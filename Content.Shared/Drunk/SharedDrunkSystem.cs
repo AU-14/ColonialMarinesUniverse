@@ -23,6 +23,12 @@ public abstract partial class SharedDrunkSystem : EntitySystem
         Status.TryAddStatusEffectDuration(uid, Drunk, ev.Duration);
     }
 
+    public void TryApplyDrunkenness(EntityUid uid, float boozePower, bool applySlur = true)
+    {
+        _ = applySlur;
+        TryApplyDrunkenness(uid, TimeSpan.FromSeconds(boozePower));
+    }
+
     public void TryRemoveDrunkenness(EntityUid uid)
     {
         Status.TryRemoveStatusEffect(uid, Drunk);
@@ -31,6 +37,11 @@ public abstract partial class SharedDrunkSystem : EntitySystem
     public void TryRemoveDrunkennessTime(EntityUid uid, TimeSpan boozePower)
     {
         Status.TryAddTime(uid, Drunk, - boozePower);
+    }
+
+    public void TryRemoveDrunkenessTime(EntityUid uid, double timeRemoved)
+    {
+        TryRemoveDrunkennessTime(uid, TimeSpan.FromSeconds(timeRemoved));
     }
 
     private void OnLightweightDrinking(Entity<LightweightDrunkComponent> entity, ref DrunkEvent args)
