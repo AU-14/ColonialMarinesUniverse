@@ -4,7 +4,7 @@
     ///     Permissions that admins can have.
     /// </summary>
     [Flags]
-    public enum AdminFlags : uint
+    public enum AdminFlags : ulong
     {
         None = 0,
 
@@ -125,8 +125,28 @@
         NameColor = 1 << 21,
 
         /// <summary>
+        ///     Lets you administer commendations.
+        /// </summary>
+        Commendations = 1 << 29,
+
+        /// <summary>
+        ///     Lets you use the mentor help system.
+        /// </summary>
+        MentorHelp = 1 << 30,
+
+        /// <summary>
         ///     Dangerous host permissions like scsi.
         /// </summary>
         Host = 1u << 31,
+
+        /// <summary>
+        ///     RMC test and maintenance commands.
+        /// </summary>
+        RMCMaintainer = 1ul << 32,
+
+        /// <summary>
+        ///     RMC admin-ghost commands and interactions.
+        /// </summary>
+        AdminGhost = 1ul << 33,
     }
 }
