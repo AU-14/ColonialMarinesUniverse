@@ -21,10 +21,5 @@
     <ProjectReference Include="..\Content.Server\Content.Server.csproj" />
     <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
   </ItemGroup>
-
-  <Import Project="..\RobustToolbox\Imports\Client.props" />
-  <Import Project="..\RobustToolbox\Imports\Server.props" />
-  <Import Project="..\RobustToolbox\Imports\Shared.props" />
-  <Import Project="..\RobustToolbox\Imports\Testing.props" />
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
 </Project>

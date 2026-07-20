@@ -11,6 +11,7 @@
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
     <PackageReference Include="Pidgin" />
     <PackageReference Include="prometheus-net" />
+    <PackageReference Include="Robust.Shared.AuthLib" />
     <PackageReference Include="Serilog" />
     <PackageReference Include="SixLabors.ImageSharp" />
     <PackageReference Include="TerraFX.Interop.Windows" PrivateAssets="compile" />
@@ -25,9 +26,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
   </ItemGroup>
-  <Import Project="..\RobustToolbox\Imports\Lidgren.props" />
-  <Import Project="..\RobustToolbox\Imports\Client.props" />
-  <Import Project="..\RobustToolbox\Imports\Shared.props" />
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <Import Project="..\RobustToolbox\MSBuild\XamlIL.targets" />
   <Import Project="..\RobustToolbox\MSBuild\Robust.EntitySystemSubscriptionsGenerator.targets" />
