@@ -26,12 +26,13 @@ public sealed class DefaultAutomaticFireModeTest
             {
                 var weapon = entMan.SpawnEntity(prototype, map.GridCoords);
                 var gun = entMan.GetComponent<GunComponent>(weapon);
+                var availableModes = gun.AvailableModes;
 
                 Assert.Multiple(() =>
                 {
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.FullAuto), prototype);
-                    Assert.That(gun.AvailableModes.HasFlag(SelectiveFire.SemiAuto), Is.True, prototype);
-                    Assert.That(gun.AvailableModes.HasFlag(SelectiveFire.FullAuto), Is.True, prototype);
+                    Assert.That((availableModes & SelectiveFire.SemiAuto) != 0, Is.True, prototype);
+                    Assert.That((availableModes & SelectiveFire.FullAuto) != 0, Is.True, prototype);
                 });
             }
 
