@@ -3475,3 +3475,30 @@ Date completed: 2026-07-20
 - Resource validation: `dotnet run --project Content.YAMLLinter/Content.YAMLLinter.csproj --configuration DebugOpt --no-build` completed with `No errors found` in 94.4 seconds.
 - Integration tests: `dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj --configuration DebugOpt --no-build --no-restore --nologo --verbosity:minimal --logger "trx;LogFileName=checkpoint-0003.trx" --results-directory <temporary-directory> -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed` completed with 418 passed, 17 skipped, and 0 failed (435 total) in 34 minutes 59 seconds. Its TRX is outside the repository.
 - Disposition: The 2000â€“2999 checkpoint is closed. Per the updated integration strategy, subsequent upstream history will be merged directly with fork-conflict resolution instead of receiving per-commit inventory audit.
+
+## Fast-port checkpoint - direct SS14 merge
+
+Date recorded: 2026-07-20
+
+This is a non-audit checkpoint for the direct fast-port. It does not add per-commit
+entries or claim deeper behavioral parity.
+
+- SS14 target: `b2c5ac13dd4fbf8dd0bc56b896220619cd24aa11`.
+- Direct merge commit: `3376262730`.
+- RobustToolbox remains untouched at `7bfa10ec04bfc8f00956419609bd6ec370f9bbac`.
+- Integrated range: 3,850 SS14 first-parent commits; the target is an ancestor of the current branch.
+
+| Area | Implemented or deferred semantic note |
+| --- | --- |
+| Movement | Typed refresh, direction, and climbing adapters are in place. |
+| Shooting | Prediction can return an empty projectile list; assisted reload is immediate; legacy vehicle and attachable lookup is not retained. |
+| Medical | Fork code uses the current damage, entity-storage, and defibrillator APIs. |
+| Chemistry | Medicine solution handling moved to `Bloodstream`; transfers use current solution ownership. |
+| Interactions | Legacy lag-compensation and user-aware storage prechecks are not retained; dynamic alert text remains deferred. |
+| Physics | Fork code uses current collision and projectile APIs; deeper behavior comparison is deferred. |
+| GameTicking | The upstream base is aligned; deeper game-ticking behavior comparison is deferred. |
+| Gamerules | The Distress start-attempt hook moved to a global event; deeper gamerule parity is deferred. |
+
+Validation at this checkpoint: `Content.Shared` and `Content.Server.Database` compile
+successfully. Client and server compilation work remains in progress. Tests were not
+run because this port is at 850 of the 1,000-upstream-commit test checkpoint.
