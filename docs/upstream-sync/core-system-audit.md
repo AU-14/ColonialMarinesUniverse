@@ -2594,3 +2594,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/OuterClothing/suits.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype/system review confirms the component resolves, applies only while equipped when it owns the accent, and does not alter the suit's existing components. Prototype loading plus equip, unequip, pre-existing accent, and clone cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1103 as `Ported (CS-0189)` when wave 0006 is committed. Reconcile this suit with the target's later inventory-relay accent architecture; the current cloning settings can preserve a clothing-supplied bark accent on a clone.
+
+## CS-0190 — Let gorillas pull without hands
+
+- Upstream: [space-wizards/space-station-14#40700](https://github.com/space-wizards/space-station-14/pull/40700), `f1e5d1eb07d0cf943f8addfff21371c13a056d7c`, 2025-10-07
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Standard gorillas now have `Puller` with `needsHands: false`, allowing both AI- and player-controlled gorillas to begin and maintain pull relationships despite having no hands component.
+- RMC/CMU divergence: RMC has no gorilla override or descendant. Existing handless RMC pullers, including xenonids and power loaders, keep their own component configuration and are unaffected.
+- Decision and rationale: Add the retained capability directly to `MobGorilla`. The current pull system already supports handless pullers, and the gorilla's interaction-capable HTN and force-prying behavior establish that moving objects is intentional rather than a humanoid-hands dependency.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance review confirms the component is added only to `MobGorilla`, uses an established local data contract, and does not change its faction, HTN, damage, or movement values. Prototype loading plus pull start, movement, release, incapacitation, and AI cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1147 as `Ported (CS-0190)` when wave 0006 is committed.
