@@ -3139,3 +3139,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Atmos/EntitySystems/SharedGasTankSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms audio changes remain after successful state mutation, stream handles are cleared through `Stop`, predicted playback still uses the same owner/user, and UI updates are unchanged. Shared compilation plus connect, disconnect, rapid toggle, forced disconnect, prediction reconciliation, null sounds, RMC masks, and tank transfer cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; this is the complete target-final audio-stream correction.
+
+## CS-0231 — Align electrification sounds with the resulting state
+
+- Upstream: [space-wizards/space-station-14#42294](https://github.com/space-wizards/space-station-14/pull/42294), `80d38c51b376f9185eb1e8a8d0f5b96f03d53ec5`, 2026-01-08
+- Areas: Interactions, Physics
+- Status: Ported (adapted)
+- Risk: Low
+- Behavior/API delta: `AirlockElectrifyEnabled` and `AirlockElectrifyDisabled` now reference the matching on/off assets, and the Station AI path chooses the sound corresponding to `ElectrifiedComponent.Enabled` after mutation. Field semantics and runtime selection are consistent for defaults and prototype overrides.
+- RMC/CMU divergence: CMU retains the shared electrification component and Station AI radial behavior, but its older `SharedDoorRemoteSystem` has no upstream electrify operating mode or sound-selection path. This adaptation changes every applicable local caller without importing that separate remote feature; shock eligibility, power checks, damage, access, and RMC door behavior are unchanged.
+- Decision and rationale: Port the target-final data-field swap and Station AI selector together. Swapping only the assets or only the selector would leave an inversion, while changing both makes the named component fields a reliable prototype contract. The absent door-remote hunk cannot apply and is dependency debt rather than silently invented behavior.
+- Files changed: `Content.Shared/Electrocution/Components/ElectrifiedComponent.cs`, `Content.Shared/Silicons/StationAi/SharedStationAiSystem.Airlock.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms Station AI mutates state before selecting sound, enabled maps to `airlock_electrify_on.ogg`, disabled maps to `airlock_electrify_off.ogg`, and shock sounds are separate. Shared compilation plus AI enable/disable, prototype override, prediction, access denial, power loss, and RMC airlock cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: When the upstream door-remote electrify mode is integrated, port its selector using these corrected field semantics. Index 2099's Station AI access/logging hardening remains separate and must preserve this selection.
