@@ -3,7 +3,7 @@
 namespace Content.Shared._RMC14.NightVision;
 
 /// <summary>
-/// For rendering sprites on top of FOV when the user has a <see cref="NightVisionComponent"/>.
+/// For rendering sprites on top of FOV when the user has a <see cref="RMCNightVisionComponent"/>.
 /// </summary>
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class RMCNightVisionVisibleComponent : Component

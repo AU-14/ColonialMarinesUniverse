@@ -21,7 +21,7 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
         if (!HasComp<XenoComponent>(args.Entity))
             return;
 
-        if (!TryComp(args.Entity, out NightVisionComponent? nightVision))
+        if (!TryComp(args.Entity, out RMCNightVisionComponent? nightVision))
             return;
 
         var stateValue = _netConfig.GetClientCVar(args.Player.Channel, RMCCVars.RMCXenoDefaultNightVision);

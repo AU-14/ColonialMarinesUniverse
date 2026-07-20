@@ -29,11 +29,11 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<NightVisionComponent, ComponentStartup>(OnNightVisionStartup);
-        SubscribeLocalEvent<NightVisionComponent, MapInitEvent>(OnNightVisionMapInit);
-        SubscribeLocalEvent<NightVisionComponent, AfterAutoHandleStateEvent>(OnNightVisionAfterHandle);
-        SubscribeLocalEvent<NightVisionComponent, ComponentRemove>(OnNightVisionRemove);
-        SubscribeLocalEvent<NightVisionComponent, ToggleNightVisionAlertEvent>(OnNightVisionToggle);
+        SubscribeLocalEvent<RMCNightVisionComponent, ComponentStartup>(OnNightVisionStartup);
+        SubscribeLocalEvent<RMCNightVisionComponent, MapInitEvent>(OnNightVisionMapInit);
+        SubscribeLocalEvent<RMCNightVisionComponent, AfterAutoHandleStateEvent>(OnNightVisionAfterHandle);
+        SubscribeLocalEvent<RMCNightVisionComponent, ComponentRemove>(OnNightVisionRemove);
+        SubscribeLocalEvent<RMCNightVisionComponent, ToggleNightVisionAlertEvent>(OnNightVisionToggle);
 
         SubscribeLocalEvent<NightVisionItemComponent, GetItemActionsEvent>(OnNightVisionItemGetActions);
         SubscribeLocalEvent<NightVisionItemComponent, ToggleActionEvent>(OnNightVisionItemToggle);
@@ -51,22 +51,22 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         SubscribeLocalEvent<RMCNightVisionVisibleOnIgniteComponent, IgnitionEvent>(OnNightVisionVisibleIgnition);
     }
 
-    private void OnNightVisionStartup(Entity<NightVisionComponent> ent, ref ComponentStartup args)
+    private void OnNightVisionStartup(Entity<RMCNightVisionComponent> ent, ref ComponentStartup args)
     {
         NightVisionChanged(ent);
     }
 
-    private void OnNightVisionAfterHandle(Entity<NightVisionComponent> ent, ref AfterAutoHandleStateEvent args)
+    private void OnNightVisionAfterHandle(Entity<RMCNightVisionComponent> ent, ref AfterAutoHandleStateEvent args)
     {
         NightVisionChanged(ent);
     }
 
-    private void OnNightVisionMapInit(Entity<NightVisionComponent> ent, ref MapInitEvent args)
+    private void OnNightVisionMapInit(Entity<RMCNightVisionComponent> ent, ref MapInitEvent args)
     {
         UpdateAlert(ent);
     }
 
-    private void OnNightVisionRemove(Entity<NightVisionComponent> ent, ref ComponentRemove args)
+    private void OnNightVisionRemove(Entity<RMCNightVisionComponent> ent, ref ComponentRemove args)
     {
         if (ent.Comp.Alert is { } alert)
             _alerts.ClearAlert(ent, alert);
@@ -74,7 +74,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         NightVisionRemoved(ent);
     }
 
-    private void OnNightVisionToggle(Entity<NightVisionComponent> ent, ref ToggleNightVisionAlertEvent args)
+    private void OnNightVisionToggle(Entity<RMCNightVisionComponent> ent, ref ToggleNightVisionAlertEvent args)
     {
         Toggle((ent, ent));
     }
@@ -219,7 +219,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
             RemCompDeferred<RMCNightVisionVisibleComponent>(ent);
     }
 
-    public NightVisionState Toggle(Entity<NightVisionComponent?> ent)
+    public NightVisionState Toggle(Entity<RMCNightVisionComponent?> ent)
     {
         if (!Resolve(ent, ref ent.Comp))
             return NightVisionState.Off;
@@ -237,7 +237,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         return ent.Comp.State;
     }
 
-    private void UpdateAlert(Entity<NightVisionComponent> ent)
+    private void UpdateAlert(Entity<RMCNightVisionComponent> ent)
     {
         if (ent.Comp.Alert is { } alert)
         {
@@ -282,9 +282,9 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         if (!_timing.ApplyingState)
         {
             var defaultState = item.Comp.DefaultState;
-            if (TryComp(user, out NightVisionComponent? nightVision))
+            if (TryComp(user, out RMCNightVisionComponent? nightVision))
             {
-                nightVision = EnsureComp<NightVisionComponent>(user);
+                nightVision = EnsureComp<RMCNightVisionComponent>(user);
                 if (nightVision.OnlyHalf && defaultState == NightVisionState.Full)
                     defaultState = NightVisionState.Half;
 
@@ -296,7 +296,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
             }
             else
             {
-                nightVision = new NightVisionComponent()
+                nightVision = new RMCNightVisionComponent()
                 {
                     State = defaultState,
                     Green = item.Comp.Green,
@@ -312,11 +312,11 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         _actions.SetToggled(item.Comp.Action, true);
     }
 
-    protected virtual void NightVisionChanged(Entity<NightVisionComponent> ent)
+    protected virtual void NightVisionChanged(Entity<RMCNightVisionComponent> ent)
     {
     }
 
-    protected virtual void NightVisionRemoved(Entity<NightVisionComponent> ent)
+    protected virtual void NightVisionRemoved(Entity<RMCNightVisionComponent> ent)
     {
     }
 
@@ -329,10 +329,10 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
 
         _appearance.SetData(item, NightVisionItemVisuals.Active, false);
 
-        if (TryComp(user, out NightVisionComponent? nightVision) &&
+        if (TryComp(user, out RMCNightVisionComponent? nightVision) &&
             !nightVision.Innate)
         {
-            RemCompDeferred<NightVisionComponent>(user.Value);
+            RemCompDeferred<RMCNightVisionComponent>(user.Value);
         }
     }
 
@@ -342,7 +342,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         item.Comp.DefaultState = nextState;
         Dirty(item);
 
-        if (item.Comp.User is { } activeUser && TryComp(activeUser, out NightVisionComponent? nightVision))
+        if (item.Comp.User is { } activeUser && TryComp(activeUser, out RMCNightVisionComponent? nightVision))
             SetState((activeUser, nightVision), nextState);
     }
 
@@ -355,7 +355,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         };
     }
 
-    public void SetSeeThroughContainers(Entity<NightVisionComponent?> ent, bool see)
+    public void SetSeeThroughContainers(Entity<RMCNightVisionComponent?> ent, bool see)
     {
         if (!Resolve(ent, ref ent.Comp, false))
             return;
@@ -364,7 +364,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         Dirty(ent);
     }
 
-    public void SetState(Entity<NightVisionComponent?> ent, NightVisionState state)
+    public void SetState(Entity<RMCNightVisionComponent?> ent, NightVisionState state)
     {
         if (!Resolve(ent, ref ent.Comp))
             return;

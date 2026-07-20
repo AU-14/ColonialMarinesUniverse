@@ -19,30 +19,30 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
     [Dependency] private ExamineSystemShared _examine = default!;
 
     private EntityQuery<XenoComponent> _xenoQuery;
-    private EntityQuery<NightVisionComponent> _nvQuery;
+    private EntityQuery<RMCNightVisionComponent> _nvQuery;
 
     public override void Initialize()
     {
         base.Initialize();
 
-        SubscribeLocalEvent<NightVisionComponent, LocalPlayerAttachedEvent>(OnNightVisionAttached);
-        SubscribeLocalEvent<NightVisionComponent, LocalPlayerDetachedEvent>(OnNightVisionDetached);
+        SubscribeLocalEvent<RMCNightVisionComponent, LocalPlayerAttachedEvent>(OnNightVisionAttached);
+        SubscribeLocalEvent<RMCNightVisionComponent, LocalPlayerDetachedEvent>(OnNightVisionDetached);
 
         _xenoQuery = _entity.GetEntityQuery<XenoComponent>();
-        _nvQuery = _entity.GetEntityQuery<NightVisionComponent>();
+        _nvQuery = _entity.GetEntityQuery<RMCNightVisionComponent>();
     }
 
-    private void OnNightVisionAttached(Entity<NightVisionComponent> ent, ref LocalPlayerAttachedEvent args)
+    private void OnNightVisionAttached(Entity<RMCNightVisionComponent> ent, ref LocalPlayerAttachedEvent args)
     {
         NightVisionChanged(ent);
     }
 
-    private void OnNightVisionDetached(Entity<NightVisionComponent> ent, ref LocalPlayerDetachedEvent args)
+    private void OnNightVisionDetached(Entity<RMCNightVisionComponent> ent, ref LocalPlayerDetachedEvent args)
     {
         Off();
     }
 
-    protected override void NightVisionChanged(Entity<NightVisionComponent> ent)
+    protected override void NightVisionChanged(Entity<RMCNightVisionComponent> ent)
     {
         if (ent != _player.LocalEntity)
             return;
@@ -63,7 +63,7 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
         }
     }
 
-    protected override void NightVisionRemoved(Entity<NightVisionComponent> ent)
+    protected override void NightVisionRemoved(Entity<RMCNightVisionComponent> ent)
     {
         if (ent != _player.LocalEntity)
             return;
@@ -86,7 +86,7 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
         SetMesonSprites(false);
     }
 
-    private void Half(Entity<NightVisionComponent> ent)
+    private void Half(Entity<RMCNightVisionComponent> ent)
     {
         if (ent.Comp.Overlay)
             _overlay.AddOverlay(new NightVisionOverlay());
@@ -100,7 +100,7 @@ public sealed partial class NightVisionSystem : SharedNightVisionSystem
         SetMesons(ent.Comp.Mesons);
     }
 
-    private void Full(Entity<NightVisionComponent> ent)
+    private void Full(Entity<RMCNightVisionComponent> ent)
     {
         if (ent.Comp.Overlay)
             _overlay.AddOverlay(new NightVisionOverlay());

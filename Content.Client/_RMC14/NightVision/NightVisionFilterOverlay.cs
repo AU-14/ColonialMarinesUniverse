@@ -27,7 +27,7 @@ public sealed partial class NightVisionFilterOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if (!_entity.TryGetComponent(_players.LocalEntity, out NightVisionComponent? nightVision) ||
+        if (!_entity.TryGetComponent(_players.LocalEntity, out RMCNightVisionComponent? nightVision) ||
             nightVision.State == NightVisionState.Off)
         {
             return;

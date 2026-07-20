@@ -365,7 +365,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
             return;
 
         hive.Comp.SeeThroughContainers = see;
-        var xenos = EntityQueryEnumerator<XenoComponent, HiveMemberComponent, NightVisionComponent>();
+        var xenos = EntityQueryEnumerator<XenoComponent, HiveMemberComponent, RMCNightVisionComponent>();
         while (xenos.MoveNext(out var uid, out _, out var member, out var nv))
         {
             if (member.Hive != hive)

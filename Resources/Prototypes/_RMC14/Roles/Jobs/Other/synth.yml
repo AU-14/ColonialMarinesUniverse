@@ -111,7 +111,7 @@
   id: RMCSynthAddComponents
   categories: [ HideSpawnMenu ]
   components:
-  - type: NightVision
+  - type: RMCNightVision
     innate: true
     state: half
     onlyHalf: true

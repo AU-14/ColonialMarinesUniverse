@@ -35,7 +35,7 @@ public sealed partial class RMCZombieSystem : EntitySystem
         RemComp<GhostRoleComponent>(target);
         RemComp<GhostTakeoverAvailableComponent>(target);
 
-        EnsureComp<NightVisionComponent>(target);
+        EnsureComp<RMCNightVisionComponent>(target);
         _faction.AddFaction(target, DumbFaction);
 
         if (TryComp<ZombieComponent>(target, out var zombieComponent))
