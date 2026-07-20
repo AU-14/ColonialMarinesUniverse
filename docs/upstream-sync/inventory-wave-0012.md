@@ -127,7 +127,7 @@ behavior to port.
 2308 | 435b7d5cf89897476ee60995a14944c6ed8dd1a1 | Add the ability for station maps to track grids they are not on (#41248) | Deferred | GameTicking, Gamerules, Interactions | Tracking grids outside a station map crosses NukeOps rule state, pinpointer UI, shared components, prototypes, and assets.
 2309 | 98647f1f0f1d2c7bcf79c3adfa30504fe8214108 | Admin: fixes description for "help osay" (#42368) | PortCandidate | — | Two-line admin help-text correction for the OOC command.
 2310 | 71040149a192a01de8aa604b5b8913f77ad315ab | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2311 | 94071a63508ed4d187652bb60d444ccd027258dc | Fix GenpopLockerBoundUserInterface prediction (#42365) | PortCandidate | Interactions | Two focused GenPop prediction corrections use a predicted BUI message and preserve the acting entity for locking.
+2311 | 94071a63508ed4d187652bb60d444ccd027258dc | Fix GenpopLockerBoundUserInterface prediction (#42365) | Ported (CS-0242) | Interactions | GenPop configuration now uses a predicted BUI message and passes its actor into the predicted lock transition.
 2312 | 06a962559adcf258d76b67f23d9a1c8d137f16c8 | Fix holywater locale string usage. (#42378) | Deferred | Chemistry | The corrected holywater label targets a chemistry-bottle layout absent locally and must follow the chemistry prototype migration.
 2313 | c9ec5e81f0605649fbb13845715d49743fe7387e | Medical Cyborg Modules Rework. (#42123) | Deferred | Medical, Interactions | The medical cyborg module, recipes, research, tags, and migration rework crosses RMC borg and medical policy.
 2314 | 11f308729d3f73bd6421207d86f6ea9d603df8c5 | Automatic changelog update | Irrelevant | — | Generated changelog only.

@@ -3282,3 +3282,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/GameTicking/GameTicker.Player.cs`, `Content.Shared.Database/LogType.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static control-flow review confirms every `InGame` path logs exactly once, every handled disconnect logs once, attached-entity formatting is null-safe, and the numeric enum addition does not overlap retained RMC values. Shared/server compilation plus lobby join, no-mind spawn wait, existing-mind reattach, observer fallback, first connection, reconnect, disconnect with/without an entity, database cancellation, and admin-log filtering cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: These records describe session status transitions, not successful character spawning. Keep round-start, late-join, respawn, and RMC spawn logs separate when interpreting the audit trail.
+
+## CS-0242 — Predict GenPop locker configuration
+
+- Upstream: [space-wizards/space-station-14#42365](https://github.com/space-wizards/space-station-14/pull/42365), `94071a63508ed4d187652bb60d444ccd027258dc`, 2026-01-12
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Completing the GenPop locker form now sends `GenpopLockerIdConfiguredMessage` through the predicted BUI path. The shared configuration handler passes `args.Actor` into `LockSystem.Lock` instead of `null`, allowing the lock transition, its popup, and its predicted audio to identify the initiating user on both client and server.
+- RMC/CMU divergence: CMU retains the standard GenPop locker, ID-expiration, access-reader, entity-storage, and lock systems. RMC access sets and maps may control where the locker appears, but configuration validation, sentence data, ID creation, storage closing, and prisoner release policy are unchanged.
+- Decision and rationale: Port both target-final one-line changes together. Predicting only the message while discarding its actor would leave user-scoped lock feedback unpredicted; passing an actor on a server-only message would not remove the interaction delay. The shared handler already performs access and input validation before either state change.
+- Files changed: `Content.Client/Security/Ui/GenpopLockerBoundUserInterface.cs`, `Content.Shared/Security/Systems/SharedGenpopSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms the same serializable message and validation gates are retained, the actor comes from the BUI event, and `LockSystem.Lock` uses it only for scoped popup/audio while dirtying the authoritative lock state normally. Client/shared compilation plus valid configuration, denied access, invalid fields, prediction reconciliation, lock popup/audio, storage closing, ID creation, duplicate input, and disconnect cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: The nearby comment notes that verb-driven entity-storage opening is not predicted; keep that separate until its own upstream prediction path is integrated.
