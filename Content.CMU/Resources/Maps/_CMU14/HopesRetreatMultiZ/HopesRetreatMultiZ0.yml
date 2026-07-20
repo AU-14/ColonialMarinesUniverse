@@ -125901,18 +125901,11 @@ entities:
     - type: Transform
       pos: 6.5,-38.5
       parent: 1
-    - type: TacticalMapUser
-      action: 447
-      marines: False
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 447
-    - type: Actions
-      actions:
-      - 447
+    missingComponents:
+    - TacticalMapUser
+    - ActionsContainer
+    - ContainerContainer
+    - Actions
 - proto: AU14AICoreSubstrateMUTHUR
   entities:
   - uid: 58776
