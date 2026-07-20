@@ -34,7 +34,6 @@ public sealed class DeviceLinkingTest : GameTest
         var server = pair.Server;
         var protoMan = server.ProtoMan;
         var compFact = server.ResolveDependency<IComponentFactory>();
-        var mapMan = server.System<SharedMapSystem>();
         var mapSys = server.System<SharedMapSystem>();
         var deviceLinkSys = server.System<DeviceLinkSystem>();
 
@@ -53,8 +52,10 @@ public sealed class DeviceLinkingTest : GameTest
                     mapSys.SetTile(grid.Owner, grid.Comp, Vector2i.Zero, new Tile(1));
                     var coord = new EntityCoordinates(grid.Owner, 0, 0);
 
-                    if (!proto.TryComp<DeviceLinkSinkComponent>(out var protoSinkComp, compFact))
-                        continue;
+                    // Spawn the sink entity
+                    var sinkEnt = server.EntMan.SpawnEntity(proto.ID, coord);
+                    // Get the actual sink component, since the one we got from the prototype isn't initialized.
+                    var sinkComp = server.EntMan.GetComponent<DeviceLinkSinkComponent>(sinkEnt);
 
                     // Spawn the tester
                     var sourceEnt = server.EntMan.SpawnEntity(PortTesterProtoId, coord);

@@ -10,8 +10,7 @@ using Robust.Shared.GameObjects;
 namespace Content.IntegrationTests.Tests.GameRules;
 
 [TestFixture]
-[Ignore("Nukeops is not enabled in RMC14")]
-public sealed class FailAndStartPresetTest
+public sealed class FailAndStartPresetTest : GameTest
 {
     [TestPrototypes]
     private const string Prototypes = @"

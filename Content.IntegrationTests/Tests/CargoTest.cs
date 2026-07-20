@@ -103,10 +103,9 @@ public sealed class CargoTest : GameTest
         {
             using (Assert.EnterMultipleScope())
             {
-                // Sanity check
-                Assert.That(proto.TryComp<StaticPriceComponent>(out var staticPriceComp, compFact), Is.True);
+                var protoIds = Pair.GetPrototypesWithComponent<StaticPriceComponent>();
 
-                if (proto.TryComp<StackPriceComponent>(out var stackPriceComp, compFact) && stackPriceComp.Price > 0)
+                foreach (var (proto, staticPriceComp) in protoIds)
                 {
                     if (
                         proto.TryComp<StackPriceComponent>(out var stackPriceComp, _sCompFact)
@@ -145,29 +144,11 @@ public sealed class CargoTest : GameTest
 
         var bounties = SProtoMan.EnumeratePrototypes<CargoBountyPrototype>().ToList();
 
-        var entManager = server.ResolveDependency<IEntityManager>();
-        var mapSystem = server.System<SharedMapSystem>();
-        var mapManager = server.System<SharedMapSystem>();
-        var protoManager = server.ResolveDependency<IPrototypeManager>();
-        var componentFactory = server.ResolveDependency<IComponentFactory>();
-        var whitelist = entManager.System<EntityWhitelistSystem>();
-        var cargo = entManager.System<CargoSystem>();
-        var sliceableSys = entManager.System<SliceableFoodSystem>();
-
-        var bounties = protoManager.EnumeratePrototypes<CargoBountyPrototype>().ToList();
-
-        await server.WaitAssertion(() =>
+        await Server.WaitAssertion(() =>
         {
             var sliceableEntityProtos = Pair.GetPrototypesWithComponent<ToolRefinableComponent>();
 
-            var sliceableEntityProtos = protoManager.EnumeratePrototypes<EntityPrototype>()
-                .Where(p => !p.Abstract)
-                .Where(p => !pair.IsTestPrototype(p))
-                .Where(p => p.TryComp<SliceableFoodComponent>(out _, componentFactory))
-                .Select(p => p.ID)
-                .ToList();
-
-            foreach (var proto in sliceableEntityProtos)
+            foreach (var (proto, sliceable) in sliceableEntityProtos)
             {
                 var ent = SSpawnAtPosition(proto.ID, coordinates);
 

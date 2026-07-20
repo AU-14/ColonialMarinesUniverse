@@ -16,13 +16,8 @@ using Content.Shared.CCVar;
 using Content.Shared.Maps;
 using Content.Shared.Roles;
 using Content.Shared.Station.Components;
-using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
-using Robust.Shared.GameObjects;
-using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
-using Robust.Shared.Prototypes;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
@@ -44,7 +39,7 @@ namespace Content.IntegrationTests.Tests
         };
 
         private const bool SkipTestMaps = true;
-        private const string TestMapsPath = "/Maps/_RMC14/Test/"; // RMC14
+        private const string TestMapsPath = "/Maps/Test/";
 
         private static readonly string[] NoSpawnMaps =
         {
@@ -89,45 +84,16 @@ namespace Content.IntegrationTests.Tests
             "/Maps/Shuttles/AdminSpawn/**" // admin gaming
         };
 
-        private static readonly string[] GameMaps =
-        {
-            // "Dev",
-            // "TestTeg",
-            // "Fland",
-            // "Meta",
-            // "Packed",
-            // "Omega",
-            // "Bagel",
-            // "CentComm",
-            // "Box",
-            // "Core",
-            // "Marathon",
-            // "MeteorArena",
-            // "Saltern",
-            // "Reach",
-            // "Train",
-            // "Oasis",
-            // "Gate",
-            // "Amber",
-            // "Loop",
-            // "Plasma",
-            // "Elkridge",
-            // "Convex",
-            // "Relic",
-            // "dm01-entryway",
-            // "Exo",
-            "RMCDev", // RMC14
-            "Savannah",
-            "Almayer",
-            "RMCAdminFax",
-            "Haurchefant",
-            "Breakwater_Strand",
-            "UNSEndeavour",
-            "Berkley",
-            "SSVDeyneka",
-			"HMSPratchett",
-            "Rover"
-        };
+        /// <summary>
+        /// Converts the above globs into regex so your eyes dont bleed trying to add filepaths.
+        /// </summary>
+        private static readonly Regex[] DoNotMapWhiteListRegexes = DoNotMapWhitelist
+            .Select(glob => new Regex(GlobToRegex(glob), RegexOptions.IgnoreCase | RegexOptions.Compiled))
+            .ToArray();
+
+        private static readonly string[] GameMaps = GameDataScrounger.PrototypesOfKind<GameMapPrototype>().Where(x => x != PoolManager.TestMap).ToArray();
+        private static readonly ResPath[] AllMapFiles = GameDataScrounger.FilesInDirectoryInVfs("/Maps", "*.yml");
+        private static readonly ResPath[] ShuttleMapFiles = GameDataScrounger.FilesInDirectoryInVfs("/Maps/Shuttles", "*.yml");
 
         private static readonly ProtoId<EntityCategoryPrototype> DoNotMapCategory = "DoNotMap";
 
@@ -178,14 +144,6 @@ namespace Content.IntegrationTests.Tests
             var mapLoader = entManager.System<MapLoaderSystem>();
             var mapSystem = entManager.System<SharedMapSystem>();
             var cfg = server.ResolveDependency<IConfigurationManager>();
-            Assert.That(cfg.GetCVar(CCVars.GridFill), Is.False);
-
-            var shuttleFolder = new ResPath("/Maps/_RMC14/Shuttles"); // RMC14
-            var shuttles = resMan
-                .ContentFindFiles(shuttleFolder)
-                .Where(filePath =>
-                    filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
-                .ToArray();
 
             await server.WaitPost(() =>
             {
@@ -218,11 +176,7 @@ namespace Content.IntegrationTests.Tests
             var protoManager = server.ResolveDependency<IPrototypeManager>();
             var loader = server.System<MapLoaderSystem>();
 
-            var mapFolder = new ResPath("/Maps/_RMC14"); // RMC14
-            var maps = resourceManager
-                .ContentFindFiles(mapFolder)
-                .Where(filePath => filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
-                .ToArray();
+            var rootedPath = map.ToRootedPath();
 
             var isV7Map = false;
 
@@ -375,7 +329,6 @@ namespace Content.IntegrationTests.Tests
             var pair = Pair;
             var server = pair.Server;
 
-            var mapManager = server.System<SharedMapSystem>();
             var entManager = server.ResolveDependency<IEntityManager>();
             var mapLoader = entManager.System<MapLoaderSystem>();
             var mapSystem = entManager.System<SharedMapSystem>();
@@ -430,12 +383,11 @@ namespace Content.IntegrationTests.Tests
                     Assert.That(mapLoader.TryLoadGrid(shuttleMap, shuttlePath, out var shuttle),
                         $"Failed to load {shuttlePath}");
 
-                    // TODO RMC14 we don't use this shit!
-                    // Assert.That(
-                    //     shuttleSystem.TryFTLDock(shuttle!.Value.Owner,
-                    //         entManager.GetComponent<ShuttleComponent>(shuttle!.Value.Owner),
-                    //         targetGrid.Value),
-                    //     $"Unable to dock {shuttlePath} to {mapProto}");
+                    Assert.That(
+                        shuttleSystem.TryFTLDock(shuttle!.Value.Owner,
+                            entManager.GetComponent<ShuttleComponent>(shuttle!.Value.Owner),
+                            targetGrid.Value),
+                        $"Unable to dock {shuttlePath} to {mapProto}");
                 }
 
                 mapSystem.DeleteMap(shuttleMap);
@@ -515,28 +467,7 @@ namespace Content.IntegrationTests.Tests
         [EnsureCVar(Side.Server, typeof(CCVars), nameof(CCVars.GridFill), false)]
         public async Task NonGameMapsLoadableTest(ResPath mapPath)
         {
-            await using var pair = await PoolManager.GetServerClient();
-            var server = pair.Server;
-            var protoMan = server.ResolveDependency<IPrototypeManager>();
-
-            var gameMaps = protoMan.EnumeratePrototypes<GameMapPrototype>()
-                .Where(x => !pair.IsTestPrototype(x))
-                .Where(x => x.ID == PoolManager.TestMap // RMC14
-                    || x.MapPath.ToString().StartsWith("/Maps/_RMC14"))
-                .Select(x => x.ID)
-                .ToHashSet();
-
-            Assert.That(gameMaps.Remove(PoolManager.TestMap));
-
-            Assert.That(gameMaps, Is.EquivalentTo(GameMaps.ToHashSet()), "Game map prototype missing from test cases.");
-
-            await pair.CleanReturnAsync();
-        }
-
-        [Test]
-        public async Task NonGameMapsLoadableTest()
-        {
-            await using var pair = await PoolManager.GetServerClient();
+            var pair = Pair;
             var server = pair.Server;
 
             var mapLoader = server.ResolveDependency<IEntitySystemManager>().GetEntitySystem<MapLoaderSystem>();
@@ -546,11 +477,6 @@ namespace Content.IntegrationTests.Tests
 
             var gameMaps = protoManager.EnumeratePrototypes<GameMapPrototype>().Select(o => o.MapPath).ToHashSet();
 
-            var mapFolder = new ResPath("/Maps/_RMC14"); // RMC14
-            var maps = resourceManager
-                .ContentFindFiles(mapFolder)
-                .Where(filePath => filePath.Extension == "yml" && !filePath.Filename.StartsWith(".", StringComparison.Ordinal))
-                .ToArray();
 
             if (gameMaps.Contains(mapPath))
             {

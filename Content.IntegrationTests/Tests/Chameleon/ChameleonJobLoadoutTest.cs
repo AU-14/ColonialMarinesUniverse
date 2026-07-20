@@ -11,7 +11,6 @@ namespace Content.IntegrationTests.Tests.Chameleon;
 /// <summary>
 /// Ensures all <see cref="IsProbablyRoundStartJob">"round start jobs"</see> have an associated chameleon loadout.
 /// </summary>
-[Ignore("Chameleon outfits are not used in RMC14")]
 public sealed class ChameleonJobLoadoutTest : InteractionTest
 {
     private static readonly List<ProtoId<JobPrototype>> JobBlacklist =

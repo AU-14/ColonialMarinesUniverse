@@ -34,7 +34,6 @@ public sealed class TraitorRuleTest : GameTest
     };
 
     [Test]
-    [Ignore("RMC14 doesn't use traitors")]
     public async Task TestTraitorObjectives()
     {
         var pair = Pair;

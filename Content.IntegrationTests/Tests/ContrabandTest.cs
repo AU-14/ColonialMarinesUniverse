@@ -28,8 +28,11 @@ public sealed class ContrabandTest : GameTest
                     if (!proto.TryComp<ContrabandComponent>(out var contraband, componentFactory))
                         continue;
 
-                    Assert.That(protoMan.TryIndex(contraband.Severity, out var severity),
-                        @$"{proto.ID} has a ContrabandComponent with a unknown severity.");
+                    if (!protoMan.TryIndex(contraband.Severity, out var severity))
+                    {
+                        Assert.Fail($"{proto.ID} has a ContrabandComponent with a unknown severity.");
+                        continue;
+                    }
 
                     if (!severity.ShowDepartmentsAndJobs)
                         continue;

@@ -73,7 +73,7 @@ public sealed class MaterialArbitrageTest : GameTest
                 if (!minMultiplier.TryGetValue(recipe, out var min))
                     min = 1;
 
-                minMultiplier[recipe] = 1; // RMC14: We do not have any upgraded lathes.
+                minMultiplier[recipe] = Math.Min(min, lathe.MaterialUseMultiplier);
             }
         }
 

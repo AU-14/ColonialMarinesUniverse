@@ -28,7 +28,7 @@ namespace Content.IntegrationTests.Tests.Networking
     // the tick where the server *should* have, but did not, acknowledge the state change.
     // Finally, we run two events inside the prediction area to ensure reconciling does for incremental stuff.
     [TestFixture]
-    public sealed partial class SimplePredictReconcileTest
+    public sealed partial class SimplePredictReconcileTest : GameTest
     {
         [Test]
         public async Task Test()
@@ -37,7 +37,6 @@ namespace Content.IntegrationTests.Tests.Networking
             var server = pair.Server;
             var client = pair.Client;
 
-            var sMapManager = server.System<SharedMapSystem>();
             var sEntityManager = server.ResolveDependency<IEntityManager>();
             var cEntityManager = client.ResolveDependency<IEntityManager>();
             var sGameTiming = server.ResolveDependency<IGameTiming>();

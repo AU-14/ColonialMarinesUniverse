@@ -101,22 +101,21 @@ public abstract partial class InteractionTest : GameTest
     protected int ConstructionGhostId;
 
     // SERVER dependencies
-    protected IEntityManager SEntMan = default!;
-    protected ITileDefinitionManager TileMan = default!;
-    protected SharedMapSystem MapMan = default!;
-    protected IPrototypeManager ProtoMan = default!;
-    protected IGameTiming STiming = default!;
-    protected IComponentFactory Factory = default!;
-    protected HandsSystem HandSys = default!;
-    protected StackSystem Stack = default!;
-    protected SharedInteractionSystem InteractSys = default!;
-    protected Content.Server.Construction.ConstructionSystem SConstruction = default!;
-    protected SharedDoAfterSystem DoAfterSys = default!;
-    protected ToolSystem ToolSys = default!;
-    protected ItemToggleSystem ItemToggleSys = default!;
-    protected InteractionTestSystem STestSystem = default!;
-    protected SharedTransformSystem Transform = default!;
-    protected SharedMapSystem MapSystem = default!;
+    [SidedDependency(Side.Server)] protected ITileDefinitionManager TileMan = default!;
+    [SidedDependency(Side.Server)] protected IPrototypeManager ProtoMan => SProtoMan;
+    protected IGameTiming STiming => SGameTiming;
+    [SidedDependency(Side.Server)] protected IComponentFactory Factory = default!;
+    [SidedDependency(Side.Server)] protected HandsSystem HandSys = default!;
+    [SidedDependency(Side.Server)] protected StackSystem Stack = default!;
+    [SidedDependency(Side.Server)] protected SharedInteractionSystem InteractSys = default!;
+    [SidedDependency(Side.Server)] protected Content.Server.Construction.ConstructionSystem SConstruction = default!;
+    [SidedDependency(Side.Server)] protected SharedDoAfterSystem DoAfterSys = default!;
+    [SidedDependency(Side.Server)] protected ToolSystem ToolSys = default!;
+    [SidedDependency(Side.Server)] protected ItemToggleSystem ItemToggleSys = default!;
+    [SidedDependency(Side.Server)] protected InteractionTestSystem STestSystem = default!;
+    [SidedDependency(Side.Server)] protected SharedTransformSystem Transform = default!;
+    [SidedDependency(Side.Server)] protected SharedMapSystem MapSystem = default!;
+    [SidedDependency(Side.Server)] protected ILogManager SLogMan = default!;
     protected ISawmill SLogger = default!;
     [SidedDependency(Side.Server)] protected SharedUserInterfaceSystem SUiSys = default!;
     [SidedDependency(Side.Server)] protected SharedCombatModeSystem SCombatMode = default!;
@@ -165,7 +164,7 @@ public abstract partial class InteractionTest : GameTest
     tags:
     - CanPilot
   - type: UserInterface
-  - type: Sprite
+  - type: CombatMode
 ";
 
     protected static PoolSettings Default => new()
@@ -185,37 +184,9 @@ public abstract partial class InteractionTest : GameTest
         //
     }
 
-        // server dependencies
-        SEntMan = Server.ResolveDependency<IEntityManager>();
-        TileMan = Server.ResolveDependency<ITileDefinitionManager>();
-        MapMan = Server.System<SharedMapSystem>();
-        ProtoMan = Server.ResolveDependency<IPrototypeManager>();
-        Factory = Server.ResolveDependency<IComponentFactory>();
-        STiming = Server.ResolveDependency<IGameTiming>();
-        HandSys = SEntMan.System<HandsSystem>();
-        InteractSys = SEntMan.System<SharedInteractionSystem>();
-        ToolSys = SEntMan.System<ToolSystem>();
-        ItemToggleSys = SEntMan.System<ItemToggleSystem>();
-        DoAfterSys = SEntMan.System<SharedDoAfterSystem>();
-        Transform = SEntMan.System<SharedTransformSystem>();
-        MapSystem = SEntMan.System<SharedMapSystem>();
-        SConstruction = SEntMan.System<Server.Construction.ConstructionSystem>();
-        STestSystem = SEntMan.System<InteractionTestSystem>();
-        Stack = SEntMan.System<StackSystem>();
-        SLogger = Server.ResolveDependency<ILogManager>().RootSawmill;
-        SUiSys = Client.System<SharedUserInterfaceSystem>();
-
-        // client dependencies
-        CEntMan = Client.ResolveDependency<IEntityManager>();
-        UiMan = Client.ResolveDependency<IUserInterfaceManager>();
-        CTiming = Client.ResolveDependency<IGameTiming>();
-        InputManager = Client.ResolveDependency<IInputManager>();
-        InputSystem = CEntMan.System<Robust.Client.GameObjects.InputSystem>();
-        CTestSystem = CEntMan.System<InteractionTestSystem>();
-        CConSys = CEntMan.System<ConstructionSystem>();
-        ExamineSys = CEntMan.System<ExamineSystem>();
-        CLogger = Client.ResolveDependency<ILogManager>().RootSawmill;
-        CUiSys = Client.System<SharedUserInterfaceSystem>();
+    public override async Task DoSetup()
+    {
+        await base.DoSetup();
 
         // Setup map.
         if (TestMapPath == null)

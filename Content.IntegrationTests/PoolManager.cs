@@ -2,19 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Content.IntegrationTests.Pair;
-using Content.IntegrationTests.Tests;
-using Content.IntegrationTests.Tests.Destructible;
-using Content.IntegrationTests.Tests.DeviceNetwork;
-using Content.IntegrationTests.Tests.Interaction.Click;
-using Content.Shared._RMC14.Prototypes;
-using Robust.Client;
-using Robust.Server;
-using Robust.Shared.Configuration;
-using Robust.Shared.ContentPack;
-using Robust.Shared.GameObjects;
-using Robust.Shared.IoC;
-using Robust.Shared.Log;
-using Robust.Shared.Timing;
+using Content.Shared.CCVar;
 using Robust.UnitTesting;
 
 namespace Content.IntegrationTests;
@@ -94,12 +82,32 @@ public static partial class PoolManager
     public static void Startup(params Assembly[] extra)
         => Instance.Startup(extra);
 
-        _testPrototypes.Clear();
-        CMPrototypeExtensions.FilterCM = false;
-        DiscoverTestPrototypes(typeof(PoolManager).Assembly);
-        foreach (var assembly in extraAssemblies)
-        {
-            DiscoverTestPrototypes(assembly);
-        }
+    public static void Shutdown() => Instance.Shutdown();
+    public static string DeathReport() => Instance.DeathReport();
+}
+
+/// <summary>
+/// Making clients, and servers is slow, this manages a pool of them so tests can reuse them.
+/// </summary>
+public sealed class ContentPoolManager : PoolManager<TestPair>
+{
+    public override PairSettings DefaultSettings =>  new PoolSettings();
+    protected override string GetDefaultTestName(ITestContextLike testContext)
+    {
+        return testContext.FullName.Replace("Content.IntegrationTests.Tests.", "");
+    }
+
+    public override void Startup(params Assembly[] extraAssemblies)
+    {
+        DefaultCvars.AddRange(PoolManager.TestCvars);
+
+        var shared = extraAssemblies
+                .Append(typeof(Shared.Entry.EntryPoint).Assembly)
+                .Append(typeof(PoolManager).Assembly)
+                .ToArray();
+
+        Startup([typeof(Client.Entry.EntryPoint).Assembly],
+            [typeof(Server.Entry.EntryPoint).Assembly],
+            shared);
     }
 }

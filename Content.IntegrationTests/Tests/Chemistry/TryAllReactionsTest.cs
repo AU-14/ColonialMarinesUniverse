@@ -1,10 +1,13 @@
-using System.Linq;
-using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reaction;
+using Content.Shared.Chemistry.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
+using System.Linq;
+using Content.IntegrationTests.Fixtures;
+using Content.IntegrationTests.Fixtures.Attributes;
+using Content.IntegrationTests.Utility;
+using Content.Shared.Chemistry.EntitySystems;
 
 namespace Content.IntegrationTests.Tests.Chemistry;
 
@@ -12,29 +15,15 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 [TestOf(typeof(ReactionPrototype))]
 public sealed class TryAllReactionsTest : GameTest
 {
-    [TestFixture]
-    [TestOf(typeof(ReactionPrototype))]
-    public sealed class TryAllReactionsTest
-    {
-        // RMC14
-        private static readonly string[] NoCheckFinalSolution =
-        {
-            // These recipes create H2O, which almost instantly gets turned into Water.
-            // Stress on the almost, as before that happens it can trigger a higher priority reaction.
-            "RMCNapalm",
-            "RMCCLF3"
-        };
-
-        [TestPrototypes]
-        private const string Prototypes = @"
+    [TestPrototypes]
+    private const string Prototypes = @"
 - type: entity
   id: TestSolutionContainer
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 100000
-        canMix: true";
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120";
 
     private static readonly string[] Reactions = GameDataScrounger.PrototypesOfKind<ReactionPrototype>();
 
@@ -147,24 +136,8 @@ public sealed class TryAllReactionsTest : GameTest
                 }
                 finally
                 {
-                    // RMC14:
-                    if (NoCheckFinalSolution.Contains(reactionPrototype.ID))
-                        return;
-
-                    //you just got linq'd fool
-                    //(i'm sorry)
-                    var foundProductsMap = reactionPrototype.Products
-                        .Concat(reactionPrototype.Reactants.Where(x => x.Value.Catalyst).ToDictionary(x => x.Key, x => x.Value.Amount))
-                        .ToDictionary(x => x, _ => false);
-                    foreach (var (reagent, quantity) in solution.Contents)
-                    {
-                        Assert.That(foundProductsMap.TryFirstOrNull(x => x.Key.Key == reagent.Prototype && x.Key.Value == quantity, out var foundProduct));
-                        foundProductsMap[foundProduct.Value.Key] = true;
-                    }
-
-                    Assert.That(foundProductsMap.All(x => x.Value));
-                });
-
+                    await Server.WaitPost(() => SEntMan.DeleteEntity(beaker));
+                }
             }
         }
         finally

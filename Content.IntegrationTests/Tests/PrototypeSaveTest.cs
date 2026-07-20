@@ -1,7 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
-using Content.Shared._RMC14.Components;
+using Content.IntegrationTests.Fixtures;
 using Content.Shared.Coordinates;
 using Robust.Shared.GameObjects;
 using Robust.Shared.IoC;
@@ -147,25 +147,8 @@ public sealed class PrototypeSaveTest : GameTest
                     }
 
                     // An entity may also remove components on init -> check no components are missing.
-
-                    // RMC14
-                    var componentsToRemove = new List<string>();
-                    if (entityMan.TryGetComponent<RemoveComponentsComponent>(uid, out var remComp) || remComp != null)
-                    {
-                        foreach (var compToRemove  in remComp.Components)
-                        {
-                            componentsToRemove.Add(compToRemove.Key);
-                        }
-                    }
-                    // RMC14
-
                     foreach (var (compType, comp) in prototype.Components)
                     {
-                        // RMC14
-                        if (componentsToRemove.Contains(compType))
-                            return;
-                        // RMC14
-
                         Assert.That(compNames, Does.Contain(compType), $"Prototype {prototype.ID} removes component {compType} on spawn.");
                     }
 

@@ -39,7 +39,6 @@ public sealed class FluidSpill : GameTest
     {
         var pair = Pair;
         var server = pair.Server;
-        var mapManager = server.System<SharedMapSystem>();
         var entityManager = server.ResolveDependency<IEntityManager>();
         var puddleSystem = server.System<PuddleSystem>();
         var mapSystem = server.System<SharedMapSystem>();

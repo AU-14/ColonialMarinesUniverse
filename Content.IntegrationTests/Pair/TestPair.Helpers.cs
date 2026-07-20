@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Preferences.Managers;
@@ -36,15 +36,9 @@ public sealed partial class TestPair
         // Load our test map in and assert that it exists.
         await Server.WaitAssertion(() =>
         {
-            mapData.MapUid = Server.System<SharedMapSystem>().CreateMap(out mapData.MapId, runMapInit: initialized);
-            mapData.Grid = Server.System<SharedMapSystem>().CreateGridEntity(mapData.MapId);
-            mapData.GridCoords = new EntityCoordinates(mapData.Grid, 0, 0);
-            var plating = tileDefinitionManager[tile];
-            var platingTile = new Tile(plating.TileId);
-            Server.System<SharedMapSystem>().SetTile(mapData.Grid.Owner, mapData.Grid.Comp, mapData.GridCoords, platingTile);
-            mapData.MapCoords = new MapCoordinates(0, 0, mapData.MapId);
-            mapData.Tile = Server.System<SharedMapSystem>().GetAllTiles(mapData.Grid.Owner, mapData.Grid.Comp).First();
-        });
+            Assert.That(mapLoaderSys.TryLoadMap(testMapPath, out var map, out var gridSet, deserializationOptions),
+                $"Failed to load map {testMapPath}.");
+            Assert.That(gridSet, Is.Not.Empty, "There were no grids loaded from the map!");
 
             mapData.MapUid = map!.Value.Owner;
             mapData.MapId = map!.Value.Comp.MapId;

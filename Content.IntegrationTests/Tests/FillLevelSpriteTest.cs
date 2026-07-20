@@ -39,13 +39,7 @@ public sealed class FillLevelSpriteTest : GameTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(proto.TryComp<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
-                Assert.That(proto.TryComp<SpriteComponent>(out var sprite, componentFactory));
-
-                var rsi = sprite.BaseRSI;
-
-                // Test base sprite fills
-                if (!string.IsNullOrEmpty(visuals.FillBaseName))
+                foreach (var proto in protos)
                 {
                     Assert.That(proto.TryComp<SolutionContainerVisualsComponent>(out var visuals, componentFactory));
                     Assert.That(proto.TryComp<SpriteComponent>(out var sprite, componentFactory));

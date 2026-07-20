@@ -8,8 +8,7 @@ namespace Content.IntegrationTests.Tests.Internals;
 
 [TestFixture]
 [TestOf(typeof(InternalsSystem))]
-[Ignore(("RMC14 does not use internals"))]
-public sealed class AutoInternalsTests
+public sealed class AutoInternalsTests : GameTest
 {
     [Test]
     public async Task TestInternalsAutoActivateInSpaceForStationSpawn()

@@ -5,9 +5,7 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
 using Content.IntegrationTests.Utility;
 using Content.Shared.Guidebook;
-using Robust.Shared.Configuration;
-using Robust.UnitTesting;
-using Robust.Shared.Log;
+using Robust.Shared.Localization;
 
 namespace Content.IntegrationTests.Tests.Guidebook;
 
@@ -32,23 +30,12 @@ public sealed class GuideEntryPrototypeTests : GameTest
         var parser = client.ResolveDependency<DocumentParsingManager>();
         var proto = protoMan.Index<GuideEntryPrototype>(protoKey);
 
-        // RMC14: The "all reagents" page is larger than the arbitrary limit.
-        //        This makes it so that it takes 2 ticks to render it.
-        //        Which in turn logs a warning that would fail this test.
-        var cfg = client.ResolveDependency<IConfigurationManager>();
-        var originalFailLevel = cfg.GetCVar(RTCVars.FailureLogLevel);
-        cfg.SetCVar(RTCVars.FailureLogLevel, LogLevel.Error);
-
-        foreach (var proto in prototypes)
+        await client.WaitAssertion(() =>
         {
             using var reader = resMan.ContentFileReadText(proto.Text);
             var text = reader.ReadToEnd();
 
-            // Avoid styleguide update limit
-            await client.WaitRunTicks(2);
-        }
-
-        cfg.SetCVar(RTCVars.FailureLogLevel, originalFailLevel);
-        await pair.CleanReturnAsync();
+            Assert.That(parser.TryAddMarkup(new Document(), text), $"Failed to parse the guide entry's document.");
+        });
     }
 }

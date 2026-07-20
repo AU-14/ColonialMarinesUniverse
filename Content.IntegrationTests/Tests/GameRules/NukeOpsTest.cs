@@ -31,8 +31,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.GameRules;
 
 [TestFixture]
-[Ignore("Nukeops is not enabled in RMC14")]
-public sealed class NukeOpsTest
+public sealed class NukeOpsTest : GameTest
 {
     private static readonly ProtoId<NpcFactionPrototype> SyndicateFaction = "Syndicate";
     private static readonly ProtoId<NpcFactionPrototype> NanotrasenFaction = "NanoTrasen";

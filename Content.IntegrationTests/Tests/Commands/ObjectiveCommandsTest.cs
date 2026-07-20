@@ -41,7 +41,7 @@ public sealed class ObjectiveCommandsTest : GameTest
     [Test]
     public async Task AddListRemoveObjectiveTest()
     {
-        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Fresh = true });
+        var pair = Pair;
         var server = pair.Server;
         var entMan = server.EntMan;
         var playerMan = server.ResolveDependency<ISharedPlayerManager>();

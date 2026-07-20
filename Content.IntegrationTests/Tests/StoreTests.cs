@@ -130,8 +130,8 @@ public sealed class StoreTests : GameTest
                     Assert.That(plainDiscountedCost.Value, Is.LessThan(prototypeCost.Value), "Expected discounted cost to be lower then prototype cost.");
 
 
-                    var buyMsg = new StoreBuyListingMessage(discountedListingItem.ID){Actor = human};
-                    server.EntMan.EventBus.RaiseLocalEvent(pda, buyMsg);
+                    var buyMsg = new StoreBuyListingMessage(discountedListingItem.ID, null){Actor = human};
+                    server.EntMan.EventBus.RaiseLocalEvent(storeEnt.Value, buyMsg);
 
                     var newBalance = storeComponent.Balance[UplinkSystem.TelecrystalCurrencyPrototype];
                     Assert.That(newBalance.Value, Is.EqualTo((originalBalance - plainDiscountedCost).Value), "Expected to have balance reduced by discounted cost");
@@ -144,7 +144,7 @@ public sealed class StoreTests : GameTest
                     Assert.That(costAfterBuy.Value, Is.EqualTo(prototypeCost.Value), "Expected cost after discount refund to be equal to prototype cost.");
 
                     var refundMsg = new StoreRequestRefundMessage { Actor = human };
-                    server.EntMan.EventBus.RaiseLocalEvent(pda, refundMsg);
+                    server.EntMan.EventBus.RaiseLocalEvent(storeEnt.Value, refundMsg);
 
                     // get refreshed item after refund re-generated items
                     discountedListingItem = storeComponent.FullListingsCatalog.First(x => x.ID == itemId);

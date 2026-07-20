@@ -45,7 +45,6 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
             var server = pair.Server;
 
             var sEntities = server.ResolveDependency<IEntityManager>();
-            var mapManager = server.System<SharedMapSystem>();
             var sysMan = server.ResolveDependency<IEntitySystemManager>();
             var handSys = sysMan.GetEntitySystem<SharedHandsSystem>();
 
@@ -111,7 +110,6 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
             var server = pair.Server;
 
             var sEntities = server.ResolveDependency<IEntityManager>();
-            var mapManager = server.System<SharedMapSystem>();
             var sysMan = server.ResolveDependency<IEntitySystemManager>();
             var handSys = sysMan.GetEntitySystem<SharedHandsSystem>();
 
@@ -177,7 +175,6 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
             var server = pair.Server;
 
             var sEntities = server.ResolveDependency<IEntityManager>();
-            var mapManager = server.System<SharedMapSystem>();
             var sysMan = server.ResolveDependency<IEntitySystemManager>();
             var handSys = sysMan.GetEntitySystem<SharedHandsSystem>();
 
@@ -243,7 +240,6 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
             var server = pair.Server;
 
             var sEntities = server.ResolveDependency<IEntityManager>();
-            var mapManager = server.System<SharedMapSystem>();
             var sysMan = server.ResolveDependency<IEntitySystemManager>();
             var handSys = sysMan.GetEntitySystem<SharedHandsSystem>();
 
@@ -261,7 +257,7 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
                 user = sEntities.SpawnEntity(null, coords);
                 sEntities.EnsureComponent<HandsComponent>(user);
                 handSys.AddHand(user, "hand", HandLocation.Left);
-                target = sEntities.SpawnEntity(null, new MapCoordinates(new Vector2(SharedInteractionSystem.InteractionRange + 0.5f, 0), mapId)); // RMC14
+                target = sEntities.SpawnEntity(null, new MapCoordinates(new Vector2(SharedInteractionSystem.InteractionRange + 0.01f, 0), mapId));
                 item = sEntities.SpawnEntity(null, coords);
                 sEntities.EnsureComponent<ItemComponent>(item);
             });
@@ -307,7 +303,6 @@ namespace Content.IntegrationTests.Tests.Interaction.Click
             var server = pair.Server;
 
             var sEntities = server.ResolveDependency<IEntityManager>();
-            var mapManager = server.System<SharedMapSystem>();
             var sysMan = server.ResolveDependency<IEntitySystemManager>();
             var handSys = sysMan.GetEntitySystem<SharedHandsSystem>();
             var conSystem = sysMan.GetEntitySystem<SharedContainerSystem>();

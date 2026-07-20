@@ -7,8 +7,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.GameRules;
 
 [TestFixture]
-[Ignore("Secret game rule is disabled in RMC14")]
-public sealed class SecretStartsTest
+public sealed class SecretStartsTest : GameTest
 {
     public override PoolSettings PoolSettings => new PoolSettings { Dirty = true };
 

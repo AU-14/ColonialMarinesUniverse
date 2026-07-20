@@ -1,8 +1,9 @@
 using System.Linq;
-using Content.Server.Storage.EntitySystems;
+using Content.IntegrationTests.Fixtures;
 using Content.Shared.Roles;
-using Robust.Shared.Collections;
+using Content.Server.Storage.EntitySystems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Collections;
 
 namespace Content.IntegrationTests.Tests.Roles;
 
@@ -55,7 +56,7 @@ public sealed class StartingGearPrototypeStorageTest : GameTest
 
                     foreach (var ent in ents)
                     {
-                        if (!storageSystem.CanInsert(bag, ent, null, out _))
+                        if (!storageSystem.CanInsert(bag, ent, out _))
                             Assert.Fail($"StartingGearPrototype {gearProto.ID} could not successfully put items into storage {bag.Id}");
 
                         server.EntMan.DeleteEntity(ent);
