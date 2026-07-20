@@ -29,7 +29,7 @@ public sealed partial class ClientRMCHandsSystem : RMCHandsSystem
                         if (!_hands.EnumerateHands((ent, hands)).Skip(1).TryFirstOrDefault(out var other))
                             return;
 
-                        _hands.UIHandClick((ent, hands), other, false);
+                        _hands.UIHandClick((ent, hands), other);
                     }))
             .Register<ClientRMCHandsSystem>();
     }

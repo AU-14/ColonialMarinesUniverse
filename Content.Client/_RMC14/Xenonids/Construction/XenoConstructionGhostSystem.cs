@@ -233,7 +233,7 @@ public sealed partial class XenoConstructionGhostSystem : EntitySystem
         if (!TryComp<XenoConstructionActionComponent>(selectedActionId, out _))
             return;
 
-        var request = new RequestPerformActionEvent(GetNetEntity(selectedActionId), null, GetNetCoordinates(coords), _rmcLagCompensation.GetLastRealTick(null));
+        var request = new RequestPerformActionEvent(GetNetEntity(selectedActionId), null, GetNetCoordinates(coords));
         RaisePredictiveEvent(request);
     }
 
