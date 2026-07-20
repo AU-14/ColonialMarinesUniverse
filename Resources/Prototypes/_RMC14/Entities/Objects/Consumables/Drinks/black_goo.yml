@@ -8,7 +8,6 @@
     solutions:
       drink:
         maxVol: 100
-  - type: Drink
   - type: Sprite
     sprite: _RMC14/Objects/Medical/black_goo.rsi
     layers:
