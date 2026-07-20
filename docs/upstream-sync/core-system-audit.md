@@ -660,3 +660,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Strip/Components/StrippableComponent.cs`, `Content.Tests/Shared/Strip/StripTimeCalculationTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms there are no later target changes to this calculation and all downstream subscribers only mutate `Multiplier`, `Additive`, or `Stealth`. Regressions cover a 90.5-second input with fractional multiplier/additive values and the zero clamp. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: Audit other interaction timers for accidental use of `TimeSpan.Seconds` or `Milliseconds`, especially RMC skill-adjusted do-afters, before normalizing their arithmetic.
+
+## CS-0043 — Remove sentience-event eligibility during zombification
+
+- Upstream: [space-wizards/space-station-14#39950](https://github.com/space-wizards/space-station-14/pull/39950), `0bbe335a3aec216e55e901b9d043de8b0d0c4db1`, 2025-08-29
+- Areas: Gamerules, Medical
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Zombifying an eligible animal now removes its `SentienceTarget` marker. The Random Sentience station event can no longer select an already-zombified creature and grant it a second sentience or ghost-role path.
+- RMC/CMU divergence: RMC retains the shared zombification flow with unrelated equipment exceptions and adds no sentience-target prototypes of its own. Standard eligible creatures and custom/admin zombification remain reachable, while zombie combat, mind ownership, infection, and RMC equipment behavior are unchanged.
+- Decision and rationale: Remove the stale eligibility component at the state transition, matching the target-final fix. Adding a zombie exclusion only to Random Sentience would leave the invalid marker visible to other consumers and couple the event query to a transformation detail.
+- Files changed: `Content.Server/Zombies/ZombieSystem.Transform.cs`, `Content.IntegrationTests/Tests/GameRules/ZombieSentienceTargetTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms Random Sentience still enumerates `SentienceTargetComponent`, the pinned target retains removal during zombification, and no RMC override re-adds it. A regression spawns an eligible monkey, zombifies it through the public system API, and requires the zombie marker to replace sentience eligibility. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: Audit other irreversible creature transformations for stale station-event eligibility markers, particularly ghost-role and polymorph transitions.
