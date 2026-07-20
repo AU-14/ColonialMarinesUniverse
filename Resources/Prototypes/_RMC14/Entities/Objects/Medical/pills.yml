@@ -1,6 +1,6 @@
 - type: entity
   name: pill
-  parent: BaseItem
+  parent: [SolutionPill, BaseItem]
   id: CMPill
   description: "A pill."
   components:
@@ -23,11 +23,11 @@
     skills:
       RMCSkillMedical: 1
   - type: Pill
-  - type: Food
+  - type: Edible
     delay: 0
     forceFeedDelay: 1
     transferAmount: null
-    eatMessage: food-swallow
+    edible: Pill
     useSound: /Audio/Items/pill.ogg
   - type: BadFood
   - type: FlavorProfile
