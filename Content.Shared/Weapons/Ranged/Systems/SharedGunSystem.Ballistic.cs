@@ -38,6 +38,8 @@ public abstract partial class SharedGunSystem
         SubscribeLocalEvent<BallisticAmmoSelfRefillerComponent, EmpPulseEvent>(OnRefillerEmpPulsed);
 
         SubscribeLocalEvent<BallisticAmmoInteractLoaderComponent, AfterInteractEvent>(OnBallisticAmmoLoad);
+
+        InitializeRmcBallistic();
     }
 
     private void OnBallisticRefillerMapInit(Entity<BallisticAmmoSelfRefillerComponent> entity, ref MapInitEvent _)
@@ -50,7 +52,7 @@ public abstract partial class SharedGunSystem
         if (args.Handled)
             return;
 
-        ManualCycle(ent, TransformSystem.GetMapCoordinates(ent), args.User);
+        CycleBallisticWithRmcDelay(ent, args.User);
         args.Handled = true;
     }
 
@@ -59,7 +61,7 @@ public abstract partial class SharedGunSystem
         if (args.Handled)
             return;
 
-        if (TryBallisticInsert(ent, args.Used, args.User))
+        if (TryAmmoInsert(ent.Owner, ent.Comp, args.Used, args.User, ent.Owner, ent.Comp.InsertDelay))
             args.Handled = true;
     }
 
@@ -169,7 +171,7 @@ public abstract partial class SharedGunSystem
             {
                 Text = Loc.GetString("gun-ballistic-cycle"),
                 Disabled = GetBallisticShots(component) == 0,
-                Act = () => ManualCycle((uid, component), TransformSystem.GetMapCoordinates(uid), args.User),
+                Act = () => CycleBallisticWithRmcDelay((uid, component), args.User),
             });
 
         }

@@ -1,6 +1,8 @@
 using Content.Shared._RMC14.Attachable.Systems;
 using Content.Shared._RMC14.Emplacements;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared.DoAfter;
 using Content.Shared.Weapons.Ranged.Components;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
@@ -81,7 +83,7 @@ public abstract partial class SharedGunSystem
     }
 
     /// <summary>
-    /// RMC assisted reload compatibility. Current ballistic loading owns validation and stack splitting.
+    /// RMC delayed direct and assisted reload compatibility. Current ballistic loading owns final validation and stack splitting.
     /// </summary>
     public bool TryAmmoInsert(
         EntityUid providerUid,
@@ -91,9 +93,27 @@ public abstract partial class SharedGunSystem
         EntityUid weapon,
         TimeSpan insertDelay)
     {
-        _ = weapon;
-        _ = insertDelay;
-        return TryBallisticInsert((providerUid, provider), ammo, loader);
+        if (!CanInsertBallistic((providerUid, provider), ammo))
+            return false;
+
+        if (insertDelay <= TimeSpan.Zero)
+            return TryBallisticInsert((providerUid, provider), ammo, loader);
+
+        _doAfter.TryStartDoAfter(new DoAfterArgs(
+            EntityManager,
+            loader,
+            insertDelay,
+            new DelayedAmmoInsertDoAfterEvent(),
+            eventTarget: providerUid,
+            target: weapon,
+            used: ammo)
+        {
+            BreakOnMove = true,
+            BreakOnDamage = false,
+            NeedHand = true,
+        });
+
+        return true;
     }
 
     public void SetProjectileTarget(EntityUid projectile, EntityUid target)

@@ -58,6 +58,11 @@ rmc-assisted-reload-fail-mismatch = The {$ammo} can't be loaded into a {$weapon}
 rmc-assisted-reload-start-user = You begin reloading {$target}'s {$weapon}! Hold still...
 rmc-assisted-reload-start-target = {$reloader} begins reloading your {$weapon} with the {$ammo}! Hold still...
 
+gun-ballistic-cycle-delayed = You begin unloading {CAPITALIZE(THE($entity))}. Hold still...
+gun-ballistic-cycle-delayed-cancelled = You stop unloading {CAPITALIZE(THE($entity))}.
+gun-ballistic-cycle-delayed-empty = {CAPITALIZE(THE($entity))} is already unloaded.
+gun-ballistic-transfer-cancelled = Your reload was interrupted!
+
 rmc-gun-stacks-hit-single = Bullseye!
 rmc-gun-stacks-hit-multiple = Bullseye! {$hits} hits in a row!
 rmc-gun-stacks-reset = The {$weapon} beeps as it loses its targeting data, and returns to normal firing procedures.
