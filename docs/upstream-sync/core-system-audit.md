@@ -1111,3 +1111,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Atmos/EntitySystems/AtmosphereSystem.API.cs`, `Content.Server/Atmos/Consoles/AtmosMonitoringConsoleSystem.cs`, `Content.Shared/Atmos/Consoles/Components/AtmosMonitoringConsoleComponent.cs`, `Content.Client/Atmos/Consoles/AtmosMonitoringConsoleNavMapControl.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms the producer raises for a network with a grid, the console restricts cleanup to that grid and network ID, all subnet construction uses typed color, and the client consumes it directly. Client/shared/server compilation and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a topology regression that removes a monitored pipe net, verifies every affected cached chunk drops the old ID, and round-trips a non-white pipe color through component state.
+
+## CS-0077 — Inherit the default parrot name
+
+- Upstream: [space-wizards/space-station-14#39131](https://github.com/space-wizards/space-station-14/pull/39131), `378fbb0ba91355417750d31ae094b5622649de97`, 2025-07-22
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The default `parrot` name now lives on `MobParrotBase` rather than only `MobParrot`, so derived parrot prototypes inherit a valid display name unless they intentionally override it.
+- RMC/CMU divergence: RMC does not override the standard parrot base; named special parrots such as Polly keep their concrete names. Accent, memory, ghost-role, petting, and movement behavior are unchanged.
+- Decision and rationale: Port the target-final metadata move as one prototype change. Keeping the duplicate concrete name would obscure whether future parrot children correctly inherit base identity.
+- Files changed: `Resources/Prototypes/Entities/Mobs/NPCs/animals.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains the base name and removes it from `MobParrot`, while named descendants still override it. Prototype loading is queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None beyond normal prototype-inheritance linting.
