@@ -11,6 +11,7 @@ using Content.Shared.Item;
 using Content.Shared.Storage;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Client.Player;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.CustomControls;
@@ -24,6 +25,7 @@ namespace Content.Client.UserInterface.Systems.Storage.Controls;
 public sealed partial class StorageWindow : BaseWindow
 {
     [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private IPlayerManager _player = default!;
     private readonly StorageUIController _storageController;
 
     public EntityUid? StorageEntity;
@@ -567,7 +569,13 @@ public sealed partial class StorageWindow : BaseWindow
             currentLocation = dragging.Location;
         }
         else if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                 storageSystem.CanInsert(StorageEntity.Value, handEntity, out _, storageComp: storageComponent, ignoreLocation: true))
+                 storageSystem.CanInsert(
+                     StorageEntity.Value,
+                     handEntity,
+                     _player.LocalEntity,
+                     out _,
+                     storageComp: storageComponent,
+                     ignoreLocation: true))
         {
             currentEnt = handEntity;
             currentLocation = new ItemStorageLocation(_storageController.DraggingRotation, Vector2i.Zero);
@@ -584,6 +592,7 @@ public sealed partial class StorageWindow : BaseWindow
         var origin = GetMouseGridPieceLocation((currentEnt, itemComp), currentLocation);
 
         var itemShape = itemSystem.GetAdjustedItemShape(
+            (StorageEntity.Value, storageComponent),
             (currentEnt, itemComp),
             currentLocation.Rotation,
             origin);
@@ -605,7 +614,10 @@ public sealed partial class StorageWindow : BaseWindow
 
             foreach (var location in locations.Value)
             {
-                var shape = itemSystem.GetAdjustedItemShape(currentEnt, location);
+                var shape = itemSystem.GetAdjustedItemShape(
+                    (StorageEntity.Value, storageComponent),
+                    currentEnt,
+                    location);
                 var bound = shape.GetBoundingBox();
 
                 var spotFree = storageSystem.ItemFitsInGridLocation(currentEnt, StorageEntity.Value, location);
@@ -660,13 +672,19 @@ public sealed partial class StorageWindow : BaseWindow
     {
         var origin = Vector2i.Zero;
 
-        if (StorageEntity != null)
-            origin = _entity.GetComponent<StorageComponent>(StorageEntity.Value).Grid.GetBoundingBox().BottomLeft;
+        if (!_entity.TryGetComponent(StorageEntity, out StorageComponent? storage))
+            return origin;
+
+        origin = storage.Grid.GetBoundingBox().BottomLeft;
 
         var textureSize = (Vector2) _emptyTexture!.Size * 2;
         var position = ((UserInterfaceManager.MousePositionScaled.Position
                          - _backgroundGrid.GlobalPosition
-                         - ItemGridPiece.GetCenterOffset(entity, location, _entity) * 2
+                         - ItemGridPiece.GetCenterOffset(
+                             (StorageEntity!.Value, storage),
+                             entity,
+                             location,
+                             _entity) * 2
                          + textureSize / 2f)
                         / textureSize).Floored() + origin;
         return position;
@@ -707,7 +725,7 @@ public sealed partial class StorageWindow : BaseWindow
         if (args.Function == ContentKeyFunctions.MoveStoredItem && StorageEntity != null)
         {
             if (handsSystem.GetActiveHandEntity() is { } handEntity &&
-                storageSystem.CanInsert(StorageEntity.Value, handEntity, out _))
+                storageSystem.CanInsert(StorageEntity.Value, handEntity, _player.LocalEntity, out _))
             {
                 var pos = GetMouseGridPieceLocation((handEntity, null),
                     new ItemStorageLocation(_storageController.DraggingRotation, Vector2i.Zero));

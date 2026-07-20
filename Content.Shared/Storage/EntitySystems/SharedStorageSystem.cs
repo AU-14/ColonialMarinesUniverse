@@ -1,6 +1,7 @@
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._RMC14.Storage;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
@@ -64,6 +65,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private SharedHandsSystem _sharedHandsSystem = default!;
     [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private RMCStorageSystem _rmcStorage = default!;
     [Dependency] protected SharedTransformSystem TransformSystem = default!;
     [Dependency] protected SharedUserInterfaceSystem UI = default!;
     [Dependency] private TagSystem _tag = default!;
@@ -205,8 +207,14 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
     private void OnMapInit(Entity<StorageComponent> entity, ref MapInitEvent args)
     {
+        var hadUseDelay = HasComp<UseDelayComponent>(entity);
+
         UseDelay.SetLength(entity.Owner, entity.Comp.QuickInsertCooldown, QuickInsertUseDelayID);
         UseDelay.SetLength(entity.Owner, entity.Comp.OpenUiCooldown, OpenUiUseDelayID);
+
+        // Storage's named delays should not add an unrelated one-second default delay.
+        if (!hadUseDelay)
+            UseDelay.SetLength(entity.Owner, TimeSpan.Zero);
     }
 
     private void OnStorageGetState(EntityUid uid, StorageComponent component, ref ComponentGetState args)
@@ -293,6 +301,9 @@ public abstract partial class SharedStorageSystem : EntitySystem
         // close ui
         foreach (var entity in storageComp.Container.ContainedEntities)
         {
+            if (HasComp<RMCItemKeepUIOpenOnStorageClosedComponent>(entity))
+                continue;
+
             UI.CloseUis(entity, actor);
         }
     }
@@ -406,7 +417,12 @@ public abstract partial class SharedStorageSystem : EntitySystem
         return true;
     }
 
-    public void OpenStorageUI(EntityUid uid, EntityUid actor, StorageComponent? storageComp = null, bool silent = true)
+    public void OpenStorageUI(
+        EntityUid uid,
+        EntityUid actor,
+        StorageComponent? storageComp = null,
+        bool silent = true,
+        bool doAfter = true)
     {
         // Handle recursively opening nested storages.
         if (ContainerSystem.TryGetContainingContainer(uid, out var container) &&
@@ -414,7 +430,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
         {
             _nestedCheck = true;
             HideStorageWindow(container.Owner, actor);
-            OpenStorageUIInternal(uid, actor, storageComp, silent: true);
+            OpenStorageUIInternal(uid, actor, storageComp, silent: true, doAfter);
             _nestedCheck = false;
         }
         else
@@ -424,7 +440,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
             if (_openStorageLimit == 1 && !_tag.HasTag(actor, BypassOpenStorageLimitTag))
                 UI.CloseUserUis<StorageComponent.StorageUiKey>(actor);
 
-            OpenStorageUIInternal(uid, actor, storageComp, silent: silent);
+            OpenStorageUIInternal(uid, actor, storageComp, silent: silent, doAfter);
         }
     }
 
@@ -432,8 +448,16 @@ public abstract partial class SharedStorageSystem : EntitySystem
     ///     Opens the storage UI for an entity
     /// </summary>
     /// <param name="entity">The entity to open the UI for</param>
-    private void OpenStorageUIInternal(EntityUid uid, EntityUid entity, StorageComponent? storageComp = null, bool silent = true)
+    private void OpenStorageUIInternal(
+        EntityUid uid,
+        EntityUid entity,
+        StorageComponent? storageComp = null,
+        bool silent = true,
+        bool doAfter = true)
     {
+        if (doAfter && _rmcStorage.OpenDoAfter(uid, entity, storageComp, silent))
+            return;
+
         if (!Resolve(uid, ref storageComp, false))
             return;
 
@@ -574,7 +598,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
                 if (entity == args.User
                     || !_itemQuery.TryGetComponent(entity, out var itemComp) // Need comp to get item size to get weight
                     || !ProtoMan.Resolve(itemComp.Size, out var itemSize)
-                    || !CanInsert(uid, entity, out _, storageComp, item: itemComp)
+                    || !CanInsert(uid, entity, args.User, out _, storageComp, item: itemComp)
                     || !_interactionSystem.InRangeUnobstructed(args.User, entity))
                 {
                     continue;
@@ -1010,6 +1034,13 @@ public abstract partial class SharedStorageSystem : EntitySystem
             || Resolve(target, ref targetLock, false) && targetLock.Locked)
             return;
 
+        if (user != null &&
+            (!CanInteract(user.Value, (source, sourceComp), silent: false) ||
+             !CanInteract(user.Value, (target, targetComp), silent: false)))
+        {
+            return;
+        }
+
         // TODO: Remove OrderBy when this issue is fixed in RT https://github.com/space-wizards/RobustToolbox/issues/6241
         foreach (var entity in entities.ToArray().OrderBy(e => GetNetEntity(e)))
         {
@@ -1041,6 +1072,30 @@ public abstract partial class SharedStorageSystem : EntitySystem
         bool ignoreStacks = false,
         bool ignoreLocation = false)
     {
+        return CanInsert(
+            uid,
+            insertEnt,
+            null,
+            out reason,
+            storageComp,
+            item,
+            ignoreStacks,
+            ignoreLocation);
+    }
+
+    /// <summary>
+    /// Verifies if an entity can be stored and applies actor-aware RMC storage policy.
+    /// </summary>
+    public bool CanInsert(
+        EntityUid uid,
+        EntityUid insertEnt,
+        EntityUid? user,
+        out string? reason,
+        StorageComponent? storageComp = null,
+        ItemComponent? item = null,
+        bool ignoreStacks = false,
+        bool ignoreLocation = false)
+    {
         if (!Resolve(uid, ref storageComp) || !Resolve(insertEnt, ref item, false))
         {
             reason = null;
@@ -1064,19 +1119,27 @@ public abstract partial class SharedStorageSystem : EntitySystem
             && _stackQuery.TryGetComponent(insertEnt, out var stack)
             && HasSpaceInStacks((uid, storageComp), stack.StackTypeId))
         {
+            if (!_rmcStorage.CanInsertStoreSkill((uid, storageComp, null), insertEnt, user, out var stackPopup))
+            {
+                reason = stackPopup;
+                return false;
+            }
+
             reason = null;
             return true;
         }
 
         var maxSize = GetMaxItemSize((uid, storageComp));
-        if (ItemSystem.GetSizePrototype(item.Size) > maxSize)
+        var ignoreItemSize = _rmcStorage.IgnoreItemSize((uid, storageComp), insertEnt);
+        if (ItemSystem.GetSizePrototype(item.Size) > maxSize && !ignoreItemSize)
         {
             reason = "comp-storage-too-big";
             return false;
         }
 
         if (TryComp<StorageComponent>(insertEnt, out var insertStorage)
-            && GetMaxItemSize((insertEnt, insertStorage)) >= maxSize)
+            && GetMaxItemSize((insertEnt, insertStorage)) >= maxSize
+            && !ignoreItemSize)
         {
             reason = "comp-storage-too-big";
             return false;
@@ -1089,6 +1152,12 @@ public abstract partial class SharedStorageSystem : EntitySystem
                 reason = "comp-storage-insufficient-capacity";
                 return false;
             }
+        }
+
+        if (!_rmcStorage.CanInsert((uid, storageComp), insertEnt, user, out var popup))
+        {
+            reason = popup;
+            return false;
         }
 
         CheckingCanInsert = true;
@@ -1183,6 +1252,10 @@ public abstract partial class SharedStorageSystem : EntitySystem
         if (!Resolve(uid, ref storageComp))
             return false;
 
+        // Run actor-aware policy before stack merging, which does not raise a container insertion attempt.
+        if (!CanInsert(uid, insertEnt, user, out reason, storageComp))
+            return false;
+
         /*
          * 1. If the inserted thing is stackable then try to stack it to existing stacks
          * 2. If anything remains insert whatever is possible.
@@ -1254,7 +1327,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
         var toInsert = activeItem;
 
-        if (!CanInsert(ent, toInsert.Value, out var reason, ent.Comp))
+        if (!CanInsert(ent, toInsert.Value, player.Owner, out var reason, ent.Comp))
         {
             _popupSystem.PopupEntity(Loc.GetString(reason ?? "comp-storage-cant-insert"), ent, player);
             return false;
@@ -1361,7 +1434,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
         if (storageEnt.Comp.StoredItems.TryGetValue(itemEnt.Owner, out var existing))
         {
-            AddOccupied(itemEnt, existing, _ignored);
+            AddOccupied(storageEnt, itemEnt, existing, _ignored);
         }
 
         // This uses a faster path than the typical codepaths
@@ -1372,7 +1445,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
         // means we can skip getting the item's rotated shape at all if the tile is occupied.
         // This mostly makes heavy checks (e.g. area insert) much, much faster.
         var fastPath = false;
-        var itemShape = ItemSystem.GetItemShape(itemEnt);
+        var itemShape = ItemSystem.GetItemShape(storageEnt, itemEnt);
         var fastAngles = itemShape.Count == 1;
 
         if (itemShape.Count == 1 && itemShape[0].Contains(Vector2i.Zero))
@@ -1439,7 +1512,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
                         }
 
                         _itemShape.Clear();
-                        ItemSystem.GetAdjustedItemShape(_itemShape, itemEnt, angle, position);
+                        ItemSystem.GetAdjustedItemShape(_itemShape, storageEnt, itemEnt, angle, position);
 
                         if (ItemFitsInGridLocation(storageEnt.Comp.OccupiedGrid, _itemShape, _ignored))
                         {
@@ -1605,13 +1678,13 @@ public abstract partial class SharedStorageSystem : EntitySystem
         if (!gridBounds.Contains(position))
             return false;
 
-        var itemShape = ItemSystem.GetAdjustedItemShape(itemEnt, rotation, position);
+        var itemShape = ItemSystem.GetAdjustedItemShape(storageEnt, itemEnt, rotation, position);
         // Ignore the item's existing location for fitting purposes.
         _ignored.Clear();
 
         if (storageEnt.Comp.StoredItems.TryGetValue(itemEnt.Owner, out var existing))
         {
-            AddOccupied(itemEnt, existing, _ignored);
+            AddOccupied(storageEnt, itemEnt, existing, _ignored);
         }
 
         return ItemFitsInGridLocation(storageEnt.Comp.OccupiedGrid, itemShape, _ignored);
@@ -1668,14 +1741,22 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
     private void AddOccupiedEntity(Entity<StorageComponent> storageEnt, Entity<ItemComponent?> itemEnt, ItemStorageLocation location)
     {
-        AddOccupied(itemEnt, location, storageEnt.Comp.OccupiedGrid);
+        AddOccupied(
+            new Entity<StorageComponent?>(storageEnt.Owner, storageEnt.Comp),
+            itemEnt,
+            location,
+            storageEnt.Comp.OccupiedGrid);
 
         Dirty(storageEnt);
     }
 
-    private void AddOccupied(Entity<ItemComponent?> itemEnt, ItemStorageLocation location, Dictionary<Vector2i, ulong> occupied)
+    private void AddOccupied(
+        Entity<StorageComponent?> storageEnt,
+        Entity<ItemComponent?> itemEnt,
+        ItemStorageLocation location,
+        Dictionary<Vector2i, ulong> occupied)
     {
-        var adjustedShape = ItemSystem.GetAdjustedItemShape((itemEnt.Owner, itemEnt.Comp), location);
+        var adjustedShape = ItemSystem.GetAdjustedItemShape(storageEnt, itemEnt, location);
         AddOccupied(adjustedShape, occupied);
     }
 
@@ -1752,7 +1833,8 @@ public abstract partial class SharedStorageSystem : EntitySystem
 
     private void RemoveOccupiedEntity(Entity<StorageComponent> storageEnt, Entity<ItemComponent?> itemEnt, ItemStorageLocation location)
     {
-        var adjustedShape = ItemSystem.GetAdjustedItemShape((itemEnt.Owner, itemEnt.Comp), location);
+        var storage = new Entity<StorageComponent?>(storageEnt.Owner, storageEnt.Comp);
+        var adjustedShape = ItemSystem.GetAdjustedItemShape(storage, itemEnt, location);
 
         RemoveOccupied(adjustedShape, storageEnt.Comp.OccupiedGrid);
 
@@ -1805,7 +1887,7 @@ public abstract partial class SharedStorageSystem : EntitySystem
         {
             if (!_itemQuery.TryGetComponent(item, out var itemComp))
                 continue;
-            sum += ItemSystem.GetItemShape((item, itemComp)).GetArea();
+            sum += ItemSystem.GetItemShape(entity, (item, itemComp)).GetArea();
         }
 
         return sum;

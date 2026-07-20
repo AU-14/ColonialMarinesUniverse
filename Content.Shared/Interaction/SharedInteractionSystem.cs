@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._RMC14.Storage;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Administration.Logs;
 using Content.Shared.CCVar;
@@ -1351,7 +1352,8 @@ namespace Content.Shared.Interaction
                 return false;
 
             // we don't check if the user can access the storage entity itself. This should be handed by the UI system.
-            return _ui.IsUiOpen(container.Owner, StorageComponent.StorageUiKey.Key, user);
+            return _ui.IsUiOpen(container.Owner, StorageComponent.StorageUiKey.Key, user) ||
+                   HasComp<RMCItemKeepUIOpenOnStorageClosedComponent>(target);
         }
 
         /// <summary>

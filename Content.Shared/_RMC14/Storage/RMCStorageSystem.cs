@@ -192,6 +192,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
         };
         _doAfter.TryStartDoAfter(doAfter);
 
+        // A rejected duplicate still consumes the open attempt; otherwise repeated input can bypass the delay.
         return true;
     }
 
@@ -210,7 +211,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
             return;
 
         args.Handled = true;
-        _storage.OpenStorageUI(uid.Value, entity.Value, storage, args.Silent);
+        _storage.OpenStorageUI(uid.Value, entity.Value, storage, args.Silent, doAfter: false);
     }
 
     private void OnStorageSkillOpenAttempt(Entity<StorageSkillRequiredComponent> ent, ref StorageInteractAttemptEvent args)
@@ -575,7 +576,7 @@ public sealed partial class RMCStorageSystem : EntitySystem
             if (!_entityWhitelist.CheckBoth(slot.ContainedEntity, ent.Comp.Blacklist, ent.Comp.Whitelist))
                 continue;
 
-            _storage.OpenStorageUI(slot.ContainedEntity.Value, ent.Owner, storageComp);
+            _storage.OpenStorageUI(slot.ContainedEntity.Value, ent.Owner, storageComp, doAfter: false);
         }
     }
 

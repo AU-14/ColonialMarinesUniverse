@@ -424,7 +424,15 @@ public sealed partial class StorageUIController : UIController, IOnSystemChanged
         if (DraggingGhost == null)
             return;
 
+        var containerSystem = EntityManager.System<ContainerSystem>();
+        if (!containerSystem.TryGetContainingContainer((DraggingGhost.Entity, null), out var container) ||
+            !EntityManager.TryGetComponent(container.Owner, out StorageComponent? storageComp))
+        {
+            return;
+        }
+
         var offset = ItemGridPiece.GetCenterOffset(
+            (container.Owner, storageComp),
             (DraggingGhost.Entity, null),
             new ItemStorageLocation(DraggingRotation, Vector2i.Zero),
             EntityManager);
