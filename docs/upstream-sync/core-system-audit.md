@@ -2945,3 +2945,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/GameRules/roundstart.yml`, `Resources/Prototypes/GameRules/variation.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static reference review confirms the old ID has no remaining repository references and the corrected ID has exactly one definition and one roundstart reference. YAML/prototype validation plus standard variation selection, probability/or-group, decal spawning, map initialization, and RMC preset cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1713 as `Ported (CS-0216)` when wave 0009 is committed.
+
+## CS-0217 — Run activatable UI before food ingestion
+
+- Upstream: [space-wizards/space-station-14#41547](https://github.com/space-wizards/space-station-14/pull/41547), `fa2e4309cc95356152d8df51591714b385275219`, 2025-11-23
+- Areas: Medical, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `FoodSystem` now handles `UseInHandEvent` after `ActivatableUISystem` as well as openable and inventory systems. An entity that is both food and an activatable UI—most notably standard paper—therefore gives its UI the default interaction first; ingestion still runs when the UI declines to handle the event.
+- RMC/CMU divergence: Pinned upstream had already replaced `FoodComponent` with `EdibleComponent` and moved this handler into `IngestionSystem`. CMU retains the older food architecture, so the functional ordering constraint is adapted to `FoodSystem`; RMC's separate `CMBasePaper` is not a food entity and remains unaffected.
+- Decision and rationale: Port only the behavior-bearing dependency addition. The upstream change to collection-expression syntax and its pre-existing `AfterInteractEvent` tool-ordering declaration are not prerequisites for fixing CMU's use-in-hand race and would add unrelated refactor delta.
+- Files changed: `Content.Shared/Nutrition/EntitySystems/FoodSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static subscription and handler review confirms UI executes first, both handlers honor `Handled`, and failed UI activation can still fall through to existing ingestion. Shared compilation plus ordinary food, standard paper, RMC paper, UI accepted/rejected, openable, inventory, eat-verb, prediction, and force-feed cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1773 as `Ported (CS-0217)` when wave 0009 is committed; revisit the adaptation when CMU adopts upstream's `EdibleComponent`/`IngestionSystem` refactor.

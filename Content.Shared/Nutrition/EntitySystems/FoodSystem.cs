@@ -22,6 +22,7 @@ using Content.Shared.Nutrition.Components;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
 using Content.Shared.Storage;
+using Content.Shared.UserInterface;
 using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
@@ -63,7 +64,7 @@ public sealed partial class FoodSystem : EntitySystem
 
         // TODO add InteractNoHandEvent for entities like mice.
         // run after openable for wrapped/peelable foods
-        SubscribeLocalEvent<FoodComponent, UseInHandEvent>(OnUseFoodInHand, after: new[] { typeof(OpenableSystem), typeof(InventorySystem) });
+        SubscribeLocalEvent<FoodComponent, UseInHandEvent>(OnUseFoodInHand, after: new[] { typeof(OpenableSystem), typeof(InventorySystem), typeof(ActivatableUISystem) });
         SubscribeLocalEvent<FoodComponent, AfterInteractEvent>(OnFeedFood);
         SubscribeLocalEvent<FoodComponent, GetVerbsEvent<AlternativeVerb>>(AddEatVerb);
         SubscribeLocalEvent<FoodComponent, ConsumeDoAfterEvent>(OnDoAfter);
