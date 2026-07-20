@@ -1436,3 +1436,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Tabletop/TabletopSystem.Map.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static evaluation of the initial sequence confirms one-based inputs and distinct positions separated by `TabletopSeparation`; map creation and round-reset behavior remain unchanged. Server compilation plus multi-tabletop placement and reset cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a deterministic sequence test covering enough values to cross several spiral corners and assert no duplicate coordinates.
+
+## CS-0102 — Return the removed reagent volume
+
+- Upstream: [space-wizards/space-station-14#39266](https://github.com/space-wizards/space-station-14/pull/39266), `d4e77423caf57cc8e3bf34ef4912bc4a467e6c66`, 2025-07-29
+- Areas: Chemistry
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: All `SharedSolutionContainerSystem.RemoveReagent` overloads now return the exact `FixedPoint2` volume removed instead of reducing the result to a Boolean; unsuccessful removal returns zero and still avoids unnecessary chemical updates.
+- RMC/CMU divergence: RMC has additional medical, xeno, refill, and repair callers of these overloads, but all currently discard the return value. Their behavior is unchanged while future callers can distinguish full, partial, and zero removal.
+- Decision and rationale: Port the retained target-final API as a unit across all three overloads so the wrapper preserves the underlying `Solution.RemoveReagent` quantity without inconsistent signatures.
+- Files changed: `Content.Shared/Chemistry/EntitySystems/SharedSolutionContainerSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static usage review confirms no CMU/RMC caller consumes these overloads as Boolean, and the success path returns the same quantity used to decide whether `UpdateChemicals` runs. Shared compilation and zero/partial/full removal cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Migrate quantity-sensitive RMC consumers to use the returned amount where accounting currently assumes the requested volume was available.
