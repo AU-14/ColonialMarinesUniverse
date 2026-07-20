@@ -3373,3 +3373,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/spider_web.yml`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype comparison confirms the clown-web fixture now matches the target-final collision block and later upstream edits do not replace it. YAML lint plus door closing/opening, clown-web slipping, walking/running contact, item throws, web destruction, standard webs, RMC resin doors, and map-load cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; later target changes add construction, damage, and solution behavior but retain this fixture unchanged.
+
+## CS-0249 â€” Initialize gas-canister UI state
+
+- Upstream: [space-wizards/space-station-14#42616](https://github.com/space-wizards/space-station-14/pull/42616), `256ecd3c468e023ae5f4071e62b6b0f2e356c999`, 2026-01-26
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Gas canisters now refresh their bound UI state on map initialization and each UI-open event, so empty or unchanged canisters populate pressure, port, and tank fields without waiting for an atmosphere update. Server-side state generation quietly returns when a partial canister lacks its node container.
+- RMC/CMU divergence: CMU retains the shared standard canister UI and server atmosphere implementation. RMC canister prototypes use the same component contract, so they receive the initialization fix without changing gas simulation, port connectivity, release valves, tank slots, appearance, or admin logging.
+- Decision and rationale: Port all target-final lines from the upstream commit together. Map initialization supplies the first authoritative state, while UI-open refresh covers pre-map-init mapper use and avoids stale latency for players. Suppressing missing-component logging is required because those lifecycle hooks can legitimately encounter lightweight test or prototype entities that cannot produce full server state.
+- Files changed: `Content.Shared/Atmos/Piping/Unary/Systems/SharedGasCanisterSystem.cs`, `Content.Server/Atmos/Piping/Unary/EntitySystems/GasCanisterSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event-flow review confirms the new hooks call the existing client/server `DirtyUI` overrides, full canisters still resolve authoritative node state, and partial entities return without mutation or error logs. Shared/client/server compilation plus empty and filled map canisters, UI open before/after map init, connected/disconnected ports, inserted tanks, unchanged pressure, partial test entities, and RMC canister prototypes are queued for the index-2999 checkpoint.
+- Follow-up/debt: A later pinned-target commit also refreshes initial pressure appearance; integrate it at its own audited history position rather than broadening this UI-state port.

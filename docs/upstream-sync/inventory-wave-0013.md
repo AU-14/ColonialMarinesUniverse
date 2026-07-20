@@ -155,7 +155,7 @@ behavior to port.
 2536 | a35a48c351c24ea2230e8646d38da942880407ee | Fix sound issues with arti crusher. (#42406) | Deferred | Interactions | Moves behavior into newer shared and predicted audio architecture.
 2537 | a237493841100673de05dc05c018fc0d02afd3a0 | Prevent picking up chameleon projector disguises via context menu (#42656) | Ported (CS-0245) | Interactions, Gamerules | CMU's pre-rewrite hands hook now cancels hand-container insertion and reveals the disguise, closing context-menu pickup.
 2538 | 235ad21f22edf2d02c59c86fafdc1e2daee5d300 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2539 | 256ecd3c468e023ae5f4071e62b6b0f2e356c999 | Refresh gas canister UI on canister startup (#42616) | PortCandidate | Interactions, Physics | CMU's canister system lacks the MapInit and UIOpened refresh hooks.
+2539 | 256ecd3c468e023ae5f4071e62b6b0f2e356c999 | Refresh gas canister UI on canister startup (#42616) | Ported (CS-0249) | Interactions, Physics | Canister UI state now refreshes at map initialization and whenever the UI opens.
 2540 | fdd8c2a1f6db2fe5c8d178b9f4353e407b11b05a | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2541 | 52155802e38c10612ca8197ebe98feec7b334053 | Doors can now close on clown spider webs (#42589) | Ported (CS-0248) | Interactions, Physics | Clown webs now use the non-hard web fixture and no longer block closing doors.
 2542 | b33c780a6c5888db376a5aaa92e8472f5ed27c04 | Automatic changelog update | Irrelevant | — | Generated changelog only.
