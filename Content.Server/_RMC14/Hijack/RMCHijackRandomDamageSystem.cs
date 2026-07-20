@@ -207,10 +207,11 @@ public sealed partial class RMCHijackRandomDamageSystem : EntitySystem
             return;
 
         var targetTotal = targetDamage.GetTotal();
-        if (targetTotal <= FixedPoint2.Zero || damageable.TotalDamage >= targetTotal)
+        var currentTotal = _damageable.GetTotalDamage((uid, damageable));
+        if (targetTotal <= FixedPoint2.Zero || currentTotal >= targetTotal)
             return;
 
-        var remaining = targetTotal - damageable.TotalDamage;
+        var remaining = targetTotal - currentTotal;
         var damage = targetDamage * (remaining / targetTotal);
 
         _damageable.TryChangeDamage(uid, damage, true, damageable: damageable);

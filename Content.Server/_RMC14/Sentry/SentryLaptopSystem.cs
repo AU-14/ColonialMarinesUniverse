@@ -352,7 +352,7 @@ public sealed partial class SentryLaptopSystem : SharedSentryLaptopSystem
         foreach (var threshold in destruct.Thresholds)
         {
             if (threshold.Trigger is DamageTrigger damageTrigger)
-                max = Math.Max(max, damageTrigger.Damage);
+                max = Math.Max(max, damageTrigger.Damage.Float());
         }
 
         return max > 0f ? max : base.GetSentryMaxHealth(sentry);

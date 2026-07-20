@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Chasm;
+using Content.Shared.Chat;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.Mobs.Components;
@@ -536,7 +537,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                     if (_chasmFallingQuery.HasComp(toPit))
                         continue;
 
-                    _chasm.StartFalling(uid, chasm, toPit);
+                    _chasm.StartFalling((uid, chasm), toPit, false);
                     _audio.PlayEntity(chasm.FallingSound, toPit, uid);
                 }
             }

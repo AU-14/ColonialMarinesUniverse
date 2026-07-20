@@ -1,6 +1,7 @@
 using Content.Server.Actions;
 using Content.Server.Chat.Systems;
 using Content.Shared._RMC14.Marines.Orders;
+using Content.Shared.Chat;
 using Robust.Shared.Random;
 
 namespace Content.Server._RMC14.Marines.Orders;

@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Mortar;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Rangefinder;
+using Content.Shared.Chat;
 using Content.Shared.Maps;
 using Robust.Server.Containers;
 using Robust.Shared.Map;
