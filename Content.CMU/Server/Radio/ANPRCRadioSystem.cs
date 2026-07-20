@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Server._RMC14.TacticalMap;
 using Content.Server.Chat.Managers;
@@ -361,6 +362,18 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         radio.Comp.GrantedChannels.Clear();
     }
 
+    // ItemSlotsSystem.TryGetSlot resolves with logMissing on, so calling it directly logs
+    // an error for any set that has no ItemSlots component. AllComponentsOneToOneDeleteTest
+    // builds a bare entity carrying only ANPRCRadio, which hits exactly that. always come
+    // through here rather than calling TryGetSlot on a radio directly
+    private bool TryGetRadioSlot(EntityUid uid, string slotId, [NotNullWhen(true)] out ItemSlot? slot)
+    {
+        slot = null;
+
+        return TryComp(uid, out ItemSlotsComponent? slots) &&
+               _itemSlots.TryGetSlot(uid, slotId, out slot, slots);
+    }
+
     private void UpdateRelayAnchor(Entity<ANPRCRadioComponent> ent)
     {
         if ((!ent.Comp.IsEquipped && !ent.Comp.Planted) || !ent.Comp.Enabled)
@@ -390,7 +403,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         anchor.RangeMultiplier = rangeMultiplier;
         anchor.Planted = ent.Comp.Planted;
 
-        if (_itemSlots.TryGetSlot(ent.Owner, AntennaSlotId, out var antennaSlot) &&
+        if (TryGetRadioSlot(ent.Owner, AntennaSlotId, out var antennaSlot) &&
             TryComp(antennaSlot.Item, out ANPRCAntennaComponent? antenna))
         {
             anchor.FullRange = antenna.FullRange * rangeMultiplier;
@@ -578,7 +591,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         var mast = false;
         var state = ANPRCPackVisualState.Bare;
 
-        if (_itemSlots.TryGetSlot(ent.Owner, AntennaSlotId, out var slot) &&
+        if (TryGetRadioSlot(ent.Owner, AntennaSlotId, out var slot) &&
             TryComp(slot.Item, out ANPRCAntennaComponent? antenna))
         {
             // the mast is the only stationary antenna, anything else draws as a whip

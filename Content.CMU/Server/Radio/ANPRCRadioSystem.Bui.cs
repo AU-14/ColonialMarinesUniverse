@@ -297,7 +297,7 @@ public sealed partial class ANPRCRadioSystem
 
         var antennaLabel = "NONE";
 
-        if (_itemSlots.TryGetSlot(ent.Owner, AntennaSlotId, out var antennaSlot) &&
+        if (TryGetRadioSlot(ent.Owner, AntennaSlotId, out var antennaSlot) &&
             TryComp(antennaSlot.Item, out ANPRCAntennaComponent? antenna))
         {
             antennaLabel = antenna.Label;
