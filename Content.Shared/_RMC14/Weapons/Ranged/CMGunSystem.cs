@@ -489,7 +489,7 @@ public sealed partial class CMGunSystem : EntitySystem
             }
         }
 
-        if (!_interaction.InRangeUnobstructed(gun.Owner, gunComp.Target.Value, gun.Comp.Range, user: user))
+        if (!_interaction.InRangeUnobstructed(gun.Owner, gunComp.Target.Value, gun.Comp.Range))
             return;
 
         foreach (var projectile in args.FiredProjectiles)

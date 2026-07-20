@@ -196,12 +196,12 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
         // Only shoot serverside
         if (_net.IsServer)
         {
-            var shotProjectiles = _gunSystem.AttemptShoot((ent, gun), args.User, args.Coordinates);
+            var shotProjectiles = _gunSystem.AttemptShoot(args.User, (ent.Owner, gun), args.Coordinates);
 
             var ammoCount = new GetAmmoCountEvent();
             RaiseLocalEvent(ent, ref ammoCount);
 
-            if (shotProjectiles != null)
+            if (shotProjectiles)
             {
                 _audio.PlayEntity(gun.SoundGunshotModified, args.User, ent);
                 if (ammoCount.Count == 0)

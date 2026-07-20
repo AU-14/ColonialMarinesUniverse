@@ -53,6 +53,8 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
         if (rearmSemiAuto)
             _gun.ResetShotCounter(ent, gun);
 
-        return _gun.AttemptShoot(user.Value, ent, gun, projectiles, session);
+        return _gun.AttemptShoot(user.Value, (ent, gun), shootCoordinates, targetUid)
+            ? []
+            : null;
     }
 }
