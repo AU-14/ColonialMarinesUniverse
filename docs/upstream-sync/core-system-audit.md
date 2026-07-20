@@ -2711,3 +2711,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Destructible/SharedDestructibleSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static lifecycle review confirms cancellation still occurs before the destruction event and deletion, event order is unchanged, and only the queueing primitive changes. Shared compilation plus predicted destruction, cancellation, server authority, rollback, repeated-call, and RMC threshold cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1296 as `Ported (CS-0198)` when wave 0007 is committed.
+
+## CS-0199 — Make standard SmartFridges airtight
+
+- Upstream: [space-wizards/space-station-14#40196](https://github.com/space-wizards/space-station-14/pull/40196), `931a3dd8ddba39bedf95d9be457f6f1f89bf1408`, 2025-10-13
+- Areas: Physics, Chemistry
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The standard `SmartFridge` prototype now participates in tile airtightness, preventing atmosphere from flowing through its solid machine fixture. The component is attached directly to the current pre-refactor SmartFridge prototype rather than depending on later construction-machine changes.
+- RMC/CMU divergence: `RMCSmartFridge` is a separate RMC smart chemical storage prototype with its own fixture and gameplay system; it is intentionally unchanged. Standard SmartFridge storage, damage thresholds, lighting, advertisements, and contents behavior remain fork-compatible.
+- Decision and rationale: Port the independent physical component despite the current prototype predating upstream's larger SmartFridge rework. Airtightness depends only on the existing anchored static fixture, which the CMU prototype already supplies.
+- Files changed: `Resources/Prototypes/Entities/Structures/Machines/smartfridge.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms `Airtight` is added only to `SmartFridge`, the fixture remains static and machine-layered, and RMC smart storage is untouched. YAML validation plus atmosphere flow, open/closed storage, destruction, inherited prototype, and RMC fridge cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1318 as `Ported (CS-0199)` when wave 0007 is committed; separately audit the prerequisite standard SmartFridge rework before adopting its construction and vending behavior.
