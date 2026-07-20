@@ -1384,3 +1384,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Tiles/ProtectedGridSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static truth-table review confirms initial footprint tiles pass and missing tiles/chunks cancel. Shared compilation plus inside/outside tile-edit cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add coverage for negative chunk coordinates and grids whose initial footprint has holes so bitmask translation remains correct.
+
+## CS-0098 — Preserve tile orientation when variantizing grids
+
+- Upstream: [space-wizards/space-station-14#39314](https://github.com/space-wizards/space-station-14/pull/39314), `392f4ea8f6080fed9cd5af76ed3de529263ed7f6`, 2025-08-01
+- Areas: Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The `variantize` mapping command now carries each tile's existing rotation and mirroring into the replacement tile while randomizing only its sprite variant.
+- RMC/CMU divergence: CMU uses the inherited command and tile representation without an RMC override, so fork-specific grids retain their authored orientation metadata.
+- Decision and rationale: Port the retained constructor argument exactly; dropping `RotationMirroring` could visibly rotate or mirror directional tiles across an entire mapped grid.
+- Files changed: `Content.Server/Administration/Commands/VariantizeCommand.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static constructor comparison confirms type, flags, and randomized variant remain unchanged while rotation/mirroring is copied from the source tile. Server compilation and a rotated/mirrored mapping-command case are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add command coverage that variant IDs can change without altering any tile's rotation/mirroring bits.
