@@ -2529,3 +2529,16 @@ Date completed: 2026-07-20
 - Files changed: standard and RMC rollerbed prototypes and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static visualizer review confirms all three complete mappings hide `unfoldedLayer` when strapped, restore it when unstrapped, and retain the folded `True` suppression. Prototype loading plus folded, deployed, occupied, and medevac-state visuals are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1023 as `Ported (CS-0184)` when wave 0006 is committed.
+
+## CS-0185 — Move Desoxyephedrine production to glasstle
+
+- Upstream: [space-wizards/space-station-14#40638](https://github.com/space-wizards/space-station-14/pull/40638), `a9e272a6cfa8b1fdde9b3d2f3e4fc0930c9740c3`, 2025-10-01; produce parity follow-up [#40639](https://github.com/space-wizards/space-station-14/pull/40639), `faf8881a879dcf37e0c5354335649b9f9d30f8ec`
+- Areas: Medical, Chemistry
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: Ambrosia vulgaris and ambrosia deus seeds and harvested produce no longer yield Desoxyephedrine. Glasstle now yields up to ten units from seed potency and contains ten units when spawned, with all three produce solution capacities reduced or expanded to their exact reagent totals.
+- RMC/CMU divergence: CMU's ambrosia vulgaris produce uses `CMBicaridine` and `CMKelotane` and has an RMC `TimedDespawn`; both are preserved. No RMC reagent, hydroponics mutation, product identity, or lifecycle component is replaced by the upstream standard prototype state.
+- Decision and rationale: Apply the seed migration and its immediate produce-parity correction as one coherent chemistry decision. Porting only one half would make harvested contents disagree with the plant's chemical production contract, while replacing whole upstream blocks would erase RMC medical reagents.
+- Files changed: hydroponics seed and produce prototypes and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static solution accounting confirms vulgaris totals 14u, deus totals 10u, and glasstle totals 25u; Desoxyephedrine is removed from both ambrosia seed/produce pairs and added to glasstle's pair. Prototype loading, growth yield, grinding, and RMC despawn behavior are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record indices 1065 and 1066 as `Ported (CS-0185)` when wave 0006 is committed.
