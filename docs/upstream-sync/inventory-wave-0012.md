@@ -104,7 +104,7 @@ behavior to port.
 2285 | 78343b2dbb4f4706c80245a0fb061f7b7c7a115d | feat: allow removing empty smart fridge entries (#39195) | Deferred | Interactions | Removing empty smart-fridge entries depends on the index-2279 shared state and UI migration.
 2286 | 7586c8017aa79e6782d801435b082fb5c754ba5c | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2287 | 85b3dcc9cce30214399266f57b071c570d401d89 | Stake Admin Alert (#42324) | Deferred | Interactions, Gamerules | The admin-alert addition is an incremental part of the deferred bonfire-stake construction cluster.
-2288 | 96d23393450a42c239582fd1107f166159c790d4 | Fix projectile deceleration (#42320) | PortCandidate | Shooting, Physics | A small projectile prototype fix replaces zero damping with tile-friction immunity, pending RMC ballistics validation.
+2288 | 96d23393450a42c239582fd1107f166159c790d4 | Fix projectile deceleration (#42320) | Ported (CS-0239) | Shooting, Physics | Ported the tile-friction fix and mirrored it to CMU's standalone RMC xeno projectile bases.
 2289 | 72b022349f7dbab98fbdfde684358dc5f344a436 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2290 | d7fcb033369c76cdc1509e89fd504daee90fece9 | BUGFIX: Cabbage placed on taco shells no longer turns into a carrot (#42326) | PortCandidate | Chemistry, Interactions | One food-sequence prototype correction prevents cabbage on taco shells from resolving as carrot.
 2291 | 9256f3f2a1b272898a351d3e6fcf17e89ddfcff8 | Automatic changelog update | Irrelevant | — | Generated changelog only.
