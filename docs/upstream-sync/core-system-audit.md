@@ -3684,3 +3684,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Shared/_RMC14/Vehicle/Core/VehicleSystem.cs`, `Content.Shared/_RMC14/Vehicle/Grid/VehicleSystem.Grid.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static flow review traces base `SetRelay` through `SharedMoverController` input clearing and then traces grid movement's direct `InputMoverComponent` read. Entry cleanup removes both relay endpoints; exit removes the grid operator marker and base cleanup still clears any remaining relay state. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings. Client/Server builds and tests remain deferred as recorded for this checkpoint.
 - Remaining debt: Runtime coverage must drive, stop, exit, re-enter, switch operators, lose the driver component, and reconcile client prediction for every grid vehicle. Standard vehicles need a regression check confirming their relays remain intact.
+
+## CS-0269 - Restore RMC innate step-trigger immunity
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and current CMU.
+- Areas: Interactions, Physics, Mobs, Prototypes
+- Classification: Missing -> Adapted
+- Risk: High before the fix; low after it.
+- Behavior/API delta: Human and xeno base prototypes still carry `ImmuneToClothingRequiredStepTriggerComponent`, but current `StepTriggerImmuneSystem` checked only the standard protection component on the tripper or equipped inventory. The retained RMC marker was therefore inert, allowing clothing-gated floor hazards to trigger on species intended to be innately exempt.
+- RMC/CMU divergence: Standard SS14 clothing protection and examination remain unchanged. The fork marker is an additional innate exemption used by the two retained RMC species bases; ordinary entities without either protection still trigger hazards normally.
+- Decision and rationale: Add one fork-owned predicate to the existing `PreventableStepTriggerComponent`/`StepTriggerAttemptEvent` owner. This preserves one authoritative cancellation point and avoids a second event subscriber with ordering ambiguity.
+- Files changed: `Content.Shared/StepTrigger/Systems/StepTriggerImmuneSystem.cs`, `Content.Shared/_RMC14/StepTrigger/StepTriggerImmuneSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Exact event-pair review confirms the existing system remains the sole owner of this protection decision. Prototype search finds the marker on the retained human-species and xeno bases, and component registration/networking remain live. `dotnet build Content.Shared/Content.Shared.csproj --configuration DebugOpt --no-restore --nologo --verbosity:minimal --disable-build-servers` succeeded with 0 errors and 6 unrelated warnings. Runtime tests remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Verify representative glass/shard and other `PreventableStepTrigger` hazards against barefoot humans, xenos, protected non-RMC mobs, and unprotected control entities after tests are authorized.
