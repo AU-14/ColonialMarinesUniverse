@@ -1592,3 +1592,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/UserInterface/Controls/MenuButton.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static usage review confirms every current XAML/RMC caller may still assign a non-null key and no external code requires a non-null getter. Client compilation plus clear/rebind/input-mode changes with all top-menu buttons mounted are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a focused control test that clears and restores `BoundKey` while binding notifications fire, asserting label text and absence of exceptions.
+
+## CS-0114 — Raise loadout completion once after full equipment
+
+- Upstream: [space-wizards/space-station-14#35067](https://github.com/space-wizards/space-station-14/pull/35067), `c59f7a53633f69eb091fe43aa05cda705e189257`, 2025-08-18
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `LoadoutSystem` now suppresses the starting-gear helper's immediate `StartingGearEquippedEvent` and emits its own event once after starting gear and any role loadout are both applied, preventing duplicate post-equip side effects such as automatic internals handling.
+- RMC/CMU divergence: RMC has additional starting-gear listeners and several callers that already explicitly suppress and later raise the event. This change brings the inherited `LoadoutComponent` path in line with that established fork pattern without altering custom callers.
+- Decision and rationale: Port the retained `raiseEvent: false` argument at the nested helper call because `GearEquipped` is already the owning completion boundary for this composite loadout operation.
+- Files changed: `Content.Shared/Clothing/LoadoutSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event tracing confirms every branch through `Equip` reaches one `GearEquipped` call, while the starting-gear helper no longer emits an earlier duplicate. Shared compilation plus jetpack/internals, starting-gear-only, and combined role-loadout cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit all RMC `EquipStartingGear` callers for explicit ownership of the completion event and document which layer should raise it.
