@@ -8,14 +8,16 @@ namespace Content.Server.GameTicking.Rules;
 
 public abstract partial class GameRuleSystem<T> : EntitySystem where T : IComponent
 {
-    [Dependency] protected IRobustRandom RobustRandom = default!;
-    [Dependency] protected IChatManager ChatManager = default!;
-    [Dependency] protected GameTicker GameTicker = default!;
     [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected IRobustRandom RobustRandom = default!;
+    [Dependency] protected GameTicker GameTicker = default!;
 
     // Not protected, just to be used in utility methods
     [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private MapSystem _map = default!;
+
+    [Dependency] protected EntityQuery<GameRuleComponent> GameRuleQuery = default!;
+    [Dependency] protected EntityQuery<T> RuleQuery = default!;
 
     public override void Initialize()
     {
@@ -25,40 +27,6 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
         SubscribeLocalEvent<T, GameRuleStartedEvent>(OnGameRuleStarted);
         SubscribeLocalEvent<T, GameRuleEndedEvent>(OnGameRuleEnded);
         SubscribeLocalEvent<RoundEndTextAppendEvent>(OnRoundEndTextAppend);
-    }
-
-    private void OnStartAttempt(RoundStartAttemptEvent args)
-    {
-        if (args.Forced || args.Cancelled)
-            return;
-
-        var query = QueryAllRules();
-        while (query.MoveNext(out var uid, out var rule, out var gameRule))
-        {
-            var minPlayers = gameRule.MinPlayers;
-            var name = ToPrettyString(uid);
-
-            if (args.Players.Length >= minPlayers)
-            {
-                OnStartAttempt((uid, rule, gameRule), args);
-                continue;
-            }
-
-            if (gameRule.CancelPresetOnTooFewPlayers)
-            {
-                ChatManager.SendAdminAnnouncement(Loc.GetString("preset-not-enough-ready-players",
-                    ("readyPlayersCount", args.Players.Length),
-                    ("minimumPlayers", minPlayers),
-                    ("presetName", name)));
-                args.Cancel();
-                // TODO remove this once announcements are logged
-                Log.Info($"Rule '{name}' requires {minPlayers} players, but only {args.Players.Length} are ready.");
-            }
-            else
-            {
-                ForceEndSelf(uid, gameRule);
-            }
-        }
     }
 
     private void OnGameRuleAdded(EntityUid uid, T component, ref GameRuleAddedEvent args)
@@ -92,11 +60,6 @@ public abstract partial class GameRuleSystem<T> : EntitySystem where T : ICompon
         {
             AppendRoundEndText(uid, comp, ruleData, ref ev);
         }
-    }
-
-    protected virtual void OnStartAttempt(Entity<T, GameRuleComponent> gameRule, RoundStartAttemptEvent ev)
-    {
-
     }
 
     /// <summary>

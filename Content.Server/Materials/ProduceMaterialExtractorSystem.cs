@@ -42,7 +42,7 @@ public sealed partial class ProduceMaterialExtractorSystem : EntitySystem
             .Where(r => ent.Comp.ExtractionReagents.Contains(r.Reagent.Prototype))
             .Sum(r => r.Quantity.Float());
 
-        var changed = (int) matAmount;
+        var changed = (int)matAmount;
 
         if (changed == 0)
         {

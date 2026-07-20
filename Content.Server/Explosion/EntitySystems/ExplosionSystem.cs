@@ -6,7 +6,7 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Destructible;
 using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.NPC.Pathfinding;
-using Content.Shared._RMC14.Explosion;
+using Content.Shared.Armor;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
@@ -37,27 +37,34 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
 {
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
-    [Dependency] private MapSystem _mapSystem = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private NodeGroupSystem _nodeGroupSystem = default!;
     [Dependency] private PathfindingSystem _pathfindingSystem = default!;
     [Dependency] private SharedCameraRecoilSystem _recoilSystem = default!;
-    [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private ThrowingSystem _throwingSystem = default!;
     [Dependency] private PvsOverrideSystem _pvsSys = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private FlammableSystem _flammableSystem = default!;
+    [Dependency] private DestructibleSystem _destructibleSystem = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
 
-    private EntityQuery<FlammableComponent> _flammableQuery;
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-    private EntityQuery<ProjectileComponent> _projectileQuery;
-    private EntityQuery<DeleteOnExplosionComponent> _deleteOnExplosionQuery;
+    [Dependency] private EntityQuery<FlammableComponent> _flammableQuery = default!;
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<ActorComponent> _actorQuery = default!;
+    [Dependency] private EntityQuery<DestructibleComponent> _destructibleQuery = default!;
+    [Dependency] private EntityQuery<DamageableComponent> _damageableQuery = default!;
+    [Dependency] private EntityQuery<ExplosionResistanceComponent> _explosionResistanceQuery = default!;
+    [Dependency] private EntityQuery<InjurableComponent> _injurableQuery = default!;
+    [Dependency] private EntityQuery<AirtightComponent> _airtightQuery = default!;
+    [Dependency] private EntityQuery<TileHistoryComponent> _tileHistoryQuery = default!;
 
     /// <summary>
     ///     "Tile-size" for space when there are no nearby grids to use as a reference.
@@ -93,10 +100,7 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
         InitAirtightMap();
         InitVisuals();
 
-        _flammableQuery = GetEntityQuery<FlammableComponent>();
-        _physicsQuery = GetEntityQuery<PhysicsComponent>();
-        _projectileQuery = GetEntityQuery<ProjectileComponent>();
-        _deleteOnExplosionQuery = GetEntityQuery<DeleteOnExplosionComponent>();
+        ProtoMan.PrototypesReloaded += ReloadExplosionPrototypes;
     }
 
     private void OnReset(RoundRestartCleanupEvent ev)
@@ -160,9 +164,6 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
             explosive.MaxTileBreak,
             explosive.CanCreateVacuum,
             user);
-
-        var ev = new CMExplosiveTriggeredEvent();
-        RaiseLocalEvent(uid, ref ev);
 
         if (explosive.DeleteAfterExplosion ?? delete)
             QueueDel(uid);
@@ -396,6 +397,24 @@ public sealed partial class ExplosionSystem : SharedExplosionSystem
 
     private void CameraShake(float range, MapCoordinates epicenter, float totalIntensity)
     {
-        // RMC14 handles explosion feedback separately.
+        var players = Filter.Empty();
+        players.AddInRange(epicenter, range, _playerManager, EntityManager);
+
+        foreach (var player in players.Recipients)
+        {
+            if (player.AttachedEntity is not EntityUid uid)
+                continue;
+
+            var playerPos = _transformSystem.GetWorldPosition(player.AttachedEntity!.Value);
+            var delta = epicenter.Position - playerPos;
+
+            if (delta.EqualsApprox(Vector2.Zero))
+                delta = new(0.01f, 0);
+
+            var distance = delta.Length();
+            var effect = 5 * MathF.Pow(totalIntensity, 0.5f) * (1 - distance / range);
+            if (effect > 0.01f)
+                _recoilSystem.KickCamera(uid, -delta.Normalized() * effect);
+        }
     }
 }

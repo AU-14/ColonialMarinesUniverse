@@ -27,10 +27,8 @@ namespace Content.Server.Anomaly;
 public sealed partial class AnomalySystem : SharedAnomalySystem
 {
     [Dependency] private IConfigurationManager _configuration = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private AmbientSoundSystem _ambient = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private ExplosionSystem _explosion = default!;
     [Dependency] private MaterialStorageSystem _material = default!;
     [Dependency] private SharedPointLightSystem _pointLight = default!;

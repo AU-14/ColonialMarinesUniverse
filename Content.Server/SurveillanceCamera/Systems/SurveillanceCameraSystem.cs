@@ -1,7 +1,5 @@
 using Content.Server.Administration.Logs;
 using Content.Server.DeviceNetwork.Systems;
-using Content.Server.Emp;
-using Content.Shared.ActionBlocker;
 using Content.Shared.Database;
 using Content.Shared.DeviceNetwork;
 using Content.Shared.DeviceNetwork.Events;
@@ -14,15 +12,14 @@ using Content.Shared.DeviceNetwork.Components;
 
 namespace Content.Server.SurveillanceCamera;
 
-public sealed partial class SurveillanceCameraSystem : EntitySystem
+public sealed partial class SurveillanceCameraSystem : SharedSurveillanceCameraSystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
     [Dependency] private ViewSubscriberSystem _viewSubscriberSystem = default!;
     [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
     [Dependency] private UserInterfaceSystem _userInterface = default!;
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private SurveillanceCameraMapSystem _cameraMapSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
 
     // Pings a surveillance camera subnet. All cameras will always respond
     // with a data message if they are on the same subnet.

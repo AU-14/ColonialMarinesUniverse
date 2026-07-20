@@ -10,8 +10,6 @@ namespace Content.Server.Body.Commands
     sealed partial class AddHandCommand : IConsoleCommand
     {
         [Dependency] private IEntityManager _entManager = default!;
-        [Dependency] private IPrototypeManager _protoManager = default!;
-        [Dependency] private IRobustRandom _random = default!;
 
         private static int _handIdAccumulator;
 

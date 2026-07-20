@@ -1,6 +1,4 @@
-﻿using Robust.Shared.Configuration;
-using Content.Server.Administration;
-using Content.Shared._RMC14.CCVar;
+﻿using Content.Server.Administration;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
 
@@ -9,32 +7,16 @@ namespace Content.Server.GameTicking.Commands;
 [AdminCommand(AdminFlags.Round)]
 public sealed partial class EndRoundCommand : LocalizedEntityCommands
 {
-    [AdminCommand(AdminFlags.Round)]
-    sealed partial class EndRoundCommand : IConsoleCommand
+    [Dependency] private GameTicker _gameTicker = default!;
+
+    public override string Command => "endround";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        [Dependency] private IEntityManager _e = default!;
-        [Dependency] private IConfigurationManager _cfg = default!;
-
-
-        public string Command => "endround";
-        public string Description => "Ends the round and moves the server to PostRound.";
-        public string Help => String.Empty;
-
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        if (_gameTicker.RunLevel != GameRunLevel.InRound)
         {
-            var ticker = _e.System<GameTicker>();
-
-            if (ticker.RunLevel != GameRunLevel.InRound)
-            {
-                shell.WriteLine("This can only be executed while the game is in a round.");
-                return;
-            }
-            //RMC14
-            //Again I do not trust le admins to remember to turn this off...
-            _cfg.SetCVar(RMCCVars.RMCDelayRoundEnd, false);
-            //RMC14
-
-            ticker.EndRound();
+            shell.WriteLine(Loc.GetString("shell-can-only-run-while-round-is-active"));
+            return;
         }
 
         _gameTicker.EndRound();

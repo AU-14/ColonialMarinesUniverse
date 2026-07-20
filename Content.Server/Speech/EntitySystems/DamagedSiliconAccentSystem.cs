@@ -11,11 +11,13 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class DamagedSiliconAccentSystem : EntitySystem
+public sealed partial class DamagedSiliconAccentSystem : RelayAccentSystem<DamagedSiliconAccentComponent>
 {
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private DestructibleSystem _destructibleSystem = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     protected override Type[]? AccentAfter => [typeof(ReplacementAccentSystem)];
     protected override Type[]? RelayAccentAfter => [typeof(ReplacementAccentSystem)];

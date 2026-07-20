@@ -1,19 +1,18 @@
-﻿using Content.Server._RMC14.Explosion;
-using Content.Server.Explosion.EntitySystems;
+﻿using Content.Server.Explosion.EntitySystems;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.Explosion.Components;
 /// <summary>
-///     Grenades that, when triggered, explode into projectiles
+/// Grenades that, when triggered, explode into projectiles
 /// </summary>
-[RegisterComponent, Access(typeof(ProjectileGrenadeSystem), typeof(RMCProjectileGrenadeSystem))]
+[RegisterComponent, Access(typeof(ProjectileGrenadeSystem))]
 public sealed partial class ProjectileGrenadeComponent : Component
 {
     public Container Container = default!;
 
     /// <summary>
-    ///     The kind of projectile that the prototype is filled with.
+    /// The kind of projectile that the prototype is filled with.
     /// </summary>
     [DataField]
     public EntProtoId? FillPrototype;
@@ -36,20 +35,20 @@ public sealed partial class ProjectileGrenadeComponent : Component
     public bool RandomAngle = false;
 
     /// <summary>
-    ///     The minimum speed the projectiles may come out at
+    /// The minimum speed the projectiles may come out at
     /// </summary>
     [DataField]
     public float MinVelocity = 2f;
 
     /// <summary>
-    ///     The maximum speed the projectiles may come out at
+    /// The maximum speed the projectiles may come out at
     /// </summary>
     [DataField]
     public float MaxVelocity = 6f;
 
     /// <summary>
-    ///     The amount of payload projectiles that should hit on a direct hit.
+    /// The trigger key that will activate the grenade.
     /// </summary>
     [DataField]
-    public int DirectHitProjectiles = 5;
+    public string TriggerKey = "timer";
 }

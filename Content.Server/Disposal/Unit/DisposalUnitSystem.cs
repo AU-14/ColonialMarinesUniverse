@@ -5,9 +5,11 @@ using Content.Shared.Disposal.Unit;
 
 namespace Content.Server.Disposal.Unit;
 
+/// <inheritdoc/>
 public sealed partial class DisposalUnitSystem : SharedDisposalUnitSystem
 {
-    [Dependency] private AtmosphereSystem _atmosSystem = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private AtmosphereSystem _atmos = default!;
 
     /// <inheritdoc/>
     protected override void IntakeAir(Entity<DisposalUnitComponent> ent, TransformComponent xform)

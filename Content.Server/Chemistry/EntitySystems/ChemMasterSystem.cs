@@ -1,5 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Content.Server.Chemistry.Components;
 using Content.Server.Popups;
 using Content.Server.Storage.EntitySystems;
@@ -20,6 +18,8 @@ using Robust.Server.GameObjects;
 using Robust.Shared.Audio;
 using Robust.Shared.Containers;
 using Robust.Shared.Prototypes;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace Content.Server.Chemistry.EntitySystems
 {
@@ -40,7 +40,7 @@ namespace Content.Server.Chemistry.EntitySystems
         [Dependency] private LabelSystem _labelSystem = default!;
         [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
-        private static readonly EntProtoId PillPrototypeId = "CMPill";
+        private static readonly EntProtoId PillPrototypeId = "Pill";
 
         public override void Initialize()
         {
@@ -170,7 +170,6 @@ namespace Content.Server.Chemistry.EntitySystems
             else // Container to buffer
             {
                 amount = FixedPoint2.Min(amount, containerSolution.GetReagentQuantity(id));
-                amount = FixedPoint2.Min(amount, bufferSolution.AvailableVolume);
                 _solutionContainerSystem.RemoveReagent(containerSoln.Value, id, amount);
                 bufferSolution.AddReagent(id, amount);
             }
@@ -212,11 +211,8 @@ namespace Content.Server.Chemistry.EntitySystems
                 return; // output can't fit pills
             }
 
-            var number = message.Number;
-            number = Math.Clamp(number, 0, 30);
-
             // Ensure the number is valid.
-            if (number == 0 || !_storageSystem.HasSpace((container, storage)))
+            if (message.Number == 0 || !_storageSystem.HasSpace((container, storage)))
                 return;
 
             // Ensure the amount is valid.
@@ -227,9 +223,7 @@ namespace Content.Server.Chemistry.EntitySystems
             if (message.Label.Length > SharedChemMaster.LabelMaxLength)
                 return;
 
-            var needed = message.Dosage * number;
-            if (!WithdrawFromBuffer(chemMaster, needed, user, out var withdrawal))
-                return;
+            var needed = message.Dosage * message.Number;
 
             if (!WithdrawFromSource(chemMaster, needed, user, out var withdrawal))
                 return;

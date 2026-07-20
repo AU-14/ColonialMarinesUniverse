@@ -1,5 +1,5 @@
-﻿using Content.Server.Power.Components;
-using Content.Server.Administration.Logs;
+﻿using Content.Server.Administration.Logs;
+using Content.Server.Power.Components;
 using Content.Shared.Database;
 using Content.Shared.Power;
 using Content.Shared.Power.Components;
@@ -25,6 +25,7 @@ public sealed partial class BatteryInterfaceSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = null!;
+    [Dependency] private SharedBatterySystem _battery = null!;
 
     public override void Initialize()
     {

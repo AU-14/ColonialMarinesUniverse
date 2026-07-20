@@ -8,10 +8,6 @@ namespace Content.Server.Store.Systems;
 
 public sealed partial class StoreSystem : SharedStoreSystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IGameTiming _timing = default!;
-
     public override void Initialize()
     {
         base.Initialize();

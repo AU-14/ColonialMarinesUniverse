@@ -19,10 +19,10 @@ namespace Content.Server.Crayon;
 public sealed partial class CrayonSystem : SharedCrayonSystem
 {
     [Dependency] private IAdminLogManager _adminLogger = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private DecalSystem _decals = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedChargesSystem _charges = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
 
     public override void Initialize()

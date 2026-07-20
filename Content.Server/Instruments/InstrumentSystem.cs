@@ -34,7 +34,10 @@ public sealed partial class InstrumentSystem : SharedInstrumentSystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private ExamineSystemShared _examineSystem = default!;
-    [Dependency] private IAdminLogManager _admingLogSystem = default!;
+    [Dependency] private IAdminLogManager _adminLogSystem = default!;
+
+    [Dependency] private EntityQuery<InstrumentComponent> _instrumentQuery = default!;
+    [Dependency] private EntityQuery<ActiveInstrumentComponent> _activeInstrumentQuery = default!;
 
     private const float MaxInstrumentBandRange = 10f;
 
@@ -456,8 +459,8 @@ public sealed partial class InstrumentSystem : SharedInstrumentSystem
                     continue;
                 }
 
-                var trans = transformQuery.GetComponent(uid);
-                var masterTrans = transformQuery.GetComponent(master);
+                var trans = Transform(uid);
+                var masterTrans = Transform(master);
                 if (!_transform.InRange(masterTrans.Coordinates, trans.Coordinates, 10f))
                 {
                     Clean(uid, instrument);

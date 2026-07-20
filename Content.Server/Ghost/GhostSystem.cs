@@ -5,10 +5,6 @@ using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
-using Content.Server.Warps;
-using Content.Shared._RMC14.Ghost;
-using Content.Shared._RMC14.Mentor.ImaginaryFriend;
-using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
@@ -51,7 +47,6 @@ namespace Content.Server.Ghost
         [Dependency] private IAdminLogManager _adminLog = default!;
         [Dependency] private SharedEyeSystem _eye = default!;
         [Dependency] private FollowerSystem _followerSystem = default!;
-        [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private JobSystem _jobs = default!;
         [Dependency] private EntityLookupSystem _lookup = default!;
         [Dependency] private MindSystem _minds = default!;
@@ -62,7 +57,6 @@ namespace Content.Server.Ghost
         [Dependency] private VisibilitySystem _visibilitySystem = default!;
         [Dependency] private MetaDataSystem _metaData = default!;
         [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IConfigurationManager _configurationManager = default!;
         [Dependency] private IChatManager _chatManager = default!;
         [Dependency] private SharedMindSystem _mind = default!;
@@ -72,6 +66,7 @@ namespace Content.Server.Ghost
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private TagSystem _tag = default!;
         [Dependency] private NameModifierSystem _nameMod = default!;
+        [Dependency] private GhostSpriteStateSystem _ghostState = default!;
 
         [Dependency] private EntityQuery<GhostComponent> _ghostQuery = default!;
         [Dependency] private EntityQuery<FollowerComponent> _followerQuery = default!;
@@ -79,7 +74,6 @@ namespace Content.Server.Ghost
 
         private static readonly ProtoId<TagPrototype> AllowGhostShownByEventTag = "AllowGhostShownByEvent";
         private static readonly ProtoId<DamageTypePrototype> AsphyxiationDamageType = "Asphyxiation";
-        private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
 
         public override void Initialize()
         {
@@ -117,7 +111,7 @@ namespace Content.Server.Ghost
             // If component not deleting they can see ghosts.
             if (ent.Comp.LifeStage <= ComponentLifeStage.Running)
             {
-                args.VisibilityMask |= (int)VisibilityFlags.Ghost | (int)VisibilityFlags.ImaginaryFriend; // RMC14
+                args.VisibilityMask |= (int)VisibilityFlags.Ghost;
             }
         }
 
@@ -240,20 +234,6 @@ namespace Content.Server.Ghost
             _actions.AddAction(uid, ref component.ToggleGhostsActionEntity, component.ToggleGhostsAction);
         }
 
-        private void OnGhostExamine(EntityUid uid, GhostComponent component, ExaminedEvent args)
-        {
-            // RMC14
-            if (HasComp<ImaginaryFriendComponent>(uid))
-                return;
-
-            var timeSinceDeath = _gameTiming.RealTime.Subtract(component.TimeOfDeath);
-            var deathTimeInfo = timeSinceDeath.Minutes > 0
-                ? Loc.GetString("comp-ghost-examine-time-minutes", ("minutes", timeSinceDeath.Minutes))
-                : Loc.GetString("comp-ghost-examine-time-seconds", ("seconds", timeSinceDeath.Seconds));
-
-            args.PushMarkup(deathTimeInfo);
-        }
-
         #region Ghost Deletion
 
         private void OnMindRemovedMessage(EntityUid uid, GhostComponent component, MindRemovedMessage args)
@@ -289,13 +269,6 @@ namespace Content.Server.Ghost
                 || !TryComp(attached, out ActorComponent? actor))
             {
                 Log.Warning($"User {args.SenderSession.Name} sent an invalid {nameof(GhostReturnToBodyRequest)}");
-                return;
-            }
-
-            if (_mind.TryGetMind(attached, out var mindId, out _) &&
-                CompOrNull<RMCGhostReturnComponent>(attached)?.Target is { } returnTo)
-            {
-                _mind.TransferTo(mindId, returnTo);
                 return;
             }
 
@@ -670,12 +643,7 @@ namespace Content.Server.Ghost
 
                     DamageSpecifier damage = new(ProtoMan.Index(AsphyxiationDamageType), dealtDamage);
 
-                    if (HasComp<XenoComponent>(playerEntity))
-                    {
-                        damage = new(_prototypeManager.Index(BluntDamageType), dealtDamage);
-                    }
-
-                    _damageable.TryChangeDamage(playerEntity, damage, true);
+                    _damageable.ChangeDamage(playerEntity.Value, damage, true);
                 }
             }
 
@@ -689,5 +657,12 @@ namespace Content.Server.Ghost
 
             return true;
         }
+    }
+
+    public sealed class GhostAttemptHandleEvent(MindComponent mind, bool canReturnGlobal) : HandledEntityEventArgs
+    {
+        public MindComponent Mind { get; } = mind;
+        public bool CanReturnGlobal { get; } = canReturnGlobal;
+        public bool Result { get; set; }
     }
 }

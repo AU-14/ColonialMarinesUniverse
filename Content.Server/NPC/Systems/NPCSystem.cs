@@ -20,6 +20,10 @@ namespace Content.Server.NPC.Systems
     /// </summary>
     public sealed partial class NPCSystem : SharedNPCSystem
     {
+        private static readonly Gauge ActiveGauge = Metrics.CreateGauge(
+            "npc_active_count",
+            "Amount of NPCs that are actively processing");
+
         [Dependency] private IConfigurationManager _configurationManager = default!;
         [Dependency] private HTNSystem _htn = default!;
         [Dependency] private MobStateSystem _mobState = default!;

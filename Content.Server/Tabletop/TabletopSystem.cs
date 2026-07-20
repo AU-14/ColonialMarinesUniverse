@@ -18,12 +18,7 @@ public sealed partial class TabletopSystem : SharedTabletopSystem
 
     public override void Initialize()
     {
-        [Dependency] private SharedMapSystem _map = default!;
-        [Dependency] private EyeSystem _eye = default!;
-        [Dependency] private HandsSystem _hands = default!;
-        [Dependency] private ViewSubscriberSystem _viewSubscriberSystem = default!;
-        [Dependency] private PopupSystem _popupSystem = default!;
-        [Dependency] private IConfigurationManager _cfg = default!;
+        base.Initialize();
 
         SubscribeNetworkEvent<TabletopStopPlayingEvent>(OnStopPlaying);
 

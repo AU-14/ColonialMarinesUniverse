@@ -6,19 +6,12 @@ using Content.Shared.Speech.EntitySystems;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class PirateAccentSystem : EntitySystem
+public sealed partial class PirateAccentSystem : RelayAccentSystem<PirateAccentComponent>
 {
     private static readonly Regex FirstWordAllCapsRegex = new(@"^(\S+)");
 
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ReplacementAccentSystem _replacement = default!;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<PirateAccentComponent, AccentGetEvent>(OnAccentGet);
-    }
 
     // converts left word when typed into the right word. For example typing you becomes ye.
     public override string Accentuate(string message, Entity<PirateAccentComponent>? ent = null)

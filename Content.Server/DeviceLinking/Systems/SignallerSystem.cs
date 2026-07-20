@@ -9,7 +9,6 @@ namespace Content.Server.DeviceLinking.Systems;
 public sealed partial class SignallerSystem : EntitySystem
 {
     [Dependency] private DeviceLinkSystem _link = default!;
-    [Dependency] private UseDelaySystem _useDelay = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
 
     public override void Initialize()

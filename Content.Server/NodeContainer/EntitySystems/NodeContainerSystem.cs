@@ -16,7 +16,7 @@ namespace Content.Server.NodeContainer.EntitySystems
     public sealed partial class NodeContainerSystem : SharedNodeContainerSystem
     {
         [Dependency] private NodeGroupSystem _nodeGroupSystem = default!;
-        private EntityQuery<NodeContainerComponent> _query;
+        [Dependency] private EntityQuery<NodeContainerComponent> _nodeContainerQuery = default!;
 
         public override void Initialize()
         {

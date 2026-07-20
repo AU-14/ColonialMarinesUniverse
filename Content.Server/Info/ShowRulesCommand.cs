@@ -10,10 +10,10 @@ using Robust.Shared.Network;
 namespace Content.Server.Info;
 
 [AdminCommand(AdminFlags.Admin)]
-public sealed partial class ShowRulesCommand : IConsoleCommand
+public sealed partial class ShowRulesCommand : LocalizedCommands
 {
-    [Dependency] private INetManager _net = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private IPlayerManager _player = default!;
 
     public override string Command => "showrules";

@@ -1,7 +1,6 @@
 using System.Numerics;
 using Content.Server.Movement.Components;
 using Content.Server.Physics.Controllers;
-using Content.Shared._RMC14.Fireman;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Conveyor;
 using Content.Shared.Gravity;
@@ -59,6 +58,10 @@ public sealed partial class PullController : VirtualController
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
+
+    [Dependency] private EntityQuery<PhysicsComponent> _physicsQuery = default!;
+    [Dependency] private EntityQuery<PullableComponent> _pullableQuery = default!;
+    [Dependency] private EntityQuery<PullerComponent> _pullerQuery = default!;
 
     /// <summary>
     ///     If distance between puller and pulled entity lower that this threshold,
@@ -122,9 +125,6 @@ public sealed partial class PullController : VirtualController
             return false;
 
         if (_container.IsEntityInContainer(player))
-            return false;
-
-        if (HasComp<BeingFiremanCarriedComponent>(pulled))
             return false;
 
         pullerComp.NextThrow = _timing.CurTime + pullerComp.ThrowCooldown;
@@ -228,14 +228,6 @@ public sealed partial class PullController : VirtualController
 
         while (movingQuery.MoveNext(out var pullableEnt, out var mover, out var pullable, out var pullableXform))
         {
-            // RMC14
-            if (HasComp<BeingFiremanCarriedComponent>(pullableEnt))
-            {
-                RemCompDeferred<PullMovingComponent>(pullableEnt);
-                continue;
-            }
-            // RMC14
-
             if (!mover.MovingTo.IsValid(EntityManager))
             {
                 RemCompDeferred<PullMovingComponent>(pullableEnt);

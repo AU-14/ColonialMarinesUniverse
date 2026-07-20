@@ -1,6 +1,3 @@
-using System.Runtime.CompilerServices;
-using Content.Server.Atmos.Components;
-using Content.Shared._RMC14.CCVar;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Atmos.EntitySystems;
@@ -30,10 +27,12 @@ namespace Content.Server.Atmos.EntitySystems
     {
         [Robust.Shared.IoC.Dependency] private IGameTiming _gameTiming = default!;
         [Robust.Shared.IoC.Dependency] private IPlayerManager _playerManager = default!;
-        [Robust.Shared.IoC.Dependency] private IConfigurationManager _confMan = default!;
         [Robust.Shared.IoC.Dependency] private IParallelManager _parMan = default!;
         [Robust.Shared.IoC.Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Robust.Shared.IoC.Dependency] private ChunkingSystem _chunkingSys = default!;
+
+        [Robust.Shared.IoC.Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
+        [Robust.Shared.IoC.Dependency] private EntityQuery<GasTileOverlayComponent> _gasTileOverlayQuery = default!;
 
         /// <summary>
         /// Per-tick cache of sessions.
@@ -60,8 +59,6 @@ namespace Content.Server.Atmos.EntitySystems
 
         private int _thresholds;
 
-        private bool _doUpdate;
-
         public override void Initialize()
         {
             base.Initialize();
@@ -79,10 +76,8 @@ namespace Content.Server.Atmos.EntitySystems
             };
 
             _playerManager.PlayerStatusChanged += OnPlayerStatusChanged;
-            Subs.CVar(_confMan, CCVars.NetGasOverlayTickRate, UpdateTickRate, true);
-            Subs.CVar(_confMan, CCVars.GasOverlayThresholds, UpdateThresholds, true);
-            Subs.CVar(_confMan, CVars.NetPVS, OnPvsToggle, true);
-            Subs.CVar(_confMan, RMCCVars.RMCGasTileOverlayUpdate, v => _doUpdate = v, true);
+
+            InitializeCVars();
 
             SubscribeLocalEvent<RoundRestartCleanupEvent>(Reset);
             SubscribeLocalEvent<GasTileOverlayComponent, ComponentStartup>(OnStartup);
@@ -314,10 +309,6 @@ namespace Content.Server.Atmos.EntitySystems
         public override void Update(float frameTime)
         {
             base.Update(frameTime);
-
-            if (!_doUpdate)
-                return;
-
             AccumulatedFrameTime += frameTime;
 
             if (_doSessionUpdate)

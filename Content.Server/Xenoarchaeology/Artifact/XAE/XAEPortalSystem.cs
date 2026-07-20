@@ -20,7 +20,6 @@ public sealed partial class XAEPortalSystem : BaseXAESystem<XAEPortalComponent>
     [Dependency] private LinkedEntitySystem _link = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private IGameTiming _timing = default!;
 
     /// <inheritdoc />
     protected override void OnActivated(Entity<XAEPortalComponent> ent, ref XenoArtifactNodeActivatedEvent args)

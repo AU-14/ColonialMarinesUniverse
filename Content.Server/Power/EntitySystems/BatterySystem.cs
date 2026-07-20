@@ -8,10 +8,9 @@ namespace Content.Server.Power.EntitySystems;
 
 public sealed class BatterySystem : SharedBatterySystem
 {
-    [UsedImplicitly]
-    public sealed partial class BatterySystem : EntitySystem
+    public override void Initialize()
     {
-        [Dependency] private IGameTiming _timing = default!;
+        base.Initialize();
 
         SubscribeLocalEvent<PowerNetworkBatteryComponent, RejuvenateEvent>(OnNetBatteryRejuvenate);
         SubscribeLocalEvent<NetworkBatteryPreSync>(PreSync);

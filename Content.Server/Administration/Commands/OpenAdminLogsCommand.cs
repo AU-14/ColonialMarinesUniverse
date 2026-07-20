@@ -9,7 +9,9 @@ namespace Content.Server.Administration.Commands;
 [AdminCommand(AdminFlags.Logs)]
 public sealed partial class OpenAdminLogsCommand : LocalizedEntityCommands
 {
-    [Dependency] private EuiManager _euiManager = default!;
+    [Dependency] private IAdminLogManager _adminLogManager = default!;
+    [Dependency] private IPlayerLocator _locator = default!;
+    [Dependency] private IPlayerManager _players = default!;
 
     public override string Command => Cmd;
     public const string Cmd = "adminlogs";

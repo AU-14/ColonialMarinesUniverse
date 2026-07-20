@@ -15,7 +15,6 @@ namespace Content.Server.Thief.Systems;
 public sealed partial class ThiefUndeterminedBackpackSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedStorageSystem _storage = default!;

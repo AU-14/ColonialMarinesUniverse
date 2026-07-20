@@ -15,7 +15,6 @@ namespace Content.Server.Vocalization.Systems;
 public sealed partial class RadioVocalizationSystem : EntitySystem
 {
     [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private InventorySystem _inventory = default!;
 

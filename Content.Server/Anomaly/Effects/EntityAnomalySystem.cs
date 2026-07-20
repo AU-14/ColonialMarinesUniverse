@@ -13,8 +13,6 @@ public sealed partial class EntityAnomalySystem : SharedEntityAnomalySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
 
-    private EntityQuery<PhysicsComponent> _physicsQuery;
-
     /// <inheritdoc/>
     public override void Initialize()
     {

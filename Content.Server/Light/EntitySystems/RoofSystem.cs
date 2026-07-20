@@ -8,8 +8,7 @@ namespace Content.Server.Light.EntitySystems;
 public sealed partial class RoofSystem : SharedRoofSystem
 {
     [Dependency] private SharedMapSystem _maps = default!;
-
-    private EntityQuery<MapGridComponent> _gridQuery;
+    [Dependency] private EntityQuery<MapGridComponent> _mapGridQuery = default!;
 
     public override void Initialize()
     {

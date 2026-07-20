@@ -19,7 +19,6 @@ namespace Content.Server.Singularity.EntitySystems;
 public sealed partial class SingularitySystem : SharedSingularitySystem
 {
 #region Dependencies
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private PvsOverrideSystem _pvs = default!;
 #endregion Dependencies

@@ -11,7 +11,7 @@ namespace Content.Server.Damage.Systems
 {
     public sealed partial class DamageOnToolInteractSystem : EntitySystem
     {
-        [Dependency] private DamageableSystem _damageableSystem = default!;
+        [Dependency] private Shared.Damage.Systems.DamageableSystem _damageableSystem = default!;
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private SharedToolSystem _toolSystem = default!;
 

@@ -8,11 +8,10 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class MumbleAccentSystem : EntitySystem
+public sealed partial class MumbleAccentSystem : RelayAccentSystem<MumbleAccentComponent>
 {
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private ReplacementAccentSystem _replacement = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
 
     public override void Initialize()
     {

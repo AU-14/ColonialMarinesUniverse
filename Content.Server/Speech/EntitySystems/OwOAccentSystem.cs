@@ -6,9 +6,16 @@ namespace Content.Server.Speech.EntitySystems;
 
 public sealed partial class OwOAccentSystem : RelayAccentSystem<OwOAccentComponent>
 {
-    public sealed partial class OwOAccentSystem : EntitySystem
+    [Dependency] private IRobustRandom _random = default!;
+
+    private static readonly IReadOnlyList<string> Faces = new List<string>{
+        " (•`ω´•)", " ;;w;;", " owo", " UwU", " >w<", " ^w^"
+    }.AsReadOnly();
+
+    private static readonly IReadOnlyDictionary<string, string> SpecialWords = new Dictionary<string, string>()
     {
-        [Dependency] private IRobustRandom _random = default!;
+        { "you", "wu" },
+    };
 
     public override string Accentuate(string message, Entity<OwOAccentComponent>? ent = null)
     {

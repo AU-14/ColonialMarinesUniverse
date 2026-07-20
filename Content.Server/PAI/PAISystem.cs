@@ -12,13 +12,12 @@ using System.Text;
 
 namespace Content.Server.PAI;
 
-public sealed partial class PAISystem : SharedPAISystem
+public sealed partial class PAISystem : EntitySystem
 {
     [Dependency] private InstrumentSystem _instrumentSystem = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private StoreSystem _store = default!;
     [Dependency] private ToggleableGhostRoleSystem _toggleableGhostRole = default!;
 
     /// <summary>

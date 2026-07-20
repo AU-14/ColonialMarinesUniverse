@@ -13,7 +13,6 @@ namespace Content.Server.Mining;
 /// </summary>
 public sealed partial class MiningSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     /// <inheritdoc/>

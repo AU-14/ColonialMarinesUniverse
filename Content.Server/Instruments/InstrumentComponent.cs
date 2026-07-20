@@ -5,8 +5,6 @@ namespace Content.Server.Instruments;
 [RegisterComponent]
 public sealed partial class InstrumentComponent : SharedInstrumentComponent
 {
-    [Dependency] private IEntityManager _entMan = default!;
-
     [ViewVariables] public float Timer = 0f;
     [ViewVariables] public int BatchesDropped = 0;
     [ViewVariables] public int LaggedBatches = 0;

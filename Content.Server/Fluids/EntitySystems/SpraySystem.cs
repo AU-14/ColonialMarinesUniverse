@@ -1,27 +1,25 @@
-using System.Numerics;
-using Content.Server.Chemistry.Components;
 using Content.Server.Chemistry.EntitySystems;
 using Content.Server.Gravity;
 using Content.Server.Popups;
 using Content.Shared.CCVar;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared._RMC14.Throwing;
-using Content.Shared.FixedPoint;
 using Content.Shared.Fluids;
 using Content.Shared.Interaction;
 using Content.Shared.Timing;
 using Robust.Server.GameObjects;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
-using Robust.Shared.Prototypes;
+using System.Numerics;
+using Content.Shared.Fluids.EntitySystems;
+using Content.Shared.Fluids.Components;
+using Robust.Server.Containers;
+using Robust.Shared.Map;
 
 namespace Content.Server.Fluids.EntitySystems;
 
-public sealed partial class SpraySystem : EntitySystem
+public sealed partial class SpraySystem : SharedSpraySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private GravitySystem _gravity = default!;
     [Dependency] private PhysicsSystem _physics = default!;
     [Dependency] private UseDelaySystem _useDelay = default!;
@@ -29,9 +27,9 @@ public sealed partial class SpraySystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private VaporSystem _vapor = default!;
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private ContainerSystem _container = default!;
 
     private float _gridImpulseMultiplier;
 
@@ -70,10 +68,10 @@ public sealed partial class SpraySystem : EntitySystem
 
         var clickPos = _transform.ToMapCoordinates(args.ClickLocation);
 
-        Spray(entity, args.User, clickPos, args.Target == args.User);
+        Spray(entity, clickPos, args.User);
     }
 
-    public void Spray(Entity<SprayComponent> entity, EntityUid user, MapCoordinates mapcoord, bool hitUser = false)
+    public override void Spray(Entity<SprayComponent> entity, EntityUid? user = null)
     {
         var xform = Transform(entity);
         var throwing = xform.LocalRotation.ToWorldVec() * entity.Comp.SprayDistance;
@@ -150,10 +148,7 @@ public sealed partial class SpraySystem : EntitySystem
             // Spawn the vapor cloud onto the grid/map the user is present on. Offset the start position based on how far the target destination is.
             var vaporPos = sprayerMapPos.Offset(distance < 1 ? quarter : threeQuarters);
             var vapor = Spawn(entity.Comp.SprayedPrototype, vaporPos);
-            if (hitUser)
-                EnsureComp<ThrownHitUserComponent>(vapor);
-
-            var vaporXform = xformQuery.GetComponent(vapor);
+            var vaporXform = Transform(vapor);
 
             _transform.SetWorldRotation(vaporXform, rotation);
 

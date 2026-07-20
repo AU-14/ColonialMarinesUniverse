@@ -7,17 +7,13 @@ namespace Content.Server.GameTicking.Commands;
 [AdminCommand(AdminFlags.Round)]
 public sealed partial class StartRoundCommand : LocalizedEntityCommands
 {
-    [AdminCommand(AdminFlags.RMCMaintainer)] //RMC14
-    [AdminCommand(AdminFlags.Round)]
-    sealed partial class StartRoundCommand : IConsoleCommand
+    [Dependency] private GameTicker _gameTicker = default!;
+
+    public override string Command => "startround";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        [Dependency] private IEntityManager _e = default!;
-
-        public string Command => "startround";
-        public string Description => "Ends PreRoundLobby state and starts the round.";
-        public string Help => String.Empty;
-
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        if (_gameTicker.RunLevel != GameRunLevel.PreRoundLobby)
         {
             shell.WriteLine(Loc.GetString("shell-can-only-run-from-pre-round-lobby"));
             return;

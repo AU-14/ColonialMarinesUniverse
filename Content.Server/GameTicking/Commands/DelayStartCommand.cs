@@ -7,17 +7,12 @@ namespace Content.Server.GameTicking.Commands;
 [AdminCommand(AdminFlags.Round)]
 sealed class DelayStartCommand : LocalizedEntityCommands
 {
-    [AdminCommand(AdminFlags.RMCMaintainer)] //RMC14
-    [AdminCommand(AdminFlags.Round)]
-    sealed partial class DelayStartCommand : IConsoleCommand
+    public override string Command => "delaystart";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        [Dependency] private IEntityManager _e = default!;
-
-        public string Command => "delaystart";
-        public string Description => "Delays the round start.";
-        public string Help => $"Usage: {Command} <seconds>\nPauses/Resumes the countdown if no argument is provided.";
-
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        var ticker = EntityManager.System<GameTicker>();
+        if (ticker.RunLevel != GameRunLevel.PreRoundLobby)
         {
             shell.WriteLine(Loc.GetString("delaystart-preround-only"));
             return;

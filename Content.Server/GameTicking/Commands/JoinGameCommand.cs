@@ -17,6 +17,9 @@ namespace Content.Server.GameTicking.Commands
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IAdminManager _adminManager = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private ILogManager _logManager = default!;
+
+        private readonly ISawmill _sawmill;
 
         public string Command => "joingame";
         public string Description => "";

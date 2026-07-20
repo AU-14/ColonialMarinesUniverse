@@ -16,8 +16,6 @@ public sealed partial class PickObjectiveTargetSystem : EntitySystem
 {
     [Dependency] private TargetObjectiveSystem _target = default!;
     [Dependency] private SharedMindSystem _mind = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private TraitorRuleSystem _traitorRule = default!;
 
     public override void Initialize()
     {

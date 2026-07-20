@@ -73,6 +73,8 @@ namespace Content.Server.Voting
         [Dependency] private IChatManager _chatManager = default!;
         [Dependency] private VoteWebhooks _voteWebhooks = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IServerDbManager _dbManager = default!;
+        [Dependency] private IEntitySystemManager _esm = default!;
 
         private const int MaxArgCount = 10;
 

@@ -9,23 +9,6 @@ public sealed partial class ActivatableUIRequiresPowerSystem : SharedActivatable
 {
     [Dependency] private ActivatableUISystem _activatableUI = default!;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-
-        SubscribeLocalEvent<ActivatableUIRequiresPowerComponent, PowerChangedEvent>(OnPowerChanged);
-    }
-
-    protected override void OnActivate(Entity<ActivatableUIRequiresPowerComponent> ent, ref ActivatableUIOpenAttemptEvent args)
-    {
-        if (args.Cancelled || this.IsPowered(ent.Owner, EntityManager))
-        {
-            return;
-        }
-
-        args.Cancel();
-    }
-
     [SubscribeLocalEvent]
     private void OnPowerChanged(EntityUid uid, ActivatableUIRequiresPowerComponent component, ref PowerChangedEvent args)
     {

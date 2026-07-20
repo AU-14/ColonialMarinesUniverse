@@ -6,16 +6,13 @@ namespace Content.Server.GameTicking.Commands;
 [AnyCommand]
 public sealed partial class ToggleReadyCommand : LocalizedEntityCommands
 {
-    [AnyCommand]
-    sealed partial class ToggleReadyCommand : IConsoleCommand
+    [Dependency] private GameTicker _gameTicker = default!;
+
+    public override string Command => "toggleready";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        [Dependency] private IEntityManager _e = default!;
-
-        public string Command => "toggleready";
-        public string Description => "";
-        public string Help => "";
-
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        if (args.Length != 1)
         {
             shell.WriteError(Loc.GetString("shell-need-exactly-one-argument"));
             return;

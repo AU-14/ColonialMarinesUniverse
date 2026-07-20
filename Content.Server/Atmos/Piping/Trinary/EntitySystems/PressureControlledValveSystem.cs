@@ -13,13 +13,18 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems;
 [UsedImplicitly]
 public sealed partial class PressureControlledValveSystem : EntitySystem
 {
-    [UsedImplicitly]
-    public sealed partial class PressureControlledValveSystem : EntitySystem
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
-        [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
-        [Dependency] private SharedAppearanceSystem _appearance = default!;
-        [Dependency] private NodeContainerSystem _nodeContainer = default!;
+        base.Initialize();
+        SubscribeLocalEvent<PressureControlledValveComponent, ComponentInit>(OnInit);
+        SubscribeLocalEvent<PressureControlledValveComponent, AtmosDeviceUpdateEvent>(OnUpdate);
+        SubscribeLocalEvent<PressureControlledValveComponent, AtmosDeviceDisabledEvent>(OnFilterLeaveAtmosphere);
+    }
 
     private void OnInit(EntityUid uid, PressureControlledValveComponent comp, ComponentInit args)
     {

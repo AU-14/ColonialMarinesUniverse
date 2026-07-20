@@ -10,7 +10,6 @@ namespace Content.Server.Holiday
     public sealed partial class HolidaySystem : EntitySystem
     {
         [Dependency] private IConfigurationManager _configManager = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IChatManager _chatManager = default!;
         [Dependency] private SharedAppearanceSystem _appearance = default!;
 

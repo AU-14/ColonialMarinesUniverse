@@ -16,7 +16,7 @@ namespace Content.Server.Ninja.Systems;
 /// </summary>
 public sealed partial class BatteryDrainerSystem : SharedBatteryDrainerSystem
 {
-    [Dependency] private BatterySystem _battery = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

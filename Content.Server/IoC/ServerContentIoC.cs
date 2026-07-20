@@ -1,10 +1,3 @@
-using Content.Server._RMC14.Actions;
-using Content.Server._RMC14.Admin;
-using Content.Server._RMC14.Commendations;
-using Content.Server._RMC14.Discord;
-using Content.Server._RMC14.LinkAccount;
-using Content.Server._RMC14.Mentor;
-using Content.Server._RMC14.PlayTimeTracking;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -40,17 +33,53 @@ using Content.Shared.Players.RateLimiting;
 
 namespace Content.Server.IoC;
 
-            IoCManager.Register<DiscordLink>();
-            IoCManager.Register<DiscordChatLink>();
-
-            // RMC14
-            IoCManager.Register<LinkAccountManager>();
-            IoCManager.Register<RMCPlayTimeManager>();
-            IoCManager.Register<RMCDiscordManager>();
-            IoCManager.Register<MentorManager>();
-            IoCManager.Register<CommendationManager>();
-            IoCManager.Register<RMCActionsManager>();
-            IoCManager.Register<RMCChatBansManager>();
-        }
+internal static class ServerContentIoC
+{
+    public static void Register(IDependencyCollection deps)
+    {
+        SharedContentIoC.Register(deps);
+        deps.Register<IChatManager, ChatManager>();
+        deps.Register<ISharedChatManager, ChatManager>();
+        deps.Register<IChatSanitizationManager, ChatSanitizationManager>();
+        deps.Register<IServerPreferencesManager, ServerPreferencesManager>();
+        deps.Register<IServerDbManager, ServerDbManager>();
+        deps.Register<INodeGroupFactory, NodeGroupFactory>();
+        deps.Register<IConnectionManager, ConnectionManager>();
+        deps.Register<ServerUpdateManager>();
+        deps.Register<IAdminManager, AdminManager>();
+        deps.Register<ISharedAdminManager, AdminManager>();
+        deps.Register<EuiManager, EuiManager>();
+        deps.Register<IVoteManager, VoteManager>();
+        deps.Register<IPlayerLocator, PlayerLocator>();
+        deps.Register<IAfkManager, AfkManager>();
+        deps.Register<IGameMapManager, GameMapManager>();
+        deps.Register<RulesManager, RulesManager>();
+        deps.Register<IBanManager, BanManager>();
+        deps.Register<ContentNetworkResourceManager>();
+        deps.Register<IAdminNotesManager, AdminNotesManager>();
+        deps.Register<GhostKickManager>();
+        deps.Register<ISharedAdminLogManager, AdminLogManager>();
+        deps.Register<IAdminLogManager, AdminLogManager>();
+        deps.Register<PlayTimeTrackingManager>();
+        deps.Register<UserDbDataManager>();
+        deps.Register<ServerInfoManager>();
+        deps.Register<DiscordWebhook>();
+        deps.Register<VoteWebhooks>();
+        deps.Register<EventWebhook>();
+        deps.Register<ServerDbEntryManager>();
+        deps.Register<ISharedPlaytimeManager, PlayTimeTrackingManager>();
+        deps.Register<ServerApi>();
+        deps.Register<JobWhitelistManager>();
+        deps.Register<PlayerRateLimitManager>();
+        deps.Register<SharedPlayerRateLimitManager, PlayerRateLimitManager>();
+        deps.Register<MappingManager>();
+        deps.Register<IWatchlistWebhookManager, WatchlistWebhookManager>();
+        deps.Register<ConnectionManager>();
+        deps.Register<MultiServerKickManager>();
+        deps.Register<CVarControlManager>();
+        deps.Register<DiscordLink>();
+        deps.Register<DiscordChatLink>();
+        deps.Register<ServerFeedbackManager>();
+        deps.Register<ISharedFeedbackManager, ServerFeedbackManager>();
     }
 }

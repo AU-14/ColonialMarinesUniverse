@@ -14,16 +14,16 @@ namespace Content.Server.Atmos.Piping.Trinary.EntitySystems;
 [UsedImplicitly]
 public sealed partial class GasMixerSystem : SharedGasMixerSystem
 {
-    [UsedImplicitly]
-    public sealed partial class GasMixerSystem : EntitySystem
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+
+    [SubscribeLocalEvent]
+    private void OnInit(Entity<GasMixerComponent> ent, ref ComponentInit args)
     {
-        [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
-        [Dependency] private IAdminLogManager _adminLogger = default!;
-        [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
-        [Dependency] private SharedAmbientSoundSystem _ambientSoundSystem = default!;
-        [Dependency] private SharedAppearanceSystem _appearance = default!;
-        [Dependency] private NodeContainerSystem _nodeContainer = default!;
-        [Dependency] private SharedPopupSystem _popup = default!;
+        UpdateAppearance(ent);
+    }
 
     [SubscribeLocalEvent]
     private void OnMixerUpdated(Entity<GasMixerComponent> ent, ref AtmosDeviceUpdateEvent args)

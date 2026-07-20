@@ -201,8 +201,11 @@ namespace Content.Server.Entry
                 _dbManager.Shutdown();
             }
 
-            IoCManager.Resolve<DiscordLink>().Shutdown().GetAwaiter().GetResult();
-            IoCManager.Resolve<DiscordChatLink>().Shutdown();
+            _serverApi.Shutdown();
+
+            // We don't care when or how this finishes, just spin the task off into the void.
+            _ = _discordLink.Shutdown();
+            _discordChatLink.Shutdown();
         }
 
         private static void LoadConfigPresets(IConfigurationManager cfg, IResourceManager res, ISawmill sawmill)

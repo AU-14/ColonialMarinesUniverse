@@ -1,9 +1,9 @@
-using System.Linq;
 using Content.Shared.Atmos;
 using Content.Shared.EntityEffects;
 using Content.Shared.Random;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using System.Linq;
 
 namespace Content.Server.Botany;
 
@@ -12,7 +12,7 @@ public sealed partial class MutationSystem : EntitySystem
     private static ProtoId<RandomPlantMutationListPrototype> _randomPlantMutations = "RandomPlantMutations";
 
     [Dependency] private IRobustRandom _robustRandom = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
     private RandomPlantMutationListPrototype _randomMutations = default!;
 
     public override void Initialize()
@@ -27,7 +27,18 @@ public sealed partial class MutationSystem : EntitySystem
     /// <param name="severity"></param>
     public void CheckRandomMutations(EntityUid plantHolder, ref SeedData seed, float severity)
     {
-        // RMC14 does not use random seed mutations.
+        foreach (var mutation in _randomMutations.mutations)
+        {
+            if (Random(Math.Min(mutation.BaseOdds * severity, 1.0f)))
+            {
+                if (mutation.AppliesToPlant)
+                    _entityEffects.TryApplyEffect(plantHolder, mutation.Effect);
+
+                // Stat adjustments do not persist by being an attached effect, they just change the stat.
+                if (mutation.Persists && !seed.Mutations.Any(m => m.Name == mutation.Name))
+                    seed.Mutations.Add(mutation);
+            }
+        }
     }
 
     /// <summary>

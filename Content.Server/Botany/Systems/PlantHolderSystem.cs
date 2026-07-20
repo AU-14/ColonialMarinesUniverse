@@ -2,21 +2,17 @@ using Content.Server.Atmos.EntitySystems;
 using Content.Server.Botany.Components;
 using Content.Server.Hands.Systems;
 using Content.Server.Popups;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Atmos;
 using Content.Shared.Botany;
 using Content.Shared.Burial.Components;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
-using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Coordinates.Helpers;
-using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
-using Content.Shared.Kitchen.Components;
 using Content.Shared.Popups;
 using Content.Shared.Random;
 using Content.Shared.Tag;
@@ -26,6 +22,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Database;
+using Content.Shared.EntityEffects;
 using Content.Shared.Labels.Components;
 using Content.Shared.Tools.Systems;
 
@@ -35,7 +34,6 @@ public sealed partial class PlantHolderSystem : EntitySystem
 {
     [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private BotanySystem _botany = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private MutationSystem _mutation = default!;
     [Dependency] private AppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -48,6 +46,8 @@ public sealed partial class PlantHolderSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
+    [Dependency] private SharedToolSystem _tool = default!;
 
     public const float HydroponicsSpeedMultiplier = 1f;
     public const float HydroponicsConsumptionMultiplier = 2f;
@@ -891,8 +891,11 @@ public sealed partial class PlantHolderSystem : EntitySystem
             EnsureUniqueSeed(uid, component);
             foreach (var entry in solution.Contents)
             {
-                var reagentProto = _prototype.IndexReagent<ReagentPrototype>(entry.Reagent.Prototype);
-                reagentProto.ReactionPlant(uid, entry, solution);
+                if (entry.Quantity < PlantMetabolismRate)
+                    continue;
+
+                var reagentProto = ProtoMan.Index<ReagentPrototype>(entry.Reagent.Prototype);
+                _entityEffects.ApplyEffects(uid, reagentProto.PlantMetabolisms.ToArray(), entry.Quantity);
             }
 
             _solutionContainerSystem.RemoveEachReagent(component.SoilSolution.Value, PlantMetabolismRate);

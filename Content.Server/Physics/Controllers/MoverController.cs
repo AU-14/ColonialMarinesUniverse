@@ -17,8 +17,15 @@ namespace Content.Server.Physics.Controllers;
 
 public sealed partial class MoverController : SharedMoverController
 {
+    private static readonly Gauge ActiveMoverGauge = Metrics.CreateGauge(
+        "physics_active_mover_count",
+        "Amount of ActiveInputMovers being processed by MoverController");
+
     [Dependency] private ThrusterSystem _thruster = default!;
-    [Dependency] private SharedTransformSystem _xformSystem = default!;
+
+    [Dependency] private EntityQuery<ActiveInputMoverComponent> _activeQuery = default!;
+    [Dependency] private EntityQuery<DroneConsoleComponent> _droneQuery = default!;
+    [Dependency] private EntityQuery<ShuttleComponent> _shuttleQuery = default!;
 
     private Dictionary<EntityUid, (ShuttleComponent, List<(EntityUid, PilotComponent, InputMoverComponent, TransformComponent)>)> _shuttlePilots = new();
 

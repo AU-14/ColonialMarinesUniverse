@@ -1,6 +1,3 @@
-using System.Numerics;
-using Content.Server.Atmos.EntitySystems;
-using Content.Shared._RMC14.Explosion;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -9,18 +6,10 @@ using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
-using Content.Shared.Projectiles;
-using Content.Shared.Tag;
-// RMC14
-using Content.Shared._RMC14.Vehicle;
-using Content.Shared.Vehicle.Components;
-// RMC14
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Dynamics;
-using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using System.Numerics;
@@ -32,8 +21,6 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class ExplosionSystem
 {
-    [Dependency] private FlammableSystem _flammableSystem = default!;
-
     /// <summary>
     ///     Used to limit explosion processing time. See <see cref="MaxProcessingTime"/>.
     /// </summary>
@@ -71,9 +58,6 @@ public sealed partial class ExplosionSystem
     private readonly List<(EntityUid, DamageSpecifier)> _toDamage = new();
 
     private List<EntityUid> _anchored = new();
-
-    // RMC14
-    private static readonly EntProtoId ShockwaveSmoke = "RMCFogShockwave";
 
     private void OnMapRemoved(MapRemovedEvent ev)
     {
@@ -221,7 +205,7 @@ public sealed partial class ExplosionSystem
         EntityUid? cause)
     {
         var size = grid.Comp.TileSize;
-        var gridBox = new Box2(tile * size, (tile + 1) * size).Scale(0.9f);
+        var gridBox = new Box2(tile * size, (tile + 1) * size);
 
         /* We do this so that we don't do an extra TryComp on anchored entities, and so we don't process them twice.
         This saves us a small amount of processing time, but in the future if we can:
@@ -271,9 +255,6 @@ public sealed partial class ExplosionSystem
             tileBlocked |= IsBlockingTurf(entity);
         }
         _anchored.Clear();
-
-        if (!tileBlocked)
-            Spawn(ShockwaveSmoke, new EntityCoordinates(grid.Owner, tile));
 
         // Next, we get the intersecting entities AGAIN, but purely for throwing. This way, glass shards spawned from
         // windows will be flung outwards, and not stay where they spawned. This is however somewhat unnecessary, and a
@@ -462,13 +443,7 @@ public sealed partial class ExplosionSystem
         float? fireStacksOnIgnite,
         EntityUid? cause)
     {
-        if (_deleteOnExplosionQuery.HasComp(uid))
-        {
-            QueueDel(uid);
-            return;
-        }
-
-        if (originalDamage != null)
+        if (originalDamage is not null)
         {
             GetEntitiesToDamage(uid, originalDamage, id);
             foreach (var (entity, damage) in _toDamage)
@@ -477,9 +452,16 @@ public sealed partial class ExplosionSystem
                     continue;
 
                 // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
-                _damageableSystem.TryChangeDamage(entity, damage * _damageableSystem.UniversalExplosionDamageModifier, ignoreResistances: true);
-                var ev = new ExplosionReceivedEvent(id, epicenter, damage);
-                RaiseLocalEvent(entity, ref ev);
+                _damageableSystem.ChangeDamage((entity, damageable), damage);
+
+                if (_actorQuery.HasComp(entity))
+                {
+                    // Log damage to player entities only; this will create a massive amount of log spam otherwise.
+                    if (cause is not null)
+                        _adminLogger.Add(LogType.ExplosionHit, LogImpact.Medium, $"Explosion of {ToPrettyString(cause):actor} dealt {damage.GetTotal()} damage to {ToPrettyString(entity):subject}");
+                    else
+                        _adminLogger.Add(LogType.ExplosionHit, LogImpact.Medium, $"Explosion at {epicenter:epicenter} dealt {damage.GetTotal()} damage to {ToPrettyString(entity):subject}");
+                }
             }
         }
 
@@ -494,29 +476,24 @@ public sealed partial class ExplosionSystem
         }
 
         // throw
-        if (xform != null // null implies anchored or in a container
-            && !xform.Anchored
-            && throwForce > 0
-            && !EntityManager.IsQueuedForDeletion(uid)
-            // RMC14
-            && !HasComp<VehicleComponent>(uid)
-            && !HasComp<GridVehicleMoverComponent>(uid)
-            // RMC14
-            && _physicsQuery.TryGetComponent(uid, out var physics)
-            && physics.BodyType == BodyType.Dynamic)
-        {
-            var pos = _transformSystem.GetWorldPosition(xform);
-            var dir = pos - epicenter.Position;
-            if (dir.IsLengthZero())
-                dir = _robustRandom.NextVector2().Normalized();
-            _throwingSystem.TryThrow(
-                uid,
-                dir,
-                physics,
-                xform,
-                _projectileQuery,
-                throwForce);
-        }
+        if (xform == null
+            || xform.Anchored
+            || throwForce <= 0
+            || EntityManager.IsQueuedForDeletion(uid)
+            || !_physicsQuery.TryGetComponent(uid, out var physics)
+            || physics.BodyType != BodyType.Dynamic)
+            return;
+
+        var pos = _transformSystem.GetWorldPosition(xform);
+        var dir = pos - epicenter.Position;
+        if (dir.IsLengthZero())
+            dir = _robustRandom.NextVector2().Normalized();
+        _throwingSystem.TryThrow(
+            uid,
+            dir,
+            physics,
+            xform,
+            throwForce);
     }
 
     /// <summary>

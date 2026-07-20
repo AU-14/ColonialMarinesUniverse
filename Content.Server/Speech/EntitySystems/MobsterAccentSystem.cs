@@ -6,7 +6,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class MobsterAccentSystem : EntitySystem
+public sealed partial class MobsterAccentSystem : RelayAccentSystem<MobsterAccentComponent>
 {
     private static readonly Regex RegexIng = new(@"(?<=\w\w)(in)g(?!\w)", RegexOptions.IgnoreCase);
     private static readonly Regex RegexLowerOr = new(@"(?<=\w)o[Rr](?=\w)");
@@ -40,7 +40,7 @@ public sealed partial class MobsterAccentSystem : EntitySystem
         msg = RegexUpperAr.Replace(msg, "AH");
 
         // Prefix
-        if (_random.Prob(component.PrefixChance))
+        if (_random.Prob(0.15f))
         {
             //Checks if the first word of the sentence is all caps
             //So the prefix can be allcapped and to not resanitize the captial
@@ -60,7 +60,7 @@ public sealed partial class MobsterAccentSystem : EntitySystem
         msg = msg[0].ToString().ToUpper() + msg.Remove(0, 1);
 
         // Suffixes
-        if (_random.Prob(component.SuffixChance))
+        if (_random.Prob(0.4f))
         {
             //Checks if the last word of the sentence is all caps
             //So the suffix can be allcapped
@@ -78,12 +78,6 @@ public sealed partial class MobsterAccentSystem : EntitySystem
             }
             if (lastWordAllCaps)
                 suffix = suffix.ToUpper();
-
-            if (msg.EndsWith("..."))
-                suffix = suffix[1..];
-            else if (msg.EndsWith("."))
-                msg = msg[..^1];
-
             msg = RegexLastPunctuation.Replace(msg, suffix);
         }
 

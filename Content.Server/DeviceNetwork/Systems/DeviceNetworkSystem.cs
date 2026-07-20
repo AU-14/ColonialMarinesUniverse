@@ -18,7 +18,6 @@ namespace Content.Server.DeviceNetwork.Systems
     public sealed partial class DeviceNetworkSystem : SharedDeviceNetworkSystem
     {
         [Dependency] private IRobustRandom _random = default!;
-        [Dependency] private IPrototypeManager _protoMan = default!;
         [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private DeviceListSystem _deviceLists = default!;
         [Dependency] private NetworkConfiguratorSystem _configurator = default!;

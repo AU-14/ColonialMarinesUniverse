@@ -8,7 +8,6 @@ namespace Content.Server.RandomMetadata;
 
 public sealed partial class RandomMetadataSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
 

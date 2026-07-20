@@ -6,9 +6,19 @@ namespace Content.Server.Speech.EntitySystems;
 
 public sealed partial class BarkAccentSystem : RelayAccentSystem<BarkAccentComponent>
 {
-    public sealed partial class BarkAccentSystem : EntitySystem
+    [Dependency] private IRobustRandom _random = default!;
+
+    private static readonly IReadOnlyList<string> Barks = new List<string>{
+        " Woof!", " WOOF", " wof-wof"
+    }.AsReadOnly();
+
+    private static readonly IReadOnlyDictionary<string, string> SpecialWords = new Dictionary<string, string>()
     {
-        [Dependency] private IRobustRandom _random = default!;
+        { "ah", "arf" },
+        { "Ah", "Arf" },
+        { "oh", "oof" },
+        { "Oh", "Oof" },
+    };
 
     public override string Accentuate(string message, Entity<BarkAccentComponent>? ent = null)
     {

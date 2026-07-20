@@ -14,7 +14,8 @@ namespace Content.Server.Stack
     [UsedImplicitly]
     public sealed partial class StackSystem : SharedStackSystem
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private SharedHandsSystem _hands = default!;
+        [Dependency] private SharedPopupSystem _popup = default!;
 
         [Dependency] private EntityQuery<StackComponent> _stackQuery;
 
@@ -31,11 +32,7 @@ namespace Content.Server.Stack
         [PublicAPI]
         public EntityUid? Split(Entity<StackComponent?> ent, int amount, EntityCoordinates spawnPosition)
         {
-            // #RMC Prevent splitting stacksin acid
-            if (IsAcidicStack(uid))
-                return null;
-
-            if (!Resolve(uid, ref stack))
+            if (!_stackQuery.Resolve(ent.Owner, ref ent.Comp))
                 return null;
 
             // Try to remove the amount of things we want to split from the original stack...
@@ -256,9 +253,6 @@ namespace Content.Server.Stack
         /// <returns>The list of stack counts per entity.</returns>
         private List<int> CalculateSpawns(int maxCountPerStack, int amount)
         {
-            var proto = _prototypeManager.Index<EntityPrototype>(entityPrototype);
-            proto.TryComp<StackComponent>(out var stack, EntityManager.ComponentFactory);
-            var maxCountPerStack = GetMaxCount(stack);
             var amounts = new List<int>();
             while (amount > 0)
             {
@@ -273,41 +267,7 @@ namespace Content.Server.Stack
         /// <inheritdoc cref="CalculateSpawns(int, int)"/>
         private List<int> CalculateSpawns(StackPrototype stackProto, int amount)
         {
-            if (!args.CanAccess || !args.CanInteract || args.Hands == null || stack.Count == 1)
-                return;
-
-            // #RMC Hide split verbs for acided stacks
-            if (IsAcidicStack(uid))
-                return;
-
-            AlternativeVerb halve = new()
-            {
-                Text = Loc.GetString("comp-stack-split-halve"),
-                Category = VerbCategory.Split,
-                Act = () => UserSplit(uid, args.User, stack.Count / 2, stack),
-                Priority = 1
-            };
-            args.Verbs.Add(halve);
-
-            var priority = 0;
-            foreach (var amount in DefaultSplitAmounts)
-            {
-                if (amount >= stack.Count)
-                    continue;
-
-                AlternativeVerb verb = new()
-                {
-                    Text = amount.ToString(),
-                    Category = VerbCategory.Split,
-                    Act = () => UserSplit(uid, args.User, amount, stack),
-                    // we want to sort by size, not alphabetically by the verb text.
-                    Priority = priority
-                };
-
-                priority--;
-
-                args.Verbs.Add(verb);
-            }
+            return CalculateSpawns(GetMaxCount(stackProto), amount);
         }
 
         /// <inheritdoc cref="CalculateSpawns(int, int)"/>

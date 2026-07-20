@@ -124,7 +124,7 @@ namespace Content.Server.Forensics
                 IconEntity = GetNetEntity(uid),
                 Text = Loc.GetString("forensic-scanner-verb-text"),
                 Message = Loc.GetString("forensic-scanner-verb-message"),
-                // Scanning is observational; the verb must not transfer contact evidence.
+                // This is important because if its true using the scanner will count as touching the object.
                 DoContactInteraction = false
             };
 

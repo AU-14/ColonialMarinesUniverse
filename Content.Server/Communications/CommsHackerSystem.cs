@@ -14,7 +14,6 @@ public sealed partial class CommsHackerSystem : SharedCommsHackerSystem
 {
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     // TODO: remove when generic check event is used
     [Dependency] private NinjaGlovesSystem _gloves = default!;

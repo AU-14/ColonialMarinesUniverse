@@ -17,8 +17,11 @@ namespace Content.Server.Atmos.Piping.Unary.EntitySystems;
 public sealed partial class GasCanisterSystem : SharedGasCanisterSystem
 {
     [Dependency] private AtmosphereSystem _atmos = default!;
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private NodeContainerSystem _nodeContainer = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+
+    private const float ReleaseArea = 0.05f; // 500cm^2 Number chosen for balance reasons. It's quite large, but so are gas canisters (holding 1.5 cubic meters of gas!)
 
     public override void Initialize()
     {

@@ -15,7 +15,12 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class ExplosionSystem
 {
-    [Dependency] private DestructibleSystem _destructibleSystem = default!;
+    // We keep track of which tiles are airtight, and how much damage from explosions those airtight blockers can take.
+    // This is quite complicated, as the data effectively needs to be tracked *per tile*, *per explosion type*.
+    // To avoid wasting significant memory, we calculate the values and share the actual backing storage of it.
+    // Stored values are reference counted so they can be evicted when no longer needed.
+    // At the time of writing, this compacts the storage for Box Station from ~5500 tolerance value sets to 13,
+    // at round start.
 
     // Use integers instead of prototype IDs for storage of explosion data.
     // This allows us to replace a Dictionary<string, FixedPoint2> with just a FixedPoint2[].

@@ -9,6 +9,7 @@ namespace Content.Server.Power.EntitySystems
     public sealed partial class ExtensionCableSystem : EntitySystem
     {
         [Dependency] private SharedMapSystem _map = default!;
+        [Dependency] private EntityQuery<ExtensionCableProviderComponent> _cableProviderQuery = default!;
 
         public override void Initialize()
         {

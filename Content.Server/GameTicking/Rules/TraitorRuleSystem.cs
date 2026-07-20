@@ -27,7 +27,6 @@ public sealed partial class TraitorRuleSystem : GameRuleSystem<TraitorRuleCompon
     [Dependency] private SharedJobSystem _jobs = default!;
     [Dependency] private MindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRoleCodewordSystem _roleCodewordSystem = default!;
     [Dependency] private SharedRoleSystem _roleSystem = default!;

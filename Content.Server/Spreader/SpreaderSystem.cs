@@ -19,11 +19,14 @@ namespace Content.Server.Spreader;
 /// </summary>
 public sealed partial class SpreaderSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private TurfSystem _turf = default!;
+
+    [Dependency] private EntityQuery<EdgeSpreaderComponent> _edgeSpreaderQuery = default!;
+    [Dependency] private EntityQuery<AirtightComponent> _airtightQuery = default!;
+    [Dependency] private EntityQuery<DockingComponent> _dockingQuery = default!;
 
     /// <summary>
     /// Cached maximum number of updates per spreader prototype. This is applied per-grid.
@@ -321,7 +324,7 @@ public sealed partial class SpreaderSystem : EntitySystem
             DebugTools.Assert(Transform(entity.Value).Anchored);
 
             // Activate any edge spreaders that are non-terminating
-            if (_query.HasComponent(entity) && !TerminatingOrDeleted(entity))
+            if (_edgeSpreaderQuery.HasComponent(entity) && !TerminatingOrDeleted(entity))
                 EnsureComp<ActiveEdgeSpreaderComponent>(entity.Value);
         }
 
@@ -336,7 +339,7 @@ public sealed partial class SpreaderSystem : EntitySystem
                 DebugTools.Assert(Transform(entity.Value).Anchored);
 
                 // Activate any edge spreaders that are non-terminating
-                if (_query.HasComponent(entity) && !TerminatingOrDeleted(entity))
+                if (_edgeSpreaderQuery.HasComponent(entity) && !TerminatingOrDeleted(entity))
                     EnsureComp<ActiveEdgeSpreaderComponent>(entity.Value);
             }
         }
@@ -344,7 +347,7 @@ public sealed partial class SpreaderSystem : EntitySystem
 
     public bool RequiresFloorToSpread(EntProtoId<EdgeSpreaderComponent> spreader)
     {
-        if (!_prototype.Index(spreader).TryComp<EdgeSpreaderComponent>(out var spreaderComp, EntityManager.ComponentFactory))
+        if (!ProtoMan.Index(spreader).TryComp<EdgeSpreaderComponent>(out var spreaderComp, EntityManager.ComponentFactory))
             return false;
 
         return ProtoMan.Index(spreaderComp.Id).PreventSpreadOnSpaced;

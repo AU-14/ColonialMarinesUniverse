@@ -1,18 +1,17 @@
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
 using Content.Server.Botany.Components;
 using Content.Server.Popups;
-using Content.Shared.Botany;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.Botany;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Kitchen.Components;
 using Content.Shared.Popups;
 using Content.Shared.Random;
+using Content.Shared.Random.Helpers;
 using Robust.Server.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
@@ -23,7 +22,6 @@ namespace Content.Server.Botany.Systems;
 
 public sealed partial class BotanySystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private AppearanceSystem _appearance = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
@@ -32,6 +30,9 @@ public sealed partial class BotanySystem : EntitySystem
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private RandomHelperSystem _randomHelper = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    [Dependency] private SharedToolSystem _tools = default!;
+
+    private static readonly ProtoId<ToolQualityPrototype> HarvestTool = "Slicing";
 
     public override void Initialize()
     {

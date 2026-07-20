@@ -1,7 +1,5 @@
 ﻿using System.Globalization;
 using Content.Server.Chat.Managers;
-using Content.Server.Mind;
-using Content.Shared.Chat;
 using Content.Shared.Mind;
 using Content.Shared.Roles;
 using Content.Shared.Roles.Jobs;
@@ -55,13 +53,6 @@ public sealed partial class JobSystem : SharedJobSystem
 
         if (prototype.RequireAdminNotify)
             _chat.DispatchServerMessage(session, Loc.GetString("job-greet-important-disconnect-admin-notify"));
-
-        if (prototype.Greeting is { } greeting)
-        {
-            var msg = Loc.GetString(greeting, ("jobName", prototype.LocalizedName));
-            _chat.ChatMessageToOne(ChatChannel.Server, msg, msg, default, false, session.Channel);
-            return;
-        }
 
         _chat.DispatchServerMessage(session, Loc.GetString("job-greet-supervisors-warning", ("jobName", prototype.LocalizedName), ("supervisors", Loc.GetString(prototype.Supervisors))));
     }

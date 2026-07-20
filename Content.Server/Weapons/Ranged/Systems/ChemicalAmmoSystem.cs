@@ -8,9 +8,12 @@ namespace Content.Server.Weapons.Ranged.Systems;
 
 public sealed partial class ChemicalAmmoSystem : EntitySystem
 {
-    public sealed partial class ChemicalAmmoSystem : EntitySystem
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+        SubscribeLocalEvent<ChemicalAmmoComponent, AmmoShotEvent>(OnFire);
+    }
 
     private void OnFire(Entity<ChemicalAmmoComponent> entity, ref AmmoShotEvent args)
     {

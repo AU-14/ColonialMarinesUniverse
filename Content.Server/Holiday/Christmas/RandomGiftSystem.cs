@@ -20,7 +20,6 @@ public sealed partial class RandomGiftSystem : EntitySystem
 {
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private HandsSystem _hands = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;

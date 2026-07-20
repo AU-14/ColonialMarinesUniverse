@@ -6,10 +6,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Morgue;
 
-public sealed partial class MorgueSystem : EntitySystem
+public sealed partial class MorgueSystem : SharedMorgueSystem
 {
-    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
 
     public override void Initialize()
     {

@@ -13,6 +13,7 @@ namespace Content.Server.Speech.Muting
     public sealed partial class MutingSystem : EntitySystem
     {
         [Dependency] private PopupSystem _popupSystem = default!;
+
         public override void Initialize()
         {
             base.Initialize();

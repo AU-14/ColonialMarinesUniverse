@@ -3,7 +3,6 @@ using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared.Camera;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Events;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Effects;
@@ -16,14 +15,15 @@ namespace Content.Server.Damage.Systems;
 
 public sealed partial class DamageOtherOnHitSystem : SharedDamageOtherOnHitSystem
 {
-    public sealed partial class DamageOtherOnHitSystem : SharedDamageOtherOnHitSystem
+    [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private GunSystem _guns = default!;
+    [Dependency] private Shared.Damage.Systems.DamageableSystem _damageable = default!;
+    [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
+    [Dependency] private SharedColorFlashEffectSystem _color = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private IAdminLogManager _adminLogger = default!;
-        [Dependency] private GunSystem _guns = default!;
-        [Dependency] private DamageableSystem _damageable = default!;
-        [Dependency] private DamageExamineSystem _damageExamine = default!;
-        [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
-        [Dependency] private SharedColorFlashEffectSystem _color = default!;
+        base.Initialize();
 
         SubscribeLocalEvent<DamageOtherOnHitComponent, ThrowDoHitEvent>(OnDoHit);
     }

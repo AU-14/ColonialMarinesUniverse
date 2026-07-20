@@ -24,7 +24,8 @@ namespace Content.Server.NodeContainer.EntitySystems
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private IAdminManager _adminManager = default!;
         [Dependency] private INodeGroupFactory _nodeGroupFactory = default!;
-        [Dependency] private ILogManager _logManager = default!;
+        [Dependency] private EntityQuery<NodeContainerComponent> _nodeContainerQuery = default!;
+        [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
         private readonly List<int> _visDeletes = new();
         private readonly List<BaseNodeGroup> _visSends = new();
@@ -345,15 +346,13 @@ namespace Content.Server.NodeContainer.EntitySystems
 
         private IEnumerable<Node> GetCompatibleNodes(Node node)
         {
-            var xform = xformQuery.GetComponent(node.Owner);
-            Entity<MapGridComponent>? grid = TryComp<MapGridComponent>(xform.GridUid, out var gridComp)
-                ? (xform.GridUid.Value, gridComp)
-                : null;
+            var xform = Transform(node.Owner);
+            Entity<MapGridComponent>? gridEnt = TryComp<MapGridComponent>(xform.GridUid, out var grid) ? (xform.GridUid.Value, grid) : null;
 
             if (!node.Connectable(EntityManager, xform))
                 yield break;
 
-            foreach (var reachable in node.GetReachableNodes((node.Owner, xform), nodeQuery, xformQuery, grid, EntityManager))
+            foreach (var reachable in node.GetReachableNodes((node.Owner, xform), _nodeContainerQuery, _xformQuery, gridEnt, EntityManager))
             {
                 DebugTools.Assert(reachable != node, "GetReachableNodes() should not include self.");
 

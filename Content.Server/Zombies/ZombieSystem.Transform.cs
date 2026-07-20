@@ -58,18 +58,20 @@ namespace Content.Server.Zombies;
 public sealed partial class ZombieSystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IBanManager _ban = default!;
     [Dependency] private IChatManager _chatMan = default!;
     [Dependency] private SharedCombatModeSystem _combat = default!;
     [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private GhostSystem _ghost = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private HumanoidAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private ServerInventorySystem _inventory = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private NameModifierSystem _nameMod = default!;
     [Dependency] private NPCSystem _npc = default!;
     [Dependency] private TagSystem _tag = default!;
-    [Dependency] private NameModifierSystem _nameMod = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
 
     private static readonly ProtoId<TagPrototype> InvalidForGlobalSpawnSpellTag = "InvalidForGlobalSpawnSpell";
@@ -256,9 +258,9 @@ public sealed partial class ZombieSystem
         _bloodstream.ChangeBloodReagents(target, zombiecomp.NewBloodReagents);
 
         //This is specifically here to combat insuls, because frying zombies on grilles is funny as shit.
-        // _inventory.TryUnequip(target, "gloves", true, true); RMC14
+        _inventory.TryUnequip(target, "gloves", true, true);
         //Should prevent instances of zombies using comms for information they shouldnt be able to have.
-        // _inventory.TryUnequip(target, "ears", true, true); RMC14
+        _inventory.TryUnequip(target, "ears", true, true);
 
         //popup
         _popup.PopupEntity(

@@ -10,10 +10,9 @@ namespace Content.Server.Cloning;
 public sealed partial class RandomCloneSpawnerSystem : EntitySystem
 {
     [Dependency] private CloningSystem _cloning = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
-    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private AliveHumanoidTargetSystem _target = default!;
 
     public override void Initialize()
     {

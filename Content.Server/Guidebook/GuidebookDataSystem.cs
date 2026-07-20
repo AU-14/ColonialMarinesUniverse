@@ -11,8 +11,6 @@ namespace Content.Server.Guidebook;
 /// </summary>
 public sealed partial class GuidebookDataSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _protoMan = default!;
-
     private readonly Dictionary<string, List<MemberInfo>> _tagged = [];
     private GuidebookData _cachedData = new();
 

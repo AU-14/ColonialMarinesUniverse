@@ -1,4 +1,3 @@
-using Content.Server._RMC14.Dropship;
 using Content.Server.Doors.Systems;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.Shuttles.Components;
@@ -40,15 +39,10 @@ public sealed partial class DockingSystem : SharedDockingSystem
     [SubscribeLocalEvent]
     private void OnAutoClose(EntityUid uid, DockingComponent component, BeforeDoorAutoCloseEvent args)
     {
-        [Dependency] private SharedMapSystem _mapSystem = default!;
-        [Dependency] private DoorSystem _doorSystem = default!;
-        [Dependency] private EntityLookupSystem _lookup = default!;
-        [Dependency] private PathfindingSystem _pathfinding = default!;
-        [Dependency] private ShuttleConsoleSystem _console = default!;
-        [Dependency] private SharedJointSystem _jointSystem = default!;
-        [Dependency] private SharedPopupSystem _popup = default!;
-        [Dependency] private SharedTransformSystem _transform = default!;
-        [Dependency] private DropshipSystem _dropship = default!;
+        // We'll just pin the door open when docked.
+        if (component.Docked)
+            args.Cancel();
+    }
 
     [SubscribeLocalEvent]
     private void OnShutdown(EntityUid uid, DockingComponent component, ComponentShutdown args)
@@ -63,147 +57,6 @@ public sealed partial class DockingSystem : SharedDockingSystem
 
         if (gridUid != null && !Terminating(gridUid.Value))
         {
-            _dockingSet.Clear();
-            _lookup.GetChildEntities(gridUid, _dockingSet);
-
-            foreach (var dock in _dockingSet)
-            {
-                Undock(dock);
-            }
-        }
-
-        public void SetDockBolts(EntityUid gridUid, bool enabled)
-        {
-            _dockingBoltSet.Clear();
-            _lookup.GetChildEntities(gridUid, _dockingBoltSet);
-
-            foreach (var entity in _dockingBoltSet)
-            {
-                if (enabled)
-                {
-                    _dropship.LockDoor((entity, entity));
-                }
-                else
-                {
-                    _dropship.UnlockDoor((entity, entity));
-                }
-            }
-        }
-
-        private void OnAutoClose(EntityUid uid, DockingComponent component, BeforeDoorAutoCloseEvent args)
-        {
-            // We'll just pin the door open when docked.
-            if (component.Docked)
-                args.Cancel();
-        }
-
-        private void OnShutdown(EntityUid uid, DockingComponent component, ComponentShutdown args)
-        {
-            if (component.DockedWith == null ||
-                Comp<MetaDataComponent>(uid).EntityLifeStage > EntityLifeStage.MapInitialized)
-            {
-                return;
-            }
-
-            var gridUid = Transform(uid).GridUid;
-
-            if (gridUid != null && !Terminating(gridUid.Value))
-            {
-                _console.RefreshShuttleConsoles();
-            }
-
-            Cleanup(uid, component);
-        }
-
-        private void Cleanup(EntityUid dockAUid, DockingComponent dockA)
-        {
-            _pathfinding.RemovePortal(dockA.PathfindHandle);
-
-            if (dockA.DockJoint != null)
-                _jointSystem.RemoveJoint(dockA.DockJoint);
-
-            var dockBUid = dockA.DockedWith;
-
-            if (dockBUid == null ||
-                !TryComp(dockBUid, out DockingComponent? dockB))
-            {
-                DebugTools.Assert(false);
-                Log.Error($"Tried to cleanup {dockAUid} but not docked?");
-
-                dockA.DockedWith = null;
-                return;
-            }
-
-            dockB.DockedWith = null;
-            dockB.DockJoint = null;
-            dockB.DockJointId = null;
-
-            dockA.DockJoint = null;
-            dockA.DockedWith = null;
-            dockA.DockJointId = null;
-
-            // If these grids are ever null then need to look at fixing ordering for unanchored events elsewhere.
-            var gridAUid = Comp<TransformComponent>(dockAUid).GridUid;
-            var gridBUid = Comp<TransformComponent>(dockBUid.Value).GridUid;
-
-            var msg = new UndockEvent
-            {
-                DockA = dockA,
-                DockB = dockB,
-                GridAUid = gridAUid!.Value,
-                GridBUid = gridBUid!.Value,
-            };
-
-            RaiseLocalEvent(dockAUid, msg);
-            RaiseLocalEvent(dockBUid.Value, msg);
-            RaiseLocalEvent(msg);
-        }
-
-        private void OnStartup(Entity<DockingComponent> entity, ref ComponentStartup args)
-        {
-            var uid = entity.Owner;
-            var component = entity.Comp;
-
-            // Use startup so transform already initialized
-            if (!Comp<TransformComponent>(uid).Anchored)
-                return;
-
-            // This little gem is for docking deserialization
-            if (component.DockedWith != null)
-            {
-                // They're still initialising so we'll just wait for both to be ready.
-                if (MetaData(component.DockedWith.Value).EntityLifeStage < EntityLifeStage.Initialized)
-                    return;
-
-                var otherDock = Comp<DockingComponent>(component.DockedWith.Value);
-                DebugTools.Assert(otherDock.DockedWith != null);
-
-                Dock((uid, component), (component.DockedWith.Value, otherDock));
-                DebugTools.Assert(component.Docked && otherDock.Docked);
-            }
-        }
-
-        private void OnAnchorChange(Entity<DockingComponent> entity, ref AnchorStateChangedEvent args)
-        {
-            if (!args.Anchored)
-            {
-                Undock(entity);
-            }
-        }
-
-        private void OnDockingReAnchor(Entity<DockingComponent> entity, ref ReAnchorEvent args)
-        {
-            var uid = entity.Owner;
-            var component = entity.Comp;
-
-            if (!component.Docked)
-                return;
-
-            var otherDock = component.DockedWith;
-            var other = Comp<DockingComponent>(otherDock!.Value);
-
-            Undock(entity);
-            Dock((uid, component), (otherDock.Value, other));
             _console.RefreshShuttleConsoles();
         }
 

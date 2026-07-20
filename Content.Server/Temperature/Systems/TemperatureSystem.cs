@@ -10,26 +10,9 @@ using Content.Shared.Temperature.Systems;
 
 namespace Content.Server.Temperature.Systems;
 
-public sealed partial class TemperatureSystem : EntitySystem
+public sealed partial class TemperatureSystem : SharedTemperatureSystem
 {
-    [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private AtmosphereSystem _atmosphere = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private IAdminLogManager _adminLogger = default!;
-    [Dependency] private TemperatureSystem _temperature = default!;
-
-    /// <summary>
-    ///     All the components that will have their damage updated at the end of the tick.
-    ///     This is done because both AtmosExposed and Flammable call ChangeHeat in the same tick, meaning
-    ///     that we need some mechanism to ensure it doesn't double dip on damage for both calls.
-    /// </summary>
-    public HashSet<Entity<TemperatureComponent>> ShouldUpdateDamage = new();
-
-    public float UpdateInterval = 1.0f;
-
-    private float _accumulatedFrametime;
-
-    public static readonly ProtoId<AlertCategoryPrototype> TemperatureAlertCategory = "Temperature";
 
     public override void Initialize()
     {

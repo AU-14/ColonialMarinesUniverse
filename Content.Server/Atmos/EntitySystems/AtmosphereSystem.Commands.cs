@@ -13,6 +13,7 @@ namespace Content.Server.Atmos.EntitySystems;
 public sealed partial class AtmosphereSystem
 {
     [Dependency] private IConsoleHost _consoleHost = default!;
+    [Dependency] private EntityQuery<AtmosFixMarkerComponent> _atmosFixMarkerQuery = default!;
 
     private void InitializeCommands()
     {

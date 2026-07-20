@@ -7,8 +7,9 @@ namespace Content.Server.Humanoid.Systems;
 
 public sealed partial class RandomHumanoidAppearanceSystem : EntitySystem
 {
-    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
 
     public override void Initialize()
     {

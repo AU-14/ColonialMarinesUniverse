@@ -10,7 +10,6 @@ namespace Content.Server.Chat.Systems;
 public sealed partial class AutoEmoteSystem : EntitySystem
 {
     [Dependency] private IGameTiming _gameTiming = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ChatSystem _chatSystem = default!;
 

@@ -1,4 +1,3 @@
-using Content.Server._RMC14.Popups;
 using Content.Shared.Popups;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -9,12 +8,14 @@ namespace Content.Server.Popups;
 
 public sealed partial class PopupSystem : SharedPopupSystem
 {
-    public sealed partial class PopupSystem : SharedPopupSystem
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+
+    public override void PopupCursor(string? message, EntityUid? recipient, PopupType type = PopupType.Small)
     {
-        [Dependency] private IPlayerManager _player = default!;
-        [Dependency] private IConfigurationManager _cfg = default!;
-        [Dependency] private SharedTransformSystem _transform = default!;
-        [Dependency] private RMCPopupSystem _rmcPopup = default!;
+        if (message == null)
+            return;
 
         if (TryComp(recipient, out ActorComponent? actor))
             RaiseNetworkEvent(new PopupCursorEvent(message, type, Timing.CurTick), actor.PlayerSession);
@@ -102,74 +103,6 @@ public sealed partial class PopupSystem : SharedPopupSystem
         if (message == null)
             return;
 
-        public override void PopupClient(string? message, EntityUid? recipient, PopupType type = PopupType.Small)
-        {
-        }
-
-        public override void PopupClient(string? message, EntityUid uid, EntityUid? recipient, PopupType type = PopupType.Small)
-        {
-            // do nothing duh its for client only
-        }
-
-        public override void PopupClient(string? message, EntityCoordinates coordinates, EntityUid? recipient, PopupType type = PopupType.Small)
-        {
-        }
-
-        public override void PopupEntity(string? message, EntityUid uid, ICommonSession recipient, PopupType type = PopupType.Small)
-        {
-            if (message == null)
-                return;
-
-            RaiseNetworkEvent(new PopupEntityEvent(message, type, GetNetEntity(uid)), recipient);
-        }
-
-        public override void PopupEntity(string? message, EntityUid uid, Filter filter, bool recordReplay, PopupType type = PopupType.Small)
-        {
-            if (message == null)
-                return;
-
-            RaiseNetworkEvent(new PopupEntityEvent(message, type, GetNetEntity(uid)), filter, recordReplay);
-        }
-
-        public override void PopupPredicted(string? message, EntityUid uid, EntityUid? recipient, PopupType type = PopupType.Small)
-        {
-            if (message == null)
-                return;
-
-            if (recipient != null)
-            {
-                // RMC14 Check if popups should be shown to nearby players.
-                if (!_rmcPopup.ShouldPopup(recipient.Value))
-                    return;
-
-                // Don't send to recipient, since they predicted it locally
-                var filter = Filter.PvsExcept(recipient.Value, entityManager: EntityManager);
-                RaiseNetworkEvent(new PopupEntityEvent(message, type, GetNetEntity(uid)), filter);
-            }
-            else
-            {
-                // With no recipient, send to everyone (in PVS range)
-                RaiseNetworkEvent(new PopupEntityEvent(message, type, GetNetEntity(uid)));
-            }
-        }
-
-        public override void PopupPredicted(string? message, EntityUid uid, EntityUid? recipient, Filter filter, bool recordReplay, PopupType type = PopupType.Small)
-        {
-            if (message == null)
-                return;
-
-            if (recipient != null)
-            {
-                // Don't send to recipient, since they predicted it locally
-                filter = filter.RemovePlayerByAttachedEntity(recipient.Value);
-            }
-
-            RaiseNetworkEvent(new PopupEntityEvent(message, type, GetNetEntity(uid)), filter, recordReplay);
-        }
-
-        public override void PopupPredicted(string? recipientMessage, string? othersMessage, EntityUid uid, EntityUid? recipient, PopupType type = PopupType.Small)
-        {
-            PopupPredicted(othersMessage, uid, recipient, type);
-        }
+        RaiseNetworkEvent(new PopupEntityEvent(message, type, Timing.CurTick, GetNetEntity(uid)), filter, recordReplay);
     }
 }

@@ -10,8 +10,7 @@ public sealed partial class RequiresTileSystem : EntitySystem
      */
 
     [Dependency] private SharedMapSystem _maps = default!;
-
-    private EntityQuery<RequiresTileComponent> _tilesQuery;
+    [Dependency] private EntityQuery<RequiresTileComponent> _tilesQuery = default!;
 
     public override void Initialize()
     {

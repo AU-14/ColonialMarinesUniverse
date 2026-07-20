@@ -1,4 +1,3 @@
-using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.UI;
@@ -6,13 +5,9 @@ using Content.Server.Afk;
 using Content.Server.EUI;
 using Content.Server.Ghost.Roles;
 using Content.Server.Mind;
-using Content.Server.Mind.Commands;
 using Content.Server.Prayer;
 using Content.Server.Silicons.Laws;
 using Content.Server.Station.Systems;
-using Content.Shared._RMC14.Admin;
-using Content.Shared._RMC14.Dialog;
-using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Systems;
 using Content.Shared.Chemistry.Components.SolutionManager;
@@ -22,13 +17,10 @@ using Content.Shared.Database;
 using Content.Shared.Disposal.Tube;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
-using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Mind.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Popups;
-using Content.Shared.Preferences;
-using Content.Shared.Roles;
 using Content.Shared.Silicons.Laws.Components;
 using Content.Shared.Silicons.StationAi;
 using Content.Shared.Verbs;
@@ -42,6 +34,9 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Shared.Toolshed;
 using Robust.Shared.Utility;
+using System.Linq;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.Mind;
 using static Content.Shared.Configurable.ConfigurationComponent;
 
 namespace Content.Server.Administration.Systems
@@ -53,10 +48,10 @@ namespace Content.Server.Administration.Systems
     {
         [Dependency] private IConGroupController _groupController = default!;
         [Dependency] private IConsoleHost _console = default!;
+        [Dependency] private IAdminLogManager _adminLogs = default!;
         [Dependency] private IAdminManager _adminManager = default!;
         [Dependency] private IGameTiming _gameTiming = default!;
         [Dependency] private SharedMapSystem _map = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private AdminSystem _adminSystem = default!;
         [Dependency] private DisposalTubeSystem _disposalTubes = default!;
         [Dependency] private EuiManager _euiManager = default!;
@@ -73,9 +68,7 @@ namespace Content.Server.Administration.Systems
         [Dependency] private AdminFrozenSystem _freeze = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private SiliconLawSystem _siliconLawSystem = default!;
-
-        // RMC14
-        [Dependency] private DialogSystem _dialog = default!;
+        [Dependency] private AfkConfirmSystem _afkConfirm = default!;
 
         private readonly Dictionary<ICommonSession, List<EditSolutionsEui>> _openSolutionUis = new();
 
@@ -134,7 +127,7 @@ namespace Content.Server.Administration.Systems
                     prayerVerb.Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/pray.svg.png"));
                     prayerVerb.Act = () =>
                     {
-                        _quickDialog.OpenDialog(player, "Subtle Message", "Message", "Popup Message", (LongString message, LongString popupMessage) => // RMC - string -> LongString for increased subtle message length.
+                        _quickDialog.OpenDialog(player, "Subtle Message", "Message", "Popup Message", (string message, string popupMessage) =>
                         {
                             _prayerSystem.SendSubtleMessage(targetActor.PlayerSession, player, message, popupMessage == "" ? Loc.GetString("prayer-popup-subtle-default") : popupMessage);
                         });
@@ -168,43 +161,6 @@ namespace Content.Server.Administration.Systems
                         ConfirmationPopup = true,
                         Impact = LogImpact.High,
                     });
-
-                    // RMC14
-                    args.Verbs.Add(new Verb
-                    {
-                        Text = Loc.GetString("rmc-admin-player-actions-spawn-here-as-job"),
-                        Category = VerbCategory.Admin,
-                        Act = () =>
-                        {
-                            var jobs = new List<DialogOption>();
-                            foreach (var job in _prototypeManager.EnumerateCM<JobPrototype>())
-                            {
-                                var ev = new SpawnAsJobDialogEvent(GetNetEntity(args.User), GetNetEntity(args.Target), job.ID);
-                                jobs.Add(new DialogOption(job.SpawnMenuRoleName ?? job.LocalizedName, ev));
-                            }
-
-                            jobs.Sort((a, b) => string.Compare(a.Text, b.Text, StringComparison.Ordinal));
-                            _dialog.OpenOptions(args.User, "Choose a job", jobs);
-                        },
-                        ConfirmationPopup = true,
-                        Impact = LogImpact.High,
-                    });
-
-                    if (TryComp(args.Target, out HumanoidAppearanceComponent? appearance))
-                    {
-                        args.Verbs.Add(new Verb
-                        {
-                            Text = Loc.GetString("rmc-admin-player-actions-random-name"),
-                            Category = VerbCategory.Admin,
-                            Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/die.svg.192dpi.png")),
-                            Act = () =>
-                            {
-                                _metaSystem.SetEntityName(args.Target, HumanoidCharacterProfile.GetName(appearance.Species, appearance.Gender));
-                            },
-                            ConfirmationPopup = true,
-                            Impact = LogImpact.High,
-                        });
-                    }
 
                     // Clone - Spawn but without the mind transfer, also spawns at the user's coordinates not the target's
                     args.Verbs.Add(new Verb()

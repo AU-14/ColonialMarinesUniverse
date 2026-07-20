@@ -8,13 +8,15 @@ namespace Content.Server.Speech.EntitySystems;
 
 public sealed partial class ScrambledAccentSystem : RelayAccentSystem<ScrambledAccentComponent>
 {
-    public sealed partial class ScrambledAccentSystem : EntitySystem
+    private static readonly Regex RegexLoneI = new(@"(?<=\ )i(?=[\ \.\?]|$)");
+
+    [Dependency] private IRobustRandom _random = default!;
+
+    public override string Accentuate(string message, Entity<ScrambledAccentComponent>? ent = null)
     {
         var words = message.ToLower().Split();
 
-        [Dependency] private IRobustRandom _random = default!;
-
-        public override void Initialize()
+        if (words.Length < 2)
         {
             var pick = _random.Next(1, 8);
             // If they try to weasel out of it by saying one word at a time we give them this.

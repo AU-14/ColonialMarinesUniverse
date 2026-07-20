@@ -9,10 +9,12 @@ namespace Content.Server.Stunnable.Systems;
 [UsedImplicitly]
 internal sealed partial class StunOnCollideSystem : EntitySystem
 {
-    [UsedImplicitly]
-    internal sealed partial class StunOnCollideSystem : EntitySystem
+    [Dependency] private StunSystem _stunSystem = default!;
+    [Dependency] private MovementModStatusSystem _movementMod = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private StunSystem _stunSystem = default!;
+        base.Initialize();
 
         SubscribeLocalEvent<StunOnCollideComponent, StartCollideEvent>(HandleCollide);
         SubscribeLocalEvent<StunOnCollideComponent, ThrowDoHitEvent>(HandleThrow);

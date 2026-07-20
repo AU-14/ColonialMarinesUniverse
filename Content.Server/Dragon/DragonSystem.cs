@@ -22,6 +22,7 @@ namespace Content.Server.Dragon;
 public sealed partial class DragonSystem : EntitySystem
 {
     [Dependency] private CarpRiftsConditionSystem _carpRifts = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private PopupSystem _popup = default!;
@@ -31,6 +32,8 @@ public sealed partial class DragonSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private SmokeSystem _smoke = default!;
 
     [Dependency] private EntityQuery<CarpRiftsConditionComponent> _carpRiftsConditionQuery = default!;
 

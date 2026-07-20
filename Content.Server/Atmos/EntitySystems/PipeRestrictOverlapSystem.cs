@@ -20,6 +20,7 @@ public sealed partial class PipeRestrictOverlapSystem : EntitySystem
     [Dependency] private MapSystem _map = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private TransformSystem _xform = default!;
+    [Dependency] private EntityQuery<NodeContainerComponent> _nodeContainerQuery = default!;
 
     private readonly List<EntityUid> _anchoredEntities = new();
 

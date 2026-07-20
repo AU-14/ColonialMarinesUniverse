@@ -18,6 +18,13 @@ namespace Content.Server.StationEvents.Events
     {
         [Dependency] private ApcSystem _apcSystem = default!;
 
+        public override void Initialize()
+        {
+            base.Initialize();
+            SubscribeLocalEvent<PowerGridCheckNotifyComponent, ComponentStartup>(OnApcStartup);
+            SubscribeLocalEvent<PowerGridCheckNotifyComponent, ApcToggleMainBreakerAttemptEvent>(OnApcToggleMainBreaker);
+        }
+
         protected override void Started(EntityUid uid, PowerGridCheckRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
         {
             base.Started(uid, component, gameRule, args);

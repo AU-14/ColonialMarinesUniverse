@@ -7,7 +7,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Administration.Systems;
 
-public sealed partial class BufferingSystem : EntitySystem
+public sealed partial class BufferingSystem : SharedBufferingSystem
 {
     [Dependency] private IRobustRandom _random = default!;
 

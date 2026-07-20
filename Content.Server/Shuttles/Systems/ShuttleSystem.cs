@@ -1,4 +1,3 @@
-using Content.Server._RMC14.Dropship;
 using Content.Server.Administration.Logs;
 using Content.Server.Buckle.Systems;
 using Content.Server.Parallax;
@@ -37,7 +36,6 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     [Dependency] private IAdminLogManager _logger = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BiomeSystem _biomes = default!;
     [Dependency] private GibbingSystem _gibbing = default!;
@@ -61,9 +59,6 @@ public sealed partial class ShuttleSystem : SharedShuttleSystem
     [Dependency] private ThrusterSystem _thruster = default!;
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
     [Dependency] private TurfSystem _turf = default!;
-
-    // RMC14
-    [Dependency] private DropshipSystem _dropship = default!;
 
     [Dependency] private EntityQuery<BuckleComponent> _buckleQuery = default!;
     [Dependency] private EntityQuery<MapGridComponent> _gridQuery = default!;

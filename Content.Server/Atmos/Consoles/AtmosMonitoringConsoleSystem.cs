@@ -1,5 +1,4 @@
 using Content.Server.Atmos.Components;
-using Content.Server.Atmos.EntitySystems;
 using Content.Server.Atmos.Piping.Components;
 using Content.Server.DeviceNetwork.Components;
 using Content.Server.NodeContainer;
@@ -300,7 +299,10 @@ public sealed partial class AtmosMonitoringConsoleSystem : SharedAtmosMonitoring
 
     private void OnPipeNodeGroupRemoved(ref PipeNodeGroupRemovedEvent args)
     {
-        // Remove cached entries for this network from chunks on the affected grid.
+        // When a pipe node group is removed, we need to iterate over all of
+        // our pipe chunks and remove any entries with a matching net id.
+        // (We only need to check the chunks for the affected grid, though.)
+
         if (!_gridAtmosPipeChunks.TryGetValue(args.Grid, out var chunkData))
             return;
 

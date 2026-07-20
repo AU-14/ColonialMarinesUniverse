@@ -9,7 +9,8 @@ namespace Content.Server.Damage.Systems;
 
 public sealed partial class ExaminableDamageSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private DestructibleSystem _destructible = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     public override void Initialize()
     {

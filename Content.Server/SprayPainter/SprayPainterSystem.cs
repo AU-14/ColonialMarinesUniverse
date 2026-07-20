@@ -27,6 +27,11 @@ namespace Content.Server.SprayPainter;
 public sealed partial class SprayPainterSystem : SharedSprayPainterSystem
 {
     [Dependency] private AtmosPipeColorSystem _pipeColor = default!;
+    [Dependency] private PopupSystem _popup = default!;
+    [Dependency] private DecalSystem _decals = default!;
+    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private ChargesSystem _charges = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     public override void Initialize()
     {

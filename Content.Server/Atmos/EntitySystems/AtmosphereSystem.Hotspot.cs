@@ -61,19 +61,10 @@ public sealed partial class AtmosphereSystem
     {
         var gridAtmosphere = ent.Comp1;
 
-        [Dependency] private DecalSystem _decalSystem = default!;
-        [Dependency] private IRobustRandom _random = default!;
-
-        private const int HotspotSoundCooldownCycles = 200;
-
-        private int _hotspotSoundCooldown = 0;
-
-        [ViewVariables(VVAccess.ReadWrite)]
-        public SoundSpecifier? HotspotSound { get; private set; } = new SoundCollectionSpecifier(DefaultHotspotSounds);
-
-        private void ProcessHotspot(
-            Entity<GridAtmosphereComponent, GasTileOverlayComponent, MapGridComponent, TransformComponent> ent,
-            TileAtmosphere tile)
+        // Hotspots that have fizzled out are assigned a new Hotspot struct
+        // with Valid set to false, so we can just check that here in
+        // one central place instead of manually removing it everywhere.
+        if (!tile.Hotspot.Valid)
         {
             gridAtmosphere.HotspotTiles.Remove(tile);
             return;

@@ -10,7 +10,6 @@ namespace Content.Server.Chemistry.EntitySystems;
 public sealed partial class SolutionRandomFillSystem : EntitySystem
 {
     [Dependency] private SharedSolutionContainerSystem _solutionsSystem = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()

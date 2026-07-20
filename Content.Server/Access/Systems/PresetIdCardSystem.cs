@@ -9,7 +9,6 @@ namespace Content.Server.Access.Systems;
 
 public sealed partial class PresetIdCardSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IdCardSystem _cardSystem = default!;
     [Dependency] private SharedAccessSystem _accessSystem = default!;
     [Dependency] private StationSystem _stationSystem = default!;

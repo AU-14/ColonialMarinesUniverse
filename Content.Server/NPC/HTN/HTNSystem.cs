@@ -19,7 +19,6 @@ namespace Content.Server.NPC.HTN;
 public sealed partial class HTNSystem : EntitySystem
 {
     [Dependency] private IAdminManager _admin = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private NPCSystem _npc = default!;
     [Dependency] private NPCUtilitySystem _utility = default!;
 

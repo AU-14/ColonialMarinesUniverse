@@ -24,8 +24,16 @@ public sealed partial class VoiceMaskSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private IConfigurationManager _cfgManager = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private LockSystem _lock = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private IdentitySystem _identity = default!;
+
+    /// <summary>
+    ///  The name of the client-side type that represents the user interface window.
+    ///  Used for innate voice masks, which need to be able to create their own UIs.
+    /// </summary>
+    private const string UiGeneratedName = "VoiceMaskBoundUserInterface";
 
     // CCVar.
     private int _maxNameLength;

@@ -6,39 +6,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Medical.SuitSensors;
 
-public sealed partial class SuitSensorSystem : EntitySystem
+public sealed partial class SuitSensorSystem : SharedSuitSensorSystem
 {
     [Dependency] private IGameTiming _gameTiming = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private DeviceNetworkSystem _deviceNetworkSystem = default!;
-    [Dependency] private IdCardSystem _idCardSystem = default!;
-    [Dependency] private MobStateSystem _mobStateSystem = default!;
-    [Dependency] private PopupSystem _popupSystem = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private StationSystem _stationSystem = default!;
     [Dependency] private SingletonDeviceNetServerSystem _singletonServerSystem = default!;
-    [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
-    [Dependency] private SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private InventorySystem _inventory = default!;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        SubscribeLocalEvent<PlayerSpawnCompleteEvent>(OnPlayerSpawn);
-        SubscribeLocalEvent<SuitSensorComponent, MapInitEvent>(OnMapInit);
-        SubscribeLocalEvent<SuitSensorComponent, ClothingGotEquippedEvent>(OnEquipped);
-        SubscribeLocalEvent<SuitSensorComponent, ClothingGotUnequippedEvent>(OnUnequipped);
-        SubscribeLocalEvent<SuitSensorComponent, ExaminedEvent>(OnExamine);
-        SubscribeLocalEvent<SuitSensorComponent, GetVerbsEvent<Verb>>(OnVerb);
-        SubscribeLocalEvent<SuitSensorComponent, EntGotInsertedIntoContainerMessage>(OnInsert);
-        SubscribeLocalEvent<SuitSensorComponent, EntGotRemovedFromContainerMessage>(OnRemove);
-        SubscribeLocalEvent<SuitSensorComponent, EmpPulseEvent>(OnEmpPulse);
-        SubscribeLocalEvent<SuitSensorComponent, EmpDisabledRemoved>(OnEmpFinished);
-        SubscribeLocalEvent<SuitSensorComponent, SuitSensorChangeDoAfterEvent>(OnSuitSensorDoAfter);
-    }
 
     public override void Update(float frameTime)
     {
@@ -57,10 +29,7 @@ public sealed partial class SuitSensorSystem : EntitySystem
                 continue;
             sensor.NextUpdate += sensor.UpdateRate;
 
-            // TODO: This would cause imprecision at different tick rates.
-            sensor.NextUpdate = curTime + sensor.UpdateRate;
-
-            if (!CheckSensorAssignedStation(uid, sensor))
+            if (!CheckSensorAssignedStation((uid, sensor)))
                 continue;
 
             // get sensor status

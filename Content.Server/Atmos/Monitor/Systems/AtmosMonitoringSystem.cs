@@ -29,7 +29,6 @@ public sealed partial class AtmosMonitorSystem : EntitySystem
     [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
     [Dependency] private AtmosDeviceSystem _atmosDeviceSystem = default!;
     [Dependency] private DeviceNetworkSystem _deviceNetSystem = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private NodeContainerSystem _nodeContainerSystem = default!;
 
     // Commands

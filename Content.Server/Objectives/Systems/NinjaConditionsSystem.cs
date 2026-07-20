@@ -14,6 +14,7 @@ namespace Content.Server.Objectives.Systems;
 /// </summary>
 public sealed partial class NinjaConditionsSystem : EntitySystem
 {
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private NumberObjectiveSystem _number = default!;
     [Dependency] private IRobustRandom _random = default!;

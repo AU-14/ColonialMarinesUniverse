@@ -17,11 +17,12 @@ namespace Content.Server.Payload.EntitySystems;
 
 public sealed partial class PayloadSystem : EntitySystem
 {
-    [Dependency] private TagSystem _tagSystem = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-    [Dependency] private TransformSystem _transform = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private ISerializationManager _serializationManager = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+    [Dependency] private TagSystem _tagSystem = default!;
+    [Dependency] private TransformSystem _transform = default!;
 
     private static readonly ProtoId<TagPrototype> PayloadTag = "Payload";
 

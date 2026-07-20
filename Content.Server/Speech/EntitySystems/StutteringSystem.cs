@@ -8,10 +8,19 @@ namespace Content.Server.Speech.EntitySystems;
 
 public sealed partial class StutteringSystem : SharedStutteringSystem
 {
-    public sealed partial class StutteringSystem : SharedStutteringSystem
+    [Dependency] private IRobustRandom _random = default!;
+
+    // Regex of characters to stutter.
+    private static readonly Regex Stutter = new(@"[b-df-hj-np-tv-wxyz]",
+        RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+    public override void DoStutter(EntityUid uid, TimeSpan time, bool refresh)
     {
-        [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
-        [Dependency] private IRobustRandom _random = default!;
+        if (refresh)
+            Status.TryUpdateStatusEffectDuration(uid, Stuttering, time);
+        else
+            Status.TryAddStatusEffectDuration(uid, Stuttering, time);
+    }
 
     public override void DoRemoveStutterTime(EntityUid uid, TimeSpan timeRemoved)
     {

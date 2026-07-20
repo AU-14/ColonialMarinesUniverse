@@ -1,4 +1,3 @@
-using Content.Server._RMC14.Rules;
 using Content.Shared.CCVar;
 using Robust.Shared;
 using Robust.Shared.ContentPack;
@@ -124,15 +123,7 @@ public sealed partial class GameTicker
     {
         // Write round info like map and round end summery into the replay_final.yml file. Useful for external parsers.
 
-        var maps = new List<string>();
-        var selectedMap = _gameMapManager.GetSelectedMap();
-        if (selectedMap != null)
-            maps.Add(selectedMap.MapName);
-
-        if (_distressSignal.SelectedPlanetMapName != null)
-            maps.Add(_distressSignal.SelectedPlanetMapName);
-
-        metadata["maps"] = _serialman.WriteValue(maps, notNullableOverride: true);
+        metadata["map"] = new ValueDataNode(_gameMapManager.GetSelectedMap()?.MapName);
         metadata["gamemode"] = new ValueDataNode(CurrentPreset != null ? Loc.GetString(CurrentPreset.ModeTitle) : string.Empty);
         metadata["roundEndPlayers"] = _serialman.WriteValue(_replayRoundPlayerInfo);
         metadata["roundEndText"] = new ValueDataNode(_replayRoundText);

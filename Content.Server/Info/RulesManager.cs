@@ -15,6 +15,8 @@ public sealed partial class RulesManager
     [Dependency] private IServerDbManager _dbManager = default!;
     [Dependency] private INetManager _netManager = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IAdminLogManager _adminLog = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     private static DateTime LastValidReadTime => DateTime.UtcNow - TimeSpan.FromDays(60);
 

@@ -9,7 +9,6 @@ namespace Content.Server.Emoting.Systems;
 
 public sealed partial class BodyEmotesSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ChatSystem _chat = default!;
 
     public override void Initialize()

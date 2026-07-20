@@ -19,7 +19,6 @@ public sealed partial class BanPanelEui : BaseEui
     [Dependency] private IPlayerLocator _playerLocator = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IAdminManager _admins = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private readonly ISawmill _sawmill;
 

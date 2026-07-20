@@ -12,19 +12,13 @@ using Robust.Shared.Timing;
 
 namespace Content.Server.Tips;
 
-/// <summary>
-///     Handles periodically displaying gameplay tips to all players ingame.
-/// </summary>
-public sealed partial class TipsSystem : EntitySystem
+public sealed partial class TipsSystem : SharedTipsSystem
 {
     [Dependency] private IChatManager _chat = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private GameTicker _ticker = default!;
-    [Dependency] private IConsoleHost _conHost = default!;
-    [Dependency] private IPlayerManager _playerManager = default!;
 
     private bool _tipsEnabled;
     private float _tipTimeOutOfRound;

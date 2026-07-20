@@ -30,7 +30,7 @@ namespace Content.Server.Access.Systems;
 [UsedImplicitly]
 public sealed partial class IdCardConsoleSystem : SharedIdCardConsoleSystem
 {
-    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IConfigurationManager _cfgManager = default!;
     [Dependency] private StationRecordsSystem _record = default!;
     [Dependency] private UserInterfaceSystem _userInterface = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;

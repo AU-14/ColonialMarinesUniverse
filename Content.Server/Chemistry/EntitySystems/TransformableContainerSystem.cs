@@ -1,5 +1,4 @@
 using Content.Server.Chemistry.Components;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.NameModifier.EntitySystems;
@@ -8,7 +7,6 @@ namespace Content.Server.Chemistry.EntitySystems;
 
 public sealed partial class TransformableContainerSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionsSystem = default!;
     [Dependency] private MetaDataSystem _metadataSystem = default!;
     [Dependency] private NameModifierSystem _nameMod = default!;
@@ -53,11 +51,11 @@ public sealed partial class TransformableContainerSystem : EntitySystem
 
         //Only reagents with spritePath property can change appearance of transformable containers!
         if (!string.IsNullOrWhiteSpace(reagentId?.Prototype)
-            && _prototypeManager.TryIndexReagent(reagentId.Value.Prototype, out ReagentPrototype? proto))
+            && ProtoMan.TryIndex(reagentId.Value.Prototype, out ReagentPrototype? proto))
         {
             var metadata = MetaData(entity.Owner);
             _metadataSystem.SetEntityDescription(entity.Owner, proto.LocalizedDescription, metadata);
-            entity.Comp.CurrentReagent = reagentId.Value.Prototype;
+            entity.Comp.CurrentReagent = proto;
             entity.Comp.Transformed = true;
         }
 
@@ -66,8 +64,7 @@ public sealed partial class TransformableContainerSystem : EntitySystem
 
     private void OnRefreshNameModifiers(Entity<TransformableContainerComponent> entity, ref RefreshNameModifiersEvent args)
     {
-        if (entity.Comp.CurrentReagent is { } currentReagentId &&
-            _prototypeManager.TryIndexReagent(currentReagentId, out var currentReagent))
+        if (ProtoMan.Resolve(entity.Comp.CurrentReagent, out var currentReagent))
         {
             args.AddModifier("transformable-container-component-glass", priority: -1, ("reagent", currentReagent.LocalizedName));
         }

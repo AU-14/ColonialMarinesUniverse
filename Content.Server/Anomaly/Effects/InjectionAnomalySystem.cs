@@ -18,8 +18,7 @@ public sealed partial class InjectionAnomalySystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private TransformSystem _transform = default!;
-
-    private EntityQuery<InjectableSolutionComponent> _injectableQuery;
+    [Dependency] private EntityQuery<InjectableSolutionComponent> _injectableQuery = default!;
 
     public override void Initialize()
     {

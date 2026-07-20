@@ -7,6 +7,7 @@ public sealed partial class RoomFillSystem : EntitySystem
 {
     [Dependency] private DungeonSystem _dungeon = default!;
     [Dependency] private SharedMapSystem _maps = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

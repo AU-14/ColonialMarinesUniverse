@@ -1,6 +1,5 @@
 ﻿using Content.Server.Administration;
 using Content.Server.Cargo.Components;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Administration;
 using Content.Shared.Cargo;
 using Content.Shared.Chemistry.EntitySystems;
@@ -25,7 +24,6 @@ namespace Content.Server.Cargo.Systems;
 public sealed partial class PricingSystem : EntitySystem
 {
     [Dependency] private IConsoleHost _consoleHost = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MobStateSystem _mobStateSystem = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
@@ -153,7 +151,7 @@ public sealed partial class PricingSystem : EntitySystem
         {
             foreach (var (reagent, amount) in resultReagents)
             {
-                price += (_prototypeManager.IndexReagent(reagent).PricePerUnit * amount).Double();
+                price += (ProtoMan.Index(reagent).PricePerUnit * amount).Double();
             }
         }
 
@@ -286,7 +284,7 @@ public sealed partial class PricingSystem : EntitySystem
             var solution = soln.Comp.Solution;
             foreach (var (reagent, quantity) in solution.Contents)
             {
-                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
+                if (!ProtoMan.TryIndex<ReagentPrototype>(reagent.Prototype, out var reagentProto))
                     continue;
 
                 // TODO check ReagentData for price information?
@@ -308,7 +306,7 @@ public sealed partial class PricingSystem : EntitySystem
         {
             foreach (var (reagent, quantity) in solution.Contents)
             {
-                if (!_prototypeManager.TryIndexReagent<ReagentPrototype>(reagent.Prototype, out var reagentProto))
+                if (!ProtoMan.TryIndex<ReagentPrototype>(reagent.Prototype, out var reagentProto))
                     continue;
 
                 // TODO check ReagentData for price information?

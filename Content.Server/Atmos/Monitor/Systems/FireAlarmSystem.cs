@@ -19,6 +19,7 @@ public sealed partial class FireAlarmSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private AccessReaderSystem _access = default!;
     [Dependency] private IConfigurationManager _configManager = default!;
+    [Dependency] private EntityQuery<DeviceNetworkComponent> _deviceNetworkQuery = default!;
 
     public override void Initialize()
     {

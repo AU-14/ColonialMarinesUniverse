@@ -1,9 +1,6 @@
-using Content.Server._RMC14.Weapons.Melee;
 using Content.Server.Interaction;
 using Content.Server.Weapons.Ranged.Systems;
-using Content.Shared._RMC14.Weapons.Ranged.IFF; //RMC
 using Content.Shared.Weapons.Melee;
-using Content.Shared.Mobs.Systems; //RMC
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
@@ -27,11 +24,6 @@ public sealed partial class NPCCombatSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedMeleeWeaponSystem _melee = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private MobStateSystem _mobState = default!; //RMC
-    [Dependency] private GunIFFSystem _gunIFF = default!; //RMC
-
-    // RMC14
-    [Dependency] private RMCMeleeWeaponSystem _rmcMeleeWeapon = default!;
 
     /// <summary>
     /// If disabled we'll move into range but not attack.

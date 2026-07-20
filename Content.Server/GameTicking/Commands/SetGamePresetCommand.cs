@@ -10,7 +10,6 @@ namespace Content.Server.GameTicking.Commands
     public sealed partial class SetGamePresetCommand : IConsoleCommand
     {
         [Dependency] private IEntityManager _entity = default!;
-        [Dependency] private IPrototypeManager _prototype = default!;
 
         public string Command => "setgamepreset";
         public string Description => Loc.GetString("set-game-preset-command-description", ("command", Command));

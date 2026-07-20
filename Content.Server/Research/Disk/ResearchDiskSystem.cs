@@ -9,7 +9,6 @@ namespace Content.Server.Research.Disk
 {
     public sealed partial class ResearchDiskSystem : EntitySystem
     {
-        [Dependency] private IPrototypeManager _prototype = default!;
         [Dependency] private PopupSystem _popupSystem = default!;
         [Dependency] private ResearchSystem _research = default!;
         public override void Initialize()

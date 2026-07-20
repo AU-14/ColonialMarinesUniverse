@@ -5,8 +5,6 @@ using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
 using Content.Server.Maps;
 using Content.Server.Roles;
-using Content.Shared._RMC14.CCVar;
-using Content.Shared._RMC14.Prototypes;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
@@ -620,22 +618,6 @@ namespace Content.Server.GameTicking
                     ("hours", Math.Truncate(duration.TotalHours)),
                     ("minutes", duration.Minutes),
                     ("seconds", duration.Seconds));
-
-                if (_distressSignal.SelectedPlanetMapName is { } planet &&
-                    _distressSignal.OperationName is { } operation)
-                {
-                    var mapName = _gameMapManager.GetSelectedMap()?.MapName;
-                    mapName ??= Loc.GetString("discord-round-notifications-unknown-map");
-                    content = Loc.GetString("rmc-discord-round-notifications-end",
-                        ("id", RoundId),
-                        ("operation", operation),
-                        ("planet", planet),
-                        ("ship", mapName),
-                        ("hours", Math.Truncate(duration.TotalHours)),
-                        ("minutes", duration.Minutes),
-                        ("seconds", duration.Seconds));
-                }
-
                 var payload = new WebhookPayload { Content = content };
 
                 await _discord.CreateMessage(_webhookIdentifier.Value, payload);
@@ -678,10 +660,6 @@ namespace Content.Server.GameTicking
 
             PlayersJoinedRoundNormally = 0;
 
-            //RMC14
-            //Adding this because I do not fucking trust admins to actually remember to turn this shit off...
-            _cfg.SetCVar(RMCCVars.RMCDelayRoundEnd, false);
-            //RMC14
             RunLevel = GameRunLevel.PreRoundLobby;
             RandomizeLobbyBackground();
             ResettingCleanup();
@@ -703,9 +681,6 @@ namespace Content.Server.GameTicking
                 UpdateInfoText();
 
                 ReqWindowAttentionAll();
-
-                if (_cfg.GetCVar(RMCCVars.RMCLobbyStartPaused))
-                    PauseStart();
             }
         }
 
@@ -814,7 +789,7 @@ namespace Content.Server.GameTicking
         {
             if (CurrentPreset == null) return;
 
-            var options = _prototypeManager.EnumerateCM<RoundAnnouncementPrototype>().ToList();
+            var options = ProtoMan.EnumeratePrototypes<RoundAnnouncementPrototype>().ToList();
 
             if (options.Count == 0)
                 return;
@@ -837,16 +812,6 @@ namespace Content.Server.GameTicking
 
                 var mapName = _gameMapManager.GetSelectedMap()?.MapName ?? Loc.GetString("discord-round-notifications-unknown-map");
                 var content = Loc.GetString("discord-round-notifications-started", ("id", RoundId), ("map", mapName));
-
-                if (_distressSignal.SelectedPlanetMapName is { } planet &&
-                    _distressSignal.OperationName is { } operation)
-                {
-                    content = Loc.GetString("rmc-discord-round-notifications-started",
-                        ("id", RoundId),
-                        ("operation", operation),
-                        ("planet", planet),
-                        ("ship", mapName));
-                }
 
                 var payload = new WebhookPayload { Content = content };
 

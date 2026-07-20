@@ -11,27 +11,9 @@ namespace Content.Server.Speech.EntitySystems;
 
 public sealed partial class SlurredSystem : SharedSlurredSystem
 {
-    [Dependency] private StatusEffectsSystem _statusEffectsSystem = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
-
-    private static readonly ProtoId<StatusEffectPrototype> SlurKey = "SlurredSpeech";
-
-    public override void Initialize()
-    {
-        SubscribeLocalEvent<SlurredAccentComponent, AccentGetEvent>(OnAccent);
-    }
-
-    public override void DoSlur(EntityUid uid, TimeSpan time, StatusEffectsComponent? status = null)
-    {
-        if (!Resolve(uid, ref status, false))
-            return;
-
-        if (!_statusEffectsSystem.HasStatusEffect(uid, SlurKey, status))
-            _statusEffectsSystem.TryAddStatusEffect<SlurredAccentComponent>(uid, SlurKey, time, true, status);
-        else
-            _statusEffectsSystem.TryAddTime(uid, SlurKey, time, status);
-    }
 
     /// <summary>
     /// Divisor applied to total seconds used to get the odds of slurred speech occuring.

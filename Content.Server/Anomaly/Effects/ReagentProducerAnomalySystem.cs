@@ -30,7 +30,6 @@ public sealed partial class ReagentProducerAnomalySystem : EntitySystem
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private PointLightSystem _light = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
 
     public const string FallbackReagent = "Water";

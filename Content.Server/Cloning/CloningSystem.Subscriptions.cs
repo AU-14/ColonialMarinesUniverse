@@ -34,6 +34,10 @@ public sealed partial class CloningSystem
     [Dependency] private LabelSystem _label = default!;
     [Dependency] private ForensicsSystem _forensics = default!;
     [Dependency] private PaperSystem _paper = default!;
+    [Dependency] private VocalSystem _vocal = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
+    [Dependency] private SharedChameleonClothingSystem _chameleonClothing = default!;
+    [Dependency] private PullingSystem _pulling = default!;
 
     public override void Initialize()
     {

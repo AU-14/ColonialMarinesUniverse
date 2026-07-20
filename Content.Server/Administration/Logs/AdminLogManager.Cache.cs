@@ -44,7 +44,7 @@ public sealed partial class AdminLogManager
 
         list ??= new List<SharedAdminLog>(LogListInitialSize);
 
-        _roundsLogCache[_currentRoundId] = list;
+        _roundsLogCache.Add(_currentRoundId, list);
         CacheRoundCount.Set(_roundsLogCache.Count);
     }
 

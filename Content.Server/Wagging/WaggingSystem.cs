@@ -16,8 +16,7 @@ namespace Content.Server.Wagging;
 public sealed partial class WaggingSystem : EntitySystem
 {
     [Dependency] private ActionsSystem _actions = default!;
-    [Dependency] private HumanoidAppearanceSystem _humanoidAppearance = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
 
     public override void Initialize()
     {

@@ -31,9 +31,6 @@ namespace Content.Server.Atmos.EntitySystems
             TileAtmosphere tile,
             int cycleNum)
         {
-            if (!TileEqualize)
-                return;
-
             if (tile.Air == null || (tile.MonstermosInfo.LastCycle >= cycleNum))
                 return; // Already done.
 
@@ -599,7 +596,11 @@ namespace Content.Server.Atmos.EntitySystems
             if (!reconsiderAdjacent)
                 return;
 
-            // Refresh airtight data before rebuilding adjacency so this equalization pass sees closed firelocks.
+            // Before updating the adjacent tile flags that determine whether air is allowed to flow
+            // or not, we explicitly update airtight data on these tiles right now.
+            // This ensures that UpdateAdjacentTiles has updated data before updating flags.
+            // This allows monstermos' floodfill check that determines if firelocks have dropped
+            // to work correctly.
             UpdateAirtightData(ent.Owner, ent.Comp1, ent.Comp3, tile);
             UpdateAirtightData(ent.Owner, ent.Comp1, ent.Comp3, other);
 

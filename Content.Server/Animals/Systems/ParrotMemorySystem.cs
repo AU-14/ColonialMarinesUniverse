@@ -27,12 +27,10 @@ public sealed partial class ParrotMemorySystem : SharedParrotMemorySystem
 {
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
-    [Dependency] private IAdminManager _admin = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private MindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private PopupSystem _popup = default!;
 
     public override void Initialize()
     {

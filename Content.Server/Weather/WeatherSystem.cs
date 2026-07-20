@@ -5,8 +5,8 @@ namespace Content.Server.Weather;
 
 public sealed partial class WeatherSystem : SharedWeatherSystem
 {
-    [Dependency] private IConsoleHost _console = default!;
-    [Dependency] private SharedMapSystem _mapSystem = default!;
+    //I dont really like to PVS override weather entities, but map status effect containers dont PVS-ing out of the box
+    [Dependency] private PvsOverrideSystem _pvs = default!;
 
     public override void Initialize()
     {

@@ -29,7 +29,6 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private AlertsSystem _alertsSystem = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ShuttleSystem _shuttle = default!;
@@ -37,11 +36,7 @@ public sealed partial class ShuttleConsoleSystem : SharedShuttleConsoleSystem
     [Dependency] private TagSystem _tags = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedContentEyeSystem _eyeSystem = default!;
-
-    private EntityQuery<MetaDataComponent> _metaQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
-    private readonly HashSet<Entity<ShuttleConsoleComponent>> _consoles = new();
+    [Dependency] private EntityQuery<PilotComponent> _pilotQuery = default!;
 
     private static readonly ProtoId<TagPrototype> CanPilotTag = "CanPilot";
 

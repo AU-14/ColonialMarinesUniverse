@@ -53,6 +53,7 @@ namespace Content.Server.Afk
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IConsoleHost _consoleHost = default!;
         [Dependency] private IAdminManager _adminManager = default!;
+        [Dependency] private ILogManager _logManager = default!;
 
         private readonly Dictionary<ICommonSession, TimeSpan> _lastActionTimes = new();
         private ISawmill _sawmill = default!;

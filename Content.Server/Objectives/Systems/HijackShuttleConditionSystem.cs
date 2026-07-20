@@ -19,6 +19,9 @@ public sealed partial class HijackShuttleConditionSystem : EntitySystem
     [Dependency] private SharedRoleSystem _role = default!;
     [Dependency] private MobStateSystem _mobState = default!;
 
+    [Dependency] private EntityQuery<HumanoidProfileComponent> _humanoidsQuery = default!;
+    [Dependency] private EntityQuery<CuffableComponent> _cuffableQuery = default!;
+
     public override void Initialize()
     {
         base.Initialize();

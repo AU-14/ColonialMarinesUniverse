@@ -24,12 +24,10 @@ namespace Content.Server.Wires;
 
 public sealed partial class WiresSystem : SharedWiresSystem
 {
-    [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private HandsSystem _hands = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
-    [Dependency] private UserInterfaceSystem _uiSystem = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ConstructionSystem _construction = default!;
 

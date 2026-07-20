@@ -1,9 +1,6 @@
-﻿using Content.Server._RMC14.Explosion;
-using Content.Server.Explosion.Components;
+﻿using Content.Server.Explosion.Components;
 using Content.Server.Weapons.Ranged.Systems;
-using Content.Shared._RMC14.Explosion;
-using Content.Shared.Projectiles;
-using Content.Shared.Weapons.Ranged.Events;
+using Content.Shared.Trigger;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -18,8 +15,6 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
 
-    // RMC14
-    private readonly List<EntityUid> _spawned = new();
 
     public override void Initialize()
     {
@@ -68,14 +63,12 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
         var shootCount = 0;
         var totalCount = component.Container.ContainedEntities.Count + component.UnspawnedCount;
 
-        // RMC14 it was sometimes dividing by 0.
-        if(totalCount <= 0)
+        // Just in case
+        if (totalCount == 0)
             return;
 
-        var hitEntities = new List<EntityUid>();
         var segmentAngle = 360 / totalCount;
 
-        _spawned.Clear();
         while (TrySpawnContents(grenadeCoord, component, out var contentUid))
         {
             Angle angle;
@@ -86,47 +79,15 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
                 var angleMin = segmentAngle * shootCount;
                 var angleMax = segmentAngle * (shootCount + 1);
                 angle = Angle.FromDegrees(_random.Next(angleMin, angleMax));
-
-                // RMC14
-                var ev = new FragmentIntoProjectilesEvent(contentUid, totalCount, angle, shootCount, hitEntities);
-                RaiseLocalEvent(uid, ref ev);
-
-                if(ev.TotalCount <= 0)
-                    return;
-                if (ev.Handled)
-                {
-                    hitEntities = ev.HitEntities;
-                    angle = ev.Angle;
-                }
                 shootCount++;
-            }
-
-            // RMC14
-            EntityUid? gunUid = null;
-            EntityUid? user = null;
-
-            if (TryComp(uid, out ProjectileComponent? clusterProjectile))
-            {
-                gunUid = clusterProjectile.Weapon;
-                user = clusterProjectile.Shooter;
             }
 
             // velocity is randomized to make the projectiles look
             // slightly uneven, doesn't really change much, but it looks better
             var direction = angle.ToVec().Normalized();
             var velocity = _random.NextVector2(component.MinVelocity, component.MaxVelocity);
-            _gun.ShootProjectile(contentUid, direction, velocity, gunUid, user, component.ProjectileSpeed);
-            _spawned.Add(contentUid);
+            _gun.ShootProjectile(contentUid, direction, velocity, null);
         }
-
-        var clusterEv = new CMClusterSpawnedEvent(_spawned, hitEntities, uid);
-        RaiseLocalEvent(uid, ref clusterEv);
-        RaiseLocalEvent(uid,
-            new AmmoShotEvent
-            {
-                FiredProjectiles = _spawned,
-            });
-        QueueDel(uid);
     }
 
     /// <summary>

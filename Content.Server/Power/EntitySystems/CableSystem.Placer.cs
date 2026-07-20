@@ -14,6 +14,7 @@ public sealed partial class CableSystem
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 
     private void InitializeCablePlacer()
     {

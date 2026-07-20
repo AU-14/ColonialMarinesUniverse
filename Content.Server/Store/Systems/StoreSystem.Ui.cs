@@ -19,14 +19,13 @@ namespace Content.Server.Store.Systems;
 public sealed partial class StoreSystem
 {
     [Dependency] private IAdminLogManager _admin = default!;
-    [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private ActionsSystem _actions = default!;
     [Dependency] private ActionContainerSystem _actionContainer = default!;
+    [Dependency] private ActionsSystem _actions = default!;
     [Dependency] private ActionUpgradeSystem _actionUpgrade = default!;
-    [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private StackSystem _stack = default!;
-    [Dependency] private UserInterfaceSystem _ui = default!;
 
     private void InitializeUi()
     {

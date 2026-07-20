@@ -17,11 +17,12 @@ namespace Content.Server.Afk;
 /// </summary>
 public sealed partial class AFKSystem : EntitySystem
 {
+    [Dependency] private IAdminManager _admin = default!;
     [Dependency] private IAfkManager _afkManager = default!;
-    [Dependency] private IConfigurationManager _configManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     /// <summary>
     /// Don't need to do it every tick.

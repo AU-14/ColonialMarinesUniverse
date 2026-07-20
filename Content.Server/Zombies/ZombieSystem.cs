@@ -23,7 +23,6 @@ using Content.Shared.Roles;
 using Content.Shared.Roles.Components;
 using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Zombies;
-using Content.Shared._RMC14.Atmos; // RMC14
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -34,7 +33,6 @@ namespace Content.Server.Zombies
     public sealed partial class ZombieSystem : SharedZombieSystem
     {
         [Dependency] private IGameTiming _timing = default!;
-        [Dependency] private IPrototypeManager _protoManager = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private BloodstreamSystem _bloodstream = default!;
         [Dependency] private DamageableSystem _damageable = default!;
@@ -45,7 +43,6 @@ namespace Content.Server.Zombies
         [Dependency] private MobStateSystem _mobState = default!;
         [Dependency] private SharedPopupSystem _popup = default!;
         [Dependency] private SharedRoleSystem _role = default!;
-        [Dependency] private SharedRMCFlammableSystem _rmcFlammable = default!; // RMC14
 
         public readonly ProtoId<NpcFactionPrototype> Faction = "Zombie";
 
@@ -161,10 +158,6 @@ namespace Content.Server.Zombies
                     ? comp.PassiveHealingCritMultiplier
                     : 1f;
 
-                // RMC14 - Stop healing if on fire
-                if (_rmcFlammable.IsOnFire(uid))
-                    return;
-
                 // Gradual healing for living zombies.
                 _damageable.ChangeDamage((uid, damage), comp.PassiveHealing * multiplier, true, false);
             }
@@ -191,7 +184,7 @@ namespace Content.Server.Zombies
             if (args.Handled)
                 return;
 
-            _protoManager.TryIndex(component.EmoteSoundsId, out var sounds);
+            ProtoMan.Resolve(component.EmoteSoundsId, out var sounds);
 
             args.Handled = _chat.TryPlayEmoteSound(uid, sounds, args.Emote);
         }
@@ -281,18 +274,9 @@ namespace Content.Server.Zombies
                     if (HasComp<ZombieImmuneComponent>(uid) || cannotSpread)
                         continue;
 
-                if (_mobState.IsIncapacitated(entity, mobState) && !HasComp<ZombieComponent>(entity) && !HasComp<ZombieImmuneComponent>(entity))
-                {
-                    ZombifyEntity(entity);
-                    args.BonusDamage = -args.BaseDamage;
-                }
-                else if (mobState.CurrentState == MobState.Alive) //heals when zombies bite live entities
-                {
-                    // RMC14 - Stop healing if on fire
-                    if (_rmcFlammable.IsOnFire(uid))
-                        return;
-
-                    _damageable.TryChangeDamage(uid, component.HealingOnBite, true, false);
+                    // If the target is dead and can be infected, infect.
+                    ZombifyEntity(uid);
+                    args.Handled = true;
                 }
             }
         }

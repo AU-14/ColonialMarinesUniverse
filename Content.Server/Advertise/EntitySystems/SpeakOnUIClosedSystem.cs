@@ -10,7 +10,6 @@ namespace Content.Server.Advertise.EntitySystems;
 public sealed partial class SpeakOnUIClosedSystem : SharedSpeakOnUIClosedSystem
 {
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private ChatSystem _chat = default!;
 
     public override void Initialize()

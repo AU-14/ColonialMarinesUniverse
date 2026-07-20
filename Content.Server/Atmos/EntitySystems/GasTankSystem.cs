@@ -15,16 +15,29 @@ namespace Content.Server.Atmos.EntitySystems;
 [UsedImplicitly]
 public sealed partial class GasTankSystem : SharedGasTankSystem
 {
-    [UsedImplicitly]
-    public sealed partial class GasTankSystem : SharedGasTankSystem
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+
+    private const float MinimumSoundValvePressure = 21.3f; // Arbitrary number
+
+    private const float ReleaseArea = 0.0005f; // About 5cm^2
+
+    // A vector bias for throwing our gas tanks in radians. Averages about -43 degrees since the sprite is at a 45-degree angle.
+    private static readonly Vector2 ThrowVector = new (-1.0f, -0.5f);
+    private static readonly TimeSpan GasDirtyInterval = TimeSpan.FromSeconds(5);
+
+    public override void Initialize()
     {
-        [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
-        [Dependency] private ExplosionSystem _explosions = default!;
-        [Dependency] private SharedAudioSystem _audioSys = default!;
-        [Dependency] private UserInterfaceSystem _ui = default!;
-        [Dependency] private IRobustRandom _random = default!;
-        [Dependency] private ThrowingSystem _throwing = default!;
-        [Dependency] private IConfigurationManager _cfg = default!;
+        base.Initialize();
+        SubscribeLocalEvent<GasTankComponent, EntParentChangedMessage>(OnParentChange);
+        SubscribeLocalEvent<GasTankComponent, GasAnalyzerScanEvent>(OnAnalyzed);
+        SubscribeLocalEvent<GasTankComponent, PriceCalculationEvent>(OnGasTankPrice);
+    }
 
     protected override void DeviceUpdated(Entity<GasTankComponent> entity, ref AtmosDeviceUpdateEvent args)
     {

@@ -5,13 +5,8 @@ using Content.Shared.Emp;
 
 namespace Content.Server.Emp;
 
-public sealed partial class EmpSystem : SharedEmpSystem
+public sealed class EmpSystem : SharedEmpSystem
 {
-    [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private TransformSystem _transform = default!;
-
-    public const string EmpPulseEffectPrototype = "EffectEmpPulse";
-
     public override void Initialize()
     {
         base.Initialize();

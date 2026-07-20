@@ -20,27 +20,19 @@ namespace Content.Server.Silicons.Borgs;
 /// <inheritdoc/>
 public sealed partial class BorgSystem : SharedBorgSystem
 {
-    [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private IBanManager _banManager = default!;
-    [Dependency] private IConfigurationManager _cfgManager = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private ActionsSystem _actions = default!;
-    [Dependency] private AlertsSystem _alerts = default!;
     [Dependency] private DeviceNetworkSystem _deviceNetwork = default!;
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private TriggerSystem _trigger = default!;
-    [Dependency] private HandsSystem _hands = default!;
-    [Dependency] private MetaDataSystem _metaData = default!;
-    [Dependency] private SharedMindSystem _mind = default!;
     [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
-    [Dependency] private PowerCellSystem _powerCell = default!;
-    [Dependency] private ThrowingSystem _throwing = default!;
-    [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private SharedContainerSystem _container = default!;
-    [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private EmagSystem _emag = default!;
+    [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
+    [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     public static readonly ProtoId<JobPrototype> BorgJobId = "Borg";
 

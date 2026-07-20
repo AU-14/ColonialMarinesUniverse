@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Numerics;
 using System.Threading;
-using Content.Server.Administration.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Atmos.Piping.EntitySystems;
+using Content.Server.Body.Systems;
 using Content.Server.Electrocution;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.GhostKick;
@@ -17,10 +17,11 @@ using Content.Server.Speech.Components;
 using Content.Shared.Speech.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Tabletop;
-using Content.Server.Tabletop.Components;
-using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Actions;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Components;
+using Content.Shared.Administration.Systems;
+using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Body;
 using Content.Shared.Body.Components;
@@ -32,8 +33,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Electrocution;
 using Content.Shared.Gibbing;
-using Content.Shared.Humanoid.Prototypes;
-using Content.Server.Humanoid.Systems;
+using Content.Shared.Gravity;
 using Content.Shared.Interaction.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Medical;
@@ -52,8 +52,6 @@ using Content.Shared.Storage.Components;
 using Content.Shared.Tabletop.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Verbs;
-using Robust.Shared.Audio;
-using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
@@ -64,13 +62,15 @@ using Robust.Shared.Random;
 using Robust.Shared.Spawners;
 using Robust.Shared.Utility;
 using Timer = Robust.Shared.Timing.Timer;
-using Content.Shared.Damage.Prototypes;
-using Content.Server._RMC14.Damage;
 
 namespace Content.Server.Administration.Systems;
 
 public sealed partial class AdminVerbSystem
 {
+    private readonly ProtoId<PolymorphPrototype> LizardSmite = "AdminLizardSmite";
+    private readonly ProtoId<PolymorphPrototype> VulpkaninSmite = "AdminVulpSmite";
+
+    [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BloodstreamSystem _bloodstreamSystem = default!;
     [Dependency] private BodySystem _bodySystem = default!;
@@ -88,7 +88,7 @@ public sealed partial class AdminVerbSystem
     [Dependency] private MobThresholdSystem _mobThresholdSystem = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private RoleSystem _role = default!;
     [Dependency] private TabletopSystem _tabletopSystem = default!;
     [Dependency] private VomitSystem _vomitSystem = default!;
     [Dependency] private WeldableSystem _weldableSystem = default!;
@@ -96,18 +96,15 @@ public sealed partial class AdminVerbSystem
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private SuperBonkSystem _superBonkSystem = default!;
     [Dependency] private SlipperySystem _slipperySystem = default!;
-    //RMC-14
-    [Dependency] private SharedXenoParasiteSystem _xenoParasite = default!;
-    [Dependency] private RandomHumanoidSystem _randomHumanoid = default!;
-    [Dependency] private MobStateSystem _mobstate = default!;
-    [Dependency] private RMCDamageableSystem _rmcdamage = default!;
-    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private AtmosDeviceSystem _atmosDevice = default!;
 
-    private static readonly EntProtoId MouseProto = "CMMobMouse";
-    private static readonly ProtoId<RandomHumanoidSettingsPrototype> RiflemanProto = "RMCUnassignedRifleman";
+    private readonly EntProtoId _actionViewLawsProtoId = "ActionViewLaws";
+    private readonly ProtoId<SiliconLawsetPrototype> _crewsimovLawset = "Crewsimov";
 
-    private static readonly ProtoId<DamageGroupPrototype> CriticalDamage = "Brute";
-    //RMC-14
+    private readonly EntProtoId _siliconMindRole = "MindRoleSiliconBrain";
+    private const string SiliconLawBoundUserInterface = "SiliconLawBoundUserInterface";
 
     // All smite verbs have names so invokeverb works.
     private void AddSmiteVerbs(GetVerbsEvent<Verb> args)
@@ -996,152 +993,136 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", omniaccentName, Loc.GetString("admin-smite-omni-accent-description"))
         };
         args.Verbs.Add(omniaccent);
-        //RMC-14
-        Verb chestburst = new()
-        {
-            Text = "Chestburst into larva",
-            Category = VerbCategory.Smite,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Effects/burst.rsi"), "bursted_stand"),
-            Act = () =>
-            {
-                var infected = EnsureComp<VictimInfectedComponent>(args.Target);
-                _xenoParasite.TryStartBurst((args.Target, infected));
-            },
-            Impact = LogImpact.Extreme,
-            Message = "Chestburst into larva",
-        };
-        args.Verbs.Add(chestburst);
 
-        Verb chestburstMouse = new()
+        var crawlerName = Loc.GetString("admin-smite-crawler-name").ToLowerInvariant();
+        Verb crawler = new()
         {
-            Text = "Chestburst into mouse",
+            Text = crawlerName,
             Category = VerbCategory.Smite,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Effects/burst.rsi"), "bursted_stand"),
+            Icon = new SpriteSpecifier.Rsi(new("Mobs/Animals/snake.rsi"), "icon"),
             Act = () =>
             {
-                var infected = EnsureComp<VictimInfectedComponent>(args.Target);
-                _xenoParasite.SetBurstSpawn((args.Target, infected), MouseProto);
-                _xenoParasite.SetBurstSound((args.Target, infected), new SoundPathSpecifier("/Audio/Animals/mouse_squeak.ogg"));
-                _xenoParasite.TryStartBurst((args.Target, infected));
+                EnsureComp<WormComponent>(args.Target);
             },
             Impact = LogImpact.Extreme,
-            Message = "Chestburst into mouse",
+            Message = string.Join(": ", crawlerName, Loc.GetString("admin-smite-crawler-description"))
         };
-        args.Verbs.Add(chestburstMouse);
+        args.Verbs.Add(crawler);
 
-        Verb chestburstRifleman = new()
+        var siliconName = Loc.GetString("admin-smite-silicon-laws-bound-name").ToLowerInvariant();
+        Verb silicon = new()
         {
-            Text = "Chestburst into rifleman",
+            Text = siliconName,
             Category = VerbCategory.Smite,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Effects/burst.rsi"), "bursted_stand"),
+            Icon = new SpriteSpecifier.Rsi(new("Interface/Actions/actions_borg.rsi"), "state-laws"),
             Act = () =>
             {
-                var rifleman = _randomHumanoid.SpawnRandomHumanoid(RiflemanProto, _transformSystem.GetMoverCoordinates(args.Target), "");
-                var infected = EnsureComp<VictimInfectedComponent>(args.Target);
-                _xenoParasite.InsertLarva((args.Target, infected), rifleman);
-                _xenoParasite.SetBurstSound((args.Target, infected), new SoundPathSpecifier("/Audio/Voice/Human/wilhelm_scream.ogg"));
-                _xenoParasite.TryStartBurst((args.Target, infected));
-            },
-            Impact = LogImpact.Extreme,
-            Message = "Chestburst into rifleman",
-        };
-        args.Verbs.Add(chestburstRifleman);
+                var userInterfaceComp = EnsureComp<UserInterfaceComponent>(args.Target);
+                _uiSystem.SetUi((args.Target, userInterfaceComp), SiliconLawsUiKey.Key, new InterfaceData(SiliconLawBoundUserInterface));
 
-        Verb forceCritical1 = new()
-        {
-            Text = "Force into critical state (100% Critical Health)",
-            Category = VerbCategory.Smite,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/health_hud.rsi"), "huddeaddefib"),
-            Act = () =>
-            {
-                Crit(args.Target, 1.0);
-            },
-            Impact = LogImpact.Extreme,
-            Message = "Forces mob into critical, no matter what its state before was, at 100% of critical health",
-        };
-        args.Verbs.Add(forceCritical1);
+                if (!HasComp<SiliconLawBoundComponent>(args.Target))
+                {
+                    EnsureComp<SiliconLawBoundComponent>(args.Target);
+                    _actions.AddAction(args.Target, _actionViewLawsProtoId);
+                }
 
-        Verb forceCritical2 = new()
-        {
-            Text = "Force into critical state (75% Critical Health)",
-            Category = VerbCategory.Smite,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/health_hud.rsi"), "huddeadclose"),
-            Act = () =>
-            {
-                Crit(args.Target, 0.75);
-            },
-            Impact = LogImpact.Extreme,
-            Message = "Forces mob into critical, no matter what its state before was, at 75% of critical health",
-        };
-        args.Verbs.Add(forceCritical2);
+                EnsureComp<SiliconLawProviderComponent>(args.Target);
+                _siliconLawSystem.SetLaws(_siliconLawSystem.GetLawset(_crewsimovLawset).Laws, args.Target);
 
-        Verb forceCritical3 = new()
-        {
-            Text = "Force into critical state (50% Critical Health)",
-            Category = VerbCategory.Smite,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/health_hud.rsi"), "huddeadalmost"),
-            Act = () =>
-            {
-                Crit(args.Target, 0.50);
-            },
-            Impact = LogImpact.Extreme,
-            Message = "Forces mob into critical, no matter what its state before was, at 50% of critical health",
-        };
-        args.Verbs.Add(forceCritical3);
+                if (_mindSystem.TryGetMind(args.Target, out var mindId, out _))
+                    _role.MindAddRole(mindId, _siliconMindRole);
 
-        Verb forceCritical4 = new()
-        {
-            Text = "Force into critical state (25% Critical Health)",
-            Category = VerbCategory.Smite,
-            Icon = new SpriteSpecifier.Rsi(new ResPath("/Textures/_RMC14/Interface/health_hud.rsi"), "huddeaddnr"),
-            Act = () =>
-            {
-                Crit(args.Target, 0.25);
+                _popupSystem.PopupEntity(Loc.GetString("admin-smite-silicon-laws-bound-self"), args.Target,
+                    args.Target, PopupType.LargeCaution);
             },
             Impact = LogImpact.Extreme,
-            Message = "Forces mob into critical, no matter what its state before was, at 25% of critical health",
+            Message = string.Join(": ", siliconName, Loc.GetString("admin-smite-silicon-laws-bound-description"))
         };
-        args.Verbs.Add(forceCritical4);
+        args.Verbs.Add(silicon);
+
+        var homingRodName = Loc.GetString("admin-smite-homing-rod-name").ToLowerInvariant();
+        Verb homingRod = new()
+        {
+            Text = homingRodName,
+            Category = VerbCategory.Smite,
+            Icon = new SpriteSpecifier.Rsi(new("Objects/Specific/Security/target.rsi"), "target_s"),
+            Act = () =>
+            {
+                var speed = 25f; // It don't miss brother.
+                var distance = 350f;
+                HomingLaunchSequence(args.Target, "ImmovableRodKeepTiles", distance, speed); // todo: swap the proto for an EntityTable GetSpawns once rod rule rework
+            },
+            Impact = LogImpact.Extreme,
+            Message = string.Join(": ", homingRodName, Loc.GetString("admin-smite-homing-rod-description"))
+        };
+        args.Verbs.Add(homingRod);
+
+        var homingRodSlowName = Loc.GetString("admin-smite-homing-rod-slow-name").ToLowerInvariant();
+        Verb homingRodSlow = new()
+        {
+            Text = homingRodSlowName,
+            Category = VerbCategory.Smite,
+            Icon = new SpriteSpecifier.Rsi(new("Objects/Specific/Security/target.rsi"), "target_c"),
+            Act = () =>
+            {
+                var speed = 5f; // slightly faster than default sprint speed 4.5
+                if (TryComp<MovementSpeedModifierComponent>(args.Target, out var movement))
+                    speed = movement.CurrentSprintSpeed + 0.001f;// run
+                var distance = 200f; // its kinda slow so were just gonna cheat a bit.
+                HomingLaunchSequence(args.Target, "ImmovableRodKeepTiles", distance, speed);
+            },
+            Impact = LogImpact.Extreme,
+            Message = string.Join(": ", homingRodSlowName, Loc.GetString("admin-smite-homing-rod-slow-description"))
+        };
+        args.Verbs.Add(homingRodSlow);
+
+        var makeStinkyName = Loc.GetString("admin-smite-make-stinky-name").ToLowerInvariant();
+        Verb makeStinky = new()
+        {
+            Text = makeStinkyName,
+            Category = VerbCategory.Smite,
+            Icon = new SpriteSpecifier.Rsi(new("Clothing/Mask/gas.rsi"), "icon"),
+            Act = () =>
+            {
+                var gasMiner = EnsureComp<GasMinerComponent>(args.Target);
+                gasMiner.SpawnGas = Gas.Ammonia;
+                gasMiner.SpawnAmount = 20;
+                gasMiner.ShowExamineText = false;
+
+                // Atmos device is not networked, no dirty.
+                var atmosDevice = EnsureComp<AtmosDeviceComponent>(args.Target);
+                atmosDevice.RequireAnchored = false;
+
+                _atmosDevice.JoinAtmosphere((args.Target, atmosDevice));
+                Dirty(args.Target, gasMiner);
+            },
+            Impact = LogImpact.Extreme,
+            Message = string.Join(": ", makeStinkyName, Loc.GetString("admin-smite-make-stinky-description"))
+        };
+        args.Verbs.Add(makeStinky);
     }
 
-    private void Crit(EntityUid target, double criticalThresholdPercent)
+    public void HomingLaunchSequence(EntityUid target, EntProtoId proto, float distance, float speed)
     {
-        if (!TryComp<DamageableComponent>(target, out var damage))
-            return;
+        // ToDo: Reuse some spawning code from whereever the rod rule ends up.
+        // I would do it now but theres a massive rod rewrite, and I don't wanna poke it for this.
+        // find reasonable spawn location (use gamerule and find rod?) but respect map not on grid etc etc
 
-        if (!_mobThresholdSystem.TryGetIncapThreshold(target, out var threshold) || !_mobThresholdSystem.TryGetDeadThreshold(target, out var dead))
-            return;
+        var random = new RobustRandom() as IRobustRandom;
+        random.SetSeed(target.Id);
+        var offset = random.NextAngle().RotateVec(new Vector2(distance, 0));
+        var spawnCoords = _transformSystem.GetMapCoordinates(target).Offset(offset);
+        var rod = Spawn(proto, spawnCoords);
+        // Here we abuse the ChasingWalkComp by making it skip targetting logic and dialling its frequency up
+        EnsureComp<ChasingWalkComponent>(rod, out var chasingComp);
+        chasingComp.NextChangeVectorTime = TimeSpan.MaxValue; // we just want it to never change
+        chasingComp.ChasingEntity = target;
+        chasingComp.ImpulseInterval = .1f; // skrrt skrrrrrrt skrrrt
+        chasingComp.RotateWithImpulse = true;
+        chasingComp.MaxSpeed = speed;
+        chasingComp.Speed = speed; // tell me lies, tell me sweet little lies.
 
-        var desiredThreshold = (threshold * criticalThresholdPercent) + (dead * (1 - criticalThresholdPercent));
-
-        if (!TryComp<MobStateComponent>(target, out var state))
-            return;
-
-        if (damage.TotalDamage > desiredThreshold)
-        {
-            //Revive + Heal
-            var heal = damage.TotalDamage.Double() - desiredThreshold.Value.Double();
-
-            if (heal < 0)
-                heal = 0;
-
-            var healing = _rmcdamage.DistributeTypesTotal((target, damage), heal);
-            _damage.TryChangeDamage(target, -healing, true);
-            if (state.CurrentState == MobState.Dead)
-                _mobstate.ChangeMobState(target, MobState.Critical);
-        }
-        else if (damage.TotalDamage < desiredThreshold)
-        {
-            //Just damage
-            var hurt = Math.Max(desiredThreshold.Value.Double() - damage.TotalDamage.Double(), 0);
-
-            if (!_prototypeManager.TryIndex(CriticalDamage, out var damageGroup))
-                return;
-
-            var damager = new DamageSpecifier(damageGroup, hurt);
-
-            var damaging = _damage.TryChangeDamage(target, damager, true);
-        }
+        if (TryComp<TimedDespawnComponent>(rod, out var despawn))
+            despawn.Lifetime = offset.Length() / speed * 3; // exists thrice as long as it takes to get to you.
     }
-    //RMC-14
 }

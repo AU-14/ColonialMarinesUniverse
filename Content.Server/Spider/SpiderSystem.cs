@@ -14,6 +14,8 @@ public sealed partial class SpiderSystem : SharedSpiderSystem
 {
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     /// <summary>
     ///     A recycled hashset used to check turfs for spiderwebs.

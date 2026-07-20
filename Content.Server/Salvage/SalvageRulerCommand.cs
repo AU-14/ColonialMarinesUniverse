@@ -11,10 +11,6 @@ sealed partial class SalvageRulerCommand : LocalizedEntityCommands
 
     public override string Command => "salvageruler";
 
-    public override string Description => Loc.GetString("salvage-ruler-command-description");
-
-    public override string Help => Loc.GetString("salvage-ruler-command-help-text", ("command",Command));
-
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
         if (args.Length != 0)

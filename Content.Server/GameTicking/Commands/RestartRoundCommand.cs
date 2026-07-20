@@ -8,25 +8,27 @@ namespace Content.Server.GameTicking.Commands;
 [AdminCommand(AdminFlags.Round)]
 public sealed partial class RestartRoundCommand : LocalizedEntityCommands
 {
-    [AdminCommand(AdminFlags.Round)]
-    public sealed partial class RestartRoundCommand : IConsoleCommand
+    [Dependency] private GameTicker _gameTicker = default!;
+    [Dependency] private RoundEndSystem _roundEndSystem = default!;
+
+    public override string Command => "restartround";
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        [Dependency] private IEntityManager _e = default!;
-
-        public string Command => "restartround";
-        public string Description => "Ends the current round and starts the countdown for the next lobby.";
-        public string Help => string.Empty;
-
-        public void Execute(IConsoleShell shell, string argStr, string[] args)
+        if (_gameTicker.RunLevel != GameRunLevel.InRound)
         {
             shell.WriteLine(Loc.GetString("shell-can-only-run-while-round-is-active"));
             return;
         }
 
-    [AdminCommand(AdminFlags.Round)]
-    public sealed partial class RestartRoundNowCommand : IConsoleCommand
-    {
-        [Dependency] private IEntityManager _e = default!;
+        _roundEndSystem.EndRound();
+    }
+}
+
+[AdminCommand(AdminFlags.Round)]
+public sealed partial class RestartRoundNowCommand : LocalizedEntityCommands
+{
+    [Dependency] private GameTicker _gameTicker = default!;
 
     public override string Command => "restartroundnow";
 

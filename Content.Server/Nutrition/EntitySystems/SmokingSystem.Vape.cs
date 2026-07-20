@@ -22,7 +22,7 @@ namespace Content.Server.Nutrition.EntitySystems
         [Dependency] private DoAfterSystem _doAfterSystem = default!;
         [Dependency] private DamageableSystem _damageableSystem = default!;
         [Dependency] private EmagSystem _emag = default!;
-        [Dependency] private FoodSystem _foodSystem = default!;
+        [Dependency] private IngestionSystem _ingestion = default!;
         [Dependency] private ExplosionSystem _explosionSystem = default!;
         [Dependency] private PopupSystem _popupSystem = default!;
 

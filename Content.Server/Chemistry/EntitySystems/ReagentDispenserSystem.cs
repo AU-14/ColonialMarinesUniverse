@@ -29,7 +29,6 @@ namespace Content.Server.Chemistry.EntitySystems
         [Dependency] private SolutionTransferSystem _solutionTransferSystem = default!;
         [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
         [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private OpenableSystem _openable = default!;
         [Dependency] private HandsSystem _handsSystem = default!;
 

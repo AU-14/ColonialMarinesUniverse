@@ -19,10 +19,10 @@ public sealed partial class UplinkSystem : EntitySystem
 {
     [Dependency] private InventorySystem _inventorySystem = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private StoreSystem _store = default!;
     [Dependency] private SharedSubdermalImplantSystem _subdermalImplant = default!;
     [Dependency] private SharedMindSystem _mind = default!;
+    [Dependency] private RingerSystem _ringer = default!;
 
     public static readonly EntProtoId<StoreComponent> TraitorUplinkStore = "StorePresetRemoteUplink";
     public static readonly ProtoId<CurrencyPrototype> TelecrystalCurrencyPrototype = "Telecrystal";

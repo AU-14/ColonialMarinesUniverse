@@ -11,7 +11,6 @@ public sealed partial class RandomDecalSpawnerSystem : EntitySystem
 {
     [Dependency] private DecalSystem _decal = default!;
     [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ITileDefinitionManager _tileDefs = default!;
 

@@ -17,7 +17,7 @@ public sealed partial class SingularityGeneratorSystem : SharedSingularityGenera
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private PhysicsSystem _physics = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private MetaDataSystem _metadata = default!;
+    [Dependency] private EntityQuery<ContainmentFieldComponent> _containmentFieldQuery = default!;
     #endregion Dependencies
 
     public override void Initialize()
@@ -179,7 +179,7 @@ public sealed partial class SingularityGeneratorSystem : SharedSingularityGenera
 
         foreach (var result in rayCastResults)
         {
-            if (!genQuery.HasComponent(result.HitEntity))
+            if (!_containmentFieldQuery.HasComponent(result.HitEntity))
                 continue;
 
             closestResult = result;

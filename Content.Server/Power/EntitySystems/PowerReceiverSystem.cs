@@ -15,8 +15,10 @@ namespace Content.Server.Power.EntitySystems
     public sealed partial class PowerReceiverSystem : SharedPowerReceiverSystem
     {
         [Dependency] private IAdminManager _adminManager = default!;
-        private EntityQuery<ApcPowerReceiverComponent> _recQuery;
-        private EntityQuery<ApcPowerProviderComponent> _provQuery;
+
+        [Dependency] private EntityQuery<ApcPowerReceiverComponent> _recQuery = default!;
+        [Dependency] private EntityQuery<ApcPowerProviderComponent> _provQuery = default!;
+        [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
 
         public override void Initialize()
         {

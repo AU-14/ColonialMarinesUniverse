@@ -9,9 +9,7 @@ namespace Content.Server.Clothing.Systems;
 
 public sealed partial class ChameleonClothingSystem : SharedChameleonClothingSystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IdentitySystem _identity = default!;
-    [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()
     {

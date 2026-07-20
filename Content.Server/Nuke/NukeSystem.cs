@@ -20,7 +20,6 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
-using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Robust.Shared.Timing;
 
@@ -235,7 +234,7 @@ public sealed partial class NukeSystem : EntitySystem
 
         var curTime = _timing.CurTime;
         if (curTime < component.LastCodeEnteredAt + SharedNukeComponent.EnterCodeCooldown)
-            return;
+            return; // Validate that they are not entering codes faster than the cooldown.
 
         component.LastCodeEnteredAt = curTime;
 

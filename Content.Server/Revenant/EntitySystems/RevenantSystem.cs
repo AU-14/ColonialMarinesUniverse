@@ -27,8 +27,8 @@ namespace Content.Server.Revenant.EntitySystems;
 public sealed partial class RevenantSystem : EntitySystem
 {
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private ActionsSystem _action = default!;
     [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private AtmosphereSystem _atmosphere = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private GameTicker _ticker = default!;
@@ -44,9 +44,6 @@ public sealed partial class RevenantSystem : EntitySystem
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private VisibilitySystem _visibility = default!;
     [Dependency] private TurfSystem _turf = default!;
-
-    private static readonly EntProtoId RevenantShopId = "ActionRevenantShop";
-
     public override void Initialize()
     {
         base.Initialize();

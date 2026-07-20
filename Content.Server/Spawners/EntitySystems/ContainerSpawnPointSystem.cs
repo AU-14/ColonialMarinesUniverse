@@ -12,7 +12,6 @@ public sealed partial class ContainerSpawnPointSystem : EntitySystem
 {
     [Dependency] private ContainerSystem _container = default!;
     [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StationSystem _station = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;

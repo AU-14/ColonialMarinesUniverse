@@ -18,6 +18,7 @@ namespace Content.Server.Spawners.EntitySystems
         [Dependency] private IRobustRandom _robustRandom = default!;
         [Dependency] private GameTicker _ticker = default!;
         [Dependency] private EntityTableSystem _entityTable = default!;
+        [Dependency] private TransformSystem _xform = default!;
 
         public override void Initialize()
         {

@@ -24,7 +24,6 @@ public sealed partial class CrewManifestSystem : EntitySystem
     [Dependency] private StationRecordsSystem _recordsSystem = default!;
     [Dependency] private EuiManager _euiManager = default!;
     [Dependency] private IConfigurationManager _configManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     /// <summary>
     ///     Cached crew manifest entries. The alternative is to outright
@@ -221,14 +220,6 @@ public sealed partial class CrewManifestSystem : EntitySystem
     /// <param name="station"></param>
     private void BuildCrewManifest(EntityUid station)
     {
-        _queuedManifests.Add(station);
-    }
-
-
-    // RMC14
-    private readonly HashSet<EntityUid> _queuedManifests = new();
-    private void RMCBuildCrewManifest(EntityUid station)
-    {
         var iter = _recordsSystem.GetRecordsOfType<GeneralStationRecord>(station);
 
         var entries = new CrewManifestEntries();
@@ -237,7 +228,7 @@ public sealed partial class CrewManifestSystem : EntitySystem
         foreach (var recordObject in iter)
         {
             var record = recordObject.Item2;
-            var entry = new CrewManifestEntry(record.Name, record.JobTitle, record.JobIcon, record.JobPrototype, record.Squad, record.SquadColor);
+            var entry = new CrewManifestEntry(record.Name, record.JobTitle, record.JobIcon, record.JobPrototype);
 
             ProtoMan.TryIndex(record.JobPrototype, out JobPrototype? job);
             entriesSort.Add((job, entry));
@@ -254,20 +245,6 @@ public sealed partial class CrewManifestSystem : EntitySystem
 
         entries.Entries = entriesSort.Select(x => x.entry).ToArray();
         _cachedEntries[station] = entries;
-    }
-    public override void Update(float frameTime)
-    {
-        base.Update(frameTime);
-
-        if (_queuedManifests.Count < 1)
-            return;
-
-        foreach (var queuedStation in _queuedManifests)
-        {
-            RMCBuildCrewManifest(queuedStation);
-            UpdateEuis(queuedStation);
-        }
-        _queuedManifests.Clear();
     }
 }
 

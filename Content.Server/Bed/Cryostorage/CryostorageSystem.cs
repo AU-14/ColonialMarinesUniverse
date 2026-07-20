@@ -1,10 +1,7 @@
-using System.Globalization;
-using Content.Server._RMC14.Announce;
 using Content.Server.Chat.Managers;
 using Content.Server.Ghost;
 using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
-using Content.Shared._RMC14.Cryostorage; // RMC14 cryo recovery console hooks.
 using Content.Shared.Access.Systems;
 using Content.Shared.Bed.Cryostorage;
 using Content.Shared.Chat;
@@ -15,7 +12,6 @@ using Content.Shared.GameTicking;
 using Content.Shared.Hands.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.StationRecords;
-using Content.Shared.StationRecords.Systems;
 using Content.Shared.UserInterface;
 using Robust.Server.Player;
 using Robust.Shared.Containers;
@@ -38,21 +34,20 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
 {
     [Dependency] private IChatManager _chatManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private AudioSystem _audio = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private AccessReaderSystem _accessReader = default!;
-    [Dependency] private ChatSystem _chatSystem = default!;
+    [Dependency] private SharedChatSystem _chatSystem = default!;
     [Dependency] private ClimbSystem _climb = default!;
-    [Dependency] private ContainerSystem _container = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private GhostSystem _ghostSystem = default!;
-    [Dependency] private HandsSystem _hands = default!;
-    [Dependency] private ServerInventorySystem _inventory = default!;
-    [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private StationSystem _station = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedStationSystem _station = default!;
     [Dependency] private StationJobsSystem _stationJobs = default!;
     [Dependency] private StationRecordsSystem _stationRecords = default!;
-    [Dependency] private TransformSystem _transform = default!;
-    [Dependency] private UserInterfaceSystem _ui = default!;
-    [Dependency] private MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
 
     /// <inheritdoc/>
     public override void Initialize()
@@ -78,17 +73,6 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
     private void OnBeforeUIOpened(Entity<CryostorageComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
         UpdateCryostorageUIState(ent);
-    }
-
-    /// <summary>
-    /// RMC14: lets sidecar recovery systems refresh vanilla cryostorage windows after moving or hiding items.
-    /// </summary>
-    public void RefreshCryostorageUI(EntityUid uid, CryostorageComponent? component = null)
-    {
-        if (!Resolve(uid, ref component, false))
-            return;
-
-        UpdateCryostorageUIState((uid, component));
     }
 
     private void OnRemoveItemBuiMessage(Entity<CryostorageComponent> ent, ref CryostorageRemoveItemBuiMessage args)
@@ -122,13 +106,6 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
 
         if (entity == null)
             return;
-
-        // RMC14: stock cryo gear stays on the body, but is unavailable through both chamber and recovery UIs.
-        if (HasComp<RMCCryoUnavailableOnStoreComponent>(entity.Value))
-        {
-            UpdateCryostorageUIState(ent);
-            return;
-        }
 
         AdminLog.Add(LogType.Action, LogImpact.High,
             $"{ToPrettyString(attachedEntity):player} removed item {ToPrettyString(entity)} from cryostorage-contained player " +
@@ -242,9 +219,6 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
         UpdateCryostorageUIState((cryostorageEnt.Value, cryostorageComponent));
         AdminLog.Add(LogType.Action, LogImpact.High, $"{ToPrettyString(ent):player} was entered into cryostorage inside of {ToPrettyString(cryostorageEnt.Value)}");
 
-        // RMC14: notify recovery consoles without changing vanilla storage ownership.
-        var ev = new EnteredCryostorageEvent();
-        RaiseLocalEvent(ent, ref ev);
         if (!TryComp<StationRecordsComponent>(station, out var stationRecords))
             return;
 
@@ -259,7 +233,15 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
             _stationRecords.RemoveRecord(key, stationRecords);
         }
 
-        _marinePresenceAnnounce.AnnounceEarlyLeave(ent, recordId, station, jobName); // RMC14
+        _chatSystem.DispatchStationAnnouncement(station.Value,
+            Loc.GetString(
+                "earlyleave-cryo-announcement",
+                ("character", name),
+                ("entity", ent.Owner), // gender things for supporting downstreams with other languages
+                ("job", CultureInfo.CurrentCulture.TextInfo.ToTitleCase(jobName))
+            ), Loc.GetString("earlyleave-cryo-sender"),
+            playDefaultSound: false
+        );
     }
 
     private void HandleCryostorageReconnection(Entity<CryostorageContainedComponent> entity)
@@ -290,10 +272,6 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
         cryostorageComponent.StoredPlayers.Remove(uid);
         AdminLog.Add(LogType.Action, LogImpact.High, $"{ToPrettyString(entity):player} re-entered the game from cryostorage {ToPrettyString(cryostorage)}");
         UpdateCryostorageUIState((cryostorage, cryostorageComponent));
-
-        // RMC14: recovery consoles must stop listing bodies that re-entered the round.
-        var ev = new LeftCryostorageEvent();
-        RaiseLocalEvent(entity, ref ev);
     }
 
     protected override void OnInsertedContainer(Entity<CryostorageComponent> ent, ref EntInsertedIntoContainerMessage args)
@@ -335,20 +313,15 @@ public sealed partial class CryostorageSystem : SharedCryostorageSystem
         var enumerator = _inventory.GetSlotEnumerator(uid);
         while (enumerator.NextItem(out var item, out var slotDef))
         {
-            // RMC14: keep unavailable stock gear out of the upstream chamber UI as well.
-            if (HasComp<RMCCryoUnavailableOnStoreComponent>(item))
+            if (HasComp<AttachedClothingComponent>(item))
                 continue;
 
-            data.ItemSlots.Add(slotDef.Name, Name(item));
+            data.ItemSlots.Add((slotDef.Name, slotDef.DisplayName, Name(item)));
         }
 
         foreach (var hand in _hands.EnumerateHands(uid))
         {
             if (!_hands.TryGetHeldItem(uid, hand, out var heldEntity, true))
-                continue;
-
-            // RMC14: keep unavailable stock gear out of the upstream chamber UI as well.
-            if (HasComp<RMCCryoUnavailableOnStoreComponent>(heldEntity.Value))
                 continue;
 
             data.HeldItems.Add(hand, Name(heldEntity.Value));

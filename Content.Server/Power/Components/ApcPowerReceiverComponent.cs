@@ -30,7 +30,10 @@ namespace Content.Server.Power.Components
         public override bool NeedsPower
         {
             get => _needsPower;
-            set => _needsPower = value;
+            set
+            {
+                _needsPower = value;
+            }
         }
 
         [DataField("needsPower")]

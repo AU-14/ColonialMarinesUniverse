@@ -11,11 +11,12 @@ namespace Content.Server.Atmos.Piping.Binary.EntitySystems;
 [UsedImplicitly]
 public sealed partial class GasPassiveGateSystem : EntitySystem
 {
-    [UsedImplicitly]
-    public sealed partial class GasPassiveGateSystem : EntitySystem
+    [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
+    [Dependency] private NodeContainerSystem _nodeContainer = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
-        [Dependency] private NodeContainerSystem _nodeContainer = default!;
+        base.Initialize();
 
         SubscribeLocalEvent<GasPassiveGateComponent, AtmosDeviceUpdateEvent>(OnPassiveGateUpdated);
         SubscribeLocalEvent<GasPassiveGateComponent, ExaminedEvent>(OnExamined);

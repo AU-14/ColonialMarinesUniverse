@@ -11,9 +11,9 @@ namespace Content.Server.GameTicking.Rules;
 
 public sealed partial class AntagLoadProfileRuleSystem : GameRuleSystem<AntagLoadProfileRuleComponent>
 {
-    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private IServerPreferencesManager _prefs = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
 
     public override void Initialize()
     {

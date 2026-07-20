@@ -98,7 +98,15 @@ public abstract partial class GameRuleSystem<T> where T: IComponent
             if (!TryComp<MapGridComponent>(possibleTarget, out var comp))
                 continue;
 
-            weights.Add((possibleTarget, comp), _map.GetFilledTileCount((possibleTarget, comp)));
+            // Get the tile count for the given grid.
+            var tileCount = _map.GetFilledTileCount((possibleTarget, comp));
+
+            // Just to be sure, no empty elements.
+            if (tileCount > 0)
+            {
+                grids.Add(((possibleTarget, comp), tileCount, new()));
+                totalTiles += tileCount;
+            }
         }
 
         if (grids.Count == 0)

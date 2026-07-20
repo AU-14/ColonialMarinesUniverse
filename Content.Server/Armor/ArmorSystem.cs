@@ -7,8 +7,6 @@ namespace Content.Server.Armor;
 /// <inheritdoc/>
 public sealed partial class ArmorSystem : SharedArmorSystem
 {
-    [Dependency] private IPrototypeManager _protoManager = default!;
-
     public override void Initialize()
     {
         base.Initialize();

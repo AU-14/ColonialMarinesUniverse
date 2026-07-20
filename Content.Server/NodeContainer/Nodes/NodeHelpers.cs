@@ -10,11 +10,7 @@ namespace Content.Server.NodeContainer.Nodes
     /// </summary>
     public static class NodeHelpers
     {
-        public static IEnumerable<Node> GetNodesInTile(
-            EntityQuery<NodeContainerComponent> nodeQuery,
-            Entity<MapGridComponent> grid,
-            Vector2i coords,
-            SharedMapSystem mapSystem)
+        public static IEnumerable<Node> GetNodesInTile(EntityQuery<NodeContainerComponent> nodeQuery, Entity<MapGridComponent> grid, Vector2i coords, SharedMapSystem mapSystem)
         {
             foreach (var entityUid in mapSystem.GetAnchoredEntities(grid, coords))
             {
@@ -87,6 +83,15 @@ namespace Content.Server.NodeContainer.Nodes
 
             foreach (var uid in mapSystem.GetAnchoredEntities(grid, coords + (-1, 0)))
                 yield return (Direction.West, uid);
+        }
+
+        [Obsolete("Use the overload that passes in Entity<MapGridComponent> and SharedMapSystem")]
+        public static IEnumerable<(Direction dir, EntityUid entity)> GetCardinalNeighborCells(
+            MapGridComponent grid,
+            Vector2i coords,
+            bool includeSameTile = true)
+        {
+            return GetCardinalNeighborCells((grid.Owner, grid), coords, IoCManager.Resolve<IEntityManager>().System<SharedMapSystem>(), includeSameTile);
         }
     }
 }

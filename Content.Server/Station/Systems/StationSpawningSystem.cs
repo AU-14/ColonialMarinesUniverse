@@ -37,11 +37,12 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private ActorSystem _actors = default!;
     [Dependency] private IdCardSystem _cardSystem = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
-    [Dependency] private HumanoidAppearanceSystem _humanoidSystem = default!;
+    [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
     [Dependency] private IdentitySystem _identity = default!;
     [Dependency] private MetaDataSystem _metaSystem = default!;
     [Dependency] private PdaSystem _pdaSystem = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private MindSystem _mindSystem = default!;
 
     /// <summary>
     /// Attempts to spawn a player character onto the given station.
@@ -88,7 +89,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         EntityUid? station,
         EntityUid? entity = null)
     {
-        ProtoMan.Resolve(job, out JobPrototype? prototype);
+        ProtoMan.Resolve(job, out var prototype);
         RoleLoadout? loadout = null;
 
         // Need to get the loadout up-front to handle names if we use an entity spawn override.
@@ -103,22 +104,6 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             {
                 loadout = new RoleLoadout(jobLoadout);
                 loadout.SetDefault(profile, _actors.GetSession(entity), ProtoMan);
-            }
-        }
-
-        // RMC14 UseLoadoutOfJob
-        if (prototype?.UseLoadoutOfJob != null &&
-            ProtoMan.Resolve(prototype.UseLoadoutOfJob, out JobPrototype? usedPrototype))
-        {
-            var newJobLoadout = LoadoutSystem.GetJobPrototype(usedPrototype.ID);
-
-            if (_prototypeManager.TryIndex(newJobLoadout, out RoleLoadoutPrototype? newRoleProto))
-            {
-                if (profile != null && profile.Loadouts.TryGetValue(newJobLoadout, out var newLoadout))
-                {
-                    roleProto = newRoleProto;
-                    loadout = newLoadout;
-                }
             }
         }
 

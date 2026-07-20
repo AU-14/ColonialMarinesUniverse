@@ -17,7 +17,6 @@ public sealed partial class EventManagerSystem : EntitySystem
     [Dependency] private IConfigurationManager _configurationManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private EntityTableSystem _entityTable = default!;
     [Dependency] public GameTicker GameTicker = default!;
     [Dependency] private RoundEndSystem _roundEnd = default!;
@@ -343,9 +342,7 @@ public sealed partial class EventManagerSystem : EntitySystem
             return false;
         }
 
-        if (_roundEnd.IsRoundEndRequested()
-            && !stationEvent.OccursDuringRoundEnd
-            && !_roundEnd.CanCallOrRecall())
+        if (_roundEnd.IsRoundEndRequested() && !stationEvent.OccursDuringRoundEnd && !_roundEnd.CanCallOrRecall())
         {
             return false;
         }

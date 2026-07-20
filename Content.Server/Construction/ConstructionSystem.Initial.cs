@@ -2,8 +2,6 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.Construction.Components;
-using Content.Shared._RMC14.Construction;
-using Content.Shared._RMC14.Prototypes;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
@@ -15,7 +13,6 @@ using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
-using Content.Shared.Stacks;
 using Content.Shared.Storage;
 using Content.Shared.Whitelist;
 using Robust.Shared.Containers;
@@ -34,7 +31,6 @@ namespace Content.Server.Construction
         [Dependency] private EntityLookupSystem _lookupSystem = default!;
         [Dependency] private SharedTransformSystem _transformSystem = default!;
         [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
-        [Dependency] private RMCConstructionSystem _rmcConstruction = default!;
 
         // --- WARNING! LEGACY CODE AHEAD! ---
         // This entire file contains the legacy code for initial construction.
@@ -106,9 +102,6 @@ namespace Content.Server.Construction
             EntityCoordinates coords,
             Angle angle = default)
         {
-            if (!_rmcConstruction.CanConstruct(user))
-                return null;
-
             // We need a place to hold our construction items!
             var container = _container.EnsureContainer<Container>(user, materialContainer, out var existed);
 
@@ -331,51 +324,13 @@ namespace Content.Server.Construction
         // LEGACY CODE. See warning at the top of the file!
         public async Task<bool> TryStartItemConstruction(string prototype, EntityUid user)
         {
-            if (!PrototypeManager.TryCM(prototype, out ConstructionPrototype? constructionPrototype))
+            if (!ProtoMan.TryIndex(prototype, out ConstructionPrototype? constructionPrototype))
             {
                 Log.Error($"Tried to start construction of invalid recipe '{prototype}'!");
                 return false;
             }
 
-            if (constructionPrototype.RMCPrototype is { } rmcProto) // rmc14
-            {
-                Entity<RMCConstructionItemComponent>? constructionItem = null;
-
-                var lastStackAmount = 0;
-
-                foreach (var held in _handsSystem.EnumerateHeld(user))
-                {
-                    // Find any valid construction item
-                    if (TryComp<RMCConstructionItemComponent>(held, out var constructionItemComp))
-                    {
-                        if (constructionItemComp.Buildable is { } buildable && !buildable.Contains(rmcProto))
-                            continue;
-
-                        if (TryComp<StackComponent>(held, out var stack))
-                        {
-                            if (lastStackAmount > stack.Count)
-                                continue; // Choose the stack with the biggest amount
-
-                            lastStackAmount = stack.Count;
-                        }
-
-                        constructionItem = (held, constructionItemComp);
-                        break;
-                    }
-                }
-
-                if (constructionItem != null)
-                {
-                    return _rmcConstruction.Build(constructionItem.Value, user, rmcProto, 1);
-                }
-                else
-                {
-                    _popup.PopupEntity(Loc.GetString("construction-system-construct-no-materials"), user, user);
-                    return false;
-                }
-            }
-
-            if (!PrototypeManager.TryIndex(constructionPrototype.Graph,
+            if (!ProtoMan.TryIndex(constructionPrototype.Graph,
                     out ConstructionGraphPrototype? constructionGraph))
             {
                 Log.Error(
@@ -448,29 +403,14 @@ namespace Content.Server.Construction
         // LEGACY CODE. See warning at the top of the file!
         private async void HandleStartStructureConstruction(TryStartStructureConstructionMessage ev, EntitySessionEventArgs args)
         {
-            if (!PrototypeManager.TryCM(ev.PrototypeName, out ConstructionPrototype? constructionPrototype))
+            if (!ProtoMan.TryIndex(ev.PrototypeName, out ConstructionPrototype? constructionPrototype))
             {
                 Log.Error($"Tried to start construction of invalid recipe '{ev.PrototypeName}'!");
                 RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack));
                 return;
             }
 
-            var coordinates = GetCoordinates(ev.Location);
-            var attempt = new RMCConstructionAttemptEvent(coordinates, constructionPrototype);
-            RaiseLocalEvent(ref attempt);
-
-            if (attempt.Cancelled)
-            {
-                if (attempt.Popup is { } popup &&
-                    args.SenderSession.AttachedEntity is { } ent)
-                {
-                    _popup.PopupCoordinates(popup, coordinates, ent);
-                }
-
-                return;
-            }
-
-            if (!PrototypeManager.TryIndex(constructionPrototype.Graph, out ConstructionGraphPrototype? constructionGraph))
+            if (!ProtoMan.TryIndex(constructionPrototype.Graph, out ConstructionGraphPrototype? constructionGraph))
             {
                 Log.Error($"Invalid construction graph '{constructionPrototype.Graph}' in recipe '{ev.PrototypeName}'!");
                 RaiseNetworkEvent(new AckStructureConstructionMessage(ev.Ack));

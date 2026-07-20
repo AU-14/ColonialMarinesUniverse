@@ -30,16 +30,16 @@ using Timer = Robust.Shared.Timing.Timer;
 
 namespace Content.Server.Singularity.EntitySystems
 {
-    [UsedImplicitly]
     public sealed partial class EmitterSystem : SharedEmitterSystem
     {
         [Dependency] private IRobustRandom _random = default!;
-        [Dependency] private IPrototypeManager _prototype = default!;
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private SharedAppearanceSystem _appearance = default!;
         [Dependency] private SharedPopupSystem _popup = default!;
         [Dependency] private ProjectileSystem _projectile = default!;
         [Dependency] private GunSystem _gun = default!;
+        [Dependency] private RadioSystem _radio = default!;
+        [Dependency] private NavMapSystem _navMap = default!;
 
         public override void Initialize()
         {

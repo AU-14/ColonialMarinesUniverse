@@ -24,7 +24,7 @@ namespace Content.Server.Ninja.Systems;
 public sealed partial class SpaceNinjaSystem : SharedSpaceNinjaSystem
 {
     [Dependency] private AlertsSystem _alerts = default!;
-    [Dependency] private BatterySystem _battery = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private CodeConditionSystem _codeCondition = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private SharedMindSystem _mind = default!;

@@ -655,14 +655,15 @@ public partial class AtmosphereSystem
     [PublicAPI]
     public bool RemovePipeNet(Entity<GridAtmosphereComponent?> grid, PipeNet pipeNet)
     {
-        // This can be raised even when the grid has no grid-atmosphere component.
+        // Technically this event can be fired even on grids that don't
+        // actually have grid atmospheres.
         if (pipeNet.Grid is not null)
         {
             var ev = new PipeNodeGroupRemovedEvent(grid, pipeNet.NetId);
             RaiseLocalEvent(ref ev);
         }
 
-        return _atmosQuery.Resolve(grid, ref grid.Comp, false) && grid.Comp.PipeNets.Remove(pipeNet);
+        return _gridAtmosQuery.Resolve(grid, ref grid.Comp, false) && grid.Comp.PipeNets.Remove(pipeNet);
     }
 
     /// <summary>
@@ -864,10 +865,11 @@ public partial class AtmosphereSystem
         bool Handled = false);
 }
 
+
 /// <summary>
-/// Raised broadcast when a pipe node group within a grid has been removed.
+/// Raised broadcasted when a pipe node group within a grid has been removed.
 /// </summary>
 /// <param name="Grid">The grid with the removed node group.</param>
-/// <param name="NetId">The network ID of the removed node group.</param>
+/// <param name="NetId">The net id of the removed node group.</param>
 [ByRefEvent]
 public record struct PipeNodeGroupRemovedEvent(EntityUid Grid, int NetId);

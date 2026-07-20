@@ -1,6 +1,5 @@
 using Content.Server.Ghost;
 using Content.Server.Hands.Systems;
-using Content.Shared._RMC14.CCVar;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Damage.Components;
@@ -14,7 +13,6 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
-using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
@@ -30,9 +28,7 @@ public sealed partial class SuicideSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private GhostSystem _ghostSystem = default!;
     [Dependency] private SharedSuicideSystem _suicide = default!;
-    [Dependency] private IConfigurationManager _config = default!;
-
-    private bool _canSuicide = false;
+    [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!;
 
     private static readonly ProtoId<TagPrototype> CannotSuicideTag = "CannotSuicide";
 
@@ -43,7 +39,6 @@ public sealed partial class SuicideSystem : EntitySystem
         SubscribeLocalEvent<DamageableComponent, SuicideEvent>(OnDamageableSuicide);
         SubscribeLocalEvent<MobStateComponent, SuicideEvent>(OnEnvironmentalSuicide);
         SubscribeLocalEvent<MindContainerComponent, SuicideGhostEvent>(OnSuicideGhost);
-        Subs.CVar(_config, RMCCVars.RMCEnableSuicide, v => _canSuicide = v, true);
     }
 
     /// <summary>
@@ -53,9 +48,6 @@ public sealed partial class SuicideSystem : EntitySystem
     /// </summary>
     public bool Suicide(EntityUid victim)
     {
-        if (!_canSuicide)
-            return false;
-
         // Can't suicide if we're already dead
         if (!TryComp<MobStateComponent>(victim, out var mobState) || _mobState.IsDead(victim, mobState))
             return false;

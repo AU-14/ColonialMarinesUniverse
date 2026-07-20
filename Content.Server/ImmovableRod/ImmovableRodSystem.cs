@@ -2,6 +2,7 @@ using Content.Server.Destructible;
 using Content.Server.Polymorph.Components;
 using Content.Server.Popups;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Body;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Examine;
@@ -29,6 +30,7 @@ public sealed partial class ImmovableRodSystem : EntitySystem
     [Dependency] private DestructibleSystem _destructible = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private ISharedAdminLogManager _adminLogger = default!;
 
     public override void Update(float frameTime)
     {

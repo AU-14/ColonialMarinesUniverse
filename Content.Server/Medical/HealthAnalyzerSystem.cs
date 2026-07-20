@@ -33,6 +33,7 @@ public sealed partial class HealthAnalyzerSystem : EntitySystem
     [Dependency] private UserInterfaceSystem _uiSystem = default!;
     [Dependency] private TransformSystem _transformSystem = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
+    [Dependency] private BloodstreamSystem _bloodstreamSystem = default!;
 
     public override void Initialize()
     {
@@ -179,20 +180,6 @@ public sealed partial class HealthAnalyzerSystem : EntitySystem
         UpdateScannedUser(healthAnalyzer, target, false);
     }
 
-
-    /// <summary>
-    /// If the scanner is active, sends one last update and sets it to inactive.
-    /// </summary>
-    /// <param name="healthAnalyzer">The health analyzer that's receiving the updates</param>
-    /// <param name="target">The entity to analyze</param>
-    private void PauseAnalyzingEntity(Entity<HealthAnalyzerComponent> healthAnalyzer, EntityUid target)
-    {
-        if (!healthAnalyzer.Comp.IsAnalyzerActive)
-            return;
-
-        UpdateScannedUser(healthAnalyzer, target, false);
-        healthAnalyzer.Comp.IsAnalyzerActive = false;
-    }
 
     /// <summary>
     /// If the scanner is active, sends one last update and sets it to inactive.

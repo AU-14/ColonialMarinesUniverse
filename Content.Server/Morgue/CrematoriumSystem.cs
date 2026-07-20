@@ -7,17 +7,9 @@ using Content.Shared.Popups;
 using Robust.Shared.Player;
 
 namespace Content.Server.Morgue;
-
-public sealed partial class CrematoriumSystem : EntitySystem
+public sealed partial class CrematoriumSystem : SharedCrematoriumSystem
 {
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private GhostSystem _ghostSystem = default!;
-    [Dependency] private EntityStorageSystem _entityStorage = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private StandingStateSystem _standing = default!;
-    [Dependency] private SharedMindSystem _minds = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
 
     public override void Initialize()
     {

@@ -26,7 +26,6 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Utility;
-using Content.Server._RMC14.Announce;
 
 namespace Content.Server.GameTicking
 {
@@ -35,10 +34,9 @@ namespace Content.Server.GameTicking
         [Dependency] private IAdminManager _adminManager = default!;
         [Dependency] private SharedJobSystem _jobs = default!;
         [Dependency] private AdminSystem _admin = default!;
-        [Dependency] private MarinePresenceAnnounceSystem _marinePresenceAnnounce = default!;
 
         public static readonly EntProtoId ObserverPrototypeName = "MobObserver";
-        public static readonly EntProtoId AdminObserverPrototypeName = "RMCAdminObserver";
+        public static readonly EntProtoId AdminObserverPrototypeName = "AdminObserver";
 
         /// <summary>
         /// How many players have joined the round through normal methods.
@@ -262,7 +260,7 @@ namespace Content.Server.GameTicking
 
             DoSpawn(player, character, station, jobId, silent, out var mob, out var jobPrototype, out var jobName);
 
-            if (lateJoin && !silent && false) // RMC14
+            if (lateJoin && !silent)
             {
                 if (jobPrototype.JoinNotifyCrew)
                 {
@@ -315,12 +313,6 @@ namespace Content.Server.GameTicking
                     Loc.GetString("job-greet-station-name", ("stationName", metaData.EntityName)));
             }
 
-            if (_distressSignal?.SelectedPlanetMapName != null)
-            {
-                _chatManager.DispatchServerMessage(player,
-                    Loc.GetString("job-greet-planet-name", ("planetName",_distressSignal.SelectedPlanetMapName)));
-            }
-
             // We raise this event directed to the mob, but also broadcast it so game rules can do something now.
             PlayersJoinedRoundNormally++;
             var aev = new PlayerSpawnCompleteEvent(mob,
@@ -332,8 +324,6 @@ namespace Content.Server.GameTicking
                 station,
                 character);
             RaiseLocalEvent(mob, aev, true);
-
-            _marinePresenceAnnounce.AnnounceLateJoin(lateJoin, silent, mob, jobId, jobName, jobPrototype); // RMC14
         }
 
         /// <summary>

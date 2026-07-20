@@ -6,9 +6,9 @@ using Robust.Shared.Console;
 namespace Content.Server.Administration.Commands;
 
 [AdminCommand(AdminFlags.Fun)]
-public sealed partial class AddPolymorphActionCommand : IConsoleCommand
+public sealed partial class AddPolymorphActionCommand : LocalizedEntityCommands
 {
-    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private PolymorphSystem _polySystem = default!;
 
     public override string Command => "addpolymorphaction";
 

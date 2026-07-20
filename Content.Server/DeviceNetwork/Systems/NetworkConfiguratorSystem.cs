@@ -37,6 +37,7 @@ public sealed partial class NetworkConfiguratorSystem : SharedNetworkConfigurato
     [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
+    [Dependency] private EntityQuery<DeviceNetworkComponent> _deviceNetworkQuery = default!;
 
     public override void Initialize()
     {

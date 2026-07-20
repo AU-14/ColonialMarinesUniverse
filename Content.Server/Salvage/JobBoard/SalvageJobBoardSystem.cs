@@ -21,7 +21,6 @@ namespace Content.Server.Salvage.JobBoard;
 public sealed partial class SalvageJobBoardSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private CargoSystem _cargo = default!;
     [Dependency] private LabelSystem _label = default!;
@@ -185,9 +184,7 @@ public sealed partial class SalvageJobBoardSystem : EntitySystem
             while (computerQuery.MoveNext(out var uid, out _))
             {
                 var message = Loc.GetString("job-board-radio-announce", ("rank", FormattedMessage.RemoveMarkupPermissive(Loc.GetString(newRank.Title))));
-                // RMC14
-                _radio.SendRadioMessage(uid, message, UnlockChannel, uid, escapeMarkup: false);
-                // RMC14
+                _radio.SendRadioMessage(uid, message, UnlockChannel, uid, false);
                 break;
             }
 

@@ -1,5 +1,3 @@
-using System.Linq;
-using Content.Server._RMC14.NPC;
 using Content.Server.Fluids.EntitySystems;
 using Content.Server.Hands.Systems;
 using Content.Server.NPC.Queries;
@@ -7,35 +5,17 @@ using Content.Server.NPC.Queries.Considerations;
 using Content.Server.NPC.Queries.Curves;
 using Content.Server.NPC.Queries.Queries;
 using Content.Server.Nutrition.Components;
-using Content.Shared._RMC14.Interaction;
-using Content.Shared._RMC14.Xenonids;
-using Content.Shared._RMC14.Xenonids.Burrow;
-using Content.Shared._RMC14.Xenonids.Construction;
-using Content.Shared._RMC14.Xenonids.Construction.EggMorpher;
-using Content.Shared._RMC14.Xenonids.Construction.Nest;
-using Content.Shared._RMC14.Xenonids.Construction.ResinHole;
-using Content.Shared._RMC14.Xenonids.Egg;
-using Content.Shared._RMC14.Xenonids.Parasite;
-using Content.Shared.Atmos.Components;
-using Content.Shared._RMC14.Sentry;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.Damage.Components;
-using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Fluids.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
-using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
-using Content.Shared.Stealth;
-using Content.Shared.Stealth.Components;
-using Content.Shared.Standing;
 using Content.Shared.Storage.Components;
 using Content.Shared.Stunnable;
-using Content.Shared.Temperature.Components;
 using Content.Shared.Tools.Systems;
 using Content.Shared.Turrets;
 using Content.Shared.Weapons.Melee;
@@ -46,6 +26,14 @@ using Microsoft.Extensions.ObjectPool;
 using Robust.Server.Containers;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
+using Content.Shared.Atmos.Components;
+using System.Linq;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Temperature.Components;
+using Content.Shared.Stealth;
+using Content.Shared.Stealth.Components;
 
 namespace Content.Server.NPC.Systems;
 
@@ -54,28 +42,23 @@ namespace Content.Server.NPC.Systems;
 /// </summary>
 public sealed partial class NPCUtilitySystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private ContainerSystem _container = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private HandsSystem _hands = default!;
-    [Dependency] private IngestionSystem _ingestion = default!;
     [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
     [Dependency] private PuddleSystem _puddle = default!;
-    [Dependency] private SharedStealthSystem _stealth = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
     [Dependency] private WeldableSystem _weldable = default!;
     [Dependency] private ExamineSystemShared _examine = default!;
-    [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private MobThresholdSystem _thresholdSystem = default!;
     [Dependency] private TurretTargetSettingsSystem _turretTargetSettings = default!;
-    [Dependency] private RMCInteractionSystem _rmcInteraction = default!;
-    [Dependency] private StandingStateSystem _standing = default!;
-
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedStealthSystem _stealth = default!;
     [Dependency] private EntityQuery<PuddleComponent> _puddleQuery = default!;
 
     private ObjectPool<HashSet<EntityUid>> _entPool =
@@ -97,12 +80,7 @@ public sealed partial class NPCUtilitySystem : EntitySystem
     {
         // TODO: PickHostilesop or whatever needs to juse be UtilityQueryOperator
 
-        // RMC14 prevent shooting while inside a container
-        var owner = blackboard.GetValue<EntityUid>(NPCBlackboard.Owner);
-        if (_container.TryGetContainingContainer(owner, out _))
-            return UtilityResult.Empty;
-
-        var weh = _proto.Index<UtilityQueryPrototype>(proto);
+        var weh = ProtoMan.Index<UtilityQueryPrototype>(proto);
         var ents = _entPool.Get();
 
         foreach (var query in weh.Query)
@@ -408,62 +386,6 @@ public sealed partial class NPCUtilitySystem : EntitySystem
 
                     return temperature.CurrentTemperature <= con.MinTemp ? 1f : 0f;
                 }
-            case TargetIsNotDeadCon:
-            {
-                return !_mobState.IsDead(targetUid) ? 1f : 0f;
-            }
-            case TargetXenoCon:
-            {
-                return HasComp<XenoComponent>(targetUid) ? 1f : 0f;
-            }
-            case TargetIsNotConstructCon:
-            {
-                return HasComp<XenoConstructComponent>(targetUid) ? 0f : 1f;
-            }
-            case CanFaceCon:
-            {
-                var ownerCoords = _transform.GetMapCoordinates(owner);
-                var targetCoords = _transform.GetMapCoordinates(targetUid);
-                if (ownerCoords.MapId != targetCoords.MapId)
-                    return 0f;
-
-                var vector = targetCoords.Position - ownerCoords.Position;
-                var angle = Angle.FromWorldVec(vector);
-                if (!_rmcInteraction.CanFaceMaxRotation(owner,angle))
-                    return 0f;
-
-                return 1f;
-            }
-            case TargetInfectableCon:
-            {
-                return TryComp<InfectableComponent>(targetUid, out var infectable)
-                        && !infectable.BeingInfected
-                        && !HasComp<VictimInfectedComponent>(targetUid) ? 1f : 0f;
-            }
-            case TargetOpenEggCon:
-            {
-                return TryComp<XenoEggComponent>(targetUid, out var egg) && egg.State == XenoEggState.Opened ? 1f : 0f;
-            }
-            case TargetIsEmptyResinTrapCon:
-                {
-                    return TryComp<XenoResinHoleComponent>(targetUid, out var trap) && trap.TrapPrototype == null ? 1f : 0f;
-                }
-            case TargetIsDownCon:
-            {
-                return _standing.IsDown(targetUid) || HasComp<XenoNestedComponent>(targetUid) ? 1f : 0f;
-            }
-            case TargetIsStandingCon:
-            {
-                return _standing.IsDown(targetUid) && !HasComp<XenoNestedComponent>(targetUid) ? 0f : 1f;
-            }
-            case TargetAvailibleEggMorpherCon:
-            {
-                return TryComp<EggMorpherComponent>(targetUid, out var eggmorpher) && eggmorpher.CurParasites < eggmorpher.MaxParasites ? 1f : 0f;
-            }
-            case TargetNotBurrowedCon:
-            {
-                return !TryComp<XenoBurrowComponent>(targetUid, out var burrow) || !burrow.Active ? 1f : 0f;
-            }
             default:
                 throw new NotImplementedException();
         }
@@ -561,21 +483,9 @@ public sealed partial class NPCUtilitySystem : EntitySystem
             }
             case NearbyHostilesQuery:
             {
-                // Begin RMC
-                if (TryComp<SentryTargetingComponent>(owner, out var targeting))
+                foreach (var ent in _npcFaction.GetNearbyHostiles(owner, vision))
                 {
-                    foreach (var ent in _sentryTargeting.GetNearbyIffHostiles((owner, targeting), vision))
-                    {
-                        entities.Add(ent);
-                    }
-                }
-                else
-                {
-                    foreach (var ent in _npcFaction.GetNearbyHostiles(owner, vision))
-                    {
-                        entities.Add(ent);
-                    }
-                    // End RMC
+                    entities.Add(ent);
                 }
                 break;
             }

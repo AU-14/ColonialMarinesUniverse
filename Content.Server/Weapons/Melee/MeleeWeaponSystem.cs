@@ -1,13 +1,6 @@
-using System.Linq;
-using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.Movement.Systems;
-using Content.Shared._RMC14.Tackle;
-using Content.Shared.Actions.Events;
-using Content.Shared.Administration.Components;
-using Content.Shared.CombatMode;
-using Content.Shared.Damage.Events;
-using Content.Shared.Damage.Systems;
+using Content.Shared.Chat;
 using Content.Shared.Effects;
 using Content.Shared.Speech.Components;
 using Content.Shared.Weapons.Melee;
@@ -15,15 +8,13 @@ using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using System.Linq;
-using Content.Shared.Coordinates;
-using Robust.Shared.Random;
+using System.Numerics;
 
 namespace Content.Server.Weapons.Melee;
 
 public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 {
     [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private DamageExamineSystem _damageExamine = default!;
     [Dependency] private LagCompensationSystem _lag = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
 
@@ -71,12 +62,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         if (session is { } pSession)
         {
             (targetCoordinates, targetLocalAngle) = _lag.GetCoordinatesAngle(target, pSession);
-            if (Interaction.InRangeUnobstructed(user, target, targetCoordinates, targetLocalAngle, range, overlapCheck: false))
-                return true;
-
-            // The client might be pulling the target, in which case the target's movement is predicted
-            // In that case, we want to use the server's position, since it will match with the client's
-            return Interaction.InRangeUnobstructed(user, target, target.ToCoordinates(), targetLocalAngle, range, overlapCheck: false);
+            return Interaction.InRangeUnobstructed(user, target, targetCoordinates, targetLocalAngle, range, overlapCheck: false);
         }
 
         return Interaction.InRangeUnobstructed(user, target, range);
@@ -90,9 +76,6 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
     public override void DoLunge(EntityUid user, EntityUid weapon, Angle angle, Vector2 localPos, string? animation, bool predicted = true)
     {
-        if (localPos == Vector2.Zero) // RMC14
-            return;
-
         Filter filter;
 
         if (predicted)

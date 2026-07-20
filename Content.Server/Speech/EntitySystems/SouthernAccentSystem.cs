@@ -4,7 +4,7 @@ using Content.Shared.Speech.EntitySystems;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class SouthernAccentSystem : EntitySystem
+public sealed partial class SouthernAccentSystem : RelayAccentSystem<SouthernAccentComponent>
 {
     private static readonly Regex RegexLowerIng = new(@"ing\b");
     private static readonly Regex RegexUpperIng = new(@"ING\b");

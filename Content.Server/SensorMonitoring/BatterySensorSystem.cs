@@ -12,6 +12,7 @@ public sealed partial class BatterySensorSystem : EntitySystem
     public const string DeviceNetworkCommandSyncData = "bat_sync_data";
 
     [Dependency] private DeviceNetworkSystem _deviceNetwork = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
 
     public override void Initialize()
     {

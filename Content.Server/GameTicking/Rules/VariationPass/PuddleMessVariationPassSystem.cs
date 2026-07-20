@@ -10,7 +10,6 @@ namespace Content.Server.GameTicking.Rules.VariationPass;
 public sealed partial class PuddleMessVariationPassSystem : VariationPassSystem<PuddleMessVariationPassComponent>
 {
     [Dependency] private PuddleSystem _puddle = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
 
     protected override void ApplyVariation(Entity<PuddleMessVariationPassComponent> ent, ref StationVariationPassEvent args)
     {

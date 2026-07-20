@@ -10,7 +10,6 @@ namespace Content.Server.Traits;
 
 public sealed partial class TraitSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private SharedHandsSystem _sharedHandsSystem = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
 

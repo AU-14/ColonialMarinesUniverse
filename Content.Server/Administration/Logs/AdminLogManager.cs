@@ -29,8 +29,8 @@ namespace Content.Server.Administration.Logs;
 public sealed partial class AdminLogManager : SharedAdminLogManager, IAdminLogManager
 {
     [Dependency] private IConfigurationManager _configuration = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private EuiManager _euis = default!;
     [Dependency] private IServerDbManager _db = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IDynamicTypeFactory _typeFactory = default!;

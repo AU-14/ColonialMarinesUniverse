@@ -18,7 +18,8 @@ public sealed partial class BeamSystem : SharedBeamSystem
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedBroadphaseSystem _broadphase = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
+
+    private static readonly EntProtoId VirtualBeamEntityControllerId = "VirtualBeamEntityController";
 
     public override void Initialize()
     {

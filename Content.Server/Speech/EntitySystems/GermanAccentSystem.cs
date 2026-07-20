@@ -7,7 +7,7 @@ using Robust.Shared.Random;
 
 namespace Content.Server.Speech.EntitySystems;
 
-public sealed partial class GermanAccentSystem : EntitySystem
+public sealed partial class GermanAccentSystem : RelayAccentSystem<GermanAccentComponent>
 {
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ReplacementAccentSystem _replacement = default!;

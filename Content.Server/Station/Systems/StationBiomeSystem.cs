@@ -7,7 +7,6 @@ namespace Content.Server.Station.Systems;
 public sealed partial class StationBiomeSystem : EntitySystem
 {
     [Dependency] private BiomeSystem _biome = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private StationSystem _station = default!;
     [Dependency] private SharedMapSystem _map = default!;
 

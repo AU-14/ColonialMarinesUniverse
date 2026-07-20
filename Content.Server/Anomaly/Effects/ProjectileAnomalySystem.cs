@@ -20,9 +20,7 @@ public sealed partial class ProjectileAnomalySystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private GunSystem _gunSystem = default!;
     [Dependency] private SharedMapSystem _map = default!;
-
-    private EntityQuery<TransformComponent> _xFormQuery;
-    private EntityQuery<MobStateComponent> _mobQuery;
+    [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery = default!;
 
     /// <summary> Pre-allocated collection for calculating entities in range. </summary>
     private readonly HashSet<EntityUid> _inRange = new();

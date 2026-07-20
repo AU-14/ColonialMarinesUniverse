@@ -1,33 +1,30 @@
-using System.Numerics;
 using Content.Server.Chemistry.Components;
-using Content.Shared._RMC14.Chemistry;
-using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
-using Content.Shared.Chemistry.Components.SolutionManager;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Content.Shared.Physics;
 using Content.Shared.Throwing;
+using Content.Shared.Chemistry.EntitySystems;
 using JetBrains.Annotations;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Spawners;
+using System.Numerics;
+using Content.Shared.Vapor;
 
 namespace Content.Server.Chemistry.EntitySystems
 {
     [UsedImplicitly]
     internal sealed partial class VaporSystem : EntitySystem
     {
-        [Dependency] private IPrototypeManager _protoManager = default!;
-        [Dependency] private SharedMapSystem _map = default!;
-        [Dependency] private SharedPhysicsSystem _physics = default!;
-        [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
-        [Dependency] private ThrowingSystem _throwing = default!;
         [Dependency] private ReactiveSystem _reactive = default!;
+        [Dependency] private ThrowingSystem _throwing = default!;
+        [Dependency] private SharedAppearanceSystem _appearance = default!;
+        [Dependency] private SharedMapSystem _map = default!;
+        [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
         [Dependency] private SharedTransformSystem _transformSystem = default!;
 
         public override void Initialize()
@@ -41,13 +38,6 @@ namespace Content.Server.Chemistry.EntitySystems
         {
             var solution = Comp<SolutionComponent>(entity).Solution;
             _reactive.DoEntityReaction(args.OtherEntity, solution, ReactionMethod.Touch);
-
-            var power = 7;
-            if (TryComp<RMCExtinguisherPowerComponent>(entity, out var extinguisher))
-                power = extinguisher.Power;
-
-            var ev = new VaporHitEvent((entity.Owner, contents), power);
-            RaiseLocalEvent(args.OtherEntity, ref ev);
 
             // Check for collision with a impassable object (e.g. wall) and stop
             if ((args.OtherFixture.CollisionLayer & (int)CollisionGroup.Impassable) != 0 && args.OtherFixture.Hard)
@@ -74,10 +64,7 @@ namespace Content.Server.Chemistry.EntitySystems
             // Set Move
             if (TryComp(vapor, out PhysicsComponent? physics))
             {
-                _physics.SetLinearDamping(vapor, physics, 0f);
-                _physics.SetAngularDamping(vapor, physics, 0f);
-
-                _throwing.TryThrow(vapor, dir, speed, user: user, recoil: false);
+                _throwing.TryThrow(vapor, dir, speed, user: user);
 
                 var distance = (target.Position - _transformSystem.GetWorldPosition(vaporXform)).Length();
                 var time = (distance / physics.LinearVelocity.Length());
@@ -135,7 +122,7 @@ namespace Content.Server.Chemistry.EntitySystems
                         if (reagentQuantity.Quantity == FixedPoint2.Zero)
                             continue;
 
-                            var reagent = _protoManager.IndexReagent<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
+                        var reagent = ProtoMan.Index<ReagentPrototype>(reagentQuantity.Reagent.Prototype);
 
                         // Limit the reaction amount to a minimum value to ensure no floating point funnies.
                         // Ex: A solution with a low percentage transfer amount will slowly approach 0.01... and never get deleted

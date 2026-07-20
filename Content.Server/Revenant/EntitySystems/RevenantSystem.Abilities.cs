@@ -47,6 +47,11 @@ public sealed partial class RevenantSystem
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
 
+    [Dependency] private EntityQuery<TagComponent> _tagQuery = default!;
+    [Dependency] private EntityQuery<ItemComponent> _itemQuery = default!;
+    [Dependency] private EntityQuery<PoweredLightComponent> _poweredLightQuery = default!;
+    [Dependency] private EntityQuery<MobStateComponent> _mobStateQuery = default!;
+
     private static readonly ProtoId<TagPrototype> WindowTag = "Window";
 
     private void InitializeAbilities()

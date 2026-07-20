@@ -17,7 +17,6 @@ namespace Content.Server.Implants;
 
 public sealed partial class ChameleonControllerSystem : SharedChameleonControllerSystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedStationSpawningSystem _stationSpawningSystem = default!;
     [Dependency] private ChameleonClothingSystem _chameleonClothingSystem = default!;

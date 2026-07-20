@@ -63,9 +63,9 @@ namespace Content.Server.Kitchen.EntitySystems
         [Dependency] private HandsSystem _handsSystem = default!;
         [Dependency] private SharedItemSystem _item = default!;
         [Dependency] private SharedStackSystem _stack = default!;
-        [Dependency] private IPrototypeManager _prototype = default!;
         [Dependency] private IAdminLogManager _adminLogger = default!;
         [Dependency] private SharedSuicideSystem _suicide = default!;
+        [Dependency] private SharedPowerStateSystem _powerState = default!;
 
         private static readonly EntProtoId MalfunctionSpark = "Spark";
 

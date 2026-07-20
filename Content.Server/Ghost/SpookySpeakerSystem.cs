@@ -9,7 +9,6 @@ namespace Content.Server.Ghost;
 
 public sealed partial class SpookySpeakerSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private ChatSystem _chat = default!;

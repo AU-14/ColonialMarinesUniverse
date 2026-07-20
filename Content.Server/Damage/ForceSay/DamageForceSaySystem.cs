@@ -17,7 +17,6 @@ namespace Content.Server.Damage.ForceSay;
 public sealed partial class DamageForceSaySystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     public override void Initialize()

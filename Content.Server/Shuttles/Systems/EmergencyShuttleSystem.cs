@@ -48,7 +48,6 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
 
     [Dependency] private IAdminLogManager _logger = default!;
     [Dependency] private IAdminManager _admin = default!;
-    [Dependency] private IConfigurationManager _configManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
@@ -62,7 +61,6 @@ public sealed partial class EmergencyShuttleSystem : SharedEmergencyShuttleSyste
     [Dependency] private NavMapSystem _navMap = default!;
     [Dependency] private MapLoaderSystem _loader = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
-    [Dependency] private PopupSystem _popup = default!;
     [Dependency] private RoundEndSystem _roundEnd = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ShuttleSystem _shuttle = default!;

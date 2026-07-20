@@ -15,7 +15,6 @@ namespace Content.Server.Machines.EntitySystems;
 /// </summary>
 public sealed partial class MultipartMachineSystem : SharedMultipartMachineSystem
 {
-    [Dependency] private IComponentFactory _factory = default!;
     [Dependency] private MapSystem _mapSystem = default!;
     [Dependency] private EntityLookupSystem _lookupSystem = default!;
 

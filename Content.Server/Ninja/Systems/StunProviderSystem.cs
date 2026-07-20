@@ -17,7 +17,7 @@ namespace Content.Server.Ninja.Systems;
 /// </summary>
 public sealed partial class StunProviderSystem : SharedStunProviderSystem
 {
-    [Dependency] private BatterySystem _battery = default!;
+    [Dependency] private SharedBatterySystem _battery = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] private SharedAudioSystem _audio = default!;

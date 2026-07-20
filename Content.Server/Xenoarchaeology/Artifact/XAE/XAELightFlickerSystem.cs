@@ -15,8 +15,7 @@ public sealed partial class XAELightFlickerSystem : BaseXAESystem<XAELightFlicke
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private GhostSystem _ghost = default!;
-
-    private EntityQuery<PoweredLightComponent> _lights;
+    [Dependency] private EntityQuery<PoweredLightComponent> _poweredLightsQuery = default!;
 
     /// <summary> Pre-allocated and re-used collection.</summary>
     private readonly HashSet<EntityUid> _entities = new();

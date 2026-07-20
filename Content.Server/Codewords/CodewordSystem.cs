@@ -13,7 +13,6 @@ namespace Content.Server.Codewords;
 /// </summary>
 public sealed partial class CodewordSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private IRobustRandom _random = default!;
 

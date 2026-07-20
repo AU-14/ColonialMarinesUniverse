@@ -14,10 +14,4 @@ public sealed partial class MobsterAccentComponent : BaseAccentComponent
     /// </summary>
     [DataField("isBoss")]
     public bool IsBoss = true;
-
-    [DataField]
-    public float PrefixChance = 0.15f;
-
-    [DataField]
-    public float SuffixChance = 0.4f;
 }

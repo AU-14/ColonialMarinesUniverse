@@ -1,5 +1,4 @@
 using Content.Server.Construction.Components;
-using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Construction.Steps;
@@ -25,7 +24,7 @@ namespace Content.Server.Construction
 
         private void OnGuideRequested(RequestConstructionGuide msg, EntitySessionEventArgs args)
         {
-            if (!PrototypeManager.TryCM(msg.ConstructionId, out ConstructionPrototype? prototype))
+            if (!ProtoMan.TryIndex(msg.ConstructionId, out ConstructionPrototype? prototype))
                 return;
 
             if (GetGuide(prototype) is { } guide)

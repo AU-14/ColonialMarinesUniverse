@@ -66,7 +66,7 @@ public sealed partial class GameTicker
                 _sawmill.Info($"Fallback - Clearing up gamerules");
                 ClearGameRules();
                 _sawmill.Info($"Fallback - Attempting to start '{preset}'");
-                SetGamePreset(preset, resetDelay: 0);
+                SetGamePreset(preset, resetDelay: 1);
                 AddGamePresetRules();
                 StartGamePresetRules();
 
@@ -142,7 +142,7 @@ public sealed partial class GameTicker
     {
         var proto = FindGamePreset(preset);
         if (proto != null)
-            SetGamePreset(proto, force, resetDelay);
+            SetGamePreset(proto, force, null, resetDelay);
     }
 
     public GamePresetPrototype? FindGamePreset(string preset)
