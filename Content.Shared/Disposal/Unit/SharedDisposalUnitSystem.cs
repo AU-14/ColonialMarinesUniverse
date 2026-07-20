@@ -37,33 +37,24 @@ namespace Content.Shared.Disposal.Unit;
 /// </summary>
 public abstract partial class SharedDisposalUnitSystem : EntitySystem
 {
-}
-
-public abstract partial class SharedDisposalUnitSystem : EntitySystem
-{
-    [Dependency] protected ActionBlockerSystem ActionBlockerSystem = default!;
-    [Dependency] private   EntityWhitelistSystem _whitelistSystem = default!;
-    [Dependency] protected MetaDataSystem Metadata = default!;
-    [Dependency] private   SharedAppearanceSystem _appearance = default!;
-    [Dependency] protected SharedAudioSystem Audio = default!;
-    [Dependency] protected IGameTiming GameTiming = default!;
-    [Dependency] private   ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private   ClimbSystem _climb = default!;
-    [Dependency] protected SharedContainerSystem Containers = default!;
-    [Dependency] protected SharedJointSystem Joints = default!;
-    [Dependency] private   SharedPowerReceiverSystem _power = default!;
-    [Dependency] private   SharedDisposalTubeSystem _disposalTubeSystem = default!;
-    [Dependency] private   SharedPopupSystem _popupSystem = default!;
-    [Dependency] private   SharedDoAfterSystem _doAfterSystem = default!;
-    [Dependency] private   SharedHandsSystem _handsSystem = default!;
-    [Dependency] protected SharedTransformSystem TransformSystem = default!;
-    [Dependency] private   SharedUserInterfaceSystem _ui = default!;
-    [Dependency] private   SharedMapSystem _map = default!;
-
-    protected static TimeSpan ExitAttemptDelay = TimeSpan.FromSeconds(0.5);
-
-    // Percentage
-    public const float PressurePerSecond = 0.05f;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private ClimbSystem _climb = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedJointSystem _joints = default!;
+    [Dependency] private SharedPowerReceiverSystem _power = default!;
+    [Dependency] private SharedDisposalHolderSystem _disposalHolder = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private INetManager _net = default!;
 
     public override void Initialize()
     {
