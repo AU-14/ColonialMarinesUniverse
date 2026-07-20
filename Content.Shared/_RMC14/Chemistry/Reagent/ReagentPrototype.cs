@@ -1,12 +1,16 @@
 ﻿// ReSharper disable CheckNamespace
 
+using Content.Shared._RMC14.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.Chemistry.Reagent;
 
-public partial class ReagentPrototype
+public partial class ReagentPrototype : ICMSpecific
 {
+    [DataField]
+    public bool IsCM { get; private set; }
+
     [DataField]
     public bool Unknown;
 

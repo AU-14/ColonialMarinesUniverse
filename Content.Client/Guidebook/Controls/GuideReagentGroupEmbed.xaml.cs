@@ -32,7 +32,7 @@ public sealed partial class GuideReagentGroupEmbed : BoxContainer, IDocumentTag
 
     public GuideReagentGroupEmbed(string group) : this()
     {
-        var prototypes = _prototype.EnumeratePrototypes<ReagentPrototype>()
+        var prototypes = RMCEnumerateReagents()
             .Where(p => p.Group.Equals(group)).OrderBy(p => p.LocalizedName);
         foreach (var reagent in prototypes)
         {
@@ -50,7 +50,11 @@ public sealed partial class GuideReagentGroupEmbed : BoxContainer, IDocumentTag
             return false;
         }
 
-        var prototypes = _prototype.EnumeratePrototypes<ReagentPrototype>()
+        var includeUpstream = args.TryGetValue("IncludeUpstream", out var includeUpstreamValue) &&
+                              bool.TryParse(includeUpstreamValue, out var include) &&
+                              include;
+
+        var prototypes = RMCEnumerateReagents(includeUpstream)
             .Where(p => p.Group.Equals(group)).OrderBy(p => p.LocalizedName);
         foreach (var reagent in prototypes)
         {
