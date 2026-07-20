@@ -634,3 +634,16 @@ Date completed: 2026-07-20
 - Focused validation: 19 integration-test cases covering all 20 entries passed with 0 failures. The initial run passed 17 and failed the two chemistry cases because the standard reaction prototypes are deliberately abstracted; the tests and audit were corrected to validate the ignored source contract before the passing rerun.
 - Solution build: `dotnet build SpaceStation14.slnx --no-restore --verbosity minimal` completed with 0 warnings and 0 errors.
 - Disposition: The batch is closed. Continue with CS-0041 and defer the next build/test execution until CS-0060 unless a change is high-risk or static review exposes a reason to validate earlier.
+
+## CS-0041 — Default the Viper and pulse carbine to full-auto
+
+- Upstream: [space-wizards/space-station-14#42830](https://github.com/space-wizards/space-station-14/pull/42830), `f2bea7b435214e62cc317778877ab5a0ab95d6dc`, 2026-07-13
+- Areas: Shooting
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Newly spawned Viper pistols and pulse carbines now select full-auto by default. Both weapons retain semi-auto as an available mode, and their fire rate, ammunition, projectile, and damage behavior are unchanged.
+- RMC/CMU divergence: Neither weapon has an RMC prototype override or RMC gun-system initialization path. The Viper inherits both modes and a semi-auto default from `BaseWeaponPistol`, so its local `Gun` component overrides only the selected mode; the pulse carbine already defines both modes locally.
+- Decision and rationale: Port only the two target-final default-mode fields. Changing `BaseWeaponPistol` would affect unrelated sidearms, while removing semi-auto availability would turn a spawn preference into a broader weapon-balance change.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml`, `Resources/Prototypes/Entities/Objects/Weapons/Guns/Pistols/pistols.yml`, `Content.IntegrationTests/Tests/Weapons/Ranged/DefaultAutomaticFireModeTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains both full-auto defaults and both selectable modes. A regression was added that spawns both weapons, verifies full-auto selection with semi-auto still available, and uses the Mk58 as a control for the unchanged base-pistol default. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: Audit later upstream selective-fire default changes individually; do not normalize RMC marine weapons to SS14 defaults without a separate balance decision.
