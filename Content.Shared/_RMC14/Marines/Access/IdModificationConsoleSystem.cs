@@ -129,7 +129,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
             access.Tags.Remove(accessToRemove);
         }
 
-        idCard._jobTitle = "Civilian";
+        idCard.LocalizedJobTitle = "Civilian";
         Dirty(uid.Value, idCard);
         Dirty(uid.Value, access);
         if (idCard.OriginalOwner != null)
@@ -137,7 +137,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
             _rank.SetRank(idCard.OriginalOwner.Value, "RMCRankCivilian");
             _squad.RemoveSquad(idCard.OriginalOwner.Value, null);
             _metaData.SetEntityName(uid.Value,
-                $"{MetaData(idCard.OriginalOwner.Value).EntityName} ({idCard._jobTitle})");
+                $"{MetaData(idCard.OriginalOwner.Value).EntityName} ({idCard.LocalizedJobTitle})");
         }
 
         _adminLogger.Add(LogType.RMCIdModify,
@@ -549,7 +549,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
             _metaData.SetEntityName(uid.Value,
                 $"{MetaData(idCard.OriginalOwner.Value).EntityName} ({jobName})");
 
-            idCard._jobTitle = jobName;
+            idCard.LocalizedJobTitle = jobName;
             Dirty(uid.Value, idCard);
 
             var selfMsgUnassign = $"{Name(marineId)} has been unassigned.";
@@ -592,7 +592,7 @@ public sealed partial class IdModificationConsoleSystem : EntitySystem
         _metaData.SetEntityName(uid.Value,
             $"{MetaData(idCard.OriginalOwner.Value).EntityName} ({newSquadName} {jobName})");
 
-        idCard._jobTitle = $"{newSquadName} {jobName}";
+        idCard.LocalizedJobTitle = $"{newSquadName} {jobName}";
         Dirty(uid.Value, idCard);
 
         var selfMsg = $"{Name(marineId)} has been assigned to {Name(newSquadEnt.Value)}.";
