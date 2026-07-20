@@ -3269,3 +3269,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Dragon/DragonSystem.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static lifecycle review confirms only the crew-destruction call was removed; dragon death and shutdown still delete all owned rifts, the destroyed rift still completes its own entity shutdown, and the weakened movement refresh remains. Server compilation plus first/middle/final rift destruction, multiple active/finished rifts, objective progress, dragon death, component shutdown, unanchoring, and repeated-shutdown cases are queued for the index-2999 checkpoint.
 - Follow-up/debt: The retained `DragonComponent.Rifts` list continues to record spawned rift identities until aggregate cleanup, matching the pinned target. Revisit that ownership model only with its later upstream lifecycle changes rather than pruning it speculatively here.
+
+## CS-0241 — Log player connection lifecycle events
+
+- Upstream: [space-wizards/space-station-14#42363](https://github.com/space-wizards/space-station-14/pull/42363), `9338834b1b8d21c78b4159bc3b9086919fcf9f6c`, 2026-01-11
+- Areas: GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `GameTicker.PlayerStatusChanged` now emits low-impact `Connection` admin logs when a session enters the game and when it disconnects. Each record includes the formatted player identity and either the currently attached entity or an explicit `nothing` marker. `LogType.Connection` occupies upstream value 104.
+- RMC/CMU divergence: RMC connection, lobby, reconnect, mind, and character flows pass through the retained GameTicker status handler, so they gain the same audit trail. CMU's RMC-specific log types begin at 10000, leaving value 104 collision-free; session attachment, database callbacks, admin announcements, and join/spawn behavior are unchanged.
+- Decision and rationale: Port the target-final enum member and all three call sites together. The no-mind and existing-mind branches exit differently and each needs one connection record, while disconnect logging belongs after the user database notification. A dedicated type lets administrators filter lifecycle events without overloading action or round-join logs.
+- Files changed: `Content.Server/GameTicking/GameTicker.Player.cs`, `Content.Shared.Database/LogType.cs`, `docs/upstream-sync/inventory-wave-0012.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms every `InGame` path logs exactly once, every handled disconnect logs once, attached-entity formatting is null-safe, and the numeric enum addition does not overlap retained RMC values. Shared/server compilation plus lobby join, no-mind spawn wait, existing-mind reattach, observer fallback, first connection, reconnect, disconnect with/without an entity, database cancellation, and admin-log filtering cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: These records describe session status transitions, not successful character spawning. Keep round-start, late-join, respawn, and RMC spawn logs separate when interpreting the audit trail.
