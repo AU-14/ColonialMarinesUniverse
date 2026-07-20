@@ -2034,3 +2034,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Clothing/Hands/gloves.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms only the ninja-generated `StunProvider` receives the cooldown. Prototype loading and repeated interactions before/after ten seconds are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0148 — Separate lethal and practice laser-rifle inheritance
+
+- Upstream: [space-wizards/space-station-14#40253](https://github.com/space-wizards/space-station-14/pull/40253), `46f59300acb99f3c2373bbc83ab446e0aa77621c`, 2025-09-10
+- Areas: Shooting, Interactions
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: The lethal and practice laser rifles are now sibling prototypes under a shared abstract base. Lethal red-laser ammunition and security contraband are defaults only for the lethal rifle, while the practice rifle independently overrides harmless ammunition and price.
+- RMC/CMU divergence: CMU still uses `HitscanBatteryAmmoProvider`, Huge rifle sizing, and the pre-resize `laser rifle` names. Those fork-compatible/current-era choices are preserved; later power-cell prediction, weapon-size, tag, and naming migrations are deliberately not pulled forward.
+- Decision and rationale: Extract only the common current components into `BaseLaserRifle` and remove the unsafe lethal-from-practice inheritance. This prevents practice-only markers and future balance fields from leaking into the lethal weapon while keeping resolved behavior otherwise equivalent.
+- Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static resolved-prototype review confirms both rifles retain their sprite, wielding, clothing, firing mode, charge cost, and current size; only lethal inherits security contraband, and only practice resolves `RedLaserPractice` at price 300. Prototype loading plus resolved-component assertions, firing, contraband, and inherited-tag checks are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Revisit item size/naming with index 0417 and migrate the provider/tag fields with the later predicted battery-gun architecture.
