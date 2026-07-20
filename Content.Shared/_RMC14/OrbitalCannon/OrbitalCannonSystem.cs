@@ -693,7 +693,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             return false;
         }
 
-        _popup.PopupCursor(Loc.GetString("rmc-ob-request-accepted"), PopupType.Large);
+        _popup.PopupCursor(Loc.GetString("rmc-ob-request-accepted"), user, PopupType.Large);
 
         var warhead = warheadContainer.ContainedEntities[0];
         var misfuel = 0;

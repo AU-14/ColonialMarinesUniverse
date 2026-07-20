@@ -107,8 +107,10 @@ public sealed partial class ARESExternalTerminalSystem : EntitySystem
     private void OnExternalLogin(Entity<ARESExternalTerminalComponent> ent, ref RMCARESExternalLogin args)
     {
         SetAres(ent);
+        string? jobTitle = null;
         if (!_idCard.TryFindIdCard(args.Actor, out var idCard) || !TryComp<AccessComponent>(idCard, out var access) ||
-            idCard.Comp.FullName == null || idCard.Comp._jobTitle == null || !_iffSystem.HasFaction(idCard, ent.Comp.Faction))
+            idCard.Comp.FullName == null || string.IsNullOrEmpty(jobTitle = idCard.Comp.LocalizedJobTitle) ||
+            !_iffSystem.HasFaction(idCard, ent.Comp.Faction))
             return;
 
         _core.CreateARESLog(ent.Comp.Faction,
@@ -117,7 +119,7 @@ public sealed partial class ARESExternalTerminalSystem : EntitySystem
 
         ent.Comp.LoggedIn = true;
         ent.Comp.Accesses = access.Tags;
-        ent.Comp.LoggedInUser = $"{idCard.Comp.FullName} ({idCard.Comp._jobTitle})";
+        ent.Comp.LoggedInUser = $"{idCard.Comp.FullName} ({jobTitle})";
 
         // logs are special...
         if (ent.Comp.ShowsLogs)

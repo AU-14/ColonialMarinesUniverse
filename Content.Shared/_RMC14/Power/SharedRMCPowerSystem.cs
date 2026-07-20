@@ -16,6 +16,7 @@ using Content.Shared.Power;
 using Content.Shared.Power.Components;
 using Content.Shared.Power.EntitySystems;
 using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Content.Shared.Toggleable;
 using Content.Shared.Tools.Systems;
 using Content.Shared.UserInterface;
@@ -877,8 +878,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             (float)ent.Comp.RepairDelay.TotalSeconds,
             quality,
             new RMCFusionReactorRepairDoAfterEvent(state),
-            ent.Comp.WeldingCost,
-            duplicateCondition: DuplicateConditions.SameTool
+            ent.Comp.WeldingCost
         );
 
         if (!toolUsed)

@@ -162,9 +162,8 @@ public sealed partial class RMCAlertLevelSystem : EntitySystem
             }
             else
             {
-                SharedEntityStorageComponent? entityStorageComp = null;
-                if (_entityStorage.ResolveStorage(uid, ref entityStorageComp))
-                    _entityStorage.CloseStorage(uid, entityStorageComp); // Close a locker before locking it.
+                if (TryComp<EntityStorageComponent>(uid, out var entityStorage))
+                    _entityStorage.CloseStorage((uid, entityStorage)); // Close a locker before locking it.
                 _lock.Lock(uid, null, lockComp);
             }
         }

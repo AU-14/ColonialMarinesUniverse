@@ -244,8 +244,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
             return false;
         }
 
-        SharedEntityStorageComponent? storage = null;
-        if (_entityStorage.ResolveStorage(crate, ref storage) &&
+        if (TryComp<EntityStorageComponent>(crate, out var storage) &&
             storage.Open)
         {
             _popup.PopupCursor(Loc.GetString("rmc-supply-drop-crate-open"), user, PopupType.MediumCaution);

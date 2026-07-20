@@ -355,7 +355,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
 
     private void OnTerminalOpen(Entity<DropshipTerminalComponent> terminal, ref AfterActivatableUIOpenEvent args)
     {
-        if (!_ui.IsUiOpen(terminal.Owner, DropshipTerminalUiKey.Key, args.Actor))
+        if (!_ui.IsUiOpen(terminal.Owner, DropshipTerminalUiKey.Key, args.User))
             return;
 
         var closestLZ = FindClosestLZ(terminal);

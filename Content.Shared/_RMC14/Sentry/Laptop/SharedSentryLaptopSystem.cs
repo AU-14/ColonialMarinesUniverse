@@ -630,7 +630,7 @@ public abstract partial class SharedSentryLaptopSystem : EntitySystem
 
         if (TryComp<DamageableComponent>(sentry, out var damageable))
         {
-            var damage = _damageable.GetTotalDamage((sentry.Owner, damageable)).Float();
+            var damage = _damageable.GetTotalDamage((sentry, damageable)).Float();
             health = Math.Max(0, maxHealth - damage);
         }
 
