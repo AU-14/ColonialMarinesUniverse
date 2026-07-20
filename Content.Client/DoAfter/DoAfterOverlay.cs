@@ -12,7 +12,7 @@ using Robust.Shared.Containers;
 
 namespace Content.Client.DoAfter;
 
-public sealed class DoAfterOverlay : Overlay
+public sealed partial class DoAfterOverlay : Overlay
 {
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
 
@@ -46,9 +46,9 @@ public sealed class DoAfterOverlay : Overlay
     // Time after which the doafter will lerp to its final y offset.
     private static readonly TimeSpan MaxYPosTime = TimeSpan.FromSeconds(0.5f);
 
-    public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
+    public override OverlaySpace Space => GetRMCOverlaySpace();
 
-    public DoAfterOverlay(IEntityManager entManager, IPrototypeManager protoManager, IGameTiming timing, IPlayerManager player)
+    public DoAfterOverlay(IEntityManager entManager, IPrototypeManager protoManager, IGameTiming timing, IPlayerManager player, IOverlayManager overlay)
     {
         _entManager = entManager;
         _timing = timing;
@@ -62,6 +62,7 @@ public sealed class DoAfterOverlay : Overlay
         _barTexture = _entManager.EntitySysManager.GetEntitySystem<SpriteSystem>().Frame0(sprite);
 
         _unshadedShader = protoManager.Index(UnshadedShader).Instance();
+        InitializeRMC(overlay);
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -128,6 +129,9 @@ public sealed class DoAfterOverlay : Overlay
                     // Hints to the local player that this do-after is not visible to other players.
                     maxAlpha = 0.5f;
                 }
+
+                if (!TryGetRMCDoAfterMaxAlpha(uid, localEnt, sprite, doAfter.Args.ForceVisible, ref maxAlpha))
+                    continue;
 
                 var elapsed = time - doAfter.StartTime;
 

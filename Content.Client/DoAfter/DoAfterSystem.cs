@@ -18,7 +18,7 @@ public sealed partial class DoAfterSystem : SharedDoAfterSystem
     public override void Initialize()
     {
         base.Initialize();
-        _overlay.AddOverlay(new DoAfterOverlay(EntityManager, ProtoMan, GameTiming, _player));
+        _overlay.AddOverlay(new DoAfterOverlay(EntityManager, ProtoMan, GameTiming, _player, _overlay));
     }
 
     public override void Shutdown()
