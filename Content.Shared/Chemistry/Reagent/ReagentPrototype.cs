@@ -22,7 +22,7 @@ namespace Content.Shared.Chemistry.Reagent
 {
     [Prototype]
     [DataDefinition]
-    public sealed partial class ReagentPrototype : IPrototype, IInheritingPrototype
+    public partial class ReagentPrototype : IPrototype, IInheritingPrototype
     {
         [ViewVariables]
         [IdDataField]
