@@ -3113,3 +3113,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Preferences/Loadouts/RoleLoadout.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static data-contract review confirms the field is already consumed by role-loadout equality and entity customization and that nearby persisted members use the same attribute. Serialization round-trip coverage and the shared/content build are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; this is the complete target-final persistence fix.
+
+## CS-0229 — Keep flammability overlap fixtures massless
+
+- Upstream: [space-wizards/space-station-14#41803](https://github.com/space-wizards/space-station-14/pull/41803), `2455dbbdb093006e7ef0516869c9001214522c33`, 2025-12-17
+- Areas: Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The non-hard fixture created for flammable collision events now uses zero density. Adding `FlammableComponent` no longer increases a physics body's aggregate mass, while the fixture continues to generate overlap events for fire-stack transfer.
+- RMC/CMU divergence: RMC makes many mobs and objects flammable and extends their fire behavior, so an incidental sensor-fixture mass affects movement, impacts, dragging, and CS-0224's intentional mass-weighted fire equalization more broadly than upstream. The density change does not alter RMC ignition, resistance, damage, caps, or extinguishing logic.
+- Decision and rationale: Port the target-final named argument at fixture creation. This fixture is an event sensor rather than physical material; assigning it density contaminates the owning body's mass and feeds that artificial value back into unrelated physics and fire calculations.
+- Files changed: `Content.Server/Atmos/EntitySystems/FlammableSystem.cs`, `docs/upstream-sync/inventory-wave-0011.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms fixture shape, identifier, collision mask, non-hard state, and body association are unchanged, and only density becomes zero. Server compilation plus mass-before/after, collision fire transfer, CS-0224 unequal-mass equalization, movement, pulling, throwing, RMC mob, ignition, and extinguishing cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; preserve explicit physical fixture density on real collision fixtures rather than copying this sensor-only setting elsewhere.
