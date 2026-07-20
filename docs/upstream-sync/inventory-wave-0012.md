@@ -178,7 +178,7 @@ behavior to port.
 2359 | b22063127851f61cbf9ac1c39f4b6c55782f0678 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2360 | e5ce73a4711b9b7182fddb892ce4cc2dcf36d254 | Xenoborgs now drop pieces of pinpointer (#42295) | Deferred | Interactions, Gamerules | The 14-file Xenoborg pinpointer-drop and repair feature crosses retained borg prototypes, recipes, tags, and assets.
 2361 | 6bc617ca07b896baff8627098a7f4bfa38f0b3b9 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2362 | acdeac6172b3c436f0609eee83573703d29821bf | Make lathes refund materials when recipe gets cancelled (#42416) | PortCandidate | Interactions | The focused server lathe refund path retains materials when current or queued recipes are cancelled, pending RMC accounting validation.
+2362 | acdeac6172b3c436f0609eee83573703d29821bf | Make lathes refund materials when recipe gets cancelled (#42416) | Deferred | Interactions | Requires index 0565's deferred batchable queue, delete/abort messages, and per-batch accounting; CMU's retained FIFO lathe has no cancellation path to refund.
 2363 | dc47295d24fa2d39053861b55ef5138d696348c1 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2364 | d857acfc078098dd09b0f28d47c13444161c530e | Fixed Containment Generators not updating pointlight correctly (#42289) | Ported (CS-0234) | Interactions, Physics | Every containment-generator connection-state visual update now refreshes its point light, including the remote generator and disconnection paths.
 2365 | 48cbd020a870f0fc90e2cfa3333fa5926c6fe58a | Automatic changelog update | Irrelevant | — | Generated changelog only.
