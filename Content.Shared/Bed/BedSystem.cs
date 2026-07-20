@@ -14,15 +14,19 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared.Bed;
 
-public abstract partial class SharedBedSystem : EntitySystem
+public sealed partial class BedSystem : EntitySystem
 {
-    [Dependency] protected IGameTiming Timing = default!;
     [Dependency] private ActionContainerSystem _actConts = default!;
-    [Dependency] private SharedActionsSystem _actionsSystem = default!;
+    [Dependency] private DamageableSystem _damageableSystem = default!;
     [Dependency] private EmagSystem _emag = default!;
-    [Dependency] private SharedMetabolizerSystem _metabolizer = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private MetabolizerSystem _metabolizer = default!;
+    [Dependency] private MobStateSystem _mobStateSystem = default!;
+    [Dependency] private SharedActionsSystem _actionsSystem = default!;
     [Dependency] private SharedPowerReceiverSystem _powerReceiver = default!;
     [Dependency] private SleepingSystem _sleepingSystem = default!;
+
+    [Dependency] private EntityQuery<SleepingComponent> _sleepingQuery = default!;
 
     public override void Initialize()
     {
