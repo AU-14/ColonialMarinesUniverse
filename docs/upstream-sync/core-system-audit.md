@@ -3528,3 +3528,16 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Resources/Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Energy/taser.yml`, `Resources/Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Other/boilgun.yml`, `Resources/Prototypes/_RMC14/Entities/Structures/Power/recharger.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Repository-wide static search finds no remaining `ProjectileBatteryAmmoProvider` reference and confirms `BatteryAmmoProviderComponent` exposes the retained `proto` and `fireCost` data fields. Targeted builds are recorded at the Shooting-wave boundary; tests and prototype-linter execution remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime battery firing, mode switching, recharging, ammo-counter reconciliation, and charger insertion need focused coverage after the checkpoint.
+
+## CS-0258 - Preserve RMC firearm projectile speed
+
+- Upstreams compared: SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767` and RMC `b6d677947dd8ebcb06194a66798938645fed5a54`.
+- Areas: Shooting, Physics, Prototypes
+- Classification: Behavior changed -> Adapted
+- Risk: Medium before the fix; low after it.
+- Behavior/API delta: RMC's `GunComponent` default projectile speed was 53, while the current SS14 component inherits the upstream global default of 40. The bulk merge therefore slowed ordinary firearms inheriting `CMBaseWeaponGun`, changing travel time, leading, collision exposure, and the tuning used with RMC's custom projectile fixture.
+- RMC/CMU divergence: The retained speed of 53 is an intentional fork boundary already recorded in `inventory-wave-0010.md`; changing the current SS14 global default would incorrectly alter non-RMC weapons. Specialized RMC launchers, sentries, xeno attacks, and vehicle weapons with explicit speeds continue to override the base value.
+- Decision and rationale: Set `projectileSpeed: 53` on the fork-owned `CMBaseWeaponGun` prototype. This expresses the intended divergence at the narrow inheritance root while keeping the current SS14 `GunComponent` and modifier APIs.
+- Files changed: `Resources/Prototypes/_RMC14/Entities/Objects/Weapons/Guns/cm_base_gun.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static inheritance review confirms the main RMC pistol, rifle, shotgun, revolver, LMG, smart-gun, launcher, flamethrower, and HMG bases derive from `CMBaseWeaponGun`, while explicit per-weapon speeds still win. Targeted builds are recorded at the Shooting-wave boundary; tests and runtime projectile timing remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime collision/tunneling coverage should exercise both the 53-speed RMC projectile fixture and specialized explicit-speed projectiles after tests are authorized.

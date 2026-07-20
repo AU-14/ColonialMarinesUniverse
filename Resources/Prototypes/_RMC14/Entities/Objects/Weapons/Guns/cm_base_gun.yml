@@ -45,6 +45,7 @@
     meleeCooldownOnShoot: false
     resetOnHandSelected: false
     burstCooldown: 0
+    projectileSpeed: 53
   - type: RMCWeaponAccuracy
   - type: GunSkilledAccuracy
   - type: Appearance
