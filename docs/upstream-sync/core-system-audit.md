@@ -1072,3 +1072,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Locale/en-US/nukeops/nuke-ops.ftl` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms both strings and their `$time`/`$units` placeholders match the pinned target. Fluent validation is queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None beyond normal localization review for non-English locales.
+
+## CS-0074 — Include custom-vote titles in results
+
+- Upstream: [space-wizards/space-station-14#39137](https://github.com/space-wizards/space-station-14/pull/39137), `24b75d89a501eda4462537c6fbc33c5bcc92c168`, 2025-07-23
+- Areas: Gamerules, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Custom-vote win and tie announcements now include the vote title as well as the result, so players can identify which question finished when votes overlap or chat history is busy.
+- RMC/CMU divergence: RMC does not override custom-vote creation or these Fluent keys. Vote eligibility, timing, webhooks, administrative logs, and result calculation are unchanged.
+- Decision and rationale: Port both localization arguments and both corresponding message templates atomically so Fluent never receives a missing `$title`. Preserve the existing title text without additional escaping or policy changes.
+- Files changed: `Content.Server/Voting/VoteCommands.cs`, `Resources/Locale/en-US/voting/vote-commands.ftl`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the win and tie paths both supply `title` and their templates consume it. Server compilation, Fluent validation, and the accumulated focused suite are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a vote-manager regression that completes one winning vote and one tie and captures both server announcements with their original titles.
