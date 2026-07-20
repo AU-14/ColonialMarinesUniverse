@@ -2021,3 +2021,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Magic/SharedMagicSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static data-flow review confirms the action remains handled after prerequisites, null/no-provider wands remain no-ops, ammo wands use their old path, and limited charges respect the shared cap. Shared compilation plus both provider types, capped recharge, untagged item, and prediction cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add a focused recharge-spell test covering mixed held items and both charge providers.
+
+## CS-0147 — Add counterplay to ninja-glove stuns
+
+- Upstream: [space-wizards/space-station-14#39707](https://github.com/space-wizards/space-station-14/pull/39707), `09a197eb9162b94a7ee1f3cc78772a6b7783c47a`, 2025-09-16
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: The space ninja glove's generated stun provider now has a ten-second cooldown, preventing repeated no-delay stun interactions.
+- RMC/CMU divergence: CMU retains the upstream ninja glove ability bundle; RMC melee and stun systems are not changed, and the cooldown is scoped to this generated provider only.
+- Decision and rationale: Port the retained prototype balance value at the provider definition while preserving its power drain, whitelist, popup, and other ninja abilities.
+- Files changed: `Resources/Prototypes/Entities/Clothing/Hands/gloves.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype review confirms only the ninja-generated `StunProvider` receives the cooldown. Prototype loading and repeated interactions before/after ten seconds are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
