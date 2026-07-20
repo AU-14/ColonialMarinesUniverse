@@ -172,7 +172,7 @@ behavior to port.
 2553 | eb763886cdda9364ffb3a9a99d71b531d98ae57b | fixing the handling of the RespiratorComponent without checking (#42665) | AlreadyPresent | Medical, Physics | CMU's runtime already resolves the optional respirator safely.
 2554 | b625152511acf08678f0ecc746840ae0211e0ede | Add the Uplink changes to feedback popups. (#42649) | Deferred | Interactions, Gamerules | Depends on the feedback-panel and uplink clusters.
 2555 | d11f3fb3c1e9b387071bf82c623a519392ab812e |  Content.Packaging can now emit binlogs for the build (#42659) | PortCandidate | — | Useful isolated build-diagnostics improvement.
-2556 | 8dbdb19e0cb9fb5beba6f39e3e28ee03c6840f94 | Fix 42643 meat spike doafter race condition (#42644) | PortCandidate | Interactions | CMU's construction graph lacks the body-container-empty deconstruction condition.
+2556 | 8dbdb19e0cb9fb5beba6f39e3e28ee03c6840f94 | Fix 42643 meat spike doafter race condition (#42644) | Deferred | Interactions | Upstream's condition requires its retained-victim `body` container; CMU's older spike uses an `InUse` DoAfter flag and immediately gibs victims, so the lifecycle must migrate first.
 2557 | 80b0239c6eb79eecf14d6fd21c6bb526a40c48f0 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2558 | 9e6b0f68cd4e07941b4a3094a09bd2788bf4f741 | Some bonfire fixes (#42675) | PortCandidate | Interactions, Physics | Cohesive fixture and fire behavior corrections.
 2559 | ed3a4d8e57e740e5e37bf56ece8e0f38ab03a87c | Automatic changelog update | Irrelevant | — | Generated changelog only.
