@@ -1,5 +1,7 @@
 using System.Collections.Frozen;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
+using Content.Shared.Body;
 using Content.Shared.Humanoid.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -11,9 +13,17 @@ namespace Content.Shared.Humanoid.Markings;
 /// </summary>
 public sealed partial class MarkingManager
 {
-    public sealed partial class MarkingManager
+    [Dependency] private IComponentFactory _component = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+
+    private FrozenDictionary<HumanoidVisualLayers, FrozenDictionary<string, MarkingPrototype>> _categorizedMarkings = default!;
+    private FrozenDictionary<string, MarkingPrototype> _markings = default!;
+
+    public void Initialize()
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        _prototype.PrototypesReloaded += OnPrototypeReload;
+        CachePrototypes();
+    }
 
     private void CachePrototypes()
     {
@@ -132,48 +142,7 @@ public sealed partial class MarkingManager
         {
             for (var i = markings.Count - 1; i >= 0; i--)
             {
-                markingDict.Add(category, new());
-            }
-
-            foreach (var prototype in _prototypeManager.EnumeratePrototypes<MarkingPrototype>())
-            {
-                _index.Add(prototype);
-                markingDict[prototype.MarkingCategory].Add(prototype.ID, prototype);
-            }
-
-            Markings = _prototypeManager.EnumeratePrototypes<MarkingPrototype>().ToFrozenDictionary(x => x.ID);
-            CategorizedMarkings = markingDict.ToFrozenDictionary(
-                x => x.Key,
-                x => x.Value.ToFrozenDictionary());
-        }
-
-        public FrozenDictionary<string, MarkingPrototype> MarkingsByCategory(MarkingCategories category)
-        {
-            // all marking categories are guaranteed to have a dict entry
-            return CategorizedMarkings[category];
-        }
-
-        /// <summary>
-        ///     Markings by category and species.
-        /// </summary>
-        /// <param name="category"></param>
-        /// <param name="species"></param>
-        /// <remarks>
-        ///     This is done per category, as enumerating over every single marking by species isn't useful.
-        ///     Please make a pull request if you find a use case for that behavior.
-        /// </remarks>
-        /// <returns></returns>
-        public IReadOnlyDictionary<string, MarkingPrototype> MarkingsByCategoryAndSpecies(MarkingCategories category,
-            string species)
-        {
-            var speciesProto = _prototypeManager.Index<SpeciesPrototype>(species);
-            var markingPoints = _prototypeManager.Index(speciesProto.MarkingPoints);
-            var res = new Dictionary<string, MarkingPrototype>();
-
-            foreach (var (key, marking) in MarkingsByCategory(category))
-            {
-                // RMC14
-                if ((markingPoints.OnlyWhitelisted || (markingPoints.Points.GetValueOrDefault(category)?.OnlyWhitelisted ?? false)) && marking.SpeciesRestrictions == null)
+                if (!TryGetMarking(markings[i], out var marking))
                 {
                     markings.RemoveAt(i);
                     continue;

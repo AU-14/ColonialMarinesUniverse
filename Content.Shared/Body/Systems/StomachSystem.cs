@@ -7,10 +7,17 @@ namespace Content.Shared.Body.Systems;
 
 public sealed partial class StomachSystem : EntitySystem
 {
-    public sealed partial class StomachSystem : EntitySystem
+    [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+
+    public const string DefaultSolutionName = "stomach";
+
+    public bool CanTransferSolution(Entity<StomachComponent?, SolutionManagerComponent?> entity, Solution solution)
     {
-        [Dependency] private IGameTiming _gameTiming = default!;
-        [Dependency] private SharedSolutionContainerSystem _solutionContainerSystem = default!;
+        return Resolve(entity, ref entity.Comp1, logMissing: false)
+            && _solutionContainerSystem.ResolveSolution((entity, entity.Comp2), DefaultSolutionName, ref entity.Comp1.Solution, out var stomachSolution)
+            // TODO: For now no partial transfers. Potentially change by design
+            && stomachSolution.CanAddSolution(solution);
+    }
 
     public bool TryTransferSolution(Entity<StomachComponent?, SolutionManagerComponent?> entity, Solution solution)
     {

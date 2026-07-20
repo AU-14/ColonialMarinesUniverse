@@ -137,24 +137,72 @@ public abstract partial class SharedPopupSystem : EntitySystem
         EntityUid? recipient,
         PopupType type = PopupType.Small)
     {
-        /// <summary>
-        ///     Small popups are the default, and denote actions that may be spammable or are otherwise unimportant.
-        /// </summary>
-        Small,
-        SmallCaution,
-        /// <summary>
-        ///     Medium popups should be used for actions which are not spammable but may not be particularly important.
-        /// </summary>
-        Medium,
-        MediumCaution,
-        /// <summary>
-        ///     Large popups should be used for actions which may be important or very important to one or more users,
-        ///     but is not life-threatening.
-        /// </summary>
-        Large,
-        LargeCaution,
+        if (recipient.HasValue)
+        {
+            PopupEntity(othersMessage, uid, Filter.PvsExcept(recipient.Value), true, type);
+            PopupEntity(recipientMessage, uid, recipient.Value, type);
+        }
+        else
+        {
+            PopupEntity(othersMessage, uid, type);
+        }
+    }
 
-        MediumXeno,
+    [Obsolete("Popups are automatically predicted now, just call PopupCursor and the client will handle prediction.")]
+    public void PopupPredictedCursor(string? message, EntityUid recipient, PopupType type = PopupType.Small)
+    {
+        PopupCursor(message, recipient, type);
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupCursor and the client will handle prediction.")]
+    public void PopupPredictedCursor(string? message, ICommonSession recipient, PopupType type = PopupType.Small)
+    {
+        PopupCursor(message, recipient, type);
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupCoordinates and the client will handle prediction.")]
+    public void PopupPredictedCoordinates(string? message, EntityCoordinates coordinates, EntityUid? recipient, PopupType type = PopupType.Small)
+    {
+        PopupCoordinates(message, coordinates, type); // The recipent was only used for prediction reasons, not as a filter, so we ignore it here.
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
+    public void PopupClient(string? message, EntityUid? recipient, PopupType type = PopupType.Small)
+    {
+        if (recipient == null)
+            return;
+
+        PopupEntity(message, recipient.Value, recipient, type); // Only show the popup to the recipient, since this was the original behavior.
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
+    public void PopupClient(string? message, EntityUid uid, EntityUid? recipient, PopupType type = PopupType.Small)
+    {
+        PopupEntity(message, uid, recipient, type); // Only show the popup to the recipient, since this was the original behavior.
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupCoordinates and the client will handle prediction.")]
+    public void PopupClient(string? message, EntityCoordinates coordinates, EntityUid? recipient, PopupType type = PopupType.Small)
+    {
+        PopupCoordinates(message, coordinates, recipient, type); // Only show the popup to the recipient, since this was the original behavior.
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
+    public void PopupPredicted(string? message, EntityUid uid, EntityUid? recipient, PopupType type = PopupType.Small)
+    {
+        PopupEntity(message, uid, type); // The recipent was only used for prediction reasons, not as a filter, so we ignore it here.
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
+    public void PopupPredicted(string? message, EntityUid uid, EntityUid? recipient, Filter filter, bool recordReplay, PopupType type = PopupType.Small)
+    {
+        PopupEntity(message, uid, filter, recordReplay, type); // The recipent was only used for prediction reasons, not as a filter, so we ignore it here.
+    }
+
+    [Obsolete("Popups are automatically predicted now, just call PopupEntity and the client will handle prediction.")]
+    public void PopupPredicted(string? recipientMessage, string? othersMessage, EntityUid uid, EntityUid? recipient, PopupType type = PopupType.Small)
+    {
+        PopupEntity(recipientMessage, othersMessage, uid, recipient, type);
     }
 }
 
@@ -274,5 +322,7 @@ public enum PopupType : byte
     /// but is not life-threatening.
     /// </summary>
     Large,
-    LargeCaution
+    LargeCaution,
+
+    MediumXeno,
 }

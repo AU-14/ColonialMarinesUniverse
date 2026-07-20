@@ -20,13 +20,18 @@ namespace Content.Shared.Tabletop;
 
 public abstract partial class SharedTabletopSystem : EntitySystem
 {
-    public abstract partial class SharedTabletopSystem : EntitySystem
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transforms = default!;
+
+    public override void Initialize()
     {
-        [Dependency] protected ActionBlockerSystem ActionBlockerSystem = default!;
-        [Dependency] private SharedInteractionSystem _interactionSystem = default!;
-        [Dependency] private SharedAppearanceSystem _appearance = default!;
-        [Dependency] private SharedMapSystem _mapSystem = default!;
-        [Dependency] protected SharedTransformSystem Transforms = default!;
+        base.Initialize();
 
         SubscribeAllEvent<TabletopDraggingPlayerChangedEvent>(OnDraggingPlayerChanged);
 

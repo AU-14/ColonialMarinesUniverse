@@ -22,8 +22,7 @@ public abstract partial class SharedAtmosphereSystem : EntitySystem
 
     public override void Initialize()
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
-        [Dependency] private SharedInternalsSystem _internals = default!;
+        base.Initialize();
 
         InitializeBreathTool();
         InitializeGases();

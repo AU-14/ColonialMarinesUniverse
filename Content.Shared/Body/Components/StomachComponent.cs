@@ -20,70 +20,9 @@ public sealed partial class StomachComponent : Component
     [DataField]
     public EntityWhitelist? SpecialDigestible = null;
 
-        /// <summary>
-        /// Multiplier applied to <see cref="UpdateInterval"/> for adjusting based on metabolic rate multiplier.
-        /// </summary>
-        [DataField]
-        public float UpdateIntervalMultiplier = 1f;
-
-        /// <summary>
-        /// Adjusted update interval based off of the multiplier value.
-        /// </summary>
-        [ViewVariables]
-        public TimeSpan AdjustedUpdateInterval => UpdateInterval * UpdateIntervalMultiplier;
-
-        /// <summary>
-        ///     The solution inside of this stomach this transfers reagents to the body.
-        /// </summary>
-        [ViewVariables]
-        public Entity<SolutionComponent>? Solution;
-
-        /// <summary>
-        ///     What solution should this stomach push reagents into, on the body?
-        /// </summary>
-        [DataField]
-        public string BodySolutionName = "chemicals";
-
-        /// <summary>
-        ///     Time between reagents being ingested and them being
-        ///     transferred to <see cref="BloodstreamComponent"/>
-        /// </summary>
-        [DataField]
-        public TimeSpan DigestionDelay = TimeSpan.FromSeconds(10);
-
-        /// <summary>
-        ///     A whitelist for what special-digestible-required foods this stomach is capable of eating.
-        /// </summary>
-        [DataField]
-        public EntityWhitelist? SpecialDigestible = null;
-
-        /// <summary>
-        /// Controls whitelist behavior. If true, this stomach can digest <i>only</i> food that passes the whitelist. If false, it can digest normal food <i>and</i> any food that passes the whitelist.
-        /// </summary>
-        [DataField]
-        public bool IsSpecialDigestibleExclusive = true;
-
-        /// <summary>
-        ///     Used to track how long each reagent has been in the stomach
-        /// </summary>
-        [ViewVariables]
-        public readonly List<ReagentDelta> ReagentDeltas = new();
-
-        /// <summary>
-        ///     Used to track quantity changes when ingesting & digesting reagents
-        /// </summary>
-        public sealed class ReagentDelta
-        {
-            public readonly ReagentQuantity ReagentQuantity;
-            public TimeSpan Lifetime { get; private set; }
-
-            public ReagentDelta(ReagentQuantity reagentQuantity)
-            {
-                ReagentQuantity = reagentQuantity;
-                Lifetime = TimeSpan.Zero;
-            }
-
-            public void Increment(TimeSpan delta) => Lifetime += delta;
-        }
-    }
+    /// <summary>
+    /// Controls whitelist behavior. If true, this stomach can digest <i>only</i> food that passes the whitelist. If false, it can digest normal food <i>and</i> any food that passes the whitelist.
+    /// </summary>
+    [DataField]
+    public bool IsSpecialDigestibleExclusive = true;
 }
