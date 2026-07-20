@@ -45,7 +45,7 @@ public abstract partial class SharedGunSystem
         args.Verbs.Add(verb);
     }
 
-    private SelectiveFire GetNextMode(GunComponent component)
+    public SelectiveFire GetNextMode(GunComponent component)
     {
         var modes = new List<SelectiveFire>();
 
@@ -61,7 +61,7 @@ public abstract partial class SharedGunSystem
         return modes[(index + 1) % modes.Count];
     }
 
-    private void SelectFire(EntityUid uid, GunComponent component, SelectiveFire fire, EntityUid? user = null)
+    public void SelectFire(EntityUid uid, GunComponent component, SelectiveFire fire, EntityUid? user = null)
     {
         if (component.SelectedMode == fire)
             return;

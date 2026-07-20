@@ -8,7 +8,8 @@ namespace Content.Shared.Weapons.Ranged.Events;
 public sealed class TakeAmmoEvent : EntityEventArgs
 {
     public readonly EntityUid? User;
-    public readonly int Shots;
+    // RMC14: chamber providers consume shots before the primary ammo provider runs.
+    public int Shots;
     public List<(EntityUid? Entity, IShootable Shootable)> Ammo;
 
     /// <summary>
