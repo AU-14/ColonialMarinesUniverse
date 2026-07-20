@@ -712,3 +712,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Structures/Walls/grille.yml`, `Content.IntegrationTests/Tests/Physics/DiagonalGrilleCollisionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains `GlassLayer` on both `fix1` fixtures. A regression spawns both concrete grilles and requires the exact glass-layer mask while excluding its opaque bit. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
 - Follow-up/debt: Audit later diagonal-structure rotation metadata separately and expand collision coverage if RMC introduces custom diagonal grille variants.
+
+## CS-0047 — Block late-spawn events during locked evacuation
+
+- Upstream: [space-wizards/space-station-14#42196](https://github.com/space-wizards/space-station-14/pull/42196), `42a9292e9cb33203080a645752df515298380906`, 2026-07-15
+- Areas: Gamerules, GameTicking
+- Status: Adapted
+- Risk: Medium
+- Behavior/API delta: Nine antagonist, ghost-role, or pest event families plus the visitor-shuttle base now opt out during locked evacuation. Under CS-0036 they remain eligible while an evacuation call can still be recalled, then leave the event pool once recall is locked.
+- RMC/CMU divergence: CMU retains one concrete `DerelictCyborgSpawn` instead of the target's later abstract base and derived borg variants, so the policy is applied directly to that concrete event. RMC's primary distress-signal preset does not install the standard scheduler, while inherited standard presets, admin/custom rules, and visitor-shuttle scheduling receive the corrected policy without changing their spawn definitions.
+- Decision and rationale: Port all ten target-final policy flags together because they define one evacuation boundary. Preserve CMU's current event weights, antag-selection schema, announcements, and concrete derelict-borg structure; importing later prototype refactors would exceed this policy change.
+- Files changed: `Resources/Prototypes/GameRules/events.yml`, `Resources/Prototypes/GameRules/pests.yml`, `Resources/Prototypes/GameRules/unknown_shuttles.yml`, `Content.IntegrationTests/Tests/GameRules/StationEventRoundEndEligibilityTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms no later pinned-target commit changes these flags. The shared evacuation regression now resolves twelve restricted concrete events, verifies every flag, keeps all events eligible during recallable evacuation, and excludes all during locked evacuation; `UnknownShuttleCargoLost` proves base inheritance. Per the requested 20-port cadence, execution is deferred to the CS-0041–CS-0060 checkpoint.
+- Follow-up/debt: Audit remaining station events for explicit evacuation policy instead of bulk-disabling them, especially non-antagonist supply, weather, and emergency-response events.

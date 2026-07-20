@@ -7,6 +7,22 @@ namespace Content.IntegrationTests.Tests.GameRules;
 [TestOf(typeof(EventManagerSystem))]
 public sealed class StationEventRoundEndEligibilityTest
 {
+    private static readonly string[] RestrictedEvents =
+    {
+        "SleeperAgents",
+        "ZombieOutbreak",
+        "ClosetSkeleton",
+        "DragonSpawn",
+        "NinjaSpawn",
+        "ParadoxCloneSpawn",
+        "RevenantSpawn",
+        "WizardSpawn",
+        "LoneOpsSpawn",
+        "DerelictCyborgSpawn",
+        "KingRatMigration",
+        "UnknownShuttleCargoLost",
+    };
+
     [Test]
     public async Task RecallableEvacKeepsRestrictedEventsEligible()
     {
@@ -22,10 +38,14 @@ public sealed class StationEventRoundEndEligibilityTest
 
         await server.WaitAssertion(() =>
         {
-            Assert.That(
-                eventManager.AllEvents().Single(entry => entry.Key.ID == "SleeperAgents")
-                    .Value.OccursDuringRoundEnd,
-                Is.False);
+            var allEvents = eventManager.AllEvents()
+                .ToDictionary(entry => entry.Key.ID, entry => entry.Value);
+
+            Assert.Multiple(() =>
+            {
+                foreach (var eventId in RestrictedEvents)
+                    Assert.That(allEvents[eventId].OccursDuringRoundEnd, Is.False, eventId);
+            });
 
             roundEnd.DefaultCooldownDuration = TimeSpan.Zero;
             roundEnd.RequestRoundEnd(TimeSpan.FromMinutes(1));
@@ -45,11 +65,11 @@ public sealed class StationEventRoundEndEligibilityTest
                 ignoreEarliestStart: true,
                 playerCountOverride: int.MaxValue);
 
-            var availableIds = available.Keys.Select(prototype => prototype.ID);
+            var availableIds = available.Keys.Select(prototype => prototype.ID).ToHashSet();
             Assert.Multiple(() =>
             {
-                Assert.That(availableIds, Does.Contain("SleeperAgents"));
-                Assert.That(availableIds, Does.Contain("ZombieOutbreak"));
+                foreach (var eventId in RestrictedEvents)
+                    Assert.That(availableIds, Does.Contain(eventId), eventId);
             });
 
             roundEnd.CancelRoundEndCountdown(checkCooldown: false);
@@ -60,7 +80,7 @@ public sealed class StationEventRoundEndEligibilityTest
     }
 
     [Test]
-    public async Task LockedEvacBlocksZombieOutbreak()
+    public async Task LockedEvacBlocksRestrictedEvents()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -74,16 +94,17 @@ public sealed class StationEventRoundEndEligibilityTest
 
         await server.WaitAssertion(() =>
         {
-            var zombieEvent = eventManager.AllEvents()
-                .Single(entry => entry.Key.ID == "ZombieOutbreak");
+            var normallyAvailable = eventManager.AvailableEvents(
+                    ignoreEarliestStart: true,
+                    playerCountOverride: int.MaxValue)
+                .Keys.Select(prototype => prototype.ID)
+                .ToHashSet();
 
-            Assert.That(zombieEvent.Value.OccursDuringRoundEnd, Is.False);
-            Assert.That(
-                eventManager.AvailableEvents(
-                        ignoreEarliestStart: true,
-                        playerCountOverride: int.MaxValue)
-                    .Keys.Select(prototype => prototype.ID),
-                Does.Contain("ZombieOutbreak"));
+            Assert.Multiple(() =>
+            {
+                foreach (var eventId in RestrictedEvents)
+                    Assert.That(normallyAvailable, Does.Contain(eventId), eventId);
+            });
 
             roundEnd.DefaultCooldownDuration = TimeSpan.FromSeconds(30);
             roundEnd.RequestRoundEnd(TimeSpan.FromMinutes(1));
@@ -94,12 +115,17 @@ public sealed class StationEventRoundEndEligibilityTest
                 Assert.That(roundEnd.CanCallOrRecall(), Is.False);
             });
 
-            Assert.That(
-                eventManager.AvailableEvents(
-                        ignoreEarliestStart: true,
-                        playerCountOverride: int.MaxValue)
-                    .Keys.Select(prototype => prototype.ID),
-                Does.Not.Contain("ZombieOutbreak"));
+            var duringLockedEvac = eventManager.AvailableEvents(
+                    ignoreEarliestStart: true,
+                    playerCountOverride: int.MaxValue)
+                .Keys.Select(prototype => prototype.ID)
+                .ToHashSet();
+
+            Assert.Multiple(() =>
+            {
+                foreach (var eventId in RestrictedEvents)
+                    Assert.That(duringLockedEvac, Does.Not.Contain(eventId), eventId);
+            });
 
             roundEnd.CancelRoundEndCountdown(checkCooldown: false);
             roundEnd.DefaultCooldownDuration = TimeSpan.FromSeconds(30);

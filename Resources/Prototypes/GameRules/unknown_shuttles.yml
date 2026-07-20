@@ -49,6 +49,7 @@
     weight: 10 # 10 default
     reoccurrenceDelay: 30
     duration: 1
+    occursDuringRoundEnd: false
     maxOccurrences: 1 # should be the same as [copies] in shuttle_incoming_event.yml
   - type: RuleGrids
   - type: LoadMapRule
@@ -242,4 +243,3 @@
     startAnnouncement: station-event-unknown-shuttle-incoming #!!
   - type: LoadMapRule
     preloadedGrid: Spacebus
-
