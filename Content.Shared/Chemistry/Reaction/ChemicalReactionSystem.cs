@@ -25,11 +25,11 @@ namespace Content.Shared.Chemistry.Reaction
         /// </summary>
         private const int MaxReactionIterations = 20;
 
-        [Dependency] private INetManager _net = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
-        [Dependency] private SharedAudioSystem _audio = default!;
+        [Dependency] private INetManager _netMan = default!;
         [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+        [Dependency] private SharedAudioSystem _audio = default!;
         [Dependency] private SharedTransformSystem _transformSystem = default!;
+        [Dependency] private SharedEntityEffectsSystem _entityEffects = default!;
 
         /// <summary>
         /// A cache of all reactions indexed by at most ONE of their required reactants.
@@ -57,7 +57,7 @@ namespace Content.Shared.Chemistry.Reaction
         {
             // Construct single-reaction dictionary.
             var dict = new Dictionary<ProtoId<ReagentPrototype>, List<ReactionPrototype>>();
-            foreach (var reaction in _prototypeManager.EnumeratePrototypes<ReactionPrototype>())
+            foreach (var reaction in ProtoMan.EnumeratePrototypes<ReactionPrototype>())
             {
                 // For this dictionary we only need to cache based on the first reagent.
                 var reagent = reaction.Reactants.Keys.First();
@@ -211,19 +211,9 @@ namespace Content.Shared.Chemistry.Reaction
 
             _entityEffects.ApplyEffects(soln, reaction.Effects, unitReactions);
 
-                if (effect.ShouldLog)
-                {
-                    var entity = args.TargetEntity;
-                    _adminLogger.Add(LogType.ReagentEffect, effect.LogImpact,
-                        $"Reaction effect {effect.GetType().Name:effect} of reaction {reaction.ID:reaction} applied on entity {ToPrettyString(entity):entity} at Pos:{(posFound ? $"{gridPos:coordinates}" : "[Grid or Map not Found")}");
-                }
-
-                effect.Effect(args);
-            }
-
             // Reaction processing is predicted, so playing this on clients as well as the server
             // produces a local sound followed by the replicated server sound.
-            if (_net.IsServer)
+            if (_netMan.IsServer)
                 _audio.PlayPvs(reaction.Sound, soln);
         }
 

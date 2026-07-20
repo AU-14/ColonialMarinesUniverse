@@ -1,8 +1,7 @@
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Numerics;
 using System.Runtime.CompilerServices;
-using System.Text;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
@@ -12,14 +11,13 @@ using Content.Shared.Containers;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Localizations;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
 using Robust.Shared.ColorNaming;
 using Robust.Shared.Containers;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Utility;
-using Content.Shared.Containers;
-using Robust.Shared.Map;
+using Robust.Shared.GameStates;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
@@ -68,14 +66,22 @@ public partial record struct SolutionAccessAttemptEvent(string SolutionName)
 [UsedImplicitly]
 public abstract partial class SharedSolutionContainerSystem : EntitySystem
 {
+    public static readonly EntProtoId DefaultSolution = "Solution";
+
     [Dependency] protected IPrototypeManager PrototypeManager = default!;
+    [Dependency] protected IGameTiming Timing = default!;
+    [Dependency] protected INetManager Net = default!;
     [Dependency] protected ChemicalReactionSystem ChemicalReactionSystem = default!;
     [Dependency] protected ExamineSystemShared ExamineSystem = default!;
+    [Dependency] protected OpenableSystem Openable = default!;
     [Dependency] protected SharedAppearanceSystem AppearanceSystem = default!;
-    [Dependency] protected SharedHandsSystem Hands = default!;
     [Dependency] protected SharedContainerSystem ContainerSystem = default!;
-    [Dependency] protected MetaDataSystem MetaDataSys = default!;
-    [Dependency] protected INetManager NetManager = default!;
+    [Dependency] protected SharedHandsSystem Hands = default!;
+    [Dependency] private ILocalizationManager _localization = default!;
+
+    [Dependency] protected EntityQuery<ContainedSolutionComponent> ContainedQuery = default!;
+    [Dependency] protected EntityQuery<SolutionComponent> SolutionQuery = default!;
+    [Dependency] protected EntityQuery<SolutionManagerComponent> SolutionManagerQuery = default!;
 
     public override void Initialize()
     {
@@ -883,28 +889,6 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
             !CanSeeHiddenSolution(entity, args.Examiner) ||
             !TryGetSolution(entity.Owner, entity.Comp.Solution, out _, out var solution))
             return;
-        }
-
-        if (!CanSeeHiddenSolution(entity, args.Examiner))
-            return;
-
-        var primaryReagent = solution.GetPrimaryReagentId();
-
-        if (string.IsNullOrEmpty(primaryReagent?.Prototype))
-        {
-            args.PushText(Loc.GetString("shared-solution-container-component-on-examine-empty-container"));
-            return;
-        }
-
-        if (!PrototypeManager.TryIndexReagent(primaryReagent.Value.Prototype, out ReagentPrototype? primary))
-        {
-            Log.Error($"{nameof(Solution)} could not find the prototype associated with {primaryReagent}.");
-            return;
-        }
-
-        var colorHex = solution.GetColor(PrototypeManager)
-            .ToHexNoAlpha(); //TODO: If the chem has a dark color, the examine text becomes black on a black background, which is unreadable.
-        var messageString = "shared-solution-container-component-on-examine-main-text";
 
         using (args.PushGroup(nameof(ExaminableSolutionComponent)))
         {
@@ -913,7 +897,7 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
 
             // If there's no primary reagent, assume the solution is empty and exit early
             if (string.IsNullOrEmpty(primaryReagent?.Prototype) ||
-                !ProtoMan.Resolve<ReagentPrototype>(primaryReagent.Value.Prototype, out var primary))
+                !PrototypeManager.TryIndexReagent(primaryReagent.Value.Prototype, out var primary))
             {
                 args.PushMarkup(Loc.GetString(entity.Comp.LocVolume, ("fillLevel", ExaminedVolumeDisplay.Empty)));
                 return;
@@ -1236,13 +1220,9 @@ public abstract partial class SharedSolutionContainerSystem : EntitySystem
     {
         var uid = EntityManager.CreateEntityUninitialized(solution);
 
-        var relation = new ContainedSolutionComponent() { Container = container.Owner, ContainerName = name };
-        AddComp(uid, relation);
-
-        MetaDataSys.SetEntityName(uid, $"solution - {name}", raiseEvents: false);
-        ContainerSystem.Insert(uid, container, force: true);
-
-        return (uid, solution, relation);
+        // If you pass in a ProtoId without a SolutionComponent that's your own damn fault!
+        var comp = SolutionQuery.Comp(uid);
+        return (uid, comp);
     }
 
     public void AdjustDissolvedReagent(

@@ -5,9 +5,11 @@ namespace Content.Shared.Kitchen;
 
 public sealed partial class RecipeManager : EntitySystem
 {
-    public sealed partial class RecipeManager
+    public List<FoodRecipePrototype> Recipes { get; private set; } = new();
+
+    public override void Initialize()
     {
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        base.Initialize();
 
         ReloadRecipes();
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);

@@ -18,11 +18,20 @@ namespace Content.Shared.Nutrition.EntitySystems;
 
 public abstract partial class SharedCreamPieSystem : EntitySystem
 {
-    [UsedImplicitly]
-    public abstract partial class SharedCreamPieSystem : EntitySystem
+    [Dependency] private SharedStunSystem _stunSystem = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private IngestionSystem _ingestion = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPuddleSystem _puddle = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedSolutionContainerSystem _solutions = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private INetManager _net = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private SharedStunSystem _stunSystem = default!;
-        [Dependency] private SharedAppearanceSystem _appearance = default!;
+        base.Initialize();
 
         SubscribeLocalEvent<CreamPieComponent, ThrowDoHitEvent>(OnCreamPieHit);
         SubscribeLocalEvent<CreamPieComponent, LandEvent>(OnCreamPieLand);
