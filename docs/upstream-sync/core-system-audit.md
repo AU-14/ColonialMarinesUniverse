@@ -825,3 +825,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Server/Atmos/EntitySystems/AtmosphereSystem.Monstermos.cs` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the pinned target retains both pre-adjacency refresh calls and their ordering. The first 1,000-upstream-commit checkpoint will compile the server and run the accumulated focused suite; this private equalization path currently has no narrow integration seam.
 - Follow-up/debt: Add a controlled depressurization/firelock integration scenario when atmosphere test utilities expose deterministic single-cycle equalization, and audit later Monstermos changes independently.
+
+## CS-0055 — Let interaction-bypass users reach covered subfloors
+
+- Upstream: [space-wizards/space-station-14#38813](https://github.com/space-wizards/space-station-14/pull/38813), `decaa58dfe09f3e17c3f6f798013d5b8a6fc703a`, 2025-07-10
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Generic interaction attempts against entities hidden below floor tiles now skip the subfloor blocker when the actor carries `BypassInteractionChecksComponent`. Normal users remain blocked, and the change does not bypass attack, anchoring, or unanchoring restrictions.
+- RMC/CMU divergence: RMC already uses the same marker for admin access to vendors, ID-locked storage, guns, stripping, pulling, and other interaction gates, and its `AdminObserver` prototype carries it. The shared subfloor system was the inconsistent holdout.
+- Decision and rationale: Port the target-final early return only in the generic interaction-attempt handler. Reuse the established marker instead of detecting admin sessions directly, and retain the separate safety policies for attacks and structure anchoring.
+- Files changed: `Content.Shared/SubFloor/SharedSubFloorHideSystem.cs`, `Content.IntegrationTests/Tests/Interaction/SubfloorAdminInteractionTest.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms the pinned target retains this exact marker gate. A queued integration regression places a real high-voltage cable beneath steel flooring, requires a normal attempt to be cancelled, and permits the same attempt from a marked actor. Execution is deferred to the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit other visibility-layer blockers for use of the shared bypass marker, but do not generalize it to damage or anchoring without a separate admin-safety decision.
