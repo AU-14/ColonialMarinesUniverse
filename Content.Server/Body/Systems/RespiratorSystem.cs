@@ -360,7 +360,7 @@ public sealed partial class RespiratorSystem : EntitySystem
         if (ent.Comp.SuffocationCycles == 2)
             _adminLogger.Add(LogType.Asphyxiation, $"{ToPrettyString(ent):entity} started suffocating");
 
-        _damageableSys.TryChangeDamage(ent, ent.Comp.Damage, interruptsDoAfters: false);
+        _damageableSys.TryChangeDamage(ent, ent.Comp.Damage, ignoreResistances: true, interruptsDoAfters: false);
 
         if (ent.Comp.SuffocationCycles >= ent.Comp.SuffocationCycleThreshold)
         {

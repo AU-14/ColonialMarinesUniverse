@@ -2867,3 +2867,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/GameRules/roundstart.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static rule-graph review confirms the referenced prototype and handler exist, the pass appears once, and RMC rules do not explicitly schedule `BasicRoundstartVariation`. YAML validation plus standard roundstart, eligibility, blacklist, cap, random selection, map-init ordering, and RMC preset cases are queued for the index-1999 checkpoint.
 - Follow-up/debt: Record index 1573 as `Ported (CS-0210)` when wave 0008 is committed; consider a CMU-specific enable CVar separately only if operators want policy control beyond pinned upstream behavior.
+
+## CS-0211 — Make suffocation damage bypass resistances
+
+- Upstream: [space-wizards/space-station-14#41556](https://github.com/space-wizards/space-station-14/pull/41556), `5b0730b9138fafc017121e406537baac1c52bf05`, 2025-11-24
+- Areas: Medical
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Periodic damage from the respirator system now calls `TryChangeDamage` with `ignoreResistances: true`. Suffocation therefore applies its configured damage directly instead of being reduced or transformed by the target's damage modifier set and pre-resistance damage-modification events.
+- RMC/CMU divergence: CMU retains RMC's extended `TryChangeDamage` parameters for armor penetration and claw logic, but its leading `ignoreResistances` contract matches the pinned upstream API. The change is limited to damage while suffocating; oxygen recovery, suffocation-cycle timing, alerts, and RMC wound handling remain unchanged.
+- Decision and rationale: Adapt the upstream named argument to CMU's `TryChangeDamage` call. Asphyxiation represents lack of breathable gas rather than an external hit, so armor and species resistance modifiers must not negate the core respiratory hazard.
+- Files changed: `Content.Server/Body/Systems/RespiratorSystem.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static signature and call-path review confirms the named argument binds to `ignoreResistances`, `interruptsDoAfters` remains false, and recovery still follows its prior path. Server compilation plus normal, resistant-species, damage-event, recovery, alert-threshold, and RMC wound cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Record index 1786 as `Ported (CS-0211)` when wave 0009 is committed.
