@@ -1670,3 +1670,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Throwable/projectile_grenades.yml`, `Resources/Prototypes/Entities/Objects/Weapons/Throwable/scattering_grenades.yml`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static prototype review confirms exactly three projectile-grenade and five scattering-grenade `EmitSoundOnTrigger` components gained the flag, while all legacy `SoundOnTrigger` users remain untouched. Prototype loading plus one-shot spatial playback after source deletion are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Reconcile the fork's old and keyed trigger sound components as one migration before adopting later trigger-key-dependent grenade changes.
+
+## CS-0120 — Empty reagent dispensers during deconstruction
+
+- Upstream: [space-wizards/space-station-14#39676](https://github.com/space-wizards/space-station-14/pull/39676), `2ebdd9d4cd04a5fdfd671db5e3ff05e52b3c8976`, 2025-09-02
+- Areas: Chemistry, Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `ReagentDispenserBase` now empties both its bulk `storagebase` container and inserted `beakerSlot` when the machine is deconstructed, instead of deleting or trapping their contents with the machine entity.
+- RMC/CMU divergence: CMU retains the same two dispenser container identifiers and already has the shared machine-deconstruction emptying system, so no fork-specific code path was replaced.
+- Decision and rationale: Add the retained component wiring at the common dispenser base so all inheriting chemical dispensers receive consistent deconstruction behavior.
+- Files changed: `Resources/Prototypes/Entities/Structures/Dispensers/base_structuredispensers.yml` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static inheritance and container-ID review confirms both named containers exist on the base and the component/system contract is already used by other CMU machines. Prototype loading plus deconstruction with stored bottles and an inserted beaker are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Audit RMC-specific dispenser descendants for extra private containers that should also be emptied.
