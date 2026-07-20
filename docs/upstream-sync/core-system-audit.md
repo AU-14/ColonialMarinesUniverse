@@ -1982,3 +1982,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Client/Power/APC/UI/ApcMenu.xaml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static UI review confirms click handling, access disabling, and authoritative pressed-state updates remain intact. Client XAML compilation plus click prediction, denial, and state reconciliation are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Adopt target-final `SwitchButton` styling when the broader APC UI migration is reconciled.
+
+## CS-0144 — Release invalid pulls when handcuffed
+
+- Upstream: [space-wizards/space-station-14#40233](https://github.com/space-wizards/space-station-14/pull/40233), `49fb6fdd6c5fc5c8d8dd4f8f525362f8dc227915`, 2025-09-11
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Cuff insertion now completes before `TargetHandcuffedEvent` is raised, allowing pull validation to observe the new occupied hands. An active pull that is no longer valid is stopped, and a cuffed player may always request release of an existing pull even though ordinary interaction is blocked.
+- RMC/CMU divergence: CMU adds RMC fireman-carry and pulling systems around the upstream joint path. The adaptation keeps those dependencies and existing `CanPull` checks, using the common active-puller marker so fork-specific pull eligibility is respected.
+- Decision and rationale: Port the three coordinated changes atomically: correct event ordering, react on active pullers, and remove the interaction gate only from stopping a pull. Starting and continuing pulls still use their existing blocker and RMC validation.
+- Files changed: `Content.Shared/Cuffs/SharedCuffableSystem.cs`, `Content.Shared/Movement/Pulling/Systems/PullingSystem.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static control-flow review confirms the cuff exists before eligibility is recomputed, valid handless pullers remain active, invalid hand-dependent pulls stop, and `AttemptStopPullingEvent` can still cancel release. Shared compilation plus self-release, cuff-during-pull, `NeedsHands = false`, cancellation, prediction, and RMC fireman-carry cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add focused pull/cuff prediction tests covering event order and virtual-hand cleanup.
