@@ -17,6 +17,11 @@ public abstract class EquipAttemptBase(EntityUid user, EntityUid equipTarget, En
     public readonly EntityUid EquipTarget = equipTarget;
 
     /// <summary>
+    /// Legacy RMC name for <see cref="EquipTarget"/>.
+    /// </summary>
+    public EntityUid Equipee => EquipTarget;
+
+    /// <summary>
     /// The entity to be equipped.
     /// </summary>
     public readonly EntityUid Equipment = equipment;

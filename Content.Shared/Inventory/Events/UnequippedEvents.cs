@@ -9,6 +9,11 @@ public abstract class UnequippedEventBase(EntityUid equipTarget, EntityUid equip
     public readonly EntityUid EquipTarget = equipTarget;
 
     /// <summary>
+    /// Legacy RMC name for <see cref="EquipTarget"/>.
+    /// </summary>
+    public EntityUid Equipee => EquipTarget;
+
+    /// <summary>
     /// The entity which got unequipped.
     /// </summary>
     public readonly EntityUid Equipment = equipment;
