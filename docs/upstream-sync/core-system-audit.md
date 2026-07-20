@@ -1943,3 +1943,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Magic/staves.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static system review confirms `ValidateEntityTarget` resolves `TargetActionComponent` after whitelist checks and the RGB action already inherits `BaseAction`. Prototype loading plus valid light, invalid entity, inaccessible target, and predicted activation cases are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Audit other `EntityTargetAction` prototypes for the same missing base component during the deeper actions migration.
+
+## CS-0141 — Localize verb confirmation actions
+
+- Upstream: [space-wizards/space-station-14#40248](https://github.com/space-wizards/space-station-14/pull/40248), `a5ef016f1e3afc0d4cd89a5c1b810e13834bd09c`, 2025-09-10
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Context-menu verbs that require confirmation now label their confirmation action through the existing `generic-confirm` localization key instead of hardcoded English text.
+- RMC/CMU divergence: RMC adds verbs and confirmation use cases but shares this menu controller and generic localization key, so all fork verbs gain localization without changing execution or confirmation policy.
+- Decision and rationale: Replace only the displayed label; submenu construction, debug-mode bypass, and verb execution remain unchanged.
+- Files changed: `Content.Client/Verbs/UI/VerbMenuUIController.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms `generic-confirm` exists in the English locale and is resolved only when a confirmation submenu is created. Client compilation and a confirmation-popup interaction are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
