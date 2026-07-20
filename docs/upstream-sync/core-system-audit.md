@@ -1137,3 +1137,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/engineCommandPerms.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static comparison confirms the five entries match the pinned target-final permission list. Permission loading and command availability are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Verify each diagnostic command remains registered after future RobustToolbox pointer updates so stale permission names do not accumulate again.
+
+## CS-0079 — Name the remote station-AI eye
+
+- Upstream: [space-wizards/space-station-14#39177](https://github.com/space-wizards/space-station-14/pull/39177), `01a57c9a1715bd3349fd981a58b01bb6edb5bb04`, 2025-07-24
+- Areas: Interactions
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: Attaching a station AI to its remote movement entity now renames that eye to `AI eye - <AI name>`, making multiple remote eyes distinguishable in entity-facing tools and interactions.
+- RMC/CMU divergence: CMU retains its older station-AI lifecycle, but the attach path, metadata dependency, and remote entity are compatible. RMC silicon behavior is otherwise unchanged.
+- Decision and rationale: Port the retained two-file target behavior at the existing attach boundary, where both the inserted AI and spawned remote eye are known.
+- Files changed: `Content.Shared/Silicons/StationAi/SharedStationAiSystem.cs`, `Resources/Locale/en-US/silicons/station-ai.ftl`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static review confirms the localized name is applied after movement relaying and matches the pinned target-final key and format. Shared compilation and station-AI lifecycle coverage are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Add a lifecycle regression that inserts a custom-named AI, asserts its eye name, and verifies replacement eyes receive the same derived name.
