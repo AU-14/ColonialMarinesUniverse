@@ -43,7 +43,7 @@ are retained so future audits can trace each classifier's original decision.
 0021 | ecbff409b6ef7b54a0033afb816a5ba43b0862a4 | Replace `AdvertiseComponent` with `DatasetVocalizerComponent` (#38887) | Dependency-blocked/deferred | GameTicking | The old advertising system has more than fifty consumers and needs a coordinated ownership and prototype migration.
 0022 | 615c4afbcc38fcf8c520adac82b97b271cde615b | Bagel genpop (#38829) | Dependency-blocked/deferred | — | The map change should be reconciled against the target-final Bagel snapshot.
 0023 | 8026f7fd508b4241428d646bea9d1807adb3e70f | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
-0024 | 773299bd07278b05b6952063c3e4c38ddeb72966 | fix clones not getting the thieving skill (#38914) | Port candidate | Interactions, GameTicking | Clone initialization still omits the retained thieving capability restoration.
+0024 | 773299bd07278b05b6952063c3e4c38ddeb72966 | fix clones not getting the thieving skill (#38914) | Ported (CS-0084) | Interactions, GameTicking | Clone settings now copy the retained thieving capability into replacement bodies.
 0025 | 685156c08f2d30e4aa4b67b698e56f79cbd19b66 | Automatic changelog update | Non-code/no-op | — | Generated changelog only.
 0026 | 9ad99cfa64e0b2803b9c3f00736a0bdd7d5d3848 | Make more objects spray paintable (Reviving #31328) (#37341) | Dependency-blocked/deferred | Interactions, Physics | This feature depends on the unported Paintable architecture, UI, prototypes, and assets.
 0027 | 6633a18d6243600a3a616dff90ce932a22cbfe8e | Automatic changelog update | Non-code/no-op | — | Generated changelog only.

@@ -1202,3 +1202,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Delivery/SharedDeliverySystem.cs`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static review confirms both other-viewer delivery messages use the entity-aware identity while their self messages and `$possadj` argument are unchanged. Shared compilation and delivery popup formatting are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: Add masked-identity coverage so delivery popups prove that observer-specific identity rendering remains intact.
+
+## CS-0084 — Preserve thieving capability through cloning
+
+- Upstream: [space-wizards/space-station-14#38914](https://github.com/space-wizards/space-station-14/pull/38914), `773299bd07278b05b6952063c3e4c38ddeb72966`, 2025-07-10
+- Areas: Interactions, GameTicking
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `BaseClone` now copies `ThievingComponent`, preserving stealth-stripping capability and its alert state when a character receives a cloned body.
+- RMC/CMU divergence: CMU retains the older monolithic cloning-settings prototype, so the target-final `Special`-settings entry is adapted into its equivalent job/special component list. RMC cloning consumers remain unchanged.
+- Decision and rationale: Port the retained component entry at the existing fork boundary; cloning already shallow-copies the other special capabilities listed beside it.
+- Files changed: `Resources/Prototypes/Entities/Mobs/Player/clone.yml`, `docs/upstream-sync/inventory-wave-0001.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static comparison confirms `Thieving` sits in the equivalent special-capability section and the component is registered in CMU. Prototype loading and a component-copy regression are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: Cover cloning a thieving actor with both enabled and disabled stealth state to confirm shallow copying preserves the intended runtime flag and alert behavior.
