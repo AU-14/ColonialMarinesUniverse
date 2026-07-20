@@ -2450,3 +2450,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static resolved-prototype review confirms watcher masks contain all three target bits, cold/hot bolts reflect `Energy`, and magmawing overrides only its sprite, projectile temperature behavior, and muzzle flash atop `WatcherBolt`. Prototype loading plus windows, walls, holos, reflectors, hot/cold inheritance, and muzzle effects are queued for the index-1999 checkpoint.
 - Follow-up/debt: Revisit only if the later projectile fly-by fixture-anchor architecture is ported; CMU does not currently define that anchor.
+
+## CS-0179 — Propagate pull-stop cancellation by reference
+
+- Upstream: [space-wizards/space-station-14#40369](https://github.com/space-wizards/space-station-14/pull/40369), `e0fd44da662d74bfd3fdbbe6663d2f801252cd61`, 2025-09-15; side-branch hotfix [#40368](https://github.com/space-wizards/space-station-14/pull/40368), `9b5f9c3fd6aa400f47e9875cd7ba1f3ebb40e1fd`
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: `AttemptStopPullingEvent` is now a by-reference local event, its cuff subscriber receives it by reference, and `TryStopPull` raises the same mutable instance by reference. A handcuffed actor's self-release cancellation now reaches the caller instead of being written to a copied struct.
+- RMC/CMU divergence: The current pulling system contains RMC-specific behavior around the shared stop path, while CS-0144 already supplied the preceding cuff-state eligibility fix. This follow-up changes only event mutation transport and preserves all RMC stop/pull logic.
+- Decision and rationale: Port the complete three-file event contract atomically. Changing only the subscriber or only the raise site would leave incompatible dispatch semantics; retaining pass-by-value silently defeats the cancellation guard.
+- Files changed: the shared cuff handler, pulling event and pulling system, `docs/upstream-sync/inventory-wave-0005.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event-flow review confirms the same `msg` instance is raised, mutated by the cuff handler, and checked before `StopPulling`. Shared compilation plus self-release, normal release, cancellable third-party release, prediction, and RMC fireman-carry cases are queued for the index-1999 checkpoint.
+- Follow-up/debt: Add the upstream UX feedback for a blocked self-release only as a separate interaction design change.

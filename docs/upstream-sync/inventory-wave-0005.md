@@ -93,7 +93,7 @@ are retained so future audits can trace each classifier's original decision.
 0871 | ff94d3e7ad1ba0fcf105f9a040f154a583a7331f | Added spanky to mapping codeowners (#40362) | Irrelevant | — | Upstream repository ownership metadata only.
 0872 | 02061592ddb4993812d0c53ead0ee540731026c5 | Devices with access restrictions list those restrictions in their examination description (#37712) | Deferred | Interactions, Gamerules | The examination behavior depends on upstream access-system and localization changes that need focused CMU reconciliation.
 0873 | e27576929f4e729ab233bef51d5d87d6e6039a06 | Automatic changelog update | Irrelevant | — | Generated changelog only.
-0874 | e0fd44da662d74bfd3fdbbe6663d2f801252cd61 | merge stable into master (#40369) | Deferred | — | This composite branch merge must be audited through its constituent changes instead of ported as one commit.
+0874 | e0fd44da662d74bfd3fdbbe6663d2f801252cd61 | merge stable into master (#40369) | Ported (CS-0179) | Movement, Interactions, Physics | The merge's pull hotfix now raises `AttemptStopPullingEvent` by reference so cuff handlers can propagate cancellation; the effective first-parent delta was audited instead of the default merge display.
 0875 | 7444c8ea4abeaf33c3fd151537d925ce69d4878a | The station AI can be destroyed (#39588) | Deferred | Medical, Gamerules | The broad station-AI health and destruction feature depends on AI architecture that diverges in CMU.
 0876 | fb710208890366ce294bdf794969cde32ea47c7f | Automatic changelog update | Irrelevant | — | Generated changelog only.
 0877 | 584f0aaa7bd4bd92763c1f71f78c003e9fbda58d | Clerify salamander description (#40379) | Irrelevant | — | This isolated upstream description typo has no core-system impact and was not retained as a port.

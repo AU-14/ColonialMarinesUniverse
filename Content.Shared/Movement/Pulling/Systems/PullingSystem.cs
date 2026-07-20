@@ -628,7 +628,7 @@ public sealed partial class PullingSystem : EntitySystem
             return true;
 
         var msg = new AttemptStopPullingEvent(user);
-        RaiseLocalEvent(pullableUid, msg, true);
+        RaiseLocalEvent(pullableUid, ref msg, true);
 
         if (msg.Cancelled)
             return false;
