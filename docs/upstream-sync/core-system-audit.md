@@ -4578,3 +4578,15 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Server/Roles/Jobs/JobSystem.cs`, `Content.Server/_RMC14/Roles/Jobs/JobSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static review connects every retained `Greeting` declaration to the sole current job-role greeting owner while preserving the ordinary fallback path. The targeted Server build and exact-path `git diff --check` are recorded by this commit. Tests and localization/prototype loading remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must add jobs with/without greetings, silent/admin assignment, reconnect and latejoin, missing localization, runtime display-name differences, and messages containing the `jobName` argument. Arrival/radio announcements remain the separate CS-0329 path.
+
+## CS-0337 - Restore the RMC admin observer spawn contract
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0336.
+- Areas: GameTicking, Gamerules, Admin spawning, Observer lifecycle, Prototype contracts
+- Classification: Missing -> Adapted.
+- Risk: High before the fix because admin observing spawned the generic SS14 entity and bypassed retained RMC admin-ghost capabilities; low after the source/build fix pending admin-session runtime coverage.
+- Behavior/API delta: Current SS14's admin observer constant names `AdminObserver`. Live RMC uses the retained `RMCAdminObserver` prototype, which adds the RMC admin ghost marker, PropCaller behavior, and RMC loadout/inventory contract. The bulk merge kept that prototype but reverted the only normal admin-observer spawn owner to the upstream ID.
+- Decision and behavior: Restore the RMC entity ID at the current `GameTicker` constant. Current admin detection, spawn position, mind transfer, observer setup, session attachment, and round lifecycle remain authoritative; only the prototype contract changes.
+- Files changed: `Content.Server/GameTicking/GameTicker.Spawning.cs` and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static search finds one `RMCAdminObserver` prototype and the current constant as its normal spawn owner; ordinary observers still use `MobObserver`. The targeted Server build succeeded with 0 errors and 4 known warnings; exact-path `git diff --check` passed. Tests and prototype loading remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must spawn an admin before/during/after a round, verify PropCaller and RMC admin actions/loadout, return to lobby/body, reconnect, observe mind cleanup, and confirm non-admin observer behavior remains unchanged.

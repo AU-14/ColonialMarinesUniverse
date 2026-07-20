@@ -36,7 +36,7 @@ namespace Content.Server.GameTicking
         [Dependency] private AdminSystem _admin = default!;
 
         public static readonly EntProtoId ObserverPrototypeName = "MobObserver";
-        public static readonly EntProtoId AdminObserverPrototypeName = "AdminObserver";
+        public static readonly EntProtoId AdminObserverPrototypeName = "RMCAdminObserver";
 
         /// <summary>
         /// How many players have joined the round through normal methods.
