@@ -148,6 +148,7 @@ public sealed partial class SpraySystem : SharedSpraySystem
             // Spawn the vapor cloud onto the grid/map the user is present on. Offset the start position based on how far the target destination is.
             var vaporPos = sprayerMapPos.Offset(distance < 1 ? quarter : threeQuarters);
             var vapor = Spawn(entity.Comp.SprayedPrototype, vaporPos);
+            ApplyRMCSprayVaporPolicy(entity.Owner, vapor);
             var vaporXform = Transform(vapor);
 
             _transform.SetWorldRotation(vaporXform, rotation);
