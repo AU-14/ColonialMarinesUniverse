@@ -54,6 +54,9 @@ public sealed partial class JobSystem : SharedJobSystem
         if (prototype.RequireAdminNotify)
             _chat.DispatchServerMessage(session, Loc.GetString("job-greet-important-disconnect-admin-notify"));
 
+        if (TrySendRMCGreeting(session, prototype))
+            return;
+
         _chat.DispatchServerMessage(session, Loc.GetString("job-greet-supervisors-warning", ("jobName", prototype.LocalizedName), ("supervisors", Loc.GetString(prototype.Supervisors))));
     }
 

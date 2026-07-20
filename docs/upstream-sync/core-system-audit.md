@@ -4566,3 +4566,15 @@ run because this port is at 853 of the 1,000-upstream-commit test checkpoint.
 - Files changed: `Content.Server/Ghost/GhostSystem.cs`, `Content.Server/_RMC14/Ghost/GhostSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation evidence: Static lifecycle review connects nest capture, mind-to-ghost transfer, unnest marker/return enablement, validated request, current mind transfer, and stale-target fallback. The targeted Server build succeeded with 0 errors and 4 known warnings; exact-path `git diff --check` passed. Tests remain deferred until the 1,000-upstream-commit checkpoint.
 - Remaining debt: Runtime coverage must nest/free alive and dead victims, press return before/after target deletion, handle disconnect/reconnect, repeated requests, mind replacement, ghost deletion, re-nesting, xeno death, round cleanup, and PVS/session transitions. A player disconnected at unnest time still receives no return target, matching live RMC's existing behavior.
+
+## CS-0336 - Restore authored RMC job greetings
+
+- Upstreams compared: live SS14 `fbb3c79b2d206eede2210fbbf5ca1c237c262767`, live RMC `b6d677947dd8ebcb06194a66798938645fed5a54`, and CMU through CS-0335.
+- Areas: Gamerules, Job assignment, Player onboarding, Localization, Spawn lifecycle
+- Classification: Missing -> Adapted.
+- Risk: Medium before the fix because broadly authored role-specific instructions were silently replaced by generic supervisor text; low after the source/build fix pending localization and role matrices.
+- Behavior/API delta: Current SS14 sends the localized job title, optional admin-disconnect warning, and generic supervisor message when a job role is added. RMC job prototypes retain an optional `Greeting` localization key intended to replace the final supervisor message. The bulk merge retained the data field and locale but dropped its current greeting-owner hook.
+- Decision and behavior: After current title/admin messages, a narrow `_RMC14` helper sends the authored greeting with the localized job name and stops the generic supervisor fallback. Jobs without the field retain unchanged SS14 messaging. Current role-added timing, silent gate, mind/job lookup, session authority, and server-message transport remain authoritative.
+- Files changed: `Content.Server/Roles/Jobs/JobSystem.cs`, `Content.Server/_RMC14/Roles/Jobs/JobSystem.RMC.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation evidence: Static review connects every retained `Greeting` declaration to the sole current job-role greeting owner while preserving the ordinary fallback path. The targeted Server build and exact-path `git diff --check` are recorded by this commit. Tests and localization/prototype loading remain deferred until the 1,000-upstream-commit checkpoint.
+- Remaining debt: Runtime coverage must add jobs with/without greetings, silent/admin assignment, reconnect and latejoin, missing localization, runtime display-name differences, and messages containing the `jobName` argument. Arrival/radio announcements remain the separate CS-0329 path.
