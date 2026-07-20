@@ -1,6 +1,9 @@
-using Robust.Shared.Player;
-
 namespace Content.Shared.UserInterface;
+
+/// <summary>
+/// This is raised before opening a UI. Use <see cref="AfterActivatableUIOpenEvent"/>
+/// to react after a UI has actually opened.
+/// </summary>
 public sealed class ActivatableUIOpenAttemptEvent : CancellableEntityEventArgs
 {
     public EntityUid User { get; }

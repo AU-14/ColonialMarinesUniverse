@@ -2242,3 +2242,16 @@ Date completed: 2026-07-20
 - Files changed: `Resources/Prototypes/Catalog/VendingMachines/Inventories/engivend.yml` and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static inventory review confirms `ClothingEyesHudDiagnostic` exists and EngiVend stocks four. Prototype loading and vending inventory resolution are queued for the first 1,000-upstream-commit checkpoint.
 - Follow-up/debt: None.
+
+## CS-0164 — Enter shuttle pilot mode only after UI opening
+
+- Upstream: [space-wizards/space-station-14#40491](https://github.com/space-wizards/space-station-14/pull/40491), `a26bafacb1b2d81b40a19274edda40aca14cb696`, 2025-09-21
+- Areas: Movement, Interactions, Physics
+- Status: Ported
+- Risk: Medium
+- Behavior/API delta: Shuttle consoles now call `TryPilot` after their activatable UI actually opens, rather than during a cancellable open attempt. Failed or intercepted attempts can no longer put a user into pilot mode, and inability to pilot no longer incorrectly cancels read-only UI access.
+- RMC/CMU divergence: CMU retains its current shuttle console, drone console, pilot component, and movement-blocking systems. Only the standard shuttle console's event phase changes; RMC dropship controls are untouched.
+- Decision and rationale: Subscribe to `AfterActivatableUIOpenEvent` and document the attempt event's pre-open contract so piloting state follows real UI ownership instead of speculative interaction.
+- Files changed: `Content.Server/Shuttles/Systems/ShuttleConsoleSystem.cs`, `Content.Shared/UserInterface/ActivatableUIEvents.cs`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static event-flow review confirms `TryPilot` runs only after opening and UI close still removes the pilot. Server/shared compilation plus successful, denied, intercepted, and close/reopen console cases are queued for the first 1,000-upstream-commit checkpoint.
+- Follow-up/debt: None.
