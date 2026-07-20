@@ -3360,3 +3360,16 @@ Date completed: 2026-07-20
 - Files changed: `Content.Shared/Atmos/Rotting/SharedRottingSystem.cs`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
 - Validation: Static lifecycle review confirms no remaining rot-removal path requires the zero reset, map initialization and living/dead transitions still schedule from current game time, and RMC tactical-map removal remains subscribed. Shared/server compilation plus Opporozidone early/late-round treatment, rejuvenation, revival, repeated rot removal, cold storage, map initialization, tactical-map marker cleanup, and ordinary perishing are queued for the index-2999 checkpoint.
 - Follow-up/debt: None; the removed handler was vestigial and the pinned target contains no replacement scheduling hook.
+
+## CS-0248 â€” Allow doors to close over clown spider webs
+
+- Upstream: [space-wizards/space-station-14#42589](https://github.com/space-wizards/space-station-14/pull/42589), `52155802e38c10612ca8197ebe98feec7b334053`, 2026-01-26
+- Areas: Interactions, Physics
+- Status: Ported
+- Risk: Low
+- Behavior/API delta: `SpiderWebClown` now uses one non-hard, density-7 `MidImpassable` fixture like the standard web instead of a separate slip-layer trigger plus a density-1000 fixture masked as an item. Doors can close across the web while contact still reaches the web's slippery step-trigger behavior.
+- RMC/CMU divergence: RMC resin structures and xeno weeds use separate prototypes and collision rules; only the retained upstream clown-spider web changes. Destruction, food solution, flavor, placement, slip effect, and standard spider webs are unchanged.
+- Decision and rationale: Port the pinned fixture definition exactly. The old item-masked fixture made a lightweight floor web participate in door obstruction, while the dedicated slip fixture duplicated contact geometry. A single non-hard web layer preserves overlap/contact semantics without treating the web as a solid item obstacle.
+- Files changed: `Resources/Prototypes/Entities/Structures/spider_web.yml`, `docs/upstream-sync/inventory-wave-0013.md`, and `docs/upstream-sync/core-system-audit.md`.
+- Validation: Static prototype comparison confirms the clown-web fixture now matches the target-final collision block and later upstream edits do not replace it. YAML lint plus door closing/opening, clown-web slipping, walking/running contact, item throws, web destruction, standard webs, RMC resin doors, and map-load cases are queued for the index-2999 checkpoint.
+- Follow-up/debt: None; later target changes add construction, damage, and solution behavior but retain this fixture unchanged.

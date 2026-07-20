@@ -157,7 +157,7 @@ behavior to port.
 2538 | 235ad21f22edf2d02c59c86fafdc1e2daee5d300 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2539 | 256ecd3c468e023ae5f4071e62b6b0f2e356c999 | Refresh gas canister UI on canister startup (#42616) | PortCandidate | Interactions, Physics | CMU's canister system lacks the MapInit and UIOpened refresh hooks.
 2540 | fdd8c2a1f6db2fe5c8d178b9f4353e407b11b05a | Automatic changelog update | Irrelevant | — | Generated changelog only.
-2541 | 52155802e38c10612ca8197ebe98feec7b334053 | Doors can now close on clown spider webs (#42589) | PortCandidate | Interactions, Physics | Focused fixture and collision behavior correction.
+2541 | 52155802e38c10612ca8197ebe98feec7b334053 | Doors can now close on clown spider webs (#42589) | Ported (CS-0248) | Interactions, Physics | Clown webs now use the non-hard web fixture and no longer block closing doors.
 2542 | b33c780a6c5888db376a5aaa92e8472f5ed27c04 | Automatic changelog update | Irrelevant | — | Generated changelog only.
 2543 | fd0f52592788f0e1b0d7485c8c4dd83161d905f2 | Fixes Opporozidone Instarot issues (#42472) | Ported (CS-0247) | Medical, Chemistry, GameTicking | Removing rot no longer resets perishable scheduling and triggers server-age catch-up decay.
 2544 | 36d09f982b40e692851ada4c1b4ba7cf455c16c9 | Automatic changelog update | Irrelevant | — | Generated changelog only.
