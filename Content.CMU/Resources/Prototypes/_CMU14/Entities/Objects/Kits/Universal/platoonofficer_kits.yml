@@ -161,6 +161,8 @@
         amount: 2
       - id: AU14StampAO
         amount: 1
+      - id: CMUUniversalPaperTool
+        amount: 1
 
 - type: entity
   parent: AU14KitPlatoonOfficer
@@ -292,4 +294,6 @@
     - id: AU14BackpackRTOPackDesert
       amount: 1
     - id: AU14StampLO
+      amount: 1
+    - id: CMUUniversalPaperTool
       amount: 1

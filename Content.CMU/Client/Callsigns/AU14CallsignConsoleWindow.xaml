@@ -1,0 +1,51 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:gfx="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+               Title="{Loc au14-callsign-console-title}"
+               MinSize="560 480"
+               SetSize="700 620">
+
+  <PanelContainer HorizontalExpand="True" VerticalExpand="True">
+    <PanelContainer.PanelOverride>
+      <gfx:StyleBoxFlat BackgroundColor="#070E18" BorderColor="#6BC7FF" BorderThickness="2" />
+    </PanelContainer.PanelOverride>
+
+    <BoxContainer Orientation="Vertical" Margin="14" SeparationOverride="10" HorizontalExpand="True" VerticalExpand="True">
+
+      <!-- Header -->
+      <BoxContainer Orientation="Horizontal" SeparationOverride="10">
+        <BoxContainer Orientation="Vertical" SeparationOverride="2" HorizontalExpand="True">
+          <Label Name="HeaderTitleLabel" Text="COMMS NET DIRECTORY" FontColorOverride="#C7D7EA" />
+          <Label Name="FactionLabel" Text="---" FontColorOverride="#6BC7FF" />
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" SeparationOverride="2">
+          <Label Name="EditModeLabel" Text="READ ONLY" FontColorOverride="#9DB5D1" HorizontalAlignment="Right" />
+          <Label Name="EntryCountLabel" Text="0 stations" FontColorOverride="#9DB5D1" HorizontalAlignment="Right" />
+        </BoxContainer>
+      </BoxContainer>
+
+      <!-- Element list -->
+      <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+        <BoxContainer Name="ElementList" Orientation="Vertical" SeparationOverride="8" HorizontalExpand="True" />
+      </ScrollContainer>
+
+      <!-- Group creation (editors only) -->
+      <BoxContainer Name="GroupCreateRow" Orientation="Horizontal" SeparationOverride="8" Visible="False">
+        <LineEdit Name="GroupWordEdit" PlaceHolder="{Loc au14-callsign-console-group-placeholder}" HorizontalExpand="True" />
+        <Button Name="GroupCreateButton" Text="{Loc au14-callsign-console-create-group-button}" />
+      </BoxContainer>
+
+      <!-- Footer -->
+      <PanelContainer>
+        <PanelContainer.PanelOverride>
+          <gfx:StyleBoxFlat BackgroundColor="#0B131F" BorderColor="#1E3450" BorderThickness="1" />
+        </PanelContainer.PanelOverride>
+        <!-- RichTextLabel so the long hint wraps instead of stretching the window -->
+        <RichTextLabel Name="FooterLabel"
+                       Margin="8,5"
+                       HorizontalExpand="True" />
+      </PanelContainer>
+
+    </BoxContainer>
+  </PanelContainer>
+
+</DefaultWindow>

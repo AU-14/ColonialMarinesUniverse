@@ -14,6 +14,16 @@
     CMUBlackSludge: 64
 
 - type: reaction
+  id: CMUXenoPlasmaRoyal
+  reactants:
+    CMUXenoRoyalBlood:
+      amount: 1
+    CMUXenoPlasmaEgg:
+      amount: 1
+  products:
+    CMUXenoPlasmaRoyal: 2
+
+- type: reaction
   id: AU14SpaceCleaner
   requiredMixerCategories:
   - Stir
@@ -28,3 +38,34 @@
       amount: 1
   products:
     SpaceCleaner: 4
+
+# TODO: smoking reaction
+- type: reaction
+  id: CMUFormaldehyde
+  reactants:
+    RMCMethane:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+# it's haunted
+#    RMCPhoron:
+#      amount: 1
+    RMCSilver:
+      amount: 5
+      catalyst: true
+  products:
+    CMUFormaldehyde: 3
+
+# TODO: ENDOTHERMIC
+- type: reaction
+  id: CMUPhenolFormaldehyde
+  reactants:
+    CMUFormaldehyde:
+      amount: 2
+    CMUPhenol:
+      amount: 1
+    RMCMethane:
+      amount: 5
+      catalyst: true
+  products:
+    CMUPhenolFormaldehyde: 1

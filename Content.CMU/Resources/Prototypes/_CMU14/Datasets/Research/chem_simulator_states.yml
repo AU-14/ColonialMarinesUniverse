@@ -1,0 +1,11 @@
+- type: localizedDataset
+  id: CMUSimStatesStageFour
+  values:
+    prefix: cmu-sim-status-stage-four-
+    count: 8
+
+- type: localizedDataset
+  id: CMUSimStatesStageThree
+  values:
+    prefix: cmu-sim-status-stage-three-
+    count: 5

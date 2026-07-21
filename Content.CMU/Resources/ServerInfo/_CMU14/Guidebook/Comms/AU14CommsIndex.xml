@@ -1,0 +1,56 @@
+<Document>
+  # Communications Reference
+
+  This section covers the radio systems used by ground forces.
+
+  <Box>
+    <GuideEntityEmbed Entity="ANPRC117GRadio" Caption="AN/PRC-117G"/>
+    <GuideEntityEmbed Entity="AU14HeadsetGovforMarineFTL" Caption="Field Headset"/>
+  </Box>
+
+  ## Guides
+
+  - [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] - operating instructions for the manpack radio: net setup, operating modes, COMSEC fill, retransmission stations, interception, and the net log.
+  - [textlink="Field Headsets" link="AU14CommsHeadsets"] - issued headsets: named nets, relay coverage, jamming, and direct-frequency tuning.
+  - [textlink="Voice Procedure" link="AU14CommsVoiceProcedure"] - standard radio message format, prowords, and worked examples for contact reports, fire missions, and casualty evacuation requests.
+  - [textlink="Comms Quick Reference" link="AU14CommsQuickRef"] - chat prefixes, signal ranges, antennas, operating modes, transmit power, squelch, and COMSEC controls.
+
+  ## Find a Topic
+
+  <Table Columns="2" MinForcedColumnWidth="120">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Topic[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Guide[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Set up or operate an AN/PRC</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Use an issued headset</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="Field Headsets" link="AU14CommsHeadsets"]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Learn radio calls and prowords</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="Voice Procedure" link="AU14CommsVoiceProcedure"]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Check a control, range, or prefix</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">[textlink="Comms Quick Reference" link="AU14CommsQuickRef"]</Box>
+    </ColorBox>
+  </Table>
+</Document>

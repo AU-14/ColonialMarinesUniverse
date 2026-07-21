@@ -6,6 +6,8 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    category: MEDICAL
   - type: Skills
     preset: AU14SkillPresetMilitaryDoctor
   - type: JobPrefix

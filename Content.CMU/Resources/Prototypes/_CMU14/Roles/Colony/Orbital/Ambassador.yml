@@ -5,6 +5,8 @@
   roundForce: CCA
   roundRole: CivilianAmbassadorCCA
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -84,6 +86,9 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 # ├──[ CLF ]─────────────────────────────────────────────────────────┤
 
@@ -94,6 +99,8 @@
   roundForce: ICSC
   roundRole: CivilianAmbassadorICSC
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -175,6 +182,9 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 - type: job
   parent: CMJobBase
@@ -183,6 +193,8 @@
   roundForce: TWE
   roundRole: CivilianAmbassadorTWE
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -262,6 +274,9 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 - type: job
   parent: CMJobBase
@@ -270,6 +285,8 @@
   roundForce: UA
   roundRole: CivilianAmbassadorUA
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -350,6 +367,9 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 - type: job
   parent: CMJobBase
@@ -358,6 +378,8 @@
   roundForce: UPP
   roundRole: CivilianAmbassadorUPP
   roundComponents:
+  - type: AU14CallsignRole
+    exempt: true
   - type: Skills
     skills:
       RMCSkillFireman: 1
@@ -437,3 +459,6 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

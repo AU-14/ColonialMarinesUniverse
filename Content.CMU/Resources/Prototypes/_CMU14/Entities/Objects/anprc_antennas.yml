@@ -1,0 +1,43 @@
+- type: entity
+  abstract: true
+  id: ANPRCAntennaBase
+  name: AN/PRC-117G antenna
+  parent: BaseItem
+  components:
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: ANPRCAntennaBase
+  id: ANPRCWhipAntenna
+  name: AN/PRC-117G whip antenna
+  description: >-
+    A flexible steel tape-whip antenna, standard fit for manpack radios.
+    Bends around brush and doorframes without snapping.
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    state: antenna_w
+  - type: ANPRCAntenna
+    label: WHIP
+    fullRange: 30
+    partialRange: 45
+    requiresStationary: false
+
+- type: entity
+  parent: ANPRCAntennaBase
+  id: ANPRCMastAntenna
+  name: AN/PRC-117G mast antenna
+  description: >-
+    A collapsible high-gain mast antenna. Meant to be raised over a command
+    post or retrans site, not hauled around on patrol.
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    state: antenna_m
+  - type: ANPRCAntenna
+    label: MAST
+    fullRange: 55
+    partialRange: 80
+    requiresStationary: true
+    movingRangeMultiplier: 0.5

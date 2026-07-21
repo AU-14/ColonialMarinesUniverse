@@ -704,6 +704,54 @@
           groups:
             Brute: 1.5
             Toxin: 3
+      - !type:ChemVomit
+        conditions:
+        - !type:ReagentThreshold
+          reagent: CMUParacetamol
+          min: 1
+      - !type:AdjustReagent
+        reagent: CMUParacetamol
+        amount: -1000
+      - !type:ChemVomit
+        conditions:
+        - !type:ReagentThreshold
+          reagent: CMUTramadol
+          min: 1
+      - !type:AdjustReagent
+        reagent: CMUTramadol
+        amount: -1000
+      - !type:ChemVomit
+        conditions:
+        - !type:ReagentThreshold
+          reagent: CMUOxycodone
+          min: 1
+      - !type:AdjustReagent
+        reagent: CMUOxycodone
+        amount: -1000
+      - !type:ChemVomit
+        conditions:
+        - !type:ReagentThreshold
+          reagent: CMUFentanyl
+          min: 1
+      - !type:AdjustReagent
+        reagent: CMUFentanyl
+        amount: -1000
+      - !type:ChemVomit
+        conditions:
+        - !type:ReagentThreshold
+          reagent: CMUSleen
+          min: 1
+      - !type:AdjustReagent
+        reagent: CMUSleen
+        amount: -1000
+      - !type:ChemVomit
+        conditions:
+        - !type:ReagentThreshold
+          reagent: CMUSoporific
+          min: 1
+      - !type:AdjustReagent
+        reagent: CMUSoporific
+        amount: -1000
 
 #injectors
 - type: entity
@@ -999,6 +1047,48 @@
       CMUParacetamol: 60
   - type: IconLabel
     labelTextLocId: rmc-paracetamol-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMUFentanylAutoInjector
+  name: fentanyl autoinjector
+  description: An autoinjector loaded with 3 uses of Fentanyl.
+  components:
+  - type: Hypospray
+    transferAmount: 10
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 30
+        reagents:
+        - ReagentId: CMUFentanyl
+          Quantity: 30
+  - type: CMRefillableSolution
+    reagents:
+      CMUFentanyl: 30
+  - type: IconLabel
+    labelTextLocId: rmc-fentanyl-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMUMethamphetamineAutoInjector
+  name: methamphetamine autoinjector
+  description: An autoinjector loaded with 3 uses of Methamphetamine.
+  components:
+  - type: Hypospray
+    transferAmount: 15
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: CMUMethamphetamine
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMUMethamphetamine: 45
+  - type: IconLabel
+    labelTextLocId: rmc-methamphetamine-container-label-text
 
 #gauze
 

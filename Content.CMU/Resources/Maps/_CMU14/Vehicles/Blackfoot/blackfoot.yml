@@ -254,4 +254,11 @@ entities:
     - Corrodible
     - Damageable
     - Destructible
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 500
+    components:
+    - type: Transform
+      pos: 7.5,7.5
+      parent: 2
 ...

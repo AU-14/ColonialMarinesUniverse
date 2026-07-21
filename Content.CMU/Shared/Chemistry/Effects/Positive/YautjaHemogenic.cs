@@ -6,7 +6,7 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Chemistry.Effects.Positive;
 
-public sealed partial class YautjaHemogenic : RMCChemicalEffect
+public sealed partial class Yautjahemogenic : RMCChemicalEffect
 {
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {

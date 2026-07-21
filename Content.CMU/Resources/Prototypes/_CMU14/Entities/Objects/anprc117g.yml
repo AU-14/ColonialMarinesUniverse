@@ -1,0 +1,195 @@
+﻿- type: entity
+  id: ANPRC117GRadio
+  name: AN/PRC-117G
+  description: >-
+    A ruggedized multiband manpack radio, the lifeline between a platoon in
+    the field and its command net. Heavy, over-engineered, and utterly
+    indispensable. Commonly carried by Radio Telephone Operators.
+  parent: BaseItem
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    layers:
+    - state: base
+      map: [ "base" ]
+  # worn and in-hand art stays on the old pack rsi, the new rsi only carries
+  # the ground states
+  - type: Item
+    size: Huge
+    sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
+    shape:
+    - 0,0,1,1
+  - type: GenericVisualizer
+    visuals:
+      enum.ANPRCPackVisuals.State:
+        base:
+          Bare: { sprite: _AU14/Objects/Radio/anprc117g.rsi, state: base, offset: "0,0" }
+          Whip: { sprite: _AU14/Objects/Radio/anprc117g.rsi, state: base_w, offset: "0,0" }
+          Mast: { sprite: _AU14/Objects/Radio/anprc117g.rsi, state: base_m, offset: "0,0" }
+          DeployedWhip: { sprite: _AU14/Objects/Radio/anprc117g_deployed.rsi, state: whip_deploy, offset: "0,0.5" }
+          DeployedMast: { sprite: _AU14/Objects/Radio/anprc117g_deployed.rsi, state: mast_deploy, offset: "0,0.5" }
+  - type: ANPRCRadio
+    activeSlot: -1
+    enabled: true
+    requiredSlot: back
+    operatorFaction: govfor
+    callsignPresets:
+    - PLT ACTUAL
+    - PLT MAIN
+    - ALPHA ACTUAL
+    - BRAVO ACTUAL
+    - CHARLIE 6
+    - SUNRAY
+    - OVERLORD
+    - DUSTOFF
+    dfReportFactions:
+    - OPFOR
+    - CLF
+  - type: ANPRCCryptoSlot
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: PowerCellDraw
+    enabled: false
+    drawRate: 1
+    useRate: 0
+  - type: ContainerContainer
+    containers:
+      fill_card: !type:ContainerSlot
+      antenna: !type:ContainerSlot
+      cell_slot: !type:ContainerSlot
+      anprc_handset: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      fill_card:
+        name: COMSEC fill card
+        whitelist:
+          components:
+          - ANPRCFillCard
+      antenna:
+        name: antenna
+        whitelist:
+          components:
+          - ANPRCAntenna
+        startingItem: ANPRCWhipAntenna
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: RMCPowerCellHigh
+  - type: RTORelay
+    bridgedChannels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+  - type: UserInterface
+    interfaces:
+      enum.ANPRCRadioUI.Key:
+        type: ANPRCRadioBoundUserInterface
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
+  # every pack carries a viewing copy of the faction's comms net directory,
+  # opened from the panel; readOnly locks out edits even for trained operators
+  - type: AU14CallsignConsole
+    faction: govfor
+    readOnly: true
+  - type: Appearance
+  - type: ClothingSpeedModifier
+    walkModifier: 0.95
+    sprintModifier: 0.95
+  - type: Clothing
+    sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
+    slots:
+    - back
+
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioOPFOR
+  suffix: OPFOR
+  components:
+  - type: AU14CallsignConsole
+    faction: opfor
+    readOnly: true
+  - type: ANPRCRadio
+    operatorFaction: opfor
+    callsignPresets:
+    - 1-0 ACTUAL
+    - 1-1 ACTUAL
+    - 1-2 ACTUAL
+    - 1-3 ACTUAL
+    - ANVIL
+    - HAMMER
+    - RELAY 1
+    dfReportFactions:
+    - GOVFOR
+  - type: RTORelay
+    bridgedChannels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioCLF
+  suffix: CLF
+  components:
+  - type: AU14CallsignConsole
+    faction: clf
+    readOnly: true
+  - type: ANPRCRadio
+    operatorFaction: clf
+    callsignPresets:
+    - CELL ACTUAL
+    - FIREBRAND
+    - JACKAL
+    - MAGPIE
+    - LONGSHOT
+    - COURIER
+    dfReportFactions:
+    - GOVFOR
+  - type: RTORelay
+    bridgedChannels:
+    - radioCLF
+
+- type: entity
+  parent: BaseItem
+  id: AU14ANPRCHandset
+  name: AN/PRC-117G handset
+  description: >-
+    A corded handset wired into an AN/PRC-117G manpack. The cord never
+    stretches quite as far as you need it to.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/phone.rsi
+    state: rpb_phone
+  - type: Item
+    size: Invalid
+  - type: ANPRCHandset
+  - type: Undisposable
+
+- type: entity
+  parent: ANPRC117GRadio
+  id: ANPRC117GRadioFilled
+  suffix: GOVFOR, Filled
+  components:
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardGOVFOR
+
+- type: entity
+  parent: ANPRC117GRadioOPFOR
+  id: ANPRC117GRadioOPFORFilled
+  suffix: OPFOR, Filled
+  components:
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardOPFOR
+
+- type: entity
+  parent: ANPRC117GRadioCLF
+  id: ANPRC117GRadioCLFFilled
+  suffix: CLF, Filled
+  components:
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardCLF

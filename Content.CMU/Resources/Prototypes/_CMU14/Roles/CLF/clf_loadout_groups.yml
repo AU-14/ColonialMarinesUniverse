@@ -1,0 +1,24 @@
+# CLF copy of the GOVFOR Headwear loadout group, minus the USCM berets (SquadBeretRMC,
+# GreenBeretRMC): insurgents don't wear USCM unit headgear. Keep in sync with HeadwearRMC in
+# _RMC14/Roles/Loadouts/loadout_groups.yml when new civilian-appropriate headwear is added there.
+- type: loadoutGroup
+  id: HeadwearCLFAU14
+  name: rmc-loadout-group-headwear
+  minLimit: 0
+  maxLimit: 10
+  loadouts:
+  - TanBeretRMC
+  - BoonieRMC
+  - BoonieTanRMC
+  - CapRMC
+  - BrownHeadbandRMC
+  - GreenHeadbandRMC
+  - GrayHeadbandRMC
+  - RedHeadbandRMC
+  - TanHeadbandRMC
+  - SquadHeadbandRMC
+  - HeadBeanieRMC
+  - HeadBeanieTanRMC
+  - HeadBeanieGreenRMC
+  - HeadBeanieGrayRMC
+  - UNMCHeadsetRMC

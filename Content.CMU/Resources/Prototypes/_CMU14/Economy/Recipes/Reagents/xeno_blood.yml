@@ -1,0 +1,194 @@
+- type: reagent
+  parent: CMReagent
+  id: CMUXenoBlood
+  name: reagent-name-xeno-blood
+  desc: reagent-desc-xeno-blood
+  physicalDesc: reagent-physical-desc-unidentifiable
+  class: Special
+  color: "#bed700"
+  reward: 2
+  metabolisms:
+    Poison:
+      metabolismRate: 0.1
+      effects:
+      - !type:Corrosive
+        potency: 3
+
+- type: reagent
+  parent: CMUXenoBlood
+  id: CMUXenoRoyalBlood
+  name: reagent-name-xeno-royal-blood
+  desc: reagent-desc-xeno-royal-blood
+  color: "#cac703"
+  metabolisms:
+    Poison:
+      metabolismRate: 0.1
+      effects:
+      - !type:Corrosive
+        potency: 6
+
+
+- type: reagent
+  parent: CMReagent
+  id: CMUXenoPlasma
+  name: reagent-name-xeno-plasma
+  desc: reagent-desc-xeno-plasma
+  color: "#f1e8cf"
+  physicalDesc: reagent-physical-desc-unidentifiable
+
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaPhero
+  name: reagent-name-phero-plasma
+  desc: reagent-desc-phero-plasma
+  color: "#a2e7d6"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Hallucinogenic
+        potency: 8
+      - !type:Nervestimulating
+        potency: 2
+  
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaChitin
+  name: reagent-name-chitin-plasma
+  desc: reagent-desc-chitin-plasma
+  color: "#6d7694"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Hyperdensificating
+        potency: 1
+
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaCatecholamine
+  name: reagent-name-cat-plasma
+  desc: reagent-desc-cat-plasma
+  color: "#cf7551"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Neuropathic
+        potency: 2
+      - !type:Musclestimulating
+        potency: 6
+
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaEgg
+  name: reagent-name-egg-plasma
+  desc: reagent-desc-egg-plasma
+  color: "#c3c371"
+  reward: 2
+  class: Special
+  overdose: 80
+  criticalOverdose: 100
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Hemositic
+        potency: 4
+#TODO: special crit OD behavior for this
+
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaNeuro
+  name: reagent-name-neuro-plasma
+  desc: reagent-desc-neuro-plasma
+  color: "#ba8216"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Neurotoxic
+        potency: 4
+      - !type:Excreting
+        potency: 2
+      - !type:Hallucinogenic
+        potency: 6
+
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaNutrient
+  name: reagent-name-nutrient-plasma
+  desc: reagent-desc-nutrient-plasma
+  color: "#2fbe88"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Fueling
+        potency: 1
+      - !type:Viscous
+        potency: 3
+      - !type:Addictive
+        potency: 4
+      - !type:Nutritious
+        potency: 3
+
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaPurple
+  name: reagent-name-purple-plasma
+  desc: reagent-desc-purple-plasma
+  color: "#a65d7f"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Biocidic
+        potency: 2
+
+- type: reagent
+  parent: CMUXenoPlasma
+  id: CMUXenoPlasmaRoyal
+  name: reagent-name-royal-plasma
+  desc: reagent-desc-royal-plasma
+  color: "#ffeb9c"
+  reward: 2
+  class: Special
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Poison:
+      metabolismRate: 0.2
+      effects:
+      - !type:Biocidic
+        potency: 4
+      - !type:Addictive
+        potency: 1
+      - !type:Hallucinogenic
+        potency: 4
+      - !type:Encrypted
+        potency: 1

@@ -25,6 +25,11 @@ au14-job-description-clfmachinegunner = Fight for the CLF, support your fellow f
 au14-job-prefix-clfmachinegunner = CIV
 AU14JobCLFMachineGunner = CLF Machine Gunner
 
+au14-job-name-clfradiooperator = CLF Radio Operator
+au14-job-description-clfradiooperator = Carry the cell's AN/PRC-117G, keep the net alive and relay word between the Cell Leader and the fighters in the field.
+au14-job-prefix-clfradiooperator = CIV
+AU14JobCLFRadioOperator = CLF Radio Operator
+
 au14-job-name-clfcellleader = CLF Cell Leader
 au14-job-description-clfcellleader = Lead your men and take over the colony. Push out, capture and/or kill any government forces that don't surrender. Convince the local civilians to join your cause.
 au14-job-prefix-clfcellleader = CIV

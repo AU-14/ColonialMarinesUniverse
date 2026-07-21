@@ -1,0 +1,683 @@
+<Document>
+  # AN/PRC-117G Radio
+
+  The AN/PRC-117G is a manpack radio used by trained radio operators. It can store several nets, transmit over long distances, and relay nearby friendly headset traffic while powered.
+
+  <Box>
+    <GuideEntityEmbed Entity="ANPRC117GRadio" Caption="AN/PRC-117G"/>
+    <GuideEntityEmbed Entity="ANPRCFillCardGOVFOR" Caption="COMSEC Fill Card"/>
+  </Box>
+
+  ## Quick Setup
+
+  Before leaving the staging area:
+
+  - Wear the radio in your [bold]back slot[/bold].
+  - Alt-click the radio or open its verb menu.
+  - Select [bold]Open Radio Panel[/bold].
+  - Select [bold]+ ADD NET[/bold].
+  - Give the slot a short label, such as [bold]CMD[/bold].
+  - Select [bold]TUNE[/bold].
+  - Choose a named net from the [bold]NET[/bold] tab, or enter a direct frequency.
+  - Select the slot row to make it active.
+  - Insert a matching COMSEC fill card when required.
+  - Check the callsign shown on the radio panel.
+
+  Transmit through the active slot with:
+
+  [color=#a4885c]:r Message here.[/color]
+
+  A worn radio normally transmits using the wearer's assigned callsign. If no callsign is assigned, it transmits as [bold]UNKNOWN STATION[/bold].
+
+  ## Operator Access
+
+  Only trained operators can open the radio panel and transmit directly through the radio.
+
+  A worn radio relays traffic only when it is carried by a trained operator. A deployed retransmission station continues relaying without a wearer.
+
+  ### GOVFOR trained roles
+
+  - Radio Traffic Operator
+  - Commander
+  - Officer Adjutant
+  - Advisor
+  - Platoon Sergeant
+
+  ### CLF trained roles
+
+  - Cell Leader
+
+  Nearby headset users do not need radio training. They only need to be within range of a powered radio carrying their net.
+
+  ## Handset
+
+  Any nearby person can use the radio's handset without radio training.
+
+  Alt-click the [bold]wearer[/bold], or a deployed radio, and select [bold]Take Handset[/bold]. The handset transmits over the radio's active slot with [color=#a4885c]:r[/color].
+
+  The handset:
+
+  - Reaches approximately two tiles.
+  - Disconnects when the user moves out of range.
+  - Uses the handset user's own callsign.
+  - Can be used by one person at a time.
+
+  Alt-click again to return the handset.
+
+  A squad leader can use an attached RTO's handset to reach a command net that is not available through the squad leader's headset.
+
+  ## Slots
+
+  The radio can store up to [bold]four[/bold] slots.
+
+  Each slot can contain a named net or a direct frequency. Slot labels are only shown on that radio and do not change the selected net.
+
+  Select a slot row to make it active. [color=#a4885c]:r[/color] always transmits through the active slot.
+
+  <Table Columns="3" MinForcedColumnWidth="80">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Control[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Function[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Details[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]NET[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Select a named faction net.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Used for normal net setup.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]FREQ[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Enter a direct frequency.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Can also be used to monitor enemy frequencies.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]CLEAR[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Remove the selected net or frequency.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Keeps the slot and its label.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]DEL[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Delete the slot.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Another slot becomes active when necessary.</Box>
+    </ColorBox>
+  </Table>
+
+  Frequencies can be entered with or without a decimal point.
+
+  [color=#a4885c]1606[/color] and [color=#a4885c]1.606[/color] select the same frequency.
+
+  ## Callsigns
+
+  Faction radio traffic is identified by callsign.
+
+  The sender's character name and role are not transmitted over headsets or manpack radios. Friendly and hostile listeners see the sender's callsign instead.
+
+  Face-to-face speech is unaffected.
+
+  Faction members receive callsigns automatically when they deploy.
+
+  <Table Columns="2" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Example[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Station[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">HAVOC 6</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Commanding officer</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">HAVOC 5</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Executive officer or second-in-command</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">HAVOC 7</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Senior non-commissioned officer</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">HAVOC ROMEO</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Command radio operator</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">HAVOC OPS</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Staff officers</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">ALPHA ACTUAL</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Alpha squad leader</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">ALPHA ROMEO</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Radio operator attached to Alpha</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">ALPHA 1-1 ... 1-N</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Alpha squad members</Box>
+    </ColorBox>
+  </Table>
+
+  [bold]ACTUAL[/bold] identifies the person in charge speaking personally rather than an operator transmitting on their behalf.
+
+  Squad leaders answer as their element's ACTUAL station, for example [bold]ALPHA ACTUAL[/bold]. At platoon level, [bold]HAVOC 6 ACTUAL[/bold] means the commander has taken the handset personally instead of the RTO.
+
+  ### Comms Net Directory
+
+  The [bold]Comms Net Directory[/bold] shows which person is assigned to each callsign. It is available on command-post laptops and overwatch consoles.
+
+  Authorized radio personnel can:
+
+  - Rename element words.
+  - Reassign individual suffixes.
+  - Review current callsign assignments.
+
+  A worn AN/PRC normally follows the wearer's assigned callsign. The panel displays this as [bold]AUTO[/bold].
+
+  The radio updates automatically when:
+
+  - It is given to another person.
+  - The wearer's callsign is changed.
+  - The wearer changes squads.
+
+  ### Callsign override
+
+  A fixed station callsign can be set from the radio panel.
+
+  - Select a callsign from the [bold]PRESETS[/bold] menu, or enter one manually.
+  - Manual callsigns can contain up to 16 characters.
+  - Select [bold]SET[/bold] to apply the override.
+  - Clear the field and select [bold]SET[/bold] to remove it.
+
+  Fixed callsigns can be used for command posts, retransmission sites, or other permanent stations.
+
+  For message format, prowords, and examples, see [textlink="Voice Procedure" link="AU14CommsVoiceProcedure"].
+
+  ## Direct Frequencies
+
+  A slot containing a frequency without a named net is a direct-frequency slot.
+
+  A [textlink="tuned headset" link="AU14CommsHeadsets"] can communicate on the same frequency with [color=#a4885c]:x[/color].
+
+  Without a relay:
+
+  - Traffic is clear within [bold]30 tiles[/bold].
+  - Traffic may be lightly degraded up to [bold]50 tiles[/bold].
+  - Traffic is not received beyond [bold]50 tiles[/bold].
+
+  With a powered AN/PRC carrying the frequency:
+
+  - The radio relays traffic between nearby users.
+  - Both users must be within [bold]50 tiles[/bold] of the radio.
+
+  Use [color=#a4885c]:r[/color] when the direct-frequency slot is active on the radio.
+
+  Use [color=#a4885c]:x[/color] from a tuned headset.
+
+  ## Operating Modes
+
+  Select [bold]MODE[/bold] to cycle the radio's operating mode.
+
+  <Table Columns="4" MinForcedColumnWidth="75">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Mode[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Purpose[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Benefits[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Limitations[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]FH[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Frequency-hopping traffic.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Reduces jamming by one tier.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Uses 1.5× battery and creates a small direction-finding signature.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]SC[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Normal secured traffic.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Efficient. Secured traffic creates no direction-finding signature.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Provides no jamming resistance.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]CT[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Cipher traffic between AN/PRC radios.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Hidden and unreadable without matching fill. No direction-finding signature.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Requires fill. Standard headsets cannot receive it.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]PT[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Plain-text broadcast.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Uses 0.5× battery.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Readable by any compatible receiver and creates the largest direction-finding risk.</Box>
+    </ColorBox>
+  </Table>
+
+  ## Jamming
+
+  FH reduces jamming by one tier.
+
+  - Heavy jamming becomes medium.
+  - Medium jamming becomes light.
+  - Light jamming is ignored.
+
+  Unlike a normal headset, the AN/PRC can transmit while inside a jammer field. The message may be degraded instead of being blocked completely.
+
+  ## MON, SCAN, and SQL
+
+  ### MON
+
+  [bold]MON[/bold] enables receive-only monitoring.
+
+  While MON is enabled:
+
+  - The radio receives traffic on its loaded nets.
+  - [color=#a4885c]:r[/color] transmission is blocked.
+  - Headset channel keys remain usable.
+
+  ### SCAN
+
+  [bold]SCAN[/bold] listens to all loaded nets.
+
+  When traffic is received, the radio changes its active slot to the slot that received the message. It does not automatically return to the previous slot.
+
+  ### SQL
+
+  [bold]SQL[/bold] controls squelch. Squelch filters degraded signals and static, but does not block clear traffic.
+
+  <Table Columns="2" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]SQL[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Filtering[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]0[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Passes all traffic, including heavy static.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]1[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Blocks heavy static.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]2[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Blocks medium jammer garble.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]3[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Default. Blocks normal jammer garble.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]4[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Maximum filtering. Weak relay traffic may also be suppressed.</Box>
+    </ColorBox>
+  </Table>
+
+  Lowering SQL allows more degraded traffic to pass through.
+
+  ## COMSEC Fill
+
+  COMSEC fill is stored on a physical card inserted into the radio.
+
+  The radio accepts one fill card at a time. The COMSEC panel displays [bold]SECURED[/bold] when the loaded card matches the traffic being used.
+
+  Faction headsets contain their own net keys. The AN/PRC requires a matching fill card to participate securely.
+
+  Transmitting on a secured faction net without matching fill:
+
+  - Displays a warning.
+  - Still sends the message.
+  - Sends the message in the clear.
+
+  A radio can accept another faction's fill card. A current captured card allows compatible secured traffic from that faction to be read.
+
+  ## ZEROIZE, DESTROY, and RECRYPTO
+
+  ### ZEROIZE
+
+  [bold]ZEROIZE[/bold] ejects the loaded fill card.
+
+  The card is placed in a free hand. If no hand is available, it is dropped nearby.
+
+  ### DESTROY
+
+  [bold]DESTROY[/bold] permanently removes the loaded fill card.
+
+  ### RECRYPTO
+
+  [bold]RECRYPTO[/bold] advances the active fill generation for the card's faction.
+
+  Older cards from that faction become [bold]STALE[/bold], including captured cards.
+
+  A stale card:
+
+  - Remains identifiable.
+  - Cannot secure current traffic.
+  - Cannot decode current secured traffic.
+  - Is marked [bold]STALE[/bold] when examined or viewed in the radio panel.
+
+  Newly issued cards use the faction's current generation. Replacement cards are obtained through the normal supply system.
+
+  ## Transmit Power
+
+  Select [bold]TX[/bold] to change transmit power.
+
+  <Table Columns="4" MinForcedColumnWidth="75">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Power[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Relay range[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Battery use[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]DF signature[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]LO[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">60% of standard range.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Half.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Half.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]MED[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Standard range.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Standard.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Standard.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]HI[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Approximately 150% of standard range.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Double.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Double.</Box>
+    </ColorBox>
+  </Table>
+
+  ## Direction Finding
+
+  Enemy electronic-warfare equipment can locate transmissions that create a direction-finding signature.
+
+  A signature can be produced by:
+
+  - PT mode.
+  - Faction-net traffic sent without matching fill.
+  - FH mode, including secured FH traffic.
+  - Higher transmit power.
+  - Repeated transmissions from the same location.
+  - Transmitting near enemy jamming.
+
+  Secured SC and CT traffic do not create a direction-finding signature.
+
+  ## Radio Check
+
+  Select [bold]RADIO CHECK[/bold] to test coverage on the active net.
+
+  The radio transmits:
+
+  [bold]RADIO CHECK, HOW COPY, OVER[/bold]
+
+  The operator receives a private report listing stations in clear or degraded coverage.
+
+  When performed inside enemy jamming, the report also includes a bearing to the strongest jammer.
+
+  ## Retransmission Stations
+
+  A trained operator can deploy a radio with [bold]Set Up Retrans[/bold].
+
+  A retransmission station:
+
+  - Relays its loaded faction nets.
+  - Continues recording traffic.
+  - Consumes battery power.
+  - Retains its presets.
+  - Retains its fill card.
+  - Allows nearby users to take its handset.
+
+  Any user can select [bold]Pack Up Radio[/bold], including hostile personnel.
+
+  A captured retransmission station can therefore provide access to its radio, handset, and loaded fill card.
+
+  ## Fixed Infrastructure
+
+  Powered shipboard [bold]communications arrays[/bold] anchor faction nets across the ship, including every deck.
+
+  Command-post [bold]antenna masts[/bold] provide local coverage without electrical power. Masts, worn radios, and retransmission stations reach one level above or below their own; only an array covers a whole site vertically.
+
+  Combat nets require coverage from at least one of the following:
+
+  - A worn AN/PRC.
+  - A deployed retransmission station.
+  - A communications array.
+  - A command-post antenna mast.
+
+  If all available relays are disabled or removed, the affected net loses coverage.
+
+  ## Battery and Antenna
+
+  The radio uses a battery in its internal battery slot.
+
+  Power is consumed:
+
+  - Slowly while the radio is idle.
+  - More quickly while transmitting.
+  - More quickly while performing radio checks.
+  - According to the selected operating mode and transmit power.
+
+  The standard [bold]whip antenna[/bold] supports mobile operation.
+
+  A [bold]mast antenna[/bold]:
+
+  - Provides greater range while stationary.
+  - Provides less range than the whip while moving.
+  - Is intended for command posts and retransmission sites.
+
+  ## Intercepting Enemy Traffic
+
+  Enter another faction's frequency with [bold]FREQ[/bold].
+
+  When the signal reaches the radio, intercepted traffic appears in [color=#FF6B6B]red[/color] and is recorded in the net log.
+
+  What can be received depends on the transmitting radio's mode and COMSEC state.
+
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Traffic[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Without matching fill[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Headset traffic</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Received as static.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Secured AN/PRC traffic</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Received as static.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Unfilled AN/PRC traffic</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Readable.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">PT traffic</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Readable.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">FH traffic</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Readable when sent in the clear, with light interference.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">CT traffic</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Not displayed.</Box>
+    </ColorBox>
+  </Table>
+
+  A current fill card from the transmitting faction allows compatible secured traffic to be read until that faction performs recrypto.
+
+  Intercepted traffic is identified by callsign. It does not reveal the sender's character name or role.
+
+  The radio relays only its own faction's nets. Tuning another faction's frequency allows reception, but does not extend that faction's coverage.
+
+  ## Net Log
+
+  The radio stores the last [bold]50[/bold] entries while powered.
+
+  The log records:
+
+  - Transmissions sent with [color=#a4885c]:r[/color].
+  - The wearer's headset transmissions.
+  - Incoming traffic on the active net.
+  - Incoming traffic on all loaded nets while MON or SCAN is enabled.
+
+  The log can be used to review missed traffic or confirm that a message was transmitted.
+
+  ## Status Display
+
+  The top of the radio panel shows its current status.
+
+  - [bold]PWR[/bold] shows the power state.
+  - [bold]LINK[/bold] shows the current link state.
+  - [bold]MODE[/bold] shows the selected operating mode.
+  - [bold]BIT[/bold] shows built-in test status.
+  - [bold]FAULT[/bold] shows detected problems.
+
+  [bold]READY[/bold] means the radio is worn and has an active net.
+
+  [bold]NO NET[/bold], [bold]STBY[/bold], and [bold]NOT WORN[/bold] indicate that part of the setup is incomplete.
+</Document>

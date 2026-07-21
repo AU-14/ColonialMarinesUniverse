@@ -1,0 +1,207 @@
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUMonkeyCube
+  name: monkey cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - CMMobSmallHostMonkey
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycube
+
+- type: entity
+  parent: BaseWrappedCube
+  name: monkey cube
+  id: CMUMonkeyCubeWrapped
+  description: Unwrap this to get a monkey cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUMonkeyCube
+  - type: Tag
+    tags:
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycubewrap
+
+- type: entity
+  parent: RMCBoxCardboard
+  name: monkey cube box
+  id: CMUMonkeyCubeBox
+  description: Drymate brand monkey cubes. Just add water!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/boxes.rsi
+    state: monkeycubebox
+  - type: Item
+    sprite: _RMC14/Objects/Storage/boxes.rsi
+    size: Large
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,7,1
+  - type: StorageFill
+    contents:
+      - id: CMUMonkeyCubeWrapped
+        amount: 8
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUYirenCube
+  name: yiren cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostYiren
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycube
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUFarwaCube
+  name: farwa cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostFarwa
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycube
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUStokCube
+  name: stok cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostStok
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycube
+
+- type: entity
+  parent: RehydratableAnimalCube
+  id: CMUNeaeraCube
+  name: neaera cube
+  components:
+  - type: Rehydratable
+    possibleSpawns:
+    - RMCMobSmallHostNeaera
+  - type: Tag
+    tags:
+    - Meat
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycube
+
+- type: entity
+  parent: BaseWrappedCube
+  name: yiren cube
+  id: CMUYirenCubeWrapped
+  description: Unwrap this to get a yiren cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUYirenCube
+  - type: Tag
+    tags:
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycubewrap
+
+- type: entity
+  parent: BaseWrappedCube
+  name: stok cube
+  id: CMUStokCubeWrapped
+  description: Unwrap this to get a stok cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUStokCube
+  - type: Tag
+    tags:
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycubewrap
+
+- type: entity
+  parent: BaseWrappedCube
+  name: farwa cube
+  id: CMUFarwaCubeWrapped
+  description: Unwrap this to get a farwa cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUFarwaCube
+  - type: Tag
+    tags:
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycubewrap
+
+- type: entity
+  parent: BaseWrappedCube
+  name: neaera cube
+  id: CMUNeaeraCubeWrapped
+  description: Unwrap this to get a neaera cube.
+  components:
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMUNeaeraCube
+  - type: Tag
+    tags:
+    - MonkeyCube
+  - type: Sprite
+    sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
+    state: monkeycubewrap
+
+- type: entity
+  parent: RMCBoxCardboard
+  name: exotic fauna cube box
+  id: CMUExoticCubeBox
+  description: Drymate brand premium exotic fauna cubes. Just add water!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/boxes.rsi
+    state: monkeycubebox
+  - type: Item
+    sprite: _RMC14/Objects/Storage/boxes.rsi
+    size: Large
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,3,1
+  - type: StorageFill
+    contents:
+      - id: CMUYirenCubeWrapped
+        amount: 1
+      - id: CMUFarwaCubeWrapped
+        amount: 1
+      - id: CMUNeaeraCubeWrapped
+        amount: 1
+      - id: CMUStokCubeWrapped
+        amount: 1

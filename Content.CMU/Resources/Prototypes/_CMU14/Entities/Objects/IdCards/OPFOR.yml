@@ -154,6 +154,14 @@
 
 - type: entity
   parent: AU14IDCardOPFOR
+  id: AU14JobIDCardOPFORRadioTrafficOperator
+  name: radio traffic operator ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobOPFORRadioTrafficOperator
+
+- type: entity
+  parent: AU14IDCardOPFOR
   id: AU14IDCardOPFORAuxSupportSynth
   name: support synthetic ID card
   components:

@@ -123,3 +123,59 @@
     toggledRsi:
       sprite: _AU14/Clothing/Goggles/m1a1orange.rsi
       state: helmet-down
+
+# Prescription variants
+
+- type: entity
+  parent: AU14GogglesM1A1ClearBallistic
+  id: AU14GogglesPrescriptionM1A1ClearBallistic
+  name: prescription clear M1A1 ballistic goggles
+  description: Newer issue USCM goggles. They are capable of preventing insects, dust, and other things from getting into one's eyes. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: AU14GogglesM1A1Ballistic
+  id: AU14GogglesPrescriptionM1A1Ballistic
+  name: prescription M1A1 ballistic goggles
+  description: Newer issue USCM goggles. They are capable of preventing insects, dust, and other things from getting into one's eyes. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: AU14GogglesM1A1DarkBallistic
+  id: AU14GogglesPrescriptionM1A1DarkBallistic
+  name: prescription dark M1A1 ballistic goggles
+  description: Newer issue USCM goggles. They are capable of preventing insects, dust, and other things from getting into one's eyes. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: AU14GogglesM1A1LaserBallistic
+  id: AU14GogglesPrescriptionM1A1LaserBallistic
+  name: prescription laser shielded M1A1 ballistic goggles
+  description: Newer issue USCM goggles. They are capable of preventing insects, dust, and other things from getting into one's eyes. Also protects your eyes from lasers! Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: AU14GogglesM1A1PolarizedBallistic
+  id: AU14GogglesPrescriptionM1A1PolarizedBallistic
+  name: prescription ventrax polarized goggles
+  description: On the market as civilian goggles, the brand’s pretty ambiguous, but they seem to be made by Ventrax, a subsidiary of some other Wey-Yu subsidiary. Surprisingly, they make decent combat goggles. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: AU14GogglesM1A1OrangeBallistic
+  id: AU14GogglesPrescriptionM1A1OrangeBallistic
+  name: prescription ventrax orange goggles
+  description: On the market as civilian goggles, the brand’s pretty ambiguous, but they seem to be made by Ventrax, a subsidiary of some other Wey-Yu subsidiary. Surprisingly, they make decent combat goggles. You swear the orange tint makes you see better at night. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4

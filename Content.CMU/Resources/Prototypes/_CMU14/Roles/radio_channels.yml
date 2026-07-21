@@ -8,6 +8,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioGovforBravo
@@ -18,6 +19,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioGovforCharlie
@@ -28,6 +30,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioGovforCommand
@@ -38,6 +41,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioGovforIntel
@@ -48,6 +52,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioGovforJTAC
@@ -58,6 +63,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioGovforMILP
@@ -68,6 +74,7 @@
   longRange: true
   tower: true
   faction: "govfor"
+  anchorGated: true
 
 # ├──[ OPFOR CHANNELS ]──────────────────────────────────────────────┤
 - type: radioChannel
@@ -79,6 +86,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioOpforBravo
@@ -89,6 +97,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioOpforCharlie
@@ -99,6 +108,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioOpforCommand
@@ -109,6 +119,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioOpforIntel
@@ -119,6 +130,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioOpforJTAC
@@ -129,6 +141,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 - type: radioChannel
   id: radioOpforMILP
@@ -139,6 +152,7 @@
   longRange: true
   tower: true
   faction: "opfor"
+  anchorGated: true
 
 # ├──[ COLONY ]──────────────────────────────────────────────────────┤
 - type: radioChannel
@@ -283,3 +297,19 @@
   color: "#92969A"
   longRange: true
   tower: true
+
+- type: radioChannel
+  id: ANPRCActiveChannel
+  name: chat-radio-anprc-sentinel
+  keycode: "r"
+  frequency: 0
+  color: "#3fcf8e"
+  longRange: true
+
+- type: radioChannel
+  id: TunableFrequencyChannel
+  name: chat-radio-tunable-sentinel
+  keycode: "x"
+  frequency: 0
+  color: "#5B9BD5"
+  longRange: false

@@ -1,0 +1,425 @@
+<Document>
+  # Comms Quick Reference
+
+  A compact reference for radio controls, ranges, and status effects.
+
+  For detailed instructions, see [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] and [textlink="Field Headsets" link="AU14CommsHeadsets"].
+
+  ## Chat Prefixes
+
+  <Table Columns="2" MinForcedColumnWidth="120">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Prefix[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Function[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#a4885c]:h[/color]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Transmit on the headset's default net.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#a4885c]:v[/color], [color=#a4885c]:a[/color], and others</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Transmit on another keyed headset net. Examine the headset to view its available prefixes.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#a4885c]:r[/color]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Transmit through the active AN/PRC slot or handset.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#a4885c]:x[/color]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Transmit on a headset's tuned direct frequency.</Box>
+    </ColorBox>
+  </Table>
+
+  The AN/PRC panel can be operated by:
+
+  - Radio Traffic Operators
+  - Commanders
+  - Officer Adjutants
+  - Advisors
+  - Platoon Sergeants
+  - CLF Cell Leaders
+
+  The handset can be used by anyone within range.
+
+  ## Signal Range
+
+  The following AN/PRC ranges assume [bold]TX MED[/bold] and a whip antenna.
+
+  <Table Columns="3" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]System[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Clear range[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Degraded or lost[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Named net through AN/PRC</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0-30 tiles from the radio.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Degraded to 45 tiles. No signal beyond 45.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Direct frequency</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0-30 tiles from the transmitter.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Degraded to 50 tiles. No signal beyond 50.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">AN/PRC frequency bridge</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Both users within 50 tiles of the radio.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Fails when either user is outside bridge range.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Command-post antenna mast</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0-75 tiles.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Degraded to 100 tiles. No signal beyond 100.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Shipboard communications array</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Covers the connected ship while powered.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Provides no coverage when destroyed or unpowered.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Handset cord</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Approximately two tiles from the radio.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Disconnects when the user moves out of range.</Box>
+    </ColorBox>
+  </Table>
+
+  Transmit power and antenna type modify AN/PRC relay range.
+
+  Faction nets, including squad, command, intelligence, JTAC, and MP, require coverage from at least one of the following:
+
+  - A powered AN/PRC worn by a trained operator.
+  - A deployed retransmission station.
+  - A command-post antenna mast.
+  - A powered communications array.
+  - A vehicle radio set aboard a dropship or vehicle (covers little more than the hull).
+  - A field antenna mast, raised from ten metal sheets by engineering-trained personnel.
+
+  Colony and civilian channels are not relay-gated and keep stock behavior.
+
+  ## Antennas
+
+  <Table Columns="3" MinForcedColumnWidth="90">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Antenna[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Operation[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Range[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]WHIP[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Mobile or stationary.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Standard range.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]MAST[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Best while stationary.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Approximately double range while stationary and half standard range while moving.</Box>
+    </ColorBox>
+  </Table>
+
+  ## Operating Modes
+
+  <Table Columns="4" MinForcedColumnWidth="80">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Mode[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Function[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Benefits[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Limitations[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]FH[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Frequency-hopping traffic.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Reduces jamming by one tier and permits transmission inside jammer fields.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Uses 1.5× battery and creates a small direction-finding signature.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]SC[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Normal secured traffic.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Uses 0.75× battery and creates no direction-finding signature while secured.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Provides no jamming resistance.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]CT[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Cipher traffic between AN/PRC radios.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Hidden from receivers without matching fill and creates no direction-finding signature.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Requires fill-loaded AN/PRCs and provides no jamming resistance.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]PT[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Plain-text broadcast.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Uses 0.5× battery.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Readable by any compatible receiver, increases jamming by one tier, and creates the largest direction-finding risk.</Box>
+    </ColorBox>
+  </Table>
+
+  Matching COMSEC fill secures FH, SC, and CT traffic. PT traffic is always sent in the clear.
+
+  ## Transmit Power
+
+  <Table Columns="4" MinForcedColumnWidth="70">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]TX[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Range[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Battery use[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]DF signature[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]LO[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.6×</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.5×</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0.5×</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]MED[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1×</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1×</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1×</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]HI[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">1.5×</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">2×</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">2×</Box>
+    </ColorBox>
+  </Table>
+
+  ## Squelch
+
+  Signal quality falls off smoothly with distance from the nearest relay:
+  clear close in, light hiss over the outer band, broken fragments at the
+  fringe. Squelch decides how much of that damaged traffic you hear - it
+  never repairs a transmission, it only mutes it.
+
+  <Table Columns="2" MinForcedColumnWidth="100">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]SQL[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Filtering[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]0[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Passes all traffic, including heavy static.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]1[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Suppresses heavy static and undecodable encrypted traffic.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]2[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Suppresses medium jammer degradation.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]3[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Default. Suppresses light jammer degradation and broken fringe-range traffic.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]4[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Maximum filtering. Even lightly hissy long-range traffic is suppressed.</Box>
+    </ColorBox>
+  </Table>
+
+  Lower SQL settings allow more degraded traffic to be heard. Raising squelch
+  buys quiet at the price of missing weak distant stations entirely.
+
+  ## COMSEC Controls
+
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Action[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Result[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Insert fill card</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Secures compatible faction traffic in FH, SC, and CT modes.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]ZEROIZE[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Ejects the loaded card without damaging it.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]DESTROY[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Permanently removes the loaded card.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]RECRYPTO[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Makes all older cards from that faction stale, including captured cards. Command authority only: Commander, Adjutant, Advisor.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Captured current card</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Allows compatible secured traffic from that faction to be decoded until recrypto.</Box>
+    </ColorBox>
+  </Table>
+
+  Replacement fill cards are obtained through the normal supply system.
+
+  ## Direction Finding
+
+  The following traffic creates a direction-finding signature, from highest to lowest risk:
+
+  - PT traffic.
+  - Faction-net traffic sent without matching fill.
+  - Secured FH traffic.
+
+  Secured SC and CT traffic do not create a direction-finding signature.
+
+  Repeated signature-producing transmissions from the same location increase the chance of detection. Direction-finding risk decreases after approximately one minute without another qualifying transmission.
+
+  [bold]RADIO CHECK[/bold] reports which stations receive the active net clearly or with degradation.
+
+  When used inside a jammer field, it also reports a bearing to the strongest jammer.
+</Document>

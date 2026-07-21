@@ -1,6 +1,7 @@
 - type: entity
   abstract: false
   id: UPPCargoCatalog
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies ]
   components:
   - type: RequisitionsComputer
     categories:
@@ -90,6 +91,10 @@
         crate: RMCCrateFoodIngredients
     - name: Gear
       entries:
+      - cost: 300
+        crate: ANPRCFillCardResupplyCrateOPFOR
+      - cost: 1500
+        crate: ANPRCRadioResupplyCrateOPFOR
       - cost: 1200
         crate: AU14CrateTacticalMonocular
       - cost: 1700

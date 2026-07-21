@@ -26,8 +26,13 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: "5"
+    commandElement: true
   - type: CommendationGiver
   - type: InnateCommandSpeech
+  - type: ANPRCRadioUser
+  - type: ANPRCCryptoAuthority
   - type: AU14SilenceOrderAbility
   - type: AU14CallToAttentionAbility
   - type: AU14CallToAttentionImmune
@@ -114,6 +119,9 @@
     pocket2: AU14TabletGovfor
   inhand:
     - AU14KitJOAdjutantKit
+  storage:
+    back:
+    - ANPRCFillCardGOVFOR
 
 - type: startingGear
   id: AU14GearOPFORAdjutant
@@ -123,6 +131,9 @@
     pocket2: AU14TabletOpfor
   inhand:
     - AU14KitJOAdjutantKit
+  storage:
+    back:
+    - ANPRCFillCardOPFOR
 
 - type: roleLoadout
   id: JobAU14JobGOVFORAdjutant

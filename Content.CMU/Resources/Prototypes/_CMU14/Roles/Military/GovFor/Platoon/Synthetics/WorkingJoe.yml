@@ -17,6 +17,9 @@
   - AU14GovforCommand
   - AUPrisonStaff
   - auwy
+  roundComponents:
+  - type: AU14CallsignRole
+    category: SYNTH
 
 - type: job
   abstract: true
@@ -37,6 +40,9 @@
   - AU14OpforCommand
   - AUPrisonStaff
   - auwy
+  roundComponents:
+  - type: AU14CallsignRole
+    category: SYNTH
 
 - type: job
   parent: AU14JobGOVFORWorkingJoeBase

@@ -1,3 +1,16 @@
+# ├──[ Skills ]──────────────────────────────────────────────────────┤
+# grants AN/PRC-117G operator training, for standing up a replacement RTO
+- type: entity
+  parent: CMPamphlet
+  id: AU14PamphletRadioOperator
+  name: field radio operator's pamphlet
+  description: A pamphlet used to quickly impart vital knowledge. This one covers AN/PRC-117G manpack operation, net procedure and COMSEC handling.
+  components:
+  - type: SkillPamphlet
+    addComps:
+    - type: ANPRCRadioUser
+
+# ├──[ Languages ]───────────────────────────────────────────────────┤
 - type: entity
   parent: CMPamphletLanguage
   id: AU14PamphletLanguageEnglish

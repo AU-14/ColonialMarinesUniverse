@@ -9,3 +9,43 @@
     hiveUIColor: "#4d994d"
     canMakeAlliances: true
     corrupted: true
+
+- type: entity
+  id: CMUAlphaHive
+  name: Alpha Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#ff4040" #they are red for an amazing reason
+    hiveUIColor: "#992626"
+
+- type: entity
+  id: CMUBravoHive
+  name: Bravo Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#ffff80" #they are yellow for an amazing reason
+    hiveUIColor: "#99994d"
+
+- type: entity
+  id: CMUCharlieHive
+  name: Charlie Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#bb40ff" #they are purple for an amazing reason
+    hiveUIColor: "#702699"
+
+- type: entity
+  id: CMUDeltaHive
+  name: Delta Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#8080ff" #they are blue for an amazing reason
+    hiveUIColor: "#4d4d99"

@@ -5,11 +5,16 @@
   roundForce: CLF
   roundRole: CLFCellLeader
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: "6"
+    commandElement: true
   - type: NpcFactionMember
     factions:
     - CLF
   - type: CLFMember
     statusIcon: CLFFactionLeader
+  - type: ANPRCRadioUser
+  - type: ANPRCCryptoAuthority
   - type: Skills
     skills:
       RMCSkillCqc: 2
@@ -28,6 +33,7 @@
       RMCSkillPowerLoader: 1
       RMCSkillSurgery: 1
       RMCSkillVehicles: 1
+      RMCSkillSpecialistWeapons: 1
   - type: JobPrefix
     prefix: au14-job-prefix-clfcellleader
   - type: StartingMindRole
@@ -80,8 +86,11 @@
     eyes: RMCGlassesAviators
     pocket1: AU14StampCLFCell
   inhand:
-  - AU14CLFCellKit
+  - AU14HeavyCellKit
   - AU14CLFHeadset
+  storage:
+    back:
+    - ANPRCFillCardCLF
 
 - type: entity
   parent: CMSpawnPointJobBase
@@ -113,3 +122,6 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

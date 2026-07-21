@@ -1,12 +1,14 @@
 - type: reagent
   parent: CMReagent
   id: CMUBlackSludge
-  name: reagent-name-rmcblackgoo
-  desc: reagent-desc-rmcblackgoo
+  name: reagent-name-black-sludge
+  desc: reagent-desc-black-sludge
   physicalDesc: reagent-physical-desc-unidentifiable
   flavor: bitter
   color: "#0a0b0d"
   unknown: true
+  flags: Scannable
+  class: Hydro
   toxin: true
   metabolisms:
     Poison:
@@ -14,3 +16,97 @@
       effects:
       - !type:ChemVomit
         probability: 0
+
+- type: reagent
+  parent: CMReagent
+  id: CMUFormaldehyde # mutant apples / cherries
+  name: reagent-name-formaldehyde
+  desc: reagent-desc-formaldehyde
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: bitter
+  color: "#808080"
+  flags: Scannable
+  class: Hydro
+  overdose: 30
+  criticalOverdose: 50
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.5
+      effects:
+        - !type:Toxic
+          potency: 1
+        - !type:Carcinogenic
+          potency: 1
+
+- type: reagent
+  parent: CMReagent
+  id: CMUPrimeCipherToxin
+  name: reagent-name-ciphertoxin
+  desc: reagent-desc-ciphertoxin
+  physicalDesc: reagent-physical-desc-unidentifiable
+  flavor: horrible
+  color: "#331133"
+  unknown: true
+  flags: NoGeneration
+  toxin: true
+  metabolisms:
+    Medicine:
+      metabolismRate: 1
+      effects:
+      - !type:Ciphering
+        potency: 1 # prime hive
+
+- type: reagent
+  parent: CMUPrimeCipherToxin
+  id: CMUCorruptedCipherToxin
+  color: "#113311"
+  metabolisms:
+    Medicine:
+      metabolismRate: 1
+      effects:
+      - !type:Ciphering
+        potency: 2 # corrupted hive
+
+- type: reagent
+  parent: CMUPrimeCipherToxin
+  id: CMUAlphaCipherToxin
+  color: "#331111"
+  metabolisms:
+    Medicine:
+      metabolismRate: 1
+      effects:
+      - !type:Ciphering
+        potency: 3 # alpha hive
+
+- type: reagent
+  parent: CMUPrimeCipherToxin
+  id: CMUBravoCipherToxin
+  color: "#333311"
+  metabolisms:
+    Medicine:
+      metabolismRate: 1
+      effects:
+      - !type:Ciphering
+        potency: 4 # bravo hive
+
+- type: reagent
+  parent: CMUPrimeCipherToxin
+  id: CMUCharlieCipherToxin
+  color: "#551155"
+  metabolisms:
+    Medicine:
+      metabolismRate: 1
+      effects:
+      - !type:Ciphering
+        potency: 5 # charlie hive
+
+- type: reagent
+  parent: CMUPrimeCipherToxin
+  id: CMUDeltaCipherToxin
+  color: "#111133"
+  metabolisms:
+    Medicine:
+      metabolismRate: 1
+      effects:
+      - !type:Ciphering
+        potency: 6 # delta hive

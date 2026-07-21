@@ -344,6 +344,12 @@
       - id: AU14RadioJammer
         amount: 4
         points: 10
+      - id: ANPRC117GRadioCLFFilled
+        amount: 1
+        points: 15
+      - id: ANPRCFillCardCLF
+        amount: 3
+        points: 4
       - id: AU14CLFHeadset
         amount: 10
         points: 8
@@ -474,6 +480,8 @@
     state: crate
   - type: StorageFill
     contents:
+    - id: ANPRC117GRadioCLFFilled
+      amount: 1
     - id:  AU14GunCaseRifleMar30
       amount: 2
     - id: RMCGunCasePistolZHNK72

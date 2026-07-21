@@ -1,0 +1,11 @@
+# Marker job that exists ONLY as a jobwhitelist key: "jobwhitelistadd <player> InsforEditor" lets
+# that player open the INSFOR faction editor (InsurgencyAuthorization.EditorWhitelistJob) without
+# being an admin. It is never joinable: no spawn points, no preference entry, weight 0.
+- type: playTimeTracker
+  id: AU14JobInsforEditor
+
+- type: job
+  id: InsforEditor
+  name: au14-job-name-insfor-editor
+  playTimeTracker: AU14JobInsforEditor
+  setPreference: false

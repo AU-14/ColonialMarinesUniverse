@@ -55,6 +55,73 @@
     spawn: AU14GeneralMedicalVendor
 
 - type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateResearchTerminal
+  name: Weyland-Yutani research data terminal crate
+  description: A crate containing a computer linked to Weyland-Yutani's research servers.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUResearchDataTerminal
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRF
+  suffix: Corporate
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScanner
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFGovfor
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  suffix: GOVFOR
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerGovfor
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFOpfor
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  suffix: OPFOR
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerOpfor
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFColony
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  suffix: Colony
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerColony
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateXRFNobody
+  name: x-ray fluorescence spectrometer crate
+  description: A crate containing an X-Ray Fluorescence spectrometer machine. WARNING! CONTENTS ARE RADIOACTIVE.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUXRFScannerNobody
+
+- type: entity
+  parent: RMCSecureCaseMedicalBig
+  id: CMUCrateSim
+  name: synthesis simulator crate
+  description: A crate containing a specialized chemical synthesis machine linked to Weyland-Yutani's research servers.
+  components:
+  - type: SpawnOnTerminate
+    spawn: CMUChemSimulator
+
+- type: entity
   parent: RMCSecureCaseMedicalBig #Medical Vendor Crate
   id: AU14CrateMedicalBloodVendor
   name: WeYu blood dispenser crate
@@ -62,6 +129,78 @@
   components:
   - type: SpawnOnTerminate
     spawn: AU14VendorBlood
+
+- type: entity
+  parent: RMCCrateSecurePhoron
+  id: CMUCratePreciousMetals #you shouldn't eat these, it will get you killed
+  name: precious metals crate
+  description: A crate containing gold, silver, and uranium
+  components:
+  #TODO: stacks
+  - type: StorageFill
+    contents:
+    - id: RMCJugGold
+      amount: 1
+    - id: RMCJugSilver
+      amount: 1
+    - id: RMCJugUranium
+      amount: 1
+    - id: RMCJugPlatinum
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateLabGlassware
+  name: laboratory glassware crate
+  description: A crate containing laboratory glassware.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBoxSyringe
+      amount: 1
+    - id: RMCBoxBeaker
+      amount: 1
+    - id: RMCVialBoxFull
+      amount: 1
+    - id: CMBottleEmpty
+      amount: 3
+    - id: CMBeakerLarge
+      amount: 3
+    - id: RMCBeakerHighCapacity
+      amount: 1
+
+- type: entity
+  parent: RMCCrateScience
+  id: CMUCrateChemGlasses
+  name: reagent scanner HUD goggles crate
+  description: A crate containing a pair of reagent scanner HUD goggles.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGlassesReagentHUDGlasses
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUMonkeyCubeCrate
+  name: monkey cube crate (x8)
+  description: A crate containing 8 monkey cubes.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUMonkeyCubeBox
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: CMUExoticCubeCrate
+  name: exotic fauna crate (x4)
+  description: A crate containing 4 exotic fauna cubes.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUExoticCubeBox
+      amount: 1
 
 - type: entity
   parent: RMCCrateWeapons

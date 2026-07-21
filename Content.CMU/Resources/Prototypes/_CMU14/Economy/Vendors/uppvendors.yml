@@ -731,6 +731,10 @@
       - id: RMCPackFlareCAS
     - name: Spare Equipment
       entries:
+      - id: ANPRC117GRadioOPFORFilled
+        amount: 2
+      - id: ANPRCMastAntenna
+        amount: 1
       - id: RMCExplosiveBreachingCharge
         amount: 4
       - id: RMCBinoculars
@@ -933,14 +937,14 @@
   name: UPP combat technicians gear rack
   description: An automated gear rack for combat technicians.
   components:
-  - type: AccessReader
-    access: [ [ "AU14AccessGovforEngineering" ], [ "AU14AccessOpforEngineering" ] ]
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORSquadCombatTech
     - AU14JobOPFORSquadCombatTech
+    - AU14JobGOVFOROfficerEngi
+    - AU14JobOPFOROfficerEngi
     sections:
     - name: Engineer Set
       takeAll: CMEngineerSet

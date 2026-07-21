@@ -22,7 +22,8 @@
 
 - type: entity
   parent: RMCCrateHydro
-  id: AU14CrateHydroponics
+  id: AU14CrateHydroponicsEquipment
+  name: hydroponics equpment crate
   suffix: Filled
   components:
   - type: EntityStorage
@@ -45,9 +46,42 @@
       amount: 1
     - id: RMCToolMiniHoe
       amount: 1
+    - id: BoxMouthSwab
+      amount: 1
+
+- type: entity
+  parent: RMCCrateHydro
+  id: AU14CrateHydroponics
+  name: hydroponics crate
+  suffix: Filled
+  components:
+  - type: EntityStorage
+    capacity: 32
+  - type: StorageFill
+    contents:
+    - id: RMCStoragePlantBag
+      amount: 2
+    - id: ChemistryBottleEZNutrient
+      amount: 1
+    - id: ChemistryBottleRobustHarvest
+      amount: 1
+    - id: ChemistryBottleLeft4Zed
+      amount: 1
+    - id: RMCBucket
+      amount: 1
+    - id: RMCToolSpade
+      amount: 1
+    - id: RMCToolHatchet
+      amount: 1
+    - id: RMCToolMiniHoe
+      amount: 1
+    - id: BoxMouthSwab
+      amount: 1
     - id: BananaSeeds
       amount: 1
     - id: BerrySeeds
+      amount: 1
+    - id: CarrotSeeds
       amount: 1
     - id: ChiliSeeds
       amount: 1
@@ -61,6 +95,37 @@
       amount: 1
     - id: AppleSeeds
       amount: 1
+
+- type: entity
+  parent: RMCCrateHydro
+  id: AU14CrateHydroSeeds
+  name: seeds crate
+  suffix: Filled
+  components:
+  - type: EntityStorage
+    capacity: 32
+  - type: StorageFill
+    contents:
+    - id: BananaSeeds
+      amount: 1
+    - id: BerrySeeds
+      amount: 1
+    - id: CarrotSeeds
+      amount: 1
+    - id: ChiliSeeds
+      amount: 1
+    - id: CornSeeds
+      amount: 1
+    - id: PotatoSeeds
+      amount: 1
+    - id: TomatoSeeds
+      amount: 1
+    - id: WheatSeeds
+      amount: 1
+    - id: AppleSeeds
+      amount: 1
+    - id: LingzhiSeeds
+      amount: 1
     - id: PoppySeeds
       amount: 1
     - id: SugarcaneSeeds
@@ -68,6 +133,12 @@
     - id: WatermelonSeeds
       amount: 1
     - id: LimeSeeds
+      amount: 1
+    - id: RMCMangoSeeds
+      amount: 1
+    - id: SunflowerSeeds
+      amount: 1
+    - id: FlyAmanitaSeeds
       amount: 1
     - id: LemonSeeds
       amount: 1
@@ -88,6 +159,4 @@
     - id: GarlicSeeds
       amount: 1
     - id: OnionRedSeeds
-      amount: 1
-    - id: BoxMouthSwab
       amount: 1
