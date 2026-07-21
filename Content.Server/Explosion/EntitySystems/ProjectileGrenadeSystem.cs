@@ -88,6 +88,9 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
             var velocity = _random.NextVector2(component.MinVelocity, component.MaxVelocity);
             _gun.ShootProjectile(contentUid, direction, velocity, null);
         }
+
+        // RMC14
+        QueueDel(uid);
     }
 
     /// <summary>

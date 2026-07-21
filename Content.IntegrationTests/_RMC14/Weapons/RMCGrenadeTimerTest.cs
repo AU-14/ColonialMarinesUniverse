@@ -14,14 +14,14 @@ public sealed class RMCGrenadeTimerTest
 {
     public sealed class GrenadeTriggerListenerSystem : TestListenerSystem<TriggerEvent>;
 
-    [TestCase("CMGrenadeFrag", 4, false, true)]
-    [TestCase("CMGrenadeFragOld", 4, false, true)]
+    [TestCase("CMGrenadeFrag", 4, true, true)]
+    [TestCase("CMGrenadeFragOld", 4, true, true)]
     [TestCase("CMGrenadeHighExplosive", 4, true, false)]
     [TestCase("CMGrenadeSmoke", 2, true, false)]
-    [TestCase("RMCArmorHelmetHEFA", 4, false, true)]
+    [TestCase("RMCArmorHelmetHEFA", 4, true, true)]
     [TestCase("RMCGrenadeCustomMetalFoam", 3, true, false)]
     [TestCase("RMCGrenadeFlashBang", 4, true, false)]
-    [TestCase("RMCGrenadeIED", 4, false, true)]
+    [TestCase("RMCGrenadeIED", 4, true, true)]
     [TestCase("RMCGrenadeIncendiary", 4, true, false)]
     [TestCase("RMCGrenadeWhitePhosphorus", 2, true, false)]
     public async Task GrenadeWaitsForFuseBeforeTriggering(

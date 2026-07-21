@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: GrenadeBase
+  parent: TimerGrenadeBase
   id: CMGrenadeBase
   name: grenade
   description: Duck and cover.
