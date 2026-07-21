@@ -32,11 +32,11 @@
   - type: BadFood
   - type: FlavorProfile
     ignoreReagents: []
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        canReact: false
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      canReact: false
   - type: SolutionSpiker
     sourceSolution: food
   - type: Extractable
@@ -57,13 +57,13 @@
   parent: CMPill
   id: CMPillBicaridine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill3
@@ -75,13 +75,13 @@
   parent: CMPill
   id: CMPillDexalin
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMDexalin
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMDexalin
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill16
@@ -93,13 +93,13 @@
   parent: CMPill
   id: CMPillDylovene
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMDylovene
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMDylovene
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill13
@@ -111,13 +111,13 @@
   parent: CMPill
   id: CMPillInaprovaline
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMInaprovaline
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMInaprovaline
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill1
@@ -129,13 +129,13 @@
   parent: CMPill
   id: CMPillKelotane
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill5
@@ -147,13 +147,13 @@
   parent: CMPill
   id: CMPillTricordrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMTricordrazine
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill5
@@ -167,13 +167,13 @@
   name: unmarked pill
   description: An unknown pill.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: RMCUltrazine
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: RMCUltrazine
+        Quantity: 5
   - type: Sprite
     layers:
     - state: pill6
@@ -185,13 +185,13 @@
   parent: CMPill
   id: RMCPillRussianRed
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: RMCRussianRed
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: RMCRussianRed
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill12
@@ -204,15 +204,15 @@
   id: RMCPillMeralyneBicaridine
   suffix: MeraBic
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 7.5
-        - ReagentId: CMMeralyne
-          Quantity: 7.5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 7.5
+      - ReagentId: CMMeralyne
+        Quantity: 7.5
   - type: Sprite
     layers:
     - state: pill4
@@ -225,15 +225,15 @@
   id: RMCPillKelotaneDermaline
   suffix: KeloDerm
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 7.5
-        - ReagentId: CMDermaline
-          Quantity: 7.5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 7.5
+      - ReagentId: CMDermaline
+        Quantity: 7.5
   - type: Sprite
     layers:
     - state: pill7
@@ -245,13 +245,13 @@
   parent: CMPill
   id: RMCPillImidazoline
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 1
-        reagents:
-        - ReagentId: CMImidazoline
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 1
+      reagents:
+      - ReagentId: CMImidazoline
+        Quantity: 1
   - type: Sprite
     layers:
     - state: pill3
@@ -266,13 +266,13 @@
   id: RMCPillAntiZed
   suffix: DO NOT MAP, AntiZed
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: RMCAntiZed
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: RMCAntiZed
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill16
@@ -285,13 +285,13 @@
   id: RMCPillCyanide
   description: A cyanide pill. Don't swallow this!
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 50
-        reagents:
-        - ReagentId: RMCCyanide
-          Quantity: 50
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: RMCCyanide
+        Quantity: 50
   - type: Sprite
     layers:
     - state: pill16
@@ -307,13 +307,13 @@
   parent: CMPill
   id: RMCPillDexalinPlus
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMDexalinPlus
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMDexalinPlus
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill16
@@ -325,15 +325,15 @@
   parent: CMPill
   id: RMCPillIron
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: RMCIron
-          Quantity: 10
-        - ReagentId: Nutriment
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: RMCIron
+        Quantity: 10
+      - ReagentId: Nutriment
+        Quantity: 5
   - type: Sprite
     layers:
     - state: pill14

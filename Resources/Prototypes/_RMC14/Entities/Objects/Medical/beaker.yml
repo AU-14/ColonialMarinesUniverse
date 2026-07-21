@@ -78,10 +78,10 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 5
     fillBaseName: beaker
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 60
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 60
   - type: Openable
     opened: true
     closeable: true
@@ -125,10 +125,10 @@
       visible: false
   - type: Item
     sprite: _RMC14/Objects/Medical/large_beaker.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 120
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
   - type: SolutionContainerVisuals
     maxFillLevels: 5
     fillBaseName: beakerlarge
@@ -171,10 +171,10 @@
       visible: false
   - type: Item
     sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 300
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 300
   - type: SolutionContainerVisuals
     maxFillLevels: 5
     fillBaseName: beakerbluespace
@@ -293,10 +293,10 @@
   - type: Item
     size: Normal
     sprite: _RMC14/Objects/Tanks/minitank.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 180
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 180
   - type: SolutionContainerVisuals
     maxFillLevels: 5
     fillBaseName: minitank
@@ -346,10 +346,10 @@
   - type: Item
     size: Large
     sprite: _RMC14/Objects/Tanks/pressurized_reagent_container.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 480
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
   - type: SolutionContainerVisuals
     maxFillLevels: 4
     fillBaseName: can
@@ -370,86 +370,86 @@
   id: RMCPressurizedCanisterBicaridine
   suffix: Bicaridine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 480
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 480
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 480
 
 - type: entity
   parent: RMCPressurizedCanister
   id: RMCPressurizedCanisterKelotane
   suffix: Kelotane
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 480
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 480
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 480
 
 - type: entity
   parent: RMCPressurizedCanister
   id: RMCPressurizedCanisterTricordrazineRevival
   suffix: Tricordrazine - Revival
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 480
-        reagents:
-        - ReagentId: CMEpinephrine
-          Quantity: 160
-        - ReagentId: CMInaprovaline
-          Quantity: 160
-        - ReagentId: CMTricordrazine
-          Quantity: 160
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 160
+      - ReagentId: CMInaprovaline
+        Quantity: 160
+      - ReagentId: CMTricordrazine
+        Quantity: 160
 
 - type: entity
   parent: RMCPressurizedCanister
   id: RMCPressurizedCanisterTricordrazine
   suffix: Tricordrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 480
-        reagents:
-        - ReagentId: CMTricordrazine
-          Quantity: 480
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 480
 
 - type: entity
   parent: RMCPressurizedCanister
   id: RMCPressurizedCanisterMeraBic
   suffix: MeraBic
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 480
-        reagents:
-        - ReagentId: CMMeralyne
-          Quantity: 240
-        - ReagentId: CMBicaridine
-          Quantity: 240
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMMeralyne
+        Quantity: 240
+      - ReagentId: CMBicaridine
+        Quantity: 240
 
 - type: entity
   parent: RMCPressurizedCanister
   id: RMCPressurizedCanisterKeloDerm
   suffix: KeloDerm
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 480
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 240
-        - ReagentId: CMDermaline
-          Quantity: 240
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 240
+      - ReagentId: CMDermaline
+        Quantity: 240
 
 - type: Tag
   id: PressurizedCanister
@@ -475,10 +475,10 @@
   - type: SolutionContainerVisuals
     maxFillLevels: 6
     fillBaseName: vial
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 30
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 30
   - type: SolutionTransfer
     transferAmount: 5
     maxTransferAmount: 30
@@ -517,13 +517,13 @@
   description: A small glass vial. Can hold up to 30 units. Contains Tricordrazine, a weak general use medicine for treating damage.
   suffix: Filled, Tricordrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 30
-        reagents:
-        - ReagentId: CMTricordrazine
-          Quantity: 30
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 30
   - type: CMRefillableSolution
     solution: beaker
     reagents:
@@ -536,13 +536,13 @@
   description: A small glass vial. Can hold up to 30 units. Contains Epinephrine, a cardiostimulant used to assist in revival.
   suffix: Filled, Epinephrine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 30
-        reagents:
-        - ReagentId: CMEpinephrine
-          Quantity: 30
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 30
   - type: CMRefillableSolution
     solution: beaker
     reagents:
@@ -567,10 +567,10 @@
       visible: false
   - type: Item
     sprite: _RMC14/Objects/Chemistry/reagent_jug.rsi
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 500
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 500
   - type: SolutionContainerVisuals
     fillBaseName: reagentjug-
     inHandsMaxFillLevels: 5
