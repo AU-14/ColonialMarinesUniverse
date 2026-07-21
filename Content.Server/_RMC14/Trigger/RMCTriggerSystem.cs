@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared.Explosion.Components;
 using Content.Shared.Throwing;
 using Content.Shared.Trigger;
 using Content.Shared.Trigger.Components;
@@ -97,6 +98,15 @@ public sealed partial class RMCTriggerSystem : EntitySystem
         {
             if (time < active.TriggerAt)
                 continue;
+
+            if (TryComp(uid, out ScatteringGrenadeComponent? scattering))
+            {
+                _trigger.Trigger(uid, key: scattering.TriggerKey);
+                RemCompDeferred<ActiveTriggerOnThrowEndComponent>(uid);
+
+                // ScatteringGrenadeSystem spawns its payload during Update and deletes the source afterwards.
+                continue;
+            }
 
             _trigger.Trigger(uid);
             if (!EntityManager.IsQueuedForDeletion(uid) && !TerminatingOrDeleted(uid))

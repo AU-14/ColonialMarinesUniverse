@@ -83,6 +83,10 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
 
                     _throwingSystem.TryThrow(contentUid, direction, component.Velocity);
 
+                    // RMC14 - let fork systems initialize scattered payloads such as fired flares.
+                    var thrown = new GrenadeContentThrownEvent(uid);
+                    RaiseLocalEvent(contentUid, ref thrown);
+
                     if (component.TriggerContents && TryComp<TimerTriggerComponent>(contentUid, out var contentTimer))
                     {
                         additionalIntervalDelay += _random.NextFloat(component.IntervalBetweenTriggersMin, component.IntervalBetweenTriggersMax);

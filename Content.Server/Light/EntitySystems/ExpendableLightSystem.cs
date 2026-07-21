@@ -37,6 +37,7 @@ namespace Content.Server.Light.EntitySystems
             base.Initialize();
 
             SubscribeLocalEvent<ExpendableLightComponent, ComponentInit>(OnExpLightInit);
+            SubscribeLocalEvent<ExpendableLightComponent, MapInitEvent>(OnExpLightMapInit);
             SubscribeLocalEvent<ExpendableLightComponent, UseInHandEvent>(OnExpLightUse);
             SubscribeLocalEvent<ExpendableLightComponent, GetVerbsEvent<ActivationVerb>>(AddIgniteVerb);
             SubscribeLocalEvent<ExpendableLightComponent, InteractUsingEvent>(OnInteractUsing);
@@ -65,6 +66,52 @@ namespace Content.Server.Light.EntitySystems
                 switch (component.CurrentState)
                 {
                     case ExpendableLightState.Lit:
+                        // RMC14 - flares use several brightness phases between ignition and fade-out.
+                        component.CurrentState = ExpendableLightState.PhaseOne;
+                        component.StateExpiryTime = (float)component.PhaseOneDuration.TotalSeconds;
+
+                        if (component.PhaseOneDuration > TimeSpan.Zero)
+                            UpdateVisualizer(ent);
+
+                        break;
+
+                    case ExpendableLightState.PhaseOne:
+                        component.CurrentState = ExpendableLightState.PhaseTwo;
+                        component.StateExpiryTime = (float)component.PhaseTwoDuration.TotalSeconds;
+
+                        if (component.PhaseTwoDuration > TimeSpan.Zero)
+                            UpdateVisualizer(ent);
+
+                        break;
+
+                    case ExpendableLightState.PhaseTwo:
+                        component.CurrentState = ExpendableLightState.PhaseThree;
+                        component.StateExpiryTime = (float)component.PhaseThreeDuration.TotalSeconds;
+
+                        if (component.PhaseThreeDuration > TimeSpan.Zero)
+                            UpdateVisualizer(ent);
+
+                        break;
+
+                    case ExpendableLightState.PhaseThree:
+                        component.CurrentState = ExpendableLightState.PhaseFour;
+                        component.StateExpiryTime = (float)component.PhaseFourDuration.TotalSeconds;
+
+                        if (component.PhaseFourDuration > TimeSpan.Zero)
+                            UpdateVisualizer(ent);
+
+                        break;
+
+                    case ExpendableLightState.PhaseFour:
+                        component.CurrentState = ExpendableLightState.PhaseFive;
+                        component.StateExpiryTime = (float)component.PhaseFiveDuration.TotalSeconds;
+
+                        if (component.PhaseFiveDuration > TimeSpan.Zero)
+                            UpdateVisualizer(ent);
+
+                        break;
+
+                    case ExpendableLightState.PhaseFive:
                         component.CurrentState = ExpendableLightState.Fading;
                         component.StateExpiryTime = (float)component.FadeOutDuration.TotalSeconds;
 
@@ -167,6 +214,23 @@ namespace Content.Server.Light.EntitySystems
                     _appearance.SetData(ent, ExpendableLightVisuals.Behavior, component.TurnOnBehaviourID, appearance);
                     break;
 
+                // RMC14
+                case ExpendableLightState.PhaseOne:
+                    _appearance.SetData(ent, ExpendableLightVisuals.Behavior, component.PhaseOneBehaviourID, appearance);
+                    break;
+                case ExpendableLightState.PhaseTwo:
+                    _appearance.SetData(ent, ExpendableLightVisuals.Behavior, component.PhaseTwoBehaviourID, appearance);
+                    break;
+                case ExpendableLightState.PhaseThree:
+                    _appearance.SetData(ent, ExpendableLightVisuals.Behavior, component.PhaseThreeBehaviourID, appearance);
+                    break;
+                case ExpendableLightState.PhaseFour:
+                    _appearance.SetData(ent, ExpendableLightVisuals.Behavior, component.PhaseFourBehaviourID, appearance);
+                    break;
+                case ExpendableLightState.PhaseFive:
+                    _appearance.SetData(ent, ExpendableLightVisuals.Behavior, component.PhaseFiveBehaviourID, appearance);
+                    break;
+
                 case ExpendableLightState.Fading:
                     _appearance.SetData(ent, ExpendableLightVisuals.Behavior, component.FadeOutBehaviourID, appearance);
                     break;
@@ -211,6 +275,13 @@ namespace Content.Server.Light.EntitySystems
             component.CurrentState = ExpendableLightState.BrandNew;
             component.StateExpiryTime = (float)component.GlowDuration.TotalSeconds;
             EnsureComp<PointLightComponent>(uid);
+        }
+
+        // RMC14
+        private void OnExpLightMapInit(Entity<ExpendableLightComponent> ent, ref MapInitEvent args)
+        {
+            if (ent.Comp.StartsActivated)
+                TryActivate(ent);
         }
 
         private void OnExpLightUse(Entity<ExpendableLightComponent> ent, ref UseInHandEvent args)
