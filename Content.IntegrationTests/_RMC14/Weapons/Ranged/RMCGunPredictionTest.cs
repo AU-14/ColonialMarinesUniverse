@@ -7,8 +7,11 @@ using Content.Client._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.CombatMode;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
+using Robust.Client.GameStates;
+using Robust.Client.Physics;
 using Robust.Server.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -49,6 +52,10 @@ public sealed class RMCGunPredictionTest
           - type: ProjectileIFF
             factions:
             - FactionMarine
+
+        - type: entity
+          parent: BaseBullet
+          id: RMCGunPredictionRollbackProjectile
 
         - type: entity
           parent: MobHuman
@@ -115,6 +122,63 @@ public sealed class RMCGunPredictionTest
           components:
           - type: GunIgnorePrediction
         """;
+
+    [Test]
+    public async Task PredictedCollisionRollbackDoesNotInvalidateContacts()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var client = pair.Client;
+        var sEntMan = server.EntMan;
+        var cEntMan = client.EntMan;
+        var playerManager = server.ResolveDependency<IPlayerManager>();
+        var serverSession = playerManager.Sessions.Single();
+        var map = await pair.CreateTestMap();
+        EntityUid clientProjectile = default;
+
+        await server.WaitPost(() =>
+        {
+            var player = sEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            Assert.That(playerManager.SetAttachedEntity(serverSession, player), Is.True);
+        });
+        await pair.RunTicksSync(5);
+
+        var cPlayer = client.Session?.AttachedEntity ??
+            throw new AssertionException("The client must have an attached entity.");
+
+        await client.WaitAssertion(() =>
+        {
+            Assert.That(cEntMan.HasComponent<PredictedPhysicsComponent>(cPlayer), Is.True);
+
+            clientProjectile = cEntMan.SpawnEntity(
+                "RMCGunPredictionRollbackProjectile",
+                cEntMan.GetComponent<TransformComponent>(cPlayer).Coordinates);
+            cEntMan.EnsureComponent<PredictedProjectileClientComponent>(clientProjectile);
+            cEntMan.EnsureComponent<PredictedPhysicsComponent>(clientProjectile);
+#pragma warning disable RA0002
+            cEntMan.GetComponent<PhysicsComponent>(clientProjectile).Predict = true;
+#pragma warning restore RA0002
+
+            var gameState = (ClientGameStateManager) client.ResolveDependency<IClientGameStateManager>();
+            Assert.That(gameState.PredictionNeedsResetting, Is.True);
+            Assert.DoesNotThrow(gameState.ResetPredictedEntities);
+            Assert.Multiple(() =>
+            {
+                Assert.That(cEntMan.EntityExists(clientProjectile), Is.True);
+                Assert.That(cEntMan.IsQueuedForDeletion(clientProjectile), Is.False);
+                Assert.That(cEntMan.GetComponent<ProjectileComponent>(clientProjectile).ProjectileSpent, Is.False);
+            });
+        });
+
+        await pair.RunTicksSync(2);
+        await client.WaitAssertion(() => Assert.That(cEntMan.EntityExists(clientProjectile), Is.False));
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task ProjectileShotsArePredictedAndCorrelated()

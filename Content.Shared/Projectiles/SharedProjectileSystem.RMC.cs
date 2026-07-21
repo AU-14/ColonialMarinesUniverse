@@ -9,6 +9,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Projectiles;
 
@@ -17,6 +18,7 @@ public abstract partial class SharedProjectileSystem
     [Dependency] private DamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedContainerSystem _rmcContainers = default!;
     [Dependency] private INetManager _rmcNet = default!;
+    [Dependency] private IGameTiming _rmcTiming = default!;
 
     private void InitializeRMCProjectile()
     {
@@ -28,7 +30,10 @@ public abstract partial class SharedProjectileSystem
 
     private void OnRMCStartCollide(Entity<ProjectileComponent> projectile, ref StartCollideEvent args)
     {
-        if (args.OurFixtureId != ProjectileFixture ||
+        // Contact reset replays collisions during state application. Deleting a predicted copy there can invalidate
+        // another predicted body's reference to the same contact before the reset has finished iterating it.
+        if ((_rmcTiming.ApplyingState && HasComp<PredictedProjectileClientComponent>(projectile)) ||
+            args.OurFixtureId != ProjectileFixture ||
             !args.OtherFixture.Hard ||
             projectile.Comp.ProjectileSpent ||
             projectile.Comp is { Weapon: null, OnlyCollideWhenShot: true })
