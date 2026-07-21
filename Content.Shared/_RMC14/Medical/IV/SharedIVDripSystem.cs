@@ -536,7 +536,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
             TryComp(container.Owner, out IVDripComponent? iv))
         {
             iv.FillColor = solution.GetColor(_prototype);
-            iv.FillPercentage = (int) (solution.Volume / solution.MaxVolume * 100);
+            iv.FillPercentage = (int) (GetFillPercentage(solution.Volume, solution.MaxVolume) * 100);
             Dirty(container.Owner, iv);
             UpdateIVAppearance((container.Owner, iv));
         }
@@ -563,7 +563,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
                 continue;
 
             iv.Comp.FillColor = solution.GetColor(_prototype);
-            iv.Comp.FillPercentage = (int) (solution.Volume / solution.MaxVolume * 100);
+            iv.Comp.FillPercentage = (int) (GetFillPercentage(solution.Volume, solution.MaxVolume) * 100);
             Dirty(iv);
             UpdateIVAppearance(iv);
             return;
@@ -587,7 +587,7 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         if (_solutionContainer.TryGetSolution(pack.Owner, pack.Comp.Solution, out var solEnt))
         {
             var solution = solEnt.Value.Comp.Solution;
-            pack.Comp.FillPercentage = solution.Volume / solution.MaxVolume;
+            pack.Comp.FillPercentage = GetFillPercentage(solution.Volume, solution.MaxVolume);
             pack.Comp.FillColor = solution.GetColor(_prototype);
         }
         else
@@ -597,6 +597,13 @@ public abstract partial class SharedIVDripSystem : EntitySystem
         }
 
         Dirty(pack);
+    }
+
+    private static FixedPoint2 GetFillPercentage(FixedPoint2 volume, FixedPoint2 maxVolume)
+    {
+        return maxVolume <= FixedPoint2.Zero
+            ? FixedPoint2.Zero
+            : volume / maxVolume;
     }
 
     protected virtual void UpdateDialysisAppearance(Entity<PortableDialysisComponent> dialysis)

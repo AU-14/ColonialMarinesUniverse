@@ -109,6 +109,8 @@ marking-VulpSnoutWolf-m_snout_fwolf_FRONT_primary = Primary
 marking-VulpSnoutWolf-m_snout_fwolf_FRONT_secondary = Secondary
 marking-VulpSnoutWolf = Vulpkanin Wolf
 
+marking-VulpSnouted = Vulpkanin Snout
+
 
 marking-VulpHeadTiger-tiger_head = Tiger stripes
 marking-VulpHeadTiger = Vulpkanin Tiger stripes (head)
@@ -185,6 +187,17 @@ marking-VulpTailFox4-m_tail_fox4_secondary = Tip
 marking-VulpTailLong = Long (no wag)
 marking-VulpTailLong-long = Base
 marking-VulpTailLong-long-tip = Tip
+
+marking-VulpTailAnimated = { marking-VulpTail }
+marking-VulpTailTipAnimated = { marking-VulpTailTip }
+marking-VulpTailFoxAnimated = { marking-VulpTailFox }
+marking-VulpTailFoxTipAnimated = { marking-VulpTailFoxTip }
+marking-VulpTailCoyoteAnimated = { marking-VulpTailCoyote }
+marking-VulpTailAustralianShepherdAnimated = { marking-VulpTailAustralianShepherd }
+marking-VulpTailStraightAnimated = { marking-VulpTailStraight }
+marking-VulpTailBushyAnimated = Vulpkanin Bushy
+marking-VulpTailCorgiAnimated = Vulpkanin Corgi
+marking-VulpTailDalmatianAnimated = Vulpkanin Dalmatian
 
 
 marking-VulpBellyCrest-belly_crest = Belly

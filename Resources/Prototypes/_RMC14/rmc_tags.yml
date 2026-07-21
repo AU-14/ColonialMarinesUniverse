@@ -194,3 +194,22 @@
 
 - type: Tag
   id: RMCDataDisk
+
+# Legacy tags still used by RMC prototypes after their upstream declarations were removed.
+- type: Tag
+  id: Briefcase
+
+- type: Tag
+  id: DrinkGlass
+
+- type: Tag
+  id: Machete
+
+- type: Tag
+  id: RodMetal1
+
+- type: Tag
+  id: Shovel
+
+- type: Tag
+  id: Wringer

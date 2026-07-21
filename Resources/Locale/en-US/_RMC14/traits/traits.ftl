@@ -9,6 +9,15 @@ rmc-trait-french-accent-desc = You come from space France
 rmc-trait-mobster-accent-name = Mobster accent
 rmc-trait-mobster-accent-desc = ey gabagool fugeddaboutit I'm walkin here
 
+trait-pirate-accent-name = Pirate accent
+trait-pirate-accent-desc = You can't stop speaking like a pirate!
+
+trait-cowboy-name = Cowboy accent
+trait-cowboy-desc = You speak with a distinct cowboy accent!
+
+trait-italian-name = Italian accent
+trait-italian-desc = Mamma mia! You seem to have lived in space Italy!
+
 rmc-trait-spanish-accent-name = Spanish accent
 rmc-trait-spanish-accent-desc = You come from space Spain
 

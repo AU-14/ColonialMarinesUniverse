@@ -20,3 +20,9 @@ marking-RMCLizardSnakeTailStripeAlt-m_tail_snakestripealt_secondary = Stripes
 marking-RMCLizardSnakeTailUnder = Snake Tail Under
 marking-RMCLizardSnakeTailUnder-m_tail_snakeunder_primary = Primary
 marking-RMCLizardSnakeTailUnder-m_tail_snakeunder_secondary = Under
+
+marking-RMCLizardSnakeTailAnimated = { marking-RMCLizardSnakeTail }
+marking-RMCLizardSnakeTailAltAnimated = { marking-RMCLizardSnakeTailAlt }
+marking-RMCLizardSnakeTailStripeAnimated = { marking-RMCLizardSnakeTailStripe }
+marking-RMCLizardSnakeTailStripeAltAnimated = { marking-RMCLizardSnakeTailStripeAlt }
+marking-RMCLizardSnakeTailUnderAnimated = { marking-RMCLizardSnakeTailUnder }

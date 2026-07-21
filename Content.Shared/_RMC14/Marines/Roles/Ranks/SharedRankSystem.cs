@@ -107,7 +107,7 @@ public abstract partial class SharedRankSystem : EntitySystem
         }
 
         if (hasPaygrade && rank.Paygrade != null)
-            return $"({Loc.GetString(rank.Paygrade)}) {Loc.GetString(rank.Name)}";
+            return $"({rank.Paygrade}) {rank.Name}";
 
         return rank.Name;
     }

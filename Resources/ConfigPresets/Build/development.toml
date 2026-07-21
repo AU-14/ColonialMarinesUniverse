@@ -25,6 +25,10 @@ grid_splitting = false
 [procgen]
 preload = false
 
+[rmc]
+# Allow solo development rounds without xeno candidates.
+distress_xenos_minimum = 0
+
 [salvage]
 expedition_cooldown = 30.0
 

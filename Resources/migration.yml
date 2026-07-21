@@ -900,3 +900,35 @@ CrateEngineeringJetpack: CrateSpaceMiniJetpack
 CrateEngineeringMiniJetpack: CrateSpaceMiniJetpack
 CrateEngineeringShuttle: CrateSpaceShuttlePower
 CrateEngineeringThruster: CrateSpaceThruster
+
+# 2026-07-04
+RMCWeaponShotgunHG3712: RMCWeaponShotgunM12
+
+# RMC map compatibility entries restored after upstream resource alignment.
+# 2024-07-31
+CMGroundsideOperationsConsole: RMCGroundsideOperationsConsole
+
+# 2025-05-29
+CMBucketJani: RMCBucketJanitorial
+
+# 2025-11-24
+WeaponRifleL83A2: RMCWeaponRifleL83A2
+
+# 2025-11-29
+CMWallSuperReinforced: CMWallReinforced
+
+# 2026-01-04
+CMGasTankOxygen: RMCGasTankOxygenFilled
+
+# 2026-01-27
+RMCJumpsuitUNSecurity: RMCJumpsuitRiotControl
+
+# 2026-03-18
+CMWebbingSurgicalBlue: RMCWebbingSurgicalBlue
+
+# 2026-05-19
+RMCFogWallWeed30: RMCFogWallWeed
+
+# 2026-07-11
+RMCJumpsuitSPPPaP: RMCJumpsuitSPPPCG
+RMCCoatPaP: RMCCoatPCG

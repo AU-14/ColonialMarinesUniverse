@@ -1,6 +1,7 @@
 ﻿using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Projectiles;
+using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
@@ -14,11 +15,13 @@ public sealed partial class RMCGunGroupPenaltySystem : EntitySystem
     [Dependency] private CMGunSystem _rmcGun = default!;
 
     private EntityQuery<GunGroupPenaltyComponent> _gunGroupPenalty;
+    private EntityQuery<GunComponent> _gunQuery;
     private EntityQuery<ProjectileComponent> _projectileQuery;
 
     public override void Initialize()
     {
         _gunGroupPenalty = GetEntityQuery<GunGroupPenaltyComponent>();
+        _gunQuery = GetEntityQuery<GunComponent>();
         _projectileQuery = GetEntityQuery<ProjectileComponent>();
 
         SubscribeLocalEvent<GunGroupPenaltyComponent, GotEquippedHandEvent>(OnGroupSpreadPenaltyEquippedHand);
@@ -46,7 +49,8 @@ public sealed partial class RMCGunGroupPenaltySystem : EntitySystem
 
         foreach (var held in _hands.EnumerateHeld(args.OldParent.Value))
         {
-            _gun.RefreshModifiers(held);
+            if (_gunQuery.TryComp(held, out var gun))
+                _gun.RefreshModifiers((held, gun));
         }
     }
 
@@ -54,7 +58,8 @@ public sealed partial class RMCGunGroupPenaltySystem : EntitySystem
     {
         foreach (var held in _hands.EnumerateHeld(args.Container.Owner))
         {
-            _gun.RefreshModifiers(held);
+            if (_gunQuery.TryComp(held, out var gun))
+                _gun.RefreshModifiers((held, gun));
         }
     }
 
@@ -116,8 +121,11 @@ public sealed partial class RMCGunGroupPenaltySystem : EntitySystem
 
         foreach (var held in _hands.EnumerateHeld((user, user)))
         {
-            if (held != gun.Owner)
-                _gun.RefreshModifiers(held);
+            if (held != gun.Owner &&
+                _gunQuery.TryComp(held, out var otherGun))
+            {
+                _gun.RefreshModifiers((held, otherGun));
+            }
         }
     }
 }

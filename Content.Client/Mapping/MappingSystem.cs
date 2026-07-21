@@ -57,7 +57,7 @@ public sealed partial class MappingSystem : EntitySystem
                 if (!tileDef.MapAtmosphere && tileDef.Sprite is {} sprite)
                     _actions.SetIcon(action, new SpriteSpecifier.Texture(sprite));
                 ev.TileId = tileDef.ID;
-                _metaData.SetEntityName(action, Loc.GetString(tileDef.Name));
+                _metaData.SetEntityName(action, tileDef.LocalizedName);
             }
             else if (permission.EntityType is {} id)
             {

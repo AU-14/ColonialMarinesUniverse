@@ -89,3 +89,12 @@ marking-FelinidTigerDouble-m_tail_tiger2_tertiary = Stripes
 
 marking-FelinidDouble = Double Cat Tail
 marking-FelinidDouble-m_tail_twocat = Primary
+
+marking-FelinidTailBasicAnimated = { marking-FelinidTailBasic }
+marking-FelinidTailBasicWithBowAnimated = { marking-FelinidTailBasicWithBow }
+marking-FelinidTailBasicWithBellAnimated = { marking-FelinidTailBasicWithBell }
+marking-FelinidTailBasicWithBowAndBellAnimated = { marking-FelinidTailBasicWithBowAndBell }
+marking-FelinidLeopardAnimated = { marking-FelinidLeopard }
+marking-FelinidCatBigAnimated = { marking-FelinidCatBig }
+marking-FelinidTigerDoubleAnimated = { marking-FelinidTigerDouble }
+marking-FelinidDoubleAnimated = { marking-FelinidDouble }

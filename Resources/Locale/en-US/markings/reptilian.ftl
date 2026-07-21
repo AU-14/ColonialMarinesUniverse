@@ -41,6 +41,13 @@ marking-LizardTailDTiger = Lizard Tail (Dark Tiger Stripes)
 marking-LizardTailAquatic-tail_aquatic = Lizard Tail (Aquatic)
 marking-LizardTailAquatic = Lizard Tail (Aquatic)
 
+marking-LizardTailSmoothAnimated = { marking-LizardTailSmooth }
+marking-LizardTailLargeAnimated = { marking-LizardTailLarge }
+marking-LizardTailSpikesAnimated = { marking-LizardTailSpikes }
+marking-LizardTailLTigerAnimated = { marking-LizardTailLTiger }
+marking-LizardTailDTigerAnimated = { marking-LizardTailDTiger }
+marking-LizardTailAquaticAnimated = { marking-LizardTailAquatic }
+
 marking-LizardSnoutRound-snout_round = Lizard Snout (Round)
 marking-LizardSnoutRound = Lizard Snout (Round)
 

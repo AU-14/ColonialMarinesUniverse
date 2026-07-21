@@ -24,7 +24,7 @@ public sealed partial class MarkingSet
 
     public MarkingSet(
         List<Marking> markings,
-        string pointsPrototype,
+        string? pointsPrototype,
         MarkingManager? markingManager = null,
         IPrototypeManager? prototypeManager = null)
         : this(pointsPrototype, markingManager, prototypeManager)
@@ -38,14 +38,17 @@ public sealed partial class MarkingSet
     }
 
     public MarkingSet(
-        string pointsPrototype,
+        string? pointsPrototype,
         MarkingManager? markingManager = null,
         IPrototypeManager? prototypeManager = null)
     {
         IoCManager.Resolve(ref markingManager, ref prototypeManager);
 
-        if (prototypeManager.TryIndex(pointsPrototype, out MarkingPointsPrototype? points))
+        if (!string.IsNullOrEmpty(pointsPrototype) &&
+            prototypeManager.TryIndex(pointsPrototype, out MarkingPointsPrototype? points))
+        {
             Points = MarkingPoints.CloneMarkingPointDictionary(points.Points);
+        }
     }
 
     public MarkingSet(MarkingSet other)

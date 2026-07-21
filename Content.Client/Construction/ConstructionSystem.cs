@@ -132,8 +132,12 @@ namespace Content.Client.Construction
                     if (!ProtoMan.Resolve(entityId, out var proto))
                         continue;
 
-                    var name = constructionProto.SetName.HasValue ? Loc.GetString(constructionProto.SetName) : proto.Name;
-                    var desc = constructionProto.SetDescription.HasValue ? Loc.GetString(constructionProto.SetDescription) : proto.Description;
+                    var name = constructionProto.SetName is { } setName
+                        ? LocalizeOrUseLiteral(setName)
+                        : proto.Name;
+                    var desc = constructionProto.SetDescription is { } setDescription
+                        ? LocalizeOrUseLiteral(setDescription)
+                        : proto.Description;
 
                     constructionProto.Name = name;
                     constructionProto.Description = desc;
@@ -141,6 +145,11 @@ namespace Content.Client.Construction
                     _recipesMetadataCache.Add(constructionProto.ID, entityId);
                 } while (stack.Count > 0);
             }
+        }
+
+        private string LocalizeOrUseLiteral(string value)
+        {
+            return Loc.TryGetString(value, out var localized) ? localized : value;
         }
 
         private void OnConstructionGuideReceived(ResponseConstructionGuide ev)

@@ -5,8 +5,12 @@ using Content.Client.Actions;
 using Content.Client.Construction;
 using Content.Client.Mapping;
 using Content.Client.UserInterface;
+using Content.IntegrationTests.Utility;
+using Content.Shared.Guidebook;
+using Content.Shared.Humanoid.Markings;
 using Content.Shared.Input;
 using Content.Shared.Maps;
+using Content.Shared.Traits;
 using Robust.Client.Placement;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
@@ -20,6 +24,7 @@ namespace Content.IntegrationTests.Tests;
 public sealed class LocalizationWarningTest
 {
     private static readonly ProtoId<ContentTileDefinition> LiteralNameTile = "RMCFloorHybrisaEngineerShip";
+    private static readonly string[] MarkingPrototypes = GameDataScrounger.PrototypesOfKind<MarkingPrototype>();
 
     [Test]
     public async Task ClientDoesNotLookUpLiteralTextAsMessageIds()
@@ -93,6 +98,40 @@ public sealed class LocalizationWarningTest
 
                 Assert.That(missingTileNames, Is.Empty,
                     $"Tile localization IDs without en-US messages:\n{string.Join('\n', missingTileNames)}");
+
+                var missingGuideNames = prototypeManager.EnumeratePrototypes<GuideEntryPrototype>()
+                    .Where(guide => !localization.TryGetString(guide.Name, out _))
+                    .Select(guide => $"{guide.ID}: {guide.Name}")
+                    .Order()
+                    .ToArray();
+
+                var missingTraitMessages = new List<string>();
+                foreach (var trait in prototypeManager.EnumeratePrototypes<TraitPrototype>())
+                {
+                    if (!localization.TryGetString(trait.Name, out _))
+                        missingTraitMessages.Add($"{trait.ID} name: {trait.Name}");
+
+                    if (trait.Description is { } description &&
+                        !localization.TryGetString(description, out _))
+                    {
+                        missingTraitMessages.Add($"{trait.ID} description: {description}");
+                    }
+                }
+
+                var missingMarkingNames = MarkingPrototypes
+                    .Where(id => !localization.TryGetString($"marking-{id}", out _))
+                    .Order()
+                    .ToArray();
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(missingGuideNames, Is.Empty,
+                        $"Guide entries without en-US names:\n{string.Join('\n', missingGuideNames)}");
+                    Assert.That(missingTraitMessages, Is.Empty,
+                        $"Traits without en-US messages:\n{string.Join('\n', missingTraitMessages)}");
+                    Assert.That(missingMarkingNames, Is.Empty,
+                        $"Markings without en-US names:\n{string.Join('\n', missingMarkingNames)}");
+                });
             }
             finally
             {

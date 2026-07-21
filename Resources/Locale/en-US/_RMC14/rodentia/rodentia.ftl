@@ -32,6 +32,7 @@ marking-RodentiaHeadTopEarLong-long_overlay = Inner ear
 marking-RodentiaHeadTopEarMouse = Ears - Mouse
 marking-RodentiaHeadTopEarMouse-mouse = Outer ear
 marking-RodentiaHeadTopEarMouse-mouse_overlay = Inner ear
+marking-RodentiaHeadTopEarDefault = { marking-RodentiaHeadTopEarMouse }
 
 marking-RodentiaHeadTopEarMouseLarge = Ears - Mouse (Large)
 marking-RodentiaHeadTopEarMouseLarge-mouse_large = Outer
@@ -129,6 +130,7 @@ marking-RodentiaTailLongCounterTip-long_tip = Tip
 
 marking-RodentiaTailMouse = Tail - Mouse
 marking-RodentiaTailMouse-mouse = Tail
+marking-RodentiaTailDefault = { marking-RodentiaTailMouse }
 
 marking-RodentiaTailRabbit = Tail - Rabbit
 marking-RodentiaTailRabbit-rabbit = Tail
