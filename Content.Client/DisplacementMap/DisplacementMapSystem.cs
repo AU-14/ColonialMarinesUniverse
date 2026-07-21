@@ -108,8 +108,14 @@ public sealed partial class DisplacementMapSystem : EntitySystem
             displacementLayer.CopyToShaderParameters!.LayerKey = key.ToString()!;
         }
 
-        _sprite.AddLayer(sprite.AsNullable(), displacementLayer, index);
-        _sprite.LayerMapSet(sprite.AsNullable(), displacementKey, index);
+        var displacementLayerIndex = _sprite.AddLayer(sprite.AsNullable(), displacementLayer, index);
+
+        // LayerSetData parses enum-looking strings, but dynamic sprite layers can be mapped under that exact string.
+        // Restore the original key object so the shader copy always targets the same LayerMap entry as its source.
+        var addedLayer = (SpriteComponent.Layer) sprite.Comp[displacementLayerIndex];
+        addedLayer.CopyToShaderParameters!.LayerKey = key;
+
+        _sprite.LayerMapSet(sprite.AsNullable(), displacementKey, displacementLayerIndex);
 
         return true;
     }
