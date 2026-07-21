@@ -232,11 +232,19 @@ public sealed class ImpactEffectEvent : EntityEventArgs
 {
     public string Prototype;
     public NetCoordinates Coordinates;
+    public NetEntity? Shooter;
+    public int? PredictedProjectile;
 
-    public ImpactEffectEvent(string prototype, NetCoordinates coordinates)
+    public ImpactEffectEvent(
+        string prototype,
+        NetCoordinates coordinates,
+        NetEntity? shooter = null,
+        int? predictedProjectile = null)
     {
         Prototype = prototype;
         Coordinates = coordinates;
+        Shooter = shooter;
+        PredictedProjectile = predictedProjectile;
     }
 }
 

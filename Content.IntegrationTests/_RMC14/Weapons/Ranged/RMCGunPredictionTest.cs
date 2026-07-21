@@ -58,6 +58,25 @@ public sealed class RMCGunPredictionTest
           id: RMCGunPredictionRollbackProjectile
 
         - type: entity
+          parent: RMCGunPredictionTestGun
+          id: RMCGunPredictionImpactTestGun
+          components:
+          - type: Gun
+            projectileSpeed: 30
+          - type: BasicEntityAmmoProvider
+            proto: RMCGunPredictionImpactTestProjectile
+
+        - type: entity
+          parent: RMCGunPredictionTestProjectile
+          id: RMCGunPredictionImpactTestProjectile
+          components:
+          - type: Projectile
+            impactEffect: RMCGunPredictionTestImpact
+
+        - type: entity
+          id: RMCGunPredictionTestImpact
+
+        - type: entity
           parent: MobHuman
           id: RMCGunPredictionFriendlyTarget
           components:
@@ -314,6 +333,153 @@ public sealed class RMCGunPredictionTest
             var predictions = sEntMan.EntityQueryEnumerator<PredictedProjectileServerComponent>();
             Assert.That(predictions.MoveNext(out _, out _), Is.False);
         });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PredictedImpactEffectIsDeduplicatedWhenPredictionArrivesFirst()
+    {
+        await PredictedImpactEffectIsDeduplicated(true);
+    }
+
+    [Test]
+    public async Task PredictedImpactEffectIsDeduplicatedWhenAuthoritativeEventArrivesFirst()
+    {
+        await PredictedImpactEffectIsDeduplicated(false);
+    }
+
+    private async Task PredictedImpactEffectIsDeduplicated(bool predictionFirst)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var client = pair.Client;
+        var sEntMan = server.EntMan;
+        var cEntMan = client.EntMan;
+        var playerManager = server.ResolveDependency<IPlayerManager>();
+        var serverSession = playerManager.Sessions.Single();
+        var map = await pair.CreateTestMap();
+        EntityUid sPlayer = default;
+        EntityUid sGun = default;
+        EntityUid sTarget = default;
+
+        await server.WaitPost(() =>
+        {
+            sPlayer = sEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            Assert.That(playerManager.SetAttachedEntity(serverSession, sPlayer), Is.True);
+            sGun = sEntMan.SpawnEntity("RMCGunPredictionImpactTestGun", map.GridCoords);
+            Assert.That(server.System<SharedHandsSystem>().TryPickup(sPlayer, sGun), Is.True);
+            server.System<SharedCombatModeSystem>().SetInCombatMode(sPlayer, true);
+            sTarget = sEntMan.SpawnEntity(
+                "RMCGunPredictionHardTarget",
+                map.GridCoords.Offset(Vector2.UnitX * 2));
+        });
+        await pair.RunTicksSync(5);
+
+        var cPlayer = client.Session?.AttachedEntity ??
+            throw new AssertionException("Client player was not attached");
+        var cGun = cEntMan.GetEntity(sEntMan.GetNetEntity(sGun));
+        var cTarget = cEntMan.GetEntity(sEntMan.GetNetEntity(sTarget));
+        List<EntityUid>? projectiles = null;
+
+        int CountImpacts()
+        {
+            var impacts = 0;
+            var query = cEntMan.EntityQueryEnumerator<MetaDataComponent>();
+            while (query.MoveNext(out _, out var metadata))
+            {
+                if (!metadata.Deleted && metadata.EntityPrototype?.ID == "RMCGunPredictionTestImpact")
+                    impacts++;
+            }
+
+            return impacts;
+        }
+
+        await client.WaitPost(() =>
+        {
+            var target = cEntMan.GetComponent<TransformComponent>(cTarget).Coordinates;
+            projectiles = client.System<GunPredictionSystem>().ShootRequested(
+                cEntMan.GetNetEntity(cGun),
+                cEntMan.GetNetCoordinates(target),
+                cEntMan.GetNetEntity(cTarget),
+                client.Session!);
+
+            cEntMan.RaisePredictiveEvent(new RequestShootEvent
+            {
+                Gun = cEntMan.GetNetEntity(cGun),
+                Coordinates = cEntMan.GetNetCoordinates(target),
+                Target = cEntMan.GetNetEntity(cTarget),
+                Shot = projectiles?.Select(projectile => projectile.Id).ToList(),
+                LastRealTick = default,
+            });
+
+            if (!predictionFirst)
+            {
+                var projectile = projectiles!.Single();
+                cEntMan.EventBus.RaiseEvent(
+                    EventSource.Network,
+                    new ImpactEffectEvent(
+                        "RMCGunPredictionTestImpact",
+                        cEntMan.GetNetCoordinates(target),
+                        cEntMan.GetNetEntity(cPlayer),
+                        projectile.Id));
+            }
+        });
+
+        Assert.That(projectiles, Has.Count.EqualTo(1));
+        var clientProjectile = projectiles!.Single();
+        if (predictionFirst)
+        {
+            await client.WaitRunTicks(10);
+            await client.WaitAssertion(() =>
+            {
+                Assert.That(
+                    cEntMan.GetComponent<PredictedProjectileClientComponent>(clientProjectile).Hit,
+                    Is.True);
+                Assert.That(CountImpacts(), Is.EqualTo(1));
+            });
+
+            await pair.RunTicksSync(10);
+            await server.WaitAssertion(() =>
+            {
+                var query = sEntMan.EntityQueryEnumerator<PredictedProjectileServerComponent>();
+                EntityUid? matchingProjectile = null;
+                while (query.MoveNext(out var projectile, out var predicted))
+                {
+                    if (predicted.ClientId == clientProjectile.Id)
+                        matchingProjectile = projectile;
+                }
+
+                Assert.That(matchingProjectile, Is.Not.Null);
+                Assert.That(
+                    sEntMan.GetComponent<ProjectileComponent>(matchingProjectile!.Value).ProjectileSpent,
+                    Is.True);
+            });
+            await client.WaitAssertion(() => Assert.That(CountImpacts(), Is.EqualTo(1)));
+        }
+        else
+        {
+            await client.WaitAssertion(() =>
+            {
+                Assert.That(
+                    cEntMan.GetComponent<PredictedProjectileClientComponent>(clientProjectile).Hit,
+                    Is.False);
+                Assert.That(CountImpacts(), Is.EqualTo(1));
+            });
+
+            await client.WaitRunTicks(10);
+            await client.WaitAssertion(() =>
+            {
+                Assert.That(
+                    cEntMan.GetComponent<PredictedProjectileClientComponent>(clientProjectile).Hit,
+                    Is.True);
+                Assert.That(CountImpacts(), Is.EqualTo(1));
+            });
+        }
 
         await pair.CleanReturnAsync();
     }

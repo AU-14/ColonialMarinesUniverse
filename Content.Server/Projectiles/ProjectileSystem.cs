@@ -2,6 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Destructible;
 using Content.Server.Effects;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Camera;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
@@ -98,10 +99,33 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
         if (component.DeleteOnCollide && component.ProjectileSpent)
             QueueDel(uid);
 
-        if (component.ImpactEffect != null && TryComp(uid, out TransformComponent? xform))
+        PlayImpactEffect((uid, component));
+    }
+
+    protected override void PlayImpactEffect(Entity<ProjectileComponent> projectile)
+    {
+        if (projectile.Comp.ImpactEffect is not { } impactEffect ||
+            !TryComp(projectile, out TransformComponent? xform))
         {
-            RaiseNetworkEvent(new ImpactEffectEvent(component.ImpactEffect, GetNetCoordinates(xform.Coordinates)), Filter.Pvs(xform.Coordinates, entityMan: EntityManager));
+            return;
         }
+
+        NetEntity? shooter = null;
+        int? predictedProjectile = null;
+        if (TryComp(projectile, out PredictedProjectileServerComponent? predicted) &&
+            predicted.ClientEnt is { } clientEntity)
+        {
+            shooter = GetNetEntity(clientEntity);
+            predictedProjectile = predicted.ClientId;
+        }
+
+        RaiseNetworkEvent(
+            new ImpactEffectEvent(
+                impactEffect,
+                GetNetCoordinates(xform.Coordinates),
+                shooter,
+                predictedProjectile),
+            Filter.Pvs(xform.Coordinates, entityMan: EntityManager));
     }
 
     private bool TryPenetrate(Entity<ProjectileComponent> projectile, DamageSpecifier damage, FixedPoint2 damageRequired)

@@ -118,6 +118,9 @@ public abstract partial class SharedProjectileSystem
         var additionalHits = new AfterProjectileHitEvent(projectile, target);
         RaiseLocalEvent(uid, ref additionalHits);
 
+        if (_rmcNet.IsServer || HasComp<PredictedProjectileClientComponent>(uid))
+            PlayImpactEffect((uid, component));
+
         if (!predicted && component.DeleteOnCollide && component.ProjectileSpent)
         {
             PredictedQueueDel(uid);
@@ -136,4 +139,6 @@ public abstract partial class SharedProjectileSystem
 
         Dirty(uid, predictedHit);
     }
+
+    protected abstract void PlayImpactEffect(Entity<ProjectileComponent> projectile);
 }
