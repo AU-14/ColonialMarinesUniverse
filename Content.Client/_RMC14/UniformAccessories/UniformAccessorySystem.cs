@@ -173,7 +173,7 @@ public sealed partial class UniformAccessorySystem : SharedUniformAccessorySyste
 
     private string GetKey(EntityUid uid, UniformAccessoryComponent component, int index)
     {
-        var key = $"enum.{nameof(UniformAccessoryLayer)}.{UniformAccessoryLayer.Base}{index}_{Name(uid)}_{uid.Id}";
+        var key = $"{nameof(UniformAccessoryLayer)}.{UniformAccessoryLayer.Base}{index}_{Name(uid)}_{uid.Id}";
 
         if (component.LayerKeys != null && component.LayerKeys.Count > 0 && component.Limit > 1)
         {
