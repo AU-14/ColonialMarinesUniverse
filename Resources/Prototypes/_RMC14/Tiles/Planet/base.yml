@@ -48,7 +48,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetRunedSandstone
-  name: runed sandstone
+  name: tiles-rmc-legacy-runed-sandstone
   sprite: /Textures/_RMC14/Tiles/planet/runed_sandstone/runedsandstone.png
   footstepSounds:
     collection: FootstepWood
@@ -57,7 +57,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetGCircuit
-  name: gcircuit
+  name: tiles-rmc-legacy-gcircuit
   sprite: /Textures/_RMC14/Tiles/planet/gcircuit/gcircuita.png
   footstepSounds:
     collection: FootstepHull
@@ -66,7 +66,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetShuttleBlue
-  name: blue shuttle
+  name: tiles-rmc-legacy-blue-shuttle
   sprite: /Textures/_RMC14/Tiles/planet/shuttle/floor.png
   footstepSounds:
     collection: FootstepHull
@@ -75,19 +75,19 @@
 - type: tile
   parent: CMPlanetShuttleBlue
   id: CMPlanetShuttleRed
-  name: red shuttle
+  name: tiles-rmc-legacy-red-shuttle
   sprite: /Textures/_RMC14/Tiles/planet/shuttle/floor4.png
 
 - type: tile
   parent: CMPlanetShuttleBlue
   id: CMPlanetShuttleDarkRed
-  name: dark red shuttle
+  name: tiles-rmc-legacy-dark-red-shuttle
   sprite: /Textures/_RMC14/Tiles/planet/shuttle/floor6.png
 
 - type: tile
   parent: CMTileBase
   id: CMPlanetCorsatSquare
-  name: corsat squares
+  name: tiles-rmc-legacy-corsat-squares
   sprite: /Textures/_RMC14/Tiles/planet/corsat/squares.png
   footstepSounds:
     collection: FootstepHull
@@ -96,7 +96,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetCorsatSquareWood
-  name: corsat squares wood
+  name: tiles-rmc-legacy-corsat-squares-wood
   sprite: /Textures/_RMC14/Tiles/planet/corsat/squareswood.png
   footstepSounds:
     collection: FootstepWood
@@ -105,7 +105,7 @@
 - type: tile
   parent: CMTileBase
   id: CMPlanetCorsatPlate
-  name: corsat plate
+  name: tiles-rmc-legacy-corsat-plate
   sprite: /Textures/_RMC14/Tiles/planet/corsat/plate.png
   footstepSounds:
     collection: FootstepHull
@@ -114,7 +114,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetPlasticFloor1
-  name: plastic tile
+  name: tiles-plastic-floor
   sprite: /Textures/_RMC14/Tiles/planet/interior/plasticfloor1.png
   footstepSounds:
     collection: FootstepFloor
@@ -123,7 +123,7 @@
 - type: tile
   parent: CMPlanetBase
   id: RMCPlanetSandWet
-  name: sand
+  name: tiles-rmc-legacy-sand
   sprite: /Textures/_RMC14/Tiles/varadero/layer1.png
   variants: 8
   placementVariants:
@@ -149,13 +149,13 @@
 - type: tile
   parent: CMPlanetBase
   id: RMCPlanetMultiTileDark
-  name: multi tile dark
+  name: tiles-rmc-legacy-multi-tile-dark
   sprite: /Textures/_RMC14/Tiles/varadero/grey_multi_tiles.png
 
 - type: tile
   parent: CMPlanetBase
   id: RMCPlanetShale
-  name: shale
+  name: tiles-rmc-legacy-shale
   sprite: /Textures/_RMC14/Tiles/planet/auto_shale/shale_1.png
   variants: 8
   placementVariants:
@@ -188,13 +188,13 @@
 - type: tile
   parent: CMTileBase
   id: CMPlanetTatami
-  name: tatami flooring
+  name: tiles-rmc-legacy-tatami-flooring
   sprite: /Textures/_RMC14/Tiles/planet/interior/tatami.png
 
 - type: tile
   parent: CMPlanetBase
   id: RMCPlanetDirtBrownRoad
-  name: dirt road
+  name: tiles-rmc-legacy-dirt-road
   sprite: /Textures/_RMC14/Tiles/planet/browndirt_road/browndirt_road.png
 
 - type: tile

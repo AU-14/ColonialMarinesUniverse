@@ -71,6 +71,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 {
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedCMInventorySystem _cmInventory = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
@@ -1652,10 +1653,10 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private bool ValidateFlareCondition(EntityUid flare, EntityUid pack, EntityUid user, bool suppressPopup)
     {
-        if (!TryComp<SharedExpendableLightComponent>(flare, out var expendable))
+        if (!_appearance.TryGetData<ExpendableLightState>(flare, ExpendableLightVisuals.State, out var state))
             return true;
 
-        if (expendable.CurrentState != ExpendableLightState.BrandNew)
+        if (state != ExpendableLightState.BrandNew)
         {
             RestockValidationPopup(suppressPopup, "rmc-vending-machine-restock-flare-spent", pack, user, ("item", pack));
             return false;

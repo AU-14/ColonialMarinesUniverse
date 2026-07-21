@@ -7,7 +7,7 @@
 - type: tile
   parent: RMCFloorHybrisaBrownBase
   id: RMCFloorHybrisaBrown
-  name: brown metal tile
+  name: tiles-cm-default-brown
   sprite: /Textures/_RMC14/Tiles/hybrisa/zbrownfloorfull1.png
 
 - type: tile

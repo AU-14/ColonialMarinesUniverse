@@ -8,7 +8,7 @@
 - type: tile
   parent: RMCFloorStrataBlueBase
   id: RMCFloorStrataBlue
-  name: blue metal tile
+  name: tiles-cm-default-blue
   sprite: /Textures/_RMC14/Tiles/strata/blue1.png
 
 - type: tile

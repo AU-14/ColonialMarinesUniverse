@@ -13,6 +13,8 @@ using Content.Shared.Input;
 using Content.Shared.Maps;
 using Content.Shared.Traits;
 using Robust.Client.Placement;
+using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controllers.Implementations;
 using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Localization;
@@ -24,7 +26,7 @@ namespace Content.IntegrationTests.Tests;
 
 public sealed class LocalizationWarningTest
 {
-    private static readonly ProtoId<ContentTileDefinition> LiteralNameTile = "RMCFloorHybrisaEngineerShip";
+    private static readonly ProtoId<ContentTileDefinition> RmcTile = "RMCFloorHybrisaEngineerShip";
     private static readonly string[] MarkingPrototypes = GameDataScrounger.PrototypesOfKind<MarkingPrototype>();
 
     [Test]
@@ -62,8 +64,7 @@ public sealed class LocalizationWarningTest
 
                 BoundKeyHelper.ShortKeyName(ContentKeyFunctions.FocusChat);
 
-                // RMC tile definitions contain both Fluent IDs and legacy literal names. Exercise the real mapping
-                // action path with a literal tile name so it cannot be passed directly to Loc.GetString again.
+                // Exercise the mapping action path with an RMC tile whose name was migrated from legacy literal text.
                 var prototypeManager = client.ResolveDependency<IPrototypeManager>();
                 var placementManager = client.ResolveDependency<IPlacementManager>();
                 var localization = client.ResolveDependency<ILocalizationManager>();
@@ -72,7 +73,7 @@ public sealed class LocalizationWarningTest
 
                 Assert.That(fillActionMethod, Is.Not.Null);
 
-                var tile = prototypeManager.Index(LiteralNameTile);
+                var tile = prototypeManager.Index(RmcTile);
                 placementManager.BeginPlacing(new PlacementInformation
                 {
                     IsTile = true,
@@ -89,16 +90,39 @@ public sealed class LocalizationWarningTest
 
                 placementManager.Clear();
 
-                var missingTileNames = prototypeManager.EnumeratePrototypes<ContentTileDefinition>()
-                    .Where(tileDefinition => tileDefinition.Name.StartsWith("tiles-", StringComparison.Ordinal) &&
-                                             !localization.TryGetString(tileDefinition.Name, out _))
-                    .Select(tileDefinition => $"{tileDefinition.ID}: {tileDefinition.Name}")
+                var invalidTileNames = prototypeManager.EnumeratePrototypes<ContentTileDefinition>()
+                    .Where(tileDefinition => !tileDefinition.Abstract &&
+                                             !tileDefinition.EditorHidden &&
+                                             (string.IsNullOrWhiteSpace(tileDefinition.Name) ||
+                                              !localization.TryGetString(tileDefinition.Name, out _)))
+                    .Select(tileDefinition =>
+                        $"{tileDefinition.ID}: {(string.IsNullOrWhiteSpace(tileDefinition.Name)
+                            ? "<empty>"
+                            : tileDefinition.Name)}")
                     .Distinct()
                     .Order()
                     .ToArray();
 
-                Assert.That(missingTileNames, Is.Empty,
-                    $"Tile localization IDs without en-US messages:\n{string.Join('\n', missingTileNames)}");
+                Assert.That(invalidTileNames, Is.Empty,
+                    $"Editor-visible tiles with invalid en-US names:\n{string.Join('\n', invalidTileNames)}");
+
+                // Build the engine-owned tile spawn menu, which localizes every visible tile while sorting and
+                // rendering.
+                // Some legacy tile sprites independently warn when loaded as raw textures from an RSI.
+                var resourceLog = client.ResolveDependency<ILogManager>().GetSawmill("res");
+                var previousResourceLogLevel = resourceLog.Level;
+                var tileSpawning = client.ResolveDependency<IUserInterfaceManager>()
+                    .GetUIController<TileSpawningUIController>();
+                try
+                {
+                    resourceLog.Level = LogLevel.Error;
+                    tileSpawning.ToggleWindow();
+                }
+                finally
+                {
+                    tileSpawning.CloseWindow();
+                    resourceLog.Level = previousResourceLogLevel;
+                }
 
                 var missingGuideNames = prototypeManager.EnumeratePrototypes<GuideEntryPrototype>()
                     .Where(guide => !localization.TryGetString(guide.Name, out _))

@@ -8,7 +8,7 @@
 - type: tile
   parent: CMFloorStrataCyanBase
   id: CMFloorStrataCyan01
-  name: cyan metal tile
+  name: tiles-cm-default-cyan
   sprite: /Textures/_RMC14/Tiles/strata/cyan1.png
 
 - type: tile

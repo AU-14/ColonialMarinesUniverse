@@ -8,7 +8,7 @@
 - type: tile
   parent: CMFloorStrataMetalBase
   id: CMFloorStrataMultitile1
-  name: metal tile
+  name: tiles-cm-default-metal
   sprite: /Textures/_RMC14/Tiles/strata/multi_tiles1.png
 
 - type: tile
@@ -39,7 +39,7 @@
 - type: tile
   parent: CMFloorStrataMetalBase
   id: CMFloorStrataGreyMultitile1
-  name: grey metal tile
+  name: tiles-cm-default-grey
   sprite: /Textures/_RMC14/Tiles/strata/grey_multi_tiles1.png
 
 - type: tile

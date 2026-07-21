@@ -3,7 +3,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetStrata
-  name: strata
+  name: tiles-rmc-legacy-strata
   sprite: /Textures/_RMC14/Tiles/planet/strata/floor.png
   footstepSounds:
     collection: FootstepHull
@@ -13,7 +13,7 @@
 - type: tile
   parent: CMTileBase
   id: CMPlanetStrataMultiTiles
-  name: strata multi tiles
+  name: tiles-rmc-legacy-strata-multi-tiles
   sprite: /Textures/_RMC14/Tiles/planet/strata/multi_tiles.png
   variants: 6
   placementVariants:
@@ -27,7 +27,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetMattedGrass
-  name: matted grass
+  name: tiles-rmc-legacy-matted-grass
   sprite: /Textures/_RMC14/Tiles/planet/auto_strata_grass/grass.png
   variants: 8
   placementVariants:
@@ -71,6 +71,7 @@
 - type: tile
   parent: CMPlanetBase
   id: CMPlanetMattedGrass3
+  name: tiles-rmc-legacy-matted-grass
   sprite: /Textures/_RMC14/Tiles/planet/auto_strata_grass/grass_mud.png
   variants: 8
   placementVariants:

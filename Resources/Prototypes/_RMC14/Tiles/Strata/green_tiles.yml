@@ -8,7 +8,7 @@
 - type: tile
   parent: RMCFloorStrataGreenBase
   id: RMCFloorStrataGreen
-  name: green metal tile
+  name: tiles-cm-default-green
   sprite: /Textures/_RMC14/Tiles/strata/green1.png
 
 - type: tile

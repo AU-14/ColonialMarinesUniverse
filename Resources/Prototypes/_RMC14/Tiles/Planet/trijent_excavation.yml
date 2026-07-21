@@ -3,7 +3,7 @@
 - type: tile
   parent: CMPlanetBase
   id: RMCPlanetDesertExcavationBase
-  name: excavation
+  name: tiles-rmc-legacy-excavation
   sprite: /Textures/_RMC14/Tiles/planet/desert_excavation/0.png
   minimapColor: "#9c906dc2"
 

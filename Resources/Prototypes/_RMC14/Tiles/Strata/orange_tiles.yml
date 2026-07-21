@@ -8,7 +8,7 @@
 - type: tile
   parent: CMFloorStrataWhiteBase
   id: CMFloorStrataOrangeCover
-  name: orange metal tile
+  name: tiles-cm-default-orange
   sprite: /Textures/_RMC14/Tiles/strata/orange_cover.png
 
 - type: tile

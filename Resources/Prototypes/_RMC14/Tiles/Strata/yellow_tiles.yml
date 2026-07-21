@@ -8,7 +8,7 @@
 - type: tile
   parent: RMCFloorStrataYellowBase
   id: RMCFloorStrataYellow
-  name: yellow metal tile
+  name: tiles-cm-default-yellow
   sprite: /Textures/_RMC14/Tiles/strata/yellow1.png
 
 - type: tile

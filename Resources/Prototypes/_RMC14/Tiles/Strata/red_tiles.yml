@@ -8,7 +8,7 @@
 - type: tile
   parent: RMCFloorStrataRedBase
   id: RMCFloorStrataRed
-  name: red metal tile
+  name: tiles-cm-default-red
   sprite: /Textures/_RMC14/Tiles/strata/red1.png
 
 - type: tile

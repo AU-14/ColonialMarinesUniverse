@@ -7,7 +7,7 @@
 - type: tile
   parent: RMCFloorHybrisaWhiteBase
   id: RMCFloorHybrisaWhite
-  name: white metal tile
+  name: tiles-cm-default-white
   sprite: /Textures/_RMC14/Tiles/hybrisa/tilewhite.png
 
 - type: tile
