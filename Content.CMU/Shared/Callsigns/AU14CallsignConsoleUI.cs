@@ -1,3 +1,4 @@
+using Content.Shared.Radio;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._AU14.Callsigns;
@@ -88,4 +89,16 @@ public static class AU14Callsigns
 {
     public const int MaxWordLength = 10;
     public const int MaxSuffixLength = 8;
+
+    // factions that run callsigns at all
+    public static readonly HashSet<string> Factions =
+        new(StringComparer.OrdinalIgnoreCase) { "govfor", "opfor", "clf" };
+
+    // where a callsign actually applies. a callsign is net procedure, not an
+    // identity: it holds on the callsign factions' nets, but on an open channel -
+    // colony, WEYU, CMB - the speaker goes out under their own name like anyone else
+    public static bool IsCallsignChannel(RadioChannelPrototype channel)
+    {
+        return !string.IsNullOrEmpty(channel.Faction) && Factions.Contains(channel.Faction);
+    }
 }

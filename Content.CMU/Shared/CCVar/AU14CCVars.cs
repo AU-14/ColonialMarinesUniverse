@@ -17,7 +17,7 @@ public sealed partial class AU14CCVars : CVars
 
     // master switch for the AU14 comms overhaul, off = stock radio behavior
     public static readonly CVarDef<bool> NewCommsSystem =
-        CVarDef.Create("au14.new_comms_system", false, CVar.SERVERONLY);
+        CVarDef.Create("au14.new_comms_system", true, CVar.SERVERONLY);
         
     /// <summary>
     /// With the "Separated" HUD layout the chat panel sits to the right of the viewport, which pushes the
