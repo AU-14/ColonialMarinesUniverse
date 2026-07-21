@@ -1,71 +1,44 @@
 #nullable enable
+using System.Collections.Generic;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Components.SolutionManager;
 using Robust.Shared.GameObjects;
-using Robust.Shared.Log;
 using Robust.Shared.Prototypes;
-using Robust.UnitTesting;
-using Serilog.Events;
 
 namespace Content.IntegrationTests.Tests.Chemistry;
 
 [TestFixture]
 public sealed class SolutionContainerMapInitTest : GameTest
 {
-    private const string ExistingSolutionWarning = "Attempted to port a solution id";
-
-    private static readonly EntProtoId[] AffectedPrototypes =
-    [
-        "CMBeaker",
-        "CMBeakerLarge",
-        "CMDrinkCanBobdaClassic",
-        "CMFireExtinguisher",
-        "CMJumpsuitBO",
-        "CMMarinePreparedMealChicken",
-        "CMMarinePreparedMealCornbread",
-        "CMMarinePreparedMealPasta",
-        "CMMarinePreparedMealPizza",
-        "CMMarinePreparedMealPork",
-        "CMMarinePreparedMealTofu",
-        "CMPillDexalin",
-        "CMPillDylovene",
-        "RMCBeakerHighCapacity",
-        "RMCBucket",
-        "RMCMobMouseDoc",
-        "RMCTankReagentEmpty",
-        "RMCTankReagentFuel",
-        "RMCTankReagentWater",
-    ];
-
     [Test]
-    public async Task AffectedPrototypesDoNotPortExistingSolutionsOnMapInit()
+    public async Task EntityPrototypesDoNotDeclareOverlappingLegacySolutions()
     {
-        var testMap = await Pair.CreateTestMap();
-        var rootLog = Server.ResolveDependency<ILogManager>().RootSawmill;
-        var logCatcher = new LogCatcher();
+        var prototypeManager = Server.ResolveDependency<IPrototypeManager>();
+        var componentFactory = Server.ResolveDependency<IComponentFactory>();
 
-        rootLog.AddHandler(logCatcher);
-        try
+        await Server.WaitAssertion(() =>
         {
-            await Server.WaitAssertion(() =>
+            var overlaps = new List<string>();
+
+#pragma warning disable CS0612 // The compatibility component is what this regression test guards against.
+            foreach (var prototype in prototypeManager.EnumeratePrototypes<EntityPrototype>())
             {
-                foreach (var prototype in AffectedPrototypes)
+                if (!prototype.TryComp<SolutionContainerManagerComponent>(out var legacy, componentFactory) ||
+                    !prototype.TryComp<SolutionComponent>(out var current, componentFactory))
                 {
-                    var entity = SSpawnAtPosition(prototype, testMap.GridCoords);
-                    Assert.That(Server.MetaData(entity).EntityLifeStage, Is.EqualTo(EntityLifeStage.MapInitialized));
+                    continue;
                 }
-            });
 
-            var warnings = logCatcher.CaughtLogs
-                .Where(log => log.Level == LogEventLevel.Warning)
-                .Select(log => log.RenderMessage())
-                .Where(message => message.Contains(ExistingSolutionWarning, StringComparison.Ordinal))
-                .ToArray();
+                if (legacy.Solutions?.ContainsKey(current.Id) == true)
+                    overlaps.Add($"{prototype.ID}: {current.Id}");
+            }
+#pragma warning restore CS0612
 
-            Assert.That(warnings, Is.Empty, string.Join(Environment.NewLine, warnings));
-        }
-        finally
-        {
-            rootLog.RemoveHandler(logCatcher);
-        }
+            overlaps.Sort(StringComparer.Ordinal);
+            Assert.That(overlaps, Is.Empty,
+                "Entity prototypes declare the same solution through Solution and SolutionContainerManager:" +
+                Environment.NewLine + string.Join(Environment.NewLine, overlaps));
+        });
     }
 }

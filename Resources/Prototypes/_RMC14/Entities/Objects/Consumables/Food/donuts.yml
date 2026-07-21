@@ -96,13 +96,13 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/donuts.rsi
     state: donut1
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
   - type: Item
     sprite: Objects/Consumable/Food/Baked/donut.rsi
     size: Tiny
@@ -126,15 +126,15 @@
     transferAmount: 2 # 3 bites
   - type: Sprite
     state: donut2
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
-        - ReagentId: RMCSprinkles
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: RMCSprinkles
+        Quantity: 2
   - type: Item
     heldPrefix: pink
   - type: FlavorProfile

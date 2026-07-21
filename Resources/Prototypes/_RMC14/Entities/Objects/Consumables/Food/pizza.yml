@@ -22,15 +22,15 @@
     state: pizza
   - type: Item
     heldPrefix: pizza
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 30
-        - ReagentId: Vitamin
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 40
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 30
+      - ReagentId: Vitamin
+        Quantity: 5
 
 - type: entity
   abstract: true
@@ -42,15 +42,15 @@
   - type: Item
     heldPrefix: slice
     size: Tiny
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 6
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Vitamin
-          Quantity: 0.8
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Vitamin
+        Quantity: 0.8
 
 # Food Pizzas
 
@@ -176,15 +176,15 @@
     refineResult:
     - id: RMCFoodPizzaVegetableSlice
       amount: 6
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 25
-        - ReagentId: Vitamin
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 40
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 25
+      - ReagentId: Vitamin
+        Quantity: 5
 
 - type: entity
   parent: RMCFoodPizzaSliceBase
@@ -201,15 +201,15 @@
     - cheesy
     - oily
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 6
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: Vitamin
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: Vitamin
+        Quantity: 1
 
 - type: entity
   parent: RMCFoodPizzaFullBase
@@ -248,17 +248,17 @@
     - cheesy
     - oily
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 6
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: JuicePineapple
-          Quantity: 1
-        - ReagentId: Vitamin
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: JuicePineapple
+        Quantity: 1
+      - ReagentId: Vitamin
+        Quantity: 1
 
 - type: entity
   parent: RMCFoodPizzaFullBase
@@ -297,17 +297,17 @@
     - cheesy
     - oily
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 6
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: Vitamin
-          Quantity: 1
-        - ReagentId: Protein
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: Vitamin
+        Quantity: 1
+      - ReagentId: Protein
+        Quantity: 1
 
 - type: entity
   parent: RMCFoodPizzaFullBase
@@ -344,17 +344,17 @@
     - onion
     - cheesy
     - bread
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 6
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: Vitamin
-          Quantity: 1
-        - ReagentId: Protein
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 6
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: Vitamin
+        Quantity: 1
+      - ReagentId: Protein
+        Quantity: 1
 
 # Pizza Box Base
 - type: entity

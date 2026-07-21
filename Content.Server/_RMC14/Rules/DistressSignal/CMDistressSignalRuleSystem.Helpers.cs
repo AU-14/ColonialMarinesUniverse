@@ -302,39 +302,39 @@ public sealed partial class CMDistressSignalRuleSystem
     {
         var allSpawners = GetSpawners();
         EntityUid? squad = null;
+        EntProtoId? squadId = null;
 
         if (job.HasSquad)
         {
-            var (squadId, squadEnt) = NextSquad(job, rule, preferred);
+            var (nextSquadId, squadEnt) = NextSquad(job, rule, preferred);
+            squadId = nextSquadId;
             squad = squadEnt;
 
-            if (allSpawners.Squad.TryGetValue(squadId, out var jobSpawners) &&
+            if (allSpawners.Squad.TryGetValue(nextSquadId, out var jobSpawners) &&
                 jobSpawners.TryGetValue(job.ID, out var spawners))
             {
                 return (_random.Pick(spawners), squadEnt);
             }
 
-            if (allSpawners.SquadAny.TryGetValue(squadId, out var anySpawners))
+            if (allSpawners.SquadAny.TryGetValue(nextSquadId, out var anySpawners))
                 return (_random.Pick(anySpawners), squadEnt);
 
-            if (allSpawners.SquadFull.TryGetValue(squadId, out jobSpawners) &&
+            if (allSpawners.SquadFull.TryGetValue(nextSquadId, out jobSpawners) &&
                 jobSpawners.TryGetValue(job.ID, out spawners))
             {
                 return (_random.Pick(spawners), squadEnt);
             }
 
-            if (allSpawners.SquadAnyFull.TryGetValue(squadId, out anySpawners))
+            if (allSpawners.SquadAnyFull.TryGetValue(nextSquadId, out anySpawners))
                 return (_random.Pick(anySpawners), squadEnt);
 
-            Log.Error($"No valid spawn found for player. Squad: {squadId}, job: {job.ID}");
+            Log.Debug($"No squad spawn found for player. Falling back to generic spawn points. Squad: {nextSquadId}, job: {job.ID}");
 
             if (allSpawners.NonSquad.TryGetValue(job.ID, out spawners))
                 return (_random.Pick(spawners), squadEnt);
 
             if (allSpawners.NonSquadFull.TryGetValue(job.ID, out spawners))
                 return (_random.Pick(spawners), squadEnt);
-
-            Log.Error($"No valid spawn found for player. Job: {job.ID}");
         }
         else
         {
@@ -344,7 +344,7 @@ public sealed partial class CMDistressSignalRuleSystem
             if (allSpawners.NonSquadFull.TryGetValue(job.ID, out spawners))
                 return (_random.Pick(spawners), null);
 
-            Log.Error($"No valid spawn found for player. Job: {job.ID}");
+            Log.Debug($"No job-specific spawn found for player. Falling back to generic spawn points. Job: {job.ID}");
         }
 
         var pointsQuery = EntityQueryEnumerator<SpawnPointComponent>();
@@ -374,6 +374,11 @@ public sealed partial class CMDistressSignalRuleSystem
 
         if (latePoints.Count > 0)
             return (_random.Pick(latePoints), squad);
+
+        if (squadId is { } failedSquad)
+            Log.Error($"No valid spawn found for player. Squad: {failedSquad}, job: {job.ID}");
+        else
+            Log.Error($"No valid spawn found for player. Job: {job.ID}");
 
         return null;
     }

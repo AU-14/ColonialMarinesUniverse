@@ -53,10 +53,10 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Medical/lethal_syringe.rsi
-  - type: SolutionContainerManager
-    solutions:
-      injector:
-        maxVol: 50
+  - type: Solution
+    id: injector
+    solution:
+      maxVol: 50
   - type: Injector
     currentTransferAmount: 50
     activeModeProtoId: RMCInjectorModeLethal
@@ -72,10 +72,10 @@
     currentLabel: reagent-name-rmc-chloral-hydrate
   - type: Injector
     activeModeProtoId: RMCInjectorModeLethal
-  - type: SolutionContainerManager
-    solutions:
-      injector:
-        maxVol: 50
-        reagents:
-        - ReagentId: RMCChloralhydrate
-          Quantity: 50
+  - type: Solution
+    id: injector
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: RMCChloralhydrate
+        Quantity: 50

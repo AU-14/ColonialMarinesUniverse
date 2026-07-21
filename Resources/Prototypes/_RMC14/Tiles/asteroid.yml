@@ -18,7 +18,7 @@
   abstract: true
   id: RMCFloorAsteroidStripedBase
   name: tiles-cm-striped
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
   footstepSounds:
     collection: FootstepFloor

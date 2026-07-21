@@ -10,6 +10,19 @@ namespace Content.IntegrationTests.Tests.Tiles;
 
 public sealed class TileStackRecursionTest : GameTest
 {
+    private static readonly ProtoId<ContentTileDefinition>[] NoBaseTurfTiles =
+    [
+        "CMFloorStriped0",
+        "CMFloorSteelNoWeeds",
+        "RMCFloorAIGlowingNoBuild",
+        "RMCFloorAINoBuild",
+        "CMFloorAsteroidStriped0",
+        "RMCFloorPlateNoBuild",
+        "RMCFloorPlatingNoBuild",
+        "RMCFloorUnderplatingNoBuild",
+        "RMCFloorUnderplatingNoWeeds",
+    ];
+
     [Test]
     public async Task TestBaseTurfRecursion()
     {
@@ -35,11 +48,22 @@ public sealed class TileStackRecursionTest : GameTest
             Assert.That(ctdef.BaseTurf != ctdef.ID);
             nodes.Add((ctdef.ID, int.MaxValue));
             if (ctdef.BaseTurf != null)
+            {
+                Assert.That(ctdef.BaseTurf.Value.Id, Is.Not.Empty,
+                    $"Tile {ctdef.ID} has an empty base turf prototype ID.");
+                Assert.That(tiles.ContainsKey(ctdef.BaseTurf.Value), Is.True,
+                    $"Tile {ctdef.ID} has unknown base turf {ctdef.BaseTurf.Value}.");
                 edges.Add((ctdef.BaseTurf.Value, ctdef.ID));
+            }
             Assert.That(ctdef.BaseWhitelist, Does.Not.Contain(ctdef.ID));
             edges.AddRange(ctdef.BaseWhitelist.Select(possibleTurf =>
                 (possibleTurf, new ProtoId<ContentTileDefinition>(ctdef.ID))));
         }
+
+        foreach (var tile in NoBaseTurfTiles)
+            Assert.That(protoMan.Index(tile).BaseTurf, Is.Null,
+                $"Tile {tile} must not inherit a destructible base turf.");
+
         Bfs(nodes, edges, maxTileHistoryLength);
     }
 

@@ -4,13 +4,13 @@
   name: coffee
   description: Careful, the beverage you're about to enjoy is extremely hot.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 50
-        reagents:
-        - ReagentId: RMCCoffee
-          Quantity: 30
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: RMCCoffee
+        Quantity: 30
   - type: Edible
     edible: Drink
     solution: drink
@@ -65,13 +65,13 @@
     sprite: _RMC14/Objects/Consumable/Drinks/tea.rsi
     state: base
     layers: []
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 50
-        reagents:
-        - ReagentId: RMCTea
-          Quantity: 30
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: RMCTea
+        Quantity: 30
 
 - type: entity
   parent: RMCDrinkTea
@@ -84,13 +84,13 @@
     sprite: _RMC14/Objects/Consumable/Drinks/tea.rsi
     state: tea_spp
     layers: []
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 30
-        reagents:
-        - ReagentId: RMCTea
-          Quantity: 30
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: RMCTea
+        Quantity: 30
 
 - type: entity
   parent: RMCDrinkTeaSPP
@@ -98,13 +98,13 @@
   name: insulated container
   suffix: Water
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 30
-        reagents:
-        - ReagentId: Water
-          Quantity: 30
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Water
+        Quantity: 30
 
 - type: entity
   parent: RMCDrinkCoffee
@@ -116,10 +116,10 @@
     sprite: _RMC14/Objects/Consumable/Drinks/hot_cocoa.rsi
     state: base
     layers: []
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 50
-        reagents:
-        - ReagentId: RMCHotCocoa
-          Quantity: 30
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: RMCHotCocoa
+        Quantity: 30

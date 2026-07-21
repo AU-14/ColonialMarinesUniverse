@@ -6,13 +6,13 @@
   components:
   - type: Label
     currentLabel: reagent-name-cminaprovaline
-  - type: SolutionContainerManager
-    solutions:
-      injector:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMInaprovaline
-          Quantity: 15
+  - type: Solution
+    id: injector
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMInaprovaline
+        Quantity: 15
 
 - type: entity
   parent: RMCPrefilledSyringe
@@ -22,13 +22,13 @@
   components:
   - type: Label
     currentLabel: reagent-name-cmdylovene
-  - type: SolutionContainerManager
-    solutions:
-      injector:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMDylovene
-          Quantity: 15
+  - type: Solution
+    id: injector
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMDylovene
+        Quantity: 15
 
 - type: entity
   parent: RMCPrefilledSyringe
@@ -38,16 +38,16 @@
   components:
   - type: Label
     currentLabel: drugs
-  - type: SolutionContainerManager
-    solutions:
-      injector:
-        maxVol: 15
-        reagents:
-        - ReagentId: RMCSpaceDrugs
-          Quantity: 5
-        - ReagentId: RMCPsilocybin
-          Quantity: 5
-        - ReagentId: RMCMindbreakerToxin
-          Quantity: 5
+  - type: Solution
+    id: injector
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: RMCSpaceDrugs
+        Quantity: 5
+      - ReagentId: RMCPsilocybin
+        Quantity: 5
+      - ReagentId: RMCMindbreakerToxin
+        Quantity: 5
 #TODO Spaceacillin, Vaccine, Chloralhydrate.
 #code/game/objects/items/reagent_containers/syringes.dm

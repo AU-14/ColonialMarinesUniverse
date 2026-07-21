@@ -5,12 +5,12 @@
   description: It's milk. White and nutritious goodness!
   suffix: Full, RMC
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        reagents:
-        - ReagentId: Milk
-          Quantity: 50
+  - type: Solution
+    id: drink
+    solution:
+      reagents:
+      - ReagentId: Milk
+        Quantity: 50
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/milk.rsi
   - type: Item
@@ -26,11 +26,11 @@
   name: soy milk
   description: It's soy milk. White and nutritious goodness!
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        reagents:
-        - ReagentId: MilkSoy
-          Quantity: 50
+  - type: Solution
+    id: drink
+    solution:
+      reagents:
+      - ReagentId: MilkSoy
+        Quantity: 50
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/milk_soy.rsi

@@ -9,7 +9,7 @@
   - type: Storage
     maxItemSize: Ginormous
     grid:
-    - 0,0,8,0
+    - 0,0,15,1
   - type: Sprite
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: Icon

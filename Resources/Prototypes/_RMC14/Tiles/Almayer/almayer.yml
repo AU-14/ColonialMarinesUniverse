@@ -11,7 +11,7 @@
   name: tiles-cm-default-no-weeds
   sprite: /Textures/_RMC14/Tiles/almayer/default.png
   weedsSpreadable: false
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
 
 - type: tile
@@ -20,7 +20,7 @@
   name: tiles-rmc-underplating-no-weeds
   sprite: /Textures/_RMC14/Tiles/shiva/plating.png
   weedsSpreadable: false
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
   isSubfloor: true
 
@@ -29,7 +29,7 @@
   id: RMCFloorPlatingNoBuild
   name: tiles-cm-plating
   sprite: /Textures/_RMC14/Tiles/almayer/plating.png
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
   blockAnchoring: true
   blockConstruction: true
@@ -44,7 +44,7 @@
 - type: tile
   parent: CMFloorSteel
   id: RMCFloorUnderplatingNoBuild
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
   blockAnchoring: true
   blockConstruction: true
@@ -200,7 +200,7 @@
 - type: tile
   parent: CMFloorPlate
   id: RMCFloorPlateNoBuild
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
   blockAnchoring: true
   blockConstruction: true

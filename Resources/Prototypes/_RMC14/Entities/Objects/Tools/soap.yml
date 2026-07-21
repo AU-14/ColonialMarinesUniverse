@@ -15,13 +15,13 @@
     size: Tiny  
   - type: Physics
     bodyType: Dynamic
-  - type: SolutionContainerManager
-    solutions:
-      soap:
-        maxVol: 50
-        reagents:
-        - ReagentId: SoapReagent
-          Quantity: 50
+  - type: Solution
+    id: soap
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: SoapReagent
+        Quantity: 50
   - type: SolutionTransfer
     transferAmount: 10
     minTransferAmount: 1

@@ -13,7 +13,7 @@
 - type: tile
   parent: RMCFloorAIGlowing
   id: RMCFloorAIGlowingNoBuild
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
   blockAnchoring: true
   blockConstruction: true
@@ -32,7 +32,7 @@
 - type: tile
   parent: RMCFloorAI
   id: RMCFloorAINoBuild
-  baseTurf: ""
+  baseTurf: null
   deconstructTools: [ ]
   blockAnchoring: true
   blockConstruction: true
@@ -88,4 +88,3 @@
   parent: RMCFloorAINoBuildSilver
   id: RMCFloorAINoBuildSilverWest
   sprite: /Textures/_RMC14/Tiles/almayer/ai/ai_silver_3.png
-

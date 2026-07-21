@@ -8,10 +8,10 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/condiments.rsi
     state: emptycondiment
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 50
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
   - type: DrawableSolution
     solution: food
   - type: DrainableSolution
@@ -47,10 +47,10 @@
   parent: RMCCondiment
   id: RMCCondimentSmall
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
   - type: SolutionTransfer
     maxTransferAmount: 20
 
@@ -62,13 +62,13 @@
   components:
   - type: Sprite
     state: icon
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 60
-        reagents:
-        - ReagentId: Hotsauce
-          Quantity: 60
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: Hotsauce
+        Quantity: 60
   - type: SolutionTransfer
     maxTransferAmount: 60
 
@@ -81,12 +81,12 @@
   components:
   - type: Sprite
     state: enzyme
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: Enzyme
-          Quantity: 50
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: Enzyme
+        Quantity: 50
 
 # Sugar
 - type: entity
@@ -95,12 +95,12 @@
   name: sugar
   description: Tasty space sugar!
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: RMCSugar
-          Quantity: 50
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: RMCSugar
+        Quantity: 50
 
 # Ketchup
 - type: reagent
@@ -129,12 +129,12 @@
   components:
   - type: Sprite
     state: ketchup
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: RMCKetchup
-          Quantity: 50
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: RMCKetchup
+        Quantity: 50
 
 # Soy Sauce
 - type: reagent
@@ -163,12 +163,12 @@
   components:
   - type: Sprite
     state: soysauce
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: RMCSoysauce
-          Quantity: 50
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: RMCSoysauce
+        Quantity: 50
 
 # Corn Oil
 - type: reagent
@@ -197,12 +197,12 @@
   components:
   - type: Sprite
     state: oliveoil
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: RMCCornoil
-          Quantity: 50
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: RMCCornoil
+        Quantity: 50
 
 # Salt
 - type: entity
@@ -213,12 +213,12 @@
   components:
   - type: Sprite
     state: saltshakersmall
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: TableSalt
-          Quantity: 20
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: TableSalt
+        Quantity: 20
 
 # Pepper
 - type: entity
@@ -229,12 +229,12 @@
   components:
   - type: Sprite
     state: peppermillsmall
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        reagents:
-        - ReagentId: Blackpepper
-          Quantity: 50
+  - type: Solution
+    id: food
+    solution:
+      reagents:
+      - ReagentId: Blackpepper
+        Quantity: 50
 
 # Hotsauces
 # Cholula

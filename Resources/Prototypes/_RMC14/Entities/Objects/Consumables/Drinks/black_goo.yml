@@ -4,10 +4,10 @@
   name: strange bottle
   description: A strange bottle of unknown origin.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 100
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 100
   - type: Sprite
     sprite: _RMC14/Objects/Medical/black_goo.rsi
     layers:
@@ -37,13 +37,13 @@
   id: RMCBlackGooGlassFull
   suffix: DO NOT MAP, full
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 100
-        reagents:
-        - ReagentId: RMCBlackGoo
-          Quantity: 100
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 100
+      reagents:
+      - ReagentId: RMCBlackGoo
+        Quantity: 100
 
 - type: entity
   parent: RMCBlackGooGlass
@@ -52,10 +52,10 @@
   name: even stranger bottle
   description: A bottle of blue labeled CURE...
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 100
-        reagents:
-        - ReagentId: RMCAntiZed
-          Quantity: 100
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 100
+      reagents:
+      - ReagentId: RMCAntiZed
+        Quantity: 100

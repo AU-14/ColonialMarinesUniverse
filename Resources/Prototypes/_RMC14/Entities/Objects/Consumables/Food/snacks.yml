@@ -9,13 +9,13 @@
       - FoodSnack
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/packaged.rsi
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 25 # Room for extra condiments
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 25 # Room for extra condiments
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
   - type: Item
     sprite: _RMC14/Objects/Consumable/Food/packaged.rsi
     heldPrefix: packet
@@ -57,17 +57,17 @@
   - type: Sprite
     state: barcardine-o
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: CocoaPowder
-          Quantity: 3
-        - ReagentId: CMBicaridine
-          Quantity: 2 # Given that the overdose rate is a lot higher, I doubt this will cause issues, you'd need to eat more than 15 bars.
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: CocoaPowder
+        Quantity: 3
+      - ReagentId: CMBicaridine
+        Quantity: 2 # Given that the overdose rate is a lot higher, I doubt this will cause issues, you'd need to eat more than 15 bars.
 
 - type: entity
   parent: RMCFoodSnackBase
@@ -99,15 +99,15 @@
   - type: Sprite
     state: boonie-o
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 6
-        - ReagentId: CocoaPowder
-          Quantity: 4
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 6
+      - ReagentId: CocoaPowder
+        Quantity: 4
 
 - type: entity
   parent: RMCFoodSnackBase
@@ -139,15 +139,15 @@
     state: chunk-o
   - type: Item
     size: Normal
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20 # It's going to take a bit to eat this goddamn thing.
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 7
-        - ReagentId: CocoaPowder
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20 # It's going to take a bit to eat this goddamn thing.
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 7
+      - ReagentId: CocoaPowder
+        Quantity: 10
   - type: MeleeWeapon # True horror comes from improvisation.
     damage:
       types:
@@ -186,17 +186,17 @@
     state: hunk-o
   - type: Item
     size: Large
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 40 # Remember what I said before? It's worse now.
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Iron # IT CONTAINS 30 UNITS OF WHAT???
-          Quantity: 30
-        - ReagentId: CocoaPowder
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 40 # Remember what I said before? It's worse now.
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Iron # IT CONTAINS 30 UNITS OF WHAT???
+        Quantity: 30
+      - ReagentId: CocoaPowder
+        Quantity: 5
   - type: MeleeWeapon # You could legitimately use this as a strong melee weapon. That horrifies me.
     damage:
       types:
@@ -216,15 +216,15 @@
       - salty
   - type: Sprite
     state: kepler_chips
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: TableSalt # Holy shit these are salty.
-          Quantity: 12
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: TableSalt # Holy shit these are salty.
+        Quantity: 12
   - type: Item
   - type: Edible
     trash:
@@ -243,17 +243,17 @@
       - salty
   - type: Sprite
     state: kepler_flame
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: TableSalt
-          Quantity: 4
-        - ReagentId: Hotsauce
-          Quantity: 8
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 4
+      - ReagentId: Hotsauce
+        Quantity: 8
   - type: Item
   - type: Edible
     trash:
@@ -271,15 +271,15 @@
       - peppery
   - type: Sprite
     state: wy_pepper
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 6
-        - ReagentId: Blackpepper
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 6
+      - ReagentId: Blackpepper
+        Quantity: 1
   - type: Item
   - type: Edible
     trash:
@@ -317,17 +317,17 @@
   - type: Sprite
     state: hburger
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Protein
-          Quantity: 5
-        - ReagentId: TableSalt
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Protein
+        Quantity: 5
+      - ReagentId: TableSalt
+        Quantity: 2
 
 - type: entity
   parent: RMCFoodSnackBase
@@ -359,15 +359,15 @@
   - type: Sprite
     state: open-burrito
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Protein
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Protein
+        Quantity: 5
 
 - type: entity
   parent: RMCFoodSnackBase
@@ -399,17 +399,17 @@
   - type: Sprite
     state: open-hotdog
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
-        - ReagentId: Protein
-          Quantity: 2
-        - ReagentId: TableSalt
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: Protein
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
 
 - type: entity
   parent: RMCFoodSnackBase
@@ -441,17 +441,17 @@
   - type: Sprite
     state: open_samosa
   - type: Item
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
-        - ReagentId: Protein
-          Quantity: 2
-        - ReagentId: TableSalt
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: Protein
+        Quantity: 2
+      - ReagentId: TableSalt
+        Quantity: 2
 
 - type: entity
   parent: RMCFoodSnackBase
@@ -465,15 +465,15 @@
       - nutriment
   - type: Sprite
     state: eat_bar
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 6
-        - ReagentId: TableSalt
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 6
+      - ReagentId: TableSalt
+        Quantity: 1
   - type: Item
   - type: Edible
     trash:

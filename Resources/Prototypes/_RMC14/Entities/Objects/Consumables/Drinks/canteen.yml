@@ -20,13 +20,13 @@
     blacklist:
       components:
       - Xeno
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 60
-        reagents:
-        - ReagentId: Water
-          Quantity: 60
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: Water
+        Quantity: 60
   - type: Tag
     tags:
     - DrinkGlass
@@ -76,10 +76,10 @@
   components:
   - type: Sprite
     state: flask
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 60
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
 
 - type: entity
   parent: CMCanteenBase

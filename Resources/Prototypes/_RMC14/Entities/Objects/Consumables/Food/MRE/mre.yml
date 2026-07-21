@@ -17,7 +17,7 @@
     size: Small
   - type: Storage
     grid:
-    - 0,0,15,1
+    - 0,0,17,1
     maxItemSize: Small
     whitelist:
       components:

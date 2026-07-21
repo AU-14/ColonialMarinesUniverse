@@ -20,10 +20,10 @@
   description: A ceramic mug. Practically guaranteed to fall and spill scalding-hot drink onto your brand-new shirt. Ouch.
   suffix: RMC
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 30
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 30
   - type: Edible
     edible: Drink
     solution: drink
@@ -64,13 +64,13 @@
   id: RMCCoffeeCupFilled
   suffix: RMC, Filled, RMCCoffee
   components:
-    - type: SolutionContainerManager
-      solutions:
-        drink:
-          maxVol: 30
-          reagents:
-          - ReagentId: RMCCoffee
-            Quantity: 30
+    - type: Solution
+      id: drink
+      solution:
+        maxVol: 30
+        reagents:
+        - ReagentId: RMCCoffee
+          Quantity: 30
 
 - type: entity
   parent: RMCCoffeeCup
@@ -169,10 +169,10 @@
   description: A paper water cup.
   suffix: RMC
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
-        maxVol: 10
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 10
   - type: Edible
     edible: Drink
     solution: drink

@@ -16,15 +16,15 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: rawfish
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
-        - ReagentId: UncookedAnimalProteins
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: UncookedAnimalProteins
+        Quantity: 1
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
@@ -134,15 +134,15 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: grilledfish
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
-        - ReagentId: Protein
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: Protein
+        Quantity: 2
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
@@ -172,15 +172,15 @@
   - type: Sprite
     sprite: Objects/Consumable/Food/meals.rsi
     state: fishandchips
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 5
-        - ReagentId: Protein
-          Quantity: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 5
+      - ReagentId: Protein
+        Quantity: 5
   - type: Item
     size: Small
     sprite: Objects/Consumable/Food/meals.rsi
@@ -205,13 +205,13 @@
   - type: Sprite
     sprite: _RMC14/Objects/Fishing/Food/fish.rsi
     state: fishfingers
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Fishing/Food/fish.rsi
@@ -237,15 +237,15 @@
   - type: Sprite
     sprite: Objects/Consumable/Food/meals.rsi
     state: cubancarp
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 6
-        - ReagentId: Hotsauce
-          Quantity: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 6
+      - ReagentId: Hotsauce
+        Quantity: 3
   - type: Item
     size: Small
     sprite: Objects/Consumable/Food/meals.rsi
@@ -270,13 +270,13 @@
   - type: Sprite
     sprite: _RMC14/Objects/Fishing/Food/fish.rsi
     state: fish_snacks_meat
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 2
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Fishing/Food/fish.rsi
@@ -313,13 +313,13 @@
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi
     state: fishsushiroll
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Consumable/Food/misc.rsi

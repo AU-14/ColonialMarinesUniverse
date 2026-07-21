@@ -100,28 +100,28 @@
   id: RMCBeakerMetalFoamAluminum
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 60
-        reagents:
-          - ReagentId: RMCAluminum
-            Quantity: 30
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 60
+      reagents:
+        - ReagentId: RMCAluminum
+          Quantity: 30
 
 - type: entity
   parent: CMBeaker
   id: RMCBeakerMetalFoamingAgent
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 60
-        reagents:
-          - ReagentId: FoamingAgent
-            Quantity: 10
-          - ReagentId: PolytrinicAcid
-            Quantity: 10
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 60
+      reagents:
+        - ReagentId: FoamingAgent
+          Quantity: 10
+        - ReagentId: PolytrinicAcid
+          Quantity: 10
 
 # Weedkiller
 - type: entity
@@ -169,30 +169,30 @@
   id: RMCBeakerWeedkillerPlantBGone
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 60
-        reagents:
-          - ReagentId: PlantBGone
-            Quantity: 25
-          - ReagentId: RMCPotassium
-            Quantity: 25
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 60
+      reagents:
+        - ReagentId: PlantBGone
+          Quantity: 25
+        - ReagentId: RMCPotassium
+          Quantity: 25
 
 - type: entity
   parent: CMBeaker
   id: RMCBeakerWeedkillerPhosphorus
   categories: [ HideSpawnMenu ]
   components:
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 60
-        reagents:
-          - ReagentId: RMCSugar
-            Quantity: 25
-          - ReagentId: RMCPhosphorus
-            Quantity: 25
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 60
+      reagents:
+        - ReagentId: RMCSugar
+          Quantity: 25
+        - ReagentId: RMCPhosphorus
+          Quantity: 25
 
 # Other
 - type: entity
