@@ -5,11 +5,13 @@ using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.GameTicking;
 using Content.Shared.Projectiles;
+using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -22,12 +24,14 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedProjectileSystem _projectile = default!;
+    [Dependency] private RMCLagCompensationSystem _rmcLagCompensation = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private TransformSystem _transform = default!;
 
     private readonly Dictionary<(Guid, int), EntityUid> _predicted = new();
     private readonly List<(PredictedProjectileHitEvent Event, ICommonSession Player)> _predictedHits = new();
     private bool _preventCollision;
+    private bool _validatingPredictedHitCollision;
     private bool _logHits;
     private float _coordinateDeviation;
     private float _lowestCoordinateDeviation;
@@ -52,6 +56,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         _transformQuery = GetEntityQuery<TransformComponent>();
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeNetworkEvent<RequestShootEvent>(OnShootRequest);
         SubscribeNetworkEvent<PredictedProjectileHitEvent>(OnPredictedProjectileHit);
 
         SubscribeLocalEvent<PredictedProjectileServerComponent, MapInitEvent>(OnPredictedMapInit);
@@ -69,6 +74,11 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _predicted.Clear();
+    }
+
+    private void OnShootRequest(RequestShootEvent ev, EntitySessionEventArgs args)
+    {
+        _rmcLagCompensation.SetLastRealTick(args.SenderSession.UserId, ev.LastRealTick);
     }
 
     private void OnPredictedMapInit(Entity<PredictedProjectileServerComponent> ent, ref MapInitEvent args)
@@ -97,7 +107,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private void OnPredictedPreventCollide(Entity<PredictedProjectileServerComponent> ent, ref PreventCollideEvent args)
     {
-        if (!_preventCollision)
+        if (!_preventCollision || _validatingPredictedHitCollision)
             return;
 
         if (args.Cancelled)
@@ -114,10 +124,15 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         if (!_physicsQuery.TryComp(ent, out var entPhysics))
             return;
 
+        if (!FixturesCanCollide(args.OurFixture, args.OtherFixture))
+            return;
+
         if (!Collides(
                 (ent, ent, entPhysics),
                 (other, otherLagComp, otherFixtures, args.OtherBody, otherTransform),
-                null))
+                null,
+                args.OurFixture,
+                args.OtherFixture))
         {
             args.Cancelled = true;
         }
@@ -126,12 +141,23 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
     private bool Collides(
         Entity<PredictedProjectileServerComponent, PhysicsComponent> projectile,
         Entity<LagCompensationComponent, FixturesComponent, PhysicsComponent, TransformComponent> other,
-        MapCoordinates? clientCoordinates)
+        MapCoordinates? clientCoordinates,
+        Fixture projectileFixture,
+        Fixture otherFixture)
     {
+        if (!FixturesCanCollide(projectileFixture, otherFixture))
+            return false;
+
         var projectileCoordinates = _transform.GetMapCoordinates(projectile);
+        if (projectileCoordinates.MapId == MapId.Nullspace ||
+            other.Comp4.MapID != projectileCoordinates.MapId)
+        {
+            return false;
+        }
+
         var projectilePosition = projectileCoordinates.Position;
 
-        MapCoordinates lowestCoordinate = default;
+        MapCoordinates? lowestCoordinate = null;
         var otherCoordinates = EntityCoordinates.Invalid;
         var ping = projectile.Comp1.Shooter?.Channel.Ping ?? 0;
         // Use 1.5 due to the trip buffer.
@@ -143,7 +169,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             otherCoordinates = pos.Item2;
             if (pos.Item1 >= sentTime)
                 break;
-            else if (lowestCoordinate == default && pos.Item1 >= sentTime - pingTime)
+            else if (lowestCoordinate == null && pos.Item1 >= sentTime - pingTime)
                 lowestCoordinate = _transform.ToMapCoordinates(pos.Item2);
         }
 
@@ -151,26 +177,28 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             ? _transform.GetMapCoordinates(other)
             : _transform.ToMapCoordinates(otherCoordinates);
 
-        if (clientCoordinates != null &&
-            (clientCoordinates.Value.InRange(otherMapCoordinates, _coordinateDeviation) ||
-             clientCoordinates.Value.InRange(lowestCoordinate, _lowestCoordinateDeviation)))
+        if (otherMapCoordinates.MapId != projectileCoordinates.MapId)
+            return false;
+
+        if (clientCoordinates is { } reportedCoordinates)
         {
-            otherMapCoordinates = clientCoordinates.Value;
+            if (reportedCoordinates.MapId != projectileCoordinates.MapId)
+                return false;
+
+            var nearLowestCoordinate = lowestCoordinate is { } lowest &&
+                                       lowest.MapId == projectileCoordinates.MapId &&
+                                       reportedCoordinates.InRange(lowest, _lowestCoordinateDeviation);
+            if (reportedCoordinates.InRange(otherMapCoordinates, _coordinateDeviation) || nearLowestCoordinate)
+                otherMapCoordinates = reportedCoordinates;
         }
 
         var transform = new Transform(otherMapCoordinates.Position, 0);
         var bounds = new Box2(transform.Position, transform.Position);
 
-        foreach (var fixture in other.Comp2.Fixtures.Values)
+        for (var i = 0; i < otherFixture.Shape.ChildCount; i++)
         {
-            if ((fixture.CollisionLayer & projectile.Comp2.CollisionMask) == 0)
-                continue;
-
-            for (var i = 0; i < fixture.Shape.ChildCount; i++)
-            {
-                var boundy = fixture.Shape.ComputeAABB(transform, i);
-                bounds = bounds.Union(boundy);
-            }
+            var fixtureBounds = otherFixture.Shape.ComputeAABB(transform, i);
+            bounds = bounds.Union(fixtureBounds);
         }
 
         bounds = bounds.Enlarged(_aabbEnlargement);
@@ -183,6 +211,51 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             return true;
 
         return false;
+    }
+
+    private bool PassesCollisionRules(
+        EntityUid projectile,
+        PhysicsComponent projectilePhysics,
+        Fixture projectileFixture,
+        EntityUid other,
+        PhysicsComponent otherPhysics,
+        Fixture otherFixture)
+    {
+        if (!projectilePhysics.CanCollide ||
+            !otherPhysics.CanCollide ||
+            !FixturesCanCollide(projectileFixture, otherFixture))
+        {
+            return false;
+        }
+
+        _validatingPredictedHitCollision = true;
+        try
+        {
+            var prevent = new PreventCollideEvent(
+                projectile,
+                other,
+                projectilePhysics,
+                otherPhysics,
+                projectileFixture,
+                otherFixture);
+            RaiseLocalEvent(projectile, ref prevent);
+            if (prevent.Cancelled)
+                return false;
+
+            prevent = new PreventCollideEvent(
+                other,
+                projectile,
+                otherPhysics,
+                projectilePhysics,
+                otherFixture,
+                projectileFixture);
+            RaiseLocalEvent(other, ref prevent);
+            return !prevent.Cancelled;
+        }
+        finally
+        {
+            _validatingPredictedHitCollision = false;
+        }
     }
 
     private void ProcessPredictedHit(PredictedProjectileHitEvent ev, ICommonSession player)
@@ -200,12 +273,21 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             return;
 
         if (!_projectileQuery.TryComp(projectile, out var projectileComp) ||
-            !_physicsQuery.TryComp(projectile, out var projectilePhysics))
+            !_physicsQuery.TryComp(projectile, out var projectilePhysics) ||
+            !_fixturesQuery.TryComp(projectile, out var projectileFixtures) ||
+            !projectileFixtures.Fixtures.TryGetValue(
+                SharedProjectileSystem.ProjectileFixture,
+                out var projectileFixture))
         {
             return;
         }
 
-        predictedProjectile.Hit = true;
+        if (projectileComp.ProjectileSpent ||
+            projectileComp is { Weapon: null, OnlyCollideWhenShot: true })
+        {
+            return;
+        }
+
         foreach (var (netEnt, clientPos) in ev.Hit)
         {
             if (GetEntity(netEnt) is not { Valid: true } hit)
@@ -219,10 +301,31 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
                 continue;
             }
 
-            if (!Collides(
-                    (projectile, predictedProjectile, projectilePhysics),
-                    (hit, otherLagComp, otherFixtures, otherPhysics, otherTransform),
-                    clientPos))
+            var validCollision = false;
+            foreach (var otherFixture in otherFixtures.Fixtures.Values)
+            {
+                if (!Collides(
+                        (projectile, predictedProjectile, projectilePhysics),
+                        (hit, otherLagComp, otherFixtures, otherPhysics, otherTransform),
+                        clientPos,
+                        projectileFixture,
+                        otherFixture) ||
+                    !PassesCollisionRules(
+                        projectile,
+                        projectilePhysics,
+                        projectileFixture,
+                        hit,
+                        otherPhysics,
+                        otherFixture))
+                {
+                    continue;
+                }
+
+                validCollision = true;
+                break;
+            }
+
+            if (!validCollision)
             {
                 if (_logHits)
                     Log.Info("missed");
@@ -233,8 +336,17 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             if (_logHits)
                 Log.Info("hit");
 
+            predictedProjectile.Hit = true;
             _projectile.ProjectileCollide((projectile, projectileComp, projectilePhysics), hit, true);
+            return;
         }
+    }
+
+    private static bool FixturesCanCollide(Fixture projectileFixture, Fixture otherFixture)
+    {
+        return otherFixture.Hard &&
+               ((projectileFixture.CollisionMask & otherFixture.CollisionLayer) != 0 ||
+                (otherFixture.CollisionMask & projectileFixture.CollisionLayer) != 0);
     }
 
     public override void Update(float frameTime)

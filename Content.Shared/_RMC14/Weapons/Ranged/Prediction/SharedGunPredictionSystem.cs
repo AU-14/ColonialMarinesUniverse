@@ -23,7 +23,17 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
         Subs.CVar(_config, RMCCVars.RMCGunPrediction, v => GunPrediction = v, true);
     }
 
-    public List<EntityUid>? ShootRequested(NetEntity netGun, NetCoordinates coordinates, NetEntity? target, List<int>? projectiles, ICommonSession session, bool rearmSemiAuto = false)
+    public bool ShouldPredict(EntityUid gun)
+    {
+        return GunPrediction && !HasComp<GunIgnorePredictionComponent>(gun);
+    }
+
+    public List<EntityUid>? ShootRequested(
+        NetEntity netGun,
+        NetCoordinates coordinates,
+        NetEntity? target,
+        ICommonSession session,
+        bool continuous = false)
     {
         var user = session.AttachedEntity;
 
@@ -38,23 +48,52 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
             return null;
 
         var shootCoordinates = GetCoordinates(coordinates);
+        var shootMapCoordinates = _transform.ToMapCoordinates(shootCoordinates);
+        if (!IsSameMap(ent, shootMapCoordinates))
+            return null;
+
         var targetUid = GetEntity(target);
         if (targetUid is { } clickedTarget)
         {
-            var mapCoordinates = _transform.ToMapCoordinates(shootCoordinates);
-            if (_rideSurface.TryGetRiderAtCoordinates(clickedTarget, mapCoordinates, out var rider))
+            if (_rideSurface.TryGetRiderAtCoordinates(clickedTarget, shootMapCoordinates, out var rider))
                 targetUid = rider;
+
+            if (targetUid is { } resolvedTarget && !IsSameMap(resolvedTarget, shootMapCoordinates))
+                targetUid = null;
         }
 
 #pragma warning disable RA0002
         gun.ShootCoordinates = shootCoordinates;
         gun.Target = targetUid;
 #pragma warning restore RA0002
-        if (rearmSemiAuto)
+        var shot = _gun.AttemptShootRequest(user.Value, (ent, gun), shootCoordinates, targetUid);
+        if (continuous)
             _gun.ResetShotCounter(ent, gun);
 
-        return _gun.AttemptShoot(user.Value, (ent, gun), shootCoordinates, targetUid)
-            ? []
-            : null;
+        return shot;
+    }
+
+    protected bool IsSameMap(EntityUid entity, EntityUid other)
+    {
+        return TryGetMapId(entity, out var mapId) &&
+               TryGetMapId(other, out var otherMapId) &&
+               mapId == otherMapId;
+    }
+
+    protected bool IsSameMap(EntityUid entity, MapCoordinates coordinates)
+    {
+        return coordinates.MapId != MapId.Nullspace &&
+               TryGetMapId(entity, out var mapId) &&
+               mapId == coordinates.MapId;
+    }
+
+    private bool TryGetMapId(EntityUid entity, out MapId mapId)
+    {
+        mapId = MapId.Nullspace;
+        if (!TryComp(entity, out TransformComponent? transform))
+            return false;
+
+        mapId = transform.MapID;
+        return mapId != MapId.Nullspace;
     }
 }

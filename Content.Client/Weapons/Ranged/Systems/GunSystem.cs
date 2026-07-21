@@ -4,12 +4,16 @@ using Content.Client.Animations;
 using Content.Client.Clickable;
 using Content.Client.Items;
 using Content.Client.Weapons.Ranged.Components;
+using Content.Client._RMC14.Movement;
+using Content.Client._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
+using Content.Shared.Projectiles;
 using Content.Shared.Weapons.Hitscan.Components;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
@@ -48,6 +52,8 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private ClickableSystem _clickable = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedCameraRecoilSystem _recoil = default!;
+    [Dependency] private GunPredictionSystem _gunPrediction = default!;
+    [Dependency] private RMCLagCompensationSystem _rmcLagCompensation = default!;
     [Dependency] private SharedMapSystem _maps = default!;
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
@@ -217,35 +223,57 @@ public sealed partial class GunSystem : SharedGunSystem
         if (RMCRecentlyPickedUpItem())
             return;
 
+        if (_player.LocalSession is not { } session)
+            return;
+
         Log.Debug($"Sending shoot request tick {Timing.CurTick} / {Timing.CurTime}");
 
+        var continuous = ApplyRmcContinuousFirePolicy(gun, _cfg.GetCVar(CCVars.ControlHoldToAttackRanged));
+        var projectiles = _gunPrediction.ShootRequested(
+            GetNetEntity(gun),
+            GetNetCoordinates(coordinates),
+            target,
+            session,
+            continuous);
 
         RaisePredictiveEvent(new RequestShootEvent
         {
             Target = target,
             Coordinates = GetNetCoordinates(coordinates),
             Gun = GetNetEntity(gun),
-            Continuous = ApplyRmcContinuousFirePolicy(gun, _cfg.GetCVar(CCVars.ControlHoldToAttackRanged)),
+            Continuous = continuous,
+            Shot = projectiles?.Select(projectile => projectile.Id).ToList(),
+            LastRealTick = _rmcLagCompensation.GetLastRealTick(null),
         });
     }
 
-    public override void Shoot(Entity<GunComponent> gun, List<(EntityUid? Entity, IShootable Shootable)> ammo,
-        EntityCoordinates fromCoordinates, EntityCoordinates toCoordinates, out bool userImpulse, EntityUid? user = null, bool throwItems = false)
+    public override List<EntityUid> Shoot(Entity<GunComponent> gun, List<(EntityUid? Entity, IShootable Shootable)> ammo,
+        EntityCoordinates fromCoordinates, EntityCoordinates toCoordinates, out bool userImpulse, EntityUid? user = null,
+        bool throwItems = false, Angle? recoilAngle = null)
     {
         userImpulse = true;
 
-        // Rather than splitting client / server for every ammo provider it's easier
-        // to just delete the spawned entities. This is for programmer sanity despite the wasted perf.
-        // This also means any ammo specific stuff can be grabbed as necessary.
-        var direction = TransformSystem.ToMapCoordinates(fromCoordinates).Position - TransformSystem.ToMapCoordinates(toCoordinates).Position;
-        var worldAngle = direction.ToAngle().Opposite();
+        var fromMap = TransformSystem.ToMapCoordinates(fromCoordinates);
+        var toMap = TransformSystem.ToMapCoordinates(toCoordinates).Position;
+        var mapDirection = toMap - fromMap.Position;
+        var mapAngle = mapDirection.ToAngle();
+        var angle = recoilAngle ?? GetRecoilAngle(gun, Timing.CurTime, mapAngle);
+        var fromEnt = Maps.TryFindGridAt(fromMap, out var gridUid, out _)
+            ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
+            : new EntityCoordinates(_maps.GetMapOrInvalid(fromMap.MapId), fromMap.Position);
+
+        toMap = fromMap.Position + angle.ToVec() * mapDirection.Length();
+        mapDirection = toMap - fromMap.Position;
+        var gunVelocity = Physics.GetMapLinearVelocity(fromEnt);
+        var predictProjectiles = _gunPrediction.ShouldPredict(gun);
+        var shotProjectiles = new List<EntityUid>(ammo.Count);
 
         foreach (var (ent, shootable) in ammo)
         {
-            if (throwItems)
+            if (throwItems && ent != null)
             {
-                Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
-                if (IsClientSide(ent!.Value))
+                Recoil(user, -mapDirection, gun.Comp.CameraRecoilScalarModified);
+                if (IsClientSide(ent.Value))
                     Del(ent.Value);
                 else
                     RemoveShootable(ent.Value);
@@ -258,13 +286,26 @@ public sealed partial class GunSystem : SharedGunSystem
                 case CartridgeAmmoComponent cartridge:
                     if (!cartridge.Spent)
                     {
+                        if (predictProjectiles)
+                        {
+                            var projectile = Spawn(cartridge.Prototype, fromEnt);
+                            CreateAndFireProjectiles(projectile, cartridge);
+                            RaiseLocalEvent(ent!.Value, new AmmoShotEvent
+                            {
+                                FiredProjectiles = shotProjectiles,
+                            });
+                        }
+
                         SetCartridgeSpent(ent!.Value, cartridge, true);
-                        MuzzleFlash(gun, cartridge, worldAngle, user);
-                        Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
-                        Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
                         // TODO: Can't predict entity deletions.
                         //if (cartridge.DeleteOnSpawn)
                         //    Del(cartridge.Owner);
+
+                        if (!predictProjectiles)
+                        {
+                            MuzzleFlash(gun, cartridge, mapDirection.ToAngle(), user);
+                            Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
+                        }
                     }
                     else
                     {
@@ -272,24 +313,85 @@ public sealed partial class GunSystem : SharedGunSystem
                         Audio.PlayPredicted(gun.Comp.SoundEmpty, gun, user);
                     }
 
+                    Recoil(user, -mapDirection, gun.Comp.CameraRecoilScalarModified);
                     if (IsClientSide(ent!.Value))
                         Del(ent.Value);
 
                     break;
                 case AmmoComponent newAmmo:
-                    MuzzleFlash(gun, newAmmo, worldAngle, user);
-                    Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
-                    Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
-                    if (IsClientSide(ent!.Value))
-                        Del(ent.Value);
+                    if (ent == null)
+                        break;
+
+                    if (predictProjectiles)
+                        CreateAndFireProjectiles(ent.Value, newAmmo);
                     else
-                        RemoveShootable(ent.Value);
+                    {
+                        MuzzleFlash(gun, newAmmo, mapDirection.ToAngle(), user);
+                        Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
+                    }
+
+                    Recoil(user, -mapDirection, gun.Comp.CameraRecoilScalarModified);
+                    RemoveShootable(ent.Value);
                     break;
                 case HitscanAmmoComponent:
                     Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
-                    Recoil(user, direction, gun.Comp.CameraRecoilScalarModified);
+                    Recoil(user, -mapDirection, gun.Comp.CameraRecoilScalarModified);
                     break;
             }
+        }
+
+        RaiseLocalEvent(gun, new AmmoShotEvent
+        {
+            FiredProjectiles = shotProjectiles,
+        });
+
+        return shotProjectiles;
+
+        void CreateAndFireProjectiles(EntityUid ammoEnt, AmmoComponent ammoComp)
+        {
+            if (TryComp<ProjectileSpreadComponent>(ammoEnt, out var ammoSpreadComp))
+            {
+                var spreadEvent = new GunGetAmmoSpreadEvent(ammoSpreadComp.Spread);
+                RaiseLocalEvent(gun, ref spreadEvent);
+                var angles = LinearSpread(
+                    mapAngle - spreadEvent.Spread / 2,
+                    mapAngle + spreadEvent.Spread / 2,
+                    ammoSpreadComp.Count);
+
+                FireProjectile(ammoEnt, angles[0].ToVec());
+                for (var i = 1; i < ammoSpreadComp.Count; i++)
+                {
+                    var projectile = Spawn(ammoSpreadComp.Proto, fromEnt);
+                    FireProjectile(projectile, angles[i].ToVec());
+                }
+            }
+            else
+            {
+                FireProjectile(ammoEnt, mapDirection);
+            }
+
+            MuzzleFlash(gun, ammoComp, mapDirection.ToAngle(), user);
+            Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
+        }
+
+        void FireProjectile(EntityUid projectile, Vector2 direction)
+        {
+            if (gun.Comp.Target is { } target && !TerminatingOrDeleted(target))
+            {
+                var targeted = EnsureComp<TargetedProjectileComponent>(projectile);
+                targeted.Target = target;
+            }
+
+            if (!HasComp<ProjectileComponent>(projectile))
+            {
+                Del(projectile);
+                return;
+            }
+
+            EnsureComp<PredictedProjectileClientComponent>(projectile);
+            Physics.UpdateIsPredicted(projectile);
+            ShootProjectile(projectile, direction, gunVelocity, gun, user, gun.Comp.ProjectileSpeedModified);
+            shotProjectiles.Add(projectile);
         }
     }
 

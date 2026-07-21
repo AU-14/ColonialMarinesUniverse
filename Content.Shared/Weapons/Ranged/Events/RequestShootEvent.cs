@@ -1,5 +1,6 @@
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
+using Robust.Shared.Timing;
 
 namespace Content.Shared.Weapons.Ranged.Events;
 
@@ -29,4 +30,23 @@ public sealed class RequestShootEvent : EntityEventArgs
     /// If true, the gun will continue firing until a stop event is sent from the client.
     /// </summary>
     public bool Continuous;
+
+    /// <summary>
+    /// Client-side projectile entity IDs created while predicting this shot.
+    /// </summary>
+    public List<int>? Shot;
+
+    /// <summary>
+    /// Last authoritative server tick applied by the requesting client.
+    /// </summary>
+    public GameTick LastRealTick;
+}
+
+/// <summary>
+/// Tells a client that predicted projectile copies have no authoritative counterpart.
+/// </summary>
+[Serializable, NetSerializable]
+public sealed class PredictedProjectileCleanupEvent : EntityEventArgs
+{
+    public List<int> Projectiles = [];
 }
