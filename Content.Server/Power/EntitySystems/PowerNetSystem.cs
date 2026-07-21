@@ -3,6 +3,7 @@ using Content.Server.NodeContainer.EntitySystems;
 using Content.Server.Power.Components;
 using Content.Server.Power.NodeGroups;
 using Content.Server.Power.Pow3r;
+using Content.Shared._RMC14.Power;
 using Content.Shared.CCVar;
 using Content.Shared.Power;
 using Content.Shared.Power.Components;
@@ -29,6 +30,7 @@ namespace Content.Server.Power.EntitySystems
         [Dependency] private EntityQuery<ApcPowerReceiverBatteryComponent> _apcBatteryQuery = default!;
         [Dependency] private EntityQuery<PowerNetworkBatteryComponent> _powerNetworkBatteryQuery = default!;
         [Dependency] private EntityQuery<BatteryComponent> _batteryQuery = default!;
+        [Dependency] private EntityQuery<RMCPowerReceiverComponent> _rmcPowerReceiverQuery = default!;
 
         private readonly PowerState _powerState = new();
         private readonly HashSet<PowerNet> _powerNetReconnectQueue = new();
@@ -342,6 +344,9 @@ namespace Content.Server.Power.EntitySystems
             var enumerator = AllEntityQuery<ApcPowerReceiverComponent>();
             while (enumerator.MoveNext(out var uid, out var apcReceiver))
             {
+                if (_rmcPowerReceiverQuery.HasComp(uid))
+                    continue;
+
                 var powered = IsPoweredCalculate(apcReceiver);
 
                 MetaDataComponent? metadata = null;
