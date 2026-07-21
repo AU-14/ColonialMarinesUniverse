@@ -238,7 +238,11 @@
   - type: ClothingPrefixOnTimerTrigger
     prefix: primed
   - type: TriggerOnUse
+    keyOut: startTimer
   - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
     delay: 4
     beepSound:
       path: "/Audio/_RMC14/Explosion/armbomb.ogg"

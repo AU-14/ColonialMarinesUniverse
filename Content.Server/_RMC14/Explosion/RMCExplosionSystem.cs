@@ -67,6 +67,15 @@ public sealed partial class RMCExplosionSystem : SharedRMCExplosionSystem
 
     private void OnTrigger(Entity<MetaDataComponent> ent, ref TriggerEvent ev)
     {
+        // Timer input events only arm the fuse; legacy RMC effects should receive the timer output event.
+        if (ev.Key is { } key &&
+            TryComp<TimerTriggerComponent>(ent, out var timer) &&
+            key != timer.KeyOut &&
+            timer.KeysIn.Contains(key))
+        {
+            return;
+        }
+
         var rmcEv = new RMCTriggerEvent(ev.User, ev.Handled);
         RaiseLocalEvent(ent.Owner, ref rmcEv);
         ev.Handled = rmcEv.Handled;

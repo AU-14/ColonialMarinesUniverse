@@ -11,7 +11,11 @@
   - type: PayloadTrigger
     components:
     - type: TriggerOnUse
+      keyOut: startTimer
     - type: TimerTrigger
+      keysIn:
+      - startTimer
+      keyOut: trigger
       delay: 3
       delayOptions: [3, 5, 10]
       initialBeepDelay: 0

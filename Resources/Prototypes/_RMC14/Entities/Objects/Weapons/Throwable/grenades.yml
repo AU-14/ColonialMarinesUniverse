@@ -10,7 +10,11 @@
   - type: ExplosionResistance
     damageCoefficient: 0
   - type: TriggerOnUse
+    keyOut: startTimer
   - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
     delay: 4
     beepSound:
       path: "/Audio/_RMC14/Explosion/armbomb.ogg"
@@ -54,7 +58,7 @@
           RMCSkillPolice: 2
   - type: EmitSoundOnTrigger
     keysIn:
-    - timer
+    - trigger
     positional: true
     sound:
       path: "/Audio/Effects/flash_bang.ogg"
@@ -120,7 +124,7 @@
     proto: RMCSmoke
   - type: EmitSoundOnTrigger
     keysIn:
-    - timer
+    - trigger
     positional: true
     sound: /Audio/Effects/smoke.ogg
   - type: DeleteOnTrigger
@@ -331,7 +335,7 @@
     sprite: _RMC14/Objects/Weapons/Grenades/m07training.rsi
   - type: EmitSoundOnTrigger
     keysIn:
-    - timer
+    - trigger
     positional: true
     sound: /Audio/Effects/snap.ogg
   - type: Tag
@@ -382,7 +386,7 @@
     proto: RMCSmokePhosphorusWeak
   - type: EmitSoundOnTrigger
     keysIn:
-    - timer
+    - trigger
     positional: true
     sound: /Audio/Effects/smoke.ogg
 
