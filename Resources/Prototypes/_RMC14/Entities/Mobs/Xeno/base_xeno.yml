@@ -39,6 +39,7 @@
       components:
       - EntityStorage
   - type: Damageable
+  - type: Injurable
     damageContainer: Xeno
   - type: Destructible
     thresholds: []
