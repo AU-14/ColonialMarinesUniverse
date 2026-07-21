@@ -262,6 +262,7 @@
     totalIntensity: 110
     deleteAfterExplosion: false
   - type: ProjectileGrenade
+    triggerKey: trigger
     fillPrototype: CMProjectileShrapnel
     capacity: 48
     directHit: false
@@ -293,6 +294,7 @@
     totalIntensity: 240
     deleteAfterExplosion: false
   - type: ProjectileGrenade
+    triggerKey: trigger
     fillPrototype: CMProjectileShrapnel
     capacity: 48 #same as HEFA
     directHit: false
@@ -436,6 +438,7 @@
     totalIntensity: 280
     deleteAfterExplosion: false
   - type: ProjectileGrenade
+    triggerKey: trigger
     fillPrototype: CMProjectileShrapnel
     capacity: 48
   - type: ContainerContainer

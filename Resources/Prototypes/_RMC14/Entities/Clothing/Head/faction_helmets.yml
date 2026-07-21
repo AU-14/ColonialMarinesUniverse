@@ -259,6 +259,7 @@
     totalIntensity: 110
     deleteAfterExplosion: false
   - type: ProjectileGrenade
+    triggerKey: trigger
     fillPrototype: CMProjectileShrapnel
     capacity: 48
     minVelocity: 0.5

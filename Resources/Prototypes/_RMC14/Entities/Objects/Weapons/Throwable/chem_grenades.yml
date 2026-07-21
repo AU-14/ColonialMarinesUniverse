@@ -70,7 +70,7 @@
   - type: DeleteOnTrigger
   - type: EmitSoundOnTrigger
     keysIn:
-    - timer
+    - trigger
     positional: true
     sound:
         path: /Audio/Effects/Chemistry/bubbles.ogg
@@ -145,7 +145,7 @@
       - RMCTimerTrigger
   - type: EmitSoundOnTrigger
     keysIn:
-    - timer
+    - trigger
     positional: true
     sound:
         path: /Audio/Effects/smoke.ogg
