@@ -1,6 +1,9 @@
 - type: job
   parent: CMJobBase
   id: AU14FORECONSynth
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   roundSide: ThirdParty
   roundForce: FORECON
   roundRole: AU14FORECONSynth

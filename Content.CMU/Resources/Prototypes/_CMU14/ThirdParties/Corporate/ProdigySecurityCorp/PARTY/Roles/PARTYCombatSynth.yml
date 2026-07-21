@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobPARTYPartyContractorBase
   id: AU14JobProdigyPARTCombatSynth
+  isSynthetic: true
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: ProdigyPARTCombatSynth
@@ -57,7 +58,7 @@
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobProdigyPARTCombatSynth
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobSyntheticWhitelist
   ranks:
     AU14RankPrDSynth5:
     - !type:RoleTimeRequirement

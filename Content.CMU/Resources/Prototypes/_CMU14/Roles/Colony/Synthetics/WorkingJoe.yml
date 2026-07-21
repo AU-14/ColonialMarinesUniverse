@@ -9,7 +9,8 @@
   setPreference: true
   canBeAntag: false
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   requirements:
     - !type:TraitsRequirement
       inverted: true

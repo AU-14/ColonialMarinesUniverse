@@ -13,6 +13,8 @@
   requireAdminNotify: true
   joinNotifyCrew: true
   canBeAntag: false
+  whitelisted: true
+  whitelistParent: CMUJobCommandWhitelist
   displayWeight: 10
   accessGroups:
   - AU14GovforCommand

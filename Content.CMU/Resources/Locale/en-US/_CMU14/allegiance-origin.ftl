@@ -203,3 +203,7 @@ origin-icsc-turkey-description = Born in Turkey, an independent nation within th
 
 origin-icsc-pakistan-name = ICSC - Pakistan
 origin-icsc-pakistan-description = Born in Pakistan, an independent nation within the ICSC.
+
+# Origins - Prodigy
+origin-prodigy-newsiam-name = Prodigy - New Siam
+origin-prodigy-newsiam-description = From New Siam, a Prodigy Security Corp territory.

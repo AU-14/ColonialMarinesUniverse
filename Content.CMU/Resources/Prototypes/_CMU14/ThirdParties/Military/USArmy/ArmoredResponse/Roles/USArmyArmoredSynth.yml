@@ -5,6 +5,9 @@
   description: au14-job-description-usarmy
   playTimeTracker: AU14JobUSArmySynth
   basePlaytimeTracker: true
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   hidden: true
 
 - type: job
