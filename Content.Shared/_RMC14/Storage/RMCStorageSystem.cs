@@ -162,6 +162,8 @@ public sealed partial class RMCStorageSystem : EntitySystem
 
                 grid[^1] = expanded;
             }
+
+            _storage.UpdateOccupiedRMC(storage);
         }
     }
 

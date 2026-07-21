@@ -38,10 +38,11 @@
     whitelist:
       tags:
       - Cigar
-  - type: StorageFill
-    contents:
-    - id: Cigar
-      amount: 7
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: Cigar
+        amount: 7
   - type: ItemCounter
     count:
       tags: [Cigar]
@@ -98,10 +99,11 @@
     whitelist:
       tags:
       - Cigar
-  - type: StorageFill
-    contents:
-    - id: CMTarbackCigar
-      amount: 5
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: CMTarbackCigar
+        amount: 5
   - type: ItemCounter
     count:
       tags: [Cigar]
@@ -145,7 +147,8 @@
     - state: cig5
       map: ["cig5"]
       visible: false
-  - type: StorageFill
-    contents:
-    - id: RMCShioCigar
-      amount: 5
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: RMCShioCigar
+        amount: 5

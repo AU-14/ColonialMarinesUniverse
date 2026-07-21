@@ -41,7 +41,7 @@
   suffix: RMC14
 
 - type: entity
-  parent: [RMCToolboxEmergency, ToolboxEmergencyFilled]
+  parent: RMCToolboxEmergency
   id: RMCToolboxEmergencyFilled
   components:
   - type: StorageFill
@@ -69,7 +69,7 @@
   suffix: RMC14
 
 - type: entity
-  parent: [RMCToolboxElectrical, ToolboxElectricalFilled]
+  parent: RMCToolboxElectrical
   id: RMCToolboxElectricalFilled
   components:
   - type: StorageFill
@@ -99,7 +99,7 @@
   suffix: RMC14
 
 - type: entity
-  parent: [RMCToolboxMechanical, ToolboxMechanicalFilled]
+  parent: RMCToolboxMechanical
   id: RMCToolboxMechanicalFilled
   components:
   - type: StorageFill

@@ -31,6 +31,7 @@ using Content.Shared.Popups;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Sprite;
 using Content.Shared.Storage;
+using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -1335,7 +1336,8 @@ public sealed partial class IntelSystem : EntitySystem
                 {
                     break;
                 }
-                else if (_entityStorage.Insert(intel, nearby))
+                else if (TryComp<EntityStorageComponent>(nearby, out var entityStorage) &&
+                         _entityStorage.Insert(intel, nearby, entityStorage))
                 {
                     break;
                 }

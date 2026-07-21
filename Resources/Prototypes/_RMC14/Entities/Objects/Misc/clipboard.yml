@@ -1,7 +1,8 @@
 - type: entity
-  parent: BoxFolderClipboard
+  parent: BoxFolderClipboardEmpty
   id: CMClipboard
   name: clipboard
+  suffix: Filled
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Misc/clipboard.rsi

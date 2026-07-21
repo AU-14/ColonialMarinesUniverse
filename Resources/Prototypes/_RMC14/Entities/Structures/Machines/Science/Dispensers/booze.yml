@@ -1,7 +1,8 @@
 - type: entity
-  parent: BoozeDispenser
+  parent: BoozeDispenserEmpty
   id: CMDispenserBooze
   name: booze dispenser
+  suffix: Filled
   description: A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one.
   components:
   - type: Sprite

@@ -12,6 +12,11 @@ public abstract partial class SharedStorageSystem
         return CanInteract(user, storage, silent: silent);
     }
 
+    public void UpdateOccupiedRMC(Entity<StorageComponent> storage)
+    {
+        UpdateOccupied(storage);
+    }
+
     private bool TryRMCStorageEjectHand(EntityUid user, EntityUid item)
     {
         return _rmcHandsStorage.TryStorageEjectHand(user, item);
