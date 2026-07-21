@@ -1,5 +1,7 @@
 using System.Numerics;
+using Content.Client._RMC14.Emplacements;
 using Content.Client.Hands.Systems;
+using Content.Shared._RMC14.CombatMode;
 using Content.Shared.Weapons.Ranged.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -23,6 +25,9 @@ public sealed class CombatModeIndicatorsOverlay : Overlay
     private readonly IEyeManager _eye;
     private readonly CombatModeSystem _combat;
     private readonly HandsSystem _hands = default!;
+    private readonly RMCCombatModeSystem _rmcCombatMode;
+    private readonly RMCWeaponControllerSystem _rmcWeaponController;
+    private readonly SpriteSystem _sprite;
 
     private readonly Texture _gunSight;
     private readonly Texture _gunBoltSight;
@@ -50,6 +55,10 @@ public sealed class CombatModeIndicatorsOverlay : Overlay
             "gun_bolt_sight"));
         _meleeSight = spriteSys.Frame0(new SpriteSpecifier.Rsi(new ResPath("/Textures/Interface/Misc/crosshair_pointers.rsi"),
              "melee_sight"));
+
+        _rmcCombatMode = entMan.System<RMCCombatModeSystem>();
+        _rmcWeaponController = entMan.System<RMCWeaponControllerSystem>();
+        _sprite = entMan.System<SpriteSystem>();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -78,7 +87,21 @@ public sealed class CombatModeIndicatorsOverlay : Overlay
         var uiScale = (args.ViewportControl as Control)?.UIScale ?? 1f;
         var limitedScale = uiScale > 1.25f ? 1.25f : uiScale;
 
+        // RMC14
+        var crosshairEntity = handEntity;
+        if (_rmcWeaponController.TryGetControllingWeapon(out var weapon))
+            crosshairEntity = weapon;
+
         var sight = isHandGunItem ? (isGunBolted ? _gunSight : _gunBoltSight) : _meleeSight;
+        if (crosshairEntity != null && _rmcCombatMode.GetCrosshair(crosshairEntity.Value) is { } crosshair)
+        {
+            sight = _sprite.Frame0(crosshair);
+            var sightSize = sight.Size * limitedScale;
+            var rect = UIBox2.FromDimensions(mousePos - sightSize * 0.5f, sightSize);
+            args.ScreenHandle.DrawTextureRect(sight, rect);
+            return;
+        }
+
         DrawSight(sight, args.ScreenHandle, mousePos, limitedScale * Scale);
     }
 
