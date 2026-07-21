@@ -6,6 +6,7 @@ using Content.Client.Construction;
 using Content.Client.Mapping;
 using Content.Client.UserInterface;
 using Content.IntegrationTests.Utility;
+using Content.Shared.Access;
 using Content.Shared.Guidebook;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Input;
@@ -105,6 +106,16 @@ public sealed class LocalizationWarningTest
                     .Order()
                     .ToArray();
 
+                // RMC's "protobaseaccess ..." names are control sentinels used to build console groups, not
+                // player-facing localization IDs.
+                var missingAccessNames = prototypeManager.EnumeratePrototypes<AccessLevelPrototype>()
+                    .Where(access => access.Name is { } name &&
+                                     !name.Contains("protobaseaccess", StringComparison.Ordinal) &&
+                                     !localization.TryGetString(name, out _))
+                    .Select(access => $"{access.ID}: {access.Name}")
+                    .Order()
+                    .ToArray();
+
                 var missingTraitMessages = new List<string>();
                 foreach (var trait in prototypeManager.EnumeratePrototypes<TraitPrototype>())
                 {
@@ -127,6 +138,8 @@ public sealed class LocalizationWarningTest
                 {
                     Assert.That(missingGuideNames, Is.Empty,
                         $"Guide entries without en-US names:\n{string.Join('\n', missingGuideNames)}");
+                    Assert.That(missingAccessNames, Is.Empty,
+                        $"Access levels without en-US names:\n{string.Join('\n', missingAccessNames)}");
                     Assert.That(missingTraitMessages, Is.Empty,
                         $"Traits without en-US messages:\n{string.Join('\n', missingTraitMessages)}");
                     Assert.That(missingMarkingNames, Is.Empty,

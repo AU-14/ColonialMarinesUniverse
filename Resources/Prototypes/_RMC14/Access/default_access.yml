@@ -3,7 +3,7 @@
 #all of their children will be listed inside them
 - type: accessLevel
   id: RMCMarineDefaultAccess
-  name: Marine Default
+  name: rmc-access-marine-default
   hidden: true
 
 - type: accessLevel

@@ -76,15 +76,15 @@
   components:
   - type: Edible
     transferAmount: 1.2
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 3
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 4
-        - ReagentId: TableSalt
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 3
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 4
+      - ReagentId: TableSalt
+        Quantity: 2
 
 - type: entity
   parent: CMMREFoodSnack

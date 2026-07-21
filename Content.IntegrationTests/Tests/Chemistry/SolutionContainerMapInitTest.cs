@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Content.IntegrationTests.Fixtures;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
+using Content.Shared.Nutrition.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -12,7 +13,7 @@ namespace Content.IntegrationTests.Tests.Chemistry;
 public sealed class SolutionContainerMapInitTest : GameTest
 {
     [Test]
-    public async Task EntityPrototypesDoNotDeclareOverlappingLegacySolutions()
+    public async Task EntityPrototypesDoNotOverlapLegacyAndMapInitSolutions()
     {
         var prototypeManager = Server.ResolveDependency<IPrototypeManager>();
         var componentFactory = Server.ResolveDependency<IComponentFactory>();
@@ -25,19 +26,29 @@ public sealed class SolutionContainerMapInitTest : GameTest
             foreach (var prototype in prototypeManager.EnumeratePrototypes<EntityPrototype>())
             {
                 if (!prototype.TryComp<SolutionContainerManagerComponent>(out var legacy, componentFactory) ||
-                    !prototype.TryComp<SolutionComponent>(out var current, componentFactory))
-                {
+                    legacy.Solutions is not { } legacySolutions)
                     continue;
-                }
 
-                if (legacy.Solutions?.ContainsKey(current.Id) == true)
-                    overlaps.Add($"{prototype.ID}: {current.Id}");
+                var mapInitSolutions = new HashSet<string>();
+                if (prototype.TryComp<SolutionComponent>(out var current, componentFactory))
+                    mapInitSolutions.Add(current.Id);
+
+                // IngestionSystem creates the configured solution during MapInit even when the prototype
+                // does not declare a Solution component, so it can also race the legacy compatibility port.
+                if (prototype.TryComp<EdibleComponent>(out var edible, componentFactory))
+                    mapInitSolutions.Add(edible.Solution);
+
+                foreach (var solutionId in mapInitSolutions)
+                {
+                    if (legacySolutions.ContainsKey(solutionId))
+                        overlaps.Add($"{prototype.ID}: {solutionId}");
+                }
             }
 #pragma warning restore CS0612
 
             overlaps.Sort(StringComparer.Ordinal);
             Assert.That(overlaps, Is.Empty,
-                "Entity prototypes declare the same solution through Solution and SolutionContainerManager:" +
+                "Entity prototypes declare a legacy solution that is also supplied during MapInit:" +
                 Environment.NewLine + string.Join(Environment.NewLine, overlaps));
         });
     }

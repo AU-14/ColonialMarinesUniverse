@@ -31,7 +31,7 @@
 - type: accessLevel
   id: CMAccessCE
   parent: RMCBaseEngineeringAccess
-  name: Chief Engineer
+  name: id-card-access-level-chief-engineer
 
 - type: accessLevel
   id: CMAccessASO
@@ -41,17 +41,17 @@
 - type: accessLevel
   id: CMAccessCorp
   parent: RMCBaseHidden
-  name: cm-job-name-corp
+  name: cm-job-name-liaison
 
 - type: accessLevel
   id: RMCAccessDatabase
   parent: RMCBaseCommandAccess
-  name: Database
+  name: rmc-access-database
 
 - type: accessLevel
   id: RMCAccessSeniorCommand
   parent: RMCBaseCommandAccess
-  name: Senior Command
+  name: rmc-access-senior-command
 
 # Admin only.
 - type: accessLevel

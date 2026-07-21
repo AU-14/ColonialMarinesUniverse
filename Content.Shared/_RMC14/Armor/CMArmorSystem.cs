@@ -44,6 +44,8 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private static readonly ProtoId<DamageGroupPrototype> ArmorGroup = "Brute";
     private static readonly ProtoId<DamageGroupPrototype> BioGroup = "Burn";
+    private static readonly SpriteSpecifier ArmorExamineIcon =
+        new SpriteSpecifier.Rsi(new("/Textures/Interface/Actions/actions_fakemindshield.rsi"), "icon-on");
     private static readonly int MaxXenoArmor = 55;
 
     private EntityQuery<RMCAllowSuitStorageUserWhitelistComponent> _rmcAllowSuitStorageUserWhitelistQuery;
@@ -221,7 +223,7 @@ public sealed partial class CMArmorSystem : EntitySystem
         var examineMarkup = GetArmorExamine(component);
 
         _examine.AddDetailedExamineVerb(args, component, examineMarkup,
-            Loc.GetString("armor-examinable-verb-text"), "/Textures/Interface/Actions/actions_fakemindshield.rsi/icon-on.png",
+            Loc.GetString("armor-examinable-verb-text"), ArmorExamineIcon,
             Loc.GetString("armor-examinable-verb-message"));
     }
 

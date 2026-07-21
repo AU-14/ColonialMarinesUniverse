@@ -4,6 +4,8 @@ cm-job-description-aso = Coordinate the intelligence department, and assist the 
 cm-job-prefix-aso = ASO
 CMJobAuxiliarySupportOfficer = Auxiliary Support Officer
 
+cm-job-name-pilot = Pilot Officer
+
 cm-job-name-dropship-pilot = Dropship Pilot
 cm-job-description-dropship-pilot = Transport troops via the dropship and provide medevac. Make sure no invaders get onto your assigned Dropship.
 cm-job-prefix-dropship-pilot = DP

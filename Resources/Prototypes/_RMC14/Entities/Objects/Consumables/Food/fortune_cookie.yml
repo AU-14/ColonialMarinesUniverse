@@ -32,13 +32,13 @@
   - type: FlavorProfile
     flavors:
     - fortunecookie
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 1
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 1
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 1
 
 - type: entity
   parent: FoodCookieFortune

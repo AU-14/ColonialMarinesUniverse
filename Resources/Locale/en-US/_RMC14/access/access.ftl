@@ -1,1 +1,11 @@
 ﻿rmc-access-denied = Access denied.
+cm-access-requisitions = Requisitions
+rmc-access-ares-logs = ARES Logs
+rmc-access-vehicle-bay = Vehicle Bay
+rmc-access-marine-default = Marine Default
+rmc-access-database = Database
+rmc-access-senior-command = Senior Command
+cm-access-marine-prep = Marine Prep
+cm-access-aegis = Aegis
+cm-access-illegal = Illegal
+id-card-access-level-morgue = Morgue

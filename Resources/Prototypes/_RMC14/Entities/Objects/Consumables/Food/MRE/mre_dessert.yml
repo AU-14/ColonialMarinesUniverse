@@ -76,17 +76,17 @@
   components:
   - type: Edible
     transferAmount: 1
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 3
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 2
-        - ReagentId: RMCSugar
-          Quantity: 2
-        - ReagentId: Theobromine
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 3
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 2
+      - ReagentId: RMCSugar
+        Quantity: 2
+      - ReagentId: Theobromine
+        Quantity: 1
 
 - type: entity
   parent: CMMREFoodDessert

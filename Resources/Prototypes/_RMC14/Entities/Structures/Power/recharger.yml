@@ -15,6 +15,11 @@
   - type: PowerChargerVisuals
     emptyState: "recharger"
     occupiedState: "recharger"
+    lightStates:
+      Off: "recharger-0"
+      Empty: "recharger-0"
+      Charging: "recharger-1"
+      Charged: "recharger-5"
   - type: Fixtures
     fixtures:
       fix1:

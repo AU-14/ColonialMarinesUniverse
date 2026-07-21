@@ -56,15 +56,15 @@
   components:
   - type: Edible
     transferAmount: 1.6
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 8
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 6
-        - ReagentId: TableSalt
-          Quantity: 2
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 8
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 6
+      - ReagentId: TableSalt
+        Quantity: 2
   - type: Extractable
     grindableSolutionName: food
   - type: InjectableSolution

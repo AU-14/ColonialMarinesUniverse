@@ -167,15 +167,15 @@
   - type: FlavorProfile
     flavors:
     - fishy
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 5
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 3
-        - ReagentId: UncookedAnimalProteins
-          Quantity: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 5
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 3
+      - ReagentId: UncookedAnimalProteins
+        Quantity: 1
   - type: Extractable
     grindableSolutionName: food
   - type: InjectableSolution

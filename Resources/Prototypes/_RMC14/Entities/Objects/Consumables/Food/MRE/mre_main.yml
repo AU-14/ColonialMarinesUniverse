@@ -100,15 +100,15 @@
   components:
   - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 20
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 14
-        - ReagentId: TableSalt
-          Quantity: 6
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 14
+      - ReagentId: TableSalt
+        Quantity: 6
   - type: Extractable
     grindableSolutionName: food
   - type: InjectableSolution
@@ -185,15 +185,15 @@
     sprite: _RMC14/Objects/Consumable/Food/mre_clf.rsi
   - type: Edible
     transferAmount: 4
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
-        - ReagentId: Nutriment
-          Quantity: 26
-        - ReagentId: TableSalt
-          Quantity: 4
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 26
+      - ReagentId: TableSalt
+        Quantity: 4
 
 - type: entity
   parent: RMCMREFoodCLF
