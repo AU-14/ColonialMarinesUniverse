@@ -156,7 +156,7 @@ namespace Content.Server.Preferences.Managers
                     markingsList.Add(parsed.Value);
                 }
 
-                if (Marking.ParseFromDbString($"{profile.HairName}@{profile.HairColor}") is { } facialMarking)
+                if (Marking.ParseFromDbString($"{profile.FacialHairName}@{profile.FacialHairColor}") is { } facialMarking)
                     markingsList.Add(facialMarking);
 
                 if (Marking.ParseFromDbString($"{profile.HairName}@{profile.HairColor}") is { } hairMarking)

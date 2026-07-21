@@ -2,6 +2,6 @@
   id: Human
   name: species-name-human
   roundStart: true
-  prototype: MobHuman
+  prototype: CMMobHuman
   dollPrototype: AppearanceHuman
   skinColoration: HumanToned

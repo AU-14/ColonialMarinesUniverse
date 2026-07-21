@@ -108,6 +108,6 @@ public sealed partial class LayerMarkingPicker : BoxContainer
     {
         base.Resized();
 
-        Items.Columns = (int)(Width / _columnWidth);
+        Items.Columns = Math.Max(1, (int)(Width / _columnWidth));
     }
 }

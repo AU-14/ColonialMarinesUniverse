@@ -36,6 +36,17 @@ public static class MarkingColoring
     {
         var colors = new List<Color>();
 
+        // RMC markings that provide their own sprite colors should not be tinted by skin color.
+        if (!prototype.RMCFollowSkinColor)
+        {
+            for (var i = 0; i < prototype.Sprites.Count; i++)
+            {
+                colors.Add(Color.White);
+            }
+
+            return colors;
+        }
+
         // Coloring from default properties
         var defaultColor = prototype.Coloring.Default.GetColor(skinColor, eyeColor, otherMarkings);
 

@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._RMC14.Armor;
 using Content.Client.Humanoid;
 using Content.Client.Station;
 using Content.Shared.Body;
@@ -163,9 +164,15 @@ public sealed partial class ProfilePreviewSpriteView
         if (!_prototypeManager.Resolve(job.StartingGear, out var gear))
             return;
 
+        _prototypeManager.Resolve(job.DummyStartingGear, out var dummyGear);
+        var armorSystem = EntMan.System<CMArmorSystem>();
+
         foreach (var slot in slots)
         {
             var itemType = ((IEquipmentLoadout) gear).GetGear(slot.Name);
+
+            if (itemType == string.Empty && dummyGear != null)
+                itemType = ((IEquipmentLoadout) dummyGear).GetGear(slot.Name);
 
             if (inventorySys.TryUnequip(PreviewDummy, slot.Name, out var unequippedItem, silent: true, force: true, reparent: false))
             {
@@ -175,6 +182,16 @@ public sealed partial class ProfilePreviewSpriteView
             if (itemType != string.Empty)
             {
                 var item = EntMan.SpawnEntity(itemType, MapCoordinates.Nullspace);
+
+                if (EntMan.TryGetComponent<RMCArmorVariantComponent>(item, out var variantComponent))
+                {
+                    var variantItemProtoId = armorSystem.GetArmorVariant((item, variantComponent), profile.ArmorPreference);
+                    var variantItem = EntMan.SpawnEntity(variantItemProtoId, MapCoordinates.Nullspace);
+                    inventorySys.TryEquip(PreviewDummy, variantItem, slot.Name, true, true);
+                    EntMan.QueueDeleteEntity(item);
+                    continue;
+                }
+
                 inventorySys.TryEquip(PreviewDummy, item, slot.Name, true, true);
             }
         }

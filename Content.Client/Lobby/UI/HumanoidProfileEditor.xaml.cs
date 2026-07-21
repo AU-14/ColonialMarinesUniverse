@@ -107,6 +107,7 @@ namespace Content.Client.Lobby.UI
             _allowFlavorText = _cfgManager.GetCVar(CCVars.FlavorText);
 
             Markings.SetModel(_markingsModel);
+            InitializeRmcControls();
 
             ImportButton.OnPressed += args =>
             {
@@ -386,6 +387,7 @@ namespace Content.Client.Lobby.UI
             UpdateEyePickers();
             UpdateSaveButton();
             UpdateMarkings();
+            UpdateRmcControls();
 
             RefreshAntags();
             RefreshJobs();

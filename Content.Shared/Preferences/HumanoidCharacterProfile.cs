@@ -348,7 +348,7 @@ namespace Content.Shared.Preferences
         {
             var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
 
-            var profile = new HumanoidCharacterProfile();
+            var profile = new HumanoidCharacterProfile(baseProfile);
             if ((randomizeCfg & RandomizeCfg.Species) != 0)
             {
                 profile.Species = RandomSpecies();

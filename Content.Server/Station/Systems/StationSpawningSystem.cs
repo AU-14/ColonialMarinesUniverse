@@ -37,6 +37,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private ActorSystem _actors = default!;
     [Dependency] private IdCardSystem _cardSystem = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
+    [Dependency] private HumanoidAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private SharedVisualBodySystem _visualBody = default!;
     [Dependency] private IdentitySystem _identity = default!;
@@ -144,6 +145,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         {
             _visualBody.ApplyProfileTo(entity.Value, profile);
             _humanoidProfile.ApplyProfileTo(entity.Value, profile);
+            _humanoidAppearance.LoadProfile(entity.Value, profile);
             _metaSystem.SetEntityName(entity.Value, profile.Name);
 
             if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
