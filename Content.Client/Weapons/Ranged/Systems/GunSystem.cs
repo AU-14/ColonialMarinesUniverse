@@ -297,9 +297,8 @@ public sealed partial class GunSystem : SharedGunSystem
                         }
 
                         SetCartridgeSpent(ent!.Value, cartridge, true);
-                        // TODO: Can't predict entity deletions.
-                        //if (cartridge.DeleteOnSpawn)
-                        //    Del(cartridge.Owner);
+                        if (cartridge.DeleteOnSpawn)
+                            PredictedQueueDel(ent.Value);
 
                         if (!predictProjectiles)
                         {
