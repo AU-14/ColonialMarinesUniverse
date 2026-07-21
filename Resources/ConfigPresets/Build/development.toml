@@ -1,4 +1,5 @@
 ﻿[game]
+defaultpreset = "CMDistressSignal"
 # Start in the lobby for development testing
 lobbyenabled = true
 # Dev map for faster loading & convenience
