@@ -169,11 +169,15 @@ public sealed partial class TriggerSystem
 
             if (timer.NextTrigger <= curTime)
             {
+                if (_net.IsClient && !timer.Predicted)
+                    continue;
+
                 var user = TerminatingOrDeleted(timer.User) ? null : timer.User;
                 Trigger(uid, user, timer.KeyOut);
                 // Remove after triggering to prevent it from starting the timer again
                 RemComp<ActiveTimerTriggerComponent>(uid);
-                if (TryComp<AppearanceComponent>(uid, out var appearance))
+                if (!EntityManager.IsQueuedForDeletion(uid) &&
+                    TryComp<AppearanceComponent>(uid, out var appearance))
                     _appearance.SetData(uid, TriggerVisuals.VisualState, TriggerVisualState.Unprimed, appearance);
             }
         }

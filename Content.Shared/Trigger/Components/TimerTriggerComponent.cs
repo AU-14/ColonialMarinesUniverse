@@ -74,6 +74,13 @@ public sealed partial class TimerTriggerComponent : Component
     public TimeSpan BeepInterval = TimeSpan.FromSeconds(1);
 
     /// <summary>
+    /// Whether timer expiry and its resulting trigger should be predicted by clients.
+    /// Disable this when the trigger effects are server-authoritative and the source must remain until they replicate.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Predicted = true;
+
+    /// <summary>
     /// The entity that activated this trigger.
     /// TODO: use WeakEntityReference once the engine PR is merged!
     /// </summary>

@@ -22,7 +22,9 @@
         volume: -5
     initialBeepDelay: 0
     beepInterval: 10
+    predicted: false
     popup: null
+  - type: TimerTriggerVisuals
   - type: IgnorePredictionHide
   - type: Clothing
     slots:
