@@ -1,6 +1,7 @@
 using Content.Client.Trigger.Components;
 using Content.Client.Trigger.Systems;
 using Content.IntegrationTests.Fixtures;
+using Content.Shared.Construction;
 using Content.Shared.Trigger;
 using Content.Shared.Trigger.Systems;
 using Robust.Client.GameObjects;
@@ -33,7 +34,7 @@ public sealed class RMCGrenadeVisualsTest : GameTest
                     var grenade = client.EntMan.Spawn(prototype);
                     try
                     {
-                        Assert.That(client.EntMan.HasComponent<TimerTriggerVisualsComponent>(grenade),
+                        Assert.That(client.EntMan.HasComponent<GenericVisualizerComponent>(grenade),
                             Is.True,
                             $"{prototype} has no timer visualizer.");
 
@@ -65,6 +66,58 @@ public sealed class RMCGrenadeVisualsTest : GameTest
         });
     }
 
+    [TestCase("CMGrenadeHighExplosive")]
+    [TestCase("CMGrenadeFrag")]
+    [TestCase("CMGrenadeSmoke")]
+    [TestCase("RMCGrenadeWhitePhosphorus")]
+    [TestCase("RMCGrenadeWhitePhosphorusCompound")]
+    [NonParallelizable]
+    public async Task GrenadesContinueFlashingWhilePrimed(string prototype)
+    {
+        var map = await Pair.CreateTestMap();
+        var playerManager = Server.ResolveDependency<IPlayerManager>();
+        var session = playerManager.Sessions.Single();
+        NetEntity grenadeNet = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            var player = SEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            Assert.That(playerManager.SetAttachedEntity(session, player), Is.True);
+
+            var grenade = SEntMan.SpawnEntity(prototype, map.GridCoords);
+            grenadeNet = SEntMan.GetNetEntity(grenade);
+
+            var trigger = Server.System<TriggerSystem>();
+            trigger.SetDelay(grenade, TimeSpan.FromSeconds(10));
+            Assert.That(trigger.ActivateTimerTrigger(grenade), Is.True);
+        });
+
+        await RunUntilSynced();
+        await RunTicksSync(1);
+        await RunSeconds(0.3f);
+
+        await Client.WaitAssertion(() =>
+        {
+            var grenade = CEntMan.GetEntity(grenadeNet);
+            var sprite = CEntMan.GetComponent<SpriteComponent>(grenade);
+            AssertLayerAutoAnimated(sprite, ConstructionVisuals.Layer);
+            if (CEntMan.HasComponent<TimerTriggerVisualsComponent>(grenade))
+                AssertLayerAutoAnimated(sprite, TriggerVisualLayers.Base);
+        });
+
+        void AssertLayerAutoAnimated(SpriteComponent sprite, System.Enum layerKey)
+        {
+            var grenade = CEntMan.GetEntity(grenadeNet);
+            var spriteSystem = Client.System<SpriteSystem>();
+            Assert.That(spriteSystem.LayerMapTryGet((grenade, sprite), layerKey, out var layerId, false), Is.True);
+            Assert.That(spriteSystem.TryGetLayer((grenade, sprite), layerId, out var layer, false), Is.True);
+            Assert.That(layer.ActualState?.StateId.Name, Is.EqualTo("primed"), $"Unexpected state on {layerKey}.");
+            Assert.That(layer.AutoAnimated,
+                Is.True,
+                $"{prototype}'s {layerKey} layer stopped flashing while its fuse was still active.");
+        }
+    }
+
     [Test, NonParallelizable]
     public async Task HedpRemainsPrimedUntilExplosionAppears()
     {
@@ -81,6 +134,12 @@ public sealed class RMCGrenadeVisualsTest : GameTest
     public async Task HsdpRemainsVisibleUntilSmokeAppears()
     {
         await AssertPrimedUntilEffectAppears("CMGrenadeSmoke", "RMCSmoke");
+    }
+
+    [Test, NonParallelizable]
+    public async Task CcdpRemainsVisibleUntilSmokeAppears()
+    {
+        await AssertPrimedUntilEffectAppears("RMCGrenadeWhitePhosphorusCompound", "RMCSmokePhosphorus");
     }
 
     private async Task AssertPrimedUntilEffectAppears(string grenadePrototype, string effectPrototype)
@@ -159,7 +218,7 @@ public sealed class RMCGrenadeVisualsTest : GameTest
             var sprite = CEntMan.GetComponent<SpriteComponent>(clientGrenade);
             Assert.That(Client.System<SpriteSystem>().LayerMapTryGet(
                     (clientGrenade, sprite),
-                    TriggerVisualLayers.Base,
+                    ConstructionVisuals.Layer,
                     out var layerId,
                     false),
                 Is.True);

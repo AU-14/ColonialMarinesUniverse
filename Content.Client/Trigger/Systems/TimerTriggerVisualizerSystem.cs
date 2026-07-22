@@ -21,13 +21,6 @@ public sealed partial class TimerTriggerVisualizerSystem : VisualizerSystem<Time
         ent.Comp.PrimingAnimation = new Animation
         {
             Length = TimeSpan.MaxValue,
-            AnimationTracks = {
-                new AnimationTrackSpriteFlick()
-                {
-                    LayerKey = TriggerVisualLayers.Base,
-                    KeyFrames = { new AnimationTrackSpriteFlick.KeyFrame(ent.Comp.PrimingSprite, 0f) }
-                }
-            },
         };
 
         if (ent.Comp.PrimingSound != null)
@@ -53,10 +46,14 @@ public sealed partial class TimerTriggerVisualizerSystem : VisualizerSystem<Time
         switch (state)
         {
             case TriggerVisualState.Primed:
+                SpriteSystem.LayerSetRsiState((uid, args.Sprite), TriggerVisualLayers.Base, comp.PrimingSprite);
+                SpriteSystem.LayerSetAutoAnimated((uid, args.Sprite), TriggerVisualLayers.Base, true);
                 if (!AnimationSystem.HasRunningAnimation(uid, animPlayer, TimerTriggerVisualsComponent.AnimationKey))
                     AnimationSystem.Play((uid, animPlayer), comp.PrimingAnimation, TimerTriggerVisualsComponent.AnimationKey);
                 break;
             case TriggerVisualState.Unprimed:
+                if (AnimationSystem.HasRunningAnimation(uid, animPlayer, TimerTriggerVisualsComponent.AnimationKey))
+                    AnimationSystem.Stop((uid, animPlayer), TimerTriggerVisualsComponent.AnimationKey);
                 SpriteSystem.LayerSetRsiState((uid, args.Sprite), TriggerVisualLayers.Base, comp.UnprimedSprite);
                 break;
             default:
