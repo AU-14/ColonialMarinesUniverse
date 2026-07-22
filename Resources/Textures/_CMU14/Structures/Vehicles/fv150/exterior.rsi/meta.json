@@ -11,6 +11,20 @@
             "name": "tank_base",
             "directions": 4
         },
+
+        {
+      "name": "slauncher_0",
+      "directions": 4
+        },
+        {
+      "name": "slauncher_1",
+      "directions": 4
+        },
+        {
+      "name": "slauncher_2",
+      "directions": 4
+        },
+
         {
             "name": "apc_base",
             "directions": 4
