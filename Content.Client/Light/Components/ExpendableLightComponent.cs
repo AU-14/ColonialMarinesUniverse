@@ -45,6 +45,12 @@ public sealed partial class ExpendableLightComponent : SharedExpendableLightComp
     /// </summary>
     [Access(typeof(ExpendableLightSystem))]
     public EntityUid? PlayingStream;
+
+    /// <summary>
+    /// The last light behaviour selected by appearance data.
+    /// </summary>
+    [Access(typeof(ExpendableLightSystem))]
+    public string? LastLightBehaviourID;
 }
 
 public enum ExpendableLightVisualLayers : byte

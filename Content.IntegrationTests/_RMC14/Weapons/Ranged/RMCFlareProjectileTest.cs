@@ -3,8 +3,12 @@ using Content.Server._RMC14.Trigger;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Light.Components;
+using Robust.Client.GameObjects;
+using Robust.Server.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;
+using ClientExpendableLightComponent = Content.Client.Light.Components.ExpendableLightComponent;
+using ServerExpendableLightSystem = Content.Server.Light.EntitySystems.ExpendableLightSystem;
 
 namespace Content.IntegrationTests._RMC14.Weapons.Ranged;
 
@@ -157,6 +161,79 @@ public sealed class RMCFlareProjectileTest
                 Assert.That(target.Abbreviation, Is.Not.Null.And.Not.Empty);
                 Assert.That(metadata.EntityName, Is.EqualTo(target.Abbreviation));
                 Assert.That(entMan.HasComponent<ActiveFlareSignalComponent>(signalFlare), Is.False);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SignalBeaconAppearance_DoesNotRestartLightPhase()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var client = pair.Client;
+        var serverEntMan = server.EntMan;
+        var clientEntMan = client.EntMan;
+        var playerManager = server.ResolveDependency<IPlayerManager>();
+        var serverSession = playerManager.Sessions.Single();
+        var map = await pair.CreateTestMap();
+        EntityUid serverFlare = default;
+
+        await server.WaitPost(() =>
+        {
+            var player = serverEntMan.SpawnEntity("MobHuman", map.GridCoords);
+            Assert.That(playerManager.SetAttachedEntity(serverSession, player), Is.True);
+
+            serverFlare = serverEntMan.SpawnEntity("RMCFlareCAS", map.GridCoords);
+            var expendable = serverEntMan.GetComponent<ExpendableLightComponent>(serverFlare);
+            var expendableSystem = serverEntMan.System<ServerExpendableLightSystem>();
+            Assert.That(expendableSystem.TryActivate((serverFlare, expendable)), Is.True);
+        });
+
+        await pair.RunTicksSync(5);
+        var clientFlare = clientEntMan.GetEntity(serverEntMan.GetNetEntity(serverFlare));
+
+        // Let the turn-on behaviour make enough progress that a restart is visible as a radius drop.
+        await pair.RunTicksSync(90);
+        var radiusBeforeBeacon = 0f;
+        await client.WaitAssertion(() =>
+        {
+            var expendable = clientEntMan.GetComponent<ClientExpendableLightComponent>(clientFlare);
+            var pointLight = clientEntMan.GetComponent<PointLightComponent>(clientFlare);
+            radiusBeforeBeacon = pointLight.Radius;
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(expendable.LastLightBehaviourID, Is.EqualTo("turn_on"));
+                Assert.That(radiusBeforeBeacon, Is.GreaterThan(3f));
+            });
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var appearance = serverEntMan.GetComponent<AppearanceComponent>(serverFlare);
+            serverEntMan.System<SharedAppearanceSystem>().SetData(
+                serverFlare,
+                SignalFlareVisuals.BeaconState,
+                true,
+                appearance);
+        });
+        await pair.RunTicksSync(3);
+
+        await client.WaitAssertion(() =>
+        {
+            var expendable = clientEntMan.GetComponent<ClientExpendableLightComponent>(clientFlare);
+            var pointLight = clientEntMan.GetComponent<PointLightComponent>(clientFlare);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(expendable.LastLightBehaviourID, Is.EqualTo("turn_on"));
+                Assert.That(pointLight.Radius, Is.GreaterThanOrEqualTo(radiusBeforeBeacon));
             });
         });
 
