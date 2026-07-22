@@ -19,6 +19,7 @@ using Robust.Server.GameObjects;
 using Robust.Server.Player;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests.Tests.Minds;
@@ -190,6 +191,65 @@ public sealed partial class MindTests : GameTest
                 Assert.That(mindSystem.GetMind(targetEntity), Is.EqualTo(mind));
             });
         });
+    }
+
+    [Test]
+    public async Task TestControlMobDoesNotGhostPlayerlessMind()
+    {
+        var pair = await SetupPair();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var entMan = server.ResolveDependency<IServerEntityManager>();
+        var player = server.PlayerMan.Sessions.Single();
+        var mindSystem = entMan.System<MindSystem>();
+        var mindId = mindSystem.GetMind(player.UserId)!.Value;
+        var mind = entMan.GetComponent<MindComponent>(mindId);
+        MindComponent playerlessMind = default!;
+        EntityUid target = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var source = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            target = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            mindSystem.TransferTo(mindId, source, ghostCheckOverride: true, mind: mind);
+            var playerlessMindId = mindSystem.CreateMind(null, "Chip Dominquez");
+            playerlessMind = entMan.GetComponent<MindComponent>(playerlessMindId);
+            mindSystem.TransferTo(playerlessMindId, target, mind: playerlessMind);
+        });
+        await pair.RunTicksSync(5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(playerlessMind.UserId, Is.Null);
+            Assert.That(entMan.HasComponent<ActorComponent>(target), Is.False);
+            Assert.That(CountObservers(entMan), Is.Zero);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            mindSystem.ControlMob(player.UserId, target);
+            Assert.That(player.AttachedEntity, Is.EqualTo(target));
+        });
+        await pair.RunTicksSync(10);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(playerlessMind.OwnedEntity, Is.Null);
+            Assert.That(CountObservers(entMan), Is.Zero);
+        });
+    }
+
+    private static int CountObservers(IServerEntityManager entMan)
+    {
+        var count = 0;
+        var query = entMan.EntityQueryEnumerator<MetaDataComponent>();
+        while (query.MoveNext(out _, out var metadata))
+        {
+            if (metadata.EntityPrototype?.ID == "MobObserver")
+                count++;
+        }
+
+        return count;
     }
 
     [Test]

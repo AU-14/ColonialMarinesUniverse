@@ -184,8 +184,18 @@ public sealed partial class MindSystem : SharedMindSystem
         {
             component = EnsureComp<MindContainerComponent>(entity.Value);
 
-            if (TryGetMind(entity.Value, out var entityMindId, out _) && entityMindId != mindId)
-                _ghosts.OnGhostAttempt(entityMindId, false);
+            if (TryGetMind(entity.Value, out var entityMindId, out var entityMind) && entityMindId != mindId)
+            {
+                if (entityMind.UserId == null)
+                {
+                    // There is no player to control a ghost, so detach the mind without creating one.
+                    TransferTo(entityMindId, null, ghostCheckOverride: true, createGhost: false, mind: entityMind);
+                }
+                else
+                {
+                    _ghosts.OnGhostAttempt(entityMindId, false, mind: entityMind);
+                }
+            }
 
             if (TryComp<ActorComponent>(entity.Value, out var actor))
             {
