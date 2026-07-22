@@ -234,17 +234,20 @@ public sealed class ImpactEffectEvent : EntityEventArgs
     public NetCoordinates Coordinates;
     public NetEntity? Shooter;
     public int? PredictedProjectile;
+    public NetEntity? Target;
 
     public ImpactEffectEvent(
         string prototype,
         NetCoordinates coordinates,
         NetEntity? shooter = null,
-        int? predictedProjectile = null)
+        int? predictedProjectile = null,
+        NetEntity? target = null)
     {
         Prototype = prototype;
         Coordinates = coordinates;
         Shooter = shooter;
         PredictedProjectile = predictedProjectile;
+        Target = target;
     }
 }
 

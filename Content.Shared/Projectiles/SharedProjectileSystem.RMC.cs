@@ -5,20 +5,24 @@ using Content.Shared._RMC14.Xenonids.Damage;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Effects;
+using Content.Shared.FixedPoint;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
-using Robust.Shared.Timing;
+using Robust.Shared.Player;
 
 namespace Content.Shared.Projectiles;
 
 public abstract partial class SharedProjectileSystem
 {
     [Dependency] private DamageableSystem _rmcDamageable = default!;
+    [Dependency] private SharedColorFlashEffectSystem _rmcColor = default!;
     [Dependency] private SharedContainerSystem _rmcContainers = default!;
+    [Dependency] private SharedGunSystem _rmcGuns = default!;
     [Dependency] private INetManager _rmcNet = default!;
-    [Dependency] private IGameTiming _rmcTiming = default!;
 
     private void InitializeRMCProjectile()
     {
@@ -30,9 +34,10 @@ public abstract partial class SharedProjectileSystem
 
     private void OnRMCStartCollide(Entity<ProjectileComponent> projectile, ref StartCollideEvent args)
     {
-        // Contact reset replays collisions during state application. Deleting a predicted copy there can invalidate
-        // another predicted body's reference to the same contact before the reset has finished iterating it.
-        if ((_rmcTiming.ApplyingState && HasComp<PredictedProjectileClientComponent>(projectile)) ||
+        // Predicted projectiles are handled first by GunPredictionSystem. Letting
+        // this generic client handler process an unspent penetrating projectile
+        // again would duplicate its impact feedback and penetration bookkeeping.
+        if (HasComp<PredictedProjectileClientComponent>(projectile) ||
             args.OurFixtureId != ProjectileFixture ||
             !args.OtherFixture.Hard ||
             projectile.Comp.ProjectileSpent ||
@@ -68,10 +73,23 @@ public abstract partial class SharedProjectileSystem
     /// <summary>
     /// RMC prediction-compatible projectile collision entry point.
     /// </summary>
-    public void ProjectileCollide(
+    public bool ProjectileCollide(
         Entity<ProjectileComponent, PhysicsComponent> projectile,
         EntityUid target,
         bool predicted = false)
+    {
+        return ProjectileCollideCore(projectile, target, predicted);
+    }
+
+    /// <summary>
+    /// Handles a projectile collision after the caller has validated the contact.
+    /// The server overrides this so physics hits and accepted predicted hits share
+    /// the same authoritative damage and feedback pipeline.
+    /// </summary>
+    protected virtual bool ProjectileCollideCore(
+        Entity<ProjectileComponent, PhysicsComponent> projectile,
+        EntityUid target,
+        bool predicted)
     {
         var (uid, component, _) = projectile;
         if (component.ProjectileSpent)
@@ -79,7 +97,7 @@ public abstract partial class SharedProjectileSystem
             if (_rmcNet.IsServer && component.DeleteOnCollide)
                 PredictedQueueDel(uid);
 
-            return;
+            return false;
         }
 
         var reflect = new ProjectileReflectAttemptEvent(uid, component, false);
@@ -87,7 +105,7 @@ public abstract partial class SharedProjectileSystem
         if (reflect.Cancelled)
         {
             SetShooter(uid, component, target);
-            return;
+            return false;
         }
 
         var hit = new ProjectileHitEvent(
@@ -96,7 +114,7 @@ public abstract partial class SharedProjectileSystem
             component.Shooter);
         RaiseLocalEvent(uid, ref hit);
         if (hit.Handled)
-            return;
+            return false;
 
         DamageSpecifier? damage = new DamageSpecifier(hit.Damage);
         if (_rmcNet.IsServer)
@@ -108,28 +126,57 @@ public abstract partial class SharedProjectileSystem
                 origin: component.Shooter,
                 tool: uid);
         }
+        else if (!component.IgnoreResistances)
+        {
+            var modify = new DamageModifyEvent(hit.Damage, component.Shooter, uid);
+            RaiseLocalEvent(target, modify);
+            damage = modify.Damage;
+        }
 
-        var damageEvent = new ProjectileDamageDealtEvent(component.Shooter, damage);
-        RaiseLocalEvent(target, ref damageEvent);
+        var localPrediction = _rmcNet.IsClient &&
+                              HasComp<PredictedProjectileClientComponent>(uid);
+        var playFeedback = !localPrediction || BeginPredictedImpactFeedback(uid, target);
+        if (playFeedback)
+        {
+            var damageEvent = new ProjectileDamageDealtEvent(component.Shooter, damage);
+            RaiseLocalEvent(target, ref damageEvent);
 
-        component.ProjectileSpent = true;
+            if (localPrediction && !Deleted(target))
+            {
+                if (HasComp<DamageableComponent>(target) && damage?.AnyPositive() == true)
+                    _rmcColor.RaiseEffect(Color.Red, new List<EntityUid> { target }, Filter.Local());
+
+                _rmcGuns.PlayImpactSound(target, damage, component.SoundHit, component.ForceSound);
+            }
+        }
+
+        component.ProjectileSpent = !TryPredictPenetration(component, damage);
         Dirty(uid, component);
 
         var additionalHits = new AfterProjectileHitEvent(projectile, target);
         RaiseLocalEvent(uid, ref additionalHits);
 
         if (_rmcNet.IsServer || HasComp<PredictedProjectileClientComponent>(uid))
-            PlayImpactEffect((uid, component));
+            PlayImpactEffect((uid, component), target);
 
         if (!predicted && component.DeleteOnCollide && component.ProjectileSpent)
         {
             PredictedQueueDel(uid);
-            return;
+            return true;
         }
 
-        if (!_rmcNet.IsServer || !predicted || !component.DeleteOnCollide)
-            return;
+        if (!_rmcNet.IsServer || !predicted || !component.DeleteOnCollide || !component.ProjectileSpent)
+            return true;
 
+        PreservePredictedProjectileHit(projectile, target);
+        return true;
+    }
+
+    protected void PreservePredictedProjectileHit(
+        Entity<ProjectileComponent, PhysicsComponent> projectile,
+        EntityUid target)
+    {
+        var uid = projectile.Owner;
         var predictedHit = EnsureComp<PredictedProjectileHitComponent>(uid);
         predictedHit.Origin = _transform.GetMoverCoordinates(uid);
 
@@ -140,5 +187,35 @@ public abstract partial class SharedProjectileSystem
         Dirty(uid, predictedHit);
     }
 
-    protected abstract void PlayImpactEffect(Entity<ProjectileComponent> projectile);
+    /// <summary>
+    /// Correlates immediate shooter feedback with the matching authoritative
+    /// result. Non-client implementations do not need correlation state.
+    /// </summary>
+    protected virtual bool BeginPredictedImpactFeedback(EntityUid projectile, EntityUid target)
+    {
+        return true;
+    }
+
+    private static bool TryPredictPenetration(ProjectileComponent projectile, DamageSpecifier? damage)
+    {
+        if (projectile.PenetrationThreshold == 0 || damage == null)
+            return false;
+
+        if (projectile.PenetrationDamageTypeRequirement != null)
+        {
+            foreach (var requiredDamageType in projectile.PenetrationDamageTypeRequirement)
+            {
+                if (!damage.DamageDict.Keys.Contains(requiredDamageType))
+                    return false;
+            }
+        }
+
+        // The destruction threshold is server-only, so the client cannot know
+        // exactly how much penetration budget this target consumes. Continue the
+        // local copy optimistically; authoritative impact feedback stops it when
+        // the server's real penetration calculation is spent.
+        return damage.AnyPositive();
+    }
+
+    protected abstract void PlayImpactEffect(Entity<ProjectileComponent> projectile, EntityUid target);
 }

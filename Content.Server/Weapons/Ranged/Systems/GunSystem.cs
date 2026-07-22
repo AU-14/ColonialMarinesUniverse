@@ -1,10 +1,9 @@
 using System.Numerics;
 using Content.Server.Cargo.Systems;
-using Content.Server.Weapons.Ranged.Components;
 using Content.Shared.Cargo;
-using Content.Shared.Damage;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Projectiles;
-using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -24,11 +23,10 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private PricingSystem _pricing = default!;
     [Dependency] private SharedMapSystem _map = default!;
 
-    private const float DamagePitchVariation = 0.05f;
-
     public override void Initialize()
     {
         base.Initialize();
+        InitializeAutoFire();
         SubscribeLocalEvent<BallisticAmmoProviderComponent, PriceCalculationEvent>(OnBallisticPrice);
     }
 
@@ -63,7 +61,10 @@ public sealed partial class GunSystem : SharedGunSystem
 
     public override List<EntityUid> Shoot(Entity<GunComponent> gun, List<(EntityUid? Entity, IShootable Shootable)> ammo,
         EntityCoordinates fromCoordinates, EntityCoordinates toCoordinates, out bool userImpulse, EntityUid? user = null,
-        bool throwItems = false, Angle? recoilAngle = null)
+        bool throwItems = false, Angle? recoilAngle = null,
+        IReadOnlyList<int>? predictedProjectiles = null,
+        ICommonSession? userSession = null,
+        ISet<int>? acceptedPredictedProjectiles = null)
     {
         userImpulse = true;
 
@@ -159,10 +160,25 @@ public sealed partial class GunSystem : SharedGunSystem
 
                     Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
                     break;
+                case RMCFlamerAmmoProviderComponent flamer:
+                    if (ent != null)
+                        RMCFlamer.ShootFlamer((ent.Value, flamer), gun, user, fromCoordinates, toCoordinates);
+                    break;
+                case RMCSprayAmmoProviderComponent spray:
+                    if (ent != null)
+                        RMCFlamer.ShootSpray((ent.Value, spray), gun, user, fromCoordinates, toCoordinates);
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
+
+        CorrelatePredictedProjectiles(
+            shotProjectiles,
+            predictedProjectiles,
+            userSession,
+            user,
+            acceptedPredictedProjectiles);
 
         RaiseLocalEvent(gun, new AmmoShotEvent()
         {
@@ -202,6 +218,40 @@ public sealed partial class GunSystem : SharedGunSystem
         }
     }
 
+    private void CorrelatePredictedProjectiles(
+        List<EntityUid> projectiles,
+        IReadOnlyList<int>? predictedProjectiles,
+        ICommonSession? userSession,
+        EntityUid? user,
+        ISet<int>? acceptedPredictedProjectiles)
+    {
+        if (predictedProjectiles == null || userSession == null || user == null)
+            return;
+
+        var predictionIndex = 0;
+        foreach (var projectile in projectiles)
+        {
+            if (!HasComp<ProjectileComponent>(projectile))
+                continue;
+
+            if (predictionIndex >= predictedProjectiles.Count)
+                break;
+
+            var clientId = predictedProjectiles[predictionIndex++];
+            if (acceptedPredictedProjectiles != null && !acceptedPredictedProjectiles.Add(clientId))
+                continue;
+
+            var predicted = new PredictedProjectileServerComponent
+            {
+                Shooter = userSession,
+                ClientId = clientId,
+                ClientEnt = user,
+            };
+            AddComp(projectile, predicted, true);
+            Dirty(projectile, predicted);
+        }
+    }
+
     private void ShootOrThrow(EntityUid uid, Vector2 mapDirection, Vector2 gunVelocity, Entity<GunComponent> gun, EntityUid? user)
     {
         if (gun.Comp.Target is { } target && !TerminatingOrDeleted(target))
@@ -223,45 +273,23 @@ public sealed partial class GunSystem : SharedGunSystem
         ShootProjectile(uid, mapDirection, gunVelocity, gun, user, gun.Comp.ProjectileSpeedModified);
     }
 
-    protected override void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? user = null)
+    protected override void CreateEffect(
+        EntityUid gunUid,
+        MuzzleFlashEvent message,
+        EntityUid? tracked = null,
+        EntityUid? player = null,
+        Vector2 offset = default,
+        Vector2 originOffset = default)
     {
         var filter = Filter.Pvs(gunUid, entityManager: EntityManager);
 
-        if (TryComp<ActorComponent>(user, out var actor))
+        if (TryComp<ActorComponent>(tracked, out var actor))
+            filter.RemovePlayer(actor.PlayerSession);
+
+        if (TryComp<ActorComponent>(player, out actor))
             filter.RemovePlayer(actor.PlayerSession);
 
         RaiseNetworkEvent(message, filter);
     }
 
-    public override void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound)
-    {
-        DebugTools.Assert(!Deleted(otherEntity), "Impact sound entity was deleted");
-
-        // Like projectiles and melee,
-        // 1. Entity specific sound
-        // 2. Ammo's sound
-        // 3. Nothing
-        var playedSound = false;
-
-        if (!forceWeaponSound && modifiedDamage != null && modifiedDamage.GetTotal() > 0 && TryComp<RangedDamageSoundComponent>(otherEntity, out var rangedSound))
-        {
-            var type = SharedMeleeWeaponSystem.GetHighestDamageSound(modifiedDamage, ProtoMan);
-
-            if (type != null && rangedSound.SoundTypes?.TryGetValue(type, out var damageSoundType) == true)
-            {
-                Audio.PlayPvs(damageSoundType, otherEntity, AudioParams.Default.WithVariation(DamagePitchVariation));
-                playedSound = true;
-            }
-            else if (type != null && rangedSound.SoundGroups?.TryGetValue(type, out var damageSoundGroup) == true)
-            {
-                Audio.PlayPvs(damageSoundGroup, otherEntity, AudioParams.Default.WithVariation(DamagePitchVariation));
-                playedSound = true;
-            }
-        }
-
-        if (!playedSound && weaponSound != null)
-        {
-            Audio.PlayPvs(weaponSound, otherEntity);
-        }
-    }
 }

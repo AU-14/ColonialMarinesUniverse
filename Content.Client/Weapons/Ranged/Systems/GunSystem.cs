@@ -5,12 +5,13 @@ using Content.Client.Clickable;
 using Content.Client.Items;
 using Content.Client.Weapons.Ranged.Components;
 using Content.Client._RMC14.Movement;
+using Content.Client._RMC14.Vehicle;
 using Content.Client._RMC14.Weapons.Ranged.Prediction;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Camera;
 using Content.Shared.CCVar;
 using Content.Shared.CombatMode;
-using Content.Shared.Damage;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
@@ -32,6 +33,7 @@ using Robust.Shared.Graphics;
 using Robust.Shared.Input;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Player;
 using Robust.Shared.Physics;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -58,6 +60,7 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private SharedTransformSystem _xform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SpriteTreeSystem _spriteTree = default!;
+    [Dependency] private VehicleTurretMuzzleOffsetSystem _vehicleTurretMuzzleOffset = default!;
 
     public static readonly EntProtoId HitscanProto = "HitscanEffect";
     private GunTargetEntityComparer _comparer = default!;
@@ -114,7 +117,7 @@ public sealed partial class GunSystem : SharedGunSystem
     {
         var gunUid = GetEntity(args.Uid);
 
-        CreateEffect(gunUid, args, gunUid);
+        CreateEffect(gunUid, args, gunUid, _player.LocalEntity, args.Offset, args.OriginOffset);
     }
 
     private void OnHitscan(HitscanEvent ev)
@@ -249,7 +252,10 @@ public sealed partial class GunSystem : SharedGunSystem
 
     public override List<EntityUid> Shoot(Entity<GunComponent> gun, List<(EntityUid? Entity, IShootable Shootable)> ammo,
         EntityCoordinates fromCoordinates, EntityCoordinates toCoordinates, out bool userImpulse, EntityUid? user = null,
-        bool throwItems = false, Angle? recoilAngle = null)
+        bool throwItems = false, Angle? recoilAngle = null,
+        IReadOnlyList<int>? predictedProjectiles = null,
+        ICommonSession? userSession = null,
+        ISet<int>? acceptedPredictedProjectiles = null)
     {
         userImpulse = true;
 
@@ -330,11 +336,20 @@ public sealed partial class GunSystem : SharedGunSystem
                     }
 
                     Recoil(user, -mapDirection, gun.Comp.CameraRecoilScalarModified);
-                    RemoveShootable(ent.Value);
+                    if (!predictProjectiles && !HasComp<ProjectileComponent>(ent.Value))
+                        RemoveShootable(ent.Value);
                     break;
                 case HitscanAmmoComponent:
                     Audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
                     Recoil(user, -mapDirection, gun.Comp.CameraRecoilScalarModified);
+                    break;
+                case RMCFlamerAmmoProviderComponent flamer:
+                    if (ent != null)
+                        RMCFlamer.ShootFlamer((ent.Value, flamer), gun, user, fromCoordinates, toCoordinates);
+                    break;
+                case RMCSprayAmmoProviderComponent spray:
+                    if (ent != null)
+                        RMCFlamer.ShootSpray((ent.Value, spray), gun, user, fromCoordinates, toCoordinates);
                     break;
             }
         }
@@ -383,7 +398,8 @@ public sealed partial class GunSystem : SharedGunSystem
 
             if (!HasComp<ProjectileComponent>(projectile))
             {
-                Del(projectile);
+                RemoveShootable(projectile);
+                ThrowingSystem.TryThrow(projectile, direction, gun.Comp.ProjectileSpeedModified, user);
                 return;
             }
 
@@ -391,6 +407,72 @@ public sealed partial class GunSystem : SharedGunSystem
             Physics.UpdateIsPredicted(projectile);
             ShootProjectile(projectile, direction, gunVelocity, gun, user, gun.Comp.ProjectileSpeedModified);
             shotProjectiles.Add(projectile);
+        }
+    }
+
+    protected override void ReplayPhysicalProjectiles(
+        Entity<GunComponent> gun,
+        IReadOnlyList<(EntityUid? Entity, IShootable Shootable)> ammo,
+        EntityCoordinates fromCoordinates,
+        EntityCoordinates toCoordinates,
+        EntityUid? user,
+        Angle recoilAngle)
+    {
+        var fromMap = TransformSystem.ToMapCoordinates(fromCoordinates);
+        var toMap = TransformSystem.ToMapCoordinates(toCoordinates).Position;
+        var mapDirection = toMap - fromMap.Position;
+        var mapAngle = mapDirection.ToAngle();
+        var fromEnt = Maps.TryFindGridAt(fromMap, out var gridUid, out _)
+            ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
+            : new EntityCoordinates(_maps.GetMapOrInvalid(fromMap.MapId), fromMap.Position);
+
+        toMap = fromMap.Position + recoilAngle.ToVec() * mapDirection.Length();
+        mapDirection = toMap - fromMap.Position;
+        var gunVelocity = Physics.GetMapLinearVelocity(fromEnt);
+
+        foreach (var (ammoEntity, shootable) in ammo)
+        {
+            if (ammoEntity is not { } projectileUid ||
+                IsClientSide(projectileUid) ||
+                shootable is not AmmoComponent ||
+                shootable is CartridgeAmmoComponent ||
+                !HasComp<ProjectileComponent>(projectileUid))
+            {
+                continue;
+            }
+
+            var direction = mapDirection;
+            if (TryComp<ProjectileSpreadComponent>(projectileUid, out var ammoSpreadComp))
+            {
+                var spreadEvent = new GunGetAmmoSpreadEvent(ammoSpreadComp.Spread);
+                RaiseLocalEvent(gun, ref spreadEvent);
+                direction = LinearSpread(
+                    mapAngle - spreadEvent.Spread / 2,
+                    mapAngle + spreadEvent.Spread / 2,
+                    ammoSpreadComp.Count)[0].ToVec();
+            }
+
+            if (gun.Comp.Target is { } target && !TerminatingOrDeleted(target))
+            {
+                var targeted = EnsureComp<TargetedProjectileComponent>(projectileUid);
+                targeted.Target = target;
+            }
+
+            var predicted = EnsureComp<PredictedProjectileClientComponent>(projectileUid);
+            predicted.Hit = false;
+            predicted.HitTargets.Clear();
+            predicted.PendingPenetrationBodyType = null;
+            predicted.PendingPenetrationVelocity = null;
+            predicted.Coordinates = null;
+
+            Physics.UpdateIsPredicted(projectileUid);
+            ShootProjectile(
+                projectileUid,
+                direction,
+                gunVelocity,
+                gun,
+                user,
+                gun.Comp.ProjectileSpeedModified);
         }
     }
 
@@ -402,7 +484,13 @@ public sealed partial class GunSystem : SharedGunSystem
         _recoil.KickCamera(user.Value, recoil.Normalized() * 0.5f * recoilScalar);
     }
 
-    protected override void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? tracked = null)
+    protected override void CreateEffect(
+        EntityUid gunUid,
+        MuzzleFlashEvent message,
+        EntityUid? tracked = null,
+        EntityUid? player = null,
+        Vector2 offset = default,
+        Vector2 originOffset = default)
     {
         if (!Timing.IsFirstTimePredicted)
             return;
@@ -435,16 +523,33 @@ public sealed partial class GunSystem : SharedGunSystem
         var ent = Spawn(message.Prototype, coordinates);
         TransformSystem.SetWorldRotationNoLerp(ent, message.Angle);
 
-        if (tracked != null)
+        if (_vehicleTurretMuzzleOffset.TryGetGunPose(gunUid, null, out var origin, out var rotation))
+        {
+            var renderedMap = TransformSystem.ToMapCoordinates(origin);
+            var effectXform = Transform(ent);
+            effectXform.ActivelyLerping = false;
+            var rotationOffset = (message.Angle - rotation).Reduced();
+            TransformSystem.SetWorldRotationNoLerp((ent, effectXform), rotation + rotationOffset);
+            TransformSystem.SetWorldPosition(
+                (ent, effectXform),
+                renderedMap.Position + (rotation + rotationOffset).RotateVec(offset));
+
+            var track = EnsureComp<VehicleTurretTrackedMuzzleFlashComponent>(ent);
+            track.Weapon = gunUid;
+            track.Offset = offset;
+            track.RotationOffset = rotationOffset;
+        }
+        else if (tracked != null)
         {
             var track = EnsureComp<TrackUserComponent>(ent);
             track.User = tracked;
-            track.Offset = Vector2.UnitX / 2f;
+            track.Offset = offset;
+            track.OriginOffset = originOffset;
         }
 
         var lifetime = 0.4f;
 
-        if (TryComp<TimedDespawnComponent>(gunUid, out var despawn))
+        if (TryComp<TimedDespawnComponent>(ent, out var despawn))
         {
             lifetime = despawn.Lifetime;
         }
@@ -469,17 +574,17 @@ public sealed partial class GunSystem : SharedGunSystem
         };
 
         _animPlayer.Play(ent, anim, "muzzle-flash");
-        if (!TryComp(gunUid, out PointLightComponent? light))
+        if (!TryComp(ent, out PointLightComponent? light))
         {
             light = Factory.GetComponent<PointLightComponent>();
             light.NetSyncEnabled = false;
-            AddComp(gunUid, light);
+            AddComp(ent, light);
         }
 
-        Lights.SetEnabled(gunUid, true, light);
-        Lights.SetRadius(gunUid, 2f, light);
-        Lights.SetColor(gunUid, Color.FromHex("#cc8e2b"), light);
-        Lights.SetEnergy(gunUid, 5f, light);
+        Lights.SetEnabled(ent, true, light);
+        Lights.SetRadius(ent, 2f, light);
+        Lights.SetColor(ent, Color.FromHex("#cc8e2b"), light);
+        Lights.SetEnergy(ent, 5f, light);
 
         var animTwo = new Animation()
         {
@@ -511,10 +616,10 @@ public sealed partial class GunSystem : SharedGunSystem
             }
         };
 
-        var uidPlayer = EnsureComp<AnimationPlayerComponent>(gunUid);
+        var uidPlayer = EnsureComp<AnimationPlayerComponent>(ent);
 
-        _animPlayer.Stop(gunUid, uidPlayer, "muzzle-flash-light");
-        _animPlayer.Play((gunUid, uidPlayer), animTwo, "muzzle-flash-light");
+        _animPlayer.Stop(ent, uidPlayer, "muzzle-flash-light");
+        _animPlayer.Play((ent, uidPlayer), animTwo, "muzzle-flash-light");
     }
 
     /// <remarks>We use our own sorting algorithm separate from the default for smarter configurability.</remarks>
@@ -644,5 +749,4 @@ public sealed partial class GunSystem : SharedGunSystem
         return false;
     }
 
-    public override void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound) { }
 }

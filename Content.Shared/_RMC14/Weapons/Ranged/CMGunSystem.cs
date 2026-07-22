@@ -11,6 +11,7 @@ using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Containers.ItemSlots;
@@ -507,7 +508,10 @@ public sealed partial class CMGunSystem : EntitySystem
                 Dirty(projectile, projectileComp);
             }
 
-            _projectile.ProjectileCollide((projectile, projectileComp, physicsComp), gunComp.Target.Value);
+            _projectile.ProjectileCollide(
+                (projectile, projectileComp, physicsComp),
+                gunComp.Target.Value,
+                HasComp<PredictedProjectileServerComponent>(projectile));
         }
 
         userDelay.LastPBAt = _timing.CurTime;

@@ -26,8 +26,8 @@ public sealed class RequestShootEvent : EntityEventArgs
     public NetEntity? Target;
 
     /// <summary>
-    /// If the client wants to continuously shoot.
-    /// If true, the gun will continue firing until a stop event is sent from the client.
+    /// Whether held-fire should re-arm a semi-automatic-only weapon before this
+    /// attempt. Burst and full-auto cadence must keep their accumulated timing.
     /// </summary>
     public bool Continuous;
 

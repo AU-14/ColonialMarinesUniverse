@@ -21,6 +21,8 @@ namespace Content.Server._RMC14.Weapons.Ranged.Prediction;
 
 public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 {
+    private const int MaxReportedTargetsPerHit = 16;
+
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedProjectileSystem _projectile = default!;
@@ -30,6 +32,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private readonly Dictionary<(Guid, int), EntityUid> _predicted = new();
     private readonly List<(PredictedProjectileHitEvent Event, ICommonSession Player)> _predictedHits = new();
+    private readonly PredictedHitReportLimiter _predictedHitLimiter = new();
     private bool _preventCollision;
     private bool _validatingPredictedHitCollision;
     private bool _logHits;
@@ -74,6 +77,8 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _predicted.Clear();
+        _predictedHits.Clear();
+        _predictedHitLimiter.Reset();
     }
 
     private void OnShootRequest(RequestShootEvent ev, EntitySessionEventArgs args)
@@ -97,17 +102,55 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         if (ent.Comp.Shooter == null)
             return;
 
-        _predicted.Remove((ent.Comp.Shooter.UserId, ent.Comp.ClientId));
+        var key = (ent.Comp.Shooter.UserId, ent.Comp.ClientId);
+        if (_predicted.TryGetValue(key, out var current) && current == ent.Owner)
+            _predicted.Remove(key);
     }
 
     private void OnPredictedProjectileHit(PredictedProjectileHitEvent ev, EntitySessionEventArgs args)
     {
-        _predictedHits.Add((ev, args.SenderSession));
+        var player = args.SenderSession;
+        var playerId = player.UserId.UserId;
+        if (!_predictedHitLimiter.TryAcquire(playerId))
+        {
+            // An over-limit report cannot remain correlated to a hidden authoritative
+            // projectile forever. Reject each live correlation once for this tick.
+            if (_predictedHitLimiter.ShouldRejectOverLimitReport(
+                    playerId,
+                    ev.Projectile,
+                    IsLivePredictedProjectile(player, ev.Projectile)))
+            {
+                RejectPredictedHit(player, ev.Projectile);
+            }
+
+            return;
+        }
+
+        _predictedHits.Add((ev, player));
+    }
+
+    private bool IsLivePredictedProjectile(ICommonSession player, int clientId)
+    {
+        if (!_predicted.TryGetValue((player.UserId, clientId), out var projectile) ||
+            !_predictedProjectileServerQuery.TryComp(projectile, out var predictedProjectile) ||
+            predictedProjectile.Hit ||
+            predictedProjectile.RejectionSent ||
+            predictedProjectile.Shooter?.UserId != player.UserId.UserId ||
+            !_projectileQuery.TryComp(projectile, out var projectileComponent))
+        {
+            return false;
+        }
+
+        return !projectileComponent.ProjectileSpent &&
+               projectileComponent is not { Weapon: null, OnlyCollideWhenShot: true };
     }
 
     private void OnPredictedPreventCollide(Entity<PredictedProjectileServerComponent> ent, ref PreventCollideEvent args)
     {
-        if (!_preventCollision || _validatingPredictedHitCollision)
+        if (!_preventCollision ||
+            _validatingPredictedHitCollision ||
+            ent.Comp.Hit ||
+            ent.Comp.RejectionSent)
             return;
 
         if (args.Cancelled)
@@ -129,7 +172,9 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
         if (!Collides(
                 (ent, ent, entPhysics),
-                (other, otherLagComp, otherFixtures, args.OtherBody, otherTransform),
+                other,
+                otherLagComp,
+                otherTransform,
                 null,
                 args.OurFixture,
                 args.OtherFixture))
@@ -140,7 +185,9 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
     private bool Collides(
         Entity<PredictedProjectileServerComponent, PhysicsComponent> projectile,
-        Entity<LagCompensationComponent, FixturesComponent, PhysicsComponent, TransformComponent> other,
+        EntityUid other,
+        LagCompensationComponent? lagCompensation,
+        TransformComponent otherTransform,
         MapCoordinates? clientCoordinates,
         Fixture projectileFixture,
         Fixture otherFixture)
@@ -150,7 +197,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
 
         var projectileCoordinates = _transform.GetMapCoordinates(projectile);
         if (projectileCoordinates.MapId == MapId.Nullspace ||
-            other.Comp4.MapID != projectileCoordinates.MapId)
+            otherTransform.MapID != projectileCoordinates.MapId)
         {
             return false;
         }
@@ -164,17 +211,20 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         var sentTime = _timing.CurTime - TimeSpan.FromMilliseconds(ping * 1.5);
         var pingTime = TimeSpan.FromMilliseconds(ping);
 
-        foreach (var pos in other.Comp1.Positions)
+        if (lagCompensation != null)
         {
-            otherCoordinates = pos.Item2;
-            if (pos.Item1 >= sentTime)
-                break;
-            else if (lowestCoordinate == null && pos.Item1 >= sentTime - pingTime)
-                lowestCoordinate = _transform.ToMapCoordinates(pos.Item2);
+            foreach (var pos in lagCompensation.Positions)
+            {
+                otherCoordinates = pos.Item2;
+                if (pos.Item1 >= sentTime)
+                    break;
+                else if (lowestCoordinate == null && pos.Item1 >= sentTime - pingTime)
+                    lowestCoordinate = _transform.ToMapCoordinates(pos.Item2);
+            }
         }
 
         var otherMapCoordinates = otherCoordinates == default
-            ? _transform.GetMapCoordinates(other)
+            ? _transform.GetMapCoordinates((other, otherTransform))
             : _transform.ToMapCoordinates(otherCoordinates);
 
         if (otherMapCoordinates.MapId != projectileCoordinates.MapId)
@@ -263,11 +313,11 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         if (!_predicted.TryGetValue((player.UserId, ev.Projectile), out var projectile))
             return;
 
-        if (!_predictedProjectileServerQuery.TryComp(projectile, out var predictedProjectile) ||
-            predictedProjectile.Hit)
-        {
+        if (!_predictedProjectileServerQuery.TryComp(projectile, out var predictedProjectile))
             return;
-        }
+
+        if (predictedProjectile.Hit || predictedProjectile.RejectionSent)
+            return;
 
         if (predictedProjectile.Shooter?.UserId != player.UserId.UserId)
             return;
@@ -288,25 +338,46 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             return;
         }
 
+        var reportedTargets = 0;
+        var matchedAuthoritativeHit = false;
         foreach (var (netEnt, clientPos) in ev.Hit)
         {
+            if (++reportedTargets > MaxReportedTargetsPerHit)
+                break;
+
+            // A penetrating authority copy can reach this target before its local
+            // counterpart. Consume that duplicate while still validating any other
+            // contacts included in the same report.
+            if (predictedProjectile.AuthoritativeHits.Remove(netEnt))
+            {
+                matchedAuthoritativeHit = true;
+                continue;
+            }
+
             if (GetEntity(netEnt) is not { Valid: true } hit)
                 continue;
 
-            if (!_lagCompensationQuery.TryComp(hit, out var otherLagComp) ||
-                !_fixturesQuery.TryComp(hit, out var otherFixtures) ||
+            _lagCompensationQuery.TryComp(hit, out var otherLagComp);
+            if (!_fixturesQuery.TryComp(hit, out var otherFixtures) ||
                 !_physicsQuery.TryComp(hit, out var otherPhysics) ||
                 !_transformQuery.TryComp(hit, out var otherTransform))
             {
                 continue;
             }
 
+            // Moving entities require history for rewind validation. Anchored/static
+            // targets such as walls can be checked safely against their current pose.
+            if (otherLagComp == null && otherPhysics.BodyType != BodyType.Static)
+                continue;
+
             var validCollision = false;
             foreach (var otherFixture in otherFixtures.Fixtures.Values)
             {
                 if (!Collides(
                         (projectile, predictedProjectile, projectilePhysics),
-                        (hit, otherLagComp, otherFixtures, otherPhysics, otherTransform),
+                        hit,
+                        otherLagComp,
+                        otherTransform,
                         clientPos,
                         projectileFixture,
                         otherFixture) ||
@@ -336,10 +407,30 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
             if (_logHits)
                 Log.Info("hit");
 
-            predictedProjectile.Hit = true;
-            _projectile.ProjectileCollide((projectile, projectileComp, projectilePhysics), hit, true);
+            if (!_projectile.ProjectileCollide((projectile, projectileComp, projectilePhysics), hit, true))
+                return;
+
+            predictedProjectile.Hit = projectileComp.ProjectileSpent;
+
             return;
         }
+
+        if (!matchedAuthoritativeHit)
+            RejectPredictedHit(player, ev.Projectile);
+    }
+
+    private void RejectPredictedHit(ICommonSession player, int projectile)
+    {
+        if (_predicted.TryGetValue((player.UserId, projectile), out var uid) &&
+            _predictedProjectileServerQuery.TryComp(uid, out var predicted))
+        {
+            if (predicted.RejectionSent)
+                return;
+
+            predicted.RejectionSent = true;
+        }
+
+        RaiseNetworkEvent(new PredictedProjectileHitRejectedEvent(projectile), player);
     }
 
     private static bool FixturesCanCollide(Fixture projectileFixture, Fixture otherFixture)
@@ -361,6 +452,7 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
         finally
         {
             _predictedHits.Clear();
+            _predictedHitLimiter.Reset();
         }
 
         var predicted = EntityQueryEnumerator<PredictedProjectileHitComponent, TransformComponent>();
@@ -374,5 +466,45 @@ public sealed partial class GunPredictionSystem : SharedGunPredictionSystem
                 QueueDel(uid);
             }
         }
+    }
+}
+
+internal sealed class PredictedHitReportLimiter
+{
+    // This leaves ample headroom for several projectile-spread shots to land
+    // together while bounding expensive rewind/collision validation per player.
+    internal const int DefaultMaxReportsPerSession = 64;
+
+    private readonly int _maxReportsPerSession;
+    private readonly Dictionary<Guid, int> _reportsBySession = new();
+    private readonly HashSet<(Guid Player, int Projectile)> _rejectedReports = new();
+
+    internal PredictedHitReportLimiter(int maxReportsPerSession = DefaultMaxReportsPerSession)
+    {
+        if (maxReportsPerSession < 1)
+            throw new ArgumentOutOfRangeException(nameof(maxReportsPerSession));
+
+        _maxReportsPerSession = maxReportsPerSession;
+    }
+
+    internal bool TryAcquire(Guid player)
+    {
+        var reports = _reportsBySession.GetValueOrDefault(player);
+        if (reports >= _maxReportsPerSession)
+            return false;
+
+        _reportsBySession[player] = reports + 1;
+        return true;
+    }
+
+    internal bool ShouldRejectOverLimitReport(Guid player, int projectile, bool live)
+    {
+        return live && _rejectedReports.Add((player, projectile));
+    }
+
+    internal void Reset()
+    {
+        _reportsBySession.Clear();
+        _rejectedReports.Clear();
     }
 }

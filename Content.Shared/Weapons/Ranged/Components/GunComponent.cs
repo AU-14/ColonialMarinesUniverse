@@ -74,6 +74,14 @@ public sealed partial class GunComponent : Component
     public Angle CurrentAngle;
 
     /// <summary>
+    /// Server-authoritative monotonic sequence used to seed predicted spread.
+    /// Both sides advance it only after a shot reaches recoil calculation, so a
+    /// client cannot choose an arbitrary PRNG seed in its shoot request.
+    /// </summary>
+    [AutoNetworkedField, ViewVariables]
+    public uint SpreadSequence;
+
+    /// <summary>
     /// The base value for how much the spread increases every time the gun fires.
     /// </summary>
     [DataField]

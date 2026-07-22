@@ -22,7 +22,11 @@ public sealed partial class GunSystem
 
     private bool ApplyRmcContinuousFirePolicy(Entity<GunComponent> gun, bool continuous)
     {
-        return continuous && !HasComp<GunClickToFireComponent>(gun);
+        return ShouldRearmSemiAuto(
+            continuous,
+            gun.Comp.SelectedMode,
+            gun.Comp.AvailableModes,
+            HasComp<GunClickToFireComponent>(gun));
     }
 
     private EntityUid GetRmcShootCoordinateEntity(EntityUid user, Entity<GunComponent> gun)

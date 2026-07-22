@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Random;
 using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer;
 using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions;
@@ -69,6 +70,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] protected SharedPointLightSystem Lights = default!;
     [Dependency] protected SharedPopupSystem PopupSystem = default!;
     [Dependency] protected SharedProjectileSystem Projectiles = default!;
+    [Dependency] protected SharedRMCFlamerSystem RMCFlamer = default!;
     [Dependency] protected SharedTransformSystem TransformSystem = default!;
     [Dependency] protected TagSystem TagSystem = default!;
     [Dependency] protected ThrowingSystem ThrowingSystem = default!;
@@ -93,6 +95,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     private const float InteractNextFire = 0.3f;
     private const double SafetyNextFire = 0.5;
     private const float EjectOffset = 0.4f;
+    private const float DamagePitchVariation = 0.05f;
     private const int MaxPredictedProjectilesPerRequest = 256;
     protected const string AmmoExamineColor = "yellow";
     protected const string FireRateExamineColor = "yellow";
@@ -192,14 +195,21 @@ public abstract partial class SharedGunSystem : EntitySystem
 
             gun.Comp.ShootCoordinates = shootCoordinates;
             gun.Comp.Target = target;
+            if (ShouldRearmSemiAuto(
+                    msg.Continuous,
+                    gun.Comp.SelectedMode,
+                    gun.Comp.AvailableModes,
+                    HasComp<GunClickToFireComponent>(gun)))
+            {
+                ResetShotCounter(gun, gun.Comp);
+            }
+
             AttemptShootInternal(
                 user.Value,
                 gun,
                 requestedPredictions,
                 args.SenderSession,
                 acceptedPredictions);
-            if (msg.Continuous)
-                gun.Comp.ShotCounter = 0;
         }
         finally
         {
@@ -281,6 +291,18 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
 
         return TryGetRmcFallbackGun(entity, out gun);
+    }
+
+    public static bool ShouldRearmSemiAuto(
+        bool holdToFire,
+        SelectiveFire selectedMode,
+        SelectiveFire availableModes,
+        bool clickToFire)
+    {
+        return holdToFire &&
+               selectedMode == SelectiveFire.SemiAuto &&
+               !clickToFire &&
+               (availableModes & SelectiveFire.FullAuto) == 0;
     }
 
     private void StopShooting(Entity<GunComponent> ent)
@@ -509,15 +531,26 @@ public abstract partial class SharedGunSystem : EntitySystem
         // Shoot confirmed - sounds also played here in case it's invalid (e.g. cartridge already spent).
         var shotProjectiles = new List<EntityUid>();
         var userImpulse = false;
-        Angle? recoilAngle = null;
+        var fromMap = TransformSystem.ToMapCoordinates(fromCoordinates);
+        var toMap = TransformSystem.ToMapCoordinates(toCoordinates.Value);
+        var recoilAngle = GetRecoilAngle(
+            gun,
+            curTime,
+            (toMap.Position - fromMap.Position).ToAngle());
+
+        // Reserve the deterministic spread sample before server-only shoot
+        // cancellation hooks. The predicting client has already advanced this
+        // state, so a cancelled authoritative shot must do the same or the next
+        // rapid shot will use a different spread sequence.
         if (BeforeShoot(user, gun, ev.Ammo))
         {
-            var fromMap = TransformSystem.ToMapCoordinates(fromCoordinates);
-            var toMap = TransformSystem.ToMapCoordinates(toCoordinates.Value);
-            recoilAngle = GetRecoilAngle(gun, curTime, (toMap.Position - fromMap.Position).ToAngle());
-
             if (Timing.IsFirstTimePredicted)
             {
+                var correlateProjectiles = _netManager.IsServer &&
+                                           _config.GetCVar(RMCCVars.RMCGunPrediction) &&
+                                           !HasComp<GunIgnorePredictionComponent>(gun) &&
+                                           predictedProjectiles != null &&
+                                           userSession != null;
                 shotProjectiles = Shoot(
                     gun,
                     ev.Ammo,
@@ -526,35 +559,68 @@ public abstract partial class SharedGunSystem : EntitySystem
                     out userImpulse,
                     user,
                     throwItems: attemptEv.ThrowItems,
-                    recoilAngle: recoilAngle);
+                    recoilAngle: recoilAngle,
+                    predictedProjectiles: correlateProjectiles ? predictedProjectiles : null,
+                    userSession: correlateProjectiles ? userSession : null,
+                    acceptedPredictedProjectiles: correlateProjectiles ? acceptedPredictedProjectiles : null);
             }
-        }
 
-        if (_netManager.IsServer &&
-            _config.GetCVar(RMCCVars.RMCGunPrediction) &&
-            !HasComp<GunIgnorePredictionComponent>(gun) &&
-            predictedProjectiles != null &&
-            userSession != null)
-        {
-            var predictionIndex = 0;
-            foreach (var projectile in shotProjectiles)
+            // Taking physical ammo calls EnsureShootable and resets cartridge state on every replay,
+            // but Shoot only runs once. Mirror the authoritative state changes without replaying effects.
+            if (_netManager.IsClient && !Timing.IsFirstTimePredicted)
             {
-                if (!HasComp<ProjectileComponent>(projectile))
-                    continue;
-
-                if (predictionIndex >= predictedProjectiles.Count)
-                    break;
-
-                var clientId = predictedProjectiles[predictionIndex++];
-                var predicted = new PredictedProjectileServerComponent
+                foreach (var (ammoEntity, shootable) in ev.Ammo)
                 {
-                    Shooter = userSession,
-                    ClientId = clientId,
-                    ClientEnt = user,
-                };
-                AddComp(projectile, predicted, true);
-                Dirty(projectile, predicted);
-                acceptedPredictedProjectiles?.Add(clientId);
+                    if (ammoEntity is not { } ammoUid)
+                        continue;
+
+                    if (shootable is CartridgeAmmoComponent { Spent: false } cartridge)
+                    {
+                        SetCartridgeSpent(ammoUid, cartridge, true);
+                        if (cartridge.DeleteOnSpawn)
+                            PredictedQueueDel(ammoUid);
+                    }
+                    else if (shootable is AmmoComponent and not CartridgeAmmoComponent &&
+                             !HasComp<ProjectileComponent>(ammoUid))
+                    {
+                        RemoveShootable(ammoUid);
+                    }
+                }
+
+                if (!attemptEv.ThrowItems)
+                {
+                    ReplayPhysicalProjectiles(
+                        gun,
+                        ev.Ammo,
+                        fromCoordinates,
+                        toCoordinates.Value,
+                        user,
+                        recoilAngle);
+                }
+            }
+
+            // This state change must run during prediction replays. Shoot itself
+            // is first-time-only because it creates entities and presentation,
+            // but skipping replayed fuel debits lets near-empty flamers produce
+            // phantom client shots until the next authoritative state arrives.
+            if (!attemptEv.ThrowItems)
+            {
+                foreach (var (ammoEntity, shootable) in ev.Ammo)
+                {
+                    if (ammoEntity is { } flamerUid &&
+                        shootable is RMCFlamerAmmoProviderComponent flamer)
+                    {
+                        RMCFlamer.ConsumeFlamerFuel(
+                            (flamerUid, flamer),
+                            fromCoordinates,
+                            toCoordinates.Value);
+                    }
+                    else if (ammoEntity is { } sprayUid &&
+                             shootable is RMCSprayAmmoProviderComponent spray)
+                    {
+                        RMCFlamer.ConsumeSprayFuel((sprayUid, spray));
+                    }
+                }
             }
         }
 
@@ -599,7 +665,10 @@ public abstract partial class SharedGunSystem : EntitySystem
         out bool userImpulse,
         EntityUid? user = null,
         bool throwItems = false,
-        Angle? recoilAngle = null);
+        Angle? recoilAngle = null,
+        IReadOnlyList<int>? predictedProjectiles = null,
+        ICommonSession? userSession = null,
+        ISet<int>? acceptedPredictedProjectiles = null);
 
     protected virtual bool BeforeShoot(
         EntityUid? user,
@@ -607,6 +676,19 @@ public abstract partial class SharedGunSystem : EntitySystem
         List<(EntityUid? Entity, IShootable Shootable)> ammo)
     {
         return true;
+    }
+
+    /// <summary>
+    /// Restores simulation state for server-owned projectile ammunition after a client prediction rollback.
+    /// </summary>
+    protected virtual void ReplayPhysicalProjectiles(
+        Entity<GunComponent> gun,
+        IReadOnlyList<(EntityUid? Entity, IShootable Shootable)> ammo,
+        EntityCoordinates fromCoordinates,
+        EntityCoordinates toCoordinates,
+        EntityUid? user,
+        Angle recoilAngle)
+    {
     }
 
     protected Angle GetRecoilAngle(Entity<GunComponent> gun, TimeSpan curTime, Angle direction)
@@ -623,7 +705,9 @@ public abstract partial class SharedGunSystem : EntitySystem
         DirtyField(gun.AsNullable(), nameof(GunComponent.CurrentAngle));
         DirtyField(gun.AsNullable(), nameof(GunComponent.LastFire));
 
-        var seed = (long) Timing.CurTick.Value << 32 | (uint) GetNetEntity(gun).Id;
+        var seed = (long) gun.Comp.SpreadSequence << 32 | (uint) GetNetEntity(gun).Id;
+        gun.Comp.SpreadSequence++;
+        DirtyField(gun.AsNullable(), nameof(GunComponent.SpreadSequence));
         var random = new Xoroshiro64S(seed).NextFloat(-0.5f, 0.5f);
         var spread = gun.Comp.CurrentAngle.Theta * random;
         var angle = new Angle(direction.Theta + spread);
@@ -745,8 +829,23 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (sprite == null)
             return;
 
-        var ev = new MuzzleFlashEvent(GetNetEntity(gun), sprite, worldAngle);
-        CreateEffect(gun, ev, user);
+        var muzzleFlashOffset = component.MuzzleFlashOffset;
+        var muzzleFlashOriginOffset = Vector2.Zero;
+        if (TryComp(gun, out GunComponent? gunComp))
+        {
+            var beforeEv = new RMCBeforeMuzzleFlashEvent(gun, gunComp.ShootOriginOffset);
+            RaiseLocalEvent(gun, ref beforeEv);
+            gun = beforeEv.Weapon;
+            muzzleFlashOriginOffset = beforeEv.Offset;
+        }
+
+        var ev = new MuzzleFlashEvent(
+            GetNetEntity(gun),
+            sprite,
+            worldAngle,
+            muzzleFlashOffset,
+            muzzleFlashOriginOffset);
+        CreateEffect(gun, ev, gun, user, muzzleFlashOffset, muzzleFlashOriginOffset);
     }
 
     public void CauseImpulse(EntityCoordinates fromCoordinates, EntityCoordinates toCoordinates, Entity<PhysicsComponent> user)
@@ -836,9 +935,92 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
     }
 
-    protected abstract void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? user = null);
+    protected abstract void CreateEffect(
+        EntityUid gunUid,
+        MuzzleFlashEvent message,
+        EntityUid? tracked = null,
+        EntityUid? player = null,
+        Vector2 offset = default,
+        Vector2 originOffset = default);
 
-    public abstract void PlayImpactSound(EntityUid otherEntity, DamageSpecifier? modifiedDamage, SoundSpecifier? weaponSound, bool forceWeaponSound);
+    public void PlayImpactSound(
+        EntityUid otherEntity,
+        DamageSpecifier? modifiedDamage,
+        SoundSpecifier? weaponSound,
+        bool forceWeaponSound,
+        ICommonSession? excludedSession = null)
+    {
+        DebugTools.Assert(!Deleted(otherEntity), "Impact sound entity was deleted");
+
+        var filter = _netManager.IsClient
+            ? Filter.Local()
+            : Filter.Pvs(otherEntity, entityManager: EntityManager);
+        if (excludedSession != null)
+            filter.RemovePlayer(excludedSession);
+
+        if (filter.Count == 0)
+            return;
+
+        var (sound, varyPitch) = GetImpactSound(
+            otherEntity,
+            modifiedDamage,
+            weaponSound,
+            forceWeaponSound);
+        if (sound == null)
+            return;
+
+        var audioParams = varyPitch
+            ? AudioParams.Default.WithVariation(DamagePitchVariation)
+            : AudioParams.Default;
+        Audio.PlayEntity(sound, filter, otherEntity, true, audioParams);
+    }
+
+    public (SoundSpecifier? Sound, bool VaryPitch) GetImpactSound(
+        EntityUid otherEntity,
+        DamageSpecifier? modifiedDamage,
+        SoundSpecifier? weaponSound,
+        bool forceWeaponSound)
+    {
+        // Like projectiles and melee: prefer the target's material/damage sound,
+        // then fall back to the projectile's configured impact sound.
+        if (!forceWeaponSound &&
+            modifiedDamage != null &&
+            modifiedDamage.GetTotal() > 0 &&
+            TryComp(otherEntity, out RangedDamageSoundComponent? rangedSound))
+        {
+            var type = SharedMeleeWeaponSystem.GetHighestDamageSound(modifiedDamage, ProtoMan);
+            if (type != null &&
+                rangedSound.SoundTypes?.TryGetValue(type, out var damageSoundType) == true)
+            {
+                return (damageSoundType, true);
+            }
+
+            if (type != null &&
+                rangedSound.SoundGroups?.TryGetValue(type, out var damageSoundGroup) == true)
+            {
+                return (damageSoundGroup, true);
+            }
+        }
+
+        return (weaponSound, false);
+    }
+
+    public void PlayResolvedImpactSound(
+        EntityCoordinates coordinates,
+        SoundSpecifier? sound,
+        bool varyPitch)
+    {
+        if (sound == null)
+            return;
+
+        var filter = _netManager.IsClient
+            ? Filter.Local()
+            : Filter.Pvs(coordinates, entityMan: EntityManager);
+        var audioParams = varyPitch
+            ? AudioParams.Default.WithVariation(DamagePitchVariation)
+            : AudioParams.Default;
+        Audio.PlayStatic(sound, filter, coordinates, true, audioParams);
+    }
 
     /// <summary>
     /// Used for animated effects on the client.

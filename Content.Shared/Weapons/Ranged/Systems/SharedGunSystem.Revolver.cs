@@ -411,10 +411,12 @@ public partial class SharedGunSystem
                 args.Ammo.Add((ammoEnt.Value, EnsureComp<AmmoComponent>(ammoEnt.Value)));
             }
 
-            // Delete the cartridge entity on client
+            // Hide the cartridge immediately on the predicting client. Networked
+            // cartridges must be detached through the prediction-aware deletion
+            // path so state rollback can restore them safely.
             if (_netManager.IsClient)
             {
-                QueueDel(ammoEnt);
+                PredictedQueueDel(ammoEnt);
             }
         }
 

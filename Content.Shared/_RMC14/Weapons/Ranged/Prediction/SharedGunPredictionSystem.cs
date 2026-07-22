@@ -66,11 +66,14 @@ public abstract partial class SharedGunPredictionSystem : EntitySystem
         gun.ShootCoordinates = shootCoordinates;
         gun.Target = targetUid;
 #pragma warning restore RA0002
-        var shot = _gun.AttemptShootRequest(user.Value, (ent, gun), shootCoordinates, targetUid);
         if (continuous)
             _gun.ResetShotCounter(ent, gun);
 
-        return shot;
+        return _gun.AttemptShootRequest(
+            user.Value,
+            (ent, gun),
+            shootCoordinates,
+            targetUid);
     }
 
     protected bool IsSameMap(EntityUid entity, EntityUid other)

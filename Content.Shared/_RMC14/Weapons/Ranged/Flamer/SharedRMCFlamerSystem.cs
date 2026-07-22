@@ -15,10 +15,13 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
+using Content.Shared.Fluids;
+using Content.Shared.Fluids.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Temperature;
+using Content.Shared.Timing;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
@@ -51,6 +54,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
     [Dependency] private SolutionTransferSystem _solutionTransfer = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private UseDelaySystem _useDelay = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private RMCReagentSystem _reagent = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -69,6 +73,7 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
         SubscribeLocalEvent<RMCSprayAmmoProviderComponent, TakeAmmoEvent>(OnSprayTakeAmmo);
         SubscribeLocalEvent<RMCSprayAmmoProviderComponent, GetAmmoCountEvent>(OnSprayGetAmmoCount);
+        SubscribeLocalEvent<RMCSprayAmmoProviderComponent, AttemptShootEvent>(OnSprayAttemptShoot);
 
         SubscribeLocalEvent<RMCIgniterComponent, MapInitEvent>(OnIgniterMapInit, after: [typeof(SharedSolutionContainerSystem)]);
         SubscribeLocalEvent<RMCIgniterComponent, UniqueActionEvent>(OnIgniterUniqueAction);
@@ -221,6 +226,14 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
 
     private void OnSprayTakeAmmo(Entity<RMCSprayAmmoProviderComponent> ent, ref TakeAmmoEvent args)
     {
+        if (args.Shots <= 0 ||
+            ent.Comp.Cost <= FixedPoint2.Zero ||
+            !_solution.TryGetSolution(ent.Owner, ent.Comp.SolutionId, out var solutionEnt, out _) ||
+            solutionEnt.Value.Comp.Solution.Volume < ent.Comp.Cost)
+        {
+            return;
+        }
+
         args.Ammo.Add((ent, ent.Comp));
     }
 
@@ -230,8 +243,53 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             return;
 
         var solution = solutionEnt.Value.Comp.Solution;
-        args.Count = solution.Volume.Int();
-        args.Capacity = solution.MaxVolume.Int();
+        if (ent.Comp.Cost <= FixedPoint2.Zero)
+            return;
+
+        args.Count = (solution.Volume / ent.Comp.Cost).Int();
+        args.Capacity = (solution.MaxVolume / ent.Comp.Cost).Int();
+    }
+
+    private void OnSprayAttemptShoot(Entity<RMCSprayAmmoProviderComponent> ent, ref AttemptShootEvent args)
+    {
+        if (!TryComp(ent, out SprayComponent? spray))
+        {
+            CancelSprayShot(ref args);
+            return;
+        }
+
+        var sprayAttempt = new SprayAttemptEvent(args.User);
+        RaiseLocalEvent(ent.Owner, ref sprayAttempt);
+        if (sprayAttempt.Cancelled)
+        {
+            CancelSprayShot(ref args, sprayAttempt.CancelPopupMessage);
+            return;
+        }
+
+        if (ent.Comp.Cost <= FixedPoint2.Zero ||
+            !_solution.TryGetSolution(ent.Owner, ent.Comp.SolutionId, out var solutionEnt, out _) ||
+            solutionEnt.Value.Comp.Solution.Volume < ent.Comp.Cost)
+        {
+            CancelSprayShot(
+                ref args,
+                Loc.GetString(spray.SprayEmptyPopupMessage, ("entity", ent.Owner)));
+            return;
+        }
+
+        if (_useDelay.IsDelayed(ent.Owner) ||
+            args.ToCoordinates is not { } toCoordinates ||
+            !args.FromCoordinates.TryDelta(EntityManager, _transform, toCoordinates, out var delta) ||
+            delta.IsLengthZero())
+        {
+            CancelSprayShot(ref args);
+        }
+    }
+
+    private static void CancelSprayShot(ref AttemptShootEvent args, string? message = null)
+    {
+        args.Cancelled = true;
+        args.ResetCooldown = true;
+        args.Message = message;
     }
 
     private void OnIgniterMapInit(Entity<RMCIgniterComponent> ent, ref MapInitEvent args)
@@ -310,20 +368,10 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         EntityCoordinates fromCoordinates,
         EntityCoordinates toCoordinates)
     {
-        if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out var solution, out var reagent, out var tank))
+        if (!CanShootFlamer(flamer, fromCoordinates, toCoordinates, out var tiles, out _, out var reagent, out var tank))
             return;
 
         _audio.PlayPredicted(gun.Comp.SoundGunshotModified, gun, user);
-
-        //  333456
-        // 1233456
-        //  333456
-        var cost = tiles.Count;
-        if (reagent.FireSpread && cost > 2)
-            cost = (int)Math.Ceiling(cost / 3.0f);
-
-        solution.Value.Comp.Solution.RemoveSolution(flamer.Comp.CostPer * cost);
-        _solution.UpdateChemicals(solution.Value);
 
         if (_net.IsClient)
             return;
@@ -338,6 +386,39 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
         chainComp.FuelPressure = (int)flamer.Comp.CostPer;
 
         Dirty(chain, chainComp);
+    }
+
+    /// <summary>
+    /// Applies the replay-safe part of a flamer shot. Entity spawning, audio,
+    /// and other presentation stay in <see cref="ShootFlamer"/>, while this fuel
+    /// debit is repeated whenever the client prediction timeline is rebuilt.
+    /// </summary>
+    public void ConsumeFlamerFuel(
+        Entity<RMCFlamerAmmoProviderComponent> flamer,
+        EntityCoordinates fromCoordinates,
+        EntityCoordinates toCoordinates)
+    {
+        if (!CanShootFlamer(
+                flamer,
+                fromCoordinates,
+                toCoordinates,
+                out var tiles,
+                out var solution,
+                out var reagent,
+                out _))
+        {
+            return;
+        }
+
+        //  333456
+        // 1233456
+        //  333456
+        var cost = tiles.Count;
+        if (reagent.FireSpread && cost > 2)
+            cost = (int)Math.Ceiling(cost / 3.0f);
+
+        solution.Value.Comp.Solution.RemoveSolution(flamer.Comp.CostPer * cost);
+        _solution.UpdateChemicals(solution.Value);
     }
 
     public bool TryGetPreviewTiles(
@@ -418,6 +499,23 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
             return;
 
         _rmcSpray.Spray(spray, user.Value, _transform.ToMapCoordinates(toCoordinates), spray.Comp.HitUser);
+    }
+
+    /// <summary>
+    /// Keeps the predicting client's solution count in lockstep with the server
+    /// while the authoritative spray system creates and fills the vapor entities.
+    /// </summary>
+    public void ConsumeSprayFuel(Entity<RMCSprayAmmoProviderComponent> spray)
+    {
+        if (_net.IsServer ||
+            !_solution.TryGetSolution(spray.Owner, spray.Comp.SolutionId, out var solutionEnt, out _))
+        {
+            return;
+        }
+
+        solutionEnt.Value.Comp.Solution.RemoveSolution(spray.Comp.Cost);
+        _solution.UpdateChemicals(solutionEnt.Value);
+        _useDelay.TryResetDelay(spray.Owner);
     }
 
     /// <summary>

@@ -3,6 +3,7 @@ using Content.Server.Gravity;
 using Content.Server.Popups;
 using Content.Shared.CCVar;
 using Content.Shared.Chemistry.EntitySystems;
+using Content.Shared.FixedPoint;
 using Content.Shared.Fluids;
 using Content.Shared.Interaction;
 using Content.Shared.Timing;
@@ -82,6 +83,16 @@ public sealed partial class SpraySystem : SharedSpraySystem
 
     public override void Spray(Entity<SprayComponent> entity, MapCoordinates mapcoord, EntityUid? user = null)
     {
+        Spray(entity, mapcoord, user, predictedSound: false);
+    }
+
+    public void Spray(
+        Entity<SprayComponent> entity,
+        MapCoordinates mapcoord,
+        EntityUid? user,
+        bool predictedSound,
+        FixedPoint2? transferAmountOverride = null)
+    {
         if (!_solutionContainer.TryGetSolution(entity.Owner, entity.Comp.Solution, out var soln, out var solution))
             return;
 
@@ -103,6 +114,10 @@ public sealed partial class SpraySystem : SharedSpraySystem
                 _popupSystem.PopupEntity(Loc.GetString(entity.Comp.SprayEmptyPopupMessage, ("entity", entity)), entity.Owner, user.Value);
             return;
         }
+
+        var transferAmount = transferAmountOverride ?? entity.Comp.TransferAmount;
+        if (transferAmount <= FixedPoint2.Zero)
+            return;
 
         var sprayerXform = Transform(entity);
 
@@ -127,11 +142,19 @@ public sealed partial class SpraySystem : SharedSpraySystem
         var threeQuarters = diffNorm * 0.75f;
         var quarter = diffNorm * 0.25f;
 
-        var amount = Math.Max(Math.Min((solution.Volume / entity.Comp.TransferAmount).Int(), entity.Comp.VaporAmount), 1);
+        var amount = Math.Max(Math.Min((solution.Volume / transferAmount).Int(), entity.Comp.VaporAmount), 1);
         var spread = entity.Comp.VaporSpread / amount;
+        var remainingTransfer = FixedPoint2.Min(transferAmount, solution.Volume);
+        var legacyAdjustedSolutionAmount = entity.Comp.TransferAmount / entity.Comp.VaporAmount;
 
         for (var i = 0; i < amount; i++)
         {
+            // FixedPoint2 division truncates, so recompute the RMC share from the
+            // remainder each iteration. This makes the final authoritative debit
+            // exactly match the fixed predicted cost.
+            var adjustedSolutionAmount = transferAmountOverride != null
+                ? remainingTransfer / (amount - i)
+                : legacyAdjustedSolutionAmount;
             var rotation = new Angle(diffAngle + Angle.FromDegrees(spread * i) -
                                      Angle.FromDegrees(spread * (amount - 1) / 2));
 
@@ -143,8 +166,6 @@ public sealed partial class SpraySystem : SharedSpraySystem
             if (distance > entity.Comp.SprayDistance)
                 target = sprayerMapPos.Offset(diffNorm * entity.Comp.SprayDistance);
 
-            var adjustedSolutionAmount = entity.Comp.TransferAmount / entity.Comp.VaporAmount;
-
             // Spawn the vapor cloud onto the grid/map the user is present on. Offset the start position based on how far the target destination is.
             var vaporPos = sprayerMapPos.Offset(distance < 1 ? quarter : threeQuarters);
             var vapor = Spawn(entity.Comp.SprayedPrototype, vaporPos);
@@ -154,6 +175,8 @@ public sealed partial class SpraySystem : SharedSpraySystem
             _transform.SetWorldRotation(vaporXform, rotation);
 
             _vapor.TryAddSolution(vapor, soln.Value, adjustedSolutionAmount);
+            if (transferAmountOverride != null)
+                remainingTransfer -= adjustedSolutionAmount;
 
             // impulse direction is defined in world-coordinates, not local coordinates
             var impulseDirection = rotation.ToVec();
@@ -186,7 +209,11 @@ public sealed partial class SpraySystem : SharedSpraySystem
             }
         }
 
-        _audio.PlayPvs(entity.Comp.SpraySound, entity, entity.Comp.SpraySound.Params.WithVariation(0.125f));
+        var audioParams = entity.Comp.SpraySound.Params.WithVariation(0.125f);
+        if (predictedSound)
+            _audio.PlayPredicted(entity.Comp.SpraySound, entity, user, audioParams);
+        else
+            _audio.PlayPvs(entity.Comp.SpraySound, entity, audioParams);
 
         _useDelay.TryResetDelay(entity);
     }

@@ -15,48 +15,33 @@ using ServerGunSystem = Content.Server.Weapons.Ranged.Systems.GunSystem;
 namespace Content.IntegrationTests._RMC14.Weapons.Ranged;
 
 [TestFixture]
-[TestOf(typeof(Content.Client.Weapons.Ranged.Systems.GunSystem))]
-public sealed class RMCDeleteOnSpawnCartridgePredictionTest
+[TestOf(typeof(GunPredictionSystem))]
+public sealed class RMCPhysicalAmmoPredictionRollbackTest
 {
     [TestPrototypes]
     private const string Prototypes = """
         - type: entity
           parent: BaseItem
-          id: RMCDeleteOnSpawnCartridgePredictionGun
+          id: RMCPhysicalAmmoPredictionRollbackGun
           components:
           - type: Gun
-            fireRate: 1
-            projectileSpeed: 0.01
+            fireRate: 30
+            projectileSpeed: 10
             resetOnHandSelected: false
             soundGunshot: null
             soundEmpty: null
           - type: BallisticAmmoProvider
             capacity: 1
             whitelist:
-              tags:
-              - Cartridge
-
-        - type: entity
-          parent: BaseCartridge
-          id: RMCDeleteOnSpawnCartridgePredictionAmmo
-          components:
-          - type: CartridgeAmmo
-            proto: RMCDeleteOnSpawnCartridgePredictionProjectile
-            deleteOnSpawn: true
-          - type: Appearance
-
-        - type: entity
-          parent: BaseBullet
-          id: RMCDeleteOnSpawnCartridgePredictionProjectile
-          components:
-          - type: Projectile
-            deleteOnCollide: false
-            impactEffect: null
-            soundHit: null
+              components:
+              - Ammo
+          - type: ContainerContainer
+            containers:
+              ballistic-ammo: !type:Container
         """;
 
     [Test]
-    public async Task DeleteOnSpawnCartridgeDoesNotAppearEjectedDuringPrediction()
+    public async Task NetworkedThrownAmmoSurvivesPredictionRollback()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -70,19 +55,19 @@ public sealed class RMCDeleteOnSpawnCartridgePredictionTest
         var playerManager = server.ResolveDependency<IPlayerManager>();
         var serverSession = playerManager.Sessions.Single();
         var map = await pair.CreateTestMap();
+        EntityUid serverAmmo = default;
         EntityUid serverGun = default;
-        EntityUid serverCartridge = default;
 
         await server.WaitPost(() =>
         {
             var player = serverEntMan.SpawnEntity("MobHuman", map.GridCoords);
             Assert.That(playerManager.SetAttachedEntity(serverSession, player), Is.True);
-            serverGun = serverEntMan.SpawnEntity("RMCDeleteOnSpawnCartridgePredictionGun", map.GridCoords);
-            serverCartridge = serverEntMan.SpawnEntity("RMCDeleteOnSpawnCartridgePredictionAmmo", map.GridCoords);
+            serverGun = serverEntMan.SpawnEntity("RMCPhysicalAmmoPredictionRollbackGun", map.GridCoords);
+            serverAmmo = serverEntMan.SpawnEntity("BulletFoam", map.GridCoords);
 
             var gun = server.System<ServerGunSystem>();
             var provider = serverEntMan.GetComponent<BallisticAmmoProviderComponent>(serverGun);
-            Assert.That(gun.TryBallisticInsert((serverGun, provider), serverCartridge, null, true), Is.True);
+            Assert.That(gun.TryBallisticInsert((serverGun, provider), serverAmmo, null, true), Is.True);
             Assert.That(server.System<SharedHandsSystem>().TryPickup(player, serverGun), Is.True);
             server.System<SharedCombatModeSystem>().SetInCombatMode(player, true);
         });
@@ -91,7 +76,8 @@ public sealed class RMCDeleteOnSpawnCartridgePredictionTest
         var clientPlayer = client.Session?.AttachedEntity ??
             throw new AssertionException("The client must have an attached entity.");
         var clientGun = clientEntMan.GetEntity(serverEntMan.GetNetEntity(serverGun));
-        var clientCartridge = clientEntMan.GetEntity(serverEntMan.GetNetEntity(serverCartridge));
+        var ammoNetEntity = serverEntMan.GetNetEntity(serverAmmo);
+        var clientAmmo = clientEntMan.GetEntity(ammoNetEntity);
 
         await client.WaitPost(() =>
         {
@@ -105,11 +91,11 @@ public sealed class RMCDeleteOnSpawnCartridgePredictionTest
 
             Assert.Multiple(() =>
             {
-                Assert.That(projectiles, Has.Count.EqualTo(1));
+                Assert.That(projectiles, Has.Count.Zero);
                 Assert.That(
-                    clientEntMan.IsQueuedForDeletion(clientCartridge),
+                    clientEntMan.EntityExists(clientAmmo),
                     Is.True,
-                    "A cartridge deleted by the server must be hidden by client prediction.");
+                    "Prediction must not hard-delete server-owned physical ammunition.");
             });
 
             clientEntMan.RaisePredictiveEvent(new RequestShootEvent
@@ -122,33 +108,6 @@ public sealed class RMCDeleteOnSpawnCartridgePredictionTest
         });
 
         await client.WaitRunTicks(1);
-        await client.WaitAssertion(() =>
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(clientEntMan.EntityExists(clientCartridge), Is.True);
-                Assert.That(
-                    clientEntMan.GetComponent<TransformComponent>(clientCartridge).MapID,
-                    Is.EqualTo(MapId.Nullspace));
-            });
-        });
-
-        // The request has not reached the server yet, but receiving a server tick forces
-        // the client to roll back and replay the shot from its pending predictive event.
-        await server.WaitRunTicks(1);
-        await client.WaitRunTicks(1);
-        await client.WaitAssertion(() =>
-        {
-            Assert.Multiple(() =>
-            {
-                Assert.That(clientEntMan.EntityExists(clientCartridge), Is.True);
-                Assert.That(
-                    clientEntMan.GetComponent<TransformComponent>(clientCartridge).MapID,
-                    Is.EqualTo(MapId.Nullspace),
-                    "Rollback replay must keep a delete-on-spawn cartridge hidden.");
-            });
-        });
-
         for (var i = 0; i < 5; i++)
         {
             await server.WaitRunTicks(1);
@@ -157,13 +116,12 @@ public sealed class RMCDeleteOnSpawnCartridgePredictionTest
 
         await client.WaitAssertion(() =>
         {
-            if (!clientEntMan.EntityExists(clientCartridge))
-                return;
-
-            Assert.That(
-                clientEntMan.GetComponent<TransformComponent>(clientCartridge).MapID,
-                Is.EqualTo(MapId.Nullspace),
-                "The authoritative deletion must not leave an ejected cartridge behind.");
+            var authoritativeAmmo = clientEntMan.GetEntity(ammoNetEntity);
+            Assert.Multiple(() =>
+            {
+                Assert.That(clientEntMan.EntityExists(authoritativeAmmo), Is.True);
+                Assert.That(clientEntMan.HasComponent<AmmoComponent>(authoritativeAmmo), Is.False);
+            });
         });
 
         await pair.CleanReturnAsync();
