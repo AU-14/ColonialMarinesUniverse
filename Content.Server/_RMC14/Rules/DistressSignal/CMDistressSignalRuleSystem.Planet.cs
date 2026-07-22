@@ -10,12 +10,15 @@ using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._RMC14.WeedKiller;
 using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared.Chat;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Random;
+using Robust.Shared.Utility;
 
 namespace Content.Server._RMC14.Rules.DistressSignal;
 
 public sealed partial class CMDistressSignalRuleSystem
 {
+    private PreloadedPlanetMap? _preloadedPlanetMap;
 
     /// <summary>
     /// Loads the planet map, initializes ambient light, miasma, and tunnel systems.
@@ -31,15 +34,30 @@ public sealed partial class CMDistressSignalRuleSystem
             _lastPlanetMaps.Dequeue();
         }
 
-        if (!_mapLoader.TryLoadMap(planet.Comp.Map, out var mapNullable, out var grids))
-            return false;
+        Entity<MapComponent> map;
+        HashSet<Entity<MapGridComponent>> grids;
+        if (TryTakePreloadedPlanetMap(planet, out var preloaded))
+        {
+            map = preloaded.Map;
+            grids = preloaded.Grids;
+        }
+        else
+        {
+            if (!_mapLoader.TryLoadMap(planet.Comp.Map, out var mapNullable, out var loadedGrids))
+                return false;
 
-        var map = mapNullable.Value;
+            map = mapNullable.Value;
+            grids = loadedGrids;
+        }
+
         EnsureComp<RMCPlanetComponent>(map);
         EnsureComp<TacticalMapComponent>(map);
 
         if (grids.Count == 0)
+        {
+            QueueDel(map);
             return false;
+        }
 
         if (grids.Count > 1)
             Log.Error("Multiple planet-side grids found");
@@ -89,6 +107,66 @@ public sealed partial class CMDistressSignalRuleSystem
         return true;
     }
 
+    /// <summary>
+    /// Deserializes the selected planet during the ticker's pre-round map-loading window.
+    /// Map initialization remains at round start so map-init behavior is unchanged.
+    /// </summary>
+    private void PreloadPlanetMap(RMCPlanet planet)
+    {
+        ClearPreloadedPlanetMap();
+
+        if (!_mapLoader.TryLoadMap(planet.Comp.Map, out var map, out var grids))
+        {
+            Log.Error($"Failed to preload planet map {planet.Comp.Map}");
+            return;
+        }
+
+        if (grids.Count == 0)
+        {
+            Log.Error($"Planet map {planet.Comp.Map} did not contain a grid");
+            QueueDel(map.Value);
+            return;
+        }
+
+        _preloadedPlanetMap = new PreloadedPlanetMap(planet.Comp.Map, map.Value, grids);
+    }
+
+    private bool ShouldPreloadPlanetMap()
+    {
+        foreach (var rule in GameTicker.GetAddedGameRules<CMDistressSignalRuleComponent>())
+        {
+            if (rule.Comp.SpawnPlanet)
+                return true;
+        }
+
+        return false;
+    }
+
+    private bool TryTakePreloadedPlanetMap(RMCPlanet planet, out PreloadedPlanetMap preloaded)
+    {
+        if (_preloadedPlanetMap is not { } cached ||
+            cached.Path != planet.Comp.Map ||
+            TerminatingOrDeleted(cached.Map) ||
+            cached.Grids.Any(grid => TerminatingOrDeleted(grid.Owner)))
+        {
+            ClearPreloadedPlanetMap();
+            preloaded = default;
+            return false;
+        }
+
+        _preloadedPlanetMap = null;
+        preloaded = cached;
+        return true;
+    }
+
+    private void ClearPreloadedPlanetMap()
+    {
+        if (_preloadedPlanetMap is { } preloaded && !TerminatingOrDeleted(preloaded.Map))
+            QueueDel(preloaded.Map);
+
+        _preloadedPlanetMap = null;
+    }
+
     private RMCPlanet SelectRandomPlanet()
     {
         if (SelectedPlanetMap != null)
@@ -110,7 +188,15 @@ public sealed partial class CMDistressSignalRuleSystem
     /// <param name="planet">The planet to use for this round.</param>
     public void SetPlanet(RMCPlanet planet)
     {
+        var replacePreload = _preloadedPlanetMap is { } preloaded && preloaded.Path != planet.Comp.Map;
+        if (replacePreload)
+            ClearPreloadedPlanetMap();
+
         SelectedPlanetMap = planet;
+
+        // A vote or admin command can replace the selection after LoadingMapsEvent has already run.
+        if (replacePreload)
+            PreloadPlanetMap(planet);
     }
 
     /// <summary>
@@ -208,7 +294,7 @@ public sealed partial class CMDistressSignalRuleSystem
             }
 
             _carryoverVotes[picked.Proto.ID] = 0;
-            SelectedPlanetMap = picked;
+            SetPlanet(picked);
         };
         _currentVote.OnCancelled += _ => _currentVote = null;
     }
@@ -229,4 +315,9 @@ public sealed partial class CMDistressSignalRuleSystem
     {
         _currentVote?.Cancel();
     }
+
+    private readonly record struct PreloadedPlanetMap(
+        ResPath Path,
+        Entity<MapComponent> Map,
+        HashSet<Entity<MapGridComponent>> Grids);
 }

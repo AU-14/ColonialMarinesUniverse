@@ -1976,12 +1976,16 @@ public sealed partial class IntelSystem : EntitySystem
                 _popup.PopupEntity(Loc.GetString("rmc-intel-disk-reader-finished"), uid, completedUserId);
         }
 
+        var processStartedAt = _timing.RealTime;
         if (_activePositionIntels.Count > 0)
         {
-            while (_activePositionIntels.TryDequeue(out var intel))
+            while (true)
             {
-                if (_timing.CurTime >= time + _maxProcessTime)
+                if (_timing.RealTime >= processStartedAt + _maxProcessTime)
                     return;
+
+                if (!_activePositionIntels.TryDequeue(out var intel))
+                    break;
 
                 if (TerminatingOrDeleted(intel))
                     continue;
@@ -2013,10 +2017,13 @@ public sealed partial class IntelSystem : EntitySystem
 
         if (_activeSurvivorIntels.Count > 0)
         {
-            while (_activeSurvivorIntels.TryDequeue(out var intel))
+            while (true)
             {
-                if (_timing.CurTime >= time + _maxProcessTime)
+                if (_timing.RealTime >= processStartedAt + _maxProcessTime)
                     return;
+
+                if (!_activeSurvivorIntels.TryDequeue(out var intel))
+                    break;
 
                 if (TerminatingOrDeleted(intel))
                     continue;
@@ -2038,10 +2045,13 @@ public sealed partial class IntelSystem : EntitySystem
 
         if (_activeCorpseIntels.Count > 0)
         {
-            while (_activeCorpseIntels.TryDequeue(out var intel))
+            while (true)
             {
-                if (_timing.CurTime >= time + _maxProcessTime)
+                if (_timing.RealTime >= processStartedAt + _maxProcessTime)
                     return;
+
+                if (!_activeCorpseIntels.TryDequeue(out var intel))
+                    break;
 
                 if (TerminatingOrDeleted(intel))
                     continue;

@@ -251,6 +251,8 @@ public sealed partial class CMDistressSignalRuleSystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         InvalidateActiveRule();
+        ClearPreloadedPlanetMap();
+        ClearPreloadedAdminMaps();
         StartPlanetVote();
         ResetSelectedPlanet();
         _spawnedDropships = false;

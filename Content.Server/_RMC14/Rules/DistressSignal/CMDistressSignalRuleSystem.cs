@@ -309,7 +309,11 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
     private void OnMapLoading(LoadingMapsEvent ev)
     {
-        SelectRandomPlanet();
+        var planet = SelectRandomPlanet();
+        if (ShouldPreloadPlanetMap())
+            PreloadPlanetMap(planet);
+
+        PreloadAdminAreas();
         GameTicker.UpdateInfoText();
     }
 

@@ -246,12 +246,16 @@ public sealed partial class AreaInfoSystem : EntitySystem
             return;
 
         var time = _timing.CurTime;
+        var processStartedAt = _timing.RealTime;
         if (_marineAlertCopyQueue.Count > 0)
         {
-            while (_marineAlertCopyQueue.TryDequeue(out var ent))
+            while (true)
             {
-                if (_timing.CurTime >= time + _maxProcessTime)
+                if (_timing.RealTime >= processStartedAt + _maxProcessTime)
                     return;
+
+                if (!_marineAlertCopyQueue.TryDequeue(out var ent))
+                    break;
 
                 if (TerminatingOrDeleted(ent))
                     continue;

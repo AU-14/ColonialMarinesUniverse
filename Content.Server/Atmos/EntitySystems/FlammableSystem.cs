@@ -56,12 +56,18 @@ namespace Content.Server.Atmos.EntitySystems
 
         private static readonly TimeSpan UpdateTime = TimeSpan.FromSeconds(1);
 
+        private readonly HashSet<Entity<FlammableComponent>> _activeFlammables = new();
+        private readonly HashSet<Entity<FlammableComponent>> _activeFlammablesToAdd = new();
+        private readonly HashSet<Entity<FlammableComponent>> _activeFlammablesToRemove = new();
         private readonly Dictionary<Entity<FlammableComponent>, float> _fireEvents = new();
+
+        private bool _updatingFlammables;
 
         public override void Initialize()
         {
             UpdatesAfter.Add(typeof(AtmosphereSystem));
 
+            SubscribeLocalEvent<FlammableComponent, ComponentRemove>(OnRemove);
             SubscribeLocalEvent<FlammableComponent, MapInitEvent>(OnMapInit);
             SubscribeLocalEvent<FlammableComponent, InteractUsingEvent>(OnInteractUsing);
             SubscribeLocalEvent<FlammableComponent, StartCollideEvent>(OnCollide);
@@ -79,6 +85,17 @@ namespace Content.Server.Atmos.EntitySystems
             SubscribeLocalEvent<ExtinguishOnInteractComponent, ActivateInWorldEvent>(OnExtinguishActivateInWorld);
 
             SubscribeLocalEvent<IgniteOnHeatDamageComponent, DamageChangedEvent>(OnDamageChanged);
+        }
+
+        public override void Shutdown()
+        {
+            base.Shutdown();
+
+            _activeFlammables.Clear();
+            _activeFlammablesToAdd.Clear();
+            _activeFlammablesToRemove.Clear();
+            _fireEvents.Clear();
+            _updatingFlammables = false;
         }
 
         private void OnExtinguishEvent(Entity<FlammableComponent> ent, ref ExtinguishEvent args)
@@ -134,6 +151,7 @@ namespace Content.Server.Atmos.EntitySystems
         private void OnMapInit(EntityUid uid, FlammableComponent component, MapInitEvent args)
         {
             component.NextUpdate = _timing.CurTime + UpdateTime;
+            UpdateActiveState((uid, component));
 
             // Sets up a fixture for flammable collisions.
             // TODO: Should this be generalized into a general non-hard 'effects' fixture or something? I can't think of other use cases for it.
@@ -144,6 +162,14 @@ namespace Content.Server.Atmos.EntitySystems
 
             _fixture.TryCreateFixture(uid, component.FlammableCollisionShape, component.FlammableFixtureID, density: 0,
                 hard: false, collisionMask: (int)CollisionGroup.FullTileLayer, body: body);
+        }
+
+        private void OnRemove(Entity<FlammableComponent> ent, ref ComponentRemove args)
+        {
+            SetActive(ent, false);
+
+            if (!_updatingFlammables)
+                _fireEvents.Remove(ent);
         }
 
         private void OnInteractUsing(EntityUid uid, FlammableComponent flammable, InteractUsingEvent args)
@@ -305,6 +331,8 @@ namespace Content.Server.Atmos.EntitySystems
                 flammable.OnFire |= ignite;
                 UpdateAppearance(uid, flammable);
             }
+
+            UpdateActiveState((uid, flammable));
         }
 
         public void Extinguish(EntityUid uid, FlammableComponent? flammable = null)
@@ -324,7 +352,9 @@ namespace Content.Server.Atmos.EntitySystems
             var extinguished = new ExtinguishedEvent();
             RaiseLocalEvent(uid, ref extinguished);
 
+            _alertsSystem.ClearAlert(uid, flammable.FireAlert);
             UpdateAppearance(uid, flammable);
+            UpdateActiveState((uid, flammable));
         }
 
         public void Ignite(EntityUid uid, EntityUid ignitionSource, FlammableComponent? flammable = null,
@@ -351,6 +381,7 @@ namespace Content.Server.Atmos.EntitySystems
             }
 
             UpdateAppearance(uid, flammable);
+            UpdateActiveState((uid, flammable));
         }
 
         private void OnDamageChanged(EntityUid uid, IgniteOnHeatDamageComponent component, DamageChangedEvent args)
@@ -388,89 +419,177 @@ namespace Content.Server.Atmos.EntitySystems
                 return;
 
             flammable.ResistCompleteTime = _timing.CurTime + flammable.ResistTime;
+            UpdateActiveState((uid, flammable));
 
             _popup.PopupEntity(Loc.GetString("flammable-component-resist-message"), uid, uid);
             _stunSystem.TryUpdateParalyzeDuration(uid, flammable.ResistTime);
         }
 
+        private void UpdateActiveState(Entity<FlammableComponent> ent)
+        {
+            var active = !ent.Comp.Deleted &&
+                (ent.Comp.OnFire || ent.Comp.FireStacks < 0 || ent.Comp.Resisting);
+            SetActive(ent, active);
+        }
+
+        private void SetActive(Entity<FlammableComponent> ent, bool active)
+        {
+            var wasActive = _activeFlammables.Contains(ent);
+            if (_updatingFlammables)
+            {
+                if (_activeFlammablesToRemove.Contains(ent))
+                    wasActive = false;
+                else if (_activeFlammablesToAdd.Contains(ent))
+                    wasActive = true;
+            }
+
+            if (active && !wasActive)
+                ent.Comp.NextUpdate = _timing.CurTime + UpdateTime;
+
+            if (active == wasActive)
+                return;
+
+            if (!_updatingFlammables)
+            {
+                if (active)
+                    _activeFlammables.Add(ent);
+                else
+                    _activeFlammables.Remove(ent);
+
+                return;
+            }
+
+            if (active)
+            {
+                _activeFlammablesToRemove.Remove(ent);
+                _activeFlammablesToAdd.Add(ent);
+            }
+            else
+            {
+                _activeFlammablesToAdd.Remove(ent);
+                _activeFlammablesToRemove.Add(ent);
+            }
+        }
+
+        private void ApplyPendingActiveChanges()
+        {
+            foreach (var ent in _activeFlammablesToRemove)
+            {
+                _activeFlammables.Remove(ent);
+            }
+
+            foreach (var ent in _activeFlammablesToAdd)
+            {
+                if (!ent.Comp.Deleted)
+                    _activeFlammables.Add(ent);
+            }
+
+            _activeFlammablesToRemove.Clear();
+            _activeFlammablesToAdd.Clear();
+        }
+
         public override void Update(float frameTime)
         {
-            // process all fire events
-            foreach (var (flammable, deltaTemp) in _fireEvents)
+            _updatingFlammables = true;
+            try
             {
-                // 100 -> 1, 200 -> 2, 400 -> 3...
-                var fireStackMod = Math.Max(MathF.Log2(deltaTemp / 100) + 1, 0);
-                var fireStackDelta = fireStackMod - flammable.Comp.FireStacks;
-                var flammableEntity = flammable.Owner;
-                if (fireStackDelta > 0)
+                // process all fire events
+                foreach (var (flammable, deltaTemp) in _fireEvents)
                 {
-                    AdjustFireStacks(flammableEntity, fireStackDelta, flammable);
-                }
-                Ignite(flammableEntity, flammableEntity, flammable);
-            }
-            _fireEvents.Clear();
+                    if (flammable.Comp.Deleted || TerminatingOrDeleted(flammable.Owner))
+                        continue;
 
-            var curTime = _timing.CurTime;
-
-            // TODO: This needs cleanup to take off the crust from TemperatureComponent and shit.
-            var query = EntityQueryEnumerator<FlammableComponent, TransformComponent>();
-            while (query.MoveNext(out var uid, out var flammable, out _))
-            {
-                if (curTime < flammable.NextUpdate)
-                    continue;
-
-                flammable.NextUpdate += UpdateTime;
-
-                // Check if we finished resisting.
-                if (curTime > flammable.ResistCompleteTime)
-                    flammable.ResistCompleteTime = null;
-
-                // Slowly dry ourselves off if wet.
-                if (flammable.FireStacks < 0)
-                {
-                    flammable.FireStacks = MathF.Min(0, flammable.FireStacks + 1);
-                }
-
-                if (!flammable.OnFire)
-                {
-                    _alertsSystem.ClearAlert(uid, flammable.FireAlert);
-                    continue;
-                }
-
-                _alertsSystem.ShowAlert(uid, flammable.FireAlert);
-
-                if (flammable.FireStacks > 0)
-                {
-                    var air = _atmosphereSystem.GetContainingMixture(uid);
-
-                    // If we're in an oxygenless environment, put the fire out.
-                    if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
+                    // 100 -> 1, 200 -> 2, 400 -> 3...
+                    var fireStackMod = Math.Max(MathF.Log2(deltaTemp / 100) + 1, 0);
+                    var fireStackDelta = fireStackMod - flammable.Comp.FireStacks;
+                    var flammableEntity = flammable.Owner;
+                    if (fireStackDelta > 0)
                     {
-                        Extinguish(uid, flammable);
+                        AdjustFireStacks(flammableEntity, fireStackDelta, flammable);
+                    }
+                    Ignite(flammableEntity, flammableEntity, flammable);
+                }
+                _fireEvents.Clear();
+
+                var curTime = _timing.CurTime;
+
+                // TODO: This needs cleanup to take off the crust from TemperatureComponent and shit.
+                foreach (var ent in _activeFlammables)
+                {
+                    var (uid, flammable) = ent;
+                    if (flammable.Deleted || TerminatingOrDeleted(uid))
+                    {
+                        SetActive(ent, false);
                         continue;
                     }
 
-                    var source = EnsureComp<IgnitionSourceComponent>(uid);
-                    _ignitionSourceSystem.SetIgnited((uid, source));
+                    if (Paused(uid))
+                        continue;
 
-                    if (TryComp(uid, out TemperatureComponent? temp))
-                        _temperatureSystem.ChangeHeat(uid, 12500 * flammable.FireStacks, false, temp);
+                    if (curTime < flammable.NextUpdate)
+                        continue;
 
-                    var ev = new GetFireProtectionEvent();
-                    // let the thing on fire handle it
-                    RaiseLocalEvent(uid, ref ev);
-                    // and whatever it's wearing
-                    if (_inventoryQuery.TryComp(uid, out var inv))
-                        _inventory.RelayEvent((uid, inv), ref ev);
+                    flammable.NextUpdate += UpdateTime;
 
-                    _damageableSystem.TryChangeDamage(uid, flammable.Damage * flammable.FireStacks * ev.Multiplier, interruptsDoAfters: false);
+                    // Check if we finished resisting.
+                    if (curTime > flammable.ResistCompleteTime)
+                        flammable.ResistCompleteTime = null;
 
-                    AdjustFireStacks(uid, flammable.FirestackFade * (flammable.Resisting ? 15f : 1f), flammable, flammable.OnFire);
+                    // Slowly dry ourselves off if wet.
+                    if (flammable.FireStacks < 0)
+                    {
+                        flammable.FireStacks = MathF.Min(0, flammable.FireStacks + 1);
+                    }
+
+                    if (!flammable.OnFire)
+                    {
+                        _alertsSystem.ClearAlert(uid, flammable.FireAlert);
+                        UpdateActiveState(ent);
+                        continue;
+                    }
+
+                    _alertsSystem.ShowAlert(uid, flammable.FireAlert);
+
+                    if (flammable.FireStacks > 0)
+                    {
+                        var air = _atmosphereSystem.GetContainingMixture(uid);
+
+                        // If we're in an oxygenless environment, put the fire out.
+                        if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
+                        {
+                            Extinguish(uid, flammable);
+                            continue;
+                        }
+
+                        var source = EnsureComp<IgnitionSourceComponent>(uid);
+                        _ignitionSourceSystem.SetIgnited((uid, source));
+
+                        if (TryComp(uid, out TemperatureComponent? temp))
+                            _temperatureSystem.ChangeHeat(uid, 12500 * flammable.FireStacks, false, temp);
+
+                        var ev = new GetFireProtectionEvent();
+                        // let the thing on fire handle it
+                        RaiseLocalEvent(uid, ref ev);
+                        // and whatever it's wearing
+                        if (_inventoryQuery.TryComp(uid, out var inv))
+                            _inventory.RelayEvent((uid, inv), ref ev);
+
+                        _damageableSystem.TryChangeDamage(uid, flammable.Damage * flammable.FireStacks * ev.Multiplier, interruptsDoAfters: false);
+
+                        AdjustFireStacks(uid, flammable.FirestackFade * (flammable.Resisting ? 15f : 1f), flammable, flammable.OnFire);
+                    }
+                    else
+                    {
+                        Extinguish(uid, flammable);
+                    }
+
+                    UpdateActiveState(ent);
                 }
-                else
-                {
-                    Extinguish(uid, flammable);
-                }
+            }
+            finally
+            {
+                _updatingFlammables = false;
+                ApplyPendingActiveChanges();
             }
         }
     }

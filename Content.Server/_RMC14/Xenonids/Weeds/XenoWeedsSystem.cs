@@ -75,9 +75,10 @@ public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
         base.Update(frameTime);
 
         var time = _timing.CurTime;
+        var processStartedAt = _timing.RealTime;
         for (var i = _spread.Count - 1; i >= 0; i--)
         {
-            if (_timing.CurTime - time > _maxProcessTime)
+            if (_timing.RealTime - processStartedAt > _maxProcessTime)
                 return;
 
             var (uid, weeds) = _spread[i];

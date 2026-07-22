@@ -740,9 +740,10 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
         try
         {
-            var time = _timing.CurTime;
+            var processStartedAt = _timing.RealTime;
             if (_toProcess.Count > 0)
             {
+                _toRemove.Clear();
                 foreach (var (squadId, membersQueue) in _toProcess)
                 {
                     if (TerminatingOrDeleted(squadId))
@@ -755,9 +756,12 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
                     if (_squad.TryGetSquadLeader(squadId, out var leader))
                         leaderCoords = TransformSystem.GetMapCoordinates(leader);
 
-                    while (membersQueue.TryDequeue(out var member))
+                    while (true)
                     {
-                        if (_timing.CurTime > time + _maxProcessTime)
+                        if (_timing.RealTime > processStartedAt + _maxProcessTime)
+                            break;
+
+                        if (!membersQueue.TryDequeue(out var member))
                             break;
 
                         if (TerminatingOrDeleted(member))
@@ -812,6 +816,9 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
                     if (membersQueue.Count == 0)
                         _toRemove.Add(squadId);
+
+                    if (_timing.RealTime > processStartedAt + _maxProcessTime)
+                        break;
                 }
 
                 foreach (var squad in _toRemove)
@@ -835,6 +842,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         catch
         {
             _toProcess.Clear();
+            _toRemove.Clear();
             throw;
         }
     }

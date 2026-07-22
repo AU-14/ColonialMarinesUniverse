@@ -40,6 +40,8 @@
       - map: ["enum.SolutionContainerLayers.Fill"]
         state: icon-3
         visible: false
+  - type: SolutionContainerVisuals
+    fillBaseName: icon-
   - type: Item
     size: Small
   - type: DamageOnLand

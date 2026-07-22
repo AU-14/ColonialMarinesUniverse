@@ -13,6 +13,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Fax.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -23,6 +24,8 @@ namespace Content.Server._RMC14.Rules.DistressSignal;
 public sealed partial class CMDistressSignalRuleSystem
 {
     private const int FaxPowerLoadValue = 5;
+
+    private readonly Dictionary<ResPath, Queue<Entity<MapComponent>>> _preloadedAdminMaps = new();
 
     /// <summary>
     /// Checks whether a player is allowed to play the specified job, considering bans and playtime requirements.
@@ -73,6 +76,13 @@ public sealed partial class CMDistressSignalRuleSystem
                 if (string.IsNullOrWhiteSpace(path.ToString()))
                     return false;
 
+                if (TryTakePreloadedAdminMap(path, out var preloadedMap))
+                {
+                    _mapSystem.InitializeMap(preloadedMap.Owner);
+                    mapEntityUid = preloadedMap.Owner;
+                    return true;
+                }
+
                 if (!_mapLoader.TryLoadMap(path, out var map, out _))
                     return false;
 
@@ -95,6 +105,78 @@ public sealed partial class CMDistressSignalRuleSystem
 
         if (SpawnMap(comp.Thunderdome, out var mapEnt))
             EnsureComp<ThunderdomeMapComponent>(mapEnt.Value);
+    }
+
+    private void PreloadAdminAreas()
+    {
+        ClearPreloadedAdminMaps();
+
+        foreach (var rule in GameTicker.GetAddedGameRules<CMDistressSignalRuleComponent>())
+        {
+            foreach (var map in rule.Comp.AuxiliaryMaps)
+            {
+                PreloadAdminMap(new ResPath(map));
+            }
+
+            PreloadAdminMap(rule.Comp.Thunderdome);
+        }
+    }
+
+    private void PreloadAdminMap(ResPath path)
+    {
+        if (string.IsNullOrWhiteSpace(path.ToString()))
+            return;
+
+        if (!_mapLoader.TryLoadMap(path, out var map, out _))
+        {
+            Log.Error($"Failed to preload admin map {path}");
+            return;
+        }
+
+        if (!_preloadedAdminMaps.TryGetValue(path, out var maps))
+        {
+            maps = new Queue<Entity<MapComponent>>();
+            _preloadedAdminMaps.Add(path, maps);
+        }
+
+        maps.Enqueue(map.Value);
+    }
+
+    private bool TryTakePreloadedAdminMap(ResPath path, out Entity<MapComponent> map)
+    {
+        if (_preloadedAdminMaps.TryGetValue(path, out var maps))
+        {
+            while (maps.TryDequeue(out var preloaded))
+            {
+                if (!TerminatingOrDeleted(preloaded))
+                {
+                    if (maps.Count == 0)
+                        _preloadedAdminMaps.Remove(path);
+
+                    map = preloaded;
+                    return true;
+                }
+            }
+
+            _preloadedAdminMaps.Remove(path);
+        }
+
+        map = default;
+        return false;
+    }
+
+    private void ClearPreloadedAdminMaps()
+    {
+        foreach (var maps in _preloadedAdminMaps.Values)
+        {
+            foreach (var map in maps)
+            {
+                if (!TerminatingOrDeleted(map))
+                    QueueDel(map);
+            }
+        }
+
+        _preloadedAdminMaps.Clear();
     }
 
     private void SetCamoType(CamouflageType? ct = null)
