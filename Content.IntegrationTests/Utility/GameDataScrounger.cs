@@ -156,38 +156,25 @@ public static partial class GameDataScrounger
         if (NoScrounging)
             return;
 
-        var resDir = ContentResources();
-        Assert.That(Directory.Exists($"{resDir}/Prototypes"));
+        var resourceRoots = ContentResourceRoots();
+        Assert.That(Directory.Exists(Path.Combine(resourceRoots[0], "Prototypes")));
 
-        var ignoreList = GetIgnoredPrototypes(resDir);
+        var ignoreList = GetIgnoredPrototypes();
 
-        // Start with our root directory. We use this as a stack of directories to traverse.
-        var explorationStack = new List<string>() { $"{resDir}/Prototypes" };
-
-        while (explorationStack.Count > 0)
+        foreach (var file in EnumerateContentFiles("/Prototypes", "*.yml"))
         {
-            // Take a directory off the stack.
-            var dir = explorationStack.Pop();
+            var ignored = IsIgnoredPrototypePath(file.VfsPath, ignoreList);
 
-            var ignoredDir = ignoreList.Contains(Path.GetFullPath(dir));
-
-            explorationStack.AddRange(Directory.EnumerateDirectories(dir));
-
-            foreach (var file in Directory.EnumerateFiles(dir, "*.yml"))
+            foreach (var (kind, id) in IndexPrototypesIn(file.DiskPath, ignored))
             {
-                var ignored = ignoredDir || ignoreList.Contains(Path.GetFullPath(file));
-
-                foreach (var (kind, id) in IndexPrototypesIn(file, ignored))
+                // alternate universe where .net has rust's Entry api.
+                if (!_prototypeIndex.TryGetValue(kind, out var list))
                 {
-                    // alternate universe where .net has rust's Entry api.
-                    if (!_prototypeIndex.TryGetValue(kind, out var list))
-                    {
-                        _prototypeIndex[kind] = new();
-                        list = _prototypeIndex[kind];
-                    }
-
-                    list.Add(id);
+                    _prototypeIndex[kind] = new();
+                    list = _prototypeIndex[kind];
                 }
+
+                list.Add(id);
             }
         }
 
@@ -334,35 +321,51 @@ public static partial class GameDataScrounger
 
     // This is indeed, unfortunately, a replica of Content.Shared/Entry/EntryPoint.cs:129
     // That code relies on engine tools we can't use here, because we can't even spin up engine.
-    private static HashSet<string> GetIgnoredPrototypes(string resDir)
+    private static HashSet<ResPath> GetIgnoredPrototypes()
     {
-        var ignores = new HashSet<string>();
-        var ignoredProtosPath = $"{resDir}/IgnoredPrototypes";
+        var ignores = new HashSet<ResPath>();
 
-        if (!Directory.Exists(ignoredProtosPath))
-            return ignores; // Nothing to do.
-
-        foreach (var path in Directory.EnumerateFiles($"{resDir}/IgnoredPrototypes"))
+        foreach (var file in EnumerateContentFiles("/IgnoredPrototypes", "*", false))
         {
             var stream = new YamlStream();
 
-            stream.Load(File.OpenText(path));
+            stream.Load(File.OpenText(file.DiskPath));
 
             foreach (var document in stream)
             {
                 if (document.RootNode is not YamlSequenceNode seq)
-                    throw new Exception($"The ignored prototypes file at {path} isn't a valid yaml sequence/list.");
+                    throw new Exception($"The ignored prototypes file at {file.DiskPath} isn't a valid yaml sequence/list.");
 
                 foreach (var entry in seq)
                 {
                     if (entry is not YamlScalarNode { Value: {} value })
-                        throw new Exception($"An entry in {path} is not a valid YAML scalar/string literal. Entry: {entry}");
+                        throw new Exception($"An entry in {file.DiskPath} is not a valid YAML scalar/string literal. Entry: {entry}");
 
-                    ignores.Add(Path.GetFullPath($"{resDir}{value}"));
+                    ignores.Add(new ResPath(value).ToRootedPath());
                 }
             }
         }
 
         return ignores;
+    }
+
+    private static bool IsIgnoredPrototypePath(ResPath path, HashSet<ResPath> ignores)
+    {
+        foreach (var ignored in ignores)
+        {
+            if (!string.IsNullOrEmpty(ignored.Extension))
+            {
+                if (path == ignored)
+                    return true;
+
+                continue;
+            }
+
+            var ignoredDirectory = ignored.CanonPath.TrimEnd('/');
+            if (path.CanonPath.StartsWith($"{ignoredDirectory}/", StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
     }
 }

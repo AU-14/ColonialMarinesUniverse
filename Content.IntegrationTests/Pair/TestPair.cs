@@ -92,6 +92,7 @@ public sealed partial class TestPair : RobustIntegrationTest.TestPair
         {
             LoadConfigAndUserData = false,
         };
+        opts.Options.MountOptions.DirMounts.Add(Content.Shared.CMU.CMUContentPaths.DevelopmentResourceRoot);
 
         opts.BeforeStart += () =>
         {
@@ -113,6 +114,7 @@ public sealed partial class TestPair : RobustIntegrationTest.TestPair
         {
             LoadConfigAndUserData = false,
         };
+        opts.Options.MountOptions.DirMounts.Add(Content.Shared.CMU.CMUContentPaths.DevelopmentResourceRoot);
 
         opts.BeforeStart += () =>
         {

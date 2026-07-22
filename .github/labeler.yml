@@ -7,6 +7,8 @@
   - any-glob-to-any-file:
     - 'Resources/Maps/**/*.yml'
     - 'Resources/Prototypes/Maps/**/*.yml'
+    - 'Content.CMU/Resources/Maps/**/*.yml'
+    - 'Content.CMU/Resources/Prototypes/Maps/**/*.yml'
 
 "Changes: UI":
 - changed-files:

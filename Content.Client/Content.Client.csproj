@@ -7,6 +7,17 @@
   </PropertyGroup>
   <Import Project="../MSBuild/Content.props" />
   <ItemGroup>
+    <Compile Include="..\Content.CMU\Client\**\*.cs"
+             Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Update="..\Content.CMU\Client\**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="..\Content.CMU\Client\**\*.xaml"
+                      Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Include="..\Content.CMU\Client\**\*.xaml"
+                     Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Nett" />
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
     <PackageReference Include="SixLabors.ImageSharp" />

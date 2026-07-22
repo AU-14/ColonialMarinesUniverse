@@ -6,6 +6,7 @@ on:
     paths:
     # Run if maps are changed.
     - "Resources/Maps/_RMC14/**/*.yml"
+    - "Content.CMU/Resources/Maps/**/*.yml"
     # Also run if the mapchecker itself or its config is changed.
     - ".github/map_checker/**"
   workflow_dispatch:
@@ -44,5 +45,11 @@ jobs:
     - name: Build
       run: cd .github/map_checker && cargo b --release
 
-    - name: Run
+    - name: Run RMC map checker
       run: ./.github/map_checker/target/release/map_checker -c .github/map_checker/matchers.yml -m Resources/Maps/_RMC14
+
+    - name: Run CMU map checker
+      run: |
+        if [ -d Content.CMU/Resources/Maps ]; then
+          ./.github/map_checker/target/release/map_checker -c .github/map_checker/matchers.yml -m Content.CMU/Resources/Maps
+        fi

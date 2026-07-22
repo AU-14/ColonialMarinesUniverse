@@ -31,6 +31,7 @@ public sealed class SandboxTest
             },
             Options = new GameControllerOptions { LoadConfigAndUserData = false }
         };
+        options.Options.MountOptions.DirMounts.Add(Content.Shared.CMU.CMUContentPaths.DevelopmentResourceRoot);
 
         options.BeforeStart += () =>
         {

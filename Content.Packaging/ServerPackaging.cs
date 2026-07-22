@@ -179,6 +179,8 @@ public static class ServerPackaging
         var inputPassCore = graph.InputCore;
         var inputPassResources = graph.InputResources;
 
+        SharedPackaging.ValidateCMUResourcePaths(contentDir);
+
         // Additional assemblies that need to be copied such as EFCore.
         var sourcePath = Path.Combine(contentDir, "bin", "Content.Server");
 
@@ -206,6 +208,18 @@ public static class ServerPackaging
             inputPassResources,
             ServerContentIgnoresResources.Concat(SharedPackaging.AdditionalIgnoredResources).ToHashSet(),
             cancel);
+
+        var cmuResourceIgnores = RobustServerPackaging.ServerIgnoresResources
+            .Union(RobustSharedPackaging.SharedIgnoredResources)
+            .Union(ServerContentIgnoresResources)
+            .Union(SharedPackaging.AdditionalIgnoredResources)
+            .ToHashSet();
+
+        await RobustSharedPackaging.DoResourceCopy(
+            Path.Combine(contentDir, SharedPackaging.CMUContentDirectory, "Resources"),
+            inputPassResources,
+            cmuResourceIgnores,
+            cancel: cancel);
 
         if (hybridAcz)
         {

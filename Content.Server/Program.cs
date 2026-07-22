@@ -1,3 +1,4 @@
+using Content.Shared.CMU;
 using Robust.Server;
 
 namespace Content.Server
@@ -6,7 +7,9 @@ namespace Content.Server
     {
         public static void Main(string[] args)
         {
-            ContentStart.Start(args);
+            var options = new ServerOptions();
+            options.MountOptions.DirMounts.Add(CMUContentPaths.DevelopmentResourceRoot);
+            ContentStart.StartLibrary(args, options);
         }
     }
 }

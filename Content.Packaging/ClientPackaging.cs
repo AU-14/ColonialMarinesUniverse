@@ -79,6 +79,8 @@ public static class ClientPackaging
 
         var inputPass = graph.Input;
 
+        SharedPackaging.ValidateCMUResourcePaths(contentDir);
+
         await RobustSharedPackaging.WriteContentAssemblies(
             inputPass,
             contentDir,
@@ -88,6 +90,12 @@ public static class ClientPackaging
 
         await RobustClientPackaging.WriteClientResources(
             contentDir,
+            inputPass,
+            SharedPackaging.AdditionalIgnoredResources,
+            cancel);
+
+        await RobustClientPackaging.WriteClientResources(
+            Path.Combine(contentDir, SharedPackaging.CMUContentDirectory),
             inputPass,
             SharedPackaging.AdditionalIgnoredResources,
             cancel);

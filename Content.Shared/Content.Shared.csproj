@@ -5,6 +5,10 @@
   </PropertyGroup>
   <Import Project="../MSBuild/Content.props" />
   <ItemGroup>
+    <Compile Include="..\Content.CMU\Shared\**\*.cs"
+             Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
     <PackageReference Include="System.Numerics.Tensors" />
     <PackageReference Include="YamlDotNet" />

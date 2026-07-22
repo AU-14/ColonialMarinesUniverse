@@ -29,4 +29,4 @@ jobs:
           pip3 install --ignore-installed --user pillow jsonschema
       - name: Validate RSIs
         run: |
-          python3 RobustToolbox/Schemas/validate_rsis.py Resources/
+          python3 RobustToolbox/Schemas/validate_rsis.py Resources/ Content.CMU/Resources/

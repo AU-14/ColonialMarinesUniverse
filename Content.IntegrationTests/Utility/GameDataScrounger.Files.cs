@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Robust.Shared.ContentPack;
@@ -7,6 +8,8 @@ namespace Content.IntegrationTests.Utility;
 
 public static partial class GameDataScrounger
 {
+    private readonly record struct ContentFile(string DiskPath, ResPath VfsPath);
+
     /// <summary>
     ///     Returns all files in a given content location that match a pattern.
     /// </summary>
@@ -16,11 +19,8 @@ public static partial class GameDataScrounger
     /// <returns>A list of all files within the VFS directory matching the pattern.</returns>
     public static string[] FilesInDirectory(string location, string pattern, bool recursive = true)
     {
-        var path = GetContentPathOnDisk(location);
-
-        return Directory.EnumerateFiles(path,
-                pattern ?? "*",
-                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
+        return EnumerateContentFiles(location, pattern, recursive)
+            .Select(file => file.DiskPath)
             .ToArray();
     }
 
@@ -33,14 +33,40 @@ public static partial class GameDataScrounger
     /// <returns>A list of all file paths within the VFS directory matching the pattern.</returns>
     public static ResPath[] FilesInDirectoryInVfs(string location, string pattern, bool recursive = true)
     {
-        var path = GetContentPathOnDisk(location.TrimEnd('/'));
-        var resBasePath = ContentResources();
-
-        return Directory.EnumerateFiles(path,
-                pattern ?? "*",
-                recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly)
-            .Select(x => ResPath.FromRelativeSystemPath(x.Remove(0, resBasePath.Length)))
+        return EnumerateContentFiles(location, pattern, recursive)
+            .Select(file => file.VfsPath)
             .ToArray();
+    }
+
+    /// <summary>
+    ///     Enumerates physical content files in VFS mount order, keeping the first file for duplicate VFS paths.
+    /// </summary>
+    private static IEnumerable<ContentFile> EnumerateContentFiles(
+        string location,
+        string pattern,
+        bool recursive = true)
+    {
+        Assert.That(location, Does.StartWith("/"), "Path must be rooted.");
+
+        var resourceLocation = new ResPath(location);
+        var searchOption = recursive ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly;
+        var seen = new HashSet<ResPath>();
+
+        foreach (var root in ContentResourceRoots())
+        {
+            var directory = Path.Combine(root, resourceLocation.ToRelativeSystemPath());
+            if (!Directory.Exists(directory))
+                continue;
+
+            foreach (var file in Directory.EnumerateFiles(directory, pattern ?? "*", searchOption)
+                         .Order(StringComparer.Ordinal))
+            {
+                var relativePath = Path.GetRelativePath(root, file);
+                var vfsPath = ResPath.FromRelativeSystemPath(relativePath).ToRootedPath();
+                if (seen.Add(vfsPath))
+                    yield return new ContentFile(file, vfsPath);
+            }
+        }
     }
 
     /// <summary>
@@ -81,9 +107,13 @@ public static partial class GameDataScrounger
     /// <summary>
     ///     Mirrors a function in the engine for ease of maintenance.
     /// </summary>
-    private static string ContentResources()
+    internal static string[] ContentResourceRoots()
     {
-        return ExecutableRelativeFile($"{FindContentRootDir()}Resources");
+        return
+        [
+            ExecutableRelativeFile($"{FindContentRootDir()}Resources"),
+            ExecutableRelativeFile(Content.Shared.CMU.CMUContentPaths.DevelopmentResourceRoot),
+        ];
     }
 
     /// <summary>
@@ -95,6 +125,15 @@ public static partial class GameDataScrounger
     {
         Assert.That(path, Does.StartWith("/"), "Path must be rooted.");
 
-        return $"{ContentResources()}{path.ToString()}";
+        var relativePath = new ResPath(path).ToRelativeSystemPath();
+        var roots = ContentResourceRoots();
+        foreach (var root in roots)
+        {
+            var candidate = Path.Combine(root, relativePath);
+            if (File.Exists(candidate) || Directory.Exists(candidate))
+                return candidate;
+        }
+
+        return Path.Combine(roots[0], relativePath);
     }
 }
