@@ -107,6 +107,12 @@
     overlayColor: '#FFFFFF00'
     noiseAmount: 0 # In case default values change
     noiseMultiplier: 0 # In case default values change
+  # RMC14
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
+        requireInputValidation: false
 
 # proto for player ghosts specifically
 - type: entity

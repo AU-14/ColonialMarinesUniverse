@@ -64,6 +64,10 @@
       enum.GeneralStationRecordConsoleKey.Key:
       # who the fuck named this bruh
         type: GeneralStationRecordConsoleBoundUserInterface
+      # RMC14
+      enum.DialogUiKey.Key:
+        type: DialogBui
+        requireInputValidation: false
   - type: IntrinsicUI
     uis:
       enum.SolarControlConsoleUiKey.Key:
