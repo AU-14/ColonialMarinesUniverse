@@ -54,7 +54,7 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
                 if (!HasComp<AmbientSoundComponent>(sirenUid))
                 {
                     var ambient = AddComp<AmbientSoundComponent>(sirenUid);
-                    _ambientSound.SetSound(sirenUid, new SoundPathSpecifier("/Audio/Effects/Vehicle/ambulancesiren.ogg"), ambient);
+                    _ambientSound.SetSound(sirenUid, new SoundPathSpecifier("/Audio/_CMU14/Machines/ColonySiren.ogg"), ambient);
                     _ambientSound.SetRange(sirenUid, 48f, ambient);
                     _ambientSound.SetVolume(sirenUid, -1f, ambient);
                     _ambientSound.SetAmbience(sirenUid, true, ambient);
