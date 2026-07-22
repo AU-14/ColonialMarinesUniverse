@@ -139,6 +139,9 @@
     delay: 0
   - type: SpawnOnTrigger
     proto: CMExplosionEffectGrenade
+    keysIn:
+    - trigger
+    - timer
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/grenade_launcher.rsi
     layers:
@@ -290,6 +293,9 @@
     positional: true
     sound: /Audio/Effects/smoke.ogg
   - type: DeleteOnTrigger
+    keysIn:
+    - trigger
+    - timer
 
 - type: entity
   parent: RMCAirBurstProjectileSmoke

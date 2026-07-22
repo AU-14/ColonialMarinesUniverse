@@ -99,9 +99,9 @@ public sealed partial class RMCTriggerSystem : EntitySystem
             if (time < active.TriggerAt)
                 continue;
 
-            if (TryComp(uid, out ScatteringGrenadeComponent? scattering))
+            if (HasComp<ScatteringGrenadeComponent>(uid))
             {
-                _trigger.Trigger(uid, key: scattering.TriggerKey);
+                _trigger.Trigger(uid);
                 RemCompDeferred<ActiveTriggerOnThrowEndComponent>(uid);
 
                 // ScatteringGrenadeSystem spawns its payload during Update and deletes the source afterwards.

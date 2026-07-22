@@ -1,6 +1,7 @@
 using Content.Shared.Explosion.Components;
 using Content.Shared.Physics;
 using Content.Shared.Projectiles;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Random;
 
@@ -40,8 +41,11 @@ public sealed partial class RMCSharedScatteringGrenadeSystem : EntitySystem
     /// </summary>
     private void OnStartCollide(Entity<ScatteringGrenadeComponent> ent, ref StartCollideEvent args)
     {
-        if ((args.OtherFixture.CollisionLayer & (int)(CollisionGroup.Impassable | CollisionGroup.HighImpassable)) ==
-            0 || !ent.Comp.TriggerOnWallCollide)
+        if (!ent.Comp.TriggerOnWallCollide ||
+            args.OurFixtureId == SharedFlyBySoundSystem.FlyByFixture ||
+            args.OtherFixtureId == SharedFlyBySoundSystem.FlyByFixture ||
+            !args.OtherFixture.Hard ||
+            (args.OtherFixture.CollisionLayer & (int)(CollisionGroup.Impassable | CollisionGroup.HighImpassable)) == 0)
             return;
 
         ent.Comp.IsTriggered = true;

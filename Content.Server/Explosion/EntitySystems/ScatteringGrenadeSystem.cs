@@ -34,7 +34,8 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
     /// </summary>
     private void OnScatteringTrigger(Entity<ScatteringGrenadeComponent> entity, ref TriggerEvent args)
     {
-        if (args.Key != entity.Comp.TriggerKey)
+        // RMC14 - preserve the trigger framework's null-key wildcard behavior.
+        if (args.Key != null && args.Key != entity.Comp.TriggerKey)
             return;
 
         entity.Comp.IsTriggered = true;
@@ -72,6 +73,14 @@ public sealed partial class ScatteringGrenadeSystem : SharedScatteringGrenadeSys
                         var angleMin = segmentAngle * thrownCount;
                         var angleMax = segmentAngle * (thrownCount + 1);
                         angle = Angle.FromDegrees(_random.Next(angleMin, angleMax));
+
+                        // RMC14 - allow fork payloads to use directional scatter patterns.
+                        var scatter = new ScatterGrenadeContentsEvent(totalCount, thrownCount, angle);
+                        RaiseLocalEvent(uid, ref scatter);
+
+                        if (scatter.Handled)
+                            angle = scatter.Angle;
+
                         thrownCount++;
                     }
 

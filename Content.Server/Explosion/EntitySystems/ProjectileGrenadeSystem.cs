@@ -1,6 +1,10 @@
-﻿using Content.Server.Explosion.Components;
+﻿using Content.Server._RMC14.Explosion;
+using Content.Server.Explosion.Components;
 using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared._RMC14.Explosion;
+using Content.Shared.Projectiles;
 using Content.Shared.Trigger;
+using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -10,6 +14,8 @@ namespace Content.Server.Explosion.EntitySystems;
 
 public sealed partial class ProjectileGrenadeSystem : EntitySystem
 {
+    private readonly List<EntityUid> _spawned = new();
+
     [Dependency] private GunSystem _gun = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -46,7 +52,8 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     /// </summary>
     private void OnFragTrigger(Entity<ProjectileGrenadeComponent> entity, ref TriggerEvent args)
     {
-        if (args.Key != entity.Comp.TriggerKey)
+        // RMC14 - a null trigger key intentionally activates every effect on the airburst projectile.
+        if (args.Key != null && args.Key != entity.Comp.TriggerKey)
             return;
 
         FragmentIntoProjectiles(entity.Owner, entity.Comp);
@@ -63,12 +70,14 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
         var shootCount = 0;
         var totalCount = component.Container.ContainedEntities.Count + component.UnspawnedCount;
 
-        // Just in case
-        if (totalCount == 0)
+        // RMC14 - direct hits can consume the payload before it is fired.
+        if (totalCount <= 0)
             return;
 
+        var hitEntities = new List<EntityUid>();
         var segmentAngle = 360 / totalCount;
 
+        _spawned.Clear();
         while (TrySpawnContents(grenadeCoord, component, out var contentUid))
         {
             Angle angle;
@@ -79,17 +88,49 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
                 var angleMin = segmentAngle * shootCount;
                 var angleMax = segmentAngle * (shootCount + 1);
                 angle = Angle.FromDegrees(_random.Next(angleMin, angleMax));
+
+                // RMC14 - apply directional spread, IFF, and direct-hit behavior.
+                var ev = new FragmentIntoProjectilesEvent(contentUid, totalCount, angle, shootCount, hitEntities);
+                RaiseLocalEvent(uid, ref ev);
+
+                if (ev.TotalCount <= 0)
+                    return;
+
+                if (ev.Handled)
+                {
+                    hitEntities = ev.HitEntities;
+                    angle = ev.Angle;
+                }
+
                 shootCount++;
+            }
+
+            EntityUid? gunUid = null;
+            EntityUid? user = null;
+
+            // RMC14 - preserve attribution from the airburst projectile.
+            if (TryComp(uid, out ProjectileComponent? clusterProjectile))
+            {
+                gunUid = clusterProjectile.Weapon;
+                user = clusterProjectile.Shooter;
             }
 
             // velocity is randomized to make the projectiles look
             // slightly uneven, doesn't really change much, but it looks better
             var direction = angle.ToVec().Normalized();
             var velocity = _random.NextVector2(component.MinVelocity, component.MaxVelocity);
-            _gun.ShootProjectile(contentUid, direction, velocity, null);
+            _gun.ShootProjectile(contentUid, direction, velocity, gunUid, user, component.ProjectileSpeed);
+            _spawned.Add(contentUid);
         }
 
-        // RMC14
+        // RMC14 - initialize hit limits and payload timers, including star shell bursts.
+        var clusterEv = new CMClusterSpawnedEvent(_spawned, hitEntities, uid);
+        RaiseLocalEvent(uid, ref clusterEv);
+        RaiseLocalEvent(uid, new AmmoShotEvent
+        {
+            FiredProjectiles = _spawned,
+        });
+
         QueueDel(uid);
     }
 

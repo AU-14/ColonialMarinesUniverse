@@ -1,3 +1,5 @@
+using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -6,6 +8,7 @@ using Content.Shared.Explosion;
 using Content.Shared.Explosion.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Content.Shared.Vehicle.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
@@ -58,6 +61,9 @@ public sealed partial class ExplosionSystem
     private readonly List<(EntityUid, DamageSpecifier)> _toDamage = new();
 
     private List<EntityUid> _anchored = new();
+
+    // RMC14
+    private static readonly EntProtoId ShockwaveSmoke = "RMCFogShockwave";
 
     private void OnMapRemoved(MapRemovedEvent ev)
     {
@@ -205,7 +211,8 @@ public sealed partial class ExplosionSystem
         EntityUid? cause)
     {
         var size = grid.Comp.TileSize;
-        var gridBox = new Box2(tile * size, (tile + 1) * size);
+        // RMC14
+        var gridBox = new Box2(tile * size, (tile + 1) * size).Scale(0.9f);
 
         /* We do this so that we don't do an extra TryComp on anchored entities, and so we don't process them twice.
         This saves us a small amount of processing time, but in the future if we can:
@@ -255,6 +262,10 @@ public sealed partial class ExplosionSystem
             tileBlocked |= IsBlockingTurf(entity);
         }
         _anchored.Clear();
+
+        // RMC14
+        if (!tileBlocked)
+            Spawn(ShockwaveSmoke, new EntityCoordinates(grid.Owner, tile));
 
         // Next, we get the intersecting entities AGAIN, but purely for throwing. This way, glass shards spawned from
         // windows will be flung outwards, and not stay where they spawned. This is however somewhat unnecessary, and a
@@ -443,16 +454,27 @@ public sealed partial class ExplosionSystem
         float? fireStacksOnIgnite,
         EntityUid? cause)
     {
+        // RMC14
+        if (_deleteOnExplosionQuery.HasComp(uid))
+        {
+            QueueDel(uid);
+            return;
+        }
+
         if (originalDamage is not null)
         {
             GetEntitiesToDamage(uid, originalDamage, id);
             foreach (var (entity, damage) in _toDamage)
             {
-                if (!_damageableQuery.TryComp(entity, out var damageable))
-                    continue;
+                if (_damageableQuery.TryComp(entity, out var damageable))
+                {
+                    // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
+                    _damageableSystem.ChangeDamage((entity, damageable), damage);
+                }
 
-                // TODO EXPLOSIONS turn explosions into entities, and pass the the entity in as the damage origin.
-                _damageableSystem.ChangeDamage((entity, damageable), damage);
+                // RMC14
+                var ev = new ExplosionReceivedEvent(id, epicenter, damage);
+                RaiseLocalEvent(entity, ref ev);
 
                 if (_actorQuery.HasComp(entity))
                 {
@@ -480,6 +502,10 @@ public sealed partial class ExplosionSystem
             || xform.Anchored
             || throwForce <= 0
             || EntityManager.IsQueuedForDeletion(uid)
+            // RMC14
+            || HasComp<VehicleComponent>(uid)
+            || HasComp<GridVehicleMoverComponent>(uid)
+            // RMC14
             || !_physicsQuery.TryGetComponent(uid, out var physics)
             || physics.BodyType != BodyType.Dynamic)
             return;
