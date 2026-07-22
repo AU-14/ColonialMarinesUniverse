@@ -147,6 +147,7 @@
   - type: RTORelay
     bridgedChannels:
     - radioCLF
+    - radioCLFCommand
 
 - type: entity
   parent: BaseItem
@@ -193,3 +194,68 @@
     containers:
       fill_card:
       - ANPRCFillCardCLF
+
+# the cell's fixed end of the net. cannot be worn - it only works set up - so the
+# operator takes the manpack forward while whoever stays behind mans this one on the
+# handset. gives the CLF command net an actual station on the other end, and makes the
+# place they hide it worth defending and worth raiding
+- type: entity
+  parent: ANPRC117GRadioCLFFilled
+  id: AU14CLFBaseStation
+  name: clandestine base station
+  suffix: CLF, Base Station
+  description: >-
+    A base station cannibalised from colony survey gear and a stolen military set,
+    bolted into a crate that does not travel well. Too heavy to carry on your back,
+    long-legged enough to hold the cell together from wherever it is hidden.
+  components:
+  # no wearable slots: this only ever works planted, so it can be carried in hand to
+  # a hiding spot and set up, but never worn as a manpack the way the RTO's set is
+  - type: Clothing
+    slots:
+    - NONE
+  - type: Item
+    size: Ginormous
+  - type: ANPRCRadio
+    operatorFaction: clf
+    requiredSlot: none
+    callsignPresets:
+    - CELL ACTUAL
+    - BASE
+    - FIREBRAND
+    - MAGPIE
+    dfReportFactions:
+    - GOVFOR
+    # comes up tuned so the leader can work it without a trained operator present
+    defaultSlots:
+    - label: CELL
+      channel: radioCLF
+    - label: CMD
+      channel: radioCLFCommand
+  - type: ItemSlots
+    slots:
+      fill_card:
+        name: COMSEC fill card
+        whitelist:
+          components:
+          - ANPRCFillCard
+      antenna:
+        name: antenna
+        whitelist:
+          components:
+          - ANPRCAntenna
+        startingItem: ANPRCMastAntenna
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: RMCPowerCellHigh
+
+- type: entity
+  parent: CMPaperWritten
+  id: ANPRCNetLogPrintout
+  name: AN/PRC-117G net log printout
+  description: A strip of thermal paper spat out of a radio's log printer. Smudges if you handle it too much.
+  components:
+  - type: Item
+    size: Small
+  # content is written by ANPRCRadioSystem when the log is printed
+  - type: Paper

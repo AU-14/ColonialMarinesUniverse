@@ -15,10 +15,11 @@
       RMCSkillFireman: 1
       RMCSkillVehicles: 1
       RMCSkillDomestics: 1
-      RMCSkillMedical: 3
+      RMCSkillMedical: 4
       RMCSkillResearch: 1
-      RMCSkillSurgery: 3
+      RMCSkillSurgery: 4
       RMCSkillFirearms: 2
+      RMCSkillLeadership: 1
       RMCSkillPolice: 1
       RMCSkillSpecialistWeapons: 1
   - type: JobPrefix

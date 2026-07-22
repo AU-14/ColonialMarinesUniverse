@@ -187,6 +187,26 @@
             </BoxContainer>
           </PanelContainer>
 
+          <!-- Search receiver -->
+          <BoxContainer Orientation="Horizontal" Margin="2,1,2,0">
+            <Label Text="SEARCH" FontColorOverride="#A9C3E8" HorizontalExpand="True" />
+            <Label Name="SweepStatusLabel" Text="IDLE" FontColorOverride="#687A9A" />
+          </BoxContainer>
+          <PanelContainer>
+            <PanelContainer.PanelOverride>
+              <gfx:StyleBoxFlat BackgroundColor="#17181D" BorderColor="#3D4059" BorderThickness="1" />
+            </PanelContainer.PanelOverride>
+            <BoxContainer Orientation="Vertical" Margin="6,5" SeparationOverride="4">
+              <Label Name="SweepBandLabel" Text="BAND IDLE" FontColorOverride="#4A7A55" />
+              <Label Name="SweepHintLabel"
+                     Text="Searching drops all nets and blocks transmit."
+                     FontColorOverride="#687A9A" />
+              <Button Name="SweepButton" Text="START SEARCH" />
+              <Label Text="CONTACTS" FontColorOverride="#A9C3E8" Margin="0,3,0,0" />
+              <BoxContainer Name="SweepContactList" Orientation="Vertical" SeparationOverride="2" />
+            </BoxContainer>
+          </PanelContainer>
+
           <!-- COMSEC -->
           <BoxContainer Orientation="Horizontal" Margin="2,1,2,0">
             <Label Text="COMSEC" FontColorOverride="#A9C3E8" HorizontalExpand="True" />
@@ -220,6 +240,10 @@
                   HorizontalExpand="True"
                   PlaceHolder="Filter sender / text" />
         <Button Name="NetLogFilterClearButton" Text="CLR" MinWidth="44" />
+      </BoxContainer>
+      <BoxContainer Orientation="Horizontal" SeparationOverride="4">
+        <Button Name="PrintLogButton"        Text="PRINT LOG"        HorizontalExpand="True" />
+        <Button Name="PrintInterceptsButton" Text="PRINT INTERCEPTS" HorizontalExpand="True" />
       </BoxContainer>
       <PanelContainer VerticalExpand="True" SizeFlagsStretchRatio="2">
         <PanelContainer.PanelOverride>

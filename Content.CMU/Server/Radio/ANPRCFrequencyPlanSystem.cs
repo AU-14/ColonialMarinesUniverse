@@ -75,6 +75,22 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
             : channel.Frequency;
     }
 
+    // a frequency the operator already holds: an unfactioned net, or one belonging to
+    // their own faction. the sweep uses this so nobody is made to grind out a number
+    // that is already printed on their own freq card
+    public bool IsKnownTo(int frequency, string? operatorFaction)
+    {
+        if (!TryGetChannelByFrequency(frequency, out var channel) ||
+            !_prototype.TryIndex(channel, out var proto))
+        {
+            return false;
+        }
+
+        return string.IsNullOrEmpty(proto.Faction) ||
+               string.IsNullOrEmpty(operatorFaction) ||
+               string.Equals(proto.Faction, operatorFaction, StringComparison.OrdinalIgnoreCase);
+    }
+
     public bool TryGetChannelByFrequency(int frequency, out ProtoId<RadioChannelPrototype> channel)
     {
         if (_channelsByFrequency == null)

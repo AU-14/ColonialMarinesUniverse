@@ -199,6 +199,20 @@
   longRange: true
   tower: true
   faction: "clf"
+  anchorGated: true
+
+# cell command net. lives on the RTO pack only - no earpiece carries it, so the cell
+# leader talks to command through the operator's handset the same way GOVFOR does
+- type: radioChannel
+  id: radioCLFCommand
+  name: chat-radio-CLFCommand
+  keycode: "n"
+  frequency: 1887
+  color: "#0b7a3d"
+  longRange: true
+  tower: true
+  faction: "clf"
+  anchorGated: true
 
 - type: radioChannel
   id: radioMobFamily

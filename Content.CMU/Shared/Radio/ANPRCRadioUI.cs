@@ -71,12 +71,70 @@ public static class RadioTxPowerExtensions
 }
 
 [Serializable, NetSerializable]
-public sealed class ANPRCNetLogEntry(float timestamp, string senderName, string channelDisplay, string message)
+public sealed class ANPRCNetLogEntry(
+    float timestamp,
+    string senderName,
+    string channelDisplay,
+    string message,
+    bool intercepted = false)
 {
     public readonly float Timestamp = timestamp;
     public readonly string SenderName = senderName;
     public readonly string ChannelDisplay = channelDisplay;
     public readonly string Message = message;
+
+    // traffic on a net belonging to somebody else's faction. worth writing down,
+    // worth carrying to whoever can act on it
+    public readonly bool Intercepted = intercepted;
+}
+
+// a contact the search receiver has built up but not necessarily fixed. Resolved
+// contacts carry their exact frequency, unresolved ones only the digits earned so far
+[Serializable, NetSerializable]
+public sealed class ANPRCSweepContact(
+    int frequency,
+    float confidence,
+    bool resolved,
+    string channelName,
+    int tier,
+    int tierMax,
+    bool known)
+{
+    public readonly int Frequency = frequency;
+    public readonly float Confidence = confidence;
+    public readonly bool Resolved = resolved;
+
+    // only populated once resolved, the net's name is part of the prize
+    public readonly string ChannelName = channelName;
+
+    // digits of the frequency earned so far, out of TierMax for a full fix
+    public readonly int Tier = tier;
+    public readonly int TierMax = tierMax;
+
+    // one of the operator's own nets, surfaced for free rather than fixed. shown so
+    // the band reads honestly, but never something they had to spend time on
+    public readonly bool Known = known;
+}
+
+[Serializable, NetSerializable]
+public sealed class ANPRCSetSweepMsg(bool enabled) : BoundUserInterfaceMessage
+{
+    public readonly bool Enabled = enabled;
+}
+
+// tune a resolved sweep contact straight into a slot without retyping the number
+[Serializable, NetSerializable]
+public sealed class ANPRCTuneContactMsg(int slot, int frequency) : BoundUserInterfaceMessage
+{
+    public readonly int Slot = slot;
+    public readonly int Frequency = frequency;
+}
+
+// dumps the net log to paper so an intercept can leave the radio
+[Serializable, NetSerializable]
+public sealed class ANPRCPrintLogMsg(bool interceptsOnly) : BoundUserInterfaceMessage
+{
+    public readonly bool InterceptsOnly = interceptsOnly;
 }
 
 [Serializable, NetSerializable]
@@ -200,9 +258,16 @@ public sealed class ANPRCRadioState(
     float batteryFraction,
     bool hasBattery,
     string antennaLabel,
-    Dictionary<string, int> channelFrequencies)
+    Dictionary<string, int> channelFrequencies,
+    bool sweepEnabled,
+    int sweepPosition,
+    List<ANPRCSweepContact> sweepContacts)
     : BoundUserInterfaceState
 {
+    public readonly bool SweepEnabled = sweepEnabled;
+    public readonly int SweepPosition = sweepPosition;
+    public readonly List<ANPRCSweepContact> SweepContacts = sweepContacts;
+
     public readonly Dictionary<int, ProtoId<RadioChannelPrototype>> Presets = presets;
     public readonly Dictionary<int, int> FrequencyOverrides = frequencyOverrides;
     public readonly Dictionary<int, string> SlotLabels = slotLabels;

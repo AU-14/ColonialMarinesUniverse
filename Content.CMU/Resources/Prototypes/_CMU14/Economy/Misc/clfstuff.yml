@@ -130,6 +130,35 @@
       - id: RMCM2CMount
         amount: 1
         points: 17
+    - name: Attachments
+      entries:
+      - id: AU14AttachmentTwoPointSling
+        amount: 5
+        points: 0
+      - id: RMCAttachmentS42xTelescopicMiniscope
+        amount: 4
+        points: 3
+      - id: RMCAttachmentS84xTelescopicScope
+        amount: 2
+        points: 8
+      - id: RMCAttachmentS6ReflexSight
+        amount: 4
+        points: 3
+      - id: RMCAttachmentS5RedDotSight
+        amount: 10
+        points: 1
+      - id: RMCAttachmentSuppressor
+        amount: 2
+        points: 8
+      - id: RMCAttachmentExtendedBarrel
+        amount: 4
+        points: 3
+      - id: RMCAttachmentM42A2CollapsibleStock
+        amount: 3
+        points: 2
+      - id: RMCAttachmentBipod
+        amount: 2
+        points: 2
     - name: Rifle Ammunition
       entries:
       - id: RMCMagazineRifleM16
@@ -347,6 +376,9 @@
       - id: ANPRC117GRadioCLFFilled
         amount: 1
         points: 15
+      - id: AU14CLFBaseStation
+        amount: 1
+        points: 18
       - id: ANPRCFillCardCLF
         amount: 3
         points: 4
@@ -481,6 +513,8 @@
   - type: StorageFill
     contents:
     - id: ANPRC117GRadioCLFFilled
+      amount: 1
+    - id: AU14CLFBaseStation
       amount: 1
     - id:  AU14GunCaseRifleMar30
       amount: 2

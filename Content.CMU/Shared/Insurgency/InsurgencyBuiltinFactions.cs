@@ -107,6 +107,8 @@ public static class InsurgencyBuiltinFactions
 
     private static FactionVendorDefinition ToolVendor() => Vendor("CLF tool cache",
         Section("Field Tools",
+            Entry("ANPRC117GRadioCLFFilled", 1),
+            Entry("AU14CLFBaseStation", 1),
             Entry("AU14GunCaseRifleMar30"),
             Entry("RMCGunCasePistolZHNK72", 1),
             Entry("RMCGunCasePistolMK80", 1),
