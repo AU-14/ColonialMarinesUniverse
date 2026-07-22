@@ -40,7 +40,7 @@ public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
     private static readonly ProtoId<TagPrototype> IgnoredTag = "SpreaderIgnore";
 
     private readonly List<EntityUid> _anchored = new();
-    private readonly List<Entity<XenoWeedsComponent>> _spread = new();
+    private readonly List<WeedSpreadJob> _spread = new();
 
     private EntityQuery<AirtightComponent> _airtightQuery;
     private EntityQuery<AllowWeedSpreadComponent> _allowWeedSpreadQuery;
@@ -50,6 +50,8 @@ public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
     private EntityQuery<XenoWeedsComponent> _xenoWeedsQuery;
 
     private TimeSpan _maxProcessTime;
+
+    private readonly record struct WeedSpreadJob(Entity<XenoWeedsComponent> Weeds, TimeSpan ExpectedProcessAt);
 
     public override void Initialize()
     {
@@ -81,8 +83,9 @@ public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
             if (_timing.RealTime - processStartedAt > _maxProcessTime)
                 return;
 
-            var (uid, weeds) = _spread[i];
+            var job = _spread[i];
             _spread.RemoveAt(i);
+            var (uid, weeds) = job.Weeds;
 
             if (_transform.GetGrid(uid) is not { } gridId ||
                 !_mapGridQuery.TryComp(gridId, out var gridComp))
@@ -171,6 +174,13 @@ public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
                 var neighborWeeds = Spawn(prototype, coords);
                 var neighborWeedsEnt = AssignSource(neighborWeeds, (source.Value, sourceWeeds));
 
+                // Keep later growth waves on the original RMC cadence when this job was deferred by the frame budget.
+                if (TryComp(neighborWeeds, out XenoWeedsSpreadingComponent? neighborSpreading))
+                {
+                    neighborSpreading.SpreadAt = job.ExpectedProcessAt + neighborSpreading.SpreadDelay;
+                    Dirty(neighborWeeds, neighborSpreading);
+                }
+
                 _hive.SetSameHive(uid, neighborWeeds);
 
                 EnsureComp<ActiveEdgeSpreaderComponent>(neighborWeeds);
@@ -235,7 +245,8 @@ public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
                 continue;
 
             RemCompDeferred<XenoWeedsSpreadingComponent>(uid);
-            _spread.Add((uid, weeds));
+            // Due spreads are collected after the processing pass, so upstream would process them next tick.
+            _spread.Add(new((uid, weeds), spreading.SpreadAt + _timing.TickPeriod));
         }
     }
 }
