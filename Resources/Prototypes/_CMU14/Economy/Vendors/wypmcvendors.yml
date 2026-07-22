@@ -817,11 +817,11 @@
         isAppendSquadRoleName: false
         givePrefix: rmc-job-prefix-weapons-specialist-sharp
         isAppendPrefix: true
-      - id: AU14ScoutSpecEquipmentCaseWeYu
-        giveSquadRoleName: rmc-job-name-weapons-specialist-scout
-        isAppendSquadRoleName: false
-        givePrefix: rmc-job-prefix-weapons-specialist-scout
-        isAppendPrefix: true
+      #- id: AU14ScoutSpecEquipmentCaseWeYu
+        #giveSquadRoleName: rmc-job-name-weapons-specialist-scout
+        #isAppendSquadRoleName: false
+        #givePrefix: rmc-job-prefix-weapons-specialist-scout
+        #isAppendPrefix: true
       - id: CMSniperEquipmentCase
         giveSquadRoleName: rmc-job-name-weapons-specialist-sniper
         isAppendSquadRoleName: false
