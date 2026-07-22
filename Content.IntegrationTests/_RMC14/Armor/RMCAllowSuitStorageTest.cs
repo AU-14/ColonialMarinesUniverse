@@ -1,5 +1,7 @@
 using Content.Shared._RMC14.Armor;
+using Content.Shared.Armor;
 using Content.Shared.Inventory;
+using Content.Shared.Whitelist;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -38,6 +40,29 @@ public sealed class RMCAllowSuitStorageTest
             entMan.DeleteEntity(wearer);
 
             Assert.That(entMan.Deleted(jacket), Is.True);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task GasTankMatchesRmcArmorSuitStorageWhitelist()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var whitelist = server.System<EntityWhitelistSystem>();
+            var armor = entMan.SpawnEntity("CMArmorM3Medium", MapCoordinates.Nullspace);
+            var gasTank = entMan.SpawnEntity("OxygenTank", MapCoordinates.Nullspace);
+            var suitStorage = entMan.GetComponent<AllowSuitStorageComponent>(armor);
+
+            Assert.That(whitelist.IsValid(suitStorage.Whitelist, gasTank), Is.True);
+
+            entMan.DeleteEntity(armor);
+            entMan.DeleteEntity(gasTank);
         });
 
         await pair.CleanReturnAsync();

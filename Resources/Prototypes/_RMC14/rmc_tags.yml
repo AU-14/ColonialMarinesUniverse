@@ -1,4 +1,7 @@
 - type: Tag
+  id: GasTank # RMC suit-storage whitelists and saved maps.
+
+- type: Tag
   id: RMCSkillPamphlet
 
 - type: Tag
