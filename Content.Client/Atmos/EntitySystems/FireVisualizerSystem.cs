@@ -1,5 +1,6 @@
 using Content.Client.Atmos.Components;
 using Content.Client.DisplacementMap;
+using Content.Shared._RMC14.Atmos; // RMC14
 using Content.Shared.Atmos;
 using Content.Shared.DisplacementMap;
 using Robust.Client.GameObjects;
@@ -16,9 +17,13 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
     [Dependency] private PointLightSystem _lights = default!;
     [Dependency] private DisplacementMapSystem _displacement = default!;
 
+    private EntityQuery<RMCFireColorComponent> _fireColorQuery; // RMC14
+
     public override void Initialize()
     {
         base.Initialize();
+
+        _fireColorQuery = GetEntityQuery<RMCFireColorComponent>(); // RMC14
 
         SubscribeLocalEvent<FireVisualsComponent, ComponentInit>(OnComponentInit);
         SubscribeLocalEvent<FireVisualsComponent, ComponentShutdown>(OnShutdown);
@@ -97,10 +102,19 @@ public sealed partial class FireVisualizerSystem : VisualizerSystem<FireVisualsC
             component.CurrentDisplacement = fireDisplacement;
         }
 
+        // RMC14
+        var fireColor = component.LightColor;
+        if (_fireColorQuery.TryComp(uid, out var fireColorComp))
+        {
+            fireColor = fireColorComp.Color;
+            SpriteSystem.LayerSetColor((uid, sprite), index, fireColor);
+        }
+        // RMC14 end
+
         component.LightEntity ??= Spawn(null, new EntityCoordinates(uid, default));
         var light = EnsureComp<PointLightComponent>(component.LightEntity.Value);
 
-        _lights.SetColor(component.LightEntity.Value, component.LightColor, light);
+        _lights.SetColor(component.LightEntity.Value, fireColor, light); // RMC14 fire color
 
         // light needs a minimum radius to be visible at all, hence the + 1.5f
         _lights.SetRadius(component.LightEntity.Value, Math.Clamp(1.5f + component.LightRadiusPerStack * fireStacks, 0f, component.MaxLightRadius), light);

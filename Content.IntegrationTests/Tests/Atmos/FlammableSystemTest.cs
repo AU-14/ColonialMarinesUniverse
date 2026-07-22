@@ -12,6 +12,7 @@ namespace Content.IntegrationTests.Tests.Atmos;
 public sealed class FlammableSystemTest : GameTest
 {
     private const string TestEntity = "FlammableUpdateTest";
+    private const string TestRMCEntity = "RMCFlammableUpdateTest";
 
     [TestPrototypes]
     private const string Prototypes = $"""
@@ -23,6 +24,12 @@ public sealed class FlammableSystemTest : GameTest
             damage:
               types:
                 Heat: 0
+
+        - type: entity
+          parent: {TestEntity}
+          id: {TestRMCEntity}
+          components:
+          - type: RMCFireColor
         """;
 
     [SidedDependency(Side.Server)] private readonly FlammableSystem _flammable = null!;
@@ -52,9 +59,35 @@ public sealed class FlammableSystemTest : GameTest
         await Pair.RunSeconds(0.5f);
         await Server.WaitAssertion(() => Assert.That(flammable.OnFire, Is.True));
 
-        // The test map has no atmosphere, so the first periodic update extinguishes the entity.
+        // Fire duration is stack-driven and does not depend on the atmospheric simulation.
         await Pair.RunSeconds(0.6f);
-        await Server.WaitAssertion(() => Assert.That(flammable.OnFire, Is.False));
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(flammable.OnFire, Is.True);
+            Assert.That(flammable.FireStacks, Is.EqualTo(1.9f));
+        });
+    }
+
+    [Test]
+    public async Task RMCFlammableFadesAtRMCStackRate()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid entity = default;
+        FlammableComponent flammable = default!;
+
+        await Server.WaitAssertion(() =>
+        {
+            entity = SSpawnAtPosition(TestRMCEntity, map.GridCoords);
+            flammable = SComp<FlammableComponent>(entity);
+            _flammable.SetFireStacks(entity, 2f, flammable, ignite: true);
+        });
+
+        await Pair.RunSeconds(1.1f);
+        await Server.WaitAssertion(() =>
+        {
+            Assert.That(flammable.OnFire, Is.True);
+            Assert.That(flammable.FireStacks, Is.EqualTo(1.75f));
+        });
     }
 
     [Test]

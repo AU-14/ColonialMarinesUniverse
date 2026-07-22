@@ -35,7 +35,6 @@ namespace Content.Server.Atmos.EntitySystems
     public sealed partial class FlammableSystem : EntitySystem
     {
         [Dependency] private ActionBlockerSystem _actionBlockerSystem = default!;
-        [Dependency] private AtmosphereSystem _atmosphereSystem = default!;
         [Dependency] private StunSystem _stunSystem = default!;
         [Dependency] private TemperatureSystem _temperatureSystem = default!;
         [Dependency] private SharedIgnitionSourceSystem _ignitionSourceSystem = default!;
@@ -552,15 +551,6 @@ namespace Content.Server.Atmos.EntitySystems
 
                     if (flammable.FireStacks > 0)
                     {
-                        var air = _atmosphereSystem.GetContainingMixture(uid);
-
-                        // If we're in an oxygenless environment, put the fire out.
-                        if (air == null || air.GetMoles(Gas.Oxygen) < 1f)
-                        {
-                            Extinguish(uid, flammable);
-                            continue;
-                        }
-
                         var source = EnsureComp<IgnitionSourceComponent>(uid);
                         _ignitionSourceSystem.SetIgnited((uid, source));
 
@@ -576,7 +566,10 @@ namespace Content.Server.Atmos.EntitySystems
 
                         _damageableSystem.TryChangeDamage(uid, flammable.Damage * flammable.FireStacks * ev.Multiplier, interruptsDoAfters: false);
 
-                        AdjustFireStacks(uid, flammable.FirestackFade * (flammable.Resisting ? 15f : 1f), flammable, flammable.OnFire);
+                        var fireStackFade = UsesRMCFireBehavior(uid)
+                            ? GetRMCFireStackFade(flammable.Resisting)
+                            : flammable.FirestackFade * (flammable.Resisting ? 15f : 1f);
+                        AdjustFireStacks(uid, fireStackFade, flammable, flammable.OnFire);
                     }
                     else
                     {
