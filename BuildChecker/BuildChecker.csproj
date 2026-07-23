@@ -19,6 +19,8 @@ https://docs.microsoft.com/en-us/visualstudio/msbuild/msbuild
     <ProjectGuid>{C899FCA4-7037-4E49-ABC2-44DE72487110}</ProjectGuid>
     <TargetFramework>net4.7.2</TargetFramework>
     <RestorePackages>false</RestorePackages>
+    <!-- This project only runs build hooks; recursive SDK items may include nested checkouts. -->
+    <EnableDefaultItems>false</EnableDefaultItems>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
