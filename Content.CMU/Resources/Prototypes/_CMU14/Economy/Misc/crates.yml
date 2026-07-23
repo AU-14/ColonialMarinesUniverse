@@ -131,19 +131,17 @@
     children:
     - !type:GroupSelector
       children:
-      - id: CMUMobCarp
-        amount: 3
       - id: MobCow
       - id: MobGoat
       - id: MobGorilla
-        amount: 2
+      #  amount: 2
       - id: MobKangaroo
-        amount: 3
+      #  amount: 3
       - id: MobPig
       - id: MobPenguin
-        amount: 3
-      - id: RMCMobOrion
-        amount: 4
+      #  amount: 3
+      #- id: RMCMobOrion
+      #  amount: 4
       - !type:GroupSelector
         weight: 0.75
         children:
@@ -159,3 +157,47 @@
           amount: 3
         - id: RMCMobSmallHostYiren
           amount: 3
+        - id: CMUMobCarp
+          amount: 3
+      - !type:GroupSelector
+        weight: 0.25
+        children:
+        - id: XenoEgg
+          weight: 2
+        - id: CMUXenoLarvaHL
+        - id: CMUXenoDroneHL
+        - id: CMUXenoDroneGardenerHL
+          weight: 0.5
+        - id: CMUXenoDroneHealerHL
+          weight: 0.5
+        - id: CMUXenoDefenderHL
+        - id: CMUXenoDefenderSteelcrestHL
+          weight: 0.5
+        - id: CMUXenoDefenderHeatshieldHL
+          weight: 0.5
+        - id: CMUXenoSentinelHL
+        - id: CMUXenoSentinelToxicHL
+          weight: 0.5
+        - id: CMUXenoRunnerHL
+        #- id: CMUXenoRunnerAciderHL
+        - id: CMUXenoBullHL
+        #- id: CMUXenoCarrierHL
+        #- id: CMUXenoCarrierEggsacHL
+        #  weight: 0.5
+        - id: CMUXenoBurrowerHL
+        - id: CMUXenoHivelordHL
+        - id: CMUXenoHivelordResinWhispererHL
+          weight: 0.5
+        - id: CMUXenoHivelordDesignerHL
+          weight: 0.5
+        - id: CMUXenoWarriorHL
+        - id: CMUXenoWarriorBulwarkHL
+          weight: 0.5
+        - id: CMUXenoSpitterHL
+        - id: CMUXenoSpitterVenatorHL
+          weight: 0.5
+        - id: CMUXenoSpitterAlchemistHL
+          weight: 0.5
+        - id: CMUXenoLurkerHL
+        - id: CMUXenoLurkerVampireHL
+          weight: 0.5
