@@ -30,7 +30,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         ApplyPendingAudioConfiguration();
         ProcessPendingCrossZAudioSources();
 
-        if (!_zLevelsEnabled)
+        if (!ZLevelsEnabled)
             return;
 
         UpdateZMovement(frameTime);

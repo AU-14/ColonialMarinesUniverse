@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Threading;
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Vehicles;
@@ -79,7 +80,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private int _profileZHighGroundAccepted;
     private int _profileZMoveSnapSweepSamples;
     private int _profileZMoveSnapSweepHighGroundChecks;
-    private volatile bool _debugFalling;
+    private int _debugFalling;
     [Dependency] private PullingSystem _pulling = default!;
 
     private void InitMovement()
@@ -87,7 +88,11 @@ public abstract partial class CMUSharedZLevelsSystem
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
         _highgroundQuery = GetEntityQuery<CMUZLevelHighGroundComponent>();
         _vehicleTraversalQuery = GetEntityQuery<CMUVehicleZTraversalComponent>();
-        Subs.CVar(_configuration, CMUZLevelsCVars.DebugFalling, value => _debugFalling = value, true);
+        Subs.CVar(
+            _configuration,
+            CMUZLevelsCVars.DebugFalling,
+            value => Interlocked.Exchange(ref _debugFalling, value ? 1 : 0),
+            true);
 
         SubscribeLocalEvent<DamageableComponent, CMUZLevelHitEvent>(OnFallDamage);
         SubscribeLocalEvent<PhysicsComponent, CMUZLevelHitEvent>(OnFallAreaImpact);
@@ -406,7 +411,8 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private bool ShouldDebugFalling(EntityUid uid)
     {
-        return _debugFalling && HasComp<CMUZFallingComponent>(uid);
+        return Interlocked.CompareExchange(ref _debugFalling, 0, 0) != 0 &&
+               HasComp<CMUZFallingComponent>(uid);
     }
 
     private void DebugLogFalling(EntityUid uid, string stage, string details)

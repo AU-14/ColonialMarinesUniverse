@@ -8,7 +8,7 @@ namespace Content.Server._CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem
 {
-    protected override bool ZPhysicsEnabled => _zLevelsEnabled;
+    protected override bool ZPhysicsEnabled => ZLevelsEnabled;
 
     private int _maxZTransitionsPerTick = 64;
     private long _zTransitionBudgetTicks = TimeSpan.FromMilliseconds(1).Ticks;
@@ -21,7 +21,7 @@ public sealed partial class CMUZLevelsSystem
         Subs.CVar(
             _config,
             CMUZLevelsCVars.MaxFallsPerTick,
-            value => Volatile.Write(ref _maxZTransitionsPerTick, Math.Max(0, value)),
+            value => Interlocked.Exchange(ref _maxZTransitionsPerTick, Math.Max(0, value)),
             true);
         Subs.CVar(
             _config,
@@ -34,7 +34,7 @@ public sealed partial class CMUZLevelsSystem
 
     protected override bool CanProcessZLevelTransition(EntityUid ent, int offset)
     {
-        var maxTransitionsPerTick = Volatile.Read(ref _maxZTransitionsPerTick);
+        var maxTransitionsPerTick = Interlocked.CompareExchange(ref _maxZTransitionsPerTick, 0, 0);
         if (maxTransitionsPerTick <= 0)
             return false;
 

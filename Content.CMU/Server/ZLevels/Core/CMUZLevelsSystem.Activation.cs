@@ -56,7 +56,7 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnZPhysicsTileChanged(ref TileChangedEvent args)
     {
-        if (!_zLevelsEnabled)
+        if (!ZLevelsEnabled)
             return;
 
         for (var i = 0; i < args.Changes.Length; i++)

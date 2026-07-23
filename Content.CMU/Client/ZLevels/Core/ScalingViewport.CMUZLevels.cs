@@ -21,14 +21,13 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Profiling;
 using Robust.Shared.Prototypes;
-using RuntimeCompilerServices = System.Runtime.CompilerServices;
 
 namespace Content.Client.Viewport;
 
 public sealed partial class ScalingViewport
 {
-    private static readonly RuntimeCompilerServices.ConditionalWeakTable<IClydeViewport, ZLevelViewportRenderState>
-        ZLevelViewportRenderStates = new();
+    // Entries exist only during synchronous viewport rendering and are removed in a finally block.
+    private static readonly HashSet<long> ActiveZLevelViewportIds = new();
 
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IConfigurationManager _config = default!;
@@ -67,6 +66,7 @@ public sealed partial class ScalingViewport
     private readonly List<Box2> _zLowerSearchBounds = new();
     private readonly List<int> _checkedOpeningIndices = new(MaxOpeningLosChecks);
     private readonly List<int> _zRenderedLowerDepths = new();
+    private readonly ZLevelRenderVisibilityState _zLevelRenderVisibility = new();
     private readonly ZEye _zEye = new();
     private readonly ZEye _stairPreviewEye = new();
     private readonly LowerRenderGraceState _zLowerRenderGrace = new();
@@ -156,7 +156,7 @@ public sealed partial class ScalingViewport
         var clearColor = viewport.ClearColor;
         var clearWhenMissingEye = viewport.ClearWhenMissingEye;
         SetZLevelRenderingActive(viewport, false);
-        InvalidateZRenderVisibility(viewport);
+        InvalidateZRenderVisibility();
 
         try
         {
@@ -483,7 +483,6 @@ public sealed partial class ScalingViewport
         }
 
         PublishZRenderVisibility(
-            viewport,
             renderIdentity,
             viewXform.MapID,
             _zRenderedLowerDepths);
@@ -493,7 +492,7 @@ public sealed partial class ScalingViewport
     private void RenderWithoutZLevels(IClydeViewport viewport, string reason)
     {
         SetZLevelRenderingActive(viewport, false);
-        InvalidateZRenderVisibility(viewport);
+        InvalidateZRenderVisibility();
         _zLowerRenderGrace.Reset();
         NoteZRenderBypassed(reason);
         ClearZLevelCompositeState();
@@ -517,35 +516,28 @@ public sealed partial class ScalingViewport
 
     internal static bool IsZLevelCompositionActive(IClydeViewport viewport)
     {
-        return ZLevelViewportRenderStates.TryGetValue(viewport, out var state) &&
-               state.Active;
+        return ActiveZLevelViewportIds.Contains(viewport.Id);
     }
 
-    private static void SetZLevelRenderingActive(IClydeViewport viewport, bool active)
+    private void SetZLevelRenderingActive(IClydeViewport viewport, bool active)
     {
-        ZLevelViewportRenderStates
-            .GetValue(viewport, static _ => new ZLevelViewportRenderState())
-            .Active = active;
+        if (active)
+            ActiveZLevelViewportIds.Add(viewport.Id);
+        else
+            ActiveZLevelViewportIds.Remove(viewport.Id);
     }
 
-    private static void InvalidateZRenderVisibility(IClydeViewport viewport)
+    private void InvalidateZRenderVisibility()
     {
-        ZLevelViewportRenderStates
-            .GetValue(viewport, static _ => new ZLevelViewportRenderState())
-            .RenderVisibility
-            .Invalidate();
+        _zLevelRenderVisibility.Invalidate();
     }
 
-    private static void PublishZRenderVisibility(
-        IClydeViewport viewport,
+    private void PublishZRenderVisibility(
         ZLevelViewIdentity identity,
         MapId baseMapId,
         IReadOnlyList<int> renderedLowerDepths)
     {
-        ZLevelViewportRenderStates
-            .GetValue(viewport, static _ => new ZLevelViewportRenderState())
-            .RenderVisibility
-            .Publish(identity, baseMapId, renderedLowerDepths);
+        _zLevelRenderVisibility.Publish(identity, baseMapId, renderedLowerDepths);
     }
 
     internal bool TryCopyRenderedLowerDepths(
@@ -559,8 +551,7 @@ public sealed partial class ScalingViewport
         destination.Clear();
 
         return _viewport is not null &&
-               ZLevelViewportRenderStates.TryGetValue(_viewport, out var state) &&
-               state.RenderVisibility.TryCopyRenderedLowerDepths(
+               _zLevelRenderVisibility.TryCopyRenderedLowerDepths(
                    new ZLevelViewIdentity(eye, viewEntity, baseMapUid, networkUid),
                    baseMapId,
                    destination);
@@ -1495,12 +1486,6 @@ public sealed partial class ScalingViewport
     }
 
     private readonly record struct StairPreviewOrigin(Vector2 Position, Vector2 ViewerPosition);
-
-    private sealed class ZLevelViewportRenderState
-    {
-        public bool Active;
-        public readonly ZLevelRenderVisibilityState RenderVisibility = new();
-    }
 
     internal readonly struct ZLevelViewIdentity
     {

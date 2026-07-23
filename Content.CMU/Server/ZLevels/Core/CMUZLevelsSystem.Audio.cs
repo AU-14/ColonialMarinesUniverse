@@ -25,10 +25,11 @@ public sealed partial class CMUZLevelsSystem
     private readonly List<CMUZLevelAcousticPathStep> _zLevelAudioPath = new();
     private readonly List<EntityUid> _zLevelAudioSourceScratch = new();
     private EntityQuery<TransformComponent> _zAudioXformQuery;
-    private volatile bool _crossZAudioEnabled = true;
+    private int _crossZAudioEnabled = 1;
     private bool _creatingZLevelAudioProjection;
     private int _maxAudioDepth = 1;
     private int _audioConfigurationDirty;
+    private bool CrossZAudioEnabled => Interlocked.CompareExchange(ref _crossZAudioEnabled, 0, 0) != 0;
 
     private void InitAudio()
     {
@@ -109,8 +110,8 @@ public sealed partial class CMUZLevelsSystem
     {
         StopCrossZAudioProjections(source);
 
-        if (!_zLevelsEnabled ||
-            !_crossZAudioEnabled ||
+        if (!ZLevelsEnabled ||
+            !CrossZAudioEnabled ||
             source.Comp.State != AudioState.Playing ||
             TerminatingOrDeleted(source))
         {
@@ -140,7 +141,7 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnCrossZAudioChanged(bool enabled)
     {
-        _crossZAudioEnabled = enabled;
+        Interlocked.Exchange(ref _crossZAudioEnabled, enabled ? 1 : 0);
         Interlocked.Exchange(ref _audioConfigurationDirty, 1);
     }
 
@@ -170,7 +171,7 @@ public sealed partial class CMUZLevelsSystem
 
     private void RefreshCrossZAudioSources()
     {
-        if (!_zLevelsEnabled || !_crossZAudioEnabled)
+        if (!ZLevelsEnabled || !CrossZAudioEnabled)
         {
             StopAllCrossZAudioProjections();
             return;

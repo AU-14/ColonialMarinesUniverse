@@ -37,7 +37,7 @@ public sealed partial class CMUZLevelsSystem
     private const float StairPreviewProbeRadius = 5f;
     private const int MaxProbeOpeningLosChecks = 24;
 
-    private volatile bool _zLevelsEnabled = true;
+    private int _zLevelsEnabled = 1;
     private int _viewConfigurationDirty;
     private int _clearCrossZViewModesRequested;
     private int _maxPvsDepth = 1;
@@ -77,6 +77,7 @@ public sealed partial class CMUZLevelsSystem
     private int _profilePvsOpeningNearTileBoundsChecks;
     private EntityQuery<MapGridComponent> _viewGridQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _viewHighGroundQuery;
+    private bool ZLevelsEnabled => Interlocked.CompareExchange(ref _zLevelsEnabled, 0, 0) != 0;
 
     private void InitView()
     {
@@ -109,7 +110,7 @@ public sealed partial class CMUZLevelsSystem
     {
         FlushDirtyViewers();
 
-        if (!_zLevelsEnabled)
+        if (!ZLevelsEnabled)
             return;
 
         if (_gameTiming.CurTime < _nextZLevelViewerUpdate)
@@ -261,7 +262,7 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnPlayerAttached(PlayerAttachedEvent ev)
     {
-        if (!_zLevelsEnabled)
+        if (!ZLevelsEnabled)
             return;
 
         var viewer = EnsureComp<CMUZLevelViewerComponent>(ev.Entity);
@@ -367,7 +368,7 @@ public sealed partial class CMUZLevelsSystem
 
     private void SyncViewerProbesCore(Entity<CMUZLevelViewerComponent> ent, TransformComponent? xform = null)
     {
-        if (!_zLevelsEnabled ||
+        if (!ZLevelsEnabled ||
             _maxViewProbesPerPlayer <= 0 ||
             !HasViewerProbeSubscribers(ent))
         {
@@ -1126,7 +1127,7 @@ public sealed partial class CMUZLevelsSystem
 
     private void OnZLevelsEnabledChanged(bool enabled)
     {
-        _zLevelsEnabled = enabled;
+        Interlocked.Exchange(ref _zLevelsEnabled, enabled ? 1 : 0);
 
         if (!enabled)
             Interlocked.Exchange(ref _clearCrossZViewModesRequested, 1);
@@ -1246,7 +1247,7 @@ public sealed partial class CMUZLevelsSystem
     {
         _dirtyViewers.Clear();
 
-        if (!_zLevelsEnabled)
+        if (!ZLevelsEnabled)
         {
             var disabledQuery = EntityQueryEnumerator<CMUZLevelViewerComponent>();
             while (disabledQuery.MoveNext(out var uid, out var viewer))

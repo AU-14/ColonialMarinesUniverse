@@ -149,8 +149,11 @@ Depth attenuation remains a gameplay policy decision under MZ-055. Phase 3 prese
   no longer allocates axis lists or performs quadratic duplicate searches.
 - A warmed 1,000-call footprint characterization reports zero managed allocation when the caller
   provides sufficient capacity.
-- Roof tile propagation follows direct `MapBelow` links and uses one pooled Boolean buffer instead
-  of a dictionary plus per-level tile lists.
+- Roof tile propagation follows direct `MapBelow` links and reuses one system-owned Boolean list
+  instead of a dictionary plus per-level tile lists.
+- Viewport visibility state is owned by each control; only active viewport IDs are tracked during
+  synchronous rendering. Runtime CVar flags use `Interlocked` integer access, keeping these paths
+  compatible with the Robust content sandbox.
 - RMC's unused reactor-light accumulation index was removed.
 - Topology and opening lookup profiler counters distinguish direct/index hits, recovery scans,
   visited networks, recovered hits, misses, candidates, and writes without adding normal-gameplay
@@ -162,7 +165,7 @@ evidence-gated Phase 4 work.
 
 ## Static .NET performance scan
 
-The final Phase 3 scan covered 124 unique production C# files and 30,739 nonblank lines: the CMU Multi-Z
+The final Phase 3 scan covered 124 unique production C# files and 30,727 nonblank lines: the CMU Multi-Z
 modules, their direct modified host adapters, and the added CMU compatibility systems. Tests,
 `RobustToolbox/`, `RSI.NET/`, and generated `BuildChecker/` trees were excluded.
 
@@ -173,7 +176,7 @@ modules, their direct modified host adapters, and the added CMU compatibility sy
   registration, and already-documented rendering/ordnance paths. No new unrecorded hot-path
   collection issue was identified.
 - No current-culture comparer was introduced.
-- The structural scan found 140 explicitly sealed production class declarations and no matching
+- The structural scan found 139 explicitly sealed production class declarations and no matching
   plain public/internal unsealed class declaration in the audited set.
 - Existing projected-light, ordnance, support-query, and potential render-local culling findings
   remain in the audit log; Phase 3 does not claim that static shape proves their runtime cost.
@@ -181,6 +184,7 @@ modules, their direct modified host adapters, and the added CMU compatibility sy
 ## Validation evidence
 
 - `Content.IntegrationTests` DebugOpt build: 0 warnings, 0 errors.
+- Headless content sandbox verification: all client-loaded assemblies passed module type checks.
 - Focused shared/client Multi-Z unit suite: 122 passed.
 - `USSBushMultiZTest`: 5 passed across segmented runs, including five-level construction, source
   obstruction, rollback, post-commit observer retention, combination, topology repair, and
