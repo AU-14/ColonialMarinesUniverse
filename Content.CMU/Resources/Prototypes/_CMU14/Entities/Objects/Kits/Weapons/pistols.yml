@@ -302,3 +302,21 @@
     - id: RMCWeaponRevolverM44
     - id: RMCSpeedLoaderM44
       amount: 6
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14GunCasePistolM50HAZOPS
+  name: M50 Handcannon case
+  description: A gun case containing an M50 "Bald Eagle" handcannon.
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,15,1
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponPistolM50HAZOPS
+    - id: AU14MagazinePistolM50
+      amount: 6
