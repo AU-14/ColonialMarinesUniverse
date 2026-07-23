@@ -38,6 +38,7 @@
     - replay_load
     - saveconfig
     - chatwindow
+    - toggleselfghost # CMU14
 
 - Flags: DEBUG
   Commands:
