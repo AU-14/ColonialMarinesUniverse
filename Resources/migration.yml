@@ -806,7 +806,7 @@ TowelColorGreen: null
 TowelColorDarkGreen: null
 TowelColorGold: null
 TowelColorOrange: null
-TowelColorBlack: null
+TowelColorBlack: TowelColorWhite
 TowelColorPink: null
 TowelColorYellow: null
 TowelColorMaroon: null

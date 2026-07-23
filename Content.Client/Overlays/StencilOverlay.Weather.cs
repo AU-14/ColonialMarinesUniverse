@@ -1,8 +1,10 @@
 using System.Numerics;
+using Content.Client.Viewport;
 using Content.Shared.Light.Components;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Weather;
 using Robust.Client.Graphics;
+using Robust.Shared.Graphics;
 using Robust.Shared.Map.Components;
 
 namespace Content.Client.Overlays;
@@ -22,6 +24,7 @@ public sealed partial class StencilOverlay
         var worldAABB = args.WorldAABB;
         var worldBounds = args.WorldBounds;
         var position = args.Viewport.Eye?.Position.Position ?? Vector2.Zero;
+        var zTileOffset = GetWeatherTileOffset(args.Viewport.Eye);
 
         // Cut out the irrelevant bits via stencil
         // This is why we don't just use parallax; we might want specific tiles to get drawn over
@@ -42,14 +45,15 @@ public sealed partial class StencilOverlay
                     worldHandle.SetTransform(matty);
                     _entManager.TryGetComponent(grid.Owner, out RoofComponent? roofComp);
 
-                    foreach (var tile in _map.GetTilesIntersecting(grid.Owner, grid, worldAABB))
+                    foreach (var tile in _map.GetTilesIntersecting(grid.Owner, grid, worldAABB, ignoreEmpty: false))
                     {
                         // Ignored tiles for stencil
                         if (_weather.CanWeatherAffect((grid.Owner, grid, roofComp), tile))
                             continue;
 
-                        var gridTile = new Box2(tile.GridIndices * grid.Comp.TileSize,
-                            (tile.GridIndices + Vector2i.One) * grid.Comp.TileSize);
+                        var gridTile = new Box2(
+                            tile.GridIndices * grid.Comp.TileSize + zTileOffset,
+                            (tile.GridIndices + Vector2i.One) * grid.Comp.TileSize + zTileOffset);
 
                         worldHandle.DrawRect(gridTile, Color.White);
                     }
@@ -81,5 +85,12 @@ public sealed partial class StencilOverlay
 
         worldHandle.SetTransform(Matrix3x2.Identity);
         worldHandle.UseShader(null);
+    }
+
+    internal static Vector2 GetWeatherTileOffset(IEye? eye)
+    {
+        return eye is ScalingViewport.ZEye zEye
+            ? zEye.VisualZOffset
+            : Vector2.Zero;
     }
 }

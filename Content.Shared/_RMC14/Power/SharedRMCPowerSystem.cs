@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Sprite;
@@ -51,11 +52,11 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedRMCSpriteSystem _sprite = default!;
     [Dependency] private SharedToolSystem _tool = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 
     protected readonly HashSet<EntityUid> ToUpdate = new();
-    private readonly Dictionary<MapId, List<EntityUid>> _reactorPoweredLights = new();
-    private readonly HashSet<MapId> _reactorsUpdated = new();
+    private readonly HashSet<EntityUid> _reactorsUpdated = new();
     private bool _recalculate;
 
     private EntityQuery<RMCApcComponent> _apcQuery;
@@ -100,7 +101,6 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         SubscribeLocalEvent<RMCFusionReactorComponent, RMCFusionReactorDestroyDoAfterEvent>(OnFusionReactorDestroyDoAfter);
         SubscribeLocalEvent<RMCFusionReactorComponent, ExaminedEvent>(OnFusionReactorExamined);
 
-        SubscribeLocalEvent<RMCReactorPoweredLightComponent, MapInitEvent>(OnReactorPoweredLightMapInit);
 
         Subs.BuiEvents<RMCApcComponent>(RMCApcUiKey.Key,
             subs =>
@@ -668,12 +668,6 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         }
     }
 
-    private void OnReactorPoweredLightMapInit(Entity<RMCReactorPoweredLightComponent> ent, ref MapInitEvent args)
-    {
-        if (TryComp(ent, out TransformComponent? xform))
-            _reactorPoweredLights.GetOrNew(xform.MapID).Add(ent);
-    }
-
     private void OnApcSetChannelBuiMsg(Entity<RMCApcComponent> ent, ref RMCApcSetChannelBuiMsg args)
     {
         // Channel switching is intentionally disabled for RMC APCs.
@@ -963,12 +957,26 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
     public abstract bool IsPowered(EntityUid ent);
 
-    private bool AnyReactorsOn(MapId map)
+    protected bool TryGetPowerGroup(EntityUid? mapUid, out EntityUid powerGroup)
+    {
+        powerGroup = default;
+        if (mapUid is not { } map || TerminatingOrDeleted(map))
+            return false;
+
+        powerGroup = _zLevels.TryGetZNetwork(map, out var network)
+            ? network.Value.Owner
+            : map;
+        return true;
+    }
+
+    private bool AnyReactorsOn(EntityUid powerGroup)
     {
         var reactors = EntityQueryEnumerator<RMCFusionReactorComponent, TransformComponent>();
         while (reactors.MoveNext(out var comp, out var xform))
         {
-            if (comp.State == RMCFusionReactorState.Working && xform.MapID == map)
+            if (comp.State == RMCFusionReactorState.Working &&
+                TryGetPowerGroup(xform.MapUid, out var reactorGroup) &&
+                reactorGroup == powerGroup)
                 return true;
         }
 
@@ -977,8 +985,8 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
 
     private void ReactorUpdated(Entity<RMCFusionReactorComponent> ent)
     {
-        var mapId = _transform.GetMapId(ent.Owner);
-        _reactorsUpdated.Add(mapId);
+        if (TryGetPowerGroup(Transform(ent).MapUid, out var powerGroup))
+            _reactorsUpdated.Add(powerGroup);
     }
 
     protected void UpdateReceiverPower(EntityUid receiver, ref PowerChangedEvent ev)
@@ -1049,33 +1057,29 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             var reactorQuery = EntityQueryEnumerator<RMCFusionReactorComponent>();
             while (reactorQuery.MoveNext(out var uid, out _))
             {
-                _reactorsUpdated.Add(Transform(uid).MapID);
+                if (TryGetPowerGroup(Transform(uid).MapUid, out var powerGroup))
+                    _reactorsUpdated.Add(powerGroup);
             }
 
-            var lightQuery = EntityQueryEnumerator<RMCReactorPoweredLightComponent>();
-            while (lightQuery.MoveNext(out var uid, out var comp))
-            {
-                _reactorPoweredLights.GetOrNew(Transform(uid).MapID).Add(uid);
-            }
         }
 
         if (_net.IsClient)
         {
             ToUpdate.Clear();
-            _reactorPoweredLights.Clear();
             _reactorsUpdated.Clear();
             return;
         }
 
         try
         {
-            foreach (var map in _reactorsUpdated)
+            foreach (var powerGroup in _reactorsUpdated)
             {
-                var powered = AnyReactorsOn(map);
+                var powered = AnyReactorsOn(powerGroup);
                 var lights = EntityQueryEnumerator<RMCReactorPoweredLightComponent, TransformComponent>();
                 while (lights.MoveNext(out var uid, out var poweredLight, out var xform))
                 {
-                    if (xform.MapID == map)
+                    if (TryGetPowerGroup(xform.MapUid, out var lightGroup) &&
+                        lightGroup == powerGroup)
                     {
                         poweredLight.Enabled = powered;
                         Dirty(uid, poweredLight);

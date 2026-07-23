@@ -1,4 +1,5 @@
 using Content.Server.Administration.Logs;
+using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.Destructible;
 using Content.Server.Effects;
 using Content.Server.Weapons.Ranged.Systems;
@@ -24,6 +25,8 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
     [Dependency] private DestructibleSystem _destructibleSystem = default!;
     [Dependency] private GunSystem _guns = default!;
     [Dependency] private SharedCameraRecoilSystem _sharedCameraRecoil = default!;
+    [Dependency] private SharedTransformSystem _zTransform = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
@@ -155,7 +158,10 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
 
         if (!deleted)
         {
-            var feedbackFilter = Filter.Pvs(target, entityManager: EntityManager);
+            var feedbackCoordinates = _zTransform.ToMapCoordinates(Transform(target).Coordinates);
+            var feedbackFilter = _zLevels.AddZLevelViewers(
+                Filter.Pvs(target, entityManager: EntityManager),
+                feedbackCoordinates);
             if (predictingSession != null)
                 feedbackFilter.RemovePlayer(predictingSession);
 
@@ -231,6 +237,10 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
             predictedProjectile = predicted.ClientId;
         }
 
+        var impactFilter = _zLevels.AddZLevelViewers(
+            Filter.Pvs(xform.Coordinates, entityMan: EntityManager),
+            _zTransform.ToMapCoordinates(xform.Coordinates));
+
         RaiseNetworkEvent(
             new ImpactEffectEvent(
                 impactEffect,
@@ -238,7 +248,7 @@ public sealed partial class ProjectileSystem : SharedProjectileSystem
                 shooter,
                 predictedProjectile,
                 GetNetEntity(target)),
-            Filter.Pvs(xform.Coordinates, entityMan: EntityManager));
+            impactFilter);
     }
 
     private bool TryPenetrate(Entity<ProjectileComponent> projectile, DamageSpecifier damage, FixedPoint2 damageRequired)

@@ -1,4 +1,5 @@
 ﻿using System.Runtime.InteropServices;
+using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
@@ -60,9 +61,15 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
         SubscribeLocalEvent<RMCPowerReceiverComponent, PowerChangedEvent>(OnReceiverPowerChanged);
         SubscribeLocalEvent<RMCPowerUsageDisplayComponent, ExaminedEvent>(OnUsageDisplayEvent);
+        SubscribeLocalEvent<CMUZLevelNetworkUpdatedEvent>(OnZLevelNetworkUpdated);
 
         Subs.CVar(_config, RMCCVars.RMCPowerUpdateEverySeconds, v => _updateEvery = TimeSpan.FromSeconds(v), true);
         Subs.CVar(_config, RMCCVars.RMCPowerLoadMultiplier, v => _powerLoadMultiplier = v, true);
+    }
+
+    private void OnZLevelNetworkUpdated(ref CMUZLevelNetworkUpdatedEvent args)
+    {
+        RecalculatePower();
     }
 
     private void OnUsageDisplayEvent(Entity<RMCPowerUsageDisplayComponent> ent, ref ExaminedEvent args)
@@ -151,12 +158,12 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
         while (generators.MoveNext(out var generator, out var xform))
         {
             if (generator.State != RMCFusionReactorState.Working ||
-                xform.MapUid is not { } map)
+                !TryGetPowerGroup(xform.MapUid, out var powerGroup))
             {
                 continue;
             }
 
-            ref var mapPower = ref CollectionsMarshal.GetValueRefOrAddDefault(power, map, out _);
+            ref var mapPower = ref CollectionsMarshal.GetValueRefOrAddDefault(power, powerGroup, out _);
             mapPower += generator.Watts;
         }
 
@@ -172,7 +179,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
                     continue;
                 }
 
-                if (xform.MapUid is not { } map)
+                if (!TryGetPowerGroup(xform.MapUid, out var powerGroup))
                     continue;
 
                 if (!_apcQuery.TryComp(apc, out var apcComp))
@@ -186,7 +193,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
                     cell = (cellId.Value, battery);
                 }
 
-                _apcs.GetOrNew(map).Add(((apc, apcComp, xform), cell));
+                _apcs.GetOrNew(powerGroup).Add(((apc, apcComp, xform), cell));
             }
 
             foreach (var remove in _toRemove)

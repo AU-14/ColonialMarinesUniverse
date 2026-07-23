@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Random;
 using Content.Shared._RMC14.Weapons.Ranged;
@@ -16,6 +17,7 @@ using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
 using Content.Shared.Tag;
@@ -34,6 +36,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
@@ -52,6 +55,7 @@ public abstract partial class SharedGunSystem : EntitySystem
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private INetManager _netManager = default!;
     [Dependency] private ItemSlotsSystem _slots = default!;
+    [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
     [Dependency] private RechargeBasicEntityAmmoSystem _recharge = default!;
     [Dependency] private SharedCombatModeSystem _combatMode = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -470,6 +474,23 @@ public abstract partial class SharedGunSystem : EntitySystem
         if (toCoordinates == null)
             return null;
 
+        var sourceFromCoordinates = fromCoordinates;
+        var sourceToCoordinates = toCoordinates.Value;
+        if (!_zLevelShooting.TryAdjustShotCoordinates(
+                user,
+                fromCoordinates,
+                toCoordinates.Value,
+                out fromCoordinates,
+                out var adjustedToCoordinates,
+                sourceCollisionMask: 0))
+        {
+            gun.Comp.NextFire = lastFire;
+            DirtyField(gun.AsNullable(), nameof(GunComponent.NextFire));
+            return null;
+        }
+
+        toCoordinates = adjustedToCoordinates;
+
         // Remove ammo
         var ev = new TakeAmmoEvent(shots, [], fromCoordinates, user);
 
@@ -511,6 +532,24 @@ public abstract partial class SharedGunSystem : EntitySystem
 
             return null;
         }
+
+        var sourceCollisionMask = GetShotCollisionMask(ev.Ammo);
+        if (_zLevelShooting.IsCrossZSourcePathBlocked(
+                user,
+                sourceFromCoordinates,
+                fromCoordinates,
+                sourceCollisionMask))
+        {
+            fromCoordinates = sourceFromCoordinates;
+            toCoordinates = sourceToCoordinates;
+            RestoreDirectAmmoCoordinates(ev.Ammo, sourceFromCoordinates);
+        }
+
+        _zLevelShooting.TryGetProjectileVisualOffset(
+            user,
+            sourceFromCoordinates,
+            fromCoordinates,
+            out var projectileVisualOffset);
 
         // Handle burstfire
         if (gun.Comp.SelectedMode == SelectiveFire.Burst)
@@ -623,6 +662,8 @@ public abstract partial class SharedGunSystem : EntitySystem
                 }
             }
         }
+
+        _zLevelShooting.ApplyProjectileVisualOffset(shotProjectiles, projectileVisualOffset);
 
         var shotEv = new GunShotEvent(user, ev.Ammo, fromCoordinates, toCoordinates.Value);
         RaiseLocalEvent(gun, ref shotEv);
@@ -745,6 +786,83 @@ public abstract partial class SharedGunSystem : EntitySystem
             Projectiles.SetShooter(uid, projectile, shooter.Value);
 
         TransformSystem.SetWorldRotation(uid, direction.ToWorldAngle() + projectile.Angle);
+    }
+
+    private int GetShotCollisionMask(IReadOnlyList<(EntityUid? Entity, IShootable Shootable)> ammo)
+    {
+        var collisionMask = 0;
+        foreach (var (entity, shootable) in ammo)
+        {
+            if (shootable is CartridgeAmmoComponent cartridge)
+            {
+                collisionMask |= GetPrototypeShotCollisionMask(cartridge.Prototype);
+                continue;
+            }
+
+            if (shootable is RMCFlamerAmmoProviderComponent or RMCSprayAmmoProviderComponent)
+            {
+                collisionMask |= (int) (CollisionGroup.FullTileMask | CollisionGroup.BarricadeImpassable);
+                continue;
+            }
+
+            if (entity is not { } uid || Deleted(uid))
+                continue;
+
+            if (TryComp<HitscanBasicRaycastComponent>(uid, out var hitscan))
+                collisionMask |= (int) hitscan.CollisionMask;
+
+            if (!TryComp<FixturesComponent>(uid, out var fixtures))
+                continue;
+
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                collisionMask |= fixture.CollisionMask;
+            }
+        }
+
+        return collisionMask == 0
+            ? CMUZLevelShootingSystem.DefaultSourceCollisionMask
+            : collisionMask;
+    }
+
+    private int GetPrototypeShotCollisionMask(EntProtoId prototypeId)
+    {
+        if (!ProtoMan.TryIndex<EntityPrototype>(prototypeId, out var prototype))
+            return 0;
+
+        var collisionMask = 0;
+        if (prototype.TryComp<HitscanBasicRaycastComponent>(out var hitscan, Factory))
+            collisionMask |= (int) hitscan.CollisionMask;
+
+        if (prototype.TryComp<FixturesComponent>(out var fixtures, Factory))
+        {
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                collisionMask |= fixture.CollisionMask;
+            }
+        }
+
+        return collisionMask;
+    }
+
+    private void RestoreDirectAmmoCoordinates(
+        IReadOnlyList<(EntityUid? Entity, IShootable Shootable)> ammo,
+        EntityCoordinates coordinates)
+    {
+        foreach (var (entity, shootable) in ammo)
+        {
+            if (entity is not { } uid ||
+                Deleted(uid) ||
+                Containers.IsEntityInContainer(uid) ||
+                shootable is CartridgeAmmoComponent ||
+                shootable is RMCFlamerAmmoProviderComponent ||
+                shootable is RMCSprayAmmoProviderComponent)
+            {
+                continue;
+            }
+
+            TransformSystem.SetCoordinates(uid, Transform(uid), coordinates);
+        }
     }
 
     /// <summary>

@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Client.Stylesheets;
+using Content.Shared._CMU14.Input;
 using Content.Shared._RMC14.Input;
 using Content.Shared.CCVar;
 using Content.Shared.Input;
@@ -174,6 +175,9 @@ namespace Content.Client.Options.UI.Tabs
             AddButton(CMKeyFunctions.RMCInteractWithOtherHand);
             AddButton(CMKeyFunctions.RMCRest);
             AddButton(CMKeyFunctions.RMCResist);
+
+            AddHeader("ui-options-header-cmu-zlevels");
+            AddButton(CMUKeyFunctions.CMUToggleShootDownZLevel);
 
             AddHeader("ui-options-header-rmc-xeno");
             AddButton(CMKeyFunctions.CMXenoWideSwing);

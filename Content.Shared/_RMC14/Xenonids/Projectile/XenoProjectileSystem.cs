@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Light;
 using Content.Shared._RMC14.Movement;
@@ -49,6 +50,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private CMUZLevelShootingSystem _zLevelShooting = default!;
 
     private EntityQuery<ProjectileComponent> _projectileQuery;
     private EntityQuery<PreventAttackLightOffComponent> _preventAttackLightOffQuery;
@@ -447,7 +449,19 @@ public sealed partial class XenoProjectileSystem : EntitySystem
             return false;
 
         var origin = _transform.GetMapCoordinates(xeno);
+        var sourceOrigin = origin;
         var targetMap = _transform.ToMapCoordinates(targetCoords);
+        if (!_zLevelShooting.TryAdjustShotMapCoordinates(
+                xeno,
+                origin,
+                targetMap,
+                out origin,
+                out targetMap,
+                _zLevelShooting.GetProjectileCollisionMask(projectileId)))
+            return false;
+
+        _zLevelShooting.TryGetProjectileVisualOffset(xeno, sourceOrigin, origin, out var projectileVisualOffset);
+
         if (origin.MapId != targetMap.MapId ||
             origin.Position == targetMap.Position)
         {
@@ -489,6 +503,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
             diff *= speed / diff.Length();
 
             _gun.ShootProjectile(projectile, diff, Vector2.Zero, xeno, xeno, speed);
+            _zLevelShooting.ApplyProjectileVisualOffset(projectile, projectileVisualOffset);
 
             var ev = new ProjectileShotEvent(xeno, predicted);
             RaiseLocalEvent(projectile, ref ev);

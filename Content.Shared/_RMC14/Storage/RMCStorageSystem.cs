@@ -698,6 +698,9 @@ public sealed partial class RMCStorageSystem : EntitySystem
             {
                 foreach (var toClose in _toClose)
                 {
+                    if (!TryComp<EntityStorageComponent>(toClose, out _))
+                        continue;
+
                     var locked = _lock.IsLocked(toClose);
                     if (locked)
                         _lock.Unlock(toClose, null);

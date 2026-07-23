@@ -1,13 +1,17 @@
 using System.Numerics;
+using System.Diagnostics.CodeAnalysis;
 using Content.Client.Graphics;
 using Content.Client.Parallax;
+using Content.Client.Viewport;
 using Content.Client.Weather;
+using Content.Shared._CMU14.ZLevels;
 using Content.Shared.Salvage;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Weather;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
+using Robust.Shared.Configuration;
 using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -25,6 +29,7 @@ public sealed partial class StencilOverlay : Overlay
     private static readonly ProtoId<ShaderPrototype> StencilDraw = "StencilDraw";
 
     [Dependency] private IClyde _clyde = default!;
+    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _protoManager = default!;
@@ -68,7 +73,10 @@ public sealed partial class StencilOverlay : Overlay
             res.Blep = _clyde.CreateRenderTarget(args.Viewport.Size, new RenderTargetFormatParameters(RenderTargetColorFormat.Rgba8Srgb), name: "weather-stencil");
         }
 
-        if (_statusEffects.TryEffectsWithComp(mapUid, out _weatherSet))
+        var drawWeather = args.Viewport.Eye is not ScalingViewport.ZEye { Depth: < 0 } ||
+                          _config.GetCVar(CMUZLevelsCVars.WeatherLowerLayers);
+
+        if (drawWeather && TryGetWeatherSetForPass(args, mapUid, out _weatherSet))
             DrawWeather(args, res, _weatherSet, invMatrix);
 
         if (_entManager.TryGetComponent<RestrictedRangeComponent>(mapUid, out var restrictedRangeComponent))
@@ -93,5 +101,26 @@ public sealed partial class StencilOverlay : Overlay
         {
             Blep?.Dispose();
         }
+    }
+
+    private bool TryGetWeatherSetForPass(
+        in OverlayDrawArgs args,
+        EntityUid mapUid,
+        [NotNullWhen(true)] out HashSet<Entity<WeatherStatusEffectComponent, StatusEffectComponent>>? weather)
+    {
+        if (_statusEffects.TryEffectsWithComp(mapUid, out weather))
+            return true;
+
+        if (args.Viewport.Eye is not ScalingViewport.ZEye zEye ||
+            zEye.WeatherSourceMapId == MapId.Nullspace ||
+            zEye.WeatherSourceMapId == args.MapId)
+        {
+            weather = null;
+            return false;
+        }
+
+        var weatherMapUid = _map.GetMapOrInvalid(zEye.WeatherSourceMapId);
+        return weatherMapUid != EntityUid.Invalid &&
+               _statusEffects.TryEffectsWithComp(weatherMapUid, out weather);
     }
 }

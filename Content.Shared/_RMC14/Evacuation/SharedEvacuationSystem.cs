@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Numerics;
 using System.Text;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Explosion;
@@ -59,6 +60,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private EntityQuery<AreaComponent> _areaQuery;
     private EntityQuery<DoorComponent> _doorQuery;
@@ -468,18 +470,42 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
     private IEnumerable<EntityUid> GetEvacuationAreas(EntityCoordinates coordinates)
     {
-        if (!_area.TryGetAllAreas(coordinates, out var areaGrid))
+        var ent = coordinates.EntityId;
+        if (!ent.IsValid() || !TryComp(ent, out TransformComponent? entXform) ||
+            entXform.MapUid is not { } targetMap)
             yield break;
 
-        foreach (var areaId in areaGrid.Value.Comp.AreaEntities.Values)
+        var searchMaps = new HashSet<EntityUid> { targetMap };
+        if (_zLevels.TryGetZNetwork(targetMap, out var network))
         {
-            if (!_areaQuery.TryComp(areaId, out var area) ||
-                !area.HijackEvacuationArea)
+            foreach (var (_, netMapUid) in network.Value.Comp.ZLevels)
+            {
+                if (netMapUid.HasValue)
+                    searchMaps.Add(netMapUid.Value);
+            }
+        }
+
+        var seen = new HashSet<EntityUid>();
+        var gridQuery = EntityQueryEnumerator<AreaGridComponent, TransformComponent>();
+        while (gridQuery.MoveNext(out _, out _, out var gridXform))
+        {
+            if (!searchMaps.Contains(gridXform.MapUid ?? EntityUid.Invalid) ||
+                !_area.TryGetAllAreas(gridXform.Coordinates, out var areaGrid))
             {
                 continue;
             }
 
-            yield return areaId;
+            foreach (var areaId in areaGrid.Value.Comp.AreaEntities.Values)
+            {
+                if (!seen.Add(areaId) ||
+                    !_areaQuery.TryComp(areaId, out var area) ||
+                    !area.HijackEvacuationArea)
+                {
+                    continue;
+                }
+
+                yield return areaId;
+            }
         }
     }
 

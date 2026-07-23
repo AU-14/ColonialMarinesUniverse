@@ -269,9 +269,14 @@ namespace Content.Shared.Movement.Systems
 
             var oldMapId = args.OldMapId;
             var mapId = args.Transform.MapUid;
+            var movingWithinZNetwork = oldMapId is { } oldMap &&
+                                       mapId is { } newMap &&
+                                       _cmuZLevels.TryGetZNetwork(oldMap, out var oldNetwork) &&
+                                       _cmuZLevels.TryGetZNetwork(newMap, out var newNetwork) &&
+                                       oldNetwork.Value.Owner == newNetwork.Value.Owner;
 
             // If we change maps then reset eye rotation entirely.
-            if (oldMapId != mapId)
+            if (oldMapId != mapId && !movingWithinZNetwork)
             {
                 entity.Comp.RelativeEntity = relative;
                 entity.Comp.TargetRelativeRotation = Angle.Zero;

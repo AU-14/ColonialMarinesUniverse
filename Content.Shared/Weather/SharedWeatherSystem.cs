@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Content.Shared.Maps;
@@ -20,6 +21,7 @@ public abstract partial class SharedWeatherSystem : EntitySystem
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedRoofSystem _roof = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     [Dependency] private EntityQuery<BlockWeatherComponent> _blockQuery = default!;
     [Dependency] private EntityQuery<WeatherStatusEffectComponent> _weatherQuery = default!;
@@ -29,13 +31,13 @@ public abstract partial class SharedWeatherSystem : EntitySystem
 
     public bool CanWeatherAffect(Entity<MapGridComponent?, RoofComponent?> ent, TileRef tileRef)
     {
-        if (tileRef.Tile.IsEmpty)
-            return true;
-
         if (!Resolve(ent, ref ent.Comp1))
             return false;
 
         if (Resolve(ent, ref ent.Comp2, false) && _roof.IsRooved((ent, ent.Comp1, ent.Comp2), tileRef.GridIndices))
+            return false;
+
+        if (_zLevels.HasTileAbove(tileRef.GridIndices, ent.Owner))
             return false;
 
         var tileDef = (ContentTileDefinition)_tileDefManager[tileRef.Tile.TypeId];

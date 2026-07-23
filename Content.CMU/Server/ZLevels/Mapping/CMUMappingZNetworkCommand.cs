@@ -1,0 +1,84 @@
+using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.Administration;
+using Content.Server.GameTicking;
+using Content.Server.Maps;
+using Content.Shared.Administration;
+using Content.Shared.Maps;
+using Robust.Server.GameObjects;
+using Robust.Shared.Console;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
+
+namespace Content.Server._CMU14.ZLevels.Mapping;
+
+[AdminCommand(AdminFlags.Server | AdminFlags.Mapping)]
+public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
+{
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private CMUZNetworkLifecycleSystem _lifecycle = default!;
+    [Dependency] private MapSystem _map = default!;
+
+    public override string Command => "znetwork-mapping";
+    public override string Description => "Load existed game map prototype as ZNetwork for mapping";
+
+    public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
+    {
+        var options = new List<CompletionOption>();
+        foreach (var map in _proto.EnumeratePrototypes<GameMapPrototype>())
+        {
+            if (map.MapsAbove.Count > 0 || map.MapsBelow.Count > 0)
+                options.Add(new CompletionOption(map.ID, map.MapName));
+        }
+
+        return CompletionResult.FromHintOptions(options, "GameMapPrototype with CMU Z-level map set");
+    }
+
+    public override void Execute(IConsoleShell shell, string argStr, string[] args)
+    {
+        if (shell.Player is not { } player)
+        {
+            shell.WriteError(Loc.GetString("shell-cannot-run-command-from-server"));
+            return;
+        }
+
+        if (args.Length != 1)
+        {
+            shell.WriteError("Wrong arguments count.");
+            return;
+        }
+
+        //Get Map Prototype
+        if (!_proto.Resolve<GameMapPrototype>(args[0], out var mapProto))
+        {
+            shell.WriteError($"Unknown GameMapPrototype {args[0]}");
+            return;
+        }
+
+        if (!_lifecycle.TryCreateMappingNetwork(mapProto, out var result, out var error))
+        {
+            shell.WriteError(error);
+            return;
+        }
+
+        //Maps successfully created. run misc helpful mapping commands
+        if (player.AttachedEntity is { Valid: true } playerEntity &&
+            (EntityManager.GetComponent<MetaDataComponent>(playerEntity).EntityPrototype is not { } proto || proto != GameTicker.AdminObserverPrototypeName))
+        {
+            shell.ExecuteCommand("aghost");
+        }
+
+        // don't interrupt mapping with events or auto-shuttle
+        shell.ExecuteCommand("changecvar events.enabled false");
+        shell.ExecuteCommand("changecvar shuttle.auto_call_time 0");
+
+        //TODO: Autosaves
+
+        shell.ExecuteCommand($"tp 0 0 {result.BaseLevel.Comp.MapId}");
+        if (player.AttachedEntity is { Valid: true } attached)
+            EntityManager.System<CMUZLevelsSystem>().RefreshZLevelViewer(attached);
+
+        shell.RemoteExecuteCommand("mappingclientsidesetup");
+        foreach (var mapId in result.CreatedMaps)
+            DebugTools.Assert(_map.IsPaused(mapId));
+    }
+}

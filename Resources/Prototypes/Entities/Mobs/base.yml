@@ -54,6 +54,7 @@
   - type: MobMover
   - type: MovementSpeedModifier
   - type: LagCompensation
+  - type: CMUZPhysics
 
 - type: entity
   save: false

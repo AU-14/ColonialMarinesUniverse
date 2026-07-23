@@ -1,6 +1,8 @@
 using System;
 using System.Numerics;
 using System.Collections.Generic;
+using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using Content.Shared.Damage;
 using Content.Shared.Doors.Components;
 using Content.Shared.Foldable;
@@ -280,6 +282,12 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         out CollisionCandidate candidate)
     {
         candidate = default;
+
+        if (HasComp<CMUVehicleZTraversalComponent>(vehicle) &&
+            HasComp<CMUZLevelHighGroundComponent>(other))
+        {
+            return false;
+        }
 
         var otherXform = Transform(other);
         if (!otherXform.Anchored && HasComp<ItemComponent>(other))

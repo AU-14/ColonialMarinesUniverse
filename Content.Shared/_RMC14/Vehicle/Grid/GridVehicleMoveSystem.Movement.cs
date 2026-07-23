@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using Content.Shared._CMU14.ZLevels.Core.Components;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using System.Numerics;
 using Content.Shared.Vehicle.Components;
 using Content.Shared._RMC14.Vehicle;
@@ -824,6 +826,56 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         return true;
     }
 
+    private void UpdateFallingMovement(
+        EntityUid uid,
+        GridVehicleMoverComponent mover,
+        EntityUid grid,
+        MapGridComponent gridComp,
+        CMUVehicleZTraversalComponent zTraversal,
+        float frameTime)
+    {
+        GetSmashSlowdownMultiplier(mover);
+
+        mover.IsCommittedToMove = false;
+        mover.IsPushMove = false;
+        mover.PushDirection = Vector2i.Zero;
+
+        var maxDriftSpeed = MathF.Max(0f, zTraversal.MaxAirDriftSpeed);
+        if (maxDriftSpeed > 0f)
+            mover.CurrentSpeed = Math.Clamp(mover.CurrentSpeed, -maxDriftSpeed, maxDriftSpeed);
+
+        mover.CurrentSpeed = GridVehicleMotionSimulator.StepIdleSpeed(
+            mover.CurrentSpeed,
+            mover.Deceleration * MathF.Max(0f, zTraversal.AirDriftDecelerationMultiplier),
+            frameTime);
+
+        var moved = false;
+        if (mover.CurrentDirection != Vector2i.Zero &&
+            MathF.Abs(mover.CurrentSpeed) > MinVehicleSpeed)
+        {
+            var moveDir = mover.CurrentSpeed >= 0f
+                ? mover.CurrentDirection
+                : -mover.CurrentDirection;
+            var forward = new Vector2(moveDir.X, moveDir.Y);
+            var travel = MathF.Abs(mover.CurrentSpeed) * frameTime;
+            var target = mover.Position + forward * travel;
+            var rotation = DirectionToVehicleRotation(mover.CurrentDirection);
+
+            moved = TryMoveContinuous(uid, mover, grid, target, rotation, out var blocked);
+            if (blocked)
+                mover.CurrentSpeed = 0f;
+        }
+
+        UpdateDerivedTileState(grid, gridComp, mover);
+        mover.IsMoving = MathF.Abs(mover.CurrentSpeed) > MinVehicleSpeed;
+        SetGridPosition(uid, grid, mover.Position);
+
+        if (moved || mover.IsMoving)
+            _physics.WakeBody(uid);
+
+        Dirty(uid, mover);
+    }
+
     private bool TryMoveKnownClear(
         EntityUid uid,
         GridVehicleMoverComponent mover,
@@ -1107,6 +1159,18 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         var local = coords.WithEntityId(xform.ParentUid, _transform, EntityManager).Position;
 
         _transform.SetLocalPosition(uid, local, xform);
+        WakeVehicleZPhysics(uid);
+    }
+
+    private void WakeVehicleZPhysics(EntityUid uid)
+    {
+        if (!HasComp<CMUVehicleZTraversalComponent>(uid) ||
+            !TryComp(uid, out CMUZPhysicsComponent? zPhysics))
+        {
+            return;
+        }
+
+        _zLevels.WakeZPhysics((uid, zPhysics));
     }
 
     private Vector2i GetTile(EntityUid grid, MapGridComponent gridComp, Vector2 pos)

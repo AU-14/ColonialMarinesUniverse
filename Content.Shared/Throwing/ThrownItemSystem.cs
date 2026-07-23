@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Gravity;
@@ -25,6 +26,7 @@ namespace Content.Shared.Throwing
         [Dependency] private SharedBroadphaseSystem _broadphase = default!;
         [Dependency] private SharedPhysicsSystem _physics = default!;
         [Dependency] private SharedGravitySystem _gravity = default!;
+        [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
         private const string ThrowingFixture = "throw-fixture";
 
@@ -127,6 +129,13 @@ namespace Content.Shared.Throwing
                 _adminLogger.Add(LogType.Landed, LogImpact.Low, $"{ToPrettyString(uid):entity} thrown by {ToPrettyString(thrownItem.Thrower.Value):thrower} landed.");
 
             _broadphase.RegenerateContacts((uid, physics));
+
+            if (_zLevels.DistanceToGround(uid, out _) > 0 &&
+                _zLevels.WakeZPhysics(uid))
+            {
+                return;
+            }
+
             var landEvent = new LandEvent(thrownItem.Thrower, playSound);
             RaiseLocalEvent(uid, ref landEvent);
         }

@@ -27,6 +27,7 @@
         density: 15
         layer:
         - GhostImpassable
+  - type: CMUZLevelGhostMover
 
 # shared parent between aghosts, replay spectators and normal observers
 - type: entity

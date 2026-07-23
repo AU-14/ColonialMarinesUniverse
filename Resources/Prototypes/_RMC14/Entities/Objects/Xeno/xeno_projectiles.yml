@@ -9,6 +9,7 @@
     sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
   - type: Physics
     bodyType: Dynamic
+  - type: CMUZPhysics
   - type: TileFrictionModifier
     modifier: 0
   - type: Fixtures

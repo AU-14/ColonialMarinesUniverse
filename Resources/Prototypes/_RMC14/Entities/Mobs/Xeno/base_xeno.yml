@@ -152,6 +152,7 @@
   - type: Spottable
   - type: Physics
     bodyType: KinematicController
+  - type: CMUXenoZJump
   - type: Fixtures
     fixtures:
       fix1:

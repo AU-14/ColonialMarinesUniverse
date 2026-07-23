@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Chemistry.Reagent;
@@ -70,6 +71,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private static readonly ProtoId<ReagentPrototype> WaterReagent = "Water";
     private static readonly ProtoId<TagPrototype> StructureTag = "Structure";
@@ -470,9 +472,31 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         _onCollide.CleanupChain(chain);
     }
 
-    public int SpawnFire(EntityCoordinates target, EntProtoId spawn, EntityUid chain, int range, int? intensity, int? duration, out bool cont)
+    public int SpawnFire(
+        EntityCoordinates target,
+        EntProtoId spawn,
+        EntityUid chain,
+        int range,
+        int? intensity,
+        int? duration,
+        out bool cont,
+        int? zProjectionMaxFloors = null,
+        Func<EntityCoordinates, bool>? canSpawn = null)
     {
         cont = false;
+        var projected = zProjectionMaxFloors is { } maxFloors
+            ? _zLevels.TryProjectToGround(target, out target, maxFloors)
+            : _zLevels.TryProjectToGround(target, out target);
+
+        if (!projected)
+        {
+            cont = true;
+            return range;
+        }
+
+        if (canSpawn != null && !canSpawn(target))
+            return Math.Max(range - 1, 0);
+
         if (!_rmcMap.TryGetTileDef(target, out var tile) ||
             tile.ID == ContentTileDefinition.SpaceID)
         {
@@ -557,8 +581,11 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
 
         foreach (var ignitionTarget in targets)
         {
-            if (CheckViableTile(ent, ignitionTarget))
-                SpawnFireChain(ent.Comp.Spawn, chain, ignitionTarget, intensity, duration);
+            if (!_zLevels.TryProjectToGround(ignitionTarget, out var projectedTarget))
+                continue;
+
+            if (CheckViableTile(ent, projectedTarget))
+                SpawnFireChain(ent.Comp.Spawn, chain, projectedTarget, intensity, duration);
         }
 
         _onCollide.CleanupChain(chain);

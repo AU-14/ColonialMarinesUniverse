@@ -1,4 +1,5 @@
 using Content.Server.Chat.Systems;
+using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.Movement.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Effects;
@@ -17,6 +18,7 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private LagCompensationSystem _lag = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     public override void Initialize()
     {
@@ -70,7 +72,10 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
     protected override void DoDamageEffect(List<EntityUid> targets, EntityUid? user, TransformComponent targetXform)
     {
-        var filter = Filter.Pvs(targetXform.Coordinates, entityMan: EntityManager).RemoveWhereAttachedEntity(o => o == user);
+        var filter = _zLevels.AddZLevelViewers(
+                Filter.Pvs(targetXform.Coordinates, entityMan: EntityManager),
+                TransformSystem.ToMapCoordinates(targetXform.Coordinates))
+            .RemoveWhereAttachedEntity(o => o == user);
         _color.RaiseEffect(Color.Red, targets, filter);
     }
 
@@ -86,6 +91,10 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         {
             filter = Filter.Pvs(user, entityManager: EntityManager);
         }
+
+        filter = _zLevels.AddZLevelViewers(
+            filter,
+            TransformSystem.ToMapCoordinates(Transform(user).Coordinates));
 
         RaiseNetworkEvent(new MeleeLungeEvent(GetNetEntity(user), GetNetEntity(weapon), angle, localPos, animation), filter);
     }

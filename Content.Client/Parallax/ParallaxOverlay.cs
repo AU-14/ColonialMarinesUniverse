@@ -1,5 +1,8 @@
 using System.Numerics;
 using Content.Client.Parallax.Managers;
+using Content.Client.Viewport;
+using Content.Shared._CMU14.ZLevels;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.CCVar;
 using Content.Shared.Parallax.Biomes;
 using Robust.Client.GameObjects;
@@ -21,6 +24,7 @@ public sealed partial class ParallaxOverlay : Overlay
     [Dependency] private IParallaxManager _manager = default!;
     private readonly SharedMapSystem _mapSystem;
     private readonly ParallaxSystem _parallax;
+    private readonly CMUSharedZLevelsSystem _zLevels;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowWorld;
 
@@ -30,6 +34,7 @@ public sealed partial class ParallaxOverlay : Overlay
         IoCManager.InjectDependencies(this);
         _mapSystem = _entManager.System<SharedMapSystem>();
         _parallax = _entManager.System<ParallaxSystem>();
+        _zLevels = _entManager.System<CMUSharedZLevelsSystem>();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -37,7 +42,26 @@ public sealed partial class ParallaxOverlay : Overlay
         if (args.MapId == MapId.Nullspace || _entManager.HasComponent<BiomeComponent>(_mapSystem.GetMapOrInvalid(args.MapId)))
             return false;
 
-        return true;
+        if (args.Viewport.Eye is ScalingViewport.ZEye zEye)
+            return zEye.LowestDepth == zEye.Depth;
+
+        return ShouldDrawOrdinaryPass(
+            ScalingViewport.IsZLevelCompositionActive(args.Viewport),
+            _configurationManager.GetCVar(CMUZLevelsCVars.Enabled),
+            _configurationManager.GetCVar(CMUZLevelsCVars.RenderEnabled),
+            _zLevels.TryMapDown(args.MapUid, out _));
+    }
+
+    internal static bool ShouldDrawOrdinaryPass(
+        bool viewportRenderZLevels,
+        bool zLevelsEnabled,
+        bool renderEnabled,
+        bool hasLowerMap)
+    {
+        return !viewportRenderZLevels ||
+               !zLevelsEnabled ||
+               !renderEnabled ||
+               !hasLowerMap;
     }
 
     protected override void Draw(in OverlayDrawArgs args)

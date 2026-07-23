@@ -1,5 +1,6 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.ActionBlocker;
 using Content.Shared.CCVar;
 using Content.Shared.Friction;
@@ -47,6 +48,7 @@ public abstract partial class SharedMoverController : VirtualController
     [Dependency] private SharedGravitySystem _gravity = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private TagSystem _tags = default!;
+    [Dependency] private CMUSharedZLevelsSystem _cmuZLevels = default!;
 
     [Dependency] protected EntityQuery<CanMoveInAirComponent> CanMoveInAirQuery = default!;
     [Dependency] protected EntityQuery<FootstepModifierComponent> FootstepModifierQuery = default!;

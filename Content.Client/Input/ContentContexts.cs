@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Input;
+using Content.Shared._CMU14.Input;
 using Content.Shared.Input;
 using Robust.Shared.Input;
 
@@ -156,6 +157,7 @@ namespace Content.Client.Input
             human.AddFunction(CMKeyFunctions.RMCInteractWithOtherHand);
             human.AddFunction(CMKeyFunctions.RMCRest);
             human.AddFunction(CMKeyFunctions.RMCResist);
+            human.AddFunction(CMUKeyFunctions.CMUToggleShootDownZLevel);
 
             var xenonid = contexts.New("xenonid", "human");
             xenonid.AddFunction(CMKeyFunctions.CMXenoWideSwing);

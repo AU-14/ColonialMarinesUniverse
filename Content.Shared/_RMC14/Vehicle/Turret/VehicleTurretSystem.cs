@@ -1,5 +1,6 @@
 using System;
 using System.Numerics;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -177,6 +178,9 @@ public sealed partial class VehicleTurretSystem : EntitySystem
         var visualComp = EnsureComp<VehicleTurretVisualComponent>(visual);
         visualComp.Turret = GetNetEntity(turretUid);
         Dirty(visual, visualComp);
+        var zFollower = EnsureComp<CMUZVisualFollowerComponent>(visual);
+        zFollower.Target = vehicle;
+        Dirty(visual, zFollower);
         turret.VisualEntity = visual;
     }
 
