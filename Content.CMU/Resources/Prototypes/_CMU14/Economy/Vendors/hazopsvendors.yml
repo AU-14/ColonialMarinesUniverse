@@ -265,9 +265,12 @@
       choices: { CMUHandgunsWeapon: 1 }
       entries:
       - id: AU14KitWeaponM4A3
+      - id: AU14GunCasePistolM50HAZOPS
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
+        amount: 60
+      - id: AU14MagazinePistolM50
         amount: 60
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
