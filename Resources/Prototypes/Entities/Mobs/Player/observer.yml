@@ -155,6 +155,19 @@
   - type: InstantAction
     event: !type:ToggleFoVActionEvent
 
+# begin CMU14
+- type: entity
+  id: ActionToggleSelfGhost
+  name: Toggle Your Ghost
+  description: Toggle the visibility of your own ghost.
+  components:
+  - type: InstantAction
+    icon: { sprite: Mobs/Ghosts/ghost_human.rsi, state: icon }
+    clientExclusive: true
+    checkCanInteract: false
+    event: !type:ToggleSelfGhostActionEvent
+#end CMU14
+
 - type: entity
   parent: BaseMentalAction
   id: ActionToggleGhosts
@@ -162,7 +175,9 @@
   description: Toggle the visibility of other ghosts.
   components:
   - type: Action
-    icon: { sprite: Mobs/Ghosts/ghost_human.rsi, state: icon }
+  #begin CMU14
+    icon: Interface/Actions/toggle-other-ghosts.png
+  #end CMU14
     clientExclusive: true
   - type: InstantAction
     event: !type:ToggleGhostsActionEvent
