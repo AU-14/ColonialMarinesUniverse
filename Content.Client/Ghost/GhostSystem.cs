@@ -76,6 +76,7 @@ namespace Content.Client.Ghost
             SubscribeLocalEvent<EyeComponent, ToggleLightingActionEvent>(OnToggleLighting);
             SubscribeLocalEvent<EyeComponent, ToggleFoVActionEvent>(OnToggleFoV);
             SubscribeLocalEvent<GhostComponent, ToggleGhostsActionEvent>(OnToggleGhosts);
+            SubscribeLocalEvent<GhostComponent, ToggleSelfGhostActionEvent>(OnToggleSelfGhost); // CMU14
         }
 
         private void OnStartup(EntityUid uid, GhostComponent component, ComponentStartup args)
@@ -138,7 +139,7 @@ namespace Content.Client.Ghost
             if (args.Handled)
                 return;
 
-            var locId = GhostVisibility ? "ghost-gui-toggle-ghost-visibility-popup-off" : "ghost-gui-toggle-ghost-visibility-popup-on";
+            var locId = GhostVisibility ? "ghost-gui-toggle-other-ghosts-visibility-popup-off" : "ghost-gui-toggle-other-ghosts-visibility-popup-on";
             Popup.PopupEntity(Loc.GetString(locId), args.Performer);
             if (uid == _playerManager.LocalEntity)
                 ToggleGhostVisibility();
@@ -146,12 +147,28 @@ namespace Content.Client.Ghost
             args.Handled = true;
         }
 
+// CMU14
+        private void OnToggleSelfGhost(EntityUid uid, GhostComponent component, ToggleSelfGhostActionEvent args)
+        {
+            if (args.Handled)
+                return;
+
+            if (uid == _playerManager.LocalEntity && TryToggleSelfGhostVisibility(uid, out var isNowVisible))
+            {
+                var locId = isNowVisible ? "ghost-gui-toggle-self-ghost-visibility-popup-on" : "ghost-gui-toggle-self-ghost-visibility-popup-off";
+                Popup.PopupEntity(Loc.GetString(locId), args.Performer);
+            }
+
+            args.Handled = true;
+        }
+        
         private void OnGhostRemove(EntityUid uid, GhostComponent component, ComponentRemove args)
         {
             _actions.RemoveAction(uid, component.ToggleLightingActionEntity);
             _actions.RemoveAction(uid, component.ToggleFoVActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostsActionEntity);
             _actions.RemoveAction(uid, component.ToggleGhostHearingActionEntity);
+            _actions.RemoveAction(uid, component.ToggleSelfGhostActionEntity); // CMU14
 
             if (uid != _playerManager.LocalEntity)
                 return;
@@ -226,6 +243,32 @@ namespace Content.Client.Ghost
         public void ToggleGhostVisibility(bool? visibility = null)
         {
             GhostVisibility = visibility ?? !GhostVisibility;
+        }
+        
+        // CMU14
+        /// <summary>
+        /// Toggles player's own ghost sprite visibility.
+        /// </summary>
+        /// <param name="uid"></param>
+        /// <param name="visibility"></param>
+        /// <returns>The newly setvisibility state.</returns> <summary>
+        public bool TryToggleSelfGhostVisibility(EntityUid? uid, out bool isNowVisible, bool? visibility = null)
+        {
+            isNowVisible = false;
+            if (!uid.HasValue)
+                return false;
+
+            var entityManager = IoCManager.Resolve<IEntityManager>();
+            if (!entityManager.HasComponent<GhostComponent>(uid))
+                return false;
+
+            if (!entityManager.TryGetComponent(uid, out SpriteComponent? spriteComponent))
+                return false;
+
+            spriteComponent.Visible = visibility ?? !spriteComponent.Visible;
+
+            isNowVisible = spriteComponent.Visible;
+            return true;
         }
     }
 }
