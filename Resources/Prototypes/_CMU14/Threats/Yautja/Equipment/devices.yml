@@ -546,6 +546,10 @@
   - type: FireProtection
     reduction: 0.5
   - type: IngestionBlocker
+    # Yautja masks are worn by default and do not have a pull-down state. Keep
+    # the food/drink interaction available while the mask's sealed systems are
+    # represented by its dedicated Yautja visor logic.
+    enabled: false
   - type: IdentityBlocker
   - type: YautjaMaskAccessoryHolder
   - type: YautjaTechItem
@@ -608,6 +612,30 @@
     explosionArmor: 10
   - type: Corrodible
     isCorrodible: false
+
+- type: entity
+  parent: IDCardStandard
+  id: CMUYautjaIdCard
+  name: yautja ID card
+  description: A standard Yautja identification card.
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/items/radio.rsi
+    state: upp_key
+  - type: Item
+    size: Tiny
+  - type: IdCard
+    jobTitle: cmu-yautja-id-chip-job
+    jobIcon: JobIconUnknown
+  - type: Access
+    groups:
+    - CMUYautjaAccessSecure
+  - type: YautjaTechItem
+    blockPickup: false
+    blockUse: false
+    blockMelee: false
+    blockThrow: false
+    blockShoot: false
 
 - type: entity
   parent: IDCardStandard
@@ -2352,6 +2380,9 @@
           RightCentre: { state: pred_vendor_rcentre }
           Right: { state: pred_vendor_right }
   - type: YautjaGearRack
+  - type: RemoveComponents
+    components:
+    - type: ActivatableUIRequiresAccess
   - type: CMAutomatedVendor
     uiStyle: Yautja
     sections:

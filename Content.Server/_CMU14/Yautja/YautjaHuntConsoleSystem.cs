@@ -370,12 +370,10 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
             {
                 ghostRole.JobProto = "CMUYautjaYoungblood";
                 ghostRole.ReregisterOnGhost = false;
-                ghostRole.RaffleConfig = new GhostRoleRaffleConfig(new GhostRoleRaffleSettings
-                {
-                    InitialDuration = 30,
-                    JoinExtendsDurationBy = 10,
-                    MaxDuration = 90,
-                });
+                // Apply the raffle after the Youngblood job metadata is finalized.
+                // This preserves the existing registration flow while using the same
+                // 30/10/90 guest-role window as regular prey.
+                ghostRole.RaffleConfig = CreateYautjaGuestRoleRaffleConfig();
             }
         }
 
@@ -473,11 +471,13 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         if (TryComp<GhostRoleComponent>(spawned, out var existing))
         {
             EnsureComp<GhostTakeoverAvailableComponent>(spawned);
+            existing.RaffleConfig = CreateYautjaGuestRoleRaffleConfig();
             return existing;
         }
 
         var ghostRole = EnsureComp<GhostRoleComponent>(spawned);
         EnsureComp<GhostTakeoverAvailableComponent>(spawned);
+        ghostRole.RaffleConfig = CreateYautjaGuestRoleRaffleConfig();
 
         if (kind == YautjaHuntConsoleKind.Blooding)
         {
@@ -491,6 +491,16 @@ public sealed partial class YautjaHuntConsoleSystem : EntitySystem
         ghostRole.RoleDescription = "cmu-yautja-hunt-prey-ghost-description";
         ghostRole.RoleRules = "cmu-yautja-hunt-prey-ghost-rules";
         return ghostRole;
+    }
+
+    private static GhostRoleRaffleConfig CreateYautjaGuestRoleRaffleConfig()
+    {
+        return new GhostRoleRaffleConfig(new GhostRoleRaffleSettings
+        {
+            InitialDuration = 30,
+            JoinExtendsDurationBy = 10,
+            MaxDuration = 90,
+        });
     }
 
     private void OnEscapeConsoleInteractHand(Entity<YautjaHuntEscapeConsoleComponent> ent, ref InteractHandEvent args)

@@ -4,9 +4,15 @@
   name: cmu-yautja-job-name-hunter
   description: cmu-yautja-job-description-hunter
   playTimeTracker: CMUYautjaHunter
-  icon: CMJobIconEmpty
+  icon: CMUYautjaJobIcon
   joinNotifyCrew: false
-  hidden: true
+  hidden: false
+  canBeAntag: false
+  whitelisted: true
+  jobEntity: CMUMobYautja
+  jobPreviewEntity: CMUMobYautja
+  startingGear: CMUYautjaHunterGear
+  usePlayerProfile: false
   special:
   - !type:AddComponentSpecial
     components:
@@ -70,23 +76,23 @@
   id: CMUYautjaHunterGear
   equipment:
     ears: CMUYautjaCommunicator
+    ears2: CMUYautjaFalconDrone
     mask: CMUYautjaMask
     gloves: CMUYautjaBracer
-    back: CMUYautjaCloakPack
+    back: CMUYautjaCapeFull
     outerClothing: CMUYautjaClanArmor
     jumpsuit: CMUYautjaBodyMesh
     shoes: CMUYautjaClanGreaves
-    belt: CMUYautjaTrophyBelt
+    belt: CMUYautjaHuntingPouch
     pocket1: CMUYautjaSmartDisc
-    pocket2: CMUYautjaMedicomp
+    pocket2: CMUYautjaMedicompFull
   storage:
-    back:
+    belt:
     - CMUYautjaHuntingTrap
     - CMUYautjaHuntingTrap
     - CMUYautjaPolishingRag
     - CMUYautjaCleanserGelVial
     - CMUYautjaRelayBeacon
-    - CMUYautjaHuntingPouch
     - CMUYautjaToolbeltFilled
     - CMUYautjaHoundObservationPad
 

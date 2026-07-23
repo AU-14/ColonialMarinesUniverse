@@ -36,7 +36,7 @@ public sealed partial class CMStorageVisualizerSystem : VisualizerSystem<CMStora
         if (TryComp(uid, out RMCIdLockableStorageComponent? lockable))
         {
             if (component.StorageEmpty != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, false);
+                SetVisible(uid, args.Sprite, component.StorageEmpty, false);
 
             if (!AppearanceSystem.TryGetData<bool>(uid, StorageVisuals.Open, out var lockableOpen, args.Component))
                 return;
@@ -44,18 +44,18 @@ public sealed partial class CMStorageVisualizerSystem : VisualizerSystem<CMStora
             if (lockable.Locked)
             {
                 if (component.StorageOpen != null)
-                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, lockableOpen);
+                    SetVisible(uid, args.Sprite, component.StorageOpen, lockableOpen);
                 if (component.StorageClosed != null)
-                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, !lockableOpen);
+                    SetVisible(uid, args.Sprite, component.StorageClosed, !lockableOpen);
                 return;
             }
 
             var emptyUnlocked = used == 0;
             var showOpen = lockableOpen || emptyUnlocked;
             if (component.StorageOpen != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, showOpen);
+                SetVisible(uid, args.Sprite, component.StorageOpen, showOpen);
             if (component.StorageClosed != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, !showOpen);
+                SetVisible(uid, args.Sprite, component.StorageClosed, !showOpen);
             return;
         }
 
@@ -64,21 +64,21 @@ public sealed partial class CMStorageVisualizerSystem : VisualizerSystem<CMStora
             if (!component.ShowOpenClosedWhenEmpty)
             {
                 if (component.StorageOpen != null)
-                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, false);
+                    SetVisible(uid, args.Sprite, component.StorageOpen, false);
                 if (component.StorageClosed != null)
-                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, false);
+                    SetVisible(uid, args.Sprite, component.StorageClosed, false);
                 if (component.StorageEmpty != null)
-                    _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, true);
+                    SetVisible(uid, args.Sprite, component.StorageEmpty, true);
                 return;
             }
 
             if (component.StorageEmpty != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, false);
+                SetVisible(uid, args.Sprite, component.StorageEmpty, false);
         }
         else
         {
             if (component.StorageEmpty != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageEmpty, false);
+                SetVisible(uid, args.Sprite, component.StorageEmpty, false);
         }
 
         // Open or closed
@@ -88,16 +88,22 @@ public sealed partial class CMStorageVisualizerSystem : VisualizerSystem<CMStora
         if (open)
         {
             if (component.StorageOpen != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, true);
+                SetVisible(uid, args.Sprite, component.StorageOpen, true);
             if (component.StorageClosed != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, false);
+                SetVisible(uid, args.Sprite, component.StorageClosed, false);
         }
         else
         {
             if (component.StorageOpen != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageOpen, false);
+                SetVisible(uid, args.Sprite, component.StorageOpen, false);
             if (component.StorageClosed != null)
-                _sprite.LayerSetVisible((uid, args.Sprite), component.StorageClosed, true);
+                SetVisible(uid, args.Sprite, component.StorageClosed, true);
         }
+    }
+
+    private void SetVisible(EntityUid uid, SpriteComponent sprite, string layerKey, bool visible)
+    {
+        if (_sprite.LayerMapTryGet((uid, sprite), layerKey, out _, false))
+            _sprite.LayerSetVisible((uid, sprite), layerKey, visible);
     }
 }

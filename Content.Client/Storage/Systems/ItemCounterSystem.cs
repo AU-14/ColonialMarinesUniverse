@@ -42,7 +42,7 @@ public sealed partial class ItemCounterSystem : SharedItemCounterSystem
     public void ProcessOpaqueSprite(EntityUid uid, string layer, int count, int maxCount, List<string> states, bool hide = false, SpriteComponent? sprite = null)
     {
         if (!Resolve(uid, ref sprite)
-        || !_sprite.LayerMapTryGet((uid, sprite), layer, out var layerKey, logMissing: true))
+        || !_sprite.LayerMapTryGet((uid, sprite), layer, out var layerKey, logMissing: false))
             return;
 
         var activeState = ContentHelpers.RoundToEqualLevels(count, maxCount, states.Count);
@@ -58,7 +58,8 @@ public sealed partial class ItemCounterSystem : SharedItemCounterSystem
         var activeTill = ContentHelpers.RoundToNearestLevels(count, maxCount, layers.Count);
         for (var i = 0; i < layers.Count; ++i)
         {
-            _sprite.LayerSetVisible((uid, sprite), layers[i], !hide && i < activeTill);
+            if (_sprite.LayerMapTryGet((uid, sprite), layers[i], out var layerKey, false))
+                _sprite.LayerSetVisible((uid, sprite), layerKey, !hide && i < activeTill);
         }
     }
 

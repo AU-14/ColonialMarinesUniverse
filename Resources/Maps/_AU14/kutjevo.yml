@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 03/29/2026 11:45:18
-  entityCount: 26882
+  entityCount: 26883
 maps:
 - 1
 grids:
@@ -179648,4 +179648,17 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 3.5,1.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 26883
+    components:
+    - type: MetaData
+      name: Kutjevo ground relay
+    - type: Transform
+      pos: 114.5,-81.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: kutjevo.ground.relay
+      displayName: Kutjevo Ground Relay
 ...

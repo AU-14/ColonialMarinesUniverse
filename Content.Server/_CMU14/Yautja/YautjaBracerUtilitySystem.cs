@@ -139,6 +139,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
     private void OnMapInit(Entity<YautjaBracerComponent> ent, ref MapInitEvent args)
     {
         EnsureIdContainer(ent);
+        EnsureIdCardContainer(ent);
         EnsureIdChip(ent);
     }
 
@@ -1202,6 +1203,13 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
                 _inventory.TryUnequip(user, IdSlot, out _, silent: true, force: true);
 
             _containers.Insert(chip.Value, container, force: true);
+            var displacedCardContainer = EnsureIdCardContainer(bracer);
+            if (displacedCardContainer.ContainedEntity is { } displacedCard &&
+                !_inventory.TryEquip(user, user, displacedCard, IdSlot, silent: true, force: true))
+            {
+                return false;
+            }
+
             bracer.Comp.IdChipDeployed = false;
             Dirty(bracer);
             _audio.PlayPvs(bracer.Comp.IdChipSound, bracer.Owner);
@@ -1211,12 +1219,25 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
         if (_inventory.TryGetSlotEntity(user, IdSlot, out var occupied) && occupied != chip)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-id-slot-blocked"), user, user, PopupType.SmallCaution);
-            return false;
+            if (!_inventory.TryUnequip(user, IdSlot, out var displaced, silent: true, force: true) ||
+                displaced is not { } displacedCard ||
+                !_containers.Insert(displacedCard, EnsureIdCardContainer(bracer), force: true))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-id-slot-blocked"), user, user, PopupType.SmallCaution);
+                return false;
+            }
         }
 
         if (!_inventory.TryEquip(user, user, chip.Value, IdSlot, silent: true, force: true))
         {
+            var displacedCardContainer = EnsureIdCardContainer(bracer);
+            if (displacedCardContainer.ContainedEntity is { } displacedCard)
+            {
+                _containers.Remove(displacedCard, displacedCardContainer, force: true);
+                _inventory.TryEquip(user, user, displacedCard, IdSlot, silent: true, force: true);
+            }
+
+            _containers.Insert(chip.Value, container, force: true);
             _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-id-failed"), user, user, PopupType.SmallCaution);
             return false;
         }
@@ -1279,6 +1300,11 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
     private ContainerSlot EnsureIdContainer(Entity<YautjaBracerComponent> bracer)
     {
         return _containers.EnsureContainer<ContainerSlot>(bracer.Owner, bracer.Comp.IdChipContainerId);
+    }
+
+    private ContainerSlot EnsureIdCardContainer(Entity<YautjaBracerComponent> bracer)
+    {
+        return _containers.EnsureContainer<ContainerSlot>(bracer.Owner, bracer.Comp.IdCardContainerId);
     }
 
     private bool TryCreateItem(

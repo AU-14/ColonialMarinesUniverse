@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/14/2026 09:32:27
-  entityCount: 39092
+  entityCount: 39093
 maps:
 - 1
 grids:
@@ -332903,4 +332903,17 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -100.5,-122.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 39093
+    components:
+    - type: MetaData
+      name: Hope's Retreat ground relay
+    - type: Transform
+      pos: 18.5,-48.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: hopes-retreat.ground.relay
+      displayName: Hope's Retreat Ground Relay
 ...

@@ -69,6 +69,7 @@ using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Clothing.Components;
 using Content.Shared.CombatMode;
+using Content.Shared.CCVar;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Damage;
 using Content.Shared.Database;
@@ -77,6 +78,7 @@ using Content.Shared.Doors.Components;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.GameTicking;
+using Content.Shared.Ghost.Roles;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
@@ -171,10 +173,11 @@ public sealed class YautjaSmokeTest
                 AssertEquipped(entMan, inventory, hunter, "mask", "CMUYautjaMask");
                 AssertEquipped(entMan, inventory, hunter, "ears2", "CMUYautjaFalconDrone");
                 AssertEquipped(entMan, inventory, hunter, "gloves", "CMUYautjaBracer");
-                AssertEquipped(entMan, inventory, hunter, "back", "CMUYautjaCloakPack");
+                AssertEquipped(entMan, inventory, hunter, "back", "CMUYautjaCapeFull");
                 AssertEquippedAny(entMan, inventory, hunter, "outerClothing", ClanArmorLoadoutIds);
                 AssertEquipped(entMan, inventory, hunter, "jumpsuit", "CMUYautjaBodyMesh");
                 AssertEquipped(entMan, inventory, hunter, "shoes", "CMUYautjaClanGreaves");
+                AssertEquipped(entMan, inventory, hunter, "belt", "CMUYautjaHuntingPouch");
                 AssertEquipped(entMan, inventory, hunter, "pocket1", "CMUYautjaSmartDisc");
                 AssertEquipped(entMan, inventory, hunter, "pocket2", "CMUYautjaMedicompFull");
             }
@@ -2213,7 +2216,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(CountAttachedArms(body, user), Is.Zero,
                         "CMSS13 activate_random_verb() uses rand(1, 10), with slots 9 and 10 routing to delimb_user().");
                     Assert.That(AudioFileNamesAfter(entMan, beforeAudio),
-                        Does.Contain("/Audio/_CMU14/Yautja/wristblades_on.wav"),
+                        Does.Contain("/Audio/_CMU14/Yautja/Weapons/WristBlades/wristblades_on.wav"),
                         "CMSS13 delimb_user() plays sound/weapons/wristblades_on.ogg at low volume.");
                 });
             });
@@ -5297,7 +5300,7 @@ public sealed class YautjaSmokeTest
 
         Assert.Multiple(() =>
         {
-            AssertSoundPath(component.InstallAttachmentSound, "/Audio/_CMU14/Yautja/pred_attach.wav");
+            AssertSoundPath(component.InstallAttachmentSound, "/Audio/_CMU14/Yautja/Equipment/pred_attach.wav");
             AssertSoundPath(component.RemoveAttachmentSound, "/Audio/_RMC14/Machines/click.ogg");
         });
     }
@@ -7774,7 +7777,7 @@ public sealed class YautjaSmokeTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(audio, Does.Contain("/Audio/_CMU14/Yautja/pred_bracer.wav"),
+                    Assert.That(audio, Does.Contain("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav"),
                         "CMSS13 bracer_message() always plays sound/items/pred_bracer.ogg for bracer message notifications.");
                     Assert.That(audio, Does.Not.Contain("/Audio/Machines/button.ogg"),
                         "Message notifications must not accidentally use the local lock sound field.");
@@ -9342,10 +9345,10 @@ public sealed class YautjaSmokeTest
                     Assert.That(chain.ExecutionDropDuration, Is.EqualTo(TimeSpan.FromSeconds(0.4)));
                     Assert.That(chain.ExecutionLiftHeight, Is.EqualTo(2f));
                     Assert.That(chain.ForceAirlockDamage.DamageDict["Structural"], Is.EqualTo((FixedPoint2) 100));
-                    AssertSoundPath(chain.HelpFinisherSound, "/Audio/_CMU14/Yautja/hit_punch.wav");
-                    AssertSoundPath(chain.ExecutionTargetSound, "/Audio/_CMU14/Yautja/bone_break1.wav");
-                    AssertSoundPath(chain.ExecutionUserSound, "/Audio/_CMU14/Yautja/pred_roar5.wav");
-                    AssertSoundPath(chain.ExecutionSlamSound, "/Audio/_CMU14/Yautja/bang.wav");
+                    AssertSoundPath(chain.HelpFinisherSound, "/Audio/_CMU14/Yautja/Weapons/ChainGauntlet/hit_punch.wav");
+                    AssertSoundPath(chain.ExecutionTargetSound, "/Audio/_CMU14/Yautja/Weapons/Melee/bone_break1.wav");
+                    AssertSoundPath(chain.ExecutionUserSound, "/Audio/_CMU14/Yautja/Voice/Roars/pred_roar5.wav");
+                    AssertSoundPath(chain.ExecutionSlamSound, "/Audio/_CMU14/Yautja/Weapons/Melee/bang.wav");
                     AssertSoundPath(chain.ForceAirlockCrashSound, "/Audio/_RMC14/Effects/metal_crash.ogg");
                 });
             }
@@ -9839,7 +9842,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(bracerComp.SelfDestructArmed, Is.False);
                     Assert.That(entMan.HasComponent<DialogComponent>(bracer), Is.False);
                     Assert.That(AudioFileNamesAfter(entMan, beforeAudio),
-                        Does.Contain("/Audio/_CMU14/Yautja/wristblades_on.wav"),
+                        Does.Contain("/Audio/_CMU14/Yautja/Weapons/WristBlades/wristblades_on.wav"),
                         "CMSS13 delimb_user() plays sound/weapons/wristblades_on.ogg.");
                 });
             });
@@ -12654,6 +12657,53 @@ public sealed class YautjaSmokeTest
                 RaiseDialogOption(entMan, huntsmasterConsole, hunter, "Multi Faction (small)");
                 Assert.That(entMan.EntityQuery<GhostTakeoverAvailableComponent>().Count(), Is.EqualTo(initialGhostRoles + 4));
 
+                var preyRoles = new List<(EntityUid Uid, GhostRoleComponent Role)>();
+                var preyQuery = entMan.EntityQueryEnumerator<GhostRoleComponent, GhostTakeoverAvailableComponent>();
+                while (preyQuery.MoveNext(out var preyUid, out var preyRole, out _))
+                {
+                    if (preyRole.RaffleConfig?.SettingsOverride != null)
+                        preyRoles.Add((preyUid, preyRole));
+                }
+
+                Assert.That(preyRoles, Has.Count.EqualTo(4));
+                Assert.That(preyRoles.All(entry =>
+                    entry.Role.RaffleConfig?.SettingsOverride is { InitialDuration: 30, JoinExtendsDurationBy: 10, MaxDuration: 90 }), Is.True);
+
+                var session = server.PlayerMan.Sessions.Single();
+                var previousAttached = session.AttachedEntity;
+                try
+                {
+                    server.CfgMan.SetCVar(CCVars.GhostQuickLottery, true);
+                    server.PlayerMan.SetAttachedEntity(session, null);
+                    var ghostRoles = entMan.System<GhostRoleSystem>();
+                    var preyRole = preyRoles[0];
+                    var info = ghostRoles.GetGhostRolesInfo(session)
+                        .Single(entry => entry.Identifier == preyRoles[0].Role.Identifier);
+                    Assert.That(info.Kind, Is.EqualTo(GhostRoleKind.RaffleReady));
+                    ghostRoles.Request(session, preyRole.Role.Identifier);
+                    Assert.That(entMan.TryGetComponent(preyRole.Uid, out GhostRoleRaffleComponent? raffle), Is.True);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(raffle!.CurrentMembers, Does.Contain(session));
+                        Assert.That(raffle.Countdown, Is.EqualTo(TimeSpan.FromSeconds(1)));
+                    });
+
+                    ghostRoles.Update(1.1f);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(session.AttachedEntity, Is.EqualTo(preyRole.Uid));
+                        Assert.That(preyRole.Role.Taken, Is.True);
+                        Assert.That(entMan.HasComponent<GhostRoleRaffleComponent>(preyRole.Uid), Is.False);
+                        Assert.That(ghostRoles.GetGhostRolesInfo(null), Has.None.Matches<GhostRoleInfo>(
+                            entry => entry.Identifier == preyRole.Role.Identifier));
+                    });
+                }
+                finally
+                {
+                    server.CfgMan.SetCVar(CCVars.GhostQuickLottery, CCVars.GhostQuickLottery.DefaultValue);
+                    server.PlayerMan.SetAttachedEntity(session, previousAttached);
+                }
+
                 entMan.EventBus.RaiseLocalEvent(bloodingConsole, new InteractHandEvent(hunter, bloodingConsole));
                 Assert.That(entMan.GetComponent<DialogComponent>(bloodingConsole).Title,
                     Is.EqualTo(Loc.GetString("cmu-yautja-hunt-console-blooding-title")));
@@ -13951,7 +14001,6 @@ public sealed class YautjaSmokeTest
         {
             var entMan = server.EntMan;
             var ghostRoles = entMan.System<GhostRoleSystem>();
-            var playtime = server.ResolveDependency<PlayTimeTrackingManager>();
             var session = server.PlayerMan.Sessions.Single();
             previousAttached = session.AttachedEntity;
 
@@ -13966,16 +14015,16 @@ public sealed class YautjaSmokeTest
 
                 var blooding = entMan.GetComponent<YautjaHuntConsoleComponent>(console);
                 var solo = blooding.BloodingCallOptions.Single(candidate => candidate.Id == "youngblood_solo_experienced");
-                entMan.EventBus.RaiseLocalEvent(console, new YautjaHuntCallSelectedEvent(entMan.GetNetEntity(hunter), solo.Id));
+                var huntConsole = entMan.System<YautjaHuntConsoleSystem>();
+                Assert.That(huntConsole.TryCreateYoungbloodCall((console, blooding), hunter, solo, bypassEligibility: true), Is.True);
 
                 var query = entMan.EntityQueryEnumerator<GhostRoleComponent, GhostTakeoverAvailableComponent, YautjaYoungbloodGhostRoleComponent>();
                 Assert.That(query.MoveNext(out var youngblood, out var ghostRole, out _, out var metadata), Is.True);
 
-                var playtimes = playtime.GetTrackerTimes(session);
-                playtimes["CMJobRifleman"] = TimeSpan.FromHours(5);
-                playtimes["CMJobSelectableXeno"] = TimeSpan.FromHours(5);
-
                 server.PlayerMan.SetAttachedEntity(session, null);
+                var info = ghostRoles.GetGhostRolesInfo(session)
+                    .Single(entry => entry.Identifier == ghostRole.Identifier);
+                Assert.That(info.Kind, Is.EqualTo(GhostRoleKind.RaffleReady));
                 ghostRoles.Request(session, ghostRole.Identifier);
 
                 Assert.That(entMan.HasComponent<GhostRoleRaffleComponent>(youngblood), Is.True);
@@ -13989,6 +14038,8 @@ public sealed class YautjaSmokeTest
                     Assert.That(ghostRole.Taken, Is.True);
                     Assert.That(metadata.SetupComplete, Is.True);
                     Assert.That(ghostRole.ReregisterOnGhost, Is.False);
+                    Assert.That(ghostRoles.GetGhostRolesInfo(null), Has.None.Matches<GhostRoleInfo>(
+                        entry => entry.Identifier == ghostRole.Identifier));
                 });
             }
             finally
@@ -15324,6 +15375,29 @@ public sealed class YautjaSmokeTest
                 Assert.That(hellhound.YautjaOwner, Is.EqualTo(hunter));
                 Assert.That(entMan.HasComponent<GhostRoleComponent>(hellhoundUid), Is.True);
                 Assert.That(entMan.HasComponent<GhostTakeoverAvailableComponent>(hellhoundUid), Is.True);
+                var ghostRole = entMan.GetComponent<GhostRoleComponent>(hellhoundUid);
+                Assert.That(ghostRole.RaffleConfig, Is.Not.Null);
+                Assert.That(ghostRole.RaffleConfig!.SettingsOverride, Is.Null);
+                Assert.That(ghostRole.RaffleConfig.Settings, Is.EqualTo("default"));
+                var session = server.PlayerMan.Sessions.Single();
+                var previousAttached = session.AttachedEntity;
+                try
+                {
+                    server.PlayerMan.SetAttachedEntity(session, null);
+                    entMan.System<GhostRoleSystem>().Request(session, ghostRole.Identifier);
+                    Assert.That(entMan.TryGetComponent(hellhoundUid, out GhostRoleRaffleComponent? raffle), Is.True);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(raffle!.Countdown, Is.EqualTo(TimeSpan.FromSeconds(30)));
+                        Assert.That(raffle.JoinExtendsDurationBy, Is.EqualTo(TimeSpan.FromSeconds(10)));
+                        Assert.That(raffle.MaxDuration, Is.EqualTo(TimeSpan.FromSeconds(90)));
+                        Assert.That(raffle.CurrentMembers, Does.Contain(session));
+                    });
+                }
+                finally
+                {
+                    server.PlayerMan.SetAttachedEntity(session, previousAttached);
+                }
                 Assert.That(entMan.HasComponent<PressureImmunityComponent>(hellhoundUid), Is.True);
                 Assert.That(entMan.HasComponent<NightVisionComponent>(hellhoundUid), Is.True);
                 Assert.That(entMan.HasComponent<RespiratorComponent>(hellhoundUid), Is.False);
@@ -15338,6 +15412,149 @@ public sealed class YautjaSmokeTest
                     entMan.DeleteEntity(sleeping);
             }
         });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SleepingHellhoundLeftClickActivationOpensConfirmation()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var sleeping = entMan.SpawnEntity("CMUHunterShipSleepingHellhound", map.GridCoords);
+
+            try
+            {
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+
+                var activate = new ActivateInWorldEvent(hunter, sleeping, true);
+                entMan.EventBus.RaiseLocalEvent(sleeping, activate);
+
+                Assert.That(activate.Handled, Is.True,
+                    "A left-click world activation must be consumed by the sleeping Hellhound.");
+                Assert.That(entMan.HasComponent<DialogComponent>(sleeping), Is.True,
+                    "A left-click on the sleeping Hellhound must open the wake confirmation dialog.");
+            }
+            finally
+            {
+                if (!entMan.Deleted(hunter))
+                    entMan.DeleteEntity(hunter);
+                if (!entMan.Deleted(sleeping))
+                    entMan.DeleteEntity(sleeping);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HellhoundGhostRoleUsesDefaultRaffleQueue()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var session = server.PlayerMan.Sessions.Single();
+            var previousAttached = session.AttachedEntity;
+            var hellhound = entMan.SpawnEntity("CMUMobYautjaHellhound", map.GridCoords);
+
+            try
+            {
+                var role = entMan.GetComponent<GhostRoleComponent>(hellhound);
+                Assert.That(role.RaffleConfig, Is.Not.Null);
+                Assert.That(role.RaffleConfig!.Settings, Is.EqualTo("default"));
+
+                server.PlayerMan.SetAttachedEntity(session, null);
+                var info = entMan.System<GhostRoleSystem>().GetGhostRolesInfo(session)
+                    .Single(entry => entry.Identifier == role.Identifier);
+                Assert.That(info.Kind, Is.EqualTo(GhostRoleKind.RaffleReady));
+                entMan.System<GhostRoleSystem>().Request(session, role.Identifier);
+
+                Assert.That(entMan.TryGetComponent(hellhound, out GhostRoleRaffleComponent? raffle), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(raffle!.CurrentMembers, Does.Contain(session));
+                    Assert.That(raffle.Countdown, Is.EqualTo(TimeSpan.FromSeconds(30)));
+                    Assert.That(raffle.JoinExtendsDurationBy, Is.EqualTo(TimeSpan.FromSeconds(10)));
+                    Assert.That(raffle.MaxDuration, Is.EqualTo(TimeSpan.FromSeconds(90)));
+                });
+            }
+            finally
+            {
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+                if (!entMan.Deleted(hellhound))
+                    entMan.DeleteEntity(hellhound);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HellhoundRaffleWinnerIsTransferredIntoTheGhostRoleBody()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hellhound = default;
+        EntityUid? previousAttached = null;
+        var session = server.PlayerMan.Sessions.Single();
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                server.CfgMan.SetCVar(CCVars.GhostQuickLottery, true);
+
+                var entMan = server.EntMan;
+                hellhound = entMan.SpawnEntity("CMUMobYautjaHellhound", map.GridCoords);
+                var role = entMan.GetComponent<GhostRoleComponent>(hellhound);
+                previousAttached = session.AttachedEntity;
+                server.PlayerMan.SetAttachedEntity(session, null);
+
+                entMan.System<GhostRoleSystem>().Request(session, role.Identifier);
+
+                Assert.That(entMan.TryGetComponent(hellhound, out GhostRoleRaffleComponent? raffle), Is.True);
+                Assert.That(raffle!.CurrentMembers, Does.Contain(session));
+                Assert.That(raffle.Countdown, Is.EqualTo(TimeSpan.FromSeconds(1)));
+            });
+
+            await pair.RunSeconds(1.25f);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(session.AttachedEntity, Is.EqualTo(hellhound));
+                    Assert.That(entMan.GetComponent<GhostRoleComponent>(hellhound).Taken, Is.True);
+                    Assert.That(entMan.HasComponent<GhostRoleRaffleComponent>(hellhound), Is.False);
+                    Assert.That(entMan.System<GhostRoleSystem>().GetGhostRolesInfo(null), Has.None.Matches<GhostRoleInfo>(
+                        entry => entry.Identifier == entMan.GetComponent<GhostRoleComponent>(hellhound).Identifier));
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                server.CfgMan.SetCVar(CCVars.GhostQuickLottery, CCVars.GhostQuickLottery.DefaultValue);
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+
+                if (hellhound != default && !server.EntMan.Deleted(hellhound))
+                    server.EntMan.DeleteEntity(hellhound);
+            });
+        }
 
         await pair.CleanReturnAsync();
     }
@@ -17082,7 +17299,7 @@ public sealed class YautjaSmokeTest
                 Assert.That(trapSystem.TryTriggerTrap((trap, trapComp), target), Is.True);
 
                 var transform = entMan.System<SharedTransformSystem>();
-                transform.SetCoordinates(target, map.GridCoords.Offset(new Vector2(6, 0)));
+                transform.SetCoordinates(target, map.GridCoords.Offset(new Vector2(3, 0)));
             });
 
             await pair.RunTicksSync(2);
@@ -17099,7 +17316,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(trapComp.TrappedMob, Is.EqualTo(target),
                         "CMSS13 apply_tether() blocks movement past the hunting trap's tether range.");
                     Assert.That(entMan.HasComponent<RMCTetherComponent>(target), Is.True);
-                    Assert.That(distance, Is.LessThanOrEqualTo(5f));
+                    Assert.That(distance, Is.LessThanOrEqualTo(2f));
                     Assert.That(entMan.GetComponent<TransformComponent>(trap).Anchored, Is.True);
                 });
             });
@@ -17715,7 +17932,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task HuntingTrapTechAuthorizedCanConfigureRangeLikeCmss13Trait()
+    public async Task HuntingTrapTechCannotConfigureFixedRange()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -17734,14 +17951,13 @@ public sealed class YautjaSmokeTest
                 entMan.EnsureComponent<YautjaTechAuthorizedComponent>(user);
 
                 var localVerbs = verbs.GetLocalVerbs(trap, user, typeof(InteractionVerb), force: true);
-                var configure = localVerbs.Single(verb => verb.Text == "Configure Hunting Trap");
-                configure.Act!.Invoke();
+                Assert.That(localVerbs, Has.None.Matches<InteractionVerb>(verb => verb.Text == "Configure Hunting Trap"));
 
-                Assert.That(entMan.HasComponent<DialogComponent>(trap), Is.True);
-                RaiseDialogOption(entMan, trap, user, "6");
+                entMan.EventBus.RaiseLocalEvent(trap,
+                    new YautjaTrapRangeSelectedEvent(entMan.GetNetEntity(user), 7));
 
-                Assert.That(entMan.GetComponent<YautjaTrapComponent>(trap).TetherRange, Is.EqualTo(6f),
-                    "CMSS13 /obj/item/hunting_trap/verb/configure_trap() gates on TRAIT_YAUTJA_TECH, not species.");
+                Assert.That(entMan.GetComponent<YautjaTrapComponent>(trap).TetherRange, Is.EqualTo(2f),
+                    "A direct range event must not widen the fixed two-tile tether.");
             }
             finally
             {

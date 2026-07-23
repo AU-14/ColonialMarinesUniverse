@@ -201,7 +201,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!_config.GetCVar(CCVars.GridFill))
+        if (!_config.GetCVar(CCVars.GridFill) && !ent.Comp.IgnoreGridFill)
             return;
 
         if (_map == null)

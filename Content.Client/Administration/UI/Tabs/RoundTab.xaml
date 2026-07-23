@@ -1,6 +1,7 @@
 ﻿<Control
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+    xmlns:customControls="clr-namespace:Content.Client.Administration.UI.CustomControls"
     Margin="4"
     MinSize="50 50">
     <GridContainer
@@ -9,5 +10,6 @@
         <controls:ConfirmButton Name="EndRound" Text="{Loc administration-ui-round-tab-end-round}" />
         <controls:ConfirmButton Name="RestartRound" Text="{Loc administration-ui-round-tab-restart-round}" />
         <controls:ConfirmButton Name="RestartRoundNow" Text="{Loc administration-ui-round-tab-restart-round-now}" />
+        <customControls:CommandButton Command="yautja_editor" Text="{Loc cmu-yautja-admin-editor-open}" />
     </GridContainer>
 </Control>

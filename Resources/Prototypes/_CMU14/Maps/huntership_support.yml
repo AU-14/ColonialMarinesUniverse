@@ -60,6 +60,12 @@
   - type: YautjaHuntTeleporter
     kind: Young
 
+# Compatibility alias for map files produced before the transformer backend
+# prototype was included in the generated visual id.
+- type: entity
+  parent: CMUHunterShipPlacedCMUHunterShipYautjaPassivePowerTransformerTransformerSouthOffset16x16
+  id: CMUHunterShipPlacedObjStructurePropPowerTransformerTransformerSouthOffset16x16
+
 - type: entity
   parent: CMUYautjaStructureYautjaMachinesOverwatch
   id: CMUHunterShipHuntsmastersConsole

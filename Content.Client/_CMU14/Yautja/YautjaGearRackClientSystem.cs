@@ -1,8 +1,14 @@
 using System.Collections.Generic;
 using System.Numerics;
+using Content.Shared.Access;
+using Content.Shared.Access.Systems;
 using Content.Client.Clickable;
 using Content.Client.Interactable.Components;
+using Content.Shared.Mind;
 using Content.Shared.Physics;
+using Content.Shared.Roles;
+using Content.Shared.Roles.Jobs;
+using Content.Shared.UserInterface;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared.VendingMachines;
 using Robust.Client.GameObjects;
@@ -11,6 +17,7 @@ using Robust.Shared.Physics;
 using Robust.Shared.Physics.Collision.Shapes;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Client._CMU14.Yautja;
@@ -27,10 +34,82 @@ public sealed partial class YautjaGearRackClientSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private FixtureSystem _fixtures = default!;
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedJobSystem _job = default!;
+    [Dependency] private SharedMindSystem _mind = default!;
+
+    private static readonly ProtoId<AccessLevelPrototype> YautjaSecureAccess = "CMUAccessYautjaSecure";
+    private static readonly ProtoId<AccessLevelPrototype> YautjaElderAccess = "CMUAccessYautjaElder";
+    private static readonly ProtoId<AccessLevelPrototype> YautjaAncientAccess = "CMUAccessYautjaAncient";
+    private static readonly ProtoId<AccessLevelPrototype> YautjaBadBloodAccess = "CMUAccessYautjaBadBlood";
+    private static readonly ProtoId<JobPrototype> HunterJob = "CMUYautjaHunter";
+    private static readonly ProtoId<JobPrototype> YoungbloodJob = "CMUYautjaYoungblood";
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<YautjaGearRackComponent, ActivatableUIOpenAttemptEvent>(OnOpenAttempt);
+    }
 
     public override void Update(float frameTime)
     {
         RefreshAllRacks();
+    }
+
+    private void OnOpenAttempt(Entity<YautjaGearRackComponent> ent, ref ActivatableUIOpenAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var denial = ent.Comp.Kind switch
+        {
+            YautjaGearRackKind.Adult => DenyIfMissingAccessThenWrongRole(
+                HasAccess(args.User, YautjaSecureAccess),
+                HasJob(args.User, HunterJob)),
+            YautjaGearRackKind.Youngblood => DenyIfMissingAccessThenWrongRole(
+                HasAccess(args.User, YautjaSecureAccess),
+                HasJob(args.User, YoungbloodJob) || HasJob(args.User, HunterJob)),
+            YautjaGearRackKind.Elder => DenyIfMissingAccessThenWrongRole(
+                HasAccess(args.User, YautjaElderAccess) || HasAccess(args.User, YautjaAncientAccess),
+                HasJob(args.User, HunterJob)),
+            YautjaGearRackKind.Thrall => HasComp<YautjaThrallComponent>(args.User)
+                ? null
+                : "cm-vending-machine-access-denied",
+            YautjaGearRackKind.BloodedThrall => HasComp<YautjaTechAuthorizedComponent>(args.User)
+                ? null
+                : "cm-vending-machine-access-denied",
+            YautjaGearRackKind.BadBlood => HasAccess(args.User, YautjaBadBloodAccess)
+                ? null
+                : "cm-vending-machine-access-denied",
+            YautjaGearRackKind.Stranded => HasAccess(args.User, YautjaSecureAccess) &&
+                                            !HasAccess(args.User, YautjaBadBloodAccess)
+                ? null
+                : "cm-vending-machine-access-denied",
+            _ => null,
+        };
+
+        if (denial == null)
+            return;
+
+        args.Cancel();
+    }
+
+    private static string? DenyIfMissingAccessThenWrongRole(bool hasAccess, bool hasRole)
+    {
+        if (!hasAccess)
+            return "cm-vending-machine-access-denied";
+
+        return hasRole ? null : "cmu-yautja-rack-wrong-role";
+    }
+
+    private bool HasAccess(EntityUid user, ProtoId<AccessLevelPrototype> access)
+    {
+        return _accessReader.FindAccessTags(user).Contains(access);
+    }
+
+    private bool HasJob(EntityUid user, ProtoId<JobPrototype> job)
+    {
+        return _mind.TryGetMind(user, out var mindId, out _) &&
+               _job.MindHasJobWithId(mindId, job.Id);
     }
 
     private void RefreshAllRacks()
@@ -142,7 +221,7 @@ public sealed partial class YautjaGearRackClientSystem : EntitySystem
             if (!TrySetLayerSprite((uid, sprite), VendingMachineVisualLayers.Base, merged))
                 return;
 
-            TrySetLayerSprite((uid, sprite), VendingMachineVisualLayers.BaseUnshaded, merged);
+            HideUnshadedLayer((uid, sprite));
             _sprite.SetOffset((uid, sprite), new Vector2((length - 1) / 2f, 0.5f));
             return;
         }
@@ -154,8 +233,14 @@ public sealed partial class YautjaGearRackClientSystem : EntitySystem
         if (!TrySetLayerSprite((uid, sprite), VendingMachineVisualLayers.Base, original))
             return;
 
-        TrySetLayerSprite((uid, sprite), VendingMachineVisualLayers.BaseUnshaded, original);
+        HideUnshadedLayer((uid, sprite));
         _sprite.SetOffset((uid, sprite), new Vector2(0f, 0.5f));
+    }
+
+    private void HideUnshadedLayer(Entity<SpriteComponent> sprite)
+    {
+        if (_sprite.LayerMapTryGet(sprite.AsNullable(), VendingMachineVisualLayers.BaseUnshaded, out var layer, false))
+            _sprite.LayerSetVisible(sprite.AsNullable(), layer, false);
     }
 
     private bool TrySetLayerSprite(Entity<SpriteComponent> sprite, VendingMachineVisualLayers layer, SpriteSpecifier spec)

@@ -41,10 +41,27 @@ public sealed partial class AtmosPipeLayersSystem : SharedAtmosPipeLayersSystem
         {
             foreach (var (layerKey, rsiPath) in pipeState)
             {
-                if (TryParseKey(layerKey, out var @enum))
-                    _sprite.LayerSetRsi((ent, sprite), @enum, new ResPath(rsiPath));
-                else
-                    _sprite.LayerSetRsi((ent, sprite), layerKey, new ResPath(rsiPath));
+                TryParseKey(layerKey, out var @enum);
+                var hasLayer = @enum != null
+                    ? _sprite.LayerMapTryGet((ent, sprite), @enum, out var layerIndex, false)
+                    : _sprite.LayerMapTryGet((ent, sprite), layerKey, out layerIndex, false);
+                if (!hasLayer)
+                    continue;
+
+                // Some map-specific pipe wrappers replace the parent RSI while
+                // retaining its appearance component. Keep the wrapper's
+                // sprite when the currently selected state does not exist in
+                // the replacement RSI instead of logging a client error.
+                var path = new ResPath(rsiPath);
+                var state = _sprite.LayerGetRsiState((ent, sprite), layerIndex);
+                if (state.IsValid
+                    && _resourceCache.TryGetResource(SpriteSpecifierSerializer.TextureRoot / path, out RSIResource? rsi)
+                    && !rsi.RSI.TryGetState(state, out _))
+                {
+                    continue;
+                }
+
+                _sprite.LayerSetRsi((ent, sprite), layerIndex, path);
             }
         }
     }

@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/16/2026 22:52:10
-  entityCount: 31156
+  entityCount: 31157
 maps:
 - 1
 grids:
@@ -210603,4 +210603,17 @@ entities:
     - type: Transform
       pos: 160.5,15.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 31157
+    components:
+    - type: MetaData
+      name: Sorokyne Strata ground relay
+    - type: Transform
+      pos: 183.5,110.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: sorokyne.ground.relay
+      displayName: Sorokyne Strata Ground Relay
 ...

@@ -19,6 +19,8 @@
     description: cmu-yautja-hellhound-ghost-description
     rules: cmu-yautja-hellhound-ghost-rules
     allowMovement: true
+    raffle:
+      settings: default
   - type: GhostTakeoverAvailable
   - type: Sprite
     drawdepth: Mobs

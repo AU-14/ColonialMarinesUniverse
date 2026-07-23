@@ -43,8 +43,10 @@ public sealed class YautjaHuntingTrapTest
                         "CMSS13 /obj/item/hunting_trap local item size mapping.");
                     Assert.That(price.Price, Is.EqualTo(50),
                         "CMSS13 /obj/item/hunting_trap black_market_value = 50.");
-                    Assert.That(trapComp.TetherRange, Is.EqualTo(5f),
-                        "CMSS13 /obj/item/hunting_trap var/tether_range = 5.");
+                    Assert.That(trapComp.TetherRange, Is.EqualTo(2f),
+                        "A hunting trap holds prey within two tiles.");
+                    Assert.That(trapComp.CanConfigureRange, Is.False,
+                        "The hunting trap does not expose the obsolete configurable range menu.");
                     Assert.That(trapComp.TrapDuration, Is.EqualTo(TimeSpan.FromSeconds(30)),
                         "CMSS13 /obj/item/hunting_trap var/duration = 30 SECONDS.");
                     Assert.That(trapComp.Armed, Is.False,

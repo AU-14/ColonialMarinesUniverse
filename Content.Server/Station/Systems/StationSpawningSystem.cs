@@ -250,11 +250,11 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             ApplyRegulationAppearance(jobEntity, profile);
             ApplyTeamFaction(jobEntity, team);
 
-            if (profile != null &&
-                HasComp<YautjaComponent>(jobEntity) &&
+            if (HasComp<YautjaComponent>(jobEntity) &&
                 !IsBadBloodFactionMember(jobEntity))
             {
-                _yautjaProfile.ApplyProfile(jobEntity, profile.YautjaProfile);
+                if (profile != null)
+                    _yautjaProfile.ApplyProfile(jobEntity, profile.YautjaProfile);
             }
 
             // Use originalPrototype for access, ID, and faction

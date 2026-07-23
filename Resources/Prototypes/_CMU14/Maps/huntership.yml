@@ -1,0 +1,18 @@
+- type: gameMap
+  id: CMUYautjaHunterShip
+  mapName: Yautja Hunter Ship
+  mapPath: /Maps/_CMU14/huntership.yml
+  mapsBelow:
+  - /Maps/_CMU14/huntership_lower.yml
+  mapsAbove:
+  - /Maps/_CMU14/huntership_upper.yml
+  minPlayers: 0
+  maxPlayers: 50
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    CMUYautjaHunterShip:
+      stationProto: StandardUNMCWarship
+      components:
+      - type: StationNameSetup
+        mapNameTemplate: 'Yautja Hunter Ship'

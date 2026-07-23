@@ -464,19 +464,29 @@ public sealed class YautjaRelayBeaconState(List<YautjaRelayBeaconDestinationEntr
 }
 
 [Serializable, NetSerializable]
-public sealed class YautjaRelayBeaconDestinationEntry(YautjaRelayDestinationKind kind, string name, bool available, int customIndex = -1)
+public sealed class YautjaRelayBeaconDestinationEntry(
+    YautjaRelayDestinationKind kind,
+    string name,
+    bool available,
+    int customIndex = -1,
+    string? destinationId = null)
 {
     public readonly YautjaRelayDestinationKind Kind = kind;
     public readonly string Name = name;
     public readonly bool Available = available;
     public readonly int CustomIndex = customIndex;
+    public readonly string? DestinationId = destinationId;
 }
 
 [Serializable, NetSerializable]
-public sealed class YautjaRelayBeaconDestinationMsg(YautjaRelayDestinationKind destination, int customIndex = -1) : BoundUserInterfaceMessage
+public sealed class YautjaRelayBeaconDestinationMsg(
+    YautjaRelayDestinationKind destination,
+    int customIndex = -1,
+    string? destinationId = null) : BoundUserInterfaceMessage
 {
     public readonly YautjaRelayDestinationKind Destination = destination;
     public readonly int CustomIndex = customIndex;
+    public readonly string? DestinationId = destinationId;
 }
 
 [ByRefEvent]

@@ -49,6 +49,16 @@
 
 - type: entity
   parent: MarkerBase
+  id: CMUYautjaGroundRelayDestination
+  name: Yautja ground relay destination
+  description: Invisible destination marker for Yautja relay beacons on a ground map.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: YautjaRelayDestination
+    kind: Ground
+
+- type: entity
+  parent: MarkerBase
   id: CMUYautjaHumanShipRelayDestination
   name: human ship Yautja relay destination
   description: Invisible destination marker for Yautja relay beacons.

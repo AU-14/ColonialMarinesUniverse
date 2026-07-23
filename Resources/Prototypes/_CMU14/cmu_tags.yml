@@ -8,6 +8,24 @@
   id: CMUYautjaToolbelt
 
 - type: Tag
+  id: CMUYautjaHerbalMedicine
+
+- type: Tag
+  id: CMUYautjaMedicompItem
+
+- type: Tag
+  id: CMUYautjaDuellingKnife
+
+- type: Tag
+  id: CMUYautjaPlasmaPistol
+
+- type: Tag
+  id: CMUYautjaArrow
+
+- type: Tag
+  id: CMUYautjaBow
+
+- type: Tag
   id: MeatWheat
 
 - type: Tag

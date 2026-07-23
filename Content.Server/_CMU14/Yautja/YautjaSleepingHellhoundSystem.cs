@@ -17,6 +17,7 @@ public sealed partial class YautjaSleepingHellhoundSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaSleepingHellhoundComponent, InteractHandEvent>(OnInteractHand);
+        SubscribeLocalEvent<YautjaSleepingHellhoundComponent, ActivateInWorldEvent>(OnActivateInWorld);
         SubscribeLocalEvent<YautjaSleepingHellhoundComponent, YautjaSleepingHellhoundConfirmEvent>(OnWakeConfirmed);
     }
 
@@ -26,19 +27,32 @@ public sealed partial class YautjaSleepingHellhoundSystem : EntitySystem
             return;
 
         args.Handled = true;
+        TryOpenWakeDialog(ent, args.User);
+    }
 
-        if (!HasComp<YautjaComponent>(args.User) && !HasComp<YautjaTechAuthorizedComponent>(args.User))
+    private void OnActivateInWorld(Entity<YautjaSleepingHellhoundComponent> ent, ref ActivateInWorldEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        TryOpenWakeDialog(ent, args.User);
+    }
+
+    private void TryOpenWakeDialog(Entity<YautjaSleepingHellhoundComponent> ent, EntityUid user)
+    {
+        if (!HasComp<YautjaComponent>(user) && !HasComp<YautjaTechAuthorizedComponent>(user))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-sleeping-hellhound-denied"), ent, args.User, PopupType.SmallCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-sleeping-hellhound-denied"), ent, user, PopupType.SmallCaution);
             return;
         }
 
         _dialog.OpenConfirmation(
             ent,
-            args.User,
+            user,
             Loc.GetString("cmu-yautja-sleeping-hellhound-confirm-title"),
             Loc.GetString("cmu-yautja-sleeping-hellhound-confirm-message"),
-            new YautjaSleepingHellhoundConfirmEvent(GetNetEntity(args.User)));
+            new YautjaSleepingHellhoundConfirmEvent(GetNetEntity(user)));
     }
 
     private void OnWakeConfirmed(Entity<YautjaSleepingHellhoundComponent> ent, ref YautjaSleepingHellhoundConfirmEvent args)

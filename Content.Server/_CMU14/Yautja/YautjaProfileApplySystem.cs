@@ -221,7 +221,7 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
     private void ApplyCapeColor(EntityUid cape, YautjaCharacterProfile profile)
     {
         var capeComp = EnsureComp<YautjaCapeComponent>(cape);
-        capeComp.Color = profile.CapeColor;
+        capeComp.Color = YautjaCharacterProfile.Default.CapeColor;
         Dirty(cape, capeComp);
     }
 
@@ -267,8 +267,8 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             bracerComp.OwnerRank = profile.OwnerRank;
             if (profile.InvisibilitySound == YautjaInvisibilitySound.Retro)
             {
-                bracerComp.CloakOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakon.wav");
-                bracerComp.CloakOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakoff.wav");
+                bracerComp.CloakOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_cloakon.wav");
+                bracerComp.CloakOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_cloakoff.wav");
             }
             else
             {

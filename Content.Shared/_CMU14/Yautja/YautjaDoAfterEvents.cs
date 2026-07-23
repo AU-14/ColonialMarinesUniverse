@@ -92,23 +92,29 @@ public sealed partial class YautjaRelayBeaconDoAfterEvent : SimpleDoAfterEvent
 {
     public readonly YautjaRelayDestinationKind Destination;
     public readonly int CustomIndex;
+    public readonly string? DestinationId;
 
-    public YautjaRelayBeaconDoAfterEvent(YautjaRelayDestinationKind destination, int customIndex = -1)
+    public YautjaRelayBeaconDoAfterEvent(
+        YautjaRelayDestinationKind destination,
+        int customIndex = -1,
+        string? destinationId = null)
     {
         Destination = destination;
         CustomIndex = customIndex;
+        DestinationId = destinationId;
     }
 
     public override DoAfterEvent Clone()
     {
-        return new YautjaRelayBeaconDoAfterEvent(Destination, CustomIndex);
+        return new YautjaRelayBeaconDoAfterEvent(Destination, CustomIndex, DestinationId);
     }
 
     public override bool IsDuplicate(DoAfterEvent other)
     {
         return other is YautjaRelayBeaconDoAfterEvent relay &&
                relay.Destination == Destination &&
-               relay.CustomIndex == CustomIndex;
+               relay.CustomIndex == CustomIndex &&
+               relay.DestinationId == DestinationId;
     }
 }
 

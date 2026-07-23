@@ -8,5 +8,5 @@
     cancelPresetOnTooFewPlayers: false
   - type: YautjaPredatorRound
     modePredator: true
-    minSlots: 3
-    maxSlots: 5
+    minSlots: 2
+    maxSlots: 4

@@ -45,6 +45,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                     _windowRules = null;
                 };
                 _windowRules.OpenCentered();
+                _windowRules.MoveToFront();
             };
 
             _window.OnRoleFollow += info =>

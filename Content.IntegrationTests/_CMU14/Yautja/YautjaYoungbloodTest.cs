@@ -1043,7 +1043,7 @@ public sealed class YautjaYoungbloodTest
 
                 var maskComp = entMan.GetComponent<YautjaMaskComponent>(mask);
                 Assert.That(maskComp.VisorEnabled, Is.False);
-                AssertSoundPath(maskComp.ToggleVisorSound, "/Audio/_CMU14/Yautja/pred_vision.wav");
+                AssertSoundPath(maskComp.ToggleVisorSound, "/Audio/_CMU14/Yautja/Equipment/pred_vision.wav");
                 AssertSoundPath(maskComp.ZoomOnSound, "/Audio/_CMU14/Yautja/pred_zoom_on.ogg");
                 AssertSoundPath(maskComp.ZoomOffSound, "/Audio/_CMU14/Yautja/pred_zoom_off.ogg");
 

@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 04/11/2026 14:32:54
-  entityCount: 5991
+  entityCount: 5992
 maps:
 - 1
 grids:
@@ -37908,4 +37908,17 @@ entities:
       text: brig
     - type: WarpPoint
       location: Savannah brig
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 5992
+    components:
+    - type: MetaData
+      name: Fiorina ground relay
+    - type: Transform
+      pos: -43.5,4.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: fiorina.ground.relay
+      displayName: Fiorina Ground Relay
 ...

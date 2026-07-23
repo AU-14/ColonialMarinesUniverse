@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 08:50:22
-  entityCount: 24647
+  entityCount: 24648
 maps:
 - 1
 grids:
@@ -175373,4 +175373,17 @@ entities:
       containers:
         rmc_xeno_tunnel_mob_container: !type:Container
           ents: []
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 24648
+    components:
+    - type: MetaData
+      name: Chances Claim ground relay
+    - type: Transform
+      pos: -2.5,-8.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: chances-claim.ground.relay
+      displayName: Chances Claim Ground Relay
 ...

@@ -266,9 +266,9 @@
     activated: true
     toggleOnWield: false
     soundActivate:
-      path: /Audio/_CMU14/Yautja/wristblades_on.wav
+      path: /Audio/_CMU14/Yautja/Weapons/WristBlades/wristblades_on.wav
     soundDeactivate:
-      path: /Audio/_CMU14/Yautja/wristblades_off.wav
+      path: /Audio/_CMU14/Yautja/Weapons/WristBlades/wristblades_off.wav
   - type: ItemTogglePrefix
     prefixOn: combistick
     prefixOff: combistick_folded
@@ -309,7 +309,7 @@
         Piercing: 30
   - type: Blocking
     blockSound: !type:SoundPathSpecifier
-      path: /Audio/_CMU14/Yautja/parry.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Melee/parry.wav
     passiveBlockFraction: 0
     activeBlockFraction: 0.4
     passiveBlockModifier:
@@ -936,7 +936,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_CMU14/Yautja/pred_plasma_shot.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -1015,7 +1015,7 @@
     - Burst
     burstFireRate: 0.909091
     soundGunshot:
-      path: /Audio/_CMU14/Yautja/pred_plasma_shot.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -1234,7 +1234,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_CMU14/Yautja/pulse3.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse3.wav
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -1507,6 +1507,12 @@
   name: quiver strap
   description: A strap that can hold a bow with a quiver for arrows.
   components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/quiver.rsi
+    layers:
+    - state: icon
+    - map: [ "enum.StorageContainerVisualLayers.Fill" ]
+      visible: false
   - type: YautjaTechItem
   - type: Corrodible
     isCorrodible: false

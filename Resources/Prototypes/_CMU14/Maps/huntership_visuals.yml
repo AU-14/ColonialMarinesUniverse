@@ -3616,12 +3616,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "hunter_rune_corner_2"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner_2"
@@ -3629,6 +3630,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3640,12 +3642,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "hunter_rune_corner_2"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner_2"
@@ -3653,6 +3656,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3664,12 +3668,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: South
     layers:
     - state: "hunter_rune_corner_2"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner_2"
@@ -3677,6 +3682,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3688,12 +3694,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: West
     layers:
     - state: "hunter_rune_corner_2"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner_2"
@@ -3701,6 +3708,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3712,12 +3720,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "hunter_rune_corner"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner"
@@ -3725,6 +3734,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3736,12 +3746,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "hunter_rune_corner"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner"
@@ -3749,6 +3760,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3760,12 +3772,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: South
     layers:
     - state: "hunter_rune_corner"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner"
@@ -3773,6 +3786,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3784,12 +3798,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: West
     layers:
     - state: "hunter_rune_corner"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune_corner"
@@ -3797,6 +3812,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3808,12 +3824,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -3821,6 +3838,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3832,12 +3850,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -3845,6 +3864,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3856,12 +3876,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: South
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -3869,6 +3890,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3880,12 +3902,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: West
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -3893,6 +3916,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3904,12 +3928,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "small_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "small_arrow"
@@ -3917,6 +3942,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3928,12 +3954,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: South
     layers:
     - state: "small_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "small_arrow"
@@ -3941,6 +3968,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3952,12 +3980,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -3965,6 +3994,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -3976,12 +4006,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -3989,6 +4020,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -4000,12 +4032,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: South
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -4013,6 +4046,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -4024,12 +4058,13 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     enableOverrideDir: true
     overrideDir: West
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -4037,6 +4072,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -5945,6 +5981,11 @@
   description: "The fire inside the brazier emits a relatively dim glow to flashlights and flares, but nothing can replace the feeling of sitting next to a fireplace with your friends."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: OverMobs
@@ -5980,6 +6021,11 @@
   description: "The fire inside the brazier emits a relatively dim glow to flashlights and flares, but nothing can replace the feeling of sitting next to a fireplace with your friends."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: SmallObjects
@@ -6050,6 +6096,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: SmallObjects
@@ -6072,6 +6123,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: Objects
@@ -8163,6 +8219,8 @@
     overrideDir: South
     layers:
     - state: "bloodpack"
+    - state: "blank"
+      map: ["enum.BloodPackVisuals.Label"]
   - type: Icon
     sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
     state: "bloodpack"
@@ -8206,6 +8264,8 @@
     overrideDir: South
     layers:
     - state: "bloodpack"
+    - state: "blank"
+      map: ["enum.BloodPackVisuals.Label"]
   - type: Icon
     sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
     state: "bloodpack"
@@ -8249,6 +8309,8 @@
     overrideDir: South
     layers:
     - state: "bloodpack"
+    - state: "blank"
+      map: ["enum.BloodPackVisuals.Label"]
   - type: Icon
     sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
     state: "bloodpack"
@@ -15091,8 +15153,6 @@
     state: "term"
   - type: Clickable
   - type: InteractionOutline
-  - type: Fixtures
-    fixtures: {}
 
 
 - type: entity
@@ -15117,8 +15177,6 @@
     state: "term"
   - type: Clickable
   - type: InteractionOutline
-  - type: Fixtures
-    fixtures: {}
 
 
 - type: entity
@@ -15143,8 +15201,6 @@
     state: "term"
   - type: Clickable
   - type: InteractionOutline
-  - type: Fixtures
-    fixtures: {}
 
 
 - type: entity
@@ -15169,8 +15225,6 @@
     state: "term"
   - type: Clickable
   - type: InteractionOutline
-  - type: Fixtures
-    fixtures: {}
 
 
 - type: entity
@@ -32231,6 +32285,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
   - type: Fixtures
     fixtures: {}
 
@@ -32261,6 +32316,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
   - type: Fixtures
     fixtures: {}
 
@@ -32291,6 +32347,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
   - type: Fixtures
     fixtures: {}
 
@@ -35444,7 +35501,7 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/machinery/cryogenics2.rsi
-    drawdepth: SmallObjects
+    drawdepth: Mobs
     noRot: true
     snapCardinals: false
     offset: 0.0313,0.5
@@ -35468,6 +35525,14 @@
     offState: "pred_cell-off-empty"
     coverOnState: "pred_cell-on-occupied"
     coverOffState: "pred_cell-off-occupied"
+  - type: ContainerContainer
+    containers:
+      scanner-body:
+        !type:ContainerSlot
+        showEnts: false
+      beakerSlot: !type:ContainerSlot {}
+      machine_board: !type:Container {}
+      machine_parts: !type:Container {}
   - type: ApcPowerReceiver
     needsPower: false
     powerLoad: 0
@@ -42204,6 +42269,12 @@
   - type: Icon
     sprite: _CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
     state: "body_scanner_open"
+  - type: GenericVisualizer
+    visuals:
+      enum.CryostorageVisuals.Full:
+        enum.HyperSleepChamberLayers.Base:
+          True: { state: body_scanner_closed }
+          False: { state: body_scanner_open }
   - type: ApcPowerReceiver
     needsPower: false
     powerLoad: 0
@@ -42244,6 +42315,12 @@
   - type: Icon
     sprite: _CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
     state: "body_scanner_open"
+  - type: GenericVisualizer
+    visuals:
+      enum.CryostorageVisuals.Full:
+        enum.HyperSleepChamberLayers.Base:
+          True: { state: body_scanner_closed }
+          False: { state: body_scanner_open }
   - type: ApcPowerReceiver
     needsPower: false
     powerLoad: 0
@@ -43114,13 +43191,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0,0.5
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -43128,6 +43206,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43139,13 +43218,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0,0.5625
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -43153,6 +43233,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43164,13 +43245,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0.0313,-0.0313
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -43178,6 +43260,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43189,13 +43272,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: -0.0313,0.0313
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -43203,6 +43287,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43214,13 +43299,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0,0.0313
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -43228,6 +43314,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43239,13 +43326,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0,0.5625
     enableOverrideDir: true
     overrideDir: South
     layers:
     - state: "hunter_rune"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "hunter_rune"
@@ -43253,6 +43341,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43264,13 +43353,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0,-1
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "small_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "small_arrow"
@@ -43278,6 +43368,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43289,13 +43380,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0.1563,0
     enableOverrideDir: true
     overrideDir: East
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -43303,6 +43395,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43314,13 +43407,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0,-0.125
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -43328,6 +43422,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43339,13 +43434,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: 0.0938,-0.125
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -43353,6 +43449,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43364,13 +43461,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: -0.0625,-0.125
     enableOverrideDir: true
     overrideDir: North
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -43378,6 +43476,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -43389,13 +43488,14 @@
   components:
   - type: Sprite
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
-    drawdepth: FloorObjects
+    drawdepth: HighFloorObjects
     noRot: true
     offset: -0.1875,0
     enableOverrideDir: true
     overrideDir: West
     layers:
     - state: "stripes_arrow"
+      shader: unshaded
   - type: Icon
     sprite: _CMU14/HunterShip/effects/32x32-hunter_effects.rsi
     state: "stripes_arrow"
@@ -43403,6 +43503,7 @@
     radius: 1.25
     energy: 1
     color: "#ff0000"
+    castShadows: false
 
 
 - type: entity
@@ -47175,6 +47276,11 @@
   description: "The fire inside the brazier emits a relatively dim glow to flashlights and flares, but nothing can replace the feeling of sitting next to a fireplace with your friends."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: OverMobs
@@ -47211,6 +47317,11 @@
   description: "The fire inside the brazier emits a relatively dim glow to flashlights and flares, but nothing can replace the feeling of sitting next to a fireplace with your friends."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: OverMobs
@@ -47247,6 +47358,11 @@
   description: "The fire inside the brazier emits a relatively dim glow to flashlights and flares, but nothing can replace the feeling of sitting next to a fireplace with your friends."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: OverMobs
@@ -47283,6 +47399,11 @@
   description: "The fire inside the brazier emits a relatively dim glow to flashlights and flares, but nothing can replace the feeling of sitting next to a fireplace with your friends."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 6
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: SmallObjects
@@ -47355,6 +47476,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: SmallObjects
@@ -47378,6 +47504,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: SmallObjects
@@ -47401,6 +47532,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#c75fcb"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientbrazier.rsi
     drawdepth: SmallObjects
@@ -47424,6 +47560,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: Objects
@@ -47447,6 +47588,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: Objects
@@ -47470,6 +47616,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: Objects
@@ -47493,6 +47644,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: Objects
@@ -47516,6 +47672,11 @@
   description: "It's a torch."
   suffix: Hunter Ship exact visual
   components:
+  - type: PointLight
+    enabled: true
+    radius: 5
+    energy: 1
+    color: "#FFC90C"
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/structures/bonfire.rsi
     drawdepth: Objects
@@ -50625,7 +50786,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -50679,7 +50840,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -50733,7 +50894,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -50787,7 +50948,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -50841,7 +51002,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -50895,7 +51056,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -50949,7 +51110,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -51003,7 +51164,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -51057,7 +51218,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: CMUStartHandheldLightOn
   - type: Physics
     bodyType: Dynamic
@@ -51112,7 +51273,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -51166,7 +51327,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -51220,7 +51381,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -51274,7 +51435,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -51328,7 +51489,7 @@
     radius: 7.5
     energy: 1
     color: "#f03939"
-    enabled: false
+    enabled: true
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -54542,4 +54703,3 @@
         layer:
         - WallLayer
         density: 1000
-

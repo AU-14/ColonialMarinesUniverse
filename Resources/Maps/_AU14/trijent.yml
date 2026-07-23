@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 05/06/2026 02:14:18
-  entityCount: 34728
+  entityCount: 34729
 maps:
 - 1
 grids:
@@ -254074,4 +254074,17 @@ entities:
     - type: Transform
       pos: 179.5,-9.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 34729
+    components:
+    - type: MetaData
+      name: Trijent ground relay
+    - type: Transform
+      pos: 216.5,-2.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: trijent.ground.relay
+      displayName: Trijent Ground Relay
 ...

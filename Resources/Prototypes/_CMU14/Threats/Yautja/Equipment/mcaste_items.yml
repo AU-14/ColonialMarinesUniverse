@@ -279,7 +279,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_CMU14/Yautja/pred_plasmacaster_fire.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto

@@ -201,6 +201,10 @@
     maxItemSize: Normal
     grid:
     - 0,0,11,3
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMUYautjaToolbelt
   - type: FixedItemSizeStorage
   - type: LimitedStorage
     limits:
@@ -222,6 +226,7 @@
     toggleAction: CMUActionYautjaToggleLantern
     blinkingBehaviourId: blinking
     radiatingBehaviourId: radiating
+  - type: CMUStartHandheldLightOn
   - type: YautjaTechItem
     damageMultiplier: 1
     blockPickup: false

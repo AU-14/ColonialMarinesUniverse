@@ -12602,7 +12602,7 @@ public sealed class YautjaBowTest
                         "CMSS13 dual plasma cannons set fire_delay = FIRE_DELAY_TIER_2 * 6.");
                     Assert.That(gun.SelectedMode, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
-                    AssertSoundPath(gun.SoundGunshot!, "/Audio/_CMU14/Yautja/pred_plasmacaster_fire.wav");
+                    AssertSoundPath(gun.SoundGunshot!, "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
                     Assert.That(tech.BlockPickup, Is.True);
                     Assert.That(tech.ShootDeniedPopup.Id, Is.EqualTo("cmu-yautja-spike-launcher-denied"));
                     Assert.That(linked.Projectile.Id, Is.EqualTo("CMUYautjaCasterLanceBolt"),
@@ -12861,22 +12861,22 @@ public sealed class YautjaBowTest
                         "cmu-yautja-caster-mode-stun",
                         "CMUYautjaCasterStunBolt",
                         30,
-                        "/Audio/_CMU14/Yautja/pred_plasmacaster_fire.wav");
+                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
                     AssertCasterMode(casterComp.Modes[1],
                         "cmu-yautja-caster-mode-immobilizer",
                         "CMUYautjaCasterImmobilizerBolt",
                         150,
-                        "/Audio/_CMU14/Yautja/pulse.wav");
+                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav");
                     AssertCasterMode(casterComp.Modes[2],
                         "cmu-yautja-caster-mode-lethal",
                         "CMUYautjaCasterLethalBolt",
                         100,
-                        "/Audio/_CMU14/Yautja/pred_lasercannon.wav");
+                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav");
                     AssertCasterMode(casterComp.Modes[3],
                         "cmu-yautja-caster-mode-eradicator",
                         "CMUYautjaCasterEradicatorBolt",
                         1000,
-                        "/Audio/_CMU14/Yautja/pulse.wav");
+                        "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav");
                 });
             }
             finally
@@ -14771,7 +14771,7 @@ public sealed class YautjaBowTest
     }
 
     [Test]
-    public async Task CapePostVendorHookKeepsSelectedSubtypeAndAppliesColorLikeCmss13()
+    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesDefaultColorLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -14808,7 +14808,7 @@ public sealed class YautjaBowTest
                 AssertEquippedPrototype(entMan, inventory, hunter, "back", "CMUYautjaCapeQuarter");
                 Assert.That(inventory.TryGetSlotEntity(hunter, "back", out var cape), Is.True);
                 Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color,
-                    Is.EqualTo(new Color((byte) 0x2a, (byte) 0x5c, (byte) 0x8a)));
+                    Is.EqualTo(YautjaCharacterProfile.Default.CapeColor));
             }
             finally
             {
@@ -18182,7 +18182,7 @@ public sealed class YautjaBowTest
             "plasma_rifle",
             "plasma_rifle",
             WieldedPrefix: "plasma_rifle",
-            GunShotSoundPath: "/Audio/_CMU14/Yautja/pred_plasma_shot.wav");
+            GunShotSoundPath: "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav");
         yield return new Cmss13WeaponVisualSoundRow(
             "CMUYautjaPlasmaPistol",
             "/obj/item/weapon/gun/energy/yautja/plasmapistol",
@@ -18190,7 +18190,7 @@ public sealed class YautjaBowTest
             "plasma_pistol",
             "plasma_pistol",
             WieldedPrefix: "plasma_pistol",
-            GunShotSoundPath: "/Audio/_CMU14/Yautja/pulse3.wav");
+            GunShotSoundPath: "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse3.wav");
     }
 
     private static IEnumerable<Cmss13WeaponNoEmbedRow> Cmss13WeaponNoEmbedRows()

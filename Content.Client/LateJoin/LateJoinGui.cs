@@ -109,21 +109,30 @@ namespace Content.Client.LateJoin
 
         private bool DepartmentMatchesFilter(DepartmentPrototype department)
         {
-            if (string.IsNullOrEmpty(_factionFilter))
+            return DepartmentMatchesFilter(department, _factionFilter);
+        }
+
+        public static bool DepartmentMatchesFilter(DepartmentPrototype department, string? factionFilter)
+        {
+            factionFilter = factionFilter?.ToLowerInvariant();
+            if (string.IsNullOrEmpty(factionFilter))
                 return true;
+
+            if (factionFilter is "hunt" or "hunters")
+                return department.Roles.Contains("CMUYautjaHunter");
 
             // Prefer explicit faction field if present on the department prototype
             if (!string.IsNullOrEmpty(department.Faction))
             {
                 var f = department.Faction.ToLowerInvariant();
-                if (_factionFilter == "govfor")
+                if (factionFilter == "govfor")
                     return f == "govfor";
-                if (_factionFilter == "opfor")
+                if (factionFilter == "opfor")
                     return f == "opfor";
-                if (_factionFilter == "humans" || _factionFilter == "colonists")
+                if (factionFilter == "humans" || factionFilter == "colonists")
                     return f == "humans" || f == "human" || f == "colonists" || f == "colonist" || f == "default" || f == "";
 
-                return f == _factionFilter;
+                return f == factionFilter;
             }
 
             // Fallback to heuristic matching on ID/name for older prototypes
@@ -133,11 +142,11 @@ namespace Content.Client.LateJoin
             var isGov = id.Contains("govfor") || id.Contains("government") || id.Contains("gov") || name.Contains("govfor") || name.Contains("government") || name.Contains("gov");
             var isOp = id.Contains("opfor") || id.Contains("op") || name.Contains("opfor") || name.Contains("op");
 
-            if (_factionFilter == "govfor")
+            if (factionFilter == "govfor")
                 return isGov;
-            if (_factionFilter == "opfor")
+            if (factionFilter == "opfor")
                 return isOp;
-            if (_factionFilter == "humans" || _factionFilter == "colonists")
+            if (factionFilter == "humans" || factionFilter == "colonists")
                 return !isGov && !isOp;
 
             return true;
@@ -237,6 +246,9 @@ namespace Content.Client.LateJoin
 
                     foreach (var jobId in department.Roles)
                     {
+                        if (!JobMatchesFilter(_factionFilter, jobId))
+                            continue;
+
                         if (!stationAvailable.ContainsKey(jobId))
                             continue;
 
@@ -361,6 +373,11 @@ namespace Content.Client.LateJoin
             }
 
             CrtLobbyTheme.Apply(_base);
+        }
+
+        public static bool JobMatchesFilter(string? factionFilter, string jobId)
+        {
+            return factionFilter is not ("hunt" or "hunters") || jobId == "CMUYautjaHunter";
         }
 
         private void JobsAvailableUpdated(IReadOnlyDictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> updatedJobs)

@@ -287,12 +287,12 @@ public sealed partial class YautjaTrapSystem : EntitySystem
             return;
         }
 
-        if (args.Range is < 2 or > 7)
+        if (args.Range != 2)
             return;
 
-        trap.Comp.TetherRange = args.Range;
+        trap.Comp.TetherRange = 2f;
         Dirty(trap);
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-trap-configure-set", ("range", args.Range)), user.Value, user.Value);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-trap-configure-set", ("range", 2)), user.Value, user.Value);
     }
 
     private void OnGettingPickedUpAttempt(Entity<YautjaTrapComponent> trap, ref GettingPickedUpAttemptEvent args)

@@ -13,14 +13,19 @@ using Content.Client.UserInterface.Systems.Actions.Controls;
 using Content.Client.Verbs.UI;
 using Content.Server._CMU14.Yautja;
 using Content.Server.Administration.Logs;
-using Content.Server.GameTicking.Presets;
+using Content.Server.EUI;
+using Content.Server.GameTicking;
+using Content.Server.Maps;
 using Content.Server.Mind;
 using Content.Server.Radio;
 using Content.Server.Radio.Components;
 using Content.Server.Radio.EntitySystems;
 using Content.Server.Spawners.Components;
+using Content.Server.Shuttles.Components;
+using Content.Server.Station.Components;
 using Content.Server.Station.Systems;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dialog;
@@ -52,6 +57,8 @@ using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.Roles;
 using Content.Shared.Speech;
+using Content.Shared.Stacks;
+using Content.Shared.Storage;
 using Content.Shared.Verbs;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -61,10 +68,12 @@ using Robust.Client.UserInterface.Controls;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Components;
 using Robust.Shared.ContentPack;
+using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
@@ -138,6 +147,60 @@ public sealed class YautjaPredatorRoleTest
                 AssertEquippedPrototype(entMan, inventory, hunter, "shoes", "CMUYautjaClanGreavesSilver2");
                 AssertEquippedPrototype(entMan, inventory, hunter, "gloves", "CMUYautjaBracerCrimson");
                 AssertEquippedPrototype(entMan, inventory, hunter, "back", "CMUYautjaCapeDamaged");
+                AssertEquippedPrototype(entMan, inventory, hunter, "ears", "CMUYautjaCommunicator");
+                AssertEquippedPrototype(entMan, inventory, hunter, "jumpsuit", "CMUYautjaBodyMesh");
+                AssertEquippedPrototype(entMan, inventory, hunter, "belt", "CMUYautjaHuntingPouch");
+                AssertEquippedPrototype(entMan, inventory, hunter, "pocket1", "CMUYautjaSmartDisc");
+                AssertEquippedPrototype(entMan, inventory, hunter, "pocket2", "CMUYautjaMedicompFull");
+                Assert.That(inventory.TryGetSlotEntity(hunter, "id", out _), Is.False,
+                    "The starter loadout must leave the id slot free for the bracer chip.");
+
+                Assert.That(inventory.TryGetSlotEntity(hunter, "belt", out var belt), Is.True);
+                var beltStorage = entMan.GetComponent<StorageComponent>(belt.Value);
+                Assert.That(beltStorage.Container.ContainedEntities.Select(uid => entMan.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID),
+                    Is.EquivalentTo(new[]
+                    {
+                        "CMUYautjaHuntingTrap",
+                        "CMUYautjaHuntingTrap",
+                        "CMUYautjaPolishingRag",
+                        "CMUYautjaCleanserGelVial",
+                        "CMUYautjaRelayBeacon",
+                        "CMUYautjaToolbeltFilled",
+                        "CMUYautjaHoundObservationPad",
+                    }));
+
+                Assert.That(inventory.TryGetSlotEntity(hunter, "pocket2", out var medicomp), Is.True);
+                var medicompStorage = entMan.GetComponent<StorageComponent>(medicomp.Value);
+                Assert.That(medicompStorage.Container.ContainedEntities.Select(uid => entMan.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID),
+                    Is.EquivalentTo(new[]
+                    {
+                        "CMUYautjaStabilizerGel",
+                        "CMUYautjaHealingGun",
+                        "CMUYautjaWoundClamp",
+                        "CMUYautjaAlienHealthAnalyzer",
+                        "CMUYautjaAutoInjector",
+                        "CMUYautjaAutoInjector",
+                        "CMUYautjaAutoInjector",
+                        "CMUYautjaHealingGel",
+                    }));
+                Assert.That(medicompStorage.Container.ContainedEntities
+                        .Where(uid => entMan.GetComponent<MetaDataComponent>(uid).EntityPrototype?.ID == "CMUYautjaHealingGel")
+                        .Sum(uid => entMan.GetComponent<StackComponent>(uid).Count),
+                    Is.EqualTo(6));
+
+                var idCards = new List<EntityUid>();
+                var idCardQuery = entMan.EntityQueryEnumerator<MetaDataComponent>();
+                while (idCardQuery.MoveNext(out var idCard, out var idCardMeta))
+                {
+                    if (idCardMeta.EntityPrototype?.ID == "CMUYautjaIdCard")
+                        idCards.Add(idCard);
+                }
+
+                Assert.That(idCards, Has.Count.EqualTo(0),
+                    "Yautja starter gear must not spawn a separate ID card before the bracer chip is deployed.");
+                Assert.That(inventory.TryGetSlotEntity(hunter, "back", out var equippedCape), Is.True);
+                Assert.That(entMan.GetComponent<YautjaCapeComponent>(equippedCape.Value).Color,
+                    Is.EqualTo(YautjaCharacterProfile.Default.CapeColor));
 
                 Assert.That(inventory.TryGetSlotEntity(hunter, "mask", out var mask), Is.True);
                 Assert.That(containers.TryGetContainer(mask.Value, "cmu-yautja-mask-accessory", out var maskAccessory), Is.True);
@@ -185,6 +248,7 @@ public sealed class YautjaPredatorRoleTest
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var job = prototypes.Index<JobPrototype>("CMUYautjaHunter");
+            var threatDepartment = prototypes.Index<DepartmentPrototype>("AU14DepartmentThreat");
 
             Assert.Multiple(() =>
             {
@@ -196,7 +260,33 @@ public sealed class YautjaPredatorRoleTest
                 Assert.That(job.JobPreviewEntity?.ToString(), Is.EqualTo("CMUMobYautja"));
                 Assert.That(job.StartingGear?.ToString(), Is.EqualTo("CMUYautjaHunterGear"));
                 Assert.That(job.UsePlayerProfile, Is.False);
+                Assert.That(threatDepartment.Roles, Does.Contain("CMUYautjaHunter"));
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaBracerDrainFailureUsesValidBoldMarkup()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var resources = server.ResolveDependency<IResourceManager>();
+            foreach (var locale in new[] { "ru-RU", "en-US" })
+            {
+                using var stream = resources.ContentFileRead(new ResPath($"/Locale/{locale}/_CMU14/yautja/yautja.ftl"));
+                using var reader = new StreamReader(stream);
+                var text = reader.ReadToEnd();
+
+                Assert.That(text, Does.Contain("[bold]{$charge}/{$max}[/bold]"), locale);
+                Assert.That(text, Does.Contain("[bold]{$amount}[/bold]"), locale);
+                Assert.That(text, Does.Not.Contain("<bold>"), locale);
+                Assert.That(text, Does.Not.Contain("</bold>"), locale);
+            }
         });
 
         await pair.CleanReturnAsync();
@@ -306,7 +396,7 @@ public sealed class YautjaPredatorRoleTest
     }
 
     [Test]
-    public async Task DistressPresetEnablesPredatorModeRuleWithThreeToFiveSlots()
+    public async Task PredatorModeRuleUsesTwoToFourSlotsAndDefaultRandomSchedule()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -314,19 +404,314 @@ public sealed class YautjaPredatorRoleTest
         await server.WaitAssertion(() =>
         {
             var prototypes = server.ResolveDependency<IPrototypeManager>();
-            var preset = prototypes.Index<GamePresetPrototype>("CMDistressSignal");
             var rulePrototype = prototypes.Index<EntityPrototype>("CMUYautjaPredatorRound");
 
-            Assert.That(preset.Rules, Does.Contain("CMUYautjaPredatorRound"));
             Assert.That(rulePrototype.TryGetComponent<YautjaPredatorRoundComponent>(out var predatorRound, server.EntMan.ComponentFactory), Is.True);
             Assert.Multiple(() =>
             {
                 Assert.That(predatorRound!.ModePredator, Is.True);
-                Assert.That(predatorRound.MinSlots, Is.EqualTo(3));
-                Assert.That(predatorRound.MaxSlots, Is.EqualTo(5));
+                Assert.That(predatorRound.MinSlots, Is.EqualTo(2));
+                Assert.That(predatorRound.MaxSlots, Is.EqualTo(4));
                 Assert.That(predatorRound.PredatorJob.Id, Is.EqualTo("CMUYautjaHunter"));
                 Assert.That(predatorRound.HunterShipMap.Id, Is.EqualTo("CMUYautjaHunterShip"));
+                Assert.That(YautjaPredatorRoundCVars.RandomEnabled.DefaultValue, Is.True);
+                Assert.That(YautjaPredatorRoundCVars.RandomMinimumRounds.DefaultValue, Is.EqualTo(3));
+                Assert.That(YautjaPredatorRoundCVars.RandomMaximumRounds.DefaultValue, Is.EqualTo(5));
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HunterShipGameMapCanBeLoaded()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true
+        });
+        var server = pair.Server;
+        var ticker = server.EntMan.System<GameTicker>();
+        var prototypes = server.ResolveDependency<IPrototypeManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(prototypes.TryIndex<GameMapPrototype>("CMUYautjaHunterShip", out var map), Is.True);
+            var options = DeserializationOptions.Default with { InitializeMaps = true };
+            Assert.DoesNotThrow(() => ticker.LoadGameMap(map!, out _, options));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PredatorRoundStartAutomaticallyLoadsHunterShipZLevels()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+            DummyTicker = false,
+        });
+        var server = pair.Server;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var cfg = server.CfgMan;
+                cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, false);
+                cfg.SetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds, 1);
+                cfg.SetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds, 1);
+                cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, true);
+                server.EntMan.System<GameTicker>().RestartRound();
+            });
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var prototypes = server.ResolveDependency<IPrototypeManager>();
+                var ticker = entMan.System<GameTicker>();
+                Assert.That(ticker.RunLevel, Is.EqualTo(GameRunLevel.InRound));
+
+                var ruleQuery = entMan.EntityQueryEnumerator<YautjaPredatorRoundComponent>();
+                Assert.That(ruleQuery.MoveNext(out _, out var rule), Is.True);
+                Assert.That(rule.HunterShipLoaded, Is.True);
+
+                var networks = new List<(EntityUid Uid, CMUZLevelsNetworkComponent Component)>();
+                var networkQuery = entMan.EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
+                while (networkQuery.MoveNext(out var networkUid, out var network))
+                {
+                    if (network.ZLevels.Keys.ToHashSet().SetEquals(new[] { -1, 0, 1 }))
+                        networks.Add((networkUid, network));
+                }
+
+                Assert.That(networks, Has.Count.EqualTo(1));
+                var loadedNetwork = networks[0];
+                foreach (var (depth, mapUid) in loadedNetwork.Component.ZLevels)
+                {
+                    Assert.That(mapUid, Is.Not.Null);
+                    Assert.That(entMan.TryGetComponent(mapUid!.Value, out CMUZLevelMapComponent? mapLevel), Is.True);
+                    Assert.That(mapLevel!.NetworkUid, Is.EqualTo(loadedNetwork.Uid));
+                    Assert.That(mapLevel.Depth, Is.EqualTo(depth));
+                    Assert.That(entMan.TryGetComponent(mapUid.Value, out MapComponent map), Is.True);
+                    Assert.That(map!.MapId, Is.Not.EqualTo(MapId.Nullspace));
+                }
+
+                var stationSystem = entMan.System<StationSystem>();
+                var predatorStations = new HashSet<EntityUid>();
+                var spawnQuery = entMan.EntityQueryEnumerator<YautjaHuntSpawnPointComponent, TransformComponent>();
+                var huntSpawnPointCount = 0;
+                while (spawnQuery.MoveNext(out var spawnUid, out var spawn, out var transform))
+                {
+                    huntSpawnPointCount++;
+
+                    if (stationSystem.GetOwningStation(spawnUid, transform) is { } station)
+                        predatorStations.Add(station);
+                }
+
+                if (predatorStations.Count == 0)
+                {
+                    var hunterMap = prototypes.Index<GameMapPrototype>("CMUYautjaHunterShip");
+                    var stationQuery = entMan.EntityQueryEnumerator<StationDataComponent, MetaDataComponent>();
+                    while (stationQuery.MoveNext(out var station, out _, out var metadata))
+                    {
+                        if (metadata.EntityName == hunterMap.MapName)
+                            predatorStations.Add(station);
+                    }
+                }
+
+                Assert.That(huntSpawnPointCount, Is.GreaterThan(0), "Hunter ship map must contain hunt spawn points.");
+                var jobSpawnPointCount = 0;
+                var jobSpawnQuery = entMan.EntityQueryEnumerator<SpawnPointComponent>();
+                while (jobSpawnQuery.MoveNext(out _, out var spawn))
+                {
+                    if (spawn.SpawnType == SpawnPointType.Job && spawn.Job?.Id == "CMUYautjaHunter")
+                        jobSpawnPointCount++;
+                }
+
+                Assert.That(jobSpawnPointCount, Is.GreaterThan(0), "Hunter ship map must contain hunter job spawn points.");
+
+                var hunterShuttles = new List<EntityUid>();
+                var shuttleQuery = entMan.EntityQueryEnumerator<ShuttleComponent, TransformComponent, MetaDataComponent>();
+                while (shuttleQuery.MoveNext(out var shuttle, out _, out var shuttleTransform, out var shuttleMetadata))
+                {
+                    if (shuttleMetadata.EntityName == "Hunter Shuttle" &&
+                        shuttleTransform.MapUid is { } shuttleMap &&
+                        loadedNetwork.Component.ZLevels.Values.Contains(shuttleMap))
+                    {
+                        hunterShuttles.Add(shuttle);
+                    }
+                }
+
+                Assert.That(hunterShuttles, Has.Count.EqualTo(1),
+                    "Hunt initialization must spawn exactly one Hunter Shuttle on the Hunter Ship.");
+
+                Assert.That(predatorStations, Has.Count.EqualTo(1),
+                    "Hunter slots must be attached to the hunter ship station, not duplicated on every station.");
+
+                var hunterSlotStations = new List<(EntityUid Station, int? Slots)>();
+                var jobsQuery = entMan.EntityQueryEnumerator<StationJobsComponent>();
+                while (jobsQuery.MoveNext(out var station, out var stationJobs) )
+                {
+                    if (!stationJobs.JobList.TryGetValue("CMUYautjaHunter", out var slots))
+                        continue;
+
+                    hunterSlotStations.Add((station, slots));
+                }
+
+                Assert.That(hunterSlotStations, Has.Count.EqualTo(1));
+                Assert.That(hunterSlotStations[0].Station, Is.EqualTo(predatorStations.Single()));
+                Assert.That(hunterSlotStations[0].Slots, Is.EqualTo(rule.Slots));
+
+                // A hunter join must consume a slot. The spawn hook is raised
+                // before StationSpawningSystem assigns the job, so it must not
+                // reset the remaining count back to the round maximum.
+                var hunterStation = predatorStations.Single();
+                var hunterJobs = entMan.GetComponent<StationJobsComponent>(hunterStation);
+                var stationJobsSystem = entMan.System<StationJobsSystem>();
+                Assert.That(stationJobsSystem.TryAdjustJobSlot(
+                    hunterStation,
+                    "CMUYautjaHunter",
+                    -1,
+                    false,
+                    false,
+                    hunterJobs), Is.True);
+                var remainingHunterSlots = hunterJobs.JobList["CMUYautjaHunter"];
+                var selectedYautjaProfile = YautjaCharacterProfile.Default
+                    .WithName("Late Join Kainde Amedha")
+                    .WithSkinColor(YautjaSkinColor.Green)
+                    .WithEyeColor(YautjaEyeColor.Gold)
+                    .WithArmor(YautjaGearMaterial.Bronze, 3);
+                var selectedLobbyProfile = HumanoidCharacterProfile.DefaultWithSpecies("Human")
+                    .WithName("Human Lobby Profile")
+                    .WithYautjaProfile(selectedYautjaProfile);
+                // SpawnPlayerCharacterOnStation raises the same PlayerSpawningEvent
+                // used by GameTicker.MakeJoinGame for a late-joining player.
+                var spawned = entMan.System<StationSpawningSystem>().SpawnPlayerCharacterOnStation(
+                    hunterStation,
+                    "CMUYautjaHunter",
+                    selectedLobbyProfile);
+                try
+                {
+                    Assert.That(spawned, Is.Not.Null);
+                    var spawnedUid = spawned!.Value;
+                    var spawnedTransform = entMan.GetComponent<TransformComponent>(spawnedUid);
+                    Assert.That(spawnedTransform.MapUid, Is.Not.Null,
+                        "A predator late-join must be placed on a real hunter-ship z-level map.");
+                    Assert.That(loadedNetwork.Component.ZLevels.Values,
+                        Does.Contain(spawnedTransform.MapUid!.Value),
+                        "A predator late-join must use a spawn marker on one of the hunter ship z-levels.");
+
+                    var spawnedYautja = entMan.GetComponent<YautjaAppliedProfileComponent>(spawnedUid);
+                    var spawnedHumanoid = entMan.GetComponent<HumanoidAppearanceComponent>(spawnedUid);
+                    var spawnedMeta = entMan.GetComponent<MetaDataComponent>(spawnedUid);
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(spawnedMeta.EntityName, Is.EqualTo(selectedYautjaProfile.Name));
+                        Assert.That(spawnedYautja.Profile.Name, Is.EqualTo(selectedYautjaProfile.Name));
+                        Assert.That(spawnedHumanoid.Species, Is.EqualTo("Yautja"));
+                        Assert.That(spawnedHumanoid.SkinColor,
+                            Is.EqualTo(YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Green)));
+                        Assert.That(spawnedHumanoid.EyeColor,
+                            Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Gold)));
+                    });
+                    Assert.That(hunterJobs.JobList["CMUYautjaHunter"], Is.EqualTo(remainingHunterSlots));
+                }
+                finally
+                {
+                    if (spawned is { } spawnedUid && !entMan.Deleted(spawnedUid))
+                        entMan.DeleteEntity(spawnedUid);
+                }
+            });
+        }
+        finally
+        {
+            var cfg = server.CfgMan;
+            cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, YautjaPredatorRoundCVars.RandomEnabled.DefaultValue);
+            cfg.SetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds, YautjaPredatorRoundCVars.RandomMinimumRounds.DefaultValue);
+            cfg.SetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds, YautjaPredatorRoundCVars.RandomMaximumRounds.DefaultValue);
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PredatorAdminEditorAppliesChanceSlotsAndInitializesHunterShip()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var cfg = server.CfgMan;
+            cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, false);
+
+            var session = server.PlayerMan.Sessions.Single();
+            var euiManager = server.ResolveDependency<EuiManager>();
+            var editor = new Content.Server._CMU14.Yautja.YautjaPredatorAdminEditorEui();
+            EntityUid predatorSpawn = default;
+            euiManager.OpenEui(editor, session);
+
+            try
+            {
+                editor.HandleMessage(new YautjaPredatorAdminEditorSetRandomMessage(true, 3, 5));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomEnabled), Is.True);
+                    Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomMinimumRounds), Is.EqualTo(3));
+                    Assert.That(cfg.GetCVar(YautjaPredatorRoundCVars.RandomMaximumRounds), Is.EqualTo(5));
+                });
+
+                editor.HandleMessage(new YautjaPredatorAdminEditorSetHunterSlotsMessage(4));
+                Assert.That(entMan.System<YautjaPredatorRoundSystem>().ConfiguredHunterSlots, Is.EqualTo(4));
+
+                // Keep this EUI routing test focused on the admin controls. The
+                // first-time map load (including Z-level linking) is covered by
+                // PredatorRoundStartAutomaticallyLoadsHunterShipZLevels below.
+                var ticker = entMan.System<GameTicker>();
+                Assert.That(ticker.StartGameRule("CMUYautjaPredatorRound", out var ruleUid), Is.True);
+                // A marker makes EnsurePredatorRound take its already-provisioned
+                // spawn-point path without loading the large map into this
+                // connected EUI test.
+                predatorSpawn = entMan.SpawnEntity("CMUHunterShipMarkerPredatorSpawn", MapCoordinates.Nullspace);
+                editor.HandleMessage(new YautjaPredatorAdminEditorInitializeMessage());
+
+                var ruleQuery = entMan.EntityQueryEnumerator<YautjaPredatorRoundComponent>();
+                Assert.That(ruleQuery.MoveNext(out _, out var rule), Is.True);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(rule.Slots, Is.EqualTo(4));
+                    Assert.That(rule.MinSlots, Is.EqualTo(4));
+                    Assert.That(rule.MaxSlots, Is.EqualTo(4));
+                    Assert.That(rule.HunterShipLoaded, Is.True);
+                });
+
+                var state = editor.GetNewState();
+                Assert.That(state, Is.TypeOf<YautjaPredatorAdminEditorEuiState>());
+                var editorState = (YautjaPredatorAdminEditorEuiState) state;
+                Assert.Multiple(() =>
+                {
+                    Assert.That(editorState.HuntInitialized, Is.True);
+                    Assert.That(editorState.ActiveHunterSlots, Is.EqualTo(4));
+                    Assert.That(editorState.HunterSlots, Is.EqualTo(4));
+                    Assert.That(editorState.RandomEnabled, Is.True);
+                    Assert.That(editorState.RandomMinimumRounds, Is.EqualTo(3));
+                    Assert.That(editorState.RandomMaximumRounds, Is.EqualTo(5));
+                });
+            }
+            finally
+            {
+                editor.Close();
+                if (predatorSpawn.IsValid() && !entMan.Deleted(predatorSpawn))
+                    entMan.DeleteEntity(predatorSpawn);
+                cfg.SetCVar(YautjaPredatorRoundCVars.RandomEnabled, YautjaPredatorRoundCVars.RandomEnabled.DefaultValue);
+            }
         });
 
         await pair.CleanReturnAsync();
@@ -368,10 +753,13 @@ public sealed class YautjaPredatorRoleTest
 
             var relay = prototypes.Index<EntityPrototype>("CMUYautjaRelayBeacon");
             Assert.That(relay.TryGetComponent<YautjaRelayBeaconComponent>(out var relayBeacon, componentFactory), Is.True);
+            Assert.That(Enum.TryParse<YautjaRelayDestinationKind>("Ground", out var ground), Is.True,
+                "The relay beacon needs a distinct multi-point ground destination kind.");
             Assert.That(relayBeacon!.AllowedDestinations, Is.EqualTo(new[]
             {
                 YautjaRelayDestinationKind.YautjaShip,
                 YautjaRelayDestinationKind.HumanShip,
+                ground,
             }));
             Assert.That(relayBeacon.PulseSound, Is.TypeOf<SoundPathSpecifier>());
             var signalPath = new ResPath("/Audio/_CMU14/Yautja/signal.ogg");
@@ -399,6 +787,191 @@ public sealed class YautjaPredatorRoleTest
             Assert.That(humanShip.TryGetComponent<YautjaRelayDestinationComponent>(out var humanShipDestination, componentFactory), Is.True);
             Assert.That(humanShipDestination!.Kind, Is.EqualTo(YautjaRelayDestinationKind.HumanShip));
         });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task GroundRelayDestinationContractExists()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var componentFactory = server.EntMan.ComponentFactory;
+
+            Assert.That(prototypes.TryIndex<EntityPrototype>("CMUYautjaGroundRelayDestination", out var marker), Is.True);
+            Assert.That(marker!.TryGetComponent<YautjaRelayDestinationComponent>(out var destination, componentFactory), Is.True);
+            Assert.That(destination!.Kind.ToString(), Is.EqualTo("Ground"));
+
+            Assert.That(typeof(YautjaRelayBeaconDestinationEntry)
+                    .GetField("DestinationId", BindingFlags.Public | BindingFlags.Instance), Is.Not.Null,
+                "Map-placed destinations must be selected by a stable ID rather than an entity-query index.");
+            Assert.That(typeof(YautjaRelayBeaconDestinationMsg)
+                    .GetField("DestinationId", BindingFlags.Public | BindingFlags.Instance), Is.Not.Null,
+                "The relay UI message must carry the selected map marker ID to the server.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RelayBeaconShowsAndUsesMultipleGroundDestinationsById()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid beacon = default;
+        EntityUid first = default;
+        EntityUid second = default;
+        MapCoordinates secondCoordinates = default;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var hands = entMan.System<SharedHandsSystem>();
+                var transform = entMan.System<SharedTransformSystem>();
+                var ui = entMan.System<SharedUserInterfaceSystem>();
+                entMan.EnsureComponent<RMCPlanetComponent>(map.Grid.Owner);
+
+                hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+                beacon = entMan.SpawnEntity("CMUYautjaRelayBeacon", map.GridCoords);
+                first = entMan.SpawnEntity("CMUYautjaGroundRelayDestination", map.GridCoords.Offset(new Vector2(12, 0)));
+                second = entMan.SpawnEntity("CMUYautjaGroundRelayDestination", map.GridCoords.Offset(new Vector2(16, 0)));
+
+                entMan.GetComponent<YautjaRelayDestinationComponent>(first).Id = "test-ground-first";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(first).DisplayName = "First Ground";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(second).Id = "test-ground-second";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(second).DisplayName = "Second Ground";
+                secondCoordinates = transform.GetMapCoordinates(second);
+
+                Assert.That(hands.TryPickupAnyHand(hunter, beacon), Is.True);
+                var use = new UseInHandEvent(hunter);
+                entMan.EventBus.RaiseLocalEvent(beacon, use);
+                Assert.That(use.Handled, Is.True);
+                Assert.That(ui.TryGetUiState<YautjaRelayBeaconState>(beacon, YautjaRelayBeaconUIKey.Key, out var state), Is.True);
+
+                var ground = state!.Destinations
+                    .Where(destination => destination.Kind.ToString() == "Ground")
+                    .ToArray();
+                Assert.That(ground, Has.Length.EqualTo(2));
+                Assert.That(ground.Select(destination => destination.DestinationId), Is.EquivalentTo(new[]
+                {
+                    "test-ground-first",
+                    "test-ground-second",
+                }));
+
+                var selected = ground.Single(destination => destination.DestinationId == "test-ground-second");
+                ui.RaiseUiMessage(beacon, YautjaRelayBeaconUIKey.Key,
+                    new YautjaRelayBeaconDestinationMsg(selected.Kind, selected.CustomIndex, selected.DestinationId)
+                    {
+                        Actor = hunter,
+                    });
+            });
+
+            await pair.RunTicksSync(pair.SecondsToTicks(10.5f));
+
+            await server.WaitAssertion(() =>
+            {
+                var actual = server.EntMan.System<SharedTransformSystem>().GetMapCoordinates(hunter);
+                Assert.That(actual.MapId, Is.EqualTo(secondCoordinates.MapId));
+                Assert.That(actual.Position, Is.EqualTo(secondCoordinates.Position));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                foreach (var uid in new[] { hunter, beacon, first, second })
+                {
+                    if (uid != default && !entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task InvalidGroundRelayDestinationsAreOmittedAndCannotStartRelay()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid beacon = default;
+        var destinations = new List<EntityUid>();
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var hands = entMan.System<SharedHandsSystem>();
+                var ui = entMan.System<SharedUserInterfaceSystem>();
+
+                hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+                beacon = entMan.SpawnEntity("CMUYautjaRelayBeacon", map.GridCoords);
+
+                var valid = entMan.SpawnEntity("CMUYautjaGroundRelayDestination", map.GridCoords.Offset(new Vector2(12, 0)));
+                var blank = entMan.SpawnEntity("CMUYautjaGroundRelayDestination", map.GridCoords.Offset(new Vector2(14, 0)));
+                var duplicate = entMan.SpawnEntity("CMUYautjaGroundRelayDestination", map.GridCoords.Offset(new Vector2(16, 0)));
+                var nullspace = entMan.SpawnEntity("CMUYautjaGroundRelayDestination", MapCoordinates.Nullspace);
+                destinations.AddRange(new[] { valid, blank, duplicate, nullspace });
+
+                entMan.GetComponent<YautjaRelayDestinationComponent>(valid).Id = "valid-ground";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(valid).DisplayName = "Valid Ground";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(blank).Id = " ";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(blank).DisplayName = "Blank ID";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(duplicate).Id = "valid-ground";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(duplicate).DisplayName = "Duplicate Ground";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(nullspace).Id = "nullspace-ground";
+                entMan.GetComponent<YautjaRelayDestinationComponent>(nullspace).DisplayName = "Nullspace Ground";
+
+                Assert.That(hands.TryPickupAnyHand(hunter, beacon), Is.True);
+                var use = new UseInHandEvent(hunter);
+                entMan.EventBus.RaiseLocalEvent(beacon, use);
+                Assert.That(use.Handled, Is.True);
+                Assert.That(ui.TryGetUiState<YautjaRelayBeaconState>(beacon, YautjaRelayBeaconUIKey.Key, out var state), Is.True);
+
+                var ground = state!.Destinations
+                    .Where(destination => destination.Kind == YautjaRelayDestinationKind.Ground)
+                    .ToArray();
+                Assert.That(ground.Select(destination => destination.DestinationId), Is.EqualTo(new[] { "valid-ground" }));
+
+                foreach (var invalidId in new[] { " ", "nullspace-ground" })
+                {
+                    ui.RaiseUiMessage(beacon, YautjaRelayBeaconUIKey.Key,
+                        new YautjaRelayBeaconDestinationMsg(YautjaRelayDestinationKind.Ground, -1, invalidId)
+                        {
+                            Actor = hunter,
+                        });
+                }
+
+                Assert.That(ActiveRelayDoAfters(entMan, hunter), Is.EqualTo(0));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                foreach (var uid in destinations.Append(hunter).Append(beacon))
+                {
+                    if (uid != default && !entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+        }
 
         await pair.CleanReturnAsync();
     }
@@ -2338,7 +2911,7 @@ public sealed class YautjaPredatorRoleTest
             try
             {
                 entMan.GetComponent<YautjaRelayBeaconComponent>(beacon).PulseSound =
-                    new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+                    new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
                 Assert.That(hands.TryPickupAnyHand(hunter, beacon), Is.True);
 
                 Assert.That(ui.TryOpenUi(beacon, YautjaRelayBeaconUIKey.Key, hunter), Is.True);
@@ -2396,7 +2969,7 @@ public sealed class YautjaPredatorRoleTest
             try
             {
                 entMan.GetComponent<YautjaRelayBeaconComponent>(beacon).PulseSound =
-                    new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+                    new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
                 Assert.That(hands.TryPickupAnyHand(hunter, beacon), Is.True);
 
                 var beforeUse = AudioEntities(entMan);
@@ -2415,7 +2988,7 @@ public sealed class YautjaPredatorRoleTest
                     new YautjaRelayBeaconDestinationMsg(YautjaRelayDestinationKind.YautjaShip) { Actor = hunter });
 
                 Assert.That(AudioFileNamesAfter(entMan, beforeUse),
-                    Is.EqualTo(new[] { "/Audio/_CMU14/Yautja/pred_bracer.wav" }),
+                    Is.EqualTo(new[] { "/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav" }),
                     "CMSS13 plays signal.ogg only after the chosen destination resolves to a turf and the do_after starts.");
             }
             finally
@@ -2437,7 +3010,7 @@ public sealed class YautjaPredatorRoleTest
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
         var map = await pair.CreateTestMap();
-        const string testPulseSound = "/Audio/_CMU14/Yautja/pred_bracer.wav";
+        const string testPulseSound = "/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav";
 
         EntityUid bloodedThrall = default;
         EntityUid simpleBeacon = default;

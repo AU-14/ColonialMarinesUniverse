@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 03/23/2026 05:14:47
-  entityCount: 55296
+  entityCount: 55297
 maps:
 - 1
 grids:
@@ -411102,4 +411102,17 @@ entities:
     - type: Transform
       pos: -197.5,-150.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 55297
+    components:
+    - type: MetaData
+      name: Solaris ground relay
+    - type: Transform
+      pos: 20.5,-155.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: au747.ground.relay
+      displayName: Solaris Ground Relay
 ...

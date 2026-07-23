@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 07/08/2026 07:36:06
-  entityCount: 17500
+  entityCount: 17501
 maps:
 - 1
 grids:
@@ -131959,4 +131959,17 @@ entities:
     - type: Transform
       pos: 148.5,9.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 17501
+    components:
+    - type: MetaData
+      name: Shivas Snowball ground relay
+    - type: Transform
+      pos: 68.5,46.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: shivas-snowball.ground.relay
+      displayName: Shivas' Snowball Ground Relay
 ...

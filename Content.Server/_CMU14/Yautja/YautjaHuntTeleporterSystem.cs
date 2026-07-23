@@ -18,7 +18,7 @@ public sealed partial class YautjaHuntTeleporterSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
 
-    private static readonly SoundSpecifier TeleportSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_bracer.wav");
+    private static readonly SoundSpecifier TeleportSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
     private static readonly TimeSpan StepDuplicateWindow = TimeSpan.FromMilliseconds(500);
     private readonly Dictionary<(EntityUid User, YautjaHuntTeleporterKind Kind), TimeSpan> _nextStepAt = new();
 

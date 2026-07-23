@@ -20997,6 +20997,7 @@ entities:
   - uid: 303998
     components:
     - type: Transform
+      rot: 1.5707963267948966 rad
       pos: 62.5,53.5
       parent: 300002
 - proto: CMUHunterShipYautjaLandingPadB

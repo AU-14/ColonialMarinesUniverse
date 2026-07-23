@@ -59,6 +59,8 @@ namespace Content.Server._CMU14.Yautja;
 
 public sealed partial class YautjaItemSystem : EntitySystem
 {
+    private readonly record struct RelayGroundDestination(EntityUid Entity, string Id, string Name);
+
     private static readonly string[] FalconReturnSlots = { "ears", "ears2" };
     private static readonly ProtoId<NpcFactionPrototype> BadBloodYautjaFaction = "CMUYautjaBadBlood";
 
@@ -729,7 +731,8 @@ public sealed partial class YautjaItemSystem : EntitySystem
             return false;
         }
 
-        if (beacon.Comp.AllowedDestinations.Count == 1)
+        if (beacon.Comp.AllowedDestinations.Count == 1 &&
+            beacon.Comp.AllowedDestinations[0] != YautjaRelayDestinationKind.Ground)
             return TryStartRelayTeleport(beacon, user, beacon.Comp.AllowedDestinations[0]);
 
         _ui.TryOpenUi(beacon.Owner, YautjaRelayBeaconUIKey.Key, user);
@@ -739,13 +742,18 @@ public sealed partial class YautjaItemSystem : EntitySystem
 
     private void OnRelayBeaconDestination(Entity<YautjaRelayBeaconComponent> beacon, ref YautjaRelayBeaconDestinationMsg args)
     {
-        if (TryStartRelayTeleport(beacon, args.Actor, args.Destination, args.CustomIndex))
+        if (TryStartRelayTeleport(beacon, args.Actor, args.Destination, args.CustomIndex, args.DestinationId))
             _ui.CloseUi(beacon.Owner, YautjaRelayBeaconUIKey.Key, args.Actor);
         else
             UpdateRelayBeaconUi(beacon, args.Actor);
     }
 
-    private bool TryStartRelayTeleport(Entity<YautjaRelayBeaconComponent> beacon, EntityUid user, YautjaRelayDestinationKind destinationKind, int customIndex = -1)
+    private bool TryStartRelayTeleport(
+        Entity<YautjaRelayBeaconComponent> beacon,
+        EntityUid user,
+        YautjaRelayDestinationKind destinationKind,
+        int customIndex = -1,
+        string? destinationId = null)
     {
         if (!CanReachRelayBeaconAttackSelf(user))
             return false;
@@ -757,17 +765,23 @@ public sealed partial class YautjaItemSystem : EntitySystem
 
         if (customIndex < 0)
         {
-            if (!beacon.Comp.AllowedDestinations.Contains(destinationKind) || !TryGetRelayDestination(destinationKind, out _))
+            var validDestination = destinationKind == YautjaRelayDestinationKind.Ground
+                ? TryGetGroundRelayDestination(destinationId, out _)
+                : string.IsNullOrWhiteSpace(destinationId) && TryGetRelayDestination(destinationKind, out _);
+            if (!beacon.Comp.AllowedDestinations.Contains(destinationKind) || !validDestination)
                 return false;
         }
-        else if (!beacon.Comp.AllowCustomDestinations || !TryGetCustomRelayDestination(customIndex, out _))
+        else if (!beacon.Comp.AllowCustomDestinations ||
+                 destinationKind == YautjaRelayDestinationKind.Ground ||
+                 !string.IsNullOrWhiteSpace(destinationId) ||
+                 !TryGetCustomRelayDestination(customIndex, out _))
             return false;
 
         var doAfter = new DoAfterArgs(
             EntityManager,
             user,
             beacon.Comp.DoAfter,
-            new YautjaRelayBeaconDoAfterEvent(destinationKind, customIndex),
+            new YautjaRelayBeaconDoAfterEvent(destinationKind, customIndex, destinationId),
             beacon.Owner,
             target: user,
             used: beacon.Owner)
@@ -811,6 +825,13 @@ public sealed partial class YautjaItemSystem : EntitySystem
         {
             if (!TryGetCustomRelayDestination(args.CustomIndex, out coordinates))
                 return;
+        }
+        else if (args.Destination == YautjaRelayDestinationKind.Ground)
+        {
+            if (!TryGetGroundRelayDestination(args.DestinationId, out var destination))
+                return;
+
+            coordinates = Transform(destination).Coordinates;
         }
         else if (TryGetRelayDestination(args.Destination, out var destination))
         {
@@ -857,6 +878,20 @@ public sealed partial class YautjaItemSystem : EntitySystem
         var entries = new List<YautjaRelayBeaconDestinationEntry>();
         foreach (var destination in beacon.Comp.AllowedDestinations)
         {
+            if (destination == YautjaRelayDestinationKind.Ground)
+            {
+                foreach (var groundDestination in GetGroundRelayDestinations())
+                {
+                    entries.Add(new YautjaRelayBeaconDestinationEntry(
+                        destination,
+                        groundDestination.Name,
+                        true,
+                        destinationId: groundDestination.Id));
+                }
+
+                continue;
+            }
+
             entries.Add(new YautjaRelayBeaconDestinationEntry(
                 destination,
                 RelayDestinationName(destination),
@@ -895,6 +930,58 @@ public sealed partial class YautjaItemSystem : EntitySystem
                 continue;
 
             destination = uid;
+            return true;
+        }
+
+        return false;
+    }
+
+    private List<RelayGroundDestination> GetGroundRelayDestinations()
+    {
+        var destinations = new List<RelayGroundDestination>();
+        var ids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var query = EntityQueryEnumerator<YautjaRelayDestinationComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (Deleted(uid) || component.Kind != YautjaRelayDestinationKind.Ground)
+                continue;
+
+            var id = component.Id.Trim();
+            var name = component.DisplayName.Trim();
+            var transform = Transform(uid);
+            var coordinates = transform.Coordinates;
+            if (id.Length == 0 ||
+                name.Length == 0 ||
+                !coordinates.IsValid(EntityManager) ||
+                transform.MapID == MapId.Nullspace ||
+                !ids.Add(id))
+                continue;
+
+            destinations.Add(new RelayGroundDestination(uid, id, name));
+        }
+
+        destinations.Sort(static (left, right) =>
+        {
+            var idComparison = StringComparer.OrdinalIgnoreCase.Compare(left.Id, right.Id);
+            return idComparison != 0
+                ? idComparison
+                : StringComparer.OrdinalIgnoreCase.Compare(left.Name, right.Name);
+        });
+        return destinations;
+    }
+
+    private bool TryGetGroundRelayDestination(string? id, out EntityUid destination)
+    {
+        destination = default;
+        if (string.IsNullOrWhiteSpace(id))
+            return false;
+
+        foreach (var groundDestination in GetGroundRelayDestinations())
+        {
+            if (!string.Equals(groundDestination.Id, id.Trim(), StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            destination = groundDestination.Entity;
             return true;
         }
 

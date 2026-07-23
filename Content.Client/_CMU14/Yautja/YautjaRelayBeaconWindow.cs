@@ -10,7 +10,7 @@ public sealed class YautjaRelayBeaconWindow : DefaultWindow
 {
     private readonly BoxContainer _entries;
 
-    public event Action<YautjaRelayDestinationKind, int>? OnDestination;
+    public event Action<YautjaRelayDestinationKind, int, string?>? OnDestination;
 
     public YautjaRelayBeaconWindow()
     {
@@ -74,7 +74,8 @@ public sealed class YautjaRelayBeaconWindow : DefaultWindow
 
             var destination = entry.Kind;
             var customIndex = entry.CustomIndex;
-            button.OnPressed += _ => OnDestination?.Invoke(destination, customIndex);
+            var destinationId = entry.DestinationId;
+            button.OnPressed += _ => OnDestination?.Invoke(destination, customIndex, destinationId);
             _entries.AddChild(button);
         }
     }

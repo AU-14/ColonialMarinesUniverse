@@ -5,8 +5,12 @@ using System.Numerics;
 using Content.Client._RMC14.Interaction;
 using Content.Client._RMC14.Dialog;
 using Content.Client.Clickable;
+using Content.Server.Maps;
+using Content.Server.Power.Components;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Doors;
+using Content.Shared._RMC14.Rules;
 using Content.Shared.Interaction;
 using Content.Shared.VendingMachines;
 using Robust.Client.ComponentTrees;
@@ -31,6 +35,12 @@ public sealed class YautjaHuntingGroundMapTest
     private static readonly ResPath DesertMoonPath = new("/Maps/_CMU14/HuntingGrounds/desert_moon.yml");
     private static readonly ResPath DesertMoonCavesPath = new("/Maps/_CMU14/HuntingGrounds/desert_moon_caves.yml");
     private static readonly ResPath HunterShipPath = new("/Maps/_CMU14/huntership.yml");
+    private static readonly ResPath[] HunterShipZLevelPaths =
+    [
+        new("/Maps/_CMU14/huntership.yml"),
+        new("/Maps/_CMU14/huntership_upper.yml"),
+        new("/Maps/_CMU14/huntership_lower.yml"),
+    ];
 
     private static readonly string[] HunterShipHuntConsolePrototypes =
     [
@@ -38,6 +48,56 @@ public sealed class YautjaHuntingGroundMapTest
         "CMUHunterShipPlacedCMUHunterShipHuntsmastersConsoleOverwatchSouthOffsetNeg1x13",
         "CMUHunterShipPlacedCMUHunterShipBloodingConsoleOverwatchSouthOffsetNeg1x13",
     ];
+
+    private static readonly string[] HunterShipDoorButtonPrototypes =
+    [
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffset0x23",
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffset5x23",
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffsetNeg4x23",
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffsetNeg9x23",
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffset23x0",
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffset24x0",
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffsetNeg20x0",
+        "CMUHunterShipPlacedRMCPodDoorButtonDoorctrlSouthOffsetNeg24x0",
+    ];
+
+    [Test]
+    public async Task InRotationPlanetMapsHaveGroundRelayMarkers()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var componentFactory = server.EntMan.ComponentFactory;
+            var resources = server.ResolveDependency<IResourceManager>();
+            var checkedPaths = new HashSet<ResPath>();
+            var errors = new List<string>();
+
+            foreach (var planetPrototype in prototypes.EnumeratePrototypes<EntityPrototype>())
+            {
+                if (!planetPrototype.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory) ||
+                    !planet!.InRotation ||
+                    !checkedPaths.Add(prototypes.Index<GameMapPrototype>(planet.MapId).MapPath))
+                {
+                    continue;
+                }
+
+                var map = prototypes.Index<GameMapPrototype>(planet.MapId);
+                var markerCount = CountMapPrototypes(resources, map.MapPath)
+                    .GetValueOrDefault("CMUYautjaGroundRelayDestination");
+                if (markerCount < 1 || !ContainsLine(resources, map.MapPath, "kind: Ground"))
+                    errors.Add($"{planetPrototype.ID} -> {map.ID} -> {map.MapPath}");
+            }
+
+            Assert.That(errors, Is.Empty,
+                "In-rotation planet maps missing a CMUYautjaGroundRelayDestination marker:\n" +
+                string.Join('\n', errors));
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [Test]
     public async Task HuntingGroundMapsLoadWithSourceLandmarkMarkers()
@@ -324,6 +384,68 @@ public sealed class YautjaHuntingGroundMapTest
 
                 if (loadedMap != default && !entMan.Deleted(loadedMap))
                     entMan.DeleteEntity(loadedMap);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HunterShipPlacedDoorButtonsArePoweredOnRealShip()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Destructive = true });
+        var server = pair.Server;
+        var buttons = new Dictionary<string, EntityUid>();
+        var loadedMaps = new List<EntityUid>();
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var loader = entMan.System<MapLoaderSystem>();
+
+                foreach (var path in HunterShipZLevelPaths)
+                {
+                    Assert.That(loader.TryLoadMap(path, out var map, out var grids,
+                        DeserializationOptions.Default with { InitializeMaps = true }), Is.True, path.ToString());
+
+                    loadedMaps.Add(map!.Value.Owner);
+                    var grid = grids!.Single().Owner;
+                    var remaining = HunterShipDoorButtonPrototypes.ToHashSet();
+                    var query = entMan.EntityQueryEnumerator<RMCDoorButtonComponent, TransformComponent, MetaDataComponent>();
+                    while (query.MoveNext(out var uid, out _, out var xform, out var meta))
+                    {
+                        if (xform.GridUid == grid && meta.EntityPrototype?.ID is { } id && remaining.Remove(id))
+                            buttons[id] = uid;
+                    }
+                }
+
+                Assert.That(buttons.Keys, Is.EquivalentTo(HunterShipDoorButtonPrototypes));
+            });
+
+            await pair.ReallyBeIdle(20);
+
+            await server.WaitAssertion(() =>
+            {
+                foreach (var (id, button) in buttons)
+                {
+                    var receiver = server.EntMan.GetComponent<ApcPowerReceiverComponent>(button);
+                    Assert.That(receiver.NeedsPower, Is.False, id);
+                    Assert.That(receiver.Powered, Is.True,
+                        $"Hunter Ship button {id} must not show the generic unpowered message.");
+                }
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                foreach (var loadedMap in loadedMaps)
+                {
+                    if (!server.EntMan.Deleted(loadedMap))
+                        server.EntMan.DeleteEntity(loadedMap);
+                }
             });
         }
 

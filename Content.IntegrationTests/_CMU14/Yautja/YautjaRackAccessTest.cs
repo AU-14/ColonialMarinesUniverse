@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Popups;
 using Content.IntegrationTests.Pair;
 using Content.Server.Mind;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Components;
 using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared.Roles;
@@ -21,6 +23,121 @@ namespace Content.IntegrationTests._CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaRackAccessTest
 {
+    [Test]
+    public void YautjaRackClientGateDoesNotEmitDeniedPopup()
+    {
+        var sourcePath = Path.Combine(
+            AppContext.BaseDirectory,
+            "..",
+            "..",
+            "Content.Client",
+            "_CMU14",
+            "Yautja",
+            "YautjaGearRackClientSystem.cs");
+
+        Assert.That(File.Exists(sourcePath), Is.True, sourcePath);
+        var source = File.ReadAllText(sourcePath);
+        Assert.That(source, Does.Not.Contain("_popup.PopupClient"),
+            "The server must be the only source of a denied Gear Rack popup.");
+    }
+
+    [Test]
+    public async Task YautjaRackClientOpenAttemptIsDeniedBeforePredictedOpen()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var client = pair.Client;
+
+        await client.WaitAssertion(() =>
+        {
+            var entMan = client.EntMan;
+            var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var rack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", MapCoordinates.Nullspace);
+            try
+            {
+                var ev = new ActivatableUIOpenAttemptEvent(user);
+                entMan.EventBus.RaiseLocalEvent(rack, ev);
+                Assert.That(ev.Cancelled, Is.True);
+            }
+            finally
+            {
+                entMan.DeleteEntity(rack);
+                entMan.DeleteEntity(user);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaRacksUseOnlyTheirRoleAwareAccessGate()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var client = pair.Client;
+
+        await client.WaitAssertion(() =>
+        {
+            foreach (var prototype in RackPrototypes)
+            {
+                var entityPrototype = client.ResolveDependency<IPrototypeManager>().Index<EntityPrototype>(prototype);
+                var factory = client.EntMan.ComponentFactory;
+                Assert.That(entityPrototype.TryGetComponent<RemoveComponentsComponent>(out var remove, factory), Is.True,
+                    prototype);
+                Assert.That(remove!.Components.Any(component =>
+                        component.Key.Contains("ActivatableUIRequiresAccess", StringComparison.Ordinal)), Is.True,
+                    $"{prototype} must remove the generic ColMarTech access popup in addition to using its custom role gate.");
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaRackDeniedPopupIsShownOnlyOnceWhenClientPredictionIsReconciled()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+
+        await client.WaitPost(() =>
+        {
+            var entMan = client.EntMan;
+            var user = entMan.SpawnEntity("CMMobHuman", map.CGridCoords);
+            var rack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", map.CGridCoords);
+            var ev = new ActivatableUIOpenAttemptEvent(user);
+            entMan.EventBus.RaiseLocalEvent(rack, ev);
+            Assert.That(ev.Cancelled, Is.True);
+            Assert.That(entMan.System<PopupSystem>().WorldLabels,
+                Is.Empty,
+                "Client prediction must cancel the rack open without showing a denial popup.");
+        });
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var user = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var rack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", map.GridCoords);
+            var session = server.PlayerMan.Sessions.Single();
+            server.PlayerMan.SetAttachedEntity(session, user);
+
+            var ev = new ActivatableUIOpenAttemptEvent(user);
+            entMan.EventBus.RaiseLocalEvent(rack, ev);
+            Assert.That(ev.Cancelled, Is.True);
+        });
+
+        await pair.ReallyBeIdle(10);
+
+        await client.WaitAssertion(() =>
+        {
+            var denied = client.EntMan.System<PopupSystem>().WorldLabels
+                .Count(label => label.Text == "Access denied.");
+            Assert.That(denied, Is.EqualTo(1),
+                "A denied rack click must produce one popup after client prediction and server reconciliation.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task YautjaRackAccessOpenAttemptsMatchCmss13SourceGates()
     {
@@ -300,4 +417,15 @@ public sealed class YautjaRackAccessTest
         entMan.EnsureComponent<YautjaTechAuthorizedComponent>(user);
         return user;
     }
+
+    private static readonly string[] RackPrototypes =
+    {
+        "CMUYautjaLoadoutVendor",
+        "CMUYautjaElderLoadoutVendor",
+        "CMUYautjaYoungbloodLoadoutVendor",
+        "CMUYautjaThrallLoadoutVendor",
+        "CMUYautjaBloodedThrallLoadoutVendor",
+        "CMUYautjaBadBloodLoadoutVendor",
+        "CMUYautjaStrandedLoadoutVendor",
+    };
 }

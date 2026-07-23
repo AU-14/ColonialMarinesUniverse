@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 05/06/2026 02:13:41
-  entityCount: 19496
+  entityCount: 19497
 maps:
 - 1
 grids:
@@ -167761,4 +167761,17 @@ entities:
     - type: Transform
       pos: 160.5,-97.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 19497
+    components:
+    - type: MetaData
+      name: Corsat ground relay
+    - type: Transform
+      pos: 4.5,-51.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: corsat.ground.relay
+      displayName: Corsat Ground Relay
 ...

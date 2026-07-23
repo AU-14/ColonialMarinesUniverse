@@ -18,6 +18,12 @@ public sealed class LockVisualizerSystem : VisualizerSystem<LockVisualsComponent
 
         var unlockedStateExist = args.Sprite.BaseRSI?.TryGetState(comp.StateUnlocked, out _);
 
+        // Map-specific visual wrappers may intentionally replace the sprite
+        // layers from their parent prototype. If the lock overlay is absent,
+        // there is nothing to update and the visualizer must not log an error.
+        if (!SpriteSystem.LayerMapTryGet((uid, args.Sprite), LockVisualLayers.Lock, out _, false))
+            return;
+
         if (AppearanceSystem.TryGetData<bool>(uid, StorageVisuals.Open, out var open, args.Component))
         {
             SpriteSystem.LayerSetVisible((uid, args.Sprite), LockVisualLayers.Lock, !open);

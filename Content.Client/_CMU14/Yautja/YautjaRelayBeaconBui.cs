@@ -17,7 +17,8 @@ public sealed class YautjaRelayBeaconBui : BoundUserInterface
     {
         base.Open();
         _window = this.CreateWindow<YautjaRelayBeaconWindow>();
-        _window.OnDestination += (destination, customIndex) => SendMessage(new YautjaRelayBeaconDestinationMsg(destination, customIndex));
+        _window.OnDestination += (destination, customIndex, destinationId) =>
+            SendMessage(new YautjaRelayBeaconDestinationMsg(destination, customIndex, destinationId));
 
         if (State is YautjaRelayBeaconState state)
             _window.UpdateState(state);

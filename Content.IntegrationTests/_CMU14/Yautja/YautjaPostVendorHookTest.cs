@@ -302,7 +302,7 @@ public sealed class YautjaPostVendorHookTest
     }
 
     [Test]
-    public async Task CapePostVendorHookKeepsSelectedSubtypeAndAppliesProfileColorAcrossSourceCapeRacks()
+    public async Task CapePostVendorHookKeepsSelectedSubtypeAndUsesDefaultColorAcrossSourceCapeRacks()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -340,7 +340,8 @@ public sealed class YautjaPostVendorHookTest
 
                         AssertEquippedPrototype(entMan, inventory, user, "back", capePrototype);
                         Assert.That(inventory.TryGetSlotEntity(user, "back", out var cape), Is.True, $"{capePrototype} equipped");
-                        Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color, Is.EqualTo(ProfileCapeColor), capePrototype);
+                        Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color,
+                            Is.EqualTo(YautjaCharacterProfile.Default.CapeColor), capePrototype);
                     }
                     finally
                     {
@@ -452,7 +453,7 @@ public sealed class YautjaPostVendorHookTest
     }
 
     [Test]
-    public async Task BloodedThrallCapePostVendorHookUsesAppliedProfileWithoutYautjaComponentLikeCmss13Prefs()
+    public async Task BloodedThrallCapePostVendorHookUsesDefaultColorWithoutYautjaComponentLikeCmss13Prefs()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -478,7 +479,8 @@ public sealed class YautjaPostVendorHookTest
 
                 AssertEquippedPrototype(entMan, inventory, user, "back", "CMUYautjaCapeQuarter");
                 Assert.That(inventory.TryGetSlotEntity(user, "back", out var cape), Is.True);
-                Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color, Is.EqualTo(ProfileCapeColor));
+                Assert.That(entMan.GetComponent<YautjaCapeComponent>(cape.Value).Color,
+                    Is.EqualTo(YautjaCharacterProfile.Default.CapeColor));
             }
             finally
             {

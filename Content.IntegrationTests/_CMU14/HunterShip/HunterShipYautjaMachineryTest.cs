@@ -61,7 +61,7 @@ public sealed class HunterShipYautjaMachineryTest
 
                 Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, row.Id);
                 Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(row.Sprite), row.Id);
-                Assert.That(sprite.DrawDepth, Is.EqualTo((int) Content.Shared.DrawDepth.DrawDepth.SmallObjects), row.Id);
+                Assert.That(sprite.DrawDepth, Is.EqualTo(row.DrawDepth), row.Id);
                 Assert.That(sprite.NoRotation, Is.True, row.Id);
                 Assert.That(sprite.EnableDirectionOverride, Is.True, row.Id);
                 Assert.That(sprite.DirectionOverride, Is.EqualTo(Direction.South), row.Id);
@@ -258,9 +258,10 @@ public sealed class HunterShipYautjaMachineryTest
                 Assert.That(prototype.TryGetComponent<TransformComponent>(out var transform, factory), Is.True, row.Id);
                 Assert.That(transform!.Anchored, Is.True, row.Id);
 
-                Assert.That(prototype.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True, row.Id);
-                Assert.That(fixtures!.Fixtures, Is.Empty,
-                    $"{row.Id} follows the Hunter Ship DMM nonblocking underfloor placement.");
+                Assert.That(prototype.TryGetComponent<PhysicsComponent>(out _, factory), Is.False,
+                    $"{row.Id} is an underfloor terminal and must not have a physics body.");
+                Assert.That(prototype.TryGetComponent<FixturesComponent>(out _, factory), Is.False,
+                    $"{row.Id} must not declare an empty fixture state without physics.");
 
                 Assert.That(prototype.TryGetComponent<SubFloorHideComponent>(out var subfloor, factory), Is.True, row.Id);
                 Assert.That(subfloor!.BlockInteractions, Is.False, row.Id);
@@ -465,7 +466,8 @@ public sealed class HunterShipYautjaMachineryTest
                 "pred_cell",
                 ["pred_cell", "pred_cell-on-occupied", "pred_cell-off-empty"],
                 new Vector2(0.03125f, 0.5f),
-                Color.White),
+                Color.White,
+                DrawDepth: (int) Content.Shared.DrawDepth.DrawDepth.Mobs),
             new MachineryRow(
                 "CMUHunterShipPlacedCMUHunterShipYautjaPassivePowerTransformerTransformerSouthOffset16x16",
                 "CMUHunterShipYautjaPassivePowerTransformer",
@@ -522,7 +524,8 @@ public sealed class HunterShipYautjaMachineryTest
         bool RemovesInheritedVisualizer = false,
         bool HasHardFixture = true,
         int IdleLoad = 0,
-        int ActiveLoad = 0);
+        int ActiveLoad = 0,
+        int DrawDepth = (int) Content.Shared.DrawDepth.DrawDepth.SmallObjects);
 
     private readonly record struct CableTerminalRow(
         string Id,

@@ -14,10 +14,10 @@ public sealed partial class YautjaPredatorRoundComponent : Component
     public ProtoId<GameMapPrototype> HunterShipMap = "CMUYautjaHunterShip";
 
     [DataField]
-    public int MinSlots = 3;
+    public int MinSlots = 2;
 
     [DataField]
-    public int MaxSlots = 5;
+    public int MaxSlots = 4;
 
     [DataField]
     public bool ModePredator = true;

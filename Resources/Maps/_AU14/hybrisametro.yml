@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 02/17/2026 23:01:22
-  entityCount: 24486
+  entityCount: 24487
 maps:
 - 1
 grids:
@@ -214085,4 +214085,17 @@ entities:
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: xenotunnel
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 24487
+    components:
+    - type: MetaData
+      name: Hybrisa Metropolitan ground relay
+    - type: Transform
+      pos: -148.5,-50.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: hybrisa-metropolitan.ground.relay
+      displayName: Hybrisa Metropolitan Ground Relay
 ...
