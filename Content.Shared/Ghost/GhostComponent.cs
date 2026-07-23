@@ -25,6 +25,11 @@ public sealed partial class GhostComponent : Component
     [DataField, AutoNetworkedField]
     public EntityUid? ToggleFoVActionEntity;
 
+    [DataField, AutoNetworkedField]
+    public EntityUid? ToggleSelfGhostActionEntity; // CMU14
+    [DataField]
+    public EntProtoId ToggleSelfGhostAction = "ActionToggleSelfGhost"; // CMU14
+
     [DataField]
     public EntProtoId ToggleGhostsAction = "ActionToggleGhosts";
 
@@ -84,18 +89,20 @@ public sealed partial class GhostComponent : Component
     /// <remarks>
     /// Changed by <see cref="SharedGhostSystem.SetCanReturnToBody"/>.
     /// </remarks>
-    [DataField, AutoNetworkedField]
+    []
     public bool CanReturnToBody;
 
     /// <summary>
     /// Ghost color
     /// </summary>
     /// <remarks>Used to allow admins to change ghost colors. Should be removed if the capability to edit existing sprite colors is ever added back.</remarks>
-    [DataField, AutoNetworkedField]
+    []
     public Color Color = Color.White;
 }
 
 public sealed partial class ToggleFoVActionEvent : InstantActionEvent { }
+
+public sealed partial class ToggleSelfGhostActionEvent : InstantActionEvent { } // CMU14
 
 public sealed partial class ToggleGhostsActionEvent : InstantActionEvent { }
 
