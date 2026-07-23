@@ -1,0 +1,79 @@
+- type: rank
+  id: CMURankProvostSectorMarshal
+  name: Sector Marshal
+  prefix: PvSM.
+  paygrade: O9
+
+- type: rank
+  id: CMURankProvostSeniorMarshal
+  name: Senior Marshal
+  prefix: PvSnM.
+  paygrade: O8
+
+- type: rank
+  id: CMURankProvostMarshal
+  name: Marshal
+  prefix: PvM.
+  paygrade: O7
+
+- type: rank
+  id: CMURankProvostDeputyMarshal
+  name: Deputy Marshal
+  prefix: PvDM.
+  paygrade: O6
+
+- type: rank
+  id: CMURankProvostChiefInspector
+  name: Chief Inspector
+  prefix: PvCI.
+  paygrade: O5
+
+- type: rank
+  id: CMURankProvostInspector
+  name: Provost Inspector
+  prefix: PvI.
+  paygrade: O4
+
+- type: rank
+  id: CMURankProvostAdvisor
+  name: Sergeant Major
+  prefix: SgtMaj.
+  paygrade: E9E
+
+- type: rank
+  id: CMURankProvostProvostTeamLeader
+  name: Master Sergeant
+  prefix: MSgt.
+  paygrade: E8
+
+- type: rank
+  id: CMURankProvostProvostEnforcer
+  name: Staff Sergeant
+  prefix: SSgt.
+  paygrade: E6
+
+# Specialists
+- type: rank
+  id: CMURankProvostSpcComms
+  name: Communications Specialist
+  prefix: Spc.
+  paygrade: O1
+
+- type: rank
+  id: CMURankProvostSpcAgent
+  name: Special Agent
+  prefix: Spc.
+  paygrade: O1
+
+- type: rank
+  id: CMURankProvostSpcMedical
+  name: Medical Specialist
+  prefix: Spc.
+  paygrade: O1
+
+# Fax responder
+- type: rank
+  id: CMURankProvostFaxResponder
+  name: Communications Officer
+  prefix: ComOff.
+  paygrade: O2

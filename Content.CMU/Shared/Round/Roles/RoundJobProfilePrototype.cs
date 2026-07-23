@@ -8,6 +8,7 @@ public enum RoundJobSide : byte
     None,
     Govfor,
     Opfor,
+    Indfor,
     ThirdParty,
     Civilian,
     Threat,

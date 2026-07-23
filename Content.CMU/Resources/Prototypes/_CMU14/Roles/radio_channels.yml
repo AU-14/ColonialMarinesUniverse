@@ -154,6 +154,18 @@
   faction: "opfor"
   anchorGated: true
 
+# ├──[ INDFOR CHANNELS ]─────────────────────────────────────────────┤
+- type: radioChannel
+  id: radioProvost
+  name: chat-radio-provost
+  keycode: "0"
+  frequency: 1863
+  color: "#5b96d4"
+  longRange: true
+  tower: true
+  faction: "indfor"
+  anchorGated: true
+
 # ├──[ COLONY ]──────────────────────────────────────────────────────┤
 - type: radioChannel
   id: Colony

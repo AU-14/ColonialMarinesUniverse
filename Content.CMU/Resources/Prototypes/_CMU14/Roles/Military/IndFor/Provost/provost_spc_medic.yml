@@ -1,0 +1,89 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostSpcMedic
+  name: cmu-job-name-corp-provost-spc-medic
+  description: cmu-ghost-role-information-provost-spc-medic-description
+  icon: CMUJobIconProvostSpecialist
+  startingGear: CMUGearProvostSpcMedic
+  playTimeTracker: CMJobProvostSpcMedic
+  spawnMenuRoleName: Provost Spc Medic
+  ranks:
+    CMURankProvostSpcMedical: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillLeadership: 1
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-spc-medic
+
+- type: playTimeTracker
+  id: CMJobProvostSpcMedic
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostSpcMedic
+  name: provost role spc medic
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostSpcMedic
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostSpcMedic
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-spc-medic
+    description: cmu-ghost-role-information-provost-spc-medic-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostSpcMedic
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostSpcMedic
+  equipment:
+    head: CMHeadCapSurgOrange
+    eyes: RMCGlassesMedicalHUDGlasses
+    ears: AU14HeadsetProvostAllCommand
+    jumpsuit: CMJumpsuitProvostSenior
+    outerClothing: RMCArmorProvostLight
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    id: CMUIDCardProvostSpcMedic
+    belt: AU14BeltMedicBagSupportSynthBlack
+    back: CMBackpackMarineMedic
+    pocket1: CMSurgicalCaseFilled
+    pocket2: AU14PouchIFAKFill
+  storage:
+    belt:
+    - CMMaskSterile
+    back:
+    - AU14CMDefibrillator
+    - CMPillCanisterDexalin
+    - CMPillCanisterInaprovaline
+    - AU14PillCanisterOxycodone
+    - AU14PillCanisterCardiocaine
+    - AU14PillCanisterHepatocytin
+    - AU14PillCanisterNephronate
+    - AU14PillCanisterOsteoCalc
+    - AU14PillCanisterPulmovine
+    - AU14PillCanisterEthylredoxrazine
+  inhand:
+  - CMU14DropSurgicalBlack

@@ -1,0 +1,79 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostMarshalDeputy
+  name: cmu-job-name-corp-provost-deputy-marshal
+  description: cmu-ghost-role-information-provost-description
+  icon: CMUJobIconProvostMarshal
+  startingGear: CMUGearProvostDeputyMarshal
+  playTimeTracker: CMJobProvostDeputyMarshal
+  ranks:
+    CMURankProvostDeputyMarshal: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillConstruction: 2
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 5
+      RMCSkillEngineer: 2
+      RMCSkillExecution: 1
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillIntel: 2
+      RMCSkillJtac: 4
+      RMCSkillLeadership: 3
+      RMCSkillMedical: 3
+      RMCSkillMeleeWeapons: 1
+      RMCSkillOverwatch: 1
+      RMCSkillPolice: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillSmartGun: 1
+      RMCSkillVehicles: 2
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-deputy-marshal
+
+- type: playTimeTracker
+  id: CMJobProvostDeputyMarshal
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostDeputyMarshal
+  name: provost role deputy marshal
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostDeputyMarshal
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostDeputyMarshal
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-deputy-marshal
+    description: cmu-ghost-role-information-provost-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostMarshalDeputy
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostDeputyMarshal
+  equipment:
+    head: RMCArmorCapProvost
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetProvostAllCommand
+    jumpsuit: CMJumpsuitProvostMarshal
+    outerClothing: RMCProvostCoatMarshalFilled
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    id: CMUIDCardProvostDeputyMarshal
+    belt: RMCMatebaBeltLuxuriousFilled
+    back: CMSatchelSecurityFilledProvostDeputyMarshal
+    pocket1: RMCUniversalRecorder
+    pocket2: RMCPouchMagazinePistolFilledMateba
