@@ -43,8 +43,11 @@
   categories: [HideSpawnMenu]
   name: psychic crush warning
   components:
+    # Lifetime covers the full 5-pulse channel at 1 s/pulse plus a small buffer, so all rings
+    # spawned during the channel remain visible until detonation. Ordinarily the warning is
+    # deleted by ClearPsychicCrushEffects on end; TimedDespawn is only the orphan fallback.
     - type: TimedDespawn
-      lifetime: 0.7
+      lifetime: 6
     - type: Sprite
       drawdepth: Effects
       sprite: _CMU14/Effects/Xeno/warlock_crush_warning.rsi
@@ -171,15 +174,6 @@
         - HideContextMenu
 
 - type: entity
-  parent: CMUXenoWarlockBlastParticles
-  id: CMUXenoWarlockLanceParticles
-  categories: [HideSpawnMenu]
-  name: psychic lance
-  components:
-    - type: CMUXenoWarlockParticleEmitter
-      effect: PsychicLanceCharge
-
-- type: entity
   id: CMUXenoWarlockShieldChannelEffect
   categories: [HideSpawnMenu]
   name: psychic shield
@@ -209,7 +203,6 @@
     - type: RMCProjectileAccuracy
       accuracy: 999
     - type: CMUXenoPsychicBlastProjectile
-      mode: Blast
       radius: 1.25
       damage:
         types:
@@ -222,32 +215,6 @@
       radius: 1.5
       energy: 1.2
       color: "#970f0f"
-
-- type: entity
-  parent: CMUXenoPsychicBlastProjectile
-  id: CMUXenoPsychicLanceProjectile
-  categories: [HideSpawnMenu]
-  name: psychic lance
-  components:
-    - type: Sprite
-      sprite: _RMC14/Effects/beam.rsi
-      state: laser_beam_intense
-      drawdepth: Effects
-      color: "#CB0166"
-    - type: CMUXenoPsychicBlastProjectile
-      mode: Lance
-      radius: 0.75
-      damage:
-        types:
-          Blunt: 60
-      slow: 2
-      impactSound:
-        path: /Audio/_CMU14/Xeno/Warlock/EMPulse.ogg
-      impactEffectId: CMUXenoPsychicBlastShockwave
-    - type: PointLight
-      radius: 1.5
-      energy: 1.6
-      color: "#CB0166"
 
 - type: entity
   id: CMUXenoPsychicBlastShockwave

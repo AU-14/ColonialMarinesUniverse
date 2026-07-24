@@ -9,7 +9,6 @@ public enum CMUXenoWarlockParticleEffect : byte
 {
     PsychicCrushCharge,
     PsychicBlastCharge,
-    PsychicLanceCharge,
     CrushWarning,
     DroneOperatorTransfer,
     DroneAndroidDormant,
@@ -51,4 +50,10 @@ public sealed partial class CMUXenoWarlockParticleEmitterComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool UseMotionOverride;
+
+    // Runtime cap (in pixels) on how far a directed particle can travel from origin. Set by the
+    // spawning system when the effect needs to hug a specific in-world distance (e.g. the psychic
+    // blast wind-up matching the projectile's actual impact point). null = use profile default.
+    [DataField, AutoNetworkedField]
+    public float? MaxDirectedTravelPixelsOverride;
 }
