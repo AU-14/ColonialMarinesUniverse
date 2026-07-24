@@ -91,6 +91,12 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
             $"  render ms: base={stats.BaseRenderMs:F2}, lower={stats.LowerRenderMs:F2}, " +
             $"upper={stats.UpperRenderMs:F2}, stairPreview={stats.StairPreviewRenderMs:F2}, " +
             $"lowerShare={FormatPercent(stats.LowerRenderMs, stats.TotalRenderMs)}");
+        shell.WriteLine(
+            $"  stair preview: candidates={stats.StairPreviewSpriteCandidates}, " +
+            $"spriteChecks={stats.StairPreviewSpriteVisibilityChecks}, " +
+            $"tiles={stats.StairPreviewTilesScanned}, tilesDrawn={stats.StairPreviewTilesDrawn}, " +
+            $"losChecks={stats.StairPreviewLosChecks}, cullMs={stats.StairPreviewCullMs:F2}, " +
+            $"fovMaskMs={stats.StairPreviewFovMaskMs:F2}");
         PrintProjectedLighting(shell);
 
         if (!counts)

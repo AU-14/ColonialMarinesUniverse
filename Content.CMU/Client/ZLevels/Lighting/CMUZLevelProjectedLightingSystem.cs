@@ -17,6 +17,8 @@ using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Dynamics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Timing;
 using SysStopwatch = System.Diagnostics.Stopwatch;
@@ -47,9 +49,8 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedPointLightSystem _lights = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private LightTreeSystem _lightTree = default!;
-    [Dependency] private ExamineSystem _examine = default!;
+    [Dependency] private OccluderSystem _occluder = default!;
 
     private CMUClientZLevelsSystem _zLevels = default!;
 
@@ -82,6 +83,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private readonly Dictionary<MapId, List<SourceLight>> _sourceLightBuckets = new();
     private readonly Dictionary<OpeningCandidateBucketKey, List<int>> _openingCandidateBuckets = new();
     private readonly List<List<int>> _openingCandidateBucketPool = new();
+    private readonly Dictionary<MapId, List<Entity<BroadphaseComponent>>> _rayBroadphases = new();
     private readonly ProjectedLightAlongAxisComparer _alongAxisComparer = new();
     private Box2 _combinedCurrentViewOpeningBounds;
     private Box2 _cachedCombinedCurrentViewOpeningBounds;
@@ -210,6 +212,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
         stats.Ran = true;
         stats.SkipReason = "processed";
+        RebuildRayBroadphases();
         Entity<CMUZLevelMapComponent?> playerZLevelMap = (playerMapUid, playerZMap);
         var sourceStart = SysStopwatch.GetTimestamp();
         BuildSourceLightBuckets(
@@ -516,7 +519,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         if (distSquared > ExamineSystemShared.MaxRaycastRange * ExamineSystemShared.MaxRaycastRange)
             return false;
 
-        return _examine.InRangeUnOccluded(origin, target, 0f, null);
+        return _occluder.InRangeUnoccluded(origin, target, 0f, ignoreTouching: true);
     }
 
     private static Vector2 InsetOpeningPoint(Vector2 point, Vector2 center)
@@ -1160,17 +1163,12 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
                 {
                     LastProjectedLightingDebugStats.Raycasts++;
                     var ray = new CollisionRay(sourceLight.WorldPosition, rayDirection.Normalized(), (int)CollisionGroup.Opaque);
-                    var blocked = false;
-                    foreach (var _ in _physics.IntersectRay(adjacentMapId, ray, rayLength, ignoredEnt: sourceLight.Entity, returnOnFirstHit: true))
-                    {
-                        blocked = true;
-                        break;
-                    }
-
-                    if (blocked)
-                    {
+                    if (IsRayBlocked(
+                        adjacentMapId,
+                        ray,
+                        rayLength,
+                        sourceLight.Entity))
                         continue;
-                    }
                 }
 
                 // Smooth attenuation keeps the projected leak from becoming brighter than the source.
@@ -1218,6 +1216,83 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             if (_sourceCandidates.Count > 0)
                 AddSourceCandidates();
         }
+    }
+
+    private void RebuildRayBroadphases()
+    {
+        foreach (var broadphases in _rayBroadphases.Values)
+        {
+            broadphases.Clear();
+        }
+
+        var query = EntityQueryEnumerator<BroadphaseComponent, TransformComponent>();
+        while (query.MoveNext(out var uid, out var broadphase, out var xform))
+        {
+            if (xform.MapID == MapId.Nullspace)
+                continue;
+
+            if (!_rayBroadphases.TryGetValue(xform.MapID, out var broadphases))
+            {
+                broadphases = new List<Entity<BroadphaseComponent>>();
+                _rayBroadphases.Add(xform.MapID, broadphases);
+            }
+
+            broadphases.Add((uid, broadphase));
+        }
+    }
+
+    private bool IsRayBlocked(
+        MapId mapId,
+        CollisionRay ray,
+        float maxLength,
+        EntityUid ignoredEntity)
+    {
+        // Keep the old physics ray's broadphase-AABB semantics without materializing its result list.
+        // OccluderSystem is not equivalent here: the live comparator found different decisions.
+        if (!_rayBroadphases.TryGetValue(mapId, out var broadphases))
+            return false;
+
+        var state = new OpaqueRayState(
+            ray.CollisionMask,
+            maxLength,
+            ignoredEntity);
+
+        foreach (var broadphase in broadphases)
+        {
+            var (_, rotation, _, inverseMatrix) =
+                _transform.GetWorldPositionRotationMatrixWithInv(broadphase.Owner);
+            var position = Vector2.Transform(ray.Position, inverseMatrix);
+            var direction = new Angle(-rotation.Theta).RotateVec(ray.Direction);
+            var localRay = new Ray(position, direction);
+
+            broadphase.Comp.StaticTree.QueryRay(ref state, CheckOpaqueRayProxy, localRay);
+            if (state.Blocked)
+                return true;
+
+            broadphase.Comp.DynamicTree.QueryRay(ref state, CheckOpaqueRayProxy, localRay);
+            if (state.Blocked)
+                return true;
+        }
+
+        return false;
+    }
+
+    private static bool CheckOpaqueRayProxy(
+        ref OpaqueRayState state,
+        in FixtureProxy proxy,
+        in Vector2 point,
+        float distanceFromOrigin)
+    {
+        if (distanceFromOrigin > state.MaxLength ||
+            proxy.Entity == state.IgnoredEntity ||
+            (proxy.Fixture.CollisionLayer & state.CollisionMask) == 0 ||
+            !proxy.Fixture.Hard)
+        {
+            return true;
+        }
+
+        state.Blocked = true;
+        return false;
     }
 
     private static EntityUid GetOpeningMapForProjection(
@@ -1873,6 +1948,22 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
         Color Color,
         float Softness,
         bool IsMerged = false);
+
+    private struct OpaqueRayState
+    {
+        public readonly int CollisionMask;
+        public readonly float MaxLength;
+        public readonly EntityUid IgnoredEntity;
+        public bool Blocked;
+
+        public OpaqueRayState(int collisionMask, float maxLength, EntityUid ignoredEntity)
+        {
+            CollisionMask = collisionMask;
+            MaxLength = maxLength;
+            IgnoredEntity = ignoredEntity;
+            Blocked = false;
+        }
+    }
 
     private sealed class ProjectedLightAlongAxisComparer : IComparer<ProjectedLightCandidate>
     {

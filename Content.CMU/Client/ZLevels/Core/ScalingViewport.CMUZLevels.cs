@@ -45,6 +45,7 @@ public sealed partial class ScalingViewport
     private SharedTransformSystem? _transform;
     private EntityLookupSystem? _lookup;
     private ExamineSystem? _examine;
+    private OccluderSystem? _occluder;
     private SharedContainerSystem? _containers;
     private SpriteSystem? _sprite;
     private ShaderInstance? _stencilClearShaderInstance;
@@ -213,6 +214,7 @@ public sealed partial class ScalingViewport
         _transform ??= _entityManager.System<SharedTransformSystem>();
         _lookup ??= _entityManager.System<EntityLookupSystem>();
         _examine ??= _entityManager.System<ExamineSystem>();
+        _occluder ??= _entityManager.System<OccluderSystem>();
         _containers ??= _entityManager.System<SharedContainerSystem>();
 
         if (!TryGetZLevelViewEntity(fallbackEye, out var viewEntity, out var zLevelViewer, out var viewXform) ||
@@ -1136,7 +1138,9 @@ public sealed partial class ScalingViewport
         {
             _stairPreviewViewport.Eye = _stairPreviewEye;
             _stairPreviewViewport.ClearColor = Color.Transparent;
+            var cullStart = Stopwatch.GetTimestamp();
             CullStairPreviewSprites(_stairPreviewEye.Position.MapId);
+            LastZRenderDebugStats.StairPreviewCullMs += GetElapsedMilliseconds(cullStart);
             _stairPreviewViewport.Render();
         }
         finally
@@ -1162,6 +1166,7 @@ public sealed partial class ScalingViewport
 
         _stairPreviewSpriteCandidates.Clear();
         _lookup.GetEntitiesIntersecting(mapId, worldAabb, _stairPreviewSpriteCandidates, LookupFlags.All);
+        LastZRenderDebugStats.StairPreviewSpriteCandidates += _stairPreviewSpriteCandidates.Count;
 
         foreach (var candidate in _stairPreviewSpriteCandidates)
         {
@@ -1174,6 +1179,7 @@ public sealed partial class ScalingViewport
                 continue;
             }
 
+            LastZRenderDebugStats.StairPreviewSpriteVisibilityChecks++;
             var worldBounds = GetStairPreviewSpriteBounds(uid, sprite, xform, xformQuery);
             var target = new MapCoordinates(worldBounds.Center, mapId);
             if (CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
@@ -1300,11 +1306,12 @@ public sealed partial class ScalingViewport
 
     private void DrawStairPreviewFovMask(DrawingHandleScreen screen, UIBox2 drawBox)
     {
+        var maskStart = Stopwatch.GetTimestamp();
         if (_stairPreviewViewport is null ||
             _mapSystem is null ||
             _transform is null ||
             _lookup is null ||
-            _examine is null ||
+            _occluder is null ||
             !TryGetViewportWorldAabb(_stairPreviewViewport, out var worldAabb))
         {
             return;
@@ -1322,6 +1329,7 @@ public sealed partial class ScalingViewport
             var gridMatrix = _transform.GetWorldMatrix(grid.Owner);
             foreach (var tile in _mapSystem.GetTilesIntersecting(grid.Owner, grid.Comp, worldAabb, ignoreEmpty: true))
             {
+                LastZRenderDebugStats.StairPreviewTilesScanned++;
                 var localBounds = _lookup.GetLocalBounds(tile, grid.Comp.TileSize).Enlarged(0.01f);
                 var worldBounds = gridMatrix.TransformBox(localBounds);
                 var target = new MapCoordinates(worldBounds.Center, mapId);
@@ -1329,11 +1337,13 @@ public sealed partial class ScalingViewport
                 if (!CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
                     continue;
 
+                LastZRenderDebugStats.StairPreviewTilesDrawn++;
                 screen.DrawRect(GetCompositeScreenBox(localBounds, gridMatrix, drawBox), Color.White);
             }
         }
 
         _stairPreviewGrids.Clear();
+        LastZRenderDebugStats.StairPreviewFovMaskMs += GetElapsedMilliseconds(maskStart);
     }
 
     private void SetStairPreviewOrigins(CMUZLevelViewerComponent viewer, Vector2 viewerPosition)
@@ -1382,7 +1392,7 @@ public sealed partial class ScalingViewport
         MapId mapId,
         Vector2 renderOffset)
     {
-        if (_examine is null)
+        if (_occluder is null)
             return false;
 
         foreach (var origin in _stairPreviewOrigins)
@@ -1405,7 +1415,8 @@ public sealed partial class ScalingViewport
             }
 
             var originCoordinates = new MapCoordinates(origin.Position, mapId);
-            if (_examine.InRangeUnOccluded(originCoordinates, target, 0f, null))
+            LastZRenderDebugStats.StairPreviewLosChecks++;
+            if (_occluder.InRangeUnoccluded(originCoordinates, target, 0f, ignoreTouching: true))
                 return true;
         }
 
@@ -1668,6 +1679,13 @@ public sealed partial class ScalingViewport
         public double BaseRenderMs;
         public double UpperRenderMs;
         public double StairPreviewRenderMs;
+        public double StairPreviewCullMs;
+        public double StairPreviewFovMaskMs;
+        public int StairPreviewSpriteCandidates;
+        public int StairPreviewSpriteVisibilityChecks;
+        public int StairPreviewTilesScanned;
+        public int StairPreviewTilesDrawn;
+        public int StairPreviewLosChecks;
         public readonly List<int> LowerRenderedDepths = new();
 
         public void Reset()
@@ -1722,6 +1740,13 @@ public sealed partial class ScalingViewport
             BaseRenderMs = 0d;
             UpperRenderMs = 0d;
             StairPreviewRenderMs = 0d;
+            StairPreviewCullMs = 0d;
+            StairPreviewFovMaskMs = 0d;
+            StairPreviewSpriteCandidates = 0;
+            StairPreviewSpriteVisibilityChecks = 0;
+            StairPreviewTilesScanned = 0;
+            StairPreviewTilesDrawn = 0;
+            StairPreviewLosChecks = 0;
             LowerRenderedDepths.Clear();
         }
     }

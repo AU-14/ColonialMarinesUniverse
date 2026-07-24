@@ -215,6 +215,75 @@ Targeted gates passed: Release `Content.Server` and `Content.Benchmarks` builds 
 warnings/errors, and the DebugOpt `CMUZLevelViewerLifecycleTest` filter passed 2/2 integration
 tests in 4 minutes 21 seconds.
 
+### MZ-001, MZ-045, and MZ-046 live client rendering
+
+The client-rendering protocol used a Release OpenGL client on an NVIDIA GeForce RTX 4070 Ti SUPER
+at 1280x720, VSync off, and no client FPS cap. The server retained all five `USSBushRedux` maps at
+depths `[-1, 0, 1, 2, 3]`. An attached observer remained at map 1, `(-15.5, -4.5)`, and a runtime
+`CMUMultiZStairs` at that position enabled the stair-preview path. Each distribution contains
+3,600 rendered frames with the same positioning overlay and scene.
+
+The baseline made 104 projected source-to-opening physics rays per frame. Candidate work was
+0.2438/0.3579 ms p50/p95 of the 0.2661/0.3986 ms projected-light total, identifying the
+result-materializing ray query as the measured projected-light bottleneck. A generic occluder
+first-hit replacement was tested and rejected after it disagreed on 12 of 104 ray decisions every
+frame. A CMU-owned first-hit traversal of the current physics broadphases then matched the old
+result on all 374,400 comparisons (104 rays times 3,600 frames). The accepted predicate preserves
+map, maximum distance, ignored source entity, opaque collision layer, and hard-fixture semantics.
+
+Stair preview tested 349 intersecting sprite candidates and issued 349 LOS checks every frame.
+Its LOS query now uses the allocation-free occluder first-hit API with the previous
+endpoint-touching rule. The same exact replacement is used for current-view projected-light
+opening visibility; that particular opening path was not active in this sampled scene.
+
+Paired results were:
+
+| Metric | Before p50 / p95 | After p50 / p95 | p50 / p95 change |
+| --- | ---: | ---: | ---: |
+| Client frame | 2.3597 / 3.5518 ms | 2.1859 / 3.2635 ms | -7.37% / -8.12% |
+| Multi-Z render | 1.4533 / 2.1917 ms | 1.3485 / 2.0321 ms | -7.21% / -7.28% |
+| Projected lighting | 0.2661 / 0.3986 ms | 0.2131 / 0.3307 ms | -19.92% / -17.03% |
+| Projected candidates | 0.2438 / 0.3579 ms | 0.1896 / 0.2890 ms | -22.23% / -19.25% |
+| Stair render | 0.8075 / 1.2290 ms | 0.7382 / 1.1056 ms | -8.58% / -10.04% |
+| Stair culling | 0.4922 / 0.7479 ms | 0.4277 / 0.6569 ms | -13.10% / -12.17% |
+
+Behavioral work counts were unchanged:
+
+| Work per rendered frame | Before | After |
+| --- | ---: | ---: |
+| Projected rays | 104 | 104 |
+| Projected candidates | 9 | 9 |
+| Projected lights applied | 5 | 5 |
+| Stair sprite candidates / checks | 349 / 349 | 349 / 349 |
+| Stair LOS checks | 349 | 349 |
+| Lower passes / stair composites | 1 / 1 | 1 / 1 |
+
+The same baseline scene also captured blur on/off:
+
+| Metric | Blur disabled p50 / p95 | Blur enabled p50 / p95 | Enabled p50 cost |
+| --- | ---: | ---: | ---: |
+| Client frame | 2.2633 / 3.3401 ms | 2.3597 / 3.5518 ms | +4.26% |
+| Multi-Z render | 1.3755 / 2.0526 ms | 1.4533 / 2.1917 ms | +5.66% |
+| Lower render | 0.0877 / 0.1350 ms | 0.0966 / 0.1534 ms | +10.15% |
+
+The validated after capture recorded one lower and one blur pass per frame. This establishes a
+measurable one-pass CPU/frame cost, not isolated GPU copy or shader time. A multi-depth scene can
+apply the blur sequentially; consolidating those passes would change accumulated blur strength.
+No blur production behavior was changed without an explicit visual contract and GPU timestamps.
+
+Raw client logs are
+`artifacts/multiz-phase4/working/mz-render-before-client.stdout.log`,
+`artifacts/multiz-phase4/working/mz-render-compare-client.stdout.log`,
+`artifacts/multiz-phase4/working/mz-render-exact-compare-client.stdout.log`, and
+`artifacts/multiz-phase4/working/mz-render-after-client.stdout.log`. The checked-in
+`evidence/mz-001-045-046-client-rendering.json` preserves exact distributions and SHA-256 hashes.
+
+Targeted gates passed: Release `Content.Client` built with zero warnings/errors, and the DebugOpt
+`ZLevelBlurOverlayTest | StairPreviewVisibilityTest | StairPreviewOriginTest` filter passed 14/14
+tests. The representative stair scene exercised sprite/LOS work but no nonempty FOV-mask tiles.
+Tile-heavy stair preview, isolated GPU copy/shader timestamps, multi-depth blur, receiving-map
+projected-light shadows, and secondary-viewport lighting remain explicit validation risks.
+
 ## Soak result
 
 The complete 18,000-tick Multi-Z soak ran to completion with 20 checkpoints:

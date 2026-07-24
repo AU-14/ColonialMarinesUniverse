@@ -1,0 +1,128 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-24",
+  "baselineCommit": "ced24ac08e731e3e3ffa145d06985620b5d796ff",
+  "protocol": {
+    "mapPrototype": "USSBushRedux",
+    "loadedMaps": 5,
+    "depths": [-1, 0, 1, 2, 3],
+    "clientBuild": "Release",
+    "graphicsApi": "OpenGL",
+    "graphicsDevice": "NVIDIA GeForce RTX 4070 Ti SUPER",
+    "viewport": "1280x720",
+    "vsync": false,
+    "maximumFramesPerSecond": 0,
+    "sampleFrames": 3600,
+    "observerMapId": 1,
+    "observerPosition": [-15.5, -4.5],
+    "stairPrototype": "CMUMultiZStairs",
+    "notes": [
+      "The same live server, five loaded maps, observer position, runtime stair, blur setting, positioning overlay, and viewport dimensions were retained for the paired stair captures.",
+      "The capture sampler is opt-in, uses preallocated per-frame storage, and allocates its percentile scratch arrays only after the sample window ends."
+    ]
+  },
+  "change": {
+    "projectedLighting": "Replace the result-materializing physics ray overload with a CMU-owned first-hit query over the current frame's physics broadphases. The predicate preserves the existing map, maximum distance, ignored source entity, opaque collision-layer, and hard-fixture rules.",
+    "currentOpening": "Use the allocation-free occluder first-hit query with the previous endpoint-touching behavior for current-view opening visibility.",
+    "stairPreview": "Use the allocation-free occluder first-hit query with the previous endpoint-touching behavior for stair-preview sprite and tile visibility.",
+    "blur": "No production blur composition behavior changed. Opt-in pass/draw instrumentation was added because consolidating per-depth blur passes would change accumulated blur strength."
+  },
+  "projectedLightingComparator": {
+    "rejectedOccluderSubstitution": {
+      "artifact": "artifacts/multiz-phase4/working/mz-render-compare-client.stdout.log",
+      "sha256": "AECA1BB544CBD6F3CB12D4B1D0B538AFD04FDB7804D01BB2DD89A5059DF1ACA0",
+      "frames": 3600,
+      "raysPerFrame": 104,
+      "matchesPerFrame": 92,
+      "mismatchesPerFrame": 12,
+      "conclusion": "Rejected because the generic occluder query is not behavior-equivalent to the existing physics broadphase decision."
+    },
+    "acceptedBroadphaseFirstHit": {
+      "artifact": "artifacts/multiz-phase4/working/mz-render-exact-compare-client.stdout.log",
+      "sha256": "B44ED9FEE9D85936C6E53F60705904524C00490EA347566BBAEFC32F5C9B3709",
+      "frames": 3600,
+      "raysPerFrame": 104,
+      "matchesPerFrame": 104,
+      "mismatchesPerFrame": 0,
+      "totalComparisons": 374400,
+      "conclusion": "Accepted after every comparison matched the existing physics result."
+    }
+  },
+  "pairedStairCapture": {
+    "before": {
+      "artifact": "artifacts/multiz-phase4/working/mz-render-before-client.stdout.log",
+      "sha256": "896A56C5AE8BACB684D1FC20CEEEDB836D520A1DB4F30A4CC7AD3E576777D982",
+      "frameMilliseconds": {"p50": 2.3597, "p95": 3.5518},
+      "renderMilliseconds": {"p50": 1.4533, "p95": 2.1917},
+      "projectedMilliseconds": {"p50": 0.2661, "p95": 0.3986},
+      "projectedCandidateMilliseconds": {"p50": 0.2438, "p95": 0.3579},
+      "stairRenderMilliseconds": {"p50": 0.8075, "p95": 1.2290},
+      "stairCullMilliseconds": {"p50": 0.4922, "p95": 0.7479}
+    },
+    "after": {
+      "artifact": "artifacts/multiz-phase4/working/mz-render-after-client.stdout.log",
+      "sha256": "03F74D618CF90A8FE248D89D4BB28FEA39074F521AFCBCA492112D0B479D66D5",
+      "frameMilliseconds": {"p50": 2.1859, "p95": 3.2635},
+      "renderMilliseconds": {"p50": 1.3485, "p95": 2.0321},
+      "projectedMilliseconds": {"p50": 0.2131, "p95": 0.3307},
+      "projectedCandidateMilliseconds": {"p50": 0.1896, "p95": 0.2890},
+      "stairRenderMilliseconds": {"p50": 0.7382, "p95": 1.1056},
+      "stairCullMilliseconds": {"p50": 0.4277, "p95": 0.6569}
+    },
+    "changePercent": {
+      "frame": {"p50": -7.37, "p95": -8.12},
+      "render": {"p50": -7.21, "p95": -7.28},
+      "projected": {"p50": -19.92, "p95": -17.03},
+      "projectedCandidate": {"p50": -22.23, "p95": -19.25},
+      "stairRender": {"p50": -8.58, "p95": -10.04},
+      "stairCull": {"p50": -13.10, "p95": -12.17}
+    },
+    "unchangedWorkCountsPerFrame": {
+      "projectedRays": 104,
+      "projectedCandidates": 9,
+      "projectedLightsApplied": 5,
+      "stairSpriteCandidates": 349,
+      "stairSpriteVisibilityChecks": 349,
+      "stairLosChecks": 349,
+      "lowerPasses": 1,
+      "stairComposites": 1
+    }
+  },
+  "blurCharacterization": {
+    "blurEnabled": {
+      "frameMilliseconds": {"p50": 2.3597, "p95": 3.5518},
+      "renderMilliseconds": {"p50": 1.4533, "p95": 2.1917},
+      "lowerRenderMilliseconds": {"p50": 0.0966, "p95": 0.1534}
+    },
+    "blurDisabled": {
+      "frameMilliseconds": {"p50": 2.2633, "p95": 3.3401},
+      "renderMilliseconds": {"p50": 1.3755, "p95": 2.0526},
+      "lowerRenderMilliseconds": {"p50": 0.0877, "p95": 0.1350}
+    },
+    "enabledCostRelativeToDisabledPercent": {
+      "frameP50": 4.26,
+      "renderP50": 5.66,
+      "lowerRenderP50": 10.15
+    },
+    "validatedPassCountAfterInstrumentationFix": 1,
+    "conclusion": "Blur is measurable in the one-lower-pass scene, but no shader/copy-specific GPU timestamp was available and consolidating sequential depth passes would change the image. No behavior change is justified."
+  },
+  "validation": {
+    "releaseClientBuild": "Passed with zero warnings and zero errors.",
+    "focusedTests": {
+      "artifact": "artifacts/multiz-phase4/working/mz-client-render-tests.stdout.log",
+      "sha256": "763BC0C5801A9217E75D87F93E52FB65DC5884C9699671793D5EAD421CCEE8ED",
+      "configuration": "DebugOpt",
+      "filter": "ZLevelBlurOverlayTest | StairPreviewVisibilityTest | StairPreviewOriginTest",
+      "passed": 14,
+      "failed": 0
+    }
+  },
+  "deferredRisks": [
+    "The stair scene exercised 349 sprite candidates and LOS checks per frame but no nonempty FOV-mask tiles; tile-heavy stair preview still needs a representative visual capture.",
+    "The capture records client CPU/frame distributions and work counts. It does not provide isolated GPU copy or shader timestamps.",
+    "Multi-depth blur can issue more than one sequential pass. Consolidation or downsampling is deferred because it would change accumulated blur strength without a visual contract.",
+    "Projected lights still do not cast receiving-map shadows; this legacy visual approximation remains MZ-061 rather than being changed during a performance pass.",
+    "The exact broadphase comparator covered 374,400 decisions in the Bush scene, not every possible rotated or moving-grid topology."
+  ]
+}

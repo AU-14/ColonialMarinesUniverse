@@ -138,6 +138,43 @@ Targeted validation passed: the Release `Content.Server` and `Content.Benchmarks
 with zero warnings and errors, and both `CMUZLevelViewerLifecycleTest` integration cases passed in
 DebugOpt.
 
+### MZ-001, MZ-045, and MZ-046 measured client-rendering follow-up
+
+A live Release client capture on the five-map Bush scenario extended the existing render telemetry
+with an opt-in 3,600-frame distribution sampler and explicit projected-ray, stair-candidate,
+stair-LOS, tile, composite, and blur-pass counts. The sampler preallocates normal per-frame storage
+and creates percentile scratch arrays only after a requested capture finishes.
+
+The projected-light candidate pass performed 104 source-to-opening physics rays each frame. Its
+existing physics query materialized a result list even though the caller only needed a Boolean
+first hit. Replacing that predicate with the general occluder API was rejected: it disagreed with
+12 of 104 existing physics decisions on every comparator frame. The accepted CMU-owned predicate
+instead traverses the current frame's physics broadphases and preserves the exact existing maximum
+distance, ignored source entity, opaque collision-layer, and hard-fixture checks. It matched all
+374,400 old/new decisions in a 3,600-frame comparator run before becoming authoritative.
+
+The same allocation-free occluder first-hit API now replaces the result-materializing Examine
+query for current-view opening checks and stair-preview sprite/tile visibility. Endpoint touching
+remains ignored, matching the previous Examine behavior. No visibility cap, cache, scheduling
+policy, or prediction behavior was added.
+
+In the paired stair capture, work remained exactly 104 projected rays, 9 projected candidates,
+5 applied lights, 349 stair sprite candidates/checks, 349 stair LOS checks, one lower pass, and
+one stair composite per frame. Projected-light p50/p95 fell from 0.2661/0.3986 ms to
+0.2131/0.3307 ms; stair-cull p50/p95 fell from 0.4922/0.7479 ms to 0.4277/0.6569 ms. Full metrics,
+artifact hashes, and the rejected comparator are recorded in `phase-4-validation-log.md` and
+`evidence/mz-001-045-046-client-rendering.json`.
+
+Blur was measured but not rewritten. In the one-lower-pass, 1280x720 scene, enabling it added
+4.26% to frame p50, 5.66% to render p50, and 10.15% to lower-pass p50 relative to blur disabled.
+The final capture recorded one blur pass per frame. Consolidating sequential multi-depth passes
+would change accumulated blur strength, and the available capture did not isolate GPU
+copy/shader timestamps, so a behavior-preserving production change is not justified.
+
+Targeted validation passed: the Release `Content.Client` build completed with zero warnings and
+errors, and the DebugOpt blur/stair filter passed 14/14 tests. The sampled stair scene did not
+exercise nonempty FOV-mask tiles; a tile-heavy stair scene and isolated GPU timings remain open.
+
 ## Cross-Z audio and acoustic policy
 
 - One shared acoustic path builder defines each crossed boundary: downward traversal checks the
