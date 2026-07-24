@@ -448,6 +448,29 @@ server error lines), with no error referencing the changed Multi-Z tile file or 
 The exact evidence and hashes are checked in at
 `evidence/multiz-tile-localization-fix.json`.
 
+### Post-validation legacy Bush component-registration isolation
+
+The saved Bush map retains transient organ timer deltas through six deserialization-only
+compatibility components. Those shims originally inferred the global registration names
+`OrganHealth`, `Heart`, `Kidneys`, `Liver`, `Lungs`, and `CMUStomach`. Merging the Multi-Z work
+with CMU medical therefore made the compatibility `OrganHealth` and `Lungs` registrations collide
+with real gameplay components during connected client startup. The other four names were audited
+at the same boundary and remained unnecessarily exposed to later medical additions.
+
+All six shims now use explicit, CMU-owned `LegacyBush*` names. Only the matching embedded deltas in
+`USSBushReworkFinalize1.yml` changed: 18 health entries and three entries for each specialized
+organ. The compatibility field values, entity prototypes, real medical components, and gameplay
+systems are unchanged.
+
+The pre-fix connected regression failed 1/1 in 38 seconds and reported all six inferred names.
+After the correction it passed 1/1 in 38 seconds while checking both server and client component
+factories. The module sandbox/type-loading gate passed 1/1 in 19 seconds, and the connected
+five-map Bush load/topology, minimum replication, map-combination lifecycle, and registration
+suite passed 4/4 in 1 minute 8 seconds. No performance improvement is claimed.
+
+Exact hashes, map counts, commands, and the propagation risk are checked in at
+`evidence/legacy-bush-component-registration-fix.json`.
+
 ## Deferred to Phase 4 or explicit design
 
 - Two-client latency, prediction, reconciliation, late join, reconnect, and remote-camera sessions.

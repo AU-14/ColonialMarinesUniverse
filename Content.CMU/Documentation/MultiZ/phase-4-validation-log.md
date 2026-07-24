@@ -671,6 +671,30 @@ Checked evidence is in `evidence/multiz-tile-localization-fix.json`; raw logs ar
 `artifacts/multiz-phase4/20260724-tile-localization-before` and
 `artifacts/multiz-phase4/20260724-tile-localization-after`.
 
+## Legacy Bush component-registration collision
+
+The merged branch reproduced a runtime registration collision before connected client
+initialization: the deserialization-only compatibility `OrganHealthComponent` and the real CMU
+medical component both registered as `OrganHealth`. Source audit found the same present collision
+for `Lungs` and the same generic-name exposure for the saved Heart, Kidneys, Liver, and stomach
+timer shims.
+
+A red connected regression captured the inferred name of every shim and failed 1/1 in 38 seconds
+with six assertion failures. The behavior-preserving correction assigns explicit
+`LegacyBushOrganHealth`, `LegacyBushHeart`, `LegacyBushKidneys`, `LegacyBushLiver`,
+`LegacyBushLungs`, and `LegacyBushStomach` names and retargets the map's corresponding 33 saved
+deltas. It does not modify any medical component or timer value.
+
+The fixed connected replay passed 1/1 in 38 seconds on both server and client component factories.
+The sandbox/type-loading gate passed 1/1 in 19 seconds. The combined registration, required
+five-map Bush load/topology, minimum falling/vehicle replication, and map-combination lifecycle
+filter passed 4/4 in 1 minute 8 seconds with no skips. These runs validate the isolated
+compatibility registry and standalone Multi-Z maps; the receiving `Rebase` worktree must still
+rebuild its uncommitted medical work and run its medical gates after the guarded cherry-pick.
+
+Checked evidence is in `evidence/legacy-bush-component-registration-fix.json`. This is a runtime
+correctness fix only; no CPU, GPU, allocation, packet, or startup-time improvement is claimed.
+
 ## Remaining Phase 4 exit work
 
 Phase 4 remains open until evidence covers, at minimum:

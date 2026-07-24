@@ -1,0 +1,99 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-24",
+  "branch": "Chip/multiz-modernization",
+  "baseCommit": "e34d9076c6c8528a973b1e616192c76fdc19de1a",
+  "finding": "MZ-074",
+  "reportedFailure": {
+    "receivingBranch": "Rebase",
+    "runtimeError": "OrganHealth is already registered",
+    "stage": "Connected integration client initialization",
+    "presentExactCollisions": [
+      "OrganHealth",
+      "Lungs"
+    ],
+    "auditedGenericNames": [
+      "OrganHealth",
+      "Heart",
+      "Kidneys",
+      "Liver",
+      "Lungs",
+      "CMUStomach"
+    ]
+  },
+  "baseline": {
+    "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --filter FullyQualifiedName~LegacyBushCompatibilityRegistrationTest -m:1 /nr:false -v:minimal",
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "duration": "38 s",
+    "assertionFailures": 6,
+    "observedRegistrationNames": [
+      "OrganHealth",
+      "Heart",
+      "Kidneys",
+      "Liver",
+      "Lungs",
+      "CMUStomach"
+    ],
+    "stdoutSha256": "426C3FF11DD4AC699331BB0BB2E30E65251D1B47216DEA2CAB10F2D18BF6E210"
+  },
+  "change": {
+    "compatibilitySource": "Content.CMU/Shared/Compatibility/LegacyBushSavedComponents.cs",
+    "savedMap": "Content.CMU/Resources/Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize1.yml",
+    "explicitRegistrationNames": [
+      "LegacyBushOrganHealth",
+      "LegacyBushHeart",
+      "LegacyBushKidneys",
+      "LegacyBushLiver",
+      "LegacyBushLungs",
+      "LegacyBushStomach"
+    ],
+    "mapDeltaCounts": {
+      "LegacyBushOrganHealth": 18,
+      "LegacyBushHeart": 3,
+      "LegacyBushKidneys": 3,
+      "LegacyBushLiver": 3,
+      "LegacyBushLungs": 3,
+      "LegacyBushStomach": 3
+    },
+    "oldGenericMapDeltaCountAfter": 0,
+    "realMedicalComponentsChanged": 0,
+    "behavior": "Keep the six timer snapshots deserializable under private compatibility names without changing their values or gameplay systems."
+  },
+  "focusedValidation": {
+    "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --filter FullyQualifiedName~LegacyBushCompatibilityRegistrationTest -m:1 /nr:false -v:minimal",
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "duration": "38 s",
+    "factoriesChecked": [
+      "server",
+      "client"
+    ],
+    "stdoutSha256": "D56D1FBC37BCDD354F2D35836A2C47DE21641EAB77A3E7E269EADC858C693F93"
+  },
+  "requiredGates": {
+    "sandbox": {
+      "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --no-build --filter FullyQualifiedName~SandboxTest.Test -m:1 /nr:false -v:minimal",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "19 s",
+      "stdoutSha256": "B8FBB612F8FD6D879233F352717295487CF07AD5951F9D452609D726A6C12517"
+    },
+    "connectedBush": {
+      "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --no-build --filter FullyQualifiedName~LegacyBushCompatibilityRegistrationTest|FullyQualifiedName~USSBushMultiZTest.LoadsNetworkAndResolvesActiveShipMarkers|FullyQualifiedName~USSBushMultiZTest.ReplicatesMinimumFallingAndVehicleTraversalState|FullyQualifiedName~USSBushMultiZTest.CombinesExistingMapsThroughLifecycle -m:1 /nr:false -v:minimal",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1 m 8 s",
+      "stdoutSha256": "4AF7498D534E737573F93DB8B03C43B4C9CD6F7C254BAD3EDAD53D509B771CE8"
+    }
+  },
+  "claim": "Runtime correctness fix only; no CPU, GPU, allocation, packet, map-load, or startup-time performance improvement is claimed.",
+  "deferredRisks": [
+    "The receiving Rebase worktree contains uncommitted medical work. After the isolated cherry-pick, rebuild that exact worktree and run its connected medical gates without staging or committing the medical paths.",
+    "Keep the compatibility classes deserialization-only and update the explicit name and saved-map delta together if the saved map is regenerated."
+  ]
+}

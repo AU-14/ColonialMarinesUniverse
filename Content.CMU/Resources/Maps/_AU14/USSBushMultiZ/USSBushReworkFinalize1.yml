@@ -10295,7 +10295,7 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
     - type: Physics
       canCollide: False
@@ -10304,7 +10304,7 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
     - type: Physics
       canCollide: False
@@ -10313,7 +10313,7 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
     - type: Physics
       canCollide: False
@@ -10324,9 +10324,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Heart
+    - type: LegacyBushHeart
       nextPulseUpdate: 35.1338084
     - type: Physics
       canCollide: False
@@ -10335,9 +10335,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Heart
+    - type: LegacyBushHeart
       nextPulseUpdate: 35.1338084
     - type: Physics
       canCollide: False
@@ -10346,9 +10346,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Heart
+    - type: LegacyBushHeart
       nextPulseUpdate: 35.1338084
     - type: Physics
       canCollide: False
@@ -10359,9 +10359,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Kidneys
+    - type: LegacyBushKidneys
       nextSelfDamageTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10370,9 +10370,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Kidneys
+    - type: LegacyBushKidneys
       nextSelfDamageTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10381,9 +10381,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Kidneys
+    - type: LegacyBushKidneys
       nextSelfDamageTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10394,9 +10394,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Liver
+    - type: LegacyBushLiver
       nextSelfDamageTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10405,9 +10405,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Liver
+    - type: LegacyBushLiver
       nextSelfDamageTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10416,9 +10416,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Liver
+    - type: LegacyBushLiver
       nextSelfDamageTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10429,9 +10429,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Lungs
+    - type: LegacyBushLungs
       nextAsphyxTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10440,9 +10440,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Lungs
+    - type: LegacyBushLungs
       nextAsphyxTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10451,9 +10451,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: Lungs
+    - type: LegacyBushLungs
       nextAsphyxTick: 31.1338084
     - type: Physics
       canCollide: False
@@ -10464,9 +10464,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: CMUStomach
+    - type: LegacyBushStomach
       nextVomitCheck: 40.1338084
     - type: Physics
       canCollide: False
@@ -10475,9 +10475,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: CMUStomach
+    - type: LegacyBushStomach
       nextVomitCheck: 40.1338084
     - type: Physics
       canCollide: False
@@ -10486,9 +10486,9 @@ entities:
     components:
     - type: Transform
       parent: 1670
-    - type: OrganHealth
+    - type: LegacyBushOrganHealth
       nextRegenTick: 40.1338084
-    - type: CMUStomach
+    - type: LegacyBushStomach
       nextVomitCheck: 40.1338084
     - type: Physics
       canCollide: False

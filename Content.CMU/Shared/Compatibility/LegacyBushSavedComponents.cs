@@ -25,6 +25,7 @@ public sealed partial class LegacyBushTimeEntry
 }
 
 [RegisterComponent]
+[ComponentProtoName("LegacyBushOrganHealth")]
 public sealed partial class OrganHealthComponent : Component
 {
     [DataField]
@@ -32,6 +33,7 @@ public sealed partial class OrganHealthComponent : Component
 }
 
 [RegisterComponent]
+[ComponentProtoName("LegacyBushHeart")]
 public sealed partial class HeartComponent : Component
 {
     [DataField]
@@ -39,6 +41,7 @@ public sealed partial class HeartComponent : Component
 }
 
 [RegisterComponent]
+[ComponentProtoName("LegacyBushKidneys")]
 public sealed partial class KidneysComponent : Component
 {
     [DataField]
@@ -46,6 +49,7 @@ public sealed partial class KidneysComponent : Component
 }
 
 [RegisterComponent]
+[ComponentProtoName("LegacyBushLiver")]
 public sealed partial class LiverComponent : Component
 {
     [DataField]
@@ -53,6 +57,7 @@ public sealed partial class LiverComponent : Component
 }
 
 [RegisterComponent]
+[ComponentProtoName("LegacyBushLungs")]
 public sealed partial class LungsComponent : Component
 {
     [DataField]
@@ -60,6 +65,7 @@ public sealed partial class LungsComponent : Component
 }
 
 [RegisterComponent]
+[ComponentProtoName("LegacyBushStomach")]
 public sealed partial class CMUStomachComponent : Component
 {
     [DataField]
