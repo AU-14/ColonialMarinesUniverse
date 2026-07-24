@@ -349,6 +349,74 @@ mapping edits also remain unmeasured; none receives a speculative cache, cap, or
 The existing shared RMC Z-network power domain is preserved pending the separate MZ-064 gameplay
 decision.
 
+### MZ-008, MZ-037, MZ-052, and MZ-053 networking and replication
+
+The deterministic protocol used the Release evidence runner, `USSBushRedux`, depths
+`[-1, 0, 1, 2, 3]`, 30 warm-up ticks, 30 profile ticks, one viewer, one PVS sample, no soak, and
+seed 42. Both captures passed every hard five-map, teardown, profiler, viewer, and PVS lifecycle
+gate. The new replication section serializes the exact generated state returned for every
+component instance; it is an isolated state-size measurement, not a prediction of compressed
+packet size.
+
+| Isolated state metric | Before | After | Change |
+| --- | ---: | ---: | ---: |
+| Canonical topology network | 49 bytes | 28 bytes | -21 bytes |
+| Five map topology states | 57 bytes / 5 states | 0 bytes / 5 null states | -57 bytes |
+| Total topology | 106 bytes | 28 bytes | -78 bytes (-73.58%) |
+| Bush Z physics | 84,140 bytes / 6,010 states | 66,110 bytes / 6,010 states | -18,030 bytes (-21.43%) |
+| Z physics per state | 14 bytes | 11 bytes | -3 bytes (-21.43%) |
+| Control Z physics | 43,750 bytes / 3,125 states | 34,375 bytes / 3,125 states | -9,375 bytes (-21.43%) |
+| Representative vehicle traversal | not captured | 0 bytes / 1 null state | marker-only proof |
+
+The topology change replicates only depth-to-map data and derives reverse/neighbour indexes on the
+client. The physics change stops serializing default immutable bounciness. Falling activation is
+not removed: it moves from a networked add/remove marker to one explicit boolean on the already
+replicated physics state, preserving client visuals and predicted vehicle drift. The server keeps
+the marker solely as its active query set. Bush had zero falling markers and zero vehicle traversal
+components at capture time, so neither receives a Bush burst-volume claim.
+
+The real-network protocol ran the Release server and graphical client against the five-map Bush
+scenario. A server diagnostic armed before connection recorded cumulative transport exactly when
+the session entered `InGame`; after 40 seconds of client warm-up, a separate reset bracketed a
+20-second steady window. Both paired processes exited 0 and the client reached `InGame`.
+
+| Real late-join metric | Before | After | Observed change |
+| --- | ---: | ---: | ---: |
+| Client full-game-state size | 929,316 bytes | 929,192 bytes | -124 bytes (-0.013%) |
+| Server sent bytes at `InGame` | 226,278 | 226,278 | 0 |
+| Server sent packets at `InGame` | 346 | 347 | +1 |
+
+The full-state observation is one whole-world pair and is smaller than cross-run world/timing
+variation. Transport compression/framing produced no byte saving at the milestone, so no real
+packet improvement is claimed. Across three identically configured 20-second windows, baseline
+sent-byte deltas ranged from 25,611 to 53,816 and after deltas ranged from 26,706 to 76,726; this
+noise is not attributed to the component changes.
+
+The after build also ran with `net.fakelagmin=0.1` and zero random lag on both server and client.
+The client completed a 929,243-byte full state, reached `InGame`, remained connected through the
+20-second window, and both processes exited 0. This validates connection/state application under
+the injected delay only; the logs provide no round-trip percentile and the scenario did not drive
+a vehicle over an edge.
+
+Raw deterministic evidence is
+`artifacts/multiz-phase4/20260724-mz008-037-052-053-before/evidence.json` and
+`artifacts/multiz-phase4/20260724-mz008-037-052-053-after-v2/evidence.json`. The comparable real
+pair is under `20260724-mz-network-before-real-v4-armed` and
+`20260724-mz-network-after-real-v4-armed`; the latency capture is
+`20260724-mz-network-after-latency100ms`. The checked
+`evidence/mz-008-037-052-053-replication.json` records hashes, exact counters, validation, and
+deferred risks.
+
+The combined DebugOpt focused filter passed 2/2 in 1 minute 1 second with no skips. It verifies
+exact five-map client topology after initial connection and reconnect, falling true-to-false
+replication without the server marker, and marker-only vehicle defaults. Release
+`Content.Benchmarks` and `Content.Server` builds passed with zero warnings and errors.
+
+The remaining risks are production vehicle/falling population, a driven edge-transition
+prediction/correction capture under latency, populated-round packet distributions, and repeated
+late-join trials with controlled world state. No visibility cap, replication throttle, or
+speculative state cache was introduced.
+
 ## Soak result
 
 The complete 18,000-tick Multi-Z soak ran to completion with 20 checkpoints:

@@ -3,10 +3,12 @@ using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Pair;
 using Content.Server._CMU14.ZLevels.Core;
+using Content.Server._CMU14.ZLevels.PVS;
 using Content.Server.GameTicking;
 using Content.Shared._CMU14.RoundSetup.LegacyBush;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -15,6 +17,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.Manager.Attributes;
 using Robust.Shared.Utility;
@@ -44,7 +47,9 @@ public sealed class USSBushMultiZTest : GameTest
         var zLevels = SEntMan.System<CMUZLevelsSystem>();
 
         EntityUid networkUid = default;
+        NetEntity networkNet = default;
         Dictionary<int, EntityUid> loadedMaps = [];
+        Dictionary<int, NetEntity> loadedMapNets = [];
 
         await server.WaitAssertion(() =>
         {
@@ -55,6 +60,7 @@ public sealed class USSBushMultiZTest : GameTest
             Assert.That(zLevels.TryGetZNetwork(mainMap, out var matchingNetwork), Is.True);
             Assert.That(matchingNetwork, Is.Not.Null);
             networkUid = matchingNetwork.Value.Owner;
+            networkNet = SEntMan.GetNetEntity(networkUid);
 
             Assert.That(zLevels.TryGetDepthBounds(matchingNetwork.Value, out var minDepth, out var maxDepth), Is.True);
             Assert.That(minDepth, Is.EqualTo(-1));
@@ -68,10 +74,13 @@ public sealed class USSBushMultiZTest : GameTest
                 Assert.That(map.Depth, Is.EqualTo(depth));
                 Assert.That(map.NetworkUid, Is.EqualTo(networkUid));
                 loadedMaps.Add(depth, mapUid);
+                loadedMapNets.Add(depth, SEntMan.GetNetEntity(mapUid));
             }
         });
 
         await server.WaitRunTicks(2);
+        await Pair.RunTicksSync(5);
+        await AssertClientTopology(networkNet, loadedMapNets);
 
         await server.WaitAssertion(() =>
         {
@@ -233,6 +242,14 @@ public sealed class USSBushMultiZTest : GameTest
             SEntMan.DeleteEntity(upwardShooter);
         });
 
+        var clientNetManager = Client.ResolveDependency<IClientNetManager>();
+        await Client.WaitPost(() => clientNetManager.ClientDisconnect("CMU topology reconnect validation."));
+        await Pair.RunTicksSync(5);
+        Client.SetConnectTarget(Server);
+        await Client.WaitPost(() => clientNetManager.ClientConnect(null, 0, null));
+        await Pair.RunTicksSync(20);
+        await AssertClientTopology(networkNet, loadedMapNets);
+
         await server.WaitPost(() =>
         {
             foreach (var mapUid in loadedMaps.Values)
@@ -249,6 +266,66 @@ public sealed class USSBushMultiZTest : GameTest
             Assert.That(SEntMan.EntityExists(networkUid), Is.False,
                 "Empty Z-networks must be deleted with their final map.");
         });
+    }
+
+    [Test]
+    public async Task ReplicatesMinimumFallingAndVehicleTraversalState()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid serverEntity = default;
+        NetEntity entityNet = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            serverEntity = SEntMan.SpawnEntity(null, map.GridCoords);
+            entityNet = SEntMan.GetNetEntity(serverEntity);
+
+            var physics = SEntMan.EnsureComponent<CMUZPhysicsComponent>(serverEntity);
+            SEntMan.EnsureComponent<CMUVehicleZTraversalComponent>(serverEntity);
+            SEntMan.EnsureComponent<CMUZFallingComponent>(serverEntity);
+            SEntMan.EnsureComponent<CMUPvsOverrideComponent>(serverEntity);
+#pragma warning disable RA0002
+            physics.Falling = true;
+#pragma warning restore RA0002
+            SEntMan.DirtyField(serverEntity, physics, nameof(CMUZPhysicsComponent.Falling));
+        });
+        await Pair.RunTicksSync(5);
+
+        await Client.WaitAssertion(() =>
+        {
+            var clientEntity = CEntMan.GetEntity(entityNet);
+            var physics = CEntMan.GetComponent<CMUZPhysicsComponent>(clientEntity);
+            var traversal = CEntMan.GetComponent<CMUVehicleZTraversalComponent>(clientEntity);
+            Assert.Multiple(() =>
+            {
+                Assert.That(physics.Falling, Is.True);
+                Assert.That(physics.Bounciness, Is.EqualTo(0.3f));
+                Assert.That(CEntMan.HasComponent<CMUZFallingComponent>(clientEntity), Is.False,
+                    "The server active-set marker must not replicate.");
+                Assert.That(traversal.SupportSampleSpacing,
+                    Is.EqualTo(CMUVehicleSupportFootprint.DefaultSampleSpacing));
+                Assert.That(traversal.MaxAirDriftSpeed, Is.EqualTo(4f));
+            });
+        });
+
+        await Server.WaitAssertion(() =>
+        {
+            var physics = SEntMan.GetComponent<CMUZPhysicsComponent>(serverEntity);
+#pragma warning disable RA0002
+            physics.Falling = false;
+#pragma warning restore RA0002
+            SEntMan.DirtyField(serverEntity, physics, nameof(CMUZPhysicsComponent.Falling));
+            SEntMan.RemoveComponent<CMUZFallingComponent>(serverEntity);
+        });
+        await Pair.RunTicksSync(5);
+
+        await Client.WaitAssertion(() =>
+        {
+            var clientEntity = CEntMan.GetEntity(entityNet);
+            Assert.That(CEntMan.GetComponent<CMUZPhysicsComponent>(clientEntity).Falling, Is.False);
+        });
+
+        await Server.WaitPost(() => SEntMan.DeleteEntity(serverEntity));
     }
 
     [Test]
@@ -564,6 +641,41 @@ public sealed class USSBushMultiZTest : GameTest
         {
             Assert.That(SEntMan.EntityExists(networkUid), Is.False,
                 "A combined Z-network must be deleted with its final map.");
+        });
+    }
+
+    private async Task AssertClientTopology(
+        NetEntity networkNet,
+        IReadOnlyDictionary<int, NetEntity> mapNets)
+    {
+        await Client.WaitAssertion(() =>
+        {
+            var networkUid = CEntMan.GetEntity(networkNet);
+            var network = CEntMan.GetComponent<CMUZLevelsNetworkComponent>(networkUid);
+            Assert.That(network.ZLevels.Count, Is.EqualTo(mapNets.Count));
+            Assert.That(network.ZLevelByEntity.Count, Is.EqualTo(mapNets.Count));
+
+            foreach (var (depth, mapNet) in mapNets)
+            {
+                var mapUid = CEntMan.GetEntity(mapNet);
+                var map = CEntMan.GetComponent<CMUZLevelMapComponent>(mapUid);
+                var expectedAbove = mapNets.TryGetValue(depth + 1, out var above)
+                    ? CEntMan.GetEntity(above)
+                    : (EntityUid?) null;
+                var expectedBelow = mapNets.TryGetValue(depth - 1, out var below)
+                    ? CEntMan.GetEntity(below)
+                    : (EntityUid?) null;
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(network.ZLevels[depth], Is.EqualTo(mapUid));
+                    Assert.That(network.ZLevelByEntity[mapUid], Is.EqualTo(depth));
+                    Assert.That(map.NetworkUid, Is.EqualTo(networkUid));
+                    Assert.That(map.Depth, Is.EqualTo(depth));
+                    Assert.That(map.MapAbove, Is.EqualTo(expectedAbove));
+                    Assert.That(map.MapBelow, Is.EqualTo(expectedBelow));
+                });
+            }
         });
     }
 

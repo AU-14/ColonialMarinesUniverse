@@ -117,7 +117,5 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             neighbourMap.MapAbove = null;
         else
             neighbourMap.MapBelow = null;
-
-        Dirty(neighbour, neighbourMap);
     }
 }

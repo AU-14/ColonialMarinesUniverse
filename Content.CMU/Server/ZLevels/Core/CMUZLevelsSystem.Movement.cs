@@ -76,12 +76,20 @@ public sealed partial class CMUZLevelsSystem
 
     private bool WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent)
     {
-        if (!ShouldWakeZPhysics(ent))
+        if (!Resolve(ent, ref ent.Comp, false))
         {
             RemCompDeferred<CMUZFallingComponent>(ent.Owner);
             return false;
         }
 
+        if (!ShouldWakeZPhysics(ent))
+        {
+            SetZPhysicsFallingState((ent.Owner, ent.Comp), false);
+            RemCompDeferred<CMUZFallingComponent>(ent.Owner);
+            return false;
+        }
+
+        SetZPhysicsFallingState((ent.Owner, ent.Comp), true);
         EnsureComp<CMUZFallingComponent>(ent.Owner);
         return true;
     }

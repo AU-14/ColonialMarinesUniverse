@@ -211,6 +211,40 @@ reactor-powered-light entities, the required initial build remains synchronous a
 323 KB, and large middle/upper removals plus bulk mapping edits remain explicit risks. Shared RMC
 power domains are unchanged.
 
+### MZ-008, MZ-037, MZ-052, and MZ-053 measured replication follow-up
+
+The Phase 4 runner now captures the generated component state for every topology and Z-physics
+instance after the five-map Bush load. The baseline established 106 bytes of duplicated topology
+state (49 on the network plus 57 across five maps) and 84,140 bytes across 6,010 serialized
+`CMUZPhysics` states (14 bytes each). Bush had no active falling markers or vehicle traversal
+components, so those absent populations were not treated as optimization evidence.
+
+`CMUZLevelsNetworkComponent.ZLevels` is now the sole replicated topology. Its reverse lookup and
+the four map-local owner/depth/neighbour fields are derived after client state application and map
+startup. `CMUZPhysicsComponent.Bounciness` remains prototype data after repository-wide review
+found no override or runtime assignment. The transient `CMUZFallingComponent` is now a server-only
+active-set marker; one replicated `CMUZPhysicsComponent.Falling` boolean supplies the client visual
+and predicted vehicle-drift signal. Every authoritative wake/sleep/stop path updates that signal.
+Vehicle traversal remains a networked marker whose immutable prototype fields have no generated
+state.
+
+The isolated five-map state capture reduced topology from 106 to 28 bytes (-73.58%) and Z physics
+from 84,140 to 66,110 bytes (-21.43%, 14 to 11 bytes per instance). A synthetic representative
+vehicle traversal component produced a null state and zero state-payload bytes. A connected
+five-map test verifies initial and reconnect topology exactly, and a second connected test verifies
+falling true/false replication, absence of the server marker on the client, and vehicle defaults.
+
+The real late-join milestone pair observed a 929,316-byte baseline full state and a 929,192-byte
+after full state (-124 bytes, -0.013%), but both reached the server `InGame` transition at exactly
+226,278 sent transport bytes. Twenty-second steady windows varied more than the change and are not
+claimed as an improvement. With 100 ms fake lag on both endpoints, the client still completed the
+full state, entered `InGame`, and remained connected; no vehicle edge transition occurred, so
+prediction quality under latency remains open.
+
+The checked evidence is `evidence/mz-008-037-052-053-replication.json`. It distinguishes isolated
+component serialization from actual full-state and transport measurements and records the absent
+Bush falling/vehicle populations as deferred risks.
+
 ## Cross-Z audio and acoustic policy
 
 - One shared acoustic path builder defines each crossed boundary: downward traversal checks the

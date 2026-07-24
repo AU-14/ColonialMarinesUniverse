@@ -8,6 +8,7 @@ using Content.Shared.Stunnable;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -65,9 +66,93 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         _gridQuery = GetEntityQuery<MapGridComponent>();
         XformQuery = GetEntityQuery<TransformComponent>();
 
+        SubscribeLocalEvent<CMUZLevelsNetworkComponent, AfterAutoHandleStateEvent>(OnZNetworkState);
+        SubscribeLocalEvent<CMUZLevelMapComponent, ComponentStartup>(OnZMapStartup);
+
         InitMovement();
         InitThrowing();
         InitView();
+    }
+
+    private void OnZNetworkState(Entity<CMUZLevelsNetworkComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (_net.IsClient)
+            RebuildClientTopology(ent);
+    }
+
+    private void OnZMapStartup(Entity<CMUZLevelMapComponent> ent, ref ComponentStartup args)
+    {
+        if (!_net.IsClient)
+            return;
+
+        var query = EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
+        while (query.MoveNext(out var networkUid, out var network))
+        {
+            if (!network.ZLevelByEntity.TryGetValue(ent.Owner, out var depth) &&
+                !TryFindDepth(network, ent.Owner, out depth))
+            {
+                continue;
+            }
+
+            ApplyClientMapTopology(ent, networkUid, network, depth);
+            return;
+        }
+    }
+
+    private void RebuildClientTopology(Entity<CMUZLevelsNetworkComponent> ent)
+    {
+        foreach (var oldMap in ent.Comp.ZLevelByEntity.Keys)
+        {
+            if (!_zMapQuery.TryComp(oldMap, out var map))
+                continue;
+
+            map.NetworkUid = EntityUid.Invalid;
+            map.MapAbove = null;
+            map.MapBelow = null;
+            map.Depth = 0;
+        }
+
+        ent.Comp.ZLevelByEntity.Clear();
+        foreach (var (depth, mapUid) in ent.Comp.ZLevels)
+        {
+            if (mapUid is not { } map)
+                continue;
+
+            ent.Comp.ZLevelByEntity[map] = depth;
+            if (_zMapQuery.TryComp(map, out var mapComp))
+                ApplyClientMapTopology((map, mapComp), ent.Owner, ent.Comp, depth);
+        }
+    }
+
+    private static bool TryFindDepth(
+        CMUZLevelsNetworkComponent network,
+        EntityUid map,
+        out int depth)
+    {
+        foreach (var (candidateDepth, candidateMap) in network.ZLevels)
+        {
+            if (candidateMap != map)
+                continue;
+
+            depth = candidateDepth;
+            network.ZLevelByEntity[map] = candidateDepth;
+            return true;
+        }
+
+        depth = default;
+        return false;
+    }
+
+    private static void ApplyClientMapTopology(
+        Entity<CMUZLevelMapComponent> map,
+        EntityUid networkUid,
+        CMUZLevelsNetworkComponent network,
+        int depth)
+    {
+        map.Comp.NetworkUid = networkUid;
+        map.Comp.Depth = depth;
+        map.Comp.MapAbove = network.ZLevels.GetValueOrDefault(depth + 1);
+        map.Comp.MapBelow = network.ZLevels.GetValueOrDefault(depth - 1);
     }
 
     /// <summary>

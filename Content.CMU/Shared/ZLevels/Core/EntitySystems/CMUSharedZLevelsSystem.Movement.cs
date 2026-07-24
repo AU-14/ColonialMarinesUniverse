@@ -324,6 +324,7 @@ public abstract partial class CMUSharedZLevelsSystem
                                 uid,
                                 "sleep",
                                 $"settledDistance={settledDistanceToGround:F3} sticky={stickyGround} local={zPhys.LocalPosition:F3}");
+                            SetZPhysicsFallingState((uid, zPhys), false);
                             RemComp<CMUZFallingComponent>(uid);
                         }
 
@@ -346,6 +347,7 @@ public abstract partial class CMUSharedZLevelsSystem
                     ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity))
                 {
                     DebugLogFalling(uid, "sleep", $"settledDistance=0.000 sticky={stickyGround} local={zPhys.LocalPosition:F3}");
+                    SetZPhysicsFallingState((uid, zPhys), false);
                     RemComp<CMUZFallingComponent>(uid);
                     DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
                     continue;
@@ -412,7 +414,8 @@ public abstract partial class CMUSharedZLevelsSystem
     private bool ShouldDebugFalling(EntityUid uid)
     {
         return Interlocked.CompareExchange(ref _debugFalling, 0, 0) != 0 &&
-               HasComp<CMUZFallingComponent>(uid);
+               TryComp<CMUZPhysicsComponent>(uid, out var zPhysics) &&
+               zPhysics.Falling;
     }
 
     private void DebugLogFalling(EntityUid uid, string stage, string details)
@@ -682,6 +685,7 @@ public abstract partial class CMUSharedZLevelsSystem
         zPhys.Velocity = 0;
         zPhys.LocalPosition = 0;
         DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
+        SetZPhysicsFallingState((uid, zPhys), false);
         RemComp<CMUZFallingComponent>(uid);
     }
 
@@ -835,6 +839,7 @@ public abstract partial class CMUSharedZLevelsSystem
             if (ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity))
             {
                 DebugLogFalling(uid, "post-down-sleep", $"local={zPhys.LocalPosition:F3} sticky={stickyGround}");
+                SetZPhysicsFallingState((uid, zPhys), false);
                 RemComp<CMUZFallingComponent>(uid);
             }
         }
@@ -885,6 +890,15 @@ public abstract partial class CMUSharedZLevelsSystem
     public virtual bool WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
     {
         return ShouldWakeZPhysics(ent);
+    }
+
+    protected void SetZPhysicsFallingState(Entity<CMUZPhysicsComponent> ent, bool falling)
+    {
+        if (ent.Comp.Falling == falling)
+            return;
+
+        ent.Comp.Falling = falling;
+        DirtyField(ent, ent.Comp, nameof(CMUZPhysicsComponent.Falling));
     }
 
     protected bool ShouldWakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
@@ -995,7 +1009,7 @@ public abstract partial class CMUSharedZLevelsSystem
             _transform.GetWorldRotation(xform),
             _vehicleSupportSamples);
 
-        var falling = HasComp<CMUZFallingComponent>(target);
+        var falling = target.Comp!.Falling;
         var supported = 0;
         var supportedDistance = 0f;
         var highestSupportedSurfaceDistance = float.MaxValue;

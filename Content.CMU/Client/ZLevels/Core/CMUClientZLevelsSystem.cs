@@ -46,8 +46,6 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         SubscribeLocalEvent<CMUZPhysicsComponent, AfterAutoHandleStateEvent>(OnZPhysicsState);
         SubscribeLocalEvent<CMUZPhysicsComponent, MoveEvent>(OnZPhysicsMoveGroundSnapClient);
         SubscribeLocalEvent<CMUZPhysicsComponent, GetEyeOffsetEvent>(OnEyeOffset);
-        SubscribeLocalEvent<CMUZFallingComponent, ComponentStartup>(OnFallingStartup);
-        SubscribeLocalEvent<CMUZFallingComponent, ComponentShutdown>(OnFallingShutdown);
         SubscribeLocalEvent<CMUZLevelProjectileVisualOffsetComponent, ComponentStartup>(OnProjectileVisualOffsetStartup);
         SubscribeLocalEvent<CMUZLevelProjectileVisualOffsetComponent, ComponentShutdown>(OnProjectileVisualOffsetShutdown);
         SubscribeLocalEvent<CMUZLevelPredictedProjectileVisualOffsetComponent, ComponentStartup>(OnPredictedProjectileVisualOffsetStartup);
@@ -90,39 +88,6 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         }
 
         ApplyZPhysicsVisuals(ent.Owner, ent.Comp, sprite);
-    }
-
-    private void OnFallingShutdown(Entity<CMUZFallingComponent> ent, ref ComponentShutdown args)
-    {
-        if (!TryComp<CMUZPhysicsComponent>(ent, out var zPhys) ||
-            !TryComp<SpriteComponent>(ent, out var sprite))
-        {
-            return;
-        }
-
-        if (_config.GetCVar(CMUZLevelsCVars.Enabled))
-        {
-            ApplyZPhysicsVisuals(ent.Owner, zPhys, sprite);
-            return;
-        }
-
-        if (TryComp<CMUZPhysicsVisualComponent>(ent, out var visual))
-        {
-            RestoreZPhysicsVisuals(ent.Owner, sprite, visual);
-            RemComp<CMUZPhysicsVisualComponent>(ent);
-        }
-    }
-
-    private void OnFallingStartup(Entity<CMUZFallingComponent> ent, ref ComponentStartup args)
-    {
-        if (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
-            !TryComp<CMUZPhysicsComponent>(ent, out var zPhys) ||
-            !TryComp<SpriteComponent>(ent, out var sprite))
-        {
-            return;
-        }
-
-        ApplyZPhysicsVisuals(ent.Owner, zPhys, sprite);
     }
 
     private void OnProjectileVisualOffsetStartup(Entity<CMUZLevelProjectileVisualOffsetComponent> ent, ref ComponentStartup args)

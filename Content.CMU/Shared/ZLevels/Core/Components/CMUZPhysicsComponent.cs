@@ -26,6 +26,17 @@ public sealed partial class CMUZPhysicsComponent : Component
 
     // Physics
 
-    [DataField, AutoNetworkedField]
+    /// <summary>
+    /// Immutable prototype configuration. No prototypes override the default, so it does not
+    /// need to be repeated in every component state.
+    /// </summary>
+    [DataField]
     public float Bounciness = 0.3f;
+
+    /// <summary>
+    /// Minimum client signal for airborne visuals and predicted vehicle drift. The server keeps
+    /// <see cref="CMUZFallingComponent"/> as its query-efficient active set.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool Falling;
 }

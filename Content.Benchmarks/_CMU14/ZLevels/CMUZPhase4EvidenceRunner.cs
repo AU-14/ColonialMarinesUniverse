@@ -15,17 +15,21 @@ using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.GameTicking;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared._CMU14.ZLevels.Vehicles;
 using Content.Shared.Maps;
 using Content.Shared.Warps;
 using Robust.Shared;
 using Robust.Shared.Configuration;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Profiling;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
+using GameTick = Robust.Shared.Timing.GameTick;
 
 namespace Content.Benchmarks._CMU14.ZLevels;
 
@@ -147,6 +151,7 @@ internal static class CMUZPhase4EvidenceRunner
         var zLevels = entityManager.System<CMUZLevelsSystem>();
         var ticker = entityManager.System<GameTicker>();
         var profiler = server.ResolveDependency<ProfManager>();
+        var serializer = server.ResolveDependency<IRobustSerializer>();
 
         var result = new ScenarioResult
         {
@@ -247,6 +252,21 @@ internal static class CMUZPhase4EvidenceRunner
         {
             result.Load.Profile = CaptureProfiler(profiler, loadProfilerStart);
             configuration.SetCVar(CVars.ProfEnabled, false);
+            result.Replication.TopologyNetwork =
+                CaptureComponentReplication<CMUZLevelsNetworkComponent>(entityManager, serializer);
+            result.Replication.TopologyMaps =
+                CaptureComponentReplication<CMUZLevelMapComponent>(entityManager, serializer);
+            result.Replication.ZPhysics =
+                CaptureComponentReplication<CMUZPhysicsComponent>(entityManager, serializer);
+            result.Replication.Falling =
+                CaptureComponentReplication<CMUZFallingComponent>(entityManager, serializer);
+            result.Replication.VehicleTraversal =
+                CaptureComponentReplication<CMUVehicleZTraversalComponent>(entityManager, serializer);
+            result.Replication.RepresentativeVehicleTraversal =
+                CaptureRepresentativeComponentReplication<CMUVehicleZTraversalComponent>(entityManager, serializer);
+            result.Replication.TopologyPayloadBytes =
+                result.Replication.TopologyNetwork.PayloadBytes +
+                result.Replication.TopologyMaps.PayloadBytes;
         });
 
         var sessions = await server.AddDummySessions(options.Players);
@@ -934,6 +954,66 @@ internal static class CMUZPhase4EvidenceRunner
         }
     }
 
+    private static ComponentReplicationCapture CaptureComponentReplication<TComponent>(
+        IEntityManager entityManager,
+        IRobustSerializer serializer)
+        where TComponent : Component
+    {
+        var payloads = new List<double>();
+        long payloadBytes = 0;
+        var instances = 0;
+        var states = 0;
+        var nullStates = 0;
+        using var stream = new MemoryStream();
+        var query = entityManager.EntityQueryEnumerator<TComponent>();
+        while (query.MoveNext(out _, out var component))
+        {
+            instances++;
+            var state = entityManager.GetComponentState(
+                entityManager.EventBus,
+                component,
+                null,
+                GameTick.Zero);
+            if (state == null)
+            {
+                nullStates++;
+                continue;
+            }
+
+            stream.SetLength(0);
+            serializer.Serialize(stream, state);
+            payloads.Add(stream.Length);
+            payloadBytes += stream.Length;
+            states++;
+        }
+
+        return new ComponentReplicationCapture
+        {
+            Instances = instances,
+            SerializedStates = states,
+            NullStates = nullStates,
+            PayloadBytes = payloadBytes,
+            PayloadBytesPerState = Distribution.From(payloads),
+        };
+    }
+
+    private static ComponentReplicationCapture CaptureRepresentativeComponentReplication<TComponent>(
+        IEntityManager entityManager,
+        IRobustSerializer serializer)
+        where TComponent : Component, new()
+    {
+        var uid = entityManager.Spawn();
+        entityManager.EnsureComponent<TComponent>(uid);
+        try
+        {
+            return CaptureComponentReplication<TComponent>(entityManager, serializer);
+        }
+        finally
+        {
+            entityManager.DeleteEntity(uid);
+        }
+    }
+
     private readonly record struct OperationSample(double Milliseconds, long ThreadAllocatedBytes);
     private readonly record struct CyclingPvsCapture(OperationCapture Capture, int Reattachments);
 }
@@ -1026,6 +1106,7 @@ internal sealed class ScenarioResult
     public LoadResult Load { get; set; } = new();
     public TopologyResult Topology { get; init; } = new();
     public TickCapture Capture { get; init; } = new();
+    public ReplicationCapture Replication { get; init; } = new();
     public PvsCapture Pvs { get; init; } = new();
     public SoakResult Soak { get; init; } = new();
     public TeardownResult Teardown { get; init; } = new();
@@ -1075,6 +1156,26 @@ internal sealed class TickCapture
     public int NetworkCount { get; set; }
     public OperationCapture TickTurnaround { get; set; } = new();
     public ProfileCapture Profile { get; set; } = new();
+}
+
+internal sealed class ReplicationCapture
+{
+    public ComponentReplicationCapture TopologyNetwork { get; set; } = new();
+    public ComponentReplicationCapture TopologyMaps { get; set; } = new();
+    public long TopologyPayloadBytes { get; set; }
+    public ComponentReplicationCapture ZPhysics { get; set; } = new();
+    public ComponentReplicationCapture Falling { get; set; } = new();
+    public ComponentReplicationCapture VehicleTraversal { get; set; } = new();
+    public ComponentReplicationCapture RepresentativeVehicleTraversal { get; set; } = new();
+}
+
+internal sealed class ComponentReplicationCapture
+{
+    public int Instances { get; init; }
+    public int SerializedStates { get; init; }
+    public int NullStates { get; init; }
+    public long PayloadBytes { get; init; }
+    public Distribution PayloadBytesPerState { get; init; } = new();
 }
 
 internal sealed class ProfileCapture

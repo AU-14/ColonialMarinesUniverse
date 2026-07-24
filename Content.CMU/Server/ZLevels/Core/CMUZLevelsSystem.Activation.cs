@@ -80,12 +80,13 @@ public sealed partial class CMUZLevelsSystem
         SetActiveStatus(ent, true);
     }
 
-    private void SetActiveStatus(EntityUid ent, bool active)
+    private void SetActiveStatus(Entity<CMUZPhysicsComponent> ent, bool active)
     {
         if (active)
-            WakeZPhysics(ent);
+            WakeZPhysics((ent.Owner, ent.Comp));
         else
         {
+            SetZPhysicsFallingState(ent, false);
             RemCompDeferred<CMUZFallingComponent>(ent);
         }
     }

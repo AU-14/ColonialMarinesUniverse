@@ -43,10 +43,7 @@ public sealed partial class CMUZLevelsSystem
             levelMapComponent.MapAbove = aboveMap;
 
             if (TryComp<CMUZLevelMapComponent>(aboveMap, out var aboveMapComp))
-            {
                 aboveMapComp.MapBelow = mapUid;
-                Dirty(aboveMap, aboveMapComp);
-            }
         }
 
         if (network.Comp.ZLevels.TryGetValue(depth - 1, out var belowMapUid) &&
@@ -55,13 +52,9 @@ public sealed partial class CMUZLevelsSystem
             levelMapComponent.MapBelow = belowMap;
 
             if (TryComp<CMUZLevelMapComponent>(belowMap, out var belowMapComp))
-            {
                 belowMapComp.MapAbove = mapUid;
-                Dirty(belowMap, belowMapComp);
-            }
         }
 
-        Dirty(mapUid, levelMapComponent);
         Dirty(network);
     }
 

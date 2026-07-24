@@ -257,7 +257,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     private bool ShouldPreserveVehicleZFallMotion(EntityUid uid)
     {
         return HasComp<CMUVehicleZTraversalComponent>(uid) &&
-               HasComp<CMUZFallingComponent>(uid);
+               TryComp(uid, out CMUZPhysicsComponent? zPhysics) &&
+               zPhysics.Falling;
     }
 
     private void OnMoverCanRun(Entity<GridVehicleMoverComponent> ent, ref VehicleCanRunEvent args)
@@ -353,7 +354,8 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
                     break;
 
                 if (TryComp(uid, out CMUVehicleZTraversalComponent? zTraversal) &&
-                    HasComp<CMUZFallingComponent>(uid))
+                    TryComp(uid, out CMUZPhysicsComponent? zPhysics) &&
+                    zPhysics.Falling)
                 {
                     UpdateFallingMovement(uid, mover, currentGrid, currentGridComp, zTraversal, MovementFixedStep);
                 }
