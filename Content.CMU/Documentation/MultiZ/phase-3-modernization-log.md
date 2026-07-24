@@ -376,6 +376,29 @@ Exact artifact paths, SHA-256 hashes, filters, counters, and deferred risks are 
 sandbox/type loading, deterministic behavior, and one-client stability; they do not close the
 two-client, prediction, populated-round, or GPU risks below.
 
+### Post-validation dynamic grid-vehicle mover compatibility
+
+A later server report exposed a compatibility defect between the imported RMC grid-vehicle
+prototypes and the current mover invariant. `RMCVehicleBase` declared a dynamic physics body and
+also supplied `InputMover`. When a player session attached to `VehicleSPPTankCommand`, the active
+mob-mover pass reached `HandleMobMovement` and fatally asserted because the body was dynamic rather
+than a kinematic controller. The preceding late `MsgEntity` warning was correlating evidence, not
+the root cause: focused and real-network validation both produced late messages without the fatal
+assertion.
+
+The behavior-preserving content fix removes `InputMover` from `RMCVehicleBase`. The current grid
+vehicle integration already cancels the generic movement relay and reads the operator's
+`InputMover` directly, so vehicle physics remains dynamic and the existing operator/prediction path
+is unchanged. The regression suite verifies the command-tank prototype, direct player attachment
+through five synchronized physics ticks, and ordinary operator setup with driver
+`InputMover`/`GridVehicleOperator` retained and relay components absent.
+
+The pre-fix focused prototype test failed 1/1 in 36 seconds. After the fix, the tank-focused suite
+passed 3/3 in 42 seconds. The complete five-map Bush, falling/vehicle replication, map lifecycle,
+sandbox/type-check, and tank gate is recorded in Phase 4 evidence. No performance improvement is
+claimed. A populated live vehicle drive with prediction/correction and injected latency remains
+deferred.
+
 ## Deferred to Phase 4 or explicit design
 
 - Two-client latency, prediction, reconciliation, late join, reconnect, and remote-camera sessions.

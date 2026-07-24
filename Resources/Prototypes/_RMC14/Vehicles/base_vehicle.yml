@@ -109,7 +109,6 @@
       enum.VehicleWeaponsUiKey.Key:
         type: VehicleWeaponsBoundUserInterface
   - type: VehicleWeapons
-  - type: InputMover
   - type: ItemSlots
   - type: HardpointSlots
     vehicleFamily: HardpointVehicleFamilyVan

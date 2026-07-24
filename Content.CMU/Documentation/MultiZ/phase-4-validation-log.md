@@ -567,6 +567,41 @@ tile `19,-24`; the user confirmed that the lower level remained visible instead 
 space. Tile and entity placement share the same placement-active render gate, so this closes the
 reported regression. The finding is tracked as MZ-069.
 
+## Dynamic grid-vehicle mover stability regression
+
+A post-validation server capture reported a fatal `SharedMoverController.HandleMobMovement`
+assertion for `VehicleSPPTankCommand`: the inherited `InputMover` reached the mob-movement pass
+while the tank correctly retained `BodyType.Dynamic`. A focused prototype regression established
+the before-fix baseline and failed 1/1 in 36 seconds because the unsafe component pair was present.
+The smallest content-side fix removed the redundant `InputMover` from `RMCVehicleBase`; no physics
+body, grid movement, prediction, visibility, or replication policy changed.
+
+After the fix, the tank-focused suite passed 3/3 in 42 seconds. It verifies:
+
+- the concrete SPP command tank remains a dynamic grid vehicle without `InputMover`;
+- a connected player can attach directly to the tank and advance five synchronized physics ticks
+  without entering the mob-mover path; and
+- ordinary driver setup retains the driver's `InputMover` and `GridVehicleOperator`, sets
+  `Vehicle.Operator`, and removes the generic source/target movement relay.
+
+The combined gate covers both client-loaded assemblies through `SandboxTest`, the five-map
+`USSBushRedux` load/topology case, minimum falling/vehicle replication, map-combination lifecycle,
+and all three tank regressions. It passed 7/7 with no skips in 1 minute 2 seconds. Sequential
+Release client and server builds passed with zero warnings and zero errors.
+
+A fresh one-client Bush stability run used 20 seconds of server warm-up, 45 seconds of client
+warm-up, and a 15-second capture. It completed in 88.797 seconds; both processes exited 0, both
+stderr logs were empty, the client received a 928,762-byte full game state, and it entered
+`InGame`. The server logged one late guidebook `MsgEntity` (`Diff: -218`) but no
+`HandleMobMovement`, body-type, debug-assert, fatal, or unhandled signature. This demonstrates that
+a late message can occur without the vehicle crash and is not treated as its cause. The known RMC
+Mentor send-after-disconnect error appeared after graceful shutdown and remains deferred.
+
+Checked evidence is in `evidence/dynamic-grid-vehicle-mover-fix.json`; raw stability logs are under
+`artifacts/multiz-phase4/20260724-vehicle-mover-fix-stability`. The deterministic operator test
+does not replace a populated live vehicle drive under latency, so prediction/correction and
+edge-transition validation remain open.
+
 ## Remaining Phase 4 exit work
 
 Phase 4 remains open until evidence covers, at minimum:
