@@ -138,28 +138,51 @@ in at [evidence/phase-4-baseline-summary.json](evidence/phase-4-baseline-summary
 
 These results update the applicable finding rows above but do not complete Phase 4.
 
+## Ordered modernization closeout evidence
+
+All five requested performance groups were executed in order with paired or controlled evidence,
+and the final product state passed the required five-map `USSBushRedux` scenario. The last gate
+also passed 123 focused CMU Z-level unit tests and four integration tests with no skips. The
+integration set included Robust sandbox/module type checks for both client-loaded assemblies,
+initial Bush topology, reconnect-relevant minimum falling/vehicle replication, and map-combination
+lifecycle behavior.
+
+Sequential Release client and server builds completed with zero warnings and errors. A fresh
+Release one-client stability run received a 720,871-byte full game state, entered `InGame`,
+remained connected through the sample, and exited both processes 0 with empty stderr. At `InGame`,
+the server recorded 227,191 sent bytes/347 packets; the later 15-second sample delta was 18,068
+sent bytes/927 packets. These counters describe the run and are not presented as an optimization
+delta.
+
+The validation harness now suppresses the UTF-8 BOM that legacy Windows PowerShell otherwise sends
+before the first redirected console command. The final armed diagnostic succeeded. A pre-existing
+RMC Mentor send-after-disconnect error remains after graceful client shutdown and is explicitly
+deferred rather than hidden. Exact hashes and commands are in
+`evidence/ordered-modernization-final-validation.json`.
+
 ## Remaining Phase 4 validation backlog
 
-- Repeat the completed 16/32/64-viewer headless PVS scaling capture in a populated live round and
-  capture real packet/bandwidth, late-join, and reconnect behavior.
+- Repeat the completed 16/32/64-viewer deterministic PVS scaling capture in a populated live round
+  and capture its real packet/bandwidth and scheduling distributions.
 - Run a live two-client server-authority, prediction, reconciliation, late-join, reconnect,
   remote-camera, and latency session.
 - Repeat server load/tick captures across order-controlled runs and a populated live Bush round;
   the first whole-scenario single-level/five-level baseline is recorded, but it is not an isolated
   Multi-Z overhead measurement.
-- Capture client CPU/frame/allocation and GPU time per Z-level view mode, including projected
-  lighting, stair preview, weather, blur, multiple depths, and secondary viewports.
-- Capture real network/PVS packets and bytes during level switches, falls, projectile traversal,
-  topology changes, and late join.
-- Measure replicated component counts and late-join bytes for topology, `CMUZPhysics`, falling
-  state, viewer state, and vehicle traversal configuration.
+- Capture GPU time plus tile-heavy, weather, multiple-depth, and secondary-viewport client scenes.
+  Projected-light and stair CPU/frame/allocation distributions and blur frame overhead are already
+  measured.
+- Capture real packet distributions during level switches, falls, projectile traversal, topology
+  changes, and repeated controlled late joins. Isolated topology/physics/vehicle serialization and
+  one paired real late join are already measured.
 - Capture focused allocations for disabled falling diagnostics, vehicle support, opening/grid
-  lookups, PVS recipient filters, stair LOS, projected-light rays, speech, ordnance, and rendering
-  hot paths.
+  lookups, PVS recipient filters, speech, and remaining rendering hot paths. Stair/projected-light
+  LOS, continuous ordnance, and representative vehicle-landing work now have scoped evidence.
 - Capture topology lookup counters during initialization, late join, reconnect, traversal,
   topology mutation, and client rendering; the steady headless fast path is already clean.
 - Burst-test simultaneous falls, map transitions, roof propagation, mapping edits, and topology
-  lifecycle changes.
+  lifecycle changes. Initial construction and bottom-up teardown are measured; representative
+  middle/upper removal and bulk mapping edits remain.
 - Test latency-injected vehicle traversal and immediate cross-Z shooting at an opening.
 - Render-pipeline test speech bubbles, indicators, weather offsets, secondary cameras,
   `SnapCardinals`, stair origins, a future render-local culling replacement, blur, and projected

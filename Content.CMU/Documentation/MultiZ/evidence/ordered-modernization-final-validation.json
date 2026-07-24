@@ -1,0 +1,137 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-24",
+  "productCommit": "929236a56711080ec0bfc8b243e5241c5757b92a",
+  "scope": [
+    "MZ-017",
+    "MZ-001",
+    "MZ-045",
+    "MZ-046",
+    "MZ-014",
+    "MZ-040",
+    "MZ-008",
+    "MZ-037",
+    "MZ-052",
+    "MZ-053",
+    "MZ-057",
+    "MZ-062"
+  ],
+  "fiveMapGate": {
+    "artifact": "artifacts/multiz-phase4/20260724-mz057-062-after/evidence.json",
+    "sha256": "9128BE48D4E873FC9DCA6DDC8DD1A11631B661D93DF395D808DD7283EDF0BCA0",
+    "mapPrototype": "USSBushRedux",
+    "loadedMaps": 5,
+    "depths": [-1, 0, 1, 2, 3],
+    "hardGatesPassed": true,
+    "notes": "The final product source state passed map/depth, topology, teardown, profiler, viewer, and PVS lifecycle gates."
+  },
+  "builds": {
+    "client": {
+      "configuration": "Release",
+      "artifact": "artifacts/multiz-phase4/20260724-final-validation/client-build-final.log",
+      "sha256": "F25BE227FD3EF2CA4F5D8CAA359E1BD10C01DA29B74E0786AEF71E870B133AC7",
+      "warnings": 0,
+      "errors": 0,
+      "elapsed": "00:00:03.46"
+    },
+    "server": {
+      "configuration": "Release",
+      "artifact": "artifacts/multiz-phase4/20260724-final-validation/server-build-final.log",
+      "sha256": "8071FF21C7AE5DA8AD8A30CEBF5A6DDDCD1C9ED6F274139A6FDAF816A7C934C7",
+      "warnings": 0,
+      "errors": 0,
+      "elapsed": "00:00:41.14"
+    },
+    "concurrentAttempt": {
+      "result": "One build failed with CS2012 because both processes wrote the shared Content.Shared Release output.",
+      "serverArtifact": "artifacts/multiz-phase4/20260724-final-validation/server-build.log",
+      "serverArtifactSha256": "57685918B6B520627F62E6BDCC194084E26F361F4385D69F29833ED88A3C2CC5",
+      "resolution": "The required gates were rerun sequentially with shared compilation disabled and both passed."
+    }
+  },
+  "tests": {
+    "focusedUnit": {
+      "configuration": "DebugOpt",
+      "filter": "Content.Tests.Shared._CMU14.ZLevels or Content.Tests.Client._CMU14.ZLevels",
+      "artifact": "artifacts/multiz-phase4/20260724-final-validation/focused-unit-tests.log",
+      "sha256": "647349F0558ADA1BE52809B3CCE07E14890C0F0492B7D1A9FA47AD6275CC7316",
+      "passed": 123,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "194 ms"
+    },
+    "focusedIntegrationAndSandbox": {
+      "configuration": "DebugOpt",
+      "tests": [
+        "SandboxTest.Test",
+        "USSBushMultiZTest.LoadsNetworkAndResolvesActiveShipMarkers",
+        "USSBushMultiZTest.ReplicatesMinimumFallingAndVehicleTraversalState",
+        "USSBushMultiZTest.CombinesExistingMapsThroughLifecycle"
+      ],
+      "artifact": "artifacts/multiz-phase4/20260724-final-validation/focused-integration-sandbox.log",
+      "sha256": "45FD25032E84755AF1DF633D77E6AC30DEE191A90D1619DB61D06D3B4B5E052E",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1 m 3 s",
+      "sandbox": "Robust checked both client and shared content assemblies."
+    }
+  },
+  "clientServerStability": {
+    "configuration": "Release",
+    "mapPrototype": "USSBushRedux",
+    "serverWarmupSeconds": 20,
+    "clientWarmupSeconds": 45,
+    "captureSeconds": 15,
+    "fakeLagSeconds": 0,
+    "serverExitCode": 0,
+    "clientExitCode": 0,
+    "serverStderrBytes": 0,
+    "clientStderrBytes": 0,
+    "fullGameStateBytes": 720871,
+    "enteredInGame": true,
+    "inGameTransport": {
+      "sentBytes": 227191,
+      "receivedBytes": 3590,
+      "sentPackets": 347,
+      "receivedPackets": 35
+    },
+    "steadyWindowTransportDelta": {
+      "sentBytes": 18068,
+      "receivedBytes": 8494,
+      "sentPackets": 927,
+      "receivedPackets": 923
+    },
+    "artifacts": {
+      "runner": {
+        "path": "artifacts/multiz-phase4/20260724-final-validation/stability-final-run.log",
+        "sha256": "3DDEE78DAD3A07D07F9CF6380774F833B3D39F67B344F81C02EA0C91697BEE29"
+      },
+      "manifest": {
+        "path": "artifacts/multiz-phase4/20260724-final-validation/stability-final/manifest.json",
+        "sha256": "0C987C4B7A1C7735AAFA8B3080ED631C03DD8471D73B81659958373FBC43FCE4"
+      },
+      "serverStdout": {
+        "path": "artifacts/multiz-phase4/20260724-final-validation/stability-final/server.stdout.log",
+        "sha256": "BEDEB6A89828DDEA88315EBA7EE14D8401EDCF4ACE8FCDAFC45E3ED29DA97E17"
+      },
+      "clientStdout": {
+        "path": "artifacts/multiz-phase4/20260724-final-validation/stability-final/client.stdout.log",
+        "sha256": "530FF95CFC6A7BA8E35C2B4577ECF1EBA9A224D4D0BFA210A8954E99D6F2A189"
+      }
+    },
+    "knownNoise": "After the client requested graceful shutdown, the pre-existing RMC Mentor disconnect handler tried to send MentorMessagesReceivedMsg to the disconnected channel and logged one server error. It did not terminate either process and is outside the Multi-Z paths changed here."
+  },
+  "harnessChange": {
+    "path": "Tools/run_multiz_network_capture.ps1",
+    "behavior": "Construct redirected stdin with UTF-8 encoding without a preamble and write command bytes directly, preventing Windows PowerShell 5.1 from prefixing the first server-console command with a BOM.",
+    "validation": "The final run accepted 'cmu_znet_stats arm' and captured the InGame milestone; no unknown-command or toolshed parse failure remained."
+  },
+  "deferredRisks": [
+    "The stability run used one local client. It is not a two-client authority, prediction, reconciliation, reconnect, or remote-camera trial.",
+    "The final no-lag stability run does not replace the earlier 100 ms connection/state-application capture and neither capture drove a production vehicle over an edge.",
+    "The current client-render evidence has CPU/frame/allocation distributions but no isolated GPU timestamps; blur and multi-depth compositing remain behavior-preserving GPU work only.",
+    "Populated-round packet distributions, repeated controlled late joins, production vehicle/ordnance actors, topology mapping bursts, and long live rounds remain open.",
+    "The pre-existing Mentor disconnect-handler send-after-disconnect error remains visible on graceful client shutdown."
+  ]
+}

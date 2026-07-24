@@ -356,6 +356,26 @@ modules, their direct modified host adapters, and the added CMU compatibility sy
 These are deterministic code and integration checks. They are not substitutes for the live
 multiplayer, packet, CPU, GPU, and allocation captures required by Phase 4.
 
+### Ordered-queue final gate follow-up
+
+After all five Phase 4 performance groups, the final product state again passed the five-map
+`USSBushRedux` evidence gate. The focused CMU Z-level unit filter passed 123/123, and the combined
+integration filter passed 4/4: Robust sandbox type checks for both client-loaded assemblies plus
+Bush load/topology, minimum falling/vehicle replication, and map-combination lifecycle coverage.
+Sequential Release client and server builds each completed with zero warnings and errors.
+
+A fresh Release server/client run loaded Bush, accepted the armed network diagnostic before
+connection, received a 720,871-byte full game state, entered `InGame`, remained connected through
+the sample, and shut both processes down with exit code 0 and empty stderr. The capture harness
+was corrected to suppress the legacy Windows PowerShell redirected-stdin BOM; this changes only
+the validation command transport. The known RMC Mentor send-after-disconnect error still appears
+after graceful client shutdown and remains outside the Multi-Z scope.
+
+Exact artifact paths, SHA-256 hashes, filters, counters, and deferred risks are checked in at
+`evidence/ordered-modernization-final-validation.json`. These final gates validate build,
+sandbox/type loading, deterministic behavior, and one-client stability; they do not close the
+two-client, prediction, populated-round, or GPU risks below.
+
 ## Deferred to Phase 4 or explicit design
 
 - Two-client latency, prediction, reconciliation, late join, reconnect, and remote-camera sessions.

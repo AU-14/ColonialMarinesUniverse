@@ -63,8 +63,17 @@ function Start-DotnetProcess {
 
     $process = [Diagnostics.Process]::new()
     $process.StartInfo = $start
-    if (-not $process.Start()) {
-        throw "Failed to start dotnet $($Arguments -join ' ')"
+    $previousInputEncoding = [Console]::InputEncoding
+    try {
+        # .NET Framework constructs the redirected StreamWriter from the
+        # console encoding and otherwise emits its UTF-8 BOM as process input.
+        [Console]::InputEncoding = [Text.UTF8Encoding]::new($false)
+        if (-not $process.Start()) {
+            throw "Failed to start dotnet $($Arguments -join ' ')"
+        }
+    }
+    finally {
+        [Console]::InputEncoding = $previousInputEncoding
     }
 
     [pscustomobject]@{
@@ -72,6 +81,21 @@ function Start-DotnetProcess {
         StandardOutput = $process.StandardOutput.ReadToEndAsync()
         StandardError = $process.StandardError.ReadToEndAsync()
     }
+}
+
+function Send-ProcessInput {
+    param(
+        [Parameter(Mandatory)]
+        $Capture,
+
+        [Parameter(Mandatory)]
+        [string] $Command
+    )
+
+    # Keep server-console input independent of the caller's output encoding.
+    $bytes = [Text.Encoding]::UTF8.GetBytes($Command + [Environment]::NewLine)
+    $Capture.Process.StandardInput.BaseStream.Write($bytes, 0, $bytes.Length)
+    $Capture.Process.StandardInput.BaseStream.Flush()
 }
 
 function Stop-CapturedProcess {
@@ -87,7 +111,7 @@ function Stop-CapturedProcess {
         return
     }
 
-    $Capture.Process.StandardInput.WriteLine($Command)
+    Send-ProcessInput $Capture $Command
     if ($Capture.Process.WaitForExit(5000)) {
         return
     }
@@ -121,7 +145,7 @@ try {
         throw "Server exited before capture with code $($server.Process.ExitCode)."
     }
 
-    $server.Process.StandardInput.WriteLine('cmu_znet_stats arm')
+    Send-ProcessInput $server 'cmu_znet_stats arm'
 
     $client = Start-DotnetProcess @(
         (Join-Path $repoRoot 'bin\Content.Client\Content.Client.dll'),
@@ -142,13 +166,13 @@ try {
         throw "Client exited during warmup with code $($client.Process.ExitCode)."
     }
 
-    $server.Process.StandardInput.WriteLine('cmu_znet_stats reset')
+    Send-ProcessInput $server 'cmu_znet_stats reset'
     Start-Sleep -Seconds $CaptureSeconds
     if ($client.Process.HasExited) {
         throw "Client exited before capture with code $($client.Process.ExitCode)."
     }
 
-    $server.Process.StandardInput.WriteLine('cmu_znet_stats')
+    Send-ProcessInput $server 'cmu_znet_stats'
     Start-Sleep -Seconds 2
 }
 finally {

@@ -467,6 +467,50 @@ Raw evidence is `artifacts/multiz-phase4/20260724-mz057-062-before/evidence.json
 test passed 1/1. Checked `evidence/mz-057-062-gameplay-bursts.json` preserves hashes, exact
 distributions, work counts, validation, and deferred risks.
 
+## Ordered modernization final gates
+
+The final product source state passed the required `USSBushRedux` five-map gate in the MZ-057/MZ-062
+after capture: five maps at depths `[-1, 0, 1, 2, 3]`, one topology network, and successful
+map/depth, topology, teardown, profiler, viewer, and PVS lifecycle checks. Its raw evidence SHA-256
+is `9128BE48D4E873FC9DCA6DDC8DD1A11631B661D93DF395D808DD7283EDF0BCA0`.
+
+Final deterministic gates were:
+
+- Release `Content.Client`: 0 warnings, 0 errors; log SHA-256
+  `F25BE227FD3EF2CA4F5D8CAA359E1BD10C01DA29B74E0786AEF71E870B133AC7`.
+- Release `Content.Server`: 0 warnings, 0 errors; log SHA-256
+  `8071FF21C7AE5DA8AD8A30CEBF5A6DDDCD1C9ED6F274139A6FDAF816A7C934C7`.
+- DebugOpt focused CMU Z-level unit filter: 123 passed, 0 failed, 0 skipped; log SHA-256
+  `647349F0558ADA1BE52809B3CCE07E14890C0F0492B7D1A9FA47AD6275CC7316`.
+- DebugOpt combined integration/sandbox filter: 4 passed, 0 failed, 0 skipped in 1 minute
+  3 seconds. It ran Robust module type checks against both client-loaded assemblies plus Bush
+  load/topology, minimum falling/vehicle replication, and map-combination lifecycle cases. Log
+  SHA-256 is `45FD25032E84755AF1DF633D77E6AC30DEE191A90D1619DB61D06D3B4B5E052E`.
+
+An initial attempt to build client and server concurrently failed one build with `CS2012` because
+both processes wrote the same `Content.Shared` Release output. That is build orchestration
+contention, not a source failure. The gates above were rerun sequentially with shared compilation
+disabled and both passed.
+
+The fresh Release client/server stability run used `USSBushRedux`, 20 seconds of server warm-up,
+45 seconds of client warm-up, and a 15-second no-lag sample. The first server diagnostic command
+was accepted, the `InGame` milestone recorded 227,191 sent bytes across 347 packets, the client
+received a 720,871-byte full game state and entered `InGame`, and both processes exited 0 with
+empty stderr. The steady sample delta was 18,068 sent bytes/927 packets and 8,494 received
+bytes/923 packets. This is a stability/sample result, not a packet-improvement claim.
+
+The capture also retains one pre-existing RMC Mentor error after the client requested graceful
+shutdown: its disconnect handler attempted to send `MentorMessagesReceivedMsg` to the already
+disconnected channel. It did not terminate either process and is outside the changed Multi-Z
+paths, but the run is not described as error-free.
+
+Windows PowerShell 5.1 originally prefixed the first redirected server-console command with a
+UTF-8 BOM. The capture harness now constructs stdin with a no-preamble encoding and writes command
+bytes directly. The final run accepted `cmu_znet_stats arm`, so the earlier unknown-command
+artifact is excluded from the passing gate. Checked
+`evidence/ordered-modernization-final-validation.json` records every artifact path, SHA-256,
+counter, command filter, and deferred risk.
+
 ## Soak result
 
 The complete 18,000-tick Multi-Z soak ran to completion with 20 checkpoints:
@@ -527,17 +571,21 @@ reported regression. The finding is tracked as MZ-069.
 
 Phase 4 remains open until evidence covers, at minimum:
 
-- PVS scaling runs beyond the corrected eight-viewer snapshot;
-- a real two-client session covering server authority, prediction, reconciliation, late join,
-  reconnect, remote cameras, immediate cross-Z interaction, and injected latency;
-- packet and byte captures for topology state, PVS fan-out, component replication, level changes,
-  falls, projectile traversal, and late join;
-- client CPU, frame-time, allocation, and GPU captures for each view mode, projected lighting,
-  stair preview, weather, blur, multiple visible depths, and secondary viewports;
-- focused allocation and query captures for movement support, vehicles, opening searches, PVS
-  recipients, stair LOS, projected-light rays, speech, ordnance, and rendering;
-- burst captures for simultaneous falls, transitions, roof propagation, mapping edits, and
-  topology lifecycle changes;
+- populated-round 16/32/64-viewer PVS scheduling and real packet/bandwidth captures; the
+  deterministic higher-viewer allocation/CPU scaling gate is complete;
+- a real two-client session covering server authority, prediction, reconciliation, reconnect,
+  remote cameras, immediate cross-Z interaction, and injected latency; one-client late join and
+  100 ms connection/state application are complete;
+- packet and byte distributions for PVS fan-out, level changes, falls, projectile traversal, and
+  repeated controlled late joins; isolated topology/physics/vehicle serialization and one real
+  late join are complete;
+- GPU timestamps and tile-heavy/multi-depth/secondary-viewport client scenes; projected-light and
+  stair CPU/frame/allocation captures plus blur frame overhead are complete;
+- populated vehicle, ordnance, movement-support, speech, and opening-query captures; representative
+  vehicle-landing and continuous-ordnance bursts are complete;
+- burst captures for simultaneous falls/transitions, representative middle or upper topology
+  removals, mapping bulk edits, and populated reactor-powered-light changes; bottom-up teardown
+  and initial topology/power work are complete;
 - live audio, atmosphere-isolation, AI non-traversal, power-domain, and long-round stability
   validation;
 - repeated, order-controlled server baselines so load and tick conclusions use distributions
