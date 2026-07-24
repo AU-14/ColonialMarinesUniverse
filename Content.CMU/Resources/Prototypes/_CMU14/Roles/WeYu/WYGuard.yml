@@ -89,6 +89,12 @@
     ears: AU14ColonyWeylandHeadset
     ears2: RMCM5CameraGear
     suitstorage: RMCM77BeltPMCFilled
+  storage:
+    back:
+    - RMCMREWeYa
+    - CMCanteen
+    - CMU14TearGasGrenade
+    - RMCGrenadeFlashBang
 
 - type: entity
   parent: CMSpawnPointJobBase
