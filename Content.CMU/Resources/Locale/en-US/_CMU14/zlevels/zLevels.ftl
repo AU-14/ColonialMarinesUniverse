@@ -101,4 +101,5 @@ cmu-zlevel-ladder-retract-no-hand = You need an empty hand to retract the ladder
 cmu-zlevel-ladder-retract-finish = You retract the ladder.
 
 ui-options-header-cmu-zlevels = CMU Z-Levels
+ui-options-function-cmu-toggle-shoot-down-z-level = Toggle aiming down a Z-level
 ui-options-zlevel-blur = Z-level blur:
