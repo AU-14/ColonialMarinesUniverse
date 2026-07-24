@@ -1,0 +1,304 @@
+<Document>
+  # Getting On The Net
+
+  This page takes you from spawning in to holding a working conversation on a radio net. It assumes you have never touched the comms system before and explains every step as you take it.
+
+  If something does not work, the last section of this page lists what usually causes it.
+
+  <Box>
+    <GuideEntityEmbed Entity="AU14HeadsetGovforMarineFTL" Caption="Field Headset"/>
+    <GuideEntityEmbed Entity="ANPRC117GRadio" Caption="AN/PRC-117G"/>
+  </Box>
+
+  ## Step 1: Work out what you are carrying
+
+  Almost everybody spawns with a [bold]field headset[/bold] in their ears slot. This is your personal radio and it is all most roles ever need.
+
+  A small number of roles also spawn with an [bold]AN/PRC-117G[/bold] manpack radio in their back slot. It is large, it is obvious in your inventory, and it is the thing that makes everyone else's headset work.
+
+  Open your inventory and check both slots before you do anything else.
+
+  - [bold]Headset only[/bold] - read step 2, then step 3, then skip to the handset section.
+  - [bold]Headset and manpack[/bold] - read the whole page. You are the reason your squad has comms.
+
+  ## Step 2: Understand why radios go dead
+
+  This is the single thing that confuses new players most, so read it before you try to transmit.
+
+  Your headset is not a phone. It does not reach across the map on its own. Combat nets are [bold]relay-gated[/bold]: your headset only works if it is standing near something that anchors the net.
+
+  Anything on this list will anchor a net:
+
+  - A powered AN/PRC worn by a trained operator.
+  - A deployed retransmission station.
+  - A command-post antenna mast.
+  - A powered shipboard communications array.
+  - A vehicle radio aboard a dropship or vehicle, covering little more than the hull.
+  - A field antenna mast raised from ten metal sheets by engineering-trained personnel.
+
+  If none of those are within range of you, your squad net is dead. Not degraded. Dead. You will speak and nothing will happen.
+
+  This is why the radio operator matters, and it is why walking away from the person carrying the pack cuts you off. In a squad that is usually your [bold]Fireteam Leader[/bold].
+
+  Colony and civilian channels are the exception. They are not gated and work anywhere, which is also why anyone can listen to them.
+
+  ### How far is "near"
+
+  <Table Columns="2" MinForcedColumnWidth="120">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Distance from the anchor[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]What you get[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">0-30 tiles</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Clear traffic both ways.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">30-45 tiles</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Readable but degraded. Words go missing.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Beyond 45 tiles</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Nothing at all.</Box>
+    </ColorBox>
+  </Table>
+
+  Coverage reaches one level above or below the anchor, so a tunnel or a lower deck usually needs its own relay. Only a shipboard array covers a whole site vertically.
+
+  ## Step 3: Say something on your headset
+
+  With the headset worn in your ears slot, type a colon, the letter h, a space, and your message:
+
+  [color=#a4885c]:h Radio check, over.[/color]
+
+  If the net is anchored and somebody is listening, they will see your message with your callsign in front of it.
+
+  Your headset may carry more than one net. Examine the headset to see which prefixes it holds. Common ones:
+
+  - [color=#a4885c]:v[/color] for command, if your headset has the command key.
+  - [color=#a4885c]:a[/color] for Alpha, if your headset has the Alpha key.
+
+  A headset cannot use a net it does not have the key for. There is no way to add one in the field.
+
+  Note that your [bold]name is never transmitted[/bold]. Everyone on the net sees your callsign instead, friendly or hostile. Face to face speech is unaffected, so people standing next to you still hear you normally.
+
+  ## Step 4: Open the radio panel
+
+  Everything from here needs an AN/PRC on your back and the training to use it.
+
+  Only these roles can open the panel and transmit through the radio:
+
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Faction[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Trained roles[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]GOVFOR and OPFOR[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Commander, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, squad leaders, Fireteam Leaders, and Radio Traffic Operators.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]CLF[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Cell Leader and Radio Operator.</Box>
+    </ColorBox>
+  </Table>
+
+  Both regular factions field the same set of trained roles, so a captured enemy pack is useful to the same people on your side.
+
+  If you are not on that list the panel will not open for you. You have two ways round it: use somebody else's handset, covered further down, or read a [bold]field radio operator's pamphlet[/bold] if one is available, which trains you permanently.
+
+  To open it:
+
+  - Wear the radio in your [bold]back slot[/bold]. It does nothing in a bag or on the floor.
+  - Alt-click the radio, or open its verb menu.
+  - Select [bold]Open Radio Panel[/bold].
+
+  The panel opens with a status line across the top. Read it now, because it tells you what is wrong before you waste time hunting.
+
+  - [bold]READY[/bold] means the radio is worn and has an active net. This is what you want.
+  - [bold]NOT WORN[/bold] means it is not in your back slot.
+  - [bold]NO NET[/bold] means you have not set up a slot yet. That is normal on a fresh radio.
+  - [bold]STBY[/bold] means part of the setup is still incomplete.
+
+  ## Step 5: Add your first net
+
+  A fresh radio has no nets loaded. You build them yourself, into what the panel calls slots. The radio holds up to [bold]four[/bold].
+
+  Work through this in order:
+
+  - Select [bold]+ ADD NET[/bold]. An empty slot appears.
+  - Give it a short label, something like [bold]CMD[/bold] or [bold]ALPHA[/bold]. The label is cosmetic. It is only shown on your own radio and it does not pick the net for you.
+  - Select [bold]TUNE[/bold] on that slot.
+  - Open the [bold]NET[/bold] tab and pick a named faction net from the list.
+  - Select the slot row itself so it becomes the [bold]active[/bold] slot.
+
+  That last step catches people out constantly. Adding a net does not select it. The active slot is the one you actually transmit on, and it is the row that is highlighted.
+
+  Instead of a named net you can enter a raw frequency in the [bold]FREQ[/bold] tab. Frequencies work with or without the decimal point, so [color=#a4885c]1606[/color] and [color=#a4885c]1.606[/color] are the same thing. Use this for tuning to somebody else's net, which is covered in the AN/PRC guide.
+
+  Two more buttons on each slot:
+
+  - [bold]CLEAR[/bold] empties the slot but keeps it and its label.
+  - [bold]DEL[/bold] removes the slot entirely.
+
+  ## Step 6: Load your COMSEC fill
+
+  Most faction nets are meant to be encrypted, and the AN/PRC does not carry its own keys. It reads them off a physical card.
+
+  - Find your issued [bold]fill card[/bold] in your kit.
+  - Insert it into the radio's fill card slot.
+  - Check the COMSEC panel. It should read [bold]SECURED[/bold].
+
+  If you transmit on a secured faction net with no matching fill, the radio warns you and [bold]sends the message anyway, in the clear[/bold]. It does not stop you. Anyone listening on that frequency reads it, and you light up enemy direction finding while you do it.
+
+  Treat a fill warning as a mistake to fix, not a message to click past.
+
+  ## Step 7: Transmit
+
+  With a slot active, transmit through the radio the same way you use a headset, but with [color=#a4885c]:r[/color]:
+
+  [color=#a4885c]:r HAVOC 6, this is ALPHA ROMEO, radio check, over.[/color]
+
+  [color=#a4885c]:r[/color] always goes out on whichever slot is currently active. If you have four nets loaded and speak on the wrong one, that is almost always because you forgot to change the active slot first.
+
+  Your transmission goes out under your callsign. A worn radio follows the wearer's assigned callsign automatically, shown on the panel as [bold]AUTO[/bold]. If you have no callsign assigned you will transmit as [bold]UNKNOWN STATION[/bold], which is worth fixing before anyone needs you.
+
+  ## Step 8: Confirm it actually works
+
+  Do not assume. Select [bold]RADIO CHECK[/bold] on the panel.
+
+  The radio sends [bold]RADIO CHECK, HOW COPY, OVER[/bold] on the active net, then gives you a private report listing which stations hear you clearly and which hear you degraded.
+
+  This is the fastest way to answer "is my net working" without bothering anyone, and you should run it before you move somewhere new and after you set up.
+
+  If you run it while sitting inside enemy jamming, the report also gives you a bearing to the strongest jammer, which is useful intelligence on its own.
+
+  ## The handset: how everyone else uses your radio
+
+  The handset is how someone without radio training talks on a net they do not otherwise have. A squad leader reaching the command net through their Fireteam Leader is the standard case.
+
+  To take it:
+
+  - Stand within about [bold]two and a half tiles[/bold] of the radio or the person wearing it.
+  - Make sure you have a [bold]free hand[/bold]. You cannot take it with both hands full.
+  - Alt-click the wearer, or the deployed radio.
+  - Select [bold]Take Handset[/bold].
+
+  Now read this part carefully, because it surprises people and it has consequences.
+
+  [bold]While you are holding the handset, anything you say out loud goes out on the net.[/bold] You do not need a prefix. Talking normally to the person next to you transmits it to every station on that net.
+
+  To speak without transmitting, [bold]whisper[/bold]. Whispered speech stays off the air.
+
+  The rest of the handset's behaviour:
+
+  - It transmits on the radio's [bold]active slot[/bold], whatever the operator last selected.
+  - It uses [bold]your[/bold] callsign, not the radio operator's.
+  - Only one person can hold it at a time.
+  - Walk out of range and the cord yanks out of your hand and disconnects you.
+  - Select [bold]Hang Up Handset[/bold] to return it.
+
+  One exception: if you are wearing your own AN/PRC, holding someone else's handset does not open your mic. Your own pack takes priority and normal [color=#a4885c]:r[/color] discipline applies.
+
+  ## When it does not work
+
+  Work down this list in order. It is roughly ordered by how often each one is the real problem.
+
+  <Table Columns="2" MinForcedColumnWidth="120">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Symptom[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Check[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Nobody answers on a squad or command net</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">There is no anchor in range. Find your Fireteam Leader, a mast, or an array. This is the answer most of the time.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[color=#a4885c]:r[/color] goes out on the wrong net</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">The wrong slot is active. Select the row you want first.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">The panel will not open</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Your role is not radio trained, or the radio is not in your back slot.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Traffic arrives broken or full of static</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">You are at the edge of coverage, or you are being jammed. Move closer to the anchor.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">AN/PRC traffic arrives as pure static</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">One of the two radios does not have matching COMSEC fill.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">A net key is missing from your headset</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Examine it to confirm. You cannot add keys in the field. Use a handset instead.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">You transmit as UNKNOWN STATION</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">You have no callsign assigned. Command can assign one from the net directory.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">You said something private and it went out on the net</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">You are holding a handset. Hang it up, or whisper.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">The radio has gone completely dead</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Check the battery in its internal slot. Searching and high transmit power drain it quickly.</Box>
+    </ColorBox>
+  </Table>
+
+  ## Where to go next
+
+  - [textlink="AN/PRC-117G Radio" link="AU14CommsANPRC"] - everything else the manpack does: operating modes, transmit power, retransmission stations, band searching, and intercepting enemy traffic.
+  - [textlink="Field Headsets" link="AU14CommsHeadsets"] - direct frequencies, tuning, and headset-specific behaviour.
+  - [textlink="Voice Procedure" link="AU14CommsVoiceProcedure"] - how to actually word a transmission so it is understood the first time.
+  - [textlink="Comms Quick Reference" link="AU14CommsQuickRef"] - the tables on one page, for when you know what you are doing and just need a number.
+</Document>

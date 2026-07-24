@@ -35,6 +35,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
     [Dependency] private ANPRCGarbleSystem _garble = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
+    [Dependency] private ANPRCSweepSystem _sweep = default!;
 
     // direct frequencies reach one z-level up or down, same as a worn manpack
     private const int DirectFreqLevelReach = 1;
@@ -134,6 +135,10 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         var senderPos = _transform.GetWorldPosition(sender);
         var senderMap = Transform(sender).MapID;
         var senderJam = _garble.GetJamIntensity(sender);
+
+        // custom frequencies radiate like any other, so a search receiver can find the
+        // squad nets an RTO thought were private for being off the published plan
+        _sweep.RecordEmission(sender, frequency);
 
         var query = EntityQueryEnumerator<TunedFrequencyComponent, TransformComponent>();
 

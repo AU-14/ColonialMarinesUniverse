@@ -33,6 +33,9 @@ public sealed class ANPRCRadioBoundUserInterface : BoundUserInterface
         _window.OnRadioCheck += () => SendMessage(new ANPRCRadioCheckMsg());
         _window.OnOpenDirectory += () => SendMessage(new ANPRCOpenDirectoryMsg());
         _window.OnManualFrequency += (slot, text) => SendMessage(new ANPRCManualFrequencyMsg(slot, text));
+        _window.OnSetSweep += enabled => SendMessage(new ANPRCSetSweepMsg(enabled));
+        _window.OnTuneContact += (slot, freq) => SendMessage(new ANPRCTuneContactMsg(slot, freq));
+        _window.OnPrintLog += intercepts => SendMessage(new ANPRCPrintLogMsg(intercepts));
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

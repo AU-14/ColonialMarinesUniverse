@@ -1,3 +1,4 @@
+## legacy/deprecated - do not use
 - type: job
   parent: CMJobBase
   id: AU14JobGeneralWhitelist

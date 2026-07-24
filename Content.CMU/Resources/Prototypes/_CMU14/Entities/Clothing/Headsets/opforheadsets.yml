@@ -87,7 +87,7 @@
 
 # ├──[ HEADSETS ]────────────────────────────────────────────────────┤
 - type: entity
-  parent: RMCHeadsetShip
+  parent: AU14HeadsetMilitaryBase
   id: AU14HeadsetOpforMarine
   name: OPFOR section radio headset
   description: This is used by OPFOR personnel to communicate on the radio.
@@ -104,8 +104,8 @@
     - SquadLeader
     - FireteamLeader
     - BattleBuddy
-    - SeniorEnlistedAdvisor
     - PrimaryLandingZone
+    - OpforSeniorEnlistedAdvisor
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -113,6 +113,8 @@
   name: OPFOR Command radio headset
   description: This is used by OPFOR command members to communicate on the radio.
   components:
+  - type: Sprite
+    state: mco_headset
   - type: ContainerFill
     containers:
       key_slots:

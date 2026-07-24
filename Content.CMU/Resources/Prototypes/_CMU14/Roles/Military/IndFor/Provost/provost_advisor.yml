@@ -1,0 +1,81 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostAdvisor
+  name: cmu-job-name-corp-provost-advisor
+  description: cmu-ghost-role-information-provost-description
+  icon: CMUJobIconProvostAdvisor
+  startingGear: CMUGearProvostAdvisor
+  playTimeTracker: CMJobProvostAdvisor
+  ranks:
+    CMURankProvostAdvisor: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+  - type: SquadArmorWearer
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-advisor
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pve_advisor
+  - type: ANPRCRadioUser
+
+- type: playTimeTracker
+  id: CMJobProvostAdvisor
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMUJobIconProvostAdvisor
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_pva
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostAdvisor
+  name: provost role advisor
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostAdvisor
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostAdvisor
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-advisor
+    description: cmu-ghost-role-information-provost-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostAdvisor
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostAdvisor
+  equipment:
+    head: RMCHeadBeretProvostSenior
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetProvostAllCommand
+    jumpsuit: CMJumpsuitProvostSenior
+    outerClothing: RMCProvostJacketFilled
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    id: CMUIDCardProvostAdvisor
+    belt: CMBeltSecurityMPFilled
+    back: CMSatchelSecurityFilledProvost
+    pocket1: RMCUniversalRecorder
+    pocket2: RMCPouchGeneralLarge

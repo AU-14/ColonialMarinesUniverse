@@ -41,7 +41,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobCommandWhitelist
   supervisors: au14-job-supervisors-orbital
   accessGroups:
   - Colonist
@@ -135,7 +135,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobCommandWhitelist
   supervisors: au14-job-supervisors-orbital
   accessGroups:
   - Colonist
@@ -229,7 +229,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobCommandWhitelist
   supervisors: au14-job-supervisors-orbital
   accessGroups:
   - Colonist
@@ -322,7 +322,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobCommandWhitelist
   supervisors: au14-job-supervisors-orbital
   accessGroups:
   - Colonist
@@ -414,7 +414,7 @@
   requireAdminNotify: false
   joinNotifyCrew: false
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobCommandWhitelist
   supervisors: au14-job-supervisors-orbital
   accessGroups:
   - Colonist

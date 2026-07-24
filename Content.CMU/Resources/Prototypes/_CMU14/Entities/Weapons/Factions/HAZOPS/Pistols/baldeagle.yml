@@ -16,7 +16,7 @@
     accuracyMultiplierUnwielded: 0.85
   - type: Gun
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_kt42.ogg
+      path: /Audio/_AU14/Weapons/m50/desert_eagle_fire.ogg
   - type: PumpAction
     sound:
       path: /Audio/_RMC14/Weapons/Guns/Cock/gun_pistol_cocked.ogg

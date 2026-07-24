@@ -975,7 +975,7 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetChances
-  planetText: "Date 2181 -  Chances Claim - Weyland Administrated Frontier Colony entangled with organized crime"
+  planetText: "Date 2182 - Chances Claim, a Weyland-Yutani Administrated Frontier Mining Colony entangled in the middle of a horrible crime wave."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV747
@@ -983,11 +983,11 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetShepherdsPride
-  planetText: "Date 2181 - Shepherds' Pride, a wildlife reserve."
+  planetText: "Date 2180 - Shepherds' Pride, a wildlife reserve on the fringes of the Neroid Sector."
 
 - type: lorePrimer
   id: AU14PrimerPlanetStableGarrison
-  planetText: "Date 2181 - Stable Garrison, a UA controlled frontier world with a joint base and sizeable urban community."
+  planetText: "Date 2183 - Stable Garrison, a UA controlled frontier world with a joint base and sizeable urban community."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV624
@@ -1006,11 +1006,11 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetLV327
-  planetText: "Date 2181 - Port Nereid, a valuable waterport on a frontier world, UA controlled."
+  planetText: "Date 2181 - Port Nereid, a valuable waterport, atmospheric processor and transit hub on the Neroid Sector frontier world LV-109, named 'Elgin's Folley'. Port Nereid is a joint-venture colony established by the United Americas Colonial Administration and Weyland-Yutani."
 
 - type: lorePrimer
   id: AU14PrimerPlanetCorsatStation
-  planetText: "Date 2181 - Corsat Station, Weyland-Yutani operated research station."
+  planetText: "Date 2181 - Corsat Station, a Weyland-Yutani operated research and prison station."
 
 - type: lorePrimer
   id: AU14PrimerPlanetLament
@@ -1018,7 +1018,7 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetSorokyne
-  planetText: "Date 2186 - Sorokyne Strata. Union of Progressive People's research outpost."
+  planetText: "Date 2186 - Sorokyne Strata. A major Union of Progressive People's research outpost in the Neroid Sector."
 
 - type: lorePrimer
   id: AU14PrimerPlanetTrijent
@@ -1026,15 +1026,15 @@
 
 - type: lorePrimer
   id: AU14PrimerPlanetShivasSnowball
-  planetText: "Date 2177 - Shivas' Snowball. United Americas mining and research colony."
+  planetText: "Date 2177 - Shivas' Snowball. A United Americas mining and research colony."
 
 - type: lorePrimer
   id: AU14PrimerPlanetKutjevo
-  planetText: "Date 2181 - Kutjevo Biolab. Level three facility operated by the Weyland-Yutani Corporation."
+  planetText: "Date 2181 - Kutjevo Biolab. A level three biohazard containment and research facility operated by the Weyland-Yutani Corporation."
 
 - type: lorePrimer
   id: AU14PrimerPlanetFiorina
-  planetText: "Date 2181 - Fiorina Prison. Privately owned  and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."
+  planetText: "Date 2181 - Fiorina Prison. Privately owned and operated by the Weyland-Yutani corporation, Fiorina 161 is a maximum security prison for the most dangerous criminals in the system."
 
 
 - type: entity
@@ -1109,4 +1109,4 @@
 
 - type: lorePrimer
   id: CMUPrimerHopesRetreat
-  planetText: "Date: 2181. Tidally-locked planet JE-1758 Ascanius, locally referred to as Hope's Retreat by colonists. Nominally under an ICSC charter but host to various facilities of various allegiances, including the United Americas, Union of Progressive Peoples and Three-World Empire."
+  planetText: "Date - 2181. Tidally-locked planet JE-1758 Ascanius, locally referred to as Hope's Retreat by colonists. Nominally under an ICSC charter but host to various facilities of various allegiances, including the United Americas, Union of Progressive Peoples and Three-World Empire."

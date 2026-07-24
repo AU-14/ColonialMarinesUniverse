@@ -165,8 +165,10 @@ public sealed partial class ANPRCRadioSystem
                 TryComp(wearing.Radio, out ANPRCRadioComponent? logRadio) &&
                 logRadio.Enabled)
             {
-                // log headset traffic under what actually went on air
-                var logName = TryComp(ent.Owner, out AU14CallsignComponent? ownCallsign) &&
+                // log headset traffic under what actually went on air: the callsign
+                // on a callsign-faction net, the plain name on an open channel
+                var logName = AU14Callsigns.IsCallsignChannel(args.Channel) &&
+                              TryComp(ent.Owner, out AU14CallsignComponent? ownCallsign) &&
                               !string.IsNullOrEmpty(ownCallsign.Callsign)
                     ? ownCallsign.Callsign
                     : Name(ent.Owner);
@@ -211,6 +213,14 @@ public sealed partial class ANPRCRadioSystem
     {
         var radio = pack.Comp;
 
+        // the set cannot search and talk at once. stay silent or stop sweeping
+        if (radio.SweepEnabled)
+        {
+            args.Channel = null;
+            _cmChat.ChatMessageToOne(Loc.GetString("anprc-sweep-tx-blocked"), speaker);
+            return;
+        }
+
         // callsign goes out as the speaker name, message body carries no prefix
         var outMessage = args.Message;
 
@@ -240,6 +250,14 @@ public sealed partial class ANPRCRadioSystem
 
         _powerCell.TryUseCharge(pack.Owner, GetTransmitCost(radio));
 
+        // callsigns are procedure on the callsign factions' nets only. a pack tuned
+        // to an open channel - colony, WEYU, CMB - puts the speaker on air under
+        // their own name and rank, and the log records what actually went out
+        var callsignNet = _commsEnabled && AU14Callsigns.IsCallsignChannel(channel);
+
+        if (!callsignNet)
+            senderName = Name(speaker);
+
         var unsecured = !string.IsNullOrEmpty(channel.Faction) &&
                         radio.Mode != RadioMode.PlainText &&
                         !_crypto.HasMatchingCrypto(pack.Owner, channel);
@@ -264,16 +282,17 @@ public sealed partial class ANPRCRadioSystem
             EnsureComp<TelecomExemptComponent>(pack.Owner);
 
         // strip the job prefix for the duration of the send so the radio line is just
-        // the callsign, no name no role. with the overhaul disabled this goes out unmasked
+        // the callsign, no name no role. with the overhaul disabled, or on an open
+        // channel where the callsign does not apply, this goes out unmasked
         JobPrefixComponent? jobPrefix = null;
-        var hadJobPrefix = _commsEnabled && TryComp(speaker, out jobPrefix);
+        var hadJobPrefix = callsignNet && TryComp(speaker, out jobPrefix);
         var savedPrefix = jobPrefix?.Prefix ?? default;
         var savedAdditionalPrefix = jobPrefix?.AdditionalPrefix;
 
         if (hadJobPrefix)
             RemComp<JobPrefixComponent>(speaker);
 
-        radio.NameMaskActive = _commsEnabled;
+        radio.NameMaskActive = callsignNet;
 
         try
         {

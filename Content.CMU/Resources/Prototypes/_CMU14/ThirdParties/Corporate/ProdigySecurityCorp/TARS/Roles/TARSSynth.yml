@@ -1,6 +1,7 @@
 - type: job
   parent: AU14JobTARSPartyContractorBase
   id: AU14JobProdigyTARSPartySynth
+  isSynthetic: true
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: ProdigyTARSPartySynth
@@ -57,6 +58,7 @@
   description: au14-prodigyrescue-description
   playTimeTracker: AU14JobProdigyTARSPartySynthTracker
   whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
   ranks:
     AU14RankPrDSynth5:
     - !type:RoleTimeRequirement

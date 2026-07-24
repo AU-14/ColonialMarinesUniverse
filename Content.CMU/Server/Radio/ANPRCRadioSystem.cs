@@ -20,6 +20,7 @@ using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
+using Content.Shared.Paper;
 using Content.Shared.Item;
 using Content.Shared.PowerCell;
 using Content.Shared.Popups;
@@ -54,6 +55,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private ANPRCFrequencyPlanSystem _freqPlan = default!;
     [Dependency] private ANPRCGarbleSystem _garble = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
+    [Dependency] private ANPRCSweepSystem _sweep = default!;
+    [Dependency] private PaperSystem _paper = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
     [Dependency] private TacticalMapSystem _tacticalMap = default!;
@@ -125,6 +128,9 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             subs.Event<ANPRCManualFrequencyMsg>(OnManualFrequency);
             subs.Event<ANPRCRadioCheckMsg>(OnRadioCheck);
             subs.Event<ANPRCOpenDirectoryMsg>(OnOpenDirectory);
+            subs.Event<ANPRCSetSweepMsg>(OnSetSweep);
+            subs.Event<ANPRCTuneContactMsg>(OnTuneContact);
+            subs.Event<ANPRCPrintLogMsg>(OnPrintLog);
         });
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCPlantDoAfterEvent>(OnPlantDoAfter);
@@ -136,6 +142,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<PropCallerComponent, MapInitEvent>(OnAdminObserverMapInit);
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCDirectScanSwitchedEvent>(OnDirectScanSwitched);
+        SubscribeLocalEvent<ANPRCRadioComponent, ANPRCSweepStoppedEvent>(OnSweepStopped);
+        SubscribeLocalEvent<ANPRCRadioComponent, ANPRCSweepUpdatedEvent>(OnSweepUpdated);
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCCryptoChangedEvent>(OnCryptoChanged);
         SubscribeLocalEvent<ANPRCRadioComponent, PowerCellSlotEmptyEvent>(OnBatteryEmpty);
         SubscribeLocalEvent<ANPRCRadioComponent, EntInsertedIntoContainerMessage>(OnAntennaInserted);
@@ -197,12 +205,21 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         {
             var heard = _garble.ApplyComsecGarble(args.MessageSource, ent.Owner, args.Channel, args.Message);
 
+            // traffic on somebody else's faction net is an intercept: flagged in the
+            // log so it can be picked back out and carried off the radio on paper
+            var intercepted = !string.IsNullOrEmpty(args.Channel.Faction) &&
+                              !string.Equals(
+                                  args.Channel.Faction,
+                                  radio.OperatorFaction,
+                                  StringComparison.OrdinalIgnoreCase);
+
             AppendNetLog(
                 radio,
                 _timing.CurTime.TotalSeconds,
                 GetSenderDisplayName(args.MessageSource),
                 $"{args.Channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(args.Channel))} MHz)",
-                heard);
+                heard,
+                intercepted);
 
             UpdateBuiState(ent);
 
@@ -308,6 +325,11 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     private void GrantReceiveChannels(Entity<ANPRCRadioComponent> radio)
     {
         if (!radio.Comp.Enabled || (!radio.Comp.IsEquipped && !radio.Comp.Planted))
+            return;
+
+        // the set has one receiver. searching the band means it is not sitting on any
+        // of the operator's own nets - going deaf is the price of hunting
+        if (radio.Comp.SweepEnabled)
             return;
 
         var active = EnsureComp<ActiveRadioComponent>(radio.Owner);
@@ -636,6 +658,17 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         UpdateBuiState(ent);
     }
 
+    private void OnSweepStopped(Entity<ANPRCRadioComponent> ent, ref ANPRCSweepStoppedEvent args)
+    {
+        UpdateEquippedChannels(ent);
+        UpdateBuiState(ent);
+    }
+
+    private void OnSweepUpdated(Entity<ANPRCRadioComponent> ent, ref ANPRCSweepUpdatedEvent args)
+    {
+        UpdateBuiState(ent);
+    }
+
     private void UpdateEquippedChannels(Entity<ANPRCRadioComponent> ent)
     {
         RevokeReceiveChannels(ent);
@@ -693,9 +726,10 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         double timestamp,
         string sender,
         string channel,
-        string message)
+        string message,
+        bool intercepted = false)
     {
-        radio.NetLog.Enqueue(new ANPRCNetLogEntry((float) timestamp, sender, channel, message));
+        radio.NetLog.Enqueue(new ANPRCNetLogEntry((float) timestamp, sender, channel, message, intercepted));
 
         while (radio.NetLog.Count > ANPRCRadioComponent.MaxNetLogEntries)
         {

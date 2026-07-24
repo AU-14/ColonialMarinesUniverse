@@ -1,0 +1,82 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostSpcComms
+  name: cmu-job-name-corp-provost-spc-comms
+  description: cmu-ghost-role-information-provost-spc-comms-description
+  icon: CMUJobIconProvostSpecialist
+  startingGear: CMUGearProvostSpcComms
+  playTimeTracker: CMJobProvostSpcComms
+  spawnMenuRoleName: Provost Spc Comms
+  ranks:
+    CMURankProvostSpcComms: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 1
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+      RMCSkillJtac: 4
+      RMCSkillIntel: 3
+      RMCSkillLeadership: 2
+      RMCSkillOverwatch: 2
+      RMCSkillMedical: 1
+      RMCSkillEngineer: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-spc-comms
+  - type: ANPRCRadioUser
+
+- type: playTimeTracker
+  id: CMJobProvostSpcComms
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostSpcComms
+  name: provost role spc comms
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostSpcComms
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostSpcComms
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-spc-comms
+    description: cmu-ghost-role-information-provost-spc-comms-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostSpcComms
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostSpcComms
+  equipment:
+    head: RMCHeadBeretProvostSenior
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetProvostAllCommand
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvostLight
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    id: CMUIDCardProvostSpcComms
+    belt: AU14BeltUtilityGeneralBlack
+    back: ANPRC117GRadio
+    pocket1: AU14RadioJammer
+    pocket2: RMCPouchGeneralLarge
+  storage:
+    belt:
+    - ANPRCFreqCard
+    - ANPRCFreqCardOPFOR
+    - ANPRCFillCardGOVFOR
+    - ANPRCFillCardOPFOR

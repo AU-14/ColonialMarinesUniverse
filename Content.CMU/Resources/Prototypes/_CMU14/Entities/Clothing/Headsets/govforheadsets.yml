@@ -88,7 +88,7 @@
 
 # ├──[ HEADSETS ]────────────────────────────────────────────────────┤
 - type: entity
-  parent: RMCHeadsetShip
+  parent: AU14HeadsetMilitaryBase
   id: AU14HeadsetGovforMarine
   name: GOVFOR section radio headset
   description: This is used by GOVFOR personnel to communicate on the radio.
@@ -114,6 +114,8 @@
   name: GOVFOR Command radio headset
   description: This is used by GOVFOR command members to communicate on the radio.
   components:
+  - type: Sprite
+    state: mco_headset
   - type: ContainerFill
     containers:
       key_slots: # give all usable keys for emergencies/promotions

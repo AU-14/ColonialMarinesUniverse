@@ -77,18 +77,24 @@
   id: TWEColony
   name: origin-twe-colony-name
   description: origin-twe-colony-description
+  languages:
+    - Japanese
   roundStart: true
 
 - type: Origin
   id: TWEMars
   name: origin-twe-mars-name
   description: origin-twe-mars-description
+  languages:
+    - Japanese
   roundStart: true
 
 - type: Origin
   id: TWELuna
   name: origin-twe-luna-name
   description: origin-twe-luna-description
+  languages:
+    - Japanese
   roundStart: true
 
 - type: Origin
@@ -101,6 +107,8 @@
   id: TWEOther
   name: origin-twe-other-name
   description: origin-twe-other-description
+  languages:
+    - Japanese
   roundStart: true
 
 - type: Origin
@@ -420,4 +428,14 @@
   description: origin-icsc-pakistan-description
   languages:
     - Urdu
+  roundStart: true
+
+# Prodigy
+
+- type: Origin
+  id: ProdigyNewSiam
+  name: origin-prodigy-newsiam-name
+  description: origin-prodigy-newsiam-description
+  languages:
+    - Mandarin
   roundStart: true

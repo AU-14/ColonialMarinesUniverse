@@ -46,14 +46,11 @@
 
   The AN/PRC panel can be operated by:
 
-  - Radio Traffic Operators
-  - Commanders
-  - Officer Adjutants
-  - Advisors
-  - Platoon Sergeants
-  - CLF Cell Leaders
+  - [bold]GOVFOR and OPFOR[/bold] - Commander, Adjutant, staff officers, engineering officers, intelligence officers, synthetics, squad leaders, Fireteam Leaders, and Radio Traffic Operators.
+  - [bold]CLF[/bold] - Cell Leader and Radio Operator.
+  - Anyone who has read a [bold]field radio operator's pamphlet[/bold].
 
-  The handset can be used by anyone within range.
+  The handset can be used by anyone within range, trained or not.
 
   ## Signal Range
 
@@ -422,4 +419,69 @@
   [bold]RADIO CHECK[/bold] reports which stations receive the active net clearly or with degradation.
 
   When used inside a jammer field, it also reports a bearing to the strongest jammer.
+
+  ## SEARCH
+
+  [bold]START SEARCH[/bold] walks the band hunting for other factions' frequencies.
+
+  While searching:
+
+  <Table Columns="2" MinForcedColumnWidth="110">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Effect[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Value[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Loaded nets</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">All dropped. You hear nothing.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Transmit</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Inhibited.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Full band pass</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Approximately 80 seconds.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Catches a frequency if</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">It carried traffic within the last 20 seconds, within 60 tiles, on the same level.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Catches to resolve</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">4.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Partial contact decay</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Full decay in roughly 50 seconds without another catch.</Box>
+    </ColorBox>
+  </Table>
+
+  Contacts below half confidence are hidden, above it show an approximate frequency, and at full confidence resolve to an exact frequency and net name.
+
+  ## Net Log
+
+  Stores the last [bold]50[/bold] entries. Other factions' traffic is flagged [bold]INTERCEPT[/bold].
+
+  [bold]PRINT LOG[/bold] and [bold]PRINT INTERCEPTS[/bold] transcribe it to paper.
 </Document>
