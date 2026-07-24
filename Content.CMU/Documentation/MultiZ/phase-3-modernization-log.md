@@ -424,6 +424,30 @@ in 37 seconds. Blur policy coverage expanded from four directional cases to 7/7 
 explicit default, zero-strength, and positive-strength assertions. No performance improvement is
 claimed for either correction.
 
+### Post-validation Multi-Z grate localization correction
+
+The reported client warning burst came from the tile-spawning UI localizing `TileDefinition.Name`.
+`multiztiles.yml` supplied raw English display text in 22 name fields rather than Fluent IDs. The
+smallest behavior-preserving correction assigns 16 `tiles-cmu-multiz-*` IDs and maps them back to
+the exact existing en-US labels. Tile IDs, sprites, inheritance, destructibility, transparency,
+mass, map data, and editor visibility are unchanged.
+
+The focused client integration regression resolves the same localization path for all 20 concrete
+Multi-Z grate tiles and passed 1/1 in 37 seconds. The combined sandbox/type-check and required
+five-map Bush load/topology/replication/lifecycle gate passed 5/5 in 1 minute 20 seconds. Release
+client and server builds completed with zero warnings and errors.
+
+A fresh 68.847-second Release Bush client/server run received a 929,193-byte full game state,
+entered `InGame`, exited both processes 0 with empty stderr, and logged zero unknown localization
+IDs. It also logged three `MainLoop: Cannot keep up!` warnings, demonstrating that the catch-up
+signal is separate from this localization correction. This change makes no CPU, GPU, allocation,
+packet, or load-time improvement claim.
+
+The repo-wide YAML validator still reports 524 unrelated aggregate errors (964 emitted client and
+server error lines), with no error referencing the changed Multi-Z tile file or localization IDs.
+The exact evidence and hashes are checked in at
+`evidence/multiz-tile-localization-fix.json`.
+
 ## Deferred to Phase 4 or explicit design
 
 - Two-client latency, prediction, reconciliation, late join, reconnect, and remote-camera sessions.

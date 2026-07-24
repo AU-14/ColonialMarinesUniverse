@@ -638,6 +638,39 @@ stability evidence only: no CPU, GPU, allocation, or packet improvement is claim
 lower-pass confirmation and a populated real-seat drive under latency/two-client reconciliation
 remain deferred.
 
+## Multi-Z grate localization warning correction
+
+The client warning report reproduced a data-contract issue at the tile-spawning UI boundary:
+`Loc.GetString(tile.Name)` received raw English names from the Multi-Z grate definitions. The
+reported sample contained 18 unknown-message warnings. Static source inspection found 22 affected
+name assignments, representing 16 distinct labels across 20 concrete tiles and two abstract
+parents.
+
+The correction changes only those names to CMU-owned Fluent IDs and defines exact en-US values for
+the existing display text. It does not change any tile ID, sprite, inheritance, destructibility,
+map serialization, visibility, or gameplay property. A focused client integration test exercises
+the UI's localization operation for all 20 concrete variants and passed 1/1 in 37 seconds. The
+required sandbox/type-check, five-map Bush load/topology, minimum falling/vehicle replication, and
+map-combination lifecycle gate passed 5/5 in 1 minute 20 seconds. Sequential Release client and
+server builds passed with zero warnings and errors in 58.29 and 20.85 seconds.
+
+The after-fix Release stability capture used 20 seconds of server warm-up, 30 seconds of client
+warm-up, and a 10-second sample. It completed in 68.847 seconds; both processes exited 0, both
+stderr logs were empty, the client received a 929,193-byte full game state and entered `InGame`,
+and neither process logged an unknown message ID. One late guidebook `MsgEntity` (`Diff: -209`)
+and the known RMC Mentor send-after-disconnect error occurred without a fatal or unhandled
+signature.
+
+Three `MainLoop: Cannot keep up!` warnings remained in the after-fix run. A shorter pre-fix startup
+capture also produced a catch-up warning without entering the tile-menu localization path. The
+catch-up warnings are therefore recorded as separate load/tick evidence; this correction claims no
+performance improvement. The four indestructible half-grate prototypes also retain their existing
+`Destroyable Half Grate` display labels pending an explicit naming decision.
+
+Checked evidence is in `evidence/multiz-tile-localization-fix.json`; raw logs are under
+`artifacts/multiz-phase4/20260724-tile-localization-before` and
+`artifacts/multiz-phase4/20260724-tile-localization-after`.
+
 ## Remaining Phase 4 exit work
 
 Phase 4 remains open until evidence covers, at minimum:
