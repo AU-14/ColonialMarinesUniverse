@@ -71,6 +71,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
     private static readonly EntProtoId OrbitalTargetMarker = "RMCLaserDropshipTarget";
 
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabOrbitalCannonLogs";
+    private readonly CMUTopDownOrdnanceResult _firingImpactColumn = new(default);
 
     public override void Initialize()
     {
@@ -815,8 +816,8 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             if (!_topDownOrdnance.TryResolveImpactColumn(
                     planetCoordinates,
                     CMUTopDownOrdnanceKind.OrbitalBombardment,
-                    out var impactColumn) ||
-                impactColumn.TerminalImpact is not { } terminalImpact)
+                    _firingImpactColumn) ||
+                _firingImpactColumn.TerminalImpact is not { } terminalImpact)
             {
                 RemCompDeferred<OrbitalCannonFiringComponent>(uid);
                 continue;
@@ -917,7 +918,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 if (CannonHasWarhead(cannonEnt, out var warhead))
                 {
                     if (TryComp(warhead, out OrbitalCannonWarheadComponent? warheadComp))
-                        SpawnOrbitalTransitBlasts((warhead, warheadComp), impactColumn);
+                        SpawnOrbitalTransitBlasts((warhead, warheadComp), _firingImpactColumn);
 
                     var ev = new OrbitalBombardmentFireEvent(cannonEnt, warhead, fuel, terminalCoordinates);
                     RaiseLocalEvent(warhead, ref ev);

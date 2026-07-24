@@ -5,6 +5,7 @@ using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Areas;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Profiling;
 
 namespace Content.Shared._CMU14.ZLevels.Ordnance;
 
@@ -15,6 +16,7 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private ProfManager _prof = default!;
 
     private EntityQuery<CMUZLevelMapComponent> _zMapQuery;
 
@@ -33,44 +35,75 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
         [NotNullWhen(true)] out CMUTopDownOrdnanceResult? result)
     {
         result = new CMUTopDownOrdnanceResult(selected);
+        return TryResolveImpactColumn(selected, kind, result);
+    }
 
-        if (!_map.TryGetMap(selected.MapId, out var mapUid) ||
-            mapUid is not { } resolvedMapUid)
+    /// <summary>
+    /// Resolves an impact column into a caller-owned result buffer.
+    /// Use this for continuously refreshed targets whose result does not escape the calling operation.
+    /// </summary>
+    public bool TryResolveImpactColumn(
+        MapCoordinates selected,
+        CMUTopDownOrdnanceKind kind,
+        CMUTopDownOrdnanceResult result)
+    {
+        using var profile = _prof.Group("CMU Z Ordnance Impact Column");
+        var profiling = _prof.IsEnabled;
+        var depthsVisited = 0;
+        var mapsResolved = 0;
+        result.Reset(selected);
+
+        try
         {
-            result.BlockReason = CMUTopDownOrdnanceBlockReason.NoMap;
-            return false;
-        }
-
-        if (!_zLevels.TryGetZNetwork(resolvedMapUid, out var network) ||
-            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
-        {
-            return TryResolveSingleSurface(selected, kind, result);
-        }
-
-        result.UsesZLevels = true;
-        for (var depth = maxDepth; depth >= minDepth; depth--)
-        {
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var map, out var mapComp))
-                continue;
-
-            var coordinates = new MapCoordinates(selected.Position, mapComp.MapId);
-            if (!TryGetBlockingSurface(coordinates, depth, out var surface))
-                continue;
-
-            if (!CanAffect(surface.Coordinates, kind, out var blockReason))
+            if (!_map.TryGetMap(selected.MapId, out var mapUid) ||
+                mapUid is not { } resolvedMapUid)
             {
-                result.BlockReason = blockReason;
+                result.BlockReason = CMUTopDownOrdnanceBlockReason.NoMap;
                 return false;
             }
 
-            result.Surfaces.Add(surface);
+            if (!_zLevels.TryGetZNetwork(resolvedMapUid, out var network) ||
+                !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+            {
+                return TryResolveSingleSurface(selected, kind, result);
+            }
+
+            result.UsesZLevels = true;
+            for (var depth = maxDepth; depth >= minDepth; depth--)
+            {
+                depthsVisited++;
+                if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var map, out var mapComp))
+                    continue;
+
+                mapsResolved++;
+                var coordinates = new MapCoordinates(selected.Position, mapComp.MapId);
+                if (!TryGetBlockingSurface(coordinates, depth, out var surface))
+                    continue;
+
+                if (!CanAffect(surface.Coordinates, kind, out var blockReason))
+                {
+                    result.BlockReason = blockReason;
+                    return false;
+                }
+
+                result.Surfaces.Add(surface);
+            }
+
+            if (result.Surfaces.Count > 0)
+                return true;
+
+            result.BlockReason = CMUTopDownOrdnanceBlockReason.NoSurface;
+            return false;
         }
-
-        if (result.Surfaces.Count > 0)
-            return true;
-
-        result.BlockReason = CMUTopDownOrdnanceBlockReason.NoSurface;
-        return false;
+        finally
+        {
+            if (profiling)
+            {
+                _prof.WriteValue("CMU Z Ordnance Depths Visited", depthsVisited);
+                _prof.WriteValue("CMU Z Ordnance Maps Resolved", mapsResolved);
+                _prof.WriteValue("CMU Z Ordnance Surfaces", result.Surfaces.Count);
+            }
+        }
     }
 
     /// <summary>
@@ -256,7 +289,7 @@ public sealed class CMUTopDownOrdnanceResult
         Selected = selected;
     }
 
-    public MapCoordinates Selected { get; }
+    public MapCoordinates Selected { get; private set; }
 
     public bool UsesZLevels;
 
@@ -271,6 +304,14 @@ public sealed class CMUTopDownOrdnanceResult
     public bool Redirected => FirstImpact is { } impact &&
                               (impact.Coordinates.MapId != Selected.MapId ||
                                (impact.Coordinates.Position - Selected.Position).LengthSquared() > 0.001f);
+
+    public void Reset(MapCoordinates selected)
+    {
+        Selected = selected;
+        UsesZLevels = false;
+        BlockReason = CMUTopDownOrdnanceBlockReason.None;
+        Surfaces.Clear();
+    }
 }
 
 public readonly record struct CMUTopDownOrdnanceSurface(MapCoordinates Coordinates, int Depth);

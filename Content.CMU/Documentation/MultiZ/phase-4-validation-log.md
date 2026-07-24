@@ -417,6 +417,56 @@ prediction/correction capture under latency, populated-round packet distribution
 late-join trials with controlled world state. No visibility cap, replication throttle, or
 speculative state cache was introduced.
 
+### MZ-057 and MZ-062 ordnance and vehicle gameplay bursts
+
+The paired Release protocol reused the standard `USSBushRedux` five-map scenario, depths
+`[-1, 0, 1, 2, 3]`, 30 warm-up ticks, 30 profile ticks, one viewer, one PVS sample, no soak, and
+seed 42. Both captures passed every hard five-map, depth, teardown, profiler, viewer, and PVS
+lifecycle gate.
+
+For MZ-057, the runner temporarily enables mortar/orbital permission on loaded area and roofing
+components, restoring every value after capture. This forces performance coverage without changing
+the map or production policy. The selected map-4 coordinate `(-18.5, 34.5)` visited five depths,
+resolved five maps, and returned three blocking surfaces on every call.
+
+| Ordnance metric | Before | After | Change |
+| --- | ---: | ---: | ---: |
+| Unprofiled loop | 1,000 calls / 2.0203 ms | 1,000 calls / 1.9161 ms | -5.16%; single-run timing |
+| Scoped allocation | 168 bytes/call | 0 bytes/call | -100% |
+| Profile p50 / p95 | 0.0020 / 0.0021 ms | 0.0019 / 0.0023 ms | no CPU claim |
+| Depths / maps / surfaces | 5 / 5 / 3 | 5 / 5 / 3 | identical |
+
+The measured continuous orbital-firing caller now reuses one result buffer but executes the same
+full resolution each tick. The p95 did not improve, so the only claimed result is the exact
+allocation removal. No topology, tile, area, or time-based result cache was added.
+
+For MZ-062, the runner creates 24 damageable interior occupants, with 16 in the tracked passenger
+set and 8 available only through marker discovery. Each profiled hard landing resets collision
+sound cooldown, disables wheel/footprint damage to isolate the interior path, and verifies 24
+damage targets and 24 applied operations.
+
+| Vehicle hard-landing metric | Before | After | Change |
+| --- | ---: | ---: | ---: |
+| Discovery samples over 64 landings | 128 | 64 | -50% |
+| Candidate visits over 64 landings | 3,072 | 1,536 | -50% |
+| Matched targets per landing | 24 + 24 scans | one 24-target snapshot | behavior preserved |
+| Landing p50 / p95 | 0.0228 / 0.0269 ms | 0.0127 / 0.0143 ms | -44.30% / -46.84% |
+| Unprofiled 100-landing loop | 1.6422 ms | 1.3406 ms | -18.37% |
+| Scoped allocation per landing | 19,624 bytes | 19,584 bytes | -40 bytes (-0.20%) |
+| Occupant-damage allocation | 12,096 bytes | 12,096 bytes | unchanged |
+| Damage targets / applied | 24 / 24 | 24 / 24 | identical |
+
+The exact discovery work reduction and target counts support the CPU result. The remaining
+allocation is dominated by independent per-victim damage processing. Those mutable specifications
+were not pooled because target-specific damage events may cancel or modify them. Actor-backed
+interior audio, real wheel damage, crush candidates, and a populated production vehicle landing
+remain live validation risks.
+
+Raw evidence is `artifacts/multiz-phase4/20260724-mz057-062-before/evidence.json` and
+`artifacts/multiz-phase4/20260724-mz057-062-after/evidence.json`. The Release result-buffer unit
+test passed 1/1. Checked `evidence/mz-057-062-gameplay-bursts.json` preserves hashes, exact
+distributions, work counts, validation, and deferred risks.
+
 ## Soak result
 
 The complete 18,000-tick Multi-Z soak ran to completion with 20 checkpoints:

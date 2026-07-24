@@ -245,6 +245,40 @@ The checked evidence is `evidence/mz-008-037-052-053-replication.json`. It disti
 component serialization from actual full-state and transport measurements and records the absent
 Bush falling/vehicle populations as deferred risks.
 
+### MZ-057 and MZ-062 measured gameplay-burst follow-up
+
+The Phase 4 runner now forces Bush area/roof ordnance permission only inside the capture, selects a
+stable coordinate at map 4 `(-18.5, 34.5)`, and repeatedly resolves the same live column. Each call
+visited all five depths and maps and returned the same three blocking surfaces. The baseline
+allocated exactly 168 bytes per call for the result/list while p50/p95 was only
+0.0020/0.0021 ms, identifying allocation rather than CPU as the continuous-firing bottleneck.
+
+`CMUTopDownOrdnanceSystem` now accepts a caller-owned resettable result. Only the orbital cannon's
+per-tick firing update uses it; launch validation and the low-frequency mortar, rangefinder, and
+area-info callers retain the convenient allocating API. The firing loop still performs the full
+topology, tile, and area resolution every tick, so live retargeting behavior and invalidation
+semantics are unchanged. The after capture retained 5/5/3 depth/map/surface counts and reduced
+scoped allocation from 168 to zero. Its 0.0019/0.0023 ms p50/p95 does not establish a CPU
+improvement.
+
+The same runner raises a hard-landing event against a synthetic 24-occupant interior: 16 occupants
+are in the tracked passenger set and 8 are discoverable only through the interior marker query.
+Collision sound and occupant damage were both enabled, wheel/footprint damage disabled, and every
+profiled landing found and applied damage to all 24 targets. The baseline performed two complete
+interior scans per landing.
+
+Landing sound and damage now share one event-local occupant snapshot. Discovery samples and total
+candidate enumeration fell 128-to-64 and 3,072-to-1,536 over 64 landings, while target/applied
+counts stayed 24 per landing. Hard-landing p50/p95 fell from 0.0228/0.0269 ms to
+0.0127/0.0143 ms (-44.30%/-46.84%); the 100-landing unprofiled loop fell from 1.6422 to
+1.3406 ms (-18.37%). Allocation changed only 19,624-to-19,584 bytes per landing because the
+dominant 12,096-byte occupant-damage path is intentionally unchanged.
+
+Mutable per-victim damage specifications were not pooled or shared. Damage events can independently
+cancel or customize each target, so eliminating that measured allocation would need a stronger
+`DamageSpecifier` ownership contract rather than a CMU-local cache. Checked evidence is
+`evidence/mz-057-062-gameplay-bursts.json`.
+
 ## Cross-Z audio and acoustic policy
 
 - One shared acoustic path builder defines each crossed boundary: downward traversal checks the

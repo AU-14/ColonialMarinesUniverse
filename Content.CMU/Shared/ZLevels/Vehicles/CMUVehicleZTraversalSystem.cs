@@ -12,6 +12,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
+using Robust.Shared.Profiling;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -31,9 +32,10 @@ public sealed partial class CMUVehicleZTraversalSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VehicleWheelSystem _wheels = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private ProfManager _prof = default!;
 
     private readonly HashSet<EntityUid> _landingDamageTargets = new();
-    private readonly HashSet<EntityUid> _interiorSoundRecipients = new();
+    private readonly HashSet<EntityUid> _landingInteriorTargets = new();
     private readonly List<Vector2> _supportSamples = new();
 
     public override void Initialize()
@@ -48,22 +50,37 @@ public sealed partial class CMUVehicleZTraversalSystem : EntitySystem
         if (args.ImpactPower < ent.Comp.HardLandingMinVelocity)
             return;
 
+        using var profile = _prof.Group("CMU Z Vehicle Hard Landing");
         var damageType = _proto.Index(BluntDamageType);
         var baseDamage = MathF.Pow(args.ImpactPower, 2);
+        var interiorTargetsReady = false;
+        _landingInteriorTargets.Clear();
 
-        PlayVehicleLandingSound(ent);
+        try
+        {
+            PlayVehicleLandingSound(ent, ref interiorTargetsReady);
 
-        if (ent.Comp.LandingWheelDamageMultiplier > 0f)
-            _wheels.DamageWheels(ent.Owner, baseDamage * ent.Comp.LandingWheelDamageMultiplier);
+            if (ent.Comp.LandingWheelDamageMultiplier > 0f)
+                _wheels.DamageWheels(ent.Owner, baseDamage * ent.Comp.LandingWheelDamageMultiplier);
 
-        DamageVehicleOccupants(ent, damageType, baseDamage * ent.Comp.LandingOccupantDamageMultiplier);
-        DamageFootprintTargets(ent, damageType, baseDamage * ent.Comp.LandingCrushDamageMultiplier);
+            DamageVehicleOccupants(
+                ent,
+                damageType,
+                baseDamage * ent.Comp.LandingOccupantDamageMultiplier,
+                ref interiorTargetsReady);
+            DamageFootprintTargets(ent, damageType, baseDamage * ent.Comp.LandingCrushDamageMultiplier);
+        }
+        finally
+        {
+            _landingInteriorTargets.Clear();
+        }
     }
 
     private void DamageVehicleOccupants(
         Entity<CMUVehicleZTraversalComponent> ent,
         DamageTypePrototype damageType,
-        float damageAmount)
+        float damageAmount,
+        ref bool interiorTargetsReady)
     {
         if (damageAmount <= 0f ||
             !TryComp(ent.Owner, out VehicleInteriorComponent? interior))
@@ -71,20 +88,39 @@ public sealed partial class CMUVehicleZTraversalSystem : EntitySystem
             return;
         }
 
-        _landingDamageTargets.Clear();
-        _landingDamageTargets.UnionWith(interior.Passengers);
-        _landingDamageTargets.UnionWith(interior.Xenos);
-        AddInteriorMapOccupants(ent.Owner, interior, _landingDamageTargets);
+        EnsureLandingInteriorTargets(ent.Owner, interior, ref interiorTargetsReady);
 
-        foreach (var occupant in _landingDamageTargets)
+        using var profile = _prof.Group("CMU Z Vehicle Occupant Damage");
+        var applied = 0;
+        foreach (var occupant in _landingInteriorTargets)
         {
             if (TerminatingOrDeleted(occupant))
                 continue;
 
             _damage.TryChangeDamage(occupant, new DamageSpecifier(damageType, damageAmount), true, origin: ent.Owner);
+            applied++;
         }
 
-        _landingDamageTargets.Clear();
+        if (_prof.IsEnabled)
+        {
+            _prof.WriteValue("CMU Z Vehicle Occupant Damage Targets", _landingInteriorTargets.Count);
+            _prof.WriteValue("CMU Z Vehicle Occupant Damage Applied", applied);
+        }
+    }
+
+    private void EnsureLandingInteriorTargets(
+        EntityUid vehicle,
+        VehicleInteriorComponent interior,
+        ref bool ready)
+    {
+        if (ready)
+            return;
+
+        _landingInteriorTargets.Clear();
+        _landingInteriorTargets.UnionWith(interior.Passengers);
+        _landingInteriorTargets.UnionWith(interior.Xenos);
+        AddInteriorMapOccupants(vehicle, interior, _landingInteriorTargets);
+        ready = true;
     }
 
     private void AddInteriorMapOccupants(
@@ -95,18 +131,31 @@ public sealed partial class CMUVehicleZTraversalSystem : EntitySystem
         if (interior.MapId == MapId.Nullspace)
             return;
 
+        using var profile = _prof.Group("CMU Z Vehicle Interior Discovery");
+        var candidates = 0;
+        var matched = 0;
         var query = EntityQueryEnumerator<VehicleInteriorOccupantComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var occupant, out var xform))
         {
+            candidates++;
             if (occupant.Vehicle == vehicle &&
                 xform.MapID == interior.MapId)
             {
                 recipients.Add(uid);
+                matched++;
             }
+        }
+
+        if (_prof.IsEnabled)
+        {
+            _prof.WriteValue("CMU Z Vehicle Interior Candidates", candidates);
+            _prof.WriteValue("CMU Z Vehicle Interior Matched", matched);
         }
     }
 
-    private void PlayVehicleLandingSound(Entity<CMUVehicleZTraversalComponent> ent)
+    private void PlayVehicleLandingSound(
+        Entity<CMUVehicleZTraversalComponent> ent,
+        ref bool interiorTargetsReady)
     {
         if (_net.IsClient ||
             !TryComp(ent.Owner, out VehicleSoundComponent? sound) ||
@@ -120,31 +169,29 @@ public sealed partial class CMUVehicleZTraversalSystem : EntitySystem
             return;
 
         _audio.PlayPvs(sound.CollisionSound, ent.Owner);
-        PlayVehicleInteriorSound(ent.Owner, sound.CollisionSound);
+        PlayVehicleInteriorSound(ent.Owner, sound.CollisionSound, ref interiorTargetsReady);
         sound.NextCollisionSound = now + TimeSpan.FromSeconds(sound.CollisionSoundCooldown);
         Dirty(ent.Owner, sound);
     }
 
-    private void PlayVehicleInteriorSound(EntityUid vehicle, SoundSpecifier sound)
+    private void PlayVehicleInteriorSound(
+        EntityUid vehicle,
+        SoundSpecifier sound,
+        ref bool interiorTargetsReady)
     {
         if (!TryComp(vehicle, out VehicleInteriorComponent? interior))
             return;
 
-        _interiorSoundRecipients.Clear();
-        _interiorSoundRecipients.UnionWith(interior.Passengers);
-        _interiorSoundRecipients.UnionWith(interior.Xenos);
-        AddInteriorMapOccupants(vehicle, interior, _interiorSoundRecipients);
+        EnsureLandingInteriorTargets(vehicle, interior, ref interiorTargetsReady);
 
         var filter = Filter.Empty();
-        foreach (var occupant in _interiorSoundRecipients)
+        foreach (var occupant in _landingInteriorTargets)
         {
             AddInteriorSoundRecipient(filter, occupant);
         }
 
         if (filter.Count > 0)
             _audio.PlayGlobal(sound, filter, true);
-
-        _interiorSoundRecipients.Clear();
     }
 
     private void AddInteriorSoundRecipient(Filter filter, EntityUid recipient)

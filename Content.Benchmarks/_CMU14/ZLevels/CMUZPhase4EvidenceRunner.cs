@@ -13,12 +13,17 @@ using Content.IntegrationTests;
 using Content.IntegrationTests.Pair;
 using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.GameTicking;
+using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._CMU14.ZLevels.Vehicles;
+using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Vehicle;
+using Content.Shared.Damage.Components;
 using Content.Shared.Maps;
 using Content.Shared.Warps;
 using Robust.Shared;
+using Robust.Shared.Audio;
 using Robust.Shared.Configuration;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
@@ -44,6 +49,14 @@ internal static class CMUZPhase4EvidenceRunner
     private const string PvsViewerCounterName = ProfilerPrefix + "PVS Viewers";
     private const int ProfilerIndexSize = 512;
     private const int ProfilerBufferSize = 1048576;
+    private const int OrdnanceWarmupIterations = 64;
+    private const int OrdnanceCaptureIterations = 1000;
+    private const int OrdnanceProfileIterations = 256;
+    private const int VehicleLandingWarmupIterations = 4;
+    private const int VehicleLandingCaptureIterations = 100;
+    private const int VehicleLandingProfileIterations = 64;
+    private const int VehicleLandingOccupants = 24;
+    private const int VehicleLandingTrackedOccupants = 16;
     private const double TickDeadlineMilliseconds = 1000.0 / 30.0;
     private const long MinimumSoakGrowthAllowanceBytes = 32L * 1024 * 1024;
     private const int SoakGrowthDivisor = 20;
@@ -268,6 +281,20 @@ internal static class CMUZPhase4EvidenceRunner
                 result.Replication.TopologyNetwork.PayloadBytes +
                 result.Replication.TopologyMaps.PayloadBytes;
         });
+
+        if (multiZ)
+        {
+            await server.WaitPost(() =>
+            {
+                result.GameplayBursts = CaptureGameplayBursts(
+                    entityManager,
+                    configuration,
+                    mapSystem,
+                    zLevels,
+                    profiler,
+                    baseMap);
+            });
+        }
 
         var sessions = await server.AddDummySessions(options.Players);
         EntityCoordinates[] spawnCoordinates = [];
@@ -1014,6 +1041,274 @@ internal static class CMUZPhase4EvidenceRunner
         }
     }
 
+    private static GameplayBurstCapture CaptureGameplayBursts(
+        IEntityManager entityManager,
+        IConfigurationManager configuration,
+        SharedMapSystem mapSystem,
+        CMUZLevelsSystem zLevels,
+        ProfManager profiler,
+        EntityUid baseMap)
+    {
+        var ordnance = entityManager.System<CMUTopDownOrdnanceSystem>();
+        var result = new GameplayBurstCapture();
+        var areaState = new List<(AreaComponent Component, bool MortarFire, bool OrbitalBombardment)>();
+        var roofState = new List<(RoofingEntityComponent Component, bool MortarFire, bool OrbitalBombardment)>();
+
+#pragma warning disable RA0002
+        var areaQuery = entityManager.EntityQueryEnumerator<AreaComponent>();
+        while (areaQuery.MoveNext(out _, out var area))
+        {
+            areaState.Add((area, area.MortarFire, area.OB));
+            area.MortarFire = true;
+            area.OB = true;
+        }
+
+        var roofQuery = entityManager.EntityQueryEnumerator<RoofingEntityComponent>();
+        while (roofQuery.MoveNext(out _, out var roof))
+        {
+            roofState.Add((roof, roof.CanMortarFire, roof.CanOrbitalBombard));
+            roof.CanMortarFire = true;
+            roof.CanOrbitalBombard = true;
+        }
+#pragma warning restore RA0002
+
+        try
+        {
+            var selected = FindRepresentativeOrdnanceCoordinate(
+                entityManager,
+                mapSystem,
+                zLevels,
+                ordnance,
+                baseMap,
+                out var expectedSurfaces);
+            var columnBuffer = new CMUTopDownOrdnanceResult(selected);
+
+            for (var i = 0; i < OrdnanceWarmupIterations; i++)
+                ValidateOrdnanceResolution(ordnance, selected, expectedSurfaces, columnBuffer);
+
+            var allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            var started = Stopwatch.GetTimestamp();
+            for (var i = 0; i < OrdnanceCaptureIterations; i++)
+                ValidateOrdnanceResolution(ordnance, selected, expectedSurfaces, columnBuffer);
+
+            var elapsed = Stopwatch.GetElapsedTime(started);
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
+
+            configuration.SetCVar(CVars.ProfEnabled, true);
+            var profilerStart = profiler.Buffer.LogWriteOffset;
+            for (var i = 0; i < OrdnanceProfileIterations; i++)
+                ValidateOrdnanceResolution(ordnance, selected, expectedSurfaces, columnBuffer);
+            result.Ordnance = new OrdnanceBurstCapture
+            {
+                SelectedMap = selected.MapId.ToString(),
+                SelectedX = selected.Position.X,
+                SelectedY = selected.Position.Y,
+                ExpectedSurfaces = expectedSurfaces,
+                WarmupIterations = OrdnanceWarmupIterations,
+                CaptureIterations = OrdnanceCaptureIterations,
+                WallMilliseconds = elapsed.TotalMilliseconds,
+                ThreadAllocatedBytes = allocated,
+                ProfileIterations = OrdnanceProfileIterations,
+                Profile = CaptureProfiler(profiler, profilerStart),
+            };
+            configuration.SetCVar(CVars.ProfEnabled, false);
+
+            result.VehicleLanding = CaptureVehicleLandingBurst(
+                entityManager,
+                configuration,
+                profiler,
+                zLevels,
+                baseMap);
+            return result;
+        }
+        finally
+        {
+            configuration.SetCVar(CVars.ProfEnabled, false);
+#pragma warning disable RA0002
+            foreach (var (area, mortarFire, orbitalBombardment) in areaState)
+            {
+                area.MortarFire = mortarFire;
+                area.OB = orbitalBombardment;
+            }
+
+            foreach (var (roof, mortarFire, orbitalBombardment) in roofState)
+            {
+                roof.CanMortarFire = mortarFire;
+                roof.CanOrbitalBombard = orbitalBombardment;
+            }
+#pragma warning restore RA0002
+        }
+    }
+
+    private static MapCoordinates FindRepresentativeOrdnanceCoordinate(
+        IEntityManager entityManager,
+        SharedMapSystem mapSystem,
+        CMUZLevelsSystem zLevels,
+        CMUTopDownOrdnanceSystem ordnance,
+        EntityUid baseMap,
+        out int expectedSurfaces)
+    {
+        if (!zLevels.TryGetZNetwork(baseMap, out var network))
+            throw new InvalidOperationException("The gameplay burst capture requires a Multi-Z network.");
+
+        MapCoordinates best = default;
+        expectedSurfaces = 0;
+        foreach (var (_, mapUid) in network.Value.Comp.ZLevels.OrderByDescending(entry => entry.Key))
+        {
+            if (mapUid is not { } map ||
+                !entityManager.TryGetComponent<MapGridComponent>(map, out var grid))
+            {
+                continue;
+            }
+
+            foreach (var tile in mapSystem.GetAllTiles(map, grid))
+            {
+                var selected = mapSystem.GridTileToWorld(map, grid, tile.GridIndices);
+                if (!ordnance.TryResolveImpactColumn(
+                        selected,
+                        CMUTopDownOrdnanceKind.OrbitalBombardment,
+                        out var column))
+                {
+                    continue;
+                }
+
+                if (column.Surfaces.Count <= expectedSurfaces)
+                    continue;
+
+                best = selected;
+                expectedSurfaces = column.Surfaces.Count;
+                if (expectedSurfaces == network.Value.Comp.ZLevels.Count)
+                    return best;
+            }
+        }
+
+        if (expectedSurfaces == 0)
+            throw new InvalidOperationException("No representative Bush ordnance column was found.");
+
+        return best;
+    }
+
+    private static void ValidateOrdnanceResolution(
+        CMUTopDownOrdnanceSystem ordnance,
+        MapCoordinates selected,
+        int expectedSurfaces,
+        CMUTopDownOrdnanceResult column)
+    {
+        if (!ordnance.TryResolveImpactColumn(
+                selected,
+                CMUTopDownOrdnanceKind.OrbitalBombardment,
+                column) ||
+            column.Surfaces.Count != expectedSurfaces)
+        {
+            throw new InvalidOperationException(
+                $"Ordnance column changed during capture: expected {expectedSurfaces} surfaces.");
+        }
+    }
+
+    private static VehicleLandingBurstCapture CaptureVehicleLandingBurst(
+        IEntityManager entityManager,
+        IConfigurationManager configuration,
+        ProfManager profiler,
+        CMUZLevelsSystem zLevels,
+        EntityUid baseMap)
+    {
+        if (!zLevels.TryGetZNetwork(baseMap, out var network))
+            throw new InvalidOperationException("The vehicle landing capture requires a Multi-Z network.");
+
+        var interiorMap = network.Value.Comp.ZLevels
+            .OrderByDescending(entry => entry.Key)
+            .Select(entry => entry.Value)
+            .FirstOrDefault(map => map is not null && map != baseMap);
+        if (interiorMap is not { } interiorMapUid)
+            throw new InvalidOperationException("The vehicle landing capture requires a separate interior map.");
+
+        var vehicle = entityManager.SpawnEntity(null, new EntityCoordinates(baseMap, Vector2.Zero));
+        var occupants = new List<EntityUid>(VehicleLandingOccupants);
+        try
+        {
+            var traversal = entityManager.EnsureComponent<CMUVehicleZTraversalComponent>(vehicle);
+            traversal.LandingWheelDamageMultiplier = 0f;
+            traversal.LandingCrushDamageMultiplier = 0f;
+            traversal.LandingOccupantDamageMultiplier = 0.35f;
+
+            var interior = entityManager.EnsureComponent<VehicleInteriorComponent>(vehicle);
+#pragma warning disable RA0002
+            interior.Map = interiorMapUid;
+            interior.MapId = entityManager.GetComponent<MapComponent>(interiorMapUid).MapId;
+#pragma warning restore RA0002
+
+            var sound = entityManager.EnsureComponent<VehicleSoundComponent>(vehicle);
+            sound.CollisionSound = new SoundPathSpecifier("/Audio/Effects/metal_crunch.ogg");
+            sound.CollisionSoundCooldown = 0.5f;
+
+            for (var i = 0; i < VehicleLandingOccupants; i++)
+            {
+                var occupantUid = entityManager.SpawnEntity(
+                    null,
+                    new EntityCoordinates(interiorMapUid, new Vector2(i % 6, i / 6)));
+                occupants.Add(occupantUid);
+                entityManager.EnsureComponent<DamageableComponent>(occupantUid);
+                var occupant = entityManager.EnsureComponent<VehicleInteriorOccupantComponent>(occupantUid);
+#pragma warning disable RA0002
+                occupant.Vehicle = vehicle;
+#pragma warning restore RA0002
+
+                if (i < VehicleLandingTrackedOccupants)
+                {
+#pragma warning disable RA0002
+                    interior.Passengers.Add(occupantUid);
+#pragma warning restore RA0002
+                }
+            }
+
+            for (var i = 0; i < VehicleLandingWarmupIterations; i++)
+                RaiseVehicleLanding(entityManager, vehicle, sound);
+
+            var allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            var started = Stopwatch.GetTimestamp();
+            for (var i = 0; i < VehicleLandingCaptureIterations; i++)
+                RaiseVehicleLanding(entityManager, vehicle, sound);
+
+            var elapsed = Stopwatch.GetElapsedTime(started);
+            var allocated = GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
+
+            configuration.SetCVar(CVars.ProfEnabled, true);
+            var profilerStart = profiler.Buffer.LogWriteOffset;
+            for (var i = 0; i < VehicleLandingProfileIterations; i++)
+                RaiseVehicleLanding(entityManager, vehicle, sound);
+
+            return new VehicleLandingBurstCapture
+            {
+                Occupants = VehicleLandingOccupants,
+                TrackedOccupants = VehicleLandingTrackedOccupants,
+                FallbackOnlyOccupants = VehicleLandingOccupants - VehicleLandingTrackedOccupants,
+                WarmupIterations = VehicleLandingWarmupIterations,
+                CaptureIterations = VehicleLandingCaptureIterations,
+                WallMilliseconds = elapsed.TotalMilliseconds,
+                ThreadAllocatedBytes = allocated,
+                ProfileIterations = VehicleLandingProfileIterations,
+                Profile = CaptureProfiler(profiler, profilerStart),
+            };
+        }
+        finally
+        {
+            configuration.SetCVar(CVars.ProfEnabled, false);
+            foreach (var occupant in occupants)
+                entityManager.DeleteEntity(occupant);
+            entityManager.DeleteEntity(vehicle);
+        }
+    }
+
+    private static void RaiseVehicleLanding(
+        IEntityManager entityManager,
+        EntityUid vehicle,
+        VehicleSoundComponent sound)
+    {
+        sound.NextCollisionSound = TimeSpan.Zero;
+        var hit = new CMUZLevelHitEvent(8f);
+        entityManager.EventBus.RaiseLocalEvent(vehicle, hit);
+    }
+
     private readonly record struct OperationSample(double Milliseconds, long ThreadAllocatedBytes);
     private readonly record struct CyclingPvsCapture(OperationCapture Capture, int Reattachments);
 }
@@ -1107,6 +1402,7 @@ internal sealed class ScenarioResult
     public TopologyResult Topology { get; init; } = new();
     public TickCapture Capture { get; init; } = new();
     public ReplicationCapture Replication { get; init; } = new();
+    public GameplayBurstCapture? GameplayBursts { get; set; }
     public PvsCapture Pvs { get; init; } = new();
     public SoakResult Soak { get; init; } = new();
     public TeardownResult Teardown { get; init; } = new();
@@ -1176,6 +1472,39 @@ internal sealed class ComponentReplicationCapture
     public int NullStates { get; init; }
     public long PayloadBytes { get; init; }
     public Distribution PayloadBytesPerState { get; init; } = new();
+}
+
+internal sealed class GameplayBurstCapture
+{
+    public OrdnanceBurstCapture Ordnance { get; set; } = new();
+    public VehicleLandingBurstCapture VehicleLanding { get; set; } = new();
+}
+
+internal sealed class OrdnanceBurstCapture
+{
+    public string SelectedMap { get; init; } = string.Empty;
+    public float SelectedX { get; init; }
+    public float SelectedY { get; init; }
+    public int ExpectedSurfaces { get; init; }
+    public int WarmupIterations { get; init; }
+    public int CaptureIterations { get; init; }
+    public double WallMilliseconds { get; init; }
+    public long ThreadAllocatedBytes { get; init; }
+    public int ProfileIterations { get; init; }
+    public ProfileCapture Profile { get; init; } = new();
+}
+
+internal sealed class VehicleLandingBurstCapture
+{
+    public int Occupants { get; init; }
+    public int TrackedOccupants { get; init; }
+    public int FallbackOnlyOccupants { get; init; }
+    public int WarmupIterations { get; init; }
+    public int CaptureIterations { get; init; }
+    public double WallMilliseconds { get; init; }
+    public long ThreadAllocatedBytes { get; init; }
+    public int ProfileIterations { get; init; }
+    public ProfileCapture Profile { get; init; } = new();
 }
 
 internal sealed class ProfileCapture
