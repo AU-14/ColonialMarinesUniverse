@@ -1109,10 +1109,21 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (args.Handled)
             return;
 
-        // Shield-up detonation is handled by CMUXenoPsychicShieldDetonateActionEvent,
-        // dispatched after we swap the action to InstantAction in StartPsychicShield.
+        // Shield-up detonation is normally dispatched via CMUXenoPsychicShieldDetonateActionEvent
+        // after SetPsychicShieldActionMode swaps the action to InstantAction in StartPsychicShield.
+        // If the raise event still fires while the shield is up (action-swap not yet networked,
+        // integration tests raising the event directly, or an admin using the raw verb) treat the
+        // press as a detonate so the input is never eaten silently. Same plasma gate as the
+        // dedicated detonate handler; identical DetonatePsychicShield call site.
         if (warlock.Comp.PsychicShieldSegments.Count > 0)
+        {
+            if (!_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicShieldCost))
+                return;
+
+            DetonatePsychicShield(warlock);
+            args.Handled = true;
             return;
+        }
 
         if (_timing.CurTime < warlock.Comp.NextPsychicShieldAt)
             return;
@@ -1254,6 +1265,13 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         {
             if (actionComp.AttachedEntity != warlock)
                 continue;
+
+            // Skip the swap when the action entity is on its way out. Happens during round
+            // cleanup and integration test teardown: a MoveEvent triggered by parent detach
+            // reaches EndPsychicShield after the action has already been queued for deletion,
+            // and EnsureComp on a terminating entity fires a DebugAssert.
+            if (TerminatingOrDeleted(actionId))
+                return;
 
             if (shieldUp)
             {
