@@ -1,6 +1,7 @@
 ﻿using System;
 using BenchmarkDotNet.Running;
 using BenchmarkDotNet.Configs;
+using Content.Benchmarks._CMU14.ZLevels;
 using Robust.Benchmarks.Configs;
 
 namespace Content.Benchmarks
@@ -10,6 +11,12 @@ namespace Content.Benchmarks
 
         public static void Main(string[] args)
         {
+            if (Array.IndexOf(args, "--multiz-evidence") != -1)
+            {
+                Environment.ExitCode = CMUZPhase4EvidenceRunner.RunAsync(args).GetAwaiter().GetResult();
+                return;
+            }
+
 #if DEBUG
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("\nWARNING: YOU ARE RUNNING A DEBUG BUILD, USE A RELEASE BUILD FOR AN ACCURATE BENCHMARK");

@@ -15,4 +15,5 @@ The initial post-rebase port target is `d25e5d8950a0c2f25a67c900e2246ad1a68f6327
 See [phase-1-port-log.md](phase-1-port-log.md) for the compatibility port and
 [phase-2-audit-report.md](phase-2-audit-report.md) for the subsystem review,
 [phase-3-modernization-log.md](phase-3-modernization-log.md) for the implemented modernization,
+[phase-4-validation-log.md](phase-4-validation-log.md) for measured validation evidence,
 and [audit-log.md](audit-log.md) for the canonical running finding register.
