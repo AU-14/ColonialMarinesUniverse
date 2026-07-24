@@ -450,12 +450,30 @@ public sealed class USSBushMultiZTest : GameTest
         var mapSystem = SEntMan.System<ServerMapSystem>();
         var mapIds = new MapId[4];
         var levelMaps = new EntityUid[4];
+        var removalRoofTile = new Vector2i(10000, 10000);
         EntityUid networkUid = default;
 
         await server.WaitAssertion(() =>
         {
             for (var i = 0; i < mapIds.Length; i++)
+            {
                 levelMaps[i] = mapSystem.CreateMap(out mapIds[i]);
+                SEntMan.AddComponent<MapGridComponent>(levelMaps[i]);
+            }
+
+            var sharedMap = SEntMan.System<SharedMapSystem>();
+            var tileManager = server.ResolveDependency<ITileDefinitionManager>();
+            var floor = new Tile(tileManager["FloorSteel"].TileId);
+            sharedMap.SetTile(
+                levelMaps[0],
+                SEntMan.GetComponent<MapGridComponent>(levelMaps[0]),
+                removalRoofTile,
+                floor);
+            sharedMap.SetTile(
+                levelMaps[1],
+                SEntMan.GetComponent<MapGridComponent>(levelMaps[1]),
+                removalRoofTile,
+                floor);
 
             var networksBefore = CountComponents<CMUZLevelsNetworkComponent>();
             Assert.That(
@@ -495,6 +513,14 @@ public sealed class USSBushMultiZTest : GameTest
                 "Final validation failure did not roll back the loaded auxiliary level.");
             Assert.That(CountComponents<CMUZLevelsNetworkComponent>(), Is.EqualTo(networksBefore + 1),
                 "Final validation failure created an orphan Z-network.");
+
+            var roofSystem = SEntMan.System<ServerRoofSystem>();
+            var lowerGrid = SEntMan.GetComponent<MapGridComponent>(levelMaps[0]);
+            var lowerRoof = SEntMan.GetComponent<RoofComponent>(levelMaps[0]);
+            Assert.That(
+                roofSystem.IsRooved((levelMaps[0], lowerGrid, lowerRoof), removalRoofTile),
+                Is.True,
+                "The middle level did not roof the level below before removal.");
         });
 
         await server.WaitPost(() => mapSystem.DeleteMap(mapIds[1]));
@@ -514,6 +540,14 @@ public sealed class USSBushMultiZTest : GameTest
             Assert.That(lower.MapAbove, Is.Null);
             Assert.That(SEntMan.TryGetComponent<CMUZLevelMapComponent>(levelMaps[2], out var upper));
             Assert.That(upper.MapBelow, Is.Null);
+
+            var roofSystem = SEntMan.System<ServerRoofSystem>();
+            var lowerGrid = SEntMan.GetComponent<MapGridComponent>(levelMaps[0]);
+            var lowerRoof = SEntMan.GetComponent<RoofComponent>(levelMaps[0]);
+            Assert.That(
+                roofSystem.IsRooved((levelMaps[0], lowerGrid, lowerRoof), removalRoofTile),
+                Is.False,
+                "Removing the middle level did not clear its roof contribution below.");
         });
 
         await server.WaitPost(() =>

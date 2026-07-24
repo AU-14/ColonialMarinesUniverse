@@ -175,6 +175,42 @@ Targeted validation passed: the Release `Content.Client` build completed with ze
 errors, and the DebugOpt blur/stair filter passed 14/14 tests. The sampled stair scene did not
 exercise nonempty FOV-mask tiles; a tile-heavy stair scene and isolated GPU timings remain open.
 
+### MZ-014 and MZ-040 measured topology-burst follow-up
+
+The Phase 4 evidence runner now brackets the five-map lifecycle load and teardown with profiler
+captures. The baseline separated the required initial work from redundant event fan-out. Initial
+roof construction visited and wrote 20,095 tiles across all five maps in 1.1536 ms with 322,640
+scoped bytes; it remains a required full rebuild. The topology-triggered power path, however,
+enumerated 47 APCs, 1,174 receivers, and 23 reactor groups in 0.1284 ms even though all 1,221
+APC/receiver area updates were already pending from `MapInit`.
+
+`CMUZLevelNetworkUpdatedEvent` now identifies a rebuilt network versus a removed map/depth. Map
+removal resolves its network through `CMUZLevelMapComponent.NetworkUid`, retaining the old network
+scan only as stale-index recovery. Roof removal work seeds state from surviving higher maps and
+writes only levels below the removed depth; removing the lowest remaining level performs no roof
+work. Initial network construction retains the unchanged full top-down build. RMC power now queues
+only the affected Z-network's reactor power group and leaves the existing `MapInit` area-update set
+untouched.
+
+In bottom-up Bush teardown, all five ownership lookups were direct and fallback scans remained
+zero. Four broad roof rebuilds and 38,298 roof writes fell to zero. Topology-removal p50/max/sum
+fell from 0.2816/0.8716/1.7023 ms to 0.0279/0.1358/0.2145 ms
+(-90.09%/-84.42%/-87.40%). The after load still performed exactly five-map/20,095-tile initial
+roof work and exactly 1,221 pending power area updates; the redundant global power requeue was
+absent. Single-run whole-load and wrapper timing differences are not treated as stable
+improvements.
+
+Targeted validation passed: the Release `Content.Benchmarks` build completed with zero warnings
+and errors, both paired raw captures passed every hard five-map/headless gate, and the DebugOpt
+Bush lifecycle/marker filter passed 2/2. The lifecycle test verifies that deleting a middle level
+clears its roof contribution on the lower level, so the optimization is not based only on
+bottom-up teardown.
+
+The checked evidence is `evidence/mz-014-040-topology-bursts.json`. Bush contained no
+reactor-powered-light entities, the required initial build remains synchronous at approximately
+323 KB, and large middle/upper removals plus bulk mapping edits remain explicit risks. Shared RMC
+power domains are unchanged.
+
 ## Cross-Z audio and acoustic policy
 
 - One shared acoustic path builder defines each crossed boundary: downward traversal checks the

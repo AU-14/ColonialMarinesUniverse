@@ -284,6 +284,71 @@ tests. The representative stair scene exercised sprite/LOS work but no nonempty 
 Tile-heavy stair preview, isolated GPU copy/shader timestamps, multi-depth blur, receiving-map
 projected-light shadows, and secondary-viewport lighting remain explicit validation risks.
 
+### MZ-014 and MZ-040 topology, roof, and power bursts
+
+The paired protocol used the Release evidence runner, `USSBushRedux`, the same five depths
+`[-1, 0, 1, 2, 3]`, 30 warm-up ticks, 30 profile ticks, one viewer, one PVS sample, no soak, and
+seed 42. New load profiling starts before lifecycle construction and ends after two server ticks;
+teardown profiling brackets bottom-up deletion of all five maps. Both captures passed all hard
+map-count, depth, teardown, profiler, viewer, and PVS lifecycle gates.
+
+The baseline showed two different costs:
+
+| Initial-load work | Baseline |
+| --- | ---: |
+| Required roof rebuild | 1.1536 ms; 322,640 bytes |
+| Roof maps / tiles visited / tiles written | 5 / 20,095 / 20,095 |
+| Redundant global power requeue | 0.1284 ms; 0 bytes |
+| APCs / receivers / reactor groups enumerated | 47 / 1,174 / 23 |
+| Already-pending APC/receiver area updates | 1,221 |
+| Legitimate area refresh max / allocation | 1.7006 ms / 92,136 bytes |
+
+The 1,221 pending updates exactly equal the 47 APCs plus 1,174 receivers, establishing that the
+global topology requeue duplicated `MapInit` scheduling rather than creating required work.
+Initial roof state, by contrast, requires the full top-down traversal.
+
+The modernization adds an event delta for rebuilt versus removed map/depth, resolves removals
+through the removed map's direct network owner with the previous scan as recovery, writes roofs
+only below the removed depth, and queues only the affected network's reactor power group. It adds
+no cap, speculative cache, delayed visibility, changed roof rule, or new power-domain policy.
+
+After the change, initial roof work remained five maps and 20,095 visited/written tiles. Its single
+sample was 0.8409 ms and 323,168 bytes, but that host-timing difference is not claimed as an
+improvement because the behavior and work are unchanged. The global APC/receiver/reactor requeue
+was absent, while all 1,221 legitimate area updates and their 92,136 scoped bytes remained.
+
+Bottom-up teardown produced the stable affected-path result:
+
+| Metric | Before | After | Change |
+| --- | ---: | ---: | ---: |
+| Roof rebuilds | 4 | 0 | -100% |
+| Roof maps visited | 10 | 0 | -100% |
+| Roof tiles visited / written | 38,298 / 38,298 | 0 / 0 | -100% / -100% |
+| Direct ownership hits | 0 | 5 | all removals |
+| Fallback networks scanned | 5 | 0 | -100% |
+| Topology removal p50 | 0.2816 ms | 0.0279 ms | -90.09% |
+| Topology removal maximum | 0.8716 ms | 0.1358 ms | -84.42% |
+| Topology removal sum | 1.7023 ms | 0.2145 ms | -87.40% |
+| Maximum scoped allocation | 8,400 bytes | 8,400 bytes | unchanged |
+
+Bottom-up deletion is a specific no-lower-level case, not a claim that every removal is free. The
+focused DebugOpt Bush filter passed 2/2 in 1 minute 17 seconds; its lifecycle case creates aligned
+lower and middle tiles, verifies the middle deck roofs the lower one, removes the middle map, and
+verifies that the lower roof contribution is cleared. The Release `Content.Benchmarks` build
+passed with zero warnings and errors.
+
+Raw evidence is
+`artifacts/multiz-phase4/20260724-mz014-040-before-v3/evidence.json` and
+`artifacts/multiz-phase4/20260724-mz014-040-after/evidence.json`. The checked-in
+`evidence/mz-014-040-topology-bursts.json` preserves exact samples, hashes, validation, and risks.
+
+Bush had no reactor-powered-light entities, so the remaining whole light query needs a populated
+topology-mutation capture. The required initial 20,095-tile build remains synchronous and
+approximately 323 KB. Representative large middle/upper removals, `znetwork-variantize`, and bulk
+mapping edits also remain unmeasured; none receives a speculative cache, cap, or work budget here.
+The existing shared RMC Z-network power domain is preserved pending the separate MZ-064 gameplay
+decision.
+
 ## Soak result
 
 The complete 18,000-tick Multi-Z soak ran to completion with 20 checkpoints:

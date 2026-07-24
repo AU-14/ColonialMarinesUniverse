@@ -27,6 +27,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
+using Robust.Shared.Profiling;
 using Robust.Shared.Utility;
 using System.Numerics;
 using static Content.Shared.Popups.PopupType;
@@ -48,6 +49,7 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedPowerReceiverSystem _powerReceiver = default!;
+    [Dependency] private ProfManager _prof = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private SharedRMCSpriteSystem _sprite = default!;
@@ -1015,6 +1017,11 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
         _recalculate = true;
     }
 
+    protected void QueueReactorPowerGroupRefresh(EntityUid powerGroup)
+    {
+        _reactorsUpdated.Add(powerGroup);
+    }
+
     private void OffsetApc(Entity<RMCApcComponent> ent)
     {
         var sprite = EnsureComp<SpriteSetRenderOrderComponent>(ent);
@@ -1041,24 +1048,40 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
     {
         if (_recalculate)
         {
+            using var profile = _prof.Group("CMU Z Power Global Requeue");
             _recalculate = false;
+            var apcsQueued = 0;
             var apcQuery = EntityQueryEnumerator<RMCApcComponent>();
             while (apcQuery.MoveNext(out var uid, out _))
             {
                 ToUpdate.Add(uid);
+                apcsQueued++;
             }
 
+            var receiversQueued = 0;
             var receiverQuery = EntityQueryEnumerator<RMCPowerReceiverComponent>();
             while (receiverQuery.MoveNext(out var uid, out _))
             {
                 ToUpdate.Add(uid);
+                receiversQueued++;
             }
 
+            var reactorGroupsQueued = 0;
             var reactorQuery = EntityQueryEnumerator<RMCFusionReactorComponent>();
             while (reactorQuery.MoveNext(out var uid, out _))
             {
                 if (TryGetPowerGroup(Transform(uid).MapUid, out var powerGroup))
+                {
                     _reactorsUpdated.Add(powerGroup);
+                    reactorGroupsQueued++;
+                }
+            }
+
+            if (_prof.IsEnabled)
+            {
+                _prof.WriteValue("CMU Z Power Global APCs Queued", apcsQueued);
+                _prof.WriteValue("CMU Z Power Global Receivers Queued", receiversQueued);
+                _prof.WriteValue("CMU Z Power Global Reactor Groups Queued", reactorGroupsQueued);
             }
 
         }
@@ -1070,88 +1093,94 @@ public abstract partial class SharedRMCPowerSystem : EntitySystem
             return;
         }
 
-        try
+        using (var profile = _prof.Group("CMU Z Power Reactor Light Refresh"))
         {
-            foreach (var powerGroup in _reactorsUpdated)
+            try
             {
-                var powered = AnyReactorsOn(powerGroup);
-                var lights = EntityQueryEnumerator<RMCReactorPoweredLightComponent, TransformComponent>();
-                while (lights.MoveNext(out var uid, out var poweredLight, out var xform))
+                foreach (var powerGroup in _reactorsUpdated)
                 {
-                    if (TryGetPowerGroup(xform.MapUid, out var lightGroup) &&
-                        lightGroup == powerGroup)
+                    var powered = AnyReactorsOn(powerGroup);
+                    var lights = EntityQueryEnumerator<RMCReactorPoweredLightComponent, TransformComponent>();
+                    while (lights.MoveNext(out var uid, out var poweredLight, out var xform))
                     {
-                        poweredLight.Enabled = powered;
-                        Dirty(uid, poweredLight);
-                        _appearance.SetData(uid, ToggleableVisuals.Enabled, powered);
-                        Pointlight.SetEnabled(uid, powered);
+                        if (TryGetPowerGroup(xform.MapUid, out var lightGroup) &&
+                            lightGroup == powerGroup)
+                        {
+                            poweredLight.Enabled = powered;
+                            Dirty(uid, poweredLight);
+                            _appearance.SetData(uid, ToggleableVisuals.Enabled, powered);
+                            Pointlight.SetEnabled(uid, powered);
+                        }
                     }
                 }
             }
-        }
-        finally
-        {
-            _reactorsUpdated.Clear();
-        }
-
-        try
-        {
-            foreach (var update in ToUpdate)
+            finally
             {
-                if (TerminatingOrDeleted(update))
-                    continue;
+                _reactorsUpdated.Clear();
+            }
+        }
 
-                if (_apcQuery.TryComp(update, out var apc))
+        using (var profile = _prof.Group("CMU Z Power Area Refresh"))
+        {
+            try
+            {
+                foreach (var update in ToUpdate)
                 {
-                    if (_areaPowerQuery.TryComp(apc.Area, out var oldArea))
+                    if (TerminatingOrDeleted(update))
+                        continue;
+
+                    if (_apcQuery.TryComp(update, out var apc))
                     {
-                        oldArea.Apcs.Remove(update);
+                        if (_areaPowerQuery.TryComp(apc.Area, out var oldArea))
+                        {
+                            oldArea.Apcs.Remove(update);
+                            Dirty(update, apc);
+                        }
+                    }
+
+                    if (_powerReceiverQuery.TryComp(update, out var receiver))
+                    {
+                        if (_areaPowerQuery.TryComp(receiver.Area, out var oldArea))
+                        {
+                            GetAreaReceivers((receiver.Area.Value, oldArea), receiver.Channel).Remove(update);
+                            oldArea.Load[(int) receiver.Channel] -= receiver.LastLoad;
+                            Dirty(update, receiver);
+                        }
+                    }
+
+                    if (!TryGetPowerArea(update, out var area))
+                        continue;
+
+                    if (apc != null)
+                    {
+                        if (area.Comp.Apcs.Add(update))
+                            Dirty(area);
+
+                        apc.Area = area;
                         Dirty(update, apc);
                     }
-                }
 
-                if (_powerReceiverQuery.TryComp(update, out var receiver))
-                {
-                    if (_areaPowerQuery.TryComp(receiver.Area, out var oldArea))
+                    if (receiver != null)
                     {
-                        GetAreaReceivers((receiver.Area.Value, oldArea), receiver.Channel).Remove(update);
-                        oldArea.Load[(int) receiver.Channel] -= receiver.LastLoad;
+                        receiver.Area = area;
                         Dirty(update, receiver);
-                    }
-                }
 
-                if (!TryGetPowerArea(update, out var area))
-                    continue;
+                        var ev = new PowerChangedEvent(IsAreaPowered((area, area), receiver.Channel), 0);
+                        UpdateReceiverPower(update, ref ev);
 
-                if (apc != null)
-                {
-                    if (area.Comp.Apcs.Add(update))
-                        Dirty(area);
-
-                    apc.Area = area;
-                    Dirty(update, apc);
-                }
-
-                if (receiver != null)
-                {
-                    receiver.Area = area;
-                    Dirty(update, receiver);
-
-                    var ev = new PowerChangedEvent(IsAreaPowered((area, area), receiver.Channel), 0);
-                    UpdateReceiverPower(update, ref ev);
-
-                    if (GetAreaReceivers(area, receiver.Channel).Add(update))
-                    {
-                        receiver.LastLoad = GetNewPowerLoad((update, receiver));
-                        area.Comp.Load[(int) receiver.Channel] += receiver.LastLoad;
-                        Dirty(area);
+                        if (GetAreaReceivers(area, receiver.Channel).Add(update))
+                        {
+                            receiver.LastLoad = GetNewPowerLoad((update, receiver));
+                            area.Comp.Load[(int) receiver.Channel] += receiver.LastLoad;
+                            Dirty(area);
+                        }
                     }
                 }
             }
-        }
-        finally
-        {
-            ToUpdate.Clear();
+            finally
+            {
+                ToUpdate.Clear();
+            }
         }
     }
 }

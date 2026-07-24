@@ -15,6 +15,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
+using Robust.Shared.Profiling;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
@@ -32,6 +33,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedPointLightSystem _light = default!;
+    [Dependency] private ProfManager _prof = default!;
 
     [ViewVariables]
     private TimeSpan _nextUpdate;
@@ -49,6 +51,7 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     private readonly Dictionary<EntityUid, List<(Entity<RMCApcComponent, TransformComponent> Apc, Entity<BatteryComponent>? Cell)>> _apcs = new();
     private readonly List<EntityUid> _toRemove = new();
+    private bool _profileTopologyRefresh;
 
     public override void Initialize()
     {
@@ -69,7 +72,8 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     private void OnZLevelNetworkUpdated(ref CMUZLevelNetworkUpdatedEvent args)
     {
-        RecalculatePower();
+        _profileTopologyRefresh = true;
+        QueueReactorPowerGroupRefresh(args.Network.Owner);
     }
 
     private void OnUsageDisplayEvent(Entity<RMCPowerUsageDisplayComponent> ent, ref ExaminedEvent args)
@@ -129,7 +133,21 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     public override void Update(float frameTime)
     {
-        base.Update(frameTime);
+        if (_profileTopologyRefresh)
+        {
+            _profileTopologyRefresh = false;
+            using var profile = _prof.Group("CMU Z Power Topology Refresh");
+            var pendingBefore = ToUpdate.Count;
+
+            base.Update(frameTime);
+
+            if (_prof.IsEnabled)
+                _prof.WriteValue("CMU Z Power Pending Before Refresh", pendingBefore);
+        }
+        else
+        {
+            base.Update(frameTime);
+        }
 
         if (_nextUpdate > _timing.CurTime)
             return;

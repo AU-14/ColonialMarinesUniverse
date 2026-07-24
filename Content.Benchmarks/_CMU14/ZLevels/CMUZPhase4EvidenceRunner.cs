@@ -163,12 +163,17 @@ internal static class CMUZPhase4EvidenceRunner
         var loadedMapIds = new List<MapId>();
         var mapCountBefore = 0;
         var networkCountBefore = 0;
+        long loadProfilerStart = 0;
 
         await server.WaitPost(() =>
         {
             configuration.SetCVar(CVars.NetPVS, true);
             configuration.SetCVar(CVars.ThreadParallelCount, 0);
             configuration.SetCVar(CVars.NetPvsAsync, false);
+            configuration.SetCVar(CVars.ProfIndexSize, ProfilerIndexSize);
+            configuration.SetCVar(CVars.ProfBufferSize, ProfilerBufferSize);
+            configuration.SetCVar(CVars.ProfEnabled, true);
+            loadProfilerStart = profiler.Buffer.LogWriteOffset;
 
             mapCountBefore = entityManager.Count<MapComponent>();
             networkCountBefore = entityManager.Count<CMUZLevelsNetworkComponent>();
@@ -236,6 +241,12 @@ internal static class CMUZPhase4EvidenceRunner
             }
 
             result.Topology.LoadedMapCount = loadedMapIds.Count;
+        });
+        await server.WaitRunTicks(2);
+        await server.WaitPost(() =>
+        {
+            result.Load.Profile = CaptureProfiler(profiler, loadProfilerStart);
+            configuration.SetCVar(CVars.ProfEnabled, false);
         });
 
         var sessions = await server.AddDummySessions(options.Players);
@@ -400,17 +411,28 @@ internal static class CMUZPhase4EvidenceRunner
             });
         }
 
+        long teardownProfilerStart = 0;
         await server.WaitPost(() =>
         {
+            configuration.SetCVar(CVars.ProfEnabled, true);
+            teardownProfilerStart = profiler.Buffer.LogWriteOffset;
+            var allocatedBefore = GC.GetAllocatedBytesForCurrentThread();
+            var started = Stopwatch.GetTimestamp();
             foreach (var mapId in loadedMapIds)
             {
                 if (mapSystem.MapExists(mapId))
                     mapSystem.DeleteMap(mapId);
             }
+
+            result.Teardown.DeleteWallMilliseconds = Stopwatch.GetElapsedTime(started).TotalMilliseconds;
+            result.Teardown.DeleteThreadAllocatedBytes =
+                GC.GetAllocatedBytesForCurrentThread() - allocatedBefore;
         });
         await server.WaitRunTicks(2);
         await server.WaitPost(() =>
         {
+            result.Teardown.Profile = CaptureProfiler(profiler, teardownProfilerStart);
+            configuration.SetCVar(CVars.ProfEnabled, false);
             result.Teardown.MapCountBefore = mapCountBefore;
             result.Teardown.MapCountAfter = entityManager.Count<MapComponent>();
             result.Teardown.NetworkCountBefore = networkCountBefore;
@@ -1024,6 +1046,7 @@ internal sealed class LoadResult
     public int MapCountAfter { get; init; }
     public int NetworkCountBefore { get; init; }
     public int NetworkCountAfter { get; init; }
+    public ProfileCapture Profile { get; set; } = new();
 }
 
 internal sealed class TopologyResult
@@ -1112,6 +1135,9 @@ internal sealed class SoakCheckpoint
 
 internal sealed class TeardownResult
 {
+    public double DeleteWallMilliseconds { get; set; }
+    public long DeleteThreadAllocatedBytes { get; set; }
+    public ProfileCapture Profile { get; set; } = new();
     public int MapCountBefore { get; set; }
     public int MapCountAfter { get; set; }
     public int NetworkCountBefore { get; set; }

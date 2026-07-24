@@ -77,6 +77,7 @@ public sealed partial class CMUZLevelsSystem
 
     internal void PublishZNetworkUpdated(Entity<CMUZLevelsNetworkComponent> network)
     {
+        using var profile = Prof.Group("CMU Z Topology Publish");
         try
         {
             var ev = new CMUZLevelNetworkUpdatedEvent(network);
@@ -94,4 +95,14 @@ public sealed partial class CMUZLevelsSystem
 /// Raised when maps are added to or removed from a Z-level network.
 /// </summary>
 [ByRefEvent]
-public readonly record struct CMUZLevelNetworkUpdatedEvent(Entity<CMUZLevelsNetworkComponent> Network);
+public readonly record struct CMUZLevelNetworkUpdatedEvent(
+    Entity<CMUZLevelsNetworkComponent> Network,
+    CMUZLevelNetworkUpdateKind Kind = CMUZLevelNetworkUpdateKind.Rebuilt,
+    EntityUid? ChangedMap = null,
+    int? ChangedDepth = null);
+
+public enum CMUZLevelNetworkUpdateKind : byte
+{
+    Rebuilt,
+    MapRemoved,
+}
