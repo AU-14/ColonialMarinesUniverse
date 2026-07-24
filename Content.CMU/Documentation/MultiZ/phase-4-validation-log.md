@@ -164,6 +164,57 @@ These scoped samples identify what to measure next. They are still one determini
 and are not sufficient by themselves to justify a new cap, cache, scheduling policy, or
 architecture change.
 
+### MZ-017 higher-viewer scaling and modernization
+
+The same five-map, 60-warm-up-tick, 300-profile-tick, 30-PVS-sample protocol was repeated at 16,
+32, and 64 attached observer viewers before changing production code. Every run recorded 38
+periodic 4-Hz probe samples, retained every requested viewer, required zero reattachments, loaded
+depths `[-1, 0, 1, 2, 3]`, and passed all headless correctness gates.
+
+The baseline allocation scaled with viewers, while `VisibleOpeningSort` remained allocation-free
+and small. Per-viewer `VisibleOpening` allocated 4,800 bytes at p50 and `StairPreview` allocated
+1,024 bytes at p50. This identified the result-materializing examine LOS query as the smallest
+measured bottleneck to address. Server PVS now uses the allocation-free occluder first-hit query
+for visible openings and stair previews; the stair query composes the existing viewer/stair ignore
+predicate with the existing endpoint-touching rule.
+
+| Viewers | Probe p50 before / after | Probe p95 before / after | Allocation before / after | Allocation change |
+| ---: | ---: | ---: | ---: | ---: |
+| 16 | 1.2070 / 0.6432 ms | 1.5377 / 0.9047 ms | 106,192 / 30,528 bytes | -71.25% |
+| 32 | 2.6280 / 2.4628 ms | 19.7458 / 3.0405 ms | 221,136 / 62,656 bytes | -71.67% |
+| 64 | 6.2943 / 5.0146 ms | 7.6211 / 5.9572 ms | 442,064 / 127,552 bytes | -71.15% |
+
+The 32-viewer baseline p95 contains a host-scheduling tail, so its large p95 delta is not treated
+as a stable CPU improvement ratio. P50 improved by 46.71%, 6.29%, and 20.33% at 16, 32, and 64
+viewers respectively; the deterministic allocation slope is the stronger result.
+
+Behavioral work counts were unchanged in every pair:
+
+| Viewers | Visible-opening candidates before / after | LOS checks before / after | Stair tiles before / after |
+| ---: | ---: | ---: | ---: |
+| 16 | 360 / 360 | 170 / 170 | 1,936 / 1,936 |
+| 32 | 730 / 730 | 350 / 350 | 3,872 / 3,872 |
+| 64 | 1,512 / 1,512 | 714 / 714 | 7,744 / 7,744 |
+
+The raw before evidence is
+`artifacts/multiz-phase4/20260724-002912`,
+`artifacts/multiz-phase4/20260724-003227`, and
+`artifacts/multiz-phase4/20260724-003522`; after evidence is
+`artifacts/multiz-phase4/20260724-004457`,
+`artifacts/multiz-phase4/20260724-004755`, and
+`artifacts/multiz-phase4/20260724-005001`. The checked-in
+`evidence/mz-017-pvs-scaling.json` preserves the exact values and SHA-256 hashes.
+
+This closes the headless higher-viewer and server-LOS allocation work for MZ-017. Real packets,
+bandwidth, late join, reconnect, and live populated-round scheduling remain deferred to the
+networking group; approximately 1.9-2.0 KB per viewer per rebuild remains in candidate discovery
+and surrounding work. No candidate cap, visibility cache, or scheduling change is justified by
+this capture.
+
+Targeted gates passed: Release `Content.Server` and `Content.Benchmarks` builds reported zero
+warnings/errors, and the DebugOpt `CMUZLevelViewerLifecycleTest` filter passed 2/2 integration
+tests in 4 minutes 21 seconds.
+
 ## Soak result
 
 The complete 18,000-tick Multi-Z soak ran to completion with 20 checkpoints:

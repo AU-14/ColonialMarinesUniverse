@@ -120,6 +120,24 @@ Vehicle prediction at unsupported edges and immediate target-level PVS readiness
 tests under MZ-038 and MZ-063. Replicated topology and broad `CMUZPhysics` population require Phase
 4 byte/count evidence before further state removal.
 
+### MZ-017 measured PVS follow-up
+
+The Phase 4 16/32/64-viewer baseline identified server LOS result materialization, rather than
+opening sorting, as the measured per-viewer allocation driver. The server stair-preview and
+visible-opening checks now call Robust's allocation-free occluder first-hit API directly. The
+stair predicate still ignores the viewer and stair entities and preserves the previous
+endpoint-touching rule.
+
+The change adds no cap, cache, dirty policy, or new scheduling behavior. Across every before/after
+pair, visible-opening candidates, LOS checks, stair tiles, viewers, and probe eyes were identical.
+Allocation per 4-Hz rebuild fell by 71.2-71.7% across the three viewer counts. Exact metrics and
+artifact hashes are recorded in `phase-4-validation-log.md` and
+`evidence/mz-017-pvs-scaling.json`.
+
+Targeted validation passed: the Release `Content.Server` and `Content.Benchmarks` builds completed
+with zero warnings and errors, and both `CMUZLevelViewerLifecycleTest` integration cases passed in
+DebugOpt.
+
 ## Cross-Z audio and acoustic policy
 
 - One shared acoustic path builder defines each crossed boundary: downward traversal checks the

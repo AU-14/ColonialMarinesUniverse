@@ -28,9 +28,9 @@ public sealed partial class CMUZLevelsSystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private IConfigurationManager _config = default!;
-    [Dependency] private ExamineSystemShared _examine = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private OccluderSystem _occluder = default!;
 
     private readonly EntProtoId _zEyeProto = "CMUZLevelEye";
     private const int ZProbeOpeningTileRadius = 24;
@@ -863,7 +863,29 @@ public sealed partial class CMUZLevelsSystem
                         _profilePvsStairLosChecks++;
                     }
 
-                    if (_examine.InRangeUnOccluded(origin, target, range, ent => ent == viewer.Owner || ent == highGroundUid))
+                    var ignoreState = (
+                        Viewer: viewer.Owner,
+                        HighGround: highGroundUid,
+                        Origin: origin.Position,
+                        Target: target.Position,
+                        Transform: _transform);
+                    if (_occluder.InRangeUnoccluded(
+                            origin,
+                            target,
+                            range,
+                            ignoreState,
+                            static (ent, state) =>
+                            {
+                                if (ent.Owner == state.Viewer ||
+                                    ent.Owner == state.HighGround)
+                                {
+                                    return true;
+                                }
+
+                                return OccluderSystem.IsTouchingEndpoint(
+                                    ent,
+                                    (state.Transform, state.Origin, state.Target));
+                            }))
                     {
                         AddStairPreviewPosition(previewPositions, target.Position);
                         if (previewPositions.Count >= CMUZLevelViewerComponent.MaxStairPreviewPositions)
@@ -1083,7 +1105,7 @@ public sealed partial class CMUZLevelsSystem
                 _profilePvsVisibleOpeningLosChecks++;
 
             var target = new MapCoordinates(_probeOpeningCandidates[i].Center, mapId);
-            if (_examine.InRangeUnOccluded(origin, target, 0f, null))
+            if (_occluder.InRangeUnoccluded(origin, target, 0f, ignoreTouching: true))
                 return true;
         }
 
