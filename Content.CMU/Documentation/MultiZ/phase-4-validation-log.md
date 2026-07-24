@@ -602,6 +602,42 @@ Checked evidence is in `evidence/dynamic-grid-vehicle-mover-fix.json`; raw stabi
 does not replace a populated live vehicle drive under latency, so prediction/correction and
 edge-transition validation remain open.
 
+## Blur default and grid-driver WASD regressions
+
+Follow-up live reports exposed two configuration/input correctness gaps. The blur report reproduced
+with an archived client profile containing `blur_enabled=false` and `blur_strength=2.0`: the
+overlay required both values, while the Graphics tab only controlled strength. Blur strength is
+now the single effective control. Its shipped `1.0` default enables blur, zero disables it, and the
+legacy Boolean remains registered but behaviorally ignored so old archives do not generate an
+unknown-CVar warning. The focused suite expanded from four passing pass-direction tests, which did
+not cover effective enablement, to 7/7 in 19 ms.
+
+The vehicle report reproduced in a two-map client/server test with a genuinely predicted buckle,
+an exterior `VehicleSPPTankCommand`, and 250 ms of client WASD. Before the fix, the test failed
+0/1 in 46 seconds: generic assignment had installed and then removed the standard movement relay,
+left the operator `CanMove=true`, moved the buckled driver 0.025 tiles, and triggered the buckle
+offset invariant. The smallest fix installs that relay only for
+`VehicleMovementKind.Standard`; grid movement continues to read the operator's input directly.
+The exact replay passed 1/1 in 36 seconds. The complete vehicle filter passed 5/5 in 58 seconds,
+including a standard Janicart relay check, and ordinary buckle movement passed 1/1 in 37 seconds.
+
+The combined sandbox/type-check, three required five-map Bush load/replication/lifecycle cases,
+and five vehicle regressions passed 9/9 in 1 minute 25 seconds. Sequential Release client and
+server builds completed with zero warnings and zero errors in 55.02 and 21.58 seconds,
+respectively.
+
+A fresh Release Bush client/server stability run used 20 seconds of server warm-up, 30 seconds of
+client warm-up, and a 10-second capture. It completed in 68.684 seconds; both processes exited 0,
+both stderr logs were empty, the client received a 928,762-byte full game state and entered
+`InGame`, and the affected archived profile produced no unknown legacy-blur-CVar warning. One late
+guidebook `MsgEntity` (`Diff: -262`) appeared without a fatal or unhandled signature.
+
+Checked evidence is in `evidence/blur-default-and-grid-driver-input-fix.json`; raw stability logs
+are under `artifacts/multiz-phase4/20260724-blur-driver-fix-stability`. This is correctness and
+stability evidence only: no CPU, GPU, allocation, or packet improvement is claimed. A live visual
+lower-pass confirmation and a populated real-seat drive under latency/two-client reconciliation
+remain deferred.
+
 ## Remaining Phase 4 exit work
 
 Phase 4 remains open until evidence covers, at minimum:

@@ -399,6 +399,31 @@ sandbox/type-check, and tank gate is recorded in Phase 4 evidence. No performanc
 claimed. A populated live vehicle drive with prediction/correction and injected latency remains
 deferred.
 
+### Post-validation blur-default and grid-driver input corrections
+
+Two user-reported correctness regressions were reproduced after the performance queue. First, the
+client had archived `cmu.zlevels.blur_enabled=false` alongside `blur_strength=2.0`. The overlay
+required both settings, but the Graphics tab exposed only strength, so the visible slider could
+not restore blur. The smallest consistent correction makes strength the single effective setting:
+the positive `1.0` default enables blur and zero disables it. The legacy Boolean stays registered
+only so existing archives load without an unknown-CVar warning. Render-pass selection remains
+unchanged.
+
+Second, generic vehicle ownership unconditionally installed the standard movement relay, after
+which the RMC grid-vehicle entry hook removed it. That transient path left a buckled grid driver
+with `InputMover.CanMove=true`. In the representative two-map test, 250 ms of client WASD moved the
+driver 0.025 tiles away from the seat offset and the buckle transform invariant unbuckled them.
+`VehicleSystem` now installs the relay only for `VehicleMovementKind.Standard`, matching the older
+RMC branch: grid vehicles continue to read the operator's `InputMover` directly, while ordinary
+vehicles retain their relay.
+
+The exact pre-fix driver regression failed 0/1 in 46 seconds; the fixed replay passed 1/1 in
+36 seconds. The expanded vehicle suite passed 5/5 in 58 seconds, including the existing dynamic
+tank/operator checks and a new standard-Janicart relay check. Ordinary buckle movement passed 1/1
+in 37 seconds. Blur policy coverage expanded from four directional cases to 7/7 in 19 ms with
+explicit default, zero-strength, and positive-strength assertions. No performance improvement is
+claimed for either correction.
+
 ## Deferred to Phase 4 or explicit design
 
 - Two-client latency, prediction, reconciliation, late join, reconnect, and remote-camera sessions.

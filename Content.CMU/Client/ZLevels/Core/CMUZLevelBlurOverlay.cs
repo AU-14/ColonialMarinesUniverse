@@ -59,8 +59,12 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
 
     private bool IsBlurEnabled()
     {
-        return _config.GetCVar(CMUZLevelsCVars.BlurEnabled) &&
-               _config.GetCVar(CMUZLevelsCVars.BlurStrength) > 0f;
+        return IsBlurEnabled(_config.GetCVar(CMUZLevelsCVars.BlurStrength));
+    }
+
+    internal static bool IsBlurEnabled(float strength)
+    {
+        return strength > 0f;
     }
 
     protected override void Draw(in OverlayDrawArgs args)

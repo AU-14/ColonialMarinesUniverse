@@ -42,7 +42,7 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
             $"maxDepth={_config.GetCVar(CMUZLevelsCVars.MaxRenderDepth)}, " +
             $"maxOpeningRects={_config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass)}");
         shell.WriteLine(
-            $"  cvars perf: blur={_config.GetCVar(CMUZLevelsCVars.BlurEnabled)}, " +
+            $"  cvars perf: blur={CMUZLevelBlurOverlay.IsBlurEnabled(_config.GetCVar(CMUZLevelsCVars.BlurStrength))}, " +
             $"lowerGrace={_config.GetCVar(CMUZLevelsCVars.LowerRenderVisibilityGrace):F2}s, " +
             $"projectedLights={_config.GetCVar(CMUZLevelsCVars.ProjectedLightingEnabled)}, " +
             $"projectedGrace={_config.GetCVar(CMUZLevelsCVars.ProjectedLightingVisibilityGrace):F2}s, " +

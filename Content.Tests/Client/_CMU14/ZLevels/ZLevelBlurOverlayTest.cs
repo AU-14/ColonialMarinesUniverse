@@ -1,5 +1,6 @@
 using Content.Client._CMU14.ZLevels.Core;
 using Content.Client.Viewport;
+using Content.Shared._CMU14.ZLevels;
 using NUnit.Framework;
 
 namespace Content.Tests.Client._CMU14.ZLevels;
@@ -7,6 +8,21 @@ namespace Content.Tests.Client._CMU14.ZLevels;
 [TestFixture]
 public sealed class ZLevelBlurOverlayTest
 {
+    [Test]
+    public void BlurIsEnabledByDefault()
+    {
+        Assert.That(
+            CMUZLevelBlurOverlay.IsBlurEnabled(CMUZLevelsCVars.BlurStrength.DefaultValue),
+            Is.True);
+    }
+
+    [TestCase(0f, false)]
+    [TestCase(1f, true)]
+    public void BlurStrengthControlsWhetherBlurIsEnabled(float strength, bool enabled)
+    {
+        Assert.That(CMUZLevelBlurOverlay.IsBlurEnabled(strength), Is.EqualTo(enabled));
+    }
+
     [Test]
     public void LowerLevelPassStillBlurs()
     {

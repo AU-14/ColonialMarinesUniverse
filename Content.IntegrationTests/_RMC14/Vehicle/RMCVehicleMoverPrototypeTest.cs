@@ -15,6 +15,7 @@ namespace Content.IntegrationTests._RMC14.Vehicle;
 public sealed class RMCVehicleMoverPrototypeTest : GameTest
 {
     private static readonly EntProtoId SPPCommandTank = "VehicleSPPTankCommand";
+    private static readonly EntProtoId Janicart = "VehicleJanicart";
 
     [Test]
     public async Task SPPCommandTankDoesNotUseMobMoverTest()
@@ -94,6 +95,38 @@ public sealed class RMCVehicleMoverPrototypeTest : GameTest
                 Assert.That(SEntMan.HasComponent<RelayInputMoverComponent>(driver), Is.False);
                 Assert.That(SEntMan.HasComponent<MovementRelayTargetComponent>(tank), Is.False);
                 Assert.That(SEntMan.HasComponent<InputMoverComponent>(tank), Is.False);
+            });
+        });
+    }
+
+    [Test]
+    public async Task StandardVehicleStillUsesMovementRelayTest()
+    {
+        var map = await Pair.CreateTestMap();
+        EntityUid driver = default;
+        EntityUid vehicleUid = default;
+
+        await Server.WaitAssertion(() =>
+        {
+            driver = SEntMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            vehicleUid = SEntMan.SpawnEntity(Janicart, map.GridCoords);
+
+            var vehicle = SEntMan.GetComponent<VehicleComponent>(vehicleUid);
+            var vehicleSystem = SEntMan.System<Content.Shared.Vehicle.VehicleSystem>();
+            Assert.That(vehicle.MovementKind, Is.EqualTo(VehicleMovementKind.Standard));
+            Assert.That(vehicleSystem.TrySetOperator((vehicleUid, vehicle), driver), Is.True);
+        });
+
+        await Pair.RunTicksSync(2);
+
+        await Server.WaitAssertion(() =>
+        {
+            Assert.Multiple(() =>
+            {
+                Assert.That(SEntMan.GetComponent<VehicleComponent>(vehicleUid).Operator, Is.EqualTo(driver));
+                Assert.That(SEntMan.HasComponent<RelayInputMoverComponent>(driver), Is.True);
+                Assert.That(SEntMan.HasComponent<MovementRelayTargetComponent>(vehicleUid), Is.True);
+                Assert.That(SEntMan.HasComponent<GridVehicleOperatorComponent>(driver), Is.False);
             });
         });
     }

@@ -137,7 +137,8 @@ public sealed partial class VehicleSystem : EntitySystem
             Dirty(operatorUid, vehicleOperator);
         }
 
-        _mover.SetRelay(operatorUid, entity);
+        if (entity.Comp.MovementKind == VehicleMovementKind.Standard)
+            _mover.SetRelay(operatorUid, entity);
 
         var enterEvent = new OnVehicleEnteredEvent(entity, operatorUid);
         RaiseLocalEvent(operatorUid, ref enterEvent);

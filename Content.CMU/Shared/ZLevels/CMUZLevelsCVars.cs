@@ -21,7 +21,9 @@ public sealed partial class CMUZLevelsCVars : CVars
     public static readonly CVarDef<int> MaxAudioDepth =
         CVarDef.Create("cmu.zlevels.max_audio_depth", 8, CVar.SERVER);
 
-    public static readonly CVarDef<bool> BlurEnabled =
+    // Retained so existing archived client configs do not produce an unknown-CVar warning.
+    // BlurStrength is the supported on/off control: zero disables blur and its positive default enables it.
+    public static readonly CVarDef<bool> LegacyBlurEnabled =
         CVarDef.Create("cmu.zlevels.blur_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<float> BlurStrength =
