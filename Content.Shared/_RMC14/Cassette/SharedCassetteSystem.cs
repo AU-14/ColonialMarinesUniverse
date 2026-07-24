@@ -184,7 +184,7 @@ public abstract partial class SharedCassetteSystem : EntitySystem
                 audioParams = audioParams.WithVolume(SharedAudioSystem.GainToVolume(gain));
             }
 
-            player.Comp.AudioStream = _audio.PlayEntity(song, actor, player, audioParams)?.Entity;
+            player.Comp.AudioStream = _audio.PlayGlobal(song, actor, audioParams)?.Entity;
         }
 
         player.Comp.Tape = tape.Value;
