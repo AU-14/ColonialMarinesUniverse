@@ -3,6 +3,8 @@
   id: SquadOpfor
   name: Sierra
   components:
+  - type: AU14SquadCallsign
+    word: VIOLET
   - type: SquadTeam
     roundStart: true
     color: "#bb91d8"
@@ -17,6 +19,8 @@
   id: SquadOpforBravo
   name: Tango
   components:
+  - type: AU14SquadCallsign
+    word: TAN
   - type: SquadTeam
     roundStart: true
     color: "#c6c1a8"
@@ -31,6 +35,8 @@
   id: SquadOpforCharlie
   name:  Uniform
   components:
+  - type: AU14SquadCallsign
+    word: SAGE
   - type: SquadTeam
     roundStart: true
     color: "#7A967E"
@@ -45,6 +51,8 @@
   id: SquadOpforIntel
   name: Intel # this will cause confusion, but better than x2 Auxiliary
   components:
+  - type: AU14SquadCallsign
+    word: BLUE
   - type: SquadTeam
     roundStart: true
     color: "#1E90FF"

@@ -45,10 +45,77 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         _channelsByFrequency = null;
     }
 
+    // prototype reloads happen mid-round: the chem generator reloads reagent
+    // prototypes on every generated chem, and admins can reload after hotfixes.
+    // throwing the plan away here re-rolled every net frequency behind the backs of
+    // all the printed cards, tuned slots and sweep fixes. keep the plan, reconcile
+    // it against the channel list, and only reprint if something actually moved
     private void OnPrototypesReloaded(PrototypesReloadedEventArgs args)
     {
-        _plan = null;
+        if (!args.WasModified<RadioChannelPrototype>())
+            return;
+
         _channelsByFrequency = null;
+
+        if (_plan == null)
+            return;
+
+        var changed = false;
+
+        // channels that no longer exist or no longer qualify drop out of the plan
+        foreach (var id in _plan.Keys.ToArray())
+        {
+            if (!_prototype.TryIndex<RadioChannelPrototype>(id, out var proto) ||
+                proto.Frequency <= 0 ||
+                string.IsNullOrEmpty(proto.Faction))
+            {
+                _plan.Remove(id);
+                changed = true;
+            }
+        }
+
+        // new channels get a frequency without disturbing the assignments everyone
+        // already has written down
+        var taken = new HashSet<int>(_plan.Values);
+
+        foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
+        {
+            if (proto.Frequency > 0)
+                taken.Add(proto.Frequency);
+        }
+
+        var added = _prototype.EnumeratePrototypes<RadioChannelPrototype>()
+            .Where(proto => proto.Frequency > 0 &&
+                            !string.IsNullOrEmpty(proto.Faction) &&
+                            !_plan.ContainsKey(proto.ID))
+            .OrderBy(proto => proto.ID, StringComparer.Ordinal);
+
+        foreach (var proto in added)
+        {
+            int frequency;
+
+            do
+            {
+                frequency = _random.Next(FrequencyMin, FrequencyMax + 1);
+            }
+            while (!taken.Add(frequency));
+
+            _plan[proto.ID] = frequency;
+            changed = true;
+        }
+
+        if (changed)
+            ReprintCards();
+    }
+
+    private void ReprintCards()
+    {
+        var query = EntityQueryEnumerator<ANPRCFreqCardComponent, PaperComponent>();
+
+        while (query.MoveNext(out var uid, out var card, out var paper))
+        {
+            _paper.SetContent((uid, paper), GenerateSoi(card.Faction));
+        }
     }
 
     private void OnCommsToggled(bool enabled)
@@ -57,12 +124,7 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         _channelsByFrequency = null;
 
         // cards printed before the toggle carry the wrong numbers, reprint them
-        var query = EntityQueryEnumerator<ANPRCFreqCardComponent, PaperComponent>();
-
-        while (query.MoveNext(out var uid, out var card, out var paper))
-        {
-            _paper.SetContent((uid, paper), GenerateSoi(card.Faction));
-        }
+        ReprintCards();
     }
 
     public int GetFrequency(RadioChannelPrototype channel)

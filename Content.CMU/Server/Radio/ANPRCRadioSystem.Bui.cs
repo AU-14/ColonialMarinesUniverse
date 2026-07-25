@@ -181,7 +181,9 @@ public sealed partial class ANPRCRadioSystem
             return;
         }
 
-        if (_freqPlan.TryGetChannelByFrequency(frequency, out var channel))
+        var onNet = _freqPlan.TryGetChannelByFrequency(frequency, out var channel);
+
+        if (onNet)
         {
             ent.Comp.FrequencyOverrides.Remove(args.Slot);
             ent.Comp.Presets[args.Slot] = channel;
@@ -207,11 +209,20 @@ public sealed partial class ANPRCRadioSystem
             ? slotLabel
             : $"P{args.Slot + 1}";
 
+        // say what the number landed on. a frequency that matches no net used to get
+        // the same confirmation as one that does, and operators walked away thinking
+        // they were on a net when they were keying dead air
         _cmChat.ChatMessageToOne(
-            Loc.GetString(
-                "anprc-frequency-set",
-                ("slot", label),
-                ("freq", TunableFrequencySystem.FormatFreq(frequency))),
+            onNet && _prototype.TryIndex(channel, out var channelProto)
+                ? Loc.GetString(
+                    "anprc-frequency-set-net",
+                    ("slot", label),
+                    ("freq", TunableFrequencySystem.FormatFreq(frequency)),
+                    ("channel", channelProto.LocalizedName))
+                : Loc.GetString(
+                    "anprc-frequency-set-dynamic",
+                    ("slot", label),
+                    ("freq", TunableFrequencySystem.FormatFreq(frequency))),
             args.Actor);
     }
 
@@ -317,7 +328,9 @@ public sealed partial class ANPRCRadioSystem
         if (!ent.Comp.DiscoveredFrequencies.Contains(args.Frequency))
             return;
 
-        if (_freqPlan.TryGetChannelByFrequency(args.Frequency, out var channel))
+        var onNet = _freqPlan.TryGetChannelByFrequency(args.Frequency, out var channel);
+
+        if (onNet)
         {
             ent.Comp.FrequencyOverrides.Remove(args.Slot);
             ent.Comp.Presets[args.Slot] = channel;
@@ -335,10 +348,16 @@ public sealed partial class ANPRCRadioSystem
         UpdateBuiState(ent);
 
         _cmChat.ChatMessageToOne(
-            Loc.GetString(
-                "anprc-frequency-set",
-                ("slot", ent.Comp.SlotLabels[args.Slot]),
-                ("freq", TunableFrequencySystem.FormatFreq(args.Frequency))),
+            onNet && _prototype.TryIndex(channel, out var channelProto)
+                ? Loc.GetString(
+                    "anprc-frequency-set-net",
+                    ("slot", ent.Comp.SlotLabels[args.Slot]),
+                    ("freq", TunableFrequencySystem.FormatFreq(args.Frequency)),
+                    ("channel", channelProto.LocalizedName))
+                : Loc.GetString(
+                    "anprc-frequency-set-unknown",
+                    ("slot", ent.Comp.SlotLabels[args.Slot]),
+                    ("freq", TunableFrequencySystem.FormatFreq(args.Frequency))),
             args.Actor);
     }
 

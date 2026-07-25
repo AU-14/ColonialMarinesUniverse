@@ -36,9 +36,9 @@
     callsignPresets:
     - PLT ACTUAL
     - PLT MAIN
-    - ALPHA ACTUAL
-    - BRAVO ACTUAL
-    - CHARLIE 6
+    - RED ACTUAL
+    - YELLOW ACTUAL
+    - PURPLE 6
     - SUNRAY
     - OVERLORD
     - DUSTOFF
