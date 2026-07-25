@@ -82,6 +82,8 @@
         amount: 10
       - id: AU14PillCanisterOsteoCalc
         amount: 10
+      - id: CMU14PillCanisterAlkysine
+        amount: 10
       - id: AU14PillCanisterPulmovine
         amount: 10
       - id: AU14PillCanisterImidazoline
