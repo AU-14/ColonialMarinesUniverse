@@ -1,0 +1,59 @@
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoBoxerPunch
+  name: cm-xeno-boxer-punch-name
+  description: cm-xeno-boxer-punch-description
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 4
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+  - type: TargetAction
+    range: 2
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoBoxerPunchActionEvent
+    toggleOutline: false
+  - type: XenoOffensiveAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoBoxerJab
+  name: cm-xeno-boxer-jab-name
+  description: cm-xeno-boxer-jab-description
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 4
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: punch
+  - type: TargetAction
+    range: 3
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoBoxerJabActionEvent
+    toggleOutline: false
+  - type: XenoOffensiveAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: ActionXenoBoxerUppercut
+  name: cm-xeno-boxer-uppercut-name
+  description: cm-xeno-boxer-uppercut-description
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 10
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_clothesline
+  - type: TargetAction
+    range: 1.5
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoBoxerUppercutActionEvent
+    toggleOutline: false
+  - type: XenoOffensiveAction

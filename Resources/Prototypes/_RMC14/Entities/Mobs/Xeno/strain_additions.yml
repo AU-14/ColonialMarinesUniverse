@@ -160,6 +160,52 @@
     id: CMXenoWarriorBulwark
 
 - type: entity
+  parent: CMXenoWarrior
+  id: CMXenoWarriorBoxer
+  suffix: Boxer
+  components:
+  - type: Sprite
+    sprite: _CM13/Mobs/Xenos/Warrior/boxer_warrior.rsi
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+  - type: RemoveComponents
+    components:
+    - type: RMCXenoDamageVisuals
+      prefix: boxer
+    - type: XenoPunch
+    - type: XenoLunge
+    - type: XenoFling
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      560: Critical
+      660: Dead
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoBoxerPunch
+    - ActionXenoBoxerJab
+    - ActionXenoBoxerUppercut
+    - ActionXenoDevolve
+  - type: XenoStrain
+    name: rmc-xeno-boxer-name
+    description: rmc-xeno-boxer-description
+    popup: rmc-xeno-boxer-popup
+  - type: XenoBoxer
+  - type: XenoEvolution
+    strains: []
+  - type: CMArmor
+    xenoArmor: 25
+    explosionArmor: 40
+  - type: XenoHidden
+  - type: RMCActionOrder
+    id: CMXenoWarriorBoxer
+
+- type: entity
   parent: RMCXenoCarrierBase
   id: CMXenoReaper
   name: Reaper
