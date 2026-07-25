@@ -67,35 +67,22 @@ public sealed partial class MarineOrdersComponent : Component
 
     // Gender-based "Move!" Voicelines.
     [DataField, AutoNetworkedField]
-    public SoundSpecifier? MoveOrderSoundMale;
+    public SoundSpecifier? MoveOrderSoundMale = new SoundCollectionSpecifier("AU14MaleMoveOrder");
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier? MoveOrderSoundFemale;
-
-    // Fallback for backwards compatibility
-    [DataField, AutoNetworkedField]
-    public SoundSpecifier? MoveOrderSound;
+    public SoundSpecifier? MoveOrderSoundFemale = new SoundCollectionSpecifier("AU14FemaleMoveOrder");
 
     // Gender-based "Focus!" Voicelines.
     [DataField, AutoNetworkedField]
-    public SoundSpecifier? FocusOrderSoundMale;
+    public SoundSpecifier? FocusOrderSoundMale = new SoundCollectionSpecifier("AU14MaleFocusOrder");
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier? FocusOrderSoundFemale;
-
-    // Fallback for backwards compatibility
-    [DataField, AutoNetworkedField]
-    public SoundSpecifier? FocusOrderSound;
+    public SoundSpecifier? FocusOrderSoundFemale = new SoundCollectionSpecifier("AU14FemaleFocusOrder");
 
     // Gender-based "Hold!" Voicelines.
     [DataField, AutoNetworkedField]
-    public SoundSpecifier? HoldOrderSoundMale;
+    public SoundSpecifier? HoldOrderSoundMale = new SoundCollectionSpecifier("AU14MaleHoldOrder");
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier? HoldOrderSoundFemale;
-
-    // Fallback for backwards compatibility
-    [DataField, AutoNetworkedField]
-    public SoundSpecifier? HoldOrderSound;
-
+    public SoundSpecifier? HoldOrderSoundFemale = new SoundCollectionSpecifier("AU14FemaleHoldOrder");
 }

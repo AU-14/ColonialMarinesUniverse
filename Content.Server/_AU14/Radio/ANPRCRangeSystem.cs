@@ -154,7 +154,10 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
         }
     }
 
-    private ANPRCRangeTier GetRangeTier(EntityUid entity, string channelId, out float quality)
+    // best coverage tier any live anchor gives this entity on the channel. public so
+    // the radio check can report reachability the same way real traffic is gated,
+    // instead of pretending the pack's own radius is the whole net
+    public ANPRCRangeTier GetRangeTier(EntityUid entity, string channelId, out float quality)
     {
         var entityPos = _transform.GetWorldPosition(entity);
         var entityMap = Transform(entity).MapID;

@@ -193,30 +193,30 @@
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">ALPHA ACTUAL</Box>
+      <Box Margin="4">RED ACTUAL</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Alpha squad leader</Box>
-    </ColorBox>
-
-    <ColorBox>
-      <Box Margin="4">ALPHA ROMEO</Box>
-    </ColorBox>
-    <ColorBox>
-      <Box Margin="4">Radio operator attached to Alpha</Box>
+      <Box Margin="4">Red (Alpha) squad leader</Box>
     </ColorBox>
 
     <ColorBox>
-      <Box Margin="4">ALPHA 1-1 ... 1-N</Box>
+      <Box Margin="4">RED ROMEO</Box>
     </ColorBox>
     <ColorBox>
-      <Box Margin="4">Alpha squad members</Box>
+      <Box Margin="4">Radio operator attached to Red (Alpha)</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">RED 1-1 ... 1-N</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Red (Alpha) squad members</Box>
     </ColorBox>
   </Table>
 
   [bold]ACTUAL[/bold] identifies the person in charge speaking personally rather than an operator transmitting on their behalf.
 
-  Squad leaders answer as their element's ACTUAL station, for example [bold]ALPHA ACTUAL[/bold]. At platoon level, [bold]HAVOC 6 ACTUAL[/bold] means the commander has taken the handset personally instead of the RTO.
+  Squad leaders answer as their element's ACTUAL station, for example [bold]RED ACTUAL[/bold]. At platoon level, [bold]HAVOC 6 ACTUAL[/bold] means the commander has taken the handset personally instead of the RTO.
 
   ### Comms Net Directory
 

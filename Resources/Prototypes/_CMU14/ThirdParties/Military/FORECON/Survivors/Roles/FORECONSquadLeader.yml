@@ -6,18 +6,6 @@
   roundRole: AU14FORECONSquadleaderBase
   roundComponents:
   - type: MarineOrders
-    moveOrderSoundMale:
-      collection: AU14MaleMoveOrder
-    moveOrderSoundFemale:
-      collection: AU14FemaleMoveOrder
-    focusOrderSoundMale:
-      collection: AU14MaleFocusOrder
-    focusOrderSoundFemale:
-      collection: AU14FemaleFocusOrder
-    holdOrderSoundMale:
-      collection: AU14MaleHoldOrder
-    holdOrderSoundFemale:
-      collection: AU14FemaleHoldOrder
   name: cm-job-name-squad-leader
   description: au14-job-description-govforadvisor
   playTimeTracker: AU14JobFORECONSquadLeader

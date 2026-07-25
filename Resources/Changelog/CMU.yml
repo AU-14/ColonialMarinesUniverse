@@ -8059,5 +8059,50 @@
   id: 503
   time: '2026-07-24T23:15:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1704
+- author: maertayn
+  changes:
+  - message: Fixed Cassettes not working for Mono channel audio files
+    type: Fix
+  id: 504
+  time: '2026-07-24T23:53:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1707
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed multiple roles lacking proper leadership component
+    type: Fix
+  id: 505
+  time: '2026-07-25T00:31:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1705
+- author: rokudara-sen
+  changes:
+  - message: AN/PRC-117G frequency assignments no longer change mid-round, so printed
+      SOI cards stay accurate
+    type: Fix
+  - message: Radio checks now include stations reachable through comms array coverage
+    type: Fix
+  - message: Direct-frequency traffic heard by a tuned radio is now logged and marked
+      as an intercept when unauthenticated
+    type: Fix
+  - message: Nets discovered through a band sweep can now be selected from the NET
+      tab
+    type: Fix
+  - message: Tuning feedback now distinguishes named nets, unidentified nets, and
+      empty direct frequencies
+    type: Tweak
+  - message: Squads now use color callsigns such as RED, YELLOW, PURPLE, and GREEN
+      instead of phonetics
+    type: Add
+  - message: The CLF Requisitions Rack now issues the cell's starting comms for free
+    type: Tweak
+  id: 506
+  time: '2026-07-25T08:43:55.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1710
+- author: maertayn
+  changes:
+  - message: Removes the MarineOrders collection specifier in yaml
+    type: Code
+  id: 507
+  time: '2026-07-25T08:47:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1708
 Name: CMU
 Order: -1

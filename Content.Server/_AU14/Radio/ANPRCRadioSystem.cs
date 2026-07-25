@@ -142,6 +142,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         SubscribeLocalEvent<PropCallerComponent, MapInitEvent>(OnAdminObserverMapInit);
 
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCDirectScanSwitchedEvent>(OnDirectScanSwitched);
+        SubscribeLocalEvent<ANPRCRadioComponent, ANPRCDirectTrafficReceivedEvent>(OnDirectTrafficReceived);
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCSweepStoppedEvent>(OnSweepStopped);
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCSweepUpdatedEvent>(OnSweepUpdated);
         SubscribeLocalEvent<ANPRCRadioComponent, ANPRCCryptoChangedEvent>(OnCryptoChanged);
@@ -656,6 +657,46 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     private void OnDirectScanSwitched(Entity<ANPRCRadioComponent> ent, ref ANPRCDirectScanSwitchedEvent args)
     {
         UpdateBuiState(ent);
+    }
+
+    // direct-frequency traffic lands in the net log like channel traffic does. anyone
+    // the set cannot place as friendly - enemy operators, colony handhelds, private
+    // squad freqs of the other side - gets the intercept flag so the print filter and
+    // the red log line pick it up
+    private void OnDirectTrafficReceived(Entity<ANPRCRadioComponent> ent, ref ANPRCDirectTrafficReceivedEvent args)
+    {
+        if (!_commsEnabled)
+            return;
+
+        var senderFaction = GetSenderFaction(args.Sender);
+
+        var intercepted = string.IsNullOrEmpty(senderFaction) ||
+                          !string.Equals(senderFaction, ent.Comp.OperatorFaction, StringComparison.OrdinalIgnoreCase);
+
+        AppendNetLog(
+            ent.Comp,
+            _timing.CurTime.TotalSeconds,
+            args.SenderName,
+            $"{TunableFrequencySystem.FormatFreq(args.Frequency)} MHz",
+            args.Message,
+            intercepted);
+
+        UpdateBuiState(ent);
+    }
+
+    private string? GetSenderFaction(EntityUid sender)
+    {
+        if (TryComp(sender, out ANPRCRadioComponent? sourceRadio))
+            return sourceRadio.OperatorFaction;
+
+        if (TryComp(sender, out WearingANPRCComponent? wearing) &&
+            TryComp(wearing.Radio, out ANPRCRadioComponent? wornRadio))
+        {
+            return wornRadio.OperatorFaction;
+        }
+
+        // every faction member carries an assigned callsign, which knows its faction
+        return CompOrNull<AU14CallsignComponent>(sender)?.Faction;
     }
 
     private void OnSweepStopped(Entity<ANPRCRadioComponent> ent, ref ANPRCSweepStoppedEvent args)

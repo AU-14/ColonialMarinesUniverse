@@ -35,18 +35,6 @@
     - type: IntelRescueSurvivorObjective
     - type: RMCAllowSuitStorage
     - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
   useLoadoutOfJob: CMSurvivorCorporate # for inheritance
 
 - type: startingGear

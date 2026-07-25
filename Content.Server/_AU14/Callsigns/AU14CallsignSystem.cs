@@ -330,6 +330,11 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         if (_squadWords.TryGetValue(squad, out var word))
             return word;
 
+        // squads carry a color word (RED, YELLOW, PURPLE) so callsigns never collide
+        // with the phonetic alphabet used for everything else on the net
+        if (CompOrNull<AU14SquadCallsignComponent>(squad)?.Word is { Length: > 0 } squadWord)
+            return squadWord.ToUpperInvariant();
+
         return Name(squad).ToUpperInvariant();
     }
 

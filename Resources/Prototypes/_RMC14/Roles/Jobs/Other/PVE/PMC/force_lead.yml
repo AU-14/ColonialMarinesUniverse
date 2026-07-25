@@ -30,18 +30,6 @@
         sprite: _RMC14/Interface/cm_job_icons.rsi
         state: pmc_ld
     - type: MarineOrders
-      moveOrderSoundMale:
-        collection: AU14MaleMoveOrder
-      moveOrderSoundFemale:
-        collection: AU14FemaleMoveOrder
-      focusOrderSoundMale:
-        collection: AU14MaleFocusOrder
-      focusOrderSoundFemale:
-        collection: AU14FemaleFocusOrder
-      holdOrderSoundMale:
-        collection: AU14MaleHoldOrder
-      holdOrderSoundFemale:
-        collection: AU14FemaleHoldOrder
     - type: RMCPointing
     - type: RMCTrackable
     - type: DemoSpecWhitelist
