@@ -254,6 +254,24 @@
 
 - type: entity
   parent: CMPill
+  id: CMU14PillAlkysine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 10
+        reagents:
+        - ReagentId: CMUAlkysine
+          Quantity: 10
+  - type: Sprite
+    layers:
+    - state: pill2
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+  - type: ExamineRequiresSkill
+    skilledExamine: cm-pill-contents-alkysine #new contents
+
+- type: entity
+  parent: CMPill
   id: AU14PillCMUOsteoCalc
   components:
   - type: SolutionContainerManager
@@ -316,6 +334,29 @@
       amount: 16
   - type: IconLabel
     labelTextLocId: rmc-cardiocaine-container-label-text
+
+- type: entity
+  parent: CMPillCanister
+  id: CMU14PillCanisterAlkysine
+  name: alkysine pill bottle
+  suffix: alkysine, 16
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister9
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: CMU14PillAlkysine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: cmu-alkysine-container-label-text
 
 - type: entity
   parent: CMPillCanister
