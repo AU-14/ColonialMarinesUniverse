@@ -74,6 +74,8 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
     [Dependency] private SharedRequisitionsSystem _reqsys = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private ILogManager _logman = default!;
+    [Dependency] private SharedTransformSystem _xform = default!;
+    [Dependency] private XRFScannerSystem _scanner = default!;
 
     private Dictionary<Entity<ResearchDataTerminalComponent>, int> _printing = [];
     private HashSet<Entity<ResearchDataTerminalComponent>> _printingLast = [];
@@ -186,7 +188,29 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
                     {
                         if (ent == cip)
                         {
-                            SpawnNextToOrDrop("CMUCipherHintPaper", ent);
+                            var xrf = GetNearestXRF(cip);
+                            if (xrf == EntityUid.Invalid)
+                                SpawnNextToOrDrop("CMUCipherHintPaper", ent);
+                            else
+                            {
+                                var elev = _scanner.GetFactionElevator(xrf, null);
+                                if (elev == NetEntity.Invalid)
+                                    SpawnNextToOrDrop("CMUCipherHintPaper", ent);
+                                else
+                                {
+                                    var elevint = GetEntity(elev);
+                                    if (!TryComp<RequisitionsElevatorComponent>(elevint, out var elevcomp))
+                                        SpawnNextToOrDrop("CMUCipherHintPaper", ent);
+                                    else
+                                    {
+                                        var order = new RequisitionsEntry();
+                                        order.Cost = 0;
+                                        order.Crate = "CMUCrateSecureCipheringExperiment";
+                                        elevcomp.Orders.Add(order);
+                                        SpawnNextToOrDrop("CMUCipherHintPaperInformDeliv", ent);
+                                    }
+                                }
+                            }
                         }
                         else
                         {
@@ -460,6 +484,32 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
             datcomp.Data = value.Item5;
         }
     }
+
+    public EntityUid GetNearestXRF(EntityUid ent)
+    {
+        if (!TryComp(ent, out TransformComponent? excomp))
+            return EntityUid.Invalid;
+        var scannersq = EntityQueryEnumerator<XRFScannerComponent>();
+        List<(EntityUid, TransformComponent)> scanners = [];
+        EntityUid closest = EntityUid.Invalid;
+        float closestDistance = float.MaxValue;
+        while (scannersq.MoveNext(out var xent, out _))
+        {
+            if (!TryComp(xent, out TransformComponent? xcomp))
+                continue;
+            if (excomp.MapUid != xcomp.MapUid)
+                continue;
+            float dist = System.Numerics.Vector2.Distance(_xform.GetWorldPosition(ent), _xform.GetWorldPosition(xent));
+            if (closestDistance > dist)
+            {
+                closestDistance = dist;
+                closest = xent;
+            }
+        }
+        return closest;
+    }
+
+
     private void RerollChems()
     {
         _selectable.Clear();
