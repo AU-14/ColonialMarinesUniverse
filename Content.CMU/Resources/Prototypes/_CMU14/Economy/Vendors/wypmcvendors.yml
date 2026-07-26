@@ -86,6 +86,8 @@
       entries:
       - id: AU14BeltMarineBlack
         amount: 40
+      - id: CMUBeltCombatSidearmRig
+        amount: 15
       - id: RMCBeltHolsterSMGPouch
         amount: 15
       - id: RMCBeltGrenade
@@ -1027,6 +1029,8 @@
       - id: RMCIntelDetector
         amount: 4
       - id: RMCFulton20
+        amount: 4
+      - id: RMCOverwatchCameraTripod
         amount: 4
       - id: RMCSentryLaptop
         amount: 4

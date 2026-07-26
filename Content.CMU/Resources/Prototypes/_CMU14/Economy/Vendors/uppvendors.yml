@@ -106,6 +106,8 @@
       entries:
       - id: AU14BeltMarineUPP
         amount: 40
+      - id: CMUBeltCombatSidearmRig
+        amount: 15
       - id: RMCBeltGrenade
         amount: 4
       - id: AU14ShotgunShellLoadingRigUPP
@@ -1296,6 +1298,8 @@
       - id: RMCIntelDetector
         amount: 4
       - id: RMCFulton20
+        amount: 4
+      - id: RMCOverwatchCameraTripod
         amount: 4
       - id: RMCSentryLaptop
         amount: 4
