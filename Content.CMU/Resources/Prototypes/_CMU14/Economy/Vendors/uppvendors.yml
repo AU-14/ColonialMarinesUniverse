@@ -883,12 +883,12 @@
       takeOne: SquadSpecKit
       sharedSpecLimit: 1
       entries:
-      - id: AU14KitUPPPointmanType23
+      - id: CMUType23ShotgunCase
         giveSquadRoleName: au14-job-name-govforspecialist-pointmanUPP
         givePrefix: au14-job-prefix-govforspecialist-pointmanUPP
         isAppendSquadRoleName: false
         isAppendPrefix: true
-      - id: AU14KitUPPHATHJRA12
+      - id: CMUDemoSpecEquipmentCaseUPP
         giveSquadRoleName: au14-job-name-govforspecialist-heavyantitankUPP
         givePrefix: au14-job-prefix-govforspecialist-heavyantitankUPP
         isAppendSquadRoleName: false

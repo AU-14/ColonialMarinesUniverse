@@ -108,6 +108,26 @@
     </ColorBox>
 
     <ColorBox>
+      <Box Margin="4">CLF relay set (staked down)</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0-35 tiles.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Degraded to 50 tiles. No signal beyond 50.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">CLF base station (staked down)</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">0-55 tiles.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Degraded to 80 tiles. No signal beyond 80.</Box>
+    </ColorBox>
+
+    <ColorBox>
       <Box Margin="4">Shipboard communications array</Box>
     </ColorBox>
     <ColorBox>
@@ -115,6 +135,16 @@
     </ColorBox>
     <ColorBox>
       <Box Margin="4">Provides no coverage when destroyed or unpowered.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">CLF feeder tap</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Whatever the tapped mast or array covers.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Adds the CLF nets without removing any. The host keeps working normally for its owners.</Box>
     </ColorBox>
 
     <ColorBox>
@@ -138,8 +168,72 @@
   - A powered communications array.
   - A vehicle radio set aboard a dropship or vehicle (covers little more than the hull).
   - A field antenna mast, raised from ten metal sheets by engineering-trained personnel.
+  - A CLF clandestine base station or relay set, staked down (CLF nets only).
+  - Any mast or array carrying a CLF feeder tap (CLF nets only, until the tap is removed).
 
   Colony and civilian channels are not relay-gated and keep stock behavior.
+
+  ## Net Splicing
+
+  A CLF Radio Operator with a net splice kit can tap a mast or array and add the cell nets to it. The host is not disabled and keeps serving its owners. Probe the band to find each hidden trunk carrier, then lock it. Probes are shared across the whole job. Running out of probes, or filling the detection meter, fails the job and faults the junction.
+
+  <Table Columns="4" MinForcedColumnWidth="80">
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Target[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Carriers[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Probes[/bold]</Box>
+    </ColorBox>
+    <ColorBox Color="#263238">
+      <Box Margin="4">[bold]Open time[/bold]</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Field antenna mast</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">2</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">24</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">6 seconds</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Command-post mast</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">3</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">32</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">8 seconds</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">Communications array</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">4</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">40</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">12 seconds</Box>
+    </ColorBox>
+  </Table>
+
+  Signal reads zero more than 30 positions from a carrier. A lock takes within 4. Each probe adds 1.5% detection. A missed lock adds 30% and costs 2 probes. The mast sparks throughout, and holds a fault for 90 seconds after a failure, during which it cannot be spliced again.
+
+  Anyone can pull a tap off in eight seconds, and recovers a CLF fill card for doing it.
 
   ## Antennas
 
@@ -172,6 +266,16 @@
     </ColorBox>
     <ColorBox>
       <Box Margin="4">Approximately double range while stationary and half standard range while moving.</Box>
+    </ColorBox>
+
+    <ColorBox>
+      <Box Margin="4">[bold]WIRE[/bold]</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">Improvised, fitted to the CLF relay set only.</Box>
+    </ColorBox>
+    <ColorBox>
+      <Box Margin="4">35 tiles clear and 50 degraded while stationary, half standard range while moving.</Box>
     </ColorBox>
   </Table>
 

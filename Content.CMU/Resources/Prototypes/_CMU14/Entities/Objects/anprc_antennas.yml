@@ -26,6 +26,25 @@
 
 - type: entity
   parent: ANPRCAntennaBase
+  id: ANPRCWireAntenna
+  name: improvised wire antenna
+  description: >-
+    A reel of insulated wire, a ceramic insulator and a length of paracord. Thrown
+    over a branch or a rafter it will hold a net together, and looks like scrap in
+    a bag until it is strung up.
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    state: antenna_w
+  - type: ANPRCAntenna
+    label: WIRE
+    fullRange: 35
+    partialRange: 50
+    requiresStationary: true
+    movingRangeMultiplier: 0.5
+
+- type: entity
+  parent: ANPRCAntennaBase
   id: ANPRCMastAntenna
   name: AN/PRC-117G mast antenna
   description: >-
