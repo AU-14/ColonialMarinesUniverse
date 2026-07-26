@@ -81,7 +81,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointCivilianColonyAdminAssistant
-  name: Spawn Point Colony Administrative Assistant
+  name: Spawn Point Colony Deputy Administrator
   components:
   - type: SpawnPoint
     job_id: AU14JobCivilianColonyAdminAssistant

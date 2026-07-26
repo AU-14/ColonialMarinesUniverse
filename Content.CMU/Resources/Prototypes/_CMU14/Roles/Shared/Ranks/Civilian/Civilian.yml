@@ -11,13 +11,13 @@
 
 - type: rank
   id: AU14RankColonySeniorAdminAssistant
-  name: Senior Assistant
-  prefix: Sn. Assist.
+  name: Senior Deputy Administrator
+  prefix: Sr. Dep. Admin.
 
 - type: rank
   id: AU14RankColonyAdminAssistant
-  name: Assistant
-  prefix: Assist.
+  name: Deputy Administrator
+  prefix: Dep. Admin.
 
 # Diplomatic
 - type: rank
