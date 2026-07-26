@@ -161,6 +161,9 @@
     sprite: _RMC14/Objects/Misc/paper.rsi
     layers:
     - state: photo
+    - state: photo
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
     - state: paper_stamped
       map: ["enum.PaperVisualLayers.Stamp"]
       visible: false
@@ -170,6 +173,81 @@
     contentMargin: -20, 40, -25, 25
     backgroundPatchMargin: 0, 0, 0, 0
     backgroundScale: 1.0, 1.0
+
+- type: entity #27x27 pixel image to ss14 goodie with black background. Really nice if you know how to get shit done
+  parent: CMPaper
+  id: CMUPaperParking
+  name: parking ticket
+  description: A municipal parking violation notice. Failure to comply may result in fines or vehicle impoundment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: parking_ticket
+    - state: parking_ticket
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/parking_ticket_bkg.png"
+    maxWritableArea: 600, 400
+    contentMargin: 10, 10, 10, 90
+    backgroundPatchMargin: 0, 0, 0, 0
+    backgroundScale: 1.0, 1.0
+  - type: Paper
+    content: |
+     [bold]Reason for Violation[/bold]
+     [check] No Valid Parking Permit         [check] Blocking Driveway / Access
+     [check] No Parking Area / Space        [check] Blocking Other Vehicle
+     [check] Fire Lane                                     [check] Parked in 2 Spaces
+     [check] Reserved / Assigned Space   [check] Other: [mono][color=DarkBlue][form][/color][/mono]
+     ===============================================================
+     Date/Time: [mono][color=DarkBlue][form][/color][/mono] [bold]/[/bold] License Plate: [mono][color=DarkBlue][form][/color][/mono]
+     Location: [mono][color=DarkBlue][form][/color][/mono] [bold]/[/bold] Permit No: [mono][color=DarkBlue][form][/color][/mono] [bold]/[/bold] Driver: [mono][color=DarkBlue][form][/color][/mono]
+     Vehicle Type & Model & Color: [mono][color=DarkBlue][form][/color][/mono]
+     Issued By: [mono][color=DarkBlue][signature][/color][/mono]
+
+- type: entity
+  parent: CMUPaperPhoto
+  id: CMUPaperPhotoPotato
+  name: cat photograph
+  description: A photograph of an evil looking cat... It's staring at you.
+  components:
+    - type: Paper
+      stampState: paper_stamp-ce
+      stampedBy:
+        - stampedColor: '#241700' #MAINTAINERS DON'T GET SCARED BY THIS.
+          stampedName: SEEGSON #PHOTOGRAPH OF POTATOED
+      content: |
+       [color=#988]██[color=#888]██[color=#aaa]██[color=#baa]██[color=#dcc]████[color=#ccc]████████████████████████[color=#cbb]██[color=#ccc]████[color=#dcc]██[color=#cbc]██[color=#bba]██[color=#baa]██[color=#999]██[color=#aaa]██
+       [color=#777]██[color=#665]██[color=#877]██[color=#988]██[color=#bba]██[color=#cbb]██[color=#dcc]██[color=#ccc]████[color=#ccb]████[color=#ccc]██[color=#ccb]██[color=#ccc]██████████[color=#bbb]██[color=#ccc]██[color=#dcc]██[color=#ccb]██[color=#baa]██[color=#a99]████[color=#988]██[color=#aaa]██
+       [color=#766]██[color=#655]██[color=#877]████[color=#888]██[color=#a99]██[color=#ccb]██[color=#ddc]██[color=#ccc]██[color=#ccb]████████[color=#ccc]██[color=#ccb]██[color=#ccc]██[color=#cdc]██[color=#ccc]████[color=#dcc]██[color=#cbb]██[color=#baa]██[color=#989]██[color=#999]██[color=#baa]██[color=#999]██[color=#a99]██
+       [color=#776]██[color=#665]██[color=#a99]████[color=#766]██[color=#877]██[color=#aa9]██[color=#ccb]██[color=#ddd]██[color=#dcc]██[color=#ddc]██████████████████[color=#cbb]██[color=#a9a]██[color=#988]████[color=#a99]██[color=#ccc]██[color=#aaa]██[color=#999]██
+       [color=#887]██[color=#877]██[color=#ba9]██[color=#baa]██[color=#766]████[color=#876]██[color=#a98]██[color=#baa]██[color=#a99]██[color=#987]██[color=#a99]██[color=#aa9]██[color=#a99]██[color=#a98]██[color=#988]████[color=#998]██[color=#baa]██[color=#998]██[color=#877]████[color=#a99]████[color=#aaa]██[color=#878]██[color=#aaa]██
+       [color=#887]██[color=#766]██[color=#887]██[color=#988]██[color=#987]██[color=#877]██████[color=#a99]██[color=#877]██[color=#766]██[color=#987]██████[color=#887]██[color=#877]████[color=#887]██[color=#988]██[color=#977]██[color=#988]██[color=#999]██[color=#a99]██[color=#999]██[color=#878]██[color=#777]██[color=#bbb]██
+       [color=#988]██[color=#766]██████[color=#a88]██[color=#987]████[color=#876]██[color=#877]██[color=#876]██[color=#766]██[color=#776]██[color=#887]████[color=#877]██[color=#766]████[color=#877]██[color=#876]██[color=#887]██[color=#a99]██████[color=#988]██[color=#888]██[color=#777]██[color=#bbb]██
+       [color=#ba9]██[color=#776]██[color=#665]██[color=#876]██[color=#caa]██[color=#988]██[color=#866]██[color=#877]██[color=#987]██[color=#766]██[color=#866]██[color=#876]██[color=#866]████[color=#876]██████[color=#987]██[color=#977]██[color=#987]████[color=#a98]██[color=#cba]██[color=#cbb]██[color=#988]██[color=#777]██[color=#ccc]██
+       [color=#ccb]██[color=#876]██[color=#655]██[color=#766]██[color=#a98]██[color=#987]██[color=#765]██[color=#987]████[color=#754]████[color=#cba]██[color=#987]████[color=#a87]██[color=#987]██[color=#976]████[color=#a98]████[color=#876]██[color=#765]██[color=#a98]██[color=#ba9]██[color=#766]██[color=#776]██[color=#dcc]██
+       [color=#ccb]██[color=#877]██[color=#665]██[color=#765]██[color=#a88]████[color=#876]██[color=#a98]██[color=#987]██[color=#865]██[color=#876]██[color=#cba]██[color=#a98]██[color=#a87]██[color=#a88]██[color=#a87]████[color=#987]██[color=#b99]██[color=#ba9]██[color=#a99]██[color=#877]██[color=#776]██[color=#988]██[color=#877]██[color=#887]██[color=#ccb]██
+       [color=#dcc]██[color=#988]██[color=#876]████[color=#b99]██[color=#ca9]██[color=#a98]██[color=#ca9]██[color=#a87]██[color=#875]██[color=#a98]████[color=#976]██[color=#876]██[color=#976]██[color=#ba9]████[color=#a88]██[color=#a98]██[color=#baa]██[color=#cba]██[color=#b99]██[color=#877]██[color=#987]██[color=#a99]██[color=#aa9]██[color=#ccb]██
+       [color=#ddc]██[color=#bba]██[color=#998]██[color=#988]██[color=#caa]██[color=#cba]██[color=#a98]████[color=#876]██[color=#865]██[color=#b98]██[color=#986]██[color=#765]████[color=#876]██[color=#b99]██[color=#a98]██[color=#977]██[color=#876]██[color=#a88]██[color=#cba]██[color=#cbb]██[color=#a98]██[color=#a99]██[color=#baa]██[color=#bba]██[color=#ccb]██
+       [color=#dcc]██[color=#cba]██[color=#aa9]████[color=#ba9]██[color=#a88]██[color=#644]██[color=#432]██[color=#100]██[color=#210]██[color=#865]██[color=#cba]██[color=#a88]██[color=#976]██[color=#876]██[color=#caa]██[color=#876]██[color=#321]██[color=#100]██[color=#321]██[color=#654]██[color=#a98]██[color=#cba]██[color=#ba9]██[color=#998]██[color=#ba9]██[color=#ccc]██
+       ██[color=#bba]██[color=#a98]████[color=#ba9]██[color=#976]██[color=#421]██[color=#100]██[color=#000]██[color=#100]██[color=#876]██[color=#edc]██[color=#ba9]██[color=#a88]██[color=#a98]██[color=#dbb]██[color=#876]██[color=#200]██[color=#000]██[color=#100]██[color=#321]██[color=#766]██[color=#dbb]██[color=#ba9]██[color=#987]██[color=#988]██[color=#ccb]██
+       [color=#dcc]██[color=#aa9]██[color=#887]██[color=#988]██[color=#cba]██[color=#977]██[color=#310]██[color=#000]██████[color=#765]██[color=#edc]██[color=#b99]██[color=#987]██[color=#ba9]██[color=#edc]██[color=#876]██[color=#100]██[color=#000]████[color=#100]██[color=#654]██[color=#dcb]██[color=#baa]██[color=#987]██[color=#988]██[color=#ddc]██
+       [color=#bba]██[color=#776]██[color=#544]██[color=#554]██[color=#cba]████[color=#a87]██[color=#765]██[color=#876]██[color=#987]██[color=#765]██[color=#b98]██[color=#ba9]██[color=#a98]██[color=#ba9]██[color=#987]██[color=#765]██[color=#876]██[color=#865]██[color=#876]██[color=#987]██[color=#a98]██[color=#ba9]██[color=#876]██[color=#533]██[color=#433]██[color=#bba]██
+       [color=#baa]██[color=#776]██[color=#544]██[color=#654]██[color=#876]██[color=#a98]██[color=#ba9]██[color=#caa]██[color=#dcb]██[color=#cba]██[color=#a87]██[color=#654]██[color=#a98]██[color=#ca9]██[color=#ba9]██[color=#876]██[color=#976]██[color=#ca9]██[color=#dcb]██[color=#ba8]██[color=#986]██[color=#987]████[color=#765]██[color=#543]████[color=#ccb]██
+       [color=#bba]██[color=#988]██[color=#776]██[color=#765]██[color=#644]██[color=#654]██[color=#876]██[color=#b99]██[color=#cba]██[color=#a98]██[color=#987]██[color=#421]██[color=#865]██[color=#976]██[color=#865]██[color=#754]██[color=#876]██[color=#dcb]██[color=#cb9]██[color=#a97]██[color=#864]██[color=#865]██[color=#876]██[color=#986]██[color=#976]██[color=#876]██[color=#cba]██
+       [color=#cbb]██[color=#aa9]██[color=#998]██[color=#988]██[color=#977]██[color=#654]██[color=#643]██[color=#755]██[color=#a88]██[color=#a98]██[color=#ca9]██[color=#543]██[color=#643]██[color=#432]██[color=#532]██[color=#765]██[color=#876]██[color=#b99]██[color=#764]██[color=#653]████[color=#875]██[color=#a97]██[color=#ba8]██[color=#cb9]██[color=#ba8]██[color=#dcb]██
+       [color=#ccb]██[color=#baa]██[color=#887]██[color=#665]██[color=#654]██[color=#754]██[color=#765]██[color=#a98]██████[color=#cba]██[color=#dba]██[color=#765]██[color=#321]██[color=#654]██[color=#edc]██[color=#dbb]██[color=#a98]██[color=#a97]██████[color=#986]██[color=#764]████[color=#875]██[color=#986]██[color=#dcb]██
+       [color=#ccb]██[color=#ba9]██[color=#877]██[color=#543]████[color=#765]██[color=#b98]██[color=#cba]██[color=#a98]██[color=#a87]████[color=#edc]██[color=#976]██[color=#543]██[color=#876]██[color=#fdd]██[color=#dbb]██[color=#987]██[color=#ba8]██[color=#ca8]██[color=#ba8]██[color=#a86]██[color=#753]██[color=#653]██[color=#753]██[color=#986]██[color=#ddb]██
+       [color=#dcc]██[color=#cbb]██[color=#987]██[color=#654]██[color=#755]██[color=#977]██[color=#ba9]██[color=#cba]██[color=#a98]████[color=#b98]██[color=#ba9]██[color=#876]██[color=#754]██[color=#765]██[color=#ba9]██[color=#b98]██[color=#987]██[color=#ba8]██████[color=#a97]██[color=#875]██[color=#874]██[color=#875]██[color=#a98]██[color=#dcb]██
+       [color=#ccc]██[color=#dcc]██[color=#ba9]██[color=#987]████[color=#977]████[color=#a88]██[color=#b98]██[color=#b99]██[color=#ca9]██[color=#754]██[color=#643]██[color=#421]██[color=#532]██[color=#976]██[color=#a97]████[color=#ca8]██[color=#ba7]██[color=#b97]██████[color=#ba8]██[color=#cb8]██[color=#dc8]██[color=#cc8]██
+       [color=#ccc]██[color=#dcb]██[color=#cba]██[color=#caa]██[color=#876]██[color=#865]██[color=#755]██[color=#865]██[color=#a87]██[color=#b98]██[color=#b99]██[color=#987]██[color=#976]████[color=#986]██[color=#ca8]██[color=#ca9]████[color=#b97]██[color=#a96]██[color=#a95]██[color=#a86]██[color=#cb7]██[color=#db8]██[color=#cb8]██[color=#cb7]████
+       [color=#dcc]██[color=#cbb]██[color=#ba9]██[color=#a98]██[color=#865]████████[color=#a87]██████[color=#b98]██[color=#ca9]██[color=#cb9]██[color=#db9]██[color=#dba]██[color=#ca9]██[color=#b98]██[color=#985]████[color=#a96]██[color=#b96]██[color=#db8]██[color=#cb8]██[color=#cb7]██████
+       [color=#cbb]██[color=#bba]██[color=#a98]██[color=#987]██[color=#865]██[color=#866]████[color=#876]██[color=#976]████[color=#865]██[color=#976]██[color=#b98]██[color=#ca9]██[color=#dba]██[color=#a87]██[color=#a86]██[color=#875]██[color=#975]██[color=#a85]██[color=#ba6]██[color=#ca7]██[color=#dc7]██[color=#cb7]██[color=#cb6]██████
+       [color=#cbb]██[color=#aa9]██[color=#987]██[color=#765]██[color=#755]██[color=#865]████[color=#875]██[color=#865]████[color=#764]██[color=#875]██[color=#975]██[color=#b97]██[color=#a97]██[color=#864]████[color=#763]██[color=#a96]██[color=#ba7]██[color=#cb7]██[color=#db7]██[color=#cb6]████[color=#ca5]██[color=#cb6]████
 
 # ICSC
 - type: entity
@@ -525,6 +603,18 @@
   name: Laselle Bionational paper
   description: A sheet of paper bearing the Laselle Bionational letterhead.
   components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: laselle_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/LASALLE_BIONATIONALHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
@@ -632,7 +722,7 @@
     footerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFFooter.png"
     footerMargin: 0, 0, 0, 40
 
-#CLF
+#CLF / Insurgent factions.
 - type: entity
   parent: CMPaper
   id: CMUPaperCLF
@@ -653,6 +743,224 @@
       visible: false
   - type: PaperVisuals
     headerImagePath: "/Textures/_CMU14/Interface/Paper/CLFHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+# UN / IHRO
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperUN
+  name: UN paper
+  description: A sheet of paper bearing the United Nations letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: un_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/UNHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperIHRO
+  name: IHRO paper
+  description: A sheet of paper bearing the Independent Human Rights Organization letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ihro_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/IHROHeader2.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperIHRO2
+  name: IHRO paper
+  description: A sheet of paper bearing the Interstellar Human Rights Organization letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ihro_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/IHROHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+# USARMY
+- type: entity
+  parent: CMPaper
+  id: CMUPaperUSARMY
+  name: US Army paper
+  description: A sheet of paper bearing the United States Army letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: usarmy_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/UnitedStatesArmy.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#FBI
+- type: entity
+  parent: CMPaper
+  id: CMUPaperFBI
+  name: FBI paper
+  description: A sheet of paper bearing the Federal Bureau of Investigation letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: fbi_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/FederalHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#ORBITALS
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperARBITER
+  name: Judge's paper
+  description: A sheet of paper bearing the Orbital Arbiter's letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: arbiter_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbArbiterHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperARBITERVariant
+  name: Judge's paper
+  description: A sheet of black paper bearing the Orbital Arbiter's letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#1a1a1a"
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+      color: "#1a1a1a"
+    - state: arbiter_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbArbiterHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    backgroundModulate: "#1a1a1a"
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperCOUNSEL
+  name: Counsellor's paper
+  description: A sheet of paper bearing the Orbital Counsel's letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: counsel_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbCounselHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#PROVOST
+
+- type: entity #admeme
+  parent: CMPaper
+  id: CMUPaperPROVOST
+  name: PROVOST paper
+  description: A sheet of paper bearing the Provost's letterhead. You feel like this is a very important piece of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: provost_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/PROVOSTHeader.png"
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
 

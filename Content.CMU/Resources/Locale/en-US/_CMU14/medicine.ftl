@@ -12,6 +12,7 @@ cm-pill-contents-hepatocytin = Heals liver damage.
 cm-pill-contents-pulmovine = Heals lung damage.
 cm-pill-contents-nephronate = Heals kidney damage.
 cm-pill-contents-cardiocaine = Heals heart damage.
+cm-pill-contents-alkysine = Heals brain damage.
 cm-pill-contents-osteocalc = Heals bone damage.
 
 rmc-ethylredoxrazine-container-label-text = ET
@@ -26,6 +27,7 @@ cmu-inhaler-container-label-text = AL
 cmu-epinephrine-container-label-text = EP
 rmc-osteocalc-container-label-text = OL
 rmc-cardiocaine-container-label-text = CE
+cmu-alkysine-container-label-text = AL
 rmc-nephronate-container-label-text = NE
 rmc-pulmovine-container-label-text = PE
 rmc-hepatocytin-container-label-text = HN
