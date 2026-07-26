@@ -356,9 +356,11 @@
       - id: CMUGasMaskFilterHAZOPS
         amount: 3
         points: 5
-    # the cell's starting comms: one manpack and one base station on the house so a
-    # round-start cell is never without its net. gated to the radio operator; spares
-    # and replacements stay as the paid entries under Special Equipment
+    # the cell's starting comms: one manpack, one base station, one splice kit and one
+    # relay on the house, so a round-start cell has its net and one attempt at somebody
+    # else's mast without waiting on a sapper's bench. everything past that is crafted at
+    # the workbench or paid for under Special Equipment. gated to the radio operator, who
+    # is the only one trained to use any of it
     - name: Radio Operator Issue
       jobs:
       - AU14JobCLFRadioOperator
@@ -367,6 +369,12 @@
         amount: 1
         points: 0
       - id: AU14CLFBaseStation
+        amount: 1
+        points: 0
+      - id: AU14CLFNetSpliceKit
+        amount: 1
+        points: 0
+      - id: AU14CLFClandestineRelay
         amount: 1
         points: 0
     - name: Special Equipment
@@ -392,6 +400,12 @@
       - id: AU14CLFBaseStation
         amount: 1
         points: 18
+      - id: AU14CLFNetSpliceKit
+        amount: 3
+        points: 12
+      - id: AU14CLFClandestineRelay
+        amount: 3
+        points: 6
       - id: ANPRCFillCardCLF
         amount: 3
         points: 4
@@ -528,6 +542,10 @@
     - id: ANPRC117GRadioCLFFilled
       amount: 1
     - id: AU14CLFBaseStation
+      amount: 1
+    - id: AU14CLFNetSpliceKit
+      amount: 1
+    - id: AU14CLFClandestineRelay
       amount: 1
     - id:  AU14GunCaseRifleMar30
       amount: 2

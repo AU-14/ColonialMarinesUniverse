@@ -270,6 +270,10 @@
         amount: 3
       - id: ANPRC117GRadioCLFFilled
         amount: 1
+      - id: AU14CLFNetSpliceKit
+        amount: 1
+      - id: AU14CLFClandestineRelay
+        amount: 2
       - id: ANPRCMastAntenna
         amount: 1
       - id: RMCEngineerKit
