@@ -23,7 +23,6 @@
     - AU14JobOPFORMilitaryDoctor
     - AU14JobOPFOROfficerMedical
     - AU14JobOPFORAuxSupportSynth
-    - CMUJobOPFORDroneOperator # Drone can take a medical specialization.
     - AU14JobCivilianNurse
     - AU14JobCivilianPhysician
     - AU14JobCivilianHeadPhysician
