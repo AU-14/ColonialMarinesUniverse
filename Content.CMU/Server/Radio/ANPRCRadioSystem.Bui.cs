@@ -31,20 +31,24 @@ public sealed partial class ANPRCRadioSystem
         }
 
         // a planted pack works like a field phone, anyone at it can take the handset.
-        // for a worn pack the verb lives on the wearer instead
-        if (ent.Comp.Planted && ent.Comp.Enabled)
+        // for a worn pack the verb lives on the wearer instead. a relay-only set has
+        // no handset to take - it is a repeater, not a station
+        if (ent.Comp.Planted && ent.Comp.Enabled && !ent.Comp.RelayOnly)
             AddHandsetVerbs(ent, user, ref args);
 
         if (!HasComp<ANPRCRadioUserComponent>(user))
             return;
 
-        args.Verbs.Add(new AlternativeVerb
+        if (!ent.Comp.RelayOnly)
         {
-            Text = Loc.GetString("anprc-verb-open"),
-            IconEntity = GetNetEntity(ent.Owner),
-            Priority = 2,
-            Act = () => _ui.OpenUi(ent.Owner, ANPRCRadioUI.Key, user)
-        });
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("anprc-verb-open"),
+                IconEntity = GetNetEntity(ent.Owner),
+                Priority = 2,
+                Act = () => _ui.OpenUi(ent.Owner, ANPRCRadioUI.Key, user)
+            });
+        }
 
         if (!ent.Comp.Planted && !ent.Comp.IsEquipped && !_container.IsEntityInContainer(ent.Owner))
         {

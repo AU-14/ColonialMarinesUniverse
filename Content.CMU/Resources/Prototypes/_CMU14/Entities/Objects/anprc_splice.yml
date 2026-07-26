@@ -1,0 +1,65 @@
+- type: entity
+  parent: BaseItem
+  id: AU14CLFNetSpliceKit
+  name: net splice kit
+  suffix: CLF, Sapper
+  description: >-
+    A junction tap wound out of stolen feeder cable, a keying module, and a band scope
+    built out of parts that did not start life together. Clamp it onto a mast's feeder
+    and go looking for the trunk carriers.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    state: sentrycomp_cl
+    color: "#7a6a4a"
+  - type: Item
+    size: Small
+  - type: AU14NetSpliceKit
+
+- type: entity
+  parent: BaseStructure
+  id: AU14CLFNetSpliceTap
+  name: feeder tap
+  suffix: CLF
+  description: >-
+    A junction box wired into the mast's feeder, humming to itself. Nothing about it
+    matches the rest of the hardware.
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/sentrycomp.rsi
+    state: sentrycomp_on
+    color: "#8a7a5a"
+    drawdepth: SmallObjects
+    scale: 0.8, 0.8
+    offset: 0.25, -0.15
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.2,-0.2,0.2,0.2"
+        density: 40
+        mask:
+        - None
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: null
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 60
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: AU14NetSpliceTap

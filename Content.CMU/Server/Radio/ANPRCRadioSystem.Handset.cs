@@ -92,6 +92,9 @@ public sealed partial class ANPRCRadioSystem
         // it if the starting whip lands in the slot after this runs
         UpdatePackVisuals(ent);
 
+        if (ent.Comp.RelayOnly)
+            return;
+
         if (!TrySpawnInContainer(ent.Comp.HandsetId, ent, ANPRCRadioComponent.HandsetContainerId, out var handset))
             return;
 

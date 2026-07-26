@@ -28,6 +28,9 @@ public sealed partial class ANPRCRadioComponent : Component
     [DataField]
     public string RequiredSlot = "back";
 
+    [DataField]
+    public bool RelayOnly;
+
     [DataField, AutoNetworkedField]
     public bool IsEquipped = false;
 

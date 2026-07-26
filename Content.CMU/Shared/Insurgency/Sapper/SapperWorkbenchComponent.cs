@@ -47,6 +47,11 @@ public sealed partial class SapperWorkbenchComponent : Component
         // The siphon rig moved into the recipe list (was: apply a cable coil to the bench).
         new("AU14SapperSiphonRig", "Siphon rig", 6f, new() { { "CMSteel", 9 }, { "RMCPlastic", 6 } },
             new() { Cable(30), AnyElectronics(), PowerCell() }),
+        // Comms hardware.
+        new("AU14CLFNetSpliceKit", "Net splice kit", 8f, new() { { "CMSteel", 12 }, { "RMCPlastic", 9 } },
+            new() { Cable(30), AnyElectronics(), AnyElectronics() }),
+        new("AU14CLFClandestineRelay", "Clandestine relay set", 6f, new() { { "CMSteel", 9 }, { "RMCPlastic", 6 } },
+            new() { Cable(20), AnyElectronics(), PowerCell() }),
         // The "Switch" illegal fire-selector chip. Deliberately plasteel-hungry: it turns any rifle
         // into a bullet hose, so the cost is the whole balance lever.
         new("AU14AttachmentSwitch", "Switch (auto-sear chip)", 8f, new() { { "CMPlasteel", 40 } },
