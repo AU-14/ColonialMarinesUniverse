@@ -87,6 +87,9 @@ public sealed partial class ItemCamouflageVisualizerSystem : VisualizerSystem<It
                         var newLayer = new PrototypeLayerData();
                         foreach (var (state, layer) in args.Layers)
                         {
+                            if (layer.MapKeys != null && layer.MapKeys.Any(k => k.StartsWith("cmu-item-stain")))
+                                continue;
+
                             if (layer.RsiPath == null)
                                 continue;
 

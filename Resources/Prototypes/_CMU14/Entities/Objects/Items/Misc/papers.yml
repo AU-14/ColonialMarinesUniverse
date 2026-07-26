@@ -105,6 +105,13 @@
   components:
   - type: CipherHintPaper
 
+- type: entity
+  parent: CMUWYPaper
+  id: CMUCipherHintPaperInformDeliv
+  name: Research Ciphering Breakthrough
+  components:
+  - type: CipherHintPaper
+    informDelivery: true
 
 
 

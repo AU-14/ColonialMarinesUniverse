@@ -46,6 +46,7 @@
   id: CMUXRFScanner
   name: XRF scanner
   description: A spectrometer that bombards a sample in high energy radiation to detect emitted fluorescent x-ray patterns. By using the emission spectrum of the sample it can identify its chemical composition.
+  suffix: Corporate
   components:
   - type: Appearance
   - type: Anchorable
@@ -133,6 +134,7 @@
 - type: entity
   parent: CMUXRFScanner
   id: CMUXRFScannerNobody
+  suffix: Generic
   components:
   - type: XRFScanner
     faction: none

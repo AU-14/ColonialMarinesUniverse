@@ -333,6 +333,18 @@
     CMUOsteoCalc: 3
 
 - type: reaction
+  id: CMUAlkysine
+  reactants:
+    RMCChlorine:
+      amount: 1
+    RMCNitrogen:
+      amount: 1
+    CMDylovene:
+      amount: 1
+  products:
+    CMUAlkysine: 3
+
+- type: reaction
   id: CMUBiogenicMatrix
   reactants:
     CMBicaridine:

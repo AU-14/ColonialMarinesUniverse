@@ -122,6 +122,30 @@
 
 - type: reagent
   parent: CMReagentMedicine
+  id: CMUAlkysine #Overdose brain damage is needed.
+  name: reagent-name-cmu-alkysine #new name
+  desc: reagent-desc-cmu-alkysine #new desc
+  flavor: metallic
+  physicalDesc: reagent-physical-desc-translucent
+  color: "#e9d191"
+  overdose: 25
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:HealOrganEffect
+        organComponent: Brain
+        amount: 3
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 30
+        damage:
+          types:
+            Poison: 3
+
+- type: reagent
+  parent: CMReagentMedicine
   id: CMUBiogenicMatrix
   name: reagent-name-cmu-biogenic-matrix
   desc: reagent-desc-cmu-biogenic-matrix
