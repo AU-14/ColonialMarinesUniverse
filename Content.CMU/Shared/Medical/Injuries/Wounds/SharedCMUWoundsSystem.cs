@@ -831,12 +831,6 @@ public abstract partial class SharedCMUWoundsSystem : EntitySystem
             Cleanup = WoundCleanupFlags.None,
             TreatmentQuality = WoundTreatmentQuality.Adequate,
         });
-        RestorePartToFieldCap(part, comp);
-    }
-
-    private void RestorePartToFieldCap(EntityUid part, BodyPartWoundComponent comp)
-    {
-        PartHealth.RestoreToFractionCap((part, null), ComputeFieldTreatmentCap(comp));
     }
 
     public static float ComputeFieldTreatmentCap(BodyPartWoundComponent comp)
