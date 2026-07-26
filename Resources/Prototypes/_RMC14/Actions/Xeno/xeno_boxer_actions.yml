@@ -1,8 +1,6 @@
 - type: entity
   parent: ActionXenoBase
   id: ActionXenoBoxerPunch
-  name: cm-xeno-boxer-punch-name
-  description: cm-xeno-boxer-punch-description
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -21,8 +19,6 @@
 - type: entity
   parent: ActionXenoBase
   id: ActionXenoBoxerJab
-  name: cm-xeno-boxer-jab-name
-  description: cm-xeno-boxer-jab-description
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -41,8 +37,6 @@
 - type: entity
   parent: ActionXenoBase
   id: ActionXenoBoxerUppercut
-  name: cm-xeno-boxer-uppercut-name
-  description: cm-xeno-boxer-uppercut-description
   components:
   - type: Action
     itemIconStyle: NoItem

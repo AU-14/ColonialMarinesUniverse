@@ -1,9 +1,9 @@
-cm-xeno-boxer-punch-name = Удар
-cm-xeno-boxer-punch-description = Ударьте цель, нанеся дробящий урон, отбросив её и накопив силу нокаута.
-cm-xeno-boxer-jab-name = Джеб
-cm-xeno-boxer-jab-description = Проведите джеб: ошеломите и замедлите цель, накопив силу нокаута.
-cm-xeno-boxer-uppercut-name = Апперкот
-cm-xeno-boxer-uppercut-description = Расходует силу нокаута на всё более мощный завершающий удар.
+ent-ActionXenoBoxerPunch = Удар
+  .desc = Ударьте цель, нанеся дробящий урон, отбросив её и накопив силу нокаута.
+ent-ActionXenoBoxerJab = Джеб
+  .desc = Проведите джеб: ошеломите и замедлите цель, накопив силу нокаута.
+ent-ActionXenoBoxerUppercut = Апперкот
+  .desc = Расходует силу нокаута на всё более мощный завершающий удар.
 cm-xeno-boxer-ko-meter = Сила нокаута: {$meter}/15
 cm-xeno-boxer-clear-head-charge = Заряды «Ясной головы»: {$charges}/3
 rmc-xeno-boxer-name = Боксёр

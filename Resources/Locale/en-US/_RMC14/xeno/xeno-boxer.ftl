@@ -1,9 +1,9 @@
-cm-xeno-boxer-punch-name = Punch
-cm-xeno-boxer-punch-description = Punch a target, dealing blunt damage, knocking them back, and building knockout power.
-cm-xeno-boxer-jab-name = Jab
-cm-xeno-boxer-jab-description = Jab a target to daze and slow them while building knockout power.
-cm-xeno-boxer-uppercut-name = Uppercut
-cm-xeno-boxer-uppercut-description = Spend knockout power on an escalating finishing blow.
+ent-ActionXenoBoxerPunch = Punch
+  .desc = Punch a target, dealing blunt damage, knocking them back, and building knockout power.
+ent-ActionXenoBoxerJab = Jab
+  .desc = Jab a target to daze and slow them while building knockout power.
+ent-ActionXenoBoxerUppercut = Uppercut
+  .desc = Spend knockout power on an escalating finishing blow.
 cm-xeno-boxer-ko-meter = KO power: {$meter}/15
 cm-xeno-boxer-clear-head-charge = Clear Head charges: {$charges}/3
 rmc-xeno-boxer-name = Boxer
