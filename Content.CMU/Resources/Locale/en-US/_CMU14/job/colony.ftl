@@ -210,9 +210,9 @@ au14-job-name-orbitallawyer = Orbital Counsel
 au14-job-description-orbitallawyer = Defend the innocent (and guilty), prosecute, or just argue until someone pays you.
 au14-job-prefix-orbitallawyer = Orb. Cnsl.
 
-au14-job-name-civiliancolonyadminasssistant = Administrative Assistant
+au14-job-name-civiliancolonyadminasssistant = Deputy Administrator
 au14-job-description-civiliancolonyadminassistant = Be the right hand of the Colony Administrator.
-au14-job-prefix-colonyadminassistant = Admin. Assist.
+au14-job-prefix-colonyadminassistant = Dep. Admin.
 
 au14-job-name-civiliancorporateassistant = Corporate Assistant
 au14-job-description-civiliancorporateassistant = Be the right hand of the Corporate Liaison.

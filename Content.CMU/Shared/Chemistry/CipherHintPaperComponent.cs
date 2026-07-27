@@ -10,4 +10,7 @@ public sealed partial class CipherHintPaperComponent : Component
     // will this add a xeno crate to the nearest req elevator?
     [DataField]
     public bool SpawnCrate = false;
+    [DataField]
+    // will this SAY it added a xeno crate to the nearest req elevator?
+    public bool InformDelivery = false;
 }

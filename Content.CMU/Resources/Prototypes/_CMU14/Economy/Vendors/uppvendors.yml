@@ -106,6 +106,8 @@
       entries:
       - id: AU14BeltMarineUPP
         amount: 40
+      - id: CMUBeltCombatSidearmRig
+        amount: 15
       - id: RMCBeltGrenade
         amount: 4
       - id: AU14ShotgunShellLoadingRigUPP
@@ -883,12 +885,12 @@
       takeOne: SquadSpecKit
       sharedSpecLimit: 1
       entries:
-      - id: AU14KitUPPPointmanType23
+      - id: CMUType23ShotgunCase
         giveSquadRoleName: au14-job-name-govforspecialist-pointmanUPP
         givePrefix: au14-job-prefix-govforspecialist-pointmanUPP
         isAppendSquadRoleName: false
         isAppendPrefix: true
-      - id: AU14KitUPPHATHJRA12
+      - id: CMUDemoSpecEquipmentCaseUPP
         giveSquadRoleName: au14-job-name-govforspecialist-heavyantitankUPP
         givePrefix: au14-job-prefix-govforspecialist-heavyantitankUPP
         isAppendSquadRoleName: false
@@ -1296,6 +1298,8 @@
       - id: RMCIntelDetector
         amount: 4
       - id: RMCFulton20
+        amount: 4
+      - id: RMCOverwatchCameraTripod
         amount: 4
       - id: RMCSentryLaptop
         amount: 4

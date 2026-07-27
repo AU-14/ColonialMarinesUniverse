@@ -12,6 +12,27 @@
     - state: "off"
     - state: "normal-unshaded"
   - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORPlatoonCorpsman
+    - AU14JobGOVFORMilitaryDoctor
+    - AU14JobGOVFOROfficerMedical
+    - AU14JobGOVFORAuxSupportSynth
+    - AU14JobGOVFORNurse
+    - CMUJobGOVFORDroneOperator # Drone can take a medical specialization.
+    - AU14JobOPFORPlatoonCorpsman
+    - AU14JobOPFORMilitaryDoctor
+    - AU14JobOPFOROfficerMedical
+    - AU14JobOPFORAuxSupportSynth
+    - AU14JobCivilianNurse
+    - AU14JobCivilianPhysician
+    - AU14JobCivilianHeadPhysician
+    - AU14JobCivilianScientist # Basically weya's doctors.
+    - AU14JobCLFPhysician
+    - AU14JobCLFSurgeon
+    - AU14JobCivilianEmergencyResponseOfficer
+    - AU14JobCivilianEthicsAndWellnessAdvisor
+    - AU14JobThirdPartyLeader # There is no specific role for third-party medics, so they all get access.
+    - AU14JobThirdPartyMember # There is no specific role for third-party medics, so they all get access.
     sections:
     - name: General Medical Supplies
       entries:
@@ -81,6 +102,8 @@
       - id: AU14PillCanisterNephronate
         amount: 10
       - id: AU14PillCanisterOsteoCalc
+        amount: 10
+      - id: CMU14PillCanisterAlkysine
         amount: 10
       - id: AU14PillCanisterPulmovine
         amount: 10

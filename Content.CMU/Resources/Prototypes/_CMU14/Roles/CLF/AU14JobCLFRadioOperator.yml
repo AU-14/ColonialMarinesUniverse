@@ -37,6 +37,7 @@
     - CLF
   - type: FactionLanguageMember
     factionTag: CLF
+  - type: MarineOrders
 
   name: au14-job-name-clfradiooperator
   description: au14-job-description-clfradiooperator

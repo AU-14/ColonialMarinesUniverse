@@ -35,6 +35,7 @@
     - CLF
   - type: FactionLanguageMember
     factionTag: CLF
+  - type: MarineOrders
 
   name: au14-job-name-clfsurgeon
   description: au14-job-description-clfsurgeon

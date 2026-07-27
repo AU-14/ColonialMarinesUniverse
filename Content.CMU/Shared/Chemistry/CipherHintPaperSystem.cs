@@ -39,6 +39,10 @@ public sealed partial class CipherHintPaperSystem : EntitySystem
             content += Loc.GetString("cmu-paper-ciph-hint-subheader") + '\n';
             content += Loc.GetString("cmu-paper-ciph-hint", ("CIPH", "Ciphering"), ("A", ciph[0]), ("B", ciph[1]), ("C", ciph[2])) + '\n';
             content += Loc.GetString("cmu-paper-xeno-knowledge") + '\n';
+            if (ent.Comp.InformDelivery)
+            {
+                content += Loc.GetString("cmu-paper-xeno-sample-deliv") + '\n';
+            }
             if (ent.Comp.SpawnCrate && !hasSpawnedXenoBox)
             {
                 content += Loc.GetString("cmu-paper-xeno-sample-deliv") + '\n';
@@ -70,7 +74,7 @@ public sealed partial class CipherHintPaperSystem : EntitySystem
                                 var elevatorCoords = _xform.GetMapCoordinates(uid, xform);
                                 if (dtcoords.MapId != elevatorCoords.MapId)
                                     continue;
-                                float dist = (elevatorCoords.Position - dtcoords.Position).LengthSquared();
+                                float dist = MathF.Sqrt((elevatorCoords.Position - dtcoords.Position).LengthSquared());
                                 if (closestDist > dist)
                                 {
                                     closestDist = dist;

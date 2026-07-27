@@ -36,9 +36,9 @@
     callsignPresets:
     - PLT ACTUAL
     - PLT MAIN
-    - ALPHA ACTUAL
-    - BRAVO ACTUAL
-    - CHARLIE 6
+    - SABRE ACTUAL
+    - DAGGER ACTUAL
+    - PIKE 6
     - SUNRAY
     - OVERLORD
     - DUSTOFF
@@ -248,6 +248,74 @@
       cell_slot:
         name: power-cell-slot-component-slot-name-default
         startingItem: RMCPowerCellHigh
+
+- type: entity
+  parent: BaseItem
+  id: AU14CLFClandestineRelay
+  name: clandestine relay set
+  suffix: CLF, Cache Relay
+  description: >-
+    A stripped transceiver board and a power cell taped into a scavenged field set, with
+    a reel of wire for an antenna. There are no controls on it worth the name - it
+    repeats what it is told to repeat and nothing else.
+  components:
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Devices/communication.rsi
+    heldPrefix: walkietalkie
+    shape:
+    - 0,0,0,0
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/communication.rsi
+    color: "#7a7a5a"
+    layers:
+    - state: walkietalkie
+      map: [ "base" ]
+  - type: Appearance
+  - type: ANPRCRadio
+    operatorFaction: clf
+    requiredSlot: none
+    relayOnly: true
+    dfReportFactions:
+    - GOVFOR
+    defaultSlots:
+    - label: CELL
+      channel: radioCLF
+    - label: CMD
+      channel: radioCLFCommand
+  - type: ANPRCCryptoSlot
+  - type: PowerCellSlot
+    cellSlotId: cell_slot
+  - type: PowerCellDraw
+    enabled: false
+    drawRate: 1
+    useRate: 0
+  - type: ContainerContainer
+    containers:
+      fill_card: !type:ContainerSlot
+      antenna: !type:ContainerSlot
+      cell_slot: !type:ContainerSlot
+      anprc_handset: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      fill_card:
+        name: COMSEC fill card
+        whitelist:
+          components:
+          - ANPRCFillCard
+      antenna:
+        name: antenna
+        whitelist:
+          components:
+          - ANPRCAntenna
+        startingItem: ANPRCWireAntenna
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+        startingItem: RMCPowerCellHigh
+  - type: ContainerFill
+    containers:
+      fill_card:
+      - ANPRCFillCardCLF
 
 - type: entity
   parent: CMPaperWritten

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Linq;
 using Content.Shared._AU14.Insurgency;
 using Content.Shared._AU14.Insurgency.CellKit;
@@ -17,12 +16,13 @@ namespace Content.Server._AU14.Insurgency.CellKit;
 ///
 ///     Event-driven: reacts to the UI open, the deploy message, and the deploy do-after. No polling.
 /// </summary>
-public sealed class InsurgencyCellKitSystem : EntitySystem
+public sealed partial class InsurgencyCellKitSystem : EntitySystem
 {
     [Dependency] private InsurgencyFactionApplySystem _apply = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
 
     public override void Initialize()
     {
@@ -72,11 +72,25 @@ public sealed class InsurgencyCellKitSystem : EntitySystem
             return;
 
         foreach (var placeable in faction.CellKit.PlaceableEntities)
+        {
+            if (!_protoMan.HasIndex<EntityPrototype>(placeable.Id))
+            {
+                Logger.GetSawmill("insfor").Error($"[InsurgencyCellKit] Active faction cell kit references unknown/invalid proto '{placeable.Id}'!");
+                continue;
+            }
+
             ent.Comp.Remaining.Add(new CellKitDeployable { Proto = placeable.Id, IsVendor = false });
+        }
 
         for (var i = 0; i < faction.CellKit.VendorDefinitions.Count; i++)
         {
             var vendor = faction.CellKit.VendorDefinitions[i];
+            if (!_protoMan.HasIndex<EntityPrototype>(vendor.BaseModel.Id))
+            {
+                Logger.GetSawmill("insfor").Error($"[InsurgencyCellKit] Active faction vendor '{vendor.Name}' references unknown/invalid proto '{vendor.BaseModel.Id}'!");
+                continue;
+            }
+
             ent.Comp.Remaining.Add(new CellKitDeployable
             {
                 Proto = vendor.BaseModel.Id,
@@ -130,7 +144,13 @@ public sealed class InsurgencyCellKitSystem : EntitySystem
 
         var spawned = Spawn(deployable.Proto, coords);
         if (deployable.IsVendor)
-            _apply.ConfigureFactionVendor(spawned, GetVendorDefinition(deployable.VendorIndex), deployable.VendorIndex);
+        {
+            var vendorDef = GetVendorDefinition(deployable.VendorIndex);
+            if (vendorDef == null)
+                Logger.GetSawmill("insfor").Error($"[InsurgencyCellKit] Vendor index '{deployable.VendorIndex}' OOB at deploy time, '{deployable.Proto}' spawned without faction config!");
+            else
+                _apply.ConfigureFactionVendor(spawned, vendorDef, deployable.VendorIndex);
+        }
         else
             // Machines like the analyzer pick up the faction's submittable-for-points table when placed.
             _apply.ConfigureFactionAnalyzer(spawned);
@@ -143,10 +163,13 @@ public sealed class InsurgencyCellKitSystem : EntitySystem
         PushState(ent);
     }
 
-    private FactionVendorDefinition GetVendorDefinition(int index)
+    private FactionVendorDefinition? GetVendorDefinition(int index)
     {
         var faction = _apply.GetActiveFaction();
-        return faction!.CellKit.VendorDefinitions[index];
+        if (faction == null || index < 0 || index >= faction.CellKit.VendorDefinitions.Count)
+            return null;
+
+        return faction.CellKit.VendorDefinitions[index];
     }
 
     private void PushState(Entity<InsurgencyCellKitComponent> ent)

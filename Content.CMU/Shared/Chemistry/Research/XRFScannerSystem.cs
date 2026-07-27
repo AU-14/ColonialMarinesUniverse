@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Audio;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.DoAfter;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
@@ -272,5 +273,25 @@ public abstract partial class XRFScannerSystem : EntitySystem
             _paper.SetContent(paper, contents);
             DirtyEntity(paper);
         }
+    }
+    /// <summary>
+    /// gets the associated faction's ASRS elevator.
+    /// if there are multiple elevators for one faction, then it gets the first one it finds.
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <returns></returns>
+    public NetEntity GetFactionElevator(EntityUid ent, XRFScannerComponent? comp)
+    {
+        if (!Resolve(ent, ref comp))
+            return NetEntity.Invalid;
+        var query = EntityQueryEnumerator<RequisitionsElevatorComponent>();
+        while (query.MoveNext(out var elev, out var ecomp))
+        {
+            if (comp.Faction.Equals(ecomp.Faction, StringComparison.OrdinalIgnoreCase))
+            {
+                return GetNetEntity(elev);
+            }
+        }
+        return NetEntity.Invalid;
     }
 }

@@ -109,6 +109,8 @@
       entries:
       - id: CMBeltMarine
         amount: 40
+      - id: CMUBeltCombatSidearmRig
+        amount: 15
       - id: RMCBeltGrenade
         amount: 4
       - id: RMCM276ShotgunShellLoadingRig
@@ -1242,7 +1244,7 @@
   parent: CMVendorBundleRiflemanApparel
   id: AU14VendorBundleCombatTechnicianEssentials
   name: essential engineer set
-  description: Contains 50 metal, 50 plasteel, 50 sandbags, a shovel, a high-capacity power cell, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
+  description: Contains 50 metal, 50 plasteel, 50 sandbags, a shovel, a high-capacity power cell, an overwatch camera tripod, a light replacer, a deployable ladder, a welding visor, welding goggles, and a nailgun.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/wrench.rsi
@@ -1263,6 +1265,7 @@
     - RMCVisorWelding
     - RMCWeldingGoggles
     - RMCSentryLaptop
+    - RMCOverwatchCameraTripod
     - AU14ToolShovel
 
 - type: entity
@@ -1605,6 +1608,8 @@
       - id: RMCIntelDetector
         amount: 4
       - id: RMCFulton20
+        amount: 4
+      - id: RMCOverwatchCameraTripod
         amount: 4
       - id: RMCSentryLaptop
         amount: 4

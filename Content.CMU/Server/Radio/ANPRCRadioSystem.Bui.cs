@@ -31,20 +31,24 @@ public sealed partial class ANPRCRadioSystem
         }
 
         // a planted pack works like a field phone, anyone at it can take the handset.
-        // for a worn pack the verb lives on the wearer instead
-        if (ent.Comp.Planted && ent.Comp.Enabled)
+        // for a worn pack the verb lives on the wearer instead. a relay-only set has
+        // no handset to take - it is a repeater, not a station
+        if (ent.Comp.Planted && ent.Comp.Enabled && !ent.Comp.RelayOnly)
             AddHandsetVerbs(ent, user, ref args);
 
         if (!HasComp<ANPRCRadioUserComponent>(user))
             return;
 
-        args.Verbs.Add(new AlternativeVerb
+        if (!ent.Comp.RelayOnly)
         {
-            Text = Loc.GetString("anprc-verb-open"),
-            IconEntity = GetNetEntity(ent.Owner),
-            Priority = 2,
-            Act = () => _ui.OpenUi(ent.Owner, ANPRCRadioUI.Key, user)
-        });
+            args.Verbs.Add(new AlternativeVerb
+            {
+                Text = Loc.GetString("anprc-verb-open"),
+                IconEntity = GetNetEntity(ent.Owner),
+                Priority = 2,
+                Act = () => _ui.OpenUi(ent.Owner, ANPRCRadioUI.Key, user)
+            });
+        }
 
         if (!ent.Comp.Planted && !ent.Comp.IsEquipped && !_container.IsEntityInContainer(ent.Owner))
         {
@@ -181,7 +185,9 @@ public sealed partial class ANPRCRadioSystem
             return;
         }
 
-        if (_freqPlan.TryGetChannelByFrequency(frequency, out var channel))
+        var onNet = _freqPlan.TryGetChannelByFrequency(frequency, out var channel);
+
+        if (onNet)
         {
             ent.Comp.FrequencyOverrides.Remove(args.Slot);
             ent.Comp.Presets[args.Slot] = channel;
@@ -207,11 +213,20 @@ public sealed partial class ANPRCRadioSystem
             ? slotLabel
             : $"P{args.Slot + 1}";
 
+        // say what the number landed on. a frequency that matches no net used to get
+        // the same confirmation as one that does, and operators walked away thinking
+        // they were on a net when they were keying dead air
         _cmChat.ChatMessageToOne(
-            Loc.GetString(
-                "anprc-frequency-set",
-                ("slot", label),
-                ("freq", TunableFrequencySystem.FormatFreq(frequency))),
+            onNet && _prototype.TryIndex(channel, out var channelProto)
+                ? Loc.GetString(
+                    "anprc-frequency-set-net",
+                    ("slot", label),
+                    ("freq", TunableFrequencySystem.FormatFreq(frequency)),
+                    ("channel", channelProto.LocalizedName))
+                : Loc.GetString(
+                    "anprc-frequency-set-dynamic",
+                    ("slot", label),
+                    ("freq", TunableFrequencySystem.FormatFreq(frequency))),
             args.Actor);
     }
 
@@ -317,7 +332,9 @@ public sealed partial class ANPRCRadioSystem
         if (!ent.Comp.DiscoveredFrequencies.Contains(args.Frequency))
             return;
 
-        if (_freqPlan.TryGetChannelByFrequency(args.Frequency, out var channel))
+        var onNet = _freqPlan.TryGetChannelByFrequency(args.Frequency, out var channel);
+
+        if (onNet)
         {
             ent.Comp.FrequencyOverrides.Remove(args.Slot);
             ent.Comp.Presets[args.Slot] = channel;
@@ -335,10 +352,16 @@ public sealed partial class ANPRCRadioSystem
         UpdateBuiState(ent);
 
         _cmChat.ChatMessageToOne(
-            Loc.GetString(
-                "anprc-frequency-set",
-                ("slot", ent.Comp.SlotLabels[args.Slot]),
-                ("freq", TunableFrequencySystem.FormatFreq(args.Frequency))),
+            onNet && _prototype.TryIndex(channel, out var channelProto)
+                ? Loc.GetString(
+                    "anprc-frequency-set-net",
+                    ("slot", ent.Comp.SlotLabels[args.Slot]),
+                    ("freq", TunableFrequencySystem.FormatFreq(args.Frequency)),
+                    ("channel", channelProto.LocalizedName))
+                : Loc.GetString(
+                    "anprc-frequency-set-unknown",
+                    ("slot", ent.Comp.SlotLabels[args.Slot]),
+                    ("freq", TunableFrequencySystem.FormatFreq(args.Frequency))),
             args.Actor);
     }
 

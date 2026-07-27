@@ -123,6 +123,10 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
         Vector2 holderOffset = CMUXenoWarlockSystem.GetWarlockParticleRenderOffset(particles.Effect) / PixelsPerMeter;
         Vector2 velocity = particles.UseMotionOverride ? particles.MotionVelocity : profile.Velocity;
         Vector2 gravity = particles.UseMotionOverride ? particles.MotionGravity : profile.Gravity;
+        // Per-emitter override lets the spawner tie the outer reach of a directed effect to an
+        // in-world distance (e.g. matching the psychic blast wind-up to the projectile's impact).
+        // Falls back to the profile's static cap when the emitter did not set one.
+        float maxDirectedTravel = particles.MaxDirectedTravelPixelsOverride ?? profile.MaxDirectedTravelPixels;
 
         for (var i = 0; i < profile.Count; i++)
         {
@@ -138,8 +142,8 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
                 CMUXenoWarlockParticleOverlay.Hash01(seed, i, 4), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 5));
             Vector2 motion = velocity * rawAge + drift * rawAge + gravity * (0.5f * rawAge * rawAge);
             if (particles.UseMotionOverride
-                && motion.LengthSquared() > profile.MaxDirectedTravelPixels * profile.MaxDirectedTravelPixels)
-                motion = Vector2.Normalize(motion) * profile.MaxDirectedTravelPixels;
+                && motion.LengthSquared() > maxDirectedTravel * maxDirectedTravel)
+                motion = Vector2.Normalize(motion) * maxDirectedTravel;
 
             Vector2 scale = CMUXenoWarlockParticleOverlay.Lerp(profile.ScaleMin, profile.ScaleMax,
                     CMUXenoWarlockParticleOverlay.Hash01(seed, i, 6), CMUXenoWarlockParticleOverlay.Hash01(seed, i, 7))

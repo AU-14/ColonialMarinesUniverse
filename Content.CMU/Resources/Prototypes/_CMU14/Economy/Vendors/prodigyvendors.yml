@@ -82,6 +82,8 @@
       entries:
       - id: AU14BeltMarineBlack
         amount: 40
+      - id: CMUBeltCombatSidearmRig
+        amount: 15
       - id: RMCBeltGrenade
         amount: 4
       - id: AU14M276ShotgunShellLoadingRigBlack
@@ -992,6 +994,8 @@
       - id: RMCIntelDetector
         amount: 4
       - id: RMCFulton20
+        amount: 4
+      - id: RMCOverwatchCameraTripod
         amount: 4
       - id: AU14ProdigyLaptop
         amount: 4

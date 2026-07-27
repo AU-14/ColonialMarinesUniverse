@@ -27,7 +27,9 @@ anprc-frequency-invalid = Invalid frequency format. Enter a number such as 1606 
 anprc-frequency-out-of-band = No net can live there. Direct frequencies sit in 1.000-2.999 MHz or the 30.000-87.999 softwave band.
 anprc-frequency-not-found = No channel found at frequency { $freq }.
 anprc-frequency-set = [{ $slot }] tuned to { $freq } MHz.
-anprc-frequency-set-dynamic = [{ $slot }] set to { $freq } MHz (direct frequency). Transmit with :r.
+anprc-frequency-set-net = [{ $slot }] tuned to { $freq } MHz — on the { $channel } net.
+anprc-frequency-set-unknown = [{ $slot }] tuned to { $freq } MHz — unidentified net. Traffic will be logged.
+anprc-frequency-set-dynamic = [{ $slot }] set to { $freq } MHz (direct frequency) — no net assigned here. Transmit with :r.
 
 anprc-slot-max-reached = Maximum preset slots reached (4). Delete a slot first.
 

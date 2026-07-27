@@ -1,0 +1,9 @@
+ui-options-header-cmu-emotes = Emotes
+ui-options-function-cmu-emote-slot1 = Emote Slot 1
+ui-options-function-cmu-emote-slot2 = Emote Slot 2
+ui-options-function-cmu-emote-slot3 = Emote Slot 3
+ui-options-function-cmu-emote-slot4 = Emote Slot 4
+ui-options-function-cmu-emote-slot5 = Emote Slot 5
+ui-options-function-cmu-emote-slot6 = Emote Slot 6
+ui-options-function-cmu-emote-slot7 = Emote Slot 7
+ui-options-function-cmu-emote-slot8 = Emote Slot 8

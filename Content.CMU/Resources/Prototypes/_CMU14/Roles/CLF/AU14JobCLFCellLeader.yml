@@ -47,6 +47,7 @@
     - CLF
   - type: FactionLanguageLeader
     factionTag: CLF
+  - type: MarineOrders
 
   name: au14-job-name-clfcellleader
   description: au14-job-description-clfcellleader
