@@ -1380,7 +1380,7 @@ public sealed partial class YautjaRitualDuelComponent : Component
     public SoundSpecifier DuelSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Roars/pred_roar2.wav");
 
     [DataField]
-    public SoundSpecifier ReleaseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Clicks/pred_click1.wav");
+    public SoundSpecifier ReleaseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Voice/Clicks/pred_click01.wav");
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
