@@ -36,12 +36,6 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankFirstLT:
-      entity: AU14ChevronFirstLT
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORMilitaryDoctor
-        time: 86400 # 24 hours
     RMCRankSecondLT:
       entity: AU14ChevronSecondLT
       requirements: []
