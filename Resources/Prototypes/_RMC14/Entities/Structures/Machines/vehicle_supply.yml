@@ -356,6 +356,45 @@
       - RMCAPCFlareLauncher
       - RMCAPCFreightStorage
       - RMCAPCWheel
+    - name: M577 APC 'Weyland' (WY)
+      vehicle: VehicleAPCPMC
+      group: vehicle-apc
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: RMCAPCDualCannon
+          name: dual cannon
+          item: RMCAPCDualCannon
+          slot: primary
+      - id: secondary
+        name: Secondary
+        options:
+        - id: RMCAPCFrontCannon
+          name: frontal cannon
+          item: RMCAPCFrontCannon
+          slot: secondary
+      - id: wheels
+        name: Wheels
+        options:
+        - id: RMCAPCWheel
+          name: wheel
+          item: RMCAPCWheel
+          slot: wheel-1
+      - id: support
+        name: Support
+        options:
+        - id: RMCAPCFlareLauncher
+          name: flare launcher
+          item: RMCAPCFlareLauncher
+          slot: support
+      hardpoints:
+      - RMCAPCDualCannon
+      - RMCAPCFrontCannon
+      - RMCAPCCommsRelay
+      - RMCAPCFlareLauncher
+      - RMCAPCFreightStorage
+      - RMCAPCWheel
     - name: ZSL-68 APC (UPP)
       vehicle: VehicleSPPAPC
       group: vehicle-apc
@@ -520,7 +559,7 @@
       - VehicleTankRocketLauncher
       - VehicleTankFlareModule
       - VehicleTankArtilleryModule
-    - name: M34A2 Longstreet 'Yutani'
+    - name: M34A2 Longstreet 'Yutani' (WY)
       vehicle: VehicleTankPMC
       group: vehicle-tank
       loadoutCategories:

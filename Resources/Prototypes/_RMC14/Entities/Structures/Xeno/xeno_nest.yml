@@ -7,9 +7,14 @@
     snap:
     - Wall
   components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
   - type: Physics
     bodyType: Static
-  - type: Appearance  
+  - type: Appearance
   - type: Sprite
     sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
     state: nest_overlay

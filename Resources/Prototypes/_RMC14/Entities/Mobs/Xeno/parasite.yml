@@ -141,7 +141,7 @@
       4: rmc-xeno-ancient-parasite
       5: rmc-xeno-prime-parasite
   - type: FixedIdentity
-    name: cm-job-name-xeno-parasite-xeno
+    name: cmu-job-name-xeno-unknown
     whitelist:
       components:
       - Xeno

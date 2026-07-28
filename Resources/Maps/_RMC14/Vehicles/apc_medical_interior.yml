@@ -47,7 +47,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Map Entity
+      name: APC (Medical)
     - type: Transform
     - type: Map
       mapPaused: True

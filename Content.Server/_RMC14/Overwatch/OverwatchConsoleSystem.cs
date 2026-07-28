@@ -62,12 +62,15 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
 
     private void OnWatchedRemove<T>(Entity<OverwatchCameraComponent> ent, ref T args)
     {
-        foreach (var watching in ent.Comp.Watching)
+        foreach (var watching in new List<EntityUid>(ent.Comp.Watching))
         {
             if (TerminatingOrDeleted(watching))
                 continue;
 
-            RemCompDeferred<OverwatchWatchingComponent>(watching);
+            if (TryComp(watching, out ActorComponent? actor) && actor != null)
+                Unwatch(watching, actor.PlayerSession);
+            else
+                RemCompDeferred<OverwatchWatchingComponent>(watching);
         }
     }
 
@@ -95,9 +98,29 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
         _eye.SetTarget(watcher, toWatch, watcher);
         _viewSubscriber.AddViewSubscriber(toWatch, watcher.Comp1.PlayerSession);
 
-        RemoveWatcher(watcher);
-        EnsureComp<OverwatchWatchingComponent>(watcher).Watching = toWatch;
+        OverwatchWatchingComponent watching;
+        if (TryComp(watcher.Owner, out OverwatchWatchingComponent? previous))
+        {
+            watching = previous;
+            if (previous.Watching is { } previousTarget && previousTarget != toWatch.Owner)
+            {
+                _viewSubscriber.RemoveViewSubscriber(previousTarget, watcher.Comp1.PlayerSession);
+                if (TryComp(previousTarget, out OverwatchCameraComponent? previousCamera))
+                {
+                    previousCamera.Watching.Remove(watcher);
+                    Dirty(previousTarget, previousCamera);
+                }
+            }
+        }
+        else
+        {
+            watching = EnsureComp<OverwatchWatchingComponent>(watcher);
+        }
+
+        watching.Watching = toWatch;
+        Dirty(watcher.Owner, watching);
         toWatch.Comp.Watching.Add(watcher);
+        Dirty(toWatch.Owner, toWatch.Comp);
     }
 
     protected override void Unwatch(Entity<EyeComponent?> watcher, ICommonSession player)
@@ -120,8 +143,12 @@ public sealed partial class OverwatchConsoleSystem : SharedOverwatchConsoleSyste
         if (!TryComp(toRemove, out OverwatchWatchingComponent? watching))
             return;
 
-        if (TryComp(watching.Watching, out OverwatchCameraComponent? watched))
+        if (watching.Watching is { } watchedEntity &&
+            TryComp(watchedEntity, out OverwatchCameraComponent? watched))
+        {
             watched.Watching.Remove(toRemove);
+            Dirty(watchedEntity, watched);
+        }
 
         watching.Watching = null;
         RemCompDeferred<OverwatchWatchingComponent>(toRemove);

@@ -18,7 +18,7 @@
 
   Address the receiving station first, then identify the transmitting station.
 
-  [color=#a4885c]HAVOC 6, this is RED ROMEO, message, over.[/color]
+  [color=#a4885c]HAVOC 6, this is SABRE ROMEO, message, over.[/color]
 
   A complete call normally contains:
 
@@ -30,11 +30,11 @@
 
   The receiving station answers using the same order:
 
-  [color=#a4885c]RED ROMEO, this is HAVOC 6, send it, over.[/color]
+  [color=#a4885c]SABRE ROMEO, this is HAVOC 6, send it, over.[/color]
 
   After both stations have established contact, [bold]THIS IS[/bold] may be omitted:
 
-  [color=#a4885c]RED ROMEO, HAVOC 6, send it, over.[/color]
+  [color=#a4885c]SABRE ROMEO, HAVOC 6, send it, over.[/color]
 
   ## Prowords
 
@@ -181,9 +181,9 @@
 
   A radio check confirms that two stations can hear each other.
 
-  [color=#a4885c]HAVOC ROMEO, this is RED ROMEO, radio check, over.[/color]
+  [color=#a4885c]HAVOC ROMEO, this is SABRE ROMEO, radio check, over.[/color]
 
-  [color=#a4885c]RED ROMEO, this is HAVOC ROMEO, Lima Charlie. How me? Over.[/color]
+  [color=#a4885c]SABRE ROMEO, this is HAVOC ROMEO, Lima Charlie. How me? Over.[/color]
 
   [color=#a4885c]Lima Charlie, out.[/color]
 
@@ -203,19 +203,19 @@
   - Approximate strength.
   - What the reporting element is doing.
 
-  [color=#a4885c]HAVOC 6, this is RED ACTUAL, contact. Infantry, squad strength, east treeline near grid two-four-five. Engaging, over.[/color]
+  [color=#a4885c]HAVOC 6, this is SABRE ACTUAL, contact. Infantry, squad strength, east treeline near grid two-four-five. Engaging, over.[/color]
 
-  [color=#a4885c]RED ACTUAL, HAVOC 6, roger. YELLOW is moving to your flank. Hold your position, over.[/color]
+  [color=#a4885c]SABRE ACTUAL, HAVOC 6, roger. DAGGER is moving to your flank. Hold your position, over.[/color]
 
-  [color=#a4885c]HAVOC 6, RED ACTUAL, wilco, out.[/color]
+  [color=#a4885c]HAVOC 6, SABRE ACTUAL, wilco, out.[/color]
 
   ## Fire-Support Request
 
   Establish contact before sending the full request.
 
-  [color=#a4885c]HAVOC OPS, this is RED ROMEO, fire mission, over.[/color]
+  [color=#a4885c]HAVOC OPS, this is SABRE ROMEO, fire mission, over.[/color]
 
-  [color=#a4885c]RED ROMEO, HAVOC OPS, send it, over.[/color]
+  [color=#a4885c]SABRE ROMEO, HAVOC OPS, send it, over.[/color]
 
   The request should identify:
 
@@ -226,17 +226,17 @@
 
   [color=#a4885c]Enemy machine-gun position on the north ridge beside the communications tower. Friendlies are two-five-zero meters east, marked by smoke. Request suppression, over.[/color]
 
-  [color=#a4885c]RED ROMEO, HAVOC OPS, roger. Rounds out, impact in three-zero seconds, over.[/color]
+  [color=#a4885c]SABRE ROMEO, HAVOC OPS, roger. Rounds out, impact in three-zero seconds, over.[/color]
 
-  [color=#a4885c]HAVOC OPS, RED ROMEO, impact observed. Target suppressed. End of mission, out.[/color]
+  [color=#a4885c]HAVOC OPS, SABRE ROMEO, impact observed. Target suppressed. End of mission, out.[/color]
 
   ## Casualty Evacuation Request
 
   Establish contact before sending casualty details.
 
-  [color=#a4885c]HAVOC ROMEO, this is YELLOW ROMEO, casualty evacuation request, over.[/color]
+  [color=#a4885c]HAVOC ROMEO, this is DAGGER ROMEO, casualty evacuation request, over.[/color]
 
-  [color=#a4885c]YELLOW ROMEO, HAVOC ROMEO, send it, over.[/color]
+  [color=#a4885c]DAGGER ROMEO, HAVOC ROMEO, send it, over.[/color]
 
   Include:
 
@@ -248,15 +248,15 @@
 
   [color=#a4885c]Two casualties. One urgent surgical, one walking wounded. Pickup at the landing zone south of the bridge. Area is secure and marked with green smoke, over.[/color]
 
-  [color=#a4885c]YELLOW ROMEO, HAVOC ROMEO, good copy. Evacuation craft inbound in five minutes, out.[/color]
+  [color=#a4885c]DAGGER ROMEO, HAVOC ROMEO, good copy. Evacuation craft inbound in five minutes, out.[/color]
 
   ## Using ACTUAL
 
   [bold]ACTUAL[/bold] identifies the person in charge speaking personally rather than an RTO or other person speaking on their behalf.
 
-  Squad leaders carry it as their assigned station: [bold]RED ACTUAL[/bold] is the Red (Alpha) squad leader. Command stations append it when the officer takes the handset personally.
+  Squad leaders carry it as their assigned station: [bold]SABRE ACTUAL[/bold] is the Sabre (Alpha) squad leader. Command stations append it when the officer takes the handset personally.
 
-  [color=#a4885c]RED ACTUAL, this is HAVOC 6 ACTUAL. Move past phase line DODGE, over.[/color]
+  [color=#a4885c]SABRE ACTUAL, this is HAVOC 6 ACTUAL. Move past phase line DODGE, over.[/color]
 
   Without [bold]ACTUAL[/bold], [bold]HAVOC 6[/bold] traffic may be the RTO relaying for the commander. With it, the commander is speaking personally.
 

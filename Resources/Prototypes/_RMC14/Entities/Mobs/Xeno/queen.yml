@@ -305,7 +305,7 @@
     enabled: false
   - type: XenoToggleChargingStop
   - type: FixedIdentity
-    name: cm-job-name-xeno-queen
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartTQ
   - type: RMCTrackable

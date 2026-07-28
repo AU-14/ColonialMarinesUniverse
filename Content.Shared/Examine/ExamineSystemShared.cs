@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._RMC14.Examine;
 using Content.Shared._RMC14.Overwatch;
 using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared._RMC14.Xenonids.Watch;
@@ -7,6 +8,7 @@ using Content.Shared.Ghost;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Whitelist;
 using JetBrains.Annotations;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
@@ -26,6 +28,7 @@ namespace Content.Shared.Examine
 
         // RMC14
         [Dependency] private QueenEyeSystem _queenEye = default!;
+        [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
         public const float MaxRaycastRange = 100;
 
@@ -305,11 +308,19 @@ namespace Content.Shared.Examine
 
             var hasDescription = false;
             var metadata = MetaData(entity);
+            var description = metadata.EntityDescription;
+
+            // RMC14
+            if (TryComp(entity, out FixedDescriptionComponent? fixedDescription) &&
+                _whitelist.IsWhitelistPass(fixedDescription.Whitelist, examiner.Value))
+            {
+                description = Loc.GetString(fixedDescription.Description);
+            }
 
             //Add an entity description if one is declared
-            if (!string.IsNullOrEmpty(metadata.EntityDescription))
+            if (!string.IsNullOrEmpty(description))
             {
-                message.AddText(metadata.EntityDescription);
+                message.AddText(description);
                 hasDescription = true;
             }
 

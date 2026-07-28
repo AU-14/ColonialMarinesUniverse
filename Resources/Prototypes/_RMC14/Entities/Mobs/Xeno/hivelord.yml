@@ -12,7 +12,7 @@
   description: A builder of really big hives.
   components:
   - type: GhostRole
-    name: cm-job-name-xeno-hivelord
+    name: cmu-job-name-xeno-unknown
   - type: MobState
     allowedStates:
     - Alive
@@ -116,7 +116,7 @@
   - type: XenoInhands
     prefix: hivelord
   - type: FixedIdentity
-    name: cm-job-name-xeno-hivelord
+    name: cmu-job-name-xeno-unknown
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: RMCSurgeryXenoHeart

@@ -105,6 +105,8 @@
         tags:
         - RMCTankFlamerLargeUPP
         - RMCTankFlamerLarge
+        - RMCTankFlamerBLargeUPP
+        - RMCTankFlamerXLargeUPP
   - type: ItemSlots
     slots:
       item:

@@ -21,3 +21,11 @@
 - type: lobbyBackground
   id: AU14LobbyWendigoFollowed
   background: /Textures/_AU14/Lobby/WendigoFollowed.png
+
+- type: lobbyBackground
+  id: CMU14LobbyWorkingJoes
+  background: /Textures/_AU14/Lobby/Joes.png
+
+- type: lobbyBackground
+  id: CMU14LobbyXenoWar
+  background: /Textures/_AU14/Lobby/XenoWar.png

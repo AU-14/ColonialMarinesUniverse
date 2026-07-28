@@ -9,7 +9,7 @@ namespace Content.Shared.Actions.Components;
 /// An action that raises an event as soon as it gets used.
 /// Requires <see cref="ActionComponent"/>.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem))]
+[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem), typeof(Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock.CMUXenoWarlockSystem))]
 [EntityCategory("Actions")]
 public sealed partial class InstantActionComponent : Component
 {

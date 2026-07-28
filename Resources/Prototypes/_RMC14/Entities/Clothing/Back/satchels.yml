@@ -253,7 +253,6 @@
       - RMCScoutArmor
     denyReason: rmc-wear-scout-armor-required
   - type: ThermalCloak
-    opacity: 0.035 # Put to 0.03 for testing
     restrictWeapons: true
     cloakedHideLayers:
     - Tail

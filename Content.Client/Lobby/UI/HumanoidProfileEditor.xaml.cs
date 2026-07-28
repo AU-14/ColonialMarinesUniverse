@@ -1767,7 +1767,7 @@ namespace Content.Client.Lobby.UI
             if (ContainsAny(id, name, "Officer", "Chief")) // after Crew Chief
                 return ("officer", Loc.GetString("humanoid-profile-editor-segment-officer"));
 
-            if (ContainsAny(id, name, "Doctor", "AuxTech", "Police", "Synth", "Working Joe", "Auxiliary", "DroneOperator", "Nurse", "EngineeringTech"))
+            if (ContainsAny(id, name, "Doctor", "AuxTech", "Police", "Synth", "Working Joe", "Auxiliary", "DroneOperator", "Nurse", "EngineeringTech", "Correspondent"))
                 return ("support", Loc.GetString("humanoid-profile-editor-segment-support"));
 
             if (ContainsAny(id, name, "Leader", "Sergeant", "RadioTelephone"))

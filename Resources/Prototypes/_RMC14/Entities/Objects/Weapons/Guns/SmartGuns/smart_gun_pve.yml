@@ -62,7 +62,7 @@
     - FullAuto
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 5
+    baseFireRate: 6
     burstScatterMult: 4
     modifiers:
       FullAuto:
@@ -72,6 +72,9 @@
         shotsToMaxScatter: 80
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.05
+  - type: GunIFF
+    enabled: true
+    preventFriendlyFire: true
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot

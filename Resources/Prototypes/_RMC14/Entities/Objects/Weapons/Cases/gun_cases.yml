@@ -720,6 +720,31 @@
 
 - type: entity
   parent: RMCBaseEquipmentCase
+  id: CMUType23ShotgunCase
+  name: type 23 shotgunner equipment case
+  description: A gun case containing an Type 23 tactical shotgun, a box of high-dispersive shock grenades, and a box of buckshot shells.
+  components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,3
+  - type: StorageFill
+    contents:
+    - id: CMUWeaponShotgunType23Tactical
+    - id: RMCBoxShotgunHDSG
+      amount: 6
+    - id: RMCBoxShotgunHeavySlugs
+      amount: 4
+    - id: RMCBoxShotgunHeavyBuckshot
+      amount: 4
+    - id: RMCBoxShotgunHeavyFlechette
+      amount: 4
+    - id: RMCBoxShotgunHeavyDragonbreath
+      amount: 3
+    - id: AU14Altyn
+
+- type: entity
+  parent: RMCBaseEquipmentCase
   id: AU14HAZOPSShotgunCase
   name: heavy shotgunner equipment case
   description: A gun case containing an spas-12 shotgun.

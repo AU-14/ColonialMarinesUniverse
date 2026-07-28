@@ -14,7 +14,7 @@
     guides:
     - RMCGuideRoleWarrior
   - type: GhostRole
-    name: cm-job-name-xeno-warrior
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Warrior/warrior.rsi # AU14-Edit
   - type: MobState
@@ -127,7 +127,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-warrior
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
   - type: RMCActionOrder

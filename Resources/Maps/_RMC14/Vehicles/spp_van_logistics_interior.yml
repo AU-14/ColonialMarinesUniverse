@@ -27,7 +27,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Map Entity
+      name: UPP Van (Logistics)
     - type: Transform
     - type: Map
       mapPaused: True

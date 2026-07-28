@@ -10,9 +10,18 @@
   - type: Item
     size: Huge
   - type: Wieldable
+    freeHandsRequired: 0
   - type: Eye
     zoom: 0.5, 0.5
   - type: RMCStaticZoomLevel
+  - type: Scope
+    useInHand: true
+    requireWielding: true
+    zoomLevels:
+    - zoom: 1.6
+      offset: 14
+      allowMovement: true
+      doAfter: 0
   - type: SurveillanceCameraMicrophone
     blacklist:
       components:

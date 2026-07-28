@@ -79,6 +79,7 @@
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS84xTelescopicScope
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
         startingAttachable: RMCAttachmentM54CStockCollapsible
         whitelist:
@@ -149,6 +150,7 @@
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS84xTelescopicScope
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
         whitelist:
           tags:
@@ -206,6 +208,7 @@
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS84xTelescopicScope
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
         startingAttachable: RMCAttachmentM54CStockCollapsible
         whitelist:
@@ -282,6 +285,7 @@
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS84xTelescopicScope
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
         startingAttachable: RMCAttachmentM54CStockCollapsibleWhite
         whitelist:
@@ -342,6 +346,7 @@
           - RMCAttachmentS6ReflexSight
           - RMCAttachmentS84xTelescopicScope
           - RMCAttachmentS42xTelescopicMiniscope
+          - RMCAttachmentB8SmartScope
       rmc-aslot-stock:
         startingAttachable: RMCAttachmentM54CStockCollapsibleWhite
         whitelist:

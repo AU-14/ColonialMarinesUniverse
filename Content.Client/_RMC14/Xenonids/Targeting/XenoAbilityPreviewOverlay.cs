@@ -22,6 +22,7 @@ using Content.Shared._RMC14.Xenonids.Sentinel;
 using Content.Shared._RMC14.Xenonids.Stomp;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared._RMC14.Xenonids.Despoiler;
+using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 using Content.Shared.Actions.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -60,8 +61,10 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
     private static readonly Color AcidMineOutlineColor = new Color(0.6f, 0.9f, 0.2f);
     private static readonly Color DeployTrapsOutlineColor = new Color(0.8f, 0.6f, 0.2f);
     private static readonly Color SentinelToxinOutlineColor = new Color(0.34f, 0.95f, 0.24f);
+    private static readonly Color WarlockOutlineColor = new Color(0.298f, 0.114f, 0.584f); // #4c1d95
 
     private const float OutlineAlpha = 0.8f;
+    private const float WarlockShieldIndicatorAlpha = 0.8f;
     private const float OutlineThickness = 0.1f;
     private const int BombardDefaultRadius = 3;
     private const float ToxicSpitDefaultRange = 7f;
@@ -100,6 +103,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
     private readonly EntityQuery<XenoDespoilerCausticEmbraceActionComponent> _causticEmbraceQ;
     private readonly EntityQuery<XenoDespoilerComponent> _despoilerQ;
     private readonly EntityQuery<XenoToxicSpitComponent> _toxicSpitQ;
+    private readonly EntityQuery<CMUXenoWarlockComponent> _warlockQ;
 
     public XenoAbilityPreviewOverlay(IEntityManager ents)
     {
@@ -137,6 +141,7 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
         _causticEmbraceQ = ents.GetEntityQuery<XenoDespoilerCausticEmbraceActionComponent>();
         _despoilerQ = ents.GetEntityQuery<XenoDespoilerComponent>();
         _toxicSpitQ = ents.GetEntityQuery<XenoToxicSpitComponent>();
+        _warlockQ = ents.GetEntityQuery<CMUXenoWarlockComponent>();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -272,7 +277,148 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
                     embrace,
                     player.Value);
                 break;
+
+            case CMUXenoPsychicBlastActionEvent:
+                if (_warlockQ.TryComp(player.Value, out var blastWarlock))
+                    DrawWarlockRangeCircle(args, player.Value, originMap, blastWarlock.PsychicBlastRange);
+                break;
+
+            case CMUXenoPsychicCrushActionEvent:
+                if (_warlockQ.TryComp(player.Value, out var crushWarlock))
+                    DrawWarlockRangeCircle(args, player.Value, originMap, crushWarlock.PsychicCrushInitRange);
+                break;
+
+            case CMUXenoPsychicShieldActionEvent:
+                DrawWarlockShieldTargetPreview(args, player.Value, originMap, mousePos);
+                break;
         }
+    }
+
+    private void DrawWarlockShieldTargetPreview(
+        in OverlayDrawArgs args,
+        EntityUid player,
+        MapCoordinates originMap,
+        MapCoordinates mousePos)
+    {
+        if (!_warlockQ.HasComp(player))
+            return;
+
+        var direction = GetCardinalFromMouseDelta(player, originMap, mousePos);
+        var color = WarlockOutlineColor.WithAlpha(WarlockShieldIndicatorAlpha);
+        DrawWarlockShieldPlacement(args, originMap, direction, color);
+    }
+
+    private Direction GetCardinalFromMouseDelta(EntityUid player, MapCoordinates originMap, MapCoordinates mousePos)
+    {
+        if (originMap.MapId != mousePos.MapId)
+            return _transform.GetWorldRotation(player).GetCardinalDir();
+
+        var delta = mousePos.Position - originMap.Position;
+        // Mouse within warlock's own tile: fall back to current facing to avoid picking a wrong cardinal from jitter.
+        if (Math.Abs(delta.X) < 0.5f && Math.Abs(delta.Y) < 0.5f)
+            return _transform.GetWorldRotation(player).GetCardinalDir();
+
+        return delta.ToWorldAngle().GetCardinalDir();
+    }
+
+    // Tile-shaped range indicator that tracks the warlock's actual world position (like the
+    // shield preview) instead of snapping to their tile centre. A tile is highlighted when the
+    // range circle touches it - i.e. the closest point of the tile to the warlock's world
+    // position is within the ability's range. That closest point is per-axis clamped: on each
+    // axis the offset from the tile centre to the warlock is either zero (warlock inside the
+    // tile on that axis) or |delta| - halfTile (warlock outside the tile on that axis). Any
+    // tile grazed by the range circle is fully highlighted so its whole footprint reads as in
+    // range at a glance. Range is read from the warlock component (not TargetActionComponent)
+    // because the action's YAML range is intentionally loose - the SharedActionsSystem gate has
+    // to accept clicks anywhere on a highlighted tile, so the true reach lives on the warlock
+    // and CMUXenoWarlockSystem.TrySnapAbilityTargetToTile enforces the same closest-point-of-
+    // tile rule server-side, guaranteeing every highlighted tile is a legal target.
+    private void DrawWarlockRangeCircle(
+        in OverlayDrawArgs args,
+        EntityUid player,
+        MapCoordinates originMap,
+        float range)
+    {
+        if (range <= 0f)
+            return;
+
+        if (!_mapSystem.TryFindGridAt(originMap, out var gridUid, out var grid))
+            return;
+
+        var center = _mapSystem.CoordinatesToTile(gridUid, grid, originMap);
+        var tileSize = grid.TileSize;
+        var halfTile = tileSize / 2f;
+        // Query far enough out to catch tiles whose closest corner is inside the range circle,
+        // which extends up to halfTile*sqrt(2) beyond the naive per-axis range. Ceiling covers
+        // the diagonal reach in tile count.
+        var maxTiles = (int) MathF.Ceiling((range + halfTile) / tileSize);
+        var tiles = new HashSet<Vector2i>();
+        for (var x = -maxTiles; x <= maxTiles; x++)
+        {
+            for (var y = -maxTiles; y <= maxTiles; y++)
+            {
+                var indices = center + new Vector2i(x, y);
+                var tileCenter = _mapSystem.GridTileToWorld(gridUid, grid, indices).Position;
+                var delta = tileCenter - originMap.Position;
+                // Closest point of the tile to the warlock. Per axis: 0 when the warlock is
+                // inside the tile on that axis (|delta.axis| <= halfTile), else |delta.axis| -
+                // halfTile (the gap between the warlock's projected position and the tile
+                // boundary). The 2D length of that vector is the true minimum distance from
+                // warlock to any point of the tile.
+                var closest = new Vector2(
+                    MathF.Max(0f, MathF.Abs(delta.X) - halfTile),
+                    MathF.Max(0f, MathF.Abs(delta.Y) - halfTile));
+                if (closest.Length() > range)
+                    continue;
+
+                tiles.Add(indices);
+            }
+        }
+
+        DrawTileBorder(args.WorldHandle, gridUid, grid, tiles, WarlockOutlineColor.WithAlpha(OutlineAlpha));
+    }
+
+    // Draws a rectangle outline at the world position where the shield will actually spawn -
+    // 1 world-unit in front of the warlock, 3 wide by 1 thick perpendicular to the facing direction.
+    // Not tile-snapped; tracks the warlock's exact position.
+    private void DrawWarlockShieldPlacement(
+        in OverlayDrawArgs args,
+        MapCoordinates originMap,
+        Direction direction,
+        Color color)
+    {
+        var forward = direction switch
+        {
+            Direction.North => new Vector2(0, 1),
+            Direction.South => new Vector2(0, -1),
+            Direction.East => new Vector2(1, 0),
+            Direction.West => new Vector2(-1, 0),
+            _ => new Vector2(0, 1),
+        };
+        Vector2 halfWidth; // 3 tiles wide, perpendicular to facing
+        Vector2 halfDepth; // 1 tile thick, along facing
+        if (direction == Direction.North || direction == Direction.South)
+        {
+            halfWidth = new Vector2(1.5f, 0f);
+            halfDepth = new Vector2(0f, 0.5f);
+        }
+        else
+        {
+            halfWidth = new Vector2(0f, 1.5f);
+            halfDepth = new Vector2(0.5f, 0f);
+        }
+
+        var center = originMap.Position + forward;
+        var c1 = center - halfWidth - halfDepth;
+        var c2 = center + halfWidth - halfDepth;
+        var c3 = center + halfWidth + halfDepth;
+        var c4 = center - halfWidth + halfDepth;
+
+        var handle = args.WorldHandle;
+        DrawEdge(handle, c1, c2, color);
+        DrawEdge(handle, c2, c3, color);
+        DrawEdge(handle, c3, c4, color);
+        DrawEdge(handle, c4, c1, color);
     }
 
     private void DrawResinSurge(

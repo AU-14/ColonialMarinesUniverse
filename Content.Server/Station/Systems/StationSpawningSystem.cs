@@ -92,6 +92,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     {
         "AuxSupportSynth",
         "AuxTech",
+        "CombatCorrespondent",
+        "DroneOperator",
         "EngineeringTech",
         "IntelOfficer",
         "JuniorOfficer",

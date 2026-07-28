@@ -75,7 +75,6 @@ public sealed class CMUXenoPortTest
             var blastChannel = entMan.SpawnEntity("CMUXenoWarlockBlastChannelEffect", map.GridCoords);
             var crushParticle = entMan.SpawnEntity("CMUXenoWarlockCrushParticles", map.GridCoords);
             var blastParticle = entMan.SpawnEntity("CMUXenoWarlockBlastParticles", map.GridCoords);
-            var lanceParticle = entMan.SpawnEntity("CMUXenoWarlockLanceParticles", map.GridCoords);
 
             try
             {
@@ -86,10 +85,8 @@ public sealed class CMUXenoPortTest
                 Assert.That(entMan.Deleted(blastChannel), Is.False);
                 Assert.That(entMan.HasComponent<CMUXenoWarlockParticleEmitterComponent>(crushParticle), Is.True);
                 Assert.That(entMan.HasComponent<CMUXenoWarlockParticleEmitterComponent>(blastParticle), Is.True);
-                Assert.That(entMan.HasComponent<CMUXenoWarlockParticleEmitterComponent>(lanceParticle), Is.True);
                 Assert.That(entMan.Deleted(crushParticle), Is.False);
                 Assert.That(entMan.Deleted(blastParticle), Is.False);
-                Assert.That(entMan.Deleted(lanceParticle), Is.False);
             }
             finally
             {
@@ -100,7 +97,6 @@ public sealed class CMUXenoPortTest
                 entMan.DeleteEntity(blastChannel);
                 entMan.DeleteEntity(crushParticle);
                 entMan.DeleteEntity(blastParticle);
-                entMan.DeleteEntity(lanceParticle);
             }
         });
 
@@ -126,15 +122,11 @@ public sealed class CMUXenoPortTest
 
             try
             {
-                var actionEv = new CMUXenoPsychicShieldActionEvent
-                {
-                    Performer = warlock,
-                    Action = action,
-                };
-                entMan.EventBus.RaiseLocalEvent(warlock, actionEv);
+                // Click one tile north of the warlock -> shield faces north.
+                var spawnEv = RaiseShieldPress(entMan, warlock, action, map.GridCoords.Offset(new Vector2(0, 1)));
 
                 var warlockComp = entMan.GetComponent<CMUXenoWarlockComponent>(warlock);
-                Assert.That(actionEv.Handled, Is.True);
+                Assert.That(spawnEv.Handled, Is.True);
                 Assert.That(warlockComp.PsychicShieldSegments, Has.Count.EqualTo(1));
 
                 shield = warlockComp.PsychicShieldSegments[0];
@@ -212,12 +204,8 @@ public sealed class CMUXenoPortTest
 
                 var actionEnt = SpawnAction(entMan);
                 action = actionEnt.Owner;
-                var actionEv = new CMUXenoPsychicShieldActionEvent
-                {
-                    Performer = warlock,
-                    Action = actionEnt,
-                };
-                entMan.EventBus.RaiseLocalEvent(warlock, actionEv);
+                // Click one tile north of the warlock -> shield faces north.
+                var actionEv = RaiseShieldPress(entMan, warlock, actionEnt, map.GridCoords.Offset(new Vector2(0, 1)));
 
                 Assert.That(actionEv.Handled, Is.True);
 
@@ -289,12 +277,8 @@ public sealed class CMUXenoPortTest
 
                 var actionEnt = SpawnAction(entMan);
                 action = actionEnt.Owner;
-                var actionEv = new CMUXenoPsychicShieldActionEvent
-                {
-                    Performer = warlock,
-                    Action = actionEnt,
-                };
-                entMan.EventBus.RaiseLocalEvent(warlock, actionEv);
+                // Click one tile north of the warlock -> shield faces north.
+                var actionEv = RaiseShieldPress(entMan, warlock, actionEnt, map.GridCoords.Offset(new Vector2(0, 1)));
 
                 Assert.That(actionEv.Handled, Is.True);
 
@@ -390,12 +374,8 @@ public sealed class CMUXenoPortTest
 
                 var actionEnt = SpawnAction(entMan);
                 action = actionEnt.Owner;
-                var actionEv = new CMUXenoPsychicShieldActionEvent
-                {
-                    Performer = warlock,
-                    Action = actionEnt,
-                };
-                entMan.EventBus.RaiseLocalEvent(warlock, actionEv);
+                // Click one tile north of the warlock -> shield faces north.
+                var actionEv = RaiseShieldPress(entMan, warlock, actionEnt, map.GridCoords.Offset(new Vector2(0, 1)));
 
                 Assert.That(actionEv.Handled, Is.True);
 
@@ -423,12 +403,9 @@ public sealed class CMUXenoPortTest
                 Assert.That(ev.Cancelled, Is.True);
                 Assert.That(entMan.HasComponent<CMUXenoFrozenProjectileComponent>(projectile), Is.True);
 
-                var detonateEv = new CMUXenoPsychicShieldActionEvent
-                {
-                    Performer = warlock,
-                    Action = actionEnt,
-                };
-                entMan.EventBus.RaiseLocalEvent(warlock, detonateEv);
+                // Shield is up: a single press detonates.
+                // Shield is up: any click detonates. Target is ignored.
+                var detonateEv = RaiseShieldPress(entMan, warlock, actionEnt, map.GridCoords);
 
                 var velocity = physics.GetMapLinearVelocity(projectile, component: projectilePhysics);
                 Assert.Multiple(() =>
@@ -465,6 +442,18 @@ public sealed class CMUXenoPortTest
     {
         var action = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
         return (action, entMan.EnsureComponent<ActionComponent>(action));
+    }
+
+    private static CMUXenoPsychicShieldActionEvent RaiseShieldPress(IEntityManager entMan, EntityUid warlock, EntityUid action, EntityCoordinates target)
+    {
+        var ev = new CMUXenoPsychicShieldActionEvent
+        {
+            Performer = warlock,
+            Action = action,
+            Target = target,
+        };
+        entMan.EventBus.RaiseLocalEvent(warlock, ev);
+        return ev;
     }
 
     private static bool HasAction(IEntityManager entMan, EntityUid user, string prototype)

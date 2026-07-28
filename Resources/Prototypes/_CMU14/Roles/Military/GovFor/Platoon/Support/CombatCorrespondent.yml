@@ -1,0 +1,129 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobGOVFORCombatCorrespondentBaseAbstract
+  name: au14-job-name-govforcombatcorrespondent
+  description: au14-job-description-govforcombatcorrespondent
+  icon: "AU14JobIconGovRifleman"
+  spawnMenuRoleName: Combat Correspondent (GOVFOR)
+  startingGear: AU14GearGOVFORCombatCorrespondent
+  dummyStartingGear: AU14GearGOVFORCombatCorrespondentDummy
+  playTimeTracker: AU14JobGOVFORCombatCorrespondent
+  displayWeight: -1
+  accessGroups:
+  - AU14GovforSquad
+  hasIcon: false
+
+- type: job
+  abstract: true
+  parent: AU14JobGOVFORCombatCorrespondentBaseAbstract
+  id: AU14JobGOVFORCombatCorrespondentBase
+  roundRole: CombatCorrespondent
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforcombatcorrespondent
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: rifleman
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NoEnglish
+    - CMUProstheticLeftArm
+    - CMUProstheticRightArm
+    - CMUProstheticLeftLeg
+    - CMUProstheticRightLeg
+    - SlowRunner
+    - Anemic
+    - Asthmatic
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankStaffSergeant:
+      entity: AU14ChevronUSCMStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORCombatCorrespondent
+        time: 86400 # 24 hours
+    RMCRankSergeant:
+      entity: AU14ChevronUSCMSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFORCombatCorrespondent
+        time: 36000 # 10 hours
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORCombatCorrespondent
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORCombatCorrespondent
+  equipment:
+    id: AU14IDCardGOVFORCombatCorrespondent
+    ears: AU14HeadsetGovforMarine
+    pocket2: RMCCorrespondentMicrophone
+
+- type: startingGear
+  id: AU14GearGOVFORCombatCorrespondentDummy
+  equipment:
+    outerClothing: RMCOuterClothingExternalWebbing
+    shoes: AU14BootsJungle
+    head: AU14JunglePatrolCap
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORCombatCorrespondent
+  name: Spawn Point GOVFOR Combat Correspondent
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORCombatCorrespondent
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobGOVFORCombatCorrespondentBase
+  id: AU14JobGOVFORCombatCorrespondent
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORCombatCorrespondent
+  points: 7
+  groups:
+  - MarineBackpack
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - CombatCorrespondentCamera
+
+- type: loadoutGroup
+  id: CombatCorrespondentCamera
+  name: rmc-loadout-group-miscellaneous
+  minLimit: 1
+  hidden: true
+  loadouts:
+  - CombatCorrespondentCameraLoadout
+
+- type: loadout
+  id: CombatCorrespondentCameraLoadout
+  inhand:
+  - RMCCameraBroadcasting

@@ -13,7 +13,7 @@
   components:
   - type: CanBuildThickFromConstructNode
   - type: GhostRole
-    name: cm-job-name-xeno-carrier
+    name: cmu-job-name-xeno-unknown
   - type: MobState
     allowedStates:
     - Alive
@@ -122,7 +122,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-carrier
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
 

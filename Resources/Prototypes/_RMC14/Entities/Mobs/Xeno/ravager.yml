@@ -15,7 +15,7 @@
     guides:
     - RMCGuideRoleRavager
   - type: GhostRole
-    name: cm-job-name-xeno-ravager
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Ravager/ravager.rsi # AU14-Edit
     layers:
@@ -156,7 +156,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: ravager
   - type: FixedIdentity
-    name: cm-job-name-xeno-ravager
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT3
 

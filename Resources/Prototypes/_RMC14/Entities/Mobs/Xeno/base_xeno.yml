@@ -249,7 +249,7 @@
     makeSentient: true
     allowSpeech: true
     allowMovement: true
-    name: cm-xeno-name
+    name: cmu-job-name-xeno-unknown
     description: cm-xeno-description
     raffle:
       settings: short
@@ -384,7 +384,12 @@
   - type: XenoRankNames
   - type: Blindable
   - type: FixedIdentity
-    name: cm-xeno-name
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
+  - type: FixedDescription
+    description: rmc-xeno-unknown-description
     whitelist:
       components:
       - Marine

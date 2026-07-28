@@ -31,7 +31,7 @@
   parent: [ ClothingEyesBase , ShowMedicalIcons ]
   id: CMGlassesM42ScoutSight
   name: M42 scout sight
-  description: A headset and night vision sighting system for the M96 Scout Rifle. Allows highlighted imaging of surroundings.
+  description: A headset and night vision sighting system for the M96 Scout Rifle. Allows highlighted imaging of surroundings. Click it to toggle.
   components:
   - type: Item
     storedRotation: 0
@@ -42,7 +42,19 @@
       map: [ "icon" ]
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
+  - type: NightVisionItem
+    actionId: RMCActionToggleSmartGunSight
+    enableOnEquip: false
+    green: true
+    defaultState: Full
+    blockScopes: true
   - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.NightVisionItemVisuals.Active:
+        icon:
+          True: { state: icon_on }
+          False: { state: icon }
 
 - type: entity
   parent: CMGlassesM42ScoutSight
@@ -59,7 +71,7 @@
   parent: ClothingEyesHudMedical
   id: RMCGlassesM4SPRBattleSight
   name: M4RA Battle Sight
-  description: A headset and night vision sighting system for the M4RA Custom Battle Rifle. Allows highlighted imaging of surroundings, as well as the ability to view the suit sensor health status readouts of other marines.
+  description: A headset and night vision sighting system for the M4RA Custom Battle Rifle. Allows highlighted imaging of surroundings, as well as the ability to view the suit sensor health status readouts of other marines. Click it to toggle.
   components:
   - type: Item
     storedRotation: 0
@@ -71,8 +83,18 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/m42_scoutsight.rsi
   - type: NightVisionItem
-    mesons: true
+    actionId: RMCActionToggleSmartGunSight
+    enableOnEquip: false
+    green: true
+    defaultState: Full
+    blockScopes: true
   - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.NightVisionItemVisuals.Active:
+        icon:
+          True: { state: icon_on }
+          False: { state: icon }
 
 - type: entity
   parent: 
@@ -80,7 +102,7 @@
   - ShowMedicalIcons
   id: RMCGlassesSmartGunSight
   name: M56B head mounted sight # TODO RMC14 meson tile vision see description below
-  description: A headset and goggles system for the M56B Smart Gun. # TODO RMC14 Has a low-res short-range imager, allowing for view of terrain.
+  description: A headset and goggles system for the M56B Smart Gun. Click it to toggle. # TODO RMC14 Has a low-res short-range imager, allowing for view of terrain.
   components:
   - type: Item
     storedRotation: 0
@@ -95,7 +117,19 @@
     whitelist:
       components:
       - SmartGun
+  - type: NightVisionItem
+    actionId: RMCActionToggleSmartGunSight
+    enableOnEquip: false
+    green: true
+    defaultState: Full
+    blockScopes: true
   - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.NightVisionItemVisuals.Active:
+        icon:
+          True: { state: icon_on }
+          False: { state: icon }
 
 - type: entity
   parent: ClothingEyesBase
@@ -867,7 +901,7 @@
 - type: entity
   parent: ClothingEyesBase
   id: RMCWeldingGoggles
-  name: welding goggles # TODO RMC14 impairs vision when on
+  name: welding goggles
   description: Protects the eyes from welders, approved by the mad scientist association.
   components:
   - type: Sprite
@@ -881,6 +915,7 @@
   - type: ComponentToggler
     components:
     - type: EyeProtection
+    - type: WeldingVision
   - type: RMCItemToggleClothingVisuals
   - type: GenericVisualizer
     visuals:
@@ -911,7 +946,7 @@
 
 - type: entity
   parent: RMCWeldingGoggles
-  id: RMCWeldingGogglesSuperior # TODO RMC14 less vision impairment then regular goggles
+  id: RMCWeldingGogglesSuperior
   name: superior welding goggles
   description: Welding goggles made from more expensive materials, strangely smells like potatoes.
   components:
@@ -919,6 +954,11 @@
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/welding_goggles_superior.rsi
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Eyes/Glasses/welding_goggles_superior.rsi
+  - type: ComponentToggler
+    components:
+    - type: EyeProtection
+  - type: WeldingVision
+    superior: true
 
 - type: entity
   parent: ClothingEyesBase

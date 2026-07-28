@@ -64,6 +64,23 @@
     event: !type:ToggleActionEvent
 
 - type: entity
+  parent: ActionMarineBase
+  id: RMCActionToggleSmartGunSight
+  name: Toggle the M56B head mounted sight
+  description: Allows you to see even in complete darkness.
+  components:
+  - type: Action
+    icon:
+      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/ml66a_sight.rsi
+      state: icon
+    iconOn:
+      sprite: _RMC14/Objects/Clothing/Eyes/Glasses/ml66a_sight.rsi
+      state: icon_on
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:ToggleActionEvent
+
+- type: entity
   parent: ActionMarineToggleable
   id: RMCActionToggleIDLock
   name: Toggle ID lock

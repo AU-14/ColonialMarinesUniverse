@@ -208,15 +208,6 @@
         reductionDecreaseRate: 0
         durationPerUnit: 8
         additive: true
-      - !type:GenericStatusEffect
-        conditions:
-        - !type:ReagentThreshold
-          min: 110
-        key: Unconscious
-        component: RMCUnconscious
-        time: 10 #Yes, it's this much.
-        type: Add
-        refresh: true
 
 - type: reagent
   parent: [ CMReagentMedicine, Kelotane ]

@@ -169,6 +169,50 @@
 
 - type: entity
   parent: RMCBaseEquipmentCase
+  id: CMUDemoSpecEquipmentCaseUPP
+  name: demolitionist equipment case
+  suffix: UPP, EMBLR
+  description: "A large case containing a heavy-caliber EMBLR, 70mm rockets, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: demo
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,3
+  - type: StorageFill
+    contents:
+
+
+    - id: AU14SatchelDemoSpecUPP
+      amount: 2
+    - id: CMUWeaponLauncherEMBLR
+    - id: CMURocket70mm
+      amount: 2
+    - id: CMURocket70mmWhitePhosphorus
+      amount: 2
+    - id: CMURocket70mmAntiArmor
+      amount: 2
+    - id: RMCWeaponSMGType19
+    - id: RMCMagazineSMGType19
+      amount: 2
+    - id: RMCExplosivePlastic
+      amount: 2
+    - id: RMCBinoculars
+
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: DemoSpecWhitelist
+
+
+
+
+- type: entity
+  parent: RMCBaseEquipmentCase
   id: RMCScoutSpecEquipmentCase
   name: scout equipment case
   suffix: Base

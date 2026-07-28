@@ -71,6 +71,26 @@
 - type: Tag
   id: GasMask
 
+# Prescription variants
+
+- type: entity
+  parent: CMMaskGas
+  id: CMMaskPrescriptionGas
+  name: prescription gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: RMCMaskGasSPP
+  id: RMCMaskPrescriptionGasSPP
+  name: prescription ShMB/4 gasmask
+  description: The standard issue gasmask utilized by the UPP Vanguard Collective and many UPP civilian organizations. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
 - type: entity
   parent: CMBaseMask
   id: CMMaskSterile

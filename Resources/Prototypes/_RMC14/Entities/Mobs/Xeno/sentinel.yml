@@ -12,7 +12,7 @@
   description: A slithery, spitting kind of alien.
   components:
   - type: GhostRole
-    name: cm-job-name-xeno-sentinel
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Sentinel/sentinel.rsi # AU14-Edit
   - type: MobState
@@ -99,7 +99,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.1
   - type: FixedIdentity
-    name: cm-job-name-xeno-sentinel
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT1
   - type: VentCrawler

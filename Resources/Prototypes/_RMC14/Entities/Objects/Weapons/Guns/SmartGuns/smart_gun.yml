@@ -26,6 +26,7 @@
     isCorrodible: false
   - type: GunIFF
     enabled: true
+    preventFriendlyFire: true
   - type: WieldDelay
     baseDelay: 0.4
   - type: WieldableSpeedModifiers
@@ -63,7 +64,7 @@
     - FullAuto
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 8
+    baseFireRate: 9.6
     burstScatterMult: 4
     modifiers:
       FullAuto:
@@ -98,7 +99,7 @@
           components:
           - SmartGunBattery
   - type: GunDamageModifier
-    multiplier: 0.6
+    multiplier: 1
   - type: GunToggleableAmmo
     settings:
     - damage:
@@ -238,7 +239,7 @@
   - type: RMCSelectiveFire
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 15
+    baseFireRate: 18
     burstScatterMult: 1
     modifiers:
       FullAuto:
