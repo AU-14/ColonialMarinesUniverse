@@ -878,6 +878,30 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 faction,
                 "CMDoubleDoorEngineerGovforGlassLocked",
                 "CMDoubleDoorEngineerOpforGlassLocked"),
+            PlatoonMarkerClass.LockedLogisticsDoor => FactionPrototype(
+                faction,
+                "CMAirlockLogisticsGovforLocked",
+                "CMAirlockLogisticsOpforLocked"),
+            PlatoonMarkerClass.LockedLogisticsGlassDoor => FactionPrototype(
+                faction,
+                "CMAirlockLogisticsGovforGlassLocked",
+                "CMAirlockLogisticsOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleLogisticsDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorLogisticsGovforLocked",
+                "CMDoubleDoorLogisticsOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleLogisticsGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorLogisticsGovforGlassLocked",
+                "CMDoubleDoorLogisticsOpforGlassLocked"),
+            PlatoonMarkerClass.LaptopCallsign => FactionPrototype(
+                faction,
+                "AU14ItemLaptopCallsignGOVFOR",
+                "AU14ItemLaptopCallsignOPFOR"),
+            PlatoonMarkerClass.CommsArrayShip => FactionPrototype(
+                faction,
+                "AU14CommsArrayShipGovfor",
+                "AU14CommsArrayShipOpfor"),
             _ => null,
         };
     }

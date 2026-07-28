@@ -8,7 +8,7 @@ au14-job-name-govforplatco = Commander
 au14-job-description-govforplatco = Command the unit. Manage strategy, unit coordination and liaise with command from the CIC.
 au14-job-prefix-govforplatco = CMNDR
 
-au14-job-name-govforadjutant = Adjutant Officer
+au14-job-name-govforadjutant = Executive Officer
 au14-job-description-govforadjutant = Stand ready to assume command. Handle unit administration and keep the chain of command running smoothly.
 au14-job-prefix-govforadjutant = XO
 
@@ -55,6 +55,10 @@ au14-job-prefix-govforsquadsergeant = SL
 au14-job-name-govforsquadrifleman = Rifleman
 au14-job-description-govforsquadrifleman = The backbone of the unit. Follow orders, pull security, and shoot straight.
 au14-job-prefix-govforsquadrifleman = RFN
+
+au14-job-name-govforcombatcorrespondent = Combat Correspondent
+au14-job-description-govforcombatcorrespondent = Embed with the unit to report on the operation. Follow orders, pull security, and get the story.
+au14-job-prefix-govforcombatcorrespondent = CC
 
 au14-job-name-govforsquadautomaticrifleman = Automatic Rifleman
 au14-job-name-govforsquadautomaticrifleman-plural = Automatic Riflemen

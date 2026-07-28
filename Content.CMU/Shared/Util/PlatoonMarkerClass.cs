@@ -77,6 +77,12 @@ namespace Content.Shared.AU14.util
         LockedDoubleMedicalDoor,
         LockedDoubleMedicalGlassDoor,
         LockedDoubleEngineeringDoor,
-        LockedDoubleEngineeringGlassDoor
+        LockedDoubleEngineeringGlassDoor,
+        LockedLogisticsDoor,
+        LockedLogisticsGlassDoor,
+        LockedDoubleLogisticsDoor,
+        LockedDoubleLogisticsGlassDoor,
+        LaptopCallsign,
+        CommsArrayShip
     }
 }

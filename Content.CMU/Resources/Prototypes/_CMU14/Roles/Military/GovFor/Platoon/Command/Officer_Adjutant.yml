@@ -5,7 +5,7 @@
   name: au14-job-name-govforadjutant
   description: au14-job-description-govforadjutant
   icon: "AU14JobIconGovAdjutant"
-  spawnMenuRoleName: Adjutant Officer (GOVFOR)
+  spawnMenuRoleName: Executive Officer (GOVFOR)
   supervisors: au14-job-supervisors-govforplatco
   startingGear: AU14GearGOVFORAdjutant
   dummyStartingGear: AU14GearGOVFORAdjutantDummy
@@ -170,7 +170,7 @@
 - type: entity
   parent: CMSpawnPointJobBase
   id: AU14SpawnPointGOVFORAdjutant
-  name: Spawn Point GOVFOR Adjutant Officer
+  name: Spawn Point GOVFOR Executive Officer
   components:
   - type: SpawnPoint
     job_id: AU14JobGOVFORAdjutant
