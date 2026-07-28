@@ -40,7 +40,6 @@ using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
 using CMUDrawDepth = Content.Shared.DrawDepth.DrawDepth;
@@ -85,7 +84,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public TimeSpan PsychicBlastChargeDuration = TimeSpan.FromSeconds(1);
 
     [DataField, AutoNetworkedField]
-    public FixedPoint2 PsychicBlastCost = 75;
+    public FixedPoint2 PsychicBlastCost = 100;
 
     [DataField, AutoNetworkedField]
     public DamageSpecifier PsychicBlastDamage = new()
@@ -111,7 +110,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public float PsychicBlastRadius = 1.25f;
 
     [DataField, AutoNetworkedField]
-    public float PsychicBlastRange = 7f;
+    public float PsychicBlastRange = 6f;
 
     [DataField, AutoNetworkedField]
     public TimeSpan PsychicBlastSlow = TimeSpan.FromSeconds(1.5);
@@ -166,11 +165,11 @@ public sealed partial class CMUXenoWarlockComponent : Component
         PsychicCrushPulseSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
 
     // Range at which the warlock can start channelling a new psychic crush. Matches the psychic
-    // blast's initiation range (7 tiles) so both ranged abilities share the same reach at cast.
+    // blast's initiation range (6 tiles) so both ranged abilities share the same reach at cast.
     // Distinct from PsychicCrushRange, which governs how far the target can drift from the
     // warlock during the channel before the crush breaks.
     [DataField, AutoNetworkedField]
-    public float PsychicCrushInitRange = 7f;
+    public float PsychicCrushInitRange = 6f;
 
     [DataField, AutoNetworkedField]
     public float PsychicCrushRange = CMUXenoWarlockSystem.PsychicCrushTargetRangeValue;
@@ -509,7 +508,6 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
     [Dependency] private SharedRMCSpriteSystem _rmcSprite = default!;
@@ -543,11 +541,13 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     // 0 disables the hard cap - ShouldPsychicShieldBreakFromFrozenProjectiles returns false
     // when max <= 0, so the shield only breaks from integrity or from being interrupted.
     public const int PsychicShieldMaxFrozenProjectilesValue = 0;
-    public const int PsychicShieldPlasmaCost = 200;
+    // Paid once when the shield goes up. Detonating it afterwards is free, so the whole
+    // raise-and-reflect cycle costs this much and nothing more.
+    public const int PsychicShieldPlasmaCost = 300;
+    public const int PsychicShieldDetonationPlasmaCost = 0;
     public const float PsychicShieldHalfThickness = 0.5f;
     public const float PsychicShieldHalfWidth = 1.5f;
     public const float PsychicShieldProjectileStopOffset = 0.1f;
-    public const float PsychicShieldReflectionSpreadDegrees = 80f;
     // Small padding added to the tick sweep's oriented-rectangle test so a fast grenade that
     // just barely overshoots the shield face between ticks still gets caught.
     public const float ShieldSweepMargin = 0.15f;
@@ -590,6 +590,8 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             OnChannelingRefreshSpeed);
         SubscribeLocalEvent<CMUXenoPsychicShieldRootComponent, RefreshMovementSpeedModifiersEvent>(
             OnPsychicShieldRootRefreshSpeed);
+        SubscribeLocalEvent<CMUXenoPsychicShieldRootComponent, AttemptMobCollideEvent>(
+            OnPsychicShieldRootAttemptMobCollide);
         SubscribeLocalEvent<CMUXenoPsychicBlastProjectileComponent, ProjectileHitEvent>(OnPsychicBlastProjectileHit);
         SubscribeLocalEvent<CMUXenoPsychicBlastProjectileComponent, ProjectileFixedDistanceStopEvent>(
             OnPsychicBlastProjectileFixedDistanceStop);
@@ -656,19 +658,12 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             }
 
             // Natural expiry auto-detonates: same reflect + blast + roar + reflect sound as a
-            // manual button press, and charges the same PsychicShieldCost. If plasma is short
-            // the reflect does not happen - the shield just releases the caught projectiles at
-            // rest and ends. Either way the shield ends this tick, so the popup only fires once
-            // instead of spamming across ticks. Disruption paths (stun, knockdown, throw,
+            // manual button press. Detonation is free, so expiry always reflects and no plasma
+            // check can strand the caught projectiles. Disruption paths (stun, knockdown, throw,
             // mob-state, rejuvenate) still call EndPsychicShield with reflectProjectiles: false
             // so the drop-and-release behaviour is preserved there.
             if (warlock.PsychicShieldSegments.Count > 0 && time >= warlock.PsychicShieldExpiresAt)
-            {
-                if (_xenoPlasma.TryRemovePlasmaPopup((uid, null), warlock.PsychicShieldCost))
-                    DetonatePsychicShield(ent);
-                else
-                    EndPsychicShield(ent, false, false);
-            }
+                DetonatePsychicShield(ent);
         }
     }
 
@@ -1113,13 +1108,10 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         // after SetPsychicShieldActionMode swaps the action to InstantAction in StartPsychicShield.
         // If the raise event still fires while the shield is up (action-swap not yet networked,
         // integration tests raising the event directly, or an admin using the raw verb) treat the
-        // press as a detonate so the input is never eaten silently. Same plasma gate as the
-        // dedicated detonate handler; identical DetonatePsychicShield call site.
+        // press as a detonate so the input is never eaten silently. Free, like the dedicated
+        // detonate handler; identical DetonatePsychicShield call site.
         if (warlock.Comp.PsychicShieldSegments.Count > 0)
         {
-            if (!_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicShieldCost))
-                return;
-
             DetonatePsychicShield(warlock);
             args.Handled = true;
             return;
@@ -1153,9 +1145,8 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             return;
         if (warlock.Comp.PsychicShieldSegments.Count == 0)
             return;
-        if (!_xenoPlasma.TryRemovePlasmaPopup((warlock.Owner, null), warlock.Comp.PsychicShieldCost))
-            return;
 
+        // Detonating costs nothing; the whole cycle is paid for when the shield goes up.
         DetonatePsychicShield(warlock);
         args.Handled = true;
     }
@@ -1497,7 +1488,14 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         Vector2i centreTile = _map.WorldToTile(gridUid, grid, targetMap.Position);
         var affectedTiles = new List<Vector2i>();
         foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicCrushAffectedOffsets(areaPulses))
+        {
+            // Same wall filter the warning ring and the blur use, so what the marines were shown
+            // is exactly what gets hit.
+            if (!IsPsychicCrushTileAffected(targetMap, targetCoords.Offset(new(offset.X, offset.Y))))
+                continue;
+
             affectedTiles.Add(new Vector2i(centreTile.X + offset.X, centreTile.Y + offset.Y));
+        }
 
         var candidates = _lookup.GetLocalEntitiesIntersecting(gridUid, affectedTiles);
 
@@ -1590,14 +1588,35 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         Spawn(prototype, warlock.Comp.PsychicCrushTarget);
     }
 
+    // Walls stop the crush from growing past them. A tile counts only when it is not itself blocked
+    // and the epicentre has a clear line to it. CollisionGroup.Impassable is the wall layer, so
+    // walls and windows cut the area whereas barricades do not - a cade's fixture sits on
+    // TableLayer, BarricadeImpassable and BulletImpassable, all outside this mask. Same two-part
+    // tile filter SharedXenoForTheHiveSystem uses to keep its acid smoke out of sealed rooms.
+    private bool IsPsychicCrushTileAffected(MapCoordinates origin, EntityCoordinates tile)
+    {
+        if (_rmcMap.IsTileBlocked(tile, CollisionGroup.Impassable))
+            return false;
+
+        return _interaction.InRangeUnobstructed(origin,
+            _transform.ToMapCoordinates(tile),
+            PsychicCrushMaxAreaRadius + 1f,
+            CollisionGroup.Impassable);
+    }
+
     private void SpawnPsychicCrushBlur(Entity<CMUXenoWarlockComponent> warlock, int areaPulses)
     {
         if (!CMUXenoWarlockSystem.ShouldSpawnPsychicCrushTileBlur(true))
             return;
 
+        var originMap = _transform.ToMapCoordinates(warlock.Comp.PsychicCrushTarget);
         foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicCrushAffectedOffsets(areaPulses))
         {
-            Spawn(warlock.Comp.PsychicCrushBlurId, warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y)));
+            EntityCoordinates tile = warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y));
+            if (!IsPsychicCrushTileAffected(originMap, tile))
+                continue;
+
+            Spawn(warlock.Comp.PsychicCrushBlurId, tile);
         }
     }
 
@@ -1851,17 +1870,10 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             bool isThrownItem = !HasComp<ProjectileComponent>(frozenEnt)
                 && TryComp(frozenEnt, out ThrownItemComponent? _);
 
-            // Thrown items reflect straight back with no spread. The random ±40° cone only
-            // applies to projectiles so bullets/rockets scatter across the shooters instead of
-            // returning single-file.
-            Angle spread = isThrownItem
-                ? Angle.Zero
-                : _random.NextAngle(-Angle.FromDegrees(PsychicShieldReflectionSpreadDegrees / 2f),
-                    Angle.FromDegrees(PsychicShieldReflectionSpreadDegrees / 2f));
-
+            // Everything reflects straight back along the shield face, projectiles and thrown
+            // items alike.
             Vector2 reflected = CMUXenoWarlockSystem.ReflectProjectileVelocity(frozen.Velocity,
-                warlock.Comp.PsychicShieldDirection,
-                spread);
+                warlock.Comp.PsychicShieldDirection);
 
             if (!isThrownItem)
             {
@@ -2312,10 +2324,14 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     private void SpawnPsychicCrushWarnings(Entity<CMUXenoWarlockComponent> warlock, int pulse)
     {
+        var originMap = _transform.ToMapCoordinates(warlock.Comp.PsychicCrushTarget);
         foreach (Vector2i offset in CMUXenoWarlockSystem.GetPsychicCrushWarningOffsets(pulse))
         {
-            EntityUid warning = Spawn(warlock.Comp.PsychicCrushWarningId,
-                warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y)));
+            EntityCoordinates tile = warlock.Comp.PsychicCrushTarget.Offset(new(offset.X, offset.Y));
+            if (!IsPsychicCrushTileAffected(originMap, tile))
+                continue;
+
+            EntityUid warning = Spawn(warlock.Comp.PsychicCrushWarningId, tile);
             warlock.Comp.PsychicCrushWarnings.Add(warning);
         }
     }
@@ -2414,6 +2430,19 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     {
         args.ModifySpeed(CMUXenoWarlockSystem.GetPsychicShieldOwnerMoveSpeedMultiplier(),
             CMUXenoWarlockSystem.GetPsychicShieldOwnerMoveSpeedMultiplier());
+    }
+
+    // Mob collision would otherwise displace the warlock while the shield is up, and OnWarlockMove
+    // then ends the shield once the 0.25 s grace expires - so any xeno bumping into the warlock
+    // costs it the shield, the plasma and the cooldown. The boiler's bombard and the drone's
+    // construction avoid this by setting RootEntity on their do-afters, which
+    // DoAfterMobCollisionSystem turns into this same cancel. The shield holds its state without a
+    // do-after, so it cancels the event directly off its root component, the way XenoRestSystem
+    // and XenoDodgeSystem do for resting and dodging xenos.
+    private void OnPsychicShieldRootAttemptMobCollide(Entity<CMUXenoPsychicShieldRootComponent> ent,
+        ref AttemptMobCollideEvent args)
+    {
+        args.Cancelled = true;
     }
 
     private void ResetShieldProjectilePrediction(EntityUid projectile)
@@ -2758,7 +2787,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
     public static FixedPoint2 GetPsychicShieldCost() => FixedPoint2.New(PsychicShieldPlasmaCost);
 
-    public static FixedPoint2 GetPsychicShieldDetonationCost() => FixedPoint2.New(PsychicShieldPlasmaCost);
+    public static FixedPoint2 GetPsychicShieldDetonationCost() => FixedPoint2.New(PsychicShieldDetonationPlasmaCost);
 
     public static TimeSpan GetPsychicShieldDuration() => TimeSpan.FromSeconds(6);
 
@@ -2937,20 +2966,13 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     }
 
     public static Vector2 ReflectProjectileVelocity(Vector2 velocity, Direction shieldDirection)
-        => CMUXenoWarlockSystem.ReflectProjectileVelocity(velocity, shieldDirection, Angle.Zero);
-
-    public static Vector2 ReflectProjectileVelocity(Vector2 velocity, Direction shieldDirection, Angle spread)
     {
-        Vector2 reflected = shieldDirection switch
+        return shieldDirection switch
         {
             Direction.North or Direction.South => new(velocity.X, -velocity.Y),
             Direction.East or Direction.West   => new(-velocity.X, velocity.Y), _ => -velocity
         };
-
-        return spread.RotateVec(reflected);
     }
-
-    public static float GetPsychicShieldReflectionSpreadDegrees() => PsychicShieldReflectionSpreadDegrees;
 
     public static bool IsProjectileIncomingFromFront(Vector2 velocity, Direction shieldDirection)
     {
