@@ -149,8 +149,12 @@
       entries:
       - id: AU14MaskGasHAZOPSM40
         amount: 40
+      - id: AU14MaskPrescriptionGasHAZOPSM40
+        amount: 10
       - id: AU14MaskGasHAZOPSM17
         amount: 40
+      - id: AU14MaskPrescriptionGasHAZOPSM17
+        amount: 10
       - id: CMUGasMaskFilterHAZOPS
         amount: 80
       - id: AU14PouchGasMaskBag

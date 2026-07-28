@@ -325,6 +325,8 @@
       entries:
       - id: RMCMaskGasSPP
         amount: 40
+      - id: RMCMaskPrescriptionGasSPP
+        amount: 10
       - id: CMUGasMaskFilterUPP
         amount: 80
       - id: AU14PouchGasMaskBag

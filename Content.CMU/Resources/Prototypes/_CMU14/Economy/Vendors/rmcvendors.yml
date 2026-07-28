@@ -363,6 +363,8 @@
       entries:
       - id: AU14MaskGasRMC
         amount: 40
+      - id: AU14MaskPrescriptionGasRMC
+        amount: 10
       - id: CMUGasMaskFilter
         amount: 80
       - id: AU14PouchGasMaskBag

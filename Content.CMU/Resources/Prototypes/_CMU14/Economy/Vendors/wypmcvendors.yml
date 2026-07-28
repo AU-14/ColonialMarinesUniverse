@@ -234,7 +234,9 @@
     - name: Gas Mask
       entries:
       - id: CMMaskGas
-        amount: 20
+        amount: 40
+      - id: CMMaskPrescriptionGas
+        amount: 10
       - id: CMUGasMaskFilterWY
         amount: 40
       - id: AU14PouchGasMaskBag
