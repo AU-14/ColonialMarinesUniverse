@@ -24,6 +24,7 @@ namespace Content.Shared.AU14.util
         MilitaryPolice,
         MilitaryDoctor,
         SectionSergeant,
+        SquadSergeant,
         Pilot,
         ExtraVendor1,
         combattech,

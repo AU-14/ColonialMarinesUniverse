@@ -160,6 +160,14 @@
 
 - type: entity
   parent: VMarkerOpfor
+  id: VMarkerOpforSquadSergeant
+  name: Opfor squad leader marker
+  components:
+  - type: VendorMarker
+    class: SquadSergeant
+
+- type: entity
+  parent: VMarkerOpfor
   id: VMarkerOpforpilot
   name: Opfor pilot marker
   components:
@@ -337,6 +345,14 @@
   components:
   - type: VendorMarker
     class: SectionSergeant
+
+- type: entity
+  parent: VMarkerGovfor
+  id: VMarkerGovforSquadSergeant
+  name: Gov squad leader marker
+  components:
+  - type: VendorMarker
+    class: SquadSergeant
 
 - type: entity
   parent: VMarkerGovfor
@@ -634,6 +650,17 @@
   components:
   - type: VendorMarker
     class: SectionSergeant
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    state: base
+
+- type: entity
+  parent: VmarkerShip
+  id: VMarkerShipSquadSergeant
+  name: Ship squad leader marker
+  components:
+  - type: VendorMarker
+    class: SquadSergeant
   - type: Sprite
     sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
     state: base

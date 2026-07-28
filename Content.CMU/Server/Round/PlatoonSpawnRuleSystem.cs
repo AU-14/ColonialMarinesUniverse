@@ -117,7 +117,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     if (doorProtoId != null)
                     {
                         if (_prototypeManager.TryIndex(doorProtoId, out _))
-                            _entityManager.SpawnEntity(doorProtoId, transform.Coordinates);
+                            _entityManager.SpawnAttachedTo(doorProtoId, transform.Coordinates, rotation: transform.LocalRotation);
                         continue;
                     }
 
