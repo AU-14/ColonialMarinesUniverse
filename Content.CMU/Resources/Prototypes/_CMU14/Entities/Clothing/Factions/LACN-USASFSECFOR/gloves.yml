@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHandsBase
+  parent: AU14GlovesBase
   id: AU14LACNGloves
   name: LACN combat gloves
   description: Standard issue LACN combat gloves with insulated fibers.
