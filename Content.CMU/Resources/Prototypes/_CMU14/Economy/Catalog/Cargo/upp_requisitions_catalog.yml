@@ -228,8 +228,8 @@
       - cost: 400
         crate: RMCCrateXM88
       - cost: 800
-        crate: RMCCrateMOU53
-      - cost: 400
+        crate: CMUCrateOlympiets
+      - cost: 600
         crate: RMCCrateM85A1
       - cost: 200
         crate: AU14CrateAssortedKnives
