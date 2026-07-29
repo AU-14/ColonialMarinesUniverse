@@ -14,6 +14,8 @@
       - !type:HealOrganEffect
         organComponent: Liver
         amount: 5
+      - !type:Hepatopeutic
+        potency: 2
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -38,6 +40,8 @@
       - !type:HealOrganEffect
         organComponent: Lungs
         amount: 5
+      - !type:Pneumopeutic
+        potency: 2
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -62,6 +66,8 @@
       - !type:HealOrganEffect
         organComponent: Kidneys
         amount: 5
+      - !type:Nephropeutic
+        potency: 2
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -86,6 +92,8 @@
       - !type:HealOrganEffect
         organComponent: Heart
         amount: 5
+      - !type:Cardiopeutic
+        potency: 2
       - !type:CMURestartHeartEffect
         chancePerTick: 0.05
       - !type:HealthChange
@@ -112,6 +120,8 @@
       - !type:CMUBoneRegenBoostEffect
         multiplier: 1.5
         durationSeconds: 15
+      - !type:Bonemending
+        potency: 2
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -136,6 +146,8 @@
       - !type:HealOrganEffect
         organComponent: Brain
         amount: 3
+      - !type:Neuropeutic
+        potency: 2
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold

@@ -24,20 +24,48 @@
     CMUXenoPlasmaRoyal: 2
 
 - type: reaction
+  id: CMUAmmonia
+  reactants:
+    RMCHydrogen:
+      amount: 3
+    RMCNitrogen:
+      amount: 1
+  products:
+    CMUAmmonia: 3
+
+- type: reaction
+  id: CMUDiethylamine
+  reactants:
+    CMUAmmonia:
+      amount: 1
+    RMCEthanol:
+      amount: 1
+  products:
+    CMUDiethylamine: 2
+
+- type: reaction
+  id: CMUUnstableMutagen
+  reactants:
+    RMCChlorine:
+      amount: 1
+    RMCRadium:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+  products:
+    CMUUnstableMutagen: 3
+
+- type: reaction
   id: AU14SpaceCleaner
-  requiredMixerCategories:
-  - Stir
   reactants:
     Water:
-      amount: 2
-    Vodka:
       amount: 1
-    LemonLime:
+    CMUAmmonia:
       amount: 1
     TableSalt:
       amount: 1
   products:
-    SpaceCleaner: 4
+    SpaceCleaner: 2
 
 # TODO: smoking reaction
 - type: reaction
