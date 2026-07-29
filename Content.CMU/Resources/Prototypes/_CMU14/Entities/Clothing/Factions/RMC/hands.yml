@@ -1,5 +1,5 @@
 - type: entity
-  parent: RMCHandsVeteran
+  parent: AU14GlovesBase
   id: AU14HandsRMC
   suffix: AU14
   name: L6 pattern combat gloves

@@ -837,18 +837,11 @@ entities:
     - type: Transform
       pos: 23.5,24.5
       parent: 1
-    - type: TacticalMapUser
-      action: 27
-      marines: False
-    - type: ActionsContainer
-    - type: ContainerContainer
-      containers:
-        actions: !type:Container
-          ents:
-          - 27
-    - type: Actions
-      actions:
-      - 27
+    missingComponents:
+    - TacticalMapUser
+    - ActionsContainer
+    - ContainerContainer
+    - Actions
 - proto: AU14MaintenanceJack
   entities:
   - uid: 179
