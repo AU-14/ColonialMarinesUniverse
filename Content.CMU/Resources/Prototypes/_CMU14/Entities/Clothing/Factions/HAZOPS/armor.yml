@@ -16,7 +16,7 @@
     sprintModifier: .75
   - type: Clothing
     equipSound:
-      path: /Audio/Items/jumpsuit_equip.ogg
+      path: Audio/_CMU14/Armor/pwa_equip.ogg
 
 - type: entity
   parent: AU14BaseArmor
