@@ -103,3 +103,4 @@
     melee: 40
     bullet: 40
     explosionArmor: 20
+  - type: Insulated
