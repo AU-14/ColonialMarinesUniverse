@@ -1125,6 +1125,17 @@
 
 - type: entity
   parent: VmarkerShip
+  id: VMarkerShipRosterConsole
+  name: Ship Personnel Roster Console Marker
+  components:
+  - type: VendorMarker
+    class: RosterConsole
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+
+- type: entity
+  parent: VmarkerShip
   id: VMarkerShipOrbitalCannonGovfor
   name: Ship Orbital Cannon Govfor Marker
   components:

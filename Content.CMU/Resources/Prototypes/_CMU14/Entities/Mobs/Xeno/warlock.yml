@@ -48,9 +48,9 @@
     - CMXenoWarrior
   - type: XenoDevour
   - type: XenoPlasma
-    plasma: 1700
-    maxPlasma: 1700
-    plasmaRegenOnWeeds: 60
+    plasma: 800
+    maxPlasma: 800
+    plasmaRegenOnWeeds: 6
   - type: CMUXenoWarlock
   - type: XenoPsychicCommunication
     whisperRange: 7
