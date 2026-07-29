@@ -592,7 +592,17 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
 
             string freqText;
             if (state.FrequencyOverrides.TryGetValue(slot, out var dynFreq))
-                freqText = $"{FormatFreq(dynFreq)} MHz · DIRECT";
+            {
+                // a raw frequency the sweep fixed but could not name reads as an
+                // unknown net rather than a plain direct entry, so an operator can
+                // tell a tuned intercept from a number they punched in themselves
+                var unknownNet = state.SweepContacts.Any(contact =>
+                    contact.Resolved && !contact.Known && contact.Frequency == dynFreq);
+
+                freqText = unknownNet
+                    ? $"{FormatFreq(dynFreq)} MHz · UNKNOWN NET"
+                    : $"{FormatFreq(dynFreq)} MHz · DIRECT";
+            }
             else if (state.Presets.TryGetValue(slot, out var ch) && _prototype.TryIndex(ch, out var proto))
                 freqText = $"{FormatFreq(PlanFreq(proto))} MHz · {proto.LocalizedName.ToUpperInvariant()}";
             else
@@ -682,15 +692,26 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
             if (proto.Frequency <= 0)
                 continue;
 
-            // only list the radio's own faction nets. faction-less channels (colony,
-            // civilian) get tuned by raw frequency instead
-            if (!string.IsNullOrEmpty(opFaction) && proto.Faction != opFaction)
+            // own-faction nets always list. a foreign net lists once the search
+            // receiver has fixed it - the server only puts a foreign channel's
+            // frequency in the state after it lands in DiscoveredFrequencies.
+            // faction-less channels (colony, civilian) get tuned by raw frequency
+            var ownNet = string.IsNullOrEmpty(opFaction) ||
+                         string.Equals(proto.Faction, opFaction, StringComparison.OrdinalIgnoreCase);
+
+            var discovered = !ownNet &&
+                             !string.IsNullOrEmpty(proto.Faction) &&
+                             state.ChannelFrequencies.ContainsKey(proto.ID);
+
+            if (!ownNet && !discovered)
                 continue;
 
             var capturedProto = proto;
             var btn = new Button
             {
-                Text = $"{proto.LocalizedName.ToUpperInvariant()}  -  {FormatFreq(PlanFreq(proto))} MHz",
+                Text = discovered
+                    ? $"{proto.LocalizedName.ToUpperInvariant()}  -  {FormatFreq(PlanFreq(proto))} MHz · INTERCEPT"
+                    : $"{proto.LocalizedName.ToUpperInvariant()}  -  {FormatFreq(PlanFreq(proto))} MHz",
                 HorizontalExpand = true,
             };
             btn.OnPressed += _ =>

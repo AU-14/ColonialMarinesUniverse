@@ -196,6 +196,20 @@ public sealed partial class TunableFrequencySystem : EntitySystem
             if (wearer == sender)
                 continue;
 
+            var anprcPos = _transform.GetWorldPosition(xform);
+
+            if (!TryGetLinkIntensity(
+                    sender,
+                    senderPos,
+                    anprc,
+                    anprcPos,
+                    frequency,
+                    anprc,
+                    out var intensity))
+            {
+                continue;
+            }
+
             if (radio.ScanEnabled &&
                 (!radio.FrequencyOverrides.TryGetValue(radio.ActiveSlot, out var activeSlotFrequency) ||
                  activeSlotFrequency != frequency))
@@ -222,27 +236,33 @@ public sealed partial class TunableFrequencySystem : EntitySystem
                 }
             }
 
+            // what this set actually hears, garble and all, is what lands in its log -
+            // this is how direct-frequency traffic (enemy squad nets, colony softwave)
+            // becomes an intercept the operator can print and carry off the radio
+            var jam = MaxIntensity(senderJam, _garble.GetJamIntensity(anprc));
+            var totalIntensity = MaxIntensity(intensity, jam);
+
+            var heard = totalIntensity != RadioJamIntensity.None
+                ? _garble.GarbleMessage(message, totalIntensity)
+                : message;
+
+            var logEv = new ANPRCDirectTrafficReceivedEvent(
+                sender,
+                senderName ?? Name(sender),
+                frequency,
+                heard);
+
+            RaiseLocalEvent(anprc, ref logEv);
+
+            // the wearer's own tuned headset already delivers this to chat, the pack
+            // only logs it instead of doubling the line up
             if (TryComp(wearer, out TunedFrequencyComponent? wearerTuned) &&
                 wearerTuned.Frequency == frequency)
             {
                 continue;
             }
 
-            var anprcPos = _transform.GetWorldPosition(xform);
-
-            if (!TryGetLinkIntensity(
-                    sender,
-                    senderPos,
-                    anprc,
-                    anprcPos,
-                    frequency,
-                    anprc,
-                    out var intensity))
-            {
-                continue;
-            }
-
-            DeliverGarbled(sender, anprc, wearer, message, frequency, senderJam, intensity, senderName);
+            SendToEntity(sender, wearer, heard, frequency, senderName);
         }
 
         SendToEntity(sender, sender, message, frequency, senderName);
@@ -531,3 +551,12 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 }
 
 public record struct ANPRCDirectScanSwitchedEvent;
+
+// a tuned-in ANPRC caught traffic on a raw frequency; the radio system writes it
+// into the set's net log, flagged as an intercept when the sender is not friendly
+[ByRefEvent]
+public readonly record struct ANPRCDirectTrafficReceivedEvent(
+    EntityUid Sender,
+    string SenderName,
+    int Frequency,
+    string Message);

@@ -11,7 +11,7 @@
   description: A heavy charging xeno with a brutal forward rush.
   components:
   - type: GhostRole
-    name: cm-job-name-xeno-bull
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _CMU14/Mobs/Xenonids/Bull/bull.rsi
   - type: MobState
@@ -101,7 +101,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-bull
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
   - type: RMCActionOrder

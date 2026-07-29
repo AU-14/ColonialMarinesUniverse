@@ -444,6 +444,7 @@
   - type: ThermalCloak
     grantAction: false
     opacity: 0.02
+    movingOpacity: 0.02
     restrictWeapons: true
     hideNightVision: false
     cloakedHideLayers:

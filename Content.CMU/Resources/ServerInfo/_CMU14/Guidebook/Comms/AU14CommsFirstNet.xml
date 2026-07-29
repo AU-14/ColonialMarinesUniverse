@@ -35,6 +35,8 @@
   - A powered shipboard communications array.
   - A vehicle radio aboard a dropship or vehicle, covering little more than the hull.
   - A field antenna mast raised from ten metal sheets by engineering-trained personnel.
+  - A clandestine base station or a staked-down relay set, if you are with the CLF.
+  - Any mast or array the CLF have spliced a tap into.
 
   If none of those are within range of you, your squad net is dead. Not degraded. Dead. You will speak and nothing will happen.
 
@@ -75,6 +77,55 @@
   </Table>
 
   Coverage reaches one level above or below the anchor, so a tunnel or a lower deck usually needs its own relay. Only a shipboard array covers a whole site vertically.
+
+  ### If you are with the CLF
+
+  The CLF has no communications array and never gets one. Your coverage is either something you build, or something the enemy already built that you tap.
+
+  <Box>
+    <GuideEntityEmbed Entity="AU14CLFNetSpliceKit" Caption="Splice Kit"/>
+    <GuideEntityEmbed Entity="AU14CommsMastField" Caption="Field Mast"/>
+    <GuideEntityEmbed Entity="AU14CLFBaseStation" Caption="Base Station"/>
+    <GuideEntityEmbed Entity="AU14CLFClandestineRelay" Caption="Relay Set"/>
+  </Box>
+
+  #### Tapping somebody else's mast
+
+  Every fixed mast and array has a feeder junction, and a junction can be spliced. Do it and your cell nets run on that mast at that mast's range. A command-post mast is worth 75 tiles to you. A site array is worth 200.
+
+  A tap [bold]adds[/bold] your nets and takes nothing away. The mast keeps carrying whatever it carried before, for whoever built it. Splicing one does not knock it down, jam it, or cut the garrison off it. If you want a mast gone, break it.
+
+  You need a [bold]net splice kit[/bold], built at the sapper's workbench, and you need to be the [bold]Radio Operator[/bold]. Nobody else is trained for it.
+
+  Use the kit on the mast. Getting the cover off takes several seconds, then the splice panel opens. The trunk carriers are hidden somewhere in the band and you have to find each one:
+
+  - [bold]PROBE[/bold] a position and the panel reports what came back. A strong reading means you are close. A zero means there is no carrier within thirty of where you looked.
+  - [bold]LOCK[/bold] when you think you have it. Within three positions and the carrier is yours. Miss it and you lose two probes and take a large hit to the detection meter.
+  - Probes are shared across the whole job rather than given per carrier. Each one nudges detection a little. A missed lock costs twenty times as much, so probe again rather than guess.
+
+  Sweep coarsely before you do anything else. Three probes spread evenly across the band will always touch a carrier, and from there you walk in on whichever came back strongest.
+
+  Run out of probes, or fill the detection meter, and the job fails. The kit is gone and the junction drops into fault for ninety seconds, during which nobody can splice it again. Bring a second kit if you want a second try, and expect to wait.
+
+  The mast throws sparks the whole time you are working on it, and keeps sparking through the fault. Neither is subtle. Put someone on the approach before you start.
+
+  #### Building your own
+
+  - A [bold]field antenna mast[/bold] is ten metal sheets and eight seconds, and gives 75 tiles clear and 100 degraded. Your Cell Leader, Radio Operator, Guerillas and Machine Gunners all have the engineering skill for it. It is also tall, outdoors only, and anyone can tap it or break it, marines included.
+  - A [bold]clandestine base station[/bold] reaches 55 clear and 80 degraded and can be worked on its handset, which no relay can. It is too heavy to conceal on a person, so the place you hide it is a place worth defending.
+  - A [bold]relay set[/bold] reaches 35 clear and 50 degraded and has no controls on it at all. It is the weakest thing on this list. Use it where there is no mast to tap and no room to raise one, such as inside a building or down a tunnel.
+
+  Only your Cell Leader and Radio Operator can stake down a relay or a base station.
+
+  #### What it costs you
+
+  None of this is hidden from the enemy.
+
+  A [bold]tap[/bold] sits at the foot of the mast where anyone walking past can see it. It can be shot, and anyone can pull it off in eight seconds. Whoever does gets its keying module, which reads your cell's traffic until your leadership orders a recrypto.
+
+  A [bold]relay[/bold] is staked down, not locked down. Anyone can pack one up in three seconds and walk off with that piece of your coverage.
+
+  Put both somewhere nobody has a reason to walk past.
 
   ## Step 3: Say something on your headset
 

@@ -33,7 +33,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Map Entity
+      name: ARV (CMU)
     - type: Transform
     - type: Map
       mapPaused: True

@@ -28,7 +28,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Map Entity
+      name: Lexington Dropship
     - type: Transform
     - type: Map
       mapPaused: True

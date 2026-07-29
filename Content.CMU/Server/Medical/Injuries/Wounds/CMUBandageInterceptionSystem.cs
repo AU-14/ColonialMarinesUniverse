@@ -410,6 +410,9 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 
     private bool HasTreatableDamage(EntityUid user, EntityUid patient, WoundTreaterComponent treater)
     {
+        if (treater.CMUTreatsWounds)
+            return false;
+
         if (IsSynthPatient(patient))
             return false;
 
