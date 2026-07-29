@@ -1,5 +1,5 @@
 - type: entity
-  parent: RMCHandsVeteran
+  parent: AU14GlovesBase
   id: AU14HandsProdigyRU
   name: Prodigy Response Unit gloves
   description: Standard issue kevlon fiber gloves manufactured for and by Prodigy Security Corp. They are insulated against electrical shock.

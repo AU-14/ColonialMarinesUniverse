@@ -14,6 +14,10 @@
   - type: ClothingSpeedModifier
     walkModifier: .75
     sprintModifier: .75
+  - type: Clothing
+    sprite: _AU14/Clothing/HAZOPS/poweredwarfightingarmor.rsi
+    equipSound:
+      path: /Audio/_CMU14/Armor/pwa_equip.ogg
 
 - type: entity
   parent: AU14BaseArmor
