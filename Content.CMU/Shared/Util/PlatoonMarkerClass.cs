@@ -84,6 +84,7 @@ namespace Content.Shared.AU14.util
         LockedDoubleLogisticsDoor,
         LockedDoubleLogisticsGlassDoor,
         LaptopCallsign,
-        CommsArrayShip
+        CommsArrayShip,
+        RosterConsole
     }
 }

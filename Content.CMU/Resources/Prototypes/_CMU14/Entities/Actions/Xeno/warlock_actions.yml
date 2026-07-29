@@ -1,8 +1,8 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicCrush
-  name: Psychic Crush
-  description: Channel psychic pressure at a location, then crush enemies in the expanding area.
+  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl. A loc entry
+  # overrides the prototype's name/description, so keeping text here as well would be dead.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -14,12 +14,12 @@
       state: psy_crush_activate
     useDelay: 0.25
   # SharedActionsSystem gate is intentionally looser than the ability's true range so a click
-  # anywhere on a tile the range overlay highlights (7-tile closest-point-of-tile check) reaches
-  # the handler. The handler snaps to the tile centre and enforces the real 7-tile initiation
+  # anywhere on a tile the range overlay highlights (6-tile closest-point-of-tile check) reaches
+  # the handler. The handler snaps to the tile centre and enforces the real 6-tile initiation
   # range via CMUXenoWarlockComponent.PsychicCrushInitRange. Worst-case click distance on a
-  # highlighted boundary tile is 7 + tile diagonal ≈ 8.41, rounded up to 9.
+  # highlighted boundary tile is 6 + tile diagonal ≈ 7.41, rounded up to 8.
   - type: TargetAction
-    range: 9
+    range: 8
     checkCanAccess: true
   - type: WorldTargetAction
     event: !type:CMUXenoPsychicCrushActionEvent
@@ -33,18 +33,17 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicBlast
-  name: Psychic Blast
-  description: Detonate psychic force at a location, damaging and slowing nearby enemies.
+  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem
     icon:
       sprite: _CMU14/Actions/Xeno/warlock.rsi
       state: psy_blast
-    useDelay: 8
-  # See CMUActionXenoPsychicCrush above for why the gate range exceeds the true 7-tile range.
+    useDelay: 10
+  # See CMUActionXenoPsychicCrush above for why the gate range exceeds the true 6-tile range.
   - type: TargetAction
-    range: 9
+    range: 8
     checkCanAccess: false
   - type: WorldTargetAction
     event: !type:CMUXenoPsychicBlastActionEvent
@@ -54,8 +53,7 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicShield
-  name: Psychic Shield
-  description: Raise a psychic shield facing the clicked direction that catches projectiles. Click again with the shield up to detonate.
+  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem

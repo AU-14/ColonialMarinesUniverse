@@ -1,0 +1,15 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+            Title="{Loc 'faction-roster-console-window-title'}"
+            MinSize="620 820"
+            SetSize="620 820">
+    <PanelContainer StyleClasses="CrtPanel" VerticalExpand="True" HorizontalExpand="True">
+        <ScrollContainer HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Name="ContentContainer"
+                          Orientation="Vertical"
+                          Margin="12 12 12 12"
+                          SeparationOverride="8"
+                          HorizontalExpand="True"
+                          MaxWidth="590" />
+        </ScrollContainer>
+    </PanelContainer>
+</DefaultWindow>
