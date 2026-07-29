@@ -230,6 +230,32 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         continue;
                     }
 
+                    if (markerComp.Class == PlatoonMarkerClass.RosterConsole)
+                    {
+                        string? rosterConsoleProtoId = null;
+                        if (markerComp.Govfor)
+                            rosterConsoleProtoId = "CMUGovforRosterConsole";
+                        else if (markerComp.Opfor)
+                            rosterConsoleProtoId = "CMUOpforRosterConsole";
+                        else if (markerComp.Ship)
+                        {
+                            var parentUid = transform.ParentUid;
+                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
+                            {
+                                rosterConsoleProtoId = parentShipFaction.Faction == "govfor"
+                                    ? "CMUGovforRosterConsole"
+                                    : parentShipFaction.Faction == "opfor"
+                                        ? "CMUOpforRosterConsole"
+                                        : null;
+                            }
+                        }
+                        if (rosterConsoleProtoId != null && _prototypeManager.TryIndex(rosterConsoleProtoId, out _))
+                        {
+                            _entityManager.SpawnEntity(rosterConsoleProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
                     // --- GROUNDSIDE OPS SEGREGATED MARKERS ---
                     if (markerComp.Class == PlatoonMarkerClass.GroundsideOpsGovfor)
                     {
