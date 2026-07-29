@@ -129,6 +129,87 @@
     - radioOpforJTAC
     - radioOpforMILP
 
+# ship-mounted long-range relays, use the telecomms relay's model instead of the mast/array
+- type: entity
+  parent: AU14CommsArrayGovfor
+  id: AU14CommsArrayShipGovfor
+  name: GOVFOR ship comms array
+  suffix: GOVFOR, Ship, All Nets
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/telecommunication.rsi
+    offset: 0, 0
+    layers:
+    - state: relay_off
+      map: [ "base" ]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+  - type: GenericVisualizer
+    visuals:
+      enum.AU14CommsStructureVisuals.Damaged:
+        base:
+          True: { state: relay_broken }
+          False: { state: relay_off }
+  - type: ANPRCRelayAnchor
+    fullRange: 1000
+    partialRange: 1250
+    levelReach: -1
+    channels:
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioGovforCommand
+    - radioGovforIntel
+    - radioGovforJTAC
+    - radioGovforMILP
+
+- type: entity
+  parent: AU14CommsArrayOpfor
+  id: AU14CommsArrayShipOpfor
+  name: OPFOR ship comms array
+  suffix: OPFOR, Ship, All Nets
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/telecommunication.rsi
+    offset: 0, 0
+    layers:
+    - state: relay_off
+      map: [ "base" ]
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+  - type: GenericVisualizer
+    visuals:
+      enum.AU14CommsStructureVisuals.Damaged:
+        base:
+          True: { state: relay_broken }
+          False: { state: relay_off }
+  - type: ANPRCRelayAnchor
+    fullRange: 1000
+    partialRange: 1250
+    levelReach: -1
+    channels:
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+    - radioOpforCommand
+    - radioOpforIntel
+    - radioOpforJTAC
+    - radioOpforMILP
+
 # passive CP masts, no power needed, local coverage only
 - type: entity
   abstract: true

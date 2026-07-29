@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHandsBase
+  parent: AU14GlovesBase
   id: AU14PVEHandsInsulatedBlackMarine
   name: insulated combat gloves
   description: "Standard issue tactical gloves with insulated fibers."
@@ -15,7 +15,7 @@
   - type: FingerprintMask
 
 - type: entity
-  parent: ClothingHandsBase
+  parent: AU14GlovesBase
   id: AU14PVEHandsFingerlessBlackGloves
   name: fingerless combat gloves
   description: "Standard issue tactical gloves with the fingers cut off, no longer providing protection against electrical shocks."
@@ -26,7 +26,7 @@
     sprite: _AU14/Clothing/Hands/black-fingerless.rsi
 
 - type: entity
-  parent: ClothingHandsBase
+  parent: AU14GlovesBase
   id: AU14PVEHandsFingerlessBrownGloves
   name: fingerless combat gloves
   description: "Standard issue tactical gloves with the fingers cut off, no longer providing protection against electrical shocks."

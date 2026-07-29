@@ -78,6 +78,16 @@
       AU14JobOPFORWorkingJoe: 1
 
 - type: entity
+  id: AddGovforCorrespondent
+  parent: BaseGameRule
+  components:
+  - type: AddJobsRule
+    addToShip: true
+    shipFaction: govfor
+    jobs:
+      AU14JobGOVFORCombatCorrespondent: 1
+
+- type: entity
   id: AddClf
   parent: BaseGameRule
   components:

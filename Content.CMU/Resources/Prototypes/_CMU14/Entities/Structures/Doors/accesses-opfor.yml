@@ -170,3 +170,35 @@
   components:
   - type: AccessReader
     access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMAirlockLogisticsGovforLocked
+  id: CMAirlockLogisticsOpforLocked
+  suffix: Logistics, Opfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMAirlockLogisticsGovforGlassLocked
+  id: CMAirlockLogisticsOpforGlassLocked
+  suffix: Logistics, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorLogisticsGovforLocked
+  id: CMDoubleDoorLogisticsOpforLocked
+  suffix: Logistics, Opfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMDoubleDoorLogisticsGovforGlassLocked
+  id: CMDoubleDoorLogisticsOpforGlassLocked
+  suffix: Logistics, Opfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]

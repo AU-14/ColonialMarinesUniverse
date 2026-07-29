@@ -198,6 +198,14 @@
   components:
   - type: JobTitleChanger
     jobTitle: Colony Administration Advisor Synthetic
+    
+- type: entity
+  parent: AU14IDCardColonySynthetic
+  id: AU14IDCardColonySyntheticResearch
+  name: colony research synthetic ID card
+  components:
+  - type: JobTitleChanger
+    jobTitle: Colony Research Synthetic
 
 # ├──[ LEADERS ]─────────────────────────────────────────────────────┤
 - type: entity

@@ -75,7 +75,7 @@
 
 - type: entity
   id: AU14SkillPresetOfficerAdjutant
-  name: Adjutant Officer
+  name: Executive Officer
   categories: [ HideSpawnMenu ]
   components:
   - type: SkillPreset

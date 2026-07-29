@@ -26,8 +26,12 @@
   suffix: Filled
 
 - type: entity
-  parent: RMCBootsCBRN
+  parent: [RMCItemSlotM5Bayonet, RMCBootsCBRN]
   id: AU14BootsCBRN
   components:
   - type: Item
     size: Small
+  - type: CMArmor
+    melee: 25
+    bullet: 25
+    explosionArmor: 20

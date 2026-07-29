@@ -41,14 +41,20 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankPrivateFirstClass:
-      entity: AU14ChevronUSCMPrivateFirstClass
+    RMCRankCorporal:
+      entity: AU14ChevronUSCMCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobGOVFOREngineeringTech
+        time: 86400 # 24 hours
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFOREngineeringTech
         time: 36000 # 10 hours
-    RMCRankPrivate:
-      entity: AU14ChevronUSCMPrivate
+    RMCRankPrivateFirstClass:
+      entity: AU14ChevronUSCMPrivateFirstClass
       requirements: []
 
 - type: playTimeTracker
