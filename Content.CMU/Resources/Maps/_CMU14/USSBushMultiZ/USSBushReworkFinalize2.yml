@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/28/2026 12:38:24
-  entityCount: 832
+  time: 07/29/2026 16:58:59
+  entityCount: 833
 maps:
 - 1
 grids:
@@ -839,9 +839,6 @@ entities:
       parent: 1
     missingComponents:
     - TacticalMapUser
-    - ActionsContainer
-    - ContainerContainer
-    - Actions
 - proto: AU14MaintenanceJack
   entities:
   - uid: 179
@@ -5114,5 +5111,13 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 29.5,10.5
+      parent: 1
+- proto: VMarkerShipRosterConsole
+  entities:
+  - uid: 139
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 18.5,14.5
       parent: 1
 ...
