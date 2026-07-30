@@ -263,10 +263,13 @@
       choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: AU14KitWeaponXMP5A6
+      - id: AU14GunCaseRifleXM20A2
     - name: Primary Ammunition
       entries:
       - id: AU14MagazineXMP5A6
         amount: 60
+      - id: AU14MagazineRifleXM20A2
+        amount: 45
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
