@@ -875,10 +875,13 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
+      - id: CMUGunCaseRifleNSG23
       - id: AU14KitWeaponFP9000
       - id: AU14KitWeaponM39B2
     - name: Weapon Ammunition
       entries:
+      - id: RMCMagazineRifleSSG45
+        amount: 60
       - id: RMCMagazineSMGFP9000
         amount: 60
       - id: CMMagazineSMGM63
@@ -989,6 +992,10 @@
         amount: 8
       - id: AU14WeaponRifleF44AA
         amount: 1
+      - id: RMCWeaponRifleSSG45
+        amount: 3
+      - id: WeaponShotgunM890
+        amount: 3
     - name: primary ammunition
       entries:
       - id: RMCMagazineSMGFP9000
@@ -1009,6 +1016,12 @@
         amount: 5
       - id: AU14MagazineRifleF44AA
         amount: 5
+      - id: RMCMagazineRifleSSG45AP
+        amount: 25
+      - id: RMCMagazineRifleSSG45Extended
+        amount: 30
+      - id: RMCMagazineRifleSSG45
+        amount: 100
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette

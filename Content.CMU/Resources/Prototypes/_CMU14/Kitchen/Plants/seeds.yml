@@ -1,0 +1,155 @@
+- type: entity
+  parent: SeedBase
+  name: packet of messa's tears seeds
+  id: MTearSeeds
+  components:
+  - type: Seed
+    seedId: mtear
+  - type: Sprite
+    sprite: _CMU14/Objects/Kitchen/Plants/mtear.rsi
+
+- type: entity
+  parent: SeedBase
+  name: packet of death berry seeds
+  id: DeathberrySeeds
+  components:
+  - type: Seed
+    seedId: deathberry
+  - type: Sprite
+    sprite: _CMU14/Objects/Kitchen/Plants/deathberry.rsi
+
+- type: entity
+  parent: SeedBase
+  name: packet of poison berry seeds
+  id: PoisonberrySeeds
+  components:
+  - type: Seed
+    seedId: poisonberry
+  - type: Sprite
+    sprite: _CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+
+- type: entity
+  parent: SeedBase
+  name: packet of poison apple seeds
+  id: PoisonAppleSeeds
+  components:
+  - type: Seed
+    seedId: poisonApple
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/apple.rsi
+
+- type: seed
+  id: mtear
+  name: seeds-mtear-name
+  noun: seeds-noun-seeds
+  displayName: seeds-mtear-display-name
+  plantRsi: _CMU14/Objects/Kitchen/Plants/mtear.rsi
+  packetPrototype: MTearSeeds
+  productPrototypes:
+  - FoodMTear
+  lifespan: 50
+  maturation: 3
+  production: 5
+  yield: 4
+  potency: 10
+  growthStages: 4
+  lightTolerance: 6
+  waterConsumption: 0.60
+  nutrientConsumption: 0.50
+  idealHeat: 288
+  chemicals:
+    RMCSugar: #TODO: Replace with honey
+      Min: 1
+      Max: 10
+      PotencyDivisor: 1
+    CMKelotane:
+      Min: 3
+      Max: 5
+      PotencyDivisor: 1
+  specialChemicals:
+    CMUDigoxin:
+      Min: 3
+      Max: 20
+      PotencyDivisor: 1
+
+- type: seed
+  id: deathberry
+  name: seeds-deathberry-name
+  noun: seeds-noun-seeds
+  displayName: seeds-deathberry-display-name
+  plantRsi: _CMU14/Objects/Kitchen/Plants/deathberry.rsi
+  packetPrototype: DeathberrySeeds
+  productPrototypes:
+  - FoodDeathberry
+  lifespan: 20
+  maturation: 5
+  production: 5
+  yield: 3
+  potency: 50
+  growthStages: 6
+  chemicals:
+    RMCSugar: #TODO: replace with fruit
+      Min: 1
+      Max: 1
+      PotencyDivisor: 1
+    RMCLexorin:
+      Min: 1
+      Max: 3
+      PotencyDivisor: 1
+  specialChemicals:
+    CMUThymol:
+      Min: 3
+      Max: 20
+      PotencyDivisor: 1
+
+- type: seed
+  id: poisonberry
+  name: seeds-poisonberry-name
+  noun: seeds-noun-seeds
+  displayName: seeds-poisonberry-display-name
+  plantRsi: _CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+  packetPrototype: PoisonberrySeeds
+  productPrototypes:
+  - FoodPoisonberry
+  lifespan: 20
+  maturation: 5
+  production: 5
+  yield: 2
+  potency: 10
+  growthStages: 6
+  chemicals:
+    RMCSugar: #TODO: replace with fruit
+      Min: 1
+      Max: 1
+      PotencyDivisor: 1
+    RMCGenericToxin:
+      Min: 3
+      Max: 5
+      PotencyDivisor: 1
+  specialChemicals:
+    CMUThymol:
+      Min: 3
+      Max: 20
+      PotencyDivisor: 1
+
+- type: seed
+  id: poisonApple
+  name: seeds-poisonapple-name
+  noun: seeds-noun-seeds
+  displayName: seeds-poisonapple-display-name
+  plantRsi: Objects/Specific/Hydroponics/apple.rsi
+  packetPrototype: PoisonAppleSeeds
+  productPrototypes:
+    - FoodPoisonApple
+  harvestRepeat: Repeat
+  lifespan: 55
+  maturation: 6
+  production: 6
+  yield: 3
+  potency: 10
+  idealLight: 6
+  chemicals:
+    CMUCyanide:
+      Min: 1
+      Max: 10
+      PotencyDivisor: 10

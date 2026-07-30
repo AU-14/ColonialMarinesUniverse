@@ -23,7 +23,7 @@
 - type: entity
   parent: RMCCrateHydro
   id: AU14CrateHydroponicsEquipment
-  name: hydroponics equpment crate
+  name: hydroponics equipment crate
   suffix: Filled
   components:
   - type: EntityStorage
@@ -39,6 +39,8 @@
     - id: ChemistryBottleLeft4Zed
       amount: 1
     - id: RMCBucket
+      amount: 1
+    - id: CMWirecutter
       amount: 1
     - id: RMCToolSpade
       amount: 1
@@ -125,6 +127,10 @@
     - id: AppleSeeds
       amount: 1
     - id: LingzhiSeeds
+      amount: 1
+    - id: MTearSeeds
+      amount: 1
+    - id: NettleSeeds
       amount: 1
     - id: PoppySeeds
       amount: 1
