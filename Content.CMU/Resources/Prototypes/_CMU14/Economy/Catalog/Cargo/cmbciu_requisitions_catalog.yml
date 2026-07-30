@@ -159,8 +159,8 @@
         crate: RMCCrateSupplyJanitor
     - name: Vehicle Ammo
       entries:
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoLTBCannon
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonMixed
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1800
@@ -180,7 +180,7 @@
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 900
-        crate: RMCCrateVehicleAmmoGrenadeLauncher
+        crate: CMUCrateVehicleAmmoGrenadeLauncherMixed
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 700
@@ -191,8 +191,12 @@
         crate: RMCCrateVehicleAmmoTowLauncher
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1000
-        crate: RMCCrateVehicleAmmoCupola
+      - cost: 1025
+        crate: CMUCrateVehicleAmmoCupolaMixed
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1050
+        crate: CMUCrateVehicleAmmoCupolaTracer
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1200

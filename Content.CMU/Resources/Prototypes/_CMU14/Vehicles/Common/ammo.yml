@@ -1,0 +1,223 @@
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxCupolaTracer
+  name: cupola cannon ammo crate (tracer)
+  description: Tracer ammunition for cupola-mounted vehicle cannons. Burns bright in flight to help the gunner walk fire onto target, at the cost of giving away the tank's position.
+  components:
+  - type: Sprite
+    layers:
+    - state: cupola_0
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: cupola_0, visible: true }
+          Low: { state: cupola_0, visible: true }
+          Medium: { state: cupola_1, visible: true }
+          High: { state: cupola_1, visible: true }
+          Full: { state: cupola_1, visible: true }
+  - type: BulletBox
+    amount: 500
+    max: 500
+    bulletType: VehicleAmmoBoxCupola
+    ammoProto: CMUCartridgeCupolaTracer
+    usedIn: Tank cupola
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxLTBCannonAPFSDS
+  name: LTB APFSDS cannon shell
+  description: Ammunition for light tank cannons. A fin-stabilized discarding-sabot penetrator with no explosive filler, meant to punch through armor rather than fragment. Barely scratches infantry or structures.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_apfsds
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: lbtshell_casing, visible: true }
+          Full: { state: lbtshell_apfsds, visible: true }
+  - type: BulletBox
+    amount: 1
+    max: 1
+    bulletType: VehicleAmmoBoxLTBCannon
+    ammoProto: CMUCartridgeLTBCannonAPFSDS
+    usedIn: Tank LTB cannon
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxLTBCannonHEAT
+  name: LTB HEAT cannon shell
+  description: Ammunition for light tank cannons. A shaped-charge warhead that punches a focused jet through armor with a small blast, backed by light fragmentation. Less effective against armor than a dedicated penetrator, but hits far harder than a standard HE shell.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_heat
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: lbtshell_casing, visible: true }
+          Full: { state: lbtshell_heat, visible: true }
+  - type: BulletBox
+    amount: 1
+    max: 1
+    bulletType: VehicleAmmoBoxLTBCannon
+    ammoProto: CMUCartridgeLTBCannonHEAT
+    usedIn: Tank LTB cannon
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxLTBCannonHE
+  name: LTB HE cannon shell
+  description: Ammunition for light tank cannons. A thin-walled high-explosive shell that trades armor penetration for a much wider blast and fragmentation radius.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_he
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: lbtshell_casing, visible: true }
+          Full: { state: lbtshell_he, visible: true }
+  - type: BulletBox
+    amount: 1
+    max: 1
+    bulletType: VehicleAmmoBoxLTBCannon
+    ammoProto: CMUCartridgeLTBCannonHE
+    usedIn: Tank LTB cannon
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxLTBCannonCanister
+  name: LTB canister cannon shell
+  description: Ammunition for light tank cannons. A short-ranged anti-personnel round packed with metal shot that bursts into a lethal spray shortly after firing. Nearly useless against armor.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_canister
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: lbtshell_casing, visible: true }
+          Full: { state: lbtshell_canister, visible: true }
+  - type: BulletBox
+    amount: 1
+    max: 1
+    bulletType: VehicleAmmoBoxLTBCannon
+    ammoProto: CMUCartridgeLTBCannonCanister
+    usedIn: Tank LTB cannon
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxLTBCannonNapalm
+  name: LTB napalm cannon shell
+  description: Ammunition for light tank cannons. A napalm-filled shell with very little blast, but scatters sticky burning fragments that spread across the impact area. Good for burning out entrenched positions or setting the field alight.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_thermite
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: lbtshell_casing, visible: true }
+          Full: { state: lbtshell_thermite, visible: true }
+  - type: BulletBox
+    amount: 1
+    max: 1
+    bulletType: VehicleAmmoBoxLTBCannon
+    ammoProto: CMUCartridgeLTBCannonNapalm
+    usedIn: Tank LTB cannon
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxGrenadeLauncherHEFA
+  name: grenade launcher ammo crate (HEFA)
+  description: Ammunition for vehicle grenade launchers. 30mm HEFA grenades, a fragmentation round that showers the area in shrapnel. Better against infantry, weaker against structures and vehicles than HEDP.
+  components:
+  - type: Sprite
+    layers:
+    - state: glauncher_0
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: glauncher_2, visible: true }
+          Low: { state: glauncher_2, visible: true }
+          Medium: { state: glauncher_1, visible: true }
+          High: { state: glauncher_0, visible: true }
+          Full: { state: glauncher_0, visible: true }
+  - type: BulletBox
+    amount: 10
+    max: 10
+    bulletType: VehicleAmmoBoxGrenadeLauncher
+    ammoProto: CMGrenadeFrag
+    usedIn: Tank grenade launcher, Humvee launcher
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxGrenadeLauncherWPDP
+  name: grenade launcher ammo crate (WPDP)
+  description: Ammunition for vehicle grenade launchers. 30mm WPDP grenades, which burst into a lingering cloud of white phosphorus. Good for denying an area or burning out entrenched targets.
+  components:
+  - type: Sprite
+    layers:
+    - state: glauncher_0
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: glauncher_2, visible: true }
+          Low: { state: glauncher_2, visible: true }
+          Medium: { state: glauncher_1, visible: true }
+          High: { state: glauncher_0, visible: true }
+          Full: { state: glauncher_0, visible: true }
+  - type: BulletBox
+    amount: 10
+    max: 10
+    bulletType: VehicleAmmoBoxGrenadeLauncher
+    ammoProto: RMCGrenadeWhitePhosphorus
+    usedIn: Tank grenade launcher, Humvee launcher
+
+- type: entity
+  parent: VehicleAmmoBoxBase
+  id: CMUAmmoBoxGrenadeLauncherHIAM
+  name: grenade launcher ammo crate (HIAM)
+  description: Ammunition for vehicle grenade launchers. 30mm HIAM grenades, which spread long-lasting napalm fire to deny territory and disrupt enemy mobility rather than deal a direct blast.
+  components:
+  - type: Sprite
+    layers:
+    - state: glauncher_0
+      map: [ "enum.BulletBoxLayers.Fill" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.BulletBoxLayers.Fill:
+        enum.BulletBoxLayers.Fill:
+          Empty: { state: glauncher_2, visible: true }
+          Low: { state: glauncher_2, visible: true }
+          Medium: { state: glauncher_1, visible: true }
+          High: { state: glauncher_0, visible: true }
+          Full: { state: glauncher_0, visible: true }
+  - type: BulletBox
+    amount: 10
+    max: 10
+    bulletType: VehicleAmmoBoxGrenadeLauncher
+    ammoProto: RMCGrenadeIncendiary
+    usedIn: Tank grenade launcher, Humvee launcher
