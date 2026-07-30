@@ -40,6 +40,9 @@ public sealed partial class AU14ShopkeeperVendorComponent : Component
     /// <summary>Cash the current customer has inserted but not yet spent.</summary>
     public float InsertedCash = 0f;
 
+    // <summary>Default price applied to inserted items</summary>
+    public float DefaultPrice = 10f;
+
     public const string StockContainerName = "shopkeeper_stock";
     public const string CashSlotName = "shopkeeper_cash";
 

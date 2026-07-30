@@ -21,8 +21,9 @@ public sealed class AU14ShopkeeperVendorShopState : BoundUserInterfaceState
     public float InsertedCash { get; }
     public List<AU14ShopkeeperListingState> Listings { get; }
     public float SalesTaxPercent { get; }
-    public AU14ShopkeeperVendorShopState(float cash, List<AU14ShopkeeperListingState> listings, float salesTaxPercent = 0f)
-    { InsertedCash = cash; Listings = listings; SalesTaxPercent = salesTaxPercent; }
+    public float DefaultPrice {get; }
+    public AU14ShopkeeperVendorShopState(float cash, List<AU14ShopkeeperListingState> listings, float salesTaxPercent = 0f, float defaultPrice = 10f)
+    { InsertedCash = cash; Listings = listings; SalesTaxPercent = salesTaxPercent; DefaultPrice = defaultPrice;}
 }
 [Serializable, NetSerializable]
 public sealed class AU14ShopkeeperBuyBuiMsg : BoundUserInterfaceMessage
@@ -41,3 +42,7 @@ public sealed class AU14ShopkeeperEditListingBuiMsg : BoundUserInterfaceMessage
 [Serializable, NetSerializable]
 public sealed class AU14ShopkeeperRemoveListingBuiMsg : BoundUserInterfaceMessage
 { public int Index { get; } public AU14ShopkeeperRemoveListingBuiMsg(int i) { Index = i; } }
+
+[Serializable, NetSerializable]
+public sealed class AU14ShopkeeperEditDefaultPriceBuiMsg : BoundUserInterfaceMessage
+{ public int Index { get; } public AU14ShopkeeperEditDefaultPriceBuiMsg(int i) { Index = i; } }

@@ -17,7 +17,14 @@
         <!-- Manage section: only visible for shopkeepers -->
         <BoxContainer Name="ManageSection" Access="Public" Orientation="Vertical" SeparationOverride="4" Visible="False">
             <Label Text="-- Manage Stock --" Margin="0 6" StyleClasses="LabelHeading" />
-            <Label Text="Use an item on this machine to add stock. Edit name/price below."
+            <Label Text="Use an item on this machine to add stock. Edit default price here." StyleClasses="LabelSubText" Margin="0 2" />
+            <Label Text="Default price determines the price of newly inserted stock." StyleClasses="LabelSubText" Margin="0 2" />
+            <BoxContainer Orientation="Horizontal" Access="Public">
+                <Label Text ="Default Price: " StyleClasses="LabelSubText"/>
+                <LineEdit Name="DefaultPriceLineEdit" HorizontalExpand="True"></LineEdit>
+                <Button Name="SaveDefaultPriceBtn" Text="Save" HorizontalExpand="True" Margin="0 4"/>
+            </BoxContainer>
+            <Label Text="Edit name/price below."
                    StyleClasses="LabelSubText" Margin="0 2" />
             <ScrollContainer VerticalExpand="True" HScrollEnabled="False" MinSize="0 160">
                 <BoxContainer Name="ManageList" Access="Public" Orientation="Vertical" SeparationOverride="4" />
