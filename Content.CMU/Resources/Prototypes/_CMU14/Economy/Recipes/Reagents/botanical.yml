@@ -1,5 +1,65 @@
 - type: reagent
   parent: CMReagent
+  id: CMUAmmonia
+  name: reagent-name-ammonia
+  desc: reagent-desc-ammonia
+  physicalDesc: reagent-physical-desc-pungent
+  flavor: bitter
+  color: "#404030"
+  class: Common
+  group: Botanical
+  plantMetabolism:
+  - !type:PlantAdjustNutrition
+    amount: 2
+  - !type:PlantAdjustHealth
+    amount: 0.5
+  - !type:PlantAdjustPotency
+    amount: 0.1
+  metabolisms:
+    Poison:
+      effects:
+        - !type:Toxic
+          potency: 3
+        - !type:Nutritious
+          potency: 2
+
+- type: reagent
+  parent: CMReagent
+  id: CMUDiethylamine
+  name: reagent-name-diethylamine
+  desc: reagent-desc-diethylamine
+  physicalDesc: reagent-physical-desc-strong-smelling
+  flavor: bitter
+  color: "#604030"
+  class: Uncommon
+  group: Botanical
+  plantMetabolism:
+  - !type:PlantAdjustNutrition
+    amount: 2
+  - !type:PlantAdjustHealth
+    amount: 0.8
+  - !type:PlantAdjustPotency
+    amount: 0.3
+
+- type: reagent
+  parent: CMReagent
+  id: CMUUnstableMutagen
+  name: reagent-name-unstable-mutagen
+  desc: reagent-desc-unstable-mutagen
+  physicalDesc: reagent-physical-desc-glowing
+  flavor: bitter
+  color: "#13BC5E"
+  class: Uncommon
+  group: Botanical
+  metabolisms:
+    Poison:
+      effects:
+        - !type:Carcinogenic
+          potency: 1
+
+# hydro chems
+- type: reagent
+  parent: CMReagent
   id: CMUAtropine # mutant poppy / mutant potato / regular potato seeds
   name: reagent-name-atropine
   desc: reagent-desc-atropine
@@ -8,6 +68,7 @@
   color: "#B31008"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   metabolisms:
     Medicine:
@@ -30,6 +91,7 @@
   color: "#badb9e"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   metabolisms:
     Medicine:
@@ -48,6 +110,7 @@
   color: "#c9ca75"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   metabolisms:
     Medicine:
@@ -66,6 +129,7 @@
   color: "#8f947b"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   overdose: 6
   criticalOverdose: 10
@@ -92,6 +156,7 @@
   color: "#aaaaaa"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   overdose: 6
   criticalOverdose: 10
@@ -112,6 +177,7 @@
   color: "#9ec265"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   overdose: 10.5
   criticalOverdose: 20
@@ -134,6 +200,7 @@
   color: "#c0bf90"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   overdose: 6
   criticalOverdose: 10
@@ -156,6 +223,7 @@
   color: "#c095c9"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   overdose: 10.5
   criticalOverdose: 20
@@ -178,6 +246,7 @@
   color: "#792300"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   overdose: 30
   criticalOverdose: 50
@@ -198,6 +267,7 @@
   color: "#CF3600"
   flags: Scannable
   class: Hydro
+  group: Botanical
   reward: 2
   overdose: 30
   criticalOverdose: 50
