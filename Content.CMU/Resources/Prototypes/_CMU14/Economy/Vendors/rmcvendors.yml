@@ -1184,6 +1184,7 @@
       - id: AU14CaseSentry
       - id: AU14CaseSentryMini
       - id: AU14CaseSentrySniper
+      - id: RMCM271A2BruteLauncherRigFilled
     - name: Tool Storage
       choices: { CMUCTToolStorage: 1 }
       entries:

@@ -92,3 +92,30 @@
         amount: 40
       - id: RMCShoesBlack
         amount: 40
+    - name: Limited Weaponry (Only for EMERGENCIES)
+      entries:
+      - id: RMCWeaponFlamerColony
+        amount: 1
+      - id: RMCTankFlamerColony
+        amount: 3
+      - id: RMCWeaponSMGPDW90
+        amount: 4
+      - id: CMUBoxMagazineSMGPDW90
+        amount: 2
+      - id: AU14WeaponShotgunM890Tactical
+        amount: 1
+      - id: RMCBoxShellsBuckshot
+        amount: 1
+      - id: RMCBoxShellsSlugs
+        amount: 1
+      - id: RMCBoxShellsBeanbag
+        amount: 1
+      - id: RMCBoxShellsFlechette
+        amount: 1
+      - id: RMCWeaponRifleSSG45
+        amount: 2
+      - id: RMCBoxMagazineRifleSSG45
+        amount: 1
+      - id: RMCMagazineRifleSSG45AP
+        amount: 3
+
