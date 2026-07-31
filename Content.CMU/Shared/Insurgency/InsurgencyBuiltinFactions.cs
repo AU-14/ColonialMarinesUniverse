@@ -52,6 +52,7 @@ public static class InsurgencyBuiltinFactions
         "RMCTechTreeConsoleCLF",
         "CMFaxCLF",
         "AU14AnalyzerMachineCLF",
+        "AU14CLFBaseStation",
         "RMCLampTripod",
     };
 
