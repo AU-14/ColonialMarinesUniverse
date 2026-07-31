@@ -30,6 +30,14 @@
         {
             "name": "small_truck_brown_cargo_damage_5",
             "directions": 4
+        },
+        {
+            "name": "wheels_1",
+            "directions": 4
+        },
+        {
+            "name": "wheels_0",
+            "directions": 4
         }
     ]
 }

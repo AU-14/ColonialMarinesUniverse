@@ -24,7 +24,11 @@
             "directions": 4
         },
         {
-            "name": "small_truck_turquoise_cargo_damage_4",
+            "name": "wheels_1",
+            "directions": 4
+        },
+        {
+            "name": "wheels_0",
             "directions": 4
         }
     ]
