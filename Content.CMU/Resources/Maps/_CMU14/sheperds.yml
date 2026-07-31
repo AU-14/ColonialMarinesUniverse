@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/23/2026 02:09:22
-  entityCount: 43471
+  time: 07/31/2026 09:55:14
+  entityCount: 43500
 maps:
 - 1
 grids:
@@ -59448,6 +59448,11 @@ entities:
     - type: Transform
       pos: 37.5,-123.5
       parent: 1
+  - uid: 354444
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
+      parent: 1
 - proto: arrestclfobjective
   entities:
   - uid: 1208
@@ -59685,6 +59690,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354445
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: AU14CivilianPrisonJumpsuit
   entities:
@@ -60135,6 +60145,11 @@ entities:
     - type: Transform
       pos: 37.5,-123.5
       parent: 1
+  - uid: 354446
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
+      parent: 1
 - proto: AU14JumpsuitVeteranPMCCorporate
   entities:
   - uid: 322490
@@ -60147,6 +60162,11 @@ entities:
     - type: Transform
       pos: 37.5,-123.5
       parent: 1
+  - uid: 354447
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
+      parent: 1
 - proto: AU14JumpsuitVeteranPMCCorporateLead
   entities:
   - uid: 322491
@@ -60158,6 +60178,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354448
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: AU14KitWeaponFP9000
   entities:
@@ -60212,6 +60237,11 @@ entities:
     - type: Transform
       pos: 36.5,-125.5
       parent: 1
+  - uid: 354486
+    components:
+    - type: Transform
+      pos: 36.5,-125.5
+      parent: 1
 - proto: AU14PVEHandsInsulatedBlackMarine
   entities:
   - uid: 1038
@@ -60223,6 +60253,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354449
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: AU14SensorTowerOffset
   entities:
@@ -60516,15 +60551,20 @@ entities:
       parent: 1
 - proto: AU14SpawnPointWYGuard
   entities:
-  - uid: 20
+  - uid: 354461
     components:
     - type: Transform
-      pos: 37.5,-121.5
+      pos: 36.5,-124.5
       parent: 1
-  - uid: 343033
+  - uid: 354463
     components:
     - type: Transform
-      pos: 36.5,-121.5
+      pos: 36.5,-123.5
+      parent: 1
+  - uid: 354464
+    components:
+    - type: Transform
+      pos: 36.5,-122.5
       parent: 1
 - proto: AU14StampApproved
   entities:
@@ -60655,6 +60695,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354450
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: AUbudgetConsole
   entities:
@@ -78721,15 +78766,20 @@ entities:
     - type: Transform
       pos: 37.5,-123.5
       parent: 1
-  - uid: 343055
-    components:
-    - type: Transform
-      pos: 37.5,-122.5
-      parent: 1
   - uid: 352682
     components:
     - type: Transform
       pos: 55.5,-160.5
+      parent: 1
+  - uid: 354429
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354451
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: CMClosetBioFilled
   entities:
@@ -82521,6 +82571,11 @@ entities:
       pos: 36.5,-125.5
       parent: 1
   - uid: 343117
+    components:
+    - type: Transform
+      pos: 36.5,-125.5
+      parent: 1
+  - uid: 354485
     components:
     - type: Transform
       pos: 36.5,-125.5
@@ -256342,15 +256397,20 @@ entities:
       parent: 1
 - proto: CMWebbingBlack
   entities:
-  - uid: 343056
+  - uid: 354430
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
       parent: 1
-  - uid: 343057
+  - uid: 354431
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354471
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
       parent: 1
 - proto: CMWebbingHolster
   entities:
@@ -258615,6 +258675,11 @@ entities:
     - type: Transform
       pos: 37.5,-123.5
       parent: 1
+  - uid: 354452
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
+      parent: 1
 - proto: RMCArmorHelmetPMCKutjevoSecurity
   entities:
   - uid: 322495
@@ -258626,6 +258691,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354453
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: RMCAttachmentRailFlashlight
   entities:
@@ -259536,15 +259606,20 @@ entities:
       parent: 1
 - proto: RMCBeltHolsterPistolTSE
   entities:
-  - uid: 343058
+  - uid: 354432
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
       parent: 1
-  - uid: 343059
+  - uid: 354433
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354472
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
       parent: 1
 - proto: RMCBeltSecurityWeYaFilled
   entities:
@@ -259557,6 +259632,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354454
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: RMCBinocularsCivPVE
   entities:
@@ -259590,6 +259670,11 @@ entities:
     - type: Transform
       pos: 36.5,-125.5
       parent: 1
+  - uid: 354484
+    components:
+    - type: Transform
+      pos: 36.5,-125.5
+      parent: 1
 - proto: RMCBootsPMCFilled
   entities:
   - uid: 316589
@@ -259616,6 +259701,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354455
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: RMCBottleMindbreaker
   entities:
@@ -289590,6 +289680,11 @@ entities:
     - type: Transform
       pos: 36.5,-125.5
       parent: 1
+  - uid: 354483
+    components:
+    - type: Transform
+      pos: 36.5,-125.5
+      parent: 1
 - proto: RMCHeadCapWestonYamadaDark
   entities:
   - uid: 322498
@@ -289601,6 +289696,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354456
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: RMCHospitalDivider
   entities:
@@ -289621,6 +289721,11 @@ entities:
     - type: Transform
       pos: 37.5,-123.5
       parent: 1
+  - uid: 354457
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
+      parent: 1
 - proto: RMCJumpsuitVeteranPMCHybrisaLead
   entities:
   - uid: 322500
@@ -289632,6 +289737,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354458
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: RMCKitchenKnifeChef
   entities:
@@ -289932,12 +290042,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 31.5,-163.5
       parent: 1
-  - uid: 343054
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 37.5,-122.5
-      parent: 1
   - uid: 344379
     components:
     - type: Transform
@@ -289979,6 +290083,12 @@ entities:
     - type: Transform
       rot: 4.71238898038469 rad
       pos: 78.501,-150.501
+      parent: 1
+  - uid: 354443
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 37.5,-122.5
       parent: 1
 - proto: RMCLightFixtureBlueDouble
   entities:
@@ -291697,6 +291807,11 @@ entities:
     components:
     - type: Transform
       pos: 37.5,-123.5
+      parent: 1
+  - uid: 354459
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
       parent: 1
 - proto: RMCOverwatchConsoleWeYaRotating
   entities:
@@ -300488,6 +300603,11 @@ entities:
     - type: Transform
       pos: 37.5,-123.5
       parent: 1
+  - uid: 354460
+    components:
+    - type: Transform
+      pos: 37.5,-122.5
+      parent: 1
 - proto: RMCSatchelTSEPA
   entities:
   - uid: 316546
@@ -307562,42 +307682,47 @@ entities:
     - type: Transform
       pos: 36.5,-125.5
       parent: 1
+  - uid: 354482
+    components:
+    - type: Transform
+      pos: 36.5,-125.5
+      parent: 1
 - proto: RMCWebbingBlackSmall
   entities:
-  - uid: 343060
+  - uid: 354435
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
       parent: 1
-  - uid: 343061
+  - uid: 354436
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354473
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
       parent: 1
 - proto: RMCWebbingDropPouchBlack
   entities:
-  - uid: 343062
+  - uid: 354437
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
       parent: 1
-  - uid: 343063
+  - uid: 354438
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354474
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
       parent: 1
 - proto: RMCWebbingHolsterBlack
   entities:
-  - uid: 343064
-    components:
-    - type: Transform
-      pos: 37.5,-122.5
-      parent: 1
-  - uid: 343065
-    components:
-    - type: Transform
-      pos: 37.5,-122.5
-      parent: 1
   - uid: 344173
     components:
     - type: Transform
@@ -307607,6 +307732,21 @@ entities:
     components:
     - type: Transform
       pos: 30.5,134.5
+      parent: 1
+  - uid: 354439
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354440
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354475
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
       parent: 1
 - proto: RMCWebbingLegPouch
   entities:
@@ -307632,15 +307772,20 @@ entities:
     - type: Transform
       pos: 32.5,134.5
       parent: 1
-  - uid: 343066
+  - uid: 354441
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
       parent: 1
-  - uid: 343067
+  - uid: 354442
     components:
     - type: Transform
-      pos: 37.5,-122.5
+      pos: 33.5,-121.5
+      parent: 1
+  - uid: 354476
+    components:
+    - type: Transform
+      pos: 33.5,-121.5
       parent: 1
 - proto: RMCWhiteMappingComputer
   entities:
