@@ -61,3 +61,83 @@
   name: shop counter
   description: A customisable counter. The shopkeeper can stock it with any items and set prices. Prices are subject to the colony sales tax.
   suffix: Shopkeeper
+
+#For hybrisa prospera weymart. Free to use for other weymarts! 
+
+- type: entity
+  id: AU14WeymartRacks1
+  parent: AU14ShopkeeperVendorBase
+  name: shop counter
+  description: A customisable counter. The shopkeeper can stock it with any items and set prices. Prices are subject to the colony sales tax.
+  suffix: Shopkeeper
+  components:  
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    layers:
+    - state: "longrack1"
+
+- type: entity
+  parent: AU14WeymartRacks1
+  id: AU14WeymartRacks2
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    layers:
+    - state: "longrack2"
+    
+- type: entity
+  parent: AU14WeymartRacks1
+  id: AU14WeymartRacks3
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    layers:
+    - state: "longrack3"
+    
+- type: entity
+  parent: AU14WeymartRacks1
+  id: AU14WeymartRacks4
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    layers:
+    - state: "longrack4"
+
+- type: entity
+  parent: AU14WeymartRacks1
+  id: AU14WeymartRacks5
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    layers:
+    - state: "longrack5"
+    
+- type: entity
+  parent: AU14WeymartRacks1
+  id: AU14WeymartRacks6
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    layers:
+    - state: "longrack6"
+
+- type: entity
+  parent: AU14WeymartRacks1
+  id: AU14WeymartRacks7
+  name: store rack
+  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/hybrisiaracks.rsi
+    layers:
+    - state: "longrack7"

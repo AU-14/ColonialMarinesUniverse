@@ -1,0 +1,31 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": null,
+    "size": {
+        "x": 96,
+        "y": 96
+    },
+    "states": [
+        {
+            "name": "small_truck_turquoise_cargo",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_turquoise_cargo_damage_1",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_turquoise_cargo_damage_2",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_turquoise_cargo_damage_3",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_turquoise_cargo_damage_4",
+            "directions": 4
+        }
+    ]
+}

@@ -1,0 +1,55 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": null,
+    "size": {
+        "x": 96,
+        "y": 96
+    },
+    "states": [
+        {
+            "name": "small_truck_blue",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_blue_damage_1",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_blue_damage_2",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_blue_damage_3",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_blue_damage_4",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_blue_damage_5",
+            "directions": 4
+        },
+        {
+            "name": "damaged_frame",
+            "directions": 4
+        },
+        {
+            "name": "damaged 2",
+            "directions": 4
+        },
+        {
+            "name": "damaged 3",
+            "directions": 4
+        },
+        {
+            "name": "damaged 4",
+            "directions": 4
+        },
+        {
+            "name": "damaged 5",
+            "directions": 4
+        }
+    ]
+}

@@ -1,0 +1,35 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": null,
+    "size": {
+        "x": 192,
+        "y": 192
+    },
+    "states": [
+        {
+            "name": "long_truck_kelland",
+            "directions": 4
+        },
+        {
+            "name": "long_truck_kelland_damage_1",
+            "directions": 4
+        },
+        {
+            "name": "long_truck_kelland_damage_2",
+            "directions": 4
+        },
+        {
+            "name": "long_truck_kelland_damage_3",
+            "directions": 4
+        },
+        {
+            "name": "long_truck_kelland_damage_4",
+            "directions": 4
+        },
+        {
+            "name": "long_truck_kelland_damage_5",
+            "directions": 4
+        }
+    ]
+}

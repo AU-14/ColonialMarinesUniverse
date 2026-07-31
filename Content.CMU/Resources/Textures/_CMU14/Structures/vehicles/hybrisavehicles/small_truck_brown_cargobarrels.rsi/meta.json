@@ -1,0 +1,19 @@
+{
+    "version": 1,
+    "license": null,
+    "copyright": null,
+    "size": {
+        "x": 96,
+        "y": 96
+    },
+    "states": [
+        {
+        "name": "small_truck_brown_cargobarrels",
+        "directions": 4
+        },
+		{
+		"name": "damaged_frame",
+		"directions": 4
+		}
+    ]
+}

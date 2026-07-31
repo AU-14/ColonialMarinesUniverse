@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/31/2026 08:23:01
-  entityCount: 38
+  time: 07/31/2026 08:23:39
+  entityCount: 34
 maps:
 - 1
 grids:
@@ -104,11 +104,11 @@ entities:
     - type: GasTileOverlay
 - proto: AU14VehicleRadioSet
   entities:
-  - uid: 5
+  - uid: 34
     components:
     - type: Transform
       rot: 3.141592653589793 rad
-      pos: -2.5,2.5
+      pos: -1.5,2.5
       parent: 2
 - proto: CMChairComfy
   entities:
@@ -127,98 +127,48 @@ entities:
     - type: VehicleDriverSeat
       skills:
         all: {}
+- proto: CMRandomPosterAny
+  entities:
+  - uid: 5
+    components:
+    - type: Transform
+      pos: -2.5,2.5
+      parent: 2
 - proto: CMWindoorSecure
   entities:
   - uid: 32
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
-      pos: -1.5,1.5
+      pos: -2.5,0.5
       parent: 2
-  - uid: 35
+  - uid: 33
     components:
     - type: Transform
       rot: 1.5707963267948966 rad
-      pos: -1.5,0.5
+      pos: -2.5,1.5
       parent: 2
-- proto: RMCSeatHumveePassenger
+- proto: RMCSpawnerRandomCrateLoot
   entities:
   - uid: 29
     components:
     - type: Transform
-      pos: -2.353667,2
+      pos: -2.5,1.5
       parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
+- proto: SteelBench
+  entities:
   - uid: 30
     components:
     - type: Transform
-      pos: -2.744292,2
+      rot: 1.5707963267948966 rad
+      pos: -2.5,0.5
       parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
   - uid: 31
     components:
     - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -2.744292,0.5
+      rot: 1.5707963267948966 rad
+      pos: -2.5,1.5
       parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
-  - uid: 33
-    components:
-    - type: Transform
-      pos: -1.400542,2
-      parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
-  - uid: 34
-    components:
-    - type: Transform
-      pos: -1.884917,2
-      parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
-  - uid: 36
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -2.306792,0.5
-      parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
-  - uid: 37
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1.822417,0.5
-      parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
-  - uid: 38
-    components:
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: -1.369292,0.5
-      parent: 2
-    missingComponents:
-    - Corrodible
-    - Damageable
-    - Destructible
 - proto: VehicleBoxVanBack1
   entities:
   - uid: 6
