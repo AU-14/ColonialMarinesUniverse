@@ -45,6 +45,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         SubscribeLocalEvent<AU14ShopkeeperVendorComponent, AU14ShopkeeperReturnChangeBuiMsg>(OnReturnChange);
         SubscribeLocalEvent<AU14ShopkeeperVendorComponent, AU14ShopkeeperEditListingBuiMsg>(OnEditListing);
         SubscribeLocalEvent<AU14ShopkeeperVendorComponent, AU14ShopkeeperRemoveListingBuiMsg>(OnRemoveListing);
+        SubscribeLocalEvent<AU14ShopkeeperVendorComponent, AU14ShopkeeperEditDefaultPriceBuiMsg>(OnEditDefaultPrice);
     }
     private void OnMapInit(EntityUid uid, AU14ShopkeeperVendorComponent comp, MapInitEvent args)
     {
@@ -112,7 +113,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
             {
                 ItemNet = GetNetEntity(args.Entity),
                 DisplayName = displayName,
-                Price = 10,
+                Price = (int)comp.DefaultPrice,
                 ProtoId = protoId,
                 SellerIdCard = sellerIdCard.Valid ? sellerIdCard : null,
             });
@@ -192,6 +193,12 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         comp.Listings.RemoveAt(msg.Index);
         UpdateShopUi(uid, comp);
     }
+
+    private void OnEditDefaultPrice(EntityUid uid, AU14ShopkeeperVendorComponent comp, AU14ShopkeeperEditDefaultPriceBuiMsg msg)
+    {
+        comp.DefaultPrice = msg.Index;
+        UpdateShopUi(uid, comp);
+    }
     // -- UI helpers -----------------------------------------------------------
     private void UpdateShopUi(EntityUid uid, AU14ShopkeeperVendorComponent comp)
     {
@@ -218,6 +225,6 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
         }).ToList();
 
         _ui.SetUiState(uid, AU14ShopkeeperVendorUi.Shop,
-            new AU14ShopkeeperVendorShopState(comp.InsertedCash, items, tax * 100f));
+            new AU14ShopkeeperVendorShopState(comp.InsertedCash, items, tax * 100f, comp.DefaultPrice));
     }
 }

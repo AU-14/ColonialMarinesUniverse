@@ -17,6 +17,7 @@ public sealed partial class AU14ShopkeeperVendorBui(EntityUid owner, Enum uiKey)
         _window.ReturnChangeBtn.OnPressed += _ => SendPredictedMessage(new AU14ShopkeeperReturnChangeBuiMsg());
         _window.OnSaveListing += (idx, name, price) => SendPredictedMessage(new AU14ShopkeeperEditListingBuiMsg(idx, name, price));
         _window.OnRemoveListing += idx => SendPredictedMessage(new AU14ShopkeeperRemoveListingBuiMsg(idx));
+        _window.OnSaveDefaultPrice += idx => SendPredictedMessage(new AU14ShopkeeperEditDefaultPriceBuiMsg(idx));
     }
     protected override void UpdateState(BoundUserInterfaceState state)
     {
