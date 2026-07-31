@@ -23,9 +23,6 @@ public sealed partial class CMUXenoZJumpComponent : Component
     public LocId NoZPhysicsPopup = "cmu-xeno-zjump-fail-no-z-physics";
 
     [DataField, AutoNetworkedField]
-    public FixedPoint2 PlasmaCost = 50;
-
-    [DataField, AutoNetworkedField]
     public float Range = 7f;
 
     [DataField, AutoNetworkedField]
