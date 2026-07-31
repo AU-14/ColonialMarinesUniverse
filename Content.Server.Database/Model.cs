@@ -51,6 +51,11 @@ namespace Content.Server.Database
         public DbSet<IPIntelCache> IPIntelCache { get; set; } = null!;
         public DbSet<CustomVoteLog> CustomVoteLog { get; set; } = null!;
         public DbSet<CustomVoteLogOption> CustomVoteLogOption { get; set; } = null!;
+        public DbSet<AU14FactionDefinition> AU14FactionDefinitions { get; set; } = default!;
+        public DbSet<AU14CustomConstructionEntry> AU14CustomConstructionEntries { get; set; } = default!;
+        public DbSet<CMUBalanceRatingPoll> CMUBalanceRatingPolls { get; set; } = default!;
+        public DbSet<CMUBalanceRatingResponse> CMUBalanceRatingResponses { get; set; } = default!;
+        public DbSet<CMURoundOutcome> CMURoundOutcomes { get; set; } = default!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -61,6 +66,38 @@ namespace Content.Server.Database
             modelBuilder.Entity<Profile>()
                 .HasIndex(p => new {p.Slot, PrefsId = p.PreferenceId})
                 .IsUnique();
+
+            modelBuilder.Entity<CMUBalanceRatingPoll>()
+                .HasOne(poll => poll.Round)
+                .WithMany()
+                .HasForeignKey(poll => poll.RoundId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CMUBalanceRatingPoll>()
+                .HasOne(poll => poll.CreatedBy)
+                .WithMany()
+                .HasForeignKey(poll => poll.CreatedById)
+                .HasPrincipalKey(player => player.UserId)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<CMUBalanceRatingResponse>()
+                .HasOne(response => response.Poll)
+                .WithMany(poll => poll.Responses)
+                .HasForeignKey(response => response.PollId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CMUBalanceRatingResponse>()
+                .HasOne(response => response.Player)
+                .WithMany()
+                .HasForeignKey(response => response.PlayerId)
+                .HasPrincipalKey(player => player.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CMURoundOutcome>()
+                .HasOne(outcome => outcome.Round)
+                .WithOne()
+                .HasForeignKey<CMURoundOutcome>(outcome => outcome.RoundId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Antag>()
                 .HasIndex(p => new {HumanoidProfileId = p.ProfileId, p.AntagName})

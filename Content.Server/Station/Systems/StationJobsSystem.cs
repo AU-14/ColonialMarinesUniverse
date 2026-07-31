@@ -412,6 +412,22 @@ public sealed partial class StationJobsSystem : EntitySystem
     }
 
     /// <summary>
+    /// Sets a job's round-start slot count while retaining its configured mid-round count.
+    /// </summary>
+    public void SetRoundStartJobSlot(EntityUid station, ProtoId<JobPrototype> jobId, int amount, StationJobsComponent? stationJobs = null)
+    {
+        if (!Resolve(station, ref stationJobs))
+            return;
+
+        if (!stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var slots) || slots.Length < 2)
+            stationJobs.SetupAvailableJobs[jobId] = [amount, -1];
+        else
+            slots[0] = amount;
+
+        UpdateJobsAvailable();
+    }
+
+    /// <summary>
     /// Looks at the given priority list, and picks the best available job (optionally with the given exclusions)
     /// </summary>
     /// <param name="station">Station to pick from.</param>

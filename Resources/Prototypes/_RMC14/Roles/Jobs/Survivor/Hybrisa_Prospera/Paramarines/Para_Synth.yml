@@ -6,13 +6,13 @@
     RMCRankSyntheticColonist: [ ]
   startingGear: RMCGearParaSupportSynthetic
   icon: RMCJobIconParaSupportSynthetic
-  playTimeTracker: RMCJobSyntheticColony
-  spawnMenuRoleName: Royal Paramarine Support Synthetic (Hybrisa Special Survivor)
+  spawnMenuRoleName: Royal Paramarine Support Synthetic (Survivor)
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   special:
     - !type:AddComponentSpecial
       components:
-        - type: Language
-          preset: RMCLanguagePresetSynthColonist
         - type: LanguageLearning
           learnableLanguages:
             - Xeno
@@ -29,7 +29,6 @@
           factions:
             - RoyalMarines
             - TSE
-        - type: RMCSurvivor
         - type: RMCAllowSuitStorage
         - type: IntelRescueSurvivorObjective
         - type: MotionDetectorTracked
@@ -47,8 +46,7 @@
           background:
             sprite: /Textures/_RMC14/Interface/map_blips.rsi
             state: background_para
-        - type: AssignSquad
-          squad: SquadPara
+
         - type: JobPrefix
           prefix: rmc-job-prefix-para-synth
         - type: MeleeWeapon
@@ -65,14 +63,13 @@
               Blunt: 35
         - type: Synth
           generation: rmc-species-synth-generation-second
-  useLoadoutOfJob: RMCSyntheticColony # for inheritance
+  useLoadoutOfJob: RMCJobSyntheticColony # for inheritance
   hidden: true
 
 - type: startingGear
   parent: RMCGearParaBase
   id: RMCGearParaSupportSynthetic
   equipment:
-    id: RMCIDRoyalParamarinesSupportSynthetic
     jumpsuit: RMCJumpsuitMarinePara
     back: RMCSatchelLightpackFilledParaSynth
     belt: RMCMedicalL75RCMFillPara
@@ -95,5 +92,5 @@
   parent: CMJobIconBase
   id: RMCJobIconParaSupportSynthetic
   icon:
-    sprite: _RMC14/Interface/job_icons/TSE/RCM/paramarine.rsi
+    sprite: _RMC14/Interface/cm_job_icons.rsi
     state: para_synth

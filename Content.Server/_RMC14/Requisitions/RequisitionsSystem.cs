@@ -34,6 +34,18 @@ namespace Content.Server._RMC14.Requisitions;
 
 public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 {
+    public bool TryReserveStock(Entity<RequisitionsComputerComponent> computer, int category, int order)
+    {
+        return category >= 0 && category < computer.Comp.Categories.Count &&
+               order >= 0 && order < computer.Comp.Categories[category].Entries.Count;
+    }
+
+    public void ReapplyPlatoonCatalogs()
+    {
+        var query = EntityQueryEnumerator<RequisitionsComputerComponent>();
+        while (query.MoveNext(out var uid, out var component))
+            Dirty(uid, component);
+    }
     [Dependency] private IAdminLogManager _adminLogs = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private ChasmSystem _chasm = default!;

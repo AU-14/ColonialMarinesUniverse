@@ -1,0 +1,43 @@
+- type: entity
+  parent: RMCCrateBase
+  id: ANPRCFillCardResupplyCrateGOVFOR
+  name: COMSEC fill card resupply crate (GOVFOR)
+  components:
+  - type: StorageFill
+    contents:
+    - id: ANPRCFillCardGOVFOR
+      amount: 3
+
+- type: entity
+  parent: RMCCrateBase
+  id: ANPRCFillCardResupplyCrateOPFOR
+  name: COMSEC fill card resupply crate (OPFOR)
+  components:
+  - type: StorageFill
+    contents:
+    - id: ANPRCFillCardOPFOR
+      amount: 3
+
+- type: entity
+  parent: RMCCrateBase
+  id: ANPRCRadioResupplyCrateGOVFOR
+  name: AN/PRC-117G resupply crate (GOVFOR)
+  components:
+  - type: StorageFill
+    contents:
+    - id: ANPRC117GRadioFilled
+      amount: 1
+    - id: ANPRCMastAntenna
+      amount: 1
+
+- type: entity
+  parent: RMCCrateBase
+  id: ANPRCRadioResupplyCrateOPFOR
+  name: AN/PRC-117G resupply crate (OPFOR)
+  components:
+  - type: StorageFill
+    contents:
+    - id: ANPRC117GRadioOPFORFilled
+      amount: 1
+    - id: ANPRCMastAntenna
+      amount: 1

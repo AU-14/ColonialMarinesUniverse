@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.DoAfter;
 using Content.Shared.Roles;
 using Robust.Shared.GameStates;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
@@ -73,6 +74,21 @@ public sealed partial class VehicleExitComponent : Component
     [NonSerialized]
     public bool PendingExit;
 }
+
+[ByRefEvent]
+public record struct VehicleEntryAttemptEvent(EntityUid User, int EntryIndex)
+{
+    public bool Cancelled;
+}
+
+[ByRefEvent]
+public record struct VehicleExitAttemptEvent(EntityUid User, EntityUid Exit)
+{
+    public bool Cancelled;
+}
+
+[ByRefEvent]
+public readonly record struct VehicleExitedEvent(EntityUid User, EntityUid Exit, MapCoordinates ExitCoordinates);
 
 [Serializable, NetSerializable]
 public sealed partial class VehicleEnterDoAfterEvent : SimpleDoAfterEvent

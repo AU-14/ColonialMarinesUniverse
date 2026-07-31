@@ -56,7 +56,7 @@
   ## Who do MPs answer to? It's Provost!
   <Box Orientation="Vertical">
     [bold]Provost Marshal[/bold]
-    <GuideEntityEmbed Entity="RMCGuidebookRolePvM" Caption=""/>
+    <GuideEntityEmbed Entity="CMUGuidebookRolePvM" Caption=""/>
   </Box>
   [color=#ffa500][bold]Provost Marshal Office,[/bold][/color] often shortened to just "Provost", is the organization that ensures the law is interpreted correctly and writes the law itself. [bold]If you see a member of the Provost aboard the Almayer, give them the utmost respect.[/bold]
 

@@ -24,7 +24,7 @@ public sealed partial class IdCardComponent : Component
 
     [DataField]
     [AutoNetworkedField]
-    private string? _jobTitle;
+    public string? _jobTitle;
 
     [Access(typeof(SharedIdCardSystem), typeof(SharedPdaSystem), typeof(SharedAgentIdCardSystem), Other = AccessPermissions.ReadWriteExecute)]
     public string? LocalizedJobTitle { set => _jobTitle = value; get => _jobTitle ?? (JobTitle != null ? Loc.GetString(JobTitle) : string.Empty); }
@@ -64,4 +64,7 @@ public sealed partial class IdCardComponent : Component
 
     [DataField]
     public bool CanMicrowave = true;
+
+    [DataField, AutoNetworkedField]
+    public int AccountBalance;
 }

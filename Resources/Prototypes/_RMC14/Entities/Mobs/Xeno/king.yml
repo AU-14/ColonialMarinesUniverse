@@ -9,8 +9,10 @@
   name: King
   description: The end of the line.
   components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/King/king.rsi
+    sprite: _AU14/Mobs/Xenos/King/king.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -19,7 +21,7 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      1500: Critical
+      800: Critical
       1600: Dead
   - type: Tag
     tags:
@@ -130,7 +132,7 @@
   - type: RMCXenoDamageVisuals
     prefix: king
   - type: FixedIdentity
-    name: rmc-job-name-xeno-king
+    name: cmu-job-name-xeno-unknown
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi

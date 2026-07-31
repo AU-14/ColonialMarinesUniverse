@@ -1,0 +1,448 @@
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivHSVan
+  name: Hyperdyne systems Van
+  description: A Hyperdyne Systems van, used for synthetic maintance. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/civvan.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: civvan
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/PaddyWagonVanEmpty.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 8
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,-0.25
+      radius: 0.6
+      interiorCoords: -1.3,1
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: -1.3,1
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: -1.3,1
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivturquiseCargo
+  name: Small Cargo Truck
+  description: An old small cargo truck. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_turquoise_cargo.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: small_truck_turquoise_cargo
+    - map: [ damaged_frame ]
+      state: small_truck_turquoise_cargo_damage_1
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 8
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.25,0
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.25,-1
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: 0.25,-1
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivCivTruck1
+  name: Small Civilian Truck
+  description: An old small cargo truck. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: civtruck_1
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivCivTruck2
+  name: Small We-Yu Civilian Truck 
+  description: An old small cargo truck. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: civtruck_2
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 10
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.25,0
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.25,-1
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: 0.25,-1
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivCivTruck3
+  name: Small White Civilian Truck 
+  description: An old small cargo truck. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: civtruck_3
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+      
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivMedTruck
+  name: Small Civilian Medical Truck 
+  description: An old small cargo truck. This seems to be loaded with medical supplies. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_medical.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: small_truck_medical
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+# Todo: sprite wheels
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivGarbageTruck
+  name: Small Garbage Truck 
+  description: An old small garbage truck. Stinks. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_garbage.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: small_truck_garbage
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+# Todo: sprite wheels
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivBrownBarrelsTruck
+  name: Brown Truck with cargo barrels
+  description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargobarrels.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: small_truck_brown_cargobarrels
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+# Todo: sprite wheels
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivBrownCargoTruck
+  name: Brown Truck with cargo
+  description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargo.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: small_truck_brown_cargo
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+# Todo: sprite wheels
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivBlueCargoTruck
+  name: Blue Truck with cargo
+  description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_blue_cargo.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: small_truck_blue_cargo
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+# Todo: sprite wheels
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 10
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.25,0
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.25,-1
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: 0.25,-1
+     
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivBlueTruck
+  name: Blue truck
+  description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_blue.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: small_truck_blue
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+# Todo: sprite wheels
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,0
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivEMSAmbulance
+  name: An ambulance
+  description: An old van used as ambulance for colonial Emergency Medical Service. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/ambulance.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: van_base
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/Ambulance.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 8
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,-0.25
+      radius: 0.6
+      interiorCoords: -1.3,1
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: -1.3,1
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: -1.3,1
+      
+- type: entity
+  parent: VehicleBoxVanBase
+  id: AU14VehicleCivCopMonoSupron
+  name: Police Car
+  description: An police Mono Supron, produced by Weyland-Yutani. Still sturdy enough for transport.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/cop_car.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: van_base
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_0
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/CopMonoSupron.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 8
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,-0.25
+      radius: 0.6
+      interiorCoords: -1.3,1
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: -1.3,1
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: -1.3,1

@@ -64,9 +64,6 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         if (!CanStartZJumpWindup(xeno, args.Target, xeno.Comp))
             return;
 
-        if (!_xenoPlasma.HasPlasmaPopup((xeno.Owner, null), xeno.Comp.PlasmaCost))
-            return;
-
         var ev = new CMUXenoZJumpDoAfterEvent(GetNetCoordinates(args.Target));
         var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.Windup, ev, xeno, args.Action)
         {
@@ -116,9 +113,6 @@ public sealed partial class CMUXenoZJumpSystem : EntitySystem
         var target = _transform.ToMapCoordinates(targetCoordinates);
         var direction = ClampJumpVector(target.Position - origin.Position, xeno.Comp.Range);
         if (direction == Vector2.Zero)
-            return false;
-
-        if (!_xenoPlasma.TryRemovePlasmaPopup((xeno.Owner, null), xeno.Comp.PlasmaCost))
             return false;
 
         _physics.ResetDynamics(xeno, physics);

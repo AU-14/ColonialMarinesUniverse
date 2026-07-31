@@ -4,6 +4,11 @@ namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
 {
+    public static readonly CVarDef<string> ConstructionMenuAddDefaultMaterial =
+        CVarDef.Create("construction.menu_add_default_material", "CMSteel", CVar.SERVERONLY);
+
+    public static readonly CVarDef<int> ConstructionMenuAddDefaultAmount =
+        CVarDef.Create("construction.menu_add_default_amount", 1, CVar.SERVERONLY);
     /// <summary>
     /// The sound played when clicking a UI button
     /// </summary>

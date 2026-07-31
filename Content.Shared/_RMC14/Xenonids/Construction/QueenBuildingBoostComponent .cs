@@ -3,7 +3,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._RMC14.Xenonids.Construction;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(SharedXenoConstructionSystem))]
+[Access(typeof(SharedXenoConstructionSystem), typeof(XenoSystem))]
 public sealed partial class QueenBuildingBoostComponent : Component
 {
     [DataField, AutoNetworkedField]

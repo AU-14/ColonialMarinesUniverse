@@ -8,8 +8,8 @@ namespace Content.Shared.Body;
 /// </summary>
 /// <seealso cref="BodySystem" />
 /// <seealso cref="SharedVisualBodySystem" />
-[RegisterComponent, NetworkedComponent]
-[Access(typeof(BodySystem))]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(BodySystem), typeof(Systems.SharedBodySystem))]
 public sealed partial class BodyComponent : Component
 {
     public const string ContainerID = "body_organs";

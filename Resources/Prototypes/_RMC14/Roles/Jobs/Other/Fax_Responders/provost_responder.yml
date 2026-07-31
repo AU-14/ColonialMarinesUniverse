@@ -5,10 +5,10 @@
   spawnMenuRoleName: Provost Communications Officer (Fax Responder)
   description: rmc-job-description-provost-responder
   playTimeTracker: CMJobProvostResponder
-  ranks:
-    RMCRankProvostCommunicationsOfficer: []
   startingGear: RMCGearProvostResponder
   icon: "CMJobIconEmpty"
+  ranks:
+    CMURankProvostFaxResponder: []
   joinNotifyCrew: false
   supervisors: cm-job-supervisors-staff
   accessGroups:
@@ -39,7 +39,7 @@
   id: RMCGearProvostResponder
   equipment:
     head: RMCHeadBeretProvost
-    eyes: CMGlassesSecurity # TODO: replace with sec hud
+    eyes: CMGlassesSecurity
     ears: RMCHeadsetProvost
     jumpsuit: CMJumpsuitProvost
     outerClothing: RMCProvostCommandJacket

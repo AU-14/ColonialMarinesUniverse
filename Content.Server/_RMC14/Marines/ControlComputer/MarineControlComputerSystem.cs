@@ -34,7 +34,7 @@ public sealed partial class MarineControlComputerSystem : SharedMarineControlCom
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<MarineComponent, BeingGibbedEvent>(OnMarineGibbed);
+        SubscribeLocalEvent<MarineComponent, Content.Shared.Gibbing.BeingGibbedEvent>(OnMarineGibbed);
 
         Subs.BuiEvents<MarineControlComputerComponent>(MarineControlComputerUi.MedalsPanel,
             subs =>
@@ -224,7 +224,7 @@ public sealed partial class MarineControlComputerSystem : SharedMarineControlCom
         });
     }
 
-    private void OnMarineGibbed(Entity<MarineComponent> ent, ref BeingGibbedEvent ev)
+    private void OnMarineGibbed(Entity<MarineComponent> ent, ref Content.Shared.Gibbing.BeingGibbedEvent ev)
     {
         if (HasComp<RMCSurvivorComponent>(ent))
         {

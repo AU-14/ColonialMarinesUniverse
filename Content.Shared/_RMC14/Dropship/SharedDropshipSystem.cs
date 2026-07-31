@@ -39,6 +39,49 @@ namespace Content.Shared._RMC14.Dropship;
 
 public abstract partial class SharedDropshipSystem : EntitySystem
 {
+    public void SetFactionController(EntityUid uid, string faction)
+    {
+        if (!TryComp(uid, out DropshipDestinationComponent? component))
+            return;
+        component.FactionController = faction;
+        Dirty(uid, component);
+    }
+
+    public void SetDestinationType(EntityUid uid, string destinationType)
+    {
+        if (!TryComp(uid, out DropshipDestinationComponent? component))
+            return;
+        if (Enum.TryParse(destinationType, true, out DropshipDestinationComponent.DestinationType parsed))
+            component.Destinationtype = parsed;
+        Dirty(uid, component);
+    }
+
+    public void SetDestinationShip(EntityUid uid, EntityUid? ship)
+    {
+        if (TryComp(uid, out DropshipDestinationComponent? component))
+        {
+            component.Ship = ship;
+            Dirty(uid, component);
+        }
+    }
+
+    public void SetDestinationHome(EntityUid uid, bool home)
+    {
+        if (TryComp(uid, out DropshipDestinationComponent? component))
+        {
+            component.Home = home;
+            Dirty(uid, component);
+        }
+    }
+
+    public void SetDropshipDestination(EntityUid uid, EntityUid? destination)
+    {
+        if (TryComp(uid, out DropshipComponent? component))
+        {
+            component.Destination = destination;
+            Dirty(uid, component);
+        }
+    }
     [Dependency] protected SharedAudioSystem Audio = default!;
 
     [Dependency] private AreaSystem _areas = default!;

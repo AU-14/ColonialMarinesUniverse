@@ -14,8 +14,10 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleBoiler
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Boiler/boiler.rsi
+    sprite: _AU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
   - type: Fixtures
     fixtures:
       fix1:
@@ -71,6 +73,25 @@
     plasma: 400
     maxPlasma: 400
     plasmaRegenOnWeeds: 7
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
   - type: XenoAcid
   - type: CMArmor
     xenoArmor: 20
@@ -161,7 +182,7 @@
     enabled: false
   - type: XenoToggleChargingStop
   - type: FixedIdentity
-    name: cm-job-name-xeno-boiler
+    name: cmu-job-name-xeno-unknown
   - type: RMCActionOrder
     id: CMXenoBoiler
 
@@ -198,7 +219,7 @@
   suffix: Sapper
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Boiler/boiler_sapper.rsi
+    sprite: _AU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -227,7 +248,7 @@
       590: Critical
       690: Dead
   - type: XenoZoom
-    zoom: 1.8, 1.8
+    zoom: 1.75, 1.75
     offsetLength: 0
     speed: 1
     doAfter: 0

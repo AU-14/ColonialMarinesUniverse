@@ -1179,7 +1179,7 @@ public sealed partial class CMUZLevelsSystem
             if (!viewer.LookUp)
                 continue;
 
-            SetLookUp(uid, false);
+            TryDisableLookUp(uid);
         }
 
     }

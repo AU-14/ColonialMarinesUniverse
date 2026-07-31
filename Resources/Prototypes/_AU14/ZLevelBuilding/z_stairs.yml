@@ -1,0 +1,121 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# Building overhaul (z-level): buildable z-level staircases.
+#
+# CMU traversal model (learned from how CMUMultiZStairs is placed on the multi-z maps):
+#   - A walk-through stair (CMUZLevelHighGround, inherited from CMUMultiZStairs) ALWAYS sits on the LOWER of
+#     the two levels it connects. Its descending height curve carries you UP when you walk onto its high end.
+#   - The tile directly above the stair (on the upper level) must be a HOLE (empty tile). The movement code
+#     returns as soon as it finds any solid tile on your current level, BEFORE it ever checks the stair on the
+#     level below - so descent is only possible through an open shaft. The upper level just needs floor around
+#     the hole to stand on.
+#
+# Therefore:
+#   AU14ZStairUp   - built on the lower level. It IS the traversal stair (keeps the high ground). Setup lays a
+#                    standing platform ring on the level above and leaves the shaft tile open, plus a beam here.
+#   AU14ZStairDown - built on the current level to reach the level below. The current tile becomes the open
+#                    shaft, so this entity is only a frame (NO high ground - otherwise it would push you UP).
+#                    Setup generates the level below, drops the real traversal stair (AU14ZStairPure) down
+#                    there, punches the shaft hole here, and places a beam here.
+#   AU14ZStairPure - the bare traversal stair (high ground, no ZStair setup). Placed on the connected lower
+#                    level by setup logic and by au_digdown. No ZStair means no recursive setup.
+#
+# The Construction component is REQUIRED for the AU14 construction-menu ghost to complete into this entity.
+
+# Bare walk-through stair. High ground, no setup. Placed on the LOWER level by setup logic / au_digdown.
+# Parented to the No-Preview variant so it does not reveal the level above when stood near.
+# Uses the CMUMultiZStairsSolo sprite (single-tile stair cap) per request.
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: AU14ZStairPure
+  name: z-level staircase
+  suffix: AU14 z-build, companion
+  description: A staircase connecting two z-levels. Walk onto it to traverse smoothly.
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_solo_cap
+    offset: 0,0.5
+
+# Frame placed over the open shaft on the current level for a DOWN stair. No high ground (it must not push
+# anyone up); it is purely a visual cap over the hole. Walking onto its tile drops you to the stair below.
+- type: entity
+  abstract: true
+  id: AU14ZStairFrameBase
+  name: z-level staircase frame
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Clickable
+  - type: Sprite
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_solo_cap
+    offset: 0,0.5
+    drawdepth: WallMountedItems
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      slowdown:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+
+# Up stair - built on the LOWER level. It is the traversal stair; setup lays the platform + open shaft above.
+# No-Preview variant so it does not reveal the level above.
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: AU14ZStairUp
+  name: z-level stairs (up)
+  suffix: AU14 z-build
+  description: A staircase leading up one z-level. Lays a standing platform above with an open shaft and a support beam here.
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_solo_cap
+    offset: 0,0.5
+  - type: ZStair
+    direction: 1
+    partnerProto: AU14ZStairPure
+  - type: Construction
+    graph: AU14ZStairUpGraph
+    node: stair
+
+# Down stair - a frame over an open shaft. Setup generates the level below and drops the real stair there.
+- type: entity
+  parent: AU14ZStairFrameBase
+  id: AU14ZStairDown
+  name: z-level stairs (down)
+  suffix: AU14 z-build
+  description: A stairwell leading down one z-level. Opens a shaft here, generates the level below, and places a return stair down there.
+  components:
+  # Slightly darker than the up/return stairs: this frame never carries you up itself (it is the cap over
+  # the descent shaft), so the tint is the at-a-glance cue for "this staircase leads DOWN".
+  # 🔧 TUNABLE: darkness of the down-stair sprite (white = no tint).
+  - type: Sprite
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: p_stair_solo_cap
+    offset: 0,0.5
+    drawdepth: WallMountedItems
+    color: "#A8A8A8"
+  - type: ZStair
+    direction: -1
+    partnerProto: AU14ZStairPure
+  - type: Construction
+    graph: AU14ZStairDownGraph
+    node: stair

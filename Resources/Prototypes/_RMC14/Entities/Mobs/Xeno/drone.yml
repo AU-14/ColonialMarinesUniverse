@@ -12,6 +12,8 @@
   name: Drone
   description: An alien drone.
   components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: MobState
     allowedStates:
     - Alive
@@ -26,6 +28,25 @@
     tags:
     - DoorBumpOpener
     - RMCSynthGrabbable
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaPurple
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 1
   - type: MeleeWeapon
     damage:
       groups:
@@ -105,9 +126,10 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.1
   - type: FixedIdentity
-    name: cm-job-name-xeno-drone
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT1
+  - type: CMUXenoZJump
 
 - type: entity
   parent: CMXenoDroneBase
@@ -117,7 +139,7 @@
     guides:
     - RMCGuideRoleDrone
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Drone/drone.rsi
+    sprite: _AU14/Mobs/Xenos/Drone/drone.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -148,6 +170,7 @@
     - DoorXenoResin
     - XenoStickyResin
     - XenoFastResin
+    - XenoCollapseResin
     - XenoResinSpikes
   - type: VentCrawler
     ventCrawlIcon: drone
@@ -160,7 +183,7 @@
   suffix: Gardener
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Drone/gardener_drone.rsi
+    sprite: _AU14/Mobs/Xenos/Drone/gardener_drone.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -224,7 +247,7 @@
   suffix: Healer
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Drone/healer_drone.rsi
+    sprite: _AU14/Mobs/Xenos/Drone/healer_drone.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive

@@ -47,7 +47,7 @@ public sealed partial class AcidBloodSplashSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<AcidBloodSplashComponent, DamageChangedEvent>(OnDamageChanged);
-        SubscribeLocalEvent<AcidBloodSplashComponent, BeingGibbedEvent>(OnGib);
+        SubscribeLocalEvent<AcidBloodSplashComponent, Content.Shared.Gibbing.BeingGibbedEvent>(OnGib);
 
         _bruteTypes.Clear();
 
@@ -108,7 +108,7 @@ public sealed partial class AcidBloodSplashSystem : EntitySystem
         }
     }
 
-    private void OnGib(Entity<AcidBloodSplashComponent> ent, ref BeingGibbedEvent args)
+    private void OnGib(Entity<AcidBloodSplashComponent> ent, ref Content.Shared.Gibbing.BeingGibbedEvent args)
     {
         if (!ent.Comp.IsActivateSplashOnGib)
             return;

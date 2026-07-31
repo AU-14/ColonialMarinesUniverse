@@ -92,11 +92,11 @@ namespace Content.Client.Construction.UI
         /// <summary>
         /// Constructs a new instance of <see cref="ConstructionMenuPresenter" />.
         /// </summary>
-        public ConstructionMenuPresenter()
+        public ConstructionMenuPresenter(IConstructionMenuView? view = null)
         {
             // This is a lot easier than a factory
             IoCManager.InjectDependencies(this);
-            _constructionView = new ConstructionMenu();
+            _constructionView = view ?? new ConstructionMenu();
             _whitelistSystem = _entManager.System<EntityWhitelistSystem>();
             _spriteSystem = _entManager.System<SpriteSystem>();
             _sawmill = _logManager.GetSawmill("construction.ui");
@@ -182,9 +182,12 @@ namespace Content.Client.Construction.UI
             var isEmptyCategory = string.IsNullOrEmpty(category) || category == ForAllCategoryName;
             _selectedCategory = isEmptyCategory ? string.Empty : category;
 
+            var filter = new ConstructionMenuFilterEvent(new HashSet<string>(), new HashSet<string>());
+            _constructionSystem!.QueryMenuExtensions(ref filter);
+
             foreach (var recipe in EnumerateRMCConstructionPrototypes())
             {
-                if (recipe.Hide)
+                if (recipe.Hide || filter.HiddenRecipes.Contains(recipe.ID))
                     continue;
 
                 if (_playerManager.LocalSession == null

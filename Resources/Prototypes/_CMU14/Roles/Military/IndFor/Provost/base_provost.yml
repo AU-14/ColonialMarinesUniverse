@@ -1,0 +1,30 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: CMUJobMilitaryBaseProvost
+  supervisors: au14-job-supervisors-govforplatco
+  joinNotifyCrew: false
+  setPreference: false
+  hidden: true
+  roundForce: PROVOST
+  roundSide: Indfor
+  marineAuthorityLevel: 8
+  accessGroups:
+  - ShipMasterAccess
+  - aulegacygroupcommand
+  - AU14GovforCommand
+  - AU14OpforCommand
+  - auadmin
+  - auheadsofcolony
+  roundComponents:
+  - type: RMCTrackable
+  - type: DemoSpecWhitelist
+  - type: GrenadeSpecWhitelist
+  - type: ScoutWhitelist
+  - type: SniperWhitelist
+  - type: PyroWhitelist
+  - type: MarineOrders
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pve

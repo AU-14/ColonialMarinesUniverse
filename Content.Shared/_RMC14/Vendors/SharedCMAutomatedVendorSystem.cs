@@ -69,6 +69,17 @@ namespace Content.Shared._RMC14.Vendors;
 
 public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 {
+    public void UpdateVendorFactionPointsCache(string faction, int newPoints)
+    {
+        var query = EntityQueryEnumerator<CMAutomatedVendorComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (!component.UseObjectivePoints || !string.Equals(component.Faction, faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+            component.CachedFactionWinPoints = newPoints;
+            Dirty(uid, component);
+        }
+    }
     [Dependency] private AccessReaderSystem _accessReader = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;

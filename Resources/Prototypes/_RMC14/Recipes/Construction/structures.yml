@@ -12,7 +12,7 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
 - type: construction
   parent: RMC
@@ -27,9 +27,9 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
-# Directional Windows
+  # Directional Windows
 - type: construction
   parent: RMC
   name: directional window
@@ -41,8 +41,8 @@
   description: A glass window. It looks thin and flimsy.
   canBuildInImpassable: true
   conditions:
-    - !type:EmptyOrWindowValidInTile
-    - !type:NoWindowsInTile
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
   objectType: Structure
   placementMode: SnapgridCenter
 
@@ -57,8 +57,8 @@
   description: A glass window reinforced with bracing rods. It looks rather strong.
   canBuildInImpassable: true
   conditions:
-    - !type:EmptyOrWindowValidInTile
-    - !type:NoWindowsInTile
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
   objectType: Structure
   placementMode: SnapgridCenter
 
@@ -76,7 +76,7 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: true
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
 - type: construction
   parent: RMC
@@ -91,9 +91,13 @@
   placementMode: SnapgridCenter
   canBuildInImpassable: true
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
-# Barricades
+  # Barricades
+  # AU14 building overhaul: the construction-menu barricade entries are hidden here (hide: true) and replaced by
+  # ghost-placed versions in _AU14/Buildables/au14_barricades.yml, so barricades use "Place construction ghost"
+  # instead of the RMC "Build here" radial. The RMC engineering-kit radial (rmcPrototype) is a separate build
+  # prototype and is unaffected.
 - type: construction
   parent: RMC
   name: Metal Barricade
@@ -106,9 +110,10 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeMetalRecipe
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCMetalBarricadeBuild
 
 - type: construction
@@ -123,9 +128,10 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadePlasteelRecipe
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCPlasteelBarricadeBuild
 
 - type: construction
@@ -140,9 +146,10 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeWoodRecipe
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCWoodenBarricadeBuild
 
 - type: construction
@@ -157,9 +164,10 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeMetalDoorRecipe
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCMetalBarricadeFoldableBuild
 
 - type: construction
@@ -174,9 +182,10 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadePlasteelDoorRecipe
   conditions:
-    - !type:TileNotBlocked
-    - !type:TileBarricadeClear
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
   rmcPrototype: RMCPlasteelBarricadeFoldableBuild
 
 #lighting
@@ -194,7 +203,7 @@
   canRotate: true
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked
 
 - type: construction
   parent: RMC
@@ -210,4 +219,4 @@
   canRotate: true
   canBuildInImpassable: false
   conditions:
-    - !type:TileNotBlocked
+  - !type:TileNotBlocked

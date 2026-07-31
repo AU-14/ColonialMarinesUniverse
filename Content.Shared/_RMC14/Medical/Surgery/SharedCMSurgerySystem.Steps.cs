@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Body;
+using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Inventory;
@@ -285,6 +286,27 @@ public abstract partial class SharedCMSurgerySystem
 
     public bool CanPerformStep(EntityUid user, EntityUid body, ProtoId<OrganCategoryPrototype>? part, EntityUid step, bool doPopup, out string? popup, out StepInvalidReason reason, out HashSet<EntityUid>? validTools)
     {
+        return CanPerformStep(user, body, part, step, doPopup, null, out popup, out reason, out validTools);
+    }
+
+    public bool CanPerformStep(EntityUid user, EntityUid body, BodyPartType part, EntityUid step, bool doPopup, EntityUid? usedTool, out string? popup, out StepInvalidReason reason, out HashSet<EntityUid>? validTools)
+    {
+        ProtoId<OrganCategoryPrototype>? category = part switch
+        {
+            BodyPartType.Head => "Head",
+            BodyPartType.Torso => "Torso",
+            BodyPartType.Arm => "ArmLeft",
+            BodyPartType.Hand => "HandLeft",
+            BodyPartType.Leg => "LegLeft",
+            BodyPartType.Foot => "FootLeft",
+            _ => null,
+        };
+
+        return CanPerformStep(user, body, category, step, doPopup, usedTool, out popup, out reason, out validTools);
+    }
+
+    private bool CanPerformStep(EntityUid user, EntityUid body, ProtoId<OrganCategoryPrototype>? part, EntityUid step, bool doPopup, EntityUid? usedTool, out string? popup, out StepInvalidReason reason, out HashSet<EntityUid>? validTools)
+    {
         var slot = part?.Id switch
         {
             "Head" => SlotFlags.HEAD,
@@ -296,7 +318,11 @@ public abstract partial class SharedCMSurgerySystem
             _ => SlotFlags.NONE
         };
 
-        var check = new CMSurgeryCanPerformStepEvent(user, body, GetTools(user), slot);
+        var tools = GetTools(user);
+        if (usedTool is { } tool && !tools.Contains(tool))
+            tools.Add(tool);
+
+        var check = new CMSurgeryCanPerformStepEvent(user, body, tools, slot);
         RaiseLocalEvent(step, ref check);
         popup = check.Popup;
         validTools = check.ValidTools;

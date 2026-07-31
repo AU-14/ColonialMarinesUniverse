@@ -68,6 +68,7 @@
 
 - type: reaction
   id: CMDexalin
+  quantized: true
   reactants:
     RMCOxygen:
       amount: 2
@@ -147,6 +148,222 @@
     CMTricordrazine: 2
 
 - type: reaction
+  id: CMUParacetamol
+  reactants:
+    CMInaprovaline:
+      amount: 1
+    RMCHydrogen:
+      amount: 1
+    RMCSugar:
+      amount: 1
+  products:
+    CMUParacetamol: 3
+
+- type: reaction
+  id: CMUTramadol
+  reactants:
+    CMUParacetamol:
+      amount: 1
+    CMDylovene:
+      amount: 1
+    RMCHydrogen:
+      amount: 1
+  products:
+    CMUTramadol: 3
+
+- type: reaction
+  id: CMUOxycodone
+  reactants:
+    CMUTramadol:
+      amount: 1
+    CMEpinephrine:
+      amount: 1
+    RMCEthanol:
+      amount: 1
+  products:
+    CMUOxycodone: 3
+
+- type: reaction
+  id: CMUFentanylPrecursor
+  minTemp: 350
+  reactants:
+    CMUOxycodone:
+      amount: 1
+    RMCCLF3:
+      amount: 1
+  products:
+    CMUFentanylPrecursor: 2
+
+- type: reaction
+  id: CMUFentanyl
+  minTemp: 400
+  maxTemp: 420
+  reactants:
+    CMUFentanylPrecursor:
+      amount: 1
+    CMEpinephrine:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+  products:
+    CMUFentanyl: 1
+
+- type: reaction
+  id: CMUMethPrecursor
+  minTemp: 370
+  reactants:
+    RMCMethylphenidate:
+      amount: 2
+    RMCChlorine:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+  products:
+    CMUMethPrecursor: 3
+
+- type: reaction
+  id: CMUMethBase
+  minTemp: 400
+  reactants:
+    CMUMethPrecursor:
+      amount: 1
+    RMCSulphuricAcid:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUMethBase: 2
+
+- type: reaction
+  id: CMUMethamphetamine
+  maxTemp: 320
+  reactants:
+    CMUMethBase:
+      amount: 1
+    RMCEthanol:
+      amount: 1
+  products:
+    CMUMethamphetamine: 2
+
+- type: reaction
+  id: CMUSleen
+  reactants:
+    CMUOxycodone:
+      amount: 1
+    CMUTramadol:
+      amount: 1
+    RMCEthanol:
+      amount: 1
+    CMInaprovaline:
+      amount: 1
+  products:
+    CMUSleen: 4
+
+- type: reaction
+  id: CMUSoporific
+  reactants:
+    RMCChloralhydrate:
+      amount: 1
+    RMCChlorine:
+      amount: 1
+    RMCEthanol:
+      amount: 1
+    RMCSugar:
+      amount: 1
+  products:
+    CMUSoporific: 4
+
+- type: reaction
+  id: CMUHepatocytin
+  reactants:
+    CMDylovene:
+      amount: 1
+    CMBicaridine:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUHepatocytin: 3
+
+- type: reaction
+  id: CMUPulmovine
+  reactants:
+    CMDexalinPlus:
+      amount: 1
+    CMBicaridine:
+      amount: 1
+    RMCOxygen:
+      amount: 1
+  products:
+    CMUPulmovine: 3
+
+- type: reaction
+  id: CMUNephronate
+  reactants:
+    CMDylovene:
+      amount: 1
+    CMEpinephrine:
+      amount: 1
+    RMCPotassium:
+      amount: 1
+  products:
+    CMUNephronate: 3
+
+- type: reaction
+  id: CMUCardiocaine
+  reactants:
+    CMEpinephrine:
+      amount: 1
+    CMBicaridine:
+      amount: 1
+    RMCIron:
+      amount: 1
+  products:
+    CMUCardiocaine: 3
+
+- type: reaction
+  id: CMUOsteoCalc
+  reactants:
+    CMBicaridine:
+      amount: 1
+    CMKelotane:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+  products:
+    CMUOsteoCalc: 3
+
+- type: reaction
+  id: CMUAlkysine
+  reactants:
+    RMCChlorine:
+      amount: 1
+    RMCNitrogen:
+      amount: 1
+    CMDylovene:
+      amount: 1
+  products:
+    CMUAlkysine: 3
+
+- type: reaction
+  id: CMUBiogenicMatrix
+  reactants:
+    CMBicaridine:
+      amount: 2
+    CMDermaline:
+      amount: 2
+    CMUOsteoCalc:
+      amount: 2
+    Protein:
+      amount: 3
+    RMCIron:
+      amount: 1
+    Water:
+      amount: 2
+  products:
+    CMUBiogenicMatrix: 10
+
+- type: reaction
   id: CMMeralyne
   reactants:
     RMCCarbon:
@@ -187,8 +404,6 @@
 - type: reaction
   id: RMCMethylphenidate
   reactants:
-    RMCBlackGoo: # TODO RMC14 remove this later
-      amount: 0.5
     RMCMindbreakerToxin:
       amount: 1
     RMCHydrogen:
@@ -199,8 +414,6 @@
 - type: reaction
   id: RMCCitalopram
   reactants:
-    RMCBlackGoo: # TODO RMC14 remove this later
-      amount: 0.5
     RMCMindbreakerToxin:
       amount: 1
     RMCCarbon:
@@ -211,8 +424,6 @@
 - type: reaction
   id: RMCParoxetine
   reactants:
-    RMCBlackGoo: # TODO RMC14 remove this later
-      amount: 0.5
     RMCMindbreakerToxin:
       amount: 1
     RMCOxygen:

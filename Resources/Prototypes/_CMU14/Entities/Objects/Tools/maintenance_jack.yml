@@ -1,0 +1,124 @@
+- type: entity
+  parent: [BaseItem, RMCBaseMeleeWeapon]
+  id: AU14MaintenanceJack
+  name: K92 Maintenance Jack
+  description: A small carryable maintenance jack used to service vehicles, can also act as a bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks.
+  suffix: CMU
+  components:
+  - type: Sprite
+    sprite: _AU14/Objects/Tools/maintenance_jack.rsi
+    state: icon
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - MaintenanceJack
+  - type: Clothing
+    quickEquip: false
+    slots:
+      - Belt
+      - Suitstorage
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/crowbar_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/crowbar_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/crowbar_drop.ogg
+      params:
+        volume: -4
+  - type: MeleeWeapon
+    wideAnimationRotation: 90
+    attackRate: 0.87
+    damage:
+      types:
+        Blunt: 27
+        Structural: 36
+    soundHit:
+      collection: GenericHit
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
+  - type: ToolTileCompatible
+    delay: 0.5
+  - type: Tool
+    qualities:
+      - VehicleServicing
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+  - type: Prying
+    speedModifier: 2
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+
+- type: entity
+  parent: AU14MaintenanceJack
+  id: AU14MaintenanceJackSpecial
+  name: K92-S Special Maintenance Jack
+  description: A very-heavy combination crowbar, wrench, and generally large bludgeoning device that comes in handy in emergencies. Can be used to disengage door jacks. Incredibly hefty, though.
+  suffix: CMU, Synth
+  components:
+  - type: RMCSynthItemRestriction
+  - type: WhitelistPickupBy
+    whitelist:
+      components:
+        - Synth
+  - type: Tag
+    tags:
+    - Wrench
+    - Crowbar
+    - MaintenanceJack
+  - type: Tool
+    qualities:
+      - Prying
+      - Anchoring
+      - VehicleServicing
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+  - type: Prying
+    pryPowered: true
+    force: true
+    speedModifier: 4
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+  - type: MultipleTool
+    statusShowBehavior: true
+    entries:
+      - behavior: Prying
+        sprite:
+          sprite: _AU14/Objects/Tools/maintenance_jack.rsi
+          state: icon
+        useSound: /Audio/Items/crowbar.ogg
+      - behavior: Anchoring
+        sprite:
+          sprite: _AU14/Objects/Tools/maintenance_jack.rsi
+          state: wrench
+        useSound: /Audio/Items/ratchet.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: High
+    heavyMelee:
+      contact: Crush
+      penetration: None
+      energy: High
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 225
+        mask:
+        - MobMask
+        layer:
+        - MobLayer

@@ -1,0 +1,79 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostEnforcerMedic
+  name: cmu-job-name-corp-provost-enforcer-medic
+  description: cmu-ghost-role-information-provost-squad-description
+  icon: CMUJobIconProvostEnforcer
+  startingGear: CMUGearProvostEnforcerMedic
+  playTimeTracker: CMJobProvostEnforcer
+  spawnMenuRoleName: Provost Enforcer (Medic)
+  ranks:
+    CMURankProvostProvostEnforcer: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-enforcer-medic
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostEnforcerMedic
+  name: provost role enforcer (medic)
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostEnforcerMedic
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostEnforcerMedic
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-enforcer-medic
+    description: cmu-ghost-role-information-provost-squad-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostEnforcerMedic
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostEnforcerMedic
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: RMCGlassesMedicalHUDGlasses
+    ears: AU14HeadsetProvostAllCommand
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvostLight
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: CMUIDCardProvostEnforcerMedic
+    belt: AU14BeltMedicBagSupportSynthBlack
+    back: CMBackpackMarineMedic
+    pocket1: CMSurgicalCaseFilled
+    pocket2: RMCPouchShotgunLargeSlugs
+  storage:
+    back:
+    - AU14CMDefibrillator
+    - AU14PillCanisterMeralyne
+    - AU14PillCanisterDermaline
+    - CMPillCanisterDylovene
+    belt:
+    - CMMaskSterile
+    - CMPillCanisterDexalin
+    - CMPillCanisterInaprovaline
+  inhand:
+  - CMU14DropSurgicalBlack

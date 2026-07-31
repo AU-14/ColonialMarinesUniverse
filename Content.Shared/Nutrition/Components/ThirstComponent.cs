@@ -66,6 +66,29 @@ public sealed partial class ThirstComponent : Component
         {ThirstThreshold.Parched, "Parched"},
         {ThirstThreshold.Dead, "Parched"},
     };
+
+    /// <summary>
+    /// Movement speed multiplier applied while <see cref="CurrentThirstThreshold"/> is Thirsty or worse.
+    /// How soon this kicks in is entirely a function of <see cref="BaseDecayRate"/> and the gap between the
+    /// Okay and Thirsty entries of <see cref="ThirstThresholds"/>.
+    /// </summary>
+    [DataField]
+    public float ThirstySlowdownModifier = 0.9f;
+
+    /// <summary>
+    /// Movement speed multiplier applied while <see cref="CurrentThirstThreshold"/> is Parched or worse.
+    /// Stacks with <see cref="ThirstySlowdownModifier"/>.
+    /// </summary>
+    [DataField]
+    public float ParchedSlowdownModifier = 0.8f;
+
+    /// <summary>
+    /// How often the "you need to drink" reminder popup repeats while Thirsty or worse.
+    /// The actual throttle timer is shared with Hunger's reminder via <see cref="NutritionReminderComponent"/>
+    /// so the two don't stack in the same tick.
+    /// </summary>
+    [DataField]
+    public TimeSpan ReminderPopupInterval = TimeSpan.FromSeconds(60);
 }
 
 [Flags]

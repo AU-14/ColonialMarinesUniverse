@@ -10,6 +10,15 @@ namespace Content.Shared.Popups;
 /// </summary>
 public abstract partial class SharedPopupSystem : EntitySystem
 {
+    /// <summary>
+    /// Shows a popup to the local client. Client-side callers historically used this
+    /// convenience overload through <see cref="SharedPopupSystem"/>.
+    /// </summary>
+    public void PopupCursor(string? message, PopupType type = PopupType.Small)
+    {
+        PopupCursor(message, (EntityUid?) null, type);
+    }
+
     [Dependency] protected IGameTiming Timing = default!;
 
     /// <summary>

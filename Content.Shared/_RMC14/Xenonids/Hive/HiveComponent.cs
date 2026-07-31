@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared._RMC14.Xenonids.Construction.Tunnel;
 using Content.Shared.FixedPoint;
+using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -12,6 +13,8 @@ namespace Content.Shared._RMC14.Xenonids.Hive;
 [Access(typeof(SharedXenoHiveSystem), typeof(SharedXenoPylonSystem), typeof(XenoTunnelSystem))]
 public sealed partial class HiveComponent : Component
 {
+    [DataField, AutoNetworkedField, ViewVariables]
+    public bool Corrupted;
     [DataField, AutoNetworkedField]
     public Dictionary<int, FixedPoint2> TierLimits = new()
     {
@@ -32,7 +35,22 @@ public sealed partial class HiveComponent : Component
     public HashSet<EntProtoId> AnnouncedUnlocks = new();
 
     [DataField, AutoNetworkedField]
+    public bool CanMakeAlliances;
+
+    [AutoNetworkedField, ViewVariables]
+    public HashSet<ProtoId<NpcFactionPrototype>> Allies = [];
+
+    [AutoNetworkedField, ViewVariables]
+    public HashSet<EntityUid> IndividualAllies = [];
+
+    [DataField, AutoNetworkedField]
     public List<TimeSpan> AnnouncementsLeft = [];
+
+    [DataField, AutoNetworkedField, ViewVariables]
+    public Color HiveColor = Color.White;
+
+    [DataField, AutoNetworkedField, ViewVariables]
+    public Color HiveUIColor = Color.FromHex("#921992");
 
     [DataField, AutoNetworkedField]
     public bool AnnouncedQueenDeathCooldownOver;

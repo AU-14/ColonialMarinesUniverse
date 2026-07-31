@@ -134,4 +134,11 @@
                         Scale="0.5 0.5"/>
         </PanelContainer>
     </BoxContainer>
+    <BoxContainer Name="BalanceRatingContainer"
+                  Access="Public"
+                  Orientation="Vertical"
+                  SeparationOverride="4"
+                  HorizontalAlignment="Left"
+                  VerticalAlignment="Bottom"
+                  MouseFilter="Ignore" />
 </lobbyUi:LobbyGui>

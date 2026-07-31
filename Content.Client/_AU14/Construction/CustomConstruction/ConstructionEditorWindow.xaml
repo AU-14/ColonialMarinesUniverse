@@ -1,0 +1,108 @@
+<!--
+SPDX-License-Identifier: AGPL-3.0-only
+Copyright (c) 2026 wray-git
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'construction-editor-title'}"
+               MinSize="440 520">
+    <PanelContainer Name="RootPanel" HorizontalExpand="True" VerticalExpand="True">
+    <BoxContainer Orientation="Vertical" Margin="8 8 8 8">
+        <Label Name="ItemLabel" StyleClasses="LabelKeyText" Margin="0 0 0 6"/>
+
+        <!-- Spawnlist -->
+        <Label Text="{Loc 'construction-editor-spawnlist'}"/>
+        <OptionButton Name="SpawnlistDropdown" HorizontalExpand="True"/>
+        <BoxContainer Name="NewSpawnlistRow" Orientation="Horizontal" Visible="False" Margin="0 2 0 0">
+            <LineEdit Name="NewSpawnlistEdit" HorizontalExpand="True" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-new-spawnlist'}"/>
+            <Button Name="ConfirmSpawnlistButton" Text="{Loc 'construction-editor-confirm'}"/>
+        </BoxContainer>
+
+        <!-- Category -->
+        <Label Text="{Loc 'construction-editor-category'}" Margin="0 6 0 0"/>
+        <OptionButton Name="CategoryDropdown" HorizontalExpand="True"/>
+        <LineEdit Name="NewCategoryEdit" Visible="False" Margin="0 2 0 0"
+                  PlaceHolder="{Loc 'construction-editor-new-category'}"/>
+
+        <!-- Steps -->
+        <Label Text="{Loc 'construction-editor-steps'}" Margin="0 8 0 0"/>
+        <ItemList Name="StepsList" VerticalExpand="True" MinHeight="110" Margin="0 0 0 2"/>
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 4">
+            <Button Name="RemoveStepButton" Text="{Loc 'construction-editor-remove-step'}" HorizontalExpand="True" Margin="0 0 2 0"/>
+            <Button Name="ClearStepsButton" Text="{Loc 'construction-editor-clear-steps'}" HorizontalExpand="True"/>
+        </BoxContainer>
+
+        <!-- Add material step -->
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 2">
+            <OptionButton Name="MaterialDropdown" HorizontalExpand="True" Margin="0 0 2 0"/>
+            <LineEdit Name="AmountEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-amount'}"/>
+            <LineEdit Name="MatDoAfterEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-doafter'}"/>
+            <Button Name="AddMaterialButton" Text="{Loc 'construction-editor-add-material'}"/>
+        </BoxContainer>
+        <Label Name="MaterialWarning" Visible="False" Margin="0 0 0 2"/>
+
+        <!-- Add tool step -->
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
+            <OptionButton Name="ToolDropdown" HorizontalExpand="True" Margin="0 0 2 0"/>
+            <LineEdit Name="ToolDoAfterEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-doafter'}"/>
+            <Button Name="AddToolButton" Text="{Loc 'construction-editor-add-tool'}"/>
+        </BoxContainer>
+
+        <!-- Custom material / tool by ANY entity prototype (picked from the entity selector).
+             Own amount/seconds boxes: amount applies to the custom MATERIAL (consumed copies), the
+             seconds box applies to whichever of the two is picked. -->
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
+            <LineEdit Name="CustomAmountEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-amount'}"/>
+            <LineEdit Name="CustomDoAfterEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-doafter'}"/>
+            <Button Name="PickEntityMaterialButton" Text="{Loc 'construction-editor-pick-entity-material'}"
+                    HorizontalExpand="True" Margin="0 0 2 0"/>
+            <Button Name="PickEntityToolButton" Text="{Loc 'construction-editor-pick-entity-tool'}"
+                    HorizontalExpand="True"/>
+        </BoxContainer>
+
+        <!-- Deconstruction steps (structures only). Empty = default single crowbar. -->
+        <Label Name="DeconstructHeader" Text="{Loc 'construction-editor-deconstruct-steps'}" StyleClasses="LabelKeyText" Margin="0 4 0 0"/>
+        <ItemList Name="DeconstructStepsList" MinHeight="60" Margin="0 0 0 2"/>
+        <BoxContainer Name="DeconstructToolRow" Orientation="Horizontal" Margin="0 0 0 2">
+            <OptionButton Name="DeconstructToolDropdown" HorizontalExpand="True" Margin="0 0 2 0"/>
+            <LineEdit Name="DeconstructDoAfterEdit" MinWidth="50" Margin="0 0 2 0"
+                      PlaceHolder="{Loc 'construction-editor-doafter'}"/>
+            <Button Name="AddDeconstructToolButton" Text="{Loc 'construction-editor-add-deconstruct-tool'}"/>
+        </BoxContainer>
+        <BoxContainer Name="DeconstructButtonRow" Orientation="Horizontal" Margin="0 0 0 6">
+            <Button Name="PickDeconstructEntityToolButton" Text="{Loc 'construction-editor-pick-deconstruct-entity-tool'}"
+                    HorizontalExpand="True" Margin="0 0 2 0"/>
+            <Button Name="RemoveDeconstructStepButton" Text="{Loc 'construction-editor-remove-deconstruct-step'}" HorizontalExpand="True" Margin="0 0 2 0"/>
+            <Button Name="ClearDeconstructStepsButton" Text="{Loc 'construction-editor-clear-deconstruct-steps'}" HorizontalExpand="True"/>
+        </BoxContainer>
+
+        <!-- Health (optional): overrides the built structure's destruction threshold. Blank = inherit from parent. -->
+        <BoxContainer Orientation="Horizontal" Margin="0 4 0 6">
+            <Label Text="{Loc 'construction-editor-health'}" VerticalAlignment="Center" Margin="0 0 4 0"/>
+            <LineEdit Name="HealthEdit" MinWidth="80" HorizontalExpand="True"
+                      PlaceHolder="{Loc 'construction-editor-health-placeholder'}"/>
+        </BoxContainer>
+
+        <!-- Confirm -->
+        <BoxContainer Orientation="Horizontal">
+            <Button Name="OkButton" Text="{Loc 'construction-editor-ok'}" HorizontalExpand="True" Margin="0 0 2 0"/>
+            <Button Name="CancelButton" Text="{Loc 'construction-editor-cancel'}" HorizontalExpand="True"/>
+        </BoxContainer>
+
+        <!-- Danger zone: bulk-remove the selected spawnlist/category. Gated by the checkbox + a 3s warning. -->
+        <Label Text="{Loc 'construction-editor-danger'}" StyleClasses="LabelKeyText" Margin="0 8 0 2"/>
+        <CheckBox Name="RemoveIncludeAllCheck" Text="{Loc 'construction-editor-remove-include-all'}"/>
+        <Label Name="RemoveWarningLabel" Visible="False" Margin="0 2 0 2"/>
+        <BoxContainer Orientation="Horizontal" Margin="0 0 0 2">
+            <Button Name="RemoveGroupButton" Text="{Loc 'construction-editor-remove-group'}" HorizontalExpand="True" Margin="0 0 2 0"/>
+            <Button Name="RemoveGroupConfirmButton" Text="{Loc 'construction-editor-remove-confirm'}" HorizontalExpand="True" Visible="False" Disabled="True"/>
+        </BoxContainer>
+    </BoxContainer>
+    </PanelContainer>
+</DefaultWindow>

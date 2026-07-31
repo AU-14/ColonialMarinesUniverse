@@ -19,6 +19,11 @@ public sealed partial class SharedEntityEffectsSystem : EntitySystem, IEntityEff
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedEntityConditionsSystem _condition = default!;
 
+    public void ApplyLegacyEffect(EntityUid target, EntityEffect effect, float scale)
+    {
+        effect.Effect(new EntityEffectBaseArgs(target, EntityManager));
+    }
+
     public override void Initialize()
     {
         SubscribeLocalEvent<ReactiveComponent, ReactionEntityEvent>(OnReactive);

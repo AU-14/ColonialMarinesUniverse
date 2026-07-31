@@ -36,30 +36,96 @@
     overrideDir: South
     enableOverrideDir: false
 
-# WeYa
+# WeYa PMC
 - type: entity
   parent: RMCOverwatchConsole
   id: RMCOverwatchConsoleWeYa
-  suffix: WeYa
+  suffix: WeYu
   components:
   - type: OverwatchConsole
     canOrbitalBombardment: false
     group: WeYa
-  - type: AccessReader
-    access: [ [ "RMCAccessWeYa" ] ]
-  - type: RequiresSkill
-    skills:
-      RMCSkillOverwatch: 0 # So that CL may use it.
+  - type: TacticalMapComputer
+    faction: MARINES
 
 - type: entity
   parent: RMCOverwatchConsoleWeYa
   id: RMCOverwatchConsoleWeYaRotating
-  suffix: WeYa, Rotating
+  suffix: WeYu, Rotating
   components:
   - type: Sprite
     overrideDir: South
     enableOverrideDir: false
 
+# Govfor
+- type: entity
+  parent: RMCOverwatchConsole
+  id: RMCOverwatchConsoleGovfor
+  suffix: Govfor
+  components:
+  - type: TacticalMapComputer
+    faction: govfor
+  - type: OverwatchConsole
+    canOrbitalBombardment: true
+    group: GOVFOR
+  - type: AU14CallsignConsole
+    faction: govfor
+  # child UserInterface overrides replace the whole interfaces dict, so the
+  # parent keys are redeclared alongside the callsign directory
+  - type: UserInterface
+    interfaces:
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
+
+- type: entity
+  parent: RMCOverwatchConsoleGovfor
+  id: RMCOverwatchConsoleGovforRotating
+  suffix: Govfor, Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false
+  - type: TacticalMapComputer
+    faction: govfor
+# Opfor
+- type: entity
+  parent: RMCOverwatchConsole
+  id: RMCOverwatchConsoleOpfor
+  suffix: Opfor
+  components:
+  - type: OverwatchConsole
+    canOrbitalBombardment: false
+    group: OPFOR
+  - type: TacticalMapComputer
+    faction: opfor
+  - type: AU14CallsignConsole
+    faction: opfor
+  - type: UserInterface
+    interfaces:
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
+- type: entity
+  parent: RMCOverwatchConsoleOpfor
+  id: RMCOverwatchConsoleOpforRotating
+  suffix: Opfor, Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false
+  - type: TacticalMapComputer
+    faction: opfor
 # RCM
 - type: entity
   parent: RMCOverwatchConsole
@@ -68,7 +134,7 @@
   components:
   - type: OverwatchConsole
     canOrbitalBombardment: false
-    group: Whiskey Troop
+    group: Gamma Troop
 
 - type: entity
   parent: RMCOverwatchConsoleRCM

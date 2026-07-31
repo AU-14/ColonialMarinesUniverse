@@ -110,6 +110,11 @@ public sealed partial class VehicleSystem : EntitySystem
             return;
         }
 
+        var entryAttempt = new VehicleEntryAttemptEvent(args.User, entryIndex);
+        RaiseLocalEvent(ent.Owner, ref entryAttempt);
+        if (entryAttempt.Cancelled)
+            return;
+
         if (!HasComp<GhostComponent>(args.User) &&
             !TryPrepareEnter(ent, args.User, entryIndex, popup: true, out _, out _, out _, out _, out _))
         {
@@ -566,6 +571,11 @@ public sealed partial class VehicleSystem : EntitySystem
         if (!TryGetExitCoordinates(ent, enter, vehicleUid, out var exitCoords, out var exitMapCoords))
             return false;
 
+        var exitAttempt = new VehicleExitAttemptEvent(user, ent.Owner);
+        RaiseLocalEvent(vehicleUid, ref exitAttempt);
+        if (exitAttempt.Cancelled)
+            return false;
+
         if (!HasComp<GhostComponent>(user) && IsExitDestinationBlocked(exitCoords, vehicleUid, user))
         {
             _popup.PopupEntity(Loc.GetString("rmc-vehicle-exit-blocked"), user, user, PopupType.SmallCaution);
@@ -574,6 +584,9 @@ public sealed partial class VehicleSystem : EntitySystem
 
         _rmcTeleporter.HandlePulling(user, exitMapCoords);
         UntrackOccupant(user, vehicleUid);
+
+        var exited = new VehicleExitedEvent(user, ent.Owner, exitMapCoords);
+        RaiseLocalEvent(vehicleUid, ref exited);
         return true;
     }
 

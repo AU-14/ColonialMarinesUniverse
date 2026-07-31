@@ -1,4 +1,4 @@
-# MSbuild binlog files
+# MSBuild binlog files
 *.binlog
 
 ## Ignore Visual Studio temporary files, build results, and
@@ -295,15 +295,15 @@ ehthumbs.db
 # Merge driver stuff
 Content.Tools/test/out.yml
 
-# Local changelog Discord debug files.
-Resources/Changelog/Old.yml
-Resources/Changelog/DiscordDebug.md
-
 # Windows
 desktop.ini
 
 # Images generated using the MapRenderer
 Resources/MapImages
+
+# AU14 in-game construction editor output is runtime/server data.
+# Live servers restore their own generated entries from their database.
+Resources/Prototypes/_AU14/CustomConstruction/Generated/
 
 ## Docfx stuff
 /Content.Docfx/api/
@@ -311,11 +311,13 @@ Resources/MapImages
 
 *.bak
 
-# Shader error output
-error.glsl
-
 # Direnv stuff
 .direnv/
 
-# C# Dev Kit cache file
-*.lscache
+# Vibe stuff
+settings.local.json
+yaml-linter-stderr.txt
+yaml-linter-stdout.txt
+pr1600_inline.json
+pr1600_issue.json
+pr1600_reviews.json

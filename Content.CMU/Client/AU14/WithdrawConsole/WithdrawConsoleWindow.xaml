@@ -1,0 +1,44 @@
+<withdrawConsole:WithdrawConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:withdrawConsole="clr-namespace:Content.Client.AU14.WithdrawConsole"
+    Title="Withdraw Console" MinSize="360 280">
+    <BoxContainer Orientation="Vertical" Margin="8 8 8 8" SeparationOverride="6">
+
+        <Label Name="StatusLabel" Access="Public"
+               Text="Console locked."
+               HorizontalAlignment="Center"
+               StyleClasses="LabelBig" />
+
+        <Label Name="SwipeCountLabel" Access="Public"
+               Text="Swipe two authorized IDs to unlock."
+               HorizontalAlignment="Center" />
+
+        <Label Name="TimerLabel" Access="Public"
+               Text=""
+               HorizontalAlignment="Center"
+               StyleClasses="LabelBig" />
+
+        <Control MinSize="0 8" />
+
+        <Button Name="ToggleWithdrawButton" Access="Public"
+                Text="Initiate Withdraw Protocol"
+                HorizontalExpand="True"
+                Disabled="True" />
+
+        <Button Name="CancelButton" Access="Public"
+                Text="Cancel Withdrawal"
+                HorizontalExpand="True"
+                Disabled="True"
+                Visible="False"
+                StyleClasses="Caution" />
+
+        <Control MinSize="0 4" />
+
+        <Button Name="StalemateButton" Access="Public"
+                Text="Toggle Stalemate"
+                HorizontalExpand="True"
+                Disabled="True" />
+
+    </BoxContainer>
+</withdrawConsole:WithdrawConsoleWindow>

@@ -11,6 +11,8 @@
   name: Hivelord
   description: A builder of really big hives.
   components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: MobState
     allowedStates:
     - Alive
@@ -84,6 +86,29 @@
     size: Big
   - type: RMCXenoDamageVisuals
     prefix: hivelord
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaPurple
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaPhero
+          Quantity: 200
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 1
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -91,7 +116,7 @@
   - type: XenoInhands
     prefix: hivelord
   - type: FixedIdentity
-    name: cm-job-name-xeno-hivelord
+    name: cmu-job-name-xeno-unknown
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: RMCSurgeryXenoHeart
@@ -106,7 +131,7 @@
     guides:
     - RMCGuideRoleHivelord
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Hivelord/hivelord.rsi
+    sprite: _AU14/Mobs/Xenos/Hivelord/hivelord.rsi # AU14-Edit
   - type: Xeno
     role: CMXenoHivelord
     actionIds:
@@ -132,6 +157,7 @@
     - DoorXenoResinThick
     - XenoStickyResin
     - XenoFastResin
+    - XenoCollapseResin
     - XenoResinSpikes
     - HiveAcidPillarXeno
     canOrderConstruction:
@@ -148,6 +174,7 @@
     plasmaTransferDelay: 0.5
   - type: AcidTrap
   - type: XenoEvolution
+    max: 500
     strains:
     - CMXenoHivelordResinWhisperer
     - CMXenoHivelordDesigner
@@ -161,7 +188,7 @@
   components:
   - type: CanBuildThickFromConstructNode
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Hivelord/resin_whisperer_hivelord.rsi
+    sprite: _AU14/Mobs/Xenos/Hivelord/resin_whisperer_hivelord.rsi # AU14-Edit
   - type: Xeno
     role: CMXenoHivelord
     actionIds:
@@ -185,6 +212,7 @@
     - DoorXenoResin
     - XenoStickyResin
     - XenoFastResin
+    - XenoCollapseResin
     - XenoResinSpikes
     - XenoWeedsSource
     canOrderConstruction:
@@ -219,7 +247,7 @@
     guides:
     - RMCGuideRoleDesigner
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Hivelord/designer_hivelord.rsi
+    sprite: _AU14/Mobs/Xenos/Hivelord/designer_hivelord.rsi # AU14-Edit
   - type: Xeno
     role: CMXenoHivelord
     actionIds:
@@ -279,8 +307,8 @@
     plasmaRegenOnWeeds: 5.5
     plasmaTransferDelay: 0.5
   - type: XenoPheromones
-    pheromonesMultiplier: 3.5
-    pheroSuffix: designer
+    pheromonesMultiplier: 3
+    pheroSuffix: strong
   - type: Tackle
     max: 4
     chance: 0.45

@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Rest;
@@ -57,7 +58,7 @@ public sealed partial class PlasmaTreeSystem : EntitySystem
         {
             if (!_hive.FromSameHive(ent, nearbyEntity) ||
                 !HasComp<XenoComponent>(nearbyEntity) ||
-                !HasComp<XenoRestingComponent>(nearbyEntity) ||
+                !(HasComp<XenoRestingComponent>(nearbyEntity) || HasComp<XenoAttachedOvipositorComponent>(nearbyEntity)) ||
                 !TryComp<XenoPlasmaComponent>(nearbyEntity, out var plasmaComp) ||
                 plasmaComp.Plasma == plasmaComp.MaxPlasma ||
                 !HasComp<MobStateComponent>(nearbyEntity) ||
@@ -85,7 +86,7 @@ public sealed partial class PlasmaTreeSystem : EntitySystem
             BreakOnMove = true,
             MovementThreshold = 0.5f,
             DuplicateCondition = DuplicateConditions.SameEvent,
-            TargetEffect = "RMCEffectHealBusy",
+            TargetEffect = "RMCEffectHealPlasma",
         };
 
         if (_doafter.TryStartDoAfter(recover, out var id))

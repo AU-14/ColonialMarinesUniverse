@@ -2,24 +2,24 @@
   parent: RMCBaseEquipmentCase
   id: CMSniperEquipmentCase
   name: sniper equipment case
-  description: "A large case containing your very own long-range M96S sniper rifle, M45 ghillie armor and helmet, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  description: "A large case containing your very own long-range M96S sniper rifle, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
   components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,3
   - type: StorageFill
     contents:
-    - id: CMArmorM45
-    - id: CMArmorHelmetM45
-    - id: CMGlassesM42ScoutSight
+    - id: RMCVisorNightVision
     - id: CMMagazineSniperM96S
+      amount: 8
     - id: CMMagazineSniperM96SIncendiary
-      amount: 2
+      amount: 4
     - id: CMMagazineSniperM96SFlak
-      amount: 2
+      amount: 4
     - id: CMBackpackSniper
-    - id: RMCMK80
-    - id: CMMagazinePistolMK80
-      amount: 2
     - id: CMM96SSniperRifle
-    - id: RMCKitSpotter
+    - id: AU14KitSpotter
 #    - id: CMFacepaintSniper
   - type: CMChangeUserOnVend
     addComponents:
@@ -27,28 +27,31 @@
   - type: IgnoreContentsSize
     items:
       tags:
-      - RMCKitSpotter
+      - AU14KitSpotter
 
 - type: entity
   parent: CMSniperEquipmentCase
   id: RMCAntiMaterielEquipmentCase
   name: anti-materiel sniper equipment case
-  description: "A large case containing your very own long-range XM43E1 anti-materiel sniper rifle, M45 ghillie armor and helmet, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  description: "A large case containing your very own long-range XM43E1 anti-materiel sniper rifle, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
   components:
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,3
   - type: StorageFill
     contents:
-    - id: CMArmorM45
-    - id: CMArmorHelmetM45
-    - id: CMGlassesM42ScoutSight
-    - id: RMCMagazineSniperXM43E1AntiMateriel
-      amount: 2
-    - id: CMBackpackSniper
-    - id: RMCMK80
-    - id: CMMagazinePistolMK80
-      amount: 2
     - id: RMCXM43E1AntiMaterielRifle
-    - id: RMCKitSpotter
-  #    - id: CMFacepaintSniper
+    - id: RMCMagazineSniperXM43E1AntiMateriel
+      amount: 10
+    - id: RMCVisorNightVision
+    - id: RMCScoutShoes
+    - id: CMBackpackSniper
+    - id: AU14KitSpotter
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - AU14KitSpotter
 
 - type: entity
   parent: RMCBaseEquipmentCase
@@ -65,7 +68,7 @@
   - type: Storage
     maxItemSize: Huge
     grid:
-    - 0,0,21,1
+    - 0,0,21,3
   - type: StorageFill
     contents:
     - id: WeaponLauncherM83 # check IFF
@@ -73,15 +76,53 @@
     - id: RMCSatchelGrenadeSpec # ID lock
     - id: RMCSatchelGrenadeSpec
     - id: RMCHandsM3G4
-    - id: RMCArmorM3G4
-    - id: RMCArmorHelmetM3G4 # hugger protection
-    - id: RMCMK80
-    - id: CMMagazinePistolMK80
-      amount: 2
     - id: RMCBinoculars
+    - id: RMCBoxAGMI
+    - id: RMCBoxAGMF
+    - id: CMPacketGrenadeHighExplosiveFilled
+      amount: 4
+    - id: RMCPacketGrenadeIncendiaryFilled
+      amount: 4
+    - id: CMPacketGrenadeFragFilled
+      amount: 4
+    - id: AU14PacketGrenadeTearGasFilledAirburst
+      amount: 2
   - type: CMChangeUserOnVend
     addComponents:
     - type: GrenadeSpecWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: RMCSharpSpecEquipmentCase
+  name: SHARP operator equipment case
+  description: "A large case containing a P9 SHARP rifle, M103 SHARP magazine belt, M3-G4 grenadier armor and helmet, several specialized 9X dart magazines, an instructional pamphlet, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: grenadier
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,3
+  - type: StorageFill
+    contents:
+    - id: RMCWeaponRifleSharp
+    - id: RMCBeltSharp
+    - id: RMCMagazineRifleSharpExplosive
+      amount: 7
+    - id: RMCMagazineRifleSharpFlechette
+      amount: 5
+    - id: RMCMagazineRifleSharpIncendiary
+      amount: 5
+    - id: RMCHandsM3G4
+    - id: RMCLaserDesignatorPVE
+    - id: RMCPamphletSharp
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: SharpSpecWhitelist
 
 - type: entity
   parent: RMCBaseEquipmentCase
@@ -128,8 +169,53 @@
 
 - type: entity
   parent: RMCBaseEquipmentCase
+  id: CMUDemoSpecEquipmentCaseUPP
+  name: demolitionist equipment case
+  suffix: UPP, EMBLR
+  description: "A large case containing a heavy-caliber EMBLR, 70mm rockets, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: demo
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,3
+  - type: StorageFill
+    contents:
+
+
+    - id: AU14SatchelDemoSpecUPP
+      amount: 2
+    - id: CMUWeaponLauncherEMBLR
+    - id: CMURocket70mm
+      amount: 2
+    - id: CMURocket70mmWhitePhosphorus
+      amount: 2
+    - id: CMURocket70mmAntiArmor
+      amount: 2
+    - id: RMCWeaponSMGType19
+    - id: RMCMagazineSMGType19
+      amount: 2
+    - id: RMCExplosivePlastic
+      amount: 2
+    - id: RMCBinoculars
+
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: DemoSpecWhitelist
+
+
+
+
+- type: entity
+  parent: RMCBaseEquipmentCase
   id: RMCScoutSpecEquipmentCase
   name: scout equipment case
+  suffix: Base
   description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
   components:
   - type: Sprite
@@ -144,29 +230,74 @@
     - 0,0,21,3
   - type: StorageFill
     contents:
-    - id: RMCArmorM3Scout
-    - id: RMCArmorHelmetM3Scout
     - id: RMCGlassesM4SPRBattleSight
     - id: RMCMagazineRifleM4SPRA19
-      amount: 4
+      amount: 6
     - id: RMCMagazineRifleM4SPRA19Incendiary
-      amount: 2
+      amount: 4
     - id: RMCMagazineRifleM4SPRA19Impact
-      amount: 2
+      amount: 4
     - id: RMCBackpackScout
-    - id: RMCMK80
-    - id: CMMagazinePistolMK80
-      amount: 2
     - id: WeaponRifleM4SPRCustom
     - id: RMCThermalTarpFolded
+      amount: 2
     - id: RMCExplosivePlastic
       amount: 2
-    - id: CMEncryptionKeyJTAC
     - id: RMCLaserDesignatorScout
+    - id: RMCArmorM3Scout
+    - id: RMCArmorHelmetM3Scout
     - id: RMCScoutShoes
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: AU14ScoutSpecEquipmentCaseWeYu
+  name: scout equipment case
+  suffix: WeYu
+  description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: scout
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,21,3
+  - type: StorageFill
+    contents:
+    - id: RMCGlassesM4SPRBattleSight
+    - id: RMCMagazineRifleM5SPRHVP
+      amount: 8
+    - id: RMCMagazineRifleM5SPRHVHIP
+      amount: 4
+    - id: RMCAttachmentExtendedBarrel
+    - id: RMCAttachmentFlashlightGrip
+    - id: RMCAttachmentS5RedDotSight
+    - id: RMCBackpackScout
+    - id: WeaponRifleM5SPR2
+    - id: RMCThermalTarpFolded
+      amount: 2
+    - id: RMCExplosivePlastic
+      amount: 2
+    - id: RMCLaserDesignatorScout
+    - id: RMCArmorM3Scout
+    - id: RMCArmorHelmetM3Scout
+    - id: RMCScoutShoes
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: ScoutWhitelist
+
+- type: entity
+  parent: RMCScoutSpecEquipmentCase
+  id: AU14ScoutSpecEquipmentCaseLACN
+  name: scout equipment case
+  suffix: LACN
+  description: "A large case containing an M4SPR custom battle rifle, M3-S light armor and helmet, M4SPR battle sight, M68 thermal cloak, V3 reactive thermal tarp, ammunition and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
 
 - type: entity
   parent: RMCBaseEquipmentCase
@@ -191,13 +322,129 @@
     - id: RMCBackpackBroiler
     - id: RMCWeaponFlamerSpec
     - id: RMCTankFlamerLarge
+    - id: RMCTankFlamerLargeB
+    - id: RMCTankFlamerLargeX
     - id: RMCPouchFuelTank
     - id: CMFireExtinguisher
     - id: CMFireExtinguisherPortable
-    - id: RMCMK80
-    - id: CMMagazinePistolMK80
-      amount: 2
     - id: RMCBinoculars
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: PyroWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: CMU14PyroSpecEquipmentCaseHAZOPS
+  name: pyrotechnician equipment case
+  suffix: HAZOPS
+  description: "A large case containing M240A2, M35 pyrotechnician armor and helmet, and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: pyro
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,3
+  - type: StorageFill
+    contents:
+    - id: CMArmorM35
+    - id: CMArmorHelmetM35
+    - id: AU14FuelM240A2FuelTankFilled
+    - id: AU14WeaponFlamerM240A2HAZOPS
+    - id: AU14TankFlamerM240A2HAZOPS
+    - id: AU14TankFlamerM240A2HAZOPSNapalmB
+    - id: AU14TankFlamerM240A2HAZOPSNapalmX
+    - id: RMCPouchFuelTank
+    - id: CMFireExtinguisher
+    - id: CMFireExtinguisherPortable
+    - id: RMCBinoculars
+    - id: RMCPamphletAdminWeaponsSpecialistPyro
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: PyroWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: CMU14PyroSpecEquipmentCaseWeylandYutani
+  name: pyrotechnician equipment case
+  suffix: WY
+  description: "A large case containing Flammenwerfer-3, M35 pyrotechnician armor and helmet, and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: pyro
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,3
+  - type: StorageFill
+    contents:
+    - id: CMArmorM35
+    - id: CMArmorHelmetM35
+    - id: CMU14FuelFL3FuelTankFilled
+    - id: RMCWeaponFL3Flamer
+    - id: RMCTankFlamerFL3
+    - id: RMCTankFlamerFL3B
+    - id: RMCTankFlamerFL3X
+    - id: RMCPouchFuelTank
+    - id: CMFireExtinguisher
+    - id: CMFireExtinguisherPortable
+    - id: RMCBinoculars
+    - id: RMCPamphletAdminWeaponsSpecialistPyro
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: PyroWhitelist
+
+- type: entity
+  parent: RMCBaseEquipmentCase
+  id: CMU14PyroSpecEquipmentCaseUPP
+  name: pyrotechnician equipment case
+  suffix: UPP
+  description: "A large case containing LPO80-T, M35 pyrotechnician armor and helmet, and additional pieces of equipment.\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: pyro
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,3
+  - type: StorageFill
+    contents:
+    - id: CMArmorM35
+    - id: CMArmorHelmetM35
+    - id: RMCBackpackBroilerUPP
+    - id: RMCWeaponFlamerSpecUPP
+    - id: RMCTankFlamerLargeUPP
+    - id: RMCTankFlamerBLargeUPP
+    - id: RMCTankFlamerXLargeUPP
+    - id: RMCPouchFuelTank
+    - id: CMFireExtinguisher
+    - id: CMFireExtinguisherPortable
+    - id: RMCBinoculars
+    - id: RMCPamphletAdminWeaponsSpecialistPyro
+    #- id: RMCMK80
+    #- id: CMMagazinePistolMK80
+    #  amount: 2
   - type: CMChangeUserOnVend
     addComponents:
     - type: PyroWhitelist
@@ -272,9 +519,8 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: StorageFill
     contents:
-    - id: CMArmorM45
     - id: CMArmorHelmetM45
-    - id: CMGlassesM42ScoutSight
+    - id: RMCVisorNightVision
     - id: CMBackpackSniper
     - id: RMCLaserDesignatorSpotter
     - id: CMPamphletSpotter

@@ -9,6 +9,12 @@
     snap:
     - Wall
   components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
+  - type: Appearance
   - type: Fixtures
     fixtures:
       fix1:
@@ -68,7 +74,6 @@
     outlineColor: "#000000FF"
   - type: RMCMesonsNonviewable
     xenoVisible: true
-  - type: XenoChargeDontHit
 
 - type: entity
   parent: XenoFruitBase

@@ -11,6 +11,7 @@ namespace Content.Server._RMC14.Marines.Roles.Ranks;
 
 public sealed partial class RankSystem : SharedRankSystem
 {
+    private readonly Dictionary<EntityUid, PlayerSpawnCompleteEvent> _spawnData = new();
     [Dependency] private PlayTimeTrackingManager _tracking = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IServerPreferencesManager _preferences = default!;
@@ -34,6 +35,7 @@ public sealed partial class RankSystem : SharedRankSystem
 
     private void OnPlayerSpawnComplete(PlayerSpawnCompleteEvent ev)
     {
+        _spawnData[ev.Mob] = ev;
         if (ev.JobId == null)
             return;
 
@@ -112,5 +114,14 @@ public sealed partial class RankSystem : SharedRankSystem
                 return;
             }
         }
+    }
+
+    public ProtoId<JobPrototype>? GetJobId(EntityUid mob)
+        => _spawnData.TryGetValue(mob, out var spawn) ? spawn.JobId : null;
+
+    public void ReapplyJobRank(EntityUid mob)
+    {
+        if (_spawnData.TryGetValue(mob, out var spawn))
+            OnPlayerSpawnComplete(spawn);
     }
 }

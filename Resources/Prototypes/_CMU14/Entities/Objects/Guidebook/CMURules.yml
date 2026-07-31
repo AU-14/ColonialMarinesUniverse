@@ -1,0 +1,92 @@
+- type: guideEntry
+  parent: RMC
+  id: RMCOverview
+  name: Rules Overview
+  priority: 0
+  text: "/ServerInfo/Guidebook/_RMC14/Rules/RMCOverview.xml"
+  children:
+  - AU14RulesZeroTolerance
+  - AU14RulesGeneral
+  - AU14RulesRoleplay
+  - AU14GamemodeRulesOverview
+
+- type: guideEntry
+  parent: RMC
+  id: AU14RulesZeroTolerance
+  name: Zero Tolerance Rules
+  priority: 1
+  text: "/ServerInfo/Guidebook/_AU14/Rules/AU14ZeroTolerance.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14RulesGeneral
+  name: General Rules
+  priority: 2
+  text: "/ServerInfo/Guidebook/_AU14/Rules/AU14GeneralRules.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14RulesRoleplay
+  name: Roleplay Rules
+  priority: 3
+  text: "/ServerInfo/Guidebook/_AU14/Rules/AU14RoleplayRules.xml"
+  children:
+  - AU14HighRoleplayRoles
+
+- type: guideEntry
+  parent: RMC
+  id: AU14GamemodeRulesOverview
+  name: Gamemode Rules
+  priority: 4
+  text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesOverview.xml"
+  children:
+  - AU14GamemodeRulesInsurgency
+  # - AU14GamemodeRulesForceOnForce
+  # - AU14GamemodeRulesDistressSignal
+  # - AU14GamemodeRulesColonyFall
+  # - AU14GamemodeRulesPrometheus
+
+- type: guideEntry
+  parent: RMC
+  id: AU14HighRoleplayRoles
+  name: High Roleplay Roles
+  priority: 5
+  text: "/ServerInfo/Guidebook/_AU14/Rules/AU14HighRoleplayRoles.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: AU14GamemodeRulesInsurgency
+  name: Insurgency Rules
+  priority: 6
+  text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesInsurgency.xml"
+
+# Placeholder stubs below,
+# require actual rules
+#
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesForceOnForce
+#   name: Force on Force Rules
+#   priority: 7
+#   text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesForceOnForce.xml"
+#
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesDistressSignal
+#   name: Distress Signal Rules
+#   priority: 8
+#   text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesDistressSignal.xml"
+               #
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesColonyFall
+#   name: Colony Fall Rules
+#   priority: 9
+#   text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesColonyFall.xml"
+#
+# - type: guideEntry
+#   parent: RMC
+#   id: AU14GamemodeRulesPrometheus
+#   name: Prometheus Rules
+#   priority: 10
+#   text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesPrometheus.xml"

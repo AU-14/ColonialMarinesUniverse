@@ -9,8 +9,10 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleDrone
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Larva/larva.rsi
+    sprite: _AU14/Mobs/Xenos/Larva/larva.rsi # AU14-Edit
   - type: FiremanCarriable
     canThrow: true
     carrierWhitelist:
@@ -64,7 +66,7 @@
       fix1:
         shape:
           !type:PhysShapeCircle
-          radius: 0.25
+          radius: 0.2
         density: 185
         mask:
         - SmallMobMask
@@ -102,7 +104,7 @@
       4: rmc-xeno-elder-larva
       5: rmc-xeno-elder-larva
   - type: FixedIdentity
-    name: cm-job-name-xeno-larva
+    name: cmu-job-name-xeno-unknown
   - type: VentCrawler
     ventCrawlIcon: larva
   - type: RMCActionOrder
@@ -116,6 +118,6 @@
   description: All slimy and yucky.
   components:
     - type: Sprite
-      sprite: _RMC14/Mobs/Xenonids/Larva/larva.rsi
+      sprite: _AU14/Mobs/Xenos/Larva/larva.rsi # AU14-Edit
       noRot: true
       state: embryo

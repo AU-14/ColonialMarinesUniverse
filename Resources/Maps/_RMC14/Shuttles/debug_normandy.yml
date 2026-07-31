@@ -26,7 +26,7 @@ entities:
   - uid: 173
     components:
     - type: MetaData
-      name: debug normandy
+      name: debug normandy (RMC)
     - type: Transform
       pos: 2.2710133,-2.4148211
       parent: invalid

@@ -486,8 +486,8 @@
 - type: entity
   parent: RMCHelmetGarbBase
   id: RMCHelmetGarbChaplainPatch
-  name: UNMC chaplain helmet patch
-  description: This patch is all that remains of the Chaplaincy of the UNS Almayer, along with the Chaplains themselves. Both no longer exist as a result of losses suffered during Tychon Tackle.
+  name: chaplain helmet patch
+  description: A Chaplain's patch.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/HelmetGarb/chaplain_patch.rsi
@@ -519,7 +519,7 @@
   parent: RMCHelmetGarbBase
   id: RMCHelmetGarbIoFlair
   name: io flair
-  description: The Arcturians might be our allies now, but Io is forever a stain on trans-species relations. Never forget those who gave their lives aboard the UNS Doramin..
+  description: The Arcturians might be our allies now, but Io is forever a stain on trans-species relations. Never forget those who gave their lives aboard the USS Doramin..
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/HelmetGarb/io_flair.rsi
@@ -567,7 +567,7 @@
   parent: RMCHelmetGarbBase
   id: RMCHelmetGarbMovieTicket
   name: movie ticket
-  description: A pair of red movie tickets. It reminds you of a time you could watch more than the same 5 or so VHS films the Almayer has.
+  description: A pair of red movie tickets. It reminds you of a time you could watch more than the same 5 or so VHS films the ship has.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/HelmetGarb/movie_ticket.rsi

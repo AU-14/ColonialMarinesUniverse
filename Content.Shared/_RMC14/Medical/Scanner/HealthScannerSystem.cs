@@ -165,7 +165,7 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return;
         }
 
-        if (!_rmcHands.TryGetHolder(scanner, out _))
+        if (!_rmcHands.TryGetHolder(scanner, out var viewer))
             return;
 
         FixedPoint2 blood = 0;
@@ -183,7 +183,10 @@ public sealed partial class HealthScannerSystem : EntitySystem
         var bleeding = _rmcBloodstream.IsBleeding(target);
         var state = new HealthScanState(GetNetEntity(target), blood, maxBlood, temperature, pulse, chemicals, bleeding, scanner.Comp.DetailLevel);
 
-        _ui.SetUiState(scanner.Owner, HealthScannerUIKey.Key, new HealthScannerBuiState(state));
+        var uiState = new HealthScannerBuiState(state);
+        var buildEv = new HealthScannerBuildStateEvent(scanner, target, viewer, uiState);
+        RaiseLocalEvent(scanner, ref buildEv);
+        _ui.SetUiState(scanner.Owner, HealthScannerUIKey.Key, uiState);
     }
 
     public override void Update(float frameTime)

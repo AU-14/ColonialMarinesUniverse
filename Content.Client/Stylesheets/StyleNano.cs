@@ -84,6 +84,33 @@ namespace Content.Client.Stylesheets
         public const string StyleClassLabelSmall = "LabelSmall";
         public const string StyleClassButtonBig = "ButtonBig";
 
+        // CMU lobby theme compatibility. The dedicated CRT sheetlets were added on
+        // master after this upstream stylesheet diverged; keeping the class names
+        // here lets CMU controls opt into them without replacing the newer sheet.
+        public const string StyleClassCrtWindow = "CrtWindow";
+        public const string StyleClassCrtWindowHeader = "CrtWindowHeader";
+        public const string StyleClassCrtWindowTitle = "CrtWindowTitle";
+        public const string StyleClassCrtHeaderPanel = "CrtHeaderPanel";
+        public const string StyleClassCrtButton = "CrtButton";
+        public const string StyleClassCrtButtonLabel = "CrtButtonLabel";
+        public const string StyleClassCrtNativeButtonLabel = "CrtNativeButtonLabel";
+        public const string StyleClassCrtText = "CrtText";
+        public const string StyleClassCrtDimText = "CrtDimText";
+        public const string StyleClassCrtHeading = "CrtHeading";
+        public const string StyleClassCrtHeadingBig = "CrtHeadingBig";
+        public const string StyleClassCrtRichText = "CrtRichText";
+        public const string StyleClassCrtLineEdit = "CrtLineEdit";
+        public const string StyleClassCrtNativeLineEdit = "CrtNativeLineEdit";
+        public const string StyleClassCrtSlider = "CrtSlider";
+        public const string StyleClassCrtProgressBar = "CrtProgressBar";
+        public const string StyleClassCrtTabContainer = "CrtTabContainer";
+        public const string StyleClassCrtStripeBack = "CrtStripeBack";
+        public const string StyleClassCrtIconButton = "CrtIconButton";
+        public const string StyleClassCrtItemList = "CrtItemList";
+        public const string StyleClassCrtScrollBar = "CrtScrollBar";
+
+        public static bool CrtUiEnabled { get; set; } = true;
+
         public const string StyleClassPopupMessageSmall = "PopupMessageSmall";
         public const string StyleClassPopupMessageSmallCaution = "PopupMessageSmallCaution";
         public const string StyleClassPopupMessageMedium = "PopupMessageMedium";

@@ -11,7 +11,7 @@ using Robust.Shared.Utility;
 namespace Content.Shared._RMC14.Vendors;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
-[Access(typeof(SharedCMAutomatedVendorSystem))]
+[Access(typeof(SharedCMAutomatedVendorSystem), Other = AccessPermissions.ReadWriteExecute)]
 public sealed partial class CMAutomatedVendorComponent : Component
 {
     // TODO RMC14 make this EntProtoId<T>? instead of string?
@@ -81,6 +81,15 @@ public sealed partial class CMAutomatedVendorComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool EjectContentsOnDestruction = false;
+
+    [DataField, AutoNetworkedField]
+    public bool UseObjectivePoints;
+
+    [DataField, AutoNetworkedField]
+    public string Faction = string.Empty;
+
+    [AutoNetworkedField]
+    public int CachedFactionWinPoints;
 
     /// <summary>
     ///     Whether this vendor can be manually restocked.

@@ -8,7 +8,7 @@ namespace Content.Shared.Body;
 /// </summary>
 /// <seealso cref="BodySystem" />
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
-[Access(typeof(BodySystem))]
+[Access(typeof(BodySystem), typeof(Systems.SharedBodySystem))]
 public sealed partial class OrganComponent : Component
 {
     /// <summary>

@@ -1,4 +1,6 @@
 using Content.Shared.CCVar;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared.Body.Part;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
@@ -238,7 +240,7 @@ public sealed partial class DamageableSystem
         }
 
         if (!damageDone.Empty)
-            OnEntityDamageChanged((ent, damageable), damageDone, args.InterruptsDoAfters, args.Origin, args.Tool);
+            OnEntityDamageChanged((ent, damageable), damageDone, args.InterruptsDoAfters, args.Origin, args.Tool, args.Impact);
     }
 }
 
@@ -250,6 +252,10 @@ public record struct BeforeDamageChangedEvent(
     DamageSpecifier Damage,
     EntityUid? Origin = null,
     EntityUid? Source = null,
+    DamageImpact Impact = default,
+    SlotFlags TargetSlots = ~SlotFlags.POCKET,
+    BodyPartType? TargetPart = null,
+    TargetBodyZone? TargetZone = null,
     bool Cancelled = false);
 
 /// <summary>
@@ -264,14 +270,18 @@ public sealed class DamageModifyEvent(
     EntityUid? origin = null,
     EntityUid? tool = null,
     int armorPiercing = 0,
-    bool shouldIgnoreClawLogic = false)
+    bool shouldIgnoreClawLogic = false,
+    DamageImpact impact = default,
+    SlotFlags targetSlots = ~SlotFlags.POCKET,
+    BodyPartType? targetPart = null,
+    TargetBodyZone? targetZone = null)
     : EntityEventArgs, IInventoryRelayEvent
 {
     /// <inheritdoc/>
     /// <remarks>
     ///     Whenever locational damage is a thing, this should just check only that bit of armor.
     /// </remarks>
-    public SlotFlags TargetSlots => ~SlotFlags.POCKET;
+    public SlotFlags TargetSlots { get; } = targetSlots;
 
     /// <summary>
     ///     Contains the original damage, prior to any modifers.
@@ -294,6 +304,12 @@ public sealed class DamageModifyEvent(
     public readonly int ArmorPiercing = armorPiercing;
 
     public readonly bool ShouldIgnoreClawLogic = shouldIgnoreClawLogic;
+
+    public DamageImpact Impact = impact;
+
+    public BodyPartType? TargetPart = targetPart;
+
+    public TargetBodyZone? TargetZone = targetZone;
 }
 
 /// <summary>
@@ -307,7 +323,8 @@ public readonly record struct DamageDealtEvent(
     DamageSpecifier Damage,
     EntityUid? Origin,
     bool InterruptsDoAfters,
-    EntityUid? Tool = null);
+    EntityUid? Tool = null,
+    DamageImpact Impact = default);
 
 [Obsolete("Will be replaced with damage-model specific events; general 'took damage' can be served by DamageDealtEvent")]
 public sealed class DamageChangedEvent : EntityEventArgs
@@ -347,18 +364,22 @@ public sealed class DamageChangedEvent : EntityEventArgs
 
     public readonly EntityUid? Tool;
 
+    public readonly DamageImpact Impact;
+
     public DamageChangedEvent(
         DamageableComponent damageable,
         DamageSpecifier? damageDelta,
         bool interruptsDoAfters,
         EntityUid? origin,
-        EntityUid? tool = null
+        EntityUid? tool = null,
+        DamageImpact impact = default
     )
     {
         Damageable = damageable;
         DamageDelta = damageDelta;
         Origin = origin;
         Tool = tool;
+        Impact = impact;
 
         if (DamageDelta is null)
             return;

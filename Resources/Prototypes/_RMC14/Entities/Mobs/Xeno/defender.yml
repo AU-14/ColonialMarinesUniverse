@@ -11,8 +11,10 @@
   name: Defender
   description: An alien with an armored crest.
   components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Defender/defender.rsi
+    sprite: _AU14/Mobs/Xenos/Defender/defender.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -66,6 +68,25 @@
     damage:
       groups:
         Brute: 27.5
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaChitin
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 1
   - type: XenoTailStab
     tailDamage:
       groups:
@@ -106,7 +127,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.1
   - type: FixedIdentity
-    name: cm-job-name-xeno-defender
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT1
 
@@ -135,6 +156,7 @@
   - type: XenoEvolution
     strains:
     - CMXenoDefenderSteelcrest
+    - CMXenoDefenderHeatshield
   - type: RMCActionOrder
     id: CMXenoDefender
 
@@ -144,7 +166,7 @@
   suffix: Steelcrest
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Defender/steelcrest_defender.rsi
+    sprite: _AU14/Mobs/Xenos/Defender/steelcrest_defender.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest

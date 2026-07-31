@@ -1,4 +1,5 @@
 using Content.Server.Maps;
+using Content.Shared.AU14.util;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
 
@@ -40,5 +41,17 @@ namespace Content.Server.GameTicking.Presets
         /// </summary>
         [DataField("supportedMaps", customTypeSerializer: typeof(PrototypeIdSerializer<GameMapPoolPrototype>))]
         public string? MapPool;
+
+        [DataField("requiresGovforVote")]
+        public bool RequiresGovforVote;
+
+        [DataField("requiresOpforVote")]
+        public bool RequiresOpforVote;
+
+        [DataField("supportedPlanets")]
+        public List<string>? SupportedPlanets;
+
+        [DataField("planetPool", customTypeSerializer: typeof(PrototypeIdSerializer<GamePlanetPoolPrototype>))]
+        public string? PlanetPool;
     }
 }

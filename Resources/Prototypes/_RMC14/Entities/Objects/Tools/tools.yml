@@ -122,8 +122,8 @@
 - type: entity
   parent: Multitool
   id: CMMultitool
-  name: security access tuner
-  description: A small handheld tool used to override various machine functions.
+  name: access tuner
+  description: A small handheld tool used to override or connect various machine functions.
   suffix: Multitool
   components:
   - type: Sprite
@@ -268,6 +268,49 @@
     storedSprite: null
 
 - type: entity
+  parent: BaseItem
+  id: MaintenanceJack
+  name: vehicle maintenance jack
+  description: A heavy-duty hardpoint jack for servicing armored vehicles. Works where a crowbar can't.
+  suffix: RMC
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    slots:
+    - Suitstorage
+    - Belt
+  - type: Tool
+    qualities:
+    - VehicleServicing
+    speedModifier: 1.0
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+  - type: CMSurgeryTool
+  - type: CMRetractor
+  - type: CMBoneSetter
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.8
+    mishapChance: 0.14
+    mishapDamageType: Blunt
+    mishapDamageAmount: 5
+    failurePenalty: 1
+
+- type: entity
   parent: CMCrowbar
   id: RMCTacticalPrybar
   name: tactical prybar
@@ -285,6 +328,65 @@
         Blunt: 25
     soundHit:
       path: /Audio/_RMC14/Weapons/genhit3.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+
+- type: entity
+  parent: [BaseItem, RMCBaseMeleeWeapon]
+  id: RMCMaintenanceJack
+  name: maintenance jack
+  description: A heavy synthetic-grade maintenance tool that can pry doors and work as a wrench.
+  suffix: RMC, Synth
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    storedRotation: 0
+  - type: Clothing
+    quickEquip: false
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    slots:
+    - Back
+    - Suitstorage
+  - type: Tool
+    qualities:
+    - Prying
+    - Anchoring
+    - VehicleServicing
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+  - type: Prying
+    pryPowered: true
+    force: true
+    speedModifier: 2
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+  - type: ToolTileCompatible
+    delay: 0
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 0.8
+    damage:
+      types:
+        Blunt: 20
+        Structural: 30
+    soundHit:
+      collection: MetalThud
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
+  - type: RMCSynthItemRestriction
+    checkPickup: false
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 200
 
 - type: entity
   parent: HandLabeler
@@ -295,7 +397,7 @@
       sprite: _RMC14/Objects/Tools/hand_labeler.rsi
       state: hand_labeler
     - type: Item
-      size: Normal
+      size: Small
       sprite: _RMC14/Objects/Tools/hand_labeler.rsi
       storedRotation: 0
     - type: RMCHandLabeler
@@ -325,6 +427,8 @@
     quickEquip: false
     slots:
     - Suitstorage
+  - type: EntrenchingTool
+  - type: RMCShovel
   - type: UseDelay
     delay: 0.25
   - type: Appearance

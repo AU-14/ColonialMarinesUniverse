@@ -27,6 +27,7 @@ namespace Content.Client.Chat.UI
             Emote,
             Say,
             Whisper,
+            Radio,
             Looc
         }
 
@@ -87,7 +88,7 @@ namespace Content.Client.Chat.UI
             }
         }
 
-        public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null)
+        public SpeechBubble(ChatMessage message, EntityUid senderEntity, string speechStyleClass, Color? fontColor = null, TimeSpan? totalTime = null)
         {
             IoCManager.InjectDependencies(this);
             _senderEntity = senderEntity;
@@ -106,7 +107,7 @@ namespace Content.Client.Chat.UI
             bubble.Measure(Vector2Helpers.Infinity);
             ContentSize = bubble.DesiredSize;
             _verticalOffsetAchieved = -ContentSize.Y;
-            _deathTime = _timing.RealTime + TotalTime;
+            _deathTime = _timing.RealTime + (totalTime ?? TotalTime);
         }
 
         protected abstract Control BuildBubble(ChatMessage message, string speechStyleClass, Color? fontColor = null);

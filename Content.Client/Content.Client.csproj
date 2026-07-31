@@ -13,9 +13,21 @@
       <DependentUpon>%(Filename)</DependentUpon>
     </Compile>
     <EmbeddedResource Include="..\Content.CMU\Client\**\*.xaml"
-                      Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+                      Exclude="..\Content.CMU\Client\AU14\**\*.xaml"
+                      Link="_CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
     <AdditionalFiles Include="..\Content.CMU\Client\**\*.xaml"
-                     Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+                     Exclude="..\Content.CMU\Client\AU14\**\*.xaml"
+                     Link="_CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\Content.CMU\Client\AU14\**\*.xaml"
+                      Exclude="..\Content.CMU\Client\AU14\Chemistry\**\*.xaml"
+                      Link="AU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Include="..\Content.CMU\Client\AU14\**\*.xaml"
+                     Exclude="..\Content.CMU\Client\AU14\Chemistry\**\*.xaml"
+                     Link="AU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\Content.CMU\Client\AU14\Chemistry\**\*.xaml"
+                      Link="_AU14\Chemistry\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Include="..\Content.CMU\Client\AU14\Chemistry\**\*.xaml"
+                     Link="_AU14\Chemistry\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Nett" />

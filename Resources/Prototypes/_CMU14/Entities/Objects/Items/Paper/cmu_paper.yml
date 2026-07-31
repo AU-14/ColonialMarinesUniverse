@@ -1,0 +1,1600 @@
+- type: entity
+  id: CMUPaperSlipBase
+  parent: CMPaper
+  name: paper slip
+  description: A plain slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    heldPrefix: paper_slip
+  - type: Paper
+    contentSize: 1000
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/NoteSlip.png"
+    backgroundModulate: "#eaedde"
+    maxWritableArea: 300, 300
+    contentMargin: 20, 30, 60, 40
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperBase
+  name: paper
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundModulate: "#eaedde"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    fontAccentColor: "#ffffff"
+
+# DEDICATED PAPER SLIPS /*//////////////////////////////////////////////////
+
+- type: entity
+  id: CMUPaperSlipMedication
+  parent: CMUPaperSlipBase
+  name: medication slip
+  suffix: Purple
+  description: A standardized prescription slip produced by the International Committee of the Red Cross. Used by Medical personnel to authorize, track, and strictly ration the distribution of controlled pharmaceuticals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#dbbce3"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#dbbce3"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    heldPrefix: paper_slip
+  - type: Paper
+    contentSize: 600
+    content: |
+      [color=#1a1a1a][bold]MEDICATION AUTHORIZATION[/bold]
+      [bold]Patient Name:[/bold] [form]
+      [bold]Medication:[/bold] [form]
+      [bold]Dosage/Amount:[/bold] [form]
+      [bold]Notes / Instructions:[/bold]
+      [form]
+      [bold]Attending Physician:[/bold]
+      [signature][/color]
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/MedicalSlip.png" #"/Textures/Interface/CMUPaper/MedicalSlip.png"
+    backgroundModulate: "#dbbce3"
+    maxWritableArea: 300, 300
+    contentMargin: 20, 10, 10, 25
+
+- type: entity
+  id: CMUPaperSlipMedicationGreen
+  parent: CMUPaperSlipMedication
+  name: medication slip
+  suffix: Green
+  description: A standardized prescription slip produced by the International Committee of the Red Cross. Used by Medical personnel to authorize, track, and strictly ration the distribution of controlled pharmaceuticals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#8eb372"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#8eb372"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    heldPrefix: paper_slip
+  - type: PaperVisuals
+    backgroundModulate: "#8eb372"
+
+- type: entity
+  id: CMUPaperSlipMedicationORed
+  parent: CMUPaperSlipMedication
+  name: medication slip
+  suffix: Red
+  description: A standardized prescription slip produced by the International Committee of the Red Cross. Used by Medical personnel to authorize, track, and strictly ration the distribution of controlled pharmaceuticals.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#c35e51"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#c35e51"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    heldPrefix: paper_slip
+  - type: PaperVisuals
+    backgroundModulate: "#c35e51"
+
+#- type: entity Ehh someone will make it one day
+#  parent: BaseItem
+#  id: CMUPhotoAlbum
+#  name: photo album
+# description: A bound album designed for organizing and preserving photographs.
+# components:
+#  - type: Sprite
+#    sprite: _RMC14/Objects/Misc/paper.rsi
+#    state: album
+
+- type: entity #27x27 pixel image to ss14 goodie with black background. Really nice if you know how to get shit done
+  parent: CMPaper
+  id: CMUPaperPhoto
+  name: photograph
+  description: A photograph of a person, place, or thing.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: photo
+    - state: photo
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/photo_bkg.png"
+    maxWritableArea: 650, 680
+    contentMargin: -20, 40, -25, 25
+    backgroundPatchMargin: 0, 0, 0, 0
+    backgroundScale: 1.0, 1.0
+
+- type: entity #27x27 pixel image to ss14 goodie with black background. Really nice if you know how to get shit done
+  parent: CMPaper
+  id: CMUPaperParking
+  name: parking ticket
+  description: A municipal parking violation notice. Failure to comply may result in fines or vehicle impoundment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: parking_ticket
+    - state: parking_ticket
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/parking_ticket_bkg.png"
+    maxWritableArea: 600, 400
+    contentMargin: 10, 10, 10, 90
+    backgroundPatchMargin: 0, 0, 0, 0
+    backgroundScale: 1.0, 1.0
+  - type: Paper
+    content: |
+     [bold]Reason for Violation[/bold]
+     [check] No Valid Parking Permit         [check] Blocking Driveway / Access
+     [check] No Parking Area / Space        [check] Blocking Other Vehicle
+     [check] Fire Lane                                     [check] Parked in 2 Spaces
+     [check] Reserved / Assigned Space   [check] Other: [mono][color=DarkBlue][form][/color][/mono]
+     ===============================================================
+     Date/Time: [mono][color=DarkBlue][form][/color][/mono] [bold]/[/bold] License Plate: [mono][color=DarkBlue][form][/color][/mono]
+     Location: [mono][color=DarkBlue][form][/color][/mono] [bold]/[/bold] Permit No: [mono][color=DarkBlue][form][/color][/mono] [bold]/[/bold] Driver: [mono][color=DarkBlue][form][/color][/mono]
+     Vehicle Type & Model & Color: [mono][color=DarkBlue][form][/color][/mono]
+     Issued By: [mono][color=DarkBlue][signature][/color][/mono]
+
+- type: entity
+  parent: CMUPaperPhoto
+  id: CMUPaperPhotoPotato
+  name: cat photograph
+  description: A photograph of an evil looking cat... It's staring at you.
+  components:
+    - type: Paper
+      stampState: paper_stamp-ce
+      stampedBy:
+        - stampedColor: '#241700' #MAINTAINERS DON'T GET SCARED BY THIS.
+          stampedName: SEEGSON #PHOTOGRAPH OF POTATOED
+      content: |
+       [color=#988]██[color=#888]██[color=#aaa]██[color=#baa]██[color=#dcc]████[color=#ccc]████████████████████████[color=#cbb]██[color=#ccc]████[color=#dcc]██[color=#cbc]██[color=#bba]██[color=#baa]██[color=#999]██[color=#aaa]██
+       [color=#777]██[color=#665]██[color=#877]██[color=#988]██[color=#bba]██[color=#cbb]██[color=#dcc]██[color=#ccc]████[color=#ccb]████[color=#ccc]██[color=#ccb]██[color=#ccc]██████████[color=#bbb]██[color=#ccc]██[color=#dcc]██[color=#ccb]██[color=#baa]██[color=#a99]████[color=#988]██[color=#aaa]██
+       [color=#766]██[color=#655]██[color=#877]████[color=#888]██[color=#a99]██[color=#ccb]██[color=#ddc]██[color=#ccc]██[color=#ccb]████████[color=#ccc]██[color=#ccb]██[color=#ccc]██[color=#cdc]██[color=#ccc]████[color=#dcc]██[color=#cbb]██[color=#baa]██[color=#989]██[color=#999]██[color=#baa]██[color=#999]██[color=#a99]██
+       [color=#776]██[color=#665]██[color=#a99]████[color=#766]██[color=#877]██[color=#aa9]██[color=#ccb]██[color=#ddd]██[color=#dcc]██[color=#ddc]██████████████████[color=#cbb]██[color=#a9a]██[color=#988]████[color=#a99]██[color=#ccc]██[color=#aaa]██[color=#999]██
+       [color=#887]██[color=#877]██[color=#ba9]██[color=#baa]██[color=#766]████[color=#876]██[color=#a98]██[color=#baa]██[color=#a99]██[color=#987]██[color=#a99]██[color=#aa9]██[color=#a99]██[color=#a98]██[color=#988]████[color=#998]██[color=#baa]██[color=#998]██[color=#877]████[color=#a99]████[color=#aaa]██[color=#878]██[color=#aaa]██
+       [color=#887]██[color=#766]██[color=#887]██[color=#988]██[color=#987]██[color=#877]██████[color=#a99]██[color=#877]██[color=#766]██[color=#987]██████[color=#887]██[color=#877]████[color=#887]██[color=#988]██[color=#977]██[color=#988]██[color=#999]██[color=#a99]██[color=#999]██[color=#878]██[color=#777]██[color=#bbb]██
+       [color=#988]██[color=#766]██████[color=#a88]██[color=#987]████[color=#876]██[color=#877]██[color=#876]██[color=#766]██[color=#776]██[color=#887]████[color=#877]██[color=#766]████[color=#877]██[color=#876]██[color=#887]██[color=#a99]██████[color=#988]██[color=#888]██[color=#777]██[color=#bbb]██
+       [color=#ba9]██[color=#776]██[color=#665]██[color=#876]██[color=#caa]██[color=#988]██[color=#866]██[color=#877]██[color=#987]██[color=#766]██[color=#866]██[color=#876]██[color=#866]████[color=#876]██████[color=#987]██[color=#977]██[color=#987]████[color=#a98]██[color=#cba]██[color=#cbb]██[color=#988]██[color=#777]██[color=#ccc]██
+       [color=#ccb]██[color=#876]██[color=#655]██[color=#766]██[color=#a98]██[color=#987]██[color=#765]██[color=#987]████[color=#754]████[color=#cba]██[color=#987]████[color=#a87]██[color=#987]██[color=#976]████[color=#a98]████[color=#876]██[color=#765]██[color=#a98]██[color=#ba9]██[color=#766]██[color=#776]██[color=#dcc]██
+       [color=#ccb]██[color=#877]██[color=#665]██[color=#765]██[color=#a88]████[color=#876]██[color=#a98]██[color=#987]██[color=#865]██[color=#876]██[color=#cba]██[color=#a98]██[color=#a87]██[color=#a88]██[color=#a87]████[color=#987]██[color=#b99]██[color=#ba9]██[color=#a99]██[color=#877]██[color=#776]██[color=#988]██[color=#877]██[color=#887]██[color=#ccb]██
+       [color=#dcc]██[color=#988]██[color=#876]████[color=#b99]██[color=#ca9]██[color=#a98]██[color=#ca9]██[color=#a87]██[color=#875]██[color=#a98]████[color=#976]██[color=#876]██[color=#976]██[color=#ba9]████[color=#a88]██[color=#a98]██[color=#baa]██[color=#cba]██[color=#b99]██[color=#877]██[color=#987]██[color=#a99]██[color=#aa9]██[color=#ccb]██
+       [color=#ddc]██[color=#bba]██[color=#998]██[color=#988]██[color=#caa]██[color=#cba]██[color=#a98]████[color=#876]██[color=#865]██[color=#b98]██[color=#986]██[color=#765]████[color=#876]██[color=#b99]██[color=#a98]██[color=#977]██[color=#876]██[color=#a88]██[color=#cba]██[color=#cbb]██[color=#a98]██[color=#a99]██[color=#baa]██[color=#bba]██[color=#ccb]██
+       [color=#dcc]██[color=#cba]██[color=#aa9]████[color=#ba9]██[color=#a88]██[color=#644]██[color=#432]██[color=#100]██[color=#210]██[color=#865]██[color=#cba]██[color=#a88]██[color=#976]██[color=#876]██[color=#caa]██[color=#876]██[color=#321]██[color=#100]██[color=#321]██[color=#654]██[color=#a98]██[color=#cba]██[color=#ba9]██[color=#998]██[color=#ba9]██[color=#ccc]██
+       ██[color=#bba]██[color=#a98]████[color=#ba9]██[color=#976]██[color=#421]██[color=#100]██[color=#000]██[color=#100]██[color=#876]██[color=#edc]██[color=#ba9]██[color=#a88]██[color=#a98]██[color=#dbb]██[color=#876]██[color=#200]██[color=#000]██[color=#100]██[color=#321]██[color=#766]██[color=#dbb]██[color=#ba9]██[color=#987]██[color=#988]██[color=#ccb]██
+       [color=#dcc]██[color=#aa9]██[color=#887]██[color=#988]██[color=#cba]██[color=#977]██[color=#310]██[color=#000]██████[color=#765]██[color=#edc]██[color=#b99]██[color=#987]██[color=#ba9]██[color=#edc]██[color=#876]██[color=#100]██[color=#000]████[color=#100]██[color=#654]██[color=#dcb]██[color=#baa]██[color=#987]██[color=#988]██[color=#ddc]██
+       [color=#bba]██[color=#776]██[color=#544]██[color=#554]██[color=#cba]████[color=#a87]██[color=#765]██[color=#876]██[color=#987]██[color=#765]██[color=#b98]██[color=#ba9]██[color=#a98]██[color=#ba9]██[color=#987]██[color=#765]██[color=#876]██[color=#865]██[color=#876]██[color=#987]██[color=#a98]██[color=#ba9]██[color=#876]██[color=#533]██[color=#433]██[color=#bba]██
+       [color=#baa]██[color=#776]██[color=#544]██[color=#654]██[color=#876]██[color=#a98]██[color=#ba9]██[color=#caa]██[color=#dcb]██[color=#cba]██[color=#a87]██[color=#654]██[color=#a98]██[color=#ca9]██[color=#ba9]██[color=#876]██[color=#976]██[color=#ca9]██[color=#dcb]██[color=#ba8]██[color=#986]██[color=#987]████[color=#765]██[color=#543]████[color=#ccb]██
+       [color=#bba]██[color=#988]██[color=#776]██[color=#765]██[color=#644]██[color=#654]██[color=#876]██[color=#b99]██[color=#cba]██[color=#a98]██[color=#987]██[color=#421]██[color=#865]██[color=#976]██[color=#865]██[color=#754]██[color=#876]██[color=#dcb]██[color=#cb9]██[color=#a97]██[color=#864]██[color=#865]██[color=#876]██[color=#986]██[color=#976]██[color=#876]██[color=#cba]██
+       [color=#cbb]██[color=#aa9]██[color=#998]██[color=#988]██[color=#977]██[color=#654]██[color=#643]██[color=#755]██[color=#a88]██[color=#a98]██[color=#ca9]██[color=#543]██[color=#643]██[color=#432]██[color=#532]██[color=#765]██[color=#876]██[color=#b99]██[color=#764]██[color=#653]████[color=#875]██[color=#a97]██[color=#ba8]██[color=#cb9]██[color=#ba8]██[color=#dcb]██
+       [color=#ccb]██[color=#baa]██[color=#887]██[color=#665]██[color=#654]██[color=#754]██[color=#765]██[color=#a98]██████[color=#cba]██[color=#dba]██[color=#765]██[color=#321]██[color=#654]██[color=#edc]██[color=#dbb]██[color=#a98]██[color=#a97]██████[color=#986]██[color=#764]████[color=#875]██[color=#986]██[color=#dcb]██
+       [color=#ccb]██[color=#ba9]██[color=#877]██[color=#543]████[color=#765]██[color=#b98]██[color=#cba]██[color=#a98]██[color=#a87]████[color=#edc]██[color=#976]██[color=#543]██[color=#876]██[color=#fdd]██[color=#dbb]██[color=#987]██[color=#ba8]██[color=#ca8]██[color=#ba8]██[color=#a86]██[color=#753]██[color=#653]██[color=#753]██[color=#986]██[color=#ddb]██
+       [color=#dcc]██[color=#cbb]██[color=#987]██[color=#654]██[color=#755]██[color=#977]██[color=#ba9]██[color=#cba]██[color=#a98]████[color=#b98]██[color=#ba9]██[color=#876]██[color=#754]██[color=#765]██[color=#ba9]██[color=#b98]██[color=#987]██[color=#ba8]██████[color=#a97]██[color=#875]██[color=#874]██[color=#875]██[color=#a98]██[color=#dcb]██
+       [color=#ccc]██[color=#dcc]██[color=#ba9]██[color=#987]████[color=#977]████[color=#a88]██[color=#b98]██[color=#b99]██[color=#ca9]██[color=#754]██[color=#643]██[color=#421]██[color=#532]██[color=#976]██[color=#a97]████[color=#ca8]██[color=#ba7]██[color=#b97]██████[color=#ba8]██[color=#cb8]██[color=#dc8]██[color=#cc8]██
+       [color=#ccc]██[color=#dcb]██[color=#cba]██[color=#caa]██[color=#876]██[color=#865]██[color=#755]██[color=#865]██[color=#a87]██[color=#b98]██[color=#b99]██[color=#987]██[color=#976]████[color=#986]██[color=#ca8]██[color=#ca9]████[color=#b97]██[color=#a96]██[color=#a95]██[color=#a86]██[color=#cb7]██[color=#db8]██[color=#cb8]██[color=#cb7]████
+       [color=#dcc]██[color=#cbb]██[color=#ba9]██[color=#a98]██[color=#865]████████[color=#a87]██████[color=#b98]██[color=#ca9]██[color=#cb9]██[color=#db9]██[color=#dba]██[color=#ca9]██[color=#b98]██[color=#985]████[color=#a96]██[color=#b96]██[color=#db8]██[color=#cb8]██[color=#cb7]██████
+       [color=#cbb]██[color=#bba]██[color=#a98]██[color=#987]██[color=#865]██[color=#866]████[color=#876]██[color=#976]████[color=#865]██[color=#976]██[color=#b98]██[color=#ca9]██[color=#dba]██[color=#a87]██[color=#a86]██[color=#875]██[color=#975]██[color=#a85]██[color=#ba6]██[color=#ca7]██[color=#dc7]██[color=#cb7]██[color=#cb6]██████
+       [color=#cbb]██[color=#aa9]██[color=#987]██[color=#765]██[color=#755]██[color=#865]████[color=#875]██[color=#865]████[color=#764]██[color=#875]██[color=#975]██[color=#b97]██[color=#a97]██[color=#864]████[color=#763]██[color=#a96]██[color=#ba7]██[color=#cb7]██[color=#db7]██[color=#cb6]████[color=#ca5]██[color=#cb6]████
+
+# ICSC
+- type: entity
+  parent: CMPaper
+  id: CMUPaperICSC
+  name: ICSC paper
+  description: A paper with Independent Core System Colonies letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: icsc_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/ICSCHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/ICSCFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+# USCM
+- type: entity
+  parent: CMPaper
+  id: CMUPaperUSCM
+  name: USCM paper
+  description: A sheet of paper bearing the United States Colonial Marine Corps letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: uscm_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/USCMHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/USCMFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+# UA
+- type: entity
+  parent: CMPaper
+  id: CMUPaperFlagUA
+  name: UA paper
+  description: A sheet of paper bearing the United Americas Flag letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ua_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/UAHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/UAFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+# UPP
+- type: entity
+  parent: CMPaper
+  id: CMUPaperUPP
+  name: UPP paper
+  description: A sheet of paper bearing the Union of Progressive Peoples letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: upp_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/UPPHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperFlagUPP
+  name: UPP Flag paper
+  description: A sheet of paper bearing the Union of Progressive Peoples Flag letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: upp_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFLAGHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+# HYPERDYNE
+- type: entity
+  parent: CMPaper
+  id: CMUPaperHYPERDYNE
+  name: Hyperdyne paper
+  suffix: Black
+  description: A sheet of paper bearing the Hyperdyne Systems letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: hyperdyne_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperAltHYPERDYNE
+  name: Hyperdyne executive paper
+  suffix: Orange
+  description: A premium sheet of paper bearing the Hyperdyne Systems letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: hyperdyne_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEHeader_alt.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEFooter_alt.png"
+    footerMargin: 0, 0, 0, 40
+
+# WEYLAND
+- type: entity
+  parent: CMPaper
+  id: CMUPaperBlackWEYLAND
+  name: Weyland-Yutani paper
+  suffix: Black
+  description: A sheet of paper bearing the black Weyland-Yutani letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: wy_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDBlackHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDBlackFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+- type: entity
+  parent: CMUPaperBlackWEYLAND
+  id: CMUPaperWEYLAND
+  name: Weyland-Yutani paper
+  suffix: Regular
+  description: A sheet of paper bearing the Weyland-Yutani letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+- type: entity
+  parent: CMUPaperBlackWEYLAND
+  id: CMUPaperInvertedWEYLAND
+  name: Weyland-Yutani paper
+  suffix: Inverted
+  description: A sheet of paper bearing the inverted Weyland-Yutani letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDInvertedHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDInvertedFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+- type: entity
+  parent: CMUPaperBlackWEYLAND
+  id: CMUPaperResearcherWEYLAND
+  name: Weyland-Yutani paper
+  suffix: Researcher
+  description: A sheet of paper bearing the Weyland-Yutani Research letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDResearchHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDResearchFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+- type: entity
+  parent: CMUPaperBlackWEYLAND
+  id: CMUPaperPMCWEYLAND
+  name: Weyland-Yutani paper
+  suffix: PMC
+  description: A sheet of paper bearing the repurposed Weyland "Wings" for the Weyland-Yutani Private Military Contractors letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDPMCHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDPMCFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+#TWE
+- type: entity
+  parent: CMPaper
+  id: CMUPaperTWE
+  name: TWE paper
+  description: A sheet of paper bearing the Three World Empire letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: twe_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/TWEHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/TWEFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+
+#TYRELL [NOT INGAME YET]
+- type: entity
+  parent: CMPaper
+  id: CMUPaperBlackTYRELL
+  name: Tyrell paper
+  suffix: Black
+  description: A sheet of paper bearing the black Tyrell Corporation letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperTYRELL
+  name: Tyrell paper
+  suffix: Orange
+  description: A sheet of paper bearing the Tyrell Corporation letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPHeader_alt.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPFooter_alt.png"
+    footerMargin: 0, 0, 0, 40
+
+#SEEGSON
+- type: entity
+  parent: CMPaper
+  id: CMUPaperSEEGSON
+  name: Seegson paper
+  description: A sheet of paper bearing the Seegson letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: seegson_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/SEEGSONHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/SEEGSONFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+#LASELLE BIONATIONAL
+- type: entity
+  parent: CMPaper
+  id: CMUPaperLASELLE
+  name: Laselle Bionational paper
+  description: A sheet of paper bearing the Laselle Bionational letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: laselle_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/LASALLE_BIONATIONALHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#YAMAHA
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperYAMAHA
+  name: Yamaha paper
+  description: A sheet of paper bearing the Yamaha Corporation letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/YAMAHAHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#KELLAND
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperKELLAND
+  name: Kelland paper
+  description: A sheet of paper bearing the Kelland Mining letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: kelland_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/KELLANDHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#CMB
+- type: entity
+  parent: CMPaper
+  id: CMUPaperCMB
+  name: CMB paper
+  description: A sheet of paper bearing the Colonial Marshal Bureau letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/CMBHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/CMBFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+#VAI // Logo is me opening the CM13 page of their seeing mentions of USCM then just making it similar to it + PMCs as troy suggested MAKE A NEW ONE THATS GOOD
+- type: entity
+  parent: CMPaper
+  id: CMUPaperVAI
+  name: VAI paper
+  description: A sheet of paper bearing the Vanguard's Arrow Incorporated letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: vai_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/VANGUARDARROWHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/VANGUARDARROWFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+#CCAF // Logo is from a ingame patch. It's ass
+- type: entity
+  parent: CMPaper
+  id: CMUPaperCCAF
+  name: CCAF paper
+  description: A sheet of paper bearing the Canadian Colonial Armed Forces letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ccaf_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFFooter.png"
+    footerMargin: 0, 0, 0, 40
+
+#CLF / Insurgent factions.
+- type: entity
+  parent: CMPaper
+  id: CMUPaperCLF
+  name: CLF paper
+  description: A sheet of paper bearing the Colonial Liberation Front letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: clf_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/CLFHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+# UN / IHRO
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperUN
+  name: UN paper
+  description: A sheet of paper bearing the United Nations letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: un_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/UNHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperIHRO
+  name: IHRO paper
+  description: A sheet of paper bearing the Independent Human Rights Organization letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ihro_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/IHROHeader2.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperIHRO2
+  name: IHRO paper
+  description: A sheet of paper bearing the Interstellar Human Rights Organization letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: ihro_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/IHROHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+# USARMY
+- type: entity
+  parent: CMPaper
+  id: CMUPaperUSARMY
+  name: US Army paper
+  description: A sheet of paper bearing the United States Army letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: usarmy_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/UnitedStatesArmy.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#FBI
+- type: entity
+  parent: CMPaper
+  id: CMUPaperFBI
+  name: FBI paper
+  description: A sheet of paper bearing the Federal Bureau of Investigation letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: fbi_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/FederalHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#ORBITALS
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperARBITER
+  name: Judge's paper
+  description: A sheet of paper bearing the Orbital Arbiter's letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: arbiter_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbArbiterHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperARBITERVariant
+  name: Judge's paper
+  description: A sheet of black paper bearing the Orbital Arbiter's letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#1a1a1a"
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+      color: "#1a1a1a"
+    - state: arbiter_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbArbiterHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    backgroundModulate: "#1a1a1a"
+
+- type: entity
+  parent: CMPaper
+  id: CMUPaperCOUNSEL
+  name: Counsellor's paper
+  description: A sheet of paper bearing the Orbital Counsel's letterhead.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: counsel_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/OrbCounselHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+#PROVOST
+
+- type: entity #admeme
+  parent: CMPaper
+  id: CMUPaperPROVOST
+  name: PROVOST paper
+  description: A sheet of paper bearing the Provost's letterhead. You feel like this is a very important piece of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+    - state: paper_faction_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+    - state: provost_letterhead
+      visible: true
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/PROVOSTHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+
+# PAPER SLIPS /*//////////////////////////////////////////////////
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperCreamSlip
+  name: cream paper slip
+  description: A cream colored slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#e3cfae"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#e3cfae"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#e3cfae"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperTanSlip
+  name: tan paper slip
+  description: A tan colored slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#d0ab76"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#d0ab76"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#d0ab76"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperBrownSlip
+  name: brown paper slip
+  description: A brown slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#a2704b"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#a2704b"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#a2704b"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperBlackSlip
+  name: black paper slip
+  description: A black slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#1c1b1d"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#262626"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#1c1b1d"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperGreySlip
+  name: grey paper slip
+  description: A grey slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#afaba2"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#afaba2"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#afaba2"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperBlueSlip
+  name: blue paper slip
+  description: A blue slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#91a8c2"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#91a8c2"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#91a8c2"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperNavySlip
+  name: navy paper slip
+  description: A navy slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#242c3e"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#242c3e"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#242c3e"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperCyanSlip
+  name: cyan paper slip
+  description: A cyan slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#7fbebc"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#7fbebc"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#7fbebc"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperGreenSlip
+  name: green paper slip
+  description: A green slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#8eb372"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#8eb372"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#8eb372"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperOliveSlip
+  name: olive paper slip
+  description: An olive slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#9f9657"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#9f9657"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#9f9657"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperOrangeSlip
+  name: orange paper slip
+  description: An orange slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#d98d58"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#d98d58"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#d98d58"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperPinkSlip
+  name: pink paper slip
+  description: A pink slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#d89ca0"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#d89ca0"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#d89ca0"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperPurpleSlip
+  name: purple paper slip
+  description: A purple slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#9b85a8"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#9b85a8"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#9b85a8"
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperRedSlip
+  name: red paper slip
+  description: A red slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#c35e51"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#c35e51"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#c35e51"
+
+
+- type: entity
+  parent: CMUPaperSlipBase
+  id: CMUPaperYellowSlip
+  name: yellow paper slip
+  description: A yellow slip of paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper_slip
+      color: "#dcbc65"
+    - state: paper_slip_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#dcbc65"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#dcbc65"
+
+# PAPERS /*//////////////////////////////////////////////////
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperCream
+  name: cream paper
+  description: A cream colored paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#e3cfae"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#e3cfae"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#e3cfae"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperTan
+  name: tan paper
+  description: A tan colored paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#d0ab76"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#d0ab76"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#d0ab76"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperBrown
+  name: brown paper
+  description: A brown paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#a2704b"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#a2704b"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#a2704b"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperBlack
+  name: black paper
+  description: A black paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#1c1b1d"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#262626"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#1c1b1d"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperGrey
+  name: grey paper
+  description: A grey paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#afaba2"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#afaba2"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#afaba2"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperBlue
+  name: blue paper
+  description: A blue paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#91a8c2"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#91a8c2"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#91a8c2"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperNavy
+  name: navy paper
+  description: A navy paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#242c3e"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#242c3e"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#242c3e"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperCyan
+  name: cyan paper
+  description: A cyan paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#7fbebc"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#7fbebc"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#7fbebc"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperGreen
+  name: green paper
+  description: A green paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#8eb372"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#8eb372"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#8eb372"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperOlive
+  name: olive paper
+  description: An olive paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#9f9657"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#9f9657"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#9f9657"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperYellow
+  name: yellow paper
+  description: A yellow paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#dcbc65"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#dcbc65"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#dcbc65"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperOrange
+  name: orange paper
+  description: An orange paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#d98d58"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#d98d58"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#d98d58"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperPink
+  name: pink paper
+  description: A pink paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#d89ca0"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#d89ca0"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#d89ca0"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperPurple
+  name: purple paper
+  description: A purple paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#9b85a8"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#9b85a8"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#9b85a8"
+
+- type: entity
+  parent: CMUPaperBase
+  id: CMUPaperRed
+  name: red paper
+  description: A red paper.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: paper
+      color: "#c35e51"
+    - state: paper_words
+      map: ["enum.PaperVisualLayers.Writing"]
+      color: "#c35e51"
+      visible: false
+    - state: paper_stamped
+      map: ["enum.PaperVisualLayers.Stamp"]
+      visible: false
+  - type: PaperVisuals
+    backgroundModulate: "#c35e51"

@@ -218,15 +218,6 @@
 
 - type: entity
   parent: CMSatchel
-  id: RMCSatchelHydro
-  name: hydroponics satchel
-  description: A green satchel for plant-related work.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Back/Satchels/Civilians/hydro.rsi
-
-- type: entity
-  parent: CMSatchel
   id: CMBackpackSniper
   name: M3 sniper's waist-rig
   description: A specially-designed rig attached to the waist with a pocket, designed for marksmen.
@@ -239,20 +230,16 @@
   - type: ItemCamouflage
     camouflageVariations:
       Jungle: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/jungle-classic.rsi
-      Desert: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/urban-desert.rsi
-      Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow.rsi
+      Desert: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow-urban-desert.rsi
+      Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow-urban-desert.rsi
       Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/jungle-classic.rsi
-      Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/urban-desert.rsi
-    camoNames:
-      Snow: "M3 sniper's smock"
-    camoDescriptions:
-      Snow: "A specially-designed smock with pockets for all your sniper needs."
+      Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow-urban-desert.rsi
 
 - type: entity
   parent: CMSatchel
   id: RMCBackpackScout
   name: M68 thermal cloak
-  description: The lightweight thermal dampeners and optical camouflage provided by this cloak are weaker than those found in standard UNMC ghillie suits. In exchange, the cloak can be worn over combat armor and offers the wearer high maneuverability and adaptability to many environments.
+  description: The lightweight thermal dampeners and optical camouflage provided by this cloak are weaker than those found in standard USCM ghillie suits. In exchange, the cloak can be worn over combat armor and offers the wearer high maneuverability and adaptability to many environments.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/scout_cloak.rsi
@@ -266,12 +253,8 @@
       - RMCScoutArmor
     denyReason: rmc-wear-scout-armor-required
   - type: ThermalCloak
-    opacity: 0.03 # Put to 0.03 for testing
     restrictWeapons: true
     cloakedHideLayers:
-    - Hair
-    - HeadTop
-    - HeadSide
     - Tail
     - Snout # I don't know if this is hugely problematic but better safe than sorry
     whitelist:
@@ -292,7 +275,7 @@
   parent: RMCBackpackScout
   id: RMCBackpackSPPCommando
   name: V86 thermal cloak
-  description: A thermo-optic camouflage cloak commonly used by SPP commando units.
+  description: A thermo-optic camouflage cloak commonly used by UPP commando units.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/SPP/scout_cloak.rsi
@@ -427,20 +410,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCArmorProvostFlexi
-    - id: RMCProvostClipboard
-    # TODO RMC14 provost office handheld beacon
-
-- type: entity
-  parent: CMSatchelSecurity
-  suffix: Provost, Inspector
-  id: CMSatchelSecurityFilledProvostInspector
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCArmorProvostFlexi
-    - id: RMCStampProvostInspector
-    - id: RMCProvostClipboard
+    - id: RMCArmorProvostFlexi # TODO RMC14 provost office handheld beacon
 
 - type: entity
   parent: CMSatchelSecurity
@@ -449,9 +419,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCArmorProvostMarshal
-    - id: RMCProvostClipboard
-    # TODO RMC14 provost office handheld beacon
+    - id: RMCArmorProvostMarshal # TODO RMC14 provost office handheld beacon
 
 - type: entity
   parent: CMSatchelSecurity
@@ -460,10 +428,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCArmorProvostMarshal
-    - id: RMCProvostClipboard
-    - id: RMCTabletCO
-    # TODO RMC14 provost office handheld beacon
+    - id: RMCArmorProvostMarshal # TODO RMC14 provost office handheld beacon
 
 - type: entity
   parent: CMSatchelSecurity
@@ -472,10 +437,7 @@
   components:
   - type: StorageFill
     contents:
-    - id: RMCArmorProvostMarshal
-    - id: RMCProvostClipboard
-    - id: RMCTabletCO
-    # TODO RMC14 provost office handheld beacon
+    - id: RMCArmorProvostMarshal # TODO RMC14 provost office handheld beacon
 
 - type: entity
   parent: CMSatchelSecurity
@@ -485,8 +447,7 @@
   - type: StorageFill
     contents:
     - id: RMCPacketGrenadeFlashBang
-    - id: RMCWeaponTaser
-    # TODO RMC14 4 tear gas grenades
+    - id: RMCWeaponTaser # TODO RMC14 4 tear gas grenades
 
 - type: entity
   parent: CMSatchel
@@ -500,9 +461,9 @@
     - id: CMStampDenied
 
 - type: entity
-  parent: CMSatchel
-  id: RMCSatchelFilledFaxResponderHighComm
-  suffix: Fax Responder, HComm
+  parent: CMSatchelSecurity
+  id: CMSatchelSecurityFilledFaxResponder
+  suffix: Fax Responder
   components:
   - type: StorageFill
     contents:
@@ -511,21 +472,10 @@
     - id: CMStampDenied
 
 - type: entity
-  parent: CMSatchelSecurity
-  id: CMSatchelSecurityFilledFaxResponderProvost
-  suffix: Fax Responder, Provost
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCProvostPen
-    - id: CMStampApproved
-    - id: CMStampDenied
-
-- type: entity
   parent: CMSatchel
   id: CMSatchelMarine
-  name: UNMC satchel
-  description: A heavy-duty satchel carried by some UNMC soldiers and support personnel.
+  name: satchel
+  description: A heavy-duty satchel.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/standard/jungle-desert-classic.rsi
@@ -540,8 +490,8 @@
 - type: entity
   parent: CMSatchelMarine
   id: CMSatchelMarineIntel
-  name: UNMC lightweight expedition pack
-  description: A heavy-duty IMP based backpack that can be slung around the front or to the side, and can quickly be accessed with only one hand. Usually issued to Marine intelligence officers.
+  name: lightweight expedition pack
+  description: A heavy-duty IMP based backpack that can be slung around the front or to the side, and can quickly be accessed with only one hand.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/big/jungle-desert-classic.rsi
@@ -559,8 +509,8 @@
 - type: entity
   parent: CMSatchelMarineIntel
   id: RMCSatchelMarineIntelChestrig
-  name: UNMC expedition chestrig
-  description: A heavy-duty IMP based chestrig, can quickly be accessed with only one hand. Usually issued to UNMC intelligence officers.
+  name: USCM expedition chestrig
+  description: A heavy-duty IMP based chestrig, can quickly be accessed with only one hand. Usually issued to USCM intelligence officers.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Chestrigs/intel/desert.rsi
@@ -575,7 +525,7 @@
 - type: entity
   parent: CMSatchelMarine
   id: RMCSatchelMarineChestrigPVE # Reskin for PVE
-  name: UNMC IMP chestrig
+  name: USCM IMP chestrig
   description: A heavy-duty IMP based chestrig, can quickly be accessed with only one hand.
   suffix: PVE
   components:
@@ -592,8 +542,8 @@
 - type: entity
   parent: CMSatchelMarineIntel
   id: RMCSatchelMarineIntelSatchel
-  name: UNMC lightweight expedition satchel
-  description: A heavy-duty IMP based satchel, reinforced with kevlar so it doesn't rip. Can quickly be accessed with only one hand. Usually issued to UNMC intelligence officers.
+  name: USCM lightweight expedition satchel
+  description: A heavy-duty IMP based satchel, reinforced with kevlar so it doesn't rip. Can quickly be accessed with only one hand. Usually issued to USCM intelligence officers.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/intel.rsi
@@ -603,13 +553,13 @@
 - type: entity
   parent: CMSatchelMarineIntel # Reskin for FORECON
   id: RMCSatchelMarineLogisticsBig
-  name: UNMC logistics IMP backpack
+  name: logistics IMP backpack
   description: A standard-issue backpack worn by logistics personnel. It is occasionally issued to combat personnel for longer term expeditions and deep space incursions.
 
 - type: entity
   parent: CMSatchelMarineIntel
   id: CMSatchelMarineLogistics
-  name: Marine logistics IMP backpack
+  name: logistics IMP backpack
   description: A standard-issue backpack worn by logistics personnel. It is occasionally issued to combat personnel for longer term expeditions and deep space incursions.
   components:
   - type: Storage
@@ -635,8 +585,8 @@
 - type: entity
   parent: CMSatchelMarine
   id: CMSatchelMarineTech
-  name: Marine technician chestrig
-  description: A heavy-duty chestrig used by some Marine technicians.
+  name: chestrig
+  description: A heavy-duty chestrig.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Chestrigs/tech/jungle-classic.rsi
@@ -661,7 +611,7 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelGrenadeSpec
-  name: UNMC IMP M63A1 grenade satchel
+  name: USCM IMP M63A1 grenade satchel
   description: A satchel specially designed to maximize grenade carrying capacity while minimizing the risks of secondary ignition.
   components:
   - type: ExplosionResistance
@@ -700,8 +650,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelWelder
-  name: UNMC technician welder-satchel
-  description: A specialized satchel worn by UNMC technicians and engineers. It carries two small fuel tanks for quick welder refueling and use.
+  name: technician welder-satchel
+  description: A specialized satchel worn by technicians and engineers. It carries two small fuel tanks for quick welder refueling and use.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/welder.rsi
@@ -754,8 +704,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelDemoSpec
-  name: UNMC IMP M22 rocket bags
-  description: A specially-designed backpack that fits to the IMP mounting frame on standard UNMC infantry armor. It's made of two easily-accessible, waterproofed reinforced tubes and one smaller satchel slung at the bottom. The two silos are for rockets, but no one is stopping you from cramming other things in there.
+  name: USCM IMP M22 rocket bags
+  description: A specially-designed backpack that fits to the IMP mounting frame on standard USCM infantry armor. It's made of two easily-accessible, waterproofed reinforced tubes and one smaller satchel slung at the bottom. The two silos are for rockets, but no one is stopping you from cramming other things in there.
   components:
   - type: ExplosionResistance
     damageCoefficient: 0
@@ -798,7 +748,7 @@
 - type: entity
   parent: CMSatchel
   id: RMCBackpackRTO
-  name: UNMC radio telephone pack
+  name: Radio telephone pack
   description: A heavy-duty pack, used for telecommunications between central command. Commonly carried by RTOs.
   components:
   - type: Sprite
@@ -835,7 +785,6 @@
   - type: GuideHelp
     guides:
     - RMCGuideMarineCommunications
-    - RMCLanguage
     - RMCGuideCommunicationsTowers
     - RMCGuideRoleCombatTechnician
     - RMCGuideRoleMaintenanceTechnician
@@ -850,8 +799,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCBackpackRTOPMCBroken
-  name: broken We-Ya radio telephone pack
-  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weston-Yamada and internal systems seem to be completely fried and broken.
+  name: broken We-Yu radio telephone pack
+  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weyland-Yutani and internal systems seem to be completely fried and broken.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/rto.rsi
@@ -864,52 +813,48 @@
       map: [ "closedLayer" ]
   - type: Storage
     grid:
-    - 0,0,19,1 # 20
+    - 0,0,14,1 # 1
 
 - type: entity
   parent: RMCBackpackRTO
   id: RMCBackpackRTOPMC
-  name: We-Ya radio telephone pack
-  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weston-Yamada.
+  name: We-Yu radio telephone pack
+  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the logo of Weyland-Yutani.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/rto.rsi
   - type: Storage
     grid:
-    - 0,0,19,1 # 20
+    - 0,0,14,1 # 1
   - type: RotaryPhone
-    category: Weston-Yamada
+    category: Weyland-Yutani
   - type: ItemCamouflage
     camouflageVariations: {}
 
 - type: entity
   parent: RMCBackpackRTO
   id: RMCBackpackRTOSPP
-  name: SPP radio telephone pack
-  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the Socialist Progressive People's insignia.
+  name: UPP radio telephone pack
+  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the Union of Progressive Peoples' insignia.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/SPP/rto.rsi
   - type: Storage
     grid:
-    - 0,0,19,1 # 20
+    - 0,0,14,1 # 1
   - type: RotaryPhone
-    category: Socialist Progressive People
+    category: UPP
   - type: ItemCamouflage
     camouflageVariations: {}
 
 - type: entity
   parent: RMCBackpackRTO
-  id: RMCBackpackRTOTSE
-  name: TSE radio telephone pack
-  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the Three Suns Empire's insignia.
+  id: RMCBackpackRTOTSE # TODO RMC14 - Different Sprites
+  name: TWE radio telephone pack
+  description: A heavy-duty extended-pack, used for telecommunications between central command. Commonly carried by RTOs. This one bears the Three World Empire's insignia.
   components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Back/Backpacks/RCM/rto.rsi
   - type: RotaryPhone
     category: Three Suns Empire
-  - type: ItemCamouflage
-    camouflageVariations: {}
 
 - type: entity
   parent: RMCBackpackRTO
@@ -1048,6 +993,109 @@
     - id: RMCExplosivePlastic
 
 - type: entity
+  parent: RMCSatchelLightpack
+  id: RMCSatchelLightpackFilledRoyal
+  suffix: Filled, Royal
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMFirstAidKitFilled
+    - id: RMCPowerCellSmartgun
+    - id: RMCMagazineSmartGunHT
+      amount: 2
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: CMPackFlare
+
+- type: entity
+  parent: RMCSatchelLightpack
+  id: RMCSatchelLightpackFilledRoyalCommando
+  suffix: Filled, Royal Commando
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleL83A3AP
+    - id: RMCMagazineRifleL83A3
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: CMPackFlare
+
+- type: entity
+  parent: RMCSatchelLightpack
+  id: RMCSatchelLightpackFilledRoyalMarksman
+  suffix: Filled, Royal Marksman
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleL24AP
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: CMPackFlare
+
+- type: entity
+  parent: RMCSatchelLightpack
+  id: RMCSatchelLightpackFilledRoyalMedic
+  suffix: Filled, Royal Medic
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175 // Why the FUCK does the medic get nades?
+    - id: RMCHeadRoyalBeret
+    - id: CMMaskGas # TODO RMC14 royal marine gas masks
+    - id: RMCSyringeCase
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: RMCTacticalPrybar
+    - id: RMCMRETSE
+
+- type: entity
+  parent: RMCSatchelLightpack
+  id: RMCSatchelLightpackFilledRoyalLieutenant
+  suffix: Filled, Royal Lieutenant
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCSyringeCase
+    - id: CMPackFlare
+    - id: RMCMagazineRifleL24
+
+- type: entity
+  parent: RMCSatchelLightpack
+  id: RMCSatchelLightpackFilledRoyalMajor
+  suffix: Filled, Royal Major
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCSyringeCase
+    - id: CMPackFlare
+
+- type: entity
+  parent: RMCSatchelLightpack
+  id: RMCSatchelLightpackFilledRoyalTeamlead
+  suffix: Filled, Royal Team Leader
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCSyringeCase
+    - id: CMCautery
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCMagazineRifleL24
+    - id: CMPackFlare
+
+- type: entity
   parent: RMCSatchelLightpack5Slot
   id: RMCSatchelLightpackFilledPara
   suffix: Paramarine, Survivor, Filled
@@ -1056,17 +1104,6 @@
       contents:
         - id: CMSheetMetal20
         - id: RMCRadioHandheldColony
-
-- type: entity
-  parent: RMCSatchelLightpack5Slot
-  id: RMCSatchelLightpackFilledParaHelmet
-  suffix: Paramarine, Helmet, Survivor, Filled
-  components:
-    - type: StorageFill
-      contents:
-        - id: CMSheetMetal20
-        - id: RMCRadioHandheldColony
-        - id: RMCHeadRoyalL1HelmetBallistic
 
 - type: entity
   parent: RMCSatchelLightpack5Slot
@@ -1092,7 +1129,6 @@
     contents:
     # M40 CCDP Greande #RMC14 TODO
     - id: RMCGrenadeFlashBang
-    - id: RMCTabletCO
     - id: RMCLaserDesignator
     - id: RMCArmorM3General
     - id: CMArmorHelmetM11CGeneral
@@ -1114,8 +1150,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelLightpackWeYa
-  name: We-Ya combat pack
-  description: A small, lightweight pack for expeditions and short-range operations, designed for Weston-Yamada security and private military personnel.
+  name: We-Yu combat pack
+  description: A small, lightweight pack for expeditions and short-range operations, designed for Weyland-Yutani security and private military personnel.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/PMC/corporate.rsi
@@ -1124,16 +1160,16 @@
   parent: RMCSatchelLightpack
   id: RMCSatchelPMC
   name: PMC combat backpack
-  description: A Weston-Yamada field tested backpack, featuring multiple pouches and compartments for ease of access, preventing slowdown from operatives in the field.
+  description: A Weyland-Yutani field tested backpack, featuring multiple pouches and compartments for ease of access, preventing slowdown from operatives in the field.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/standard.rsi
 
 - type: entity
-  parent: RMCSatchelLightpackWelder
+  parent: [RMCSatchelPMC, RMCSatchelWelder]
   id: RMCSatchelWelderPMC
-  name: PMC technician welderpack
-  description: Ergonomic, protected, high capacity backpack, designed for Weston-Yamada PMCs. Features a small fueltank for quick blowtorch refueling.
+  name: pmc technician welderpack
+  description: Ergonomic, protected, high capacity backpack, designed for Weyland-Yutani PMCs. Features a small fueltank for quick blowtorch refueling.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/welder.rsi
@@ -1148,17 +1184,10 @@
     sprite: _RMC14/Objects/Clothing/Back/Satchels/Other/lightpack_welder.rsi
 
 - type: entity
-  parent: RMCSatchelLightpackWelder
-  id: RMCSatchelLightpackWelderBlack
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Back/Satchels/Other/lightpack_welder_black.rsi
-
-- type: entity
   parent: CMSatchel
   id: RMCSatchelSPP
   name: UCP3 combat pack
-  description: An SPP military standard-issue Union Combat Pack MK3.
+  description: An UPP military standard-issue Union Combat Pack MK3.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/SPP/standard.rsi
@@ -1188,57 +1217,10 @@
     - id: CMRollerBedSpawnFolded
 
 - type: entity
-  parent: RMCSatchelSPP
-  id: RMCSatchelSPPSurvivor
-  suffix: Filled, Survivor
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCRadioHandheldColony
-    - id: CMSheetMetal20
-
-- type: entity
-  parent: RMCSatchelSPP
-  id: RMCSatchelSPPSurvivorSpec
-  suffix: Filled, Survivor Specialist
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCRadioHandheldColony
-    - id: RMCMagazineRifleType71
-    - id: RMCMagazineRifleType71
-
-- type: entity
-  parent: RMCSatchelSPPMedic
-  id: RMCSatchelSPPMedicSurvivor
-  suffix: Filled, Survivor
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCRadioHandheldColony
-    - id: CMDefibrillator
-    - id: CMFireExtinguisherPortable
-    - id: CMHealthAnalyzer
-
-- type: entity
-  parent: RMCSatchelSPP
-  id: RMCSatchelSPPSynth
-  suffix: Filled, Synthetic
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMDefibrillator
-    - id: CMAdvFirstAidKitFilled
-    - id: CMPortableSurgicalBedSpawnFolded
-    - id: CMBloodPackFull
-    - id: CMBloodPackFull
-    - id: RMCSynthResetKeyNovaris
-
-- type: entity
   parent: RMCSatchelWelder
   id: RMCSatchelSPPWelder
   name: UCP3-E technician welderpack
-  description: A special version of the Union Combat Pack MK3 featuring a small fueltank for quick blowtorch refueling. Used by SPP Sappers.
+  description: A special version of the Union Combat Pack MK3 featuring a small fueltank for quick blowtorch refueling. Used by UPP Sappers.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/SPP/welder.rsi
@@ -1267,8 +1249,8 @@
 - type: entity
   parent: CMSatchel
   id: RMCSatchelTSEPA
-  name: TSP-4 police pack
-  description: A TSEPA standard-issue Three Suns Pack MK4.
+  name: UPE-4 police pack
+  description: A Neroid Sector Policing Authority standard-issue Pack.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/TSE/tsepa_standard.rsi
@@ -1312,16 +1294,3 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Clothing/Back/Satchels/TSE/tsepa_standard.rsi
-
-- type: entity
-  parent: CMSatchel
-  id: RMCSatchelRoyalMOLS
-  name: L1 pattern MOLS day pack
-  description: The L1 pattern Modular Operational Load-Bearing System designates the standard issue set of lightweight load-carrying equipment for the RCM. This particular item is the day pack, which can be worn with or without the full MOLS rig.
-  suffix: PVE, Royal
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Clothing/Back/Satchels/TSE/mols_pack.rsi
-  - type: Storage
-    grid:
-    - 0,0,9,1 # 10 slots

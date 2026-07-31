@@ -1,0 +1,29 @@
+au14-callsign-console-title = Comms Net Directory
+au14-callsign-console-net = { $faction } NET
+au14-callsign-console-mode-edit = NET CONTROL
+au14-callsign-console-mode-readonly = READ ONLY
+au14-callsign-console-stations = { $count } stations
+au14-callsign-console-command-element = COMMAND
+au14-callsign-console-squad-element = { $squad } SQUAD
+au14-callsign-console-no-stations = - no stations -
+au14-callsign-console-rename-placeholder = New word
+au14-callsign-console-suffix-placeholder = Suffix
+au14-callsign-console-set-button = SET
+au14-callsign-console-footer = Station callsigns replace names on the net. 6 = commander · 5 = 2IC · 7 = senior NCO · ACTUAL = squad leader · ROMEO = RTO · PAPA = pilot · CHIEF = DCC · OPS = staff · N-N = fireteam-number. Radio-trained personnel can rename elements, reassign suffixes and form task groups.
+au14-callsign-console-not-authorized = You are not trained to administer the comms net.
+au14-callsign-console-wrong-faction = This directory does not answer to your authority.
+au14-callsign-console-suffix-taken = Callsign suffix { $suffix } is already in use in that element.
+au14-callsign-console-group-element = TASK GROUP
+au14-callsign-console-category-air = AIR CREW
+au14-callsign-console-category-armor = VEHICLE CREW
+au14-callsign-console-category-mp = MILITARY POLICE
+au14-callsign-console-category-medical = MEDICAL
+au14-callsign-console-category-intel = INTELLIGENCE
+au14-callsign-console-category-synth = SYNTHETICS
+au14-callsign-console-group-taken = That word is unavailable or already on the net.
+au14-callsign-console-group-placeholder = New group word
+au14-callsign-console-create-group-button = CREATE GROUP
+au14-callsign-console-delete-group-button = DISBAND
+au14-callsign-console-group-none = - element -
+au14-callsign-headset-examine = You answer to [color=#6BC7FF]{ $callsign }[/color] on the net.
+au14-overwatch-console-comms-directory = Comms Net Directory

@@ -7,6 +7,11 @@ namespace Content.Shared._RMC14.Requisitions;
 [Serializable, NetSerializable]
 public sealed partial class RequisitionsEntry
 {
+    [NonSerialized] public string? DeptOrderedBy;
+    [NonSerialized] public string? DeptReason;
+    [NonSerialized] public string? DeptDeliverTo;
+    [NonSerialized] public string? DeptAccessLevel;
+    [NonSerialized] public string? DeptName;
     [DataField]
     public string? Name;
 

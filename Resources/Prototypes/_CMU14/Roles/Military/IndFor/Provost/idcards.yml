@@ -1,0 +1,102 @@
+- type: entity
+  abstract: true
+  parent: CMIDCardGold
+  id: CMUIDCardProvost
+  name: provost ID card
+  description: Issued to members of the Provost Office.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: Clothing
+    slots:
+    - idcard
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostChiefInspector
+  name: provost chief inspector ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostInspectorChief
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostInspector
+  name: provost inspector ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostInspector
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostAdvisor
+  name: provost advisor ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostAdvisor
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostMarshal
+  name: provost marshal ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostMarshal
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostDeputyMarshal
+  name: provost deputy marshal ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostMarshalDeputy
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostTeamLeader
+  name: provost team leader ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostTeamLeader
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostEnforcer
+  name: provost enforcer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostEnforcer
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostEnforcerMedic
+  name: provost medic enforcer ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostEnforcerMedic
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostSpcAgent
+  name: provost special agent ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostSpcAgent
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostSpcComms
+  name: provost communications specialist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostSpcComms
+
+- type: entity
+  parent: CMUIDCardProvost
+  id: CMUIDCardProvostSpcMedic
+  name: provost medical specialist ID card
+  components:
+  - type: PresetIdCard
+    job: CMUJobINDFORProvostSpcMedic

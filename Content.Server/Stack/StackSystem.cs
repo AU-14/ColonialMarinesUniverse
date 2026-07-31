@@ -121,6 +121,16 @@ namespace Content.Server.Stack
                                             spawnPosition);
         }
 
+        /// <summary>
+        /// Compatibility wrapper for CMU callers using the pre-upstream-renaming API.
+        /// </summary>
+        public List<EntityUid> SpawnMultiple(EntProtoId entityPrototypeId,
+                                             int amount,
+                                             EntityCoordinates spawnPosition)
+        {
+            return SpawnMultipleAtPosition(entityPrototypeId, amount, spawnPosition);
+        }
+
         /// <inheritdoc cref="SpawnMultipleAtPosition(EntProtoId, List{int}, EntityCoordinates)"/>
         [PublicAPI]
         public List<EntityUid> SpawnMultipleAtPosition(EntityPrototype entityProto,
@@ -208,6 +218,16 @@ namespace Content.Server.Stack
             return SpawnMultipleNextToOrDrop(stack,
                                              CalculateSpawns(stack, amount),
                                              target);
+        }
+
+        /// <summary>
+        /// Compatibility wrapper for CMU callers using the pre-upstream-renaming API.
+        /// </summary>
+        public List<EntityUid> SpawnMultiple(EntProtoId entityPrototypeId,
+                                             int amount,
+                                             EntityUid target)
+        {
+            return SpawnMultipleNextToOrDrop(entityPrototypeId, amount, target);
         }
 
         /// <inheritdoc cref="SpawnMultipleNextToOrDrop(EntProtoId, List{int}, EntityUid)"/>

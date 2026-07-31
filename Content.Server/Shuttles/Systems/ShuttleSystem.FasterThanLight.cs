@@ -336,6 +336,11 @@ public sealed partial class ShuttleSystem
     {
         component = null;
 
+        var safety = new ShuttleFTLSafetyEvent(uid, ShuttleFTLSafetyPhase.Setup);
+        RaiseLocalEvent(uid, ref safety, true);
+        if (safety.Cancelled)
+            return false;
+
         if (HasComp<FTLComponent>(uid))
         {
             Log.Warning($"Tried queuing {ToPrettyString(uid)} which already has {nameof(FTLComponent)}?");
@@ -365,6 +370,14 @@ public sealed partial class ShuttleSystem
     {
         var uid = entity.Owner;
         var comp = entity.Comp1;
+
+        var safety = new ShuttleFTLSafetyEvent(uid, ShuttleFTLSafetyPhase.Startup);
+        RaiseLocalEvent(uid, ref safety, true);
+        if (safety.Cancelled)
+        {
+            RemCompDeferred<FTLComponent>(uid);
+            return;
+        }
         var xform = Transform(entity);
         DoTheDinosaur(xform);
 
@@ -1002,4 +1015,18 @@ public sealed partial class ShuttleSystem
         var ev = new ShuttleFlattenEvent(xform.MapUid.Value, aabbs);
         RaiseLocalEvent(ref ev);
     }
+}
+
+public enum ShuttleFTLSafetyPhase : byte
+{
+    Request,
+    Setup,
+    Startup,
+}
+
+[ByRefEvent]
+public record struct ShuttleFTLSafetyEvent(EntityUid Shuttle, ShuttleFTLSafetyPhase Phase)
+{
+    public bool Cancelled;
+    public string Reason = string.Empty;
 }

@@ -1,0 +1,156 @@
+- type: job
+  abstract: true
+  parent: AU14JobMilitaryBase
+  id: AU14JobRadioTrafficOperatorBaseAbstract
+  name: au14-job-name-radiotrafficoperator
+  description: au14-job-description-radiotrafficoperator
+  icon: "AU14JobIconRTO"
+  spawnMenuRoleName: Radio Traffic Operator (GOVFOR)
+  startingGear: AU14GearGOVFORRadioTrafficOperator
+  dummyStartingGear: AU14GearGOVFORRadioTrafficOperatorDummy
+  playTimeTracker: AU14JobGOVFORRadioTrafficOperator
+  accessGroups:
+  - AU14GovforSquad
+  - AU14GovforFTL
+
+- type: job
+  abstract: true
+  parent: AU14JobRadioTrafficOperatorBaseAbstract
+  id: AU14JobRadioTrafficOperatorBase
+  roundRole: RadioTrafficOperator
+  roundProfiles:
+  - AU14RoundJobProfileMilitaryBase
+  roundComponents:
+  - type: AU14CallsignRole
+    suffix: ROMEO
+  - type: ANPRCRadioUser
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRTO
+  - type: JobPrefix
+    prefix: au14-job-prefix-radiotrafficoperator
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      state: govfor_rto
+  roundForceComponents:
+    OPFOR:
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_AU14/Interface/au14opforjobicons.rsi
+        state: rto
+
+  requirements:
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+    - NonResuscitable
+    - NoEnglish
+    - SlowRunner
+    - Anemic
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankLanceCorporal:
+      entity: AU14ChevronUSCMLanceCorporal
+      requirements: []
+
+- type: playTimeTracker
+  id: AU14JobGOVFORRadioTrafficOperator
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTrafficOperator
+  equipment:
+    id: AU14IDCardGOVFORRadioTrafficOperator
+    ears: AU14HeadsetGovforMarine
+    back: ANPRC117GRadioFilled
+    pocket1: ANPRCFillCardGOVFOR
+    pocket2: ANPRCFreqCard
+
+
+- type: startingGear
+  id: AU14GearGOVFORRadioTrafficOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetGovforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointGOVFORRadioTrafficOperator
+  name: Spawn Point GOVFOR Radio Traffic Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobGOVFORRadioTrafficOperator
+  - type: Sprite
+    state: syn_spawn
+
+- type: job
+  parent: AU14JobRadioTrafficOperatorBase
+  id: AU14JobGOVFORRadioTrafficOperator
+  hidden: false
+  setPreference: true
+  basePlaytimeTracker: true
+
+- type: roleLoadout
+  id: JobAU14JobGOVFORRadioTrafficOperator
+  points: 7
+  groups:
+  - EyewearRMCPVE
+  - MasksRMCPVE
+  - HeadwearRMCPVE
+  - HelmetGarbsRMCPVE
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+
+- type: job
+  parent: AU14JobRadioTrafficOperatorBase
+  id: AU14JobOPFORRadioTrafficOperator
+  roundSide: Opfor
+  roundForce: OPFOR
+  icon: "AU14JobIconOPFORRTO"
+  spawnMenuRoleName: Radio Traffic Operator (OPFOR)
+  supervisors: au14-job-supervisors-opfor
+  startingGear: AU14GearopforRadioTrafficOperator
+  dummyStartingGear: AU14GearopforRadioTrafficOperatorDummy
+  playTimeTracker: AU14JobOPFORRadioTrafficOperator
+  accessGroups:
+  - AU14OpforSquad
+  - AU14OpforFTL
+
+- type: startingGear
+  id: AU14GearopforRadioTrafficOperator
+  equipment:
+    id: AU14JobIDCardOPFORRadioTrafficOperator
+    ears: AU14HeadsetOpforMarine
+    back: ANPRC117GRadioOPFORFilled
+    pocket1: ANPRCFillCardOPFOR
+    pocket2: ANPRCFreqCardOPFOR
+
+- type: playTimeTracker
+  id: AU14JobOPFORRadioTrafficOperator
+  isHumanoid: true
+
+- type: startingGear
+  id: AU14GearopforRadioTrafficOperatorDummy
+  equipment:
+    outerClothing: AU14ArmorM3JungleThree
+    shoes: AU14BootsJungle
+    head: AU14JungleM10Helmet
+    jumpsuit: AU14JungleFatigues
+    ears: AU14HeadsetOpforMarine
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointopforRadioTrafficOperator
+  name: Spawn Point opfor Radio Traffic Operator
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobOPFORRadioTrafficOperator
+  - type: Sprite
+    state: syn_spawn

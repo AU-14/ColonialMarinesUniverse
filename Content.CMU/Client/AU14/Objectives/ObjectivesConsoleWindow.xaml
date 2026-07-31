@@ -1,0 +1,19 @@
+<controls:FancyWindow xmlns="https://spacestation14.io"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls"
+        Title="Objectives Console"
+        MinSize="800 700">
+    <BoxContainer Orientation="Vertical" Margin="8 8">
+        <controls:StripeBack>
+            <Label Text="Objectives Console" HorizontalAlignment="Center"/>
+        </controls:StripeBack>
+        <BoxContainer Orientation="Horizontal" Margin="0 4 0 4">
+            <Label Name="CurrentWinPointsLabel" Text="Current Win Points: 0"/>
+            <Control MinSize="16 0" />
+            <Label Name="RequiredWinPointsLabel" Text="Points to Final Objective: 0"/>
+        </BoxContainer>
+        <ScrollContainer VerticalExpand="true">
+            <BoxContainer Name="ObjectivesList" Orientation="Vertical"/>
+        </ScrollContainer>
+    </BoxContainer>
+</controls:FancyWindow>

@@ -21,4 +21,7 @@ public sealed partial class RequisitionsComputerComponent : Component
 
     [DataField]
     public bool IsLastInteracted = false;
+
+    [DataField]
+    public string Faction = "none";
 }

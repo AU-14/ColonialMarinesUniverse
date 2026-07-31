@@ -20,6 +20,8 @@
     producingSound: /Audio/_RMC14/Machines/print.ogg
     staticPacks:
     - RMCRecipesArmyLathe
+    # AU14 building overhaul: admin-added armylathe recipes (managed by the in-game Lathe Editor, Admin Tools).
+    - AU14ArmylatheRecipes
   - type: MaterialStorage
     storage:
       CMSteel: 56250

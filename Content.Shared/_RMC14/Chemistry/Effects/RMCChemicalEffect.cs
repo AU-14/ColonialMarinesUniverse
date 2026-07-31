@@ -124,22 +124,40 @@ public abstract partial class RMCChemicalEffect : EntityEffectBase<RMCChemicalEf
         {
             var scaledPotency = PotencyPerSecond * args.Scale;
             Tick(damageable, scaledPotency, args);
+            var legacyArgs = ToLegacyArgs(args);
+            Tick(damageable, scaledPotency, legacyArgs);
 
             var totalQuantity = FixedPoint2.Zero;
             if (args.Source != null)
                 totalQuantity = args.Source.GetTotalPrototypeQuantity(reagent.ID);
 
             if (reagent.Overdose != null && totalQuantity >= reagent.Overdose)
+            {
                 TickOverdose(damageable, scaledPotency, args);
+                TickOverdose(damageable, scaledPotency, legacyArgs);
+            }
 
             if (reagent.CriticalOverdose != null && totalQuantity >= reagent.CriticalOverdose)
+            {
                 TickCriticalOverdose(damageable, scaledPotency, args);
+                TickCriticalOverdose(damageable, scaledPotency, legacyArgs);
+            }
         }
         finally
         {
             _moddedPotency = null;
         }
     }
+
+    private static EntityEffectReagentArgs ToLegacyArgs(RMCChemicalEffectArgs args)
+        => new(args.TargetEntity,
+            args.EntityManager,
+            args.OrganEntity,
+            args.Source,
+            args.Quantity,
+            args.Reagent,
+            null,
+            args.Scale);
 
     private static float CalculateReagentBoost(RMCChemicalEffectArgs args)
     {
@@ -163,7 +181,15 @@ public abstract partial class RMCChemicalEffect : EntityEffectBase<RMCChemicalEf
     {
     }
 
+    protected virtual void ReagentBoost(EntityEffectReagentArgs args, ref float boost)
+    {
+    }
+
     protected virtual void Tick(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
+    {
+    }
+
+    protected virtual void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
     }
 
@@ -171,7 +197,32 @@ public abstract partial class RMCChemicalEffect : EntityEffectBase<RMCChemicalEf
     {
     }
 
+    protected virtual void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    {
+    }
+
     protected virtual void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, RMCChemicalEffectArgs args)
     {
+    }
+
+    protected virtual void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    {
+    }
+
+    protected virtual void TickHydroTray(DamageableSystem damageable, FixedPoint2 potency, EntityEffectHydroArgs args)
+    {
+    }
+}
+
+[ByRefEvent]
+public struct HydroTickEvent<T> where T : RMCChemicalEffect
+{
+    public FixedPoint2 Potency;
+    public EntityEffectHydroArgs Args;
+
+    public HydroTickEvent(FixedPoint2 potency, EntityEffectHydroArgs args)
+    {
+        Potency = potency;
+        Args = args;
     }
 }

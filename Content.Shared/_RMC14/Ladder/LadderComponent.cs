@@ -4,7 +4,7 @@ using Robust.Shared.GameStates;
 namespace Content.Shared._RMC14.Ladder;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
-[Access(typeof(SharedLadderSystem))]
+[Access(typeof(SharedLadderSystem), Other = AccessPermissions.ReadWriteExecute)]
 public sealed partial class LadderComponent : Component
 {
     [DataField, AutoNetworkedField]

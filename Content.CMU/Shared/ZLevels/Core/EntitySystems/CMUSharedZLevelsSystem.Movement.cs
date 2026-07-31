@@ -27,6 +27,7 @@ namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem
 {
+    public const int MaxZLevelsBelowRendering = 8;
     public const int MaxZLevelTraversalDepth = 8;
 
     private const float ZGravityForce = 9.8f;

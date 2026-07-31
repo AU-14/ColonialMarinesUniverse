@@ -143,6 +143,11 @@ public sealed partial class RMCWeldEffectSystem : EntitySystem
         RemComp<RMCWeldEffectActiveComponent>(target);
     }
 
+    public void ClearWeldEffect(EntityUid target)
+    {
+        ClearActiveEffect(target);
+    }
+
     private void RotateOffsets(
         Angle rotation,
         ref Vector2? startOffset,

@@ -1,4 +1,6 @@
 using Content.Shared.Access;
+using Content.Shared.AU14.Allegiance;
+using Content.Shared.AU14.Origin;
 using Content.Shared.Guidebook;
 using Content.Shared.Players.PlayTimeTracking;
 using Content.Shared.StatusIcon;
@@ -12,6 +14,17 @@ namespace Content.Shared.Roles;
 [Prototype]
 public sealed partial class JobPrototype : IPrototype
 {
+    [DataField]
+    public ProtoId<AllegiancePrototype>? AllegianceOverride { get; private set; }
+
+    [DataField]
+    public bool IgnoreAllegiance { get; private set; }
+
+    [DataField("originwhitelist")]
+    public HashSet<ProtoId<OriginPrototype>>? OriginWhitelist { get; private set; }
+
+    [DataField("originblackist")]
+    public HashSet<ProtoId<OriginPrototype>>? OriginBlackist { get; private set; }
     [ViewVariables]
     [IdDataField]
     public string ID { get; private set; } = default!;

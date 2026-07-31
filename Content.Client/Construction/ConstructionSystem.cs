@@ -437,7 +437,17 @@ namespace Content.Client.Construction
 
             _ghosts.Clear();
         }
+
+        public void QueryMenuExtensions(ref ConstructionMenuFilterEvent args)
+        {
+            RaiseLocalEvent(ref args);
+        }
     }
+
+    [ByRefEvent]
+    public record struct ConstructionMenuFilterEvent(
+        HashSet<string> HiddenRecipes,
+        HashSet<string> ExcludedSpawnlists);
 
     public sealed class CraftingAvailabilityChangedArgs : EventArgs
     {

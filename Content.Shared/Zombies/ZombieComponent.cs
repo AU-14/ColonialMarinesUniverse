@@ -17,6 +17,7 @@ namespace Content.Shared.Zombies;
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ZombieComponent : Component
 {
+    public EmoteSoundsPrototype? EmoteSounds;
     /// <summary>
     /// The baseline infection chance you have if you have no protective gear
     /// </summary>

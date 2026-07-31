@@ -92,6 +92,10 @@ public sealed partial class VictimInfectedComponent : Component
     [DataField]
     public NetUserId? VictimUserId;
 
+    public NetUserId? InfectorUser;
+    public bool InfectorWantsLarva;
+    public bool InfectorLarvaClaimPending;
+
     [DataField]
     public int FinalStage = 6;
 

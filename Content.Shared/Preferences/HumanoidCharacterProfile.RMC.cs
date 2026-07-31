@@ -43,6 +43,16 @@ public sealed partial class HumanoidCharacterProfile
         PlaytimePerks = other.PlaytimePerks;
         XenoPrefix = other.XenoPrefix;
         XenoPostfix = other.XenoPostfix;
+        Allegiance = other.Allegiance;
+        Origin = other.Origin;
+        Synthetic = other.Synthetic;
+        _gamemodeJobPriorities = other._gamemodeJobPriorities.ToDictionary(
+            pair => pair.Key,
+            pair => new Dictionary<ProtoId<JobPrototype>, JobPriority>(pair.Value));
+        _threatPreferences = new HashSet<ProtoId<Content.Shared._CMU14.Threats.ThreatPrototype>>(other._threatPreferences);
+        _gamemodeThreatPreferences = other._gamemodeThreatPreferences.ToDictionary(
+            pair => pair.Key,
+            pair => new HashSet<ProtoId<Content.Shared._CMU14.Threats.ThreatPrototype>>(pair.Value));
     }
 
     private bool RmcMemberwiseEquals(HumanoidCharacterProfile other)
@@ -53,7 +63,10 @@ public sealed partial class HumanoidCharacterProfile
                NamedItems == other.NamedItems &&
                PlaytimePerks == other.PlaytimePerks &&
                XenoPrefix == other.XenoPrefix &&
-               XenoPostfix == other.XenoPostfix;
+               XenoPostfix == other.XenoPostfix &&
+               Allegiance == other.Allegiance &&
+               Origin == other.Origin &&
+               Synthetic == other.Synthetic;
     }
 
     private void AddRmcHash(ref HashCode hashCode)
@@ -65,6 +78,9 @@ public sealed partial class HumanoidCharacterProfile
         hashCode.Add(PlaytimePerks);
         hashCode.Add(XenoPrefix);
         hashCode.Add(XenoPostfix);
+        hashCode.Add(Allegiance);
+        hashCode.Add(Origin);
+        hashCode.Add(Synthetic);
     }
 
     private void EnsureRmcValid(ICommonSession session, IDependencyCollection collection, IPrototypeManager prototypeManager)

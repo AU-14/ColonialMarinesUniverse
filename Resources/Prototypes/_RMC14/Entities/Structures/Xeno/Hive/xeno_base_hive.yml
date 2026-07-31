@@ -2,6 +2,11 @@
   abstract: true
   id: BaseHiveStructure
   components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
   - type: GuideHelp
     guides:
     - RMCGuideHiveStructures
@@ -44,6 +49,11 @@
   abstract: true
   id: BaseHiveStructureNode
   components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
   - type: GuideHelp
     guides:
     - RMCGuideHiveStructures

@@ -11,8 +11,10 @@
   name: Praetorian
   description: A huge, looming beast of an alien.
   components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/praetorian.rsi
+    sprite: _AU14/Mobs/Xenos/Praetorian/praetorian.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -46,6 +48,29 @@
     - CMXenoSpitter
   - type: XenoAcid
   - type: XenoDevour
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoRoyalBlood
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaPhero
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 200
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoRoyalBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
   - type: XenoPlasma
     plasma: 800
     maxPlasma: 800
@@ -115,7 +140,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.7
   - type: FixedIdentity
-    name: cm-job-name-xeno-praetorian
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT3
 
@@ -160,7 +185,7 @@
     guides:
     - RMCGuideRoleValkyrie
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/valkyrie_praetorian.rsi
+    sprite: _AU14/Mobs/Xenos/Praetorian/valkyrie_praetorian.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -223,6 +248,7 @@
   - type: AcidTrap
   - type: RMCActionOrder
     id: RMCXenoPraetorianValkyrie
+  - type: CMUXenoZJump
 
 - type: entity
   parent: CMXenoPraetorianBase
@@ -230,21 +256,13 @@
   suffix: Dancer
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/dancer_praetorian.rsi
-  - type: XenoRegen
-    critHealMultiplier: 0.4455  # 35% increased regeneration
-    standHealingMultiplier: 0.567
-    restHealMultiplier: 1.35
-  - type: XenoCappedPheromones
-    cappedPheromones:
-      Recovery: 3
+    sprite: _AU14/Mobs/Xenos/Praetorian/dancer_praetorian.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
     - ActionXenoRegurgitate
     - ActionXenoWatch
-    - ActionXenoTailStabLance
-    - ActionXenoTailStabLanceAlt
+    - ActionXenoTailLance
     - ActionXenoImpale
     - ActionXenoDodge
     - ActionXenoTailTrip
@@ -258,20 +276,17 @@
   - type: XenoClaws
     clawType: Sharp
   - type: XenoFinesse
+  - type: XenoDancerRework
   - type: XenoDodge
   - type: XenoImpale
     damage:
       groups:
-        Brute: 40
+        Brute: 60
   - type: XenoTailTrip
-  - type: XenoAltTailStab
-    tailDamage:
-      groups:
-        Brute: 8
-  - type: XenoSwiftSteps
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoPraetorianDancer
+  - type: CMUXenoZJump
 
 - type: entity
   parent: CMXenoPraetorianBase
@@ -282,7 +297,7 @@
     guides:
     - RMCGuideRoleVanguard
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/vanguard_praetorian.rsi
+    sprite: _AU14/Mobs/Xenos/Praetorian/vanguard_praetorian.rsi # AU14-Edit
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -335,7 +350,7 @@
     guides:
     - RMCGuideRoleOppressor
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Praetorian/oppressor_praetorian.rsi
+    sprite: _AU14/Mobs/Xenos/Praetorian/oppressor_praetorian.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest

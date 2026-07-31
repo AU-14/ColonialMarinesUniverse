@@ -8,6 +8,33 @@ using Robust.Shared.Utility;
 namespace Content.Shared.Chat
 {
     [Serializable, NetSerializable]
+    public enum ChatDisplayKind : byte
+    {
+        Unknown, Local, Whisper, Emote, Radio, LOOC, OOC, Dead, Admin, Mentor, System, Combat,
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class ChatDisplayMetadata(
+        ChatDisplayKind kind,
+        string? senderName = null,
+        string? senderPrefix = null,
+        string? verb = null,
+        string? channelLabel = null,
+        bool quoteBody = false,
+        Color? accentColor = null,
+        Color? backgroundColorOverride = null)
+    {
+        public ChatDisplayKind Kind = kind;
+        public string? SenderName = senderName;
+        public string? SenderPrefix = senderPrefix;
+        public string? Verb = verb;
+        public string? ChannelLabel = channelLabel;
+        public bool QuoteBody = quoteBody;
+        public Color? AccentColor = accentColor;
+        public Color? BackgroundColorOverride = backgroundColorOverride;
+    }
+
+    [Serializable, NetSerializable]
     public sealed class ChatMessage
     {
         public ChatChannel Channel;
@@ -26,6 +53,8 @@ namespace Content.Shared.Chat
 
         public NetEntity SenderEntity;
 
+        public NetEntity GhostFollowEntity;
+
         /// <summary>
         ///     Identifier sent when <see cref="SenderEntity"/> is <see cref="NetEntity.Invalid"/>
         ///     if this was sent by a player to assign a key to the sender of this message.
@@ -37,11 +66,17 @@ namespace Content.Shared.Chat
         public Color? MessageColorOverride;
         public string? AudioPath;
         public float AudioVolume;
+        public ChatDisplayMetadata? Display;
+        public bool HidePopup;
+        public bool UseEmoteSpeechBubble;
+        public string? SpeechStyleClass;
+        public string? LanguageIcon;
+        public bool RepeatCheckSender;
 
         [NonSerialized]
         public bool Read;
 
-        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0)
+        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, bool repeatCheckSender = true, ChatDisplayMetadata? display = null, NetEntity ghostFollowEntity = default)
         {
             Channel = channel;
             Message = message;
@@ -52,6 +87,9 @@ namespace Content.Shared.Chat
             MessageColorOverride = colorOverride;
             AudioPath = audioPath;
             AudioVolume = audioVolume;
+            RepeatCheckSender = repeatCheckSender;
+            Display = display;
+            GhostFollowEntity = ghostFollowEntity;
         }
 
         public ChatMessage(ChatMessage copyFrom)
@@ -65,6 +103,13 @@ namespace Content.Shared.Chat
             MessageColorOverride = copyFrom.MessageColorOverride;
             AudioPath = copyFrom.AudioPath;
             AudioVolume = copyFrom.AudioVolume;
+            RepeatCheckSender = copyFrom.RepeatCheckSender;
+            Display = copyFrom.Display;
+            HidePopup = copyFrom.HidePopup;
+            UseEmoteSpeechBubble = copyFrom.UseEmoteSpeechBubble;
+            SpeechStyleClass = copyFrom.SpeechStyleClass;
+            LanguageIcon = copyFrom.LanguageIcon;
+            GhostFollowEntity = copyFrom.GhostFollowEntity;
             Read = copyFrom.Read;
         }
     }

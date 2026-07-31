@@ -9,14 +9,16 @@
   - RMCXenoVentCrawler
   id: CMXenoBurrower
   name: Burrower
-  description: A beefy alien with sharp claws.
+  description: A hefty alien with sharp claws.
   components:
   - type: CanBuildThickFromConstructNode
   - type: GuideHelp
     guides:
     - RMCGuideRoleBurrower
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Burrower/burrower.rsi
+    sprite: _AU14/Mobs/Xenos/Burrower/burrower.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -31,6 +33,25 @@
       0: Alive
       500: Critical
       600: Dead
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaPurple
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 1
   - type: Xeno
     role: CMXenoBurrower
     actionIds:
@@ -39,6 +60,7 @@
     - ActionXenoWatch
     - ActionXenoTailStab
     - ActionXenoAcidNormal
+    - ActionXenoPheromones
     - ActionXenoOrderConstruction
     - ActionXenoDigTunnel
     - ActionXenoPlantWeeds
@@ -62,10 +84,13 @@
     xenoArmor: 25
     explosionArmor: 40
   - type: XenoDevour
+  - type: XenoPheromones
+    pheromonesMultiplier: 2
   - type: XenoStomp
     selfEffect: CMEffectSelfStomp
     shortRange: 0
     range: 4
+    stompsThroughBarricades: true
     plasmaCost: 100
     paralyzeTime: 2
     slowBigInsteadOfStun: true
@@ -124,7 +149,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-burrower
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
   - type: VentCrawler

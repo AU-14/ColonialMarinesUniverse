@@ -10,4 +10,7 @@ public enum HolocardStatus : byte
     Emergency,
     Xeno,
     Permadead,
+    Stable,
+    Trauma,
+    OrganFailure,
 }

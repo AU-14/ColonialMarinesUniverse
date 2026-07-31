@@ -22,7 +22,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Map Entity
+      name: Van (Box)
     - type: Transform
     - type: Map
       mapPaused: False

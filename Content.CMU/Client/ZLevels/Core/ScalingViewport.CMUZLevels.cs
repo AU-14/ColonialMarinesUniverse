@@ -71,6 +71,8 @@ public sealed partial class ScalingViewport
     private readonly LowerRenderGraceState _zLowerRenderGrace = new();
     private IClydeViewport? _stairPreviewViewport;
     private bool _drawStairPreviewComposite;
+    private bool _drawFaintUpperComposite;
+    private float _faintUpperAlpha;
     private EntityUid? _lastZLevelEyeEntity;
     private EntityUid? _lastZLevelViewEntity;
 
@@ -482,6 +484,12 @@ public sealed partial class ScalingViewport
             renderIdentity,
             viewXform.MapID,
             _zRenderedLowerDepths);
+
+        // The first stage of CMU's look-up cycle ghosts the unobstructed level
+        // above the viewer before switching to the full look-up view.
+        if (lookUp == 0 && zLevelViewer.FaintUp)
+            RenderFaintUpperComposite(viewport, fallbackEye, viewXform, lowestDepth, weatherSourceMapId);
+
         LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
     }
 
@@ -1263,6 +1271,70 @@ public sealed partial class ScalingViewport
     {
         if (_drawStairPreviewComposite)
             DrawStairPreviewComposite(handle.DrawingHandleScreen, drawBox);
+
+        if (_drawFaintUpperComposite && _stairPreviewViewport is not null)
+        {
+            handle.DrawingHandleScreen.DrawTextureRect(
+                _stairPreviewViewport.RenderTarget.Texture,
+                drawBox,
+                Color.White.WithAlpha(_faintUpperAlpha));
+        }
+    }
+
+    private void RenderFaintUpperComposite(
+        IClydeViewport viewport,
+        IEye fallbackEye,
+        TransformComponent viewXform,
+        int lowestDepth,
+        MapId weatherSourceMapId)
+    {
+        if (!_config.GetCVar(CMUZLevelsCVars.FaintUpperEnabled))
+            return;
+
+        if (_zLevels is null || _transform is null || _mapSystem is null || viewXform.MapUid is not { } mapUid)
+            return;
+
+        if (!_zLevels.TryMapOffset(mapUid, 1, out _, out var upperMapComp))
+            return;
+
+        // Do not reveal the upper map through a real ceiling.
+        var viewerPos = _transform.GetWorldPosition(viewXform);
+        var aboveCoords = new MapCoordinates(viewerPos, upperMapComp.MapId);
+        if (_mapSystem.TryFindGridAt(aboveCoords, out var upperGridUid, out var upperGridComp))
+        {
+            var tileRef = _mapSystem.GetTileRef(upperGridUid, upperGridComp, aboveCoords);
+            if (!tileRef.Tile.IsEmpty)
+                return;
+        }
+
+        EnsureStairPreviewViewport(viewport);
+        if (_stairPreviewViewport is null)
+            return;
+
+        var rotation = -fallbackEye.Rotation;
+        var offset = rotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset;
+
+        _zEye.LowestDepth = lowestDepth;
+        _zEye.Depth = 1;
+        _zEye.HighestDepth = 1;
+        _zEye.BaseMapId = viewXform.MapID;
+        _zEye.WeatherSourceMapId = weatherSourceMapId;
+        _zEye.Position = new MapCoordinates(fallbackEye.Position.Position, upperMapComp.MapId);
+        _zEye.DrawFov = fallbackEye.DrawFov;
+        _zEye.DrawLight = fallbackEye.DrawLight;
+        _zEye.Offset = fallbackEye.Offset + offset;
+        _zEye.Rotation = fallbackEye.Rotation;
+        _zEye.Scale = fallbackEye.Scale;
+        _zEye.VisualZOffset = offset;
+        _zEye.BlurCurrentLevel = false;
+        _zEye.ConfigureVisibleEntityIndicators(false, _zOpeningBounds);
+
+        _stairPreviewViewport.Eye = _zEye;
+        _stairPreviewViewport.ClearColor = Color.Transparent;
+        _stairPreviewViewport.Render();
+
+        _faintUpperAlpha = Math.Clamp(_config.GetCVar(CMUZLevelsCVars.FaintUpperAlpha), 0.05f, 0.80f);
+        _drawFaintUpperComposite = true;
     }
 
     private void DrawStairPreviewComposite(DrawingHandleScreen screen, UIBox2 drawBox)
@@ -1471,6 +1543,7 @@ public sealed partial class ScalingViewport
     private void ClearZLevelCompositeState()
     {
         _drawStairPreviewComposite = false;
+        _drawFaintUpperComposite = false;
     }
 
     internal static void NoteZRenderBypassed(string reason)

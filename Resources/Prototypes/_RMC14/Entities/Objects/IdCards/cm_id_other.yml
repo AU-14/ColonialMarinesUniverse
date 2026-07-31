@@ -85,7 +85,7 @@
     state: corporate_liaison
   - type: ItemIFF
     factions:
-    - FactionWeYa
+    - FactionWEYU
     - FactionMarine
   - type: PresetIdCard
     job: CMLiaison
@@ -101,7 +101,7 @@
     state: pmc
   - type: ItemIFF
     factions:
-    - FactionWeYa
+    - FactionWEYU
 
 - type: entity
   parent: CMIDCardPMC
@@ -123,7 +123,7 @@
     state: pmc
   - type: ItemIFF
     factions:
-    - FactionWeYa
+    - FactionWEYU
   - type: PresetIdCard
     job: CMLiaison
 
@@ -134,7 +134,7 @@
   components:
   - type: ItemIFF
     factions:
-    - FactionWeYa
+    - FactionWEYU
     - FactionSurvivor
   - type: PresetIdCard
     job: CMSurvivorCorporate
@@ -204,6 +204,7 @@
   - type: ItemIFF
     factions:
     - FactionMarine
+    - FactionCMB
 
 - type: entity
   parent: CMIDCardSilver
@@ -216,6 +217,7 @@
   - type: ItemIFF
     factions:
     - FactionMarine
+    - FactionCMB
 
 - type: entity
   parent: CMIDCardSilver
@@ -225,20 +227,11 @@
   components:
   - type: ItemIFF
     factions:
-    - FactionWeYa
+    - FactionWEYU
   - type: Access
     groups:
     - Colony
     - RMCWeYa
-
-- type: entity
-  parent: RMCIDCardPMC
-  id: RMCIDCardExecutiveBodyguard
-  components:
-  - type: ItemIFF
-    factions:
-    - FactionMarine
-    - FactionWeYa
 
 - type: entity
   parent: CMIDCardLanyard
@@ -255,79 +248,6 @@
 
 - type: entity
   parent: CMIDCardGold
-  id: RMCIDCardProvost
-  abstract: true
-  name: provost ID card
-  description: Issued to members of the Provost Office.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/CMIDs/provost.rsi
-    state: provost
-  - type: Clothing
-    slots:
-    - idcard
-    sprite: _RMC14/Objects/CMIDs/provost.rsi
-
-- type: entity
-  parent: RMCIDCardProvost
-  id: RMCIDCardProvostAdvisor
-  name: Provost Advisor ID card
-  components:
-  - type: PresetIdCard
-    job: CMProvostAdvisor
-
-- type: entity
-  parent: RMCIDCardProvost
-  id: RMCIDCardProvostEnforcer
-  name: Provost Enforcer ID card
-  components:
-  - type: PresetIdCard
-    job: CMProvostEnforcer
-
-- type: entity
-  parent: RMCIDCardProvost
-  id: RMCIDCardProvostTeamLeader
-  name: Provost Team Leader ID card
-  components:
-  - type: PresetIdCard
-    job: CMProvostTeamLeader
-
-- type: entity
-  parent: RMCIDCardProvost
-  id: RMCIDCardProvostChiefInspector
-  name: provost chief inspector ID card
-  components:
-  - type: PresetIdCard
-    job: CMProvostChiefInspector
-
-- type: entity
-  parent: RMCIDCardProvost
-  id: RMCIDCardProvostDeputyMarshal
-  name: Provost Deputy Marshal ID card
-  suffix: Admin
-  components:
-  - type: PresetIdCard
-    job: CMProvostDeputyMarshal
-
-- type: entity
-  parent: RMCIDCardProvost
-  id: RMCIDCardProvostInspector
-  name: Provost Inspector ID card
-  components:
-  - type: PresetIdCard
-    job: CMProvostInspector
-
-- type: entity
-  parent: RMCIDCardProvost
-  id: RMCIDCardProvostMarshal
-  name: Provost Marshal ID card
-  suffix: Admin
-  components:
-  - type: PresetIdCard
-    job: CMProvostMarshal
-
-- type: entity
-  parent: CMIDCardGold
   id: RMCIDCardSynth
   name: synth ID card
   components:
@@ -341,7 +261,7 @@
   suffix: Survivor
   components:
   - type: PresetIdCard
-    job: RMCSyntheticColony
+    job: RMCJobSyntheticColony
   - type: ItemIFF
     factions:
     - FactionSurvivor
@@ -382,56 +302,3 @@
   - type: Sprite
     sprite: _RMC14/Objects/CMIDs/aegis.rsi
     state: bloody
-
-
-# CBRN
-
-- type: entity
-  parent: CMIDCardStandardDogtag
-  id: CMDogtagCBRNRifleman
-  name: CBRN Rifleman's dogtags
-  components:
-  - type: PresetIdCard
-    job: RMCCBRNRifleman
-
-- type: entity
-  parent: CMIDCardStandardDogtag
-  id: CMDogtagCBRNCombatTech
-  name: CBRN Combat Technician's dogtags
-  components:
-  - type: PresetIdCard
-    job: RMCCBRNCombatTech
-
-- type: entity
-  parent: CMIDCardStandardDogtag
-  id: CMDogtagCBRNFTL
-  name: CBRN Fireteam Leader's dogtags
-  components:
-  - type: PresetIdCard
-    job: RMCCBRNFireteamLeader
-
-- type: entity
-  parent: CMIDCardStandardDogtag
-  id: CMDogtagCBRNSL
-  name: CBRN Squad Leader's dogtags
-  components:
-  - type: PresetIdCard
-    job: RMCCBRNSquadLeader
-
-- type: entity
-  parent: CMIDCardStandardDogtag
-  id: CMDogtagCBRNWS
-  name: CBRN Weapons Specialist's dogtags
-  components:
-  - type: PresetIdCard
-    job: RMCCBRNWS
-
-- type: entity
-  parent: CMIDCardStandardDogtag
-  id: CMDogtagCBRNMedic
-  name: CBRN Hospital Corpsman's dogtags
-  components:
-  - type: PresetIdCard
-    job: RMCCBRNMedic
-
-

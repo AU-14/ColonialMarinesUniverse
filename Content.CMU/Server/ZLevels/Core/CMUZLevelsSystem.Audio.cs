@@ -228,6 +228,37 @@ public sealed partial class CMUZLevelsSystem
         }
     }
 
+    public void PlayPvsDirectlyAcrossZ(SoundSpecifier sound, EntityUid source, int maxDepth = 1)
+    {
+        _creatingZLevelAudioProjection = true;
+        try
+        {
+            _audioSystem.PlayPvs(sound, source);
+            var xform = Transform(source);
+            if (xform.MapUid is not { } sourceMap ||
+                !TryComp<CMUZLevelMapComponent>(sourceMap, out var sourceZMap))
+                return;
+
+            var position = _transform.GetWorldPosition(xform);
+            Entity<CMUZLevelMapComponent?> current = (sourceMap, sourceZMap);
+            for (var direction = -1; direction <= 1; direction += 2)
+            {
+                current = (sourceMap, sourceZMap);
+                for (var depth = 0; depth < maxDepth; depth++)
+                {
+                    if (!TryMapOffset(current, direction, out var target))
+                        break;
+                    _audioSystem.PlayPvs(sound, new EntityCoordinates(target.Value.Owner, position));
+                    current = (target.Value.Owner, target.Value.Comp);
+                }
+            }
+        }
+        finally
+        {
+            _creatingZLevelAudioProjection = false;
+        }
+    }
+
     private void ProjectCrossZAudio(
         Entity<AudioComponent> source,
         Entity<CMUZLevelMapComponent> sourceMap,

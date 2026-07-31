@@ -32,6 +32,17 @@ namespace Content.Client.UserInterface.Controls
             XamlChildren = ContentsContainer.Children;
         }
 
+        public bool AllowDraggingOutsideParentBounds { get; set; }
+
+        public void SetCloseButtonAppearance(Color color, Vector2 size)
+        {
+            CloseButton.Visible = true;
+            CloseButton.Disabled = false;
+            CloseButton.MinSize = size;
+            CloseButton.SetSize = size;
+            CloseButton.ModulateSelfOverride = color;
+        }
+
         public string? Title
         {
             get => WindowTitle.Text;

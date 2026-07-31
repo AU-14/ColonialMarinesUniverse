@@ -10,9 +10,11 @@ namespace Content.Shared.Radio.Components;
 /// <summary>
 ///     This component is by entities that can contain encryption keys
 /// </summary>
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class EncryptionKeyHolderComponent : Component
 {
+    [AutoNetworkedField]
+    public HashSet<ProtoId<RadioChannelPrototype>> ReadOnlyChannels = new();
     /// <summary>
     ///     Whether or not encryption keys can be removed from the headset.
     /// </summary>

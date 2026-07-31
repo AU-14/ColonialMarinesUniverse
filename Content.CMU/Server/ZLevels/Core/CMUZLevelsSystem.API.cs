@@ -68,6 +68,23 @@ public sealed partial class CMUZLevelsSystem
         }
     }
 
+    public bool TryAddMapsIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
+    {
+        var requestedMaps = new HashSet<EntityUid>();
+        var requestedDepths = new HashSet<int>();
+        foreach (var (map, depth) in maps)
+        {
+            if (!requestedMaps.Add(map) || !requestedDepths.Add(depth) ||
+                network.Comp.ZLevels.ContainsKey(depth) || network.Comp.ZLevelByEntity.ContainsKey(map) ||
+                TryGetZNetwork(map, out _))
+                return false;
+        }
+
+        AttachMapsToZNetwork(network, maps);
+        PublishZNetworkUpdated(network);
+        return true;
+    }
+
     internal void PublishZNetworkUpdated(Entity<CMUZLevelsNetworkComponent> network)
     {
         using var profile = Prof.Group("CMU Z Topology Publish");

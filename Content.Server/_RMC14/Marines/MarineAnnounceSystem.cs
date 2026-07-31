@@ -105,16 +105,18 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
     public override void AnnounceToMarines(
         string message,
         SoundSpecifier? sound = null,
-        Filter? filter = null)
+        Filter? filter = null,
+        bool excludeSurvivors = true,
+        string? faction = null)
     {
-        filter ??= Filter.Empty()
-            .AddWhereAttachedEntity(e =>
-                HasComp<MarineComponent>(e) ||
-                HasComp<GhostComponent>(e)
-            );
+        filter ??= Filter.Empty().AddWhereAttachedEntity(e =>
+            HasComp<GhostComponent>(e) ||
+            TryComp(e, out MarineComponent? marine) &&
+            (string.IsNullOrEmpty(faction) || string.Equals(marine.Faction, faction, StringComparison.OrdinalIgnoreCase)));
 
         // Filter out non rescued survivors.
-        filter.RemoveWhereAttachedEntity(HasComp<IntelRescueSurvivorObjectiveComponent>);
+        if (excludeSurvivors)
+            filter.RemoveWhereAttachedEntity(HasComp<IntelRescueSurvivorObjectiveComponent>);
 
         _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, message, default, false, true, null);
         _audio.PlayGlobal(sound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));

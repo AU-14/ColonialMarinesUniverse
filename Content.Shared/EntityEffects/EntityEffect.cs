@@ -1,5 +1,9 @@
 using Content.Shared.Database;
+using Content.Shared.Chemistry;
+using Content.Shared.Chemistry.Components;
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.EntityConditions;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.EntityEffects;
@@ -17,7 +21,18 @@ public abstract partial class EntityEffect
     /// <param name="raiser">The type of effect raising the event.</param>
     /// <param name="scale">Optional scale multiplier for the effect.</param>
     /// <param name="user">The entity causing the effect.</param>
-    public abstract void RaiseEvent(EntityUid target, IEntityEffectRaiser raiser, float scale, EntityUid? user);
+    public virtual void RaiseEvent(EntityUid target, IEntityEffectRaiser raiser, float scale, EntityUid? user)
+    {
+        if (raiser is SharedEntityEffectsSystem system)
+            system.ApplyLegacyEffect(target, this, scale);
+    }
+
+    /// <summary>
+    /// Compatibility entry point for CMU effects authored against the pre-event entity-effect API.
+    /// </summary>
+    public virtual void Effect(EntityEffectBaseArgs args)
+    {
+    }
 
     /// <summary>
     /// Conditions for this effect to happen.
@@ -50,7 +65,10 @@ public abstract partial class EntityEffect
 /// <param name="prototype">Prototype manager, to resolve prototype calls.</param>
 /// <param name="entSys">EntitySystem manager, to resolve system calls.</param>
 /// <returns>The guidebook text string, if generated. Null otherwise.</returns>
-    public virtual string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => null;
+    protected virtual string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys) => null;
+
+    public virtual string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+        => ReagentEffectGuidebookText(prototype, entSys);
 
     /// <summary>
     /// If this effect is logged, how important is the log?
@@ -64,6 +82,29 @@ public abstract partial class EntityEffect
     [ViewVariables]
     public virtual LogType LogType => LogType.EntityEffect;
 }
+
+public record class EntityEffectBaseArgs(EntityUid TargetEntity, IEntityManager EntityManager);
+
+public record class EntityEffectReagentArgs(
+    EntityUid TargetEntity,
+    IEntityManager EntityManager,
+    EntityUid? OrganEntity,
+    Solution? Source,
+    FixedPoint2 Quantity,
+    ReagentPrototype? Reagent,
+    ReactionMethod? Method,
+    FixedPoint2 Scale) : EntityEffectBaseArgs(TargetEntity, EntityManager);
+
+public record class EntityEffectHydroArgs(
+    EntityUid TargetEntity,
+    IEntityManager EntityManager,
+    EntityUid? OrganEntity,
+    Solution? Source,
+    FixedPoint2 Quantity,
+    ReagentPrototype? Reagent,
+    ReactionMethod? Method,
+    FixedPoint2 Scale)
+    : EntityEffectReagentArgs(TargetEntity, EntityManager, OrganEntity, Source, Quantity, Reagent, Method, Scale);
 
 /// <summary>
 /// Used to store an <see cref="EntityEffect"/> so it can be raised without losing the type of the condition.
@@ -79,3 +120,5 @@ public abstract partial class EntityEffectBase<T> : EntityEffect where T : Entit
         raiser.RaiseEffectEvent(target, type, scale, user);
     }
 }
+
+public abstract partial class EventEntityEffect<T> : EntityEffectBase<T> where T : EventEntityEffect<T>;

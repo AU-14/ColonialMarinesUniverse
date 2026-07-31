@@ -9,6 +9,7 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared.Weapons.Ranged.Systems;
@@ -357,6 +358,20 @@ public abstract partial class SharedGunSystem
     {
         Appearance.SetData(ent, AmmoVisuals.AmmoCount, GetBallisticShots(ent.Comp));
         Appearance.SetData(ent, AmmoVisuals.AmmoMax, ent.Comp.Capacity);
+    }
+
+    // RMC14
+    /// <summary>
+    /// Changes which prototype an empty ballistic provider spawns on fire. Used to let vehicle
+    /// turrets chamber different shell variants (e.g. AP/HE) depending on which crate loaded them.
+    /// </summary>
+    public void SetBallisticProto(Entity<BallisticAmmoProviderComponent> entity, EntProtoId proto)
+    {
+        if (entity.Comp.Proto == proto)
+            return;
+
+        entity.Comp.Proto = proto;
+        Dirty(entity);
     }
 
     public void SetBallisticUnspawned(Entity<BallisticAmmoProviderComponent> entity, int count)

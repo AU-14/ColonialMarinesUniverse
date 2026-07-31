@@ -1,0 +1,107 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostInspector
+  name: cmu-job-name-corp-provost-inspector
+  description: cmu-job-description-inspector
+  icon: CMUJobIconProvostInspector
+  startingGear: CMUGearProvostInspector
+  playTimeTracker: CMJobProvostInspector
+  whitelisted: true
+  whitelistParent: CMUJobCommandWhitelist
+  ranks:
+    CMURankProvostInspector: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+      RMCSkillLeadership: 2
+      RMCSkillMedical: 1
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-inspector
+  - type: CommandAccent
+  - type: RMCPointing
+  - type: SeeNewPlayers
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pve_chief_inspector
+  - type: ANPRCRadioUser
+
+- type: playTimeTracker
+  id: CMJobProvostInspector
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMUJobIconProvostInspector
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_pvi
+
+# ├──[ Spawnpoint ]──────────────────────────────────────────────────┤
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMUSpawnPointProvostInspector
+  name: Provost Inspector spawn point
+  suffix: RMC, Job Spawn
+  components:
+  - type: SpawnPoint
+    job_id: CMUJobINDFORProvostInspector
+  - type: Sprite
+    state: x
+  - type: AssignSquad
+    whitelist:
+      components:
+      - SquadTeam
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostInspector
+  name: provost role inspector
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostInspector
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostInspector
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-chief
+    description: cmu-ghost-role-information-provost-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostInspector
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostInspector
+  equipment:
+    head: RMCHeadBeretProvostSenior
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetProvostAllCommand
+    jumpsuit: CMJumpsuitProvostCI
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    id: CMUIDCardProvostInspector
+    belt: RMCBeltHolsterPistolHandcannonFilled
+    back: CMSatchelSecurityFilledProvost
+    pocket1: RMCUniversalRecorder
+    pocket2: RMCPouchGeneralLarge
+  storage:
+    back:
+    - AU14StampProvostInspector
+    - AU14RadioJammer

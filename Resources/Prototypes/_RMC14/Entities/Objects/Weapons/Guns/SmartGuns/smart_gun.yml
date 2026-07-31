@@ -1,9 +1,8 @@
-﻿
-- type: entity
+﻿- type: entity
   abstract: true
   parent: [ CMBaseWeaponGun, BaseItem, RMCBaseAttachableHolder ]
   id: RMCSmartGunNoCamo
-  name: ML66A smart gun
+  name: M56B smart gun
   description: The actual firearm in the Smart Gun System. Essentially a heavy, mobile machinegun.
   components:
   - type: Wieldable
@@ -27,6 +26,7 @@
     isCorrodible: false
   - type: GunIFF
     enabled: true
+    preventFriendlyFire: true
   - type: WieldDelay
     baseDelay: 0.4
   - type: WieldableSpeedModifiers
@@ -56,7 +56,7 @@
     availableModes:
     - FullAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
+      collection: AU14SmartgunFireSound
     soundEmpty:
       path: /Audio/Weapons/Guns/Empty/lmg_empty.ogg
   - type: RMCSelectiveFire
@@ -64,7 +64,7 @@
     - FullAuto
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 5
+    baseFireRate: 9.6
     burstScatterMult: 4
     modifiers:
       FullAuto:
@@ -152,9 +152,6 @@
     rsi:
       sprite: _RMC14/Interface/MousePointer/smartgun_mouse.rsi
       state: all
-  - type: GuideHelp
-    guides:
-    - RMCGuideRoleSGO
 
 - type: entity
   parent: RMCSmartGunNoCamo
@@ -181,20 +178,9 @@
 
 - type: entity
   parent: RMCSmartGun
-  id: RMCSmartGunUNMC
-  suffix: UNMC
-  components:
-  - type: RMCLoreExaminable
-    content: rmc-lore-examinable-smart-gun
-    factions:
-    - UNMC
-
-- type: entity
-  parent: RMCSmartGunNoCamo
   id: RMCSmartGunPMC
-  name: ML79A smart gun
-  description: The actual firearm in the 4-piece ML79A Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
-  suffix: PMC
+  name: M56T smart gun
+  description: The actual firearm in the 4-piece M56T Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml79a.rsi
@@ -210,14 +196,14 @@
     slots:
       gun_magazine:
         name: Magazine
-        startingItem: RMCMagazineSmartGunirradiated
+        startingItem: RMCMagazineSmartGun
         insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_reload.ogg
         ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_sg_unload.ogg
         priority: 2
         whitelist:
           tags:
-          - RMCMagazineSmartGunirradiated
           - RMCMagazineSmartGun #For some reason when this is removed mags literally becomes unusable :confused:
+          - RMCMagazineSmartGunirradiated
       cell_slot:
         name: power-cell-slot-component-slot-name-default
         startingItem: RMCPowerCellSmartgun
@@ -253,20 +239,38 @@
   - type: RMCSelectiveFire
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 10
+    baseFireRate: 18
     burstScatterMult: 1
     modifiers:
       FullAuto:
         maxScatterModifier: 0
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 80
+        shotsToMaxScatter: 250
+  - type: GunToggleableAmmo
+    settings:
+    - damage:
+        types:
+          Piercing: 62
+      armorPiercing: 20
+      name: rmc-toggleable-ammo-highly-precise
+      icon:
+        sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+        state: ammo_swap_normal
+    - damage:
+        types:
+          Piercing: 53
+      armorPiercing: 60
+      name: rmc-toggleable-ammo-armor-shredding
+      icon:
+        sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
+        state: ammo_swap_ap
 
 - type: entity
   parent: RMCSmartGunNoCamo
   id: RMCSmartGunCO
-  name: ML66B 'cavalier' smart gun
-  description: The actual firearm in the Smart Gun System. Back order only. Besides a more robust weapons casing, an ID lock system and a fancy paintjob, the gun's performance is identical to the standard-issue ML66A.
+  name: M56C 'cavalier' smart gun
+  description: The actual firearm in the Smart Gun System. Back order only. Besides a more robust weapons casing, an ID lock system and a fancy paintjob, the gun's performance is identical to the standard-issue M56B.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/CO.rsi
@@ -280,7 +284,7 @@
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/CO.rsi
   - type: Gun
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a.ogg
+      collection: AU14SmartgunFireSound
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -303,14 +307,17 @@
 - type: entity
   parent: RMCSmartGun
   id: RMCSmartGunCLF
-  name: ML66B 'freedom' smart gun
-  description: The actual firearm in the 4-piece ML66B Smartgun System. Essentially a heavy, mobile machinegun. This one has the CLF logo carved over the manufacturing stamp.
+  name: M56B 'freedom' smart gun
+  description: The actual firearm in the 4-piece M56B Smartgun System. Essentially a heavy, mobile machinegun. This one has the CLF logo carved over the manufacturing stamp.
+  components:
+  - type: GunRequireEquipped
+    whitelist: { }
 
 - type: entity
   parent: RMCSmartGunNoCamo
   id: RMCSmartGunRoyal
-  name: ML66C 'royal' smart gun
-  description: The actual firearm in the 2-piece ML66C Smart Gun System. This variant is used by the Three Sun Empire's Royal Crown Marine units. You may toggle firing restrictions by using a special action.
+  name: L56 smart gun
+  description: The actual firearm in the 2-piece L56 Smart Gun System. This smartgun is used by Three World Empires Imperial Space Armed Forces and Royal Marine Commando units. You may toggle firing restrictions by using a special action.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/SmartGuns/ml66a_royal.rsi
@@ -344,7 +351,7 @@
 - type: entity
   parent: CMMagazineRifleBase
   id: RMCMagazineSmartGun
-  name: "ML66A drum magazine (10x30mm)"
+  name: "M56 drum magazine (10x30mm)"
   components:
   - type: Tag
     tags:
@@ -367,14 +374,11 @@
     - suitStorage
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsSmartGun
-  - type: GuideHelp
-    guides:
-    - RMCGuideRoleSGO
 
 - type: entity
   parent: RMCMagazineSmartGun
   id: RMCMagazineSmartGunirradiated
-  name: "ML79A drum magazine irradiated (10x30mm)"
+  name: "M56 drum magazine irradiated (10x30mm)"
   components:
   - type: BallisticAmmoProvider
     whitelist:
@@ -456,7 +460,7 @@
     - range: 12
       falloff: 9999
       ignoreModifiers: true
-    - range: 7
+    - range: 10
       falloff: 4
   - type: RMCProjectileAccuracy
     accuracy: 105

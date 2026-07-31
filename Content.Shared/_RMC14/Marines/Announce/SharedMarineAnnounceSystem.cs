@@ -222,7 +222,9 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
     public virtual void AnnounceToMarines(
         string message,
         SoundSpecifier? sound = null,
-        Filter? filter = null)
+        Filter? filter = null,
+        bool excludeSurvivors = true,
+        string? faction = null)
     {
     }
 

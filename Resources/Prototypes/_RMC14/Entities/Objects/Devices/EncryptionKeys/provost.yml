@@ -1,11 +1,11 @@
-﻿- type: entity
+- type: entity
   parent: CMEncryptionKey
   id: RMCEncryptionKeyProvost
   name: provost radio encryption key
   components:
   - type: EncryptionKey
     channels:
-    - Provost
+    - radioProvost
     - MarineCommand
     - MarineMilitaryPolice
     - MarineAlpha
@@ -20,6 +20,6 @@
     - MarineJTAC
     - MarineIntel
     - MarineCommon
-    defaultChannel: Provost
+    defaultChannel: radioProvost
   - type: Sprite
     state: stripped_key

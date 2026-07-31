@@ -1,0 +1,56 @@
+using Content.Shared._CMU14.Language;
+using Robust.Client.UserInterface;
+
+namespace Content.Client._CMU14.Language;
+
+public sealed class FactionLanguageBoundUserInterface : BoundUserInterface
+{
+    private FactionLanguagePickerWindow? _window;
+
+    public FactionLanguageBoundUserInterface(EntityUid owner, Enum uiKey) : base(owner, uiKey) { }
+
+    protected override void Open()
+    {
+        base.Open();
+
+        CreateWindow();
+    }
+
+    protected override void UpdateState(BoundUserInterfaceState state)
+    {
+        if (_window == null || !_window.IsOpen)
+            CreateWindow();
+
+        if (state is FactionLanguagePickerState s)
+            _window?.Populate(s.Languages, s.FactionTag);
+    }
+
+    private void CreateWindow()
+    {
+        CloseWindow();
+        _window = new FactionLanguagePickerWindow();
+        _window.OnLanguagePicked += OnPicked;
+        _window.OpenCentered();
+    }
+
+    private void OnPicked(string language)
+    {
+        SendMessage(new FactionLanguagePickedMessage(language));
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        base.Dispose(disposing);
+        CloseWindow();
+    }
+
+    private void CloseWindow()
+    {
+        if (_window == null)
+            return;
+
+        _window.OnLanguagePicked -= OnPicked;
+        _window.Close();
+        _window = null;
+    }
+}

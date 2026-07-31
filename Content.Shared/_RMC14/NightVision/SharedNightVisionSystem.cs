@@ -264,7 +264,7 @@ public abstract partial class SharedNightVisionSystem : EntitySystem
         _audio.PlayLocal(item.Comp.SoundOn, item.Owner, user);
     }
 
-    private void EnableNightVisionItem(Entity<NightVisionItemComponent> item, EntityUid user)
+    public void EnableNightVisionItem(Entity<NightVisionItemComponent> item, EntityUid user)
     {
         DisableNightVisionItem(item, item.Comp.User);
 

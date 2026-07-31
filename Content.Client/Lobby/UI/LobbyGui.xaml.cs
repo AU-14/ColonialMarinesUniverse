@@ -10,6 +10,7 @@ namespace Content.Client.Lobby.UI
     [GenerateTypedNameReferences]
     public sealed partial class LobbyGui : UIScreen
     {
+        private const float BalanceRatingBottomMargin = 84f;
         [Dependency] private IClientConsoleHost _consoleHost = default!;
 
         public LobbyGui()
@@ -18,6 +19,7 @@ namespace Content.Client.Lobby.UI
             IoCManager.InjectDependencies(this);
             SetAnchorPreset(MainContainer, LayoutPreset.Wide);
             SetAnchorPreset(Background, LayoutPreset.Wide);
+            PositionBalanceRatingContainer();
 
             LobbySong.SetMarkup(Loc.GetString("lobby-state-song-no-song-text"));
 
@@ -26,6 +28,13 @@ namespace Content.Client.Lobby.UI
 
             CollapseButton.OnPressed += _ => TogglePanel(false);
             ExpandButton.OnPressed += _ => TogglePanel(true);
+        }
+
+        public void PositionBalanceRatingContainer()
+        {
+            SetAnchorAndMarginPreset(BalanceRatingContainer, LayoutPreset.BottomLeft, margin: 10);
+            SetMarginTop(BalanceRatingContainer, -BalanceRatingContainer.DesiredSize.Y - BalanceRatingBottomMargin);
+            SetMarginBottom(BalanceRatingContainer, -BalanceRatingBottomMargin);
         }
 
         public void SwitchState(LobbyGuiState state)

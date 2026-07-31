@@ -34,6 +34,15 @@ public sealed partial class CriminalRecordsConsoleSystem : SharedCriminalRecords
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private IdentitySystem _identity = default!;
 
+    public void AddScannedRecord(StationRecordKey key)
+    {
+        // Records are no longer hidden pending a forensic scan in the newer console implementation.
+        // Keep the CMU hook as a compatibility notification and refresh any open consoles.
+        var query = AllEntityQuery<CriminalRecordsConsoleComponent>();
+        while (query.MoveNext(out var uid, out var component))
+            UpdateUserInterface((uid, component));
+    }
+
     public override void Initialize()
     {
         SubscribeLocalEvent<CriminalRecordsConsoleComponent, RecordModifiedEvent>(UpdateUserInterface);

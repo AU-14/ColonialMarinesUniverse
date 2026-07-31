@@ -14,8 +14,10 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleRavager
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Ravager/ravager.rsi
+    sprite: _AU14/Mobs/Xenos/Ravager/ravager.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base", "enum.XenoShardVisualLayers.Base" ]
       state: alive
@@ -68,6 +70,25 @@
     explosionArmor: 80
   - type: XenoClaws
     clawType: VerySharp
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaCatecholamine
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaCatecholamine
+        Quantity: 1
   - type: MeleeWeapon
     attackRate: 1.05
     damage:
@@ -135,7 +156,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: ravager
   - type: FixedIdentity
-    name: cm-job-name-xeno-ravager
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT3
 
@@ -163,7 +184,7 @@
       groups:
         Brute: 45
   - type: VehicleDamageMultiplier
-    multiplier: 2
+    multiplier: 4
   - type: XenoScissorCut
     damage:
       types:
@@ -182,10 +203,7 @@
   suffix: Berserker
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Ravager/berserker_ravager.rsi
-  - type: XenoCappedPheromones
-    cappedPheromones:
-      Frenzy: 2.9
+    sprite: _AU14/Mobs/Xenos/Ravager/berserker_ravager.rsi
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -258,7 +276,10 @@
   suffix: Hedgehog
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Ravager/hedgehog_ravager.rsi
+    sprite: _AU14/Mobs/Xenos/Ravager/hedgehog_ravager.rsi
+    # layers:
+    # - state: hedgehog_1
+    #   map: [ "enum.XenoShardVisualLayers.Base" ]
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -329,3 +350,5 @@
   - type: XenoHidden
   - type: RMCActionOrder
     id: RMCXenoRavagerHedgehog
+
+

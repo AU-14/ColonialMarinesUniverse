@@ -163,6 +163,15 @@
       Min: 1
       Max: 4
       PotencyDivisor: 25
+  specialChemicals:
+    CMUConiine:
+      Min: 3
+      Max: 20
+      PotencyDivisor: 10
+    CMUPhenol:
+      Min: 3
+      Max: 20
+      PotencyDivisor: 10
 
 - type: seed
   id: laughinPea
@@ -703,6 +712,11 @@
       Min: 1
       Max: 4
       PotencyDivisor: 25
+  specialChemicals:
+    CMUPsoralen:
+      Min: 3
+      Max: 20
+      PotencyDivisor: 5
 
 - type: seed
   id: garlic
@@ -744,6 +758,7 @@
     - FoodApple
   mutationPrototypes:
     - goldenApple
+    - poisonApple
   harvestRepeat: Repeat
   lifespan: 55
   maturation: 6
@@ -1059,6 +1074,11 @@
       Min: 1
       Max: 25
       PotencyDivisor: 4
+  specialChemicals:
+    CMUUrishiol:
+      Min: 3
+      Max: 20
+      PotencyDivisor: 2
 
 - type: seed
   id: deathNettle
@@ -1082,7 +1102,7 @@
   nutrientConsumption: 0.80
   idealHeat: 298
   chemicals:
-    SulfuricAcid:
+    RMCSulphuricAcid:
       Min: 1
       Max: 15
       PotencyDivisor: 6
@@ -1090,6 +1110,11 @@
       Min: 1
       Max: 15
       PotencyDivisor: 6
+  specialChemicals:
+    CMUUrishiol:
+      Min: 7
+      Max: 20
+      PotencyDivisor: 1
 
 - type: seed
   id: chili
@@ -1164,8 +1189,6 @@
   packetPrototype: PoppySeeds
   productPrototypes:
     - FoodPoppy
-  mutationPrototypes:
-    - lily
   lifespan: 25
   maturation: 10
   production: 3
@@ -1179,6 +1202,11 @@
       Max: 2
       PotencyDivisor: 50
     Bicaridine:
+      Min: 1
+      Max: 20
+      PotencyDivisor: 5
+  specialChemicals:
+    CMUAtropine:
       Min: 1
       Max: 20
       PotencyDivisor: 5
@@ -1258,7 +1286,12 @@
       Min: 1
       Max: 20
       PotencyDivisor: 5
-    Epinephrine:
+    CMUAmatoxin:
+      Min: 3
+      Max: 10
+      PotencyDivisor: 5
+  specialChemicals:
+    CMUZygacine:
       Min: 1
       Max: 20
       PotencyDivisor: 5
@@ -1715,6 +1748,9 @@
   packetPrototype: BerrySeeds
   productPrototypes:
     - FoodBerries
+  mutationPrototypes:
+    - poisonberry
+    - deathberry
   harvestRepeat: Repeat
   lifespan: 50
   maturation: 6

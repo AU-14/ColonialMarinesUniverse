@@ -6,7 +6,7 @@ using Robust.Shared.Utility;
 namespace Content.Shared.Tools.Components;
 
 [RegisterComponent, NetworkedComponent]
-[Access(typeof(SharedToolSystem))]
+[Access(typeof(SharedToolSystem), typeof(Content.Shared.AU14.Objectives.Interact.SharedInteractObjectiveSystem))]
 public sealed partial class ToolComponent : Component
 {
     [DataField]

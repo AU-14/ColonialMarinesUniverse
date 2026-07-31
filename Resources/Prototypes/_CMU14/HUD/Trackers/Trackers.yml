@@ -1,0 +1,9 @@
+- type: trackerMode
+  id: GROMCommandingOfficer
+  job: AU14UPPGROMCommander
+  alert: SquadTrackerCommandingOfficer
+
+- type: trackerMode
+  id: USArmyCommandingOfficer
+  job: AU14USArmyCommander
+  alert: SquadTrackerCommandingOfficer

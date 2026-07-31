@@ -1,0 +1,31 @@
+- type: entity
+  parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
+  id: AU14MaskGasRMC
+  name: L7 pattern gasmask
+  description: The standard issue gasmask utilized by the TWE Royal Marines Commandos and IASF.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/RMC/mask/gasmask.rsi
+  - type: Clothing
+    sprite: _AU14/Clothing/RMC/mask/gasmask.rsi
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Snout
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask
+
+# Prescription variants
+
+- type: entity
+  parent: AU14MaskGasRMC
+  id: AU14MaskPrescriptionGasRMC
+  name: prescription L7 pattern gasmask
+  description: The standard issue gasmask utilized by the TWE Royal Marines Commandos and IASF. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4

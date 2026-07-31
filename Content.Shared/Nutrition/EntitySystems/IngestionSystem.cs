@@ -236,7 +236,7 @@ public sealed partial class IngestionSystem : EntitySystem
         return false;
     }
 
-    private void OnTryIngest(Entity<BodyComponent> entity, ref AttemptIngestEvent args)
+    private void OnTryIngest(Entity<Content.Shared.Body.BodyComponent> entity, ref AttemptIngestEvent args)
     {
         var food = args.Ingested;
         var forceFed = args.User != entity.Owner;
@@ -290,7 +290,7 @@ public sealed partial class IngestionSystem : EntitySystem
         }
     }
 
-    private void OnEatingDoAfter(Entity<BodyComponent> entity, ref EatingDoAfterEvent args)
+    private void OnEatingDoAfter(Entity<Content.Shared.Body.BodyComponent> entity, ref EatingDoAfterEvent args)
     {
         if (args.Cancelled || args.Handled || entity.Comp.Deleted || args.Target == null)
             return;

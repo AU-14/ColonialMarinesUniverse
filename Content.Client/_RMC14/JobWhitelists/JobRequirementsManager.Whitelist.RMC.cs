@@ -5,6 +5,8 @@ namespace Content.Client.Players.PlayTimeTracking;
 
 public sealed partial class JobRequirementsManager
 {
+    public bool IsWhitelisted(ProtoId<JobPrototype> job) => IsRMCWhitelisted(job);
+
     private bool IsRMCWhitelisted(ProtoId<JobPrototype> job)
     {
         var visited = new HashSet<ProtoId<JobPrototype>>();

@@ -4,6 +4,8 @@ namespace Content.Shared.CCVar;
 
 public sealed partial class CCVars
 {
+    public static readonly CVarDef<int> VotePlatoonDuration =
+        CVarDef.Create("vote.platoon_duration", 30, CVar.SERVERONLY);
     /// <summary>
     ///     Allows enabling/disabling player-started votes for ultimate authority
     /// </summary>

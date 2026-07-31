@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Medical.Scanner;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
 using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.QueenSpawned;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Tackle;
 using Content.Shared._RMC14.Vendors;
@@ -184,6 +185,11 @@ public sealed partial class XenoSystem : EntitySystem
 
         _eye.RefreshVisibilityMask(xeno.Owner);
         Dirty(xeno);
+
+        if (xeno.Comp.Role == "CMXenoQueen")
+        {
+            RaiseLocalEvent(new QueenSpawnedEvent(xeno.Owner));
+        }
     }
 
     private void OnXenoGetAdditionalAccess(Entity<XenoComponent> xeno, ref GetAccessTagsEvent args)
@@ -620,5 +626,11 @@ public sealed partial class XenoSystem : EntitySystem
                 }
             }
         }
+    }
+
+    public void SetHealOffWeeds(Entity<XenoRegenComponent> ent, bool enabled)
+    {
+        ent.Comp.HealOffWeeds = enabled;
+        Dirty(ent);
     }
 }

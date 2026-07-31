@@ -91,6 +91,7 @@
     - DoorXenoResin
     - XenoStickyResin
     - XenoFastResin
+    - XenoCollapseResin
     - XenoResinSpikes
     - HiveAcidPillarXeno
     canOrderConstruction:
@@ -279,7 +280,7 @@
     enabled: false
   - type: XenoToggleChargingStop
   - type: FixedIdentity
-    name: cm-job-name-xeno-queen
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartTQ
   - type: RMCTrackable

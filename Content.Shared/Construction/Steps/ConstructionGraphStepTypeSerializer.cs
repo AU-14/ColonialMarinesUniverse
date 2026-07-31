@@ -1,4 +1,5 @@
-﻿using Robust.Shared.Serialization;
+﻿using Content.Shared.Construction.Steps;
+using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Serialization.Markdown.Mapping;
 using Robust.Shared.Serialization.Markdown.Validation;
@@ -29,6 +30,12 @@ namespace Content.Shared.Construction.Steps
             if (node.Has("tag"))
             {
                 return typeof(TagConstructionGraphStep);
+            }
+
+            // AU14: match a held entity by its exact prototype id (works for any item).
+            if (node.Has("entityId"))
+            {
+                return typeof(EntityIdConstructionGraphStep);
             }
 
             if (node.Has("allTags") || node.Has("anyTags"))

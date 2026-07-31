@@ -59,6 +59,14 @@ public sealed partial class RandomHumanoidSystem : EntitySystem
         _visualBody.ApplyProfileTo(humanoid, profile);
         _humanoidProfile.ApplyProfileTo(humanoid, profile);
 
+        RaiseLocalEvent(humanoid, new RandomHumanoidSpawnedEvent(prototypeId, profile.Species));
+
         return humanoid;
     }
+}
+
+public sealed partial class RandomHumanoidSpawnedEvent(string settingsPrototypeId, string species) : EntityEventArgs
+{
+    public readonly string SettingsPrototypeId = settingsPrototypeId;
+    public readonly string Species = species;
 }

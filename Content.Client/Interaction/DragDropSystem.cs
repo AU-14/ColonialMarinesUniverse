@@ -209,6 +209,11 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
         if (ev.Handled != true)
             return false;
 
+        var startEv = new CanStartDragEvent(dragger, entity);
+        RaiseLocalEvent(dragger, ref startEv);
+        if (startEv.Cancelled)
+            return false;
+
         _draggedEntity = entity;
         _state = DragState.MouseDown;
         _mouseDownScreenPos = args.ScreenCoordinates;

@@ -80,6 +80,18 @@
   minLimit: 0
   maxLimit: 12
   loadouts:
+  - GogglesM1A1ClearAU14
+  - GogglesM1A1AU14
+  - GogglesM1A1DarkAU14
+  - GogglesM1A1LaserAU14
+  - GogglesM1A1OrangeAU14
+  - GogglesM1A1PolarizedAU14
+  - GogglesM1A1ClearPrescriptionAU14
+  - GogglesM1A1PrescriptionAU14
+  - GogglesM1A1DarkPrescriptionAU14
+  - GogglesM1A1LaserPrescriptionAU14
+  - GogglesM1A1OrangePrescriptionAU14
+  - GogglesM1A1PolarizedPrescriptionAU14
   - AviatorsRMC
   - EyepatchRMC
   - GlassesRPGRMC
@@ -93,10 +105,15 @@
   - GogglesAdvancedRMC
   - GogglesM1A1RMC
   - PersonalShadesRMC
-  - SunglassesRMC # TODO prescription sunglasses
+  - PersonalShadesPrescriptionRMC
+  - SunglassesRMC
+  - SunglassesPrescriptionRMC
   - GlassesTriMaxYellowRMC
+  - GlassesTriMaxYellowPrescriptionRMC
   - GlassesTriMaxBronzeRMC
+  - GlassesTriMaxBronzePrescriptionRMC
   - GlassesTriMaxBlackRMC
+  - GlassesTriMaxBlackPrescriptionRMC
   - GogglesRedRMC
   - GogglesBlueRMC
   - GogglesPurpleRMC
@@ -118,23 +135,34 @@
   minLimit: 0
   maxLimit: 1
   loadouts:
+  - GogglesM1A1ClearAU14
+  - GogglesM1A1AU14
+  - GogglesM1A1DarkAU14
+  - GogglesM1A1LaserAU14
+  - GogglesM1A1OrangeAU14
+  - GogglesM1A1PolarizedAU14
+  - GogglesM1A1ClearPrescriptionAU14
+  - GogglesM1A1PrescriptionAU14
+  - GogglesM1A1DarkPrescriptionAU14
+  - GogglesM1A1LaserPrescriptionAU14
+  - GogglesM1A1OrangePrescriptionAU14
+  - GogglesM1A1PolarizedPrescriptionAU14
   - AviatorsRMC
   - EyepatchRMC
   - GlassesRPGRMC
   - GlassesRPGRMCOld
   - GlassesPrescriptionRMC
   - HippieGlassesRMC
-  - GogglesRMC
-  - GogglesPrescriptionRMC
-  - GogglesBlackRMC
-  - GogglesOrangeRMC # TODO add prescription variants of all the goggles
-  - GogglesAdvancedRMC
-  - GogglesM1A1RMC
   - PersonalShadesRMC
-  - SunglassesRMC # TODO prescription sunglasses
+  - PersonalShadesPrescriptionRMC
+  - SunglassesRMC
+  - SunglassesPrescriptionRMC
   - GlassesTriMaxYellowRMC
+  - GlassesTriMaxYellowPrescriptionRMC
   - GlassesTriMaxBronzeRMC
+  - GlassesTriMaxBronzePrescriptionRMC
   - GlassesTriMaxBlackRMC
+  - GlassesTriMaxBlackPrescriptionRMC
 
 - type: loadoutGroup
   id: EyewearRoyalRMC
@@ -169,7 +197,6 @@
   - MaskScarfGrayRMC
   - MaskScarfGreenRMC
   - MaskScarfTanRMC
-  - GasMaskRMC
   - TornScarfBlackRMC
   - TornScarfDesertRMC
   - TornScarfGreenRMC
@@ -210,7 +237,6 @@
   - MaskScarfGrayRMC
   - MaskScarfGreenRMC
   - MaskScarfTanRMC
-  - GasMaskRMC
   - KeffiyehRMC
   - KeffiyehBlackRMC
   - KeffiyehBlueRMC
@@ -316,22 +342,10 @@
   loadouts:
   - FakeNVGRMC
   - FakeNVGPVERMC
-  - NettingRMC
-  - NettingUrbanRMC
-  - NettingDesertRMC
-  - NettingJungleRMC
-  - RaincoverRMC
-  - RaincoverUrbanRMC
-  - RaincoverDesertRMC
-  - RaincoverJungleRMC
   - BuckshotSpentRMC
   - FlechetteSpentRMC
   - SlugSpentRMC
   - CartridgeSpentRMC
-  - HelmetGasmaskRMC
-  - HelmetGasmaskDesertRMC
-  - HelmetGasmaskJungleRMC
-  - HelmetGasmaskUrbanRMC
   - FeatherRMC
   - FeatherRedRMC
   - FeatherBlueRMC
@@ -343,9 +357,6 @@
   - TrimmedWireRMC
   - ChaplainPatchRMC
   - PeaceFlairRMC
-  - IoFlairRMC
-  - TerraTekFlairRMC
-  - UNMCFlairRMC
   - MovieTicketRMC
 
 - type: loadoutGroup
@@ -354,15 +365,10 @@
   minLimit: 0
   maxLimit: 2
   loadouts:
-  - FakeNVGPVERMC
   - BuckshotSpentRMC
   - FlechetteSpentRMC
   - SlugSpentRMC
   - CartridgeSpentRMC
-  - HelmetGasmaskRMC
-  - HelmetGasmaskDesertRMC
-  - HelmetGasmaskJungleRMC
-  - HelmetGasmaskUrbanRMC
   - FeatherRMC
   - FeatherRedRMC
   - FeatherBlueRMC
@@ -374,10 +380,9 @@
   - TrimmedWireRMC
   - ChaplainPatchRMC
   - PeaceFlairRMC
-  - IoFlairRMC
-  - TerraTekFlairRMC
-  - UNMCFlairRMC
   - MovieTicketRMC
+  - FakeNVGRMC
+  - FakeNVGPVERMC
 
 - type: loadoutGroup
   id: HelmetGarbsRoyalRMC
@@ -409,11 +414,6 @@
   loadouts:
   - UNMCSquadPatchRMC
   - SquadArmbandRMC
-  - PonchoRMC
-  - PonchoJungleRMC
-  - PonchoDesertRMC
-  - PonchoUrbanRMC
-  - PonchoSnowRMC
   - PatchPeaceRMC
   - PDTLKitRMC
 
@@ -798,10 +798,15 @@
   - GogglesAdvancedRMC
   - GogglesM1A1RMC
   - PersonalShadesRMC
-  - SunglassesRMC # TODO prescription sunglasses
+  - PersonalShadesPrescriptionRMC
+  - SunglassesRMC
+  - SunglassesPrescriptionRMC
   - GlassesTriMaxYellowRMC
+  - GlassesTriMaxYellowPrescriptionRMC
   - GlassesTriMaxBronzeRMC
+  - GlassesTriMaxBronzePrescriptionRMC
   - GlassesTriMaxBlackRMC
+  - GlassesTriMaxBlackPrescriptionRMC
   - GogglesRedRMC
   - GogglesBlueRMC
   - GogglesPurpleRMC

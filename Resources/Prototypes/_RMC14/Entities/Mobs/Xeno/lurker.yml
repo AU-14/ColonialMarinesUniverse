@@ -11,8 +11,10 @@
   name: Lurker
   description: A beefy, fast alien with sharp claws.
   components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Lurker/lurker.rsi
+    sprite: _AU14/Mobs/Xenos/Lurker/lurker.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -41,6 +43,25 @@
     tier: 2
     hudOffset: -0.15,0.05
     unlockAt: 540 # 9 minutes
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaCatecholamine
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaCatecholamine
+        Quantity: 1
   - type: XenoRegen
     restHealMultiplier:  1.5
   - type: XenoLight
@@ -95,9 +116,10 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-lurker
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
+  - type: CMUXenoZJump
 
 - type: entity
   parent:
@@ -143,7 +165,7 @@
     guides:
     - RMCGuideRoleVampire
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Lurker/vampire_lurker.rsi
+    sprite: _AU14/Mobs/Xenos/Lurker/vampire_lurker.rsi # AU14-Edit
   - type: Xeno
     role: CMXenoLurker
     actionIds:

@@ -38,6 +38,12 @@ public sealed partial class DropshipNavigationComputerComponent : Component
     public bool RemoteControl = false;
 
     [DataField, AutoNetworkedField]
+    public bool CanTacticalLand;
+
+    [DataField, AutoNetworkedField]
+    public Vector2i TacticalLandFootprintOverride = Vector2i.Zero;
+
+    [DataField, AutoNetworkedField]
     public TimeSpan LockoutDuration = TimeSpan.FromMinutes(10);
 
     [DataField, AutoNetworkedField]

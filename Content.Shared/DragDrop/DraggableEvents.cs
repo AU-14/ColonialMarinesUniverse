@@ -12,6 +12,9 @@ public record struct CanDragEvent
     public bool Handled;
 }
 
+[ByRefEvent]
+public record struct CanStartDragEvent(EntityUid User, EntityUid Target, bool Cancelled = false);
+
 /// <summary>
 /// Raised directed on a dragged entity to indicate whether it has interactions with the target entity.
 /// </summary>

@@ -131,6 +131,22 @@ public sealed partial class HungerComponent : Component
     [ViewVariables(VVAccess.ReadWrite)]
     [AutoNetworkedField]
     public TimeSpan ThresholdUpdateRate = TimeSpan.FromSeconds(1);
+
+    /// <summary>
+    /// Movement speed multiplier applied while <see cref="CurrentThreshold"/> is Peckish or worse.
+    /// How soon this kicks in is entirely a function of <see cref="BaseDecayRate"/> and the gap between the
+    /// Okay and Peckish entries of <see cref="Thresholds"/>. Stacks with <see cref="StarvingSlowdownModifier"/>.
+    /// </summary>
+    [DataField]
+    public float PeckishSlowdownModifier = 0.9f;
+
+    /// <summary>
+    /// How often the "you need to eat" reminder popup repeats while Peckish or worse.
+    /// The actual throttle timer is shared with Thirst's reminder via <see cref="NutritionReminderComponent"/>
+    /// so the two don't stack in the same tick.
+    /// </summary>
+    [DataField]
+    public TimeSpan ReminderPopupInterval = TimeSpan.FromSeconds(60);
 }
 
 [Serializable, NetSerializable]

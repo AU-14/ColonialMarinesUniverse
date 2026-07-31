@@ -1,0 +1,264 @@
+<controls:CMUSurgeryWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._CMU14.Medical.Treatment.Surgery"
+    xmlns:graphics="clr-namespace:Robust.Client.Graphics;assembly=Robust.Client"
+    Title="{Loc 'cmu-medical-surgery-window-title'}"
+    MinSize="560 420"
+    SetSize="980 660">
+
+    <PanelContainer Name="ScaleRoot"
+                    Access="Public"
+                    HorizontalExpand="True"
+                    VerticalExpand="True">
+        <PanelContainer.PanelOverride>
+            <graphics:StyleBoxFlat
+                BackgroundColor="#121318"
+                BorderColor="#333642"
+                BorderThickness="1"/>
+        </PanelContainer.PanelOverride>
+
+        <BoxContainer Orientation="Vertical"
+                      Margin="12"
+                      SeparationOverride="8"
+                      HorizontalExpand="True"
+                      VerticalExpand="True">
+
+            <BoxContainer Name="SurgeryHeaderRow"
+                          Access="Public"
+                          Orientation="Horizontal"
+                          SeparationOverride="8"
+                          HorizontalExpand="True">
+                <PanelContainer Name="PatientCard"
+                                Access="Public"
+                                MinSize="320 96"
+                                HorizontalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#211E25E6"
+                            BorderColor="#5A5168"
+                            BorderThickness="2"/>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10"
+                                  SeparationOverride="3"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True">
+                        <Label Text="{Loc 'cmu-medical-surgery-section-patient'}"
+                               StyleClasses="LabelSecondary"
+                               FontColorOverride="#B7B0A5"/>
+                        <Label Name="PatientLabel"
+                               Access="Public"
+                               StyleClasses="LabelHeading"
+                               FontColorOverride="#F2EEE7"
+                               ClipText="True"/>
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="WorkflowCard"
+                                Access="Public"
+                                HorizontalExpand="True" MinSize="0 96">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#181A20E8"
+                            BorderColor="#333642"
+                            BorderThickness="1"/>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="10"
+                                  SeparationOverride="3"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True">
+                        <Label Text="{Loc 'cmu-medical-surgery-section-workflow'}"
+                               StyleClasses="LabelHeading"
+                               FontColorOverride="#F2EEE7"/>
+                        <Label Name="WorkflowStatusLabel"
+                               Access="Public"
+                               FontColorOverride="#B7B0A5"
+                               ClipText="True"/>
+                        <PanelContainer Name="HintPanel"
+                                        Access="Public"
+                                        Visible="True"
+                                        HorizontalExpand="True"
+                                        Margin="0 4 0 0">
+                            <PanelContainer.PanelOverride>
+                                <graphics:StyleBoxFlat
+                                    BackgroundColor="#20222AEE"
+                                    BorderColor="#3F4350"
+                                    BorderThickness="1"/>
+                            </PanelContainer.PanelOverride>
+                            <Label Text="{Loc 'cmu-medical-surgery-window-hint'}"
+                                   FontColorOverride="#D7D0C5"
+                                   Margin="8 4"
+                                   ClipText="True"/>
+                        </PanelContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+
+            <PanelContainer Name="InProgressPanel"
+                            Access="Public"
+                            Visible="False"
+                            HorizontalExpand="True">
+                <PanelContainer.PanelOverride>
+                    <graphics:StyleBoxFlat
+                        BackgroundColor="#272117E8"
+                        BorderColor="#D2A95D"
+                        BorderThickness="2"/>
+                </PanelContainer.PanelOverride>
+                <BoxContainer Name="InProgressBody"
+                              Access="Public"
+                              Orientation="Horizontal"
+                              SeparationOverride="10"
+                              Margin="8"
+                              HorizontalExpand="True">
+                    <BoxContainer Orientation="Vertical"
+                                  SeparationOverride="2"
+                                  HorizontalExpand="True">
+                        <Label Name="InProgressHeadingLabel"
+                               Access="Public"
+                               Text="{Loc 'cmu-medical-surgery-in-progress-heading'}"
+                               StyleClasses="LabelHeading"
+                               FontColorOverride="#D2A95D"/>
+                        <Label Name="InProgressSubtitleLabel"
+                               Access="Public"
+                               FontColorOverride="#F2EEE7"
+                               ClipText="True"/>
+                        <Label Name="InProgressCreditLabel"
+                               Access="Public"
+                               FontColorOverride="#B7B0A5"
+                               ClipText="True"/>
+                        <Label Name="InProgressStepLabel"
+                               Access="Public"
+                               FontColorOverride="#D7D0C5"
+                               ClipText="True"/>
+                        <Label Name="InProgressActionLabel"
+                               Access="Public"
+                               FontColorOverride="#D78954"
+                               ClipText="True"/>
+                    </BoxContainer>
+
+                    <PanelContainer Name="InProgressActionRailPanel"
+                                    Access="Public"
+                                    MinSize="285 0"
+                                    VerticalExpand="True">
+                        <PanelContainer.PanelOverride>
+                            <graphics:StyleBoxFlat
+                                BackgroundColor="#1B1D24F0"
+                                BorderColor="#4A4D5A"
+                                BorderThickness="1"/>
+                        </PanelContainer.PanelOverride>
+                        <BoxContainer Orientation="Vertical"
+                                      Margin="8"
+                                      SeparationOverride="4"
+                                      HorizontalExpand="True"
+                                      VerticalExpand="True">
+                            <Label Text="{Loc 'cmu-medical-surgery-actions-heading'}"
+                                   StyleClasses="LabelKeyText"
+                                   FontColorOverride="#F2EEE7"/>
+                            <BoxContainer Name="InProgressChoiceContainer"
+                                          Access="Public"
+                                          Orientation="Vertical"
+                                          SeparationOverride="4"
+                                          HorizontalExpand="True"/>
+                        </BoxContainer>
+                    </PanelContainer>
+                </BoxContainer>
+            </PanelContainer>
+
+            <BoxContainer Name="SurgeryMainBody"
+                          Access="Public"
+                          Orientation="Horizontal"
+                          SeparationOverride="6"
+                          HorizontalExpand="True"
+                          VerticalExpand="True">
+                <PanelContainer Name="PartPanel"
+                                Access="Public"
+                                MinSize="320 0"
+                                VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#181A20E8"
+                            BorderColor="#333642"
+                            BorderThickness="1"/>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="6"
+                                  SeparationOverride="6"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True">
+                        <Label Text="{Loc 'cmu-medical-surgery-section-parts'}"
+                               StyleClasses="LabelHeading"
+                               FontColorOverride="#F2EEE7"/>
+                        <ScrollContainer HorizontalExpand="True"
+                                         VerticalExpand="True">
+                            <BoxContainer Name="PartListContainer"
+                                          Access="Public"
+                                          Orientation="Vertical"
+                                          SeparationOverride="5"
+                                          HorizontalExpand="True"/>
+                        </ScrollContainer>
+                    </BoxContainer>
+                </PanelContainer>
+
+                <PanelContainer Name="ProcedurePanel"
+                                Access="Public"
+                                HorizontalExpand="True"
+                                VerticalExpand="True">
+                    <PanelContainer.PanelOverride>
+                        <graphics:StyleBoxFlat
+                            BackgroundColor="#181A20E8"
+                            BorderColor="#333642"
+                            BorderThickness="1"/>
+                    </PanelContainer.PanelOverride>
+                    <BoxContainer Orientation="Vertical"
+                                  Margin="8"
+                                  SeparationOverride="6"
+                                  HorizontalExpand="True"
+                                  VerticalExpand="True">
+                        <PanelContainer HorizontalExpand="True">
+                            <PanelContainer.PanelOverride>
+                                <graphics:StyleBoxFlat
+                                    BackgroundColor="#211F2AEE"
+                                    BorderColor="#6A5B82"
+                                    BorderThickness="1"/>
+                            </PanelContainer.PanelOverride>
+                            <BoxContainer Name="SelectedPartHeaderRow"
+                                          Access="Public"
+                                          Orientation="Horizontal"
+                                          Margin="8 6"
+                                          SeparationOverride="8"
+                                          HorizontalExpand="True">
+                                <BoxContainer Orientation="Vertical"
+                                              HorizontalExpand="True">
+                                    <Label Name="SelectedPartLabel"
+                                           Access="Public"
+                                           StyleClasses="LabelHeading"
+                                           FontColorOverride="#F2EEE7"
+                                           ClipText="True"/>
+                                    <Label Name="SelectedPartStatusLabel"
+                                           Access="Public"
+                                           FontColorOverride="#B7B0A5"
+                                           ClipText="True"/>
+                                </BoxContainer>
+                                <Label Name="ProcedureHeaderLabel"
+                                       Access="Public"
+                                       FontColorOverride="#D2A95D"
+                                       VerticalAlignment="Center"
+                                       ClipText="True"/>
+                            </BoxContainer>
+                        </PanelContainer>
+
+                        <ScrollContainer HorizontalExpand="True"
+                                         VerticalExpand="True">
+                            <BoxContainer Name="ProcedureListContainer"
+                                          Access="Public"
+                                          Orientation="Vertical"
+                                          SeparationOverride="6"
+                                          HorizontalExpand="True"/>
+                        </ScrollContainer>
+                    </BoxContainer>
+                </PanelContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</controls:CMUSurgeryWindow>

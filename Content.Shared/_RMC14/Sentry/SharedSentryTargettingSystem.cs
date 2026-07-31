@@ -290,4 +290,55 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     {
         return GetHumanoidFactions().All(friendlyFactions.Contains);
     }
+
+    public void ApplyAllianceStateToSentry(EntityUid sentryUid, SentryTargetingComponent targeting,
+        Dictionary<string, Dictionary<string, Content.Shared.AU14.AllianceConsole.AllianceStatus>> globalState)
+    {
+        targeting.AllianceFriendlyNpcFactions.Clear();
+        foreach (var (side, states) in globalState)
+        {
+            if (!targeting.FriendlyFactions.Contains(side))
+                continue;
+            foreach (var (faction, status) in states)
+            {
+                if (status == Content.Shared.AU14.AllianceConsole.AllianceStatus.Friendly)
+                    targeting.AllianceFriendlyNpcFactions.Add(faction);
+            }
+        }
+        Dirty(sentryUid, targeting);
+    }
+
+    public void AddAllianceFriendlyFaction(string sideFaction, string npcFaction)
+    {
+        var query = AllEntityQuery<SentryTargetingComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (component.FriendlyFactions.Contains(sideFaction))
+                component.AllianceFriendlyNpcFactions.Add(npcFaction);
+            Dirty(uid, component);
+        }
+    }
+
+    public void RemoveAllianceFriendlyFaction(string sideFaction, string npcFaction)
+    {
+        var query = AllEntityQuery<SentryTargetingComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (component.FriendlyFactions.Contains(sideFaction))
+                component.AllianceFriendlyNpcFactions.Remove(npcFaction);
+            Dirty(uid, component);
+        }
+    }
+
+    public void ClearFactionAssignment(Entity<SentryTargetingComponent> ent)
+    {
+        ent.Comp.FriendlyFactions.Clear();
+        ent.Comp.DeployedFriendlyFactions.Clear();
+        ent.Comp.HumanoidAdded.Clear();
+
+        if (_net.IsServer)
+            ApplyTargeting(ent);
+
+        Dirty(ent.Owner, ent.Comp);
+    }
 }

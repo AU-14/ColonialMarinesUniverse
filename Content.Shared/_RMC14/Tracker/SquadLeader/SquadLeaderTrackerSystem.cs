@@ -268,6 +268,9 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
         AddFireteamMember(ent.Comp.Fireteams, marine.Value);
 
+        var updatedEv = new FireteamMemberUpdatedEvent(marine.Value);
+        RaiseLocalEvent(marine.Value, ref updatedEv, true);
+
         _adminLog.Add(LogType.RMCFireteam, $"{ToPrettyString(args.Actor)} assigned {ToPrettyString(marine)} to fireteam {args.Fireteam}");
 
         Dirty(ent);
@@ -479,6 +482,10 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
             return;
 
         RemComp<FireteamMemberComponent>(memberId.Value);
+
+        var updatedEv = new FireteamMemberUpdatedEvent(memberId.Value);
+        RaiseLocalEvent(memberId.Value, ref updatedEv, true);
+
         if (!_squadLeaderTrackerQuery.TryComp(memberId, out var tracker))
             return;
 

@@ -72,6 +72,9 @@
         shotsToMaxScatter: 80
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.05
+  - type: GunIFF
+    enabled: true
+    preventFriendlyFire: true
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot

@@ -12,6 +12,7 @@ using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Systems;
+using Content.Shared.NPC.Components;
 using Content.Shared.Popups;
 using Content.Shared.Prototypes;
 using Content.Shared.Stunnable;
@@ -39,10 +40,34 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
     [Dependency] private SharedNightVisionSystem _nightVision = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private PullingSystem _pulling = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+
+    public bool IsAllyOfHive(EntityUid ent, EntityUid? hiveEnt)
+    {
+        if (hiveEnt is null || !TryComp<HiveComponent>(hiveEnt, out var hive))
+            return false;
+
+        if (TryComp<HiveMemberComponent>(ent, out var member) && member.Hive == hiveEnt)
+            return true;
+
+        if (hive.IndividualAllies.Contains(ent))
+            return true;
+
+        if (!TryComp<NpcFactionMemberComponent>(ent, out var faction))
+            return false;
+
+        foreach (var factionId in faction.Factions)
+        {
+            if (hive.Allies.Contains(factionId))
+                return true;
+        }
+
+        return false;
+    }
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private XenoSystem _xeno = default!;
 
@@ -62,6 +87,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         SubscribeLocalEvent<MarineComponent, KnockedDownEvent>(OnStunned);
 
         SubscribeLocalEvent<HiveComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<HiveMemberComponent, ComponentStartup>(OnHiveStartup);
 
         SubscribeLocalEvent<XenoEvolutionGranterComponent, MobStateChangedEvent>(OnGranterMobStateChanged);
         SubscribeLocalEvent<XenoEvolutionGranterComponent, EntityTerminatingEvent>(OnGranterTerminating);
@@ -216,6 +242,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
         comp.Hive = hive;
         Dirty(member, comp);
+        UpdateHiveAppearance(member.Owner, hiveEnt);
 
         if (HasComp<XenoEvolutionGranterComponent>(member) &&
             old is { } oldHiveUid &&
@@ -230,6 +257,20 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
         var ev = new HiveChangedEvent(hiveEnt, old);
         RaiseLocalEvent(member, ref ev);
+    }
+
+    private void OnHiveStartup(Entity<HiveMemberComponent> ent, ref ComponentStartup args)
+    {
+        Entity<HiveComponent>? hive = null;
+        if (ent.Comp.Hive is { } hiveUid && _query.TryComp(hiveUid, out var hiveComp))
+            hive = (hiveUid, hiveComp);
+
+        UpdateHiveAppearance(ent.Owner, hive);
+    }
+
+    private void UpdateHiveAppearance(EntityUid member, Entity<HiveComponent>? hive)
+    {
+        _appearance.SetData(member, XenoHiveVisuals.Color, hive?.Comp.HiveColor ?? Color.White);
     }
 
     /// <summary>

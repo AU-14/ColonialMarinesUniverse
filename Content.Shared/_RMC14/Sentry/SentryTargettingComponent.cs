@@ -1,4 +1,6 @@
 using Robust.Shared.GameStates;
+using Content.Shared.NPC.Prototypes;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Sentry;
 
@@ -20,4 +22,7 @@ public sealed partial class SentryTargetingComponent : Component
 
     [DataField, AutoNetworkedField]
     public HashSet<string> HumanoidAdded = new();
+
+    [DataField, AutoNetworkedField]
+    public HashSet<ProtoId<NpcFactionPrototype>> AllianceFriendlyNpcFactions = new();
 }

@@ -36,6 +36,9 @@ public sealed partial record CriminalRecord : StationRecord
     /// </summary>
     [DataField]
     public List<CrimeHistory> History = new();
+
+    [DataField]
+    public int Bounty;
 }
 
 /// <summary>

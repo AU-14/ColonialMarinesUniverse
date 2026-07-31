@@ -1,0 +1,97 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostTeamLeader
+  name: cmu-job-name-corp-provost-team-leader
+  description: cmu-ghost-role-information-provost-squad-description
+  icon: CMUJobIconProvostTeamLeader
+  startingGear: CMUGearProvostTeamLeader
+  playTimeTracker: CMJobProvostTeamLeader
+  spawnMenuRoleName: Provost Team Leader
+  ranks:
+    CMURankProvostProvostTeamLeader: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 2
+      RMCSkillLeadership: 2
+      RMCSkillOverwatch: 1
+      RMCSkillEndurance: 2
+      RMCSkillJtac: 3
+      RMCSkillMedical: 1
+      RMCSkillConstruction: 2
+      RMCSkillEngineer: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillIntel: 1
+      RMCSkillFirearms: 2
+  - type: SquadLeader
+    icon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_pvl
+  - type: RMCPointing
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-team-leader
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: pve_leader
+  - type: ANPRCRadioUser
+
+- type: playTimeTracker
+  id: CMJobProvostTeamLeader
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMUJobIconProvostTeamLeader
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_pvl
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostTeamLeader
+  name: provost role team leader
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostTeamLeader
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostTeamLeader
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-team-leader
+    description: cmu-ghost-role-information-provost-squad-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostTeamLeader
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostTeamLeader
+  equipment:
+    head: RMCHeadBeretProvostSenior
+    eyes: CMGlassesSecurity
+    jumpsuit: CMJumpsuitProvostSenior
+    outerClothing: RMCArmorProvostSeniorFilled
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: CMUIDCardProvostTeamLeader
+    belt: RMCMK80BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs
+  storage:
+    back:
+    - AU14PacketGrenadeTearGasFilled
+    - AU14PacketGrenadeTearGasFilled

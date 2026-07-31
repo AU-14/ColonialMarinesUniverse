@@ -20,7 +20,25 @@ public sealed partial class TacticalMapComponent : Component
    public Dictionary<int, TacticalMapBlip> XenoBlips = new();
 
    [DataField]
-   public Dictionary<int, TacticalMapBlip> XenoStructureBlips = new();
+    public Dictionary<int, TacticalMapBlip> XenoStructureBlips = new();
+
+    [DataField]
+    public Dictionary<int, TacticalMapBlip> OpforBlips = new();
+
+    [DataField]
+    public Dictionary<int, TacticalMapBlip> LastUpdateOpforBlips = new();
+
+    [DataField]
+    public Dictionary<int, TacticalMapBlip> GovforBlips = new();
+
+    [DataField]
+    public Dictionary<int, TacticalMapBlip> LastUpdateGovforBlips = new();
+
+    [DataField]
+    public Dictionary<int, TacticalMapBlip> ClfBlips = new();
+
+    [DataField]
+    public Dictionary<int, TacticalMapBlip> LastUpdateClfBlips = new();
 
    [DataField]
    public Dictionary<int, TacticalMapBlip> LastUpdateXenoBlips = new();

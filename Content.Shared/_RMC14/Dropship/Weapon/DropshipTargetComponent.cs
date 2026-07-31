@@ -16,4 +16,10 @@ public sealed partial class DropshipTargetComponent : Component
 
     [DataField, AutoNetworkedField]
     public Dictionary<EntityUid, EntityUid> Eyes = new();
+
+    [DataField, AutoNetworkedField]
+    public string? CreatorFaction;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan ActivatedAt;
 }

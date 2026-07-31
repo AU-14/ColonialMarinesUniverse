@@ -24,4 +24,7 @@ public sealed partial class RequisitionsAccountComponent : Component
 
     [DataField]
     public List<RequisitionsRandomCrates> RandomCrates = new();
+
+    [DataField("faction")]
+    public string Faction = "none";
 }

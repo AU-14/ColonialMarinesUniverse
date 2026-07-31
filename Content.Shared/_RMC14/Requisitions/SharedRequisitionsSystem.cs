@@ -123,6 +123,21 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
         SendUIStateAll();
     }
 
+    public void ChangeBudget(int amount, string? faction)
+    {
+        var accountQuery = EntityQueryEnumerator<RequisitionsAccountComponent>();
+        while (accountQuery.MoveNext(out var uid, out var comp))
+        {
+            if (faction != null && comp.Faction != faction)
+                continue;
+
+            comp.Balance = Math.Max(0, comp.Balance + amount);
+            Dirty(uid, comp);
+        }
+
+        SendUIStateAll();
+    }
+
     protected void SendUIStateAll()
     {
         var query = EntityQueryEnumerator<RequisitionsComputerComponent>();

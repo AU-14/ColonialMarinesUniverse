@@ -1,0 +1,26 @@
+<allianceConsole:AllianceConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:allianceConsole="clr-namespace:Content.Client.AU14.AllianceConsole"
+    Title="Alliance Console" MinSize="420 320">
+    <BoxContainer Orientation="Vertical" Margin="8 8 8 8" SeparationOverride="6">
+
+        <Label Name="FactionLabel" Access="Public"
+               Text="Alliance Console"
+               HorizontalAlignment="Center"
+               StyleClasses="LabelBig" />
+
+        <Label Name="SubtitleLabel" Access="Public"
+               Text="Set the standing of third-party factions."
+               HorizontalAlignment="Center" />
+
+        <Control MinSize="0 6" />
+
+        <ScrollContainer VerticalExpand="True">
+            <BoxContainer Name="FactionList" Access="Public"
+                          Orientation="Vertical"
+                          SeparationOverride="4" />
+        </ScrollContainer>
+
+    </BoxContainer>
+</allianceConsole:AllianceConsoleWindow>

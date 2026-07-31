@@ -1,0 +1,16 @@
+<controls:CorporateConsoleThirdPartyWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client.AU14.ColonyEconomy"
+    Title="Call Third Party Support (Corporate)" MinSize="400 300">
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="8">
+        <Label Name="BudgetLabel" Access="Public" Text="Corporate Budget: $0"
+               StyleClasses="LabelHeading" Margin="4 4" />
+        <Label Text="Available Third Parties:" StyleClasses="LabelHeading" Margin="4 8" />
+        <ItemList Name="ThirdPartyList" Access="Public" SelectMode="Single" HorizontalExpand="True" VerticalExpand="True" MinSize="0 120" Margin="4 4" />
+        <Label Name="CostLabel" Access="Public" Text="Cost: $0" Margin="4 4" />
+        <Button Name="CallBtn" Access="Public" Text="Request Support"
+                HorizontalExpand="True" Margin="4 8" />
+        <Label Name="StatusLabel" Access="Public" Text="" Margin="4 4" />
+    </BoxContainer>
+</controls:CorporateConsoleThirdPartyWindow>
+

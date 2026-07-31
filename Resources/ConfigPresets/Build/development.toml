@@ -1,13 +1,19 @@
-﻿[game]
-defaultpreset = "CMDistressSignal"
-# Start in the lobby for development testing
-lobbyenabled = true
-# Dev map for faster loading & convenience
-map = "RMCDev"
+[build]
+engine_version = "v278.0.0"
+
+[game]
+defaultpreset = "ColonyFall"
+# Straight in-game baby
+map = "USSBushRedux"
+lobbyenabled = false
 role_timers = false
-admin_job_tracking = true
-role_loadout_timers = false
-new_character_jobs = "Passenger, Captain"
+role_whitelist = false
+
+[rmc]
+distress_xenos_minimum = 0  # stop blocking distress testing
+lobby_min_players = 1       # localhost
+dropship_hijack_initial_delay_minutes = 1
+dropship_hijack_travel_time_seconds = 5
 
 [events]
 enabled = false
@@ -16,19 +22,23 @@ enabled = false
 role_time = 0.5
 quick_lottery = true
 
+[gateway]
+generator_enabled = false
+
 [movement]
 mob_pushing = true
+
+[net]
+tickrate = 30
 
 [physics]
 # Makes mapping annoying
 grid_splitting = false
+maxlinvelocity = 72
+target_minimum_tickrate = 90
 
 [procgen]
 preload = false
-
-[rmc]
-# Allow solo development rounds without xeno candidates.
-distress_xenos_minimum = 0
 
 [salvage]
 expedition_cooldown = 30.0
@@ -40,28 +50,11 @@ emergency = false
 arrivals = false
 preload_grids = false
 
-[afk]
-time = 0
-
 [admin]
-afk_time = 0
 see_own_notes = true
-new_player_threshold = 120
 
 [ic]
-random_characters = false
+# random_characters = true
 random_species_weights = ""
 ssd_sleep_time = 3600
-
-[database]
-# Change to postgres if needed
-engine = "sqlite"
-pg_host = "localhost"
-pg_port = 5432
-pg_database = "ss14"
-pg_username = "postgres"
-pg_password = "postgres"
-
-[net]
-max_rapid_connections = 413
-max_ip_connections = 413
+id_job_length = 50

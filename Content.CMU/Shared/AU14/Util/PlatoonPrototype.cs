@@ -1,0 +1,81 @@
+using Content.Shared.AU14.Allegiance;
+using Robust.Shared.Prototypes;
+using Content.Shared.NPC.Prototypes;
+using Robust.Shared.Utility;
+using Content.Shared._RMC14.Language.Prototypes;
+
+namespace Content.Shared.AU14.util;
+
+[Prototype]
+public sealed partial class PlatoonPrototype : IPrototype
+{
+    [IdDataField]
+    public string ID { get; private set; } = default!;
+
+    [DataField("factions", required: false)]
+    public List<string> Factions { get; private set; } = new();
+
+    /// <summary>
+    /// The primary NPC faction assigned to members of this platoon when they spawn.
+    /// Overrides the generic GOVFOR/OPFOR faction for more specific platoon identity.
+    /// </summary>
+    [DataField("npcFaction")]
+    public ProtoId<NpcFactionPrototype>? NpcFaction { get; private set; }
+
+    /// <summary>
+    /// The allegiance associated with this platoon.
+    /// Characters with a matching allegiance will preferentially spawn here.
+    /// </summary>
+    [DataField("Allegiance")]
+    public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
+
+    /// <summary>
+    /// Languages immediately known by members of this platoon.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> Languages { get; private set; } = new();
+
+    /// <summary>
+    /// Languages members can learn from this platoon.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<LanguagePrototype>> LearnableLanguages { get; private set; } = new();
+
+    [DataField("name", required: true)]
+    public string Name { get; private set; } = string.Empty;
+
+    [DataField("lorePrimer")]
+    public ProtoId<LorePrimerPrototype>? LorePrimer { get; private set; }
+
+    [DataField("reqlist", required: false)]
+    public string Reqlist { get; private set; } = string.Empty;
+
+    [DataField]
+    public ProtoId<PlatoonVendorSetPrototype>? VendorSet { get; private set; }
+
+    [DataField]
+    public Dictionary<PlatoonMarkerClass, EntProtoId> VendorOverrides { get; private set; } = new();
+
+    [DataField("VendorToMarker")]
+    public Dictionary<PlatoonMarkerClass, EntProtoId> VendorMarkersByClass { get; private set; } = new();
+
+    [DataField("possibleships")]
+    public List<string> PossibleShips { get; private set; } = new();
+
+    [DataField("jobClassOverride")]
+    public Dictionary<PlatoonJobClass, string> JobClassOverride { get; private set; } = new();
+    [DataField("PlatoonFlag")]
+    public string PlatoonFlag { get; private set; } = string.Empty;
+    //used for capture objectives and deco, spritestate
+    [DataField("jobSlotOverride")]
+    public Dictionary<PlatoonJobClass, int> JobSlotOverride { get; private set; } = new();
+
+    [DataField("CompatibleDropships")]
+    public List<ResPath> CompatibleDropships { get; private set; } = new();
+
+    [DataField("compatibleFighters")]
+    public List<ResPath> CompatibleFighters { get; private set; } = new();
+
+    [DataField("techTree", required: false)]
+    public string TechTree { get; private set; } = string.Empty;
+}

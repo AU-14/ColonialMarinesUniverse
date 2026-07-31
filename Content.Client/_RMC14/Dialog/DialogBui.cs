@@ -1,4 +1,5 @@
 ﻿using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Xenonids.JoinXeno;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
@@ -25,6 +26,12 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
     {
         if (_window is not { IsOpen: true })
             return;
+
+        if (TryGetQueueClaimOptions(s, out var confirmIndex, out var declineIndex))
+        {
+            UpdateQueueClaim(s, confirmIndex, declineIndex);
+            return;
+        }
 
         if (_window.Container is not RMCDialogOptionsContainer container)
         {
@@ -126,6 +133,51 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
 
             container.Options.AddChild(button);
         }
+    }
+
+    private void UpdateQueueClaim(DialogComponent s, int confirmIndex, int declineIndex)
+    {
+        if (_window is not { IsOpen: true })
+            return;
+
+        if (_window.Container is not RMCDialogQueueClaimContainer container)
+        {
+            _window.Container?.Orphan();
+            _window.Container = null;
+
+            container = new RMCDialogQueueClaimContainer();
+            container.ConfirmButton.OnPressed += _ => SendPredictedMessage(new DialogOptionBuiMsg(confirmIndex));
+            container.DeclineButton.OnPressed += _ => SendPredictedMessage(new DialogOptionBuiMsg(declineIndex));
+
+            _window.Container = container;
+            _window.AddChild(_window.Container);
+        }
+
+        _window.Title = s.Title;
+        container.MessageLabel.Text = s.Message.Text;
+        container.ConfirmButton.Text = s.Options[confirmIndex].Text;
+        container.DeclineButton.Text = s.Options[declineIndex].Text;
+    }
+
+    private static bool TryGetQueueClaimOptions(DialogComponent s, out int confirmIndex, out int declineIndex)
+    {
+        confirmIndex = -1;
+        declineIndex = -1;
+
+        for (var i = 0; i < s.Options.Count; i++)
+        {
+            switch (s.Options[i].Event)
+            {
+                case LarvaQueueClaimConfirmEvent:
+                    confirmIndex = i;
+                    break;
+                case LarvaQueueClaimDeclineEvent:
+                    declineIndex = i;
+                    break;
+            }
+        }
+
+        return confirmIndex >= 0 && declineIndex >= 0;
     }
 
     private void UpdateInput(DialogComponent s)

@@ -32,7 +32,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: grid
+      name: Lifeboat (Athena)
     - type: Transform
       pos: 39.453125,-0.484375
       parent: invalid

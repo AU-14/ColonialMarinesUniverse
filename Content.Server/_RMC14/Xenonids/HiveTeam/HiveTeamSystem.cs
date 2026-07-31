@@ -44,7 +44,7 @@ public sealed partial class HiveTeamSystem : EntitySystem
         SubscribeLocalEvent<HiveMemberComponent, XenoDevolvedEvent>(OnXenoDevolved);
         SubscribeLocalEvent<XenoComponent, HiveLeaderRemovedEvent>(OnLeaderRemoved);
         SubscribeLocalEvent<HiveTeamMemberComponent, MobStateChangedEvent>(OnMemberMobStateChanged);
-        SubscribeLocalEvent<HiveTeamMemberComponent, BeingGibbedEvent>(OnMemberGibbed);
+        SubscribeLocalEvent<HiveTeamMemberComponent, Content.Shared.Gibbing.BeingGibbedEvent>(OnMemberGibbed);
 
         Subs.BuiEvents<XenoComponent>(HiveTeamUIKey.Key, subs =>
         {
@@ -146,7 +146,7 @@ public sealed partial class HiveTeamSystem : EntitySystem
         RemoveMemberFromTeams(ent.Owner, hive, teams);
     }
 
-    private void OnMemberGibbed(Entity<HiveTeamMemberComponent> ent, ref BeingGibbedEvent args)
+    private void OnMemberGibbed(Entity<HiveTeamMemberComponent> ent, ref Content.Shared.Gibbing.BeingGibbedEvent args)
     {
         if (_hive.GetHive(ent.Owner) is not { } hive)
             return;

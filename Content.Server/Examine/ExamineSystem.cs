@@ -1,8 +1,14 @@
 using System.Linq;
+using Content.Server._AU14.Examine;
+using Content.Server.Chat.Managers;
 using Content.Server.Verbs;
+using Content.Shared.CCVar;
+using Content.Shared.Chat;
 using Content.Shared.Examine;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Verbs;
 using JetBrains.Annotations;
+using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
 
@@ -12,9 +18,17 @@ namespace Content.Server.Examine
     public sealed partial class ExamineSystem : ExamineSystemShared
     {
         [Dependency] private VerbSystem _verbSystem = default!;
+        [Dependency] private readonly IChatManager _chatManager = default!;
+        [Dependency] private readonly INetConfigurationManager _netConfigManager = default!;
 
         private readonly FormattedMessage _entityNotFoundMessage = new();
         private readonly FormattedMessage _entityOutOfRangeMessage = new();
+
+        // Neutral gray chat highlight, same treatment as system messages get.
+        private static readonly ChatDisplayMetadata ExamineChatDisplay = new(
+            ChatDisplayKind.System,
+            accentColor: Color.FromHex("#a0a0a0"),
+            backgroundColorOverride: Color.FromHex("#1e1e1e"));
 
         public override void Initialize()
         {
@@ -72,6 +86,23 @@ namespace Content.Server.Examine
             var text = GetExamineText(entity, player.AttachedEntity);
             RaiseNetworkEvent(new ExamineSystemMessages.ExamineInfoResponseMessage(
                 request.NetEntity, request.Id, text, verbs?.ToList()), channel);
+
+            // AU14/CMU: optionally echo the exact same context-menu examine text into chat.
+            // Skip this if the target already gets the detailed character breakdown message,
+            // so examining a character doesn't produce two chat messages at once.
+            var coveredByCharacterBreakdown = HasComp<ExaminableCharacterComponent>(entity)
+                && _netConfigManager.GetClientCVar(channel, CCVars.ExamineLogInChat);
+
+            if (!coveredByCharacterBreakdown && _netConfigManager.GetClientCVar(channel, CCVars.ExamineFullTextInChat))
+            {
+                var markup = text.ToMarkup();
+                if (!string.IsNullOrWhiteSpace(FormattedMessage.RemoveMarkupPermissive(markup)))
+                {
+                    var itemName = FormattedMessage.EscapeText(Identity.Name(entity, EntityManager, playerEnt));
+                    var combinedLog = $"[color=gold][bold]{itemName}[/bold][/color]\n{markup}";
+                    _chatManager.ChatMessageToOne(ChatChannel.Emotes, combinedLog, combinedLog, EntityUid.Invalid, false, channel, recordReplay: false, display: ExamineChatDisplay);
+                }
+            }
         }
     }
 }

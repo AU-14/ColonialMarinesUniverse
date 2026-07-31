@@ -74,6 +74,30 @@ public abstract partial class SharedHandsSystem
         AddHand(ent, handName, new Hand(handLocation, emptyLabel, emptyRepresentative, whitelist, blacklist));
     }
 
+    public bool TrySetHandLocation(Entity<HandsComponent?> ent, string handName, HandLocation handLocation)
+    {
+        if (!Resolve(ent, ref ent.Comp, false) || !ent.Comp.Hands.TryGetValue(handName, out var hand))
+            return false;
+
+        if (hand.Location == handLocation)
+            return true;
+
+        hand.Location = handLocation;
+        ent.Comp.Hands[handName] = hand;
+        ent.Comp.SortedHands = ent.Comp.SortedHands.OrderBy(id => ent.Comp.Hands[id].Location).ToList();
+        Dirty(ent);
+        return true;
+    }
+
+    public IEnumerable<(string Id, Hand Hand)> EnumerateHandsInSortedOrder(Entity<HandsComponent> ent)
+    {
+        foreach (var handId in ent.Comp.SortedHands)
+        {
+            if (ent.Comp.Hands.TryGetValue(handId, out var hand))
+                yield return (handId, hand);
+        }
+    }
+
     /// <summary>
     /// Adds a hand with the given container id and supplied hand definition to the given entity.
     /// </summary>

@@ -24,6 +24,9 @@ public sealed partial class BloodstreamComponent : Component
     public const string DefaultBloodTemporarySolutionName = "bloodstreamTemporary";
     public const string DefaultMetabolitesSolutionName = "metabolites";
 
+    [DataField, AutoNetworkedField]
+    public ProtoId<ReagentPrototype> BloodReagent = "Blood";
+
     /// <summary>
     /// The next time that blood level will be updated and bloodloss damage dealt.
     /// </summary>

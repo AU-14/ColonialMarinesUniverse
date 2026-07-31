@@ -7,6 +7,9 @@ namespace Content.Shared._RMC14.CCVar;
 [CVarDefs]
 public sealed partial class RMCCVars : CVars
 {
+    public static readonly CVarDef<bool> RMCMarineOverlayEnabled =
+        CVarDef.Create("rmc.marine_overlay_enabled", true, CVar.CLIENT | CVar.ARCHIVE);
+
     public static readonly CVarDef<float> CMXenoDamageDealtMultiplier =
         CVarDef.Create("rmc.xeno_damage_dealt_multiplier", 1f, CVar.REPLICATED | CVar.SERVER);
 
@@ -604,4 +607,7 @@ public sealed partial class RMCCVars : CVars
 
     public static readonly CVarDef<float> RMCDoAfterCancelMaxProcessTimeMilliseconds =
         CVarDef.Create("rmc.do_after_cancel_max_process_time_milliseconds", 1f, CVar.REPLICATED | CVar.SERVER);
+
+    public static readonly CVarDef<int> RMCLobbyMinimumPlayers =
+        CVarDef.Create("rmc.lobby_min_players", 20, CVar.REPLICATED | CVar.SERVER);
 }

@@ -8,6 +8,12 @@
     snap:
     - Wall
   components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
+  - type: Appearance
   - type: Item
     size: Ginormous
   - type: Fixtures
@@ -82,7 +88,7 @@
     allowed:
     - Electrocution
   - type: DeletedByWeedKiller
-  - type: XenoChargeDontHit
+
 
 - type: entity
   parent: BaseItem
@@ -95,6 +101,11 @@
     snap:
     - Wall
   components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
   - type: Item
     size: Ginormous
   - type: Transform
@@ -149,7 +160,6 @@
   - type: WhitelistPickupBy
   - type: DestroyedXenoEgg
   - type: RMCMesonsNonviewable
-  - type: XenoChargeDontHit
 
 - type: entity
   parent: XenoEggDestroyed

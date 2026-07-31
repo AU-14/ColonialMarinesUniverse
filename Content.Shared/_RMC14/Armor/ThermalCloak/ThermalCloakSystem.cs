@@ -20,7 +20,9 @@ using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Maths;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
@@ -58,6 +60,29 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         SubscribeLocalEvent<GunComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<CancelUseWithCloakComponent, UseInHandEvent>(OnTimerUse, before: [typeof(TriggerSystem)]);
         SubscribeLocalEvent<UncloakOnHitComponent, ProjectileHitEvent>(OnAcidProjectile);
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient) return;
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<ThermalCloakUserComponent, EntityActiveInvisibleComponent, PhysicsComponent>();
+        while (query.MoveNext(out var uid, out var cloakUser, out var activeInvis, out var physics))
+        {
+            var isMoving = physics.LinearVelocity.LengthSquared() > 0.01f;
+            var target = isMoving ? cloakUser.MovingOpacity : cloakUser.Opacity;
+            var delta = MathF.Min(cloakUser.LerpSpeed * frameTime, MathF.Abs(target - cloakUser.CurrentOpacity));
+            var newOpacity = cloakUser.CurrentOpacity + MathF.Sign(target - cloakUser.CurrentOpacity) * delta;
+
+            if (!MathHelper.CloseToPercent(newOpacity, cloakUser.CurrentOpacity))
+            {
+                cloakUser.CurrentOpacity = newOpacity;
+                activeInvis.Opacity = newOpacity;
+                Dirty(uid, activeInvis);
+                Dirty(uid, cloakUser);
+            }
+        }
     }
 
     private void OnGetItemActions(Entity<ThermalCloakComponent> ent, ref GetItemActionsEvent args)
@@ -128,8 +153,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (enabling && !HasComp<EntityActiveInvisibleComponent>(user))
         {
             var activeInvisibility = EnsureComp<EntityActiveInvisibleComponent>(user);
-            activeInvisibility.Opacity = ent.Comp.Opacity;
-            Dirty(user, activeInvisibility);
+            InitializeCloakUserOpacity(user, ent.Comp, activeInvisibility);
 
             ent.Comp.Enabled = true;
             turnInvisible.Enabled = true;
@@ -209,6 +233,7 @@ public sealed partial class ThermalCloakSystem : EntitySystem
                 RemCompDeferred<EntityIFFComponent>(user);
 
             RemCompDeferred<EntityActiveInvisibleComponent>(user);
+            RemCompDeferred<ThermalCloakUserComponent>(user);
 
             if (_net.IsServer)
                 _audio.PlayPvs(ent.Comp.UncloakSound, user);
@@ -307,6 +332,21 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         var rotation = _transform.GetWorldRotation(user);
 
         Spawn(cloakProtoId, coordinates, rotation: rotation);
+    }
+
+    private void InitializeCloakUserOpacity(EntityUid user, ThermalCloakComponent cloak,
+        EntityActiveInvisibleComponent activeInvis)
+    {
+        var userCloak = EnsureComp<ThermalCloakUserComponent>(user);
+        userCloak.Opacity = cloak.Opacity;
+        userCloak.MovingOpacity = cloak.MovingOpacity;
+        userCloak.LerpSpeed = cloak.OpacityLerpSpeed;
+        var isMoving = TryComp<PhysicsComponent>(user, out var physics) && physics.LinearVelocity.LengthSquared() > 0.01f;
+        userCloak.CurrentOpacity = isMoving ? cloak.MovingOpacity : cloak.Opacity;
+        Dirty(user, userCloak);
+
+        activeInvis.Opacity = userCloak.CurrentOpacity;
+        Dirty(user, activeInvis);
     }
 }
 

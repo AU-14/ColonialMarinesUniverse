@@ -1,0 +1,30 @@
+<cmu:UniversalPaperToolWindow xmlns="https://spacestation14.io"
+    xmlns:cmu="clr-namespace:Content.Client._CMU14.Paper"
+    SetSize="420 520"
+    MinSize="360 360">
+
+    <PanelContainer>
+        <BoxContainer Orientation="Vertical"
+                      SeparationOverride="8"
+                      Margin="8">
+
+            <Label Name="HeaderLabel" StyleClasses="LabelHeading" />
+            <Label Name="PaperStatusLabel" StyleClasses="LabelSubText" />
+
+                        <LineEdit Name="SearchBar"
+                      PlaceHolder="Search templates..."
+                      HorizontalExpand="True" />
+
+            <ScrollContainer VerticalExpand="True" HScrollEnabled="False">
+                <BoxContainer Name="TemplateList"
+                              Orientation="Vertical"
+                              SeparationOverride="6" />
+            </ScrollContainer>
+
+            <Button Name="ExitButton"
+                    Text="Close"
+                    HorizontalAlignment="Center" />
+        </BoxContainer>
+    </PanelContainer>
+
+</cmu:UniversalPaperToolWindow>

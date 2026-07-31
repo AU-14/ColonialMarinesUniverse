@@ -6,6 +6,14 @@
   name: Urist C.M. McHands
   suffix: RMC14
   components:
+  - type: Butcherable
+    butcheringType: Knife
+    waitForRot: true
+    spawned:
+    - id: FoodMeatHuman
+      amount: 6
+  - type: Fingerprint
+  - type: FootPrints
   - type: Fixtures
     fixtures:
       fix1:
@@ -21,7 +29,6 @@
         layer:
         - Opaque
         - XenoProjectileImpassable
-        - Marine
       fix2:
         shape:
           !type:PhysShapeCircle
@@ -34,13 +41,9 @@
   - type: InjectableSolution
     solution: chemicals
   - type: RMCStamina
-  - type: RMCPulse
   - type: Bloodstream
-    bloodReferenceSolution:
-      reagents:
-      - ReagentId: Blood
-        Quantity: 560
-    maxVolumeModifier: 1
+    bloodReagent: Blood
+    bloodMaxVolume: 560
     maxBleedAmount: 50
     bleedReductionAmount: 0
     bloodRefreshAmount: 0.15
@@ -78,6 +81,9 @@
     interactSuccessString: rmc-patting-success-generic
     messagePerceivedByOthers: rmc-patting-success-generic-others
   - type: Blindable
+    maxDamage: 30
+  - type: CMUBlurDelay
+    threshold: 12
   - type: Tag
     tags:
     - CanPilot
@@ -85,14 +91,16 @@
     - DoorBumpOpener
   - type: Marine
   - type: RMCSuitLight
-  - type: RMCLastBodyScanResult
   - type: HolocardState
   - type: Hunger
-    baseDecayRate: 0.025
+    # baseDecayRate of 0.1/sec with all threshold modifiers at 1 means decay is a flat 6/min.
+    # Okay(380) -> Peckish(110) is a gap of 270, i.e. exactly 45 minutes of not eating: warning popup + slowdown starts.
+    # Peckish(110) -> Starving(50) is a gap of 60, i.e. exactly 10 more minutes: severe popup + screen desaturates.
+    baseDecayRate: 0.1
     thresholds:
-      Overfed: 550
-      Okay: 400
-      Peckish: 250
+      Overfed: 480
+      Okay: 380
+      Peckish: 110
       Starving: 50
       Dead: 0
     hungerThresholdDecayModifiers:
@@ -101,34 +109,30 @@
       Peckish: 1
       Starving: 1
       Dead: 0
+    peckishSlowdownModifier: 0.9
+    starvingSlowdownModifier: 0.8 # 20% slowdown while desaturated
   - type: Thirst
-    baseDecayRate: 0.01666666666
+    # baseDecayRate of 0.1/sec, decay multiplier is 1x at Okay and 0.8x at Thirsty.
+    # Okay(278) -> Thirsty(98) is a gap of 180 at 1x (6/min), i.e. exactly 30 minutes: warning popup + slowdown starts.
+    # Thirsty(98) -> Parched(50) is a gap of 48 at 0.8x (4.8/min), i.e. exactly 10 more minutes: severe popup + screen desaturates.
+    baseDecayRate: 0.1
+    thresholds:
+      OverHydrated: 378
+      Okay: 278
+      Thirsty: 98
+      Parched: 50
+      Dead: 0
+    thirstySlowdownModifier: 0.9
+    parchedSlowdownModifier: 0.8
   - type: Body
-  - type: VisualBody
-  - type: HumanoidProfile
-  - type: HideableHumanoidLayers
-  - type: InitialBody
-    organs:
-      Torso: OrganHumanTorso
-      Head: OrganHumanHead
-      ArmLeft: OrganHumanArmLeft
-      ArmRight: OrganHumanArmRight
-      HandRight: OrganHumanHandRight
-      HandLeft: OrganHumanHandLeft
-      LegLeft: OrganHumanLegLeft
-      LegRight: OrganHumanLegRight
-      FootLeft: OrganHumanFootLeft
-      FootRight: OrganHumanFootRight
-      Brain: OrganHumanBrain
-      Eyes: OrganHumanEyes
-      Tongue: OrganHumanTongue
-      Appendix: OrganHumanAppendix
-      Ears: OrganHumanEars
-      Lungs: RMCOrganHumanLungs
-      Heart: RMCOrganHumanHeart
-      Stomach: RMCOrganHumanStomach
-      Liver: OrganHumanLiver
-      Kidneys: OrganHumanKidneys
+    prototype: CMUHumanBody
+    requiredLegs: 2
+  - type: Internals
+  - type: BodyZoneTargeting
+  - type: CMUHumanMedical
+  - type: HitLocation
+  - type: PainShock
+  - type: CMUPainFeedback
   - type: Damageable
     damageContainer: Biological
     damageModifierSet: null
@@ -190,6 +194,16 @@
         type: DialogBui
       enum.ViewIntelObjectivesUI.Key:
         type: ViewIntelObjectivesBui
+      enum.BodyPartPickerUIKey.Key:
+        type: BodyPartPickerBui
+      enum.CMUSurgeryUIKey.Key:
+        type: CMUSurgeryBui
+      enum.CMUMedicalFieldCraftingUI.Key:
+        type: CMUMedicalFieldCraftingBui
+        requireInputValidation: false
+      enum.FactionLanguageUiKey.Key:
+        type: FactionLanguageBoundUserInterface
+        requireInputValidation: false
   - type: Infectable
   - type: Tackleable
   - type: XenoNestable
@@ -266,8 +280,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      150: Critical
-      200: Dead
+      200: Critical
+      275: Dead
   - type: MobStateActions
     actions:
       Critical:
@@ -278,7 +292,7 @@
     thresholds: [ ]
   - type: NpcFactionMember
     factions:
-    - UNMC
+    - AUColonist
   - type: RMCNightVisionVisible
   - type: CrashLandable
   - type: StunShakeable
@@ -303,7 +317,7 @@
             state: human_acid_enhanced
             visible: true
   - type: Spottable
-  - type: RMCActiveInputMover
+  - type: ActiveInputMover
   - type: DropItemsOnRest
   - type: UserBlockShootingInsideContainers
   - type: TacticalMapTracked
@@ -369,6 +383,7 @@
   - type: RMCDisarmable
   - type: StunOnExplosionReceived
   - type: DeafenWhileCrit
+  - type: CrawlWhileCrit
   - type: RMCStopDropRollVisuals
   - type: XenoToggleChargingDamage
     damage:
@@ -383,16 +398,15 @@
       8: 8
   - type: XenoToggleChargingKnockback
   - type: XenoToggleChargingParalyze
+  # CMU14
+  - type: CMUXenoBullChargeTarget
+  # CMU14
   - type: RMCMobStateDrawDepth
     drawDepths:
       Dead: BelowMobs
   - type: IVDripTarget
   - type: FixedIdentity
     name: rmc-host
-    whitelist:
-      components:
-      - Xeno
-  - type: HiddenAppearance
     whitelist:
       components:
       - Xeno
@@ -405,8 +419,14 @@
     whitelist:
       tags:
       - SurvivalPouch
+  - type: TileFirePatter
+    removeDuration: 3.75
+    sound:
+      path: /Audio/_RMC14/Weapons/genhit1.ogg
   - type: HumanoidAppearance
     species: Human
     hideLayersOnEquip:
     - UndergarmentTop
     - Hair
+  - type: LanguageLearning
+    preset: AU14LanguageLearningPresetHuman

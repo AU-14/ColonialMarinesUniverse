@@ -13,8 +13,10 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleWarrior
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Warrior/warrior.rsi
+    sprite: _AU14/Mobs/Xenos/Warrior/warrior.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -56,11 +58,35 @@
     plasma: 0
     maxPlasma: 0
     plasmaRegenOnWeeds: 0
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaChitin
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 1
   - type: XenoEvolution
     max: 500
     evolvesTo:
     - RMCXenoCrusher
+    # CMU14
+    - CMXenoWarlock
+    # CMU14
     - CMXenoPraetorian
+    strains:
+    - CMXenoWarriorBulwark
   - type: CMArmor
     xenoArmor: 20
     explosionArmor: 40
@@ -100,7 +126,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-warrior
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
   - type: RMCActionOrder

@@ -62,6 +62,16 @@ public sealed partial class CMDistressSignalRuleSystem
         CheckQueenDeath(distress);
     }
 
+    public bool TryEndActiveDistressRound(DistressSignalRuleResult result)
+    {
+        var distress = TryGetActiveRule();
+        if (distress == null)
+            return false;
+
+        EndRound(distress, result);
+        return true;
+    }
+
     private void UpdateHijackState(CMDistressSignalRuleComponent distress)
     {
         var hijack = false;

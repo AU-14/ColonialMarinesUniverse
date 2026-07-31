@@ -552,6 +552,18 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         return false;
     }
 
+    public void TriggerColonyEvacuation(EntityUid map)
+    {
+        var progress = EnsureComp<EvacuationProgressComponent>(map);
+        if (progress.Enabled)
+            return;
+
+        progress.Enabled = true;
+        Dirty(map, progress);
+        var ev = new EvacuationEnabledEvent();
+        RaiseLocalEvent(map, ref ev, true);
+    }
+
     public bool IsEvacuationEnabled()
     {
         var query = EntityQueryEnumerator<EvacuationProgressComponent>();

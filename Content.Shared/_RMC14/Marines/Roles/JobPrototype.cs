@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Prototypes;
 using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
+using Content.Shared._AU14.Marines.Roles.Chevrons;
+using Content.Shared._CMU14.Round.Roles;
 
 // ReSharper disable CheckNamespace
 namespace Content.Shared.Roles;
@@ -31,6 +33,14 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     [DataField]
     public bool Hidden;
 
+    /// <summary>
+    /// Whether this job represents a synthetic (android) role. Characters must have
+    /// <see cref="Content.Shared.Preferences.HumanoidCharacterProfile.Synthetic"/> set to
+    /// match this before they can be resolved into the role.
+    /// </summary>
+    [DataField]
+    public bool IsSynthetic;
+
     [DataField]
     public int? OverwatchSortPriority;
 
@@ -54,6 +64,9 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
 
     [DataField]
     public Dictionary<ProtoId<RankPrototype>, HashSet<JobRequirement>?>? Ranks;
+
+    [DataField]
+    public Dictionary<string, ChevronDefinition>? Chevrons { get; set; }
 
     [DataField]
     public Dictionary<RMCPlaytimeMedalType, EntProtoId>? Medals;
@@ -95,4 +108,28 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     /// </summary>
     [DataField]
     public Dictionary<CamouflageType, ProtoId<StartingGearPrototype>>? CamouflageStartingGear;
+
+    [DataField]
+    public RoundJobSide RoundSide { get; private set; } = RoundJobSide.None;
+
+    [DataField]
+    public string? RoundForce { get; private set; }
+
+    [DataField]
+    public string? RoundRole { get; private set; }
+
+    [DataField, AlwaysPushInheritance]
+    public List<ProtoId<RoundJobProfilePrototype>> RoundProfiles { get; private set; } = new();
+
+    [DataField, AlwaysPushInheritance]
+    public ComponentRegistry RoundComponents { get; private set; } = new();
+
+    [DataField, AlwaysPushInheritance]
+    public Dictionary<string, ComponentRegistry> RoundSideComponents { get; private set; } = new();
+
+    [DataField, AlwaysPushInheritance]
+    public Dictionary<string, ComponentRegistry> RoundForceComponents { get; private set; } = new();
+
+    [DataField]
+    public bool RoundComponentsRemoveExisting { get; private set; } = true;
 }

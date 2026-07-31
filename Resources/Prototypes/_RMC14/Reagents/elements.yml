@@ -245,7 +245,7 @@
         probability: 0
 
 - type: reagent
-  parent: [RMCReagentElement, Uranium]
+  parent: RMCReagentElement
   id: RMCRadium
   name: reagent-name-radium
   group: Elements
@@ -260,7 +260,8 @@
       effects:
       - !type:Carcinogenic
         potency: 2
-#TODO causes internal bleeding, OD organ damage, critical causes even more #PROPERTY_HEMORRAGING = 1
+      - !type:Hemorrhaging
+        potency: 1
 
 - type: reagent
   parent: RMCReagentElement

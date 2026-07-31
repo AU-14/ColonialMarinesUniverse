@@ -1,0 +1,21 @@
+- type: department
+  parent: CMDepartmentBase
+  id: CMUDepartmentProvost
+  name: cmu-department-CMUProvost
+  description: cmu-department-CMUProvost-description
+  color: "#DE3A3A"
+  roles:
+  - CMUJobINDFORProvostAdvisor
+  - CMUJobINDFORProvostInspector
+  - CMUJobINDFORProvostInspectorChief
+  - CMUJobINDFORProvostEnforcer
+  - CMUJobINDFORProvostEnforcerMedic
+  - CMUJobINDFORProvostMarshal
+  - CMUJobINDFORProvostMarshalDeputy
+  - CMUJobINDFORProvostSpcAgent
+  - CMUJobINDFORProvostSpcComms
+  - CMUJobINDFORProvostSpcMedic
+  - CMUJobINDFORProvostTeamLeader
+  departmentRadio: radioProvost
+  headOfDepartment: CMUJobINDFORProvostInspectorChief
+  hidden: true

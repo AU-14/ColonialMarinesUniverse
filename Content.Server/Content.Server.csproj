@@ -10,6 +10,7 @@
   </PropertyGroup>
   <Import Project="../MSBuild/Content.props" />
   <ItemGroup>
+    <PackageReference Include="ClosedXML" />
     <Compile Include="..\Content.CMU\Server\**\*.cs"
              Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>

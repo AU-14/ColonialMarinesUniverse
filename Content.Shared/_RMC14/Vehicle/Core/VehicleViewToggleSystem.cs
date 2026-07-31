@@ -122,6 +122,46 @@ public sealed partial class VehicleViewToggleSystem : EntitySystem
         _actions.SetToggled(toggle.Action, toggle.IsOutside);
     }
 
+    public void RefreshOutsideViewers(EntityUid outsideTarget)
+    {
+        var query = EntityQueryEnumerator<VehicleViewToggleComponent, EyeComponent>();
+        while (query.MoveNext(out var user, out var toggle, out var eye))
+        {
+            if (toggle.IsOutside && toggle.OutsideTarget == outsideTarget)
+                _eye.SetTarget(user, outsideTarget, eye);
+        }
+    }
+
+    public bool SetOutsideView(EntityUid user, EntityUid outsideTarget)
+    {
+        if (!TryComp(user, out VehicleViewToggleComponent? toggle) ||
+            toggle.OutsideTarget != outsideTarget || !TryComp(user, out EyeComponent? eye))
+            return false;
+
+        toggle.InsideTarget = eye.Target;
+        _eye.SetTarget(user, outsideTarget, eye);
+        toggle.IsOutside = true;
+        UpdateActionState(toggle);
+        Dirty(user, toggle);
+        var toggled = new VehicleViewToggledEvent(true);
+        RaiseLocalEvent(user, ref toggled);
+        return true;
+    }
+
+    public void ReplaceOutsideTarget(EntityUid oldOutsideTarget, EntityUid newOutsideTarget)
+    {
+        var query = EntityQueryEnumerator<VehicleViewToggleComponent, EyeComponent>();
+        while (query.MoveNext(out var user, out var toggle, out var eye))
+        {
+            if (toggle.OutsideTarget != oldOutsideTarget)
+                continue;
+            toggle.OutsideTarget = newOutsideTarget;
+            if (toggle.IsOutside)
+                _eye.SetTarget(user, newOutsideTarget, eye);
+            Dirty(user, toggle);
+        }
+    }
+
     private void EnsureSingleToggleAction(EntityUid user, VehicleViewToggleComponent toggle)
     {
         bool IsToggleActionPrototype(EntityUid actionUid)

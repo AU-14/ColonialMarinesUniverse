@@ -14,8 +14,10 @@
   - type: GuideHelp
     guides:
     - RMCGuideRoleSpitter
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Spitter/spitter.rsi
+    sprite: _AU14/Mobs/Xenos/Spitter/spitter.rsi #AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -60,6 +62,10 @@
     evolvesTo:
     - RMCXenoBoiler
     - CMXenoPraetorian
+    - RMCXenoDespoiler
+    strains:
+    - CMXenoSpitterVenator
+    - CMXenoSpitterAlchemist
   - type: XenoSpit
   - type: XenoChargeSpit
   - type: XenoScatteredSpit
@@ -103,6 +109,25 @@
       whitelist:
         components:
         - XenoHeavy
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
   - type: RMCXenoDamageVisuals
     prefix: spitter
   - type: TacticalMapIcon
@@ -113,10 +138,11 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-spitter
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
   - type: VentCrawler
     ventCrawlIcon: spitter
   - type: RMCActionOrder
     id: CMXenoSpitter
+  - type: CMUXenoZJump

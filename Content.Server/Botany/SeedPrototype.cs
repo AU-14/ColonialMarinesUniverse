@@ -137,6 +137,8 @@ public partial class SeedData
 
     [DataField] public Dictionary<string, SeedChemQuantity> Chemicals = new();
 
+    [DataField] public Dictionary<string, SeedChemQuantity> SpecialChemicals = new();
+
     [DataField] public Dictionary<Gas, float> ConsumeGasses = new();
 
     [DataField] public Dictionary<Gas, float> ExudeGasses = new();
@@ -272,6 +274,7 @@ public partial class SeedData
             ProductPrototypes = new List<EntProtoId>(ProductPrototypes),
             MutationPrototypes = new List<ProtoId<SeedPrototype>>(MutationPrototypes),
             Chemicals = new Dictionary<string, SeedChemQuantity>(Chemicals),
+            SpecialChemicals = new Dictionary<string, SeedChemQuantity>(SpecialChemicals),
             ConsumeGasses = new Dictionary<Gas, float>(ConsumeGasses),
             ExudeGasses = new Dictionary<Gas, float>(ExudeGasses),
 
@@ -333,6 +336,7 @@ public partial class SeedData
             MutationPrototypes = new List<ProtoId<SeedPrototype>>(other.MutationPrototypes),
 
             Chemicals = new Dictionary<string, SeedChemQuantity>(Chemicals),
+            SpecialChemicals = new Dictionary<string, SeedChemQuantity>(other.SpecialChemicals),
             ConsumeGasses = new Dictionary<Gas, float>(ConsumeGasses),
             ExudeGasses = new Dictionary<Gas, float>(ExudeGasses),
 

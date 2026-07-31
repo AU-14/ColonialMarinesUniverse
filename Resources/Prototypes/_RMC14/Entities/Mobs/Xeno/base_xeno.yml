@@ -34,12 +34,15 @@
   save: false
   components: # TODO RMC14 camera recoil from large explosions? check 13
   - type: ZombieImmune
+  - type: BodyZoneTargeting
+    meleeAccuracy: 0.5
+    headAccuracyMultiplier: 0.6
+    torsoAccuracyMultiplier: 0.75
   - type: BlockEntityStorage
     whitelist:
       components:
       - EntityStorage
   - type: Damageable
-  - type: Injurable
     damageContainer: Xeno
   - type: Destructible
     thresholds: []
@@ -47,6 +50,7 @@
     simple: true
     deadText: rmc-medical-examine-dead-xeno
   - type: RMCBlockMedicalExamine
+  - type: YautjaTrophySource
   - type: MobState
     allowedStates:
     - Alive
@@ -152,7 +156,10 @@
   - type: Spottable
   - type: Physics
     bodyType: KinematicController
-  - type: CMUXenoZJump
+  - type: CMUZPhysics
+  # CMU14
+  #- type: CMUXenoZJump
+  # CMU14
   - type: Fixtures
     fixtures:
       fix1:
@@ -174,19 +181,16 @@
         layer:
         - BulletImpassable
   - type: CMSurgeryTarget
+  - type: Gibbable
   - type: RMCGibOnDeath
   - type: RMCSpawnEntitiesOnGib
     entities:
     - RMCDecalSpawnerGibsDrone # TODO one for every caste
     - RMCGibEffectXenoSmall # TODO larger gib effect for larger xenos
   - type: Body
-  - type: InitialBody
-    organs:
-      Head: RMCHeadXeno
-      Heart: RMCOrganXenoHeart
+    prototype: Xenonid
   - type: Xeno
   - type: VehicleDamageMultiplier
-    multiplier: 1.5
   - type: XenoRegen
   - type: XenoStateVisuals
   - type: UserInterface
@@ -203,16 +207,14 @@
         type: XenoChooseStructureBui
       enum.XenoPheromonesUI.Key:
         type: XenoPheromonesBui
+      enum.XenoAlchemistUI.Key:
+        type: XenoAlchemistBui
       enum.XenoOrderConstructionUI.Key:
         type: XenoOrderConstructionBui
       enum.XenoFruitChooseUI.Key:
         type: XenoFruitChooseBui
       enum.XenoWordQueenUI.Key:
         type: XenoWordQueenBui
-      enum.HiveTeamUIKey.Key:
-        type: HiveTeamBui
-      enum.HiveLeaderSquadUIKey.Key:
-        type: HiveLeaderSquadBui
       enum.TacticalMapUserUi.Key:
         type: TacticalMapUserBui
       enum.XenoReserveParasiteChangeUI.Key:
@@ -236,12 +238,22 @@
     mustBeDead: true
   - type: WhitelistPickup
   - type: DropHeldOnIncapacitate
-  - type: RMCNightVision
+  - type: NightVision
     alert: XenoNightVision
     overlay: true
   - type: ParalyzeOnPullAttemptImmune
   - type: InfectOnPullAttemptImmune
   - type: GhostTakeoverAvailable
+  - type: LarvaQueueable
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: cmu-job-name-xeno-unknown
+    description: cm-xeno-description
+    raffle:
+      settings: short
+    rules: cm-xeno-rules
   - type: StatusEffects
     allowed:
     - Stun
@@ -282,6 +294,7 @@
       - Xeno
       - Infectable
       - Synth
+      - Yautja
   - type: BlockPullingDead
   - type: XenoFriendly
   - type: Undisposable
@@ -310,7 +323,7 @@
     - enum.VendingMachineUiKey.Key
     - enum.PaperUiKey.Key
     - enum.RMCCameraUiKey.Key
-  - type: RMCActiveInputMover
+  - type: ActiveInputMover
   - type: HiveTracker
     trackerModes:
     - Queen
@@ -342,6 +355,7 @@
   - type: AssignXenoName
   - type: MobGibbedByExplosionType
   - type: TileFirePatter
+    removeDuration: 3.75
   - type: CanBeFirePatted
   - type: BlockIdExamine
   - type: NoStunOnExit
@@ -370,14 +384,21 @@
   - type: XenoRankNames
   - type: Blindable
   - type: FixedIdentity
-    name: cm-xeno-name
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
+  - type: FixedDescription
+    description: rmc-xeno-unknown-description
     whitelist:
       components:
       - Marine
   - type: EmoteCooldown
   - type: RMCMesonsNonviewable
     xenoVisible: true
-  - type: CanBeLarvaQueued
+  - type: UserIFF
+    factions:
+     -  FactionXeno
 
 - type: entity
   abstract: true
@@ -483,6 +504,9 @@
     stacks: -5
   - type: RMCHandEmotes
   - type: XenoToggleChargingKnockback
+  # CMU14
+  - type: CMUXenoBullChargeTarget
+  # CMU14
   - type: XenoCanAddPlasmaToConstruct
 
 - type: entity

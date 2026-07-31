@@ -141,9 +141,40 @@ public sealed partial class PlantHolderComponent : Component
     [ViewVariables]
     public Entity<SolutionComponent>? SoilSolution = null;
 
+    [ViewVariables]
+    public MutationController MutationController = new();
+
     /// <summary>
     /// Tool quality that required if plant should be harvested with specified tool.
     /// </summary>
     [DataField]
     public ProtoId<ToolQualityPrototype>? HarvestToolQuality = "Sawing";
+}
+
+public struct MutationController
+{
+    public OrderedDictionary<string, int> Fields;
+
+    public MutationController()
+    {
+        Fields = new OrderedDictionary<string, int>
+        {
+            { "Plant Cancer", 0 },
+            { "Gluttony", 0 },
+            { "Endurance", 0 },
+            { "Light Tolerance", 0 },
+            { "Toxin Tolerance", 0 },
+            { "Weed Tolerance", 0 },
+            { "Production", 0 },
+            { "Lifespan", 0 },
+            { "Potency", 0 },
+            { "Maturity", 0 },
+            { "Bioluminescence", 0 },
+            { "Flowers", 0 },
+            { "New Chems", 0 },
+            { "New Chems2", 0 },
+            { "New Chems3", 0 },
+            { "Mutate Species", 0 },
+        };
+    }
 }

@@ -1,0 +1,232 @@
+- type: entity
+  id: CMUXenoPsychicShieldSegment
+  categories: [HideSpawnMenu]
+  name: psychic shield
+  components:
+    - type: Physics
+      bodyType: Static
+    - type: Fixtures
+      fixtures:
+        shield:
+          shape: !type:PolygonShape
+            vertices:
+              - "-1.5,-0.5"
+              - "1.5,-0.5"
+              - "1.5,0.5"
+              - "-1.5,0.5"
+          hard: true
+          layer:
+            - BulletImpassable
+    - type: CMUXenoPsychicShieldSegment
+    - type: IgnorePredictionHit
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  parent: CMUXenoPsychicShieldSegment
+  id: CMUXenoPsychicShield
+  categories: [HideSpawnMenu]
+  name: psychic shield
+  components:
+    - type: Sprite
+      drawdepth: Effects
+      sprite: _CMU14/Effects/Xeno/warlock_shield.rsi
+      state: shield
+    - type: PointLight
+      radius: 2
+      energy: 1.5
+      color: "#7fb7ff"
+
+- type: entity
+  id: CMUXenoPsychicCrushWarning
+  categories: [HideSpawnMenu]
+  name: psychic crush warning
+  components:
+    # Lifetime covers the full 5-pulse channel at 1 s/pulse plus a small buffer, so all rings
+    # spawned during the channel remain visible until detonation. Ordinarily the warning is
+    # deleted by ClearPsychicCrushEffects on end; TimedDespawn is only the orphan fallback.
+    - type: TimedDespawn
+      lifetime: 6
+    - type: Sprite
+      drawdepth: Effects
+      sprite: _CMU14/Effects/Xeno/warlock_crush_warning.rsi
+      noRot: true
+      state: crush_warning
+    - type: EffectVisuals
+    - type: CMUXenoWarlockParticleEmitter
+      effect: CrushWarning
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushOrb
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: Sprite
+      drawdepth: Overlays
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
+      noRot: true
+      state: orb_charge
+    - type: PointLight
+      radius: 2
+      energy: 1.5
+      color: "#6a59b3"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushSmooth
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: TimedDespawn
+      lifetime: 0.5
+    - type: Sprite
+      drawdepth: Overlays
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
+      noRot: true
+      state: crush_smooth
+    - type: EffectVisuals
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushHard
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: TimedDespawn
+      lifetime: 0.4
+    - type: Sprite
+      drawdepth: Overlays
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
+      noRot: true
+      state: crush_hard
+    - type: EffectVisuals
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoPsychicCrushBlur
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: TimedDespawn
+      lifetime: 1
+    - type: CMUXenoPsychicCrushBlur
+      duration: 1
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockCrushChannelEffect
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: PointLight
+      radius: 3
+      energy: 1.8
+      color: "#6a59b3"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockCrushParticles
+  categories: [HideSpawnMenu]
+  name: psychic crush
+  components:
+    - type: CMUXenoWarlockParticleEmitter
+      effect: PsychicCrushCharge
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockBlastChannelEffect
+  categories: [HideSpawnMenu]
+  name: psychic blast
+  components:
+    - type: PointLight
+      radius: 3
+      energy: 2
+      color: "#970f0f"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockBlastParticles
+  categories: [HideSpawnMenu]
+  name: psychic blast
+  components:
+    - type: CMUXenoWarlockParticleEmitter
+      effect: PsychicBlastCharge
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUXenoWarlockShieldChannelEffect
+  categories: [HideSpawnMenu]
+  name: psychic shield
+  components:
+    - type: PointLight
+      radius: 3
+      energy: 1.4
+      color: "#5999b3"
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  parent: XenoBaseProjectile
+  id: CMUXenoPsychicBlastProjectile
+  categories: [HideSpawnMenu]
+  name: psychic blast
+  components:
+    - type: Sprite
+      sprite: _RMC14/Effects/beam.rsi
+      state: laser_beam
+      drawdepth: Effects
+      color: "#970f0f"
+    - type: ProjectileMaxRange
+      max: 7
+      delete: false
+    - type: RMCProjectileAccuracy
+      accuracy: 999
+    - type: CMUXenoPsychicBlastProjectile
+      radius: 1.25
+      damage:
+        types:
+          Blunt: 65
+      slow: 1.5
+      impactSound:
+        path: /Audio/_CMU14/Xeno/Warlock/EMPulse.ogg
+      impactEffectId: CMUXenoPsychicBlastShockwave
+    - type: PointLight
+      radius: 1.5
+      energy: 1.2
+      color: "#970f0f"
+
+- type: entity
+  id: CMUXenoPsychicBlastShockwave
+  categories: [HideSpawnMenu]
+  name: psychic blast shockwave
+  components:
+    - type: TimedDespawn
+      lifetime: 0.6
+    - type: RMCExplosionShockWave
+      falloffPower: 25
+      sharpness: 12
+      width: 0.6
+    - type: Tag
+      tags:
+        - HideContextMenu

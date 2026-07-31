@@ -1839,6 +1839,24 @@ public sealed partial class IntelSystem : EntitySystem
         return true;
     }
 
+    public int GetIntelPoints(string team)
+    {
+        return TryGetTechTree(out var tree)
+            ? (int) Math.Floor(tree.Value.Comp.Tree.Points.Double())
+            : 0;
+    }
+
+    public bool TrySpendIntelPoints(string team, double amount)
+    {
+        return TryUsePoints(FixedPoint2.New(amount));
+    }
+
+    public void SetTeamTechTreeOverride(string team, string? protoId)
+    {
+        // The newer RMC tech-tree implementation has one authoritative tree.
+        // Keep the CMU call compatible until faction trees are split upstream again.
+    }
+
     public void AddPoints(Entity<IntelTechTreeComponent> tree, FixedPoint2 points)
     {
         tree.Comp.Tree.Points += points;
