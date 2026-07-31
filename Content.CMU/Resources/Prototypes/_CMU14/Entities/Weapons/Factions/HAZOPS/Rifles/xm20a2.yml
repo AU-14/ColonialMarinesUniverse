@@ -1,0 +1,94 @@
+- type: entity
+  parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
+  name: XM20A2 Pulse Rifle
+  id: AUWeaponRifleXM20A2HAZOPS
+  description: Devolped as a possible successor to the M20A Harrington rifle, the XM20A2 never entered full service in the USCM and was succeeded by the M41. This heavily modified variant is issued to HAZOPS to bolster their mid-long range capablites. Big magazine, and big firerate, but the drum magazines can't load anything other than standard 10x24mm, and the rails can't mount modern attachments.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/HAZOPS/XM20A246x32.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-0
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Item
+    sprite: _AU14/Weapons/Guns/HAZOPS/XM20A2.rsi
+    size: Large
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/HAZOPS/XM20A2.rsi
+  - type: Gun
+    shotsPerBurst: 3
+    selectedMode: FullAuto
+    availableModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    soundGunshot:
+      collection: AU14M41FireSound
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - Burst
+    - FullAuto
+    recoilUnwielded: 4
+    scatterWielded: 8
+    scatterUnwielded: 20
+    baseFireRate: 5
+    burstScatterMult: 1
+    modifiers:
+      Burst:
+        fireDelay: 0.1665
+        maxScatterModifier: 10
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+  - type: MagazineAmmoProvider
+    autoEject: false
+    soundAutoEject: null
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        startingItem: AU14MagazineRifleXM20A2
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m41_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - AU14MagazineRifleXM20A2
+  - type: GunDamageModifier
+    multiplier: 0.90
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 0.95
+    accuracyMultiplierUnwielded: 0.65
+
+- type: entity
+  parent: CMMagazineRifleBase
+  id: AU14MagazineRifleXM20A2
+  name: XM20A2 magazine (10x24mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazineRifle
+    - AU14MagazineRifleXM20A2
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - AU14CartridgeRifleM20A
+      - CMCartridgeRifle10x24mm
+    proto: AU14CartridgeRifleM20A
+    capacity: 120
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Ammo/Magazines/xm20a2.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: Appearance
+  - type: RefillableByBulletBox
+    bulletType: RMCBoxBulletsRifle
+    
+- type: Tag
+  id: AU14MagazineRifleXM20A2

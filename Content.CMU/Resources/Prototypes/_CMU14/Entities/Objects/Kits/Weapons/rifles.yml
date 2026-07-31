@@ -369,3 +369,21 @@
         amount: 1
       - id: RMCMagazineRifleMAR40
         amount: 3
+
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14GunCaseRifleXM20A2
+  name: XM20A2 pulse rifle case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,5,1
+  - type: StorageFill
+    contents:
+      - id: AUWeaponRifleXM20A2HAZOPS
+        amount: 1
+      - id: AU14MagazineRifleXM20A2
+        amount: 5
