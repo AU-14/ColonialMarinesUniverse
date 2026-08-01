@@ -24,7 +24,7 @@ public sealed partial class ThirdPartyPrototype : IPrototype
     public string? EntryMethod { get; private set; }
 
     [DataField("dropshippath", required: false)]
-    public ResPath dropshippath { get; private set; } = new("/Maps/_CMU14/Shuttles/black_ert.yml");
+    public ResPath dropshippath { get; private set; } = new("/Maps/Shuttles/black_ert.yml");
 
     // used if enterbyshuttle is true
 

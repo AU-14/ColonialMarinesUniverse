@@ -5,11 +5,11 @@
   description: A compact document fabrication device manufactured by Weyland-Yutani's Communications & Research and Development Division. Designed for rapid field administration, it accepts standardized paper stock and prints pre-authorized corporate, military, and governmental stationery from its internal template library. Do not ask where the ink comes from.
   components:
   - type: Sprite
-    sprite: _CMU14/Items/universal_paper_tool.rsi
+    sprite: Items/universal_paper_tool.rsi
     state: icon
   - type: Item
     size: Small
-    sprite: _CMU14/Items/universal_paper_tool.rsi
+    sprite: Items/universal_paper_tool.rsi
   - type: ActivatableUI
     key: enum.UniversalPaperToolUiKey.Key
     requiresComplex: false

@@ -20,7 +20,7 @@
     prefix: au14-job-prefix-civilianwastemanagementspecialist
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: wms
 
   name: au14-job-name-civilianwastemanagementspecialist

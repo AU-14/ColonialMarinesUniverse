@@ -6,7 +6,7 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: _AU14/Items/audefib.rsi
+    sprite: Items/audefib.rsi
     layers:
     - state: defib
     - state: defib_on
@@ -21,10 +21,10 @@
           False: { visible: false }
   - type: Item
     size: Normal
-    sprite: _AU14/Items/audefib.rsi
+    sprite: Items/audefib.rsi
     heldPrefix: defib
   - type: Clothing
-    sprite: _AU14/Items/audefib.rsi
+    sprite: Items/audefib.rsi
     slots:
     - OUTERCLOTHING
     - back
@@ -33,9 +33,9 @@
     speechVerb: Robotic
   - type: ItemToggle
     soundActivate:
-      path: /Audio/_AU14/Medical/defib_SafetyOn.ogg
+      path: /Audio/Medical/defib_SafetyOn.ogg
     soundDeactivate:
-      path: /Audio/_AU14/Medical/defib_SafetyOff.ogg
+      path: /Audio/Medical/defib_SafetyOff.ogg
   - type: Defibrillator
     zapDelay: 0
     doAfterDuration: 12.5
@@ -45,23 +45,23 @@
       groups:
         Airloss: -150
     zapSound:
-      path: /Audio/_AU14/Medical/defib_release.ogg
+      path: /Audio/Medical/defib_release.ogg
       params:
         volume: 0.1
     chargeSound:
-      path: /Audio/_AU14/Medical/defib_charge.ogg
+      path: /Audio/Medical/defib_charge.ogg
       params:
         volume: -5
     failureSound:
-      path: /Audio/_AU14/Medical/defib_failed.ogg
+      path: /Audio/Medical/defib_failed.ogg
       params:
         volume: 0.1
     successSound:
-      path: /Audio/_AU14/Medical/defib_success.ogg
+      path: /Audio/Medical/defib_success.ogg
       params:
         volume: 0.1
     readySound:
-      path: /Audio/_AU14/Medical/defib_ready.ogg
+      path: /Audio/Medical/defib_ready.ogg
       params:
         volume: 0.1
     zapDamage: 25

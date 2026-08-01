@@ -131,7 +131,7 @@
     guides:
     - RMCGuideRoleHivelord
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Hivelord/hivelord.rsi # AU14-Edit
+    sprite: Mobs/Xenos/Hivelord/hivelord.rsi # AU14-Edit
   - type: Xeno
     role: CMXenoHivelord
     actionIds:
@@ -188,7 +188,7 @@
   components:
   - type: CanBuildThickFromConstructNode
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Hivelord/resin_whisperer_hivelord.rsi # AU14-Edit
+    sprite: Mobs/Xenos/Hivelord/resin_whisperer_hivelord.rsi # AU14-Edit
   - type: Xeno
     role: CMXenoHivelord
     actionIds:
@@ -247,7 +247,7 @@
     guides:
     - RMCGuideRoleDesigner
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Hivelord/designer_hivelord.rsi # AU14-Edit
+    sprite: Mobs/Xenos/Hivelord/designer_hivelord.rsi # AU14-Edit
   - type: Xeno
     role: CMXenoHivelord
     actionIds:

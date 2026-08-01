@@ -117,7 +117,7 @@ public sealed partial class CustomConstructionMenuSystem
 
     /// <summary>
     /// Builds the generated tile-applier entity + graph + recipe. Mirrors the hand-authored Tiles spawnlist
-    /// (see Resources/Prototypes/_AU14/ZLevelBuilding/tiles.yml): an applier entity carries a TileApplier that
+    /// (see Content.CMU/Resources/Prototypes/ZLevelBuilding/tiles.yml): an applier entity carries a TileApplier that
     /// lays the tile on map-init then deletes itself, and a Construction component so the build path accepts it.
     /// </summary>
     private string BuildTileYaml(string key, string tileId, string material, int amount, string spawnlist, string category, bool zLevelPage)

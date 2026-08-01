@@ -963,7 +963,7 @@
   description: An automated rack hooked up to a small storage of military police equipment.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: Structures/Vendors/assortedequipment.rsi
   - type: AccessReader
     access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
   - type: CMAutomatedVendor

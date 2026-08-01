@@ -11,7 +11,7 @@
         - ReagentId: Nutriment
           Quantity: 5
   - type: Sprite
-    sprite: _CMU14/Objects/Kitchen/Plants/mtear.rsi
+    sprite: Objects/Kitchen/Plants/mtear.rsi
   - type: Item
     heldPrefix: produce
   - type: Produce
@@ -33,7 +33,7 @@
         - ReagentId: Nutriment
           Quantity: 5
   - type: Sprite
-    sprite: _CMU14/Objects/Kitchen/Plants/deathberry.rsi
+    sprite: Objects/Kitchen/Plants/deathberry.rsi
   - type: Item
     heldPrefix: produce
   - type: Produce
@@ -55,7 +55,7 @@
         - ReagentId: Nutriment
           Quantity: 5
   - type: Sprite
-    sprite: _CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+    sprite: Objects/Kitchen/Plants/poisonberry.rsi
   - type: Item
     heldPrefix: produce
   - type: Produce

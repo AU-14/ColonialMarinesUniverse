@@ -1,4 +1,4 @@
-﻿using Content.Server.Chat.Systems;
+using Content.Server.Chat.Systems;
 using Content.Shared._CMU14.Threats.Mobs.Wendigo;
 using Content.Shared.Actions;
 using Content.Shared.Chat.Prototypes;
@@ -26,30 +26,30 @@ public sealed partial class WendigoVoiceSystem : EntitySystem
     private static readonly Dictionary<string, string> EmoteToSound = new()
     {
         // Voice lines
-        { "WendigoAllYourFault", "/Audio/_AU14/Wendigo/mimicry/all_your_fault.ogg" },
-        { "WendigoCloser", "/Audio/_AU14/Wendigo/mimicry/closer.ogg" },
-        { "WendigoComeCloser", "/Audio/_AU14/Wendigo/mimicry/come_closer.ogg" },
-        { "WendigoGuilty1", "/Audio/_AU14/Wendigo/mimicry/guilty1.ogg" },
-        { "WendigoGuilty2", "/Audio/_AU14/Wendigo/mimicry/guilty2.ogg" },
-        { "WendigoGuilty3", "/Audio/_AU14/Wendigo/mimicry/guilty3.ogg" },
-        { "WendigoHelpMe", "/Audio/_AU14/Wendigo/mimicry/help_me.ogg" },
-        { "WendigoHungry", "/Audio/_AU14/Wendigo/mimicry/hungry.ogg" },
-        { "WendigoImComingToHelp", "/Audio/_AU14/Wendigo/mimicry/im_coming_to_help.ogg" },
-        { "WendigoItsAlive", "/Audio/_AU14/Wendigo/mimicry/its_alive.ogg" },
-        { "WendigoItsInTheHouse", "/Audio/_AU14/Wendigo/mimicry/its_in_the_house.ogg" },
-        { "WendigoItsStillOutThere", "/Audio/_AU14/Wendigo/mimicry/its_still_out_there.ogg" },
-        { "WendigoJustAStory", "/Audio/_AU14/Wendigo/mimicry/just_a_story.ogg" },
-        { "WendigoLetMeIn", "/Audio/_AU14/Wendigo/mimicry/let_me_in.ogg" },
-        { "WendigoLittleLight1", "/Audio/_AU14/Wendigo/mimicry/little_light1.ogg" },
-        { "WendigoLittleLight2", "/Audio/_AU14/Wendigo/mimicry/little_light2.ogg" },
-        { "WendigoNoNo", "/Audio/_AU14/Wendigo/mimicry/no_no.ogg" },
-        { "WendigoOpenTheDoor", "/Audio/_AU14/Wendigo/mimicry/open_the_door.ogg" },
-        { "WendigoPleaseNo", "/Audio/_AU14/Wendigo/mimicry/please_no.ogg" },
-        { "WendigoSaveMe", "/Audio/_AU14/Wendigo/mimicry/save_me.ogg" },
-        { "WendigoSecrets", "/Audio/_AU14/Wendigo/mimicry/secrets.ogg" },
-        { "WendigoSoAfraid", "/Audio/_AU14/Wendigo/mimicry/so_afraid.ogg" },
-        { "WendigoWeCantGetOut", "/Audio/_AU14/Wendigo/mimicry/we_cant_get_out.ogg" },
-        { "WendigoWhereAreYou", "/Audio/_AU14/Wendigo/mimicry/where_are_you.ogg" }
+        { "WendigoAllYourFault", "/Audio/Wendigo/mimicry/all_your_fault.ogg" },
+        { "WendigoCloser", "/Audio/Wendigo/mimicry/closer.ogg" },
+        { "WendigoComeCloser", "/Audio/Wendigo/mimicry/come_closer.ogg" },
+        { "WendigoGuilty1", "/Audio/Wendigo/mimicry/guilty1.ogg" },
+        { "WendigoGuilty2", "/Audio/Wendigo/mimicry/guilty2.ogg" },
+        { "WendigoGuilty3", "/Audio/Wendigo/mimicry/guilty3.ogg" },
+        { "WendigoHelpMe", "/Audio/Wendigo/mimicry/help_me.ogg" },
+        { "WendigoHungry", "/Audio/Wendigo/mimicry/hungry.ogg" },
+        { "WendigoImComingToHelp", "/Audio/Wendigo/mimicry/im_coming_to_help.ogg" },
+        { "WendigoItsAlive", "/Audio/Wendigo/mimicry/its_alive.ogg" },
+        { "WendigoItsInTheHouse", "/Audio/Wendigo/mimicry/its_in_the_house.ogg" },
+        { "WendigoItsStillOutThere", "/Audio/Wendigo/mimicry/its_still_out_there.ogg" },
+        { "WendigoJustAStory", "/Audio/Wendigo/mimicry/just_a_story.ogg" },
+        { "WendigoLetMeIn", "/Audio/Wendigo/mimicry/let_me_in.ogg" },
+        { "WendigoLittleLight1", "/Audio/Wendigo/mimicry/little_light1.ogg" },
+        { "WendigoLittleLight2", "/Audio/Wendigo/mimicry/little_light2.ogg" },
+        { "WendigoNoNo", "/Audio/Wendigo/mimicry/no_no.ogg" },
+        { "WendigoOpenTheDoor", "/Audio/Wendigo/mimicry/open_the_door.ogg" },
+        { "WendigoPleaseNo", "/Audio/Wendigo/mimicry/please_no.ogg" },
+        { "WendigoSaveMe", "/Audio/Wendigo/mimicry/save_me.ogg" },
+        { "WendigoSecrets", "/Audio/Wendigo/mimicry/secrets.ogg" },
+        { "WendigoSoAfraid", "/Audio/Wendigo/mimicry/so_afraid.ogg" },
+        { "WendigoWeCantGetOut", "/Audio/Wendigo/mimicry/we_cant_get_out.ogg" },
+        { "WendigoWhereAreYou", "/Audio/Wendigo/mimicry/where_are_you.ogg" }
     };
 
     public override void Initialize()

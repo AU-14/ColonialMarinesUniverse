@@ -12,7 +12,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cm_bloodsplatter
   - type: SpriteColor
     color: "#b40000"
@@ -33,7 +33,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cmubloodsplatter1
 
 - type: entity
@@ -48,7 +48,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cmubloodsplatter2
 
 # ├──[ YAUTJA BLOOD ]────────────────────────────────────────────────┤
@@ -64,7 +64,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cm_bloodsplatter
   - type: SpriteColor
     color: "#2cf274"
@@ -81,7 +81,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cmubloodsplatter1
 
 - type: entity
@@ -96,7 +96,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cmubloodsplatter2
 
 # ├──[ SYNTH BLOOD ]─────────────────────────────────────────────────┤
@@ -112,7 +112,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cm_bloodsplatter
   - type: SpriteColor
     color: "#EEEEEE"
@@ -129,7 +129,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cmubloodsplatter1
 
 - type: entity
@@ -144,5 +144,5 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: _CMU14/Effects/blood_impact.rsi
+      sprite: Effects/blood_impact.rsi
       state: cmubloodsplatter2

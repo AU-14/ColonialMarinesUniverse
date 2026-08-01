@@ -6,7 +6,7 @@
   - type: Seed
     seedId: mtear
   - type: Sprite
-    sprite: _CMU14/Objects/Kitchen/Plants/mtear.rsi
+    sprite: Objects/Kitchen/Plants/mtear.rsi
 
 - type: entity
   parent: SeedBase
@@ -16,7 +16,7 @@
   - type: Seed
     seedId: deathberry
   - type: Sprite
-    sprite: _CMU14/Objects/Kitchen/Plants/deathberry.rsi
+    sprite: Objects/Kitchen/Plants/deathberry.rsi
 
 - type: entity
   parent: SeedBase
@@ -26,7 +26,7 @@
   - type: Seed
     seedId: poisonberry
   - type: Sprite
-    sprite: _CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+    sprite: Objects/Kitchen/Plants/poisonberry.rsi
 
 - type: entity
   parent: SeedBase
@@ -43,7 +43,7 @@
   name: seeds-mtear-name
   noun: seeds-noun-seeds
   displayName: seeds-mtear-display-name
-  plantRsi: _CMU14/Objects/Kitchen/Plants/mtear.rsi
+  plantRsi: Objects/Kitchen/Plants/mtear.rsi
   packetPrototype: MTearSeeds
   productPrototypes:
   - FoodMTear
@@ -77,7 +77,7 @@
   name: seeds-deathberry-name
   noun: seeds-noun-seeds
   displayName: seeds-deathberry-display-name
-  plantRsi: _CMU14/Objects/Kitchen/Plants/deathberry.rsi
+  plantRsi: Objects/Kitchen/Plants/deathberry.rsi
   packetPrototype: DeathberrySeeds
   productPrototypes:
   - FoodDeathberry
@@ -107,7 +107,7 @@
   name: seeds-poisonberry-name
   noun: seeds-noun-seeds
   displayName: seeds-poisonberry-display-name
-  plantRsi: _CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+  plantRsi: Objects/Kitchen/Plants/poisonberry.rsi
   packetPrototype: PoisonberrySeeds
   productPrototypes:
   - FoodPoisonberry

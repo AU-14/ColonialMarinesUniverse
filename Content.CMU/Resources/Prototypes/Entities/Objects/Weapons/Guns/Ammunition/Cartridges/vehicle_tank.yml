@@ -4,7 +4,7 @@
   name: cartridge (LTB cannon, APFSDS)
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_apfsds
       map: ["enum.AmmoVisualLayers.Base"]
@@ -25,7 +25,7 @@
   name: cartridge (LTB cannon, HEAT)
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_heat
       map: ["enum.AmmoVisualLayers.Base"]
@@ -46,7 +46,7 @@
   name: cartridge (LTB cannon, HE)
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_he
       map: ["enum.AmmoVisualLayers.Base"]
@@ -67,7 +67,7 @@
   name: cartridge (LTB cannon, canister)
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_canister
       map: ["enum.AmmoVisualLayers.Base"]
@@ -88,7 +88,7 @@
   name: cartridge (LTB cannon, napalm)
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_thermite
       map: ["enum.AmmoVisualLayers.Base"]

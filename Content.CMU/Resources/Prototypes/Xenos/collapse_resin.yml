@@ -15,7 +15,7 @@
   parent: CMTileBaseUnpryable
   id: AU14ResinScabFloor
   name: tiles-au14-scab-resin
-  sprite: /Textures/_AU14/Tiles/scab_resin_blank.png
+  sprite: /Textures/Tiles/scab_resin_blank.png
   isSubfloor: true
   indestructible: true
   friction: 1
@@ -27,7 +27,7 @@
   description: A dark crust of hardened resin, spun thick across a hole in the floor. It holds weight, barely.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Xenos/xeno_collapse_resin.rsi
+    sprite: Structures/Xenos/xeno_collapse_resin.rsi
     drawdepth: FloorObjects
     state: collapse
   - type: ResinFloorPatch

@@ -72,7 +72,7 @@
   suffix: Shopkeeper
   components:  
   - type: Sprite
-    sprite: _AU14/Structures/hybrisiaracks.rsi
+    sprite: Structures/hybrisiaracks.rsi
     layers:
     - state: "longrack1"
 
@@ -83,7 +83,7 @@
   description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/hybrisiaracks.rsi
+    sprite: Structures/hybrisiaracks.rsi
     layers:
     - state: "longrack2"
     
@@ -94,7 +94,7 @@
   description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/hybrisiaracks.rsi
+    sprite: Structures/hybrisiaracks.rsi
     layers:
     - state: "longrack3"
     
@@ -105,7 +105,7 @@
   description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/hybrisiaracks.rsi
+    sprite: Structures/hybrisiaracks.rsi
     layers:
     - state: "longrack4"
 
@@ -116,7 +116,7 @@
   description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/hybrisiaracks.rsi
+    sprite: Structures/hybrisiaracks.rsi
     layers:
     - state: "longrack5"
     
@@ -127,7 +127,7 @@
   description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/hybrisiaracks.rsi
+    sprite: Structures/hybrisiaracks.rsi
     layers:
     - state: "longrack6"
 
@@ -138,6 +138,6 @@
   description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/hybrisiaracks.rsi
+    sprite: Structures/hybrisiaracks.rsi
     layers:
     - state: "longrack7"

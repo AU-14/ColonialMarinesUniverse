@@ -14,10 +14,10 @@ public sealed partial class YautjaHealthShardComponent : Component
     public EntProtoId HalfPrototype = "CMUYautjaHealthShardHalf";
 
     [DataField]
-    public SoundSpecifier? SplitSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/HealthShard/prd_health_twist_01.wav");
+    public SoundSpecifier? SplitSound = new SoundPathSpecifier("/Audio/Yautja/Equipment/HealthShard/prd_health_twist_01.wav");
 
     [DataField]
-    public SoundSpecifier? EquipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/HealthShard/prd_health_twist_air_02.wav");
+    public SoundSpecifier? EquipSound = new SoundPathSpecifier("/Audio/Yautja/Equipment/HealthShard/prd_health_twist_air_02.wav");
 }
 
 [RegisterComponent, NetworkedComponent]
@@ -27,10 +27,10 @@ public sealed partial class YautjaHealthShardHalfComponent : Component
     public EntProtoId WholePrototype = "CMUYautjaHealthShard";
 
     [DataField]
-    public SoundSpecifier? MergeSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/HealthShard/prd_health_twist_01.wav");
+    public SoundSpecifier? MergeSound = new SoundPathSpecifier("/Audio/Yautja/Equipment/HealthShard/prd_health_twist_01.wav");
 
     [DataField]
-    public SoundSpecifier? UseSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/HealthShard/prd_health_jab_01.wav");
+    public SoundSpecifier? UseSound = new SoundPathSpecifier("/Audio/Yautja/Equipment/HealthShard/prd_health_jab_01.wav");
 
     [DataField]
     public SoundSpecifier? CompleteSound = new SoundCollectionSpecifier("CMUYautjaHealthShardPainScream");

@@ -9,7 +9,7 @@
       types:
         Structural: 750
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/koorcigs.rsi
+    sprite: Structures/Vendors/koorcigs.rsi
   - type: VendingMachine
     pack: AU14VendorKoorCigs
 
@@ -29,7 +29,7 @@
   suffix: Civ
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/snowflakevendor.rsi
+    sprite: Structures/Vendors/snowflakevendor.rsi
     layers:
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
@@ -238,7 +238,7 @@
   components:
   - type: AU14VendorJO
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
     jobs: [ AU14JobOPFORPlatOp, AU14JobGOVFORPlatOp, AU14JobPlatOpBase ]
     sections:
@@ -252,7 +252,7 @@
     #     isAppendPrefix: false
     #     isAppendSquadRoleName: false
     #     giveIcon:
-    #       sprite: _AU14/Interface/au14govforjobicons.rsi
+    #       sprite: Interface/au14govforjobicons.rsi
     #       state: govfor_adj
     # - name: Staff Officers
     #   choices: { CMUJOLoadoutVendorKit: 1 }
@@ -273,7 +273,7 @@
     #     isAppendPrefix: false
     #     isAppendSquadRoleName: false
     #     giveIcon:
-    #       sprite: _AU14/Interface/au14govforjobicons.rsi
+    #       sprite: Interface/au14govforjobicons.rsi
     #       state: govfor_io
     #   - id: AU14KitJOEngineeringKit
     #     giveSquadRoleName: au14-job-name-juniorofficer-eo
@@ -281,7 +281,7 @@
     #     isAppendPrefix: false
     #     isAppendSquadRoleName: false
     #     giveIcon:
-    #       sprite: _AU14/Interface/au14govforjobicons.rsi
+    #       sprite: Interface/au14govforjobicons.rsi
     #       state: govfor_eo
     - name: Spare Equipment
       entries:
@@ -300,7 +300,7 @@
   description: An automated rack hooked up to a small storage of military police equipment.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: Structures/Vendors/assortedequipment.rsi
   - type: AccessReader
     access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
   - type: CMAutomatedVendor
@@ -350,7 +350,7 @@
   description: An automated rack hooked up to a small storage of military doctor equipment.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORMilitaryDoctor

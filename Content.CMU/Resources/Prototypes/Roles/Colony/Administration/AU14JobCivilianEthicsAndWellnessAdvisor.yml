@@ -16,7 +16,7 @@
     prefix: au14-job-prefix-ethicsandwellnessadvisor
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: nurse
 
   name: au14-job-name-ethicsandwellnessadvisor

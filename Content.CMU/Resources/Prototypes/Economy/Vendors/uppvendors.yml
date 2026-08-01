@@ -13,7 +13,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    sprite: Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -214,7 +214,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Food
@@ -686,7 +686,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+    sprite: Structures/Vendors/uscmcommandclothes.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -1020,7 +1020,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforPilot" ], [ "AU14AccessOpforPilot" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/genericweaponrack.rsi
+    sprite: Structures/Vendors/genericweaponrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Weapons
@@ -1171,7 +1171,7 @@
   description: An automated rack hooked up to a small storage of military police equipment.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: Structures/Vendors/assortedequipment.rsi
   - type: AccessReader
     access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
   - type: CMAutomatedVendor
@@ -1465,7 +1465,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    sprite: Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Softcovers

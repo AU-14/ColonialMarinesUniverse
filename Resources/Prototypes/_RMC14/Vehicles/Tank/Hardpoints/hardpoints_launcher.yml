@@ -108,7 +108,7 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot: /Audio/_AU14/Weapons/agl/gun_agl_fire1.ogg
+    soundGunshot: /Audio/Weapons/agl/gun_agl_fire1.ogg
     cameraRecoilScalar: 0
   - type: ShootAtFixedPoint
     shootArcProj: true
@@ -179,7 +179,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_AU14/Weapons/vehicle/towfire.ogg
+      path: /Audio/Weapons/vehicle/towfire.ogg
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 5
@@ -279,7 +279,7 @@
   description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    sprite: Structures/Vehicles/fv150/icons.rsi
     state: mounted_cupola
   - type: HardpointItem
     hardpointType: Launcher
@@ -298,7 +298,7 @@
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
     showOverlay: true
-    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: Structures/Vehicles/fv150/exterior.rsi
     overlayState: mounted_cupola_0
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision

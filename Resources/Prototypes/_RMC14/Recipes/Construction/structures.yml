@@ -95,7 +95,7 @@
 
   # Barricades
   # AU14 building overhaul: the construction-menu barricade entries are hidden here (hide: true) and replaced by
-  # ghost-placed versions in _AU14/Buildables/au14_barricades.yml, so barricades use "Place construction ghost"
+  # ghost-placed versions in Buildables/au14_barricades.yml, so barricades use "Place construction ghost"
   # instead of the RMC "Build here" radial. The RMC engineering-kit radial (rmcPrototype) is a separate build
   # prototype and is unaffected.
 - type: construction

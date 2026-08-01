@@ -66,9 +66,9 @@
   suffix: Filled, Support Synth, RMC
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
+    sprite: Clothing/RMC/belt/medicbag.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
+    sprite: Clothing/RMC/belt/medicbag.rsi
   - type: ItemCamouflage
     camouflageVariations: { }
 
@@ -78,9 +78,9 @@
   suffix: Filled, Support Synth, Black
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+    sprite: Clothing/UniversalBelts/Black/medicbag.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+    sprite: Clothing/UniversalBelts/Black/medicbag.rsi
   - type: ItemCamouflage
     camouflageVariations: { }
 
@@ -90,9 +90,9 @@
   suffix: Empty, Black
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+    sprite: Clothing/UniversalBelts/Black/medicbag.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/medicbag.rsi
+    sprite: Clothing/UniversalBelts/Black/medicbag.rsi
   - type: ItemCamouflage
     camouflageVariations: { }
 
@@ -152,7 +152,7 @@
   description: An ammunition belt designed to hold shotgun shells. # or individual bullets. TODO RMC14
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/shotgunbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/shotgunbelt.rsi
     layers:
     - state: icon
     - state: sixth
@@ -168,7 +168,7 @@
     - state: full
       visible: false
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/shotgunbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/shotgunbelt.rsi
   - type: Item
     size: Large
   - type: Storage
@@ -236,7 +236,7 @@
   description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version has a holster assembly that allows one to carry the most common pistols. It also contains side pouches that can store most pistol magazines.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/pistolbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/pistolbelt.rsi
     layers:
     - state: icon
     - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
@@ -279,7 +279,7 @@
     - state: full
       map: [ "closedLayer" ]
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/pistolbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/pistolbelt.rsi
     slots:
     - suitStorage
     - belt
@@ -389,9 +389,9 @@
   description: Despite the fact that 1. drum magazines are incredibly non-ergonomical, and 2. require incredibly precise machining in order to fit universally (spoiler, they don't, adding further to the myth of 'Smart Gun Personalities'), the government decided to issue a modified belt (more formally known by the designation M280) with hooks and dust covers. When the carry catch on the drum isn't getting stuck in the oiled up velcro, the rig actually does do a decent job at holding a plentiful amount of drums. But at the end of the day, compared to standard rigs.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/sgbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/sgbelt.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/sgbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/sgbelt.rsi
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -422,9 +422,9 @@
   description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version is specially designed to store knives. Not commonly issued, but kept in service.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/knifebelt.rsi
+    sprite: Clothing/UniversalBelts/Black/knifebelt.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/knifebelt.rsi
+    sprite: Clothing/UniversalBelts/Black/knifebelt.rsi
   - type: ItemSlots
   - type: CMHolster
   - type: UsableWhileDevoured
@@ -456,7 +456,7 @@
   description: The M802 is a limited-issue mark of load-bearing equipment, designed to carry smartgun ammunition and a sidearm.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/sgbeltpistol.rsi
+    sprite: Clothing/UniversalBelts/Black/sgbeltpistol.rsi
     layers:
     - state: icon
     - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
@@ -464,14 +464,14 @@
       offset: 0.15625, 0.0
       map: [ "enum.CMHolsterLayers.Fill" ]
       visible: false
-    - sprite: _AU14/Clothing/UniversalBelts/Black/sgbeltpistol.rsi
+    - sprite: Clothing/UniversalBelts/Black/sgbeltpistol.rsi
       state: icon-front
     - state: half
       map: [ "openLayer" ]
     - state: full
       map: [ "closedLayer" ]
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/sgbeltpistol.rsi
+    sprite: Clothing/UniversalBelts/Black/sgbeltpistol.rsi
   - type: Storage   # Holds up to 4 drums/magazines and 1 sidearm
     maxItemSize: Normal
     grid:
@@ -518,9 +518,9 @@
   description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version has a holster assembly that allows one to carry the most common pistols. It also contains side pouches that can store two pistol magazines and three rifle magazines.
   components:
   - type: Sprite
-    sprite: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+    sprite: Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
   - type: Clothing
-    sprite: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+    sprite: Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
   - type: Storage # 3 rifle mags + 2 pistol mags + 1 sidearm
     maxItemSize: Normal
     grid:
@@ -566,11 +566,11 @@
     - CMUCombatSidearmRig
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
-      Snow: _CMU14/Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
-      Desert: _CMU14/Objects/Clothing/Belt/sidearm_rig/desert.rsi
-      Urban: _CMU14/Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
-      Classic: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+      Jungle: Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+      Snow: Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
+      Desert: Objects/Clothing/Belt/sidearm_rig/desert.rsi
+      Urban: Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
+      Classic: Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
 
 - type: entity
   parent: CMBeltBaseStorage
@@ -580,12 +580,12 @@
   description: A small, lightweight pouch. The newer G8-A model, while uncomfortable, can also be clipped around the waist.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/generalpouchbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/generalpouchbelt.rsi
   - type: Clothing
     slots:
     - suitStorage
     - belt
-    sprite: _AU14/Clothing/UniversalBelts/Black/generalpouchbelt.rsi
+    sprite: Clothing/UniversalBelts/Black/generalpouchbelt.rsi
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -608,9 +608,9 @@
   description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This is the standard variant, designed for bulk ammunition-carrying operations.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UniversalBelts/Black/ammorig.rsi
+    sprite: Clothing/UniversalBelts/Black/ammorig.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UniversalBelts/Black/ammorig.rsi
+    sprite: Clothing/UniversalBelts/Black/ammorig.rsi
   - type: Item
     size: Large
   - type: Storage

@@ -49,7 +49,7 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
     private const float StumpBleedDamage = 30f;
     private static readonly SoundSpecifier SeveranceSound =
-        new SoundPathSpecifier("/Audio/_CMU14/Medical/crackandbleed.ogg");
+        new SoundPathSpecifier("/Audio/Medical/crackandbleed.ogg");
 
     public override void Initialize()
     {

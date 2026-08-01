@@ -161,10 +161,10 @@
   description: A portable ladder that can be deployed against objects to traverse z-levels.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: Structures/deployableladder.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: Structures/deployableladder.rsi
     size: Large
   - type: CMUDeployableZLevelLadder
     upLadderPrototype: CMUDeployableZLevelLadderThroughUp
@@ -176,7 +176,7 @@
   suffix: Deployable, Up
   components:
   - type: Sprite
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: Structures/deployableladder.rsi
     drawdepth: WallTops
     state: deployed
 
@@ -186,6 +186,6 @@
   suffix: Deployable, Down
   components:
   - type: Sprite
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: Structures/deployableladder.rsi
     drawdepth: WallTops
     state: deployed

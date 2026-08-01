@@ -11,7 +11,7 @@
   description: A tiny inverted sear chip that drops into a trigger group. Flip it on and the gun simply stops asking when to stop firing. Utterly illegal, wildly inaccurate, and prone to jamming.
   components:
   - type: Sprite
-    sprite: _AU14/Insurgency/switch.rsi
+    sprite: Insurgency/switch.rsi
     state: switch
   - type: AttachableVisuals
   - type: Tag

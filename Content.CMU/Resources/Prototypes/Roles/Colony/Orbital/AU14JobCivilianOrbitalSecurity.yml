@@ -19,7 +19,7 @@
     prefix: au14-job-prefix-orbitalsecurity
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: orbital_security
 
   name: au14-job-name-orbitalsecurity

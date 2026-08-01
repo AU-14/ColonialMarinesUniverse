@@ -1,4 +1,4 @@
-// Content.Server/AU14/ColonyEconomy/ColonyBudgetSystem.cs
+// Content.CMU/Server/ColonyEconomy/ColonyBudgetSystem.cs
 using Content.Shared.AU14.ColonyEconomy;
 
 namespace Content.Server.AU14.ColonyEconomy;

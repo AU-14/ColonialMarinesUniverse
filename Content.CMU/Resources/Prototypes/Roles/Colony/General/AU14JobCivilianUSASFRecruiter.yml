@@ -18,7 +18,7 @@
     prefix: au14-job-prefix-usasfrecruiter
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: advisor
   name: au14-job-name-usasfrecruiter
   description: au14-job-description-usasfrecruiter

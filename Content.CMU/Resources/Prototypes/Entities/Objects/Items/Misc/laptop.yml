@@ -10,7 +10,7 @@
     bodyType: Static
     canCollide: false
   - type: Sprite
-    sprite:  _AU14/Items/laptop.rsi
+    sprite:  Items/laptop.rsi
     state: laptop_off
 
 - type: entity
@@ -26,7 +26,7 @@
     bodyType: Static
     canCollide: false
   - type: Sprite
-    sprite:  _AU14/Items/laptop.rsi
+    sprite:  Items/laptop.rsi
     layers:
     - map: ["base"]
       state: laptop_off_govfor
@@ -58,7 +58,7 @@
     bodyType: Static
     canCollide: false
   - type: Sprite
-    sprite:  _AU14/Items/laptop.rsi
+    sprite:  Items/laptop.rsi
     layers:
     - map: ["base"]
       state: laptop_off_opfor
@@ -87,7 +87,7 @@
   suffix: GOVFOR
   components:
   - type: Sprite
-    sprite: _AU14/Items/laptop.rsi
+    sprite: Items/laptop.rsi
     state: laptop_off_govfor
   - type: InteractionOutline
   - type: ActivatableUI
@@ -105,7 +105,7 @@
   suffix: OPFOR
   components:
   - type: Sprite
-    sprite: _AU14/Items/laptop.rsi
+    sprite: Items/laptop.rsi
     state: laptop_off_opfor
   - type: AU14CallsignConsole
     faction: opfor

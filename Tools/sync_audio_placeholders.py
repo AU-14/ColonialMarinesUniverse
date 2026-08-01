@@ -12,7 +12,7 @@ from pathlib import Path
 DEBUG = "debug" in (arg.lower() for arg in sys.argv[1:])
 
 PRIVATE_ROOT = Path("../ColonialMarinesAudio/Resources/Audio/_CMU14/Private")
-PUBLIC_ROOT = Path("Resources/Audio/_CMU14/Private")
+PUBLIC_ROOT = Path("Content.CMU/Resources/Audio/Private")
 PLACEHOLDERS = {
     ".ogg": Path(__file__).resolve().parent / "sync_audio_placeholder.ogg",
     ".mp3": Path(__file__).resolve().parent / "sync_audio_placeholder.mp3",

@@ -337,7 +337,7 @@ public sealed class USSBushMultiZTest : GameTest
         var source = SProtoMan.Index<GameMapPrototype>(MapPrototype);
         var gameMap = source.Persistence(source.MapPath);
         gameMap.MapsBelow.Add(source.MapsBelow[0]);
-        gameMap.MapsAbove.Add(new ResPath("/Maps/_CMU14/USSBushRedux/missing-transaction-level.yml"));
+        gameMap.MapsAbove.Add(new ResPath("/Maps/USSBushRedux/missing-transaction-level.yml"));
         Func<string, LogEvent, bool> allowExpectedMissingMap = (sawmill, log) =>
             sawmill == "system.map_loader" &&
             log.RenderMessage().Contains("missing-transaction-level.yml");

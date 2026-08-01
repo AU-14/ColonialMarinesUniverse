@@ -32,7 +32,7 @@ namespace Content.Server._AU14.Construction.CustomConstruction;
 ///
 /// <para>
 /// Persistence is "restart-applied": each added item is written as a self-contained construction
-/// prototype YAML file under <c>Resources/Prototypes/_AU14/CustomConstruction/Generated/</c>. The
+/// prototype YAML file under <c>Content.CMU/Resources/Prototypes/CustomConstruction/Generated/</c>. The
 /// entry lives in the codebase as a normal prototype file, so it is loaded on the next restart,
 /// committed to git, and shipped to clients via the content pack. Add = write file, Remove = delete
 /// file, Change Recipe = rewrite file. A machine-readable header records spawnlist/category/steps so
@@ -68,7 +68,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
     // AU14ToolPermissionSystem) because jobwhitelistadd was reachable by lower admin ranks. Trusted
     // non-admins are now granted per tool through the Tool Permissions window or the toolperm command.
 
-    private const string GeneratedSubDir = "Prototypes/_AU14/CustomConstruction/Generated";
+    private const string GeneratedSubDir = "Prototypes/CustomConstruction/Generated";
     private const string DefaultSpawnlist = "AU14";
     private const string DefaultCategory = "Custom";
 

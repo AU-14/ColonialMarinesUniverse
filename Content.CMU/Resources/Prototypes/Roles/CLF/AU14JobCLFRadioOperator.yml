@@ -30,7 +30,7 @@
     mindRole: MindRoleCLFGuerrilla
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: colonist
   - type: ShowMarineIcons
     factions:

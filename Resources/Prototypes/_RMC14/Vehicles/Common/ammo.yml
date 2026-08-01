@@ -164,7 +164,7 @@
   description: Ammunition for light tank cannons. A squash-head shell that splats a plastic charge against the target before detonating, sending a heavy shockwave through the armor. Excellent structural damage with a moderate blast, and can bring down walls, but doesn't need to penetrate to work.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_hesh
       map: [ "enum.BulletBoxLayers.Fill" ]

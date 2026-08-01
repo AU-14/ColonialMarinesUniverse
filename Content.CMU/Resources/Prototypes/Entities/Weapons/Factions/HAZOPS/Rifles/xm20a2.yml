@@ -5,17 +5,17 @@
   description: Devolped as a possible successor to the M20A Harrington rifle, the XM20A2 never entered full service in the USCM and was succeeded by the M41. This heavily modified variant is issued to HAZOPS to bolster their mid-long range capablites. Big magazine, and big firerate, but the drum magazines can't load anything other than standard 10x24mm, and the rails can't mount modern attachments.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/HAZOPS/XM20A246x32.rsi
+    sprite: Weapons/Guns/HAZOPS/XM20A246x32.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-0
       map: ["enum.GunVisualLayers.Mag"]
   - type: Item
-    sprite: _AU14/Weapons/Guns/HAZOPS/XM20A2.rsi
+    sprite: Weapons/Guns/HAZOPS/XM20A2.rsi
     size: Large
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/HAZOPS/XM20A2.rsi
+    sprite: Weapons/Guns/HAZOPS/XM20A2.rsi
   - type: Gun
     shotsPerBurst: 3
     selectedMode: FullAuto
@@ -80,7 +80,7 @@
     proto: AU14CartridgeRifleM20A
     capacity: 120
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/xm20a2.rsi
+    sprite: Weapons/Guns/Ammo/Magazines/xm20a2.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]

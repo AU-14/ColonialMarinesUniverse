@@ -219,3 +219,8 @@
   license: "CC-BY-3.0"
   copyright: "Created by Tomlija, converted to OGG and modified by themias."
   source: "https://freesound.org/people/Tomlija/sounds/99565/"
+
+- files: ["cmu_twobeep.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from cmss13"
+  source: "https://github.com/cmss13-devs/cmss13/blob/21e6447cc08aea502f671c819fdbcecbb85e6028/sound/machines/twobeep.ogg"

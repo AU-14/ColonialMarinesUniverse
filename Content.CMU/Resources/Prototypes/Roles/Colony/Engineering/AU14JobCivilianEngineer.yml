@@ -18,7 +18,7 @@
     prefix: au14-job-prefix-colonyengineer
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: engineer
 
   name: au14-job-name-civilianengineer

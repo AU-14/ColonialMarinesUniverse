@@ -13,7 +13,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Warlock/warlock.rsi
+    sprite: Mobs/Xenonids/Warlock/warlock.rsi
   - type: MobState
     allowedStates:
     - Alive

@@ -31,7 +31,7 @@
   description: Ammunition for light tank cannons. A fin-stabilized discarding-sabot penetrator with no explosive filler, meant to punch through armor rather than fragment. Barely scratches infantry or structures.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_apfsds
       map: [ "enum.BulletBoxLayers.Fill" ]
@@ -55,7 +55,7 @@
   description: Ammunition for light tank cannons. A shaped-charge warhead that punches a focused jet through armor with a small blast, backed by light fragmentation. Less effective against armor than a dedicated penetrator, but hits far harder than a standard HE shell.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_heat
       map: [ "enum.BulletBoxLayers.Fill" ]
@@ -79,7 +79,7 @@
   description: Ammunition for light tank cannons. A thin-walled high-explosive shell that trades armor penetration for a much wider blast and fragmentation radius.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_he
       map: [ "enum.BulletBoxLayers.Fill" ]
@@ -103,7 +103,7 @@
   description: Ammunition for light tank cannons. A short-ranged anti-personnel round packed with metal shot that bursts into a lethal spray shortly after firing. Nearly useless against armor.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_canister
       map: [ "enum.BulletBoxLayers.Fill" ]
@@ -127,7 +127,7 @@
   description: Ammunition for light tank cannons. A napalm-filled shell with very little blast, but scatters sticky burning fragments that spread across the impact area. Good for burning out entrenched positions or setting the field alight.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    sprite: Structures/Vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_thermite
       map: [ "enum.BulletBoxLayers.Fill" ]

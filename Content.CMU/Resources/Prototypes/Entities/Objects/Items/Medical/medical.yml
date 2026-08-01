@@ -802,7 +802,7 @@
   description: An autoinjector loaded with naloxone, used to instantly counteract toxin damage. Primarily used to treat overdoses. Doesn't require any training to use.
   components:
   - type: Sprite
-    sprite: _AU14/Items/naloxone_auto_injector.rsi
+    sprite: Items/naloxone_auto_injector.rsi
     layers:
     - state: autoinjector
     - state: autoinjector1
@@ -836,7 +836,7 @@
   description: An autoinjector loaded with epinephrine, sometimes referred to as an 'EpiPen'. It is used to treat severe allergic reactions, though it can also be used to help restart someone's heart. Doesn't require any training to use.
   components:
   - type: Sprite
-    sprite: _AU14/Items/naloxone_auto_injector.rsi
+    sprite: Items/naloxone_auto_injector.rsi
     layers:
     - state: autoinjector
     - state: autoinjector1
@@ -1140,10 +1140,10 @@
   description: A vacuum sealed packet of chemically treated gauze designed to stop arterial bleeding fast. The powder burns like hell, but it works. Single-use. Rip it open, jam it in, hope for the best.
   components:
   - type: Sprite
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: Items/quickclot.rsi
     state: quickclot
   - type: Item
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: Items/quickclot.rsi
     inhandVisuals:
       left:
       - state: qc_left
@@ -1170,13 +1170,13 @@
   description: A vacuum sealed packet of chemically treated gauze designed to stop arterial bleeding fast. The powder burns like hell, but it works. Single-use. This one is trash, its already been used!
   components:
   - type: Sprite
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: Items/quickclot.rsi
     state: qc_ripped
   - type: Tag
     tags:
     - Trash
   - type: Item
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: Items/quickclot.rsi
     inhandVisuals:
       left:
       - state: qc_left
@@ -1193,10 +1193,10 @@
     tags:
     - Brutepack
   - type: Sprite
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: Items/quickclot.rsi
     state: hemgauze
   - type: Item
-    sprite: _AU14/Items/quickclot.rsi
+    sprite: Items/quickclot.rsi
     inhandVisuals:
       left:
       - state: hemgauze_left

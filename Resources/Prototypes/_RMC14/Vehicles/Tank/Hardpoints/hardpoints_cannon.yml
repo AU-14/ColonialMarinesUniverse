@@ -33,7 +33,7 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot: /Audio/_AU14/Weapons/vehicle/tankgun.ogg
+    soundGunshot: /Audio/Weapons/vehicle/tankgun.ogg
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 5
@@ -181,7 +181,7 @@
     availableModes:
     - FullAuto
     soundGunshot:
-      path: /Audio/_AU14/Weapons/vehicle/autocannon.ogg
+      path: /Audio/Weapons/vehicle/autocannon.ogg
       params:
         variation: 0.06
     cameraRecoilScalar: 0
@@ -221,7 +221,7 @@
   description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    sprite: Structures/Vehicles/fv150/icons.rsi
     state: heavy_autocannon
   - type: HardpointItem
     hardpointType: Cannon
@@ -240,7 +240,7 @@
     pixelOffsetEast: "0,0"
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
-    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: Structures/Vehicles/fv150/exterior.rsi
     overlayState: heavy_autocannon_0
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
@@ -251,7 +251,7 @@
     availableModes:
     - FullAuto
     soundGunshot:
-      path: /Audio/_AU14/Weapons/vehicle/autocannon.ogg
+      path: /Audio/Weapons/vehicle/autocannon.ogg
       params:
         variation: 0.06
     cameraRecoilScalar: 0

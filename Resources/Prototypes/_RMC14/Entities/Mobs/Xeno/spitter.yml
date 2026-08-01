@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Spitter/spitter.rsi #AU14-Edit
+    sprite: Mobs/Xenos/Spitter/spitter.rsi #AU14-Edit
   - type: MobState
     allowedStates:
     - Alive

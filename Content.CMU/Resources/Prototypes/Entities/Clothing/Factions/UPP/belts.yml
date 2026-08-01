@@ -6,9 +6,9 @@
   description: The Type 41 load rig is the standard-issue load-bearing equipment of the UPP military. The primary function of this belt is to provide easy access to mags for the Type 71 during operations. Despite being designed for the Type 71 weapon system, the pouches are modular enough to fit other types of ammo and equipment.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/belt/ammo.rsi
+    sprite: Clothing/UPP/belt/ammo.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/belt/ammo.rsi
+    sprite: Clothing/UPP/belt/ammo.rsi
   - type: ItemCamouflage
     camouflageVariations: {}
 
@@ -33,12 +33,12 @@
   description: A small, lightweight pouch that can be clipped onto U-pattern UPP armor to provide additional storage. The newer 48-M model, while uncomfortable, can also be clipped around the waist.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/belt/general.rsi
+    sprite: Clothing/UPP/belt/general.rsi
   - type: Clothing
     slots:
     - suitStorage
     - belt
-    sprite: _AU14/Clothing/UPP/belt/general.rsi
+    sprite: Clothing/UPP/belt/general.rsi
   - type: ItemCamouflage
     camouflageVariations: {}
 
@@ -49,9 +49,9 @@
   description: The Type 41 is the standard load-bearing equipment of UPP military. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport medical supplies. \nRight click its sprite and click \"toggle belt mode\" to take pills out of bottles by simply clicking them.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/belt/medical.rsi
+    sprite: Clothing/UPP/belt/medical.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/belt/medical.rsi
+    sprite: Clothing/UPP/belt/medical.rsi
 
 - type: entity
   parent: RMCM276ShotgunShellLoadingRig
@@ -61,7 +61,7 @@
   description: An ammunition belt designed to hold shotgun shells, primarily for the Type 23 shotgun. # or individual bullets. TODO RMC14
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/belt/shotgun.rsi
+    sprite: Clothing/RMC/belt/shotgun.rsi
     layers:
     - state: icon
     - state: sixth
@@ -77,7 +77,7 @@
     - state: full
       visible: false
   - type: Clothing
-    sprite: _AU14/Clothing/RMC/belt/shotgun.rsi
+    sprite: Clothing/RMC/belt/shotgun.rsi
   - type: ItemCamouflage
     camouflageVariations: {}
 
@@ -89,9 +89,9 @@
   description: The Type 41 load rig is the standard load-bearing equipment of the UPP military. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
+    sprite: Clothing/RMC/belt/medicbag.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/RMC/belt/medicbag.rsi
+    sprite: Clothing/RMC/belt/medicbag.rsi
   - type: ItemCamouflage
     camouflageVariations: {}
 
@@ -103,9 +103,9 @@
   description: Recently adopted by UPP military, this belt allows machinegunners to carry more ammo boxes into battle. It also found use with SOF breachers using Type 23 shotguns.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/belt/machinegun.rsi
+    sprite: Clothing/UPP/belt/machinegun.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/belt/machinegun.rsi
+    sprite: Clothing/UPP/belt/machinegun.rsi
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -137,7 +137,7 @@
   description: Type 92 is an experimental ammo-carrying rig issued to UPP machinegunners which combines a sidearm holster with box-shaped pouches for limited storage.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/belt/machinegun_pistol.rsi
+    sprite: Clothing/UPP/belt/machinegun_pistol.rsi
     layers:
     - state: icon
     - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
@@ -145,14 +145,14 @@
       offset: 0.15625, 0.0
       map: [ "enum.CMHolsterLayers.Fill" ]
       visible: false
-    - sprite: _AU14/Clothing/UPP/belt/machinegun_pistol.rsi
+    - sprite: Clothing/UPP/belt/machinegun_pistol.rsi
       state: icon-front
     - state: half
       map: [ "openLayer" ]
     - state: full
       map: [ "closedLayer" ]
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/belt/machinegun_pistol.rsi
+    sprite: Clothing/UPP/belt/machinegun_pistol.rsi
   - type: Storage   # Holds up to 4 drums/magazines and 1 sidearm
     maxItemSize: Normal
     grid:
@@ -201,7 +201,7 @@
   description: This UPP-designed sidearm rig can very snugly and securely fit a Type-73, NP92, or a ZHNK-72, and their magazines or speedloaders. However, it lacks versatility in stored weaponry.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/belt/holster.rsi
+    sprite: Clothing/UPP/belt/holster.rsi
     layers:
     - state: icon
     - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
@@ -244,7 +244,7 @@
     - state: full
       map: [ "closedLayer" ]
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/belt/holster.rsi
+    sprite: Clothing/UPP/belt/holster.rsi
     slots:
     - suitStorage
     - belt

@@ -5,7 +5,7 @@
   description: The standard-issue pack of TWE forces. Designed to lug gear into the battlefield.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/back/small.rsi
+    sprite: Clothing/RMC/back/small.rsi
 
 - type: entity
   parent: CMBackpack
@@ -14,7 +14,7 @@
   description: The standard-issue pack of RMC forces. Designed to lug gear into the battlefield.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/back/frame_2.rsi
+    sprite: Clothing/RMC/back/frame_2.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -29,7 +29,7 @@
   description: The standard-issue pack of TWE forces. Designed to lug gear into the battlefield.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/back/medium.rsi
+    sprite: Clothing/RMC/back/medium.rsi
 
 - type: entity
   parent: AU14SmallBackpackRMC
@@ -38,7 +38,7 @@
   description: The standard-issue pack of TWE forces. Designed to lug gear into the battlefield. This one has a red cross on it.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/back/medic.rsi
+    sprite: Clothing/RMC/back/medic.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -51,7 +51,7 @@
   description: A large pack. Designed to engineering equipment and explosives into the battlefield.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/back/large.rsi
+    sprite: Clothing/RMC/back/large.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -64,4 +64,4 @@
   description: A specialized backpack worn by RMC technicians. It carries a fueltank for quick welder refueling and use.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/back/sapper.rsi
+    sprite: Clothing/RMC/back/sapper.rsi

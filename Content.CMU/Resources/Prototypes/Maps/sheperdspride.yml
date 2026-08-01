@@ -2,12 +2,12 @@
   id: Sheperds
   mapName: LV-112 Sheperds Pride
   allegiance: Neutral
-  mapPath: /Maps/_CMU14/sheperds.yml
+  mapPath: /Maps/sheperds.yml
   mapsBelow:
-  - /Maps/_CMU14/sheperds_below.yml
+  - /Maps/sheperds_below.yml
   mapsAbove:
-  - /Maps/_CMU14/sheperds_above.yml
-  - /Maps/_CMU14/sheperds_above2.yml
+  - /Maps/sheperds_above.yml
+  - /Maps/sheperds_above2.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

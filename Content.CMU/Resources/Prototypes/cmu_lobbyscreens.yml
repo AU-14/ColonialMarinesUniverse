@@ -1,31 +1,31 @@
 - type: lobbyBackground
   id: AU14LobbyDropship
-  background: /Textures/_AU14/Lobby/Dropship.png
+  background: /Textures/Lobby/Dropship.png
 
 - type: lobbyBackground
   id: AU14LobbyCLF
-  background: /Textures/_AU14/Lobby/CLF.png
+  background: /Textures/Lobby/CLF.png
 
 - type: lobbyBackground
   id: AU14LobbyHAZOPS
-  background: /Textures/_AU14/Lobby/HAZOPS.png
+  background: /Textures/Lobby/HAZOPS.png
 
 - type: lobbyBackground
   id: AU14LobbyXenos
-  background: /Textures/_AU14/Lobby/Xenos.png
+  background: /Textures/Lobby/Xenos.png
 
 - type: lobbyBackground
   id: AU14LobbyCLFRiot
-  background: /Textures/_AU14/Lobby/clfriot.png
+  background: /Textures/Lobby/clfriot.png
 
 - type: lobbyBackground
   id: AU14LobbyWendigoFollowed
-  background: /Textures/_AU14/Lobby/WendigoFollowed.png
+  background: /Textures/Lobby/WendigoFollowed.png
 
 - type: lobbyBackground
   id: CMU14LobbyWorkingJoes
-  background: /Textures/_AU14/Lobby/Joes.png
+  background: /Textures/Lobby/Joes.png
 
 - type: lobbyBackground
   id: CMU14LobbyXenoWar
-  background: /Textures/_AU14/Lobby/XenoWar.png
+  background: /Textures/Lobby/XenoWar.png

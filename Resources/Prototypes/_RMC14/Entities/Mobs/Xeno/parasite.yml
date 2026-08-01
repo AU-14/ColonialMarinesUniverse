@@ -16,7 +16,7 @@
     raffle:
       settings: parasiteTimeRequirement
   - type: Sprite
-    sprite: _AU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
+    sprite: Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
   - type: FiremanCarriable
     canThrow: true
     carrierWhitelist:
@@ -102,7 +102,7 @@
   - type: Clothing
     quickEquip: false
     slots: [mask]
-    sprite: _AU14/Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
+    sprite: Mobs/Xenos/Parasite/parasite.rsi # AU14-Edit
   - type: HideLayerClothing
     slots:
     - Snout

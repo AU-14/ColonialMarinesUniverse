@@ -22,7 +22,7 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
     private static readonly Color BruteDamageColor = Color.FromHex("#FF0000");
     private static readonly ResPath BruteDamageOverlays = new("Mobs/Effects/brute_damage.rsi");
     private static readonly ResPath BurnDamageOverlays = new("Mobs/Effects/burn_damage.rsi");
-    private static readonly ResPath TreatmentOverlays = new("_CMU14/Mobs/Medical/treatment_overlays.rsi");
+    private static readonly ResPath TreatmentOverlays = new("Mobs/Medical/treatment_overlays.rsi");
 
     private static readonly DamageOverlayKind[] DamageOverlayOrder =
     [

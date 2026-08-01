@@ -22,7 +22,7 @@
     prefix: au14-job-prefix-civilianambassadorcca
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: cca_ambassador
   - type: NpcFactionMember
     factions:
@@ -116,7 +116,7 @@
     prefix: au14-job-prefix-civilianambassadoricsc
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: icsc_ambassador
   - type: NpcFactionMember
     factions:
@@ -210,7 +210,7 @@
     prefix: au14-job-prefix-civilianambassadortwe
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: twe_ambassador
   - type: NpcFactionMember
     factions:
@@ -302,7 +302,7 @@
     prefix: au14-job-prefix-civilianambassadorua
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: ua_ambassador
   - type: NpcFactionMember
     factions:
@@ -395,7 +395,7 @@
     prefix: au14-job-prefix-civilianambassadorupp
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/Interface/au14colonyjobicons.rsi
       state: upp_ambassador
   - type: NpcFactionMember
     factions:

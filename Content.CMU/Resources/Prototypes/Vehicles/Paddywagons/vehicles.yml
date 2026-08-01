@@ -5,7 +5,7 @@
   description: A Hyperdyne Systems van, used for synthetic maintance. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civvan.rsi
+    sprite: Structures/vehicles/hybrisavehicles/civvan.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -16,7 +16,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/PaddyWagonVanEmpty.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/PaddyWagonVanEmpty.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -39,7 +39,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_turquoise_cargo.rsi
+    sprite: Structures/vehicles/hybrisavehicles/small_truck_turquoise_cargo.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -50,7 +50,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -73,7 +73,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    sprite: Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -84,7 +84,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -107,7 +107,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    sprite: Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -118,7 +118,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 10
@@ -141,7 +141,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    sprite: Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -152,7 +152,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -176,7 +176,7 @@
   description: An old small cargo truck. This seems to be loaded with medical supplies. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_medical.rsi
+    sprite: Structures/vehicles/hybrisavehicles/small_truck_medical.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -188,7 +188,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -211,7 +211,7 @@
   description: An old small garbage truck. Stinks. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_garbage.rsi
+    sprite: Structures/vehicles/hybrisavehicles/small_truck_garbage.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -223,7 +223,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -246,7 +246,7 @@
   description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargobarrels.rsi
+    sprite: Structures/vehicles/hybrisavehicles/small_truck_brown_cargobarrels.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -258,7 +258,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -281,7 +281,7 @@
   description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargo.rsi
+    sprite: Structures/vehicles/hybrisavehicles/small_truck_brown_cargo.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -293,7 +293,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -316,7 +316,7 @@
   description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_blue_cargo.rsi
+    sprite: Structures/vehicles/hybrisavehicles/small_truck_blue_cargo.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -328,7 +328,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 10
@@ -351,7 +351,7 @@
   description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_blue.rsi
+    sprite: Structures/vehicles/hybrisavehicles/small_truck_blue.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -363,7 +363,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -386,7 +386,7 @@
   description: An old van used as ambulance for colonial Emergency Medical Service. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/ambulance.rsi
+    sprite: Structures/vehicles/hybrisavehicles/ambulance.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -397,7 +397,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/Ambulance.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/Ambulance.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8
@@ -420,7 +420,7 @@
   description: An police Mono Supron, produced by Weyland-Yutani. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/cop_car.rsi
+    sprite: Structures/vehicles/hybrisavehicles/cop_car.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -431,7 +431,7 @@
     - map: [ rmc-wheels ]
       state: wheels_0
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/CopMonoSupron.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/CopMonoSupron.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 8

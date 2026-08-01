@@ -14,7 +14,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    sprite: Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -251,7 +251,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Food
@@ -737,7 +737,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/uscmcommandclothes.rsi
+    sprite: Structures/Vendors/uscmcommandclothes.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -1538,7 +1538,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+    sprite: Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Softcovers

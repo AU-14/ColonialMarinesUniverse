@@ -8,7 +8,7 @@
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    sprite: Structures/vehicles/hybrisavehicles/van.rsi
     layers:
     - map: [ base ]
       state: van_base
@@ -20,7 +20,7 @@
   - type: VehicleSound
     collisionSoundCooldown: 1.5
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/van_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 10
@@ -46,7 +46,7 @@
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    sprite: Structures/vehicles/hybrisavehicles/van.rsi
     layers:
     - map: [ base ]
       state: truck_base
@@ -58,7 +58,7 @@
   - type: VehicleSound
     collisionSoundCooldown: 1.5
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -84,7 +84,7 @@
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    sprite: Structures/vehicles/hybrisavehicles/van.rsi
     layers:
     - map: [ base ]
       state: armored_base
@@ -96,7 +96,7 @@
   - type: VehicleSound
     collisionSoundCooldown: 1.5
   - type: VehicleEnter
-    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    interiorPath: /Maps/Vehicleinteriors/Civillians/truck_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4

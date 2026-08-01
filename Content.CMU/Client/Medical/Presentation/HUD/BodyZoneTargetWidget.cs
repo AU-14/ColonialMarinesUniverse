@@ -24,7 +24,7 @@ public sealed class BodyZoneTargetWidget : Control
     private const string BaseState = "zone_sel";
 
     private static readonly ResPath RsiPath =
-        new("/Textures/_CMU14/Medical/Presentation/HUD/targetdoll.rsi");
+        new("/Textures/Medical/Presentation/HUD/targetdoll.rsi");
 
     private static readonly ZoneButton[] ZoneButtons =
     {

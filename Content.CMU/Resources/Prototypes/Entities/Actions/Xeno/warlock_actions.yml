@@ -1,16 +1,16 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicCrush
-  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl. A loc entry
+  # Name and description are in Content.CMU/Resources/Locale/en-US/xeno/warlock.ftl. A loc entry
   # overrides the prototype's name/description, so keeping text here as well would be dead.
   components:
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      sprite: Actions/Xeno/warlock.rsi
       state: psy_crush
     iconOn:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      sprite: Actions/Xeno/warlock.rsi
       state: psy_crush_activate
     useDelay: 0.25
   # SharedActionsSystem gate is intentionally looser than the ability's true range so a click
@@ -33,12 +33,12 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicBlast
-  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
+  # Name and description are in Content.CMU/Resources/Locale/en-US/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      sprite: Actions/Xeno/warlock.rsi
       state: psy_blast
     useDelay: 10
   # See CMUActionXenoPsychicCrush above for why the gate range exceeds the true 6-tile range.
@@ -53,15 +53,15 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicShield
-  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
+  # Name and description are in Content.CMU/Resources/Locale/en-US/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      sprite: Actions/Xeno/warlock.rsi
       state: psy_shield
     iconOn:
-      sprite: _CMU14/Actions/Xeno/warlock.rsi
+      sprite: Actions/Xeno/warlock.rsi
       state: psy_shield_reflect
     useDelay: 0.25
   - type: TargetAction

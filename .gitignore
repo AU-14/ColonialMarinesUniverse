@@ -303,7 +303,7 @@ Resources/MapImages
 
 # AU14 in-game construction editor output is runtime/server data.
 # Live servers restore their own generated entries from their database.
-Resources/Prototypes/_AU14/CustomConstruction/Generated/
+Content.CMU/Resources/Prototypes/CustomConstruction/Generated/
 
 ## Docfx stuff
 /Content.Docfx/api/
