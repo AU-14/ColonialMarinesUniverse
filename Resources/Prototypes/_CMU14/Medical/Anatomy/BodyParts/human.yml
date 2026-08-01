@@ -1,0 +1,304 @@
+- type: entity
+  parent: BaseItem
+  id: CMUPartHumanBase
+  name: human body part
+  abstract: true
+  components:
+  - type: Damageable
+    damageContainer: Biological
+  - type: BodyPart
+  - type: Gibbable
+  - type: ContainerContainer
+    containers:
+      bodypart: !type:Container
+        ents: []
+  - type: StaticPrice
+    price: 100
+  - type: Tag
+    tags:
+    - Trash
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 3
+      - ReagentId: Blood
+        Quantity: 10
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanTorso
+  components:
+  - type: BodyPart
+    partType: Torso
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 10
+      - ReagentId: Blood
+        Quantity: 20
+  - type: BodyPartHealth
+    max: 150
+    current: 150
+    severanceThreshold: 999999  # safety lock — torso never severs
+    resistance:
+      Brute: 0.9
+  - type: Bone
+    integrity: 120
+    integrityMax: 120
+    bruteAbsorbFraction: 0.65
+    fractureThresholds:
+      Hairline: 80
+      Simple: 50
+      Compound: 25
+      Shattered: 5
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: torso_m
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanHead
+  components:
+  - type: BodyPart
+    partType: Head
+    vital: true
+  - type: Input
+    context: ghost
+  - type: Tag
+    tags:
+    - Head
+  - type: Extractable
+    juiceSolution:
+      reagents:
+      - ReagentId: Fat
+        Quantity: 5
+      - ReagentId: Blood
+        Quantity: 10
+  - type: BodyPartHealth
+    max: 60
+    current: 60
+    severanceThreshold: 170  # decapitation requires 170 structural damage past zero health
+    resistance:
+      Brute: 0.85
+  - type: Bone
+    integrity: 80
+    integrityMax: 80
+    bruteAbsorbFraction: 0.7
+    fractureThresholds:
+      Hairline: 65
+      Simple: 40
+      Compound: 20
+      Shattered: 5
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: head_m
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanLeftArm
+  components:
+  - type: BodyPart
+    partType: Arm
+    symmetry: Left
+  - type: BodyPartHealth
+    max: 80
+    current: 80
+    severanceThreshold: 90
+  - type: Bone
+    integrity: 90
+    integrityMax: 90
+    bruteAbsorbFraction: 0.6
+    fractureThresholds:
+      Hairline: 65
+      Simple: 40
+      Compound: 20
+      Shattered: 5
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_arm
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanRightArm
+  components:
+  - type: BodyPart
+    partType: Arm
+    symmetry: Right
+  - type: BodyPartHealth
+    max: 80
+    current: 80
+    severanceThreshold: 90
+  - type: Bone
+    integrity: 90
+    integrityMax: 90
+    bruteAbsorbFraction: 0.6
+    fractureThresholds:
+      Hairline: 65
+      Simple: 40
+      Compound: 20
+      Shattered: 5
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_arm
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanLeftHand
+  components:
+  - type: BodyPart
+    partType: Hand
+    symmetry: Left
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
+  - type: Bone
+    integrity: 45
+    integrityMax: 45
+    bruteAbsorbFraction: 0.5
+    fractureThresholds:
+      Hairline: 30
+      Simple: 20
+      Compound: 10
+      Shattered: 3
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_hand
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanRightHand
+  components:
+  - type: BodyPart
+    partType: Hand
+    symmetry: Right
+  - type: BodyPartHealth
+    max: 35
+    current: 35
+    severanceThreshold: 45
+  - type: Bone
+    integrity: 45
+    integrityMax: 45
+    bruteAbsorbFraction: 0.5
+    fractureThresholds:
+      Hairline: 30
+      Simple: 20
+      Compound: 10
+      Shattered: 3
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_hand
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanLeftLeg
+  components:
+  - type: BodyPart
+    partType: Leg
+    symmetry: Left
+  - type: MovementBodyPart
+    walkSpeed: 2.7
+    sprintSpeed: 5
+  - type: BodyPartHealth
+    max: 90
+    current: 90
+    severanceThreshold: 90
+  - type: Bone
+    integrity: 100
+    integrityMax: 100
+    bruteAbsorbFraction: 0.65
+    fractureThresholds:
+      Hairline: 70
+      Simple: 45
+      Compound: 22
+      Shattered: 5
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_leg
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanRightLeg
+  components:
+  - type: BodyPart
+    partType: Leg
+    symmetry: Right
+  - type: MovementBodyPart
+    walkSpeed: 2.7
+    sprintSpeed: 5
+  - type: BodyPartHealth
+    max: 90
+    current: 90
+    severanceThreshold: 90
+  - type: Bone
+    integrity: 100
+    integrityMax: 100
+    bruteAbsorbFraction: 0.65
+    fractureThresholds:
+      Hairline: 70
+      Simple: 45
+      Compound: 22
+      Shattered: 5
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_leg
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanLeftFoot
+  components:
+  - type: BodyPart
+    partType: Foot
+    symmetry: Left
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
+  - type: Bone
+    integrity: 55
+    integrityMax: 55
+    bruteAbsorbFraction: 0.55
+    fractureThresholds:
+      Hairline: 40
+      Simple: 28
+      Compound: 14
+      Shattered: 3
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: l_foot
+    drawdepth: Items
+
+- type: entity
+  parent: CMUPartHumanBase
+  id: CMUPartHumanRightFoot
+  components:
+  - type: BodyPart
+    partType: Foot
+    symmetry: Right
+  - type: BodyPartHealth
+    max: 45
+    current: 45
+    severanceThreshold: 50
+  - type: Bone
+    integrity: 55
+    integrityMax: 55
+    bruteAbsorbFraction: 0.55
+    fractureThresholds:
+      Hairline: 40
+      Simple: 28
+      Compound: 14
+      Shattered: 3
+  - type: Sprite
+    sprite: Mobs/Species/Human/parts.rsi
+    state: r_foot
+    drawdepth: Items

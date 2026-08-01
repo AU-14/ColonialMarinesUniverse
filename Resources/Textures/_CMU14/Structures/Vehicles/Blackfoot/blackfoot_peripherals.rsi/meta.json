@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CM13 PR #10291 at https://github.com/cmss13-devs/cmss13/blob/040a7c240f53d077c67edc92e2e57a927a477a4a/icons/obj/vehicles/blackfoot_peripherals.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "fuelpump-crate"
+    },
+    {
+      "name": "flightcpu-crate"
+    },
+    {
+      "name": "blackfoot-ammo"
+    },
+    {
+      "name": "blackfoot-ammo-interior-left"
+    },
+    {
+      "name": "blackfoot-ammo-interior-right"
+    },
+    {
+      "name": "landing-pad-light"
+    },
+    {
+      "name": "landing-pad-light-on"
+    },
+    {
+      "name": "doorgun-ammo"
+    }
+  ]
+}

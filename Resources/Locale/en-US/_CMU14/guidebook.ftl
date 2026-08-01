@@ -1,0 +1,13 @@
+cmu-guide-rules-overview = Rules Overview
+cmu-guide-rules-zero-tolerance = Zero Tolerance Rules
+cmu-guide-rules-general = General Rules
+cmu-guide-rules-roleplay = Roleplay Rules
+cmu-guide-rules-gamemode = Gamemode Rules
+cmu-guide-rules-high-roleplay-roles = High Roleplay Roles
+cmu-guide-rules-insurgency = Insurgency Rules
+cmu-guide-comms-overview = Communications Reference
+cmu-guide-comms-first-net = Getting On The Net
+cmu-guide-comms-anprc = AN/PRC-117G Radio
+cmu-guide-comms-headsets = Field Headsets
+cmu-guide-comms-voice-procedure = Voice Procedure
+cmu-guide-comms-quick-reference = Comms Quick Reference

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/AndroBetel/PvE-CMSS13/blob/47e5694315f3bb99f742a94a988037abdae103e5/icons/obj/items/clothing/glasses.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon_on"
+    },
+    {
+      "name": "icon"
+    }
+  ]
+}

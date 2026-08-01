@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/951a05e0f0e55e48c76efe22dfcbc1733e084fa0/icons/obj/items/weapons/guns/guns_by_map/desert/guns_obj.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/951a05e0f0e55e48c76efe22dfcbc1733e084fa0/icons/obj/items/weapons/guns/guns_by_map/desert/back.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/951a05e0f0e55e48c76efe22dfcbc1733e084fa0/icons/obj/items/weapons/guns/guns_by_map/desert/suit_slot.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/951a05e0f0e55e48c76efe22dfcbc1733e084fa0/icons/obj/items/weapons/guns/guns_by_map/desert/guns_righthand.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/951a05e0f0e55e48c76efe22dfcbc1733e084fa0/icons/obj/items/weapons/guns/guns_by_map/desert/guns_lefthand.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "mag-0"
+    },
+    {
+      "name": "bolt-open"
+    },
+    {
+      "name": "equipped-BACKPACK",
+      "directions": 4
+    },
+    {
+      "name": "icon"
+    },
+    {
+      "name": "equipped-SUITSTORAGE",
+      "directions": 4
+    },
+    {
+      "name": "wielded-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "wielded-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    }
+  ]
+}

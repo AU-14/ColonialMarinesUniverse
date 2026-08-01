@@ -1,0 +1,137 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/BonniePandora/pandora-cmss13-pve/blob/6dd66df34196643ea3a1b0fb51f30b99e22a7030/icons/obj/items/weapons/grenade.dmi",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "grenade_20mm_frag"
+        },
+        {
+            "name": "grenade_20mm_frag_active",
+            "directions": 4,
+            "delays": [
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "grenade_20mm_gas"
+        },
+        {
+            "name": "grenade_20mm_gas_active",
+            "directions": 4,
+            "delays": [
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "grenade_20mm_he"
+        },
+        {
+            "name": "grenade_20mm_he_active",
+            "directions": 4,
+            "delays": [
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "grenade_20mm_holo"
+        },
+        {
+            "name": "grenade_20mm_holo_active",
+            "directions": 4,
+            "delays": [
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "grenade_20mm_incend"
+        },
+        {
+            "name": "grenade_20mm_incend_active",
+            "directions": 4,
+            "delays": [
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ]
+            ]
+        },
+        {
+            "name": "grenade_20mm_squash"
+        },
+        {
+            "name": "grenade_20mm_squash_active",
+            "directions": 4,
+            "delays": [
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ],
+                [
+                    0.1
+                ]
+            ]
+        }
+    ]
+}

@@ -1,0 +1,65 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/0a35ccf2c3763697a7a53ba287488bc9fc3bf23a/icons/obj/vehicles/apc.dmi",
+  "size": {
+    "x": 128,
+    "y": 128
+  },
+  "states": [
+    {
+      "name": "wheels_0",
+      "directions": 4
+    },
+    {
+      "name": "freight_2",
+      "directions": 4
+    },
+    {
+      "name": "dualcannon_0",
+      "directions": 4
+    },
+    {
+      "name": "frontalcannon_0",
+      "directions": 4
+    },
+    {
+      "name": "freight_0",
+      "directions": 4
+    },
+    {
+      "name": "apc_base",
+      "directions": 4
+    },
+    {
+      "name": "apc_base_med",
+      "directions": 4
+    },
+    {
+      "name": "apc_base_com",
+      "directions": 4,
+      "delays": [
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ],
+        [
+          1,
+          1,
+          1
+        ]
+      ]
+    }
+  ]
+}

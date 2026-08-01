@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "license": "CC-BY-NC-SA-4.0",
+  "copyright": "Taken from tgstation/TerraGov-Marine-Corps at https://github.com/tgstation/TerraGov-Marine-Corps/blob/3fc0dc2bf1dd46b3396c2dc3168b0098ff5a2d18/icons/Xeno/actions/bull.dmi. License and authorship per TGMC README asset table.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "bull_ready_charge"
+    },
+    {
+      "name": "bull_charge"
+    },
+    {
+      "name": "bull_headbutt"
+    },
+    {
+      "name": "bull_gore"
+    }
+  ]
+}

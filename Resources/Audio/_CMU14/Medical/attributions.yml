@@ -1,0 +1,14 @@
+- files: ["bone_crack_1.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from tgstation (via cmss13)"
+  source: "https://github.com/cmss13-devs/cmss13/blob/f274c735e7aa31f57e82a3cfe2edc3231efe2bbb/sound/effects/crack1.ogg"
+
+- files: ["bone_crack_2.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from tgstation (via cmss13)"
+  source: "https://github.com/cmss13-devs/cmss13/blob/f274c735e7aa31f57e82a3cfe2edc3231efe2bbb/sound/effects/crack2.ogg"
+
+- files: ["crackandbleed.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "Taken from tgstation (via cmss13)"
+  source: "https://github.com/cmss13-devs/cmss13/blob/f274c735e7aa31f57e82a3cfe2edc3231efe2bbb/sound/effects/crackandbleed.ogg"

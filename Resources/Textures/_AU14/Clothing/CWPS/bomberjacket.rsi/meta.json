@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/167ac892a2df83180b3ea0905984cfe5702f9a95/icons/obj/items/clothing/suits.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/mob/humans/onmob/suit_1.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/mob/humans/onmob/suit_1.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/mob/humans/onmob/suit_1.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/mob/humans/onmob/suit_1.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/obj/items/clothing/cm_suits.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/obj/items/clothing/cm_suits.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/mob/humans/onmob/suit_1.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/obj/items/clothing/cm_suits.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/5f467f7ce029ecda028af82d3587424e7e1bb5ce/icons/mob/humans/onmob/suit_1.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/cdfdf986686fc69df2b7ce7fa258a32462c2f479/icons/mob/humans/onmob/suit_0.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "equipped-OUTERCLOTHING",
+      "directions": 4
+    }
+  ]
+}

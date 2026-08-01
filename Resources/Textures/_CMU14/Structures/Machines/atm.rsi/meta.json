@@ -1,0 +1,14 @@
+﻿{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by Mert Can Şahingeri for use in CMU14 or anything else u want",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "atm"
+    }
+  ]
+}

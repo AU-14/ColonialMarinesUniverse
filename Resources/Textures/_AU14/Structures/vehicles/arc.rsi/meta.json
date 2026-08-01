@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/89c4b3ba080475ec9a3ae792a4dcc368fd9da4ca/icons/obj/vehicles/arc.dmi",
+  "size": {
+    "x": 128,
+    "y": 128
+  },
+  "states": [
+    {
+      "name": "arc_destroyed",
+      "directions": 4
+    }
+  ]
+}

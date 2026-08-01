@@ -1,0 +1,21 @@
+- type: entity
+  parent: BaseItem
+  id: CMUCastItem
+  name: medical cast
+  description: A rigid cast that immobilises and slowly heals fractures up to Simple severity.
+  components:
+  - type: Item
+    size: Small
+  - type: CMUCastItem
+    applyDelay: 6
+    uses: 4
+    maxSuppressed: Simple
+  - type: Tag
+    tags:
+    - CMUCastItem
+  - type: Sprite
+    sprite: _AU14/Objects/Medical/cast.rsi
+    state: cast
+
+- type: Tag
+  id: CMUCastItem

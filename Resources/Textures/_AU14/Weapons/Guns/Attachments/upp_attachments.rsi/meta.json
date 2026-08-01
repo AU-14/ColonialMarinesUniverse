@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13-pve/blob/master/icons/obj/items/weapons/guns/attachments/stock.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/master/icons/obj/items/weapons/guns/attachments/under.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ag80-col-on"
+    },
+    {
+      "name": "ag80-col"
+    },
+    {
+      "name": "ag80-col_a"
+    },
+    {
+      "name": "ag80-col_a-on"
+    },
+    {
+      "name": "grenade-ag80-on"
+    },
+    {
+      "name": "grenade-ag80-open"
+    },
+    {
+      "name": "grenade-ag80"
+    },
+    {
+      "name": "grenade-ag80_a"
+    },
+    {
+      "name": "grenade-ag80-open_a"
+    }
+  ]
+}

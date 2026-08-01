@@ -1,0 +1,18 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cmss13 at https://github.com/psyendrocronologicalwarfare/cmss13/blob/c59a3a9110af0ee0a6f2ffcc5a2257826df455ce/icons/mob/humans/onmob/clothing/head/hats_by_faction/UNISC.dmi, https://github.com/psyendrocronologicalwarfare/cmss13/blob/97da1564412aec3acc18976c131b0866f8178f2a/icons/obj/items/clothing/suits/suits_by_faction/UNISC.dmi, https://github.com/psyendrocronologicalwarfare/cmss13/blob/97da1564412aec3acc18976c131b0866f8178f2a/icons/obj/items/clothing/suits/suits_by_faction/UNISC.dmi, https://github.com/psyendrocronologicalwarfare/cmss13/blob/97da1564412aec3acc18976c131b0866f8178f2a/icons/obj/items/clothing/suits/suits_by_faction/UNISC.dmi, https://github.com/psyendrocronologicalwarfare/cmss13/blob/97da1564412aec3acc18976c131b0866f8178f2a/icons/obj/items/clothing/suits/suits_by_faction/UNISC.dmi. Reassembled by Orion due to lots of spriting errors.",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "icon"
+        },
+        {
+            "name": "patch",
+            "directions": 4
+        }
+    ]
+}

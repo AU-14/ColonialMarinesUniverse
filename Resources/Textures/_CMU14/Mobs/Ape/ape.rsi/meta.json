@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Made by Patogrone on discord.",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "alive",
+      "directions": 4
+    },
+    {
+      "name": "dead"
+    }
+  ]
+}

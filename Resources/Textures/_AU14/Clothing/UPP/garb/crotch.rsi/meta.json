@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at https://github.com/BonniePandora/pandora-cmss13-pve/blob/6dd66df34196643ea3a1b0fb51f30b99e22a7030/icons/mob/humans/onmob/ties.dmi, https://github.com/BonniePandora/pandora-cmss13-pve/blob/6dd66df34196643ea3a1b0fb51f30b99e22a7030/icons/obj/items/clothing/ties_overlay.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "helmet",
+      "directions": 4
+    }
+  ]
+}

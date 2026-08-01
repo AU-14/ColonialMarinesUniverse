@@ -1,0 +1,35 @@
+names-tribal-first-dataset-1 = Aytan
+names-tribal-first-dataset-2 = Eyleru
+names-tribal-first-dataset-3 = Kahyu
+names-tribal-first-dataset-4 = Lenat
+names-tribal-first-dataset-5 = Mo'ari
+names-tribal-first-dataset-6 = Neyrey
+names-tribal-first-dataset-7 = Olo'na
+names-tribal-first-dataset-8 = Sulan
+names-tribal-first-dataset-9 = Taru
+names-tribal-first-dataset-10 = Tsa'nu
+names-tribal-first-dataset-11 = Vena
+names-tribal-first-dataset-12 = Yura
+names-tribal-first-dataset-13 = Eytuk
+names-tribal-first-dataset-14 = Norani
+names-tribal-first-dataset-15 = Akwa
+names-tribal-first-dataset-16 = Tipan
+names-tribal-first-dataset-17 = Mokra
+names-tribal-first-dataset-18 = Rey'la
+names-tribal-first-dataset-19 = Tey'ra
+names-tribal-first-dataset-20 = Anuk
+
+names-tribal-clan-dataset-1 = of the Bone Spear
+names-tribal-clan-dataset-2 = of the High Branches
+names-tribal-clan-dataset-3 = of the Deepwater
+names-tribal-clan-dataset-4 = of the Stoneheart
+names-tribal-clan-dataset-5 = of the Crystal Vale
+names-tribal-clan-dataset-6 = of the Falling Star
+names-tribal-clan-dataset-7 = of the Bramble Hold
+names-tribal-clan-dataset-8 = of the Mistwalk
+names-tribal-clan-dataset-9 = of the Ash Ridge
+names-tribal-clan-dataset-10 = of the Sunfang
+names-tribal-clan-dataset-11 = of the Roothome
+names-tribal-clan-dataset-12 = of the Skybind
+
+name-format-tribal = { $part0 } { $part1 }
