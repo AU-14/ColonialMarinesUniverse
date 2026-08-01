@@ -168,7 +168,8 @@ namespace Content.Server.AU14.Round
                         return;
 
                     Logger.GetSawmill("content").Debug("[PlatoonVoteManagerSystem] Preset vote finished.");
-                    onFinished(GetPresetVoteWinner(args));
+                    var winner = GetPresetVoteWinner(args);
+                    Timer.Spawn(0, () => onFinished(winner));
                 };
                 TrackVoteHandle(vote);
                 return vote;
