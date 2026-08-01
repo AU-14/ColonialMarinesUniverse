@@ -17,8 +17,8 @@
     "rootCause": "The client tile-spawning UI calls Loc.GetString(tile.Name), but the CMU Multi-Z grate tile prototypes supplied raw English display text instead of Fluent message IDs."
   },
   "change": {
-    "prototypeFile": "Content.CMU/Resources/Prototypes/_CMU14/Tiles/multiztiles.yml",
-    "localeFile": "Content.CMU/Resources/Locale/en-US/_CMU14/zlevels/zLevels.ftl",
+    "prototypeFile": "Content.CMU/Resources/Prototypes/Tiles/multiztiles.yml",
+    "localeFile": "Content.CMU/Resources/Locale/en-US/zlevels/zLevels.ftl",
     "localizedNameReferences": 22,
     "distinctFluentIds": 16,
     "missingFluentIdsAfter": 0,

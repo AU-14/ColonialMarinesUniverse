@@ -1,13 +1,13 @@
 - type: gameMap
   id: USSBushRedux
   mapName: USS George Bush
-  mapPath: /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize0.yml
+  mapPath: /Maps/USSBushMultiZ/USSBushReworkFinalize0.yml
   mapsBelow:
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize-1.yml
+  - /Maps/USSBushMultiZ/USSBushReworkFinalize-1.yml
   mapsAbove:
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize1.yml
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize2.yml
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize3.yml
+  - /Maps/USSBushMultiZ/USSBushReworkFinalize1.yml
+  - /Maps/USSBushMultiZ/USSBushReworkFinalize2.yml
+  - /Maps/USSBushMultiZ/USSBushReworkFinalize3.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

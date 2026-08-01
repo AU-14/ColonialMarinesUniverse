@@ -40,7 +40,7 @@
   },
   "change": {
     "compatibilitySource": "Content.CMU/Shared/Compatibility/LegacyBushSavedComponents.cs",
-    "savedMap": "Content.CMU/Resources/Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize1.yml",
+    "savedMap": "Content.CMU/Resources/Maps/USSBushMultiZ/USSBushReworkFinalize1.yml",
     "explicitRegistrationNames": [
       "LegacyBushOrganHealth",
       "LegacyBushHeart",

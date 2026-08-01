@@ -67,6 +67,7 @@ ent-CMUDeployableZLevelLadder = Deployable Ladder
 cmu-zlevel-falling-popup = {$name} falls from above.
 
 cmu-zlevel-look-up-fail = There is a ceiling above you. You cannot look up.
+cmu-zlevel-look-up-nested = You cannot look up while nested.
 cmu-zlevel-look-up-enabled = You look up.
 cmu-zlevel-look-up-disabled = You stop looking up.
 
@@ -97,12 +98,13 @@ cmu-zlevel-ladder-deploy-no-floor = The ladder needs stable flooring below it.
 cmu-zlevel-ladder-deploy-roof = There is a roof above you.
 cmu-zlevel-ladder-deploy-blocked = There is already a ladder there.
 cmu-zlevel-ladder-deploy-finish = You deploy the ladder.
+cmu-zlevel-ladder-unstable = The ladder wobbles without nearby support!
+cmu-zlevel-ladder-collapse = The unsupported ladder collapses back into its packed frame!
 cmu-zlevel-ladder-retract-no-hand = You need an empty hand to retract the ladder.
 cmu-zlevel-ladder-retract-finish = You retract the ladder.
 
-ui-options-header-cmu-zlevels = CMU Z-Levels
-ui-options-function-cmu-toggle-shoot-down-z-level = Toggle aiming down a Z-level
-ui-options-zlevel-blur = Z-level blur:
+# AU14 (building overhaul): stage 1 of the look-up cycle (faint upper ghost).
+cmu-zlevel-faint-up-enabled = You glance upward, faintly making out the level above.
 
 tiles-cmu-multiz-destroyable-grate-1 = MultiZ Destroyable Grate 1
 tiles-cmu-multiz-destroyable-grate-2 = MultiZ Destroyable Grate 2
