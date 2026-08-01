@@ -1,0 +1,7 @@
+- type: department
+  parent: CMDepartmentBase
+  abstract: true
+  id: AU14DepartmentHydroponics
+  departmentRadio: null
+  headOfDepartment: AU14JobCivilianHeadOfService
+  faction: colonist

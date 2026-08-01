@@ -1,0 +1,31 @@
+- type: trait
+  id: CMUProstheticLeftArm
+  name: trait-cmu-prosthetic-left-arm-name
+  description: trait-cmu-prosthetic-left-arm-desc
+  category: Disabilities
+  components:
+  - type: CMUProstheticLeftArm
+
+- type: trait
+  id: CMUProstheticRightArm
+  name: trait-cmu-prosthetic-right-arm-name
+  description: trait-cmu-prosthetic-right-arm-desc
+  category: Disabilities
+  components:
+  - type: CMUProstheticRightArm
+
+- type: trait
+  id: CMUProstheticLeftLeg
+  name: trait-cmu-prosthetic-left-leg-name
+  description: trait-cmu-prosthetic-left-leg-desc
+  category: Disabilities
+  components:
+  - type: CMUProstheticLeftLeg
+
+- type: trait
+  id: CMUProstheticRightLeg
+  name: trait-cmu-prosthetic-right-leg-name
+  description: trait-cmu-prosthetic-right-leg-desc
+  category: Disabilities
+  components:
+  - type: CMUProstheticRightLeg

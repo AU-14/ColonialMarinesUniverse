@@ -434,6 +434,7 @@
   boilingPoint: 100.0
   meltingPoint: 0.0
   friction: 0.4
+  class: Basic
   metabolisms:
     Digestion:
       effects:

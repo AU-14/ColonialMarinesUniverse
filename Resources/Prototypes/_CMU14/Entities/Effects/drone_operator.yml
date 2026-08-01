@@ -1,0 +1,63 @@
+- type: entity
+  id: CMUDroneOperatorTransferEffect
+  categories: [HideSpawnMenu]
+  name: remote piloting transfer
+  components:
+    - type: PointLight
+      radius: 1.35
+      energy: 0.35
+      color: "#6eb8ff"
+    - type: CMUXenoWarlockParticleEmitter
+      effect: DroneOperatorTransfer
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUDroneOperatorConnectBeamEffect
+  categories: [HideSpawnMenu]
+  name: remote piloting connect beam
+  components:
+    - type: PointLight
+      radius: 1.4
+      energy: 0.35
+      color: "#6eb8ff"
+    - type: TimedDespawn
+      lifetime: 0.6
+    - type: CMUXenoWarlockParticleEmitter
+      effect: DroneTransferConnect
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUDroneAndroidDisconnectBeamEffect
+  categories: [HideSpawnMenu]
+  name: remote piloting disconnect beam
+  components:
+    - type: PointLight
+      radius: 1.4
+      energy: 0.35
+      color: "#d44848"
+    - type: TimedDespawn
+      lifetime: 0.6
+    - type: CMUXenoWarlockParticleEmitter
+      effect: DroneTransferDisconnect
+    - type: Tag
+      tags:
+        - HideContextMenu
+
+- type: entity
+  id: CMUDroneAndroidDormantEffect
+  categories: [HideSpawnMenu]
+  name: dormant android signal
+  components:
+    - type: PointLight
+      radius: 1.25
+      energy: 0.3
+      color: "#d44848"
+    - type: CMUXenoWarlockParticleEmitter
+      effect: DroneAndroidDormant
+    - type: Tag
+      tags:
+        - HideContextMenu

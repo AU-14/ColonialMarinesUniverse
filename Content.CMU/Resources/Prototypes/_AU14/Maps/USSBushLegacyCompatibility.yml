@@ -34,14 +34,6 @@
   id: AU14UADeskFlag
 
 - type: entity
-  parent: RMCBannerUN
-  id: AU14WallFlagUA
-
-- type: entity
-  parent: RMCBannerSPP
-  id: AU14WallFlagUPP
-
-- type: entity
   parent: RMCSecureCaseMedicalBig
   id: AU14CrateMedicalVendor
   name: We-Ya-Med vendor crate
@@ -160,11 +152,6 @@
           bounds: "-0.49,-0.49,0.49,0.49"
         density: 1000
         hard: false
-
-- type: entity
-  parent: PillCanister
-  id: AU14DrugDealerDrugBottle
-  name: Speed Demon bottle
 
 # Shepherd beach overlays are mapped to the current equivalent water entities.
 - type: entity
