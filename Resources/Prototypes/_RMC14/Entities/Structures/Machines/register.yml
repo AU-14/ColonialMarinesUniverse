@@ -19,7 +19,7 @@
   - type: Sprite
     drawdepth: SmallObjects
     sprite: _RMC14/Structures/Machines/computer.rsi
-    state: on
+    state: register_on
     layers: []
   - type: Clickable
   - type: Corrodible

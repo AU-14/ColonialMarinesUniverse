@@ -27,7 +27,11 @@
     canCollide: false
   - type: Sprite
     sprite:  _AU14/Items/laptop.rsi
-    state: laptop_off_govfor
+    layers:
+    - map: ["base"]
+      state: laptop_off_govfor
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: laptop_off_govfor
   - type: AU14CallsignConsole
     faction: govfor
   - type: UserInterface
@@ -55,7 +59,11 @@
     canCollide: false
   - type: Sprite
     sprite:  _AU14/Items/laptop.rsi
-    state: laptop_off_opfor
+    layers:
+    - map: ["base"]
+      state: laptop_off_opfor
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: laptop_off_opfor
   - type: AU14CallsignConsole
     faction: opfor
   - type: UserInterface

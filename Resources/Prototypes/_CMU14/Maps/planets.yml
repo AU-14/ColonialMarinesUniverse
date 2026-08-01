@@ -5,6 +5,7 @@
   name: Solaris Gulch
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/Solaris.yml
     votename: "Solaris Gulch"
     mapId: AU747
     lorePrimer: AU14PrimerPlanetLV747
@@ -81,6 +82,7 @@
   name: Shepherds' Pride
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_CMU14/sheperds.yml
     votename: "Shepherds' Pride"
     mapId: Sheperds
     lorePrimer: AU14PrimerPlanetShepherdsPride
@@ -161,6 +163,7 @@
   name: Stable Garrison
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/garrison.yml
     votename: "Stable Garrison"
     mapId: stablegarrison
     lorePrimer: AU14PrimerPlanetStableGarrison
@@ -229,6 +232,7 @@
   name: LV624
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/LV624.yml
     votename: "LV624 Green Hell"
     mapId: LV624
     lorePrimer: AU14PrimerPlanetLV624
@@ -303,6 +307,7 @@
   name: Gixens Caverns
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/gixenscaverns.yml
     votename: "Gixens Caverns"
     mapId: GixensCaverns
     lorePrimer: AU14PrimerPlanetGixensCaverns
@@ -331,6 +336,7 @@
   name: Flight
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/flight.yml
     votename: "Flight"
     mapId: Flight
     lorePrimer: AU14PrimerPlanetFlight
@@ -373,6 +379,7 @@
   name: Hybrisa Metropolitan
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/hybrisametro.yml
     votename: "Hybrisa Metropolitan"
     mapId: hybrisametro
     lorePrimer: AU14PrimerPlanetLV759
@@ -437,6 +444,7 @@
   name: Port Nereid
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/PortNeroidMultiZ/portneroidmultiz0.yml
     votename: "Port Nereid"
     mapId: portneroid
     lorePrimer: AU14PrimerPlanetLV327
@@ -503,6 +511,7 @@
   name: Corsat Station
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/corsat.yml
     votename: "Corsat Station"
     mapId: aucorsat
     lorePrimer: AU14PrimerPlanetCorsatStation
@@ -555,6 +564,7 @@
   name: LV-376 "Ulixes"
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/BarkersMultiZ/barkers0.yml
     votename: "Barker's Lament"
     mapId: CMULV376BarkersLament
     lorePrimer: AU14PrimerPlanetLament
@@ -622,6 +632,7 @@
   name: Sorokyne Strata
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/SorokyneMultiZ/sorokyne0.yml
     votename: "Sorokyne Strata"
     mapId: au14sorokyne
     lorePrimer: AU14PrimerPlanetSorokyne
@@ -682,6 +693,7 @@
   name: Trijent
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/trijent.yml
     votename: "Raijin Hydroelectric"
     mapId: AUTrijentMap
     lorePrimer: AU14PrimerPlanetTrijent
@@ -743,6 +755,7 @@
   name: Shivas' Snowball
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/ShivasSnowballMultiZ/ShivasSnowballMultiZ0.yml
     votename: "Shivas' Snowball"
     mapId: auShivas
     lorePrimer: AU14PrimerPlanetShivasSnowball
@@ -801,6 +814,7 @@
   name: Kutjevo Biolab
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/kutjevo.yml
     votename: "Kutjevo Biolab"
     mapId: auKutjevo
     lorePrimer: AU14PrimerPlanetKutjevo
@@ -859,6 +873,7 @@
   name: Fiorina Prison
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_AU14/fiorina.yml
     votename: "Fiorina Prison"
     mapId: aufiorina
     lorePrimer: AU14PrimerPlanetFiorina
@@ -918,6 +933,7 @@
   name: Chances Claim
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_CMU14/chances.yml
     votename: "Chances Claim"
     mapId: auchances
     lorePrimer: AU14PrimerPlanetChances
@@ -1042,6 +1058,7 @@
   name: JE-1758 "Ascanius"
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_CMU14/HopesRetreatMultiZ/HopesRetreatMultiZ0.yml
     votename: "Hope's Retreat"
     mapId: hopesretreat
     lorePrimer: CMUPrimerHopesRetreat

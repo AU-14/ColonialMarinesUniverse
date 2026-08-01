@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-pve at https://github.com/cmss13-devs/cmss13-pve/blob/3a8fe887279b11a6de4dfef2ffb58779e2a26876/icons/obj/items/clothing/glasses.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/3a8fe887279b11a6de4dfef2ffb58779e2a26876/icons/mob/humans/onmob/eyes.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/9c26d36fdcba53dc47dd2007d4532bf9806c9e79/icons/mob/humans/onmob/helmet_garb.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/3a8fe887279b11a6de4dfef2ffb58779e2a26876/icons/mob/humans/onmob/eyes.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/3a8fe887279b11a6de4dfef2ffb58779e2a26876/icons/mob/humans/onmob/eyes.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/9c26d36fdcba53dc47dd2007d4532bf9806c9e79/icons/mob/humans/onmob/helmet_garb.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/3a8fe887279b11a6de4dfef2ffb58779e2a26876/icons/mob/humans/onmob/eyes.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/9c26d36fdcba53dc47dd2007d4532bf9806c9e79/icons/mob/humans/onmob/helmet_garb.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/3a8fe887279b11a6de4dfef2ffb58779e2a26876/icons/mob/humans/onmob/eyes.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/9c26d36fdcba53dc47dd2007d4532bf9806c9e79/icons/mob/humans/onmob/helmet_garb.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/3a8fe887279b11a6de4dfef2ffb58779e2a26876/icons/mob/humans/onmob/eyes.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/9c26d36fdcba53dc47dd2007d4532bf9806c9e79/icons/mob/humans/onmob/helmet_garb.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "icon"
+    },
+    {
+      "name": "equipped-MASK",
+      "directions": 4
+    },
+    {
+      "name": "equipped-EYES",
+      "directions": 4
+    },
+    {
+      "name": "helmet",
+      "directions": 4
+    },
+    {
+      "name": "helmet-down",
+      "directions": 4
+    }
+  ]
+}

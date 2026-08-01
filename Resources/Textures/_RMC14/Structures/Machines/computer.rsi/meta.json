@@ -2429,6 +2429,12 @@
         },
         {
             "name": "remoteflightcomp0"
+        },
+        {
+            "name": "on"
+        },
+        {
+            "name": "off"
         }
     ]
 }

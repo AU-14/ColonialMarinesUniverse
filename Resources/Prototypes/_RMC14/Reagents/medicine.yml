@@ -81,7 +81,7 @@
       effects:
       - !type:EqualHealthChange
         conditions:
-        - !type:Temperature
+        - !type:TemperatureCondition
           max: 170
         damage:
         - Brute: -1
@@ -294,7 +294,7 @@
     Medicine:
       metabolismRate: 0.1
       effects:
-      - !type:ChemHealEyeDamage
+      - !type:EyeDamage
       - !type:Oculopeutic
         potency: 2
       - !type:HealthChange
@@ -327,7 +327,7 @@
       effects:
       - !type:EqualHealthChange
         conditions:
-        - !type:Temperature
+        - !type:TemperatureCondition
           max: 170
         damage:
         - Brute: -2.25

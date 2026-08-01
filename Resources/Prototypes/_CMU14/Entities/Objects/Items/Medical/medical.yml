@@ -745,7 +745,7 @@
           groups:
             Brute: 1.5
             Toxin: 3
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           reagent: CMUParacetamol
@@ -753,7 +753,7 @@
       - !type:AdjustReagent
         reagent: CMUParacetamol
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           reagent: CMUTramadol
@@ -761,7 +761,7 @@
       - !type:AdjustReagent
         reagent: CMUTramadol
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           reagent: CMUOxycodone
@@ -769,7 +769,7 @@
       - !type:AdjustReagent
         reagent: CMUOxycodone
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           reagent: CMUFentanyl
@@ -777,7 +777,7 @@
       - !type:AdjustReagent
         reagent: CMUFentanyl
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           reagent: CMUSleen
@@ -785,7 +785,7 @@
       - !type:AdjustReagent
         reagent: CMUSleen
         amount: -1000
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           reagent: CMUSoporific
