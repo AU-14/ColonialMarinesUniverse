@@ -2,7 +2,6 @@ using System;
 using Content.Shared._CMU14.Item.Stain;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Chemistry;
-using Content.Shared.Chemistry.Reaction;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -21,20 +20,31 @@ public sealed partial class CMUItemStainReactionSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<ReactiveComponent, ReactionEntityEvent>(OnReaction);
+        SubscribeLocalEvent<ItemComponent, ReactionEntityEvent>(OnItemReaction);
+        SubscribeLocalEvent<InventoryComponent, ReactionEntityEvent>(OnInventoryReaction);
     }
 
-    private void OnReaction(Entity<ReactiveComponent> ent, ref ReactionEntityEvent args)
+    private void OnItemReaction(Entity<ItemComponent> ent, ref ReactionEntityEvent args)
+    {
+        OnReaction(ent.Owner, ref args);
+    }
+
+    private void OnInventoryReaction(Entity<InventoryComponent> ent, ref ReactionEntityEvent args)
+    {
+        OnReaction(ent.Owner, ref args);
+    }
+
+    private void OnReaction(EntityUid uid, ref ReactionEntityEvent args)
     {
         if (args.Method != ReactionMethod.Touch || !TrySelectReagent(args, out var reagent))
             return;
 
         if (reagent.CleansItemStains)
         {
-            if (HasComp<ItemComponent>(ent))
-                _stains.TryClean(ent);
-            else if (HasComp<InventoryComponent>(ent))
-                _stains.CleanExposedEquipment(ent);
+            if (HasComp<ItemComponent>(uid))
+                _stains.TryClean(uid);
+            else if (HasComp<InventoryComponent>(uid))
+                _stains.CleanExposedEquipment(uid);
             return;
         }
 
@@ -42,10 +52,10 @@ public sealed partial class CMUItemStainReactionSystem : EntitySystem
             return;
 
         var color = reagent.ItemStainColor ?? reagent.SubstanceColor;
-        if (HasComp<ItemComponent>(ent))
-            _stains.TryStain(ent, kind, color);
-        else if (HasComp<InventoryComponent>(ent))
-            _stains.StainExposedEquipment(ent, kind, color);
+        if (HasComp<ItemComponent>(uid))
+            _stains.TryStain(uid, kind, color);
+        else if (HasComp<InventoryComponent>(uid))
+            _stains.StainExposedEquipment(uid, kind, color);
     }
 
     /// <summary>

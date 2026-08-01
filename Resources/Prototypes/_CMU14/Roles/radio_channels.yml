@@ -46,7 +46,7 @@
 - type: radioChannel
   id: radioGovforIntel
   name: chat-radio-govforintel
-  keycode: "y"
+  keycode: "e"
   frequency: 1605
   color: "#e4860c"
   longRange: true
@@ -80,7 +80,7 @@
 - type: radioChannel
   id: radioOpforAlpha
   name: chat-radio-opforalpha
-  keycode: "s"
+  keycode: "9"
   frequency: 1601
   color: "#bb91d8"
   longRange: true
@@ -124,7 +124,7 @@
 - type: radioChannel
   id: radioOpforIntel
   name: chat-radio-opforintel
-  keycode: "i"
+  keycode: "g"
   frequency: 1602
   color: "#e4860c"
   longRange: true
@@ -335,7 +335,7 @@
 - type: radioChannel
   id: TunableFrequencyChannel
   name: chat-radio-tunable-sentinel
-  keycode: "x"
+  keycode: "m"
   frequency: 0
   color: "#5B9BD5"
   longRange: false

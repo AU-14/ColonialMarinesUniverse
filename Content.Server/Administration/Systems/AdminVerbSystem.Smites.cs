@@ -73,7 +73,7 @@ public sealed partial class AdminVerbSystem
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private BloodstreamSystem _bloodstreamSystem = default!;
-    [Dependency] private BodySystem _bodySystem = default!;
+    [Dependency] private Content.Shared.Body.BodySystem _bodySystem = default!;
     [Dependency] private CreamPieSystem _creamPieSystem = default!;
     [Dependency] private ElectrocutionSystem _electrocutionSystem = default!;
     [Dependency] private EntityStorageSystem _entityStorageSystem = default!;

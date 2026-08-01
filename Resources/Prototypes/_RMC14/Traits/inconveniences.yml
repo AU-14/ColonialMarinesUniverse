@@ -7,15 +7,6 @@
 #  - type: Snoring
 
 - type: trait
-  id: LightweightDrunk
-  name: trait-lightweight-name
-  description: trait-lightweight-desc
-  category: Quirks
-  components:
-  - type: LightweightDrunk
-    boozeStrengthMultiplier: 2
-
-- type: trait
   id: NonResuscitable
   name: au14-trait-unrevivable-name
   description: au14-trait-unrevivable-desc

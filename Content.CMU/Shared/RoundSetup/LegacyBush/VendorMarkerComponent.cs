@@ -1,5 +1,6 @@
 namespace Content.Shared._CMU14.RoundSetup.LegacyBush;
 
+using Content.Shared.AU14.util;
 using Robust.Shared.Prototypes;
 
 /// <summary>
@@ -17,56 +18,17 @@ public sealed partial class VendorMarkerComponent : Component
     public bool Opfor;
 
     [DataField("dropship")]
-    public bool Dropship;
+    public bool DropShip;
 
     [DataField]
     public bool Ship;
 
     [DataField]
-    public LegacyBushMarkerClass Class;
+    public PlatoonMarkerClass Class;
 
     [DataField]
     public EntProtoId? Replacement;
 
     [DataField]
     public bool PreserveName;
-}
-
-public enum LegacyBushMarkerClass
-{
-    Corpsman,
-    Clothing,
-    Weapons,
-    SWeapons,
-    ObjectivesConsole,
-    ReturnPointGeneric,
-    DropshipDestination,
-    RequisitionsLift,
-    RequisitionsConsole,
-    RequisitionsVendor,
-    AutomaticRifleman,
-    Rifleman,
-    DropshipCrewChief,
-    OperationsOfficer,
-    RadioTelephoneOperator,
-    JuniorOfficer,
-    MilitaryPolice,
-    MilitaryDoctor,
-    SectionSergeant,
-    Pilot,
-    CombatTechnician,
-    LockedCommandDoor,
-    LockedSecurityDoor,
-    LockedSecurityDoorGlass,
-    LockedGlassDoor,
-    LockedCommandGlassDoor,
-    LockedEngineeringDoor,
-    LockedEngineeringGlassDoor,
-    LockedMedicalGlassDoor,
-    OverwatchConsole,
-    TechTree,
-    Analyzer,
-    AllianceConsoleGovfor,
-    WithdrawConsoleGovfor,
-    CommandTabletGovfor,
 }

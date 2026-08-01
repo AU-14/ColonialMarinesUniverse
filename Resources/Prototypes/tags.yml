@@ -227,6 +227,9 @@
   id: CannonBall # Ammo: WeaponLauncherPirateCannon, ShuttleGunPirateCannon
 
 - type: Tag
+  id: Chili
+
+- type: Tag
   id: CannotSuicide # Used by SuicideSystem. Tagged entities ghost when attempting to suicide.
 
 - type: Tag

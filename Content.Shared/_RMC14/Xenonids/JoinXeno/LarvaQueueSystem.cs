@@ -56,7 +56,6 @@ public sealed partial class LarvaQueueSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<JoinXenoComponent, JoinLarvaQueueEvent>(OnJoinLarvaQueue);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleanup);
         SubscribeLocalEvent<BurrowedLarvaAddedEvent>(OnBurrowedLarvaAdded);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);

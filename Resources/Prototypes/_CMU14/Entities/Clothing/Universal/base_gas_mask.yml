@@ -1,0 +1,18 @@
+- type: entity
+  id: CMUBaseGasMaskFilterSlot
+  abstract: true
+  components:
+  - type: BreathMask
+  - type: ContainerContainer
+    containers:
+      filter: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      filter:
+        name: filter
+        insertSound: /Audio/Items/screwdriver.ogg
+        ejectSound: /Audio/Items/screwdriver.ogg
+        whitelist:
+          tags:
+          - CMUGasMaskFilter
+  - type: CMItemSlots

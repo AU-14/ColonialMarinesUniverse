@@ -31,7 +31,7 @@ namespace Content.Server._RMC14.Medical.Autodoc;
 public sealed partial class AutodocSystem : SharedAutodocSystem
 {
     [Dependency] private AudioSystem _audio = default!;
-    [Dependency] private BodySystem _body = default!;
+    [Dependency] private Content.Shared.Body.BodySystem _body = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private MobStateSystem _mobState = default!;

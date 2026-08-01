@@ -224,6 +224,9 @@ namespace Content.Client.Changelog
             Remove,
             Fix,
             Tweak,
+            Map,
+            Code,
+            Admin,
         }
     }
 }

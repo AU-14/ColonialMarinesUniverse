@@ -26,7 +26,7 @@ public sealed partial class SynthSystem : SharedSynthSystem
 
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private BloodstreamSystem _bloodstream = default!;
-    [Dependency] private BodySystem _body = default!;
+    [Dependency] private Content.Shared.Body.BodySystem _body = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private TagSystem _tags = default!;
 

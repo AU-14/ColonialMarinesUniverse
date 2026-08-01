@@ -459,3 +459,33 @@
   - type: IntelReadObjective
     state: Active
     value: 999
+
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelCLF
+  name: CLF intel computer
+  description: A CLF Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: clf
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable

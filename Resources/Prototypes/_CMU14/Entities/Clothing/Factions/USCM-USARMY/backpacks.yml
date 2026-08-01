@@ -1,0 +1,161 @@
+- type: entity
+  parent: CMBackpack
+  id: AU14IMPBackpackMarine
+  name: standard weight IMP backpack
+  description: The standard-issue pack of UA forces. Designed to lug gear into the battlefield.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/impbag.rsi
+    - type: Item
+      size: Huge
+    - type: Storage
+      maxItemSize: Huge
+      grid:
+        - 0,0,22,1
+
+- type: entity
+  parent: AU14IMPBackpackMarine
+  id: AU14IMPBackpackWorkingJoe
+  name: Working Joe utility pack
+  description: A standard IMP backpack modified for Seegson synthetic units. Opens instantly.
+  components:
+    - type: StorageOpenDoAfter
+      duration: 0
+      skipInHand: true
+      skipOnGround: true
+
+- type: entity
+  parent: CMBackpack
+  id: AU14CorpsmanIMPBackpackMarine
+  name: standard weight medical IMP backpack
+  description: The standard-issue pack of UA forces. Designed to lug gear into the battlefield. This one has a red cross on it.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/corpsmanbag.rsi
+
+- type: entity
+  parent: CMBackpack
+  id: AU14TechBackpackMarine
+  name: technician backpack
+  description: A large pack. Designed to engineering equipment and explosives into the battlefield.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/techbag.rsi
+
+- type: entity
+  parent: CMSatchel
+  id: AU14SatchelCorpsman
+  name: corpsman satchel
+  description: A sterile satchel used in medical departments.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/Back/corpsmansatchel.rsi
+
+- type: entity
+  parent: CMSatchel
+  id: AU14BackpackRTOPackBlack
+  name: "Black AN/PRC-55 Portable Transceiver"
+  description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/blackrtopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+    - type: Storage
+      maxItemSize: Large
+      grid:
+        - 0,0,4,1
+    - type: CMStorageVisualizer
+      storageClosed: null
+      storageOpen: null
+    - type: RotaryPhone
+      category: Marine
+    - type: RotaryPhoneBackpack
+    - type: UserInterface
+      interfaces:
+        enum.RMCTelephoneUiKey.Key:
+          type: RMCTelephoneBui
+        enum.StorageUiKey.Key:
+          type: StorageBoundUserInterface
+    - type: ActivatableUIBlacklist
+      blacklist:
+        components:
+          - Xeno
+    - type: GenericVisualizer
+      visuals:
+        enum.RotaryPhoneLayers.Layer:
+          base:
+            Base: { state: icon }
+            Ring: { state: ring }
+            Ear: { state: ear }
+    - type: Undisposable
+
+- type: entity
+  parent: AU14BackpackRTOPackBlack
+  id: AU14BackpackRTOPackJungle
+  name: "Jungle AN/PRC-55 Portable Transceiver"
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/junglertopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+
+- type: entity
+  parent: AU14BackpackRTOPackBlack
+  id: AU14BackpackRTOPackDesert
+  name: "Desert AN/PRC-55 Portable Transceiver"
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/desertrtopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+
+- type: entity
+  parent: AU14BackpackRTOPackBlack
+  id: AU14BackpackRTOPackGray
+  name: "Gray AN/PRC-55 Portable Transceiver"
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/RTOPack/classicrtopack.rsi
+      layers:
+        - state: icon
+          map: ["base"]
+
+- type: entity
+  parent: RMCSatchelMarineLogisticsBig
+  id: AU14MolleBackpack
+  name: M2 MOLLE Backpack
+  description: Tactical backpack manufactured by one of the Alphatech subsidiaries. Very lightweight backpack that utilizes UA standard MOLLE fastening systems, which allows easy access and optimal weight distribution. Standard issue heavy duty pack for US army troopers.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/US_Army/Back/molle.rsi
+    - type: ItemCamouflage
+      camouflageVariations: {}
+
+- type: entity
+  parent: CMSatchelMarine
+  id: AU14MolleSatchel
+  name: M1 MOLLE Satchel
+  description: Tactical satchel manufactured by one of the Alphatech subsidiaries. Very lightweight beltbag variant that utilizes UA standard MOLLE fastening systems. Standard issue pack for US army troopers.
+  components:
+    - type: Sprite
+      sprite: _AU14/Clothing/US_Army/Back/molle_satchel.rsi
+    - type: ItemCamouflage
+      camouflageVariations: {}
+
+- type: entity
+  parent: AU14IMPBackpackMarine
+  id: AU14IMPBackpackMarineGuardFilled
+  suffix: Guard, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14ArmorM3DesertOne
+    - id: AU14WeaponRifleXM4RATwoPointSling
+    - id: AU14PouchMagazineFilledM4RA
+    - id: AU14DesertM10Helmet
+    - id: AU14PouchIFAKFill
+    - id: CMMagazineRifleM4SPR

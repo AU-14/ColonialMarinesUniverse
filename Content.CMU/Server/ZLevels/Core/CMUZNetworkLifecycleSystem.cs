@@ -582,7 +582,7 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
             }
         }
 
-        var error = $"{operation}: {failure.Message}";
+        var error = $"{operation}: {failure}";
         if (rollbackFailures.Count > 0)
             error += $" Rollback also failed {rollbackFailures.Count} time(s): {rollbackFailures[0].Message}";
 

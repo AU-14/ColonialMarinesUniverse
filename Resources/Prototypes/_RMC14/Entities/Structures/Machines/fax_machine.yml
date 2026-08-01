@@ -87,15 +87,6 @@
 
 - type: entity
   parent: CMFax
-  id: CMFaxCLF
-  suffix: CLF
-  components:
-  - type: FaxMachine
-    name: "Colony Liberation Front"
-    notifyAdmins: true
-
-- type: entity
-  parent: CMFax
   id: CMFaxSPP
   suffix: SPP
   components:

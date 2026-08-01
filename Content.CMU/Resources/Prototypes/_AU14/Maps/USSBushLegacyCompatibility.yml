@@ -1,6 +1,12 @@
 # Compatibility prototypes required by the pre-rebase USS Bush Redux maps.
 # Keep aliases and legacy marker data here so each modernization can be audited.
 
+# Modern hydroponics leaves still inherit this pre-RMC compatibility base.
+- type: entity
+  abstract: true
+  parent: ProduceBase
+  id: ProduceBaseRuminant
+
 # The legacy warship station intentionally excluded cargo/evacuation systems.
 # Current StandardUNMCWarship gained those parents after the rebase, so the
 # Bush keeps its original station composition here.
@@ -36,18 +42,6 @@
   id: AU14WallFlagUPP
 
 - type: entity
-  parent: CMVendorCigs
-  id: AU14VendorKoorCigs
-
-- type: entity
-  parent: CMVendorMedicalAllAccess
-  id: AU14GeneralMedicalVendor
-
-- type: entity
-  parent: CMVendorBlood
-  id: AU14VendorBlood
-
-- type: entity
   parent: RMCSecureCaseMedicalBig
   id: AU14CrateMedicalVendor
   name: We-Ya-Med vendor crate
@@ -59,10 +53,6 @@
 - type: entity
   parent: RMCOrbitalCannon
   id: AU14OrbitalCannonGovfor
-
-- type: entity
-  parent: VehicleSupplyConsole
-  id: AU14VehicleSupplyConsoleUSCMLimited
 
 - type: entity
   parent: RMCComputerIntel
@@ -90,20 +80,6 @@
   - type: AccessReader
     access: [["CMAccessMarinePrep"], ["RMCAccessCommand"]]
 
-- type: entity
-  parent: CMCrowbar
-  id: MaintenanceJack
-  name: vehicle maintenance jack
-  description: A heavy-duty hardpoint jack for servicing armored vehicles.
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
-    state: icon
-  - type: Item
-    size: Normal
-    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
-
-# Current RMC equivalents for pre-rebase medical and ship machinery.
 - type: entity
   parent: RMCAutodocNoConsole
   id: CMUAutodocPod
@@ -186,43 +162,11 @@
         hard: false
 
 - type: entity
-  parent: CMGauze1
-  id: AU14HemostaticGauze
-  name: hemostatic gauze
-
-- type: entity
-  parent: BaseItem
-  id: AU14HemostaticGauzePacketTrash
-  name: used hemostatic gauze packet
-  components:
-  - type: Sprite
-    sprite: _RMC14/Objects/Medical/medical.rsi
-    state: gauze
-  - type: Item
-    size: Tiny
-  - type: Tag
-    tags:
-    - Trash
-
-- type: entity
   parent: PillCanister
   id: AU14DrugDealerDrugBottle
   name: Speed Demon bottle
 
 # Shepherd beach overlays are mapped to the current equivalent water entities.
-- type: entity
-  parent: RMCEntityDesertWaterShallowCorner
-  id: AUEntityShepBeachCorner
-
-- type: entity
-  parent: RMCEntityDesertWaterShallowCornerEdge
-  id: AUEntityShepBeachCornerEdge
-
-- type: entity
-  parent: RMCEntityDesertWaterShallowEdge
-  id: AUEntityShepBeachEdge
-
-# Tartarus cargo containers used on the Bush hangar decks.
 - type: entity
   abstract: true
   id: AU14ContainerTartarusBase
@@ -348,281 +292,3 @@
     ship: true
   - type: Sprite
     state: green
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkershipClothing
-  components:
-  - type: VendorMarker
-    class: Clothing
-    replacement: ColMarTechEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkershiprequisitionsvendor
-  components:
-  - type: VendorMarker
-    class: RequisitionsVendor
-    replacement: ColMarTechCargoGuns
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipCorpsman
-  components:
-  - type: VendorMarker
-    class: Corpsman
-    replacement: ColMarTechMedicalGear
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipDoctor
-  components:
-  - type: VendorMarker
-    class: MilitaryDoctor
-    replacement: ColMarTechCrewMedicalEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipComtech
-  components:
-  - type: VendorMarker
-    class: CombatTechnician
-    replacement: ColMarTechSCTGear
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipAutomaticRifleman
-  components:
-  - type: VendorMarker
-    class: AutomaticRifleman
-    replacement: ColMarTechSGEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipRifleman
-  components:
-  - type: VendorMarker
-    class: Rifleman
-    replacement: ColMarTechEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipDCC
-  components:
-  - type: VendorMarker
-    class: DropshipCrewChief
-    replacement: ColMarTechDropshipCrewEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipOperationsOfficer
-  components:
-  - type: VendorMarker
-    class: OperationsOfficer
-    replacement: ColMarTechStaffOfficerEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipJuniorOfficer
-  components:
-  - type: VendorMarker
-    class: JuniorOfficer
-    replacement: ColMarTechSeniorOfficerEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipMPPoliceman
-  components:
-  - type: VendorMarker
-    class: MilitaryPolice
-    replacement: ColMarTechMilitaryPoliceEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipRadiotelephoneOperator
-  components:
-  - type: VendorMarker
-    class: RadioTelephoneOperator
-    replacement: ColMarTechSLEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipSectionSergeant
-  components:
-  - type: VendorMarker
-    class: SectionSergeant
-    replacement: ColMarTechSLEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipPilot
-  components:
-  - type: VendorMarker
-    class: Pilot
-    replacement: ColMarTechDropshipCrewWeapon
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipWeapons
-  components:
-  - type: VendorMarker
-    class: Weapons
-    replacement: ColMarTechGuns
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipSweapons
-  components:
-  - type: VendorMarker
-    class: SWeapons
-    replacement: ColMarTechSWSEquipment
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedCommandDoor
-  components:
-  - type: VendorMarker
-    class: LockedCommandDoor
-    replacement: CMAirlockCommandLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedCommandDoorGlass
-  components:
-  - type: VendorMarker
-    class: LockedCommandGlassDoor
-    replacement: CMULegacyBushAirlockGlassCommandLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedSecurityDoor
-  components:
-  - type: VendorMarker
-    class: LockedSecurityDoor
-    replacement: CMAirlockSecurityLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedSecurityDoorGlass
-  components:
-  - type: VendorMarker
-    class: LockedSecurityDoorGlass
-    replacement: CMAirlockGlassSecurityLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedGlassDoor
-  components:
-  - type: VendorMarker
-    class: LockedGlassDoor
-    replacement: CMULegacyBushAirlockGlassMarineLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedGlassDoorEngineering
-  components:
-  - type: VendorMarker
-    class: LockedEngineeringGlassDoor
-    replacement: CMAirlockGlassEngineerLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedDoorEngineering
-  components:
-  - type: VendorMarker
-    class: LockedEngineeringDoor
-    replacement: CMAirlockEngineerLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipLockedGlassDoorMedical
-  components:
-  - type: VendorMarker
-    class: LockedMedicalGlassDoor
-    replacement: CMAirlockGlassMedicalLocked
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipOverwatchConsole
-  components:
-  - type: VendorMarker
-    class: OverwatchConsole
-    replacement: RMCOverwatchConsoleRotating
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipTechTree
-  components:
-  - type: VendorMarker
-    class: TechTree
-    replacement: RMCTechTreeConsole
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipAllianceConsoleGovfor
-  components:
-  - type: VendorMarker
-    class: AllianceConsoleGovfor
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipWithdrawConsoleGovfor
-  components:
-  - type: VendorMarker
-    class: WithdrawConsoleGovfor
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipCommandTabletGovfor
-  components:
-  - type: VendorMarker
-    class: CommandTabletGovfor
-    replacement: RMCTabletCO
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: shipobjectivesconsolemarker
-  components:
-  - type: VendorMarker
-    class: ObjectivesConsole
-    replacement: ComputerObjectivesGovfor
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: shipfetchreturnmarker
-  components:
-  - type: VendorMarker
-    class: ReturnPointGeneric
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipRequisitionsConsole
-  components:
-  - type: VendorMarker
-    class: RequisitionsConsole
-    replacement: CMASRSConsole
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipRequisitionsLift
-  components:
-  - type: VendorMarker
-    class: RequisitionsLift
-    replacement: CMCargoElevator
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: VMarkerShipAnalyzer
-  components:
-  - type: VendorMarker
-    class: Analyzer
-    replacement: MachineArtifactAnalyzer
-
-- type: entity
-  parent: CMULegacyBushShipMarker
-  id: dropshipdestshipmarker
-  components:
-  - type: VendorMarker
-    class: DropshipDestination
-    replacement: CMDropshipDestination
-    preserveName: true

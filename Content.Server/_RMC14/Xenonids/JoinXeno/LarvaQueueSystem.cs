@@ -165,7 +165,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         return false;
     }
 
-    private void OnBurrowedLarvaAdded(ref BurrowedLarvaAddedEvent ev)
+    private void OnBurrowedLarvaAdded(BurrowedLarvaAddedEvent ev)
     {
         var hiveUid = GetEntity(ev.Hive);
         if (_hiveQuery.TryComp(hiveUid, out var hive))

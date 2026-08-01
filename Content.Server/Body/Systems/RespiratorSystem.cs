@@ -34,7 +34,7 @@ public sealed partial class RespiratorSystem : EntitySystem
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private AlertsSystem _alertsSystem = default!;
     [Dependency] private AtmosphereSystem _atmosSys = default!;
-    [Dependency] private BodySystem _body = default!;
+    [Dependency] private Content.Shared.Body.BodySystem _body = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private DamageableSystem _damageableSys = default!;
     [Dependency] private LungSystem _lungSystem = default!;
