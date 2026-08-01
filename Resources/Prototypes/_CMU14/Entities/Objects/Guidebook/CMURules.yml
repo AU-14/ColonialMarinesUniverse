@@ -1,7 +1,7 @@
 - type: guideEntry
   parent: RMC
   id: RMCOverview
-  name: Rules Overview
+  name: cmu-guide-rules-overview
   priority: 0
   text: "/ServerInfo/Guidebook/_RMC14/Rules/RMCOverview.xml"
   children:
@@ -13,21 +13,21 @@
 - type: guideEntry
   parent: RMC
   id: AU14RulesZeroTolerance
-  name: Zero Tolerance Rules
+  name: cmu-guide-rules-zero-tolerance
   priority: 1
   text: "/ServerInfo/Guidebook/_AU14/Rules/AU14ZeroTolerance.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14RulesGeneral
-  name: General Rules
+  name: cmu-guide-rules-general
   priority: 2
   text: "/ServerInfo/Guidebook/_AU14/Rules/AU14GeneralRules.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14RulesRoleplay
-  name: Roleplay Rules
+  name: cmu-guide-rules-roleplay
   priority: 3
   text: "/ServerInfo/Guidebook/_AU14/Rules/AU14RoleplayRules.xml"
   children:
@@ -36,7 +36,7 @@
 - type: guideEntry
   parent: RMC
   id: AU14GamemodeRulesOverview
-  name: Gamemode Rules
+  name: cmu-guide-rules-gamemode
   priority: 4
   text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesOverview.xml"
   children:
@@ -49,14 +49,14 @@
 - type: guideEntry
   parent: RMC
   id: AU14HighRoleplayRoles
-  name: High Roleplay Roles
+  name: cmu-guide-rules-high-roleplay-roles
   priority: 5
   text: "/ServerInfo/Guidebook/_AU14/Rules/AU14HighRoleplayRoles.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14GamemodeRulesInsurgency
-  name: Insurgency Rules
+  name: cmu-guide-rules-insurgency
   priority: 6
   text: "/ServerInfo/Guidebook/_AU14/Rules/Gamemodes/AU14GamemodeRulesInsurgency.xml"
 

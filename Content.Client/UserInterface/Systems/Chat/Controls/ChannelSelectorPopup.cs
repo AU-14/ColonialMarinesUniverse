@@ -16,7 +16,8 @@ public sealed class ChannelSelectorPopup : Popup
         ChatSelectChannel.LOOC,
         ChatSelectChannel.OOC,
         ChatSelectChannel.Dead,
-        ChatSelectChannel.Admin
+        ChatSelectChannel.Admin,
+        ChatSelectChannel.Mentor,
         // NOTE: Console is not in there and it can never be permanently selected.
         // You can, however, still submit commands as console by prefixing with /.
     };
@@ -113,6 +114,7 @@ public sealed class ChannelSelectorPopup : Popup
         Selected?.Invoke(channel);
     }
 
+    [System.Obsolete]
     protected override void Dispose(bool disposing)
     {
         base.Dispose(disposing);

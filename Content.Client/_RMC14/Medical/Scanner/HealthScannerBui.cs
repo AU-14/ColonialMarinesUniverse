@@ -5,7 +5,7 @@ using Robust.Client.UserInterface;
 namespace Content.Client._RMC14.Medical.Scanner;
 
 [UsedImplicitly]
-public sealed class HealthScannerBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
+public sealed partial class HealthScannerBui(EntityUid owner, Enum uiKey) : BoundUserInterface(owner, uiKey)
 {
     [ViewVariables]
     private HealthScannerWindow? _window;
@@ -37,5 +37,6 @@ public sealed class HealthScannerBui(EntityUid owner, Enum uiKey) : BoundUserInt
         }
 
         _scanUiData.PopulateHealthScan(_window, uiState.ScanState);
+        UpdateCmuState(uiState);
     }
 }

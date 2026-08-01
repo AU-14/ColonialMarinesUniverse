@@ -36,6 +36,9 @@ trait-frontal-lisp-desc = You thpeak with a lithp.
 trait-socialanxiety-name = Stutter
 trait-socialanxiety-desc = You speak with a stutter.
 
+trait-socialanxietyheavy-name = Heavy Stutter
+trait-socialanxietyheavy-desc = You speak with a heavy stutter. Your sentences may be cut off.
+
 trait-southern-name = Southern drawl
 trait-southern-desc = You have a different way of speakin'.
 

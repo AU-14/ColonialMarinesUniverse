@@ -12,8 +12,12 @@ role_whitelist = false
 [rmc]
 distress_xenos_minimum = 0  # stop blocking distress testing
 lobby_min_players = 1       # localhost
+planet_map_vote = false
 dropship_hijack_initial_delay_minutes = 1
 dropship_hijack_travel_time_seconds = 5
+
+[vote]
+preset_enabled = false
 
 [events]
 enabled = false
@@ -21,9 +25,6 @@ enabled = false
 [ghost]
 role_time = 0.5
 quick_lottery = true
-
-[gateway]
-generator_enabled = false
 
 [movement]
 mob_pushing = true

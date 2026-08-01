@@ -94,6 +94,7 @@ namespace Content.Client.Lobby.UI
             MarkingManager markings)
         {
             RobustXamlLoader.Load(this);
+            CrtLobbyTheme.Apply(this);
             _sawmill = logManager.GetSawmill("profile.editor");
             _cfgManager = configurationManager;
             _entManager = entManager;
@@ -327,6 +328,7 @@ namespace Content.Client.Lobby.UI
             SpeciesInfoButton.OnPressed += OnSpeciesInfoButtonPressed;
 
             UpdateSpeciesGuidebookIcon();
+            CrtLobbyTheme.Apply(this);
             IsDirty = false;
         }
 
@@ -377,6 +379,7 @@ namespace Content.Client.Lobby.UI
             };
 
             SyntheticContainer.AddChild(selector);
+            CrtLobbyTheme.Apply(SyntheticContainer);
         }
 
         private void SetDirty()

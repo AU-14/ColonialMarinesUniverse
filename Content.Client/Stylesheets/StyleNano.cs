@@ -66,6 +66,7 @@ namespace Content.Client.Stylesheets
         public const string StyleClassChatLineEdit = "chatLineEdit";
         public const string StyleClassChatChannelSelectorButton = "chatSelectorOptionButton";
         public const string StyleClassChatFilterOptionButton = "chatFilterOptionButton";
+        public const string StyleClassChatGhostFollowButton = "chatGhostFollowButton";
         public const string StyleClassStorageButton = "storageButton";
 
         public const string StyleClassConsoleHeading = "ConsoleHeading";
@@ -90,8 +91,12 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtWindow = "CrtWindow";
         public const string StyleClassCrtWindowHeader = "CrtWindowHeader";
         public const string StyleClassCrtWindowTitle = "CrtWindowTitle";
+        public const string StyleClassCrtPanel = "CrtPanel";
+        public const string StyleClassCrtInsetPanel = "CrtInsetPanel";
+        public const string StyleClassCrtQuietPanel = "CrtQuietPanel";
         public const string StyleClassCrtHeaderPanel = "CrtHeaderPanel";
         public const string StyleClassCrtButton = "CrtButton";
+        public const string StyleClassCrtAttentionButton = "CrtAttentionButton";
         public const string StyleClassCrtButtonLabel = "CrtButtonLabel";
         public const string StyleClassCrtNativeButtonLabel = "CrtNativeButtonLabel";
         public const string StyleClassCrtText = "CrtText";
@@ -110,6 +115,24 @@ namespace Content.Client.Stylesheets
         public const string StyleClassCrtScrollBar = "CrtScrollBar";
 
         public static bool CrtUiEnabled { get; set; } = true;
+        public static Color CrtBackground => CrtThemePalette.Background;
+        public static Color CrtPanelBackground => CrtThemePalette.PanelBackground;
+        public static Color CrtPanelBackgroundAlt => CrtThemePalette.PanelBackgroundAlt;
+        public static Color CrtInsetBackground => CrtThemePalette.InsetBackground;
+        public static Color CrtHeaderBackground => CrtThemePalette.HeaderBackground;
+        public static Color CrtButtonBackground => CrtThemePalette.ButtonBackground;
+        public static Color CrtButtonHoverBackground => CrtThemePalette.ButtonHoverBackground;
+        public static Color CrtButtonPressedBackground => CrtThemePalette.ButtonPressedBackground;
+        public static Color CrtButtonDisabledBackground => CrtThemePalette.ButtonDisabledBackground;
+        public static Color CrtSliderForeground => CrtThemePalette.SliderForeground;
+        public static Color CrtProgressForeground => CrtThemePalette.ProgressForeground;
+        public static Color CrtItemBackground => CrtThemePalette.ItemBackground;
+        public static Color CrtItemSelectedBackground => CrtThemePalette.ItemSelectedBackground;
+        public static Color CrtItemDisabledBackground => CrtThemePalette.ItemDisabledBackground;
+        public static Color CrtGreen => CrtThemePalette.Accent;
+        public static Color CrtGreenDim => CrtThemePalette.AccentDim;
+        public static Color CrtGreenSoft => CrtThemePalette.AccentSoft;
+        public static Color CrtGreenDisabled => CrtThemePalette.AccentDisabled;
 
         public const string StyleClassPopupMessageSmall = "PopupMessageSmall";
         public const string StyleClassPopupMessageSmallCaution = "PopupMessageSmallCaution";

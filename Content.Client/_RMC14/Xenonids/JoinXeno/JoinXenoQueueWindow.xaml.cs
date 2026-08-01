@@ -44,7 +44,7 @@ public sealed partial class JoinXenoQueueWindow : DefaultWindow
 
     private void ApplyCrtPalette()
     {
-        Stylesheet = _stylesheetManager.SheetNano;
+        Stylesheet = _stylesheetManager.SheetNanotrasen;
         CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
     }
 }

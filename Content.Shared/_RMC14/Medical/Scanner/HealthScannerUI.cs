@@ -30,6 +30,12 @@ public readonly partial record struct HealthScanState(
 public sealed class HealthScannerBuiState(HealthScanState scanState) : BoundUserInterfaceState
 {
     public readonly HealthScanState ScanState = scanState;
+    public NetEntity Target => ScanState.Target;
+    public FixedPoint2 Blood => ScanState.Blood;
+    public FixedPoint2 MaxBlood => ScanState.MaxBlood;
+    public float? Temperature => ScanState.Temperature;
+    public Solution? Chemicals => ScanState.Chemicals;
+    public bool Bleeding => ScanState.Bleeding;
     public Dictionary<BodyPartType, CMUBodyPartReadout>? CMUParts;
     public List<CMUOrganReadout>? CMUOrgans;
     public List<CMUFractureReadout>? CMUFractures;

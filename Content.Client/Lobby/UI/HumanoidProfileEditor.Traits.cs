@@ -120,5 +120,7 @@ public sealed partial class HumanoidProfileEditor
                 TraitsList.AddChild(selector);
             }
         }
+
+        CrtLobbyTheme.Apply(TraitsList);
     }
 }

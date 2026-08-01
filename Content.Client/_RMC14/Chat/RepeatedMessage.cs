@@ -1,5 +1,6 @@
 ﻿using Content.Shared.Chat;
 using Robust.Shared.Utility;
+using Content.Client.UserInterface.Systems.Chat.Widgets;
 
 namespace Content.Client._RMC14.Chat;
 
@@ -20,4 +21,5 @@ public sealed class RepeatedMessage(
     public readonly string? LanguageIcon = languageIcon;
     public int Count = 1;
     internal LanguageIconTag.LanguageIconControl? IconControl;
+    public ChatMessageRow? Row;
 }

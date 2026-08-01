@@ -2,15 +2,18 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Client.Stylesheets.Stylesheets;
+using Content.Shared.CCVar;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
 using Robust.Shared.Reflection;
+using Robust.Shared.Configuration;
 
 namespace Content.Client.Stylesheets
 {
     public sealed partial class StylesheetManager : IStylesheetManager
     {
         [Dependency] private ILogManager _logManager = default!;
+        [Dependency] private IConfigurationManager _configurationManager = default!;
         [Dependency] private IUserInterfaceManager _userInterfaceManager = default!;
         [Dependency] private IReflectionManager _reflection = default!;
 
@@ -42,6 +45,10 @@ namespace Content.Client.Stylesheets
             sawmill.Debug("Initializing Stylesheets...");
             var sw = Stopwatch.StartNew();
 
+            SetCrtTheme(
+                _configurationManager.GetCVar(CCVars.CrtUiEnabled),
+                _configurationManager.GetCVar(CCVars.CrtUiColor));
+
             // add all sheetlets to the hashset
             var tys = _reflection.FindTypesWithAttribute<CommonSheetletAttribute>();
             UnusedSheetlets = [..tys];
@@ -54,6 +61,9 @@ namespace Content.Client.Stylesheets
 
             _userInterfaceManager.Stylesheet = SheetNanotrasen;
 
+            _configurationManager.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
+            _configurationManager.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+
             // warn about unused sheetlets
             if (UnusedSheetlets.Count > 0)
             {
@@ -65,6 +75,47 @@ namespace Content.Client.Stylesheets
             }
 
             sawmill.Debug($"Initialized {_styleRuleCount} style rules in {sw.Elapsed}");
+        }
+
+        public void PreviewCrtUi(bool enabled, string color)
+        {
+            SetCrtTheme(enabled, color);
+            RefreshStylesheets();
+        }
+
+        public void ResetCrtUiPreview()
+        {
+            SetCrtTheme(
+                _configurationManager.GetCVar(CCVars.CrtUiEnabled),
+                _configurationManager.GetCVar(CCVars.CrtUiColor));
+            RefreshStylesheets();
+        }
+
+        private void OnCrtUiEnabledChanged(bool enabled)
+        {
+            SetCrtTheme(enabled, _configurationManager.GetCVar(CCVars.CrtUiColor));
+            RefreshStylesheets();
+        }
+
+        private void OnCrtUiColorChanged(string color)
+        {
+            SetCrtTheme(_configurationManager.GetCVar(CCVars.CrtUiEnabled), color);
+            RefreshStylesheets();
+        }
+
+        private static void SetCrtTheme(bool enabled, string color)
+        {
+            StyleNano.CrtUiEnabled = enabled;
+            CrtThemePalette.Set(enabled, color);
+        }
+
+        private void RefreshStylesheets()
+        {
+            SheetNanotrasen = new NanotrasenStylesheet(new BaseStylesheet.NoConfig(), this).Stylesheet;
+            SheetSystem = new SystemStylesheet(new BaseStylesheet.NoConfig(), this).Stylesheet;
+            SheetNano = new StyleNano(_resCache).Stylesheet;
+            SheetSpace = new StyleSpace(_resCache).Stylesheet;
+            _userInterfaceManager.Stylesheet = SheetNanotrasen;
         }
 
         private int _styleRuleCount;

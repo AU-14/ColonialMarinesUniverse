@@ -50,6 +50,90 @@
 #   - CMUJobOPFORDroneOperator
 #   - AU14JobOPFORWeaponsSpecialist
 
+- type: antagSpecifier
+  abstract: true
+  parent: BaseAntagSpecifier
+  id: CMUColonyAntag
+  jobBlacklist:
+  - AU14JobGOVFORPlatCo
+  - AU14JobGOVFORPlatoonCorpsman
+  - AU14JobGOVFORNurse
+  - AU14JobGOVFORDCC
+  - AU14JobGOVFORPlatOp
+  - AU14JobGOVFORDSPilot
+  - AU14JobGOVFORRadioTelephoneOperator
+  - AU14JobGOVFORRadioTrafficOperator
+  - AU14JobGOVFORSquadSergeant
+  - AU14JobGOVFORSquadAutomaticRifleman
+  - AU14JobGOVFORSquadCombatTech
+  - AU14JobGOVFOREngineeringTech
+  - AU14JobGOVFORSquadRifleman
+  - AU14JobGOVFORAuxSupportSynth
+  - AU14JobGOVFORadvisor
+  - AU14JobGOVFORMilitaryDoctor
+  - AU14JobGOVFORMilitaryPoliceMan
+  - AU14JobGOVFORSectionSergeant
+  - AU14JobGOVFORAuxTech
+  - AU14JobGOVFORWorkingJoe
+  - AU14JobGOVFORWeaponsSpecialist
+  - AU14JobGOVFORVehicleCrewman
+  - AU14JobGOVFORVehicleCommander
+  - CMUJobGOVFORDroneOperator
+  - AU14JobOPFORPlatCo
+  - AU14JobOPFORPlatoonCorpsman
+  - AU14JobOPFORDCC
+  - AU14JobOPFORPlatOp
+  - AU14JobOPFORDSPilot
+  - AU14JobOPFORRadioTelephoneOperator
+  - AU14JobOPFORSquadSergeant
+  - AU14JobOPFORSquadAutomaticRifleman
+  - AU14JobOPFORSquadCombatTech
+  - AU14JobOPFORSquadRifleman
+  - AU14JobOPFORAuxSupportSynth
+  - AU14JobOPFORadvisor
+  - AU14JobOPFORMilitaryDoctor
+  - AU14JobOPFORMilitaryPoliceMan
+  - AU14JobOPFORSectionSergeant
+  - AU14JobOPFORAuxTech
+  - AU14JobOPFORWorkingJoe
+  - AU14JobOPFORVehicleCrewman
+
+- type: antagSpecifier
+  parent: CMUColonyAntag
+  id: RunawaySynth
+  prefRoles: [ RunawaySynthRole ]
+  briefing:
+    text: runawaysynth-role-greeting
+    color: CornflowerBlue
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: RunawaySynth
+  - type: Synth
+    changeBrain: false
+    canUseGuns: true
+    hideGeneration: true
+    useHumanHealthIcons: true
+  - type: Skills
+    skills:
+      RMCSkillCqc: 4
+      RMCSkillEngineer: 4
+      RMCSkillConstruction: 3
+      RMCSkillOverwatch: 1
+      RMCSkillMedical: 4
+      RMCSkillSurgery: 3
+      RMCSkillResearch: 1
+      RMCSkillMeleeWeapons: 2
+      RMCSkillPilot: 2
+      RMCSkillPolice: 2
+      RMCSkillFireman: 5
+      RMCSkillFirearms: 2
+      RMCSkillPowerLoader: 2
+      RMCSkillVehicles: 2
+      RMCSkillJtac: 3
+      RMCSkillIntel: 2
+      RMCSkillDomestics: 2
+      RMCSkillNavigations: 1
+
 - type: entity
   id: RunawaySynth
   parent: BaseGameRule
@@ -57,47 +141,12 @@
   - type: GameRule
   - type: RunawaySynthRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
-    definitions:
-    - prefRoles: [ RunawaySynthRole ]
-      max: 1
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: RunawaySynth
       playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: runawaysynth-role-greeting
-        color: CornflowerBlue
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      components:
-      - type: RunawaySynth
-      - type: Synth
-        changeBrain: false
-        canUseGuns: true
-        hideGeneration: true
-        useHumanHealthIcons: true
-      - type: Skills
-        skills:
-          RMCSkillCqc: 4
-          RMCSkillEngineer: 4
-          RMCSkillConstruction: 3
-          RMCSkillOverwatch: 1
-          RMCSkillMedical: 4
-          RMCSkillSurgery: 3
-          RMCSkillResearch: 1
-          RMCSkillMeleeWeapons: 2
-          RMCSkillPilot: 2
-          RMCSkillPolice: 2
-          RMCSkillFireman: 5
-          RMCSkillFirearms: 2
-          RMCSkillPowerLoader: 2
-          RMCSkillVehicles: 2
-          RMCSkillJtac: 3
-          RMCSkillIntel: 2
-          RMCSkillDomestics: 2
-          RMCSkillNavigations: 1
-#     mindRoles:
-#     - MindRoleRunawaySynth
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -119,15 +168,21 @@
   isCM: true
 
 ## CLF subverted synth
+- type: antagSpecifier
+  parent: BaseAntagSpecifier
+  id: SubvertedSynth
+  prefRoles: [ CLFSubvertedSynthRole ]
+
 - type: entity
   id: SubvertedSynth
   parent: BaseGameRule
   components:
   - type: SubvertedSynthRule
   - type: AntagSelection
-    selectionTime: PostPlayerSpawn
-    definitions:
-    - prefRoles: [ CLFSubvertedSynthRole ]
+    selectionTime: RuleStarted
+    antags:
+    - !type:FixedAntagCount
+      proto: SubvertedSynth
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -253,6 +308,20 @@
   isCM: true
 
 ## fugitive
+- type: antagSpecifier
+  parent: CMUColonyAntag
+  id: Fugitive
+  prefRoles: [ FugitiveRole ]
+  briefing:
+    text: fugitive-role-greeting
+    color: CornflowerBlue
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearFugitive
+  components:
+  - type: Fugitive
+  mindRoles:
+  - MindRoleFugitive
+
 - type: entity
   id: Fugitive
   parent: BaseGameRule
@@ -260,23 +329,12 @@
   - type: GameRule
   - type: FugitiveRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
-    definitions:
-    - prefRoles: [ FugitiveRole ]
-      max: 1
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: Fugitive
       playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: fugitive-role-greeting
-        color: CornflowerBlue
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      components:
-      - type: Fugitive
-      mindRoles:
-      - MindRoleFugitive
-      startingGear: AU14GearFugitive
+      range: { min: 1, max: 1 }
 
 - type: startingGear
   id: AU14GearFugitive
@@ -321,6 +379,20 @@
   isCM: true
 
 ## Druggo
+- type: antagSpecifier
+  parent: CMUColonyAntag
+  id: DrugDealer
+  prefRoles: [ DrugDealerRole ]
+  briefing:
+    text: dealer-role-greeting
+    color: MediumVioletRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearDrugDealer
+  components:
+  - type: DrugDealer
+  mindRoles:
+  - MindRoleDrugDealer
+
 - type: entity
   id: DrugDealer
   parent: BaseGameRule
@@ -328,23 +400,12 @@
   - type: GameRule
   - type: DrugDealerRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
-    definitions:
-    - prefRoles: [ DrugDealerRole ]
-      max: 1
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: DrugDealer
       playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: dealer-role-greeting
-        color: MediumVioletRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: AU14GearDrugDealer
-      components:
-      - type: DrugDealer
-      mindRoles:
-      - MindRoleDrugDealer
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -390,29 +451,32 @@
       amount: 2
 
 ## Spy
+- type: antagSpecifier
+  parent: CMUColonyAntag
+  id: CorporateSpy
+  prefRoles: [ CorporateSpyRole ]
+  briefing:
+    text: spy-role-greeting
+    color: DarkSlateGray
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearCorporateSpy
+  components:
+  - type: CorporateSpy
+  mindRoles:
+  - MindRoleCorporateSpy
+
 - type: entity
   id: CorporateSpy
   parent: BaseGameRule
   components:
   - type: GameRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
-    definitions:
-    - prefRoles: [ CorporateSpyRole ]
-      max: 1
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: CorporateSpy
       playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: spy-role-greeting
-        color: DarkSlateGray
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: AU14GearCorporateSpy
-      components:
-      - type: CorporateSpy
-      mindRoles:
-      - MindRoleCorporateSpy
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -439,6 +503,39 @@
     pocket1: AU14IDCardCorporateSpy
 
 ## CLF Veteran
+- type: antagSpecifier
+  parent: CMUColonyAntag
+  id: CLFVeteran
+  prefRoles: [ CLFVeteranRole ]
+  jobBlacklist:
+  - AU14JobCLFGuerilla
+  - AU14JobCLFSapper
+  - AU14JobCLFCellLeader
+  - AU14JobCLFRadioOperator
+  - AU14JobCLFPhysician
+  - AU14JobCLFSurgeon
+  briefing:
+    text: clfveteran-role-greeting
+    color: OliveDrab
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearCLFVeteran
+  components:
+  - type: CLFVeteran
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 3
+      RMCSkillMeleeWeapons: 3
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFireman: 3
+      RMCSkillConstruction: 3
+      RMCSkillLeadership: 3
+      RMCSkillMedical: 3
+      RMCSkillPolice: 1
+      RMCSkillSurgery: 3
+  mindRoles:
+  - MindRoleCLFVeteran
+
 - type: entity
   id: CLFVeteran
   parent: BaseGameRule
@@ -446,42 +543,12 @@
   - type: GameRule
   - type: CLFVeteranRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
-    definitions:
-    - prefRoles: [ CLFVeteranRole ]
-      max: 1
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: CLFVeteran
       playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      jobBlacklist:
-      - AU14JobCLFGuerilla
-      - AU14JobCLFSapper
-      - AU14JobCLFCellLeader
-      - AU14JobCLFRadioOperator
-      - AU14JobCLFPhysician
-      - AU14JobCLFSurgeon
-      briefing:
-        text: clfveteran-role-greeting
-        color: OliveDrab
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: AU14GearCLFVeteran
-      components:
-      - type: CLFVeteran
-      - type: Skills
-        skills:
-          RMCSkillFirearms: 3
-          RMCSkillMeleeWeapons: 3
-          RMCSkillCqc: 3
-          RMCSkillEndurance: 3
-          RMCSkillFireman: 3
-          RMCSkillConstruction: 3
-          RMCSkillLeadership: 3
-          RMCSkillMedical: 3
-          RMCSkillPolice: 1
-          RMCSkillSurgery: 3
-      mindRoles:
-      - MindRoleCLFVeteran
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -508,6 +575,20 @@
     suitstorage: AU14WeaponRevolverM44Inscribed
 
 ## Strike Organizer
+- type: antagSpecifier
+  parent: CMUColonyAntag
+  id: StrikeOrganizer
+  prefRoles: [ StrikeOrganizerRole ]
+  briefing:
+    text: strikeorganizer-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearStrikeOrganizer
+  components:
+  - type: StrikeOrganizer
+  mindRoles:
+  - MindRoleStrikeOrganizer
+
 - type: entity
   id: StrikeOrganizer
   parent: BaseGameRule
@@ -515,23 +596,12 @@
   - type: GameRule
   - type: StrikeOrganizerRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
-    definitions:
-    - prefRoles: [ StrikeOrganizerRole ]
-      max: 1
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: StrikeOrganizer
       playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: strikeorganizer-role-greeting
-        color: DarkRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: AU14GearStrikeOrganizer
-      components:
-      - type: StrikeOrganizer
-      mindRoles:
-      - MindRoleStrikeOrganizer
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -570,6 +640,21 @@
       amount: 2
 
 ## Cannibal
+- type: antagSpecifier
+  parent: BaseAntagSpecifier
+  id: Cannibal
+  prefRoles: [ CannibalRole ]
+  jobWhitelist:
+  - AU14JobCivilianFoodServiceWorker
+  briefing:
+    text: cannibal-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: Cannibal
+  mindRoles:
+  - MindRoleCannibal
+
 - type: entity
   id: Cannibal
   parent: BaseGameRule
@@ -577,21 +662,12 @@
   - type: GameRule
   - type: CannibalRule
   - type: AntagSelection
-    selectionTime: PostPlayerSpawn
-    definitions:
-    - prefRoles: [ CannibalRole ]
-      max: 1
+    selectionTime: RuleStarted
+    antags:
+    - !type:LinearAntagCount
+      proto: Cannibal
       playerRatio: 15
-      jobWhitelist:
-      - AU14JobCivilianFoodServiceWorker
-      briefing:
-        text: cannibal-role-greeting
-        color: DarkRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      components:
-      - type: Cannibal
-      mindRoles:
-      - MindRoleCannibal
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -613,6 +689,19 @@
   isCM: true
 
 ## Serial Killer
+- type: antagSpecifier
+  parent: CMUColonyAntag
+  id: SerialKiller
+  prefRoles: [ SerialKillerRole ]
+  briefing:
+    text: serialkiller-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: SerialKiller
+  mindRoles:
+  - MindRoleSerialKiller
+
 - type: entity
   id: SerialKiller
   parent: BaseGameRule
@@ -620,22 +709,12 @@
   - type: GameRule
   - type: SerialKillerRule
   - type: AntagSelection
-    selectionTime: IntraPlayerSpawn
-    definitions:
-    - prefRoles: [ SerialKillerRole ]
-      max: 1
+    selectionTime: JobsAssigned
+    antags:
+    - !type:LinearAntagCount
+      proto: SerialKiller
       playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: serialkiller-role-greeting
-        color: DarkRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      components:
-      - type: SerialKiller
-      mindRoles:
-      - MindRoleSerialKiller
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag
@@ -657,6 +736,24 @@
   isCM: true
 
 ## CLF Sleeper Agent
+- type: antagSpecifier
+  parent: BaseAntagSpecifier
+  id: CLFSleeperAgent
+  prefRoles: [ CLFSleeperAgentRole ]
+  jobWhitelist:
+  - AU14JobGOVFORSquadSergeant
+  - AU14JobGOVFORSectionSergeant
+  - AU14JobGOVFORPlatOp
+  - AU14JobGOVFORMilitaryPoliceMan
+  briefing:
+    text: clf-sleeper-agent-role-greeting
+    color: OliveDrab
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: CLFSleeperAgent
+  mindRoles:
+  - MindRoleCLFSleeperAgent
+
 - type: entity
   id: CLFSleeperAgent
   parent: BaseGameRule
@@ -664,24 +761,12 @@
   - type: GameRule
   - type: CLFSleeperAgentRule
   - type: AntagSelection
-    selectionTime: PostPlayerSpawn
-    definitions:
-    - prefRoles: [ CLFSleeperAgentRole ]
-      max: 1
+    selectionTime: RuleStarted
+    antags:
+    - !type:LinearAntagCount
+      proto: CLFSleeperAgent
       playerRatio: 20
-      jobWhitelist:
-      - AU14JobGOVFORSquadSergeant
-      - AU14JobGOVFORSectionSergeant
-      - AU14JobGOVFORPlatOp
-      - AU14JobGOVFORMilitaryPoliceMan
-      briefing:
-        text: clf-sleeper-agent-role-greeting
-        color: OliveDrab
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      components:
-      - type: CLFSleeperAgent
-      mindRoles:
-      - MindRoleCLFSleeperAgent
+      range: { min: 1, max: 1 }
 
 - type: entity
   parent: BaseMindRoleAntag

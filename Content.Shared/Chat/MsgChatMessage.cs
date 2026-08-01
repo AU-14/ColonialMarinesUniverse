@@ -55,6 +55,8 @@ namespace Content.Shared.Chat
 
         public NetEntity GhostFollowEntity;
 
+        public NetEntity XenoWatchEntity;
+
         /// <summary>
         ///     Identifier sent when <see cref="SenderEntity"/> is <see cref="NetEntity.Invalid"/>
         ///     if this was sent by a player to assign a key to the sender of this message.
@@ -76,7 +78,7 @@ namespace Content.Shared.Chat
         [NonSerialized]
         public bool Read;
 
-        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, bool repeatCheckSender = true, ChatDisplayMetadata? display = null, NetEntity ghostFollowEntity = default)
+        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, bool repeatCheckSender = true, ChatDisplayMetadata? display = null, NetEntity ghostFollowEntity = default, NetEntity xenoWatchEntity = default)
         {
             Channel = channel;
             Message = message;
@@ -90,6 +92,7 @@ namespace Content.Shared.Chat
             RepeatCheckSender = repeatCheckSender;
             Display = display;
             GhostFollowEntity = ghostFollowEntity;
+            XenoWatchEntity = xenoWatchEntity;
         }
 
         public ChatMessage(ChatMessage copyFrom)
@@ -110,6 +113,7 @@ namespace Content.Shared.Chat
             SpeechStyleClass = copyFrom.SpeechStyleClass;
             LanguageIcon = copyFrom.LanguageIcon;
             GhostFollowEntity = copyFrom.GhostFollowEntity;
+            XenoWatchEntity = copyFrom.XenoWatchEntity;
             Read = copyFrom.Read;
         }
     }

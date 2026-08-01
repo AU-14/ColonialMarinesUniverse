@@ -25,6 +25,10 @@ public interface IStylesheetManager
 
     void Initialize();
 
+    void PreviewCrtUi(bool enabled, string color);
+
+    void ResetCrtUiPreview();
+
     ///
     /// Sheetlets marked with CommonSheetlet that have not satisfied the type constraints of any stylesheet
     ///

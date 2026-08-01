@@ -107,6 +107,9 @@ public sealed partial class LanguageLearningSystem : SharedLanguageLearningSyste
             if (_mobState.IsDead(potentialLearner))
                 continue;
 
+            if (HasComp<NoLanguageLearningComponent>(potentialLearner))
+                continue;
+
             if (!TryComp<LanguageLearningComponent>(potentialLearner, out var learnerComp))
                 continue;
 

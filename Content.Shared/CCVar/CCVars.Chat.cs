@@ -83,4 +83,19 @@ public sealed partial class CCVars
     /// </summary>
     public static readonly CVarDef<string> ChatHighlightsColor =
         CVarDef.Create("chat.highlights_color", "#17FFC1FF", CVar.CLIENTONLY | CVar.ARCHIVE, "The color in which the highlights will be displayed.");
+
+    public static readonly CVarDef<string> ChatTabs =
+        CVarDef.Create("chat.tabs", "", CVar.CLIENTONLY | CVar.ARCHIVE, "Client-side chat tab definitions.");
+
+    public static readonly CVarDef<string> ChatChannelStyles =
+        CVarDef.Create("chat.channel_styles", "", CVar.CLIENTONLY | CVar.ARCHIVE, "Client-side chat channel font and color overrides.");
+
+    public static readonly CVarDef<string> ChatSplitPane =
+        CVarDef.Create("chat.split_pane", "", CVar.CLIENTONLY | CVar.ARCHIVE, "Client-side split chat pane state.");
+
+    public static readonly CVarDef<bool> ChatLegacyMode =
+        CVarDef.Create("chat.legacy_mode", false, CVar.CLIENTONLY | CVar.ARCHIVE, "Use the legacy chat presentation.");
+
+    public static readonly CVarDef<bool> ChatColorWholeMessage =
+        CVarDef.Create("chat.color_whole_message", true, CVar.CLIENTONLY | CVar.ARCHIVE, "Color the full text of each structured chat row.");
 }

@@ -15,13 +15,12 @@ namespace Content.Client.UserInterface.Systems.Chat;
 public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSystem>
 {
     [Dependency] private ILocalizationManager _loc = default!;
-    [UISystemDependency] private readonly CharacterInfoSystem _characterInfo = default!;
-
-    private string _chatSpeechDoubleQuoteBegin = default!;
+    [UISystemDependency] private CharacterInfoSystem _characterInfo = default!;
 
     private static readonly Regex StartDoubleQuote = new("\"$");
     private static readonly Regex EndDoubleQuote = new("^\"|(?<=^@)\"");
     private static readonly Regex StartAtSign = new("^@");
+    private const string AfterSpeakerHighlightContext = "(?<=(?<=/name.*)|(?<=/bold.*\".*)|(?<=,.*\"\".*))";
 
     /// <summary>
     ///     The list of words to be highlighted in the chatbox.
@@ -55,8 +54,6 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         {
             UpdateHighlights(highlights, true);
         }
-
-        _chatSpeechDoubleQuoteBegin = _loc.GetString("chat-manager-speech-double-quote-begin");
     }
 
     public void OnSystemLoaded(CharacterInfoSystem system)
@@ -120,10 +117,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
                 keyword = EndDoubleQuote.Replace(keyword, "(?<!\\w)");
             }
 
-            // Make sure the character's name is highlighted only when mentioned directly (eg. it's said by someone),
-            // for example in 'Name Surname says, "..."' 'Name Surname' won't be highlighted.
-            keyword = StartAtSign.Replace(keyword,
-                $"(?<=(?<=^.?OOC:.*:.*)|(?<=,.*{_chatSpeechDoubleQuoteBegin}.*)|(?<=\\n.*)|(?<=:.*))");
+            // Make sure any name tagged as ours gets highlighted only when others say it.
+            keyword = StartAtSign.Replace(keyword, AfterSpeakerHighlightContext);
 
             _highlights.Add(keyword);
         }

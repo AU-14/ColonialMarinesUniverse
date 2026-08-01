@@ -19,6 +19,8 @@ public sealed partial class LanguageSystem : SharedLanguageSystem
         base.Initialize();
 
         SubscribeLocalEvent<LanguageComponent, MapInitEvent>(OnInitLanguageSpeaker);
+        SubscribeLocalEvent<RemoveLanguageComponent, ComponentStartup>(OnRemoveLanguageStartup);
+        SubscribeLocalEvent<RemoveLanguageComponent, DetermineEntityLanguagesEvent>(OnRemoveLanguages);
         SubscribeLocalEvent<RoundStartingEvent>(OnRoundStarting);
         SubscribeNetworkEvent<LanguagesSetMessage>(OnClientSetLanguage);
     }
@@ -56,6 +58,38 @@ public sealed partial class LanguageSystem : SharedLanguageSystem
             return;
 
         SetLanguage(uid, message.CurrentLanguage);
+    }
+
+    private void OnRemoveLanguages(Entity<RemoveLanguageComponent> ent, ref DetermineEntityLanguagesEvent args)
+    {
+        foreach (var language in ent.Comp.Languages)
+        {
+            if (ent.Comp.RemoveSpoken && args.SpokenLanguages.Count > 1)
+                args.SpokenLanguages.Remove(language);
+
+            if (ent.Comp.RemoveUnderstood && args.UnderstoodLanguages.Count > 1)
+                args.UnderstoodLanguages.Remove(language);
+        }
+    }
+
+    private void OnRemoveLanguageStartup(Entity<RemoveLanguageComponent> ent, ref ComponentStartup args)
+    {
+        if (!TryComp<LanguageComponent>(ent, out var language))
+            return;
+
+        foreach (var removed in ent.Comp.Languages)
+        {
+            if (ent.Comp.RemoveSpoken)
+                language.SpokenLanguages.Remove(removed);
+
+            if (ent.Comp.RemoveUnderstood)
+                language.UnderstoodLanguages.Remove(removed);
+
+            if (ent.Comp.ClearCurrentLanguage && language.CurrentLanguage == removed)
+                language.CurrentLanguage = null;
+        }
+
+        UpdateEntityLanguages(ent.Owner);
     }
 
     public void SetLanguage(Entity<LanguageComponent?> ent, ProtoId<LanguagePrototype> language)
@@ -110,17 +144,20 @@ public sealed partial class LanguageSystem : SharedLanguageSystem
         if (!Resolve(ent, ref ent.Comp, false))
             return false;
 
-        if (ent.Comp.CurrentLanguage == null ||
-            !ent.Comp.SpokenLanguages.Contains(ent.Comp.CurrentLanguage.Value))
-        {
-            ent.Comp.CurrentLanguage = ent.Comp.DefaultLanguage ?? ent.Comp.SpokenLanguages.FirstOrDefault();
-            var update = new LanguagesUpdateEvent();
-            RaiseLocalEvent(ent, ref update);
-            Dirty(ent);
-            return true;
-        }
+        ProtoId<LanguagePrototype>? target = null;
+        if (ent.Comp.SpokenLanguages.Count > 0)
+            target = ent.Comp.DefaultLanguage != null && ent.Comp.SpokenLanguages.Contains(ent.Comp.DefaultLanguage.Value)
+                ? ent.Comp.DefaultLanguage.Value
+                : ent.Comp.SpokenLanguages.First();
 
-        return false;
+        if (ent.Comp.CurrentLanguage == target)
+            return false;
+
+        ent.Comp.CurrentLanguage = target;
+        var update = new LanguagesUpdateEvent();
+        RaiseLocalEvent(ent, ref update);
+        Dirty(ent);
+        return true;
     }
 
     public void UpdateEntityLanguages(Entity<LanguageComponent?> ent)

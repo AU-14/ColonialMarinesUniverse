@@ -106,6 +106,7 @@ public sealed partial class HumanoidProfileEditor
             return;
 
         UpdateJobPriorities();
+        CrtLobbyTheme.Apply(JobList);
     }
 
     /// <summary>
@@ -297,6 +298,7 @@ public sealed partial class HumanoidProfileEditor
         }
 
         UpdateJobPriorities();
+        CrtLobbyTheme.Apply(JobList);
     }
 
     public void RefreshAntags()
@@ -361,5 +363,7 @@ public sealed partial class HumanoidProfileEditor
 
             AntagList.AddChild(antagContainer);
         }
+
+        CrtLobbyTheme.Apply(AntagList);
     }
 }
