@@ -1,6 +1,5 @@
 using Content.Shared._RMC14.Vendors;
-using Content.Shared.AU14.Objectives;
-using Content.Server.AU14.Objectives;
+using Content.Server._CMU14.Round.Objectives;
 using Robust.Server.GameObjects;
 
 namespace Content.Server._RMC14.Vendors;
@@ -8,7 +7,7 @@ namespace Content.Server._RMC14.Vendors;
 public sealed partial class CMAutomatedVendorSystem : SharedCMAutomatedVendorSystem
 {
     [Dependency] private UserInterfaceSystem _ui = default!;
-    [Dependency] private AuObjectiveSystem _objectiveSystem = default!;
+    [Dependency] private ObjectiveControlSystem _objectiveSystem = default!;
 
     public override void Initialize()
     {

@@ -32,9 +32,65 @@
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
-    rotationSpeed: 60
+    rotationSpeed: 80
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
+    overlayState: tank_turret_0
+    overlayDamagedState: tank_turret_1
+    useDirectionalOffsets: false
+    pixelOffsetNorth: "0,-10"
+    pixelOffsetEast: "-10,0"
+    pixelOffsetSouth: "0,10"
+    pixelOffsetWest: "10,0"
+  - type: ItemSlots
+    slots:
+      turret-cannon:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      turret-launcher:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+  - type: HardpointSlots
+    vehicleFamily: Tank
+    slots:
+    - id: turret-cannon
+      hardpointType: Cannon
+      slotType: Cannon
+      required: false
+      insertDelay: 2.0
+    - id: turret-launcher
+      hardpointType: Launcher
+      slotType: Launcher
+      required: false
+      insertDelay: 2.0
+
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankTurretTWE
+  name: Improper TBA3 'Vandeleur' Turret
+  description: The TBA3 'Vandeleur' Turret, developed by Weyland Yutani as part of the 'B' upgrade package for the FV150 'Hobelar' Light Cavalry Tank. The Vandeleur is a direct evolution of the original FV150-A turret, with improvements to the internal systems and modularity. It can mount a wide array of weapon systems both quickly and easily, and features an inbuilt flare deployment system.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    state: tank_turret_0
+  - type: HardpointItem
+    hardpointType: Turret
+    vehicleFamily: Tank
+    slotType: Turret
+    damageMultiplier: 0.05
+    repairRate: 0.008
+  - type: HardpointIntegrity
+    maxIntegrity: 450
+  - type: VehicleTurret
+    rotateToCursor: true
+    stabilizedRotation: false
+    rotationSpeed: 95
+    showOverlay: true
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
     overlayState: tank_turret_0
     overlayDamagedState: tank_turret_1
     useDirectionalOffsets: false
@@ -88,7 +144,7 @@
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
-    rotationSpeed: 60
+    rotationSpeed: 80
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/wytank.rsi
     overlayState: tank_turret_0
@@ -131,6 +187,28 @@
   description: Heavy duty tank treads.
   components:
   - type: Sprite
+    state: treads
+  - type: HardpointItem
+    hardpointType: Wheel
+    vehicleFamily: Tank
+    slotType: Treads
+    damageMultiplier: 0.15
+    repairRate: 0.0165
+  - type: HardpointIntegrity
+    maxIntegrity: 300
+  - type: VehicleWheelItem
+  - type: RemoveComponents
+    components:
+    - type: PowerLoaderGrabbable
+
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankTreadsTWE
+  name: tank treads
+  description: Heavy duty tank treads.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
     state: treads
   - type: HardpointItem
     hardpointType: Wheel

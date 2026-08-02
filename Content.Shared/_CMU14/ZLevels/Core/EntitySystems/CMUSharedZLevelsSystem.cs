@@ -22,7 +22,7 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     /// <summary>
     /// World-space sprite displacement used when projecting adjacent z-levels into the active view.
     /// </summary>
-    public const float ZLevelVisualOffset = 0.7f;
+    public const float ZLevelVisualOffset = 0.75f;
 
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private INetManager _net = default!;

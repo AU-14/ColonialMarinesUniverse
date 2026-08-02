@@ -1,0 +1,11 @@
+# field-built comms structures, raised from metal by engineering-trained personnel
+- type: rmcConstruction
+  id: AU14CommsMastFieldBuild
+  name: field antenna mast
+  prototype: AU14CommsMastField
+  noRotate: true
+  doAfterTime: 8
+  doAfterTimeMin: 4
+  materialCost: 10
+  skill: RMCSkillEngineer
+  requiredSkillLevel: 2

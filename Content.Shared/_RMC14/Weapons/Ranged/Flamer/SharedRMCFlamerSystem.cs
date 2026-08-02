@@ -627,32 +627,30 @@ public abstract partial class SharedRMCFlamerSystem : EntitySystem
                 continue;
             }
 
-            foreach (var tile in comp.Tiles)
+            for (var i = comp.Tiles.Count - 1; i >= 0; i--)
             {
-                if (time >= tile.At)
-                {
-                    comp.Tiles.Remove(tile);
-                    if (!_zLevels.TryProjectToGround(_transform.ToCoordinates(tile.Coordinates), out var fireCoordinates))
-                        continue;
+                var tile = comp.Tiles[i];
+                if (time < tile.At)
+                    continue;
 
-                    var fire = Spawn(comp.Spawn, fireCoordinates);
+                comp.Tiles.RemoveAt(i);
+                if (!_zLevels.TryProjectToGround(_transform.ToCoordinates(tile.Coordinates), out var fireCoordinates))
+                    continue;
 
-                    // check for any fires on the same tile other than the one we just spawned, and delete them
-                    if (_rmcMap.HasAnchoredEntityEnumerator<TileFireComponent>(fireCoordinates, out var oldTileFire)
+                var fire = Spawn(comp.Spawn, fireCoordinates);
+
+                // check for any fires on the same tile other than the one we just spawned, and delete them
+                if (_rmcMap.HasAnchoredEntityEnumerator<TileFireComponent>(fireCoordinates, out var oldTileFire)
                         && oldTileFire.Owner.Id != fire.Id)
-                    {
-                        QueueDel(oldTileFire);
-                    }
+                    QueueDel(oldTileFire);
 
-                    if (_reagent.TryIndex(comp.Reagent, out var reagent))
-                    {
-                        var intensity = Math.Min(comp.MaxIntensity, reagent.Intensity);
-                        var duration = Math.Min(comp.MaxDuration, reagent.Duration);
-                        _rmcFlammable.SetIntensityDuration(fire, intensity, duration);
-                    }
-
-                    break;
+                if (_reagent.TryIndex(comp.Reagent, out var reagent))
+                {
+                    var intensity = Math.Min(comp.MaxIntensity, reagent.Intensity);
+                    var duration = Math.Min(comp.MaxDuration, reagent.Duration);
+                    _rmcFlammable.SetIntensityDuration(fire, intensity, duration);
                 }
+                break;
             }
         }
     }

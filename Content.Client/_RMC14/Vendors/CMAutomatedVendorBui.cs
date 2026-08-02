@@ -368,6 +368,24 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                 uiEntry.Amount.Modulate = disabled ? Color.Red : Color.White;
                 uiEntry.Panel.Button.Disabled = disabled;
 
+                // Stock line: how many are left to buy at all (an infinity symbol when the entry has no
+                // stock cap).
+                //
+                // Entries without a points cost already print that same remaining count in the Amount
+                // column above, so our "x5" would just repeat the number next to itself. Hide it in that
+                // case - Visible (not an empty string) so the label surrenders its MinWidth instead of
+                // leaving a blank gap in the row.
+                var amountAlreadyShowsStock = entry.Points == null && entry.Amount != null;
+                uiEntry.Stock.Visible = !amountAlreadyShowsStock;
+
+                if (!amountAlreadyShowsStock)
+                {
+                    uiEntry.Stock.Text = entry.Amount is { } stockLeft
+                        ? Loc.GetString("rmc-vending-stock-remaining", ("count", stockLeft))
+                        : Loc.GetString("rmc-vending-stock-infinite");
+                    uiEntry.Stock.Modulate = disabled ? Color.Red : Color.White;
+                }
+
                 if (!string.IsNullOrWhiteSpace(uiEntry.Amount.Text))
                     anyAmount = true;
             }

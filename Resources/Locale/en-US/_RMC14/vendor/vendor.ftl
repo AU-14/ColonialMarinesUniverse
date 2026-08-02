@@ -7,5 +7,9 @@ rmc-vending-machine-hack-no-skill = You do not understand how to tweak the acces
 rmc-vending-machine-hack-start = You start tweaking access restrictions in {THE($vendor)}
 rmc-vending-machine-hack-finish-remove = You have successfully removed access restrictions in {THE($vendor)}
 rmc-vending-machine-hack-finish-restore = You have restored access restrictions in {THE($vendor)}
+# Stock line shown on each vendor item. "remaining" is the total left to buy, "infinite" when uncapped.
+rmc-vending-stock-remaining = x{$count}
+rmc-vending-stock-infinite = ∞
+
 rmc-vendor-points-token-redeem = You insert {THE($token)} into {THE($vendor)}. {$points} points are added to your account.
 rmc-vendor-points-token-wrong-vendor = {CAPITALIZE(THE($token))} does not fit into {THE($vendor)}.

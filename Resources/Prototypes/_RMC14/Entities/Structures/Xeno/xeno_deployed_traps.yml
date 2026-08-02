@@ -3,6 +3,11 @@
   name: xeno trap
   description: A resin trap laid by a Trapper.
   components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
   - type: DeployTrapsBlocker
   - type: Transform
     anchored: true

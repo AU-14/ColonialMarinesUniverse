@@ -1,8 +1,8 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicCrush
-  name: Psychic Crush
-  description: Channel psychic pressure at a location, then crush enemies in the expanding area.
+  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl. A loc entry
+  # overrides the prototype's name/description, so keeping text here as well would be dead.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -13,28 +13,37 @@
       sprite: _CMU14/Actions/Xeno/warlock.rsi
       state: psy_crush_activate
     useDelay: 0.25
+  # SharedActionsSystem gate is intentionally looser than the ability's true range so a click
+  # anywhere on a tile the range overlay highlights (6-tile closest-point-of-tile check) reaches
+  # the handler. The handler snaps to the tile centre and enforces the real 6-tile initiation
+  # range via CMUXenoWarlockComponent.PsychicCrushInitRange. Worst-case click distance on a
+  # highlighted boundary tile is 6 + tile diagonal ≈ 7.41, rounded up to 8.
   - type: TargetAction
-    range: 7
+    range: 8
     checkCanAccess: true
   - type: WorldTargetAction
     event: !type:CMUXenoPsychicCrushActionEvent
+  # Marker used by SetPsychicCrushActionMode to swap the crush action between WorldTargetAction
+  # (idle / windup) and InstantAction (channeling, early-detonate on next press). See
+  # CMUXenoWarlockSystem.SetPsychicCrushActionMode for the swap logic.
+  - type: CMUXenoPsychicCrushActionMarker
   - type: ActionBlockIfResting
   - type: RMCDazeableAction
 
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicBlast
-  name: Psychic Blast
-  description: Detonate psychic force at a location, damaging and slowing nearby enemies.
+  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem
     icon:
       sprite: _CMU14/Actions/Xeno/warlock.rsi
       state: psy_blast
-    useDelay: 8
+    useDelay: 10
+  # See CMUActionXenoPsychicCrush above for why the gate range exceeds the true 6-tile range.
   - type: TargetAction
-    range: 7
+    range: 8
     checkCanAccess: false
   - type: WorldTargetAction
     event: !type:CMUXenoPsychicBlastActionEvent
@@ -44,8 +53,7 @@
 - type: entity
   parent: ActionXenoBase
   id: CMUActionXenoPsychicShield
-  name: Psychic Shield
-  description: Raise a forward psychic shield that catches projectiles and can be detonated.
+  # Name and description are in Resources/Locale/en-US/_CMU14/xeno/warlock.ftl.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -56,7 +64,11 @@
       sprite: _CMU14/Actions/Xeno/warlock.rsi
       state: psy_shield_reflect
     useDelay: 0.25
-  - type: InstantAction
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
     event: !type:CMUXenoPsychicShieldActionEvent
+  - type: CMUXenoPsychicShieldActionMarker
   - type: ActionBlockIfResting
   - type: RMCDazeableAction

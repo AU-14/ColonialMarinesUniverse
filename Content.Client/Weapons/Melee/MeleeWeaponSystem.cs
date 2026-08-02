@@ -4,6 +4,7 @@ using Content.Client._RMC14.Weapons.Melee;
 using Content.Client.Gameplay;
 using Content.Shared._RMC14.Input;
 using Content.Shared._RMC14.Tackle;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CombatMode;
 using Content.Shared.Effects;
 using Content.Shared.Hands.Components;
@@ -217,10 +218,19 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         EntityUid? target = null;
 
         if (_stateManager.CurrentState is GameplayStateBase screen)
+        {
             target = screen.GetClickedEntity(mousePos);
 
+            //RMC14
+            if (HasComp<XenoComponent>(attacker) &&
+            _rmcMeleeWeapon.TryGetAlternativeXenoAttackTarget(attacker, mousePos, screen.GetClickableEntities(mousePos), out var altTarget))
+            {
+                target = altTarget;
+            }
+        }
+
         var attackerPos = TransformSystem.GetMapCoordinates(attacker);
-        if (mousePos.MapId != attackerPos.MapId || (attackerPos.Position - mousePos.Position).Length() > meleeComponent.Range)
+        if (mousePos.MapId != attackerPos.MapId || (attackerPos.Position - mousePos.Position).Length() > _rmcMeleeWeapon.RMCGetUserDisarmRange(attacker, target, meleeComponent))
             return;
 
         _rmcLagCompensation.SendLastRealTick(); // RMC14
@@ -237,8 +247,16 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
         EntityUid? target = null;
 
         if (_stateManager.CurrentState is GameplayStateBase screen)
+        {
             target = screen.GetClickedEntity(mousePos);
 
+            //RMC14
+            if (HasComp<XenoComponent>(attacker) &&
+            _rmcMeleeWeapon.TryGetAlternativeXenoAttackTarget(attacker, mousePos, screen.GetClickableEntities(mousePos), out var altTarget))
+            {
+                target = altTarget;
+            }
+        }
         // RMC14
         if ((attackerPos.Position - mousePos.Position).Length() > _rmcMeleeWeapon.GetUserLightAttackRange(attacker, target, meleeComponent))
             return;

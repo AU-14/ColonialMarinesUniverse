@@ -1,0 +1,902 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# Building overhaul: a curated set of constructable CM/RMC structures for the construction menu.
+#
+# Pattern follows the in-repo CM recipes (e.g. BarricadeMetalGraph in _RMC14/Recipes/Construction): a build
+# edge that consumes material(s), and a deconstruct edge (crowbar) that returns the same materials as sheets and
+# deletes the structure. Each buildable is a child of the original CM/RMC entity (so it inherits sprite, health,
+# and the parent's own destroy-drops) plus a Construction component (required for the build target) and a
+# StructuralSupport component (so it takes part in the z-level support graph - needs a beam below on upper z).
+#
+# Health tiers come from the chosen parent: wood < metal < reinforced < heavy reinforced. Normal walls are cheap
+# metal; stronger walls cost plasteel + metal, as requested. Material -> returned sheet entity:
+#   CMSteel -> CMSheetMetal1 ; CMPlasteel -> CMSheetPlasteel1 ; RMCWood -> RMCPlankWood1 ; RMCPlastic -> RMCSheetPlastic1
+#
+# Spawnlists split by category (Walls / Furniture / Decoration); AU14 is the "All" spawnlist and shows them all.
+
+# =========================================================================================================
+# WALLS
+# =========================================================================================================
+
+# --- Metal wall (normal, cheap metal, standard health) ---
+- type: constructionGraph
+  id: AU14BuildWallMetalGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 2
+        doAfter: 2
+  - node: built
+    entity: AU14BuildWallMetal
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: entity
+  parent: CMWallMetal
+  id: AU14BuildWallMetal
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildWallMetalGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildWallMetalRecipe
+  name: metal wall
+  description: A metal wall to separate rooms. Cheap, made from metal.
+  graph: AU14BuildWallMetalGraph
+  startNode: start
+  targetNode: built
+  category: Walls
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Wood wall (weakest, cheap wood) ---
+- type: constructionGraph
+  id: AU14BuildWallWoodGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCWood
+        amount: 4
+        doAfter: 2
+  - node: built
+    entity: AU14BuildWallWood
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCPlankWood1
+        amount: 4
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: entity
+  parent: CMWallWood
+  id: AU14BuildWallWood
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildWallWoodGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildWallWoodRecipe
+  name: wood wall
+  description: A wooden wall. The cheapest and weakest wall.
+  graph: AU14BuildWallWoodGraph
+  startNode: start
+  targetNode: built
+  category: Walls
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Reinforced wall (strong, plasteel + metal, high health) ---
+- type: constructionGraph
+  id: AU14BuildWallReinforcedGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: mid
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 2
+        doAfter: 2
+  - node: mid
+    entity: AU14BuildWallReinforcedMid
+    edges:
+    - to: built
+      steps:
+      - material: CMPlasteel
+        amount: 2
+        doAfter: 3
+  - node: built
+    entity: AU14BuildWallReinforced
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 2
+      - !type:SpawnPrototype
+        prototype: CMSheetPlasteel1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 4
+
+- type: entity
+  parent: CMWallReinforced
+  id: AU14BuildWallReinforcedMid
+  suffix: AU14 buildable (in progress)
+  components:
+  - type: Construction
+    graph: AU14BuildWallReinforcedGraph
+    node: mid
+
+- type: entity
+  parent: CMWallReinforced
+  id: AU14BuildWallReinforced
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildWallReinforcedGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildWallReinforcedRecipe
+  name: reinforced wall
+  description: A reinforced wall built from plasteel and metal. Strong.
+  graph: AU14BuildWallReinforcedGraph
+  startNode: start
+  targetNode: built
+  category: Walls
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Heavy reinforced wall (strongest, lots of plasteel + metal) ---
+- type: constructionGraph
+  id: AU14BuildWallHeavyGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: mid
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 2
+        doAfter: 2
+  - node: mid
+    entity: AU14BuildWallHeavyMid
+    edges:
+    - to: built
+      steps:
+      - material: CMPlasteel
+        amount: 4
+        doAfter: 4
+  - node: built
+    entity: AU14BuildWallHeavy
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 2
+      - !type:SpawnPrototype
+        prototype: CMSheetPlasteel1
+        amount: 4
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 5
+
+- type: entity
+  parent: CMWallReinforcedHeavy
+  id: AU14BuildWallHeavyMid
+  suffix: AU14 buildable (in progress)
+  components:
+  - type: Construction
+    graph: AU14BuildWallHeavyGraph
+    node: mid
+
+- type: entity
+  parent: CMWallReinforcedHeavy
+  id: AU14BuildWallHeavy
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildWallHeavyGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildWallHeavyRecipe
+  name: heavy reinforced wall
+  description: An ultra-reinforced wall. The toughest wall, built from a lot of plasteel and metal.
+  graph: AU14BuildWallHeavyGraph
+  startNode: start
+  targetNode: built
+  category: Walls
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# =========================================================================================================
+# FURNITURE
+# =========================================================================================================
+
+# --- Metal table ---
+- type: constructionGraph
+  id: AU14BuildTableGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 1
+        doAfter: 1
+  - node: built
+    entity: AU14BuildTable
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: CMTable
+  id: AU14BuildTable
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildTableGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildTableRecipe
+  name: table
+  description: A metal table to put things on.
+  graph: AU14BuildTableGraph
+  startNode: start
+  targetNode: built
+  category: Furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Wooden table ---
+- type: constructionGraph
+  id: AU14BuildTableWoodGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCWood
+        amount: 2
+        doAfter: 1
+  - node: built
+    entity: AU14BuildTableWood
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCPlankWood1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: CMTableWooden
+  id: AU14BuildTableWood
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildTableWoodGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildTableWoodRecipe
+  name: wooden table
+  description: A wooden table to put things on.
+  graph: AU14BuildTableWoodGraph
+  startNode: start
+  targetNode: built
+  category: Furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Reinforced table (plasteel + metal) ---
+- type: constructionGraph
+  id: AU14BuildTableReinforcedGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: mid
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 1
+        doAfter: 1
+  - node: mid
+    entity: AU14BuildTableReinforcedMid
+    edges:
+    - to: built
+      steps:
+      - material: CMPlasteel
+        amount: 1
+        doAfter: 2
+  - node: built
+    entity: AU14BuildTableReinforced
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 1
+      - !type:SpawnPrototype
+        prototype: CMSheetPlasteel1
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: entity
+  parent: CMTableReinforced
+  id: AU14BuildTableReinforcedMid
+  suffix: AU14 buildable (in progress)
+  components:
+  - type: Construction
+    graph: AU14BuildTableReinforcedGraph
+    node: mid
+
+- type: entity
+  parent: CMTableReinforced
+  id: AU14BuildTableReinforced
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildTableReinforcedGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildTableReinforcedRecipe
+  name: reinforced table
+  description: A reinforced desk built from plasteel and metal.
+  graph: AU14BuildTableReinforcedGraph
+  startNode: start
+  targetNode: built
+  category: Furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Storage rack ---
+- type: constructionGraph
+  id: AU14BuildRackGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 1
+        doAfter: 1
+  - node: built
+    entity: AU14BuildRack
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: CMRack
+  id: AU14BuildRack
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildRackGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildRackRecipe
+  name: rack
+  description: A metal storage rack.
+  graph: AU14BuildRackGraph
+  startNode: start
+  targetNode: built
+  category: Furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# =========================================================================================================
+# DECORATION
+# =========================================================================================================
+
+# --- Red barrel (plastic) ---
+- type: constructionGraph
+  id: AU14BuildBarrelRedGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCPlastic
+        amount: 2
+        doAfter: 1
+  - node: built
+    entity: AU14BuildBarrelRed
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCSheetPlastic1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: RMCBarrelRed
+  id: AU14BuildBarrelRed
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildBarrelRedGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildBarrelRedRecipe
+  name: red barrel
+  description: A red storage barrel.
+  graph: AU14BuildBarrelRedGraph
+  startNode: start
+  targetNode: built
+  category: Decoration
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Blue barrel (plastic) ---
+- type: constructionGraph
+  id: AU14BuildBarrelBlueGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCPlastic
+        amount: 2
+        doAfter: 1
+  - node: built
+    entity: AU14BuildBarrelBlue
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCSheetPlastic1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: RMCBarrelBlue
+  id: AU14BuildBarrelBlue
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildBarrelBlueGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildBarrelBlueRecipe
+  name: blue barrel
+  description: A blue storage barrel.
+  graph: AU14BuildBarrelBlueGraph
+  startNode: start
+  targetNode: built
+  category: Decoration
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Green barrel (plastic) ---
+- type: constructionGraph
+  id: AU14BuildBarrelGreenGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCPlastic
+        amount: 2
+        doAfter: 1
+  - node: built
+    entity: AU14BuildBarrelGreen
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCSheetPlastic1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: RMCBarrelGreen
+  id: AU14BuildBarrelGreen
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildBarrelGreenGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildBarrelGreenRecipe
+  name: green barrel
+  description: A green storage barrel.
+  graph: AU14BuildBarrelGreenGraph
+  startNode: start
+  targetNode: built
+  category: Decoration
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Yellow barrel (plastic) ---
+- type: constructionGraph
+  id: AU14BuildBarrelYellowGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCPlastic
+        amount: 2
+        doAfter: 1
+  - node: built
+    entity: AU14BuildBarrelYellow
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCSheetPlastic1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: RMCBarrelYellow
+  id: AU14BuildBarrelYellow
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildBarrelYellowGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildBarrelYellowRecipe
+  name: yellow barrel
+  description: A yellow storage barrel.
+  graph: AU14BuildBarrelYellowGraph
+  startNode: start
+  targetNode: built
+  category: Decoration
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- White barrel (plastic) ---
+- type: constructionGraph
+  id: AU14BuildBarrelWhiteGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCPlastic
+        amount: 2
+        doAfter: 1
+  - node: built
+    entity: AU14BuildBarrelWhite
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCSheetPlastic1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: RMCBarrelWhite
+  id: AU14BuildBarrelWhite
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildBarrelWhiteGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildBarrelWhiteRecipe
+  name: white barrel
+  description: A white storage barrel.
+  graph: AU14BuildBarrelWhiteGraph
+  startNode: start
+  targetNode: built
+  category: Decoration
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# --- Potted plant (decoration) ---
+- type: constructionGraph
+  id: AU14BuildPottedPlantGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: RMCPlastic
+        amount: 1
+        doAfter: 1
+  - node: built
+    entity: AU14BuildPottedPlant
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: RMCSheetPlastic1
+        amount: 1
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 2
+
+- type: entity
+  parent: CMPottedPlant1
+  id: AU14BuildPottedPlant
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildPottedPlantGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildPottedPlantRecipe
+  name: potted plant
+  description: A leafy potted plant. Decoration.
+  graph: AU14BuildPottedPlantGraph
+  startNode: start
+  targetNode: built
+  category: Decoration
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked
+
+# =========================================================================================================
+# FURNITURE (storage)
+# =========================================================================================================
+
+# --- Emergency closet ---
+- type: constructionGraph
+  id: AU14BuildClosetGraph
+  start: start
+  graph:
+  - node: start
+    edges:
+    - to: built
+      completed:
+      - !type:SnapToGrid
+      steps:
+      - material: CMSteel
+        amount: 2
+        doAfter: 2
+  - node: built
+    entity: AU14BuildCloset
+    edges:
+    - to: start
+      completed:
+      - !type:SpawnPrototype
+        prototype: CMSheetMetal1
+        amount: 2
+      - !type:DeleteEntity
+      steps:
+      - tool: Prying
+        doAfter: 3
+
+- type: entity
+  parent: CMClosetEmergency
+  id: AU14BuildCloset
+  suffix: AU14 buildable
+  components:
+  - type: Construction
+    graph: AU14BuildClosetGraph
+    node: built
+  - type: StructuralSupport
+    cantileverSpan: 2
+
+- type: construction
+  id: AU14BuildClosetRecipe
+  name: emergency closet
+  description: A metal storage closet.
+  graph: AU14BuildClosetGraph
+  startNode: start
+  targetNode: built
+  category: Furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: false
+  isCM: true
+  spawnlist: AU14
+  conditions:
+  - !type:TileNotBlocked

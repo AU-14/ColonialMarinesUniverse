@@ -1,0 +1,80 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostSpcAgent
+  name: cmu-job-name-corp-provost-spc-agent
+  description: cmu-ghost-role-information-provost-spc-agent-description
+  icon: CMUJobIconProvostSpecialist
+  startingGear: CMUGearProvostSpcAgent
+  playTimeTracker: CMJobProvostSpcAgent
+  spawnMenuRoleName: Provost Spc Agent
+  ranks:
+    CMURankProvostSpcAgent: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 1
+      RMCSkillMeleeWeapons: 1
+      RMCSkillIntel: 3
+      RMCSkillJtac: 2
+      RMCSkillMedical: 1
+      RMCSkillPolice: 1
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-spc-agent
+  - type: ANPRCRadioUser
+
+- type: playTimeTracker
+  id: CMJobProvostSpcAgent
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMUJobIconProvostSpecialist
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_pvi2
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostSpcAgent
+  name: provost role spc agent
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostSpcAgent
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostSpcAgent
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-spc-agent
+    description: cmu-ghost-role-information-provost-spc-agent-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostSpcAgent
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostSpcAgent
+  equipment:
+    eyes: RMCGlassesSecurityBlue
+    ears: RMCHeadsetProvost
+    jumpsuit: CMJumpsuitProvostAgent
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    id: CMUIDCardProvostSpcAgent
+    belt: RMCMatebaBeltLuxuriousFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: AU14RadioJammer
+    pocket2: RMCPouchGeneralLarge
+  inhand:
+  - RMCArmorProvostAgent

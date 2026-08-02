@@ -22,6 +22,14 @@ public sealed partial class CMUZLevelViewerComponent : Component
     public bool LookUp;
 
     /// <summary>
+    /// AU14 (building overhaul): stage 1 of the look-up cycle. The level above is ghosted in at low alpha
+    /// (rooftop awareness) without shifting aim or view. The toggle action cycles
+    /// normal -> FaintUp -> LookUp -> normal.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool FaintUp;
+
+    /// <summary>
     /// Temporarily draws the level above when a visible stair is close enough to the viewer.
     /// </summary>
     [DataField, AutoNetworkedField]

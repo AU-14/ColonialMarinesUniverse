@@ -234,17 +234,6 @@
       Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow-urban-desert.rsi
       Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/jungle-classic.rsi
       Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/sniper_smock/snow-urban-desert.rsi
-  - type: Clothing
-    equipSound:
-      collection: storageRustle
-    unequipSound:
-      collection: RMCEquipArmor
-    quickEquip: false
-    slots:
-    - back
-    - belt
-  - type: Corrodible
-    isCorrodible: false
 
 - type: entity
   parent: CMSatchel
@@ -256,9 +245,14 @@
     sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/scout_cloak.rsi
   - type: Storage
     grid:
-    - 0,0,15,1
+    - 0,0,14,1 # 15 slots
+  - type: ClothingRequireEquipped
+    autoUnequip: true
+    whitelist:
+      tags:
+      - RMCScoutArmor
+    denyReason: rmc-wear-scout-armor-required
   - type: ThermalCloak
-    opacity: 0.035 # Put to 0.03 for testing
     restrictWeapons: true
     cloakedHideLayers:
     - Tail
@@ -417,16 +411,6 @@
   - type: StorageFill
     contents:
     - id: RMCArmorProvostFlexi # TODO RMC14 provost office handheld beacon
-
-- type: entity
-  parent: CMSatchelSecurity
-  suffix: Provost
-  id: CMSatchelSecurityFilledProvostInspector
-  components:
-  - type: StorageFill
-    contents:
-    - id: RMCArmorProvostFlexi
-    - id: RMCStampProvostInspector
 
 - type: entity
   parent: CMSatchelSecurity

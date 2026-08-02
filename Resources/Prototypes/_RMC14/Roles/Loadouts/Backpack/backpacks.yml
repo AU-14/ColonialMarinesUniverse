@@ -32,4 +32,4 @@
 - type: loadout
   id: ProvostSecuritySatchel
   equipment:
-    back: CMSatchelSecurityFilledProvostInspector
+    back: CMSatchelSecurityFilledProvost

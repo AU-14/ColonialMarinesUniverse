@@ -22,12 +22,16 @@ namespace Content.Server.GameTicking
         [ViewVariables]
         private TimeSpan _joinTimingWarnThreshold = TimeSpan.FromSeconds(5);
 
+        private bool _joinTimingLogEnabled = true;
+
         [Dependency] private IPlayerManager _playerManager = default!;
 
         private void InitializePlayer()
         {
             Subs.CVar(_cfg, CCVars.GameJoinTimingWarnSeconds,
                 seconds => _joinTimingWarnThreshold = TimeSpan.FromSeconds(Math.Max(0f, seconds)), true);
+            Subs.CVar(_cfg, CCVars.GameJoinTimingLogEnabled,
+                enabled => _joinTimingLogEnabled = enabled, true);
 
             _playerManager.PlayerStatusChanged += PlayerStatusChanged;
         }
@@ -216,6 +220,9 @@ namespace Content.Server.GameTicking
             DateTime? start = null,
             string baseline = "Connected status was set")
         {
+            if (!_joinTimingLogEnabled)
+                return;
+
             var elapsed = DateTime.UtcNow - (start ?? session.ConnectedTime);
             if (elapsed < _joinTimingWarnThreshold)
             {
@@ -238,6 +245,9 @@ namespace Content.Server.GameTicking
 
         private void LogSlowJoinPhase(ICommonSession session, string step, TimeSpan elapsed)
         {
+            if (!_joinTimingLogEnabled)
+                return;
+
             if (elapsed < _joinTimingWarnThreshold)
             {
                 Log.Debug(

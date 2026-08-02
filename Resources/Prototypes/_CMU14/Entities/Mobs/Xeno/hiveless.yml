@@ -1,0 +1,543 @@
+- type: entity
+  parent: CMXenoLarva
+  id: CMUXenoLarvaHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Xeno
+    role: CMUXenoLarvaHL
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 0.1
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: job
+  parent: CMXenoLarva
+  id: CMUXenoLarvaHL
+  playTimeTracker: CMJobXenoLarva
+
+- type: entity
+  parent: CMXenoDrone
+  id: CMUXenoDroneHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoDroneGardener
+  id: CMUXenoDroneGardenerHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoDroneHealer
+  id: CMUXenoDroneHealerHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoDefender
+  id: CMUXenoDefenderHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 5
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoDefenderSteelcrest
+  id: CMUXenoDefenderSteelcrestHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 5
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoDefenderHeatshield
+  id: CMUXenoDefenderHeatshieldHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 5
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoSentinel
+  id: CMUXenoSentinelHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 3
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: RMCXenoSentinelToxic
+  id: CMUXenoSentinelToxicHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 3
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoRunner
+  id: CMUXenoRunnerHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: RMCXenoRunnerAcider
+  id: CMUXenoRunnerAciderHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoBull
+  id: CMUXenoBullHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 8
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoCarrier
+  id: CMUXenoCarrierHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 3.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: RMCXenoCarrierEggsac
+  id: CMUXenoCarrierEggsacHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 3.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoBurrower
+  id: CMUXenoBurrowerHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoHivelord
+  id: CMUXenoHivelordHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 5.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoHivelordResinWhisperer
+  id: CMUXenoHivelordResinWhispererHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 5.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoHivelordDesigner
+  id: CMUXenoHivelordDesignerHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 5.5
+  - type: Hiveless
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoWarrior
+  id: CMUXenoWarriorHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoWarriorBulwark
+  id: CMUXenoWarriorBulwarkHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoSpitter
+  id: CMUXenoSpitterHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoSpitterVenator
+  id: CMUXenoSpitterVenatorHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4.5
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoSpitterAlchemist
+  id: CMUXenoSpitterAlchemistHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: CMXenoLurker
+  id: CMUXenoLurkerHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4.5
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+
+- type: entity
+  parent: RMCXenoLurkerVampire
+  id: CMUXenoLurkerVampireHL
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: BurrowedLarvaSpawnBlocked
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoPlasma
+    plasmaRegenOffWeeds: 4.5
+  - type: Hiveless
+  - type: GhostRole
+    name: cmu-xeno-hiveless-name
+    description: cmu-xeno-hiveless-description
+    raffle:
+      settings: short
+    rules: cmu-xeno-hiveless-rules
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown

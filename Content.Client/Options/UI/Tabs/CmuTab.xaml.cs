@@ -33,10 +33,14 @@ public sealed partial class CmuTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableRunechatBubbles, RunechatSpeechBubblesCheckBox);
         Control.AddOptionPercentSlider(CCVars.ChatRunechatBubbleScale, RunechatSpeechBubbleScaleSlider, 0.5f, 2f);
         Control.AddOptionCheckBox(CCVars.ChatGhostFollowButton, ChatGhostFollowButton);
+        Control.AddOptionCheckBox(CCVars.ExamineLogInChat, ExamineLogInChatCheckBox);
+        Control.AddOptionCheckBox(CCVars.ExamineFullTextInChat, ExamineFullTextInChatCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.TargetedHealingEnabled, TargetedHealingCheckBox);
+        Control.AddOptionCheckBox(CMUMedicalCCVars.AutoReapplyKitsEnabled, AutoReapplyKitsCheckBox);
         Control.AddOptionCheckBox(CMUMedicalCCVars.UiLessSurgeryEnabled, UiLessSurgeryCheckBox);
         Control.AddOptionCheckBox(CCVars.CMUScreamOnHotbarEnabled, ScreamOnHotbarCheckBox);
         Control.AddOptionPercentSlider(CMUZLevelsCVars.BlurStrength, ZLevelBlurSlider, scale: OldZLevelBlurStrength);
+        Control.AddOptionPercentSlider(CMUZLevelsCVars.FaintUpperAlpha, FaintLookUpOpacitySlider, 0.05f, 0.80f);
 
         Control.Initialize();
         UpdateCrtUiOptionsVisibility();

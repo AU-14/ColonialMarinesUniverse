@@ -180,7 +180,11 @@ public sealed partial class XenoStompSystem : EntitySystem
             if (!_xeno.CanAbilityAttackTarget(xeno, receiver))
                 continue;
 
-            if (IsBlockedByObstacle(origin, _transform.GetMapCoordinates(receiver), xeno.Owner))
+            if (IsBlockedByObstacle(
+                    origin,
+                    _transform.GetMapCoordinates(receiver),
+                    xeno.Owner,
+                    ignoreBarricades: xeno.Comp.StompsThroughBarricades))
                 continue;
 
             if (xeno.Comp.SlowBigInsteadOfStun && _size.TryGetSize(receiver, out var size) && size >= RMCSizes.Big)
@@ -319,7 +323,11 @@ public sealed partial class XenoStompSystem : EntitySystem
         }
     }
 
-    private bool IsBlockedByObstacle(MapCoordinates origin, MapCoordinates target, EntityUid ignore)
+    private bool IsBlockedByObstacle(
+        MapCoordinates origin,
+        MapCoordinates target,
+        EntityUid ignore,
+        bool ignoreBarricades = false)
     {
         if (origin.MapId != target.MapId)
             return true;
@@ -329,8 +337,11 @@ public sealed partial class XenoStompSystem : EntitySystem
         if (distance < 0.1f)
             return false;
 
-        var mask = (int) (CollisionGroup.Impassable | CollisionGroup.InteractImpassable | CollisionGroup.BarricadeImpassable);
-        var ray = new CollisionRay(origin.Position, diff.Normalized(), mask);
+        var mask = CollisionGroup.Impassable | CollisionGroup.InteractImpassable;
+        if (!ignoreBarricades)
+            mask |= CollisionGroup.BarricadeImpassable;
+
+        var ray = new CollisionRay(origin.Position, diff.Normalized(), (int) mask);
         foreach (var _ in _physics.IntersectRay(origin.MapId, ray, distance, ignore, returnOnFirstHit: true))
         {
             return true;

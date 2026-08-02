@@ -78,13 +78,14 @@
     amount: 500
     max: 500
     bulletType: VehicleAmmoBoxCupola
+    ammoProto: VehicleCartridgeSentry10x50mm
     usedIn: Tank cupola
 
 - type: entity
   parent: VehicleAmmoBoxBase
   id: VehicleAmmoBoxGrenadeLauncher
-  name: grenade launcher ammo crate
-  description: Ammunition for vehicle grenade launchers.
+  name: grenade launcher ammo crate (HEDP)
+  description: Ammunition for vehicle grenade launchers. 30mm HEDP grenades, a balanced dual-purpose round.
   components:
   - type: Sprite
     layers:
@@ -103,6 +104,7 @@
     amount: 10
     max: 10
     bulletType: VehicleAmmoBoxGrenadeLauncher
+    ammoProto: CMGrenadeHighExplosive
     usedIn: Tank grenade launcher, Humvee launcher
 
 - type: entity
@@ -158,23 +160,25 @@
 - type: entity
   parent: VehicleAmmoBoxBase
   id: VehicleAmmoBoxLTBCannon
-  name: LTB APHE cannon shell
-  description: Ammunition for light tank cannons.
+  name: LTB HESH cannon shell
+  description: Ammunition for light tank cannons. A squash-head shell that splats a plastic charge against the target before detonating, sending a heavy shockwave through the armor. Excellent structural damage with a moderate blast, and can bring down walls, but doesn't need to penetrate to work.
   components:
   - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
     layers:
-    - state: ltbcannon_0
+    - state: lbtshell_hesh
       map: [ "enum.BulletBoxLayers.Fill" ]
   - type: GenericVisualizer
     visuals:
       enum.BulletBoxLayers.Fill:
         enum.BulletBoxLayers.Fill:
-          Empty: { state: lbtshell_0, visible: true }
-          Full: { state: lbtshell_1, visible: true }
+          Empty: { state: lbtshell_casing, visible: true }
+          Full: { state: lbtshell_hesh, visible: true }
   - type: BulletBox
     amount: 1
     max: 1
     bulletType: VehicleAmmoBoxLTBCannon
+    ammoProto: VehicleCartridgeLTBCannon
     usedIn: Tank LTB cannon
 
 - type: entity

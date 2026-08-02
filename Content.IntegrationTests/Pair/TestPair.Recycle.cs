@@ -22,6 +22,12 @@ public sealed partial class TestPair : IAsyncDisposable
 {
     public PairState State { get; private set; } = PairState.Ready;
 
+    // Set once CleanReturnAsync() has handed this pair back to the pool. From that point on, the
+    // pair may immediately be grabbed and mutated by another concurrently-running test (the test
+    // runner uses LevelOfParallelism > 1), so the `await using` block's own implicit DisposeAsync()
+    // call at scope-exit must not inspect/act on `State` anymore - it no longer belongs to us.
+    private bool _returnedToPool;
+
     private async Task OnDirtyDispose()
     {
         var usageTime = Watch.Elapsed;
@@ -133,11 +139,17 @@ public sealed partial class TestPair : IAsyncDisposable
         await OnCleanDispose();
         DebugTools.Assert(State is PairState.Dead or PairState.Ready);
         PoolManager.NoCheckReturn(this);
+        _returnedToPool = true;
         ClearContext();
     }
 
     public async ValueTask DisposeAsync()
     {
+        // Already explicitly returned via CleanReturnAsync(); this is just the `await using` block's
+        // own scope-exit disposal firing redundantly. The pair may already be owned by another test.
+        if (_returnedToPool)
+            return;
+
         switch (State)
         {
             case PairState.Dead:

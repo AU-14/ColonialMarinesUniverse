@@ -10,6 +10,7 @@ public sealed partial class FindParasiteBoundUserInterface(EntityUid owner, Enum
     : BoundUserInterface(owner, uiKey)
 {
     private ItemList.Item? _selectedItem;
+    private bool _updatingState;
 
     // Deselecting directly via code still activates events,
     // prevent activation of function "OnItemDeselect" if "_impledDeselect" is true
@@ -60,6 +61,12 @@ public sealed partial class FindParasiteBoundUserInterface(EntityUid owner, Enum
         }
 
         var activeParasiteSpawners = uiState.ActiveParasiteSpawners;
+        var selectedSpawner = _selectedItem?.Metadata is NetEntity selected
+            ? selected
+            : (NetEntity?) null;
+
+        _updatingState = true;
+        _selectedItem = null;
         _spawnerList.Clear();
 
         foreach (var spawnerData in activeParasiteSpawners)
@@ -70,11 +77,23 @@ public sealed partial class FindParasiteBoundUserInterface(EntityUid owner, Enum
                 Metadata = spawnerData.Spawner,
             };
             _spawnerList.Add(item);
+
+            if (spawnerData.Spawner == selectedSpawner)
+            {
+                item.Selected = true;
+                _selectedItem = item;
+            }
         }
+
+        _window!.SpawnButton.Disabled = _selectedItem is null;
+        _updatingState = false;
     }
 
     private void OnItemSelect(ItemList.ItemListSelectedEventArgs args)
     {
+        if (_updatingState)
+            return;
+
         _window!.SpawnButton.Disabled = false;
 
         var newSelectedItem = args.ItemList[args.ItemIndex];
@@ -107,6 +126,9 @@ public sealed partial class FindParasiteBoundUserInterface(EntityUid owner, Enum
 
     private void OnItemDeselect(ItemList.ItemListDeselectedEventArgs args)
     {
+        if (_updatingState)
+            return;
+
         var deselected = (NetEntity)args.ItemList[args.ItemIndex].Metadata!;
 
         if (_selectedItem is null)

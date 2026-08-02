@@ -30,7 +30,8 @@ namespace Content.Server.Chat.Managers
             INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false,
             bool useEmoteSpeechBubble = false,
             string? languageIcon = null,
-            string? speechStyleClass = null);
+            string? speechStyleClass = null,
+            ChatDisplayMetadata? display = null);
         // RMC14
 
         void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay,

@@ -267,6 +267,16 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         return _queues.TryGetValue(hive, out queue!);
     }
 
+    public void AddToLarvaQueueFront(Entity<HiveComponent> hive, NetUserId userId)
+    {
+        if (_pendingClaims.ContainsKey(userId))
+            return;
+
+        RemoveFromAllQueues(userId);
+        QueueFor(hive.Owner).AddReadyFirst(userId);
+        NotifyReadyPositions(hive.Owner);
+    }
+
     public void TryClaimQueueable(EntityUid uid)
     {
         if (TryComp(uid, out HiveMemberComponent? member) &&

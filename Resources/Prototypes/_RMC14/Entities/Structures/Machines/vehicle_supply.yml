@@ -356,6 +356,45 @@
       - RMCAPCFlareLauncher
       - RMCAPCFreightStorage
       - RMCAPCWheel
+    - name: M577 APC 'Weyland' (WY)
+      vehicle: VehicleAPCPMC
+      group: vehicle-apc
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: RMCAPCDualCannon
+          name: dual cannon
+          item: RMCAPCDualCannon
+          slot: primary
+      - id: secondary
+        name: Secondary
+        options:
+        - id: RMCAPCFrontCannon
+          name: frontal cannon
+          item: RMCAPCFrontCannon
+          slot: secondary
+      - id: wheels
+        name: Wheels
+        options:
+        - id: RMCAPCWheel
+          name: wheel
+          item: RMCAPCWheel
+          slot: wheel-1
+      - id: support
+        name: Support
+        options:
+        - id: RMCAPCFlareLauncher
+          name: flare launcher
+          item: RMCAPCFlareLauncher
+          slot: support
+      hardpoints:
+      - RMCAPCDualCannon
+      - RMCAPCFrontCannon
+      - RMCAPCCommsRelay
+      - RMCAPCFlareLauncher
+      - RMCAPCFreightStorage
+      - RMCAPCWheel
     - name: ZSL-68 APC (UPP)
       vehicle: VehicleSPPAPC
       group: vehicle-apc
@@ -479,7 +518,7 @@
         name: Support
         options:
         - id: VehicleTankWarningArray
-          name: warning array
+          name: weapons sensor array
           item: VehicleTankWarningArray
           slot: support
         - id: VehicleTankOverdriveEnhancer
@@ -520,7 +559,7 @@
       - VehicleTankRocketLauncher
       - VehicleTankFlareModule
       - VehicleTankArtilleryModule
-    - name: M34A2 Longstreet 'Yutani'
+    - name: M34A2 Longstreet 'Yutani' (WY)
       vehicle: VehicleTankPMC
       group: vehicle-tank
       loadoutCategories:
@@ -603,7 +642,7 @@
         name: Support
         options:
         - id: VehicleTankWarningArray
-          name: warning array
+          name: weapons sensor array
           item: VehicleTankWarningArray
           slot: support
         - id: VehicleTankOverdriveEnhancer
@@ -699,7 +738,7 @@
           item: VehicleSPPTankFlareModule
           slot: support
         - id: VehicleSPPTankWarningArray
-          name: warning array
+          name: weapons sensor array
           item: VehicleSPPTankWarningArray
           slot: support
         - id: VehicleSPPTankOverdriveEnhancer
@@ -723,6 +762,59 @@
       - VehicleSPPTankWarningArray
       - VehicleSPPTankOverdriveEnhancer
       - VehicleSPPTankArtilleryModule
+    - name: FV150 Hobelar LCT (TWE)
+      vehicle: VehicleTankTWE
+      group: vehicle-tank
+      loadoutCategories:
+      - id: primary
+        name: Primary
+        options:
+        - id: VehicleTankAutocannonTWE
+          name: L26A2 45mm Autocannon
+          item: VehicleTankAutocannonTWE
+          slot: primary::turret-cannon
+      - id: secondary
+        name: Secondary
+        options:
+        - id: VehicleTankFlamer
+          name: flamer
+          item: VehicleTankFlamer
+          slot: primary::turret-launcher
+        - id: VehicleTankGrenadeLauncher
+          name: grenade launcher
+          item: VehicleTankGrenadeLauncher
+          slot: primary::turret-launcher
+        - id: VehicleTankTowLauncher
+          name: TOW launcher
+          item: VehicleTankTowLauncher
+          slot: primary::turret-launcher
+        - id: VehicleTankM56Cupola
+          name: M56 cupola
+          item: VehicleTankM56Cupola
+          slot: primary::turret-launcher
+      - id: standardtreads
+        name: Treads
+        options:
+        - id: VehicleTankTreadsTWE
+          name: treads
+          item: VehicleTankTreadsTWE
+          slot: wheel-1
+      - id: support
+        name: Support
+        options:
+        - id: VehicleTankRocketLauncherTWE
+          name: L-39T Smoke Discharger
+          item: VehicleTankRocketLauncherTWE
+          slot: support
+      hardpoints:
+      - VehicleTankTurretTWE
+      - VehicleTankTreadsTWE
+      - VehicleTankFlamer
+      - VehicleTankGrenadeLauncher
+      - VehicleTankTowLauncher
+      - VehicleTankM56Cupola
+      - VehicleTankRERE700
+      - VehicleTankRocketLauncherTWE
 #    - name: blackfoot
 #      vehicle: VehicleBlackfoot
 #      group: vehicle-support

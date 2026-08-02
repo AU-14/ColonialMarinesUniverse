@@ -512,6 +512,67 @@
     camouflageVariations: { }
 
 - type: entity
+  parent: CMBeltMarine
+  id: CMUBeltCombatSidearmRig
+  name: M276 pattern combat sidearm rig
+  description: The M276 is standard load-bearing equipment. It consists of a modular belt with various clips. This version has a holster assembly that allows one to carry the most common pistols. It also contains side pouches that can store two pistol magazines and three rifle magazines.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+  - type: Clothing
+    sprite: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+  - type: Storage # 3 rifle mags + 2 pistol mags + 1 sidearm
+    maxItemSize: Normal
+    grid:
+    - 0,0,11,1 # 6 slots
+    whitelist:
+      tags:
+      - Sidearm
+      - CMMagazinePistol
+      - RMCMagazineRevolver
+      - CMMagazineRifle
+      - CMMagazineSmg
+      - CMMagazineSniper
+    blacklist:
+      tags:
+      - RMCSmartPistol
+      - RMCMagazinePistolSU6
+  - type: FixedItemSizeStorage
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-one-gun
+      whitelist:
+        tags:
+        - Sidearm
+    - popup: rmc-storage-limit-two-mags
+      count: 2
+      whitelist:
+        tags:
+        - CMMagazinePistol
+        - RMCMagazineRevolver
+    - popup: rmc-storage-limit-max-mags
+      count: 3
+      whitelist:
+        tags:
+        - CMMagazineRifle
+        - CMMagazineSmg
+        - CMMagazineSniper
+  - type: CMHolster
+    whitelist:
+      tags:
+      - Sidearm
+  - type: Tag
+    tags:
+    - CMUCombatSidearmRig
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+      Snow: _CMU14/Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
+      Desert: _CMU14/Objects/Clothing/Belt/sidearm_rig/desert.rsi
+      Urban: _CMU14/Objects/Clothing/Belt/sidearm_rig/snow-urban.rsi
+      Classic: _CMU14/Objects/Clothing/Belt/sidearm_rig/classic-jungle.rsi
+
+- type: entity
   parent: CMBeltBaseStorage
   id: AU14BeltUtilityGeneralBlack
   suffix: Black, AU14

@@ -1,0 +1,23 @@
+- type: trackerMode
+  id: ProvostMarshal
+  job: CMUJobINDFORProvostMarshal
+
+- type: trackerMode
+  id: ProvostDeputyMarshal
+  job: CMUJobINDFORProvostMarshalDeputy
+
+- type: trackerMode
+  id: ProvostChiefInspector
+  job: CMUJobINDFORProvostInspectorChief
+
+- type: trackerMode
+  id: ProvostInspector
+  job: CMUJobINDFORProvostInspector
+
+- type: trackerMode
+  id: ProvostTeamLeader
+  job: CMUJobINDFORProvostTeamLeader
+
+- type: trackerMode
+  id: ProvostAdvisor
+  job: CMUJobINDFORProvostAdvisor

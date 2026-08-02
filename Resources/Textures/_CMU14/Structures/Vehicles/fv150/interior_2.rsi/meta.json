@@ -1,0 +1,30 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "taken from CMSS13-PvE https://github.com/cmss13-devs/cmss13-pve/pull/1276 by github CactusMouth",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "ammo_loader"
+        },
+        {
+            "name": "weapon_console"
+        },
+        {
+            "name": "driver_console"
+        },
+        {
+            "name": "locker_open"
+        },
+        {
+            "name": "locker"
+        },
+        {
+            "name": "hatch"
+        }
+
+    ]
+}

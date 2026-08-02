@@ -23,7 +23,7 @@
     - auwy
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14govforhud.rsi
+      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
       state: working_joe
   - type: Language
     preset: AU14LanguagePresetSynth

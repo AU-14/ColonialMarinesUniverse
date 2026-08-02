@@ -60,6 +60,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SharedCMChatSystem _rmcChat = default!;
+    [Dependency] private RMCOverwatchTripodCameraSystem _tripod = default!;
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private SharedSupplyDropSystem _supplyDrop = default!;
     [Dependency] private SharedTacticalMapSystem _tacticalMap = default!;
@@ -99,6 +100,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         SubscribeLocalEvent<OrbitalCannonLaunchEvent>(OnOrbitalCannonLaunch);
 
         SubscribeLocalEvent<OverwatchConsoleComponent, BoundUIOpenedEvent>(OnBUIOpened);
+        SubscribeLocalEvent<OverwatchConsoleComponent, BoundUIClosedEvent>(OnBUIClosed);
         SubscribeLocalEvent<OverwatchConsoleComponent, OverwatchTransferMarineSelectedEvent>(OnTransferMarineSelected);
         SubscribeLocalEvent<OverwatchConsoleComponent, OverwatchTransferMarineSquadEvent>(OnTransferMarineSquad);
 
@@ -179,6 +181,19 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
         var state = GetOverwatchBuiState(ent);
         _ui.SetUiState(ent.Owner, OverwatchConsoleUI.Key, state);
+    }
+
+    private void OnBUIClosed(Entity<OverwatchConsoleComponent> ent, ref BoundUIClosedEvent args)
+    {
+        if (_net.IsClient || args.UiKey is not OverwatchConsoleUI.Key ||
+            !TryComp(args.Actor, out ActorComponent? actor) ||
+            !TryComp(args.Actor, out EyeComponent? eye))
+        {
+            return;
+        }
+
+        if (TryComp(args.Actor, out OverwatchWatchingComponent? watching) && watching.Watching is not null)
+            Unwatch((args.Actor, eye), actor.PlayerSession);
     }
 
     private void OnTransferMarineSelected(Entity<OverwatchConsoleComponent> ent, ref OverwatchTransferMarineSelectedEvent args)
@@ -406,11 +421,25 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         if (args.Target == default || !TryGetEntity(args.Target, out var target))
             return;
 
-        if (!TryGetAccessibleMemberSquad(ent.Comp, target.Value, out _))
+        Entity<OverwatchCameraComponent?> camera;
+        if (TryGetAccessibleMemberSquad(ent.Comp, target.Value, out _) &&
+            _inventory.TryGetInventoryEntity<OverwatchCameraComponent>(target.Value, out var marineCamera))
+        {
+            camera = marineCamera;
+        }
+        else if (TryComp(target, out RMCOverwatchTripodCameraComponent? tripod) &&
+                 tripod.Deployed &&
+                 tripod.Squad is { } tripodSquad &&
+                 TryComp(tripodSquad, out SquadTeamComponent? tripodTeam) &&
+                 CanAccessSquad(ent.Comp, tripodTeam) &&
+                 TryComp(target, out OverwatchCameraComponent? tripodCamera))
+        {
+            camera = (target.Value, tripodCamera);
+        }
+        else
+        {
             return;
-
-        if (!_inventory.TryGetInventoryEntity<OverwatchCameraComponent>(target.Value, out var camera))
-            return;
+        }
 
         if (HasComp<ScopingComponent>(args.Actor))
         {
@@ -418,6 +447,16 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
             {
                 _popup.PopupCursor("You're too busy peering through optics.", args.Actor, PopupType.MediumCaution);
             }
+            return;
+        }
+
+        if (_net.IsServer &&
+            TryComp(args.Actor, out OverwatchWatchingComponent? watching) &&
+            watching.Watching == camera.Owner &&
+            TryComp(args.Actor, out ActorComponent? actor) &&
+            TryComp(args.Actor, out EyeComponent? eye))
+        {
+            Unwatch((args.Actor, eye), actor.PlayerSession);
             return;
         }
 
@@ -710,7 +749,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         _eye.SetTarget(watcher, null);
     }
 
-    private OverwatchConsoleBuiState GetOverwatchBuiState(Entity<OverwatchConsoleComponent> console)
+    public OverwatchConsoleBuiState GetOverwatchBuiState(Entity<OverwatchConsoleComponent> console)
     {
         return GetOverwatchBuiState(console.Comp);
     }
@@ -720,6 +759,7 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
         var squads = new List<OverwatchSquad>();
         var marines = new Dictionary<NetEntity, List<OverwatchMarine>>();
         var fireteams = new Dictionary<NetEntity, FireteamData>();
+        var cameras = new Dictionary<NetEntity, List<OverwatchTripodCamera>>();
         var query = EntityQueryEnumerator<SquadTeamComponent>();
         while (query.MoveNext(out var uid, out var team))
         {
@@ -749,7 +789,39 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
             squads.Add(squad);
         }
 
-        return new OverwatchConsoleBuiState(squads, marines, fireteams);
+        var cameraQuery = EntityQueryEnumerator<RMCOverwatchTripodCameraComponent>();
+        while (cameraQuery.MoveNext(out var cameraId, out var camera))
+        {
+            if (!camera.Deployed ||
+                !HasComp<OverwatchCameraComponent>(cameraId) ||
+                camera.Squad is not { } squadOwner ||
+                !TryComp(squadOwner, out SquadTeamComponent? team) ||
+                !CanAccessSquad(console, team))
+            {
+                continue;
+            }
+
+            var squadId = GetNetEntity(squadOwner);
+            if (!squads.Any(s => s.Id == squadId))
+                continue;
+
+            var coordinates = _transform.GetMapCoordinates(cameraId);
+            if (!_map.TryGetMap(coordinates.MapId, out var map))
+                continue;
+
+            var location = _planetQuery.HasComp(map)
+                ? OverwatchLocation.Planet
+                : OverwatchLocation.Ship;
+            var areaName = _area.TryGetArea(coordinates, out _, out var area) ? area.Name : string.Empty;
+            cameras.GetOrNew(squadId).Add(
+                new OverwatchTripodCamera(
+                    GetNetEntity(cameraId),
+                    _tripod.GetDisplayLabel((cameraId, camera)),
+                    areaName,
+                    location));
+        }
+
+        return new OverwatchConsoleBuiState(squads, marines, fireteams, cameras);
     }
 
     public bool IsHidden(Entity<OverwatchConsoleComponent> console, NetEntity marine)
@@ -885,13 +957,19 @@ public abstract partial class SharedOverwatchConsoleSystem : EntitySystem
 
         _nextUpdateTime = time + _updateEvery;
 
+        var states = new Dictionary<string, OverwatchConsoleBuiState>();
         var query = EntityQueryEnumerator<OverwatchConsoleComponent>();
         while (query.MoveNext(out var uid, out var console))
         {
             if (!_ui.IsUiOpen(uid, OverwatchConsoleUI.Key))
                 continue;
 
-            var state = GetOverwatchBuiState(console);
+            if (!states.TryGetValue(console.Group, out var state))
+            {
+                state = GetOverwatchBuiState(console);
+                states[console.Group] = state;
+            }
+
             _ui.SetUiState(uid, OverwatchConsoleUI.Key, state);
         }
     }

@@ -10,7 +10,7 @@ namespace Content.Shared.Actions.Components;
 /// An action that targets an entity or map.
 /// Requires <see cref="ActionComponent"/>.
 /// </summary>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem))]
+[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem), typeof(Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock.CMUXenoWarlockSystem))]
 [EntityCategory("Actions")]
 [AutoGenerateComponentState]
 public sealed partial class TargetActionComponent : Component

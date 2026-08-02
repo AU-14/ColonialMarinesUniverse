@@ -102,6 +102,68 @@
 
 - type: entity
   parent: VehicleTankHardpointBase
+  id: VehicleTankRocketLauncherTWE
+  name: Improper L-39T Smoke Discharger
+  description: A support module for the FV150, based off those used by the UA for their vehicles.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    state: slauncher_0
+  - type: HardpointItem
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.075
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 100
+  - type: VehicleTurret
+    useDirectionalOffsets: true
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
+    showOverlay: true
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: slauncher_0
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: GunIgnorePrediction
+  - type: Gun
+    fireRate: 0.6
+    projectileSpeed: 18
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot: /Audio/Weapons/Guns/Gunshots/grenade_launcher.ogg
+    cameraRecoilScalar: 0
+  - type: ShootAtFixedPoint
+  - type: OnShootTriggerAmmoTimer
+    delay: 0.2
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: RMC40MMGrenadeM74AGMSVehicle
+    capacity: 6
+  - type: VehicleHardpointAmmo
+    magazineSize: 6
+    maxStoredMagazines: 2
+  - type: GunFireArc
+    arc: 360
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxGrenadeLauncher
+  - type: GunMuzzleOffset
+    offset: "0,0"
+    useDirectionalOffsets: true
+    offsetEast: "0,0.2"
+    muzzleOffset: "0,-1"
+    useAimDirection: true
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: slauncher_0
+
+
+- type: entity
+  parent: VehicleTankHardpointBase
   id: VehicleTankFlareModule
   name: flare module
   description: A flare launcher support attachment for a tank.

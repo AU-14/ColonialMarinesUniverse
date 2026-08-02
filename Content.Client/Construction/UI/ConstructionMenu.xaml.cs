@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.UserInterface.Controls;
 using Content.Shared.Construction.Prototypes;
@@ -32,6 +33,35 @@ namespace Content.Client.Construction.UI
         ScrollContainer RecipesGridScrollContainer { get; }
         GridContainer RecipesGrid { get; }
 
+        /// <summary>
+        /// If true, the presenter populates <see cref="GroupedRecipesContainer"/> with per-category
+        /// sections (header + sub-grid) instead of the flat <see cref="RecipesGrid"/>.
+        /// </summary>
+        bool UseGroupedView { get; }
+
+        /// <summary>
+        /// Vertical container the presenter fills with grouped category sections when
+        /// <see cref="UseGroupedView"/> is true.
+        /// </summary>
+        BoxContainer GroupedRecipesContainer { get; }
+
+        /// <summary>
+        /// If true, the construction menu closes as soon as a build/placement begins.
+        /// </summary>
+        bool CloseOnConstruct { get; }
+
+        /// <summary>
+        /// The spawnlist (top-level tree group) currently selected. Empty string means "no spawnlist
+        /// filter" (show everything). Menus without spawnlist support return empty.
+        /// </summary>
+        string SelectedSpawnlist { get; }
+
+        /// <summary>
+        /// Provides the menu with the distinct spawnlists discovered among recipes, so it can build
+        /// its left-tree entries. No-op for menus without spawnlist support.
+        /// </summary>
+        void SetSpawnlists(IReadOnlyList<string> spawnlists);
+
         event EventHandler<(string search, string catagory)> PopulateRecipes;
         event EventHandler<ConstructionMenu.ConstructionMenuListData?> RecipeSelected;
         event EventHandler RecipeFavorited;
@@ -40,6 +70,7 @@ namespace Content.Client.Construction.UI
         event EventHandler ClearAllGhosts;
 
         void ClearRecipeInfo();
+        void SetConstructionSkillInfo(int skillLevel, int discountPercent);
         void SetRecipeInfo(string name, string description, EntityPrototype? targetPrototype, Color iconColor, bool isItem, bool isFavorite, ConstructionPrototype prototype);
         void ResetPlacement();
 
@@ -67,6 +98,16 @@ namespace Content.Client.Construction.UI
         }
 
         public string[] Categories { get; set; } = Array.Empty<string>();
+
+        // The classic menu uses the flat grid/list, never grouped, and stays open while building.
+        private readonly BoxContainer _stubGroupedContainer = new();
+        public bool UseGroupedView => false;
+        public BoxContainer GroupedRecipesContainer => _stubGroupedContainer;
+        public bool CloseOnConstruct => false;
+
+        // The classic menu has no spawnlist tree; it always shows everything.
+        public string SelectedSpawnlist => string.Empty;
+        public void SetSpawnlists(IReadOnlyList<string> spawnlists) { }
 
         public bool EraseButtonPressed
         {
@@ -190,6 +231,16 @@ namespace Content.Client.Construction.UI
             TargetTexture.Modulate = Color.White;
             FavoriteButton.Visible = false;
             RecipeStepList.Clear();
+            ConstructionSkillInfo.Visible = false;
+        }
+
+        public void SetConstructionSkillInfo(int skillLevel, int discountPercent)
+        {
+            ConstructionSkillInfo.SetMessage(Loc.GetString("construction-menu-skill-info",
+                ("skill", skillLevel),
+                ("discount", discountPercent)),
+                Color.FromHex("#72C7FF"));
+            ConstructionSkillInfo.Visible = skillLevel > 0;
         }
 
         public sealed record ConstructionMenuListData(ConstructionPrototype Prototype, EntityPrototype TargetPrototype) : ListData;

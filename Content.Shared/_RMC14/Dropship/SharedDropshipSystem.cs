@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.ARES;
@@ -1251,6 +1252,35 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         }
 
         dropship = default;
+        return false;
+    }
+
+    public bool TryGetGridFaction(EntityUid ent, [NotNullWhen(true)] out string? faction)
+    {
+        faction = null;
+        if (!TryComp(ent, out TransformComponent? xform) || xform.GridUid is not { } grid)
+            return false;
+
+        if (TryComp<ShipFactionComponent>(grid, out var shipFaction) &&
+            !string.IsNullOrWhiteSpace(shipFaction.Faction))
+        {
+            faction = shipFaction.Faction;
+            return true;
+        }
+
+        var children = Transform(grid).ChildEnumerator;
+        while (children.MoveNext(out var child))
+        {
+            if (!TryComp<WhitelistedShuttleComponent>(child, out var shuttle) ||
+                string.IsNullOrWhiteSpace(shuttle.Faction))
+            {
+                continue;
+            }
+
+            faction = shuttle.Faction;
+            return true;
+        }
+
         return false;
     }
 

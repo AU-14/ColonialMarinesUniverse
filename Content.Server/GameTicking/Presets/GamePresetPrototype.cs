@@ -42,6 +42,30 @@ namespace Content.Server.GameTicking.Presets
         [DataField("maxPlayers")]
         public int? MaxPlayers;
 
+        /// <summary>
+        /// Whether this preset starts the automatic third-party queue without requiring a selected threat.
+        /// </summary>
+        [DataField("thirdPartyAutoSpawn")]
+        public bool ThirdPartyAutoSpawn;
+
+        /// <summary>
+        /// Seconds between automatic third-party spawn attempts for preset-owned scheduling.
+        /// </summary>
+        [DataField("thirdPartyInterval")]
+        public int ThirdPartyInterval = 14000;
+
+        /// <summary>
+        /// Maximum fraction of the current population used to preselect third-party bodies.
+        /// </summary>
+        [DataField("thirdPartyRatio")]
+        public float ThirdPartyRatio = 0.15f;
+
+        /// <summary>
+        /// Maximum number of third parties selected for the preset-owned queue.
+        /// </summary>
+        [DataField("maxThirdParties")]
+        public int MaxThirdParties = 7;
+
         [DataField("rules", customTypeSerializer: typeof(PrototypeIdListSerializer<EntityPrototype>))]
         public IReadOnlyList<string> Rules { get; private set; } = Array.Empty<string>();
 

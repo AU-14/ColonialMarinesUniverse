@@ -25,6 +25,8 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    category: MP
   - type: Skills
     preset: AU14SkillPresetMilitaryPolice
   - type: AU14CallToAttentionAbility

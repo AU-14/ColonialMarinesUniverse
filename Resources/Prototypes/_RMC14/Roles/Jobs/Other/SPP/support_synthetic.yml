@@ -9,6 +9,9 @@
   startingGear: RMCGearSPPSynthetic
   icon: "RMCJobIconReconSynthetic"
   joinNotifyCrew: false
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   accessGroups:
   - ShipMasterAccess
   - Synth

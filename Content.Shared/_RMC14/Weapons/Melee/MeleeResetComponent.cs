@@ -8,4 +8,10 @@ public sealed partial class MeleeResetComponent : Component
 {
     [DataField, AutoNetworkedField]
     public TimeSpan OriginalTime;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan OriginalUserTime;
+
+    [DataField, AutoNetworkedField]
+    public bool ResetUserCooldown;
 }

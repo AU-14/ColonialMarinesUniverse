@@ -1,0 +1,190 @@
+- type: entity
+  parent: CMBaseStructure
+  id: CMUResearchDataTerminal
+  name: research data terminal
+  description: A terminal for accessing research data.
+  components:
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Transform
+    anchored: false
+  - type: Anchorable
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 25
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: research
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: ResearchDataTerminal
+  - type: ActivatableUI
+    key: enum.ResearchDataTerminalUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.ResearchDataTerminalUI.Key:
+        type: ResearchDataTerminalBui
+
+- type: entity
+  parent: CMBaseStructure
+  id: CMUXRFScanner
+  name: XRF scanner
+  description: A spectrometer that bombards a sample in high energy radiation to detect emitted fluorescent x-ray patterns. By using the emission spectrum of the sample it can identify its chemical composition.
+  suffix: Corporate
+  components:
+  - type: Appearance
+  - type: Anchorable
+  - type: GenericVisualizer
+    visuals:
+      enum.XRFScannerVisuals.State:
+        enum.XRFScannerVisuals.State:
+          Scanner: { state: base }
+          Sample: { state: sample }
+          Processing: { state: processing }
+          Finished: { state: finished }
+          Error: { state: error }
+          Failed: { state: failed }
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Structures/Machines/Science/reagent_analyzer.rsi
+    noRot: true
+    layers:
+    - state: base
+      map: [ "enum.XRFScannerVisuals.State" ]
+    #- state: sample
+    #  map: ["enum.XRFScannerState.Sample"]
+    #  visible: false
+    #- state: processing
+    #  map: ["enum.XRFScannerState.Processing"]
+    #  visible: false
+    #- state: finished
+    #  map: ["enum.XRFScannerState.Finished"]
+    #  visible: false
+    #- state: error
+    #  map: ["enum.XRFScannerState.Error"]
+    #  visible: false
+    #- state: failed
+    #  map: ["enum.XRFScannerState.Failed"]
+    #  visible: false
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: XRFScanner
+    faction: corporate
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 25
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: ContainerContainer
+    containers:
+      sample: !type:ContainerSlot
+
+- type: entity
+  parent: CMUXRFScanner
+  id: CMUXRFScannerGovfor
+  suffix: GOVFOR
+  components:
+  - type: XRFScanner
+    faction: govfor
+
+- type: entity
+  parent: CMUXRFScanner
+  id: CMUXRFScannerOpfor
+  suffix: OPFOR
+  components:
+  - type: XRFScanner
+    faction: opfor
+
+- type: entity
+  parent: CMUXRFScanner
+  id: CMUXRFScannerColony
+  suffix: Colony
+  components:
+  - type: XRFScanner
+    faction: colony
+
+- type: entity
+  parent: CMUXRFScanner
+  id: CMUXRFScannerNobody
+  suffix: Generic
+  components:
+  - type: XRFScanner
+    faction: none
+
+- type: entity
+  parent: CMBaseStructure
+  id: CMUChemSimulator
+  name: synthesis simulator
+  description: This computer uses advanced algorithms to perform simulations of reagent properties, for the purpose of calculating the synthesis required to make a new variant.
+  components:
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.ChemSimulatorVisuals.Sim:
+        enum.ChemSimulatorVisuals.Sim:
+          Normal: { state: modifier }
+          Off: { state: modifier_off }
+          Running: { state: modifier_running }
+          Reading: { state: modifier_reading }
+          Printing: { state: modifier_printing }
+          Ready: { state: modifier_ready }
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: Anchorable
+  - type: Sprite
+    sprite: _AU14/Structures/Machines/Science/chem_simulator.rsi
+    offset: "0.5, 0.5"
+    state: modifier
+  - type: ChemSimulator
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.40,0.4,1.40,1"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: ContainerContainer
+    containers:
+      target: !type:ContainerSlot
+      reference: !type:ContainerSlot
+  - type: ActivatableUI
+    key: enum.ChemSimulatorUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.ChemSimulatorUI.Key:
+        type: ChemSimulatorBui

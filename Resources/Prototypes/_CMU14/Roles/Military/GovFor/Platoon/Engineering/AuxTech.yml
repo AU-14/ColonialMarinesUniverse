@@ -51,18 +51,12 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankSergeant:
-      entity: AU14ChevronUSCMSergeant
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORAuxTech
-        time: 86400 # 24 hours
     RMCRankCorporal:
       entity: AU14ChevronUSCMCorporal
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobGOVFORAuxTech
-        time: 61200 # 17 hours
+        time: 86400 # 24 hours
     RMCRankLanceCorporal:
       entity: AU14ChevronUSCMLanceCorporal
       requirements:
@@ -165,6 +159,7 @@
   equipment:
     shoes: CMBootsBlackFilled
     back: CMSatchelMarine
+    ears: AU14HeadsetOpforAuxiliary
   storage:
     back:
     - CMStampApproved

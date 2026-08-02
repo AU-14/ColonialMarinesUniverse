@@ -15,6 +15,18 @@
         prob: 0.1
 
 - type: entity
+  id: CMUCrateSecureCipheringExperiment
+  parent: RMCCrateSecureWeYa
+  name: secure Weyland-Yutani crate
+  description: A secure Weyland-Yutani crate. You don't know what is in it, but there is a rather large "CLASSIFIED" label and a plethora of warning semiotics.
+  suffix: CMU, Xeno Eggs
+  components:
+  - type: StorageFill
+    contents:
+      - id: XenoEgg
+        amount: 1
+
+- type: entity
   id: AU14CrateSecureWeYuDrugs
   parent: AU14CrateSecureWeYuXenoEggs
   name: secure We-Yu crate
@@ -61,3 +73,55 @@
         amount: 6
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
+
+- type: entity
+  id: CMUCrateSecureWYRandomExp
+  parent: RMCCrateSecureWeYa
+  name: Weyland-Yutani Experiment Crate
+  description: A secure Weyland-Yutani crate, you do not know what is in it. There is a big "EXPERIMENTAL" label on it.
+  suffix: CMU, Random
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: CMUCrateSecureWYRandomExp
+        rolls: 1
+
+- type: entityTable
+  id: CMUCrateSecureWYRandomExp
+  table: !type:GroupSelector
+    children:
+    - !type:AllSelector
+      children:
+      - id: XenoEgg
+      - id: XenoEgg
+      - id: CMUYautjaHivebreaker
+        prob: 0.1
+      weight: 1
+    - !type:AllSelector
+      children:
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      weight: 1
+    - !type:AllSelector
+      children:
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      weight: 5
+      

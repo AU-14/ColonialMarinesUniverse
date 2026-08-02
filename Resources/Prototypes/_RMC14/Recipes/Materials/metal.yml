@@ -37,7 +37,8 @@
   doAfterTimeMin: 1.5
   materialCost: 6
   skill: RMCSkillConstruction
-  requiredSkillLevel: 2
+  # AU14: any construction skill may build these.
+  requiredSkillLevel: 0
 
 - type: rmcConstruction
   id: RMCHandrailBuild

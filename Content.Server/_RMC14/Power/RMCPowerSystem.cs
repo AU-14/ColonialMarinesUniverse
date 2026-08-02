@@ -101,6 +101,9 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
         receiver.Powered = true;
 
         Dirty(ent, ent.Comp);
+        // the networked Powered flag lives on the apc receiver, without this the
+        // client examine shows unpowered until the server examine text arrives
+        Dirty(ent.Owner, receiver);
 
         var ev = new PowerChangedEvent(true, 0);
         RaiseLocalEvent(ent, ref ev);

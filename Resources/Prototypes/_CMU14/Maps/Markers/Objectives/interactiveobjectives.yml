@@ -5,28 +5,28 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: hackcomputerobj
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - ForceOnForce
     - DistressSignal
-    possiblefactions:
+    factions:
     - govfor
     repeating: false
-    objectivelevel: 1
-    custompoints: 10
-    ObjectiveDescription: "Hack an enemy field operations computer"
+    objectiveLevel: 1
+    customPoints: 10
+    objectiveDescription: "Hack an enemy field operations computer"
   - type: InteractObjective
-    Interactables:
+    interactables:
     - AU14ObjectiveItemHackableComputer
-    doAfterMessagebegin: "You begin hacking the computer..."
-    doAfterMessagecomplete: "You successfully extract the data."
+    doAfterMessageBegin: "You begin hacking the computer..."
+    doAfterMessageComplete: "You successfully extract the data."
     spawn: true
-    spawnmarker: hackcomputerspawnmarker
-    amounttospawn: 1
-    interactionsneeded: 1
-    interacttime: 10
+    spawnMarkerId: hackcomputerspawnmarker
+    spawnCount: 1
+    interactionsNeeded: 1
+    interactTime: 10
 
 - type: entity
   name: Hack Computer Spawn Marker
@@ -35,5 +35,5 @@
   components:
   - type: Sprite
     state: red
-  - type: FetchObjectiveMarker
-    fetchid: hackcomputerspawnmarker
+  - type: CMUObjectiveMarker
+    fetchId: hackcomputerspawnmarker

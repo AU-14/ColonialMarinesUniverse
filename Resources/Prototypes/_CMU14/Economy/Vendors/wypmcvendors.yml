@@ -86,6 +86,8 @@
       entries:
       - id: AU14BeltMarineBlack
         amount: 40
+      - id: CMUBeltCombatSidearmRig
+        amount: 15
       - id: RMCBeltHolsterSMGPouch
         amount: 15
       - id: RMCBeltGrenade
@@ -203,7 +205,7 @@
         amount: 15
       - id: CMEntrenchingTool
         amount: 15
-      - id: RMCShovel
+      - id: AU14ToolShovel
         amount: 10
       - id: CMScrewdriver
         amount: 5
@@ -232,7 +234,9 @@
     - name: Gas Mask
       entries:
       - id: CMMaskGas
-        amount: 20
+        amount: 40
+      - id: CMMaskPrescriptionGas
+        amount: 10
       - id: CMUGasMaskFilterWY
         amount: 40
       - id: AU14PouchGasMaskBag
@@ -750,6 +754,109 @@
 
 - type: entity
   parent: ColMarTechBase
+  id: AU14WYsquadleaderequipmentvendor
+  name: We-Yu PMC squad leader vendor
+  description: >-
+    An automated equipment rack, hooked up to a compact storage of Weyland-Yutani PMC squad-leadership equipment.
+    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORSquadSergeant
+    - AU14JobOPFORSquadSergeant
+    - AU14JobGOVFORSquadSergeantCMBCIU
+    - AU14JobGOVFORSquadSergeantRMC
+    - AU14JobGOVFORSquadSergeantUPP
+    - AU14JobGOVFORSquadSergeantWYPMC
+    sections:
+    - name: Apparel
+      choices: { CMHat: 2 }
+      entries:
+      - id: ArmorHelmetPMCOfficer
+      - id: RMCHeadBeanie
+    - name: Squad Leader Essentials
+      takeAll: CMStandard
+      entries:
+      - id: RMCVendorBundleCrewLeader
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMBackpackMarine
+      - id: RMCScabbardMacheteFilled
+      - id: CMSatchelMarine
+        recommended: true
+    - name: Footwear
+      entries:
+      - id: AU14SpikeBoots
+        points: 8
+        recommended: true
+    - name: Utilities
+      entries:
+      - id: RMCWhistle
+        points: 3
+      - id: CMFireExtinguisherPortable
+        points: 3
+      - id: RMCMotionDetector
+        points: 5
+      - id: RMCFulton20
+        points: 5
+    - name: Binoculars
+      entries:
+      - id: RMCRangefinder
+        points: 3
+      - id: RMCLaserDesignator
+        points: 5
+    - name: Engineering Supplies
+      entries:
+      - id: CMSheetMetal10
+        name: metal x10
+        points: 5
+        recommended: true
+      - id: CMSheetPlasteel10
+        name: plasteel x10
+        points: 7
+        recommended: true
+      - id: RMCExplosivePlastic
+        points: 5
+        recommended: true
+      - id: RMCExplosiveBreachingCharge
+        points: 7
+        recommended: true
+      - id: CMSandbagEmpty25
+        name: sandbags x25
+        points: 10
+        recommended: true
+      - id: RMCPackFlareCAS
+        points: 7
+      - id: RMCWeldingGoggles
+        points: 5
+    - name: Medical Supplies
+      entries:
+      - id: CMBurnKit10
+        points: 2
+      - id: CMTraumaKit10
+        points: 2
+      - id: CMAdvFirstAidKitFilled
+        points: 12
+      - id: CMBicaridineAutoInjector
+        points: 1
+      - id: CMDexalinPlusAutoInjector
+        points: 1
+      - id: CMInaprovalineAutoInjector
+        points: 1
+      - id: CMKelotaneAutoInjector
+        points: 1
+      - id: CMTricordrazineAutoInjector
+        points: 1
+      - id: CMHealthAnalyzer
+        points: 4
+      - id: CMRollerBedSpawnFolded
+        points: 2
+
+- type: entity
+  parent: ColMarTechBase
   id: AU14WYWeaponsVendor
   name: We-Yu PMC weapons rack
   description: >-
@@ -768,10 +875,13 @@
     - name: Weapons
       choices: { CMUPrimaryWeapon: 1 }
       entries:
+      - id: CMUGunCaseRifleNSG23
       - id: AU14KitWeaponFP9000
       - id: AU14KitWeaponM39B2
     - name: Weapon Ammunition
       entries:
+      - id: RMCMagazineRifleSSG45
+        amount: 60
       - id: RMCMagazineSMGFP9000
         amount: 60
       - id: CMMagazineSMGM63
@@ -882,6 +992,10 @@
         amount: 8
       - id: AU14WeaponRifleF44AA
         amount: 1
+      - id: RMCWeaponRifleSSG45
+        amount: 3
+      - id: WeaponShotgunM890
+        amount: 3
     - name: primary ammunition
       entries:
       - id: RMCMagazineSMGFP9000
@@ -902,6 +1016,12 @@
         amount: 5
       - id: AU14MagazineRifleF44AA
         amount: 5
+      - id: RMCMagazineRifleSSG45AP
+        amount: 25
+      - id: RMCMagazineRifleSSG45Extended
+        amount: 30
+      - id: RMCMagazineRifleSSG45
+        amount: 100
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -1028,6 +1148,8 @@
         amount: 4
       - id: RMCFulton20
         amount: 4
+      - id: RMCOverwatchCameraTripod
+        amount: 4
       - id: RMCSentryLaptop
         amount: 4
     - name: RTO Packs
@@ -1074,3 +1196,64 @@
         amount: 1
       - id: RMCTentUNMCExtendedMessFolded
         amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14WYShipsideUniformVendor
+  name: We-Yu PMC shipside uniform vendor
+  description: A stripped-down dispenser rack stocked with off-duty uniforms, footwear, and light personal gear for wear aboard ship.
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Softcovers
+      entries:
+      - id: AU14WYPMCBallCap
+        amount: 20
+      - id: AU14HeadCommandoBeanie
+        amount: 10
+    - name: Fatigues
+      entries:
+      - id: AU14WYPMCFatigues
+        amount: 40
+    - name: Footwear
+      entries:
+      - id: RMCBootsPMCFilled
+        amount: 25
+      - id: RMCBootsCorporate
+        amount: 40
+    - name: Mask
+      entries:
+      - id: CMMaskCoif
+        amount: 20
+      - id: RMCMaskScarfBlack
+        amount: 20
+      - id: RMCMaskScarfGray
+        amount: 20
+      - id: RMCMaskTornScarfGreen
+        amount: 20
+      - id: RMCMaskTornScarfDesert
+        amount: 20
+      - id: RMCMaskTornScarfSnow
+        amount: 20
+      - id: RMCMaskTornScarfBlack
+        amount: 20
+      - id: RMCMaskSmockBlack
+        amount: 20
+      - id: RMCMaskNeckerchiefGray
+        amount: 20
+    - name: Glasses
+      entries:
+      - id: AU14GlassesBiMex
+        amount: 25
+      - id: AU14GlassesBiMexOrange
+        amount: 25
+      - id: RMCGlassesTriMaxBronze
+        amount: 25
+    - name: Bag
+      entries:
+      - id: CMSatchelMarine
+        amount: 40

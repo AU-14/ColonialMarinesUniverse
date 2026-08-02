@@ -45,6 +45,9 @@
     - Corp
     - Colony
     - Synth #RMC14 End
+    - AU14GovforCommand
+    - AU14OpforCommand
+    - aulegacygroupcommand
     tags:
     - NuclearOperative
     - SyndicateAgent
@@ -131,7 +134,7 @@
     govfor: true
     clf: true
     liveUpdate: true
-  
+
 
 - type: entity
   abstract: true

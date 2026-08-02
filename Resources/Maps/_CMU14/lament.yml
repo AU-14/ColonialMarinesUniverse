@@ -155052,6 +155052,8 @@ entities:
     - type: FaxMachine
       name: Military CIC
       notifyAdmins: True
+      groups:
+      - military-command
   - uid: 1885
     components:
     - type: Transform
@@ -155158,6 +155160,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Military Provost Office
+      groups:
+      - military-command
 - proto: CMFaxSPP
   entities:
   - uid: 1899
@@ -562852,7 +562856,7 @@ entities:
     - type: Transform
       pos: -152.5,-60.5
       parent: 1
-- proto: MaintenanceJack
+- proto: AU14MaintenanceJack
   entities:
   - uid: 82847
     components:

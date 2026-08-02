@@ -38,6 +38,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     private static readonly HashSet<string> CommandJobIds = new(StringComparer.OrdinalIgnoreCase)
     {
         "AU14JobCLFCellLeader",
+        "AU14JobCLFRadioOperator",
         "AU14JobCLFPhysician",
         "AU14JobCLFSurgeon"
     };

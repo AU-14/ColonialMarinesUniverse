@@ -164,9 +164,12 @@ public sealed partial class OverwatchSquadView : Control
         {
             var name = Names.GetChild(i);
             var role = Roles.GetChild(i);
+            var area = Locations.GetChild(i);
             if (!string.IsNullOrWhiteSpace(text))
             {
-                if (!name.ChildrenContainText(text) && !role.ChildrenContainText(text))
+                if (!name.ChildrenContainText(text) &&
+                    !role.ChildrenContainText(text) &&
+                    !area.ChildrenContainText(text))
                 {
                     MakeViewVisible(i, false);
                     continue;

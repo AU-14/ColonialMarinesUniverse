@@ -4,6 +4,7 @@ using Content.Shared.Damage;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Nutrition.Components;
+using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
 using Content.Shared.StatusIcon;
 using Robust.Shared.Prototypes;
@@ -22,6 +23,7 @@ public sealed partial class HungerSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeedModifier = default!;
     [Dependency] private SharedJetpackSystem _jetpack = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     private static readonly ProtoId<SatiationIconPrototype> HungerIconOverfedId = "HungerIconOverfed";
     private static readonly ProtoId<SatiationIconPrototype> HungerIconPeckishId = "HungerIconPeckish";
@@ -52,18 +54,41 @@ public sealed partial class HungerSystem : EntitySystem
 
     private void OnRefreshMovespeed(EntityUid uid, HungerComponent component, RefreshMovementSpeedModifiersEvent args)
     {
-        if (component.CurrentThreshold > HungerThreshold.Starving)
-            return;
-
         if (_jetpack.IsUserFlying(uid))
             return;
 
-        args.ModifySpeed(component.StarvingSlowdownModifier, component.StarvingSlowdownModifier);
+        // How soon these kick in is entirely a function of BaseDecayRate and Thresholds - see base.yml.
+        if (component.CurrentThreshold <= HungerThreshold.Peckish)
+            args.ModifySpeed(component.PeckishSlowdownModifier, component.PeckishSlowdownModifier);
+
+        if (component.CurrentThreshold <= HungerThreshold.Starving)
+            args.ModifySpeed(component.StarvingSlowdownModifier, component.StarvingSlowdownModifier);
     }
 
     private void OnRejuvenate(EntityUid uid, HungerComponent component, RejuvenateEvent args)
     {
         SetHunger(uid, component.Thresholds[HungerThreshold.Okay], component);
+    }
+
+    /// <summary>
+    /// Pops the "you need to eat" reminder while Peckish or worse, throttled by <see cref="HungerComponent.ReminderPopupInterval"/>.
+    /// </summary>
+    private void UpdateReminderPopup(EntityUid uid, HungerComponent component)
+    {
+        if (component.CurrentThreshold > HungerThreshold.Peckish)
+            return;
+
+        var reminder = EnsureComp<NutritionReminderComponent>(uid);
+        var curTime = _timing.CurTime;
+        if (curTime < reminder.NextReminderPopupTime)
+            return;
+
+        reminder.NextReminderPopupTime = curTime + component.ReminderPopupInterval;
+
+        var message = component.CurrentThreshold <= HungerThreshold.Starving
+            ? "nutrition-hunger-overdue-severe"
+            : "nutrition-hunger-overdue-warning";
+        _popup.PopupClient(Loc.GetString(message), uid, uid);
     }
 
     /// <summary>
@@ -102,6 +127,15 @@ public sealed partial class HungerSystem : EntitySystem
 
         SetAuthoritativeHungerValue((uid, component), amount);
         UpdateCurrentThreshold(uid, component);
+    }
+
+    /// <summary>
+    /// Sets an entity's hunger to the value of the given threshold, e.g. to spawn them already Peckish.
+    /// </summary>
+    public void SetHungerToThreshold(EntityUid uid, HungerComponent component, HungerThreshold threshold)
+    {
+        if (component.Thresholds.TryGetValue(threshold, out var value))
+            SetHunger(uid, value, component);
     }
 
     /// <summary>
@@ -271,6 +305,7 @@ public sealed partial class HungerSystem : EntitySystem
 
             UpdateCurrentThreshold(uid, hunger);
             DoContinuousHungerEffects(uid, hunger);
+            UpdateReminderPopup(uid, hunger);
         }
     }
 }

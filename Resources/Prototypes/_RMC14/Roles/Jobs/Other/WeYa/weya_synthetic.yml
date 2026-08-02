@@ -9,6 +9,9 @@
   startingGear: RMCGearCorporateSynthetic
   icon: "RMCJobIconSynth"
   joinNotifyCrew: false
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   accessGroups:
   - RMCWeYaExec
   special:

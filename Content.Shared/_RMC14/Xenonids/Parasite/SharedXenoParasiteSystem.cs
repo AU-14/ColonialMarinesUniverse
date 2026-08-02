@@ -1157,6 +1157,15 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         Dirty(burst);
     }
 
+    public void SetHive(EntityUid burst, EntityUid? hive)
+    {
+        if (TryComp<VictimInfectedComponent>(burst, out var comp))
+        {
+            comp.Hive = hive;
+        }
+        DirtyEntity(burst);
+    }
+
     public void SetHive(Entity<VictimInfectedComponent> burst, EntityUid? hive)
     {
         burst.Comp.Hive = hive;

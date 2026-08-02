@@ -101,7 +101,7 @@
   - type: GunIgnoreContainerOwnerCollision
   - type: GunIgnorePrediction
   - type: Gun
-    fireRate: 0.3333
+    fireRate: 0.16665
     projectileSpeed: 18
     minAngle: 10
     maxAngle: 10
@@ -124,11 +124,11 @@
     capacity: 10
   - type: VehicleHardpointAmmo
     magazineSize: 10
-    maxStoredMagazines: 3
+    maxStoredMagazines: 1
   - type: GunFireArc
     arc: 120
   - type: RefillableByBulletBox
-    bulletType: VehicleAmmoBoxSmokeLauncher
+    bulletType: VehicleAmmoBoxGrenadeLauncher
   - type: GunMuzzleOffset
     offset: "0,0"
     useDirectionalOffsets: true
@@ -251,7 +251,7 @@
     accuracyMultiplierUnwielded: 5
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeSentry10x50mm
+    proto: CMUCartridgeCupolaTracer
     capacity: 500
   - type: VehicleHardpointAmmo
     magazineSize: 500
@@ -270,6 +270,73 @@
   - type: HardpointVisual
     vehicleState: m56cupola_0
     damagedVehicleState: m56cupola_1
+
+
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankCupolaTWE
+  name: Improper L98 10x28mm Hull General Purpose Machine Gun
+  description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    state: mounted_cupola
+  - type: HardpointItem
+    hardpointType: Launcher
+    vehicleFamily: Tank
+    slotType: Launcher
+    damageMultiplier: 0.0
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+  - type: VehicleTurretAttachment
+  - type: VehicleTurret
+    offsetRotatesWithTurret: true
+    useDirectionalOffsets: true
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
+    showOverlay: true
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: mounted_cupola_0
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: Gun
+    fireRate: 6
+    minAngle: 3
+    maxAngle: 3
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
+    cameraRecoilScalar: 0
+  - type: GunIFF
+    enabled: true
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 5
+    accuracyMultiplierUnwielded: 5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: VehicleCartridgeSentry10x50mm
+    capacity: 500
+  - type: VehicleHardpointAmmo
+    magazineSize: 500
+    maxStoredMagazines: 1
+  - type: GunFireArc
+    arc: 180
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxCupola
+  - type: GunMuzzleOffset
+    offset: "0,0"
+    useDirectionalOffsets: true
+    offsetEast: "0,0.2"
+    muzzleOffset: "0,-1"
+    useAimDirection: true
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: mounted_cupola_0
+    damagedVehicleState: mounted_cupola_1
 
 - type: entity
   parent: VehicleTankHardpointBase

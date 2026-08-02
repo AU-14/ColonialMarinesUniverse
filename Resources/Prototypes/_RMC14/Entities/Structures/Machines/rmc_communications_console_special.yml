@@ -68,6 +68,20 @@
   - type: OverwatchConsole
     canOrbitalBombardment: true
     group: GOVFOR
+  - type: AU14CallsignConsole
+    faction: govfor
+  # child UserInterface overrides replace the whole interfaces dict, so the
+  # parent keys are redeclared alongside the callsign directory
+  - type: UserInterface
+    interfaces:
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
 
 - type: entity
   parent: RMCOverwatchConsoleGovfor
@@ -90,6 +104,18 @@
     group: OPFOR
   - type: TacticalMapComputer
     faction: opfor
+  - type: AU14CallsignConsole
+    faction: opfor
+  - type: UserInterface
+    interfaces:
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
 - type: entity
   parent: RMCOverwatchConsoleOpfor
   id: RMCOverwatchConsoleOpforRotating

@@ -10,25 +10,47 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Verbs;
 using Robust.Shared.Console;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.Server._RMC14.Roles;
 
 public sealed partial class FindParasiteSystem : EntitySystem
 {
-    [Dependency] private EntityManager _entities = default!;
-    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    private static readonly TimeSpan UiRefreshInterval = TimeSpan.FromSeconds(1);
+
     [Dependency] private AreaSystem _areas = default!;
-    [Dependency] private XenoEggRoleSystem _parasiteRole = default!;
+    [Dependency] private EntityManager _entities = default!;
     [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] private XenoEggRoleSystem _parasiteRole = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+
+    private TimeSpan _nextUiRefresh;
+
     public override void Initialize()
     {
         base.Initialize();
 
         SubscribeLocalEvent<FindParasiteComponent, FindParasiteActionEvent>(FindParasites);
 
-        SubscribeLocalEvent<FindParasiteComponent, BoundUIOpenedEvent>(GetAllActiveParasiteSpawners);
+        SubscribeLocalEvent<FindParasiteComponent, BoundUIOpenedEvent>(OnUiOpened);
         SubscribeLocalEvent<FindParasiteComponent, FollowParasiteSpawnerMessage>(FollowParasiteSpawner);
         SubscribeLocalEvent<FindParasiteComponent, TakeParasiteRoleMessage>(TakeParasiteRole);
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_timing.CurTime < _nextUiRefresh)
+            return;
+
+        _nextUiRefresh = _timing.CurTime + UiRefreshInterval;
+
+        var query = EntityQueryEnumerator<FindParasiteComponent>();
+        while (query.MoveNext(out var uid, out var component))
+        {
+            if (_ui.IsUiOpen(uid, XenoFindParasiteUI.Key))
+                UpdateUi((uid, component));
+        }
     }
 
     private void FindParasites(Entity<FindParasiteComponent> parasiteFinderEnt, ref FindParasiteActionEvent args)
@@ -42,7 +64,12 @@ public sealed partial class FindParasiteSystem : EntitySystem
         args.Handled = true;
     }
 
-    private void GetAllActiveParasiteSpawners(Entity<FindParasiteComponent> parasiteFinderEnt, ref BoundUIOpenedEvent args)
+    private void OnUiOpened(Entity<FindParasiteComponent> ent, ref BoundUIOpenedEvent args)
+    {
+        UpdateUi(ent);
+    }
+
+    private void UpdateUi(Entity<FindParasiteComponent> parasiteFinderEnt)
     {
         var ent = parasiteFinderEnt.Owner;
         var uiState = new FindParasiteUIState();

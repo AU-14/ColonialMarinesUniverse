@@ -105,7 +105,6 @@ public sealed partial class RMCBruteLauncherSystem : EntitySystem
         SubscribeLocalEvent<RMCBruteProjectileComponent, AfterProjectileHitEvent>(OnProjectileHit);
         SubscribeLocalEvent<RMCBruteProjectileComponent, ProjectileFixedDistanceStopEvent>(OnProjectileFixedDistanceStop);
 
-        SubscribeLocalEvent<RMCProjectileSkipXenosComponent, PreventCollideEvent>(OnSkipXenosPreventCollide);
         SubscribeLocalEvent<RMCBackblastOnShootComponent, GunShotEvent>(OnBackblastShot);
     }
 
@@ -647,15 +646,6 @@ public sealed partial class RMCBruteLauncherSystem : EntitySystem
 
             _throwing.TryThrow(ent.Owner, Vector2.Normalize(direction), component.ThrowSpeed, animated: false, playSound: false, compensateFriction: true);
         }
-    }
-
-    private void OnSkipXenosPreventCollide(Entity<RMCProjectileSkipXenosComponent> projectile, ref PreventCollideEvent args)
-    {
-        if (args.Cancelled)
-            return;
-
-        if (HasComp<XenoComponent>(args.OtherEntity))
-            args.Cancelled = true;
     }
 
     private void OnBackblastShot(Entity<RMCBackblastOnShootComponent> launcher, ref GunShotEvent args)

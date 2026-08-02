@@ -84,6 +84,7 @@
     - DoorXenoResin
     - XenoStickyResin
     - XenoFastResin
+    - XenoCollapseResin
     - XenoResinSpikes
     - HiveAcidPillarXeno
     canOrderConstruction:
@@ -187,6 +188,37 @@
       path: /Audio/_RMC14/Xeno/alien_queen_died.ogg
       params:
         volume: -6
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoRoyalBlood
+          Quantity: 120
+        - ReagentId: CMUXenoPlasmaRoyal
+          Quantity: 120
+        - ReagentId: CMUXenoPlasmaChitin
+          Quantity: 120
+        - ReagentId: CMUXenoPlasmaPhero
+          Quantity: 120
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 120
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoRoyalBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaRoyal
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
   - type: WhitelistPickup
     whitelist:
       components:
@@ -273,7 +305,7 @@
     enabled: false
   - type: XenoToggleChargingStop
   - type: FixedIdentity
-    name: cm-job-name-xeno-queen
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartTQ
   - type: RMCTrackable

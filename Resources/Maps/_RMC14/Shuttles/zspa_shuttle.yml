@@ -32,7 +32,7 @@ entities:
   - uid: 2
     components:
     - type: MetaData
-      name: grid
+      name: ZSPA Shuttle (RMC)
     - type: Transform
       pos: -3.484375,0.421875
       parent: invalid

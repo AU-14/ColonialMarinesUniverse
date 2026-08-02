@@ -6,7 +6,7 @@
   components:
   - type: Sprite
     state: red
-  - type: ObjectiveMaster
+  - type: CMUObjectiveMaster
     gamePreset: DistressSignal
 
 # as you can see we only have DS/FoF - other presets use first mapped comp as fallback
@@ -18,16 +18,16 @@
   components:
   - type: Sprite
     state: red
-  - type: ObjectiveMaster
+  - type: CMUObjectiveMaster
     gamePreset: ForceOnForce
     maxNeutralObjectives: 7
     factions:
       govfor:
-        majorObjectives: 3   # default: 5
-        minorObjectives: 5   # default: 10
+        maxMajorObjectives: 3   # default: 5
+        maxMinorObjectives: 5   # default: 10
       opfor:
-        majorObjectives: 3   # default: 5
-        minorObjectives: 5   # default: 10
+        maxMajorObjectives: 3   # default: 5
+        maxMinorObjectives: 5   # default: 10
       # clf/scientist etc. inherit defaults
 
 # ├──[ OBJ CONSOLES ]────────────────────────────────────────────────┤

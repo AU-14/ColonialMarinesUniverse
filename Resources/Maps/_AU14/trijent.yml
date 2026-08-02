@@ -62365,7 +62365,6 @@ entities:
     - type: Transform
       pos: 211.5,-2.5
       parent: 1
-    - type: MarkedForDestroy
 - proto: AU14TallFloodlight
   entities:
   - uid: 21
@@ -162312,7 +162311,7 @@ entities:
     - type: Transform
       pos: 61.481674,-140.54593
       parent: 1
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 16766
     components:

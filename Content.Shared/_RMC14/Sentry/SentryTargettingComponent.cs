@@ -11,11 +11,18 @@ public sealed partial class SentryTargetingComponent : Component
     [DataField, AutoNetworkedField]
     public HashSet<string> FriendlyFactions = new();
 
+    /// <summary>
+    /// If populated, this sentry always uses exactly these friendly factions.
+    /// Deployer assignment, multitools, and sentry laptops cannot replace this whitelist.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public HashSet<string> LockedFriendlyFactions = new();
+
     [DataField, AutoNetworkedField]
     public HashSet<string> DeployedFriendlyFactions = new();
 
     [DataField, AutoNetworkedField]
-    public string OriginalFaction = "UNMC";
+    public string OriginalFaction = "GOVFOR";
 
     [DataField, AutoNetworkedField]
     public HashSet<string> TargetedFactions = new();

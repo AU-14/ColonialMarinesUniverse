@@ -219250,7 +219250,7 @@ entities:
     - type: Transform
       pos: -93.37922,-111.191574
       parent: 1
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 4342
     components:

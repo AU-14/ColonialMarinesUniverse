@@ -1,5 +1,5 @@
 - type: entity
-  parent: ClothingHeadBase
+  parent: [ClothingHeadBase, CMUBaseGasMaskFilterSlot]
   id: RMCHoodBioGeneral
   name: bio hood
   description: A hood that protects the head and face from biological contaminants.
@@ -10,11 +10,11 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Helmets/biohelmet.rsi
   - type: HideLayerClothing
-    slots:
-    - Hair
-    - Snout
-    - HeadTop
-    - HeadSide
+    layers:
+      Hair: HEAD
+      Snout: HEAD
+      HeadTop: HEAD
+      HeadSide: HEAD
   - type: CMArmor
     bio: 100 # CLOTHING_ARMOR_HARDCORE
     # armor_rad = 20

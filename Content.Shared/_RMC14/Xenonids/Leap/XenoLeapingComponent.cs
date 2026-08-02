@@ -1,3 +1,4 @@
+using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Physics;
 using Robust.Shared.Audio;
@@ -14,6 +15,12 @@ public sealed partial class XenoLeapingComponent : Component
 {
     [DataField, AutoNetworkedField]
     public EntityCoordinates Origin;
+
+    [DataField, AutoNetworkedField]
+    public MapCoordinates Destination;
+
+    [DataField, AutoNetworkedField]
+    public Vector2 Direction;
 
     [DataField, AutoNetworkedField]
     public TimeSpan ParalyzeTime;

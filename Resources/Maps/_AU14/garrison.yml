@@ -74547,19 +74547,16 @@ entities:
     - type: Transform
       pos: 224.5,-147.5
       parent: 1
-    - type: InteractObjectiveTracker
   - uid: 408
     components:
     - type: Transform
       pos: 212.5,-100.5
       parent: 1
-    - type: InteractObjectiveTracker
   - uid: 409
     components:
     - type: Transform
       pos: 180.5,-120.5
       parent: 1
-    - type: InteractObjectiveTracker
 - proto: AU14Patch32ndAB
   entities:
   - uid: 45
@@ -85314,6 +85311,8 @@ entities:
       parent: 1
     - type: FaxMachine
       destinationAddress: CMB Marshal's Office
+      groups:
+      - marshal-bureau
   - uid: 2032
     components:
     - type: Transform
@@ -158836,7 +158835,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 14663
     components:

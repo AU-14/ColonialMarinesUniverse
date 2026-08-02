@@ -245,9 +245,9 @@ public sealed class ScenarioPlanMarkerCoverageTest
 - type: partySpawn
   id: ScenarioPlanStandaloneCooldownThirdPartySpawn
   leadersToSpawn:
-    MobHuman: 1
+    MobHuman: 2
   gruntsToSpawn:
-    MobHuman: 1
+    MobHuman: 3
   spawnTogether: false
   Markers:
     Leader: scenario-plan-cooldown
@@ -514,7 +514,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
         yield return new TestCaseData(
                 ColonyFallVotingChoices.Id,
                 ColonyFallPreset,
-                "AUPlanetStableGarrison",
+                "CMUPlanetStableGarrisonRedux",
                 new[] { ColonyFallCultistThreat.Id, ColonyFallXenoThreat.Id, WendigoThreat.Id, ColonyFallAbominationThreat.Id })
             .SetName("ColonyFall Stable Garrison package slice matches adapter");
         yield return new TestCaseData(
@@ -1678,6 +1678,41 @@ public sealed class ScenarioPlanMarkerCoverageTest
     }
 
     [Test]
+    public async Task RoundStartThirdPartyReusesMarkersOnCooldownWhenRequired()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitPost(() =>
+        {
+            var entities = server.EntMan;
+
+            entities.SpawnEntity(StandaloneThirdPartyCooldownLeaderMarker, map.GridCoords);
+            entities.SpawnEntity(StandaloneThirdPartyCooldownMemberMarker, map.GridCoords);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var thirdPartySystem = server.System<ThirdPartySystem>();
+            var thirdParty = prototypes.Index<ThirdPartyPrototype>(StandaloneCooldownThirdParty);
+            var partySpawn = prototypes.Index<PartySpawnPrototype>(thirdParty.PartySpawn);
+
+            Assert.That(
+                thirdPartySystem.SpawnThirdParty(thirdParty, partySpawn, true),
+                Is.True,
+                "Round-start spawning should reuse a marker only after its distinct marker pool is exhausted.");
+            Assert.That(
+                thirdPartySystem.SpawnThirdParty(thirdParty, partySpawn, true),
+                Is.True,
+                "Round-start spawning should be able to reuse matching markers that are already on cooldown.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task ThirdPartyParachuteSpawnMarkersMatchLegacyRuntimeMarkerSelection()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -2661,10 +2696,88 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 var guerillaBucket = spawnPlan.BodyBuckets.Single(bucket => bucket.Bucket == "CLFGuerilla");
 
                 Assert.That(commandBucket.Bodies["AU14JobCLFCellLeader"], Is.EqualTo(1));
+                Assert.That(commandBucket.Bodies["AU14JobCLFRadioOperator"], Is.EqualTo(1));
                 Assert.That(commandBucket.Bodies["AU14JobCLFPhysician"], Is.EqualTo(1));
                 Assert.That(commandBucket.Bodies["AU14JobCLFSurgeon"], Is.EqualTo(1));
                 Assert.That(guerillaBucket.Bodies["AU14JobCLFGuerilla"], Is.EqualTo(3));
             });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task InsurgencyPresetSchedulesExplicitlyWhitelistedThirdPartiesWithoutThreat()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var componentFactory = server.ResolveDependency<IComponentFactory>();
+            var preset = prototypes.Index<GamePresetPrototype>(InsurgencyPreset);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(preset.ThirdPartyAutoSpawn, Is.True);
+                Assert.That(preset.ThirdPartyInterval, Is.EqualTo(1800));
+                Assert.That(preset.ThirdPartyRatio, Is.EqualTo(0.15f));
+                Assert.That(preset.MaxThirdParties, Is.EqualTo(2));
+            });
+
+            foreach (string planetId in preset.SupportedPlanets!)
+            {
+                Assert.That(
+                    TryGetPlanet(prototypes, componentFactory, planetId, out var planet),
+                    Is.True,
+                    $"{planetId} did not resolve to a planet map prototype.");
+
+                var candidates = planet!.ThirdParties
+                    .Select(prototypes.Index<ThirdPartyPrototype>)
+                    .Where(party =>
+                        AuRoundSelectionRules.IsExplicitlyWhitelistedForGamemode(party, InsurgencyPreset) &&
+                        AuRoundSelectionRules.IsThirdPartyAllowed(
+                            party,
+                            InsurgencyPreset,
+                            null,
+                            null,
+                            null,
+                            MarkerValidationPlayerCount))
+                    .ToList();
+
+                Assert.That(
+                    candidates,
+                    Is.Not.Empty,
+                    $"{planetId} has no population-valid third party explicitly whitelisted for Insurgency.");
+
+                var bodyCounts = candidates.ToDictionary(
+                    party => party,
+                    party => ThreatVoteSelection.CalculateBodyCount(
+                        prototypes.Index<PartySpawnPrototype>(party.PartySpawn),
+                        MarkerValidationPlayerCount).Total);
+                int bodyBudget = AuRoundSystem.CalculateThirdPartyBodyBudget(
+                    MarkerValidationPlayerCount,
+                    preset.ThirdPartyRatio);
+                List<ThirdPartyPrototype> selected = AuRoundSystem.SelectThirdPartiesWithinBodyBudget(
+                    candidates,
+                    preset.MaxThirdParties,
+                    bodyBudget,
+                    choices => choices[0],
+                    party => bodyCounts[party],
+                    out int selectedBodyCount);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(selected, Is.Not.Empty, $"{planetId} could not select an Insurgency third party within its preset budget.");
+                    Assert.That(selected, Has.Count.LessThanOrEqualTo(preset.MaxThirdParties));
+                    Assert.That(selectedBodyCount, Is.LessThanOrEqualTo(bodyBudget));
+                    Assert.That(
+                        selected.All(party =>
+                            AuRoundSelectionRules.IsExplicitlyWhitelistedForGamemode(party, InsurgencyPreset)),
+                        Is.True);
+                });
+            }
         });
 
         await pair.CleanReturnAsync();
@@ -4690,6 +4803,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
     private static bool IsClfCommandJob(string jobId)
     {
         return jobId.Equals("AU14JobCLFCellLeader", StringComparison.OrdinalIgnoreCase) ||
+               jobId.Equals("AU14JobCLFRadioOperator", StringComparison.OrdinalIgnoreCase) ||
                jobId.Equals("AU14JobCLFPhysician", StringComparison.OrdinalIgnoreCase) ||
                jobId.Equals("AU14JobCLFSurgeon", StringComparison.OrdinalIgnoreCase);
     }

@@ -50,6 +50,7 @@ namespace Content.Client.Construction
             SubscribeLocalEvent<LocalPlayerAttachedEvent>(HandlePlayerAttached);
             SubscribeNetworkEvent<AckStructureConstructionMessage>(HandleAckStructure);
             SubscribeNetworkEvent<ResponseConstructionGuide>(OnConstructionGuideReceived);
+            SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnConstructionPrototypesReloaded);
 
             CommandBinds.Builder
                 .Bind(ContentKeyFunctions.OpenCraftingMenu,
@@ -64,6 +65,19 @@ namespace Content.Client.Construction
             SubscribeLocalEvent<ConstructionGhostComponent, ComponentShutdown>(HandleGhostComponentShutdown);
         }
 
+        private void OnConstructionPrototypesReloaded(PrototypesReloadedEventArgs args)
+        {
+            if (!args.WasModified<ConstructionPrototype>() &&
+                !args.WasModified<ConstructionGraphPrototype>() &&
+                !args.WasModified<EntityPrototype>())
+                return;
+
+            _guideCache.Clear();
+            _recipesMetadataCache.Clear();
+            WarmupRecipesCache();
+            ConstructionRecipesChanged?.Invoke(this, EventArgs.Empty);
+        }
+
         private void HandleGhostComponentShutdown(EntityUid uid, ConstructionGhostComponent component, ComponentShutdown args)
         {
             ClearGhost(component.GhostId);
@@ -72,6 +86,10 @@ namespace Content.Client.Construction
         public bool TryGetRecipePrototype(string constructionProtoId, [NotNullWhen(true)] out string? targetProtoId)
         {
             if (_recipesMetadataCache.TryGetValue(constructionProtoId, out targetProtoId))
+                return true;
+
+            if (PrototypeManager.TryIndex(constructionProtoId, out ConstructionPrototype? constructionProto) &&
+                TryCacheRecipeTarget(constructionProto, out targetProtoId))
                 return true;
 
             targetProtoId = null;
@@ -140,6 +158,41 @@ namespace Content.Client.Construction
             }
         }
 
+        private bool TryCacheRecipeTarget(ConstructionPrototype constructionProto, [NotNullWhen(true)] out string? targetProtoId)
+        {
+            targetProtoId = null;
+            if (_recipesMetadataCache.TryGetValue(constructionProto.ID, out targetProtoId))
+                return true;
+
+            if (!PrototypeManager.TryIndex(constructionProto.Graph, out var graphProto) ||
+                !graphProto.Nodes.TryGetValue(constructionProto.TargetNode, out var targetNode))
+                return false;
+
+            var stack = new Stack<ConstructionGraphNode>();
+            stack.Push(targetNode);
+            while (stack.Count > 0)
+            {
+                var node = stack.Pop();
+                if (node.Entity.GetId(null, null, new(EntityManager)) is { } entityId &&
+                    PrototypeManager.TryIndex(entityId, out EntityPrototype? proto))
+                {
+                    constructionProto.Name = constructionProto.SetName != null ? Loc.GetString(constructionProto.SetName) : proto.Name;
+                    constructionProto.Description = constructionProto.SetDescription != null ? Loc.GetString(constructionProto.SetDescription) : proto.Description;
+                    _recipesMetadataCache[constructionProto.ID] = entityId;
+                    targetProtoId = entityId;
+                    return true;
+                }
+
+                foreach (var edge in node.Edges)
+                {
+                    if (graphProto.Nodes.TryGetValue(edge.Target, out var next))
+                        stack.Push(next);
+                }
+            }
+
+            return false;
+        }
+
         private void OnConstructionGuideReceived(ResponseConstructionGuide ev)
         {
             _guideCache[ev.ConstructionId] = ev.Guide;
@@ -194,6 +247,7 @@ namespace Content.Client.Construction
 
         public event EventHandler<CraftingAvailabilityChangedArgs>? CraftingAvailabilityChanged;
         public event EventHandler<string>? ConstructionGuideAvailable;
+        public event EventHandler? ConstructionRecipesChanged;
         public event EventHandler? ToggleCraftingWindow;
         public event EventHandler? FlipConstructionPrototype;
 
@@ -331,6 +385,11 @@ namespace Content.Client.Construction
                     _sprite.LayerSetVisible((ghost.Value, sprite), ghostLayerIndex, true);
                 }
 
+                // AU14: also copy the target's sprite SCALE. Copying only the RSI states rendered scaled
+                // entities (e.g. the 64x64 support beams drawn at 0.5) as their full-size art, so the placed
+                // ghost covered 4 tiles while the built entity covers 1.
+                _sprite.SetScale((ghost.Value, sprite), targetSprite.Scale);
+
                 Del(dummy);
             }
             else
@@ -438,7 +497,16 @@ namespace Content.Client.Construction
 
             _ghosts.Clear();
         }
+
+        public void QueryMenuExtensions(ref ConstructionMenuFilterEvent args)
+        {
+            RaiseLocalEvent(ref args);
+        }
     }
+
+    /// <summary>Allows fork/content systems to contribute recipe visibility without coupling the generic menu to them.</summary>
+    [ByRefEvent]
+    public record struct ConstructionMenuFilterEvent(HashSet<string> HiddenRecipes, HashSet<string> ExcludedSpawnlists);
 
     public sealed partial class CraftingAvailabilityChangedArgs : EventArgs
     {

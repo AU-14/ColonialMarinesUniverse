@@ -143,3 +143,12 @@ public record class EntityEffectReagentArgs : EntityEffectBaseArgs
         Scale = scale;
     }
 }
+
+public record class EntityEffectHydroArgs : EntityEffectReagentArgs
+{
+    public EntityEffectHydroArgs(EntityUid targetEntity, IEntityManager entityManager, EntityUid? organEntity, Solution? source, FixedPoint2 quantity, ReagentPrototype? reagent, ReactionMethod? method, FixedPoint2 scale) :
+        base(targetEntity, entityManager, organEntity, source, quantity, reagent, method, scale)
+    {
+    }
+}
+

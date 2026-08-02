@@ -234,7 +234,7 @@ public sealed partial class DrinkSystem : SharedDrinkSystem
         else
         {
             _popup.PopupEntity(
-                Loc.GetString("drink-component-try-use-drink-success-slurp-taste", ("flavors", flavors)), args.User,
+                Loc.GetString("drink-component-try-use-drink-success-slurp-taste", ("drink", entity.Owner), ("flavors", flavors)), args.User,
                 args.User);
             _popup.PopupEntity(
                 Loc.GetString("drink-component-try-use-drink-success-slurp"), args.User, Filter.PvsExcept(args.User), true);
@@ -249,8 +249,5 @@ public sealed partial class DrinkSystem : SharedDrinkSystem
         _stomach.TryTransferSolution(firstStomach.Value.Owner, drained, firstStomach.Value.Comp1);
 
         _forensics.TransferDna(entity, args.Target.Value);
-
-        if (!forceDrink && solution.Volume > 0)
-            args.Repeat = true;
     }
 }

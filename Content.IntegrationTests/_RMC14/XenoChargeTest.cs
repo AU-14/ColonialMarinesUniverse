@@ -2,9 +2,11 @@ using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Charge.CursorCharge;
 using Content.Shared.Actions.Components;
+using Content.Shared.Damage;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Robust.Shared.GameObjects;
+using Robust.Shared.IoC;
 using Robust.Shared.Map;
 
 namespace Content.IntegrationTests._RMC14;
@@ -132,6 +134,63 @@ public sealed class XenoChargeTest
             });
 
             await pair.CleanReturnAsync();
+        }
+    }
+
+    [Test]
+    public async Task ChargerLungeCannotDestroyUnchargeableStructure()
+    {
+        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
+
+        EntityUid charger = default;
+        EntityUid structure = default;
+        EntityCoordinates gridCoords = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var mapSystem = server.System<SharedMapSystem>();
+                mapSystem.CreateMap(out var mapId);
+                var grid = mapSystem.CreateGridEntity(mapId);
+                gridCoords = new EntityCoordinates(grid, 0, 0);
+
+                var tileDefinitionManager = server.ResolveDependency<ITileDefinitionManager>();
+                var plating = tileDefinitionManager["Plating"];
+                mapSystem.SetTile(grid.Owner, grid.Comp, gridCoords, new Tile(plating.TileId));
+            });
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+
+                charger = entMan.SpawnEntity("MobHuman", gridCoords.Offset(new Vector2(0.5f, 0.5f)));
+                structure = entMan.SpawnEntity("CMWallMetal", gridCoords.Offset(new Vector2(2.5f, 0.5f)));
+                entMan.RemoveComponent<XenoCrusherChargableComponent>(structure);
+
+                Assert.That(entMan.HasComponent<DamageableComponent>(structure), Is.True);
+                Assert.That(entMan.HasComponent<XenoCrusherChargableComponent>(structure), Is.False);
+
+                var chargerComp = entMan.EnsureComponent<XenoChargerComponent>(charger);
+                var state = entMan.EnsureComponent<XenoChargerStateComponent>(charger);
+                state.MoveState = XenoChargerMoveState.Lunging;
+                state.Stage = chargerComp.MaxStage;
+                state.LungeDirection = Vector2.UnitX;
+                state.LungeDistanceRemaining = chargerComp.LungeDistance +
+                                               state.Stage * chargerComp.LungeDistancePerStage;
+            });
+
+            await server.WaitRunTicks(20);
+
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(server.EntMan.EntityExists(structure), Is.True);
+                Assert.That(server.EntMan.HasComponent<XenoChargerStateComponent>(charger), Is.False);
+            });
+        }
+        finally
+        {
+            server.Dispose();
         }
     }
 

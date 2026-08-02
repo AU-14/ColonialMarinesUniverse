@@ -464,6 +464,14 @@ public sealed partial class AreaEchoSystem : EntitySystem
     // Maybe TODO: defer this onto ticks? but whatever its just clientside
     private void OnAudioParentChanged(Entity<AudioComponent> entity, ref EntParentChangedMessage args)
     {
+        // While a game state is being applied, grid/broadphase data for entities being
+        // created or reparented can be transiently inconsistent (e.g. on initial full-state
+        // sync when hundreds of entities are created in one batch). Skip echo processing in
+        // that case; the periodic Update() pass will pick playing audio back up once the
+        // state has settled.
+        if (_gameTiming.ApplyingState)
+            return;
+
         if (args.Transform.MapID == MapId.Nullspace)
             return;
 

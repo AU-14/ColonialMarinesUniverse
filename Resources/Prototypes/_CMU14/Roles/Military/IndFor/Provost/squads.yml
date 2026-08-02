@@ -1,0 +1,13 @@
+- type: entity
+  parent: SquadBase
+  id: SquadIndforProvost
+  name: Provost
+  components:
+  - type: SquadTeam
+    color: "#F0433E"
+    radio: radioProvost
+    group: INDFOR
+    roundStart: true
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_mp

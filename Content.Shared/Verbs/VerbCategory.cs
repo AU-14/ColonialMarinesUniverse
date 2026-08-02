@@ -47,6 +47,10 @@ namespace Content.Shared.Verbs
         public static readonly VerbCategory Debug =
             new("verb-categories-debug", "/Textures/Interface/VerbIcons/debug.svg.192dpi.png");
 
+        // AU14: container for the in-game "Add/Remove to Construction Menu" admin verbs.
+        public static readonly VerbCategory Construction =
+            new("verb-categories-construction", null);
+
         public static readonly VerbCategory Eject =
             new("verb-categories-eject", "/Textures/Interface/VerbIcons/eject.svg.192dpi.png");
 

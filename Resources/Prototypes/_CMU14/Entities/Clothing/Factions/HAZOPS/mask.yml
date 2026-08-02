@@ -44,3 +44,23 @@
     bio: 25
   - type: FireProtection
     reduction: 0.7
+
+# Prescription variants
+
+- type: entity
+  parent: AU14MaskGasHAZOPSM40
+  id: AU14MaskPrescriptionGasHAZOPSM40
+  name: prescription M40A4 gas mask
+  description: The distant cousin of the M40 gasmask from the 1990s. Designed specifically for HAZOPS teams, it provides heightened resistance to biological contaminants. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: AU14MaskGasHAZOPSM17
+  id: AU14MaskPrescriptionGasHAZOPSM17
+  name: prescription M17A4 gas mask
+  description: The evolution of the same mask your great great grandaddy complained about during his deployment in 'Nam. Heavy, big, and uncomfortable to wear. Donned with a CBRN hood. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4

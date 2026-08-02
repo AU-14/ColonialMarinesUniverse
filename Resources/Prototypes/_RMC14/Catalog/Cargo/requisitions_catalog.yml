@@ -1,5 +1,6 @@
 - type: entity # TODO RMC14 split these into per file categories and inherit all to ASRS
   abstract: true
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies ]
   id: CMCargoCatalog
   components:
   - type: Speech
@@ -34,6 +35,8 @@
         crate: AU14CrateBoxFloorTiles
       - cost: 350
         crate: AU14CrateBoxFloorTilesWood
+      - cost: 350
+        crate: CMUCrateBiosuitGeneral #the colors on this one are yellow therefore engineering
     - name: Materials
       entries:
       - cost: 350
@@ -84,6 +87,12 @@
         crate: RMCCrateClothingMedicalPouches
       - cost: 350
         crate: AU14CrateBoxFirefighting
+      - cost: 300
+        crate: CMUCrateGasMaskFilter
+      - cost: 1500
+        crate: CMUCrateGasMaskFilterHAZOPS
+      - cost: 350
+        crate: CMUCrateBiosuitSecurity
     - name: Medical
       entries:
       - cost: 350
@@ -106,6 +115,10 @@
         crate: AU14CrateBoxDefibrillator
         maxStock: 4
         stockReplenishDelay: 600
+      - cost: 850
+        crate: CMUCrateLabGlassware
+      - cost: 350
+        crate: CMUCrateBiosuitMedical
     - name: Supplies
       entries:
       - cost: 350
@@ -114,10 +127,6 @@
         crate: RMCCrateSupplyEvacuation
       - cost: 390
         crate: RMCCrateSupplyJanitor
-      - cost: 350
-        crate: RMCCrateHydro
-      - cost: 340
-        crate: hydroponicsTray
       - cost: 330
         crate: AU14CrateWorkTools
       - cost: 380
@@ -178,8 +187,8 @@
         crate: AU14CrateBoxABR40Magazines
     - name: Vehicle Ammo
       entries:
-      - cost: 2000
-        crate: RMCCrateVehicleAmmoLTBCannon
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonMixed
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1800
@@ -199,7 +208,7 @@
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 900
-        crate: RMCCrateVehicleAmmoGrenadeLauncher
+        crate: CMUCrateVehicleAmmoGrenadeLauncherMixed
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 700
@@ -210,8 +219,12 @@
         crate: RMCCrateVehicleAmmoTowLauncher
         maxStock: 2
         stockReplenishDelay: 300
-      - cost: 1000
-        crate: RMCCrateVehicleAmmoCupola
+      - cost: 1025
+        crate: CMUCrateVehicleAmmoCupolaMixed
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1050
+        crate: CMUCrateVehicleAmmoCupolaTracer
         maxStock: 2
         stockReplenishDelay: 300
       - cost: 1200

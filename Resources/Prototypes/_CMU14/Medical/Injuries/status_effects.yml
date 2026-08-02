@@ -298,6 +298,34 @@
   name: accelerated bone regen
   categories: [ HideSpawnMenu ]
 
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUOxycodoneHaze
+  name: opioid haze
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RMCDazed
+    visionReduction: 0.0125
+    outerFadeStart: 0.85
+    outerFadeEnd: 1.0
+    alpha: 0.0625
+    innerAlpha: 0
+    color: "#000000"
+
+- type: entity
+  parent: MobStatusEffectBase
+  id: StatusEffectCMUFentanylHaze
+  name: opioid haze
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RMCDazed
+    visionReduction: 0.05
+    outerFadeStart: 0.85
+    outerFadeEnd: 1.0
+    alpha: 0.25
+    innerAlpha: 0
+    color: "#000000"
+
 # ----- Pain shock ---------------------------------------------------------
 
 - type: entity

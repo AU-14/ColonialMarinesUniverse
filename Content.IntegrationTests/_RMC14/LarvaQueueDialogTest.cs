@@ -7,6 +7,7 @@ using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Evolution;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
@@ -25,6 +26,73 @@ namespace Content.IntegrationTests._RMC14;
 [TestFixture]
 public sealed class LarvaQueueJoinXenoUiTest
 {
+    [Test]
+    public async Task StrandedXenoIsOfferedCreditedBurrowedLarva()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        var entMan = server.EntMan;
+        var hiveSystem = entMan.System<SharedXenoHiveSystem>();
+        var larvaQueue = entMan.System<LarvaQueueSystem>();
+        var mind = entMan.System<MindSystem>();
+        var player = server.PlayerMan.Sessions.Single();
+
+        EntityUid ghost = default;
+        EntityUid hive = default;
+        EntityUid runner = default;
+        EntityUid spawnPoint = default;
+        NetEntity ghostNet = default;
+        await server.WaitAssertion(() =>
+        {
+            ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
+            hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
+            runner = entMan.SpawnEntity("CMXenoRunner", map.GridCoords.Offset(new Vector2(2, 0)));
+            spawnPoint = entMan.SpawnEntity("CMXenoRunner", map.GridCoords.Offset(new Vector2(3, 0)));
+            hiveSystem.SetHive(runner, hive);
+            hiveSystem.SetHive(spawnPoint, hive);
+
+            var mindId = mind.CreateMind(player.UserId, "Runner");
+            mind.TransferTo(mindId, runner);
+            mind.TransferTo(mindId, ghost);
+            mind.SetUserId(mindId, player.UserId);
+            ghostNet = entMan.GetNetEntity(ghost);
+
+            var hiveComp = entMan.GetComponent<HiveComponent>(hive);
+            larvaQueue.AddToLarvaQueueFront((hive, hiveComp), player.UserId);
+            entMan.DeleteEntity(runner);
+            hiveSystem.ChangeBurrowedLarva((hive, hiveComp), 1);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
+            AssertConfirmDialog(entMan, ghost, "a burrowed larva");
+        });
+
+        await ConfirmDialog(pair, ghostNet);
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(player.AttachedEntity, Is.Not.EqualTo(ghost));
+            Assert.That(player.AttachedEntity, Is.Not.EqualTo(spawnPoint));
+            Assert.That(entMan.HasComponent<XenoComponent>(player.AttachedEntity), Is.True);
+            Assert.That(entMan.GetComponent<HiveComponent>(hive).BurrowedLarva, Is.Zero);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task LarvaQueueOffersLarvaInsteadOfGhostedAdult()
     {

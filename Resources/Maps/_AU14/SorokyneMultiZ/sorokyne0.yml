@@ -53598,6 +53598,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: PAP Office
+      groups:
+      - marshal-bureau
 - proto: CMFaxColonyAdmin
   entities:
   - uid: 31178
@@ -53607,6 +53609,9 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Colony Admin
+      groups:
+      - marshal-bureau
+      - colony-command
 - proto: CMFilingCabinet
   entities:
   - uid: 1012
@@ -116731,7 +116736,7 @@ entities:
     - type: Transform
       pos: 130.5,51.5
       parent: 1
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 11049
     components:

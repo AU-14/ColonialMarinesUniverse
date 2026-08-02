@@ -1,0 +1,43 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "The files are from CMSS13-PVE",
+    "size": {
+        "x": 96,
+        "y": 96
+    },
+    "states": [
+        {
+            "name": "small_truck_brown_cargo",
+            "directions": 4
+        },
+        {
+            "name": "damaged_frame",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_brown_cargo_damage_2",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_brown_cargo_damage_3",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_brown_cargo_damage_4",
+            "directions": 4
+        },
+        {
+            "name": "small_truck_brown_cargo_damage_5",
+            "directions": 4
+        },
+        {
+            "name": "wheels_1",
+            "directions": 4
+        },
+        {
+            "name": "wheels_0",
+            "directions": 4
+        }
+    ]
+}

@@ -1,0 +1,31 @@
+- type: entity
+  parent: AU14CassetteTapeTan
+  id: AU14CassetteTapeUnitedAmericasVol1
+  name: United Americas Vol. 1 cassette
+  description: "Side A of an old UA cassette bootleg. It looks scratched, but still playable."
+  components:
+  - type: CassetteTape
+    songs:
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/hotel_california.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/student_visas.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/run_through_the_jungle.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/one.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/killing_in_the_name.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/all_along_the_watchtower.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/house_of_the_rising_sun.ogg
+
+- type: entity
+  parent: AU14CassetteTapeTan
+  id: AU14CassetteTapeUnitedAmericasVol2
+  name: United Americas Vol. 2 cassette
+  description: "Side B of the UA cassette bootleg. The magnetic tape film is held together with an ancient adhesive."
+  components:
+  - type: CassetteTape
+    songs:
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/enter_sandman.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/rosemary.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/risk.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/audhumbla.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/empress_rising.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/one_way_trip_to_the_sun.ogg
+    - /Audio/_CMU14/Private/Music/Cassette/UnitedAmericas/space_sabbath.ogg

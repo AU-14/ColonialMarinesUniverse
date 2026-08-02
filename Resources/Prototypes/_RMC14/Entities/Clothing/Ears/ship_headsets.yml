@@ -45,6 +45,7 @@
   id: RMCHeadsetShip
   name: marine radio headset
   description: A standard military radio headset. Bulkier than combat models.
+  suffix: RMC
   components:
   - type: ContainerFill
     containers:

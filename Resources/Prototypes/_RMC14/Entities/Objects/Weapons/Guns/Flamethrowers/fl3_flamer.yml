@@ -4,6 +4,8 @@
   name: flammenwerfer 3 heavy incineration unit
   description: A heavy industrial incineration unit produced by the Weyland Corporation and later by Weyland-Yutani. Often found among foliage cleaning missions on frontier colonies, it usually isn't seen in combat, but is devastating when actually used.
   components:
+  - type: Corrodible
+    isCorrodible: false
   - type: RMCMagneticItem
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Flamethrower/FL3/fl3_inhands.rsi

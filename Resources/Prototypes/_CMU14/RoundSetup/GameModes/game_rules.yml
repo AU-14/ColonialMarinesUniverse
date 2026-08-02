@@ -1,12 +1,14 @@
 - type: entity
   id: PlatoonSpawn
   parent: BaseGameRule
+  name: Spawn Platoon
   components:
   - type: PlatoonSpawnRule
 
 - type: entity
   id: AddGovfor
   parent: BaseGameRule
+  name: Spawn Govfor
   components:
   - type: AddJobsRule
     addToShip: true
@@ -45,6 +47,7 @@
 - type: entity
   id: AddOpfor
   parent: BaseGameRule
+  name: Spawn Opfor
   components:
   - type: AddJobsRule
     shipFaction: opfor
@@ -56,7 +59,8 @@
       AU14JobOPFORPlatOp: 4
       AU14JobOPFOROfficerIntel: 1
       AU14JobOPFORSquadSergeant: 3
-      AU14JobOPFORRadioTelephoneOperator: 4
+      AU14JobOPFORRadioTelephoneOperator: 3
+      AU14JobOPFORRadioTrafficOperator: 3
       AU14JobOPFORSquadRifleman: 75
 #     CMUJobOPFORDroneOperator: 1
 #     AU14JobOPFORWeaponsSpecialist: 3 # TODO
@@ -77,15 +81,29 @@
       AU14JobOPFORWorkingJoe: 1
 
 - type: entity
+  id: AddGovforCorrespondent
+  parent: BaseGameRule
+  name: Add Combat Reporter
+  components:
+  - type: AddJobsRule
+    addToShip: true
+    shipFaction: govfor
+    jobs:
+      AU14JobGOVFORCombatCorrespondent: 1
+
+- type: entity
   id: AddClf
   parent: BaseGameRule
+  name: Spawn CLF
   components:
   - type: AddJobsRule
     jobs:
       AU14JobCLFCellLeader: 1
+      AU14JobCLFRadioOperator: 1
       AU14JobCLFPhysician: 1
       AU14JobCLFSurgeon: 1
       AU14JobCLFGuerilla: 3
+      AU14JobCLFSapper: 1
 
 - type: entity
   id: ColonyAntags
@@ -99,7 +117,7 @@
 - type: entity
   id: AuVoteRule
   parent: BaseGameRule
-  name: AU Vote Rule
+  name: Start Game Votes
   description: Loads AU/CMU round votes, planets, platoons, and bioscan.
   components:
   - type: AuVoteRule

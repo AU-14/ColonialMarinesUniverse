@@ -255,6 +255,13 @@
         location: Right
     sortedHands:
     - hand_right
+  - type: RandomSound
+    sound:
+      collection: CMUMonkeyNoises
+      params:
+        volume: -10
+    min: 45
+    max: 60
   - type: ComplexInteraction
   - type: GenericVisualizer
     visuals:

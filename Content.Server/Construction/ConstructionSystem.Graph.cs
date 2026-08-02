@@ -414,6 +414,12 @@ namespace Content.Server.Construction
             var afterChangeEv = new AfterConstructionChangeEntityEvent(construction.Graph, construction.Node, previousNode);
             RaiseLocalEvent(newUid, ref afterChangeEv);
 
+            if (userUid is { } builder)
+            {
+                var completedEv = new ConstructionCompletedEvent(newUid, builder);
+                RaiseLocalEvent(newUid, ref completedEv, broadcast: true);
+            }
+
             return newUid;
         }
 

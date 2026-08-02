@@ -1,0 +1,80 @@
+- type: job
+  parent: CMUJobMilitaryBaseProvost
+  id: CMUJobINDFORProvostEnforcer
+  name: cmu-job-name-corp-provost-enforcer
+  description: cmu-ghost-role-information-provost-squad-description
+  icon: CMUJobIconProvostEnforcer
+  startingGear: CMUGearProvostEnforcer
+  playTimeTracker: CMJobProvostEnforcer
+  spawnMenuRoleName: Provost Enforcer
+  ranks:
+    CMURankProvostProvostEnforcer: []
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillCqc: 3
+      RMCSkillEndurance: 3
+      RMCSkillFirearms: 2
+      RMCSkillFireman: 2
+      RMCSkillMeleeWeapons: 1
+      RMCSkillPolice: 2
+  - type: JobPrefix
+    prefix: cmu-job-prefix-provost-enforcer
+
+- type: playTimeTracker
+  id: CMJobProvostEnforcer
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMUJobIconProvostEnforcer
+  icon:
+    sprite: _RMC14/Interface/cm_job_icons.rsi
+    state: hudsquad_pve
+
+# ├──[ Ghost Spawn ]─────────────────────────────────────────────────┤
+- type: entity
+  id: CMURandomHumanoidProvostEnforcer
+  name: provost role enforcer
+  suffix: Ghost
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/provost.rsi
+    state: provost
+  - type: RandomHumanoidSpawner
+    settings: CMUProvostEnforcer
+
+- type: randomHumanoidSettings
+  parent: RMCEventHumanoid
+  id: CMUProvostEnforcer
+  components:
+  - type: GhostRole
+    name: cmu-ghost-name-corp-provost-enforcer
+    description: cmu-ghost-role-information-provost-squad-description
+    rules: cmu-ghost-role-information-provost-rules
+    reregister: false
+    job: CMUJobINDFORProvostEnforcer
+    raffle:
+      settings: short
+  - type: GhostRoleApplySpecial
+    squad: SquadIndforProvost
+
+# ├──[ Loadout ]─────────────────────────────────────────────────────┤
+- type: startingGear
+  id: CMUGearProvostEnforcer
+  equipment:
+    head: RMCHeadBeretProvost
+    eyes: CMGlassesSecurity
+    ears: AU14HeadsetProvostAllCommand
+    jumpsuit: CMJumpsuitProvost
+    outerClothing: RMCArmorProvost
+    gloves: CMHandsBlackMarine
+    shoes: CMBootsBlackFilled
+    suitstorage: WeaponShotgunM890
+    id: CMUIDCardProvostEnforcer
+    belt: RMCM1984BeltFilled
+    back: CMSatchelSecurityFilledProvostEnforcer
+    pocket1: RMCPouchShotgunLargeBeanbag
+    pocket2: RMCPouchShotgunLargeSlugs
+  storage:
+    back:
+    - AU14PacketGrenadeTearGasFilled

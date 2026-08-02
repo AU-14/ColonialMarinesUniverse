@@ -26,6 +26,10 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: "7"
+    commandElement: true
+  - type: ANPRCRadioUser # senior NCO is radio trained, backup manpack operator
   - type: Skills
     preset: AU14SkillPresetPlatoonSeniorSergeant
   - type: RMCSpeechBubbleSpecificStyle

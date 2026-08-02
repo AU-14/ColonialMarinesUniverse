@@ -57,7 +57,12 @@ namespace Content.Client.Construction
             if (!IoCManager.Resolve<IPrototypeManager>().TryIndex(targetProtoId, out EntityPrototype? proto))
                 return;
 
-            manager.CurrentTextures = IoCManager.Resolve<IEntityManager>().System<SpriteSystem>().GetPrototypeTextures(proto).ToList();
+            // AU14 building overhaul (marked change in a non-AU14 file): pass the TARGET PROTOTYPE so the
+            // placement overlay honours its sprite Scale. The `CurrentTextures` setter passes a null prototype,
+            // which drops the scale - so a 64x64 scale:0.5 support beam previewed as a 4-tile ghost instead of
+            // 1 tile. PreparePlacementTexList applies prototype.Scale (PlacementManager), fixing the preview size.
+            var texs = IoCManager.Resolve<IEntityManager>().System<SpriteSystem>().GetPrototypeTextures(proto).ToList();
+            manager.PreparePlacementTexList(texs, !CanRotate, proto);
         }
     }
 }

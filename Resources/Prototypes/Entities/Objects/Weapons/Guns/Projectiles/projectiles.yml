@@ -759,7 +759,7 @@
 - type: entity
   parent: RMCProjectileRocket84mm
   id: RMCProjectileLTBCannon
-  name: LTB cannon shell
+  name: LTB HESH cannon shell
   categories: [ HideSpawnMenu ]
   components:
   - type: DeleteOnFixedDistanceStop
@@ -770,11 +770,12 @@
     impactEffect: BulletImpactEffect
     damage:
       types:
-        Blunt: 12
-        Piercing: 8
+        Blunt: 10
+        Piercing: 4
+        Structural: 60
     maxFixedRange: 0
   - type: VehicleDamageMultiplier
-    multiplier: 10
+    multiplier: 8
   - type: TriggerOnFixedDistanceStop
     delay: 0
   - type: DeleteOnTrigger

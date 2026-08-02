@@ -1,0 +1,22 @@
+- type: trackerMode
+  id: CommandingOfficer
+  alert: SquadTrackerCommandingOfficer
+  job: AU14JobGOVFORPlatCo
+
+- type: trackerMode
+  id: ExecutiveOfficer
+  alert: SquadTrackerExecutiveOfficer
+  job: AU14JobGOVFORadvisor
+
+- type: trackerMode
+  id: SeniorEnlistedAdvisor
+  job: AU14JobGOVFORadvisor
+
+- type: trackerMode
+  id: ChiefMilitaryPolice
+  alert: SquadTrackerChiefMilitaryPolice
+  job: AU14JobGOVFOROfficerMP
+
+- type: trackerMode
+  id: ChiefMedicalOfficer
+  job: AU14JobGOVFOROfficerMedical

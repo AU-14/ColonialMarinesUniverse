@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
-using Content.Shared.AU14.Objectives;
+using Content.Shared._CMU14.Round.Objectives.Component;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -1302,7 +1302,7 @@ public sealed partial class IntelSystem : EntitySystem
         if (planetMapId == null)
             return fallback;
 
-        var query = EntityQueryEnumerator<ObjectiveMasterComponent, TransformComponent>();
+        var query = EntityQueryEnumerator<CMUObjectiveMasterComponent, TransformComponent>();
         while (query.MoveNext(out var uid, out var comp, out var xform))
         {
             if (comp.IsActive && xform.MapID == planetMapId)

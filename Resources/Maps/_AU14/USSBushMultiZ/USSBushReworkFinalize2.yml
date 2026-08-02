@@ -1,11 +1,11 @@
 meta:
   format: 7
   category: Map
-  engineVersion: v277.0.0
+  engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 07/08/2026 08:10:36
-  entityCount: 841
+  time: 07/29/2026 16:58:59
+  entityCount: 833
 maps:
 - 1
 grids:
@@ -837,6 +837,25 @@ entities:
     - type: Transform
       pos: 23.5,24.5
       parent: 1
+    missingComponents:
+    - TacticalMapUser
+- proto: AU14MaintenanceJack
+  entities:
+  - uid: 179
+    components:
+    - type: Transform
+      pos: 28.35638,15.642
+      parent: 1
+  - uid: 180
+    components:
+    - type: Transform
+      pos: 28.51263,15.470125
+      parent: 1
+  - uid: 181
+    components:
+    - type: Transform
+      pos: 28.63763,15.345125
+      parent: 1
 - proto: CMApcHighCapacity
   entities:
   - uid: 212
@@ -1106,13 +1125,6 @@ entities:
     components:
     - type: Transform
       pos: 18.5,16.5
-      parent: 1
-- proto: CMTelecomServer
-  entities:
-  - uid: 158
-    components:
-    - type: Transform
-      pos: 23.5,13.5
       parent: 1
 - proto: CMWallReinforcedHeavyAlmayerAINoLights
   entities:
@@ -4713,46 +4725,24 @@ entities:
     - type: Transform
       pos: 46.5,-65.5
       parent: 1
-- proto: ComputerObjectivesGovfor
+- proto: RMCActionOpenTacticalMapMarine
   entities:
-  - uid: 139
+  - uid: 27
+    mapInit: true
+    paused: true
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20,22.5
-      parent: 1
-- proto: MaintenanceJack
-  entities:
-  - uid: 179
-    components:
-    - type: Transform
-      pos: 28.35638,15.642
-      parent: 1
-  - uid: 180
-    components:
-    - type: Transform
-      pos: 28.51263,15.470125
-      parent: 1
-  - uid: 181
-    components:
-    - type: Transform
-      pos: 28.63763,15.345125
-      parent: 1
-- proto: RMCAIConsoleARES
-  entities:
-  - uid: 142
-    components:
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 27,22.5
-      parent: 1
+      parent: 96
+    - type: Action
+      originalIconColor: '#FFFFFFFF'
+      container: 96
+      attachedEntity: 96
 - proto: RMCAIConsoleHERMES
   entities:
-  - uid: 143
+  - uid: 126
     components:
     - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 27,21.5
+      pos: 23.5,22.5
       parent: 1
 - proto: RMCAlmayerStairs
   entities:
@@ -4767,14 +4757,6 @@ entities:
     - type: Transform
       rot: 3.141592653589793 rad
       pos: 30.5,12.5
-      parent: 1
-- proto: RMCComputerIntelGovfor
-  entities:
-  - uid: 140
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20,21.5
       parent: 1
 - proto: RMCDeployerSentry
   entities:
@@ -4794,14 +4776,6 @@ entities:
     components:
     - type: Transform
       pos: 27.5,18.5
-      parent: 1
-- proto: RMCLifeboatConsole
-  entities:
-  - uid: 146
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 18.498198,15.067384
       parent: 1
 - proto: RMCLightFixtureBlueDoubleAlwaysPowered
   entities:
@@ -4956,26 +4930,6 @@ entities:
       parent: 1
 - proto: RMCPodDoorButtonBigRedShip
   entities:
-  - uid: 68
-    components:
-    - type: MetaData
-      name: AI Core Stairs
-    - type: Transform
-      rot: 3.141592653589793 rad
-      pos: 30.5,10
-      parent: 1
-    - type: Fixtures
-      fixtures: {}
-  - uid: 126
-    components:
-    - type: MetaData
-      name: AI Core Stairs
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 29,12.5
-      parent: 1
-    - type: Fixtures
-      fixtures: {}
   - uid: 185
     components:
     - type: MetaData
@@ -5031,24 +4985,6 @@ entities:
       category: AI Core
     - type: Fixtures
       fixtures: {}
-- proto: RMCShutterAlmayer
-  entities:
-  - uid: 71
-    components:
-    - type: MetaData
-      name: AI Core Stairs
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 29.5,10.5
-      parent: 1
-  - uid: 88
-    components:
-    - type: MetaData
-      name: AI Core Stairs
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 29.5,11.5
-      parent: 1
 - proto: RMCSprayBottleSpaceCleaner
   entities:
   - uid: 182
@@ -5081,12 +5017,6 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 18.498964,15.944345
       parent: 1
-  - uid: 141
-    components:
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 20,20.5
-      parent: 1
 - proto: RMCTelecomBusMainframe
   entities:
   - uid: 157
@@ -5114,21 +5044,6 @@ entities:
     components:
     - type: Transform
       pos: 19.474598,9.415131
-      parent: 1
-- proto: RMCWarshipControlConsole
-  entities:
-  - uid: 144
-    components:
-    - type: MetaData
-      name: USS GWB control console
-    - type: Transform
-      rot: -1.5707963267948966 rad
-      pos: 27,20.5
-      parent: 1
-  - uid: 184
-    components:
-    - type: Transform
-      pos: 23.5,22.5
       parent: 1
 - proto: RMCWindowReinforcedAIHull
   entities:
@@ -5176,5 +5091,33 @@ entities:
     components:
     - type: Transform
       pos: 17.5,14.5
+      parent: 1
+- proto: VMarkerShipCommsArray
+  entities:
+  - uid: 68
+    components:
+    - type: Transform
+      pos: 23.5,13.5
+      parent: 1
+- proto: VMarkerShipLockedDoubleCommandDoor
+  entities:
+  - uid: 71
+    components:
+    - type: Transform
+      pos: 29.5,11.5
+      parent: 1
+  - uid: 88
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 29.5,10.5
+      parent: 1
+- proto: VMarkerShipRosterConsole
+  entities:
+  - uid: 139
+    components:
+    - type: Transform
+      rot: 1.5707963267948966 rad
+      pos: 18.5,14.5
       parent: 1
 ...

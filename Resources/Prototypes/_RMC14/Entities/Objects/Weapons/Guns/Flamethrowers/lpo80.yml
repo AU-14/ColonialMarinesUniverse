@@ -46,6 +46,8 @@
   name: LPO80-T incinerator unit
   description: An aged but effective lightweight combat incinerator officially in service as a anti-fortification tool but, in practice, utilized in close quarters combat for flushing out enemy combatants. This one seems to be refurbished to fit certain fuel tanks.
   components:
+  - type: Corrodible
+    isCorrodible: false
   - type: RMCCanUseBroiler
   - type: RMCIgniter
     enabled: true

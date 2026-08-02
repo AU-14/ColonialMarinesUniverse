@@ -119,7 +119,7 @@
 - type: entity
   parent: AU14KitPlatoonOfficer
   id: AU14KitJOAdjutantKit
-  name: Adjutant Officer (XO) Kit
+  name: Executive Officer (XO) Kit
   description: >-
     The administrative heart of the command element. The most senior is the XO, the CO's second in command (who actually reads the fine print).
 
@@ -160,6 +160,8 @@
       - id: CMFolderYellowEmpty
         amount: 2
       - id: AU14StampAO
+        amount: 1
+      - id: CMUUniversalPaperTool
         amount: 1
 
 - type: entity
@@ -292,4 +294,6 @@
     - id: AU14BackpackRTOPackDesert
       amount: 1
     - id: AU14StampLO
+      amount: 1
+    - id: CMUUniversalPaperTool
       amount: 1

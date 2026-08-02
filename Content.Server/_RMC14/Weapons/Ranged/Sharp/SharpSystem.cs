@@ -37,6 +37,7 @@ public sealed partial class SharpSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedAuraSystem _aura = default!;
+    [Dependency] private CollisionWakeSystem _collisionWake = default!;
     [Dependency] private GunIFFSystem _gunIff = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
@@ -320,6 +321,7 @@ public sealed partial class SharpSystem : EntitySystem
         var mine = Spawn(projectile.Comp.Mine, coordinates);
         var xform = Transform(mine);
         _transform.AnchorEntity(mine, xform);
+        _collisionWake.SetEnabled(mine, false);
         _physics.SetBodyType(mine, BodyType.Static);
 
         if (_projectileIffQuery.TryComp(projectile, out var projectileIff) &&

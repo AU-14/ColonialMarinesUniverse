@@ -30,6 +30,7 @@ public sealed partial class UserDbDataManager : IPostInjectInit
 
     private ISawmill _sawmill = default!;
     private TimeSpan _loadTimingWarnThreshold = TimeSpan.FromSeconds(5);
+    private bool _joinTimingLogEnabled = true;
     private bool _loadTimingCVarSubscribed;
 
     // TODO: Ideally connected/disconnected would be subscribed to IPlayerManager directly,
@@ -135,6 +136,9 @@ public sealed partial class UserDbDataManager : IPostInjectInit
             return;
         }
 
+        if (!_joinTimingLogEnabled)
+            return;
+
         _sawmill.Warning(
             "[JOIN-TIMING] User data load for {Session} took {Elapsed:N0} ms ({LoaderCount} loaders, {FinisherCount} finishers)",
             session,
@@ -146,6 +150,9 @@ public sealed partial class UserDbDataManager : IPostInjectInit
     private void LogSlowAction(string phase, Delegate action, ICommonSession session, TimeSpan elapsed)
     {
         if (elapsed < _loadTimingWarnThreshold)
+            return;
+
+        if (!_joinTimingLogEnabled)
             return;
 
         _sawmill.Warning(
@@ -216,6 +223,8 @@ public sealed partial class UserDbDataManager : IPostInjectInit
 
         _cfg.OnValueChanged(CCVars.GameJoinTimingWarnSeconds,
             seconds => _loadTimingWarnThreshold = TimeSpan.FromSeconds(Math.Max(0f, seconds)), true);
+        _cfg.OnValueChanged(CCVars.GameJoinTimingLogEnabled,
+            enabled => _joinTimingLogEnabled = enabled, true);
         _loadTimingCVarSubscribed = true;
     }
 

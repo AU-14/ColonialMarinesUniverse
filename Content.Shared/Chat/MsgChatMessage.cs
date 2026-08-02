@@ -35,6 +35,11 @@ namespace Content.Shared.Chat
         public bool QuoteBody;
         public Color? AccentColor;
 
+        /// <summary>
+        /// Overrides the row's background highlight color (normally derived from the chat channel).
+        /// </summary>
+        public Color? BackgroundColorOverride;
+
         public ChatDisplayMetadata(
             ChatDisplayKind kind,
             string? senderName = null,
@@ -42,7 +47,8 @@ namespace Content.Shared.Chat
             string? verb = null,
             string? channelLabel = null,
             bool quoteBody = false,
-            Color? accentColor = null)
+            Color? accentColor = null,
+            Color? backgroundColorOverride = null)
         {
             Kind = kind;
             SenderName = senderName;
@@ -51,6 +57,7 @@ namespace Content.Shared.Chat
             ChannelLabel = channelLabel;
             QuoteBody = quoteBody;
             AccentColor = accentColor;
+            BackgroundColorOverride = backgroundColorOverride;
         }
     }
 

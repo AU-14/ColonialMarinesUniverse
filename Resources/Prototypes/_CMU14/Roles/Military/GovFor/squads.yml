@@ -3,6 +3,8 @@
   id: SquadGovfor
   name: Alpha
   components:
+  - type: AU14SquadCallsign
+    word: SABRE
   - type: SquadTeam
     color: "#F0433E"
     radio: radioGovforAlpha
@@ -17,6 +19,8 @@
   id: SquadGovforBravo
   name: Bravo
   components:
+  - type: AU14SquadCallsign
+    word: DAGGER
   - type: SquadTeam
     roundStart: true
     color: "#c7b646"
@@ -31,6 +35,8 @@
   id: SquadGovforCharlie
   name: Charlie
   components:
+  - type: AU14SquadCallsign
+    word: PIKE
   - type: SquadTeam
     roundStart: true
     group: GOVFOR
@@ -45,6 +51,8 @@
   id: SquadGovforIntel
   name: Auxiliary
   components:
+  - type: AU14SquadCallsign
+    word: LONGBOW
   - type: SquadTeam
     group: GOVFOR
     roundStart: true

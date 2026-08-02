@@ -21,6 +21,7 @@ permissions:
 env:
   DOTNET_VERSION: 10.0.x
   CONFIGURATION: Release
+  AUDIO_REPO_TOKEN: ${{ secrets.AUDIO_REPO_TOKEN }}
 
 jobs:
   prepare:
@@ -152,6 +153,7 @@ jobs:
 
   package:
     name: Package ${{ matrix.name }}
+    if: always() && needs.prepare.result == 'success'
     runs-on: ubuntu-latest
     needs: prepare
     strategy:
@@ -196,6 +198,24 @@ jobs:
           git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --recursive --depth=1
 
+      - name: Checkout ColonialMarinesAudio
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: AU-14/ColonialMarinesAudio
+          token: ${{ env.AUDIO_REPO_TOKEN }}
+          path: __audio-overlay
+
+      - name: Rsync CMAudio into Resources
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
+        run: |
+          mkdir -p Resources/Audio/_CMU14/Private/
+          rsync -a --delete \
+            __audio-overlay/Resources/Audio/_CMU14/Private/ \
+            Resources/Audio/_CMU14/Private/
+          du -sh Resources/Audio/_CMU14/Private/
+          rm -rf __audio-overlay
+
       - uses: actions/setup-dotnet@v5.2.0
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }}
@@ -226,6 +246,7 @@ jobs:
 
   publish:
     name: Publish test merge version
+    if: always() && needs.prepare.result == 'success' && needs.package.result == 'success'
     runs-on: ubuntu-latest
     needs:
       - prepare
@@ -265,6 +286,9 @@ jobs:
           pattern: test-merge-release-*
           path: release
           merge-multiple: true
+
+      - name: Show package sizes
+        run: ls -lh release/
 
       - name: Publish test merge version
         run: Tools/publish_multi_request.py

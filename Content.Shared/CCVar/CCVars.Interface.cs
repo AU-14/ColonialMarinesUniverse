@@ -20,7 +20,29 @@ public sealed partial class CCVars
     /// The layout style of the UI
     /// </summary>
     public static readonly CVarDef<string> UILayout =
-        CVarDef.Create("ui.layout", "Separated", CVar.CLIENTONLY | CVar.ARCHIVE);
+        CVarDef.Create("ui.layout", "Default", CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// If true, uses the improved Gmod-style construction menu instead of the classic one.
+    /// Defaults to true. Takes effect when gameplay is next entered.
+    /// </summary>
+    public static readonly CVarDef<bool> ConstructionMenuImproved =
+        CVarDef.Create("ui.construction_menu_improved", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
+    /// <summary>
+    /// Default material (construction graph material stack id, e.g. "CMSteel") used when an admin adds
+    /// an item to the construction menu in-game via the world right-click verb. Must be a CM material
+    /// stack id (CMSteel, CMPlasteel, CMGlass, RMCWood, …) — that is what the held sheets provide.
+    /// </summary>
+    public static readonly CVarDef<string> ConstructionMenuAddDefaultMaterial =
+        CVarDef.Create("construction.menu_add_default_material", "CMSteel", CVar.SERVERONLY);
+
+    /// <summary>
+    /// Default amount of <see cref="ConstructionMenuAddDefaultMaterial"/> required to build an
+    /// item added to the construction menu in-game.
+    /// </summary>
+    public static readonly CVarDef<int> ConstructionMenuAddDefaultAmount =
+        CVarDef.Create("construction.menu_add_default_amount", 1, CVar.SERVERONLY);
 
     /// <summary>
     /// The dimensions for the chat window in Default UI mode

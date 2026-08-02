@@ -12,7 +12,7 @@
   description: A builder of really big hives.
   components:
   - type: GhostRole
-    name: cm-job-name-xeno-hivelord
+    name: cmu-job-name-xeno-unknown
   - type: MobState
     allowedStates:
     - Alive
@@ -86,6 +86,29 @@
     size: Big
   - type: RMCXenoDamageVisuals
     prefix: hivelord
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaPurple
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaPhero
+          Quantity: 200
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 1
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -93,7 +116,7 @@
   - type: XenoInhands
     prefix: hivelord
   - type: FixedIdentity
-    name: cm-job-name-xeno-hivelord
+    name: cmu-job-name-xeno-unknown
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: RMCSurgeryXenoHeart
@@ -134,6 +157,7 @@
     - DoorXenoResinThick
     - XenoStickyResin
     - XenoFastResin
+    - XenoCollapseResin
     - XenoResinSpikes
     - HiveAcidPillarXeno
     canOrderConstruction:
@@ -188,6 +212,7 @@
     - DoorXenoResin
     - XenoStickyResin
     - XenoFastResin
+    - XenoCollapseResin
     - XenoResinSpikes
     - XenoWeedsSource
     canOrderConstruction:

@@ -23,4 +23,12 @@ public sealed partial class ConstructionPrototype : IInheritingPrototype, ICMSpe
 
     [DataField]
     public Color IconColor = Color.FromHex("#ffffff");
+
+    /// <summary>
+    /// AU14: which spawnlist (top-level group in the improved construction menu's left tree) this
+    /// recipe belongs to. Empty is treated as the default "AU14" spawnlist. Set by the in-game
+    /// construction-menu editor on generated entries.
+    /// </summary>
+    [DataField]
+    public string Spawnlist = string.Empty;
 }

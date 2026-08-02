@@ -330,9 +330,13 @@
   - type: CMVendorBundle
     bundle:
     - RMCExplosivePlastic
+    - RMCExplosiveBreachingCharge
     - RMCPackFlareCAS
     - RMCLaserDesignator
     - CMFireExtinguisherPortable
+    - RMCFulton20
+    - RMCBoxZiptie
+    - RMCWhistle
 
 - type: entity
   parent: RMCKitBase

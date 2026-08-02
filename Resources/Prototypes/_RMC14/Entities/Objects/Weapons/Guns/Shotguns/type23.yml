@@ -79,5 +79,30 @@
     - RMCWeaponShotgunType23
     - RMCWeaponShotgun
 
+
+- type: entity
+  name: Type 23 tactical shotgun
+  parent: RMCWeaponShotgunType23
+  id: CMUWeaponShotgunType23Tactical
+  description: A Refurbished type 23 in all black. This one seems to fit 18.5 Gauge ammunition too.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/UPP/type23_tac.rsi
+    layers:
+    - state: icon
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/UPP/type23_tac.rsi
+  - type: BallisticAmmoProvider
+    capacity: 5 # One in chamber 4 in tube we don't have chambering yet
+    proto: RMCShellShotgunHeavyBuckshot #try it
+    whitelist:
+      tags: #Heavy shells
+      - RMCShellShotgunHeavyBuckshot
+      - RMCShellShotgunHeavySlugs
+      - RMCShellShotgunHeavyFlechette
+      - RMCShellShotgunIncendiaryHeavyBuckshot
+      - RMCShellShotgunHeavyBeanbag
+      - RMCShellShotgunHDSG
 - type: Tag
   id: RMCWeaponShotgunType23

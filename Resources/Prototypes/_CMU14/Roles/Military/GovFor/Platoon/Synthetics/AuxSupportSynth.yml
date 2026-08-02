@@ -12,7 +12,8 @@
   playTimeTracker: AU14JobGOVFORAuxSupportSynth
   canBeAntag: false
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   displayWeight: -1
   accessGroups:
   - AU14GovforCommand
@@ -27,6 +28,7 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: ANPRCRadioUser
   - type: Skills
     preset: AU14SkillPresetPlatoonAuxiliarySupportSynth
   - type: JobPrefix

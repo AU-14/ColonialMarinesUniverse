@@ -111,35 +111,11 @@
                                                    ToolTip="{Loc 'humanoid-profile-editor-guidebook-button-tooltip'}"/>
                                     <OptionButton Name="SpeciesButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
-                                <!-- Allegiance -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-allegiance-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="AllegianceButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <!-- Origin -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-origin-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="OriginButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <!-- Age -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-age-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <LineEdit Name="AgeEdit" MinSize="40 0" HorizontalAlignment="Right" />
-                                </BoxContainer>
                                 <!-- Sex -->
                                 <BoxContainer HorizontalExpand="True">
                                     <Label Text="{Loc 'humanoid-profile-editor-sex-label'}" />
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SexButton" HorizontalAlignment="Right" />
-                                </BoxContainer>
-                                <!-- Pronouns -->
-                                <BoxContainer HorizontalExpand="True">
-                                    <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" />
-                                    <Control HorizontalExpand="True"/>
-                                    <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
                                 <!-- Show clothing -->
                                 <BoxContainer HorizontalExpand="True">
@@ -153,6 +129,8 @@
                                     <Control HorizontalExpand="True"/>
                                     <OptionButton Name="SpawnPriorityButton" HorizontalAlignment="Right" />
                                 </BoxContainer>
+                                <!-- Synthetic -->
+                                <BoxContainer Name="SyntheticContainer" Orientation="Vertical" />
                             </BoxContainer>
                             <!-- Skin -->
                             <BoxContainer Margin="10" HorizontalExpand="True" Orientation="Vertical">
@@ -170,6 +148,84 @@
                                 <Label Text="{Loc 'humanoid-profile-editor-eyes-label'}" />
                                 <humanoid:EyeColorPicker Name="EyeColorPicker" />
                             </BoxContainer>
+                        </BoxContainer>
+                    </ScrollContainer>
+                </BoxContainer>
+                <BoxContainer Orientation="Vertical">
+                    <ScrollContainer VerticalExpand="True">
+                        <BoxContainer Orientation="Vertical" Margin="10" SeparationOverride="7" HorizontalExpand="True">
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-short-examine-label'}" ToolTip="{Loc 'humanoid-profile-editor-short-examine-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <LineEdit Name="ShortExamineEdit" MinSize="220 0" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-short-examine-tooltip'}" />
+                            </BoxContainer>
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-age-label'}" ToolTip="{Loc 'humanoid-profile-editor-age-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <LineEdit Name="AgeEdit" MinSize="40 0" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-allegiance-label'}" ToolTip="{Loc 'humanoid-profile-editor-allegiance-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="AllegianceButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-origin-label'}" ToolTip="{Loc 'humanoid-profile-editor-origin-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="OriginButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-pronouns-label'}" ToolTip="{Loc 'humanoid-profile-editor-pronouns-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="PronounsButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-height-label'}" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <LineEdit Name="HeightFeetEdit" MinSize="22 0" MaxWidth="22" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
+                                <Label Text="'" VerticalAlignment="Center" Margin="2 0 2 0" />
+                                <LineEdit Name="HeightInchesEdit" MinSize="30 0" MaxWidth="30" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-height-tooltip'}" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-weight-label'}" ToolTip="{Loc 'humanoid-profile-editor-weight-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <LineEdit Name="WeightEdit" MinSize="60 0" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-weight-tooltip'}" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-build-label'}" ToolTip="{Loc 'humanoid-profile-editor-build-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <OptionButton Name="BuildButton" HorizontalAlignment="Right" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <Label Name="HairColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                            </BoxContainer>
+                            <BoxContainer HorizontalExpand="True">
+                                <Label Text="{Loc 'humanoid-profile-editor-hide-meta-label'}" ToolTip="{Loc 'humanoid-profile-editor-hide-meta-tooltip'}" />
+                                <Control HorizontalExpand="True"/>
+                                <Button Name="HideMetaInformationButton" ToggleMode="True" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-hide-meta-tooltip'}" />
+                            </BoxContainer>
+                            <cc:HSeparator Color="#16823E" Margin="0 5" />
+                            <Label Text="{Loc 'humanoid-profile-editor-full-description-label'}" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
+                            <TextEdit Name="FullDescriptionEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
+                            <Label Text="{Loc 'humanoid-profile-editor-medical-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
+                            <TextEdit Name="MedicalRecordEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
+                            <Label Text="{Loc 'humanoid-profile-editor-criminal-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
+                            <TextEdit Name="CriminalRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
+                            <Label Text="{Loc 'humanoid-profile-editor-general-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
+                            <TextEdit Name="GeneralRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>

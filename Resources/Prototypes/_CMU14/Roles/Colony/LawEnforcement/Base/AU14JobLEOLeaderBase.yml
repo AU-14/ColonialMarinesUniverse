@@ -22,6 +22,8 @@
     traits:
     - Epilepsy
     - NoEnglish
+  roundComponents:
+  - type: MarineOrders
 
 - type: playTimeTracker
   id: AU14JobCivilianCMBMarshal

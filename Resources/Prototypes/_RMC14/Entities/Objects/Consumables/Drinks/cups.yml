@@ -2,16 +2,19 @@
   id: RMCCoffee
   parent: Coffee
   color: "#704435"
+  class: Uncommon
 
 - type: reagent
   id: RMCTea
   parent: Tea
   color: "#8a5a3a"
+  class: Uncommon
 
 - type: reagent
   id: RMCHotCocoa
   parent: HotCocoa
   color: "#664300"
+  class: Rare
 
 - type: entity
   parent: DrinkBaseMug

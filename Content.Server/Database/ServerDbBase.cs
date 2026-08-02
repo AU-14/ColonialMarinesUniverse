@@ -339,10 +339,20 @@ namespace Content.Server.Database
                 allegiance,
                 origin,
                 platoon,
+                profile.Synthetic,
                 threatPreferences,
                 gamemodeJobPriorities,
                 gamemodeAntagPreferences,
                 gamemodeThreatPreferences,
+                profile.ShortExamine,
+                profile.FullDescription,
+                profile.MedicalRecord,
+                profile.CriminalRecord,
+                profile.GeneralRecord,
+                profile.Height,
+                profile.Weight,
+                Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
+                profile.HideMetaInformation,
                 yautjaProfile
             );
         }
@@ -773,6 +783,16 @@ namespace Content.Server.Database
             profile.Allegiance = humanoid.Allegiance?.Id;
             profile.Origin = humanoid.Origin?.Id;
             profile.Platoon = humanoid.Platoon?.Id;
+            profile.Synthetic = humanoid.Synthetic;
+            profile.ShortExamine = humanoid.ShortExamine;
+            profile.FullDescription = humanoid.FullDescription;
+            profile.MedicalRecord = humanoid.MedicalRecord;
+            profile.CriminalRecord = humanoid.CriminalRecord;
+            profile.GeneralRecord = humanoid.GeneralRecord;
+            profile.Height = humanoid.Height;
+            profile.Weight = humanoid.Weight;
+            profile.Build = humanoid.Build.ToString();
+            profile.HideMetaInformation = humanoid.HideMetaInformation;
             profile.ThreatPreference = humanoid.ThreatPreferences.Count == 0
                 ? null
                 : JsonSerializer.Serialize(humanoid.ThreatPreferences.Select(t => t.Id).OrderBy(id => id));

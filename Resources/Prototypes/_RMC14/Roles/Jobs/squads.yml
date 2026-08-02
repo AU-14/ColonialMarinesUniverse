@@ -265,7 +265,7 @@
     - Goggles
     - Armor
     - Gloves
-    radio: Provost
+    radio: radioProvost
     minimapBackground:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: background_twe

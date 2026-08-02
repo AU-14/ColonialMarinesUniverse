@@ -154,6 +154,16 @@ namespace Content.Shared.Humanoid
             "RMCHumanHairEmobun",
             "HumanHairKagami",
             "RMCHumanHairKagami",
+
+            "HumanHairCia",
+            "HumanHairPulato",
+            "RMCHumanHairPonytail4",
+            "HumanHairPonytail5",
+            "HumanHairBusiness",
+            "HumanHairBusiness2",
+            "HumanHairBusiness3",
+            "HumanHairBusiness4",
+            "HumanHairClassicBusiness",
         };
 
         /// <summary>
@@ -183,6 +193,7 @@ namespace Content.Shared.Humanoid
             "HumanFacialHairHogan",
             "HumanFacialHairVandyke",
             "RMCHumanFacialHairSoulfulSelleck",
+            "HumanFacialHairGt",
         };
 
         /// <summary>
@@ -271,6 +282,8 @@ namespace Content.Shared.Humanoid
             ("Dusty Ginger", new Color(139, 88, 65)),
             ("Ash Ginger", new Color(124, 87, 72)),
             ("Light Ginger", new Color(186, 108, 60)),
+            ("Burnt Ginger", new Color(111, 40, 20)),
+            ("Natural Ginger", new Color(126, 50, 24)),
 
             // Sandy Brown
             ("Dark Sandy Brown", new Color(103, 81, 64)),
@@ -296,6 +309,17 @@ namespace Content.Shared.Humanoid
             ("Faded Honey Blonde", new Color(173, 145, 111)),
             ("Weathered Honey Blonde", new Color(162, 137, 105)),
 
+            // Caramel Blonde
+            ("Caramel Blonde", new Color(174, 142, 89)),
+            ("Olive Blonde", new Color(183, 163, 88)),
+            ("Golden Tan", new Color(202, 170, 109)),
+            ("Amber Blonde", new Color(192, 152, 93)),
+
+            // Gold
+            ("Dark Gold", new Color(146, 108, 21)),
+            ("Bright Gold", new Color(255, 195, 0)),
+            ("Pale Gold", new Color(255, 225, 105)),
+
             // Ash Blonde
             ("Dark Ash Blonde", new Color(127, 117, 99)),
             ("Ash Blonde", new Color(148, 138, 119)),
@@ -311,6 +335,9 @@ namespace Content.Shared.Humanoid
             ("Dusty Blonde", new Color(188, 173, 143)),
             ("Faded Blonde", new Color(197, 183, 153)),
             ("Pale Blonde", new Color(204, 194, 169)),
+            ("Golden Blonde", new Color(241, 204, 143)),
+            ("Flaxen Blonde", new Color(221, 193, 138)),
+            ("Platinum Blonde", new Color(229, 218, 161)),
 
             // Grey
             ("Dark Grey", new Color(65, 64, 63)),

@@ -51,6 +51,8 @@
   requireAdminNotify: true
   joinNotifyCrew: false
   canBeAntag: false
+  whitelisted: true
+  whitelistParent: CMUJobCommandWhitelist
   supervisors: au14-job-supervisors-colonyadministrator
   accessGroups:
   - auadmin
@@ -99,3 +101,6 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

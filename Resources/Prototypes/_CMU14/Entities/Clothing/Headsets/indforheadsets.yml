@@ -1,0 +1,57 @@
+# ├──[ BASE MILITARY HEADSET ]───────────────────────────────────────┤
+- type: entity
+  abstract: true
+  parent: RMCHeadsetShip
+  id: AU14HeadsetMilitaryBase
+  suffix: CMU
+
+# ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
+- type: entity
+  parent: AU14EncryptionKey
+  id: AU14EncryptionKeyIndforProvost
+  name: Provost encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - radioProvost
+    defaultChannel: radioProvost
+
+# ├──[ HEADSETS ]────────────────────────────────────────────────────┤
+- type: entity
+  parent: AU14HeadsetMilitaryBase
+  id: AU14HeadsetProvostAllCommand
+  name: provost headset
+  suffix: Gov/Opfor CMD
+  components:
+  - type: Sprite
+    state: mco_headset
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyIndforProvost
+      - AU14EncryptionKeyGovforCommand
+      - AU14EncryptionKeyOpforCommand
+  - type: RMCRadioFilter
+    disabledChannels: # mute squad noise inherited via Command key
+    - radioGovforAlpha
+    - radioGovforBravo
+    - radioGovforCharlie
+    - radioOpforAlpha
+    - radioOpforBravo
+    - radioOpforCharlie
+  - type: RMCHeadset
+    radioTextIncrease: 3
+  - type: GrantSquadLeaderTracker
+    defaultMode: ProvostTeamLeader
+    trackerModes:
+    - ProvostMarshal
+    - ProvostDeputyMarshal
+    - ProvostChiefInspector
+    - ProvostInspector
+    - ProvostTeamLeader
+    - ProvostAdvisor
+    - CommandingOfficer
+    - ExecutiveOfficer
+    - SeniorEnlistedAdvisor
+    - ChiefMilitaryPolice
+    - ChiefMedicalOfficer

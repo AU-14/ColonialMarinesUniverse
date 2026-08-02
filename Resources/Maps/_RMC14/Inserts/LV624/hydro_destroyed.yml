@@ -714,7 +714,7 @@ entities:
     - type: Transform
       pos: 9.5,6.5
       parent: 1
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 43
     components:

@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Dropship.Utility.Components;
+using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.Coordinates;
 using Content.Shared.Popups;
@@ -19,10 +20,12 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] protected SharedSupplyDropSystem SupplyDrop = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
 
     private static readonly EntProtoId DefaultDropPodPrototype = "RMCSupplyDropPod";
@@ -73,6 +76,9 @@ public abstract partial class SharedRMCOrbitalDeployerSystem : EntitySystem
             {
                 var deployingEntity = Spawn(deployPrototype);
                 deploying = deployingEntity;
+
+                _dropship.TryGetGridFaction(deployer, out var faction);
+                _sentryTargeting.TryApplyDefaultFaction(deployingEntity, faction);
             }
 
             deployable.RemainingDeployCount--;

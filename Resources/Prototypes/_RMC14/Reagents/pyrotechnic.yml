@@ -192,6 +192,7 @@
   intensity: 72
   duration: -27
   radius: 0
+  class: Uncommon
   intensityMod: 1.8
   durationMod: -0.9
   radiusMod: -0.09
@@ -215,6 +216,7 @@
   color: "#0064C8"
   toxin: true
   intensity: -6
+  class: Common
   duration: 16
   radius: 6
   intensityMod: -0.35

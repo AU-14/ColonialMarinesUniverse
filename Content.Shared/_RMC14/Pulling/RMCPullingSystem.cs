@@ -31,6 +31,7 @@ using Robust.Shared.Timing;
 using Content.Shared._RMC14.Xenonids.Crest;
 using Content.Shared._RMC14.Xenonids.Fortify;
 using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Tackle;
 
 namespace Content.Shared._RMC14.Pulling;
 
@@ -99,6 +100,9 @@ public sealed partial class RMCPullingSystem : EntitySystem
         SubscribeLocalEvent<PullerComponent, PullStoppedMessage>(OnPullerPullStopped);
 
         SubscribeLocalEvent<BeingPulledComponent, PullStoppedMessage>(OnBeingPulledPullStopped);
+
+        SubscribeLocalEvent<PullerComponent, RMCGetUserDisarmRange>(ExtendTacklingRangeToPullingTarget);
+        SubscribeLocalEvent<PullerComponent, RMCMeleeUserGetRangeEvent>(ExtendAttackingRangeToPullingTarget);
     }
 
     private void OnGetPullTarget(Entity<BuckleComponent> ent, ref RMCGetPullTargetEvent ev)
@@ -562,6 +566,22 @@ public sealed partial class RMCPullingSystem : EntitySystem
             return null;
 
         return ev.Target;
+    }
+
+    private void ExtendTacklingRangeToPullingTarget(Entity<PullerComponent> ent, ref RMCGetUserDisarmRange args)
+    {
+        if (args.Target == ent.Comp.Pulling && args.Target != null)
+        {
+            args.Range = Math.Max(args.Range, 4.0f);
+        }
+    }
+
+    private void ExtendAttackingRangeToPullingTarget(Entity<PullerComponent> ent, ref RMCMeleeUserGetRangeEvent args)
+    {
+        if (args.Target == ent.Comp.Pulling && args.Target != null)
+        {
+            args.Range = Math.Max(args.Range, 4.0f);
+        }
     }
 
     public override void Update(float frameTime)

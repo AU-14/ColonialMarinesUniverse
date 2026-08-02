@@ -54,6 +54,36 @@
     eyes: RMCGlassesTriMaxBlackFake
 
 - type: loadout
+  id: SunglassesPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionSunglasses
+
+- type: loadout
+  id: PersonalShadesPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionSunglassesBigFake
+
+- type: loadout
+  id: GlassesTriMaxYellowPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionGlassesTriMaxYellowFake
+
+- type: loadout
+  id: GlassesTriMaxBronzePrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionGlassesTriMaxBronzeFake
+
+- type: loadout
+  id: GlassesTriMaxBlackPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionGlassesTriMaxBlackFake
+
+- type: loadout
   id: GogglesRMC
   cost: 2
   equipment:
@@ -190,3 +220,75 @@
   cost: 2
   equipment:
     eyes: RMCHippieGlassesSunset
+
+- type: loadout
+  id: GogglesM1A1ClearAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1ClearBallistic
+
+- type: loadout
+  id: GogglesM1A1AU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1Ballistic
+
+- type: loadout
+  id: GogglesM1A1DarkAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1DarkBallistic
+
+- type: loadout
+  id: GogglesM1A1LaserAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1LaserBallistic
+
+- type: loadout
+  id: GogglesM1A1OrangeAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1OrangeBallistic
+
+- type: loadout
+  id: GogglesM1A1PolarizedAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1PolarizedBallistic
+
+- type: loadout
+  id: GogglesM1A1ClearPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1ClearBallistic
+
+- type: loadout
+  id: GogglesM1A1PrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1Ballistic
+
+- type: loadout
+  id: GogglesM1A1DarkPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1DarkBallistic
+
+- type: loadout
+  id: GogglesM1A1LaserPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1LaserBallistic
+
+- type: loadout
+  id: GogglesM1A1OrangePrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1OrangeBallistic
+
+- type: loadout
+  id: GogglesM1A1PolarizedPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1PolarizedBallistic

@@ -272,6 +272,7 @@
   id: MaintenanceJack
   name: vehicle maintenance jack
   description: A heavy-duty hardpoint jack for servicing armored vehicles. Works where a crowbar can't.
+  suffix: RMC
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
@@ -337,6 +338,7 @@
   id: RMCMaintenanceJack
   name: maintenance jack
   description: A heavy synthetic-grade maintenance tool that can pry doors and work as a wrench.
+  suffix: RMC, Synth
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Tools/maintenance_jack.rsi

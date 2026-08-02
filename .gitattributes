@@ -7,6 +7,19 @@
 *.ps1 text  eol=crlf
 
 ###############################################################################
+# Force binary assets to be treated as binary, regardless of autocrlf/text=auto
+# heuristics, so committing from a CRLF-configured client can't corrupt them.
+###############################################################################
+*.png  binary
+*.webp binary
+*.ico  binary
+*.ogg  binary
+*.wav  binary
+*.sf2  binary
+*.ttf  binary
+*.otf  binary
+
+###############################################################################
 # Set default behavior for command prompt diff.
 ###############################################################################
 *.cs        diff=csharp

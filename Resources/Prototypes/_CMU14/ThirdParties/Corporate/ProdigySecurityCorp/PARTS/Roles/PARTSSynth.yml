@@ -1,6 +1,7 @@
 - type: job
   parent: CMJobBase
   id: AU14JobPARTSPartySynthetic
+  isSynthetic: true
   roundSide: ThirdParty
   roundForce: PSC
   roundRole: PARTSPartySynthetic
@@ -57,6 +58,7 @@
   description: au14-prodigyparty-description
   playTimeTracker: AU14JobPARTSPartySyntheticTracker
   whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
   ranks:
     AU14RankPrDSynth5:
     - !type:RoleTimeRequirement

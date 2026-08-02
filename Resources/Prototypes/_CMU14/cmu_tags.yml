@@ -26,6 +26,9 @@
   id: CMUYautjaBow
 
 - type: Tag
+  id: CMUCombatSidearmRig
+
+- type: Tag
   id: MeatWheat
 
 - type: Tag
@@ -87,3 +90,6 @@
 
 - type: Tag
   id: Cherry
+
+- type: Tag
+  id: MaintenanceJack

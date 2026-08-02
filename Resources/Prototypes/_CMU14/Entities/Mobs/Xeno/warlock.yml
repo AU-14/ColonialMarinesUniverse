@@ -11,7 +11,7 @@
   description: A psychic xeno that crushes minds and shields itself with plasma.
   components:
   - type: GhostRole
-    name: cm-job-name-xeno-warlock
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _CMU14/Mobs/Xenonids/Warlock/warlock.rsi
   - type: MobState
@@ -48,9 +48,9 @@
     - CMXenoWarrior
   - type: XenoDevour
   - type: XenoPlasma
-    plasma: 1700
-    maxPlasma: 1700
-    plasmaRegenOnWeeds: 60
+    plasma: 800
+    maxPlasma: 800
+    plasmaRegenOnWeeds: 6
   - type: CMUXenoWarlock
   - type: XenoPsychicCommunication
     whisperRange: 7
@@ -95,7 +95,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.5
   - type: FixedIdentity
-    name: cm-job-name-xeno-warlock
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT3
   - type: RMCActionOrder

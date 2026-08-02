@@ -1,3 +1,3 @@
-﻿server-updates-received = Update has been received, server will automatically restart for update at the end of this round.
-server-updates-shutdown = Server is shutting down for update and will automatically restart.
-server-updates-shutdown-uptime = Server is shutting down for periodic cleanup and will automatically restart.
+server-updates-received = Server update has been received. The server will automatically restart to update when a new round starts.
+server-updates-shutdown = Server is currently reloading for an update.
+server-updates-shutdown-uptime = Server is currently restarting for a periodic maintenance cleanup.

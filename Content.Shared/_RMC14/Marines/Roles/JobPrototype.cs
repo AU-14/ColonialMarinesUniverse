@@ -34,6 +34,14 @@ public sealed partial class JobPrototype : IInheritingPrototype, ICMSpecific
     [DataField]
     public bool Hidden;
 
+    /// <summary>
+    /// Whether this job represents a synthetic (android) role. Characters must have
+    /// <see cref="Content.Shared.Preferences.HumanoidCharacterProfile.Synthetic"/> set to
+    /// match this before they can be resolved into the role.
+    /// </summary>
+    [DataField]
+    public bool IsSynthetic;
+
     [DataField]
     public int? OverwatchSortPriority;
 

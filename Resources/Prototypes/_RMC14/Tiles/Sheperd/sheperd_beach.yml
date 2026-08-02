@@ -83,6 +83,11 @@
     color: '#FFFFFF33'
   - type: FTLSmashImmune
   - type: NoFTL
+  # Shepherd's deep river sits on the underground z-level. These entities are saved unanchored (water must
+  # not take a snap-grid slot), so the cave-in system saw an empty tile and treated the whole riverbed as an
+  # over-mined cavern - collapsing it and dropping the bridges built above. This marks the riverbed as holding
+  # up its own roof, the same way rock and walls do.
+  - type: ZLoadBearingTerrain
 
 - type: entity
   id: CMUOverlayWater

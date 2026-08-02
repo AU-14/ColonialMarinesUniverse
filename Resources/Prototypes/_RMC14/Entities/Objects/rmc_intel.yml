@@ -190,6 +190,7 @@
   parent: RMCCommunicationsConsoleBase
   id: RMCComputerIntelCLF
   name: CLF intel computer
+  suffix: RMC, Don't Use
   description: A CLF Intel Computer for data cataloguing and distribution.
   components:
   - type: Sprite
@@ -521,7 +522,7 @@
       -
         - name: Requisition Budget Increase
           description: Distributes resources to requisitions for spending.
-          cost: 2
+          cost: 20
           increase: 1
           repurchasable: true
           events:
@@ -556,24 +557,24 @@
       -
         - name: Requisition Budget Increase
           description: Distributes resources to requisitions for spending.
-          cost: 5
-          increase: 2
+          cost: 20
+          increase: 1
           repurchasable: true
           events:
           - !type:TechRequisitionsBudgetEvent
-            amount: 7500
+            amount: 5000
           - !type:TechAnnounceEvent
             author: SPECIAL ASSETS AUTHORIZED
             message: Additional supply budget has been authorised for this operation.
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: budget_req
-        - name: Unlock Tier 3
+        - name: Unlock Tier 2
           description: Transitions the tree to another tier.
           cost: 1
           events:
           - !type:TechUnlockTierEvent
-            tier: 3
+            tier: 2
           icon:
             sprite: _RMC14/Interface/tech_tree.rsi
             state: upgrade
@@ -598,7 +599,7 @@
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: USArmyArmored
+            thirdPartyId: ProdigyPARTY
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
@@ -730,12 +731,12 @@
             sprite: _RMC14/Interface/tech_tree.rsi
             state: beacon
         - name: Call Prodigy Armed Repair Team Yankee
-          description: Summon a PMC team from PART, specifically Sierra Squad, They are not hostile to CLF but not required to help directly!
+          description: Summon a PMC team from PART, specifically Yankee Squad, They are not hostile to CLF but not required to help directly!
           cost: 70
           repurchasable: false
           events:
           - !type:TechPartySpawnEvent
-            thirdPartyId: ProdigyPARTSParty
+            thirdPartyId: ProdigyPARTY
           - !type:TechAnnounceEvent
             author: INTEL OPERATIONS
             message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.

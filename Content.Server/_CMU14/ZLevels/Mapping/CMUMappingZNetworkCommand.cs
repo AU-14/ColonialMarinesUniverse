@@ -67,12 +67,28 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
 
         List<MapId> createdMaps = new();
 
+        void CleanupFailedLoad()
+        {
+            foreach (var mapId in createdMaps)
+            {
+                if (_map.MapExists(mapId))
+                    _map.DeleteMap(mapId);
+            }
+
+            if (EntityManager.EntityExists(network))
+                EntityManager.DeleteEntity(network);
+
+            if (createdMaps.Count > 0)
+                shell.WriteLine("Unloaded all maps created by the failed zNetwork load.");
+        }
+
         var opts = new DeserializationOptions {StoreYamlUids = true};
 
         //Load default map
         if (!_mapLoader.TryLoadMap(mapProto.MapPath, out var defaultMapEnt, out _, opts))
         {
             shell.WriteError($"Failed to load default zNetwork map: {mapProto.MapPath.ToString()}!");
+            CleanupFailedLoad();
             return;
         }
         dict.Add(defaultMapEnt.Value, 0);
@@ -81,12 +97,13 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
         _meta.SetEntityName(defaultMapEnt.Value, $"Mapping {mapProto.MapName}");
 
         //Loading maps below first
-        var depth = mapProto.MapsBelow.Count * -1;
+        var depth = -1;
         foreach (var path in mapProto.MapsBelow)
         {
             if (!_mapLoader.TryLoadMap(path, out var mapEnt, out _, opts))
             {
                 shell.WriteError($"Failed to load zNetwork map (depth {depth}): {path.ToString()}!");
+                CleanupFailedLoad();
                 return;
             }
 
@@ -94,7 +111,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
             createdMaps.Add(mapEnt.Value.Comp.MapId);
             EntityManager.AddComponents(mapEnt.Value, mapProto.ZLevelsComponentOverrides);
             _meta.SetEntityName(mapEnt.Value, $"Mapping {mapProto.MapName} [{depth}]");
-            depth++;
+            depth--;
         }
 
         depth = 1;
@@ -103,6 +120,7 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
             if (!_mapLoader.TryLoadMap(path, out var mapEnt, out _, opts))
             {
                 shell.WriteError($"Failed to load zNetwork map (depth {depth}): {path.ToString()}!");
+                CleanupFailedLoad();
                 return;
             }
 
@@ -114,29 +132,20 @@ public sealed partial class CMUMappingZNetworkCommand : LocalizedEntityCommands
         }
 
         //Was the maps actually created or did it fail somehow?
-        var success = true;
         foreach (var mapId in createdMaps)
         {
             if (!_map.MapExists(mapId))
             {
-                success = false;
                 shell.WriteError($"For some reason some maps dont exist after loading! MapId: {mapId}");
+                CleanupFailedLoad();
+                return;
             }
         }
 
         if (!_zLevel.TryAddMapsIntoZNetwork(network, dict))
         {
             shell.WriteError($"Failed to create zNetwork from loaded maps!");
-            return;
-        }
-
-        if (!success)
-        {
-            foreach (var mapId in createdMaps)
-            {
-                _map.DeleteMap(mapId);
-            }
-            shell.WriteError("Unloading all created maps...");
+            CleanupFailedLoad();
             return;
         }
 

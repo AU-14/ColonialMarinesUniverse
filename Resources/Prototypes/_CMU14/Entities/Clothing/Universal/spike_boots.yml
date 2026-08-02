@@ -20,6 +20,6 @@
   - type: Clothing
     sprite: _AU14/Clothing/Shoes/spikedboots.rsi
   - type: ClothingSpeedModifier
-    walkModifier: 0.8
-    sprintModifier: 0.8
+    walkModifier: 0.9
+    sprintModifier: 0.9
   - type: SpikeBoots

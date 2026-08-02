@@ -35,7 +35,7 @@
 - type: entity
   parent: AU14IDCardGOVFOR
   id: AU14IDCardGOVFORAdjutant
-  name: plt. adjutant officer ID card
+  name: plt. executive officer ID card
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORAdjutant
@@ -127,6 +127,14 @@
   components:
   - type: PresetIdCard
     job: AU14JobGOVFORSquadRifleman
+
+- type: entity
+  parent: AU14IDCardGOVFOR
+  id: AU14IDCardGOVFORCombatCorrespondent
+  name: combat correspondent ID card
+  components:
+  - type: PresetIdCard
+    job: AU14JobGOVFORCombatCorrespondent
 
 - type: entity
   parent: AU14IDCardGOVFOR

@@ -48,6 +48,15 @@
     seedId: sunflower
   - type: Sprite
     sprite: _RMC14/Objects/Kitchen/Plants/sunflower.rsi
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        maxVol: 3
+        reagents:
+        - ReagentId: CMUDigoxin
+          Quantity: 3
+  - type: Extractable
+    grindableSolutionName: food
 
 - type: seed
   id: plump
@@ -183,6 +192,15 @@
       seedId: rmcmango
     - type: Sprite
       sprite: _RMC14/Objects/Kitchen/Plants/mango.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUUrishiol
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: seed
   id: rmcmango

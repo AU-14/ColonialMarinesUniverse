@@ -15,7 +15,7 @@
     guides:
     - RMCGuideRoleCrusher
   - type: GhostRole
-    name: cm-job-name-xeno-crusher
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Crusher/crusher.rsi # AU14-Edit
     scale: 1.3, 1.3
@@ -82,6 +82,25 @@
     damage:
       groups:
         Brute: 40
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaChitin
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 1
   - type: XenoTailStab
     tailDamage:
       groups:
@@ -132,7 +151,7 @@
     value: 0.7
   - type: TantrumSpeedBuff
   - type: FixedIdentity
-    name: cm-job-name-xeno-crusher
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT3
 

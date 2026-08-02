@@ -2,7 +2,7 @@ using System.Linq;
 using Content.Shared.Lathe;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
-using Content.Shared.AU14.Objectives;
+using Content.Shared._CMU14.Round.Objectives.Component;
 using JetBrains.Annotations;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -86,7 +86,7 @@ public abstract partial class SharedResearchSystem : EntitySystem
                 return false;
         }
 
-        var objQuery = EntityQueryEnumerator<AuObjectiveComponent>();
+        var objQuery = EntityQueryEnumerator<CMUObjectiveComponent>();
         while (objQuery.MoveNext(out _, out var obj))
         {
             if (obj.TechUnlocks.Count == 0)
@@ -95,7 +95,7 @@ public abstract partial class SharedResearchSystem : EntitySystem
                 continue;
 
 
-            var completed = obj.FactionStatuses.Values.Any(s => s == AuObjectiveComponent.ObjectiveStatus.Completed);
+            var completed = obj.StatusesPerFaction.Values.Any(s => s == CMUObjectiveComponent.ObjectiveStatus.Completed);
             if (!completed)
                 return false;
         }

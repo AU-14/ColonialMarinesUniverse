@@ -1,0 +1,9 @@
+- type: job
+  parent: CMJobBase
+  id: CMUJobSyntheticWhitelist
+  playTimeTracker: CMUJobSyntheticWhitelist
+  whitelisted: true
+  hidden: true
+
+- type: playTimeTracker
+  id: CMUJobSyntheticWhitelist

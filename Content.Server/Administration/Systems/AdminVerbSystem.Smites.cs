@@ -17,6 +17,7 @@ using Content.Server.Storage.Components;
 using Content.Server.Storage.EntitySystems;
 using Content.Server.Tabletop;
 using Content.Server.Tabletop.Components;
+using Content.Shared._CMU14.TileMovement;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Administration;
 using Content.Shared.Administration.Components;
@@ -804,6 +805,24 @@ public sealed partial class AdminVerbSystem
             Message = string.Join(": ", runWalkSwapName, Loc.GetString("admin-smite-run-walk-swap-description"))
         };
         args.Verbs.Add(runWalkSwap);
+
+        var tileMovementName = Loc.GetString("admin-smite-tile-movement-name").ToLowerInvariant();
+        Verb tileMovement = new()
+        {
+            Text = tileMovementName,
+            Category = VerbCategory.Smite,
+            Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/smite.svg.192dpi.png")),
+            Act = () =>
+            {
+                EnsureComp<CMUTileMovementComponent>(args.Target);
+
+                _popupSystem.PopupEntity(Loc.GetString("admin-smite-tile-movement-prompt"), args.Target,
+                    args.Target, PopupType.LargeCaution);
+            },
+            Impact = LogImpact.Extreme,
+            Message = string.Join(": ", tileMovementName, Loc.GetString("admin-smite-tile-movement-description"))
+        };
+        args.Verbs.Add(tileMovement);
 
         var backwardsAccentName = Loc.GetString("admin-smite-speak-backwards-name").ToLowerInvariant();
         Verb backwardsAccent = new()

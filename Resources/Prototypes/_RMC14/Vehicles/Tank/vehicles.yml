@@ -502,3 +502,116 @@
     - offset: 0,2
       radius: 1
       interiorCoords: 0.5,0.5
+
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleTankTWE
+  name: FV150 Hobelar LCT
+  description: The FV150 ‘Hobelar’ Light Cavalry Tank is a 6m long, 6m wide, 8m tall support vehicle for the RMC. Originally procured for the Special Air Service operations as an Airborne tank, this model has been made into a support vehicle for the Royal Marines thanks to a change of symbol and technological design. Entrance at the back.
+  components:
+  - type: VehicleEnter
+    interiorPath: /Maps/_RMC14/Vehicles/spp_tank_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 2
+    entryPoints:
+    - offset: 0,2
+      radius: 1
+      interiorCoords: 0.5,0.5
+  - type: GridVehicleMover
+    maxSpeed: 8
+    acceleration: 1.556
+    deceleration: 8
+    maxReverseSpeed: 4
+    reverseAcceleration: 1.556
+    turnDelay: 0.7
+    turnInPlace: true
+    turnInPlaceMaxSpeed: 1
+    pushCooldown: 2
+    canPushVehicles: true
+    blockingMobBypassNudgeLimit: 2
+    xenoBlockMinimumSize: Immobile
+    canXenosPush: false
+    canSmashWalls: true
+    wallSmashMinSpeed: 1.5
+    wallSmashWheelDamage: 0.6
+    wallSmashHullDamage: 12
+    wallSmashSlowdownMultiplier: 0.2
+    wallSmashSlowdownDuration: 1.5
+    speedAtZeroIntegrity: 1
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    layers:
+    - map: [ base ]
+      state: tank_base
+    - map: [ primary ]
+      state: tank_turret_0
+    - map: [ secondary ]
+      sprite: _RMC14/Structures/Vehicles/tank.rsi
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      sprite: _RMC14/Structures/Vehicles/tank.rsi
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      primary:
+        startingItem: VehicleTankTurretTWE
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      secondary:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreadsTWE
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+  - type: HardpointSlots
+    vehicleFamily: Tank
+    slots:
+    - id: armor
+      hardpointType: Armor
+      slotType: Armor
+
+      visualLayer: armor
+      insertDelay: 2.5
+      required: false
+    - id: primary
+      hardpointType: Turret
+      slotType: Turret
+
+      visualLayer: primary
+      insertDelay: 3.0
+      required: false
+    - id: secondary
+      hardpointType: Secondary
+
+      visualLayer: secondary
+      insertDelay: 2.5
+      required: false
+    - id: support
+      hardpointType: Support
+      slotType: SupportAttachment
+
+      visualLayer: support
+      insertDelay: 2.0
+      required: false
+    - id: wheel-1
+      hardpointType: Wheel
+      slotType: Treads
+      insertDelay: 2.0

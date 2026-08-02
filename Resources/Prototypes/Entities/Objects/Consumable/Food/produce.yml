@@ -299,9 +299,7 @@
     solutions:
       food:
         reagents:
-        - ReagentId: SulfuricAcid
-          Quantity: 15
-        - ReagentId: FluorosulfuricAcid
+        - ReagentId: Histamine
           Quantity: 15
   - type: Produce
     seedId: deathNettle
@@ -1875,7 +1873,7 @@
       food:
         maxVol: 15
         reagents:
-        - ReagentId: Amatoxin
+        - ReagentId: CMUAmatoxin
           Quantity: 10
         - ReagentId: Nutriment
           Quantity: 5
@@ -2737,7 +2735,7 @@
       food:
         maxVol: 1
         reagents:
-        - ReagentId: Toxin
+        - ReagentId: CMUCyanide
           Quantity: 1
   - type: Extractable
     grindableSolutionName: food

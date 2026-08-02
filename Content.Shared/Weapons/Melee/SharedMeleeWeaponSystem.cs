@@ -220,6 +220,13 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     // RMC14
     private void OnMeleeDeselected(Entity<MeleeWeaponComponent> weapon, ref HandDeselectedEvent args)
     {
+        // While the client is applying server state (e.g. a hand swap during ResetPredictedEntities),
+        // adding a brand-new networked component to the user mutates its component set mid-reset and
+        // crashes the client. If it isn't there yet, skip: the authoritative state will bring it. When it
+        // already exists, updating its field below is safe.
+        if (Timing.ApplyingState && !HasComp<RMCMeleeUserCooldownComponent>(args.User))
+            return;
+
         var userCooldown = EnsureComp<RMCMeleeUserCooldownComponent>(args.User);
         if (userCooldown.NextAttack < weapon.Comp.NextAttack)
         {

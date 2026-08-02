@@ -16,6 +16,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using Content.Shared._RMC14.Tackle;
 
 namespace Content.Shared._RMC14.Weapons.Melee;
 
@@ -71,6 +72,15 @@ public abstract partial class SharedRMCMeleeWeaponSystem : EntitySystem
 
         ent.Comp.OriginalTime = weapon.NextAttack;
         weapon.NextAttack = _timing.CurTime;
+
+        ent.Comp.ResetUserCooldown = TryComp(ent, out RMCMeleeUserCooldownComponent? userCooldown);
+        if (userCooldown != null)
+        {
+            ent.Comp.OriginalUserTime = userCooldown.NextAttack;
+            userCooldown.NextAttack = _timing.CurTime;
+            Dirty(ent, userCooldown);
+        }
+
         Dirty(ent, weapon);
         Dirty(ent, ent.Comp);
     }
@@ -213,7 +223,15 @@ public abstract partial class SharedRMCMeleeWeaponSystem : EntitySystem
             return;
 
         if (disarm)
+        {
             weapon.NextAttack = reset.OriginalTime;
+
+            if (reset.ResetUserCooldown && TryComp(weaponUid, out RMCMeleeUserCooldownComponent? userCooldown))
+            {
+                userCooldown.NextAttack = reset.OriginalUserTime;
+                Dirty(weaponUid, userCooldown);
+            }
+        }
 
         RemComp<MeleeResetComponent>(weaponUid);
         Dirty(weaponUid, weapon);
@@ -295,6 +313,13 @@ public abstract partial class SharedRMCMeleeWeaponSystem : EntitySystem
     public float GetUserLightAttackRange(EntityUid user, EntityUid? target, MeleeWeaponComponent melee)
     {
         var ev = new RMCMeleeUserGetRangeEvent(target, melee.Range);
+        RaiseLocalEvent(user, ref ev);
+        return ev.Range;
+    }
+
+    public float RMCGetUserDisarmRange(EntityUid user, EntityUid? target, MeleeWeaponComponent melee)
+    {
+        var ev = new RMCGetUserDisarmRange(target, melee.Range);
         RaiseLocalEvent(user, ref ev);
         return ev.Range;
     }

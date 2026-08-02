@@ -1,4 +1,4 @@
-﻿<tabs:MiscTab xmlns="https://spacestation14.io"
+<tabs:MiscTab xmlns="https://spacestation14.io"
               xmlns:tabs="clr-namespace:Content.Client.Options.UI.Tabs"
               xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
               xmlns:ui="clr-namespace:Content.Client.Options.UI"
@@ -18,6 +18,12 @@
                        StyleClasses="LabelKeyText"/>
                 <ui:OptionDropDown Name="DropDownHudTheme" Title="{Loc 'ui-options-hud-theme'}" />
                 <ui:OptionDropDown Name="DropDownHudLayout" Title="{Loc 'ui-options-hud-layout'}" />
+                <CheckBox Name="CenterSeparatedViewportCheckBox" Text="{Loc 'au14-ui-options-center-separated-viewport'}" />
+                <ui:OptionDropDown Name="SeparatedHudStatusSideDropdown" Title="{Loc 'au14-ui-options-separated-hud-status-side'}" />
+                <!-- CMU14 -->
+                <Label Text="{Loc 'cmu-ui-options-general-construction'}"
+                       StyleClasses="LabelKeyText"/>
+                <ui:OptionDropDown Name="DropDownConstructionMode" Title="{Loc 'cmu-ui-options-construction-mode'}" />
                 <Label Text="{Loc 'ui-options-general-discord'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="DiscordRich" Text="{Loc 'ui-options-discordrich'}" />

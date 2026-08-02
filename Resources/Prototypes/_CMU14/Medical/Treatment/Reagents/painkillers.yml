@@ -109,6 +109,14 @@
         tierSuppression: 4
         decayBonus: 1.25
         durationPerUnit: 90
+      - !type:TemporaryBlurryVision
+        blur: 0.15
+        time: 4
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectCMUOxycodoneHaze
+        time: 4
+        type: Add
+        refresh: true
       - !type:ModifyStatusEffect
         conditions:
         - !type:ReagentThreshold
@@ -136,6 +144,79 @@
         - !type:ReagentThreshold
           min: 20
         boozePower: 8
+
+- type: reagent
+  parent: CMReagent
+  id: CMUFentanylPrecursor
+  name: reagent-name-cmu-fentanyl-precursor
+  desc: reagent-desc-cmu-fentanyl-precursor
+  flavor: metallic
+  physicalDesc: reagent-physical-desc-volatile
+  color: "#b8c2cc"
+  metabolisms:
+    Poison:
+      effects:
+      - !type:HealthChange
+        damage:
+          types:
+            Poison: 2
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMUFentanyl
+  name: reagent-name-cmu-fentanyl
+  desc: reagent-desc-cmu-fentanyl
+  flavor: medicine
+  physicalDesc: reagent-physical-desc-oily
+  color: "#e8e8f0"
+  overdose: 10
+  criticalOverdose: 15
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.15
+      effects:
+      - !type:Allergenic
+      - !type:CMUApplyPainSuppressionEffect
+        accumulationSuppression: 0.9
+        tierSuppression: 5
+        decayBonus: 1.5
+        durationPerUnit: 120
+      - !type:TemporaryBlurryVision
+        blur: 0.6
+        time: 4
+      - !type:ModifyStatusEffect
+        effectProto: StatusEffectCMUFentanylHaze
+        time: 4
+        type: Add
+        refresh: true
+      - !type:ModifyStatusEffect
+        conditions:
+        - !type:ReagentThreshold
+          min: 10
+        effectProto: StatusEffectSeeingRainbow
+        time: 1.5
+        type: Add
+        refresh: false
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 10
+        damage:
+          types:
+            Poison: 4
+            Asphyxiation: 3
+      - !type:HealthChange
+        conditions:
+        - !type:ReagentThreshold
+          min: 15
+        damage:
+          types:
+            Asphyxiation: 6
+      - !type:Drunk
+        conditions:
+        - !type:ReagentThreshold
+          min: 10
+        boozePower: 10
 
 - type: reagent
   parent: CMReagentMedicine

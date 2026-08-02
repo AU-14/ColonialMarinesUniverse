@@ -11,12 +11,14 @@ using Content.Client.Players.PlayTimeTracking;
 using Content.Client.Sprite;
 using Content.Client.Stylesheets;
 using Content.Client.UserInterface.Systems.Guidebook;
+using Content.Shared._CMU14.Roles;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.LinkAccount;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.AU14.Allegiance;
+using Content.Shared._CMU14.CharacterDescription;
 using Content.Shared.AU14.Origin;
 using Content.Shared._CMU14.Threats;
 using Content.Shared.CCVar;
@@ -68,6 +70,8 @@ namespace Content.Client.Lobby.UI
         // CCvar.
         private int _maxNameLength;
         private bool _allowFlavorText;
+        private bool _allowCharacterDescription;
+        private bool _loadingHeightControls;
 
         private FlavorText.FlavorText? _flavorText;
         private TextEdit? _flavorTextEdit;
@@ -83,13 +87,14 @@ namespace Content.Client.Lobby.UI
         // Static tab indices within TabContainer. Kept in one place since SetTabTitle/SetTabVisible
         // and the preview logic all need to agree on where each tab lives. The flavortext tab is
         // appended dynamically at the end (TabContainer.ChildCount - 1) and isn't listed here.
-        private const int RegulationAppearanceTabIndex = 1;
-        private const int InsurgencyTabIndex = 2;
-        private const int ColonyFallTabIndex = 3;
-        private const int DistressSignalTabIndex = 4;
-        private const int TraitsTabIndex = 5;
-        private const int MarkingsTabIndex = 6;
-        private const int NamedItemsTabIndex = 7;
+        private const int CharacterDescriptionTabIndex = 1;
+        private const int RegulationAppearanceTabIndex = 2;
+        private const int InsurgencyTabIndex = 3;
+        private const int ColonyFallTabIndex = 4;
+        private const int DistressSignalTabIndex = 5;
+        private const int TraitsTabIndex = 6;
+        private const int MarkingsTabIndex = 7;
+        private const int NamedItemsTabIndex = 8;
 
         /// <summary>
         /// If we're attempting to save.
@@ -183,6 +188,7 @@ namespace Content.Client.Lobby.UI
 
             _maxNameLength = _cfgManager.GetCVar(CCVars.MaxNameLength);
             _allowFlavorText = _cfgManager.GetCVar(CCVars.FlavorText);
+            _allowCharacterDescription = _cfgManager.GetCVar(CCVars.CharacterDescription);
 
             ImportButton.OnPressed += args =>
             {
@@ -229,6 +235,8 @@ namespace Content.Client.Lobby.UI
             #region Appearance
 
             TabContainer.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-appearance-tab"));
+            TabContainer.SetTabTitle(CharacterDescriptionTabIndex, Loc.GetString("humanoid-profile-editor-character-description-tab"));
+            TabContainer.SetTabVisible(CharacterDescriptionTabIndex, _allowCharacterDescription);
             TabContainer.SetTabTitle(RegulationAppearanceTabIndex, Loc.GetString("humanoid-profile-editor-regulation-appearance-tab"));
             TabContainer.OnTabChanged += _ => ReloadPreview(false);
 
@@ -309,6 +317,47 @@ namespace Content.Client.Lobby.UI
 
             #endregion Origin
 
+            #region Character Description
+
+            ShortExamineEdit.OnTextChanged += args => { SetShortExamine(args.Text); };
+
+            bool IsValidFeet(string text) => text.Length <= 1 && (text.Length == 0 || (text[0] >= '4' && text[0] <= '6'));
+            bool IsValidInches(string text) => text.Length <= 2 && text.All(char.IsDigit) && (text.Length == 0 || int.Parse(text) <= 11);
+
+            HeightFeetEdit.IsValid = IsValidFeet;
+            HeightInchesEdit.IsValid = IsValidInches;
+            HeightFeetEdit.OnTextChanged += _ => UpdateHeightFromEdits();
+            HeightInchesEdit.OnTextChanged += _ => UpdateHeightFromEdits();
+
+            WeightEdit.OnTextChanged += args =>
+            {
+                if (int.TryParse(args.Text, out var newWeight))
+                    SetWeight(newWeight);
+            };
+            FullDescriptionEdit.OnTextChanged += _ => { SetFullDescription(Rope.Collapse(FullDescriptionEdit.TextRope)); };
+            MedicalRecordEdit.OnTextChanged += _ => { SetMedicalRecord(Rope.Collapse(MedicalRecordEdit.TextRope)); };
+            CriminalRecordEdit.OnTextChanged += _ => { SetCriminalRecord(Rope.Collapse(CriminalRecordEdit.TextRope)); };
+            GeneralRecordEdit.OnTextChanged += _ => { SetGeneralRecord(Rope.Collapse(GeneralRecordEdit.TextRope)); };
+
+            foreach (var build in Enum.GetValues<BuildType>())
+            {
+                BuildButton.AddItem(Loc.GetString($"build-type-{build.ToString().ToLowerInvariant()}"), (int)build);
+            }
+
+            BuildButton.OnItemSelected += args =>
+            {
+                BuildButton.SelectId(args.Id);
+                SetBuild((BuildType)args.Id);
+            };
+
+            HideMetaInformationButton.OnToggled += args =>
+            {
+                SetHideMetaInformation(args.Button.Pressed);
+                UpdateHideMetaInformationButtonText();
+            };
+
+            #endregion Character Description
+
             #region Skin
 
             Skin.OnValueChanged += _ =>
@@ -344,6 +393,7 @@ namespace Content.Client.Lobby.UI
                     Profile.Appearance.WithHairColor(newColor.marking.MarkingColors[0]));
                 UpdateCMarkingsHair();
                 ReloadPreview();
+                HairColorNameLabel.Text = NamedColorHelper.NearestColorName(newColor.marking.MarkingColors[0]);
             };
 
             FacialHairPicker.OnMarkingSelect += newStyle =>
@@ -553,6 +603,8 @@ namespace Content.Client.Lobby.UI
 
             #endregion SpawnPriority
 
+            RefreshSynthetic();
+
             #region ArmorPreference
 
             foreach (var value in Enum.GetValues<ArmorPreference>())
@@ -637,6 +689,7 @@ namespace Content.Client.Lobby.UI
                     Profile.Appearance.WithEyeColor(newColor));
                 Markings.CurrentEyeColor = Profile.Appearance.EyeColor;
                 ReloadProfilePreview();
+                EyeColorNameLabel.Text = NamedColorHelper.NearestColorName(newColor);
             };
 
             #endregion Eyes
@@ -1345,9 +1398,11 @@ namespace Content.Client.Lobby.UI
             UpdateXenoPostfix();
             UpdateAllegianceControls();
             UpdateOriginControls();
+            UpdateCharacterDescriptionControls();
             RefreshThreatPreferences();
 
             RefreshAntags();
+            RefreshSynthetic();
             RefreshJobs();
             RefreshLoadouts();
             RefreshSpecies();
@@ -1517,6 +1572,13 @@ namespace Content.Client.Lobby.UI
             if (!_requirements.IsAllowed(job, (HumanoidCharacterProfile?)_preferencesManager.Preferences?.SelectedCharacter, out var reason))
             {
                 selector.LockRequirements(reason);
+            }
+            else if (Profile != null && job.IsSynthetic != Profile.Synthetic)
+            {
+                selector.LockRequirements(FormattedMessage.FromUnformatted(
+                    Loc.GetString(job.IsSynthetic
+                        ? "humanoid-profile-editor-synthetic-locked-job"
+                        : "humanoid-profile-editor-synthetic-locked-job-non-synthetic")));
             }
             else
             {
@@ -1790,7 +1852,7 @@ namespace Content.Client.Lobby.UI
             if (ContainsAny(id, name, "Officer", "Chief")) // after Crew Chief
                 return ("officer", Loc.GetString("humanoid-profile-editor-segment-officer"));
 
-            if (ContainsAny(id, name, "Doctor", "AuxTech", "Police", "Synth", "Working Joe", "Auxiliary", "DroneOperator", "Nurse", "EngineeringTech"))
+            if (ContainsAny(id, name, "Doctor", "AuxTech", "Police", "Synth", "Working Joe", "Auxiliary", "DroneOperator", "Nurse", "EngineeringTech", "Correspondent"))
                 return ("support", Loc.GetString("humanoid-profile-editor-segment-support"));
 
             if (ContainsAny(id, name, "Leader", "Sergeant", "RadioTelephone"))
@@ -1976,6 +2038,7 @@ namespace Content.Client.Lobby.UI
                     }
             }
 
+            SkinToneNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.SkinColor);
             ReloadProfilePreview();
         }
 
@@ -2111,10 +2174,129 @@ namespace Content.Client.Lobby.UI
             SetDirty();
         }
 
+        private void SetShortExamine(string text)
+        {
+            Profile = Profile?.WithShortExamine(text);
+            SetDirty();
+        }
+
+        private void SetFullDescription(string text)
+        {
+            Profile = Profile?.WithFullDescription(text);
+            SetDirty();
+        }
+
+        private void SetMedicalRecord(string text)
+        {
+            Profile = Profile?.WithMedicalRecord(text);
+            SetDirty();
+        }
+
+        private void SetCriminalRecord(string text)
+        {
+            Profile = Profile?.WithCriminalRecord(text);
+            SetDirty();
+        }
+
+        private void SetGeneralRecord(string text)
+        {
+            Profile = Profile?.WithGeneralRecord(text);
+            SetDirty();
+        }
+
+        private void SetCharacterHeight(string text)
+        {
+            Profile = Profile?.WithHeight(text);
+            SetDirty();
+        }
+
+        private void UpdateHeightFromEdits()
+        {
+            if (_loadingHeightControls)
+                return;
+
+            var feet = HeightFeetEdit.Text;
+            var inches = HeightInchesEdit.Text;
+            SetCharacterHeight(feet.Length == 1 && inches.Length is 1 or 2 ? $"{feet}'{inches}" : string.Empty);
+        }
+
+        private void SetWeight(int weight)
+        {
+            Profile = Profile?.WithWeight(weight);
+            SetDirty();
+        }
+
+        private void SetBuild(BuildType build)
+        {
+            Profile = Profile?.WithBuild(build);
+            SetDirty();
+        }
+
+        private void SetHideMetaInformation(bool hideMetaInformation)
+        {
+            Profile = Profile?.WithHideMetaInformation(hideMetaInformation);
+            SetDirty();
+        }
+
         private void SetThreatPreference(string gamemode, string threat, bool pref)
         {
             Profile = Profile?.WithGamemodeThreatPreference(gamemode, new ProtoId<ThreatPrototype>(threat), pref);
             SetDirty();
+        }
+
+        /// <summary>
+        /// Refreshes the synthetic toggle. Locked (and forced to No) unless the player
+        /// holds the synthetic job whitelist.
+        /// </summary>
+        public void RefreshSynthetic()
+        {
+            SyntheticContainer.DisposeAllChildren();
+
+            var items = new[]
+            {
+                ("humanoid-profile-editor-synthetic-yes-button", 0),
+                ("humanoid-profile-editor-synthetic-no-button", 1)
+            };
+
+            var selector = new RequirementsSelector()
+            {
+                Margin = new Thickness(3f, 3f, 3f, 0f),
+            };
+
+            selector.Setup(
+                items,
+                Loc.GetString("humanoid-profile-editor-synthetic-title"),
+                250,
+                Loc.GetString("humanoid-profile-editor-synthetic-description"));
+            selector.Select(Profile?.Synthetic == true ? 0 : 1);
+
+            var whitelisted = _prototypeManager.TryIndex<JobPrototype>(CMUSyntheticRoles.SyntheticWhitelistJob, out var marker)
+                && _requirements.CheckWhitelist(marker, out _);
+
+            if (!whitelisted)
+            {
+                selector.LockRequirements(FormattedMessage.FromUnformatted(
+                    Loc.GetString("humanoid-profile-editor-synthetic-locked")));
+
+                if (Profile?.Synthetic == true)
+                {
+                    Profile = Profile?.WithSynthetic(false);
+                    SetDirty();
+                }
+            }
+            else
+            {
+                selector.UnlockRequirements();
+            }
+
+            selector.OnSelected += preference =>
+            {
+                Profile = Profile?.WithSynthetic(preference == 0);
+                SetDirty();
+                RefreshJobs();
+            };
+
+            SyntheticContainer.AddChild(selector);
         }
 
         /// <summary>
@@ -2733,6 +2915,41 @@ namespace Content.Client.Lobby.UI
         private void UpdatePlaytimePerks()
         {
             PlaytimePerksButton.Pressed = Profile?.PlaytimePerks ?? true;
+        }
+
+        private void UpdateCharacterDescriptionControls()
+        {
+            ShortExamineEdit.Text = Profile?.ShortExamine ?? string.Empty;
+
+            var height = Profile?.Height ?? string.Empty;
+            var heightParts = height.Split('\'');
+            _loadingHeightControls = true;
+            HeightFeetEdit.Text = heightParts.Length == 2 ? heightParts[0] : string.Empty;
+            HeightInchesEdit.Text = heightParts.Length == 2 ? heightParts[1] : string.Empty;
+            _loadingHeightControls = false;
+
+            WeightEdit.Text = (Profile?.Weight ?? 160).ToString();
+            FullDescriptionEdit.TextRope = new Rope.Leaf(Profile?.FullDescription ?? string.Empty);
+            MedicalRecordEdit.TextRope = new Rope.Leaf(Profile?.MedicalRecord ?? string.Empty);
+            CriminalRecordEdit.TextRope = new Rope.Leaf(Profile?.CriminalRecord ?? string.Empty);
+            GeneralRecordEdit.TextRope = new Rope.Leaf(Profile?.GeneralRecord ?? string.Empty);
+            BuildButton.SelectId((int)(Profile?.Build ?? BuildType.Average));
+            HideMetaInformationButton.Pressed = Profile?.HideMetaInformation ?? false;
+            UpdateHideMetaInformationButtonText();
+
+            if (Profile != null)
+            {
+                SkinToneNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.SkinColor);
+                HairColorNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.HairColor);
+                EyeColorNameLabel.Text = NamedColorHelper.NearestColorName(Profile.Appearance.EyeColor);
+            }
+        }
+
+        private void UpdateHideMetaInformationButtonText()
+        {
+            HideMetaInformationButton.Text = Loc.GetString(HideMetaInformationButton.Pressed
+                ? "humanoid-profile-editor-hide-meta-true"
+                : "humanoid-profile-editor-hide-meta-false");
         }
 
         private void UpdateXenoPrefix()

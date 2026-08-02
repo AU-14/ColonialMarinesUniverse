@@ -99,6 +99,17 @@
       seedId: carrots
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/carrot.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 6
+          reagents:
+          - ReagentId: CMUPhenol
+            Quantity: 3
+          - ReagentId: CMUConiine
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -109,6 +120,15 @@
       seedId: cabbage
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/cabbage.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUPsoralen
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -140,6 +160,15 @@
       seedId: lemon
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/lemon.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUPsoralen
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -150,6 +179,15 @@
       seedId: lemoon
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/lemoon.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUPsoralen
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -160,6 +198,15 @@
       seedId: lime
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/lime.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUPsoralen
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -170,6 +217,15 @@
       seedId: orange
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/orange.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUPsoralen
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -201,6 +257,15 @@
       seedId: potato
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/potato.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUAtropine
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -311,6 +376,15 @@
       seedId: apple
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/apple.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUCyanide
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -450,6 +524,16 @@
       seedId: poppy
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/poppy.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUAtropine
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
+
 
 - type: entity
   parent: SeedBase
@@ -472,6 +556,15 @@
       seedId: lingzhi
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/lingzhi.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUZygacine
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -650,6 +743,15 @@
       seedId: berries
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/berries.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUThymol
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase
@@ -752,6 +854,15 @@
       seedId: cherry
     - type: Sprite
       sprite: Objects/Specific/Hydroponics/cherry.rsi
+    - type: SolutionContainerManager
+      solutions:
+        food:
+          maxVol: 3
+          reagents:
+          - ReagentId: CMUCyanide
+            Quantity: 3
+    - type: Extractable
+      grindableSolutionName: food
 
 - type: entity
   parent: SeedBase

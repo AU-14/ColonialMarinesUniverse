@@ -74,6 +74,7 @@
     - AU14AccessGovforPilot
     - AU14AccessGovforJuniorOfficer
     - AU14AccessGovforReq
+    - AU14AccessGovforVehicleCrew
     - AU14AccessOpfor # opfor & opforsquad are identical
     - AU14AccessOpforSquad
     - AU14AccessOpforCommand
@@ -85,6 +86,7 @@
     - AU14AccessOpforPilot
     - AU14AccessOpforJuniorOfficer
     - AU14AccessOpforReq
+    - AU14AccessOpforVehicleCrew
     - AU14AccessColonyHeadPhysician
     - AU14AccessColonyHeadEngineer
     - AU14AccessColonyMarshall

@@ -57,6 +57,8 @@
   description: au14-prodigyhazard-description
   playTimeTracker: AU14JobHRTPartySyntheticTracker
   whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   ranks:
     AU14RankPrDSynth5:
     - !type:RoleTimeRequirement

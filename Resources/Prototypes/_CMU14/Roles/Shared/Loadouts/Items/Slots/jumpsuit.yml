@@ -19,6 +19,11 @@
     jumpsuit: AU14CivilianWorkwearGreen
 
 - type: loadout
+  id: CivilianWorkwearGreyAU14
+  equipment:
+    jumpsuit: RMCJumpsuitLiaisonGreyWorkwear
+
+- type: loadout
   id: JumpsuitDutchBandolierAU14
   equipment:
     jumpsuit: RMCJumpsuitDutchBandolier
@@ -72,6 +77,11 @@
   id: CivilianFlannelPurpleAU14
   equipment:
     jumpsuit: AU14CivilianFlannelPurple
+
+- type: loadout
+  id: CivilianFlannelWhiteAU14
+  equipment:
+    jumpsuit: AU14CivilianFlannelWhite
 
 - type: loadout
   id: HazardVestAU14
@@ -157,6 +167,11 @@
   id: WYJumpsuitLiaisonFormalAU14
   equipment:
     jumpsuit: CMJumpsuitLiaisonFormal
+
+- type: loadout
+  id: WYJumpsuitLiaisonFieldAU14
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonField
 
 - type: loadout
   id: WYJumpsuitLiaisonOutingAU14

@@ -1,5 +1,6 @@
 using System.Collections.Immutable;
 using System.Linq;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.TacticalMap;
@@ -28,6 +29,7 @@ public sealed partial class RMCPlanetSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRMCPowerSystem _rmcPower = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
 
     private int _coordinateVariance;
     private float _hijackSongGain;
@@ -120,6 +122,30 @@ public sealed partial class RMCPlanetSystem : EntitySystem
     public bool IsOnPlanet(MapCoordinates coordinates)
     {
         return IsOnPlanet(_transform.ToCoordinates(coordinates));
+    }
+
+    /// <summary>
+    /// Resolves coordinates on a connected Z-level to the depth-zero planet map.
+    /// Coordinates already on a planet map or grid are returned unchanged.
+    /// </summary>
+    public bool TryGetPlanetSurfaceCoordinates(MapCoordinates coordinates, out MapCoordinates planetCoordinates)
+    {
+        planetCoordinates = coordinates;
+        if (IsOnPlanet(coordinates))
+            return true;
+
+        var entityCoordinates = _transform.ToCoordinates(coordinates);
+        if (_transform.GetMap(entityCoordinates) is not { } mapUid ||
+            !_zLevels.TryGetZNetwork(mapUid, out var network) ||
+            !_zLevels.TryGetMapAtDepth(network.Value, 0, out var planetMap) ||
+            !_zLevels.TryGetMapCoordinates(planetMap, coordinates.Position, out planetCoordinates) ||
+            !IsOnPlanet(planetCoordinates))
+        {
+            planetCoordinates = default;
+            return false;
+        }
+
+        return true;
     }
 
     public bool TryGetOffset(MapCoordinates coordinates, out Vector2i offset)

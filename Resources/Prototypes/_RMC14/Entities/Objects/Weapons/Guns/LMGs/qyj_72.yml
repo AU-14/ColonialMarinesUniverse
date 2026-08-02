@@ -48,7 +48,7 @@
     recoilUnwielded: 0
     scatterWielded: 1
     scatterUnwielded: 1
-    baseFireRate: 3
+    baseFireRate: 3.6
     burstScatterMult: 3
     modifiers:
       Burst:
@@ -104,6 +104,9 @@
   - type: Corrodible
     isCorrodible: false
   - type: SmartGun
+  - type: GunIFF
+    enabled: true
+    preventFriendlyFire: true
   - type: RMCMagneticItem
 
 - type: entity

@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit.Stacks;
 using Content.Shared._RMC14.Xenonids.Rank;
+using Content.Shared._RMC14.Xenonids.Sentinel;
 using Content.Shared.Damage;
 using Content.Shared.Ghost;
 using Content.Shared.Mobs;
@@ -45,6 +46,7 @@ public sealed partial class XenoHudOverlay : Overlay
     private static readonly ResPath RsiPathSlow = new("/Textures/_RMC14/Effects/xeno_stomp.rsi");
     private static readonly ResPath RsiPathFreeze = new("/Textures/_RMC14/Effects/xeno_freeze.rsi");
     private static readonly ResPath RsiPathHypertension = new("/Textures/_RMC14/Interface/Alerts/hypertension.rsi");
+    private static readonly ResPath RsiPathIntoxicated = new("/Textures/_RMC14/Interface/Alerts/xeno_toxins.rsi");
 
     private static readonly Rsi[] AcidStackIcons =
     [
@@ -72,6 +74,9 @@ public sealed partial class XenoHudOverlay : Overlay
     private static readonly Rsi SlowIcon = new(RsiPathSlow, "stomp");
     private static readonly Rsi StunIcon = new(RsiPathFreeze, "freeze");
     private static readonly Rsi SynthIcon = new(RsiPath, "fake_tall");
+    private static readonly Rsi IntoxicatedRing = new(RsiPathIntoxicated, "intoxicated");
+    private static readonly Rsi IntoxicatedHighRing = new(RsiPathIntoxicated, "intoxicated_high");
+    private static readonly Rsi[] IntoxicatedAmountIcons = CreateIntoxicatedAmountIcons();
 
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IOverlayManager _overlay = default!;
@@ -169,6 +174,7 @@ public sealed partial class XenoHudOverlay : Overlay
                 DrawDeadIcon(in args, scaleMatrix, rotationMatrix);
 
             DrawAcidStacks(in args, scaleMatrix, rotationMatrix);
+            DrawIntoxicatedStacks(in args, scaleMatrix, rotationMatrix);
             DrawMarkedIcons(in args, scaleMatrix, rotationMatrix);
             DrawYellowMarkedIcons(in args, scaleMatrix, rotationMatrix);
             DrawRank(in args, scaleMatrix, rotationMatrix);
@@ -306,6 +312,54 @@ public sealed partial class XenoHudOverlay : Overlay
         }
     }
 
+    private void DrawIntoxicatedStacks(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
+    {
+        var handle = args.WorldHandle;
+        var stacks = _entity
+            .AllEntityQueryEnumerator<XenoIntoxicatedComponent, SpriteComponent, TransformComponent>();
+        while (stacks.MoveNext(out var uid, out var comp, out var sprite, out var xform))
+        {
+            if (xform.MapID != args.MapId)
+                continue;
+
+            if (_container.IsEntityOrParentInContainer(uid, xform: xform))
+                continue;
+
+            if (_invisQuery.HasComp(uid))
+                continue;
+
+            var bounds = _sprite.GetLocalBounds((uid, sprite));
+            var worldPos = _transform.GetWorldPosition(xform, _xformQuery);
+
+            if (!bounds.Translated(worldPos).Intersects(args.WorldAABB))
+                continue;
+
+            var worldMatrix = Matrix3x2.CreateTranslation(worldPos);
+            var scaledWorld = Matrix3x2.Multiply(scaleMatrix, worldMatrix);
+            var matrix = Matrix3x2.Multiply(rotationMatrix, scaledWorld);
+            handle.SetTransform(matrix);
+
+            var level = Math.Clamp(comp.Stacks, 0, 30);
+            if (level <= 0)
+                continue;
+
+            var amountIcon = IntoxicatedAmountIcons[level];
+            var ringIcon = level >= comp.HighStackThreshold
+                ? IntoxicatedHighRing
+                : IntoxicatedRing;
+
+            var amountTexture = _sprite.GetFrame(amountIcon, _timing.CurTime);
+            var ringTexture = _sprite.GetFrame(ringIcon, _timing.CurTime);
+
+            var yOffset = (bounds.Height + sprite.Offset.Y) / 2f - (float) amountTexture.Height / EyeManager.PixelsPerMeter * bounds.Height;
+            var xOffset = (bounds.Width + sprite.Offset.X) / 2f - (float) amountTexture.Width / EyeManager.PixelsPerMeter * bounds.Width;
+            var position = new Vector2(xOffset, yOffset);
+
+            handle.DrawTexture(amountTexture, position);
+            handle.DrawTexture(ringTexture, position);
+        }
+    }
+
     private void DrawRank(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)
     {
         var handle = args.WorldHandle;
@@ -345,6 +399,17 @@ public sealed partial class XenoHudOverlay : Overlay
             var position = new Vector2(xOffset, yOffset);
             handle.DrawTexture(texture, position);
         }
+    }
+
+    private static Rsi[] CreateIntoxicatedAmountIcons()
+    {
+        var icons = new Rsi[31];
+        for (var i = 0; i < icons.Length; i++)
+        {
+            icons[i] = new Rsi(RsiPathIntoxicated, $"intoxicated_amount{i}");
+        }
+
+        return icons;
     }
 
     private void DrawMarkedIcons(in OverlayDrawArgs args, Matrix3x2 scaleMatrix, Matrix3x2 rotationMatrix)

@@ -1,14 +1,20 @@
 - type: entity
   parent: CMBaseCartridgeRifle
   id: VehicleCartridgeLTBCannon
-  name: cartridge (LTB cannon)
+  name: cartridge (LTB cannon, HESH)
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
     layers:
-    - state: base
+    - state: lbtshell_hesh
       map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Huge
+  - type: SpentAmmoVisuals
+    state: lbtshell_hesh
+    suffix: false
   - type: CartridgeAmmo
+    deleteOnSpawn: false
     proto: RMCProjectileLTBCannon
     muzzleFlash: MuzzleFlashEffectVehicleOverLarge
     muzzleFlashOffset: 2.2, 0
@@ -66,7 +72,7 @@
 # Projectiles
 - type: entity
   id: VehicleLTBCannonImpact
-  name: LTB cannon impact
+  name: LTB HESH cannon impact
   categories: [ HideSpawnMenu ]
   components:
   - type: TriggerOnSpawn
@@ -81,11 +87,11 @@
     centerRadius: 1
   - type: Explosive
     explosionType: RMCLTBCannon
-    maxIntensity: 8
+    maxIntensity: 9
     intensitySlope: 2
-    totalIntensity: 150
-    tileBreakScale: 0
-    maxTileBreak: 0
+    totalIntensity: 140
+    tileBreakScale: 1
+    maxTileBreak: 3
 
 - type: entity
   parent: RMCBaseBullet

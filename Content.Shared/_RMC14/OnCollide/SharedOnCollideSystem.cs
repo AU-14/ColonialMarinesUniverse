@@ -42,6 +42,19 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
 
         SubscribeLocalEvent<DamageOnCollideComponent, StartCollideEvent>(OnStartCollide);
         SubscribeLocalEvent<DamageOnCollideComponent, EndCollideEvent>(OnEndCollide);
+        SubscribeLocalEvent<EntityTerminatingEvent>(OnEntityTerminating);
+    }
+
+    private void OnEntityTerminating(ref EntityTerminatingEvent args)
+    {
+        var terminating = args.Entity.Owner;
+
+        var chains = EntityQueryEnumerator<CollideChainComponent>();
+        while (chains.MoveNext(out var chainUid, out var chain))
+        {
+            if (chain.Hit.Remove(terminating))
+                Dirty(chainUid, chain);
+        }
     }
 
     private void OnStartCollide(Entity<DamageOnCollideComponent> ent, ref StartCollideEvent args)

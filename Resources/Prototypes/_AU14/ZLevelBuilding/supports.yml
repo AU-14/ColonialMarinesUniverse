@@ -1,0 +1,219 @@
+# SPDX-License-Identifier: AGPL-3.0-only
+# Copyright (c) 2026 wray-git
+# SPDX-License-Identifier: AGPL-3.0-only
+# Building overhaul (z-level): the tiered structural support beams.
+#
+# Each beam is the single-tile navalis beam (half-scale sprite + 1-tile wall fixture) plus the wall behaviours
+# players expect: a real health pool (Damageable on the marine structural container), the "Integrity: #%" examine
+# (RMCIntegrityExamine + ExaminableDamage), breaching/explosion compatibility (RMCWallExplosionDeletable), and a
+# Destructible whose destruction threshold is proportionate to its material (wood weak, plasteel tough) that drops
+# the matching sheets when broken. StructuralSupport makes it hold up the level above.
+#
+# NOTE: these parent the existing colored navalis beams (BaseStructure-based) rather than CMBaseWall - parenting
+# the wall base dropped the prototypes at load (its IconSmooth sprite setup conflicted with the scaled sprite
+# override), so the wall behaviours are added here explicitly instead.
+
+# Blue - the staircase's own support beam (spawned by ZStairSystem, not built). Anchors the staircase.
+# NON-BLOCKING (hard: false): it sits right next to the stair shaft, and a solid beam there could wall the
+# player off from stepping back onto the return staircase. It stays shootable/attackable via Destructible.
+- type: entity
+  parent: AU14NavalisSupportBeamBlue
+  id: AU14NavalisSupportBeamBlue1Tile
+  name: steel support beam
+  description: A sturdy steel beam holding up the structure above. Destroying it brings down what it supports.
+  suffix: AU14 z-build, 1 tile
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_blue
+    scale: 0.5, 0.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+  - type: StructuralSupport
+    isAnchor: true
+    isVerticalSupport: true
+    cantileverSpan: 2
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: ExaminableDamage
+    messages: RMCWallMessages
+  - type: RMCIntegrityExamine
+  - type: RMCWallExplosionDeletable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1800
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 2
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+# Brown - wooden support (lowest quality, weakest, shortest span).
+- type: entity
+  parent: AU14NavalisSupportBeamBrown
+  id: AU14NavalisSupportBeamBrown1Tile
+  name: wooden support beam
+  description: A wooden support beam. Cheap and weak; it will not take much punishment.
+  suffix: AU14 z-build, 1 tile, wood
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_brown
+    scale: 0.5, 0.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: StructuralSupport
+    isVerticalSupport: true
+    cantileverSpan: 3
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: ExaminableDamage
+    messages: RMCWallMessages
+  - type: RMCIntegrityExamine
+  - type: RMCWallExplosionDeletable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 800
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RMCPlankWood1:
+            min: 2
+            max: 4
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: AU14SupportBeamWoodGraph
+    node: beam
+
+# Green - steel support (mid quality).
+- type: entity
+  parent: AU14NavalisSupportBeamGreen
+  id: AU14NavalisSupportBeamGreen1Tile
+  name: metal support beam
+  description: A steel support beam. A solid, all-round support that takes a fair beating.
+  suffix: AU14 z-build, 1 tile, metal
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_green
+    scale: 0.5, 0.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: StructuralSupport
+    isVerticalSupport: true
+    cantileverSpan: 5
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: ExaminableDamage
+    messages: RMCWallMessages
+  - type: RMCIntegrityExamine
+  - type: RMCWallExplosionDeletable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1800
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 2
+            max: 3
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: AU14SupportBeamMetalGraph
+    node: beam
+
+# Aqua - plasteel support (highest quality, toughest, longest span).
+- type: entity
+  parent: AU14NavalisSupportBeamAqua
+  id: AU14NavalisSupportBeamAqua1Tile
+  name: plasteel support beam
+  description: A plasteel support beam. The toughest support; it takes serious firepower to bring down.
+  suffix: AU14 z-build, 1 tile, plasteel
+  components:
+  - type: Sprite
+    noRot: true
+    sprite: _AU14/Structures/navalis_support_beam.rsi
+    state: support_beam_aqua
+    scale: 0.5, 0.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - WallLayer
+        density: 1000
+  - type: StructuralSupport
+    isVerticalSupport: true
+    cantileverSpan: 8
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: ExaminableDamage
+    messages: RMCWallMessages
+  - type: RMCIntegrityExamine
+  - type: RMCWallExplosionDeletable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3500
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetPlasteel1:
+            min: 2
+            max: 3
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: AU14SupportBeamPlasteelGraph
+    node: beam

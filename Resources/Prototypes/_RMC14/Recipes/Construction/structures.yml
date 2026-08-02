@@ -94,6 +94,10 @@
   - !type:TileNotBlocked
 
   # Barricades
+  # AU14 building overhaul: the construction-menu barricade entries are hidden here (hide: true) and replaced by
+  # ghost-placed versions in _AU14/Buildables/au14_barricades.yml, so barricades use "Place construction ghost"
+  # instead of the RMC "Build here" radial. The RMC engineering-kit radial (rmcPrototype) is a separate build
+  # prototype and is unaffected.
 - type: construction
   parent: RMC
   name: Metal Barricade
@@ -106,6 +110,7 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeMetalRecipe
   conditions:
   - !type:TileNotBlocked
   - !type:TileBarricadeClear
@@ -123,6 +128,7 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadePlasteelRecipe
   conditions:
   - !type:TileNotBlocked
   - !type:TileBarricadeClear
@@ -140,6 +146,7 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeWoodRecipe
   conditions:
   - !type:TileNotBlocked
   - !type:TileBarricadeClear
@@ -157,6 +164,7 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeMetalDoorRecipe
   conditions:
   - !type:TileNotBlocked
   - !type:TileBarricadeClear
@@ -174,6 +182,7 @@
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadePlasteelDoorRecipe
   conditions:
   - !type:TileNotBlocked
   - !type:TileBarricadeClear

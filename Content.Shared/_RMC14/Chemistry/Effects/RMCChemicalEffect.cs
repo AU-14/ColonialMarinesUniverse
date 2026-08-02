@@ -29,25 +29,35 @@ public abstract partial class RMCChemicalEffect : EntityEffect
 
     public override void Effect(EntityEffectBaseArgs args)
     {
-        if (args is not EntityEffectReagentArgs { Reagent: { } reagent } reagentArgs)
-            return;
+        if (args is EntityEffectReagentArgs { Reagent: { } reagent } reagentArgs && args is not EntityEffectHydroArgs)
+        {
+            var damageable = args.EntityManager.System<DamageableSystem>();
+            var scale = reagentArgs.Scale;
+            var boost = CalculateReagentBoost(reagentArgs);
+            _moddedPotency = Potency + boost;
+            var scaledPotency = PotencyPerSecond * scale;
+            Tick(damageable, scaledPotency, reagentArgs);
 
-        var damageable = args.EntityManager.System<DamageableSystem>();
-        var scale = reagentArgs.Scale;
-        var boost = CalculateReagentBoost(reagentArgs);
-        _moddedPotency = Potency + boost;
-        var scaledPotency = PotencyPerSecond * scale;
-        Tick(damageable, scaledPotency, reagentArgs);
+            var totalQuantity = FixedPoint2.Zero;
+            if (reagentArgs.Source != null)
+                totalQuantity = reagentArgs.Source.GetTotalPrototypeQuantity(reagent.ID);
 
-        var totalQuantity = FixedPoint2.Zero;
-        if (reagentArgs.Source != null)
-            totalQuantity = reagentArgs.Source.GetTotalPrototypeQuantity(reagent.ID);
+            if (reagent.Overdose != null && totalQuantity >= reagent.Overdose)
+                TickOverdose(damageable, scaledPotency, reagentArgs);
 
-        if (reagent.Overdose != null && totalQuantity >= reagent.Overdose)
-            TickOverdose(damageable, scaledPotency, reagentArgs);
-
-        if (reagent.CriticalOverdose != null && totalQuantity >= reagent.CriticalOverdose)
-            TickCriticalOverdose(damageable, scaledPotency, reagentArgs);
+            if (reagent.CriticalOverdose != null && totalQuantity >= reagent.CriticalOverdose)
+                TickCriticalOverdose(damageable, scaledPotency, reagentArgs);
+        }
+        else if (args is EntityEffectHydroArgs { Reagent: { } hydro } hydroArgs)
+        {
+            var damageable = args.EntityManager.System<DamageableSystem>();
+            var scale = hydroArgs.Scale;
+            var boost = CalculateReagentBoost(hydroArgs);
+            _moddedPotency = Potency + boost;
+            var scaledPotency = PotencyPerSecond * scale;
+            TickHydroTray(damageable, scaledPotency, hydroArgs);
+        }
+        
     }
 
     private static float CalculateReagentBoost(EntityEffectReagentArgs args)
@@ -69,6 +79,8 @@ public abstract partial class RMCChemicalEffect : EntityEffect
         return boost;
     }
 
+
+
     protected virtual void ReagentBoost(EntityEffectReagentArgs args, ref float boost)
     {
     }
@@ -84,4 +96,21 @@ public abstract partial class RMCChemicalEffect : EntityEffect
     protected virtual void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
     }
+
+    protected virtual void TickHydroTray(DamageableSystem damageable, FixedPoint2 potency, EntityEffectHydroArgs args)
+    {
+    }
 }
+[ByRefEvent]
+public struct HydroTickEvent<T> where T : RMCChemicalEffect
+{
+    public FixedPoint2 Potency;
+    public EntityEffectHydroArgs Args;
+    public HydroTickEvent(FixedPoint2 potency, EntityEffectHydroArgs args)
+    {
+        Potency = potency;
+        Args = args;
+    }
+}
+
+

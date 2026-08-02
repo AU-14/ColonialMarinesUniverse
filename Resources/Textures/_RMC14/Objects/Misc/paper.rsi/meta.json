@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/9ab207cd7ffba86a0411d7058645fb8f2a7895f3/icons/obj/items/paper.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/paperwork_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/paperwork_righthand.dmi, paper_stamp-provost, paper_stamp-provost-inspector, stamp-provost, paper_stamp-sea, and stamp-sea made by pursuitinashes (discord) based off of paper_stamp-marine and stamp-deny. paper_stamp-clf, paper_stamp-spp, paper_stamp-tse, and paper_stamp-free-press created by crazy1112345 (discord). stamp-clf, stamp-spp, stamp-tse, and stamp-free-press created by crazy1112345, based on stamp-marine. weya_pen made by SharkSnake98. Standard paper stamp overlays taken from tgstation at https://github.com/tgstation/tgstation/commit/e1142f20f5e4661cb6845cfcf2dd69f864d67432, with paper_stamp-syndicate by Veritius, paper_stamp-greytide by ubaser, paper_stamp-psychologist by clinux, and paper_stamp-wizard by brassicaprime69 (Discord), paper_stamp-cca by Oslo",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/9ab207cd7ffba86a0411d7058645fb8f2a7895f3/icons/obj/items/paper.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/paperwork_lefthand.dmi, https://github.com/cmss13-devs/cmss13/blob/8d3eabd2575fcb859ab4320a298cdbc185910f6f/icons/mob/humans/onmob/inhands/equipment/paperwork_righthand.dmi, paper_stamp-provost, paper_stamp-provost-inspector, stamp-provost, paper_stamp-sea, and stamp-sea made by pursuitinashes (discord) based off of paper_stamp-marine and stamp-deny. paper_stamp-clf, paper_stamp-spp, paper_stamp-tse, and paper_stamp-free-press created by crazy1112345 (discord). stamp-clf, stamp-spp, stamp-tse, and stamp-free-press created by crazy1112345, based on stamp-marine. weya_pen made by SharkSnake98. Standard paper stamp overlays taken from tgstation at https://github.com/tgstation/tgstation/commit/e1142f20f5e4661cb6845cfcf2dd69f864d67432, with paper_stamp-syndicate by Veritius, paper_stamp-greytide by ubaser, paper_stamp-psychologist by clinux, and paper_stamp-wizard by brassicaprime69 (Discord), paper_stamp-cca by Oslo, https://github.com/cmss13-devs/cmss13/blob/52681260f1021befe2cdce04d8e21deee78e8b07/icons/obj/items/paper.dmi",
   "size": {
     "x": 32,
     "y": 32
@@ -207,6 +207,33 @@
       "name": "seegson_letterhead"
     },
     {
+      "name": "ihro_letterhead"
+    },
+    {
+      "name": "arbiter_letterhead"
+    },
+    {
+      "name": "counsel_letterhead"
+    },
+    {
+      "name": "provost_letterhead"
+    },
+    {
+      "name": "usarmy_letterhead"
+    },
+    {
+      "name": "fbi_letterhead"
+    },
+    {
+      "name": "un_letterhead"
+    },
+    {
+      "name": "laselle_letterhead"
+    },
+    {
+      "name": "parking_ticket"
+    },
+    {
       "name": "twe_letterhead"
     },
     {
@@ -231,13 +258,13 @@
       "name": "paper_stamp-cmb"
     },
     {
-        "name": "paper_stamp-clf"
+      "name": "paper_stamp-clf"
     },
     {
-        "name": "paper_stamp-spp"
+      "name": "paper_stamp-spp"
     },
     {
-        "name": "paper_stamp-tse"
+      "name": "paper_stamp-tse"
     },
     {
         "name": "paper_stamp-cca"
@@ -297,16 +324,16 @@
       "name": "stamp-cmb"
     },
     {
-        "name": "stamp-clf"
+      "name": "stamp-clf"
     },
     {
-        "name": "stamp-spp"
+      "name": "stamp-spp"
     },
     {
-        "name": "stamp-tse"
+      "name": "stamp-tse"
     },
     {
-        "name": "stamp-free-press"
+      "name": "stamp-free-press"
     },
     {
       "name": "stamp-intaff"
@@ -428,6 +455,27 @@
     {
       "name": "stamp-inhand-right",
       "directions": 4
+    },
+    {
+      "name": "paper_wy_words"
+    },
+    {
+      "name": "paper_wy_grant"
+    },
+    {
+      "name": "paper_wy_synthesis"
+    },
+    {
+      "name": "paper_wy_partial_report"
+    },
+    {
+      "name": "paper_wy_full_report"
+    },
+    {
+      "name": "paper_wy_contract"
+    },
+    {
+      "name": "paper_wy"
     }
   ]
 }

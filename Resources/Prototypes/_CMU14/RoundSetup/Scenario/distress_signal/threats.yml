@@ -37,6 +37,7 @@
   winConditionRuleIds:
     - KillAllGovforRule
     - KillAllXenoRule
+    - HiveCollapseRule
 
 - type: roundGroup
   id: DistressSignalAbominationRoundGroup

@@ -1,9 +1,12 @@
+using Content.Server.Players.JobWhitelist;
+using Content.Shared._CMU14.Roles;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
 using Content.Shared.AU14.util;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Robust.Server.Player;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -17,6 +20,8 @@ namespace Content.Server.AU14.Allegiance;
 public sealed partial class AllegianceSystem : EntitySystem
 {
     [Dependency] private IServerNetManager _netManager = default!;
+    [Dependency] private JobWhitelistManager _jobWhitelist = default!;
+    [Dependency] private IPlayerManager _player = default!;
 
     /// <summary>
     /// Tracks which players have toggled "Ignore Allegiance".
@@ -50,9 +55,12 @@ public sealed partial class AllegianceSystem : EntitySystem
     /// If the job has IgnoreAllegiance, always returns true.
     /// If the job has AllegianceOverride, the character must have that specific allegiance.
     /// </summary>
-    public bool IsAllegianceApplicableForPlatoon(HumanoidCharacterProfile profile, PlatoonPrototype platoon, JobPrototype? job = null)
+    public bool IsAllegianceApplicableForPlatoon(HumanoidCharacterProfile profile, PlatoonPrototype platoon, JobPrototype? job, NetUserId userId)
     {
         if (job != null && !DoesCharacterMeetJobOrigin(profile, job))
+            return false;
+
+        if (job != null && !DoesCharacterMeetJobSynthetic(profile, job, userId))
             return false;
 
         if (job is { IgnoreAllegiance: true })
@@ -80,9 +88,12 @@ public sealed partial class AllegianceSystem : EntitySystem
     /// If the job has IgnoreAllegiance, always returns true.
     /// If the job has AllegianceOverride, the character must have that specific allegiance.
     /// </summary>
-    public bool IsAllegianceApplicableForColony(HumanoidCharacterProfile profile, RMCPlanetMapPrototypeComponent colony, JobPrototype? job = null)
+    public bool IsAllegianceApplicableForColony(HumanoidCharacterProfile profile, RMCPlanetMapPrototypeComponent colony, JobPrototype? job, NetUserId userId)
     {
         if (job != null && !DoesCharacterMeetJobOrigin(profile, job))
+            return false;
+
+        if (job != null && !DoesCharacterMeetJobSynthetic(profile, job, userId))
             return false;
 
         if (job is { IgnoreAllegiance: true })
@@ -147,6 +158,32 @@ public sealed partial class AllegianceSystem : EntitySystem
     }
 
     /// <summary>
+    /// Whether the given character is synthetic for job-matching purposes: the profile
+    /// must have Synthetic set, AND the player must still hold the live synthetic job
+    /// whitelist. Re-checking the live whitelist (rather than trusting the saved profile
+    /// flag alone) means a revoked whitelist silently falls back to non-synthetic instead
+    /// of leaving the character stuck unable to be resolved into any job.
+    /// </summary>
+    private bool IsEffectivelySynthetic(HumanoidCharacterProfile profile, NetUserId userId)
+    {
+        if (!profile.Synthetic)
+            return false;
+
+        return _player.TryGetSessionById(userId, out var session)
+               && _jobWhitelist.IsAllowed(session, CMUSyntheticRoles.SyntheticWhitelistJob);
+    }
+
+    /// <summary>
+    /// Checks whether a character satisfies a job's synthetic requirement: a synthetic
+    /// job requires an (effectively) synthetic character, and a non-synthetic job requires
+    /// an (effectively) non-synthetic character.
+    /// </summary>
+    public bool DoesCharacterMeetJobSynthetic(HumanoidCharacterProfile profile, JobPrototype job, NetUserId userId)
+    {
+        return job.IsSynthetic == IsEffectivelySynthetic(profile, userId);
+    }
+
+    /// <summary>
     /// Given a player's character profiles, finds a character whose allegiance
     /// matches a platoon. Returns null if no match found.
     /// </summary>
@@ -154,7 +191,8 @@ public sealed partial class AllegianceSystem : EntitySystem
         IReadOnlyDictionary<int, ICharacterProfile> characters,
         int selectedIndex,
         PlatoonPrototype platoon,
-        JobPrototype? job = null)
+        JobPrototype? job,
+        NetUserId userId)
     {
         // If the platoon has no allegiance, the selected character is fine
         if (platoon.Allegiance == null)
@@ -167,7 +205,7 @@ public sealed partial class AllegianceSystem : EntitySystem
         if (characters.TryGetValue(selectedIndex, out var selectedProfile) &&
             selectedProfile is HumanoidCharacterProfile selectedHumanoid)
         {
-            if (IsAllegianceApplicableForPlatoon(selectedHumanoid, platoon, job))
+            if (IsAllegianceApplicableForPlatoon(selectedHumanoid, platoon, job, userId))
                 return selectedHumanoid;
         }
 
@@ -177,7 +215,7 @@ public sealed partial class AllegianceSystem : EntitySystem
             if (profile is not HumanoidCharacterProfile humanoid)
                 continue;
 
-            if (IsAllegianceApplicableForPlatoon(humanoid, platoon, job))
+            if (IsAllegianceApplicableForPlatoon(humanoid, platoon, job, userId))
                 return humanoid;
         }
 
@@ -192,7 +230,8 @@ public sealed partial class AllegianceSystem : EntitySystem
         IReadOnlyDictionary<int, ICharacterProfile> characters,
         int selectedIndex,
         RMCPlanetMapPrototypeComponent colony,
-        JobPrototype? job = null)
+        JobPrototype? job,
+        NetUserId userId)
     {
         // If the colony has no allegiance, the selected character is fine
         if (colony.Allegiance == null)
@@ -205,7 +244,7 @@ public sealed partial class AllegianceSystem : EntitySystem
         if (characters.TryGetValue(selectedIndex, out var selectedProfile) &&
             selectedProfile is HumanoidCharacterProfile selectedHumanoid)
         {
-            if (IsAllegianceApplicableForColony(selectedHumanoid, colony, job))
+            if (IsAllegianceApplicableForColony(selectedHumanoid, colony, job, userId))
                 return selectedHumanoid;
         }
 
@@ -215,7 +254,7 @@ public sealed partial class AllegianceSystem : EntitySystem
             if (profile is not HumanoidCharacterProfile humanoid)
                 continue;
 
-            if (IsAllegianceApplicableForColony(humanoid, colony, job))
+            if (IsAllegianceApplicableForColony(humanoid, colony, job, userId))
                 return humanoid;
         }
 

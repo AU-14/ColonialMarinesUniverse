@@ -6,6 +6,8 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    category: MEDICAL
   - type: Skills
     preset: AU14SkillPresetMilitaryDoctor
   - type: JobPrefix
@@ -34,12 +36,6 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankFirstLT:
-      entity: AU14ChevronFirstLT
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORMilitaryDoctor
-        time: 86400 # 24 hours
     RMCRankSecondLT:
       entity: AU14ChevronSecondLT
       requirements: []

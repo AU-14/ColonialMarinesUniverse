@@ -81,8 +81,8 @@ namespace Content.IntegrationTests.Tests
                     .Where(p => !p.Components.ContainsKey("GhostRoleApplySpecial")) // Spawns special-role setup on direct entity spawn.
                     .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
                     .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
-                    .Where(p => !p.Components.ContainsKey("AuObjective")) // Starts objective state when spawned directly.
-                    .Where(p => !p.Components.ContainsKey("ObjectiveMaster")) // Activates unrelated objectives as a side effect.
+                    .Where(p => !p.Components.ContainsKey("CMUObjective")) // Starts objective state when spawned directly.
+                    .Where(p => !p.Components.ContainsKey("CMUObjectiveMaster")) // Activates unrelated objectives as a side effect.
                     .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
                     .Select(p => p.ID)
                     .ToList();
@@ -229,8 +229,8 @@ namespace Content.IntegrationTests.Tests
                 .Where(p => !p.Components.ContainsKey("EntityTableContainerFill")) // Filled containers create child entities that trip connected-client cleanup.
                 .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an (audio) announcement.
                 .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawn an (audio) announcement on deletion.
-                .Where(p => !p.Components.ContainsKey("AuObjective")) // Starts objective state when spawned directly.
-                .Where(p => !p.Components.ContainsKey("ObjectiveMaster")) // Activates unrelated objectives as a side effect.
+                .Where(p => !p.Components.ContainsKey("CMUObjective")) // Starts objective state when spawned directly.
+                .Where(p => !p.Components.ContainsKey("CMUObjectiveMaster")) // Activates unrelated objectives as a side effect.
                 .Where(p => p.Categories.All(x => x.ID != SpawnerCategory))
                 .Select(p => p.ID)
                 .ToList();
@@ -327,8 +327,8 @@ namespace Content.IntegrationTests.Tests
                 "EntityTableContainerFill",
                 "GhostRole",
                 "GhostRoleApplySpecial",
-                "AuObjective",
-                "ObjectiveMaster",
+                "CMUObjective",
+                "CMUObjectiveMaster",
                 // RMC14
                 "ActivateDropshipWeaponOnSpawn",
                 "AmbientSound",

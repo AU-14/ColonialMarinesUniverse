@@ -117,7 +117,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     if (doorProtoId != null)
                     {
                         if (_prototypeManager.TryIndex(doorProtoId, out _))
-                            _entityManager.SpawnEntity(doorProtoId, transform.Coordinates);
+                            _entityManager.SpawnAttachedTo(doorProtoId, transform.Coordinates, rotation: transform.LocalRotation);
                         continue;
                     }
 
@@ -226,6 +226,32 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                         if (groundsideProtoId != null && _prototypeManager.TryIndex(groundsideProtoId, out _))
                         {
                             _entityManager.SpawnEntity(groundsideProtoId, transform.Coordinates);
+                        }
+                        continue;
+                    }
+
+                    if (markerComp.Class == PlatoonMarkerClass.RosterConsole)
+                    {
+                        string? rosterConsoleProtoId = null;
+                        if (markerComp.Govfor)
+                            rosterConsoleProtoId = "CMUGovforRosterConsole";
+                        else if (markerComp.Opfor)
+                            rosterConsoleProtoId = "CMUOpforRosterConsole";
+                        else if (markerComp.Ship)
+                        {
+                            var parentUid = transform.ParentUid;
+                            if (_entityManager.TryGetComponent<ShipFactionComponent>(parentUid, out var parentShipFaction))
+                            {
+                                rosterConsoleProtoId = parentShipFaction.Faction == "govfor"
+                                    ? "CMUGovforRosterConsole"
+                                    : parentShipFaction.Faction == "opfor"
+                                        ? "CMUOpforRosterConsole"
+                                        : null;
+                            }
+                        }
+                        if (rosterConsoleProtoId != null && _prototypeManager.TryIndex(rosterConsoleProtoId, out _))
+                        {
+                            _entityManager.SpawnEntity(rosterConsoleProtoId, transform.Coordinates);
                         }
                         continue;
                     }
@@ -838,6 +864,70 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 faction,
                 "CMAirlockGovforLocked",
                 "CMAirlockOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleNormalDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorGovforLocked",
+                "CMDoubleDoorOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorGovforGlassLocked",
+                "CMDoubleDoorOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleCommandDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorCommandGovforLocked",
+                "CMDoubleDoorCommandOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleCommandGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorCommandGovforGlassLocked",
+                "CMDoubleDoorCommandOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleSecurityDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorSecurityGovforLocked",
+                "CMDoubleDoorSecurityOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleSecurityGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorSecurityGovforGlassLocked",
+                "CMDoubleDoorSecurityOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleMedicalDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorMedicalGovforLocked",
+                "CMDoubleDoorMedicalOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleMedicalGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorMedicalGovforGlassLocked",
+                "CMDoubleDoorMedicalOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleEngineeringDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorEngineerGovforLocked",
+                "CMDoubleDoorEngineerOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleEngineeringGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorEngineerGovforGlassLocked",
+                "CMDoubleDoorEngineerOpforGlassLocked"),
+            PlatoonMarkerClass.LockedLogisticsDoor => FactionPrototype(
+                faction,
+                "CMAirlockLogisticsGovforLocked",
+                "CMAirlockLogisticsOpforLocked"),
+            PlatoonMarkerClass.LockedLogisticsGlassDoor => FactionPrototype(
+                faction,
+                "CMAirlockLogisticsGovforGlassLocked",
+                "CMAirlockLogisticsOpforGlassLocked"),
+            PlatoonMarkerClass.LockedDoubleLogisticsDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorLogisticsGovforLocked",
+                "CMDoubleDoorLogisticsOpforLocked"),
+            PlatoonMarkerClass.LockedDoubleLogisticsGlassDoor => FactionPrototype(
+                faction,
+                "CMDoubleDoorLogisticsGovforGlassLocked",
+                "CMDoubleDoorLogisticsOpforGlassLocked"),
+            PlatoonMarkerClass.LaptopCallsign => FactionPrototype(
+                faction,
+                "AU14ItemLaptopCallsignGOVFOR",
+                "AU14ItemLaptopCallsignOPFOR"),
+            PlatoonMarkerClass.CommsArrayShip => FactionPrototype(
+                faction,
+                "AU14CommsArrayShipGovfor",
+                "AU14CommsArrayShipOpfor"),
             _ => null,
         };
     }

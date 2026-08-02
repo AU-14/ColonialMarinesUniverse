@@ -20,10 +20,15 @@
   - GogglesAdvancedRMC
   - GogglesM1A1RMC
   - PersonalShadesRMC
-  - SunglassesRMC # TODO prescription sunglasses
+  - PersonalShadesPrescriptionRMC
+  - SunglassesRMC
+  - SunglassesPrescriptionRMC
   - GlassesTriMaxYellowRMC
+  - GlassesTriMaxYellowPrescriptionRMC
   - GlassesTriMaxBronzeRMC
+  - GlassesTriMaxBronzePrescriptionRMC
   - GlassesTriMaxBlackRMC
+  - GlassesTriMaxBlackPrescriptionRMC
   - GogglesRedRMC
   - GogglesBlueRMC
   - GogglesPurpleRMC

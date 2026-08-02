@@ -3,4 +3,3 @@
 namespace Content.Shared._RMC14.Xenonids.Charge.CursorCharge;
 
 public sealed partial class XenoCursorChargingActionEvent : InstantActionEvent;
-

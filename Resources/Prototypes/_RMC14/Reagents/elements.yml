@@ -109,6 +109,7 @@
   physicalDesc: reagent-physical-desc-metallic
   flavor: metallic
   color: "#F7C430"
+  class: Rare
   metabolisms:
     Medicine:
       metabolismRate: 0.1
@@ -146,6 +147,7 @@
   color: "#a19d94"
   overdose: 30
   criticalOverdose: 50
+  flags: Medical, Scannable
   metabolisms:
     Medicine:
       metabolismRate: 0.1
@@ -245,7 +247,7 @@
         probability: 0
 
 - type: reagent
-  parent: [RMCReagentElement, Uranium]
+  parent: RMCReagentElement
   id: RMCRadium
   name: reagent-name-radium
   group: Elements
@@ -260,7 +262,8 @@
       effects:
       - !type:Carcinogenic
         potency: 2
-#TODO causes internal bleeding, OD organ damage, critical causes even more #PROPERTY_HEMORRAGING = 1
+      - !type:Hemorrhaging
+        potency: 1
 
 - type: reagent
   parent: RMCReagentElement
@@ -288,6 +291,7 @@
   physicalDesc: reagent-physical-desc-reasonably-metallic
   flavor: metallic
   color: "#D0D0D0"
+  class: Rare
   unknown: true
   metabolisms:
     Medicine:
@@ -339,6 +343,7 @@
   physicalDesc: reagent-physical-desc-metallic
   flavor: metallic
   color: "#B8B8C0"
+  class: Rare
   unknown: true
   metabolisms:
     Poison:
@@ -486,6 +491,7 @@
   desc: reagent-desc-rmc-platinum
   physicalDesc: reagent-physical-desc-reasonably-metallic
   flavor: metallic
+  class: Rare
   color: "#edf5ff"
   boilingPoint: 3825.0
   meltingPoint: 1768.0

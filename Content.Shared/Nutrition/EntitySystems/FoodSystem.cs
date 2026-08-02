@@ -296,7 +296,7 @@ public sealed partial class FoodSystem : EntitySystem
         }
         else
         {
-            _popup.PopupClient(Loc.GetString(entity.Comp.EatMessage, ("food", entity.Owner), ("flavors", flavors)), args.User, args.User);
+            _popup.PopupEntity(Loc.GetString(entity.Comp.EatMessage, ("food", entity.Owner), ("flavors", flavors)), args.User, args.User);
 
             // log successful voluntary eating
             _adminLogger.Add(LogType.Ingestion, LogImpact.Low, $"{ToPrettyString(args.User):target} ate {ToPrettyString(entity.Owner):food}");
@@ -321,8 +321,6 @@ public sealed partial class FoodSystem : EntitySystem
         {
             _utensil.TryBreak(utensil, args.User);
         }
-
-        args.Repeat = !forceFeed;
 
         if (TryComp<StackComponent>(entity, out var stack))
         {

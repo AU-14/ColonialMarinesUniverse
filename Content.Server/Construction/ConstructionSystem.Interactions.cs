@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Construction.Components;
 using Content.Server.Temperature.Components;
+using Content.Shared._RMC14.Construction;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
 using Content.Shared.Construction.EntitySystems;
@@ -271,9 +272,26 @@ namespace Content.Server.Construction
 
                     var insert = interactUsing.Used;
 
+                    var paidMaterialCost = 0;
+                    if (insertStep is MaterialConstructionGraphStep materialStep)
+                    {
+                        if (!TryComp<StackComponent>(insert, out var materialStack) ||
+                            materialStack.StackTypeId != materialStep.MaterialPrototypeId)
+                            return HandleResult.False;
+
+                        var costEv = new RMCConstructionCostEvent(
+                            interactUsing.User,
+                            materialStack.StackTypeId,
+                            materialStep.Amount,
+                            materialStep.Amount);
+                        RaiseLocalEvent(interactUsing.User, ref costEv, true);
+                        paidMaterialCost = Math.Max(1, costEv.Cost);
+                        if (materialStack.Count < paidMaterialCost)
+                            return HandleResult.False;
+                    }
                     // Since many things inherit this step, we delegate the "is this entity valid?" logic to them.
-                    // While this is very OOP and I find it icky, I must admit that it simplifies the code here a lot.
-                    if(!insertStep.EntityValid(insert, EntityManager, Factory))
+                    // Material steps are validated above because their skill-adjusted amount can be below Amount.
+                    else if (!insertStep.EntityValid(insert, EntityManager, Factory))
                         return HandleResult.False;
 
                     // Unremovable items can't be inserted, unless they are a lingering stack
@@ -289,7 +307,11 @@ namespace Content.Server.Construction
                     {
                         var doAfterEv = new ConstructionInteractDoAfterEvent(EntityManager, interactUsing);
 
-                        var doAfterEventArgs = new DoAfterArgs(EntityManager, interactUsing.User, step.DoAfter, doAfterEv, uid, uid, interactUsing.Used)
+                        var baseDelay = TimeSpan.FromSeconds(step.DoAfter);
+                        var delayEv = new RMCConstructionDelayEvent(interactUsing.User, baseDelay, baseDelay);
+                        RaiseLocalEvent(interactUsing.User, ref delayEv, true);
+
+                        var doAfterEventArgs = new DoAfterArgs(EntityManager, interactUsing.User, delayEv.Delay, doAfterEv, uid, uid, interactUsing.Used)
                         {
                             BreakOnDamage = false,
                             BreakOnMove = true,
@@ -315,11 +337,24 @@ namespace Content.Server.Construction
                     // we split the stack in two and insert the split stack.
                     if (insertStep is MaterialConstructionGraphStep materialInsertStep)
                     {
-                        if (_stackSystem.Split(insert, materialInsertStep.Amount, Transform(interactUsing.User).Coordinates) is not {} stack)
+                        if (_stackSystem.Split(insert, paidMaterialCost, Transform(interactUsing.User).Coordinates) is not {} stack)
                             return HandleResult.False;
 
                         insert = stack;
+
+                        var transactionEv = new RMCConstructionTransactionCompletedEvent(
+                            uid,
+                            interactUsing.User,
+                            materialInsertStep.MaterialPrototypeId,
+                            Math.Max(0, materialInsertStep.Amount - paidMaterialCost));
+                        RaiseLocalEvent(uid, ref transactionEv, broadcast: true);
                     }
+
+                    // AU14: a custom "tool" step (EntityId with Consume:false) only requires the entity to be
+                    // present - it must NOT be consumed. This mirrors the in-hand build path. We validated the
+                    // entity above; just leave it untouched and signal the step handled.
+                    if (insertStep is EntityIdConstructionGraphStep { Consume: false })
+                        return HandleResult.True;
 
                     // Container-storage handling.
                     if (!string.IsNullOrEmpty(insertStep.Store))
@@ -467,13 +502,32 @@ namespace Content.Server.Construction
         ///          If the entity is deleted by an action, it will short-circuit and stop performing the rest of actions.</remarks>
         public void PerformActions(EntityUid uid, EntityUid? userUid, IEnumerable<IGraphAction> actions)
         {
-            foreach (var action in actions)
+            var before = new BeforeConstructionActionsEvent(userUid, actions.ToList());
+            RaiseLocalEvent(uid, before);
+
+            foreach (var action in before.Actions)
             {
                 // If an action deletes the entity, we stop performing the rest of actions.
                 if (!Exists(uid))
                     break;
 
                 action.PerformAction(uid, userUid, EntityManager);
+            }
+        }
+
+        /// <summary>
+        /// Raised immediately before a construction transaction performs its graph actions. Subscribers may
+        /// replace actions for this invocation without mutating the shared construction prototype.
+        /// </summary>
+        public sealed class BeforeConstructionActionsEvent : EntityEventArgs
+        {
+            public readonly EntityUid? User;
+            public readonly List<IGraphAction> Actions;
+
+            public BeforeConstructionActionsEvent(EntityUid? user, List<IGraphAction> actions)
+            {
+                User = user;
+                Actions = actions;
             }
         }
 

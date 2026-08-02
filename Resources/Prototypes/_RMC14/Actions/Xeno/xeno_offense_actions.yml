@@ -403,6 +403,93 @@
     useDelay: 2
 
 - type: entity
+  id: ActionXenoToxicSpit
+  parent: ActionXenoBase
+  name: Toxic Spit (30)
+  description: Launch a fast toxic projectile that passes over friendlies, deals burn damage, and inflicts Intoxicated stacks on the first enemy it hits.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    useDelay: 2
+  - type: TargetAction
+    repeat: true
+    range: 15
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:XenoToxicSpitActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: ActionXenoToxicSlash
+  parent: ActionXenoBase
+  name: Toxic Slash (100)
+  description: Coat your claws with toxin for a short time, gaining 20% movement speed and causing your next three melee hits to inflict Intoxicated stacks.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: neuroclaws_off
+    iconOn:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: neuroclaws_on
+    useDelay: 10
+  - type: InstantAction
+    event: !type:XenoToxicSlashActionEvent
+  - type: XenoActionPlasma
+    cost: 100
+
+- type: entity
+  id: ActionXenoDrainSting
+  parent: ActionXenoBase
+  name: Drain Sting (75)
+  description: Sting an adjacent Intoxicated enemy and consume most of their toxin stacks. The sting deals damage based on the stacks consumed, knocks the victim down, heals you, and restores plasma. If the victim had high stacks, your carapace hardens with a temporary armor surge.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: neuro_sting
+    useDelay: 25
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+    event: !type:XenoDrainStingActionEvent
+  - type: XenoActionPlasma
+    cost: 75
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: CMGuidebookActionXenoBase
+  id: RMCGuidebookActionXenoToxicSpit
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      state: xeno_spit
+
+- type: entity
+  parent: CMGuidebookActionXenoBase
+  id: RMCGuidebookActionXenoToxicSlash
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      state: neuroclaws_off
+
+- type: entity
+  parent: CMGuidebookActionXenoBase
+  id: RMCGuidebookActionXenoDrainSting
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Sprite
+      state: neuro_sting
+
+- type: entity
   parent: CMGuidebookActionXenoBase
   id: RMCGuidebookActionXenoSpit
   categories: [ HideSpawnMenu ]
@@ -665,7 +752,6 @@
     event: !type:XenoLungeActionEvent
   - type: XenoOffensiveAction
   - type: RMCDazeableAction
-  - type: RMCCooldownOnMiss
 
 - type: entity
   parent: CMGuidebookActionXenoBase
@@ -982,8 +1068,6 @@
   - type: ActionBlockIfResting
   - type: XenoActionPlasma
     cost: 80
-  - type: RMCCooldownOnMiss
-    missCooldown: 0.7
 
 - type: entity
   parent: ActionXenoBase
@@ -1006,8 +1090,6 @@
   - type: XenoActionPlasma
     cost: 30
   - type: ActionBlockIfResting
-  - type: RMCCooldownOnMiss
-    missCooldown: 0.7
 
 - type: entity
   parent: ActionXenoBase

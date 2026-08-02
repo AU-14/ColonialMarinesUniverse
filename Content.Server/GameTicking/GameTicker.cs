@@ -1,7 +1,7 @@
 using Content.Server._RMC14.Rules;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
-using Content.Server.AU14.Objectives;
+using Content.Server._CMU14.Round.Objectives;
 using Content.Server.AU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
@@ -70,7 +70,7 @@ namespace Content.Server.GameTicking
         [Dependency] private SharedRoleSystem _roles = default!;
         [Dependency] private ServerDbEntryManager _dbEntryManager = default!;
         [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
-        [Dependency] private AuObjectiveSystem _auobjectivesystem = default!;
+        [Dependency] private ObjectiveControlSystem _auobjectivesystem = default!;
         [ViewVariables] private bool _initialized;
         [ViewVariables] private bool _postInitialized;
 

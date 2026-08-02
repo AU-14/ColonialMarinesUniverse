@@ -119,6 +119,28 @@
     max: 5
 
 - type: entity
+  id: XenoToxicSpitProjectile
+  parent: [ XenoSpitImpactSounds, XenoBaseProjectile ]
+  name: toxic spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
+    layers:
+    - state: neurotoxin
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Heat: 16
+  - type: XenoToxicSpitProjectile
+  - type: RMCProjectileSkipXenos
+  - type: XenoProjectile
+    deleteOnFriendlyXeno: true
+  - type: ProjectileMaxRange
+    max: 7
+
+- type: entity
   id: XenoQueenNeuroSpitProjectile
   parent: [ XenoSpitImpactSounds, XenoBaseProjectile ]
   name: neurotoxic spit

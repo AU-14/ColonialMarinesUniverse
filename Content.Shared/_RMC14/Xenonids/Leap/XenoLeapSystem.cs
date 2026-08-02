@@ -87,6 +87,8 @@ public sealed partial class XenoLeapSystem : EntitySystem
 
     public override void Initialize()
     {
+        UpdatesAfter.Add(typeof(SharedPhysicsSystem));
+
         _physicsQuery = GetEntityQuery<PhysicsComponent>();
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
 
@@ -218,6 +220,8 @@ public sealed partial class XenoLeapSystem : EntitySystem
         var impulse = direction.Normalized() * xeno.Comp.Strength * physics.Mass;
 
         leaping.Origin = _transform.GetMoverCoordinates(xeno);
+        leaping.Destination = origin.Offset(direction);
+        leaping.Direction = direction.Normalized();
         leaping.ParalyzeTime = xeno.Comp.KnockdownTime;
         leaping.LeapSound = xeno.Comp.LeapSound;
         leaping.LeapEndTime = _timing.CurTime + TimeSpan.FromSeconds(direction.Length() / xeno.Comp.Strength);
@@ -674,6 +678,15 @@ public sealed partial class XenoLeapSystem : EntitySystem
         var leaping = EntityQueryEnumerator<XenoLeapingComponent>();
         while (leaping.MoveNext(out var uid, out var comp))
         {
+            var coordinates = _transform.GetMapCoordinates(uid);
+            if (coordinates.MapId == comp.Destination.MapId &&
+                Vector2.Dot(coordinates.Position - comp.Destination.Position, comp.Direction) >= 0)
+            {
+                _transform.SetMapCoordinates(uid, comp.Destination);
+                StopLeap((uid, comp));
+                continue;
+            }
+
             if (time < comp.LeapEndTime)
                 continue;
 

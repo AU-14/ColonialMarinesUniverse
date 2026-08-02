@@ -132,6 +132,7 @@ public sealed partial class TestPair
         if (State != PairState.Ready)
             throw new InvalidOperationException($"Pair is not ready to use. State: {State}");
         State = PairState.InUse;
+        _returnedToPool = false;
     }
 
     public enum PairState : byte

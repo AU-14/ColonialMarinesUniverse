@@ -10,7 +10,7 @@
   description: The end of the line.
   components:
   - type: GhostRole
-    name: rmc-job-name-xeno-king
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/King/king.rsi # AU14-Edit
   - type: MobState
@@ -54,8 +54,8 @@
     maxPlasma: 1000
     plasmaRegenOnWeeds: 2
   - type: CMArmor
-    xenoArmor: 25
-    explosionArmor: 25
+    xenoArmor: 45
+    explosionArmor: 70
   - type: InnateCommandSpeech
   - type: XenoClaws
     clawType: VerySharp
@@ -132,7 +132,7 @@
   - type: RMCXenoDamageVisuals
     prefix: king
   - type: FixedIdentity
-    name: rmc-job-name-xeno-king
+    name: cmu-job-name-xeno-unknown
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi

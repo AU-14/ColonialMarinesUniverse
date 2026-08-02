@@ -1,0 +1,32 @@
+- type: entity
+  parent: CMCartridgeSentry10x50mm
+  id: CMUCartridgeCupolaTracer
+  name: cartridge (10x50mm, tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: CartridgeAmmo
+    proto: CMUBulletCupolaTracer
+    muzzleFlash: MuzzleFlashEffectVehicleOver
+
+- type: entity
+  parent: CMBulletSentry10x50mm
+  id: CMUBulletCupolaTracer
+  name: bullet (10x50mm, tracer)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/bullet_projectiles.rsi
+    drawdepth: Effects
+    layers:
+    - state: bullet
+      shader: unshaded
+  - type: PointLight
+    enabled: true
+    color: "#ff4300"
+    radius: 2.0
+    energy: 7.0
+  - type: RMCProjectileAccuracy
+    accuracy: 115
+    thresholds:
+    - range: 22
+      falloff: 10

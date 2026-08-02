@@ -1,0 +1,87 @@
+- type: entity
+  name: sprig of Messa's Tear
+  parent: FoodProduceBase
+  id: FoodMTear
+  description: "A mountain climate herb with a soft, cold blue flower, known to contain an abundance of healing chemicals."
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 5
+  - type: Sprite
+    sprite: _CMU14/Objects/Kitchen/Plants/mtear.rsi
+  - type: Item
+    heldPrefix: produce
+  - type: Produce
+    seedId: mtear
+  - type: Tag
+    tags:
+    - Vegetable
+
+- type: entity
+  name: bunch of death-berries
+  parent: FoodProduceBase
+  id: FoodDeathberry
+  description: "Taste so good, you will die!"
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 5
+  - type: Sprite
+    sprite: _CMU14/Objects/Kitchen/Plants/deathberry.rsi
+  - type: Item
+    heldPrefix: produce
+  - type: Produce
+    seedId: deathberry
+  - type: Tag
+    tags:
+    - Fruit
+
+- type: entity
+  name: bunch of poison-berries
+  parent: FoodProduceBase
+  id: FoodPoisonberry
+  description: "Taste so good, you could die!"
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 5
+  - type: Sprite
+    sprite: _CMU14/Objects/Kitchen/Plants/poisonberry.rsi
+  - type: Item
+    heldPrefix: produce
+  - type: Produce
+    seedId: poisonberry
+  - type: Tag
+    tags:
+    - Fruit
+
+- type: entity
+  name: apple
+  parent: FoodProduceBase
+  id: FoodPoisonApple
+  description: "It's a little piece of Eden."
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      food:
+        reagents:
+        - ReagentId: Nutriment
+          Quantity: 5
+  - type: Sprite
+    sprite: Objects/Specific/Hydroponics/apple.rsi
+  - type: Item
+    heldPrefix: produce
+  - type: Produce
+    seedId: poisonApple
+  - type: Tag
+    tags:
+    - Fruit

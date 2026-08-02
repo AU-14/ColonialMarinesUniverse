@@ -1,0 +1,140 @@
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoCupolaTracer
+  name: M56 cupola magazines crate (tracer) (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxCupolaTracer
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoCupolaMixed
+  name: M56 cupola magazines crate (mixed) (x2)
+  description: A mixed crate of M56 cupola magazines, carrying one standard and one tracer magazine instead of a single type in bulk.
+  components:
+  - type: StorageFill
+    contents:
+    - id: VehicleAmmoBoxCupola
+      amount: 1
+    - id: CMUAmmoBoxCupolaTracer
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoLTBCannonAPFSDS
+  name: LTB APFSDS cannon shell crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonAPFSDS
+      amount: 16
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoLTBCannonHEAT
+  name: LTB HEAT cannon shell crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonHEAT
+      amount: 16
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoLTBCannonHE
+  name: LTB HE cannon shell crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonHE
+      amount: 16
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoLTBCannonCanister
+  name: LTB canister cannon shell crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonCanister
+      amount: 16
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoLTBCannonNapalm
+  name: LTB napalm cannon shell crate (x16)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxLTBCannonNapalm
+      amount: 16
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoLTBCannonMixed
+  name: LTB mixed cannon shell crate (x16)
+  description: A mixed crate of light tank cannon shells, carrying a small selection of every LTB round type instead of a single type in bulk.
+  components:
+  - type: StorageFill
+    contents:
+    - id: VehicleAmmoBoxLTBCannon
+      amount: 2
+    - id: CMUAmmoBoxLTBCannonAPFSDS
+      amount: 3
+    - id: CMUAmmoBoxLTBCannonHEAT
+      amount: 3
+    - id: CMUAmmoBoxLTBCannonHE
+      amount: 4
+    - id: CMUAmmoBoxLTBCannonCanister
+      amount: 2
+    - id: CMUAmmoBoxLTBCannonNapalm
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoGrenadeLauncherHEFA
+  name: M92T grenade launcher magazines crate (HEFA) (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxGrenadeLauncherHEFA
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoGrenadeLauncherWPDP
+  name: M92T grenade launcher magazines crate (WPDP) (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxGrenadeLauncherWPDP
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoGrenadeLauncherHIAM
+  name: M92T grenade launcher magazines crate (HIAM) (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUAmmoBoxGrenadeLauncherHIAM
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateVehicleAmmoGrenadeLauncherMixed
+  name: M92T grenade launcher magazines crate (mixed) (x4)
+  description: A mixed crate of tank grenade launcher rounds, carrying one of every round type instead of a single type in bulk.
+  components:
+  - type: StorageFill
+    contents:
+    - id: VehicleAmmoBoxGrenadeLauncher
+      amount: 1
+    - id: CMUAmmoBoxGrenadeLauncherHEFA
+      amount: 1
+    - id: CMUAmmoBoxGrenadeLauncherWPDP
+      amount: 1
+    - id: CMUAmmoBoxGrenadeLauncherHIAM
+      amount: 1

@@ -56,7 +56,7 @@ namespace Content.Server.GameTicking.Commands
                 shell.WriteLine("Round has not started.");
                 return;
             }
-            else if (ticker.RunLevel == GameRunLevel.InRound)
+            else if (ticker.RunLevel is GameRunLevel.InRound or GameRunLevel.PostRound)
             {
                 string id = args[0];
 

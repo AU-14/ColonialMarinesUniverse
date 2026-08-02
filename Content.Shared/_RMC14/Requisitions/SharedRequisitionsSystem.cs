@@ -267,6 +267,19 @@ public abstract partial class SharedRequisitionsSystem : EntitySystem
         EnsureComp<RequisitionsCustomDeliveryComponent>(delivery);
     }
 
+    public void AddEntryToCategory(EntityUid ent, RequisitionsComputerComponent? comp, string category, RequisitionsEntry entry)
+    {
+        if (!Resolve(ent, ref comp))
+            return;
+        foreach (var cat in comp.Categories)
+        {
+            if (cat.Name == category)
+            {
+                cat.Entries.Add(entry);
+                return;
+            }
+        }
+    }
     private MapId EnsurePurchasesMap()
     {
         if (_purchasesMap != null)

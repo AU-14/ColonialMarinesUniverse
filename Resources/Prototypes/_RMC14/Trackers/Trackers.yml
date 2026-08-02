@@ -1,35 +1,11 @@
 # Humanoid Role Trackers
-
-- type: trackerMode
-  id: CommandingOfficer
-  job: CMCommandingOfficer
-  alert: SquadTrackerCommandingOfficer
-
-- type: trackerMode
-  id: ExecutiveOfficer
-  job: CMExecutiveOfficer
-  alert: SquadTrackerExecutiveOfficer
-
 - type: trackerMode
   id: AuxiliarySupportOfficer
   job: CMAuxiliarySupportOfficer
 
 - type: trackerMode
-  id: ChiefMilitaryPolice
-  job: CMChiefMP
-  alert: SquadTrackerChiefMilitaryPolice
-
-- type: trackerMode
   id: ChiefEngineer
   job: CMChiefEngineer
-
-- type: trackerMode
-  id: ChiefMedicalOfficer
-  job: CMCMO
-
-- type: trackerMode
-  id: SeniorEnlistedAdvisor
-  job: CMSeniorEnlistedAdvisor
 
 - type: trackerMode
   id: Quartermaster
@@ -107,30 +83,6 @@
   job: CMCorporateExecutiveSpecialistLegal
 
 - type: trackerMode
-  id: ProvostMarshal
-  job: CMProvostMarshal
-
-- type: trackerMode
-  id: ProvostDeputyMarshal
-  job: CMProvostDeputyMarshal
-
-- type: trackerMode
-  id: ProvostChiefInspector
-  job: CMProvostChiefInspector
-
-- type: trackerMode
-  id: ProvostInspector
-  job: CMProvostInspector
-
-- type: trackerMode
-  id: ProvostTeamLeader
-  job: CMProvostTeamLeader
-
-- type: trackerMode
-  id: ProvostAdvisor
-  job: CMProvostAdvisor
-
-- type: trackerMode
   id: LeaderSpp
   job: RMCSPPLeader
 
@@ -150,7 +102,7 @@
   id: FORECONCommandingOfficer
   job: RMCSurvivorForeconCommander
   alert: SquadTrackerCommandingOfficer
-  
+
 - type: trackerMode
   id: ParaTeamLeader
   job: RMCSurvivorParaTeamLeader

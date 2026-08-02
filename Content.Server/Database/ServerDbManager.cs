@@ -35,7 +35,6 @@ namespace Content.Server.Database
         PlayerNotFound,
         TierNotFound,
     }
-
     public partial interface IServerDbManager
     {
         void Init();

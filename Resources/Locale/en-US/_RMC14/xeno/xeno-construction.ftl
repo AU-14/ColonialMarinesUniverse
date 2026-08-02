@@ -2,6 +2,7 @@ cm-xeno-construction-failed-weeds = Bad place for a garden!
 ent-XenoResinSpikes = resin spikes
     .desc = A small cluster of bone spikes. Ouch.
 cm-xeno-construction-failed-need-weeds = We can only shape on weeds. Find some resin before you start building!
+rmc-xeno-construction-failed-needs-hole = We can only spin this across a hole in the ground.
 cm-xeno-construction-failed-cant-build = We can't build there!
 cm-xeno-construction-failed-select-structure = We need to select a structure to build first! Use the "Choose Resin Structure" action.
 cm-xeno-construction-failed-requires-support = {CAPITALIZE(MAKEPLURAL($choice))} need a wall or resin door next to them to stand up.

@@ -19,6 +19,7 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared._RMC14.Xenonids.Designer;
 using Content.Shared._RMC14.Xenonids.Designer.Events;
+using Content.Shared._AU14.Xenos;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Events;
@@ -1536,7 +1537,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         target = target.SnapToGrid(EntityManager, _map);
         var hasBoost = _queenBoostQuery.HasComp(xeno.Owner);
 
-        if (IsNearVehiclePopup(xeno, target))
+        if (IsNearVehiclePopup(xeno, target, popup))
             return false;
         if (checkStructureSelected &&
             buildChoice is { } nodeChoice &&
@@ -1550,7 +1551,13 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return false;
         }
 
-        if (checkWeeds && !_xenoWeeds.IsOnWeeds((gridId, grid), target))
+        // Structures that patch holes (scab resin) invert the usual placement rules: they want an EMPTY tile
+        // and do not care about weeds, because a collapsed floor has neither. See XenoOpenSpaceConstruction.
+        var buildsOnOpenSpace = buildChoice is { } openSpaceChoice &&
+                                _prototype.TryIndex(openSpaceChoice, out var openSpaceProto) &&
+                                openSpaceProto.HasComponent<XenoOpenSpaceConstructionComponent>();
+
+        if (checkWeeds && !buildsOnOpenSpace && !_xenoWeeds.IsOnWeeds((gridId, grid), target))
         {
             if (popup)
                 _popup.PopupClient(Loc.GetString("cm-xeno-construction-failed-need-weeds"), target, xeno);
@@ -1567,7 +1574,20 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                 return false;
         }
 
-        if (!TileSolidAndNotBlocked(target))
+        if (buildsOnOpenSpace)
+        {
+            // Only into an actual hole. Building these over intact floor is what made scab resin behave like
+            // a second floor layer instead of a patch.
+            var openTile = _mapSystem.CoordinatesToTile(gridId, grid, target);
+            if (_mapSystem.TryGetTileRef(gridId, grid, openTile, out var openRef) && !openRef.Tile.IsEmpty)
+            {
+                if (popup)
+                    _popup.PopupClient(Loc.GetString("rmc-xeno-construction-failed-needs-hole"), target, xeno);
+
+                return false;
+            }
+        }
+        else if (!TileSolidAndNotBlocked(target))
         {
             if (popup)
                 _popup.PopupClient(Loc.GetString("cm-xeno-construction-failed-cant-build"), target, xeno);
@@ -1973,12 +1993,13 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         return true;
     }
 
-    private bool IsNearVehiclePopup(Entity<XenoConstructionComponent> xeno, EntityCoordinates target)
+    private bool IsNearVehiclePopup(Entity<XenoConstructionComponent> xeno, EntityCoordinates target, bool popup = true)
     {
         if (!IsNearVehicle(_transform.ToMapCoordinates(target)))
             return false;
 
-        _popup.PopupClient(Loc.GetString("cm-xeno-construction-failed-cant-build"), target, xeno);
+        if (popup)
+            _popup.PopupClient(Loc.GetString("cm-xeno-construction-failed-cant-build"), target, xeno);
         return true;
     }
 

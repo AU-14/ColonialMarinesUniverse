@@ -13,12 +13,18 @@ on:
   workflow_dispatch:        # Manual
     inputs:
       start_date:
-        description: "Backfill from date (ISO 8601), automatic when empty"
+        description: "Backfill date (ISO-8601), auto if empty"
         required: false
       category:
         description: "Changelog category, keep default"
         required: false
         default: "CMU"
+  workflow_call:
+    outputs:
+      changes_detected:
+        value: ${{ jobs.update.outputs.changes_detected }}
+      commit_hash:
+        value: ${{ jobs.update.outputs.commit_hash }}
 
 jobs:
   update:
@@ -40,7 +46,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GITHUB_REPOSITORY: ${{ github.repository }}
           GITHUB_RUN_ID: ${{ github.run_id }}
-          START_DATE: ${{ inputs.start_date }}
+          START_DATE: ${{ inputs.start_date || '' }}
 
       - name: Update changelog
         run: Tools/update_changelog.py Resources/Changelog/CMU.yml

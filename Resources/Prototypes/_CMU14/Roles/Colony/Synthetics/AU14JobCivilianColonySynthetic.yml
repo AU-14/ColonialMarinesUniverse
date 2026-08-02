@@ -80,7 +80,8 @@
   joinNotifyCrew: false
   supervisors: au14-job-supervisors-colonycivilian
   whitelisted: true
-  whitelistParent: AU14JobGeneralWhitelist
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   accessGroups:
   - Colonist
   - auadmin
@@ -129,5 +130,8 @@
   - RecreationalRMC
   - CannedDrinksAU14
   - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14
 
 # ├──[ orbital ]─────────────────────────────────────────────────────┤

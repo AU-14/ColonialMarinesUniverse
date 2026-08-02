@@ -27,9 +27,11 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     [Dependency] private SharedBuckleSystem _buckle = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SentrySystem _sentry = default!;
+    [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
     [Dependency] private SharedWeaponMountSystem _weaponMount = default!;
 
     public override void Initialize()
@@ -236,6 +238,9 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
                 _container.EmptyContainer(container, false, Transform(deployer).Coordinates.Offset(deployOffset));
                 if (equipmentDeployerComponent.DeployEntity != null)
                     _transform.SetLocalRotation(deployingEntity.Value, Transform(deployingEntity.Value).LocalRotation + Angle.FromDegrees(rotationOffset));
+
+                _dropship.TryGetGridFaction(deployer, out var faction);
+                _sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction);
             }
         }
 

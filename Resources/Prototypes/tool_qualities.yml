@@ -79,5 +79,5 @@
   id: VehicleServicing
   name: tool-quality-vehicle-servicing-name
   toolName: tool-quality-vehicle-servicing-tool-name
-  spawn: MaintenanceJack
+  spawn: AU14MaintenanceJack
   icon: { sprite: _RMC14/Objects/Tools/maintenance_jack.rsi, state: icon }

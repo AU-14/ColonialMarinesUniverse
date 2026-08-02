@@ -416,3 +416,30 @@
     - offset: 1.5,0
       radius: 0.7
       interiorCoords: 4.45,1.7
+
+- type: entity
+  parent: VehicleAPCBase
+  id: VehicleAPCPMC
+  name: Weyland-Yutani armored personnel carrier
+  description: An armored personnel carrier operated by Weyland-Yutani's private military contractors.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Vehicles/apc.rsi
+    layers:
+    - map: [ base ]
+      sprite: _RMC14/Structures/Vehicles/apc_pmc.rsi
+      state: hull_wy
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ primary ]
+      state: PRIMARY
+      visible: false
+    - map: [ secondary ]
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1

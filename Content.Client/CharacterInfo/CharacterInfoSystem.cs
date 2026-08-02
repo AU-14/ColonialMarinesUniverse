@@ -32,6 +32,13 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     private void OnCharacterInfoEvent(CharacterInfoEvent msg, EntitySessionEventArgs args)
     {
         var entity = GetEntity(msg.NetEntity);
+
+        // The entity this info refers to may no longer exist client-side by the time this
+        // (possibly delayed) event arrives, e.g. if it was deleted or the client reconnected
+        // in the meantime. Just drop the stale update rather than crashing.
+        if (!Exists(entity))
+            return;
+
         var data = new CharacterData(entity, msg.JobTitle, msg.Objectives, msg.Briefing, Name(entity), msg.LorePrimerLines);
 
         OnCharacterUpdate?.Invoke(data);

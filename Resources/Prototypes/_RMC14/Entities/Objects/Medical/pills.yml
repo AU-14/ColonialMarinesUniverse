@@ -269,7 +269,7 @@
       food:
         maxVol: 50
         reagents:
-        - ReagentId: RMCCyanide
+        - ReagentId: CMUCyanide
           Quantity: 50
   - type: Sprite
     layers:

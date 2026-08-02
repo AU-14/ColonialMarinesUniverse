@@ -6,6 +6,7 @@ using Content.Shared.Construction.Steps;
 using Content.Shared.Examine;
 using Content.Shared.Popups;
 using Content.Shared.Verbs;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Construction
@@ -19,8 +20,16 @@ namespace Content.Server.Construction
         private void InitializeGuided()
         {
             SubscribeNetworkEvent<RequestConstructionGuide>(OnGuideRequested);
+            SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnGuidePrototypesReloaded);
             SubscribeLocalEvent<ConstructionComponent, GetVerbsEvent<Verb>>(AddDeconstructVerb);
             SubscribeLocalEvent<ConstructionComponent, ExaminedEvent>(HandleConstructionExamined);
+        }
+
+        private void OnGuidePrototypesReloaded(PrototypesReloadedEventArgs args)
+        {
+            if (args.WasModified<ConstructionPrototype>() ||
+                args.WasModified<ConstructionGraphPrototype>())
+                _guideCache.Clear();
         }
 
         private void OnGuideRequested(RequestConstructionGuide msg, EntitySessionEventArgs args)

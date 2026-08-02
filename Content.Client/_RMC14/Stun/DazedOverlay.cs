@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Shared._RMC14.Stun;
-using Content.Shared.StatusEffectNew;
+using Content.Shared.StatusEffectNew.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
@@ -16,7 +16,6 @@ public sealed partial class DazedOverlay : Overlay
 
     private readonly IEntityManager _entManager;
     private readonly IPlayerManager _playerManager;
-    private readonly SharedStatusEffectsSystem _statusEffect;
 
     private readonly ShaderInstance _vignetteShader;
 
@@ -27,9 +26,28 @@ public sealed partial class DazedOverlay : Overlay
     {
         _entManager = entManager;
         _playerManager = playerManager;
-        _statusEffect = entManager.System<SharedStatusEffectsSystem>();
 
         _vignetteShader = prototypeManager.Index(CircleMaskShader).InstanceUnique();
+    }
+
+    // Picks the strongest active RMCDazed-driven effect (combat daze, opioid haze, etc.) rather than
+    // being tied to a single hardcoded status effect, since several sources can apply this vignette.
+    private RMCDazedComponent? GetStrongestDazed(EntityUid uid)
+    {
+        if (!_entManager.TryGetComponent(uid, out StatusEffectContainerComponent? container))
+            return null;
+
+        RMCDazedComponent? strongest = null;
+        foreach (var effect in container.ActiveStatusEffects)
+        {
+            if (!_entManager.TryGetComponent(effect, out RMCDazedComponent? candidate))
+                continue;
+
+            if (strongest == null || candidate.Alpha > strongest.Alpha)
+                strongest = candidate;
+        }
+
+        return strongest;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -39,10 +57,9 @@ public sealed partial class DazedOverlay : Overlay
         if (localEntity == null)
             return;
 
-        if (!_statusEffect.TryGetStatusEffect(localEntity.Value, RMCDazedSystem.StatusEffectDazed, out var statusEffect))
-            return;
+        var dazed = GetStrongestDazed(localEntity.Value);
 
-        if (!_entManager.TryGetComponent(statusEffect, out RMCDazedComponent? dazed))
+        if (dazed == null)
             return;
 
         var handle = args.WorldHandle;

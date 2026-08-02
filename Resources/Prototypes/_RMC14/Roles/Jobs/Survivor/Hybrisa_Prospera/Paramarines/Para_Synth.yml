@@ -7,6 +7,9 @@
   startingGear: RMCGearParaSupportSynthetic
   icon: RMCJobIconParaSupportSynthetic
   spawnMenuRoleName: Royal Paramarine Support Synthetic (Survivor)
+  whitelisted: true
+  whitelistParent: CMUJobSyntheticWhitelist
+  isSynthetic: true
   special:
     - !type:AddComponentSpecial
       components:

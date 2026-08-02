@@ -77,6 +77,10 @@
   - type: CMHolster
   - type: CMItemSlots
   - type: UsableWhileDevoured
+  - type: CMArmor
+    melee: 25
+    bullet: 25
+    explosionArmor: 20
 
 - type: entity
   parent: [RMCItemSlotM5Bayonet, CMBootsBlack]

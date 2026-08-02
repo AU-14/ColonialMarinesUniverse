@@ -164,6 +164,7 @@
   intensityMod: 0.1
   durationMod: 0.7
   radiusMod: -0.08
+  class: Rare
   metabolisms:
     Poison:
       metabolismRate: 0.1

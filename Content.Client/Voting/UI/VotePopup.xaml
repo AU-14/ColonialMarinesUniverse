@@ -1,15 +1,24 @@
 <Control xmlns="https://spacestation14.io" MinWidth="560" MaxWidth="1280" RectClipContent="True">
     <PanelContainer Name="VotePanel" StyleClasses="CrtPanel" />
-    <BoxContainer Margin="10 8" Orientation="Vertical" SeparationOverride="6">
+
+    <BoxContainer Name="MainContent" Margin="10 8" Orientation="Vertical" SeparationOverride="6">
         <Label Name="VoteCaller" StyleClasses="CrtHeading" />
         <RichTextLabel Name="VoteTitle" StyleClasses="CrtRichText" />
         <Button Margin="0 2" Name="FollowVoteTarget" Text="{Loc 'ui-vote-follow-button-popup'}" Visible="False" />
 
         <GridContainer Columns="3" Name="VoteOptionsContainer" HorizontalExpand="True"
-                       HSeparationOverride="8" VSeparationOverride="6" />
+            HSeparationOverride="8" VSeparationOverride="6" />
         <BoxContainer Orientation="Horizontal" Margin="0 2 0 0">
             <ProgressBar Margin="0 0 8 0" HorizontalExpand="True" Name="TimeLeftBar" MinValue="0" MaxValue="1" MinSize="0 20" StyleClasses="CrtProgressBar" />
             <Label Name="TimeLeftText" StyleClasses="CrtHeading" MinWidth="42" HorizontalAlignment="Right" />
+            <Button Name="MinimizeButton" Text="{Loc 'ui-vote-minimize'}" Margin="8 0 0 0" MinWidth="80" />
         </BoxContainer>
+    </BoxContainer>
+
+    <BoxContainer Name="MinimizedContent" Margin="10 8" Orientation="Horizontal" Visible="False"
+            HorizontalExpand="True" VerticalAlignment="Center">
+        <Label Name="MinimizedTitle" HorizontalExpand="True" StyleClasses="CrtHeading" ClipText="True" />
+        <Label Name="MinimizedTimeLeft" StyleClasses="CrtHeading" MinWidth="42" HorizontalAlignment="Right" Margin="0 0 8 0" />
+        <Button Name="RestoreButton" Text="{Loc 'ui-vote-restore'}" MinWidth="80" />
     </BoxContainer>
 </Control>

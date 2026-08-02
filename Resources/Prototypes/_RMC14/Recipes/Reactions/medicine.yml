@@ -68,6 +68,7 @@
 
 - type: reaction
   id: CMDexalin
+  quantized: true
   reactants:
     RMCOxygen:
       amount: 2
@@ -183,6 +184,62 @@
     CMUOxycodone: 3
 
 - type: reaction
+  id: CMUFentanylPrecursor
+  reactants:
+    CMUOxycodone:
+      amount: 1
+    RMCCLF3:
+      amount: 1
+  products:
+    CMUFentanylPrecursor: 2
+
+- type: reaction
+  id: CMUFentanyl
+  reactants:
+    CMUFentanylPrecursor:
+      amount: 1
+    CMEpinephrine:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+  products:
+    CMUFentanyl: 1
+
+- type: reaction
+  id: CMUMethPrecursor
+  reactants:
+    RMCMethylphenidate:
+      amount: 2
+    RMCChlorine:
+      amount: 1
+    RMCPhosphorus:
+      amount: 1
+  products:
+    CMUMethPrecursor: 3
+
+- type: reaction
+  id: CMUMethBase
+  reactants:
+    CMUMethPrecursor:
+      amount: 1
+    RMCSulphuricAcid:
+      amount: 1
+    RMCCarbon:
+      amount: 1
+  products:
+    CMUMethBase: 2
+
+- type: reaction
+  id: CMUMethamphetamine
+  reactants:
+    CMUMethBase:
+      amount: 1
+    RMCEthanol:
+      amount: 1
+  products:
+    CMUMethamphetamine: 2
+
+- type: reaction
   id: CMUSleen
   reactants:
     CMUOxycodone:
@@ -269,6 +326,18 @@
       amount: 1
   products:
     CMUOsteoCalc: 3
+
+- type: reaction
+  id: CMUAlkysine
+  reactants:
+    RMCChlorine:
+      amount: 1
+    RMCNitrogen:
+      amount: 1
+    CMDylovene:
+      amount: 1
+  products:
+    CMUAlkysine: 3
 
 - type: reaction
   id: CMUBiogenicMatrix

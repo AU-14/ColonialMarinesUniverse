@@ -5,23 +5,23 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: arrestteamobjbasic
-    factioneutral: true
-    applicableModes:
+    factionNeutral: true
+    allowedPresets:
     - ForceOnForce
-    possiblefactions:
+    factions:
     - opfor
     - govfor
     repeating: true
-    objectivelevel: 1
-    custompoints: 6
-    maxrepeatable: 1
-    ObjectiveDescription: "Arrest enemy combatants"
+    objectiveLevel: 1
+    customPoints: 6
+    maxRepeatable: 1
+    objectiveDescription: "Arrest enemy combatants"
   - type: ArrestObjective
-    factiontoarrest: govfor
-    amounttoarrest: 2
-    removekillmark: true
+    factionToArrest: govfor
+    arrestCount: 2
+    removeKillMark: true
 
 - type: entity
   name: Arrest CLF Objective
@@ -30,22 +30,22 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: govforarrestclfobj
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - Insurgency
-    possiblefactions:
+    factions:
     - govfor
     repeating: true
-    objectivelevel: 1
-    custompoints: 25
-    maxrepeatable: 3
-    ObjectiveDescription: "Arrest Threats"
+    objectiveLevel: 1
+    customPoints: 25
+    maxRepeatable: 3
+    objectiveDescription: "Arrest Threats"
   - type: ArrestObjective
-    factiontoarrest: clf
-    amounttoarrest: 2
-    removekillmark: true
+    factionToArrest: clf
+    arrestCount: 2
+    removeKillMark: true
 
 - type: entity
   name: Arrest GOVFOR Objective
@@ -54,19 +54,19 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: clfarrestgovforobj
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - Insurgency
-    possiblefactions:
+    factions:
     - clf
     repeating: true
-    objectivelevel: 1
-    custompoints: 20
-    maxrepeatable: 3
-    ObjectiveDescription: "Arrest GOVFOR soldiers"
+    objectiveLevel: 1
+    customPoints: 20
+    maxRepeatable: 3
+    objectiveDescription: "Arrest GOVFOR soldiers"
   - type: ArrestObjective
-    factiontoarrest: govfor
-    amounttoarrest: 2
-    removekillmark: true
+    factionToArrest: govfor
+    arrestCount: 2
+    removeKillMark: true

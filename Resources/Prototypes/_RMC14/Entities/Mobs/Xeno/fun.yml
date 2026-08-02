@@ -14,7 +14,7 @@
     evolvesTo: [ ]
   - type: XenoHidden
   - type: FixedIdentity
-    name: rmc-rouny
+    name: cmu-job-name-xeno-unknown
 
 - type: entity
   parent:
@@ -31,7 +31,7 @@
     evolvesTo: [ ]
   - type: XenoHidden
   - type: FixedIdentity
-    name: rmc-wehny
+    name: cmu-job-name-xeno-unknown
 
 - type: entity
   parent:
@@ -173,4 +173,4 @@
         - XenoHeavy
   - type: XenoHidden
   - type: FixedIdentity
-    name: rmc-lesser-carrier
+    name: cmu-job-name-xeno-unknown

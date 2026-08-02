@@ -227,6 +227,13 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         {
             hive.Allies.Remove(faction);
         }
+        //just made some BULLSHIT!!
+        var factionsQuery = EntityQueryEnumerator<NpcFactionMemberComponent>();
+        while (factionsQuery.MoveNext(out EntityUid ent, out var comp))
+        {
+            if (comp.Factions.Contains(faction))
+                DirtyEntity(ent);
+        }
     }
 
     public void SetHiveIndividualAlly(EntityUid ent, EntityUid hiveEnt, bool alliance)
@@ -241,13 +248,18 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         {
             hive.IndividualAllies.Remove(ent);
         }
+        DirtyEntity(ent);
     }
 
     public void ClearHiveIndividualAllies(EntityUid hiveEnt)
     {
         if (!TryComp<HiveComponent>(hiveEnt, out var hive))
             return;
-        hive.IndividualAllies.Clear();
+        foreach (var item in hive.IndividualAllies)
+        {
+            hive.IndividualAllies.Remove(item);
+            DirtyEntity(item);
+        }
     }
 
     /// <summary>
@@ -406,11 +418,13 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         if (hive.Comp.CurrentQueen == queen)
             return true;
 
+        var oldQueen = hive.Comp.CurrentQueen;
+
         hive.Comp.CurrentQueen = queen;
         Dirty(hive);
 
-        var ev = new XenoHiveQueenChangedEvent();
-        RaiseLocalEvent(hive.Owner, ref ev);
+        var ev = new XenoHiveQueenChangedEvent(oldQueen, queen);
+        RaiseLocalEvent(hive.Owner, ev, true);
         return true;
     }
 
@@ -424,6 +438,7 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
     private void ClearHiveQueen(Entity<HiveComponent> hive, bool died = false)
     {
+        var oldQueen = hive.Comp.CurrentQueen;
         hive.Comp.CurrentQueen = null;
 
         if (died)
@@ -435,8 +450,8 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
 
         Dirty(hive);
 
-        var ev = new XenoHiveQueenChangedEvent();
-        RaiseLocalEvent(hive.Owner, ref ev);
+        var ev = new XenoHiveQueenChangedEvent(oldQueen, null);
+        RaiseLocalEvent(hive.Owner, ev, true);
     }
 
     public bool HasHiveCore(Entity<HiveComponent> hive)

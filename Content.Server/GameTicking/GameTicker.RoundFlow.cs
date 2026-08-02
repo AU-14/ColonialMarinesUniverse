@@ -229,6 +229,26 @@ namespace Content.Server.GameTicking
                     }
                 }
             }
+
+            LoadAdminFaxHubMap();
+        }
+
+        private static readonly ResPath AdminFaxHubMapPath = new("/Maps/_AU14/Admin/adminfaxhub.yml");
+
+        /// <summary>
+        /// Loads the AU14 admin fax hub utility map every round, on an automatically
+        /// assigned MapId, independent of the selected station/planet map.
+        /// </summary>
+        private void LoadAdminFaxHubMap()
+        {
+            var opts = DeserializationOptions.Default with { InitializeMaps = true };
+            if (!_loader.TryLoadMap(AdminFaxHubMapPath, out var map, out _, opts))
+            {
+                _sawmill.Error($"[RoundStart] Failed to load admin fax hub map at {AdminFaxHubMapPath}");
+                return;
+            }
+
+            _sawmill.Debug($"[RoundStart] Loaded admin fax hub map {map.Value.Comp.MapId} from {AdminFaxHubMapPath}");
         }
 
         public PreGameMapLoad RaisePreLoad(

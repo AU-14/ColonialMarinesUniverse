@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -35,6 +36,7 @@ public sealed partial class XenoChargerCollisionSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDestructibleSystem _destructible = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private XenoSystem _xeno = default!;
@@ -360,11 +362,8 @@ public sealed partial class XenoChargerCollisionSystem : EntitySystem
         if (_physicsQuery.TryGetComponent(target, out var wallPhysics) &&
             wallPhysics.Hard && wallPhysics.BodyType == BodyType.Static)
         {
-
-            if (TryComp(target, out XenoCrusherChargableComponent? crushchargable) && crushchargable.PassOnDestroy)
-                return;
-
-            if (!HasComp<DamageableComponent>(target))
+            if (!HasComp<XenoCrusherChargableComponent>(target) ||
+                !HasComp<DamageableComponent>(target))
             {
                 _movement.ResetToIdle(charger);
                 return;
@@ -372,12 +371,21 @@ public sealed partial class XenoChargerCollisionSystem : EntitySystem
 
             var damage = new DamageSpecifier();
             damage.DamageDict[_blunt] = (stage + 1) * xeno.ChargedDamageBase;
-            _damageable.TryChangeDamage(target, damage);
+            var damageChanged = _damageable.TryChangeDamage(target, damage);
+
+            if (damageChanged == null || damageChanged.GetTotal() <= FixedPoint2.Zero)
+            {
+                _movement.ResetToIdle(charger);
+                return;
+            }
 
             if (stage >= 7)
             {
-                if (_net.IsServer)
-                    BreakWall(charger, target, state.LungeDirection);
+                if (!TryBreakWall(target))
+                {
+                    _movement.ResetToIdle(charger);
+                    return;
+                }
 
                 state.Stage = Math.Max(0, state.Stage - 1);
                 Dirty(charger, state);
@@ -395,21 +403,15 @@ public sealed partial class XenoChargerCollisionSystem : EntitySystem
         }
     }
 
-    private void BreakWall(EntityUid charger, EntityUid wall, Vector2 lungeDirection)
+    private bool TryBreakWall(EntityUid wall)
     {
-        //WIP but not really that important.
-
         if (!_net.IsServer)
-            return;
+            return false;
 
-        if (TerminatingOrDeleted(charger))
-            return;
+        if (TerminatingOrDeleted(wall))
+            return true;
 
-        //if its not indestructible, delete.
-        if (HasComp<DamageableComponent>(wall))
-            Del(wall);
-
-        //was gonna add some shrapnel throwing code here, but it had hands so im not doing it now.
+        return _destructible.DestroyEntity(wall);
     }
 
     private Vector2 GetWallNormal(EntityUid charger, EntityUid wall)

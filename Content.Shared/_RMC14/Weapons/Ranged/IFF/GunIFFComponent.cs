@@ -11,4 +11,7 @@ public sealed partial class GunIFFComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool Enabled;
+
+    [DataField, AutoNetworkedField]
+    public bool PreventFriendlyFire;
 }

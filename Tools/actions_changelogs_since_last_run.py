@@ -152,14 +152,38 @@ def get_last_changelog_by_ref(ref: str) -> str:
     )
 
 
+def changelog_entry_signature(
+    entry: ChangelogEntry,
+) -> tuple[str | None, str | None, str | None]:
+    """
+    After reaching MAX_ENTRIES, IDs will renumber at newest and prunes old.
+    So this serves as a stable diff PK (previously IDs) to check for new changes.
+    """
+    return (
+        entry.get("author"),
+        entry.get("time"),
+        entry.get("url"),
+    )
+
+
 def diff_changelog(
     old: dict[str, Any], cur: dict[str, Any]
 ) -> Iterable[ChangelogEntry]:
     """
     Find all new entries not present in the previous publish.
     """
-    old_entry_ids = {e["id"] for e in old["Entries"]}
-    return (e for e in cur["Entries"] if e["id"] not in old_entry_ids)
+    old_entries = {changelog_entry_signature(e) for e in old.get("Entries", [])}
+    diff = [
+        e
+        for e in cur.get("Entries", [])
+        if changelog_entry_signature(e) not in old_entries
+    ]
+    print(
+        f"Old={len(old.get('Entries', []))} "
+        f"Current={len(cur.get('Entries', []))} "
+        f"New={len(diff)}"
+    )
+    return diff
 
 
 def get_discord_body(content: str):
@@ -182,7 +206,9 @@ def send_discord_webhook(lines: list[str]):
         while response.status_code == 429:
             retry_attempt += 1
             if retry_attempt > 20:
-                print("Too many retries on a single request despite following retry_after header... giving up")
+                print(
+                    "Too many retries on a single request despite following retry_after header... giving up"
+                )
                 exit(1)
             retry_after = response.json().get("retry_after", 5)
             print(f"Rate limited, retrying after {retry_after} seconds")

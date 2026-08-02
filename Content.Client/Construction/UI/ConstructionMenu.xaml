@@ -27,6 +27,7 @@
                     </BoxContainer>
                 </BoxContainer>
             </Control>
+            <RichTextLabel Name="ConstructionSkillInfo" Visible="False" HorizontalExpand="True" Margin="4 0 0 3"/>
             <ItemList Name="RecipeStepList" Access="Public" VerticalExpand="True" Margin="0 0 0 5"/>
             <BoxContainer Orientation="Vertical">
                 <Button Name="BuildButton" Disabled="True" ToggleMode="True"

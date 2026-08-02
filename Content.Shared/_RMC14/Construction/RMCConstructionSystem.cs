@@ -1,3 +1,4 @@
+using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._RMC14.Construction.Prototypes;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Emplacements;
@@ -5,6 +6,7 @@ using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.DoAfter;
@@ -153,6 +155,9 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         {
             var totalAmount = amount / proto.Amount;
             var cost = (amount == proto.Amount) ? materialCost : totalAmount * materialCost;
+            var costEv = new RMCConstructionCostEvent(user, stack.StackTypeId, cost, cost);
+            RaiseLocalEvent(user, ref costEv, true);
+            cost = Math.Max(1, costEv.Cost);
 
             if (stack.Count < cost)
             {
@@ -173,6 +178,11 @@ public sealed partial class RMCConstructionSystem : EntitySystem
 
         var skillMultiplier = _skills.HasSkill(user, proto.DelaySkill, 2) ? 1 : 2;
         var delay = proto.DoAfterTime * skillMultiplier;
+
+        var delayEv = new RMCConstructionDelayEvent(user, delay, delay);
+        RaiseLocalEvent(user, ref delayEv, true);
+        delay = delayEv.Delay;
+
         var doAfterTime = Math.Max(delay.TotalSeconds, proto.DoAfterTimeMin.TotalSeconds);
 
         var doAfter = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(doAfterTime), ev, ent, ent)
@@ -238,14 +248,23 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         var totalAmount = args.Amount / entry.Amount; // So a stack of 20 with an amount of 4 and a cost of 1 is correctly 5 cost
         var cost = (args.Amount == entry.Amount) ? entry.MaterialCost : totalAmount * entry.MaterialCost;
 
+        var materialShortfall = 0;
+        var stackType = string.Empty;
         if (TryComp<StackComponent>(ent.Owner, out var stack))
         {
-            if (!_stack.Use(ent.Owner, cost ?? 1, stack))
+            var baseCost = cost ?? 1;
+            var costEv = new RMCConstructionCostEvent(args.User, stack.StackTypeId, baseCost, baseCost);
+            RaiseLocalEvent(args.User, ref costEv, true);
+            var paidCost = Math.Max(1, costEv.Cost);
+            if (!_stack.Use(ent.Owner, paidCost, stack))
             {
                 var message = Loc.GetString("rmc-construction-more-material", ("material", ent.Owner), ("object", entry.Name));
                 _popup.PopupEntity(message, args.User, args.User, PopupType.SmallCaution);
                 return;
             }
+
+            materialShortfall = Math.Max(0, baseCost - paidCost);
+            stackType = stack.StackTypeId;
         }
         else if (_net.IsServer)
         {
@@ -255,13 +274,15 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!Deleted(ent))
             UpdateStackAmountUI(ent);
 
+        var builtEntities = new List<EntityUid>();
         if (args.Amount > 1)
         {
-            SpawnMultiple(entry.Prototype, args.Amount, coordinates);
+            builtEntities.AddRange(SpawnMultiple(entry.Prototype, args.Amount, coordinates));
         }
         else
         {
             var built = SpawnAtPosition(entry.Prototype, coordinates);
+            builtEntities.Add(built);
 
             if (!entry.NoRotate)
                 _transform.SetLocalRotation(built, args.Direction.ToAngle());
@@ -270,6 +291,24 @@ public sealed partial class RMCConstructionSystem : EntitySystem
             // Removes collision with the construction until you leave
             if (!HasComp<BarricadeComponent>(built))
                 MakeConstructionImmuneToCollision(built, args.User);
+
+        }
+
+        for (var i = 0; i < builtEntities.Count; i++)
+        {
+            var built = builtEntities[i];
+            var perEntityShortfall = builtEntities.Count == 0
+                ? 0
+                : materialShortfall / builtEntities.Count + (i < materialShortfall % builtEntities.Count ? 1 : 0);
+            var transactionEv = new RMCConstructionTransactionCompletedEvent(
+                built,
+                args.User,
+                stackType,
+                perEntityShortfall);
+            RaiseLocalEvent(built, ref transactionEv, broadcast: true);
+
+            var completedEv = new ConstructionCompletedEvent(built, args.User);
+            RaiseLocalEvent(built, ref completedEv, broadcast: true);
         }
     }
 
@@ -417,7 +456,14 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!_prototype.TryIndex<EntityPrototype>(prototype, out var proto))
             return false;
 
-        var canBuild = CanBuildAt(coordinates, proto.Name, out popup, anchoring, direction, collision);
+        // AU14: laying a floor is precisely how you make unbuildable terrain buildable, so a tile applier is
+        // not subject to the terrain's own blockConstruction/blockAnchoring flags - otherwise beach, coast and
+        // water-shore tiles (whose abstract parents carry those flags, so every variant inherits them) refuse
+        // the tile ghost outright and the player just sees nothing appear. Structures, barricades and every
+        // other recipe stay blocked exactly as before; they can be built once a floor is down.
+        var isTileApplier = proto.TryComp<TileApplierComponent>(out _, _componentFactory);
+
+        var canBuild = CanBuildAt(coordinates, proto.Name, out popup, anchoring, direction, collision, isTileApplier);
         if (!canBuild)
             return false;
 
@@ -435,7 +481,9 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         return canBuild;
     }
 
-    public bool CanBuildAt(EntityCoordinates coordinates, string? prototypeName, out string? popup, bool anchoring = false, Direction direction = Direction.Invalid, CollisionGroup? collision = null)
+    /// <param name="ignoreBlockedTerrain">Skips the tile's own blockConstruction/blockAnchoring veto. Set for
+    /// tile appliers, which exist to replace that terrain.</param>
+    public bool CanBuildAt(EntityCoordinates coordinates, string? prototypeName, out string? popup, bool anchoring = false, Direction direction = Direction.Invalid, CollisionGroup? collision = null, bool ignoreBlockedTerrain = false)
     {
         popup = default;
         if (_transform.GetGrid(coordinates) is not { } gridId)
@@ -458,9 +506,9 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (!_map.TryGetTileDef(grid, indices, out var def))
             return true;
 
-        var invalid = def is ContentTileDefinition { BlockConstruction: true };
+        var invalid = !ignoreBlockedTerrain && def is ContentTileDefinition { BlockConstruction: true };
         if (anchoring)
-            invalid = def is ContentTileDefinition { BlockAnchoring: true };
+            invalid = !ignoreBlockedTerrain && def is ContentTileDefinition { BlockAnchoring: true };
 
         if (invalid || _rmcMap.HasAnchoredEntityEnumerator<LadderComponent>(coordinates))
         {
@@ -483,3 +531,19 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         return true;
     }
 }
+
+/// <summary>Extension point for server-authoritative material pricing without coupling RMC construction to a fork.</summary>
+[ByRefEvent]
+public record struct RMCConstructionCostEvent(EntityUid User, string StackType, int BaseCost, int Cost);
+
+/// <summary>Extension point for construction delay modifiers.</summary>
+[ByRefEvent]
+public record struct RMCConstructionDelayEvent(EntityUid User, TimeSpan BaseDelay, TimeSpan Delay);
+
+/// <summary>Reports the exact material delta associated with one newly-built entity.</summary>
+[ByRefEvent]
+public record struct RMCConstructionTransactionCompletedEvent(
+    EntityUid Built,
+    EntityUid User,
+    string StackType,
+    int MaterialShortfall);

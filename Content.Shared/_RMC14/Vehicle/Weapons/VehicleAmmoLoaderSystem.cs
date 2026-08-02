@@ -11,6 +11,7 @@ using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Content.Shared.Weapons.Ranged.Components;
+using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Network;
@@ -23,6 +24,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 {
     [Dependency] private BulletBoxSystem _bulletBox = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -728,6 +730,11 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
 
         if (box.Comp.Amount <= 0)
             Del(box.Owner);
+
+        // RMC14: swap the chambered shell type when loading into an empty ready slot,
+        // so boxes like AP/HE/canister variants can all feed the same gun.
+        if (ammoSlot == 0 && ammo.Count == 0 && box.Comp.AmmoProto is { } ammoProto)
+            _gun.SetBallisticProto((ammoUid, ammo), ammoProto);
 
         _hardpointAmmo.TryLoadIntoSlot((ammoUid, hardpointAmmo), ammo, ammoSlot, transferAmount);
 

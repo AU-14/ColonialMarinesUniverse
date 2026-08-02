@@ -1,0 +1,154 @@
+<!--
+SPDX-License-Identifier: AGPL-3.0-only
+Copyright (c) 2026 wray-git
+SPDX-License-Identifier: AGPL-3.0-only
+-->
+<DefaultWindow xmlns="https://spacestation14.io"
+               Title="{Loc 'construction-menu-title'}">
+    <PanelContainer Name="RootPanel" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True" Margin="4 4 4 4">
+
+            <!-- Top faux-tab strip (gmod-style) -->
+            <PanelContainer Name="TopBarPanel" Margin="0 0 0 4">
+                <BoxContainer Orientation="Horizontal" Margin="2 2 2 2">
+                    <Button Name="TabSpawnlists" Text="{Loc 'gmod-construction-menu-spawnlists'}"
+                            ToggleMode="True" Pressed="True" MinWidth="110"/>
+                    <Button Name="TabTiles" Text="{Loc 'gmod-construction-menu-tiles'}"
+                            ToggleMode="True" MinWidth="80" Margin="4 0 0 0"/>
+                    <Control HorizontalExpand="True"/>
+                    <OptionButton Name="ModeDropdown" MinWidth="190" Margin="0 0 4 0"/>
+                    <Button Name="HeaderCloseButton" Text="✕" MinWidth="34"/>
+                </BoxContainer>
+            </PanelContainer>
+
+            <!-- Main body -->
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True" VerticalExpand="True">
+
+                <!-- LEFT: search + folder tree -->
+                <PanelContainer Name="TreePanel" MinWidth="170" Margin="0 0 4 0">
+                    <BoxContainer Orientation="Vertical" Margin="4 4 4 4">
+                        <LineEdit Name="SearchBar" PlaceHolder="{Loc 'construction-menu-search'}" Margin="0 0 0 4"/>
+                        <Label Text="{Loc 'gmod-construction-menu-your-spawnlists'}"
+                               StyleClasses="LabelKeyText" Margin="2 0 0 2"/>
+                        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                                <!-- One toggle button per spawnlist, built in code (AU14 gets the logo). -->
+                                <BoxContainer Name="SpawnlistContainer" Orientation="Vertical" HorizontalExpand="True"/>
+                                <Button Name="TreeFavorites" ToggleMode="True"
+                                        Text="{Loc 'gmod-construction-menu-favorites'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2" Visible="False"
+                                        StyleClasses="OpenBoth"/>
+                            </BoxContainer>
+                        </ScrollContainer>
+                    </BoxContainer>
+                </PanelContainer>
+
+                <!-- CENTER: sub-categorized item grid -->
+                <PanelContainer Name="CenterPanel" HorizontalExpand="True" VerticalExpand="True">
+                    <ScrollContainer Name="RecipesGridScrollContainer" Access="Public"
+                                     HorizontalExpand="True" VerticalExpand="True" HScrollEnabled="False"
+                                     Margin="4 4 4 4">
+                        <BoxContainer Name="GroupedRecipesContainer" Access="Public"
+                                      Orientation="Vertical" HorizontalExpand="True"/>
+                    </ScrollContainer>
+                </PanelContainer>
+
+                <!-- DETAIL: slide-out panel (width animated in code). Abuts the Tools panel on its right
+                     (no right border / no gap) so it reads as sliding out from underneath Tools. -->
+                <PanelContainer Name="DetailPanel" Visible="False" Margin="4 0 0 0">
+                    <BoxContainer Name="DetailContent" Orientation="Vertical" Margin="6 6 6 6" MinWidth="248">
+                        <BoxContainer Orientation="Horizontal" Margin="0 0 0 6">
+                            <EntityPrototypeView Name="TargetTexture" Stretch="Fill" SetSize="64 64" Margin="0 0 8 0"/>
+                            <BoxContainer Orientation="Vertical" VerticalAlignment="Center" HorizontalExpand="True">
+                                <RichTextLabel Name="TargetName"/>
+                                <RichTextLabel Name="TargetDesc"/>
+                            </BoxContainer>
+                        </BoxContainer>
+                        <Label Text="{Loc 'gmod-construction-menu-steps'}" StyleClasses="LabelKeyText" Margin="0 0 0 2"/>
+                        <RichTextLabel Name="ConstructionSkillInfo" Visible="False" HorizontalExpand="True" Margin="0 0 0 3"/>
+                        <ItemList Name="RecipeStepList" Access="Public" VerticalExpand="True" Margin="0 0 0 6"/>
+                        <Button Name="BuildButton" Disabled="True" ToggleMode="True" Margin="0 0 0 4"/>
+                        <Button Name="FavoriteButton" Visible="False" Margin="0 0 0 4"/>
+                        <!-- Admin-only recipe management (visible only in recipe mode, for admins). Lets an admin
+                             change or hide ANY menu recipe - including vanilla ones the right-click editor can't see. -->
+                        <Button Name="RecipeChangeButton" Visible="False" Margin="0 0 0 2"/>
+                        <Button Name="RecipeRemoveButton" Visible="False" Margin="0 0 0 4"/>
+                        <!-- Saved-build management (visible only when viewing a saved build). -->
+                        <Button Name="SavedBuildRenameButton" Visible="False" Margin="0 0 0 2"/>
+                        <BoxContainer Name="SavedBuildRenameRow" Orientation="Horizontal" Visible="False" Margin="0 0 0 2">
+                            <LineEdit Name="SavedBuildRenameEdit" HorizontalExpand="True" Margin="0 0 2 0"/>
+                            <Button Name="SavedBuildRenameConfirm" Text="OK" MinWidth="40"/>
+                        </BoxContainer>
+                        <Button Name="SavedBuildDeleteButton" Visible="False" Margin="0 0 0 2"/>
+                        <Button Name="SavedBuildFolderButton" Visible="False" Margin="0 0 0 4"/>
+                        <BoxContainer Name="GhostActionsRow" Orientation="Horizontal">
+                            <Button Name="EraseButton" ToggleMode="True" HorizontalExpand="True" Margin="0 0 2 0"/>
+                            <Button Name="ClearButton" HorizontalExpand="True"/>
+                        </BoxContainer>
+                    </BoxContainer>
+                </PanelContainer>
+
+                <!-- RIGHT: tools panel -->
+                <PanelContainer Name="ToolsPanel" MinWidth="220" Margin="0 0 0 0">
+                    <BoxContainer Orientation="Vertical" Margin="4 4 4 4">
+                        <Button Name="TabTools" Text="{Loc 'gmod-construction-menu-tools'}"
+                                ToggleMode="True" Pressed="True" Disabled="True" HorizontalExpand="True"
+                                Margin="0 0 0 4"/>
+                        <ScrollContainer VerticalExpand="True" HorizontalExpand="True">
+                            <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+                                <!-- Construction category -->
+                                <Label Text="{Loc 'gmod-construction-menu-construction'}"
+                                       StyleClasses="LabelKeyText" Margin="0 0 0 2"/>
+                                <Button Name="AdvancedDuplicatorButton"
+                                        Text="{Loc 'gmod-construction-menu-advanced-duplicator'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="PartnersButton"
+                                        Text="{Loc 'gmod-construction-menu-partners'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+
+                                <!-- Admin Tools category -->
+                                <Label Text="{Loc 'gmod-construction-menu-admin-tools'}"
+                                       StyleClasses="LabelKeyText" Margin="0 6 0 2"/>
+                                <Button Name="ConstructionItemsEditorButton"
+                                        Text="{Loc 'gmod-construction-menu-items-editor'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="MassEntityEditorButton"
+                                        Text="{Loc 'gmod-construction-menu-mass-editor'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="TilesEditorButton"
+                                        Text="{Loc 'gmod-construction-menu-tiles-editor'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="LatheEditorButton"
+                                        Text="{Loc 'gmod-construction-menu-lathe-editor'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="SpawnlistDeleteButton"
+                                        Text="{Loc 'gmod-construction-menu-spawnlist-delete'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="ZLevelTogglesButton"
+                                        Text="{Loc 'gmod-construction-menu-zlevel-toggles'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="ZSyncListsButton"
+                                        Text="{Loc 'gmod-construction-menu-zsync-lists'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                                <Button Name="ToolPermissionsButton"
+                                        Text="{Loc 'gmod-construction-menu-tool-permissions'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+
+                                <!-- INSFOR category: insfor-update intentionally layers this button onto
+                                     the improved construction menu from building-improvement PR #1497.
+                                     The editor runs a server console command, so servers without the
+                                     INSFOR feature just no-op. -->
+                                <Label Text="{Loc 'gmod-construction-menu-insfor'}"
+                                       StyleClasses="LabelKeyText" Margin="0 6 0 2"/>
+                                <Button Name="InsforEditorButton"
+                                        Text="{Loc 'gmod-construction-menu-insfor-editor'}"
+                                        HorizontalExpand="True" Margin="0 0 0 2"/>
+                            </BoxContainer>
+                        </ScrollContainer>
+                    </BoxContainer>
+                </PanelContainer>
+
+            </BoxContainer>
+        </BoxContainer>
+    </PanelContainer>
+</DefaultWindow>

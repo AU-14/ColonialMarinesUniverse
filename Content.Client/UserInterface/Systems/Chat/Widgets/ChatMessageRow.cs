@@ -28,13 +28,18 @@ public sealed partial class ChatMessageRow : PanelContainer
 
         var accent = accentOverride ?? GetAccent(message, textColor);
         var metrics = GetMetrics(fontSize);
+
+        // Messages with a custom background (e.g. examine echoes) get a full box outline and some
+        // breathing room, so a run of them doesn't melt into one undifferentiated block of color.
+        var isBoxed = message.Display?.BackgroundColorOverride != null;
+
         HorizontalExpand = true;
-        Margin = new Thickness(0, 0, 0, metrics.OuterBottomMargin);
+        Margin = new Thickness(0, 0, 0, isBoxed ? Math.Max(metrics.OuterBottomMargin, 4) : metrics.OuterBottomMargin);
         PanelOverride = new StyleBoxFlat
         {
-            BackgroundColor = GetBackground(message.Channel),
+            BackgroundColor = GetBackground(message),
             BorderColor = accent,
-            BorderThickness = new Thickness(2, 0, 0, 0),
+            BorderThickness = isBoxed ? new Thickness(2, 2, 2, 2) : new Thickness(2, 0, 0, 0),
             ContentMarginLeftOverride = 4,
             ContentMarginRightOverride = 4,
             ContentMarginTopOverride = metrics.VerticalPadding,
@@ -240,8 +245,13 @@ public sealed partial class ChatMessageRow : PanelContainer
             && string.Equals(display.ChannelLabel, "RAD", StringComparison.OrdinalIgnoreCase);
     }
 
-    private static Color GetBackground(ChatChannel channel)
+    private static Color GetBackground(ChatMessage message)
     {
+        if (message.Display?.BackgroundColorOverride is { } backgroundOverride)
+            return backgroundOverride;
+
+        var channel = message.Channel;
+
         if ((channel & ChatChannel.AdminRelated) != 0)
             return Color.FromHex("#23151e");
 

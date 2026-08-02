@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Doors;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Power;
 using Content.Shared._RMC14.Xenonids;
@@ -14,6 +15,7 @@ using Content.Shared.Prying.Components;
 using Content.Shared.Prying.Systems;
 using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Map.Enumerators;
 using Robust.Shared.Network;
@@ -147,6 +149,15 @@ public sealed partial class CMDoorSystem : EntitySystem
             return;
         }
 
+        var buttonName = button.Comp.Id ?? Name(button);
+        var buttonTransform = Transform(button);
+
+        if (IsAnyLinkedDoorLocked(buttonName, buttonTransform.MapID))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-machines-button-locked-open"), button, user, PopupType.SmallCaution);
+            return;
+        }
+
         if (button.Comp.MinimumRoundTimeToPress is { } minimumTime && _gameTicker.RoundDuration() <= minimumTime)
         {
             var minutesLeft = (int)(minimumTime.TotalMinutes - _gameTicker.RoundDuration().TotalMinutes);
@@ -175,9 +186,6 @@ public sealed partial class CMDoorSystem : EntitySystem
         button.Comp.LastUse = time;
         button.Comp.Used = true;
         Dirty(button);
-
-        var buttonName = button.Comp.Id ?? Name(button);
-        var buttonTransform = Transform(button);
 
         var doors = EntityQueryEnumerator<RMCPodDoorComponent, DoorComponent, TransformComponent, MetaDataComponent>();
         while (doors.MoveNext(out var door, out var podDoor, out var doorComp, out var doorTransform, out var metaData))
@@ -222,6 +230,30 @@ public sealed partial class CMDoorSystem : EntitySystem
             return;
 
         RaiseNetworkEvent(new RMCPodDoorButtonPressedEvent(GetNetEntity(button), animState), Filter.PvsExcept(button));
+    }
+
+    /// <summary>
+    /// Checks whether any door linked to a button by name/id (see <see cref="OnButtonActivateInWorld"/>) has been
+    /// permanently locked open via <see cref="CMUAdjutantLockDoorComponent"/>, in which case the button should
+    /// stop responding entirely.
+    /// </summary>
+    private bool IsAnyLinkedDoorLocked(string buttonName, MapId mapId)
+    {
+        var doors = EntityQueryEnumerator<CMUAdjutantLockDoorComponent, RMCPodDoorComponent, TransformComponent, MetaDataComponent>();
+        while (doors.MoveNext(out var door, out var lockComp, out var podDoor, out var doorTransform, out var metaData))
+        {
+            if (!lockComp.Locked || TerminatingOrDeleted(door))
+                continue;
+
+            if (mapId != doorTransform.MapID)
+                continue;
+
+            var id = podDoor.Id ?? metaData.EntityName;
+            if (buttonName == id)
+                return true;
+        }
+
+        return false;
     }
 
     private void OnBeforePry(Entity<DoorComponent> ent, ref RMCBeforePryEvent args)

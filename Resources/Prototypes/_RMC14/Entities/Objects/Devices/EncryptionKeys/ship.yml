@@ -109,7 +109,7 @@
   - type: EncryptionKey
     channels:
     - MarineHighCommand
-    - Provost
+    - radioProvost
     defaultChannel: MarineHighCommand
   - type: Sprite
     state: cap_key

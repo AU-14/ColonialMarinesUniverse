@@ -13,7 +13,7 @@
   components:
   - type: CanBuildThickFromConstructNode
   - type: GhostRole
-    name: cm-job-name-xeno-carrier
+    name: cmu-job-name-xeno-unknown
   - type: MobState
     allowedStates:
     - Alive
@@ -63,6 +63,25 @@
     stunMin: 4
     stunMax: 5
   - type: TunnelRenamer
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaPurple
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 1
   - type: MovementSpeedModifier
     baseWalkSpeed: 2
     baseSprintSpeed: 3.5
@@ -103,7 +122,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-carrier
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
 
@@ -201,6 +220,25 @@
     name: rmc-xeno-eggsac-name
     description: rmc-xeno-eggsac-description
     popup: rmc-xeno-eggsac-popup
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaEgg
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaEgg
+        Quantity: 1
   - type: XenoPheromones
     pheromonesMultiplier: 3
     pheroSuffix: strong

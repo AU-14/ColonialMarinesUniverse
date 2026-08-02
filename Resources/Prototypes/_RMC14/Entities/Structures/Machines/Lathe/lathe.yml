@@ -36,16 +36,20 @@
     producingSound: /Audio/_RMC14/Machines/print.ogg
     staticPacks:
     - RMCRecipesLathe
+    # AU14 building overhaul: admin-added autolathe recipes (managed by the in-game Lathe Editor, Admin Tools).
+    - AU14AutolatheRecipes
   - type: MaterialStorage
     storage:
       CMSteel: 30000
       CMGlass: 2000
+      RMCPlastic: 20000 # AU14 building overhaul: accept plastic so plastic-cost recipes can be printed.
     whitelist:
       components:
       - FloorTile
       tags:
       - Metal
       - RMCGlass
+      - Plastic # AU14 building overhaul: allow plastic sheets to be inserted.
       - RMCTablePartMetal
       - RMCRackParts
       - RMCTablePartMetalReinforced

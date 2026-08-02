@@ -7,6 +7,11 @@ namespace Content.Server.AU14.Round;
 
 internal static class AuRoundSelectionRules
 {
+    public static bool IsExplicitlyWhitelistedForGamemode(ThirdPartyPrototype proto, string gamemode)
+    {
+        return ContainsIgnoreCase(proto.whitelistedgamemodes, gamemode);
+    }
+
     public static bool IsThirdPartyAllowed(
         ThirdPartyPrototype proto,
         string currentGamemode,

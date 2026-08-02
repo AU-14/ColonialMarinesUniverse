@@ -118,8 +118,34 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 
         // Also apply platoon catalog in case the console needs a custom catalog based on current round
         ApplyPlatoonCatalogToComputer(uid, comp);
+        AddXRFToCatalog(uid, comp);
         ResetStock((uid, comp));
         Dirty(uid, comp);
+    }
+
+    private void AddXRFToCatalog(EntityUid ent, RequisitionsComputerComponent comp)
+    {
+        var entry = new RequisitionsEntry();
+        entry.Cost = 1000;
+        switch (comp.Faction)
+        {
+            case "corporate":
+                entry.Crate = "CMUCrateXRF";
+                break;
+            case "colony":
+                entry.Crate = "CMUCrateXRFColony";
+                break;
+            case "govfor":
+                entry.Crate = "CMUCrateXRFGovfor";
+                break;
+            case "opfor":
+                entry.Crate = "CMUCrateXRFOpfor";
+                break;
+            default:
+                entry.Crate = "CMUCrateXRFNobody";
+                break;
+        }
+        AddEntryToCategory(ent, null, "Research", entry);
     }
 
     private void ApplyPlatoonCatalogToComputer(EntityUid consoleUid, RequisitionsComputerComponent comp)

@@ -38,7 +38,7 @@
     shoes: RMCShoesLaceupBrown
     eyes: RMCGlassesAviators
   inhand:
-    - RMCShovel
+    - AU14ToolShovel
 
 - type: entity
   parent: CMSpawnPointJobBase

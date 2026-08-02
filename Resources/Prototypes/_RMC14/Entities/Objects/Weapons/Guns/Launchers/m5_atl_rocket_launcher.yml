@@ -81,7 +81,39 @@
     soundGunshot:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/m5_shoot.ogg
   - type: Corrodible
-    isCorrodible: true
+    isCorrodible: false
+  - type: RMCMagneticItem
+
+- type: entity
+  parent: [RMCBaseWeaponLauncher, RMCBaseAttachableHolder]
+  name: EMBLR
+  id: CMUWeaponLauncherEMBLR
+  description: "A German designed MANPAD system designed to replace the aging Russian-made 'spear' missile launchers. It offers reasonable air defence capabilities at the platoon-level for members of the UPPAC. This ones electronic systems seems to be taken off, rendering it as a 'Anti-Tank Weapon'"
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+    layers:
+      - state: base
+        sprite: _AU14/Weapons/Guns/UPP/emblr/emblr_icon.rsi
+        map: ["enum.GunVisualLayers.Base"]
+  - type: BallisticAmmoProvider
+    whitelist:
+      tags:
+        - CMURocketAmmo70mm
+    capacity: 1
+    cycleable: true
+    mayTransfer: false
+    insertDelay: 6.0
+    cycleDelay: 6.0
+    proto: CMURocket70mm
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+  - type: Gun
+    fireRate: 0.83
+    soundGunshot:
+      path: /Audio/_RMC14/Weapons/Guns/Gunshots/m5_shoot.ogg
+  - type: Corrodible
+    isCorrodible: false
   - type: RMCMagneticItem
 
 # 84mm HE
@@ -110,6 +142,105 @@
     suffix: false
   - type: IgnorePredictionHide
   - type: AssistedReloadAmmo
+
+- type: entity
+  id: CMURocket70mm
+  name: 70mm high-explosive rocket
+  parent: BaseItem
+  description: A squat missile canister for the EMBLR surface-to-air weapons system. Unlike it's USCM counterpart, the Goose carries a small but powerful warhead. This one has 'High-Explosive' written on the side.
+  components:
+  - type: Tag
+    tags:
+    - CMURocketAmmo70mm
+  - type: CartridgeAmmo
+    proto: CMUProjectileRocket70mmHE
+    deleteOnSpawn: false
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/emblr.rsi
+    layers:
+    - state: emblr
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Normal
+  - type: Appearance
+  - type: SpentAmmoVisuals
+    state: spent
+    suffix: false
+  - type: IgnorePredictionHide
+  - type: AssistedReloadAmmo
+
+- type: entity
+  id: CMUProjectileRocket70mm
+  name: 70mm high-explosive rocket
+  categories: [ HideSpawnMenu ]
+  description: Uh oh.
+  components:
+  - type: Physics
+    bodyType: Dynamic
+    fixedRotation: false
+  - type: Fixtures
+    fixtures:
+      projectile:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.15,-0.15,0.15,0.15"
+          # Bigger than bullets. Rectangle won't work since AABB shapes don't rotate. This should help significantly with explosion consistency.
+        hard: false
+        mask:
+        - Impassable
+        - BulletImpassable
+        restitution: 0.0
+        density: 20
+  - type: Projectile
+    deleteOnCollide: false
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Blunt: 15
+    maxFixedRange: 6 # 7 tiles
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/emblr.rsi
+    layers:
+    - state: emblr_projectile
+  - type: IgnorePredictionHide
+  - type: RMCProjectileAccuracy
+    accuracy: 95
+    thresholds:
+    - range: 7
+      falloff: 10
+  - type: DeleteOnTrigger
+
+- type: entity
+  parent: CMUProjectileRocket70mm
+  id: CMUProjectileRocket70mmHE
+  name: 70mm high-explosive rocket
+  categories: [ HideSpawnMenu ]
+  description: Uh oh.
+  components:
+  - type: TriggerOnCollide
+    # TODO RMC14 Make TriggerOnCollide spawn the explosion on the OtherEntity tile more consistently, so the explosion is centered properly
+    fixtureID: projectile # no parent entity from BaseBulletTrigger because it has Clickable
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 30
+    intensitySlope: 10
+    totalIntensity: 290
+    maxTileBreak: 0
+  - type: CMExplosionEffect
+  - type: RMCScorchEffect
+  - type: PointLight
+    radius: 3.5
+    color: orange
+    energy: 0.5
+  - type: IgnorePredictionHide
+  - type: RMCProjectileAccuracy
+    accuracy: 95
+    thresholds:
+    - range: 7
+      falloff: 10
+  - type: VehicleDamageMultiplier
+    multiplier: 8
 
 - type: entity
   id: RMCBaseProjectileRocket84mm
@@ -206,6 +337,66 @@
   - type: IgnorePredictionHide
 
 - type: entity
+  id: CMURocket70mmAntiArmor
+  name: 70mm anti-armor rocket
+  parent: CMURocket70mm
+  description: A squat missile canister for the EMBLR surface-to-air weapons system. Unlike it's USCM counterpart, the Goose carries a small but powerful warhead. This one has 'Armor-Piercing' written on the side.
+  components:
+  - type: CartridgeAmmo
+    proto: RMCProjectileRocket84mmAntiArmor
+    deleteOnSpawn: false
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/emblr.rsi
+    layers:
+    - state: emblr
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: SpentAmmoVisuals
+    state: spent
+    suffix: false
+  - type: IgnorePredictionHide
+
+- type: entity
+  id: CMUProjectileRocket70mmAntiArmor
+  name: 70mm anti-armor rocket
+  parent: CMUProjectileRocket70mm
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Blunt: 160
+        Heat: 150
+        # 10 brute damage + 150 brute and 150 burn to simulate direct explosive damage.
+        # Temporary mechanic to make it consistent with intended main target damage.
+    maxFixedRange: 5 # 6 tiles
+  - type: CMArmorPiercing
+    amount: 100 # Ignores all armor.
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/emblr.rsi
+    layers:
+    - state: emblr_projectile
+  - type: Explosive
+    # TODO RMC14 Very inconsistent because explosions spawn at epicenter of the rocket, not the hit entity. Proper values are around (50, 40, 90)
+    explosionType: RMC
+    maxIntensity: 10
+    intensitySlope: 5
+    totalIntensity: 35
+    maxTileBreak: 0
+  - type: RMCKnockOutOnCollide # Hardcoded 6 second stun, different from explosions.
+    paralyzeTime: 6
+  - type: IgnorePredictionHide
+  - type: RMCProjectileAccuracy
+    accuracy: 125
+    thresholds:
+    - range: 6
+      falloff: 10
+  - type: VehicleDamageMultiplier
+    multiplier: 10
+
+
+
+- type: entity
   id: RMCProjectileRocket84mmAntiArmor
   name: 84mm anti-armor rocket
   parent: RMCProjectileRocket84mm
@@ -260,6 +451,25 @@
       map: ["enum.AmmoVisualLayers.Base"]
   - type: SpentAmmoVisuals
     state: m5_84mm_wp
+    suffix: false
+  - type: IgnorePredictionHide
+
+- type: entity
+  parent: CMURocket70mm
+  id: CMURocket70mmWhitePhosphorus
+  name: 70mm white phosphorus rocket
+  description: A squat missile canister for the EMBLR surface-to-air weapons system. Unlike it's USCM counterpart, the Goose carries a small but powerful warhead. This one has 'WP' written on the side.
+  components:
+  - type: CartridgeAmmo
+    proto: RMCProjectileRocket84mmWhitePhosphorus
+    deleteOnSpawn: false
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Explosives/emblr.rsi
+    layers:
+    - state: emblr
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: SpentAmmoVisuals
+    state: spent
     suffix: false
   - type: IgnorePredictionHide
 

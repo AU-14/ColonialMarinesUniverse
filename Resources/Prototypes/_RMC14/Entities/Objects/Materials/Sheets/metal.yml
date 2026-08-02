@@ -67,6 +67,7 @@
       - RMCDividerConstruction
       # computer frame
       - RMCMachineFrameBuild
+      - AU14CommsMastFieldBuild
       - RMCDividerConstruction
       # metal baseball bat
       - RMCDividerConstruction

@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared._RMC14.Xenonids.Projectile;
 using Content.Shared._RMC14.Xenonids.Sweep;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Events;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
 using Content.Shared.Interaction;
@@ -67,6 +68,7 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
         SubscribeLocalEvent<XenoBulwarkComponent, XenoBulwarkTailSwingActionEvent>(OnTailSwingAction);
         SubscribeLocalEvent<XenoBulwarkComponent, XenoReflectiveShieldActionEvent>(OnReflectiveShieldAction);
         SubscribeLocalEvent<XenoBulwarkComponent, ProjectileReflectAttemptEvent>(OnReflectAttempt);
+        SubscribeLocalEvent<XenoReflectiveShieldActionComponent, ActionPerformedEvent>(OnReflectiveShieldPerformed);
     }
 
     private void OnGetArmor(Entity<XenoBulwarkComponent> xeno, ref CMGetArmorEvent args)
@@ -270,6 +272,14 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
             _actions.SetToggled(action.AsNullable(), true);
     }
 
+    private void OnReflectiveShieldPerformed(Entity<XenoReflectiveShieldActionComponent> action, ref ActionPerformedEvent args)
+    {
+        if (!TryComp(args.Performer, out XenoBulwarkComponent? bulwark) || bulwark.Reflecting)
+            return;
+
+        _actions.SetCooldown(action.Owner, GetReflectCooldown((args.Performer, bulwark), true));
+    }
+
     private void OnReflectAttempt(Entity<XenoBulwarkComponent> xeno, ref ProjectileReflectAttemptEvent args)
     {
         if (args.Cancelled || !xeno.Comp.Reflecting || HasComp<XenoProjectileComponent>(args.ProjUid))
@@ -347,25 +357,25 @@ public sealed partial class XenoBulwarkSystem : EntitySystem
         xeno.Comp.Reflecting = false;
         Dirty(xeno);
 
-        TimeSpan cooldown;
-        if (refund)
-        {
-            var elapsed = _timing.CurTime - xeno.Comp.ReflectStartedAt;
-            var seconds = Math.Max(
-                xeno.Comp.ReflectMinCooldown.TotalSeconds,
-                elapsed.TotalSeconds * xeno.Comp.ReflectCooldownPerSecond);
-            cooldown = TimeSpan.FromSeconds(seconds);
-        }
-        else
-        {
-            cooldown = xeno.Comp.ReflectFullCooldown;
-        }
+        var cooldown = GetReflectCooldown(xeno, refund);
 
         foreach (var action in _rmcActions.GetActionsWithEvent<XenoReflectiveShieldActionEvent>(xeno))
         {
             _actions.SetToggled(action.AsNullable(), false);
             _actions.SetCooldown(action.AsNullable(), cooldown);
         }
+    }
+
+    private TimeSpan GetReflectCooldown(Entity<XenoBulwarkComponent> xeno, bool refund)
+    {
+        if (!refund)
+            return xeno.Comp.ReflectFullCooldown;
+
+        var elapsed = _timing.CurTime - xeno.Comp.ReflectStartedAt;
+        var seconds = Math.Max(
+            xeno.Comp.ReflectMinCooldown.TotalSeconds,
+            elapsed.TotalSeconds * xeno.Comp.ReflectCooldownPerSecond);
+        return TimeSpan.FromSeconds(seconds);
     }
 
     private void SetTailSwingCooldown(EntityUid xeno, TimeSpan cooldown)

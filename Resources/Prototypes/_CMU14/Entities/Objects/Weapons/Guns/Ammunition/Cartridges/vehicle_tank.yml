@@ -1,0 +1,195 @@
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeLTBCannonAPFSDS
+  name: cartridge (LTB cannon, APFSDS)
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_apfsds
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Huge
+  - type: SpentAmmoVisuals
+    state: lbtshell_apfsds
+    suffix: false
+  - type: CartridgeAmmo
+    deleteOnSpawn: false
+    proto: CMUProjectileLTBCannonAPFSDS
+    muzzleFlash: MuzzleFlashEffectVehicleOverLarge
+    muzzleFlashOffset: 2.2, 0
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeLTBCannonHEAT
+  name: cartridge (LTB cannon, HEAT)
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_heat
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Huge
+  - type: SpentAmmoVisuals
+    state: lbtshell_heat
+    suffix: false
+  - type: CartridgeAmmo
+    deleteOnSpawn: false
+    proto: CMUProjectileLTBCannonHEAT
+    muzzleFlash: MuzzleFlashEffectVehicleOverLarge
+    muzzleFlashOffset: 2.2, 0
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeLTBCannonHE
+  name: cartridge (LTB cannon, HE)
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_he
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Huge
+  - type: SpentAmmoVisuals
+    state: lbtshell_he
+    suffix: false
+  - type: CartridgeAmmo
+    deleteOnSpawn: false
+    proto: CMUProjectileLTBCannonHE
+    muzzleFlash: MuzzleFlashEffectVehicleOverLarge
+    muzzleFlashOffset: 2.2, 0
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeLTBCannonCanister
+  name: cartridge (LTB cannon, canister)
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_canister
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Huge
+  - type: SpentAmmoVisuals
+    state: lbtshell_canister
+    suffix: false
+  - type: CartridgeAmmo
+    deleteOnSpawn: false
+    proto: CMUProjectileLTBCannonCanister
+    muzzleFlash: MuzzleFlashEffectVehicleOverLarge
+    muzzleFlashOffset: 2.2, 0
+
+- type: entity
+  parent: CMBaseCartridgeRifle
+  id: CMUCartridgeLTBCannonNapalm
+  name: cartridge (LTB cannon, napalm)
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/ammo/vehicles.rsi
+    layers:
+    - state: lbtshell_thermite
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: Item
+    size: Huge
+  - type: SpentAmmoVisuals
+    state: lbtshell_thermite
+    suffix: false
+  - type: CartridgeAmmo
+    deleteOnSpawn: false
+    proto: CMUProjectileLTBCannonNapalm
+    muzzleFlash: MuzzleFlashEffectVehicleOverLarge
+    muzzleFlashOffset: 2.2, 0
+
+# Impacts
+- type: entity
+  id: CMULTBCannonImpactAPFSDS
+  name: LTB APFSDS cannon impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TriggerOnSpawn
+  - type: DeleteOnTrigger
+  - type: RMCScorchEffect
+    radius: 2
+    centerRadius: 0
+
+- type: entity
+  id: CMULTBCannonImpactHEAT
+  name: LTB HEAT cannon impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TriggerOnSpawn
+  - type: ExplodeOnTrigger
+  - type: DeleteOnTrigger
+  - type: CMExplosionEffect
+    minShrapnel: 15
+    maxShrapnel: 40
+    shrapnelSpeed: 8
+  - type: RMCScorchEffect
+    radius: 3
+    centerRadius: 1
+  - type: Explosive
+    explosionType: RMCLTBCannon
+    maxIntensity: 6
+    intensitySlope: 2
+    totalIntensity: 60
+    tileBreakScale: 0
+    maxTileBreak: 0
+
+- type: entity
+  id: CMULTBCannonImpactHE
+  name: LTB HE cannon impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TriggerOnSpawn
+  - type: ExplodeOnTrigger
+  - type: DeleteOnTrigger
+  - type: CMExplosionEffect
+    minShrapnel: 70
+    maxShrapnel: 160
+    shrapnelSpeed: 8
+  - type: RMCScorchEffect
+    radius: 5
+    centerRadius: 2
+  - type: Explosive
+    explosionType: RMCLTBCannon
+    maxIntensity: 12
+    intensitySlope: 2
+    totalIntensity: 220
+    tileBreakScale: 0
+    maxTileBreak: 0
+
+- type: entity
+  id: CMULTBCannonImpactCanister
+  name: LTB canister cannon impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TriggerOnSpawn
+  - type: DeleteOnTrigger
+  - type: RMCScorchEffect
+    radius: 1
+    centerRadius: 0
+
+- type: entity
+  id: CMULTBCannonImpactNapalm
+  name: LTB napalm cannon impact
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TriggerOnSpawn
+  - type: ExplodeOnTrigger
+  - type: DeleteOnTrigger
+  - type: RMCScorchEffect
+    radius: 2
+    centerRadius: 1
+  - type: Explosive
+    explosionType: RMCLTBCannon
+    maxIntensity: 3
+    intensitySlope: 1
+    totalIntensity: 20
+    tileBreakScale: 0
+    maxTileBreak: 0
+  - type: TileFireOnTrigger
+    spawn: RMCTileFireStickyNapalm
+    range: 2

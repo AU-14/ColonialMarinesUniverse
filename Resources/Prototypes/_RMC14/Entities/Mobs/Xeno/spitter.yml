@@ -15,7 +15,7 @@
     guides:
     - RMCGuideRoleSpitter
   - type: GhostRole
-    name: cm-job-name-xeno-spitter
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Spitter/spitter.rsi #AU14-Edit
   - type: MobState
@@ -109,6 +109,25 @@
       whitelist:
         components:
         - XenoHeavy
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
   - type: RMCXenoDamageVisuals
     prefix: spitter
   - type: TacticalMapIcon
@@ -119,7 +138,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.2
   - type: FixedIdentity
-    name: cm-job-name-xeno-spitter
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT2
   - type: VentCrawler

@@ -93,11 +93,14 @@
   - type: RMCSuitLight
   - type: HolocardState
   - type: Hunger
-    baseDecayRate: 0.03125
+    # baseDecayRate of 0.1/sec with all threshold modifiers at 1 means decay is a flat 6/min.
+    # Okay(380) -> Peckish(110) is a gap of 270, i.e. exactly 45 minutes of not eating: warning popup + slowdown starts.
+    # Peckish(110) -> Starving(50) is a gap of 60, i.e. exactly 10 more minutes: severe popup + screen desaturates.
+    baseDecayRate: 0.1
     thresholds:
-      Overfed: 550
-      Okay: 400
-      Peckish: 250
+      Overfed: 480
+      Okay: 380
+      Peckish: 110
       Starving: 50
       Dead: 0
     hungerThresholdDecayModifiers:
@@ -106,8 +109,21 @@
       Peckish: 1
       Starving: 1
       Dead: 0
+    peckishSlowdownModifier: 0.9
+    starvingSlowdownModifier: 0.8 # 20% slowdown while desaturated
   - type: Thirst
-    baseDecayRate: 0.02083
+    # baseDecayRate of 0.1/sec, decay multiplier is 1x at Okay and 0.8x at Thirsty.
+    # Okay(278) -> Thirsty(98) is a gap of 180 at 1x (6/min), i.e. exactly 30 minutes: warning popup + slowdown starts.
+    # Thirsty(98) -> Parched(50) is a gap of 48 at 0.8x (4.8/min), i.e. exactly 10 more minutes: severe popup + screen desaturates.
+    baseDecayRate: 0.1
+    thresholds:
+      OverHydrated: 378
+      Okay: 278
+      Thirsty: 98
+      Parched: 50
+      Dead: 0
+    thirstySlowdownModifier: 0.9
+    parchedSlowdownModifier: 0.8
   - type: Body
     prototype: CMUHumanBody
     requiredLegs: 2

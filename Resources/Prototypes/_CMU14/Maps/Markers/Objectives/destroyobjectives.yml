@@ -6,22 +6,22 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: destroymineablesolarissteel
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - ForceOnForce
-    possiblefactions:
+    factions:
     - opfor
     - govfor
     repeating: false
-    objectivelevel: 1
-    custompoints: 5
-    ObjectiveDescription: "Destroy a steel-rich mineable vein (mineablesolarisrocksteel)"
+    objectiveLevel: 1
+    customPoints: 5
+    objectiveDescription: "Destroy a steel-rich mineable vein (mineablesolarisrocksteel)"
   - type: DestroyObjective
-    entitytodestroy: mineablesolarisrocksteel
-    useanyentity: true
-    amounttodestroy: 1
+    targetPrototype: mineablesolarisrocksteel
+    useAnyEntity: true
+    destroyCount: 1
 
 - type: entity
   name: Destroy AI Processor
@@ -31,20 +31,20 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: destroyaioricessir
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - ForceOnForce
     - DistressSignal
-    possiblefactions:
+    factions:
     - opfor
     - govfor
     repeating: false
-    objectivelevel: 1
-    custompoints: 5
-    ObjectiveDescription: "Destroy the AI Processor"
+    objectiveLevel: 1
+    customPoints: 5
+    objectiveDescription: "Destroy the AI Processor"
   - type: DestroyObjective
-    entitytodestroy: AU14ObjectiveItemAIProcessor
-    useanyentity: true
-    amounttodestroy: 1
+    targetPrototype: AU14ObjectiveItemAIProcessor
+    useAnyEntity: true
+    destroyCount: 1

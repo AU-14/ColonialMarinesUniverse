@@ -1,13 +1,20 @@
 using System.Linq;
+using Content.Server.Botany.Components;
+using Content.Server.Botany.Systems;
+using Content.Server.Popups;
 using Content.Shared.Atmos;
 using Content.Shared.Random;
 using Robust.Shared.Random;
+using Robust.Shared.Timing;
 
 namespace Content.Server.Botany;
 
 public sealed partial class MutationSystem : EntitySystem
 {
     [Dependency] private IRobustRandom _robustRandom = default!;
+    [Dependency] private PopupSystem _popups = default!;
+    [Dependency] private PlantHolderSystem _plantHolder = default!;
+    [Dependency] private IGameTiming _time = default!;
 
     /// <summary>
     /// For each random mutation, see if it occurs on this plant this check.
@@ -29,8 +36,31 @@ public sealed partial class MutationSystem : EntitySystem
             Log.Error($"Attempted to mutate a shared seed");
             return;
         }
-
         CheckRandomMutations(plantHolder, ref seed, severity);
+    }
+
+    public void MutateSpecies(Entity<PlantHolderComponent> plantHolder, ref SeedData seed, float severity)
+    {
+        if (plantHolder.Comp.Seed is null)
+            return;
+        string lastname = seed.DisplayName;
+        string mvar = string.Empty;
+        var seedints = ProtoMan.GetInstances<SeedPrototype>();
+        if (seed.MutationPrototypes.Count > 0 && seed.Immutable == false)
+            mvar = _robustRandom.Pick(seed.MutationPrototypes);
+        if (seedints.ContainsKey(mvar))
+            plantHolder.Comp.Seed = seedints[mvar]; //plantHolder.Comp.Seed.SpeciesChange(seedints[mvar]);
+        else return;
+        plantHolder.Comp.Dead = false;
+        _plantHolder.Mutate(plantHolder.Owner, 1, 0, plantHolder.Comp);
+        plantHolder.Comp.Age = 0;
+        plantHolder.Comp.Health = plantHolder.Comp.Seed.Endurance;
+        plantHolder.Comp.LastCycle = _time.CurTime;
+        plantHolder.Comp.Harvest = false;
+        plantHolder.Comp.WeedLevel = 0;
+
+        _popups.PopupEntity(Loc.GetString("hydro-mutate-species", ("OLD", lastname), ("NEW", plantHolder.Comp.Seed.DisplayName)),
+            plantHolder.Owner);
     }
 
     public SeedData Cross(SeedData a, SeedData b)

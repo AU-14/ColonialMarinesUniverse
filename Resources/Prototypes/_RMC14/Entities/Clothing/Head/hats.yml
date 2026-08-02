@@ -798,11 +798,11 @@
   - type: Clothing
     sprite: _RMC14/Objects/Clothing/Head/Hats/radiation_hood.rsi
   - type: HideLayerClothing
-    slots:
-    - Hair
-    - HeadTop
-    - HeadSide
-    - Snout
+    layers:
+      Hair: HEAD
+      HeadTop: HEAD
+      HeadSide: HEAD
+      Snout: HEAD
 
 - type: entity
   parent: RMCHeadRadiationHood

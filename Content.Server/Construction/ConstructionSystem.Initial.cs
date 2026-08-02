@@ -151,6 +151,7 @@ namespace Content.Server.Construction
             var containers = new Dictionary<string, Container>();
 
             var doAfterTime = 0f;
+            var materialShortfalls = new Dictionary<string, int>();
 
             // HOLY SHIT THIS IS SOME HACKY CODE.
             // But I'd rather do this shit than risk having collisions with other containers.
@@ -207,7 +208,10 @@ namespace Content.Server.Construction
 
             foreach (var step in edge.Steps)
             {
-                doAfterTime += step.DoAfter;
+                var baseDelay = TimeSpan.FromSeconds(step.DoAfter);
+                var delayEv = new RMCConstructionDelayEvent(user, baseDelay, baseDelay);
+                RaiseLocalEvent(user, ref delayEv, true);
+                doAfterTime += (float) Math.Max(0, delayEv.Delay.TotalSeconds);
 
                 var handled = false;
 
@@ -216,15 +220,26 @@ namespace Content.Server.Construction
                     case MaterialConstructionGraphStep materialStep:
                         foreach (var entity in EnumerateNearby(user))
                         {
-                            if (!materialStep.EntityValid(entity, out var stack))
+                            if (!TryComp<StackComponent>(entity, out var stack) ||
+                                stack.StackTypeId != materialStep.MaterialPrototypeId)
                                 continue;
 
                             if (used.Contains(entity))
                                 continue;
 
+                            var costEv = new RMCConstructionCostEvent(
+                                user,
+                                stack.StackTypeId,
+                                materialStep.Amount,
+                                materialStep.Amount);
+                            RaiseLocalEvent(user, ref costEv, true);
+                            var paidCost = Math.Max(1, costEv.Cost);
+                            if (stack.Count < paidCost)
+                                continue;
+
                             // TODO allow taking from several stacks.
                             // Also update crafting steps to check if it works.
-                            var splitStack = _stackSystem.Split(entity, materialStep.Amount, user.ToCoordinates(0, 0), stack);
+                            var splitStack = _stackSystem.Split(entity, paidCost, user.ToCoordinates(0, 0), stack);
 
                             if (splitStack == null)
                                 continue;
@@ -237,6 +252,10 @@ namespace Content.Server.Construction
                             else if (!_container.Insert(splitStack.Value, GetContainer(materialStep.Store)))
                                 continue;
 
+                            var missing = Math.Max(0, materialStep.Amount - paidCost);
+                            if (missing > 0)
+                                materialShortfalls[stack.StackTypeId] = materialShortfalls.GetValueOrDefault(stack.StackTypeId) + missing;
+
                             handled = true;
                             break;
                         }
@@ -244,6 +263,21 @@ namespace Content.Server.Construction
                         break;
 
                     case ArbitraryInsertConstructionGraphStep arbitraryStep:
+                        // AU14: a custom "tool" step requires the entity present but does NOT consume it.
+                        if (arbitraryStep is EntityIdConstructionGraphStep { Consume: false } presenceStep)
+                        {
+                            foreach (var entity in new HashSet<EntityUid>(EnumerateNearby(user)))
+                            {
+                                if (!presenceStep.EntityValid(entity, EntityManager, Factory))
+                                    continue;
+
+                                handled = true;
+                                break;
+                            }
+
+                            break;
+                        }
+
                         foreach (var entity in new HashSet<EntityUid>(EnumerateNearby(user)))
                         {
                             if (!arbitraryStep.EntityValid(entity, EntityManager, Factory))
@@ -348,6 +382,15 @@ namespace Content.Server.Construction
             {
                 completed.PerformAction(newEntity, user, EntityManager);
             }
+
+            foreach (var (stackType, missing) in materialShortfalls)
+            {
+                var transactionEv = new RMCConstructionTransactionCompletedEvent(newEntity, user, stackType, missing);
+                RaiseLocalEvent(newEntity, ref transactionEv, broadcast: true);
+            }
+
+            var completedEv = new ConstructionCompletedEvent(newEntity, user);
+            RaiseLocalEvent(newEntity, ref completedEv, broadcast: true);
 
             return newEntity;
         }
@@ -598,6 +641,16 @@ namespace Content.Server.Construction
             {
                 switch (step)
                 {
+                    case MaterialConstructionGraphStep materialInsert:
+                        if (TryComp<StackComponent>(holding, out var stack) &&
+                            stack.StackTypeId == materialInsert.MaterialPrototypeId)
+                        {
+                            var cost = materialInsert.Amount;
+                            var costEv = new RMCConstructionCostEvent(user, stack.StackTypeId, cost, cost);
+                            RaiseLocalEvent(ref costEv);
+                            valid = stack.Count >= costEv.Cost;
+                        }
+                        break;
                     case EntityInsertConstructionGraphStep entityInsert:
                         if (entityInsert.EntityValid(holding, EntityManager, Factory))
                             valid = true;

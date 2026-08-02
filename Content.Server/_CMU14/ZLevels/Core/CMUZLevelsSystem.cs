@@ -56,7 +56,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         EntityManager.AddComponents(mainMap, ev.GameMap.ZLevelsComponentOverrides);
 
         //Loading maps below first
-        var depth = ev.GameMap.MapsBelow.Count * -1;
+        var depth = -1;
         foreach (var mapBelow in ev.GameMap.MapsBelow)
         {
             if (!_mapLoader.TryLoadMap(mapBelow, out var mapEnt, out _))
@@ -70,7 +70,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             _map.InitializeMap(mapEnt.Value.Comp.MapId);
             _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{depth}]");
             dict.Add(mapEnt.Value, depth);
-            depth++;
+            depth--;
         }
 
         //Loading maps above next

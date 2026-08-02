@@ -149,7 +149,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         _transform.SetCoordinates(mortar, xform, coordinates, rotation);
         _transform.AnchorEntity((mortar, xform));
 
-        if (!_rmcPlanet.IsOnPlanet(coordinates))
+        if (!IsOnPlanetZLevel(_transform.ToMapCoordinates(coordinates)))
             _popup.PopupClient(Loc.GetString("rmc-mortar-deploy-end-not-planet"), user, user, PopupType.MediumCaution);
 
         _audio.PlayPredicted(mortar.Comp.DeploySound, mortar, user);
@@ -172,7 +172,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         var target = args.Vector;
         var position = _transform.GetMapCoordinates(mortar).Position;
         var offset = target;
-        if (_rmcPlanet.TryGetOffset(_transform.GetMapCoordinates(mortar.Owner), out var planetOffset))
+        if (TryGetPlanetOffset(_transform.GetMapCoordinates(mortar.Owner), out var planetOffset))
             offset -= planetOffset;
 
         mortar.Comp.Target = target;
@@ -393,7 +393,7 @@ public abstract partial class SharedMortarSystem : EntitySystem
         Spawn(ent.Comp.Flare, coords);
         var camera = Spawn(ent.Comp.Camera, coords);
 
-        if (_rmcPlanet.TryGetOffset(coords, out var offset))
+        if (TryGetPlanetOffset(coords, out var offset))
             coords = coords.Offset(offset);
 
         var (x, y) = coords.Position;
@@ -490,12 +490,39 @@ public abstract partial class SharedMortarSystem : EntitySystem
         return false;
     }
 
+    protected bool CanOperateMortarAt(EntityCoordinates coordinates)
+    {
+        var mapCoordinates = _transform.ToMapCoordinates(coordinates);
+        if (!_topDownOrdnance.IsOpenToSky(mapCoordinates))
+            return false;
+
+        if (_area.CanMortarPlacement(coordinates))
+            return true;
+
+        return _rmcPlanet.TryGetPlanetSurfaceCoordinates(mapCoordinates, out var planetCoordinates) &&
+               planetCoordinates.MapId != mapCoordinates.MapId;
+    }
+
+    protected bool IsOnPlanetZLevel(MapCoordinates coordinates)
+    {
+        return _rmcPlanet.TryGetPlanetSurfaceCoordinates(coordinates, out _);
+    }
+
+    protected bool TryGetPlanetOffset(MapCoordinates coordinates, out Vector2i offset)
+    {
+        if (_rmcPlanet.TryGetPlanetSurfaceCoordinates(coordinates, out var planetCoordinates))
+            return _rmcPlanet.TryGetOffset(planetCoordinates, out offset);
+
+        offset = default;
+        return false;
+    }
+
     private bool CanDeployPopup(Entity<MortarComponent> mortar, EntityUid user)
     {
         if (!HasSkillPopup(mortar, user, true))
             return false;
 
-        if (!_area.CanMortarPlacement(user.ToCoordinates()))
+        if (!CanOperateMortarAt(user.ToCoordinates()))
         {
             _popup.PopupClient(Loc.GetString("rmc-mortar-covered", ("mortar", mortar)), user, user, PopupType.SmallCaution);
             return false;

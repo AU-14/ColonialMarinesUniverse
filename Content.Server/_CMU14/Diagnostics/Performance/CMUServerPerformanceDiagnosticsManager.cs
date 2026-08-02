@@ -119,6 +119,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
         _lastRoundId = _ticker.RoundId;
 
         _config.OnValueChanged(CCVars.CMUServerPerformanceDiagnosticsEnabled, SetEnabled);
+        _config.OnValueChanged(CCVars.CMUServerPerformanceLogEnabled, SetLogEnabled, invokeImmediately: true);
         _config.OnValueChanged(CVars.ProfEnabled, OnProfilerEnabledChanged);
 
         InitializeMetrics();
@@ -172,6 +173,7 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             return;
 
         _config.UnsubValueChanged(CCVars.CMUServerPerformanceDiagnosticsEnabled, SetEnabled);
+        _config.UnsubValueChanged(CCVars.CMUServerPerformanceLogEnabled, SetLogEnabled);
         _config.UnsubValueChanged(CVars.ProfEnabled, OnProfilerEnabledChanged);
         UnhookEntityEvents();
         if (_profilerEnabledByDiagnostics && _profiler.IsEnabled)
@@ -784,6 +786,11 @@ public sealed partial class CMUServerPerformanceDiagnosticsManager : ICMUServerP
             _profilerEnabledByDiagnostics = false;
             _sawmill.Info("[CMU-PERF] diagnostics-disabled");
         }
+    }
+
+    private void SetLogEnabled(bool enabled)
+    {
+        _sawmill.Level = enabled ? null : LogLevel.Fatal;
     }
 
     private void HookEntityEvents()

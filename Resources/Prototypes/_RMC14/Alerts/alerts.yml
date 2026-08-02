@@ -821,6 +821,13 @@
   name: rmc-alerts-unconscious-name
   description: rmc-alerts-unconscious-desc
 
+- type: alert
+  id: XenoIntoxicated
+  icons: [ /Textures/Interface/Alerts/Intoxicated/intoxicated.png ]
+  name: rmc-xeno-sentinel-intoxicated-alert-name
+  description: rmc-xeno-sentinel-intoxicated-alert-desc
+  clickEvent: !type:XenoIntoxicatedResistAlertEvent
+
 - type: alertCategory
   id: SquadTracker
 

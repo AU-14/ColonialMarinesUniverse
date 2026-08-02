@@ -10035,7 +10035,7 @@ entities:
     - type: Transform
       pos: -58.5,3.5
       parent: 1
-- proto: RMCSpawnPointProvostInspector
+- proto: CMUSpawnPointProvostInspector
   entities:
   - uid: 5752
     components:

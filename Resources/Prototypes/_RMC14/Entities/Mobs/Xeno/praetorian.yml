@@ -12,7 +12,7 @@
   description: A huge, looming beast of an alien.
   components:
   - type: GhostRole
-    name: cm-job-name-xeno-praetorian
+    name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Praetorian/praetorian.rsi # AU14-Edit
   - type: MobState
@@ -48,6 +48,29 @@
     - CMXenoSpitter
   - type: XenoAcid
   - type: XenoDevour
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoRoyalBlood
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaPhero
+          Quantity: 200
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 200
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoRoyalBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
   - type: XenoPlasma
     plasma: 800
     maxPlasma: 800
@@ -117,7 +140,7 @@
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 0.7
   - type: FixedIdentity
-    name: cm-job-name-xeno-praetorian
+    name: cmu-job-name-xeno-unknown
   - type: RMCSurgeryXenoHeart
     item: RMCOrganXenoHeartT3
 

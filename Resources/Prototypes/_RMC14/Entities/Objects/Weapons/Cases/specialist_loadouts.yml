@@ -2,7 +2,7 @@
   parent: RMCBaseEquipmentCase
   id: CMSniperEquipmentCase
   name: sniper equipment case
-  description: "A large case containing your very own long-range M96S sniper rifle, M45 ghillie armor and helmet, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  description: "A large case containing your very own long-range M96S sniper rifle, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
   components:
   - type: Storage
     maxItemSize: Huge
@@ -21,7 +21,6 @@
     - id: CMM96SSniperRifle
     - id: AU14KitSpotter
 #    - id: CMFacepaintSniper
-    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: SniperWhitelist
@@ -34,7 +33,7 @@
   parent: CMSniperEquipmentCase
   id: RMCAntiMaterielEquipmentCase
   name: anti-materiel sniper equipment case
-  description: "A large case containing your very own long-range XM43E1 anti-materiel sniper rifle, M45 ghillie armor and helmet, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  description: "A large case containing your very own long-range XM43E1 anti-materiel sniper rifle, M42 scout sight, ammunition, spotter equipment, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
   components:
   - type: Storage
     maxItemSize: Huge
@@ -49,7 +48,6 @@
     - id: RMCScoutShoes
     - id: CMBackpackSniper
     - id: AU14KitSpotter
-    - id: AU14ScoutWebbing
   - type: IgnoreContentsSize
     items:
       tags:
@@ -171,6 +169,50 @@
 
 - type: entity
   parent: RMCBaseEquipmentCase
+  id: CMUDemoSpecEquipmentCaseUPP
+  name: demolitionist equipment case
+  suffix: UPP, EMBLR
+  description: "A large case containing a heavy-caliber EMBLR, 70mm rockets, and additional pieces of equipment.\n\nNOTE: You cannot put items back inside this case."
+  components:
+  - type: Sprite
+    layers:
+    - state: closed
+      map: [ base ]
+    - state: demo
+      map: [ label ]
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,15,3
+  - type: StorageFill
+    contents:
+
+
+    - id: AU14SatchelDemoSpecUPP
+      amount: 2
+    - id: CMUWeaponLauncherEMBLR
+    - id: CMURocket70mm
+      amount: 2
+    - id: CMURocket70mmWhitePhosphorus
+      amount: 2
+    - id: CMURocket70mmAntiArmor
+      amount: 2
+    - id: RMCWeaponSMGType19
+    - id: RMCMagazineSMGType19
+      amount: 2
+    - id: RMCExplosivePlastic
+      amount: 2
+    - id: RMCBinoculars
+
+  - type: CMChangeUserOnVend
+    addComponents:
+    - type: DemoSpecWhitelist
+
+
+
+
+- type: entity
+  parent: RMCBaseEquipmentCase
   id: RMCScoutSpecEquipmentCase
   name: scout equipment case
   suffix: Base
@@ -196,15 +238,15 @@
     - id: RMCMagazineRifleM4SPRA19Impact
       amount: 4
     - id: RMCBackpackScout
-    - id: CMBackpackSniper
     - id: WeaponRifleM4SPRCustom
     - id: RMCThermalTarpFolded
       amount: 2
     - id: RMCExplosivePlastic
       amount: 2
     - id: RMCLaserDesignatorScout
+    - id: RMCArmorM3Scout
+    - id: RMCArmorHelmetM3Scout
     - id: RMCScoutShoes
-    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
@@ -237,15 +279,15 @@
     - id: RMCAttachmentFlashlightGrip
     - id: RMCAttachmentS5RedDotSight
     - id: RMCBackpackScout
-    - id: CMBackpackSniper
     - id: WeaponRifleM5SPR2
     - id: RMCThermalTarpFolded
       amount: 2
     - id: RMCExplosivePlastic
       amount: 2
     - id: RMCLaserDesignatorScout
+    - id: RMCArmorM3Scout
+    - id: RMCArmorHelmetM3Scout
     - id: RMCScoutShoes
-    - id: AU14ScoutWebbing
   - type: CMChangeUserOnVend
     addComponents:
     - type: ScoutWhitelist
@@ -477,7 +519,6 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: StorageFill
     contents:
-    - id: AU14ScoutWebbing
     - id: CMArmorHelmetM45
     - id: RMCVisorNightVision
     - id: CMBackpackSniper

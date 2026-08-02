@@ -6,6 +6,7 @@ using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Character.Controls;
 using Content.Client.UserInterface.Systems.Character.Windows;
 using Content.Client.UserInterface.Systems.Objectives.Controls;
+using Content.Shared.Ghost;
 using Content.Shared.Input;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
@@ -58,6 +59,12 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
             .Bind(ContentKeyFunctions.OpenCharacterMenu,
                 InputCmdHandler.FromDelegate(_ => ToggleWindow()))
             .Register<CharacterUIController>();
+
+        // On a normal round-start spawn, LocalPlayerAttached fires before this state (and _window)
+        // exists, so CharacterAttached bails out with nothing to open. Catch that case here by
+        // checking whether we're already attached to an entity once the window is ready.
+        if (_player.LocalEntity is { } attached)
+            CharacterAttached(attached);
     }
 
     public void OnStateExited(GameplayState state)
@@ -74,12 +81,14 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
     public void OnSystemLoaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate += CharacterUpdated;
+        _player.LocalPlayerAttached += CharacterAttached;
         _player.LocalPlayerDetached += CharacterDetached;
     }
 
     public void OnSystemUnloaded(CharacterInfoSystem system)
     {
         system.OnCharacterUpdate -= CharacterUpdated;
+        _player.LocalPlayerAttached -= CharacterAttached;
         _player.LocalPlayerDetached -= CharacterDetached;
     }
 
@@ -238,6 +247,20 @@ public sealed partial class CharacterUIController : UIController, IOnStateEntere
 
         _window.RoleType.Text = Loc.GetString(proto?.Name ?? "role-type-crew-aligned-name");
         _window.RoleType.FontColorOverride = proto?.Color ?? Color.White;
+    }
+
+    private void CharacterAttached(EntityUid uid)
+    {
+        if (_window == null || _window.IsOpen)
+            return;
+
+        // Don't auto-open for ghosts/aghosts - only for an actual body.
+        if (_ent.HasComponent<GhostComponent>(uid))
+            return;
+
+        CharacterButton?.SetClickPressed(true);
+        _characterInfo.RequestCharacterInfo();
+        _window.Open();
     }
 
     private void CharacterDetached(EntityUid uid)

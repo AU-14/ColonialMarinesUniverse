@@ -77,6 +77,16 @@ public sealed partial class IdentitySystem : SharedIdentitySystem
         _queuedIdentityUpdates.Add(uid);
     }
 
+    // AU14 simple public API (ported from WWDP)
+    public string GetEntityIdentity(EntityUid uid)
+    {
+        var representation = GetIdentityRepresentation(uid);
+        var name = GetIdentityName(uid, representation);
+
+        return name;
+    }
+    // AU14 edit end
+
     #region Private API
 
     /// <summary>

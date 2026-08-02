@@ -77,6 +77,23 @@
 
 - type: entity
   parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsFlight
+  suffix: Flight, No preview
+  components:
+  - type: Sprite
+    state: rampbottom
+    color: "#a6aeab"
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsAlmayerTop
+  suffix: Almayer Top, No preview
+  components:
+  - type: Sprite
+    state: ramptop
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
   id: CMUMultiZStairsStrataSolo
   components:
   - type: Sprite
@@ -85,6 +102,74 @@
     sprite: _CMU14/Structures/stairs.rsi
     state: p_stair_strata_solo_cap
     offset: 0,0.5
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsRamptop
+  name: ramp
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: ramptop
+    offset: 0,0.5
+  - type: Fixtures
+    fixtures:
+      slowdown:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: CMUZLevelHighGround
+    heightCurve:
+    - 1.05
+    - 1.05
+    - 0.575
+    - 0.575
+    stick: true
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.8
+    sprintSpeedModifier: 0.8
+
+- type: entity
+  parent: CMUMultiZStairsNoPreview
+  id: CMUMultiZStairsRamplower
+  name: ramp
+  components:
+  - type: Sprite
+    drawdepth: WallMountedItems
+    noRot: true
+    sprite: _CMU14/Structures/stairs.rsi
+    state: ramplower
+    offset: 0,0.5
+  - type: Fixtures
+    fixtures:
+      slowdown:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: CMUZLevelHighGround
+    heightCurve:
+    - 0.575
+    - 0.575
+    - 0.001
+    - 0.001
+    stick: true
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.8
+    sprintSpeedModifier: 0.8
 
 - type: entity
   parent: BaseItem

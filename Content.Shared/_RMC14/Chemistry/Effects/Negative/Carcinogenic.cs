@@ -39,4 +39,11 @@ public sealed partial class Carcinogenic : RMCChemicalEffect
         damage.DamageDict[BluntType] = potency * 2f;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
+
+    protected override void TickHydroTray(DamageableSystem damageable, FixedPoint2 potency, EntityEffectHydroArgs args)
+    {
+        base.TickHydroTray(damageable, potency, args);
+        var ev = new HydroTickEvent<Carcinogenic>(potency, args);
+        args.EntityManager.EventBus.RaiseEvent(EventSource.Local, ev);
+    }
 }

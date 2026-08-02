@@ -16,7 +16,7 @@ void fragment() {
 
     // Add vignette
     highp vec2 uv = UV - 0.5;
-    highp float vignette = 1.0 - dot(uv, uv) * 2.2;
+    highp float vignette = 1.0 - dot(uv, uv) * 3.168;
     color.rgb *= clamp(vignette, 0.0, 1.0);
 
     COLOR = vec4(clamp(color.rgb, 0.0, 1.0), color.a);

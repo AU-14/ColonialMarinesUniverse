@@ -98,7 +98,7 @@ public sealed partial class CassetteSystem : SharedCassetteSystem
             return null;
 
         var audioParams = player.Comp.AudioParams.WithVolume(SharedAudioSystem.GainToVolume(_gain));
-        return _audio.PlayGlobal(stream, new ResolvedPathSpecifier(name), audioParams)?.Entity;
+        return _audio.PlayEntity(stream, player, new ResolvedPathSpecifier(name), audioParams)?.Entity;
     }
 
     protected override async void ChooseCustomTrack(Entity<CassetteTapeComponent> tape)

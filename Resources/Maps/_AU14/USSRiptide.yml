@@ -21506,6 +21506,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: com. officer
+      groups:
+      - military-command
   - uid: 1242
     components:
     - type: Transform

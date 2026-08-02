@@ -121,7 +121,14 @@ public abstract partial class SharedHumanoidAppearanceSystem : EntitySystem
                 age = Loc.GetString(humanoidRepComp.Age).ToLower();
         }
 
-        args.PushText(Loc.GetString("humanoid-appearance-component-examine", ("user", identity), ("age", age), ("species", species)));
+        // AU14 examine (ported from WWDP)
+        var locale = "humanoid-appearance-component-examine";
+
+        if (args.Examiner == args.Examined) // Use the selfaware locale when examining yourself
+            locale += "-selfaware";
+
+        args.PushText(Loc.GetString(locale, ("user", identity), ("age", age), ("species", species)), 100); // priority for examine
+        // AU14 edit end
     }
 
     /// <summary>

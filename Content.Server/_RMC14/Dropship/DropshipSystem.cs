@@ -515,8 +515,6 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
     public override bool FlyTo(Entity<DropshipNavigationComputerComponent> computer, EntityUid destination, EntityUid? user, bool hijack = false, float? startupTime = null, float? hyperspaceTime = null, bool offset = false)
     {
-        base.FlyTo(computer, destination, user, hijack, startupTime, hyperspaceTime);
-
         if (TryComp(computer.Owner, out WhitelistedShuttleComponent? whitelistComp) &&
             IsStrictThirdPartyFaction(whitelistComp.Faction) &&
             TryComp(destination, out DropshipDestinationComponent? destinationComp) &&
@@ -551,6 +549,18 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         if (!TryComp(dropshipId, out ShuttleComponent? shuttleComp))
         {
             Log.Warning($"Tried to launch {ToPrettyString(computer)} outside of a shuttle.");
+            return false;
+        }
+
+        // AU14: a dropship structurally compromised by a cave-in below it must never launch - the collapse
+        // can tangle the dropship grid into the map grid, and FTL would drag the entire map along. The
+        // lockout lasts the round; sparks from the console sell the "flight systems shorted" story.
+        if (HasComp<Content.Shared._AU14.ZLevelBuilding.ZCollapseCompromisedComponent>(dropshipId.Value))
+        {
+            if (user != null)
+                _popup.PopupEntity(Loc.GetString("au14-dropship-collapse-compromised"), computer.Owner, user.Value, PopupType.LargeCaution);
+
+            Spawn("EffectSparks", Transform(computer.Owner).Coordinates);
             return false;
         }
 

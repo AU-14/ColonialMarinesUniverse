@@ -6,6 +6,7 @@
   abstract: true
   name: rubber stamp
   description: A rubber stamp for stamping important documents.
+  suffix: RMC
   components:
   - type: Item
     heldPrefix: stamp
@@ -22,6 +23,7 @@
   parent: CMStampBase
   id: CMStampXO
   name: executive officer's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-hop
@@ -34,6 +36,7 @@
   parent: CMStampXO
   id: CMStampCO
   name: commanding officer's rubber stamp
+  suffix: RMC
   components:
   - type: Stamp
     stampedName: stamp-component-stamped-name-cm-co
@@ -42,6 +45,7 @@
   parent: CMStampBase
   id: CMStampASO
   name: auxiliary support officer's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-ce
@@ -54,6 +58,7 @@
   parent: CMStampBase
   id: CMStampCMP
   name: Chief MP's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-hos
@@ -66,6 +71,7 @@
   parent: CMStampBase
   id: CMStampMW
   name: Military Warden's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-mw
@@ -78,6 +84,7 @@
   parent: CMStampBase
   id: CMStampCMO
   name: chief medical officer's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-cmo
@@ -90,6 +97,7 @@
   parent: CMStampBase
   id: CMStampQM
   name: Logistics Officer's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-ro
@@ -102,6 +110,7 @@
   parent: CMStampASO
   id: CMStampCE
   name: chief engineer's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-ce
@@ -113,6 +122,7 @@
   parent: CMStampBase
   id: RMCStampSEA
   name: senior enlisted advisor's rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-sea
@@ -125,6 +135,7 @@
   parent: CMStampBase
   id: CMStampLiaison
   name: corporate liaison rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-we_ya
@@ -137,6 +148,7 @@
   parent: CMStampBase
   id: RMCStampProvostInspector
   name: provost inspector rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-provost
@@ -152,6 +164,7 @@
   parent: CMStampBase
   id: CMStampApproved
   name: APPROVED rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-approve
@@ -164,6 +177,7 @@
   parent: CMStampBase
   id: CMStampDenied
   name: DENIED rubber stamp
+  suffix: RMC
   components:
   - type: Sprite
     state: stamp-deny
@@ -178,7 +192,7 @@
   parent: CMStampLiaison
   id: CMStampWeYa
   name: Weyland-Yutani rubber stamp
-  suffix: Admin
+  suffix: RMC, Admin
   components:
   - type: Stamp
     stampedName: stamp-component-stamped-name-cm-we-ya
@@ -187,7 +201,7 @@
   parent: CMStampBase
   id: CMStampMarine
   name: marine rubber stamp
-  suffix: Admin, UNMC
+  suffix: RMC, Admin, UNMC
   components:
   - type: Sprite
     state: stamp-marine
@@ -200,7 +214,7 @@
   parent: CMStampBase
   id: CMStampCMB
   name: colony marshal bureau rubber stamp
-  suffix: Admin, CMB
+  suffix: RMC, Admin, CMB
   components:
   - type: Sprite
     state: stamp-cmb
@@ -213,7 +227,7 @@
   parent: CMStampBase
   id: CMStampProvost
   name: provost rubber stamp
-  suffix: Admin, Provost
+  suffix: RMC, Admin, Provost
   components:
   - type: Sprite
     state: stamp-provost # RMC14 Todo: update sprite
@@ -226,7 +240,7 @@
   parent: CMStampBase
   id: RMCStampCLF
   name: colony liberation front rubber stamp
-  suffix: Admin, CLF
+  suffix: RMC, Admin, CLF
   components:
   - type: Sprite
     state: stamp-clf
@@ -239,7 +253,7 @@
   parent: CMStampBase
   id: RMCStampSPP
   name: socialist progressive peoples rubber stamp
-  suffix: Admin, SPP
+  suffix: RMC, Admin, SPP
   components:
   - type: Sprite
     state: stamp-spp
@@ -252,7 +266,7 @@
   parent: CMStampBase
   id: RMCStampTSE
   name: three suns empire rubber stamp
-  suffix: Admin, TSE
+  suffix: RMC, Admin, TSE
   components:
   - type: Sprite
     state: stamp-tse
@@ -265,7 +279,7 @@
   parent: CMStampBase
   id: RMCStampFreePress
   name: free press rubber stamp
-  suffix: Admin, Press
+  suffix: RMC, Admin, Press
   components:
   - type: Sprite
     state: stamp-free-press

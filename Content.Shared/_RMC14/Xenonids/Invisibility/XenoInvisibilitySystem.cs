@@ -5,6 +5,8 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Actions;
+using Content.Shared.Actions.Components;
+using Content.Shared.Actions.Events;
 using Content.Shared.DoAfter;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -30,6 +32,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
 
     private readonly HashSet<EntityUid> _contacts = new();
+    private readonly Dictionary<EntityUid, PendingActionState> _pendingActionStates = new();
 
     private EntityQuery<MarineComponent> _marineQuery;
     private EntityQuery<MobCollisionComponent> _mobCollisionQuery;
@@ -42,6 +45,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
         _xenoQuery = GetEntityQuery<XenoComponent>();
 
         SubscribeLocalEvent<XenoTurnInvisibleComponent, XenoTurnInvisibleActionEvent>(OnXenoTurnInvisibleAction);
+        SubscribeLocalEvent<ActionComponent, ActionPerformedEvent>(OnActionPerformed);
 
         SubscribeLocalEvent<XenoActiveInvisibleComponent, ComponentRemove>(OnXenoActiveInvisibleRemove);
         SubscribeLocalEvent<XenoActiveInvisibleComponent, MeleeHitEvent>(OnXenoActiveInvisibleMeleeHit);
@@ -63,7 +67,7 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
         if (TryComp<XenoActiveInvisibleComponent>(xeno, out var invis))
         {
             var refundedCooldown = GetRefundedCooldown(xeno, invis, xeno.Comp.ManualRefundMultiplier);
-            RemoveInvisibility((xeno, invis), refundedCooldown);
+            RemoveInvisibility((xeno, invis), refundedCooldown, args.Action);
         }
         else
         {
@@ -74,9 +78,19 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
             Dirty(xeno, active);
 
             //Half a second cooldown to prevent double clicks
-            StartCooldown((xeno, active), xeno.Comp.ToggleLockoutTime, true);
+            QueueActionState(args.Action, xeno.Comp.ToggleLockoutTime, true);
             _movementSpeed.RefreshMovementSpeedModifiers(xeno);
         }
+    }
+
+    private void OnActionPerformed(Entity<ActionComponent> action, ref ActionPerformedEvent args)
+    {
+        if (!_pendingActionStates.Remove(action, out var pending))
+            return;
+
+        var actionEnt = action.AsNullable();
+        _actions.SetCooldown(actionEnt, pending.Cooldown);
+        _actions.SetToggled(actionEnt, pending.Toggled);
     }
 
     private void OnXenoActiveInvisibleRemove(Entity<XenoActiveInvisibleComponent> xeno, ref ComponentRemove args)
@@ -141,10 +155,19 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
         }
     }
 
-    private void RemoveInvisibility(Entity<XenoActiveInvisibleComponent> xeno, TimeSpan cooldownTime)
+    private void QueueActionState(EntityUid action, TimeSpan cooldownTime, bool toggledStatus)
+    {
+        _pendingActionStates[action] = new PendingActionState(cooldownTime, toggledStatus);
+    }
+
+    private void RemoveInvisibility(Entity<XenoActiveInvisibleComponent> xeno, TimeSpan cooldownTime, EntityUid? performedAction = null)
     {
         RemCompDeferred<XenoActiveInvisibleComponent>(xeno);
-        StartCooldown(xeno, cooldownTime, false);
+        if (performedAction is { } action)
+            QueueActionState(action, cooldownTime, false);
+        else
+            StartCooldown(xeno, cooldownTime, false);
+
         _movementSpeed.RefreshMovementSpeedModifiers(xeno);
 
         if (!xeno.Comp.DidPopup)
@@ -203,4 +226,6 @@ public sealed partial class XenoInvisibilitySystem : EntitySystem
             RemoveInvisibility((uid, active), active.FullCooldown);
         }
     }
+
+    private readonly record struct PendingActionState(TimeSpan Cooldown, bool Toggled);
 }

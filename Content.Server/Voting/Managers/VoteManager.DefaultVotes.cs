@@ -603,13 +603,13 @@ namespace Content.Server.Voting.Managers
             {
                 if(!preset.ShowInVote)
                     continue;
-
+#if !DEBUG
                 if(_playerManager.PlayerCount < (preset.MinPlayers ?? int.MinValue))
                     continue;
 
                 if(_playerManager.PlayerCount > (preset.MaxPlayers ?? int.MaxValue))
                     continue;
-
+#endif
                 presets[preset.ID] = preset.ModeTitle;
             }
             return presets;

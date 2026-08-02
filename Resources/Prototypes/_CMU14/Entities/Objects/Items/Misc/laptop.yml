@@ -28,6 +28,18 @@
   - type: Sprite
     sprite:  _AU14/Items/laptop.rsi
     state: laptop_off_govfor
+  - type: AU14CallsignConsole
+    faction: govfor
+  - type: UserInterface
+    interfaces:
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
 
 - type: entity
   parent: RMCOverwatchConsoleOpfor
@@ -44,3 +56,56 @@
   - type: Sprite
     sprite:  _AU14/Items/laptop.rsi
     state: laptop_off_opfor
+  - type: AU14CallsignConsole
+    faction: opfor
+  - type: UserInterface
+    interfaces:
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
+
+# standalone directory laptops for mapping outside the overwatch consoles
+# (command posts, briefing rooms), left-click opens the directory
+- type: entity
+  parent: AU14PropItemLaptop
+  id: AU14ItemLaptopCallsignGOVFOR
+  name: comms net directory
+  description: A field terminal listing every station callsign on the faction net.
+  suffix: GOVFOR
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/laptop.rsi
+    state: laptop_off_govfor
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.AU14CallsignConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.AU14CallsignConsoleUI.Key:
+        type: AU14CallsignConsoleBui
+  - type: AU14CallsignConsole
+    faction: govfor
+
+- type: entity
+  parent: AU14ItemLaptopCallsignGOVFOR
+  id: AU14ItemLaptopCallsignOPFOR
+  suffix: OPFOR
+  components:
+  - type: Sprite
+    sprite: _AU14/Items/laptop.rsi
+    state: laptop_off_opfor
+  - type: AU14CallsignConsole
+    faction: opfor
+
+- type: entity
+  parent: AU14ItemLaptopCallsignGOVFOR
+  id: AU14ItemLaptopCallsignCLF
+  suffix: CLF
+  components:
+  - type: AU14CallsignConsole
+    faction: clf

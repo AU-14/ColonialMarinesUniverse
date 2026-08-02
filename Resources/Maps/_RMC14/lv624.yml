@@ -155415,7 +155415,7 @@ entities:
     - type: Physics
       canCollide: False
     - type: InsideEntityStorage
-- proto: RMCShovel
+- proto: AU14ToolShovel
   entities:
   - uid: 21630
     components:

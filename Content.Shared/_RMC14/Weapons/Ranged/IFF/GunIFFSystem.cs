@@ -69,7 +69,9 @@ public sealed partial class GunIFFSystem : EntitySystem
 
         using (args.PushGroup(nameof(GunIFFComponent)))
         {
-            args.PushMarkup(Loc.GetString("rmc-examine-text-iff"));
+            args.PushMarkup(Loc.GetString(ent.Comp.PreventFriendlyFire
+                ? "rmc-examine-text-iff-prevent-friendly-fire"
+                : "rmc-examine-text-iff"));
         }
     }
 

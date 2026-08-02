@@ -1,9 +1,11 @@
 using Content.Client.Construction.UI;
 using Content.Client.Gameplay;
 using Content.Client.UserInterface.Controls;
+using Content.Shared.CCVar;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration;
 using Robust.Shared.Utility;
 
 namespace Content.Client.UserInterface.Systems.Crafting;
@@ -17,7 +19,11 @@ public sealed class CraftingUIController : UIController, IOnStateChanged<Gamepla
     public void OnStateEntered(GameplayState state)
     {
         DebugTools.Assert(_presenter == null);
-        _presenter = new ConstructionMenuPresenter();
+        var cfg = IoCManager.Resolve<IConfigurationManager>();
+        IConstructionMenuView view = cfg.GetCVar(CCVars.ConstructionMenuImproved)
+            ? new GmodConstructionMenu()
+            : new ConstructionMenu();
+        _presenter = new ConstructionMenuPresenter(view);
     }
 
     public void OnStateExited(GameplayState state)

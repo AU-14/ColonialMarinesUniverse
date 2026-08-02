@@ -11,6 +11,12 @@ public sealed partial class CCVars
         CVarDef.Create("cmu.server_performance.enabled", true, CVar.SERVERONLY | CVar.ARCHIVE);
 
     /// <summary>
+    ///     Enable the [CMU-PERF] log output. Doesn't influence normal metrics/collection, profiler or incident trackers.
+    /// </summary>
+    public static readonly CVarDef<bool> CMUServerPerformanceLogEnabled =
+        CVarDef.Create("cmu.server_performance.log_enabled", false, CVar.SERVERONLY | CVar.ARCHIVE);
+
+    /// <summary>
     ///     Seconds between full performance observations. Hard frame stalls are checked every server frame.
     /// </summary>
     public static readonly CVarDef<float> CMUServerPerformanceSampleInterval =

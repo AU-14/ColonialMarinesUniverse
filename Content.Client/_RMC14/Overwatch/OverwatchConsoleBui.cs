@@ -36,6 +36,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
     private readonly Dictionary<NetEntity, OverwatchSquadView> _squadViews = new();
     private readonly Dictionary<NetEntity, PanelContainer> _squads = new();
     private readonly Dictionary<NetEntity, Dictionary<NetEntity, OverwatchRow>> _rows = new();
+    private readonly Dictionary<NetEntity, List<OverwatchMarine>> _marines = new();
     private SquadObjectivesWindow? _objectivesWindow;
 
     public OverwatchConsoleBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
@@ -112,15 +113,39 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
         var roleSorting = new Dictionary<ProtoId<JobPrototype>, int>();
         var activeSquad = GetActiveSquad();
         var margin = new Thickness(2);
+        var tripodIds = s.Cameras.Values.SelectMany(cameras => cameras).Select(camera => camera.Id).ToHashSet();
         foreach (var squad in s.Squads)
         {
-            if (!s.Marines.TryGetValue(squad.Id, out var marines))
-                continue;
+            s.Marines.TryGetValue(squad.Id, out var squadMarines);
+            var marines = squadMarines?.ToList() ?? new List<OverwatchMarine>();
+            if (s.Cameras.TryGetValue(squad.Id, out var cameras))
+            {
+                foreach (var camera in cameras)
+                {
+                    marines.Add(new OverwatchMarine(
+                        camera.Id,
+                        camera.Id,
+                        camera.Name,
+                        MobState.Alive,
+                        false,
+                        null,
+                        true,
+                        camera.Location,
+                        camera.AreaName,
+                        null,
+                        null,
+                        null));
+                }
+            }
+            _marines[squad.Id] = marines;
 
             marines.Sort((a, b) =>
             {
                 int Sorting(OverwatchMarine marine)
                 {
+                    if (tripodIds.Contains(marine.Id))
+                        return int.MaxValue;
+
                     if (squad.Leader == marine.Id)
                         return 1000;
 
@@ -155,13 +180,10 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                 monitor.OperatorButton.OnPressed += _ => SendPredictedMessage(new OverwatchConsoleTakeOperatorBuiMsg());
                 monitor.SearchBar.OnTextChanged += _ =>
                 {
-                    if (State is not OverwatchConsoleBuiState state ||
-                        !EntMan.TryGetComponent(Owner, out OverwatchConsoleComponent? currentConsole))
-                    {
+                    if (!EntMan.TryGetComponent(Owner, out OverwatchConsoleComponent? currentConsole))
                         return;
-                    }
 
-                    if (!state.Marines.TryGetValue(squad.Id, out var currentMarines))
+                    if (!_marines.TryGetValue(squad.Id, out var currentMarines))
                         currentMarines = new List<OverwatchMarine>();
 
                     monitor.UpdateResults(
@@ -363,6 +385,8 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             {
                 var roleName = Loc.GetString("rmc-overwatch-console-role-none");
                 string? rankName = null;
+                if (tripodIds.Contains(marine.Id))
+                    roleName = Loc.GetString("rmc-overwatch-tripod-camera-role");
                 if (marine.Role != null)
                 {
                     if (marine.RoleOverride is { } roleOverride && _localization.TryGetString(roleOverride, out var localizedName))
@@ -533,6 +557,9 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                     _ => (Loc.GetString("rmc-overwatch-console-state-conscious"), GreenColor),
                 };
 
+                if (tripodIds.Contains(marine.Id))
+                    mobState = Loc.GetString("rmc-overwatch-tripod-camera-active");
+
                 if (marine.SSD && marine.State != MobState.Dead)
                     mobState = $"{mobState} {Loc.GetString("rmc-overwatch-console-ssd")}";
 
@@ -562,7 +589,7 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
                     row.Buttons.Hide.ToolTip = Loc.GetString("rmc-overwatch-console-hide-marine");
                 }
 
-                if (squad.Leader == marine.Id)
+                if (squad.Leader == marine.Id || tripodIds.Contains(marine.Id))
                 {
                     row.Buttons.Hide.Visible = false;
                     row.Buttons.Promote.Visible = false;
@@ -724,7 +751,8 @@ public sealed partial class OverwatchConsoleBui : RMCPopOutBui<OverwatchConsoleW
             });
 
             var totalCountLabel = new RichTextLabel();
-            totalCountLabel.SetMarkupPermissive($"[bold]{marines.Count} {Loc.GetString("rmc-overwatch-console-total")}[/bold]");
+            var marineCount = marines.Count(marine => !tripodIds.Contains(marine.Id));
+            totalCountLabel.SetMarkupPermissive($"[bold]{marineCount} {Loc.GetString("rmc-overwatch-console-total")}[/bold]");
 
             totalPanel.AddChild(new BoxContainer
             {

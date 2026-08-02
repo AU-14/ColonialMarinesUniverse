@@ -100,7 +100,7 @@
     pocket2: AU14PouchIFAKFill
     back: RMCSatchelMarineForeconSurvivorFill
     ears: RMCHeadsetForecon
-    suitstorage: AU14WeaponRifleM49A
+    suitstorage: WeaponRifleM4SPRCustom
   storage:
     back:
     - RMCAttachmentRailFlashlight

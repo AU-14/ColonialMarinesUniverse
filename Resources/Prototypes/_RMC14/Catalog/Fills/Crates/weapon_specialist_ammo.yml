@@ -68,6 +68,51 @@
 
 - type: entity
   parent: RMCCrateAmmo
+  id: CMUCrateEMBLRMixed
+  name: EMBLR Mixed Crate (HE x2, AP x1, WP x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mm
+      amount: 2
+    - id: CMURocket70mmWhitePhosphorus
+      amount: 1
+    - id: CMURocket70mmAntiArmor
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEMBLRAP
+  name: EMBLR Crate (x4 AP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mmAntiArmor
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEMBLRWP
+  name: EMBLR Crate (x4 WP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mmWhitePhosphorus
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEMBLRHE
+  name: EMBLR Crate (x4 HE)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mm
+      amount: 4
+
+
+- type: entity
+  parent: RMCCrateAmmo
   id: RMCCrateM5DemoSpecHighExplosive
   name: M5-ATL High Explosives Crate (HE x3)
   components:

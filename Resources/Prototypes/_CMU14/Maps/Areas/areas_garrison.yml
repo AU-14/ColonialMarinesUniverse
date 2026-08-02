@@ -105,9 +105,19 @@
     minimapColor: '#573e19'
 
 - type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonOpenSky
+  name: Albacetrie - Open Sky
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaStableGarrisonLZ
-  name: Stable Garrison - Landing Zones
+  name: Joint Base Schaefer - Landing Zones
   components:
   - type: Sprite
     state: lz_pad
@@ -117,7 +127,7 @@
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonReq
-  name: Stable Garrison - Requisitions
+  name: Joint Base Schaefer - Requisitions
   components:
   - type: Sprite
     state: kutjevo
@@ -127,27 +137,27 @@
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonPillboxes
-  name: Stable Garrison - Pillboxes
+  name: Joint Base Schaefer - Pillboxes
   components:
   - type: Sprite
-    state: stone_fields
+    state: construction_int
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonPrep
-  name: Stable Garrison - Preperations Rooms
+  name: Joint Base Schaefer - Preperations Rooms
   components:
   - type: Sprite
-    state: power
+    state: int
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonMedbay
-  name: Stable Garrison - Medbay
+  name: Joint Base Schaefer - Medbay
   components:
   - type: Sprite
     state: med1
@@ -157,57 +167,57 @@
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonBrig
-  name: Stable Garrison - Brig
+  name: Joint Base Schaefer - Brig
   components:
   - type: Sprite
-    state: colony_int
+    state: base_ico
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonCIC
-  name: Stable Garrison - CIC
+  name: Joint Base Schaefer - CIC
   components:
   - type: Sprite
-    state: weed_int
+    state: base_ico
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonFrontGate
-  name: Stable Garrison - Front Gate
+  name: Joint Base Schaefer - Front Gate
   components:
   - type: Sprite
-    state: rf_overlook
+    state: ext
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonNorth
-  name: Stable Garrison - North
+  name: Joint Base Schaefer - North
   components:
   - type: Sprite
-    state: rf_dunes
+    state: base_ico
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonSouth
-  name: Stable Garrison - South
+  name: Joint Base Schaefer - South
   components:
   - type: Sprite
-    state: rf_bridge
+    state: base_ico
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonMotorPool
-  name: Stable Garrison - Motor Pool
+  name: Joint Base Schaefer - Motor Pool
   components:
   - type: Sprite
     state: foremans
@@ -217,97 +227,97 @@
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreetSpaceport
-  name: Spaceport Way
+  name: Albacetrie - Spaceport Way
   components:
   - type: Sprite
-    state: colony_caves_0
+    state: ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreetUoAMedicalServiceRoad
-  name: UoA Medical Service Road
+  name: Albacetrie - UoA Medical Service Road
   components:
   - type: Sprite
-    state: colony_caves_1
+    state: med_ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreetSchafer
-  name: Schafer Memorial Drive
+  name: Albacetrie - Schafer Memorial Drive
   components:
   - type: Sprite
-    state: colony_caves_2
+    state: ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonYutaniDrive
-  name: Yutani Drive
+  name: Albacetrie - Yutani Drive
   components:
   - type: Sprite
-    state: colony_caves_3
+    state: ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonCarParkCorpo
-  name: Corporate Car Park
+  name: Albacetrie - Corporate Car Park
   components:
   - type: Sprite
-    state: colony_caves_3
+    state: construction1
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreet1stAvenue
-  name: 1st Avenue
+  name: Albacetrie - 1st Avenue
   components:
   - type: Sprite
-    state: colony_caves_3
+    state: ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreet2ndAvenue
-  name: 2nd Avenue
+  name: Albacetrie - 2nd Avenue
   components:
   - type: Sprite
-    state: colony_caves_3
+    state: ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreet3rdAvenue
-  name: 3rd Avenue
+  name: Albacetrie - 3rd Avenue
   components:
   - type: Sprite
-    state: colony_caves_3
+    state: ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreet4thAvenue
-  name: 4th Avenue
+  name: Albacetrie - 4th Avenue
   components:
   - type: Sprite
-    state: colony_caves_3
+    state: ext
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonStreetMainStreet
-  name: Main Street
+  name: Albacetrie - Main Street
   components:
   - type: Sprite
     state: ext
@@ -317,107 +327,107 @@
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonCMBOutpost
-  name: CMB Outpost
+  name: Albacetrie - CMB Outpost
   components:
   - type: Sprite
-    state: int
+    state: base_ico
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonCMBOutpostCheckpoint
-  name: CMB Checkpoint
+  name: Albacetrie - CMB Checkpoint
   components:
   - type: Sprite
-    state: int
+    state: base_ico
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonCMBNETunnels
-  name: Northeast Tunnels
+  name: Albacetrie - Northeast Tunnels
   components:
   - type: Sprite
-    state: int
+    state: colony_caves_0
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonFiltration
-  name: Filtration
+  name: Albacetrie - Filtration
   components:
   - type: Sprite
-    state: int
+    state: construction_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonFiltrationOverflow
-  name: Filtration Overflow
+  name: Albacetrie - Filtration Overflow
   components:
   - type: Sprite
-    state: int
+    state: rf_river
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonEastMaintTunnel
-  name: Eastern Maintenance Tunnels
+  name: Albacetrie - Eastern Maintenance Tunnels
   components:
   - type: Sprite
-    state: int
+    state: construction_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonCLHouse
-  name: Corporate Liaison's House
+  name: Albacetrie - Corporate Liaison's House
   components:
   - type: Sprite
-    state: int
+    state: colony_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonHouseUpscale
-  name: Upscale House
+  name: Albacetrie - Upscale House
   components:
   - type: Sprite
-    state: int
+    state: colony_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonGeoThermalGenerators
-  name: Colony Generator Room
+  name: Albacetrie - Colony Generator Room
   components:
   - type: Sprite
-    state: int
+    state: power
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonGeneratorPlaza
-  name: Generator Room Plaza
+  name: Albacetrie - Generator Room Plaza
   components:
   - type: Sprite
-    state: ext
+    state: power_2
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonSouthWestAlley
-  name: South West Alley
+  name: Albacetrie - South West Alley
   components:
   - type: Sprite
     state: ext
@@ -427,17 +437,17 @@
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonWasteWater
-  name: Waste Water Collection Pool
+  name: Albacetrie - Waste Water Collection Pool
   components:
   - type: Sprite
-    state: ext
+    state: rf_river
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonWeyMart
-  name: WeyMart Corner Store
+  name: Albacetrie - WeyMart Corner Store
   components:
   - type: Sprite
     state: int
@@ -447,7 +457,7 @@
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonAlbacetireNews
-  name: Albacetire News
+  name: Albacetrie - News
   components:
   - type: Sprite
     state: int
@@ -457,27 +467,27 @@
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonHotelmuylimpio
-  name: Section VII Student Housing
+  name: Albacetrie - Section VII Student Housing
   components:
   - type: Sprite
-    state: int
+    state: colony_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonDistributionEngineering
-  name: Colony Engineering & Distribution
+  name: Albacetrie - Colony Engineering & Distribution
   components:
   - type: Sprite
-    state: int
+    state: construction_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonWeyShop
-  name: WeyShop Outlet Mall
+  name: Albacetrie - WeyShop Outlet Mall
   components:
   - type: Sprite
     state: int
@@ -487,37 +497,7 @@
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonClothingShop
-  name: Modern Thread Clothing Store
-  components:
-  - type: Sprite
-    state: med0
-  - type: Area
-    minimapColor: '#714401CC'
-
-- type: entity
-  parent: AU14AreaGarrisonIndoors
-  id: AU14AreaGarrisonSurplusStore
-  name: Jack's Military Surplus
-  components:
-  - type: Sprite
-    state: med2
-  - type: Area
-    minimapColor: '#714401CC'
-
-- type: entity
-  parent: AU14AreaGarrisonIndoors
-  id: AU14AreaGarrisonGroceryStore
-  name: Weymart Grocery+
-  components:
-  - type: Sprite
-    state: med2
-  - type: Area
-    minimapColor: '#714401CC'
-
-- type: entity
-  parent: AU14AreaGarrisonIndoors
-  id: AU14AreaGarrisonPsychology
-  name: Arthur & Brothers Psychology
+  name: Albacetrie - Modern Thread Clothing Store
   components:
   - type: Sprite
     state: int
@@ -526,8 +506,38 @@
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSurplusStore
+  name: Albacetrie - Jack's Military Surplus
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonGroceryStore
+  name: Albacetrie - Weymart Grocery+
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonPsychology
+  name: Albacetrie - Arthur & Brothers Psychology
+  components:
+  - type: Sprite
+    state: med2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonManagementOffice
-  name: Weyland-Yutani Colony Management Office
+  name: Albacetrie - Weyland-Yutani Colony Management Office
   components:
   - type: Sprite
     state: int
@@ -537,47 +547,47 @@
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonERO
-  name: Emergency Response Office
+  name: Albacetrie - Emergency Response Office
   components:
   - type: Sprite
-    state: int
+    state: med0
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonCMBMotorpool
-  name: CMB Precinct Motorpool
+  name: Albacetrie - CMB Precinct Motorpool
   components:
   - type: Sprite
-    state: botany2
+    state: foremans
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonSouthEastColonyGrounds
-  name: Southwest Colony Grounds
+  name: Albacetrie - Southwest Colony Grounds
   components:
   - type: Sprite
-    state: botany2
+    state: botany0
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonSouthCentralColonyGrounds
-  name: South Central Colony Grounds
+  name: Albacetrie - South Central Colony Grounds
   components:
   - type: Sprite
-    state: botany2
+    state: botany1
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonSouthEast2ColonyGrounds
-  name: Southeast Colony Grounds
+  name: Albacetrie - Southeast Colony Grounds
   components:
   - type: Sprite
     state: botany2
@@ -587,57 +597,57 @@
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonNorthWestColonyGrounds
-  name: Northwest Colony Grounds
+  name: Albacetrie - Northwest Colony Grounds
   components:
   - type: Sprite
-    state: botany2
+    state: botany3
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonNorthEastColonyGrounds
-  name: Northeast Colony Grounds
+  name: Albacetrie - Northeast Colony Grounds
   components:
   - type: Sprite
-    state: botany2
+    state: scrubland
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonHospitalParking
-  name: Albacetire Regional Spaceport Parking
+  name: Albacetrie - Regional Spaceport Parking
   components:
   - type: Sprite
-    state: construction3
+    state: med_ext
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonCMBPrecinct
-  name: CMB Precinct
+  name: Albacetrie - CMB Precinct
   components:
   - type: Sprite
-    state: int
+    state: base_ico
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonHospital
-  name: University of Albacetire Hospital
+  name: Albacetrie - University Hospital
   components:
   - type: Sprite
-    state: int
+    state: med3
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonBar
-  name: Hank's Spirits & Arcade
+  name: Albacetrie - Hank's Spirits & Arcade
   components:
   - type: Sprite
     state: int
@@ -647,47 +657,57 @@
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonNorthApartments
-  name: Lewiston Apartments North
+  name: Albacetrie - Lewiston Apartments North
   components:
   - type: Sprite
-    state: int
+    state: colony_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonSouthApartments
-  name: Lewiston Apartments South
+  name: Albacetrie - Lewiston Apartments South
   components:
   - type: Sprite
-    state: int
+    state: colony_int
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonBiologySchool
-  name: UoA - School of Xenobiology
+  name: Albacetrie - UoA - School of Xenobiology
   components:
   - type: Sprite
-    state: int
+    state: botany1
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonSpaceportATC
-  name: Albacetire Regional Spaceport ATC
+  name: Albacetrie - Regional Spaceport ATC
   components:
   - type: Sprite
-    state: med_ext
+    state: shuttle
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonSpaceport
-  name: Albacetire Regional Spaceport
+  name: Albacetrie - Regional Spaceport
+  components:
+  - type: Sprite
+    state: shuttle2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSpaceportAdmin
+  name: Albacetrie - Colonial Administration
   components:
   - type: Sprite
     state: int
@@ -695,109 +715,109 @@
     minimapColor: '#714401CC'
 
 - type: entity
-  parent: AU14AreaGarrisonIndoors
-  id: AU14AreaGarrisonSpaceportAdmin
-  name: Colonial Administration
-  components:
-  - type: Sprite
-    state: med1
-  - type: Area
-    minimapColor: '#714401CC'
-
-- type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonNorthDesert
-  name: Northern Jungle
+  name: Albacetrie - Northern Jungle
   components:
   - type: Sprite
-    state: construction3
+    state: weed_ext
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonSouthDesert
-  name: Southern Jungle
+  name: Albacetrie - Southern Jungle
   components:
   - type: Sprite
-    state: colony_int
+    state: botany3
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonOutdoors
   id: AU14AreaGarrisonTemp
-  name: Garrison (TEMP)
+  name: Albacetrie - Garrison (TEMP)
   components:
   - type: Sprite
-    state: colony_int
+    state: default
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
   id: AU14AreaGarrisonSouthDesertTunnel
-  name: Southern Jungle Tunnel
+  name: Albacetrie - Southern Jungle Tunnel
   components:
   - type: Sprite
-    state: colony_int
+    state: colony_caves_0
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonCaves
   id: AU14AreaGarrisonCaves2
-  name: Western Caves
+  name: Albacetrie - Western Caves
   components:
   - type: Sprite
-    state: colony_int
+    state: colony_caves_1
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonCaves
   id: AU14AreaGarrisonCaves3
-  name: Deep Western Caves
+  name: Albacetrie - Deep Western Caves
   components:
   - type: Sprite
-    state: colony_int
+    state: colony_caves_2
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonCaves
   id: AU14AreaGarrisonMiningCamp
-  name: Mining Camp
+  name: Albacetrie - Mining Camp
   components:
   - type: Sprite
-    state: colony_int
+    state: foremans
   - type: Area
     minimapColor: '#714401CC'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonSewers
-  name: Stable Garrison - Sewers West
+  name: Albacetrie - Sewers West
   components:
   - type: Sprite
-    state: colony_caves_1
+    state: colony_caves_3
   - type: Area
     minimapColor: '#573e19'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonSewer1
-  name: Stable Garrison - Sewer Canal
+  name: Albacetrie - Sewer Canal
   components:
   - type: Sprite
-    state: colony_int
+    state: rf_river
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
   id: AU14AreaStableGarrisonSewer2
-  name: Stable Garrison - Sewer Northeast
+  name: Albacetrie - Sewer Northeast
+  components:
+  - type: Sprite
+    state: colony_caves_1
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewer3
+  name: Albacetrie - Sewer Southeast
   components:
   - type: Sprite
     state: colony_caves_2
@@ -806,18 +826,18 @@
 
 - type: entity
   parent: AU14AreaGarrisonFullProtection
-  id: AU14AreaStableGarrisonSewer3
-  name: Stable Garrison - Sewer Southeast
+  id: AU14AreaStableGarrisonWeyland
+  name: Albacetrie - Weyland-Yutani Bioweapons Lab
   components:
   - type: Sprite
-    state: int
+    state: weed_int
   - type: Area
     minimapColor: '#016f6f'
 
 - type: entity
-  parent: AU14AreaGarrisonFullProtection
-  id: AU14AreaStableGarrisonWeyland
-  name: Stable Garrison - Weyland-Yutani Bioweapons Lab
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonWeyland1
+  name: Albacetrie - Weyland-Yutani Facility Enterance
   components:
   - type: Sprite
     state: colony_int
@@ -826,10 +846,220 @@
 
 - type: entity
   parent: AU14AreaGarrisonIndoors
-  id: AU14AreaStableGarrisonWeyland1
-  name: Stable Garrison - Weyland-Yutani Facility Enterance
+  id: AU14AreaStableGarrisonCMBPrecinct2
+  name: Albacetrie - CMB Precinct 2nd Floor
+  components:
+  - type: Sprite
+    state: base_ico
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonCMBPrecinct3
+  name: Albacetrie - CMB Precinct Roof
+  components:
+  - type: Sprite
+    state: construction
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonJournalistRoof
+  name: Albacetrie - Journalist Office Roof
+  components:
+  - type: Sprite
+    state: construction1
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonGeothermalRoof
+  name: Albacetrie - Geothermal Powerplant Roof
+  components:
+  - type: Sprite
+    state: power_2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonWeYuMartRoof
+  name: Albacetrie - We-Yu Mart Roof
+  components:
+  - type: Sprite
+    state: construction2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonResidentialRoofs
+  name: Albacetrie - Residential Roof
+  components:
+  - type: Sprite
+    state: construction3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonGreenhouse
+  name: Albacetrie - Newport Greenhouses
+  components:
+  - type: Sprite
+    state: botany0
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonLewistonApartments2ndFloor
+  name: Albacetrie - Lewiston Apartments 2nd Floor
   components:
   - type: Sprite
     state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonLewistonApartmentsRoof
+  name: Albacetrie - Lewiston Apartments Roof
+  components:
+  - type: Sprite
+    state: construction3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonJBSMaints
+  name: Joint Base Schaefer - Maintenance Tunnels
+  components:
+  - type: Sprite
+    state: construction_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonMedialCenterRoof
+  name: Albacetrie - UoA Medical Center Roof
+  components:
+  - type: Sprite
+    state: med_ext
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonSpacesportRoof
+  name: Albacetrie - Regional Spaceport Roof
+  components:
+  - type: Sprite
+    state: shuttle2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonUniversityRoof
+  name: Albacetrie - University Roof
+  components:
+  - type: Sprite
+    state: construction
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonAmbassadorRoof
+  name: Albacetrie - Ambassadorial Complex Roof
+  components:
+  - type: Sprite
+    state: construction1
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonAmbassadorialComplex
+  name: Albacetrie - Ambassadorial Complex
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonStripMallRoof
+  name: Albacetrie - Strip Mall Roof
+  components:
+  - type: Sprite
+    state: construction2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonDistributionEngineeringRoof
+  name: Albacetrie - Engineering & Distribution Roof
+  components:
+  - type: Sprite
+    state: power_2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonSouthCheckpointRoof
+  name: Albacetrie - South Checkpoint Roof
+  components:
+  - type: Sprite
+    state: construction3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonMedicalCenter2ndFloor
+  name: Albacetrie - UoA Medical Center 2nd Floor
+  components:
+  - type: Sprite
+    state: med4
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonCaves
+  id: AU14AreaStableGarrisonNorthCaverns
+  name: Albacetrie - North Caverns
+  components:
+  - type: Sprite
+    state: med4
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonSouthCaverns
+  name: Albacetrie - South Caverns
+  components:
+  - type: Sprite
+    state: med4
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonCaverns
+  name: Albacetrie - Caverns
+  components:
+  - type: Sprite
+    state: med4
   - type: Area
     minimapColor: '#016f6f'

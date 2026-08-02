@@ -115,6 +115,15 @@ rmc-xeno-vampire-description = You lose all of your abilities and you forfeit a 
   - Execute unconscious talls with a headbite to heal your wounds.
 rmc-xeno-vampire-popup = Show no mercy! Slaughter them all!
 
+rmc-xeno-toxic-name = Manticore
+rmc-xeno-toxic-description = You lose Tail Stab, Slowing Spit, Scattered Spit, and Paralyzing Slash. In exchange, you gain higher plasma reserves, slightly stronger melee, base armor, and a toxin-focused kit built around stacking Intoxicated on hosts before consuming it.
+  You gain the ability to:
+  - Use Toxic Spit to quickly build Intoxicated stacks from range.
+  - Use Toxic Slash to briefly speed yourself up and make your next three slashes apply Intoxicated stacks.
+  - Use Drain Sting on adjacent intoxicated hosts, consuming most of their stacks to damage them, knock them down, heal yourself, and restore plasma.
+  - Trigger a temporary armor surge when Drain Sting consumes high Intoxicated stacks.
+rmc-xeno-toxic-popup = The hive's hunger coils in this one's venom. Let them weaken before the final strike.
+
 rmc-xeno-eggsac-name = Eggsac
 rmc-xeno-eggsac-description = You trade your ability to store parasites and make resin traps for stronger pheromones, more egg storage, and the ability to produce eggs.
    You gain the ability to:

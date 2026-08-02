@@ -98,6 +98,8 @@
       entries:
       - id: CMBeltMarine
         amount: 40
+      - id: CMUBeltCombatSidearmRig
+        amount: 15
       - id: RMCBeltGrenade
         amount: 4
       - id: RMCM276ShotgunShellLoadingRig
@@ -147,8 +149,12 @@
       entries:
       - id: AU14MaskGasHAZOPSM40
         amount: 40
+      - id: AU14MaskPrescriptionGasHAZOPSM40
+        amount: 10
       - id: AU14MaskGasHAZOPSM17
         amount: 40
+      - id: AU14MaskPrescriptionGasHAZOPSM17
+        amount: 10
       - id: CMUGasMaskFilterHAZOPS
         amount: 80
       - id: AU14PouchGasMaskBag
@@ -257,17 +263,23 @@
       choices: { CMUPrimaryWeapon: 1 }
       entries:
       - id: AU14KitWeaponXMP5A6
+      - id: AU14GunCaseRifleXM20A2
     - name: Primary Ammunition
       entries:
       - id: AU14MagazineXMP5A6
         amount: 60
+      - id: AU14MagazineRifleXM20A2
+        amount: 45
     - name: Handguns
       choices: { CMUHandgunsWeapon: 1 }
       entries:
       - id: AU14KitWeaponM4A3
+      - id: AU14GunCasePistolM50HAZOPS
     - name: Handgun Ammunition
       entries:
       - id: CMMagazinePistolM1984
+        amount: 60
+      - id: AU14MagazinePistolM50
         amount: 60
     - name: Attachments
       choices: { CMUAttachmentsVendor: 1 }
@@ -433,6 +445,109 @@
       entries:
       - id: AU14HAZOPShecuBeret
         amount: 2
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14HAZOPSsquadleaderequipmentvendor
+  name: HAZOPS squad leader vendor
+  description: >-
+    An automated equipment rack, hooked up to a compact storage of Hazardous Operations squad-leadership equipment of the Marine Special Operations Command.
+    Designed for immediate readiness following cryogenic hypersleep or rapid mobilization orders.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - AU14JobGOVFORSquadSergeant
+    - AU14JobOPFORSquadSergeant
+    - AU14JobGOVFORSquadSergeantCMBCIU
+    - AU14JobGOVFORSquadSergeantRMC
+    - AU14JobGOVFORSquadSergeantUPP
+    - AU14JobGOVFORSquadSergeantWYPMC
+    sections:
+    - name: Helmets and Hats
+      choices: { CMHat: 2 }
+      entries:
+      - id: AU14JungleM11Helmet
+      - id: AU14HAZOPShecuBeret
+    - name: Squad Leader Essentials
+      takeAll: CMStandard
+      entries:
+      - id: RMCVendorBundleCrewLeader
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMBackpackMarine
+      - id: RMCScabbardMacheteFilled
+      - id: CMSatchelMarine
+        recommended: true
+    - name: Footwear
+      entries:
+      - id: AU14SpikeBoots
+        points: 8
+        recommended: true
+    - name: Utilities
+      entries:
+      - id: RMCWhistle
+        points: 3
+      - id: CMFireExtinguisherPortable
+        points: 3
+      - id: RMCMotionDetector
+        points: 5
+      - id: RMCFulton20
+        points: 5
+    - name: Binoculars
+      entries:
+      - id: RMCRangefinder
+        points: 3
+      - id: RMCLaserDesignator
+        points: 5
+    - name: Engineering Supplies
+      entries:
+      - id: CMSheetMetal10
+        name: metal x10
+        points: 5
+        recommended: true
+      - id: CMSheetPlasteel10
+        name: plasteel x10
+        points: 7
+        recommended: true
+      - id: RMCExplosivePlastic
+        points: 5
+        recommended: true
+      - id: RMCExplosiveBreachingCharge
+        points: 7
+        recommended: true
+      - id: CMSandbagEmpty25
+        name: sandbags x25
+        points: 10
+        recommended: true
+      - id: RMCPackFlareCAS
+        points: 7
+      - id: RMCWeldingGoggles
+        points: 5
+    - name: Medical Supplies
+      entries:
+      - id: CMBurnKit10
+        points: 2
+      - id: CMTraumaKit10
+        points: 2
+      - id: CMAdvFirstAidKitFilled
+        points: 12
+      - id: CMBicaridineAutoInjector
+        points: 1
+      - id: CMDexalinPlusAutoInjector
+        points: 1
+      - id: CMInaprovalineAutoInjector
+        points: 1
+      - id: CMKelotaneAutoInjector
+        points: 1
+      - id: CMTricordrazineAutoInjector
+        points: 1
+      - id: CMHealthAnalyzer
+        points: 4
+      - id: CMRollerBedSpawnFolded
+        points: 2
 
 - type: entity
   parent: ColMarTechCargo
@@ -624,6 +739,8 @@
         amount: 4
       - id: RMCFulton20
         amount: 4
+      - id: RMCOverwatchCameraTripod
+        amount: 4
       - id: RMCSentryLaptop
         amount: 4
     - name: RTO Packs
@@ -674,3 +791,54 @@
       entries:
       - id: AU14FlagCarriableUA
         amount: 1
+
+- type: entity
+  parent: ColMarTechBase
+  id: AU14HAZOPSShipsideUniformVendor
+  name: HAZOPS shipside uniform vendor
+  description: A stripped-down dispenser rack stocked with off-duty uniforms, footwear, and light personal gear for wear aboard ship.
+  components:
+  - type: Sprite
+    sprite: _AU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Softcovers
+      entries:
+      - id: AU14JungleBoonieHat
+        amount: 20
+      - id: AU14JunglePatrolCap
+        amount: 25
+      - id: AU14HeadCommandoBeanie
+        amount: 10
+    - name: Fatigues
+      entries:
+      - id: AU14HAZOPUrbanFatigues
+        amount: 40
+    - name: Footwear
+      entries:
+      - id: CMBootsBlack
+        amount: 40
+    - name: Mask
+      entries:
+      - id: CMMaskCoif
+        amount: 20
+      - id: RMCMaskTornScarfGreen
+        amount: 20
+      - id: RMCMaskTornScarfSnow
+        amount: 20
+      - id: RMCMaskTornScarfBlack
+        amount: 20
+    - name: Glasses
+      entries:
+      - id: RMCGlassesMarineRpg
+        amount: 25
+      - id: AU14GlassesBiMex
+        amount: 25
+      - id: AU14GlassesBiMexOrange
+        amount: 25
+      - id: RMCGlassesTriMaxBronze
+        amount: 25
+    - name: Bag
+      entries:
+      - id: CMSatchelMarine
+        amount: 40

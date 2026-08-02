@@ -11,7 +11,7 @@ namespace Content.Shared.Actions.Components;
 /// <remarks>
 /// Requires <see cref="TargetActionComponent"/>.
 /// </remarks>
-[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem))]
+[RegisterComponent, NetworkedComponent, Access(typeof(SharedActionsSystem), typeof(SwappableActionSystem), typeof(Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock.CMUXenoWarlockSystem))]
 [EntityCategory("Actions")]
 [AutoGenerateComponentState]
 public sealed partial class WorldTargetActionComponent : Component

@@ -22,7 +22,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Map Entity
+      name: Blackfoot (Door-Gun)
     - type: Transform
     - type: Map
       mapPaused: True
@@ -225,4 +225,11 @@ entities:
     - Corrodible
     - Damageable
     - Destructible
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 500
+    components:
+    - type: Transform
+      pos: 7.5,9.5
+      parent: 2
 ...

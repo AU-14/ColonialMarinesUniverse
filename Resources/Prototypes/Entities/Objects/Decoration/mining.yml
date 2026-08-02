@@ -67,6 +67,11 @@
   - type: Tag
     tags:
     - Wooden
+  # This section is added by the building overhaul: wooden supports act as z-level structural support beams
+  # (vertical pillars) so they hold up cavern roofs and root the overhang support graph.
+  - type: StructuralSupport
+    isVerticalSupport: true
+    cantileverSpan: 2
   - type: Sprite
     noRot: true
     sprite: Objects/Decoration/mines.rsi

@@ -35,4 +35,8 @@ namespace Content.Shared.Construction
             return PrototypeManager.Index(info.DefaultPrototype).Name;
         }
     }
+
+    /// <summary>Raised on the completed entity by every supported construction entry point.</summary>
+    [ByRefEvent]
+    public record struct ConstructionCompletedEvent(EntityUid Built, EntityUid Builder);
 }

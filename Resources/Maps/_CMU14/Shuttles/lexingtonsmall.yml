@@ -28,7 +28,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Map Entity
+      name: Lexington Dropship
     - type: Transform
     - type: Map
       mapPaused: True
@@ -915,4 +915,11 @@ entities:
       parent: 2
     - type: WarpPoint
       location: Normandy
+- proto: AU14VehicleRadioSet
+  entities:
+  - uid: 200
+    components:
+    - type: Transform
+      pos: 0.5,6.5
+      parent: 2
 ...

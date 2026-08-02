@@ -66,6 +66,10 @@ namespace Content.Server.Database
         public DbSet<RMCPlayerActionOrder> RMCPlayerActionOrder { get; set; } = default!;
         public DbSet<RMCChatBans> RMCPlayerChatBans { get; set; } = default!;
 
+        // AU14 INSFOR faction featureset
+        public DbSet<AU14FactionDefinition> AU14FactionDefinitions { get; set; } = default!;
+        // AU14 building overhaul: admin-generated construction-menu entries (see AU14ConstructionModel.cs)
+        public DbSet<AU14CustomConstructionEntry> AU14CustomConstructionEntries { get; set; } = default!;
         // CMU14
         public DbSet<CMUBalanceRatingPoll> CMUBalanceRatingPolls { get; set; } = default!;
         public DbSet<CMUBalanceRatingResponse> CMUBalanceRatingResponses { get; set; } = default!;
@@ -92,6 +96,42 @@ namespace Content.Server.Database
             modelBuilder.Entity<Profile>()
                 .Property(p => p.XenoPostfix)
                 .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.ShortExamine)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.FullDescription)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.MedicalRecord)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.CriminalRecord)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.GeneralRecord)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.Height)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.Weight)
+                .HasDefaultValue(160);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.Build)
+                .HasDefaultValue(string.Empty);
+
+            modelBuilder.Entity<Profile>()
+                .Property(p => p.HideMetaInformation)
+                .HasDefaultValue(false);
 
             modelBuilder.Entity<Antag>()
                 .HasIndex(p => new {HumanoidProfileId = p.ProfileId, p.AntagName})
@@ -684,11 +724,21 @@ namespace Content.Server.Database
         public string? Allegiance { get; set; }
         public string? Origin { get; set; }
         public string? Platoon { get; set; }
+        public bool Synthetic { get; set; }
         public string? ThreatPreference { get; set; }
         public string? GamemodeJobPriorities { get; set; }
         public string? GamemodeAntagPreferences { get; set; }
         public string? GamemodeThreatPreferences { get; set; }
         [Column("yautja_profile")] public string? YautjaProfile { get; set; }
+        public string ShortExamine { get; set; } = string.Empty;
+        public string FullDescription { get; set; } = string.Empty;
+        public string MedicalRecord { get; set; } = string.Empty;
+        public string CriminalRecord { get; set; } = string.Empty;
+        public string GeneralRecord { get; set; } = string.Empty;
+        public string Height { get; set; } = string.Empty;
+        public int Weight { get; set; } = 160;
+        public string Build { get; set; } = string.Empty;
+        public bool HideMetaInformation { get; set; }
     }
 
     public class Job

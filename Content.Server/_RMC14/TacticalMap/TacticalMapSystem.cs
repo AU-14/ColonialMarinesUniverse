@@ -29,7 +29,6 @@ using Content.Shared._RMC14.Xenonids.HiveLeader;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
-using Content.Shared.AU14.Objectives;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
 using Content.Shared.Ghost;

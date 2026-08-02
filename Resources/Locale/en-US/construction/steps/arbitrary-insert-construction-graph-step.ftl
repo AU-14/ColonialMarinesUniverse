@@ -1,6 +1,10 @@
 # Shown when examining an in-construction object
 construction-insert-arbitrary-entity = Next, insert {$stepName}.
 
+# AU14: guide ("Steps") entries for custom entity-id steps (resolved from the entity's display name).
+construction-step-insert-entity = Insert {$name}.
+construction-step-use-entity = Use {$name}.
+
 construction-insert-info-examine-name-instrument-brass = brass instrument
 construction-insert-info-examine-name-instrument-keyed = keyed instrument
 construction-insert-info-examine-name-instrument-percussion = percussion instrument

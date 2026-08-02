@@ -32,6 +32,7 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 using PullableComponent = Content.Shared.Movement.Pulling.Components.PullableComponent;
@@ -459,6 +460,43 @@ namespace Content.Shared.Cuffs
 
             if (_virtualItem.TrySpawnVirtualItemInHand(handcuff, uid, out var virtItem2))
                 EnsureComp<UnremoveableComponent>(virtItem2.Value);
+        }
+
+        /// <summary>
+        ///     Instantly binds <paramref name="target"/> with a freshly spawned set of cuffs - no user, no
+        ///     do-after, no range/LOS check. For non-interaction restraint sources (e.g. a sapper snare trap).
+        ///     Returns the spawned cuffs so the caller can release them later via <see cref="Uncuff"/>, or null
+        ///     if the target can't be cuffed. Server-only: it spawns an entity, and the resulting cuffable
+        ///     state (which is networked) replicates the binding to the client so hand-use stays predicted.
+        /// </summary>
+        public EntityUid? TryAddCuffsInstant(EntityUid target, EntProtoId cuffProto, CuffableComponent? cuffable = null)
+        {
+            if (_net.IsClient)
+                return null;
+
+            if (!Resolve(target, ref cuffable, false) || !TryComp<HandsComponent>(target, out var hands))
+                return null;
+
+            // Already fully cuffed - nothing to add.
+            if (cuffable.CuffedHandCount >= hands.Count)
+                return null;
+
+            var cuffs = Spawn(cuffProto, Transform(target).Coordinates);
+            if (!TryComp<HandcuffComponent>(cuffs, out var cuffComp))
+            {
+                QueueDel(cuffs);
+                return null;
+            }
+
+            var ev = new TargetHandcuffedEvent();
+            RaiseLocalEvent(target, ref ev);
+
+            // Insert fires OnCuffsInsertedIntoContainer -> UpdateCuffState; UpdateHeldItems drops what they
+            // hold and fills both hands with unremovable virtual items so they cannot use/attack/fire.
+            _container.Insert(cuffs, cuffable.Container);
+            UpdateHeldItems(target, cuffs, cuffable);
+            cuffComp.Used = true; // so a later Uncuff() accepts these cuffs.
+            return cuffs;
         }
 
         /// <summary>

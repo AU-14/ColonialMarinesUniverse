@@ -98,6 +98,7 @@
   color: "#e2972e"
   overdose: 15
   criticalOverdose: 25
+  class: Uncommon
   metabolisms:
     Medicine:
       metabolismRate: 0.1
@@ -113,6 +114,7 @@
   color: "#1f28a7"
   overdose: 30
   criticalOverdose: 50
+  class: Common
   metabolisms:
     Medicine:
       metabolismRate: 0.1
@@ -129,6 +131,7 @@
   color: "#5887D5"
   overdose: 15
   criticalOverdose: 25
+  class: Uncommon
   metabolisms:
     Medicine:
       metabolismRate: 0.1
@@ -185,6 +188,7 @@
   desc: reagent-desc-cminaprovaline
   color: "#fe33cb"
   overdose: 110
+  class: Common
   metabolisms:
     Medicine:
       metabolismRate: 0.5
@@ -204,19 +208,6 @@
         reductionDecreaseRate: 0
         durationPerUnit: 8
         additive: true
-      - !type:Jitter
-        conditions:
-        - !type:ReagentThreshold
-          min: 110
-      - !type:GenericStatusEffect
-        conditions:
-        - !type:ReagentThreshold
-          min: 110
-        key: Unconscious
-        component: RMCUnconscious
-        time: 10 #Yes, it's this much.
-        type: Add
-        refresh: true
 
 - type: reagent
   parent: [ CMReagentMedicine, Kelotane ]
@@ -226,6 +217,7 @@
   color: "#f5e123"
   overdose: 30
   criticalOverdose: 50
+  class: Common
   metabolisms:
     Medicine:
       metabolismRate: 0.1
@@ -258,6 +250,7 @@
   color: "#d87f2b"
   overdose: 30
   criticalOverdose: 50
+  class: Uncommon
   metabolisms:
     Medicine:
       metabolismRate: 0.1
@@ -302,6 +295,8 @@
       metabolismRate: 0.1
       effects:
       - !type:ChemHealEyeDamage
+      - !type:Oculopeutic
+        potency: 2
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -442,6 +437,7 @@
   color: "#BBEDA4"
   overdose: 30
   criticalOverdose: 50
+  class: Uncommon
   metabolisms:
     Medicine:
       metabolismRate: 0.1

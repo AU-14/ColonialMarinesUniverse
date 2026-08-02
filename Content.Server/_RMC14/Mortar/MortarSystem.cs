@@ -7,7 +7,6 @@ using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Mortar;
-using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Rangefinder;
 using Content.Shared.Maps;
 using Robust.Server.Containers;
@@ -30,7 +29,6 @@ public sealed partial class MortarSystem : SharedMortarSystem
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
-    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
@@ -51,6 +49,12 @@ public sealed partial class MortarSystem : SharedMortarSystem
         if (!mortar.Comp.Deployed)
         {
             _popup.PopupEntity(Loc.GetString("rmc-mortar-not-deployed", ("mortar", mortar)), user, user, SmallCaution);
+            return false;
+        }
+
+        if (!CanOperateMortarAt(_transform.GetMoverCoordinates(mortar)))
+        {
+            _popup.PopupEntity(Loc.GetString("rmc-mortar-covered", ("mortar", mortar)), user, user, SmallCaution);
             return false;
         }
 
@@ -126,7 +130,7 @@ public sealed partial class MortarSystem : SharedMortarSystem
         }
 
         coordinates = new MapCoordinates(Vector2.Zero, mortarCoordinates.MapId);
-        _rmcPlanet.TryGetOffset(coordinates, out var offset);
+        TryGetPlanetOffset(coordinates, out var offset);
 
         target -= offset;
         coordinates = coordinates.Offset(target);
@@ -138,7 +142,7 @@ public sealed partial class MortarSystem : SharedMortarSystem
         travelTime = default;
 
         // Check if target is on planet or in space
-        if (_rmcPlanet.IsOnPlanet(coordinates))
+        if (IsOnPlanetZLevel(coordinates))
         {
             travelTime = shell?.Comp.TravelDelay ?? default;
         }

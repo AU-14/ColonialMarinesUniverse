@@ -40,7 +40,7 @@
     accuracyMultiplierUnwielded: 5
   - type: BallisticAmmoProvider
     cycleable: false
-    proto: VehicleCartridgeLTBCannon
+    proto: CMUCartridgeLTBCannonHEAT
     capacity: 1
   - type: VehicleHardpointAmmo
     magazineSize: 1
@@ -212,6 +212,76 @@
   - type: HardpointVisual
     vehicleState: ace_autocannon_0
     damagedVehicleState: ace_autocannon_1
+
+
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankAutocannonTWE
+  name: Improper L26A2 45mm Autocannon
+  description: Tosubishi Heavy Industrial Manufacturing main gun for the FV150. Its rapid fire rate and multipurpose ammunition offers stopping power against infantry, structures, and medium armor. Careful use can even disable tanks.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    state: heavy_autocannon
+  - type: HardpointItem
+    hardpointType: Cannon
+    vehicleFamily: Tank
+    slotType: Cannon
+    damageMultiplier: 0.125
+    repairRate: 0.01
+  - type: HardpointIntegrity
+    maxIntegrity: 500
+  - type: VehicleTurretAttachment
+  - type: VehicleTurret
+    offsetRotatesWithTurret: true
+    showOverlay: true
+    useDirectionalOffsets: true
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: heavy_autocannon_0
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: Gun
+    fireRate: 1.2
+    projectileSpeed: 50
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      path: /Audio/_AU14/Weapons/vehicle/autocannon.ogg
+      params:
+        variation: 0.06
+    cameraRecoilScalar: 0
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 6
+    accuracyMultiplierUnwielded: 6
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: VehicleCartridgeAceAutocannon
+    capacity: 40
+  - type: VehicleHardpointAmmo
+    magazineSize: 40
+    maxStoredMagazines: 2
+  - type: GunFireArc
+    arc: 120
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxAceAutocannon
+  - type: GunMuzzleOffset
+    applyToMuzzleFlash: true
+    useDirectionalOffsets: true
+    rotateDirectionalOffsets: true
+    offsetEast: "0.45,-0.7"
+    offsetWest: "-0.45, -0.7"
+    offsetSouth: "0, -0.55"
+    offsetNorth: "0, -1.1"
+    useAimDirection: true
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: heavy_autocannon_0
+    damagedVehicleState: heavy_autocannon_1
 
 - type: entity
   parent: VehicleTankHardpointBase

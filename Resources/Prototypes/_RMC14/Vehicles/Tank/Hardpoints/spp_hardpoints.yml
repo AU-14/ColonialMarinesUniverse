@@ -24,7 +24,7 @@
   - type: VehicleTurret
     rotateToCursor: true
     stabilizedRotation: false
-    rotationSpeed: 60
+    rotationSpeed: 80
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/spptank.rsi
     overlayState: tank_turret_0

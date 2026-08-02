@@ -50,7 +50,8 @@ public sealed partial class GameMapPrototype : IPrototype
 
     /// <summary>
     /// CrystallEdge: Additional maps loaded below the main map (at negative depth levels).
-    /// Each map in the list is loaded at depth -N, -N+1, ..., -1, with <see cref="MapPath"/> at depth 0.
+    /// Each map in the list is loaded from top to bottom at depth -1, -2, ..., -N,
+    /// with <see cref="MapPath"/> at depth 0.
     /// </summary>
     [DataField]
     public List<ResPath> MapsBelow = new();

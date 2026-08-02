@@ -9,7 +9,7 @@ stamp-component-stamped-name-au14-upp = Union of Progressive Peoples
 stamp-component-stamped-name-au14-free-press = Free Press
 stamp-component-stamped-name-au14-twe = Three World Empire
 
-stamp-component-stamped-name-au14-ao = Adjutant Officer
+stamp-component-stamped-name-au14-ao = Executive Officer
 stamp-component-stamped-name-au14-co = Commanding Officer
 stamp-component-stamped-name-au14-so = Staff Officer
 stamp-component-stamped-name-au14-io = Intelligence Officer

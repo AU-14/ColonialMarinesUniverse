@@ -22,6 +22,10 @@
   roundProfiles:
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
+  - type: AU14CallsignRole
+    suffix: "6"
+    commandElement: true
+    category: ARMOR
   - type: Skills
     preset: AU14SkillPresetPlatoonVehicleCrewman
   - type: JobPrefix

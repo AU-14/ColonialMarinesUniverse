@@ -16,11 +16,16 @@
 
                 <Label Text="{Loc 'ui-options-cmu-chat'}" StyleClasses="LabelKeyText" />
                 <CheckBox Name="ChatGhostFollowButton" Text="{Loc 'cmu-ui-options-chat-follow-button'}" />
+                <CheckBox Name="ExamineLogInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-log-in-chat'}" />
+                <CheckBox Name="ExamineFullTextInChatCheckBox" Text="{Loc 'cmu-ui-options-examine-full-text-in-chat'}" />
 
                 <Label Text="{Loc 'cmu-ui-options-medical'}" StyleClasses="LabelKeyText" />
                 <CheckBox Name="TargetedHealingCheckBox"
                           Text="{Loc 'cmu-ui-options-targeted-healing'}"
                           ToolTip="{Loc 'cmu-ui-options-targeted-healing-tooltip'}" />
+                <CheckBox Name="AutoReapplyKitsCheckBox"
+                          Text="{Loc 'cmu-ui-options-auto-reapply-kits'}"
+                          ToolTip="{Loc 'cmu-ui-options-auto-reapply-kits-tooltip'}" />
                 <CheckBox Name="UiLessSurgeryCheckBox"
                           Text="{Loc 'cmu-ui-options-ui-less-surgery'}"
                           ToolTip="{Loc 'cmu-ui-options-ui-less-surgery-tooltip'}" />
@@ -32,6 +37,7 @@
 
                 <Label Text="{Loc 'ui-options-cmu-zlevels'}" StyleClasses="LabelKeyText" />
                 <ui:OptionSlider Name="ZLevelBlurSlider" Title="{Loc 'ui-options-zlevel-blur'}" />
+                <ui:OptionSlider Name="FaintLookUpOpacitySlider" Title="{Loc 'ui-options-faint-look-up-opacity'}" />
             </BoxContainer>
         </ScrollContainer>
         <ui:OptionsTabControlRow Name="Control" Access="Public" />

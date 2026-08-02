@@ -43,7 +43,7 @@
 - type: loadout
   id: WYJumpsuitVeteranPMCCorporateAU14
   equipment:
-    jumpsuit: AU14JumpsuitVeteranPMCCorporate
+    jumpsuit: RMCJumpsuitVeteranPMCCorporate
 
 - type: loadout
   id: WYJumpsuitVeteranPMCKutjevoAU14

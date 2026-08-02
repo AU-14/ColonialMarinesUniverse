@@ -92,6 +92,9 @@
   id: RMCRocketAmmo84mm
 
 - type: Tag
+  id: CMURocketAmmo70mm
+
+- type: Tag
   id: RMCDropshipWeaponPoint
 
 - type: Tag

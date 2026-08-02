@@ -12,6 +12,7 @@ admin-smite-turned-ash-other = {CAPITALIZE($name)} turns into a pile of ash!
 admin-smite-stomach-removal-self = Your stomach feels hollow...
 admin-smite-run-walk-swap-prompt = You have to press shift to run!
 admin-smite-super-speed-prompt = You move at mach 0.8!
+admin-smite-tile-movement-prompt = Your feet lock to the tiles beneath you!
 admin-smite-lung-removal-self = You can't breathe!
 
 ## Smite names
@@ -42,6 +43,7 @@ admin-smite-maid-name = Cat Maid
 admin-smite-zoom-in-name = Zoom In
 admin-smite-flip-eye-name = Flip Eye
 admin-smite-run-walk-swap-name = Run Walk Swap
+admin-smite-tile-movement-name = Tile Movement
 admin-smite-super-speed-name = Run Up
 admin-smite-stomach-removal-name = Stomach Removal
 admin-smite-speak-backwards-name = Speak Backwards
@@ -90,6 +92,7 @@ admin-smite-maid-description = Forcibly converts them into a janitorial cat maid
 admin-smite-zoom-in-description = Zooms in their view so that they can no longer see their surroundings.
 admin-smite-flip-eye-description = Flips their view, effectively reversing their controls and making the game annoying to play.
 admin-smite-run-walk-swap-description = Swaps running and walking, forcing them to hold shift to move fast.
+admin-smite-tile-movement-description = Forces them to move tile by tile, just like in SS13!
 admin-smite-super-speed-description = Makes them really fast, causing them to turn into gibs when hitting a wall.
 admin-smite-stomach-removal-description = Removes their stomach, rendering them unable to eat.
 admin-smite-speak-backwards-description = Forces them to speak backwards, so they can't call for help.

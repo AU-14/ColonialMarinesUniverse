@@ -141,6 +141,9 @@
     - prototype: CMUPaperSlipMedicationORed
       name: Medication slip (Red)
       description: A standardized prescription slip produced by the International Committee of the Red Cross.
+    - prototype: CMUPaperParking
+      name: Parking Ticket
+      description: A municipal parking violation notice.
     - prototype: CMUPaperPhoto
       name: photograph
       description: A photograph of a person, place, or thing. (27x27 pixel space for SS14 to Image needs.)
@@ -207,6 +210,33 @@
     - prototype: CMUPaperVAI
       name: Vanguard's Arrow Incorporated paper
       description: A sheet of paper bearing the Vanguard's Arrow Incorporated letterhead.
-#    - prototype: CMUPaperCCAF
- #     name: CCAF paper
- #     description: A sheet of paper bearing the Canadian Colonial Armed Forces letterhead. - NO INGAME METHOD FOR PLAYER TO BE INVOLVED WITH
+    - prototype: CMUPaperCCAF #recruiter has access
+      name: CCAF paper
+      description: A sheet of paper bearing the Canadian Colonial Armed Forces letterhead.
+    - prototype: CMUPaperIHRO
+      name: IHRO paper
+      description: A sheet of paper bearing the Interstellar Human Rights Organization letterhead.
+    - prototype: CMUPaperIHRO2
+      name: IHRO paper variant
+      description: A sheet of paper bearing the Interstellar Human Rights Organization letterhead.
+    - prototype: CMUPaperUN
+      name: UN paper
+      description: A sheet of paper bearing the United Nations letterhead.
+    - prototype: CMUPaperUSARMY
+      name: USARMY paper
+      description: A sheet of paper bearing the United States Army letterhead.
+    - prototype: CMUPaperFBI
+      name: FBI paper
+      description: A sheet of paper bearing the Federal Bureau of Investigation letterhead.
+    - prototype: CMUPaperCLF # Insurgents have no way to access their own paper type. + This will make the stamp of the cell leader more useful.
+      name: CLF paper
+      description: A sheet of paper bearing the Colonial Liberation Front letterhead.
+    - prototype: CMUPaperARBITER
+      name: Judge paper
+      description: A sheet of paper bearing the Orbital Arbiter's letterhead.
+    - prototype: CMUPaperARBITERVariant
+      name: Judge variant paper
+      description: A sheet of black paper bearing the Orbital Arbiter's letterhead.
+    - prototype: CMUPaperCOUNSEL
+      name: Counsel paper
+      description: A sheet of paper bearing the Orbital Counsel's letterhead.

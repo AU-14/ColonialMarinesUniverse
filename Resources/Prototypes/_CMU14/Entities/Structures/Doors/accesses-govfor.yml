@@ -220,7 +220,7 @@
   suffix: Medical, Govfor, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforMedical"]]
 
 - type: entity
   parent: CMAirlockGovforGlass
@@ -236,7 +236,7 @@
   suffix: Medical, Govfor, Glass, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforMedical"]]
 
 - type: entity
   parent: CMDoubleDoorGovfor
@@ -253,7 +253,7 @@
   suffix: Medical, Govfor, Solid, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforMedical"]]
 
 - type: entity
   parent: CMDoubleDoorGovforGlass
@@ -269,7 +269,7 @@
   suffix: Medical, Govfor, Glass, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforMedical"]]
 
 - type: entity
   parent: CMAirlockGovfor
@@ -285,7 +285,15 @@
   suffix: Engineer, Govfor, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforEngineering"]]
+
+- type: entity
+  parent: CMAirlockEngineerGovfor
+  id: CMAirlockLogisticsGovforLocked
+  suffix: Logistics, Govfor, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforReq"]]
 
 - type: entity
   parent: CMAirlockGovforGlass
@@ -301,7 +309,15 @@
   suffix: Engineer, Govfor, Glass, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforEngineering"]]
+
+- type: entity
+  parent: CMAirlockEngineerGovforGlass
+  id: CMAirlockLogisticsGovforGlassLocked
+  suffix: Logistics, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforReq"]]
 
 - type: entity
   parent: CMDoubleDoorGovfor
@@ -318,7 +334,15 @@
   suffix: Engineer, Govfor, Solid, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforEngineering"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovfor
+  id: CMDoubleDoorLogisticsGovforLocked
+  suffix: Logistics, Govfor, Solid, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforReq"]]
 
 - type: entity
   parent: CMDoubleDoorGovforGlass
@@ -334,4 +358,12 @@
   suffix: Engineer, Govfor, Glass, Locked
   components:
   - type: AccessReader
-    access: [["AU14AccessGovfor"]]
+    access: [["AU14AccessGovforEngineering"]]
+
+- type: entity
+  parent: CMDoubleDoorEngineerGovforGlass
+  id: CMDoubleDoorLogisticsGovforGlassLocked
+  suffix: Logistics, Govfor, Glass, Locked
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovforReq"]]

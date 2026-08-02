@@ -45,4 +45,8 @@ public sealed partial class RadioChannelPrototype : IPrototype
 
     [DataField]
     public string Faction = string.Empty;
+
+    // AU14: gated combat nets need relay coverage on the map, ungated channels keep stock behavior
+    [DataField]
+    public bool AnchorGated;
 }

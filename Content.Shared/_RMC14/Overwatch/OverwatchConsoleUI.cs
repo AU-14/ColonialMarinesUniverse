@@ -28,11 +28,13 @@ public enum OverwatchConsoleUI
 public sealed class OverwatchConsoleBuiState(
     List<OverwatchSquad> squads,
     Dictionary<NetEntity, List<OverwatchMarine>> marines,
-    Dictionary<NetEntity, Content.Shared._RMC14.Tracker.SquadLeader.FireteamData> fireteams) : BoundUserInterfaceState
+    Dictionary<NetEntity, Content.Shared._RMC14.Tracker.SquadLeader.FireteamData> fireteams,
+    Dictionary<NetEntity, List<OverwatchTripodCamera>> cameras) : BoundUserInterfaceState
 {
     public readonly List<OverwatchSquad> Squads = squads;
     public readonly Dictionary<NetEntity, List<OverwatchMarine>> Marines = marines;
     public readonly Dictionary<NetEntity, Content.Shared._RMC14.Tracker.SquadLeader.FireteamData> Fireteams = fireteams;
+    public readonly Dictionary<NetEntity, List<OverwatchTripodCamera>> Cameras = cameras;
 }
 
 [Serializable, NetSerializable]
@@ -202,4 +204,12 @@ public readonly record struct OverwatchMarine(
     Vector2? LeaderDistance,
     ProtoId<RankPrototype>? Rank,
     LocId? RoleOverride
+);
+
+[Serializable, NetSerializable]
+public readonly record struct OverwatchTripodCamera(
+    NetEntity Id,
+    string Name,
+    string AreaName,
+    OverwatchLocation Location
 );

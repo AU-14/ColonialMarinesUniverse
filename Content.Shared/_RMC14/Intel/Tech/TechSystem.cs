@@ -1,4 +1,6 @@
 using System.Numerics;
+using Content.Shared._CMU14.Round.Objectives;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Dropship.Fabricator;
@@ -8,7 +10,6 @@ using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared._RMC14.Scaling;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Access.Systems;
-using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.Util;
 using Content.Shared.GameTicking;
 using Content.Shared.UserInterface;
@@ -58,7 +59,7 @@ public sealed partial class TechSystem : EntitySystem
     private void OnTechAnnounce(TechAnnounceEvent ev)
     {
         var msg = Loc.GetString("rmc-announcement-message-raw", ("author", ev.Author), ("message", ev.Message));
-        _marineAnnounce.AnnounceToMarines(msg, ev.Sound);
+        _marineAnnounce.AnnounceToMarines(msg, ev.Sound, faction: ev.Team);
     }
 
     private void OnTechUnlockTier(TechUnlockTierEvent ev)
@@ -140,7 +141,7 @@ public sealed partial class TechSystem : EntitySystem
 
         // Raise a shared event so the authoritative ObjectiveMaster/Objective system can deduct AU win points server-side.
         var auAmount =option.CurrentCost;
-        var spendEv = new Content.Shared.AU14.Objectives.SpendWinPointsEvent { Team = team, Amount = auAmount };
+        var spendEv = new SpendWinPointsEvent { Team = team, Amount = auAmount };
         RaiseLocalEvent(spendEv);
 
         foreach (var ev in option.Events)

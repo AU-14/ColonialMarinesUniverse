@@ -6,7 +6,8 @@ if (args.Length == 0)
     Console.WriteLine(@"Which program to run?
 1: doorsplitter
 2: metafixer
-3: areaimporter");
+3: areaimporter
+4: dmiimporter");
     program = Console.ReadLine() ?? string.Empty;
 }
 else
@@ -28,7 +29,11 @@ else if (program == "3" || "areaimporter".Contains(program))
 {
     new AreaImporter().Run();
 }
+else if (program == "4" || "dmiimporter".Contains(program))
+{
+    DmiImporter.Run();
+}
 else
 {
-    Console.WriteLine("No valid argument given, exiting. Valid arguments: doorsplitter, metafixer");
+    Console.WriteLine("No valid argument given, exiting. Valid arguments: doorsplitter, metafixer, areaimporter, dmiimporter");
 }

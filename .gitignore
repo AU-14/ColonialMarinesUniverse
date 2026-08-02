@@ -301,6 +301,10 @@ desktop.ini
 # Images generated using the MapRenderer
 Resources/MapImages
 
+# AU14 in-game construction editor output is runtime/server data.
+# Live servers restore their own generated entries from their database.
+Resources/Prototypes/_AU14/CustomConstruction/Generated/
+
 ## Docfx stuff
 /Content.Docfx/api/
 /Content.Docfx/*site
@@ -312,3 +316,8 @@ Resources/MapImages
 
 # Vibe stuff
 settings.local.json
+yaml-linter-stderr.txt
+yaml-linter-stdout.txt
+pr1600_inline.json
+pr1600_issue.json
+pr1600_reviews.json

@@ -83,6 +83,8 @@ namespace Content.Client.Voting.UI
                 button.OnPressed += _ => _voteManager.SendCastVote(vote.Id, i1);
             }
 
+            MinimizeButton.OnPressed += _ => SetMinimized(true);
+            RestoreButton.OnPressed += _ => SetMinimized(false);
             ReflowOptions(GetRawOptionTexts());
         }
 
@@ -147,7 +149,7 @@ namespace Content.Client.Voting.UI
         {
             VoteTitle.SetMessage(FormattedMessage.FromUnformatted(_vote.Title));
             VoteCaller.Text = Loc.GetString("ui-vote-created", ("initiator", _vote.Initiator));
-
+            MinimizedTitle.Text = _vote.Title;
             var buttonTexts = new string[_voteButtons.Length];
 
             for (var i = 0; i < _voteButtons.Length; i++)
@@ -285,10 +287,30 @@ namespace Content.Client.Voting.UI
             // Round up a second.
             timeLeft = TimeSpan.FromSeconds(Math.Ceiling(timeLeft.TotalSeconds));
 
-            TimeLeftBar.Value = Math.Min(1, (float) ((curTime.TotalSeconds - _vote.StartTime.TotalSeconds) /
-                                                     (_vote.EndTime.TotalSeconds - _vote.StartTime.TotalSeconds)));
+            TimeLeftBar.Value = Math.Min(1, (float) ((curTime.TotalSeconds - _vote.StartTime.TotalSeconds)
+                / (_vote.EndTime.TotalSeconds - _vote.StartTime.TotalSeconds)));
 
             TimeLeftText.Text = $"{timeLeft:m\\:ss}";
+            if (MinimizedContent.Visible)
+                MinimizedTimeLeft.Text = $"{timeLeft:m\\:ss}";
+        }
+
+        private void SetMinimized(bool minimized)
+        {
+            MainContent.Visible = !minimized;
+            MinimizedContent.Visible = minimized;
+
+            if (minimized)
+            {
+                MinWidth = 280;
+                MaxWidth = 400;
+                MinimizedTitle.Text = _vote.Title;
+            }
+            else
+            {
+                MinWidth = 560;
+                MaxWidth = 1280;
+            }
         }
     }
 }

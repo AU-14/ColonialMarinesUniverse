@@ -330,6 +330,38 @@
 - type: entity
   parent: RMCJug
   name: jug
+  suffix: uranium
+  id: RMCJugUranium
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Label
+      currentLabel: reagent-name-uranium
+    - type: SolutionContainerManager
+      solutions:
+        beaker:
+          reagents:
+            - ReagentId: RMCUranium
+              Quantity: 200
+
+- type: entity
+  parent: RMCJug
+  name: jug
+  suffix: platinum
+  id: RMCJugPlatinum
+  categories: [ HideSpawnMenu ]
+  components:
+    - type: Label
+      currentLabel: reagent-name-platinum
+    - type: SolutionContainerManager
+      solutions:
+        beaker:
+          reagents:
+            - ReagentId: RMCPlatinum
+              Quantity: 200
+
+- type: entity
+  parent: RMCJug
+  name: jug
   suffix: mercury
   id: RMCJugMercury
   categories: [ HideSpawnMenu ]

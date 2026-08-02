@@ -1804,7 +1804,7 @@ entities:
       pos: 62.5,234.5
       parent: 2
     - type: CaptureObjective
-      pointincrementtime: 360
+      pointIncrementTime: 360
 - proto: Cigarette
   entities:
   - uid: 76

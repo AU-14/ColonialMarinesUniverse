@@ -235,9 +235,14 @@ public abstract partial class SharedHandsSystem : EntitySystem
         var locUser = ("user", Identity.Entity(examinedUid, EntityManager));
         var locItems = ("items", ContentLocalizationManager.FormatList(heldItemNames));
 
-        using (args.PushGroup(nameof(HandsComponent)))
+        // AU14 examine (ported from WWDP)
+        if (args.Examiner == args.Examined) // Use the selfaware locale when inspecting yourself
+            locKey += "-selfaware";
+
+        using (args.PushGroup(nameof(HandsComponent), 99)) // priority for examine
         {
-            args.PushMarkup(Loc.GetString(locKey, locUser, locItems));
+            args.PushMarkup("- " + Loc.GetString(locKey, locUser, locItems)); // "-" for better formatting
         }
+        // AU14 edit end
     }
 }

@@ -54,6 +54,14 @@ public sealed partial class MiscTab : Control
 
         Control.AddOptionDropDown(CVars.InterfaceTheme, DropDownHudTheme, themeEntries);
         Control.AddOptionDropDown(CCVars.UILayout, DropDownHudLayout, layoutEntries);
+        // AU14: viewport centering for the Separated layout (chat panel otherwise pushes the view left).
+        Control.AddOptionCheckBox(Content.Shared._AU14.CCVar.AU14CCVars.CenterSeparatedViewport, CenterSeparatedViewportCheckBox);
+        var separatedHudStatusSideEntries = new List<OptionDropDownCVar<string>.ValueOption>
+        {
+            new("right", Loc.GetString("au14-ui-options-separated-hud-status-side-right")),
+            new("left", Loc.GetString("au14-ui-options-separated-hud-status-side-left")),
+        };
+        Control.AddOptionDropDown(Content.Shared._AU14.CCVar.AU14CCVars.SeparatedHudStatusSide, SeparatedHudStatusSideDropdown, separatedHudStatusSideEntries);
 
         Control.AddOptionCheckBox(CVars.DiscordEnabled, DiscordRich);
         Control.AddOptionCheckBox(CCVars.ShowOocPatronColor, ShowOocPatronColor);
@@ -64,6 +72,13 @@ public sealed partial class MiscTab : Control
         Control.AddOptionCheckBox(CCVars.ChatEnableFancyBubbles, FancySpeechBubblesCheckBox);
         Control.AddOptionCheckBox(CCVars.ChatFancyNameBackground, FancyNameBackgroundsCheckBox);
         Control.AddOptionCheckBox(CCVars.StaticStorageUI, StaticStorageUI);
+        // CMU14
+        var constructionModeEntries = new List<OptionDropDownCVar<bool>.ValueOption>
+        {
+            new(true, Loc.GetString("cmu-ui-options-construction-mode-improved")),
+            new(false, Loc.GetString("cmu-ui-options-construction-mode-default")),
+        };
+        Control.AddOptionDropDown(CCVars.ConstructionMenuImproved, DropDownConstructionMode, constructionModeEntries);
 
         Control.AddOptionCheckBox(RMCCVars.RMCAutoPunctuate, RMCAutoPunctuate);
         Control.AddOptionCheckBox(RMCCVars.RMCAutoEjectMagazines, RMCAutoEjectMagazines);

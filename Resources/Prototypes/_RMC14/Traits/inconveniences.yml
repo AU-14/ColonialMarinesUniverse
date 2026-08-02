@@ -94,3 +94,16 @@
   category: Disabilities
   components:
     - type: NicotineAddiction
+
+- type: trait
+  id: Nearsighted
+  name: au14-trait-nearsighted-name
+  description: au14-trait-nearsighted-desc
+  category: Disabilities
+  traitGear: RMCHipsterGlasses
+  whitelist:
+    components:
+      - Blindable
+  components:
+    - type: PermanentBlindness
+      blindness: 4

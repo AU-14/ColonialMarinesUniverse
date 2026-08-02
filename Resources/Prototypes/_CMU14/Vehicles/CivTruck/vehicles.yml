@@ -1,0 +1,113 @@
+- type: entity
+  parent: VehicleVanBase
+  id: AU14VehicleCivVan
+  name: Civilian van
+  description: An old military van. This one seems to be working for civilians
+  components:
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: VehicleFrameCLFVan
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    layers:
+    - map: [ base ]
+      state: van_base
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: VehicleSound
+    collisionSoundCooldown: 1.5
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/van_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 10
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,-1
+      radius: 0.6
+      interiorCoords: 3.25,0
+    - offset: -1,-1
+      radius: 0.6
+      interiorCoords: 3.25,-1
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: 0.25,-1
+
+- type: entity
+  parent: VehicleVanBase
+  id: AU14VehicleCivTruck
+  name: Civilian truck
+  description: An old military truck. This one seems to be working for civilians
+  components:
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: VehicleFrameCLFVan
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    layers:
+    - map: [ base ]
+      state: truck_base
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: VehicleSound
+    collisionSoundCooldown: 1.5
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 0,0
+      radius: 0.1
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+
+- type: entity
+  parent: VehicleVanBase
+  id: AU14VehicleCivArmoredTruck
+  name: Civilian armored truck
+  description: An old military truck. This one seems to be working for civilians. It has been modernized for military purposes
+  components:
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: VehicleFrameCLFVan
+  - type: Sprite
+    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    layers:
+    - map: [ base ]
+      state: armored_base
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: VehicleSound
+    collisionSoundCooldown: 1.5
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicleinteriors/Civillians/truck_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 4
+    maxXenos: 1
+    entryPoints:
+    - offset: 0,0
+      radius: 0.1
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: 3.5,-0.5

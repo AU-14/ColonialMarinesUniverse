@@ -270,50 +270,35 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
     private SoundSpecifier? GetMoveSound(Entity<MarineOrdersComponent> orders)
     {
-        // Check entity's gender from HumanoidAppearanceComponent
         if (TryComp<HumanoidAppearanceComponent>(orders.Owner, out var appearance))
         {
-            if (appearance.Sex == Sex.Male && orders.Comp.MoveOrderSoundMale != null)
-                return orders.Comp.MoveOrderSoundMale;
-
             if (appearance.Sex == Sex.Female && orders.Comp.MoveOrderSoundFemale != null)
                 return orders.Comp.MoveOrderSoundFemale;
         }
 
-        // Fallback to male sound
-        return orders.Comp.MoveOrderSound ?? orders.Comp.MoveOrderSoundMale;
+        return orders.Comp.MoveOrderSoundMale;
     }
 
     private SoundSpecifier? GetFocusSound(Entity<MarineOrdersComponent> orders)
     {
-        // Check entity's gender from HumanoidAppearanceComponent
         if (TryComp<HumanoidAppearanceComponent>(orders.Owner, out var appearance))
         {
-            if (appearance.Sex == Sex.Male && orders.Comp.FocusOrderSoundMale != null)
-                return orders.Comp.FocusOrderSoundMale;
-
             if (appearance.Sex == Sex.Female && orders.Comp.FocusOrderSoundFemale != null)
                 return orders.Comp.FocusOrderSoundFemale;
         }
 
-        // Fallback to male sound
-        return orders.Comp.FocusOrderSound ?? orders.Comp.FocusOrderSoundMale;
+        return orders.Comp.FocusOrderSoundMale;
     }
 
     private SoundSpecifier? GetHoldSound(Entity<MarineOrdersComponent> orders)
     {
-        // Check entity's gender from HumanoidAppearanceComponent
         if (TryComp<HumanoidAppearanceComponent>(orders.Owner, out var appearance))
         {
-            if (appearance.Sex == Sex.Male && orders.Comp.HoldOrderSoundMale != null)
-                return orders.Comp.HoldOrderSoundMale;
-
             if (appearance.Sex == Sex.Female && orders.Comp.HoldOrderSoundFemale != null)
                 return orders.Comp.HoldOrderSoundFemale;
         }
 
-        // Fallback to male sound
-        return orders.Comp.HoldOrderSound ?? orders.Comp.HoldOrderSoundMale;
+        return orders.Comp.HoldOrderSoundMale;
     }
 
     /// <summary>
