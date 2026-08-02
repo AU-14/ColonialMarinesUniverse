@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Client.Administration.Managers;
 using Content.Client.Administration.UI.CustomControls;
 using Content.Client.Administration.UI.Tabs.AdminTab;
 using Content.IntegrationTests.Pair;
@@ -73,6 +74,62 @@ public sealed class YautjaClanAdminEntryTest
                 tab.DisposeAllChildren();
             }
         });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ClanPermissionSurvivesAdminStatusNetworkMessage()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var session = pair.Player!;
+        var db = server.ResolveDependency<IServerDbManager>();
+        var adminManager = (AdminManager) server.ResolveDependency<IAdminManager>();
+        var adminRecord = new Admin
+        {
+            UserId = session.UserId.UserId,
+            Flags = Flags(AdminFlags.Admin | AdminFlags.Clans),
+        };
+
+        try
+        {
+            await server.WaitPost(() => server.CfgMan.SetCVar(CCVars.ConsoleLoginLocal, false));
+            await db.AddAdminAsync(adminRecord);
+            await ReloadAdmin(pair, adminManager, session, AdminFlags.Admin | AdminFlags.Clans);
+
+            await pair.Client.WaitAssertion(() =>
+            {
+                var clientAdmin = pair.Client.ResolveDependency<IClientAdminManager>();
+                Assert.That(clientAdmin.GetAdminData()?.Flags, Is.EqualTo(AdminFlags.Admin | AdminFlags.Clans));
+
+                var tab = new AdminTab();
+                try
+                {
+                    var button = Descendants(tab)
+                        .OfType<CommandButton>()
+                        .Single(entry => entry.Command == "yautja_clan_admin");
+
+                    Assert.That(button.Visible, Is.True);
+                }
+                finally
+                {
+                    tab.DisposeAllChildren();
+                }
+            });
+        }
+        finally
+        {
+            if (await db.GetAdminDataForAsync(session.UserId) != null)
+                await db.RemoveAdminAsync(session.UserId);
+
+            await server.WaitPost(() =>
+                server.CfgMan.SetCVar(CCVars.ConsoleLoginLocal, CCVars.ConsoleLoginLocal.DefaultValue));
+        }
 
         await pair.CleanReturnAsync();
     }
