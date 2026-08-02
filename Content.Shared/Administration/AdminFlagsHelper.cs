@@ -12,7 +12,7 @@ namespace Content.Shared.Administration
         // writing this class was genuinely fun.
 
         private static readonly Dictionary<string, AdminFlags> NameFlagsMap = new();
-        private static readonly string[] FlagsNameMap = new string[32];
+        private static readonly string[] FlagsNameMap = new string[64];
 
         /// <summary>
         ///     Every admin flag in the game, at once!
@@ -36,7 +36,7 @@ namespace Content.Shared.Administration
 
                 // If, in the future, somebody adds a combined admin flag or something for convenience,
                 // ignore it.
-                if (BitOperations.PopCount((uint) value) != 1)
+                if (BitOperations.PopCount((ulong) value) != 1)
                 {
                     continue;
                 }
@@ -44,7 +44,7 @@ namespace Content.Shared.Administration
                 allFlags.Add(value);
                 Everything |= value;
                 NameFlagsMap.Add(name, value);
-                FlagsNameMap[BitOperations.Log2((uint) value)] = name;
+                FlagsNameMap[BitOperations.Log2((ulong) value)] = name;
             }
 
             AllFlags = allFlags.ToArray();
@@ -89,18 +89,23 @@ namespace Content.Shared.Administration
             return NameFlagsMap[name];
         }
 
+        public static bool TryNameToFlag(string name, out AdminFlags flag)
+        {
+            return NameFlagsMap.TryGetValue(name, out flag);
+        }
+
         /// <summary>
         ///     Converts a bitfield of admin flags to an array of all the flag names set.
         /// </summary>
         public static string[] FlagsToNames(AdminFlags flags)
         {
-            var array = new string[BitOperations.PopCount((uint) flags)];
-            var highest = BitOperations.LeadingZeroCount((uint) flags);
+            var array = new string[BitOperations.PopCount((ulong) flags)];
+            var highest = BitOperations.LeadingZeroCount((ulong) flags);
 
             var ai = 0;
-            for (var i = 0; i < 32 - highest; i++)
+            for (var i = 0; i < 64 - highest; i++)
             {
-                var flagValue = (AdminFlags) (1u << i);
+                var flagValue = (AdminFlags) (1ul << i);
                 if ((flags & flagValue) != 0)
                 {
                     array[ai++] = FlagsNameMap[i];
@@ -117,6 +122,20 @@ namespace Content.Shared.Administration
 
             var flagsText = string.Join(' ', posFlagNames.Concat(negFlagNames).OrderBy(f => f.flag).Select(p => p.fText));
             return flagsText;
+        }
+
+        /// <summary>
+        ///     Checks whether an administrator may assign a set of flags.
+        /// </summary>
+        /// <remarks>
+        ///     Host administrators may assign the Clans flag without having it themselves,
+        ///     but they still cannot assign any other flag they do not possess.
+        /// </remarks>
+        public static bool CanGrant(AdminFlags actorFlags, AdminFlags requestedFlags)
+        {
+            var missingFlags = requestedFlags & ~actorFlags;
+            return missingFlags == AdminFlags.None ||
+                   missingFlags == AdminFlags.Clans && (actorFlags & AdminFlags.Host) != AdminFlags.None;
         }
     }
 }

@@ -1,5 +1,7 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Client.Administration.Managers;
 using Content.Client.Guidebook.Richtext;
+using Content.Shared.Administration;
 using Robust.Client.Console;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -11,6 +13,11 @@ namespace Content.Client.Administration.UI.CustomControls
     {
         public string? Command { get; set; }
 
+        /// <summary>
+        ///     An optional admin flag required to display this command button.
+        /// </summary>
+        public AdminFlags RequiredAdminFlag { get; set; }
+
         public CommandButton()
         {
             OnPressed += Execute;
@@ -18,8 +25,20 @@ namespace Content.Client.Administration.UI.CustomControls
 
         protected virtual bool CanPress()
         {
+            var adminFlags = IoCManager.Resolve<IClientAdminManager>().GetAdminData()?.Flags ?? AdminFlags.None;
+            if (!HasRequiredAdminFlag(adminFlags, RequiredAdminFlag))
+            {
+                return false;
+            }
+
             return string.IsNullOrEmpty(Command) ||
                    IoCManager.Resolve<IClientConGroupController>().CanCommand(Command.Split(' ')[0]);
+        }
+
+        public static bool HasRequiredAdminFlag(AdminFlags currentFlags, AdminFlags requiredAdminFlag)
+        {
+            return requiredAdminFlag == AdminFlags.None ||
+                   (currentFlags & requiredAdminFlag) == requiredAdminFlag;
         }
 
         protected override void EnteredTree()

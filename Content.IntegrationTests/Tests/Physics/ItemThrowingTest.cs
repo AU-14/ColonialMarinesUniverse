@@ -1,13 +1,33 @@
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Damage.Components;
+using Content.Shared.Physics;
 using Content.Shared.Throwing;
 using Robust.Server.GameObjects;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 
 namespace Content.IntegrationTests.Tests.Physics;
 
 public sealed class ItemThrowingTest : InteractionTest
 {
+    [Test]
+    [TestOf(typeof(ThrownItemComponent))]
+    public async Task TestThrownItemsUseHardCollisionOnHunterShipWalls()
+    {
+        await SpawnTarget("CMUHunterShipWallTurfClosedWallHuntershipHunterBase");
+        var pen = await PlaceInHands("Pen");
+
+        Assert.That(await ThrowItem(), Is.True);
+        await RunTicks(1);
+
+        var fixtures = Comp<FixturesComponent>(pen);
+        Assert.That(fixtures.Fixtures.TryGetValue("throw-fixture", out var thrownFixture), Is.True);
+        Assert.That(thrownFixture!.Hard, Is.True,
+            "The active throw fixture must participate in physical collision resolution.");
+        Assert.That(thrownFixture.CollisionLayer & (int) CollisionGroup.ThrownItem, Is.Not.EqualTo(0),
+            "The active throw fixture must advertise the thrown-item collision layer to ship walls.");
+    }
+
     /// <summary>
     /// Check that an egg breaks when thrown at a wall.
     /// </summary>
@@ -108,4 +128,3 @@ public sealed class ItemThrowingTest : InteractionTest
         AssertDeleted(pen);
     }
 }
-

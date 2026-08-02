@@ -1,5 +1,6 @@
 using Content.Server.StatusEffectNew;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
@@ -38,6 +39,12 @@ public sealed partial class CMUAnesthesiaSystem : EntitySystem
         Entity<CMUHumanMedicalComponent> ent,
         ref CMUInternalsChangedEvent args)
     {
+        if (HasComp<YautjaComponent>(ent))
+        {
+            ClearAnesthesia(ent);
+            return;
+        }
+
         if (args.Working &&
             args.GasTank is { } tank &&
             !HasComp<SynthComponent>(ent) &&

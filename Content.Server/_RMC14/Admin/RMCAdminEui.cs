@@ -93,8 +93,8 @@ public sealed partial class RMCAdminEui : BaseEui
 
         var mobState = entities.System<MobStateSystem>();
         var xenos = new List<Xeno>();
-        var xenoQuery = entities.EntityQueryEnumerator<ActorComponent, XenoComponent, MetaDataComponent>();
-        while (xenoQuery.MoveNext(out var uid, out _, out _, out var metaData))
+        var xenoQuery = entities.EntityQueryEnumerator<XenoComponent, MetaDataComponent>();
+        while (xenoQuery.MoveNext(out var uid, out _, out var metaData))
         {
             if (metaData.EntityPrototype is not { } proto)
                 continue;

@@ -39,6 +39,8 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared._CMU14.GasMask;
+using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Smoke;
 using Content.Shared.Storage;
 using Robust.Shared.Containers;
 
@@ -765,6 +767,13 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                     }
                     if (blocked)
                         continue;
+                }
+
+                if (HasComp<YautjaComponent>(user) &&
+                    HasComp<EvenSmokeComponent>(contact) &&
+                    _random.Prob(0.75f))
+                {
+                    continue;
                 }
 
                 if (damage.Damage != null)

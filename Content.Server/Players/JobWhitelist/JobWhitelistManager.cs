@@ -78,7 +78,7 @@ public sealed partial class JobWhitelistManager : IPostInjectInit
 
     public bool IsAllowed(ICommonSession session, ProtoId<JobPrototype> job)
     {
-        if (!_config.GetCVar(CCVars.GameRoleWhitelist))
+        if (!_config.GetCVar(CCVars.GameRoleWhitelist) && job.Id != YautjaHunterJob)
             return true;
 
         // RMC14-Whitelist-Tweak-Start

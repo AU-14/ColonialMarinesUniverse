@@ -289,6 +289,13 @@ namespace Content.Client.Administration.UI
             }
         }
 
+        private bool CanGrantFlag(AdminFlags flag)
+        {
+            return AdminFlagsHelper.CanGrant(
+                _adminManager.GetAdminData()?.Flags ?? AdminFlags.None,
+                flag);
+        }
+
         private void OnEditRankPressed(KeyValuePair<int, PermissionsEuiState.AdminRankData> rank)
         {
             OpenRankEditWindow(rank);
@@ -411,7 +418,7 @@ namespace Content.Client.Administration.UI
                 {
                     // Can only grant out perms you also have yourself.
                     // Primarily intended to prevent people giving themselves +HOST with +PERMISSIONS but generalized.
-                    var disable = !ui._adminManager.HasFlag(flag);
+                    var disable = !ui.CanGrantFlag(flag);
                     var flagName = flag.ToString().ToUpper();
 
                     var group = new ButtonGroup();
@@ -574,7 +581,7 @@ namespace Content.Client.Administration.UI
                 {
                     // Can only grant out perms you also have yourself.
                     // Primarily intended to prevent people giving themselves +HOST with +PERMISSIONS but generalized.
-                    var disable = !ui._adminManager.HasFlag(flag);
+                    var disable = !ui.CanGrantFlag(flag);
                     var flagName = flag.ToString().ToUpper();
 
                     var checkBox = new CheckBox

@@ -434,7 +434,8 @@ namespace Content.Server.Administration.UI
 
         private bool UserAdminFlagCheck(AdminFlags flags)
         {
-            return _adminManager.HasAdminFlag(Player, flags);
+            var data = _adminManager.GetAdminData(Player);
+            return data != null && AdminFlagsHelper.CanGrant(data.Flags, flags);
         }
 
         private bool CanTouchAdmin(Admin admin)

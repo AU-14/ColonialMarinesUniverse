@@ -24,6 +24,48 @@
   - AUColonist
   - CMUAPE
   - CMUYautja
+  - CMUXenoAlpha
+  - CMUXenoForsaken
+
+- type: npcFaction
+  id: CMUXenoAlpha
+  name: Hunter Ship Alpha Xenos
+  hostile:
+  - CMUXenoForsaken
+  - RMCXeno
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE
+  - CMUYautja
+
+- type: npcFaction
+  id: CMUXenoForsaken
+  name: Hunter Ship Forsaken Xenos
+  hostile:
+  - CMUXenoAlpha
+  - RMCXeno
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+  - CMUAPE
+  - CMUYautja
 
 - type: npcFaction
   id: CMUAPE

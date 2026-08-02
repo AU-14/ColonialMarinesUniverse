@@ -49,11 +49,14 @@ public sealed partial class XenoEggVisualizerSystem : EntitySystem
             _ => null
         };
 
-        if (string.IsNullOrWhiteSpace(state))
+        if (!XenoEggStateResolver.TryResolve(
+                state,
+                candidate => res.RSI.TryGetState(candidate, out _),
+                out var resolvedState))
             return;
 
         if (_sprite.LayerMapTryGet((ent.Owner, sprite), XenoEggLayers.Base, out var layer, false))
-            _sprite.LayerSetRsiState((ent.Owner, sprite), layer, state);
+            _sprite.LayerSetRsiState((ent.Owner, sprite), layer, resolvedState);
     }
 
     private void OnStartup(Entity<DestroyedXenoEggComponent> ent, ref ComponentStartup args)

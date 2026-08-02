@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Core;
@@ -112,6 +113,13 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
 
     public bool AddShrapnel(EntityUid part, int fragments, float severity)
     {
+        if (TryComp<BodyPartComponent>(part, out var bodyPart) &&
+            bodyPart.Body is { } body &&
+            HasComp<YautjaComponent>(body))
+        {
+            return false;
+        }
+
         if (fragments <= 0 || severity <= 0f)
             return false;
 
