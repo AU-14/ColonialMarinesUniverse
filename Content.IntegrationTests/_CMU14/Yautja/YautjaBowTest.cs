@@ -29,10 +29,12 @@ using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Inventory;
 using Content.Shared._RMC14.Item;
+using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Line;
 using Content.Shared._RMC14.Projectiles;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Slow;
+using Content.Shared.Standing;
 using Content.Shared._RMC14.Tether;
 using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared._RMC14.Weapons.Ranged;
@@ -2602,7 +2604,8 @@ public sealed class YautjaBowTest
                         Assert.That(meta.EntityName, Is.EqualTo("medicomp"), $"{row.Id} CMSS13 source name");
                         Assert.That(meta.EntityDescription, Is.EqualTo("A complex kit of alien tools and medicines."),
                             $"{row.Id} CMSS13 source description");
-                        Assert.That(item.Size.Id, Is.EqualTo("Normal"), $"{row.Id} CMSS13 w_class = SIZE_MEDIUM");
+                        Assert.That(item.Size.Id, Is.EqualTo("Small"),
+                            $"{row.Id} uses the local Small outer size so it fits a Yautja pocket.");
                         Assert.That(clothing.Slots, Is.EqualTo(SlotFlags.SUITSTORAGE), $"{row.Id} CMSS13 flags_equip_slot = SLOT_STORE");
                         Assert.That(storage.MaxItemSize, Is.EqualTo("Normal"), $"{row.Id} should accept source medicomp contents.");
                         Assert.That(limited.Limits, Has.Count.EqualTo(1), $"{row.Id} CMSS13 storage_slots = 12");
@@ -3286,21 +3289,11 @@ public sealed class YautjaBowTest
 
                         Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleWristBlades"),
                             "CMSS13 soldier bracer bracer_actions includes wristblade.");
-                        Assert.That(actionIds, Does.Contain("CMUActionYautjaCreateStabilisingCrystal"),
-                            "CMSS13 soldier bracer bracer_actions includes thwei.");
-                        Assert.That(actionIds, Does.Contain("CMUActionYautjaCreateHealingCapsule"),
-                            "CMSS13 soldier bracer bracer_actions includes capsule.");
-                        Assert.That(actionIds, Does.Contain("CMUActionYautjaTranslator"),
-                            "CMSS13 soldier bracer bracer_actions includes translator.");
-                        Assert.That(actionIds, Does.Contain("CMUActionYautjaSelfDestruct"),
-                            "CMSS13 soldier bracer bracer_actions includes self_destruct.");
+                        Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCreateHealingCapsule"),
+                            "Healing capsule is exposed through the Yautja bracer menu, not the action bar.");
                         Assert.That(actionIds, Is.EquivalentTo(new[]
                         {
                             "CMUActionYautjaToggleWristBlades",
-                            "CMUActionYautjaCreateStabilisingCrystal",
-                            "CMUActionYautjaCreateHealingCapsule",
-                            "CMUActionYautjaTranslator",
-                            "CMUActionYautjaSelfDestruct",
                         }), "CMSS13 soldier bracer replaces the inherited bracer_actions list instead of keeping normal hunter bracer actions.");
                     }
 
@@ -3379,6 +3372,27 @@ public sealed class YautjaBowTest
                 if (row.Sprite is { } sprite && row.State is { } state)
                     AssertPrototypeIconState(prototypes, factory, row.Id, sprite, state);
             }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaMcasteWornVisualsUseWorldStates()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var client = pair.Client;
+
+        await client.WaitAssertion(() =>
+        {
+            var prototypes = client.ResolveDependency<IPrototypeManager>();
+            var factory = client.ResolveDependency<IComponentFactory>();
+
+            AssertClothingVisualState(prototypes, factory, "CMUYautjaPoweredArmor", "outerClothing", "fullarmor_soldier");
+            AssertClothingVisualState(prototypes, factory, "CMUYautjaPoweredArmorEnforcer", "outerClothing", "fullarmor_soldier_lead");
+            AssertClothingVisualState(prototypes, factory, "CMUYautjaPoweredGreaves", "shoes", "y-boots_powered");
+            AssertClothingVisualState(prototypes, factory, "CMUYautjaPoweredHelmet", "head", "helmet_powered");
+            AssertClothingVisualState(prototypes, factory, "CMUYautjaCannonPack", "back", "cannonpack");
         });
 
         await pair.CleanReturnAsync();
@@ -3584,6 +3598,126 @@ public sealed class YautjaBowTest
     }
 
     [Test]
+    public async Task CannonPackReturnsThrownInternalCannonsLikeCmss13()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var actions = entMan.System<ActionContainerSystem>();
+            var inventory = entMan.System<InventorySystem>();
+            var hands = entMan.System<SharedHandsSystem>();
+            var throwing = entMan.System<Content.Server.Hands.Systems.HandsSystem>();
+
+            var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var pack = entMan.SpawnEntity("CMUYautjaCannonPack", map.GridCoords);
+
+            try
+            {
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                Assert.That(inventory.TryEquip(hunter, pack, "back", silent: true, force: true), Is.True);
+
+                var getActions = new GetItemActionsEvent(actions, hunter, pack, SlotFlags.BACK);
+                entMan.EventBus.RaiseLocalEvent(pack, getActions);
+                var action = getActions.Actions.Single();
+                var actionComp = entMan.GetComponent<ActionComponent>(action);
+                var packComp = entMan.GetComponent<YautjaCannonPackComponent>(pack);
+                var cannon = packComp.Cannon!.Value;
+
+                RaiseUsePlasmaCannons(entMan, pack, hunter, action, actionComp);
+                Assert.That(hands.IsHolding(hunter, cannon), Is.True);
+
+                Assert.That(throwing.ThrowHeldItem(hunter, map.GridCoords.Offset(new Vector2(3, 0))), Is.False,
+                    "A cannon linked to its pack cancels the throw before it can leave the hand.");
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(packComp.CannonContainer!.Contains(cannon), Is.True,
+                        "CMSS13 cannon/dropped() returns a thrown cannon to its source pack instead of leaving it on the map.");
+                    Assert.That(packComp.CannonsDeployed, Is.False,
+                        "Returning a thrown cannon clears source.cannons_deployed.");
+                    Assert.That(actionComp.Toggled, Is.False,
+                        "Returning a thrown cannon deactivates the pack action.");
+                    Assert.That(hands.IsHolding(hunter, cannon), Is.False);
+                    Assert.That(entMan.HasComponent<ThrownItemComponent>(cannon), Is.False,
+                        "The returned cannon must not keep an active throw state.");
+                });
+            }
+            finally
+            {
+                foreach (var uid in new[] { hunter, pack })
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CannonPackQDropRetractsInternalCannonsBeforeTheyReachTheFloor()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var actions = entMan.System<ActionContainerSystem>();
+            var inventory = entMan.System<InventorySystem>();
+            var hands = entMan.System<SharedHandsSystem>();
+
+            var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var pack = entMan.SpawnEntity("CMUYautjaCannonPack", map.GridCoords);
+
+            try
+            {
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                Assert.That(inventory.TryEquip(hunter, pack, "back", silent: true, force: true), Is.True);
+
+                var getActions = new GetItemActionsEvent(actions, hunter, pack, SlotFlags.BACK);
+                entMan.EventBus.RaiseLocalEvent(pack, getActions);
+                var action = getActions.Actions.Single();
+                var actionComp = entMan.GetComponent<ActionComponent>(action);
+                var packComp = entMan.GetComponent<YautjaCannonPackComponent>(pack);
+                var cannon = packComp.Cannon!.Value;
+
+                RaiseUsePlasmaCannons(entMan, pack, hunter, action, actionComp);
+                Assert.That(hands.IsHolding(hunter, cannon), Is.True);
+
+                var qDropCoordinates = map.GridCoords.Offset(new Vector2(2, 0));
+                Assert.That(hands.TryDrop(hunter, cannon, qDropCoordinates), Is.False,
+                    "Q-drop must be intercepted before its target coordinates can pull the cannon back out of the pack.");
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(packComp.CannonContainer!.Contains(cannon), Is.True,
+                        "The linked cannon must be inside its source pack after Q-drop.");
+                    Assert.That(packComp.CannonsDeployed, Is.False);
+                    Assert.That(actionComp.Toggled, Is.False);
+                    Assert.That(hands.IsHolding(hunter, cannon), Is.False);
+                });
+            }
+            finally
+            {
+                foreach (var uid in new[] { hunter, pack })
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task CannonPackUnequipRetractsDeployedInternalCannonsLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -3654,6 +3788,9 @@ public sealed class YautjaBowTest
         {
             var entMan = server.EntMan;
             var examine = entMan.System<ExamineSystem>();
+            var loc = server.ResolveDependency<ILocalizationManager>();
+            var previousCulture = loc.DefaultCulture;
+            loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
 
             var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var pack = entMan.SpawnEntity("CMUYautjaCannonPack", map.GridCoords);
@@ -3667,16 +3804,23 @@ public sealed class YautjaBowTest
                 var actionComp = entMan.GetComponent<ActionComponent>(action);
                 packComp.Charge = 40;
 
-                Assert.That(examine.GetExamineText(pack, hunter).ToMarkup(),
-                    Does.Contain("It currently has <bold>40/2000</bold> charge."),
+                var examineText = examine.GetExamineText(pack, hunter).ToMarkup();
+                var chargeLine = examineText.Split('\n').Single(line => line.Contains("It currently has"));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(chargeLine,
+                        Does.Contain("It currently has 40/2000 charge."),
                     "CMSS13 /obj/item/yautja_cannon_pack/get_examine_text() exposes current/max pack charge.");
+                    Assert.That(chargeLine, Does.Not.Contain("bold"),
+                        "The cannon pack charge text must not leak formatting tags into the examine output.");
+                });
                 Assert.That(Loc.GetString(
                         "cmu-yautja-cannon-pack-drain-failed",
                         ("charge", 40),
                         ("max", 2000),
                         ("amount", 50)),
-                    Is.EqualTo("Your pack lacks the energy. It only has <bold>40/2000</bold> remaining and needs <bold>50</bold>."),
-                    "CMSS13 drain_power() warning bolds current/max and requested charge.");
+                    Is.EqualTo("Your pack lacks the energy. It only has 40/2000 remaining and needs 50."),
+                    "Popup rendering is plain text; rich markup belongs only to examine output.");
 
                 var deploy = new YautjaUsePlasmaCannonsActionEvent
                 {
@@ -3696,6 +3840,9 @@ public sealed class YautjaBowTest
             }
             finally
             {
+                if (previousCulture != null)
+                    loc.SetCulture(previousCulture);
+
                 foreach (var uid in new[] { hunter, pack, action })
                 {
                     if (!entMan.Deleted(uid))
@@ -4203,6 +4350,107 @@ public sealed class YautjaBowTest
             {
                 var entMan = server.EntMan;
                 foreach (var uid in new[] { projectile, hunter, pack, action })
+                {
+                    if (uid != default && !entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DualPlasmaCannonsClientPredictionUsesPackPowerAndPreventsFloorDrop()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        EntityUid hunter = default;
+        EntityUid pack = default;
+        EntityUid cannon = default;
+        EntityUid action = default;
+        NetEntity hunterNet = default;
+        NetEntity cannonNet = default;
+        NetEntity packNet = default;
+        EntityUid? previousAttached = null;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var inventory = entMan.System<InventorySystem>();
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                pack = entMan.SpawnEntity("CMUYautjaCannonPack", map.GridCoords);
+                action = entMan.SpawnEntity("CMUActionYautjaUsePlasmaCannons", map.GridCoords);
+
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                var session = server.PlayerMan.Sessions.Single();
+                previousAttached = session.AttachedEntity;
+                server.PlayerMan.SetAttachedEntity(session, hunter);
+                Assert.That(inventory.TryEquip(hunter, pack, "back", silent: true, force: true), Is.True);
+
+                var packComp = entMan.GetComponent<YautjaCannonPackComponent>(pack);
+                packComp.Charge = 2000;
+                var actionComp = entMan.GetComponent<ActionComponent>(action);
+                RaiseUsePlasmaCannons(entMan, pack, hunter, action, actionComp);
+
+                cannon = packComp.Cannon!.Value;
+            });
+
+            await pair.RunTicksSync(pair.SecondsToTicks(2.1f));
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                Assert.That(cannon, Is.Not.EqualTo(default(EntityUid)));
+                hunterNet = entMan.GetNetEntity(hunter);
+                cannonNet = entMan.GetNetEntity(cannon);
+                packNet = entMan.GetNetEntity(pack);
+                Assert.That(cannonNet, Is.Not.EqualTo(default(NetEntity)),
+                    "The deployed cannon must have a network entity before the client prediction check.");
+            });
+
+            await client.WaitAssertion(() =>
+            {
+                var entMan = client.EntMan;
+                var clientHunter = entMan.GetEntity(hunterNet);
+                var clientCannon = entMan.GetEntity(cannonNet);
+                var gun = entMan.GetComponent<GunComponent>(clientCannon);
+
+                Assert.That(entMan.HasComponent<YautjaCannonPackLinkedCannonComponent>(clientCannon), Is.True,
+                    "The deployed cannon must expose its source-pack link to the client for prediction.");
+
+                var target = entMan.GetComponent<TransformComponent>(clientHunter).Coordinates.Offset(new Vector2(10, 0));
+                var projectiles = entMan.System<SharedGunSystem>().AttemptShoot((clientCannon, gun), clientHunter, target);
+
+                Assert.That(projectiles, Is.Not.Null,
+                    "Client-predicted dual cannon fire must provide a projectile instead of falling through to the empty-ammo popup.");
+                Assert.That(projectiles, Has.Count.EqualTo(1));
+
+                var drop = new RMCItemDropAttemptEvent(false);
+                entMan.EventBus.RaiseLocalEvent(clientCannon, ref drop);
+                Assert.That(drop.Cancelled, Is.True,
+                    "Dropping a deployed dual cannon must be intercepted before it reaches the floor.");
+                Assert.That(entMan.System<SharedHandsSystem>().IsHolding(clientHunter, clientCannon), Is.False);
+
+                var clientPack = entMan.GetEntity(packNet);
+                var containers = entMan.System<SharedContainerSystem>();
+                Assert.That(containers.TryGetContainingContainer((clientCannon, null, null), out var containing), Is.True);
+                Assert.That(containing.Owner, Is.EqualTo(clientPack),
+                    "The client-side drop interception must move the cannon into its source pack.");
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+                foreach (var uid in new[] { hunter, pack, action })
                 {
                     if (uid != default && !entMan.Deleted(uid))
                         entMan.DeleteEntity(uid);
@@ -4751,6 +4999,15 @@ public sealed class YautjaBowTest
                 var holderStored = entMan.GetComponent<YautjaStoredGearComponent>(holder);
                 Assert.That(install.Handled, Is.True);
                 Assert.That(gearComp.Container, Is.Not.Null);
+                var gearActions = new GetItemActionsEvent(entMan.System<ActionContainerSystem>(), hunter, bracer, SlotFlags.GLOVES);
+                entMan.EventBus.RaiseLocalEvent(bracer, gearActions);
+                var gearActionIds = ActionPrototypeIds(entMan, gearActions.Actions);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(gearActionIds, Does.Not.Contain("CMUActionYautjaRemoveBracerAttachments"));
+                    Assert.That(gearActionIds, Does.Contain("CMUActionYautjaToggleScimitar"),
+                        "Installed gear deployment actions remain available on the worn bracer.");
+                });
                 Assert.That(gearComp.Container!.Contains(holder), Is.True,
                     "CMSS13 bracer attachment holder remains the installed item in the bracer.");
                 Assert.That(gearComp.InstalledGear, Does.Contain(holder));
@@ -4816,6 +5073,42 @@ public sealed class YautjaBowTest
                     if (!entMan.Deleted(uid))
                         entMan.DeleteEntity(uid);
                 }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DeployedBracerWeaponStaysInHandWhenTheYautjaFalls()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var stored = entMan.SpawnEntity("CMUYautjaWristBladesAttachment", MapCoordinates.Nullspace);
+            try
+            {
+                var storedComp = entMan.GetComponent<YautjaStoredGearComponent>(stored);
+                storedComp.Deployed = true;
+
+                var fall = new FellDownThrowAttemptEvent(EntityUid.Invalid);
+                entMan.EventBus.RaiseLocalEvent(stored, ref fall);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(fall.Cancelled, Is.True,
+                        "The deployed bracer weapon must cancel the fall-drop attempt.");
+                    Assert.That(storedComp.Deployed, Is.True,
+                        "Falling must not retract the active weapon into the bracer.");
+                });
+            }
+            finally
+            {
+                if (!entMan.Deleted(stored))
+                    entMan.DeleteEntity(stored);
             }
         });
 
@@ -12577,6 +12870,10 @@ public sealed class YautjaBowTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
+            var loc = server.ResolveDependency<ILocalizationManager>();
+            var previousCulture = loc.DefaultCulture;
+            loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
+            loc.ReloadLocalizations();
             var cannons = entMan.SpawnEntity("CMUYautjaDualPlasmaCannons", MapCoordinates.Nullspace);
 
             try
@@ -12622,6 +12919,12 @@ public sealed class YautjaBowTest
             }
             finally
             {
+                if (previousCulture != null)
+                {
+                    loc.SetCulture(previousCulture);
+                    loc.ReloadLocalizations();
+                }
+
                 if (!entMan.Deleted(cannons))
                     entMan.DeleteEntity(cannons);
             }
@@ -12837,7 +13140,6 @@ public sealed class YautjaBowTest
                 var meta = entMan.GetComponent<MetaDataComponent>(caster);
                 var item = entMan.GetComponent<ItemComponent>(caster);
                 var gun = entMan.GetComponent<GunComponent>(caster);
-                var ammo = entMan.GetComponent<ProjectileBatteryAmmoProviderComponent>(caster);
                 var casterComp = entMan.GetComponent<YautjaCasterComponent>(caster);
 
                 Assert.Multiple(() =>
@@ -12850,32 +13152,30 @@ public sealed class YautjaBowTest
                     Assert.That(gun.AvailableModes, Is.EqualTo(SelectiveFire.SemiAuto));
                     Assert.That(gun.SoundGunshot, Is.Null,
                         "Local caster plays the CMSS13 per-strength fire sound through YautjaCasterMode.");
-                    Assert.That(ammo.Prototype, Is.EqualTo("CMUYautjaCasterStunBolt"),
+                    Assert.That(casterComp.Modes[0].Projectile.Id, Is.EqualTo("CMUYautjaCasterStunBolt"),
                         "CMSS13 plasma caster starts with /datum/ammo/energy/yautja/caster/bolt/single_stun.");
                     Assert.That(entMan.HasComponent<UniqueActionComponent>(caster), Is.True,
                         "CMSS13 plasma caster uses use_unique_action() to toggle stun/lethal mode.");
                     Assert.That(casterComp.Modes, Has.Count.EqualTo(4));
                     Assert.That(casterComp.CurrentMode, Is.EqualTo(0));
+                    Assert.That(casterComp.PowerCost, Is.EqualTo((FixedPoint2) 100),
+                        "CMSS13 plasma caster starts with charge_cost = 100 before any attack_self transition.");
 
                     AssertCasterMode(casterComp.Modes[0],
                         "cmu-yautja-caster-mode-stun",
                         "CMUYautjaCasterStunBolt",
-                        30,
                         "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav");
                     AssertCasterMode(casterComp.Modes[1],
                         "cmu-yautja-caster-mode-immobilizer",
                         "CMUYautjaCasterImmobilizerBolt",
-                        150,
                         "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav");
                     AssertCasterMode(casterComp.Modes[2],
                         "cmu-yautja-caster-mode-lethal",
                         "CMUYautjaCasterLethalBolt",
-                        100,
                         "/Audio/_CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav");
                     AssertCasterMode(casterComp.Modes[3],
                         "cmu-yautja-caster-mode-eradicator",
                         "CMUYautjaCasterEradicatorBolt",
-                        1000,
                         "/Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav");
                 });
             }
@@ -12906,10 +13206,9 @@ public sealed class YautjaBowTest
                 entMan.EnsureComponent<YautjaComponent>(hunter);
 
                 var casterComp = entMan.GetComponent<YautjaCasterComponent>(caster);
-                var ammo = entMan.GetComponent<ProjectileBatteryAmmoProviderComponent>(caster);
                 var gun = entMan.GetComponent<GunComponent>(caster);
 
-                AssertCasterState(casterComp, ammo, 0, "CMUYautjaCasterStunBolt");
+                AssertCasterState(casterComp, 0, "CMUYautjaCasterStunBolt");
                 Assert.That(gun.FireRate, Is.EqualTo(10f / 6f).Within(0.0001f),
                     "CMSS13 plasma caster stun bolts set fire_delay = FIRE_DELAY_TIER_6.");
 
@@ -12918,7 +13217,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(strengthenStun.Handled, Is.True);
-                    AssertCasterState(casterComp, ammo, 1, "CMUYautjaCasterImmobilizerBolt");
+                    AssertCasterState(casterComp, 1, "CMUYautjaCasterImmobilizerBolt");
+                    Assert.That(casterComp.PowerCost, Is.EqualTo((FixedPoint2) 150));
                     Assert.That(gun.FireRate, Is.EqualTo(10f / 80f).Within(0.0001f),
                         "CMSS13 plasma immobilizers set fire_delay = FIRE_DELAY_TIER_2 * 8.");
                 });
@@ -12928,7 +13228,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(weakenStun.Handled, Is.True);
-                    AssertCasterState(casterComp, ammo, 0, "CMUYautjaCasterStunBolt");
+                    AssertCasterState(casterComp, 0, "CMUYautjaCasterStunBolt");
+                    Assert.That(casterComp.PowerCost, Is.EqualTo((FixedPoint2) 30));
                     Assert.That(gun.FireRate, Is.EqualTo(10f / 6f).Within(0.0001f));
                 });
 
@@ -12937,7 +13238,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(lethalMode.Handled, Is.True);
-                    AssertCasterState(casterComp, ammo, 2, "CMUYautjaCasterLethalBolt");
+                    AssertCasterState(casterComp, 2, "CMUYautjaCasterLethalBolt");
+                    Assert.That(casterComp.PowerCost, Is.EqualTo((FixedPoint2) 100));
                     Assert.That(gun.FireRate, Is.EqualTo(10f / 18f).Within(0.0001f),
                         "CMSS13 plasma bolt sets fire_delay = FIRE_DELAY_TIER_6 * 3.");
                 });
@@ -12947,7 +13249,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(strengthenLethal.Handled, Is.True);
-                    AssertCasterState(casterComp, ammo, 3, "CMUYautjaCasterEradicatorBolt");
+                    AssertCasterState(casterComp, 3, "CMUYautjaCasterEradicatorBolt");
+                    Assert.That(casterComp.PowerCost, Is.EqualTo((FixedPoint2) 1000));
                     Assert.That(gun.FireRate, Is.EqualTo(10f / 120f).Within(0.0001f),
                         "CMSS13 plasma eradicator sets fire_delay = FIRE_DELAY_TIER_2 * 12.");
                 });
@@ -12957,7 +13260,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(weakenLethal.Handled, Is.True);
-                    AssertCasterState(casterComp, ammo, 2, "CMUYautjaCasterLethalBolt");
+                    AssertCasterState(casterComp, 2, "CMUYautjaCasterLethalBolt");
+                    Assert.That(casterComp.PowerCost, Is.EqualTo((FixedPoint2) 500));
                     Assert.That(gun.FireRate, Is.EqualTo(10f / 18f).Within(0.0001f));
                 });
 
@@ -12966,7 +13270,8 @@ public sealed class YautjaBowTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(stunMode.Handled, Is.True);
-                    AssertCasterState(casterComp, ammo, 0, "CMUYautjaCasterStunBolt");
+                    AssertCasterState(casterComp, 0, "CMUYautjaCasterStunBolt");
+                    Assert.That(casterComp.PowerCost, Is.EqualTo((FixedPoint2) 30));
                     Assert.That(gun.FireRate, Is.EqualTo(10f / 6f).Within(0.0001f));
                 });
             }
@@ -13112,7 +13417,7 @@ public sealed class YautjaBowTest
                 stored.Deployed = true;
 
                 var bracerPower = entMan.GetComponent<YautjaBracerComponent>(bracer);
-                bracerPower.Charge = 130;
+                bracerPower.Charge = 200;
 
                 var userCoords = entMan.GetComponent<TransformComponent>(user).Coordinates;
                 var stunAttempt = new AttemptShootEvent(user, null, userCoords, userCoords);
@@ -13124,8 +13429,9 @@ public sealed class YautjaBowTest
                 var stunAmmo = new TakeAmmoEvent(1, new List<(EntityUid? Entity, IShootable Shootable)>(), userCoords, user);
                 entMan.EventBus.RaiseLocalEvent(caster, stunAmmo);
                 stunProjectile = stunAmmo.Ammo.Single().Entity;
-                Assert.That(bracerPower.Charge, Is.EqualTo((FixedPoint2) 100),
-                    "CMSS13 plasma_caster/load_into_chamber() drains stun bolt charge_cost = 30 from source bracer.");
+                var casterPowerCost = entMan.GetComponent<YautjaCasterComponent>(caster).PowerCost;
+                Assert.That(bracerPower.Charge, Is.EqualTo((FixedPoint2) 200 - casterPowerCost),
+                    "CMSS13 plasma_caster/load_into_chamber() drains the caster's current charge_cost from the source bracer.");
 
                 var lethalMode = new UniqueActionEvent(user);
                 entMan.EventBus.RaiseLocalEvent(caster, lethalMode);
@@ -15337,26 +15643,20 @@ public sealed class YautjaBowTest
         YautjaCasterMode mode,
         string name,
         string projectile,
-        int powerCost,
         string fireSound)
     {
         Assert.Multiple(() =>
         {
             Assert.That(mode.Name.Id, Is.EqualTo(name));
             Assert.That(mode.Projectile.Id, Is.EqualTo(projectile));
-            Assert.That(mode.PowerCost, Is.EqualTo((FixedPoint2) powerCost));
             AssertSoundPath(mode.FireSound, fireSound);
         });
     }
 
-    private static void AssertCasterState(
-        YautjaCasterComponent caster,
-        ProjectileBatteryAmmoProviderComponent ammo,
-        int mode,
-        string projectile)
+    private static void AssertCasterState(YautjaCasterComponent caster, int mode, string projectile)
     {
         Assert.That(caster.CurrentMode, Is.EqualTo(mode));
-        Assert.That(ammo.Prototype, Is.EqualTo(projectile));
+        Assert.That(caster.Modes[mode].Projectile.Id, Is.EqualTo(projectile));
     }
 
     private static void AssertRangedGunStats(
@@ -15800,6 +16100,24 @@ public sealed class YautjaBowTest
         Assert.That(prototype.TryGetComponent<SpriteComponent>(out var sprite, factory), Is.True, id);
         Assert.That(sprite!.BaseRSI?.Path, Is.EqualTo(new ResPath("/Textures/" + spritePath)), $"{id} world sprite RSI");
         Assert.That(sprite.AllLayers.First().RsiState.Name, Is.EqualTo(state), $"{id} world icon state");
+    }
+
+    private static void AssertClothingVisualState(
+        IPrototypeManager prototypes,
+        IComponentFactory factory,
+        string id,
+        string slot,
+        string state)
+    {
+        var prototype = prototypes.Index<EntityPrototype>(id);
+
+        Assert.That(prototype.TryGetComponent<ClothingComponent>(out var clothing, factory), Is.True, id);
+#pragma warning disable RA0002
+        Assert.That(clothing!.ClothingVisuals.TryGetValue(slot, out var layers), Is.True,
+            $"{id} must define clothing visuals for {slot}.");
+#pragma warning restore RA0002
+        Assert.That(layers, Has.Count.EqualTo(1), $"{id} {slot} visual layer count.");
+        Assert.That(layers![0].State, Is.EqualTo(state), $"{id} {slot} visual state.");
     }
 
     private static IEnumerable<EntityUid> EntityPrototypeIds(IEntityManager entMan, string prototype)
@@ -16648,6 +16966,14 @@ public sealed class YautjaBowTest
             "A bone that appears to be of human origin.",
             yautjaItems,
             "spine",
+            Cmss13ButcherOutputKind.SkeletonLimb);
+
+        yield return new Cmss13ButcherOutputRow(
+            "CMUYautjaHumanTorso",
+            "ribcage",
+            "A bone that appears to be of human origin.",
+            yautjaItems,
+            "torso",
             Cmss13ButcherOutputKind.SkeletonLimb);
 
         yield return new Cmss13ButcherOutputRow(

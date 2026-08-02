@@ -26,9 +26,6 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
     private const float TileEpsilon = 0.25f;
     private const string RackFixtureId = "fix1";
     private const float RackFixtureHalfSize = 0.45f;
-    private static readonly ProtoId<AccessLevelPrototype> YautjaSecureAccess = "CMUAccessYautjaSecure";
-    private static readonly ProtoId<AccessLevelPrototype> YautjaElderAccess = "CMUAccessYautjaElder";
-    private static readonly ProtoId<AccessLevelPrototype> YautjaAncientAccess = "CMUAccessYautjaAncient";
     private static readonly ProtoId<AccessLevelPrototype> YautjaBadBloodAccess = "CMUAccessYautjaBadBlood";
     private static readonly ProtoId<JobPrototype> HunterJob = "CMUYautjaHunter";
     private static readonly ProtoId<JobPrototype> YoungbloodJob = "CMUYautjaYoungblood";
@@ -303,13 +300,13 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
         var denial = ent.Comp.Kind switch
         {
             YautjaGearRackKind.Adult => DenyIfMissingAccessThenWrongRole(
-                HasAccess(args.User, YautjaSecureAccess),
+                HasRackAccess(args.User, YautjaRank.Blooded),
                 HasJob(args.User, HunterJob)),
             YautjaGearRackKind.Youngblood => DenyIfMissingAccessThenWrongRole(
-                HasAccess(args.User, YautjaSecureAccess),
+                HasRackAccess(args.User, YautjaRank.YoungBlood),
                 HasJob(args.User, YoungbloodJob) || HasJob(args.User, HunterJob)),
             YautjaGearRackKind.Elder => DenyIfMissingAccessThenWrongRole(
-                HasAccess(args.User, YautjaElderAccess) || HasAccess(args.User, YautjaAncientAccess),
+                HasRackAccess(args.User, YautjaRank.Elder),
                 HasJob(args.User, HunterJob)),
             YautjaGearRackKind.Thrall => HasComp<YautjaThrallComponent>(args.User)
                 ? null
@@ -320,7 +317,7 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
             YautjaGearRackKind.BadBlood => HasAccess(args.User, YautjaBadBloodAccess)
                 ? null
                 : "cm-vending-machine-access-denied",
-            YautjaGearRackKind.Stranded => HasAccess(args.User, YautjaSecureAccess) &&
+            YautjaGearRackKind.Stranded => HasRackAccess(args.User, YautjaRank.Blooded) &&
                                             !HasAccess(args.User, YautjaBadBloodAccess)
                 ? null
                 : "cm-vending-machine-access-denied",
@@ -346,6 +343,17 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
     {
         var tags = _accessReader.FindAccessTags(user);
         return tags.Contains(access);
+    }
+
+    private bool HasRackAccess(EntityUid user, YautjaRank rank)
+    {
+        foreach (var access in YautjaRankMetadata.GetRackAccessTags(rank))
+        {
+            if (HasAccess(user, access))
+                return true;
+        }
+
+        return false;
     }
 
     private bool HasJob(EntityUid user, ProtoId<JobPrototype> job)

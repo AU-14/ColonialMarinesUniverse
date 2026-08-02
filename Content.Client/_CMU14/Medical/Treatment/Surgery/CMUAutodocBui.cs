@@ -4,6 +4,7 @@ using Content.Client._CMU14.Medical.Presentation.Windows;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Ghost.Controls;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
+using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -42,6 +43,7 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         _window.StopButton.OnPressed += StopPressed;
         _window.ClearButton.OnPressed += ClearPressed;
         _window.EjectButton.OnPressed += EjectPressed;
+        _window.DialysisButton.OnPressed += DialysisPressed;
 
         if (_latestState is { } state)
             Refresh(state);
@@ -96,9 +98,14 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
         _window.StopButton.Disabled = !state.CanQueue || !state.Running;
         _window.ClearButton.Disabled = !state.CanQueue || state.Queue.Count == 0;
         _window.EjectButton.Disabled = !state.CanQueue || state.Patient is null;
+        _window.DialysisButton.Disabled = !state.CanQueue || state.Patient is null;
+        _window.DialysisButton.Text = state.Filtering
+            ? Loc.GetString("cmu-autodoc-dialysis-stop")
+            : Loc.GetString("cmu-autodoc-dialysis-start");
 
         RefreshQueue(state);
         RefreshSurgeryList(state);
+        RefreshChemicals(state);
     }
 
     private EntityUid? ResolvePatient(NetEntity? patient)
@@ -117,6 +124,64 @@ public sealed partial class CMUAutodocBui : BoundUserInterface
     private void ClearPressed(BaseButton.ButtonEventArgs args) => SendMessage(new CMUAutodocClearQueueMessage());
 
     private void EjectPressed(BaseButton.ButtonEventArgs args) => SendMessage(new CMUAutodocEjectPatientMessage());
+
+    private void DialysisPressed(BaseButton.ButtonEventArgs args) => SendMessage(new CMUAutodocToggleDialysisMessage());
+
+    private void RefreshChemicals(CMUAutodocBuiState state)
+    {
+        if (_window is null)
+            return;
+
+        _window.ChemicalList.DisposeAllChildren();
+        if (state.Chemicals.Count == 0)
+        {
+            _window.ChemicalList.AddChild(CMUMedicalMachineStyle.Empty(Loc.GetString("cmu-autodoc-no-chemicals")));
+            return;
+        }
+
+        foreach (var chemical in state.Chemicals)
+        {
+            var row = new BoxContainer
+            {
+                Orientation = BoxContainer.LayoutOrientation.Horizontal,
+                SeparationOverride = 4,
+                HorizontalExpand = true,
+            };
+            row.AddChild(new Label
+            {
+                Text = $"{chemical.DisplayName}: {chemical.Amount}u" +
+                       (chemical.EmergencyOnly ? " *" : string.Empty),
+                ClipText = true,
+                HorizontalExpand = true,
+                VerticalAlignment = Control.VAlignment.Center,
+                FontColorOverride = CMUMedicalMachineStyle.Text,
+            });
+
+            var small = new Button
+            {
+                Text = Loc.GetString("cmu-autodoc-dose-small"),
+                Disabled = !chemical.CanInject,
+                MinWidth = 44,
+            };
+            small.OnPressed += _ => SendMessage(new CMUAutodocInjectChemicalMessage(
+                chemical.ReagentId,
+                FixedPoint2.New(5)));
+            row.AddChild(small);
+
+            var large = new Button
+            {
+                Text = Loc.GetString("cmu-autodoc-dose-large"),
+                Disabled = !chemical.CanInject,
+                MinWidth = 44,
+            };
+            large.OnPressed += _ => SendMessage(new CMUAutodocInjectChemicalMessage(
+                chemical.ReagentId,
+                FixedPoint2.New(10)));
+            row.AddChild(large);
+
+            _window.ChemicalList.AddChild(row);
+        }
+    }
 
     private void RefreshQueue(CMUAutodocBuiState state)
     {
@@ -487,6 +552,8 @@ public sealed partial class CMUAutodocWindow : FancyWindow
     public readonly Button StopButton;
     public readonly Button ClearButton;
     public readonly Button EjectButton;
+    public readonly Button DialysisButton;
+    public readonly BoxContainer ChemicalList;
 
     private float _layoutScale = 1f;
 
@@ -663,6 +730,33 @@ public sealed partial class CMUAutodocWindow : FancyWindow
         controls.AddChild(StopButton);
         controls.AddChild(ClearButton);
         controls.AddChild(EjectButton);
+
+        DialysisButton = CMUMedicalMachineStyle.ActionButton(
+            Loc.GetString("cmu-autodoc-dialysis-start"),
+            CMUMedicalMachineStyle.Purple);
+        controls.AddChild(DialysisButton);
+
+        controls.AddChild(new Label
+        {
+            Text = Loc.GetString("cmu-autodoc-chemicals-heading"),
+            StyleClasses = { "LabelHeading" },
+            FontColorOverride = CMUMedicalMachineStyle.Text,
+        });
+
+        var chemicalScroll = new ScrollContainer
+        {
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            MinSize = new Vector2(0, 82),
+        };
+        ChemicalList = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Vertical,
+            SeparationOverride = 3,
+            HorizontalExpand = true,
+        };
+        chemicalScroll.AddChild(ChemicalList);
+        controls.AddChild(chemicalScroll);
 
         var body = new BoxContainer
         {

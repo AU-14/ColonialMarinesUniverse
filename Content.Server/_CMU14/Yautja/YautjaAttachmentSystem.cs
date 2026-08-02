@@ -139,8 +139,6 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
         if (HasAction(ent.Comp, YautjaGearKind.ChainGauntlet))
             args.AddAction(ref ent.Comp.ToggleChainGauntletAction, ent.Comp.ToggleChainGauntletActionId);
-        if (ent.Comp.ActionWhitelist == null)
-            args.AddAction(ref ent.Comp.RemoveBracerAttachmentsAction, ent.Comp.RemoveBracerAttachmentsActionId);
     }
 
     private static bool HasAction(YautjaGearContainerComponent bracer, YautjaGearKind kind)
@@ -298,8 +296,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         var gearNet = GetNetEntity(gear);
         var options = new List<DialogOption>
         {
-            new("Right", new YautjaBracerAttachmentSlotSelectedEvent(userNet, gearNet, kind, true)),
-            new("Left", new YautjaBracerAttachmentSlotSelectedEvent(userNet, gearNet, kind, false)),
+            new(Loc.GetString("cmu-yautja-bracer-attachment-right"), new YautjaBracerAttachmentSlotSelectedEvent(userNet, gearNet, kind, true)),
+            new(Loc.GetString("cmu-yautja-bracer-attachment-left"), new YautjaBracerAttachmentSlotSelectedEvent(userNet, gearNet, kind, false)),
         };
 
         _dialog.OpenOptions(
@@ -614,7 +612,6 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if (!ent.Comp.Deployed)
             return;
 
-        TryRetractStoredGear(ent, args.Thrower);
         args.Cancelled = true;
     }
 

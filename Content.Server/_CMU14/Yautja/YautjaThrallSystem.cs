@@ -46,10 +46,10 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 {
     private const int MaxMessageLength = 160;
     private const int BloodedNameMaxLength = 64;
-    private const string HivebreakerDishonoredReason = "Enthralled to a Bad Blood!";
-    private const string BadBloodHiveName = "Bad Blood hive";
-    private const string BloodedNamePrompt = "Enter the newblood's new name.";
-    private const string BloodedNameTitle = "Blooded Name";
+    private const string HivebreakerDishonoredReason = "cmu-yautja-hivebreaker-dishonored-reason";
+    private const string BadBloodHiveName = "cmu-yautja-badblood-hive-name";
+    private const string BloodedNamePrompt = "cmu-yautja-blooded-name-prompt";
+    private const string BloodedNameTitle = "cmu-yautja-blooded-name-title";
     private static readonly EntProtoId BadBloodHivePrototype = "CMXenoHive";
     private static readonly ProtoId<NpcFactionPrototype> BadBloodHiveFaction = "CMUYautjaBadBlood";
     private static readonly ProtoId<NpcFactionPrototype> BloodedThrallNpcFaction = "CMUYautja";
@@ -678,7 +678,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (hivebreaker.BloodOnConversion)
             GrantAllSkills(target, 4);
 
-        _marks.ForceMark(target, target, YautjaMarkKind.Dishonored, reason: HivebreakerDishonoredReason);
+        _marks.ForceMark(target, target, YautjaMarkKind.Dishonored, reason: Loc.GetString(HivebreakerDishonoredReason));
         PopupHivebreakerEnthrallMessages(target);
 
         if (hivebreaker.HealOnConversion && TryComp(target, out DamageableComponent? damageable))
@@ -709,7 +709,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         }
 
         var hive = Spawn(BadBloodHivePrototype);
-        _meta.SetEntityName(hive, BadBloodHiveName);
+        _meta.SetEntityName(hive, Loc.GetString(BadBloodHiveName));
         _hive.SetHiveFactionAlly(BadBloodHiveFaction, hive, true);
         return hive;
     }
@@ -766,10 +766,10 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         _dialog.OpenInput(
             bracer.Owner,
             master,
-            BloodedNamePrompt,
+            Loc.GetString(BloodedNamePrompt),
             new YautjaBloodedThrallNameEvent(GetNetEntity(master), GetNetEntity(target)),
             characterLimit: BloodedNameMaxLength,
-            title: BloodedNameTitle);
+            title: Loc.GetString(BloodedNameTitle));
     }
 
     private void OnBloodedThrallName(Entity<YautjaBracerComponent> bracer, ref YautjaBloodedThrallNameEvent args)

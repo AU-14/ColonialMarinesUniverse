@@ -589,6 +589,19 @@
     size: Small
 
 - type: entity
+  parent: BaseItem
+  id: CMUYautjaHumanTorso
+  name: ribcage
+  description: A bone that appears to be of human origin.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    state: torso
+  - type: Item
+    sprite: _CMU14/Yautja/yautja_items.rsi
+    size: Small
+
+- type: entity
   id: CMUYautjaHumanButcheredRemains
   name: butchered remains
   description: Remains left by ritual Yautja butchery.

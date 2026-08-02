@@ -29,24 +29,24 @@ public sealed partial class YautjaHarvestTrophyDoAfterEvent : SimpleDoAfterEvent
 [Serializable, NetSerializable]
 public sealed partial class YautjaButcherDoAfterEvent : SimpleDoAfterEvent
 {
-    public readonly YautjaButcherKind Kind;
+    public readonly YautjaButcherProcedure Procedure;
     public readonly int Stage;
 
-    public YautjaButcherDoAfterEvent(YautjaButcherKind kind, int stage)
+    public YautjaButcherDoAfterEvent(YautjaButcherProcedure procedure, int stage)
     {
-        Kind = kind;
+        Procedure = procedure;
         Stage = stage;
     }
 
     public override DoAfterEvent Clone()
     {
-        return new YautjaButcherDoAfterEvent(Kind, Stage);
+        return new YautjaButcherDoAfterEvent(Procedure, Stage);
     }
 
     public override bool IsDuplicate(DoAfterEvent other)
     {
         return other is YautjaButcherDoAfterEvent butcher &&
-               butcher.Kind == Kind &&
+               butcher.Procedure == Procedure &&
                butcher.Stage == Stage;
     }
 }
@@ -165,6 +165,9 @@ public sealed partial class YautjaBracerMisuseDoAfterEvent : SimpleDoAfterEvent
 
 [Serializable, NetSerializable]
 public sealed partial class YautjaHuntEscapeScanDoAfterEvent : SimpleDoAfterEvent;
+
+[Serializable, NetSerializable]
+public sealed partial class YautjaPreserveEscapeDoAfterEvent : SimpleDoAfterEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class YautjaLeapDoAfterEvent : SimpleDoAfterEvent

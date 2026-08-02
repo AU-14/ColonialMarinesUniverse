@@ -8,3 +8,94 @@
   color: "#2cf274"
   recognizable: true
   physicalDesc: reagent-physical-desc-ferrous
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: CMAlkysine
+  name: reagent-name-cmalkysine
+  desc: reagent-desc-cmalkysine
+  physicalDesc: reagent-physical-desc-translucent
+  color: "#b5d8ff"
+  flags: Medical, NoGeneration
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:Neuropeutic
+        potency: 2
+
+- type: reagent
+  parent: CMReagentMedicine
+  id: thwei
+  name: reagent-name-yautja-thwei
+  desc: reagent-desc-yautja-thwei
+  physicalDesc: reagent-physical-desc-translucent
+  color: "#41c498"
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:Crossmetabolizing
+        potency: 1
+      - !type:Antitoxic
+        potency: 1
+      - !type:Yautjahemogenic
+        potency: 9
+      - !type:Oxygenating
+        potency: 6
+      - !type:Anticarcinogenic
+        potency: 6
+      - !type:Bonemending
+        potency: 6
+      - !type:Aiding
+        potency: 1
+      - !type:Antihallucinogenic
+        potency: 2
+      - !type:Focusing
+        potency: 6
+      - !type:Curing
+        potency: 4
+      - !type:Oculopeutic
+        potency: 2
+      - !type:Neuropeutic
+        potency: 2
+
+- type: reagent
+  parent: thwei
+  id: dathwei
+  name: reagent-name-yautja-dathwei
+  desc: reagent-desc-yautja-dathwei
+  color: "#c46b41"
+  flags: Medical, NoGeneration
+  metabolisms:
+    Medicine:
+      metabolismRate: 0.1
+      effects:
+      - !type:Cardiostabilizing
+        potency: 4
+      - !type:Organstabilizing
+        potency: 1
+      - !type:Painkilling
+        potency: 4
+      - !type:Antitoxic
+        potency: 1
+      - !type:Yautjahemogenic
+        potency: 3
+      - !type:Oxygenating
+        potency: 6
+      - !type:Anticarcinogenic
+        potency: 6
+      - !type:Bonemending
+        potency: 6
+      - !type:Aiding
+        potency: 1
+      - !type:Antihallucinogenic
+        potency: 2
+      - !type:Focusing
+        potency: 6
+      - !type:Curing
+        potency: 4
+      - !type:Oculopeutic
+        potency: 2
+      - !type:Neuropeutic
+        potency: 2

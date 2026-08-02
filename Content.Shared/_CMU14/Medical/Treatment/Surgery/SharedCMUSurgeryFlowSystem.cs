@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Medical.Surgery.Tools;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Body.Components;
@@ -292,7 +293,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
                 label,
                 toolCategory,
                 organCondition,
-                reinsertOrganSlot);
+                reinsertOrganSlot,
+                step.DoAfterSeconds);
             steps.Add(definition);
             stepsById.Add(stepId, definition);
         }
@@ -312,6 +314,8 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             metadata?.Category ?? string.Empty,
             metadata?.MinSkill ?? 0,
             metadata?.AllowSelfSurgery ?? false,
+            metadata?.AllowStanding ?? false,
+            metadata?.RequiresYautjaTech ?? false,
             validParts,
             selfSurgeryValidParts,
             steps.MoveToImmutable(),
@@ -341,6 +345,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         // Synth surgery tools.
         _toolCategories["blowtorch"] = new[] { typeof(BlowtorchComponent) };
         _toolCategories["cable_coil"] = new[] { typeof(RMCCableCoilComponent) };
+        _toolCategories["yautja_medicomp_stabilizer"] = new[] { typeof(CMUYautjaMedicompStabilizerToolComponent) };
+        _toolCategories["yautja_medicomp_healing_gun"] = new[] { typeof(CMUYautjaMedicompHealingGunToolComponent) };
+        _toolCategories["yautja_medicomp_clamp"] = new[] { typeof(CMUYautjaMedicompClampToolComponent) };
     }
 
     public CMUSurgeryArmedStepComponent? TryArmStep(
@@ -412,7 +419,9 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         // Missing-limb reattach rows do not have a limb entity yet, so they
         // resolve through a real body-part anchor while keeping the missing
         // slot type/symmetry as the logical target.
-        if (!CanOperateOnPatient(patient, surgeon, popup: true))
+        var allowStanding = TryGetDefinition(surgeryId, out var requestedDefinition)
+            && requestedDefinition.AllowStanding;
+        if (!CanOperateOnPatient(patient, surgeon, popup: true, allowStanding: allowStanding))
             return null;
 
         BodyPartType armedType;
@@ -711,13 +720,23 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         ClearArmed(ent.Owner, ent.Comp, expired: true);
     }
 
-    public bool CanOperateOnPatient(EntityUid patient, EntityUid surgeon, bool popup = false)
+    public bool CanOperateOnPatient(EntityUid patient, EntityUid surgeon, bool popup = false, bool allowStanding = false)
     {
         if (HasComp<CMUAutodocContainedPatientComponent>(patient))
             return true;
 
         if (RmcSurgery.IsLyingDown(patient))
             return true;
+
+        if (allowStanding)
+            return true;
+
+        if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed))
+        {
+            var surgeryId = string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId;
+            if (TryGetDefinition(surgeryId, out var definition) && definition.AllowStanding)
+                return true;
+        }
 
         if (patient == surgeon && IsBuckledToStrap(patient))
             return true;

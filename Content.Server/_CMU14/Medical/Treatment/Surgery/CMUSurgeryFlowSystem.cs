@@ -8,6 +8,7 @@ using Content.Server._CMU14.Medical.Treatment.FirstAid;
 using Content.Server._RMC14.Medical.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
@@ -130,6 +131,12 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         }
 
         var delay = ResolveStepDoAfterDelay(surgeon, patient);
+        if (TryGetDefinition(leafId, out var leafDefinition)
+            && leafDefinition.TryGetStep(committedStep, out var stepDefinition)
+            && stepDefinition.DoAfterSeconds is { } sourceSeconds)
+        {
+            delay = ResolveStepDoAfterDelay(surgeon, patient, sourceSeconds);
+        }
         if (TryComp<CMUImprovisedSurgeryToolComponent>(tool, out var improvised))
             delay = TimeSpan.FromSeconds(delay.TotalSeconds * MathF.Max(1f, improvised.DelayMultiplier));
 
@@ -156,6 +163,8 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             OnSurgerySessionStateChanged(patient);
             return false;
         }
+
+        PlayStepStartSounds(committedStep, patient);
 
         if (HasComp<BlowtorchComponent>(tool))
         {
@@ -205,14 +214,35 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return false;
         }
 
+        if (TryGetDefinition(leafId, out procedure)
+            && procedure.RequiresYautjaTech
+            && !IsYautjaTechUser(surgeon))
+        {
+            Popup.PopupEntity(
+                Loc.GetString("cmu-medical-surgery-missing-skills"),
+                patient,
+                surgeon,
+                PopupType.SmallCaution);
+            return false;
+        }
+
         return true;
     }
 
-    private TimeSpan ResolveStepDoAfterDelay(EntityUid surgeon, EntityUid patient)
+    private TimeSpan ResolveStepDoAfterDelay(EntityUid surgeon, EntityUid patient, float baseSeconds = StepDoAfterSeconds)
     {
         var multiplier = _skills.GetSkillDelayMultiplier(surgeon, SurgerySkill, SurgeryStepDelayMultipliers);
         multiplier *= _bodyScanner.GetSurgeryDelayMultiplier(surgeon, patient);
-        return TimeSpan.FromSeconds(StepDoAfterSeconds * multiplier);
+        return TimeSpan.FromSeconds(baseSeconds * multiplier);
+    }
+
+    private bool IsYautjaTechUser(EntityUid user)
+    {
+        return HasComp<YautjaComponent>(user)
+            || HasComp<YautjaTechAuthorizedComponent>(user)
+            || TryComp(user, out YautjaThrallComponent? thrall)
+            && thrall.Blooded
+            && thrall.TechAuthorized;
     }
 
     protected override void ApplyWrongToolDamage(EntityUid surgeon, EntityUid patient, EntityUid tool, string damageType, float amount)
@@ -275,6 +305,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
 
         if (TryFailSurgeryStep(patient, stepId.Id, armed.RequiredToolCategory, surgeon, tool))
         {
+            PlayStepOutcomeSound(stepId, patient, success: false);
             RearmAfterFailedStep(patient, armed, surgeon, stepPart, leafId);
             _dispatch.RefreshUiForPatient(patient);
             return;
@@ -299,6 +330,8 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             var stepEvent = new CMSurgeryStepEvent(surgeon, patient, stepPart, tools);
             RaiseLocalEvent(stepEnt, ref stepEvent);
         }
+
+        PlayStepOutcomeSound(stepId, patient, success: true);
 
         if (closedUnclampedIncision)
         {
@@ -687,6 +720,43 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
         if (ShouldAgitatePatientOnSurgeryFailure(patient))
             ApplySurgeryPainFeedback(patient);
 
+        return true;
+    }
+
+    private void PlayStepStartSounds(EntProtoId<CMSurgeryStepComponent> stepId, EntityUid source)
+    {
+        if (!TryGetStepAudio(stepId, out var audio))
+            return;
+
+        foreach (var sound in audio.StartSounds)
+            _audio.PlayPvs(sound, source);
+    }
+
+    private void PlayStepOutcomeSound(
+        EntProtoId<CMSurgeryStepComponent> stepId,
+        EntityUid source,
+        bool success)
+    {
+        if (!TryGetStepAudio(stepId, out var audio))
+            return;
+
+        var sound = success ? audio.SuccessSound : audio.FailureSound;
+        if (sound is not null)
+            _audio.PlayPvs(sound, source);
+    }
+
+    private bool TryGetStepAudio(
+        EntProtoId<CMSurgeryStepComponent> stepId,
+        out CMUSurgeryStepAudioComponent audio)
+    {
+        if (RmcSurgery.GetSingleton(stepId) is not { } step ||
+            !TryComp(step, out CMUSurgeryStepAudioComponent? found))
+        {
+            audio = default!;
+            return false;
+        }
+
+        audio = found;
         return true;
     }
 

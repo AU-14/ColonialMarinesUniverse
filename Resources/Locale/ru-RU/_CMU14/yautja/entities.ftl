@@ -55,8 +55,8 @@ ent-CMUYautjaAdvancedBruisePack-desc = Компактная чужая прип�
 ent-CMUYautjaAdvancedOintment-name = продвинутая мазь хищника
 ent-CMUYautjaAdvancedOintment-desc = Прохладная чужая мазь для закрытия ожогов и едких повреждений.
 
-ent-CMUYautjaHealingGel-name = лечебный гель
-ent-CMUYautjaHealingGel-desc = Плотный чужой коагулянт, стягивающий обширные травмы.
+ent-CMUYautjaHealingGel-name = лечебная капсула
+ent-CMUYautjaHealingGel-desc = Одноразовая капсула для перезарядки лечебного оружия яутжа.
 
 ent-CMUYautjaStabilizerGel-name = стабилизирующий гель
 ent-CMUYautjaStabilizerGel-desc = Быстро схватывающийся чужой гель, выигрывающий время при шоке и кровопотере.

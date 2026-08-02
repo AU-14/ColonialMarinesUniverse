@@ -689,6 +689,8 @@ namespace Content.Server.GameTicking
                 return;
             }
 
+            jobId = bev.JobId;
+
             // Figure out job restrictions
             var restrictedRoles = new HashSet<ProtoId<JobPrototype>>();
             var ev = new GetDisallowedJobsEvent(player, restrictedRoles);
@@ -732,7 +734,11 @@ namespace Content.Server.GameTicking
 
             _playTimeTrackings.PlayerRolesChanged(player);
 
-            EntityUid? mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(station, jobId, character);
+            EntityUid? mobMaybe = _stationSpawning.SpawnPlayerCharacterOnStation(
+                station,
+                jobId,
+                character,
+                player: player);
             DebugTools.AssertNotNull(mobMaybe);
             EntityUid mob = mobMaybe.Value;
 

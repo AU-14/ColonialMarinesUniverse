@@ -290,7 +290,7 @@ public sealed class YautjaMeleeWeaponTest
     }
 
     [Test]
-    public async Task ChainGauntletExamineShowsCmss13ComboHelpOnlyToYautja()
+    public async Task ChainGauntletExamineHasNoCombatIntentGuidance()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -315,15 +315,9 @@ public sealed class YautjaMeleeWeaponTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(hunterText, Does.Contain("Stack up your combo meter by using"),
-                        "CMSS13 chain_gauntlets/get_examine_text() adds combo guidance only when isyautja(user).");
-                    Assert.That(hunterText, Does.Contain("Finish your combo on"));
-                    Assert.That(hunterText, Does.Contain("slam the target to the ground"));
-                    Assert.That(hunterText, Does.Contain("throw the target away from you"));
-                    Assert.That(hunterText, Does.Contain("do an execution that instantly kills your target"));
-                    Assert.That(techHumanText, Does.Not.Contain("Stack up your combo meter"),
-                        "CMSS13 gates the extra text on isyautja(user), not merely Yautja tech authorization.");
-                    Assert.That(humanText, Does.Not.Contain("Stack up your combo meter"));
+                    AssertNoCombatIntentGuidance(hunterText);
+                    AssertNoCombatIntentGuidance(techHumanText);
+                    AssertNoCombatIntentGuidance(humanText);
                 });
             }
             finally
@@ -337,6 +331,17 @@ public sealed class YautjaMeleeWeaponTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    private static void AssertNoCombatIntentGuidance(string text)
+    {
+        var lower = text.ToLowerInvariant();
+        Assert.That(lower, Does.Not.Contain("harm"));
+        Assert.That(lower, Does.Not.Contain("help"));
+        Assert.That(lower, Does.Not.Contain("shove"));
+        Assert.That(lower, Does.Not.Contain("grab"));
+        Assert.That(lower, Does.Not.Contain("stack up your combo meter"));
+        Assert.That(lower, Does.Not.Contain("finish your combo"));
     }
 
     [Test]

@@ -259,12 +259,13 @@
   - type: Item
     heldPrefix: combistick
     size: Large
+  - type: ItemThrowRange
+    range: 4
   - type: Clothing
     slots:
     - back
   - type: ItemToggle
     activated: true
-    toggleOnWield: false
     soundActivate:
       path: /Audio/_CMU14/Yautja/Weapons/WristBlades/wristblades_on.wav
     soundDeactivate:
@@ -354,6 +355,8 @@
   - type: Item
     heldPrefix: war_axe
     size: Large
+  - type: ItemThrowRange
+    range: 4
   - type: Clothing
     slots:
     - back
@@ -384,6 +387,8 @@
   - type: Item
     heldPrefix: ceremonial_dagger
     size: Tiny
+  - type: ItemThrowRange
+    range: 6
   - type: Clothing
     slots:
     - pocket
@@ -703,6 +708,8 @@
   - type: Item
     heldPrefix: duelling_club
     size: Normal
+  - type: ItemThrowRange
+    range: 7
   - type: MeleeWeapon
     damage:
       types:
@@ -735,6 +742,8 @@
   - type: Item
     heldPrefix: duelling_hatchet
     size: Small
+  - type: ItemThrowRange
+    range: 4
   - type: MeleeWeapon
     damage:
       types:
@@ -906,10 +915,10 @@
   - type: YautjaTechItem
     shootDeniedPopup: cmu-yautja-spike-launcher-denied
   - type: YautjaPlasmaWeapon
-    nonYautjaExamineText: This thing looks like an alien rifle of some kind. Strange.
+    nonYautjaExamineText: cmu-yautja-plasma-rifle-nonyautja-examine
     minimumShootCharge: 7
-    lowPowerWarning: The rifle does not have enough power remaining!
-    maxChargePopup: plasma rifle hums as it achieves maximum charge.
+    lowPowerWarning: cmu-yautja-plasma-rifle-low-power
+    maxChargePopup: cmu-yautja-plasma-rifle-max-charge
     refundUnfiredProjectiles: true
   - type: Corrodible
     isCorrodible: false
@@ -955,7 +964,6 @@
   - type: BatterySelfRecharger
     autoRecharge: true
     autoRechargeRate: 1
-    autoRechargeTickInterval: 1
   - type: Wieldable
     wieldedInhandPrefix: plasma_rifle
   - type: WieldDelay
@@ -981,11 +989,11 @@
     shootDeniedPopup: cmu-yautja-fancy-grip-safety-denied
   - type: YautjaPlasmaWeapon
     showFireMode: true
-    nonYautjaExamineText: This thing looks like a rifle, but there's no mag or proper barrel. What the hell is it?
-    primaryFireModeText: It is set to fire incendiary plasma bolts.
-    secondaryFireModeText: It is set to fire impact-explosive plasma bolts.
+    nonYautjaExamineText: cmu-yautja-plasma-carbine-nonyautja-examine
+    primaryFireModeText: cmu-yautja-plasma-carbine-primary-fire-mode
+    secondaryFireModeText: cmu-yautja-plasma-carbine-secondary-fire-mode
     minimumAmmoCharge: 1
-    maxChargePopup: plasma carbine hums as it achieves maximum charge.
+    maxChargePopup: cmu-yautja-plasma-carbine-max-charge
     refundUnfiredProjectiles: true
   - type: Corrodible
     isCorrodible: false
@@ -1046,7 +1054,6 @@
   - type: BatterySelfRecharger
     autoRecharge: true
     autoRechargeRate: 1
-    autoRechargeTickInterval: 1
   - type: UniqueAction
   - type: Wieldable
     wieldedInhandPrefix: plasmacarbine
@@ -1073,7 +1080,7 @@
   - type: YautjaTechItem
     shootDeniedPopup: cmu-yautja-fancy-grip-safety-denied
   - type: YautjaPlasmaWeapon
-    nonYautjaExamineText: Looks like some massively fucked up alien flamethrower.
+    nonYautjaExamineText: cmu-yautja-defoliator-nonyautja-examine
   - type: Sprite
     sprite: _CMU14/Yautja/pred_guns.rsi
     layers:
@@ -1202,9 +1209,9 @@
     shootDeniedPopup: cmu-yautja-spike-launcher-denied
   - type: YautjaPlasmaWeapon
     showFireMode: true
-    nonYautjaExamineText: This thing looks like an alien gun of some kind. Strange.
+    nonYautjaExamineText: cmu-yautja-plasma-pistol-nonyautja-examine
     minimumAmmoCharge: 1
-    maxChargePopup: plasma pistol hums as it achieves maximum charge.
+    maxChargePopup: cmu-yautja-plasma-pistol-max-charge
     refundUnfiredProjectiles: true
   - type: Tag
     tags:
@@ -1264,7 +1271,6 @@
   - type: BatterySelfRecharger
     autoRecharge: true
     autoRechargeRate: 1
-    autoRechargeTickInterval: 1
   - type: UniqueAction
   - type: Wieldable
     wieldedInhandPrefix: plasma_pistol

@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Content.Server._RMC14.LinkAccount;
 using Content.Server.Administration.Logs;
 using Content.Shared._CMU14.BalanceRating;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Administration.Logs;
 using Content.Shared._CMU14.RoundStatistics;
 using Content.Shared.CCVar;
@@ -28,7 +29,14 @@ using MSLogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace Content.Server.Database
 {
-    public interface IServerDbManager
+    public enum SetPatronTierResult
+    {
+        Success,
+        PlayerNotFound,
+        TierNotFound,
+    }
+
+    public partial interface IServerDbManager
     {
         void Init();
 
@@ -195,6 +203,22 @@ namespace Content.Server.Database
             ImmutableTypedHwid? hwId);
         Task<PlayerRecord?> GetPlayerRecordByUserName(string userName, CancellationToken cancel = default);
         Task<PlayerRecord?> GetPlayerRecordByUserId(NetUserId userId, CancellationToken cancel = default);
+        Task<YautjaRank?> GetYautjaRank(Guid userId);
+        Task SetYautjaRank(Guid userId, YautjaRank rank);
+        Task<YautjaClanRecord?> GetYautjaClanAsync(int clanId);
+        Task<List<YautjaClanRecord>> GetYautjaClansAsync();
+        Task<YautjaClanMemberRecord?> GetYautjaClanMemberAsync(Guid userId);
+        Task<List<YautjaClanMemberRecord>> GetYautjaClanMembersAsync(int? clanId = null);
+        Task<List<YautjaClanMemberRecord>> GetYautjaClanlessMembersAsync();
+        Task<List<YautjaWhitelistHolderRecord>> GetYautjaWhitelistHoldersAsync();
+        Task<int> CreateYautjaClanAsync(string name, string description, int honor, string color, bool active = true);
+        Task<bool> UpdateYautjaClanAsync(int clanId, string name, string description, string color);
+        Task<bool> UpdateYautjaClanHonorAsync(int clanId, int honor);
+        Task<YautjaClanDeleteResult> DeactivateYautjaClanAsync(int clanId);
+        Task<bool> UpsertYautjaClanMemberAsync(YautjaClanMemberRecord member);
+        Task<bool> DeleteYautjaClanMemberAsync(Guid userId);
+        Task<int> GetYautjaWhitelistFlagsAsync(Guid userId);
+        Task SetYautjaWhitelistFlagsAsync(Guid userId, int flags);
         #endregion
 
         #region Connection Logs
@@ -381,6 +405,21 @@ namespace Content.Server.Database
         Task<RMCPatron?> GetPatron(Guid player, CancellationToken cancel);
 
         Task<List<RMCPatron>> GetAllPatrons();
+
+        Task<List<RMCPatronTier>> GetPatronTiers();
+
+        Task UpsertPatronTier(
+            string name,
+            ulong discordRole,
+            int priority,
+            bool showOnCredits,
+            bool ghostColor,
+            bool namedItems,
+            bool figurines,
+            bool lobbyMessage,
+            bool roundEndShoutout);
+
+        Task<SetPatronTierResult> SetPatronTier(Guid player, string tierName);
 
         Task SetGhostColor(Guid player, System.Drawing.Color? color);
 
@@ -758,6 +797,106 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetPlayerRecordByUserId(userId, cancel));
+        }
+
+        public Task<YautjaRank?> GetYautjaRank(Guid userId)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaRank(userId));
+        }
+
+        public Task SetYautjaRank(Guid userId, YautjaRank rank)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetYautjaRank(userId, rank));
+        }
+
+        public Task<YautjaClanRecord?> GetYautjaClanAsync(int clanId)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaClanAsync(clanId));
+        }
+
+        public Task<List<YautjaClanRecord>> GetYautjaClansAsync()
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaClansAsync());
+        }
+
+        public Task<YautjaClanMemberRecord?> GetYautjaClanMemberAsync(Guid userId)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaClanMemberAsync(userId));
+        }
+
+        public Task<List<YautjaClanMemberRecord>> GetYautjaClanMembersAsync(int? clanId = null)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaClanMembersAsync(clanId));
+        }
+
+        public Task<List<YautjaClanMemberRecord>> GetYautjaClanlessMembersAsync()
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaClanlessMembersAsync());
+        }
+
+        public Task<List<YautjaWhitelistHolderRecord>> GetYautjaWhitelistHoldersAsync()
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaWhitelistHoldersAsync());
+        }
+
+        public Task<int> CreateYautjaClanAsync(string name, string description, int honor, string color, bool active = true)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.CreateYautjaClanAsync(name, description, honor, color, active));
+        }
+
+        public Task<bool> UpdateYautjaClanAsync(
+            int clanId,
+            string name,
+            string description,
+            string color)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.UpdateYautjaClanAsync(clanId, name, description, color));
+        }
+
+        public Task<bool> UpdateYautjaClanHonorAsync(int clanId, int honor)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.UpdateYautjaClanHonorAsync(clanId, honor));
+        }
+
+        public Task<YautjaClanDeleteResult> DeactivateYautjaClanAsync(int clanId)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.DeactivateYautjaClanAsync(clanId));
+        }
+
+        public Task<bool> UpsertYautjaClanMemberAsync(YautjaClanMemberRecord member)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.UpsertYautjaClanMemberAsync(member));
+        }
+
+        public Task<bool> DeleteYautjaClanMemberAsync(Guid userId)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.DeleteYautjaClanMemberAsync(userId));
+        }
+
+        public Task<int> GetYautjaWhitelistFlagsAsync(Guid userId)
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetYautjaWhitelistFlagsAsync(userId));
+        }
+
+        public Task SetYautjaWhitelistFlagsAsync(Guid userId, int flags)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetYautjaWhitelistFlagsAsync(userId, flags));
         }
 
         public Task<int> AddConnectionLogAsync(
@@ -1278,6 +1417,42 @@ namespace Content.Server.Database
         {
             DbReadOpsMetric.Inc();
             return RunDbCommand(() => _db.GetAllPatrons());
+        }
+
+        public Task<List<RMCPatronTier>> GetPatronTiers()
+        {
+            DbReadOpsMetric.Inc();
+            return RunDbCommand(() => _db.GetPatronTiers());
+        }
+
+        public Task UpsertPatronTier(
+            string name,
+            ulong discordRole,
+            int priority,
+            bool showOnCredits,
+            bool ghostColor,
+            bool namedItems,
+            bool figurines,
+            bool lobbyMessage,
+            bool roundEndShoutout)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.UpsertPatronTier(
+                name,
+                discordRole,
+                priority,
+                showOnCredits,
+                ghostColor,
+                namedItems,
+                figurines,
+                lobbyMessage,
+                roundEndShoutout));
+        }
+
+        public Task<SetPatronTierResult> SetPatronTier(Guid player, string tierName)
+        {
+            DbWriteOpsMetric.Inc();
+            return RunDbCommand(() => _db.SetPatronTier(player, tierName));
         }
 
         public Task SetGhostColor(Guid player, System.Drawing.Color? color)

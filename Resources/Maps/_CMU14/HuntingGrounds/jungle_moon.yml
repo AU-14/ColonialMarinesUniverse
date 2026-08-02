@@ -5,7 +5,7 @@ meta:
   forkId: cmu14
   forkVersion: yautja-hunting-grounds-source-port
   time: 2026-05-29T00:00:00.000Z
-  entityCount: 4577
+  entityCount: 4591
 maps:
 - 1
 grids:
@@ -37,6 +37,11 @@ entities:
     - type: GridTree
     - type: MapLight
       ambientLightColor: '#FFFFFFFF'
+    - type: AmbientSound
+      sound:
+        collection: CMUYautjaHuntingGroundJungle
+      range: 512
+      volume: -8
     - type: Broadphase
     - type: OccluderTree
   - uid: 2
@@ -588,6 +593,16 @@ entities:
     - type: Transform
       pos: 56.5,3.5
       parent: 2
+- proto: CMUYautjaYoungbloodSpawn
+  entities:
+  - uid: 4583
+    components:
+    - type: Transform
+      pos: 56.5,3.5
+      parent: 2
+    - type: YautjaHuntSpawnPoint
+      kind: Youngblood
+      destinationId: jungle_moon
 - proto: RMCWallSandstoneTemple
   entities:
   - uid: 42
@@ -23273,4 +23288,75 @@ entities:
     components:
     - type: Transform
       pos: 112.5,96.5
+      parent: 2
+- proto: CMUYautjaHuntingGroundPreserveEdge
+  entities:
+  - uid: 4584
+    components:
+    - type: Transform
+      pos: 19.5,4.5
+      parent: 2
+  - uid: 4585
+    components:
+    - type: Transform
+      pos: 20.5,4.5
+      parent: 2
+  - uid: 4586
+    components:
+    - type: Transform
+      pos: 21.5,4.5
+      parent: 2
+  - uid: 4587
+    components:
+    - type: Transform
+      pos: 22.5,4.5
+      parent: 2
+  - uid: 4588
+    components:
+    - type: Transform
+      pos: 19.5,5.5
+      parent: 2
+  - uid: 4589
+    components:
+    - type: Transform
+      pos: 20.5,5.5
+      parent: 2
+  - uid: 4590
+    components:
+    - type: Transform
+      pos: 21.5,5.5
+      parent: 2
+  - uid: 4591
+    components:
+    - type: Transform
+      pos: 22.5,5.5
+      parent: 2
+- proto: CMUYautjaHuntingGroundPreserveShutter
+  entities:
+  - uid: 4578
+    components:
+    - type: Transform
+      pos: 19.5,7.5
+      parent: 2
+  - uid: 4579
+    components:
+    - type: Transform
+      pos: 20.5,7.5
+      parent: 2
+  - uid: 4580
+    components:
+    - type: Transform
+      pos: 21.5,7.5
+      parent: 2
+  - uid: 4581
+    components:
+    - type: Transform
+      pos: 22.5,7.5
+      parent: 2
+- proto: CMUYautjaHuntingGroundEscapeConsole
+  entities:
+  - uid: 4582
+    components:
+    - type: Transform
+      pos: 23.5,7.5
       parent: 2

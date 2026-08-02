@@ -328,36 +328,36 @@ public sealed partial class YautjaBowSystem : EntitySystem
             _meta.SetEntityName(ent, NameFor(ent.Comp, warhead, activated));
     }
 
-    private static string NameFor(YautjaArrowComponent arrow, YautjaArrowWarhead warhead, bool activated)
+    private string NameFor(YautjaArrowComponent arrow, YautjaArrowWarhead warhead, bool activated)
     {
         if (arrow.Dynamic)
         {
             if (!activated)
-                return "inert dynamic arrow";
+                return Loc.GetString("cmu-yautja-arrow-name-inert-dynamic");
 
             return warhead switch
             {
-                YautjaArrowWarhead.Explosive => "explosive dynamic arrow",
-                YautjaArrowWarhead.Emp => "EMP dynamic arrow",
-                _ => "inert dynamic arrow",
+                YautjaArrowWarhead.Explosive => Loc.GetString("cmu-yautja-arrow-name-explosive-dynamic"),
+                YautjaArrowWarhead.Emp => Loc.GetString("cmu-yautja-arrow-name-emp-dynamic"),
+                _ => Loc.GetString("cmu-yautja-arrow-name-inert-dynamic"),
             };
         }
 
         return warhead switch
         {
-            YautjaArrowWarhead.Explosive when activated => "activated explosive arrow",
-            YautjaArrowWarhead.Emp when activated => "activated EMP arrow",
-            YautjaArrowWarhead.Snare => "snare arrow",
-            _ => "inert arrow",
+            YautjaArrowWarhead.Explosive when activated => Loc.GetString("cmu-yautja-arrow-name-activated-explosive"),
+            YautjaArrowWarhead.Emp when activated => Loc.GetString("cmu-yautja-arrow-name-activated-emp"),
+            YautjaArrowWarhead.Snare => Loc.GetString("cmu-yautja-arrow-name-snare"),
+            _ => Loc.GetString("cmu-yautja-arrow-name-inert"),
         };
     }
 
-    private static string DynamicWarheadName(YautjaArrowWarhead warhead)
+    private string DynamicWarheadName(YautjaArrowWarhead warhead)
     {
         return warhead switch
         {
-            YautjaArrowWarhead.Emp => "EMP",
-            _ => "Explosive",
+            YautjaArrowWarhead.Emp => Loc.GetString("cmu-yautja-arrow-warhead-emp"),
+            _ => Loc.GetString("cmu-yautja-arrow-warhead-explosive"),
         };
     }
 

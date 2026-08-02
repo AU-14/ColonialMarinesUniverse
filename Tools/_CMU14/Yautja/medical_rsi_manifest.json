@@ -1,0 +1,21 @@
+{
+  "source": "CMSS13 icons/obj/items",
+  "target": "Resources/Textures/_CMU14/Yautja/medical.rsi",
+  "size": [32, 32],
+  "states": [
+    { "name": "crystal", "dmi": "hunter/pred_gear.dmi", "frames": 1 },
+    { "name": "thwei_1", "dmi": "hunter/pred_gear.dmi", "frames": 4, "delays": [6, 1, 1, 1] },
+    { "name": "scanner", "dmi": "hunter/pred_gear.dmi", "frames": 1 },
+    { "name": "brute_herbs", "dmi": "hunter/pred_gear.dmi", "frames": 1 },
+    { "name": "burn_herbs", "dmi": "hunter/pred_gear.dmi", "frames": 1 },
+    { "name": "medicomp", "dmi": "hunter/pred_gear.dmi", "frames": 1 },
+    { "name": "medicomp_open", "dmi": "hunter/pred_gear.dmi", "frames": 1 },
+    { "name": "stabilizer_gel", "dmi": "surgery_tools.dmi", "frames": 1 },
+    { "name": "wound_clamp", "dmi": "surgery_tools.dmi", "frames": 1 },
+    { "name": "healing_gun", "dmi": "surgery_tools.dmi", "frames": 1 },
+    { "name": "healing_gun_empty", "dmi": "surgery_tools.dmi", "frames": 1 },
+    { "name": "healing_gun_on", "dmi": "surgery_tools.dmi", "frames": 9, "delays": [19, 19, 19, 19, 19, 19, 19, 19, 19] },
+    { "name": "healing_gel", "dmi": "surgery_tools.dmi", "frames": 1 },
+    { "name": "surgical_case", "dmi": "storage/medical.dmi", "frames": 1 }
+  ]
+}

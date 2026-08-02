@@ -10,5 +10,6 @@ public sealed record SharedRMCPatronTier(
     bool Figurines,
     bool LobbyMessage,
     bool RoundEndShoutout,
-    string Tier
+    string Tier,
+    int Priority
 );

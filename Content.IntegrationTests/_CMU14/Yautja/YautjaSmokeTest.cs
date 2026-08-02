@@ -170,16 +170,22 @@ public sealed class YautjaSmokeTest
             try
             {
                 Assert.That(entMan.HasComponent<YautjaComponent>(hunter), Is.True);
-                AssertEquipped(entMan, inventory, hunter, "mask", "CMUYautjaMask");
-                AssertEquipped(entMan, inventory, hunter, "ears2", "CMUYautjaFalconDrone");
+                AssertEquipped(entMan, inventory, hunter, "ears", "CMUYautjaCommunicator");
+                Assert.That(inventory.TryGetSlotEntity(hunter, "ears2", out _), Is.False,
+                    "The falcon drone is rack gear and must not be part of the direct spawn loadout.");
                 AssertEquipped(entMan, inventory, hunter, "gloves", "CMUYautjaBracer");
-                AssertEquipped(entMan, inventory, hunter, "back", "CMUYautjaCapeFull");
-                AssertEquippedAny(entMan, inventory, hunter, "outerClothing", ClanArmorLoadoutIds);
-                AssertEquipped(entMan, inventory, hunter, "jumpsuit", "CMUYautjaBodyMesh");
-                AssertEquipped(entMan, inventory, hunter, "shoes", "CMUYautjaClanGreaves");
-                AssertEquipped(entMan, inventory, hunter, "belt", "CMUYautjaHuntingPouch");
-                AssertEquipped(entMan, inventory, hunter, "pocket1", "CMUYautjaSmartDisc");
-                AssertEquipped(entMan, inventory, hunter, "pocket2", "CMUYautjaMedicompFull");
+                Assert.That(inventory.TryGetSlotEntity(hunter, "gloves", out var bracer), Is.True);
+                var bracerGear = entMan.GetComponent<YautjaGearContainerComponent>(bracer!.Value);
+                Assert.That(bracerGear.Gear.ContainsKey(YautjaGearKind.Shield), Is.False,
+                    "The wrist shield is rack gear and must not be part of the direct spawn loadout.");
+                Assert.That(inventory.TryGetSlotEntity(hunter, "mask", out _), Is.False);
+                Assert.That(inventory.TryGetSlotEntity(hunter, "back", out _), Is.False);
+                Assert.That(inventory.TryGetSlotEntity(hunter, "outerClothing", out _), Is.False);
+                Assert.That(inventory.TryGetSlotEntity(hunter, "jumpsuit", out _), Is.False);
+                Assert.That(inventory.TryGetSlotEntity(hunter, "shoes", out _), Is.False);
+                Assert.That(inventory.TryGetSlotEntity(hunter, "belt", out _), Is.False);
+                Assert.That(inventory.TryGetSlotEntity(hunter, "pocket1", out _), Is.False);
+                Assert.That(inventory.TryGetSlotEntity(hunter, "pocket2", out _), Is.False);
             }
             finally
             {
@@ -846,8 +852,8 @@ public sealed class YautjaSmokeTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(bracerComp.InvisibilitySound, Is.EqualTo(YautjaInvisibilitySound.Modern));
-                    AssertSoundPath(bracerComp.CloakOnSound, "/Audio/_CMU14/Yautja/pred_cloakon_modern.ogg");
-                    AssertSoundPath(bracerComp.CloakOffSound, "/Audio/_CMU14/Yautja/pred_cloakoff_modern.ogg");
+                    AssertSoundPath(bracerComp.CloakOnSound, "/Audio/_CMU14/Yautja/pred_cloakon_modern.wav");
+                    AssertSoundPath(bracerComp.CloakOffSound, "/Audio/_CMU14/Yautja/pred_cloakoff_modern.wav");
                 });
             }
             finally
@@ -5491,9 +5497,34 @@ public sealed class YautjaSmokeTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaTrackGear"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaAddTrackedItem"));
-                    Assert.That(actionIds, Does.Contain("CMUActionYautjaRemoveTrackedItem"));
+                    var migratedActionIds = new[]
+                    {
+                        "CMUActionYautjaChangeExplosionType",
+                        "CMUActionYautjaRemoveBracerAttachments",
+                        "CMUActionYautjaCreateHealingCapsule",
+                        "CMUActionYautjaAddTrackedItem",
+                        "CMUActionYautjaRemoveTrackedItem",
+                        "CMUActionYautjaToggleBracerName",
+                        "CMUActionYautjaToggleBracerNotificationSound",
+                    };
+
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaOpenBracerMenu"));
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleCloak"));
+                    Assert.That(actionIds, Does.Contain("CMUActionYautjaRecall"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCallDisc"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTrackGear"),
+                        "The worn bracer should keep the tracker action off the action bar.");
+                    foreach (var migratedActionId in migratedActionIds)
+                        Assert.That(actionIds, Does.Not.Contain(migratedActionId), $"{migratedActionId} belongs to the bracer menu.");
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaOpenMarkPanel"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaSelfDestruct"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTranslator"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleBracerIdChip"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaLinkThrallBracer"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTransmitThrallMessage"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCreateStabilisingCrystal"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCreateHumanStabilisingCrystal"));
+                    Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCreateHuntingTrap"));
                 });
             }
             finally
@@ -5501,6 +5532,49 @@ public sealed class YautjaSmokeTest
                 entMan.DeleteEntity(hunter);
                 entMan.DeleteEntity(nonYautja);
 
+                if (!entMan.Deleted(bracer))
+                    entMan.DeleteEntity(bracer);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task BracerMenuRoutesNotificationSoundCommandThroughGuardedUtility()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var inventory = entMan.System<InventorySystem>();
+            var ui = entMan.System<SharedUserInterfaceSystem>();
+            var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
+
+            try
+            {
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
+
+                var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
+                bracerComp.NotificationSound = true;
+
+                ui.RaiseUiMessage(bracer, YautjaBracerUIKey.Key,
+                    new YautjaBracerPanelCommandMsg(YautjaBracerPanelCommand.ToggleBracerNotificationSound)
+                    {
+                        Actor = hunter,
+                    });
+
+                Assert.That(bracerComp.NotificationSound, Is.False,
+                    "The worn-bracer BUI command must route through TryToggleNotificationSound.");
+            }
+            finally
+            {
+                if (!entMan.Deleted(hunter))
+                    entMan.DeleteEntity(hunter);
                 if (!entMan.Deleted(bracer))
                     entMan.DeleteEntity(bracer);
             }
@@ -5755,6 +5829,7 @@ public sealed class YautjaSmokeTest
             var bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
             var anchoredGear = entMan.SpawnEntity("CMM11Knife", map.GridCoords.Offset(new Vector2(0, 2)));
             var looseGear = entMan.SpawnEntity("CMM11Knife", map.GridCoords.Offset(new Vector2(0, 5)));
+            var unlinkedCombistick = entMan.SpawnEntity("CMUYautjaCombistick", map.GridCoords.Offset(new Vector2(0, 4)));
             var action = entMan.SpawnEntity("CMUActionYautjaTrackGear", MapCoordinates.Nullspace);
 
             try
@@ -5780,6 +5855,7 @@ public sealed class YautjaSmokeTest
                 Assert.That(ui.TryGetUiState<YautjaBracerPanelState>(bracer, YautjaBracerUIKey.Key, out var state), Is.True);
 
                 var readout = state!.TrackerReadout;
+                var combistickName = entMan.GetComponent<MetaDataComponent>(unlinkedCombistick).EntityName;
                 Assert.Multiple(() =>
                 {
                     Assert.That(readout.GearHuntingGrounds, Is.EqualTo(1),
@@ -5789,6 +5865,7 @@ public sealed class YautjaSmokeTest
                         "Anchored tracked gear must not win the same-z closest-signature pass.");
                     Assert.That(state.TrackedGear, Has.Count.EqualTo(1));
                     Assert.That(state.TrackedGear.Single().Distance, Is.EqualTo(5));
+                    Assert.That(state.TrackedGear.Select(entry => entry.Name), Does.Not.Contain(combistickName));
                 });
             }
             finally
@@ -5801,6 +5878,8 @@ public sealed class YautjaSmokeTest
                     entMan.DeleteEntity(anchoredGear);
                 if (!entMan.Deleted(looseGear))
                     entMan.DeleteEntity(looseGear);
+                if (!entMan.Deleted(unlinkedCombistick))
+                    entMan.DeleteEntity(unlinkedCombistick);
                 if (!entMan.Deleted(action))
                     entMan.DeleteEntity(action);
             }
@@ -5832,47 +5911,74 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public void BracerTrackerReadoutFormatsCmss13TrackGearInternalText()
+    public async Task BracerTrackerReadoutFormatsCmss13TrackGearInternalText()
     {
-        var readout = new YautjaTrackerReadout(
-            1,
-            2,
-            3,
-            4,
-            5,
-            6,
-            true,
-            "smart-disc",
-            17,
-            1,
-            30,
-            "Briefing");
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        CultureInfo? previousCulture = null;
 
-        var lines = readout.GetCmss13ReadoutLines();
-
-        Assert.Multiple(() =>
+        try
         {
-            Assert.That(lines, Has.Count.EqualTo(3));
-            Assert.That(lines[0], Is.EqualTo("Your bracer shows a readout of deceased Yautja bio signatures, <b>1</b> in the hunting grounds, <b>2</b> in orbit, <b>3</b> in low orbit."));
-            Assert.That(lines[1], Is.EqualTo("Your bracer shows a readout of Yautja technology signatures, <b>4</b> in the hunting grounds, <b>5</b> in orbit, <b>6</b> in low orbit."));
-            Assert.That(lines[2], Is.EqualTo("The closest signature, a <b>smart-disc</b>, is approximately <b>10</b> paces <b>northeast</b> in <b>Briefing</b>."));
-        });
+            await server.WaitPost(() =>
+            {
+                var loc = server.ResolveDependency<ILocalizationManager>();
+                previousCulture = loc.DefaultCulture;
+                loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
+            });
 
-        var direct = new YautjaTrackerReadout(0, 0, 0, 0, 0, 0, true, null, 0, 0, 0, null)
-            .GetCmss13ReadoutLines();
-        Assert.That(direct.Single(), Is.EqualTo("You are directly on top of the signature."));
+            await server.WaitAssertion(() =>
+            {
+                var readout = new YautjaTrackerReadout(
+                    1,
+                    2,
+                    3,
+                    4,
+                    5,
+                    6,
+                    true,
+                    "smart-disc",
+                    17,
+                    1,
+                    30,
+                    "Briefing");
 
-        var empty = new YautjaTrackerReadout(0, 0, 0, 0, 0, 0, false, null, 0, 0, 0, null)
-            .GetCmss13ReadoutLines();
-        Assert.That(empty.Single(), Is.EqualTo("There are no signatures that require your attention."));
+                var lines = readout.GetCmss13ReadoutLines();
 
-        var deadLowOrbitOnly = new YautjaTrackerReadout(0, 0, 2, 0, 0, 0, false, null, 0, 0, 0, null)
-            .GetCmss13ReadoutLines();
-        Assert.That(deadLowOrbitOnly.Single(), Is.EqualTo("Your bracer shows a readout of deceased Yautja bio signatures, <b>2</b> in low orbit."));
+                Assert.Multiple(() =>
+                {
+                    Assert.That(lines, Has.Count.EqualTo(3));
+                    Assert.That(lines[0], Is.EqualTo("Your bracer shows a readout of deceased Yautja bio signatures, <b>1</b> in the hunting grounds, <b>2</b> in orbit, <b>3</b> in low orbit."));
+                    Assert.That(lines[1], Is.EqualTo("Your bracer shows a readout of Yautja technology signatures, <b>4</b> in the hunting grounds, <b>5</b> in orbit, <b>6</b> in low orbit."));
+                    Assert.That(lines[2], Is.EqualTo("The closest signature, a <b>smart-disc</b>, is approximately <b>10</b> paces <b>northeast</b> in <b>Briefing</b>."));
+                });
 
-        var gearOrbitOnly = new YautjaTrackerReadout(0, 0, 0, 0, 2, 0, false, null, 0, 0, 0, null)
-            .GetCmss13ReadoutLines();
-        Assert.That(gearOrbitOnly.Single(), Is.EqualTo("Your bracer shows a readout of Yautja technology signatures, <b>2</b> in orbit."));
+                var direct = new YautjaTrackerReadout(0, 0, 0, 0, 0, 0, true, null, 0, 0, 0, null)
+                    .GetCmss13ReadoutLines();
+                Assert.That(direct.Single(), Is.EqualTo("You are directly on top of the signature."));
+
+                var empty = new YautjaTrackerReadout(0, 0, 0, 0, 0, 0, false, null, 0, 0, 0, null)
+                    .GetCmss13ReadoutLines();
+                Assert.That(empty.Single(), Is.EqualTo("There are no signatures that require your attention."));
+
+                var deadLowOrbitOnly = new YautjaTrackerReadout(0, 0, 2, 0, 0, 0, false, null, 0, 0, 0, null)
+                    .GetCmss13ReadoutLines();
+                Assert.That(deadLowOrbitOnly.Single(), Is.EqualTo("Your bracer shows a readout of deceased Yautja bio signatures, <b>2</b> in low orbit."));
+
+                var gearOrbitOnly = new YautjaTrackerReadout(0, 0, 0, 0, 2, 0, false, null, 0, 0, 0, null)
+                    .GetCmss13ReadoutLines();
+                Assert.That(gearOrbitOnly.Single(), Is.EqualTo("Your bracer shows a readout of Yautja technology signatures, <b>2</b> in orbit."));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                if (previousCulture != null)
+                    server.ResolveDependency<ILocalizationManager>().SetCulture(previousCulture);
+            });
+        }
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]
@@ -5889,7 +5995,7 @@ public sealed class YautjaSmokeTest
 
             var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var bracer = entMan.SpawnEntity("CMUYautjaBracer", MapCoordinates.Nullspace);
-            var item = entMan.SpawnEntity("CMM11Knife", MapCoordinates.Nullspace);
+            var item = entMan.SpawnEntity("CMUYautjaCombistick", MapCoordinates.Nullspace);
             var addAction = entMan.SpawnEntity("CMUActionYautjaAddTrackedItem", MapCoordinates.Nullspace);
             var removeAction = entMan.SpawnEntity("CMUActionYautjaRemoveTrackedItem", MapCoordinates.Nullspace);
 
@@ -5899,6 +6005,7 @@ public sealed class YautjaSmokeTest
                 Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
                 Assert.That(hands.TryPickupAnyHand(hunter, item), Is.True);
                 Assert.That(hands.GetActiveItem(hunter), Is.EqualTo(item));
+                Assert.That(entMan.HasComponent<YautjaTechItemComponent>(item), Is.True);
                 Assert.That(entMan.HasComponent<YautjaTrackedItemComponent>(item), Is.False);
 
                 var addComp = entMan.GetComponent<ActionComponent>(addAction);
@@ -5915,6 +6022,7 @@ public sealed class YautjaSmokeTest
                     Assert.That(add.Handled, Is.True);
                     Assert.That(entMan.HasComponent<YautjaTrackedItemComponent>(item), Is.True);
                     Assert.That(entMan.HasComponent<YautjaTrackedItemComponent>(bracer), Is.False);
+                    Assert.That(hands.GetActiveItem(hunter), Is.EqualTo(item));
                 });
 
                 var removeComp = entMan.GetComponent<ActionComponent>(removeAction);
@@ -5930,6 +6038,8 @@ public sealed class YautjaSmokeTest
                 {
                     Assert.That(remove.Handled, Is.True);
                     Assert.That(entMan.HasComponent<YautjaTrackedItemComponent>(item), Is.False);
+                    Assert.That(entMan.HasComponent<YautjaTechItemComponent>(item), Is.True);
+                    Assert.That(hands.GetActiveItem(hunter), Is.EqualTo(item));
                 });
             }
             finally
@@ -6180,7 +6290,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerNotificationSoundToggleMatchesCmss13State()
+    public async Task BracerNotificationSoundToggleIsMenuOnlyWhileHandlerRemainsAvailable()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -6205,7 +6315,7 @@ public sealed class YautjaSmokeTest
                 var actionIds = ev.Actions
                     .Select(actionUid => entMan.GetComponent<MetaDataComponent>(actionUid).EntityPrototype?.ID)
                     .ToArray();
-                Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleBracerNotificationSound"));
+                Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleBracerNotificationSound"));
 
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
                 Assert.That(bracerComp.NotificationSound, Is.True);
@@ -6252,7 +6362,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerNameToggleControlsYautjaIdentityForYautjaViewer()
+    public async Task BracerNameToggleIsMenuOnlyWhileHandlerControlsYautjaIdentity()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -6282,7 +6392,7 @@ public sealed class YautjaSmokeTest
                 var actionIds = ev.Actions
                     .Select(actionUid => entMan.GetComponent<MetaDataComponent>(actionUid).EntityPrototype?.ID)
                     .ToArray();
-                Assert.That(actionIds, Does.Contain("CMUActionYautjaToggleBracerName"));
+                Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaToggleBracerName"));
 
                 Assert.That(Identity.Name(hunter, entMan, viewer).Name, Is.EqualTo("A'ke Ret"));
                 Assert.That(Identity.Name(hunter, entMan, nonYautja).Name, Is.EqualTo(Loc.GetString("cmu-yautja-identity-unknown")));
@@ -6547,7 +6657,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerIdChipActionIsGrantedToWornAndHeldHunterBracerLikeCmss13Keybind()
+    public async Task BracerIdChipActionIsPanelOnlyWhenWornButGrantedWhenHeldLikeCmss13Keybind()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -6584,8 +6694,9 @@ public sealed class YautjaSmokeTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(wornActionIds, Does.Contain("CMUActionYautjaToggleBracerIdChip"));
+                    Assert.That(wornActionIds, Does.Not.Contain("CMUActionYautjaToggleBracerIdChip"));
                     Assert.That(heldActionIds, Does.Contain("CMUActionYautjaToggleBracerIdChip"));
+                    Assert.That(heldActionIds, Does.Not.Contain("CMUActionYautjaChangeExplosionType"));
                 });
             }
             finally
@@ -6766,7 +6877,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerLinkThrallActionIsGrantedToWornAndHeldHunterBracerLikeCmss13Keybind()
+    public async Task BracerLinkThrallActionIsPanelOnlyWhenWornButGrantedWhenHeldLikeCmss13Keybind()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -6803,8 +6914,9 @@ public sealed class YautjaSmokeTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(wornActionIds, Does.Contain("CMUActionYautjaLinkThrallBracer"));
+                    Assert.That(wornActionIds, Does.Not.Contain("CMUActionYautjaLinkThrallBracer"));
                     Assert.That(heldActionIds, Does.Contain("CMUActionYautjaLinkThrallBracer"));
+                    Assert.That(heldActionIds, Does.Not.Contain("CMUActionYautjaChangeExplosionType"));
                 });
             }
             finally
@@ -7022,7 +7134,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerChangeExplosionTypeActionIsGrantedToWornAndHeldHunterBracerLikeCmss13Keybind()
+    public async Task BracerChangeExplosionTypeIsMenuOnlyForWornAndHeldHunterBracer()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -7059,8 +7171,8 @@ public sealed class YautjaSmokeTest
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(wornActionIds, Does.Contain("CMUActionYautjaChangeExplosionType"));
-                    Assert.That(heldActionIds, Does.Contain("CMUActionYautjaChangeExplosionType"));
+                    Assert.That(wornActionIds, Does.Not.Contain("CMUActionYautjaChangeExplosionType"));
+                    Assert.That(heldActionIds, Does.Not.Contain("CMUActionYautjaChangeExplosionType"));
                 });
             }
             finally
@@ -7167,7 +7279,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerInjectorsActionIsGrantedToWornHunterBracerLikeCmss13SignalAction()
+    public async Task BracerInjectorsActionIsPanelOnlyForWornHunterBracerLikeCmss13SignalAction()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -7192,8 +7304,8 @@ public sealed class YautjaSmokeTest
                     .Select(actionUid => entMan.GetComponent<MetaDataComponent>(actionUid).EntityPrototype?.ID)
                     .ToArray();
 
-                Assert.That(actionIds, Does.Contain("CMUActionYautjaCreateStabilisingCrystal"),
-                    "CMSS13 /datum/action/predator_action/bracer/thwei listens to COMSIG_KB_YAUTJA_INJECTORS and is part of hunter bracer_actions.");
+                Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCreateStabilisingCrystal"),
+                    "The worn hunter bracer should now expose injectors through the bracer panel instead of a standalone action-bar button.");
             }
             finally
             {
@@ -7208,7 +7320,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerCapsuleActionIsGrantedToWornHunterBracerLikeCmss13SignalAction()
+    public async Task BracerCapsuleActionIsMenuOnlyForWornHunterBracer()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -7233,8 +7345,7 @@ public sealed class YautjaSmokeTest
                     .Select(actionUid => entMan.GetComponent<MetaDataComponent>(actionUid).EntityPrototype?.ID)
                     .ToArray();
 
-                Assert.That(actionIds, Does.Contain("CMUActionYautjaCreateHealingCapsule"),
-                    "CMSS13 /datum/action/predator_action/bracer/capsule listens to COMSIG_KB_YAUTJA_CAPSULE and is part of hunter bracer_actions.");
+                Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaCreateHealingCapsule"));
             }
             finally
             {
@@ -7249,7 +7360,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerRecallActionsRemainDistinct()
+    public async Task BracerRecallActionIsLocalizedAndSoleDiscAction()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -7278,9 +7389,7 @@ public sealed class YautjaSmokeTest
                 Assert.Multiple(() =>
                 {
                     Assert.That(actionNames, Contains.Key("CMUActionYautjaRecall"));
-                    Assert.That(actionNames, Contains.Key("CMUActionYautjaCallDisc"));
-                    Assert.That(actionNames["CMUActionYautjaRecall"], Is.EqualTo("Вернуть снаряжение"));
-                    Assert.That(actionNames["CMUActionYautjaCallDisc"], Is.EqualTo("Вернуть диск"));
+                    Assert.That(actionNames, Does.Not.ContainKey("CMUActionYautjaCallDisc"));
                 });
             }
             finally
@@ -7477,7 +7586,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerMessageActionIsGrantedToWornHunterBracer()
+    public async Task BracerMessageActionIsPanelOnlyForWornHunterBracer()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -7502,7 +7611,7 @@ public sealed class YautjaSmokeTest
                     .Select(actionUid => entMan.GetComponent<MetaDataComponent>(actionUid).EntityPrototype?.ID)
                     .ToArray();
 
-                Assert.That(actionIds, Does.Contain("CMUActionYautjaTransmitThrallMessage"));
+                Assert.That(actionIds, Does.Not.Contain("CMUActionYautjaTransmitThrallMessage"));
             }
             finally
             {
@@ -11344,7 +11453,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task YautjaButcherActionStartsButcheringAdjacentDeadTargetLikeCmss13()
+    public async Task YautjaButcherActionOpensAdjacentDeadTargetSelectionLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -11376,19 +11485,47 @@ public sealed class YautjaSmokeTest
                 entMan.EventBus.RaiseLocalEvent(hunter, ev);
 
                 Assert.That(ev.Handled, Is.True);
-                var doAfter = entMan.GetComponent<DoAfterComponent>(hunter);
-                var activeButcher = doAfter.DoAfters.Values.Single(active =>
-                    !active.Cancelled &&
-                    !active.Completed &&
-                    active.Args.Event is YautjaButcherDoAfterEvent);
+                var dialog = entMan.GetComponent<DialogComponent>(hunter);
 
                 Assert.Multiple(() =>
                 {
-                    Assert.That(activeButcher.Args.Target, Is.EqualTo(target));
-                    Assert.That(activeButcher.Args.Target, Is.Not.EqualTo(farTarget));
-                    Assert.That(activeButcher.Args.Delay, Is.EqualTo(TimeSpan.FromSeconds(7)));
+                    Assert.That(dialog.DialogType, Is.EqualTo(DialogType.Options));
+                    Assert.That(dialog.Options, Has.Count.EqualTo(1),
+                        "Only the adjacent dead target is offered; the farther corpse is not.");
+                    Assert.That(dialog.Options[0].Text, Is.EqualTo(entMan.GetComponent<MetaDataComponent>(target).EntityName));
+                    Assert.That(dialog.Options[0].Event, Is.TypeOf<YautjaButcherTargetSelectedEvent>());
+                    Assert.That(entMan.TryGetComponent<DoAfterComponent>(hunter, out var doAfter), Is.True);
+                    Assert.That(doAfter.DoAfters.Values.Any(active =>
+                        !active.Cancelled && !active.Completed && active.Args.Event is YautjaButcherDoAfterEvent), Is.False,
+                        "Selecting a target is a separate step in CMSS13; the action must not start butchering yet.");
                     Assert.That(entMan.GetComponent<YautjaTrophySourceComponent>(target).ButcheryProgress, Is.Zero);
                     Assert.That(entMan.GetComponent<YautjaTrophySourceComponent>(farTarget).ButcheryProgress, Is.Zero);
+                });
+
+                var targetSelected = (YautjaButcherTargetSelectedEvent) dialog.Options[0].Event!;
+                entMan.EventBus.RaiseLocalEvent(hunter, targetSelected);
+
+                var procedureDialog = entMan.GetComponent<DialogComponent>(hunter);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(procedureDialog.Options, Has.Count.EqualTo(10),
+                        "A human victim exposes Skin plus the nine CMSS13 delimb choices.");
+                    Assert.That(procedureDialog.Options.All(option => option.Event is YautjaButcherProcedureSelectedEvent), Is.True);
+                    Assert.That(procedureDialog.Options.Select(option =>
+                        ((YautjaButcherProcedureSelectedEvent) option.Event!).Procedure),
+                        Is.EqualTo(new[]
+                        {
+                            YautjaButcherProcedure.Skin,
+                            YautjaButcherProcedure.Head,
+                            YautjaButcherProcedure.RightHand,
+                            YautjaButcherProcedure.LeftHand,
+                            YautjaButcherProcedure.RightArm,
+                            YautjaButcherProcedure.LeftArm,
+                            YautjaButcherProcedure.RightFoot,
+                            YautjaButcherProcedure.LeftFoot,
+                            YautjaButcherProcedure.RightLeg,
+                            YautjaButcherProcedure.LeftLeg,
+                        }));
                 });
             }
             finally
@@ -11405,6 +11542,44 @@ public sealed class YautjaSmokeTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaButcherSkinStageStartsWithoutDirtyingServerOnlyState()
+    {
+        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var mobState = entMan.System<MobStateSystem>();
+                var trophies = entMan.System<YautjaTrophySystem>();
+                var hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+                var target = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+                try
+                {
+                    entMan.EnsureComponent<YautjaComponent>(hunter);
+                    mobState.ChangeMobState(target, MobState.Dead);
+
+                    Assert.That(trophies.TryStartButcher(hunter, target, YautjaButcherProcedure.Skin), Is.True);
+                    Assert.That(entMan.GetComponent<YautjaTrophySourceComponent>(target).ButcheryProgress, Is.EqualTo(1));
+                }
+                finally
+                {
+                    if (!entMan.Deleted(hunter))
+                        entMan.DeleteEntity(hunter);
+                    if (!entMan.Deleted(target))
+                        entMan.DeleteEntity(target);
+                }
+            });
+        }
+        finally
+        {
+            server.Dispose();
+        }
     }
 
     [Test]
@@ -11730,8 +11905,10 @@ public sealed class YautjaSmokeTest
         await pair.CleanReturnAsync();
     }
 
-    [Test]
-    public async Task ThrowHeldItemDoesNotPassThroughHunterShipWall()
+    [TestCase("Pen")]
+    [TestCase("CMUYautjaHarpoon")]
+    [TestCase("CMUYautjaSmartDisc")]
+    public async Task ThrowHeldItemDoesNotPassThroughHunterShipWall(string itemPrototype)
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -11745,7 +11922,7 @@ public sealed class YautjaSmokeTest
 
             var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
             var wall = entMan.SpawnEntity("CMUHunterShipWallTurfClosedWallHuntershipHunterBase", map.GridCoords.Offset(new Vector2(1, 0)));
-            var item = entMan.SpawnEntity("Pen", map.GridCoords);
+            var item = entMan.SpawnEntity(itemPrototype, map.GridCoords);
 
             try
             {
@@ -12206,6 +12383,51 @@ public sealed class YautjaSmokeTest
                     entMan.DeleteEntity(hunter);
                 if (!entMan.Deleted(chair))
                     entMan.DeleteEntity(chair);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HunterShipChairBuckleFacesChairDirection()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var buckle = entMan.System<SharedBuckleSystem>();
+            var transform = entMan.System<SharedTransformSystem>();
+
+            var eastRider = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+            var eastChair = entMan.SpawnEntity("CMUHunterShipPlacedCMChairNonFoldChairEast", map.GridCoords.Offset(new Vector2(1, 0)));
+            var northRider = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(0, 2)));
+            var northChair = entMan.SpawnEntity("CMUHunterShipPlacedCMChairComfyComfychairNorth", map.GridCoords.Offset(new Vector2(1, 2)));
+
+            try
+            {
+                Assert.That(buckle.TryBuckle(eastRider, eastRider, eastChair, popup: false), Is.True);
+                Assert.That(buckle.TryBuckle(northRider, northRider, northChair, popup: false), Is.True);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(transform.GetWorldRotation(eastRider).GetCardinalDir(), Is.EqualTo(Direction.East));
+                    Assert.That(transform.GetWorldRotation(northRider).GetCardinalDir(), Is.EqualTo(Direction.North));
+                });
+            }
+            finally
+            {
+                if (!entMan.Deleted(eastRider))
+                    entMan.DeleteEntity(eastRider);
+                if (!entMan.Deleted(eastChair))
+                    entMan.DeleteEntity(eastChair);
+                if (!entMan.Deleted(northRider))
+                    entMan.DeleteEntity(northRider);
+                if (!entMan.Deleted(northChair))
+                    entMan.DeleteEntity(northChair);
             }
         });
 
@@ -15335,6 +15557,25 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    public async Task SleepingHellhoundProvidesDialogUiForWakeConfirmation()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+            var prototype = prototypes.Index<EntityPrototype>("CMUHunterShipSleepingHellhound");
+
+            Assert.That(prototype.TryGetComponent<UserInterfaceComponent>(out _, factory), Is.True,
+                "The sleeping Hellhound must expose UserInterface so DialogBui can open the wake confirmation.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task SleepingHellhoundRequiresConfirmationBeforeWaking()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
@@ -15590,15 +15831,15 @@ public sealed class YautjaSmokeTest
                 var cameraComputer = entMan.GetComponent<RMCCameraComputerComponent>(internalCamera);
                 Assert.That(cameraComputer.Title, Is.EqualTo("cmu-yautja-houndpad-interface-title"));
                 Assert.That(cameraComputer.ViewportSize, Is.EqualTo(new Vector2i(672, 480)));
-                Assert.That(cameraComputer.ProtoIds, Does.Contain("CMUYautjaHellhoundCamera"));
+                Assert.That(cameraComputer.ProtoIds, Does.Contain("CMUMobYautjaHellhound"));
                 Assert.That(cameraComputer.CameraIds, Does.Contain(entMan.GetNetEntity(hellhound)));
                 Assert.That(cameraComputer.CameraIds, Does.Contain(entMan.GetNetEntity(otherHellhound)));
                 Assert.That(cameraComputer.CameraIds, Does.Not.Contain(entMan.GetNetEntity(deadHellhound)));
 
                 var firstCamera = entMan.GetComponent<RMCCameraComponent>(hellhound);
                 var secondCamera = entMan.GetComponent<RMCCameraComponent>(otherHellhound);
-                Assert.That(firstCamera.Id, Is.EqualTo("CMUYautjaHellhoundCamera"));
-                Assert.That(secondCamera.Id, Is.EqualTo("CMUYautjaHellhoundCamera"));
+                Assert.That(firstCamera.Id, Is.EqualTo("CMUMobYautjaHellhound"));
+                Assert.That(secondCamera.Id, Is.EqualTo("CMUMobYautjaHellhound"));
 
                 entMan.EventBus.RaiseLocalEvent(pad, new UseInHandEvent(ordinaryUser));
                 Assert.That(ui.IsUiOpen(internalCamera, RMCCameraUiKey.Key, ordinaryUser), Is.False,
@@ -15795,7 +16036,7 @@ public sealed class YautjaSmokeTest
                     "CMSS13 houndcam reads the live Hellhound set each time; a Hellhound returning to a live state must expose a live camera feed again.");
                 Assert.Multiple(() =>
                 {
-                    Assert.That(revivedCamera!.Id, Is.EqualTo("CMUYautjaHellhoundCamera"));
+                    Assert.That(revivedCamera!.Id, Is.EqualTo("CMUMobYautjaHellhound"));
                     Assert.That(revivedCamera.Rename, Is.False,
                         "Houndcam feeds should use the Hellhound mob name, not area-renamed security-camera labels.");
                 });
@@ -15946,7 +16187,7 @@ public sealed class YautjaSmokeTest
                 var cameraComputer = entMan.GetComponent<RMCCameraComputerComponent>(internalCamera);
                 Assert.That(cameraComputer.Title, Is.EqualTo("cmu-yautja-houndpad-interface-title"));
                 Assert.That(cameraComputer.ViewportSize, Is.EqualTo(new Vector2i(672, 480)));
-                Assert.That(cameraComputer.ProtoIds, Does.Contain("CMUYautjaHellhoundCamera"));
+                Assert.That(cameraComputer.ProtoIds, Does.Contain("CMUMobYautjaHellhound"));
 
                 entMan.EventBus.RaiseLocalEvent(pad, new UseInHandEvent(hunter));
                 Assert.That(cameraComputer.CameraIds, Does.Contain(entMan.GetNetEntity(hellhound)));

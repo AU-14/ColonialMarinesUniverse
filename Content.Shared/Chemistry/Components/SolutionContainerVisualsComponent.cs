@@ -10,6 +10,8 @@ namespace Content.Shared.Chemistry.Components
         public int MaxFillLevels = 0;
         [DataField]
         public string? FillBaseName = null;
+        [DataField("fillSprite")]
+        public SpriteSpecifier? FillSprite;
         [DataField]
         public SolutionContainerLayers Layer = SolutionContainerLayers.Fill;
         [DataField]

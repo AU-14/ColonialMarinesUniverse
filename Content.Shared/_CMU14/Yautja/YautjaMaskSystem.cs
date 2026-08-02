@@ -166,12 +166,14 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        if (!CreateVisorGlasses(mask, user))
+            return;
+
         mask.Comp.VisorEnabled = true;
         mask.Comp.User = user;
         mask.Comp.NextDrain = _timing.CurTime + mask.Comp.DrainEvery;
         Dirty(mask);
 
-        CreateVisorGlasses(mask, user);
         _actions.SetToggled(mask.Comp.ToggleVisorAction, true);
 
         if (!feedback)
@@ -365,22 +367,29 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         return false;
     }
 
-    private void CreateVisorGlasses(Entity<YautjaMaskComponent> mask, EntityUid user)
+    private bool CreateVisorGlasses(Entity<YautjaMaskComponent> mask, EntityUid user)
     {
         DeleteVisorGlasses(mask, user);
 
         if (_inventory.TryGetSlotEntity(user, "eyes", out _))
-            return;
+            return false;
 
         var glasses = Spawn(mask.Comp.VisorGlassesPrototype, Transform(user).Coordinates);
         if (!_inventory.TryEquip(user, glasses, "eyes", silent: true, force: true))
         {
             QueueDel(glasses);
-            return;
+            return false;
         }
+
+        var visor = EnsureComp<YautjaMaskVisorGlassesComponent>(glasses);
+        visor.Mask = mask.Owner;
+        visor.User = user;
+        visor.ThermalVisionEnabled = true;
+        Dirty(glasses, visor);
 
         mask.Comp.VisorGlasses = glasses;
         Dirty(mask);
+        return true;
     }
 
     private void DeleteVisorGlasses(Entity<YautjaMaskComponent> mask, EntityUid? user)
@@ -389,8 +398,10 @@ public sealed partial class YautjaMaskSystem : EntitySystem
 
         if (user != null &&
             _inventory.TryGetSlotEntity(user.Value, "eyes", out var equipped) &&
-            HasComp<YautjaMaskVisorGlassesComponent>(equipped.Value))
+            TryComp(equipped.Value, out YautjaMaskVisorGlassesComponent? visor))
         {
+            visor.ThermalVisionEnabled = false;
+            Dirty(equipped.Value, visor);
             _inventory.TryUnequip(user.Value, "eyes", out _, silent: true, force: true);
             QueueDel(equipped.Value);
             if (mask.Comp.VisorGlasses == equipped.Value)

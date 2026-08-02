@@ -1,0 +1,122 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/janitor.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "caution"
+    },
+    {
+      "name": "bucket"
+    },
+    {
+      "name": "mop"
+    },
+    {
+      "name": "mop_overlay"
+    },
+    {
+      "name": "mopbucket"
+    },
+    {
+      "name": "cone"
+    },
+    {
+      "name": "lightreplacer1"
+    },
+    {
+      "name": "lightreplacer0"
+    },
+    {
+      "name": "waffles"
+    },
+    {
+      "name": "plate"
+    },
+    {
+      "name": "snack_bowl"
+    },
+    {
+      "name": "tray"
+    },
+    {
+      "name": "trashbag_empty"
+    },
+    {
+      "name": "trashbag_small"
+    },
+    {
+      "name": "trashbag_mid"
+    },
+    {
+      "name": "trashbag_full"
+    },
+    {
+      "name": "trashbag"
+    },
+    {
+      "name": "cart"
+    },
+    {
+      "name": "cart_garbage"
+    },
+    {
+      "name": "cart_mop"
+    },
+    {
+      "name": "cart_spray"
+    },
+    {
+      "name": "cart_sign1"
+    },
+    {
+      "name": "cart_sign2"
+    },
+    {
+      "name": "cart_sign3"
+    },
+    {
+      "name": "cart_sign4"
+    },
+    {
+      "name": "cart_replacer"
+    },
+    {
+      "name": "lid_bucket"
+    },
+    {
+      "name": "lid_mopbucket"
+    },
+    {
+      "name": "cart_bucket"
+    },
+    {
+      "name": "janibucket"
+    },
+    {
+      "name": "lid_janibucket"
+    },
+    {
+      "name": "soap"
+    },
+    {
+      "name": "soapnt"
+    },
+    {
+      "name": "soapdeluxe"
+    },
+    {
+      "name": "soapsyndie"
+    },
+    {
+      "name": "rag"
+    },
+    {
+      "name": "towel"
+    }
+  ]
+}

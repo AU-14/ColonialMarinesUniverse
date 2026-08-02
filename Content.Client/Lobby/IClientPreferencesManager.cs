@@ -1,5 +1,6 @@
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared._CMU14.Yautja;
 using Robust.Shared.Prototypes;
 
 namespace Content.Client.Lobby
@@ -12,6 +13,8 @@ namespace Content.Client.Lobby
 
         GameSettings? Settings { get; }
         PlayerPreferences? Preferences { get; }
+        YautjaProfileCapabilities YautjaCapabilities { get; }
+        void UpdateYautjaCapabilities(YautjaProfileCapabilities capabilities);
         void Initialize();
         void SelectCharacter(ICharacterProfile profile);
         void SelectCharacter(int slot);

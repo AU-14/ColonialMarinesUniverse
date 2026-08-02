@@ -7,7 +7,7 @@ namespace Content.Shared._CMU14.Yautja;
 
 public sealed partial class YautjaSpikeLauncherSystem : EntitySystem
 {
-    private const string NonYautjaExamineText = "Looks like some kind of...mechanical donut.";
+    private const string NonYautjaExamineText = "cmu-yautja-spike-launcher-nonyautja-examine";
 
     [Dependency] private SharedGunSystem _gun = default!;
 
@@ -23,7 +23,7 @@ public sealed partial class YautjaSpikeLauncherSystem : EntitySystem
     {
         if (!HasComp<YautjaComponent>(args.Examiner))
         {
-            args.PushText(NonYautjaExamineText);
+            args.PushText(Loc.GetString(NonYautjaExamineText));
             return;
         }
 
@@ -34,7 +34,10 @@ public sealed partial class YautjaSpikeLauncherSystem : EntitySystem
             return;
         }
 
-        args.PushMarkup($"It currently has <bold>{count}/{capacity}</bold> spikes.");
+        args.PushMarkup(Loc.GetString(
+            "cmu-yautja-spike-launcher-examine-spikes",
+            ("count", count),
+            ("capacity", capacity)));
     }
 
     private void OnTakeAmmo(Entity<YautjaSpikeLauncherComponent> ent, ref TakeAmmoEvent args)

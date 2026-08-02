@@ -4,6 +4,7 @@ using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Stamina;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared._RMC14.Vendors;
 using Content.Shared.Damage;
@@ -18,7 +19,6 @@ using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
-using Content.Shared.StatusIcon.Components;
 using Content.Shared.Whitelist;
 using Content.Shared.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Weeds;
@@ -113,7 +113,8 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         EnsureComp<ParalyzeOnPullAttemptImmuneComponent>(ent);
         EnsureComp<InfectOnPullAttemptImmuneComponent>(ent);
         EnsureComp<YautjaTrophyRecordComponent>(ent);
-        RemComp<StatusIconComponent>(ent);
+        RemComp<StaminaComponent>(ent.Owner);
+        RemComp<RMCStaminaComponent>(ent.Owner);
 
         if (ent.Comp.StunResistance > 0f)
             _rmcStatusEffects.GiveStunResistance(ent, ent.Comp.StunResistance);
@@ -238,7 +239,9 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (ent.Comp.SkillLevel <= 0)
             return;
 
-        TryComp(ent, out SkillsComponent? skills);
+        if (TryComp(ent, out SkillsComponent? skills) && skills.Preset != null)
+            return;
+
         var toGrant = new Dictionary<EntProtoId<SkillDefinitionComponent>, int>();
         foreach (var skill in _skills.Skills)
         {

@@ -331,6 +331,7 @@
         Heat: 55
   - type: ProjectileMaxRange
     max: 8
+  - type: YautjaCasterEradicatorProjectile
   - type: TriggerOnCollide
     fixtureID: projectile
   - type: ExplodeOnTrigger

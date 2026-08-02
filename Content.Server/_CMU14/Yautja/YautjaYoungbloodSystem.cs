@@ -168,6 +168,10 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
         if (_prototype.TryIndex<JobPrototype>(YoungbloodJob, out var job))
             _stationSpawning.EquipStartingGear(ent.Owner, job.StartingGear, raiseEvent: false);
 
+        var yautja = EnsureComp<YautjaComponent>(ent.Owner);
+        yautja.ClanRank = YautjaRank.YoungBlood;
+        Dirty(ent.Owner, yautja);
+
         ent.Comp.SetupComplete = true;
 
         _predatorRound.RegisterYoungblood(ent.Owner);

@@ -1,0 +1,14 @@
+- files: ["alien_creature1.ogg", "alien_creature2.ogg", "alien_creature3.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "CMSS13 developers"
+  source: "https://github.com/cmss13-devs/cmss13/tree/master/sound/soundscape"
+
+- files: ["wind1.ogg", "wind2.ogg", "rocksfalling1.ogg", "rocksfalling2.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "CMSS13 developers"
+  source: "https://github.com/cmss13-devs/cmss13/tree/master/sound/soundscape"
+
+- files: ["hunt_begin.ogg"]
+  license: "CC-BY-SA-3.0"
+  copyright: "CMSS13 developers"
+  source: "https://github.com/cmss13-devs/cmss13/blob/master/sound/misc/hunt_begin.ogg"

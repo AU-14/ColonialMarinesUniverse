@@ -1,0 +1,20 @@
+# Playlists used by the CMSS13 Yautja hunting-ground areas.
+
+- type: soundCollection
+  id: CMUYautjaHuntingGroundJungle
+  files:
+    - /Audio/_CMU14/Yautja/HuntingGrounds/alien_creature1.ogg
+    - /Audio/_CMU14/Yautja/HuntingGrounds/alien_creature2.ogg
+    - /Audio/_CMU14/Yautja/HuntingGrounds/alien_creature3.ogg
+
+- type: soundCollection
+  id: CMUYautjaHuntingGroundDesert
+  files:
+    - /Audio/_CMU14/Yautja/HuntingGrounds/wind1.ogg
+    - /Audio/_CMU14/Yautja/HuntingGrounds/wind2.ogg
+
+- type: soundCollection
+  id: CMUYautjaHuntingGroundCaves
+  files:
+    - /Audio/_CMU14/Yautja/HuntingGrounds/rocksfalling1.ogg
+    - /Audio/_CMU14/Yautja/HuntingGrounds/rocksfalling2.ogg

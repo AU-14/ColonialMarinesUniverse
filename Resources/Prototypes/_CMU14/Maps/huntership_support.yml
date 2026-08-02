@@ -121,18 +121,27 @@
     offset: 0.5,0.5
     layers:
     - state: "Normal Hellhound Sleeping"
+  - type: InteractionOutline
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
   - type: Icon
     sprite: _CMU14/HunterShip/mob/humans/onmob/hunter/hellhound.rsi
     state: "Normal Hellhound Sleeping"
   - type: YautjaSleepingHellhound
 
 - type: entity
-  parent: SpawnPointLatejoin
+  parent: CMSpawnPointJobBase
   id: CMUHunterShipMarkerClanSpawn
   name: Hunter ship clan spawn
   description: Spawn marker for Hunter Ship clan/admin testing.
   suffix: Hunter Ship admin/test spawn
   components:
+  - type: SpawnPoint
+    job_id: CMUYautjaHunter
+  - type: YautjaPredatorSpawnPoint
+    kind: HunterShipClan
   - type: YautjaRelayDestination
 
 - type: entity
@@ -145,6 +154,8 @@
   - type: SpawnPoint
     job_id: CMUYautjaHunter
   - type: YautjaRelayDestination
+  - type: YautjaPredatorSpawnPoint
+    kind: HuntingGroundsYoungblood
   - type: YautjaHuntSpawnPoint
     kind: Youngblood
 
@@ -166,7 +177,6 @@
     spawn: /Maps/_CMU14/Shuttles/hunter_shuttle.yml
     offset: -0.5,-0.5
     ignoreGridFill: true
-    clearTargetTiles: false
   - type: FTLSmashImmune
   - type: NoFTL
 
@@ -189,7 +199,7 @@
   components:
   - type: FTLBeacon
   - type: DropshipDestination
-    FactionControlling: thirdparty
+    FactionControlling: yautja
   - type: FTLSmashImmune
   - type: NoFTL
 
@@ -202,7 +212,7 @@
   components:
   - type: FTLBeacon
   - type: DropshipDestination
-    FactionControlling: thirdparty
+    FactionControlling: yautja
   - type: FTLSmashImmune
   - type: NoFTL
 
@@ -215,7 +225,7 @@
   components:
   - type: FTLBeacon
   - type: DropshipDestination
-    FactionControlling: thirdparty
+    FactionControlling: yautja
   - type: FTLSmashImmune
   - type: NoFTL
 

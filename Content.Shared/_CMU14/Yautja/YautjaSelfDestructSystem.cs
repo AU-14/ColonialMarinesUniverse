@@ -352,7 +352,9 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             bracer.Comp.SelfDestructIntensitySlope,
             SelfDestructMaxIntensity(bracer.Comp),
             user ?? bracer.Owner,
-            maxTileBreak: bracer.Comp.SelfDestructMaxTileBreak,
+            maxTileBreak: SelfDestructMaxTileBreak(
+                bracer.Comp.SelfDestructExplosionType,
+                bracer.Comp.SelfDestructMaxTileBreak),
             canCreateVacuum: false);
 
         if (user is { } victim && !TerminatingOrDeleted(victim))
@@ -396,18 +398,25 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
         }
     }
 
-    private static float SelfDestructTotalIntensity(YautjaBracerComponent bracer)
+    internal static float SelfDestructTotalIntensity(YautjaBracerComponent bracer)
     {
         return bracer.SelfDestructExplosionType == YautjaSelfDestructExplosionType.Big
             ? 600
             : 800;
     }
 
-    private static float SelfDestructMaxIntensity(YautjaBracerComponent bracer)
+    internal static float SelfDestructMaxIntensity(YautjaBracerComponent bracer)
     {
         return bracer.SelfDestructExplosionType == YautjaSelfDestructExplosionType.Big
             ? 50
             : 550;
+    }
+
+    internal static int SelfDestructMaxTileBreak(
+        YautjaSelfDestructExplosionType type,
+        int configuredSmallValue)
+    {
+        return type == YautjaSelfDestructExplosionType.Big ? 0 : configuredSmallValue;
     }
 
     private bool CanArmSelfDestruct(Entity<YautjaBracerComponent> bracer, EntityUid user)

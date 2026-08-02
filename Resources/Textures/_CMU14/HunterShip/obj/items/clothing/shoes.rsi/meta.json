@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/clothing/shoes.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "rsic": false,
+  "states": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "BLANK"
+    },
+    {
+      "name": "sneakers"
+    },
+    {
+      "name": "boots"
+    },
+    {
+      "name": "white"
+    },
+    {
+      "name": "morgue"
+    },
+    {
+      "name": "chef"
+    },
+    {
+      "name": "orange"
+    },
+    {
+      "name": "orange1"
+    },
+    {
+      "name": "brown"
+    },
+    {
+      "name": "black"
+    },
+    {
+      "name": "yellow"
+    },
+    {
+      "name": "green"
+    },
+    {
+      "name": "blue"
+    },
+    {
+      "name": "purple"
+    },
+    {
+      "name": "red"
+    },
+    {
+      "name": "rain_bow"
+    },
+    {
+      "name": "mime"
+    },
+    {
+      "name": "s-ninja"
+    },
+    {
+      "name": "cult"
+    },
+    {
+      "name": "secshoes"
+    },
+    {
+      "name": "stompers"
+    },
+    {
+      "name": "boots_"
+    },
+    {
+      "name": "jackboots"
+    },
+    {
+      "name": "jackboots-1"
+    },
+    {
+      "name": "marine"
+    },
+    {
+      "name": "marine-1"
+    },
+    {
+      "name": "marine_brown"
+    },
+    {
+      "name": "marine_brown-1"
+    },
+    {
+      "name": "marine_jungle"
+    },
+    {
+      "name": "marine_jungle-1"
+    },
+    {
+      "name": "monkey_shoes"
+    },
+    {
+      "name": "monkey_shoes-1"
+    },
+    {
+      "name": "swat"
+    },
+    {
+      "name": "rmc_boots"
+    },
+    {
+      "name": "rmc_boots-1"
+    },
+    {
+      "name": "cbrn"
+    },
+    {
+      "name": "cbrn-1"
+    },
+    {
+      "name": "marine_grey_alt"
+    },
+    {
+      "name": "marine_grey_alt-1"
+    },
+    {
+      "name": "marine_grey"
+    },
+    {
+      "name": "marine_grey-1"
+    },
+    {
+      "name": "droid_boots"
+    },
+    {
+      "name": "droid_boots-1"
+    },
+    {
+      "name": "invis_droid_boots"
+    },
+    {
+      "name": "invis_droid_boots-1"
+    },
+    {
+      "name": "shoes_"
+    },
+    {
+      "name": "laceups"
+    },
+    {
+      "name": "rmc_laceups"
+    },
+    {
+      "name": "laceups_brown"
+    },
+    {
+      "name": "detective"
+    },
+    {
+      "name": "leather"
+    },
+    {
+      "name": "fancy"
+    },
+    {
+      "name": "misc"
+    },
+    {
+      "name": "sandals"
+    },
+    {
+      "name": "footwrap_sandals"
+    },
+    {
+      "name": "clown"
+    },
+    {
+      "name": "galoshes"
+    },
+    {
+      "name": "magboots0"
+    },
+    {
+      "name": "magboots1"
+    },
+    {
+      "name": "slippers_worn"
+    },
+    {
+      "name": "slippers"
+    },
+    {
+      "name": "flippers"
+    },
+    {
+      "name": "souto_man"
+    },
+    {
+      "name": "donator"
+    },
+    {
+      "name": "doom_boots"
+    }
+  ]
+}

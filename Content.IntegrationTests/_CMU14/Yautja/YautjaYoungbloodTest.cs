@@ -2329,6 +2329,9 @@ public sealed class YautjaYoungbloodTest
 
                 AssertEquippedPrototype(entMan, inventory, youngblood, "gloves", "CMUYautjaBracer");
                 AssertEquippedPrototype(entMan, inventory, youngblood, "ears", "CMUYautjaCommunicator");
+                AssertEquippedPrototype(entMan, inventory, youngblood, "mask", "CMUYautjaMask");
+                Assert.That(entMan.HasComponent<YautjaHudViewerComponent>(youngblood), Is.True,
+                    "The F7 Youngblood must receive the mask HUD used to see Yautja ranks.");
             }
             finally
             {

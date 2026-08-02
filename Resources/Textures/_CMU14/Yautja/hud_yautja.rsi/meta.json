@@ -80,6 +80,30 @@
                        "directions":  1
                    },
                    {
+                       "name":  "councilhud",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "leaderhud",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "soldierhud",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "soldierhud_wl",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "enforcerhud",
+                       "directions":  1
+                   },
+                   {
+                       "name":  "enforcerhud_wl",
+                       "directions":  1
+                   },
+                   {
                        "name":  "hunter_student",
                        "directions":  1
                    },

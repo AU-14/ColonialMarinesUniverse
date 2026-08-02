@@ -4,13 +4,14 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Robust.Shared.Player;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.Yautja;
 
 public sealed partial class YautjaBracerEmpSystem : EntitySystem
 {
-    private const string EmpObserverPopup = "You hear a hiss and crackle!";
-    private const string EmpWearerPopup = "Your bracers hiss and spark!";
+    private const string EmpObserverPopup = "cmu-yautja-emp-observer";
+    private const string EmpWearerPopup = "cmu-yautja-emp-wearer";
 
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private YautjaCloakSystem _cloak = default!;
@@ -59,15 +60,15 @@ public sealed partial class YautjaBracerEmpSystem : EntitySystem
     {
         if (wearer is { } user)
         {
-            _popup.PopupEntity(EmpWearerPopup, user, user, PopupType.LargeCaution);
+            _popup.PopupEntity(Loc.GetString(EmpWearerPopup), user, user, PopupType.LargeCaution);
 
             var filter = Filter.Pvs(user, entityManager: EntityManager)
                 .RemoveWhereAttachedEntity(attached => attached == user);
-            _popup.PopupEntity(EmpObserverPopup, user, filter, true, PopupType.LargeCaution);
+            _popup.PopupEntity(Loc.GetString(EmpObserverPopup), user, filter, true, PopupType.LargeCaution);
             return;
         }
 
-        _popup.PopupEntity(EmpObserverPopup, bracer, Filter.Pvs(bracer, entityManager: EntityManager), true, PopupType.LargeCaution);
+        _popup.PopupEntity(Loc.GetString(EmpObserverPopup), bracer, Filter.Pvs(bracer, entityManager: EntityManager), true, PopupType.LargeCaution);
     }
 
     private static FixedPoint2 GetCmss13EmpDrain(YautjaBracerComponent bracer, float energyConsumption)

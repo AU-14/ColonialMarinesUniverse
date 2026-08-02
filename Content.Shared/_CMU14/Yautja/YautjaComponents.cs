@@ -24,11 +24,14 @@ using Robust.Shared.Serialization;
 
 namespace Content.Shared._CMU14.Yautja;
 
-[RegisterComponent, NetworkedComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class YautjaComponent : Component
 {
     [DataField]
     public LocId RankName = "cmu-yautja-rank-hunter";
+
+    [DataField, AutoNetworkedField]
+    public YautjaRank ClanRank = YautjaRank.Blooded;
 
     [DataField]
     public float BaseWalkSpeed = 4.4f;
@@ -49,7 +52,7 @@ public sealed partial class YautjaComponent : Component
     public int SkillLevel = 4;
 
     [DataField]
-    public float StunResistance = 2f;
+    public float StunResistance = 1.5f;
 
     [DataField]
     public float ShoveChanceBonus = 0.2f;
@@ -546,7 +549,16 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntProtoId HealingCapsulePrototype = "CMUYautjaHealingCapsule";
 
     [DataField]
-    public TimeSpan HealingCapsuleCooldown = TimeSpan.FromMinutes(2);
+    public TimeSpan HealingCapsuleCooldown = TimeSpan.FromMinutes(4);
+
+    /// <summary>
+    ///     CMSS13 can disable the bracer's healing-capsule action independently
+    ///     from the rest of its equipment. Keep this gate on the component so
+    ///     bad-blood and damaged variants can opt out without replacing the
+    ///     bracer action implementation.
+    /// </summary>
+    [DataField]
+    public bool HealingEnabled = true;
 
     [DataField]
     public FixedPoint2 HuntingTrapCost = 300;
@@ -612,10 +624,10 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public SoundSpecifier EquipSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/pred_bracer.wav");
 
     [DataField]
-    public SoundSpecifier CloakOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakon_modern.ogg");
+    public SoundSpecifier CloakOnSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakon_modern.wav");
 
     [DataField]
-    public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakoff_modern.ogg");
+    public SoundSpecifier CloakOffSound = new SoundPathSpecifier("/Audio/_CMU14/Yautja/pred_cloakoff_modern.wav");
 
     [DataField]
     public YautjaInvisibilitySound InvisibilitySound = YautjaInvisibilitySound.Modern;
@@ -853,7 +865,7 @@ public sealed partial class YautjaPowerActionComponent : Component
     public bool RequireMask;
 }
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class YautjaCannonPackComponent : Component
 {
     [DataField]
@@ -874,13 +886,13 @@ public sealed partial class YautjaCannonPackComponent : Component
     [ViewVariables]
     public ContainerSlot? CannonContainer;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool CannonsDeployed;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public FixedPoint2 MaxCharge = 2000;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public FixedPoint2 Charge = 2000;
 
     [DataField]
@@ -899,16 +911,16 @@ public sealed partial class YautjaCannonPackComponent : Component
     public EntityUid? User;
 }
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class YautjaCannonPackLinkedCannonComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public EntityUid Pack;
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public EntProtoId Projectile = "CMUYautjaCasterLethalBolt";
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public FixedPoint2 ChargeCost = 1000;
 }
 
@@ -928,8 +940,28 @@ public sealed partial class YautjaCannonPackProjectileRefundComponent : Componen
 [RegisterComponent, NetworkedComponent]
 public sealed partial class YautjaHudViewerComponent : Component;
 
-[RegisterComponent]
-public sealed partial class YautjaMaskVisorGlassesComponent : Component;
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(YautjaMaskSystem))]
+public sealed partial class YautjaMaskVisorGlassesComponent : Component
+{
+    /// <summary>
+    /// Mask that created this visor. A loose pair of glasses must not grant thermal wall vision.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? Mask;
+
+    /// <summary>
+    /// Wearer currently receiving this visor's thermal sight.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public EntityUid? User;
+
+    /// <summary>
+    /// Server-authoritative thermal source state for the wall-vision overlay.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool ThermalVisionEnabled;
+}
 
 [RegisterComponent]
 public sealed partial class YautjaCommunicatorComponent : Component
@@ -1051,8 +1083,14 @@ public sealed partial class YautjaHivebrokenXenoComponent : Component;
 public sealed partial class YautjaMedicalItemComponent : Component;
 
 [RegisterComponent]
+public sealed partial class YautjaHealingCapsuleComponent : Component;
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true)]
 public sealed partial class YautjaHealingGunComponent : Component
 {
+    [DataField, AutoNetworkedField]
+    public bool Loaded = true;
+
     [DataField(required: true)]
     public DamageSpecifier Damage = default!;
 
@@ -1073,6 +1111,9 @@ public sealed partial class YautjaHealingGunComponent : Component
 
     [DataField]
     public SoundSpecifier? HealSound;
+
+    [DataField]
+    public SoundSpecifier? ReloadSound;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -1335,7 +1376,7 @@ public sealed partial class YautjaSmartDiscComponent : Component
 [Access(typeof(YautjaCasterSystem))]
 public sealed partial class YautjaCasterComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public FixedPoint2 PowerCost = 100;
 
     [DataField]
@@ -1362,9 +1403,6 @@ public sealed partial class YautjaCasterMode
 
     [DataField(required: true)]
     public EntProtoId Projectile = default!;
-
-    [DataField]
-    public FixedPoint2 PowerCost = 100;
 
     [DataField]
     public string ExamineStrength = string.Empty;
@@ -1427,7 +1465,7 @@ public sealed partial class YautjaScalableRepairComponent : Component
     public string DamagedText = string.Empty;
 
     [DataField]
-    public string ReinforcedText = "It has been reinforced to be more protective.";
+    public string ReinforcedText = "cmu-yautja-repair-reinforced";
 }
 
 [Serializable, NetSerializable]
@@ -1506,10 +1544,10 @@ public sealed partial class YautjaHivebreakerComponent : Component
     public TimeSpan ConsentTimeout = TimeSpan.FromSeconds(10);
 
     [DataField]
-    public string ConsentTitle = "Submit?";
+    public string ConsentTitle = "cmu-yautja-hivebreaker-consent-title";
 
     [DataField]
-    public string ConsentMessage = "Do you wish to be Enthralled by the Bad Blood?";
+    public string ConsentMessage = "cmu-yautja-hivebreaker-consent-message";
 
     [DataField]
     public List<ProtoId<JobPrototype>> BannedXenoRoles = new()
@@ -1763,13 +1801,13 @@ public sealed partial class YautjaHuntConsoleComponent : Component
             new()
             {
                 Id = "jungle_moon",
-                DisplayName = "Jungle Moon",
+                DisplayName = "cmu-yautja-hunting-ground-jungle-moon",
                 MapPath = "/Maps/_CMU14/HuntingGrounds/jungle_moon.yml",
             },
             new()
             {
                 Id = "desert_moon",
-                DisplayName = "Desert Moon",
+                DisplayName = "cmu-yautja-hunting-ground-desert-moon",
                 MapPath = "/Maps/_CMU14/HuntingGrounds/desert_moon_caves.yml",
             },
         };
@@ -1779,17 +1817,17 @@ public sealed partial class YautjaHuntConsoleComponent : Component
     {
         return new List<YautjaHuntCallOption>
         {
-            HuntCall("mixed_small", "Multi Faction (small)", 4, 1.25f, MixedPrey()),
-            HuntCall("mixed_group", "Multi Faction (group)", 6, 1.4f, MixedPrey()),
-            HuntCall("mixed_large", "Multi Faction (large)", 8, 1.6f, MixedPrey()),
-            HuntCall("mixed_larger", "Multi Faction (larger)", 12, 1.8f, MixedPrey()),
-            HuntCall("serpents_small", "Serpents (small)", 4, 1f, SerpentPrey()),
-            HuntCall("serpents_group", "Serpents (group)", 6, 1.2f, SerpentPrey()),
-            HuntCall("serpents_large", "Serpents (large)", 8, 1.4f, SerpentPrey()),
-            HuntCall("elite_mixed_small", "Elite Multi Faction (small)", 4, 1.5f, ElitePrey()),
-            HuntCall("elite_mixed_group", "Elite Multi Faction (group)", 6, 2f, ElitePrey()),
-            HuntCall("elite_mixed_large", "Elite Multi Faction (large)", 8, 2.5f, ElitePrey()),
-            HuntCall("elite_mixed_larger", "Elite Multi Faction (larger)", 12, 3f, ElitePrey()),
+            HuntCall("mixed_small", "cmu-yautja-hunt-call-mixed-small", 4, 1.25f, MixedPrey()),
+            HuntCall("mixed_group", "cmu-yautja-hunt-call-mixed-group", 6, 1.4f, MixedPrey()),
+            HuntCall("mixed_large", "cmu-yautja-hunt-call-mixed-large", 8, 1.6f, MixedPrey()),
+            HuntCall("mixed_larger", "cmu-yautja-hunt-call-mixed-larger", 12, 1.8f, MixedPrey()),
+            HuntCall("serpents_small", "cmu-yautja-hunt-call-serpents-small", 4, 1f, SerpentPrey()),
+            HuntCall("serpents_group", "cmu-yautja-hunt-call-serpents-group", 6, 1.2f, SerpentPrey()),
+            HuntCall("serpents_large", "cmu-yautja-hunt-call-serpents-large", 8, 1.4f, SerpentPrey()),
+            HuntCall("elite_mixed_small", "cmu-yautja-hunt-call-elite-mixed-small", 4, 1.5f, ElitePrey()),
+            HuntCall("elite_mixed_group", "cmu-yautja-hunt-call-elite-mixed-group", 6, 2f, ElitePrey()),
+            HuntCall("elite_mixed_large", "cmu-yautja-hunt-call-elite-mixed-large", 8, 2.5f, ElitePrey()),
+            HuntCall("elite_mixed_larger", "cmu-yautja-hunt-call-elite-mixed-larger", 12, 3f, ElitePrey()),
         };
     }
 
@@ -1802,13 +1840,13 @@ public sealed partial class YautjaHuntConsoleComponent : Component
 
         return new List<YautjaHuntCallOption>
         {
-            YoungbloodCall("youngblood_solo", "Solo Youngblood (One member)", 1, 1, 0, 0, 5, youngblood),
-            YoungbloodCall("youngblood_solo_experienced", "Solo Youngblood (One member - Experienced)", 1, 1, 7, 5, 5, youngblood),
-            YoungbloodCall("youngblood_three_inexperienced", "Inexperienced Youngblood Party (Three members)", 2, 3, 2, 0, 5, youngblood),
-            YoungbloodCall("youngblood_three_intermediate", "Intermediate Youngblood Party (Three members)", 2, 3, 5, 2, 10, youngblood),
-            YoungbloodCall("youngblood_three_experienced", "Experienced Youngblood Party (Three members)", 2, 3, 10, 3, 20, youngblood),
-            YoungbloodCall("youngblood_three_mixed", "Mixed experience Youngblood Party (Three members)", 2, 3, 10, 0, 5, youngblood),
-            YoungbloodCall("youngblood_pack", "Youngblood Hunting Pack (Six members)", 4, 6, 10, 0, 5, youngblood),
+            YoungbloodCall("youngblood_solo", "cmu-yautja-blooding-call-solo", 1, 1, 0, 0, 5, youngblood),
+            YoungbloodCall("youngblood_solo_experienced", "cmu-yautja-blooding-call-solo-experienced", 1, 1, 7, 5, 5, youngblood),
+            YoungbloodCall("youngblood_three_inexperienced", "cmu-yautja-blooding-call-three-inexperienced", 2, 3, 2, 0, 5, youngblood),
+            YoungbloodCall("youngblood_three_intermediate", "cmu-yautja-blooding-call-three-intermediate", 2, 3, 5, 2, 10, youngblood),
+            YoungbloodCall("youngblood_three_experienced", "cmu-yautja-blooding-call-three-experienced", 2, 3, 10, 3, 20, youngblood),
+            YoungbloodCall("youngblood_three_mixed", "cmu-yautja-blooding-call-three-mixed", 2, 3, 10, 0, 5, youngblood),
+            YoungbloodCall("youngblood_pack", "cmu-yautja-blooding-call-pack", 4, 6, 10, 0, 5, youngblood),
         };
     }
 
@@ -1851,17 +1889,17 @@ public sealed partial class YautjaHuntConsoleComponent : Component
     {
         return new List<YautjaHuntSpawnEntry>
         {
-            RandomHumanoid("RMCCLFSoldier", 2),
-            RandomHumanoid("RMCCLFEngineer"),
-            RandomHumanoid("RMCCLFMedic"),
-            RandomHumanoid("RMCCLFCellLeader"),
-            RandomHumanoid("RMCPMCStandardM63B2"),
-            RandomHumanoid("RMCPMCStandardSSG45"),
-            RandomHumanoid("RMCPMCStandardM54C2"),
-            RandomHumanoid("RMCRoyalMarinesCommando"),
-            RandomHumanoid("RMCRoyalMarinesMedic"),
-            RandomHumanoid("RMCFreelancerStandard"),
-            RandomHumanoid("RMCFreelancerLeader"),
+            RandomHumanoid("CMUYautjaHuntCLFSoldier", 2),
+            RandomHumanoid("CMUYautjaHuntCLFEngineer"),
+            RandomHumanoid("CMUYautjaHuntCLFMedic"),
+            RandomHumanoid("CMUYautjaHuntCLFCellLeader"),
+            RandomHumanoid("CMUYautjaHuntPMCStandardM63B2"),
+            RandomHumanoid("CMUYautjaHuntPMCStandardSSG45"),
+            RandomHumanoid("CMUYautjaHuntPMCStandardM54C2"),
+            RandomHumanoid("CMUYautjaHuntRoyalMarinesCommando"),
+            RandomHumanoid("CMUYautjaHuntRoyalMarinesMedic"),
+            RandomHumanoid("CMUYautjaHuntFreelancerStandard"),
+            RandomHumanoid("CMUYautjaHuntFreelancerLeader"),
         };
     }
 
@@ -1880,14 +1918,14 @@ public sealed partial class YautjaHuntConsoleComponent : Component
     {
         return new List<YautjaHuntSpawnEntry>
         {
-            RandomHumanoid("RMCPMCLeader"),
-            RandomHumanoid("RMCPMCSniper"),
-            RandomHumanoid("RMCPMCEngineer"),
-            RandomHumanoid("RMCPMCMedic"),
-            RandomHumanoid("RMCRoyalMarinesTeamlead"),
-            RandomHumanoid("RMCRoyalMarinesSGO"),
-            RandomHumanoid("RMCRoyalMarinesBreacher"),
-            RandomHumanoid("RMCRoyalMarinesMarksman"),
+            RandomHumanoid("CMUYautjaHuntPMCLeader"),
+            RandomHumanoid("CMUYautjaHuntPMCSniper"),
+            RandomHumanoid("CMUYautjaHuntPMCEngineer"),
+            RandomHumanoid("CMUYautjaHuntPMCMedic"),
+            RandomHumanoid("CMUYautjaHuntRoyalMarinesTeamlead"),
+            RandomHumanoid("CMUYautjaHuntRoyalMarinesSGO"),
+            RandomHumanoid("CMUYautjaHuntRoyalMarinesBreacher"),
+            RandomHumanoid("CMUYautjaHuntRoyalMarinesMarksman"),
         };
     }
 
@@ -2016,6 +2054,16 @@ public sealed partial class YautjaHuntEscapeConsoleComponent : Component
 public sealed partial class YautjaPreserveShutterComponent : Component;
 
 [RegisterComponent]
+public sealed partial class YautjaPreserveEdgeComponent : Component
+{
+    [DataField]
+    public TimeSpan EscapeDelay = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public TimeSpan DialogTimeout = TimeSpan.FromSeconds(15);
+}
+
+[RegisterComponent]
 public sealed partial class YautjaHuntingGroundComponent : Component;
 
 [RegisterComponent]
@@ -2038,7 +2086,7 @@ public sealed partial class YautjaHellhoundComponent : Component
     public float LimbTargetDamageMultiplier = 1.15f;
 
     [DataField]
-    public EntProtoId CameraId = "CMUYautjaHellhoundCamera";
+    public EntProtoId CameraId = "CMUMobYautjaHellhound";
 }
 
 [RegisterComponent]
@@ -2056,6 +2104,14 @@ public sealed partial class YautjaHoundWatchedComponent : Component
 {
     [DataField]
     public HashSet<EntityUid> Watchers = new();
+}
+
+[RegisterComponent]
+public sealed partial class YautjaHuntPreyComponent : Component
+{
+    [DataField]
+    public SoundSpecifier HuntBeginSound = new SoundPathSpecifier(
+        "/Audio/_CMU14/Yautja/HuntingGrounds/hunt_begin.ogg");
 }
 
 [Serializable, NetSerializable]
@@ -2102,7 +2158,7 @@ public sealed partial class YautjaHoundPadComponent : Component
 public sealed partial class YautjaScalpComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public string TrueDescription = "This is the scalp of an irrelevant human.";
+    public string TrueDescription = string.Empty;
 
     [DataField, AutoNetworkedField]
     public Color HairColor = Color.White;
@@ -2173,13 +2229,13 @@ public sealed partial class YautjaThrallBracerComponent : Component, IClothingSl
     public ProtoId<ExplosionPrototype> SelfDestructExplosion = "RMC";
 
     [DataField]
-    public float SelfDestructTotalIntensity = 500;
+    public float SelfDestructTotalIntensity = 800;
 
     [DataField]
     public float SelfDestructIntensitySlope = 10;
 
     [DataField]
-    public float SelfDestructMaxIntensity = 65;
+    public float SelfDestructMaxIntensity = 550;
 
     [DataField]
     public int SelfDestructMaxTileBreak = 1;
@@ -2323,7 +2379,6 @@ public sealed partial class YautjaGearContainerComponent : Component, IClothingS
         gear.Add(YautjaGearKind.Caster, "CMUYautjaPlasmaCaster");
         gear.Add(YautjaGearKind.WristBlades, "CMUYautjaWristBlades");
         gear.Add(YautjaGearKind.Scimitar, "CMUYautjaScimitar");
-        gear.Add(YautjaGearKind.Shield, "CMUYautjaBracerShield");
         gear.Add(YautjaGearKind.ChainGauntlet, "CMUYautjaChainGauntlet");
         return gear;
     }
@@ -2676,6 +2731,21 @@ public enum YautjaButcherKind : byte
 }
 
 [Serializable, NetSerializable]
+public enum YautjaButcherProcedure : byte
+{
+    Skin,
+    Head,
+    RightHand,
+    LeftHand,
+    RightArm,
+    LeftArm,
+    RightFoot,
+    LeftFoot,
+    RightLeg,
+    LeftLeg,
+}
+
+[Serializable, NetSerializable]
 public enum YautjaTechMisuseKind : byte
 {
     Pickup,
@@ -2908,7 +2978,7 @@ public sealed partial class YautjaChainGauntletComponent : Component
     public float ChainHookProjectileSpeed = 10f;
 
     [DataField]
-    public string ChainMessage = "GET OVER HERE!";
+    public string ChainMessage = "cmu-yautja-chain-gauntlet-chain-message";
 
     [DataField]
     public string ChainMessageSpeechStyleClass = "yautjaChainSpeech";
@@ -3186,6 +3256,34 @@ public sealed partial class YautjaCasterImmobilizerProjectileComponent : Compone
 public sealed partial class YautjaCasterSingleLethalProjectileComponent : Component;
 
 [RegisterComponent]
+public sealed partial class YautjaCasterEradicatorProjectileComponent : Component
+{
+    [DataField]
+    public TimeSpan VehicleSlowdownTime = TimeSpan.FromSeconds(5);
+
+    [DataField]
+    public float VehicleHullDamage = 100f;
+
+    [DataField]
+    public SoundSpecifier VehicleImpactSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/meteorimpact.ogg");
+
+    [DataField]
+    public float InteriorExplosionIntensity = 170f;
+
+    [DataField]
+    public float InteriorExplosionSlope = 50f;
+
+    [DataField]
+    public float InteriorExplosionMaxTileIntensity = 170f;
+
+    [DataField]
+    public TimeSpan InteriorCrashStun = TimeSpan.FromSeconds(1);
+
+    [DataField]
+    public TimeSpan InteriorCrashKnockdown = TimeSpan.FromSeconds(2);
+}
+
+[RegisterComponent]
 public sealed partial class YautjaSpikeLauncherComponent : Component;
 
 [RegisterComponent]
@@ -3205,10 +3303,10 @@ public sealed partial class YautjaPlasmaWeaponComponent : Component
     public bool ShowFireMode;
 
     [DataField]
-    public string PrimaryFireModeText = "It is set to fire plasma bolts.";
+    public string PrimaryFireModeText = "cmu-yautja-plasma-carbine-primary-fire-mode";
 
     [DataField]
-    public string SecondaryFireModeText = "It is set to fire incendiary plasma bolts.";
+    public string SecondaryFireModeText = "cmu-yautja-plasma-carbine-secondary-fire-mode";
 
     [DataField]
     public string NonYautjaExamineText = string.Empty;

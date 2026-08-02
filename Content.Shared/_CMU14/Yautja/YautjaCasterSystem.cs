@@ -26,9 +26,11 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterComponent, UseInHandEvent>(OnUseInHand);
         SubscribeLocalEvent<YautjaCasterComponent, UniqueActionEvent>(OnUniqueAction);
         SubscribeLocalEvent<YautjaCasterComponent, ExaminedEvent>(OnExamined);
+        SubscribeLocalEvent<YautjaCasterComponent, GunCooldownAttemptEvent>(OnGunCooldownAttempted);
+        SubscribeLocalEvent<YautjaCasterComponent, ShotAttemptedEvent>(OnShotAttempted);
         SubscribeLocalEvent<YautjaCasterComponent, AttemptShootEvent>(OnAttemptShoot);
         SubscribeLocalEvent<YautjaCasterComponent, GunRefreshModifiersEvent>(OnGunRefreshModifiers);
-        SubscribeLocalEvent<YautjaCasterComponent, TakeAmmoEvent>(OnTakeAmmo, after: [typeof(SharedGunSystem)]);
+        SubscribeLocalEvent<YautjaCasterComponent, TakeAmmoEvent>(OnTakeAmmo, before: [typeof(SharedGunSystem)]);
         SubscribeLocalEvent<YautjaCasterComponent, AmmoShotEvent>(OnAmmoShot);
         SubscribeLocalEvent<YautjaCasterComponent, GunShotEvent>(OnGunShot);
         SubscribeLocalEvent<YautjaCasterProjectileRefundComponent, EntityTerminatingEvent>(OnProjectileTerminating);
@@ -57,7 +59,16 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
         }
 
-        SetMode(ent, mode.Value);
+        var cost = (ent.Comp.CurrentMode, mode.Value) switch
+        {
+            (0, 1) => (FixedPoint2) 150,
+            (1, 0) => (FixedPoint2) 30,
+            (2, 3) => (FixedPoint2) 1000,
+            (3, 2) => (FixedPoint2) 500,
+            _ => ent.Comp.PowerCost,
+        };
+
+        SetMode(ent, mode.Value, cost);
         PopupMode(ent, args.User, "cmu-yautja-caster-mode-set");
     }
 
@@ -74,7 +85,9 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
         }
 
-        var mode = IsLethalMode(ent.Comp) ? 0 : 2;
+        var isLethal = IsLethalMode(ent.Comp);
+        var mode = isLethal ? 0 : 2;
+        var cost = isLethal ? (FixedPoint2) 30 : 100;
 
         if (_net.IsClient)
         {
@@ -82,7 +95,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
         }
 
-        SetMode(ent, mode);
+        SetMode(ent, mode, cost);
         PopupMode(ent, args.UserUid, "cmu-yautja-caster-mode-set");
     }
 
@@ -93,10 +106,10 @@ public sealed partial class YautjaCasterSystem : EntitySystem
             return;
 
         var strength = mode.ExamineStrength.Length > 0
-            ? mode.ExamineStrength
+            ? Loc.GetString(mode.ExamineStrength)
             : Loc.GetString(mode.Name);
 
-        args.PushMarkup($"It is set to fire {strength}.");
+        args.PushMarkup(Loc.GetString("cmu-yautja-caster-fire-mode", ("mode", strength)));
     }
 
     private void OnAttemptShoot(Entity<YautjaCasterComponent> ent, ref AttemptShootEvent args)
@@ -121,11 +134,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (now < ent.Comp.CooldownUntil)
         {
             args.Cancelled = true;
-            var remaining = (int) Math.Ceiling((ent.Comp.CooldownUntil - now).TotalSeconds);
-            _popup.PopupClient(Loc.GetString("cmu-yautja-caster-cooldown", ("seconds", remaining)), args.User, args.User, PopupType.SmallCaution);
-
-            if (ent.Comp.CooldownSound != null)
-                _audio.PlayPredicted(ent.Comp.CooldownSound, ent.Owner, args.User);
+            PopupCooldown(ent, args.User, ent.Comp.CooldownUntil);
 
             return;
         }
@@ -137,29 +146,62 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         }
     }
 
+    private void OnShotAttempted(Entity<YautjaCasterComponent> ent, ref ShotAttemptedEvent args)
+    {
+        if (args.Cancelled || !CanUseCasterTech(args.User))
+            return;
+
+        var cooldownUntil = args.Used.Comp.NextFire;
+        if (cooldownUntil <= _timing.CurTime)
+            return;
+
+        PopupCooldown(ent, args.User, cooldownUntil);
+    }
+
+    private void OnGunCooldownAttempted(Entity<YautjaCasterComponent> ent, ref GunCooldownAttemptEvent args)
+    {
+        if (!CanUseCasterTech(args.User))
+            return;
+
+        PopupCooldown(ent, args.User, args.Used.Comp.NextFire);
+    }
+
+    private void PopupCooldown(Entity<YautjaCasterComponent> ent, EntityUid user, TimeSpan cooldownUntil)
+    {
+        var remaining = (int) Math.Ceiling((cooldownUntil - _timing.CurTime).TotalSeconds);
+        _popup.PopupClient(Loc.GetString("cmu-yautja-caster-cooldown", ("seconds", remaining)), ent.Owner, user, PopupType.SmallCaution);
+
+        if (ent.Comp.CooldownSound != null)
+            _audio.PlayPredicted(ent.Comp.CooldownSound, ent.Owner, user);
+    }
+
     private void OnTakeAmmo(Entity<YautjaCasterComponent> ent, ref TakeAmmoEvent args)
     {
-        if (_net.IsClient || args.Ammo.Count == 0)
+        if (args.Ammo.Count != 0 || args.Shots <= 0)
             return;
 
         if (args.User is not { } user ||
-            !TryGetSourceBracer(ent.Owner, out var sourceBracer))
+            !TryGetSourceBracer(ent.Owner, out var sourceBracer) ||
+            GetMode(ent.Comp) is not { } mode)
         {
-            ClearPreparedAmmo(args);
+            args.Reason = Loc.GetString("cmu-yautja-spike-launcher-denied");
             return;
         }
 
         var chargeCost = GetPowerCost(ent.Comp);
-        if (!_power.TryDrainPower(sourceBracer, user, chargeCost, popup: false))
+        for (var shot = 0; shot < args.Shots; shot++)
         {
-            ClearPreparedAmmo(args);
-            return;
-        }
+            if (_net.IsServer && !_power.TryDrainPower(sourceBracer, user, chargeCost, popup: false))
+            {
+                args.Reason = GetPowerFailureMessage(sourceBracer.Comp, chargeCost);
+                return;
+            }
 
-        foreach (var (ammoEntity, _) in args.Ammo)
-        {
-            if (ammoEntity is { } uid)
-                AddProjectileRefund(uid, sourceBracer, chargeCost);
+            var projectile = Spawn(mode.Projectile, args.Coordinates);
+            if (_net.IsServer)
+                AddProjectileRefund(projectile, sourceBracer, chargeCost);
+
+            args.Ammo.Add((projectile, _gun.EnsureShootable(projectile)));
         }
     }
 
@@ -191,9 +233,10 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         _power.RegenPower((ent.Comp.Bracer, bracer), ent.Comp.ChargeCost);
     }
 
-    private void SetMode(Entity<YautjaCasterComponent> ent, int mode)
+    private void SetMode(Entity<YautjaCasterComponent> ent, int mode, FixedPoint2 powerCost)
     {
         ent.Comp.CurrentMode = mode;
+        ent.Comp.PowerCost = powerCost;
         Dirty(ent);
         ApplyMode(ent);
     }
@@ -203,13 +246,6 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         var mode = GetMode(ent.Comp);
         if (mode == null)
             return;
-
-        if (TryComp(ent, out ProjectileBatteryAmmoProviderComponent? ammo) &&
-            ammo.Prototype != mode.Projectile)
-        {
-            ammo.Prototype = mode.Projectile;
-            Dirty(ent, ammo);
-        }
 
         _gun.RefreshModifiers(ent.Owner);
     }
@@ -235,7 +271,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
 
     private static FixedPoint2 GetPowerCost(YautjaCasterComponent component)
     {
-        return GetMode(component)?.PowerCost ?? component.PowerCost;
+        return component.PowerCost;
     }
 
     private static Robust.Shared.Audio.SoundSpecifier GetFireSound(YautjaCasterComponent component)
@@ -293,15 +329,13 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         refund.Fired = false;
     }
 
-    private void ClearPreparedAmmo(TakeAmmoEvent args)
+    private string GetPowerFailureMessage(YautjaBracerComponent bracer, FixedPoint2 amount)
     {
-        foreach (var (ammoEntity, _) in args.Ammo)
-        {
-            if (ammoEntity is { } uid)
-                QueueDel(uid);
-        }
-
-        args.Ammo.Clear();
+        return Loc.GetString(
+            "cmu-yautja-drain-power-failed",
+            ("charge", (int) bracer.Charge),
+            ("max", (int) bracer.MaxCharge),
+            ("amount", (int) amount));
     }
 
     private void PopupMode(Entity<YautjaCasterComponent> ent, EntityUid user, LocId message)

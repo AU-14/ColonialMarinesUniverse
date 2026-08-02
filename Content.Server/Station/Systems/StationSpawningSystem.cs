@@ -96,9 +96,14 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     private static readonly HashSet<string> AuxiliarySquadRoundRoles = new(StringComparer.OrdinalIgnoreCase)
     {
         "AuxSupportSynth",
+        "AuxTech",
+        "EngineeringTech",
+        "IntelOfficer",
         "JuniorOfficer",
-        "VehicleCrewman",
-        "IntelOfficer"
+        "Nurse",
+        "WorkingJoe",
+        "VehicleCommander",
+        "VehicleCrewman"
     };
 
     // Legacy fallback for jobs that have not been migrated to roundRole yet.
@@ -129,12 +134,17 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     /// <remarks>
     /// This only spawns the character, and does none of the mind-related setup you'd need for it to be playable.
     /// </remarks>
-    public EntityUid? SpawnPlayerCharacterOnStation(EntityUid? station, ProtoId<JobPrototype>? job, HumanoidCharacterProfile? profile, StationSpawningComponent? stationSpawning = null)
+    public EntityUid? SpawnPlayerCharacterOnStation(
+        EntityUid? station,
+        ProtoId<JobPrototype>? job,
+        HumanoidCharacterProfile? profile,
+        StationSpawningComponent? stationSpawning = null,
+        ICommonSession? player = null)
     {
         if (station != null && !Resolve(station.Value, ref stationSpawning))
             throw new ArgumentException("Tried to use a non-station entity as a station!", nameof(station));
 
-        var ev = new PlayerSpawningEvent(job, profile, station);
+        var ev = new PlayerSpawningEvent(job, profile, station, player);
 
         RaiseLocalEvent(ev);
         DebugTools.Assert(ev.SpawnResult is { Valid: true } or null);
@@ -160,7 +170,9 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         ProtoId<JobPrototype>? job,
         HumanoidCharacterProfile? profile,
         EntityUid? station,
-        EntityUid? entity = null)
+        EntityUid? entity = null,
+        YautjaRank? authoritativeYautjaRank = null,
+        YautjaProfileCapabilities? authoritativeYautjaCapabilities = null)
     {
         // --- Platoon job override logic start ---
         string? jobId = job?.ToString();
@@ -254,7 +266,12 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                 !IsBadBloodFactionMember(jobEntity))
             {
                 if (profile != null)
-                    _yautjaProfile.ApplyProfile(jobEntity, profile.YautjaProfile);
+                    _yautjaProfile.ApplyProfile(
+                        jobEntity,
+                        profile.YautjaProfile,
+                        authoritativeYautjaRank,
+                        authoritativeYautjaCapabilities,
+                        equipProfileGear: false);
             }
 
             // Use originalPrototype for access, ID, and faction
@@ -262,6 +279,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             if (originalPrototype != null && TryComp(jobEntity, out MetaDataComponent? metaDataJobEntity))
                 SetPdaAndIdCardData(jobEntity, metaDataJobEntity.EntityName, originalPrototype, station);
 
+            AssignRoundStartSquad(jobEntity, coordinates, job, originalPrototype, jobId, team);
             return jobEntity;
         }
 
@@ -366,127 +384,67 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         ApplyRegulationAppearance(entity.Value, profile);
         _identity.QueueIdentityUpdate(entity.Value);
 
-        string? teamCheckJobId = originalJob?.ToString();
+        AssignRoundStartSquad(entity.Value, coordinates, job, originalPrototype, jobId, team);
 
-        bool assignToSquad = team != null && ShouldAssignToSquad(originalPrototype, teamCheckJobId);
-        if (assignToSquad)
+        ApplyTeamFaction(entity.Value, team);
+        return entity.Value;
+    }
+
+    private void AssignRoundStartSquad(
+        EntityUid entity,
+        EntityCoordinates coordinates,
+        ProtoId<JobPrototype>? job,
+        JobPrototype? originalPrototype,
+        string? originalJobId,
+        string? team)
+    {
+        if (team == null || !ShouldAssignToSquad(originalPrototype, originalJobId))
+            return;
+
+        string protoId;
+
+        // Roles that should go into the intel/auxiliary squad
+        if (IsAuxiliarySquadRole(originalPrototype, originalJobId))
+            protoId = team == "govfor" ? "SquadGovforIntel" : "SquadOpforIntel";
+        else
         {
-            string protoId;
+            var candidates = team == "govfor" ? _govforSquads : _opforSquads;
 
-            // Roles that should go into the intel/auxiliary squad
-            if (IsAuxiliarySquadRole(originalPrototype, jobId))
-                protoId = team == "govfor" ? "SquadGovforIntel" : "SquadOpforIntel";
-            else
+            // New: prioritize distributing Sergeants, Automatic Riflemen, and Radio Telephone Operators
+            var isSergeant = IsSquadLeaderRole(originalPrototype, originalJobId);
+            var isAutomaticRifleman = IsRoundRole(originalPrototype, "SquadAutomaticRifleman") ||
+                                      originalJobId?.Contains("automaticrifleman", StringComparison.OrdinalIgnoreCase) == true ||
+                                      originalJobId?.Contains("autora", StringComparison.OrdinalIgnoreCase) == true ||
+                                      originalJobId?.Contains("auto", StringComparison.OrdinalIgnoreCase) == true ||
+                                      originalJobId?.Contains("afn", StringComparison.OrdinalIgnoreCase) == true ||
+                                      originalJobId?.EndsWith("squadautomaticrifleman", StringComparison.OrdinalIgnoreCase) == true;
+            var isRadioTelephone = IsRoundRole(originalPrototype, "RadioTelephoneOperator") ||
+                                   originalJobId?.Contains("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true ||
+                                   originalJobId?.Contains("radio", StringComparison.OrdinalIgnoreCase) == true ||
+                                   originalJobId?.Contains("rto", StringComparison.OrdinalIgnoreCase) == true ||
+                                   originalJobId?.EndsWith("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true;
+
+            // Sergeants: try to place into a squad without a leader where possible (existing behavior)
+            if (isSergeant)
             {
-                var candidates = team == "govfor" ? _govforSquads : _opforSquads;
-
-                // New: prioritize distributing Sergeants, Automatic Riflemen, and Radio Telephone Operators
-                var isSergeant = IsSquadLeaderRole(originalPrototype, jobId);
-                var isAutomaticRifleman = IsRoundRole(originalPrototype, "SquadAutomaticRifleman") ||
-                                          jobId?.Contains("automaticrifleman", StringComparison.OrdinalIgnoreCase) == true ||
-                                          jobId?.Contains("autora", StringComparison.OrdinalIgnoreCase) == true ||
-                                          jobId?.Contains("auto", StringComparison.OrdinalIgnoreCase) == true ||
-                                          jobId?.Contains("afn", StringComparison.OrdinalIgnoreCase) == true ||
-                                          jobId?.EndsWith("squadautomaticrifleman", StringComparison.OrdinalIgnoreCase) == true;
-                var isRadioTelephone = IsRoundRole(originalPrototype, "RadioTelephoneOperator") ||
-                                       jobId?.Contains("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true ||
-                                       jobId?.Contains("radio", StringComparison.OrdinalIgnoreCase) == true ||
-                                       jobId?.Contains("rto", StringComparison.OrdinalIgnoreCase) == true ||
-                                       jobId?.EndsWith("radiotelephoneoperator", StringComparison.OrdinalIgnoreCase) == true;
-
-                // Sergeants: try to place into a squad without a leader where possible (existing behavior)
-                if (isSergeant)
+                string? chosen = null;
+                foreach (var candidate in candidates)
                 {
-                    string? chosen = null;
-                    foreach (var cand in candidates)
+                    if (_squadSystem.TryEnsureSquad(candidate, out var squad) &&
+                        !_squadSystem.TryGetSquadLeader(squad, out _))
                     {
-                        if (_squadSystem.TryEnsureSquad(cand, out var s) && !_squadSystem.TryGetSquadLeader(s, out _))
-                        {
-                            chosen = cand;
-                            break;
-                        }
-                    }
-
-                    if (chosen != null)
-                    {
-                        protoId = chosen;
-                    }
-                    else
-                    {
-                        // all squads already have leaders, fall back to round-robin
-                        if (team == "govfor")
-                        {
-                            protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                            _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                        }
-                        else
-                        {
-                            protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                            _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                        }
+                        chosen = candidate;
+                        break;
                     }
                 }
-                // Automatic riflemen and radio telephone operators: try to evenly distribute so each squad gets one of each
-                else if (isAutomaticRifleman || isRadioTelephone)
-                {
-                    string? chosen = null;
-                    // Prefer squads that exist and don't yet have this role
-                    foreach (var cand in candidates)
-                    {
-                        if (_squadSystem.TryEnsureSquad(cand, out var s))
-                        {
-                            // If job is available as a ProtoId, check the role count in the squad.
-                            if (job != null)
-                            {
-                                s.Comp.Roles.TryGetValue(job.Value, out var existingCount);
-                                if (existingCount == 0)
-                                {
-                                    chosen = cand;
-                                    break;
-                                }
-                            }
-                            else
-                            {
-                                // If we don't have a proto id for the job for whatever reason,
-                                // prefer squads that exist but currently have fewer members (heuristic)
-                                if (_squadSystem.GetSquadMembersAlive(s) == 0)
-                                {
-                                    chosen = cand;
-                                    break;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            // Squad doesn't exist yet, so it definitely has none of the role
-                            chosen = cand;
-                            break;
-                        }
-                    }
 
-                    if (chosen != null)
-                    {
-                        protoId = chosen;
-                    }
-                    else
-                    {
-                        // Fallback to round-robin distribution when every squad already has the role
-                        if (team == "govfor")
-                        {
-                            protoId = candidates[_govforNextSquadIndex % candidates.Length];
-                            _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
-                        }
-                        else
-                        {
-                            protoId = candidates[_opforNextSquadIndex % candidates.Length];
-                            _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
-                        }
-                    }
+                if (chosen != null)
+                {
+                    protoId = chosen;
                 }
                 else
                 {
-                    // Default distribution (round-robin)
-                    // Sergeants already handled above; everyone else falls through here.
+                    // All squads already have leaders, fall back to round-robin.
                     if (team == "govfor")
                     {
                         protoId = candidates[_govforNextSquadIndex % candidates.Length];
@@ -499,28 +457,97 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
                     }
                 }
             }
-
-            if (!_squadSystem.TryEnsureSquad(protoId, out Entity<SquadTeamComponent> ensured))
+            // Automatic riflemen and radio telephone operators: try to evenly distribute so each squad gets one of each
+            else if (isAutomaticRifleman || isRadioTelephone)
             {
-                // Fallback: spawn a new entity with SquadTeamComponent
-                var squadEnt = Spawn(protoId, coordinates);
-                var squadComp = EnsureComp<SquadTeamComponent>(squadEnt);
-                ensured = (squadEnt, squadComp);
+                string? chosen = null;
+                // Prefer squads that exist and don't yet have this role
+                foreach (var candidate in candidates)
+                {
+                    if (_squadSystem.TryEnsureSquad(candidate, out var squad))
+                    {
+                        // If job is available as a ProtoId, check the role count in the squad.
+                        if (job != null)
+                        {
+                            squad.Comp.Roles.TryGetValue(job.Value, out var existingCount);
+                            if (existingCount == 0)
+                            {
+                                chosen = candidate;
+                                break;
+                            }
+                        }
+                        else
+                        {
+                            // If we don't have a proto id for the job for whatever reason,
+                            // prefer squads that exist but currently have fewer members (heuristic)
+                            if (_squadSystem.GetSquadMembersAlive(squad) == 0)
+                            {
+                                chosen = candidate;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        // Squad doesn't exist yet, so it definitely has none of the role
+                        chosen = candidate;
+                        break;
+                    }
+                }
+
+                if (chosen != null)
+                {
+                    protoId = chosen;
+                }
+                else
+                {
+                    // Fallback to round-robin distribution when every squad already has the role
+                    if (team == "govfor")
+                    {
+                        protoId = candidates[_govforNextSquadIndex % candidates.Length];
+                        _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
+                    }
+                    else
+                    {
+                        protoId = candidates[_opforNextSquadIndex % candidates.Length];
+                        _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
+                    }
+                }
             }
-
-            _squadSystem.AssignSquad(entity.Value, (ensured.Owner, (SquadTeamComponent?)ensured.Comp), job);
-
-            // If this is the sergeant, set as squad leader
-            if (IsSquadLeaderRole(originalPrototype, jobId))
+            else
             {
-                var memberComp = EnsureComp<SquadMemberComponent>(entity.Value);
-                var leaderIcon = ensured.Comp.LeaderIcon;
-                _squadSystem.PromoteSquadLeader((entity.Value, memberComp), entity.Value, leaderIcon);
+                // Default distribution (round-robin)
+                // Sergeants already handled above; everyone else falls through here.
+                if (team == "govfor")
+                {
+                    protoId = candidates[_govforNextSquadIndex % candidates.Length];
+                    _govforNextSquadIndex = (_govforNextSquadIndex + 1) % candidates.Length;
+                }
+                else
+                {
+                    protoId = candidates[_opforNextSquadIndex % candidates.Length];
+                    _opforNextSquadIndex = (_opforNextSquadIndex + 1) % candidates.Length;
+                }
             }
         }
 
-        ApplyTeamFaction(entity.Value, team);
-        return entity.Value;
+        if (!_squadSystem.TryEnsureSquad(protoId, out Entity<SquadTeamComponent> ensured))
+        {
+            // Fallback: spawn a new entity with SquadTeamComponent
+            var squadEnt = Spawn(protoId, coordinates);
+            var squadComp = EnsureComp<SquadTeamComponent>(squadEnt);
+            ensured = (squadEnt, squadComp);
+        }
+
+        _squadSystem.AssignSquad(entity, (ensured.Owner, (SquadTeamComponent?) ensured.Comp), job);
+
+        // If this is the sergeant, set as squad leader
+        if (IsSquadLeaderRole(originalPrototype, originalJobId))
+        {
+            var memberComp = EnsureComp<SquadMemberComponent>(entity);
+            var leaderIcon = ensured.Comp.LeaderIcon;
+            _squadSystem.PromoteSquadLeader((entity, memberComp), entity, leaderIcon);
+        }
     }
 
     private static string? GetTeamForSide(RoundJobSide side)
@@ -880,11 +907,17 @@ public sealed partial class PlayerSpawningEvent : EntityEventArgs
     /// The target station, if any.
     /// </summary>
     public readonly EntityUid? Station;
+    public readonly ICommonSession? PlayerSession;
 
-    public PlayerSpawningEvent(ProtoId<JobPrototype>? job, HumanoidCharacterProfile? humanoidCharacterProfile, EntityUid? station)
+    public PlayerSpawningEvent(
+        ProtoId<JobPrototype>? job,
+        HumanoidCharacterProfile? humanoidCharacterProfile,
+        EntityUid? station,
+        ICommonSession? playerSession = null)
     {
         Job = job;
         HumanoidCharacterProfile = humanoidCharacterProfile;
         Station = station;
+        PlayerSession = playerSession;
     }
 }

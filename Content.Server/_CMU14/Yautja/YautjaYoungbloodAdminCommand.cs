@@ -3,17 +3,18 @@ using Content.Server.Administration;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
+using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.Yautja;
 
-[AdminCommand(AdminFlags.Admin)]
+[AdminCommand(AdminFlags.Clans)]
 public sealed partial class YautjaYoungbloodCallCommand : IConsoleCommand
 {
     [Dependency] private IEntityManager _entities = default!;
 
     public string Command => "yautja_youngblood_call";
-    public string Description => "Creates a Youngblood hunting-ground call without eligibility checks.";
-    public string Help => "Usage: yautja_youngblood_call <call id>";
+    public string Description => Loc.GetString("cmu-yautja-admin-youngblood-description");
+    public string Help => Loc.GetString("cmu-yautja-admin-youngblood-help");
 
     public void Execute(IConsoleShell shell, string argStr, string[] args)
     {
@@ -25,19 +26,19 @@ public sealed partial class YautjaYoungbloodCallCommand : IConsoleCommand
 
         if (!TryGetBloodingConsole(out var console))
         {
-            shell.WriteError("No blooding console is available.");
+            shell.WriteError(Loc.GetString("cmu-yautja-admin-youngblood-no-console"));
             return;
         }
 
         if (!HasYoungbloodDestination())
         {
-            shell.WriteError("No hunting ground is active. Select one at the hunter flight console first.");
+            shell.WriteError(Loc.GetString("cmu-yautja-admin-youngblood-no-ground"));
             return;
         }
 
         if (!HasYoungbloodSpawnPoint())
         {
-            shell.WriteError("No Yautja ship Youngblood spawn is available.");
+            shell.WriteError(Loc.GetString("cmu-yautja-admin-youngblood-no-spawn"));
             return;
         }
 
@@ -45,7 +46,7 @@ public sealed partial class YautjaYoungbloodCallCommand : IConsoleCommand
             .FirstOrDefault(candidate => string.Equals(candidate.Id, args[0], StringComparison.OrdinalIgnoreCase));
         if (option == null)
         {
-            shell.WriteError($"Unknown Youngblood call id: {args[0]}");
+            shell.WriteError(Loc.GetString("cmu-yautja-admin-youngblood-unknown-call", ("id", args[0])));
             return;
         }
 
@@ -53,11 +54,11 @@ public sealed partial class YautjaYoungbloodCallCommand : IConsoleCommand
         if (!_entities.System<YautjaHuntConsoleSystem>()
                 .TryCreateYoungbloodCall(console, requester, option, bypassEligibility: true))
         {
-            shell.WriteError("Unable to create the Youngblood call.");
+            shell.WriteError(Loc.GetString("cmu-yautja-admin-youngblood-create-failed"));
             return;
         }
 
-        shell.WriteLine($"Created Youngblood call {option.Id} without eligibility checks.");
+        shell.WriteLine(Loc.GetString("cmu-yautja-admin-youngblood-created", ("id", option.Id)));
     }
 
     public CompletionResult GetCompletion(IConsoleShell shell, string[] args)
@@ -67,7 +68,7 @@ public sealed partial class YautjaYoungbloodCallCommand : IConsoleCommand
 
         return CompletionResult.FromHintOptions(
             console.Comp.BloodingCallOptions.Select(option => option.Id),
-            "<call id>");
+            Loc.GetString("cmu-yautja-admin-youngblood-call-id"));
     }
 
     private bool TryGetBloodingConsole(out Entity<YautjaHuntConsoleComponent> console)

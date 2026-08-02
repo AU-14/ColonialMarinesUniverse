@@ -243,7 +243,10 @@ namespace Content.Server.Hands.Systems
                 return true;
 
             var length = direction.Length();
-            var distance = Math.Clamp(length, minDistance, hands.ThrowRange);
+            var maxThrowRange = TryComp(throwEnt, out ItemThrowRangeComponent? itemRange)
+                ? itemRange.Range
+                : hands.ThrowRange;
+            var distance = Math.Clamp(length, minDistance, maxThrowRange);
             direction *= distance / length;
 
             var throwSpeed = hands.BaseThrowspeed;

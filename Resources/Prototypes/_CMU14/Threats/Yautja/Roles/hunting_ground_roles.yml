@@ -1,0 +1,79 @@
+# CMU-owned aliases for the human prey roles used by the Yautja hunting grounds.
+# The inherited RMC settings keep the established equipment and skill loadouts,
+# while the hunt console exposes only CMU prototype IDs.
+
+- type: randomHumanoidSettings
+  parent: RMCCLFSoldier
+  id: CMUYautjaHuntCLFSoldier
+
+- type: randomHumanoidSettings
+  parent: RMCCLFEngineer
+  id: CMUYautjaHuntCLFEngineer
+
+- type: randomHumanoidSettings
+  parent: RMCCLFMedic
+  id: CMUYautjaHuntCLFMedic
+
+- type: randomHumanoidSettings
+  parent: RMCCLFCellLeader
+  id: CMUYautjaHuntCLFCellLeader
+
+- type: randomHumanoidSettings
+  parent: RMCPMCStandardM63B2
+  id: CMUYautjaHuntPMCStandardM63B2
+
+- type: randomHumanoidSettings
+  parent: RMCPMCStandardSSG45
+  id: CMUYautjaHuntPMCStandardSSG45
+
+- type: randomHumanoidSettings
+  parent: RMCPMCStandardM54C2
+  id: CMUYautjaHuntPMCStandardM54C2
+
+- type: randomHumanoidSettings
+  parent: RMCRoyalMarinesCommando
+  id: CMUYautjaHuntRoyalMarinesCommando
+
+- type: randomHumanoidSettings
+  parent: RMCRoyalMarinesMedic
+  id: CMUYautjaHuntRoyalMarinesMedic
+
+- type: randomHumanoidSettings
+  parent: RMCFreelancerStandard
+  id: CMUYautjaHuntFreelancerStandard
+
+- type: randomHumanoidSettings
+  parent: RMCFreelancerLeader
+  id: CMUYautjaHuntFreelancerLeader
+
+- type: randomHumanoidSettings
+  parent: RMCPMCLeader
+  id: CMUYautjaHuntPMCLeader
+
+- type: randomHumanoidSettings
+  parent: RMCPMCSniper
+  id: CMUYautjaHuntPMCSniper
+
+- type: randomHumanoidSettings
+  parent: RMCPMCEngineer
+  id: CMUYautjaHuntPMCEngineer
+
+- type: randomHumanoidSettings
+  parent: RMCPMCMedic
+  id: CMUYautjaHuntPMCMedic
+
+- type: randomHumanoidSettings
+  parent: RMCRoyalMarinesTeamlead
+  id: CMUYautjaHuntRoyalMarinesTeamlead
+
+- type: randomHumanoidSettings
+  parent: RMCRoyalMarinesSGO
+  id: CMUYautjaHuntRoyalMarinesSGO
+
+- type: randomHumanoidSettings
+  parent: RMCRoyalMarinesBreacher
+  id: CMUYautjaHuntRoyalMarinesBreacher
+
+- type: randomHumanoidSettings
+  parent: RMCRoyalMarinesMarksman
+  id: CMUYautjaHuntRoyalMarinesMarksman

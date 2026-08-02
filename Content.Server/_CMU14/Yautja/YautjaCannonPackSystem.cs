@@ -1,9 +1,11 @@
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Actions;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -11,6 +13,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Throwing;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
@@ -40,7 +43,10 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
         SubscribeLocalEvent<YautjaCannonPackComponent, GotUnequippedEvent>(OnUnequipped);
         SubscribeLocalEvent<YautjaCannonPackComponent, GetItemActionsEvent>(OnGetItemActions);
         SubscribeLocalEvent<YautjaCannonPackComponent, YautjaUsePlasmaCannonsActionEvent>(OnUseCannons);
+        SubscribeLocalEvent<YautjaCannonPackLinkedCannonComponent, RMCItemDropAttemptEvent>(OnLinkedCannonDropAttempt);
         SubscribeLocalEvent<YautjaCannonPackLinkedCannonComponent, DroppedEvent>(OnLinkedCannonDropped);
+        SubscribeLocalEvent<YautjaCannonPackLinkedCannonComponent, ThrowItemAttemptEvent>(OnLinkedCannonThrowAttempt);
+        SubscribeLocalEvent<YautjaCannonPackLinkedCannonComponent, AttemptShootEvent>(OnLinkedCannonAttemptShoot);
         SubscribeLocalEvent<YautjaCannonPackLinkedCannonComponent, TakeAmmoEvent>(OnLinkedCannonTakeAmmo, before: [typeof(SharedGunSystem)]);
         SubscribeLocalEvent<YautjaCannonPackLinkedCannonComponent, AmmoShotEvent>(OnLinkedCannonAmmoShot);
         SubscribeLocalEvent<YautjaCannonPackProjectileRefundComponent, EntityTerminatingEvent>(OnCannonProjectileTerminating);
@@ -64,7 +70,7 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
 
     private void OnExamined(Entity<YautjaCannonPackComponent> ent, ref ExaminedEvent args)
     {
-        args.PushMarkup($"It currently has <bold>{(int) ent.Comp.Charge}/{(int) ent.Comp.MaxCharge}</bold> charge.");
+        args.PushText($"It currently has {(int) ent.Comp.Charge}/{(int) ent.Comp.MaxCharge} charge.");
     }
 
     private void OnEquipped(Entity<YautjaCannonPackComponent> ent, ref GotEquippedEvent args)
@@ -150,6 +156,7 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
             return;
 
         ent.Comp.CannonsDeployed = true;
+        Dirty(ent);
         _actions.SetToggled(ent.Comp.UseCannonsAction, true);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-cannon-pack-activated"), user, user);
     }
@@ -170,14 +177,74 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
 
     private void OnLinkedCannonDropped(Entity<YautjaCannonPackLinkedCannonComponent> ent, ref DroppedEvent args)
     {
-        if (TerminatingOrDeleted(ent.Comp.Pack) ||
-            !TryComp(ent.Comp.Pack, out YautjaCannonPackComponent? pack) ||
-            pack.Cannon != ent.Owner)
+        if (!TryGetLinkedPack(ent, out var pack))
         {
             return;
         }
 
-        RetractCannons((ent.Comp.Pack, pack), args.User, ent.Owner, true);
+        RetractCannons(pack, args.User, ent.Owner, true);
+    }
+
+    private void OnLinkedCannonDropAttempt(Entity<YautjaCannonPackLinkedCannonComponent> ent, ref RMCItemDropAttemptEvent args)
+    {
+        if (!TryGetLinkedPack(ent, out var pack))
+            return;
+
+        if (TryGetCurrentHolder(ent.Owner, out var user))
+            RetractCannons(pack, user, ent.Owner, true);
+
+        args.Cancelled = true;
+    }
+
+    private void OnLinkedCannonThrowAttempt(Entity<YautjaCannonPackLinkedCannonComponent> ent, ref ThrowItemAttemptEvent args)
+    {
+        if (!TryGetLinkedPack(ent, out var pack))
+            return;
+
+        RetractCannons(pack, args.User, ent.Owner, false);
+        args.Cancelled = true;
+    }
+
+    private void OnLinkedCannonAttemptShoot(Entity<YautjaCannonPackLinkedCannonComponent> ent, ref AttemptShootEvent args)
+    {
+        if (args.Cancelled ||
+            !TryGetLinkedPack(ent, out var pack) ||
+            pack.Comp.Charge >= ent.Comp.ChargeCost)
+        {
+            return;
+        }
+
+        args.Cancelled = true;
+        args.Message = GetPackDrainFailureMessage(pack.Comp, ent.Comp.ChargeCost);
+    }
+
+    private bool TryGetLinkedPack(
+        Entity<YautjaCannonPackLinkedCannonComponent> ent,
+        out Entity<YautjaCannonPackComponent> pack)
+    {
+        pack = default;
+        if (TerminatingOrDeleted(ent.Comp.Pack) ||
+            !TryComp(ent.Comp.Pack, out YautjaCannonPackComponent? packComp) ||
+            packComp.Cannon != ent.Owner)
+        {
+            return false;
+        }
+
+        pack = (ent.Comp.Pack, packComp);
+        return true;
+    }
+
+    private bool TryGetCurrentHolder(EntityUid item, out EntityUid user)
+    {
+        user = default;
+        if (!_containers.TryGetContainingContainer((item, null, null), out var container) ||
+            !HasComp<HandsComponent>(container.Owner))
+        {
+            return false;
+        }
+
+        user = container.Owner;
+        return true;
     }
 
     private void OnLinkedCannonTakeAmmo(Entity<YautjaCannonPackLinkedCannonComponent> ent, ref TakeAmmoEvent args)
@@ -192,8 +259,11 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
             return;
         }
 
-        if (!TryDrainPackPower((ent.Comp.Pack, pack), user, ent.Comp.ChargeCost))
+        if (!TryDrainPackPower((ent.Comp.Pack, pack), user, ent.Comp.ChargeCost, showPopup: false))
+        {
+            args.Reason = GetPackDrainFailureMessage(pack, ent.Comp.ChargeCost);
             return;
+        }
 
         var projectile = Spawn(ent.Comp.Projectile, args.Coordinates);
         var refund = EnsureComp<YautjaCannonPackProjectileRefundComponent>(projectile);
@@ -226,11 +296,14 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
         }
 
         pack.Charge = FixedPoint2.Min(pack.Charge + ent.Comp.ChargeCost, pack.MaxCharge);
+        Dirty(ent.Comp.Pack, pack);
     }
 
-    private void RetractCannons(Entity<YautjaCannonPackComponent> ent, EntityUid user, EntityUid cannon, bool showPopup)
+    private void RetractCannons(Entity<YautjaCannonPackComponent> ent, EntityUid? user, EntityUid cannon, bool showPopup)
     {
-        if (_hands.IsHolding(user, cannon) && !_hands.TryDrop(user, cannon, checkActionBlocker: false, doDropInteraction: false))
+        if (user is { } userUid &&
+            _hands.IsHolding(userUid, cannon) &&
+            !_hands.TryDrop(userUid, cannon, checkActionBlocker: false, doDropInteraction: false))
             return;
 
         var container = EnsureCannonContainer(ent);
@@ -238,9 +311,10 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
             return;
 
         ent.Comp.CannonsDeployed = false;
+        Dirty(ent);
         _actions.SetToggled(ent.Comp.UseCannonsAction, false);
-        if (showPopup)
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-cannon-pack-deactivated"), user, user);
+        if (showPopup && user is { } popupUser)
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-cannon-pack-deactivated"), popupUser, popupUser);
     }
 
     private EntityUid? EnsureInternalCannon(Entity<YautjaCannonPackComponent> ent)
@@ -257,8 +331,11 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
         }
 
         ent.Comp.Cannon = cannon;
-        EnsureComp<YautjaCannonPackLinkedCannonComponent>(cannon).Pack = ent.Owner;
+        var linked = EnsureComp<YautjaCannonPackLinkedCannonComponent>(cannon);
+        linked.Pack = ent.Owner;
+        Dirty(cannon, linked);
         ent.Comp.CannonsDeployed = false;
+        Dirty(ent);
         return cannon;
     }
 
@@ -268,27 +345,34 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
         return ent.Comp.CannonContainer;
     }
 
-    private bool TryDrainPackPower(Entity<YautjaCannonPackComponent> ent, EntityUid user, FixedPoint2 amount)
+    private bool TryDrainPackPower(
+        Entity<YautjaCannonPackComponent> ent,
+        EntityUid user,
+        FixedPoint2 amount,
+        bool showPopup = true)
     {
         if (amount == FixedPoint2.Zero)
             return true;
 
         if (ent.Comp.Charge < amount)
         {
-            _popup.PopupEntity(
-                Loc.GetString(
-                    "cmu-yautja-cannon-pack-drain-failed",
-                    ("charge", (int) ent.Comp.Charge),
-                    ("max", (int) ent.Comp.MaxCharge),
-                    ("amount", (int) amount)),
-                user,
-                user,
-                PopupType.MediumCaution);
+            if (showPopup)
+                _popup.PopupEntity(GetPackDrainFailureMessage(ent.Comp, amount), user, user, PopupType.MediumCaution);
             return false;
         }
 
         ent.Comp.Charge -= amount;
+        Dirty(ent);
         return true;
+    }
+
+    private string GetPackDrainFailureMessage(YautjaCannonPackComponent pack, FixedPoint2 amount)
+    {
+        return Loc.GetString(
+            "cmu-yautja-cannon-pack-drain-failed",
+            ("charge", (int) pack.Charge),
+            ("max", (int) pack.MaxCharge),
+            ("amount", (int) amount));
     }
 
     public override void Update(float frameTime)
@@ -340,11 +424,12 @@ public sealed partial class YautjaCannonPackSystem : EntitySystem
                YautjaPowerSystem.IsCmss13MainshipRechargeArea(area.Value.Comp.PowerNet, areaPrototype.ID);
     }
 
-    private static void RegenPack(Entity<YautjaCannonPackComponent> pack, FixedPoint2 amount)
+    private void RegenPack(Entity<YautjaCannonPackComponent> pack, FixedPoint2 amount)
     {
         if (pack.Comp.Charge >= pack.Comp.MaxCharge)
             return;
 
         pack.Comp.Charge = FixedPoint2.Min(pack.Comp.Charge + amount, pack.Comp.MaxCharge);
+        Dirty(pack);
     }
 }

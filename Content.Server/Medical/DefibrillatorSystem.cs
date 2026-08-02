@@ -6,6 +6,7 @@ using Content.Server.EUI;
 using Content.Server.Ghost;
 using Content.Server.Popups;
 using Content.Server.PowerCell;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Defibrillator;
@@ -119,6 +120,9 @@ public sealed partial class DefibrillatorSystem : EntitySystem
             return false;
 
         if (!TryComp<MobStateComponent>(target, out var mobState))
+            return false;
+
+        if (HasComp<YautjaComponent>(target))
             return false;
 
         if (!_powerCell.HasActivatableCharge(uid, user: user))

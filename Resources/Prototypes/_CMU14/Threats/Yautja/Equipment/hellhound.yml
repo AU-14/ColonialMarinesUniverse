@@ -10,9 +10,7 @@
   components:
   - type: YautjaHellhound
   - type: RMCCamera
-    id: CMUYautjaHellhoundCamera
-    networks:
-    - Yautja
+    id: CMUMobYautjaHellhound
     rename: false
   - type: GhostRole
     name: cmu-yautja-hellhound-ghost-name
@@ -89,6 +87,8 @@
   - type: RemoveComponents
     components:
     - type: Internals
+    - type: Hunger
+    - type: Thirst
   - type: Puller
   - type: Hands
     examineShowEmpty: false

@@ -5,7 +5,7 @@ using Robust.Shared.Console;
 
 namespace Content.Server._CMU14.Yautja;
 
-[AdminCommand(AdminFlags.Host)]
+[AdminCommand(AdminFlags.Clans)]
 public sealed partial class YautjaPredatorAdminEditorCommand : LocalizedCommands
 {
     [Dependency] private EuiManager _eui = default!;

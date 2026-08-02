@@ -8,9 +8,9 @@
   copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/tree/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/sound/effects"
 
-- files: ["pred_cloakon_modern.ogg", "pred_cloakoff_modern.ogg"]
+- files: ["pred_cloakon_modern.wav", "pred_cloakoff_modern.wav"]
   license: "CC-BY-SA-3.0"
-  copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
+  copyright: "Converted to mono PCM WAV from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/tree/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/sound/effects"
 
 - files: ["pred_bracer.wav"]
@@ -48,7 +48,7 @@
   copyright: "Taken from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/sound/effects/woodhit.ogg"
 
-- files: ["pred_click1.wav", "pred_click2.wav", "pred_click3.wav", "pred_click4.wav", "pred_click5.wav", "pred_roar1.wav", "pred_roar2.wav", "pred_roar3.wav", "pred_roar4.wav", "pred_roar5.wav", "pred_roar6.wav", "predgrowl.wav", "pred_pain1.wav", "pred_pain2.wav", "pred_pain3.wav", "pred_pain4.wav", "pred_pain5.wav", "pred_pain_rare1.wav", "pred_death1.wav", "pred_death2.wav", "pred_deathlaugh.wav", "pred_laugh1.wav", "pred_laugh2.wav", "pred_laugh3.wav", "pred_laugh4.wav", "pred_laugh5.wav", "pred_laugh6.wav"]
+- files: ["pred_click01.wav", "pred_click02.wav", "pred_click03.wav", "pred_click04.wav", "pred_click05.wav", "pred_roar1.wav", "pred_roar2.wav", "pred_roar3.wav", "pred_roar4.wav", "pred_roar5.wav", "pred_roar6.wav", "predgrowl.wav", "pred_pain1.wav", "pred_pain2.wav", "pred_pain3.wav", "pred_pain4.wav", "pred_pain5.wav", "pred_pain_rare1.wav", "pred_death1.wav", "pred_death2.wav", "pred_deathlaugh.wav", "pred_laugh1.wav", "pred_laugh2.wav", "pred_laugh3.wav", "pred_laugh4.wav", "pred_laugh5.wav", "pred_laugh6.wav"]
   license: "CC-BY-SA-3.0"
   copyright: "Converted to mono PCM WAV from CMSS13 source audio. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata."
   source: "https://github.com/cmss13-devs/cmss13/tree/b3a7ffe2813a31ddcf429a5a864b4048851d66b0/sound/voice"

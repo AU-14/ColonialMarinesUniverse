@@ -28,6 +28,25 @@ public sealed partial class YautjaPredatorRoundComponent : Component
     [ViewVariables]
     public int Slots;
 
+    /// <summary>
+    /// Remaining round-start assignments reserved for Leader and Ancient ranks.
+    /// These do not change the configured ordinary Hunter cap.
+    /// </summary>
+    [ViewVariables]
+    public int RankBypassSlotsRemaining;
+
+    /// <summary>
+    /// Remaining expanded Hunter slots while round-start job assignment is in progress.
+    /// </summary>
+    [ViewVariables]
+    public int RoundStartHunterSlotsRemaining;
+
+    /// <summary>
+    /// Round-start senior reservations still waiting for their assigned players to spawn.
+    /// </summary>
+    [ViewVariables]
+    public int RoundStartBypassSlotsRemaining;
+
     [ViewVariables]
     public bool HunterShipLoaded;
 

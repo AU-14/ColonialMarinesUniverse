@@ -9,6 +9,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared._RMC14.Areas;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.UnitTesting;
 
@@ -164,6 +165,48 @@ public sealed class YautjaHonorScoringTest
             finally
             {
                 DeleteNow(entMan, hunter, ordinaryViewer, dangerousPrey, defaultPrey);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task YautjaSelfExamineUsesWhitelistRankInsteadOfTrophyScore()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var examine = entMan.System<ExamineSystem>();
+            var hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+
+            try
+            {
+                var yautja = entMan.EnsureComponent<YautjaComponent>(hunter);
+                yautja.ClanRank = YautjaRank.Ancient;
+
+                var record = entMan.EnsureComponent<YautjaTrophyRecordComponent>(hunter);
+                record.RankName = "cmu-yautja-rank-hunter";
+
+                var examineText = examine.GetExamineText(hunter, hunter).ToMarkup();
+                var ancientName = Loc.GetString(YautjaRankMetadata.For(YautjaRank.Ancient).LocalizedName);
+                var hunterName = Loc.GetString("cmu-yautja-rank-hunter");
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(examineText, Does.Contain(ancientName),
+                        "Shift+LMB character information must show the rank granted by the Yautja whitelist.");
+                    Assert.That(examineText, Does.Not.Contain(hunterName),
+                        "The local trophy score must not replace the whitelist rank in character information.");
+                });
+            }
+            finally
+            {
+                DeleteNow(entMan, hunter);
             }
         });
 

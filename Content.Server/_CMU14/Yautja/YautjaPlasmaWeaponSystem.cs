@@ -32,7 +32,7 @@ public sealed partial class YautjaPlasmaWeaponSystem : EntitySystem
         if (!HasComp<YautjaComponent>(args.Examiner))
         {
             if (ent.Comp.NonYautjaExamineText.Length > 0)
-                args.PushText(ent.Comp.NonYautjaExamineText);
+                args.PushText(Loc.GetString(ent.Comp.NonYautjaExamineText));
 
             return;
         }
@@ -44,7 +44,10 @@ public sealed partial class YautjaPlasmaWeaponSystem : EntitySystem
 
         var charge = (int) MathF.Round(battery.CurrentCharge);
         var maxCharge = (int) MathF.Round(battery.MaxCharge);
-        args.PushMarkup($"It currently has <bold>{charge}/{maxCharge}</bold> charge.");
+        args.PushMarkup(Loc.GetString(
+            "cmu-yautja-plasma-weapon-examine-charge",
+            ("charge", charge),
+            ("max", maxCharge)));
 
         if (!ent.Comp.ShowFireMode ||
             !TryComp(ent, out BatteryWeaponFireModesComponent? fireModes))
@@ -56,7 +59,8 @@ public sealed partial class YautjaPlasmaWeaponSystem : EntitySystem
             ? ent.Comp.SecondaryFireModeText
             : ent.Comp.PrimaryFireModeText;
 
-        args.PushMarkup(text);
+        if (text.Length > 0)
+            args.PushMarkup(Loc.GetString(text));
     }
 
     private void OnAttemptShoot(Entity<YautjaPlasmaWeaponComponent> ent, ref AttemptShootEvent args)
@@ -72,7 +76,7 @@ public sealed partial class YautjaPlasmaWeaponSystem : EntitySystem
         }
 
         args.Cancelled = true;
-        args.Message = ent.Comp.LowPowerWarning;
+        args.Message = Loc.GetString(ent.Comp.LowPowerWarning);
     }
 
     private void OnTakeAmmo(Entity<YautjaPlasmaWeaponComponent> ent, ref TakeAmmoEvent args)
@@ -156,7 +160,7 @@ public sealed partial class YautjaPlasmaWeaponSystem : EntitySystem
             return;
         }
 
-        _popup.PopupEntity(ent.Comp.MaxChargePopup, ent.Owner, holder);
+        _popup.PopupEntity(Loc.GetString(ent.Comp.MaxChargePopup), ent.Owner, holder);
     }
 
     private bool TryGetDirectMobHolder(EntityUid item, out EntityUid holder)

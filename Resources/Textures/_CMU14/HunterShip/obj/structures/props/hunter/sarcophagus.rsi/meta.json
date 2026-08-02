@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/props/hunter/sarcophagus.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 64,
+    "y": 64
+  },
+  "states": [
+    {
+      "name": "sarcophagus0",
+      "directions": 4
+    },
+    {
+      "name": "sarcophagus1",
+      "directions": 4
+    },
+    {
+      "name": "sarcophagus2",
+      "directions": 4
+    },
+    {
+      "name": "sarcomat",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_deco",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_mumified_open",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_mumified_deco_open",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_mumified_deco_alt_open",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_empty_open",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_empty_deco_open",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_base",
+      "directions": 4
+    },
+    {
+      "name": "ancient_coffin_base_deco",
+      "directions": 4
+    }
+  ]
+}

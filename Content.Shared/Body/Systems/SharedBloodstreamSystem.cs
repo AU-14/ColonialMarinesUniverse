@@ -120,8 +120,24 @@ public abstract partial class SharedBloodstreamSystem : EntitySystem
                     TryModifyBloodLevel((uid, bloodstream), -bleedDrain);
                 }
 
-                // Bleed rate is reduced by the bleed reduction amount in the bloodstream component.
-                TryModifyBleedAmount((uid, bloodstream), -bloodstream.BleedReductionAmount);
+                // CMSS13's thwei reduces each bleeding tick by a fixed 0.75
+                // in addition to the normal bloodstream clotting rate. Keep
+                // this in the bleeding loop so the bonus disappears as soon
+                // as the reagent is metabolized instead of leaking into the
+                // component after the dose is gone.
+                var thweiBleedReduction = 0f;
+                if (SolutionContainer.ResolveSolution(
+                        uid,
+                        bloodstream.ChemicalSolutionName,
+                        ref bloodstream.ChemicalSolution,
+                        out var chemicals)
+                    && chemicals.GetTotalPrototypeQuantity("thwei") > FixedPoint2.Zero)
+                {
+                    thweiBleedReduction = 0.75f;
+                }
+
+                TryModifyBleedAmount((uid, bloodstream),
+                    -(bloodstream.BleedReductionAmount + thweiBleedReduction));
             }
 
             // deal bloodloss damage if their blood level is below a threshold.

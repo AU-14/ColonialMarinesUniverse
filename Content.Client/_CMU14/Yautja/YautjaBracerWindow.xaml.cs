@@ -53,6 +53,13 @@ public sealed class YautjaBracerWindow : DefaultWindow
     public Button CrystalButton = default!;
     public Button HumanCrystalButton = default!;
     public Button HuntingTrapButton = default!;
+    public Button HealingCapsuleButton = default!;
+    public Button ChangeExplosionTypeButton = default!;
+    public Button RemoveBracerAttachmentsButton = default!;
+    public Button AddTrackedItemButton = default!;
+    public Button RemoveTrackedItemButton = default!;
+    public Button ToggleBracerNameButton = default!;
+    public Button ToggleBracerNotificationSoundButton = default!;
 
     public event Action<YautjaBracerPanelCommand>? OnCommand;
 
@@ -125,6 +132,13 @@ public sealed class YautjaBracerWindow : DefaultWindow
         Bind(CrystalButton, YautjaBracerPanelCommand.CreateStabilisingCrystal);
         Bind(HumanCrystalButton, YautjaBracerPanelCommand.CreateHumanStabilisingCrystal);
         Bind(HuntingTrapButton, YautjaBracerPanelCommand.CreateHuntingTrap);
+        Bind(HealingCapsuleButton, YautjaBracerPanelCommand.CreateHealingCapsule);
+        Bind(ChangeExplosionTypeButton, YautjaBracerPanelCommand.ChangeExplosionType);
+        Bind(RemoveBracerAttachmentsButton, YautjaBracerPanelCommand.RemoveBracerAttachments);
+        Bind(AddTrackedItemButton, YautjaBracerPanelCommand.AddTrackedItem);
+        Bind(RemoveTrackedItemButton, YautjaBracerPanelCommand.RemoveTrackedItem);
+        Bind(ToggleBracerNameButton, YautjaBracerPanelCommand.ToggleBracerName);
+        Bind(ToggleBracerNotificationSoundButton, YautjaBracerPanelCommand.ToggleBracerNotificationSound);
     }
 
     public void UpdateState(YautjaBracerPanelState state)
@@ -281,6 +295,38 @@ public sealed class YautjaBracerWindow : DefaultWindow
             out _selfDestructButtonDetail);
         body.AddChild(SelfDestructButton);
 
+        ChangeExplosionTypeButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-explosion-type"),
+            Loc.GetString("cmu-yautja-bracer-menu-explosion-type-detail"),
+            YautjaBracerUiStyle.Amber,
+            out _,
+            out _);
+        body.AddChild(ChangeExplosionTypeButton);
+
+        RemoveBracerAttachmentsButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-remove-attachments"),
+            Loc.GetString("cmu-yautja-bracer-menu-remove-attachments-detail"),
+            YautjaBracerUiStyle.HotRed,
+            out _,
+            out _);
+        body.AddChild(RemoveBracerAttachmentsButton);
+
+        ToggleBracerNameButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-toggle-name"),
+            Loc.GetString("cmu-yautja-bracer-menu-toggle-name-detail"),
+            YautjaBracerUiStyle.Green,
+            out _,
+            out _);
+        body.AddChild(ToggleBracerNameButton);
+
+        ToggleBracerNotificationSoundButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-toggle-sound"),
+            Loc.GetString("cmu-yautja-bracer-menu-toggle-sound-detail"),
+            YautjaBracerUiStyle.Green,
+            out _,
+            out _);
+        body.AddChild(ToggleBracerNotificationSoundButton);
+
         return panel;
     }
 
@@ -383,6 +429,14 @@ public sealed class YautjaBracerWindow : DefaultWindow
             out _);
         body.AddChild(HuntingTrapButton);
 
+        HealingCapsuleButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-capsule"),
+            Loc.GetString("cmu-yautja-bracer-menu-capsule-detail"),
+            YautjaBracerUiStyle.Purple,
+            out _,
+            out _);
+        body.AddChild(HealingCapsuleButton);
+
         return panel;
     }
 
@@ -402,6 +456,32 @@ public sealed class YautjaBracerWindow : DefaultWindow
         _trackerSummary = YautjaBracerUiStyle.Label(string.Empty, YautjaBracerUiStyle.Muted, "LabelSubText");
         _trackerSummary.HorizontalExpand = true;
         summaryRow.AddChild(_trackerSummary);
+
+        var controls = new BoxContainer
+        {
+            Orientation = BoxContainer.LayoutOrientation.Horizontal,
+            SeparationOverride = 6,
+            HorizontalExpand = true,
+        };
+        body.AddChild(controls);
+
+        AddTrackedItemButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-add-tracked-item"),
+            Loc.GetString("cmu-yautja-bracer-menu-add-tracked-item-detail"),
+            YautjaBracerUiStyle.Green,
+            out _,
+            out _);
+        AddTrackedItemButton.HorizontalExpand = true;
+        controls.AddChild(AddTrackedItemButton);
+
+        RemoveTrackedItemButton = YautjaBracerUiStyle.ActionButton(
+            Loc.GetString("cmu-yautja-bracer-menu-remove-tracked-item"),
+            Loc.GetString("cmu-yautja-bracer-menu-remove-tracked-item-detail"),
+            YautjaBracerUiStyle.HotRed,
+            out _,
+            out _);
+        RemoveTrackedItemButton.HorizontalExpand = true;
+        controls.AddChild(RemoveTrackedItemButton);
 
         body.AddChild(BuildDirectionStrip());
 

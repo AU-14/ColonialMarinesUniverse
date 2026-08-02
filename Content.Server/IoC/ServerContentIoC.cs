@@ -1,5 +1,6 @@
 using Content.Server._CMU14.Administration.Console;
 using Content.Server._CMU14.Diagnostics.Performance;
+using Content.Server._CMU14.Yautja;
 using Content.Server._RMC14.Actions;
 using Content.Server._RMC14.Admin;
 using Content.Server._RMC14.Commendations;
@@ -51,6 +52,8 @@ namespace Content.Server.IoC
             IoCManager.Register<IChatSanitizationManager, ChatSanitizationManager>();
             IoCManager.Register<IServerPreferencesManager, ServerPreferencesManager>();
             IoCManager.Register<IServerDbManager, ServerDbManager>();
+            IoCManager.Register<YautjaClanManager>();
+            IoCManager.Register<YautjaRankManager>();
             IoCManager.Register<RecipeManager, RecipeManager>();
             IoCManager.Register<INodeGroupFactory, NodeGroupFactory>();
             IoCManager.Register<IConnectionManager, ConnectionManager>();

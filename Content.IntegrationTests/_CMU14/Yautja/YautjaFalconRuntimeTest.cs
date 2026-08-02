@@ -26,6 +26,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Components;
 using Content.Shared.Physics;
+using Content.Shared.Ghost;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
 using Robust.Client.GameObjects;
@@ -128,6 +129,88 @@ public sealed class YautjaFalconRuntimeTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FalconDroneIsHiddenFromOrdinaryHumansButVisibleToYautjaAndGhosts()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        EntityUid human = default;
+        EntityUid falcon = default;
+        EntityUid? previousAttached = null;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var session = server.PlayerMan.Sessions.Single();
+                previousAttached = session.AttachedEntity;
+                human = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                falcon = entMan.SpawnEntity(DeployedFalconPrototypeId, map.GridCoords.Offset(new Vector2(1, 0)));
+                server.PlayerMan.SetAttachedEntity(session, human);
+            });
+
+            await pair.RunTicksSync(5);
+
+            await client.WaitAssertion(() =>
+            {
+                var clientFalcon = client.EntMan.GetEntity(server.EntMan.GetNetEntity(falcon));
+                AssertFalconLayerVisible(client, clientFalcon, false);
+            });
+
+            await server.WaitPost(() => server.EntMan.EnsureComponent<YautjaComponent>(human));
+            await pair.RunTicksSync(5);
+
+            await client.WaitAssertion(() =>
+            {
+                var clientFalcon = client.EntMan.GetEntity(server.EntMan.GetNetEntity(falcon));
+                AssertFalconLayerVisible(client, clientFalcon, true);
+            });
+
+            await client.WaitPost(() =>
+            {
+                var local = client.ResolveDependency<IPlayerManager>().LocalEntity!.Value;
+                client.EntMan.RemoveComponent<YautjaComponent>(local);
+                client.EntMan.EnsureComponent<GhostComponent>(local);
+            });
+            await pair.RunTicksSync(5);
+
+            await client.WaitAssertion(() =>
+            {
+                var clientFalcon = client.EntMan.GetEntity(server.EntMan.GetNetEntity(falcon));
+                AssertFalconLayerVisible(client, clientFalcon, true);
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+
+                if (!server.EntMan.Deleted(human))
+                    server.EntMan.DeleteEntity(human);
+                if (!server.EntMan.Deleted(falcon))
+                    server.EntMan.DeleteEntity(falcon);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static void AssertFalconLayerVisible(
+        Robust.UnitTesting.RobustIntegrationTest.ClientIntegrationInstance client,
+        EntityUid falcon,
+        bool visible)
+    {
+        Assert.That(client.EntMan.TryGetComponent<SpriteComponent>(falcon, out var sprite), Is.True);
+        var spriteSystem = client.EntMan.System<SpriteSystem>();
+        Assert.That(spriteSystem.LayerMapTryGet((falcon, sprite!), YautjaFalconVisualLayers.Base, out var layer, true), Is.True);
+        Assert.That(sprite![layer].Visible, Is.EqualTo(visible));
     }
 
     [Test]

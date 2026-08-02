@@ -42,6 +42,8 @@ reagent-desc-cmmeralyne = Advanced analgesic medication used to treat extremely 
 
 reagent-name-cmimidazoline = Imidazoline
 reagent-desc-cmimidazoline = Used for treating non-genetic eye trauma. Generally prescribed as treatment for most cases of eye trauma instead of performing a surgical operation.
+reagent-name-cmalkysine = Alkysine
+reagent-desc-cmalkysine = A Yautja sleeper medicine used to repair damaged brain tissue.
 
 reagent-name-cmclonexadone = Clonexadone
 reagent-desc-cmclonexadone = Advanced cryogenic medicine made from cryoxadone. Treats most types of tissue damage. Requires temperatures below 170K to to metabolise correctly.
@@ -69,6 +71,8 @@ rmc-iron-container-label-text = Fe
 rmc-tramadol-container-label-text = TA
 rmc-oxycodone-container-label-text = OC
 rmc-paracetamol-container-label-text = PL
+rmc-fentanyl-container-label-text = FE
+rmc-methamphetamine-container-label-text = MA
 
 rmc-custom-container-label-text = {$customLabel}
 

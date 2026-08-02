@@ -9,6 +9,8 @@ public sealed class MsgJobWhitelist : NetMessage
     public override MsgGroups MsgGroup => MsgGroups.EntityEvent;
 
     public HashSet<string> Whitelist = new();
+    public Content.Shared._CMU14.Yautja.YautjaProfileCapabilities YautjaCapabilities =
+        Content.Shared._CMU14.Yautja.YautjaProfileCapabilities.Default;
 
     public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
     {
@@ -19,6 +21,11 @@ public sealed class MsgJobWhitelist : NetMessage
         {
             Whitelist.Add(buffer.ReadString());
         }
+
+        var length = buffer.ReadVariableInt32();
+        using var stream = new System.IO.MemoryStream();
+        buffer.ReadAlignedMemory(stream, length);
+        serializer.DeserializeDirect(stream, out YautjaCapabilities);
     }
 
     public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
@@ -29,5 +36,11 @@ public sealed class MsgJobWhitelist : NetMessage
         {
             buffer.Write(ban);
         }
+
+        using var stream = new System.IO.MemoryStream();
+        serializer.SerializeDirect(stream, YautjaCapabilities);
+        buffer.WriteVariableInt32((int) stream.Length);
+        stream.TryGetBuffer(out var segment);
+        buffer.Write(segment);
     }
 }

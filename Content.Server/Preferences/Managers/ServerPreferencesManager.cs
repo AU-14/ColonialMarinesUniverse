@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Database;
+using Content.Server._CMU14.Yautja;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Preferences;
@@ -29,6 +30,7 @@ namespace Content.Server.Preferences.Managers
         [Dependency] private ILogManager _log = default!;
         [Dependency] private UserDbDataManager _userDb = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private YautjaRankManager _yautjaRankManager = default!;
 
         // Cache player prefs on the server so we don't need as much async hell related to them.
         private readonly Dictionary<NetUserId, PlayerPrefData> _cachedPlayerPrefs =
@@ -106,6 +108,7 @@ namespace Content.Server.Preferences.Managers
             var session = _playerManager.GetSessionById(userId);
 
             profile.EnsureValid(session, _dependencies);
+            profile = SanitizeYautjaProfile(userId, profile);
 
             var profiles = new Dictionary<int, ICharacterProfile>(curPrefs.Characters)
             {
@@ -269,6 +272,7 @@ namespace Content.Server.Preferences.Managers
             {
                 MaxCharacterSlots = MaxCharacterSlots
             };
+            msg.YautjaCapabilities = _yautjaRankManager.ResolveProfileCapabilitiesCached(session.UserId);
             _netManager.ServerSendMessage(msg, session.Channel);
         }
 
@@ -347,8 +351,18 @@ namespace Content.Server.Preferences.Managers
 
             return new PlayerPreferences(prefs.Characters.Select(p =>
             {
-                return new KeyValuePair<int, ICharacterProfile>(p.Key, p.Value.Validated(session, collection));
+                var profile = p.Value.Validated(session, collection);
+                return new KeyValuePair<int, ICharacterProfile>(p.Key, SanitizeYautjaProfile(session.UserId, profile));
             }), prefs.SelectedCharacterIndex, prefs.AdminOOCColor, prefs.ConstructionFavorites);
+        }
+
+        private ICharacterProfile SanitizeYautjaProfile(NetUserId userId, ICharacterProfile profile)
+        {
+            if (profile is not HumanoidCharacterProfile humanoid)
+                return profile;
+
+            var capabilities = _yautjaRankManager.ResolveProfileCapabilitiesCached(userId);
+            return humanoid.WithYautjaProfile(humanoid.YautjaProfile.SanitizeForCapabilities(capabilities));
         }
 
         public IEnumerable<KeyValuePair<NetUserId, ICharacterProfile>> GetSelectedProfilesForPlayers(

@@ -15,7 +15,6 @@ using Content.Shared.Damage;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
-using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
 using Content.Shared.Interaction;
@@ -62,7 +61,6 @@ public sealed partial class YautjaChainGauntletSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaChainGauntletComponent, GetItemActionsEvent>(OnGetItemActions);
-        SubscribeLocalEvent<YautjaChainGauntletComponent, ExaminedEvent>(OnExamined);
         SubscribeLocalEvent<YautjaChainGauntletComponent, InteractUsingEvent>(OnInteractUsing);
         SubscribeLocalEvent<YautjaChainGauntletComponent, MeleeHitEvent>(OnMeleeHit);
         SubscribeLocalEvent<YautjaChainGauntletComponent, YautjaChainGauntletExecuteDoAfterEvent>(OnExecutionDoAfter);
@@ -107,17 +105,6 @@ public sealed partial class YautjaChainGauntletSystem : EntitySystem
             return;
 
         args.AddAction(ref ent.Comp.GuardAction, ent.Comp.GuardActionId);
-    }
-
-    private void OnExamined(Entity<YautjaChainGauntletComponent> ent, ref ExaminedEvent args)
-    {
-        if (!HasComp<YautjaComponent>(args.Examiner))
-            return;
-
-        args.PushMarkup("Stack up your combo meter by using [color=red]HARM[/color] intent, you can then use these combo stacks on different intents to do different finishers.");
-        args.PushMarkup("Finish your combo on [color=green]HELP[/color] intent to slam the target to the ground, incapacitating them for a few seconds, if the target is a humanoid you do extra damage as well.");
-        args.PushMarkup("Finish your combo on [color=blue]SHOVE[/color] intent to throw the target away from you, if you have some chains wrapped around the gauntlet, you'll pull them back towards you. If you are using the special ability, the throw range will be further.");
-        args.PushMarkup("Finish your combo on [color=orange]GRAB[/color] intent to do an execution that instantly kills your target, they must already be unconscious or in critical state.");
     }
 
     private void OnInteractUsing(Entity<YautjaChainGauntletComponent> ent, ref InteractUsingEvent args)

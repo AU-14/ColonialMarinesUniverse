@@ -7,6 +7,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
@@ -28,6 +29,7 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
     [Dependency] private SharedCMUSurgeryFlowSystem _flowSurgery = default!;
     [Dependency] private CMUSurgerySessionSystem _sessions = default!;
     [Dependency] private SharedCMUSurgicalTraitSystem _surgicalTraits = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> SurgerySkill = "RMCSkillSurgery";
 
@@ -35,10 +37,19 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         EntityUid patient,
         EntityUid surgeon,
         bool ignoreSkillRequirements = false,
-        bool allowOptionalHemostasis = false)
+        bool allowOptionalHemostasis = false,
+        bool allowStanding = false)
     {
         var parts = new List<CMUSurgeryPartEntry>();
-        if (!_flowSurgery.CanOperateOnPatient(patient, surgeon))
+        if (TryComp<CMUSurgeryArmedStepComponent>(patient, out var armed)
+            && _flowSurgery.TryGetDefinition(
+                string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId,
+                out var armedDefinition))
+        {
+            allowStanding |= armedDefinition.AllowStanding;
+        }
+
+        if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, allowStanding: allowStanding))
             return parts;
 
         TryComp<CMUSurgeryInProgressComponent>(patient, out var lockComp);
@@ -167,6 +178,9 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
             if (!ignoreSkillRequirements && !HasRequiredSurgerySkill(surgeon, surgery.MinSkill))
                 continue;
 
+            if (surgery.RequiresYautjaTech && !IsYautjaTechUser(surgeon))
+                continue;
+
             if (lockComp is not null && !ignoreInProgressLock)
             {
                 if (SharedCMUSurgeryFlowSystem.IsReattachSurgeryId(surgery.Id.Id))
@@ -292,6 +306,11 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
             bits.Add(Loc.GetString("cmu-medical-surgery-condition-internal-bleed"));
         if (HasComp<CMUEscharComponent>(part))
             bits.Add(Loc.GetString("cmu-medical-surgery-condition-eschar"));
+        if (TryComp<BodyPartWoundComponent>(part, out var wounds)
+            && _woundLedger.GetEntries(wounds).Count > 0)
+        {
+            bits.Add(Loc.GetString("cmu-medical-surgery-condition-wounds"));
+        }
         foreach (var trait in _surgicalTraits.EnumerateOrderedTraits(part))
             bits.Add(Loc.GetString(CMUSurgicalTraitMetadata.ConditionLocId(trait)));
 
@@ -550,6 +569,15 @@ public sealed partial class CMUSurgeryRulebookSystem : EntitySystem
         var validEv = new CMSurgeryValidEvent(patient, part);
         RaiseLocalEvent(surgeryEnt, ref validEv);
         return !validEv.Cancelled;
+    }
+
+    private bool IsYautjaTechUser(EntityUid user)
+    {
+        return HasComp<YautjaComponent>(user)
+            || HasComp<YautjaTechAuthorizedComponent>(user)
+            || TryComp(user, out YautjaThrallComponent? thrall)
+            && thrall.Blooded
+            && thrall.TechAuthorized;
     }
 
     private bool ReattachHasAnyMissingSlot(EntityUid patient)

@@ -1,7 +1,10 @@
+using System.Numerics;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Atmos.Components;
+using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
@@ -9,8 +12,13 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Projectiles;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
+using Content.Shared.Throwing;
+using Content.Shared.Vehicle.Components;
 using Content.Server.Atmos.EntitySystems;
 using Content.Server.Explosion.EntitySystems;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Maths;
+using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.Yautja;
 
@@ -21,11 +29,18 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
     private const string YautjaInterferenceStatus = "YautjaInterference";
 
     [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private HardpointSystem _hardpoints = default!;
+    [Dependency] private ExplosionSystem _explosions = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
+    [Dependency] private VehicleTopologySystem _vehicleTopology = default!;
 
     public override void Initialize()
     {
@@ -33,6 +48,8 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         SubscribeLocalEvent<YautjaCasterImmobilizerProjectileComponent, ProjectileHitEvent>(OnCasterImmobilizerHit);
         SubscribeLocalEvent<YautjaCasterStunProjectileComponent, ProjectileHitEvent>(OnCasterStunHit);
         SubscribeLocalEvent<YautjaCasterSingleLethalProjectileComponent, BeforeTriggerEvent>(OnCasterSingleLethalBeforeTrigger);
+        SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileFixedDistanceStopEvent>(OnCasterEradicatorStop);
+        SubscribeLocalEvent<YautjaCasterEradicatorProjectileComponent, ProjectileHitEvent>(OnCasterEradicatorHit);
         SubscribeLocalEvent<YautjaIncendiaryPlasmaProjectileComponent, ProjectileHitEvent>(OnIncendiaryPlasmaHit);
         SubscribeLocalEvent<YautjaPlasmaRifleBoltComponent, ProjectileHitEvent>(OnPlasmaRifleBoltHit);
     }
@@ -65,6 +82,88 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
             return;
 
         args.Cancelled = true;
+    }
+
+    private void OnCasterEradicatorStop(Entity<YautjaCasterEradicatorProjectileComponent> ent, ref ProjectileFixedDistanceStopEvent args)
+    {
+        if (TerminatingOrDeleted(ent))
+            return;
+
+        _trigger.Trigger(ent.Owner);
+    }
+
+    private void OnCasterEradicatorHit(Entity<YautjaCasterEradicatorProjectileComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (!_vehicleTopology.TryGetVehicle(args.Target, out var vehicle))
+            return;
+
+        ApplyCasterEradicatorVehicleImpact((vehicle, ent.Comp));
+    }
+
+    private void ApplyCasterEradicatorVehicleImpact(Entity<YautjaCasterEradicatorProjectileComponent> ent)
+    {
+        if (TryComp(ent.Owner, out GridVehicleMoverComponent? mover))
+        {
+            var speed = mover.CurrentSpeed;
+            var until = _timing.CurTime + ent.Comp.VehicleSlowdownTime;
+            mover.ImmobileUntil = TimeSpan.FromTicks(Math.Max(mover.ImmobileUntil.Ticks, until.Ticks));
+            mover.CurrentSpeed = 0f;
+            mover.IsCommittedToMove = false;
+            mover.IsPushMove = false;
+            mover.PushDirection = Vector2i.Zero;
+            Dirty(ent.Owner, mover);
+
+            if (MathF.Abs(speed) > 1f)
+                ApplyCasterEradicatorInteriorCrash(ent.Owner, speed, mover.MaxSpeed, ent.Comp);
+        }
+
+        _audio.PlayPvs(ent.Comp.VehicleImpactSound, ent.Owner);
+        _hardpoints.DamageVehicleHull(ent.Owner, ent.Comp.VehicleHullDamage);
+
+        if (!TryComp(ent.Owner, out VehicleInteriorComponent? interior) ||
+            interior.EntryParent == EntityUid.Invalid ||
+            !Exists(interior.EntryParent))
+        {
+            return;
+        }
+
+        var interiorCoordinates = _transform.ToMapCoordinates(interior.Entry);
+        _explosions.QueueExplosion(
+            interiorCoordinates,
+            "RMC",
+            ent.Comp.InteriorExplosionIntensity,
+            ent.Comp.InteriorExplosionSlope,
+            ent.Comp.InteriorExplosionMaxTileIntensity,
+            ent.Owner,
+            addLog: false);
+    }
+
+    private void ApplyCasterEradicatorInteriorCrash(
+        EntityUid vehicle,
+        float currentSpeed,
+        float maxSpeed,
+        YautjaCasterEradicatorProjectileComponent component)
+    {
+        if (!TryComp(vehicle, out VehicleInteriorComponent? interior))
+            return;
+
+        var flingDistance = Math.Max(1, (int) MathF.Ceiling(MathF.Abs(currentSpeed) / MathF.Max(maxSpeed, 1f))) * 2;
+        var direction = new Vector2(MathF.Sign(currentSpeed), 0f);
+        var occupants = new HashSet<EntityUid>(interior.Passengers);
+        occupants.UnionWith(interior.Xenos);
+
+        foreach (var occupant in occupants)
+        {
+            if (TerminatingOrDeleted(occupant) ||
+                TryComp(occupant, out BuckleComponent? buckle) && buckle.Buckled)
+            {
+                continue;
+            }
+
+            ApplyCasterStun(occupant, component.InteriorCrashStun);
+            ApplyCasterKnockdown(occupant, component.InteriorCrashKnockdown);
+            _throwing.TryThrow(occupant, direction, flingDistance, animated: false, playSound: false);
+        }
     }
 
     private void OnIncendiaryPlasmaHit(Entity<YautjaIncendiaryPlasmaProjectileComponent> ent, ref ProjectileHitEvent args)
@@ -147,6 +246,15 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
 
         if (_stun.TryStun(target, duration, true, status))
             _status.TrySetTime(target, CasterStunStatus, duration, status);
+
+        if (_stun.TryKnockdown(target, duration, true, status))
+            _status.TrySetTime(target, CasterKnockdownStatus, duration, status);
+    }
+
+    private void ApplyCasterKnockdown(EntityUid target, TimeSpan duration)
+    {
+        if (duration <= TimeSpan.Zero || !TryComp(target, out StatusEffectsComponent? status))
+            return;
 
         if (_stun.TryKnockdown(target, duration, true, status))
             _status.TrySetTime(target, CasterKnockdownStatus, duration, status);

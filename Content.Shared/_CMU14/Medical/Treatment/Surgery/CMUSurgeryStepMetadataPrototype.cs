@@ -56,6 +56,19 @@ public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
     public bool AllowSelfSurgery;
 
     /// <summary>
+    ///     Allows this procedure to run on a standing patient. This is kept
+    ///     opt-in because ordinary CMU surgery still requires a secured body.
+    /// </summary>
+    [DataField]
+    public bool AllowStanding;
+
+    /// <summary>
+    ///     Restricts the procedure to Yautja technology users.
+    /// </summary>
+    [DataField]
+    public bool RequiresYautjaTech;
+
+    /// <summary>
     ///     Optional narrower part set for self-surgery. Empty means use
     ///     <see cref="ValidParts"/>.
     /// </summary>

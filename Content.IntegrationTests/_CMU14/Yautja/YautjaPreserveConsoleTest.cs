@@ -3,8 +3,10 @@ using System.Linq;
 using System.Numerics;
 using Content.Client.Popups;
 using Content.Server.Administration.Logs;
+using Content.Server.Power.Components;
 using Content.Server._CMU14.Yautja;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Power;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
@@ -12,15 +14,110 @@ using Content.Shared.Doors.Systems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared.Physics;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
+using Robust.Shared.Physics;
+using Robust.Shared.Prototypes;
 
 namespace Content.IntegrationTests._CMU14.Yautja;
 
 [TestFixture]
 public sealed class YautjaPreserveConsoleTest
 {
+    [Test]
+    public async Task HuntingGroundEscapePrototypesMatchCmss13PreserveContract()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+            var shutter = prototypes.Index<EntityPrototype>("CMUYautjaHuntingGroundPreserveShutter");
+            var console = prototypes.Index<EntityPrototype>("CMUYautjaHuntingGroundEscapeConsole");
+            var edge = prototypes.Index<EntityPrototype>("CMUYautjaHuntingGroundPreserveEdge");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(shutter.TryGetComponent<YautjaPreserveShutterComponent>(out _, factory), Is.True);
+                Assert.That(shutter.TryGetComponent<DoorComponent>(out var door, factory), Is.True);
+                Assert.That(door!.State, Is.EqualTo(DoorState.Closed));
+                Assert.That(door.CanPry, Is.False);
+                Assert.That(shutter.TryGetComponent<ApcPowerReceiverComponent>(out var apc, factory), Is.True);
+                Assert.That(apc!.NeedsPower, Is.False);
+                Assert.That(shutter.TryGetComponent<RMCPowerReceiverComponent>(out var rmcPower, factory), Is.True);
+                Assert.That(rmcPower!.IdleLoad, Is.Zero);
+                Assert.That(rmcPower.ActiveLoad, Is.Zero);
+                Assert.That(console.TryGetComponent<YautjaHuntEscapeConsoleComponent>(out _, factory), Is.True);
+                Assert.That(console.TryGetComponent<FixturesComponent>(out var fixtures, factory), Is.True);
+                Assert.That(fixtures!.Fixtures, Is.Not.Empty, "The console must be a collidable structure, like the CMSS13 escape console.");
+                Assert.That(edge.TryGetComponent<YautjaPreserveEdgeComponent>(out _, factory), Is.True);
+                Assert.That(edge.TryGetComponent<FixturesComponent>(out var edgeFixtures, factory), Is.True);
+                Assert.That(edgeFixtures!.Fixtures, Is.Not.Empty, "The preserve edge must block movement until the escape completes.");
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PreserveEdgeRejectsYautjaAndMovesPreyOutAfterFiveSeconds()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid prey = default;
+        EntityUid hunterEdge = default;
+        EntityUid preyEdge = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                prey = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
+                hunterEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(1, 0)));
+                preyEdge = entMan.SpawnEntity("CMUYautjaHuntingGroundPreserveEdge", map.GridCoords.Offset(new Vector2(3, 0)));
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+
+                entMan.EventBus.RaiseLocalEvent(hunterEdge, new InteractHandEvent(hunter, hunterEdge));
+                Assert.That(entMan.TryGetComponent(hunterEdge, out DialogComponent? _), Is.False);
+
+                entMan.EventBus.RaiseLocalEvent(preyEdge, new InteractHandEvent(prey, preyEdge));
+                Assert.That(entMan.TryGetComponent(preyEdge, out DialogComponent? _), Is.True);
+
+                entMan.EventBus.RaiseLocalEvent(preyEdge, new DialogOptionBuiMsg(0)
+                {
+                    Actor = prey,
+                    UiKey = DialogUiKey.Key,
+                });
+
+                Assert.That(entMan.GetComponent<DoAfterComponent>(prey).DoAfters.Values,
+                    Has.Some.Matches<DoAfter>(active =>
+                        !active.Cancelled &&
+                        !active.Completed &&
+                        active.Args.Event is YautjaPreserveEscapeDoAfterEvent));
+            });
+
+            await pair.RunTicksSync(pair.SecondsToTicks(5.5f));
+
+            await server.WaitAssertion(() =>
+                Assert.That(server.EntMan.GetComponent<TransformComponent>(prey).MapID, Is.EqualTo(MapId.Nullspace)));
+        }
+        finally
+        {
+            await server.WaitPost(() => DeleteAll(server.EntMan, hunter, prey, hunterEdge, preyEdge));
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task PreserveEscapeConsoleYautjaDialogUsesCmss13TguiAlertText()
     {
@@ -62,6 +159,62 @@ public sealed class YautjaPreserveConsoleTest
                 var entMan = server.EntMan;
                 DeleteAll(entMan, hunter, console);
             });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PreserveEscapeConsoleYautjaDialogOptionsControlShutter()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid console = default;
+        EntityUid shutter = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                console = entMan.SpawnEntity(null, map.GridCoords);
+                shutter = entMan.SpawnEntity("CMUHunterShipObjStructureMachineryDoorPoddoorHybrisaOpenShuttersAlmayerPdoor1EastId1", map.GridCoords.Offset(new Vector2(1, 0)));
+
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                entMan.EnsureComponent<YautjaHuntEscapeConsoleComponent>(console);
+                entMan.EnsureComponent<YautjaPreserveShutterComponent>(shutter);
+
+                entMan.EventBus.RaiseLocalEvent(console, new InteractHandEvent(hunter, console));
+                Assert.That(entMan.TryGetComponent(console, out DialogComponent? _), Is.True);
+
+                entMan.EventBus.RaiseLocalEvent(console, new DialogOptionBuiMsg(0)
+                {
+                    Actor = hunter,
+                    UiKey = DialogUiKey.Key,
+                });
+
+                Assert.That(entMan.GetComponent<YautjaHuntEscapeConsoleComponent>(console).Opened, Is.True);
+                Assert.That(entMan.GetComponent<DoorComponent>(shutter).State, Is.Not.EqualTo(DoorState.Closed));
+
+                entMan.EventBus.RaiseLocalEvent(console, new InteractHandEvent(hunter, console));
+                entMan.EventBus.RaiseLocalEvent(console, new DialogOptionBuiMsg(1)
+                {
+                    Actor = hunter,
+                    UiKey = DialogUiKey.Key,
+                });
+
+                Assert.That(entMan.GetComponent<YautjaHuntEscapeConsoleComponent>(console).Opened, Is.False);
+                Assert.That(entMan.GetComponent<DoorComponent>(shutter).State, Is.Not.EqualTo(DoorState.Open));
+            });
+
+        }
+        finally
+        {
+            await server.WaitPost(() => DeleteAll(server.EntMan, hunter, console, shutter));
         }
 
         await pair.CleanReturnAsync();

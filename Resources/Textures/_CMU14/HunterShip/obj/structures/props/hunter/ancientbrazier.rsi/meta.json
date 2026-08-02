@@ -1,0 +1,78 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/props/hunter/ancientbrazier.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "brazier",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "brazier_frame_filled"
+    },
+    {
+      "name": "brazier_frame"
+    },
+    {
+      "name": "brazier_alt",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "brazier_alt_frame_filled"
+    },
+    {
+      "name": "brazier_alt_frame"
+    },
+    {
+      "name": "torch",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "torch_frame"
+    },
+    {
+      "name": "tall_small_brazier",
+      "delays": [
+        [
+          0.1,
+          0.15,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "tall_small_brazier_frame_filled"
+    },
+    {
+      "name": "tall_small_brazier_frame"
+    }
+  ]
+}

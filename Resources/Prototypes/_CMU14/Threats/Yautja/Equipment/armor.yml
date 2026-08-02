@@ -89,7 +89,7 @@
     bio: 40
     explosionArmor: 50
   - type: YautjaScalableRepair
-    damagedText: It has been damaged by long use and poor maintenance.
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaClanArmor
@@ -631,7 +631,7 @@
     bio: 40
     explosionArmor: 50
   - type: YautjaScalableRepair
-    damagedText: It has been damaged by long use and poor maintenance.
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaBadBloodArmorPatchwork
@@ -727,7 +727,7 @@
     bio: 40
     explosionArmor: 50
   - type: YautjaScalableRepair
-    damagedText: It has been damaged by long use and poor maintenance.
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaEmissaryArmorClassic
@@ -828,7 +828,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: It has been worn from long use and poor maintenance.
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaBodyMesh
@@ -976,7 +976,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: They have been damaged by long use and poor maintenance.
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaClanGreaves
@@ -1242,7 +1242,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: They have been damaged by long use and poor maintenance.
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
@@ -1338,7 +1338,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: They have been damaged by long use and poor maintenance.
+    damagedText: cmu-yautja-repair-damaged
 
 - type: entity
   parent: CMUYautjaEmissaryGreavesClassic

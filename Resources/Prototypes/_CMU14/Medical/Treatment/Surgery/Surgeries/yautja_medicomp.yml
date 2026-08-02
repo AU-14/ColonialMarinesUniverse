@@ -1,0 +1,80 @@
+# CMSS13 /datum/surgery/mcomp_wounds parity.
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepMcompStabilizeWounds
+  name: Stabilize wounds
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    doAfterSeconds: 5
+    tool:
+    - type: CMUYautjaMedicompStabilizerTool
+    add:
+    - type: CMUYautjaMedicompStabilized
+  - type: CMUYautjaMedicompStabilizeStep
+  - type: CMUSurgeryStepAudio
+    startSounds:
+    - path: /Audio/_CMU14/Yautja/Medical/clothingrustle1.ogg
+    successSound:
+      path: /Audio/_RMC14/Medical/Surgery/cautery2.ogg
+    failureSound:
+      path: /Audio/_RMC14/Medical/Surgery/organ1.ogg
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepMcompTendWounds
+  name: Tend wounds
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    doAfterSeconds: 15
+    tool:
+    - type: CMUYautjaMedicompHealingGunTool
+    add:
+    - type: CMUYautjaMedicompTreated
+    remove:
+    - type: CMUYautjaMedicompStabilized
+  - type: CMUYautjaMedicompHealingGunStep
+  - type: CMUSurgeryStepAudio
+    startSounds:
+    - path: /Audio/_RMC14/Medical/Surgery/retractor1.ogg
+    - path: /Audio/_CMU14/Yautja/Medical/heal_gun.ogg
+    successSound:
+      path: /Audio/_RMC14/Medical/Surgery/retractor2.ogg
+    failureSound:
+      path: /Audio/_RMC14/Medical/Surgery/organ2.ogg
+
+- type: entity
+  parent: CMSurgeryStepBase
+  id: CMUSurgeryStepMcompClampWound
+  name: Clamp wounds
+  components:
+  - type: CMSurgeryStep
+    skill: 1
+    doAfterSeconds: 10
+    tool:
+    - type: CMUYautjaMedicompClampTool
+    remove:
+    - type: CMUYautjaMedicompTreated
+  - type: CMUYautjaMedicompClampStep
+  - type: CMUSurgeryStepAudio
+    startSounds:
+    - path: /Audio/_RMC14/Medical/Surgery/cautery1.ogg
+    successSound:
+      path: /Audio/_RMC14/Medical/Surgery/cautery2.ogg
+    failureSound:
+      path: /Audio/Items/welder.ogg
+
+- type: entity
+  parent: CMSurgeryBase
+  id: CMUSurgeryMcompWounds
+  name: Tend wounds
+  components:
+  - type: CMSurgery
+    priority: 20
+    steps:
+    - CMUSurgeryStepMcompStabilizeWounds
+    - CMUSurgeryStepMcompTendWounds
+    - CMUSurgeryStepMcompClampWound
+  - type: CMUYautjaMedicompSurgeryCondition

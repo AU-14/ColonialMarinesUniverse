@@ -1,10 +1,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Numerics;
+using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
 using Content.Shared._RMC14.Marines.HyperSleep;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Access.Components;
 using Content.Shared.CCVar;
 using Content.Shared.Bed.Cryostorage;
@@ -15,6 +17,7 @@ using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Storage.Components;
 using Content.Shared.VendingMachines;
+using Content.Shared.Verbs;
 using Content.Server._CMU14.Light;
 using Content.Server.Medical;
 using Content.Server.Power.Components;
@@ -29,6 +32,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
+using Robust.Shared.Localization;
 using Robust.Shared.Prototypes;
 using Content.Shared.Power.Components;
 using ServerPointLightComponent = Robust.Server.GameObjects.PointLightComponent;
@@ -39,6 +43,128 @@ namespace Content.IntegrationTests._CMU14.HunterShip;
 [TestFixture]
 public sealed class HunterShipVisualRegressionTest
 {
+    [Test]
+    public async Task HunterShipLadderWrappersDeclareCmss13Directions()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+            var expected = new Dictionary<string, (bool Up, bool Down, int Offset)>
+            {
+                ["CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder01SouthOffset0x2"] = (false, true, -1),
+                ["CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder10SouthOffset0x2"] = (true, false, 1),
+                ["CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder11SouthOffset0x2"] = (true, true, 1),
+            };
+
+            foreach (var (id, direction) in expected)
+            {
+                var prototype = prototypes.Index<EntityPrototype>(id);
+                Assert.That(prototype.TryGetComponent<CMUZLevelLadderComponent>(out var ladder, factory), Is.True, id);
+
+                var upField = typeof(CMUZLevelLadderComponent).GetField("CanMoveUp");
+                var downField = typeof(CMUZLevelLadderComponent).GetField("CanMoveDown");
+                Assert.Multiple(() =>
+                {
+                    Assert.That(upField, Is.Not.Null, "CMUZLevelLadder must expose CanMoveUp.");
+                    Assert.That(downField, Is.Not.Null, "CMUZLevelLadder must expose CanMoveDown.");
+                    Assert.That(ladder!.Offset, Is.EqualTo(direction.Offset), id);
+                    if (upField != null)
+                        Assert.That(upField.GetValue(ladder), Is.EqualTo(direction.Up), id);
+                    if (downField != null)
+                        Assert.That(downField.GetValue(ladder), Is.EqualTo(direction.Down), id);
+                });
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HunterShipMiddleLadderCanClimbBothDirections()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var lower = await pair.CreateTestMap();
+        var middle = await pair.CreateTestMap();
+        var upper = await pair.CreateTestMap();
+        EntityUid user = default;
+        EntityUid ladder = default;
+        EntityUid network = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var zLevels = entMan.System<CMUZLevelsSystem>();
+            var transform = entMan.System<SharedTransformSystem>();
+            var zNetwork = zLevels.CreateZNetwork();
+            network = zNetwork.Owner;
+            Assert.That(zLevels.TryAddMapsIntoZNetwork(zNetwork, new Dictionary<EntityUid, int>
+            {
+                [lower.MapUid] = 0,
+                [middle.MapUid] = 1,
+                [upper.MapUid] = 2,
+            }), Is.True);
+
+            ladder = entMan.SpawnEntity(
+                "CMUHunterShipPlacedCMUYautjaStructureYautjaMachinesLadder11SouthOffset0x2",
+                middle.GridCoords);
+            user = entMan.SpawnEntity("CMMobHuman", middle.GridCoords);
+
+            var verbs = new GetVerbsEvent<AlternativeVerb>(user, ladder, null, null, true, true, true, new());
+            entMan.EventBus.RaiseLocalEvent(ladder, verbs, true);
+            var climbUp = verbs.Verbs.SingleOrDefault(verb =>
+                verb.Text == Loc.GetString("cmu-zlevel-ladder-climb-up"));
+            var climbDown = verbs.Verbs.SingleOrDefault(verb =>
+                verb.Text == Loc.GetString("cmu-zlevel-ladder-climb-down"));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(climbUp, Is.Not.Null, "The middle Hunter Ship ladder must offer climbing up.");
+                Assert.That(climbDown, Is.Not.Null, "The middle Hunter Ship ladder must offer climbing down.");
+            });
+            climbUp!.Act!.Invoke();
+            Assert.That(transform.GetMapCoordinates(user).MapId, Is.EqualTo(middle.MapId));
+        });
+
+        await server.WaitRunTicks(130);
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var transform = entMan.System<SharedTransformSystem>();
+            Assert.That(transform.GetMapCoordinates(user).MapId, Is.EqualTo(upper.MapId));
+            transform.SetCoordinates(user, middle.GridCoords);
+
+            var verbs = new GetVerbsEvent<AlternativeVerb>(user, ladder, null, null, true, true, true, new());
+            entMan.EventBus.RaiseLocalEvent(ladder, verbs, true);
+            var climbDown = verbs.Verbs.Single(verb =>
+                verb.Text == Loc.GetString("cmu-zlevel-ladder-climb-down"));
+            climbDown.Act!.Invoke();
+        });
+
+        await server.WaitRunTicks(130);
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(server.EntMan.System<SharedTransformSystem>().GetMapCoordinates(user).MapId,
+                Is.EqualTo(lower.MapId));
+        });
+
+        await server.WaitPost(() =>
+        {
+            if (user != default && !server.EntMan.Deleted(user))
+                server.EntMan.DeleteEntity(user);
+            if (ladder != default && !server.EntMan.Deleted(ladder))
+                server.EntMan.DeleteEntity(ladder);
+            if (network != default && !server.EntMan.Deleted(network))
+                server.EntMan.DeleteEntity(network);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task HunterShipFlamePropsStartWithLight()
     {

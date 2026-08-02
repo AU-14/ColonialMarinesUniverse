@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/clothing/gloves.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "rsic": false,
+  "states": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "black"
+    },
+    {
+      "name": "marine_fingerless"
+    },
+    {
+      "name": "marine_grey"
+    },
+    {
+      "name": "brown"
+    },
+    {
+      "name": "red"
+    },
+    {
+      "name": "yellow"
+    },
+    {
+      "name": "purple"
+    },
+    {
+      "name": "blue"
+    },
+    {
+      "name": "pmc"
+    },
+    {
+      "name": "ppo"
+    },
+    {
+      "name": "pmc_elite"
+    },
+    {
+      "name": "pmc_elite_leader"
+    },
+    {
+      "name": "grenadier"
+    },
+    {
+      "name": "veteran"
+    },
+    {
+      "name": "rmc_gloves"
+    },
+    {
+      "name": "combat_android_gloves"
+    },
+    {
+      "name": "captain"
+    },
+    {
+      "name": "marine_white"
+    },
+    {
+      "name": "latex"
+    },
+    {
+      "name": "white"
+    },
+    {
+      "name": "lightbrown"
+    },
+    {
+      "name": "insulated"
+    },
+    {
+      "name": "working_joe"
+    },
+    {
+      "name": "cbrn"
+    },
+    {
+      "name": "gauntlets"
+    },
+    {
+      "name": "souto_man"
+    },
+    {
+      "name": "black_leather"
+    },
+    {
+      "name": "legacy_bay"
+    },
+    {
+      "name": "leather"
+    },
+    {
+      "name": "orange"
+    },
+    {
+      "name": "green"
+    },
+    {
+      "name": "gray"
+    },
+    {
+      "name": "rainbow"
+    },
+    {
+      "name": "boxing"
+    },
+    {
+      "name": "boxinggreen"
+    },
+    {
+      "name": "boxingblue"
+    },
+    {
+      "name": "boxingyellow"
+    }
+  ]
+}

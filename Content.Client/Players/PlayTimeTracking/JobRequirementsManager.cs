@@ -1,6 +1,9 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Client.Lobby;
+using Content.Client._RMC14.LinkAccount;
 using Content.Client._RMC14.PlayTimeTracking;
+using Content.Shared._RMC14.LinkAccount;
 using Content.Shared.CCVar;
 using Content.Shared.Localizations;
 using Content.Shared.Players;
@@ -28,6 +31,8 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private RMCPlayTimeManager _rmcPlayTime = default!;
+    [Dependency] private LinkAccountManager _linkAccount = default!;
+    [Dependency] private IClientPreferencesManager _preferences = default!;
 
     private readonly Dictionary<string, TimeSpan> _roles = new();
     private readonly List<string> _roleBans = new();
@@ -48,6 +53,7 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
 
         _client.RunLevelChanged += ClientOnRunLevelChanged;
         _rmcPlayTime.Updated += () => Updated?.Invoke();
+        _linkAccount.Updated += () => Updated?.Invoke();
     }
 
     private void ClientOnRunLevelChanged(object? sender, RunLevelChangedEventArgs e)
@@ -90,6 +96,7 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
 
     private void RxJobWhitelist(MsgJobWhitelist message)
     {
+        _preferences.UpdateYautjaCapabilities(message.YautjaCapabilities);
         _jobWhitelists.Clear();
         _jobWhitelists.AddRange(message.Whitelist);
         Updated?.Invoke();
@@ -99,6 +106,9 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
     private bool IsWhitelistedInternal(string jobId)
     {
         if (_jobWhitelists.Contains(jobId))
+            return true;
+
+        if (BoostyYautjaWhitelist.IsAllowed(jobId, _linkAccount.Tier?.Priority))
             return true;
 
         if (!_prototypes.TryIndex<JobPrototype>(jobId, out var jobPrototype))
@@ -116,6 +126,12 @@ public sealed partial class JobRequirementsManager : ISharedPlaytimeManager
     }
     // RMC14-Whitelist-Tweak-End
 
+    /// <summary>
+    ///     Whether the local player holds the whitelist for <paramref name="jobId"/> (including via a
+    ///     WhitelistParent). Used for whitelist-gated UI that isn't a spawnable job, e.g. the construction
+    ///     menu editor tools. The server always re-validates.
+    /// </summary>
+    public bool IsWhitelisted(string jobId) => IsWhitelistedInternal(jobId);
     public bool CanCustomizeWhitelistedJob(string jobId)
     {
         if (_roleBans.Contains($"Job:{jobId}"))

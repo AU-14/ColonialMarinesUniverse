@@ -13,13 +13,41 @@ public sealed partial class YautjaHudSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
 
     private readonly Dictionary<YautjaMarkKind, StatusIconData> _icons = new();
+    private readonly Dictionary<YautjaRank, StatusIconData> _rankIcons = new();
+    private readonly Dictionary<(YautjaMilitaryCaste Caste, bool Whitelist), StatusIconData> _militaryIcons = new();
     private StatusIconData? _bloodedThrallIcon;
     private bool _cached;
 
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaMarkComponent, GetStatusIconsEvent>(OnGetStatusIcons);
+        SubscribeLocalEvent<YautjaComponent, GetStatusIconsEvent>(OnGetRankStatusIcons);
+        SubscribeLocalEvent<YautjaMilitaryCasteComponent, GetStatusIconsEvent>(OnGetMilitaryStatusIcons);
         SubscribeLocalEvent<YautjaFalconHudIconComponent, GetStatusIconsEvent>(OnFalconGetStatusIcons);
+    }
+
+    private void OnGetRankStatusIcons(Entity<YautjaComponent> ent, ref GetStatusIconsEvent args)
+    {
+        if (HasComp<YautjaMilitaryCasteComponent>(ent.Owner))
+            return;
+
+        if (!CanSeeYautjaRankIcon(ent.Owner))
+            return;
+
+        EnsureCached();
+        var rank = Enum.IsDefined(ent.Comp.ClanRank) ? ent.Comp.ClanRank : YautjaRank.Blooded;
+        if (_rankIcons.TryGetValue(rank, out var icon))
+            args.StatusIcons.Add(icon);
+    }
+
+    private void OnGetMilitaryStatusIcons(Entity<YautjaMilitaryCasteComponent> ent, ref GetStatusIconsEvent args)
+    {
+        if (!CanSeeYautjaRankIcon(ent.Owner))
+            return;
+
+        EnsureCached();
+        if (_militaryIcons.TryGetValue((ent.Comp.Caste, ent.Comp.WhitelistIcon), out var icon))
+            args.StatusIcons.Add(icon);
     }
 
     private void OnGetStatusIcons(Entity<YautjaMarkComponent> ent, ref GetStatusIconsEvent args)
@@ -86,6 +114,18 @@ public sealed partial class YautjaHudSystem : EntitySystem
         Cache(YautjaMarkKind.Student, "CMUYautjaIconStudent");
         Cache(YautjaMarkKind.Blooded, "CMUYautjaIconBlooded");
 
+        foreach (var rank in YautjaRankMetadata.Order)
+        {
+            var id = new ProtoId<HealthIconPrototype>($"CMUYautjaRankIcon{rank}");
+            if (_prototypes.TryIndex(id, out var icon))
+                _rankIcons[rank] = icon;
+        }
+
+        CacheMilitary(YautjaMilitaryCaste.Soldier, "CMUYautjaMilitarySoldierIcon");
+        CacheMilitary(YautjaMilitaryCaste.Enforcer, "CMUYautjaMilitaryEnforcerIcon");
+        CacheMilitary(YautjaMilitaryCaste.Soldier, "CMUYautjaMilitarySoldierWhitelistIcon", whitelist: true);
+        CacheMilitary(YautjaMilitaryCaste.Enforcer, "CMUYautjaMilitaryEnforcerWhitelistIcon", whitelist: true);
+
         var bloodedThrallId = new ProtoId<HealthIconPrototype>("CMUYautjaIconBloodedThrall");
         if (_prototypes.TryIndex(bloodedThrallId, out var bloodedThrall))
             _bloodedThrallIcon = bloodedThrall;
@@ -97,6 +137,12 @@ public sealed partial class YautjaHudSystem : EntitySystem
             _icons[kind] = proto;
     }
 
+    private void CacheMilitary(YautjaMilitaryCaste caste, ProtoId<HealthIconPrototype> id, bool whitelist = false)
+    {
+        if (_prototypes.TryIndex(id, out var proto))
+            _militaryIcons[(caste, whitelist)] = proto;
+    }
+
     private void AddIfPresent(IReadOnlyCollection<YautjaMarkKind> marks, List<StatusIconData> icons, YautjaMarkKind kind)
     {
         if (marks.Contains(kind) && _icons.TryGetValue(kind, out var icon))
@@ -106,5 +152,15 @@ public sealed partial class YautjaHudSystem : EntitySystem
     private bool HasYautjaHudViewer()
     {
         return _player.LocalEntity is { } viewer && HasComp<YautjaHudViewerComponent>(viewer);
+    }
+
+    private bool CanSeeYautjaRankIcon(EntityUid target)
+    {
+        if (_player.LocalEntity is not { } viewer)
+            return false;
+
+        // A Yautja must see their own rank in-game even before equipping the mask.
+        // Other entities only receive rank icons through the mask HUD, as in CMSS13.
+        return viewer == target || HasComp<YautjaHudViewerComponent>(viewer);
     }
 }

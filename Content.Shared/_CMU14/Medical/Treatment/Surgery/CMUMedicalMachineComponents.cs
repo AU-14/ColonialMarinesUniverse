@@ -20,6 +20,34 @@ public sealed partial class CMUAutodocPodComponent : Component
     [DataField]
     public TimeSpan EntryDelay = TimeSpan.FromSeconds(2);
 
+    /// <summary>
+    ///     Reagents exposed by a sleeper/autodoc-style pod. Empty lists retain
+    ///     the original surgery-only autodoc behavior.
+    /// </summary>
+    [DataField]
+    public List<ProtoId<ReagentPrototype>> AvailableChemicals = new();
+
+    [DataField]
+    public List<ProtoId<ReagentPrototype>> EmergencyChemicals = new();
+
+    [DataField]
+    public FixedPoint2 MaxChemicalVolume = FixedPoint2.New(40);
+
+    [DataField]
+    public FixedPoint2 ChemicalDose = FixedPoint2.New(5);
+
+    [DataField]
+    public FixedPoint2 LargeChemicalDose = FixedPoint2.New(10);
+
+    [DataField]
+    public FixedPoint2 MinimumHealth = FixedPoint2.New(10);
+
+    [DataField]
+    public FixedPoint2 DialysisRatePerSecond = FixedPoint2.New(8);
+
+    [ViewVariables]
+    public bool Filtering;
+
     [ViewVariables]
     public ContainerSlot BodyContainer = default!;
 

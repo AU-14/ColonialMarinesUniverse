@@ -205,6 +205,14 @@ public abstract partial class SharedOrganHealthSystem : EntitySystem
         if (!_medicalEnabled || !_organEnabled)
             return;
 
+        if (TryComp<CMUOrganStabilizedComponent>(ent.Owner, out var stabilized))
+        {
+            if (stabilized.ExpiresAt > Timing.CurTime)
+                return;
+
+            RemComp<CMUOrganStabilizedComponent>(ent.Owner);
+        }
+
         var total = args.Damage.GetTotal();
         if (total <= FixedPoint2.Zero)
             return;

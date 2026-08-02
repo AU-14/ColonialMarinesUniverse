@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13: icons/obj/items/hunter/pred_gear.dmi, icons/obj/items/surgery_tools.dmi and icons/obj/items/storage/medical.dmi.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "crystal"
+    },
+    {
+      "name": "thwei_1",
+      "delays": [
+        [
+          6.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      ]
+    },
+    {
+      "name": "scanner"
+    },
+    {
+      "name": "brute_herbs"
+    },
+    {
+      "name": "burn_herbs"
+    },
+    {
+      "name": "medicomp"
+    },
+    {
+      "name": "medicomp_open"
+    },
+    {
+      "name": "stabilizer_gel"
+    },
+    {
+      "name": "wound_clamp"
+    },
+    {
+      "name": "healing_gun"
+    },
+    {
+      "name": "healing_gun_empty"
+    },
+    {
+      "name": "healing_gun_on",
+      "delays": [
+        [
+          19.0,
+          19.0,
+          19.0,
+          19.0,
+          19.0,
+          19.0,
+          19.0,
+          19.0,
+          19.0
+        ]
+      ]
+    },
+    {
+      "name": "healing_gel"
+    },
+    {
+      "name": "surgical_case"
+    }
+  ]
+}

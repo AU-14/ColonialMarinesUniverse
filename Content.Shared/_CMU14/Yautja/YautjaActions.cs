@@ -2,6 +2,7 @@ using Content.Shared.Actions;
 using Content.Shared.Inventory;
 using Content.Shared._RMC14.Dialog;
 using Robust.Shared.Serialization;
+using Robust.Shared.Utility;
 
 namespace Content.Shared._CMU14.Yautja;
 
@@ -26,6 +27,12 @@ public sealed partial class YautjaCallDiscActionEvent : InstantActionEvent;
 public sealed partial class YautjaCallCombiActionEvent : InstantActionEvent;
 
 public sealed partial class YautjaButcherActionEvent : InstantActionEvent;
+
+[Serializable, NetSerializable]
+public sealed record YautjaButcherTargetSelectedEvent(NetEntity User, NetEntity Target);
+
+[Serializable, NetSerializable]
+public sealed record YautjaButcherProcedureSelectedEvent(NetEntity User, NetEntity Target, YautjaButcherProcedure Procedure);
 
 public sealed partial class YautjaFalconControlActionEvent : InstantActionEvent;
 
@@ -222,6 +229,13 @@ public enum YautjaBracerPanelCommand : byte
     CreateHuntingTrap,
     ToggleSelfDestruct,
     RefreshTracker,
+    ChangeExplosionType,
+    RemoveBracerAttachments,
+    CreateHealingCapsule,
+    AddTrackedItem,
+    RemoveTrackedItem,
+    ToggleBracerName,
+    ToggleBracerNotificationSound,
 }
 
 [Serializable, NetSerializable]
@@ -285,14 +299,16 @@ public sealed class YautjaTrackerReadout(
 
         if (DeadHuntingGrounds > 0 || DeadOrbit > 0 || DeadLowOrbit > 0)
         {
-            lines.Add("Your bracer shows a readout of deceased Yautja bio signatures" +
-                      $"{GetCmss13BucketReadout(DeadHuntingGrounds, DeadOrbit, DeadLowOrbit)}.");
+            lines.Add(Loc.GetString(
+                "cmu-yautja-tracker-readout-dead",
+                ("locations", GetCmss13BucketReadout(DeadHuntingGrounds, DeadOrbit, DeadLowOrbit))));
         }
 
         if (GearHuntingGrounds > 0 || GearOrbit > 0 || GearLowOrbit > 0)
         {
-            lines.Add("Your bracer shows a readout of Yautja technology signatures" +
-                      $"{GetCmss13BucketReadout(GearHuntingGrounds, GearOrbit, GearLowOrbit)}.");
+            lines.Add(Loc.GetString(
+                "cmu-yautja-tracker-readout-gear",
+                ("locations", GetCmss13BucketReadout(GearHuntingGrounds, GearOrbit, GearLowOrbit))));
         }
 
         if (ClosestPresent)
@@ -301,25 +317,30 @@ public sealed class YautjaTrackerReadout(
             {
                 var closestItem = string.IsNullOrWhiteSpace(ClosestName)
                     ? string.Empty
-                    : $" <b>{ClosestName}</b>'s";
-                lines.Add($"You are directly on top of the{closestItem} signature.");
+                    : Loc.GetString("cmu-yautja-tracker-closest-owner", ("name", ClosestName));
+                lines.Add(Loc.GetString("cmu-yautja-tracker-closest-on-top", ("signature", closestItem)));
             }
             else
             {
                 var closestItem = string.IsNullOrWhiteSpace(ClosestName)
                     ? string.Empty
-                    : $", a <b>{ClosestName}</b>";
+                    : Loc.GetString("cmu-yautja-tracker-closest-item", ("name", ClosestName));
                 var distance = ClosestDistance > 10
-                    ? $"approximately <b>{RoundCmss13TrackerDistance(ClosestDistance)}</b>"
+                    ? Loc.GetString("cmu-yautja-tracker-approximate-distance", ("distance", RoundCmss13TrackerDistance(ClosestDistance)))
                     : $"<b>{ClosestDistance}</b>";
-                lines.Add($"The closest signature{closestItem}, is {distance} paces " +
-                          $"<b>{GetCmss13DirectionText(ClosestDirection)}</b> in " +
-                          $"<b>{ClosestArea ?? "Unknown"}</b>.");
+                lines.Add(Loc.GetString(
+                    "cmu-yautja-tracker-closest-away",
+                    ("signature", closestItem),
+                    ("distance", distance),
+                    ("direction", Loc.GetString(GetCmss13DirectionText(ClosestDirection))),
+                    ("area", string.IsNullOrWhiteSpace(ClosestArea)
+                        ? Loc.GetString("cmu-yautja-tracker-unknown-area")
+                        : ClosestArea)));
             }
         }
 
         if (lines.Count == 0)
-            lines.Add("There are no signatures that require your attention.");
+            lines.Add(Loc.GetString("cmu-yautja-tracker-no-signatures"));
 
         return lines;
     }
@@ -329,13 +350,13 @@ public sealed class YautjaTrackerReadout(
         var entries = new List<string>(3);
 
         if (huntingGrounds > 0)
-            entries.Add($", <b>{huntingGrounds}</b> in the hunting grounds");
+            entries.Add(Loc.GetString("cmu-yautja-tracker-location-hunting-grounds", ("count", huntingGrounds)));
 
         if (orbit > 0)
-            entries.Add($", <b>{orbit}</b> in orbit");
+            entries.Add(Loc.GetString("cmu-yautja-tracker-location-orbit", ("count", orbit)));
 
         if (lowOrbit > 0)
-            entries.Add($", <b>{lowOrbit}</b> in low orbit");
+            entries.Add(Loc.GetString("cmu-yautja-tracker-location-low-orbit", ("count", lowOrbit)));
 
         return string.Concat(entries);
     }
@@ -349,13 +370,13 @@ public sealed class YautjaTrackerReadout(
     {
         return direction switch
         {
-            0 => "north",
-            1 => "northeast",
-            2 => "southeast",
-            3 => "south",
-            4 => "southwest",
-            5 => "northwest",
-            _ => "unknown direction",
+            0 => "cmu-yautja-tracker-direction-north",
+            1 => "cmu-yautja-tracker-direction-northeast",
+            2 => "cmu-yautja-tracker-direction-southeast",
+            3 => "cmu-yautja-tracker-direction-south",
+            4 => "cmu-yautja-tracker-direction-southwest",
+            5 => "cmu-yautja-tracker-direction-northwest",
+            _ => "cmu-yautja-tracker-direction-unknown",
         };
     }
 }

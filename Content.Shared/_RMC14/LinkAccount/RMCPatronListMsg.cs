@@ -18,7 +18,8 @@ public sealed class RMCPatronListMsg : NetMessage
         {
             var name = buffer.ReadString();
             var tier = buffer.ReadString();
-            Patrons.Add(new SharedRMCPatron(name, tier));
+            var priority = buffer.ReadVariableInt32();
+            Patrons.Add(new SharedRMCPatron(name, tier, priority));
         }
     }
 
@@ -29,6 +30,7 @@ public sealed class RMCPatronListMsg : NetMessage
         {
             buffer.Write(patron.Name);
             buffer.Write(patron.Tier);
+            buffer.WriteVariableInt32(patron.Priority);
         }
     }
 }

@@ -1,0 +1,230 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/radio.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "generic_headset"
+    },
+    {
+      "name": "wy_headset"
+    },
+    {
+      "name": "pmc_headset"
+    },
+    {
+      "name": "vai_headset"
+    },
+    {
+      "name": "alpha_headset"
+    },
+    {
+      "name": "bravo_headset"
+    },
+    {
+      "name": "charlie_headset"
+    },
+    {
+      "name": "delta_headset"
+    },
+    {
+      "name": "echo_headset"
+    },
+    {
+      "name": "cryo_headset"
+    },
+    {
+      "name": "ce_headset"
+    },
+    {
+      "name": "cmo_headset"
+    },
+    {
+      "name": "ro_headset"
+    },
+    {
+      "name": "mcom_headset"
+    },
+    {
+      "name": "sec_headset"
+    },
+    {
+      "name": "mco_headset"
+    },
+    {
+      "name": "ms_headset"
+    },
+    {
+      "name": "mhc_headset"
+    },
+    {
+      "name": "soc_headset"
+    },
+    {
+      "name": "pvst_headset"
+    },
+    {
+      "name": "med_headset"
+    },
+    {
+      "name": "req_headset"
+    },
+    {
+      "name": "eng_headset"
+    },
+    {
+      "name": "cmb_headset"
+    },
+    {
+      "name": "communicator"
+    },
+    {
+      "name": "earmuffs"
+    },
+    {
+      "name": "earmuffs2"
+    },
+    {
+      "name": "earmuffs3"
+    },
+    {
+      "name": "cypherkey"
+    },
+    {
+      "name": "stripped_key"
+    },
+    {
+      "name": "wy_key"
+    },
+    {
+      "name": "wy_sec_key"
+    },
+    {
+      "name": "pmc_key"
+    },
+    {
+      "name": "upp_key"
+    },
+    {
+      "name": "binary_key"
+    },
+    {
+      "name": "alpha_key"
+    },
+    {
+      "name": "bravo_key"
+    },
+    {
+      "name": "charlie_key"
+    },
+    {
+      "name": "delta_key"
+    },
+    {
+      "name": "echo_key"
+    },
+    {
+      "name": "cryo_key"
+    },
+    {
+      "name": "cap_key"
+    },
+    {
+      "name": "med_key"
+    },
+    {
+      "name": "cmo_key"
+    },
+    {
+      "name": "eng_key"
+    },
+    {
+      "name": "ce_key"
+    },
+    {
+      "name": "sec_key"
+    },
+    {
+      "name": "cmp_key"
+    },
+    {
+      "name": "req_key"
+    },
+    {
+      "name": "sl_key"
+    },
+    {
+      "name": "jtac_key"
+    },
+    {
+      "name": "cmb_key"
+    },
+    {
+      "name": "intercom",
+      "delays": [
+        [
+          0.7,
+          0.1,
+          0.05,
+          0.1,
+          0.7,
+          0.1,
+          0.05,
+          0.1,
+          0.7,
+          0.1,
+          0.060000002,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "intercom-p"
+    },
+    {
+      "name": "beacon",
+      "delays": [
+        [
+          1.8,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "walkietalkie",
+      "delays": [
+        [
+          0.2,
+          0.4,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "signaller"
+    },
+    {
+      "name": "legacy_bay"
+    },
+    {
+      "name": "electropack0"
+    },
+    {
+      "name": "electropack1",
+      "delays": [
+        [
+          0.3,
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "radio"
+    }
+  ]
+}

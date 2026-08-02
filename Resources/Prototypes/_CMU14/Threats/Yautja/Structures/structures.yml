@@ -29,6 +29,72 @@
     - type: FTLSmashImmune
 
 - type: entity
+  parent: RMCPodDoorIndestructible
+  id: CMUYautjaHuntingGroundPreserveShutter
+  name: preserve shutter
+  description: An unpowered, reinforced shutter separating the hunting grounds from the preserve.
+  suffix: Yautja, Hunting Grounds
+  components:
+    - type: Sprite
+      sprite: _CMU14/HunterShip/obj/structures/doors/hunter/hunter_shutter.rsi
+      drawdepth: BlastDoors
+      layers:
+        - state: "hdoor1"
+          map: [ "enum.DoorVisualLayers.Base" ]
+    - type: Icon
+      sprite: _CMU14/HunterShip/obj/structures/doors/hunter/hunter_shutter.rsi
+      state: "hdoor1"
+    - type: Door
+      openSpriteState: hdoor0
+      closedSpriteState: hdoor1
+      openingSpriteState: hdoorc0
+      closingSpriteState: hdoorc1
+      canPry: false
+      state: Closed
+    - type: YautjaPreserveShutter
+    - type: RemoveComponents
+      components:
+        - type: RMCOpenOnAlertLevel
+    - type: ApcPowerReceiver
+      needsPower: false
+    - type: RMCPowerReceiver
+      idleLoad: 0
+      activeLoad: 0
+      channel: Environment
+    - type: Corrodible
+      isCorrodible: false
+
+- type: entity
+  parent: CMUYautjaStructureBase
+  id: CMUYautjaHuntingGroundEscapeConsole
+  name: hunting grounds escape console
+  description: A console used by Yautja to open the preserve shutters and leave the hunting grounds.
+  suffix: Yautja, Hunting Grounds
+  components:
+    - type: Sprite
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      drawdepth: Objects
+      layers:
+        - state: "crew"
+    - type: Icon
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
+      state: "crew"
+    - type: YautjaHuntEscapeConsole
+    - type: Clickable
+    - type: InteractionOutline
+
+- type: entity
+  parent: RMCFogWallPermanent
+  id: CMUYautjaHuntingGroundPreserveEdge
+  name: dense fog
+  description: You think you can see a way through.
+  suffix: Yautja, Hunting Grounds
+  components:
+    - type: YautjaPreserveEdge
+    - type: Clickable
+    - type: InteractionOutline
+
+- type: entity
   parent: CMUYautjaStructureBase
   id: CMUYautjaStructureN32x32HunterPropsBorderStairs
   name: yautja border stairs
@@ -3307,6 +3373,21 @@
       visibleToGovfor: true
       visibleToClf: true
       visibleToYautja: true
+    - type: ActivatableUI
+      key: enum.TacticalMapComputerUi.Key
+    - type: UserInterface
+      interfaces:
+        enum.TacticalMapComputerUi.Key:
+          type: TacticalMapComputerBui
+    - type: TacticalMapComputer
+      allowCanvas: false
+    - type: ApcPowerReceiver
+      powerLoad: 250
+      needsPower: true
+    - type: RMCPowerReceiver
+      idleLoad: 5
+      activeLoad: 10
+      channel: Equipment
 
 - type: entity
   parent: CMUYautjaStructureBase
@@ -4967,11 +5048,14 @@
       sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "console_shuttle"
     - type: YautjaShuttleConsole
+    - type: WhitelistedShuttle
+      faction: yautja
+      ShuttleType: Dropship
+      autoReturn: false
     - type: DropshipNavigationComputer
       hijackable: false
       canTacticalLand: true
       tacticalLandFootprintOverride: 7,13
-      directLanding: true
     - type: ApcPowerReceiver
       needsPower: false
     - type: RMCPowerReceiver
@@ -4991,6 +5075,7 @@
   description: Used to monitor active health sensors of all Yautja in the system.
   suffix: Yautja, Hunter Shuttle
   components:
+    - type: YautjaCrewMonitoringConsole
     - type: RemoveComponents
       components:
         - type: ActivatableUIRequiresPower

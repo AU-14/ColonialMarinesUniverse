@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/props/mining.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "rsic": false,
+  "states": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "satchel"
+    },
+    {
+      "name": "sheetsnatcher"
+    },
+    {
+      "name": "rail",
+      "directions": 8
+    },
+    {
+      "name": "rail_bumpers",
+      "directions": 8
+    },
+    {
+      "name": "Diamond ore"
+    },
+    {
+      "name": "mars_sand"
+    },
+    {
+      "name": "Glass ore"
+    },
+    {
+      "name": "volcanic_sand"
+    },
+    {
+      "name": "Gold ore"
+    },
+    {
+      "name": "Iron ore"
+    },
+    {
+      "name": "ore"
+    },
+    {
+      "name": "Phoron ore"
+    },
+    {
+      "name": "Silver ore"
+    },
+    {
+      "name": "slag"
+    },
+    {
+      "name": "Coal ore"
+    },
+    {
+      "name": "Uranium ore"
+    },
+    {
+      "name": "Platinum ore"
+    },
+    {
+      "name": "orebox0"
+    },
+    {
+      "name": "orebox1"
+    },
+    {
+      "name": "ore2"
+    },
+    {
+      "name": "boulder1"
+    },
+    {
+      "name": "boulder2"
+    },
+    {
+      "name": "boulder3"
+    },
+    {
+      "name": "boulder4"
+    },
+    {
+      "name": "redflag_open",
+      "delays": [
+        [
+          0.3,
+          0.4,
+          0.3,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "yellowflag_open",
+      "delays": [
+        [
+          0.3,
+          0.4,
+          0.3,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "greenflag_open",
+      "delays": [
+        [
+          0.3,
+          0.4,
+          0.3,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "blueflag_open",
+      "delays": [
+        [
+          0.3,
+          0.4,
+          0.3,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "purpleflag_open",
+      "delays": [
+        [
+          0.3,
+          0.4,
+          0.3,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "redflag"
+    },
+    {
+      "name": "yellowflag"
+    },
+    {
+      "name": "greenflag"
+    },
+    {
+      "name": "blueflag"
+    },
+    {
+      "name": "purpleflag"
+    },
+    {
+      "name": "furnace",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

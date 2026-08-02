@@ -3,12 +3,14 @@ using System.Globalization;
 using System.Linq;
 using System.Numerics;
 using Content.Client.Popups;
+using Content.Client.Weapons.Ranged.Systems;
 using Content.Server._CMU14.Yautja;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Stealth;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Weapons.Common;
 using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Damage;
@@ -16,18 +18,24 @@ using Content.Shared.Explosion.Components.OnTrigger;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
+using Content.Shared.CombatMode;
 using Content.Shared.Projectiles;
+using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
 using Content.Shared.Temperature;
 using Content.Shared.Temperature.Components;
+using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Client.Input;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Input;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
+using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests._CMU14.Yautja;
 
@@ -622,17 +630,20 @@ public sealed class YautjaPlasmaWeaponTest
                     null,
                     entMan.GetComponent<TransformComponent>(hunter).Coordinates,
                     entMan.GetComponent<TransformComponent>(caster).Coordinates);
+                var invisibility = entMan.EnsureComponent<EntityTurnInvisibleComponent>(hunter);
+                invisibility.Enabled = true;
+                invisibility.RestrictWeapons = true;
                 entMan.EventBus.RaiseLocalEvent(caster, ref linkedAttempt);
                 var casterComp = entMan.GetComponent<YautjaCasterComponent>(caster);
                 Assert.That(linkedAttempt.Cancelled, Is.False,
-                    $"The control caster has a CMSS13 source bracer, Yautja tech and enough source charge. " +
+                    $"The control caster has a CMSS13 source bracer, Yautja tech, enough source charge, and may fire while cloaked. " +
                     $"Message={linkedAttempt.Message ?? "<null>"}, " +
                     $"HasYautja={entMan.HasComponent<YautjaComponent>(hunter)}, " +
                     $"Source={stored.Bracer}, " +
                     $"SourceQueued={entMan.IsQueuedForDeletion(bracer)}, " +
                     $"SourceCharge={sourceBracer.Charge}, " +
                     $"Mode={casterComp.CurrentMode}, " +
-                    $"ModeCost={casterComp.Modes[casterComp.CurrentMode].PowerCost}.");
+                    $"ModeCost={casterComp.PowerCost}.");
 
                 stored.Bracer = null;
 
@@ -655,6 +666,156 @@ public sealed class YautjaPlasmaWeaponTest
                 }
             }
         });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PlasmaCasterClientFireInputCooldownShowsNotReadyPopup()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid bracer = default;
+        EntityUid caster = default;
+        EntityUid? previousAttached = null;
+        NetEntity hunterNet = default;
+        NetEntity casterNet = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var session = server.PlayerMan.Sessions.Single();
+
+                previousAttached = session.AttachedEntity;
+                hunter = entMan.SpawnEntity("CMUMobYautja", map.GridCoords);
+                bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
+                caster = entMan.SpawnEntity("CMUYautjaPlasmaCaster", map.GridCoords);
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+                server.PlayerMan.SetAttachedEntity(session, hunter);
+
+                var stored = entMan.GetComponent<YautjaStoredGearComponent>(caster);
+                stored.Bracer = bracer;
+                stored.Deployed = true;
+
+                var hands = entMan.System<SharedHandsSystem>();
+                Assert.That(hands.TryPickupAnyHand(hunter, caster), Is.True);
+                Assert.That(hands.IsHolding(hunter, caster, out var casterHand), Is.True);
+                hands.TrySetActiveHand(hunter, casterHand);
+                Assert.That(hands.GetActiveItem(hunter), Is.EqualTo(caster));
+                entMan.System<SharedCombatModeSystem>().SetInCombatMode(hunter, true);
+
+                hunterNet = entMan.GetNetEntity(hunter);
+                casterNet = entMan.GetNetEntity(caster);
+            });
+
+            await pair.ReallyBeIdle(10);
+
+            await client.WaitPost(() =>
+            {
+                var entMan = client.EntMan;
+                var clientHunter = entMan.GetEntity(hunterNet);
+                var clientCaster = entMan.GetEntity(casterNet);
+                var loc = client.ResolveDependency<ILocalizationManager>();
+                var previousCulture = loc.DefaultCulture;
+                var gun = entMan.GetComponent<GunComponent>(clientCaster);
+                var timing = client.ResolveDependency<IGameTiming>();
+                var inputManager = client.ResolveDependency<IInputManager>();
+                var inputSystem = entMan.System<Robust.Client.GameObjects.InputSystem>();
+                var gunSystem = entMan.System<GunSystem>();
+                var key = gun.UseKey ? EngineKeyFunctions.Use : EngineKeyFunctions.UseSecondary;
+                var keyId = inputManager.NetworkBindMap.KeyFunctionID(key);
+
+                Assert.That(entMan.GetComponent<CombatModeComponent>(clientHunter).IsInCombatMode, Is.True);
+                Assert.That(entMan.HasComponent<YautjaComponent>(clientHunter), Is.True);
+                Assert.That(gunSystem.TryGetGun(clientHunter, out var activeGun, out _), Is.True);
+                Assert.That(activeGun, Is.EqualTo(clientCaster));
+                Assert.That(timing.IsFirstTimePredicted, Is.True);
+
+                loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
+                try
+                {
+                    var target = entMan.GetComponent<TransformComponent>(clientHunter).Coordinates;
+                    entMan.RemoveComponent<YautjaComponent>(clientHunter);
+                    List<EntityUid>? projectiles;
+                    try
+                    {
+                        projectiles = entMan.System<SharedGunSystem>().AttemptShoot((clientCaster, gun), clientHunter, target);
+                    }
+                    finally
+                    {
+                        entMan.EnsureComponent<YautjaComponent>(clientHunter);
+                    }
+
+                    Assert.That(projectiles, Is.Null);
+                    Assert.That(gun.NextFire, Is.GreaterThan(timing.CurTime),
+                        "The test must enter the same client-side NextFire gate used by real fire input.");
+                    var labelsBeforeInput = entMan.System<PopupSystem>().WorldLabels.Select(label => label.Text).ToList();
+                    Assert.That(labelsBeforeInput.Any(label => label.Contains("Plasma caster is not ready to fire")),
+                        Is.False,
+                        $"Cooldown setup must not create the popup being tested. Actual labels: {string.Join(" | ", labelsBeforeInput)}");
+
+                    var keyDown = new ClientFullInputCmdMessage(timing.CurTick, timing.TickFraction, keyId)
+                    {
+                        State = BoundKeyState.Down,
+                        Coordinates = target,
+                        Uid = clientHunter,
+                    };
+                    inputSystem.HandleInputCommand(client.Session, key, keyDown);
+                    gunSystem.Update(0f);
+                }
+                finally
+                {
+                    var keyUp = new ClientFullInputCmdMessage(timing.CurTick, timing.TickFraction, keyId)
+                    {
+                        State = BoundKeyState.Up,
+                        Coordinates = entMan.GetComponent<TransformComponent>(clientHunter).Coordinates,
+                        Uid = clientHunter,
+                    };
+                    inputSystem.HandleInputCommand(client.Session, key, keyUp);
+
+                    if (previousCulture != null)
+                        loc.SetCulture(previousCulture);
+                }
+            });
+
+            await client.WaitAssertion(() =>
+            {
+                var labels = client.EntMan.System<PopupSystem>().WorldLabels.ToList();
+                var cooldownPopup = labels.SingleOrDefault(label =>
+                    label.Text.Contains("Plasma caster is not ready to fire"));
+
+                Assert.That(cooldownPopup, Is.Not.Null,
+                    $"Expected a plasma caster cooldown popup. Actual labels: {string.Join(" | ", labels.Select(label => label.Text))}");
+                Assert.That(cooldownPopup!.Text, Does.Not.Contain("[color="));
+                Assert.That(cooldownPopup.Text, Does.Not.Contain("[/color]"));
+                Assert.That(cooldownPopup.Type, Is.EqualTo(PopupType.SmallCaution));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var session = server.PlayerMan.Sessions.Single();
+                server.PlayerMan.SetAttachedEntity(session, previousAttached);
+
+                foreach (var uid in new[] { hunter, bracer, caster })
+                {
+                    if (uid != default && !entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+        }
 
         await pair.CleanReturnAsync();
     }
@@ -799,7 +960,7 @@ public sealed class YautjaPlasmaWeaponTest
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
                 bracerComp.Charge = 3000;
                 var casterComp = entMan.GetComponent<YautjaCasterComponent>(caster);
-                var sourceCost = casterComp.Modes[casterComp.CurrentMode].PowerCost;
+                var sourceCost = casterComp.PowerCost;
                 var coordinates = entMan.GetComponent<TransformComponent>(caster).Coordinates;
 
                 var takeAmmo = new TakeAmmoEvent(
@@ -1017,7 +1178,83 @@ public sealed class YautjaPlasmaWeaponTest
         await pair.CleanReturnAsync();
     }
 
-    private static void RaiseProjectileHit(IEntityManager entMan, EntityUid projectile, EntityUid target, EntityUid shooter)
+    [Test]
+    public async Task PlasmaCasterEradicatorTriggersAtCmss13MaxRange()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var projectile = entMan.SpawnEntity("CMUYautjaCasterEradicatorBolt", map.GridCoords);
+
+            try
+            {
+                Assert.That(entMan.HasComponent<YautjaCasterEradicatorProjectileComponent>(projectile), Is.True,
+                    "CMSS13 plasma eradicator has its own max-range/vehicle impact behavior.");
+
+                var maxRange = new ProjectileFixedDistanceStopEvent();
+                entMan.EventBus.RaiseLocalEvent(projectile, ref maxRange);
+
+                Assert.That(entMan.IsQueuedForDeletion(projectile) || entMan.Deleted(projectile), Is.True,
+                    "CMSS13 plasma eradicator do_at_max_range() detonates the projectile at max_range = 8.");
+            }
+            finally
+            {
+                if (!entMan.Deleted(projectile))
+                    entMan.DeleteEntity(projectile);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PlasmaCasterEradicatorAppliesCmss13MultitileVehicleImpact()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var projectile = entMan.SpawnEntity("CMUYautjaCasterEradicatorBolt", map.GridCoords);
+            var vehicle = entMan.SpawnEntity("VehicleTank", map.GridCoords);
+
+            try
+            {
+                var mover = entMan.GetComponent<GridVehicleMoverComponent>(vehicle);
+                var frame = entMan.GetComponent<HardpointIntegrityComponent>(vehicle);
+                var before = frame.Integrity;
+
+                RaiseProjectileHit(entMan, projectile, vehicle, null);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(mover.ImmobileUntil - server.Timing.CurTime,
+                        Is.EqualTo(TimeSpan.FromSeconds(5)).Within(TimeSpan.FromMilliseconds(50)),
+                        "CMSS13 plasma eradicator locks a multitile vehicle for vehicle_slowdown_time = 5 seconds.");
+                    Assert.That(frame.Integrity, Is.LessThan(before),
+                        "CMSS13 plasma eradicator applies ex_act(150, ..., 100) to a multitile vehicle.");
+                });
+            }
+            finally
+            {
+                foreach (var uid in new[] { projectile, vehicle })
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static void RaiseProjectileHit(IEntityManager entMan, EntityUid projectile, EntityUid target, EntityUid? shooter)
     {
         var projectileComp = entMan.GetComponent<ProjectileComponent>(projectile);
         var damage = new DamageSpecifier(projectileComp.Damage);

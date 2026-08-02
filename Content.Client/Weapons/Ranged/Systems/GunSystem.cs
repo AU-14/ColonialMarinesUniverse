@@ -84,6 +84,7 @@ public sealed partial class GunSystem : SharedGunSystem
     }
 
     private bool _spreadOverlay;
+    private bool _fireInputHandled;
 
     public override void Initialize()
     {
@@ -175,6 +176,7 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (entityNull == null || !TryComp<CombatModeComponent>(entityNull, out var combat) || !combat.IsInCombatMode)
         {
+            _fireInputHandled = false;
             return;
         }
 
@@ -182,20 +184,35 @@ public sealed partial class GunSystem : SharedGunSystem
 
         if (!TryGetGun(entity, out var gunUid, out var gun))
         {
+            _fireInputHandled = false;
             return;
         }
 
         var useKey = gun.UseKey ? EngineKeyFunctions.Use : EngineKeyFunctions.UseSecondary;
+        var fireInputDown = _inputSystem.CmdStates.GetState(useKey) == BoundKeyState.Down;
 
-        if (_inputSystem.CmdStates.GetState(useKey) != BoundKeyState.Down && !gun.BurstActivated)
+        if (!fireInputDown && !gun.BurstActivated)
         {
+            _fireInputHandled = false;
             if (gun.ShotCounter != 0)
                 RaisePredictiveEvent(new RequestStopShootEvent { Gun = GetNetEntity(gunUid) });
             return;
         }
 
         if (gun.NextFire > Timing.CurTime)
+        {
+            if (fireInputDown && !_fireInputHandled)
+            {
+                _fireInputHandled = true;
+                var cooldownAttempt = new GunCooldownAttemptEvent(entity, (gunUid, gun));
+                RaiseLocalEvent(gunUid, ref cooldownAttempt);
+            }
+
             return;
+        }
+
+        if (fireInputDown)
+            _fireInputHandled = true;
 
         var mousePos = _eyeManager.PixelToMap(_inputManager.MouseScreenPosition);
 
@@ -339,10 +356,7 @@ public sealed partial class GunSystem : SharedGunSystem
             AddComp(ent, light);
         }
 
-        Lights.SetEnabled(ent, true, light);
-        Lights.SetRadius(ent, 2f, light);
-        Lights.SetColor(ent, Color.FromHex("#cc8e2b"), light);
-        Lights.SetEnergy(ent, 5f, light);
+        ConfigureMuzzleFlashLight(ent, light, Lights); // CMU14
 
         var animTwo = new Animation()
         {
