@@ -4,7 +4,7 @@ meta:
   engineVersion: 277.0.0
   forkId: cmu14
   forkVersion: yautja-hunting-grounds-source-port
-  time: 2026-05-29T00:00:00.000Z
+  time: "2026-05-29T00:00:00.000Z"
   entityCount: 6692
 maps:
 - 1

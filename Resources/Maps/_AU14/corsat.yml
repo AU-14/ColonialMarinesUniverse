@@ -105168,7 +105168,7 @@ entities:
     - type: Transform
       pos: 15.5,-17.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 7870
     components:

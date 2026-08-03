@@ -278239,7 +278239,7 @@ entities:
     - type: Transform
       pos: 2.5,3.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 41899
     components:
@@ -310386,7 +310386,7 @@ entities:
       parent: 1
 - proto: CMUYautjaGroundRelayDestination
   entities:
-  - uid: 47870
+  - uid: 1000000007
     components:
     - type: MetaData
       name: Flight ground relay

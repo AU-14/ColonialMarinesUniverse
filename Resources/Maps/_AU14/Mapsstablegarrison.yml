@@ -35479,7 +35479,7 @@ entities:
     - type: Transform
       pos: 153.63596,-150.16931
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 4329
     components:

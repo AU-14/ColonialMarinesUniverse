@@ -613254,7 +613254,7 @@ entities:
       parent: 1
 - proto: CMUYautjaGroundRelayDestination
   entities:
-  - uid: 91136
+  - uid: 1000000003
     components:
     - type: MetaData
       name: Barkers Lament ground relay

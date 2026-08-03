@@ -326,7 +326,7 @@ public sealed partial class RadioSystem : EntitySystem
 
     private void SendHivemindToGhosts(MsgChatMessage chatMsg, EntityUid messageSource)
     {
-        foreach (var session in Filter.Empty().AddWhereAttachedEntity(HasComp<GhostHearingComponent>).Recipients)
+        foreach (var session in Filter.Empty().AddWhereAttachedEntity(HasComp<GhostComponent>).Recipients)
         {
             _netMan.ServerSendMessage(AddChatActionButtons(chatMsg, messageSource, session.Channel), session.Channel);
         }

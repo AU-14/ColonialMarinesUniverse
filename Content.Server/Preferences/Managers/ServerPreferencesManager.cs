@@ -6,6 +6,7 @@ using Content.Server.Database;
 using Content.Server._CMU14.Yautja;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Preferences;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
@@ -361,8 +362,20 @@ namespace Content.Server.Preferences.Managers
             if (profile is not HumanoidCharacterProfile humanoid)
                 return profile;
 
+            var yautja = humanoid.YautjaProfile;
+            if (yautja.ClanRank == null &&
+                yautja.OwnerRank == YautjaBracerOwnerRank.Unblooded &&
+                yautja.Status == YautjaProfileStatus.Normal &&
+                yautja.Legacy == YautjaLegacySet.None &&
+                yautja.Unique == YautjaUniqueSet.None &&
+                yautja.CapeStyle == YautjaCapeStyle.Full &&
+                yautja.BracerMaterial == YautjaBracerMaterial.Ebony)
+            {
+                return profile;
+            }
+
             var capabilities = _yautjaRankManager.ResolveProfileCapabilitiesCached(userId);
-            return humanoid.WithYautjaProfile(humanoid.YautjaProfile.SanitizeForCapabilities(capabilities));
+            return humanoid.WithYautjaProfile(yautja.SanitizeForCapabilities(capabilities));
         }
 
         public IEnumerable<KeyValuePair<NetUserId, ICharacterProfile>> GetSelectedProfilesForPlayers(

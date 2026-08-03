@@ -174534,7 +174534,7 @@ entities:
     - type: Transform
       pos: 117.5,93.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 545
     components:
@@ -332939,7 +332939,7 @@ entities:
       parent: 1
 - proto: CMUYautjaGroundRelayDestination
   entities:
-  - uid: 39093
+  - uid: 1000000001
     components:
     - type: MetaData
       name: Hope's Retreat ground relay

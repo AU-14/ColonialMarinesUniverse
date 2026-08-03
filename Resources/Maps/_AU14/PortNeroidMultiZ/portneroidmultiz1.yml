@@ -85169,7 +85169,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 86.5,103.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 24574
     components:

@@ -210610,7 +210610,7 @@ entities:
       parent: 1
 - proto: CMUYautjaGroundRelayDestination
   entities:
-  - uid: 31157
+  - uid: 1000000009
     components:
     - type: MetaData
       name: Sorokyne Strata ground relay

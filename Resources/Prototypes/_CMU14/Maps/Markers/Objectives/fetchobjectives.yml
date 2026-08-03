@@ -1,4 +1,15 @@
 - type: entity
+  parent: MarkerBase
+  id: fetchgenericmarker
+  name: Fetch Generic Marker
+  suffix: Fetch Objective
+  components:
+  - type: Sprite
+    state: red
+  - type: CMUObjectiveMarker
+    generic: true
+
+- type: entity
   name: Fetch Ore Objective
   parent: MarkerBase
   id: fetchoreobjective
@@ -22,6 +33,7 @@
     spawnMarkerId: fetchoreobjectivemarker
     fetchCount: 500
     useAnyEntity: true
+    catalog: false
 
 - type: entity
   name: Fetch BlackBox Objective Spawn Marker
@@ -57,7 +69,7 @@
 
 - type: entity
   name: Fetch crown Objective
-  parent: MarkerBase
+  parent: fetchgenericmarker
   id: fetchcrownobjective
   components:
   - type: Sprite
@@ -77,13 +89,13 @@
     objectiveDescription: "Retrieve the Alien Crown Artifact"
   - type: FetchObjective
     targetPrototype: ClothingHeadHatXmasCrown
-    spawnMarkerId: fetchobjectivemarkergenericspawnpoint
+    spawnMarkerId: fetchgenericmarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch AN/PRC-982 Objective
-  parent: MarkerBase
+  parent: fetchgenericmarker
   id: fetchanprcobjective
   components:
   - type: Sprite
@@ -107,13 +119,13 @@
     objectiveDescription: "Retrieve the AN/PRC-982 portable radio transceiver box"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemPortableRadioTransceiver
-    spawnMarkerId: fetchobjectivemarkergenericspawnpoint
+    spawnMarkerId: fetchgenericmarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch CIR-60 Blackbox Objective
-  parent: MarkerBase
+  parent: fetchgenericmarker
   id: fetchblackboxobjective
   components:
   - type: Sprite
@@ -138,14 +150,14 @@
     objectiveDescription: "Retrieve the CIR-60 'blackbox' colony information recorder"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemBlackboxRecorder
-    spawnMarkerId: fetchobjectivemarkergenericspawnpoint
+    spawnMarkerId: fetchgenericmarker
     spawnCount: 1
     fetchCount: 1
     useAnyEntity: true
 
 - type: entity
   name: Fetch Nuclear Launch Codes Booklet Objective
-  parent: MarkerBase
+  parent: fetchgenericmarker
   id: fetchnuclearlaunchcodesobjective
   components:
   - type: Sprite
@@ -170,13 +182,13 @@
     objectiveDescription: "Retrieve the Nuclear Launch Codes Booklet"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemNuclearLaunchCodes
-    spawnMarkerId: fetchobjectivemarkergenericspawnpoint
+    spawnMarkerId: fetchgenericmarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch Theater Operations Handbook Objective
-  parent: MarkerBase
+  parent: fetchgenericmarker
   id: fetchtheaterhandbookobjective
   components:
   - type: Sprite
@@ -201,13 +213,13 @@
     objectiveDescription: "Retrieve the Theater Operations Handbook"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemTheaterHandbook
-    spawnMarkerId: fetchobjectivemarkergenericspawnpoint
+    spawnMarkerId: fetchgenericmarker
     spawnCount: 1
     fetchCount: 1
 
 - type: entity
   name: Fetch RCS-9 ARDSU Objective
-  parent: MarkerBase
+  parent: fetchgenericmarker
   id: fetchattmosdatastorageunitobjective
   components:
   - type: Sprite
@@ -232,13 +244,13 @@
     objectiveDescription: "Retrieve two ARCS-9 atmospheric radar data storage units"
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemAtmosphericRadarStorageUnit
-    spawnMarkerId: fetchobjectivemarkergenericspawnpoint
+    spawnMarkerId: fetchgenericmarker
     spawnCount: 3
     fetchCount: 2
 
 - type: entity
   name: Fetch WY Laptop Objective
-  parent: MarkerBase
+  parent: fetchgenericmarker
   id: fetchwylaptopobjective
   components:
   - type: Sprite
@@ -261,16 +273,6 @@
     objectiveDescription: "Retrieve the Weyland-Yutani Research laptop."
   - type: FetchObjective
     targetPrototype: AU14ObjectiveItemWYLaptop
-    spawnMarkerId: fetchobjectivemarkergenericspawnpoint
+    spawnMarkerId: fetchgenericmarker
     spawnCount: 1
     fetchCount: 1
-
-- type: entity
-  name: Fetch  Generic Spawnpoint
-  parent: MarkerBase
-  id: fetchobjectivemarkergenericspawnpoint
-  components:
-  - type: Sprite
-    state: red
-  - type: CMUObjectiveMarker
-    generic: true

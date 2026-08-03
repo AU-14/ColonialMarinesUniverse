@@ -106622,7 +106622,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 171.5,-94.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 10515
     components:

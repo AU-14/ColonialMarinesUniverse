@@ -310157,7 +310157,7 @@ entities:
       parent: 1
 - proto: XenoEgg
   entities:
-  - uid: 392
+  - uid: 1000000002
     components:
     - type: Transform
       pos: 46.5,-113.5

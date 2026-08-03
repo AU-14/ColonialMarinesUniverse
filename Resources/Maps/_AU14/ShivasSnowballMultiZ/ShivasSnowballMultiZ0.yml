@@ -54247,7 +54247,7 @@ entities:
     - type: Transform
       pos: 6.5,0.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 3185
     components:
@@ -131960,7 +131960,7 @@ entities:
       parent: 1
 - proto: CMUYautjaGroundRelayDestination
   entities:
-  - uid: 17501
+  - uid: 1000000006
     components:
     - type: MetaData
       name: Shivas Snowball ground relay

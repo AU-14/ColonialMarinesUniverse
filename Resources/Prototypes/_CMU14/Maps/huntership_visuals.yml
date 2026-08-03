@@ -82,14 +82,14 @@
       soundHit:
         collection: MetalThud
     - type: CollisionWake
-    - type: Physics
-    - type: Fixtures
     - type: Pullable
     - type: DamageExaminable
     - type: RMCItemPickup
     - type: RMCMesonsNonviewable
     - type: CMUZPhysics
     - type: Contraband
+  - type: Physics
+    bodyType: Static
 
 
 - type: entity
@@ -159,14 +159,14 @@
       soundHit:
         collection: MetalThud
     - type: CollisionWake
-    - type: Physics
-    - type: Fixtures
     - type: Pullable
     - type: DamageExaminable
     - type: RMCItemPickup
     - type: RMCMesonsNonviewable
     - type: CMUZPhysics
     - type: Contraband
+  - type: Physics
+    bodyType: Static
 
 
 - type: entity
@@ -2033,6 +2033,8 @@
   components:
   - type: Transform
     anchored: true
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/mob/xenos/effects.rsi
     drawdepth: BelowMobs
@@ -2047,8 +2049,11 @@
     state: "Egg Growing"
   - type: XenoEgg
     state: Growing
+    spawn: CMXenoLarva
     canSpawnGhostParasite: false
     normalSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
+    fragileSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
+    sustainedSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
     currentSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
     growingState: "Egg Growing"
     grownState: "Egg"
@@ -4117,6 +4122,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -4131,7 +4138,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaBurrowerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaBurrowerSkullTrophy ]
   id: CMUHunterShipObjItemSkullBurrowerBurrowerSkullSouth
   name: "Burrower skull"
   description: "Skull of a digging xenomorph, master of subterranean assault."
@@ -4151,7 +4158,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCarrierSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCarrierSkullTrophy ]
   id: CMUHunterShipObjItemSkullCarrierCarrierSkullSouth
   name: "Carrier skull"
   description: "Skull of a diligent xenomorph, a lifeblood worker of the hive."
@@ -4171,7 +4178,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDeaconSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDeaconSkullTrophy ]
   id: CMUHunterShipObjItemSkullDeaconDeaconSkullSouth
   name: "Deacon skull"
   description: "Skull of an unusual xenomorph, a mysterious specimen."
@@ -4191,7 +4198,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipObjItemSkullDroneDroneSkullSouth
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -4211,7 +4218,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHivelordSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHivelordSkullTrophy ]
   id: CMUHunterShipObjItemSkullHivelordHivelordSkullSouth
   name: "Hivelord skull"
   description: "Skull of a nurturing xenomorph, devoted to hive construction."
@@ -4231,7 +4238,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaPraetorianSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaPraetorianSkullTrophy ]
   id: CMUHunterShipObjItemSkullPraetorianPraetorianSkullSouth
   name: "Praetorian skull"
   description: "Skull of a strong xenomorph, jack of all trades, vanguard to the Queen."
@@ -4251,7 +4258,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaQueenSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaQueenSkullTrophy ]
   id: CMUHunterShipObjItemSkullQueenQueenSkullSouth
   name: "Queen skull"
   description: "Skull of a prime hive ruler, mother to many."
@@ -4271,7 +4278,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipObjItemSkullRavagerRavagerSkullSouth
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -4291,7 +4298,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaWarriorSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaWarriorSkullTrophy ]
   id: CMUHunterShipObjItemSkullWarriorWarriorSkullSouth
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
@@ -4317,6 +4324,8 @@
   description: "A large, ornately crafted shield forged from an unknown alloy. The colossal metal skull of a Xenomorph dominates the center, its jagged edges and hollow eyes giving it a fearsome presence. The masterful craftsmanship and weathered battle scars whisper of long-forgotten hunts and a legacy etched in blood."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -4337,6 +4346,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -4357,6 +4368,8 @@
   description: "A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: SmallObjects
@@ -4377,6 +4390,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -9593,7 +9608,10 @@
   abstract: true
   components:
   - type: XenoEgg
+    spawn: CMXenoLarva
     normalSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
+    fragileSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
+    sustainedSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
     currentSprite: _CMU14/HunterShip/mob/xenos/effects.rsi
     growingState: "Egg Growing"
     grownState: "Egg"
@@ -43685,7 +43703,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHumanSpine, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHumanSpine ]
   id: CMUHunterShipPlacedObjItemClothingAccessoryLimbSkeletonHeadSpineSpineSouthOffset8x22
   name: "skull"
   description: "A bone that appears to be of human origin."
@@ -43706,7 +43724,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHumanSpine, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHumanSpine ]
   id: CMUHunterShipPlacedObjItemClothingAccessoryLimbSkeletonHeadSpineSpineSouthOffsetNeg13x34
   name: "skull"
   description: "A bone that appears to be of human origin."
@@ -43727,12 +43745,14 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHumanSpine, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHumanSpine ]
   id: CMUHunterShipPlacedObjItemClothingAccessoryLimbSkeletonHeadSpineSpineSouthOffsetNeg1x22
   name: "skull"
   description: "A bone that appears to be of human origin."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/skeleton.rsi
     drawdepth: Overdoors
@@ -43754,6 +43774,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43775,6 +43797,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43796,6 +43820,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43817,6 +43843,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43838,6 +43866,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43859,6 +43889,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43880,6 +43912,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43901,6 +43935,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43922,6 +43958,8 @@
   description: "A beautifully designed metallic face mask, both ornate and functional."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_mask.rsi
     drawdepth: WallMountedItems
@@ -43937,7 +43975,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaBoilerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaBoilerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullBoilerBoilerSkullSouthOffset16x32
   name: "Boiler skull"
   description: "Skull of a ranged xenomorph, known for explosive acid attacks."
@@ -43958,7 +43996,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaBurrowerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaBurrowerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullBurrowerBurrowerSkullSouthOffset17x22
   name: "Burrower skull"
   description: "Skull of a digging xenomorph, master of subterranean assault."
@@ -43979,7 +44017,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaBurrowerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaBurrowerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullBurrowerBurrowerSkullSouthOffset4x28
   name: "Burrower skull"
   description: "Skull of a digging xenomorph, master of subterranean assault."
@@ -44000,7 +44038,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCarrierSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCarrierSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCarrierCarrierSkullSouthOffset13x28
   name: "Carrier skull"
   description: "Skull of a diligent xenomorph, a lifeblood worker of the hive."
@@ -44021,7 +44059,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCarrierSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCarrierSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCarrierCarrierSkullSouthOffsetNeg19x28
   name: "Carrier skull"
   description: "Skull of a diligent xenomorph, a lifeblood worker of the hive."
@@ -44042,7 +44080,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCarrierSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCarrierSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCarrierCarrierSkullSouthOffsetNeg3x27
   name: "Carrier skull"
   description: "Skull of a diligent xenomorph, a lifeblood worker of the hive."
@@ -44063,7 +44101,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCorroderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCorroderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCorroderCorroderSkullSouthOffset0x31
   name: "Corroder skull"
   description: "Skull of an acidic xenomorph, a boiling menace."
@@ -44084,7 +44122,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCorroderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCorroderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCorroderCorroderSkullSouthOffset0x34
   name: "Corroder skull"
   description: "Skull of an acidic xenomorph, a boiling menace."
@@ -44105,7 +44143,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCorroderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCorroderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCorroderCorroderSkullSouthOffset0x46
   name: "Corroder skull"
   description: "Skull of an acidic xenomorph, a boiling menace."
@@ -44126,7 +44164,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCorroderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCorroderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCorroderCorroderSkullSouthOffset1x34
   name: "Corroder skull"
   description: "Skull of an acidic xenomorph, a boiling menace."
@@ -44147,7 +44185,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCorroderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCorroderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCorroderCorroderSkullSouthOffsetNeg16x33
   name: "Corroder skull"
   description: "Skull of an acidic xenomorph, a boiling menace."
@@ -44168,7 +44206,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCorroderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCorroderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCorroderCorroderSkullSouthOffsetNeg4x35
   name: "Corroder skull"
   description: "Skull of an acidic xenomorph, a boiling menace."
@@ -44189,7 +44227,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCrusherSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCrusherSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCrusherCrusherSkullSouthOffsetNeg1x30
   name: "Crusher skull"
   description: "Skull of a powerful xenomorph, capable of shattering defenses."
@@ -44210,7 +44248,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCrusherSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCrusherSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCrusherCrusherSkullSouthOffsetNeg1x32
   name: "Crusher skull"
   description: "Skull of a powerful xenomorph, capable of shattering defenses."
@@ -44231,7 +44269,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaCrusherSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaCrusherSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullCrusherCrusherSkullSouthOffsetNeg2x31
   name: "Crusher skull"
   description: "Skull of a powerful xenomorph, capable of shattering defenses."
@@ -44252,7 +44290,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDeaconSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDeaconSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDeaconDeaconSkullSouthOffset0x33
   name: "Deacon skull"
   description: "Skull of an unusual xenomorph, a mysterious specimen."
@@ -44273,7 +44311,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDeaconSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDeaconSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDeaconDeaconSkullSouthOffset6x38
   name: "Deacon skull"
   description: "Skull of an unusual xenomorph, a mysterious specimen."
@@ -44294,7 +44332,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDeaconSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDeaconSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDeaconDeaconSkullSouthOffsetNeg13x52
   name: "Deacon skull"
   description: "Skull of an unusual xenomorph, a mysterious specimen."
@@ -44315,7 +44353,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDefenderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDefenderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDefenderDefenderSkullSouthOffset0x35
   name: "Defender skull"
   description: "Skull of a sturdy xenomorph, a bulwark of the hive."
@@ -44336,7 +44374,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDefenderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDefenderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDefenderDefenderSkullSouthOffsetNeg4x33
   name: "Defender skull"
   description: "Skull of a sturdy xenomorph, a bulwark of the hive."
@@ -44357,7 +44395,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDefenderSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDefenderSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDefenderDefenderSkullSouthOffsetNeg5x34
   name: "Defender skull"
   description: "Skull of a sturdy xenomorph, a bulwark of the hive."
@@ -44378,7 +44416,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDespoilerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDespoilerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDespoilerDespoilerSkullSouthOffset0x30
   name: "Despoiler skull"
   description: "Skull of a decrepit wretch, the surface still stinging your hands."
@@ -44399,7 +44437,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffset11x28
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44420,7 +44458,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffset11x37
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44441,7 +44479,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffset17x28
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44462,7 +44500,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffset18x24
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44483,7 +44521,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffset3x24
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44504,7 +44542,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffset6x36
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44525,7 +44563,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffsetNeg11x30
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44546,7 +44584,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffsetNeg16x35
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44567,7 +44605,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffsetNeg18x36
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44588,7 +44626,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffsetNeg22x28
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44609,7 +44647,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaDroneSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaDroneSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullDroneDroneSkullSouthOffsetNeg5x24
   name: "Drone skull"
   description: "Skull of a weak but essential xenomorph, a hive worker."
@@ -44630,7 +44668,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHivelordSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHivelordSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHivelordHivelordSkullSouthOffset14x37
   name: "Hivelord skull"
   description: "Skull of a nurturing xenomorph, devoted to hive construction."
@@ -44651,7 +44689,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHivelordSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHivelordSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHivelordHivelordSkullSouthOffset16x35
   name: "Hivelord skull"
   description: "Skull of a nurturing xenomorph, devoted to hive construction."
@@ -44672,7 +44710,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHivelordSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHivelordSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHivelordHivelordSkullSouthOffset5x24
   name: "Hivelord skull"
   description: "Skull of a nurturing xenomorph, devoted to hive construction."
@@ -44693,7 +44731,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset0x37
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44714,7 +44752,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset14x36
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44735,7 +44773,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset16x26
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44756,7 +44794,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset1x20
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44777,7 +44815,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset45x36
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44798,7 +44836,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset5x36
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44819,7 +44857,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset6x31
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44840,7 +44878,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffset7x34
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44861,7 +44899,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffsetNeg10x32
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44882,7 +44920,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffsetNeg16x35
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44903,7 +44941,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffsetNeg2x36
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44924,7 +44962,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffsetNeg3x26
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44945,7 +44983,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffsetNeg5x34
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44966,7 +45004,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaHunterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaHunterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullHunterHunterSkullSouthOffsetNeg9x25
   name: "Hunter skull"
   description: "Skull of a stealthy xenomorph, an ambushing predator."
@@ -44987,7 +45025,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaKingSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaKingSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullKingKingSkullSouthOffset0x33
   name: "King skull"
   description: "Skull of a militant hive ruler, lord of destruction."
@@ -45008,7 +45046,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffset11x25
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45029,7 +45067,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffset16x39
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45050,7 +45088,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffset17x37
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45071,7 +45109,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffset5x37
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45092,7 +45130,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffset6x26
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45113,7 +45151,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffset8x39
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45134,7 +45172,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffsetNeg11x27
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45155,7 +45193,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffsetNeg21x26
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45176,7 +45214,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffsetNeg4x34
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45197,7 +45235,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaLurkerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaLurkerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullLurkerLurkerSkullSouthOffsetNeg8x27
   name: "Lurker skull"
   description: "Skull of a stealthy xenomorph, a nocturnal entity."
@@ -45218,7 +45256,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaPraetorianSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaPraetorianSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullPraetorianPraetorianSkullSouthOffset0x33
   name: "Praetorian skull"
   description: "Skull of a strong xenomorph, jack of all trades, vanguard to the Queen."
@@ -45239,7 +45277,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaPraetorianSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaPraetorianSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullPraetorianPraetorianSkullSouthOffset0x36
   name: "Praetorian skull"
   description: "Skull of a strong xenomorph, jack of all trades, vanguard to the Queen."
@@ -45260,7 +45298,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaPraetorianSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaPraetorianSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullPraetorianPraetorianSkullSouthOffset0x4
   name: "Praetorian skull"
   description: "Skull of a strong xenomorph, jack of all trades, vanguard to the Queen."
@@ -45281,7 +45319,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaPraetorianSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaPraetorianSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullPraetorianPraetorianSkullSouthOffsetNeg1x33
   name: "Praetorian skull"
   description: "Skull of a strong xenomorph, jack of all trades, vanguard to the Queen."
@@ -45302,7 +45340,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaPraetorianSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaPraetorianSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullPraetorianPraetorianSkullSouthOffsetNeg1x34
   name: "Praetorian skull"
   description: "Skull of a strong xenomorph, jack of all trades, vanguard to the Queen."
@@ -45323,7 +45361,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaQueenSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaQueenSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullQueenQueenSkullSouthOffset0x31
   name: "Queen skull"
   description: "Skull of a prime hive ruler, mother to many."
@@ -45344,7 +45382,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaQueenSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaQueenSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullQueenQueenSkullSouthOffset0x32
   name: "Queen skull"
   description: "Skull of a prime hive ruler, mother to many."
@@ -45365,7 +45403,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaQueenSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaQueenSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullQueenQueenSkullSouthOffset1x31
   name: "Queen skull"
   description: "Skull of a prime hive ruler, mother to many."
@@ -45386,7 +45424,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaQueenSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaQueenSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullQueenQueenSkullSouthOffset1x33
   name: "Queen skull"
   description: "Skull of a prime hive ruler, mother to many."
@@ -45407,7 +45445,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaQueenSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaQueenSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullQueenQueenSkullSouthOffsetNeg5x17
   name: "Queen skull"
   description: "Skull of a prime hive ruler, mother to many."
@@ -45428,7 +45466,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffset0x29
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45449,7 +45487,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffset17x31
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45470,7 +45508,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffset17x34
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45491,7 +45529,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffset1x32
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45512,7 +45550,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffset1x33
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45533,7 +45571,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffset24xNeg4
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45554,7 +45592,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffset9x20
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45575,7 +45613,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffsetNeg15x29
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45596,7 +45634,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffsetNeg2x31
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45617,7 +45655,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRavagerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRavagerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRavagerRavagerSkullSouthOffsetNeg3x32
   name: "Ravager skull"
   description: "Skull of a ferocious xenomorph, wielding unmatched destruction."
@@ -45638,7 +45676,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffset12x26
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45659,7 +45697,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffset1x27
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45680,7 +45718,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffset3x26
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45701,7 +45739,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffset4x25
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45722,7 +45760,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffset7x38
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45743,7 +45781,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffset8x37
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45764,7 +45802,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffsetNeg1x39
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45785,7 +45823,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffsetNeg5x26
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45806,7 +45844,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaRunnerSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaRunnerSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullRunnerRunnerSkullSouthOffsetNeg6x36
   name: "Runner skull"
   description: "Skull of a swift and agile xenomorph, a terror on the prowl."
@@ -45827,7 +45865,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaSpitterSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaSpitterSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullSpitterSpitterSkullSouthOffsetNeg4x38
   name: "Spitter skull"
   description: "Skull of a highly acidic xenomorph, a venomous ranged attacker."
@@ -45848,7 +45886,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaWarriorSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaWarriorSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullWarriorWarriorSkullSouthOffset0x32
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
@@ -45869,7 +45907,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaWarriorSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaWarriorSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullWarriorWarriorSkullSouthOffset0x35
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
@@ -45890,7 +45928,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaWarriorSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaWarriorSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullWarriorWarriorSkullSouthOffset1x32
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
@@ -45911,7 +45949,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaWarriorSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaWarriorSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullWarriorWarriorSkullSouthOffsetNeg1x34
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
@@ -45932,7 +45970,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaWarriorSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaWarriorSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullWarriorWarriorSkullSouthOffsetNeg26x0
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
@@ -45953,7 +45991,7 @@
 
 
 - type: entity
-  parent: [ CMUYautjaWarriorSkullTrophy, CMUHunterShipFixedSkullWallDecor ]
+  parent: [ CMUHunterShipFixedSkullWallDecor, CMUYautjaWarriorSkullTrophy ]
   id: CMUHunterShipPlacedObjItemSkullWarriorWarriorSkullSouthOffsetNeg4x37
   name: "Warrior skull"
   description: "Skull of a strong xenomorph, a swift fighter."
@@ -45980,6 +46018,8 @@
   description: "A large, ornately crafted shield forged from an unknown alloy. The colossal metal skull of a Xenomorph dominates the center, its jagged edges and hollow eyes giving it a fearsome presence. The masterful craftsmanship and weathered battle scars whisper of long-forgotten hunts and a legacy etched in blood."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46001,6 +46041,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46022,6 +46064,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46043,6 +46087,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46064,6 +46110,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46085,6 +46133,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46106,6 +46156,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46127,6 +46179,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46148,6 +46202,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46169,6 +46225,8 @@
   description: "A large, ancient shield forged from an unknown golden alloy, gleaming with a luminous brilliance. Its worn surface and masterful craftsmanship hint at a forgotten purpose and a history lost to time."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
     drawdepth: SmallObjects
@@ -46190,6 +46248,8 @@
   description: "A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: SmallObjects
@@ -46211,6 +46271,8 @@
   description: "A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: SmallObjects
@@ -46232,6 +46294,8 @@
   description: "A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: SmallObjects
@@ -46253,6 +46317,8 @@
   description: "A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: SmallObjects
@@ -46274,6 +46340,8 @@
   description: "A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: SmallObjects
@@ -46295,6 +46363,8 @@
   description: "A large tribal shield made of a strange metal alloy. The face of the shield bears three skulls, two human, one alien."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: SmallObjects
@@ -46316,6 +46386,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46337,6 +46409,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46358,6 +46432,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46379,6 +46455,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46400,6 +46478,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46421,6 +46501,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46442,6 +46524,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46463,6 +46547,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems
@@ -46484,6 +46570,8 @@
   description: "A viciously sharp dagger inscribed with ancient Yautja markings. Smells thickly of blood. Carried by some hunters."
   suffix: Hunter Ship fixed wall decor
   components:
+  - type: Physics
+    bodyType: Static
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: WallMountedItems

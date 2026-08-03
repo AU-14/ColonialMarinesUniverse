@@ -96,8 +96,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaAddTeleporterLocation
-  name: cmu-yautja-relay-add-destination-action-name
-  description: cmu-yautja-relay-add-destination-action-desc
   components:
   - type: Action
     icon:
@@ -109,8 +107,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaFoldCombistick
-  name: cmu-yautja-combistick-fold-action-name
-  description: cmu-yautja-combistick-fold-action-desc
   components:
   - type: Action
     icon:
@@ -122,8 +118,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaCallCombi
-  name: cmu-yautja-combistick-call-action-name
-  description: cmu-yautja-combistick-call-action-desc
   components:
   - type: Action
     icon:
@@ -644,8 +638,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaGuardChainGauntlet
-  name: cmu-yautja-chain-gauntlet-guard-action-name
-  description: cmu-yautja-chain-gauntlet-guard-action-desc
   components:
   - type: Action
     icon:
@@ -657,8 +649,6 @@
 - type: entity
   parent: CMUYautjaActionBase
   id: CMUActionYautjaRemoveBracerAttachments
-  name: cmu-yautja-remove-bracer-attachments-action-name
-  description: cmu-yautja-remove-bracer-attachments-action-desc
   components:
   - type: Action
     icon:

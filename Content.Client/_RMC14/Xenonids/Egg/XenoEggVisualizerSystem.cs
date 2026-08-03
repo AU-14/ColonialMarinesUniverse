@@ -34,11 +34,10 @@ public sealed partial class XenoEggVisualizerSystem : EntitySystem
         if (!_resourceCache.TryGetResource<RSIResource>(SpriteSpecifierSerializer.TextureRoot / expectedSprite, out var res))
             return;
 
-        if (sprite.BaseRSI != res.RSI)
-        {
-            _sprite.SetBaseRsi((ent.Owner, sprite), res.RSI);
-        }
-
+        var hasBaseLayer = _sprite.LayerMapTryGet((ent.Owner, sprite), XenoEggLayers.Base, out var layer, false);
+        SpriteComponent.Layer? baseLayer = null;
+        if (hasBaseLayer)
+            hasBaseLayer = _sprite.TryGetLayer((ent.Owner, sprite), layer, out baseLayer, false);
         var state = ent.Comp.State switch
         {
             XenoEggState.Item => ent.Comp.ItemState,
@@ -55,7 +54,15 @@ public sealed partial class XenoEggVisualizerSystem : EntitySystem
                 out var resolvedState))
             return;
 
-        if (_sprite.LayerMapTryGet((ent.Owner, sprite), XenoEggLayers.Base, out var layer, false))
+        if (sprite.BaseRSI != res.RSI)
+        {
+            if (hasBaseLayer && baseLayer!.RSI == null && !res.RSI.TryGetState(baseLayer.State, out _))
+                _sprite.LayerSetRsi((ent.Owner, sprite), layer, res.RSI, resolvedState);
+            else
+                _sprite.SetBaseRsi((ent.Owner, sprite), res.RSI);
+        }
+
+        if (hasBaseLayer)
             _sprite.LayerSetRsiState((ent.Owner, sprite), layer, resolvedState);
     }
 
