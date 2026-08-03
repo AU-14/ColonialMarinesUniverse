@@ -1,3 +1,26 @@
 <Control xmlns="https://spacestation14.io">
-    <TabContainer Name="OrganTabs" />
+    <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+        <BoxContainer Orientation="Horizontal" SeparationOverride="5" HorizontalExpand="True" VerticalExpand="True">
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+                <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                    <Label Text="{Loc 'markings-unused'}" HorizontalExpand="True" />
+                    <Label Name="CMarkingPoints" HorizontalAlignment="Right" />
+                </BoxContainer>
+                <OptionButton Name="CMarkingCategoryButton" StyleClasses="OpenLeft" />
+                <LineEdit Name="CMarkingSearch" PlaceHolder="{Loc 'markings-search'}" />
+                <ItemList Name="CMarkingsUnused" VerticalExpand="True" MinSize="300 250" />
+                <Button Name="CMarkingAdd" Text="{Loc 'markings-add'}" StyleClasses="OpenRight" />
+            </BoxContainer>
+            <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+                <Label Text="{Loc 'markings-used'}" />
+                <ItemList Name="CMarkingsUsed" VerticalExpand="True" MinSize="300 250" />
+                <BoxContainer Orientation="Horizontal">
+                    <Button Name="CMarkingRankUp" Text="{Loc 'markings-rank-up'}" StyleClasses="OpenBoth" HorizontalExpand="True" />
+                    <Button Name="CMarkingRankDown" Text="{Loc 'markings-rank-down'}" StyleClasses="OpenBoth" HorizontalExpand="True" />
+                </BoxContainer>
+                <Button Name="CMarkingRemove" Text="{Loc 'markings-remove'}" StyleClasses="OpenRight" />
+            </BoxContainer>
+        </BoxContainer>
+        <BoxContainer Name="CMarkingColors" Orientation="Vertical" Visible="False" />
+    </BoxContainer>
 </Control>

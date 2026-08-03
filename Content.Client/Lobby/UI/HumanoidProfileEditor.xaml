@@ -141,8 +141,8 @@
                             </BoxContainer>
                             <!-- Hair -->
                             <BoxContainer Margin="10" Orientation="Horizontal">
-                                <humanoid:MarkingPicker Name="HairStylePicker" />
-                                <humanoid:MarkingPicker Name="FacialHairPicker" />
+                                <humanoid:SingleMarkingPicker Name="HairStylePicker" Category="Hair" />
+                                <humanoid:SingleMarkingPicker Name="FacialHairPicker" Category="FacialHair" />
                             </BoxContainer>
                             <!-- Eyes -->
                             <BoxContainer Margin="10" Orientation="Vertical">
@@ -201,18 +201,21 @@
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-skin-tone-label'}" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
-                                <Label Name="SkinToneNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                <Button Name="SkinToneColorButton" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-skin-tone-tooltip'}" />
                             </BoxContainer>
+                            <ColorSelectorSliders Name="SkinToneColorSelector" Visible="False" HorizontalExpand="True" />
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-hair-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
-                                <Label Name="HairColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                <Button Name="HairColorButton" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-hair-color-tooltip'}" />
                             </BoxContainer>
+                            <ColorSelectorSliders Name="HairColorSelector" Visible="False" HorizontalExpand="True" />
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-eye-color-label'}" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
-                                <Label Name="EyeColorNameLabel" HorizontalAlignment="Right" StyleClasses="LabelSubText" />
+                                <Button Name="EyeColorButton" HorizontalAlignment="Right" ToolTip="{Loc 'humanoid-profile-editor-eye-color-tooltip'}" />
                             </BoxContainer>
+                            <ColorSelectorSliders Name="CharacterEyeColorSelector" Visible="False" HorizontalExpand="True" />
                             <BoxContainer HorizontalExpand="True">
                                 <Label Text="{Loc 'humanoid-profile-editor-hide-meta-label'}" ToolTip="{Loc 'humanoid-profile-editor-hide-meta-tooltip'}" />
                                 <Control HorizontalExpand="True"/>
@@ -220,13 +223,21 @@
                             </BoxContainer>
                             <cc:HSeparator Color="#16823E" Margin="0 5" />
                             <Label Text="{Loc 'humanoid-profile-editor-full-description-label'}" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
-                            <TextEdit Name="FullDescriptionEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
+                            <PanelContainer StyleClasses="PanelInsetDark" Margin="0 0 0 8" HorizontalExpand="True">
+                                <TextEdit Name="FullDescriptionEdit" MinSize="220 90" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-full-description-tooltip'}" />
+                            </PanelContainer>
                             <Label Text="{Loc 'humanoid-profile-editor-medical-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
-                            <TextEdit Name="MedicalRecordEdit" MinSize="220 90" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
+                            <PanelContainer StyleClasses="PanelInsetDark" Margin="0 0 0 8" HorizontalExpand="True">
+                                <TextEdit Name="MedicalRecordEdit" MinSize="220 90" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-medical-record-tooltip'}" />
+                            </PanelContainer>
                             <Label Text="{Loc 'humanoid-profile-editor-criminal-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
-                            <TextEdit Name="CriminalRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
+                            <PanelContainer StyleClasses="PanelInsetDark" Margin="0 0 0 8" HorizontalExpand="True">
+                                <TextEdit Name="CriminalRecordEdit" MinSize="220 70" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-criminal-record-tooltip'}" />
+                            </PanelContainer>
                             <Label Text="{Loc 'humanoid-profile-editor-general-record-label'}" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
-                            <TextEdit Name="GeneralRecordEdit" MinSize="220 70" Margin="0 0 0 8" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
+                            <PanelContainer StyleClasses="PanelInsetDark" Margin="0 0 0 8" HorizontalExpand="True">
+                                <TextEdit Name="GeneralRecordEdit" MinSize="220 70" HorizontalExpand="True" ToolTip="{Loc 'humanoid-profile-editor-general-record-tooltip'}" />
+                            </PanelContainer>
                         </BoxContainer>
                     </ScrollContainer>
                 </BoxContainer>
@@ -323,7 +334,7 @@
                 <BoxContainer Name="MarkingsTab" Orientation="Vertical" Margin="10">
                     <!-- Markings -->
                     <ScrollContainer VerticalExpand="True">
-                        <humanoid:MarkingPicker Name="Markings" HorizontalExpand="True" VerticalExpand="True" />
+                        <humanoid:MarkingPicker Name="Markings" IgnoreCategories="Hair,FacialHair" HorizontalExpand="True" VerticalExpand="True" />
                     </ScrollContainer>
                 </BoxContainer>
                 <BoxContainer Name="NamedItemsTab" Orientation="Vertical" Margin="10">

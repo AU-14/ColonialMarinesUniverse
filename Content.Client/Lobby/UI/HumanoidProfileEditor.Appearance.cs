@@ -337,6 +337,7 @@ public sealed partial class HumanoidProfileEditor
                 }
         }
 
+        UpdateCmuColorControls();
         ReloadProfilePreview();
     }
 }

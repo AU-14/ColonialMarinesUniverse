@@ -14,10 +14,6 @@ public sealed partial class HumanoidProfileEditor
     private void InitializeRmcControls()
     {
         Markings.SetIgnoredLayers(HumanoidVisualLayers.Hair, HumanoidVisualLayers.FacialHair);
-        HairStylePicker.SetIncludedLayers(HumanoidVisualLayers.Hair);
-        HairStylePicker.SetModel(_markingsModel);
-        FacialHairPicker.SetIncludedLayers(HumanoidVisualLayers.FacialHair);
-        FacialHairPicker.SetModel(_markingsModel);
 
         foreach (var value in Enum.GetValues<ArmorPreference>())
         {
@@ -77,11 +73,8 @@ public sealed partial class HumanoidProfileEditor
         NamedItems.Sentry.OnTextChanged += args => SetRmcNamedItem(RMCNamedItemType.Sentry, args.Text);
 
         var namedItems = UserInterfaceManager.GetUIController<NamedItemsUIController>();
-        TabContainer.SetTabTitle(5, Loc.GetString("rmc-ui-named-items"));
-        TabContainer.SetTabVisible(5, namedItems.Available);
-
-        // RMC does not use upstream antagonist preferences.
-        TabContainer.SetTabVisible(2, false);
+        TabContainer.SetTabTitle(NamedItemsTabIndex, Loc.GetString("rmc-ui-named-items"));
+        TabContainer.SetTabVisible(NamedItemsTabIndex, namedItems.Available);
     }
 
     private void UpdateRmcControls()

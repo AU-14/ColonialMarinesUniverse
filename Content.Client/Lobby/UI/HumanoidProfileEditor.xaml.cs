@@ -81,6 +81,19 @@ namespace Content.Client.Lobby.UI
 
         private MarkingsViewModel _markingsModel = new();
 
+        // CMU's character editor has additional tabs compared to upstream. Keep the
+        // indices centralized so upstream/RMC partials cannot accidentally rename or
+        // hide the wrong CMU panel.
+        private const int AppearanceTabIndex = 0;
+        private const int CharacterDescriptionTabIndex = 1;
+        private const int RegulationAppearanceTabIndex = 2;
+        private const int InsurgencyTabIndex = 3;
+        private const int ColonyFallTabIndex = 4;
+        private const int DistressSignalTabIndex = 5;
+        private const int TraitsTabIndex = 6;
+        private const int MarkingsTabIndex = 7;
+        private const int NamedItemsTabIndex = 8;
+
         public HumanoidProfileEditor(
             IClientPreferencesManager preferencesManager,
             IConfigurationManager configurationManager,
@@ -113,6 +126,7 @@ namespace Content.Client.Lobby.UI
 
             Markings.SetModel(_markingsModel);
             InitializeRmcControls();
+            InitializeCmuTabs();
 
             ImportButton.OnPressed += args =>
             {
@@ -157,7 +171,7 @@ namespace Content.Client.Lobby.UI
 
             #region Appearance
 
-            TabContainer.SetTabTitle(0, Loc.GetString("humanoid-profile-editor-appearance-tab"));
+            TabContainer.SetTabTitle(AppearanceTabIndex, Loc.GetString("humanoid-profile-editor-appearance-tab"));
 
             #region Sex
 
@@ -255,6 +269,7 @@ namespace Content.Client.Lobby.UI
                 Profile = Profile.WithCharacterAppearance(
                     Profile.Appearance.WithEyeColor(newColor));
                 _markingsModel.SetOrganEyeColor(Profile.Appearance.EyeColor);
+                UpdateCmuColorControls();
                 ReloadProfilePreview();
             };
 
@@ -263,8 +278,6 @@ namespace Content.Client.Lobby.UI
             #endregion Appearance
 
             #region Jobs
-
-            TabContainer.SetTabTitle(1, Loc.GetString("humanoid-profile-editor-jobs-tab"));
 
             PreferenceUnavailableButton.AddItem(
                 Loc.GetString("humanoid-profile-editor-preference-unavailable-stay-in-lobby-button"),
@@ -285,16 +298,15 @@ namespace Content.Client.Lobby.UI
 
             RefreshAntags();
             RefreshJobs();
+            RefreshThreatPreferences();
 
             #endregion Jobs
-
-            TabContainer.SetTabTitle(2, Loc.GetString("humanoid-profile-editor-antags-tab"));
 
             RefreshTraits();
 
             #region Markings
 
-            TabContainer.SetTabTitle(4, Loc.GetString("humanoid-profile-editor-markings-tab"));
+            TabContainer.SetTabTitle(MarkingsTabIndex, Loc.GetString("humanoid-profile-editor-markings-tab"));
 
             _markingsModel.MarkingsChanged += (_, _) => OnMarkingChange();
             _markingsModel.MarkingsReset += OnMarkingChange;
@@ -444,11 +456,15 @@ namespace Content.Client.Lobby.UI
             UpdateSaveButton();
             UpdateMarkings();
             UpdateRmcControls();
+            UpdateCmuControls();
 
             RefreshAntags();
             RefreshJobs();
+            RefreshThreatPreferences();
             RefreshLoadouts();
             RefreshSpecies();
+            RefreshAllegiances();
+            RefreshOrigins();
             RefreshTraits();
             RefreshFlavorText();
             ReloadPreview();

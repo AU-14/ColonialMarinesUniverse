@@ -49,6 +49,7 @@ humanoid-profile-editor-allegiance-label = Allegiance:
 humanoid-profile-editor-allegiance-none = None
 humanoid-profile-editor-origin-label = Origin:
 humanoid-profile-editor-origin-none = None
+humanoid-profile-editor-color-unavailable = None
 humanoid-profile-editor-character-description-tab = Character
 humanoid-profile-editor-short-examine-label = Short Examine Text:
 humanoid-profile-editor-height-label = Height:
