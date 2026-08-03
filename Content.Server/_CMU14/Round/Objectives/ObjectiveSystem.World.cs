@@ -9,11 +9,12 @@ public abstract partial class ObjectiveSystem
     {
         var specific = new List<EntityUid>();
         var generic = new List<EntityUid>();
+        var searchMaps = GetZNetworkMapIds(map);
 
         var query = AllEntityQuery<CMUObjectiveMarkerComponent, TransformComponent>();
         while (query.MoveNext(out var markerUid, out var markerComp, out var markerXform))
         {
-            if (markerComp.Used || markerXform.MapID != map)
+            if (markerComp.Used || !searchMaps.Contains(markerXform.MapID))
                 continue;
 
             if (!string.IsNullOrEmpty(markerId) && markerComp.FetchId == markerId)

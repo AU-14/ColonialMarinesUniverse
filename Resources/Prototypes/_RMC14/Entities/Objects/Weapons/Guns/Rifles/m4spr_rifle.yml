@@ -201,6 +201,8 @@
     recoilUnwielded: 1
     scatterWielded: 4
     baseFireRate: 2.8
+    baseFireModes:
+    - SemiAuto
   - type: ItemSlots
     slots:
       gun_magazine:

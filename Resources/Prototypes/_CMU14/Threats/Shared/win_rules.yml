@@ -59,7 +59,7 @@
   description: Threat wins when the Queen is dead and no Replacement Queen evolves in time.
   components:
     - type: HiveCollapseRule
-      hiveCollapseDuration: 10 # minutes
+      hiveCollapseDuration: 600 # seconds
 
 - type: entity
   id: KillAllXenoRule

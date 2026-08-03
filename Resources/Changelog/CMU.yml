@@ -8808,32 +8808,81 @@
   id: 559
   time: '2026-08-02T15:49:30.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1766
+- author: maertayn
+  changes:
+  - message: Upon CLF Intel Computer capture, sends faxes to military/warship command
+      and CMB with the remaining CLF roster and a colonyAlert - uses announce for
+      Govfor as fallback (missing valid fax) - happy hunting!
+    type: Add
+  - message: Insfor Editor (Vanilla CLF) would spawn the upstream Intel Computer not
+      the CMU claimable one
+    type: Fix
+  - message: Prodigy (PART) Tech Unlock spawning 32nd & removed random tier 2 skip
+    type: Fix
+  - message: Updated the Objective Console UI
+    type: Add
+  - message: Late/admin spawned objectives are now added to Intel (except duplicate/other
+      preset objectives)
+    type: Add
+  - message: Player count check for preset votes is skipped in DEBUG builds
+    type: Code
+  id: 560
+  time: '2026-08-02T15:49:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1766
 - author: johnnny34y
   changes:
   - message: XM20A2 maybe fixed
     type: Fix
-  id: 560
+  id: 561
+  time: '2026-08-02T16:20:34.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1765
+- author: johnnny34y
+  changes:
+  - message: XM20A2 maybe fixed
+    type: Fix
+  id: 562
   time: '2026-08-02T16:20:34.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1765
 - author: verentr
   changes:
   - message: 'temperature requirements from the newly added reagents in #1673.'
     type: Remove
-  id: 561
+  id: 563
+  time: '2026-08-02T16:22:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1758
+- author: verentr
+  changes:
+  - message: 'temperature requirements from the newly added reagents in #1673.'
+    type: Remove
+  id: 564
   time: '2026-08-02T16:22:15.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1758
 - author: blueDev2
   changes:
   - message: Hive collapse occurs 10 minutes after queen dies without replacement.
     type: Tweak
-  id: 562
+  id: 565
+  time: '2026-08-02T16:36:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1760
+- author: blueDev2
+  changes:
+  - message: Hive collapse occurs 10 minutes after queen dies without replacement.
+    type: Tweak
+  id: 566
   time: '2026-08-02T16:36:35.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1760
 - author: CatoChristopherMrow
   changes:
   - message: Fixed default sentry IFF
     type: Fix
-  id: 563
+  id: 567
+  time: '2026-08-02T16:40:17.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1764
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed default sentry IFF
+    type: Fix
+  id: 568
   time: '2026-08-02T16:40:17.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1764
 - author: Vencallium
@@ -8875,8 +8924,119 @@
     type: Add
   - message: Added copious amounts of television to city and fort
     type: Add
-  id: 564
+  id: 569
   time: '2026-08-02T16:47:31.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1743
+- author: Vencallium
+  changes:
+  - message: Added chemistry and surgical bays to Joint Base Schaefer's medbay
+    type: Add
+  - message: Added catwalk and firing platforms to Joint Base Schaefer
+    type: Add
+  - message: Expanded cargo and added vehicle lift to Joint Base Schaefer
+    type: Add
+  - message: Added an ordnance technicians' room in the cargo in Joint Base Schaefer
+    type: Add
+  - message: Added an auxiliary entrance to Joint Base Schaefer accessible via Hangar
+      Bay leading to filtration
+    type: Add
+  - message: Added a 2nd floor and roof access to CMB precinct
+    type: Add
+  - message: Added a 2nd floor and roof access to the University of Albacetrie Medical
+      Center
+    type: Add
+  - message: Added a 2nd floor and a Cuppa Joe's shop to the University of Albacetrie
+      School of Xenogbi
+    type: Add
+  - message: Added roofs to everything; you can access all of them
+    type: Add
+  - message: Added massive sewer expansion housing 4 new discreet CLF spawns
+    type: Add
+  - message: Added massive Weyland-Yutani biomedical research facility
+    type: Add
+  - message: Added catwalks to spaceport
+    type: Add
+  - message: Relocated LZ2 to be apart of the CMB precinct
+    type: Add
+  - message: Map now has copious amounts of rechargers
+    type: Add
+  - message: Caves reworked with a lot of mineable rock
+    type: Add
+  - message: Added journalist office
+    type: Add
+  - message: Added copious amounts of television to city and fort
+    type: Add
+  id: 570
+  time: '2026-08-02T16:47:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1743
+- author: P-MCT
+  changes:
+  - message: Tasers no longer insta-stun. It takes 3 consecutive shots out of your
+      8 round battery to outright stun an individual.
+    type: Tweak
+  id: 571
+  time: '2026-08-02T18:47:11.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1756
+- author: CatoChristopherMrow
+  changes:
+  - message: Vehicle Commander skills have been set to appropriate WO level
+    type: Tweak
+  id: 572
+  time: '2026-08-02T21:37:20.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1772
+- author: maertayn
+  changes:
+  - message: Hivemind not showing when ghosting and toggling nearby / radio only
+    type: Fix
+  id: 573
+  time: '2026-08-02T22:37:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1776
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed turrets, again.
+    type: Fix
+  id: 574
+  time: '2026-08-02T22:37:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1775
+- author: Vencallium
+  changes:
+  - message: Fixed areas not having proper power Supply/APCs
+    type: Tweak
+  id: 575
+  time: '2026-08-02T23:24:06.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1777
+- author: Vencallium
+  changes:
+  - message: Spawns & vendors for new GOVFOR roles
+    type: Add
+  - message: Fixed We-Yu lab stairs not functioning properly
+    type: Fix
+  id: 576
+  time: '2026-08-03T01:57:50.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1779
+- author: TheHellFireo
+  changes:
+  - message: spawning across connected station z-levels.
+    type: Fix
+  id: 577
+  time: '2026-08-03T02:09:57.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1781
+- author: Vencallium
+  changes:
+  - message: Copious amounts of rechargers to the map
+    type: Add
+  - message: Areas and doors to the ambassadorial complex
+    type: Fix
+  - message: Reagent grinder to the We-Yu lab
+    type: Add
+  - message: All the stairs on the map because they were tweaking
+    type: Fix
+  - message: Infinite amount of miners
+    type: Add
+  - message: Lawyer and Arbiter spawner
+    type: Add
+  id: 578
+  time: '2026-08-03T08:30:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1782
 Name: CMU
 Order: -1

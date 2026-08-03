@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Round.Objectives.Type;
 using Content.Shared.DragDrop;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Movement.Pulling.Events;
+using Robust.Shared.Map;
 
 namespace Content.Server._CMU14.Round.Objectives.Type;
 
@@ -37,24 +38,12 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             keys: string.IsNullOrEmpty(fetchComp.TargetPrototype) ? null : new[] { fetchComp.TargetPrototype },
             wildcard: fetchComp.UseAnyEntity);
 
-        if ((fetchComp.UseAnyEntity || fetchComp.LateActivation) && !string.IsNullOrEmpty(fetchComp.TargetPrototype)
-            && RegisterPreplacedFetchEntities(uid, fetchComp) > 0)
-        {
-            fetchComp.HasSpawned = true;
-            return;
-        }
+        var claimed = string.IsNullOrEmpty(fetchComp.TargetPrototype)
+            ? 0 : fetchComp.Catalog
+                ? ClaimRandomFetchSources(uid, fetchComp, objMap)
+                : RegisterNearbyFetchEntities(uid, fetchComp);
 
-        var markers = ResolveMarkers(objMap, fetchComp.SpawnMarkerId);
-        var spawned = SpawnEntitiesAtMarkers(fetchComp.TargetPrototype, fetchComp.SpawnCount, markers, shuffle: true);
-
-        foreach (var ent in spawned)
-        {
-            EnsureComp<FetchItemComponent>(ent).ObjectiveUid = uid;
-            if (!string.IsNullOrEmpty(fetchComp.SpawnOther))
-                Spawn(fetchComp.SpawnOther, Transform(ent).Coordinates);
-        }
-
-        if (spawned.Count == 0)
+        if (claimed == 0)
         {
             if (fetchComp.LateActivation)
             {
@@ -94,10 +83,11 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
         }
 
         var objMap = Transform(uid).MapID;
+        var searchMaps = GetZNetworkMapIds(objMap);
         var markerQuery = AllEntityQuery<CMUObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out _, out var markerComp, out var markerXform))
         {
-            if (markerXform.MapID != objMap)
+            if (!searchMaps.Contains(markerXform.MapID))
                 continue;
 
             if (!string.IsNullOrEmpty(comp.SpawnMarkerId))
@@ -112,12 +102,12 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
         comp.HasSpawned = false;
     }
 
-    private int RegisterPreplacedFetchEntities(EntityUid objectiveUid, FetchObjectiveComponent comp, float radius = 48f)
+    private int RegisterNearbyFetchEntities(EntityUid objectiveUid, FetchObjectiveComponent comp, float radius = 48f)
     {
         if (!TryComp(objectiveUid, out TransformComponent? xform))
             return 0;
 
-        int registered = 0;
+        var registered = 0;
         foreach (var ent in _lookup.GetEntitiesInRange(xform.Coordinates, radius))
         {
             if (ent == objectiveUid || HasComp<FetchItemComponent>(ent))
@@ -130,6 +120,66 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             registered++;
         }
         return registered;
+    }
+
+    private int ClaimRandomFetchSources(EntityUid objectiveUid, FetchObjectiveComponent comp, MapId objMap)
+    {
+        var preplaced = FindPreplacedFetchEntities(objMap, comp.TargetPrototype);
+        var markers = ResolveMarkers(objMap, comp.SpawnMarkerId);
+
+        var pool = new List<(bool Preplaced, EntityUid Uid)>(preplaced.Count + markers.Count);
+        foreach (var ent in preplaced)
+            pool.Add((true, ent));
+        foreach (var marker in markers)
+            pool.Add((false, marker));
+
+        if (pool.Count == 0)
+            return 0;
+
+        var rng = new Random();
+        for (var n = pool.Count - 1; n > 0; n--)
+        {
+            var k = rng.Next(n + 1);
+            (pool[n], pool[k]) = (pool[k], pool[n]);
+        }
+
+        var toClaim = Math.Min(comp.SpawnCount, pool.Count);
+        for (var i = 0; i < toClaim; i++)
+        {
+            var (isPreplaced, srcUid) = pool[i];
+            if (isPreplaced)
+            {
+                EnsureComp<FetchItemComponent>(srcUid).ObjectiveUid = objectiveUid;
+                continue;
+            }
+
+            var markerXform = Comp<TransformComponent>(srcUid);
+            var ent = Spawn(comp.TargetPrototype, markerXform.Coordinates);
+            EnsureComp<FetchItemComponent>(ent).ObjectiveUid = objectiveUid;
+            if (!string.IsNullOrEmpty(comp.SpawnOther))
+                Spawn(comp.SpawnOther, markerXform.Coordinates);
+            MarkMarkerUsed(srcUid);
+        }
+
+        return toClaim;
+    }
+
+    private List<EntityUid> FindPreplacedFetchEntities(MapId objMap, string targetPrototype)
+    {
+        var found = new List<EntityUid>();
+        var searchMaps = GetZNetworkMapIds(objMap);
+        var query = EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
+        while (query.MoveNext(out var ent, out var meta, out var entXform))
+        {
+            if (HasComp<FetchItemComponent>(ent))
+                continue;
+
+            if (!searchMaps.Contains(entXform.MapID) || meta.EntityPrototype?.ID != targetPrototype)
+                continue;
+
+            found.Add(ent);
+        }
+        return found;
     }
 
     private void OnEntityMetaStartup(ObjectiveWatchedEntityStartupEvent ev)

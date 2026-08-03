@@ -4,7 +4,7 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 08/01/2026 05:57:20
+  time: 08/03/2026 03:46:44
   entityCount: 53811
 maps:
 - 1
@@ -87982,7 +87982,7 @@ entities:
         196,-214: AU14AreaStableGarrisonSewer3
         196,-216: AU14AreaStableGarrisonSewer3
     - type: BecomesStation
-      id: stablegarrison
+      id: StableGarrisonRedux
     - type: SpreaderGrid
     - type: ImplicitRoof
     - type: GridPathfinding

@@ -4,8 +4,8 @@ meta:
   engineVersion: v278.0.0
   forkId: ""
   forkVersion: ""
-  time: 08/01/2026 05:57:14
-  entityCount: 55873
+  time: 08/03/2026 03:46:32
+  entityCount: 55875
 maps:
 - 1
 grids:
@@ -89184,7 +89184,7 @@ entities:
         295,-80: AU14AreaGarrisonOutofBounds
         295,-81: AU14AreaGarrisonOutofBounds
     - type: BecomesStation
-      id: stablegarrison
+      id: StableGarrisonRedux
     - type: SpreaderGrid
     - type: ImplicitRoof
     - type: GridPathfinding
@@ -90975,6 +90975,20 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 278.5,-97.5
+      parent: 1
+- proto: CMApcLowCapacity
+  entities:
+  - uid: 6202
+    components:
+    - type: Transform
+      rot: 3.141592653589793 rad
+      pos: 177.5,-112.5
+      parent: 1
+  - uid: 6211
+    components:
+    - type: Transform
+      rot: -1.5707963267948966 rad
+      pos: 163.5,-73.5
       parent: 1
 - proto: CMUZLevelHatchThroughDown
   entities:

@@ -57,16 +57,26 @@ public sealed partial class SpawnPointSystem : EntitySystem
             // of any entity that lives on that ship.
             var factionShipGrids = new HashSet<EntityUid>(); // grids belonging to THIS faction's ships
             var allShipGrids     = new HashSet<EntityUid>(); // grids belonging to ANY faction ship
+            var factionShipStations = new HashSet<EntityUid>();
+            var allShipStations = new HashSet<EntityUid>();
             var shipQuery = EntityQueryEnumerator<ShipFactionComponent>();
             while (shipQuery.MoveNext(out var shipUid, out var shipFaction))
             {
                 if (string.IsNullOrEmpty(shipFaction.Faction)) continue;
                 allShipGrids.Add(shipUid);
+                var shipStation = _stationSystem.GetOwningStation(shipUid);
+                if (shipStation is { } resolvedShipStation)
+                    allShipStations.Add(resolvedShipStation);
+
                 bool isFactionMatch = isGovfor
                     ? shipFaction.Faction.Equals("govfor", StringComparison.OrdinalIgnoreCase)
                     : shipFaction.Faction.Equals("opfor",  StringComparison.OrdinalIgnoreCase);
                 if (isFactionMatch)
+                {
                     factionShipGrids.Add(shipUid);
+                    if (shipStation is { } resolvedFactionShipStation)
+                        factionShipStations.Add(resolvedFactionShipStation);
+                }
             }
 
             if (factionInShip)
@@ -81,7 +91,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 var pts = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
                 while (pts.MoveNext(out var _, out var sp, out var xform))
                 {
-                    if (xform.GridUid == null || !factionShipGrids.Contains(xform.GridUid.Value))
+                    if (!IsOnShip(xform, factionShipGrids, factionShipStations))
                         continue;
                     if (sp.SpawnType == SpawnPointType.Observer)
                         continue;
@@ -115,7 +125,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
                 while (pts.MoveNext(out var _, out var sp, out var xform))
                 {
                     // Exclude anything on a faction ship
-                    if (xform.GridUid != null && allShipGrids.Contains(xform.GridUid.Value))
+                    if (IsOnShip(xform, allShipGrids, allShipStations))
                         continue;
 
                     if ((sp.SpawnType == SpawnPointType.Job || sp.SpawnType == SpawnPointType.Unset) &&
@@ -184,5 +194,19 @@ public sealed partial class SpawnPointSystem : EntitySystem
 
         args.SpawnResult = _stationSpawning.SpawnPlayerMob(
             spawnLoc, args.Job, args.HumanoidCharacterProfile, args.Station);
+    }
+
+    private bool IsOnShip(
+        TransformComponent xform,
+        IReadOnlySet<EntityUid> shipGrids,
+        IReadOnlySet<EntityUid> shipStations)
+    {
+        if (xform.GridUid is not { } grid)
+            return false;
+
+        if (shipGrids.Contains(grid))
+            return true;
+
+        return _stationSystem.GetOwningStation(grid) is { } station && shipStations.Contains(station);
     }
 }

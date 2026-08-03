@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Dropship.AttachmentPoint;
 using Content.Shared._RMC14.Dropship.Utility.Components;
 using Content.Shared._RMC14.Dropship.Weapon;
 using Content.Shared._RMC14.Emplacements;
+using Content.Shared._RMC14.NPC;
 using Content.Shared._RMC14.PowerLoader;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared.Buckle;
@@ -29,6 +30,7 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCNPCSystem _rmcNpc = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SentrySystem _sentry = default!;
     [Dependency] private SharedSentryTargetingSystem _sentryTargeting = default!;
@@ -232,7 +234,12 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
             }
 
             if (!deploy)
+            {
+                if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                    _rmcNpc.SleepNPC(deployingEntity.Value);
+
                 _container.Insert(deployingEntity.Value, container);
+            }
             else
             {
                 _container.EmptyContainer(container, false, Transform(deployer).Coordinates.Offset(deployOffset));
@@ -241,6 +248,8 @@ public abstract partial class SharedRMCEquipmentDeployerSystem : EntitySystem
 
                 _dropship.TryGetGridFaction(deployer, out var faction);
                 _sentryTargeting.TryApplyDefaultFaction(deployingEntity.Value, faction);
+                if (HasComp<SentryTargetingComponent>(deployingEntity.Value))
+                    _rmcNpc.WakeNPC(deployingEntity.Value);
             }
         }
 

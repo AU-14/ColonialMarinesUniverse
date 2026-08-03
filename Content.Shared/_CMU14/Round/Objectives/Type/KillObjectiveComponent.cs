@@ -7,6 +7,8 @@ public sealed partial class KillObjectiveComponent : Robust.Shared.GameObjects.C
     [DataField] public string? SpecificJob;
     [DataField] public bool SynthOnly;
     [DataField] public bool SpawnMob;
+
+    [DataField] public bool Catalog = true;
     [DataField] public string SpawnMarkerId = string.Empty;
     [DataField] public int SpawnCount = 1;
     [DataField] public string FactionToKill = string.Empty;

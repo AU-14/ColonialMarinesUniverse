@@ -2,6 +2,7 @@ using System.Linq;
 using Content.IntegrationTests.Pair;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Commands;
+using Content.Server.GameTicking.Presets;
 using Content.Server.Mind;
 using Content.Server.Station.Systems;
 using Content.Shared._RMC14.CCVar;
@@ -83,7 +84,13 @@ public sealed class JoinGameCommandTest
         config.SetCVar(RMCCVars.RMCDelayRoundEnd, true);
         await pair.SetJobPriorities((FallbackJob, JobPriority.High));
 
-        await server.WaitPost(() => ticker.StartRound());
+        await server.WaitPost(() =>
+        {
+            // This test supplies its own map and jobs. Do not let the server's default
+            // preset run rules such as RemoveAllJobs and mutate that fixture.
+            ticker.SetGamePreset((GamePresetPrototype) null!);
+            ticker.StartRound();
+        });
         await pair.RunTicksSync(10);
 
         var station = EntityUid.Invalid;

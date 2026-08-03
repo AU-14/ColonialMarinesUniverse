@@ -57,8 +57,6 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         Dictionary<EntityUid, int> dict = new();
         dict.Add(mainMap, 0);
 
-        EntityManager.AddComponents(mainMap, ev.GameMap.ZLevelsComponentOverrides);
-
         var stationsById = new Dictionary<string, EntityUid>(StringComparer.OrdinalIgnoreCase);
         var stations = new HashSet<EntityUid>();
         foreach (var grid in ev.Grids)
@@ -70,6 +68,8 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             if (TryComp<BecomesStationComponent>(grid, out var becomesStation))
                 stationsById[becomesStation.Id] = station;
         }
+
+        EntityManager.AddComponents(mainMap, ev.GameMap.ZLevelsComponentOverrides);
 
         //Loading maps below first
         var depth = -1;
@@ -83,10 +83,10 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
 
             Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {depth}");
             EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
+            AddZLevelGridsToStations(grids, stationsById, stations);
             _map.InitializeMap(mapEnt.Value.Comp.MapId);
             _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{depth}]");
             dict.Add(mapEnt.Value, depth);
-            AddZLevelGridsToStations(grids, stationsById, stations);
             depth--;
         }
 
@@ -102,10 +102,10 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
 
             Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {depth}");
             EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
+            AddZLevelGridsToStations(grids, stationsById, stations);
             _map.InitializeMap(mapEnt.Value.Comp.MapId);
             _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{depth}]");
             dict.Add(mapEnt.Value, depth);
-            AddZLevelGridsToStations(grids, stationsById, stations);
             depth++;
         }
 
@@ -161,4 +161,5 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
             }
         }
     }
+
 }

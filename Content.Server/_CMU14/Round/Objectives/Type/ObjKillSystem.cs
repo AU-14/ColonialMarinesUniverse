@@ -129,10 +129,11 @@ public sealed partial class ObjKillSystem : ObjectiveSystem
 
     private void MarkExistingEntities(EntityUid uid, KillObjectiveComponent comp, CMUObjectiveComponent auComp, MapId objMap)
     {
+        var searchMaps = GetZNetworkMapIds(objMap);
         var query = AllEntityQuery<MetaDataComponent, TransformComponent, NpcFactionMemberComponent>();
         while (query.MoveNext(out var ent, out var meta, out var xform, out var factionComp))
         {
-            if (ent == uid || xform.MapID != objMap)
+            if (ent == uid || !searchMaps.Contains(xform.MapID))
                 continue;
 
             var factions = factionComp.Factions.Select(f => f.ToString().ToLowerInvariant()).ToList();

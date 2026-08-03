@@ -90,6 +90,10 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     }
 
     [PublicAPI]
+    public bool IsMapInNetwork(Entity<CMUZLevelsNetworkComponent> network, EntityUid mapUid)
+        => network.Comp.ZLevelByEntity.ContainsKey(mapUid);
+
+    [PublicAPI]
     public bool TryMapOffset(Entity<CMUZLevelMapComponent?> inputMapUid,
         int offset,
         [NotNullWhen(true)] out Entity<CMUZLevelMapComponent>? outputMapUid)

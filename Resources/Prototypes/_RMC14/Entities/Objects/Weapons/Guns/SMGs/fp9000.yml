@@ -93,7 +93,7 @@
     multiplier: 1
 
 - type: entity
-  parent: CMBaseWeaponSMG
+  parent: RMCWeaponSMGFP9000
   name: FN FP9000/2 rifle
   id: RMCWeaponSMGFP9000PMC
   description: Despite the rather ancient design, the FN FP9K sees frequent use in PMC teams due to its extreme reliability and versatility, allowing it to excel in any situation, especially due to the fact that they use the patented, official version of the gun, which has received several upgrades and tuning to its design over time.
@@ -108,44 +108,9 @@
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
     sprite: _RMC14/Objects/Weapons/Guns/SMGs/fp9000pmc.rsi
-  - type: Gun
-    shotsPerBurst: 3
-    soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/pdw90_shot.ogg
-  - type: RMCSelectiveFire
-    baseFireModes:
-    - SemiAuto
-    - Burst
-    - FullAuto
-    recoilWielded: 1
-    recoilUnwielded: 1
-    scatterWielded: 5
-    scatterUnwielded: 14
-    baseFireRate: 4
-    burstScatterMult: 7
-    modifiers:
-      Burst:
-        fireDelay: 0.0999
-        maxScatterModifier: 1.65
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
-      FullAuto:
-        maxScatterModifier: 1.85
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 20
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.35
     accuracyMultiplierUnwielded: 0.75
-  - type: MagazineAmmoProvider
-    autoEject: false
-    soundAutoEject: null
-  - type: WieldableSpeedModifiers
-    base: 0.725
-    light: 1
-    medium: 1
-    heavy: 1
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -165,7 +130,9 @@
           tags:
           - RMCAttachmentBarrelCharger
           - RMCAttachmentExtendedBarrel
+          - RMCAttachmentExtendedCompensator
           - RMCAttachmentRecoilCompensator
+          - RMCM5Bayonet
       rmc-aslot-rail:
         whitelist:
           tags:
@@ -178,13 +145,6 @@
         whitelist:
           tags:
           - RMCAttachmentLaserSight
-  - type: AttachableHolderVisuals
-    offsets:
-      rmc-aslot-rail: 0.06, .15
-      rmc-aslot-barrel: 0.81, 0.04
-      rmc-aslot-underbarrel: 0.58, -0.25
-  - type: GunDamageModifier
-    multiplier: 1
 
 - type: entity
   parent: CMMagazineRifleBase
