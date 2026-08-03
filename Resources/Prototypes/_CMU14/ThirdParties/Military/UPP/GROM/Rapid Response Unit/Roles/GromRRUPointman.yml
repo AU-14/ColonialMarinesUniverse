@@ -1,0 +1,102 @@
+- type: job
+  parent: CMJobBase
+  id: AU14UPPGROMRRUPointman
+  roundSide: ThirdParty
+  roundForce: GROM
+  roundRole: AU14UPPGROMRRUPointman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spp_sapper
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadGROM # for future when there's a dedicated map for them, right now does nothing
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: au14-job-prefix-govforspecialist-marksmanRMC
+  - type: Language
+    spokenLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    understoodLanguages:
+    - Polish
+    - Russian
+    - Spanish
+    - Mandarin
+    - German
+    - TacticalSignLanguage
+    currentLanguage: Polish
+    defaultLanguage: Polish
+
+  name: au14-job-name-govforspecialist-marksmanRMC
+  description: au14-uppgrom-rru-description
+  playTimeTracker: AU14JobUPPGROMPointman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UPP_SeniorSergeant:
+      entity: AU14ChevronUPPNISeniorSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMPointman
+        time: 36000 # 10 hours
+    UPP_Sergeant:
+      entity: AU14ChevronUPPNISergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUPPGROMPointman
+        time: 18000 # 5 hours
+    UPP_Plutonowy:
+      entity: AU14ChevronUPPNIPlutonowy
+      requirements: []
+  spawnMenuRoleName: UPP GROM Pointman (Rapid Response Unit)
+  startingGear: AU14GearUPPGROMRRUPointman
+  greeting: au14-uppgrom-rru-greeting
+  icon: "CMJobIconEmpty"
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-uppgrom-squadleader
+  accessGroups:
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUPPGROM
+  id: AU14UPPGROMRRUPointman
+  name: UPP GROM Pointman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadGROM
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-govforspecialist-marksmanRMC
+    description: au14-uppgrom-description
+    reregister: false
+    job: AU14UPPGROMRRUPointman
+    raffle:
+      settings: short
+    rules: au14-uppgrom-rules
+
+- type: startingGear
+  id: AU14GearUPPGROMRRUPointman
+  equipment:
+    id: AU14IDCardUPPGROMPointman
+    outerClothing: RMCOuterClothingExternalWebbingBrownFull
+    jumpsuit: AU14FatiguesUPPGROMClean
+    shoes: RMCBootsSPPFilled
+    head: AU14Altyn
+    belt: AU14ShotgunShellLoadingRigUPPRRU
+    pocket1: AU14PouchShotgunLargeBuckshot
+    pocket2: AU14PouchIFAKFill
+    back: RMCSatchelSPPFull
+    ears: RMCHeadsetGROM
+    suitstorage: RMCWeaponShotgunType23
