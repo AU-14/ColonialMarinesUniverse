@@ -4,13 +4,15 @@ using Content.Shared.Roles;
 using Content.Server.Storage.EntitySystems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Collections;
+using Robust.Shared.Prototypes;
+using Robust.UnitTesting;
 
 namespace Content.IntegrationTests.Tests.Roles;
 
 [TestFixture]
 public sealed class StartingGearPrototypeStorageTest : GameTest
 {
-    public override PoolSettings PoolSettings => new() { Connected = true, Dirty = true };
+    public override PoolSettings PoolSettings => new() { Connected = false, Dirty = true };
 
     /// <summary>
     /// Checks that a storage fill on a StartingGearPrototype will properly fill
@@ -66,6 +68,57 @@ public sealed class StartingGearPrototypeStorageTest : GameTest
             }
 
             mapSystem.DeleteMap(testMap.MapId);
+        });
+    }
+
+    [Test]
+    public async Task StartingGearUsesValidEntityPrototypes()
+    {
+        await AssertValidStartingGearEntities(Pair.Server);
+        await AssertValidStartingGearEntities(Pair.Client);
+    }
+
+    private static async Task AssertValidStartingGearEntities(RobustIntegrationTest.IntegrationInstance instance)
+    {
+        await instance.WaitAssertion(() =>
+        {
+            var gears = instance.ProtoMan
+                .EnumeratePrototypes<StartingGearPrototype>()
+                .Where(gear => !gear.Abstract)
+                .OrderBy(gear => gear.ID);
+
+            Assert.Multiple(() =>
+            {
+                foreach (var gear in gears)
+                {
+                    foreach (var (slot, entity) in gear.Equipment)
+                    {
+                        Assert.That(
+                            instance.ProtoMan.HasIndex<EntityPrototype>(entity),
+                            Is.True,
+                            $"Starting gear {gear.ID} has unknown equipment prototype {entity} in slot {slot}.");
+                    }
+
+                    foreach (var entity in gear.Inhand)
+                    {
+                        Assert.That(
+                            instance.ProtoMan.HasIndex<EntityPrototype>(entity),
+                            Is.True,
+                            $"Starting gear {gear.ID} has unknown in-hand prototype {entity}.");
+                    }
+
+                    foreach (var (slot, entities) in gear.Storage)
+                    {
+                        foreach (var entity in entities)
+                        {
+                            Assert.That(
+                                instance.ProtoMan.HasIndex<EntityPrototype>(entity),
+                                Is.True,
+                                $"Starting gear {gear.ID} has unknown storage prototype {entity} in slot {slot}.");
+                        }
+                    }
+                }
+            });
         });
     }
 }

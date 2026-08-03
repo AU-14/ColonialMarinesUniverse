@@ -266,7 +266,7 @@ public sealed partial class MentorManager : IPostInjectInit
         try
         {
             var msg = $"SERVER: {args.Channel.UserName} has disconnected.";
-            SendMentorMessage(args.Channel.UserId, args.Channel.UserName, null, null, msg, args.Channel, false);
+            SendMentorMessage(args.Channel.UserId, args.Channel.UserName, null, null, msg, null, false);
         }
         catch (Exception e)
         {
@@ -383,7 +383,7 @@ public sealed partial class MentorManager : IPostInjectInit
             return;
 
         var recipients = new HashSet<INetChannel>();
-        if (destinationChannel != null)
+        if (destinationChannel is { IsConnected: true })
             recipients.Add(destinationChannel);
 
         var isMentor = false;
@@ -392,7 +392,8 @@ public sealed partial class MentorManager : IPostInjectInit
             if (author != null && active.UserId == author.UserId)
                 isMentor = true;
 
-            recipients.Add(active.Channel);
+            if (active.Channel.IsConnected)
+                recipients.Add(active.Channel);
         }
 
         var isAdmin = false;

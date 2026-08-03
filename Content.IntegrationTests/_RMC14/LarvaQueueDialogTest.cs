@@ -20,6 +20,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using LarvaQueueSystem = Content.Server._RMC14.Xenonids.JoinXeno.LarvaQueueSystem;
 
 namespace Content.IntegrationTests._RMC14;
 
@@ -341,10 +342,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -395,10 +393,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -530,9 +525,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued));
+            AssertQueueStatus(entMan, ghost, hive, null);
         });
 
         await pair.CleanReturnAsync();
@@ -611,10 +604,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -690,10 +680,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -736,10 +723,7 @@ public sealed class LarvaQueueJoinXenoUiTest
         {
             BypassRoundstartDelay(entMan, ghost);
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued));
-            Assert.That(entry.Position, Is.EqualTo(0));
+            AssertQueueStatus(entMan, ghost, hive, null);
         });
 
         await pair.CleanReturnAsync();
@@ -792,10 +776,7 @@ public sealed class LarvaQueueJoinXenoUiTest
         {
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await server.WaitAssertion(() =>
@@ -822,10 +803,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -899,10 +877,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -978,10 +953,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.GetComponent<MindContainerComponent>(newLarva).HasMind, Is.True);
 
             OpenJoinXenoUi(entMan, ghost);
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -1079,10 +1051,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             Assert.That(entMan.HasComponent<GhostComponent>(ghost), Is.True);
             OpenJoinXenoUi(entMan, ghost);
 
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.NotQueued));
-            Assert.That(entry.Position, Is.EqualTo(0));
+            AssertQueueStatus(entMan, ghost, hive, null);
         });
 
         await server.WaitAssertion(() =>
@@ -1090,10 +1059,7 @@ public sealed class LarvaQueueJoinXenoUiTest
             entMan.EventBus.RaiseLocalEvent(ghost, new JoinLarvaQueueEvent(entMan.GetNetEntity(hive)));
             OpenJoinXenoUi(entMan, ghost);
 
-            var state = GetJoinXenoState(entMan, ghost);
-            var entry = state.Entries.Single(e => e.Hive == entMan.GetNetEntity(hive));
-            Assert.That(entry.Status, Is.EqualTo(JoinXenoQueueStatus.Queued));
-            Assert.That(entry.Position, Is.EqualTo(1));
+            AssertQueueStatus(entMan, ghost, hive, 1);
         });
 
         await pair.CleanReturnAsync();
@@ -1151,11 +1117,24 @@ public sealed class LarvaQueueJoinXenoUiTest
         });
     }
 
-    private static JoinXenoBuiState GetJoinXenoState(IEntityManager entMan, EntityUid ghost)
+    private static void AssertQueueStatus(
+        IEntityManager entMan,
+        EntityUid ghost,
+        EntityUid hive,
+        int? expectedPosition)
     {
-        var ui = entMan.System<SharedUserInterfaceSystem>();
-        Assert.That(ui.TryGetUiState<JoinXenoBuiState>(ghost, JoinXenoUIKey.Key, out var state), Is.True);
-        return (JoinXenoBuiState) state!;
+        var actor = entMan.GetComponent<ActorComponent>(ghost);
+        var ev = new GetLarvaQueueStatusEvent(actor.PlayerSession.UserId);
+        entMan.EventBus.RaiseEvent(EventSource.Local, ev);
+
+        if (expectedPosition is null)
+        {
+            Assert.That(ev.Queues.ContainsKey(hive), Is.False);
+            return;
+        }
+
+        Assert.That(ev.Queues.TryGetValue(hive, out var status), Is.True);
+        Assert.That(status.Position, Is.EqualTo(expectedPosition));
     }
 
     private static async Task<string> Disconnect(TestPair pair)
