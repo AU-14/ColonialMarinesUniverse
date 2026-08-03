@@ -23,36 +23,81 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
     [DataField]
     public Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> Markings { get; set; } = new();
 
+    [DataField]
+    public string RegulationHairStyleId { get; set; } = HairStyles.DefaultHairStyle;
+
+    [DataField]
+    public Color RegulationHairColor { get; set; } = Color.Black;
+
+    [DataField]
+    public string RegulationFacialHairStyleId { get; set; } = HairStyles.DefaultFacialHairStyle;
+
+    [DataField]
+    public Color RegulationFacialHairColor { get; set; } = Color.Black;
+
     public HumanoidCharacterAppearance(
         Color eyeColor,
         Color skinColor,
-        Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> markings)
+        Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> markings,
+        string? regulationHairStyleId = null,
+        Color? regulationHairColor = null,
+        string? regulationFacialHairStyleId = null,
+        Color? regulationFacialHairColor = null)
     {
         EyeColor = ClampColor(eyeColor);
         SkinColor = ClampColor(skinColor);
         Markings = markings;
+        RegulationHairStyleId = regulationHairStyleId ?? HairStyles.DefaultHairStyle;
+        RegulationHairColor = ClampColor(regulationHairColor ?? Color.Black);
+        RegulationFacialHairStyleId = regulationFacialHairStyleId ?? HairStyles.DefaultFacialHairStyle;
+        RegulationFacialHairColor = ClampColor(regulationFacialHairColor ?? Color.Black);
     }
 
     public HumanoidCharacterAppearance(HumanoidCharacterAppearance other) :
-        this(other.EyeColor, other.SkinColor, new(other.Markings))
+        this(other.EyeColor,
+            other.SkinColor,
+            new(other.Markings),
+            other.RegulationHairStyleId,
+            other.RegulationHairColor,
+            other.RegulationFacialHairStyleId,
+            other.RegulationFacialHairColor)
     {
 
     }
 
     public HumanoidCharacterAppearance WithEyeColor(Color newColor)
     {
-        return new(newColor, SkinColor, Markings);
+        return new(newColor, SkinColor, Markings, RegulationHairStyleId, RegulationHairColor,
+            RegulationFacialHairStyleId, RegulationFacialHairColor);
     }
 
     public HumanoidCharacterAppearance WithSkinColor(Color newColor)
     {
-        return new(EyeColor, newColor, Markings);
+        return new(EyeColor, newColor, Markings, RegulationHairStyleId, RegulationHairColor,
+            RegulationFacialHairStyleId, RegulationFacialHairColor);
     }
 
     public HumanoidCharacterAppearance WithMarkings(Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> newMarkings)
     {
-        return new(EyeColor, SkinColor, newMarkings);
+        return new(EyeColor, SkinColor, newMarkings, RegulationHairStyleId, RegulationHairColor,
+            RegulationFacialHairStyleId, RegulationFacialHairColor);
     }
+
+    public HumanoidCharacterAppearance WithRegulationHairStyleName(string value) =>
+        new(EyeColor, SkinColor, Markings, value, RegulationHairColor,
+            RegulationFacialHairStyleId, RegulationFacialHairColor);
+
+    public HumanoidCharacterAppearance WithRegulationHairColor(Color value) =>
+        new(EyeColor, SkinColor, Markings, RegulationHairStyleId, value,
+            RegulationFacialHairStyleId, RegulationFacialHairColor);
+
+    public HumanoidCharacterAppearance WithRegulationFacialHairStyleName(string value) =>
+        new(EyeColor, SkinColor, Markings, RegulationHairStyleId, RegulationHairColor,
+            value, RegulationFacialHairColor);
+
+    public HumanoidCharacterAppearance WithRegulationFacialHairColor(Color value) =>
+        new(EyeColor, SkinColor, Markings, RegulationHairStyleId, RegulationHairColor,
+            RegulationFacialHairStyleId, value);
 
     public static HumanoidCharacterAppearance DefaultWithSpecies(ProtoId<SpeciesPrototype> species, Sex sex)
     {
@@ -209,7 +254,11 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
         return new HumanoidCharacterAppearance(
             eyeColor,
             skinColor,
-            validatedMarkings);
+            validatedMarkings,
+            appearance.RegulationHairStyleId,
+            appearance.RegulationHairColor,
+            appearance.RegulationFacialHairStyleId,
+            appearance.RegulationFacialHairColor);
     }
 
     public bool Equals(HumanoidCharacterAppearance? other)
@@ -218,6 +267,10 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
         if (ReferenceEquals(this, other)) return true;
         return EyeColor.Equals(other.EyeColor) &&
                SkinColor.Equals(other.SkinColor) &&
+               RegulationHairStyleId == other.RegulationHairStyleId &&
+               RegulationHairColor.Equals(other.RegulationHairColor) &&
+               RegulationFacialHairStyleId == other.RegulationFacialHairStyleId &&
+               RegulationFacialHairColor.Equals(other.RegulationFacialHairColor) &&
                MarkingManager.MarkingsAreEqual(Markings, other.Markings);
     }
 
@@ -228,7 +281,8 @@ public sealed partial class HumanoidCharacterAppearance : IEquatable<HumanoidCha
 
     public override int GetHashCode()
     {
-        return HashCode.Combine(EyeColor, SkinColor, Markings);
+        return HashCode.Combine(EyeColor, SkinColor, Markings, RegulationHairStyleId, RegulationHairColor,
+            RegulationFacialHairStyleId, RegulationFacialHairColor);
     }
 
     public HumanoidCharacterAppearance Clone()

@@ -43,16 +43,7 @@ public sealed partial class HumanoidCharacterProfile
         PlaytimePerks = other.PlaytimePerks;
         XenoPrefix = other.XenoPrefix;
         XenoPostfix = other.XenoPostfix;
-        Allegiance = other.Allegiance;
-        Origin = other.Origin;
-        Synthetic = other.Synthetic;
-        _gamemodeJobPriorities = other._gamemodeJobPriorities.ToDictionary(
-            pair => pair.Key,
-            pair => new Dictionary<ProtoId<JobPrototype>, JobPriority>(pair.Value));
-        _threatPreferences = new HashSet<ProtoId<Content.Shared._CMU14.Threats.ThreatPrototype>>(other._threatPreferences);
-        _gamemodeThreatPreferences = other._gamemodeThreatPreferences.ToDictionary(
-            pair => pair.Key,
-            pair => new HashSet<ProtoId<Content.Shared._CMU14.Threats.ThreatPrototype>>(pair.Value));
+        CopyCmuFrom(other);
     }
 
     private bool RmcMemberwiseEquals(HumanoidCharacterProfile other)
@@ -65,8 +56,7 @@ public sealed partial class HumanoidCharacterProfile
                XenoPrefix == other.XenoPrefix &&
                XenoPostfix == other.XenoPostfix &&
                Allegiance == other.Allegiance &&
-               Origin == other.Origin &&
-               Synthetic == other.Synthetic;
+               CmuMemberwiseEquals(other);
     }
 
     private void AddRmcHash(ref HashCode hashCode)
@@ -78,13 +68,12 @@ public sealed partial class HumanoidCharacterProfile
         hashCode.Add(PlaytimePerks);
         hashCode.Add(XenoPrefix);
         hashCode.Add(XenoPostfix);
-        hashCode.Add(Allegiance);
-        hashCode.Add(Origin);
-        hashCode.Add(Synthetic);
+        AddCmuHash(ref hashCode);
     }
 
     private void EnsureRmcValid(ICommonSession session, IDependencyCollection collection, IPrototypeManager prototypeManager)
     {
+        EnsureCmuValid(collection.Resolve<Robust.Shared.Configuration.IConfigurationManager>());
         ArmorPreference = ArmorPreference switch
         {
             ArmorPreference.Random => ArmorPreference.Random,

@@ -5,10 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Content.Server.Afk;
 using Content.Server.Database;
+using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared.Body;
+using Content.Shared.AU14.Allegiance;
+using Content.Shared.AU14.Origin;
 using Content.Shared.CCVar;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Humanoid;
@@ -189,7 +192,7 @@ namespace Content.Server.Preferences.Managers
                 loadouts[role.RoleName] = loadout;
             }
 
-            return new HumanoidCharacterProfile(
+            var humanoid = new HumanoidCharacterProfile(
                 profile.CharacterName,
                 profile.FlavorText,
                 species,
@@ -201,7 +204,15 @@ namespace Content.Server.Preferences.Managers
                 (
                     Color.FromHex(profile.EyeColor),
                     Color.FromHex(profile.SkinColor),
-                    markings
+                    markings,
+                    profile.RegulationHairName ?? HairStyles.DefaultHairStyle,
+                    profile.RegulationHairColor is { } regulationHairColor
+                        ? Color.FromHex(regulationHairColor)
+                        : Color.Black,
+                    profile.RegulationFacialHairName ?? HairStyles.DefaultFacialHairStyle,
+                    profile.RegulationFacialHairColor is { } regulationFacialHairColor
+                        ? Color.FromHex(regulationFacialHairColor)
+                        : Color.Black
                 ),
                 spawnPriority,
                 jobs,
@@ -221,7 +232,89 @@ namespace Content.Server.Preferences.Managers
                     profile.NamedItems?.SentryName))
                 .WithPlaytimePerks(profile.PlaytimePerks)
                 .WithXenoPrefix(profile.XenoPrefix)
-                .WithXenoPostfix(profile.XenoPostfix);
+                .WithXenoPostfix(profile.XenoPostfix)
+                .WithAllegiance(profile.Allegiance is { } allegiance
+                    ? new ProtoId<AllegiancePrototype>(allegiance)
+                    : (ProtoId<AllegiancePrototype>?) null)
+                .WithOrigin(profile.Origin is { } origin
+                    ? new ProtoId<OriginPrototype>(origin)
+                    : (ProtoId<OriginPrototype>?) null)
+                .WithSynthetic(profile.Synthetic)
+                .WithShortExamine(profile.ShortExamine)
+                .WithFullDescription(profile.FullDescription)
+                .WithMedicalRecord(profile.MedicalRecord)
+                .WithCriminalRecord(profile.CriminalRecord)
+                .WithGeneralRecord(profile.GeneralRecord)
+                .WithHeight(profile.Height)
+                .WithWeight(profile.Weight)
+                .WithBuild(Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average)
+                .WithHideMetaInformation(profile.HideMetaInformation);
+
+            humanoid = RestoreGamemodeJobPriorities(humanoid, profile.GamemodeJobPriorities);
+            humanoid = RestoreGamemodeSetPreferences(humanoid, profile.GamemodeAntagPreferences,
+                static (value, gamemode, id) => value.WithGamemodeAntagPreference(
+                    gamemode, new ProtoId<AntagPrototype>(id), true));
+            humanoid = RestoreGamemodeSetPreferences(humanoid, profile.GamemodeThreatPreferences,
+                static (value, gamemode, id) => value.WithGamemodeThreatPreference(
+                    gamemode, new ProtoId<ThreatPrototype>(id), true));
+            return humanoid;
+        }
+
+        private static HumanoidCharacterProfile RestoreGamemodeJobPriorities(
+            HumanoidCharacterProfile humanoid,
+            string? raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+                return humanoid;
+
+            try
+            {
+                var preferences = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, int>>>(raw);
+                if (preferences == null)
+                    return humanoid;
+                foreach (var (gamemode, jobs) in preferences)
+                {
+                    foreach (var (job, priority) in jobs)
+                    {
+                        if (Enum.IsDefined((JobPriority) priority))
+                            humanoid = humanoid.WithGamemodeJobPriority(
+                                gamemode,
+                                new ProtoId<JobPrototype>(job),
+                                (JobPriority) priority);
+                    }
+                }
+            }
+            catch (JsonException)
+            {
+                // Invalid legacy data is ignored and replaced when the profile is next saved.
+            }
+            return humanoid;
+        }
+
+        private static HumanoidCharacterProfile RestoreGamemodeSetPreferences(
+            HumanoidCharacterProfile humanoid,
+            string? raw,
+            Func<HumanoidCharacterProfile, string, string, HumanoidCharacterProfile> add)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+                return humanoid;
+
+            try
+            {
+                var preferences = JsonSerializer.Deserialize<Dictionary<string, string[]>>(raw);
+                if (preferences == null)
+                    return humanoid;
+                foreach (var (gamemode, ids) in preferences)
+                {
+                    foreach (var id in ids)
+                        humanoid = add(humanoid, gamemode, id);
+                }
+            }
+            catch (JsonException)
+            {
+                // Invalid legacy data is ignored and replaced when the profile is next saved.
+            }
+            return humanoid;
         }
 
         private async void HandleSelectCharacterMessage(MsgSelectCharacter message)

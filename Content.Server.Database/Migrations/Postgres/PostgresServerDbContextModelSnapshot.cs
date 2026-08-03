@@ -1112,15 +1112,33 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("integer")
                         .HasColumnName("age");
 
+                    b.Property<string>("Allegiance")
+                        .HasColumnType("text")
+                        .HasColumnName("allegiance");
+
                     b.Property<string>("ArmorPreference")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("armor_preference");
 
+                    b.Property<string>("Build")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("build");
+
                     b.Property<string>("CharacterName")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("char_name");
+
+                    b.Property<string>("CriminalRecord")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("criminal_record");
 
                     b.Property<string>("EyeColor")
                         .IsRequired()
@@ -1142,10 +1160,36 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("flavor_text");
 
+                    b.Property<string>("FullDescription")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("full_description");
+
+                    b.Property<string>("GamemodeAntagPreferences")
+                        .HasColumnType("text")
+                        .HasColumnName("gamemode_antag_preferences");
+
+                    b.Property<string>("GamemodeJobPriorities")
+                        .HasColumnType("text")
+                        .HasColumnName("gamemode_job_priorities");
+
+                    b.Property<string>("GamemodeThreatPreferences")
+                        .HasColumnType("text")
+                        .HasColumnName("gamemode_threat_preferences");
+
                     b.Property<string>("Gender")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("gender");
+
+                    b.Property<string>("GeneralRecord")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("general_record");
 
                     b.Property<string>("HairColor")
                         .IsRequired()
@@ -1157,13 +1201,41 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("hair_name");
 
+                    b.Property<string>("Height")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("height");
+
+                    b.Property<bool>("HideMetaInformation")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("boolean")
+                        .HasDefaultValue(false)
+                        .HasColumnName("hide_meta_information");
+
                     b.Property<JsonDocument>("Markings")
                         .HasColumnType("jsonb")
                         .HasColumnName("markings");
 
+                    b.Property<string>("MedicalRecord")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("medical_record");
+
                     b.Property<JsonDocument>("OrganMarkings")
                         .HasColumnType("jsonb")
                         .HasColumnName("organ_markings");
+
+                    b.Property<string>("Origin")
+                        .HasColumnType("text")
+                        .HasColumnName("origin");
+
+                    b.Property<string>("Platoon")
+                        .HasColumnType("text")
+                        .HasColumnName("platoon");
 
                     b.Property<bool>("PlaytimePerks")
                         .ValueGeneratedOnAdd()
@@ -1179,10 +1251,33 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("integer")
                         .HasColumnName("pref_unavailable");
 
+                    b.Property<string>("RegulationFacialHairColor")
+                        .HasColumnType("text")
+                        .HasColumnName("regulation_facial_hair_color");
+
+                    b.Property<string>("RegulationFacialHairName")
+                        .HasColumnType("text")
+                        .HasColumnName("regulation_facial_hair_name");
+
+                    b.Property<string>("RegulationHairColor")
+                        .HasColumnType("text")
+                        .HasColumnName("regulation_hair_color");
+
+                    b.Property<string>("RegulationHairName")
+                        .HasColumnType("text")
+                        .HasColumnName("regulation_hair_name");
+
                     b.Property<string>("Sex")
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("sex");
+
+                    b.Property<string>("ShortExamine")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("text")
+                        .HasDefaultValue("")
+                        .HasColumnName("short_examine");
 
                     b.Property<string>("SkinColor")
                         .IsRequired()
@@ -1202,9 +1297,23 @@ namespace Content.Server.Database.Migrations.Postgres
                         .HasColumnType("text")
                         .HasColumnName("species");
 
+                    b.Property<bool>("Synthetic")
+                        .HasColumnType("boolean")
+                        .HasColumnName("synthetic");
+
+                    b.Property<string>("ThreatPreference")
+                        .HasColumnType("text")
+                        .HasColumnName("threat_preference");
+
                     b.Property<string>("Voice")
                         .HasColumnType("text")
                         .HasColumnName("voice");
+
+                    b.Property<int>("Weight")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasDefaultValue(160)
+                        .HasColumnName("weight");
 
                     b.Property<string>("XenoPostfix")
                         .IsRequired()

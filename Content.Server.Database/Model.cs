@@ -335,6 +335,7 @@ namespace Content.Server.Database
                 .HasDefaultValue(HwidType.Legacy);
 
             RMCModelConfiguration.OnModelCreating(modelBuilder);
+            CMUModelConfiguration.OnModelCreating(modelBuilder);
             ModelBan.OnModelCreating(modelBuilder);
             ModelCustomVoteLog.OnModelCreating(modelBuilder);
         }

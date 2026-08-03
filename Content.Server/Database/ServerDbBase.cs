@@ -246,6 +246,10 @@ namespace Content.Server.Database
             profile.FacialHairName = facialHairMarking?.MarkingId ?? HairStyles.DefaultFacialHairStyle;
             profile.HairColor = (hairMarking?.MarkingColors[0] ?? Color.Black).ToHex();
             profile.FacialHairColor = (facialHairMarking?.MarkingColors[0] ?? Color.Black).ToHex();
+            profile.RegulationHairName = appearance.RegulationHairStyleId;
+            profile.RegulationHairColor = appearance.RegulationHairColor.ToHex();
+            profile.RegulationFacialHairName = appearance.RegulationFacialHairStyleId;
+            profile.RegulationFacialHairColor = appearance.RegulationFacialHairColor.ToHex();
 
             profile.Slot = slot;
             profile.PreferenceUnavailable = (DbPreferenceUnavailableMode) humanoid.PreferenceUnavailable;
@@ -320,8 +324,46 @@ namespace Content.Server.Database
             profile.PlaytimePerks = humanoid.PlaytimePerks;
             profile.XenoPrefix = humanoid.XenoPrefix;
             profile.XenoPostfix = humanoid.XenoPostfix;
+            profile.Allegiance = humanoid.Allegiance?.Id;
+            profile.Origin = humanoid.Origin?.Id;
+            profile.Synthetic = humanoid.Synthetic;
+            profile.ShortExamine = humanoid.ShortExamine;
+            profile.FullDescription = humanoid.FullDescription;
+            profile.MedicalRecord = humanoid.MedicalRecord;
+            profile.CriminalRecord = humanoid.CriminalRecord;
+            profile.GeneralRecord = humanoid.GeneralRecord;
+            profile.Height = humanoid.Height;
+            profile.Weight = humanoid.Weight;
+            profile.Build = humanoid.Build.ToString();
+            profile.HideMetaInformation = humanoid.HideMetaInformation;
+            profile.GamemodeJobPriorities = SerializeGamemodeJobPriorities(humanoid.GamemodeJobPriorities);
+            profile.GamemodeAntagPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeAntagPreferences);
+            profile.GamemodeThreatPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeThreatPreferences);
 
             return profile;
+        }
+
+        private static string? SerializeGamemodeJobPriorities(
+            IReadOnlyDictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> preferences)
+        {
+            if (preferences.Count == 0)
+                return null;
+
+            return JsonSerializer.Serialize(preferences.ToDictionary(
+                gamemode => gamemode.Key,
+                gamemode => gamemode.Value.ToDictionary(job => job.Key.Id, job => (int) job.Value)));
+        }
+
+        private static string? SerializeGamemodeSetPreferences<T>(
+            IReadOnlyDictionary<string, HashSet<ProtoId<T>>> preferences)
+            where T : class, IPrototype
+        {
+            if (preferences.Count == 0)
+                return null;
+
+            return JsonSerializer.Serialize(preferences.ToDictionary(
+                gamemode => gamemode.Key,
+                gamemode => gamemode.Value.Select(id => id.Id).OrderBy(id => id).ToArray()));
         }
         #endregion
 
