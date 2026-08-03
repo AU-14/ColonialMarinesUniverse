@@ -6,6 +6,9 @@ using Content.Server.GameTicking.Events;
 using Content.Server.Maps;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Prototypes;
+using Content.Shared._RMC14.Rules;
+using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.AU14;
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
@@ -98,33 +101,37 @@ namespace Content.Server.GameTicking
 
             var maps = new List<GameMapPrototype>();
 
-            // the map might have been force-set by something
-            // (i.e. votemap or forcemap)
-            var mainStationMap = _gameMapManager.GetSelectedMap();
-            if (mainStationMap == null)
+            var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
+            if (selectedPlanet != null)
             {
-                // otherwise set the map using the config rules
-                _gameMapManager.SelectMapByConfigRules();
-                mainStationMap = _gameMapManager.GetSelectedMap();
-            }
-
-            // Small chance the above could return no map.
-            // ideally SelectMapByConfigRules will always find a valid map
-            if (mainStationMap != null)
-            {
-                maps.Add(mainStationMap);
+                if (ProtoMan.TryIndex<GameMapPrototype>(selectedPlanet.MapId, out var planetMap))
+                    maps.Add(planetMap);
+                else
+                    _sawmill.Error($"Selected CMU planet map prototype '{selectedPlanet.MapId}' does not exist.");
             }
             else
             {
-                throw new Exception("invalid config; couldn't select a valid station map!");
+                // The map might have been force-set by something (i.e. votemap or forcemap).
+                var mainStationMap = _gameMapManager.GetSelectedMap();
+                if (mainStationMap == null)
+                {
+                    _gameMapManager.SelectMapByConfigRules();
+                    mainStationMap = _gameMapManager.GetSelectedMap();
+                }
+
+                if (mainStationMap != null)
+                    maps.Add(mainStationMap);
+                else
+                    throw new Exception("invalid config; couldn't select a valid station map!");
             }
 
             if (CurrentPreset?.MapPool != null &&
                 ProtoMan.TryIndex<GameMapPoolPrototype>(CurrentPreset.MapPool, out var pool) &&
-                !pool.Maps.Contains(mainStationMap.ID))
+                maps.Count > 0 &&
+                !pool.Maps.Contains(maps[0].ID))
             {
                 var msg = Loc.GetString("game-ticker-start-round-invalid-map",
-                    ("map", mainStationMap.MapName),
+                    ("map", maps[0].MapName),
                     ("mode", Loc.GetString(CurrentPreset.ModeTitle)));
                 Log.Debug(msg);
                 SendServerMessage(msg);
@@ -146,10 +153,48 @@ namespace Content.Server.GameTicking
                 DebugTools.Assert(!_map.IsInitialized(mapId));
 
                 if (i == 0)
+                {
                     DefaultMap = mapId;
+
+                    if (selectedPlanet != null)
+                    {
+                        var mapEntity = _map.GetMap(mapId);
+                        EnsureComp<RMCPlanetComponent>(mapEntity);
+                        EnsureComp<TacticalMapComponent>(mapEntity);
+                    }
+                }
             }
 
+            LoadSelectedFactionShip(_auRoundSystem.GetSelectedGovforShip(), "govfor");
+            LoadSelectedFactionShip(_auRoundSystem.GetSelectedOpforShip(), "opfor");
+
             LoadAdminFaxHubMap();
+        }
+
+        private void LoadSelectedFactionShip(string? mapPrototypeId, string faction)
+        {
+            if (string.IsNullOrWhiteSpace(mapPrototypeId))
+                return;
+
+            if (!ProtoMan.TryIndex<GameMapPrototype>(mapPrototypeId, out var shipMap))
+            {
+                _sawmill.Error($"Selected {faction} ship map prototype '{mapPrototypeId}' does not exist.");
+                return;
+            }
+
+            var grids = LoadGameMap(
+                shipMap,
+                out _,
+                DeserializationOptions.Default with { InitializeMaps = true });
+
+            foreach (var grid in grids)
+            {
+                var factionComponent = EnsureComp<ShipFactionComponent>(grid);
+                factionComponent.Faction = faction;
+                EnsureComp<Content.Server.Station.Components.BecomesStationComponent>(grid);
+            }
+
+            _sawmill.Info($"Loaded CMU {faction} ship '{mapPrototypeId}' with {grids.Count} root entities.");
         }
 
         private static readonly ResPath AdminFaxHubMapPath = new("/Maps/Admin/adminfaxhub.yml");

@@ -36,6 +36,8 @@ public sealed partial class GameTicker
     /// </summary>
     public int? ResetCountdown;
 
+    private readonly List<EntityUid> _presetRuleEntities = new();
+
     private bool StartPreset(ICommonSession[] origReadyPlayers, bool force)
     {
         _sawmill.Info($"Attempting to start preset '{CurrentPreset?.ID}'");
@@ -129,6 +131,7 @@ public sealed partial class GameTicker
 
         Preset = preset;
         Decoy = decoy;
+        _auRoundSystem.SetPreset(preset);
         ValidateMap();
         UpdateInfoText();
 
@@ -197,13 +200,16 @@ public sealed partial class GameTicker
 
     private bool AddGamePresetRules()
     {
+        _presetRuleEntities.Clear();
+
         if (DummyTicker || Preset == null)
             return false;
 
         CurrentPreset = Preset;
         foreach (var rule in Preset.Rules)
         {
-            AddFilteredGameRule(rule);
+            if (AddFilteredGameRule(rule) is { } ruleEntity)
+                _presetRuleEntities.Add(ruleEntity);
         }
 
         return true;
@@ -220,8 +226,18 @@ public sealed partial class GameTicker
 
     public void StartGamePresetRules()
     {
-        // May be touched by the preset during init.
-        var rules = new List<EntityUid>(GetAddedGameRules());
+        // CMU setup rules are order-dependent: platoon marker replacement must run
+        // before job rules consume the ship stations, and RemoveAllJobs must run
+        // before AddGovfor/AddOpfor. Entity queries do not preserve prototype order.
+        var started = new HashSet<EntityUid>();
+        foreach (var rule in _presetRuleEntities.ToArray())
+        {
+            StartGameRule(rule);
+            started.Add(rule);
+        }
+
+        // The preset may add more rules while its declared rules are starting.
+        var rules = new List<EntityUid>(GetAddedGameRules().Where(rule => !started.Contains(rule)));
         foreach (var rule in rules)
         {
             StartGameRule(rule);

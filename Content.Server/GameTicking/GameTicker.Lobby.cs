@@ -1,14 +1,16 @@
+using System.Collections.Generic;
 using System.Linq;
+using Content.Server.AU14.Round;
 using Content.Shared.GameTicking;
-using Content.Server.Station.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
-using System.Text;
 
 namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
+        [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+
         [ViewVariables]
         private readonly Dictionary<NetUserId, PlayerGameStatus> _playerGameStatuses = new();
 
@@ -40,6 +42,30 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(GetInfoMsg(), Filter.Empty().AddPlayers(_playerManager.NetworkedSessions));
         }
 
+        private string GetPlanetMapName()
+        {
+            var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
+            if (!string.IsNullOrWhiteSpace(selectedPlanet?.VoteName))
+                return selectedPlanet.VoteName;
+
+            var selectedMap = _gameMapManager.GetSelectedMap();
+            if (!string.IsNullOrWhiteSpace(selectedMap?.MapName))
+                return selectedMap.MapName;
+
+            if (!string.IsNullOrWhiteSpace(selectedPlanet?.MapId))
+                return selectedPlanet.MapId;
+
+            return Loc.GetString("game-ticker-no-map-selected-plain");
+        }
+
+        private string LocalizeOrRaw(string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return string.Empty;
+
+            return Loc.TryGetString(text, out var localized) ? localized : text;
+        }
+
         private string GetInfoText()
         {
             var preset = CurrentPreset ?? Preset;
@@ -51,29 +77,12 @@ namespace Content.Server.GameTicking
             var playerCount = $"{_playerManager.PlayerCount}";
             var readyCount = _playerGameStatuses.Values.Count(x => x == PlayerGameStatus.ReadyToPlay);
 
-            var stationNames = new StringBuilder();
-            var query =
-                EntityQueryEnumerator<StationJobsComponent, StationSpawningComponent, MetaDataComponent>();
-
-            var foundOne = false;
-
-            while (query.MoveNext(out _, out _, out var meta))
-            {
-                foundOne = true;
-                if (stationNames.Length > 0)
-                    stationNames.Append('\n');
-
-                stationNames.Append(meta.EntityName);
-            }
-
-            if (!foundOne)
-            {
-                stationNames.Append(_gameMapManager.GetSelectedMap()?.MapName ??
-                                    Loc.GetString("game-ticker-no-map-selected"));
-            }
-
-            var gmTitle = (Decoy == null) ? Loc.GetString(preset.ModeTitle) : Loc.GetString(Decoy.ModeTitle);
-            var desc = (Decoy == null) ? Loc.GetString(preset.Description) : Loc.GetString(Decoy.Description);
+            var govforShip = _auRoundSystem.GetSelectedGovforShip();
+            var opforShip = _auRoundSystem.GetSelectedOpforShip();
+            var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name;
+            var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name;
+            var gmTitle = LocalizeOrRaw((Decoy ?? preset).ModeTitle);
+            var desc = LocalizeOrRaw((Decoy ?? preset).Description);
             return Loc.GetString(
                 RunLevel == GameRunLevel.PreRoundLobby
                     ? "game-ticker-get-info-preround-text"
@@ -81,7 +90,12 @@ namespace Content.Server.GameTicking
                 ("roundId", RoundId),
                 ("playerCount", playerCount),
                 ("readyCount", readyCount),
-                ("mapName", stationNames.ToString()),
+                ("planetName", GetPlanetMapName()),
+                ("govforShip", string.IsNullOrWhiteSpace(govforShip) ? "None" : govforShip),
+                ("opforShip", string.IsNullOrWhiteSpace(opforShip) ? "None" : opforShip),
+                ("govforPlatoon", string.IsNullOrWhiteSpace(govforPlatoon) ? "None" : govforPlatoon),
+                ("opforPlatoon", string.IsNullOrWhiteSpace(opforPlatoon) ? "None" : opforPlatoon),
+                ("mapName", GetPlanetMapName()),
                 ("gmTitle", gmTitle),
                 ("desc", desc));
         }

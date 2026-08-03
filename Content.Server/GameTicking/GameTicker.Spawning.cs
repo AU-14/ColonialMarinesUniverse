@@ -59,6 +59,18 @@ namespace Content.Server.GameTicking
             return spawnableStations;
         }
 
+        private static Dictionary<NetUserId, HumanoidCharacterProfile> GetGamemodeAssignmentProfiles(
+            Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
+            string? presetId)
+        {
+            if (string.IsNullOrWhiteSpace(presetId))
+                return profiles.ShallowClone();
+
+            return profiles.ToDictionary(
+                pair => pair.Key,
+                pair => pair.Value.WithJobPriorities(pair.Value.GetJobPrioritiesForGamemode(presetId)));
+        }
+
         private void SpawnPlayers(List<ICommonSession> readyPlayers,
             Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
             bool force)
@@ -88,10 +100,12 @@ namespace Content.Server.GameTicking
                 }
             }
 
+            var presetId = CurrentPreset?.ID ?? Preset?.ID ?? _auRoundSystem.SelectedPreset?.ID;
+            var assignmentProfiles = GetGamemodeAssignmentProfiles(profiles, presetId);
             var spawnableStations = GetSpawnableStations();
-            var assignedJobs = _stationJobs.AssignJobs(profiles, spawnableStations);
+            var assignedJobs = _stationJobs.AssignJobs(assignmentProfiles, spawnableStations);
 
-            _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, profiles, spawnableStations);
+            _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, assignmentProfiles, spawnableStations);
 
             // Calculate extended access for stations.
             var stationJobCounts = spawnableStations.ToDictionary(e => e, _ => 0);
