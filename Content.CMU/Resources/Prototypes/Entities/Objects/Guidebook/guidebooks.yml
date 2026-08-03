@@ -1,0 +1,12 @@
+# LAWS (colonial)
+- type: entity
+  parent: RMCGuidebookBase
+  id: AU14GuidebookLawColonial
+  name: colonial civil code
+  description: "A thick, well-thumbed but battered volume bearing the seal of the Orbital Court and the Colonial Administration. The historical first-edition of the Colonial Civil Code, printed long before the latest reforms. Its pages are considered dated being full of precedents that modern jurists dispute with dubious legal reasoning and clauses that have never been updated. No two lawyers can agree on what half of it actually means, still, every colonial office seems to have one, and it remains in circulation as a reminder that law is a living thing. It is affectionately called: 'The Blue Book'."
+  components:
+  - type: Sprite
+    sprite: Objects/Misc/Books/cclaw.rsi
+  - type: GuideHelp
+    guides:
+    - AU14CCLaw

@@ -1,0 +1,59 @@
+- type: entity
+  parent: RMCPouchToolsSoc
+  id: AU14PouchToolsFilledSupportSynthetic
+  suffix: Filled, Support Synthetic
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWirecutter
+    - id: CMWrench
+    - id: CMCrowbar
+    - id: RMCCableCoil30
+    - id: RMCPowerCellHigh
+    - id: CMWelderSmall
+    - id: CMMultitool
+
+- type: entity
+  parent: RMCPouchGeneral
+  id: AU14PouchPoliceEquipmentSupportSynth
+  name: police equipment pouch
+  description: A general-purpose pouch used to carry police equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/soctools.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,11,1
+    whitelist:
+      tags:
+      - SecBeltEquip
+      - Taser
+      - Flashlight
+      - CMMagazinePistol
+      - RMCShellShotgun
+      - RMCMagazineRevolver
+      - Donut
+      - RMCGrenadeFlashBang
+      - Radio
+      - Grenade
+      components:
+      - Handcuff
+      - Flash
+      - FlashOnTrigger
+      - Stunbaton
+      - ForensicScanner
+      - MeleeWeapon
+      - Gun
+      - RMCLighter
+  - type: FixedItemSizeStorage
+  - type: StorageFill
+    contents:
+    - id: CMFlash
+    - id: AU14TeleBaton
+    - id: RMCHandcuffs
+    - id: RMCHandcuffs
+    - id: RMCHandcuffs
+#    - id: Pepperspray # TODO RMC14
+    - id: ForensicScanner # TODO RMC14 cm clue scanner

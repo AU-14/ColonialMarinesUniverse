@@ -1,0 +1,263 @@
+- type: entity
+  parent: CMBeltMarine
+  id: AU14BeltMarineRMC
+  name: L70 pattern ammo load rig
+  description: Standart-issue Royal Marines Commando rig. It consists of a modular belt with various clips. This is the standard variant, designed for bulk ammunition-carrying operations.
+  components:
+  - type: Sprite
+    sprite: Clothing/RMC/belt/ammo.rsi
+  - type: Clothing
+    sprite: Clothing/RMC/belt/ammo.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: AU14BeltMarineRMC
+  id: AU14BeltMarineRMCFullL90
+  suffix: Full, L90
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineRifleL90extended
+    - id: AU14MagazineRifleL90extended
+    - id: AU14MagazineRifleL90
+    - id: AU14MagazineRifleL90
+    - id: AU14MagazineRifleL90
+
+- type: entity
+  parent: AU14BeltUtilityGeneralBlack
+  id: AU14BeltUtilityGeneralRMC
+  name: L26 general utility pouch
+  description: A small, lightweight pouch that can be clipped onto kestrel armour to provide additional storage. The newer model, while uncomfortable, can also be clipped around the waist.
+  components:
+  - type: Sprite
+    sprite: Clothing/RMC/belt/general.rsi
+  - type: Clothing
+    slots:
+    - suitStorage
+    - belt
+    sprite: Clothing/RMC/belt/general.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: CMBeltMedical
+  id: AU14BeltMedicalRMC
+  name: L75 pattern medical storage rig
+  description: Standart-issue Royal Marines Commando rig. It consists of a modular belt with various clips. This version is a less common configuration, designed to transport bulkier medical supplies.
+  components:
+  - type: Sprite
+    sprite: Clothing/RMC/belt/medical.rsi
+  - type: Clothing
+    sprite: Clothing/RMC/belt/medical.rsi
+
+- type: entity
+  parent: RMCBeltHolsterPistol
+  id: AU14BeltHolsterPistolRMC
+  name: L165 pattern general pistol holster rig
+  description: Standart-issue Royal Marines Commando rig. It consists of a modular belt with various clips. This version has a holster assembly that allows one to carry the most common pistols. It also contains side pouches that can store most pistol magazines.
+  components:
+  - type: Sprite
+    sprite: Clothing/RMC/belt/holster.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: _m77
+      map: [ "_m77_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984
+      map: [ "m1984_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: mk80
+      map: [ "mk80_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: b92fs
+      map: [ "b92fs_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m13
+      map: [ "m13_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: highpower
+      map: [ "mk45_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: tt
+      map: [ "t73_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: l54
+      map: [ "l54_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: deagle
+      map: [ "handcannon_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: g_deagle
+      map: [ "g_handcannon_fill" ]
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: c_deagle
+      map: [ "co_handcannon_fill" ]
+    - state: icon-front
+      map: [ "holstered" ]
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: Clothing/RMC/belt/holster.rsi
+    slots:
+    - suitStorage
+    - belt
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: AU14BeltHolsterPistolRMC
+  id: AU14BeltHolsterPistolRMCFullL165A1
+  suffix: Full, L165A1
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14L165A1Filled
+    - id: AU14MagazinePistolL165A1
+      amount: 6
+
+- type: entity
+  parent: CMBeltUtilityCombat
+  id: AU14BeltUtilityCombatRMC
+  name: L177 pattern combat toolbelt rig
+  description: Standart-issue Royal Marines Commando rig of the RMC for engineers conducting repairs within combat zones. It consists of a modular belt with various clips and pouches for tools along with a holster for a sidearm. Due to the bulk of the sidearm, it is unable to hold as many tools as its standard counterpart.
+  components:
+  - type: Sprite
+    sprite: Clothing/RMC/belt/combat_utility.rsi
+    layers:
+    - state: icon
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984 # TODO RMC14 per-gun underlay
+      offset: -0.3125, -0.09375
+      map: [ "enum.CMHolsterLayers.Fill" ]
+      visible: false
+    - sprite: Clothing/RMC/belt/combat_utility.rsi
+      state: icon-front
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: Clothing/RMC/belt/combat_utility.rsi
+
+- type: entity
+  parent: AU14BeltUtilityCombatRMC
+  id: AU14BeltUtilityCombatRMCFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWrench
+    - id: RMCWelderPVE
+    - id: CMCrowbar
+    - id: CMWirecutter
+    - id: RMCCableCoil30
+    - id: CMMultitool
+    - id: CMEntrenchingTool
+
+- type: entity
+  parent: CMBeltMedicBag
+  id: AU14BeltMedicBagRMC
+  name: L75 pattern lifesaver bag
+  description: Standart-issue Royal Marines Commando rig. This configuration mounts a duffel bag filled with a range of injectors and light medical supplies, and is common among medics.
+  components:
+  - type: Sprite
+    sprite: Clothing/RMC/belt/medicbag.rsi
+  - type: Clothing
+    sprite: Clothing/RMC/belt/medicbag.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: RMCM276ShotgunShellLoadingRig
+  id: AU14ShotgunShellLoadingRigRMC
+  name: L70 pattern shotgun shell loading rig
+  description: An ammunition belt designed to hold shotgun shells. # or individual bullets. TODO RMC14
+  components:
+  - type: Sprite
+    sprite: Clothing/RMC/belt/shotgun.rsi
+    layers:
+    - state: icon
+    - state: sixth
+      visible: false
+    - state: third
+      visible: false
+    - state: half
+      visible: false
+    - state: twothirds
+      visible: false
+    - state: fivesixths
+      visible: false
+    - state: full
+      visible: false
+  - type: Clothing
+    sprite: Clothing/RMC/belt/shotgun.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+
+- type: entity
+  parent: AU14ShotgunShellLoadingRigRMC
+  id: AU14ShotgunShellLoadingRigRMCFullBuckshot
+  suffix: Full, Buckshot
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunBuckshot
+      amount: 14
+
+- type: entity
+  parent: CMBeltBaseStorage
+  id: AU14BeltMortarGrenadierRMC
+  name: L84 pattern ammo load rig
+  description: An L84 pattern load-bearing rig configured to carry support ammunition for either the L53A1 light mortar or L164A3 multiple grenade launcher, along with a sidearm & magazine. Made of special rot-resistant fabric.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Belt/mortar/snow-urban.rsi
+    layers:
+    - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
+      state: m1984 # TODO RMC14 per-gun underlay
+      offset: 0.375, 0
+      map: [ "enum.CMHolsterLayers.Fill" ]
+      visible: false
+    - state: icon
+    - state: half
+      map: [ "openLayer" ]
+    - state: full
+      map: [ "closedLayer" ]
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Belt/mortar/snow-urban.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,17,1
+    whitelist:
+      components:
+      - MortarShell
+      tags:
+      - Sidearm
+      - AU14LauncherCompatibleGrenadeRMC
+      - AU14WeaponLauncherL164A3
+  #      - # TODO RMC14 pistol, revolver, flaregun
+  - type: FixedItemSizeStorage
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-one-gun
+      count: 2
+      whitelist:
+        components:
+        - Gun
+    - popup: rmc-storage-limit-max-shells
+      count: 8
+      whitelist:
+        components:
+        - MortarShell
+  - type: CMHolster
+    whitelist:
+      components:
+      - Gun
+  - type: ItemCamouflage
+    camouflageVariations:
