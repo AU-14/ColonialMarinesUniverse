@@ -1,0 +1,219 @@
+- type: entity
+  parent: CMComputerDropshipNavigationERT
+  id: CMComputerDropshipNavigationERTThirdParty
+  suffix: Third Party
+  components:
+  - type: AccessReader
+    access: []
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true
+
+- type: entity
+  parent: CMComputerDropshipNavigationERTTSE
+  id: CMComputerDropshipNavigationERTTSEThirdParty
+  suffix: Third Party
+  components:
+  - type: AccessReader
+    access: []
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true
+
+- type: entity
+  parent: CMComputerDropshipNavigationERTCLF
+  id: CMComputerDropshipNavigationERTCLFThirdParty
+  suffix: Third Party
+  components:
+  - type: AccessReader
+    access: []
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true
+
+- type: entity
+  parent: CMBaseStructure
+  id: AU14GovforComputerDropshipWeaponsSmall
+  name: dropship weapons computer
+  suffix: Govfor, small
+  description: A compact computer that can manage equipment, weapons and simulations installed on the dropship.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: security_cam
+    layers: []
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: WallMount
+    arc: 360
+  - type: ActivatableUI
+    key: enum.DropshipTerminalWeaponsUi.Key
+  - type: AccessReader
+    access: [["AU14AccessGovforFTL"], ["AU14AccessGovforPilot"]]
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.DropshipTerminalWeaponsUi.Key:
+        type: DropshipWeaponsBui
+  - type: DropshipTerminalWeapons
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
+  - type: TacticalMapComputer
+    faction: govfor
+  - type: RequiresSkill
+    skills:
+      RMCSkillPilot: 1
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    netsync: true
+    energy: 1
+    offset: "0,0"
+    color: "#FFEFD2"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipDestinationHome
+  name: dropship destination(home)
+  description: Defines a valid location for the dropships to FTL to when piloted. (home)
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipDestination
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipDestinationOpforWhitelist
+  name: dropship destination
+  description: Defines a valid location for the dropships to FTL to when piloted.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipDestination
+    FactionControlling: opfor
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipDestinationThirdPartyWhitelist
+  name: dropship destination (third party)
+  description: Defines a valid location for third party dropships to FTL to when piloted.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipDestination
+    FactionControlling: thirdparty
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+- type: entity
+  parent: CMDropshipDestinationThirdPartyWhitelist
+  id: CMDropshipDestinationThirdPartyReturn
+  name: Return to Deep Space
+  description: Sends a third party dropship back to its holding pattern.
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipDestinationGovforWhitelist
+  name: dropship destination (govfor)
+  description: Defines a valid location for government dropships to FTL to when piloted.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipDestination
+    FactionControlling: govfor
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: AU14GovforComputerDropshipPilotSmall
+  name: dropship navigation computer
+  suffix: Govfor, small
+  description: A compact computer that can pilot the dropship and designate tactical landings.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: security_cam
+    layers: []
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: WallMount
+    arc: 360
+  - type: DropshipNavigationComputer
+    canTacticalLand: true
+    tacticalLandFootprintOverride: 9, 15
+  - type: RequiresSkill
+    skills:
+      RMCSkillPilot: 1
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    netsync: true
+    energy: 1
+    offset: "0,0"
+    color: "#FFEFD2"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+  - type: WhitelistedShuttle
+    faction: govfor
+    ShuttleType: Dropship
+
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMComputerDropshipNavigationThirdParty
+  name: dropship navigation computer (Third Party)
+  components:
+  - type: WhitelistedShuttle
+    faction: thirdparty
+    ShuttleType: Dropship
+    autoReturn: true
+  - type: AccessReader
+    access: []
+
+- type: entity
+  parent: CMComputerDropshipNavigationThirdParty
+  id: CMComputerDropshipNavigationOldThirdParty
+  components:
+  - type: Sprite
+    sprite: Structures/Machines/shuttle_console.rsi
+    state: consoleold

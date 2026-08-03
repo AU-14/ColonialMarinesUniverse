@@ -1,12 +1,6 @@
 # Compatibility prototypes required by the pre-rebase USS Bush Redux maps.
 # Keep aliases and legacy marker data here so each modernization can be audited.
 
-# Modern hydroponics leaves still inherit this pre-RMC compatibility base.
-- type: entity
-  abstract: true
-  parent: ProduceBase
-  id: ProduceBaseRuminant
-
 # The legacy warship station intentionally excluded cargo/evacuation systems.
 # Current StandardUNMCWarship gained those parents after the rebase, so the
 # Bush keeps its original station composition here.
@@ -49,12 +43,6 @@
 - type: entity
   parent: RMCComputerIntel
   id: RMCComputerIntelGovfor
-
-- type: entity
-  parent: RMCComputerIntel
-  id: ComputerObjectivesGovfor
-  name: GOVFOR objectives console
-  description: A legacy objectives console using the current intelligence interface.
 
 - type: entity
   parent: CMAirlockGlass
@@ -110,24 +98,6 @@
   parent: RMCAICore
   id: AU14AICoreApolloGOVFOR
   name: APOLLO Central A.I.
-
-- type: entity
-  parent: RMCStairs
-  id: AU14FlightStairs
-  components:
-  - type: Sprite
-    state: rampbottom
-    color: "#a6aeab"
-  - type: Physics
-    bodyType: Static
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeAabb
-          bounds: "-0.49,-0.49,0.49,0.49"
-        density: 1000
-        hard: false
 
 # Shepherd beach overlays are mapped to the current equivalent water entities.
 - type: entity

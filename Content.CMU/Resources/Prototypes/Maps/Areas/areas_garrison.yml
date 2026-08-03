@@ -1,0 +1,835 @@
+- type: entity
+  parent: RMCAreaBase
+  id: AU14AreaGarrison
+  name: Stable Garrison
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_kutjevo.rsi
+    state: oob
+  - type: Area
+    buildSpecial: true
+    powerNet: ground
+    minimapColor: '#97A0A6CC'
+
+- type: entity
+  parent: AU14AreaGarrison
+  id: AU14AreaGarrisonOutdoors
+  name: Garrison - Outdoors
+  abstract: true
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: true
+    mortarFire: true
+    lasing: true
+    medevac: true
+    paradropping: true
+    OB: true
+    supplyDrop: true
+    weatherEnabled: true
+
+- type: entity
+  parent: AU14AreaGarrison
+  id: AU14AreaGarrisonIndoors
+  name: Garrison - Indoors
+  abstract: true
+  components:
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    weatherEnabled: false
+
+- type: entity
+  parent: AU14AreaGarrison
+  id: AU14AreaGarrisonCaves
+  name: Garrison - Caves
+  abstract: true
+  components:
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    weatherEnabled: false
+
+- type: entity
+  parent: AU14AreaGarrison
+  id: AU14AreaGarrisonFullProtection
+  name: Garrison - Safe Zone
+  abstract: true
+  components:
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaGarrisonOutofBounds
+  name: Out of Bounds
+  components:
+  - type: Sprite
+    state: oob
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaGarrisonOutofBoundsCreators
+  name: Creator's Rotunda - Out of Bounds
+  components:
+  - type: Sprite
+    state: oob
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonLZ
+  name: Stable Garrison - Landing Zones
+  components:
+  - type: Sprite
+    state: lz_pad
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonReq
+  name: Stable Garrison - Requisitions
+  components:
+  - type: Sprite
+    state: kutjevo
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonPillboxes
+  name: Stable Garrison - Pillboxes
+  components:
+  - type: Sprite
+    state: stone_fields
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonPrep
+  name: Stable Garrison - Preperations Rooms
+  components:
+  - type: Sprite
+    state: power
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonMedbay
+  name: Stable Garrison - Medbay
+  components:
+  - type: Sprite
+    state: med1
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonBrig
+  name: Stable Garrison - Brig
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonCIC
+  name: Stable Garrison - CIC
+  components:
+  - type: Sprite
+    state: weed_int
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonFrontGate
+  name: Stable Garrison - Front Gate
+  components:
+  - type: Sprite
+    state: rf_overlook
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonNorth
+  name: Stable Garrison - North
+  components:
+  - type: Sprite
+    state: rf_dunes
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSouth
+  name: Stable Garrison - South
+  components:
+  - type: Sprite
+    state: rf_bridge
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonMotorPool
+  name: Stable Garrison - Motor Pool
+  components:
+  - type: Sprite
+    state: foremans
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreetSpaceport
+  name: Spaceport Way
+  components:
+  - type: Sprite
+    state: colony_caves_0
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreetUoAMedicalServiceRoad
+  name: UoA Medical Service Road
+  components:
+  - type: Sprite
+    state: colony_caves_1
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreetSchafer
+  name: Schafer Memorial Drive
+  components:
+  - type: Sprite
+    state: colony_caves_2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonYutaniDrive
+  name: Yutani Drive
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonCarParkCorpo
+  name: Corporate Car Park
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreet1stAvenue
+  name: 1st Avenue
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreet2ndAvenue
+  name: 2nd Avenue
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreet3rdAvenue
+  name: 3rd Avenue
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreet4thAvenue
+  name: 4th Avenue
+  components:
+  - type: Sprite
+    state: colony_caves_3
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonStreetMainStreet
+  name: Main Street
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonCMBOutpost
+  name: CMB Outpost
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonCMBOutpostCheckpoint
+  name: CMB Checkpoint
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonCMBNETunnels
+  name: Northeast Tunnels
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonFiltration
+  name: Filtration
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonFiltrationOverflow
+  name: Filtration Overflow
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonEastMaintTunnel
+  name: Eastern Maintenance Tunnels
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonCLHouse
+  name: Corporate Liaison's House
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonHouseUpscale
+  name: Upscale House
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonGeoThermalGenerators
+  name: Colony Generator Room
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonGeneratorPlaza
+  name: Generator Room Plaza
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonSouthWestAlley
+  name: South West Alley
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonWasteWater
+  name: Waste Water Collection Pool
+  components:
+  - type: Sprite
+    state: ext
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonWeyMart
+  name: WeyMart Corner Store
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonAlbacetireNews
+  name: Albacetire News
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonHotelmuylimpio
+  name: Section VII Student Housing
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonDistributionEngineering
+  name: Colony Engineering & Distribution
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonWeyShop
+  name: WeyShop Outlet Mall
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonClothingShop
+  name: Modern Thread Clothing Store
+  components:
+  - type: Sprite
+    state: med0
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSurplusStore
+  name: Jack's Military Surplus
+  components:
+  - type: Sprite
+    state: med2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonGroceryStore
+  name: Weymart Grocery+
+  components:
+  - type: Sprite
+    state: med2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonPsychology
+  name: Arthur & Brothers Psychology
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonManagementOffice
+  name: Weyland-Yutani Colony Management Office
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonERO
+  name: Emergency Response Office
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonCMBMotorpool
+  name: CMB Precinct Motorpool
+  components:
+  - type: Sprite
+    state: botany2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonSouthEastColonyGrounds
+  name: Southwest Colony Grounds
+  components:
+  - type: Sprite
+    state: botany2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonSouthCentralColonyGrounds
+  name: South Central Colony Grounds
+  components:
+  - type: Sprite
+    state: botany2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonSouthEast2ColonyGrounds
+  name: Southeast Colony Grounds
+  components:
+  - type: Sprite
+    state: botany2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonNorthWestColonyGrounds
+  name: Northwest Colony Grounds
+  components:
+  - type: Sprite
+    state: botany2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonNorthEastColonyGrounds
+  name: Northeast Colony Grounds
+  components:
+  - type: Sprite
+    state: botany2
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonHospitalParking
+  name: Albacetire Regional Spaceport Parking
+  components:
+  - type: Sprite
+    state: construction3
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonCMBPrecinct
+  name: CMB Precinct
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonHospital
+  name: University of Albacetire Hospital
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonBar
+  name: Hank's Spirits & Arcade
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonNorthApartments
+  name: Lewiston Apartments North
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSouthApartments
+  name: Lewiston Apartments South
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonBiologySchool
+  name: UoA - School of Xenobiology
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSpaceportATC
+  name: Albacetire Regional Spaceport ATC
+  components:
+  - type: Sprite
+    state: med_ext
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSpaceport
+  name: Albacetire Regional Spaceport
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSpaceportAdmin
+  name: Colonial Administration
+  components:
+  - type: Sprite
+    state: med1
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonNorthDesert
+  name: Northern Jungle
+  components:
+  - type: Sprite
+    state: construction3
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonSouthDesert
+  name: Southern Jungle
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaGarrisonTemp
+  name: Garrison (TEMP)
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaGarrisonSouthDesertTunnel
+  name: Southern Jungle Tunnel
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonCaves
+  id: AU14AreaGarrisonCaves2
+  name: Western Caves
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonCaves
+  id: AU14AreaGarrisonCaves3
+  name: Deep Western Caves
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonCaves
+  id: AU14AreaGarrisonMiningCamp
+  name: Mining Camp
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#714401CC'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewers
+  name: Stable Garrison - Sewers West
+  components:
+  - type: Sprite
+    state: colony_caves_1
+  - type: Area
+    minimapColor: '#573e19'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewer1
+  name: Stable Garrison - Sewer Canal
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewer2
+  name: Stable Garrison - Sewer Northeast
+  components:
+  - type: Sprite
+    state: colony_caves_2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonSewer3
+  name: Stable Garrison - Sewer Southeast
+  components:
+  - type: Sprite
+    state: int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonWeyland
+  name: Stable Garrison - Weyland-Yutani Bioweapons Lab
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonWeyland1
+  name: Stable Garrison - Weyland-Yutani Facility Enterance
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'

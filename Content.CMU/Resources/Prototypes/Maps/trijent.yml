@@ -1,0 +1,18 @@
+- type: gameMap
+  id: AUTrijentMap
+  mapName: Trijent
+  mapPath: /Maps/trijent.yml
+  mapsBelow:
+  - /Maps/trijent_below.yml
+  mapsAbove:
+  - /Maps/trijent_above.yml
+  minPlayers: 0
+  maxPlayers: 500
+  maxRandomOffset: 0
+  randomRotation: false
+  stations:
+    AUTrijent:
+      stationProto: StandardUNMCWarship
+      components:
+        - type: StationNameSetup
+          mapNameTemplate: 'Raijin Hydroelectric'
