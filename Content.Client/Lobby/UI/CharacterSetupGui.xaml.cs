@@ -99,6 +99,15 @@ namespace Content.Client.Lobby.UI
         private void ApplyCrtPalette()
         {
             Stylesheet = _stylesheetManager.SheetNanotrasen;
+
+            if (!StyleNano.CrtUiEnabled)
+            {
+                BackgroundPanel.PanelOverride = null;
+                HeaderDividerPanel.PanelOverride = null;
+                BodyDividerPanel.PanelOverride = null;
+                return;
+            }
+
             BackgroundPanel.PanelOverride = CreateBackgroundStyleBox();
             HeaderDividerPanel.PanelOverride = CreateDividerStyleBox();
             BodyDividerPanel.PanelOverride = CreateDividerStyleBox();

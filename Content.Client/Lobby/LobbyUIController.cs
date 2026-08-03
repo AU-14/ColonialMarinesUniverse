@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Client.Guidebook;
 using Content.Client.Lobby.UI;
 using Content.Client.Players.PlayTimeTracking;
@@ -15,12 +16,15 @@ using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Client.Lobby;
 
 public sealed partial class LobbyUIController : UIController, IOnStateEntered<LobbyState>, IOnStateExited<LobbyState>
 {
+    private const float HighJobPreviewScrollDelay = 2.75f;
+
     [Dependency] private IClientPreferencesManager _preferencesManager = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
     [Dependency] private IFileDialogManager _dialogManager = default!;
@@ -35,6 +39,12 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     private CharacterSetupGui? _characterSetup;
     private HumanoidProfileEditor? _profileEditor;
     private CharacterSetupGuiSavePanel? _savePanel;
+    private int _lobbyPreviewJobIndex;
+    private float _lobbyPreviewJobTimer;
+    private string _lobbyPreviewJobSignature = string.Empty;
+    private readonly List<LobbyHighJobPreviewEntry> _lobbyPreviewJobs = new();
+    private HumanoidCharacterProfile? _lobbyPreviewJobsProfile;
+    private bool _lobbyPreviewJobsDirty = true;
 
     /// <summary>
     /// This is the characher preview panel in the chat. This should only update if their character updates.
@@ -83,6 +93,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             _profileEditor.RefreshAntags();
             _profileEditor.RefreshSynthetic();
             _profileEditor.RefreshJobs();
+            _profileEditor.RefreshThreatPreferences();
         }
     }
 
@@ -100,6 +111,9 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
             {
                 _profileEditor.RefreshJobs();
             }
+
+            if (obj.WasModified<Content.Shared._CMU14.Threats.ThreatPrototype>())
+                _profileEditor.RefreshThreatPreferences();
 
             if (obj.WasModified<LoadoutPrototype>() ||
                 obj.WasModified<LoadoutGroupPrototype>() ||
@@ -144,6 +158,13 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
 
         _characterSetup = null;
         _profileEditor = null;
+        ResetLobbyPreviewJobs();
+    }
+
+    public override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+        UpdateLobbyPreviewJobRotation(args.DeltaSeconds);
     }
 
     /// <summary>
@@ -174,11 +195,84 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         {
             PreviewPanel.ProfilePreviewSpriteView.ClearPreview();
             PreviewPanel.SetSummaryText(string.Empty);
+            PreviewPanel.SetJobText(string.Empty);
+            ResetLobbyPreviewJobs();
             return;
         }
 
-        PreviewPanel.ProfilePreviewSpriteView.LoadPreview(humanoid);
+        var entry = GetCurrentLobbyPreviewJob(humanoid);
+        PreviewPanel.ProfilePreviewSpriteView.LoadPreview(humanoid, entry?.Job);
         PreviewPanel.SetSummaryText(humanoid.Summary);
+        PreviewPanel.SetJobText(entry?.DisplayName ?? string.Empty);
+    }
+
+    private void UpdateLobbyPreviewJobRotation(float deltaSeconds)
+    {
+        if (PreviewPanel == null ||
+            _stateManager.CurrentState is not LobbyState ||
+            _preferencesManager.Preferences?.SelectedCharacter is not HumanoidCharacterProfile humanoid)
+        {
+            return;
+        }
+
+        if (RefreshLobbyPreviewJobs(humanoid))
+        {
+            RefreshLobbyPreview();
+            return;
+        }
+
+        if (_lobbyPreviewJobs.Count <= 1)
+            return;
+
+        _lobbyPreviewJobTimer += deltaSeconds;
+        if (_lobbyPreviewJobTimer < HighJobPreviewScrollDelay)
+            return;
+
+        _lobbyPreviewJobTimer -= HighJobPreviewScrollDelay;
+        _lobbyPreviewJobIndex = (_lobbyPreviewJobIndex + 1) % _lobbyPreviewJobs.Count;
+        RefreshLobbyPreview();
+    }
+
+    private LobbyHighJobPreviewEntry? GetCurrentLobbyPreviewJob(HumanoidCharacterProfile profile)
+    {
+        RefreshLobbyPreviewJobs(profile);
+        if (_lobbyPreviewJobs.Count == 0)
+            return null;
+
+        _lobbyPreviewJobIndex %= _lobbyPreviewJobs.Count;
+        return _lobbyPreviewJobs[_lobbyPreviewJobIndex];
+    }
+
+    private bool RefreshLobbyPreviewJobs(HumanoidCharacterProfile profile)
+    {
+        if (!_lobbyPreviewJobsDirty && ReferenceEquals(_lobbyPreviewJobsProfile, profile))
+            return false;
+
+        var previousSignature = _lobbyPreviewJobSignature;
+        _lobbyPreviewJobs.Clear();
+        _lobbyPreviewJobs.AddRange(LobbyHighJobPreview.GetHighPriorityJobs(profile, _prototypeManager));
+        _lobbyPreviewJobsProfile = profile;
+        _lobbyPreviewJobsDirty = false;
+        _lobbyPreviewJobSignature = LobbyHighJobPreview.GetSignature(_lobbyPreviewJobs);
+
+        var changed = previousSignature != _lobbyPreviewJobSignature;
+        if (changed)
+        {
+            _lobbyPreviewJobIndex = 0;
+            _lobbyPreviewJobTimer = 0;
+        }
+
+        return changed;
+    }
+
+    private void ResetLobbyPreviewJobs()
+    {
+        _lobbyPreviewJobIndex = 0;
+        _lobbyPreviewJobTimer = 0;
+        _lobbyPreviewJobSignature = string.Empty;
+        _lobbyPreviewJobs.Clear();
+        _lobbyPreviewJobsProfile = null;
+        _lobbyPreviewJobsDirty = true;
     }
 
     private void RefreshProfileEditor()
@@ -186,6 +280,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         _profileEditor?.RefreshAntags();
         _profileEditor?.RefreshSynthetic();
         _profileEditor?.RefreshJobs();
+        _profileEditor?.RefreshThreatPreferences();
         _profileEditor?.RefreshLoadouts();
     }
 

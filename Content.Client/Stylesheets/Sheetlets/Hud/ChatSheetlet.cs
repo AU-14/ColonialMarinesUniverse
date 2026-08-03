@@ -15,8 +15,23 @@ public sealed class ChatSheetlet<T> : Sheetlet<T> where T: PalettedStylesheet, I
     {
         IButtonConfig btnCfg = sheet;
 
-        var chatColor = sheet.SecondaryPalette.Background.WithAlpha(221.0f / 255.0f);
-        var chatBg = new StyleBoxFlat(chatColor);
+        var chatBg = new StyleBoxFlat
+        {
+            BackgroundColor = Color.FromHex("#07090B"),
+            BorderColor = Color.FromHex("#263039"),
+            BorderThickness = new Thickness(1),
+            ContentMarginLeftOverride = 2,
+            ContentMarginRightOverride = 2,
+            ContentMarginTopOverride = 2,
+            ContentMarginBottomOverride = 2,
+        };
+        var chatSubBg = new StyleBoxFlat
+        {
+            BackgroundColor = Color.FromHex("#101317"),
+            BorderColor = Color.FromHex("#2F3941"),
+            BorderThickness = new Thickness(1),
+        };
+        chatSubBg.SetContentMarginOverride(StyleBox.Margin.All, 2);
 
         var chatChannelButtonTex =
             sheet.GetTextureOr(btnCfg.RoundedButtonBorderedPath, NanotrasenStylesheet.TextureRoot);
@@ -41,9 +56,13 @@ public sealed class ChatSheetlet<T> : Sheetlet<T> where T: PalettedStylesheet, I
             E<PanelContainer>()
                 .Class(ChatInputBox.StyleClassChatPanel)
                 .Panel(chatBg),
+            E<PanelContainer>()
+                .Class(StyleNano.StyleClassChatSubPanel)
+                .Panel(chatSubBg),
             E<LineEdit>()
                 .Class(ChatInputBox.StyleClassChatLineEdit)
-                .Prop(LineEdit.StylePropertyStyleBox, new StyleBoxEmpty()),
+                .Prop(LineEdit.StylePropertyStyleBox, new StyleBoxEmpty())
+                .Prop("font-color", Color.FromHex("#D6DCE0")),
             E<Button>().Class(ChatInputBox.StyleClassChatFilterOptionButton).Box(chatChannelButton),
             E<ContainerButton>().Class(ChatInputBox.StyleClassChatFilterOptionButton).Box(chatFilterButton),
         ];

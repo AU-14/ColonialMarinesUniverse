@@ -92,9 +92,19 @@ public sealed class CrtThemeSheetlet<T> : Sheetlet<T> where T : PalettedStyleshe
 {
     public override StyleRule[] GetRules(T sheet, object config)
     {
-        var textFont = ResCache.GetFont("/Fonts/RobotoMono/RobotoMono-Regular.ttf", 12);
-        var headingFont = ResCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", 14);
-        var headingBigFont = ResCache.GetFont("/Fonts/RobotoMono/RobotoMono-Bold.ttf", 16);
+        if (!CrtThemePalette.Enabled)
+            return [];
+
+        var uavOsdStack = new[]
+        {
+            "/Fonts/UAVOSD/UAV-OSD-Sans-Mono.ttf",
+            "/Fonts/NotoSans/NotoSans-Regular.ttf",
+            "/Fonts/NotoSans/NotoSansSymbols-Regular.ttf",
+            "/Fonts/NotoSans/NotoSansSymbols2-Regular.ttf",
+        };
+        var textFont = ResCache.GetFont(uavOsdStack, 8);
+        var headingFont = ResCache.GetFont(uavOsdStack, 10);
+        var headingBigFont = ResCache.GetFont(uavOsdStack, 12);
         var nativeFont = ResCache.GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 12);
         var textColor = CrtThemePalette.AccentSoft;
         var dimTextColor = CrtThemePalette.AccentDim;

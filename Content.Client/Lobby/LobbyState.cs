@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Client.Audio;
 using Content.Client._RMC14.LinkAccount;
 using Content.Client.GameTicking.Managers;
@@ -8,6 +9,8 @@ using Content.Client.Playtime;
 using Content.Client.UserInterface.Systems.Chat;
 using Content.Client.Voting;
 using Content.Shared.CCVar;
+using Content.Shared.AU14.Allegiance;
+using Content.Shared.Preferences;
 using Robust.Client;
 using Robust.Client.Console;
 using Robust.Client.ResourceManagement;
@@ -32,6 +35,9 @@ namespace Content.Client.Lobby
         [Dependency] private IVoteManager _voteManager = default!;
         [Dependency] private ClientsidePlaytimeTrackingManager _playtimeTracking = default!;
         [Dependency] private IPrototypeManager _protoMan = default!;
+        [Dependency] private IClientPreferencesManager _preferencesManager = default!;
+
+        public bool IgnoreAllegiance { get; set; }
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
@@ -72,6 +78,9 @@ namespace Content.Client.Lobby
 
             Lobby.CharacterPreview.CharacterSetupButton.OnPressed += OnSetupPressed;
             Lobby.CharacterPreview.PatronPerks.OnPressed += OnPatronPerksPressed;
+            Lobby.CharacterPreview.PrevCharacterButton.OnPressed += OnPrevCharPressed;
+            Lobby.CharacterPreview.NextCharacterButton.OnPressed += OnNextCharPressed;
+            Lobby.CharacterPreview.IgnoreAllegianceToggle.OnToggled += OnIgnoreAllegianceToggled;
             Lobby.CharacterPreview.PatronPerks.Visible = _linkAccount.CanViewPatronPerks();
             Lobby.ReadyButton.OnPressed += OnReadyPressed;
             Lobby.ReadyButton.OnToggled += OnReadyToggled;
@@ -94,6 +103,9 @@ namespace Content.Client.Lobby
 
             Lobby!.CharacterPreview.CharacterSetupButton.OnPressed -= OnSetupPressed;
             Lobby.CharacterPreview.PatronPerks.OnPressed -= OnPatronPerksPressed;
+            Lobby.CharacterPreview.PrevCharacterButton.OnPressed -= OnPrevCharPressed;
+            Lobby.CharacterPreview.NextCharacterButton.OnPressed -= OnNextCharPressed;
+            Lobby.CharacterPreview.IgnoreAllegianceToggle.OnToggled -= OnIgnoreAllegianceToggled;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
 
@@ -115,6 +127,42 @@ namespace Content.Client.Lobby
         private void OnPatronPerksPressed(BaseButton.ButtonEventArgs args)
         {
             _userInterfaceManager.GetUIController<LinkAccountUIController>().TogglePatronPerksWindow();
+        }
+
+        private void OnPrevCharPressed(BaseButton.ButtonEventArgs args)
+        {
+            SelectAdjacentCharacter(-1);
+        }
+
+        private void OnNextCharPressed(BaseButton.ButtonEventArgs args)
+        {
+            SelectAdjacentCharacter(1);
+        }
+
+        private void SelectAdjacentCharacter(int offset)
+        {
+            var preferences = _preferencesManager.Preferences;
+            if (preferences == null || _preferencesManager.Settings == null)
+                return;
+
+            var sortedSlots = preferences.Characters.Keys.OrderBy(slot => slot).ToList();
+            if (sortedSlots.Count <= 1)
+                return;
+
+            var index = sortedSlots.IndexOf(preferences.SelectedCharacterIndex);
+            index = index < 0 ? 0 : (index + offset + sortedSlots.Count) % sortedSlots.Count;
+            _preferencesManager.SelectCharacter(sortedSlots[index]);
+            _userInterfaceManager.GetUIController<LobbyUIController>().ReloadCharacterSetup();
+        }
+
+        private void OnIgnoreAllegianceToggled(BaseButton.ButtonToggledEventArgs args)
+        {
+            IgnoreAllegiance = args.Pressed;
+            var netManager = IoCManager.Resolve<Robust.Shared.Network.IClientNetManager>();
+            netManager.ClientSendMessage(new MsgIgnoreAllegiance
+            {
+                IgnoreAllegiance = args.Pressed,
+            });
         }
 
         private void OnReadyPressed(BaseButton.ButtonEventArgs args)
