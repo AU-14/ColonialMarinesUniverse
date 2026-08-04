@@ -41,6 +41,9 @@ namespace Content.Client.Lobby
 
         private ClientGameTicker _gameTicker = default!;
         private ContentAudioSystem _contentAudioSystem = default!;
+        private Button? _joinGovforButton;
+        private Button? _joinOpforButton;
+        private Button? _joinOtherButton;
 
         protected override Type? LinkedScreenType { get; } = typeof(LobbyGui);
         public LobbyGui? Lobby;
@@ -73,6 +76,18 @@ namespace Content.Client.Lobby
 
             var width = _cfg.GetCVar(CCVars.ServerLobbyRightPanelWidth);
             Lobby.RightSide.SetWidth = width;
+
+            _joinGovforButton = Lobby.FindControl<Button>("JoinGovforButton");
+            _joinGovforButton.OnPressed += OnJoinGovforPressed;
+            _joinGovforButton.AddStyleClass("OpenRight");
+
+            _joinOpforButton = Lobby.FindControl<Button>("JoinOpforButton");
+            _joinOpforButton.OnPressed += OnJoinOpforPressed;
+            _joinOpforButton.AddStyleClass("OpenRight");
+
+            _joinOtherButton = Lobby.FindControl<Button>("JoinOtherButton");
+            _joinOtherButton.OnPressed += OnJoinOtherPressed;
+            _joinOtherButton.AddStyleClass("OpenRight");
 
             UpdateLobbyUi();
 
@@ -108,8 +123,14 @@ namespace Content.Client.Lobby
             Lobby.CharacterPreview.IgnoreAllegianceToggle.OnToggled -= OnIgnoreAllegianceToggled;
             Lobby!.ReadyButton.OnPressed -= OnReadyPressed;
             Lobby!.ReadyButton.OnToggled -= OnReadyToggled;
+            _joinGovforButton!.OnPressed -= OnJoinGovforPressed;
+            _joinOpforButton!.OnPressed -= OnJoinOpforPressed;
+            _joinOtherButton!.OnPressed -= OnJoinOtherPressed;
 
             Lobby = null;
+            _joinGovforButton = null;
+            _joinOpforButton = null;
+            _joinOtherButton = null;
         }
 
         public void SwitchState(LobbyGui.LobbyGuiState state)
@@ -172,7 +193,7 @@ namespace Content.Client.Lobby
                 return;
             }
 
-            new LateJoinGui().OpenCentered();
+            new LateJoinGui("colonists").OpenCentered();
         }
 
         private void OnReadyToggled(BaseButton.ButtonToggledEventArgs args)
@@ -242,6 +263,10 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
                 Lobby!.ObserveButton.Disabled = false;
+                Lobby.ReadyButton.AddStyleClass("OpenLeft");
+                _joinGovforButton!.Visible = true;
+                _joinOpforButton!.Visible = true;
+                _joinOtherButton!.Visible = true;
             }
             else
             {
@@ -251,6 +276,10 @@ namespace Content.Client.Lobby
                 Lobby!.ReadyButton.ToggleMode = true;
                 Lobby!.ReadyButton.Disabled = false;
                 Lobby!.ObserveButton.Disabled = true;
+                Lobby.ReadyButton.RemoveStyleClass("OpenLeft");
+                _joinGovforButton!.Visible = false;
+                _joinOpforButton!.Visible = false;
+                _joinOtherButton!.Visible = false;
             }
 
             if (_gameTicker.ServerInfoBlob != null)
@@ -336,6 +365,21 @@ namespace Content.Client.Lobby
             }
 
             _consoleHost.ExecuteCommand($"toggleready {newReady}");
+        }
+
+        private void OnJoinGovforPressed(BaseButton.ButtonEventArgs args)
+        {
+            new LateJoinGui("govfor").OpenCentered();
+        }
+
+        private void OnJoinOpforPressed(BaseButton.ButtonEventArgs args)
+        {
+            new LateJoinGui("opfor").OpenCentered();
+        }
+
+        private void OnJoinOtherPressed(BaseButton.ButtonEventArgs args)
+        {
+            _consoleHost.RemoteExecuteCommand(null, "ghostroles");
         }
     }
 }

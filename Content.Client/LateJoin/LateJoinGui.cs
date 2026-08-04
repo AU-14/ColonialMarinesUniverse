@@ -38,6 +38,7 @@ namespace Content.Client.LateJoin
         private readonly SpriteSystem _sprites;
         private readonly CrewManifestSystem _crewManifest;
         private readonly ISawmill _sawmill;
+        private readonly string? _factionFilter;
 
         private readonly Dictionary<NetEntity, Dictionary<string, List<JobButton>>> _jobButtons = new();
         private readonly Dictionary<NetEntity, Dictionary<string, BoxContainer>> _jobCategories = new();
@@ -45,8 +46,9 @@ namespace Content.Client.LateJoin
 
         private readonly Control _base;
 
-        public LateJoinGui()
+        public LateJoinGui(string? factionFilter = null)
         {
+            _factionFilter = factionFilter?.ToLowerInvariant();
             MinSize = SetSize = new Vector2(360, 560);
             IoCManager.InjectDependencies(this);
             _sprites = _entitySystem.GetEntitySystem<SpriteSystem>();
@@ -76,6 +78,53 @@ namespace Content.Client.LateJoin
             };
 
             _gameTicker.LobbyJobsAvailableUpdated += JobsAvailableUpdated;
+        }
+
+        private bool DepartmentMatchesFilter(DepartmentPrototype department)
+        {
+            if (string.IsNullOrEmpty(_factionFilter))
+                return true;
+
+            if (!string.IsNullOrEmpty(department.Faction))
+            {
+                var faction = department.Faction.ToLowerInvariant();
+                if (_factionFilter == "govfor")
+                    return faction == "govfor";
+                if (_factionFilter == "opfor")
+                    return faction == "opfor";
+                if (_factionFilter is "humans" or "colonists")
+                {
+                    return faction is "humans"
+                        or "human"
+                        or "colonists"
+                        or "colonist"
+                        or "default"
+                        or "";
+                }
+
+                return faction == _factionFilter;
+            }
+
+            var id = department.ID.ToLowerInvariant();
+            var name = department.Name.ToString().ToLowerInvariant();
+            var isGovfor = id.Contains("govfor")
+                || id.Contains("government")
+                || id.Contains("gov")
+                || name.Contains("govfor")
+                || name.Contains("government")
+                || name.Contains("gov");
+            var isOpfor = id.Contains("opfor")
+                || id.Contains("op")
+                || name.Contains("opfor")
+                || name.Contains("op");
+
+            return _factionFilter switch
+            {
+                "govfor" => isGovfor,
+                "opfor" => isOpfor,
+                "humans" or "colonists" => !isGovfor && !isOpfor,
+                _ => true,
+            };
         }
 
         private void RebuildUI()
@@ -174,6 +223,9 @@ namespace Content.Client.LateJoin
 
                 foreach (var department in departments)
                 {
+                    if (!DepartmentMatchesFilter(department))
+                        continue;
+
                     var departmentName = Loc.GetString(department.Name);
                     _jobCategories[id] = new Dictionary<string, BoxContainer>();
                     var stationAvailable = _gameTicker.JobsAvailable[id];
