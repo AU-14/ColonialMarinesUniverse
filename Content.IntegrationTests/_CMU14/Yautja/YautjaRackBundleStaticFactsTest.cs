@@ -90,7 +90,8 @@ public sealed class YautjaRackBundleStaticFactsTest
                     Assert.Multiple(() =>
                     {
                         Assert.That(entry.Name, Is.EqualTo(row.Name), $"{row.RackId}/{row.Id} display name");
-                        Assert.That(entry.Amount, Is.EqualTo((int?) 1), $"{row.RackId}/{row.Id} amount");
+                        Assert.That(entry.Amount, Is.Null, $"{row.RackId}/{row.Id} shared stock is infinite");
+                        Assert.That(entry.MaxPerUser, Is.EqualTo((int?) 1), $"{row.RackId}/{row.Id} personal limit");
                         Assert.That(entry.Points, Is.Null, $"{row.RackId}/{row.Id} source row points");
                         Assert.That(entry.Mandatory, Is.EqualTo(row.Mandatory), $"{row.RackId}/{row.Id} mandatory flag");
                         Assert.That(entry.Recommended, Is.EqualTo(row.Recommended), $"{row.RackId}/{row.Id} recommended flag");

@@ -28,6 +28,8 @@ public sealed class YautjaMedicompSurgerySystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedOrganHealthSystem _organHealth = default!;
+    [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
+    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -151,7 +153,11 @@ public sealed class YautjaMedicompSurgerySystem : EntitySystem
         RemComp<RMCSuperSlowdownComponent>(args.Body);
 
         foreach (var (part, _) in _medicalIndex.GetBodyParts(args.Body))
+        {
+            _wounds.StopSurfaceBleedingOnPart(part);
+            _woundLedger.TryUpdateExternalBleeding(part, ExternalBleedTier.None);
             RemComp<CMUEscharComponent>(part);
+        }
 
         RemComp<CMUYautjaMedicompTreatedComponent>(args.Part);
     }

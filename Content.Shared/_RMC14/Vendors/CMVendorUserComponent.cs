@@ -28,4 +28,7 @@ public sealed partial class CMVendorUserComponent : Component
 
     [DataField, AutoNetworkedField]
     public Dictionary<string, int>? ExtraPoints;
+
+    [DataField, AutoNetworkedField]
+    public Dictionary<string, int> PurchaseCounts = new();
 }

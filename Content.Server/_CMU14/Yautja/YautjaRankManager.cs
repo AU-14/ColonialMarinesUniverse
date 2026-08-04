@@ -44,7 +44,10 @@ public sealed partial class YautjaRankManager : IPostInjectInit
         if (_cache.TryGetValue(userId, out var rank))
             return rank;
 
-        return YautjaRank.Blooded;
+        // Character info can be opened before the asynchronous player-data load
+        // primes the cache. Resolve the persisted rank on a cold cache instead of
+        // presenting every uncached hunter as Blooded.
+        return Resolve(userId).GetAwaiter().GetResult();
     }
 
     public YautjaProfileCapabilities ResolveProfileCapabilitiesCached(

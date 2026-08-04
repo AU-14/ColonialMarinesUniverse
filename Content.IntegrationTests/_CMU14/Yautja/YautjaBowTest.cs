@@ -19045,7 +19045,8 @@ public sealed class YautjaBowTest
             Assert.That(typeof(CMVendorEntry).GetField("Mandatory")?.GetValue(entry), Is.EqualTo(mandatory), $"{id} mandatory flag");
         Assert.That(entry.Recommended, Is.EqualTo(recommended), $"{id} recommended flag");
         Assert.That(entry.Points, Is.Null, $"{id} regular equipment row should cost 0 source points");
-        Assert.That(entry.Amount, Is.EqualTo((int?) 1), $"{id} source regular row vends one item/bundle");
+        Assert.That(entry.Amount, Is.Null, $"{id} regular row uses infinite shared stock");
+        Assert.That(entry.MaxPerUser, Is.EqualTo((int?) 1), $"{id} source regular row is limited per hunter");
         Assert.That(entry.ReplaceSlot, Is.EqualTo(replaceSlot), $"{id} replace slot");
     }
 
