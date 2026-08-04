@@ -62,6 +62,13 @@ public sealed partial record CMVendorEntry
     [DataField]
     public int? Amount;
 
+    /// <summary>
+    /// Maximum number of units this player may receive from this entry.
+    /// A null Amount remains an infinite shared vendor stock.
+    /// </summary>
+    [DataField]
+    public int? MaxPerUser;
+
     [DataField]
     public int? Points;
 

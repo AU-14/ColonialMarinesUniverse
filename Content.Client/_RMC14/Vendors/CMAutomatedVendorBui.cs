@@ -334,7 +334,10 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
             {
                 var entry = section.Entries[entryIndex];
                 var uiEntry = (CMAutomatedVendorEntry) uiSection.Entries.GetChild(entryIndex);
-                var disabled = sectionDisabled || entry.Amount <= 0;
+                var personalRemaining = entry.MaxPerUser is { } maxPerUser
+                    ? maxPerUser - (user?.PurchaseCounts.GetValueOrDefault(entry.Id.Id) ?? 0)
+                    : (int?) null;
+                var disabled = sectionDisabled || entry.Amount <= 0 || personalRemaining <= 0;
                 if (section.TakeAll is { } takeAllId)
                 {
                     var takeAll = user?.TakeAll;
@@ -375,14 +378,19 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                 // column above, so our "x5" would just repeat the number next to itself. Hide it in that
                 // case - Visible (not an empty string) so the label surrenders its MinWidth instead of
                 // leaving a blank gap in the row.
-                var amountAlreadyShowsStock = entry.Points == null && entry.Amount != null;
+                var amountAlreadyShowsStock = entry.Points == null && entry.Amount != null &&
+                                              personalRemaining == null;
                 uiEntry.Stock.Visible = !amountAlreadyShowsStock;
 
                 if (!amountAlreadyShowsStock)
                 {
-                    uiEntry.Stock.Text = entry.Amount is { } stockLeft
+                    var stockText = entry.Amount is { } stockLeft
                         ? Loc.GetString("rmc-vending-stock-remaining", ("count", stockLeft))
                         : Loc.GetString("rmc-vending-stock-infinite");
+                    uiEntry.Stock.Text = personalRemaining is { } remaining
+                        ? Loc.GetString("rmc-vending-stock-personal", ("count", Math.Max(0, remaining)),
+                            ("stock", stockText))
+                        : stockText;
                     uiEntry.Stock.Modulate = disabled ? Color.Red : Color.White;
                 }
 

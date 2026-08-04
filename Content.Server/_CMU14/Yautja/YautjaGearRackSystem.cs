@@ -57,11 +57,13 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
 
     private void OnStartup(Entity<YautjaGearRackComponent> ent, ref ComponentStartup args)
     {
+        NormalizeVendorStock(ent.Owner);
         RefreshRun(ent);
     }
 
     private void OnMapInit(Entity<YautjaGearRackComponent> ent, ref MapInitEvent args)
     {
+        NormalizeVendorStock(ent.Owner);
         RefreshRun(ent);
     }
 
@@ -73,6 +75,38 @@ public sealed partial class YautjaGearRackSystem : EntitySystem
     private void OnMove(Entity<YautjaGearRackComponent> ent, ref MoveEvent args)
     {
         RefreshRun(ent);
+    }
+
+    private void NormalizeVendorStock(EntityUid uid)
+    {
+        if (!TryComp<CMAutomatedVendorComponent>(uid, out var vendor))
+            return;
+
+        var changed = false;
+        foreach (var section in vendor.Sections)
+        {
+            foreach (var entry in section.Entries)
+            {
+                // Yautja racks are shared catalogs. Their stock is infinite; the
+                // per-player limit below is the only exhaustion mechanism.
+                if (entry.Amount != null)
+                {
+                    entry.Amount = null;
+                    changed = true;
+                }
+
+                if (entry.MaxPerUser != null)
+                    continue;
+
+                // Point-priced spare gear is replenishable, while kits, armor,
+                // weapons and attachments are one-per-player loadout choices.
+                entry.MaxPerUser = entry.Points != null ? 10 : 1;
+                changed = true;
+            }
+        }
+
+        if (changed)
+            Dirty(uid, vendor);
     }
 
     private void RefreshRun(Entity<YautjaGearRackComponent> ent)
