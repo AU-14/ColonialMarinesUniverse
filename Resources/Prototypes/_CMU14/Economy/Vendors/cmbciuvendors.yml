@@ -361,7 +361,6 @@
     # - id: AU14PillCanisterImidazoline
     - name: Limited Injector Medications
       choices: { CMUPlatoonMedicalLimitedMedicationsInjectors: 6 }
-      takeAll: CMULimitedPills
       entries:
       - id: AU14MeraBicAutoInjector
       - id: AU14KeloDermAutoInjector

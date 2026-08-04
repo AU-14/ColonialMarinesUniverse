@@ -691,7 +691,7 @@
   name: reagent-name-albuterol
   desc: reagent-desc-albuterol
   color: "#1f83a7"
-  overdose: 35
+  overdose: 20
   metabolisms:
     Medicine:
       metabolismRate: 0.04
@@ -703,14 +703,14 @@
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
-          min: 30
+          min: 20
         damage:
           groups:
             Toxin: 0.5
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
-          min: 50
+          min: 30
         damage:
           groups:
             Brute: 1

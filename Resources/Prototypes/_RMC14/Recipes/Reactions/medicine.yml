@@ -438,3 +438,17 @@
       amount: 1
   products:
     RMCLipozine: 3
+
+- type: reaction
+  id: RMCRussianRed
+  reactants:
+    RMCEthanol:
+      amount: 1
+    CMArithrazine:
+      amount: 1
+    CMTricordrazine:
+      amount: 1
+  products:
+    RMCRussianRed: 3
+
+

@@ -571,6 +571,8 @@
       entries:
       - id: AU14WeaponSMGXMP5A6HAZOPS
         amount: 30
+      - id: AUWeaponRifleXM20A2HAZOPS
+        amount: 20
     - name: standard issue secondaries
       entries:
       - id: CMWeaponPistolM1984Empty

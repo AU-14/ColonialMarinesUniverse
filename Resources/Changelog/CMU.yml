@@ -9038,5 +9038,66 @@
   id: 578
   time: '2026-08-03T08:30:00.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1782
+- author: HotdogMan52
+  changes:
+  - message: added twenty (20) units of XM20A2 Pulse Rifle to HAZOPS Requisitions
+      Vendor
+    type: Tweak
+  - message: replaced the NSG23 in WYPMC Requisitions Vendor to the non-ID locked
+      variant due to the ID lock binding to the user who vends the rifle and not the
+      actual user
+    type: Tweak
+  id: 579
+  time: '2026-08-04T11:07:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1788
+- author: HotdogMan52
+  changes:
+  - message: upped QYJ damage from 35 to 45
+    type: Tweak
+  - message: removed QYJ IFF lockout since it's a non-smart gun
+    type: Tweak
+  - message: stopped GAU-19 from locking up due to IFF
+    type: Tweak
+  id: 580
+  time: '2026-08-04T11:07:14.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1787
+- author: verentr
+  changes:
+  - message: Added Russian Red and Albuterol crafting recipes.
+    type: Add
+  - message: Changed Russian Red as a medicine, now acts as a very crude treatment
+      for genetic damage.
+    type: Tweak
+  - message: Changed OD amounts for Albuterol (20 OD, 30 Crit OD) and Dexalin Plus
+      (5 OD, 15 Crit OD).
+    type: Tweak
+  - message: Changed soporifics drowsiness so it no longer accumulates, no more 5
+      minutes of fading in and out of consciousness.
+    type: Tweak
+  - message: Fixed CMB CIU corpsman vendor, can now take 6 injectors of choice.
+    type: Fix
+  id: 581
+  time: '2026-08-04T11:07:42.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1785
+- author: deepdarkdepths
+  changes:
+  - message: SHARP mines are now visible through walls for xenomorphs.
+    type: Tweak
+  - message: The first two tiers of the HE mine do less damage.
+    type: Tweak
+  - message: It takes slightly longer for mines to upgrade to the next tier.
+    type: Tweak
+  id: 582
+  time: '2026-08-04T11:07:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1784
+- author: P-MCT
+  changes:
+  - message: Hey Liaison good news! Corporate just sent us the EVA-Laser weapons we
+      asked for. They're older models and we'll have to order them through the ASRS,
+      but for 1500? They'll do us in a pinch.
+    type: Add
+  id: 583
+  time: '2026-08-04T11:11:03.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1755
 Name: CMU
 Order: -1

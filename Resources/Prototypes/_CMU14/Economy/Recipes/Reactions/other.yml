@@ -98,3 +98,16 @@
       catalyst: true
   products:
     CMUPhenolFormaldehyde: 1
+
+- type: reaction
+  id: AU14Albuterol
+  reactants:
+    CMUAtropine:
+      amount: 1
+    CMUPhenol:
+      amount: 1
+    CMUPulmovine:
+      amount: 3
+  products:
+    AU14Albuterol: 3
+

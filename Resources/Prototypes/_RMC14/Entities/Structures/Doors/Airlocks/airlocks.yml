@@ -288,3 +288,44 @@
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/strata_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMUAirlockUPPMaints
+  name: maintenance hatch
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Walls/upp_door_maints.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMUAirlockUPPGrey
+  name: airlock
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Walls/upp_door_grey.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMUAirlockUPPGreen
+  name: airlock
+  suffix: UPP
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Walls/upp_door_green.rsi
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMUAirlockGlassGreenUPP
+  name: glass airlock
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Walls/upp_door_greenglass.rsi
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMUAirlockGlassGreyUPP
+  name: glass airlock
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Walls/upp_door_greyglass.rsi

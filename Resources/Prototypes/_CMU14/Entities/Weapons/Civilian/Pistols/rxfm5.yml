@@ -1,0 +1,79 @@
+- type: entity
+  id: AU14WeaponPistolRXFM5
+  parent: [BaseWeaponBatterySmall]
+  name: RXF-M5 EVA Laser Pistol
+  suffix: WE-YU
+  description: A High power focusing laser pistol with an internal nuclear battery, designed for Extra-Vehicular Activity. Though it works just about anywhere really. Deprived from the same technology as laser welders. Issued by the Weyland-Yutani Corportation, but also available on the civilian market.
+  components:
+  - type: Sprite
+    sprite: _AU14/Weapons/Guns/Civilian/rxfm5.rsi
+    layers:
+    - state: base
+      map: [ "enum.GunVisualLayers.Base" ]
+  - type: Clothing
+    sprite: _AU14/Weapons/Guns/Civilian/rxfm5.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    soundGunshot:
+      path: /Audio/_AU14/Weapons/rxfm5/gun_RXFM5_fire.ogg
+  - type: HitscanBatteryAmmoProvider
+    proto: AU14RXFM5LaserShot
+    fireCost: 200
+  - type: BatterySelfRecharger
+    autoRecharge: true
+    autoRechargeRate: 65
+  - type: Appearance
+  - type: Item
+    size: Normal
+  - type: WieldDelay
+    baseDelay: 0.3
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    recoilWielded: 2
+    recoilUnwielded: 4
+    scatterWielded: 1
+    scatterUnwielded: 5
+    baseFireRate: 5
+    modifiers:
+      FullAuto:
+        fireDelay: 5
+        maxScatterModifier: 2
+        useBurstScatterMult: true
+        unwieldedScatterMultiplier: 2
+        shotsToMaxScatter: 6
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 4
+  - type: Wieldable
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/sniper_mouse.rsi
+      state: all
+  - type: Tag
+    tags:
+    - AU14WeaponPistolRXFM5
+  - type: GunIFF
+    enabled: false
+
+
+- type: hitscan
+  id: AU14RXFM5LaserShot
+  damage:
+    types:
+      Heat: 20
+      Blunt: 3
+      Asphyxiation: 5
+  muzzleFlash:
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: muzzle_laser
+  travelFlash:
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: beam
+  impactFlash:
+    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+    state: impact_laser
+    
+- type: Tag
+  id: AU14WeaponPistolRXFM5

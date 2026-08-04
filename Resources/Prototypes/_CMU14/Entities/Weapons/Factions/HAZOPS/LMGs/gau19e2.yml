@@ -35,6 +35,7 @@
           - SmartGunBattery
   - type: GunIFF
     enabled: false
+    preventFriendlyFire: false
   - type: IFFToggle
     showToggleAction: false
 

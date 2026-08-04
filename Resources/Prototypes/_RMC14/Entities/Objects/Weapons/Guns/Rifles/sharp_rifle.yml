@@ -281,7 +281,7 @@
     explosionType: RMC
     maxIntensity: 25
     intensitySlope: 8
-    totalIntensity: 220
+    totalIntensity: 190
     canCreateVacuum: false
   - type: RMCScorchEffect
     radius: 3
@@ -296,7 +296,7 @@
     explosionType: RMC
     maxIntensity: 25
     intensitySlope: 6
-    totalIntensity: 260
+    totalIntensity: 240
     canCreateVacuum: false
 
 - type: entity
@@ -475,6 +475,7 @@
   - type: SharpMine
     kind: Explosive
     triggerRadius: 1.5
+    upgradeEvery: 45
     effects:
     - RMCSharpExplosiveMineEffect1
     - RMCSharpExplosiveMineEffect2
@@ -483,6 +484,8 @@
   - type: StepTrigger
     active: false
     requiredTriggeredSpeed: 0
+  - type: RMCNightVisionVisible
+    priority: -1
   - type: RMCMesonsNonviewable
   - type: Flammable
     fireSpread: false

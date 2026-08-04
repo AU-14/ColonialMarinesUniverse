@@ -202,3 +202,43 @@
   components:
   - type: AccessReader
     access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMUAirlockUPPMaints
+  id: CMUAirlockUPPMaintsOpforLocked
+  suffix: Opfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMUAirlockUPPGrey
+  id: CMUAirlockUPPGreyOpforLocked
+  suffix: Opfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMUAirlockUPPGreen
+  id: CMUAirlockUPPGreenOpforLocked
+  suffix: Opfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMUAirlockGlassGreenUPP
+  id: CMUAirlockGlassGreenUPPOpforLocked
+  suffix: Opfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]
+
+- type: entity
+  parent: CMUAirlockGlassGreyUPP
+  id: CMUAirlockGlassGreyUPPOpforLocked
+  suffix: Opfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessOpfor"]]

@@ -320,3 +320,20 @@
     - id: AU14WeaponPistolM50HAZOPS
     - id: AU14MagazinePistolM50
       amount: 6
+      
+- type: entity
+  parent: RMCGunCaseBase
+  id: AU14KitWeaponRXFM
+  name: RXF-M5 EVA Laser pistol case
+  description: A case containing an older but reliable WEY-YU EVA laser pistol. 
+  components:
+    - type: Storage
+      maxItemSize: Huge
+      grid:
+      - 0,0,2,1
+      whitelist:
+       tags:
+       - AU14WeaponPistolRXFM5
+    - type: StorageFill
+      contents:
+      - id: AU14WeaponPistolRXFM5

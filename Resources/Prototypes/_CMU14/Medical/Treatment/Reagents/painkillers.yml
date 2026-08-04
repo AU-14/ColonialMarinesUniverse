@@ -281,9 +281,12 @@
         durationPerUnit: 75
       - !type:ModifyStatusEffect
         effectProto: StatusEffectDrowsiness
-        time: 5
+        conditions:
+        - !type:ReagentThreshold
+          min: 8
+        time: 15
         type: Add
-        refresh: false
+        refresh: true
       - !type:ModifyStatusEffect
         conditions:
         - !type:ReagentThreshold
