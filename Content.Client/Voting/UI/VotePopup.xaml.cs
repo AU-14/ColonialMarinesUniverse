@@ -29,6 +29,10 @@ namespace Content.Client.Voting.UI
 
             Stylesheet = IoCManager.Resolve<IStylesheetManager>().SheetSystem;
 
+            ApplyCrtButtonStyle(FollowVoteTarget);
+            ApplyCrtButtonStyle(MinimizeButton);
+            ApplyCrtButtonStyle(RestoreButton);
+
             if (_vote.TargetEntity != null && _vote.TargetEntity != 0)
             {
                 _targetEntity = new NetEntity(_vote.TargetEntity.Value);
@@ -47,11 +51,18 @@ namespace Content.Client.Voting.UI
                     ToggleMode = true,
                     Group = group
                 };
+                ApplyCrtButtonStyle(button);
                 _voteButtons[i] = button;
                 VoteOptionsContainer.AddChild(button);
                 var i1 = i;
                 button.OnPressed += _ => _voteManager.SendCastVote(vote.Id, i1);
             }
+        }
+
+        private static void ApplyCrtButtonStyle(Button button)
+        {
+            button.AddStyleClass(StyleNano.StyleClassCrtButton);
+            button.Label.AddStyleClass(StyleNano.StyleClassCrtButtonLabel);
         }
 
         public void UpdateData()

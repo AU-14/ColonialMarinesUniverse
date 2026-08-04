@@ -1,4 +1,6 @@
 using System.Numerics;
+using Content.Client.Stylesheets.SheetletConfigs;
+using Content.Client.Stylesheets.Sheetlets;
 using Content.Client.Stylesheets.Stylesheets;
 using Content.Client.Resources;
 using Content.Client.UserInterface.Controls;
@@ -88,12 +90,41 @@ public static class CrtThemePalette
 }
 
 [CommonSheetlet]
-public sealed class CrtThemeSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet
+public sealed class CrtThemeSheetlet<T> : Sheetlet<T> where T : PalettedStylesheet, IButtonConfig
 {
     public override StyleRule[] GetRules(T sheet, object config)
     {
         if (!CrtThemePalette.Enabled)
-            return [];
+        {
+            var fallbackPanel = StyleBoxHelpers.BaseStyleBox(sheet);
+            var fallbackInset = new StyleBoxFlat
+            {
+                BackgroundColor = sheet.SecondaryPalette.BackgroundDark,
+                BorderColor = sheet.PrimaryPalette.Background,
+                BorderThickness = new Thickness(2f),
+            };
+            var fallbackQuiet = new StyleBoxFlat
+            {
+                BackgroundColor = sheet.SecondaryPalette.BackgroundDark,
+            };
+            var fallbackHeader = new StyleBoxFlat
+            {
+                BackgroundColor = sheet.HighlightPalette.Background,
+            };
+
+            return
+            [
+                Element<PanelContainer>().Class(StyleNano.StyleClassCrtPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, fallbackPanel)
+                    .Prop(Control.StylePropertyModulateSelf, sheet.SecondaryPalette.Background),
+                Element<PanelContainer>().Class(StyleNano.StyleClassCrtInsetPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, fallbackInset),
+                Element<PanelContainer>().Class(StyleNano.StyleClassCrtQuietPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, fallbackQuiet),
+                Element<PanelContainer>().Class(StyleNano.StyleClassCrtHeaderPanel)
+                    .Prop(PanelContainer.StylePropertyPanel, fallbackHeader),
+            ];
+        }
 
         var uavOsdStack = new[]
         {
