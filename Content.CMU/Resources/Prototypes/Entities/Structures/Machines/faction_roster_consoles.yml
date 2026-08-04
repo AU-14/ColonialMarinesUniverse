@@ -1,0 +1,50 @@
+- type: entity
+  id: CMUFactionRosterConsoleBase
+  abstract: true
+  parent: RMCCommunicationsConsoleBase
+  name: personnel roster console
+  description: A terminal that pulls dossiers on personnel affiliated with a particular faction.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.FactionRosterConsoleUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.FactionRosterConsoleUiKey.Key:
+        type: FactionRosterConsoleBoundUserInterface
+
+- type: entity
+  id: CMUGovforRosterConsole
+  parent: CMUFactionRosterConsoleBase
+  name: GOVFOR personnel console
+  description: Lists GOVFOR personnel dossiers.
+  suffix: GOVFOR
+  components:
+  - type: FactionRosterConsole
+    faction: GOVFOR
+
+- type: entity
+  id: CMUOpforRosterConsole
+  parent: CMUFactionRosterConsoleBase
+  name: OPFOR personnel console
+  description: Lists OPFOR personnel dossiers.
+  suffix: OPFOR
+  components:
+  - type: FactionRosterConsole
+    faction: OPFOR
+
+- type: entity
+  id: CMUColonyRosterConsole
+  parent: CMUFactionRosterConsoleBase
+  name: colony resident console
+  description: Lists colony resident dossiers.
+  suffix: Colony
+  components:
+  - type: FactionRosterConsole
+    faction: AUColonist

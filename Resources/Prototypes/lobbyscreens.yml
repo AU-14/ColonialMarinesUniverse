@@ -75,3 +75,34 @@
   background: /Textures/LobbyScreens/reclaimer-nuke.webp
   title: lobby-state-background-reclaimernuke-title
   artist: lobby-state-background-reclaimernuke-artist
+- type: lobbyBackground
+  id: AU14LobbyDropship
+  background: /Textures/Lobby/Dropship.png
+
+- type: lobbyBackground
+  id: AU14LobbyCLF
+  background: /Textures/Lobby/CLF.png
+
+- type: lobbyBackground
+  id: AU14LobbyHAZOPS
+  background: /Textures/Lobby/HAZOPS.png
+
+- type: lobbyBackground
+  id: AU14LobbyXenos
+  background: /Textures/Lobby/Xenos.png
+
+- type: lobbyBackground
+  id: AU14LobbyCLFRiot
+  background: /Textures/Lobby/clfriot.png
+
+- type: lobbyBackground
+  id: AU14LobbyWendigoFollowed
+  background: /Textures/Lobby/WendigoFollowed.png
+
+- type: lobbyBackground
+  id: CMU14LobbyWorkingJoes
+  background: /Textures/Lobby/Joes.png
+
+- type: lobbyBackground
+  id: CMU14LobbyXenoWar
+  background: /Textures/Lobby/XenoWar.png

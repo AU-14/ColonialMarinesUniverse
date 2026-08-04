@@ -520,7 +520,11 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
         var severity = TrackerSystem.CenterSeverity;
 
         if (ent.Comp.Mode == SquadLeaderMode)
-            alert += squad;
+        {
+            var squadAlert = $"{alert}{squad}";
+            if (_prototypeManager.HasIndex<AlertPrototype>(squadAlert))
+                alert = squadAlert;
+        }
 
         if (coordinates != null)
             severity = _tracker.GetAlertSeverity(ent.Owner, coordinates.Value);
@@ -751,6 +755,38 @@ public sealed partial class SquadLeaderTrackerSystem : EntitySystem
 
             UpdateDirection((uid, tracker));
         }
+    }
+
+    public void SetBattleBuddy(EntityUid a, EntityUid b)
+    {
+        if (a == b ||
+            !TryComp(a, out SquadLeaderTrackerComponent? compA) ||
+            !TryComp(b, out SquadLeaderTrackerComponent? compB) ||
+            compA.BattleBuddy == b && compB.BattleBuddy == a)
+        {
+            return;
+        }
+
+        ClearPreviousBattleBuddy(compA);
+        ClearPreviousBattleBuddy(compB);
+
+        compA.BattleBuddy = b;
+        compB.BattleBuddy = a;
+        Dirty(a, compA);
+        Dirty(b, compB);
+    }
+
+    private void ClearPreviousBattleBuddy(SquadLeaderTrackerComponent tracker)
+    {
+        if (tracker.BattleBuddy is not { } previous ||
+            !TryComp(previous, out SquadLeaderTrackerComponent? previousTracker))
+        {
+            return;
+        }
+
+        previousTracker.BattleBuddy = null;
+        previousTracker.Mode = default;
+        Dirty(previous, previousTracker);
     }
 
     private void OnSquadObjectivesChanged(Entity<SquadTeamComponent> ent, ref SquadObjectivesChangedEvent args)

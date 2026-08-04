@@ -1,0 +1,323 @@
+- type: entity
+  save: false
+  parent: CMMobHuman
+  id: CMUZombieSummoner
+  name: zombie summoner
+  description: A death-touched humanoid capable of calling the dead back to their feet.
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRole
+    name: Zombie Summoner
+    description: Regenerate points and spend them to summon zombies.
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    raffle:
+      settings: short
+  - type: RandomHumanoidAppearance
+    randomizeName: true
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairShort
+    - RMCHumanHairCut
+    - RMCHumanHairFlair
+    - RMCHumanHairParted
+    - RMCHumanHairCleancut
+    - RMCHumanHairBedhead
+    - RMCHumanHairCombover
+    - RMCHumanHairFather
+    - RMCHumanHairCurls
+    - RMCHumanHairJensen
+    - RMCHumanHairGelled
+    - RMCHumanHairSpiky
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairMarineFade
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairTaper
+    - RMCHumanHairAverageJoe
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    - RMCHumanHairScully
+    - RMCHumanHairLongAlt
+    - RMCHumanHairLonger
+    - RMCHumanHairSidePonytail
+    - RMCHumanHairParted
+    - RMCHumanHairBedhead2
+    - RMCHumanHairCurls
+    - RMCHumanHairHimecut
+    - RMCHumanHairBraid2
+    - RMCHumanHairRowBraid
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex:
+    - "#a52a2a"
+    - "#808080"
+    - "#f0ffff"
+    - "#4682b4"
+    - "#000000"
+  - type: EquipEntityPreset
+    preset: CMUZombieSummonerMilitaryUniformPreset
+  - type: ZombieImmune
+  - type: NpcFactionMember
+    factions:
+    - Zombie
+  - type: NightVision
+    alert: XenoNightVision
+    overlay: true
+  - type: Skills
+    skills:
+      RMCSkillFirearms: 3
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 2
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Critical
+      175: Dead
+  - type: MobStateActions
+    actions:
+      Critical:
+      - CMActionGhost
+      Dead:
+      - CMActionGhost
+  - type: ZombieSummoner
+    points: 200
+    maxPoints: 200
+    zombieCost: 10
+    militaryZombieCost: 20
+    pointsPerSecond: 0.4
+    maxControlledZombies: 20
+    zombiePrototype: CMUZombieSummonerInfected
+    militaryZombiePrototype: CMUZombieSummonerMilitaryInfected
+    zombieWeaponPrototypes:
+    - CMScrewdriver
+    - CMWrench
+    - CMWirecutter
+    - RMCKitchenKnife
+    - RMCKitchenKnifeChef
+    - RMCKitchenKnifeButcher
+    - RMCToolHatchet
+    - AU14ToolMachete
+    - CMM2132Machete
+    - RMCFireAxe
+    - CMCrowbar
+    militaryZombieWeaponPrototypes:
+    - RMCFireAxe
+    - CMM2132Machete
+    - RMCM2100Machete
+    - AU14ToolMachete
+    - RMCM5Bayonet
+    - CMM11Knife
+    - RMCCombatUtilityKnifeA
+    - RMCCombatUtilityKnifeB
+    - RMCIceAxe
+    zombieFaceMarking: CMUZombieSummonerBloodyCross
+    zombieFaceMarkingColor: "#c00000"
+    startsWithFaceMark: true
+    zombieBonusMeleeDamage:
+      types:
+        Slash: 25
+    zombieDelimbChance: 0.01
+    zombieHitScreamChance: 0.5
+    zombieMovementSpeedModifier: 1
+    militaryZombieMovementSpeedModifier: 1
+    eyeColors:
+    - "#a52a2a"
+    - "#808080"
+    - "#f0ffff"
+    - "#4682b4"
+    - "#000000"
+  - type: UserInterface
+    interfaces:
+      enum.ZombieSummonerUiKey.Key:
+        type: ZombieSummonerBui
+        requireInputValidation: false
+
+- type: entity
+  save: false
+  parent: CMMobHuman
+  id: CMUZombieSummonerInfected
+  name: Cursed
+  description: A cursed civilian called into the horde.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RandomHumanoidAppearance
+    randomizeName: false
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedEyeColorsHex:
+    - "#a52a2a"
+    - "#808080"
+    - "#f0ffff"
+    - "#4682b4"
+    - "#000000"
+    beardChance: 0.1
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      100: Critical
+      138: Dead
+  - type: NpcFactionMember
+    addHostileFactions:
+    - UNMC
+    - SPP
+    - GOVFOR
+    - OPFOR
+    - Halcyon
+    - WeYa
+    - Civilian
+    - CLF
+    - TSE
+    - AUColonist
+    - RoyalMarines
+    - Bureau
+    - CMUProdigy
+    - CMUVAI
+    - AUWeYu
+    - ColonySynth
+    - CMUTWE
+    - CMUUSCMC
+    - AUBureau
+    - NSPA
+    - USAF
+    - AUUnitedAmericas
+  - type: EquipEntityPreset
+    preset: CMUZombieSummonerInfectedCivilianPreset
+  - type: ZombieSummonerZombieLabel
+
+- type: entity
+  save: false
+  parent: CMUZombieSummonerInfected
+  id: CMUZombieSummonerMilitaryInfected
+  name: Cursed
+  description: A cursed soldier called into the horde.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      150: Critical
+      188: Dead
+  - type: EquipEntityPreset
+    preset: CMUZombieSummonerMilitaryUniformPreset
+  - type: ZombieSummonerZombieLabel
+    name: cmu-zombie-summoner-military-zombie-name
+
+- type: entity
+  id: CMUZombieSummonerInfectedCivilianPreset
+  name: zombie summoner infected civilian preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ CMJumpsuitColonist ]
+      - [ CMJumpsuitTShirtWhite ]
+      - [ CMJumpsuitTShirtGray ]
+      - [ CMJumpsuitTShirtRed ]
+      - [ CMJumpsuitLiaisonBlack ]
+      - [ CMJumpsuitLiaisonBlue ]
+      - [ CMJumpsuitLiaisonBrown ]
+      - [ CMJumpsuitLiaisonField ]
+      - [ CMJumpsuitLiaisonIvy ]
+      - [ CMJumpsuitLiaisonCorporateFormal ]
+      - [ CMJumpsuitLiaisonFormal ]
+      - [ CMJumpsuitLiaison ]
+      - [ CMJumpsuitLiaisonBlazer ]
+      - [ CMJumpsuitLiaisonCharcoal ]
+      - [ RMCJumpsuitCivilian ]
+      - [ RMCJumpsuitDutchBandolier ]
+      - [ AU14CivilianWorkwearYellow ]
+      - [ AU14CivilianWorkwearPink ]
+      - [ AU14CivilianWorkwearBlue ]
+      - [ AU14CivilianWorkwearGreen ]
+    -
+      - [ RMCShoesBlack ]
+      - [ RMCShoesBlue ]
+      - [ RMCShoesBrown ]
+      - [ RMCShoesGreen ]
+      - [ RMCShoesOrange ]
+      - [ RMCShoesPurple ]
+      - [ RMCShoesRed ]
+      - [ RMCShoesWhite ]
+      - [ RMCShoesYellow ]
+      - [ RMCShoesLaceupBrown ]
+      - [ RMCShoesLaceup ]
+      - [ RMCShoesLeather ]
+      - [ RMCBootsVanBandolier ]
+    -
+      - [ RMCJacketCorporateKhaki ]
+      - [ RMCJacketCorporateBlack ]
+      - [ RMCJacketCorporateBlue ]
+      - [ RMCJacketCorporateBrown ]
+      - [ AU14CivilianJacketGrayPufferVest ]
+      - [ AU14CivilianJacketKhakiPufferVest ]
+      - [ AU14CivilianJacketTanPufferVest ]
+      - [ AU14CivilianJacketGrayPufferJacket ]
+      - [ AU14CivilianJacketOrangePufferJacket ]
+      - [ AU14CivilianJacketKhakiPufferJacket ]
+      - [ AU14WindbreakerBlue ]
+      - [ RMCJacketWindbreaker ]
+      - [ RMCJacketWindbreakerGrey ]
+      - [ RMCJacketWindbreakerBrown ]
+      - [ RMCJacketWindbreakerExpedition ]
+      - [ AU14CivilianJacketBlueParka ]
+      - [ AU14CivilianJacketGreenParka ]
+      - [ AU14CivilianJacketRedParka ]
+      - [ AU14CivilianJacketYellowParka ]
+      - [ AU14CivilianTanTrenchCoat ]
+      - [ AU14CivilianBrownTrenchCoat ]
+      - [ AU14CivilianGrayTrenchCoat ]
+      - [ AU14CivilianJacketBomberJacket ]
+      - [ AU14CivilianJacketOldCoat ]
+      - [ AU14CivilianJacketSnowSuit ]
+
+- type: entity
+  id: CMUZombieSummonerMilitaryUniformPreset
+  name: zombie summoner military uniform preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    -
+      - [ AU14WYPMCFatigues, RMCBootsPMC, AU14PVEHandsInsulatedBlackMarine, AU14WYPMCHelmet, AU14WYPMCArmor ]
+      - [ AU14ProdigyFatiguesRU, RMCBootsSPPBlack, AU14HandsProdigyRU, AU14ProdigyBallisticHelmetPART, AU14ArmorProdigyXAS23 ]
+      - [ AU14FatiguesBlackRMC, RMCBootsRoyal, AU14HandsRMC, AU14HeadHelmetRMC, AU14ArmorRMC ]
+      - [ AU14FatiguesUPP, RMCBootsSPPBlack, RMCHandsBlack, AU14UPPNavalInfantryHelmet, AU14UPPArmor ]
+      - [ JumpsuitMarine, CMBootsBlack, CMHandsBlackMarine, ArmorHelmetM10, CMArmorM3Medium ]
+      - [ AU14HAZOPUrbanFatigues, AU14BootsCBRNHAZOPS, RMCHandsVeteranCBRN, AU14HAZOPShelmet, AU14ArmorHAZOPSCBRN ]
+      - [ AU14LACNUniform, AU14LACNBoots, AU14LACNGloves, AU14LACNHelmetStandard, AU14LACNArmorStandard ]

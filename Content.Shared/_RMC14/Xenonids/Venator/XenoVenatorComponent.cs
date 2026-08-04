@@ -5,6 +5,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Xenonids.Venator;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoVenatorSystem))]
 public sealed partial class XenoVenatorComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -24,6 +25,7 @@ public sealed partial class XenoVenatorComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoVenatorSystem))]
 public sealed partial class XenoVenatorPoolOnHitComponent : Component
 {
     [DataField, AutoNetworkedField]

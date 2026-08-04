@@ -1,0 +1,86 @@
+# --- Mob variants --------------------------------------------------------
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalLeader
+  suffix: CMU14, Leader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-leader
+    description: au14-job-description-tribal-leader
+    reregister: false
+    job: AU14JobTribalLeader
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-leader
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalSpear
+  suffix: CMU14, Spear
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-spear
+    description: au14-job-description-tribal-spear
+    reregister: false
+    job: AU14JobTribalSpear
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-spear
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalBowman
+  suffix: CMU14, Bowman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-bowman
+    description: au14-job-description-tribal-bowman
+    reregister: false
+    job: AU14JobTribalBowman
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-bowman
+
+- type: entity
+  parent: CMUMobTribal
+  id: AU14MobTribalShaman
+  suffix: CMU14, Shaman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: au14-job-name-tribal-shaman
+    description: au14-job-description-tribal-shaman
+    reregister: false
+    job: AU14JobTribalShaman
+    raffle:
+      settings: short
+    rules: au14-job-description-tribal-shaman
+
+- type: entity
+  save: false
+  parent: CMMobSlimePerson
+  id: TribalSlime
+  name: Urist C.M McSlime
+  suffix: RMC14
+  components:
+  - type: Tribal

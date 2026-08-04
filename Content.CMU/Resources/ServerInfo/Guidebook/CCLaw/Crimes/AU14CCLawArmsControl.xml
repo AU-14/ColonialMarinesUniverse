@@ -1,0 +1,21 @@
+<Document>
+  # ARMS CONTROL & STATUTES
+
+  Weapons possession is a licensed privilege, not an unrestricted right. Unauthorized weapons are treated as a public safety threat due to pressurized habitats and volatile infrastructure.
+
+  ## Weapon Classes
+  - [bold]Class A — Civilian Tools[/bold] (knives, hatchets, crowbars, industrial/mining/welding tools). Legal when used lawfully. Become illegal if brandished, used to threaten, carried into restricted areas, modified into weapons, or used during a crime.
+  - [bold]Class B — Civilian Firearms[/bold] (pistols, shotguns, hunting rifles, low-capacity rifles). Require a Colonial Firearm License. Must be registered, serialized, and safely stored. Not openly carried in public without authorization. Concealed carry requires a separate permit.
+  - [bold]Class C — Restricted Weapons[/bold] (automatic weapons, smartguns, flamethrowers, grenades, explosives, armor-piercing ammunition, rocket launchers). Illegal for civilians. Only authorized for military forces, Marshals and authorized security, or authorized militia under emergency order.
+  - [bold]Class D — Prohibited Weapons[/bold] (chemical/biological/radiological weapons, improvised explosives, engineered pathogens, weaponized organisms, torture devices). Illegal for all persons. Possession is a major or capital offense depending on risk and use.
+
+  ## Weapons Charges
+  - [bold]Illegal Possession:[/bold] 10 min Class B | 15 min Class C | 20 min Class D + confiscation
+  - [bold]Brandishing:[/bold] 10 min + confiscation + possible license suspension
+  - [bold]Unlawful Carry in Restricted Area:[/bold] 10 min + confiscation + possible suspension
+  - [bold]Illegal Firearm Transfer:[/bold] 15 min + confiscation + license revocation
+  - [bold]Unsafe Storage:[/bold] 10 min + confiscation until compliance
+  - [bold]Use of Firearm During a Crime:[/bold] +10 min + confiscation + license revocation
+  - [bold]Unauthorized Discharge:[/bold] 15 min + confiscation + possible revocation
+  - [bold]Emergency Weapon Suspension:[/bold] During declared emergencies, the Marshal and Colony Administrator, acting together, may order all civilian weapons surrendered. Failure to comply: 20 min + confiscation + revocation | Permanent confinement if weapon is used against responders or lawful authorities.
+</Document>

@@ -178,6 +178,22 @@
     camouflageVariations: {}
 
 - type: entity
+  parent: RMCWeaponRevolverMateba
+  id: RMCWeaponRevolverMatebaNoStun
+  suffix: No Stun
+  components:
+  - type: RevolverAmmoProvider
+    proto: RMCCartridgeRevolverMateba
+
+- type: entity
+  parent: RMCWeaponRevolverMatebaSpecial
+  id: RMCWeaponRevolverMatebaSpecialNoStun
+  suffix: No Stun
+  components:
+  - type: RevolverAmmoProvider
+    proto: RMCCartridgeRevolverMateba
+
+- type: entity
   id: RMCBaseSpeedLoaderMateba
   name: "Mateba speed loader (.454)" #Base
   parent: BaseItem

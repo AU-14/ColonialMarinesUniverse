@@ -1,0 +1,18 @@
+- type: loadoutGroup
+  id: CLFSpecializationAU14
+  name: au14-loadout-group-role-clf-id
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - CLFFakeFoodServiceWorkerAU14
+  - CLFFakeJournalistAU14
+  - CLFFakeJournalistFreePressAU14
+  - CLFFakeJournalistIndependentAU14
+  - CLFFakeFreightSystemsSpecialistAU14
+  - CLFFakeEngineerAU14
+  - CLFFakeWasteManagementSpecialistAU14
+  - CLFFakePhysicianAU14
+  - CLFFakeNurseAU14
+  - CLFFakeEmergencyResponseOfficerAU14
+  - CLFFakeEmergencyResponseOfficerParamedicAU14
+  - CLFFakeEmergencyResponseOfficerFirefighterAU14

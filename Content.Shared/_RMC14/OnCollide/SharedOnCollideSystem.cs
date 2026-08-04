@@ -45,6 +45,12 @@ public abstract partial class SharedOnCollideSystem : EntitySystem
         SubscribeLocalEvent<DamageOnCollideComponent, ComponentShutdown>(OnShutdown);
     }
 
+    public void IgnoreTarget(Entity<DamageOnCollideComponent> entity, EntityUid target)
+    {
+        entity.Comp.Damaged.Add(target);
+        Dirty(entity);
+    }
+
     private void OnStartCollide(Entity<DamageOnCollideComponent> ent, ref StartCollideEvent args)
     {
         OnCollide(ent, args.OtherEntity);

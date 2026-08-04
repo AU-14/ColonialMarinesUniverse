@@ -1,0 +1,127 @@
+- type: entity
+  id: AU14CrateSecureWeYuXenoEggs
+  parent: RMCCrateSecureWeYa
+  name: secure We-Yu crate
+  description: A secure crate with We-Yu insignia on it.
+  suffix: AU14, Xeno Eggs
+  components:
+  - type: StorageFill
+    contents:
+      - id: XenoEgg
+        amount: 2
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+      - id: CMUYautjaHivebreaker
+        prob: 0.1
+
+- type: entity
+  id: CMUCrateSecureCipheringExperiment
+  parent: RMCCrateSecureWeYa
+  name: secure Weyland-Yutani crate
+  description: A secure Weyland-Yutani crate. You don't know what is in it, but there is a rather large "CLASSIFIED" label and a plethora of warning semiotics.
+  suffix: CMU, Xeno Eggs
+  components:
+  - type: StorageFill
+    contents:
+      - id: XenoEgg
+        amount: 1
+
+- type: entity
+  id: AU14CrateSecureWeYuDrugs
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: secure We-Yu crate
+  suffix: AU14, MindBreaker, Speed Demon
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCBottleMindbreaker
+        amount: 7
+      - id: CMUYautjaHivebreaker
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+      - id: AU14DrugDealerDrugBottle
+        amount: 7
+
+# MMI crate is not interesting enough to be the focus of Researcher experiments for an entire round. If some form of robotics is ever added to research, this might be useful again.
+#- type: entity
+#  id: AU14CrateSecureWeYuMMI
+#  parent: AU14CrateSecureWeYuXenoEggs
+#  name: secure We-Yu crate
+#  suffix: AU14, MMI
+#  components:
+#  - type: StorageFill
+#    contents:
+#      - id: MMI
+#        amount: 1
+#      - id: DeathAcidifierImplanter
+#        amount: 1
+#      - id: RMCTentUNMCStandardMedicalFolded
+#      - id: AU14TentBigFoldedSurgical
+
+# Dedicated clotted-syringe crate — six pre-filled syringes for a WYHT
+# squad to use on captured colonists. Folded medical tents come along
+# for set dressing like the other WY secure crates.
+- type: entity
+  id: AU14CrateSecureWeYuClottedSyringes
+  parent: AU14CrateSecureWeYuXenoEggs
+  name: secure We-Yu crate
+  suffix: AU14, Clotted Syringes
+  components:
+  - type: StorageFill
+    contents:
+      - id: AU14AbominationVenomSyringe
+        amount: 6
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: AU14TentBigFoldedSurgical
+
+- type: entity
+  id: CMUCrateSecureWYRandomExp
+  parent: RMCCrateSecureWeYa
+  name: Weyland-Yutani Experiment Crate
+  description: A secure Weyland-Yutani crate, you do not know what is in it. There is a big "EXPERIMENTAL" label on it.
+  suffix: CMU, Random
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: CMUCrateSecureWYRandomExp
+        rolls: 1
+
+- type: entityTable
+  id: CMUCrateSecureWYRandomExp
+  table: !type:GroupSelector
+    children:
+    - !type:AllSelector
+      children:
+      - id: XenoEgg
+      - id: XenoEgg
+      - id: CMUYautjaHivebreaker
+        prob: 0.1
+      weight: 1
+    - !type:AllSelector
+      children:
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      - id: AU14AbominationVenomSyringe
+      weight: 1
+    - !type:AllSelector
+      children:
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: RMCBottleMindbreaker
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      - id: AU14DrugDealerDrugBottle
+      weight: 5
+      

@@ -1,0 +1,37 @@
+- type: partySpawn
+  id: WorkingJoesAPOLLO
+  leadersToSpawn:
+    AU14AICoreApolloCivilian: 1
+  gruntsToSpawn:
+    AU14MobWorkingJoeColony: 2
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: WorkingJoesAPOLLO
+  partyspawn: WorkingJoesAPOLLO
+  entrymethod: shuttle
+  weight:  20
+  minplayers: 400 # admins spawn only
+  maxplayers: 400
+  GhostsNeeded: 3
+  roundstart: false
+
+- type: partySpawn
+  id: WorkingJoesNoAPOLLO
+  leadersToSpawn:
+    AU14MobWorkingJoeColony: 1
+  gruntsToSpawn:
+    AU14MobWorkingJoeColony: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: WorkingJoesNoAPOLLO
+  partyspawn: WorkingJoesNoAPOLLO
+  entrymethod: shuttle
+  weight:  20
+  minplayers: 400 # admins spawn only
+  maxplayers: 400
+  GhostsNeeded: 2
+  roundstart: false

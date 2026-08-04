@@ -1,0 +1,32 @@
+- type: entity
+  parent: CMPlatform
+  id: CMUPlatformLamentRock
+  name: rock edge
+  description: A solid chunk of desolate rocks. Looks like you could climb it with some difficulty.
+  components:
+  - type: Sprite
+    state: strata_platform
+  - type: Construction
+    graph: CMUPlatformLamentRockDestructible
+    node: start
+
+- type: entity
+  parent: CMPlatformBroken
+  id: CMUPlatformLamentRockBroken
+  name: destroyed rock edge
+  description: A solid chunk of desolate rocks. Looks like you could climb it with some difficulty. It has been destroyed.
+  components:
+  - type: Sprite
+    state: strata_platform_broken
+  - type: Construction
+    graph: CMUPlatformLamentRockDestructible
+    node: platformBroken
+
+- type: entity
+  parent: RMCPlatformCornerSmall
+  id: CMUPlatformLamentRockCornerSmall
+  name: rock corner
+  description: A solid chunk of desolate rocks.
+  components:
+  - type: Sprite
+    state: strata_platform_deco

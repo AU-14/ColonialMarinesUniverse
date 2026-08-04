@@ -1,0 +1,14 @@
+- type: entity
+  id: AU14LanguagePresetTWE
+  name: TWE Languages
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - Japanese
+    understoodLanguages:
+    - English
+    - Japanese
+    currentLanguage: English
+    defaultLanguage: English

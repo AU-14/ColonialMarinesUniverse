@@ -610712,7 +610712,7 @@ entities:
     - type: Transform
       pos: -112.1499,-12.426758
       parent: 1
-- proto: RMCWeaponShotgunHG3712
+- proto: RMCWeaponShotgunM12
   entities:
   - uid: 90269
     components:

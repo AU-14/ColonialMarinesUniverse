@@ -106,3 +106,8 @@
   files:
   - /Audio/_RMC14/Vehicle/weapons/cannon_distant1.ogg
   - /Audio/_RMC14/Vehicle/weapons/cannon_distant2.ogg
+
+- type: soundCollection
+  id: RMCAK4047Shoot
+  files:
+  - /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ak4047.ogg

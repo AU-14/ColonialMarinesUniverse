@@ -1,0 +1,14 @@
+- type: rank
+  id: AU14RankCWPSSeniorRanger
+  name: Senior Ranger
+  prefix: Sr. Ranger
+
+- type: rank
+  id: AU14RankCWPSRanger
+  name: Ranger
+  prefix: Ranger
+
+- type: rank
+  id: AU14RankCWPSRangerTrainee
+  name: Probationary Ranger
+  prefix: Prob. Ranger

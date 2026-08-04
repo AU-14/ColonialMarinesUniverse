@@ -487,6 +487,7 @@
       tags:
       - RMCCircuitboard
       - PowerCell
+      - DoorElectronics
 #      - # TODO RMC14 6 different stock parts
       components:
       - ComputerBoard
@@ -576,6 +577,7 @@
       - RMCExplosiveBreachingCharge
       - CMFireExtinguisherPortable
       - RMCCircuitboard
+      - RMCNailgunCompact
       components:
       - Welder
       - ComputerBoard
@@ -676,6 +678,10 @@
   id: RMCPouchToolsSocRCMPVEAssaultEngi
   suffix: Filled, RCM, PVE
   components:
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,31,1
   - type: StorageFill
     contents:
     - id: CMFireExtinguisherPortable

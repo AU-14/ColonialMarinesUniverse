@@ -82,3 +82,6 @@ rmc-flare-gun-examine = The last signal flare fired has the designation: [color=
 
 expendable-light-starshell-ash-empty-name = extinguished star shell ash
 expendable-light-starshell-ash-empty-desc = Burnt out remains of a star shell
+
+rmc-sharp-examine = [bold]Press your [color=cyan]unique action[/color] keybind (Spacebar by default) to toggle explosive and incendiary dart direct-hit detonation delay. Current delay: [color=yellow]{TOSTRING($seconds, "F1")} seconds[/color].[/bold]
+rmc-sharp-toggle-delay = You set {THE($gun)}'s direct-hit detonation delay to {TOSTRING($seconds, "F1")} seconds.

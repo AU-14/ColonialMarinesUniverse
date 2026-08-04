@@ -2,6 +2,7 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Actions.Events;
 using Content.Shared.Interaction;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._RMC14.Actions;
@@ -63,6 +64,11 @@ public abstract partial class SharedRMCActionsSystem : EntitySystem
             if ((shared.Id != null && shared.Id == action.Comp.Id) || (action.Comp.Id != null && shared.Ids.Contains(action.Comp.Id.Value)))
                 _actions.SetIfBiggerCooldown(actionId, action.Comp.Cooldown);
         }
+    }
+
+    public bool MatchesSharedCooldown(ActionSharedCooldownComponent component, EntProtoId id)
+    {
+        return component.Id == id || component.Ids.Contains(id) || component.ActiveIds.Contains(id);
     }
 
     /// <summary>

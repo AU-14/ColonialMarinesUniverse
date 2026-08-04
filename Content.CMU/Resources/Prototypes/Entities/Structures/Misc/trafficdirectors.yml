@@ -1,0 +1,179 @@
+- type: entity
+  abstract: true
+  id: AU14TrafficDirectorProp
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,1.4,0.5"
+        density: 190
+        layer:
+        - MobMask
+  - type: Sprite
+    sprite: Structures/trafficdirectors.rsi
+    offset: 0.5, 0.5
+    noRot: true
+  - type: Clickable
+  - type: DeleteOnExplosion
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: AU14TrafficDirectorProp
+  id: AU14PropTrafficDirector1
+  suffix: Evac Center
+  name: Traffic Director
+  description: A Traffic Director.
+  components:
+  - type: Sprite
+    state: traffic_1
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_evaccenter
+
+- type: entity
+  parent: AU14TrafficDirectorProp
+  id: AU14PropTrafficDirector2
+  suffix: Checkpoint Ahead
+  name: Traffic Director
+  description: A Traffic Director.
+  components:
+  - type: Sprite
+    state: traffic_2
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_cpahead
+
+- type: entity
+  parent: AU14TrafficDirectorProp
+  id: AU14PropTrafficDirector3
+  suffix: Follow Army Orders
+  name: Traffic Director
+  description: A Traffic Director.
+  components:
+  - type: Sprite
+    state: traffic_3
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_armyorders
+
+- type: entity
+  parent: AU14TrafficDirectorProp
+  id: AU14PropTrafficDirector4
+  suffix: Tune to Freq 91.7am
+  name: Traffic Director
+  description: A Traffic Director.
+  components:
+  - type: Sprite
+    state: traffic_4
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_freqtune
+
+- type: entity
+  parent: AU14TrafficDirectorProp
+  id: AU14PropTrafficDirector5
+  suffix: Slow Down
+  name: Traffic Director
+  description: A Traffic Director.
+  components:
+  - type: Sprite
+    state: traffic_5
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_slowdown
+
+- type: entity
+  parent: AU14TrafficDirectorProp
+  id: AU14PropTrafficDirector6
+  suffix: Empty
+  name: Traffic Director
+  description: A Traffic Director.
+  components:
+  - type: Sprite
+    state: traffic_6
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 3000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RequireProjectileTarget
+  - type: Construction
+    graph: AU14SignGraph
+    node: sign_empty

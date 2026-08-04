@@ -27,7 +27,12 @@
       - CMOintment
       - CMTraumaKit
       - CMBurnKit
-      #      - # TODO RMC14 splints
+      - CMUSplintItem
+      - CMUCastItem
+      - CMRollerItem
+      - CMBloodPack
+      - CMSurgicalLine
+      - CMSynthGraft
       - RMCGlovesLatex
       components:
       - Defibrillator

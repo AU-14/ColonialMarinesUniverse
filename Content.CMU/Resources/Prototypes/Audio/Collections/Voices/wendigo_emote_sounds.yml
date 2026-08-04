@@ -1,0 +1,90 @@
+# Wendigo sound collections
+- type: soundCollection
+  id: WendigoGrowl
+  files:
+  - /Audio/Wendigo/growl/wendigo_growl1.ogg
+  - /Audio/Wendigo/growl/wendigo_growl2.ogg
+  - /Audio/Wendigo/growl/wendigo_growl3.ogg
+  - /Audio/Wendigo/growl/wendigo_growl4.ogg
+
+- type: soundCollection
+  id: WendigoHiss
+  files:
+  - /Audio/Wendigo/hissing/wendigo_hiss1.ogg
+  - /Audio/Wendigo/hissing/wendigo_hiss2.ogg
+  - /Audio/Wendigo/hissing/wendigo_hiss3.ogg
+  - /Audio/Wendigo/hissing/wendigo_hiss4.ogg
+
+- type: soundCollection
+  id: WendigoRoar
+  files:
+  - /Audio/Wendigo/roars/wendigo_roar1.ogg
+  - /Audio/Wendigo/roars/wendigo_roar2.ogg
+  - /Audio/Wendigo/roars/wendigo_roar3.ogg
+  - /Audio/Wendigo/roars/wendigo_roar4.ogg
+
+- type: soundCollection
+  id: WendigoHelp
+  files:
+  - /Audio/Wendigo/cries/wendigo_cry1.ogg
+  - /Audio/Wendigo/cries/wendigo_cry2.ogg
+  - /Audio/Wendigo/cries/wendigo_cry3.ogg
+
+- type: soundCollection
+  id: WendigoBreathing
+  files:
+  - /Audio/Wendigo/breathing/wendigo_breathing1.ogg
+  - /Audio/Wendigo/breathing/wendigo_breathing2.ogg
+  - /Audio/Wendigo/breathing/wendigo_breathing3.ogg
+  - /Audio/Wendigo/breathing/wendigo_breathing4.ogg
+
+- type: soundCollection
+  id: WendigoLeap
+  files:
+  - /Audio/Wendigo/attack/wendigo_attack1.ogg
+  - /Audio/Wendigo/attack/wendigo_attack2.ogg
+  - /Audio/Wendigo/attack/wendigo_attack3.ogg
+
+- type: soundCollection
+  id: WendigoDoom
+  files:
+  - /Audio/Wendigo/doom/wendigo_doom1.ogg
+  - /Audio/Wendigo/doom/wendigo_doom2.ogg
+
+- type: soundCollection
+  id: WendigoDeath
+  files:
+  - /Audio/Wendigo/death/wendigo_death1.ogg
+  - /Audio/Wendigo/death/wendigo_death2.ogg
+
+# Wendigo emote sounds mapping
+- type: emoteSounds
+  id: Wendigo
+  params:
+    variation: 0.125
+  sounds:
+    Growl:
+      collection: WendigoGrowl
+    Hiss:
+      collection: WendigoHiss
+    XenoRoar:
+      collection: WendigoRoar
+    XenoHelp:
+      collection: WendigoHelp
+    WendigoBreathing:
+      collection: WendigoBreathing
+
+- type: soundCollection
+  id: WendigoHeadbiteClose
+  files:
+  - /Audio/Wendigo/headbite/close/long_range_screech_close1.ogg
+  - /Audio/Wendigo/headbite/close/long_range_screech_close2.ogg
+  - /Audio/Wendigo/headbite/close/long_range_screech_close3.ogg
+
+- type: soundCollection
+  id: WendigoHeadbiteGlobal
+  files:
+  - /Audio/Wendigo/headbite/far/long_range_screech_far1.ogg
+  - /Audio/Wendigo/headbite/far/long_range_screech_far2.ogg
+  - /Audio/Wendigo/headbite/far/long_range_screech_far3.ogg
+  - /Audio/Wendigo/headbite/far/long_range_screech_far4.ogg

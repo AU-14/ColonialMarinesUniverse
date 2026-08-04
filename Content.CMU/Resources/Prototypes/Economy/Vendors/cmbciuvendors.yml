@@ -895,7 +895,7 @@
     sections:
     - name: HG 37-12 Pump Shotgun
       entries:
-      - id: RMCWeaponShotgunHG3712
+      - id: RMCWeaponShotgunM12
         amount: 1
       - id: RMCAttachmentS6ReflexSight
         amount: 1
@@ -1042,7 +1042,7 @@
       entries:
       - id: RMCWeaponSMGMP5Alt
         amount: 10
-      - id: RMCWeaponShotgunHG3712
+      - id: RMCWeaponShotgunM12
         amount: 3
       - id: RMCXM51Case
         amount: 2

@@ -28,15 +28,6 @@
   id: AU14UADeskFlag
 
 - type: entity
-  parent: RMCSecureCaseMedicalBig
-  id: AU14CrateMedicalVendor
-  name: We-Ya-Med vendor crate
-  description: A crate containing one We-Ya-Med vendor.
-  components:
-  - type: SpawnOnTerminate
-    spawn: AU14GeneralMedicalVendor
-
-- type: entity
   parent: RMCOrbitalCannon
   id: AU14OrbitalCannonGovfor
 
@@ -75,10 +66,6 @@
 - type: entity
   parent: RMCBodyScannerConsole
   id: CMUBodyScannerConsole
-
-- type: entity
-  parent: DefibrillatorCabinetFilled
-  id: CMUDefibrillatorCabinetFilled
 
 - type: entity
   parent: MedicalTechFab
@@ -131,34 +118,6 @@
     stageLoss: 4
     destroy: true
 
-- type: entity
-  parent: AU14ContainerTartarusBase
-  id: AU14ContainerTartarusLeftMedicalEmpty
-  components:
-  - type: Sprite
-    state: emptymedicalleft
-
-- type: entity
-  parent: AU14ContainerTartarusBase
-  id: AU14ContainerTartarusRightMedicalEmptyAlt
-  components:
-  - type: Sprite
-    state: medicalright
-
-- type: entity
-  parent: AU14ContainerTartarusBase
-  id: AU14ContainerTartarusLeftTanWYWings
-  components:
-  - type: Sprite
-    state: tanwywingsleft
-
-- type: entity
-  parent: AU14ContainerTartarusBase
-  id: AU14ContainerTartarusRightTanWYWings
-  components:
-  - type: Sprite
-    state: tanwywingsright
-
 # Fallout-derived floor clutter retained by the Bush maps.
 - type: entity
   abstract: true
@@ -177,42 +136,6 @@
     canCollide: false
   - type: Clickable
   - type: InteractionOutline
-
-- type: entity
-  parent: CMULegacyBushFloorDecor
-  id: DecorFloorPaper
-  name: scattered paper
-  description: A mess of papers.
-  components:
-  - type: Sprite
-    state: scattered_papers
-
-- type: entity
-  parent: CMULegacyBushFloorDecor
-  id: DecorFloorPaper2
-  name: scattered paper
-  description: A mess of papers.
-  components:
-  - type: Sprite
-    state: papers_2
-
-- type: entity
-  parent: CMULegacyBushFloorDecor
-  id: DecorFloorPallet
-  name: pallet
-  description: A wooden pallet.
-  components:
-  - type: Sprite
-    state: pallet
-
-- type: entity
-  parent: CMULegacyBushFloorDecor
-  id: DecorFloorPalletStack
-  name: pallet stack
-  description: A stack of wooden pallets.
-  components:
-  - type: Sprite
-    state: pallet_stack
 
 # Legacy platoon markers. The replacement field selects the current default
 # UNMC equivalent without restoring the removed AU platoon framework.

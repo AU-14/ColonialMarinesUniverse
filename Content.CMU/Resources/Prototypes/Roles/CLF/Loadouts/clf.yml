@@ -1,0 +1,61 @@
+# Fake IDs
+
+- type: loadout
+  id: CLFFakeFoodServiceWorkerAU14
+  equipment:
+    id: AU14IDCardCLFFakeFoodServiceWorker
+
+- type: loadout
+  id: CLFFakeJournalistAU14
+  equipment:
+    id: AU14IDCardCLFFakeJournalist
+
+- type: loadout
+  id: CLFFakeJournalistFreePressAU14
+  equipment:
+    id: AU14IDCardCLFFakeJournalistFreePress
+
+- type: loadout
+  id: CLFFakeJournalistIndependentAU14
+  equipment:
+    id: AU14IDCardCLFFakeJournalistIndependent
+
+- type: loadout
+  id: CLFFakeFreightSystemsSpecialistAU14
+  equipment:
+    id: AU14IDCardCLFFakeFreightSystemsSpecialist
+
+- type: loadout
+  id: CLFFakeEngineerAU14
+  equipment:
+    id: AU14IDCardCLFFakeEngineer
+
+- type: loadout
+  id: CLFFakeWasteManagementSpecialistAU14
+  equipment:
+    id: AU14IDCardCLFFakeWasteManagementSpecialist
+
+- type: loadout
+  id: CLFFakePhysicianAU14
+  equipment:
+    id: AU14IDCardCLFFakePhysician
+
+- type: loadout
+  id: CLFFakeNurseAU14
+  equipment:
+    id: AU14IDCardCLFFakeNurse
+
+- type: loadout
+  id: CLFFakeEmergencyResponseOfficerAU14
+  equipment:
+    id: AU14IDCardCLFFakeEmergencyResponseOfficer
+
+- type: loadout
+  id: CLFFakeEmergencyResponseOfficerParamedicAU14
+  equipment:
+    id: AU14IDCardCLFFakeEmergencyResponseOfficerParamedic
+
+- type: loadout
+  id: CLFFakeEmergencyResponseOfficerFirefighterAU14
+  equipment:
+    id: AU14IDCardCLFFakeEmergencyResponseOfficerFirefighter

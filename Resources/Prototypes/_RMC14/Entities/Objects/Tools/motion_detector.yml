@@ -77,3 +77,15 @@
 
 - type: Tag
   id: RMCDetector
+
+- type: entity
+  parent: RMCMotionDetector
+  id: AU14MotionDetectorRMC
+  name: L107 motion detector
+  description: A military grade, hand-held motion detection device that can penetrate most anything and has an approximate range of 28 meters. Can also be utilized to scan vehicle interiors. This one is programmed to operate with RMC IFF.
+
+- type: entity
+  parent: RMCMotionDetectorCompact
+  id: AU14MotionDetectorCompactRMC
+  name: L717 pocket motion detector
+  description: This prototype motion detector sacrifices versatility, having only the long-range mode, for size, being so small it can even fit in pockets. This one is programmed to operate with RMC IFF.

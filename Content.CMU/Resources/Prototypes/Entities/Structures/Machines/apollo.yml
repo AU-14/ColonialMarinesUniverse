@@ -1,0 +1,205 @@
+- type: entity
+  id: AU14AICoreApolloCivilian
+  parent: RMCAICore
+  name: APOLLO Central A.I.
+  description: This is the artificial intelligence system for monitoring the Working Joes. It is manufactured by Seegson Corporation.
+  suffix: AU14, Colony
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicore.rsi
+    noRot: true
+    layers:
+    - state: hydra-off
+    - state: hydra
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: NameModifier
+    baseName: "APOLLO Central A.I."
+  - type: AssignXenoName
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: TypingIndicator
+    proto: joe
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - radioAI
+    - Colony
+    - radioWEYU
+    - radioCMB
+  - type: ActiveRadio
+    channels:
+    - radioAI
+    - Colony
+    - radioWEYU
+    - radioCMB
+  - type: UserInterface
+    interfaces:
+      enum.VoiceMaskUIKey.Key:
+        type: VoiceMaskBoundUserInterface
+      enum.HumanoidMarkingModifierKey.Key:
+        type: HumanoidMarkingModifierBoundUserInterface
+      enum.CMMobStateActionsUI.Key:
+        type: CMGhostActionBui
+        requireInputValidation: false
+      enum.TacticalMapUserUi.Key:
+        type: TacticalMapUserBui
+      enum.SquadLeaderTrackerUI.Key:
+        type: SquadInfoBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.ViewIntelObjectivesUI.Key:
+        type: ViewIntelObjectivesBui
+  - type: TacticalMapUser
+    actionId: RMCActionOpenTacticalMapMarine
+    marines: true
+  - type: NewPlayerLabel
+
+- type: entity
+  id: AU14AICoreApolloGOVFOR
+  parent: AU14AICoreApolloCivilian
+  name: APOLLO Central A.I.
+  suffix: AU14, GOVFOR
+  components:
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - radioAI
+    - radioGovforCommand
+    - radioGovforJTAC
+    - radioGovforAlpha
+    - radioGovforCharlie
+    - radioGovforBravo
+    - radioGovforIntel
+  - type: ActiveRadio
+    channels:
+    - radioAI
+    - radioGovforCommand
+    - radioGovforJTAC
+    - radioGovforAlpha
+    - radioGovforCharlie
+    - radioGovforBravo
+    - radioGovforIntel
+
+- type: entity
+  id: AU14AICoreApolloOPFOR
+  parent: AU14AICoreApolloCivilian
+  name: APOLLO Central A.I.
+  suffix: AU14, OPFOR
+  components:
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - radioAI
+    - radioOpforAlpha
+    - radioOpforCommand
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforIntel
+    - radioOpforJTAC
+  - type: ActiveRadio
+    channels:
+    - radioAI
+    - radioOpforAlpha
+    - radioOpforCommand
+    - radioOpforCharlie
+    - radioOpforBravo
+    - radioOpforIntel
+    - radioOpforJTAC
+
+- type: entity
+  id: AU14AICoreCPU
+  parent: RMCAICoreProcessor
+  name: APOLLO CPU
+  description: This is APOLLO's central processor. Made of a casing designed to withstand nuclear blasts, the CPU also contains APOLLO's blackbox recorder.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicoremachinery.rsi
+    layers:
+    - state: cpu_off
+    - state: cpu
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+
+- type: entity
+  id: AU14AICoreSubstrate
+  parent: RMCAICoreProcessor
+  name: APOLLO Substrate
+  description: The memory substrate of APOLLO, containing complex protocols and information. Limited capabilities can operate on substrate alone, without the main APOLLO Unit operational.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicoremachinery.rsi
+    layers:
+    - state: substrate_off
+    - state: substrate
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+
+- type: entity
+  id: APOLLOAICoreProcessor
+  name: APOLLO Processor
+  description: An external processor for APOLLO, used to process vast amounts of information.
+  placement:
+    mode: SnapgridCenter
+  components: #has no collission in 13 they have invisible walls behind it
+  - type: InteractionOutline
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 10
+    channel: Equipment
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/aicoremachinery.rsi
+    layers:
+    - state: processor_off
+    - state: processor
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 190
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Metallic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1000 # Okey hear me out down there... Health is 1000 in 13 but you can go over 1000+ and it goes on...
+#      behaviors:
+#      - !type:DoActsBehavior
+#        acts: [ "Destruction" ]
+
+- type: entity
+  parent: RMCAreaGA
+  id: AU14AreaGAAI
+  name: APOLLO Central A.I. Interface
+  components:
+  - type: Sprite
+    state: wylab
+
+- type: entity
+  parent: CMChairComfyARES
+  id: AU14ChairComfyAI
+  name: APOLLO Central A.I. interface chair
+  suffix: AU14, APOLLO
+  components:
+  - type: Sprite
+    state: ai_interface_chair

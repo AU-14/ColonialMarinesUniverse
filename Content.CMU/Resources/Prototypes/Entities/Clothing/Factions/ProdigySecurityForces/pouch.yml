@@ -33,6 +33,11 @@
       - Hypospray
       - CMUSplintItem
       - HemostaticGauzePacket
+      - CMSurgicalCase
+      - CMUCastItem
+      components:
+      - Defibrillator
+      - Foldable
 
 - type: entity
   parent: AU14PouchMedicalProdigy

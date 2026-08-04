@@ -2470,6 +2470,10 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (coords.MapId == MapId.Nullspace)
             return;
 
+        var map = _transform.GetMap(drone.Owner.ToCoordinates());
+        if (map is { } mapUid && TerminatingOrDeleted(mapUid))
+            return;
+
         Spawn(drone.Comp.RuinedCorePrototype, coords);
 
         if (drone.Comp.Operator is { } operatorUid &&

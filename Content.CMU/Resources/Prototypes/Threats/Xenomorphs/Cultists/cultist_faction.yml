@@ -1,0 +1,13 @@
+# Cultist team identifier - visible to other cultists and xenos
+- type: factionIcon
+  id: CultistFaction
+  priority: 11
+  showTo:
+    components:
+    - ShowAntagIcons
+    - Cultist
+    - Xeno
+  icon:
+    sprite: /Textures/Interface/job_icons.rsi
+    state: threat_member
+

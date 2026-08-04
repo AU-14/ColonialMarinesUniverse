@@ -1,0 +1,14 @@
+- type: rank
+  id: AU14RankNSPAInspector
+  name: Inspector
+  prefix: Insp.
+
+- type: rank
+  id: AU14RankNSPASeniorConstable
+  name: Senior Constable
+  prefix: Sr. Constable
+
+- type: rank
+  id: AU14RankNSPAConstable
+  name: Constable
+  prefix: Constable

@@ -1,0 +1,30 @@
+- type: tile
+  parent: CMPlanetBase
+  id: AUSheperdsDirt0
+  name: shep dirt 0
+  sprite: /Textures/_RMC14/Tiles/sheperd/shepdirt0.png
+  variants: 4
+  placementVariants:
+  - 1.0
+  - 1.0
+  - 1.0
+  - 1.0
+
+- type: tile
+  parent: CMPlanetBase
+  id: AUSheperdsGrass1
+  name: tiles-cm-grass
+  sprite: /Textures/_RMC14/Tiles/sheperd/shepgrass1/grass.png
+  edgeSpritePriority: 1
+  edgeSprites:
+    SouthEast: /Textures/_RMC14/Tiles/sheperd/shepgrass1/single_edge.png
+    NorthEast: /Textures/_RMC14/Tiles/sheperd/shepgrass1/single_edge.png
+    NorthWest: /Textures/_RMC14/Tiles/sheperd/shepgrass1/single_edge.png
+    SouthWest: /Textures/_RMC14/Tiles/sheperd/shepgrass1/single_edge.png
+    South: /Textures/_RMC14/Tiles/sheperd/shepgrass1/double_edge.png
+    East: /Textures/_RMC14/Tiles/sheperd/shepgrass1/double_edge.png
+    North: /Textures/_RMC14/Tiles/sheperd/shepgrass1/double_edge.png
+    West: /Textures/_RMC14/Tiles/sheperd/shepgrass1/double_edge.png
+  baseTurf: AUSheperdsDirt0
+  weedsSpreadable: true
+  semiWeedable: true

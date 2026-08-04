@@ -1,0 +1,98 @@
+- type: job
+  parent: AU14USArmyMarksmanBase
+  id: AU14USArmyMarksman
+  roundSide: ThirdParty
+  roundForce: USARMY
+  roundRole: AU14USArmyMarksman
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spec
+    background:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUSArmy
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: ScoutWhitelist
+  - type: SpotterWhitelist
+  - type: JobPrefix
+    prefix: rmc-job-prefix-forecon-marksman
+
+  name: rmc-job-name-forecon-marksman
+  description: au14-job-description-usarmy
+  playTimeTracker: AU14JobUSArmyMarksman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    USArmy_Sergeant:
+      entity: AU14ChevronUSArmySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyMarksman
+        time: 36000
+    USArmy_Corporal:
+      entity: AU14ChevronUSArmyCorporal
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUSArmyMarksman
+        time: 18000
+    USArmy_Specialist:
+      entity: AU14ChevronUSArmySpecialist
+      requirements: []
+  spawnMenuRoleName: US Army Marksman (AU14, surv)
+  startingGear: AU14GearUSArmyMarksman
+  greeting: au14-usarmy-greeting
+  icon: "AU14JobIconUSArmyMarksman"
+  joinNotifyCrew: false
+  supervisors: cm-job-name-squad-leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUSArmy
+  id: AU14JobUSArmyMarksman
+  name: US Army Marksman (Surv)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUSArmy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-marksman
+    description: au14-job-description-usarmy
+    reregister: false
+    job: AU14USArmyMarksman
+    raffle:
+      settings: short
+    rules: au14-usarmy-rules
+
+- type: startingGear
+  id: AU14GearUSArmyMarksman
+  equipment:
+    id: AU14IDCardUSArmyMarksman
+    outerClothing: AU14ArmorUSArmy
+    jumpsuit: AU14ArmyJumpsuitCavalry
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    shoes: AU14BootsUSArmyFilled
+    mask: RMCMaskKeffiyehBlack
+    head: AU14HelmetUSArmy
+    belt: RMCM1984BeltFilled
+    pocket1: AU14PouchIFAKFill
+    pocket2: AU14PouchIFAKFill
+    back: AU14MolleSatchel
+    ears: AU14HeadsetUSArmy
+    suitstorage: WeaponRifleM4SPRCustom
+  storage:
+    back:
+    - RMCRadioHandheldColony
+    - RMCMagazineRifleM4SPRA19
+    - RMCMagazineRifleM4SPRA19
+    - RMCFlashlight

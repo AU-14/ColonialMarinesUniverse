@@ -247,3 +247,25 @@
     onIcon:
       sprite: _RMC14/Objects/Clothing/helmet_visors.rsi
       state: po_visor_yellow_down
+# RMC visor aliases used by CMU's Royal Marine helmet family.
+- type: entity
+  parent: RMCVisorSquad
+  id: AU14VisorSquadRMC
+  description: An insertable visor HUD into a standard RMC helmet.
+
+- type: entity
+  parent: RMCVisorSquadIntegrated
+  id: AU14VisorSquadIntegratedRMC
+  description: An insertable visor HUD into a standard RMC helmet.
+
+- type: entity
+  parent: RMCVisorMedical
+  id: AU14VisorMedicalRMC
+  name: HBVS visor
+  description: One of the few successful components from the otherwise disastrous Commando Upgrade Program ran in the mid 2170s, the head-mounted, biomonitor vision system comes as standard in all RMC helmets.
+
+- type: entity
+  parent: RMCVisorMedicalAdvancedIntegrated
+  id: AU14VisorMedicalAdvancedIntegratedRMC
+  name: HBVS-A visor
+  description: One of the few successful components from the otherwise disastrous Commando Upgrade Program ran in the mid 2170s, the head-mounted, biomonitor vision system comes as standard in all RMC helmets.

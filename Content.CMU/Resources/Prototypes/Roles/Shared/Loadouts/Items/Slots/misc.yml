@@ -1,0 +1,119 @@
+- type: loadout
+  id: StampApprovedAU14
+  storage:
+    back:
+    - CMStampApproved
+
+- type: loadout
+  id: SynthResetKeyAU14 # WeYu
+  storage:
+    back:
+    - RMCSynthResetKey
+
+- type: loadout
+  id: SynthResetKeySeegsonAU14
+  storage:
+    back:
+    - RMCSynthResetKeySeegson
+
+- type: loadout
+  id: SynthResetKeyProdigyAU14
+  storage:
+    back:
+    - AU14SynthResetKeyProdigy
+
+- type: loadout
+  id: SynthResetKeyNovarisAU14
+  storage:
+    back:
+    - RMCSynthResetKeyNovaris
+
+- type: loadout
+  id: SynthResetKeyHyperdyneAU14
+  storage:
+    back:
+    - RMCSynthResetKeyHyperdyne
+
+- type: loadout
+  id: PatchFORECONAU14
+  storage:
+    back:
+    - RMCPatchFORECON
+
+- type: loadout
+  id: PatchUSArmyAU14
+  storage:
+    back:
+    - AU14PatchUSArmy
+
+- type: loadout
+  id: Patch1stCavAU14
+  storage:
+    back:
+    - AU14Patch1stCav
+
+- type: loadout
+  id: PatchUSCMEngineersAU14
+  storage:
+    back:
+    - AU14PatchUSCMEngineers
+
+- type: loadout
+  id: HAZOPShecuPatchAU14
+  storage:
+    back:
+    - AU14HAZOPShecuPatch
+
+- type: loadout
+  id: Patch32ndABAU14
+  storage:
+    back:
+    - AU14Patch32ndAB
+
+- type: loadout
+  id: Patch525thAIBAU14
+  storage:
+    back:
+    - AU14Patch525thAIB
+
+- type: loadout
+  id: PatchUSASFAU14
+  storage:
+    back:
+    - AU14PatchUSASF
+
+- type: loadout
+  id: CCAFPatchAU14
+  storage:
+    back:
+    - AU14CCAFPatch
+
+- type: loadout
+  id: MedicPatchCMU14
+  storage:
+    back:
+    - RMCPatchMedic
+
+- type: loadout
+  id: OliveBranchPatchCMU14
+  storage:
+    back:
+    - RMCPatchOliveBranch
+
+- type: loadout
+  id: PeacePatchCMU14
+  storage:
+    back:
+    - RMCPatchPeace
+
+- type: loadout
+  id: BlackSquareWeYuCMU14
+  storage:
+    back:
+    - RMCPatchWeYaBlackSquare
+
+- type: loadout
+  id: EMTArmBandCMU14
+  storage:
+    back:
+    - RMCMedEMTArmband

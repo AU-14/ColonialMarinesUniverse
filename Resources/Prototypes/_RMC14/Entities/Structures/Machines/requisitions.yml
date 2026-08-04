@@ -301,3 +301,57 @@
       map: [ "enum.RequisitionsGearLayers.Base" ]
   - type: RequisitionsGear
   - type: CargoSellBlacklist
+
+- type: entity
+  parent: [ CMASRSConsole ]
+  id: CMASRSConsoleGovfor
+  name: ASRS console (Govfor)
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessGovforReq" ] ]
+  - type: RequisitionsComputer
+    faction: govfor
+
+- type: entity
+  parent: [ CMASRSConsole ]
+  id: CMASRSConsoleOpfor
+  name: ASRS console (Opfor)
+  components:
+  - type: AccessReader
+    access: [ [ "AU14AccessOpforCommand" ], [ "AU14AccessOpforReq" ] ]
+  - type: RequisitionsComputer
+    faction: opfor
+
+- type: entity
+  parent: CMCargoElevator
+  id: CMCargoElevatorGovfor
+  name: cargo elevator (Govfor)
+  components:
+  - type: RequisitionsElevator
+    faction: govfor
+
+- type: entity
+  parent: CMCargoElevator
+  id: CMCargoElevatorOpfor
+  name: cargo elevator (Opfor)
+  components:
+  - type: RequisitionsElevator
+    faction: opfor
+
+- type: entity
+  parent: [ CMASRSConsole ]
+  id: CMASRSConsoleColony
+  name: ASRS console (Colony)
+  components:
+  - type: AccessReader
+    access: [ [ "CMAccessRequisitions" ], [ "CMAccessColonyCommand" ] ]
+  - type: RequisitionsComputer
+    faction: colony
+
+- type: entity
+  parent: CMCargoElevator
+  id: CMCargoElevatorColony
+  name: cargo elevator (Colony)
+  components:
+  - type: RequisitionsElevator
+    faction: colony

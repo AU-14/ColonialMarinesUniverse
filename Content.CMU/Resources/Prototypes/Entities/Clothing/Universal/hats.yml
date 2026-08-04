@@ -1,0 +1,79 @@
+- type: entity
+  parent: RMCHeadRoyalBeret
+  id: AU14HeadBeretIO
+  name: intelligence officer beret
+  description: A distinctive crimson beret worn by intelligence officers. Reinforced with flexible Kevlar, it offers minimal protection while maintaining a traditional and respected appearance.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/black_beret.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/black_beret.rsi
+
+- type: entity
+  parent: CMHeadBeret
+  id: AU14HeadBeretSO
+  name: staff officer beret
+  description: A beret with the staff officer insignia emblazoned on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/beret_quartermaster.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/beret_quartermaster.rsi
+
+- type: entity
+  parent: CMHeadBeret
+  id: AU14HeadBeretADJ
+  name: adjutant beret
+  description: A beret with the adjutant insignia emblazoned on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/CO/beret_col.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/CO/beret_col.rsi
+
+- type: entity
+  parent: CMHeadBeret
+  id: AU14HeadBeretCommander
+  name: commander beret
+  description: A beret with the adjutant insignia emblazoned on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/CO/beret_ltcol.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/CO/beret_ltcol.rsi
+
+- type: entity
+  parent: AU14LACNCommandoBeanie
+  id: AU14HeadCommandoBeanie
+  name: Beanie
+  description: A beanie to hide your bald head. Looks strangely similar to the beanie used by the LACN Naval Commandos.
+
+- type: entity
+  parent: [AU14HeadCommandoBeanie, BaseFoldable]
+  id: AU14HeadBeanieclava
+  components:
+  - type: Clothing
+    sprite: Clothing/Civilian/Hats/beanieclava.rsi
+  - type: Appearance
+  - type: Foldable
+    foldVerbText: cmu-beanieclava-fold
+    unfoldVerbText: cmu-beanieclava-unfold
+    canFoldInsideContainer: true
+  - type: IdentityBlocker
+  - type: FoldableClothing
+    foldedEquippedPrefix: folded
+    foldedHideLayers:
+    - HeadTop
+    - HeadSide
+    unfoldedHideLayers:
+    - HeadTop
+    - HeadSide
+    - Hair
+  - type: Sprite
+    sprite: Clothing/Civilian/Hats/beanieclava.rsi
+    layers:
+    - state: icon
+      map: ["unfoldedLayer"]
+    - state: icon
+      map: ["foldedLayer"]
+      visible: false

@@ -1,0 +1,14 @@
+- type: loadoutGroup
+  id: SynthBeltAU14
+  name: au14-loadout-group-synth-belt
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - BeltMedicBagSupportSynthAU14
+  - BeltMedicBagRMCSupporSynthAU14
+  - BeltMedicBagBlackSupportSynthAU14
+  - BeltUtilityFilledAU14
+  - BeltMedicalFilledAU14
+  - BeltHolsterNailgunFillAU14
+  - IntelDetectorAU14
+  - BeltSecurityMPFilledAU14

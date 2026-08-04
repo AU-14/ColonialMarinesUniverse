@@ -1,0 +1,122 @@
+# Ambassador Consoles - Used by third parties for diplomatic functions
+# These consoles allow factions to call in third party support
+
+# Base Ambassador Console
+- type: entity
+  abstract: true
+  parent: RMCCommunicationsConsoleBase
+  id: AU14AmbassadorConsoleBase
+  name: ambassador console
+  description: A console for diplomatic functions and third party communication.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: ActivatableUI
+    key: enum.AmbassadorConsoleUi.Key
+  - type: AmbassadorConsole
+    budget: 500
+    replenishAmount: 10
+    replenishInterval: 60
+  - type: UserInterface
+    interfaces:
+      enum.AmbassadorConsoleUi.Key:
+        type: AmbassadorConsoleBui
+      enum.AmbassadorThirdPartyUi.Key:
+        type: AmbassadorThirdPartyBui
+  - type: ItemSlots
+    slots:
+      CashSlot:
+        whitelist:
+          tags:
+          - Currency
+  - type: ContainerContainer
+    containers:
+      CashSlot: !type:ContainerSlot {}
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["AU14AccessColonyAmbassador"]]
+
+# UPP Ambassador Console - Can call in GROM
+- type: entity
+  id: AU14AmbassadorConsoleUPP
+  parent: AU14AmbassadorConsoleBase
+  name: UPP diplomatic console
+  description: A Union of Progressive Peoples diplomatic console. Can request GROM special forces support.
+  suffix: UPP, GROM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: AmbassadorConsole
+    factionName: UPP
+    budget: 500
+    replenishAmount: 10
+    replenishInterval: 60
+    callableParties:
+      UPPGROM: 7500
+      UPPGROMAlt: 6000
+      UPPGROMAlt2: 4500
+
+# UA Ambassador Console - Can call in US Army
+- type: entity
+  id: AU14AmbassadorConsoleUA
+  parent: AU14AmbassadorConsoleBase
+  name: UA diplomatic console
+  description: A United Americas diplomatic console. Can request US Army or VAI support.
+  suffix: UA, Army
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: AmbassadorConsole
+    factionName: United Americas
+    budget: 500
+    replenishAmount: 10
+    replenishInterval: 60
+    callableParties:
+      MarineSecurityGuard: 2000
+      VAISP: 4500
+      VAIPO: 6000
+
+# TWE Ambassador Console - Three World Empire
+- type: entity
+  id: AU14AmbassadorConsoleTWE
+  parent: AU14AmbassadorConsoleBase
+  name: TWE diplomatic console
+  description: A Three World Empire diplomatic console. Can request NSPA or Royal Marines' support.
+  suffix: TWE, PMC
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: AmbassadorConsole
+    factionName: Three World Empire
+    budget: 500
+    replenishAmount: 10
+    replenishInterval: 60
+    callableParties:
+      RMCRRT: 9000
+      NSPAInvestigationParty: 5000
+
+# Independent Systems Ambassador Console
+- type: entity
+  id: AU14AmbassadorConsoleIS
+  parent: AU14AmbassadorConsoleBase
+  name: ICSC diplomatic console
+  description: An Independent Core System Colonies diplomatic console.
+  suffix: ICSC, PMC
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: AmbassadorConsole
+    factionName: Independent Core System Colonies
+    budget: 500
+    replenishAmount: 10
+    replenishInterval: 60
+

@@ -219,11 +219,36 @@ public sealed class CrtThemeSheetlet<T> : Sheetlet<T> where T : PalettedStyleshe
             Element<PanelContainer>().Class(StyleNano.StyleClassCrtInsetPanel).Prop(PanelContainer.StylePropertyPanel, inset),
             Element<PanelContainer>().Class(StyleNano.StyleClassCrtQuietPanel).Prop(PanelContainer.StylePropertyPanel, quiet),
             Element<PanelContainer>().Class(StyleNano.StyleClassCrtHeaderPanel).Prop(PanelContainer.StylePropertyPanel, header),
-            Element<ContainerButton>().Class(StyleNano.StyleClassCrtButton).Prop(ContainerButton.StylePropertyStyleBox, button),
-            Element<ContainerButton>().Class(StyleNano.StyleClassCrtButton).Pseudo(ContainerButton.StylePseudoClassHover).Prop(ContainerButton.StylePropertyStyleBox, buttonHover),
-            Element<ContainerButton>().Class(StyleNano.StyleClassCrtButton).Pseudo(ContainerButton.StylePseudoClassPressed).Prop(ContainerButton.StylePropertyStyleBox, buttonPressed),
-            Element<ContainerButton>().Class(StyleNano.StyleClassCrtButton).Pseudo(ContainerButton.StylePseudoClassDisabled).Prop(ContainerButton.StylePropertyStyleBox, buttonDisabled),
-            Element<ContainerButton>().Class(StyleNano.StyleClassCrtAttentionButton).Prop(ContainerButton.StylePropertyStyleBox, attention),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtButton)
+                .Prop(ContainerButton.StylePropertyStyleBox, button)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                .Prop(ContainerButton.StylePropertyStyleBox, button)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                .Prop(ContainerButton.StylePropertyStyleBox, buttonHover)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtButton).Pseudo(ContainerButton.StylePseudoClassPressed)
+                .Prop(ContainerButton.StylePropertyStyleBox, buttonPressed)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtButton).Pseudo(ContainerButton.StylePseudoClassDisabled)
+                .Prop(ContainerButton.StylePropertyStyleBox, buttonDisabled)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtAttentionButton)
+                .Prop(ContainerButton.StylePropertyStyleBox, attention)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtAttentionButton).Pseudo(ContainerButton.StylePseudoClassNormal)
+                .Prop(ContainerButton.StylePropertyStyleBox, attention)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtAttentionButton).Pseudo(ContainerButton.StylePseudoClassHover)
+                .Prop(ContainerButton.StylePropertyStyleBox, buttonPressed)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtAttentionButton).Pseudo(ContainerButton.StylePseudoClassPressed)
+                .Prop(ContainerButton.StylePropertyStyleBox, buttonPressed)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
+            Element<ContainerButton>().Class(ContainerButton.StyleClassButton).Class(StyleNano.StyleClassCrtAttentionButton).Pseudo(ContainerButton.StylePseudoClassDisabled)
+                .Prop(ContainerButton.StylePropertyStyleBox, buttonDisabled)
+                .Prop(Control.StylePropertyModulateSelf, Color.White),
             Element<Label>().Class(StyleNano.StyleClassCrtText).Prop(Label.StylePropertyFont, textFont).Prop(Label.StylePropertyFontColor, textColor),
             Element<Label>().Class(StyleNano.StyleClassCrtDimText).Prop(Label.StylePropertyFont, textFont).Prop(Label.StylePropertyFontColor, dimTextColor),
             Element<Label>().Class(StyleNano.StyleClassCrtHeading).Prop(Label.StylePropertyFont, headingFont).Prop(Label.StylePropertyFontColor, headingColor),

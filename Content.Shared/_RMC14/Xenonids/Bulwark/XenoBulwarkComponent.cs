@@ -9,6 +9,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Xenonids.Bulwark;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoBulwarkSystem))]
 public sealed partial class XenoBulwarkComponent : Component
 {
     [DataField, AutoNetworkedField]

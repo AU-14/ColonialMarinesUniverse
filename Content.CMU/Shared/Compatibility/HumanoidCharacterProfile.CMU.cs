@@ -256,7 +256,50 @@ public sealed partial class HumanoidCharacterProfile
                Height == other.Height &&
                Weight == other.Weight &&
                Build == other.Build &&
-               HideMetaInformation == other.HideMetaInformation;
+               HideMetaInformation == other.HideMetaInformation &&
+               GamemodeJobPrioritiesEqual(_gamemodeJobPriorities, other._gamemodeJobPriorities) &&
+               _threatPreferences.SetEquals(other._threatPreferences) &&
+               GamemodeSetPreferencesEqual(_gamemodeThreatPreferences, other._gamemodeThreatPreferences) &&
+               GamemodeSetPreferencesEqual(_gamemodeAntagPreferences, other._gamemodeAntagPreferences);
+    }
+
+    private static bool GamemodeJobPrioritiesEqual(
+        IReadOnlyDictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> left,
+        IReadOnlyDictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> right)
+    {
+        if (left.Count != right.Count)
+            return false;
+
+        foreach (var (gamemode, leftJobs) in left)
+        {
+            if (!right.TryGetValue(gamemode, out var rightJobs) || leftJobs.Count != rightJobs.Count)
+                return false;
+
+            foreach (var (job, priority) in leftJobs)
+            {
+                if (!rightJobs.TryGetValue(job, out var rightPriority) || priority != rightPriority)
+                    return false;
+            }
+        }
+
+        return true;
+    }
+
+    private static bool GamemodeSetPreferencesEqual<T>(
+        IReadOnlyDictionary<string, HashSet<T>> left,
+        IReadOnlyDictionary<string, HashSet<T>> right)
+        where T : notnull
+    {
+        if (left.Count != right.Count)
+            return false;
+
+        foreach (var (gamemode, leftValues) in left)
+        {
+            if (!right.TryGetValue(gamemode, out var rightValues) || !leftValues.SetEquals(rightValues))
+                return false;
+        }
+
+        return true;
     }
 
     private void AddCmuHash(ref HashCode hash)

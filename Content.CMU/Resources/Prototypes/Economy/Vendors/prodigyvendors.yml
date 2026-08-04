@@ -906,7 +906,7 @@
         amount: 1
     - name: HG 37-12 Pump Shotgun
       entries:
-      - id: RMCWeaponShotgunHG3712
+      - id: RMCWeaponShotgunM12
         amount: 2
       - id: RMCBoxShotgunBuckshot
         amount: 16
@@ -949,7 +949,7 @@
         amount: 10
       - id: RMCWeaponShotgunM3717
         amount: 2
-      - id: RMCWeaponShotgunHG3712
+      - id: RMCWeaponShotgunM12
         amount: 2
       - id: AU14WeaponPistolM4A4Empty
         amount: 4

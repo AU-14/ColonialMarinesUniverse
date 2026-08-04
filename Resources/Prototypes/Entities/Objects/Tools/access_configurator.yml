@@ -170,3 +170,115 @@
     denialSound:
       path: /Audio/Machines/custom_deny.ogg
     doAfter: 0.5
+- type: entity
+  parent: AccessConfiguratorUniversal
+  id: CMUAdminAccessConfigurator
+  name: admin access configurator
+  suffix: CMU, Admin
+  description: If found, please return to your nearest High Command official.
+  components:
+  - type: AccessOverrider
+    accessLevels:
+    # Resources/Prototypes/_RMC14/Access/almayer_access.yml
+    - CMAccessRequisitions
+    - CMAccessKitchen
+    - CMAccessEngineering
+    - CMAccessMaint
+    - CMAccessOT
+    - CMAccessMedical
+    - CMAccessChemistry
+    - CMAccessResearch
+    - CMAccessPress
+    # Resources/Prototypes/_RMC14/Access/colony_access.yml
+    - CMAccessColonyPublic
+    - CMAccessColonyLogistics
+    - CMAccessColonyEngineering
+    - CMAccessColonyResearch
+    - CMAccessColonyBrig
+    - CMAccessColonyMedbay
+    - CMAccessColonyCommand
+    - CMAccessColonyChem
+    # Resources/Prototypes/_RMC14/Access/command_access.yml
+    - RMCAccessCommand
+    - CMAccessCMP
+    - CMAccessQM
+    - CMAccessSEA
+    - CMAccessCO
+    - CMAccessCMO
+    - CMAccessCE
+    - CMAccessASO
+    - CMAccessCorp
+    - CMAccessHighCommand
+    # Resources/Prototypes/_RMC14/Access/dropship_access.yml
+    - CMAccessDropship
+    - CMAccessPilot
+    - CMAccessCrewman
+    # Resources/Prototypes/_RMC14/Access/marine_access.yml
+    - CMAccessAlpha
+    - CMAccessBravo
+    - CMAccessCharlie
+    - CMAccessDelta
+    - CMAccessMarinePrep
+    - CMAccessMedPrep
+    - CMAccessCombatTechPrep
+    - CMAccessSquadLeaderPrep
+    - CMAccessSpecPrep
+    - CMAccessSmartPrep
+    - CMAccessFTLPrep
+    - CMAccessMarineRifleman
+    # Resources/Prototypes/_RMC14/Access/mp_access.yml
+    - CMAccessBrig
+    - CMAccessArmory
+    # Resources/Prototypes/_RMC14/Access/xeno_access.yml
+    - CMAccessXeno
+    - CMAccessXenoQueen
+    # CMU!!!!
+    - AU14AccessCorporateWEYU
+    - CMAccessColonyArmory
+    - AU14AccessGovfor # govfor & govforsquad are identical
+    - AU14AccessGovforSquad
+    - AU14AccessGovforCommand
+    - AU14AccessGovforSecurity
+    - AU14AccessGovforMedical
+    - AU14AccessGovforEngineering
+    - AU14AccessGovforFTL
+    - AU14AccessGovforGunner
+    - AU14AccessGovforPilot
+    - AU14AccessGovforJuniorOfficer
+    - AU14AccessGovforReq
+    - AU14AccessGovforVehicleCrew
+    - AU14AccessOpfor # opfor & opforsquad are identical
+    - AU14AccessOpforSquad
+    - AU14AccessOpforCommand
+    - AU14AccessOpforSecurity
+    - AU14AccessOpforMedical
+    - AU14AccessOpforEngineering
+    - AU14AccessOpforFTL
+    - AU14AccessOpforGunner
+    - AU14AccessOpforPilot
+    - AU14AccessOpforJuniorOfficer
+    - AU14AccessOpforReq
+    - AU14AccessOpforVehicleCrew
+    - AU14AccessColonyHeadPhysician
+    - AU14AccessColonyHeadEngineer
+    - AU14AccessColonyMarshall
+    - AU14AccessColonyForeman
+    - AU14AccessColonyAdministrator
+    - AU14AccessColonyHeadOfService
+    - AU14AccessCorporateWEYULiaison
+    - AU14AccessColonyAmbassador
+    - AU14AccessOrbitalManagement
+    - AU14AccessOrbitalLaw
+
+    privilegedIdSlot:
+      name: id-card-console-privileged-id
+      ejectSound: /Audio/Machines/id_swipe.ogg
+      insertSound: /Audio/Weapons/Guns/MagIn/batrifle_magin.ogg
+      ejectOnBreak: true
+      swap: false
+      whitelist:
+        components:
+        - IdCard
+    denialSound:
+      path: /Audio/Machines/custom_deny.ogg
+    doAfter: 0.5

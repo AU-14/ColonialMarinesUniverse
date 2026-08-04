@@ -1,0 +1,291 @@
+- type: entity
+  parent: RMCAreaBase
+  id: AU14AreaUSSGeorgeBush
+  name: "USS George W. Bush"
+  components:
+  - type: Area
+    powerNet: Bush
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+    noTunnel: true
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushReflectionRoom
+  name: "Reflection Room"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBushUpperStarboardSideFuelPumps
+  id: AU14AreaUSSGeorgeBushLowerPortSideFuelPumps
+  name: "Port Side Lower Fuel Pumps"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBushUpperStarboardSideFuelPumps
+  id: AU14AreaUSSGeorgeBushUpperPortSideFuelPumps
+  name: "Port Side Upper Fuel Pumps"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBushUpperStarboardSideFuelPumps
+  id: AU14AreaUSSGeorgeBushLowerStarboardSideFuelPumps
+  name: "Starboard Side Lower Fuel Pumps"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBushUpperEngineeringFuelPumps
+  id: AU14AreaUSSGeorgeBushUpperStarboardSideFuelPumps
+  name: "Starboard Side Upper Fuel Pumps"
+  components:
+  - type: Area
+    powerNet: Bush
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+    noTunnel: true
+    hijackEvacuationArea: true
+    hijackEvacuationWeight: 0.05
+    hijackEvacuationType: Add
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushUpperEngineeringFuelPumps
+  name: "Main Engineering Fuel Pumps"
+  components:
+  - type: Area
+    powerNet: Bush
+    CAS: false
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+    noTunnel: true
+    hijackEvacuationArea: true
+    hijackEvacuationWeight: 0.15
+    hijackEvacuationType: Add
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushMedbay
+  name: "Medbay"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushMorgue
+  name: "Morgue"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushUpperBowHallway
+  name: "Upper Bow Hallway"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushLowerBowHallway
+  name: "Lower Bow Hallway"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushUpperSternHallway
+  name: "Upper Stern Hallway"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushLowerSternHallway
+  name: "Lower Stern Hallway"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushResearch
+  name: "Research"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushResearchContainment
+  name: "Research Containment"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushChemroom
+  name: "Chemroom"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushAICoreReception
+  name: "AI Core Reception"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushAICoreLower
+  name: "AI Core Lower"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushAICoreUpper
+  name: "AI Core Upper"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushCrewAccommodationsOne
+  name: "Crew Accommodations One"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushCrewAccommodationsTwo
+  name: "Crew Accommodations Two"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushCrewAccommodationsThree
+  name: "Crew Accommodations Three"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushBrigs
+  name: "Brigs"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushEvacuationMusterArea
+  name: "Evacuation Muster Area"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushUPPAmbassadorsOffice
+  name: "UPP Ambassadors Office"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushUAAmbassadorsOffice
+  name: "UA Ambassadors Office"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushCommandOffice
+  name: "Command Office"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushCombatInformationCenter
+  name: "Combat Information Center"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushIntelRoom
+  name: "Intel Room"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushCommandersOffice
+  name: "Commanders Office"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushVehicleBayOne
+  name: "Vehicle Bay One"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushVehicleBayTwo
+  name: "Vehicle Bay Two"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushFlightdeck
+  name: "Flight Deck"
+  components:
+  - type: Area
+    powerNet: Bush
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: false
+    lasing: true
+    medevac: false
+    paradropping: false
+    OB: false
+    supplyDrop: false
+    weatherEnabled: false
+    noTunnel: true
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushRequisitions
+  name: "Requisitions"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushOrdnanceProduction
+  name: "Ordnance Office"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushHypersleep
+  name: "Hypersleep"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushGeneralCrewQuarters
+  name: "Lower Crew Accommodations"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushCombatArmsPreparations
+  name: "Combat Arms Preparations"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushGalleyEatery
+  name: "Galley Eatery"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushGalleyKitchen
+  name: "Galley Kitchen"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushSecurityOffice
+  name: "Lower Security Office"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushBriefingRoom
+  name: "Briefing Room"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushGeneratorRoom
+  name: "Generator Room"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushEmergencyEngineeringStorage
+  name: "Lower Engineering Storage"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushEngineeringOffice
+  name: "Lower Engineering Office"
+
+- type: entity
+  parent: AU14AreaUSSGeorgeBush
+  id: AU14AreaUSSGeorgeBushLowerEngineering
+  name: "Lower Engineering"

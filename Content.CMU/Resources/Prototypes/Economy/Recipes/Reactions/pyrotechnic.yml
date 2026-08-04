@@ -1,0 +1,40 @@
+- type: reaction
+  id: CMUNapalmUT
+  priority: 20
+  reactants:
+    RMCNapalm:
+      amount: 1
+    RMCPhoron:
+      amount: 1
+    RMCCLF3:
+      amount: 1
+  products:
+    RMCNapalmUT: 3
+
+- type: reaction
+  id: CMUNapalmB
+  priority: 20
+  reactants:
+    RMCNapalm:
+      amount: 2
+    RMCPhoron:
+      amount: 1
+    RMCMethane:
+      amount: 1
+    RMCCLF3:
+      amount: 1
+  products:
+    RMCNapalmB: 2
+
+- type: reaction
+  id: CMUNapalmE
+  priority: 20
+  reactants:
+    RMCPhoron:
+      amount: 1
+    RMCNapalmSticky:
+      amount: 2
+    RMCCLF3:
+      amount: 1
+  products:
+    RMCNapalmE: 2

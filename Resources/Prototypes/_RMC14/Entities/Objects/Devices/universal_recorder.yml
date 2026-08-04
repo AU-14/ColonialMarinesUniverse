@@ -143,5 +143,16 @@
     - id: RMCUniversalRecorderTape
       amount: 5
 
+- type: entity
+  parent: RMCBoxRegulationTapesEmpty
+  id: RMCBoxRegulationTapesFull
+  name: box of regulation tapes (x7)
+  suffix: FullyFilled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCUniversalRecorderTape
+      amount: 7
+
 - type: Tag
   id: Recorder

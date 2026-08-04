@@ -160624,7 +160624,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 177.27579,-111.53201
       parent: 1
-- proto: RMCWeaponShotgunHG3712
+- proto: RMCWeaponShotgunM12
   entities:
   - uid: 18083
     components:

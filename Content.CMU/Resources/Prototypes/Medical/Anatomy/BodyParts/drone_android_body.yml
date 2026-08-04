@@ -1,0 +1,49 @@
+- type: body
+  id: CMUDroneAndroidBody
+  name: "drone android"
+  root: torso
+  slots:
+    head:
+      part: CMUPartHumanHead
+      connections:
+      - torso
+      organs:
+        brain: CMUOrganHumanBrain
+        eyes: CMUOrganHumanEyes
+    torso:
+      part: CMUPartHumanTorso
+      connections:
+      - right_arm
+      - left_arm
+      - right_leg
+      - left_leg
+      organs:
+        heart: CMUOrganHumanHeart
+        lungs: CMUOrganHumanLungs
+        stomach: CMUOrganHumanStomach
+        liver: CMUOrganHumanLiver
+        kidneys: CMUOrganHumanKidneys
+    right_arm:
+      part: CMUPartRoboticRightArm
+      connections:
+      - right_hand
+    left_arm:
+      part: CMUPartRoboticLeftArm
+      connections:
+      - left_hand
+    right_hand:
+      part: CMUPartRoboticRightHand
+    left_hand:
+      part: CMUPartRoboticLeftHand
+    right_leg:
+      part: CMUPartRoboticRightLeg
+      connections:
+      - right_foot
+    left_leg:
+      part: CMUPartRoboticLeftLeg
+      connections:
+      - left_foot
+    right_foot:
+      part: CMUPartRoboticRightFoot
+    left_foot:
+      part: CMUPartRoboticLeftFoot

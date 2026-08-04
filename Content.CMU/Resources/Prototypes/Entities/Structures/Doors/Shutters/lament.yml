@@ -1,0 +1,15 @@
+- type: entity
+  parent: RMCShutterHybrisa
+  id: CMUShutterLamentOpen
+  suffix: Open
+  components:
+  - type: Door
+    state: Open
+  - type: Occluder
+    enabled: false
+  - type: Physics
+    canCollide: false
+  - type: Airtight
+    airBlocked: false
+  - type: RadiationBlocker
+    enabled: false

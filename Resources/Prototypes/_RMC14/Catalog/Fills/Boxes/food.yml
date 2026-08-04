@@ -1,4 +1,18 @@
 - type: entity
+  name: surplus box of ingredients
+  parent: RMCBoxCardboard
+  id: RMCBoxIngredients
+  description: This box contains ingredients.
+  components:
+  - type: StorageFill
+    contents:
+    - id: FoodPotato
+      amount: 2
+    - id: FoodTomato
+    - id: FoodEgg
+  - type: Sprite
+
+- type: entity
   parent: RMCBoxCardboard
   id: RMCBoxDonkpockets
   name: box of donk-pockets

@@ -169,6 +169,34 @@
   - type: RMCProjectileAccuracy
     accuracy: 105
 
+- type: entity
+  parent: RMCMK80
+  id: AU14L165A1Filled
+  name: L165A1 service pistol
+  description: Service issue pistol to the Royal Marine Commandos. A sleek, modern, semi-automatic handgun specifically designed to chamber specialized 9x19mm explosive squash-head rounds. Based on a Beretta Arms patented design, this Weyland-Yutani modification has earned its place in the hands of the Three World Empire's best soldiers. Can load normal VP-78 magazines with no issue too.
+
+- type: entity
+  parent: RMCMK80
+  id: AU14L165A1
+  name: L165A1 service pistol
+  description: Service issue pistol to the Royal Marine Commandos. A sleek, modern, semi-automatic handgun specifically designed to chamber specialized 9x19mm explosive squash-head rounds. Based on a Beretta Arms patented design, this Weyland-Yutani modification has earned its place in the hands of the Three World Empire's best soldiers. Can load normal VP-78 magazines with no issue too.
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMMagazinePistolMK80
+
+- type: entity
+  parent: CMMagazinePistolMK80
+  id: AU14MagazinePistolL165A1
+  name: L165A1 magazine (9mm Squash-Head)
+
 - type: Tag
   id: CMMagazinePistolMK80
 

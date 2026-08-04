@@ -95,3 +95,6 @@ rmc-job-prefix-pve-forecon-assistant-lead = ASL
 
 rmc-job-name-pve-forecon-squad-lead = Squad Lead
 rmc-job-prefix-pve-forecon-squad-lead = SL
+
+rmc-job-name-weapons-specialist-sharp = SHARP Operator Specialist
+rmc-job-prefix-weapons-specialist-sharp = SHRP

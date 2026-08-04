@@ -93,7 +93,7 @@
     - [ AU14WeaponRifleAR10, AU14PouchMagazineLargeFilledAR10, AU14PouchIFAKFill ]
     - [ RMCWeaponBoltActionRifle, AU14PouchMagazineLargeFilledHuntingRifle, AU14PouchIFAKFill ]
     - [ WeaponRifleMAR40, AU14PouchMagazineLargeFilledMAR40normal, AU14PouchIFAKFill ]
-    - [ RMCWeaponShotgunHG3712, AU14PouchShotgunLargeBuckshot, AU14PouchIFAKFill ]
+    - [ RMCWeaponShotgunM12, AU14PouchShotgunLargeBuckshot, AU14PouchIFAKFill ]
     - [ WeaponShotgunM357, AU14PouchShotgunLargeBuckshot, AU14PouchIFAKFill ]
     tryEquipRandomWeapon: true
     randomGearOther:

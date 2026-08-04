@@ -1,0 +1,86 @@
+- type: job
+  parent: CMJobBase
+  id: AU14JobFORECONSniperBase
+  name: au14-job-name-govforadvisor
+  description: au14-job-description-govforadvisor
+  playTimeTracker: AU14FORECONSniperDetachment
+  basePlaytimeTracker: true
+  hidden: true
+
+- type: job
+  parent: AU14JobFORECONSniperBase
+  id: AU14FORECONSniperDetachment
+  roundSide: ThirdParty
+  roundForce: FORECON
+  roundRole: AU14FORECONSniperDetachment
+  roundComponents:
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spec_sniper
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: SpotterWhitelist
+  - type: SniperWhitelist
+  - type: JobPrefix
+    prefix: rmc-job-prefix-weapons-specialist-sniper
+  - type: LanguagePreset
+    spokenLanguages:
+    - English
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: rmc-job-name-forecon-sniper
+  description: rmc-job-description-forecon-detachment
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    RMCRankWarrantOfficer:
+      entity: AU14ChevronUSCMChiefWarrantOfficer2
+      requirements: []
+  spawnMenuRoleName: FORECON Sniper (AU14, Detachment)
+  startingGear: AU14GearFORECONSniperDetachment
+  greeting: au14-forecon-detachment-greeting
+  icon: "RMCJobIconForeconSniper"
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-platco
+  accessGroups:
+  - AU14GovforSquad
+  hidden: true
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicFORECON
+  suffix: AU14, FORECON, Detachment
+  id: AU14JobFORECONSniperDetachment
+  name: FORECON Sniper (Detachment)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: SquadFORECON
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: rmc-job-name-forecon-sniper
+    description: rmc-job-description-forecon-detachment
+    reregister: false
+    job: AU14FORECONSniperDetachment
+    raffle:
+      settings: short
+    rules: au14-forecon-detachment-rules
+
+- type: startingGear
+  id: AU14GearFORECONSniperDetachment
+  equipment:
+    id: AU14IDCardFORECONSniperDetachment
+    ears: AU14HeadsetFORECONERT
+  inhand:
+  - AU14KitFORECONDetachmentUniform
+  - AU14KitFORECONDetachmentSniper
+
+- type: playTimeTracker
+  id: AU14FORECONSniperDetachment

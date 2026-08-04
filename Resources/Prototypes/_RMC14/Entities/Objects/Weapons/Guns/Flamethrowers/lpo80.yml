@@ -41,6 +41,17 @@
       rmc-aslot-underbarrel: 0.284, -0.313
 
 - type: entity
+  parent: RMCWeaponFlamerSPP
+  id: RMCWeaponFlamerSPPPVE
+  suffix: PVE
+  components:
+  - type: Gun
+    fireRate: 2
+
+- type: Tag
+  id: RMCWeaponIncineratorLPO80
+
+- type: entity
   parent: RMCWeaponFlamer
   id: RMCWeaponFlamerSpecUPP
   name: LPO80-T incinerator unit

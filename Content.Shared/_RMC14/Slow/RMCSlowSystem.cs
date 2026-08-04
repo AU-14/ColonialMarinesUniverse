@@ -42,6 +42,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
         SubscribeLocalEvent<RMCSlowdownComponent, RefreshMovementSpeedModifiersEvent>(OnSlowdownRefresh);
         SubscribeLocalEvent<RMCSuperSlowdownComponent, RefreshMovementSpeedModifiersEvent>(OnSuperSlowdownRefresh);
         SubscribeLocalEvent<RMCRootedComponent, RefreshMovementSpeedModifiersEvent>(OnRootRefresh);
+        SubscribeLocalEvent<RMCInnateSlowdownComponent, RefreshMovementSpeedModifiersEvent>(OnInnateSlowdownRefresh);
 
         SubscribeLocalEvent<RMCSpeciesSlowdownModifierComponent, StunnedEvent>(OnModifierStun);
         SubscribeLocalEvent<RMCSpeciesSlowdownModifierComponent, KnockedDownEvent>(OnModifierKnockdown);
@@ -173,6 +174,13 @@ public sealed partial class RMCSlowSystem : EntitySystem
             return;
 
         args.ModifySpeed(0, 0);
+    }
+
+    private void OnInnateSlowdownRefresh(Entity<RMCInnateSlowdownComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
+    {
+        var multiplier = _temporarySpeed.CalculateSpeedModifier(ent, ent.Comp.Slowdown);
+        if (multiplier != null)
+            args.ModifySpeed(multiplier.Value, multiplier.Value);
     }
 
     private void MaybeRemoveSlowVisuals(EntityUid ent)

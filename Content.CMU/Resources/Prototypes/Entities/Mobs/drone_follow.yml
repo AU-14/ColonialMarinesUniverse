@@ -1,0 +1,10 @@
+- type: htnCompound
+  id: CMUDroneFollowCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:MoveToOperator
+        pathfindInPlanning: true
+        targetKey: FollowTarget
+        rangeKey: FollowCloseRange
+        removeKeyOnFinish: false

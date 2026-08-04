@@ -8,14 +8,7 @@
     maxItemSize: Normal
     grid:
     - 0,0,20,1
-    whitelist:
-      tags:
-        - Book
-        - Document
-        - Write
-        - Paper
-        - Folder
-        - Stamp
+    whitelist: null
   - type: StorageFill
     contents:
       - id: AU14GuidebookLawMarine

@@ -1,0 +1,15 @@
+- type: votingChoices
+  id: InsurgencyVotingChoices
+  preset: Insurgency
+  planetChoices:
+    - planets:
+        - AUPlanetShepherdsPride
+        - CMUPlanetLament
+        - CMUPlanetStableGarrisonRedux
+        - AUPlanetSorokyne
+        - AuPlanetChances
+        - CMUPlanetHopesRetreat
+      groups:
+        - InsurgencyClfRoundGroup
+      backupGroups:
+        - InsurgencyClfRoundGroup

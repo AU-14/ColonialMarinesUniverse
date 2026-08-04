@@ -1,0 +1,24 @@
+- type: rank
+  id: AU14RankCMBMarshal
+  name: CMB Marshal
+  prefix: Mrshl.
+
+- type: rank
+  id: AU14RankCMBChiefDeputy
+  name: Chief Deputy
+  prefix: Chf. Dep.
+
+- type: rank
+  id: AU14RankCMBSrDeputy
+  name: Senior Deputy
+  prefix: Sr. Dep.
+
+- type: rank
+  id: AU14RankCMBDeputy
+  name: Deputy
+  prefix: Dep.
+
+- type: rank
+  id: AU14RankCMBProbDeputy
+  name: Probationary Deputy
+  prefix: Prob. Dep.

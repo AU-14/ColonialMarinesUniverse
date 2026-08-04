@@ -21,7 +21,7 @@
   - Muted
   - Narcolepsy
   - Pacified
-  - PainNumbness
+  - PainNumbnessStatusEffect
   - Paracusia
   - PermanentBlindness
   - Snoring
@@ -94,6 +94,33 @@
   id: CloningPod
   parent: Antag
   forceCloning: false
+  copyEquipment: null
+  copyInternalStorage: false
+  copyImplants: false
+
+# for paradox clones
+- type: cloningSettings
+  id: ParadoxCloningSettings
+  parent: [BaseClone, Antag]
+
+# changeling identity copying
+- type: cloningSettings
+  id: ChangelingCloningSettings
+  parent: BaseClone
+  components:
+  - BodyEmotes
+  - Fixtures
+  - Speech
+  - TypingIndicator
+  - ScaleVisuals
+  eventComponents:
+  - Inventory
+  - Wagging
+  - Vocal
+  - Storage
+  - Rootable
+  - Sericulture
+  - MovementSpeedModifier
   copyEquipment: null
   copyInternalStorage: false
   copyImplants: false

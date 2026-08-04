@@ -1,0 +1,14 @@
+- type: loadoutGroup
+  id: SynthPouchesRightAU14
+  name: au14-loadout-group-synth-pouches-right
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - PouchPoliceEquipmentSupportSynthRightAU14
+  - PouchToolsFilledSupportSyntheticRightAU14
+  - PouchCommandFillRightAU14
+  - PouchDocumentRightAU14
+  - PouchSlingRightAU14
+  - PouchAutoinjectorFilledMilitaryDoctorRightAU14
+  - PouchConstructionFillFullRightAU14
+  - PouchMedkitPMCFilledRightAU14

@@ -28,7 +28,7 @@
         amount: 1
     - name: Shotguns
       entries:
-      - id: RMCWeaponShotgunHG3712
+      - id: RMCWeaponShotgunM12
         amount: 1
       - id: WeaponShotgunM357Sawn
         amount: 2

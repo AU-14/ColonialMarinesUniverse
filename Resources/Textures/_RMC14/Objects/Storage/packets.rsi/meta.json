@@ -20,6 +20,18 @@
       "name": "s_nade_placeholder_e"
     },
     {
+      "name": "teargas_packet"
+    },
+    {
+      "name": "teargas_packet_e"
+    },
+    {
+      "name": "teargas_airburst_packet"
+    },
+    {
+      "name": "teargas_airburst_packet_e"
+    },
+    {
       "name": "d_nade_placeholder"
     },
     {
@@ -66,6 +78,12 @@
     },
     {
       "name": "minebox_e"
+    },
+    {
+      "name": "mineboxi"
+    },
+    {
+      "name": "minebox_ei"
     },
     {
       "name": "flashbang"
@@ -210,6 +228,18 @@
     },
     {
       "name": "mfhs_packet_e"
+    },
+    {
+      "name": "model_r2175"
+    },
+    {
+      "name": "rmchedp"
+    },
+    {
+      "name": "rmchidp"
+    },
+    {
+      "name": "rmcgas"
     }
   ]
 }

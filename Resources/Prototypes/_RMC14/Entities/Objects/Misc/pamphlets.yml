@@ -138,6 +138,19 @@
 # gives powerloader skill / bypasses limit
 - type: entity
   parent: CMPamphlet
+  id: RMCPamphletSharp
+  name: SHARP operator instructional pamphlet
+  description: A pamphlet used to quickly impart vital knowledge. This one contains P9 SHARP operator notes.
+  components:
+  - type: Sprite
+    state: pamphlet_written
+  - type: SkillPamphlet
+    addComps:
+    - type: SharpSpecWhitelist
+    bypassLimit: true
+
+- type: entity
+  parent: CMPamphlet
   id: CMPamphletPowerloader
   name: powerloader instructional pamphlet
   description: A pamphlet used to quickly impart vital knowledge. This one has a powerloader insignia. The title reads 'Moving freight and squishing heads - a practical guide to a Work Loader'.

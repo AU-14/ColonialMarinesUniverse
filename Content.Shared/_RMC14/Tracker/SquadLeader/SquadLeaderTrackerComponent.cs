@@ -27,5 +27,8 @@ public sealed partial class SquadLeaderTrackerComponent : Component
     public EntityUid? Target;
 
     [DataField, AutoNetworkedField]
+    public EntityUid? BattleBuddy;
+
+    [DataField, AutoNetworkedField]
     public HashSet<ProtoId<TrackerModePrototype>> TrackerModes = new();
 }

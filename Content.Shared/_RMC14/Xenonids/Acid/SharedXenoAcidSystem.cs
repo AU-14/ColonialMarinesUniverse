@@ -588,6 +588,24 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
     /// </summary>
     /// <param name="entity">The entity whose corrodible state is being changed</param>
     /// <param name="isCorrodible">The new corrodible value</param>
+    public bool TryGetAcidStrength(EntityUid uid, out XenoAcidStrength strength)
+    {
+        if (TryComp<TimedCorrodingComponent>(uid, out var timed))
+        {
+            strength = timed.Strength;
+            return true;
+        }
+
+        if (TryComp<DamageableCorrodingComponent>(uid, out var damageable))
+        {
+            strength = damageable.Strength;
+            return true;
+        }
+
+        strength = default;
+        return false;
+    }
+
     public void SetCorrodible(EntityUid entity, bool isCorrodible)
     {
         var corrodible = EnsureComp<CorrodibleComponent>(entity);

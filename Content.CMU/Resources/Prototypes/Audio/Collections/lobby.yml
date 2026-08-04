@@ -1,0 +1,10 @@
+- type: soundCollection
+  id: LobbyMusic
+  files:
+  - /Audio/Lobby/AliensTitle.ogg
+  - /Audio/Lobby/DarkDiscovery.ogg
+  - /Audio/Lobby/LV426.ogg
+  - /Audio/Lobby/AlienMainTitle.ogg
+  - /Audio/Lobby/HyperSleep.ogg
+  - /Audio/Lobby/TheSurvivorIsAWoman.ogg
+  - /Audio/Lobby/Morgue.ogg

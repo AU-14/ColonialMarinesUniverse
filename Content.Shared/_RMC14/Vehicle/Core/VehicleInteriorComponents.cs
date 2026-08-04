@@ -27,6 +27,10 @@ public sealed partial class VehicleInteriorLinkComponent : Component
     public EntityUid Vehicle = EntityUid.Invalid;
 }
 
+[RegisterComponent]
+[Access(typeof(VehicleSystem), typeof(VehicleInteriorProtectionSystem))]
+public sealed partial class VehicleInteriorIndestructibleComponent : Component;
+
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 [Access(typeof(VehicleSystem))]
 public sealed partial class VehicleInteriorOccupantComponent : Component

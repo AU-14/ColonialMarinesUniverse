@@ -129858,7 +129858,7 @@ entities:
     - type: Transform
       pos: 53.5,21.5
       parent: 1
-- proto: RMCWeaponShotgunHG3712
+- proto: RMCWeaponShotgunM12
   entities:
   - uid: 17103
     components:

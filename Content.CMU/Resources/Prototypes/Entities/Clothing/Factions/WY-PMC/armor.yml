@@ -1,0 +1,77 @@
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14WYPMCArmor
+  name: WY PMC Armor
+  description: A set of Weyland-Yutani PMC armor.
+  components:
+  - type: Sprite
+    sprite: Clothing/WY_PMC/wypmcstandardarmor.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: AU14WYPMCArmorMin
+  name: WY PMC Minimalistic Armor
+  description: A set of Weyland-Yutani PMC armor. This pair is quite small compared to the standard, and will provide less protection.
+  components:
+  - type: Sprite
+    sprite: Clothing/WY_PMC/wypmclightarmor.rsi
+
+- type: entity
+  parent: RMCBaseBioSuit
+  id: AU14SuitBioWeYu
+  name: WeYu-TSS MK I - bio suit
+  description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a suit that protects against biological contamination.
+  suffix: AU14, Generic, WeYu
+  components:
+  - type: Item
+    size: Small
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/biosuit_weya.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Misc/biosuit_weya.rsi
+
+- type: entity
+  id: CMUSuitBioWYSec
+  parent: AU14SuitBioWeYu
+  name: armored WeYu-TSS MK I - bio suit
+  description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a suit that protects against biological contamination. This one has been fitted with an armored vest.
+  components:
+  - type: Sprite
+    sprite: Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
+  - type: Clothing
+    sprite: Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: CMHardArmor
+  - type: CMArmor
+    melee: 30
+    bullet: 20 # CLOTHING_ARMOR_MEDIUM
+    bio: 100 # CLOTHING_ARMOR_HARDCORE
+    explosionArmor: 15 # CLOTHING_ARMOR_MEDIUMLOW
+
+- type: entity
+  parent: AU14BaseArmor
+  id: AU14WYPMCArmorEngineer
+  name: WY PMC Engineer Armor
+  description: A set of Weyland-Yutani PMC Engineer armor.
+  components:
+  - type: Sprite
+    sprite: Clothing/WY_PMC/engi_armor.rsi
+
+- type: entity
+  parent: AU14BaseArmorLight
+  id: AU14WYPPOArmor
+  name: WY PPO Armor
+  description: A set of Weyland-Yutani Personal Protection Officer armor. This pair is quite small compared to the standard, and will provide less protection.
+  components:
+  - type: ClothingSpeedModifier
+    walkModifier: 0.90
+    sprintModifier: 0.90
+  - type: Sprite
+    sprite: Clothing/WY_PMC/ppo_armor.rsi
+  - type: UniformAccessoryHolder
+    startingAccessories:
+    - RMCPatchWeYaBlackSquare

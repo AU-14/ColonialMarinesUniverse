@@ -28,6 +28,7 @@ public enum AlchemistMixture : byte
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoAlchemistSystem))]
 public sealed partial class XenoAlchemistComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -83,6 +84,7 @@ public sealed partial class XenoAlchemistComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoAlchemistSystem))]
 public sealed partial class XenoTemporaryStatModifierComponent : Component
 {
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]

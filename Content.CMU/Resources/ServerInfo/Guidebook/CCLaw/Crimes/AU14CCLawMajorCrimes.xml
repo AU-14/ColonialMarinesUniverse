@@ -1,0 +1,83 @@
+<Document>
+  # MAJOR CRIMES
+
+  ## Disorderly Conduct
+  Severely disrupting colony operations, emergency response, or essential services (blocking emergency response, interfering with evacuation, causing panic during emergency operations, disrupting medical triage).
+  - 10 min
+
+  ## Assault
+  Threatening or using physical force with hostile intent.
+  - 10 min unarmed | 15 min with a deadly weapon
+
+  ## Manslaughter
+  Killing someone without malicious intent due to reckless or negligent conduct.
+  - 20 min + possible license revocation, job removal, or permanent confinement if the person remains a danger
+
+  ## Illegal Confinement
+  Unlawfully restraining, kidnapping, or imprisoning another person. Does not apply to lawful quarantine, arrest, or protective custody.
+  - 20 min
+
+  ## Major Theft
+  Stealing colony funds, emergency supplies, weapons, vehicles, access cards, or restricted equipment.
+  - 15 min + return of property
+
+  ## Unauthorized Access to Corporate Property
+  Accessing company equipment, labs, records, or restricted areas without authorization.
+  - 7 min (minor access) | 15 min if restricted materials, vehicles, records, or systems are involved
+
+  ## Misuse of Colony Infrastructure
+  Improperly operating, disabling, or modifying colony systems (atmosphere processors, reactor systems, airlocks, water processors, emergency shelters, fuel systems).
+  - 15 min | 20 min if public safety endangered | Permanent confinement if mass death or colony collapse risk
+
+  ## Sabotage
+  Damaging, disabling, or compromising colony infrastructure, utilities, or safety/security systems.
+  - 20 min | Permanent confinement if the act creates mass danger
+
+  ## Possession of Restricted Contraband
+  Possessing restricted drugs, military equipment, explosives, illegal weapons, classified material, or dangerous organisms.
+  - 15-20 min + confiscation
+
+  ## Unauthorized Distress Signal
+  Sending a distress call, emergency beacon, or evacuation signal without lawful authorization.
+  - 15 min | 20 min if it causes panic, military deployment, or operational disruption
+
+  ## Interference with Emergency Response
+  Obstructing marshals, medical staff, evacuation crews, or other lawful emergency responders.
+  - 15 min | 20 min if injury, death, contamination, or major delay results
+
+  ## Biohazard Noncompliance
+  Refusing lawful quarantine, decontamination, medical screening, or isolation procedures.
+  - 20 min | Permanent confinement if the violation risks outbreak, mass infection, or colony‑wide contamination
+
+  ## Possession of Restricted Biological Material
+  Possessing, hiding, transporting, or selling dangerous biological material without authorization (unknown eggs, parasitic organisms, pathogen samples, infected tissue, invasive lifeform remains, unknown organic material from restricted zones).
+  - 20 min + confiscation/destruction + mandatory quarantine | Permanent confinement if colony safety endangered
+
+  ## Harboring a Contaminated Person
+  Knowingly hiding or assisting a person under quarantine or suspected of carrying a dangerous pathogen.
+  - 20 min | Permanent confinement if outbreak risk is created
+
+  ## Corporate Espionage
+  Stealing, copying, or transmitting restricted corporate, scientific, or biological research data.
+  - 20 min | Permanent confinement if tied to hostile powers, terrorist groups, or hazardous biological research
+
+  ## Unauthorized Disclosure
+  Releasing restricted colony, scientific, military, or biological information without authorization.
+  - 10 min (minor) | 20 min if it causes panic or operational disruption | Permanent confinement if mass casualties or colony collapse risk
+
+  ## Corruption
+  Using public, law enforcement, or administrative authority for personal gain or unlawful punishment.
+  - 15 min + removal from position
+
+  ## Abuse of Authority
+  Issuing unlawful arrests, searches, seizures, administrative orders, or emergency directives.
+  - 15 min + removal from position
+
+  ## Harboring a Fugitive
+  Knowingly hiding or assisting a person wanted for a major or capital crime.
+  - 15 min
+
+  ## Rioting
+  Participating in violent public unrest involving property damage, assault, theft, arson, or obstruction of emergency services.
+  - 20 min
+</Document>

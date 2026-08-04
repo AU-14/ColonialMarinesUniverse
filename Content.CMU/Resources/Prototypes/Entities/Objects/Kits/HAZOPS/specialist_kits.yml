@@ -1,0 +1,47 @@
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitHAZOPSShotgunner
+  name: HAZOPS Shotgunner kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,5
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: RMCMaskBalaclavaMARSOC
+      - id: AU14WeaponShotgunSPAS12HAZOPS
+      - id: AU14GogglesM1A1ClearBallistic
+      - id: RMCBoxShotgunBuckshot
+        amount: 8
+
+- type: entity
+  parent: RMCKitBase
+  id: AU14KitHAZOPSFlamer
+  name: HAZOPS Flamer kit
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,13,5
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: AU14WeaponFlamerM240A2HAZOPS
+      - id: AU14TankFlamerM240A2HAZOPS
+        amount: 7
+      - id: AU14MaskGasHAZOPSM17Flamer
+      - id: RMCBackpackFlamer
+      - id: RMCPouchFuelTank
+        amount: 2

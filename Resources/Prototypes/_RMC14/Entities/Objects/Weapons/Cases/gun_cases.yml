@@ -746,7 +746,7 @@
   description: A gun case containing an Type 23 tactical shotgun, a box of high-dispersive shock grenades, and a box of buckshot shells.
   components:
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous
     grid:
     - 0,0,21,3
   - type: StorageFill

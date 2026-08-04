@@ -9,6 +9,7 @@ using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 namespace Content.Shared._RMC14.Xenonids.Reaper;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoReaperSystem))]
 public sealed partial class XenoReaperComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -112,6 +113,7 @@ public sealed partial class XenoReaperComponent : Component
 public sealed partial class XenoFleshHarvestedComponent : Component;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoReaperSystem))]
 public sealed partial class XenoFleshBloomComponent : Component
 {
     [DataField, AutoNetworkedField]
@@ -143,6 +145,7 @@ public sealed partial class XenoFleshBloomComponent : Component
 }
 
 [RegisterComponent]
+[Access(typeof(XenoReaperSystem))]
 public sealed partial class XenoReaperRedGasComponent : Component
 {
     public EntityUid? Reaper;
@@ -160,6 +163,7 @@ public sealed partial class XenoReaperRedGasComponent : Component
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(XenoReaperSystem))]
 public sealed partial class XenoCarrionMantleComponent : Component
 {
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField]

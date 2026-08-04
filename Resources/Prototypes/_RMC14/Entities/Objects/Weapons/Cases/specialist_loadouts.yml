@@ -137,7 +137,7 @@
     - state: demo
       map: [ label ]
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous
     grid:
     - 0,0,15,3
   - type: StorageFill
@@ -181,7 +181,7 @@
     - state: demo
       map: [ label ]
   - type: Storage
-    maxItemSize: Huge
+    maxItemSize: Ginormous
     grid:
     - 0,0,15,3
   - type: StorageFill

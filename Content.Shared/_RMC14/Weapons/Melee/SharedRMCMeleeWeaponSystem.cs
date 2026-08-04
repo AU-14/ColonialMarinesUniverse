@@ -157,7 +157,10 @@ public abstract partial class SharedRMCMeleeWeaponSystem : EntitySystem
 
         if (_xenoQuery.HasComp(args.Origin))
         {
-            args.Damage = new DamageSpecifier(ent.Comp.XenoDamage);
+            if (ent.Comp.XenoDamage is { } xenoDamage)
+                args.Damage = new DamageSpecifier(xenoDamage);
+            else
+                args.Damage = args.Damage * ent.Comp.XenoMultiplier;
             return;
         }
 

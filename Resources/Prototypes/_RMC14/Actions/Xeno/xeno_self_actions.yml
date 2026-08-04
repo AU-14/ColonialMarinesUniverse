@@ -528,3 +528,172 @@
   components:
     - type: Sprite
       state: lay_egg
+
+- type: entity
+  id: ActionXenoStoreAcid
+  parent: ActionXenoBase
+  name: Store Acid (150)
+  description: Store an acid charge, lowering your armor until the charge is spent to hasten an offensive acid ability.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: venator_store_acid
+    useDelay: 5
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoStoreAcidActionEvent
+  - type: XenoActionPlasma
+    cost: 150
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: ActionXenoSoak
+  id: ActionXenoCrusherSoak
+  name: Soak (20)
+  description: Brace yourself for incoming damage. If you absorb 240 damage within 6 seconds, heal 120 health and reset your tail stab cooldown. [color=red]If the threshold is not reached, the effect expires with no reward.[/color]
+
+
+- type: entity
+  id: ActionXenoSelfImmolate
+  parent: ActionXenoBase
+  name: Self-Immolate (50)
+  description: Ignite yourself and build heat for Heatshield abilities.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+    useDelay: 24
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoSelfImmolateActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+  - type: ActionBlockIfResting
+
+
+- type: entity
+  id: ActionXenoThermoregulation
+  parent: ActionXenoBase
+  name: Thermoregulation (40)
+  description: Convert active flames into a short burst of speed, then extinguish yourself.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: fortify
+    useDelay: 16
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoThermoregulationActionEvent
+  - type: XenoActionPlasma
+    cost: 40
+  - type: ActionBlockIfResting
+
+
+- type: entity
+  id: ActionXenoEncasedPlates
+  parent: ActionXenoBase
+  name: Encased Plates
+  description: Toggle a slower defensive stance with stronger frontal plates.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: bulwark_encased_plates
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoEncasedPlatesActionEvent
+  - type: ActionBlockIfResting
+
+
+- type: entity
+  id: ActionXenoReflectiveShield
+  parent: ActionXenoBase
+  name: Reflective Shield
+  description: Brace your plates to reflect incoming bullets for a short time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: bulwark_reflective_shield
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoReflectiveShieldActionEvent
+  - type: XenoReflectiveShieldAction
+  - type: ActionBlockIfResting
+
+
+- type: entity
+  id: ActionXenoSelectChemical
+  parent: ActionXenoBase
+  name: Select Chemical
+  description: Select the chemical produced by your alchemist glands.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: shift_spit_neurotoxin
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoSelectChemicalActionEvent
+
+
+- type: entity
+  id: ActionXenoProduceChemical
+  parent: ActionXenoBase
+  name: Produce Chemical (50)
+  description: Convert plasma into the selected alchemical stockpile.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: secrete_resin
+    useDelay: 3
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoProduceChemicalActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+  - type: ActionBlockIfResting
+
+
+- type: entity
+  id: ActionXenoRemoveChemical
+  parent: ActionXenoBase
+  name: Purge Chemical
+  description: Purge the selected alchemical stockpile.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: dump_acid
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoRemoveChemicalActionEvent
+
+
+- type: entity
+  id: ActionXenoCarrionMantle
+  parent: ActionXenoBase
+  name: Carrion Mantle
+  description: Spend flesh resin to mantle yourself or a hivemate in hardened carrion.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_carrion_mantle
+    useDelay: 30
+  - type: TargetAction
+    range: 5
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoCarrionMantleActionEvent
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 5

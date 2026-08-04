@@ -338329,7 +338329,7 @@ entities:
           endTime: 19475.880581
           startTime: 19566.9137664
           length: 0.4
-- proto: RMCWeaponShotgunHG3712
+- proto: RMCWeaponShotgunM12
   entities:
   - uid: 8914
     components:

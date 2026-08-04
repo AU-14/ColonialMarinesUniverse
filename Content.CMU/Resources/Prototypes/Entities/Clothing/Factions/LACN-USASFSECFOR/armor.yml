@@ -1,0 +1,188 @@
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNArmorStandard
+  name: LACN BL-1 Armor
+  description: A set of ballistic armor used by the LACN landing forces.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/Armor/lacninfantryarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNArmorStandardPadless
+  name: Padless LACN BL-1 Armor
+  description: A set of ballistic armor used by the LACN landing forces. This one is missing the grieves and shoulder pads.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/Armor/lacninfantryarmorstripped.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNArmorSL
+  name: LACN BL-2 Armor
+  description: A set of ballistic armor used by the LACN landing forces NCOs and Officers.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/Armor/lacninfantryarmorsl.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNCommandoArmorStandard
+  name: LACN BL-4L Armor
+  description: A set of ballistic armor used by the LACN naval commandos.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/Armor/lacncommandoarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14CLFFlakVest
+  name: CLF flak vest
+  description: An imported flak vest that comes from your foreign buyer in the UPP. You have no idea the origin of it.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/Armor/lacncommandoarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNCommandoArmorScout
+  name: LACN BL-4L Scout Armor
+  description: A set of ballistic armor used by the LACN naval commando scouts.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/Armor/lacncommandoscoutarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 30
+    bullet: 15
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNCommandoArmorPointman
+  name: LACN BL-4L Pointman Armor
+  description: A set of ballistic armor used by the LACN naval commando pointmen.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/Armor/lacncommandopointmanarmor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier
+    walkModifier: .725
+    sprintModifier: .725
+  - type: CMArmor
+    melee: 20
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
+  id: AU14USASFSECFORChestrig
+  name: USASF Security Forces Chestrig
+  description: An exterior chestrig used by USASF SECFOR.
+  components:
+  - type: Sprite
+    sprite: Clothing/USASFSecurityForces/chestrig.rsi
+  - type: Clothing
+    sprite: Clothing/USASFSecurityForces/chestrig.rsi
+
+- type: entity
+  parent: [RMCAllowSuitStorageClothingArmorVest, RMCBaseArmor]
+  id: AU14LACNICPS2
+  name: LACN ICPS-2 Aircrew Armor
+  description: A set of ballistic armor used by LACN aircrew with an attached oxygen tank.
+  components:
+  - type: Sprite
+    sprite: Clothing/LACN/PilotGear/armor.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: CMArmor
+    melee: 20
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: CMHardArmor
+  - type: ActivatableUI
+    key: enum.SharedGasTankUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.SharedGasTankUiKey.Key:
+        type: GasTankBoundUserInterface
+  - type: GasTank
+    outputPressure: 21.3
+    air:
+      # 31 minutes
+      volume: 5
+      moles:
+      - 2.051379050 # oxygen
+      temperature: 293.15
+  - type: Tag
+    tags:
+    - GasTank
+  - type: UseDelay
+    delays:
+      gasTank:
+        length: 1.0

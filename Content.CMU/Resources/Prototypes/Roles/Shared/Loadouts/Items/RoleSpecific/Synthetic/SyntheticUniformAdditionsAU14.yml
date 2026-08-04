@@ -1,0 +1,79 @@
+- type: loadout
+  id: BlueUtilityUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianBlue
+
+- type: loadout
+  id: BrownUtilityUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianBrown
+
+- type: loadout
+  id: RedUtilityUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianRed
+
+- type: loadout
+  id: YellowUtilityUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianYellow
+
+- type: loadout
+  id: WorkingJoeUniformSynthCMU14
+  equipment:
+    jumpsuit: CMJumpsuitAverageJoe
+
+- type: loadout
+  id: GreyBoilerUniformSynthCMU14
+  equipment:
+    jumpsuit: AU14CivilianBoilerSuitGray
+
+- type: loadout
+  id: KhakiBoilerUniformSynthCMU14
+  equipment:
+    jumpsuit: AU14CivilianBoilerSuitKhaki
+
+- type: loadout
+  id: LightBlueBoilerUniformSynthCMU14
+  equipment:
+    jumpsuit: AU14CivilianBoilerSuitLightBlue
+
+- type: loadout
+  id: WhiteBoilerUniformSynthCMU14
+  equipment:
+    jumpsuit: AU14CivilianBoilerSuitWhite
+
+- type: loadout
+  id: GreenBoilerUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianGreen
+
+- type: loadout
+  id: OutdatedUniformSynthCMU14
+  equipment:
+    jumpsuit: CMJumpsuitSyntheticOutdated
+
+- type: loadout
+  id: FrontierUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianFrontier
+
+- type: loadout
+  id: BlackSupportOfficerUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitASOBlack
+
+- type: loadout
+  id: AltBlackSupportOfficerUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitASOBlackAlt
+
+- type: loadout
+  id: FormalSupportOfficerUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitASOFormal
+
+- type: loadout
+  id: AltFormalSupportOfficerUniformSynthCMU14
+  equipment:
+    jumpsuit: RMCJumpsuitASOFormalAlt

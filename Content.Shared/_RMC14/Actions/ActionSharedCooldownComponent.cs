@@ -22,4 +22,5 @@ public sealed partial class ActionSharedCooldownComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool OnPerform = true;
+
 }

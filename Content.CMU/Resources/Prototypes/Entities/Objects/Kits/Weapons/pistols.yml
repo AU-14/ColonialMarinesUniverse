@@ -52,6 +52,7 @@
        tags:
        - RMCWeaponPistolL54
        - RMCMagazinePistolL54
+       - RMCAttachmentRailFlashlight
     - type: StorageFill
       contents:
       - id: RMCAttachmentRailFlashlight
@@ -97,6 +98,7 @@
       - 0,0,15,1
       whitelist:
        tags:
+       - RMCAttachmentRailFlashlight
        - RMCWeaponPistolT73
        - RMCMagazinePistolT73
     - type: StorageFill

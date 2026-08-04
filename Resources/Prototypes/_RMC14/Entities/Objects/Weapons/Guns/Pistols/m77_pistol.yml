@@ -150,5 +150,20 @@
   - type: CartridgeAmmo
     proto: CMBulletPistolM77AP
 
+- type: entity
+  parent: RMCMagazinePistolM77Rubber
+  id: CMMagazinePistolM88Rubber
+  name: Mod 88 rubber magazine (9mm)
+  description: A 19-round rubber magazine for the Mod 88 combat pistol. The blue stripe and safety markings designate the non-lethal load designed to deform and deliver blunt-force trauma on impact. Standard issue to leverage security and suppression without creating unnecessary casualties.
+  components:
+  - type: BallisticAmmoProvider
+    proto: CMCartridgePistolM88Rubber
+
+- type: entity
+  parent: RMCCartridgePistol9mmRubber
+  id: CMCartridgePistolM88Rubber
+  description: A 9mm rubber projectile for the Mod 88 combat pistol.
+  # TODO: rubber sprite
+
 - type: Tag
   id: CMMagazinePistolM77AP

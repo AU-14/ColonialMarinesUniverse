@@ -1207,3 +1207,46 @@
     - id: RMCGrenadeIncendiary
     - id: CMSurgicalLine
     - id: CMSynthGraft
+
+# CMU surgical webbing variants. These IDs are used by CMU uniforms, loadouts,
+# vendors, and kits and include the additional CMU surgery supplies.
+- type: entity
+  parent: RMCWebbingSurgicalGreen
+  id: CMWebbingSurgicalGreen
+  components:
+  - type: Storage
+    whitelist:
+      tags:
+      - CMTraumaKit
+      - CMBurnKit
+      - CMSurgicalLine
+      - CMSynthGraft
+      - CMUCastItem
+      components:
+      - CMSurgeryTool
+  - type: StorageFill
+    contents:
+    - id: CMScalpel
+    - id: CMHemostat
+    - id: CMRetractor
+    - id: CMTraumaKit10
+    - id: CMCautery
+    - id: CMCircularSaw
+    - id: CMSurgicalDrill
+    - id: CMBoneGel
+    - id: CMBonesetter
+    - id: CMUBoneGraftItem
+    - id: CMUFixOVein
+    - id: CMUOrganClampItem
+    - id: CMSurgicalLine
+    - id: CMSynthGraft
+    - id: CMUCastItem
+
+- type: entity
+  parent: CMWebbingSurgicalGreen
+  id: CMWebbingSurgicalBlue
+  description: A robust blue webbing vest specially designed to hold a fully array of surgical equipment. Typically issued to field doctors or synthetic personnel.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Webbing/webbing_surgical_blue.rsi
+    state: webbing

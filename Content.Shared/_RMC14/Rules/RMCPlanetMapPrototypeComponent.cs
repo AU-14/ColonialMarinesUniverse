@@ -44,6 +44,9 @@ public sealed partial class RMCPlanetMapPrototypeComponent : Component
     [DataField, AutoNetworkedField]
     public Dictionary<ProtoId<JobPrototype>, List<(ProtoId<JobPrototype> Variant, int Amount)>>? SurvivorJobVariants;
 
+    [DataField("joboverrides"), AutoNetworkedField]
+    public Dictionary<ProtoId<JobPrototype>, ProtoId<JobPrototype>>? ColonyJobOverrides;
+
     /// <summary>
     /// Will override a preferred job to another
     /// Useful for FORECON so any survivor preference will be overriden to FORECON survivor

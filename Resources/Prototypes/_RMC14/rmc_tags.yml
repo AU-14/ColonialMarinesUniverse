@@ -77,6 +77,21 @@
   id: RMCMK80
 
 - type: Tag
+  id: RMCTankFlamerSPP
+
+- type: Tag
+  id: RMCTankFlamerFL3B
+
+- type: Tag
+  id: RMCTankFlamerFL3X
+
+- type: Tag
+  id: RMCWeaponFlamerSpecUPP
+
+- type: Tag
+  id: CMSplint
+
+- type: Tag
   id: RMCRocketAmmo84mm
 
 - type: Tag

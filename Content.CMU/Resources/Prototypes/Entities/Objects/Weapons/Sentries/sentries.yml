@@ -1,0 +1,13 @@
+- type: entity
+  parent: RMCSentryOmni
+  id: AU14SentryOmniWeYu
+  name: WY 571-D omnidirectional sentry gun
+  description: A Weyland-Yutani-configured 571-D sentry gun. Its locked corporate IFF recognizes Weyland-Yutani personnel, security, synthetics, contractors, and private military forces.
+  components:
+  - type: Tag
+    tags:
+    - RMCSentryWeYa
+  - type: SentryTargeting
+    lockedFriendlyFactions:
+    - AUWeYu
+    - WeYa

@@ -435,10 +435,8 @@
   components:
   - type: Sprite
     state: tramadol_packet
-  - type: StorageFill
-    contents:
-    - id: AU14PillCMUTramadol
-      amount: 4
+  - type: CMItemSlots
+    startingItem: AU14PillCMUTramadol
   - type: IconLabel
     labelTextLocId: rmc-tramadol-container-label-text
 

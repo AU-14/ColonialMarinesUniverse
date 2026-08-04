@@ -1,0 +1,10 @@
+- type: loadoutGroup
+  id: RecruiterSpecializationAU14
+  name: au14-loadout-group-role-specific-ID
+  minLimit: 1
+  maxLimit: 1
+  loadouts:
+  - ColonyUSASFRecruiterSpecializationDefaultAU14
+  - ColonyUSASFRecruiterSpecializationMarinesAU14
+  - ColonyUSASFRecruiterSpecializationUSArmyAU14
+  - ColonyUSASFRecruiterSpecializationCCAFAU14

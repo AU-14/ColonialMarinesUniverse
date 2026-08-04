@@ -1,0 +1,37 @@
+- type: entity
+  parent: WeaponRifleMAR40 
+  id: AU14WeaponRifleMAR40Tactical
+  description: A cheap, reliable assault rifle chambered in 7.62x39mm. Commonly found in the hands of criminals or mercenaries, or in the hands of the UPP or CLF. This one has been equipped with an after-market ammo-counter.
+  suffix: Filled, Tactical
+  components:
+  - type: AttachableHolder
+    randomAttachmentChance: 0.38
+    slots:
+      rmc-aslot-barrel:
+        startingAttachable: RMCAttachmentSuppressor
+        whitelist:
+          tags:
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentSuppressor
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentExtendedCompensator
+          - RMCM5Bayonet
+      rmc-aslot-rail:
+        startingAttachable: AU14AttachmentTwoPointSling
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentMagneticHarness
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: RMCAttachmentAngledGrip
+        whitelist:
+          tags:
+          - RMCAttachmentBipod
+          - RMCAttachmentFlashlightGrip
+          - RMCAttachmentGyroscopicStabilizer
+          - RMCAttachmentU7UnderbarrelShotgun
+          - RMCAttachmentExtinguisher
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentFlamer
