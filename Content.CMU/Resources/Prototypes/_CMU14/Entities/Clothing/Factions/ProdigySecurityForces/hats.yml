@@ -5,9 +5,9 @@
   description: A simple patrol cap with the logo of the Prodigy Corporation on the front.
   components:
   - type: Sprite
-    sprite: Clothing/ProdigySecurityForces/cap.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/cap.rsi
   - type: Clothing
-    sprite: Clothing/ProdigySecurityForces/cap.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/cap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -16,9 +16,9 @@
   description: A beret used by command members of the Prodigy Corporation.
   components:
   - type: Sprite
-    sprite: Clothing/ProdigySecurityForces/beret.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/beret.rsi
   - type: Clothing
-    sprite: Clothing/ProdigySecurityForces/beret.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/beret.rsi
 
 - type: entity
   parent: AU14ProdigyBallisticHelmetPART
@@ -27,6 +27,6 @@
   description: A beret used by command members of the Prodigy Armed Repair Team, the elite forces of Prodigy Security Corp. The beret is a symbol of their status and is only given to those who have proven themselves in combat and repair situations. The beret is adorned with the Prodigy logo and is a source of pride for those who wear it.
   components:
   - type: Sprite
-    sprite: Clothing/ProdigySecurityForces/beret.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/beret.rsi
   - type: Clothing
-    sprite: Clothing/ProdigySecurityForces/beret.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/beret.rsi

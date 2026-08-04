@@ -5,7 +5,7 @@
   description: A set of Weyland-Yutani PMC armor.
   components:
   - type: Sprite
-    sprite: Clothing/WY_PMC/wypmcstandardarmor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmcstandardarmor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -14,7 +14,7 @@
   description: A set of Weyland-Yutani PMC armor. This pair is quite small compared to the standard, and will provide less protection.
   components:
   - type: Sprite
-    sprite: Clothing/WY_PMC/wypmclightarmor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmclightarmor.rsi
 
 - type: entity
   parent: RMCBaseBioSuit
@@ -37,9 +37,9 @@
   description: The 'Weyland-Yutani TerraScientia bio-suit MK I'. An advanced light-weight bio-suit developed in-house by Weyland-Yutani. It's a suit that protects against biological contamination. This one has been fitted with an armored vest.
   components:
   - type: Sprite
-    sprite: Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
+    sprite: _CMU14/Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
   - type: Clothing
-    sprite: Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
+    sprite: _CMU14/Objects/Clothing/OuterClothing/Misc/biosuit_wysec.rsi
   - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
     walkModifier: 0.725
     sprintModifier: 0.725
@@ -59,7 +59,7 @@
   description: A set of Weyland-Yutani PMC Engineer armor.
   components:
   - type: Sprite
-    sprite: Clothing/WY_PMC/engi_armor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/engi_armor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -71,7 +71,7 @@
     walkModifier: 0.90
     sprintModifier: 0.90
   - type: Sprite
-    sprite: Clothing/WY_PMC/ppo_armor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/ppo_armor.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - RMCPatchWeYaBlackSquare

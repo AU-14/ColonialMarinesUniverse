@@ -86,7 +86,7 @@
   - type: Action
     checkCanInteract: false
     icon:
-      sprite: ZLevels/Actions/misc.rsi
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: up
     itemIconStyle: BigItem
 
@@ -100,7 +100,7 @@
   - type: Action
     checkCanInteract: false
     icon:
-      sprite: ZLevels/Actions/misc.rsi
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: down
     itemIconStyle: BigItem
 
@@ -114,6 +114,6 @@
   - type: Action
     checkCanInteract: false
     icon:
-      sprite: ZLevels/Actions/misc.rsi
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: down
     itemIconStyle: BigItem

@@ -7,9 +7,9 @@
   - type: Item
     storedRotation: 0
   - type: Sprite
-    sprite: Clothing/Glasses/bimex.rsi
+    sprite: _CMU14/Clothing/Glasses/bimex.rsi
   - type: Clothing
-    sprite: Clothing/Glasses/bimex.rsi
+    sprite: _CMU14/Clothing/Glasses/bimex.rsi
     slots:
     - EYES
     - MASK
@@ -23,9 +23,9 @@
   - type: Item
     storedRotation: 0
   - type: Sprite
-    sprite: Clothing/Glasses/orangebimex.rsi
+    sprite: _CMU14/Clothing/Glasses/orangebimex.rsi
   - type: Clothing
-    sprite: Clothing/Glasses/orangebimex.rsi
+    sprite: _CMU14/Clothing/Glasses/orangebimex.rsi
     slots:
     - EYES
     - MASK
@@ -39,9 +39,9 @@
   - type: Item
     storedRotation: 0
   - type: Sprite
-    sprite: Clothing/Glasses/orangepersonalshades.rsi
+    sprite: _CMU14/Clothing/Glasses/orangepersonalshades.rsi
   - type: Clothing
-    sprite: Clothing/Glasses/orangepersonalshades.rsi
+    sprite: _CMU14/Clothing/Glasses/orangepersonalshades.rsi
     slots:
     - MASK
     - EYES

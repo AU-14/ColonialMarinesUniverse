@@ -167,9 +167,9 @@
   description: "A bundle of civilian clothing and accessories for infiltrators to blend in with the local population."
   components:
   - type: Sprite
-    sprite: Items/infiltrator_briefcase.rsi
+    sprite: _CMU14/Items/infiltrator_briefcase.rsi
   - type: Icon
-    sprite: Items/infiltrator_briefcase.rsi
+    sprite: _CMU14/Items/infiltrator_briefcase.rsi
   - type: Storage
     maxItemSize: Normal
     grid:

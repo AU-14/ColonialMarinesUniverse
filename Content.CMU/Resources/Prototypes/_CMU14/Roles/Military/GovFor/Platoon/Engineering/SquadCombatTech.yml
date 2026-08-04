@@ -28,7 +28,7 @@
     prefix: au14-job-prefix-govforsquadcombattech
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14govforjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14govforjobicons.rsi
       state: govfor_ct
   - type: CMVendorUser
     id: AU14JobGOVFORSquadCombatTech
@@ -37,7 +37,7 @@
     OPFOR:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/Interface/au14opforjobicons.rsi
+        sprite: /Textures/_CMU14/Interface/au14opforjobicons.rsi
         state: ct
     - type: CMVendorUser
       id: AU14JobOPFORSquadCombatTech

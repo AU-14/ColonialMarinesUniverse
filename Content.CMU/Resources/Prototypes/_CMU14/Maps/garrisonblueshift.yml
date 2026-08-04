@@ -2,11 +2,11 @@
   id: stablegarrison
   mapName: Stable Garrison
   allegiance: UA
-  mapPath: /Maps/garrison.yml
+  mapPath: /Maps/_CMU14/garrison.yml
   mapsBelow:
-  - /Maps/garrison_below.yml
+  - /Maps/_CMU14/garrison_below.yml
   mapsAbove:
-  - /Maps/garrison_above.yml
+  - /Maps/_CMU14/garrison_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

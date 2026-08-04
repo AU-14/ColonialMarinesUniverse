@@ -12,7 +12,7 @@
         path:
           "/Audio/Effects/gen_hit.ogg"
   - type: Sprite
-    sprite: Structures/concretebarrier.rsi
+    sprite: _CMU14/Structures/concretebarrier.rsi
     layers:
     - state: concrete
     - map: [ "acided" ]
@@ -50,7 +50,7 @@
     damageDivisor: 25
     trackAllDamage: true
     damageOverlay:
-      sprite: Structures/concretebarrier.rsi
+      sprite: _CMU14/Structures/concretebarrier.rsi
   - type: Barbed
     thornsDamage:
       types:

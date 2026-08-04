@@ -5,7 +5,7 @@
   description: Specialized USCM fatigues. Favorited by HAZOPS.
   components:
   - type: Sprite
-    sprite: Clothing/snowfatigues.rsi
+    sprite: _CMU14/Clothing/snowfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUSCM

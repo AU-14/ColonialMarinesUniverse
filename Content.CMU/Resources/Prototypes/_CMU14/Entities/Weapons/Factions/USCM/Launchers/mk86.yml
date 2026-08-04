@@ -7,7 +7,7 @@
   - type: Item
     size: Huge
   - type: Sprite
-    sprite: Weapons/Guns/USCM/mk86.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/mk86.rsi
     state: m2c_gun_mount
     layers:
     - state: m2c
@@ -89,7 +89,7 @@
   - type: RMCNameItemOnVend
     item: PrimaryGun
   - type: Sprite
-    sprite: Weapons/Guns/USCM/mk86.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/mk86.rsi
     layers:
     - state: m2c_gun_mount
     - state: mag-0
@@ -198,7 +198,7 @@
     capacity: 15
     deleteWhenEmpty: false
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/mk86.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -225,7 +225,7 @@
     capacity: 15
     deleteWhenEmpty: false
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/mk86.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -252,7 +252,7 @@
     capacity: 15
     deleteWhenEmpty: false
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/mk86.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]

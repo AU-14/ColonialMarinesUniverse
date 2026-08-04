@@ -13,7 +13,7 @@
   - type: CMSurgeryTool
     skill: 2
   - type: Sprite
-    sprite: Objects/Medical/organclamp.rsi
+    sprite: _CMU14/Objects/Medical/organclamp.rsi
     state: organclamp
 
 - type: Tag

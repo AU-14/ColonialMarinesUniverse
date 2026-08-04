@@ -5,9 +5,9 @@
   description: Standard issue USCM jungle boots.
   components:
   - type: Sprite
-    sprite: Clothing/Shoes/jungleboots.rsi
+    sprite: _CMU14/Clothing/Shoes/jungleboots.rsi
   - type: Clothing
-    sprite: Clothing/Shoes/jungleboots.rsi
+    sprite: _CMU14/Clothing/Shoes/jungleboots.rsi
 
 - type: entity
   parent: [RMCItemSlotM5Bayonet, CMBootsJungle]

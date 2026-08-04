@@ -1,11 +1,11 @@
 - type: gameMap
   id: aucorsat
   mapName: Corsat Station
-  mapPath: /Maps/corsat.yml
+  mapPath: /Maps/_CMU14/corsat.yml
   mapsBelow:
-  - /Maps/corsat_below.yml
+  - /Maps/_CMU14/corsat_below.yml
   mapsAbove:
-  - /Maps/corsat_above.yml
+  - /Maps/_CMU14/corsat_above.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

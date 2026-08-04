@@ -30,12 +30,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "border_stairs"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "border_stairs"
 
 - type: entity
@@ -45,12 +45,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "border_stair_cut"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "border_stair_cut"
 
 - type: entity
@@ -60,12 +60,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "border_stairs_rune"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "border_stairs_rune"
 
 - type: entity
@@ -75,12 +75,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "border_stair_rune_cut"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "border_stair_rune_cut"
 
 - type: entity
@@ -90,12 +90,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "hunter_feed"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hunter_feed"
 
 - type: entity
@@ -105,12 +105,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "hunter_armor_prop"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hunter_armor_prop"
 
 - type: entity
@@ -120,12 +120,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "hunter_armor_prop_2"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hunter_armor_prop_2"
 
 - type: entity
@@ -135,12 +135,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "hunter_armor_prop_3"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hunter_armor_prop_3"
 
 - type: entity
@@ -150,12 +150,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "hunter_armor_prop_4"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hunter_armor_prop_4"
 
 - type: entity
@@ -165,12 +165,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "pred_trophy_vendor_bottom_left"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "pred_trophy_vendor_bottom_left"
 
 - type: entity
@@ -180,12 +180,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "pred_trophy_vendor_top_left"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "pred_trophy_vendor_top_left"
 
 - type: entity
@@ -195,12 +195,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "pred_trophy_vendor_center"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "pred_trophy_vendor_center"
 
 - type: entity
@@ -210,12 +210,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "pred_trophy_vendor_top_center"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "pred_trophy_vendor_top_center"
 
 - type: entity
@@ -225,12 +225,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "pred_trophy_vendor_bottom_right"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "pred_trophy_vendor_bottom_right"
 
 - type: entity
@@ -240,12 +240,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "pred_trophy_vendor_top_right"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "pred_trophy_vendor_top_right"
 
 - type: entity
@@ -255,12 +255,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "bone_throne"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "bone_throne"
 
 - type: entity
@@ -270,12 +270,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "bone_throne_top"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "bone_throne_top"
 
 - type: entity
@@ -285,12 +285,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "closed"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "closed"
 
 - type: entity
@@ -300,12 +300,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "open"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "open"
 
 - type: entity
@@ -315,12 +315,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "hoe"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hoe"
 
 - type: entity
@@ -330,12 +330,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "spade"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "spade"
 
 - type: entity
@@ -345,12 +345,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "hydro"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "hydro"
 
 - type: entity
@@ -360,12 +360,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "fountain_head_static"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "fountain_head_static"
 
 - type: entity
@@ -375,12 +375,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       drawdepth: Objects
       layers:
         - state: "fountain_head_flowing"
     - type: Icon
-      sprite: Yautja/Structures/32x32_hunter_props.rsi
+      sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
       state: "fountain_head_flowing"
 
 - type: entity
@@ -390,12 +390,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       drawdepth: Objects
       layers:
         - state: "small_statue_base"
     - type: Icon
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       state: "small_statue_base"
 
 - type: entity
@@ -405,12 +405,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       drawdepth: Objects
       layers:
         - state: "small_statue_base_colorable"
     - type: Icon
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       state: "small_statue_base_colorable"
 
 - type: entity
@@ -420,12 +420,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       drawdepth: Objects
       layers:
         - state: "statue_ancient"
     - type: Icon
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       state: "statue_ancient"
 
 - type: entity
@@ -435,12 +435,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       drawdepth: Objects
       layers:
         - state: "statue_grey"
     - type: Icon
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       state: "statue_grey"
 
 - type: entity
@@ -450,12 +450,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       drawdepth: Objects
       layers:
         - state: "statue_sandstone"
     - type: Icon
-      sprite: Yautja/Structures/ancientsmallstatue.rsi
+      sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
       state: "statue_sandstone"
 
 - type: entity
@@ -465,12 +465,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/consoles.rsi
+      sprite: _CMU14/Yautja/Structures/consoles.rsi
       drawdepth: Objects
       layers:
         - state: "engineerconsole"
     - type: Icon
-      sprite: Yautja/Structures/consoles.rsi
+      sprite: _CMU14/Yautja/Structures/consoles.rsi
       state: "engineerconsole"
 
 - type: entity
@@ -480,12 +480,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "cell"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "cell"
 
 - type: entity
@@ -495,12 +495,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "cell-off-empty"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "cell-off-empty"
 
 - type: entity
@@ -510,12 +510,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "cell-off-occupied"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "cell-off-occupied"
 
 - type: entity
@@ -525,12 +525,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "cell-on-empty"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "cell-on-empty"
 
 - type: entity
@@ -540,12 +540,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "cell-on-occupied"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "cell-on-occupied"
 
 - type: entity
@@ -555,12 +555,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "pred_cell"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "pred_cell"
 
 - type: entity
@@ -570,12 +570,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "pred_cell-off-empty"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "pred_cell-off-empty"
 
 - type: entity
@@ -585,12 +585,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "pred_cell-off-occupied"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "pred_cell-off-occupied"
 
 - type: entity
@@ -600,12 +600,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "pred_cell-on-empty"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "pred_cell-on-empty"
 
 - type: entity
@@ -615,12 +615,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       drawdepth: Mobs
       layers:
         - state: "pred_cell-on-occupied"
     - type: Icon
-      sprite: Yautja/Structures/cryogenics2.rsi
+      sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
       state: "pred_cell-on-occupied"
 
 - type: entity
@@ -630,12 +630,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/engineerJockey.rsi
+      sprite: _CMU14/Yautja/Structures/engineerJockey.rsi
       drawdepth: Overdoors
       layers:
         - state: "spacejockey"
     - type: Icon
-      sprite: Yautja/Structures/engineerJockey.rsi
+      sprite: _CMU14/Yautja/Structures/engineerJockey.rsi
       state: "spacejockey"
 
 - type: entity
@@ -645,12 +645,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/engineerPod.rsi
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
       drawdepth: Mobs
       layers:
         - state: "pod_broken"
     - type: Icon
-      sprite: Yautja/Structures/engineerPod.rsi
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
       state: "pod_broken"
 
 - type: entity
@@ -660,12 +660,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/engineerPod.rsi
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
       drawdepth: Mobs
       layers:
         - state: "pod"
     - type: Icon
-      sprite: Yautja/Structures/engineerPod.rsi
+      sprite: _CMU14/Yautja/Structures/engineerPod.rsi
       state: "pod"
 
 - type: entity
@@ -675,12 +675,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "floor"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "floor"
 
 - type: entity
@@ -690,12 +690,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_tile_1"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_tile_1"
 
 - type: entity
@@ -705,12 +705,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_tile_2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_tile_2"
 
 - type: entity
@@ -720,12 +720,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_tile_3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_tile_3"
 
 - type: entity
@@ -735,12 +735,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_tile_4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_tile_4"
 
 - type: entity
@@ -750,12 +750,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_tile_5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_tile_5"
 
 - type: entity
@@ -765,12 +765,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_tile_6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_tile_6"
 
 - type: entity
@@ -780,12 +780,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "outerhull"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "outerhull"
 
 - type: entity
@@ -795,12 +795,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "damaged1"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "damaged1"
 
 - type: entity
@@ -810,12 +810,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "damaged2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "damaged2"
 
 - type: entity
@@ -825,12 +825,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "damaged3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "damaged3"
 
 - type: entity
@@ -840,12 +840,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "damaged4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "damaged4"
 
 - type: entity
@@ -855,12 +855,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "damaged5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "damaged5"
 
 - type: entity
@@ -870,12 +870,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "outerhull_dir"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "outerhull_dir"
 
 - type: entity
@@ -885,12 +885,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "outerhull_alt"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "outerhull_alt"
 
 - type: entity
@@ -900,12 +900,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "outerhull_alt_dir"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "outerhull_alt_dir"
 
 - type: entity
@@ -915,12 +915,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_glow"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_glow"
 
 - type: entity
@@ -930,12 +930,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_bridge"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_bridge"
 
 - type: entity
@@ -945,12 +945,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_catwalk_alpha"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_catwalk_alpha"
 
 - type: entity
@@ -960,12 +960,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_catwalk"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_catwalk"
 
 - type: entity
@@ -975,12 +975,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_catwalk_alt_alpha"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_catwalk_alt_alpha"
 
 - type: entity
@@ -990,12 +990,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_catwalk_alt"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_catwalk_alt"
 
 - type: entity
@@ -1005,12 +1005,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_catwalk_new_alpha"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_catwalk_new_alpha"
 
 - type: entity
@@ -1020,12 +1020,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_catwalk_new"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_catwalk_new"
 
 - type: entity
@@ -1035,12 +1035,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_grille"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_grille"
 
 - type: entity
@@ -1050,12 +1050,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_grille_alpha"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_grille_alpha"
 
 - type: entity
@@ -1065,12 +1065,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_grate"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_grate"
 
 - type: entity
@@ -1080,12 +1080,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_grate_alpha"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_grate_alpha"
 
 - type: entity
@@ -1095,12 +1095,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "11,5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "11,5"
 
 - type: entity
@@ -1110,12 +1110,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "6,6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "6,6"
 
 - type: entity
@@ -1125,12 +1125,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "17,15"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "17,15"
 
 - type: entity
@@ -1140,12 +1140,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "6,11"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "6,11"
 
 - type: entity
@@ -1155,12 +1155,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "6,12"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "6,12"
 
 - type: entity
@@ -1170,12 +1170,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_1"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_1"
 
 - type: entity
@@ -1185,12 +1185,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_2"
 
 - type: entity
@@ -1200,12 +1200,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_3"
 
 - type: entity
@@ -1215,12 +1215,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_4"
 
 - type: entity
@@ -1230,12 +1230,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_5"
 
 - type: entity
@@ -1245,12 +1245,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_6"
 
 - type: entity
@@ -1260,12 +1260,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_7"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_7"
 
 - type: entity
@@ -1275,12 +1275,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_8"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_8"
 
 - type: entity
@@ -1290,12 +1290,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "corner_9"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "corner_9"
 
 - type: entity
@@ -1305,12 +1305,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "2,2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "2,2"
 
 - type: entity
@@ -1320,12 +1320,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "3,2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "3,2"
 
 - type: entity
@@ -1335,12 +1335,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "20,4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "20,4"
 
 - type: entity
@@ -1350,12 +1350,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "21,4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "21,4"
 
 - type: entity
@@ -1365,12 +1365,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "21,6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "21,6"
 
 - type: entity
@@ -1380,12 +1380,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "20,3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "20,3"
 
 - type: entity
@@ -1395,12 +1395,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_red"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_red"
 
 - type: entity
@@ -1410,12 +1410,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_red_2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_red_2"
 
 - type: entity
@@ -1425,12 +1425,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_red_3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_red_3"
 
 - type: entity
@@ -1440,12 +1440,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_red_4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_red_4"
 
 - type: entity
@@ -1455,12 +1455,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_red_5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_red_5"
 
 - type: entity
@@ -1470,12 +1470,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "hunter_red_6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "hunter_red_6"
 
 - type: entity
@@ -1485,12 +1485,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "borderless_v"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "borderless_v"
 
 - type: entity
@@ -1500,12 +1500,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       drawdepth: FloorTiles
       layers:
         - state: "borderless_h"
     - type: Icon
-      sprite: Yautja/Structures/hunter_floors.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_floors.rsi
       state: "borderless_h"
 
 - type: entity
@@ -1515,12 +1515,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine"
 
 - type: entity
@@ -1530,12 +1530,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_1"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_1"
 
 - type: entity
@@ -1545,12 +1545,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_2"
 
 - type: entity
@@ -1560,12 +1560,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_3"
 
 - type: entity
@@ -1575,12 +1575,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_4"
 
 - type: entity
@@ -1590,12 +1590,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_5"
 
 - type: entity
@@ -1605,12 +1605,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_6"
 
 - type: entity
@@ -1620,12 +1620,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_7"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_7"
 
 - type: entity
@@ -1635,12 +1635,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_8"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_8"
 
 - type: entity
@@ -1650,12 +1650,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "leftengine_9"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "leftengine_9"
 
 - type: entity
@@ -1665,12 +1665,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "stan_leftengine"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "stan_leftengine"
 
 - type: entity
@@ -1680,12 +1680,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine"
 
 - type: entity
@@ -1695,12 +1695,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_1"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_1"
 
 - type: entity
@@ -1710,12 +1710,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_2"
 
 - type: entity
@@ -1725,12 +1725,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_3"
 
 - type: entity
@@ -1740,12 +1740,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_4"
 
 - type: entity
@@ -1755,12 +1755,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_5"
 
 - type: entity
@@ -1770,12 +1770,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_6"
 
 - type: entity
@@ -1785,12 +1785,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_7"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_7"
 
 - type: entity
@@ -1800,12 +1800,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_8"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_8"
 
 - type: entity
@@ -1815,12 +1815,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "rightengine_9"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "rightengine_9"
 
 - type: entity
@@ -1830,12 +1830,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "stan_rightengine"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "stan_rightengine"
 
 - type: entity
@@ -1845,12 +1845,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "middle"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "middle"
 
 - type: entity
@@ -1860,12 +1860,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter1"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter1"
 
 - type: entity
@@ -1875,12 +1875,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter2"
 
 - type: entity
@@ -1890,12 +1890,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter3"
 
 - type: entity
@@ -1905,12 +1905,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter_l_w"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter_l_w"
 
 - type: entity
@@ -1920,12 +1920,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter_r_w"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter_r_w"
 
 - type: entity
@@ -1935,12 +1935,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter4"
 
 - type: entity
@@ -1950,12 +1950,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter_inner_w_2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter_inner_w_2"
 
 - type: entity
@@ -1965,12 +1965,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter5"
 
 - type: entity
@@ -1980,12 +1980,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "inside"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "inside"
 
 - type: entity
@@ -1995,12 +1995,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter6"
 
 - type: entity
@@ -2010,12 +2010,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter7"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter7"
 
 - type: entity
@@ -2025,12 +2025,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter8"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter8"
 
 - type: entity
@@ -2040,12 +2040,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter9"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter9"
 
 - type: entity
@@ -2055,12 +2055,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter10"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter10"
 
 - type: entity
@@ -2070,12 +2070,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter11"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter11"
 
 - type: entity
@@ -2085,12 +2085,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter12"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter12"
 
 - type: entity
@@ -2100,12 +2100,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter13"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter13"
 
 - type: entity
@@ -2115,12 +2115,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter14"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter14"
 
 - type: entity
@@ -2130,12 +2130,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter15"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter15"
 
 - type: entity
@@ -2145,12 +2145,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter16"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter16"
 
 - type: entity
@@ -2160,12 +2160,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "left_front"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "left_front"
 
 - type: entity
@@ -2175,12 +2175,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter17"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter17"
 
 - type: entity
@@ -2190,12 +2190,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter18"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter18"
 
 - type: entity
@@ -2205,12 +2205,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter19"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter19"
 
 - type: entity
@@ -2220,12 +2220,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter20"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter20"
 
 - type: entity
@@ -2235,12 +2235,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter21"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter21"
 
 - type: entity
@@ -2250,12 +2250,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter22"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter22"
 
 - type: entity
@@ -2265,12 +2265,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "right_front"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "right_front"
 
 - type: entity
@@ -2280,12 +2280,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter23"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter23"
 
 - type: entity
@@ -2295,12 +2295,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter24"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter24"
 
 - type: entity
@@ -2310,12 +2310,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter25"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter25"
 
 - type: entity
@@ -2325,12 +2325,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter26"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter26"
 
 - type: entity
@@ -2340,12 +2340,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter27"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter27"
 
 - type: entity
@@ -2355,12 +2355,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunter28"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunter28"
 
 - type: entity
@@ -2370,12 +2370,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "front_middle_window"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "front_middle_window"
 
 - type: entity
@@ -2385,12 +2385,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_1"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_1"
 
 - type: entity
@@ -2400,12 +2400,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_2"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_2"
 
 - type: entity
@@ -2415,12 +2415,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_3"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_3"
 
 - type: entity
@@ -2430,12 +2430,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_4"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_4"
 
 - type: entity
@@ -2445,12 +2445,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_5"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_5"
 
 - type: entity
@@ -2460,12 +2460,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_6"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_6"
 
 - type: entity
@@ -2475,12 +2475,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_7"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_7"
 
 - type: entity
@@ -2490,12 +2490,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_8"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_8"
 
 - type: entity
@@ -2505,12 +2505,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "left_window"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "left_window"
 
 - type: entity
@@ -2520,12 +2520,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_9"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_9"
 
 - type: entity
@@ -2535,12 +2535,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_10"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_10"
 
 - type: entity
@@ -2550,12 +2550,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_11"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_11"
 
 - type: entity
@@ -2565,12 +2565,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "right_window"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "right_window"
 
 - type: entity
@@ -2580,12 +2580,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_12"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_12"
 
 - type: entity
@@ -2595,12 +2595,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_13"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_13"
 
 - type: entity
@@ -2610,12 +2610,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_14"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_14"
 
 - type: entity
@@ -2625,12 +2625,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "bottom_window"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "bottom_window"
 
 - type: entity
@@ -2640,12 +2640,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_15"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_15"
 
 - type: entity
@@ -2655,12 +2655,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_16"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_16"
 
 - type: entity
@@ -2670,12 +2670,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       drawdepth: Walls
       layers:
         - state: "hunterw_17"
     - type: Icon
-      sprite: Yautja/Structures/hunter_shuttle.rsi
+      sprite: _CMU14/Yautja/Structures/hunter_shuttle.rsi
       state: "hunterw_17"
 
 - type: entity
@@ -2685,12 +2685,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "sarcophagus0"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "sarcophagus0"
 
 - type: entity
@@ -2700,12 +2700,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "sarcophagus1"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "sarcophagus1"
 
 - type: entity
@@ -2715,12 +2715,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "sarcophagus2"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "sarcophagus2"
 
 - type: entity
@@ -2730,12 +2730,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "sarcomat"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "sarcomat"
 
 - type: entity
@@ -2745,12 +2745,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin"
 
 - type: entity
@@ -2760,12 +2760,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_deco"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_deco"
 
 - type: entity
@@ -2775,12 +2775,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_mumified_open"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_mumified_open"
 
 - type: entity
@@ -2790,12 +2790,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_mumified_deco_open"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_mumified_deco_open"
 
 - type: entity
@@ -2805,12 +2805,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_mumified_deco_alt_open"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_mumified_deco_alt_open"
 
 - type: entity
@@ -2820,12 +2820,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_empty_open"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_empty_open"
 
 - type: entity
@@ -2835,12 +2835,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_empty_deco_open"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_empty_deco_open"
 
 - type: entity
@@ -2850,12 +2850,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_base"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_base"
 
 - type: entity
@@ -2865,12 +2865,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_coffin_base_deco"
     - type: Icon
-      sprite: Yautja/Structures/sarcophagus.rsi
+      sprite: _CMU14/Yautja/Structures/sarcophagus.rsi
       state: "ancient_coffin_base_deco"
 
 - type: entity
@@ -2880,12 +2880,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ballisticshield"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ballisticshield"
 
 - type: entity
@@ -2895,12 +2895,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ballisticshield_ready"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ballisticshield_ready"
 
 - type: entity
@@ -2910,12 +2910,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "riotmetal"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "riotmetal"
 
 - type: entity
@@ -2925,12 +2925,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "riotmetal_ready"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "riotmetal_ready"
 
 - type: entity
@@ -2940,12 +2940,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "riot"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "riot"
 
 - type: entity
@@ -2955,12 +2955,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "riot_ready"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "riot_ready"
 
 - type: entity
@@ -2970,12 +2970,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_shield"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ancient_shield"
 
 - type: entity
@@ -2985,12 +2985,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_shield_ready"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ancient_shield_ready"
 
 - type: entity
@@ -3000,12 +3000,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_shield_alt"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ancient_shield_alt"
 
 - type: entity
@@ -3015,12 +3015,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_shield_alt_ready"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ancient_shield_alt_ready"
 
 - type: entity
@@ -3030,12 +3030,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "roman_shield"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "roman_shield"
 
 - type: entity
@@ -3045,12 +3045,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "roman_shield_ready"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "roman_shield_ready"
 
 - type: entity
@@ -3060,12 +3060,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_shield_temple"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ancient_shield_temple"
 
 - type: entity
@@ -3075,12 +3075,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "ancient_shield_temple_ready"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "ancient_shield_temple_ready"
 
 - type: entity
@@ -3090,12 +3090,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "legacy_bay"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "legacy_bay"
 
 - type: entity
@@ -3105,12 +3105,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "eshield0"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "eshield0"
 
 - type: entity
@@ -3120,12 +3120,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       drawdepth: Objects
       layers:
         - state: "eshield1"
     - type: Icon
-      sprite: Yautja/Structures/shields.rsi
+      sprite: _CMU14/Yautja/Structures/shields.rsi
       state: "eshield1"
 
 - type: entity
@@ -3135,12 +3135,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "globe"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "globe"
 
 - type: entity
@@ -3150,12 +3150,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autolathe_r"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autolathe_r"
 
 - type: entity
@@ -3165,12 +3165,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autolathe_o"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autolathe_o"
 
 - type: entity
@@ -3180,12 +3180,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autolathe"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autolathe"
 
 - type: entity
@@ -3195,12 +3195,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autolathe_t"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autolathe_t"
 
 - type: entity
@@ -3210,12 +3210,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autolathe_n"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autolathe_n"
 
 - type: entity
@@ -3225,12 +3225,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "vat"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "vat"
 
 - type: entity
@@ -3240,12 +3240,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "vat_boiling"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "vat_boiling"
 
 - type: entity
@@ -3255,12 +3255,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "chair"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "chair"
 
 - type: entity
@@ -3270,12 +3270,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "chair_buckled_overlay"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "chair_buckled_overlay"
 
 - type: entity
@@ -3285,12 +3285,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "comfychair"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "comfychair"
 
 - type: entity
@@ -3300,12 +3300,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "juicer0"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "juicer0"
 
 - type: entity
@@ -3315,12 +3315,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "juicer1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "juicer1"
 
 - type: entity
@@ -3330,12 +3330,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mw"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mw"
 
 - type: entity
@@ -3345,12 +3345,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mwo"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mwo"
 
 - type: entity
@@ -3360,12 +3360,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mw1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mw1"
 
 - type: entity
@@ -3375,12 +3375,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mw0"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mw0"
 
 - type: entity
@@ -3390,12 +3390,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mwb"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mwb"
 
 - type: entity
@@ -3405,12 +3405,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mwbloody"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mwbloody"
 
 - type: entity
@@ -3420,12 +3420,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mwbloodyo"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mwbloodyo"
 
 - type: entity
@@ -3435,12 +3435,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mwbloody1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mwbloody1"
 
 - type: entity
@@ -3450,12 +3450,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mwbloody0"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mwbloody0"
 
 - type: entity
@@ -3465,12 +3465,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "fridge"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "fridge"
 
 - type: entity
@@ -3480,12 +3480,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "fridge1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "fridge1"
 
 - type: entity
@@ -3495,12 +3495,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "fridgebroken"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "fridgebroken"
 
 - type: entity
@@ -3510,12 +3510,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "fridgeopen"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "fridgeopen"
 
 - type: entity
@@ -3525,12 +3525,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "grinder"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "grinder"
 
 - type: entity
@@ -3540,12 +3540,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "grbloody"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "grbloody"
 
 - type: entity
@@ -3555,12 +3555,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "gruse"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "gruse"
 
 - type: entity
@@ -3570,12 +3570,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "gridle"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "gridle"
 
 - type: entity
@@ -3585,12 +3585,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "grjam"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "grjam"
 
 - type: entity
@@ -3600,12 +3600,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "processor"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "processor"
 
 - type: entity
@@ -3615,12 +3615,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "dinnerware"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "dinnerware"
 
 - type: entity
@@ -3630,12 +3630,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "dinnerware-vend"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "dinnerware-vend"
 
 - type: entity
@@ -3645,12 +3645,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "dinnerware-deny"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "dinnerware-deny"
 
 - type: entity
@@ -3660,12 +3660,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "blue"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "blue"
 
 - type: entity
@@ -3675,12 +3675,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mixer0"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mixer0"
 
 - type: entity
@@ -3690,12 +3690,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mixer1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mixer1"
 
 - type: entity
@@ -3705,12 +3705,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mixer0_nopower"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mixer0_nopower"
 
 - type: entity
@@ -3720,12 +3720,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "mixer1_nopower"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "mixer1_nopower"
 
 - type: entity
@@ -3735,12 +3735,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "dispenser"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "dispenser"
 
 - type: entity
@@ -3750,12 +3750,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "+beaker1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "+beaker1"
 
 - type: entity
@@ -3765,12 +3765,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "+beaker2"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "+beaker2"
 
 - type: entity
@@ -3780,12 +3780,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "+beaker3"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "+beaker3"
 
 - type: entity
@@ -3795,12 +3795,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "+beaker4"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "+beaker4"
 
 - type: entity
@@ -3810,12 +3810,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "+beaker5"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "+beaker5"
 
 - type: entity
@@ -3825,12 +3825,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "soda_dispenser"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "soda_dispenser"
 
 - type: entity
@@ -3840,12 +3840,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "booze_dispenser"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "booze_dispenser"
 
 - type: entity
@@ -3855,12 +3855,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "tank_hugger"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "tank_hugger"
 
 - type: entity
@@ -3870,12 +3870,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "tank_broken"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "tank_broken"
 
 - type: entity
@@ -3885,12 +3885,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "freezer"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "freezer"
 
 - type: entity
@@ -3900,12 +3900,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "freezer_0"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "freezer_0"
 
 - type: entity
@@ -3915,12 +3915,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "freezer_1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "freezer_1"
 
 - type: entity
@@ -3930,12 +3930,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autodoc_closed"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autodoc_closed"
 
 - type: entity
@@ -3945,12 +3945,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autodoc_open"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autodoc_open"
 
 - type: entity
@@ -3960,12 +3960,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "autodoc_operate"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "autodoc_operate"
 
 - type: entity
@@ -3975,12 +3975,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "sleeper_open"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "sleeper_open"
 
 - type: entity
@@ -3990,12 +3990,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "sleeper"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "sleeper"
 
 - type: entity
@@ -4005,12 +4005,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "sleeper_closed"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "sleeper_closed"
 
 - type: entity
@@ -4020,12 +4020,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "body_scanner"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "body_scanner"
 
 - type: entity
@@ -4035,12 +4035,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "sleeperconsole-p"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "sleeperconsole-p"
 
 - type: entity
@@ -4050,12 +4050,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "sleeperconsole"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "sleeperconsole"
 
 - type: entity
@@ -4065,12 +4065,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "crew"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "crew"
 
 - type: entity
@@ -4080,12 +4080,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "terminal"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "terminal"
 
 - type: entity
@@ -4095,12 +4095,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "cmonitor"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "cmonitor"
 
 - type: entity
@@ -4110,12 +4110,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "cameras"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "cameras"
 
 - type: entity
@@ -4125,12 +4125,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "overwatch"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "overwatch"
 
 - type: entity
@@ -4140,12 +4140,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "smallmonitor"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "smallmonitor"
 
 - type: entity
@@ -4155,12 +4155,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "abed"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "abed"
 
 - type: entity
@@ -4170,12 +4170,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "bed"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "bed"
 
 - type: entity
@@ -4185,12 +4185,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "closed"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "closed"
 
 - type: entity
@@ -4200,12 +4200,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "open"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "open"
 
 - type: entity
@@ -4215,12 +4215,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "table1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "table1"
 
 - type: entity
@@ -4230,12 +4230,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "table2-idle"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "table2-idle"
 
 - type: entity
@@ -4245,12 +4245,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "table2-active"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "table2-active"
 
 - type: entity
@@ -4260,12 +4260,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "weldtank"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "weldtank"
 
 - type: entity
@@ -4275,12 +4275,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "watertank"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "watertank"
 
 - type: entity
@@ -4290,12 +4290,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "body_scanner_open"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "body_scanner_open"
 
 - type: entity
@@ -4305,12 +4305,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "body_scanner_closed"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "body_scanner_closed"
 
 - type: entity
@@ -4320,12 +4320,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "smes"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "smes"
 
 - type: entity
@@ -4335,12 +4335,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "doorctrl"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "doorctrl"
 
 - type: entity
@@ -4350,12 +4350,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "doorctrl0"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "doorctrl0"
 
 - type: entity
@@ -4365,12 +4365,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "doorctrl1"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "doorctrl1"
 
 - type: entity
@@ -4380,12 +4380,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "doorctrl-denied"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "doorctrl-denied"
 
 - type: entity
@@ -4395,12 +4395,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "doorctrl-p"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "doorctrl-p"
 
 - type: entity
@@ -4410,12 +4410,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "ladder10"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "ladder10"
 
 - type: entity
@@ -4425,12 +4425,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "ladder01"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "ladder01"
 
 - type: entity
@@ -4440,12 +4440,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "ladder11"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "ladder11"
 
 - type: entity
@@ -4455,12 +4455,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "ladderdown"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "ladderdown"
 
 - type: entity
@@ -4470,12 +4470,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "ladderup"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "ladderup"
 
 - type: entity
@@ -4485,12 +4485,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "ladder00"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "ladder00"
 
 - type: entity
@@ -4500,12 +4500,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "seeds"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "seeds"
 
 - type: entity
@@ -4515,12 +4515,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "nutri"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "nutri"
 
 - type: entity
@@ -4530,12 +4530,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "nutri_deny"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "nutri_deny"
 
 - type: entity
@@ -4545,12 +4545,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_20"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_20"
 
 - type: entity
@@ -4560,12 +4560,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_40"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_40"
 
 - type: entity
@@ -4575,12 +4575,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_60"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_60"
 
 - type: entity
@@ -4590,12 +4590,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_80"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_80"
 
 - type: entity
@@ -4605,12 +4605,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_100"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_100"
 
 - type: entity
@@ -4620,12 +4620,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_inactive"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_inactive"
 
 - type: entity
@@ -4635,12 +4635,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_active"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_active"
 
 - type: entity
@@ -4650,12 +4650,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_boom"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_boom"
 
 - type: entity
@@ -4665,12 +4665,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_signaller"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_signaller"
 
 - type: entity
@@ -4680,12 +4680,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "t_reinforced"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "t_reinforced"
 
 - type: entity
@@ -4695,12 +4695,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "dispensing"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "dispensing"
 
 - type: entity
@@ -4710,12 +4710,12 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "filling"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "filling"
 
 - type: entity
@@ -4725,10 +4725,10 @@
   description: An ancient Yautja hunting-ground structure.
   components:
     - type: Sprite
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       drawdepth: Objects
       layers:
         - state: "console_shuttle"
     - type: Icon
-      sprite: Yautja/Structures/yautja_machines.rsi
+      sprite: _CMU14/Yautja/Structures/yautja_machines.rsi
       state: "console_shuttle"

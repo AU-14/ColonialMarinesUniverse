@@ -7,10 +7,10 @@
     isCorrodible: false
   - type: YautjaTechItem
   - type: Sprite
-    sprite: Yautja/weapons.rsi
+    sprite: _CMU14/Yautja/weapons.rsi
     state: clan_sword
   - type: Item
-    sprite: Yautja/weapons.rsi
+    sprite: _CMU14/Yautja/weapons.rsi
     size: Large
   - type: MeleeWeapon
     wideAnimationRotation: -135
@@ -390,15 +390,15 @@
   - type: YautjaTechItem
     blockMelee: false
   - type: Sprite
-    sprite: Yautja/weapons.rsi
+    sprite: _CMU14/Yautja/weapons.rsi
     state: clan_shield
   - type: Item
-    sprite: Yautja/weapons.rsi
+    sprite: _CMU14/Yautja/weapons.rsi
     heldPrefix: clan_shield
     size: Huge
   - type: Blocking
     blockSound: !type:SoundPathSpecifier
-      path: /Audio/Yautja/Weapons/Melee/parry.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Melee/parry.wav
     passiveBlockModifier:
       coefficients:
         Blunt: 0.75
@@ -744,7 +744,7 @@
     blockThrow: false
     blockShoot: false
   - type: Sprite
-    sprite: Yautja/weapons.rsi
+    sprite: _CMU14/Yautja/weapons.rsi
     layers:
     - state: harpoon
   - type: Projectile
@@ -762,12 +762,12 @@
   components:
   - type: YautjaTechItem
   - type: Sprite
-    sprite: Yautja/guns.rsi
+    sprite: _CMU14/Yautja/guns.rsi
     layers:
     - state: spike_launcher
       map: [ "enum.GunVisualLayers.Base" ]
   - type: Item
-    sprite: Yautja/gun_inhands.rsi
+    sprite: _CMU14/Yautja/gun_inhands.rsi
     heldPrefix: spike_launcher
     size: Huge
   - type: AmmoCounter
@@ -815,12 +815,12 @@
   components:
   - type: YautjaTechItem
   - type: Sprite
-    sprite: Yautja/guns.rsi
+    sprite: _CMU14/Yautja/guns.rsi
     layers:
     - state: plasma_rifle
       map: [ "enum.GunVisualLayers.Base" ]
   - type: Item
-    sprite: Yautja/gun_inhands.rsi
+    sprite: _CMU14/Yautja/gun_inhands.rsi
     heldPrefix: plasma_rifle
     size: Huge
   - type: AmmoCounter
@@ -833,7 +833,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/Yautja/Weapons/Plasma/pred_plasma_shot.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
   - type: BatteryAmmoProvider
     proto: CMUYautjaPlasmaRifleBolt
     fireCost: 175
@@ -870,12 +870,12 @@
   components:
   - type: YautjaTechItem
   - type: Sprite
-    sprite: Yautja/guns.rsi
+    sprite: _CMU14/Yautja/guns.rsi
     layers:
     - state: plasma_pistol
       map: [ "enum.GunVisualLayers.Base" ]
   - type: Item
-    sprite: Yautja/gun_inhands.rsi
+    sprite: _CMU14/Yautja/gun_inhands.rsi
     heldPrefix: plasma_pistol
     size: Normal
   - type: AmmoCounter
@@ -886,7 +886,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/Yautja/Weapons/Plasma/pulse3.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse3.wav
   - type: BatteryAmmoProvider
     proto: CMUYautjaPlasmaPistolBolt
     fireCost: 125

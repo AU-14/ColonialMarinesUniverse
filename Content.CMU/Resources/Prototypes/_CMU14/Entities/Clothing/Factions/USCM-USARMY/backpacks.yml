@@ -5,7 +5,7 @@
   description: The standard-issue pack of UA forces. Designed to lug gear into the battlefield.
   components:
     - type: Sprite
-      sprite: Clothing/Back/impbag.rsi
+      sprite: _CMU14/Clothing/Back/impbag.rsi
     - type: Item
       size: Huge
     - type: Storage
@@ -31,7 +31,7 @@
   description: The standard-issue pack of UA forces. Designed to lug gear into the battlefield. This one has a red cross on it.
   components:
     - type: Sprite
-      sprite: Clothing/Back/corpsmanbag.rsi
+      sprite: _CMU14/Clothing/Back/corpsmanbag.rsi
 
 - type: entity
   parent: CMBackpack
@@ -40,7 +40,7 @@
   description: A large pack. Designed to engineering equipment and explosives into the battlefield.
   components:
     - type: Sprite
-      sprite: Clothing/Back/techbag.rsi
+      sprite: _CMU14/Clothing/Back/techbag.rsi
 
 - type: entity
   parent: CMSatchel
@@ -49,7 +49,7 @@
   description: A sterile satchel used in medical departments.
   components:
     - type: Sprite
-      sprite: Clothing/Back/corpsmansatchel.rsi
+      sprite: _CMU14/Clothing/Back/corpsmansatchel.rsi
 
 - type: entity
   parent: CMSatchel
@@ -58,7 +58,7 @@
   description: "The AN/PRC-55 Portable Transceiver, also known as AN/PRC 55 Radio Set, is a man-pack, portable VHF FM combat-net radio transceiver manufactured by Armat Battlefield Systems and used to provide short-range, two-way radiotelephone voice communication."
   components:
     - type: Sprite
-      sprite: Clothing/RTOPack/blackrtopack.rsi
+      sprite: _CMU14/Clothing/RTOPack/blackrtopack.rsi
       layers:
         - state: icon
           map: ["base"]
@@ -97,7 +97,7 @@
   name: "Jungle AN/PRC-55 Portable Transceiver"
   components:
     - type: Sprite
-      sprite: Clothing/RTOPack/junglertopack.rsi
+      sprite: _CMU14/Clothing/RTOPack/junglertopack.rsi
       layers:
         - state: icon
           map: ["base"]
@@ -108,7 +108,7 @@
   name: "Desert AN/PRC-55 Portable Transceiver"
   components:
     - type: Sprite
-      sprite: Clothing/RTOPack/desertrtopack.rsi
+      sprite: _CMU14/Clothing/RTOPack/desertrtopack.rsi
       layers:
         - state: icon
           map: ["base"]
@@ -119,7 +119,7 @@
   name: "Gray AN/PRC-55 Portable Transceiver"
   components:
     - type: Sprite
-      sprite: Clothing/RTOPack/classicrtopack.rsi
+      sprite: _CMU14/Clothing/RTOPack/classicrtopack.rsi
       layers:
         - state: icon
           map: ["base"]
@@ -131,7 +131,7 @@
   description: Tactical backpack manufactured by one of the Alphatech subsidiaries. Very lightweight backpack that utilizes UA standard MOLLE fastening systems, which allows easy access and optimal weight distribution. Standard issue heavy duty pack for US army troopers.
   components:
     - type: Sprite
-      sprite: Clothing/US_Army/Back/molle.rsi
+      sprite: _CMU14/Clothing/US_Army/Back/molle.rsi
     - type: ItemCamouflage
       camouflageVariations: {}
 
@@ -142,7 +142,7 @@
   description: Tactical satchel manufactured by one of the Alphatech subsidiaries. Very lightweight beltbag variant that utilizes UA standard MOLLE fastening systems. Standard issue pack for US army troopers.
   components:
     - type: Sprite
-      sprite: Clothing/US_Army/Back/molle_satchel.rsi
+      sprite: _CMU14/Clothing/US_Army/Back/molle_satchel.rsi
     - type: ItemCamouflage
       camouflageVariations: {}
 

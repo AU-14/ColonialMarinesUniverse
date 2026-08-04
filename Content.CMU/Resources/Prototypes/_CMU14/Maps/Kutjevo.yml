@@ -2,11 +2,11 @@
   id: auKutjevo
   mapName: Kutjevo Biolab
   allegiance: WeylandYutani
-  mapPath: /Maps/kutjevo.yml
+  mapPath: /Maps/_CMU14/kutjevo.yml
   mapsBelow:
-  - /Maps/kutjevo_below.yml
+  - /Maps/_CMU14/kutjevo_below.yml
   mapsAbove:
-  - /Maps/kutjevo_above.yml
+  - /Maps/_CMU14/kutjevo_above.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

@@ -4,7 +4,7 @@
   name: WeYu CBRN Kit
   components:
   - type: Sprite
-    sprite: Objects/Tools/CBRN/uscm.rsi
+    sprite: _CMU14/Objects/Tools/CBRN/uscm.rsi
     state: closed
   - type: Item
     size: Small

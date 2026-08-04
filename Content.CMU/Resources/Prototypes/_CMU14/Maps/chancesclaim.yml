@@ -2,11 +2,11 @@
   id: auchances
   mapName: Chances Claim
   allegiance: WeylandYutani
-  mapPath: /Maps/chances.yml
+  mapPath: /Maps/_CMU14/chances.yml
   mapsBelow:
-  - /Maps/chances_below.yml
+  - /Maps/_CMU14/chances_below.yml
   mapsAbove:
-  - /Maps/chances_above.yml
+  - /Maps/_CMU14/chances_above.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

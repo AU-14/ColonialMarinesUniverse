@@ -8,7 +8,7 @@
   parent: BaseItem
   components:
   - type: Sprite
-    sprite: Objects/Radio/anprc117g.rsi
+    sprite: _CMU14/Objects/Radio/anprc117g.rsi
     layers:
     - state: base
       map: [ "base" ]
@@ -16,18 +16,18 @@
   # the ground states
   - type: Item
     size: Huge
-    sprite: Clothing/RTOPack/blackrtopack.rsi
+    sprite: _CMU14/Clothing/RTOPack/blackrtopack.rsi
     shape:
     - 0,0,1,1
   - type: GenericVisualizer
     visuals:
       enum.ANPRCPackVisuals.State:
         base:
-          Bare: { sprite: Objects/Radio/anprc117g.rsi, state: base, offset: "0,0" }
-          Whip: { sprite: Objects/Radio/anprc117g.rsi, state: base_w, offset: "0,0" }
-          Mast: { sprite: Objects/Radio/anprc117g.rsi, state: base_m, offset: "0,0" }
-          DeployedWhip: { sprite: Objects/Radio/anprc117g_deployed.rsi, state: whip_deploy, offset: "0,0.5" }
-          DeployedMast: { sprite: Objects/Radio/anprc117g_deployed.rsi, state: mast_deploy, offset: "0,0.5" }
+          Bare: { sprite: _CMU14/Objects/Radio/anprc117g.rsi, state: base, offset: "0,0" }
+          Whip: { sprite: _CMU14/Objects/Radio/anprc117g.rsi, state: base_w, offset: "0,0" }
+          Mast: { sprite: _CMU14/Objects/Radio/anprc117g.rsi, state: base_m, offset: "0,0" }
+          DeployedWhip: { sprite: _CMU14/Objects/Radio/anprc117g_deployed.rsi, state: whip_deploy, offset: "0,0.5" }
+          DeployedMast: { sprite: _CMU14/Objects/Radio/anprc117g_deployed.rsi, state: mast_deploy, offset: "0,0.5" }
   - type: ANPRCRadio
     activeSlot: -1
     enabled: true
@@ -95,7 +95,7 @@
     walkModifier: 0.95
     sprintModifier: 0.95
   - type: Clothing
-    sprite: Clothing/RTOPack/blackrtopack.rsi
+    sprite: _CMU14/Clothing/RTOPack/blackrtopack.rsi
     slots:
     - back
 

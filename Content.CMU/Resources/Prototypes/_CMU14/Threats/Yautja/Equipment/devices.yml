@@ -5,10 +5,10 @@
   description: A heavy wrist computer packed with alien hunting tools.
   components:
   - type: Sprite
-    sprite: Yautja/bracer.rsi
+    sprite: _CMU14/Yautja/bracer.rsi
     state: icon
   - type: Clothing
-    sprite: Yautja/bracer.rsi
+    sprite: _CMU14/Yautja/bracer.rsi
   - type: YautjaBracer
     charge: 3000
     maxCharge: 3000
@@ -178,11 +178,11 @@
   suffix: Yautja, Thrall
   components:
   - type: Sprite
-    sprite: Yautja/bracer.rsi
+    sprite: _CMU14/Yautja/bracer.rsi
     state: icon
     color: "#b85440"
   - type: Clothing
-    sprite: Yautja/bracer.rsi
+    sprite: _CMU14/Yautja/bracer.rsi
   - type: YautjaThrallBracer
   - type: YautjaTechItem
     blockPickup: false
@@ -238,11 +238,11 @@
   description: An alien hunting mask with a built-in tactical visor.
   components:
   - type: Sprite
-    sprite: Yautja/mask.rsi
+    sprite: _CMU14/Yautja/mask.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/mask.rsi
+    sprite: _CMU14/Yautja/mask.rsi
     slots:
     - Mask
     - Suitstorage
@@ -310,10 +310,10 @@
   description: A crystalline shard pulsing with restorative energy. Split it with both hands free to activate, then plunge both halves into yourself for a burst of healing and a sustained chemical treatment.
   components:
   - type: Sprite
-    sprite: Yautja/health_shard.rsi
+    sprite: _CMU14/Yautja/health_shard.rsi
     state: shard_icon
   - type: Item
-    sprite: Yautja/health_shard.rsi
+    sprite: _CMU14/Yautja/health_shard.rsi
     heldPrefix: shard_inhand
     size: Small
   - type: YautjaHealthShard
@@ -331,10 +331,10 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: Yautja/health_shard.rsi
+    sprite: _CMU14/Yautja/health_shard.rsi
     state: shard_icon_twohand
   - type: Item
-    sprite: Yautja/health_shard.rsi
+    sprite: _CMU14/Yautja/health_shard.rsi
     heldPrefix: shard_inhand
     size: Tiny
   - type: YautjaHealthShardHalf
@@ -431,13 +431,13 @@
   description: A compact field harness tuned for Yautja optical camouflage.
   components:
   - type: Sprite
-    sprite: Yautja/cape_full.rsi
+    sprite: _CMU14/Yautja/cape_full.rsi
     state: icon
   - type: Item
-    sprite: Yautja/cape_full.rsi
+    sprite: _CMU14/Yautja/cape_full.rsi
     size: Large
   - type: Clothing
-    sprite: Yautja/cape_full.rsi
+    sprite: _CMU14/Yautja/cape_full.rsi
     quickEquip: false
     slots:
     - back
@@ -453,9 +453,9 @@
     - HeadTop
     - HeadSide
     cloakSound:
-      path: /Audio/Yautja/Equipment/pred_cloakon.wav
+      path: /Audio/_CMU14/Yautja/Equipment/pred_cloakon.wav
     uncloakSound:
-      path: /Audio/Yautja/Equipment/pred_cloakoff.wav
+      path: /Audio/_CMU14/Yautja/Equipment/pred_cloakoff.wav
   - type: Storage
     maxItemSize: Large
     grid:
@@ -472,13 +472,13 @@
   description: A ceremonial cape fitted with a compact cloaking field generator.
   components:
   - type: Sprite
-    sprite: Yautja/cape_ceremonial.rsi
+    sprite: _CMU14/Yautja/cape_ceremonial.rsi
     state: icon
   - type: Item
-    sprite: Yautja/cape_ceremonial.rsi
+    sprite: _CMU14/Yautja/cape_ceremonial.rsi
     size: Large
   - type: Clothing
-    sprite: Yautja/cape_ceremonial.rsi
+    sprite: _CMU14/Yautja/cape_ceremonial.rsi
     quickEquip: false
     slots:
     - back
@@ -490,12 +490,12 @@
   description: A razor-edged Yautja throwing disc keyed to its owner.
   components:
   - type: Sprite
-    sprite: Yautja/smart_disc.rsi
+    sprite: _CMU14/Yautja/smart_disc.rsi
     layers:
     - state: icon
       map: [ "base" ]
   - type: Item
-    sprite: Yautja/smart_disc.rsi
+    sprite: _CMU14/Yautja/smart_disc.rsi
     size: Small
   - type: YautjaTechItem
     blockPickup: false
@@ -510,9 +510,9 @@
   - type: ItemToggle
     predictable: false
     soundActivate:
-      path: /Audio/Yautja/Equipment/pred_attach.wav
+      path: /Audio/_CMU14/Yautja/Equipment/pred_attach.wav
     soundDeactivate:
-      path: /Audio/Yautja/Equipment/pred_attach.wav
+      path: /Audio/_CMU14/Yautja/Equipment/pred_attach.wav
     soundFailToActivate:
       path: /Audio/Machines/button.ogg
   - type: YautjaSmartDisc
@@ -564,16 +564,16 @@
   description: A compact alien plasma weapon that draws power from a hunting bracer.
   components:
   - type: Sprite
-    sprite: Yautja/plasma_caster.rsi
+    sprite: _CMU14/Yautja/plasma_caster.rsi
     layers:
     - state: icon
       map: [ "enum.GunVisualLayers.Base" ]
   - type: Item
-    sprite: Yautja/plasma_caster.rsi
+    sprite: _CMU14/Yautja/plasma_caster.rsi
     size: Normal
   - type: YautjaTechItem
   - type: Clothing
-    sprite: Yautja/plasma_caster.rsi
+    sprite: _CMU14/Yautja/plasma_caster.rsi
     quickEquip: false
     slots:
     - suitStorage
@@ -600,22 +600,22 @@
       projectile: CMUYautjaCasterStunBolt
       powerCost: 30
       fireSound:
-        path: /Audio/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
+        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
     - name: cmu-yautja-caster-mode-immobilizer
       projectile: CMUYautjaCasterImmobilizerBolt
       powerCost: 150
       fireSound:
-        path: /Audio/Yautja/Weapons/Plasma/pulse.wav
+        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav
     - name: cmu-yautja-caster-mode-lethal
       projectile: CMUYautjaCasterLethalBolt
       powerCost: 100
       fireSound:
-        path: /Audio/Yautja/Weapons/Plasma/pred_lasercannon.wav
+        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav
     - name: cmu-yautja-caster-mode-eradicator
       projectile: CMUYautjaCasterEradicatorBolt
       powerCost: 1000
       fireSound:
-        path: /Audio/Yautja/Weapons/Plasma/pulse.wav
+        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse.wav
   - type: Appearance
 
 - type: entity
@@ -627,20 +627,20 @@
   - type: YautjaCaster
     powerCost: 30
     cooldownSound:
-      path: /Audio/Yautja/Weapons/Plasma/plasma_caster_no_energy_01.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Plasma/plasma_caster_no_energy_01.wav
     modes:
     - name: cmu-yautja-caster-mode-stun
       projectile: CMUYautjaCasterStunBolt
       powerCost: 30
       cooldown: 10
       fireSound:
-        path: /Audio/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
+        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasmacaster_fire.wav
     - name: cmu-yautja-caster-mode-lethal
       projectile: CMUYautjaCasterLethalBolt
       powerCost: 100
       cooldown: 20
       fireSound:
-        path: /Audio/Yautja/Weapons/Plasma/pred_lasercannon.wav
+        path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_lasercannon.wav
 
 - type: entity
   parent: [ BaseItem, RMCBaseMeleeWeapon ]
@@ -650,10 +650,10 @@
   components:
   - type: Sharp
   - type: Sprite
-    sprite: Yautja/wrist_blades.rsi
+    sprite: _CMU14/Yautja/wrist_blades.rsi
     state: icon
   - type: Item
-    sprite: Yautja/wrist_blades.rsi
+    sprite: _CMU14/Yautja/wrist_blades.rsi
     size: Small
   - type: YautjaTechItem
   - type: Prying
@@ -702,10 +702,10 @@
   components:
   - type: Sharp
   - type: Sprite
-    sprite: Yautja/scimitar.rsi
+    sprite: _CMU14/Yautja/scimitar.rsi
     state: icon
   - type: Item
-    sprite: Yautja/scimitar.rsi
+    sprite: _CMU14/Yautja/scimitar.rsi
     size: Large
   - type: YautjaTechItem
   - type: Prying
@@ -755,10 +755,10 @@
   description: A heavy gauntlet weapon with compact linked chain drives.
   components:
   - type: Sprite
-    sprite: Yautja/chain_gauntlet.rsi
+    sprite: _CMU14/Yautja/chain_gauntlet.rsi
     state: icon
   - type: Item
-    sprite: Yautja/chain_gauntlet.rsi
+    sprite: _CMU14/Yautja/chain_gauntlet.rsi
     size: Normal
   - type: YautjaTechItem
   - type: MeleeWeapon
@@ -795,16 +795,16 @@
   description: A compact hard-light shield projected from the hunting bracer.
   components:
   - type: Sprite
-    sprite: Yautja/bracer_shield.rsi
+    sprite: _CMU14/Yautja/bracer_shield.rsi
     state: icon
   - type: Item
-    sprite: Yautja/bracer_shield.rsi
+    sprite: _CMU14/Yautja/bracer_shield.rsi
     size: Large
   - type: YautjaTechItem
     blockMelee: false
   - type: Blocking
     blockSound: !type:SoundPathSpecifier
-      path: /Audio/Yautja/Weapons/Melee/parry.wav
+      path: /Audio/_CMU14/Yautja/Weapons/Melee/parry.wav
     passiveBlockModifier:
       coefficients:
         Blunt: 0.8
@@ -843,10 +843,10 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: brute_herbs
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: MedicallyUnskilledDoAfter
     min: 0
     doAfter: 0
@@ -863,10 +863,10 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: burn_herbs
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: MedicallyUnskilledDoAfter
     min: 0
     doAfter: 0
@@ -974,11 +974,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/healing_gun.rsi
+    sprite: _CMU14/Yautja/healing_gun.rsi
     state: healing_gun
   - type: Item
     size: Small
-    sprite: Yautja/healing_gun.rsi
+    sprite: _CMU14/Yautja/healing_gun.rsi
   - type: YautjaHealingGun
     repairsFractures: true
     damageContainers:
@@ -1080,7 +1080,7 @@
   suffix: Yautja, Filled
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     layers:
     - state: medicomp
     - state: medicomp_open
@@ -1088,7 +1088,7 @@
       visible: false
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: Storage
     maxItemSize: Normal
     grid:

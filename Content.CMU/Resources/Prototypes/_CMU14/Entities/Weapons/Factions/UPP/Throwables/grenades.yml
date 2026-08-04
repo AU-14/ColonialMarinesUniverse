@@ -5,7 +5,7 @@
   suffix: UPP
   components:
   - type: Sprite
-    sprite: Weapons/Grenades/UPP/HEDP.rsi
+    sprite: _CMU14/Weapons/Grenades/UPP/HEDP.rsi
   - type: Tag
     tags:
     - Grenade
@@ -20,7 +20,7 @@
   suffix: UPP
   components:
   - type: Sprite
-    sprite: Weapons/Grenades/UPP/HSDP.rsi
+    sprite: _CMU14/Weapons/Grenades/UPP/HSDP.rsi
   - type: Tag
     tags:
     - Grenade
@@ -35,7 +35,7 @@
   suffix: UPP
   components:
   - type: Sprite
-    sprite: Weapons/Grenades/UPP/HIDP.rsi
+    sprite: _CMU14/Weapons/Grenades/UPP/HIDP.rsi
   - type: Tag
     tags:
     - Grenade

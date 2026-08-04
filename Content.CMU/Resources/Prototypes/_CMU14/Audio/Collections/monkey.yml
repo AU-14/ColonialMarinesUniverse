@@ -2,5 +2,5 @@
 - type: soundCollection
   id: CMUMonkeyNoises
   files:
-  - /Audio/Monkey/monkey_chimper1.ogg
-  - /Audio/Monkey/monkey_chimper2.ogg
+  - /Audio/_CMU14/Monkey/monkey_chimper1.ogg
+  - /Audio/_CMU14/Monkey/monkey_chimper2.ogg

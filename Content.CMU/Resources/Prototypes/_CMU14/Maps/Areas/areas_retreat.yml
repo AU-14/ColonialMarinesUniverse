@@ -5,7 +5,7 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: Areas/areas_retreat.rsi
+    sprite: _CMU14/Areas/areas_retreat.rsi
     state: oob
   - type: Area
     buildSpecial: true

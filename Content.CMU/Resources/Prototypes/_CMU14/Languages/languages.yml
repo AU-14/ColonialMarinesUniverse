@@ -263,7 +263,7 @@
   hideLanguageName: true
   firstContactMeaning: language-Yautja-first-contact
   languageIcon:
-    sprite: /Textures/Yautja/mask.rsi
+    sprite: /Textures/_CMU14/Yautja/mask.rsi
     state: icon
   expectedVocabularySize: 140
   minimumRequiredLearnedWords: 40

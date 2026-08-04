@@ -18,7 +18,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: Structures/watchtower.rsi
+    sprite: _CMU14/Structures/watchtower.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable

@@ -20,7 +20,7 @@
     prefix: au14-job-prefix-orbitalarbiter
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14colonyhud.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyhud.rsi
       state: orbital_manager
 
   name: au14-job-name-orbitalarbiter

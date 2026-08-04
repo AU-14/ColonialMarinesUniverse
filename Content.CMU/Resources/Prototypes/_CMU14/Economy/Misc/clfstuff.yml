@@ -12,7 +12,7 @@
   components:
   - type: Pullable
   - type: Sprite
-    sprite: Structures/Vendors/genericweaponrack.rsi
+    sprite: _CMU14/Structures/Vendors/genericweaponrack.rsi
     layers:
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
@@ -619,7 +619,7 @@
   components:
   - type: TattooGun
   - type: Sprite
-    sprite: Objects/Misc/TattooGun/tattoogun.rsi
+    sprite: _CMU14/Objects/Misc/TattooGun/tattoogun.rsi
     layers:
     - state: inkgon
   - type: Storage
@@ -649,7 +649,7 @@
   description: A small cartridge of dark ink for use with a tattoo gun.
   components:
   - type: Sprite
-    sprite: Objects/Misc/TattooGun/tattoogunmag.rsi
+    sprite: _CMU14/Objects/Misc/TattooGun/tattoogunmag.rsi
     layers:
     - state: inkmag
       map: ["enum.SolutionContainerLayers.Fill"]

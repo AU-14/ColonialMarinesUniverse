@@ -29,7 +29,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: Structures/woodenbarricadesubmerged.rsi
+    sprite: _CMU14/Structures/woodenbarricadesubmerged.rsi
     state: sand_wall
   - type: Physics
     bodyType: Static

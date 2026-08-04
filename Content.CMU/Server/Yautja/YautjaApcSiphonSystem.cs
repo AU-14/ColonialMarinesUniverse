@@ -27,7 +27,7 @@ public sealed partial class YautjaApcSiphonSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     private static readonly SoundSpecifier SiphonSound =
-        new SoundPathSpecifier("/Audio/Yautja/Equipment/apc_power_drain.wav");
+        new SoundPathSpecifier("/Audio/_CMU14/Yautja/Equipment/apc_power_drain.wav");
 
     private static readonly TimeSpan SiphonDuration = TimeSpan.FromSeconds(9.3);
     private static readonly TimeSpan SiphonCooldown = TimeSpan.FromMinutes(20);

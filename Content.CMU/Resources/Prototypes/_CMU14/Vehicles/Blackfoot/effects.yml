@@ -22,5 +22,5 @@
     range: 18
     volume: -2
     sound:
-      path: /Audio/Blackfoot/exteriorflight.ogg
+      path: /Audio/_CMU14/Blackfoot/exteriorflight.ogg
   - type: BlackfootDownwash

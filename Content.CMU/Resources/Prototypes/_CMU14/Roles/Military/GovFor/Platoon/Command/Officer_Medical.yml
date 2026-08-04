@@ -38,13 +38,13 @@
     speechStyleClass: commanderSpeech
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14govforjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14govforjobicons.rsi
       state: govfor_cmo
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/Interface/au14opforjobicons.rsi
+        sprite: /Textures/_CMU14/Interface/au14opforjobicons.rsi
         state: cmo
     # UPP:
     # - type: JobPrefix

@@ -500,7 +500,7 @@
   - type: VendorMarker
     class: Clothing
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
 - type: entity
@@ -511,7 +511,7 @@
   - type: VendorMarker
     class: ShipsideUniform
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
 - type: entity
@@ -585,7 +585,7 @@
   - type: VendorMarker
     class: Rifleman
   - type: Sprite
-    sprite: Structures/Vendors/assortedequipment.rsi
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
     state: base
 
 - type: entity
@@ -607,7 +607,7 @@
   - type: VendorMarker
     class: OperationsOfficer
   - type: Sprite
-    sprite: Structures/Vendors/uscmcommandclothes.rsi
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
     state: base
 
 - type: entity
@@ -618,7 +618,7 @@
   - type: VendorMarker
     class: JuniorOfficer
   - type: Sprite
-    sprite: Structures/Vendors/uscmcommandclothes.rsi
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
     state: base
 
 - type: entity
@@ -629,7 +629,7 @@
   - type: VendorMarker
     class: MilitaryPolice
   - type: Sprite
-    sprite: Structures/Vendors/uscmcommandclothes.rsi
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
     state: base
 
 - type: entity
@@ -640,7 +640,7 @@
   - type: VendorMarker
     class: Rto
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
 - type: entity
@@ -651,7 +651,7 @@
   - type: VendorMarker
     class: SectionSergeant
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
 - type: entity
@@ -662,7 +662,7 @@
   - type: VendorMarker
     class: SquadSergeant
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
 - type: entity
@@ -673,7 +673,7 @@
   - type: VendorMarker
     class: Pilot
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
     state: base
 
 - type: entity
@@ -695,7 +695,7 @@
   - type: VendorMarker
     class: SWeapons
   - type: Sprite
-    sprite: Structures/Vendors/genericweaponrack.rsi
+    sprite: _CMU14/Structures/Vendors/genericweaponrack.rsi
     state: base
 
 # Ship door markers
@@ -708,7 +708,7 @@
     class: LockedFTLDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: com
 
 - type: entity
@@ -720,7 +720,7 @@
     class: LockedFTLGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: comglass
 
 - type: entity
@@ -732,7 +732,7 @@
     class: LockedCommandDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: com
 
 - type: entity
@@ -744,7 +744,7 @@
     class: LockedCommandGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: comglass
 
 - type: entity
@@ -756,7 +756,7 @@
     class: LockedSecurityDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: sec
 
 - type: entity
@@ -768,7 +768,7 @@
     class: LockedSecurityDoorGlass
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: secglass
 
 - type: entity
@@ -780,7 +780,7 @@
     class: LockedGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: glass
 
 - type: entity
@@ -792,7 +792,7 @@
     class: LockedNormalDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: normal
 
 - type: entity
@@ -804,7 +804,7 @@
     class: LockedEngineeringGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: engglass
 
 - type: entity
@@ -816,7 +816,7 @@
     class: LockedEngineeringDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: eng
 
 - type: entity
@@ -828,7 +828,7 @@
     class: LockedLogisticsGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: engglass
 
 - type: entity
@@ -840,7 +840,7 @@
     class: LockedLogisticsDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: eng
 
 - type: entity
@@ -852,7 +852,7 @@
     class: LockedMedicalGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: medglass
 
 - type: entity
@@ -864,7 +864,7 @@
     class: LockedMedicalDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/govfor_door_marker.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/govfor_door_marker.rsi
     state: med
 
 # Ship double door markers
@@ -877,7 +877,7 @@
     class: LockedDoubleNormalDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/govfor_solid.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/govfor_solid.rsi
     state: door_closed
 
 - type: entity
@@ -889,7 +889,7 @@
     class: LockedDoubleGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/govfor_glass.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/govfor_glass.rsi
     state: door_closed
 
 - type: entity
@@ -901,7 +901,7 @@
     class: LockedDoubleCommandDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/command_govfor_solid.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/command_govfor_solid.rsi
     state: door_closed
 
 - type: entity
@@ -913,7 +913,7 @@
     class: LockedDoubleCommandGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/command_govfor_glass.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/command_govfor_glass.rsi
     state: door_closed
 
 - type: entity
@@ -925,7 +925,7 @@
     class: LockedDoubleSecurityDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/security_govfor_solid.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/security_govfor_solid.rsi
     state: door_closed
 
 - type: entity
@@ -937,7 +937,7 @@
     class: LockedDoubleSecurityGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/security_govfor_glass.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/security_govfor_glass.rsi
     state: door_closed
 
 - type: entity
@@ -949,7 +949,7 @@
     class: LockedDoubleMedicalDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/medical_govfor_solid.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/medical_govfor_solid.rsi
     state: door_closed
 
 - type: entity
@@ -961,7 +961,7 @@
     class: LockedDoubleMedicalGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/medical_govfor_glass.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/medical_govfor_glass.rsi
     state: door_closed
 
 - type: entity
@@ -973,7 +973,7 @@
     class: LockedDoubleEngineeringDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/engineer_govfor_solid.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/engineer_govfor_solid.rsi
     state: door_closed
 
 - type: entity
@@ -985,7 +985,7 @@
     class: LockedDoubleEngineeringGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/engineer_govfor_glass.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/engineer_govfor_glass.rsi
     state: door_closed
 
 - type: entity
@@ -997,7 +997,7 @@
     class: LockedDoubleLogisticsDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/engineer_govfor_solid.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/engineer_govfor_solid.rsi
     state: door_closed
 
 - type: entity
@@ -1009,7 +1009,7 @@
     class: LockedDoubleLogisticsGlassDoor
   - type: Sprite
     drawdepth: Overdoors
-    sprite: Structures/Doors/Airlocks/Double/engineer_govfor_glass.rsi
+    sprite: _CMU14/Structures/Doors/Airlocks/Double/engineer_govfor_glass.rsi
     state: door_closed
 
 # Ship console and machine markers
@@ -1043,7 +1043,7 @@
   - type: VendorMarker
     class: LaptopCallsign
   - type: Sprite
-    sprite: Items/laptop.rsi
+    sprite: _CMU14/Items/laptop.rsi
     state: laptop_off
 
 - type: entity

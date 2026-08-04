@@ -13,7 +13,7 @@
   - type: Clickable
   - type: InteractionOutline
   - type: Sprite
-    sprite: Structures/audefibcabinet.rsi
+    sprite: _CMU14/Structures/audefibcabinet.rsi
     noRot: false
     layers:
     - state: frame

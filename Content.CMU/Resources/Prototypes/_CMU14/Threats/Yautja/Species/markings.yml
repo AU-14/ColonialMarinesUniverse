@@ -4,5 +4,5 @@
   markingCategory: Hair
   speciesRestriction: [ Yautja ]
   sprites:
-  - sprite: Yautja/hair.rsi
+  - sprite: _CMU14/Yautja/hair.rsi
     state: standard

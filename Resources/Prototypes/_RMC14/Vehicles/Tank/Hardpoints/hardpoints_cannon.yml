@@ -33,7 +33,7 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot: /Audio/Weapons/vehicle/tankgun.ogg
+    soundGunshot: /Audio/_CMU14/Weapons/vehicle/tankgun.ogg
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 5
@@ -181,7 +181,7 @@
     availableModes:
     - FullAuto
     soundGunshot:
-      path: /Audio/Weapons/vehicle/autocannon.ogg
+      path: /Audio/_CMU14/Weapons/vehicle/autocannon.ogg
       params:
         variation: 0.06
     cameraRecoilScalar: 0
@@ -251,7 +251,7 @@
     availableModes:
     - FullAuto
     soundGunshot:
-      path: /Audio/Weapons/vehicle/autocannon.ogg
+      path: /Audio/_CMU14/Weapons/vehicle/autocannon.ogg
       params:
         variation: 0.06
     cameraRecoilScalar: 0

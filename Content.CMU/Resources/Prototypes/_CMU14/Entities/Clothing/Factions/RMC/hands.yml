@@ -7,9 +7,9 @@
   components:
   - type: Insulated
   - type: Sprite
-    sprite: Clothing/RMC/hands/basic.rsi
+    sprite: _CMU14/Clothing/RMC/hands/basic.rsi
   - type: Clothing
-    sprite: Clothing/RMC/hands/basic.rsi
+    sprite: _CMU14/Clothing/RMC/hands/basic.rsi
 
 - type: entity
   parent: AU14HandsRMC
@@ -17,6 +17,6 @@
   name: L6 pattern silver combat gloves
   components:
   - type: Sprite
-    sprite: Clothing/RMC/hands/silver.rsi
+    sprite: _CMU14/Clothing/RMC/hands/silver.rsi
   - type: Clothing
-    sprite: Clothing/RMC/hands/silver.rsi
+    sprite: _CMU14/Clothing/RMC/hands/silver.rsi

@@ -5,9 +5,9 @@
   description: A WY PMC helmet.
   components:
   - type: Sprite
-    sprite: Clothing/WY_PMC/wypmchelmet.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmchelmet.rsi
   - type: Clothing
-    sprite: Clothing/WY_PMC/wypmchelmet.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmchelmet.rsi
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -16,9 +16,9 @@
   description: A WY PMC helmet.
   components:
   - type: Sprite
-    sprite: Clothing/WY_PMC/sniperhat.rsi
+    sprite: _CMU14/Clothing/WY_PMC/sniperhat.rsi
   - type: Clothing
-    sprite: Clothing/WY_PMC/sniperhat.rsi
+    sprite: _CMU14/Clothing/WY_PMC/sniperhat.rsi
 
 - type: entity
   parent: [ArmorHelmetPMC, RMCMarineHelmetWithLightBase]
@@ -27,9 +27,9 @@
   description: A contender for service with the Royal Marines Commandos, it is presently, exclusively, field tested by Weyland-Yutani mercenaries. Features a ballistic mask and integrated display connected to the visor.
   components:
   - type: Sprite
-    sprite: Clothing/WY_PMC/pmchelmet_closed.rsi
+    sprite: _CMU14/Clothing/WY_PMC/pmchelmet_closed.rsi
   - type: Clothing
-    sprite: Clothing/WY_PMC/pmchelmet_closed.rsi
+    sprite: _CMU14/Clothing/WY_PMC/pmchelmet_closed.rsi
   - type: CMArmor
     bullet: 25
     bio: 25
@@ -52,9 +52,9 @@
   description: A contender for service with the Royal Marines Commandos, it is presently, exclusively, field tested by Weyland-Yutani mercenaries. Features a ballistic mask and integrated display connected to the visor.
   components:
   - type: Sprite
-    sprite: Clothing/WY_PMC/pmchelmet_engi.rsi
+    sprite: _CMU14/Clothing/WY_PMC/pmchelmet_engi.rsi
   - type: Clothing
-    sprite: Clothing/WY_PMC/pmchelmet_engi.rsi
+    sprite: _CMU14/Clothing/WY_PMC/pmchelmet_engi.rsi
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -64,6 +64,6 @@
   components:
   - type: IdentityBlocker
   - type: Sprite
-    sprite: Clothing/WY_PMC/wypmcheavy.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmcheavy.rsi
   - type: Clothing
-    sprite: Clothing/WY_PMC/wypmcheavy.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmcheavy.rsi

@@ -8,7 +8,7 @@
   description: A wet, vaguely humanoid silhouette. Its features won't stop sliding.
   components:
   - type: Sprite
-    sprite: Mobs/Abominations/mimic.rsi
+    sprite: _CMU14/Mobs/Abominations/mimic.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive

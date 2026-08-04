@@ -6,9 +6,9 @@
   suffix: Mining, Barren
   components:
   - type: Sprite
-    sprite: Structures/Walls/fragile_rock.rsi
+    sprite: _CMU14/Structures/Walls/fragile_rock.rsi
   - type: Icon
-    sprite: Structures/Walls/fragile_rock.rsi
+    sprite: _CMU14/Structures/Walls/fragile_rock.rsi
     state: strata_ice
   - type: IconSmooth
     key: walls
@@ -47,9 +47,9 @@
   suffix: Mining, Steel
   components:
   - type: Sprite
-    sprite: Structures/Walls/steelore.rsi
+    sprite: _CMU14/Structures/Walls/steelore.rsi
   - type: Icon
-    sprite: Structures/Walls/steelore.rsi
+    sprite: _CMU14/Structures/Walls/steelore.rsi
     state: strata_ice
   - type: IconSmooth
     key: walls

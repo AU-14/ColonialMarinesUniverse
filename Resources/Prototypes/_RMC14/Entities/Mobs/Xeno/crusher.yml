@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: Mobs/Xenos/Crusher/crusher.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Crusher/crusher.rsi # AU14-Edit
     scale: 1.3, 1.3
   - type: MobState
     allowedStates:
@@ -194,7 +194,7 @@
   suffix: Charger
   components:
   - type: Sprite
-    sprite: Mobs/Xenos/Crusher/charger_crusher.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Crusher/charger_crusher.rsi # AU14-Edit
   - type: MobThresholds
     thresholds:
       0: Alive

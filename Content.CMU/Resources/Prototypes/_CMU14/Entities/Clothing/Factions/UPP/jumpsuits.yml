@@ -6,7 +6,7 @@
   description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/uppfatigues.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/uppfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUPP
@@ -19,7 +19,7 @@
   suffix: AU14
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/engi.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/engi.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCFoldableUniformBase]
@@ -28,7 +28,7 @@
   suffix: AU14
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/mp.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/mp.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -37,7 +37,7 @@
   suffix: AU14
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/medic.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/medic.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCFoldableUniformBase]
@@ -59,7 +59,7 @@
   description: Standart-issue UPP Army service uniform. Usually worn by officers.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/uppservice.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/uppservice.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUPP
@@ -72,7 +72,7 @@
   description: Standart-issue UPP Army service uniform. Usually worn by pilots and aircrews.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/uppboiler.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/uppboiler.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUPP
@@ -101,7 +101,7 @@
   - type: Item
     size: Small
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/cbrn.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/cbrn.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -110,4 +110,4 @@
   description: Uniform designed for UPP security synthetics.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/uppjoe.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/uppjoe.rsi

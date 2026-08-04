@@ -83,14 +83,14 @@
     collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
     collisionSoundCooldown: 1.5
     collisionSoundMinSpeed: 5
-    hornSound: /Audio/Blackfoot/buttonpress.ogg
+    hornSound: /Audio/_CMU14/Blackfoot/buttonpress.ogg
     hornCooldown: 1
   - type: AmbientSound
     enabled: false
     range: 18
     volume: -2
     sound:
-      path: /Audio/Blackfoot/engineidle.ogg
+      path: /Audio/_CMU14/Blackfoot/engineidle.ogg
   - type: Damageable
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
@@ -198,7 +198,7 @@
     maxIntegrity: 500
     bypassEntryOnZero: true
   - type: VehicleEnter
-    interiorPath: /Maps/Vehicles/Blackfoot/blackfoot.yml
+    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot.yml
     enterDoAfter: 1
     exitDoAfter: 1
     maxPassengers: 9
@@ -276,7 +276,7 @@
       insertDelay: 2
       required: false
   - type: VehicleEnter
-    interiorPath: /Maps/Vehicles/Blackfoot/blackfoot_doorgun.yml
+    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot_doorgun.yml
 
 - type: entity
   parent: VehicleBlackfootDoorGunBase
@@ -360,7 +360,7 @@
   abstract: true
   components:
   - type: VehicleEnter
-    interiorPath: /Maps/Vehicles/Blackfoot/blackfoot.yml
+    interiorPath: /Maps/_CMU14/Vehicles/Blackfoot/blackfoot.yml
 
 - type: entity
   parent: VehicleBlackfootBase

@@ -33,7 +33,7 @@
   description: A cheap way to injure someone. Designed by your local insurgent’s.
   components:
   - type: Sprite
-    sprite: Items/pipebomb.rsi
+    sprite: _CMU14/Items/pipebomb.rsi
     layers:
     - state: base
       map: ["enum.TriggerVisualLayers.Base"]
@@ -74,7 +74,7 @@
   suffix: Fuse
   components:
   - type: Sprite
-    sprite: Items/pipebomb.rsi
+    sprite: _CMU14/Items/pipebomb.rsi
     state: base
   - type: CraftIntoPipeBomb
     Spawn: CMUPipeBomb
@@ -90,7 +90,7 @@
   suffix: Casing
   components:
   - type: Sprite
-    sprite: Items/pipebomb.rsi
+    sprite: _CMU14/Items/pipebomb.rsi
     state: base
   - type: CraftIntoPipeBomb
     Spawn: CMUPipeBombFuse

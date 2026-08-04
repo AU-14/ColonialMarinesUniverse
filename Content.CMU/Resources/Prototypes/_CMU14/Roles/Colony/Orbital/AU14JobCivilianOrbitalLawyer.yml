@@ -20,7 +20,7 @@
     prefix: au14-job-prefix-orbitallawyer
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14colonyhud.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyhud.rsi
       state: orbital_security
 
   name: au14-job-name-orbitallawyer

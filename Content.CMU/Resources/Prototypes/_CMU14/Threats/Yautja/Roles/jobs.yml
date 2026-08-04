@@ -411,7 +411,7 @@
   suffix: Spawner, Player, Event
   components:
   - type: Sprite
-    sprite: Yautja/mask.rsi
+    sprite: _CMU14/Yautja/mask.rsi
     state: icon
   - type: RandomHumanoidSpawner
     settings: CMUYautjaHunter
@@ -471,5 +471,5 @@
   parent: CMJobIconBase
   id: CMUYautjaJobIcon
   icon:
-    sprite: Yautja/mask.rsi
+    sprite: _CMU14/Yautja/mask.rsi
     state: icon

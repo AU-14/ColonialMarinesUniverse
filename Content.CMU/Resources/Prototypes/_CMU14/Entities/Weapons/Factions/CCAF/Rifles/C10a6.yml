@@ -5,7 +5,7 @@
   description: A reflexive burst rifle designed for the CCAF by Armat Battlefield Systems. It delivers a fast three round burst upon trigger pull, all fired before the operator perceives recoil. The weapon is still in limited field testing among select CCAF infantry units.
   components:
   - type: Sprite
-    sprite: Weapons/Guns/CCAF/C10A6BR.rsi
+    sprite: _CMU14/Weapons/Guns/CCAF/C10A6BR.rsi
     state: base
     layers:
     - state: base
@@ -13,7 +13,7 @@
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: Weapons/Guns/CCAF/C10A6BR.rsi
+    sprite: _CMU14/Weapons/Guns/CCAF/C10A6BR.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -63,7 +63,7 @@
     proto: AU14CartridgeRifleC10A6BR
     capacity: 15
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/CCAF/m75amasmagazine.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/CCAF/m75amasmagazine.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]

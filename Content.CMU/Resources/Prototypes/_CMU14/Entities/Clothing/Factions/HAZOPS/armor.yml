@@ -5,7 +5,7 @@
   description: A specially designed vest for hazardous operations. Supposedly has a battery charge for "extra functionality", but nobody knows how to charge it.  Despite the armor plating providing higher biological resistance and slightly higher strike shielding, it is less protective against bullets than the standard issue USCM armor.
   components:
   - type: Sprite
-    sprite: Clothing/HAZOPS/poweredwarfightingarmor.rsi
+    sprite: _CMU14/Clothing/HAZOPS/poweredwarfightingarmor.rsi
   - type: CMArmor
     bio: 35
     bullet: 10
@@ -15,9 +15,9 @@
     walkModifier: .75
     sprintModifier: .75
   - type: Clothing
-    sprite: Clothing/HAZOPS/poweredwarfightingarmor.rsi
+    sprite: _CMU14/Clothing/HAZOPS/poweredwarfightingarmor.rsi
     equipSound:
-      path: /Audio/Armor/pwa_equip.ogg
+      path: /Audio/_CMU14/Armor/pwa_equip.ogg
 
 - type: entity
   parent: AU14BaseArmor
@@ -26,7 +26,7 @@
   description: Before the PWA, this was the standard issue vest of HAZOPS. You think it would pair nicely with your M17A4.
   components:
   - type: Sprite
-    sprite: Clothing/HAZOPS/cbrnarmor.rsi
+    sprite: _CMU14/Clothing/HAZOPS/cbrnarmor.rsi
   - type: CMArmor
     bio: 35
     bullet: 10

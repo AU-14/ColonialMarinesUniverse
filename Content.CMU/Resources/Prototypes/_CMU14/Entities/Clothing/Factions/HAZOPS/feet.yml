@@ -5,6 +5,6 @@
   description: High-quality CBRN boots for HAZOPS use.
   components:
   - type: Sprite
-    sprite: Clothing/HAZOPS/hazjacks.rsi
+    sprite: _CMU14/Clothing/HAZOPS/hazjacks.rsi
   - type: Clothing
-    sprite: Clothing/HAZOPS/hazjacks.rsi
+    sprite: _CMU14/Clothing/HAZOPS/hazjacks.rsi

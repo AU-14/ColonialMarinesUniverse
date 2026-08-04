@@ -215,5 +215,5 @@
   id: CMComputerDropshipNavigationOldThirdParty
   components:
   - type: Sprite
-    sprite: Structures/Machines/shuttle_console.rsi
+    sprite: _CMU14/Structures/Machines/shuttle_console.rsi
     state: consoleold

@@ -8,11 +8,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_ancient.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_ancient.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient.rsi
     slots:
     - Mask
     - Suitstorage
@@ -24,11 +24,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_ancient_redglow.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_redglow.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_ancient_redglow.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_redglow.rsi
     slots:
     - Mask
     - Suitstorage
@@ -40,11 +40,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_ancient_white.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_white.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_ancient_white.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_ancient_white.rsi
     slots:
     - Mask
     - Suitstorage
@@ -56,11 +56,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_bane.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_bane.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_bane.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_bane.rsi
     slots:
     - Mask
     - Suitstorage
@@ -72,11 +72,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_commando.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commando.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_commando.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commando.rsi
     slots:
     - Mask
     - Suitstorage
@@ -88,11 +88,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_commandoalt.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commandoalt.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_commandoalt.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_commandoalt.rsi
     slots:
     - Mask
     - Suitstorage
@@ -104,11 +104,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_emissary_classic.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_classic.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_emissary_classic.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_classic.rsi
     slots:
     - Mask
     - Suitstorage
@@ -120,11 +120,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_emissary_desert.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_desert.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_emissary_desert.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_desert.rsi
     slots:
     - Mask
     - Suitstorage
@@ -136,11 +136,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_emissary_jungle.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_jungle.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_emissary_jungle.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_jungle.rsi
     slots:
     - Mask
     - Suitstorage
@@ -152,11 +152,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_emissary_snow.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_snow.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_emissary_snow.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_snow.rsi
     slots:
     - Mask
     - Suitstorage
@@ -168,11 +168,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_emissary_urban.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_urban.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_emissary_urban.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_emissary_urban.rsi
     slots:
     - Mask
     - Suitstorage
@@ -184,11 +184,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_lunatic.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_lunatic.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_lunatic.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_lunatic.rsi
     slots:
     - Mask
     - Suitstorage
@@ -200,11 +200,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_patchwork.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchwork.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_patchwork.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchwork.rsi
     slots:
     - Mask
     - Suitstorage
@@ -216,11 +216,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_patchworkalt.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchworkalt.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_patchworkalt.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_patchworkalt.rsi
     slots:
     - Mask
     - Suitstorage
@@ -232,11 +232,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_scav.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scav.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_scav.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scav.rsi
     slots:
     - Mask
     - Suitstorage
@@ -248,11 +248,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_scavalt.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scavalt.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_scavalt.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_scavalt.rsi
     slots:
     - Mask
     - Suitstorage
@@ -264,11 +264,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_bb_venator.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_venator.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_bb_venator.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_bb_venator.rsi
     slots:
     - Mask
     - Suitstorage
@@ -280,11 +280,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_elite_cleopatra.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_cleopatra.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_elite_cleopatra.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_cleopatra.rsi
     slots:
     - Mask
     - Suitstorage
@@ -296,11 +296,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_elite_plated.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_plated.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_elite_plated.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_elite_plated.rsi
     slots:
     - Mask
     - Suitstorage
@@ -312,11 +312,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_legacy_collector.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_collector.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_legacy_collector.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_collector.rsi
     slots:
     - Mask
     - Suitstorage
@@ -328,11 +328,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_legacy_dragon.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_dragon.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_legacy_dragon.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_dragon.rsi
     slots:
     - Mask
     - Suitstorage
@@ -344,11 +344,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_legacy_enforcer.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_enforcer.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_legacy_enforcer.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_enforcer.rsi
     slots:
     - Mask
     - Suitstorage
@@ -360,11 +360,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask_legacy_swamp.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_swamp.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask_legacy_swamp.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask_legacy_swamp.rsi
     slots:
     - Mask
     - Suitstorage
@@ -376,11 +376,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask1_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask1_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -392,11 +392,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask1_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask1_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -408,11 +408,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask1_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask1_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -424,11 +424,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask1_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask1_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -440,11 +440,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask1_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask1_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask1_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -456,11 +456,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask2_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask2_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -472,11 +472,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask2_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask2_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -488,11 +488,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask2_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask2_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -504,11 +504,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask2_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask2_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -520,11 +520,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask2_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask2_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask2_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -536,11 +536,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask3_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask3_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -552,11 +552,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask3_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask3_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -568,11 +568,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask3_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask3_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -584,11 +584,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask3_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask3_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -600,11 +600,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask3_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask3_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask3_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -616,11 +616,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask4_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask4_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -632,11 +632,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask4_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask4_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -648,11 +648,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask4_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask4_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -664,11 +664,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask4_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask4_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -680,11 +680,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask4_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask4_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask4_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -696,11 +696,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask5_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask5_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -712,11 +712,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask5_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask5_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -728,11 +728,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask5_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask5_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -744,11 +744,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask5_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask5_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -760,11 +760,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask5_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask5_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask5_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -776,11 +776,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask6_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask6_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -792,11 +792,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask6_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask6_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -808,11 +808,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask6_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask6_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -824,11 +824,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask6_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask6_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -840,11 +840,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask6_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask6_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask6_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -856,11 +856,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask7_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask7_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -872,11 +872,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask7_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask7_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -888,11 +888,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask7_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask7_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -904,11 +904,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask7_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask7_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -920,11 +920,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask7_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask7_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask7_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -936,11 +936,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask8_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask8_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -952,11 +952,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask8_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask8_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -968,11 +968,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask8_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask8_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -984,11 +984,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask8_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask8_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1000,11 +1000,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask8_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask8_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask8_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1016,11 +1016,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask9_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask9_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1032,11 +1032,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask9_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask9_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1048,11 +1048,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask9_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask9_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1064,11 +1064,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask9_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask9_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1080,11 +1080,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask9_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask9_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask9_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1096,11 +1096,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask10_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask10_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1112,11 +1112,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask10_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask10_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1128,11 +1128,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask10_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask10_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1144,11 +1144,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask10_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask10_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1160,11 +1160,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask10_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask10_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask10_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1176,11 +1176,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask11_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask11_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1192,11 +1192,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask11_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask11_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1208,11 +1208,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask11_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask11_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1224,11 +1224,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask11_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask11_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1240,11 +1240,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask11_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask11_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask11_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1256,11 +1256,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask12_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask12_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1272,11 +1272,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask12_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask12_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1288,11 +1288,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask12_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask12_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1304,11 +1304,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask12_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask12_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1320,11 +1320,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask12_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask12_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask12_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1336,11 +1336,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask13_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask13_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1352,11 +1352,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask13_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask13_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1368,11 +1368,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask13_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask13_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1384,11 +1384,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask13_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask13_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1400,11 +1400,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask13_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask13_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask13_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1416,11 +1416,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask14_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask14_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1432,11 +1432,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask14_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask14_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1448,11 +1448,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask14_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask14_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1464,11 +1464,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask14_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask14_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1480,11 +1480,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask14_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask14_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask14_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1496,11 +1496,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask15_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask15_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1512,11 +1512,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask15_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask15_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1528,11 +1528,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask15_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask15_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1544,11 +1544,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask15_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask15_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1560,11 +1560,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask15_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask15_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask15_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1576,11 +1576,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask16_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask16_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1592,11 +1592,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask16_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask16_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1608,11 +1608,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask16_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask16_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1624,11 +1624,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask16_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask16_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1640,11 +1640,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask16_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask16_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask16_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1656,11 +1656,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask17_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask17_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1672,11 +1672,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask17_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask17_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1688,11 +1688,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask17_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask17_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1704,11 +1704,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask17_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask17_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1720,11 +1720,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask17_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask17_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask17_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1736,11 +1736,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask18_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask18_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1752,11 +1752,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask18_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask18_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1768,11 +1768,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask18_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask18_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1784,11 +1784,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask18_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask18_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1800,11 +1800,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask18_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask18_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask18_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1816,11 +1816,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask19_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask19_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1832,11 +1832,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask19_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask19_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1848,11 +1848,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask19_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask19_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1864,11 +1864,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask19_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask19_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1880,11 +1880,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask19_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask19_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask19_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1896,11 +1896,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask20_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask20_bone.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1912,11 +1912,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask20_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_bronze.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask20_bronze.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_bronze.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1928,11 +1928,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask20_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask20_crimson.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1944,11 +1944,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask20_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask20_ebony.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1960,11 +1960,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/pred_mask20_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/pred_mask20_silver.rsi
+    sprite: _CMU14/Yautja/masks/pred_mask20_silver.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1976,11 +1976,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/thrallmask_bone.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_bone.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/thrallmask_bone.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_bone.rsi
     slots:
     - Mask
     - Suitstorage
@@ -1992,11 +1992,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/thrallmask_crimson.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_crimson.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/thrallmask_crimson.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_crimson.rsi
     slots:
     - Mask
     - Suitstorage
@@ -2008,11 +2008,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/thrallmask_ebony.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_ebony.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/thrallmask_ebony.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_ebony.rsi
     slots:
     - Mask
     - Suitstorage
@@ -2024,11 +2024,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/thrallmask_gold.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_gold.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/thrallmask_gold.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_gold.rsi
     slots:
     - Mask
     - Suitstorage
@@ -2040,11 +2040,11 @@
   description: A beautifully designed alien hunting mask, both ornate and functional.
   components:
   - type: Sprite
-    sprite: Yautja/masks/thrallmask_silver.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_silver.rsi
     layers:
     - state: icon
   - type: Clothing
-    sprite: Yautja/masks/thrallmask_silver.rsi
+    sprite: _CMU14/Yautja/masks/thrallmask_silver.rsi
     slots:
     - Mask
     - Suitstorage

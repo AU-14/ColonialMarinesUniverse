@@ -125,7 +125,7 @@
   description: A manhole entrance that passes between Z-levels.
   components:
   - type: Sprite
-    sprite: Structures/ladders.rsi
+    sprite: _CMU14/Structures/ladders.rsi
     state: wymanhole_open3
 
 - type: entity

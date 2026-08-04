@@ -48,7 +48,7 @@
   description: A bare synthetic torso frame with sealed limb ports and an empty activation socket.
   components:
   - type: Sprite
-    sprite: Mobs/DroneAndroid/parts.rsi
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
     state: torso_m
   - type: Item
     size: Normal
@@ -63,7 +63,7 @@
   description: A stripped synthetic assembly part for a drone android.
   components:
   - type: Sprite
-    sprite: Mobs/DroneAndroid/parts.rsi
+    sprite: _CMU14/Mobs/DroneAndroid/parts.rsi
   - type: Item
     size: Small
 

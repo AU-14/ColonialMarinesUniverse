@@ -15,7 +15,7 @@
     - insurgency
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
   weight: 20
   minplayers: 30
   maxplayers: 400
@@ -39,7 +39,7 @@
     - insurgency
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml
   weight: 20
   minplayers: 30
   maxplayers: 400

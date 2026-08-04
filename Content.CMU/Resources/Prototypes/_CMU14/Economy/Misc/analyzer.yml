@@ -46,7 +46,7 @@
     powerLoad: 0
   - type: Appearance
   - type: Sprite
-    sprite: Structures/analyzermachine.rsi
+    sprite: _CMU14/Structures/analyzermachine.rsi
     state: analyzer_idle
   - type: Analyzer
     faction: govfor

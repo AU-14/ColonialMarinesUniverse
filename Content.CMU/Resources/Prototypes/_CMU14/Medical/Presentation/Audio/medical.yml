@@ -1,5 +1,5 @@
 - type: soundCollection
   id: CMUBoneBreakSounds
   files:
-  - /Audio/Medical/bone_crack_1.ogg
-  - /Audio/Medical/bone_crack_2.ogg
+  - /Audio/_CMU14/Medical/bone_crack_1.ogg
+  - /Audio/_CMU14/Medical/bone_crack_2.ogg

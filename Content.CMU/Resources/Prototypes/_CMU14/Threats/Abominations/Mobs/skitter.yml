@@ -8,7 +8,7 @@
   description: A four-legged crawling abomination, its underside trailing wet sinew.
   components:
   - type: Sprite
-    sprite: Mobs/Abominations/skitter.rsi
+    sprite: _CMU14/Mobs/Abominations/skitter.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive

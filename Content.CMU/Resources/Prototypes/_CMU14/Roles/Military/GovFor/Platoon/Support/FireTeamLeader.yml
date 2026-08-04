@@ -32,13 +32,13 @@
     prefix: au14-job-prefix-radiotelephoneoperator
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14govforjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14govforjobicons.rsi
       state: govfor_ftl
   roundForceComponents:
     OPFOR:
     - type: TacticalMapIcon
       icon:
-        sprite: /Textures/Interface/au14opforjobicons.rsi
+        sprite: /Textures/_CMU14/Interface/au14opforjobicons.rsi
         state: ftl
     RMC:
     - type: Skills

@@ -7,7 +7,7 @@
   - type: ExplosionResistance
     damageCoefficient: 0
   - type: Sprite
-    sprite: Clothing/UPP/back/rocketpack.rsi
+    sprite: _CMU14/Clothing/UPP/back/rocketpack.rsi
   - type: Storage
     maxItemSize: Normal
     grid:

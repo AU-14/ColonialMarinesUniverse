@@ -5,9 +5,9 @@
   description: Standard issue LACN boots.
   components:
   - type: Sprite
-    sprite: Clothing/LACN/lacnboots.rsi
+    sprite: _CMU14/Clothing/LACN/lacnboots.rsi
   - type: Clothing
-    sprite: Clothing/LACN/lacnboots.rsi
+    sprite: _CMU14/Clothing/LACN/lacnboots.rsi
 
 - type: entity
   parent: [RMCItemSlotM5Bayonet, CMBootsJungle]

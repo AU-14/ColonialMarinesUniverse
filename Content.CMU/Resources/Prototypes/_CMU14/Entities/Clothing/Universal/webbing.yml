@@ -5,7 +5,7 @@
   description: Synthcotton webbing with three pockets to hold your magazines.
   components:
     - type: Sprite
-      sprite: Clothing/UniversalWebbing/magazinewebbing.rsi
+      sprite: _CMU14/Clothing/UniversalWebbing/magazinewebbing.rsi
       state: webbing
     - type: Storage
       maxItemSize: Normal
@@ -21,7 +21,7 @@
           - CMSurgicalCase
     - type: Webbing
       playerSprite:
-        sprite: Clothing/UniversalWebbing/magazinewebbing.rsi
+        sprite: _CMU14/Clothing/UniversalWebbing/magazinewebbing.rsi
         state: equipped
       components:
         - type: Storage
@@ -54,7 +54,7 @@
   description: A pouch to dump your empty mags into.
   components:
     - type: Sprite
-      sprite: Clothing/UniversalWebbing/dumpouch.rsi
+      sprite: _CMU14/Clothing/UniversalWebbing/dumpouch.rsi
       state: webbing
     - type: Storage
       maxItemSize: Normal
@@ -70,7 +70,7 @@
           - CMSurgicalCase
     - type: Webbing
       playerSprite:
-        sprite: Clothing/UniversalWebbing/dumpouch.rsi
+        sprite: _CMU14/Clothing/UniversalWebbing/dumpouch.rsi
         state: equipped
       components:
         - type: Storage
@@ -103,7 +103,7 @@
   description: A synthcotton webbing vest with lots of pockets to hold whatever you need, but cannot hold in hands.
   components:
     - type: Sprite
-      sprite: Clothing/UniversalWebbing/utilitywebbing.rsi
+      sprite: _CMU14/Clothing/UniversalWebbing/utilitywebbing.rsi
       state: webbing
     - type: Storage
       maxItemSize: Small
@@ -119,7 +119,7 @@
           - CMSurgicalCase
     - type: Webbing
       playerSprite:
-        sprite: Clothing/UniversalWebbing/utilitywebbing.rsi
+        sprite: _CMU14/Clothing/UniversalWebbing/utilitywebbing.rsi
         state: equipped
       components:
         - type: Storage
@@ -148,7 +148,7 @@
   description: A convenient pouch to carry loose items around.
   components:
     - type: Sprite
-      sprite: Clothing/UniversalWebbing/droppouch.rsi
+      sprite: _CMU14/Clothing/UniversalWebbing/droppouch.rsi
       state: webbing
     - type: Storage
       maxItemSize: Normal
@@ -162,7 +162,7 @@
           - RMCBoxStorage
     - type: Webbing
       playerSprite:
-        sprite: Clothing/UniversalWebbing/droppouch.rsi
+        sprite: _CMU14/Clothing/UniversalWebbing/droppouch.rsi
         state: equipped
       components:
         - type: Storage
@@ -189,7 +189,7 @@
   description: A pouch to carry your administrative equipment around.
   components:
     - type: Sprite
-      sprite: Clothing/UniversalWebbing/adminpouch.rsi
+      sprite: _CMU14/Clothing/UniversalWebbing/adminpouch.rsi
       state: webbing
     - type: Storage
       quickInsert: true
@@ -208,7 +208,7 @@
     - type: Dumpable
     - type: Webbing
       playerSprite:
-        sprite: Clothing/UniversalWebbing/adminpouch.rsi
+        sprite: _CMU14/Clothing/UniversalWebbing/adminpouch.rsi
         state: equipped
       components:
         - type: Storage
@@ -235,7 +235,7 @@
   description: An older generation knife vest. Can hold up to 5 knives. It is made of synthcotton.
   components:
     - type: Sprite
-      sprite: Clothing/UniversalWebbing/knifevest.rsi
+      sprite: _CMU14/Clothing/UniversalWebbing/knifevest.rsi
       state: webbing
     - type: Storage
       grid:
@@ -251,7 +251,7 @@
     - type: CMHolster
     - type: Webbing
       playerSprite:
-        sprite: Clothing/UniversalWebbing/knifevest.rsi
+        sprite: _CMU14/Clothing/UniversalWebbing/knifevest.rsi
         state: equipped
       components:
         - type: Storage
@@ -286,7 +286,7 @@
   suffix: Medical, Filled
   components:
   - type: Sprite
-    sprite: Clothing/UniversalWebbing/drop_surgical_green.rsi
+    sprite: _CMU14/Clothing/UniversalWebbing/drop_surgical_green.rsi
     state: webbing
   - type: Webbing
     components:
@@ -342,7 +342,7 @@
   description: A matte blue synthcotton drop pouch purpose-made for holding surgical tools.
   components:
   - type: Sprite
-    sprite: Clothing/UniversalWebbing/drop_surgical_blue.rsi
+    sprite: _CMU14/Clothing/UniversalWebbing/drop_surgical_blue.rsi
     state: webbing
 
 - type: entity
@@ -352,5 +352,5 @@
   description: A tactical black synthcotton drop pouch purpose-made for holding surgical tools.
   components:
   - type: Sprite
-    sprite: Clothing/UniversalWebbing/drop_surgical_black.rsi
+    sprite: _CMU14/Clothing/UniversalWebbing/drop_surgical_black.rsi
     state: webbing

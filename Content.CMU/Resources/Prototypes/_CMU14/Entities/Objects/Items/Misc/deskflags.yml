@@ -10,7 +10,7 @@
     bodyType: Static
     canCollide: false
   - type: Sprite
-    sprite:  Items/DeskFlags/uadeskflag.rsi
+    sprite:  _CMU14/Items/DeskFlags/uadeskflag.rsi
     state: uaflag
 
 - type: entity
@@ -25,5 +25,5 @@
     bodyType: Static
     canCollide: false
   - type: Sprite
-    sprite:  Items/DeskFlags/uscmdeskflag.rsi
+    sprite:  _CMU14/Items/DeskFlags/uscmdeskflag.rsi
     state: uscmflag

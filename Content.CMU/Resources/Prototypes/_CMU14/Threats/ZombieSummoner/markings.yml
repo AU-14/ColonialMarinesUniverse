@@ -4,5 +4,5 @@
   markingCategory: Head
   speciesRestriction: [Human]
   sprites:
-  - sprite: Mobs/ZombieSummoner/bloody_cross.rsi
+  - sprite: _CMU14/Mobs/ZombieSummoner/bloody_cross.rsi
     state: bloody_cross

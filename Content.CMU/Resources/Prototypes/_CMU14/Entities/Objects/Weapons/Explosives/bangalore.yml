@@ -5,11 +5,11 @@
   description: A demolition charge used to clear obstacles and breach fortifications. Once placed on the ground it arms itself and detonates after 20 seconds.
   components:
   - type: Sprite
-    sprite: Weapons/Throwable/bangalore.rsi
+    sprite: _CMU14/Weapons/Throwable/bangalore.rsi
     state: icon
   - type: Item
     size: Large
-    sprite: Weapons/Throwable/bangalore.rsi
+    sprite: _CMU14/Weapons/Throwable/bangalore.rsi
   - type: Damageable
     damageContainer: Inorganic
   - type: Destructible

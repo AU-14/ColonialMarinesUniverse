@@ -197,7 +197,7 @@ namespace Content.Server.GameTicking
             _sawmill.Info($"Loaded CMU {faction} ship '{mapPrototypeId}' with {grids.Count} root entities.");
         }
 
-        private static readonly ResPath AdminFaxHubMapPath = new("/Maps/Admin/adminfaxhub.yml");
+        private static readonly ResPath AdminFaxHubMapPath = new("/Maps/_CMU14/Admin/adminfaxhub.yml");
 
         /// <summary>
         /// Loads the AU14 admin fax hub utility map every round, on an automatically

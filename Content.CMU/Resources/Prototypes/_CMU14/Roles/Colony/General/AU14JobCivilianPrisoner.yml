@@ -15,7 +15,7 @@
     prefix: au14-job-prefix-civilianprisoner
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: prisoner
 
   name: au14-job-name-civilianprisoner

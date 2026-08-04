@@ -13,7 +13,7 @@
   - type: CMSurgeryTool
     skill: 1
   - type: Sprite
-    sprite: Objects/Medical/bonegraft.rsi
+    sprite: _CMU14/Objects/Medical/bonegraft.rsi
     state: bonegraft
 
 - type: Tag

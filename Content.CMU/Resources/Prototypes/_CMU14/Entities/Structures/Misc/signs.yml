@@ -12,7 +12,7 @@
   - type: InteractionOutline
   - type: Sprite
     drawdepth: OverMobs
-    sprite: Structures/signs/stablesigns.rsi
+    sprite: _CMU14/Structures/signs/stablesigns.rsi
   - type: AnimationPlayer
   - type: RMCMesonsNonviewable
 
@@ -48,7 +48,7 @@
   - type: InteractionOutline
   - type: Sprite
     drawdepth: OverMobs
-    sprite: Structures/signs/schaefer.rsi
+    sprite: _CMU14/Structures/signs/schaefer.rsi
   - type: RMCMesonsNonviewable
 
 - type: entity

@@ -20,7 +20,7 @@
   id: CMBParoleeTransport
   partyspawn: CMBParoleeTransportSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
   weight: 20
   minplayers: 20
   maxplayers: 79
@@ -34,7 +34,7 @@
   id: CMBParoleeTransportBig
   partyspawn: CMBParoleeTransportBigSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml
   weight: 20
   minplayers: 80
   maxplayers: 600

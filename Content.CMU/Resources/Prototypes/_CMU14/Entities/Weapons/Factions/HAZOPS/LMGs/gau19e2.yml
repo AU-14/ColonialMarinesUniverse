@@ -7,15 +7,15 @@
   - type: RMCSelectiveFire
     baseFireRate: 11
   - type: Sprite
-    sprite: Weapons/Guns/HAZOPS/GAU19E2.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
     layers:
     - state: base
-      sprite: Weapons/Guns/HAZOPS/GAU19E2.rsi
+      sprite: _CMU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
     - state: mag-0
-      sprite: Weapons/Guns/HAZOPS/GAU19E2.rsi
+      sprite: _CMU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: Weapons/Guns/HAZOPS/GAU19E2.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/GAU19E2.rsi
   - type: ItemSlots
     slots:
       gun_magazine:

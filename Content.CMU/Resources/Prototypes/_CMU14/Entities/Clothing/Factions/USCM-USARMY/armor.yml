@@ -107,7 +107,7 @@
   name: M3 pattern jungle smooth USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmorone.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmorone.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -115,7 +115,7 @@
   name: M3 pattern jungle ribbed USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmortwo.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -123,7 +123,7 @@
   name: M3 pattern jungle dimpled USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmorthree.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -131,7 +131,7 @@
   name: M3 pattern desert smooth USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/DesertArmor/uscmarmorone.rsi
+    sprite: _CMU14/Clothing/DesertArmor/uscmarmorone.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -139,7 +139,7 @@
   name: M3 pattern desert ribbed USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/DesertArmor/uscmarmortwo.rsi
+    sprite: _CMU14/Clothing/DesertArmor/uscmarmortwo.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -147,7 +147,7 @@
   name: M3 pattern desert dimpled USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/DesertArmor/uscmarmorthree.rsi
+    sprite: _CMU14/Clothing/DesertArmor/uscmarmorthree.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -155,7 +155,7 @@
   name: M3 pattern colonial guard armor
   components:
   - type: Sprite
-    sprite: Clothing/uacgarmor.rsi
+    sprite: _CMU14/Clothing/uacgarmor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -164,7 +164,7 @@
   name: ballistic vest
   components:
   - type: Sprite
-    sprite: Clothing/ballisticarmor.rsi
+    sprite: _CMU14/Clothing/ballisticarmor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -173,7 +173,7 @@
   description: A light flak jacket designed for USCM aircrew. Provides very little protection.
   components:
   - type: Sprite
-    sprite: Clothing/pilotflakvest.rsi
+    sprite: _CMU14/Clothing/pilotflakvest.rsi
 
 - type: entity
   parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
@@ -182,7 +182,7 @@
   description: An M56 Combat Harness specially made for Smartgunners.
   components:
   - type: Sprite
-    sprite: Clothing/DesertArmor/uscmarmorsmartgunner.rsi
+    sprite: _CMU14/Clothing/DesertArmor/uscmarmorsmartgunner.rsi
   - type: Storage
     maxItemSize: Small
     grid:
@@ -202,7 +202,7 @@
   description: An M56 Combat Harness specially made for Smartgunners.
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
   - type: Storage
     maxItemSize: Small
     grid:
@@ -284,7 +284,7 @@
       gasTank:
         length: 1.0
   - type: Sprite
-    sprite: Clothing/USASFSecurityForces/USASFPilot/armor.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/armor.rsi
   - type: RMCArmorSpeedTier
     speedTier: light
   - type: CMArmor
@@ -300,7 +300,7 @@
   description: A set of ballistic armor used by USASF aircrew.
   components:
   - type: Sprite
-    sprite: Clothing/USASFSecurityForces/USASFPilot/armor.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/armor.rsi
   - type: RMCArmorSpeedTier
     speedTier: light
   - type: CMArmor
@@ -392,7 +392,7 @@
   description: A lightweight ghillie camouflage suit, used by UA snipers on recon missions. Very lightweight, but doesn't protect much.
   components:
   - type: Sprite
-    sprite: Clothing/USCMC/Armor/ghillie.rsi
+    sprite: _CMU14/Clothing/USCMC/Armor/ghillie.rsi
   - type: CMArmor
     bio: 25
   - type: RMCArmorSpeedTier
@@ -423,7 +423,7 @@
   description: The Personnel Body Armor System is the standard issue armor of the US Army, adopted over the M4 series pattern armor during field trials. Surprisingly uncomfortable, but offering far superior protection to the M3 or M4 series armor. At four times the price.
   components:
   - type: Sprite
-    sprite: Clothing/US_Army/Armor/armor.rsi
+    sprite: _CMU14/Clothing/US_Army/Armor/armor.rsi
   - type: StorageFill
     contents:
     - id: RMCTacticalPrybar
@@ -442,7 +442,7 @@
   description: The Personnel Body Armor System is the standard issue armor of the US Army, adopted over the M4 series pattern armor during field trials. Surprisingly uncomfortable, but offering far superior protection to the M3 or M4 series armor. At four times the price.
   components:
   - type: Sprite
-    sprite: Clothing/US_Army/Armor/armor.rsi
+    sprite: _CMU14/Clothing/US_Army/Armor/armor.rsi
 
 - type: entity
   parent: CMArmorM3VLSynth
@@ -451,7 +451,7 @@
   description: This is a variant of the Personnel Body Armor System, it has been modified extensively to be used by US Army Synthetics. It offers light protection, maximum mobility and more internal storage than its USCM counterpart. The cost of this item could outfit an entire squad of USCM Marines, but you are worth this cost.
   components:
   - type: Sprite
-    sprite: Clothing/US_Army/Armor/synth.rsi
+    sprite: _CMU14/Clothing/US_Army/Armor/synth.rsi
   - type: StorageFill
     contents:
     - id: RMCTacticalPrybar
@@ -462,7 +462,7 @@
   name: M3-R pattern light armor
   components:
   - type: Sprite
-    sprite: Clothing/USCMC/Armor/forecon.rsi
+    sprite: _CMU14/Clothing/USCMC/Armor/forecon.rsi
   - type: ClothingSpeedModifier # light armor speed
     walkModifier: .725
     sprintModifier: .725
@@ -473,14 +473,14 @@
   name: M3 pattern smooth USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmorone.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmorone.rsi
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: Clothing/JungleArmor/uscmarmorone.rsi
-      Desert: Clothing/DesertArmor/uscmarmorone.rsi
-      Snow: Clothing/JungleArmor/uscmarmorone.rsi
-      Classic: Clothing/JungleArmor/uscmarmorone.rsi
-      Urban: Clothing/JungleArmor/uscmarmorone.rsi
+      Jungle: _CMU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Desert: _CMU14/Clothing/DesertArmor/uscmarmorone.rsi
+      Snow: _CMU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Classic: _CMU14/Clothing/JungleArmor/uscmarmorone.rsi
+      Urban: _CMU14/Clothing/JungleArmor/uscmarmorone.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -488,14 +488,14 @@
   name: M3 pattern ribbed USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmortwo.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: Clothing/JungleArmor/uscmarmortwo.rsi
-      Desert: Clothing/DesertArmor/uscmarmortwo.rsi
-      Snow: Clothing/JungleArmor/uscmarmortwo.rsi
-      Classic: Clothing/JungleArmor/uscmarmortwo.rsi
-      Urban: Clothing/JungleArmor/uscmarmortwo.rsi
+      Jungle: _CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Desert: _CMU14/Clothing/DesertArmor/uscmarmortwo.rsi
+      Snow: _CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Classic: _CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
+      Urban: _CMU14/Clothing/JungleArmor/uscmarmortwo.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -503,14 +503,14 @@
   name: M3 pattern dimpled USCM armor
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmorthree.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: Clothing/JungleArmor/uscmarmorthree.rsi
-      Desert: Clothing/DesertArmor/uscmarmorthree.rsi
-      Snow: Clothing/JungleArmor/uscmarmorthree.rsi
-      Classic: Clothing/JungleArmor/uscmarmorthree.rsi
-      Urban: Clothing/JungleArmor/uscmarmorthree.rsi
+      Jungle: _CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Desert: _CMU14/Clothing/DesertArmor/uscmarmorthree.rsi
+      Snow: _CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Classic: _CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
+      Urban: _CMU14/Clothing/JungleArmor/uscmarmorthree.rsi
 
 - type: entity
   parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
@@ -519,7 +519,7 @@
   description: An M56 Combat Harness specially made for Smartgunners.
   components:
   - type: Sprite
-    sprite: Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+    sprite: _CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
   - type: Storage
     maxItemSize: Small
     grid:
@@ -533,11 +533,11 @@
   - type: SmartGunArmor
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: Clothing/JungleArmor/uscmarmorsmartgunner.rsi
-      Desert: Clothing/DesertArmor/uscmarmorsmartgunner.rsi
-      Snow: Clothing/JungleArmor/uscmarmorsmartgunner.rsi
-      Classic: Clothing/JungleArmor/uscmarmorsmartgunner.rsi
-      Urban: Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Jungle: _CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Desert: _CMU14/Clothing/DesertArmor/uscmarmorsmartgunner.rsi
+      Snow: _CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Classic: _CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
+      Urban: _CMU14/Clothing/JungleArmor/uscmarmorsmartgunner.rsi
 
 - type: entity
   parent: AU14BaseArmor

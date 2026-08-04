@@ -36,7 +36,7 @@
   - type: Sprite
     drawdepth: WallMountedItems
     noRot: true
-    sprite: Structures/cmu_stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
 
@@ -54,7 +54,7 @@
   - type: Clickable
   - type: Sprite
     noRot: true
-    sprite: Structures/cmu_stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
     drawdepth: WallMountedItems
@@ -85,7 +85,7 @@
   - type: Sprite
     drawdepth: WallMountedItems
     noRot: true
-    sprite: Structures/cmu_stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
   - type: ZStair
@@ -108,7 +108,7 @@
   # 🔧 TUNABLE: darkness of the down-stair sprite (white = no tint).
   - type: Sprite
     noRot: true
-    sprite: Structures/cmu_stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
     drawdepth: WallMountedItems

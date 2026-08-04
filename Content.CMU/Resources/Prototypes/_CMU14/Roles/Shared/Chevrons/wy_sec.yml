@@ -14,11 +14,11 @@
   name: junior corporate security officer chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: AU14RankWYSecurityOfficerJunior
@@ -30,11 +30,11 @@
   name: corporate security officer chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: AU14RankWYSecurityOfficer
@@ -46,11 +46,11 @@
   name: senior corporate security officer chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: AU14RankWYSecurityOfficerSenior
@@ -62,11 +62,11 @@
   name: master corporate security officer chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: AU14RankWYSecurityOfficerMaster
@@ -78,11 +78,11 @@
   name: chief corporate security officer chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: AU14RankWYSecurityOfficerChief

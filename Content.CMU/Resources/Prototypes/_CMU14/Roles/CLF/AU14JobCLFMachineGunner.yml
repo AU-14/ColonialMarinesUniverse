@@ -23,7 +23,7 @@
     prefix: au14-job-prefix-clfmachinegunner
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: colonist
   - type: ShowMarineIcons
     factions:

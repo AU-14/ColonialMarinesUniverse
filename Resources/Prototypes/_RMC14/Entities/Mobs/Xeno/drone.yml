@@ -139,7 +139,7 @@
     guides:
     - RMCGuideRoleDrone
   - type: Sprite
-    sprite: Mobs/Xenos/Drone/drone.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Drone/drone.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -183,7 +183,7 @@
   suffix: Gardener
   components:
   - type: Sprite
-    sprite: Mobs/Xenos/Drone/gardener_drone.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Drone/gardener_drone.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive
@@ -247,7 +247,7 @@
   suffix: Healer
   components:
   - type: Sprite
-    sprite: Mobs/Xenos/Drone/healer_drone.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Drone/healer_drone.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base" ]
       state: alive

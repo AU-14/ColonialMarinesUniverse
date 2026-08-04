@@ -12,7 +12,7 @@
   - type: GhostRole
     name: Wendigo
   - type: Sprite
-    sprite: Mobs/MiscMob/wendigo.rsi
+    sprite: _CMU14/Mobs/MiscMob/wendigo.rsi
     layers:
     - map: [ "enum.DamageStateVisualLayers.Base" ]
       state: alive

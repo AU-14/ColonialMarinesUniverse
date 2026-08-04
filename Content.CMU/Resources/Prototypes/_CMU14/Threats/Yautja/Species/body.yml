@@ -54,7 +54,7 @@
   parent: CMUPartHumanLeftLeg
   components:
   - type: Sprite
-    sprite: Yautja/body.rsi
+    sprite: _CMU14/Yautja/body.rsi
     state: "l_leg"
   - type: MovementBodyPart
     walkSpeed: 4.4
@@ -66,7 +66,7 @@
   parent: CMUPartHumanRightLeg
   components:
   - type: Sprite
-    sprite: Yautja/body.rsi
+    sprite: _CMU14/Yautja/body.rsi
     state: "r_leg"
   - type: MovementBodyPart
     walkSpeed: 4.4

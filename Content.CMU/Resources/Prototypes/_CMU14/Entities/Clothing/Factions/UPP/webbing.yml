@@ -5,11 +5,11 @@
   description: A convenient pouch to carry loose items around.
   components:
     - type: Sprite
-      sprite: Clothing/RMC/webbings/droppouch.rsi
+      sprite: _CMU14/Clothing/RMC/webbings/droppouch.rsi
       state: webbing
     - type: Webbing
       playerSprite:
-        sprite: Clothing/RMC/webbings/droppouch.rsi
+        sprite: _CMU14/Clothing/RMC/webbings/droppouch.rsi
         state: equipped
       components:
         - type: Storage
@@ -36,11 +36,11 @@
   description: A pouch to carry your administrative equipment around.
   components:
     - type: Sprite
-      sprite: Clothing/RMC/webbings/adminpouch.rsi
+      sprite: _CMU14/Clothing/RMC/webbings/adminpouch.rsi
       state: webbing
     - type: Webbing
       playerSprite:
-        sprite: Clothing/RMC/webbings/adminpouch.rsi
+        sprite: _CMU14/Clothing/RMC/webbings/adminpouch.rsi
         state: equipped
       components:
         - type: Storage

@@ -9,13 +9,13 @@
   description: An armor piece made to be used in combination with kestrel pattern armor.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/garb/shinguards.rsi
+    sprite: _CMU14/Clothing/UPP/garb/shinguards.rsi
     state: icon
   - type: Item
-    sprite: Clothing/UPP/garb/shinguards.rsi
+    sprite: _CMU14/Clothing/UPP/garb/shinguards.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: Clothing/UPP/garb/shinguards.rsi
+      sprite: _CMU14/Clothing/UPP/garb/shinguards.rsi
       state: helmet
 
 - type: entity
@@ -25,13 +25,13 @@
   description: An armor piece made to be used in combination with kestrel pattern armor.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/garb/shoulderpads.rsi
+    sprite: _CMU14/Clothing/UPP/garb/shoulderpads.rsi
     state: icon
   - type: Item
-    sprite: Clothing/UPP/garb/shoulderpads.rsi
+    sprite: _CMU14/Clothing/UPP/garb/shoulderpads.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: Clothing/UPP/garb/shoulderpads.rsi
+      sprite: _CMU14/Clothing/UPP/garb/shoulderpads.rsi
       state: helmet
 
 - type: entity
@@ -41,13 +41,13 @@
   description: An armor piece made to be used in combination with kestrel pattern armor.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/garb/crotch.rsi
+    sprite: _CMU14/Clothing/UPP/garb/crotch.rsi
     state: icon
   - type: Item
-    sprite: Clothing/UPP/garb/crotch.rsi
+    sprite: _CMU14/Clothing/UPP/garb/crotch.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: Clothing/UPP/garb/crotch.rsi
+      sprite: _CMU14/Clothing/UPP/garb/crotch.rsi
       state: helmet
 
 # Universal
@@ -59,13 +59,13 @@
   description: A magazine webbing made to be attached to the outside of personal armor.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/garb/magazine_webbing.rsi
+    sprite: _CMU14/Clothing/UPP/garb/magazine_webbing.rsi
     state: icon
   - type: Item
-    sprite: Clothing/UPP/garb/magazine_webbing.rsi
+    sprite: _CMU14/Clothing/UPP/garb/magazine_webbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: Clothing/UPP/garb/magazine_webbing.rsi
+      sprite: _CMU14/Clothing/UPP/garb/magazine_webbing.rsi
       state: helmet
 
 - type: entity
@@ -75,13 +75,13 @@
   description: A large webbing made to be attached to the outside of personal armor.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/garb/large_webbing.rsi
+    sprite: _CMU14/Clothing/UPP/garb/large_webbing.rsi
     state: icon
   - type: Item
-    sprite: Clothing/UPP/garb/large_webbing.rsi
+    sprite: _CMU14/Clothing/UPP/garb/large_webbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: Clothing/UPP/garb/large_webbing.rsi
+      sprite: _CMU14/Clothing/UPP/garb/large_webbing.rsi
       state: helmet
 
 - type: entity
@@ -91,13 +91,13 @@
   description: A small webbing made to be attached to the outside of personal armor.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/garb/small_webbing.rsi
+    sprite: _CMU14/Clothing/UPP/garb/small_webbing.rsi
     state: icon
   - type: Item
-    sprite: Clothing/UPP/garb/small_webbing.rsi
+    sprite: _CMU14/Clothing/UPP/garb/small_webbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: Clothing/UPP/garb/small_webbing.rsi
+      sprite: _CMU14/Clothing/UPP/garb/small_webbing.rsi
       state: helmet
 
 - type: entity

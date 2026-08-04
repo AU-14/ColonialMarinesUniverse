@@ -12,7 +12,7 @@
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntel
   entrymethod: shuttle
-  dropshippath: /Maps/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600
@@ -33,7 +33,7 @@
   announceAsSurvivors: true
   partyspawn: CLFReinforcementsSpawnIntelMachineGunner
   entrymethod: shuttle
-  dropshippath: /Maps/ShuttlesDropships/rmc_ert_clf_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
   weight: 1
   minplayers: 0
   maxplayers: 600

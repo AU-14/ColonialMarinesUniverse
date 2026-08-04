@@ -14,7 +14,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: Mobs/Xenos/Sentinel/sentinel.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Sentinel/sentinel.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive
@@ -146,7 +146,7 @@
   suffix: Manticore
   components:
   - type: Sprite
-    sprite: Mobs/Xenos/Sentinel/toxic_sentinel.rsi
+    sprite: _CMU14/Mobs/Xenos/Sentinel/toxic_sentinel.rsi
   - type: Xeno
     actionIds:
     - ActionXenoRest

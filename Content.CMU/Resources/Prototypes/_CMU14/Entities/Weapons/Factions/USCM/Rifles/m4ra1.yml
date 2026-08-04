@@ -5,17 +5,17 @@
   description: The XM4RA carbine is being developed for the United States Colonial Marines Corps as a part of Special Operations Peculiar Carbine (SOPCAR). Originally started as a weapon for the Marine Raiders, this carbine became a prototype for a new generation self defense weapon for tank crews and Marine Secuity Guard.
   components:
   - type: Sprite
-    sprite: Weapons/Guns/USCM/xm4ra1_32x64.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/xm4ra1_32x64.rsi
     layers:
     - state: bolt-open
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Item
-    sprite: Weapons/Guns/USCM/xm4ra1_32x32.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/xm4ra1_32x32.rsi
     size: Large
   - type: Clothing
-    sprite: Weapons/Guns/USCM/xm4ra1_32x32.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/xm4ra1_32x32.rsi
   - type: Gun
     shotsPerBurst: 3
     selectedMode: SemiAuto

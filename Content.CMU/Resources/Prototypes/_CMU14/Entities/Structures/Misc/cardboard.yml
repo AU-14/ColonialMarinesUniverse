@@ -28,7 +28,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: Structures/cardboard.rsi
+    sprite: _CMU14/Structures/cardboard.rsi
     state: johnnycardboard
   - type: Flamability
     chance: 1.0

@@ -14,10 +14,10 @@
   description: A cleaned skull taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: skull2
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanSkull
 
@@ -28,10 +28,10 @@
   description: A cleaned arm bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: l_arm
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanLeftArmBone
 
@@ -42,10 +42,10 @@
   description: A cleaned arm bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: r_arm
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanRightArmBone
 
@@ -56,10 +56,10 @@
   description: A cleaned hand bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: l_hand
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanLeftHandBone
 
@@ -70,10 +70,10 @@
   description: A cleaned hand bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: r_hand
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanRightHandBone
 
@@ -84,10 +84,10 @@
   description: A cleaned leg bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: l_leg
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanLeftLegBone
 
@@ -98,10 +98,10 @@
   description: A cleaned leg bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: r_leg
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanRightLegBone
 
@@ -112,10 +112,10 @@
   description: A cleaned foot bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: l_foot
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanLeftFootBone
 
@@ -126,10 +126,10 @@
   description: A cleaned foot bone taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: r_foot
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanRightFootBone
 
@@ -140,10 +140,10 @@
   description: A cleaned ribcage taken as a Yautja hunting trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: torso
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: HumanRibcage
 
@@ -154,10 +154,10 @@
   description: A resin-scarred alien skull taken from a fallen serpent.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: warrior_skull
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: XenoSkull
 
@@ -168,10 +168,10 @@
   description: A strip of alien hide cured as a hunter's trophy.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: warrior_pelt
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTrophy
     kind: XenoPelt
 
@@ -523,10 +523,10 @@
   description: A stripped spine taken from a butchered body.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: spine
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     size: Small
 
 - type: entity
@@ -536,10 +536,10 @@
   description: A heap of remains left by ritual Yautja butchery.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: torso
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     size: Normal
 
 - type: entity
@@ -549,10 +549,10 @@
   description: A heap of acid-stained remains left by ritual Yautja butchery.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: drone_pelt
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     size: Normal
 
 - type: entity
@@ -583,10 +583,10 @@
   description: A finely woven cloth used by Yautja to clean and polish bone trophies.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: polishing_rag
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     size: Tiny
   - type: YautjaTechItem
     blockPickup: false
@@ -602,13 +602,13 @@
   description: A compact alien snare that clamps onto living prey when armed.
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     drawdepth: Items
     layers:
     - state: yauttrap0
       map: [ "base" ]
   - type: Item
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     size: Small
   - type: YautjaTechItem
     blockPickup: false

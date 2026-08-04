@@ -2,7 +2,7 @@
   parent: RMC
   id: AU14Comms
   name: cmu-guide-comms-overview
-  text: "/ServerInfo/Guidebook/Comms/AU14CommsIndex.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/Comms/AU14CommsIndex.xml"
   priority: 2
   children:
   - AU14CommsFirstNet
@@ -16,32 +16,32 @@
   id: AU14CommsFirstNet
   name: cmu-guide-comms-first-net
   priority: 0
-  text: "/ServerInfo/Guidebook/Comms/AU14CommsFirstNet.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/Comms/AU14CommsFirstNet.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsANPRC
   name: cmu-guide-comms-anprc
   priority: 1
-  text: "/ServerInfo/Guidebook/Comms/AU14CommsANPRC.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/Comms/AU14CommsANPRC.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsHeadsets
   name: cmu-guide-comms-headsets
   priority: 2
-  text: "/ServerInfo/Guidebook/Comms/AU14CommsHeadsets.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/Comms/AU14CommsHeadsets.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsVoiceProcedure
   name: cmu-guide-comms-voice-procedure
   priority: 3
-  text: "/ServerInfo/Guidebook/Comms/AU14CommsVoiceProcedure.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/Comms/AU14CommsVoiceProcedure.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14CommsQuickRef
   name: cmu-guide-comms-quick-reference
   priority: 4
-  text: "/ServerInfo/Guidebook/Comms/AU14CommsQuickRef.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/Comms/AU14CommsQuickRef.xml"

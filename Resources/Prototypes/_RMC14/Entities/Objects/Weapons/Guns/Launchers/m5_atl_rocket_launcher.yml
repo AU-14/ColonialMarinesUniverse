@@ -91,10 +91,10 @@
   description: "A German designed MANPAD system designed to replace the aging Russian-made 'spear' missile launchers. It offers reasonable air defence capabilities at the platoon-level for members of the UPPAC. This ones electronic systems seems to be taken off, rendering it as a 'Anti-Tank Weapon'"
   components:
   - type: Sprite
-    sprite: Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
     layers:
       - state: base
-        sprite: Weapons/Guns/UPP/emblr/emblr_icon.rsi
+        sprite: _CMU14/Weapons/Guns/UPP/emblr/emblr_icon.rsi
         map: ["enum.GunVisualLayers.Base"]
   - type: BallisticAmmoProvider
     whitelist:
@@ -107,7 +107,7 @@
     cycleDelay: 6.0
     proto: CMURocket70mm
   - type: Clothing
-    sprite: Weapons/Guns/UPP/emblr/emblr_inhands.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/emblr/emblr_inhands.rsi
   - type: Gun
     fireRate: 0.83
     soundGunshot:

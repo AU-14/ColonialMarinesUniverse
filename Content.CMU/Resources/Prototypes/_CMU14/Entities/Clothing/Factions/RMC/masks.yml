@@ -5,9 +5,9 @@
   description: The standard issue gasmask utilized by the TWE Royal Marines Commandos and IASF.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/mask/gasmask.rsi
+    sprite: _CMU14/Clothing/RMC/mask/gasmask.rsi
   - type: Clothing
-    sprite: Clothing/RMC/mask/gasmask.rsi
+    sprite: _CMU14/Clothing/RMC/mask/gasmask.rsi
   - type: HideLayerClothing
     slots:
     - HeadTop

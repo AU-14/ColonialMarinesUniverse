@@ -47,7 +47,7 @@
 #        path:
 #          "/Audio/Weapons/dodgeball.ogg"
 #  - type: Sprite
-#    sprite: Structures/hybrisiaracks.rsi
+#    sprite: _CMU14/Structures/hybrisiaracks.rsi
 #    state: longrack1
 #  - type: Fixtures
 #    fixtures:
@@ -96,7 +96,7 @@
 #  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
 #  components:
 #  - type: Sprite
-#    sprite: Structures/hybrisiaracks.rsi
+#    sprite: _CMU14/Structures/hybrisiaracks.rsi
 #    state: longrack2
 #  - type: ActivatableUI
 #    key: enum.AU14ShopkeeperVendorUi.Shop
@@ -108,7 +108,7 @@
 #  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
 #  components:
 #  - type: Sprite
-#    sprite: Structures/hybrisiaracks.rsi
+#    sprite: _CMU14/Structures/hybrisiaracks.rsi
 #    state: longrack3
 #  - type: ActivatableUI
 #    key: enum.AU14ShopkeeperVendorUi.Shop
@@ -120,7 +120,7 @@
 #  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
 #  components:
 #  - type: Sprite
-#    sprite: Structures/hybrisiaracks.rsi
+#    sprite: _CMU14/Structures/hybrisiaracks.rsi
 #    state: longrack4
 #  - type: ActivatableUI
 #    key: enum.AU14ShopkeeperVendorUi.Shop
@@ -132,7 +132,7 @@
 #  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
 #  components:
 #  - type: Sprite
-#    sprite: Structures/hybrisiaracks.rsi
+#    sprite: _CMU14/Structures/hybrisiaracks.rsi
 #    state: longrack5
 #  - type: ActivatableUI
 #    key: enum.AU14ShopkeeperVendorUi.Shop
@@ -144,7 +144,7 @@
 #  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
 #  components:
 #  - type: Sprite
-#    sprite: Structures/hybrisiaracks.rsi
+#    sprite: _CMU14/Structures/hybrisiaracks.rsi
 #    state: longrack6
 #  - type: ActivatableUI
 #    key: enum.AU14ShopkeeperVendorUi.Shop
@@ -156,7 +156,7 @@
 #  description: A bunch of metal shelves stacked on top of eachother, with items for sale lined up on the shelves.
 #  components:
 #  - type: Sprite
-#    sprite: Structures/hybrisiaracks.rsi
+#    sprite: _CMU14/Structures/hybrisiaracks.rsi
 #    state: longrack7
 #  - type: ActivatableUI
 #    key: enum.AU14ShopkeeperVendorUi.Shop

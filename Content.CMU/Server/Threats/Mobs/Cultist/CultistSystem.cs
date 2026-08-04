@@ -59,7 +59,7 @@ public sealed partial class CultistSystem : EntitySystem
             {
                 Text = "Make Cultist",
                 Category = VerbCategory.Antag,
-                Icon = new SpriteSpecifier.Rsi(new("/Textures/Interface/job_icons.rsi"),
+                Icon = new SpriteSpecifier.Rsi(new("/Textures/_CMU14/Interface/job_icons.rsi"),
                     "threat_member"),
                 Act = () => { MakeCultist(args.Target); },
                 Impact = LogImpact.High,

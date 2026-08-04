@@ -1,7 +1,7 @@
 - type: gameMap
   id: AU747
   mapName: LV-747 Solaris Gulch
-  mapPath: /Maps/Solaris.yml
+  mapPath: /Maps/_CMU14/Solaris.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

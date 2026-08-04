@@ -13,7 +13,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -179,7 +179,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/assortedequipment.rsi
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Food
@@ -621,7 +621,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/uscmcommandclothes.rsi
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -890,7 +890,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/genericweaponrack.rsi
+    sprite: _CMU14/Structures/Vendors/genericweaponrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: HG 37-12 Pump Shotgun
@@ -945,7 +945,7 @@
   description: An automated rack hooked up to a small storage of military police equipment.
   components:
   - type: Sprite
-    sprite: Structures/Vendors/assortedequipment.rsi
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
   - type: AccessReader
     access: [["AU14AccessGovforSecurity" ], [ "AU14AccessOpforSecurity" ]]
   - type: CMAutomatedVendor
@@ -1256,7 +1256,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Softcovers

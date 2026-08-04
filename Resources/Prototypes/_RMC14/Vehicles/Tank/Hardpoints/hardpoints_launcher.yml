@@ -108,7 +108,7 @@
     selectedMode: SemiAuto
     availableModes:
     - SemiAuto
-    soundGunshot: /Audio/Weapons/agl/gun_agl_fire1.ogg
+    soundGunshot: /Audio/_CMU14/Weapons/agl/gun_agl_fire1.ogg
     cameraRecoilScalar: 0
   - type: ShootAtFixedPoint
     shootArcProj: true
@@ -179,7 +179,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/Weapons/vehicle/towfire.ogg
+      path: /Audio/_CMU14/Weapons/vehicle/towfire.ogg
     cameraRecoilScalar: 0
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 5

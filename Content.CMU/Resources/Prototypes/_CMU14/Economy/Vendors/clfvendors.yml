@@ -6,7 +6,7 @@
   suffix: CLF
   components:
   - type: Sprite
-    sprite: Structures/Vendors/genericweaponrack.rsi
+    sprite: _CMU14/Structures/Vendors/genericweaponrack.rsi
     layers:
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]

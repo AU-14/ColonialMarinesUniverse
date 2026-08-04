@@ -9,7 +9,7 @@
   description: A squat iron crucible, its rim crusted with old slag. Ore comes out as metal, metal as plasteel, and a handful of ruined circuit boards as plastic - given a decent fire and the patience to sit by it.
   components:
   - type: Sprite
-    sprite: Objects/Smelting/smelting_pot.rsi
+    sprite: _CMU14/Objects/Smelting/smelting_pot.rsi
     noRot: true
     # Lifted so the crucible reads as sitting up on the fire rather than down in the flames.
     offset: 0.0,0.22

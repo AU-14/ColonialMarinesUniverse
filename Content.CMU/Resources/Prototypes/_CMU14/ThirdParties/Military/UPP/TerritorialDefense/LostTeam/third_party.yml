@@ -13,7 +13,7 @@
   announceAsSurvivors: true
   partyspawn: UPPTDLostTeamSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
   weight:  20
   minplayers: 0
   maxplayers: 400

@@ -40,7 +40,7 @@
   suffix: Any
   components:
   - type: Sprite
-    sprite: Structures/colony_processor.rsi
+    sprite: _CMU14/Structures/colony_processor.rsi
     layers:
     - state: icon
       map: ["enum.LatheVisualLayers.IsRunning"]
@@ -311,7 +311,7 @@
   description: Swipe your ID card on the machine to withdraw cash from your personal account.
   components:
   - type: Sprite
-    sprite: Structures/Machines/atm.rsi
+    sprite: _CMU14/Structures/Machines/atm.rsi
     layers:
     - state: atm
   - type: InteractionOutline

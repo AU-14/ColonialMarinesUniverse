@@ -13,7 +13,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -182,7 +182,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/assortedequipment.rsi
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Food
@@ -619,7 +619,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforCommand" ], [ "AU14AccessOpforCommand" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/uscmcommandclothes.rsi
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Headgear
@@ -888,7 +888,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/genericweaponrack.rsi
+    sprite: _CMU14/Structures/Vendors/genericweaponrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: M240 Incinerator
@@ -1155,7 +1155,7 @@
   - type: AccessReader
     access: [ [ "AU14AccessGovforSquad" ], [ "AU14AccessOpforSquad" ] ]
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Softcovers

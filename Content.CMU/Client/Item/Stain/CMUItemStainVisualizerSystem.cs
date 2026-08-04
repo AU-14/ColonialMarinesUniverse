@@ -18,7 +18,7 @@ namespace Content.Client._CMU14.Item.Stain;
 public sealed partial class CMUItemStainVisualizerSystem : EntitySystem
 {
     private static readonly ProtoId<ShaderPrototype> ItemStainShader = "CMUItemStain";
-    private static readonly ResPath ItemStainsRsi = new("Effects/item_stains.rsi");
+    private static readonly ResPath ItemStainsRsi = new("_CMU14/Effects/item_stains.rsi");
 
     private const string ItemBloodState = "itemblood";
     private const string LayerPrefix = "cmu-item-stain";

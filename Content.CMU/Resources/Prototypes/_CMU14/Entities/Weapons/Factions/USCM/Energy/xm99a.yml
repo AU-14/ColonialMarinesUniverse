@@ -6,14 +6,14 @@
   description: An experimental directed energy weapon system designed by Armat, the XM99A is a long-range prototype rifle that fires super-heated blasts of plasma. The XM99A will slowly recharge its lithium battery drum over time using static electricity.
   components:
   - type: Sprite
-    sprite: Weapons/Guns/USCM/XM99A.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/XM99A.rsi
     layers:
     - state: bolt-open
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: Weapons/Guns/USCM/XM99A.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/XM99A.rsi
     slots:
     - suitStorage
     - Back
@@ -22,7 +22,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/Weapons/xm99/gun_xm99_fire.ogg
+      path: /Audio/_CMU14/Weapons/xm99/gun_xm99_fire.ogg
   - type: HitscanBatteryAmmoProvider
     proto: AU14PlasmaShot
     fireCost: 1000
@@ -109,7 +109,7 @@
   description: A large case for storing an phased plasma pulse rifle, an experimental directed energy weapon system designed by Armat
   components:
   - type: Sprite
-    sprite: Items/Cases/XM99ACase.rsi
+    sprite: _CMU14/Items/Cases/XM99ACase.rsi
   - type: Storage
     maxItemSize: Ginormous
     grid:

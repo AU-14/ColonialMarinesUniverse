@@ -12,7 +12,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: Mobs/Xenos/King/king.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/King/king.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive

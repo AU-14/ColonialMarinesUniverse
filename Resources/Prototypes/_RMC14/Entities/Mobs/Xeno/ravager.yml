@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: Mobs/Xenos/Ravager/ravager.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Ravager/ravager.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base", "enum.XenoShardVisualLayers.Base" ]
       state: alive
@@ -203,7 +203,7 @@
   suffix: Berserker
   components:
   - type: Sprite
-    sprite: Mobs/Xenos/Ravager/berserker_ravager.rsi
+    sprite: _CMU14/Mobs/Xenos/Ravager/berserker_ravager.rsi
   - type: Xeno
     actionIds:
     - ActionXenoRest
@@ -276,7 +276,7 @@
   suffix: Hedgehog
   components:
   - type: Sprite
-    sprite: Mobs/Xenos/Ravager/hedgehog_ravager.rsi
+    sprite: _CMU14/Mobs/Xenos/Ravager/hedgehog_ravager.rsi
     # layers:
     # - state: hedgehog_1
     #   map: [ "enum.XenoShardVisualLayers.Base" ]

@@ -5,7 +5,7 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: Areas/areas_sheperd.rsi
+    sprite: _CMU14/Areas/areas_sheperd.rsi
     state: oob
   - type: Area
     buildSpecial: true

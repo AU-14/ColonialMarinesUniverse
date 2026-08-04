@@ -6,7 +6,7 @@
   name: packet
   components:
   - type: Sprite
-    sprite: Weapons/Throwable/RMC/packets.rsi
+    sprite: _CMU14/Weapons/Throwable/RMC/packets.rsi
     state: general_packet
 
 - type: entity

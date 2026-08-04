@@ -13,11 +13,11 @@
   name: probationary deputy chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: AU14RankCMBProbDeputy
@@ -29,11 +29,11 @@
   name: deputy chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: AU14RankCMBDeputy
@@ -45,11 +45,11 @@
   name: senior deputy chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: AU14RankCMBSrDeputy
@@ -61,11 +61,11 @@
   name: chief deputy chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: AU14RankCMBChiefDeputy
@@ -77,11 +77,11 @@
   name: cmb marshal chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: AU14RankCMBMarshal

@@ -81,7 +81,7 @@
   description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel. This one has blood and tears after countless battles.
   components:
   - type: Sprite
-    sprite: Clothing/UPP/jumpsuits/upprecon.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/upprecon.rsi
   - type: WebbingClothing
     startingWebbing: AU14WebbingDropPouchUPPFull
   - type: UniformAccessoryHolder

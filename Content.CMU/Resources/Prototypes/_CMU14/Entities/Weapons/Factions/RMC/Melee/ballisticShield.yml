@@ -11,10 +11,10 @@
       - type: DisarmMalus
         malus: 0.6
     - type: Sprite
-      sprite: Weapons/Melee/RMC/ballistic_shield.rsi
+      sprite: _CMU14/Weapons/Melee/RMC/ballistic_shield.rsi
       state: rmc-ballistic-icon
     - type: Item
-      sprite: Weapons/Melee/RMC/ballistic_shield.rsi
+      sprite: _CMU14/Weapons/Melee/RMC/ballistic_shield.rsi
       size: Ginormous
       heldPrefix: rmc-ballistic
     - type: Tag
@@ -27,11 +27,11 @@
       flipDirOffset: true
       clothingVisuals:
         back:
-        - sprite: Weapons/Melee/RMC/ballistic_shield.rsi
+        - sprite: _CMU14/Weapons/Melee/RMC/ballistic_shield.rsi
           state: rmc-ballistic-inhand-right
           scale: "1.1, 1.1"
         suitstorage:
-        - sprite: Weapons/Melee/RMC/ballistic_shield.rsi
+        - sprite: _CMU14/Weapons/Melee/RMC/ballistic_shield.rsi
           state: rmc-ballistic-inhand-right
           scale: "1.1, 1.1"
     - type: StaticPrice

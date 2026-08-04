@@ -7,7 +7,7 @@
   description: Sometimes referred to as the "Fogger", the M19 nonlethal gas grenade was intended for boarding actions against pirate vessels or putting down civil unrest, saturating spaces with an irritating aerosol with temporary neuromuscular effects.
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Grenades/M19TearGas.rsi
+    sprite: _CMU14/Objects/Weapons/Grenades/M19TearGas.rsi
   - type: SpawnOnTrigger
     proto: CMU14TearGas
   - type: TriggerOnUse

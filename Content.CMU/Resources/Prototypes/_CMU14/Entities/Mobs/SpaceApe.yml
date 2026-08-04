@@ -31,7 +31,7 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive
-      sprite: Mobs/Ape/ape.rsi
+      sprite: _CMU14/Mobs/Ape/ape.rsi
     - map: [ "mask" ]
     - map: [ "clownedon" ]
       sprite: "Effects/creampie.rsi"
@@ -147,7 +147,7 @@
   - type: ApeLeap
     delay: 0
     knockdownTime: 2
-    leapSound: /Audio/Ape/aperoarshort.ogg
+    leapSound: /Audio/_CMU14/Ape/aperoarshort.ogg
   - type: Sharp
     butcherDelayModifier: 0.5
   - type: NpcFactionMember
@@ -199,7 +199,7 @@
     variation: 0.125
   sounds:
     Scream:
-      path: /Audio/Ape/aperoarlong.ogg
+      path: /Audio/_CMU14/Ape/aperoarlong.ogg
 
 - type: inventoryTemplate
   id: ape

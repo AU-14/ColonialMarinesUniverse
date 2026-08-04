@@ -7,7 +7,7 @@
     arc: 360
   - type: Sprite
     drawdepth: WallTops
-    sprite: Structures/wallflags.rsi
+    sprite: _CMU14/Structures/wallflags.rsi
     snapCardinals: true
   - type: Destructible
     thresholds:

@@ -1,7 +1,7 @@
 - type: gameMap
   id: aufiorina
   mapName: Fiorina Prison
-  mapPath: /Maps/fiorina.yml
+  mapPath: /Maps/_CMU14/fiorina.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

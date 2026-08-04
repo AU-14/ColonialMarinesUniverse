@@ -5,7 +5,7 @@
   description: M74 - Airburst Grenade Munition - Personnel Denial Canister. This grenade must be launched with a grenade launcher, and detonates once it reaches its destination. It dispenses a cloud of irritant gas with temporary neuromuscular effects.
   components:
   - type: Sprite
-    sprite:  Objects/Weapons/Guns/Ammunition/teargascanister.rsi
+    sprite:  _CMU14/Objects/Weapons/Guns/Ammunition/teargascanister.rsi
     layers:
     - state: grenade_teargas
   - type: Tag
@@ -30,7 +30,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: Objects/Weapons/Guns/Ammunition/teargascanister.rsi
+    sprite: _CMU14/Objects/Weapons/Guns/Ammunition/teargascanister.rsi
     layers:
     - state: grenade_teargas_active
   - type: SpawnOnTerminate

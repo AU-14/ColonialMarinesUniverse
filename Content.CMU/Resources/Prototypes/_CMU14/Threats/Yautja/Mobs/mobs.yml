@@ -32,7 +32,7 @@
     - UndergarmentTop
     - Hair
   - type: Icon
-    sprite: Yautja/body.rsi
+    sprite: _CMU14/Yautja/body.rsi
     state: full
   - type: FixedIdentity
     name: species-name-yautja

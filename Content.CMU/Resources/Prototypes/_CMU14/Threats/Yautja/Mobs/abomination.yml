@@ -89,7 +89,7 @@
   - type: GhostRole
     name: cmu-xeno-predalien-larva-name
   - type: Sprite
-    sprite: Yautja/predalien_larva.rsi
+    sprite: _CMU14/Yautja/predalien_larva.rsi
   - type: MobState
     allowedStates:
     - Alive
@@ -194,7 +194,7 @@
     name: cmu-xeno-abomination-name
     description: cmu-xeno-abomination-description
   - type: Sprite
-    sprite: Yautja/abomination.rsi
+    sprite: _CMU14/Yautja/abomination.rsi
   - type: MobState
     allowedStates:
     - Alive

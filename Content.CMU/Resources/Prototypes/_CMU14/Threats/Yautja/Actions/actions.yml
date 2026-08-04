@@ -13,7 +13,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/mask.rsi
+      sprite: _CMU14/Yautja/mask.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -27,7 +27,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/mask.rsi
+      sprite: _CMU14/Yautja/mask.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -42,7 +42,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/cape_full.rsi
+      sprite: _CMU14/Yautja/cape_full.rsi
       state: icon
     useDelay: 1
   - type: InstantAction
@@ -56,7 +56,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -70,7 +70,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 1
   - type: InstantAction
@@ -98,7 +98,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 1
   - type: InstantAction
@@ -169,7 +169,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 1
   - type: InstantAction
@@ -183,7 +183,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -198,7 +198,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 1
   - type: InstantAction
@@ -213,7 +213,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 10
   - type: InstantAction
@@ -227,7 +227,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 1
   - type: InstantAction
@@ -241,7 +241,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/smart_disc.rsi
+      sprite: _CMU14/Yautja/smart_disc.rsi
       state: icon
     useDelay: 10
   - type: InstantAction
@@ -255,7 +255,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer.rsi
+      sprite: _CMU14/Yautja/bracer.rsi
       state: icon
     useDelay: 1
     checkCanInteract: false
@@ -271,7 +271,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/plasma_caster.rsi
+      sprite: _CMU14/Yautja/plasma_caster.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -285,7 +285,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/wrist_blades.rsi
+      sprite: _CMU14/Yautja/wrist_blades.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -299,7 +299,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/scimitar.rsi
+      sprite: _CMU14/Yautja/scimitar.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -313,7 +313,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/bracer_shield.rsi
+      sprite: _CMU14/Yautja/bracer_shield.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction
@@ -327,7 +327,7 @@
   components:
   - type: Action
     icon:
-      sprite: Yautja/chain_gauntlet.rsi
+      sprite: _CMU14/Yautja/chain_gauntlet.rsi
       state: icon
     useDelay: 0.5
   - type: InstantAction

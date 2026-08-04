@@ -14,11 +14,11 @@
   name: militsioner chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: RMCRankSPPMlts
@@ -30,11 +30,11 @@
   name: senior militsioner chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: RMCRankSPPSMlts
@@ -46,11 +46,11 @@
   name: starshina chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: RMCRankSPPStrsh

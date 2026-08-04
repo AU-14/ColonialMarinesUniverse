@@ -39,7 +39,7 @@ public sealed partial class CMUXenoWarlockParticleOverlay : Overlay
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
     private static readonly ProtoId<ShaderPrototype> UnshadedShader = "unshaded";
-    private static readonly ResPath ParticleSprite = new("/Textures/Effects/Xeno/warlock_particles.rsi");
+    private static readonly ResPath ParticleSprite = new("/Textures/_CMU14/Effects/Xeno/warlock_particles.rsi");
     private const float PixelsPerMeter = EyeManager.PixelsPerMeter;
     private const float CullPadding = 9f;
     private readonly Texture _particleTexture;

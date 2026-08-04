@@ -7,10 +7,10 @@
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: Actions/Xeno/bull.rsi
+      sprite: _CMU14/Actions/Xeno/bull.rsi
       state: bull_charge
     iconOn:
-      sprite: Actions/Xeno/bull.rsi
+      sprite: _CMU14/Actions/Xeno/bull.rsi
       state: bull_ready_charge
     useDelay: 0.25
   - type: InstantAction
@@ -25,10 +25,10 @@
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: Actions/Xeno/bull.rsi
+      sprite: _CMU14/Actions/Xeno/bull.rsi
       state: bull_headbutt
     iconOn:
-      sprite: Actions/Xeno/bull.rsi
+      sprite: _CMU14/Actions/Xeno/bull.rsi
       state: bull_headbutt
     useDelay: 0.25
   - type: InstantAction
@@ -43,10 +43,10 @@
   - type: Action
     itemIconStyle: NoItem
     icon:
-      sprite: Actions/Xeno/bull.rsi
+      sprite: _CMU14/Actions/Xeno/bull.rsi
       state: bull_gore
     iconOn:
-      sprite: Actions/Xeno/bull.rsi
+      sprite: _CMU14/Actions/Xeno/bull.rsi
       state: bull_gore
     useDelay: 0.25
   - type: InstantAction

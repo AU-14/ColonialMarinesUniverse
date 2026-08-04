@@ -11,7 +11,7 @@
     prefix: au14-job-prefix-civiliancolonypilot
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: colony_pilot
 
   name: au14-job-name-civiliancolonypilot

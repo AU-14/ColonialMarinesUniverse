@@ -9,7 +9,7 @@
     key: walls
   - type: Sprite
     noRot: true
-    sprite: Structures/digger.rsi
+    sprite: _CMU14/Structures/digger.rsi
     state: digger_orange
   - type: Physics
     bodyType: Static
@@ -36,7 +36,7 @@
     key: walls
   - type: Sprite
     noRot: true
-    sprite: Structures/digger.rsi
+    sprite: _CMU14/Structures/digger.rsi
     state: digger_gray
   - type: Physics
     bodyType: Static

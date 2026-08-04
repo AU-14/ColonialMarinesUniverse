@@ -5,13 +5,13 @@
   description: "A lightweight designated marksman rifle developed by Howatomo Precision Machining for the Royal Marines. Designed to provide commandos with responsive long range reach past what the old L90 could manage. A continuous-charge HESH payload removes the requirement for traditional armor piercing steel core ammunition, and improves damage retention at extended range. Faster cycle rate of the breech and a light trigger gives fast and precise followup shots even at thousand meter distances."
   components:
   - type: Sprite
-    sprite: Weapons/Guns/RMC/L64A3.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L64A3.rsi
     layers:
     - state: bolt-open
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
-    - sprite: Weapons/Guns/Attachments/royal_stock.rsi
+    - sprite: _CMU14/Weapons/Guns/Attachments/royal_stock.rsi
       state: rmc_dmr_stock
       offset: -0.56, 0.025
     - sprite: _RMC14/Objects/Weapons/Guns/Attachments/rail.rsi
@@ -20,7 +20,7 @@
   - type: Item
     size: Large
   - type: Clothing
-    sprite: Weapons/Guns/RMC/L64A3.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L64A3.rsi
   - type: Tag
     tags:
     - AU14L64A3SniperRifle
@@ -114,7 +114,7 @@
   - type: Item
     size: Normal
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/L64A3.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L64A3.rsi
     layers:
     - state: mag-0
       map: ["enum.GunVisualLayers.Base"]

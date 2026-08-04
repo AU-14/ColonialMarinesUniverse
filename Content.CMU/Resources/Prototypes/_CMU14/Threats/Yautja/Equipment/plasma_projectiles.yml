@@ -10,7 +10,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: Yautja/plasma_projectiles.rsi
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
       state: muzzle_flash_blue
   - type: PointLight
     enabled: true
@@ -30,7 +30,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: Yautja/plasma_projectiles.rsi
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
       state: muzzle_energy
   - type: PointLight
     enabled: true
@@ -58,7 +58,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: Yautja/plasma_projectiles.rsi
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
       state: muzzle_energy
   - type: PointLight
     enabled: true
@@ -86,7 +86,7 @@
     layers:
     - shader: unshaded
       map: ["enum.EffectLayers.Unshaded"]
-      sprite: Yautja/plasma_projectiles.rsi
+      sprite: _CMU14/Yautja/plasma_projectiles.rsi
       state: bluespace
   - type: PointLight
     enabled: true
@@ -157,7 +157,7 @@
         volume: 5
   - type: Sprite
     noRot: false
-    sprite: Yautja/plasma_projectiles.rsi
+    sprite: _CMU14/Yautja/plasma_projectiles.rsi
     scale: 1.15, 1.15
     layers:
     - state: ion

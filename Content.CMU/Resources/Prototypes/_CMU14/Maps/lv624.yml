@@ -1,7 +1,7 @@
 - type: gameMap
   id: LV624
   mapName: LV-624
-  mapPath: /Maps/LV624.yml
+  mapPath: /Maps/_CMU14/LV624.yml
   minPlayers: 0
   maxPlayers: 65
   maxRandomOffset: 0

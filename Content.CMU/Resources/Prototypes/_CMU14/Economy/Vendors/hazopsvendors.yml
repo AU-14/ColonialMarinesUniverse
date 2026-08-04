@@ -11,7 +11,7 @@
     For full operational readiness, select one item from each section: fatigues with a webbing, footwear, gloves, headgear, armor, backpack, belt and a pouch.
   components:
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -349,7 +349,7 @@
     Manufactured to equip commanding personnel following cryogenic hypersleep or an emergency directive is issued.
   components:
   - type: Sprite
-    sprite: Structures/Vendors/uscmcommandclothes.rsi
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Fatigues
@@ -799,7 +799,7 @@
   description: A stripped-down dispenser rack stocked with off-duty uniforms, footwear, and light personal gear for wear aboard ship.
   components:
   - type: Sprite
-    sprite: Structures/Vendors/uscmgearrack.rsi
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
   - type: CMAutomatedVendor
     sections:
     - name: Softcovers

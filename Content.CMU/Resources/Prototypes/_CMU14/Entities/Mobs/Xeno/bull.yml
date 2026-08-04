@@ -13,7 +13,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: Mobs/Xenonids/Bull/bull.rsi
+    sprite: _CMU14/Mobs/Xenonids/Bull/bull.rsi
   - type: MobState
     allowedStates:
     - Alive

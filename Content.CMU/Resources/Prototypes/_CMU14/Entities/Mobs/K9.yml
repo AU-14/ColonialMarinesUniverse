@@ -18,7 +18,7 @@
      - AU14NamesK9
   - type: Sprite
     drawdepth: Mobs
-    sprite: Mobs/MiscMob/synthk9.rsi
+    sprite: _CMU14/Mobs/MiscMob/synthk9.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: k9_closed
@@ -144,7 +144,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: Mobs/MiscMob/synthk9.rsi
+    sprite: _CMU14/Mobs/MiscMob/synthk9.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: k9_closed_medpack
@@ -244,7 +244,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: Mobs/MiscMob/synthk9.rsi
+    sprite: _CMU14/Mobs/MiscMob/synthk9.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: k9_closed_backpack
@@ -293,7 +293,7 @@
   components:
   - type: Sprite
     drawdepth: Mobs
-    sprite: Mobs/MiscMob/synthk9.rsi
+    sprite: _CMU14/Mobs/MiscMob/synthk9.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: k9_closed_mp

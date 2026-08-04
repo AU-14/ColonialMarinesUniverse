@@ -6,7 +6,7 @@
   - type: Item
     size: Tiny
   - type: Sprite
-    sprite: Items/gas_mask_filter.rsi
+    sprite: _CMU14/Items/gas_mask_filter.rsi
     layers:
     - state: icon
   - type: Tag
@@ -31,7 +31,7 @@
   description: A little metal canister. May possibly also filter out airborne contaminants. There is an asbestos warning label on the side.
   components:
   - type: Sprite
-    sprite: Items/gas_mask_filter.rsi
+    sprite: _CMU14/Items/gas_mask_filter.rsi
     layers:
     - state: upp
 
@@ -47,7 +47,7 @@
     chemicalIrritantDamageMultiplier: 1.75 # 2 complete CN20 gas clouds and some extra
     baseIntegrity: 100
   - type: Sprite
-    sprite: Items/gas_mask_filter.rsi
+    sprite: _CMU14/Items/gas_mask_filter.rsi
     layers:
     - state: fancy
 
@@ -63,6 +63,6 @@
     chemicalIrritantDamageMultiplier: 1 # 4-ish CN20 gas clouds
     baseIntegrity: 100
   - type: Sprite
-    sprite: Items/gas_mask_filter.rsi
+    sprite: _CMU14/Items/gas_mask_filter.rsi
     layers:
     - state: wy

@@ -2,7 +2,7 @@
   id: Flight
   mapName: Flight
   allegiance: Neutral
-  mapPath: /Maps/flight.yml
+  mapPath: /Maps/_CMU14/flight.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

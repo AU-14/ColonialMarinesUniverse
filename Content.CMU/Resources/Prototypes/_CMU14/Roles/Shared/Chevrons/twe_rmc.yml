@@ -14,11 +14,11 @@
   name: recruit chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: RMC_Recruit
@@ -30,11 +30,11 @@
   name: marine chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: RMC_Marine
@@ -46,11 +46,11 @@
   name: lance corporal chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: RMC_LanceCorporal
@@ -62,11 +62,11 @@
   name: corporal chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: RMC_Corporal
@@ -78,11 +78,11 @@
   name: sergeant chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: RMC_Sergeant
@@ -94,11 +94,11 @@
   name: colour sergeant chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_snco
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
     rank: RMC_ColourSergeant
@@ -112,11 +112,11 @@
   name: warrant officer class 2 chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_warrant
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_warrant
   - type: RankChanger
     rank: RMC_WarrantOfficer2
@@ -128,11 +128,11 @@
   name: warrant officer class 1 chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_chiefwarrant
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_warrant
   - type: RankChanger
     rank: RMC_WarrantOfficer1
@@ -146,11 +146,11 @@
   name: officer cadet chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: RMC_OfficerCadet
@@ -162,11 +162,11 @@
   name: second lieutenant chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: RMC_2Lieutenant
@@ -178,11 +178,11 @@
   name: lieutenant chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: RMC_Lieutenant
@@ -194,11 +194,11 @@
   name: captain chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_seniorofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: RMC_Captain
@@ -212,11 +212,11 @@
   name: major chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_seniorofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: RMC_Major
@@ -228,11 +228,11 @@
   name: lieutenant colonel chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_LieutenantColonel
@@ -244,11 +244,11 @@
   name: colonel chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_Colonel
@@ -260,11 +260,11 @@
   name: brigadier chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_Brigadier
@@ -276,11 +276,11 @@
   name: deputy commandant chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_CommandantDeputy
@@ -294,11 +294,11 @@
   name: major general chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_MajorGeneral
@@ -310,11 +310,11 @@
   name: lieutenant general chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_LieutenantGeneral
@@ -326,11 +326,11 @@
   name: general chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_General
@@ -342,11 +342,11 @@
   name: commandant general chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_CommandantGeneral
@@ -358,11 +358,11 @@
   name: captain general chevron
   components:
   - type: Sprite
-    sprite: Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_flagofficer
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
     rank: RMC_CaptainGeneral

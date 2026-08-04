@@ -5,9 +5,9 @@
   description: A standard military turban found in the Three World Empire Royal Marines Commando. Considered a rare item, these kind of turbans are prized by collectors.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/hats/turban.rsi
+    sprite: _CMU14/Clothing/RMC/hats/turban.rsi
   - type: Clothing
-    sprite: Clothing/RMC/hats/turban.rsi
+    sprite: _CMU14/Clothing/RMC/hats/turban.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -17,9 +17,9 @@
   description: A green beret belonging to the Three World Empire Royal Marines Commando.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/hats/beret.rsi
+    sprite: _CMU14/Clothing/RMC/hats/beret.rsi
   - type: Clothing
-    sprite: Clothing/RMC/hats/beret.rsi
+    sprite: _CMU14/Clothing/RMC/hats/beret.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -29,9 +29,9 @@
   description: A green beret belonging to the Three World Empire Royal Marines Commando.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/hats/beret_tl.rsi
+    sprite: _CMU14/Clothing/RMC/hats/beret_tl.rsi
   - type: Clothing
-    sprite: Clothing/RMC/hats/beret_tl.rsi
+    sprite: _CMU14/Clothing/RMC/hats/beret_tl.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -41,9 +41,9 @@
   description: A green beret belonging to the Three World Empire Royal Marines Commando.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/hats/beret_tl.rsi
+    sprite: _CMU14/Clothing/RMC/hats/beret_tl.rsi
   - type: Clothing
-    sprite: Clothing/RMC/hats/beret_tl.rsi
+    sprite: _CMU14/Clothing/RMC/hats/beret_tl.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -53,6 +53,6 @@
   description: Gray peaked cap belonging to the Three World Empire Royal Marines Commando officer. Shown to show your men who's the boss.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/hats/co_peaked.rsi
+    sprite: _CMU14/Clothing/RMC/hats/co_peaked.rsi
   - type: Clothing
-    sprite: Clothing/RMC/hats/co_peaked.rsi
+    sprite: _CMU14/Clothing/RMC/hats/co_peaked.rsi

@@ -17,7 +17,7 @@
   - type: GhostRole
     name: cmu-job-name-xeno-unknown
   - type: Sprite
-    sprite: Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
   - type: Fixtures
     fixtures:
       fix1:
@@ -219,7 +219,7 @@
   suffix: Sapper
   components:
   - type: Sprite
-    sprite: Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
+    sprite: _CMU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
   - type: Xeno
     actionIds:
     - ActionXenoRest

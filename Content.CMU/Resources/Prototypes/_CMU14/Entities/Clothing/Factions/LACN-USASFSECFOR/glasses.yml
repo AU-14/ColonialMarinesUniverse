@@ -5,13 +5,13 @@
   description: A visor attached to LACN LAH-99 helmets, this one is reflective. This item must be attached to a LAH-99 helmet.
   components:
   - type: Sprite
-    sprite: Clothing/LACN/PilotGear/visor.rsi
+    sprite: _CMU14/Clothing/LACN/PilotGear/visor.rsi
     state: icon
   - type: Item
-    sprite: Clothing/LACN/PilotGear/visor.rsi
+    sprite: _CMU14/Clothing/LACN/PilotGear/visor.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: Clothing/LACN/PilotGear/visor.rsi
+      sprite: _CMU14/Clothing/LACN/PilotGear/visor.rsi
       state: helmet
 
 - type: entity
@@ -21,13 +21,13 @@
   description: A visor attached to LAH-99 helmets. This item must be attached to a LAH-99 helmet.
   components:
   - type: Sprite
-    sprite: Clothing/LACN/PilotGear/transvisor.rsi
+    sprite: _CMU14/Clothing/LACN/PilotGear/transvisor.rsi
     state: icon
   - type: Item
-    sprite: Clothing/LACN/PilotGear/transvisor.rsi
+    sprite: _CMU14/Clothing/LACN/PilotGear/transvisor.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: Clothing/LACN/PilotGear/transvisor.rsi
+      sprite: _CMU14/Clothing/LACN/PilotGear/transvisor.rsi
       state: helmet
 
 - type: entity
@@ -37,13 +37,13 @@
   description: An Integrated Helmet and Display Sighting System attached to LAH-99 helmets. This item must be attached to a LAH-99 helmet.
   components:
   - type: Sprite
-    sprite: Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
     state: icon
   - type: Item
-    sprite: Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
+      sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/hightechvisor.rsi
       state: helmet
 
 - type: entity
@@ -53,11 +53,11 @@
   description: A visor attached to LAH-99 helmets. This item must be attached to a LAH-99 helmet.
   components:
   - type: Sprite
-    sprite: Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
     state: icon
   - type: Item
-    sprite: Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
+      sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/clearvisor.rsi
       state: helmet

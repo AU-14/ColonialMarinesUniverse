@@ -128,10 +128,10 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: beltbag
   - type: Clothing
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     slots:
     - belt
     clothingVisuals:
@@ -139,7 +139,7 @@
       - state: equipped-BELT-hunting_pouch
   - type: Item
     size: Large
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: Storage
     maxItemSize: Normal
     grid:
@@ -155,11 +155,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: teleporter
   - type: Item
     size: Tiny
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaRelayBeacon
   - type: YautjaTechItem
 
@@ -171,11 +171,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: dissolving_vial
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaCleaner
   - type: YautjaTechItem
     blockPickup: false
@@ -188,13 +188,13 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     layers:
     - state: scalp_1
     - state: scalp_1_blood
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: scalp
   - type: YautjaScalp
   - type: YautjaTrophy
@@ -207,11 +207,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: bar
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: bar
     storedRotation: 0
   - type: YautjaTechItem
@@ -224,15 +224,15 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: wrench
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: wrench
     storedRotation: 0
     storedSprite:
-      sprite: Yautja/yautja_items.rsi
+      sprite: _CMU14/Yautja/yautja_items.rsi
       state: wrench
   - type: YautjaTechItem
 
@@ -244,7 +244,7 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     layers:
     - state: wirescutter
       map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -254,7 +254,7 @@
         wirescutter: ""
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: wirescutter
     storedRotation: 0
   - type: YautjaTechItem
@@ -267,7 +267,7 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     layers:
     - state: screwdriver
       map: [ "enum.DamageStateVisualLayers.Base" ]
@@ -277,7 +277,7 @@
         screwdriver: ""
   - type: Item
     size: Tiny
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: screwdriver
     storedRotation: 0
   - type: MeleeWeapon
@@ -298,11 +298,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: multitool
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: multitool
     storedRotation: 0
   - type: YautjaTechItem
@@ -315,7 +315,7 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     layers:
     - state: welder
       map: ["enum.ToggleableVisuals.Enabled"]
@@ -325,7 +325,7 @@
       shader: unshaded
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: welder
   - type: ToggleableVisuals
     spriteLayer: on
@@ -375,16 +375,16 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: beltbag
   - type: Clothing
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     clothingVisuals:
       belt:
       - state: equipped-BELT-utilitybelt_pred
   - type: Item
     size: Large
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -402,11 +402,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: metal_chain
   - type: Item
     size: Normal
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaTechItem
     blockPickup: false
     blockUse: false
@@ -419,11 +419,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: houndpad
   - type: Item
     size: Small
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaHoundPad
   - type: YautjaTechItem
 
@@ -435,11 +435,11 @@
   suffix: Yautja
   components:
   - type: Sprite
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
     state: emitter-xeno
   - type: Item
     size: Tiny
-    sprite: Yautja/yautja_items.rsi
+    sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaHivebreaker
   - type: YautjaTechItem
     blockPickup: false

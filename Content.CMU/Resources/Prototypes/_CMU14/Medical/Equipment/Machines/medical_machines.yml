@@ -10,7 +10,7 @@
     anchored: true
     noRot: true
   - type: Sprite
-    sprite: Structures/Machines/Medical/autodoc.rsi
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
     drawdepth: Mobs
     noRot: true
     layers:
@@ -23,7 +23,7 @@
       map: [ "operate" ]
       visible: false
   - type: Icon
-    sprite: Structures/Machines/Medical/autodoc.rsi
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
     state: autodoc_open
   - type: Physics
     bodyType: Static
@@ -79,12 +79,12 @@
   - type: Transform
     anchored: true
   - type: Sprite
-    sprite: Structures/Machines/Medical/autodoc.rsi
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
     drawdepth: Objects
     layers:
     - state: sleeperconsole
   - type: Icon
-    sprite: Structures/Machines/Medical/autodoc.rsi
+    sprite: _CMU14/Structures/Machines/Medical/autodoc.rsi
     state: sleeperconsole-p
   - type: Physics
     bodyType: Static
@@ -127,14 +127,14 @@
     noRot: true
   - type: CMUBodyScannerPod
   - type: Sprite
-    sprite: Structures/Machines/Medical/bodyscanner.rsi
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
     drawdepth: Mobs
     noRot: true
     layers:
     - state: body_scanner_open
       map: [ "machineLayer" ]
   - type: Icon
-    sprite: Structures/Machines/Medical/bodyscanner.rsi
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
     state: body_scanner_open
   - type: GenericVisualizer
     visuals:
@@ -179,12 +179,12 @@
   - type: Transform
     anchored: true
   - type: Sprite
-    sprite: Structures/Machines/Medical/bodyscanner.rsi
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
     drawdepth: Objects
     layers:
     - state: body_scannerconsole
   - type: Icon
-    sprite: Structures/Machines/Medical/bodyscanner.rsi
+    sprite: _CMU14/Structures/Machines/Medical/bodyscanner.rsi
     state: body_scannerconsole-p
   - type: Physics
     bodyType: Static
@@ -226,7 +226,7 @@
     anchored: true
     noRot: true
   - type: Sprite
-    sprite: Structures/Machines/Medical/limbprinter.rsi
+    sprite: _CMU14/Structures/Machines/Medical/limbprinter.rsi
     drawdepth: Objects
     noRot: true
     layers:
@@ -236,7 +236,7 @@
       map: [ "working" ]
       visible: false
   - type: Icon
-    sprite: Structures/Machines/Medical/limbprinter.rsi
+    sprite: _CMU14/Structures/Machines/Medical/limbprinter.rsi
     state: bioprinter
   - type: Physics
     bodyType: Static

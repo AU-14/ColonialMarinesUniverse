@@ -6,7 +6,7 @@
   - type: Action
     checkCanInteract: false
     icon:
-      sprite: ZLevels/Actions/misc.rsi
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: up
   - type: InstantAction
     event: !type:CMUZLevelActionUp
@@ -19,7 +19,7 @@
   - type: Action
     checkCanInteract: false
     icon:
-      sprite: ZLevels/Actions/misc.rsi
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: down
   - type: InstantAction
     event: !type:CMUZLevelActionDown
@@ -32,7 +32,7 @@
   - type: Action
     checkCanInteract: false
     icon:
-      sprite: ZLevels/Actions/misc.rsi
+      sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: eye
   - type: InstantAction
     event: !type:CMUToggleZLevelLookUpAction

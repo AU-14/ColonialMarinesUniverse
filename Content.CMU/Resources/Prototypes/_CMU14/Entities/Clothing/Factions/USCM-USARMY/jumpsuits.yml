@@ -5,7 +5,7 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/desertfatigues.rsi
+    sprite: _CMU14/Clothing/desertfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -18,7 +18,7 @@
   description: Standard-issue US Army fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/desertfatigues.rsi
+    sprite: _CMU14/Clothing/desertfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14Patch1stCav
@@ -31,7 +31,7 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/junglefatigues.rsi
+    sprite: _CMU14/Clothing/junglefatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -44,7 +44,7 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/snowfatigues.rsi
+    sprite: _CMU14/Clothing/snowfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -57,7 +57,7 @@
   description: A mix of winter and jungle USCM fatigues. Reservists don't get amazing funding, huh...
   components:
   - type: Sprite
-    sprite: Clothing/mixedsnowfatigues.rsi
+    sprite: _CMU14/Clothing/mixedsnowfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -70,7 +70,7 @@
   description: Standard-issue USCM flightsuit. It has integrated life support mechanisms.
   components:
   - type: Sprite
-    sprite: Clothing/tacticalflightsuit.rsi
+    sprite: _CMU14/Clothing/tacticalflightsuit.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -79,7 +79,7 @@
   description: Standard-issue USCM operations uniform. Used by command and support personnel on USCM installations.
   components:
   - type: Sprite
-    sprite: Clothing/uscmoperationsuniform.rsi
+    sprite: _CMU14/Clothing/uscmoperationsuniform.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -88,7 +88,7 @@
   description: Standard-issue UACG fatigues.
   components:
   - type: Sprite
-    sprite: Clothing/US_Army/Jumpsuits/army.rsi
+    sprite: _CMU14/Clothing/US_Army/Jumpsuits/army.rsi
   - type: UniformAccessoryHolder
     startingAccessories: [ AU14PatchUAFlag ]
 
@@ -99,7 +99,7 @@
   description: Standard-issue USASF fatigues.
   components:
   - type: Sprite
-    sprite: Clothing/junglefatigues.rsi
+    sprite: _CMU14/Clothing/junglefatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -112,7 +112,7 @@
   description: A standard USASF Aircrew Jumpsuit. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
-    sprite: Clothing/USASFSecurityForces/USASFPilot/uniform.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/uniform.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -126,7 +126,7 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/desertfatigues.rsi
+    sprite: _CMU14/Clothing/desertfatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -140,7 +140,7 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/junglefatigues.rsi
+    sprite: _CMU14/Clothing/junglefatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -153,7 +153,7 @@
   description: A standard US Army fatigues. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
-    sprite: Clothing/US_Army/Jumpsuits/army.rsi
+    sprite: _CMU14/Clothing/US_Army/Jumpsuits/army.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
@@ -167,7 +167,7 @@
   - type: WebbingClothing
     startingWebbing: RMCWebbingPouchForecon
   - type: Sprite
-    sprite: Clothing/US_Army/Jumpsuits/army.rsi
+    sprite: _CMU14/Clothing/US_Army/Jumpsuits/army.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14Patch1stCav
@@ -181,7 +181,7 @@
   - type: WebbingClothing
     startingWebbing: RMCWebbingPouchForecon
   - type: Sprite
-    sprite: Clothing/US_Army/Jumpsuits/army.rsi
+    sprite: _CMU14/Clothing/US_Army/Jumpsuits/army.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14Patch32ndAB
@@ -225,7 +225,7 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/junglefatigues.rsi
+    sprite: _CMU14/Clothing/junglefatigues.rsi
 
 - type: entity
   parent: RMCJumpsuitSurvivorMarineDropPouch
@@ -234,7 +234,7 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/desertfatigues.rsi
+    sprite: _CMU14/Clothing/desertfatigues.rsi
 
 - type: entity
   parent: RMCMarineUniformBase
@@ -243,7 +243,7 @@
   description: The undershirt and trousers of the legendary Marine dress blues, virtually unchanged since the 19th century. This unadorned variant is for enlisted personnel, E-1 thru E-3. This one is 'D' variant.
   components:
   - type: Sprite
-    sprite: Clothing/USCMC/Uniform/DressBlues/d_enlisted.rsi
+    sprite: _CMU14/Clothing/USCMC/Uniform/DressBlues/d_enlisted.rsi
 
 - type: entity
   parent: RMCMarineUniformBase
@@ -252,7 +252,7 @@
   description: The undershirt and trousers of the legendary Marine dress blues, virtually unchanged since the 19th century. This variant features the iconic Blood Stripe, worn by NCOs and officers. This one is 'D' variant.
   components:
   - type: Sprite
-    sprite: Clothing/USCMC/Uniform/DressBlues/d_senior.rsi
+    sprite: _CMU14/Clothing/USCMC/Uniform/DressBlues/d_senior.rsi
 
 # Camo system (ItemCamouflage) conforming variants
 # No Classic/Urban sprites exist yet - both fall back to the Jungle sprite until dedicated art is made.
@@ -263,15 +263,15 @@
   description: Standard-issue USCM fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: Clothing/junglefatigues.rsi
+    sprite: _CMU14/Clothing/junglefatigues.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - AU14PatchUAFlag
     - AU14PatchUSCM
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: Clothing/junglefatigues.rsi
-      Desert: Clothing/desertfatigues.rsi
-      Snow: Clothing/snowfatigues.rsi
-      Classic: Clothing/junglefatigues.rsi
-      Urban: Clothing/junglefatigues.rsi
+      Jungle: _CMU14/Clothing/junglefatigues.rsi
+      Desert: _CMU14/Clothing/desertfatigues.rsi
+      Snow: _CMU14/Clothing/snowfatigues.rsi
+      Classic: _CMU14/Clothing/junglefatigues.rsi
+      Urban: _CMU14/Clothing/junglefatigues.rsi

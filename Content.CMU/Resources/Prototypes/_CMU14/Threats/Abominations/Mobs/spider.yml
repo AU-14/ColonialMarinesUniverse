@@ -7,7 +7,7 @@
   description: A skittering, multi-legged head crowned with too many teeth. It wants on your face.
   components:
   - type: Sprite
-    sprite: Mobs/Abominations/spider.rsi
+    sprite: _CMU14/Mobs/Abominations/spider.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive

@@ -6,7 +6,7 @@
   description: A customizable personal armor system used by the Royal Crown Marines.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/armor/armor.rsi
+    sprite: _CMU14/Clothing/RMC/armor/armor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -16,7 +16,7 @@
   description: A customizable personal armor system used by the Royal Crown Marines.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/armor/armor.rsi
+    sprite: _CMU14/Clothing/RMC/armor/armor.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -26,7 +26,7 @@
   description: A customizable personal armor system used by the Royal Crown Marines.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/armor/padded.rsi
+    sprite: _CMU14/Clothing/RMC/armor/padded.rsi
 
 - type: entity
   parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
@@ -36,7 +36,7 @@
   description: Kestel smart gun harness specially made for Smartgunners.
   components:
   - type: Sprite
-    sprite: Clothing/RMC/armor/padded.rsi
+    sprite: _CMU14/Clothing/RMC/armor/padded.rsi
   - type: Storage
     maxItemSize: Small
     grid:
@@ -56,7 +56,7 @@
   suffix: AU14
   components:
   - type: Sprite
-    sprite: Clothing/RMC/armor/pointman.rsi
+    sprite: _CMU14/Clothing/RMC/armor/pointman.rsi
   - type: CMArmor
     melee: 30 # CLOTHING_ARMOR_HIGH
     bullet: 35 # CLOTHING_ARMOR_HIGHPLUS (bullet)
@@ -104,7 +104,7 @@
   description: A set of ballistic armor used by RMC aircrew.
   components:
   - type: Sprite
-    sprite: Clothing/USASFSecurityForces/USASFPilot/armor.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/USASFPilot/armor.rsi
   - type: RMCArmorSpeedTier
     speedTier: light
   - type: CMArmor

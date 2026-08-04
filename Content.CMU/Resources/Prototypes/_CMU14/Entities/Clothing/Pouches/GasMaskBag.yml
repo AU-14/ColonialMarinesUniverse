@@ -5,7 +5,7 @@
   description: A small bag designed to carry a gas mask and a few spare filters. Can be worn in a pocket, attached to a uniform as webbing, or stashed in a backpack.
   components:
   - type: Sprite
-    sprite: Items/gas_mask_bag.rsi
+    sprite: _CMU14/Items/gas_mask_bag.rsi
   - type: Item
     size: Small
   - type: Storage
@@ -30,7 +30,7 @@
         - CMUGasMaskFilter
   - type: Webbing
     playerSprite:
-      sprite: Items/gas_mask_bag.rsi
+      sprite: _CMU14/Items/gas_mask_bag.rsi
       state: equipped
     components:
     - type: Storage

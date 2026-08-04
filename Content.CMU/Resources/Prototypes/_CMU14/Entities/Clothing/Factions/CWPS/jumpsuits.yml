@@ -5,4 +5,4 @@
   description: The standard uniform of the Colonial Wilderness Preservation Service rangers.
   components:
   - type: Sprite
-    sprite: Clothing/CWPS/uniform.rsi
+    sprite: _CMU14/Clothing/CWPS/uniform.rsi

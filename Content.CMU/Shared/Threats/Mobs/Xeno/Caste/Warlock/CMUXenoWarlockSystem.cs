@@ -122,7 +122,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier PsychicCrushCancelSound
-        = new SoundPathSpecifier("/Audio/Xeno/Warlock/woosh_swoosh.ogg");
+        = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
 
     public EntityUid? PsychicCrushChannelEffect;
 
@@ -162,7 +162,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier
-        PsychicCrushPulseSound = new SoundPathSpecifier("/Audio/Xeno/Warlock/woosh_swoosh.ogg");
+        PsychicCrushPulseSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/woosh_swoosh.ogg");
 
     // Range at which the warlock can start channelling a new psychic crush. Matches the psychic
     // blast's initiation range (6 tiles) so both ranged abilities share the same reach at cast.
@@ -180,7 +180,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public EntityCoordinates PsychicCrushTarget;
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicCrushTriggerSound = new SoundPathSpecifier("/Audio/Xeno/Warlock/EMPulse.ogg");
+    public SoundSpecifier PsychicCrushTriggerSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/EMPulse.ogg");
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicCrushWarningId = "CMUXenoPsychicCrushWarning";
@@ -234,11 +234,11 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public TimeSpan PsychicShieldOwnerStun = TimeSpan.FromSeconds(1);
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicShieldReflectSound = new SoundPathSpecifier("/Audio/Xeno/Warlock/portal.ogg");
+    public SoundSpecifier PsychicShieldReflectSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/portal.ogg");
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier
-        PsychicShieldRoarSound = new SoundPathSpecifier("/Audio/Xeno/Warlock/roar_warlock.ogg");
+        PsychicShieldRoarSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/roar_warlock.ogg");
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicShieldSegmentId = "CMUXenoPsychicShieldSegment";
@@ -264,7 +264,7 @@ public sealed partial class CMUXenoWarlockComponent : Component
     public float PsychicShieldMinimumFreezeSpeed = 15f;
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier PsychicShieldStartSound = new SoundPathSpecifier("/Audio/Xeno/Warlock/magic.ogg");
+    public SoundSpecifier PsychicShieldStartSound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Warlock/magic.ogg");
 
     [DataField, AutoNetworkedField]
     public EntProtoId PsychicShieldVisualId = "CMUXenoPsychicShield";
@@ -522,8 +522,8 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     [Dependency] private XenoProjectileSystem _xenoProjectile = default!;
     private static readonly FixedPoint2 PsychicCrushVehicleDamageMultiplier = FixedPoint2.New(0.5f);
     private static readonly FixedPoint2 PsychicCrushMechDamageMultiplier = FixedPoint2.New(2.3f);
-    public const string PsychicBlastFireSoundPath = "/Audio/Xeno/Warlock/volkite_4.ogg";
-    public const string PsychicBlastImpactSoundPath = "/Audio/Xeno/Warlock/EMPulse.ogg";
+    public const string PsychicBlastFireSoundPath = "/Audio/_CMU14/Xeno/Warlock/volkite_4.ogg";
+    public const string PsychicBlastImpactSoundPath = "/Audio/_CMU14/Xeno/Warlock/EMPulse.ogg";
     public const int PsychicCrushBaseDamage = 25;
     public const int PsychicCrushDamagePerPulse = 15;
     public const int PsychicCrushMaxAreaRadius = 3;

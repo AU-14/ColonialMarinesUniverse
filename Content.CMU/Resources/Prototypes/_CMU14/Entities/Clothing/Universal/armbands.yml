@@ -11,9 +11,9 @@
   description: A Military Police brassard bearing the emblem of the United States Colonial Marines and bold white letters displaying "MP".
   components:
   - type: Sprite
-    sprite: Clothing/Patches/mp_armbands.rsi
+    sprite: _CMU14/Clothing/Patches/mp_armbands.rsi
     state: USCMicon
   - type: UniformAccessory
     playerSprite:
-      sprite: Clothing/Patches/mp_armbands.rsi
+      sprite: _CMU14/Clothing/Patches/mp_armbands.rsi
       state: USCMpatch

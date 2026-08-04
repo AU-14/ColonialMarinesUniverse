@@ -5,4 +5,4 @@
   description: "The flag of the Colonial Liberation Front. You can smell freedom." # This one looks ready to be planted into the ground."
   components:
   - type: Sprite
-    sprite: Objects/Flags/clf_flag.rsi
+    sprite: _CMU14/Objects/Flags/clf_flag.rsi

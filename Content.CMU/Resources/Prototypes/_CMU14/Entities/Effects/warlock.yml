@@ -31,7 +31,7 @@
   components:
     - type: Sprite
       drawdepth: Effects
-      sprite: Effects/Xeno/warlock_shield.rsi
+      sprite: _CMU14/Effects/Xeno/warlock_shield.rsi
       state: shield
     - type: PointLight
       radius: 2
@@ -50,7 +50,7 @@
       lifetime: 6
     - type: Sprite
       drawdepth: Effects
-      sprite: Effects/Xeno/warlock_crush_warning.rsi
+      sprite: _CMU14/Effects/Xeno/warlock_crush_warning.rsi
       noRot: true
       state: crush_warning
     - type: EffectVisuals
@@ -67,7 +67,7 @@
   components:
     - type: Sprite
       drawdepth: Overlays
-      sprite: Effects/Xeno/warlock_crush_orb.rsi
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
       noRot: true
       state: orb_charge
     - type: PointLight
@@ -87,7 +87,7 @@
       lifetime: 0.5
     - type: Sprite
       drawdepth: Overlays
-      sprite: Effects/Xeno/warlock_crush_orb.rsi
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
       noRot: true
       state: crush_smooth
     - type: EffectVisuals
@@ -104,7 +104,7 @@
       lifetime: 0.4
     - type: Sprite
       drawdepth: Overlays
-      sprite: Effects/Xeno/warlock_crush_orb.rsi
+      sprite: _CMU14/Effects/Xeno/warlock_crush_orb.rsi
       noRot: true
       state: crush_hard
     - type: EffectVisuals
@@ -209,7 +209,7 @@
           Blunt: 65
       slow: 1.5
       impactSound:
-        path: /Audio/Xeno/Warlock/EMPulse.ogg
+        path: /Audio/_CMU14/Xeno/Warlock/EMPulse.ogg
       impactEffectId: CMUXenoPsychicBlastShockwave
     - type: PointLight
       radius: 1.5

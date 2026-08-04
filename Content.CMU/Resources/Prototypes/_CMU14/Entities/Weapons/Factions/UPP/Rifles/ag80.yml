@@ -5,14 +5,14 @@
   description: Pulse action 9.7x16mm caseless assault rifle of the UPPAC Naval Infantry. Only recently entered service and has yet to see full integration.
   components:
   - type: Sprite
-    sprite: Weapons/Guns/UPP/ag80.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/ag80.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: Weapons/Guns/UPP/ag80.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/ag80.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -164,7 +164,7 @@
     proto: AU14CartridgeRifle97x16mm
     capacity: 60
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/ag80.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/ag80.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -191,7 +191,7 @@
       - AU14CartridgeRifle97x16mmAP
     proto: AU14CartridgeRifle97x16mmAP
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/ag80.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/ag80.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -220,7 +220,7 @@
     proto: AU14CartridgeRifle97x16mm
     capacity: 99
   - type: Sprite
-    sprite: Weapons/Guns/Ammo/Magazines/ag80.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/ag80.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -305,7 +305,7 @@
   description: The standard back end of any gun starting with AG80. Compatible with the AG80 series, this stock reduces recoil and scatter, but at a reduction to handling and agility. Also enhances the thwacking of things with the stock-end of the rifle.
   components:
   - type: Sprite
-    sprite: Weapons/Guns/Attachments/upp_attachments.rsi
+    sprite: _CMU14/Weapons/Guns/Attachments/upp_attachments.rsi
     state: ag80-col
   - type: Tag
     tags:
@@ -315,10 +315,10 @@
     doAfterBreakOnMove: false
     doAfter: 0.5
     icon:
-      sprite: Weapons/Guns/Attachments/upp_attachments.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/upp_attachments.rsi
       state: ag80-col
     iconActive:
-      sprite: Weapons/Guns/Attachments/upp_attachments.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/upp_attachments.rsi
       state: ag80-col-on
     actionName: Toggle AG80 Folding Stock
   - type: AttachableSizeMods
@@ -365,7 +365,7 @@
   description: A weapon-mounted, reloadable grenade launcher.
   components:
   - type: Sprite
-    sprite: Weapons/Guns/Attachments/upp_attachments.rsi
+    sprite: _CMU14/Weapons/Guns/Attachments/upp_attachments.rsi
     layers:
     - state: grenade-ag80
       map: [ "enum.BreechVisuals.Open" ]
@@ -433,10 +433,10 @@
     actionName: Switch to the GP-45 Grenade Launcher
     actionDesc: Switch to using the underbarrel grenade launcher.
     icon:
-      sprite: Weapons/Guns/Attachments/upp_attachments.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/upp_attachments.rsi
       state: grenade-ag80
     iconActive:
-      sprite: Weapons/Guns/Attachments/upp_attachments.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/upp_attachments.rsi
       state: grenade-ag80-on
   - type: AttachableVisuals
     redrawOnAppearanceChange: true

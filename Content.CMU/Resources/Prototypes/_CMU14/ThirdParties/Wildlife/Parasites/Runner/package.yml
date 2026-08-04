@@ -12,7 +12,7 @@
       settings: short
     rules: You may choose to act independently from the Hive, but you still answer to the Queen Mother. Infect valuable tallhosts or die a glorious death for the Queen Mother.
   - type: Sprite
-    sprite: Mobs/thirdPartiesXenos/parasite_runner.rsi
+    sprite: _CMU14/Mobs/thirdPartiesXenos/parasite_runner.rsi
   - type: Threat
   - type: GhostTakeoverAvailable
   - type: Xeno
@@ -31,7 +31,7 @@
   - type: MobCollision
     minimumSpeedModifier: 0.1
   - type: Clothing
-    sprite: Mobs/thirdPartiesXenos/parasite_runner.rsi
+    sprite: _CMU14/Mobs/thirdPartiesXenos/parasite_runner.rsi
   - type: FixedIdentity
     name: cmu-job-name-xeno-parasite-runner
     whitelist:
