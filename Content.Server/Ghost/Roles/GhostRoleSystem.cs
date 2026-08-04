@@ -53,6 +53,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
     [Dependency] private SharedRoleSystem _roleSystem = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private PopupSystem _popupSystem = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private uint _nextRoleIdentifier;
     private bool _needsUpdateGhostRoleCount = true;
@@ -667,6 +668,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
             roles.Add(new GhostRoleInfo
             {
                 Identifier = id,
+                Entity = GetNetEntity(uid),
+                EntityPrototype = GetGhostRolePreviewPrototype(role, MetaData(uid)),
+                JobPrototype = role.JobProto?.Id,
                 Name = role.RoleName,
                 Description = role.RoleDescription,
                 Rules = role.RoleRules,
@@ -678,6 +682,17 @@ public sealed partial class GhostRoleSystem : EntitySystem
         }
 
         return roles.ToArray();
+    }
+
+    private string? GetGhostRolePreviewPrototype(GhostRoleComponent role, MetaDataComponent metadata)
+    {
+        if (role.JobProto is { } jobId &&
+            _prototypeManager.TryIndex(jobId, out JobPrototype? job))
+        {
+            return job.JobPreviewEntity?.ToString() ?? job.JobEntity ?? metadata.EntityPrototype?.ID;
+        }
+
+        return metadata.EntityPrototype?.ID;
     }
 
     private void OnPlayerAttached(PlayerAttachedEvent message)

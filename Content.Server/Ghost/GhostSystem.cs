@@ -5,6 +5,10 @@ using Content.Server.Chat.Managers;
 using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Roles.Jobs;
+using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
+using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Actions;
 using Content.Shared.CCVar;
 using Content.Shared.Damage;
@@ -26,7 +30,9 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
 using Content.Shared.NameModifier.EntitySystems;
+using Content.Shared.NPC.Components;
 using Content.Shared.Popups;
+using Content.Shared.Roles;
 using Content.Shared.Storage.Components;
 using Content.Shared.Tag;
 using Content.Shared.Warps;
@@ -67,6 +73,8 @@ namespace Content.Server.Ghost
         [Dependency] private TagSystem _tag = default!;
         [Dependency] private NameModifierSystem _nameMod = default!;
         [Dependency] private GhostSpriteStateSystem _ghostState = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private SharedXenoHiveSystem _xenoHive = default!;
 
         [Dependency] private EntityQuery<GhostComponent> _ghostQuery = default!;
         [Dependency] private EntityQuery<FollowerComponent> _followerQuery = default!;
@@ -407,10 +415,25 @@ namespace Content.Server.Ghost
         private IEnumerable<GhostWarp> GetLocationWarps()
         {
             var allQuery = AllEntityQuery<WarpPointComponent>();
+            var grouping = GhostWarpGrouping.Classify(
+                isWarpPoint: true,
+                jobId: null,
+                departmentId: null,
+                factions: null,
+                isXeno: false,
+                isYautja: false,
+                isCorruptedHive: false,
+                xenoTier: null,
+                realDisplayWeight: 0);
 
             while (allQuery.MoveNext(out var uid, out var warp))
             {
-                yield return new GhostWarp(GetNetEntity(uid), warp.Location == null ? Name(uid) : Loc.GetString(warp.Location), true);
+                yield return new GhostWarp(
+                    GetNetEntity(uid),
+                    warp.Location == null ? Name(uid) : Loc.GetString(warp.Location),
+                    true,
+                    tab: grouping.Tab,
+                    section: grouping.Section);
             }
         }
 
@@ -423,14 +446,69 @@ namespace Content.Server.Ghost
 
                 if (attached == except) continue;
 
+                if (!_mobState.IsAlive(attached) && !_mobState.IsCritical(attached))
+                    continue;
+
                 TryComp<MindContainerComponent>(attached, out var mind);
+                TryComp<XenoComponent>(attached, out var xeno);
 
-                var jobName = _jobs.MindTryGetJobName(mind?.Mind);
-                var playerInfo = $"{Comp<MetaDataComponent>(attached).EntityName} ({jobName})";
+                _jobs.MindTryGetJob(mind?.Mind, out var job);
+                if (xeno != null && _prototypeManager.TryIndex(xeno.Role, out JobPrototype? xenoJob))
+                    job = xenoJob;
 
-                if (_mobState.IsAlive(attached) || _mobState.IsCritical(attached))
-                    yield return new GhostWarp(GetNetEntity(attached), playerInfo, false);
+                var department = GetDepartment(job);
+                var factions = TryComp<NpcFactionMemberComponent>(attached, out var faction)
+                    ? faction.Factions.Select(factionId => factionId.ToString()).ToList()
+                    : null;
+                var isYautja = HasComp<YautjaComponent>(attached);
+                var isYautjaThrall = HasComp<YautjaThrallComponent>(attached);
+                var isYautjaAbomination = HasComp<YautjaAbominationComponent>(attached);
+                var isCursedSummoner = HasComp<ZombieSummonerComponent>(attached);
+                var isCorruptedHive = xeno != null &&
+                                      _xenoHive.GetHive(attached) is { Comp.Corrupted: true };
+                var grouping = GhostWarpGrouping.Classify(
+                    isWarpPoint: false,
+                    jobId: job?.ID,
+                    departmentId: department?.ID,
+                    factions: factions,
+                    isXeno: xeno != null,
+                    isYautja: isYautja,
+                    isCorruptedHive: isCorruptedHive,
+                    xenoTier: xeno?.Tier,
+                    realDisplayWeight: job?.RealDisplayWeight ?? 0,
+                    isYautjaThrall: isYautjaThrall,
+                    isYautjaAbomination: isYautjaAbomination,
+                    isCursedSummoner: isCursedSummoner);
+                var roleName = job?.LocalizedName ?? Loc.GetString("generic-unknown-title");
+                var metadata = MetaData(attached);
+
+                yield return new GhostWarp(
+                    GetNetEntity(attached),
+                    metadata.EntityName,
+                    false,
+                    roleName,
+                    grouping.Tab,
+                    grouping.Section,
+                    job?.Icon.ToString(),
+                    job?.JobPreviewEntity?.ToString() ?? metadata.EntityPrototype?.ID,
+                    job?.ID,
+                    job?.RealDisplayWeight ?? 0,
+                    xeno?.Tier,
+                    xeno != null ||
+                    job?.ID.StartsWith("CMXeno", StringComparison.OrdinalIgnoreCase) == true);
             }
+        }
+
+        private DepartmentPrototype? GetDepartment(JobPrototype? job)
+        {
+            if (job == null)
+                return null;
+
+            var jobId = new ProtoId<JobPrototype>(job.ID);
+            return _prototypeManager.EnumeratePrototypes<DepartmentPrototype>()
+                .Where(department => department.Roles.Contains(jobId))
+                .OrderBy(department => department, DepartmentUIComparer.Instance)
+                .FirstOrDefault();
         }
 
         #endregion

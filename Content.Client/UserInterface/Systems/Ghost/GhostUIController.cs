@@ -43,6 +43,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         system.PlayerAttached += OnPlayerAttached;
         system.PlayerDetached += OnPlayerDetached;
         system.GhostWarpsResponse += OnWarpsResponse;
+        system.GhostWarpsReset += OnWarpsReset;
         system.GhostRoleCountUpdated += OnRoleCountUpdated;
     }
 
@@ -53,6 +54,7 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         system.PlayerAttached -= OnPlayerAttached;
         system.PlayerDetached -= OnPlayerDetached;
         system.GhostWarpsResponse -= OnWarpsResponse;
+        system.GhostWarpsReset -= OnWarpsReset;
         system.GhostRoleCountUpdated -= OnRoleCountUpdated;
     }
 
@@ -98,6 +100,11 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
         window.UpdateWarps(msg.Warps);
         window.Populate();
+    }
+
+    private void OnWarpsReset()
+    {
+        Gui?.TargetWindow.ClearWarps(clearSearch: true);
     }
 
     private void OnRoleCountUpdated(GhostUpdateGhostRoleCountEvent msg)
@@ -154,6 +161,9 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
         Gui.ReturnToBodyPressed -= ReturnToBody;
         Gui.GhostRolesPressed -= GhostRolesPressed;
         Gui.TargetWindow.WarpClicked -= OnWarpClicked;
+        Gui.TargetWindow.OnGhostnadoClicked -= OnGhostnadoClicked;
+        Gui.TargetWindow.OnWarpToRandomFollowedClicked -= OnWarpToRandomFollowedClicked;
+        Gui.TargetWindow.OnWarpToRandomClicked -= OnWarpToRandomClicked;
 
         Gui.Hide();
     }
@@ -165,9 +175,12 @@ public sealed partial class GhostUIController : UIController, IOnSystemChanged<G
 
     private void RequestWarps()
     {
+        if (Gui?.TargetWindow is not { } window)
+            return;
+
+        window.ClearWarps();
+        window.OpenCentered();
         _system?.RequestWarps();
-        Gui?.TargetWindow.Populate();
-        Gui?.TargetWindow.OpenCentered();
     }
 
     private void GhostRolesPressed()

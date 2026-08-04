@@ -1,8 +1,9 @@
 <BoxContainer xmlns="https://spacestation14.io"
               Orientation="Vertical"
-              Margin="8 0 8 0">
+              HorizontalExpand="True">
     <BoxContainer Name="Buttons"
                   Orientation="Vertical"
+                  HorizontalExpand="True"
                   SeparationOverride="5">
         <!-- Buttons are added here by code -->
     </BoxContainer>

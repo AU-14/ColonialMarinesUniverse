@@ -32,6 +32,7 @@ public sealed partial class GhostGui : UIWidget
 
     public void Hide()
     {
+        TargetWindow.ClearWarps(clearSearch: true);
         TargetWindow.Close();
         Visible = false;
     }
@@ -51,8 +52,6 @@ public sealed partial class GhostGui : UIWidget
 
             _prevNumberRoles = (int)roles;
         }
-
-        TargetWindow.Populate();
     }
 
     protected override void Dispose(bool disposing)

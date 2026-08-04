@@ -29,7 +29,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                     return;
                 }
 
-                _windowRules = new GhostRoleRulesWindow(info.Rules, _ =>
+                _windowRules = new GhostRoleRulesWindow(info.Rules, info.Kind, _ =>
                 {
                     SendMessage(new RequestGhostRoleMessage(info.Identifier));
 
@@ -83,32 +83,38 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
             _window.SaveCollapsibleBoxesStates();
 
             // Clearing the container before adding new roles
-            _window.ClearEntries();
+            _window.BeginEntryUpdate();
 
             var entityManager = IoCManager.Resolve<IEntityManager>();
             var sysManager = entityManager.EntitySysManager;
             var spriteSystem = sysManager.GetEntitySystem<SpriteSystem>();
             var requirementsManager = IoCManager.Resolve<JobRequirementsManager>();
 
-            // Grouping roles
-            var groupedRoles = ghostState.GhostRoles.GroupBy(
-                role => (
-                    role.Name,
-                    role.Description,
-                    //  Check the prototypes for role requirements and bans
-                    requirementsManager.IsAllowed(role.RolePrototypes.Item1, role.RolePrototypes.Item2, null, out var reason),
-                    reason));
-
-            // Add a new entry for each role group
-            foreach (var group in groupedRoles)
+            try
             {
-                var reason = group.Key.reason;
-                var name = group.Key.Name;
-                var description = group.Key.Description;
-                var prototypesAllowed = group.Key.Item3;
+                // Grouping roles
+                var groupedRoles = ghostState.GhostRoles.GroupBy(
+                    role => (
+                        role.Name,
+                        role.Description,
+                        requirementsManager.IsAllowed(role.RolePrototypes.Item1, role.RolePrototypes.Item2, null, out var reason),
+                        reason));
 
-                // Adding a new role
-                _window.AddEntry(name, description, prototypesAllowed, reason, group, spriteSystem);
+                // Add a new entry for each role group
+                foreach (var group in groupedRoles)
+                {
+                    var name = group.Key.Name;
+                    var description = group.Key.Description;
+                    var hasAccess = group.Key.Item3;
+                    var reason = group.Key.reason;
+
+                    // Adding a new role
+                    _window.AddEntry(name, description, hasAccess, reason, group, spriteSystem);
+                }
+            }
+            finally
+            {
+                _window.EndEntryUpdate();
             }
 
             // Restore the Collapsible box state if it is saved

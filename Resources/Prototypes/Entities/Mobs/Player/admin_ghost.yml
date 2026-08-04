@@ -45,6 +45,13 @@
     groups:
     - AllAccess
     - Silicon
+    - ShipMasterAccess # RMC14 Start
+    - Corp
+    - Colony
+    - Synth # RMC14 End
+    - AU14GovforCommand
+    - AU14OpforCommand
+    - aulegacygroupcommand
     tags:
     - NuclearOperative
     - SyndicateAgent
@@ -64,10 +71,16 @@
       enum.GeneralStationRecordConsoleKey.Key:
       # who the fuck named this bruh
         type: GeneralStationRecordConsoleBoundUserInterface
-      # RMC14
+      enum.XenoFindParasiteUI.Key:
+        type: FindParasiteBoundUserInterface
+        requireInputValidation: false
       enum.DialogUiKey.Key:
         type: DialogBui
         requireInputValidation: false
+      enum.TacticalMapUserUi.Key:
+        type: TacticalMapUserBui
+      enum.ViewIntelObjectivesUI.Key:
+        type: ViewIntelObjectivesBui
   - type: IntrinsicUI
     uis:
       enum.SolarControlConsoleUiKey.Key:
@@ -115,6 +128,16 @@
   - type: Loadout
     prototypes: [ MobAghostGear ]
   - type: BypassInteractionChecks
+  - type: ParalyzeOnPullAttemptImmune
+  - type: BypassSkillChecks
+  - type: SeeNewPlayers
+  - type: TacticalMapUser
+    marines: true
+    xenos: true
+    opfor: true
+    govfor: true
+    clf: true
+    liveUpdate: true
   - type: ExplosionResistance
     damageCoefficient: 0
   - type: GluedImmune
@@ -162,7 +185,7 @@
   components:
   - type: Action
     icon: { sprite: Interface/Actions/actions_ai.rsi, state: mass_scanner }
-    iconOn: { sprite: Interface/Actions/actions_ai.rsi, state: comms_console }
+    iconOn: { sprite: Interface/Actions/actions_ai.rsi, state: mass_scanner }
     keywords: [ "AI", "console", "interface" ]
     priority: -6
   - type: InstantAction
