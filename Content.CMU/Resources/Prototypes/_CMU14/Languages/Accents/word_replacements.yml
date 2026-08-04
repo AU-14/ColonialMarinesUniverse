@@ -21,6 +21,23 @@
     cm-chatsan-word-ttyl: cm-chatsan-replacement-ttyl
     cm-chatsan-word-tuff: cm-chatsan-replacement-tuff
     cm-chatsan-word-wtf: cm-chatsan-replacement-wtf
+    cm-chatsan-word-deltard: cm-chatsan-replacement-deltard
+    cm-chatsan-word-deltards: cm-chatsan-replacement-deltards
+    cm-chatsan-word-beno: cm-chatsan-replacement-beno
+    cm-chatsan-word-benos: cm-chatsan-replacement-benos
+    cm-chatsan-word-alphoid: cm-chatsan-replacement-alphoid
+    cm-chatsan-word-alphoids: cm-chatsan-replacement-alphoids
+    cm-chatsan-word-bravoid: cm-chatsan-replacement-bravoid
+    cm-chatsan-word-bravoids: cm-chatsan-replacement-bravoids
+    cm-chatsan-word-charloid: cm-chatsan-replacement-charloid
+    cm-chatsan-word-charloids: cm-chatsan-replacement-charloids
+    cm-chatsan-word-deltoid: cm-chatsan-replacement-deltoid
+    cm-chatsan-word-deltoids: cm-chatsan-replacement-deltoids
+    cm-chatsan-word-xenoid: cm-chatsan-replacement-xenoid
+    cm-chatsan-word-xenoids: cm-chatsan-replacement-xenoids
+    cm-chatsan-word-pb: cm-chatsan-word-pb
+    cm-chatsan-word-clanker: cm-chatsan-replacement-clanker
+    cm-chatsan-word-rwall: cm-chatsan-replacement-rwall
 
 - type: accent
   id: CMChatSanitizeMarine
@@ -33,6 +50,11 @@
     cm-chatsan-word-nw: cm-chatsan-replacement-nw
     cm-chatsan-word-se: cm-chatsan-replacement-se
     cm-chatsan-word-sw: cm-chatsan-replacement-sw
+    cm-chatsan-word-admin-marine: cm-chatsan-replacement-admin-marine
+    cm-chatsan-word-xx121-marine: cm-chatsan-replacement-xx121-marine
+    cm-chatsan-word-xx-121-marine: cm-chatsan-replacement-xx-121-marine
+    cm-chatsan-word-surv: cm-chatsan-word-survivor
+    cm-chatsan-word-survs: cm-chatsan-word-survivors
 
 - type: accent
   id: CMChatSanitizeXeno
@@ -371,3 +393,5 @@
     cm-chatsan-word-gamba: cm-chatsan-word-replacement-gamba
     cm-chatsan-word-pheros: cm-chatsan-word-replacement-pheros
     cm-chatsan-word-gens: cm-chatsan-word-replacement-gens
+    cm-chatsan-word-admin-xeno: cm-chatsan-replacement-admin-xeno
+    cm-chatsan-word-dog: cm-chatsan-replacement-dog

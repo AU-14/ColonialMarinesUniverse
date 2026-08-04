@@ -88,29 +88,6 @@
       visible: false
 
 - type: entity
-  parent: CMPacketBase
-  id: AU14PacketGrenadeTearGas
-  name: M19-NL tear gas grenade packet
-  description: It contains three M19-Non Lethal gas grenades.
-  components:
-  - type: Sprite
-    layers:
-    - state: teargas_nade_placeholder
-      map: [ "closedLayer" ]
-    - state: teargas_nade_placeholder_e
-      map: [ "openLayer", "emptyLayer" ]
-
-- type: entity
-  parent: AU14PacketGrenadeTearGas
-  id: AU14PacketGrenadeTearGasFilled
-  suffix: Filled
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMU14TearGasGrenade
-      amount: 3
-
-- type: entity
   parent: CMSatchel
   id: RMCSatchelFilledFaxResponderHighComm
   suffix: Fax Responder, HComm

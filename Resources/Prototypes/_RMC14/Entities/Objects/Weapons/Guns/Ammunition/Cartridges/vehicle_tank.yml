@@ -4,7 +4,7 @@
   name: cartridge (LTB cannon, HESH)
   components:
   - type: Sprite
-    sprite: Structures/Vehicles/ammo/vehicles.rsi
+    sprite: _CMU14/Structures/vehicles/ammo/vehicles.rsi
     layers:
     - state: lbtshell_hesh
       map: ["enum.AmmoVisualLayers.Base"]

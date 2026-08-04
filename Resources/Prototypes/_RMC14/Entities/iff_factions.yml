@@ -32,13 +32,6 @@
     - Colony
 
 - type: entity
-  parent: FactionSurvivor
-  id: FactionCLF
-  categories: [ HideSpawnMenu ]
-  components:
-  - type: IFFFaction
-
-- type: entity
   id: FactionWeYa
   categories: [ HideSpawnMenu ]
   components:

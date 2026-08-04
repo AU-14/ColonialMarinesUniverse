@@ -24,10 +24,3 @@
   category: Quirks
   components:
   - type: Snoring
-- type: trait
-  id: CMUTileMovement
-  name: trait-cmu-tile-movement-name
-  description: trait-cmu-tile-movement-desc
-  category: Quirks
-  components:
-  - type: CMUTileMovement

@@ -423,31 +423,6 @@
 
 - type: entity
   parent: SquadBase
-  id: SquadCLF
-  name: CLF
-  components:
-  - type: SquadTeam
-    color: "#3aeb34"
-    background:
-      sprite: _RMC14/Interface/job_icons/Misc/other.rsi
-      state: empty
-    blacklistedSquadArmor:
-    - Helmet
-    - Goggles
-    - Armor
-    - Gloves
-    radio: Colony
-    minimapBackground:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: background_spp
-    canSupplyDrop: false
-    group: CLF
-    leaderIcon:
-      sprite: _RMC14/Interface/job_icons/CLF.rsi
-      state: clf_sl
-
-- type: entity
-  parent: SquadBase
   id: SquadUnassigned
   name: Unassigned
   components:

@@ -72,9 +72,6 @@ cm-job-description-section-sergeant = Leader of one of the platoon's sections. G
 cm-job-prefix-section-sergeant = SctSgt
 CMPVESectionSergeant = Section Sergeant
 
-cm-job-name-platoon-commander = Platoon Commander
-cm-job-description-platoon-commander = Overwatch and lead your platoon. Obey Company Command's orders.
-cm-job-prefix-platoon-commander = PlatCO
 CMPVEPlatoonCommander = Platoon Commander
 
 rmc-job-name-pve-forecon-rifleman = Rifleman

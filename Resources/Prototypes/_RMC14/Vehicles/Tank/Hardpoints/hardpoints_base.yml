@@ -75,7 +75,7 @@
   description: The TBA3 'Vandeleur' Turret, developed by Weyland Yutani as part of the 'B' upgrade package for the FV150 'Hobelar' Light Cavalry Tank. The Vandeleur is a direct evolution of the original FV150-A turret, with improvements to the internal systems and modularity. It can mount a wide array of weapon systems both quickly and easily, and features an inbuilt flare deployment system.
   components:
   - type: Sprite
-    sprite: Structures/Vehicles/fv150/exterior.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/exterior.rsi
     state: tank_turret_0
   - type: HardpointItem
     hardpointType: Turret
@@ -90,7 +90,7 @@
     stabilizedRotation: false
     rotationSpeed: 95
     showOverlay: true
-    overlayRsi: Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: _CMU14/Structures/vehicles/fv150/exterior.rsi
     overlayState: tank_turret_0
     overlayDamagedState: tank_turret_1
     useDirectionalOffsets: false
@@ -208,7 +208,7 @@
   description: Heavy duty tank treads.
   components:
   - type: Sprite
-    sprite: Structures/Vehicles/fv150/icons.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/icons.rsi
     state: treads
   - type: HardpointItem
     hardpointType: Wheel

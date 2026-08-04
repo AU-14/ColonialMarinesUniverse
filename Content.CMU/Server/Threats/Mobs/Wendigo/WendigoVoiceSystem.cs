@@ -49,7 +49,7 @@ public sealed partial class WendigoVoiceSystem : EntitySystem
         { "WendigoSecrets", "/Audio/_CMU14/Wendigo/mimicry/secrets.ogg" },
         { "WendigoSoAfraid", "/Audio/_CMU14/Wendigo/mimicry/so_afraid.ogg" },
         { "WendigoWeCantGetOut", "/Audio/_CMU14/Wendigo/mimicry/we_cant_get_out.ogg" },
-        { "WendigoWhereAreYou", "/Audio/Wendigo/mimicry/where_are_you.ogg" }
+        { "WendigoWhereAreYou", "/Audio/_CMU14/Wendigo/mimicry/WHERE_ARE_YOU.ogg" }
     };
 
     public override void Initialize()

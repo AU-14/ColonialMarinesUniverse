@@ -106,7 +106,7 @@
   description: A support module for the FV150, based off those used by the UA for their vehicles.
   components:
   - type: Sprite
-    sprite: Structures/Vehicles/fv150/icons.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/icons.rsi
     state: slauncher_0
   - type: HardpointItem
     hardpointType: Support
@@ -123,7 +123,7 @@
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
     showOverlay: true
-    overlayRsi: Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: _CMU14/Structures/vehicles/fv150/exterior.rsi
     overlayState: slauncher_0
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision

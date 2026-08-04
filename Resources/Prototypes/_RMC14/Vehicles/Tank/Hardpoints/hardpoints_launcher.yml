@@ -279,7 +279,7 @@
   description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
   components:
   - type: Sprite
-    sprite: Structures/Vehicles/fv150/icons.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/icons.rsi
     state: mounted_cupola
   - type: HardpointItem
     hardpointType: Launcher
@@ -298,7 +298,7 @@
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
     showOverlay: true
-    overlayRsi: Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: _CMU14/Structures/vehicles/fv150/exterior.rsi
     overlayState: mounted_cupola_0
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision

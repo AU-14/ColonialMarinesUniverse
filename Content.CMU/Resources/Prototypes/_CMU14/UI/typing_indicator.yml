@@ -1,0 +1,5 @@
+- type: typingIndicator
+  id: joe
+  spritePath: /Textures/_CMU14/Effects/working_joe_speech.rsi
+  typingState: joe0
+  idleState: joe3

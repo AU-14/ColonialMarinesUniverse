@@ -363,7 +363,7 @@
     wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 1
   - type: Sprite
-    sprite: Structures/Vehicles/fv150/exterior.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/exterior.rsi
     layers:
     - map: [ base ]
       state: tank_base

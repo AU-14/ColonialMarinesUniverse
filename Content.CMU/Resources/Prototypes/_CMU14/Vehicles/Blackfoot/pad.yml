@@ -9,7 +9,7 @@
     anchored: true
   - type: Sprite
     drawdepth: FloorTiles
-    sprite: Structures/Vehicles/Blackfoot/blackfoot_landing_pad.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_landing_pad.rsi
     state: pad
   - type: Clickable
   - type: InteractionOutline
@@ -37,7 +37,7 @@
   - type: Transform
     anchored: false
   - type: Sprite
-    sprite: Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_structures.rsi
     state: flight-cpu
   - type: Clickable
   - type: InteractionOutline

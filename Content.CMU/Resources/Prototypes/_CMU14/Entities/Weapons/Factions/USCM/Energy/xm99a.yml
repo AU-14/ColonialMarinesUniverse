@@ -23,7 +23,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_CMU14/Weapons/xm99/gun_xm99_fire.ogg
-  - type: HitscanBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: AU14PlasmaShot
     fireCost: 1000
   - type: BatterySelfRecharger
@@ -85,22 +85,28 @@
   - type: GunIDLock
 
 
-- type: hitscan
+- type: entity
+  parent: BasicHitscan
   id: AU14PlasmaShot
-  damage:
-    types:
-      Heat: 105
-      Blunt: 5
-      Asphyxiation: 25
-  muzzleFlash:
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-    state: muzzle_blue
-  travelFlash:
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-    state: beam_blue
-  impactFlash:
-    sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
-    state: impact_blue
+  name: plasma pulse ray
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HitscanBasicDamage
+    damage:
+      types:
+        Heat: 105
+        Blunt: 5
+        Asphyxiation: 25
+  - type: HitscanBasicVisuals
+    muzzleFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: muzzle_blue
+    travelFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: beam_blue
+    impactFlash:
+      sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi
+      state: impact_blue
 
 - type: entity
   parent: RMCBasePVEEquipmentCase

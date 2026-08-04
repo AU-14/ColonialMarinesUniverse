@@ -52,6 +52,7 @@
   hostile:
   - GOVFOR
   - RMCXeno
+  - UNMC
 #hostile to govofr but not vice versa so turrets cant detect
 - type: npcFaction
   id: AUWeYu

@@ -7,7 +7,7 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootEngineToggleActionEvent
   - type: Action
     icon:
-      sprite: Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: integrity
     itemIconStyle: BigItem
 
@@ -20,7 +20,7 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootTakeoffActionEvent
   - type: Action
     icon:
-      sprite: Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: fuel
     itemIconStyle: BigItem
 
@@ -33,7 +33,7 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootLandActionEvent
   - type: Action
     icon:
-      sprite: Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: targeting-reticle
     itemIconStyle: BigItem
 
@@ -46,7 +46,7 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootFlightModeToggleActionEvent
   - type: Action
     icon:
-      sprite: Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_hud.rsi
       state: battery
     itemIconStyle: BigItem
 
@@ -59,7 +59,7 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootRearDoorToggleActionEvent
   - type: Action
     icon:
-      sprite: Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+      sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot.rsi
       state: rear-door-open
     itemIconStyle: BigItem
 
@@ -72,7 +72,7 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootStowToggleActionEvent
   - type: Action
     icon:
-      sprite: Structures/Vehicles/Blackfoot/blackfoot_hardpoints.rsi
+      sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_hardpoints.rsi
       state: engines
     itemIconStyle: BigItem
 

@@ -41,12 +41,6 @@
   - RMCXeno
 
 - type: npcFaction
-  id: CLF
-  hostile:
-  - RMCXeno
-  - UNMC
-
-- type: npcFaction
   id: WeYa
   hostile:
   - RMCXeno

@@ -24,10 +24,6 @@
   id: AU14GuidebookSOP
 
 - type: entity
-  parent: RMCDeskFlag
-  id: AU14UADeskFlag
-
-- type: entity
   parent: RMCOrbitalCannon
   id: AU14OrbitalCannonGovfor
 
@@ -51,42 +47,6 @@
   - type: AccessReader
     access: [["CMAccessMarinePrep"], ["RMCAccessCommand"]]
 
-- type: entity
-  parent: RMCAutodocNoConsole
-  id: CMUAutodocPod
-
-- type: entity
-  parent: RMCAutodocConsole
-  id: CMUAutodocConsole
-
-- type: entity
-  parent: RMCBodyScannerNoConsole
-  id: CMUBodyScannerPod
-
-- type: entity
-  parent: RMCBodyScannerConsole
-  id: CMUBodyScannerConsole
-
-- type: entity
-  parent: MedicalTechFab
-  id: CMULimbPrinter
-  name: limb printer
-
-- type: entity
-  parent: CMWoundClamp
-  id: CMUOrganClampItem
-  name: organ vessel clamp
-
-- type: entity
-  parent: RMCShutterAlmayerOpen
-  id: CMUShutterLamentOpen
-
-- type: entity
-  parent: RMCAICore
-  id: AU14AICoreApolloGOVFOR
-  name: APOLLO Central A.I.
-
-# Shepherd beach overlays are mapped to the current equivalent water entities.
 - type: entity
   abstract: true
   id: AU14ContainerTartarusBase
