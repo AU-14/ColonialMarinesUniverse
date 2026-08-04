@@ -1227,6 +1227,15 @@ public abstract partial class SharedGunSystem : EntitySystem
         }
     }
 
+    public void SetFireRate(Entity<GunComponent> gun, float fireRate)
+    {
+        if (MathHelper.CloseTo(gun.Comp.FireRate, fireRate))
+            return;
+
+        gun.Comp.FireRate = fireRate;
+        Dirty(gun.Owner, gun.Comp);
+    }
+
     protected abstract void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? user = null, EntityUid? player = null, Vector2 offset = default, Vector2 originOffset = default);
 
     /// <summary>

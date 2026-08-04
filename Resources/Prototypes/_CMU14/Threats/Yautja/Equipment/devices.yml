@@ -16,6 +16,9 @@
     charge: 3000
     maxCharge: 3000
     regen: 60
+    stabilisingCrystalPrototype: CMUYautjaStabilisingCrystal
+    humanStabilisingCrystalPrototype: CMUYautjaHumanStabilisingCrystal
+    healingCapsulePrototype: CMUYautjaHealingCapsule
     stabilisingCrystalCost: 400
     humanStabilisingCrystalCost: 400
     healingCapsuleCost: 600
@@ -678,19 +681,113 @@
     - CMUYautjaAccessBadBlood
 
 - type: entity
-  parent: CMUYautjaAutoInjector
+  parent: BaseItem
   id: CMUYautjaStabilisingCrystal
+  name: yautja autoinjector
+  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail.
   suffix: Yautja, Bracer Fabricated
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
+    layers:
+    - state: autoinjector
+  - type: Hypospray
+    transferAmount: 45
+    injectOnly: true
+    onlyAffectsMobs: true
+    canContainerDraw: false
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 135
+        reagents:
+        - ReagentId: CMBicaridine
+          Quantity: 45
+        - ReagentId: CMKelotane
+          Quantity: 45
+        - ReagentId: CMTricordrazine
+          Quantity: 45
+  - type: CMRefillableSolution
+    solution: pen
+    reagents:
+      CMBicaridine: 45
+      CMKelotane: 45
+      CMTricordrazine: 45
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+    doAfter: 0
+  - type: YautjaMedicalItem
+  - type: UseDelay
+    delay: 0.2
+  - type: Tag
+    tags:
+    - CMAutoInjector
+    - CMUYautjaMedicompItem
 
 - type: entity
-  parent: CMUYautjaThrallAutoInjector
+  parent: BaseItem
   id: CMUYautjaHumanStabilisingCrystal
+  name: yautja autoinjector
+  description: An alien autoinjector loaded with a strong trauma and burn treatment cocktail adapted for Yautja thralls.
   suffix: Yautja, Thrall, Bracer Fabricated
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
+    layers:
+    - state: autoinjector
+  - type: Hypospray
+    transferAmount: 45
+    injectOnly: true
+    onlyAffectsMobs: true
+    canContainerDraw: false
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 135
+        reagents:
+        - ReagentId: CMBicaridine
+          Quantity: 45
+        - ReagentId: CMKelotane
+          Quantity: 45
+        - ReagentId: CMTricordrazine
+          Quantity: 45
+  - type: CMRefillableSolution
+    solution: pen
+    reagents:
+      CMBicaridine: 45
+      CMKelotane: 45
+      CMTricordrazine: 45
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+    doAfter: 0
+  - type: YautjaMedicalItem
+  - type: UseDelay
+    delay: 0.2
+  - type: Tag
+    tags:
+    - CMAutoInjector
+    - CMUYautjaMedicompItem
 
 - type: entity
   parent: CMUYautjaHealingGel
   id: CMUYautjaHealingCapsule
   suffix: Yautja, Bracer Fabricated
+  name: healing gel
+  description: A dense alien coagulant that knits together broad trauma.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Medical/medical.rsi
+    state: medicated-suture
+  - type: Item
+    size: Small
+    sprite: Objects/Specific/Medical/medical.rsi
+  - type: Stack
+    stackType: CMUYautjaHealingGel
+    count: 2
+  - type: Tag
+    tags:
+    - Brutepack
+    - CMUYautjaMedicompItem
 
 - type: entity
   parent: BaseItem
@@ -1551,6 +1648,13 @@
     - CMUYautjaMedicompItem
   - type: CMSurgeryTool
   - type: CMUYautjaMedicompStabilizerTool
+
+- type: stack
+  id: CMUYautjaHealingGel
+  name: healing gel
+  icon: { sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: medicated-suture }
+  spawn: CMUYautjaHealingCapsule
+  maxCount: 6
 
 - type: stack
   id: CMUYautjaStabilizerGel

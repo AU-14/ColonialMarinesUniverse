@@ -896,11 +896,13 @@ ent-CMUActionYautjaMarkForHunt = Mark for Hunt
 # User-facing Yautja text used by shared systems
 
 cmu-yautja-repair-damaged = It has been damaged by long use and poor maintenance.
+cmu-yautja-repair-worn = It has been worn from long use and poor maintenance.
+cmu-yautja-repair-damaged-they = They have been damaged by long use and poor maintenance.
 cmu-yautja-repair-reinforced = It has been reinforced to be more protective.
 cmu-yautja-hivebreaker-consent-title = Submit?
 cmu-yautja-hivebreaker-consent-message = Do you wish to be enthralled by the Bad Blood?
 cmu-yautja-chain-gauntlet-chain-message = GET OVER HERE!
-cmu-yautja-spike-launcher-nonyautja-examine = Looks like some kind of... mechanical donut.
+cmu-yautja-spike-launcher-nonyautja-examine = Looks like some kind of...mechanical donut.
 cmu-yautja-spike-launcher-examine-spikes = It currently has <bold>{$count}/{$capacity}</bold> spikes.
 cmu-yautja-power-examine-charge = They currently have <bold>{$charge}/{$max}</bold> charge.
 cmu-yautja-power-examine-left-attachment = The left bracer attachment is {$item}.
@@ -918,6 +920,8 @@ cmu-yautja-plasma-carbine-secondary-fire-mode = It is set to fire impact-explosi
 cmu-yautja-plasma-carbine-max-charge = The plasma carbine hums as it achieves maximum charge.
 cmu-yautja-defoliator-nonyautja-examine = Looks like some massively fucked up alien flamethrower.
 cmu-yautja-plasma-pistol-nonyautja-examine = This thing looks like an alien gun of some kind. Strange.
+cmu-yautja-plasma-pistol-primary-fire-mode = It is set to fire plasma bolts.
+cmu-yautja-plasma-pistol-secondary-fire-mode = It is set to fire incendiary plasma bolts.
 cmu-yautja-plasma-pistol-max-charge = The plasma pistol hums as it achieves maximum charge.
 cmu-yautja-chain-gauntlet-examine-combo = Stack up your combo meter by using [color=red]HARM[/color] intent, then use those combo stacks on different intents for different finishers.
 cmu-yautja-chain-gauntlet-examine-help = Finish your combo on [color=green]HELP[/color] intent to slam the target into the ground, incapacitating them for a few seconds. Humanoids also take extra damage.
@@ -1051,7 +1055,7 @@ cmu-yautja-arrow-name-activated-emp = activated EMP arrow
 cmu-yautja-arrow-name-snare = snare arrow
 cmu-yautja-arrow-name-inert = inert arrow
 cmu-yautja-arrow-warhead-emp = EMP
-cmu-yautja-arrow-warhead-explosive = explosive
+cmu-yautja-arrow-warhead-explosive = Explosive
 cmu-yautja-tracker-dead-signature = deceased Yautja bio signature
 cmu-yautja-hivebreaker-dishonored-reason = Enthralled to a Bad Blood!
 cmu-yautja-badblood-hive-name = Bad Blood hive

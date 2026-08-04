@@ -1,5 +1,7 @@
+using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared._CMU14.Yautja;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
@@ -47,6 +49,14 @@ public sealed partial class BlockingSystem
             if (args.Damage.GetTotal() <= 0)
                 return;
 
+            if (TryComp<YautjaSourceShieldBlockComponent>(component.BlockingItem, out var sourceBlock) &&
+                sourceBlock.ShieldType is YautjaSourceShieldType.Directional or YautjaSourceShieldType.DirectionalTwoHands &&
+                args.Origin is { } attacker &&
+                !IsShieldFacingAttacker(uid, attacker))
+            {
+                return;
+            }
+
             // A shield should only block damage it can itself absorb. To determine that we need the Damageable component on it.
             if (!TryComp<DamageableComponent>(component.BlockingItem, out var dmgComp))
                 return;
@@ -68,6 +78,16 @@ public sealed partial class BlockingSystem
                 _audio.PlayPvs(blocking.BlockSound, uid);
             }
         }
+    }
+
+    private bool IsShieldFacingAttacker(EntityUid user, EntityUid attacker)
+    {
+        var delta = _transformSystem.GetWorldPosition(attacker) - _transformSystem.GetWorldPosition(user);
+        if (delta.LengthSquared() <= 0.0001f)
+            return true;
+
+        var forward = _transformSystem.GetWorldRotation(user).ToWorldVec();
+        return Vector2.Dot(forward, delta) >= 0;
     }
 
     private void OnDamageModified(EntityUid uid, BlockingComponent component, DamageModifyEvent args)

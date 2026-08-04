@@ -45,6 +45,9 @@ namespace Content.Server.Damage.Systems
 
         private void OnDoHit(EntityUid uid, DamageOtherOnHitComponent component, ThrowDoHitEvent args)
         {
+            if (args.Handled)
+                return;
+
             if (TerminatingOrDeleted(args.Target))
                 return;
 

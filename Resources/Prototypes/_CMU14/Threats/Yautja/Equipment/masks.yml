@@ -19,7 +19,7 @@
   - type: ParasiteResistance
     maxCount: 30
   - type: YautjaScalableRepair
-    damagedText: cmu-yautja-repair-damaged
+    damagedText: cmu-yautja-repair-worn
 
 - type: entity
   parent: CMUYautjaMask

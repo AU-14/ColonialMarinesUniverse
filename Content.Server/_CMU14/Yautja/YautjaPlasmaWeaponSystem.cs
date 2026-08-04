@@ -32,7 +32,7 @@ public sealed partial class YautjaPlasmaWeaponSystem : EntitySystem
         if (!HasComp<YautjaComponent>(args.Examiner))
         {
             if (ent.Comp.NonYautjaExamineText.Length > 0)
-                args.PushText(Loc.GetString(ent.Comp.NonYautjaExamineText));
+                args.ReplaceDescription(ent.Comp.NonYautjaExamineText);
 
             return;
         }

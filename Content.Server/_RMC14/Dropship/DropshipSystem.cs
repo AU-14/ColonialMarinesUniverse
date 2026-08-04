@@ -516,15 +516,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
     public override bool FlyTo(Entity<DropshipNavigationComputerComponent> computer, EntityUid destination, EntityUid? user, bool hijack = false, float? startupTime = null, float? hyperspaceTime = null, bool offset = false)
     {
         if (TryComp(computer.Owner, out WhitelistedShuttleComponent? whitelistComp) &&
-            IsStrictThirdPartyFaction(whitelistComp.Faction) &&
             TryComp(destination, out DropshipDestinationComponent? destinationComp) &&
             !HasComp<EphemeralDropshipDestinationComponent>(destination) &&
-            !IsThirdPartyDestination(destinationComp))
+            !CanUseDestination(whitelistComp.Faction, destinationComp))
         {
             if (user != null)
-                _popup.PopupEntity("This shuttle can only land at third party dropship destinations.", computer.Owner, user.Value, PopupType.MediumCaution);
+                _popup.PopupEntity("This shuttle cannot land at that faction's dropship destination.", computer.Owner, user.Value, PopupType.MediumCaution);
 
-            Log.Warning($"{ToPrettyString(user)} tried to launch thirdparty whitelisted shuttle {ToPrettyString(computer.Owner)} to non-thirdparty destination {ToPrettyString(destination)}");
+            Log.Warning($"{ToPrettyString(user)} tried to launch whitelisted shuttle {ToPrettyString(computer.Owner)} to a faction-incompatible destination {ToPrettyString(destination)}");
             return false;
         }
 
@@ -939,6 +938,18 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
     private static bool IsThirdPartyDestination(DropshipDestinationComponent destination)
     {
         return string.Equals(destination.FactionController, "thirdparty", StringComparison.OrdinalIgnoreCase);
+    }
+
+    private static bool CanUseDestination(string? whitelistFaction, DropshipDestinationComponent destination)
+    {
+        if (IsStrictThirdPartyFaction(whitelistFaction))
+            return IsThirdPartyDestination(destination);
+
+        if (string.IsNullOrEmpty(destination.FactionController))
+            return true;
+
+        return !string.IsNullOrEmpty(whitelistFaction) &&
+               string.Equals(destination.FactionController, whitelistFaction, StringComparison.OrdinalIgnoreCase);
     }
 
     private void ArmThirdPartyAutoReturn(EntityUid dropship, EntityUid destination)

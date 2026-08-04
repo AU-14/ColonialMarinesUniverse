@@ -191,16 +191,66 @@
 # Compatibility aliases for the canonical Yautja wrapper names used by the
 # integration coverage and map-export tooling.
 - type: entity
-  parent: CMUHunterShipPlacedCMVendorDinnerwareLockedPoweredDinnerwareSouth
+  parent: [ CMUHunterShipPlacedCMVendorDinnerwareLockedPoweredDinnerwareSouth, CMUHunterShipYautjaVendorDinnerware ]
   id: CMUHunterShipPlacedCMUHunterShipYautjaVendorDinnerwareDinnerwareSouthVariant02
+  name: "Dinnerplate dispenser"
+  description: "A kitchen and restaurant equipment vendor."
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
+    drawdepth: SmallObjects
+    noRot: true
+    snapCardinals: false
+    enableOverrideDir: true
+    overrideDir: South
+    layers:
+    - state: "dinnerware"
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: "dinnerware-vend"
+      shader: unshaded
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
 
 - type: entity
-  parent: CMUHunterShipPlacedCMVendorNutriNutriSouthOffsetNeg3xNeg1
+  parent: [ CMUHunterShipPlacedCMVendorNutriNutriSouthOffsetNeg3xNeg1, CMUHunterShipYautjaVendorNutri ]
   id: CMUHunterShipPlacedCMUHunterShipYautjaVendorNutriNutriSouthOffsetNeg3xNeg1
+  name: "Nutrient Servitor"
+  description: "A plant nutrients vendor."
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
+    drawdepth: SmallObjects
+    noRot: true
+    snapCardinals: false
+    offset: -0.0938,-0.0313
+    enableOverrideDir: true
+    overrideDir: South
+    layers:
+    - state: "nutri"
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: "nutri"
+      shader: unshaded
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
 
 - type: entity
-  parent: CMUHunterShipPlacedCMVendorSeedsSeedsSouthOffset3xNeg1
+  parent: [ CMUHunterShipPlacedCMVendorSeedsSeedsSouthOffset3xNeg1, CMUHunterShipYautjaVendorSeeds ]
   id: CMUHunterShipPlacedCMUHunterShipYautjaVendorSeedsSeedsSouthOffset3xNeg1
+  name: "Seed Servitor"
+  description: "A plant seeds vendor."
+  components:
+  - type: Sprite
+    sprite: _CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi
+    drawdepth: SmallObjects
+    noRot: true
+    snapCardinals: false
+    offset: 0.0938,-0.0313
+    enableOverrideDir: true
+    overrideDir: South
+    layers:
+    - state: "seeds"
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: "seeds"
+      shader: unshaded
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
 
 
 - type: entity

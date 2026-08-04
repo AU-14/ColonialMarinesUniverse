@@ -828,7 +828,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: cmu-yautja-repair-damaged
+    damagedText: cmu-yautja-repair-worn
 
 - type: entity
   parent: CMUYautjaBodyMesh
@@ -975,7 +975,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: cmu-yautja-repair-damaged
+    damagedText: cmu-yautja-repair-damaged-they
 
 - type: entity
   parent: CMUYautjaClanGreaves
@@ -1241,7 +1241,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: cmu-yautja-repair-damaged
+    damagedText: cmu-yautja-repair-damaged-they
 
 - type: entity
   parent: CMUYautjaBadBloodGreavesPatchwork
@@ -1337,7 +1337,7 @@
     bio: 40
     explosionArmor: 45
   - type: YautjaScalableRepair
-    damagedText: cmu-yautja-repair-damaged
+    damagedText: cmu-yautja-repair-damaged-they
 
 - type: entity
   parent: CMUYautjaEmissaryGreavesClassic

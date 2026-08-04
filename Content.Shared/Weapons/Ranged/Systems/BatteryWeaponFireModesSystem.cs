@@ -163,6 +163,7 @@ public sealed partial class BatteryWeaponFireModesSystem : EntitySystem
 
         if (fireMode.FireRate > 0 && TryComp(uid, out GunComponent? gun))
         {
+            _gunSystem.SetFireRate((uid, gun), fireMode.FireRate);
             _gunSystem.RefreshModifiers((uid, gun));
         }
     }

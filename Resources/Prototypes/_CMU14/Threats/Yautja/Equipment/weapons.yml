@@ -915,7 +915,7 @@
   - type: YautjaTechItem
     shootDeniedPopup: cmu-yautja-spike-launcher-denied
   - type: YautjaPlasmaWeapon
-    nonYautjaExamineText: cmu-yautja-plasma-rifle-nonyautja-examine
+    nonYautjaExamineText: This thing looks like an alien rifle of some kind. Strange.
     minimumShootCharge: 7
     lowPowerWarning: cmu-yautja-plasma-rifle-low-power
     maxChargePopup: cmu-yautja-plasma-rifle-max-charge
@@ -989,7 +989,7 @@
     shootDeniedPopup: cmu-yautja-fancy-grip-safety-denied
   - type: YautjaPlasmaWeapon
     showFireMode: true
-    nonYautjaExamineText: cmu-yautja-plasma-carbine-nonyautja-examine
+    nonYautjaExamineText: This thing looks like a rifle, but there's no mag or proper barrel. What the hell is it?
     primaryFireModeText: cmu-yautja-plasma-carbine-primary-fire-mode
     secondaryFireModeText: cmu-yautja-plasma-carbine-secondary-fire-mode
     minimumAmmoCharge: 1
@@ -1080,7 +1080,7 @@
   - type: YautjaTechItem
     shootDeniedPopup: cmu-yautja-fancy-grip-safety-denied
   - type: YautjaPlasmaWeapon
-    nonYautjaExamineText: cmu-yautja-defoliator-nonyautja-examine
+    nonYautjaExamineText: Looks like some massively fucked up alien flamethrower.
   - type: Sprite
     sprite: _CMU14/Yautja/pred_guns.rsi
     layers:
@@ -1209,7 +1209,9 @@
     shootDeniedPopup: cmu-yautja-spike-launcher-denied
   - type: YautjaPlasmaWeapon
     showFireMode: true
-    nonYautjaExamineText: cmu-yautja-plasma-pistol-nonyautja-examine
+    nonYautjaExamineText: This thing looks like an alien gun of some kind. Strange.
+    primaryFireModeText: cmu-yautja-plasma-pistol-primary-fire-mode
+    secondaryFireModeText: cmu-yautja-plasma-pistol-secondary-fire-mode
     minimumAmmoCharge: 1
     maxChargePopup: cmu-yautja-plasma-pistol-max-charge
     refundUnfiredProjectiles: true

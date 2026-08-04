@@ -247,6 +247,9 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (mode == null)
             return;
 
+        if (mode.FireRate > 0 && TryComp(ent.Owner, out GunComponent? gun))
+            _gun.SetFireRate((ent.Owner, gun), mode.FireRate);
+
         _gun.RefreshModifiers(ent.Owner);
     }
 

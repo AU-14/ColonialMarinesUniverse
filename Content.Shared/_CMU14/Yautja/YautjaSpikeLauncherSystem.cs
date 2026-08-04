@@ -23,7 +23,7 @@ public sealed partial class YautjaSpikeLauncherSystem : EntitySystem
     {
         if (!HasComp<YautjaComponent>(args.Examiner))
         {
-            args.PushText(Loc.GetString(NonYautjaExamineText));
+            args.ReplaceDescription(Loc.GetString(NonYautjaExamineText));
             return;
         }
 

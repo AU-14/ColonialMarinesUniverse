@@ -234,6 +234,9 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private void OnThrowHit(Entity<YautjaSmartDiscComponent> ent, ref ThrowDoHitEvent args)
     {
+        if (args.Handled)
+            return;
+
         if (TryCatchDiscImpact(ent, args.Target, args.Component))
         {
             args.Handled = true;

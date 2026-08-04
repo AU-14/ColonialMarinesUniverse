@@ -238,6 +238,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         watching.Ladder = ladder;
         watching.PeekTarget = peekTarget;
         watching.PreviousTarget = eye.Target;
+        watching.Offset = offset;
         watching.LookOffset = offset;
 
         _eye.SetTarget(user, peekTarget, eye);
@@ -273,6 +274,7 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         watching.Ladder = null;
         watching.PeekTarget = null;
         watching.PreviousTarget = null;
+        watching.Offset = 0;
         watching.LookOffset = 0;
     }
 
