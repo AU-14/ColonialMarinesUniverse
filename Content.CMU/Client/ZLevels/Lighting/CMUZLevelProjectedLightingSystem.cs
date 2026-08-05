@@ -74,7 +74,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private readonly List<(Vector2 Center, float Distance)> _tempOpenings = new();
     private readonly List<Box2> _currentViewOpeningBounds = new();
     private readonly List<int> _checkedOpeningIndices = new(MaxOpeningLosChecks);
-    private readonly List<Entity<PointLightComponent, TransformComponent>> _lightTreeResults = new();
+    private readonly List<Entity<SharedPointLightComponent, TransformComponent>> _lightTreeResults = new();
     private readonly HashSet<EntityUid> _sourceLightSeen = new();
     private readonly List<Box2> _portalLightQueryBounds = new();
     private readonly List<Box2> _portalOpeningCandidateBounds = new();
@@ -827,7 +827,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     }
 
     private bool TryBuildSourceLight(
-        Entity<PointLightComponent, TransformComponent> lightEnt,
+        Entity<SharedPointLightComponent, TransformComponent> lightEnt,
         MapId mapId,
         float minEnergy,
         out SourceLight sourceLight)

@@ -1529,6 +1529,9 @@
 ## W ##
 
 - type: Tag
+  id: Wall # Used by wall entities and targeting or placement whitelists.
+
+- type: Tag
   id: WallmountGeneratorAPUElectronics # ConstructionGraph: WallmountGenerator
 
 - type: Tag

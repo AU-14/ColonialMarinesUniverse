@@ -13,6 +13,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Physics;
 using Robust.Client.Graphics;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.GameObjects;
 
 namespace Content.Client._RMC14.Sprite;

@@ -17,6 +17,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
     [Dependency] private ILocalizationManager _loc = default!;
     [UISystemDependency] private CharacterInfoSystem _characterInfo = default!;
 
+    private string _chatSpeechDoubleQuoteBegin = default!;
+
     private static readonly Regex StartDoubleQuote = new("\"$");
     private static readonly Regex EndDoubleQuote = new("^\"|(?<=^@)\"");
     private static readonly Regex StartAtSign = new("^@");
@@ -61,6 +63,8 @@ public sealed partial class ChatUIController : IOnSystemChanged<CharacterInfoSys
         {
             UpdateHighlights(highlights, true);
         }
+
+        _chatSpeechDoubleQuoteBegin = _loc.GetString("chat-manager-speech-double-quote-begin");
     }
 
     public void OnSystemLoaded(CharacterInfoSystem system)

@@ -50,7 +50,9 @@ public static class CrtThemePalette
             CCVars.CrtUiColorRed => Color.FromHex("#FF4E5E"),
             CCVars.CrtUiColorPurple => Color.FromHex("#C45BFF"),
             CCVars.CrtUiColorGreen => Color.FromHex("#46FF8E"),
-            _ => Color.TryFromHex(color) ?? Color.FromHex(CCVars.CrtUiColorDefault),
+            _ => Color.TryFromHex(color, out var customColor)
+                ? customColor
+                : Color.FromHex(CCVars.CrtUiColorDefault),
         };
 
         if (!enabled)

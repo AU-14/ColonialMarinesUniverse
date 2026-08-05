@@ -214,9 +214,8 @@ public sealed partial class CmuTab : Control
 
         private static Color ResolveCrtColor(string value)
         {
-            var color = Color.TryFromHex(value);
-            if (color != null)
-                return color.Value;
+            if (Color.TryFromHex(value, out var color))
+                return color;
 
             return value switch
             {

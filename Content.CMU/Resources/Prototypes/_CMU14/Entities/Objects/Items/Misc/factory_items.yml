@@ -27,6 +27,6 @@
   components:
   - type: Sprite
     sprite: Objects/Misc/coins.rsi
-    state: coin_gold
+    state: coinGold_1
   - type: Item
     size: Tiny

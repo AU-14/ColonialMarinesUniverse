@@ -275,29 +275,28 @@ public sealed class CrtStyleBox : StyleBox
         int xDirection,
         int yDirection)
     {
-        var horizontal = new UIBox2(
-            xDirection > 0 ? x : x - length,
-            y,
-            xDirection > 0 ? x + length : x,
-            y + line * yDirection);
-
-        var vertical = new UIBox2(
+        var horizontal = CreateNormalizedBox(
             x,
-            yDirection > 0 ? y : y - length,
+            y,
+            x + length * xDirection,
+            y + line * yDirection);
+        var vertical = CreateNormalizedBox(
+            x,
+            y,
             x + line * xDirection,
-            yDirection > 0 ? y + length : y);
+            y + length * yDirection);
 
-        handle.DrawRect(Normalize(horizontal), CornerColor);
-        handle.DrawRect(Normalize(vertical), CornerColor);
+        handle.DrawRect(horizontal, CornerColor);
+        handle.DrawRect(vertical, CornerColor);
     }
 
-    private static UIBox2 Normalize(UIBox2 box)
+    private static UIBox2 CreateNormalizedBox(float left, float top, float right, float bottom)
     {
         return new UIBox2(
-            MathF.Min(box.Left, box.Right),
-            MathF.Min(box.Top, box.Bottom),
-            MathF.Max(box.Left, box.Right),
-            MathF.Max(box.Top, box.Bottom));
+            MathF.Min(left, right),
+            MathF.Min(top, bottom),
+            MathF.Max(left, right),
+            MathF.Max(top, bottom));
     }
 
     private static uint Hash(int column, int row, int seed)

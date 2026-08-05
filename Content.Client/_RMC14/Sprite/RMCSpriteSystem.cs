@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Xenonids.Hide;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.ParaDrop;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;

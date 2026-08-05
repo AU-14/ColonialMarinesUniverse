@@ -1,8 +1,8 @@
 #nullable enable
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Server.Construction.Components;
+using Content.Server.Temperature.Systems;
 using Content.Shared.Construction;
-using Content.Shared.Temperature;
 using Content.Shared.Temperature.Components;
 
 namespace Content.IntegrationTests.Tests.Construction.Interaction;
@@ -77,10 +77,9 @@ public sealed class ConstructionEventValidation : InteractionTest
 
         await Server.WaitPost(() =>
         {
-            temperature.CurrentTemperature = 400f;
-            SEntMan.EventBus.RaiseLocalEvent(
-                target,
-                new OnTemperatureChangeEvent(400f, 293.15f, 106.85f));
+            var temperatureSystem = SEntMan.System<TemperatureSystem>();
+            var heat = (400f - temperature.Temperature) * temperature.HeatCapacity;
+            temperatureSystem.ChangeHeat((target, temperature), heat);
 
             Assert.That(construction.Node, Is.EqualTo("Start"));
         });

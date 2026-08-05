@@ -60,7 +60,7 @@ public sealed class RMCVocalEmoteTest : GameTest
             foreach (var emoteId in new[] { "Scream", "Laugh", "Cough" })
             {
                 var emote = SProtoMan.Index<EmotePrototype>(emoteId);
-                var ev = new EmoteEvent(emote);
+                var ev = new EmoteEvent(SEntMan.GetNetEntity(human), emote);
                 SEntMan.EventBus.RaiseLocalEvent(human, ref ev);
                 Assert.That(ev.Handled, Is.True, $"{emoteId} did not resolve or play a vocal sound.");
             }

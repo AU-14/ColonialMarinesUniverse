@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface;
@@ -383,7 +384,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 {
     value = value.Trim('"', '\'');
 
-    if (Color.TryFromHex(value) is { } hexColor)
+    if (Color.TryFromHex(value, out var hexColor))
     {
         color = hexColor;
         return true;

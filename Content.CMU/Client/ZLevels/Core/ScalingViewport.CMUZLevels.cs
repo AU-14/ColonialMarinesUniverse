@@ -29,9 +29,7 @@ public sealed partial class ScalingViewport
     private static readonly HashSet<long> ActiveZLevelViewportIds = new();
 
     [Dependency] private ITileDefinitionManager _tile = default!;
-    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private Robust.Shared.Timing.IGameTiming _timing = default!;
 
     private static readonly ProtoId<ShaderPrototype> StencilClearShader = "StencilClear";
@@ -179,8 +177,8 @@ public sealed partial class ScalingViewport
         LastZRenderDebugStats.Reset();
         var totalStart = Stopwatch.GetTimestamp();
 
-        var zLevelsEnabled = _config.GetCVar(CMUZLevelsCVars.Enabled);
-        var renderEnabled = _config.GetCVar(CMUZLevelsCVars.RenderEnabled);
+        var zLevelsEnabled = _cfg.GetCVar(CMUZLevelsCVars.Enabled);
+        var renderEnabled = _cfg.GetCVar(CMUZLevelsCVars.RenderEnabled);
 
         if (_eye is null ||
             !ShouldUseZLevelRenderPasses(
@@ -234,10 +232,10 @@ public sealed partial class ScalingViewport
 
         var lookUp = zLevelViewer.LookUp || zLevelViewer.StairPreviewUp ? 1 : 0;
         var maxDepth = Math.Clamp(
-            _config.GetCVar(CMUZLevelsCVars.MaxRenderDepth),
+            _cfg.GetCVar(CMUZLevelsCVars.MaxRenderDepth),
             0,
             CMUSharedZLevelsSystem.MaxZLevelTraversalDepth);
-        var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
+        var maxOpeningRects = Math.Max(0, _cfg.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
         var lowestDepth = 0;
         var weatherSourceMapId = GetWeatherSourceMapId(viewXform.MapUid.Value, viewXform.MapID);
         if (!TryGetViewportWorldAabb(viewport, out var viewportWorldAabb))
@@ -440,7 +438,7 @@ public sealed partial class ScalingViewport
                     _zEye.VisualZOffset = offset;
                     _zEye.BlurCurrentLevel = false;
                     _zEye.ConfigureVisibleEntityIndicators(
-                        _config.GetCVar(CMUZLevelsCVars.VisibleEntityIndicators) && depth == 1 && !separateStairPreview,
+                        _cfg.GetCVar(CMUZLevelsCVars.VisibleEntityIndicators) && depth == 1 && !separateStairPreview,
                         _zOpeningBounds);
 
                     if (separateStairPreview)
@@ -566,7 +564,7 @@ public sealed partial class ScalingViewport
         bool hasLowerMap,
         ref int lowestDepth)
     {
-        var graceSeconds = Math.Max(0f, _config.GetCVar(CMUZLevelsCVars.LowerRenderVisibilityGrace));
+        var graceSeconds = Math.Max(0f, _cfg.GetCVar(CMUZLevelsCVars.LowerRenderVisibilityGrace));
         LastZRenderDebugStats.LowerRenderGraceSeconds = graceSeconds;
         var discoveredLowestDepth = lowestDepth;
         lowestDepth = _zLowerRenderGrace.Resolve(
@@ -1288,7 +1286,7 @@ public sealed partial class ScalingViewport
         int lowestDepth,
         MapId weatherSourceMapId)
     {
-        if (!_config.GetCVar(CMUZLevelsCVars.FaintUpperEnabled))
+        if (!_cfg.GetCVar(CMUZLevelsCVars.FaintUpperEnabled))
             return;
 
         if (_zLevels is null || _transform is null || _mapSystem is null || viewXform.MapUid is not { } mapUid)
@@ -1333,7 +1331,7 @@ public sealed partial class ScalingViewport
         _stairPreviewViewport.ClearColor = Color.Transparent;
         _stairPreviewViewport.Render();
 
-        _faintUpperAlpha = Math.Clamp(_config.GetCVar(CMUZLevelsCVars.FaintUpperAlpha), 0.05f, 0.80f);
+        _faintUpperAlpha = Math.Clamp(_cfg.GetCVar(CMUZLevelsCVars.FaintUpperAlpha), 0.05f, 0.80f);
         _drawFaintUpperComposite = true;
     }
 
@@ -1363,17 +1361,17 @@ public sealed partial class ScalingViewport
 
     private ShaderInstance GetStencilClearShader()
     {
-        return _stencilClearShaderInstance ??= _proto.Index(StencilClearShader).Instance();
+        return _stencilClearShaderInstance ??= _prototypeManager.Index(StencilClearShader).Instance();
     }
 
     private ShaderInstance GetStencilMaskShader()
     {
-        return _stencilMaskShaderInstance ??= _proto.Index(StencilMaskShader).Instance();
+        return _stencilMaskShaderInstance ??= _prototypeManager.Index(StencilMaskShader).Instance();
     }
 
     private ShaderInstance GetStencilEqualDrawShader()
     {
-        return _stencilEqualDrawShaderInstance ??= _proto.Index(StencilEqualDrawShader).Instance();
+        return _stencilEqualDrawShaderInstance ??= _prototypeManager.Index(StencilEqualDrawShader).Instance();
     }
 
     private void DrawStairPreviewFovMask(DrawingHandleScreen screen, UIBox2 drawBox)

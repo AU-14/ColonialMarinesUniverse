@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Pointing;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mobs.Components;
 using Robust.Client.GameObjects;
 using Robust.Client.Player;
