@@ -36,6 +36,9 @@ public sealed partial class XenoChargeComponent : Component
     [DataField, AutoNetworkedField]
     public TimeSpan ChargeDelay = TimeSpan.FromSeconds(1.2);
 
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? ChargeWindupSound;
+
     // TODO RMC14 extra sound on impact
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_claw_block.ogg");

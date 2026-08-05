@@ -13,7 +13,7 @@
   description: A small red alien that looks like it could run fairly quickly...
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Runner/runner.rsi
+    sprite: _CMU14/Mobs/Xenos/Runner/runner.rsi # AU14-Edit
   - type: Eye
     pvsScale: 1.5
   - type: MobState
@@ -174,7 +174,7 @@
   suffix: Acider
   components:
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/Runner/acider_runner.rsi
+    sprite: _CMU14/Mobs/Xenos/Runner/acider_runner.rsi # AU14-Edit
     layers:
     - map: [ "enum.XenoVisualLayers.Base", "enum.ForTheHiveVisualLayers.Base" ]
       state: alive
@@ -236,8 +236,8 @@
           Heat: 1
       duration: 20
   - type: ForTheHive
-    baseSprite: _RMC14/Mobs/Xenonids/Runner/acider_runner.rsi
-    activeSprite: _RMC14/Mobs/Xenonids/Runner/acider_runner_primed.rsi
+    baseSprite: _CMU14/Mobs/Xenos/Runner/acider_runner.rsi # AU14-Edit
+    activeSprite: _CMU14/Mobs/Xenos/Runner/acider_runner_primed.rsi # AU14-Edit
     baseDamage:
       types:
         Heat: 1

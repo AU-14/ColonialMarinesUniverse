@@ -125,6 +125,12 @@ public sealed class RMCGrenadeVisualsTest : GameTest
     }
 
     [Test, NonParallelizable]
+    public async Task HedpShockWaveBecomesVisible()
+    {
+        await AssertPrimedUntilEffectAppears("CMGrenadeHighExplosive", "RMCExplosionEffectGrenadeShockWave");
+    }
+
+    [Test, NonParallelizable]
     public async Task HefaRemainsPrimedUntilExplosionAppears()
     {
         await AssertPrimedUntilEffectAppears("CMGrenadeFrag", "CMExplosionEffectGrenade");

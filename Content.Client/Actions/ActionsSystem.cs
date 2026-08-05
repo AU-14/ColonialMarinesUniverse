@@ -157,8 +157,13 @@ namespace Content.Client.Actions
         /// </summary>
         public bool HasToggleIcon(EntityUid? actionId)
         {
-            return TryComp<SpriteComponent>(actionId, out var sprite)
-                && _sprite.LayerExists((actionId.Value, sprite), ActionVisuals.IconToggled);
+            if (TryComp<SpriteComponent>(actionId, out var sprite)
+                && _sprite.LayerExists((actionId.Value, sprite), ActionVisuals.IconToggled))
+            {
+                return true;
+            }
+
+            return TryComp<ActionComponent>(actionId, out var action) && action.IconOn != null;
         }
 
         public IEnumerable<Entity<ActionComponent>> GetClientActions()

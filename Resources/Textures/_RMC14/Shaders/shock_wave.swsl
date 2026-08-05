@@ -5,6 +5,7 @@ uniform highp vec2[10] position;
 uniform highp float[10] sharpness;
 uniform highp float[10] width;
 uniform highp float[10] falloffPower;
+uniform highp float[10] elapsedTime;
 
 void fragment() {
     highp vec2 coord = FRAGCOORD.xy * SCREEN_PIXEL_SIZE.xy;
@@ -21,8 +22,7 @@ void fragment() {
         // removes the first few frames of the "animation"
         Dist = max(Dist, 0.13);
         
-        highp float offset = (TIME - floor(TIME)) / TIME;
-        highp float CurrentTime = TIME * offset;
+        highp float CurrentTime = elapsedTime[i];
 
         if (Dist <= (CurrentTime + 0.1) && Dist >= (CurrentTime - 0.1)) {
             highp float Diff = Dist - CurrentTime;

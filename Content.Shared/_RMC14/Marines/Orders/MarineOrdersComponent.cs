@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Marines.Skills;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
@@ -63,4 +64,22 @@ public sealed partial class MarineOrdersComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool Intrinsic = true;
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? MoveOrderSoundMale = new SoundCollectionSpecifier("AU14MaleMoveOrder");
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? MoveOrderSoundFemale = new SoundCollectionSpecifier("AU14FemaleMoveOrder");
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? FocusOrderSoundMale = new SoundCollectionSpecifier("AU14MaleFocusOrder");
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? FocusOrderSoundFemale = new SoundCollectionSpecifier("AU14FemaleFocusOrder");
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? HoldOrderSoundMale = new SoundCollectionSpecifier("AU14MaleHoldOrder");
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? HoldOrderSoundFemale = new SoundCollectionSpecifier("AU14FemaleHoldOrder");
 }

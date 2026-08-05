@@ -374,6 +374,7 @@ public sealed partial class XenoLeapSystem : EntitySystem
             return;
 
         ent.Comp.StunDuration = ent.Comp.InherentStunDuration.Value;
+        ent.Comp.BlockSound = ent.Comp.InherentBlockSound;
     }
 
     /// <summary>

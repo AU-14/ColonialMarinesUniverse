@@ -109,6 +109,7 @@ public sealed partial class XenoChargeSystem : EntitySystem
             TimeSpan.FromSeconds(1.75f),
             0f,
             0f);
+        _audio.PlayPredicted(xeno.Comp.ChargeWindupSound, xeno, xeno);
         _doAfter.TryStartDoAfter(doAfter);
     }
 

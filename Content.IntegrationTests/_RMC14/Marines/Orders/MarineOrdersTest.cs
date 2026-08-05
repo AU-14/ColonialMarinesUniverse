@@ -15,6 +15,7 @@ using Content.Shared.Inventory;
 using Content.Shared.Movement.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.Player;
+using Robust.Shared.Audio.Components;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -157,6 +158,10 @@ public sealed class MarineOrdersTest
                 Assert.That(
                     sEntMan.GetComponent<MovementSpeedModifierComponent>(sReceiver).SprintSpeedModifier,
                     Is.EqualTo(speedBeforeOrder * 1.1f).Within(0.001f));
+                Assert.That(
+                    HasAudioFile(sEntMan, "/Audio/_CMU14/Voice/UpdatedVoice/"),
+                    Is.True,
+                    "Issuing a marine order should play one of CMU's configured order voice lines.");
             }),
             client.WaitAssertion(() =>
             {
@@ -164,5 +169,18 @@ public sealed class MarineOrdersTest
             }));
 
         await pair.CleanReturnAsync();
+    }
+
+    private static bool HasAudioFile(IEntityManager entMan, string prefix)
+    {
+        var query = entMan.EntityQueryEnumerator<AudioComponent>();
+        while (query.MoveNext(out _, out var audio))
+        {
+            var fileName = audio.FileName;
+            if (fileName.StartsWith(prefix, StringComparison.Ordinal))
+                return true;
+        }
+
+        return false;
     }
 }

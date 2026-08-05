@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Explosion.Components;
 using Robust.Client.Graphics;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 
 namespace Content.Client._RMC14.Explosion;
 
@@ -12,6 +13,7 @@ public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEvent
 
     [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private SharedTransformSystem? _xformSystem;
 
@@ -35,6 +37,10 @@ public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEvent
     private readonly float[] _falloffPower = new float[MaxCount];
     private readonly float[] _sharpness = new float[MaxCount];
     private readonly float[] _width = new float[MaxCount];
+    private readonly float[] _elapsedTimes = new float[MaxCount];
+    private readonly Dictionary<EntityUid, TimeSpan> _startTimes = new();
+    private readonly HashSet<EntityUid> _active = new();
+    private readonly List<EntityUid> _stale = new();
     private int _count;
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -45,10 +51,22 @@ public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEvent
         var query = _entMan.EntityQueryEnumerator<RMCExplosionShockWaveComponent, TransformComponent>();
 
         _count = 0;
+        _active.Clear();
+        var now = _timing.CurTime;
 
         while (query.MoveNext(out var uid, out var distortion, out var xform))
         {
+            _active.Add(uid);
+            if (!_startTimes.TryGetValue(uid, out var startTime))
+            {
+                startTime = now;
+                _startTimes.Add(uid, startTime);
+            }
+
             if (xform.MapID != args.MapId)
+                continue;
+
+            if (_count == MaxCount)
                 continue;
 
             var mapPos = _xformSystem.GetWorldPosition(uid);
@@ -63,10 +81,20 @@ public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEvent
             _falloffPower[_count] = distortion.FalloffPower;
             _sharpness[_count] = distortion.Sharpness;
             _width[_count] = distortion.Width;
+            _elapsedTimes[_count] = (float) (now - startTime).TotalSeconds;
             _count++;
+        }
 
-            if (_count == MaxCount)
-                break;
+        _stale.Clear();
+        foreach (var uid in _startTimes.Keys)
+        {
+            if (!_active.Contains(uid))
+                _stale.Add(uid);
+        }
+
+        foreach (var uid in _stale)
+        {
+            _startTimes.Remove(uid);
         }
 
         return _count > 0;
@@ -83,6 +111,7 @@ public sealed partial class RMCExplosionShockWaveOverlay : Overlay, IEntityEvent
         _shader?.SetParameter("falloffPower", _falloffPower);
         _shader?.SetParameter("sharpness", _sharpness);
         _shader?.SetParameter("width", _width);
+        _shader?.SetParameter("elapsedTime", _elapsedTimes);
         _shader?.SetParameter("SCREEN_TEXTURE", ScreenTexture);
 
         var worldHandle = args.WorldHandle;

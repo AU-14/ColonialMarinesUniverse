@@ -56,6 +56,9 @@ CMJobXenoWarrior = Warrior
 rmc-job-name-xeno-king = King
 RMCJobXenoKing = King
 
+rmc-job-name-xeno-despoiler = Despoiler
+RMCJobXenoDespoiler = Despoiler
+
 # TODO RMC14
 department-CMXeno = Xenonid
 cm-department-Xeno-description = ""

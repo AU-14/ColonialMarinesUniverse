@@ -980,6 +980,12 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (!_actionQuery.Resolve(ent, ref ent.Comp))
             return;
 
+        if (!Equals(ent.Comp.Icon, icon))
+        {
+            ent.Comp.Icon = icon;
+            DirtyField(ent, ent.Comp, nameof(ActionComponent.Icon));
+        }
+
         if (icon == null)
             _appearance.RemoveData(ent.Owner, ActionState.DynamicIcon);
         else
@@ -991,6 +997,12 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (!_actionQuery.Resolve(ent, ref ent.Comp))
             return;
 
+        if (!Equals(ent.Comp.IconOn, icon))
+        {
+            ent.Comp.IconOn = icon;
+            DirtyField(ent, ent.Comp, nameof(ActionComponent.IconOn));
+        }
+
         if (icon == null)
             _appearance.RemoveData(ent.Owner, ActionState.DynamicIconToggled);
         else
@@ -1001,6 +1013,12 @@ public abstract partial class SharedActionsSystem : EntitySystem
     {
         if (!_actionQuery.Resolve(ent, ref ent.Comp))
             return;
+
+        if (ent.Comp.IconColor != color)
+        {
+            ent.Comp.IconColor = color;
+            DirtyField(ent, ent.Comp, nameof(ActionComponent.IconColor));
+        }
 
         _appearance.SetData(ent.Owner, ActionState.Color, color);
     }

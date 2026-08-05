@@ -2,10 +2,14 @@ using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
+using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Systems;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._RMC14.Marines.Orders;
@@ -13,11 +17,13 @@ namespace Content.Shared._RMC14.Marines.Orders;
 public abstract partial class SharedMarineOrdersSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private EvasionSystem _evasionSystem = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private INetManager _net = default!;
     [Dependency] private SkillsSystem _skills = default!;
     [Dependency] private IGameTiming _timing = default!;
 
@@ -178,7 +184,27 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
             AddOrder<T>(receiver, level, duration);
         }
 
+        if (_net.IsServer && GetOrderSound<T>(orders) is { } sound)
+            _audio.PlayPvs(sound, orders.Owner);
+
         return true;
+    }
+
+    private SoundSpecifier? GetOrderSound<T>(Entity<MarineOrdersComponent> orders) where T : IOrderComponent
+    {
+        var female = TryComp<HumanoidAppearanceComponent>(orders.Owner, out var appearance) &&
+            appearance.Sex == Sex.Female;
+
+        if (typeof(T) == typeof(MoveOrderComponent))
+            return female ? orders.Comp.MoveOrderSoundFemale : orders.Comp.MoveOrderSoundMale;
+
+        if (typeof(T) == typeof(FocusOrderComponent))
+            return female ? orders.Comp.FocusOrderSoundFemale : orders.Comp.FocusOrderSoundMale;
+
+        if (typeof(T) == typeof(HoldOrderComponent))
+            return female ? orders.Comp.HoldOrderSoundFemale : orders.Comp.HoldOrderSoundMale;
+
+        return null;
     }
 
     /// <summary>

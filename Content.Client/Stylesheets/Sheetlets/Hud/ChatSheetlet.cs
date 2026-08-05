@@ -1,10 +1,12 @@
 ﻿using Content.Client.Stylesheets.SheetletConfigs;
 using Content.Client.Stylesheets.Stylesheets;
+using Content.Client.Resources;
 using Content.Client.UserInterface.Systems.Chat.Controls;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
 using static Content.Client.Stylesheets.StylesheetHelpers;
+using static Robust.Client.UserInterface.StylesheetHelpers;
 
 namespace Content.Client.Stylesheets.Sheetlets.Hud;
 
@@ -51,6 +53,28 @@ public sealed class ChatSheetlet<T> : Sheetlet<T> where T: PalettedStylesheet, I
         chatFilterButton.SetPatchMargin(StyleBox.Margin.All, 5);
         chatFilterButton.SetPadding(StyleBox.Margin.All, 2);
 
+        var chatGhostFollowButton = new StyleBoxFlat
+        {
+            BackgroundColor = Color.FromHex("#11151c"),
+            BorderColor = Color.FromHex("#3a4354"),
+            BorderThickness = new Thickness(1),
+            ContentMarginLeftOverride = 1,
+            ContentMarginRightOverride = 1,
+            ContentMarginTopOverride = 0,
+            ContentMarginBottomOverride = 0,
+        };
+        var chatGhostFollowButtonHover = new StyleBoxFlat(chatGhostFollowButton)
+        {
+            BackgroundColor = Color.FromHex("#182130"),
+            BorderColor = Color.FromHex("#65758c"),
+        };
+        var chatGhostFollowButtonPressed = new StyleBoxFlat(chatGhostFollowButton)
+        {
+            BackgroundColor = Color.FromHex("#0b111a"),
+            BorderColor = Color.FromHex("#8aa1bf"),
+        };
+        var followButtonFont = ResCache.GetFont("/Fonts/NotoSans/NotoSans-Regular.ttf", 8);
+
         return
         [
             E<PanelContainer>()
@@ -65,6 +89,14 @@ public sealed class ChatSheetlet<T> : Sheetlet<T> where T: PalettedStylesheet, I
                 .Prop("font-color", Color.FromHex("#D6DCE0")),
             E<Button>().Class(ChatInputBox.StyleClassChatFilterOptionButton).Box(chatChannelButton),
             E<ContainerButton>().Class(ChatInputBox.StyleClassChatFilterOptionButton).Box(chatFilterButton),
+            E<Button>().Class(StyleNano.StyleClassChatGhostFollowButton).Box(chatGhostFollowButton),
+            E<Button>().Class(StyleNano.StyleClassChatGhostFollowButton).Pseudo(ContainerButton.StylePseudoClassHover).Box(chatGhostFollowButtonHover),
+            E<Button>().Class(StyleNano.StyleClassChatGhostFollowButton).Pseudo(ContainerButton.StylePseudoClassPressed).Box(chatGhostFollowButtonPressed),
+            Child().Parent(Element<Button>().Class(StyleNano.StyleClassChatGhostFollowButton))
+                .Child(Element<Label>())
+                .Prop(Label.StylePropertyFont, followButtonFont)
+                .Prop(Label.StylePropertyFontColor, Color.FromHex("#D6DCE0"))
+                .Prop(Label.StylePropertyAlignMode, Label.AlignMode.Center),
         ];
     }
 }

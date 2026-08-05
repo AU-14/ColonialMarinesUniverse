@@ -20,7 +20,7 @@
       components:
       - Synth
   - type: Sprite
-    sprite: _RMC14/Mobs/Xenonids/LesserDrone/lesser_drone.rsi
+    sprite: _CMU14/Mobs/Xenos/LesserDrone/lesser_drone.rsi # AU14-Edit
   - type: MobState
     allowedStates:
     - Alive

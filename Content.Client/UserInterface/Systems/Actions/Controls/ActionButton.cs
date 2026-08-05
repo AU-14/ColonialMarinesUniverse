@@ -28,6 +28,7 @@ public sealed class ActionButton : Control, IEntityControl
     private IPlayerManager _player;
     private ActionsSystem? _actionsSys;
     private ActionUIController? _controller;
+    private SpriteSystem? _spriteSys;
     private bool _beingHovered;
     private bool _depressed;
     private bool _toggled;
@@ -51,6 +52,8 @@ public sealed class ActionButton : Control, IEntityControl
     public readonly PanelContainer HighlightRect;
     private readonly SpriteView _bigActionIcon;
     private readonly SpriteView _smallActionIcon;
+    private readonly TextureRect _bigLegacyActionIcon;
+    private readonly TextureRect _smallLegacyActionIcon;
     public readonly Label Label;
     public readonly CooldownGraphic Cooldown;
     private readonly SpriteView _smallItemSpriteView;
@@ -101,6 +104,22 @@ public sealed class ActionButton : Control, IEntityControl
             Visible = false,
             OverrideDirection = Direction.South,
         };
+        _bigLegacyActionIcon = new TextureRect
+        {
+            Name = "Big Legacy Action Icon",
+            HorizontalExpand = true,
+            VerticalExpand = true,
+            Stretch = TextureRect.StretchMode.Scale,
+            Visible = false,
+        };
+        _smallLegacyActionIcon = new TextureRect
+        {
+            Name = "Small Legacy Action Icon",
+            HorizontalAlignment = HAlignment.Right,
+            VerticalAlignment = VAlignment.Bottom,
+            Stretch = TextureRect.StretchMode.Scale,
+            Visible = false,
+        };
         Label = new Label
         {
             Name = "Label",
@@ -143,6 +162,7 @@ public sealed class ActionButton : Control, IEntityControl
             Children =
             {
                 _smallActionIcon,
+                _smallLegacyActionIcon,
                 _smallItemSpriteView
             }
         });
@@ -150,6 +170,7 @@ public sealed class ActionButton : Control, IEntityControl
 
         AddChild(Button);
         AddChild(_bigActionIcon);
+        AddChild(_bigLegacyActionIcon);
         AddChild(_bigItemSpriteView);
         AddChild(HighlightRect);
         AddChild(Label);
@@ -258,27 +279,77 @@ public sealed class ActionButton : Control, IEntityControl
 
     private void UpdateActionIcon()
     {
-        if (Action?.Comp is not {} action || !_entities.HasComponent<SpriteComponent>(Action.Value.Owner))
+        if (Action?.Comp is not {} action)
         {
-            _bigActionIcon.Visible = false;
-            _bigActionIcon.SetEntity(null);
-            _smallActionIcon.Visible = false;
-            _smallActionIcon.SetEntity(null);
+            HideActionIcons();
+            return;
         }
-        else if (action.EntityIcon != null && action.ItemIconStyle == ItemActionIconStyle.BigItem)
+
+        if (_entities.HasComponent<SpriteComponent>(Action.Value.Owner))
         {
-            _smallActionIcon.Visible = true;
-            _smallActionIcon.SetEntity(Action.Value.Owner);
-            _bigActionIcon.Visible = false;
-            _bigActionIcon.SetEntity(null);
+            _bigLegacyActionIcon.Visible = false;
+            _bigLegacyActionIcon.Texture = null;
+            _smallLegacyActionIcon.Visible = false;
+            _smallLegacyActionIcon.Texture = null;
+
+            if (action.EntityIcon != null && action.ItemIconStyle == ItemActionIconStyle.BigItem)
+            {
+                _smallActionIcon.Visible = true;
+                _smallActionIcon.SetEntity(Action.Value.Owner);
+                _bigActionIcon.Visible = false;
+                _bigActionIcon.SetEntity(null);
+            }
+            else
+            {
+                _bigActionIcon.Visible = true;
+                _bigActionIcon.SetEntity(Action.Value.Owner);
+                _smallActionIcon.Visible = false;
+                _smallActionIcon.SetEntity(null);
+            }
+
+            return;
         }
-        else
+
+        _bigActionIcon.Visible = false;
+        _bigActionIcon.SetEntity(null);
+        _smallActionIcon.Visible = false;
+        _smallActionIcon.SetEntity(null);
+
+        _controller ??= UserInterfaceManager.GetUIController<ActionUIController>();
+        var toggled = action.Toggled || _controller.SelectingTargetFor == Action.Value.Owner;
+        var icon = toggled && action.IconOn != null ? action.IconOn : action.Icon;
+        if (icon == null)
         {
-            _bigActionIcon.Visible = true;
-            _bigActionIcon.SetEntity(Action.Value.Owner);
-            _smallActionIcon.Visible = false;
-            _smallActionIcon.SetEntity(null);
+            _bigLegacyActionIcon.Visible = false;
+            _bigLegacyActionIcon.Texture = null;
+            _smallLegacyActionIcon.Visible = false;
+            _smallLegacyActionIcon.Texture = null;
+            return;
         }
+
+        _spriteSys ??= _entities.System<SpriteSystem>();
+        var texture = _spriteSys.Frame0(icon);
+        var color = action.Enabled ? action.IconColor : action.DisabledIconColor;
+        var useSmallIcon = action.EntityIcon != null && action.ItemIconStyle == ItemActionIconStyle.BigItem;
+
+        _smallLegacyActionIcon.Visible = useSmallIcon;
+        _smallLegacyActionIcon.Texture = useSmallIcon ? texture : null;
+        _smallLegacyActionIcon.Modulate = color;
+        _bigLegacyActionIcon.Visible = !useSmallIcon;
+        _bigLegacyActionIcon.Texture = useSmallIcon ? null : texture;
+        _bigLegacyActionIcon.Modulate = color;
+    }
+
+    private void HideActionIcons()
+    {
+        _bigActionIcon.Visible = false;
+        _bigActionIcon.SetEntity(null);
+        _smallActionIcon.Visible = false;
+        _smallActionIcon.SetEntity(null);
+        _bigLegacyActionIcon.Visible = false;
+        _bigLegacyActionIcon.Texture = null;
+        _smallLegacyActionIcon.Visible = false;
+        _smallLegacyActionIcon.Texture = null;
     }
 
     public void UpdateIcons()
@@ -294,7 +365,15 @@ public sealed class ActionButton : Control, IEntityControl
         if (Action != null ||
             _controller.IsDragging && GetPositionInParent() == Parent?.ChildCount - 1)
         {
-            Button.Texture = _slotBackground;
+            var background = _slotBackground;
+            if (Action?.Comp is { BackgroundOn: {} backgroundOn } action
+                && (action.Toggled || _controller.SelectingTargetFor == Action.Value.Owner))
+            {
+                _spriteSys ??= _entities.System<SpriteSystem>();
+                background = _spriteSys.Frame0(backgroundOn);
+            }
+
+            Button.Texture = background;
         }
         else
         {
@@ -340,7 +419,11 @@ public sealed class ActionButton : Control, IEntityControl
             Cooldown.FromTime(cooldown.Start, cooldown.End);
 
         if (_toggled != action.Toggled)
+        {
             _toggled = action.Toggled;
+            UpdateIcons();
+            DrawModeChanged();
+        }
     }
 
     protected override void MouseEntered()
