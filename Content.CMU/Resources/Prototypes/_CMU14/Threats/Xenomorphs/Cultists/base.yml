@@ -158,6 +158,7 @@
       tags:
       - CMAccessXeno
   - type: Sprite
+    sprite: _RMC14/Objects/Devices/synth_reset_key.rsi
     layers:
     - state: makeshift_key
     - state: makeshift_key_on
@@ -177,7 +178,7 @@
     sections:
     - name: Weapons & Ammo
       entries:
-      - id: RMCWeaponShotgunHG3712
+      - id: RMCWeaponShotgunM12
         points: 40
       - id: CMShellShotgunBuckshot
         points: 5

@@ -187,16 +187,16 @@
   suffix: CLF, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
-    startingAccessories: 
+    startingAccessories:
     - RMCCLFArmband
-  
+
 - type: entity
   parent: CMJumpsuitTShirtWhite
   id: CMJumpsuitTShirtWhiteCLFArmband
   suffix: CLF, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
-    startingAccessories: 
+    startingAccessories:
     - RMCCLFArmband
 
 - type: entity
@@ -205,7 +205,7 @@
   suffix: CLF, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
-    startingAccessories: 
+    startingAccessories:
     - RMCCLFArmband
 
 - type: entity
@@ -214,5 +214,5 @@
   suffix: CLF, Survivor, Armband
   components:
   - type: UniformAccessoryHolder
-    startingAccessories: 
+    startingAccessories:
     - RMCCLFArmband

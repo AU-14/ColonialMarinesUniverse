@@ -5,10 +5,10 @@
   description: A black cap with the patch of the USS Artemis.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ussartemiscap.rsi
+    sprite: _CMU14/Clothing/ussartemiscap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/ussartemiscap.rsi
-    
+    sprite: _CMU14/Clothing/ussartemiscap.rsi
+
 - type: entity
   parent: ClothingHeadBase
   id: AU14DesertPatrolCap
@@ -16,10 +16,10 @@
   description: A simple patrol cap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/DesertHats/cap.rsi
+    sprite: _CMU14/Clothing/DesertHats/cap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/DesertHats/cap.rsi
-    
+    sprite: _CMU14/Clothing/DesertHats/cap.rsi
+
 - type: entity
   parent: ClothingHeadBase
   id: AU14DesertFlapCap
@@ -27,10 +27,10 @@
   description: A simple patrol cap with a sun flap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/DesertHats/flapcap.rsi
+    sprite: _CMU14/Clothing/DesertHats/flapcap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/DesertHats/flapcap.rsi
-  
+    sprite: _CMU14/Clothing/DesertHats/flapcap.rsi
+
 - type: entity
   parent: ClothingHeadBase
   id: AU14DesertBoonieHat
@@ -38,10 +38,10 @@
   description: A brimmed hat to protect your face from the sun.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/DesertHats/booniehat.rsi
+    sprite: _CMU14/Clothing/DesertHats/booniehat.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/DesertHats/booniehat.rsi
-  
+    sprite: _CMU14/Clothing/DesertHats/booniehat.rsi
+
 - type: entity
   parent: ClothingHeadBase
   id: AU14JunglePatrolCap
@@ -49,10 +49,10 @@
   description: A simple patrol cap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/JungleHats/cap.rsi
+    sprite: _CMU14/Clothing/JungleHats/cap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/JungleHats/cap.rsi
-    
+    sprite: _CMU14/Clothing/JungleHats/cap.rsi
+
 - type: entity
   parent: ClothingHeadBase
   id: AU14JungleFlapCap
@@ -60,10 +60,10 @@
   description: A simple patrol cap with a sun flap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+    sprite: _CMU14/Clothing/JungleHats/flapcap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
-    
+    sprite: _CMU14/Clothing/JungleHats/flapcap.rsi
+
 - type: entity
   parent: ClothingHeadBase
   id: AU14JungleBoonieHat
@@ -71,9 +71,9 @@
   description: A brimmed hat to protect your face from the sun.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+    sprite: _CMU14/Clothing/JungleHats/booniehat.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+    sprite: _CMU14/Clothing/JungleHats/booniehat.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -82,9 +82,9 @@
   description: A simple patrol cap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/DesertHats/cap.rsi
+    sprite: _CMU14/Clothing/DesertHats/cap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/DesertHats/cap.rsi
+    sprite: _CMU14/Clothing/DesertHats/cap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -93,9 +93,9 @@
   description: A simple USASF cap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/JungleHats/cap.rsi
+    sprite: _CMU14/Clothing/JungleHats/cap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/JungleHats/cap.rsi
+    sprite: _CMU14/Clothing/JungleHats/cap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -120,9 +120,9 @@
   description: Also known as Cavalry Stetson, this hat is a symbol of tradition and remembrence of heroism that is ongoing from as far as 19th century. Even though cavalry divison had cashed in its horses for choppers, choppers for dropships, and gone tear-assing around space, looking for the shit.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/US_Army/Hats/cavalry.rsi
+    sprite: _CMU14/Clothing/US_Army/Hats/cavalry.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/US_Army/Hats/cavalry.rsi
+    sprite: _CMU14/Clothing/US_Army/Hats/cavalry.rsi
 
 # Camo system (ItemCamouflage) conforming variants
 # No Snow/Classic/Urban sprites exist yet - all fall back to the Jungle sprite until dedicated art is made.
@@ -133,16 +133,16 @@
   description: A simple patrol cap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/JungleHats/cap.rsi
+    sprite: _CMU14/Clothing/JungleHats/cap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/JungleHats/cap.rsi
+    sprite: _CMU14/Clothing/JungleHats/cap.rsi
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/JungleHats/cap.rsi
-      Desert: _AU14/Clothing/DesertHats/cap.rsi
-      Snow: _AU14/Clothing/JungleHats/cap.rsi
-      Classic: _AU14/Clothing/JungleHats/cap.rsi
-      Urban: _AU14/Clothing/JungleHats/cap.rsi
+      Jungle: _CMU14/Clothing/JungleHats/cap.rsi
+      Desert: _CMU14/Clothing/DesertHats/cap.rsi
+      Snow: _CMU14/Clothing/JungleHats/cap.rsi
+      Classic: _CMU14/Clothing/JungleHats/cap.rsi
+      Urban: _CMU14/Clothing/JungleHats/cap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -151,16 +151,16 @@
   description: A simple patrol cap with a sun flap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+    sprite: _CMU14/Clothing/JungleHats/flapcap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/JungleHats/flapcap.rsi
+    sprite: _CMU14/Clothing/JungleHats/flapcap.rsi
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/JungleHats/flapcap.rsi
-      Desert: _AU14/Clothing/DesertHats/flapcap.rsi
-      Snow: _AU14/Clothing/JungleHats/flapcap.rsi
-      Classic: _AU14/Clothing/JungleHats/flapcap.rsi
-      Urban: _AU14/Clothing/JungleHats/flapcap.rsi
+      Jungle: _CMU14/Clothing/JungleHats/flapcap.rsi
+      Desert: _CMU14/Clothing/DesertHats/flapcap.rsi
+      Snow: _CMU14/Clothing/JungleHats/flapcap.rsi
+      Classic: _CMU14/Clothing/JungleHats/flapcap.rsi
+      Urban: _CMU14/Clothing/JungleHats/flapcap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -169,13 +169,13 @@
   description: A brimmed hat to protect your face from the sun.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+    sprite: _CMU14/Clothing/JungleHats/booniehat.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/JungleHats/booniehat.rsi
+    sprite: _CMU14/Clothing/JungleHats/booniehat.rsi
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/JungleHats/booniehat.rsi
-      Desert: _AU14/Clothing/DesertHats/booniehat.rsi
-      Snow: _AU14/Clothing/JungleHats/booniehat.rsi
-      Classic: _AU14/Clothing/JungleHats/booniehat.rsi
-      Urban: _AU14/Clothing/JungleHats/booniehat.rsi
+      Jungle: _CMU14/Clothing/JungleHats/booniehat.rsi
+      Desert: _CMU14/Clothing/DesertHats/booniehat.rsi
+      Snow: _CMU14/Clothing/JungleHats/booniehat.rsi
+      Classic: _CMU14/Clothing/JungleHats/booniehat.rsi
+      Urban: _CMU14/Clothing/JungleHats/booniehat.rsi

@@ -110,7 +110,7 @@
   parent: CMJobIconBase
   id: AU14JobIconUSArmyMarksman
   icon:
-    sprite: _AU14/Interface/job_icons.rsi
+    sprite: _CMU14/Interface/job_icons.rsi
     state: hudsquad_snpr
 
 - type: playTimeTracker

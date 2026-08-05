@@ -26,15 +26,6 @@
   cost: -1
   components: []
 
-- type: trait
-  id: SignLanguage
-  name: au14-trait-sign-name
-  description: au14-trait-sign-desc
-  category: LanguageTraits
-  cost: 1
-  components: []
-  language: SignLanguage
-
 # - type: trait
 #   id: LatinLanguage
 #   name: au14-trait-latin-language-name
@@ -54,15 +45,6 @@
   language: Portuguese
 
 - type: trait
-  id: SpanishLanguage
-  name: au14-trait-spanish-language-name
-  description: au14-trait-spanish-language-desc
-  category: LanguageTraits
-  cost: 1
-  components: []
-  language: Spanish
-
-- type: trait
   id: ArabicLanguage
   name: au14-trait-arabic-language-name
   description: au14-trait-arabic-language-desc
@@ -70,42 +52,6 @@
   cost: 1
   components: []
   language: Arabic
-
-- type: trait
-  id: FrenchLanguage
-  name: au14-trait-french-language-name
-  description: au14-trait-french-language-desc
-  category: LanguageTraits
-  cost: 1
-  components: []
-  language: French
-
-- type: trait
-  id: GermanLanguage
-  name: au14-trait-german-language-name
-  description: au14-trait-german-language-desc
-  category: LanguageTraits
-  cost: 1
-  components: []
-  language: German
-
-- type: trait
-  id: RussianLanguage
-  name: au14-trait-russian-language-name
-  description: au14-trait-russian-language-desc
-  category: LanguageTraits
-  cost: 1
-  components: []
-  language: Russian
-
-- type: trait
-  id: JapaneseLanguage
-  name: au14-trait-japanese-language-name
-  description: au14-trait-japanese-language-desc
-  category: LanguageTraits
-  cost: 1
-  components: []
-  language: Japanese
 
 - type: trait
   id: MandarinLanguage

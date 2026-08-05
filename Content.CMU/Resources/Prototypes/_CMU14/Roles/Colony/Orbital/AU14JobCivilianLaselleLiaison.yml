@@ -20,7 +20,7 @@
     prefix: au14-job-prefix-laselleliaison
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: laselle_liaison
 #    - type: AssignSquad
 #      whitelist:

@@ -75,7 +75,20 @@
   parent: RMCBeltSmartGunOperatorPistol
   id: AU14BeltSmartGunOperatorPistolForeconFilled
   suffix: Full, AU14, FORECON
-  components: 
+  components:
+  - type: LimitedStorage
+    limits:
+    - popup: rmc-storage-limit-one-gun
+      whitelist:
+        tags:
+        - Sidearm
+    - popup: rmc-storage-limit-max-ammo
+      count: 5
+      whitelist:
+        tags:
+        - CMMagazinePistol
+        - RMCMagazineRevolver
+        - RMCMagazineSmartGun
   - type: StorageFill
     contents:
     - id: AU14WeaponPistolM48A4
@@ -88,7 +101,7 @@
   parent: AU14ArmorSmartGunJungleCombatHarness
   id: AU14ArmorSmartGunJungleCombatHarnessForeconFilled
   suffix: Full, AU14, FORECON
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCPowerCellSmartgun

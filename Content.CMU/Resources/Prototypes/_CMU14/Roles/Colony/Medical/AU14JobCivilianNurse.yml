@@ -17,7 +17,7 @@
     prefix: au14-job-prefix-nurse
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: nurse
 
   name: au14-job-name-civiliannurse

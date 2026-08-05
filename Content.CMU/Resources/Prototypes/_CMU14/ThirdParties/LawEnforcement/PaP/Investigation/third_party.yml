@@ -24,7 +24,7 @@
   announceAsSurvivors: true
   partyspawn: PAPInvestigationPartySpawnAlt
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
   weight: 10
   minplayers: 0
   maxplayers: 400
@@ -36,7 +36,7 @@
   announceAsSurvivors: true
   partyspawn: PAPInvestigationPartySpawn
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
   weight: 20
   minplayers: 0
   maxplayers: 400

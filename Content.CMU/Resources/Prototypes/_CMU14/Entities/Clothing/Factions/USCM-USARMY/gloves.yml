@@ -21,9 +21,9 @@
   description: "Standard issue tactical gloves with the fingers cut off, no longer providing protection against electrical shocks."
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Hands/black-fingerless.rsi
+    sprite: _CMU14/Clothing/Hands/black-fingerless.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/Hands/black-fingerless.rsi
+    sprite: _CMU14/Clothing/Hands/black-fingerless.rsi
 
 - type: entity
   parent: AU14GlovesBase
@@ -32,6 +32,6 @@
   description: "Standard issue tactical gloves with the fingers cut off, no longer providing protection against electrical shocks."
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Hands/brown-fingerless.rsi
+    sprite: _CMU14/Clothing/Hands/brown-fingerless.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/Hands/brown-fingerless.rsi
+    sprite: _CMU14/Clothing/Hands/brown-fingerless.rsi

@@ -6,7 +6,7 @@
   RMCFollowSkinColor: false
   speciesRestriction: [Human, Dwarf, Felinid, Arachnid, Reptilian, Diona, Moth, SlimePerson, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
   sprites:
-  - sprite: _AU14/Mobs/Human_Customization/undershirts.rsi
+  - sprite: _CMU14/Mobs/Human_Customization/undershirts.rsi
     state: wy_shirt
 
 - type: marking
@@ -17,5 +17,5 @@
   RMCFollowSkinColor: false
   speciesRestriction: [Human, Dwarf, Felinid, Arachnid, Reptilian, Diona, Moth, SlimePerson, Avali, Vulpkanin, Rodentia, Feroxi, Skrell]
   sprites:
-  - sprite: _AU14/Mobs/Human_Customization/undershirts.rsi
+  - sprite: _CMU14/Mobs/Human_Customization/undershirts.rsi
     state: uscm_shirt

@@ -1,7 +1,7 @@
 - type: gameMap
   id: hybrisametro
   mapName: LV-759 Hybrisa Metropolitan
-  mapPath: /Maps/_AU14/hybrisametro.yml
+  mapPath: /Maps/_CMU14/hybrisametro.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

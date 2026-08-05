@@ -6,7 +6,7 @@
   suffix: Filled
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/UACG/m20a38x32.rsi
+    sprite: _CMU14/Weapons/Guns/UACG/m20a38x32.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -14,10 +14,10 @@
       map: ["enum.GunVisualLayers.Mag"]
       shader: unshaded
   - type: Item
-    sprite: _AU14/Weapons/Guns/UACG/m20a.rsi
+    sprite: _CMU14/Weapons/Guns/UACG/m20a.rsi
     size: Large
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/UACG/m20a.rsi
+    sprite: _CMU14/Weapons/Guns/UACG/m20a.rsi
   - type: Gun
     shotsPerBurst: 3
     selectedMode: SemiAuto
@@ -99,7 +99,7 @@
     proto: AU14CartridgeRifleM20A
     capacity: 40
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/m20amag.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/m20amag.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -108,7 +108,7 @@
   - type: Appearance
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifle
-    
+
 - type: entity
   parent: CMBaseCartridgeRifle
   id: AU14CartridgeRifleM20A
@@ -212,10 +212,10 @@
     actionName: Switch to the U7 underbarrel shotgun
     actionDesc: Switch to using the underbarrel shotgun.
     icon:
-      sprite: _AU14/Weapons/Guns/Attachments/under.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/under.rsi
       state: masterkeyicon
     iconActive:
-      sprite: _AU14/Weapons/Guns/Attachments/under.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/under.rsi
       state: masterkey-on
   - type: AttachableVisuals
   - type: WieldedCrosshair

@@ -58,7 +58,7 @@
     Narcotic:
       metabolismRate: 0.1
       effects:
-      - !type:MovespeedModifier
+      - !type:MovementSpeedModifier
         walkSpeedModifier: 1.4
         sprintSpeedModifier: 1.4
       - !type:Jitter
@@ -73,7 +73,7 @@
         time: 6
         type: Add
         refresh: true
-      - !type:ChemVomit
+      - !type:Vomit
         conditions:
         - !type:ReagentThreshold
           min: 40

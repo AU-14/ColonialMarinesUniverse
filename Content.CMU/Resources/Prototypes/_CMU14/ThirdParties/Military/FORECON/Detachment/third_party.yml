@@ -12,7 +12,7 @@
   announceAsSurvivors: true
   partyspawn: AU14IntelThirdPartyMarksmanFORECONGOVFORSpawner
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600
@@ -33,7 +33,7 @@
   announceAsSurvivors: true
   partyspawn: AU14IntelThirdPartySniperFORECONGOVFORSpawner
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600

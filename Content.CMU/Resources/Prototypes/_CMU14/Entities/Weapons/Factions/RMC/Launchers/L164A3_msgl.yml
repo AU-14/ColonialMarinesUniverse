@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   name: L164A3 multi-shot grenade launcher
   parent: [ RMCBaseWeaponGrenadeLauncher ]
   id: AU14WeaponLauncherL164A3
@@ -7,14 +7,14 @@
   - type: Item
     size: Huge
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/RMC/L164A3.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L164A3.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/RMC/L164A3.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L164A3.rsi
     slots:
     - Back
     - suitStorage

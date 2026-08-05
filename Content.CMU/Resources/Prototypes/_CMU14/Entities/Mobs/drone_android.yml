@@ -56,7 +56,7 @@
     enabled: false
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14govforjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14govforjobicons.rsi
       state: rifleman
   - type: UserIFF
     factions:

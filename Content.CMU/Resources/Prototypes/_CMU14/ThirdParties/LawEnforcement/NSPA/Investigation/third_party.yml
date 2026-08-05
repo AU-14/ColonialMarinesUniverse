@@ -14,7 +14,7 @@
   announceAsSurvivors: true
   partyspawn: NSPAInvestigationPartySpawn
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
   weight: 15
   minplayers: 0
   maxplayers: 400
@@ -35,7 +35,7 @@
   announceAsSurvivors: true
   partyspawn: NSPAInvestigationPartySpawnArmored
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
   weight: 5
   minplayers: 0
   maxplayers: 400
@@ -58,7 +58,7 @@
   announceAsSurvivors: true
   partyspawn: NSPAInvestigationPartySpawnAlt
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_tsepa_shuttle.yml
   weight: 5
   minplayers: 0
   maxplayers: 400

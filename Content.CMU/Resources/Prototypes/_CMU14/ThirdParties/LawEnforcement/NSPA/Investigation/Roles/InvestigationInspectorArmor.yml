@@ -69,7 +69,7 @@
     pocket2: AU14PouchIFAKFill
     back: AU14SatchelCMBShotgun
     ears: AU14CMBHeadsetOnlyCMB
-    suitstorage: RMCWeaponShotgunHG3712
+    suitstorage: RMCWeaponShotgunM12
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicNSPA

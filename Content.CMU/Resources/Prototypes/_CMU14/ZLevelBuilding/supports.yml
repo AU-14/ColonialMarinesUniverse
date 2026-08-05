@@ -25,7 +25,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_blue
     scale: 0.5, 0.5
   - type: Fixtures
@@ -75,7 +75,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_brown
     scale: 0.5, 0.5
   - type: Fixtures
@@ -126,7 +126,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_green
     scale: 0.5, 0.5
   - type: Fixtures
@@ -177,7 +177,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_aqua
     scale: 0.5, 0.5
   - type: Fixtures

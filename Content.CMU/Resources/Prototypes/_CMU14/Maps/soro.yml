@@ -2,12 +2,12 @@
   id: au14sorokyne
   mapName: LV-976 Sorokyne Strata
   allegiance: UPP
-  mapPath: /Maps/_AU14/SorokyneMultiZ/sorokyne0.yml
+  mapPath: /Maps/_CMU14/SorokyneMultiZ/sorokyne0.yml
   mapsBelow:
-  - /Maps/_AU14/SorokyneMultiZ/sorokyne-1.yml
+  - /Maps/_CMU14/SorokyneMultiZ/sorokyne-1.yml
   mapsAbove:
-  - /Maps/_AU14/SorokyneMultiZ/sorokyne1.yml
-  - /Maps/_AU14/SorokyneMultiZ/sorokyne2.yml
+  - /Maps/_CMU14/SorokyneMultiZ/sorokyne1.yml
+  - /Maps/_CMU14/SorokyneMultiZ/sorokyne2.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

@@ -111,7 +111,7 @@
   parent: CMJobIconBase
   id: AU14JobIconUSArmyTrooper
   icon:
-    sprite: _AU14/Interface/job_icons.rsi
+    sprite: _CMU14/Interface/job_icons.rsi
     state: hudsquad_trpr
 
 - type: playTimeTracker

@@ -833,3 +833,83 @@
     state: colony_int
   - type: Area
     minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonCMBPrecinct3
+  name: Albacetrie - CMB Precinct Roof
+  components:
+  - type: Sprite
+    state: construction
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonGreenhouse
+  name: Albacetrie - Newport Greenhouses
+  components:
+  - type: Sprite
+    state: botany0
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonFullProtection
+  id: AU14AreaStableGarrisonJBSMaints
+  name: Joint Base Schaefer - Maintenance Tunnels
+  components:
+  - type: Sprite
+    state: construction_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonIndoors
+  id: AU14AreaStableGarrisonLewistonApartments2ndFloor
+  name: Albacetrie - Lewiston Apartments 2nd Floor
+  components:
+  - type: Sprite
+    state: colony_int
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonMedialCenterRoof
+  name: Albacetrie - UoA Medical Center Roof
+  components:
+  - type: Sprite
+    state: med_ext
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonMedicalCenter2ndFloor
+  name: Albacetrie - UoA Medical Center 2nd Floor
+  components:
+  - type: Sprite
+    state: med4
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonSpacesportRoof
+  name: Albacetrie - Regional Spaceport Roof
+  components:
+  - type: Sprite
+    state: shuttle2
+  - type: Area
+    minimapColor: '#016f6f'
+
+- type: entity
+  parent: AU14AreaGarrisonOutdoors
+  id: AU14AreaStableGarrisonUniversityRoof
+  name: Albacetrie - University Roof
+  components:
+  - type: Sprite
+    state: construction
+  - type: Area
+    minimapColor: '#016f6f'

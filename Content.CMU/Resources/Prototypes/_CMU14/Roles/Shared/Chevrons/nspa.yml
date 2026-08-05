@@ -11,11 +11,11 @@
   name: constable chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_enlisted
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
     rank: AU14RankNSPAConstable
@@ -27,11 +27,11 @@
   name: senior constable chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_nco
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
     rank: AU14RankNSPASeniorConstable
@@ -43,11 +43,11 @@
   name: inspector chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
     state: ranks_officer
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      sprite: _CMU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
     rank: AU14RankNSPAInspector

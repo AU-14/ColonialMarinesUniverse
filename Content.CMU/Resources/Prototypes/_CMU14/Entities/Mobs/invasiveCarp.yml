@@ -41,7 +41,7 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive
-      sprite: _AU14/Mobs/Animals/sharkminnow.rsi
+      sprite: _CMU14/Mobs/Animals/sharkminnow.rsi
   - type: MobThresholds
     thresholds:
       0: Alive

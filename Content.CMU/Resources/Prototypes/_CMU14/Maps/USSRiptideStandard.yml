@@ -2,7 +2,7 @@
   id: Riptide
   mapName: USS Riptide (USCM)
   allegiance: Neutral
-  mapPath: /Maps/_AU14/USSRiptide.yml
+  mapPath: /Maps/_CMU14/USSRiptide.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

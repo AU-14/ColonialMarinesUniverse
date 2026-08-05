@@ -53,7 +53,7 @@
   id: AU14HeadBeanieclava
   components:
   - type: Clothing
-    sprite: _AU14/Clothing/Civilian/Hats/beanieclava.rsi
+    sprite: _CMU14/Clothing/Civilian/Hats/beanieclava.rsi
   - type: Appearance
   - type: Foldable
     foldVerbText: cmu-beanieclava-fold
@@ -70,7 +70,7 @@
     - HeadSide
     - Hair
   - type: Sprite
-    sprite: _AU14/Clothing/Civilian/Hats/beanieclava.rsi
+    sprite: _CMU14/Clothing/Civilian/Hats/beanieclava.rsi
     layers:
     - state: icon
       map: ["unfoldedLayer"]

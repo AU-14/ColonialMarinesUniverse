@@ -60,7 +60,7 @@
   - type: Sprite
     drawdepth: WallMountedItems
     noRot: true
-    sprite: _CMU14/Structures/stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
 
@@ -71,7 +71,7 @@
   - type: Sprite
     drawdepth: WallMountedItems
     noRot: true
-    sprite: _CMU14/Structures/stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: p_stair_kutjevo_solo_cap
     offset: 0,0.5
 
@@ -82,7 +82,7 @@
   - type: Sprite
     drawdepth: WallMountedItems
     noRot: true
-    sprite: _CMU14/Structures/stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: p_stair_strata_solo_cap
     offset: 0,0.5
 
@@ -94,7 +94,7 @@
   - type: Sprite
     drawdepth: WallMountedItems
     noRot: true
-    sprite: _CMU14/Structures/stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: ramptop
     offset: 0,0.5
   - type: Fixtures
@@ -128,7 +128,7 @@
   - type: Sprite
     drawdepth: WallMountedItems
     noRot: true
-    sprite: _CMU14/Structures/stairs.rsi
+    sprite: _CMU14/Structures/cmu_stairs.rsi
     state: ramplower
     offset: 0,0.5
   - type: Fixtures
@@ -161,10 +161,10 @@
   description: A portable ladder that can be deployed against objects to traverse z-levels.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: _CMU14/Structures/deployableladder.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: _CMU14/Structures/deployableladder.rsi
     size: Large
   - type: CMUDeployableZLevelLadder
     upLadderPrototype: CMUDeployableZLevelLadderThroughUp
@@ -176,7 +176,7 @@
   suffix: Deployable, Up
   components:
   - type: Sprite
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: _CMU14/Structures/deployableladder.rsi
     drawdepth: WallTops
     state: deployed
 
@@ -186,6 +186,6 @@
   suffix: Deployable, Down
   components:
   - type: Sprite
-    sprite: _AU14/Structures/deployableladder.rsi
+    sprite: _CMU14/Structures/deployableladder.rsi
     drawdepth: WallTops
     state: deployed

@@ -4,7 +4,7 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/hardpoints/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/hardpoints/blackfoot.rsi
   - type: Item
     size: Large
 

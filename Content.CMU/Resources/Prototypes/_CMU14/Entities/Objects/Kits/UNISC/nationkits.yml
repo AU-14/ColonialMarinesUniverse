@@ -102,7 +102,7 @@
     - id: AU14ArmyJumpsuitCavalry
     - id: AU14BootsUSArmy
     - id: RMCWeaponRifleM54C
-    - id: AU14VP78Empty
+    - id: RMCMK80
     - id: AU14MolleSatchel
     - id: AU14PatchUSArmy
     - id: AU14Patch1stCav
@@ -302,7 +302,7 @@
     - id: AU14ArmyJumpsuitCavalry
     - id: AU14BootsUSArmy
     - id: RMCWeaponRifleM54C
-    - id: AU14VP78Empty
+    - id: RMCMK80
     - id: AU14PatchUSArmy
     - id: AU14Patch1stCav
     - id: AU14PatchUAFlag

@@ -32,9 +32,9 @@
         unwieldedScatterMultiplier: 2
         shotsToMaxScatter: 6
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/USCM/m48a4.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/m48a4.rsi
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/USCM/m48a4.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/m48a4.rsi
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.2
   - type: ItemSlots

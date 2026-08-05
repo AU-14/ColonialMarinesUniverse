@@ -5,6 +5,6 @@
   description: A blue beret with the logo of the United Nations Interstellar Settlement Corps.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/beret.rsi
+    sprite: _CMU14/Clothing/UNISC/beret.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UNISC/beret.rsi
+    sprite: _CMU14/Clothing/UNISC/beret.rsi

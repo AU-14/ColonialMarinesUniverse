@@ -41,7 +41,7 @@
     bodyType: Static
     canCollide: false
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_structures.rsi
     state: fuel-pump
   - type: Clickable
   - type: InteractionOutline
@@ -59,7 +59,7 @@
   description: A folded landing pad ready for Blackfoot support operations.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_structures.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_structures.rsi
     state: landing-pad-folded
   - type: Clickable
   - type: InteractionOutline
@@ -86,7 +86,7 @@
     anchored: true
   - type: Sprite
     drawdepth: SmallObjects
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_peripherals.rsi
     state: landing-pad-light
   - type: Clickable
   - type: InteractionOutline
@@ -116,7 +116,7 @@
   description: A packed Blackfoot fuel pump assembly.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_peripherals.rsi
     state: fuelpump-crate
   - type: Clickable
   - type: InteractionOutline
@@ -139,7 +139,7 @@
   description: A packed Blackfoot flight computer assembly.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_peripherals.rsi
     state: flightcpu-crate
   - type: Clickable
   - type: InteractionOutline
@@ -162,7 +162,7 @@
   description: Ammunition for Blackfoot flare launcher pods.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_peripherals.rsi
     layers:
     - state: blackfoot-ammo
       map: [ "enum.BulletBoxLayers.Fill" ]
@@ -188,7 +188,7 @@
   description: Ammunition for Blackfoot M866 automatic grenade launchers.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_peripherals.rsi
     layers:
     - state: doorgun-ammo
       map: [ "enum.BulletBoxLayers.Fill" ]
@@ -215,7 +215,7 @@
   components:
   - type: Sprite
     drawdepth: BelowMobs
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_tug.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_tug.rsi
     state: aerospace-tug
   - type: InteractionOutline
   - type: Fixtures

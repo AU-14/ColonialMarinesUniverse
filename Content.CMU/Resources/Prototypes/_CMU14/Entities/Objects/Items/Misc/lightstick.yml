@@ -4,7 +4,7 @@
   name: lightstick
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Misc/Lights/lightstick.rsi
+    sprite: _CMU14/Objects/Misc/Lights/lightstick.rsi
     state: lightstick_spoke1
   - type: PointLight
     color: "#FFEFD2"

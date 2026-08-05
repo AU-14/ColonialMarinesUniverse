@@ -58,7 +58,7 @@
     back: AU14SatchelCMBShotgun
     ears: AU14CMBHeadsetOnlyCMB
   inhand:
-  - RMCWeaponShotgunHG3712
+    - RMCWeaponShotgunM12
 
 - type: entity
   parent: AU14BaseMobSpeciesOrganicCMB

@@ -5,10 +5,10 @@
   description: A tinted glass window with an impact resistant coating. It looks rather strong. Might take a few good hits to shatter it.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Windows/white_tinted_window.rsi
+    sprite: _CMU14/Structures/Windows/white_tinted_window.rsi
     state: white_tinted_window0
   - type: Icon
-    sprite: _AU14/Structures/Windows/white_tinted_window.rsi
+    sprite: _CMU14/Structures/Windows/white_tinted_window.rsi
     state: white_tinted_window0
   - type: IconSmooth
     key: walls
@@ -57,10 +57,10 @@
   id: AU14WindowFrameWhiteTextured
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Windows/Frames/white_textured_frame.rsi
+    sprite: _CMU14/Structures/Windows/Frames/white_textured_frame.rsi
     state: white_textured_frame0
   - type: Icon
-    sprite: _AU14/Structures/Windows/Frames/white_textured_frame.rsi
+    sprite: _CMU14/Structures/Windows/Frames/white_textured_frame.rsi
     state: white_textured_frame0
   - type: IconSmooth
     key: walls
@@ -166,7 +166,7 @@
           !type:PhysShapeAabb
           bounds: "-0.49,-0.49,0.49,0.49"
         density: 1000
-        hard: False
+        hard: false
 
 - type: entity
   parent: MarkerBase
@@ -351,47 +351,11 @@
         Blunt: 220
 
 - type: entity
-  parent:  MarkerBase
+  parent: DisposalPipe
   id: CMUFlightDisposalPipe
   suffix: Flight
-  components:
-  - type: Sprite
-    sprite: Structures/Piping/disposal.rsi
-    layers:
-    - map: [ "pipe" ]
-      state: conpipe-s
-  - type: DisposalTube
-    containerId: DisposalTransit
-  - type: DisposalTransit
-  - type: ContainerContainer
-    containers:
-      DisposalTransit: !type:Container
-  - type: GenericVisualizer
-    visuals:
-      enum.DisposalTubeVisuals.VisualState:
-        pipe:
-          Free: { state: conpipe-s }
-          Anchored: { state: pipe-s }
 
 - type: entity
-  parent: MarkerBase
+  parent: DisposalBend
   id: CMUFlightDisposalBend
   suffix: Flight
-  components:
-  - type: Sprite
-    sprite: Structures/Piping/disposal.rsi
-    layers:
-    - map: [ "pipe" ]
-      state: conpipe-c
-  - type: DisposalTube
-    containerId: DisposalBend
-  - type: DisposalBend
-  - type: ContainerContainer
-    containers:
-      DisposalBend: !type:Container
-  - type: GenericVisualizer
-    visuals:
-      enum.DisposalTubeVisuals.VisualState:
-        pipe:
-          Free: { state: conpipe-c }
-          Anchored: { state: pipe-c }

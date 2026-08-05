@@ -9,13 +9,13 @@
   description: An armor piece made to be used in combination with kestrel pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/garb/shinguards.rsi
+    sprite: _CMU14/Clothing/RMC/garb/shinguards.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/RMC/garb/shinguards.rsi
+    sprite: _CMU14/Clothing/RMC/garb/shinguards.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/RMC/garb/shinguards.rsi
+      sprite: _CMU14/Clothing/RMC/garb/shinguards.rsi
       state: helmet
 
 - type: entity
@@ -25,13 +25,13 @@
   description: An armor piece made to be used in combination with kestrel pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/garb/shoulderpads.rsi
+    sprite: _CMU14/Clothing/RMC/garb/shoulderpads.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/RMC/garb/shoulderpads.rsi
+    sprite: _CMU14/Clothing/RMC/garb/shoulderpads.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/RMC/garb/shoulderpads.rsi
+      sprite: _CMU14/Clothing/RMC/garb/shoulderpads.rsi
       state: helmet
 
 # Universal
@@ -43,13 +43,13 @@
   description: A magazine webbing made to be attached to the outside of kestrel pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/garb/magazine_webbing.rsi
+    sprite: _CMU14/Clothing/RMC/garb/magazine_webbing.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/RMC/garb/magazine_webbing.rsi
+    sprite: _CMU14/Clothing/RMC/garb/magazine_webbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/RMC/garb/magazine_webbing.rsi
+      sprite: _CMU14/Clothing/RMC/garb/magazine_webbing.rsi
       state: helmet
 
 - type: entity
@@ -59,13 +59,13 @@
   description: A small webbing made to be attached to the outside of kestrel pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/garb/small_webbing.rsi
+    sprite: _CMU14/Clothing/RMC/garb/small_webbing.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/RMC/garb/small_webbing.rsi
+    sprite: _CMU14/Clothing/RMC/garb/small_webbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/RMC/garb/small_webbing.rsi
+      sprite: _CMU14/Clothing/RMC/garb/small_webbing.rsi
       state: helmet
 
 # Armour garb kits

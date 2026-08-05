@@ -7,7 +7,7 @@
   components:
   - type: Appearance
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_frag
   - type: Item
@@ -39,7 +39,7 @@
   description: A 20mm grenade that explodes upon impact. Less powerful than full-sized grenades.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_he
   - type: GenericVisualizer
@@ -73,7 +73,7 @@
   description: High-Explosive Dual-Purpose. A small, but deceptively strong blast grenade that has been phasing out the M15 HE grenades alongside the 30mm HEFA. Capable of being loaded in grenade launchers, or thrown by hand.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_squash
   - type: GenericVisualizer
@@ -107,7 +107,7 @@
   description: A 20mm grenade that explodes into a voluminous cloud of nerve gas upon impact.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_gas
   - type: GenericVisualizer
@@ -116,7 +116,12 @@
         enum.ConstructionVisuals.Layer:
           Primed: { state: grenade_20mm_gas_active }
           Unprimed: { state: grenade_20mm_gas }
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
     delay: 2
   - type: SpawnOnTrigger
     proto: RMCSmokeNeurotoxin # Placeholder
@@ -156,7 +161,7 @@
   description: A 20mm grenade that explodes into flaming shrapnel & a pool of incendiary compound upon impact.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_incend
   - type: CartridgeAmmo
@@ -176,7 +181,7 @@
   description: A 20mm grenade that explodes into shrapnel upon impact. The shrapenl of this one douses the target in a chemical compound which aids in target acquisition by sensors.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_holo
   - type: CartridgeAmmo
@@ -196,7 +201,7 @@
   - type: SpawnOnTrigger
     proto: CMExplosionEffectGrenade
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_frag_active
   - type: Projectile
@@ -251,7 +256,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_incend_active
   - type: ProjectileGrenade
@@ -273,7 +278,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Explosives/RMC/grenade_launcher.rsi
     layers:
     - state: grenade_20mm_holo_active
   - type: ProjectileGrenade

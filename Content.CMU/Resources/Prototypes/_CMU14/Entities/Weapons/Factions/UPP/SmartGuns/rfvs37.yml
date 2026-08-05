@@ -5,15 +5,15 @@
   description: Copy of the M56 Smartgun, the RVS-37 "Canyon", produced by major countries inside of UPP.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/UPP/rvs-37.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/rvs-37.rsi
     layers:
     - state: base
-      sprite: _AU14/Weapons/Guns/UPP/rvs-37.rsi
+      sprite: _CMU14/Weapons/Guns/UPP/rvs-37.rsi
     - state: mag-0
-      sprite: _AU14/Weapons/Guns/UPP/rvs-37.rsi
+      sprite: _CMU14/Weapons/Guns/UPP/rvs-37.rsi
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/UPP/rvs-37.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/rvs-37.rsi
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -48,7 +48,7 @@
     capacity: 250
     cycleable: false
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/rvs34_mag.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/rvs34_mag.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]

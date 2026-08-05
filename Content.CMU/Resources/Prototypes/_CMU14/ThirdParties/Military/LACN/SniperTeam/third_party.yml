@@ -12,7 +12,7 @@
   announceAsSurvivors: true
   partyspawn: LACNSniperteamSpawn
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight:  20
   minplayers: 0
   maxplayers: 400
@@ -24,7 +24,7 @@
   announceAsSurvivors: true
   partyspawn: LACNSniperteamSpawn
   entrymethod: shuttle #todo au14 entrymethod intel spawn/shipside
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
   weight: 1
   minplayers: 500
   maxplayers: 600

@@ -6,7 +6,7 @@
   components:
   - type: Item
     size: Large
-    sprite: _AU14/Structures/wheelchair.rsi
+    sprite: _CMU14/Structures/wheelchair.rsi
   - type: MeleeWeapon
     wideAnimationRotation: -110
     attackRate: 0.85
@@ -19,7 +19,7 @@
   - type: Wieldable
   - type: MeleeRequiresWield
   - type: Sprite
-    sprite: _AU14/Structures/wheelchair.rsi
+    sprite: _CMU14/Structures/wheelchair.rsi
     layers:
     - state: wheelchair
       map: ["unfoldedLayer"]

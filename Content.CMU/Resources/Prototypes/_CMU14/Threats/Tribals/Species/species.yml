@@ -11,7 +11,7 @@
   prototype: CMMobHuman
   sprites: MobHumanSprites
   markingLimits: MobTribalMarkingLimits
-  dollPrototype: MobHumanDummy
+  dollPrototype: AppearanceHuman
   skinColoration: HumanToned
 
 # Same as MobHumanMarkingLimits but UndergarmentTop / UndergarmentBottom

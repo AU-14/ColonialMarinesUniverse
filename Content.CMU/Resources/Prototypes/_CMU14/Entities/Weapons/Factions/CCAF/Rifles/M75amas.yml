@@ -5,14 +5,14 @@
   description: The M75A MAS is Armat Battlefield Systems newest modular weapons platform, intended to replace the aging M41 MK1 Pulse Rifle. The weapon is still in limited field testing among select CCAF infantry units.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/CCAF/M75AMAS.rsi
+    sprite: _CMU14/Weapons/Guns/CCAF/M75AMAS.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/CCAF/M75AMAS.rsi
+    sprite: _CMU14/Weapons/Guns/CCAF/M75AMAS.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -110,7 +110,7 @@
     proto: AU14CartridgeRifleM75AMAS
     capacity: 20
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/CCAF/m75amasmagazine.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/CCAF/m75amasmagazine.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]

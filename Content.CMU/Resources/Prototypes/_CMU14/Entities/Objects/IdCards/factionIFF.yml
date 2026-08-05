@@ -1,5 +1,6 @@
 # ├──[ COLONY ]──────────────────────────────────────────────────────┤
 - type: entity
+  parent: FactionSurvivor
   id: FactionCLF
   categories: [ HideSpawnMenu ]
   components:

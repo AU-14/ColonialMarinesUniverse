@@ -5,6 +5,8 @@
     - planets:
         - AUPlanetShepherdsPride
         - AUPlanetStableGarrison
+        - CMUPlanetStableGarrisonRedux
+        - CMUPlanetLament
       threatVote:
         candidates:
           - ColonyFallCultistRoundGroup
@@ -32,18 +34,6 @@
         candidates:
           - ColonyFallCultistRoundGroup
           - ColonyFallWendigoRoundGroup
-      backupThreatVote:
-        candidates:
-          - ColonyFallWendigoRoundGroup
-
-    - planets:
-        - CMUPlanetLament
-      threatVote:
-        candidates:
-          - ColonyFallCultistMarkerRoundGroup
-          - ColonyFallXenoRoundGroup
-          - ColonyFallWendigoRoundGroup
-          - ColonyFallAbominationRoundGroup
       backupThreatVote:
         candidates:
           - ColonyFallWendigoRoundGroup

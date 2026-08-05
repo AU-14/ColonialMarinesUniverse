@@ -6,7 +6,7 @@
   components:
   - type: RMCMagneticItem
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/HAZOPS/M240A2.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/M240A2.rsi
     state: base
     layers:
     - state: base
@@ -16,10 +16,10 @@
     - state: lit
       map: ["enum.RMCIgniterVisuals.Ignited"]
   - type: Item
-    sprite: _AU14/Weapons/Guns/HAZOPS/M240A2.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/M240A2.rsi
     size: Large
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/HAZOPS/M240A2.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/M240A2.rsi
     slots:
     - suitStorage
     - Back

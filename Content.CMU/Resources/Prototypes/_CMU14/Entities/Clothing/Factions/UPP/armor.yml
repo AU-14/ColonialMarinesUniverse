@@ -5,7 +5,7 @@
   description: A set of Union of Progressive Peoples armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/armor/uppstandardarmor.rsi
+    sprite: _CMU14/Clothing/UPP/armor/uppstandardarmor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -14,7 +14,7 @@
   description: A set of Minimalistic Union of Progressive Peoples armor. This pair is quite small compared to the standard, and will provide less protection.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/armor/upplightarmor.rsi
+    sprite: _CMU14/Clothing/UPP/armor/upplightarmor.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -23,7 +23,7 @@
   description: A set of quite bulky Union of Progressive Peoples armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/armor/upplargearmor.rsi
+    sprite: _CMU14/Clothing/UPP/armor/upplargearmor.rsi
 
 - type: entity
   parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
@@ -33,7 +33,7 @@
   description: Harness harness specially made for RVS-37 automated machinegun.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/armor/upplargearmor.rsi
+    sprite: _CMU14/Clothing/UPP/armor/upplargearmor.rsi
   - type: Storage
     maxItemSize: Small
     grid:

@@ -99,7 +99,7 @@
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive
-      sprite: _AU14/Mobs/Animals/carp.rsi
+      sprite: _CMU14/Mobs/Animals/carp.rsi
     - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
       color: "#ffffff"
       sprite: Objects/Misc/handcuffs.rsi
@@ -135,7 +135,7 @@
   - type: Sprite
     layers:
     - state: carp_spawn
-      sprite: _AU14/Mobs/Animals/carp.rsi
+      sprite: _CMU14/Mobs/Animals/carp.rsi
   - type: ProportionalSpawner
     id: CMUSpawnMobCarp
     ratio: 16

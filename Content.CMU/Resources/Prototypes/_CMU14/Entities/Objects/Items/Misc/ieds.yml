@@ -5,7 +5,7 @@
   description: A Weyland-Yutani brickphone made by a subsidiary of their communications division. Probably pried from the dead hands of some corporate shmuck. This one’s being used for dialing CLF IEDs. Someone etched 'Fuck the United Americas' into the side.
   components:
   - type: Sprite
-    sprite: _AU14/Items/IEDs/signaller.rsi
+    sprite: _CMU14/Items/IEDs/signaller.rsi
     state: advanced
   - type: Item
     inhandVisuals:
@@ -32,14 +32,18 @@
     layers:
     - state: icon
       map: ["base"]
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn: [startTimer]
+    keyOut: trigger
     delay: 3
     delayOptions: [3, 4]
     initialBeepDelay: 2
-    beepSound: /Audio/_AU14/IED/detonate.ogg
-    startOnStick: true
-    canToggleStartOnStick: true
-  - type: TimerStartOnSignal
+    beepSound: /Audio/_CMU14/IED/detonate.ogg
+  - type: TriggerOnSignal
+    port: Timer
+    keyOut: startTimer
   - type: DeviceLinkSink
     ports:
     - Timer
@@ -68,15 +72,19 @@
     layers:
     - state: icon
       map: ["base"]
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn: [startTimer]
+    keyOut: trigger
     delay: 9
     delayOptions: [3, 4]
     initialBeepDelay: 2
-    beepSound: /Audio/_AU14/IED/detonate.ogg
-    startOnStick: true
-    canToggleStartOnStick: true
+    beepSound: /Audio/_CMU14/IED/detonate.ogg
   - type: PreventThrowWhenArmed
-  - type: TimerStartOnSignal
+  - type: TriggerOnSignal
+    port: Timer
+    keyOut: startTimer
   - type: DeviceLinkSink
     ports:
     - Timer
@@ -98,13 +106,13 @@
   id: AU14IEDVest
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/CLF/pbied.rsi
+    sprite: _CMU14/Clothing/CLF/pbied.rsi
     state: icon
     layers:
     - state: icon
       map: ["base"]
   - type: Clothing
-    sprite: _AU14/Clothing/CLF/pbied.rsi
+    sprite: _CMU14/Clothing/CLF/pbied.rsi
     slots:
     - OUTERCLOTHING
     quickEquip: false
@@ -114,17 +122,19 @@
     containers:
       storagebase: !type:Container
       cluster-payload: !type:Container
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn: [startTimer]
+    keyOut: trigger
     delay: 0.1
     delayOptions: [3, 4]
     initialBeepDelay: 0
-    beepSound: /Audio/_AU14/IED/vestbeep.ogg
-    requiredWornSlots: OUTERCLOTHING
-    startOnStick: true
-    canToggleStartOnStick: true
+    beepSound: /Audio/_CMU14/IED/vestbeep.ogg
   - type: PreventThrowWhenArmed
-  - type: TimerStartOnSignal
-    requiredWornSlots: OUTERCLOTHING
+  - type: TriggerOnSignal
+    port: Timer
+    keyOut: startTimer
   - type: DeviceLinkSink
     ports:
     - Timer

@@ -585,7 +585,7 @@
     availableModes:
     - SemiAuto
     soundGunshot: null
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: CMUYautjaCasterStunBolt
     fireCost: 1
   - type: Battery
@@ -1064,6 +1064,7 @@
     maxItemSize: Small
     grid:
     - 0,0,7,1
+    whitelist: null
   - type: StorageFill
     contents:
     - id: CMUYautjaAdvancedBruisePack
@@ -1089,7 +1090,7 @@
     size: Small
     sprite: _CMU14/Yautja/yautja_items.rsi
   - type: Storage
-    maxItemSize: Small
+    maxItemSize: Normal
     grid:
     - 0,0,15,3
   - type: IgnoreContentsSize

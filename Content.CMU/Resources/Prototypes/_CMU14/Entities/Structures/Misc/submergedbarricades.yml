@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: BaseStructureDynamic
   id: AU14WoodenBarricadeSubmerged
   name: submerged landing obstacle
@@ -29,7 +29,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/woodenbarricadesubmerged.rsi
+    sprite: _CMU14/Structures/woodenbarricadesubmerged.rsi
     state: sand_wall
   - type: Physics
     bodyType: Static

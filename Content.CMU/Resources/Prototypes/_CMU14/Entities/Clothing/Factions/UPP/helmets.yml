@@ -5,9 +5,9 @@
   description: A UPP Naval Infantry helmet.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/helmets/upphelmet.rsi
+    sprite: _CMU14/Clothing/UPP/helmets/upphelmet.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/helmets/upphelmet.rsi
+    sprite: _CMU14/Clothing/UPP/helmets/upphelmet.rsi
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -30,9 +30,9 @@
   description: An old earth design initially created for special forces and internal security to use in close quarters combat. Still worn by UPP forces after more than a century.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+    sprite: _CMU14/Clothing/UPP/helmets/altyn.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+    sprite: _CMU14/Clothing/UPP/helmets/altyn.rsi
   - type: ItemToggle
     activated: true
   - type: ToggleClothing
@@ -49,10 +49,10 @@
   - type: Appearance
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+      sprite: _CMU14/Clothing/UPP/helmets/altyn.rsi
       state: equipped-HELMET
     toggledRsi:
-      sprite: _AU14/Clothing/UPP/helmets/altyn.rsi
+      sprite: _CMU14/Clothing/UPP/helmets/altyn.rsi
       state: helmet-down
   - type: CMArmor
     melee: 25

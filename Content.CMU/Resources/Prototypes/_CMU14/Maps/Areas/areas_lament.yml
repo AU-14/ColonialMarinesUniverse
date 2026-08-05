@@ -60,7 +60,7 @@
   components:
   - type: Sprite
     state: north
-    
+
 - type: entity
   parent: CMUAreaLV376N
   id: CMUAreaLV376NO
@@ -68,7 +68,7 @@
   components:
   - type: Sprite
     state: valley_north
- 
+
 - type: entity
   parent: CMUAreaLV376Outside
   id: CMUAreaLV376NE
@@ -437,7 +437,7 @@
     state: maint_engineering
   - type: Area
     minimapColor: '#C19504E7'
-    
+
 - type: entity
   parent: CMUAreaLV376Inside
   id: CMUAreaLV376EngineeringOuthouse

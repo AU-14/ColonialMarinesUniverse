@@ -5,11 +5,11 @@
   description: A patch bearing the flag of the United Americas.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/ua_flag_patch.rsi
+    sprite: _CMU14/Clothing/Patches/ua_flag_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/ua_flag_patch.rsi
+      sprite: _CMU14/Clothing/Patches/ua_flag_patch.rsi
       state: patch
 
 - type: entity
@@ -19,11 +19,11 @@
   description: "A patch bearing the flag of the United States. Its not backwards, it's charging forward."
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/us_flag_patch.rsi
+    sprite: _CMU14/Clothing/Patches/us_flag_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/us_flag_patch.rsi
+      sprite: _CMU14/Clothing/Patches/us_flag_patch.rsi
       state: patch
 
 - type: entity
@@ -33,11 +33,11 @@
   description: A patch bearing the logo of the United States Colonial Marines.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/uscm_patch.rsi
+    sprite: _CMU14/Clothing/Patches/uscm_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/uscm_patch.rsi
+      sprite: _CMU14/Clothing/Patches/uscm_patch.rsi
       state: patch
 
 - type: entity
@@ -47,11 +47,11 @@
   description: A patch bearing the logo of the United States Aero-Space Force.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/usasf_patch.rsi
+    sprite: _CMU14/Clothing/Patches/usasf_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/usasf_patch.rsi
+      sprite: _CMU14/Clothing/Patches/usasf_patch.rsi
       state: patch
 
 - type: entity
@@ -61,11 +61,11 @@
   description: A patch bearing the logo of the United States Army.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/us_army_patch.rsi
+    sprite: _CMU14/Clothing/Patches/us_army_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/us_army_patch.rsi
+      sprite: _CMU14/Clothing/Patches/us_army_patch.rsi
       state: patch
 
 - type: entity
@@ -75,11 +75,11 @@
   description: "A patch bearing the logo of the United States Army's 1st Cavalry Division"
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/us_army_cav_patch.rsi
+    sprite: _CMU14/Clothing/Patches/us_army_cav_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/us_army_cav_patch.rsi
+      sprite: _CMU14/Clothing/Patches/us_army_cav_patch.rsi
       state: patch
 
 - type: entity
@@ -89,11 +89,11 @@
   description: "A patch bearing the logo of the Canadian Colonial Armed Forces"
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/ccafpatch.rsi
+    sprite: _CMU14/Clothing/Patches/ccafpatch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/ccafpatch.rsi
+      sprite: _CMU14/Clothing/Patches/ccafpatch.rsi
       state: patch
 
 - type: entity
@@ -103,11 +103,11 @@
   description: "A patch bearing the logo of Canada"
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/canadapatch.rsi
+    sprite: _CMU14/Clothing/Patches/canadapatch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/canadapatch.rsi
+      sprite: _CMU14/Clothing/Patches/canadapatch.rsi
       state: patch
 
 - type: entity
@@ -153,11 +153,11 @@
   description: A patch bearing the flag of Brazil.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/brazil_patch.rsi
+    sprite: _CMU14/Clothing/Patches/brazil_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/brazil_patch.rsi
+      sprite: _CMU14/Clothing/Patches/brazil_patch.rsi
       state: patch
 
 - type: entity
@@ -167,11 +167,11 @@
   description: A patch bearing the logo of brazilian UACG units.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/brazilunit_patch.rsi
+    sprite: _CMU14/Clothing/Patches/brazilunit_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/brazilunit_patch.rsi
+      sprite: _CMU14/Clothing/Patches/brazilunit_patch.rsi
       state: patch
 
 - type: entity
@@ -181,11 +181,11 @@
   description: "A patch bearing the logo of the United States Army's 525th Army Intelligence Brigade"
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/us_army_spook_patch.rsi
+    sprite: _CMU14/Clothing/Patches/us_army_spook_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/us_army_spook_patch.rsi
+      sprite: _CMU14/Clothing/Patches/us_army_spook_patch.rsi
       state: patch
 
 - type: entity
@@ -195,11 +195,11 @@
   description: "A fire-resistant shoulder patch, worn by the men and women of the 4th Combat Engineering Battalion, part of the USCM 2nd Colonial Support Group"
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/marine_sapper_patch.rsi
+    sprite: _CMU14/Clothing/Patches/marine_sapper_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/marine_sapper_patch.rsi
+      sprite: _CMU14/Clothing/Patches/marine_sapper_patch.rsi
       state: patch
 
 - type: entity
@@ -209,11 +209,11 @@
   description: "A fire-resistant shoulder patch, worn by the men and women of the 32nd Armor Brigade."
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/us_army_armor_patch.rsi
+    sprite: _CMU14/Clothing/Patches/us_army_armor_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/us_army_armor_patch.rsi
+      sprite: _CMU14/Clothing/Patches/us_army_armor_patch.rsi
       state: patch
 
 - type: entity
@@ -223,11 +223,11 @@
   description: A patch bearing the emblem of the Hazardous Opeations Unit. Wearing it makes you want to forget about Freeman.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/hazops_patch.rsi
+    sprite: _CMU14/Clothing/Patches/hazops_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/hazops_patch.rsi
+      sprite: _CMU14/Clothing/Patches/hazops_patch.rsi
       state: patch
 
 - type: entity
@@ -237,11 +237,11 @@
   description: A armband bearing the colors of the United Nations Interstellar Settlement Corps.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/armband.rsi
+    sprite: _CMU14/Clothing/UNISC/armband.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/UNISC/armband.rsi
+      sprite: _CMU14/Clothing/UNISC/armband.rsi
       state: patch
 
 - type: entity
@@ -251,11 +251,11 @@
   description: A fire-resistant shoulder patch, worn by the men and women of the Royal Marine Commandos.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/rmc_patch.rsi
+    sprite: _CMU14/Clothing/Patches/rmc_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/rmc_patch.rsi
+      sprite: _CMU14/Clothing/Patches/rmc_patch.rsi
       state: patch
 
 - type: entity
@@ -265,11 +265,11 @@
   description: A patch bearing the flag of Three World Empire.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/twe_patch.rsi
+    sprite: _CMU14/Clothing/Patches/twe_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/twe_patch.rsi
+      sprite: _CMU14/Clothing/Patches/twe_patch.rsi
       state: patch
 
 - type: entity
@@ -279,9 +279,9 @@
   description: A patch bearing the insignia of GROM Special Forces Unit.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Patches/grom_patch.rsi
+    sprite: _CMU14/Clothing/Patches/grom_patch.rsi
     state: icon
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Patches/grom_patch.rsi
+      sprite: _CMU14/Clothing/Patches/grom_patch.rsi
       state: patch

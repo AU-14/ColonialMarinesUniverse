@@ -5,7 +5,7 @@
   components:
   - type: Sprite
     drawdepth: BelowMobs
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot.rsi
     state: vtol_shadow
   - type: BlackfootShadow
 
@@ -16,7 +16,7 @@
   components:
   - type: Sprite
     drawdepth: BelowMobs
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot.rsi
     state: downwash
   - type: AmbientSound
     range: 18

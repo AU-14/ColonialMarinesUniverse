@@ -81,7 +81,7 @@
   description: A standard set of Union of Progressive Peoples Fatigues. It has shards of light Kevlar to help protect against shrapnel. This one has blood and tears after countless battles.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/jumpsuits/upprecon.rsi
+    sprite: _CMU14/Clothing/UPP/jumpsuits/upprecon.rsi
   - type: WebbingClothing
     startingWebbing: AU14WebbingDropPouchUPPFull
   - type: UniformAccessoryHolder
@@ -212,10 +212,10 @@
   id: AU14PouchPistolAltFull
   suffix: Full, GROM, T74
   components:
-  - type: StorageFill
-    contents:
-    - id: RMCWeaponPistolT74
-      amount: 1
+  - type: ContainerFill
+    containers:
+      pouch:
+      - RMCWeaponPistolT74
 
 - type: entity
   parent: AU14BeltSmartGunOperatorPistolUPP
@@ -226,7 +226,7 @@
     contents:
     - id: RMCWeaponPistolT74
     - id: RMCMagazinePistolT73
-      amount: 2
+      amount: 1
     - id: RMCMagazineLMGQYJ72
       amount: 3
 

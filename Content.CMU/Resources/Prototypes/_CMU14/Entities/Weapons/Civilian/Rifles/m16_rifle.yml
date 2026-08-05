@@ -6,17 +6,17 @@
   suffix: Filled
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Civilian/aum1664x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/aum1664x32.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-2
       map: ["enum.GunVisualLayers.Mag"]
   - type: Item
-    sprite: _AU14/Weapons/Guns/Civilian/aum1632x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/aum1632x32.rsi
     size: Large
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/Civilian/aum1632x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/aum1632x32.rsi
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -102,17 +102,17 @@
   description: An old, reliable design first adopted by the U.S. military in the 1980s. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Civilian/aum16a264x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/aum16a264x32.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-2
       map: ["enum.GunVisualLayers.Mag"]
   - type: Item
-    sprite: _AU14/Weapons/Guns/Civilian/aum16a232x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/aum16a232x32.rsi
     size: Large
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/Civilian/aum16a232x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/aum16a232x32.rsi
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -130,7 +130,7 @@
   description: "An 'improved' pattern of M16A2 recently released on the civilian market, proclaiming it is 'cutting edge modularity and optics friendliness on a budget' It met limited success in it's intended market It has seen stable but small sales regardless."
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Civilian/m16a2larue64x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/m16a2larue64x32.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -144,17 +144,17 @@
   description: An old, reliable design. Something like this belongs in a museum of war history. It is chambered in 5.56x45mm.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Civilian/auar1064x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/auar1064x32.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
     - state: mag-2
       map: ["enum.GunVisualLayers.Mag"]
   - type: Item
-    sprite: _AU14/Weapons/Guns/Civilian/auar1032x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/auar1032x32.rsi
     size: Large
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/Civilian/auar1032x32.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/auar1032x32.rsi
   - type: Gun
     selectedMode: SemiAuto
     availableModes:

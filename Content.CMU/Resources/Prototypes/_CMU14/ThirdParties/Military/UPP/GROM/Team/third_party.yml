@@ -21,7 +21,7 @@
     - forceonforce
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
   weight: 100
   minplayers: 100
   maxplayers: 400
@@ -51,7 +51,7 @@
     - forceonforce
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
   weight: 100
   minplayers: 25
   maxplayers: 50
@@ -81,7 +81,7 @@
     - forceonforce
     - colonyfall
   entrymethod: shuttle
-  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
+  dropshippath: /Maps/_CMU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml
   weight: 100
   minplayers: 51
   maxplayers: 99

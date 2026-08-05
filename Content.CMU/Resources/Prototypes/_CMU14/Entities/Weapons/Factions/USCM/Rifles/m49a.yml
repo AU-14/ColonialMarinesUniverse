@@ -9,11 +9,11 @@
     guides:
     - RMCGuideRoleSpecScout
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/USCM/m49a.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/m49a.rsi
     layers:
     - state: bolt-open
       map: [ "enum.GunVisualLayers.Base" ]
-    - sprite: _AU14/Weapons/Guns/Attachments/barrel.rsi
+    - sprite: _CMU14/Weapons/Guns/Attachments/barrel.rsi
       state: m49a_barrel
       offset: 0.65, 0
       map: [ "barrel" ]
@@ -61,7 +61,7 @@
   - type: Corrodible
     isCorrodible: false
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/USCM/m49a.rsi
+    sprite: _CMU14/Weapons/Guns/USCM/m49a.rsi
   - type: MeleeWeapon
     damage:
       types:

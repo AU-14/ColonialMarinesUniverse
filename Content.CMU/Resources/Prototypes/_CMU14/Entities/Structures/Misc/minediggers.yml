@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: AU14MineDigger
   parent: BaseStructure
   name: mining machine
@@ -9,7 +9,7 @@
     key: walls
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/digger.rsi
+    sprite: _CMU14/Structures/digger.rsi
     state: digger_orange
   - type: Physics
     bodyType: Static
@@ -36,7 +36,7 @@
     key: walls
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/digger.rsi
+    sprite: _CMU14/Structures/digger.rsi
     state: digger_gray
   - type: Physics
     bodyType: Static

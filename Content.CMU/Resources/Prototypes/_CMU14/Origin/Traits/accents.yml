@@ -139,7 +139,7 @@
   cost: 1
   components:
   - type: FrontalLisp
-  
+
 - type: trait
   id: BritishAccent
   name: trait-british-name

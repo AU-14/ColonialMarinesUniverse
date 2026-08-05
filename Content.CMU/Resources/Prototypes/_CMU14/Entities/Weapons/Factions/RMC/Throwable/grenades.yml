@@ -5,7 +5,7 @@
   suffix: RM
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Grenades/RMC/HEDP.rsi
+    sprite: _CMU14/Weapons/Grenades/RMC/HEDP.rsi
 
 #- type: entity
 #  parent: CMGrenadeSmoke
@@ -14,7 +14,7 @@
 #  suffix: RM
 #  components:
 #  - type: Sprite
-#    sprite: _AU14/Weapons/Grenades/RMC/HSDP.rsi
+#    sprite: _CMU14/Weapons/Grenades/RMC/HSDP.rsi
 
 - type: entity
   parent: RMCGrenadeIncendiary
@@ -23,7 +23,7 @@
   suffix: RM
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Grenades/RMC/HIDP.rsi
+    sprite: _CMU14/Weapons/Grenades/RMC/HIDP.rsi
   - type: Tag
     tags:
     - Grenade
@@ -42,10 +42,15 @@
   suffix: RM
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Grenades/RMC/HSDP.rsi
+    sprite: _CMU14/Weapons/Grenades/RMC/HSDP.rsi
   - type: SpawnOnTrigger
     proto: AU14GrenadeNeuroGas
-  - type: OnUseTimerTrigger
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
     delay: 3.5
   - type: Tag
     tags:

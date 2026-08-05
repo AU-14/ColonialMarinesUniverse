@@ -6,8 +6,8 @@
   components:
   - type: Sprite
     layers:
-      - sprite: _AU14/Markers/landmarks.rsi
-        state: random_clothing
+    - sprite: _CMU14/Markers/landmarks.rsi
+      state: random_clothing
   - type: RandomSpawner
     chance: 0.5
     prototypes:

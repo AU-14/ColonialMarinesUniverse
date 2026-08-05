@@ -5,14 +5,14 @@
   description: The L90 Rifle, a variant of the old standard-issue rifle of the royal marine.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/RMC/L90.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/RMC/L90.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -182,7 +182,7 @@
     proto: CMCartridgeRifle10x24mm
     capacity: 40
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -210,7 +210,7 @@
       - CMCartridgeRifle10x24mmAP
     proto: CMCartridgeRifle10x24mmAP
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -241,7 +241,7 @@
     proto: CMCartridgeRifle10x24mm
     capacity: 60
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90extended.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90extended.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -269,7 +269,7 @@
       - RMCCartridgeRifle10x24mmHEAP
     proto: RMCCartridgeRifle10x24mmHEAP
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -299,7 +299,7 @@
       - RMCCartridgeRifle10x24mmIncendiary
     proto: RMCCartridgeRifle10x24mmIncendiary
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -319,14 +319,14 @@
   description: a variant of the old standard-issue rifle of the royal marine with a heavily modified firing mechanism, giving it a burst-fire option. Comes with built-in underbarell shotgun.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/RMC/L90B.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90B.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/RMC/L90B.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90B.rsi
   - type: Gun
     shotsPerBurst: 3
     selectedMode: FullAuto
@@ -464,7 +464,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Attachments/commando_4xscope.rsi
+    sprite: _CMU14/Weapons/Guns/Attachments/commando_4xscope.rsi
     state: staticscope
   - type: AttachableVisuals
     suffix: ""
@@ -474,7 +474,7 @@
     - AU14AttachmentL90MScope
   - type: AttachableToggleable
     icon:
-      sprite: _AU14/Weapons/Guns/Attachments/commando_4xscope.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/commando_4xscope.rsi
       state: staticscope
     actionName: Look through the 4x Telescopic Scope
     actionDesc: Price, have wind speed and Coriolis effect in mind. Fixed at 4x zoom.
@@ -487,7 +487,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+    sprite: _CMU14/Weapons/Guns/Attachments/commando_under.rsi
     state: masterkey
   - type: Tag
     tags:
@@ -507,10 +507,10 @@
     actionName: Switch to the underbarrel shotgun
     actionDesc: Switch to using the underbarrel shotgun.
     icon:
-      sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/commando_under.rsi
       state: masterkey
     iconActive:
-      sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+      sprite: _CMU14/Weapons/Guns/Attachments/commando_under.rsi
       state: masterkey-on
 
 - type: entity
@@ -519,7 +519,7 @@
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Attachments/commando_under.rsi
+    sprite: _CMU14/Weapons/Guns/Attachments/commando_under.rsi
     state: verticalgrip
   - type: Tag
     tags:
@@ -546,14 +546,14 @@
   description: The L90M Marksman rifle, a variant of the old standard-issue rifle of the royal marine. This particular version of the weapon has been given a custom stock, a variable zoom scope and a longer barrel. Reliable and deadly.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/RMC/L90M.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90M.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/RMC/L90M.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90M.rsi
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -661,7 +661,7 @@
     proto: CMCartridgeRifle10x24mm
     capacity: 20
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -689,7 +689,7 @@
       - CMCartridgeRifle10x24mmAP
     proto: CMCartridgeRifle10x24mmAP
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -700,7 +700,7 @@
   - type: Appearance
   - type: RefillableByBulletBox
     bulletType: RMCBoxBulletsRifleAP
-    
+
 - type: entity
   parent: AU14MagazineRifleL90M
   id: AU14MagazineRifleL90Mextended
@@ -720,7 +720,7 @@
     proto: CMCartridgeRifle10x24mm
     capacity: 30
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90Mextended.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90Mextended.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -747,7 +747,7 @@
       - RMCCartridgeRifle10x24mmHEAP
     proto: RMCCartridgeRifle10x24mmHEAP
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -775,7 +775,7 @@
       - RMCCartridgeRifle10x24mmIncendiary
     proto: RMCCartridgeRifle10x24mmIncendiary
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90M.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -794,14 +794,14 @@
   description: The L90A2 personal defense weapon, found commonly in Three World Empire's armories. This version has shortened barrel and modified fire mechanism, allowing full-auto and burst fire. Chambered in 10x20mm Parabellum.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/RMC/L90A2.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90A2.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/RMC/L90A2.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90A2.rsi
   - type: Gun
     selectedMode: FullAuto
     availableModes:
@@ -891,14 +891,14 @@
   id: AU14WeaponSMGL90A2old
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/RMC/L90A2old.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90A2old.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/RMC/L90A2old.rsi
+    sprite: _CMU14/Weapons/Guns/RMC/L90A2old.rsi
   - type: ItemSlots
     slots:
       gun_magazine:
@@ -1004,7 +1004,7 @@
     proto: CMCartridge10x20mm
     capacity: 40
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -1031,7 +1031,7 @@
       - CMCartridge10x20mmAP
     proto: CMCartridge10x20mmAP
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -1061,7 +1061,7 @@
     proto: CMCartridge10x20mm
     capacity: 66
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2extended.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90A2extended.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -1088,7 +1088,7 @@
       - RMCCartridge10x20mmHEAP
     proto: RMCCartridge10x20mmHEAP
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
@@ -1116,7 +1116,7 @@
       - RMCCartridge10x20mmIncendiary
     proto: RMCCartridge10x20mmIncendiary
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/L90A2.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]

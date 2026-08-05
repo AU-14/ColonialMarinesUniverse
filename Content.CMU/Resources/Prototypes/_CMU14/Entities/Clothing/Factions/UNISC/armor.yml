@@ -5,7 +5,7 @@
   description: Armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/mediumarmor.rsi
+    sprite: _CMU14/Clothing/UNISC/mediumarmor.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -14,7 +14,7 @@
   description: Armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/lightarmor.rsi
+    sprite: _CMU14/Clothing/UNISC/lightarmor.rsi
 
 - type: entity
   parent: AU14BaseArmor
@@ -23,7 +23,7 @@
   description: Armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/lightarmoralt.rsi
+    sprite: _CMU14/Clothing/UNISC/lightarmoralt.rsi
 
 - type: entity
   parent: [ RMCAllowSuitStorageClothingSmartgunner, AU14BaseArmor ]
@@ -32,7 +32,7 @@
   description: An M56 Combat Harness specially made for Smartgunners.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/smartgunarmor.rsi
+    sprite: _CMU14/Clothing/UNISC/smartgunarmor.rsi
   - type: Storage
     maxItemSize: Small
     grid:

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: AU14NavalisSupportBeam
   parent: BaseStructure
   name: support beam
@@ -9,7 +9,7 @@
     key: walls
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam
   - type: Physics
     bodyType: Static
@@ -32,7 +32,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_aqua
 
 - type: entity
@@ -42,7 +42,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_blue
 
 - type: entity
@@ -52,7 +52,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_brown
 
 - type: entity
@@ -62,7 +62,7 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_green
 
 - type: entity
@@ -72,5 +72,5 @@
   components:
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/navalis_support_beam.rsi
+    sprite: _CMU14/Structures/navalis_support_beam.rsi
     state: support_beam_red

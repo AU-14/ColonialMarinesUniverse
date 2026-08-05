@@ -16,7 +16,7 @@
     prefix: au14-job-prefix-headofservice
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: head_of_service
 
   name: au14-job-name-civilianheadofservice

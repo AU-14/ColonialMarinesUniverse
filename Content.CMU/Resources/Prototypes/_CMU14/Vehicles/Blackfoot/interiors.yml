@@ -6,7 +6,7 @@
   description: A fixture inside an AD-71E Blackfoot.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot.rsi
 
 - type: entity
   parent: CMUBlackfootInteriorBase
@@ -74,7 +74,7 @@
   name: Blackfoot weapon access port
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_peripherals.rsi
     state: blackfoot-ammo-interior-left
 
 - type: entity
@@ -83,7 +83,7 @@
   name: Blackfoot weapon access port
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_peripherals.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_peripherals.rsi
     state: blackfoot-ammo-interior-right
 
 - type: entity
@@ -92,7 +92,7 @@
   name: Blackfoot rear door control
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_door_button.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot_door_button.rsi
     state: blackfoot
   - type: Clickable
   - type: InteractionOutline
@@ -109,7 +109,7 @@
     mode: PlaceFree
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot.rsi
     state: seat
 
 - type: entity
@@ -120,7 +120,7 @@
     mode: PlaceFree
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot.rsi
     state: pilot-chair
   - type: VehicleWeaponsSeat
     skills:
@@ -145,7 +145,7 @@
   components:
   - type: Sprite
     drawdepth: Overdoors
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot_64x64.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot_64x64.rsi
     state: doorgun
   - type: VehicleWeaponsSeat
     skills:
@@ -172,7 +172,7 @@
   - type: Transform
     anchored: false
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot_chassis.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot_chassis.rsi
     state: chassis
     drawdepth: FloorTiles
   - type: Physics
@@ -255,7 +255,7 @@
   name: Blackfoot viewport
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot.rsi
     state: vehicle_bars
     drawdepth: Overdoors
 
@@ -280,7 +280,7 @@
     mode: PlaceFree
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/interiors/blackfoot.rsi
     drawdepth: Overdoors
     layers:
     - state: fire-cab

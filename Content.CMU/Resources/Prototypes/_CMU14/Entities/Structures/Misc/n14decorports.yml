@@ -5,7 +5,7 @@
     mode: SnapgridCenter
   components:
   - type: Sprite
-    sprite: _AU14/N14content/rails64.rsi
+    sprite: _CMU14/N14content/rails64.rsi
     state: rails
     netsync: false
     drawdepth: FloorObjects
@@ -101,7 +101,7 @@
     mode: SnapgridCenter
   components:
   - type: Sprite
-    sprite: _AU14/N14content/cave_decor.rsi
+    sprite: _CMU14/N14content/cave_decor.rsi
     netsync: false
     noRot: true
     drawdepth: FloorObjects
@@ -434,7 +434,7 @@
   abstract: true
   components:
   - type: Sprite
-    sprite: _AU14/N14content/world.rsi
+    sprite: _CMU14/N14content/world.rsi
 
 - type: entity
   parent: DecorFloorWorldBase
@@ -444,7 +444,7 @@
   suffix: 8 states
   components:
   - type: Sprite
-    sprite: _AU14/N14content/world.rsi
+    sprite: _CMU14/N14content/world.rsi
     state: scattered_papers
     # add destruction drop for materials
 

@@ -1,7 +1,7 @@
 - type: gameMap
   id: Daybreak
   mapName: Daybreak
-  mapPath: /Maps/_AU14/daybreak.yml
+  mapPath: /Maps/_CMU14/daybreak.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

@@ -12,7 +12,7 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/_CMU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: RMCIntelTechTree_ua
@@ -95,8 +95,8 @@
   possibleships:
       - USSBushRedux
   compatibleFighters:
-  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  - /Maps/_CMU14/ShuttlesDropships/f84owl.yml
+  - /Maps/_CMU14/ShuttlesDropships/ud_6.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -127,7 +127,7 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/cmbsquadcar.yml
+    - /Maps/_CMU14/ShuttlesDropships/cmbsquadcar.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -145,8 +145,8 @@
   - /Maps/_CMU14/Shuttles/osprey.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-  - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-  - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+  - /Maps/_CMU14/ShuttlesDropships/f84owl.yml
+  - /Maps/_CMU14/ShuttlesDropships/ud_6.yml
   techTree: RMCIntelTechTree_ua
 
 - type: platoon
@@ -162,8 +162,8 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/_CMU14/ShuttlesDropships/f84owl.yml
+    - /Maps/_CMU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: RMCIntelTechTree_ua
@@ -182,8 +182,8 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters:
-    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/_CMU14/ShuttlesDropships/f84owl.yml
+    - /Maps/_CMU14/ShuttlesDropships/ud_6.yml
   possibleships:
       - USSBushRedux
   techTree: RMCIntelTechTree_ua
@@ -215,8 +215,8 @@
   - /Maps/_CMU14/Shuttles/alamo.yml
   - /Maps/_CMU14/Shuttles/lexingtonsmall.yml
   compatibleFighters: #TODO: RMC Fighters
-    - /Maps/_AU14/ShuttlesDropships/f84owl.yml
-    - /Maps/_AU14/ShuttlesDropships/ud_6.yml
+    - /Maps/_CMU14/ShuttlesDropships/f84owl.yml
+    - /Maps/_CMU14/ShuttlesDropships/ud_6.yml
   possibleships: #TODO: RMC Ship
       - USSBushRedux
   techTree: RMCIntelTechTree_ua

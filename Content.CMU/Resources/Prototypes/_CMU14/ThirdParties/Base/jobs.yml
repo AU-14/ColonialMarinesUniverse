@@ -8,7 +8,7 @@
   hidden: false
   supervisors: nobody
   icon: "AU14JobIconThirdPartyLeader"
-  jobPreviewEntity: RMCPlayerXenoQueenPreview
+  jobPreviewEntity: CMUPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno
   - CMAccessXenoQueen
@@ -26,7 +26,7 @@
   hidden: false
   supervisors: nobody
   icon: "AU14JobIconThirdPartyMember"
-  jobPreviewEntity: RMCPlayerXenoQueenPreview
+  jobPreviewEntity: CMUPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno
   - CMAccessXenoQueen

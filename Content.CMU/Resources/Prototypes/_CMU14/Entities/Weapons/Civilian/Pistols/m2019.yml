@@ -10,7 +10,7 @@
     - RMCRevolver
     - AU14WeaponRevolverM2019
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Civilian/blaster.rsi
+    sprite: _CMU14/Weapons/Guns/Civilian/blaster.rsi
   - type: RevolverAmmoProvider
     whitelist:
       tags:

@@ -5,7 +5,7 @@
   description: A set of Weyland-Yutani PMC armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/WY_PMC/wypmcstandardarmor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmcstandardarmor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -14,7 +14,7 @@
   description: A set of Weyland-Yutani PMC armor. This pair is quite small compared to the standard, and will provide less protection.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/WY_PMC/wypmclightarmor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmclightarmor.rsi
 
 - type: entity
   parent: RMCBaseBioSuit
@@ -59,7 +59,7 @@
   description: A set of Weyland-Yutani PMC Engineer armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/WY_PMC/engi_armor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/engi_armor.rsi
 
 - type: entity
   parent: AU14BaseArmorLight
@@ -71,7 +71,7 @@
     walkModifier: 0.90
     sprintModifier: 0.90
   - type: Sprite
-    sprite: _AU14/Clothing/WY_PMC/ppo_armor.rsi
+    sprite: _CMU14/Clothing/WY_PMC/ppo_armor.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
     - RMCPatchWeYaBlackSquare

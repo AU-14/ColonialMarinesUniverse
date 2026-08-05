@@ -8,7 +8,7 @@
   description: A bloated, lumbering brute. Each fist is the size of a man's torso.
   components:
   - type: Sprite
-    sprite: _AU14/Mobs/Abominations/grunt.rsi
+    sprite: _CMU14/Mobs/Abominations/grunt.rsi
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
       state: alive

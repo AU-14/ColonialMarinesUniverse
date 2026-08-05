@@ -9,7 +9,7 @@
   id: CMUWallLamentRock
   name: rock wall
   description: A rough wall of hardened rock.
-  
+
 - type: entity
   id: CMUFogWallLamentWaterfallMist
   name: waterfall mist

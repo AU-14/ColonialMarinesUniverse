@@ -147,7 +147,7 @@
   - type: ApeLeap
     delay: 0
     knockdownTime: 2
-    leapSound: /Audio/_AU14/Ape/aperoarshort.ogg
+    leapSound: /Audio/_CMU14/Ape/aperoarshort.ogg
   - type: Sharp
     butcherDelayModifier: 0.5
   - type: NpcFactionMember
@@ -189,8 +189,7 @@
   - type: XenoHeadbite
     # Ape uses default xeno headbite parameters; adjust in future if you want different values
   - type: Vocal
-    sounds:
-      Unsexed: ApeEmotes
+    emoteSounds: ApeEmotes
   - type: NoSlip
 
 - type: emoteSounds
@@ -199,7 +198,7 @@
     variation: 0.125
   sounds:
     Scream:
-      path: /Audio/_AU14/Ape/aperoarlong.ogg
+      path: /Audio/_CMU14/Ape/aperoarlong.ogg
 
 - type: inventoryTemplate
   id: ape

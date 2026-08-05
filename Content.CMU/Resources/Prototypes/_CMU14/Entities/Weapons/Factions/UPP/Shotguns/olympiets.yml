@@ -5,9 +5,9 @@
   description: A limited production copy of the MOU53, this one can safely fire buckshot shells.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/UPP/olympiets.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/olympiets.rsi
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/UPP/olympiets.rsi
+    sprite: _CMU14/Weapons/Guns/UPP/olympiets.rsi
   - type: Tag
     tags:
     - CMUWeaponShotgunOlympiets

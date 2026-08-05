@@ -17,7 +17,7 @@
     prefix: au14-job-prefix-civiliancorporateadminassistant
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: corporate_assistant
   - type: AssignSquad
     whitelist:

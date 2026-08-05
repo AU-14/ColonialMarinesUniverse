@@ -15,7 +15,7 @@
     prefix: au14-job-prefix-civiliancolonist
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: colonist
 
   name: au14-job-name-civiliancolonist

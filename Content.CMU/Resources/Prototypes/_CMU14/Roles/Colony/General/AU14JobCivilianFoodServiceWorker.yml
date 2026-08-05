@@ -17,7 +17,7 @@
   - type: AU14FoodServiceWorkerMarker
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: fsw
 
   name: au14-job-name-civilianfoodserviceworker

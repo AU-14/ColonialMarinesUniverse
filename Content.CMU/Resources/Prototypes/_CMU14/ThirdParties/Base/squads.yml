@@ -6,7 +6,7 @@
   - type: SquadTeam
     color: "#3aeb34"
     background:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
+      sprite: _RMC14/Interface/job_icons/Misc/other.rsi
       state: empty
     blacklistedSquadArmor:
     - Helmet
@@ -20,7 +20,7 @@
     canSupplyDrop: false
     group: CLF
     leaderIcon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
+      sprite: _RMC14/Interface/job_icons/CLF.rsi
       state: clf_sl
 
 - type: entity
@@ -109,7 +109,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: background_ua
     leaderIcon:
-      sprite: _AU14/Interface/job_icons.rsi
+      sprite: _CMU14/Interface/job_icons.rsi
       state: hudsquad_sl_army
     canSupplyDrop: false
     group: USArmy
@@ -134,7 +134,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: background_ua
     leaderIcon:
-      sprite: _AU14/Interface/job_icons.rsi
+      sprite: _CMU14/Interface/job_icons.rsi
       state: hudsquad_sl_army
     canSupplyDrop: false
     group: USArmy

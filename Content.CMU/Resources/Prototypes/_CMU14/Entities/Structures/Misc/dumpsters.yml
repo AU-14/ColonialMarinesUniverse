@@ -13,7 +13,7 @@
   - type: InteractionOutline
   - type: Sprite
     noRot: true
-    sprite: _AU14/Structures/dumpsters.rsi
+    sprite: _CMU14/Structures/dumpsters.rsi
     drawdepth: Overdoors
     offset: 0.5,0.5
   - type: UserInterface

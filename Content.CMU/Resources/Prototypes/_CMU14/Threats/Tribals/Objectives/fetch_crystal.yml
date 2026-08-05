@@ -14,10 +14,8 @@
     possiblefactions:
     - govfor
     repeating: false
-    rollanyway: true
     objectivelevel: 3
     custompoints: 100
-    maxrepeatable: 100
     ObjectiveDescription: "Harvest the Rare Crystal deposits scattered across the jungle"
   - type: FetchObjective
     entitytospawn: SteelOre

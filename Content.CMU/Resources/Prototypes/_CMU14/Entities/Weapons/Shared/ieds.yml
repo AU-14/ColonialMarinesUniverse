@@ -44,14 +44,18 @@
     intensitySlope: 8
     totalIntensity: 100
     deleteAfterExplosion: false
-  - type: CMUOnLightTimerTrigger
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
     examinable: false
     initialBeepDelay: 0
     beepSound: /Audio/Effects/lightburn.ogg
+  - type: RandomTimerTrigger
     min: 1
     max: 4
-    instantfusechance: false
-    instfusechance: 10
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 20

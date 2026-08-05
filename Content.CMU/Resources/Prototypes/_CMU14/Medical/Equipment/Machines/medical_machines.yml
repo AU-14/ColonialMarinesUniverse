@@ -311,10 +311,10 @@
   components:
   - type: Label
     currentLabel: biogenic matrix
-  - type: SolutionContainerManager
-    solutions:
-      beaker:
-        maxVol: 120
-        reagents:
-        - ReagentId: CMUBiogenicMatrix
-          Quantity: 120
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+      reagents:
+      - ReagentId: CMUBiogenicMatrix
+        Quantity: 120

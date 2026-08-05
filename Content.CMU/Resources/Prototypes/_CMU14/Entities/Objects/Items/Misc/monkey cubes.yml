@@ -60,9 +60,7 @@
     possibleSpawns:
     - RMCMobSmallHostYiren
   - type: Tag
-    tags:
-    - Meat
-    - MonkeyCube
+    tags: [Meat, MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
@@ -76,9 +74,7 @@
     possibleSpawns:
     - RMCMobSmallHostFarwa
   - type: Tag
-    tags:
-    - Meat
-    - MonkeyCube
+    tags: [Meat, MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
@@ -92,9 +88,7 @@
     possibleSpawns:
     - RMCMobSmallHostStok
   - type: Tag
-    tags:
-    - Meat
-    - MonkeyCube
+    tags: [Meat, MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
@@ -108,9 +102,7 @@
     possibleSpawns:
     - RMCMobSmallHostNeaera
   - type: Tag
-    tags:
-    - Meat
-    - MonkeyCube
+    tags: [Meat, MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycube
@@ -125,8 +117,7 @@
     items:
     - id: CMUYirenCube
   - type: Tag
-    tags:
-    - MonkeyCube
+    tags: [MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
@@ -141,8 +132,7 @@
     items:
     - id: CMUStokCube
   - type: Tag
-    tags:
-    - MonkeyCube
+    tags: [MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
@@ -157,8 +147,7 @@
     items:
     - id: CMUFarwaCube
   - type: Tag
-    tags:
-    - MonkeyCube
+    tags: [MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap
@@ -173,8 +162,7 @@
     items:
     - id: CMUNeaeraCube
   - type: Tag
-    tags:
-    - MonkeyCube
+    tags: [MonkeyCube]
   - type: Sprite
     sprite: _CMU14/Objects/Items/Food/monkey_cubes.rsi
     state: monkeycubewrap

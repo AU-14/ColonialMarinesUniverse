@@ -5,13 +5,13 @@
   description: A camo cover for the M10 helmet. Seems a bit redundant since the helmet is already green...
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+      sprite: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
       state: helmet
 
 - type: entity
@@ -21,13 +21,13 @@
   description: A camo cover for the M10 helmet.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
+      sprite: _CMU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
       state: helmet
 
 - type: entity
@@ -37,13 +37,13 @@
   description: A camo cover for the M10 helmet.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
+      sprite: _CMU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
       state: helmet
 
 - type: entity
@@ -53,13 +53,13 @@
   description: A rain cover for the M10 helmet.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
+      sprite: _CMU14/Clothing/USCMHelmetGarb/rainhelmetcover.rsi
       state: helmet
 
 - type: entity
@@ -69,13 +69,13 @@
   description: A netting cover for the M10 helmet.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
+      sprite: _CMU14/Clothing/USCMHelmetGarb/helmetnetting.rsi
       state: helmet
 
 - type: entity
@@ -85,13 +85,13 @@
   description: A visor that can be attached to many helmets.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMHelmetGarb/riotvisor.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/riotvisor.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMHelmetGarb/riotvisor.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/riotvisor.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMHelmetGarb/riotvisor.rsi
+      sprite: _CMU14/Clothing/USCMHelmetGarb/riotvisor.rsi
       state: helmet
 
 #armor garb
@@ -104,13 +104,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
       state: helmet
 
 - type: entity
@@ -120,13 +120,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
       state: helmet
 
 - type: entity
@@ -136,13 +136,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
       state: helmet
 
 - type: entity
@@ -152,13 +152,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
       state: helmet
 
 - type: entity
@@ -168,13 +168,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
       state: helmet
 
 - type: entity
@@ -184,13 +184,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
       state: helmet
 
 - type: entity
@@ -216,13 +216,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/desertbracers.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertbracers.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/desertbracers.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertbracers.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/desertbracers.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/desertbracers.rsi
       state: helmet
 
 - type: entity
@@ -232,13 +232,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
       state: helmet
 
 - type: entity
@@ -248,13 +248,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/desertneckguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertneckguard.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/desertneckguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertneckguard.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/desertneckguard.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/desertneckguard.rsi
       state: helmet
 
 - type: entity
@@ -264,13 +264,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/desertshinguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertshinguards.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/desertshinguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertshinguards.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/desertshinguards.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/desertshinguards.rsi
       state: helmet
 
 - type: entity
@@ -280,13 +280,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
       state: helmet
 
 - type: entity
@@ -296,13 +296,13 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/desertthighguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertthighguard.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/desertthighguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/desertthighguard.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/desertthighguard.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/desertthighguard.rsi
       state: helmet
 
 - type: entity
@@ -359,13 +359,13 @@
   description: A shotgun shell holder made to be attached to the outside of M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/shotgunwebbing.rsi
       state: helmet
 
 #armor garb cases
@@ -425,13 +425,13 @@
   description: A large pouch with M3-R Pattern webbing clips designed to house surgical tools for Corpsmen attached to FORECON units, where field hospitals are not readily available.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
+      sprite: _CMU14/Clothing/USCMC/Garb/corpsmanwebbing.rsi
       state: helmet
 
 - type: entity
@@ -441,13 +441,13 @@
   description: A modified variant of the M3-R Pattern grenade webbing for FORECON units, this one accepting 12 gauge.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMC/Garb/shellwebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/shellwebbing.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMC/Garb/shellwebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/shellwebbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMC/Garb/shellwebbing.rsi
+      sprite: _CMU14/Clothing/USCMC/Garb/shellwebbing.rsi
       state: helmet
 
 - type: entity
@@ -457,13 +457,13 @@
   description: An alternative to the M3-R Pattern webbing fitted to store M40 grenades.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMC/Garb/grenadewebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/grenadewebbing.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMC/Garb/grenadewebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/grenadewebbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMC/Garb/grenadewebbing.rsi
+      sprite: _CMU14/Clothing/USCMC/Garb/grenadewebbing.rsi
       state: helmet
 
 - type: entity
@@ -473,13 +473,13 @@
   description: A set of magazine webbing made in an alternative configuration for standard M3 Pattern armor. This one is exclusively issued to Force Reconnoissance units.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMC/Garb/magazinewebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/magazinewebbing.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMC/Garb/magazinewebbing.rsi
+    sprite: _CMU14/Clothing/USCMC/Garb/magazinewebbing.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMC/Garb/magazinewebbing.rsi
+      sprite: _CMU14/Clothing/USCMC/Garb/magazinewebbing.rsi
       state: helmet
 
 # Camo system (ItemCamouflage) conforming variants
@@ -496,21 +496,21 @@
   description: A camo cover for the M10 helmet.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+    sprite: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
   - type: HelmetAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+      sprite: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
       state: helmet
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
-      Desert: _AU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
-      Snow: _AU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
-      Classic: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
-      Urban: _AU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+      Jungle: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+      Desert: _CMU14/Clothing/USCMHelmetGarb/deserthelmetcover.rsi
+      Snow: _CMU14/Clothing/USCMHelmetGarb/snowhelmetcover.rsi
+      Classic: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
+      Urban: _CMU14/Clothing/USCMHelmetGarb/junglehelmetcover.rsi
 
 - type: entity
   parent: RMCHelmetGarbGasmask
@@ -562,21 +562,21 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
       state: helmet
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
-      Desert: _AU14/Clothing/USCMArmorGarb/desertbracers.rsi
-      Snow: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
-      Classic: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
-      Urban: _AU14/Clothing/USCMArmorGarb/junglebracers.rsi
+      Jungle: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
+      Desert: _CMU14/Clothing/USCMArmorGarb/desertbracers.rsi
+      Snow: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
+      Classic: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
+      Urban: _CMU14/Clothing/USCMArmorGarb/junglebracers.rsi
 
 - type: entity
   parent: BaseItem
@@ -585,21 +585,21 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
       state: helmet
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
-      Desert: _AU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
-      Snow: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
-      Classic: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
-      Urban: _AU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+      Jungle: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+      Desert: _CMU14/Clothing/USCMArmorGarb/desertgroinplate.rsi
+      Snow: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+      Classic: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
+      Urban: _CMU14/Clothing/USCMArmorGarb/junglegroinplate.rsi
 
 - type: entity
   parent: BaseItem
@@ -608,21 +608,21 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
       state: helmet
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
-      Desert: _AU14/Clothing/USCMArmorGarb/desertneckguard.rsi
-      Snow: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
-      Classic: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
-      Urban: _AU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+      Jungle: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+      Desert: _CMU14/Clothing/USCMArmorGarb/desertneckguard.rsi
+      Snow: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+      Classic: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
+      Urban: _CMU14/Clothing/USCMArmorGarb/jungleneckguard.rsi
 
 - type: entity
   parent: BaseItem
@@ -631,21 +631,21 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
       state: helmet
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
-      Desert: _AU14/Clothing/USCMArmorGarb/desertshinguards.rsi
-      Snow: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
-      Classic: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
-      Urban: _AU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+      Jungle: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+      Desert: _CMU14/Clothing/USCMArmorGarb/desertshinguards.rsi
+      Snow: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+      Classic: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
+      Urban: _CMU14/Clothing/USCMArmorGarb/jungleshinguards.rsi
 
 - type: entity
   parent: BaseItem
@@ -654,21 +654,21 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
       state: helmet
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
-      Desert: _AU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
-      Snow: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
-      Classic: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
-      Urban: _AU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+      Jungle: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+      Desert: _CMU14/Clothing/USCMArmorGarb/desertshoulderpads.rsi
+      Snow: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+      Classic: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
+      Urban: _CMU14/Clothing/USCMArmorGarb/jungleshoulderpads.rsi
 
 - type: entity
   parent: BaseItem
@@ -677,21 +677,21 @@
   description: An armor piece made to be used in combination with M3 pattern armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
     state: icon
   - type: Item
-    sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+    sprite: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
   - type: OuterClothingAccessory
     rsi:
-      sprite: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+      sprite: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
       state: helmet
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
-      Desert: _AU14/Clothing/USCMArmorGarb/desertthighguard.rsi
-      Snow: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
-      Classic: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
-      Urban: _AU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+      Jungle: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+      Desert: _CMU14/Clothing/USCMArmorGarb/desertthighguard.rsi
+      Snow: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+      Classic: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
+      Urban: _CMU14/Clothing/USCMArmorGarb/junglethighguards.rsi
 
 - type: entity
   parent: RMCKitBase

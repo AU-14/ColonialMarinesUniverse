@@ -3,16 +3,6 @@
   preset: DistressSignal
   planetChoices:
     - planets:
-        - CMUPlanetHopesRetreat
-      threatVote:
-        candidates:
-          - DistressSignalXenoRoundGroup
-          - DistressSignalAbominationRoundGroup
-      backupThreatVote:
-        candidates:
-          - DistressSignalXenoRoundGroup
-
-    - planets:
         - AUPlanetCorsatStation
         - AUPlanetTrijent
         - AuPlanetKutjevo
@@ -27,20 +17,12 @@
     - planets:
         - AUPlanetSorokyne
         - AUPlanetLV327
-      threatVote:
-        candidates:
-          - DistressSignalXenoRoundGroup
-          - DistressSignalAbominationRoundGroup
-      backupThreatVote:
-        candidates:
-          - DistressSignalXenoRoundGroup
-
-    - planets:
+        - CMUPlanetHopesRetreat
         - AuPlanetChances
       threatVote:
         candidates:
-          - DistressSignalAbominationRoundGroup
           - DistressSignalXenoRoundGroup
+          - DistressSignalAbominationRoundGroup
       backupThreatVote:
         candidates:
           - DistressSignalXenoRoundGroup

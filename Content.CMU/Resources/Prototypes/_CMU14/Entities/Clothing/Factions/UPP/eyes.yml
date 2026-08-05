@@ -7,7 +7,7 @@
   - type: Item
     storedRotation: 0
   - type: Sprite
-    sprite: _AU14/Clothing/UPP/eyes/rvs37_sight.rsi
+    sprite: _CMU14/Clothing/UPP/eyes/rvs37_sight.rsi
     layers:
     - state: icon
       map: [ "icon" ]

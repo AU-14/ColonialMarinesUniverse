@@ -5,17 +5,17 @@
   description: The Modular Combat System Mark X Pulse Rifle, or MCS-X Pulse Rifle for short, is the standard weapon used by the prodigy security forces employed by Prodigy Corporation. The weapon has a bullpup design, intended for use in cramped urban environments. The MCS-X features a digital ammunition counter, and is capable of holding ninety-five rounds.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Prodigy/mcsmxpr32x64.rsi
+    sprite: _CMU14/Weapons/Guns/Prodigy/mcsmxpr32x64.rsi
     layers:
     - state: base
       map: [ "enum.GunVisualLayers.Base" ]
     - state: mag-0
       map: [ "enum.GunVisualLayers.Mag" ]
   - type: Item
-    sprite: _AU14/Weapons/Guns/Prodigy/mcsmxpr32x32.rsi
+    sprite: _CMU14/Weapons/Guns/Prodigy/mcsmxpr32x32.rsi
     size: Large
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/Prodigy/mcsmxpr32x32.rsi
+    sprite: _CMU14/Weapons/Guns/Prodigy/mcsmxpr32x32.rsi
   - type: ContainerContainer
     containers:
       gun_magazine: !type:ContainerSlot
@@ -108,7 +108,7 @@
     proto: CMCartridgeRifle10x24mm
     capacity: 95
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/prodigyriflemag.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/prodigyriflemag.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]
@@ -134,7 +134,7 @@
       - CMCartridgeRifle10x24mmAP
     proto: CMCartridgeRifle10x24mmAP
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/Ammo/Magazines/prodigyriflemag.rsi
+    sprite: _CMU14/Weapons/Guns/Ammo/Magazines/prodigyriflemag.rsi
     layers:
     - state: base
       map: ["enum.GunVisualLayers.Base"]

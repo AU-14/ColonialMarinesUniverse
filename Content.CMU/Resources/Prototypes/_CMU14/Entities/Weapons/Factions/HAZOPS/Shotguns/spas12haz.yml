@@ -5,9 +5,9 @@
   description: Designed for HAZOPS teams, this cut-down SPAS-12 looks mostly the same as old Earth models, but the internal workings are completely rebuilt, allowing for a devasting "triple-shot" mode.
   components:
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/HAZOPS/SPAS12HAZ.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/SPAS12HAZ.rsi
   - type: Clothing
-    sprite: _AU14/Weapons/Guns/HAZOPS/SPAS12HAZ.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/SPAS12HAZ.rsi
     slots:
     - suitStorage
     - belt

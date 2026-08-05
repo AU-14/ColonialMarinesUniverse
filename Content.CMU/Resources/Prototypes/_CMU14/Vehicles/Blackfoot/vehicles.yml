@@ -41,7 +41,7 @@
   - type: InteractionOutline
   - type: Sprite
     drawdepth: Mobs
-    sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot.rsi
+    sprite: _CMU14/Structures/vehicles/Blackfoot/blackfoot.rsi
     layers:
     - map: [ base ]
       state: stowed

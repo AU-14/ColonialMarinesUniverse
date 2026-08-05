@@ -353,6 +353,21 @@
   - type: YautjaTechItem
 
 - type: entity
+  parent: CMUYautjaToolbelt
+  id: CMUYautjaToolbeltFilled
+  suffix: Yautja, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUYautjaScrewdriver
+    - id: CMUYautjaWrench
+    - id: CMUYautjaWelder
+    - id: CMUYautjaCrowbar
+    - id: CMUYautjaWirecutters
+    - id: CableApcStack10
+    - id: CMUYautjaMultitool
+
+- type: entity
   parent: CMBeltUtility
   id: CMUYautjaToolbelt
   name: alien toolbelt
@@ -378,21 +393,6 @@
     tags:
     - CMUYautjaToolbelt
   - type: YautjaTechItem
-
-- type: entity
-  parent: CMUYautjaToolbelt
-  id: CMUYautjaToolbeltFilled
-  suffix: Yautja, Filled
-  components:
-  - type: StorageFill
-    contents:
-    - id: CMUYautjaScrewdriver
-    - id: CMUYautjaWrench
-    - id: CMUYautjaWelder
-    - id: CMUYautjaCrowbar
-    - id: CMUYautjaWirecutters
-    - id: CableApcStack10
-    - id: CMUYautjaMultitool
 
 - type: entity
   parent: BaseItem

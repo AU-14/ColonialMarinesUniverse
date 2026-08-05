@@ -5,7 +5,7 @@
   description: A Hyperdyne Systems van, used for synthetic maintance. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civvan.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/civvan.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -39,7 +39,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_turquoise_cargo.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/small_truck_turquoise_cargo.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -73,7 +73,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -107,7 +107,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -141,7 +141,7 @@
   description: An old small cargo truck. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/civtruck.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -176,7 +176,7 @@
   description: An old small cargo truck. This seems to be loaded with medical supplies. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_medical.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/small_truck_medical.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -211,7 +211,7 @@
   description: An old small garbage truck. Stinks. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_garbage.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/small_truck_garbage.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -246,7 +246,7 @@
   description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargobarrels.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargobarrels.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -281,7 +281,7 @@
   description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargo.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/small_truck_brown_cargo.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -316,7 +316,7 @@
   description: An old small barrels truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_blue_cargo.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/small_truck_blue_cargo.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -351,7 +351,7 @@
   description: An old small cargo truck. Smells like pure juice. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/small_truck_blue.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/small_truck_blue.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -386,7 +386,7 @@
   description: An old van used as ambulance for colonial Emergency Medical Service. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/ambulance.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/ambulance.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -420,7 +420,7 @@
   description: An police Mono Supron, produced by Weyland-Yutani. Still sturdy enough for transport.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/cop_car.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/cop_car.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]
@@ -446,3 +446,37 @@
     - offset: 0,2
       radius: 0.75
       interiorCoords: -1.3,1
+
+- type: entity
+  parent: VehicleBoxVanBase
+  id: VehicleCMBPoliceVan
+  name: CMB paddywagon
+  description: A van used by the Colonial Marshal Bureau to transport both prisoners and officers alike.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/marshalpaddywagon.rsi
+    offset: "0,0.5"
+    layers:
+    - map: [ base ]
+      state: van_base
+    - map: [ damaged_frame ]
+      state: damaged_frame
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: VehicleEnter
+    interiorPath: /Maps/_RMC14/Vehicles/box_van_interior.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 8
+    maxXenos: 2
+    entryPoints:
+    - offset: 1,-0.25
+      radius: 0.6
+      interiorCoords: -0.42,1.6
+    - offset: -1,-0.25
+      radius: 0.6
+      interiorCoords: -0.53,0.84
+    - offset: 0,2
+      radius: 0.75
+      interiorCoords: -1.74,1.22

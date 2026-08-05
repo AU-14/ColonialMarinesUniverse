@@ -1,8 +1,8 @@
 - type: guideEntry
   parent: RMC
   id: AU14UCMJ
-  name: Uniform Code of Military Justice
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJ.xml"
+  name: cmu-guide-ucmj
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/AU14UCMJ.xml"
   priority: 3
   children:
   - AU14UCMJLawRankStructure
@@ -16,50 +16,50 @@
 - type: guideEntry
   parent: RMC
   id: AU14UCMJLawRankStructure
-  name: Law Rank Structure
+  name: cmu-guide-ucmj-law-rank-structure
   priority: 0
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJEnforcementStructure.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/AU14UCMJEnforcementStructure.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJGENCON
-  name: The Geneva Conventions of 12th August 2106
+  name: cmu-guide-ucmj-geneva-conventions
   priority: 0
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Protectionacts/TheGenevaConventions.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/Protectionacts/TheGenevaConventions.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJRightToAppeal
-  name: Right to Appeal
+  name: cmu-guide-ucmj-right-to-appeal
   priority: 1
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJRightToAppeal.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/AU14UCMJRightToAppeal.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJNJP
-  name: Non-Judicial Punishments
+  name: cmu-guide-ucmj-non-judicial-punishments
   priority: 3
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJNJP.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/AU14UCMJNJP.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJArrestingProcedure
-  name: Arresting Procedures
+  name: cmu-guide-ucmj-arresting-procedures
   priority: 2
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJArrestingProcedure.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/AU14UCMJArrestingProcedure.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJDefinitionsandGlossary
-  name: Definitions and Glossary
+  name: cmu-guide-ucmj-definitions-and-glossary
   priority: 2
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJDefinitionsandGlossary.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/AU14UCMJDefinitionsandGlossary.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJCriminalCode
-  name: Criminal Code
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/AU14UCMJCriminalCode.xml"
+  name: cmu-guide-ucmj-criminal-code
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/AU14UCMJCriminalCode.xml"
   priority: 3
   children:
   - AU14UCMJOptionalCrimes
@@ -71,34 +71,34 @@
 - type: guideEntry
   parent: RMC
   id: AU14UCMJOptionalCrimes
-  name: Optional Crimes
+  name: cmu-guide-ucmj-optional-crimes
   priority: 1
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJOptionalCrimes.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/Crimes/AU14UCMJOptionalCrimes.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJMinorCrimes
-  name: Minor Crimes
+  name: cmu-guide-ucmj-minor-crimes
   priority: 2
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJMinorCrimes.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/Crimes/AU14UCMJMinorCrimes.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJMajorCrimes
-  name: Major Crimes
+  name: cmu-guide-ucmj-major-crimes
   priority: 3
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJMajorCrimes.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/Crimes/AU14UCMJMajorCrimes.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJCapitalCrimes
-  name: Capital Crimes
+  name: cmu-guide-ucmj-capital-crimes
   priority: 4
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJCapitalCrimes.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/Crimes/AU14UCMJCapitalCrimes.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14UCMJPrecautionaryCharges
-  name: Precautionary Charges
+  name: cmu-guide-ucmj-precautionary-charges
   priority: 5
-  text: "/ServerInfo/Guidebook/_AU14/UCMJ/Crimes/AU14UCMJPrecautionaryCharges.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/UCMJ/Crimes/AU14UCMJPrecautionaryCharges.xml"

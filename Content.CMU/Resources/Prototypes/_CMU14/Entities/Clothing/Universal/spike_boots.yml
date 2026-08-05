@@ -12,13 +12,13 @@
   suffix: AU14
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Shoes/spikedboots.rsi
+    sprite: _CMU14/Clothing/Shoes/spikedboots.rsi
     layers:
     - state: icon
     - state: filled
       map: [ "enum.CMItemSlotsLayers.Fill" ]
   - type: Clothing
-    sprite: _AU14/Clothing/Shoes/spikedboots.rsi
+    sprite: _CMU14/Clothing/Shoes/spikedboots.rsi
   - type: ClothingSpeedModifier
     walkModifier: 0.9
     sprintModifier: 0.9

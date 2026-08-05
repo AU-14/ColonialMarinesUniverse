@@ -9,7 +9,7 @@
     guides:
     - RMCGuideRoleMortar
   - type: Sprite
-    sprite: _AU14/Weapons/Mortar/L53A1.rsi
+    sprite: _CMU14/Weapons/Mortar/L53A1.rsi
     layers:
     - map: [ "mortar" ]
       state: mortar_l53a1_carry

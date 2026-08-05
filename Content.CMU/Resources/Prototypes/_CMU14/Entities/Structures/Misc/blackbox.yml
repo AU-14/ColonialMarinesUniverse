@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: BaseStructureDynamic
   id: AU14BlackBoxRecorder
   name: colony blackbox recorder
@@ -33,5 +33,5 @@
             min: 1
             max: 1
   - type: Sprite
-    sprite:  _AU14/Structures/blackbox.rsi
+    sprite:  _CMU14/Structures/blackbox.rsi
     state: blackbox

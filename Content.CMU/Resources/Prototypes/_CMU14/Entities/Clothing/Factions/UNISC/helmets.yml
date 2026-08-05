@@ -5,9 +5,9 @@
   description: Standard Issue Helmet used by UNISC. Provides modest protection from bullet and melee attacks at the head. It also has an inbuilt camera allowing for command staff to observe the squad's actions.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/m10helmet.rsi
+    sprite: _CMU14/Clothing/UNISC/m10helmet.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UNISC/m10helmet.rsi
+    sprite: _CMU14/Clothing/UNISC/m10helmet.rsi
     
 - type: entity
   parent: RMCMarineHelmetBase
@@ -16,6 +16,6 @@
   description: A slightly fancier helmet for UNISC leadership. This one contains a small built-in camera and has cushioning to project your fragile brain.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/UNISC/m11helmet.rsi
+    sprite: _CMU14/Clothing/UNISC/m11helmet.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/UNISC/m11helmet.rsi
+    sprite: _CMU14/Clothing/UNISC/m11helmet.rsi

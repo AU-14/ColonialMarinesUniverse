@@ -6,7 +6,7 @@
   suffix: CMU
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Tools/maintenance_jack.rsi
+    sprite: _CMU14/Objects/Tools/maintenance_jack.rsi
     state: icon
   - type: Item
     size: Small
@@ -94,12 +94,12 @@
     entries:
       - behavior: Prying
         sprite:
-          sprite: _AU14/Objects/Tools/maintenance_jack.rsi
+          sprite: _CMU14/Objects/Tools/maintenance_jack.rsi
           state: icon
         useSound: /Audio/Items/crowbar.ogg
       - behavior: Anchoring
         sprite:
-          sprite: _AU14/Objects/Tools/maintenance_jack.rsi
+          sprite: _CMU14/Objects/Tools/maintenance_jack.rsi
           state: wrench
         useSound: /Audio/Items/ratchet.ogg
   - type: DamageImpactProfile

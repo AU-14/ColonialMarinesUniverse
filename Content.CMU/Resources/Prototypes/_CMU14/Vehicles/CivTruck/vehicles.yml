@@ -8,7 +8,7 @@
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/van.rsi
     layers:
     - map: [ base ]
       state: van_base
@@ -46,7 +46,7 @@
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/van.rsi
     layers:
     - map: [ base ]
       state: truck_base
@@ -84,7 +84,7 @@
     damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
+    sprite: _CMU14/Structures/vehicles/hybrisavehicles/van.rsi
     layers:
     - map: [ base ]
       state: armored_base

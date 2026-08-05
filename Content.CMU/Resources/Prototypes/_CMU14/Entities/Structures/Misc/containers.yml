@@ -20,7 +20,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/containers.rsi
+    sprite: _CMU14/Structures/containers.rsi
     offset: 0, 0.5
   - type: Clickable
   - type: Occluder

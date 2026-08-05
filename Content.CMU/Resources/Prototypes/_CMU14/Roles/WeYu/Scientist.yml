@@ -26,8 +26,8 @@
     prefix: au14-job-prefix-civilianscientist
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
-      state: weya_scientist
+      sprite: /Textures/_RMC14/Interface/job_icons/We-Ya/pmc.rsi
+      state: pmc_sd
   - type: AssignSquad
     whitelist:
       tags:
@@ -101,5 +101,12 @@
   - EyewearRMC
   - MasksRMC
   - HeadwearCLFAU14
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: RMCJobIconPMCScientist
+  icon:
+    sprite: _RMC14/Interface/job_icons/We-Ya/pmc.rsi
+    state: pmc_sd
 
 # ├──[ COS ]─────────────────────────────────────────────────────────┤

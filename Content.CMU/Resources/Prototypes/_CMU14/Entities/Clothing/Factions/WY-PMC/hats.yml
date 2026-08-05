@@ -5,9 +5,9 @@
   description: A WY PMC patrol cap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/WY_PMC/wypmccap.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmccap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/WY_PMC/wypmccap.rsi
+    sprite: _CMU14/Clothing/WY_PMC/wypmccap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -16,6 +16,6 @@
   description: A WY Personal Protection Officer cap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/WY_PMC/ppo_cap.rsi
+    sprite: _CMU14/Clothing/WY_PMC/ppo_cap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/WY_PMC/ppo_cap.rsi
+    sprite: _CMU14/Clothing/WY_PMC/ppo_cap.rsi

@@ -15,7 +15,7 @@
     - type: Clickable
     - type: InteractionOutline
     - type: Sprite
-      sprite: _AU14/fireextingushercabinet.rsi
+      sprite: _CMU14/fireextingushercabinet.rsi
       snapCardinals: true
       layers:
       - state: frame

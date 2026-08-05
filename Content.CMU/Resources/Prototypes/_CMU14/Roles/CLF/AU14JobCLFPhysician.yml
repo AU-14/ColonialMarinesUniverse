@@ -27,7 +27,7 @@
     mindRole: MindRoleCLFPhysician
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_AU14/Interface/au14colonyjobicons.rsi
+      sprite: /Textures/_CMU14/Interface/au14colonyjobicons.rsi
       state: colonist
   - type: ShowMarineIcons
     factions:

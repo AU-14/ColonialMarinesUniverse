@@ -16,7 +16,7 @@
     Bends around brush and doorframes without snapping.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    sprite: _CMU14/Objects/Radio/anprc117g.rsi
     state: antenna_w
   - type: ANPRCAntenna
     label: WHIP
@@ -34,7 +34,7 @@
     a bag until it is strung up.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    sprite: _CMU14/Objects/Radio/anprc117g.rsi
     state: antenna_w
   - type: ANPRCAntenna
     label: WIRE
@@ -52,7 +52,7 @@
     post or retrans site, not hauled around on patrol.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Radio/anprc117g.rsi
+    sprite: _CMU14/Objects/Radio/anprc117g.rsi
     state: antenna_m
   - type: ANPRCAntenna
     label: MAST

@@ -8,9 +8,9 @@
     builds: AU14HescoUnfilled1
   - type: Item
     size: Huge
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: _CMU14/Structures/hesco.rsi
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: _CMU14/Structures/hesco.rsi
     state: item_icon
 
 - type: entity
@@ -44,7 +44,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: _CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_1
     - map: [ "acided" ]
@@ -89,7 +89,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: _CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_2
     - map: [ "acided" ]
@@ -149,7 +149,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: _CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_3
     - map: [ "acided" ]
@@ -210,7 +210,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: _CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_short_complete
     - map: [ "acided" ]
@@ -271,7 +271,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: Sprite
-    sprite: _AU14/Structures/hesco.rsi
+    sprite: _CMU14/Structures/hesco.rsi
     layers:
     - state: sand_wall_tall_building1
     - map: [ "acided" ]

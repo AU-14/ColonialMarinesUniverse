@@ -2,11 +2,11 @@
   id: CMULV376BarkersLament
   mapName: LV-376 Ulixes
   allegiance: UA
-  mapPath: /Maps/_AU14/BarkersMultiZ/barkers0.yml
+  mapPath: /Maps/_CMU14/BarkersMultiZ/barkers0.yml
   mapsBelow:
-  - /Maps/_AU14/BarkersMultiZ/barkers-1.yml
+  - /Maps/_CMU14/BarkersMultiZ/barkers-1.yml
   mapsAbove:
-  - /Maps/_AU14/BarkersMultiZ/barkers1.yml
+  - /Maps/_CMU14/BarkersMultiZ/barkers1.yml
   minPlayers: 40
   maxPlayers: 140
   maxRandomOffset: 0

@@ -127,12 +127,16 @@
     contents:
     - id: RMCShioRoyalsCase
     - id: RMCZippoGold
+  - type: Storage
+    maxItemSize: Normal
 
 - type: entity
   parent: RMCPouchMedkit
   id: RMCPouchMedkitVonBandolier
   suffix: Filled, Professor Von Bandolier
   components:
+  - type: Storage
+    whitelist: null
   - type: StorageFill
     contents:
     - id: AU14HemostaticGauzePacket

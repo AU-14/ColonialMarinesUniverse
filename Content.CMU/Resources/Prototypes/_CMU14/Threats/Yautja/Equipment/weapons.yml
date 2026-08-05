@@ -834,7 +834,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: CMUYautjaPlasmaRifleBolt
     fireCost: 175
   - type: Battery
@@ -887,7 +887,7 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse3.wav
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: CMUYautjaPlasmaPistolBolt
     fireCost: 125
   - type: Battery

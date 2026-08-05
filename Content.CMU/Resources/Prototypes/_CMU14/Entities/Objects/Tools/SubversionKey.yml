@@ -6,6 +6,7 @@
   components:
   - type: SynthSubverter
   - type: Sprite
+    sprite: _RMC14/Objects/Devices/synth_reset_key.rsi
     layers:
     - state: makeshift_key
     - state: makeshift_key_on

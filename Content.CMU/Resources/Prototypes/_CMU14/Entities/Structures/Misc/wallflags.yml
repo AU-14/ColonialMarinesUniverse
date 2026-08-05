@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: BaseSign
   id: AU14WallFlagBase
   abstract: true
@@ -7,7 +7,7 @@
     arc: 360
   - type: Sprite
     drawdepth: WallTops
-    sprite: _AU14/Structures/wallflags.rsi
+    sprite: _CMU14/Structures/wallflags.rsi
     snapCardinals: true
   - type: Destructible
     thresholds:

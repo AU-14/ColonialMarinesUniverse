@@ -18,7 +18,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/boxvvanwhite.rsi
+    sprite: _CMU14/Structures/vehicles/boxvvanwhite.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -222,7 +222,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/largevehicles.rsi
+    sprite: _CMU14/Structures/vehicles/largevehicles.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -512,7 +512,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/uscmapc.rsi
+    sprite: _CMU14/Structures/vehicles/uscmapc.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -592,7 +592,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/militarycargotrucks.rsi
+    sprite: _CMU14/Structures/vehicles/militarycargotrucks.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -693,7 +693,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/clfvan.rsi
+    sprite: _CMU14/Structures/vehicles/clfvan.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -752,7 +752,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/arc.rsi
+    sprite: _CMU14/Structures/vehicles/arc.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -811,7 +811,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/twetank.rsi
+    sprite: _CMU14/Structures/vehicles/twetank.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -870,7 +870,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/bison.rsi
+    sprite: _CMU14/Structures/vehicles/bison.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -992,7 +992,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/throoparmoredtruck.rsi
+    sprite: _CMU14/Structures/vehicles/throoparmoredtruck.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -1051,7 +1051,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/usasfaircraft.rsi
+    sprite: _CMU14/Structures/vehicles/usasfaircraft.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -1131,7 +1131,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/uscmifv.rsi
+    sprite: _CMU14/Structures/vehicles/uscmifv.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -1211,7 +1211,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/van.rsi
+    sprite: _CMU14/Structures/vehicles/van.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -1333,7 +1333,7 @@
         layer:
         - MobMask
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/vtol.rsi
+    sprite: _CMU14/Structures/vehicles/vtol.rsi
     offset: 0.5, 0.5
     noRot: true
   - type: Clickable
@@ -1399,7 +1399,7 @@
   description: A stock car used by UA racing fame John Wayne Jr. Just pretend the supercharger is stock.
   components:
   - type: Sprite
-    sprite: _AU14/Structures/vehicles/stockcar.rsi
+    sprite: _CMU14/Structures/vehicles/stockcar.rsi
     state: stockcar
   - type: Clickable
   - type: InteractionOutline

@@ -5,4 +5,4 @@
   description: "The flag of the United Americas. You can smell oil." # This one looks ready to be planted into the ground."
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Flags/ua_flag.rsi
+    sprite: _CMU14/Objects/Flags/ua_flag.rsi

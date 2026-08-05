@@ -5,10 +5,10 @@
   description: A spray bottle filled with a cleaning solution. It is used to clean various surfaces and objects.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
+    sprite: _CMU14/Objects/Tools/cleaner_spray.rsi
     state: cleaner
   - type: Item
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
+    sprite: _CMU14/Objects/Tools/cleaner_spray.rsi
 
 - type: entity
   parent: AU14SprayCleaner
@@ -17,7 +17,7 @@
   description: A large spray bottle filled with a cleaning solution. It is used to clean various surfaces and objects.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
+    sprite: _CMU14/Objects/Tools/cleaner_spray.rsi
     state: cleaner_large
   - type: SolutionContainerManager
     solutions:
@@ -34,7 +34,7 @@
   description: An experimental spray bottle filled with an cleaning solution. It's capable of self-regenerating the cleaning solution by harvesting ambient compounds from the surrounding atmosphere. It is used to clean various surfaces and objects.
   components:
   - type: Sprite
-    sprite: _AU14/Objects/Tools/cleaner_spray.rsi
+    sprite: _CMU14/Objects/Tools/cleaner_spray.rsi
     state: cleaner_special
   - type: SolutionContainerManager
     solutions:

@@ -78,7 +78,7 @@
   parent: RMCBeltHolsterPistol
   id: AU14BeltHolsterPistolUSArmyFull
   suffix: Full, AU14, US Army
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCMK80
@@ -93,7 +93,7 @@
   parent: AU14MolleBackpack
   id: AU14AU14MolleBackpackCOFull
   suffix: Full, AU14, US Army
-  components: 
+  components:
   - type: StorageFill
     contents:
     - id: RMCRadioHandheldColony

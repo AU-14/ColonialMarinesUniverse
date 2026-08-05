@@ -14,7 +14,7 @@
     tags:
     - CMUCastItem
   - type: Sprite
-    sprite: _AU14/Objects/Medical/cast.rsi
+    sprite: _CMU14/Objects/Medical/cast.rsi
     state: cast
 
 - type: Tag

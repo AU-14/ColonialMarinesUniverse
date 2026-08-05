@@ -6,7 +6,7 @@
   description: danger of mines and death...
   components:
   - type: Sprite
-    sprite: _AU14/N14content/world.rsi
+    sprite: _CMU14/N14content/world.rsi
     state: mine_sign
   - type: Construction
     graph: AU14SignGraph

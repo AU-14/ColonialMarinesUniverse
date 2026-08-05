@@ -16,7 +16,7 @@
     accuracyMultiplierUnwielded: 0.85
   - type: Gun
     soundGunshot:
-      path: /Audio/_AU14/Weapons/m50/desert_eagle_fire.ogg
+      path: /Audio/_CMU14/Weapons/m50/desert_eagle_fire.ogg
   - type: PumpAction
     sound:
       path: /Audio/_RMC14/Weapons/Guns/Cock/gun_pistol_cocked.ogg
@@ -25,9 +25,9 @@
     popupKey: rmc-gun-rack-first-with
     once: true
   - type: Sprite
-    sprite: _AU14/Weapons/Guns/HAZOPS/M50BaldEagle.rsi
+    sprite: _CMU14/Weapons/Guns/HAZOPS/M50BaldEagle.rsi
   - type: Clothing
-    sprite:  _AU14/Weapons/Guns/HAZOPS/M50BaldEagle.rsi
+    sprite:  _CMU14/Weapons/Guns/HAZOPS/M50BaldEagle.rsi
   - type: ItemSlots
     slots:
       gun_magazine:
