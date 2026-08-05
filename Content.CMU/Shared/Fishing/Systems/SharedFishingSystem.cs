@@ -12,6 +12,7 @@ using Content.Shared.Popups;
 using Content.Shared.Throwing;
 using Content.Shared.Actions.Components;
 using Content.Shared.Vehicle.Components;
+using Content.Shared._RMC14.Vehicle;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;

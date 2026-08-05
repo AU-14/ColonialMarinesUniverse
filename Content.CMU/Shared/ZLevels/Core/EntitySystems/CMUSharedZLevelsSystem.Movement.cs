@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Threading;
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Vehicles;
@@ -7,6 +8,7 @@ using Content.Shared.Chasm;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Ghost;
 using Content.Shared.Movement.Pulling.Components;
 using Content.Shared.Movement.Pulling.Systems;
 using Content.Shared.Throwing;
@@ -17,12 +19,16 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Prototypes;
+using DefaultInterpolatedStringHandler = System.Runtime.CompilerServices.DefaultInterpolatedStringHandler;
+using InterpolatedStringHandler = System.Runtime.CompilerServices.InterpolatedStringHandlerAttribute;
+using InterpolatedStringHandlerArgument = System.Runtime.CompilerServices.InterpolatedStringHandlerArgumentAttribute;
 
 namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem
 {
     public const int MaxZLevelsBelowRendering = 8;
+    public const int MaxZLevelTraversalDepth = 8;
 
     private const float ZGravityForce = 9.8f;
     private const float ZVelocityLimit = 20.0f;
@@ -51,15 +57,15 @@ public abstract partial class CMUSharedZLevelsSystem
     private const string FallDebugTag = "[DEBUG-CMUZ-FALL]";
     private static readonly ProtoId<DamageTypePrototype> BluntDamageType = "Blunt";
 
+    protected virtual bool ZPhysicsEnabled => _configuration.GetCVar(CMUZLevelsCVars.Enabled);
+
     private EntityQuery<FixturesComponent> _fixturesQuery;
     private EntityQuery<CMUZLevelHighGroundComponent> _highgroundQuery;
     private EntityQuery<CMUVehicleZTraversalComponent> _vehicleTraversalQuery;
     private readonly HashSet<EntityUid> _moveSnapSuppressed = new();
-    private readonly HashSet<EntityUid> _fallImpactVictims = new();
     private readonly HashSet<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshes = new();
     private readonly List<(EntityUid Puller, EntityUid Pulled)> _deferredPullJointRefreshBuffer = new();
     private readonly List<Vector2> _vehicleSupportSamples = new();
-    private readonly List<EntityUid> _zMovementUpdateQueue = new();
     private int _profileZMovementStoppedParent;
     private int _profileZMovementStoppedNoMap;
     private int _profileZMovementGroundContacts;
@@ -75,7 +81,7 @@ public abstract partial class CMUSharedZLevelsSystem
     private int _profileZHighGroundAccepted;
     private int _profileZMoveSnapSweepSamples;
     private int _profileZMoveSnapSweepHighGroundChecks;
-    private bool _debugFalling;
+    private int _debugFalling;
     [Dependency] private PullingSystem _pulling = default!;
 
     private void InitMovement()
@@ -83,7 +89,11 @@ public abstract partial class CMUSharedZLevelsSystem
         _fixturesQuery = GetEntityQuery<FixturesComponent>();
         _highgroundQuery = GetEntityQuery<CMUZLevelHighGroundComponent>();
         _vehicleTraversalQuery = GetEntityQuery<CMUVehicleZTraversalComponent>();
-        Subs.CVar(_configuration, CMUZLevelsCVars.DebugFalling, value => _debugFalling = value, true);
+        Subs.CVar(
+            _configuration,
+            CMUZLevelsCVars.DebugFalling,
+            value => Interlocked.Exchange(ref _debugFalling, value ? 1 : 0),
+            true);
 
         SubscribeLocalEvent<DamageableComponent, CMUZLevelHitEvent>(OnFallDamage);
         SubscribeLocalEvent<PhysicsComponent, CMUZLevelHitEvent>(OnFallAreaImpact);
@@ -92,6 +102,9 @@ public abstract partial class CMUSharedZLevelsSystem
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
+
+        if (Prof.IsEnabled)
+            WriteTopologyLookupProfileCounters();
 
         FlushDeferredPullJointRefreshes();
     }
@@ -111,6 +124,10 @@ public abstract partial class CMUSharedZLevelsSystem
     private void OnZPhysicsMoveGroundSnapCore(Entity<CMUZPhysicsComponent> ent, ref MoveEvent args)
     {
         if (_moveSnapSuppressed.Contains(ent.Owner))
+            return;
+
+        var xform = Transform(ent);
+        if (xform.ParentUid != xform.MapUid)
             return;
 
         if (!ShouldProcessMoveGroundSnap(_net.IsClient, _timing.ApplyingState))
@@ -172,10 +189,9 @@ public abstract partial class CMUSharedZLevelsSystem
         if (_vehicleTraversalQuery.HasComp(ent.Owner))
             return;
 
-        _fallImpactVictims.Clear();
-        _lookup.GetEntitiesInRange(ent, 0.25f, _fallImpactVictims, LookupFlags.Uncontained);
+        var entitiesAround = _lookup.GetEntitiesInRange(ent, 0.25f, LookupFlags.Uncontained);
 
-        foreach (var victim in _fallImpactVictims)
+        foreach (var victim in entitiesAround)
         {
             if (victim == ent.Owner)
                 continue;
@@ -200,23 +216,9 @@ public abstract partial class CMUSharedZLevelsSystem
             ResetZMovementProfileCounters();
 
         var processed = 0;
-        _zMovementUpdateQueue.Clear();
         var query = EntityQueryEnumerator<CMUZPhysicsComponent, CMUZFallingComponent, TransformComponent, PhysicsComponent>();
-        while (query.MoveNext(out var uid, out _, out _, out _, out _))
+        while (query.MoveNext(out var uid, out var zPhys, out _, out var xform, out var physics))
         {
-            _zMovementUpdateQueue.Add(uid);
-        }
-
-        foreach (var uid in _zMovementUpdateQueue)
-        {
-            if (!TryComp<CMUZPhysicsComponent>(uid, out var zPhys) ||
-                !HasComp<CMUZFallingComponent>(uid) ||
-                !TryComp(uid, out TransformComponent? xform) ||
-                !TryComp<PhysicsComponent>(uid, out var physics))
-            {
-                continue;
-            }
-
             processed++;
 
             if (xform.ParentUid != xform.MapUid)
@@ -257,7 +259,6 @@ public abstract partial class CMUSharedZLevelsSystem
                 ? distanceToGround
                 : GetGroundSnapDistance(distanceToGround, stickyGround);
             hasGroundContact |= fallingGroundContact;
-            var isVehicle = HasComp<CMUVehicleZTraversalComponent>(uid);
             DebugLogFalling(
                 uid,
                 "tick",
@@ -318,13 +319,13 @@ public abstract partial class CMUSharedZLevelsSystem
                                 settledDistanceToGround,
                                 stickyGround,
                                 zPhys.LocalPosition,
-                                zPhys.Velocity,
-                                isVehicle))
+                                zPhys.Velocity))
                         {
                             DebugLogFalling(
                                 uid,
                                 "sleep",
                                 $"settledDistance={settledDistanceToGround:F3} sticky={stickyGround} local={zPhys.LocalPosition:F3}");
+                            SetZPhysicsFallingState((uid, zPhys), false);
                             RemComp<CMUZFallingComponent>(uid);
                         }
 
@@ -333,7 +334,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 }
             }
             else if (hasGroundContact &&
-                     ShouldSettleNonBouncingGroundContact(isVehicle, zPhys.Velocity))
+                     ShouldSettleNonBouncingGroundContact(HasComp<CMUVehicleZTraversalComponent>(uid), zPhys.Velocity))
             {
                 var velocityBeforeSettle = zPhys.Velocity;
                 zPhys.Velocity = 0f;
@@ -344,9 +345,10 @@ public abstract partial class CMUSharedZLevelsSystem
 
                 if (zPhys.LocalPosition >= 0f &&
                     zPhys.LocalPosition < 1f &&
-                    ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity, isVehicle))
+                    ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity))
                 {
                     DebugLogFalling(uid, "sleep", $"settledDistance=0.000 sticky={stickyGround} local={zPhys.LocalPosition:F3}");
+                    SetZPhysicsFallingState((uid, zPhys), false);
                     RemComp<CMUZFallingComponent>(uid);
                     DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
                     continue;
@@ -364,7 +366,6 @@ public abstract partial class CMUSharedZLevelsSystem
 
             DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
         }
-        _zMovementUpdateQueue.Clear();
 
         if (profiling)
         {
@@ -413,7 +414,9 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private bool ShouldDebugFalling(EntityUid uid)
     {
-        return _debugFalling && HasComp<CMUZFallingComponent>(uid);
+        return Interlocked.CompareExchange(ref _debugFalling, 0, 0) != 0 &&
+               TryComp<CMUZPhysicsComponent>(uid, out var zPhysics) &&
+               zPhysics.Falling;
     }
 
     private void DebugLogFalling(EntityUid uid, string stage, string details)
@@ -422,6 +425,59 @@ public abstract partial class CMUSharedZLevelsSystem
             return;
 
         Log.Info($"{FallDebugTag} side={GetDebugNetSide()} stage={stage} ent={uid} pretty=\"{ToPrettyString(uid)}\" {GetDebugFallingLocation(uid)} {details}");
+    }
+
+    private void DebugLogFalling(
+        EntityUid uid,
+        string stage,
+        [InterpolatedStringHandlerArgument("", nameof(uid))]
+        ref FallingDebugInterpolatedStringHandler details)
+    {
+        if (!details.Enabled)
+            return;
+
+        Log.Info($"{FallDebugTag} side={GetDebugNetSide()} stage={stage} ent={uid} pretty=\"{ToPrettyString(uid)}\" {GetDebugFallingLocation(uid)} {details.GetFormattedText()}");
+    }
+
+    [InterpolatedStringHandler]
+    private ref struct FallingDebugInterpolatedStringHandler
+    {
+        private DefaultInterpolatedStringHandler _inner;
+
+        public bool Enabled { get; }
+
+        public FallingDebugInterpolatedStringHandler(
+            int literalLength,
+            int formattedCount,
+            CMUSharedZLevelsSystem system,
+            EntityUid uid,
+            out bool shouldAppend)
+        {
+            Enabled = shouldAppend = system.ShouldDebugFalling(uid);
+            _inner = shouldAppend
+                ? new DefaultInterpolatedStringHandler(literalLength, formattedCount)
+                : default;
+        }
+
+        public void AppendLiteral(string value)
+        {
+            _inner.AppendLiteral(value);
+        }
+
+        public void AppendFormatted<T>(T value)
+        {
+            _inner.AppendFormatted(value);
+        }
+
+        public void AppendFormatted<T>(T value, string? format)
+        {
+            _inner.AppendFormatted(value, format);
+        }
+
+        public string GetFormattedText()
+        {
+            return _inner.ToStringAndClear();
+        }
     }
 
     private string GetDebugNetSide()
@@ -434,10 +490,10 @@ public abstract partial class CMUSharedZLevelsSystem
 
     private string GetDebugFallingLocation(EntityUid uid)
     {
-        if (!_xformQuery.TryComp(uid, out var xform))
+        if (!XformQuery.TryComp(uid, out var xform))
             return "xform=missing";
 
-        var world = _transform.GetWorldPosition(xform, _xformQuery);
+        var world = _transform.GetWorldPosition(xform, XformQuery);
         if (xform.MapUid is not { } mapUid)
             return $"map=null mapId={xform.MapID} parent={xform.ParentUid} world={world}";
 
@@ -451,7 +507,7 @@ public abstract partial class CMUSharedZLevelsSystem
         return $"map={mapUid} mapId={xform.MapID} parent={xform.ParentUid} world={world} tile={tile} tileFound={tileFound} tileEmpty={tileEmpty} tileType={tileType}";
     }
 
-    private static bool ShouldSnapToGround(float distanceToGround, bool stickyGround)
+    internal static bool ShouldSnapToGround(float distanceToGround, bool stickyGround)
     {
         if (stickyGround)
             return true;
@@ -459,7 +515,7 @@ public abstract partial class CMUSharedZLevelsSystem
         return distanceToGround >= -MaxStepHeight && distanceToGround <= GroundSnapDistance;
     }
 
-    private static bool ShouldTreatAsGroundContact(float distanceToGround, bool stickyGround)
+    internal static bool ShouldTreatAsGroundContact(float distanceToGround, bool stickyGround)
     {
         return ShouldSnapToGround(distanceToGround, stickyGround);
     }
@@ -470,22 +526,22 @@ public abstract partial class CMUSharedZLevelsSystem
                distanceToGround < -MaxStepHeight;
     }
 
-    private static bool ShouldBounceOnGroundContact(float velocity)
+    internal static bool ShouldBounceOnGroundContact(float velocity)
     {
         return velocity <= 0f;
     }
 
-    private static bool ShouldSettleNonBouncingGroundContact(bool isVehicle, float velocity)
+    internal static bool ShouldSettleNonBouncingGroundContact(bool isVehicle, float velocity)
     {
         return isVehicle && velocity > 0f;
     }
 
-    private static bool ShouldProcessDownBoundary(float localPosition)
+    internal static bool ShouldProcessDownBoundary(float localPosition)
     {
         return localPosition < -ZPhysicsSleepDistance;
     }
 
-    private static bool ShouldClampAfterDownTransition(
+    internal static bool ShouldClampAfterDownTransition(
         float localPosition,
         float distanceToGround,
         bool stickyGround,
@@ -504,12 +560,11 @@ public abstract partial class CMUSharedZLevelsSystem
                ShouldTreatAsFallingGroundContact(distanceToGround, velocity);
     }
 
-    protected static bool ShouldSleepZPhysics(
+    protected internal static bool ShouldSleepZPhysics(
         float distanceToGround,
         bool stickyGround,
         float localPosition,
-        float velocity,
-        bool isVehicle = false)
+        float velocity)
     {
         if (MathF.Abs(velocity) > MinActiveZVelocity)
             return false;
@@ -517,12 +572,10 @@ public abstract partial class CMUSharedZLevelsSystem
         if (MathF.Abs(distanceToGround) > ZPhysicsSleepDistance)
             return false;
 
-        return isVehicle ||
-               stickyGround ||
-               MathF.Abs(localPosition) <= ZPhysicsSleepDistance;
+        return stickyGround || MathF.Abs(localPosition) <= ZPhysicsSleepDistance;
     }
 
-    private static float GetGroundSnapDistance(float distanceToGround, bool stickyGround)
+    internal static float GetGroundSnapDistance(float distanceToGround, bool stickyGround)
     {
         if (!ShouldSnapToGround(distanceToGround, stickyGround))
             return 0f;
@@ -530,30 +583,30 @@ public abstract partial class CMUSharedZLevelsSystem
         return distanceToGround;
     }
 
-    private static float GetMoveGroundSnapDistance(float distanceToGround, bool stickyGround)
+    internal static float GetMoveGroundSnapDistance(float distanceToGround, bool stickyGround)
     {
         return GetGroundSnapDistance(distanceToGround, stickyGround);
     }
 
-    private static bool ShouldProcessMoveGroundSnap(bool isClient, bool applyingState)
+    internal static bool ShouldProcessMoveGroundSnap(bool isClient, bool applyingState)
     {
         return !isClient || !applyingState;
     }
 
-    private static bool ShouldProcessMoveSnapZLevelTransition(float localPosition, bool stickyGround)
+    internal static bool ShouldProcessMoveSnapZLevelTransition(float localPosition, bool stickyGround)
     {
         return stickyGround && (localPosition < 0f ||
             localPosition >= StickyMoveSnapUpTransitionHeight);
     }
 
-    private static bool ShouldAdvanceStickyMoveSnapToUpperBoundary(float localPosition, bool stickyGround)
+    internal static bool ShouldAdvanceStickyMoveSnapToUpperBoundary(float localPosition, bool stickyGround)
     {
         return stickyGround &&
             localPosition >= StickyMoveSnapUpTransitionHeight &&
             localPosition < 1f;
     }
 
-    private static bool ShouldProcessImmediateMoveSnapZLevelTransition(
+    internal static bool ShouldProcessImmediateMoveSnapZLevelTransition(
         bool isClient,
         float localPosition,
         bool stickyGround)
@@ -567,7 +620,7 @@ public abstract partial class CMUSharedZLevelsSystem
         return ShouldProcessMoveSnapZLevelTransition(localPosition, stickyGround);
     }
 
-    private static bool ShouldUseStickyGround(
+    internal static bool ShouldUseStickyGround(
         bool isCurrentTile,
         float velocity,
         CMUZLevelHighGroundComponent heightComp)
@@ -577,7 +630,7 @@ public abstract partial class CMUSharedZLevelsSystem
             heightComp.Stick;
     }
 
-    private static bool ShouldUseSweptStickyHighGround(
+    internal static bool ShouldUseSweptStickyHighGround(
         CMUZLevelHighGroundComponent heightComp,
         float oldT,
         float newT,
@@ -603,13 +656,13 @@ public abstract partial class CMUSharedZLevelsSystem
         return false;
     }
 
-    private static bool ShouldUseSweptStickyMoveSnap(float candidateSnappedLocalPosition, float bestSnappedLocalPosition)
+    internal static bool ShouldUseSweptStickyMoveSnap(float candidateSnappedLocalPosition, float bestSnappedLocalPosition)
     {
         return candidateSnappedLocalPosition >= StickyMoveSnapUpTransitionHeight &&
             candidateSnappedLocalPosition > bestSnappedLocalPosition + 0.001f;
     }
 
-    private static bool ShouldReplaceHighGroundCandidate(
+    internal static bool ShouldReplaceHighGroundCandidate(
         bool isCurrentTile,
         float score,
         bool found,
@@ -633,6 +686,7 @@ public abstract partial class CMUSharedZLevelsSystem
         zPhys.Velocity = 0;
         zPhys.LocalPosition = 0;
         DirtyZPhysics(uid, zPhys, oldVelocity, oldHeight);
+        SetZPhysicsFallingState((uid, zPhys), false);
         RemComp<CMUZFallingComponent>(uid);
     }
 
@@ -662,6 +716,15 @@ public abstract partial class CMUSharedZLevelsSystem
 
         if (zPhys.LocalPosition < 0) //We wanna fall down on ZLevel below
         {
+            if (HasComp<ChasmFallingComponent>(uid))
+            {
+                DebugLogFalling(
+                    uid,
+                    "boundary-down-chasm-owned",
+                    $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3}");
+                return;
+            }
+
             var canTransitionDown = CanProcessZLevelTransition(uid, -1);
             DebugLogFalling(
                 uid,
@@ -674,6 +737,7 @@ public abstract partial class CMUSharedZLevelsSystem
                 DebugLogFalling(uid, "boundary-down-result", $"moved={movedDown} localBeforeNormalize={zPhys.LocalPosition:F3}");
                 if (movedDown)
                 {
+                    RecordZLevelTransition(uid, -1);
                     zPhys.LocalPosition += 1;
                     DebugLogFalling(uid, "boundary-down-normalized", $"local={zPhys.LocalPosition:F3} vel={zPhys.Velocity:F3}");
 
@@ -716,7 +780,10 @@ public abstract partial class CMUSharedZLevelsSystem
         if (CanProcessZLevelTransition(uid, 1))
         {
             if (TryMoveUp(uid))
+            {
+                RecordZLevelTransition(uid, 1);
                 zPhys.LocalPosition -= 1;
+            }
         }
         else
         {
@@ -770,14 +837,10 @@ public abstract partial class CMUSharedZLevelsSystem
         if (MathF.Abs(zPhys.Velocity) <= MinActiveZVelocity)
         {
             zPhys.Velocity = 0f;
-            if (ShouldSleepZPhysics(
-                    0f,
-                    stickyGround,
-                    zPhys.LocalPosition,
-                    zPhys.Velocity,
-                    HasComp<CMUVehicleZTraversalComponent>(uid)))
+            if (ShouldSleepZPhysics(0f, stickyGround, zPhys.LocalPosition, zPhys.Velocity))
             {
                 DebugLogFalling(uid, "post-down-sleep", $"local={zPhys.LocalPosition:F3} sticky={stickyGround}");
+                SetZPhysicsFallingState((uid, zPhys), false);
                 RemComp<CMUZFallingComponent>(uid);
             }
         }
@@ -820,9 +883,62 @@ public abstract partial class CMUSharedZLevelsSystem
         return true;
     }
 
-    [PublicAPI]
-    public virtual void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
+    protected virtual void RecordZLevelTransition(EntityUid ent, int offset)
     {
+    }
+
+    [PublicAPI]
+    public virtual bool WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
+    {
+        return ShouldWakeZPhysics(ent);
+    }
+
+    protected void SetZPhysicsFallingState(Entity<CMUZPhysicsComponent> ent, bool falling)
+    {
+        if (ent.Comp.Falling == falling)
+            return;
+
+        ent.Comp.Falling = falling;
+        DirtyField(ent, ent.Comp, nameof(CMUZPhysicsComponent.Falling));
+    }
+
+    protected bool ShouldWakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return false;
+
+        var resolved = new Entity<CMUZPhysicsComponent>(ent.Owner, ent.Comp);
+        if (!CanUseZPhysics(resolved))
+            return false;
+
+        Entity<CMUZPhysicsComponent?> distanceEnt = (ent.Owner, ent.Comp);
+        var distance = DistanceToGround(distanceEnt, out var stickyGround);
+        return !ShouldSleepZPhysics(
+            distance,
+            stickyGround,
+            ent.Comp.LocalPosition,
+            ent.Comp.Velocity);
+    }
+
+    protected bool CanUseZPhysics(Entity<CMUZPhysicsComponent> ent)
+    {
+        if (!ZPhysicsEnabled ||
+            TerminatingOrDeleted(ent) ||
+            HasComp<GhostComponent>(ent))
+        {
+            return false;
+        }
+
+        var xform = Transform(ent);
+        if (xform.MapUid is not { } map ||
+            !_zMapQuery.HasComp(map) ||
+            xform.Anchored)
+        {
+            return false;
+        }
+
+        return !TryComp<PhysicsComponent>(ent, out var physics) ||
+               physics.BodyType != BodyType.Static;
     }
 
     /// <summary>
@@ -894,7 +1010,7 @@ public abstract partial class CMUSharedZLevelsSystem
             _transform.GetWorldRotation(xform),
             _vehicleSupportSamples);
 
-        var falling = HasComp<CMUZFallingComponent>(target);
+        var falling = target.Comp!.Falling;
         var supported = 0;
         var supportedDistance = 0f;
         var highestSupportedSurfaceDistance = float.MaxValue;
@@ -1035,7 +1151,6 @@ public abstract partial class CMUSharedZLevelsSystem
             //No ZEntities found, check floor tiles
             var tileFound = _map.TryGetTileRef(checkingMap, checkingGrid, checkingTile, out var tileRef);
             var tileEmpty = !tileFound || tileRef.Tile.IsEmpty;
-            var tileType = tileFound ? tileRef.Tile.TypeId.ToString() : "none";
             if (tileFound &&
                 !tileEmpty)
             {
@@ -1045,14 +1160,14 @@ public abstract partial class CMUSharedZLevelsSystem
                 DebugLogFalling(
                     target.Owner,
                     "distance-tile-hit",
-                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileType={tileType} distance={target.Comp.LocalPosition + floor:F3}");
+                    $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileType={tileRef.Tile.TypeId} distance={target.Comp.LocalPosition + floor:F3}");
                 return target.Comp.LocalPosition + floor;
             }
 
             DebugLogFalling(
                 target.Owner,
                 "distance-tile-miss",
-                $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileFound={tileFound} tileEmpty={tileEmpty} tileType={tileType} local={target.Comp.LocalPosition:F3}");
+                $"floor={floor} checkingMap={checkingMap.Owner} tile={checkingTile} sampleWorld={worldPos} tileFound={tileFound} tileEmpty={tileEmpty} tileType={(tileFound ? tileRef.Tile.TypeId.ToString() : "none")} local={target.Comp.LocalPosition:F3}");
         }
 
         if (profiling)
@@ -1550,7 +1665,7 @@ public abstract partial class CMUSharedZLevelsSystem
     }
 
     [PublicAPI]
-    public bool TryProjectToGround(EntityCoordinates coordinates, out EntityCoordinates projected, int maxFloors = MaxZLevelsBelowRendering)
+    public bool TryProjectToGround(EntityCoordinates coordinates, out EntityCoordinates projected, int maxFloors = MaxZLevelTraversalDepth)
     {
         projected = coordinates;
 
@@ -1620,7 +1735,12 @@ public abstract partial class CMUSharedZLevelsSystem
 
         ent.Comp.LocalPosition = localPosition;
         DirtyField(ent, ent.Comp, nameof(CMUZPhysicsComponent.LocalPosition));
+        OnZLocalPositionChanged((ent.Owner, ent.Comp));
         WakeZPhysics(ent);
+    }
+
+    protected virtual void OnZLocalPositionChanged(Entity<CMUZPhysicsComponent> ent)
+    {
     }
 
     /// <summary>
@@ -1658,12 +1778,12 @@ public abstract partial class CMUSharedZLevelsSystem
             return false;
 
         var target = new MapCoordinates(worldPosition ?? _transform.GetWorldPosition(ent), targetMapComp.MapId);
-        MoveEntityAndPulledTarget(ent, target, offset);
+        MoveEntityAndPulledTarget(ent, target);
 
         return true;
     }
 
-    private void MoveEntityAndPulledTarget(EntityUid ent, MapCoordinates target, int offset)
+    private void MoveEntityAndPulledTarget(EntityUid ent, MapCoordinates target)
     {
         if (TryComp(ent, out PullableComponent? otherPullable) &&
             otherPullable.Puller != null)
@@ -1680,8 +1800,7 @@ public abstract partial class CMUSharedZLevelsSystem
             {
                 _pulling.TryDetachPullJointForTransfer(ent, pulled, puller, pullable);
                 SetMapCoordinatesWithoutMoveSnap(ent, target);
-                RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
-                MoveFiremanCarriedTarget(ent, target, offset);
+                MoveFiremanCarriedTarget(ent, target);
                 QueuePullJointRefresh(ent, pulled);
                 return;
             }
@@ -1697,14 +1816,11 @@ public abstract partial class CMUSharedZLevelsSystem
             SetMapCoordinatesWithoutMoveSnap(pulled, target);
             QueuePullJointRefresh(ent, pulled);
 
-            RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
-            RaiseLocalEvent(pulled, new CMUZLevelMoveEvent(offset));
             return;
         }
 
         SetMapCoordinatesWithoutMoveSnap(ent, target);
-        RaiseLocalEvent(ent, new CMUZLevelMoveEvent(offset));
-        MoveFiremanCarriedTarget(ent, target, offset);
+        MoveFiremanCarriedTarget(ent, target);
     }
 
     private void SetMapCoordinatesWithoutMoveSnap(EntityUid uid, MapCoordinates target)
@@ -1721,7 +1837,7 @@ public abstract partial class CMUSharedZLevelsSystem
         }
     }
 
-    private void MoveFiremanCarriedTarget(EntityUid carrier, MapCoordinates target, int offset)
+    private void MoveFiremanCarriedTarget(EntityUid carrier, MapCoordinates target)
     {
         if (!TryComp<CanFiremanCarryComponent>(carrier, out var carry) ||
             carry.Carrying is not { } carried ||
@@ -1733,7 +1849,6 @@ public abstract partial class CMUSharedZLevelsSystem
         if (Transform(carried).ParentUid != carrier)
             SetMapCoordinatesWithoutMoveSnap(carried, target);
 
-        RaiseLocalEvent(carried, new CMUZLevelMoveEvent(offset));
     }
 
     private void QueuePullJointRefresh(EntityUid puller, EntityUid pulled)
@@ -1813,15 +1928,6 @@ public abstract partial class CMUSharedZLevelsSystem
 
         return false;
     }
-}
-
-/// <summary>
-/// Is called on an entity when it moves between z-levels.
-/// </summary>
-/// <param name="offset">How many levels were crossed. If negative, it means there was a downward movement. If positive, it means an upward movement.</param>
-public sealed class CMUZLevelMoveEvent(int offset) : EntityEventArgs
-{
-    public int Offset = offset;
 }
 
 /// <summary>

@@ -12,8 +12,7 @@ public sealed partial class CMUCombineZNetworkCommand : LocalizedEntityCommands
 {
     [Dependency] private IEntityManager _entities = default!;
     [Dependency] private MapSystem _map = default!;
-    [Dependency] private CMUZLevelsSystem _zLevels = default!;
-    [Dependency] private MetaDataSystem _meta = default!;
+    [Dependency] private CMUZNetworkLifecycleSystem _lifecycle = default!;
 
     public override string Command => "znetwork-combine";
     public override string Description => "Connects a number of maps into a common network of z-levels. Does not work if one of the maps is already in the z-level network";
@@ -63,21 +62,20 @@ public sealed partial class CMUCombineZNetworkCommand : LocalizedEntityCommands
             maps.Add(mapId);
         }
 
-        var network = _zLevels.CreateZNetwork();
-        _meta.SetEntityName(network, $"Combined zNetwork: {network.Owner.Id}");
+        var levelMaps = new EntityUid[maps.Count];
         var counter = 0;
-        Dictionary<EntityUid, int> dict = new();
         foreach (var findMap in maps)
         {
-            dict.Add( _map.GetMap(findMap), counter);
+            levelMaps[counter] = _map.GetMap(findMap);
             counter++;
         }
 
-        var success = _zLevels.TryAddMapsIntoZNetwork(network, dict);
+        if (!_lifecycle.TryCombineLevels(levelMaps, out var network, out var error))
+        {
+            shell.WriteError(error);
+            return;
+        }
 
-        if (success)
-            shell.WriteLine($"Created z-level network! Z-Network entity: {network}");
-        else
-            shell.WriteLine($"Created z-level network {network}, but something went wrong!");
+        shell.WriteLine($"Created z-level network! Z-Network entity: {network}");
     }
 }

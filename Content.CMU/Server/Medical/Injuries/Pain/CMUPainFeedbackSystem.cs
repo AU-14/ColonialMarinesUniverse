@@ -219,13 +219,6 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
         if (power <= 0f)
             return;
 
-        var targetDuration = TimeSpan.FromSeconds(power);
-        if (_status.TryGetTime(uid, SharedDrunkSystem.DrunkKey, out var time) &&
-            time.Value.Item2 - _timing.CurTime >= targetDuration)
-        {
-            return;
-        }
-
         _drunk.TryApplyDrunkenness(uid, power, slur);
     }
 

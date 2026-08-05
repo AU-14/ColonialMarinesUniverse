@@ -17,6 +17,9 @@
             "name": "cleaner_special"
         },
         {
+            "name": "cleaner-fill-1"
+        },
+        {
             "name": "inhand-right",
             "directions": 4
         },

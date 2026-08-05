@@ -2,7 +2,7 @@ using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -350,19 +350,22 @@ public sealed partial class AbominationMimicSystem : EntitySystem
 
     private void FinishRevert(EntityUid disguisedUid, PolymorphedEntityComponent polymorphed)
     {
+        if (polymorphed.Parent is not { } parent)
+            return;
+
         // Carry pool changes back, then stamp the cooldown on the original
         // mimic's transform action entity. SetCooldown grays out only THAT
         // action; other mimics' action entities are untouched.
         if (TryComp(disguisedUid, out AbominationMimicComponent? disguisedMimic)
-            && TryComp(polymorphed.Parent, out AbominationMimicComponent? originalMimic))
+            && TryComp(parent, out AbominationMimicComponent? originalMimic))
         {
             originalMimic.AssimilatedPool = new(disguisedMimic.AssimilatedPool);
-            Dirty(polymorphed.Parent, originalMimic);
+            Dirty(parent, originalMimic);
 
             // Resolve the action entity at revert time — scan the original mimic's
             // action container for the transform action. Stored UIDs could go
             // stale if MobStateActions re-grants the action mid-disguise.
-            EntityUid? foundAction = FindTransformAction(polymorphed.Parent);
+            EntityUid? foundAction = FindTransformAction(parent);
             if (foundAction is { } actionEnt)
                 _actions.SetCooldown(actionEnt, disguisedMimic.TransformCooldown);
         }
@@ -370,7 +373,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // Heal the restored mimic back to full — every transform (in or out)
         // resets the body. Done before Revert so polymorph's transferDamage
         // doesn't pull the disguise's accumulated damage back onto it.
-        HealToFull(polymorphed.Parent);
+        HealToFull(parent);
 
         _polymorph.Revert((disguisedUid, null));
     }

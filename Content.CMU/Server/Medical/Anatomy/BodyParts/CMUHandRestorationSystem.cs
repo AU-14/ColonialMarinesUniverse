@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Content.Shared._CMU14.Medical.Core;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Hands.Components;
@@ -13,14 +12,13 @@ public sealed partial class CMUHandRestorationSystem : EntitySystem
 {
     [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
-    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
 
     public void RestoreUsableHands(EntityUid body)
     {
         if (!TryComp<HandsComponent>(body, out var hands))
             return;
 
-        foreach (var (partId, part) in _medicalIndex.GetBodyParts(body))
+        foreach (var (partId, part) in _body.GetBodyChildren(body))
         {
             if (part.PartType != BodyPartType.Hand)
                 continue;

@@ -44,7 +44,7 @@ public sealed class ZCaveInSystem : EntitySystem
 {
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    private SharedMapSystem _mapManager => _map;
     [Dependency] private readonly EntityLookupSystem _lookup = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;

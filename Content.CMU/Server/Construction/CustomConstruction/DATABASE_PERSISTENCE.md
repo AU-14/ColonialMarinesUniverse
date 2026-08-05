@@ -4,7 +4,7 @@
 
 The in-game construction editors (Construction Items Editor, Tiles Editor, Lathe Editor, the right-click
 Add / Change / Remove verbs, and the in-menu "Remove Item" overrides) originally persisted only by writing
-self-contained prototype YAML files under `Resources/Prototypes/_AU14/CustomConstruction/Generated/`. The
+self-contained prototype YAML files under `Content.CMU/Resources/Prototypes/CustomConstruction/Generated/`. The
 production server wipes the Docker filesystem on every patch, so anything written at runtime was lost;
 only the database survives. Every generated entry is now ALSO stored in the database, using the same
 pattern the INSFOR faction definitions use (verbatim YAML blob + small indexed key columns).

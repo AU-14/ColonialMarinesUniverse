@@ -9,7 +9,7 @@ using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
@@ -29,7 +29,7 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
 

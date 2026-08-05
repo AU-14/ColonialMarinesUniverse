@@ -1,5 +1,5 @@
 using Content.Server.Chat.Managers;
-using Content.Server.IdentityManagement;
+using Content.Shared.IdentityManagement;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Examine;
@@ -73,7 +73,7 @@ namespace Content.Server._AU14.Examine
                 nameloc += "-selfaware";
             }
 
-            var identity = _identitySystem.GetEntityIdentity(uid);
+            var identity = _identitySystem.GetIdentityShortInfo(uid, args.Examiner) ?? Name(uid);
             var name = Loc.GetString(nameloc, ("name", identity));
             logLines.Add($"[color=gold][font size=10]{name}[/font][/color]");
 

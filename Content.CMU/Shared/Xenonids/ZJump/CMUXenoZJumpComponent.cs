@@ -2,7 +2,7 @@ using Content.Shared.FixedPoint;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Threats.Mobs.Xeno.ZJump;
+namespace Content.Shared._CMU14.Xenonids.ZJump;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, Access(typeof(CMUXenoZJumpSystem))]
 public sealed partial class CMUXenoZJumpComponent : Component

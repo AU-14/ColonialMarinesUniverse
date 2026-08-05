@@ -5,18 +5,21 @@ namespace Content.Shared._CMU14.ZLevels.Core.Components;
 /// <summary>
 /// Automatically added to the map when it appears in zLevelNetwork.
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState, UnsavedComponent]
+[RegisterComponent, NetworkedComponent, UnsavedComponent]
 public sealed partial class CMUZLevelMapComponent : Component
 {
-    [DataField, AutoNetworkedField]
+    /// <summary>
+    /// Process-local topology data derived from the owning network's canonical depth map on clients.
+    /// </summary>
+    [DataField]
     public EntityUid NetworkUid = EntityUid.Invalid;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? MapAbove;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public EntityUid? MapBelow;
 
-    [DataField, AutoNetworkedField]
+    [DataField]
     public int Depth = 0;
 }

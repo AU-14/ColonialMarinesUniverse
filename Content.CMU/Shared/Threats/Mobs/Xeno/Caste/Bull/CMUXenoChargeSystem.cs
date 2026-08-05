@@ -2,7 +2,7 @@
 
 namespace Content.Shared._RMC14.Xenonids.Charge;
 
-public sealed partial class XenoChargeSystem
+public sealed partial class XenoToggleChargingSystem
 {
     public void CMUResetToggleCharging(Entity<ActiveXenoToggleChargingComponent> xeno, bool resetInput = true)
     {

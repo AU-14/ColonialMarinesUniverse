@@ -4,8 +4,8 @@ using Content.Shared._CMU14.ZLevels.Weather;
 using Content.Shared.Administration;
 using Content.Shared.Weather;
 using Robust.Shared.Console;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Timing;
 
 namespace Content.Server._CMU14.ZLevels.Weather;
 
@@ -13,8 +13,8 @@ namespace Content.Server._CMU14.ZLevels.Weather;
 public sealed partial class CMUWeatherCommand : LocalizedCommands
 {
     [Dependency] private IEntityManager _entities = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private IPrototypeManager _proto = default!;
-    [Dependency] private IGameTiming _timing = default!;
 
     public override string Command => "znetwork-weather";
     public override string Description => "Sets weather for all maps in zNetwork";
@@ -44,10 +44,11 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
         }
 
         //Weather Proto parsing
-        WeatherPrototype? weather = null;
+        EntProtoId? weather = null;
         if (!args[1].Equals("null"))
         {
-            if (!_proto.Resolve(args[1], out weather))
+            weather = args[1];
+            if (!_proto.TryIndex(weather, out _))
             {
                 shell.WriteError(Loc.GetString("cmd-weather-error-unknown-proto"));
                 return;
@@ -55,13 +56,12 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
         }
 
         //Time parsing
-        TimeSpan? endTime = null;
+        TimeSpan? duration = null;
         if (args.Length == 3)
         {
-            var curTime = _timing.CurTime;
             if (int.TryParse(args[2], out var durationInt))
             {
-                endTime = curTime + TimeSpan.FromSeconds(durationInt);
+                duration = TimeSpan.FromSeconds(durationInt);
             }
             else
             {
@@ -70,7 +70,7 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
             }
         }
 
-        _entities.System<CMUWeatherSystem>().SetWeather((target.Value, levelComp), weather, endTime);
+        _entities.System<CMUWeatherSystem>().SetWeather((target.Value, levelComp), weather, duration);
     }
 
     public override CompletionResult GetCompletion(IConsoleShell shell, string[] args)
@@ -89,9 +89,12 @@ public sealed partial class CMUWeatherCommand : LocalizedCommands
         if (args.Length == 2)
         {
             var options = new List<CompletionOption>();
-            foreach (var option in CompletionHelper.PrototypeIDs<WeatherPrototype>(true, _proto))
+            foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
             {
-                options.Add(option);
+                if (!proto.HasComp<WeatherStatusEffectComponent>(_componentFactory))
+                    continue;
+
+                options.Add(new CompletionOption(proto.ID, proto.Name));
             }
 
             options.Add(new CompletionOption("null", Loc.GetString("cmd-weather-null")));

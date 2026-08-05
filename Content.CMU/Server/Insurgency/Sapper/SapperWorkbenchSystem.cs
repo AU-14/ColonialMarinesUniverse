@@ -443,9 +443,14 @@ public sealed partial class SapperWorkbenchSystem : EntitySystem
         // CableApc/MV/HV...). Deliberately broad to kill the "which coil?" confusion.
         if (req.AnyCable)
         {
-            return _tag.HasTag(uid, CableCoilTag) ||
-                   (TryComp(uid, out StackComponent? cableStack) &&
-                    cableStack.StackTypeId.Contains("Cable", StringComparison.OrdinalIgnoreCase));
+            if (_tag.HasTag(uid, CableCoilTag))
+                return true;
+
+            if (!TryComp(uid, out StackComponent? cableStack))
+                return false;
+
+            var stackTypeId = cableStack.StackTypeId;
+            return stackTypeId.Id.Contains("Cable", StringComparison.OrdinalIgnoreCase);
         }
 
         if (req.Prototype is { } proto)

@@ -1,19 +1,15 @@
-using Content.Server.GameTicking;
 using Content.Shared._CMU14.ZLevels.Core;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Robust.Server.GameObjects;
-using Robust.Shared.EntitySerialization.Systems;
 
 namespace Content.Server._CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
 {
     [Dependency] private MapSystem _map = default!;
-    [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private MetaDataSystem _meta = default!;
-
-    public CMUZLevelOpeningCache OpeningCache => _zOpeningCache;
 
     public override void Initialize()
     {
@@ -23,70 +19,103 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         InitTransitionBudget();
         InitializeActivation();
 
-        SubscribeLocalEvent<PostGameMapLoad>(OnGameMapLoad);
+        SubscribeLocalEvent<MapRemovedEvent>(OnMapRemoved);
     }
 
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
 
-        if (!_zLevelsEnabled)
+        ApplyPendingViewConfiguration();
+        ApplyPendingAudioConfiguration();
+        ProcessPendingCrossZAudioSources();
+
+        if (!ZLevelsEnabled)
             return;
 
         UpdateZMovement(frameTime);
         UpdateView(frameTime);
     }
 
-    private void OnGameMapLoad(PostGameMapLoad ev)
+    private void OnMapRemoved(MapRemovedEvent ev)
     {
-        if (ev.GameMap.MapsAbove.Count == 0 && ev.GameMap.MapsBelow.Count == 0)
+        using var profile = Prof.Group("CMU Z Topology Map Removal");
+        if (TryComp<CMUZLevelMapComponent>(ev.Uid, out var removedMap) &&
+            removedMap.NetworkUid.IsValid() &&
+            TryComp<CMUZLevelsNetworkComponent>(removedMap.NetworkUid, out var directNetwork) &&
+            RemoveMapFromNetwork(ev.Uid, removedMap.NetworkUid, directNetwork))
+        {
+            if (Prof.IsEnabled)
+                Prof.WriteValue("CMU Z Topology Removal Direct Hits", 1);
             return;
-
-        var stationNetwork = CreateZNetwork();
-        _meta.SetEntityName(stationNetwork, $"Station z-Network: {ev.GameMap.MapName}");
-
-        var mainMap = _map.GetMap(ev.Map);
-        Dictionary<EntityUid, int> dict = new();
-        dict.Add(mainMap, 0);
-
-        EntityManager.AddComponents(mainMap, ev.GameMap.ZLevelsComponentOverrides);
-
-        //Loading maps below first
-        var depth = ev.GameMap.MapsBelow.Count * -1;
-        foreach (var mapBelow in ev.GameMap.MapsBelow)
-        {
-            if (!_mapLoader.TryLoadMap(mapBelow, out var mapEnt, out _))
-            {
-                Log.Error($"Failed to load map for Station zNetwork at depth {depth}!");
-                continue;
-            }
-
-            Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {depth}");
-            EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
-            _map.InitializeMap(mapEnt.Value.Comp.MapId);
-            _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{depth}]");
-            dict.Add(mapEnt.Value, depth);
-            depth++;
         }
 
-        //Loading maps above next
-        depth = 1;
-        foreach (var mapAbove in ev.GameMap.MapsAbove)
+        var fallbackNetworksScanned = 0;
+        var query = EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
+        while (query.MoveNext(out var networkUid, out var network))
         {
-            if (!_mapLoader.TryLoadMap(mapAbove, out var mapEnt, out _))
-            {
-                Log.Error($"Failed to load map for Station zNetwork at depth {depth}!");
-                continue;
-            }
-
-            Log.Info($"Created map {mapEnt.Value.Comp.MapId} for Station zNetwork at level {depth}");
-            EntityManager.AddComponents(mapEnt.Value, ev.GameMap.ZLevelsComponentOverrides);
-            _map.InitializeMap(mapEnt.Value.Comp.MapId);
-            _meta.SetEntityName(mapEnt.Value, $"{ev.GameMap.MapName} [{depth}]");
-            dict.Add(mapEnt.Value, depth);
-            depth++;
+            fallbackNetworksScanned++;
+            if (RemoveMapFromNetwork(ev.Uid, networkUid, network))
+                break;
         }
 
-        TryAddMapsIntoZNetwork(stationNetwork, dict);
+        if (Prof.IsEnabled)
+        {
+            Prof.WriteValue("CMU Z Topology Removal Direct Hits", 0);
+            Prof.WriteValue("CMU Z Topology Removal Fallback Networks", fallbackNetworksScanned);
+        }
+    }
+
+    private bool RemoveMapFromNetwork(
+        EntityUid removedMap,
+        EntityUid networkUid,
+        CMUZLevelsNetworkComponent network)
+    {
+        if (!network.ZLevelByEntity.Remove(removedMap, out var depth))
+            return false;
+
+        if (network.ZLevels.TryGetValue(depth, out var mapAtDepth) &&
+            mapAtDepth == removedMap)
+        {
+            network.ZLevels.Remove(depth);
+        }
+
+        ClearRemovedMapNeighbour(network, depth - 1, clearAbove: true);
+        ClearRemovedMapNeighbour(network, depth + 1, clearAbove: false);
+
+        if (network.ZLevels.Count == 0)
+        {
+            QueueDel(networkUid);
+            return true;
+        }
+
+        Dirty(networkUid, network);
+
+        var updated = new CMUZLevelNetworkUpdatedEvent(
+            (networkUid, network),
+            CMUZLevelNetworkUpdateKind.MapRemoved,
+            removedMap,
+            depth);
+        RaiseLocalEvent(ref updated);
+        RefreshViewersForNetwork((networkUid, network));
+        return true;
+    }
+
+    private void ClearRemovedMapNeighbour(
+        CMUZLevelsNetworkComponent network,
+        int depth,
+        bool clearAbove)
+    {
+        if (!network.ZLevels.TryGetValue(depth, out var neighbourUid) ||
+            neighbourUid is not { } neighbour ||
+            !TryComp<CMUZLevelMapComponent>(neighbour, out var neighbourMap))
+        {
+            return;
+        }
+
+        if (clearAbove)
+            neighbourMap.MapAbove = null;
+        else
+            neighbourMap.MapBelow = null;
     }
 }

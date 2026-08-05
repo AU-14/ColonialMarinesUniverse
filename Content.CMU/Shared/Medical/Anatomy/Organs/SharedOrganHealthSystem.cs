@@ -13,7 +13,7 @@ using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;

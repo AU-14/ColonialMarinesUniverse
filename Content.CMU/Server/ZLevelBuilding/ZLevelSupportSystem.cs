@@ -44,7 +44,7 @@ public sealed class ZLevelSupportSystem : EntitySystem
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    private SharedMapSystem _mapManager => _map;
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly ThrowingSystem _throwing = default!;
     [Dependency] private readonly IRobustRandom _random = default!;

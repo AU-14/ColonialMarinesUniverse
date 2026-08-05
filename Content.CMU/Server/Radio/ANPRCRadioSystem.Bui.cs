@@ -471,8 +471,8 @@ public sealed partial class ANPRCRadioSystem
             return;
 
         var hasBattery = _powerCell.TryGetBatteryFromSlot(ent.Owner, out var battery);
-        var batteryFraction = hasBattery && battery!.MaxCharge > 0f
-            ? battery.CurrentCharge / battery.MaxCharge
+        var batteryFraction = hasBattery && battery!.Value.Comp.MaxCharge > 0f
+            ? _batterySystem.GetCharge(battery.Value.AsNullable()) / battery.Value.Comp.MaxCharge
             : 0f;
 
         var antennaLabel = "NONE";

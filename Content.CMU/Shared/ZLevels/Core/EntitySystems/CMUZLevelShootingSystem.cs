@@ -1,15 +1,22 @@
 using System.Numerics;
+using System.Threading;
 using Content.Shared._CMU14.Input;
+using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Physics;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Wieldable;
 using Content.Shared.Wieldable.Components;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Configuration;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
@@ -19,12 +26,18 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
     private const float CrossZShotRange = 4f;
     private const float CrossZOpeningSourceEdgeRangeTiles = 2f;
     private const float CrossZOpeningSourceNudge = 0.30f;
+    public const int DefaultSourceCollisionMask =
+        (int) (CollisionGroup.Impassable | CollisionGroup.BulletImpassable | CollisionGroup.Opaque);
 
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedGunSystem _gun = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
+    private readonly Dictionary<EntProtoId, int> _projectileCollisionMasks = new();
+    private int _clearShootDownRequested;
 
     public override void Initialize()
     {
@@ -32,6 +45,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         SubscribeLocalEvent<GunComponent, ItemUnwieldedEvent>(OnGunUnwielded);
         SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelLookUpEnabledEvent>(OnLookUpEnabled);
+        Subs.CVar(_config, CMUZLevelsCVars.Enabled, OnZLevelsEnabledChanged, true);
 
         CommandBinds.Builder
             .Bind(CMUKeyFunctions.CMUToggleShootDownZLevel,
@@ -42,6 +56,29 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
                     },
                     handle: false))
             .Register<CMUZLevelShootingSystem>();
+    }
+
+    private void OnZLevelsEnabledChanged(bool enabled)
+    {
+        if (enabled)
+            return;
+
+        Interlocked.Exchange(ref _clearShootDownRequested, 1);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        if (Interlocked.Exchange(ref _clearShootDownRequested, 0) == 0)
+            return;
+
+        var query = EntityQueryEnumerator<CMUZLevelShooterComponent>();
+        while (query.MoveNext(out var uid, out var shooter))
+        {
+            if (shooter.ShootDown)
+                SetShootDown(uid, false);
+        }
     }
 
     public override void Shutdown()
@@ -67,6 +104,12 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private void ToggleShootDown(EntityUid user)
     {
+        if (!_config.GetCVar(CMUZLevelsCVars.Enabled))
+        {
+            TryDisableShootDown(user);
+            return;
+        }
+
         if (!CanAimAcrossZWithoutGun(user) &&
             !TryGetReadyGun(user, "cmu-zlevel-shoot-down-no-gun", "cmu-zlevel-shoot-down-requires-wield"))
         {
@@ -74,6 +117,12 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         }
 
         var shootDown = !IsShootDownEnabled(user);
+        if (shootDown && !CanShootAtOffset(user, -1))
+        {
+            PopupSelf(user, "cmu-zlevel-shoot-down-no-level");
+            return;
+        }
+
         SetShootDown(user, shootDown);
 
         var message = shootDown
@@ -134,8 +183,15 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         return TryComp<CMUZLevelShooterComponent>(user, out var shooter) && shooter.ShootDown;
     }
 
-    public void SetShootDown(EntityUid user, bool enabled)
+    public bool SetShootDown(EntityUid user, bool enabled)
     {
+        if (enabled &&
+            (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
+             !CanShootAtOffset(user, -1)))
+        {
+            return false;
+        }
+
         CMUZLevelShooterComponent shooter;
         if (TryComp<CMUZLevelShooterComponent>(user, out var existing))
         {
@@ -144,19 +200,21 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         else
         {
             if (!enabled)
-                return;
+                return false;
 
             shooter = EnsureComp<CMUZLevelShooterComponent>(user);
         }
 
         if (shooter.ShootDown == enabled)
-            return;
+            return false;
 
         shooter.ShootDown = enabled;
         DirtyField(user, shooter, nameof(CMUZLevelShooterComponent.ShootDown));
 
         if (enabled)
             _zLevels.TryDisableLookUp(user);
+
+        return true;
     }
 
     public bool TryAdjustShotCoordinates(
@@ -165,7 +223,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         EntityCoordinates toCoordinates,
         out EntityCoordinates adjustedFromCoordinates,
         out EntityCoordinates adjustedToCoordinates,
-        bool requireReadyGunForLookUp = true)
+        bool requireReadyGunForLookUp = true,
+        int sourceCollisionMask = DefaultSourceCollisionMask)
     {
         adjustedFromCoordinates = fromCoordinates;
         adjustedToCoordinates = toCoordinates;
@@ -178,10 +237,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         if (shooterMap == null ||
             !_zLevels.TryMapOffset(shooterMap.Value, offset, out var targetMap, out var map))
         {
-            PopupSelf(shooter, offset > 0
-                ? "cmu-zlevel-shoot-up-no-level"
-                : "cmu-zlevel-shoot-down-no-level");
-            return false;
+            ClearStaleShotOffset(shooter, offset);
+            return true;
         }
 
         var fromMap = _transform.ToMapCoordinates(fromCoordinates);
@@ -208,9 +265,18 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             toMap.Position,
             clampedTo,
             opening,
-            offset,
             out var projectileFrom,
             out var projectileTo);
+
+        if (ResolveCrossZShotPath(
+                hasRequestedOffset: true,
+                hasTargetMap: true,
+                hasOpening: true,
+                sourcePathBlocked: IsSourcePathBlocked(fromMap, projectileFrom, shooter, sourceCollisionMask)) ==
+            CrossZShotPathDecision.SameLevel)
+        {
+            return true;
+        }
 
         var targetFrom = new MapCoordinates(projectileFrom, map.MapId);
         var targetTo = new MapCoordinates(projectileTo, map.MapId);
@@ -225,7 +291,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         MapCoordinates fromCoordinates,
         MapCoordinates toCoordinates,
         out MapCoordinates adjustedFromCoordinates,
-        out MapCoordinates adjustedToCoordinates)
+        out MapCoordinates adjustedToCoordinates,
+        int sourceCollisionMask = DefaultSourceCollisionMask)
     {
         adjustedFromCoordinates = fromCoordinates;
         adjustedToCoordinates = toCoordinates;
@@ -238,10 +305,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         if (shooterMap == null ||
             !_zLevels.TryMapOffset(shooterMap.Value, offset, out var targetMap, out var map))
         {
-            PopupSelf(shooter, offset > 0
-                ? "cmu-zlevel-shoot-up-no-level"
-                : "cmu-zlevel-shoot-down-no-level");
-            return false;
+            ClearStaleShotOffset(shooter, offset);
+            return true;
         }
 
         var clampedTo = ClampCrossZShotTarget(fromCoordinates.Position, toCoordinates.Position);
@@ -266,13 +331,65 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             toCoordinates.Position,
             clampedTo,
             opening,
-            offset,
             out var projectileFrom,
             out var projectileTo);
+
+        if (ResolveCrossZShotPath(
+                hasRequestedOffset: true,
+                hasTargetMap: true,
+                hasOpening: true,
+                sourcePathBlocked: IsSourcePathBlocked(fromCoordinates, projectileFrom, shooter, sourceCollisionMask)) ==
+            CrossZShotPathDecision.SameLevel)
+        {
+            return true;
+        }
 
         adjustedFromCoordinates = new MapCoordinates(projectileFrom, map.MapId);
         adjustedToCoordinates = new MapCoordinates(projectileTo, map.MapId);
         return true;
+    }
+
+    public bool IsCrossZSourcePathBlocked(
+        EntityUid shooter,
+        EntityCoordinates sourceCoordinates,
+        EntityCoordinates projectedSourceCoordinates,
+        int collisionMask)
+    {
+        if (collisionMask == 0)
+            return false;
+
+        var source = _transform.ToMapCoordinates(sourceCoordinates);
+        var projectedSource = _transform.ToMapCoordinates(projectedSourceCoordinates);
+        if (source.MapId == MapId.Nullspace ||
+            projectedSource.MapId == MapId.Nullspace ||
+            source.MapId == projectedSource.MapId)
+        {
+            return false;
+        }
+
+        return IsSourcePathBlocked(source, projectedSource.Position, shooter, collisionMask);
+    }
+
+    public int GetProjectileCollisionMask(EntProtoId projectile)
+    {
+        if (_projectileCollisionMasks.TryGetValue(projectile, out var cached))
+            return cached;
+
+        if (!ProtoMan.TryIndex<EntityPrototype>(projectile, out var prototype))
+            return DefaultSourceCollisionMask;
+
+        var mask = 0;
+        if (prototype.TryComp<FixturesComponent>(out var fixtures, Factory))
+        {
+            foreach (var fixture in fixtures.Fixtures.Values)
+            {
+                mask |= fixture.CollisionMask;
+            }
+        }
+
+        mask = mask == 0 ? DefaultSourceCollisionMask : mask;
+        _projectileCollisionMasks[projectile] = mask;
+        return mask;
     }
 
     public bool TryGetProjectileVisualOffset(
@@ -318,7 +435,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return false;
 
         if (sourceFromCoordinates.MapId == MapId.Nullspace ||
-            projectileFromCoordinates.MapId == MapId.Nullspace)
+            projectileFromCoordinates.MapId == MapId.Nullspace ||
+            sourceFromCoordinates.MapId == projectileFromCoordinates.MapId)
         {
             return false;
         }
@@ -388,7 +506,6 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         Vector2 to,
         Vector2 clampedTo,
         Vector2 opening,
-        int offset,
         out Vector2 projectileFrom,
         out Vector2 projectileTo)
     {
@@ -432,6 +549,56 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         return from + delta / distance * CrossZShotRange;
     }
 
+    private bool IsSourcePathBlocked(
+        MapCoordinates source,
+        Vector2 target,
+        EntityUid shooter,
+        int collisionMask)
+    {
+        if (collisionMask == 0)
+            return false;
+
+        var direction = target - source.Position;
+        var distance = direction.Length();
+        if (distance <= 0.001f)
+            return false;
+
+        var ray = new CollisionRay(
+            source.Position,
+            direction / distance,
+            collisionMask);
+
+        foreach (var _ in _physics.IntersectRay(
+                     source.MapId,
+                     ray,
+                     distance,
+                     ignoredEnt: shooter,
+                     returnOnFirstHit: true))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    internal static CrossZShotPathDecision ResolveCrossZShotPath(
+        bool hasRequestedOffset,
+        bool hasTargetMap,
+        bool hasOpening,
+        bool sourcePathBlocked)
+    {
+        if (!hasRequestedOffset ||
+            !hasTargetMap ||
+            sourcePathBlocked)
+        {
+            return CrossZShotPathDecision.SameLevel;
+        }
+
+        return hasOpening
+            ? CrossZShotPathDecision.CrossLevel
+            : CrossZShotPathDecision.BlockedFloor;
+    }
+
     private void PopupSelf(EntityUid user, string message)
     {
         _popup.PopupClient(Loc.GetString(message), user, user, PopupType.SmallCaution);
@@ -439,19 +606,54 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private int GetRequestedShotOffset(EntityUid shooter, bool requireReadyGunForLookUp = false)
     {
+        if (!_config.GetCVar(CMUZLevelsCVars.Enabled))
+        {
+            TryDisableShootDown(shooter);
+            _zLevels.TryDisableLookUp(shooter);
+            return 0;
+        }
+
+        var offset = 0;
         if (TryComp<CMUZLevelShooterComponent>(shooter, out var shooterComp) &&
             shooterComp.ShootDown)
         {
-            return -1;
+            offset = -1;
         }
-
-        if (TryComp<CMUZLevelViewerComponent>(shooter, out var viewer) &&
-            viewer.LookUp &&
-            (!requireReadyGunForLookUp || HasReadyGun(shooter)))
+        else if (TryComp<CMUZLevelViewerComponent>(shooter, out var viewer) &&
+                 viewer.LookUp &&
+                 (!requireReadyGunForLookUp || HasReadyGun(shooter)))
         {
-            return 1;
+            offset = 1;
         }
 
+        if (offset == 0 ||
+            CanShootAtOffset(shooter, offset))
+        {
+            return offset;
+        }
+
+        ClearStaleShotOffset(shooter, offset);
         return 0;
+    }
+
+    private bool CanShootAtOffset(EntityUid shooter, int offset)
+    {
+        return Transform(shooter).MapUid is { } map &&
+               _zLevels.TryMapOffset(map, offset, out _);
+    }
+
+    private void ClearStaleShotOffset(EntityUid shooter, int offset)
+    {
+        if (offset < 0)
+            TryDisableShootDown(shooter);
+        else
+            _zLevels.TryDisableLookUp(shooter);
+    }
+
+    internal enum CrossZShotPathDecision : byte
+    {
+        SameLevel,
+        BlockedFloor,
+        CrossLevel,
     }
 }

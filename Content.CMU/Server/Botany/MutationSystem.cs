@@ -1,6 +1,7 @@
 using Content.Server._AU14.Chemistry.Reagents;
 using Content.Server.Botany.Components;
 using Content.Shared.Random.Helpers;
+using Content.Shared.Popups;
 using Robust.Shared.Random;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ namespace Content.Server.Botany;
 public sealed partial class MutationSystem : EntitySystem
 {
     [Dependency] private ServerReagentGeneratorSystem _gen = default!;
+    [Dependency] private SharedPopupSystem _popups = default!;
 
 
     public void MutateSeed(Entity<PlantHolderComponent> plantHolder, ref SeedData seed, float severity)

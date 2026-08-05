@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Shared._CMU14.ZLevels.Core;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
@@ -5,6 +6,7 @@ using Content.Shared.Light.Components;
 using Content.Shared.Light.EntitySystems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Profiling;
 
 namespace Content.Shared._CMU14.ZLevels.Roof;
 
@@ -18,9 +20,12 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
     [Dependency] protected SharedRoofSystem Roof = default!;
     [Dependency] protected SharedMapSystem Map = default!;
     [Dependency] protected ITileDefinitionManager TilDefMan = default!;
+    [Dependency] protected ProfManager Prof = default!;
 
     protected EntityQuery<MapGridComponent> GridQuery;
     protected EntityQuery<RoofComponent> RoofQuery;
+    protected EntityQuery<CMUZLevelMapComponent> ZMapQuery;
+    private readonly List<bool> _roofStates = new();
 
     public override void Initialize()
     {
@@ -28,6 +33,7 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
 
         GridQuery = GetEntityQuery<MapGridComponent>();
         RoofQuery = GetEntityQuery<RoofComponent>();
+        ZMapQuery = GetEntityQuery<CMUZLevelMapComponent>();
 
         SubscribeLocalEvent<CMUZLevelMapComponent, TileChangedEvent>(OnTileChanged);
     }
@@ -45,39 +51,55 @@ public abstract partial class CMUSharedRoofSystem : EntitySystem
         if (args.Changes.Length == 0)
             return;
 
-        Dictionary<Vector2i, bool> roofMap = new();
-        foreach (var change in args.Changes)
-        {
-            var roovedAbove = Roof.IsRooved((ent, currentMapGrid, currentRoof), change.GridIndices);
-            var roovedTile = !CMUZLevelOpeningCache.IsOpeningTile(change.NewTile, TilDefMan);
-            roofMap.Add(change.GridIndices, roovedAbove || roovedTile);
-        }
-
-        var mapsBelow = ZLevel.GetAllMapsBelow(ent);
-
-        if (mapsBelow.Count == 0)
+        if (ent.Comp.MapBelow is not { } firstMapBelow)
             return;
 
-        foreach (var mapBelow in mapsBelow)
+        using var profile = Prof.Group("CMU Z Roof Propagation");
+        _roofStates.Clear();
+        _roofStates.EnsureCapacity(args.Changes.Length);
+        for (var i = 0; i < args.Changes.Length; i++)
         {
+            ref readonly var change = ref args.Changes[i];
+            var roovedAbove = Roof.IsRooved((ent, currentMapGrid, currentRoof), change.GridIndices);
+            var roovedTile = !CMUZLevelOpeningCache.IsOpeningTile(change.NewTile, TilDefMan);
+            _roofStates.Add(roovedAbove || roovedTile);
+        }
+
+        var mapsVisited = 0;
+        var roofWrites = 0;
+        EntityUid? currentMapBelow = firstMapBelow;
+        while (currentMapBelow is { } mapBelow &&
+               ZMapQuery.TryComp(mapBelow, out var zMapBelow))
+        {
+            mapsVisited++;
+            currentMapBelow = zMapBelow.MapBelow;
+
             if (!GridQuery.TryComp(mapBelow, out var mapGridBelow))
                 continue;
 
             var roofBelow = EnsureComp<RoofComponent>(mapBelow);
-            var coveredByThisLevel = new List<Vector2i>();
-
-            foreach (var (indices, rooved) in roofMap)
+            for (var i = 0; i < args.Changes.Length; i++)
             {
-                Roof.SetRoof((mapBelow, mapGridBelow, roofBelow), indices, rooved);
+                ref readonly var change = ref args.Changes[i];
+                Roof.SetRoof(
+                    (mapBelow, mapGridBelow, roofBelow),
+                    change.GridIndices,
+                    _roofStates[i]);
+                roofWrites++;
 
-                if (Map.TryGetTile(mapGridBelow, indices, out var tile) && !tile.IsEmpty)
-                    coveredByThisLevel.Add(indices);
+                if (Map.TryGetTile(mapGridBelow, change.GridIndices, out var tile) &&
+                    !tile.IsEmpty)
+                {
+                    _roofStates[i] = true;
+                }
             }
+        }
 
-            foreach (var indices in coveredByThisLevel)
-            {
-                roofMap[indices] = true;
-            }
+        if (Prof.IsEnabled)
+        {
+            Prof.WriteValue("CMU Z Roof Changed Tiles", args.Changes.Length);
+            Prof.WriteValue("CMU Z Roof Maps Visited", mapsVisited);
+            Prof.WriteValue("CMU Z Roof Writes", roofWrites);
         }
     }
 }

@@ -349,7 +349,12 @@ public sealed class SapperTripwireSystem : EntitySystem
             {
                 // Drop it out of the charge to the wire spot first so its effect originates there.
                 _container.Remove(item, payload, force: true);
-                _trigger.HandleTimerTrigger(item, tripper, PayloadFuseDelay, 0f, null, null);
+                var timer = EnsureComp<Content.Shared.Trigger.Components.TimerTriggerComponent>(item);
+                timer.Delay = TimeSpan.FromSeconds(PayloadFuseDelay);
+                timer.BeepInterval = TimeSpan.Zero;
+                timer.BeepSound = null;
+                Dirty(item, timer);
+                _trigger.ActivateTimerTrigger((item, timer), tripper);
             }
         }
 

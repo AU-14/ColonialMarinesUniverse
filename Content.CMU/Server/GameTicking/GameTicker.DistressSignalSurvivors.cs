@@ -1,9 +1,12 @@
 using Content.Shared.GameTicking;
+using Content.Server.AU14.Round;
 
 namespace Content.Server.GameTicking;
 
 public sealed partial class GameTicker
 {
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
+
     internal static readonly TimeSpan DistressSignalSurvivorAnnouncementLeadTime = TimeSpan.FromMinutes(1);
 
     private bool _distressSignalSurvivorAnnouncementSent;

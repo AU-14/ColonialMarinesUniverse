@@ -31,7 +31,7 @@ public sealed partial class CMUXenoBullChargeSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private XenoSystem _xeno = default!;
-    [Dependency] private XenoChargeSystem _xenoCharge = default!;
+    [Dependency] private XenoToggleChargingSystem _xenoCharge = default!;
 
     public override void Initialize()
     {

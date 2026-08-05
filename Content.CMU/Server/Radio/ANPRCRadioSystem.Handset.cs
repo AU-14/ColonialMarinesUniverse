@@ -1,5 +1,6 @@
 using Content.Server.Chat.Systems;
-using Content.Server.Radio.Components;
+using System.Linq;
+using Content.Shared.Radio.Components;
 using Content.Shared._AU14.Callsigns;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
@@ -196,7 +197,7 @@ public sealed partial class ANPRCRadioSystem
         if (TryComp(user.Owner, out WearingHeadsetComponent? headset) &&
             TryComp(headset.Headset, out EncryptionKeyHolderComponent? keys))
         {
-            headsetChannels = keys.Channels;
+            headsetChannels = keys.Channels.Select(channel => channel.Id).ToHashSet();
         }
 
         var wanted = new HashSet<string>();

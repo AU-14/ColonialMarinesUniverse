@@ -62,13 +62,6 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
         if (!TryComp(target, out DamageableComponent? damageable))
             return false;
 
-        if (gun.Comp.DamageContainers is not null &&
-            damageable.DamageContainerID is { } container &&
-            !gun.Comp.DamageContainers.Contains(container))
-        {
-            return false;
-        }
-
         if (user != target && !_interaction.InRangeUnobstructed(user, target, popup: true))
             return false;
 
@@ -109,8 +102,9 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 
         if (gun.Comp.RepairsFractures)
             RepairFractures(target);
-        var healed = _damageable.TryChangeDamage(target, gun.Comp.Damage * _damageable.UniversalTopicalsHealModifier, true, origin: user);
-        var total = healed?.GetTotal() ?? FixedPoint2.Zero;
+        var healing = gun.Comp.Damage * _damageable.UniversalTopicalsHealModifier;
+        var healed = _damageable.TryChangeDamage(target, healing, true, origin: user);
+        var total = healed ? -healing.GetTotal() : FixedPoint2.Zero;
 
         _audio.PlayPredicted(gun.Comp.HealSound, gun.Owner, user);
 

@@ -417,8 +417,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
                 recoil: false,
                 animated: true,
                 playSound: false,
-                doSpin: true,
-                rotate: false);
+                doSpin: true);
 
             TryComp(uid, out thrown);
         }
@@ -478,7 +477,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
                 origin: disc.YautjaOwner ?? uid,
                 tool: uid);
 
-            if (dealt != null && !dealt.Empty)
+            if (dealt)
                 _audio.PlayPvs(disc.HitSound, target);
         }
 

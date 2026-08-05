@@ -5,6 +5,7 @@ using System;
 using Content.Server.Administration;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Administration;
+using Content.Shared.Maps;
 using Robust.Shared.Console;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
@@ -72,7 +73,7 @@ public sealed class AU14MultiZCommand : IConsoleCommand
             return;
         }
 
-        var mapManager = IoCManager.Resolve<IMapManager>();
+        var mapManager = entMan.System<SharedMapSystem>();
         var mapId = new MapId(mapIdInt);
         if (!mapManager.MapExists(mapId))
         {
@@ -80,10 +81,14 @@ public sealed class AU14MultiZCommand : IConsoleCommand
             return;
         }
 
-        var mapUid = mapManager.GetMapEntityId(mapId);
-        var comp = entMan.EnsureComponent<ZBuildableMapComponent>(mapUid);
+        if (!mapManager.TryGetMap(mapId, out var mapUid))
+        {
+            shell.WriteError($"No map entity for MapId {mapIdInt}.");
+            return;
+        }
+        var comp = entMan.EnsureComponent<ZBuildableMapComponent>(mapUid.Value);
         comp.Enabled = on;
-        entMan.Dirty(mapUid, comp);
+        entMan.Dirty(mapUid.Value, comp);
 
         shell.WriteLine($"Map {mapIdInt} Multi Z-Level set to {(on ? "Yes" : "No")}. Players {(on ? "can now" : "can no longer")} build AU14 z-level stairs/floors here.");
     }

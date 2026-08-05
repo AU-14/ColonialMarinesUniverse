@@ -1,14 +1,12 @@
-using System.Numerics;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.GameStates;
-using Robust.Shared.Map;
 
 namespace Content.Shared._CMU14.ZLevels.Core.Components;
 
 /// <summary>
 /// Allows an entity to move up and down the z-levels by gravity or jumping
 /// </summary>
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(fieldDeltas: true),
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true, fieldDeltas: true),
  Access(typeof(CMUSharedZLevelsSystem))]
 public sealed partial class CMUZPhysicsComponent : Component
 {
@@ -28,32 +26,17 @@ public sealed partial class CMUZPhysicsComponent : Component
 
     // Physics
 
-    [DataField, AutoNetworkedField]
+    /// <summary>
+    /// Immutable prototype configuration. No prototypes override the default, so it does not
+    /// need to be repeated in every component state.
+    /// </summary>
+    [DataField]
     public float Bounciness = 0.3f;
 
-    // Visuals
-
     /// <summary>
-    /// Used only by the client.
-    /// Blocks the rotation of an object if it has <see cref="LocalPosition"/> > 0,
-    /// and saves the original NoRot value in SpriteComponent here so that it can be restored in the future.
+    /// Minimum client signal for airborne visuals and predicted vehicle drift. The server keeps
+    /// <see cref="CMUZFallingComponent"/> as its query-efficient active set.
     /// </summary>
-    [DataField]
-    public bool NoRotDefault;
-
-    /// <summary>
-    /// The original DrawDepth of the object is automatically saved here. Increases by 1 when the creature has <see cref="LocalPosition"/> > 0
-    /// </summary>
-    [DataField]
-    public int DrawDepthDefault;
-
-    /// <summary>
-    /// When the mapinit entity is created, its initial Sprite Offset value is written here in order to apply an offset based on the Z position relative to this value.
-    /// </summary>
-    [DataField]
-    public Vector2 SpriteOffsetDefault = Vector2.Zero;
-
-    public EntityUid LastFallCheckMap = EntityUid.Invalid;
-
-    public Vector2i LastFallCheckTile;
+    [DataField, AutoNetworkedField]
+    public bool Falling;
 }

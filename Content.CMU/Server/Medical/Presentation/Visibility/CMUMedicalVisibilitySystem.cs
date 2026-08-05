@@ -1,6 +1,6 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Eye;
 using Robust.Server.GameObjects;

@@ -35,7 +35,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
 {
     [Dependency] private readonly CMUZLevelsSystem _zLevels = default!;
     [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
@@ -579,7 +579,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     /// CMBaseWallInvincible family). These mark the playfield boundary.</summary>
     private bool IsIndestructibleWall(EntityUid uid)
     {
-        return _tag.HasTag(uid, "Wall") && !HasComp<Content.Shared.Damage.DamageableComponent>(uid);
+        return _tag.HasTag(uid, "Wall") && !HasComp<Content.Shared.Damage.Components.DamageableComponent>(uid);
     }
 
     /// <summary>If an indestructible border wall stands at <paramref name="worldPos"/> on the level directly

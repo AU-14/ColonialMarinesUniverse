@@ -2,7 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Robust.Shared.Containers;

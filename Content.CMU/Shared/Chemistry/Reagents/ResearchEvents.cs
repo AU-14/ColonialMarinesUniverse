@@ -128,12 +128,12 @@ public sealed class RetroactiveLockdownEvent(HashSet<string> chems) : EntityEven
 }
 
 [Serializable, NetSerializable]
-public sealed partial class DDIDiscoveredEvent() : EntityEventArgs
+public sealed partial class DDIDiscoveredEvent : EntityEventArgs
 {
 
 }
 
 [Serializable, NetSerializable]
-public sealed partial class XRFDoAfterEvent() : SimpleDoAfterEvent
+public sealed partial class XRFDoAfterEvent : SimpleDoAfterEvent
 {
 }

@@ -243,7 +243,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         List<FixedPoint2> metabs = [];
         if (proto.Metabolisms is not null)
         {
-            foreach (var metab in proto.Metabolisms.Values)
+            foreach (var metab in proto.Metabolisms.Metabolisms.Values)
             {
                 metabs.Add(metab.MetabolismRate);
                 foreach (var effect in metab.Effects)

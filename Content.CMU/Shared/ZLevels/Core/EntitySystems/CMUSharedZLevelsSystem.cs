@@ -7,6 +7,8 @@ using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using JetBrains.Annotations;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
+using Robust.Shared.GameStates;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
@@ -32,17 +34,28 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ActionBlockerSystem _blocker = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IConfigurationManager _configuration = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] protected ProfManager Prof = default!;
 
     private EntityQuery<MapComponent> _mapQuery;
     private EntityQuery<CMUZLevelMapComponent> _zMapQuery;
     private EntityQuery<MapGridComponent> _gridQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
+    protected EntityQuery<TransformComponent> XformQuery;
+    private int _profileZNetworkFastHits;
+    private int _profileZNetworkRecoveryScans;
+    private int _profileZNetworkRecoveryNetworks;
+    private int _profileZNetworkRecoveryHits;
+    private int _profileZNetworkMisses;
+    private int _profileZOffsetNeighbourHits;
+    private int _profileZOffsetNetworkHits;
+    private int _profileZOffsetRecoveryScans;
+    private int _profileZOffsetRecoveryNetworks;
+    private int _profileZOffsetRecoveryHits;
+    private int _profileZOffsetMisses;
 
     public override void Initialize()
     {
@@ -51,12 +64,95 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         _mapQuery = GetEntityQuery<MapComponent>();
         _zMapQuery = GetEntityQuery<CMUZLevelMapComponent>();
         _gridQuery = GetEntityQuery<MapGridComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
+        XformQuery = GetEntityQuery<TransformComponent>();
 
-        InitBuckle();
+        SubscribeLocalEvent<CMUZLevelsNetworkComponent, AfterAutoHandleStateEvent>(OnZNetworkState);
+        SubscribeLocalEvent<CMUZLevelMapComponent, ComponentStartup>(OnZMapStartup);
+
         InitMovement();
         InitThrowing();
         InitView();
+    }
+
+    private void OnZNetworkState(Entity<CMUZLevelsNetworkComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        if (_net.IsClient)
+            RebuildClientTopology(ent);
+    }
+
+    private void OnZMapStartup(Entity<CMUZLevelMapComponent> ent, ref ComponentStartup args)
+    {
+        if (!_net.IsClient)
+            return;
+
+        var query = EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
+        while (query.MoveNext(out var networkUid, out var network))
+        {
+            if (!network.ZLevelByEntity.TryGetValue(ent.Owner, out var depth) &&
+                !TryFindDepth(network, ent.Owner, out depth))
+            {
+                continue;
+            }
+
+            ApplyClientMapTopology(ent, networkUid, network, depth);
+            return;
+        }
+    }
+
+    private void RebuildClientTopology(Entity<CMUZLevelsNetworkComponent> ent)
+    {
+        foreach (var oldMap in ent.Comp.ZLevelByEntity.Keys)
+        {
+            if (!_zMapQuery.TryComp(oldMap, out var map))
+                continue;
+
+            map.NetworkUid = EntityUid.Invalid;
+            map.MapAbove = null;
+            map.MapBelow = null;
+            map.Depth = 0;
+        }
+
+        ent.Comp.ZLevelByEntity.Clear();
+        foreach (var (depth, mapUid) in ent.Comp.ZLevels)
+        {
+            if (mapUid is not { } map)
+                continue;
+
+            ent.Comp.ZLevelByEntity[map] = depth;
+            if (_zMapQuery.TryComp(map, out var mapComp))
+                ApplyClientMapTopology((map, mapComp), ent.Owner, ent.Comp, depth);
+        }
+    }
+
+    private static bool TryFindDepth(
+        CMUZLevelsNetworkComponent network,
+        EntityUid map,
+        out int depth)
+    {
+        foreach (var (candidateDepth, candidateMap) in network.ZLevels)
+        {
+            if (candidateMap != map)
+                continue;
+
+            depth = candidateDepth;
+            network.ZLevelByEntity[map] = candidateDepth;
+            return true;
+        }
+
+        depth = default;
+        return false;
+    }
+
+    private static void ApplyClientMapTopology(
+        Entity<CMUZLevelMapComponent> map,
+        EntityUid networkUid,
+        CMUZLevelsNetworkComponent network,
+        int depth)
+    {
+        map.Comp.NetworkUid = networkUid;
+        map.Comp.Depth = depth;
+        map.Comp.MapAbove = network.ZLevels.GetValueOrDefault(depth + 1);
+        map.Comp.MapBelow = network.ZLevels.GetValueOrDefault(depth - 1);
     }
 
     /// <summary>
@@ -72,19 +168,34 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
             !TerminatingOrDeleted(zLevelMapComp.NetworkUid) &&
             TryComp<CMUZLevelsNetworkComponent>(zLevelMapComp.NetworkUid, out var cachedNetwork))
         {
+            if (Prof.IsEnabled)
+                _profileZNetworkFastHits++;
+
             zLevel = (zLevelMapComp.NetworkUid, cachedNetwork);
             return true;
         }
 
+        if (Prof.IsEnabled)
+            _profileZNetworkRecoveryScans++;
+
         var query = EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
         while (query.MoveNext(out var uid, out var zLevelComp))
         {
+            if (Prof.IsEnabled)
+                _profileZNetworkRecoveryNetworks++;
+
             if (!zLevelComp.ZLevelByEntity.ContainsKey(mapUid))
                 continue;
+
+            if (Prof.IsEnabled)
+                _profileZNetworkRecoveryHits++;
 
             zLevel = (uid, zLevelComp);
             return true;
         }
+
+        if (Prof.IsEnabled)
+            _profileZNetworkMisses++;
 
         return false;
     }
@@ -102,6 +213,9 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
             inputMapUid.Comp.MapAbove is { } mapAbove &&
             _zMapQuery.TryComp(mapAbove, out var mapAboveComp))
         {
+            if (Prof.IsEnabled)
+                _profileZOffsetNeighbourHits++;
+
             outputMapUid = (mapAbove, mapAboveComp);
             return true;
         }
@@ -110,6 +224,9 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
             inputMapUid.Comp.MapBelow is { } mapBelow &&
             _zMapQuery.TryComp(mapBelow, out var mapBelowComp))
         {
+            if (Prof.IsEnabled)
+                _profileZOffsetNeighbourHits++;
+
             outputMapUid = (mapBelow, mapBelowComp);
             return true;
         }
@@ -119,13 +236,22 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
             cachedNetwork.ZLevels.TryGetValue(inputMapUid.Comp.Depth + offset, out var cachedTargetMapUid) &&
             _zMapQuery.TryComp(cachedTargetMapUid, out var cachedTargetZLevelComp))
         {
+            if (Prof.IsEnabled)
+                _profileZOffsetNetworkHits++;
+
             outputMapUid = (cachedTargetMapUid.Value, cachedTargetZLevelComp);
             return true;
         }
 
+        if (Prof.IsEnabled)
+            _profileZOffsetRecoveryScans++;
+
         var query = EntityQueryEnumerator<CMUZLevelsNetworkComponent>();
         while (query.MoveNext(out var network))
         {
+            if (Prof.IsEnabled)
+                _profileZOffsetRecoveryNetworks++;
+
             if (!network.ZLevelByEntity.TryGetValue(inputMapUid, out var inputDepth))
                 continue;
 
@@ -135,11 +261,44 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
             if (!_zMapQuery.TryComp(targetMapUid, out var targetZLevelComp))
                 continue;
 
+            if (Prof.IsEnabled)
+                _profileZOffsetRecoveryHits++;
+
             outputMapUid = (targetMapUid.Value, targetZLevelComp);
             return true;
         }
 
+        if (Prof.IsEnabled)
+            _profileZOffsetMisses++;
+
         return false;
+    }
+
+    private void WriteTopologyLookupProfileCounters()
+    {
+        Prof.WriteValue("CMU Z Network Fast Hits", _profileZNetworkFastHits);
+        Prof.WriteValue("CMU Z Network Recovery Scans", _profileZNetworkRecoveryScans);
+        Prof.WriteValue("CMU Z Network Recovery Networks", _profileZNetworkRecoveryNetworks);
+        Prof.WriteValue("CMU Z Network Recovery Hits", _profileZNetworkRecoveryHits);
+        Prof.WriteValue("CMU Z Network Misses", _profileZNetworkMisses);
+        Prof.WriteValue("CMU Z Offset Neighbour Hits", _profileZOffsetNeighbourHits);
+        Prof.WriteValue("CMU Z Offset Network Hits", _profileZOffsetNetworkHits);
+        Prof.WriteValue("CMU Z Offset Recovery Scans", _profileZOffsetRecoveryScans);
+        Prof.WriteValue("CMU Z Offset Recovery Networks", _profileZOffsetRecoveryNetworks);
+        Prof.WriteValue("CMU Z Offset Recovery Hits", _profileZOffsetRecoveryHits);
+        Prof.WriteValue("CMU Z Offset Misses", _profileZOffsetMisses);
+
+        _profileZNetworkFastHits = 0;
+        _profileZNetworkRecoveryScans = 0;
+        _profileZNetworkRecoveryNetworks = 0;
+        _profileZNetworkRecoveryHits = 0;
+        _profileZNetworkMisses = 0;
+        _profileZOffsetNeighbourHits = 0;
+        _profileZOffsetNetworkHits = 0;
+        _profileZOffsetRecoveryScans = 0;
+        _profileZOffsetRecoveryNetworks = 0;
+        _profileZOffsetRecoveryHits = 0;
+        _profileZOffsetMisses = 0;
     }
 
     [PublicAPI]
@@ -200,44 +359,6 @@ public abstract partial class CMUSharedZLevelsSystem : EntitySystem
         [NotNullWhen(true)] out Entity<CMUZLevelMapComponent>? belowMapUid)
     {
         return TryMapOffset(inputMapUid, -1, out belowMapUid);
-    }
-
-    /// <summary>
-    /// Returns a list of all maps above the specified map. The closest map at the top is returned first.
-    /// </summary>
-    [PublicAPI]
-    public List<EntityUid> GetAllMapsAbove(Entity<CMUZLevelMapComponent> inputMapUid)
-    {
-        var result = new List<EntityUid>();
-        var currentMap = inputMapUid;
-
-        while (currentMap.Comp.MapAbove is { } above &&
-               _zMapQuery.TryComp(above, out var aboveComp))
-        {
-            result.Add(above);
-            currentMap = (above, aboveComp);
-        }
-
-        return result;
-    }
-
-    /// <summary>
-    /// Returns a list of all maps below the specified map. The closest map at the bottom is returned first.
-    /// </summary>
-    [PublicAPI]
-    public List<EntityUid> GetAllMapsBelow(Entity<CMUZLevelMapComponent> inputMapUid)
-    {
-        var result = new List<EntityUid>();
-        var currentMap = inputMapUid;
-
-        while (currentMap.Comp.MapBelow is { } below &&
-               _zMapQuery.TryComp(below, out var belowComp))
-        {
-            result.Add(below);
-            currentMap = (below, belowComp);
-        }
-
-        return result;
     }
 
     [PublicAPI]

@@ -1,4 +1,4 @@
-// Content.Shared/AU14/ColonyEconomy/SubmissionStorageComponent.cs
+// Content.CMU/Shared/ColonyEconomy/ColonyATMComponent.cs
 using Robust.Shared.GameStates;
 
 namespace Content.Shared.AU14.ColonyEconomy;

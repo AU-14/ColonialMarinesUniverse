@@ -61,7 +61,7 @@ public sealed partial class CMUFractureMovementSystem : EntitySystem
             return;
         }
 
-        if (_standing.IsDown(ent) || args.ParentChanged || args.OldPosition == args.NewPosition)
+        if (_standing.IsDown(ent.Owner) || args.ParentChanged || args.OldPosition == args.NewPosition)
             return;
         if (!args.NewPosition.TryDistance(EntityManager, _transform, args.OldPosition, out var distance) ||
             distance <= MinimumMoveDistance)

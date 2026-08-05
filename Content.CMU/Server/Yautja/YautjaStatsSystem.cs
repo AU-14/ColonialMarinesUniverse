@@ -118,7 +118,11 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         Dirty(ent, speech);
 
         var vocal = EnsureComp<VocalComponent>(ent);
-        vocal.Sounds = new(ent.Comp.VocalSounds);
+        if (TryComp(ent, out HumanoidAppearanceComponent? vocalAppearance) &&
+            ent.Comp.VocalSounds.TryGetValue(vocalAppearance.Sex, out var vocalSounds))
+        {
+            vocal.EmoteSounds = vocalSounds;
+        }
         Dirty(ent, vocal);
 
         GrantAllSkills(ent);
@@ -175,7 +179,10 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (!TryComp<HumanoidAppearanceComponent>(ent, out var humanoid))
             return;
 
-        humanoid.MarkingSet.RemoveCategory(MarkingCategories.Hair);
+        while (humanoid.MarkingSet.Markings.TryGetValue(MarkingCategories.Hair, out var hair) && hair.Count > 0)
+        {
+            humanoid.MarkingSet.Remove(MarkingCategories.Hair, hair.Count - 1);
+        }
         _humanoid.AddMarking(ent, DreadlocksMarking, DreadlocksColor, false, forced: true, humanoid);
         Dirty(ent, humanoid);
     }

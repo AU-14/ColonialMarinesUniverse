@@ -1028,7 +1028,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
         GhostRoleComponent? ghostRole = null;
         if (TryComp(entity, out ghostRole) && ghostRole.MakeSentient)
-            MakeSentientCommand.MakeSentient(entity, EntityManager, ghostRole.AllowMovement, ghostRole.AllowSpeech);
+            _mindSystem.MakeSentient(entity, ghostRole.AllowMovement, ghostRole.AllowSpeech);
 
         ContentPlayerData? data = session.ContentData();
         EntityUid? mind = _mindSystem.GetMind(playerNetId);

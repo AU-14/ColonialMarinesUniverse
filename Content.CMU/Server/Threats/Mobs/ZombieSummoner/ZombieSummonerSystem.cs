@@ -568,7 +568,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
         {
             _prayer.SendSubtleMessage(
                 actor.PlayerSession,
-                Loc.GetString("cmu-zombie-summoner-insanity-source"),
+                null,
                 message,
                 Loc.GetString("prayer-popup-subtle-default"));
             return;

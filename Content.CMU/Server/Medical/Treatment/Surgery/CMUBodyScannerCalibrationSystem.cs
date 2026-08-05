@@ -9,7 +9,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Body;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Timing;
 

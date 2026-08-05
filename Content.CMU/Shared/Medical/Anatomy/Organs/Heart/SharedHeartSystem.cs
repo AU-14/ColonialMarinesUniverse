@@ -3,7 +3,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart.Events;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -25,7 +25,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
     [Dependency] protected SharedRMCBloodstreamSystem Bloodstream = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId Tachycardia = "StatusEffectCMUTachycardia";

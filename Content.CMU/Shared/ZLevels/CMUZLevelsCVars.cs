@@ -6,6 +6,9 @@ namespace Content.Shared._CMU14.ZLevels;
 [CVarDefs]
 public sealed partial class CMUZLevelsCVars : CVars
 {
+    public static readonly CVarDef<bool> CullOccludedDynamicSprites =
+        CVarDef.Create("cmu.zlevels.cull_occluded_dynamic_sprites", true, CVar.CLIENTONLY | CVar.ARCHIVE);
+
     public static readonly CVarDef<bool> Enabled =
         CVarDef.Create("cmu.zlevels.enabled", true, CVar.REPLICATED | CVar.SERVER);
 
@@ -24,7 +27,15 @@ public sealed partial class CMUZLevelsCVars : CVars
     public static readonly CVarDef<int> MaxRenderDepth =
         CVarDef.Create("cmu.zlevels.max_render_depth", 8, CVar.REPLICATED | CVar.SERVER);
 
-    public static readonly CVarDef<bool> BlurEnabled =
+    public static readonly CVarDef<int> MaxPvsDepth =
+        CVarDef.Create("cmu.zlevels.max_pvs_depth", 8, CVar.SERVER);
+
+    public static readonly CVarDef<int> MaxAudioDepth =
+        CVarDef.Create("cmu.zlevels.max_audio_depth", 8, CVar.SERVER);
+
+    // Retained so existing archived client configs do not produce an unknown-CVar warning.
+    // BlurStrength is the supported on/off control: zero disables blur and its positive default enables it.
+    public static readonly CVarDef<bool> LegacyBlurEnabled =
         CVarDef.Create("cmu.zlevels.blur_enabled", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<float> BlurStrength =
@@ -56,9 +67,6 @@ public sealed partial class CMUZLevelsCVars : CVars
 
     public static readonly CVarDef<float> TransitionBudgetMs =
         CVarDef.Create("cmu.zlevels.transition_budget_ms", 1.0f, CVar.SERVER);
-
-    public static readonly CVarDef<bool> CullOccludedDynamicSprites =
-        CVarDef.Create("cmu.zlevels.cull_occluded_dynamic_sprites", true, CVar.CLIENTONLY | CVar.ARCHIVE);
 
     public static readonly CVarDef<int> MaxOpeningRectsPerPass =
         CVarDef.Create("cmu.zlevels.max_opening_rects_per_pass", 512, CVar.CLIENTONLY | CVar.ARCHIVE);

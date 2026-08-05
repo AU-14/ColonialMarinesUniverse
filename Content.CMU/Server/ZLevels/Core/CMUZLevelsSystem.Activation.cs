@@ -1,9 +1,6 @@
 using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared.Ghost;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
-using Robust.Shared.Physics;
-using Robust.Shared.Physics.Components;
 using Robust.Shared.Physics.Events;
 
 namespace Content.Server._CMU14.ZLevels.Core;
@@ -44,21 +41,22 @@ public sealed partial class CMUZLevelsSystem
         if (!TryGetFallCheckTile(ent, out var map, out var tile))
             return;
 
-        if (ent.Comp.LastFallCheckMap == map &&
-            ent.Comp.LastFallCheckTile == tile)
+        var cache = EnsureComp<CMUZPhysicsActivationCacheComponent>(ent);
+        if (cache.Map == map &&
+            cache.Tile == tile)
         {
             if (!HasHighGroundAtTile(map, tile))
                 return;
         }
 
-        ent.Comp.LastFallCheckMap = map;
-        ent.Comp.LastFallCheckTile = tile;
+        cache.Map = map;
+        cache.Tile = tile;
         CheckActivation(ent);
     }
 
     private void OnZPhysicsTileChanged(ref TileChangedEvent args)
     {
-        if (!_zLevelsEnabled)
+        if (!ZLevelsEnabled)
             return;
 
         for (var i = 0; i < args.Changes.Length; i++)
@@ -82,40 +80,13 @@ public sealed partial class CMUZLevelsSystem
         SetActiveStatus(ent, true);
     }
 
-    private bool CanUseZPhysics(Entity<CMUZPhysicsComponent> ent)
-    {
-        if (!_zLevelsEnabled ||
-            TerminatingOrDeleted(ent))
-        {
-            return false;
-        }
-
-        if (HasComp<GhostComponent>(ent))
-            return false;
-
-        var xform = Transform(ent);
-        if (xform.MapUid is not { } map ||
-            !HasComp<CMUZLevelMapComponent>(map) ||
-            xform.Anchored)
-        {
-            return false;
-        }
-
-        if (TryComp<PhysicsComponent>(ent, out var physics))
-        {
-            if (physics.BodyType == BodyType.Static)
-                return false;
-        }
-
-        return true;
-    }
-
-    private void SetActiveStatus(EntityUid ent, bool active)
+    private void SetActiveStatus(Entity<CMUZPhysicsComponent> ent, bool active)
     {
         if (active)
-            WakeZPhysics(ent);
+            WakeZPhysics((ent.Owner, ent.Comp));
         else
         {
+            SetZPhysicsFallingState(ent, false);
             RemCompDeferred<CMUZFallingComponent>(ent);
         }
     }

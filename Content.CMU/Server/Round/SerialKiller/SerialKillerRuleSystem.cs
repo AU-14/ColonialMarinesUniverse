@@ -2,7 +2,7 @@ using Content.Server.AU14.ColonyEconomy;
 using Content.Server.GameTicking.Rules;
 using Content.Server.AU14.Systems;
 using Content.Server.Station.Systems;
-using Content.Server.StationRecords.Systems;
+using Content.Shared.StationRecords.Systems;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;

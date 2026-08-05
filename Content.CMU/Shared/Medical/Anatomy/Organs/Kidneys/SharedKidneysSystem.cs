@@ -2,7 +2,7 @@ using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -19,7 +19,7 @@ public abstract partial class SharedKidneysSystem : EntitySystem
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected CMUMedicalBodyIndexSystem MedicalIndex = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected CMStasisBagSystem Stasis = default!;
 
     private static readonly EntProtoId RenalFailure = "StatusEffectCMURenalFailure";

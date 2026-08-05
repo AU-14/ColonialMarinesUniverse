@@ -174,7 +174,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 if (chem.Metabolisms is not null)
                 {
                     //evil fucking wretched awful horrible no good shit
-                    foreach (var metab in chem.Metabolisms.Values)
+                    foreach (var metab in chem.Metabolisms.Metabolisms.Values)
                     {
                         metabRate = metab.MetabolismRate;
                         foreach (var effect in metab.Effects)
@@ -200,7 +200,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
                 if (chem.Metabolisms is not null)
                 {
                     string fx = string.Empty;
-                    foreach (var metab in chem.Metabolisms.Values)
+                    foreach (var metab in chem.Metabolisms.Metabolisms.Values)
                     {
                         foreach (var effect in metab.Effects)
                         {
@@ -243,7 +243,7 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             if (chem.Metabolisms is not null)
             {
                 string fx = string.Empty;
-                foreach (var metab in chem.Metabolisms.Values)
+                foreach (var metab in chem.Metabolisms.Metabolisms.Values)
                 {
                     foreach (var effect in metab.Effects)
                     {
@@ -261,8 +261,8 @@ public sealed partial class ServerReagentGeneratorSystem : SharedReagentGenerato
             FixedPoint2 metabRate = 0.01;
             if (chem.Metabolisms is not null)
             {
-                metabRate = chem.Metabolisms.Values[0].MetabolismRate;
-                foreach (var metab in chem.Metabolisms.Values)
+                metabRate = chem.Metabolisms.Metabolisms.Values.First().MetabolismRate;
+                foreach (var metab in chem.Metabolisms.Metabolisms.Values)
                 {
                     metabRate = metab.MetabolismRate;
                     foreach (var effect in metab.Effects)

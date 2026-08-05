@@ -152,7 +152,7 @@ public sealed class GunSwitchSystem : EntitySystem
 
             // AttemptShoot respects the gun's own fire-rate cooldown, so calling it every tick just
             // sustains fire at the (multiplied) rate - the involuntary mag dump.
-            _gun.AttemptShoot(dump.User, uid, gunComp, dump.Target);
+            _gun.AttemptShoot(dump.User, (uid, gunComp), dump.Target);
         }
     }
 

@@ -36,9 +36,24 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
         var query = EntityManager.EntityQueryEnumerator<DecalGridComponent>();
         while (query.MoveNext(out var gridUid, out var decalGrid))
         {
-            var (removed, skipped) = _decalSys.RemoveDecals(gridUid, idFilter, cleanableOnly, decalGrid);
-            totalRemoved += removed;
-            totalSkipped += skipped;
+            foreach (var chunk in decalGrid.ChunkCollection.ChunkCollection.Values)
+            {
+                foreach (var (id, decal) in chunk.Decals.ToArray())
+                {
+                    if (idFilter != null && !idFilter.Contains(decal.Id))
+                        continue;
+
+                    if (cleanableOnly &&
+                        (!_protoMan.TryIndex<DecalPrototype>(decal.Id, out var prototype) || !prototype.DefaultCleanable))
+                    {
+                        totalSkipped++;
+                        continue;
+                    }
+
+                    if (_decalSys.RemoveDecal(gridUid, id, decalGrid))
+                        totalRemoved++;
+                }
+            }
             gridCount++;
         }
 

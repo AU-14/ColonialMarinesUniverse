@@ -1,6 +1,6 @@
+using System.Threading;
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared._CMU14.ZLevels.Vehicles;
 using Robust.Shared.Timing;
 using DiagnosticStopwatch = System.Diagnostics.Stopwatch;
 
@@ -8,21 +8,34 @@ namespace Content.Server._CMU14.ZLevels.Core;
 
 public sealed partial class CMUZLevelsSystem
 {
+    protected override bool ZPhysicsEnabled => ZLevelsEnabled;
+
     private int _maxZTransitionsPerTick = 64;
-    private TimeSpan _zTransitionBudget = TimeSpan.FromMilliseconds(1);
+    private long _zTransitionBudgetTicks = TimeSpan.FromMilliseconds(1).Ticks;
     private GameTick _zTransitionBudgetTick;
     private int _zTransitionsThisTick;
     private long _zTransitionBudgetStart;
 
     private void InitTransitionBudget()
     {
-        Subs.CVar(_config, CMUZLevelsCVars.MaxFallsPerTick, value => _maxZTransitionsPerTick = Math.Max(0, value), true);
-        Subs.CVar(_config, CMUZLevelsCVars.TransitionBudgetMs, value => _zTransitionBudget = TimeSpan.FromMilliseconds(Math.Max(0, value)), true);
+        Subs.CVar(
+            _config,
+            CMUZLevelsCVars.MaxFallsPerTick,
+            value => Interlocked.Exchange(ref _maxZTransitionsPerTick, Math.Max(0, value)),
+            true);
+        Subs.CVar(
+            _config,
+            CMUZLevelsCVars.TransitionBudgetMs,
+            value => Interlocked.Exchange(
+                ref _zTransitionBudgetTicks,
+                TimeSpan.FromMilliseconds(Math.Max(0, value)).Ticks),
+            true);
     }
 
     protected override bool CanProcessZLevelTransition(EntityUid ent, int offset)
     {
-        if (_maxZTransitionsPerTick <= 0)
+        var maxTransitionsPerTick = Interlocked.CompareExchange(ref _maxZTransitionsPerTick, 0, 0);
+        if (maxTransitionsPerTick <= 0)
             return false;
 
         var curTick = _gameTiming.CurTick;
@@ -33,59 +46,51 @@ public sealed partial class CMUZLevelsSystem
             _zTransitionBudgetStart = DiagnosticStopwatch.GetTimestamp();
         }
 
-        if (_zTransitionsThisTick >= _maxZTransitionsPerTick)
+        if (_zTransitionsThisTick >= maxTransitionsPerTick)
             return false;
 
-        if (_zTransitionBudget > TimeSpan.Zero &&
-            DiagnosticStopwatch.GetElapsedTime(_zTransitionBudgetStart) >= _zTransitionBudget)
+        var transitionBudgetTicks = Interlocked.Read(ref _zTransitionBudgetTicks);
+        if (transitionBudgetTicks > 0 &&
+            DiagnosticStopwatch.GetElapsedTime(_zTransitionBudgetStart) >=
+            TimeSpan.FromTicks(transitionBudgetTicks))
         {
             return false;
         }
 
-        _zTransitionsThisTick++;
         return true;
     }
 
-    public override void WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
+    protected override void RecordZLevelTransition(EntityUid ent, int offset)
     {
-        if (!Prof.IsEnabled)
-        {
-            WakeZPhysicsCore(ent);
-            return;
-        }
-
-        using var profile = Prof.Group("CMU Z Wake");
-        WakeZPhysicsCore(ent);
+        _zTransitionsThisTick++;
     }
 
-    private void WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent)
+    public override bool WakeZPhysics(Entity<CMUZPhysicsComponent?> ent)
     {
-        if (!_zLevelsEnabled ||
-            !Resolve(ent, ref ent.Comp, false))
-        {
-            return;
-        }
+        if (!Prof.IsEnabled)
+            return WakeZPhysicsCore(ent);
 
-        var resolved = new Entity<CMUZPhysicsComponent>(ent.Owner, ent.Comp);
-        if (!CanUseZPhysics(resolved))
-        {
-            RemCompDeferred<CMUZFallingComponent>(ent.Owner);
-            return;
-        }
+        using var profile = Prof.Group("CMU Z Wake");
+        return WakeZPhysicsCore(ent);
+    }
 
-        Entity<CMUZPhysicsComponent?> distanceEnt = (ent.Owner, ent.Comp);
-        var distance = DistanceToGround(distanceEnt, out var stickyGround);
-        if (ShouldSleepZPhysics(
-                distance,
-                stickyGround,
-                ent.Comp.LocalPosition,
-                ent.Comp.Velocity,
-                HasComp<CMUVehicleZTraversalComponent>(ent.Owner)))
+    private bool WakeZPhysicsCore(Entity<CMUZPhysicsComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
         {
             RemCompDeferred<CMUZFallingComponent>(ent.Owner);
-            return;
+            return false;
         }
 
+        if (!ShouldWakeZPhysics(ent))
+        {
+            SetZPhysicsFallingState((ent.Owner, ent.Comp), false);
+            RemCompDeferred<CMUZFallingComponent>(ent.Owner);
+            return false;
+        }
+
+        SetZPhysicsFallingState((ent.Owner, ent.Comp), true);
         EnsureComp<CMUZFallingComponent>(ent.Owner);
+        return true;
     }
 }

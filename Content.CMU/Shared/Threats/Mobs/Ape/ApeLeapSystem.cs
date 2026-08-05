@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Invisibility;
 using Content.Shared._RMC14.Xenonids.Leap;
@@ -60,6 +61,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
     [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -381,7 +383,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
             victim.RecoverAt = _timing.CurTime + xeno.Comp.ParalyzeTime;
             Dirty(target, victim);
 
-            _stun.TrySlowdown(xeno, xeno.Comp.MoveDelayTime, true, 0f, 0f);
+            _slow.TrySlowdown(xeno, xeno.Comp.MoveDelayTime);
 
             if (_net.IsServer)
                 _stun.TryParalyze(target, xeno.Comp.ParalyzeTime, true);
@@ -393,8 +395,8 @@ public sealed partial class ApeLeapSystem : EntitySystem
                 SpawnAttachedTo(xeno.Comp.HitEffect, target.ToCoordinates());
         }
 
-        DamageSpecifier? damage = _damagable.TryChangeDamage(target, xeno.Comp.Damage, origin: xeno, tool: xeno);
-        if (damage?.GetTotal() > FixedPoint2.Zero)
+        var damage = _damagable.ChangeDamage(target, xeno.Comp.Damage, origin: xeno, tool: xeno);
+        if (damage.GetTotal() > FixedPoint2.Zero)
         {
             Filter filter = Filter.Pvs(target, entityManager: EntityManager)
                 .RemoveWhereAttachedEntity(o => o == xeno.Owner);

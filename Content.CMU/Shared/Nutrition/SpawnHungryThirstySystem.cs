@@ -18,7 +18,7 @@ public sealed partial class SpawnHungryThirstySystem : EntitySystem
     private void OnStartup(Entity<SpawnHungryThirstyComponent> ent, ref ComponentStartup args)
     {
         if (TryComp(ent, out ThirstComponent? thirst))
-            _thirst.SetThirstToThreshold(ent, thirst, ent.Comp.StartingThirstThreshold);
+            _thirst.SetThirst(ent, thirst, thirst.ThirstThresholds[ent.Comp.StartingThirstThreshold]);
 
         if (TryComp(ent, out HungerComponent? hunger))
             _hunger.SetHungerToThreshold(ent, hunger, ent.Comp.StartingHungerThreshold);

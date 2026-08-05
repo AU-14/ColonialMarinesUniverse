@@ -1,4 +1,4 @@
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.AU14.Radio;
 using Content.Shared.Clothing;

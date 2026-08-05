@@ -33,7 +33,7 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
     [Dependency] private SharedOrganHealthSystem _organHealth = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private IPrototypeManager _protoMgr = default!;
-    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _surgery = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
 

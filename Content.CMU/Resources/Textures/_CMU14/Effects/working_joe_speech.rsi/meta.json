@@ -1,14 +1,14 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from tgstation at https://github.com/tgstation/tgstation/blob/4b4e9dff1d7d891cfb75d25ca5bf5172d1c02be6/icons/hud/screen_gen.dmi",
+  "copyright": "Taken from https://github.com/Blundir/cmss13/blob/ee6cb7c8a80f4093d4c33bba9f820b427c66dd81/icons/mob/effects/talk.dmi",
   "size": {
     "x": 32,
     "y": 32
   },
   "states": [
     {
-      "name": "noise",
+      "name": "joe0",
       "delays": [
         [
           0.1,
@@ -31,20 +31,14 @@
           0.1,
           0.1,
           0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
-          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "joe3",
+      "delays": [
+        [
           0.1,
           0.1,
           0.1,

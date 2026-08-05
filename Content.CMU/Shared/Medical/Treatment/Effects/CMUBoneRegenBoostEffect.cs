@@ -20,7 +20,7 @@ public sealed partial class CMUBoneRegenBoostEffect : EntityEffect
         if (args is not EntityEffectReagentArgs reagent)
             return;
         var entMan = args.EntityManager;
-        var status = entMan.System<SharedStatusEffectsSystem>();
+        var status = entMan.System<StatusEffectsSystem>();
 
         if (!status.TryAddStatusEffectDuration(reagent.TargetEntity,
                 "StatusEffectCMUBoneRegenBoost", out var effect,

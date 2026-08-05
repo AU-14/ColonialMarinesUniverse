@@ -10,8 +10,6 @@ namespace Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 
 public abstract partial class CMUSharedZLevelsSystem
 {
-    [Dependency] private IConfigurationManager _configuration = default!;
-
     /// <summary>
     /// Adds players whose Z-level probe eye can see <paramref name="coordinates"/> to a normal PVS filter.
     /// </summary>
@@ -34,13 +32,13 @@ public abstract partial class CMUSharedZLevelsSystem
 
             foreach (var eye in viewer.Eyes)
             {
-                if (!_xformQuery.TryComp(eye, out var eyeXform) ||
+                if (!XformQuery.TryComp(eye, out var eyeXform) ||
                     eyeXform.MapID != coordinates.MapId)
                 {
                     continue;
                 }
 
-                var eyePosition = _transform.GetWorldPosition(eyeXform, _xformQuery);
+                var eyePosition = _transform.GetWorldPosition(eyeXform, XformQuery);
                 if (Vector2.DistanceSquared(eyePosition, coordinates.Position) <= pvsRangeSquared)
                     return true;
             }

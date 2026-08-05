@@ -166,7 +166,7 @@ public sealed partial class YautjaHealthShardSystem : EntitySystem
             solution.AddReagent(reagent, amount);
         }
 
-        _bloodstream.TryAddToChemicals((target, null), solution);
+        _bloodstream.TryAddToBloodstream((target, null), solution);
 
         if (ent.Comp.CompleteSound != null)
             _audio.PlayPvs(ent.Comp.CompleteSound, target);

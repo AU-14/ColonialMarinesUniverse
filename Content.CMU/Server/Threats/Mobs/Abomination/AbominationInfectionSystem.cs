@@ -9,9 +9,9 @@ using Content.Shared.EntityEffects;
 using Content.Shared.Humanoid;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Polymorph;
-using Content.Shared.StatusEffect;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -43,7 +43,6 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private PolymorphSystem _polymorph = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VomitSystem _vomit = default!;
@@ -59,7 +58,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
     {
         SubscribeLocalEvent<AbominationComponent, MeleeHitEvent>(OnAbominationMeleeHit);
         SubscribeLocalEvent<AbominationInfectionComponent, MobStateChangedEvent>(OnInfectedMobStateChanged);
-        SubscribeLocalEvent<ExecuteEntityEffectEvent<CauseAbominationInfection>>(OnExecuteCauseInfection);
+        SubscribeLocalEvent<MobStateComponent, EntityEffectEvent<CauseAbominationInfection>>(OnExecuteCauseInfection);
     }
 
     public override void Update(float frameTime)
@@ -97,8 +96,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
             {
                 infection.NextTickAt = now + infection.TickInterval;
                 _damageable.TryChangeDamage(uid, infection.TickDamage, true);
-                _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, SharedDrunkSystem.DrunkKey,
-                    infection.DrunkPerTick * severity, true);
+                _drunk.TryApplyDrunkenness(uid, infection.DrunkPerTick * severity);
             }
 
             // Coughing — interval shrinks as severity rises.
@@ -130,9 +128,9 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
         }
     }
 
-    private void OnExecuteCauseInfection(ref ExecuteEntityEffectEvent<CauseAbominationInfection> args)
+    private void OnExecuteCauseInfection(Entity<MobStateComponent> ent, ref EntityEffectEvent<CauseAbominationInfection> args)
     {
-        EntityUid target = args.Args.TargetEntity;
+        var target = ent.Owner;
 
         if (!IsValidInfectionTarget(target))
             return;

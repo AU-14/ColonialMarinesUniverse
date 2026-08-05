@@ -60,7 +60,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
-    [Dependency] private IMapManager _mapManager = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
     [Dependency] private BuildPartnerSystem _partners = default!;
     [Dependency] private PlayerBuiltSystem _playerBuilt = default!;
     [Dependency] private IAdminManager _adminManager = default!;
@@ -69,7 +69,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
     [Dependency] private ZLevelBuildingSystem _zBuilding = default!;
     [Dependency] private ZStairSystem _zStairs = default!;
-    [Dependency] private SharedMapSystem _map = default!;
+    private SharedMapSystem _map => _mapManager;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private ITileDefinitionManager _tileDef = default!;
@@ -1046,11 +1046,11 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 // above/below - a build whose support beams or upper platforms cross levels saves as one.
                 // Opt-in, because scanning other levels unconditionally swept in structures directly above
                 // or below the selection that the builder never intended to capture.
-                if (includeMultiZ && _mapManager.GetMapEntityId(map.MapId) is { Valid: true } boxMapUid)
+                if (includeMultiZ && _mapManager.TryGetMap(map.MapId, out var boxMapUid))
                 {
                     for (var dz = -MaxZRange; dz <= MaxZRange; dz++)
                     {
-                        if (dz == 0 || !_zLevels.TryMapOffset(boxMapUid, dz, out _, out var otherMapComp))
+                        if (dz == 0 || !_zLevels.TryMapOffset(boxMapUid.Value, dz, out _, out var otherMapComp))
                             continue;
 
                         _lookup.GetEntitiesIntersecting(otherMapComp.MapId, box, found);
@@ -1135,12 +1135,12 @@ public sealed partial class SavedBuildSystem : EntitySystem
             if (!includeMultiZ)
                 continue;
 
-            if (_mapManager.GetMapEntityId(map.MapId) is not { Valid: true } boxMapUid)
+            if (!_mapManager.TryGetMap(map.MapId, out var boxMapUid))
                 continue;
 
             for (var dz = -MaxZRange; dz <= MaxZRange; dz++)
             {
-                if (dz == 0 || !_zLevels.TryMapOffset(boxMapUid, dz, out _, out var otherMapComp))
+                if (dz == 0 || !_zLevels.TryMapOffset(boxMapUid.Value, dz, out _, out var otherMapComp))
                     continue;
 
                 var otherMap = new MapCoordinates(map.Position, otherMapComp.MapId);

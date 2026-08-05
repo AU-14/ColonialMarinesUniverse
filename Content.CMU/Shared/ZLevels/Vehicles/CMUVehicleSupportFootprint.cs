@@ -43,16 +43,16 @@ public static class CMUVehicleSupportFootprint
         bottom += inset;
         top -= inset;
 
-        var xSamples = new List<float>();
-        var ySamples = new List<float>();
-        AddAxisSamples(left, right, spacing, xSamples);
-        AddAxisSamples(bottom, top, spacing, ySamples);
+        var xSampleCount = GetAxisSampleCount(left, right, spacing);
+        var ySampleCount = GetAxisSampleCount(bottom, top, spacing);
 
-        foreach (var x in xSamples)
+        for (var xIndex = 0; xIndex < xSampleCount; xIndex++)
         {
-            foreach (var y in ySamples)
+            var x = GetAxisSample(left, right, xIndex, xSampleCount);
+            for (var yIndex = 0; yIndex < ySampleCount; yIndex++)
             {
-                AddSample(samples, new Vector2(x, y));
+                var y = GetAxisSample(bottom, top, yIndex, ySampleCount);
+                samples.Add(new Vector2(x, y));
             }
         }
     }
@@ -176,32 +176,22 @@ public static class CMUVehicleSupportFootprint
         return !first;
     }
 
-    private static void AddAxisSamples(float min, float max, float spacing, List<float> samples)
+    private static int GetAxisSampleCount(float min, float max, float spacing)
     {
-        samples.Add(min);
-
         var length = max - min;
         if (length <= DuplicateTolerance)
-            return;
+            return 1;
 
         var intervals = Math.Max(1, (int) MathF.Ceiling(length / spacing));
-        for (var i = 1; i < intervals; i++)
-        {
-            var t = i / (float) intervals;
-            samples.Add(MathHelper.Lerp(min, max, t));
-        }
-
-        samples.Add(max);
+        return intervals + 1;
     }
 
-    private static void AddSample(List<Vector2> samples, Vector2 sample)
+    private static float GetAxisSample(float min, float max, int index, int count)
     {
-        foreach (var existing in samples)
-        {
-            if ((existing - sample).LengthSquared() <= DuplicateTolerance * DuplicateTolerance)
-                return;
-        }
+        if (count <= 1)
+            return min;
 
-        samples.Add(sample);
+        var t = index / (float) (count - 1);
+        return MathHelper.Lerp(min, max, t);
     }
 }

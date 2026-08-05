@@ -77,7 +77,7 @@ public sealed partial class MGhostCommand : LocalizedCommands
             ? _entities.GetComponent<TransformComponent>(player.AttachedEntity.Value).Coordinates
             : gameTicker.GetObserverSpawnPoint();
 
-        EntityUid ghost = _entities.SpawnEntity(GameTicker.MentorObserverPrototypeName, coordinates);
+        EntityUid ghost = _entities.SpawnEntity(GameTicker.ObserverPrototypeName, coordinates);
         transformSystem.AttachToGridOrMap(ghost, _entities.GetComponent<TransformComponent>(ghost));
 
         if (canReturn)

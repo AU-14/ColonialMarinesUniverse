@@ -1,4 +1,4 @@
-using Content.Server.Explosion.EntitySystems;
+using Content.Shared.Trigger;
 using Content.Shared._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
 
 namespace Content.Server._CMU14.Threats.Mobs.Xeno.Caste.Warlock;
@@ -21,10 +21,10 @@ public sealed class CMUXenoWarlockShieldCollisionSystem : EntitySystem
 {
     public override void Initialize()
     {
-        SubscribeLocalEvent<CMUXenoFrozenProjectileComponent, BeforeTriggerEvent>(OnFrozenProjectileBeforeTrigger);
+        SubscribeLocalEvent<CMUXenoFrozenProjectileComponent, AttemptTriggerEvent>(OnFrozenProjectileBeforeTrigger);
     }
 
-    private void OnFrozenProjectileBeforeTrigger(Entity<CMUXenoFrozenProjectileComponent> frozen, ref BeforeTriggerEvent args)
+    private void OnFrozenProjectileBeforeTrigger(Entity<CMUXenoFrozenProjectileComponent> frozen, ref AttemptTriggerEvent args)
     {
         // Thrown grenades opt into keeping their fuse alive by setting AllowTriggerWhileFrozen.
         // For those, the trigger runs normally - if the shield does not reflect in time, the

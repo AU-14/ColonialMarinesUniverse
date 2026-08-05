@@ -68,7 +68,17 @@ public sealed partial class CMUBangaloreSystem : EntitySystem
         _audio.PlayPvs(ent.Comp.DeploySound, ent);
 
         if (TryComp(ent, out RMCExplosiveDeleteComponent? delete))
-            _trigger.HandleTimerTrigger(ent, args.User, delete.Delay, delete.BeepInterval, delete.InitialBeepDelay, delete.BeepSound);
+        {
+            var timer = EnsureComp<Content.Shared.Trigger.Components.TimerTriggerComponent>(ent);
+            timer.Delay = TimeSpan.FromSeconds(delete.Delay);
+            timer.BeepInterval = TimeSpan.FromSeconds(delete.BeepInterval);
+            timer.InitialBeepDelay = delete.InitialBeepDelay is { } initial
+                ? TimeSpan.FromSeconds(initial)
+                : null;
+            timer.BeepSound = delete.BeepSound;
+            Dirty(ent, timer);
+            _trigger.ActivateTimerTrigger((ent.Owner, timer), args.User);
+        }
     }
 
     private bool CanDeployPopup(Entity<CMUBangaloreComponent> ent, EntityUid user)

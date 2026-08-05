@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Server.Chat.Systems;
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Shared._AU14.Callsigns;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;

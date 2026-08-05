@@ -1,8 +1,4 @@
 using Robust.Shared.GameObjects;
-using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.List;
-using System.Collections.Generic;
-using Content.Shared.Tag;
 
 namespace Content.Shared.BarricadeBlock;
 
@@ -10,24 +6,20 @@ namespace Content.Shared.BarricadeBlock;
 public sealed partial class BarricadeBlockComponent : Component
 {
     /// <summary>
-    /// % chance of blocking a projectile passing overhead
+    /// Percentage chance of blocking a projectile passing overhead.
     /// </summary>
-    [DataField("blocking")]
+    [DataField]
     public int Blocking = 66;
 
     /// <summary>
-    /// Can it be used bidirectionally (e.g. sandbags) or only from behind (e.g. crenelated walls)?
+    /// Whether the cover works from both directions.
     /// </summary>
-    [DataField("bidirectional")]
+    [DataField]
     public bool Bidirectional = true;
 
     /// <summary>
-    /// Maximum distance (in tiles) a shooter can be from this barricade for a directionally-aligned
-    /// shot to pass over instead of being subject to block chance.
+    /// Maximum distance at which an aligned shot can pass over the cover.
     /// </summary>
-    [DataField("distance")]
+    [DataField]
     public float Distance = 3.5f;
-
 }
-
-/// ported from civ14

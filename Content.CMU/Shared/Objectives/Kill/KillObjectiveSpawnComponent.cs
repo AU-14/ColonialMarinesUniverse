@@ -1,6 +1,7 @@
 namespace Content.Shared.AU14.Objectives.Kill;
 
-public sealed class KillObjectiveSpawnComponent
+[DataDefinition]
+public sealed partial class KillObjectiveSpawnComponent
 {
     [DataField("generic", required: false)]
     public bool Generic { get; private set; } = false;

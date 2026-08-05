@@ -8,7 +8,6 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Damage;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
-using Robust.Client.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -90,7 +89,7 @@ public sealed partial class Ciphering : RMCChemicalEffect
                         ghive = entman.Spawn("CMUCorruptedHive");
                     }
                     else ghive = hives["corrupted"];
-                    parasys.SetHive(targ, ghive);
+                    parasys.SetHive((targ, inf), ghive);
                     break;
                 case 3:
                     var ahive = EntityUid.Invalid;
@@ -99,7 +98,7 @@ public sealed partial class Ciphering : RMCChemicalEffect
                         ahive = entman.Spawn("CMUAlphaHive");
                     }
                     else ahive = hives["alpha"];
-                    parasys.SetHive(targ, ahive);
+                    parasys.SetHive((targ, inf), ahive);
                     break;
                 case 4:
                     var bhive = EntityUid.Invalid;
@@ -108,7 +107,7 @@ public sealed partial class Ciphering : RMCChemicalEffect
                         bhive = entman.Spawn("CMUBravoHive");
                     }
                     else bhive = hives["bravo"];
-                    parasys.SetHive(targ, bhive);
+                    parasys.SetHive((targ, inf), bhive);
                     break;
                 case 5:
                     var chive = EntityUid.Invalid;
@@ -117,7 +116,7 @@ public sealed partial class Ciphering : RMCChemicalEffect
                         chive = entman.Spawn("CMUCharlieHive");
                     }
                     else chive = hives["charlie"];
-                    parasys.SetHive(targ, chive);
+                    parasys.SetHive((targ, inf), chive);
                     break;
                 case 6:
                     var dhive = EntityUid.Invalid;
@@ -126,10 +125,10 @@ public sealed partial class Ciphering : RMCChemicalEffect
                         dhive = entman.Spawn("CMUDeltaHive");
                     }
                     else dhive = hives["delta"];
-                    parasys.SetHive(targ, dhive);
+                    parasys.SetHive((targ, inf), dhive);
                     break;
                 default:
-                    parasys.SetHive(targ, hives["prime"]);
+                    parasys.SetHive((targ, inf), hives["prime"]);
                     break;
             }
         }

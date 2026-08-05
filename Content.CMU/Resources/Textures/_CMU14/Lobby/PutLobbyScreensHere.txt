@@ -1,2 +1,2 @@
 Note:
-Only png and jpgs files are supported, and you need a prototype in /Prototypes/_AU14/lobbyscreens.yml
+Only png and jpgs files are supported, and you need a prototype in /Prototypes/lobbyscreens.yml

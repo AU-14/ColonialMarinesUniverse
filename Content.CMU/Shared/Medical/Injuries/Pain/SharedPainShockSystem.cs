@@ -28,7 +28,7 @@ public abstract partial class SharedPainShockSystem : EntitySystem
     [Dependency] protected INetManager Net = default!;
     [Dependency] protected IRobustRandom Random = default!;
     [Dependency] protected SharedPainSourceProfileSystem PainSources = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
 
     private const float PainScanInterval = 0.5f;
     private const float ShockStatusRefreshSeconds = 2.5f;

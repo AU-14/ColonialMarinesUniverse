@@ -1,7 +1,7 @@
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
 using Content.Server.Mind;
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -59,7 +59,7 @@ public sealed partial class CultistSystem : EntitySystem
             {
                 Text = "Make Cultist",
                 Category = VerbCategory.Antag,
-                Icon = new SpriteSpecifier.Rsi(new("/Textures/_AU14/Interface/job_icons.rsi"),
+                Icon = new SpriteSpecifier.Rsi(new("/Textures/_CMU14/Interface/job_icons.rsi"),
                     "threat_member"),
                 Act = () => { MakeCultist(args.Target); },
                 Impact = LogImpact.High,

@@ -10,7 +10,7 @@ using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs;
 using Content.Server.Station.Systems;
-using Content.Server.StationRecords.Systems;
+using Content.Shared.StationRecords.Systems;
 using Content.Shared.StationRecords;
 using Content.Shared.CriminalRecords;
 using Content.Shared.Security;

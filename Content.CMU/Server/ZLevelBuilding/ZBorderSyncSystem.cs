@@ -9,6 +9,7 @@ using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
+using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Prototypes;
@@ -144,7 +145,7 @@ public sealed class ZBorderSyncSystem : EntitySystem
 
         // Every map prototype is offered, planets or not, in rotation or not - the scope picker should
         // cover anything the server can ever load.
-        foreach (var map in _prototype.EnumeratePrototypes<Content.Server.Maps.GameMapPrototype>()
+        foreach (var map in _prototype.EnumeratePrototypes<GameMapPrototype>()
                      .OrderBy(p => p.MapName, StringComparer.OrdinalIgnoreCase))
         {
             var name = string.IsNullOrWhiteSpace(map.MapName) ? map.ID : map.MapName;
@@ -167,7 +168,7 @@ public sealed class ZBorderSyncSystem : EntitySystem
         foreach (var scope in scopes)
         {
             if (scope != GlobalScope &&
-                !_prototype.HasIndex<Content.Server.Maps.GameMapPrototype>(scope) &&
+                !_prototype.HasIndex<GameMapPrototype>(scope) &&
                 !_prototype.HasIndex<EntityPrototype>(scope))
                 continue;
 

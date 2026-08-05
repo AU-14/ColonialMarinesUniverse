@@ -58,7 +58,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     [Dependency] protected SharedPainShockSystem Pain = default!;
     [Dependency] protected CMUSurgerySessionSystem SurgerySessions = default!;
     [Dependency] protected SharedCMUSurgicalTraitSystem SurgicalTraits = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected SharedUserInterfaceSystem UserInterface = default!;
     [Dependency] protected SharedCMSurgerySystem RmcSurgery = default!;
 

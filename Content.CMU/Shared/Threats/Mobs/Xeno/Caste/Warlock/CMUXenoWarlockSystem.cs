@@ -820,8 +820,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             Angle.Zero,
             warlock.Comp.PsychicBlastProjectileSpeed,
             distance,
-            predicted: false,
-            stopAtTarget: true);
+            predicted: false);
 
         if (shot)
             _audio.PlayPvs(warlock.Comp.PsychicBlastFireSound, warlock);
@@ -1160,14 +1159,14 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (HasComp<CMUXenoPsychicShieldActionMarkerComponent>(ent))
         {
             if (ent.Comp.Event == null)
-                ent.Comp.Event = new CMUXenoPsychicShieldDetonateActionEvent();
+                _actions.SetEvent(ent, new CMUXenoPsychicShieldDetonateActionEvent());
             return;
         }
 
         if (HasComp<CMUXenoPsychicCrushActionMarkerComponent>(ent))
         {
             if (ent.Comp.Event == null)
-                ent.Comp.Event = new CMUXenoPsychicCrushDetonateActionEvent();
+                _actions.SetEvent(ent, new CMUXenoPsychicCrushDetonateActionEvent());
         }
     }
 
@@ -1178,14 +1177,14 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         if (HasComp<CMUXenoPsychicShieldActionMarkerComponent>(ent))
         {
             if (ent.Comp.Event == null)
-                ent.Comp.Event = new CMUXenoPsychicShieldActionEvent();
+                _actions.SetEvent(ent, new CMUXenoPsychicShieldActionEvent());
             return;
         }
 
         if (HasComp<CMUXenoPsychicCrushActionMarkerComponent>(ent))
         {
             if (ent.Comp.Event == null)
-                ent.Comp.Event = new CMUXenoPsychicCrushActionEvent();
+                _actions.SetEvent(ent, new CMUXenoPsychicCrushActionEvent());
         }
     }
 
@@ -1223,8 +1222,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
                 RemComp<TargetActionComponent>(actionId);
                 RemComp<WorldTargetActionComponent>(actionId);
                 var instant = EnsureComp<InstantActionComponent>(actionId);
-                instant.Event = new CMUXenoPsychicCrushDetonateActionEvent();
-                Dirty(actionId, instant);
+                _actions.SetEvent(actionId, new CMUXenoPsychicCrushDetonateActionEvent());
             }
             else
             {
@@ -1234,8 +1232,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
                 target.CheckCanAccess = true;
                 Dirty(actionId, target);
                 var world = EnsureComp<WorldTargetActionComponent>(actionId);
-                world.Event = new CMUXenoPsychicCrushActionEvent();
-                Dirty(actionId, world);
+                _actions.SetEvent(actionId, new CMUXenoPsychicCrushActionEvent());
             }
 
             // Toggled state drives the action icon flip. Icon "psy_crush_activate" is shown
@@ -1269,8 +1266,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
                 RemComp<TargetActionComponent>(actionId);
                 RemComp<WorldTargetActionComponent>(actionId);
                 var instant = EnsureComp<InstantActionComponent>(actionId);
-                instant.Event = new CMUXenoPsychicShieldDetonateActionEvent();
-                Dirty(actionId, instant);
+                _actions.SetEvent(actionId, new CMUXenoPsychicShieldDetonateActionEvent());
             }
             else
             {
@@ -1280,8 +1276,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
                 target.CheckCanAccess = false;
                 Dirty(actionId, target);
                 var world = EnsureComp<WorldTargetActionComponent>(actionId);
-                world.Event = new CMUXenoPsychicShieldActionEvent();
-                Dirty(actionId, world);
+                _actions.SetEvent(actionId, new CMUXenoPsychicShieldActionEvent());
             }
 
             // Toggled=true selects iconOn (psy_shield_reflect, the detonate icon);
@@ -2199,7 +2194,6 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             if (frozen.FixedDistanceRemaining < TimeSpan.Zero)
                 frozen.FixedDistanceRemaining = TimeSpan.Zero;
 
-            frozen.FixedDistanceTargetCoordinates = fixedDistance.TargetCoordinates;
             frozen.FixedDistanceArcProj = fixedDistance.ArcProj;
             RemComp<ProjectileFixedDistanceComponent>(projectile);
         }
@@ -2213,7 +2207,6 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         {
             var fixedDistance = EnsureComp<ProjectileFixedDistanceComponent>(projectile);
             fixedDistance.FlyEndTime = _timing.CurTime + frozen.FixedDistanceRemaining;
-            fixedDistance.TargetCoordinates = null;
             fixedDistance.ArcProj = frozen.FixedDistanceArcProj;
             Dirty(projectile, fixedDistance);
         }

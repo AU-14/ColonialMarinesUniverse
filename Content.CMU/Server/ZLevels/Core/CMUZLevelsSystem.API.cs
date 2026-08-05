@@ -1,6 +1,5 @@
 using Content.Server._CMU14.ZLevels.PVS;
 using Content.Shared._CMU14.ZLevels.Core.Components;
-using JetBrains.Annotations;
 
 namespace Content.Server._CMU14.ZLevels.Core;
 
@@ -9,15 +8,21 @@ public sealed partial class CMUZLevelsSystem
     /// <summary>
     /// Creates a new entity zLevelNetwork
     /// </summary>
-    [PublicAPI]
-    public Entity<CMUZLevelsNetworkComponent> CreateZNetwork()
+    internal Entity<CMUZLevelsNetworkComponent> CreateZNetwork()
     {
         var ent = Spawn();
 
-        var zLevel = EnsureComp<CMUZLevelsNetworkComponent>(ent);
-        EnsureComp<CMUPvsOverrideComponent>(ent);
-
-        return (ent, zLevel);
+        try
+        {
+            var zLevel = EnsureComp<CMUZLevelsNetworkComponent>(ent);
+            EnsureComp<CMUPvsOverrideComponent>(ent);
+            return (ent, zLevel);
+        }
+        catch
+        {
+            Del(ent);
+            throw;
+        }
     }
 
     /// <summary>
@@ -38,10 +43,7 @@ public sealed partial class CMUZLevelsSystem
             levelMapComponent.MapAbove = aboveMap;
 
             if (TryComp<CMUZLevelMapComponent>(aboveMap, out var aboveMapComp))
-            {
                 aboveMapComp.MapBelow = mapUid;
-                Dirty(aboveMap, aboveMapComp);
-            }
         }
 
         if (network.Comp.ZLevels.TryGetValue(depth - 1, out var belowMapUid) &&
@@ -50,86 +52,67 @@ public sealed partial class CMUZLevelsSystem
             levelMapComponent.MapBelow = belowMap;
 
             if (TryComp<CMUZLevelMapComponent>(belowMap, out var belowMapComp))
-            {
                 belowMapComp.MapAbove = mapUid;
-                Dirty(belowMap, belowMapComp);
-            }
         }
 
-        Dirty(mapUid, levelMapComponent);
         Dirty(network);
     }
 
-    public bool TryAddMapsIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
+    internal void AttachMapsToZNetwork(
+        Entity<CMUZLevelsNetworkComponent> network,
+        Dictionary<EntityUid, int> maps)
     {
-        if (!CanAddMapsIntoZNetwork(network, maps))
-            return false;
-
         foreach (var (ent, depth) in maps)
         {
             AddMapIntoZNetwork(network, ent, depth);
         }
+    }
 
-        if (maps.Count > 0)
+    public bool TryAddMapsIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
+    {
+        var requestedMaps = new HashSet<EntityUid>();
+        var requestedDepths = new HashSet<int>();
+        foreach (var (map, depth) in maps)
+        {
+            if (!requestedMaps.Add(map) || !requestedDepths.Add(depth) ||
+                network.Comp.ZLevels.ContainsKey(depth) || network.Comp.ZLevelByEntity.ContainsKey(map) ||
+                TryGetZNetwork(map, out _))
+                return false;
+        }
+
+        AttachMapsToZNetwork(network, maps);
+        PublishZNetworkUpdated(network);
+        return true;
+    }
+
+    internal void PublishZNetworkUpdated(Entity<CMUZLevelsNetworkComponent> network)
+    {
+        using var profile = Prof.Group("CMU Z Topology Publish");
+        try
         {
             var ev = new CMUZLevelNetworkUpdatedEvent(network);
             RaiseLocalEvent(ref ev);
+        }
+        finally
+        {
             RefreshViewersForNetwork(network);
         }
-
-        return true;
     }
 
-    private bool CanAddMapsIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
-    {
-        var seenMaps = new HashSet<EntityUid>();
-        var seenDepths = new HashSet<int>();
-
-        foreach (var (mapUid, depth) in maps)
-        {
-            if (!seenMaps.Add(mapUid))
-            {
-                Log.Warning($"Failed attempt to add maps to ZLevelNetwork {network}: Map {mapUid} appears more than once in the request.");
-                return false;
-            }
-
-            if (!seenDepths.Add(depth))
-            {
-                Log.Warning($"Failed attempt to add maps to ZLevelNetwork {network}: Depth {depth} appears more than once in the request.");
-                return false;
-            }
-
-            if (network.Comp.ZLevels.ContainsKey(depth))
-            {
-                Log.Warning($"Failed to add map {mapUid} to ZLevelNetwork {network}: This depth is already occupied.");
-                return false;
-            }
-
-            if (network.Comp.ZLevelByEntity.ContainsKey(mapUid))
-            {
-                Log.Warning($"Failed attempt to add map {mapUid} to ZLevelNetwork {network} at depth {depth}: This map is already in this network.");
-                return false;
-            }
-
-            if (!TryGetZNetwork(mapUid, out var otherNetwork))
-                continue;
-
-            if (otherNetwork.Value.Owner == network.Owner)
-            {
-                Log.Warning($"Failed attempt to add map {mapUid} to ZLevelNetwork {network} at depth {depth}: This map is already in this network.");
-                return false;
-            }
-
-            Log.Warning($"Failed attempt to add map {mapUid} to ZLevelNetwork {network}: This map is already in another network {otherNetwork}.");
-            return false;
-        }
-
-        return true;
-    }
 }
 
 /// <summary>
 /// Raised when maps are added to or removed from a Z-level network.
 /// </summary>
 [ByRefEvent]
-public readonly record struct CMUZLevelNetworkUpdatedEvent(Entity<CMUZLevelsNetworkComponent> Network);
+public readonly record struct CMUZLevelNetworkUpdatedEvent(
+    Entity<CMUZLevelsNetworkComponent> Network,
+    CMUZLevelNetworkUpdateKind Kind = CMUZLevelNetworkUpdateKind.Rebuilt,
+    EntityUid? ChangedMap = null,
+    int? ChangedDepth = null);
+
+public enum CMUZLevelNetworkUpdateKind : byte
+{
+    Rebuilt,
+    MapRemoved,
+}

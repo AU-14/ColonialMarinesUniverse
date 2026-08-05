@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Server.StatusEffectNew;
+using Content.Shared.StatusEffectNew;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;

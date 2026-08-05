@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -22,6 +23,7 @@ namespace Content.Shared._CMU14.CrawlState;
 public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
 {
     [Dependency] private ActionBlockerSystem _blocker = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private MobThresholdSystem _thresholds = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -100,7 +102,7 @@ public sealed partial class SharedCrawlWhileCritSystem : EntitySystem
         if (!_thresholds.TryGetThresholdForState(ent, MobState.Critical, out var critThreshold))
             return false;
 
-        var overflow = damageable.TotalDamage - critThreshold.Value;
+        var overflow = _damageable.GetTotalDamage((ent.Owner, damageable)) - critThreshold.Value;
         return overflow <= ent.Comp.CrawlWindow;
     }
 

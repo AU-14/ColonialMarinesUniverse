@@ -1,6 +1,6 @@
 using System.Linq;
 using System.Numerics;
-using Content.Server.PowerCell;
+using Content.Shared.PowerCell;
 using Content.Server.Radio;
 using Content.Shared._AU14.CCVar;
 using Content.Shared._AU14.Radio;

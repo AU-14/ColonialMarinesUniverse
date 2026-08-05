@@ -18,6 +18,13 @@ public abstract partial class CMUSharedZLevelsSystem
     private readonly List<Entity<MapGridComponent>> _openingGridScratch = new();
     private readonly CMUZLevelOpeningCache _sharedOpeningCache = new();
 
+    public CMUZLevelOpeningCache OpeningCache => _sharedOpeningCache;
+
+    protected void ClearSharedOpeningCache()
+    {
+        _sharedOpeningCache.Clear();
+    }
+
     private void InitView()
     {
         SubscribeLocalEvent<CMUZLevelViewerComponent, MoveEvent>(OnViewerMove);
@@ -81,7 +88,7 @@ public abstract partial class CMUSharedZLevelsSystem
         }
 
         // Faint -> full look up (original gates apply; on failure we stay in faint mode).
-        if (HasOpaqueAbove(ent))
+        if (!CanLookUp(ent))
         {
             _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-fail"), ent, ent, PopupType.SmallCaution);
             return;
@@ -94,6 +101,52 @@ public abstract partial class CMUSharedZLevelsSystem
         RaiseLocalEvent(ent, ev);
 
         _popup.PopupClient(Loc.GetString("cmu-zlevel-look-up-enabled"), ent, ent, PopupType.SmallCaution);
+    }
+
+    private bool CanLookUp(EntityUid ent)
+    {
+        var mapUid = Transform(ent).MapUid;
+        var hasUpperMap = mapUid is { } map &&
+                          TryMapUp(map, out _);
+
+        return CanEnableLookUp(hasUpperMap, HasOpaqueAbove(ent));
+    }
+
+    internal static bool CanEnableLookUp(bool hasUpperMap, bool opaqueAbove)
+    {
+        return hasUpperMap && !opaqueAbove;
+    }
+
+    internal static bool CanToggleLookUp(bool currentlyLookingUp, bool canEnable)
+    {
+        return currentlyLookingUp || canEnable;
+    }
+
+    public bool SetLookUp(EntityUid uid, bool enabled)
+    {
+        if (enabled &&
+            (!_configuration.GetCVar(CMUZLevelsCVars.Enabled) ||
+             !CanLookUp(uid)))
+        {
+            return false;
+        }
+
+        var viewer = EnsureComp<CMUZLevelViewerComponent>(uid);
+        if (viewer.LookUp == enabled)
+            return true;
+
+        viewer.LookUp = enabled;
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.LookUp));
+
+        if (!enabled)
+            return true;
+
+        viewer.FaintUp = false;
+        DirtyField(uid, viewer, nameof(CMUZLevelViewerComponent.FaintUp));
+
+        var ev = new CMUZLevelLookUpEnabledEvent();
+        RaiseLocalEvent(uid, ev);
+        return true;
     }
 
     public bool TryDisableLookUp(EntityUid uid)
@@ -140,7 +193,7 @@ public abstract partial class CMUSharedZLevelsSystem
     {
         foreach (var eye in viewer.Eyes)
         {
-            if (_xformQuery.TryComp(eye, out var eyeXform) &&
+            if (XformQuery.TryComp(eye, out var eyeXform) &&
                 eyeXform.MapUid == targetMap)
             {
                 return true;
@@ -169,7 +222,6 @@ public abstract partial class CMUSharedZLevelsSystem
             radius,
             out openingPosition,
             _openingGridScratch,
-            _mapManager,
             _map,
             _transform,
             TilDefMan,
@@ -211,7 +263,6 @@ public abstract partial class CMUSharedZLevelsSystem
             searchRadius,
             _distanceOpeningCandidates,
             _openingGridScratch,
-            _mapManager,
             _map,
             _transform,
             TilDefMan,

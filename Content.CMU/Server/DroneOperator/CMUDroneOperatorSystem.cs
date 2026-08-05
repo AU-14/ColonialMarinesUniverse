@@ -7,7 +7,7 @@ using Content.Server.NPC.HTN;
 using Content.Server.NPC.Pathfinding;
 using Content.Server.NPC.Systems;
 using Content.Server.Radio;
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Server.Radio.EntitySystems;
 using Content.Server._RMC14.Humanoid.Markings;
 using Content.Shared._CMU14.DroneOperator;
@@ -23,6 +23,7 @@ using Content.Shared.CombatMode;
 using Content.Shared.Coordinates;
 using Content.Shared.Dataset;
 using Content.Shared.DoAfter;
+using Content.Shared.Chat;
 using Content.Shared.Ghost;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
@@ -85,7 +86,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SkillsSystem _skills = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -514,7 +515,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
             keys.Channels.Contains(args.Channel.ID) &&
             !keys.ReadOnlyChannels.Contains(args.Channel.ID))
         {
-            _radio.SendRadioMessage(session.Operator, args.Message, args.Channel, wearing.Headset, args.Language);
+            _radio.SendRadioMessage(session.Operator, args.Message, args.Channel, wearing.Headset);
             args.Channel = null;
             return;
         }
@@ -1018,9 +1019,11 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                 tool.Owner,
                 user,
                 frame.Owner,
-                (float) frame.Comp.OpenDelay.TotalSeconds,
-                frame.Comp.OpenTool,
+                frame.Comp.OpenDelay,
+                new[] { frame.Comp.OpenTool.Id },
                 new CMUDroneFrameOpenPortsDoAfterEvent(),
+                out _,
+                toolComponent: tool.Comp,
                 duplicateCondition: DuplicateConditions.SameEvent | DuplicateConditions.SameTarget | DuplicateConditions.SameTool);
 
             if (started)
@@ -1036,9 +1039,11 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                 tool.Owner,
                 user,
                 frame.Owner,
-                (float) frame.Comp.ClampDelay.TotalSeconds,
-                frame.Comp.ClampTool,
+                frame.Comp.ClampDelay,
+                new[] { frame.Comp.ClampTool.Id },
                 new CMUDroneFrameClampPartDoAfterEvent(clampPart),
+                out _,
+                toolComponent: tool.Comp,
                 duplicateCondition: DuplicateConditions.SameEvent | DuplicateConditions.SameTarget | DuplicateConditions.SameTool);
 
             if (started)
@@ -1059,10 +1064,12 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
                 tool.Owner,
                 user,
                 frame.Owner,
-                (float) frame.Comp.WeldDelay.TotalSeconds,
-                frame.Comp.WeldTool,
+                frame.Comp.WeldDelay,
+                new[] { frame.Comp.WeldTool.Id },
                 new CMUDroneFrameWeldPartDoAfterEvent(weldPart),
+                out _,
                 frame.Comp.WeldFuel,
+                tool.Comp,
                 duplicateCondition: DuplicateConditions.SameEvent | DuplicateConditions.SameTarget | DuplicateConditions.SameTool);
 
             if (started)
@@ -2461,6 +2468,10 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
 
         var coords = _transform.GetMapCoordinates(drone.Owner);
         if (coords.MapId == MapId.Nullspace)
+            return;
+
+        var map = _transform.GetMap(drone.Owner.ToCoordinates());
+        if (map is { } mapUid && TerminatingOrDeleted(mapUid))
             return;
 
         Spawn(drone.Comp.RuinedCorePrototype, coords);

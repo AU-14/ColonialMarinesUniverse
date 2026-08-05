@@ -10,15 +10,15 @@ public sealed partial class TacticalMapSystem
     private static readonly Dictionary<string, SpriteSpecifier.Rsi> FactionSignalIcon = new()
     {
         ["govfor"] = new SpriteSpecifier.Rsi(
-            new ResPath("/Textures/_AU14/Interface/au14govforjobicons.rsi"),
+            new ResPath("/Textures/_CMU14/Interface/au14govforjobicons.rsi"),
             "rifleman"),
 
         ["opfor"] = new SpriteSpecifier.Rsi(
-            new ResPath("/Textures/_AU14/Interface/au14opforjobicons.rsi"),
+            new ResPath("/Textures/_CMU14/Interface/au14opforjobicons.rsi"),
             "rifleman"),
 
         ["clf"] = new SpriteSpecifier.Rsi(
-            new ResPath("/Textures/_AU14/Interface/au14colonyjobicons.rsi"),
+            new ResPath("/Textures/_CMU14/Interface/au14colonyjobicons.rsi"),
             "colonist")
     };
 
@@ -36,7 +36,8 @@ public sealed partial class TacticalMapSystem
             return null;
         }
 
-        FactionSignalIcon.TryGetValue(sourceFactionLower, out var icon);
+        if (!FactionSignalIcon.TryGetValue(sourceFactionLower, out var icon))
+            return null;
 
         var blip = new TacticalMapBlip(
             indices,

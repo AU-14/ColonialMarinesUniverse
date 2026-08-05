@@ -12,7 +12,6 @@ using Content.Shared.Chemistry.Reagent;
 using Content.Shared.GameTicking;
 using Content.Shared.Paper;
 using Discord.Rest;
-using Robust.Client.UserInterface;
 using Robust.Shared.Configuration;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;

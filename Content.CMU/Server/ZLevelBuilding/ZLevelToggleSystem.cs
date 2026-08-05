@@ -35,7 +35,7 @@ public sealed class ZLevelToggleSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IResourceManager _resource = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly CustomConstructionMenuSystem _menu = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
@@ -69,17 +69,16 @@ public sealed class ZLevelToggleSystem : EntitySystem
         if (!_mapManager.MapExists(ev.Map))
             return;
 
-        var mapUid = _mapManager.GetMapEntityId(ev.Map);
-        if (!mapUid.IsValid())
+        if (!_mapManager.TryGetMap(ev.Map, out var mapUid))
             return;
 
         var set = _loadedMaps.TryGetValue(ev.GameMap.ID, out var existing)
             ? existing
             : _loadedMaps[ev.GameMap.ID] = new HashSet<EntityUid>();
-        set.Add(mapUid);
+        set.Add(mapUid.Value);
 
         if (_disabled.Contains(ev.GameMap.ID))
-            ApplyToMap(mapUid, false);
+            ApplyToMap(mapUid.Value, false);
     }
 
     private void OnRequestOpen(RequestOpenZLevelTogglesEvent msg, EntitySessionEventArgs args)

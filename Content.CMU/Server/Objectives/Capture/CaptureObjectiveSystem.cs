@@ -141,7 +141,7 @@ public sealed partial class CaptureObjectiveSystem : EntitySystem
         while (query.MoveNext(out var uid, out var comp, out var objComp))
         {
             // --- Begin: Slash damage tracking ---
-            if (TryComp(uid, out Content.Shared.Damage.DamageableComponent? damageable))
+            if (TryComp(uid, out Content.Shared.Damage.Components.DamageableComponent? damageable))
             {
                 float currentSlash = 0f;
                 if (damageable.Damage.DamageDict.TryGetValue("Slash", out var slash))

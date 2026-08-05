@@ -99,7 +99,7 @@ public sealed partial class WorkingJoeRebootSystem : EntitySystem
         var revived = false;
         if (TryComp(key, out DefibrillatorComponent? defibComp))
         {
-            _defib.Zap(key, ent.Owner, args.User, defibComp);
+            _defib.Zap((key, defibComp), ent.Owner, args.User);
             revived = !_mobState.IsDead(ent.Owner);
         }
 
