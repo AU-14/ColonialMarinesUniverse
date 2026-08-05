@@ -1,6 +1,75 @@
 - type: markingsGroup
   parent: Undergarments
   id: Human
+  # Preserve the selectable Human marking catalog from before the upstream body-system rebase.
+  selectionBlacklist:
+  - GauzeBoxerWrapLeft
+  - GauzeBoxerWrapRight
+  - GauzeLeftArm
+  - GauzeLowerArmRight
+  - GauzeLowerLegLeft
+  - GauzeLowerLegRight
+  - GauzeShoulder
+  - GauzeStomach
+  - GauzeUpperArmRight
+  - GauzeUpperLegLeft
+  - GauzeUpperLegRight
+  - HumanFacialHairAbe
+  - HumanFacialHairBrokenman
+  - HumanFacialHairChaplin
+  - HumanFacialHairDwarf
+  - HumanFacialHairHip
+  - HumanFacialHairMartialartist
+  - HumanFacialHairMoonshiner
+  - HumanFacialHairWatson
+  - HumanHairBaby
+  - HumanHairClassicFloorlengthBedhead
+  - HumanHairCube
+  - HumanHairFloorlengthBedhead
+  - HumanHairLongBow
+  - HumanHairLongWithBangs
+  - HumanHairOverEyePigtail
+  - HumanHairShorterLongBedhead
+  - HumanHairTerminal
+  - HumanLongEars
+  - HumanNoseBlob
+  - HumanNoseDroop
+  - HumanNoseNubby
+  - HumanNoseSchnozz
+  - HumanNoseUppie
+  - LongEarsDrow
+  - LongEarsSmall
+  - LongEarsTall
+  - LongEarsThin
+  - LongEarsUpwards
+  - LongEarsWide
+  - RMCHumanFacialHairDwarfAlt
+  - RMCHumanHairAfro
+  - RMCHumanHairAfro2
+  - RMCHumanHairAfroLarge
+  - RMCHumanHairBraid
+  - RMCHumanHairDandypomp
+  - RMCHumanHairFamilyman
+  - RMCHumanHairHitop
+  - RMCHumanHairHolly
+  - RMCHumanHairHollyShaved
+  - RMCHumanHairJoestar
+  - RMCHumanHairLongMessy
+  - RMCHumanHairMahdrills
+  - RMCHumanHairMediumBraid
+  - RMCHumanHairMohawk
+  - RMCHumanHairMohawkShaved
+  - RMCHumanHairMohawkShaved2
+  - RMCHumanHairMohawkShaved3
+  - RMCHumanHairPompadour
+  - RMCHumanHairPonytail9
+  - RMCHumanHairPulatoLong
+  - RMCHumanHairPulatoLong2
+  - RMCHumanHairQuiff
+  - RMCHumanHairReverseMohawk
+  - RMCHumanHairShavedKnot
+  - RMCHumanHairUpdo
+  - RMCHumanHairVegeta
   limits:
     enum.HumanoidVisualLayers.UndergarmentTop:
       limit: 1

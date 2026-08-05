@@ -1,16 +1,22 @@
-﻿using Content.Client.FeedbackPopup;
+using Content.Client._RMC14.LinkAccount;
+using Content.Client._RMC14.Roadmap;
+using Content.Client.Credits;
 using Content.Client.Gameplay;
+using Content.Client.GameTicking.Managers;
 using Content.Client.UserInterface.Controls;
 using Content.Client.UserInterface.Systems.Guidebook;
 using Content.Client.UserInterface.Systems.Info;
+using Content.Client.UserInterface.Systems.MenuBar.Widgets;
 using Content.Shared.CCVar;
 using JetBrains.Annotations;
 using Robust.Client.Console;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Shared.Configuration;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Input;
 using Robust.Shared.Input.Binding;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using static Robust.Client.UserInterface.Controls.BaseButton;
 
@@ -19,25 +25,37 @@ namespace Content.Client.UserInterface.Systems.EscapeMenu;
 [UsedImplicitly]
 public sealed partial class EscapeUIController : UIController, IOnStateEntered<GameplayState>, IOnStateExited<GameplayState>
 {
-    [Dependency] private IClientConsoleHost _console = default!;
-    [Dependency] private IUriOpener _uri = default!;
-    [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private ChangelogUIController _changelog = default!;
-    [Dependency] private InfoUIController _info = default!;
-    [Dependency] private OptionsUIController _options = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IClientConsoleHost _console = default!;
+    [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private GuidebookUIController _guidebook = default!;
-    [Dependency] private FeedbackPopupUIController _feedback = null!;
+    [Dependency] private InfoUIController _info = default!;
+    [Dependency] private LinkAccountManager _linkAccount = default!;
+    [Dependency] private OptionsUIController _options = default!;
+    [Dependency] private IUriOpener _uri = default!;
+
+    private const float RoundStatusRefreshInterval = 1f;
 
     private Options.UI.EscapeMenu? _escapeWindow;
+    private ClientGameTicker? _gameTicker;
+    private float _roundStatusRefreshTimer;
 
-    private MenuButton? EscapeButton => UIManager.GetActiveUIWidgetOrNull<MenuBar.Widgets.GameTopMenuBar>()?.EscapeButton;
+    private MenuButton? EscapeButton => UIManager.GetActiveUIWidgetOrNull<GameTopMenuBar>()?.EscapeButton;
+
+    public override void Initialize()
+    {
+        _linkAccount.Updated += () =>
+        {
+            if (_escapeWindow != null)
+                _escapeWindow.PatronPerksButton.Visible = _linkAccount.CanViewPatronPerks();
+        };
+    }
 
     public void UnloadButton()
     {
         if (EscapeButton == null)
-        {
             return;
-        }
 
         EscapeButton.Pressed = false;
         EscapeButton.OnPressed -= EscapeButtonOnOnPressed;
@@ -46,35 +64,52 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
     public void LoadButton()
     {
         if (EscapeButton == null)
-        {
             return;
-        }
 
         EscapeButton.OnPressed += EscapeButtonOnOnPressed;
     }
 
-    private void ActivateButton() => EscapeButton!.SetClickPressed(true);
-    private void DeactivateButton() => EscapeButton!.SetClickPressed(false);
+    private void ActivateButton()
+    {
+        EscapeButton!.SetClickPressed(true);
+    }
+
+    private void DeactivateButton()
+    {
+        EscapeButton!.SetClickPressed(false);
+    }
 
     public void OnStateEntered(GameplayState state)
     {
         DebugTools.Assert(_escapeWindow == null);
 
+        _gameTicker = _entManager.System<ClientGameTicker>();
+        _gameTicker.RoundStatusUpdated += UpdateEscapeStatus;
+
         _escapeWindow = UIManager.CreateWindow<Options.UI.EscapeMenu>();
 
         _escapeWindow.OnClose += DeactivateButton;
-        _escapeWindow.OnOpen += ActivateButton;
-
-        _escapeWindow.FeedbackButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            _feedback.ToggleWindow();
-        };
+        _escapeWindow.OnOpen += EscapeWindowOnOpen;
 
         _escapeWindow.ChangelogButton.OnPressed += _ =>
         {
             CloseEscapeWindow();
             _changelog.ToggleWindow();
+        };
+
+        _escapeWindow.CreditsButton.OnPressed += _ => new CreditsWindow().OpenCentered();
+
+        _escapeWindow.PatronPerksButton.Visible = _linkAccount.CanViewPatronPerks();
+        _escapeWindow.PatronPerksButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            UIManager.GetUIController<LinkAccountUIController>().TogglePatronPerksWindow();
+        };
+
+        _escapeWindow.RoadmapButton.OnPressed += _ =>
+        {
+            CloseEscapeWindow();
+            UIManager.GetUIController<RoadmapUIController>().ToggleRoadmap();
         };
 
         _escapeWindow.RulesButton.OnPressed += _ =>
@@ -111,7 +146,6 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
             _guidebook.ToggleGuidebook();
         };
 
-        // Hide wiki button if we don't have a link for it.
         _escapeWindow.WikiButton.Visible = _cfg.GetCVar(CCVars.InfoLinksWiki) != "";
 
         CommandBinds.Builder
@@ -122,9 +156,15 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
 
     public void OnStateExited(GameplayState state)
     {
+        if (_gameTicker != null)
+        {
+            _gameTicker.RoundStatusUpdated -= UpdateEscapeStatus;
+            _gameTicker = null;
+        }
+
         if (_escapeWindow != null)
         {
-            _escapeWindow.Dispose();
+            _escapeWindow.Close();
             _escapeWindow = null;
         }
 
@@ -139,6 +179,43 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
     private void CloseEscapeWindow()
     {
         _escapeWindow?.Close();
+    }
+
+    private void EscapeWindowOnOpen()
+    {
+        ActivateButton();
+        _roundStatusRefreshTimer = 0f;
+        UpdateEscapeStatus();
+    }
+
+    private void UpdateEscapeStatus()
+    {
+        if (_escapeWindow == null || _gameTicker == null)
+            return;
+
+        _escapeWindow.SetRoundStatus(
+            _gameTicker.CurrentMapName,
+            _gameTicker.CurrentShipMapName,
+            _gameTicker.RoundId,
+            _gameTicker.CurrentPlayerCount,
+            _gameTicker.CurrentGamemodeTitle,
+            _gameTicker.IsGameStarted);
+        _escapeWindow.SetRoundTime(_gameTicker.RoundRealTimeDuration(), _gameTicker.IsGameStarted);
+    }
+
+    public override void FrameUpdate(FrameEventArgs args)
+    {
+        base.FrameUpdate(args);
+
+        if (_escapeWindow?.IsOpen != true || _gameTicker == null)
+            return;
+
+        _roundStatusRefreshTimer -= args.DeltaSeconds;
+        if (_roundStatusRefreshTimer > 0f)
+            return;
+
+        _roundStatusRefreshTimer = RoundStatusRefreshInterval;
+        UpdateEscapeStatus();
     }
 
     /// <summary>

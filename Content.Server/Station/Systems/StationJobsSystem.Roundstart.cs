@@ -66,6 +66,9 @@ public sealed partial class StationJobsSystem
         // Player <-> (job, station)
         var assigned = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>(profiles.Count);
 
+        // CMU14: Reserve threat-vote volunteers before normal weighted job selection.
+        AssignCmuForcedJobs(profiles, stations, useRoundStartJobs, assigned);
+
         // The jobs left on the stations. This collection is modified as jobs are assigned to track what's available.
         var stationJobs = new Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>>();
         foreach (var station in stations)

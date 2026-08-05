@@ -354,40 +354,7 @@ namespace Content.Server.Voting.Managers
         {
             isAdmin = false;
             timeSpan = default;
-
-            // Admins can always call votes.
-            if (_adminMgr.HasAdminFlag(initiator, AdminFlags.Moderator))
-            {
-                isAdmin = true;
-                return true;
-            }
-
-            // If voting is disabled, block votes.
-            if (!_cfg.GetCVar(CCVars.VoteEnabled))
-                return false;
-            // Specific standard vote types can be disabled with cvars.
-            if (voteType != null && VoteTypesToEnableCVars.TryGetValue(voteType.Value, out var cvar) && !_cfg.GetCVar(cvar))
-                return false;
-
-            // Cannot start vote if vote is already active (as non-admin).
-            if (_votes.Count != 0)
-                return false;
-
-            // Standard vote on timeout, no calling.
-            // Ghosts I understand you're dead but stop spamming the restart vote bloody hell.
-            if (voteType != null && _standardVoteTimeout.TryGetValue(voteType.Value, out timeSpan))
-                return false;
-
-            // If only one Preset available thats not really a vote
-            // Still allow vote if availbable one is different from current one
-            if (voteType == StandardVoteType.Preset)
-            {
-                var presets = GetGamePresets();
-                if (presets.Count == 1 && presets.Select(x => x.Key).Single() == _entityManager.System<GameTicker>().Preset?.ID)
-                    return false;
-            }
-
-            return !_voteTimeout.TryGetValue(initiator.UserId, out timeSpan);
+            return false;
         }
 
         public bool CanCallVote(ICommonSession initiator, StandardVoteType? voteType = null)

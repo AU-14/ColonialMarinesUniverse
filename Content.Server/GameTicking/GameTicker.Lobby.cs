@@ -1,15 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server.AU14.Round;
+using Content.Server.Maps;
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
         [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
 
         [ViewVariables]
         private readonly Dictionary<NetUserId, PlayerGameStatus> _playerGameStatuses = new();
@@ -39,7 +42,9 @@ namespace Content.Server.GameTicking
 
         public void UpdateInfoText()
         {
-            RaiseNetworkEvent(GetInfoMsg(), Filter.Empty().AddPlayers(_playerManager.NetworkedSessions));
+            var filter = Filter.Empty().AddPlayers(_playerManager.NetworkedSessions);
+            RaiseNetworkEvent(GetInfoMsg(), filter);
+            RaiseNetworkEvent(GetRoundStatusMsg(), filter);
         }
 
         private string GetPlanetMapName()
@@ -56,6 +61,32 @@ namespace Content.Server.GameTicking
                 return selectedPlanet.MapId;
 
             return Loc.GetString("game-ticker-no-map-selected-plain");
+        }
+
+        private string GetShipMapName()
+        {
+            var shipNames = new List<string>();
+            AddShipMapName(_auRoundSystem.GetSelectedGovforShip(), shipNames);
+            AddShipMapName(_auRoundSystem.GetSelectedOpforShip(), shipNames);
+
+            if (shipNames.Count > 0)
+                return string.Join(" / ", shipNames.Distinct());
+
+            return Loc.GetString("ui-escape-status-no-ship");
+        }
+
+        private void AddShipMapName(string? mapId, List<string> shipNames)
+        {
+            if (string.IsNullOrWhiteSpace(mapId))
+                return;
+
+            if (_prototypeManager.TryIndex<GameMapPrototype>(mapId, out var shipMap))
+            {
+                shipNames.Add(shipMap.MapName);
+                return;
+            }
+
+            shipNames.Add(mapId);
         }
 
         private string LocalizeOrRaw(string text)
@@ -122,6 +153,33 @@ namespace Content.Server.GameTicking
         private TickerLobbyInfoEvent GetInfoMsg()
         {
             return new(GetInfoText());
+        }
+
+        private CMURoundStatusEvent GetRoundStatusMsg()
+        {
+            var preset = CurrentPreset ?? Preset;
+            var gamemodeTitle = preset != null
+                ? LocalizeOrRaw(preset.ModeTitle)
+                : Loc.GetString("ui-escape-status-unknown");
+
+            return new CMURoundStatusEvent(
+                GetPlanetMapName(),
+                GetShipMapName(),
+                RoundId,
+                _playerManager.PlayerCount,
+                gamemodeTitle,
+                RoundStartTimeSpan,
+                RealRoundDuration(),
+                RunLevel != GameRunLevel.PreRoundLobby);
+        }
+
+        private TimeSpan RealRoundDuration()
+        {
+            if (RunLevel == GameRunLevel.PreRoundLobby || _roundStartDateTime == default)
+                return TimeSpan.Zero;
+
+            var elapsed = DateTime.UtcNow - _roundStartDateTime;
+            return elapsed < TimeSpan.Zero ? TimeSpan.Zero : elapsed;
         }
 
         private void UpdateLateJoinStatus()

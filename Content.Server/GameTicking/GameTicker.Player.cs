@@ -205,6 +205,7 @@ namespace Content.Server.GameTicking
             }
 
             RaiseNetworkEvent(new TickerJoinGameEvent(), session.Channel);
+            RaiseNetworkEvent(GetRoundStatusMsg(), session.Channel);
         }
 
         private void PlayerJoinLobby(ICommonSession session)
@@ -216,6 +217,7 @@ namespace Content.Server.GameTicking
             RaiseNetworkEvent(new TickerJoinLobbyEvent(), client);
             RaiseNetworkEvent(GetStatusMsg(session), client);
             RaiseNetworkEvent(GetInfoMsg(), client);
+            RaiseNetworkEvent(GetRoundStatusMsg(), client);
             RaiseLocalEvent(new PlayerJoinedLobbyEvent(session));
         }
 

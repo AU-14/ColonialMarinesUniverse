@@ -132,6 +132,7 @@
   - type: BypassSkillChecks
   - type: SeeNewPlayers
   - type: TacticalMapUser
+    actionId: RMCActionOpenTacticalMapMarine
     marines: true
     xenos: true
     opfor: true

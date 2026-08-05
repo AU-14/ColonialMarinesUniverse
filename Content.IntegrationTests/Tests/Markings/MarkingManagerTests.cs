@@ -16,6 +16,7 @@ public sealed class MarkingManagerTests : GameTest
     private const string Prototypes = @"
 - type: markingsGroup
   id: Testing
+  selectionBlacklist: [ TestingOnlyMarking ]
 
 - type: markingsGroup
   id: TestingOther
@@ -61,6 +62,18 @@ public sealed class MarkingManagerTests : GameTest
   bodyPart: Eyes
   sexRestriction: Male
   groupWhitelist: [ Testing ]
+  sprites: [{ sprite: Mobs/Customization/human_hair.rsi, state: afro }]
+
+- type: marking
+  id: LegacyTestingOnlyMarking
+  bodyPart: Eyes
+  speciesRestriction: [ Testing ]
+  sprites: [{ sprite: Mobs/Customization/human_hair.rsi, state: afro }]
+
+- type: marking
+  id: LegacyOtherOnlyMarking
+  bodyPart: Eyes
+  speciesRestriction: [ TestingOther ]
   sprites: [{ sprite: Mobs/Customization/human_hair.rsi, state: afro }]
 
 - type: marking
@@ -185,6 +198,50 @@ public sealed class MarkingManagerTests : GameTest
             Assert.That(testingMenMarkings[HumanoidVisualLayers.Eyes][0].MarkingId, Is.EqualTo("MenOnlyMarking"));
             Assert.That(testingMenMarkings[HumanoidVisualLayers.Eyes][1].MarkingId, Is.EqualTo("TestingOnlyMarking"));
             Assert.That(testingMenMarkings[HumanoidVisualLayers.Eyes][2].MarkingId, Is.EqualTo("TestingMenOnlyMarking"));
+        });
+    }
+
+    [Test]
+    public async Task LegacySpeciesRestrictionsFilterModernMarkingGroups()
+    {
+        var server = Pair.Server;
+
+        await server.WaitIdleAsync();
+
+        await server.WaitAssertion(() =>
+        {
+            var markingManager = server.ResolveDependency<MarkingManager>();
+
+            var testingMarkings = markingManager.MarkingsByLayerAndGroupAndSex(
+                HumanoidVisualLayers.Eyes,
+                "Testing",
+                Sex.Male);
+            var otherMarkings = markingManager.MarkingsByLayerAndGroupAndSex(
+                HumanoidVisualLayers.Eyes,
+                "TestingOther",
+                Sex.Male);
+
+            Assert.That(testingMarkings, Does.ContainKey("LegacyTestingOnlyMarking"));
+            Assert.That(testingMarkings, Does.Not.ContainKey("LegacyOtherOnlyMarking"));
+            Assert.That(testingMarkings, Does.Not.ContainKey("TestingOnlyMarking"));
+            Assert.That(otherMarkings, Does.ContainKey("LegacyOtherOnlyMarking"));
+            Assert.That(otherMarkings, Does.Not.ContainKey("LegacyTestingOnlyMarking"));
+
+            var humanHeadTopMarkings = markingManager.MarkingsByLayerAndGroupAndSex(
+                HumanoidVisualLayers.HeadTop,
+                "Human",
+                Sex.Male);
+            var humanHairMarkings = markingManager.MarkingsByLayerAndGroupAndSex(
+                HumanoidVisualLayers.Hair,
+                "Human",
+                Sex.Male);
+
+            Assert.That(humanHeadTopMarkings, Does.Not.ContainKey("VulpEar"));
+            Assert.That(humanHeadTopMarkings, Does.Not.ContainKey("AvaliHairBigPonytail"));
+            Assert.That(humanHeadTopMarkings, Does.Not.ContainKey("HumanLongEars"));
+            Assert.That(humanHairMarkings, Does.Not.ContainKey("RMCHumanHairAfro"));
+            Assert.That(humanHairMarkings, Does.ContainKey("RMCHumanHairCrew"));
+            Assert.That(humanHairMarkings, Does.ContainKey("AU14HumanHairCIA2"));
         });
     }
 

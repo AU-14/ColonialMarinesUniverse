@@ -57,6 +57,9 @@ namespace Content.Client.Voting.UI
                 var i1 = i;
                 button.OnPressed += _ => _voteManager.SendCastVote(vote.Id, i1);
             }
+
+            MinimizeButton.OnPressed += _ => SetMinimized(true);
+            RestoreButton.OnPressed += _ => SetMinimized(false);
         }
 
         private static void ApplyCrtButtonStyle(Button button)
@@ -69,6 +72,7 @@ namespace Content.Client.Voting.UI
         {
             VoteTitle.SetMessage(FormattedMessage.FromUnformatted(_vote.Title));
             VoteCaller.Text = Loc.GetString("ui-vote-created", ("initiator", _vote.Initiator));
+            MinimizedTitle.Text = _vote.Title;
 
             for (var i = 0; i < _voteButtons.Length; i++)
             {
@@ -112,6 +116,26 @@ namespace Content.Client.Voting.UI
                                                      (_vote.EndTime.TotalSeconds - _vote.StartTime.TotalSeconds)));
 
             TimeLeftText.Text = $"{timeLeft:m\\:ss}";
+            if (MinimizedContent.Visible)
+                MinimizedTimeLeft.Text = $"{timeLeft:m\\:ss}";
+        }
+
+        private void SetMinimized(bool minimized)
+        {
+            MainContent.Visible = !minimized;
+            MinimizedContent.Visible = minimized;
+
+            if (minimized)
+            {
+                MinWidth = 280;
+                MaxWidth = 400;
+                MinimizedTitle.Text = _vote.Title;
+            }
+            else
+            {
+                MinWidth = 560;
+                MaxWidth = 1280;
+            }
         }
     }
 }

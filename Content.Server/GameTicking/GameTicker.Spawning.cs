@@ -102,8 +102,13 @@ namespace Content.Server.GameTicking
 
             var presetId = CurrentPreset?.ID ?? Preset?.ID ?? _auRoundSystem.SelectedPreset?.ID;
             var assignmentProfiles = GetGamemodeAssignmentProfiles(profiles, presetId);
+            // CMU14: Threat selection and volunteer reservation must happen before station job assignment.
+            var threatRoundStart = PrepareCmuThreatRoundStart(assignmentProfiles);
             var spawnableStations = GetSpawnableStations();
             var assignedJobs = _stationJobs.AssignJobs(assignmentProfiles, spawnableStations);
+
+            // CMU14: Immediate threats need their marker bodies before overflow jobs are assigned.
+            SpawnImmediateCmuThreat(threatRoundStart, assignedJobs);
 
             _stationJobs.AssignOverflowJobs(ref assignedJobs, playerNetIds, assignmentProfiles, spawnableStations);
 
@@ -130,6 +135,10 @@ namespace Content.Server.GameTicking
             // Spawn everybody in!
             foreach (var (player, (job, station)) in assignedJobs)
             {
+                // CMU14: ThreatSystem spawns and assigns these bodies at threat markers.
+                if (IsCmuThreatJob(job))
+                    continue;
+
                 if (job == null)
                     continue;
 
@@ -138,9 +147,12 @@ namespace Content.Server.GameTicking
 
             RefreshLateJoinAllowed();
 
+            // CMU14: Start the deferred vote after normal players have spawned.
+            CompleteCmuThreatRoundStart(threatRoundStart, assignedJobs);
+
             // Allow rules to add roles to players who have been spawned in. (For example, on-station traitors)
             RaiseLocalEvent(new RulePlayerJobsAssignedEvent(
-                assignedJobs.Keys.Select(x => _playerManager.GetSessionById(x)).ToArray(),
+                GetCmuRuleJobsAssignedPlayers(threatRoundStart, assignedJobs),
                 profiles,
                 force));
         }
@@ -151,6 +163,10 @@ namespace Content.Server.GameTicking
             bool lateJoin = true,
             bool silent = false)
         {
+            // CMU14: Held threat volunteers cannot take a normal job while their vote is active.
+            if (IsCmuThreatVoteRoundJoinBlocked(player))
+                return;
+
             var character = GetPlayerProfile(player);
 
             var jobBans = _banManager.GetJobBans(player.UserId);
@@ -178,6 +194,10 @@ namespace Content.Server.GameTicking
         {
             // Can't spawn players with a dummy ticker!
             if (DummyTicker)
+                return;
+
+            // CMU14: Some callers enter through the profile overload directly.
+            if (IsCmuThreatVoteRoundJoinBlocked(player))
                 return;
 
             if (station == EntityUid.Invalid)

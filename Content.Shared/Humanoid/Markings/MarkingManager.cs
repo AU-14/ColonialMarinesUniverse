@@ -76,6 +76,9 @@ public sealed partial class MarkingManager
 
         foreach (var (key, marking) in MarkingsByLayer(layer))
         {
+            if (groupProto.SelectionBlacklist.Contains(new(marking.ID)))
+                continue;
+
             if (!CanBeApplied(groupProto, sex, marking, whitelisted))
                 continue;
 
@@ -119,14 +122,17 @@ public sealed partial class MarkingManager
 
     private bool CanBeApplied(MarkingsGroupPrototype group, Sex sex, MarkingPrototype prototype, bool whitelisted)
     {
-        if (prototype.GroupWhitelist == null)
+        // RMC marking prototypes still use speciesRestriction, which is equivalent to a group whitelist here.
+        var hasWhitelist = prototype.GroupWhitelist != null || prototype.SpeciesRestrictions != null;
+        if (!hasWhitelist)
         {
             if (whitelisted)
                 return false;
         }
         else
         {
-            if (!prototype.GroupWhitelist.Contains(group))
+            if (prototype.GroupWhitelist?.Contains(group) != true &&
+                prototype.SpeciesRestrictions?.Contains(group.ID) != true)
                 return false;
         }
 

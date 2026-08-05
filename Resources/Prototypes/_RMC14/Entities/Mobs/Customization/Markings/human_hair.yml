@@ -1333,3 +1333,75 @@
   sprites:
     - sprite: _RMC14/Mobs/Customization/human_hair.rsi
       state: hair_hollyshaved
+
+# CMU hairstyles preserved from the pre-rebase character setup catalog.
+
+- type: marking
+  id: AU14HumanHairCIA2
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_cia2
+
+- type: marking
+  id: AU14HumanHairCIA3
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_cia3
+
+- type: marking
+  id: AU14HumanHairCIA5
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_cia5
+
+- type: marking
+  id: AU14HumanHairIRS
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_irs
+
+- type: marking
+  id: AU14HumanHairFlatPressed
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_flatpressed
+
+- type: marking
+  id: AU14HumanHairWaver
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_waver
+
+- type: marking
+  id: AU14HumanHairElegant
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_elegantbun
+
+- type: marking
+  id: AU14HumanHairLowBun
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_low_bun
+
+- type: marking
+  id: AU14HumanHairLowPonyTail
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_low_ponytail
+
+- type: marking
+  id: AU14HumanHairLowPonyTailAlt
+  bodyPart: Hair
+  sprites:
+    - sprite: _AU14/Mobs/Human_Customization/human_hair_au.rsi
+      state: hair_low_ponytail_alt

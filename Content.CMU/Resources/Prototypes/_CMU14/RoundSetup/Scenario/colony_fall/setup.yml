@@ -4,6 +4,7 @@
   planetChoices:
     - planets:
         - AUPlanetShepherdsPride
+        - AUPlanetStableGarrison
         - CMUPlanetStableGarrisonRedux
         - CMUPlanetLament
       threatVote:

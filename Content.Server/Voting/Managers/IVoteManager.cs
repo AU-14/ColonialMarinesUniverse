@@ -26,11 +26,10 @@ namespace Content.Server.Voting.Managers
         bool TryGetVote(int voteId, [NotNullWhen(true)] out IVoteHandle? vote);
 
         /// <summary>
-        /// Check if a player can initiate a vote right now. Optionally of a specified standard type.
+        /// Check whether a player can initiate a standard vote.
         /// </summary>
         /// <remarks>
-        /// Players cannot start votes if they have made another vote recently,
-        /// or if the specified vote type has been made recently.
+        /// CMU does not allow player-created standard votes, so this always returns false.
         /// </remarks>
         /// <param name="initiator">The player to check.</param>
         /// <param name="voteType">
@@ -38,17 +37,16 @@ namespace Content.Server.Voting.Managers
         /// Null to only check timeout for all vote types for the specified player.
         /// </param>
         /// <returns>
-        /// True if <paramref name="initiator"/> can start votes right now,
-        /// and if provided if they can start votes of type <paramref name="voteType"/>.
+        /// Always false.
         /// </returns>
         bool CanCallVote(ICommonSession initiator, StandardVoteType? voteType = null);
 
         /// <summary>
-        /// Initiate a standard vote such as restart round, that can be initiated by players.
+        /// Initiate a standard vote such as restart round.
         /// </summary>
         /// <param name="initiator">
-        /// The player that called the vote.
-        /// If null it is assumed to be an automatic vote by the server.
+        /// The player that called the vote, or null for an automatic/server vote.
+        /// Player-originated calls are rejected.
         /// </param>
         /// <param name="voteType">The type of standard vote to make.</param>
         void CreateStandardVote(ICommonSession? initiator, StandardVoteType voteType, string[]? args = null);
