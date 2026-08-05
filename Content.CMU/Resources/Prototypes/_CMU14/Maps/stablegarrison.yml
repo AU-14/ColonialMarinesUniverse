@@ -16,7 +16,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    stablegarrison:
+    StableGarrisonRedux:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

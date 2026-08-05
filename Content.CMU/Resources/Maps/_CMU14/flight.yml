@@ -309990,13 +309990,6 @@ entities:
     - type: Transform
       pos: -3.5,424.5
       parent: 1
-- proto: TowelColorRed
-  entities:
-  - uid: 47781
-    components:
-    - type: Transform
-      pos: -2.5,402.5
-      parent: 1
 - proto: WoodenBench
   entities:
   - uid: 47782

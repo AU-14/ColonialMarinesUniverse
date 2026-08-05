@@ -1,7 +1,7 @@
 - type: guideEntry
   parent: RMC
   id: AU14SOP
-  name: Military Standard Operating Procedure
+  name: cmu-guide-sop
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOP.xml"
   priority: 3
   children:
@@ -17,55 +17,55 @@
 - type: guideEntry
   parent: RMC
   id: AU14SOPRulesofEngagement
-  name: Rules of Engagement
+  name: cmu-guide-sop-rules-of-engagement
   priority: 0
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPRulesofEngagement.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPEquipmentAndPersonnel
-  name: Equipment and Personnel
+  name: cmu-guide-sop-equipment-and-personnel
   priority: 1
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPEquipmentAndPersonnel.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPCommand
-  name: Command Regulations
+  name: cmu-guide-sop-command-regulations
   priority: 1
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPCommand.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPDropshipsandAircraft
-  name: Dropships and Aircraft
+  name: cmu-guide-sop-dropships-and-aircraft
   priority: 1
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPDropshipsandAircraft.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPRankStructure
-  name: Rank Structure
+  name: cmu-guide-sop-rank-structure
   priority: 1
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPRankStructure.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPThirdParty
-  name: Third-Party Regulations
+  name: cmu-guide-sop-third-party-regulations
   priority: 1
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPThirdParty.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPVehicles
-  name: Vehicles
+  name: cmu-guide-sop-vehicles
   priority: 1
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPVehicles.xml"
 
 - type: guideEntry
   parent: RMC
   id: AU14SOPDeployment
-  name: Deployment
+  name: cmu-guide-sop-deployment
   priority: 1
   text: "/ServerInfo/_CMU14/Guidebook/SOP/AU14SOPDeployment.xml"

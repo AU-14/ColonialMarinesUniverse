@@ -1,7 +1,6 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
 using Content.Server.Chat.Systems;
-using Content.Server.Ghost;
 using Content.Server.Power.Components;
 using Content.Shared.Chat;
 using Content.Shared.Database;
@@ -29,7 +28,6 @@ public sealed partial class RadioSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private IChatManager _chatManager = default!;
-    [Dependency] private GhostSystem _ghost = default!;
     [Dependency] private EntityQuery<TelecomExemptComponent> _exemptQuery = default!;
 
     // set used to prevent radio feedback loops.
@@ -56,22 +54,40 @@ public sealed partial class RadioSystem : EntitySystem
         if (!TryComp(uid, out ActorComponent? actor))
             return;
 
-        var msg = args.ChatMsg;
-        if (_ghost.CanGhostWarp(actor.PlayerSession, out _))
-        {
-            msg = new MsgChatMessage
-            {
-                Message = new ChatMessage(args.ChatMsg.Message)
-                {
-                    WrappedMessage = _chatManager.PrependFollowButtonIfAppropriate(
-                        args.ChatMsg.Message.WrappedMessage,
-                        args.MessageSource,
-                        actor.PlayerSession.Channel),
-                },
-            };
-        }
-
+        var msg = AddChatActionButtons(args.ChatMsg, args.MessageSource, actor.PlayerSession.Channel);
         _netMan.ServerSendMessage(msg, actor.PlayerSession.Channel);
+    }
+
+    internal MsgChatMessage AddChatActionButtons(
+        MsgChatMessage chatMsg,
+        EntityUid messageSource,
+        INetChannel recipient)
+    {
+        var ghostWrappedMessage = _chatManager.AddGhostFollowButton(
+            chatMsg.Message.WrappedMessage,
+            messageSource,
+            recipient);
+        var wrappedMessage = _chatManager.AddXenoWatchButton(
+            ghostWrappedMessage,
+            messageSource,
+            recipient);
+
+        if (wrappedMessage == chatMsg.Message.WrappedMessage)
+            return chatMsg;
+
+        return new MsgChatMessage
+        {
+            Message = new ChatMessage(chatMsg.Message)
+            {
+                WrappedMessage = wrappedMessage,
+                GhostFollowEntity = ghostWrappedMessage != chatMsg.Message.WrappedMessage
+                    ? GetNetEntity(messageSource)
+                    : NetEntity.Invalid,
+                XenoWatchEntity = wrappedMessage != ghostWrappedMessage
+                    ? GetNetEntity(messageSource)
+                    : NetEntity.Invalid,
+            },
+        };
     }
 
     /// <summary>

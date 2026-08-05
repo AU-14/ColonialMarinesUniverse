@@ -935,3 +935,17 @@ RMCCoatPaP: RMCCoatPCG
 
 # 2026-07-22
 CMPosterRememberIo: CMPosterPresident
+
+# 2026-08-05
+AU14GuidebookLawMarineProvost: RMCGuidebookLawMarineProvost
+CMLightFixture: RMCLightFixture
+CMLightFixtureAlwaysPowered: RMCLightFixtureAlwaysPowered
+CMLightFixtureSmall: RMCLightFixtureSmall
+CMLightFixtureSmallAlwaysPowered: RMCLightFixtureSmallAlwaysPowered
+CMPosterArious: CMPosterPathos
+CMPosterPulseRifle: CMPosterAssaultRifle
+CMWeaponLauncherM79: RMCWeaponLauncherM85A1
+FishBass: RMCFoodFishBass
+RMCTray_empty: RMCTrayEmpty
+CMUMultiZStairsFlight: CMUMultiZStairsRamplower
+fetchgenericmarker: fetchobjectivemarkergenericspawnpoint

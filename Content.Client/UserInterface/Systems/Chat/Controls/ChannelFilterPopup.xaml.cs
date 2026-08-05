@@ -42,6 +42,9 @@ public sealed partial class ChannelFilterPopup : Popup
     private readonly Dictionary<ChatChannel, ChannelFilterCheckbox> _filterStates = new();
     private readonly Dictionary<string, ChatTabButton> _tabButtons = new();
     private readonly Dictionary<string, CheckBox> _radioFilterStates = new();
+    private (string Target, string? Color, string Font, int? FontSize)[] _configuredStyles =
+        Array.Empty<(string Target, string? Color, string Font, int? FontSize)>();
+    private ChatStyleTarget[] _configuredStyleTargets = Array.Empty<ChatStyleTarget>();
     private string? _draggingTabId;
     private string? _dragTargetTabId;
     private bool _filtersReadOnly;
@@ -270,6 +273,19 @@ public sealed partial class ChannelFilterPopup : Popup
 
     public void ConfigureStyles(IReadOnlyList<ChatStyleSettings> styles, IReadOnlyList<ChatStyleTarget> targets)
     {
+        var styleSnapshot = styles
+            .Select(style => (style.Target, style.Color, style.Font, style.FontSize))
+            .ToArray();
+
+        if (_configuredStyles.SequenceEqual(styleSnapshot) &&
+            _configuredStyleTargets.SequenceEqual(targets))
+        {
+            return;
+        }
+
+        _configuredStyles = styleSnapshot;
+        _configuredStyleTargets = targets.ToArray();
+
         while (StyleRows.ChildCount > 0)
         {
             StyleRows.RemoveChild(0);

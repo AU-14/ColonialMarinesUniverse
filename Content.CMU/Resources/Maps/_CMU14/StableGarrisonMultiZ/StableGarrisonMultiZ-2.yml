@@ -99139,15 +99139,6 @@ entities:
     - type: Transform
       pos: 259.42496,-123.15004
       parent: 1
-- proto: GhostWarpPoint
-  entities:
-  - uid: 104365
-    components:
-    - type: MetaData
-      name: Albacetrie We-Yu Bunker
-    - type: Transform
-      pos: 265.5,-106.5
-      parent: 1
 - proto: PonderingOrb
   entities:
   - uid: 106434

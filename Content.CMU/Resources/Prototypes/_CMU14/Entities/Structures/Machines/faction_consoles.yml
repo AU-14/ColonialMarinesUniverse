@@ -1,0 +1,34 @@
+- type: entity
+  parent: CMFax
+  id: CMFaxColonyAdmin
+  name: colony administrator fax machine
+  suffix: Admin
+  components:
+  - type: FaxMachine
+    name: "Colony Administrator"
+    notifyAdmins: true
+
+- type: entity
+  parent: RMCTechTreeConsole
+  id: RMCTechTreeConsoleGovfor
+  name: govfor tech tree console
+  description: A GovFor tech console used to make tech purchases for GovFor.
+  components:
+  - type: TechControlConsole
+    team: govfor
+
+- type: entity
+  parent: RMCTacticalMapTable
+  id: RMCTacticalMapTableGovfor
+  suffix: Govfor
+  components:
+  - type: TacticalMapComputer
+    faction: govfor
+
+- type: entity
+  parent: RMCTacticalMapTableLarge
+  id: RMCTacticalMapTableLargeGovfor
+  suffix: Govfor, Large
+  components:
+  - type: TacticalMapComputer
+    faction: govfor

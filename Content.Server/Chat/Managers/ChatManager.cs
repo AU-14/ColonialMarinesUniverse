@@ -370,8 +370,35 @@ internal sealed partial class ChatManager : IChatManager
         var netSource = _entityManager.GetNetEntity(source);
         user?.AddEntity(netSource);
 
-        wrappedMessage = PrependFollowButtonIfAppropriate(wrappedMessage, source, client);
-        var msg = new ChatMessage(channel, message, wrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume, display: display);
+        var ghostFollowEntity = NetEntity.Invalid;
+        var xenoWatchEntity = NetEntity.Invalid;
+        var customWrappedMessage = wrappedMessage;
+
+        if (TryCreateGhostFollowButton(customWrappedMessage, source, client, out var wrappedWithFollowButton, out var followEntity))
+        {
+            customWrappedMessage = wrappedWithFollowButton;
+            ghostFollowEntity = followEntity;
+        }
+
+        if (TryCreateXenoWatchButton(customWrappedMessage, source, client, out var wrappedWithWatchButton, out var watchEntity))
+        {
+            customWrappedMessage = wrappedWithWatchButton;
+            xenoWatchEntity = watchEntity;
+        }
+
+        var msg = new ChatMessage(
+            channel,
+            message,
+            customWrappedMessage,
+            netSource,
+            user?.Key,
+            hideChat,
+            colorOverride,
+            audioPath,
+            audioVolume,
+            display: display,
+            ghostFollowEntity: ghostFollowEntity,
+            xenoWatchEntity: xenoWatchEntity);
         _netManager.ServerSendMessage(new MsgChatMessage() { Message = msg }, client);
 
         if (!recordReplay)
@@ -380,7 +407,18 @@ internal sealed partial class ChatManager : IChatManager
         if ((channel & ChatChannel.AdminRelated) == 0 ||
             _configurationManager.GetCVar(CCVars.ReplayRecordAdminChat))
         {
-            _replay.RecordServerMessage(msg);
+            var replayMessage = new ChatMessage(
+                channel,
+                message,
+                wrappedMessage,
+                netSource,
+                user?.Key,
+                hideChat,
+                colorOverride,
+                audioPath,
+                audioVolume,
+                display: display);
+            _replay.RecordServerMessage(replayMessage);
         }
     }
 
@@ -395,8 +433,34 @@ internal sealed partial class ChatManager : IChatManager
 
         foreach (var client in clients)
         {
-            var customWrapMessage = PrependFollowButtonIfAppropriate(wrappedMessage, source, client);
-            var msg = new ChatMessage(channel, message, customWrapMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume);
+            var ghostFollowEntity = NetEntity.Invalid;
+            var xenoWatchEntity = NetEntity.Invalid;
+            var customWrappedMessage = wrappedMessage;
+
+            if (TryCreateGhostFollowButton(customWrappedMessage, source, client, out var wrappedWithFollowButton, out var followEntity))
+            {
+                customWrappedMessage = wrappedWithFollowButton;
+                ghostFollowEntity = followEntity;
+            }
+
+            if (TryCreateXenoWatchButton(customWrappedMessage, source, client, out var wrappedWithWatchButton, out var watchEntity))
+            {
+                customWrappedMessage = wrappedWithWatchButton;
+                xenoWatchEntity = watchEntity;
+            }
+
+            var msg = new ChatMessage(
+                channel,
+                message,
+                customWrappedMessage,
+                netSource,
+                user?.Key,
+                hideChat,
+                colorOverride,
+                audioPath,
+                audioVolume,
+                ghostFollowEntity: ghostFollowEntity,
+                xenoWatchEntity: xenoWatchEntity);
             _netManager.ServerSendMessage(new MsgChatMessage { Message = msg }, client);
         }
 

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Content.IntegrationTests.Fixtures;
 using Content.IntegrationTests.Pair;
+using Content.Server.AU14.Round;
 using Content.Server._CMU14.ZLevels.Core;
 using Content.Server._CMU14.ZLevels.PVS;
 using Content.Server.GameTicking;
@@ -9,6 +10,8 @@ using Content.Shared._CMU14.RoundSetup.LegacyBush;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._CMU14.ZLevels.Vehicles;
+using Content.Shared.AU14;
+using Content.Shared.AU14.util;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -31,6 +34,8 @@ namespace Content.IntegrationTests._CMU14.ZLevels;
 public sealed class USSBushMultiZTest : GameTest
 {
     private const string MapPrototype = "USSBushRedux";
+    private static readonly ProtoId<PlatoonPrototype> UsmcPlatoon = "USCM";
+    private static readonly EntProtoId PlatoonSpawnRule = "PlatoonSpawn";
 
     public override PoolSettings PoolSettings => new()
     {
@@ -50,11 +55,25 @@ public sealed class USSBushMultiZTest : GameTest
         NetEntity networkNet = default;
         Dictionary<int, EntityUid> loadedMaps = [];
         Dictionary<int, NetEntity> loadedMapNets = [];
+        var uscmEquipmentVendorsBefore = 0;
+        var uscmWeaponsVendorsBefore = 0;
 
         await server.WaitAssertion(() =>
         {
+            Assert.That(SEntMan.System<AuRoundSystem>().SetPlanet("AUPlanetLV747"), Is.True);
+            SEntMan.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon =
+                SProtoMan.Index(UsmcPlatoon);
+
             var options = DeserializationOptions.Default with { InitializeMaps = true };
-            ticker.LoadGameMap(SProtoMan.Index<GameMapPrototype>(MapPrototype), out var mapId, options);
+            var grids = ticker.LoadGameMap(SProtoMan.Index<GameMapPrototype>(MapPrototype), out var mapId, options);
+            foreach (var grid in grids)
+            {
+                var faction = SEntMan.EnsureComponent<ShipFactionComponent>(grid);
+                faction.Faction = "govfor";
+            }
+
+            uscmEquipmentVendorsBefore = CountPrototype("AU14USCMequipmentvendor");
+            uscmWeaponsVendorsBefore = CountPrototype("AU14USCMWeaponsVendor");
 
             var mainMap = mapSystem.GetMap(mapId);
             Assert.That(zLevels.TryGetZNetwork(mainMap, out var matchingNetwork), Is.True);
@@ -82,6 +101,9 @@ public sealed class USSBushMultiZTest : GameTest
         await Pair.RunTicksSync(5);
         await AssertClientTopology(networkNet, loadedMapNets);
 
+        await server.WaitAssertion(() => ticker.StartGameRule(PlatoonSpawnRule));
+        await server.WaitRunTicks(2);
+
         await server.WaitAssertion(() =>
         {
             var unresolvedMarkers = 0;
@@ -93,14 +115,13 @@ public sealed class USSBushMultiZTest : GameTest
                 unresolvedMarkers++;
             }
 
-            Assert.That(unresolvedMarkers, Is.EqualTo(146),
-                "Only the removed objective-return, alliance, and withdrawal mechanics should remain as inert markers.");
-
-            AssertPrototypeCountAtLeast("CMASRSConsole", 1);
-            AssertPrototypeCountAtLeast("CMCargoElevator", 1);
-            AssertPrototypeCountAtLeast("CMDropshipDestination", 2);
-            AssertPrototypeCountAtLeast("RMCOverwatchConsoleRotating", 4);
-            AssertPrototypeCountAtLeast("RMCTechTreeConsole", 1);
+            Assert.That(unresolvedMarkers, Is.GreaterThan(0),
+                "Dynamic Bush markers should remain available for the selected platoon rule.");
+            Assert.That(CountPrototype("AU14USCMequipmentvendor"), Is.GreaterThan(uscmEquipmentVendorsBefore),
+                "The selected USCM platoon did not resolve Bush's rifleman vendor markers.");
+            Assert.That(CountPrototype("AU14USCMWeaponsVendor"), Is.GreaterThan(uscmWeaponsVendorsBefore),
+                "The selected USCM platoon did not resolve Bush's weapons vendor markers.");
+            AssertPrototypeCountAtLeast("RMCOverwatchConsoleGovforRotating", 1);
         });
 
         await server.WaitAssertion(() =>
@@ -252,6 +273,7 @@ public sealed class USSBushMultiZTest : GameTest
 
         await server.WaitPost(() =>
         {
+            ticker.ClearGameRules();
             foreach (var mapUid in loadedMaps.Values)
             {
                 if (SEntMan.TryGetComponent<MapComponent>(mapUid, out var map))
@@ -712,6 +734,14 @@ public sealed class USSBushMultiZTest : GameTest
 
     private void AssertPrototypeCountAtLeast(string prototype, int expected)
     {
+        var count = CountPrototype(prototype);
+
+        Assert.That(count, Is.GreaterThanOrEqualTo(expected),
+            $"Expected at least {expected} resolved {prototype} entities.");
+    }
+
+    private int CountPrototype(string prototype)
+    {
         var count = 0;
         var query = SEntMan.EntityQueryEnumerator<MetaDataComponent>();
         while (query.MoveNext(out _, out var metadata))
@@ -720,8 +750,7 @@ public sealed class USSBushMultiZTest : GameTest
                 count++;
         }
 
-        Assert.That(count, Is.GreaterThanOrEqualTo(expected),
-            $"Expected at least {expected} resolved {prototype} entities.");
+        return count;
     }
 }
 

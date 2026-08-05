@@ -69123,15 +69123,10 @@ entities:
   - uid: 1079
     components:
     - type: Transform
-      anchored: True
       pos: 50.5,-148.5
       parent: 1
     - type: Lock
       locked: True
-    - type: Physics
-      bodyType: Static
-    - type: PointLight
-      enabled: True
   - uid: 1080
     components:
     - type: Transform
@@ -69160,16 +69155,10 @@ entities:
   - uid: 1085
     components:
     - type: Transform
-      anchored: True
       pos: 52.5,-145.5
       parent: 1
     - type: Lock
       locked: True
-    - type: Physics
-      canCollide: True
-      bodyType: Static
-    - type: PointLight
-      enabled: True
   - uid: 1086
     components:
     - type: Transform

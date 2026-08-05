@@ -31,4 +31,7 @@ public enum SpawnPointType
     LateJoin,
     Job,
     Observer,
+    // CMU14: Faction-specific late-join fallbacks used by AU14 planet maps.
+    LateJoinOpfor,
+    LateJoinGovfor,
 }

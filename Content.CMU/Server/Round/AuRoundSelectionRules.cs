@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Voting;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._CMU14.Threats;
+using Content.Shared.AU14.util;
 
 namespace Content.Server.AU14.Round;
 
@@ -70,6 +71,57 @@ internal static class AuRoundSelectionRules
         };
     }
 
+    public static VoteOptions BuildPlatoonVoteOptions(
+        string faction,
+        string presetId,
+        string planetId,
+        IReadOnlyList<PlatoonPrototype> platoons,
+        TimeSpan duration)
+    {
+        var options = platoons
+            .Select(platoon => (platoon.Name, (object) platoon))
+            .ToList();
+
+        return new VoteOptions
+        {
+            Title = $"{faction} Vote",
+            Options = options,
+            Duration = duration,
+            CarryoverEnabled = true,
+            CarryoverKey = BuildContextVoteCarryoverKey(
+                $"platoon:{faction.ToLowerInvariant()}",
+                presetId,
+                planetId,
+                platoons.Select(platoon => platoon.ID)),
+        };
+    }
+
+    public static VoteOptions BuildShipVoteOptions(
+        string faction,
+        string presetId,
+        string planetId,
+        PlatoonPrototype platoon,
+        IReadOnlyList<string> ships,
+        TimeSpan duration)
+    {
+        var options = ships
+            .Select(ship => (ship, (object) ship))
+            .ToList();
+
+        return new VoteOptions
+        {
+            Title = $"{faction} Ship Vote",
+            Options = options,
+            Duration = duration,
+            CarryoverEnabled = true,
+            CarryoverKey = BuildContextVoteCarryoverKey(
+                $"ship:{faction.ToLowerInvariant()}:{platoon.ID}",
+                presetId,
+                planetId,
+                ships),
+        };
+    }
+
     private static string BuildPlanetVoteCarryoverKey(
         string presetId,
         IEnumerable<RMCPlanetMapPrototypeComponent> planets)
@@ -79,6 +131,16 @@ internal static class AuRoundSelectionRules
             .Order(StringComparer.OrdinalIgnoreCase);
 
         return $"au14-planet:{presetId}:{string.Join(",", mapIds)}";
+    }
+
+    private static string BuildContextVoteCarryoverKey(
+        string voteType,
+        string presetId,
+        string planetId,
+        IEnumerable<string> optionIds)
+    {
+        var options = optionIds.Order(StringComparer.OrdinalIgnoreCase);
+        return $"au14-{voteType}:{presetId}:{planetId}:{string.Join(",", options)}";
     }
 
     private static bool ContainsIgnoreCase(IEnumerable<string> values, string value)

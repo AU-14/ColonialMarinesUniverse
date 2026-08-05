@@ -77414,6 +77414,8 @@ entities:
     components:
     - type: Transform
       parent: 4
+    - type: Action
+      container: 4
 - proto: ArmorHelmetPMCCorporate
   entities:
   - uid: 6

@@ -216,6 +216,11 @@ namespace Content.Server.AU14.Round
             _selectedPreset = null;
             _selectedPlanet = null;
             _selectedPlanetId = null;
+            _selectedGovforShip = null;
+            _selectedOpforShip = null;
+            var platoons = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            platoons.SelectedGovforPlatoon = null;
+            platoons.SelectedOpforPlatoon = null;
             _state.SelectedThreat = null;
             _state.ResetDistressSignalThirdPartyLock();
             _selectedThirdParties.Clear();
@@ -836,23 +841,27 @@ namespace Content.Server.AU14.Round
             var duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VotePlatoonDuration));
             var platoonSpawnRuleSystem =
                 _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            var planetId = _selectedPlanetId ?? planetProto.MapId;
 
-            void StartShipVote(List<string> possibleShips, string title, Action<string> onShipSelected)
+            void StartShipVote(
+                List<string> possibleShips,
+                string faction,
+                PlatoonPrototype platoon,
+                Action<string> onShipSelected)
             {
-
                 if (possibleShips.Count == 0)
                 {
                     onShipSelected(string.Empty);
                     return;
                 }
 
-                var shipOptions = possibleShips.Select(id => (id, (object)id)).ToList();
-                var voteopt = new VoteOptions
-                {
-                    Title = title,
-                    Options = shipOptions,
-                    Duration = duration
-                };
+                var voteopt = AuRoundSelectionRules.BuildShipVoteOptions(
+                    faction,
+                    presetProto.ID,
+                    planetId,
+                    platoon,
+                    possibleShips,
+                    duration);
                 voteopt.SetInitiatorOrServer(null);
 
                 var handle = _voteManager.CreateVote(voteopt);
@@ -865,31 +874,29 @@ namespace Content.Server.AU14.Round
                     string? winner = args.Winner as string;
                     if (winner == null && args.Winners is var arr && arr.Length > 0)
                         winner = arr[0] as string;
-                    if (winner == null && shipOptions.Count > 0)
-                        winner = shipOptions[0].id;
+                    if (winner == null && voteopt.Options.Count > 0)
+                        winner = voteopt.Options[0].data as string;
                     if (winner != null)
                         args.ResolveWinner(winner);
                     onShipSelected(winner ?? string.Empty);
                 };
             }
 
-
-
             if (presetProto.RequiresGovforVote && govforPlatoons.Count > 0)
             {
-                var optionsplatoons = new List<(string text, object data)>();
+                var platoons = new List<PlatoonPrototype>();
                 foreach (var platoonId in govforPlatoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((platoon.Name, platoon));
+                    platoons.Add(platoon);
                 }
 
-                var voteopt = new VoteOptions
-                {
-                    Title = "Govfor Vote",
-                    Options = optionsplatoons,
-                    Duration = duration
-                };
+                var voteopt = AuRoundSelectionRules.BuildPlatoonVoteOptions(
+                    "Govfor",
+                    presetProto.ID,
+                    planetId,
+                    platoons,
+                    duration);
                 voteopt.SetInitiatorOrServer(null);
                 var handle = _voteManager.CreateVote(voteopt);
                 TrackVoteHandle(handle);
@@ -924,7 +931,8 @@ namespace Content.Server.AU14.Round
                                         return;
 
                                     StartShipVote(winnerId.PossibleShips,
-                                        "Govfor Ship Vote",
+                                        "Govfor",
+                                        winnerId,
                                         shipId => _selectedGovforShip = shipId);
                                 });
                         }
@@ -934,19 +942,19 @@ namespace Content.Server.AU14.Round
 
             if (presetProto.RequiresOpforVote && opforPlatoons.Count > 0)
             {
-                var optionsplatoons = new List<(string text, object data)>();
+                var platoons = new List<PlatoonPrototype>();
                 foreach (var platoonId in opforPlatoons)
                 {
                     var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    optionsplatoons.Add((platoon.Name, platoon));
+                    platoons.Add(platoon);
                 }
 
-                var voteopt = new VoteOptions
-                {
-                    Title = "Opfor Vote",
-                    Options = optionsplatoons,
-                    Duration = duration
-                };
+                var voteopt = AuRoundSelectionRules.BuildPlatoonVoteOptions(
+                    "Opfor",
+                    presetProto.ID,
+                    planetId,
+                    platoons,
+                    duration);
                 voteopt.SetInitiatorOrServer(null);
                 var handle = _voteManager.CreateVote(voteopt);
                 TrackVoteHandle(handle);
@@ -981,7 +989,8 @@ namespace Content.Server.AU14.Round
                                         return;
 
                                     StartShipVote(winnerId.PossibleShips,
-                                        "Opfor Ship Vote",
+                                        "Opfor",
+                                        winnerId,
                                         shipId => _selectedOpforShip = shipId);
                                 });
                         }

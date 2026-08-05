@@ -52,5 +52,6 @@ namespace Content.Server.Chat.Managers
 
         string PrependFollowButtonIfAppropriate(string wrappedMessage, EntityUid source, INetChannel recipient);
         string AddGhostFollowButton(string wrappedMessage, EntityUid source, INetChannel recipient);
+        string AddXenoWatchButton(string wrappedMessage, EntityUid source, INetChannel recipient);
     }
 }

@@ -1,0 +1,19 @@
+- type: entity
+  name: latejoin spawn point opfor
+  id: SpawnPointLatejoinopfor
+  parent: SpawnPointJobBase
+  components:
+  - type: Sprite
+    state: green
+  - type: SpawnPoint
+    spawn_type: LateJoinOpfor
+
+- type: entity
+  name: latejoin spawn point govfor
+  id: SpawnPointLatejoingovfor
+  parent: SpawnPointJobBase
+  components:
+  - type: Sprite
+    state: green
+  - type: SpawnPoint
+    spawn_type: LateJoinGovfor
