@@ -23,7 +23,7 @@
       time: 18000 # 5 hours
   supervisors: nobody
   icon: "AU14JobIconThreatLeader"
-  jobPreviewEntity: RMCPlayerXenoQueenPreview
+  jobPreviewEntity: CMUPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno
   - CMAccessXenoQueen
@@ -40,7 +40,7 @@
   playTimeTracker: AUJobThreatMember
   supervisors: nobody
   icon: "AU14JobIconThreatMember"
-  jobPreviewEntity: RMCPlayerXenoQueenPreview
+  jobPreviewEntity: CMUPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno
   - CMAccessXenoQueen
@@ -48,3 +48,13 @@
 
 - type: playTimeTracker
   id: AUJobThreatMember
+
+- type: entity
+  id: CMUPlayerXenoQueenPreview
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Queen/queen.rsi
+    layers:
+    - state: alive
+      scale: 0.5, 0.5

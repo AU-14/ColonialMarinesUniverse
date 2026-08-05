@@ -689,7 +689,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (role.JobProto is { } jobId &&
             _prototypeManager.TryIndex(jobId, out JobPrototype? job))
         {
-            return job.JobPreviewEntity?.ToString() ?? job.JobEntity ?? metadata.EntityPrototype?.ID;
+            return job.JobPreviewEntity?.ToString() ?? job.JobEntity?.ToString() ?? metadata.EntityPrototype?.ID;
         }
 
         return metadata.EntityPrototype?.ID;
