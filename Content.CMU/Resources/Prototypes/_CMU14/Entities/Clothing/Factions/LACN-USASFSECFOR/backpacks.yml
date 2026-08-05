@@ -5,7 +5,7 @@
   description: The standard-issue pack of LACN landing forces. Designed to lug gear into the battlefield.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/Storage/lacnpack.rsi
+    sprite: _CMU14/Clothing/LACN/Storage/lacnpack.rsi
   - type: Storage
     maxItemSize: Large
     grid:
@@ -18,4 +18,4 @@
   description: The standard-issue pack of LACN landing forces with an extra ammo can attached to it. Designed to lug gear into the battlefield.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/Storage/lacnammopack.rsi
+    sprite: _CMU14/Clothing/LACN/Storage/lacnammopack.rsi

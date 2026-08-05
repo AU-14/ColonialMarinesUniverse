@@ -22,7 +22,7 @@ public sealed partial class FactionRosterConsoleWindow : DefaultWindow
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-        Stylesheet = _stylesheetManager.SheetNano;
+        Stylesheet = _stylesheetManager.SheetNanotrasen;
         CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
 
         RefreshButton.OnPressed += _ => OnRefresh?.Invoke();

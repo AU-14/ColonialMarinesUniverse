@@ -5,9 +5,9 @@
   description: A cheaply produced ballistic helmet used by the Prodigy Corporation.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/helmet.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/helmet.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/ProdigySecurityForces/helmet.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/helmet.rsi
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -16,9 +16,9 @@
   description: A more robust ballistic helmet used by PART operatives.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/parthelmet.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/parthelmet.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/parthelmet.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/parthelmet.rsi
 
 - type: entity
   parent: AU14WYPMCHelmetHeavy
@@ -27,6 +27,6 @@
   description: A heavy ballistic helmet with mask for PART Heavy gunners, the orange tint on the eye holes protect from bullet flashes and sun glare to allow continous firing.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partsgo.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partsgo.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partsgo.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partsgo.rsi

@@ -46,7 +46,7 @@
     powerLoad: 0
   - type: Appearance
   - type: Sprite
-    sprite: _AU14/Structures/analyzermachine.rsi
+    sprite: _CMU14/Structures/analyzermachine.rsi
     state: analyzer_idle
   - type: Analyzer
     faction: govfor
@@ -95,7 +95,7 @@
         points: 12
     - name: Shotguns
       entries:
-      - id: RMCWeaponShotgunHG3712
+      - id: RMCWeaponShotgunM12
         amount: 1
         points: 10
       - id: WeaponShotgunM357Sawn

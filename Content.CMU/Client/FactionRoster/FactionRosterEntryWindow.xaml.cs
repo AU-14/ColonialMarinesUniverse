@@ -18,7 +18,7 @@ public sealed partial class FactionRosterEntryWindow : DefaultWindow
     {
         RobustXamlLoader.Load(this);
         IoCManager.InjectDependencies(this);
-        Stylesheet = _stylesheetManager.SheetNano;
+        Stylesheet = _stylesheetManager.SheetNanotrasen;
         CrtLobbyTheme.ApplyWindow(this, useCrtTypography: true);
 
         Title = entry.Name;

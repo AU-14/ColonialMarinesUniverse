@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeAhYoureStillHere
   name: emote-name-workingjoe-ah-youre-still-here
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeGoodDay
   name: emote-name-workingjoe-good-day
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeHello
   name: emote-name-workingjoe-hello
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeHowAreYou
   name: emote-name-workingjoe-how-are-you
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeHowCanIHelpYou
   name: emote-name-workingjoe-how-can-i-help-you
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeIDontBelieveIveHadThePleasure
   name: emote-name-workingjoe-i-dont-believe-ive-had-the-pleasure
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeIWillBeWithYouShortly
   name: emote-name-workingjoe-i-will-be-with-you-shortly
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeWhatDoYouNeedToKnowToday
   name: emote-name-workingjoe-what-do-you-need-to-know-today
-  category: Greeting
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

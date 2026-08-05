@@ -54,7 +54,7 @@
         potency: 8
       - !type:Nervestimulating
         potency: 2
-  
+
 - type: reagent
   parent: CMUXenoPlasma
   id: CMUXenoPlasmaChitin

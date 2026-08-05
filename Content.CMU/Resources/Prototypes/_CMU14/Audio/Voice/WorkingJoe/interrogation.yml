@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeAreWePlayingAGame
   name: emote-name-workingjoe-are-we-playing-a-game
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeAreYouAuthorisedAlarm
   name: emote-name-workingjoe-are-you-authorised-alarm
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeAreYouPlayingAGameWithMe
   name: emote-name-workingjoe-are-you-playing-a-game-with-me
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeAreYouQuiteFinished
   name: emote-name-workingjoe-are-you-quite-finished
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeHaveYouBeenMisbehaving
   name: emote-name-workingjoe-have-you-been-misbehaving
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeIHopeThatsNotWhatIThinkItIs
   name: emote-name-workingjoe-i-hope-thats-not-what-i-think-it-is
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeIsSomeonePlayingAGameWithMe
   name: emote-name-workingjoe-is-someone-playing-a-game-with-me
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeWasThatYou
   name: emote-name-workingjoe-was-that-you
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -113,7 +113,7 @@
 - type: emote
   id: WorkingJoeWhatAreYouDoing
   name: emote-name-workingjoe-what-are-you-doing
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -127,7 +127,7 @@
 - type: emote
   id: WorkingJoeWhatAreYouDoingHere
   name: emote-name-workingjoe-what-are-you-doing-here
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -141,7 +141,7 @@
 - type: emote
   id: WorkingJoeWhatAreYouPlayingAt
   name: emote-name-workingjoe-what-are-you-playing-at
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -155,7 +155,7 @@
 - type: emote
   id: WorkingJoeWhereAreYouGoing
   name: emote-name-workingjoe-where-are-you-going
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -169,7 +169,7 @@
 - type: emote
   id: WorkingJoeWhosResponsibleForThis
   name: emote-name-workingjoe-whos-responsible-for-this
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -183,7 +183,7 @@
 - type: emote
   id: WorkingJoeWhyWouldYouDoThis
   name: emote-name-workingjoe-why-would-you-do-this
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -197,7 +197,7 @@
 - type: emote
   id: WorkingJoeWouldYouLikeToTellMeWhereThisCameFrom
   name: emote-name-workingjoe-would-you-like-to-tell-me-where-this-came-from
-  category: Interrogation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

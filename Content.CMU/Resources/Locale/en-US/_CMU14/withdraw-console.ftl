@@ -34,4 +34,3 @@ withdraw-console-round-end-stalemate = Both factions have agreed to a stalemate.
 
 # Colony-specific
 withdraw-console-colony-evac-enabled = Colony withdrawal confirmed. Lifeboat fueling systems are now active. Evacuation authorized at the 10-minute mark.
-

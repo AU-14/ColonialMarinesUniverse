@@ -42,8 +42,7 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
             $"maxDepth={_config.GetCVar(CMUZLevelsCVars.MaxRenderDepth)}, " +
             $"maxOpeningRects={_config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass)}");
         shell.WriteLine(
-            $"  cvars perf: blur={_config.GetCVar(CMUZLevelsCVars.BlurEnabled)}, " +
-            $"dynamicCull={_config.GetCVar(CMUZLevelsCVars.CullOccludedDynamicSprites)}, " +
+            $"  cvars perf: blur={CMUZLevelBlurOverlay.IsBlurEnabled(_config.GetCVar(CMUZLevelsCVars.BlurStrength))}, " +
             $"lowerGrace={_config.GetCVar(CMUZLevelsCVars.LowerRenderVisibilityGrace):F2}s, " +
             $"projectedLights={_config.GetCVar(CMUZLevelsCVars.ProjectedLightingEnabled)}, " +
             $"projectedGrace={_config.GetCVar(CMUZLevelsCVars.ProjectedLightingVisibilityGrace):F2}s, " +
@@ -92,6 +91,12 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
             $"  render ms: base={stats.BaseRenderMs:F2}, lower={stats.LowerRenderMs:F2}, " +
             $"upper={stats.UpperRenderMs:F2}, stairPreview={stats.StairPreviewRenderMs:F2}, " +
             $"lowerShare={FormatPercent(stats.LowerRenderMs, stats.TotalRenderMs)}");
+        shell.WriteLine(
+            $"  stair preview: candidates={stats.StairPreviewSpriteCandidates}, " +
+            $"spriteChecks={stats.StairPreviewSpriteVisibilityChecks}, " +
+            $"tiles={stats.StairPreviewTilesScanned}, tilesDrawn={stats.StairPreviewTilesDrawn}, " +
+            $"losChecks={stats.StairPreviewLosChecks}, cullMs={stats.StairPreviewCullMs:F2}, " +
+            $"fovMaskMs={stats.StairPreviewFovMaskMs:F2}");
         PrintProjectedLighting(shell);
 
         if (!counts)
@@ -169,7 +174,7 @@ public sealed partial class CMUZLevelRenderDebugCommand : IConsoleCommand
         var maxDepth = Math.Clamp(
             stats.MaxDepth,
             0,
-            CMUSharedZLevelsSystem.MaxZLevelsBelowRendering);
+            CMUSharedZLevelsSystem.MaxZLevelTraversalDepth);
 
         for (var depth = -1; depth >= -maxDepth; depth--)
         {

@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeBeCarefulWithThat
   name: emote-name-workingjoe-be-careful-with-that
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeDoNotDamageSeegsonProperty
   name: emote-name-workingjoe-do-not-damage-seegson-property
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeDontRun
   name: emote-name-workingjoe-dont-run
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeFirearmsCanCauseSeriousInjuryLetMeAssistYou
   name: emote-name-workingjoe-firearms-can-cause-serious-injury-let-me-assist-you
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeIAssumeYouHaveAPermitForThatWeapon
   name: emote-name-workingjoe-i-assume-you-have-a-permit-for-that-weapon
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeIDoHopeThatWeaponIsRegistered
   name: emote-name-workingjoe-i-do-hope-that-weapon-is-registered
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeIHopeThatWeaponIsRegistered
   name: emote-name-workingjoe-i-hope-that-weapon-is-registered
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeInvestigateWeapon
   name: emote-name-workingjoe-investigate-weapon
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -113,7 +113,7 @@
 - type: emote
   id: WorkingJoeMostConcerning
   name: emote-name-workingjoe-most-concerning
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -127,7 +127,7 @@
 - type: emote
   id: WorkingJoeOnlyWildAnimalsFearFire
   name: emote-name-workingjoe-only-wild-animals-fear-fire
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -141,7 +141,7 @@
 - type: emote
   id: WorkingJoeRunningCausesAccidents
   name: emote-name-workingjoe-running-causes-accidents
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -155,7 +155,7 @@
 - type: emote
   id: WorkingJoeSomeoneMightGetHurt
   name: emote-name-workingjoe-someone-might-get-hurt
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -169,7 +169,7 @@
 - type: emote
   id: WorkingJoeThatWasVeryDangerous
   name: emote-name-workingjoe-that-was-very-dangerous
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -183,7 +183,7 @@
 - type: emote
   id: WorkingJoeThatsForMeNotForYou
   name: emote-name-workingjoe-thats-for-me-not-for-you
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -197,7 +197,7 @@
 - type: emote
   id: WorkingJoeThatsNotAToy
   name: emote-name-workingjoe-thats-not-a-toy
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -211,7 +211,7 @@
 - type: emote
   id: WorkingJoeTheseItemsCarryNotableHealthRisksWhenAlightAndInhaled
   name: emote-name-workingjoe-these-items-carry-notable-health-risks-when-alight-and-inhaled
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -225,7 +225,7 @@
 - type: emote
   id: WorkingJoeUnprotectedFlamesAreExtremelyDangerousAndEntirelyUnadvisable
   name: emote-name-workingjoe-unprotected-flames-are-extremely-dangerous-and-entirely-unadvisable
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -239,7 +239,7 @@
 - type: emote
   id: WorkingJoeYouAndIAreGoingToHaveATalkAboutSafety
   name: emote-name-workingjoe-you-and-i-are-going-to-have-a-talk-about-safety
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -253,7 +253,7 @@
 - type: emote
   id: WorkingJoeYouAreCarryingSomeVeryDangerousItems
   name: emote-name-workingjoe-you-are-carrying-some-very-dangerous-items
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -267,7 +267,7 @@
 - type: emote
   id: WorkingJoeYouCouldveHurtSomeone
   name: emote-name-workingjoe-you-couldve-hurt-someone
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -281,7 +281,7 @@
 - type: emote
   id: WorkingJoeYoureBecomingHysterical
   name: emote-name-workingjoe-youre-becoming-hysterical
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -295,7 +295,7 @@
 - type: emote
   id: WorkingJoeYoureGoingToHaveToBeMoreCareful
   name: emote-name-workingjoe-youre-going-to-have-to-be-more-careful
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -309,7 +309,7 @@
 - type: emote
   id: WorkingJoeYoureGoingToHurtYourself
   name: emote-name-workingjoe-youre-going-to-hurt-yourself
-  category: Warning
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

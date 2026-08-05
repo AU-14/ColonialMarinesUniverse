@@ -175074,7 +175074,7 @@ entities:
     - type: Transform
       pos: 42.5,-109.5
       parent: 1
-- proto: RMCWeaponShotgunHG3712
+- proto: RMCWeaponShotgunM12
   entities:
   - uid: 25927
     components:

@@ -1,6 +1,6 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._RMC14.CCVar;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.CCVar;
 using Content.Shared.Mobs.Components;

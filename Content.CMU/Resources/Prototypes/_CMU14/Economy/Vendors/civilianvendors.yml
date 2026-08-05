@@ -163,7 +163,7 @@
   suffix: Civ
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
     layers:
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]
@@ -402,7 +402,7 @@
   suffix: Civ
   components:
   - type: Sprite
-    sprite: _AU14/Structures/Vendors/assortedequipment.rsi
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
     layers:
     - state: "base"
       map: [ "enum.VendingMachineVisualLayers.BaseUnshaded", "enum.VendingMachineVisualLayers.Base" ]

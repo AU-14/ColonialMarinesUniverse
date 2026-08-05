@@ -25,7 +25,9 @@ namespace Content.Client.Viewport;
 
 public sealed partial class ScalingViewport
 {
-    [Dependency] private IMapManager _mapManager = default!;
+    // Entries exist only during synchronous viewport rendering and are removed in a finally block.
+    private static readonly HashSet<long> ActiveZLevelViewportIds = new();
+
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
@@ -43,6 +45,7 @@ public sealed partial class ScalingViewport
     private SharedTransformSystem? _transform;
     private EntityLookupSystem? _lookup;
     private ExamineSystem? _examine;
+    private OccluderSystem? _occluder;
     private SharedContainerSystem? _containers;
     private SpriteSystem? _sprite;
     private ShaderInstance? _stencilClearShaderInstance;
@@ -61,19 +64,17 @@ public sealed partial class ScalingViewport
     private readonly List<Box2> _zLowerOpeningBounds = new();
     private readonly List<Box2> _zLowerSearchBounds = new();
     private readonly List<int> _checkedOpeningIndices = new(MaxOpeningLosChecks);
+    private readonly List<int> _zRenderedLowerDepths = new();
+    private readonly ZLevelRenderVisibilityState _zLevelRenderVisibility = new();
     private readonly ZEye _zEye = new();
     private readonly ZEye _stairPreviewEye = new();
+    private readonly LowerRenderGraceState _zLowerRenderGrace = new();
     private IClydeViewport? _stairPreviewViewport;
     private bool _drawStairPreviewComposite;
-    // AU14 (building overhaul): "faint upper" rooftop-awareness pass. Reuses the stair-preview offscreen
-    // viewport (the two are mutually exclusive: the faint pass only runs when neither LookUp nor
-    // StairPreviewUp is active, which is exactly when the stair-preview composite is idle).
     private bool _drawFaintUpperComposite;
     private float _faintUpperAlpha;
     private EntityUid? _lastZLevelEyeEntity;
     private EntityUid? _lastZLevelViewEntity;
-    private TimeSpan _zLowerRenderGraceUntil = TimeSpan.Zero;
-    private int _zLowerRenderGraceLowestDepth;
 
     internal static ZLevelRenderDebugStats LastZRenderDebugStats { get; } = new();
 
@@ -142,7 +143,6 @@ public sealed partial class ScalingViewport
             maxOpeningBounds,
             exactOpeningBounds,
             _zLevelGrids,
-            _mapManager,
             _mapSystem,
             _transform,
             _tile);
@@ -151,6 +151,29 @@ public sealed partial class ScalingViewport
     }
 
     private void RenderZLevelPasses(IClydeViewport viewport)
+    {
+        var controlEye = _eye;
+        var viewportEye = viewport.Eye;
+        var clearColor = viewport.ClearColor;
+        var clearWhenMissingEye = viewport.ClearWhenMissingEye;
+        SetZLevelRenderingActive(viewport, false);
+        InvalidateZRenderVisibility();
+
+        try
+        {
+            RenderZLevelPassesCore(viewport);
+        }
+        finally
+        {
+            Eye = controlEye;
+            viewport.Eye = viewportEye;
+            viewport.ClearColor = clearColor;
+            viewport.ClearWhenMissingEye = clearWhenMissingEye;
+            SetZLevelRenderingActive(viewport, false);
+        }
+    }
+
+    private void RenderZLevelPassesCore(IClydeViewport viewport)
     {
         ClearZLevelCompositeState();
         LastZRenderDebugStats.Reset();
@@ -171,8 +194,9 @@ public sealed partial class ScalingViewport
                     : !renderEnabled
                         ? "cmu.zlevels.render_enabled=false"
                         : "z render disabled";
+            _zLowerRenderGrace.Reset();
             var renderStart = Stopwatch.GetTimestamp();
-            viewport.Render();
+            RenderFreshBasePass(viewport);
             LastZRenderDebugStats.BasePassRendered = true;
             LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
             LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
@@ -192,14 +216,16 @@ public sealed partial class ScalingViewport
         _transform ??= _entityManager.System<SharedTransformSystem>();
         _lookup ??= _entityManager.System<EntityLookupSystem>();
         _examine ??= _entityManager.System<ExamineSystem>();
+        _occluder ??= _entityManager.System<OccluderSystem>();
         _containers ??= _entityManager.System<SharedContainerSystem>();
 
-        if (!TryGetZLevelViewEntity(fallbackEye, out _, out var zLevelViewer, out var viewXform) ||
+        if (!TryGetZLevelViewEntity(fallbackEye, out var viewEntity, out var zLevelViewer, out var viewXform) ||
             viewXform.MapUid is null)
         {
             LastZRenderDebugStats.SkipReason = "no Z-level viewer for current eye";
+            _zLowerRenderGrace.Reset();
             var renderStart = Stopwatch.GetTimestamp();
-            viewport.Render();
+            RenderFreshBasePass(viewport);
             LastZRenderDebugStats.BasePassRendered = true;
             LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
             LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
@@ -210,21 +236,23 @@ public sealed partial class ScalingViewport
         var maxDepth = Math.Clamp(
             _config.GetCVar(CMUZLevelsCVars.MaxRenderDepth),
             0,
-            CMUSharedZLevelsSystem.MaxZLevelsBelowRendering);
+            CMUSharedZLevelsSystem.MaxZLevelTraversalDepth);
         var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
         var lowestDepth = 0;
         var weatherSourceMapId = GetWeatherSourceMapId(viewXform.MapUid.Value, viewXform.MapID);
         if (!TryGetViewportWorldAabb(viewport, out var viewportWorldAabb))
         {
             LastZRenderDebugStats.SkipReason = "no viewport world bounds";
+            _zLowerRenderGrace.Reset();
             var renderStart = Stopwatch.GetTimestamp();
-            viewport.Render();
+            RenderFreshBasePass(viewport);
             LastZRenderDebugStats.BasePassRendered = true;
             LastZRenderDebugStats.BaseRenderMs = GetElapsedMilliseconds(renderStart);
             LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
             return;
         }
 
+        SetZLevelRenderingActive(viewport, true);
         LastZRenderDebugStats.UsedZRender = true;
         LastZRenderDebugStats.SkipReason = "rendered";
         LastZRenderDebugStats.BaseMapId = viewXform.MapID;
@@ -238,6 +266,13 @@ public sealed partial class ScalingViewport
         var zRenderRotation = -fallbackEye.Rotation;
         LastZRenderDebugStats.ZRenderOffsetPerDepth =
             zRenderRotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset;
+        var renderIdentity = new ZLevelViewIdentity(
+            fallbackEye,
+            viewEntity,
+            viewXform.MapUid.Value,
+            _entityManager.TryGetComponent<CMUZLevelMapComponent>(viewXform.MapUid.Value, out var zMap)
+                ? zMap.NetworkUid
+                : EntityUid.Invalid);
 
         _zOpeningBounds.Clear();
         using (var openingProfile = _prof.Group("CMU Z Opening Query"))
@@ -324,7 +359,7 @@ public sealed partial class ScalingViewport
             }
             LastZRenderDebugStats.LowerDepthDiscoveryMs = GetElapsedMilliseconds(lowerDiscoveryStart);
 
-            ApplyLowerRenderGrace(maxDepth, hasLowerMap, ref lowestDepth);
+            ApplyLowerRenderGrace(renderIdentity, maxDepth, hasLowerMap, ref lowestDepth);
 
             LastZRenderDebugStats.LowerSuppressedByOpeningGate = maxDepth > 0 &&
                 hasLowerMap &&
@@ -334,6 +369,7 @@ public sealed partial class ScalingViewport
         }
 
         LastZRenderDebugStats.LowestDepth = lowestDepth;
+        _zRenderedLowerDepths.Clear();
 
         //From the lowest depth to the highest, render each level
         using (var passProfile = _prof.Group("CMU Z Render Passes"))
@@ -429,6 +465,7 @@ public sealed partial class ScalingViewport
                     LastZRenderDebugStats.LowerPassesRendered++;
                     LastZRenderDebugStats.LowerRenderMs += renderMs;
                     LastZRenderDebugStats.LowerRenderedDepths.Add(depth);
+                    _zRenderedLowerDepths.Add(depth);
                 }
                 else if (depth > 0)
                 {
@@ -443,15 +480,35 @@ public sealed partial class ScalingViewport
             }
         }
 
-        // AU14 (building overhaul): stage 1 of the look-up cycle. When the viewer toggled faint mode, is not
-        // already looking up and is not under a ceiling, ghost the level directly above at low alpha.
+        PublishZRenderVisibility(
+            renderIdentity,
+            viewXform.MapID,
+            _zRenderedLowerDepths);
+
+        // The first stage of CMU's look-up cycle ghosts the unobstructed level
+        // above the viewer before switching to the full look-up view.
         if (lookUp == 0 && zLevelViewer.FaintUp)
             RenderFaintUpperComposite(viewport, fallbackEye, viewXform, lowestDepth, weatherSourceMapId);
 
-        // Restore the Eye
-        Eye = fallbackEye;
-        viewport.Eye = Eye;
         LastZRenderDebugStats.TotalRenderMs = GetElapsedMilliseconds(totalStart);
+    }
+
+    private void RenderWithoutZLevels(IClydeViewport viewport, string reason)
+    {
+        SetZLevelRenderingActive(viewport, false);
+        InvalidateZRenderVisibility();
+        _zLowerRenderGrace.Reset();
+        NoteZRenderBypassed(reason);
+        ClearZLevelCompositeState();
+        viewport.Render();
+    }
+
+    private void RenderFreshBasePass(IClydeViewport viewport)
+    {
+        viewport.Eye = _eye ?? viewport.Eye;
+        viewport.ClearColor = Color.Black;
+        viewport.ClearWhenMissingEye = true;
+        viewport.Render();
     }
 
     internal static bool ShouldUseZLevelRenderPasses(bool zLevelsEnabled, bool renderEnabled)
@@ -460,40 +517,82 @@ public sealed partial class ScalingViewport
                renderEnabled;
     }
 
-    private void ApplyLowerRenderGrace(int maxDepth, bool hasLowerMap, ref int lowestDepth)
+    internal static bool IsZLevelCompositionActive(IClydeViewport viewport)
+    {
+        return ActiveZLevelViewportIds.Contains(viewport.Id);
+    }
+
+    private void SetZLevelRenderingActive(IClydeViewport viewport, bool active)
+    {
+        if (active)
+            ActiveZLevelViewportIds.Add(viewport.Id);
+        else
+            ActiveZLevelViewportIds.Remove(viewport.Id);
+    }
+
+    private void InvalidateZRenderVisibility()
+    {
+        _zLevelRenderVisibility.Invalidate();
+    }
+
+    private void PublishZRenderVisibility(
+        ZLevelViewIdentity identity,
+        MapId baseMapId,
+        IReadOnlyList<int> renderedLowerDepths)
+    {
+        _zLevelRenderVisibility.Publish(identity, baseMapId, renderedLowerDepths);
+    }
+
+    internal bool TryCopyRenderedLowerDepths(
+        IEye eye,
+        EntityUid viewEntity,
+        EntityUid baseMapUid,
+        MapId baseMapId,
+        EntityUid networkUid,
+        List<int> destination)
+    {
+        destination.Clear();
+
+        return _viewport is not null &&
+               _zLevelRenderVisibility.TryCopyRenderedLowerDepths(
+                   new ZLevelViewIdentity(eye, viewEntity, baseMapUid, networkUid),
+                   baseMapId,
+                   destination);
+    }
+
+    private void ApplyLowerRenderGrace(
+        ZLevelViewIdentity identity,
+        int maxDepth,
+        bool hasLowerMap,
+        ref int lowestDepth)
     {
         var graceSeconds = Math.Max(0f, _config.GetCVar(CMUZLevelsCVars.LowerRenderVisibilityGrace));
         LastZRenderDebugStats.LowerRenderGraceSeconds = graceSeconds;
+        var discoveredLowestDepth = lowestDepth;
+        lowestDepth = _zLowerRenderGrace.Resolve(
+            identity,
+            _timing.CurTime,
+            TimeSpan.FromSeconds(graceSeconds),
+            maxDepth,
+            hasLowerMap,
+            discoveredLowestDepth,
+            out var active);
 
-        if (lowestDepth < 0)
+        if (discoveredLowestDepth < 0)
         {
-            _zLowerRenderGraceLowestDepth = lowestDepth;
-            _zLowerRenderGraceUntil = graceSeconds > 0f
-                ? _timing.CurTime + TimeSpan.FromSeconds(graceSeconds)
-                : TimeSpan.Zero;
-
-            LastZRenderDebugStats.LowerRenderGraceLowestDepth = _zLowerRenderGraceLowestDepth;
+            LastZRenderDebugStats.LowerRenderGraceLowestDepth = lowestDepth;
             LastZRenderDebugStats.LowerRenderGraceRemainingMs = graceSeconds * 1000d;
             return;
         }
 
-        if (graceSeconds > 0f &&
-            maxDepth > 0 &&
-            hasLowerMap &&
-            _zLowerRenderGraceLowestDepth < 0 &&
-            _timing.CurTime <= _zLowerRenderGraceUntil)
+        if (active)
         {
-            lowestDepth = Math.Clamp(_zLowerRenderGraceLowestDepth, -maxDepth, -1);
             LastZRenderDebugStats.LowerRenderGraceActive = true;
             LastZRenderDebugStats.LowerRenderGraceLowestDepth = lowestDepth;
             LastZRenderDebugStats.LowerRenderGraceRemainingMs = Math.Max(
                 0d,
-                (_zLowerRenderGraceUntil - _timing.CurTime).TotalMilliseconds);
-            return;
+                (_zLowerRenderGrace.Until - _timing.CurTime).TotalMilliseconds);
         }
-
-        _zLowerRenderGraceLowestDepth = 0;
-        _zLowerRenderGraceUntil = TimeSpan.Zero;
     }
 
     private bool TryFindChainedLowerOpeningBounds(
@@ -1041,16 +1140,22 @@ public sealed partial class ScalingViewport
         _stairPreviewEye.DrawFov = false;
         _stairPreviewEye.ConfigureVisibleEntityIndicators(false, _zOpeningBounds);
 
-        _stairPreviewViewport.Eye = _stairPreviewEye;
-        _stairPreviewViewport.ClearColor = Color.Transparent;
-        CullStairPreviewSprites(_stairPreviewEye.Position.MapId);
+        var viewportEye = _stairPreviewViewport.Eye;
+        var clearColor = _stairPreviewViewport.ClearColor;
         try
         {
+            _stairPreviewViewport.Eye = _stairPreviewEye;
+            _stairPreviewViewport.ClearColor = Color.Transparent;
+            var cullStart = Stopwatch.GetTimestamp();
+            CullStairPreviewSprites(_stairPreviewEye.Position.MapId);
+            LastZRenderDebugStats.StairPreviewCullMs += GetElapsedMilliseconds(cullStart);
             _stairPreviewViewport.Render();
         }
         finally
         {
             RestoreStairPreviewSprites();
+            _stairPreviewViewport.Eye = viewportEye;
+            _stairPreviewViewport.ClearColor = clearColor;
         }
 
         _drawStairPreviewComposite = true;
@@ -1069,6 +1174,7 @@ public sealed partial class ScalingViewport
 
         _stairPreviewSpriteCandidates.Clear();
         _lookup.GetEntitiesIntersecting(mapId, worldAabb, _stairPreviewSpriteCandidates, LookupFlags.All);
+        LastZRenderDebugStats.StairPreviewSpriteCandidates += _stairPreviewSpriteCandidates.Count;
 
         foreach (var candidate in _stairPreviewSpriteCandidates)
         {
@@ -1081,6 +1187,7 @@ public sealed partial class ScalingViewport
                 continue;
             }
 
+            LastZRenderDebugStats.StairPreviewSpriteVisibilityChecks++;
             var worldBounds = GetStairPreviewSpriteBounds(uid, sprite, xform, xformQuery);
             var target = new MapCoordinates(worldBounds.Center, mapId);
             if (CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
@@ -1165,8 +1272,6 @@ public sealed partial class ScalingViewport
         if (_drawStairPreviewComposite)
             DrawStairPreviewComposite(handle.DrawingHandleScreen, drawBox);
 
-        // AU14 (building overhaul): the faint upper-level ghost is just the offscreen upper pass drawn at
-        // low alpha over the frame - no stencil/LOS masking, that's the point (see everything above you).
         if (_drawFaintUpperComposite && _stairPreviewViewport is not null)
         {
             handle.DrawingHandleScreen.DrawTextureRect(
@@ -1176,9 +1281,6 @@ public sealed partial class ScalingViewport
         }
     }
 
-    // AU14 (building overhaul): render the level directly above into the offscreen viewport so it can be
-    // composited faintly. Skipped when the viewer is under a ceiling (a non-empty tile straight above them):
-    // there the roof legitimately hides the upper level, and ghosting it through a roof would be wall-hacks.
     private void RenderFaintUpperComposite(
         IClydeViewport viewport,
         IEye fallbackEye,
@@ -1195,10 +1297,10 @@ public sealed partial class ScalingViewport
         if (!_zLevels.TryMapOffset(mapUid, 1, out _, out var upperMapComp))
             return;
 
-        // Ceiling check: any non-empty tile on the upper map straight above the viewer means we're indoors.
+        // Do not reveal the upper map through a real ceiling.
         var viewerPos = _transform.GetWorldPosition(viewXform);
         var aboveCoords = new MapCoordinates(viewerPos, upperMapComp.MapId);
-        if (_mapManager.TryFindGridAt(aboveCoords, out var upperGridUid, out var upperGridComp))
+        if (_mapSystem.TryFindGridAt(aboveCoords, out var upperGridUid, out var upperGridComp))
         {
             var tileRef = _mapSystem.GetTileRef(upperGridUid, upperGridComp, aboveCoords);
             if (!tileRef.Tile.IsEmpty)
@@ -1209,7 +1311,7 @@ public sealed partial class ScalingViewport
         if (_stairPreviewViewport is null)
             return;
 
-        Angle rotation = fallbackEye.Rotation * -1;
+        var rotation = -fallbackEye.Rotation;
         var offset = rotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset;
 
         _zEye.LowestDepth = lowestDepth;
@@ -1218,8 +1320,6 @@ public sealed partial class ScalingViewport
         _zEye.BaseMapId = viewXform.MapID;
         _zEye.WeatherSourceMapId = weatherSourceMapId;
         _zEye.Position = new MapCoordinates(fallbackEye.Position.Position, upperMapComp.MapId);
-        // Keep FOV on (matches the real look-up upper pass): without it the ghost leaked through walls
-        // and the viewer's own field-of-view cone, which is a wall-hack.
         _zEye.DrawFov = fallbackEye.DrawFov;
         _zEye.DrawLight = fallbackEye.DrawLight;
         _zEye.Offset = fallbackEye.Offset + offset;
@@ -1278,11 +1378,12 @@ public sealed partial class ScalingViewport
 
     private void DrawStairPreviewFovMask(DrawingHandleScreen screen, UIBox2 drawBox)
     {
+        var maskStart = Stopwatch.GetTimestamp();
         if (_stairPreviewViewport is null ||
             _mapSystem is null ||
             _transform is null ||
             _lookup is null ||
-            _examine is null ||
+            _occluder is null ||
             !TryGetViewportWorldAabb(_stairPreviewViewport, out var worldAabb))
         {
             return;
@@ -1300,6 +1401,7 @@ public sealed partial class ScalingViewport
             var gridMatrix = _transform.GetWorldMatrix(grid.Owner);
             foreach (var tile in _mapSystem.GetTilesIntersecting(grid.Owner, grid.Comp, worldAabb, ignoreEmpty: true))
             {
+                LastZRenderDebugStats.StairPreviewTilesScanned++;
                 var localBounds = _lookup.GetLocalBounds(tile, grid.Comp.TileSize).Enlarged(0.01f);
                 var worldBounds = gridMatrix.TransformBox(localBounds);
                 var target = new MapCoordinates(worldBounds.Center, mapId);
@@ -1307,38 +1409,53 @@ public sealed partial class ScalingViewport
                 if (!CanAnyStairPreviewOriginSeeBounds(target, worldBounds, mapId, _stairPreviewEye.VisualZOffset))
                     continue;
 
+                LastZRenderDebugStats.StairPreviewTilesDrawn++;
                 screen.DrawRect(GetCompositeScreenBox(localBounds, gridMatrix, drawBox), Color.White);
             }
         }
 
         _stairPreviewGrids.Clear();
+        LastZRenderDebugStats.StairPreviewFovMaskMs += GetElapsedMilliseconds(maskStart);
     }
 
     private void SetStairPreviewOrigins(CMUZLevelViewerComponent viewer, Vector2 viewerPosition)
     {
         _stairPreviewOrigins.Clear();
 
+        for (var i = 0; i < CMUZLevelViewerComponent.MaxStairPreviewPositions; i++)
+        {
+            if (!TryGetStairPreviewPosition(viewer, i, out var position))
+                break;
+
+            _stairPreviewOrigins.Add(new StairPreviewOrigin(position, viewerPosition));
+        }
+    }
+
+    internal static bool TryGetStairPreviewPosition(
+        CMUZLevelViewerComponent viewer,
+        int index,
+        out Vector2 position)
+    {
         var count = Math.Clamp(
             viewer.StairPreviewPositionCount,
             0,
             CMUZLevelViewerComponent.MaxStairPreviewPositions);
 
-        for (var i = 0; i < count; i++)
+        if (index < 0 || index >= count)
         {
-            var position = i switch
-            {
-                0 => viewer.StairPreviewPosition,
-                1 => viewer.StairPreviewPosition2,
-                2 => viewer.StairPreviewPosition3,
-                3 => viewer.StairPreviewPosition4,
-                _ => default,
-            };
-
-            if (position == default)
-                continue;
-
-            _stairPreviewOrigins.Add(new StairPreviewOrigin(position, viewerPosition));
+            position = default;
+            return false;
         }
+
+        position = index switch
+        {
+            0 => viewer.StairPreviewPosition,
+            1 => viewer.StairPreviewPosition2,
+            2 => viewer.StairPreviewPosition3,
+            3 => viewer.StairPreviewPosition4,
+            _ => default,
+        };
+        return true;
     }
 
     private bool CanAnyStairPreviewOriginSeeBounds(
@@ -1347,7 +1464,7 @@ public sealed partial class ScalingViewport
         MapId mapId,
         Vector2 renderOffset)
     {
-        if (_examine is null)
+        if (_occluder is null)
             return false;
 
         foreach (var origin in _stairPreviewOrigins)
@@ -1370,7 +1487,8 @@ public sealed partial class ScalingViewport
             }
 
             var originCoordinates = new MapCoordinates(origin.Position, mapId);
-            if (_examine.InRangeUnOccluded(originCoordinates, target, 0f, null))
+            LastZRenderDebugStats.StairPreviewLosChecks++;
+            if (_occluder.InRangeUnoccluded(originCoordinates, target, 0f, ignoreTouching: true))
                 return true;
         }
 
@@ -1425,7 +1543,7 @@ public sealed partial class ScalingViewport
     private void ClearZLevelCompositeState()
     {
         _drawStairPreviewComposite = false;
-        _drawFaintUpperComposite = false; // AU14: faint upper ghost is re-decided every frame
+        _drawFaintUpperComposite = false;
     }
 
     internal static void NoteZRenderBypassed(string reason)
@@ -1439,11 +1557,148 @@ public sealed partial class ScalingViewport
     {
         _stairPreviewViewport?.Dispose();
         _stairPreviewViewport = null;
+        _zLowerRenderGrace.Reset();
         RestoreStairPreviewSprites();
         ClearZLevelCompositeState();
     }
 
     private readonly record struct StairPreviewOrigin(Vector2 Position, Vector2 ViewerPosition);
+
+    internal readonly struct ZLevelViewIdentity
+    {
+        public readonly IEye Eye;
+        public readonly EntityUid ViewEntity;
+        public readonly EntityUid BaseMapUid;
+        public readonly EntityUid NetworkUid;
+
+        public ZLevelViewIdentity(
+            IEye eye,
+            EntityUid viewEntity,
+            EntityUid baseMapUid,
+            EntityUid networkUid)
+        {
+            Eye = eye;
+            ViewEntity = viewEntity;
+            BaseMapUid = baseMapUid;
+            NetworkUid = networkUid;
+        }
+
+        public bool Matches(ZLevelViewIdentity other)
+        {
+            return ReferenceEquals(Eye, other.Eye) &&
+                   ViewEntity == other.ViewEntity &&
+                   BaseMapUid == other.BaseMapUid &&
+                   NetworkUid == other.NetworkUid;
+        }
+    }
+
+    internal sealed class LowerRenderGraceState
+    {
+        private ZLevelViewIdentity _identity;
+        private bool _hasIdentity;
+
+        public int LowestDepth { get; private set; }
+        public TimeSpan Until { get; private set; }
+
+        public int Resolve(
+            ZLevelViewIdentity identity,
+            TimeSpan now,
+            TimeSpan graceDuration,
+            int maxDepth,
+            bool hasLowerMap,
+            int discoveredLowestDepth,
+            out bool active)
+        {
+            if (!_hasIdentity || !_identity.Matches(identity))
+            {
+                Reset();
+                _identity = identity;
+                _hasIdentity = true;
+            }
+
+            active = false;
+            if (discoveredLowestDepth < 0)
+            {
+                LowestDepth = discoveredLowestDepth;
+                Until = graceDuration > TimeSpan.Zero
+                    ? now + graceDuration
+                    : TimeSpan.Zero;
+                return discoveredLowestDepth;
+            }
+
+            if (graceDuration > TimeSpan.Zero &&
+                maxDepth > 0 &&
+                hasLowerMap &&
+                LowestDepth < 0 &&
+                now <= Until)
+            {
+                active = true;
+                return Math.Clamp(LowestDepth, -maxDepth, -1);
+            }
+
+            LowestDepth = 0;
+            Until = TimeSpan.Zero;
+            return discoveredLowestDepth;
+        }
+
+        public void Reset()
+        {
+            _identity = default;
+            _hasIdentity = false;
+            LowestDepth = 0;
+            Until = TimeSpan.Zero;
+        }
+    }
+
+    internal sealed class ZLevelRenderVisibilityState
+    {
+        private readonly List<int> _renderedLowerDepths = new();
+        private ZLevelViewIdentity _identity;
+        private MapId _baseMapId = MapId.Nullspace;
+        private bool _valid;
+
+        public void Publish(
+            ZLevelViewIdentity identity,
+            MapId baseMapId,
+            IReadOnlyList<int> renderedLowerDepths)
+        {
+            _identity = identity;
+            _baseMapId = baseMapId;
+            _renderedLowerDepths.Clear();
+
+            for (var i = 0; i < renderedLowerDepths.Count; i++)
+            {
+                _renderedLowerDepths.Add(renderedLowerDepths[i]);
+            }
+
+            _valid = true;
+        }
+
+        public bool TryCopyRenderedLowerDepths(
+            ZLevelViewIdentity identity,
+            MapId baseMapId,
+            List<int> destination)
+        {
+            destination.Clear();
+            if (!_valid ||
+                _baseMapId != baseMapId ||
+                !_identity.Matches(identity))
+            {
+                return false;
+            }
+
+            destination.AddRange(_renderedLowerDepths);
+            return true;
+        }
+
+        public void Invalidate()
+        {
+            _valid = false;
+            _identity = default;
+            _baseMapId = MapId.Nullspace;
+            _renderedLowerDepths.Clear();
+        }
+    }
 
     internal sealed class ZLevelRenderDebugStats
     {
@@ -1497,6 +1752,13 @@ public sealed partial class ScalingViewport
         public double BaseRenderMs;
         public double UpperRenderMs;
         public double StairPreviewRenderMs;
+        public double StairPreviewCullMs;
+        public double StairPreviewFovMaskMs;
+        public int StairPreviewSpriteCandidates;
+        public int StairPreviewSpriteVisibilityChecks;
+        public int StairPreviewTilesScanned;
+        public int StairPreviewTilesDrawn;
+        public int StairPreviewLosChecks;
         public readonly List<int> LowerRenderedDepths = new();
 
         public void Reset()
@@ -1551,6 +1813,13 @@ public sealed partial class ScalingViewport
             BaseRenderMs = 0d;
             UpperRenderMs = 0d;
             StairPreviewRenderMs = 0d;
+            StairPreviewCullMs = 0d;
+            StairPreviewFovMaskMs = 0d;
+            StairPreviewSpriteCandidates = 0;
+            StairPreviewSpriteVisibilityChecks = 0;
+            StairPreviewTilesScanned = 0;
+            StairPreviewTilesDrawn = 0;
+            StairPreviewLosChecks = 0;
             LowerRenderedDepths.Clear();
         }
     }

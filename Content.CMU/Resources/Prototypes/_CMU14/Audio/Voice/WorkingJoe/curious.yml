@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeNowWheresThatComeFrom
   name: emote-name-workingjoe-now-wheres-that-come-from
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeReally
   name: emote-name-workingjoe-really
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeWhatHaveWeHere
   name: emote-name-workingjoe-what-have-we-here
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeWhatIsThis
   name: emote-name-workingjoe-what-is-this
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeWhatWasThat
   name: emote-name-workingjoe-what-was-that
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeWhatWasThatSound
   name: emote-name-workingjoe-what-was-that-sound
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeWhatsGoingOnHere
   name: emote-name-workingjoe-whats-going-on-here
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeWhatsThis
   name: emote-name-workingjoe-whats-this
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -113,7 +113,7 @@
 - type: emote
   id: WorkingJoeWhereDidThatComeFrom
   name: emote-name-workingjoe-where-did-that-come-from
-  category: Curious
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

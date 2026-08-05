@@ -5,9 +5,9 @@
   description: A standard cap made for the LACN.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/HelmetsHats/lacnnavycap.rsi
+    sprite: _CMU14/Clothing/LACN/HelmetsHats/lacnnavycap.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/LACN/HelmetsHats/lacnnavycap.rsi
+    sprite: _CMU14/Clothing/LACN/HelmetsHats/lacnnavycap.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -16,9 +16,9 @@
   description: A beanie used by the Naval Commandos of the LACN.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/HelmetsHats/lacncommandobeanie.rsi
+    sprite: _CMU14/Clothing/LACN/HelmetsHats/lacncommandobeanie.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/LACN/HelmetsHats/lacncommandobeanie.rsi
+    sprite: _CMU14/Clothing/LACN/HelmetsHats/lacncommandobeanie.rsi
 
 - type: entity
   parent: ClothingHeadBase
@@ -27,6 +27,6 @@
   description: A beret bearing the insignia of the USASF Security Forces.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USASFSecurityForces/beret.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/beret.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/USASFSecurityForces/beret.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/beret.rsi

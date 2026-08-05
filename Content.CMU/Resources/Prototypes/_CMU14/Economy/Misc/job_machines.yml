@@ -40,7 +40,7 @@
   suffix: Any
   components:
   - type: Sprite
-    sprite: _AU14/Structures/colony_processor.rsi
+    sprite: _CMU14/Structures/colony_processor.rsi
     layers:
     - state: icon
       map: ["enum.LatheVisualLayers.IsRunning"]
@@ -92,9 +92,6 @@
       tags:
       - SteelOre
 
-- type: Tag
-  id: SteelOre
-
 - type: entity
   parent: AUSubmissionPointBase
   id: AUSubmissionPointWood
@@ -109,9 +106,6 @@
     whitelist:
       tags:
       - AUwood
-
-- type: Tag
-  id: AUwood
 
 - type: entity
   parent: AUSubmissionPointBase
@@ -318,7 +312,8 @@
   components:
   - type: Sprite
     sprite: _CMU14/Structures/Machines/atm.rsi
-    state: atm
+    layers:
+    - state: atm
   - type: InteractionOutline
   - type: UserInterface
     interfaces:

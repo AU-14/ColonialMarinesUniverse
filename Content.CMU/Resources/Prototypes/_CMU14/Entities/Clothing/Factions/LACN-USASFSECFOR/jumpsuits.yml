@@ -5,7 +5,7 @@
   description: Standard-issue LACN landing forces fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/Uniforms/lacnuniform.rsi
+    sprite: _CMU14/Clothing/LACN/Uniforms/lacnuniform.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -14,7 +14,7 @@
   description: Standard-issue LACN landing forces fatigues with a warm overcoat. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/Uniforms/lacnuniformcoat.rsi
+    sprite: _CMU14/Clothing/LACN/Uniforms/lacnuniformcoat.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -23,7 +23,7 @@
   description: Standard-issue USASF SECFOR fatigues. They have shards of light Kevlar to help protect against stabbing weapons and bullets.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/USASFSecurityForces/uniform.rsi
+    sprite: _CMU14/Clothing/USASFSecurityForces/uniform.rsi
 
 - type: entity
   parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
@@ -32,4 +32,4 @@
   description: A standard LACN Aircrew Jumpsuit. It has shards of light Kevlar to help protect against shrapnel.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/PilotGear/uniform.rsi
+    sprite: _CMU14/Clothing/LACN/PilotGear/uniform.rsi

@@ -151521,7 +151521,7 @@ entities:
     - type: Transform
       pos: 92.5,22.5
       parent: 1
-- proto: CMEncryptionKeyWEYU
+- proto: CMEncryptionKeyWEYA
   entities:
   - uid: 59808
     components:
@@ -589569,7 +589569,7 @@ entities:
     - type: Transform
       pos: -112.1499,-12.426758
       parent: 1
-- proto: RMCWeaponShotgunHG3712
+- proto: RMCWeaponShotgunM12
   entities:
   - uid: 81661
     components:

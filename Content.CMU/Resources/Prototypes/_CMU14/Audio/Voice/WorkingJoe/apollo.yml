@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeApolloWillRequireADetailedReport
   name: emote-name-workingjoe-apollo-will-require-a-detailed-report
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeFacilityNowClearApolloInformed
   name: emote-name-workingjoe-facility-now-clear-apollo-informed
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeIAmRequiredByApolloAbortingSearch
   name: emote-name-workingjoe-i-am-required-by-apollo-aborting-search
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeIWillInformApolloOnYourBehalf
   name: emote-name-workingjoe-i-will-inform-apollo-on-your-behalf
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeIllHaveToReportThis
   name: emote-name-workingjoe-ill-have-to-report-this
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeLoggingReportToApollo
   name: emote-name-workingjoe-logging-report-to-apollo
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeServiceSupportTicketRemovedFromQueue
   name: emote-name-workingjoe-service-support-ticket-removed-from-queue
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeYouUnderstandIllHaveToReportYouForThis
   name: emote-name-workingjoe-you-understand-ill-have-to-report-you-for-this
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -113,7 +113,7 @@
 - type: emote
   id: WorkingJoeYourFailedSupportRequestHasBeenLoggedWithApollo
   name: emote-name-workingjoe-your-failed-support-request-has-been-logged-with-apollo
-  category: APOLLO
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

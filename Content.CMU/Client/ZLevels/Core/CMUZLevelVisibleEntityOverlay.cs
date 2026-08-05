@@ -37,7 +37,7 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
     private readonly EntityQuery<SpriteComponent> _spriteQuery;
     private readonly EntityQuery<TransformComponent> _xformQuery;
     private readonly HashSet<EntityUid> _candidates = new();
-    private readonly List<Vector2> _screenLabels = new();
+    private readonly CMUZLevelScreenLabelStore _screenLabels = new();
     private readonly Font _font;
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV | OverlaySpace.ScreenSpace;
@@ -64,28 +64,29 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
 
     protected override void Draw(in OverlayDrawArgs args)
     {
-        if (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
-            !_config.GetCVar(CMUZLevelsCVars.VisibleEntityIndicators))
-        {
-            return;
-        }
-
-        if (args.Viewport.Eye is not ScalingViewport.ZEye zEye ||
-            !zEye.DrawVisibleEntityIndicators)
-        {
-            return;
-        }
-
         if (args.Space == OverlaySpace.ScreenSpace)
         {
             DrawLabels(args);
             return;
         }
 
-        _screenLabels.Clear();
+        if (!_config.GetCVar(CMUZLevelsCVars.Enabled) ||
+            !_config.GetCVar(CMUZLevelsCVars.VisibleEntityIndicators))
+        {
+            _screenLabels.ClearViewport(args.Viewport.Id);
+            return;
+        }
+
+        if (args.Viewport.Eye is not ScalingViewport.ZEye zEye ||
+            !zEye.DrawVisibleEntityIndicators)
+        {
+            _screenLabels.ClearViewport(args.Viewport.Id);
+            return;
+        }
+
+        var screenLabels = _screenLabels.BeginWorldPass(args.Viewport.Id);
 
         if (_player.LocalEntity is not { } player ||
-            args.ViewportControl == null ||
             zEye.BaseMapId == MapId.Nullspace ||
             zEye.VisibleEntityIndicatorBounds.Count == 0)
         {
@@ -131,27 +132,31 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
             if (!_examine.InRangeUnOccluded(origin, targetOnBaseMap, 0f, null))
                 continue;
 
-            AddPlayerIndicator(player, zEye, args);
+            AddPlayerIndicator(player, zEye, args, screenLabels);
             return;
         }
     }
 
     private void DrawLabels(in OverlayDrawArgs args)
     {
-        if (_screenLabels.Count == 0)
-            return;
-
-        foreach (var screenPosition in _screenLabels)
+        foreach (var viewportPosition in _screenLabels.ConsumeScreenPass(args.Viewport.Id))
         {
+            var viewportScale = args.ViewportBounds.Size / (Vector2) args.Viewport.Size;
+            var screenPosition = args.ViewportBounds.TopLeft +
+                                 viewportPosition * viewportScale -
+                                 new Vector2(5f, 24f);
             args.ScreenHandle.DrawString(_font, screenPosition + Vector2.One, "!", Color.Black);
             args.ScreenHandle.DrawString(_font, screenPosition, "!", Color.Yellow);
         }
     }
 
-    private void AddPlayerIndicator(EntityUid player, ScalingViewport.ZEye zEye, in OverlayDrawArgs args)
+    private void AddPlayerIndicator(
+        EntityUid player,
+        ScalingViewport.ZEye zEye,
+        in OverlayDrawArgs args,
+        List<Vector2> screenLabels)
     {
-        if (args.ViewportControl == null ||
-            !_spriteQuery.TryComp(player, out var sprite) ||
+        if (!_spriteQuery.TryComp(player, out var sprite) ||
             !_xformQuery.TryComp(player, out var xform))
         {
             return;
@@ -162,9 +167,9 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
         var topCenter = new Vector2(worldPos.X + bounds.Center.X, worldPos.Y + bounds.Top + 0.25f);
         Angle rotation = zEye.Rotation * -1;
         var zPassOffset = rotation.ToWorldVec() * CMUClientZLevelsSystem.ZLevelOffset * zEye.Depth;
-        var screenPosition = args.ViewportControl.WorldToScreen(topCenter - zPassOffset) - new Vector2(5f, 24f);
+        var viewportPosition = args.Viewport.WorldToLocal(topCenter - zPassOffset);
 
-        _screenLabels.Add(screenPosition);
+        screenLabels.Add(viewportPosition);
     }
 
     private static bool IntersectsAnyOpening(Box2 bounds, IReadOnlyList<Box2> openings)
@@ -176,5 +181,51 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
         }
 
         return false;
+    }
+}
+
+internal sealed class CMUZLevelScreenLabelStore
+{
+    private static readonly IReadOnlyList<Vector2> Empty = Array.Empty<Vector2>();
+    private readonly Dictionary<long, Entry> _entries = new();
+
+    public List<Vector2> BeginWorldPass(long viewportId)
+    {
+        if (!_entries.TryGetValue(viewportId, out var entry))
+        {
+            entry = new Entry();
+            _entries.Add(viewportId, entry);
+        }
+
+        entry.Labels.Clear();
+        entry.Ready = true;
+        return entry.Labels;
+    }
+
+    public void ClearViewport(long viewportId)
+    {
+        if (!_entries.TryGetValue(viewportId, out var entry))
+            return;
+
+        entry.Labels.Clear();
+        entry.Ready = false;
+    }
+
+    public IReadOnlyList<Vector2> ConsumeScreenPass(long viewportId)
+    {
+        if (!_entries.TryGetValue(viewportId, out var entry) ||
+            !entry.Ready)
+        {
+            return Empty;
+        }
+
+        entry.Ready = false;
+        return entry.Labels;
+    }
+
+    private sealed class Entry
+    {
+        public readonly List<Vector2> Labels = new();
+        public bool Ready;
     }
 }

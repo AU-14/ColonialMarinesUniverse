@@ -7,6 +7,8 @@ using Robust.Shared.Enums;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using SysStopwatch = System.Diagnostics.Stopwatch;
 
 namespace Content.Client._CMU14.ZLevels.Core;
 
@@ -15,8 +17,11 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IEntityManager _entity = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private IGameTiming _timing = default!;
     private ShaderInstance? _blurShader;
     private const float MaxBlurStrength = 2.0f;
+
+    internal static BlurDebugStats LastBlurDebugStats { get; } = new();
 
     public override bool RequestScreenTexture => IsBlurEnabled();
     public override OverlaySpace Space => OverlaySpace.WorldSpace;
@@ -42,6 +47,7 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
         if (args.MapId == MapId.Nullspace)
             return false;
 
+        LastBlurDebugStats.NotePass(_timing.CurFrame);
         return true;
     }
 
@@ -53,12 +59,17 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
 
     private bool IsBlurEnabled()
     {
-        return _config.GetCVar(CMUZLevelsCVars.BlurEnabled) &&
-               _config.GetCVar(CMUZLevelsCVars.BlurStrength) > 0f;
+        return IsBlurEnabled(_config.GetCVar(CMUZLevelsCVars.BlurStrength));
+    }
+
+    internal static bool IsBlurEnabled(float strength)
+    {
+        return strength > 0f;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
     {
+        var drawStart = SysStopwatch.GetTimestamp();
         if (ScreenTexture == null || args.Viewport.Eye == null)
             return;
 
@@ -81,10 +92,42 @@ public sealed partial class CMUZLevelBlurOverlay : Overlay
         worldHandle.UseShader(blurShader);
         worldHandle.DrawRect(args.WorldBounds, Color.White);
         worldHandle.UseShader(null);
+        LastBlurDebugStats.NoteDraw(
+            _timing.CurFrame,
+            (SysStopwatch.GetTimestamp() - drawStart) * 1000d / SysStopwatch.Frequency);
     }
 
     private ShaderInstance GetBlurShader()
     {
         return _blurShader ??= _proto.Index(_zBlurShader).InstanceUnique();
+    }
+
+    internal sealed class BlurDebugStats
+    {
+        public uint Frame;
+        public int Passes;
+        public double DrawMs;
+
+        public void NotePass(uint frame)
+        {
+            ResetForFrame(frame);
+            Passes++;
+        }
+
+        public void NoteDraw(uint frame, double elapsedMs)
+        {
+            ResetForFrame(frame);
+            DrawMs += elapsedMs;
+        }
+
+        private void ResetForFrame(uint frame)
+        {
+            if (Frame == frame)
+                return;
+
+            Frame = frame;
+            Passes = 0;
+            DrawMs = 0d;
+        }
     }
 }

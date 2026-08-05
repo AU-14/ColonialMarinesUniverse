@@ -30254,14 +30254,20 @@ entities:
     components:
     - type: Transform
       parent: 378
+    - type: Action
+      container: 378
   - uid: 381
     components:
     - type: Transform
       parent: 380
+    - type: Action
+      container: 380
   - uid: 383
     components:
     - type: Transform
       parent: 382
+    - type: Action
+      container: 382
 - proto: AirAlarm
   entities:
   - uid: 384
@@ -58711,7 +58717,7 @@ entities:
     - type: Transform
       pos: -18.5,102.5
       parent: 1
-- proto: CMEncryptionKeyWEYU
+- proto: CMEncryptionKeyWEYA
   entities:
   - uid: 5617
     components:

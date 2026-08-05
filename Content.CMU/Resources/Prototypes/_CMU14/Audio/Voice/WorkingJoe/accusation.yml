@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeIHeardThat
   name: emote-name-workingjoe-i-heard-that
-  category: Accusation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeIKnowThatWasYou
   name: emote-name-workingjoe-i-know-that-was-you
-  category: Accusation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeISawThat
   name: emote-name-workingjoe-i-saw-that
-  category: Accusation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeIllAssumeThatDidntCombustAllOnItsOwn
   name: emote-name-workingjoe-ill-assume-that-didnt-combust-all-on-its-own
-  category: Accusation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeSomebodysMadeAMess
   name: emote-name-workingjoe-somebodys-made-a-mess
-  category: Accusation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

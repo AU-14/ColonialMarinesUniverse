@@ -89,6 +89,3 @@ emote-wendigo-we-cant-get-out = We cant get out!
 
 emote-name-wendigo-where-are-you = Where Are You
 emote-wendigo-where-are-you = Where are you?
-
-
-

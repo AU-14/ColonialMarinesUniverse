@@ -13,7 +13,7 @@
     bio: 10
     explosionArmor: 20
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/flakvest.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/flakvest.rsi
 
 - type: entity
   parent: CMUArmorProdigyFlakVest
@@ -22,7 +22,7 @@
   name: flak vest
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/flakvestlight.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/flakvestlight.rsi
 
 - type: entity
   parent: CMUArmorProdigyFlakVest
@@ -31,7 +31,7 @@
   name: medical flak vest
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/flakvestmedical.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/flakvestmedical.rsi
 
 - type: entity
   parent: CMArmorM4
@@ -47,7 +47,7 @@
   - type: Corrodible
     isCorrodible: false
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
   - type: Storage
     maxItemSize: Small
     grid:
@@ -67,11 +67,11 @@
     batteryDrain: 0
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
-      Desert: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
-      Snow: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
-      Classic: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
-      Urban: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
+      Jungle: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
+      Desert: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
+      Snow: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
+      Classic: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
+      Urban: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor1.rsi
   - type: RMCLoreExaminable
     content: au14-lore-examinable-armor-PRU-XAS-23-PBA-new
 
@@ -82,7 +82,7 @@
   description: Tougher than steel, quieter than whispers, the PRU-XAS-23-G Pattern Battle Armor provides capable protection for smart gunners, ditching the built in motion detector for SG rigs. When worn, uniform accessories such as webbing cannot be attached due to the gunner rig occupying the clips, although the expanded storage on the physical armor makes up for it. Due to its awkwardness and increased armor from the normal model it requires the clips on the Prodigy Response Unit uniform to wear.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
   - type: MotionDetector
     handToggleable: false
   #- type: ClothingSpeedModifier
@@ -94,11 +94,11 @@
   #  bullet: 40 # CLOTHING_ARMOR_ULTRAHIGH (bullets)
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
-      Desert: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
-      Snow: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
-      Classic: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
-      Urban: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
+      Jungle: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
+      Desert: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
+      Snow: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
+      Classic: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
+      Urban: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor3.rsi
 
 - type: entity
   parent: AU14ArmorProdigyXAS23
@@ -107,7 +107,7 @@
   description: Tougher than kevlar, quieter than whispers, the PRU-XAS-23-S Pattern Battle Armor provides capable protection for synthetics, combined with an experimental integrated motion trackers. When worn, uniform accessories such as webbing cannot be attached due to the motion detector occupying the clips, although the expanded storage on the physical armor makes up for it. Due to its awkwardness and lighter armor from the normal model it requires the clips on the Prodigy Response Unit uniform to wear.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
+    sprite: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
   #- type: ClothingSpeedModifier
   #  walkModifier: 1.2
   #  sprintModifier: 1.2
@@ -118,8 +118,8 @@
     explosionArmor: 0 # CLOTHING_ARMOR_NONE
   - type: ItemCamouflage
     camouflageVariations:
-      Jungle: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
-      Desert: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
-      Snow: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
-      Classic: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
-      Urban: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
+      Jungle: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
+      Desert: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
+      Snow: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
+      Classic: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi
+      Urban: _CMU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/PARTArmors/partarmor2.rsi

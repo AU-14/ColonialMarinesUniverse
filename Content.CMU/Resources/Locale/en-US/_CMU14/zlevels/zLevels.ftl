@@ -1,3 +1,69 @@
+ent-CMUActionZLevelUp = Move up
+    .desc = Move up one Z-level
+
+ent-CMUActionZLevelDown = Move down
+    .desc = Move down one Z-level
+
+ent-CMUActionToggleLookUp = Look up
+    .desc = You lift your head and look up at the sky.
+
+ent-CMUZLevelLadderBase = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThrough = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThroughDown = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThroughUp1 = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThroughDown1 = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThroughUp2 = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThroughDown2 = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThroughUp3 = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelLadderThroughDown3 = z-level ladder
+    .desc = A sturdy metal ladder that passes between Z-levels.
+
+ent-CMUZLevelRopeThroughUp = z-level rope
+    .desc = A climbable rope that passes between Z-levels.
+
+ent-CMUZLevelRopeThroughDown2 = z-level rope
+    .desc = A climbable rope that passes between Z-levels.
+
+ent-CMUZLevelHatchThroughDown = z-level hatch
+    .desc = A hatch entrance that passes between Z-levels.
+
+ent-CMUZLevelManholeThroughDown = z-level manhole entrance
+    .desc = A manhole entrance that passes between Z-levels.
+
+ent-CMUZLevelManholeCoveredThroughDown = z-level manhole entrance
+    .desc = A manhole entrance that passes between Z-levels.
+
+ent-CMUMultiZStairs = multi-Z stairs
+    .desc = A stairway that connects Z-levels.
+
+ent-CMUMultiZStairsNoPreview = multi-Z stairs
+    .desc = A stairway that connects Z-levels.
+
+ent-CMUMultiZStairsSolo = multi-Z stairs
+    .desc = A stairway that connects Z-levels.
+
+ent-CMUMultiZStairsKutjevoSolo = multi-Z stairs
+    .desc = A stairway that connects Z-levels.
+
+ent-CMUDeployableZLevelLadder = Deployable Ladder
+    .desc = A portable ladder that can be deployed through an open Z-level shaft.
+
 cmu-zlevel-falling-popup = {$name} falls from above.
 
 cmu-zlevel-look-up-fail = There is a ceiling above you. You cannot look up.
@@ -36,5 +102,23 @@ cmu-zlevel-ladder-unstable = The ladder wobbles without nearby support!
 cmu-zlevel-ladder-collapse = The unsupported ladder collapses back into its packed frame!
 cmu-zlevel-ladder-retract-no-hand = You need an empty hand to retract the ladder.
 cmu-zlevel-ladder-retract-finish = You retract the ladder.
+
 # AU14 (building overhaul): stage 1 of the look-up cycle (faint upper ghost).
 cmu-zlevel-faint-up-enabled = You glance upward, faintly making out the level above.
+
+tiles-cmu-multiz-destroyable-grate-1 = MultiZ Destroyable Grate 1
+tiles-cmu-multiz-destroyable-grate-2 = MultiZ Destroyable Grate 2
+tiles-cmu-multiz-destroyable-grate-3 = MultiZ Destroyable Grate 3
+tiles-cmu-multiz-destroyable-grate-4 = MultiZ Destroyable Grate 4
+tiles-cmu-multiz-destroyable-grate-5 = MultiZ Destroyable Grate 5
+tiles-cmu-multiz-destroyable-grate-6 = MultiZ Destroyable Grate 6
+tiles-cmu-multiz-destroyable-half-grate-1 = MultiZ Destroyable Half Grate 1
+tiles-cmu-multiz-destroyable-half-grate-2 = MultiZ Destroyable Half Grate 2
+tiles-cmu-multiz-destroyable-half-grate-3 = MultiZ Destroyable Half Grate 3
+tiles-cmu-multiz-destroyable-half-grate-4 = MultiZ Destroyable Half Grate 4
+tiles-cmu-multiz-indestructible-grate-1 = MultiZ Indestructible Grate 1
+tiles-cmu-multiz-indestructible-grate-2 = MultiZ Indestructible Grate 2
+tiles-cmu-multiz-indestructible-grate-3 = MultiZ Indestructible Grate 3
+tiles-cmu-multiz-indestructible-grate-4 = MultiZ Indestructible Grate 4
+tiles-cmu-multiz-indestructible-grate-5 = MultiZ Indestructible Grate 5
+tiles-cmu-multiz-indestructible-grate-6 = MultiZ Indestructible Grate 6

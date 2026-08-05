@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeAWildGooseChaseAsSuspected
   name: emote-name-workingjoe-a-wild-goose-chase-as-suspected
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeAsIThoughtUnfortunate
   name: emote-name-workingjoe-as-i-thought-unfortunate
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeCleanUpRequired
   name: emote-name-workingjoe-clean-up-required
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeFarBeyondRepair
   name: emote-name-workingjoe-far-beyond-repair
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeThere
   name: emote-name-workingjoe-there
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeThisCouldRequireMyAttention
   name: emote-name-workingjoe-this-could-require-my-attention
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeThisIsGoingToBeAProblem
   name: emote-name-workingjoe-this-is-going-to-be-a-problem
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeUnexplainedDisturbancesAreMostTroubling
   name: emote-name-workingjoe-unexplained-disturbances-are-most-troubling
-  category: Statement
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

@@ -17,4 +17,3 @@ clf-tattoo-recruit-briefing =
     (note betraying the CLF is considered a rule violation. (Infighting/Mutiny excluded with good RP reasons.)
 roles-antag-clf-recruit-name = CLF Recruit
 roles-antag-clf-recruit-objective = You have been recruited to the CLF cause. Support your fellow CLF members and help liberate the colony.
-

@@ -35,7 +35,6 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     [Dependency] private readonly IOverlayManager _overlays = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
     [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IClientAdminManager _admin = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
@@ -167,7 +166,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     public MapCoordinates GetTargetMap()
     {
         var cursor = _eye.PixelToMap(_input.MouseScreenPosition);
-        if (GridAligned && _mapManager.TryFindGridAt(cursor, out var gridUid, out var grid))
+        if (GridAligned && _mapSystem.TryFindGridAt(cursor, out var gridUid, out var grid))
         {
             var tile = _mapSystem.CoordinatesToTile(gridUid, grid, cursor);
             return _mapSystem.GridTileToWorld(gridUid, grid, tile);
@@ -183,8 +182,8 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         if (zOffset == 0)
             return true;
 
-        var mapUid = _mapManager.GetMapEntityId(target.MapId);
-        if (!mapUid.Valid || !_zLevels.TryMapOffset(mapUid, zOffset, out _, out var mapComp))
+        if (!_mapSystem.TryGetMap(target.MapId, out var mapUid) ||
+            !_zLevels.TryMapOffset(mapUid.Value, zOffset, out _, out var mapComp))
             return false;
 
         levelTarget = new MapCoordinates(target.Position, mapComp.MapId);
@@ -226,7 +225,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
 
     private void PlaceInstant(MapCoordinates target)
     {
-        if (!_mapManager.TryFindGridAt(target, out var gridUid, out _))
+        if (!_mapSystem.TryFindGridAt(target, out var gridUid, out _))
             return;
 
         // The build file is LOCAL: upload its YAML for the server to load (admin-gated server-side).
@@ -296,13 +295,12 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     /// </summary>
     private bool TryGetPlacementGrid(MapCoordinates coords, out EntityUid gridUid)
     {
-        if (_mapManager.TryFindGridAt(coords, out gridUid, out _))
+        if (_mapSystem.TryFindGridAt(coords, out gridUid, out _))
             return true;
 
-        var mapUid = _mapManager.GetMapEntityId(coords.MapId);
-        if (mapUid.Valid && HasComp<MapGridComponent>(mapUid))
+        if (_mapSystem.TryGetMap(coords.MapId, out var mapUid) && HasComp<MapGridComponent>(mapUid.Value))
         {
-            gridUid = mapUid;
+            gridUid = mapUid.Value;
             return true;
         }
 

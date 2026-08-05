@@ -1474,7 +1474,7 @@ entities:
     - type: Transform
       pos: 15.514484,200.5232
       parent: 2
-    - type: OnUseTimerTrigger
+    - type: TimerTrigger
       delay: 4
 - proto: AU14LargeTruckArmoredWYBlack
   entities:

@@ -14,9 +14,7 @@ internal static class ZLevelCrosshairIndicatorHelper
         if (shootDown)
             return ZLevelCrosshairIndicator.Down;
 
-        return shootUp
-            ? ZLevelCrosshairIndicator.Up
-            : ZLevelCrosshairIndicator.None;
+        return shootUp ? ZLevelCrosshairIndicator.Up : ZLevelCrosshairIndicator.None;
     }
 
     public static string? GetGlyph(ZLevelCrosshairIndicator indicator)

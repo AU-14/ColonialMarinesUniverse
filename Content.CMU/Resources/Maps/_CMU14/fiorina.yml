@@ -153,7 +153,6 @@ entities:
     - type: GridTree
     - type: Broadphase
     - type: OccluderTree
-    - type: Almayer
     - type: MapGrid
       chunks:
         0,0:
@@ -1662,7 +1661,7 @@ entities:
         chunkSize: 4
     - type: GasTileOverlay
     - type: BecomesStation
-      id: Almayer
+      id: fiorina
     - type: RadiationGridResistance
     - type: FootstepModifier
       footstepSoundCollection: !type:SoundCollectionSpecifier

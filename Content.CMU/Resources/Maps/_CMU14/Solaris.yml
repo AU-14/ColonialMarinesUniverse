@@ -115023,7 +115023,7 @@ entities:
     - type: Transform
       pos: 244.5,-248.5
       parent: 1
-- proto: CMEncryptionKeyWEYU
+- proto: CMEncryptionKeyWEYA
   entities:
   - uid: 1327
     components:
@@ -410258,20 +410258,6 @@ entities:
     components:
     - type: Transform
       pos: 125.5,-124.5
-      parent: 1
-- proto: TowelColorDarkBlue
-  entities:
-  - uid: 55126
-    components:
-    - type: Transform
-      pos: 122.5,-125.5
-      parent: 1
-- proto: TowelColorDarkGreen
-  entities:
-  - uid: 55127
-    components:
-    - type: Transform
-      pos: 121.5,-121.5
       parent: 1
 - proto: ToyFigurineClown
   entities:

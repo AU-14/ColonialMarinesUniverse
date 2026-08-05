@@ -9,5 +9,3 @@ goo-permadeath = This time, you're dead for real.
 
 goo-infection-warning = Something is wrong, you feel hot and you're sweating profusely
 goo-infection-underway = You feel at one with the universe
-
-

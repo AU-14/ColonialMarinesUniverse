@@ -28,7 +28,6 @@ public sealed class BuildSaveOverlay : Overlay
 
     private readonly BuildSaveModeSystem _mode;
     private readonly IPlayerManager _player;
-    private readonly IMapManager _mapManager;
     private readonly SharedMapSystem _mapSystem;
     private readonly SharedTransformSystem _transform;
     private readonly IEntityManager _entMan;
@@ -36,14 +35,12 @@ public sealed class BuildSaveOverlay : Overlay
     public BuildSaveOverlay(
         BuildSaveModeSystem mode,
         IPlayerManager player,
-        IMapManager mapManager,
         SharedMapSystem mapSystem,
         SharedTransformSystem transform,
         IEntityManager entMan)
     {
         _mode = mode;
         _player = player;
-        _mapManager = mapManager;
         _mapSystem = mapSystem;
         _transform = transform;
         _entMan = entMan;
@@ -128,7 +125,7 @@ public sealed class BuildSaveOverlay : Overlay
     /// <summary>Draws a square outline (size 2*radius+1 tiles) centred on the tile under <paramref name="center"/>.</summary>
     private void DrawBox(DrawingHandleWorld handle, MapCoordinates center, int radius, Color color)
     {
-        if (!_mapManager.TryFindGridAt(center, out var gridUid, out var grid))
+        if (!_mapSystem.TryFindGridAt(center, out var gridUid, out var grid))
         {
             // Off-grid: fall back to a plain world-space square around the point.
             var half = radius + 0.5f;

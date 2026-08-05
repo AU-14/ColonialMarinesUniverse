@@ -35,7 +35,7 @@
       - LightReplacer
       - EntrenchingTool
   - type: Sprite
-    sprite: _AU14/Clothing/RMC/belt/combat_utility.rsi
+    sprite: _CMU14/Clothing/RMC/belt/combat_utility.rsi
     layers:
     - state: icon
     - sprite: _RMC14/Objects/Weapons/Guns/gun_underlays.rsi
@@ -43,14 +43,14 @@
       offset: -0.3125, -0.09375
       map: [ "enum.CMHolsterLayers.Fill" ]
       visible: false
-    - sprite: _AU14/Clothing/RMC/belt/combat_utility.rsi
+    - sprite: _CMU14/Clothing/RMC/belt/combat_utility.rsi
       state: icon-front
     - state: half
       map: [ "openLayer" ]
     - state: full
       map: [ "closedLayer" ]
   - type: Clothing
-    sprite: _AU14/Clothing/RMC/belt/combat_utility.rsi
+    sprite: _CMU14/Clothing/RMC/belt/combat_utility.rsi
 
 - type: entity
   parent: AU14BeltUtilityCombatRMC

@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeCoreDutiesHaveBeenNeglectedForNoGain
   name: emote-name-workingjoe-core-duties-have-been-neglected-for-no-gain
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeDontDoThat
   name: emote-name-workingjoe-dont-do-that
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeEnough
   name: emote-name-workingjoe-enough
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeGoneHowInconsiderate
   name: emote-name-workingjoe-gone-how-inconsiderate
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeIDontUnderstandWhatYouAreDoing
   name: emote-name-workingjoe-i-dont-understand-what-you-are-doing
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeIWishYouHadntDoneThat
   name: emote-name-workingjoe-i-wish-you-hadnt-done-that
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeInadvisable
   name: emote-name-workingjoe-inadvisable
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeNoNo
   name: emote-name-workingjoe-no-no
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -113,7 +113,7 @@
 - type: emote
   id: WorkingJoeOnTopOfInnumerableDutiesNowIHaveAnInterloper
   name: emote-name-workingjoe-on-top-of-innumerable-duties-now-i-have-an-interloper
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -127,7 +127,7 @@
 - type: emote
   id: WorkingJoePleaseStopThis
   name: emote-name-workingjoe-please-stop-this
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -141,7 +141,7 @@
 - type: emote
   id: WorkingJoeSoTiresome
   name: emote-name-workingjoe-so-tiresome
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -155,7 +155,7 @@
 - type: emote
   id: WorkingJoeStopThat
   name: emote-name-workingjoe-stop-that
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -169,7 +169,7 @@
 - type: emote
   id: WorkingJoeThatWasAMistake
   name: emote-name-workingjoe-that-was-a-mistake
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -183,7 +183,7 @@
 - type: emote
   id: WorkingJoeThatWasIrresponsible
   name: emote-name-workingjoe-that-was-irresponsible
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -197,7 +197,7 @@
 - type: emote
   id: WorkingJoeTheresNoNeedForThis
   name: emote-name-workingjoe-theres-no-need-for-this
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -211,7 +211,7 @@
 - type: emote
   id: WorkingJoeThisIsImpingingOnMySchedule
   name: emote-name-workingjoe-this-is-impinging-on-my-schedule
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -225,7 +225,7 @@
 - type: emote
   id: WorkingJoeThisIsntNecessary
   name: emote-name-workingjoe-this-isnt-necessary
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -239,7 +239,7 @@
 - type: emote
   id: WorkingJoeThisIsntRight
   name: emote-name-workingjoe-this-isnt-right
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -253,7 +253,7 @@
 - type: emote
   id: WorkingJoeThisIsntTheAnswer
   name: emote-name-workingjoe-this-isnt-the-answer
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -267,7 +267,7 @@
 - type: emote
   id: WorkingJoeThisReallyWontDo
   name: emote-name-workingjoe-this-really-wont-do
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -281,7 +281,7 @@
 - type: emote
   id: WorkingJoeThisWontDo
   name: emote-name-workingjoe-this-wont-do
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -295,7 +295,7 @@
 - type: emote
   id: WorkingJoeUnwarranted
   name: emote-name-workingjoe-unwarranted
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -309,7 +309,7 @@
 - type: emote
   id: WorkingJoeVeryIrresponsible
   name: emote-name-workingjoe-very-irresponsible
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -323,7 +323,7 @@
 - type: emote
   id: WorkingJoeYoullHaveToTakeResponsibilityForThat
   name: emote-name-workingjoe-youll-have-to-take-responsibility-for-that
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -337,7 +337,7 @@
 - type: emote
   id: WorkingJoeYoureGettingCareless
   name: emote-name-workingjoe-youre-getting-careless
-  category: Negative
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

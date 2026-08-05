@@ -6,9 +6,9 @@
   description: A windbreaker made for CMB deputies.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/CMB/cmbdeputywindbreaker.rsi
+    sprite: _CMU14/Clothing/CMB/cmbdeputywindbreaker.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/CMB/cmbdeputywindbreaker.rsi
+    sprite: _CMU14/Clothing/CMB/cmbdeputywindbreaker.rsi
 
 - type: entity
   parent: [RMCAllowSuitStorageClothingHazardVest, RMCBaseJacket]
@@ -17,6 +17,6 @@
   description: A windbreaker made for CMB marshals.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/CMB/cmbmarshalwindbreaker.rsi
+    sprite: _CMU14/Clothing/CMB/cmbmarshalwindbreaker.rsi
   - type: Clothing
-    sprite: _AU14/Clothing/CMB/cmbmarshalwindbreaker.rsi
+    sprite: _CMU14/Clothing/CMB/cmbmarshalwindbreaker.rsi

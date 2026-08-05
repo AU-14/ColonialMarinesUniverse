@@ -5,4 +5,4 @@
   description: A set of CMB Crisis Intervention Unit armor.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/uacgarmor.rsi
+    sprite: _CMU14/Clothing/uacgarmor.rsi

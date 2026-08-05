@@ -85258,7 +85258,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 182.5,-42.5
       parent: 1
-- proto: CMEncryptionKeyWEYUColony
+- proto: CMEncryptionKeyWEYAColony
   entities:
   - uid: 2024
     components:
@@ -117070,46 +117070,6 @@ entities:
     - type: Transform
       pos: 255.7445,-155.43619
       parent: 1
-- proto: GhostWarpPoint
-  entities:
-  - uid: 7678
-    components:
-    - type: MetaData
-      name: Mining Camp
-    - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 1.5,-128.5
-      parent: 1
-    - type: WarpPoint
-      location: Mining Camp
-  - uid: 7679
-    components:
-    - type: MetaData
-      name: LZ2 - Corporate Car Park
-    - type: Transform
-      pos: 284.5,-149.5
-      parent: 1
-  - uid: 7680
-    components:
-    - type: Transform
-      pos: 150.5,-146.5
-      parent: 1
-    - type: WarpPoint
-      location: United American Embassy
-  - uid: 7681
-    components:
-    - type: Transform
-      pos: 237.5,-49.5
-      parent: 1
-    - type: WarpPoint
-      location: Administration Office
-  - uid: 7682
-    components:
-    - type: Transform
-      pos: 0.5,0.5
-      parent: 1
-    - type: WarpPoint
-      location: Creator's Rotunda
 - proto: killcelleaderobjective
   entities:
   - uid: 7683
@@ -338329,7 +338289,7 @@ entities:
           endTime: 19475.880581
           startTime: 19566.9137664
           length: 0.4
-- proto: RMCWeaponShotgunHG3712
+- proto: RMCWeaponShotgunM12
   entities:
   - uid: 8914
     components:
@@ -342371,25 +342331,6 @@ entities:
     components:
     - type: Transform
       pos: 17.322952,-36.244286
-      parent: 1
-- proto: TowelColorDarkBlue
-  entities:
-  - uid: 49117
-    components:
-    - type: Transform
-      pos: 171.33789,-94.59151
-      parent: 1
-  - uid: 49118
-    components:
-    - type: Transform
-      pos: 177.6431,-94.852104
-      parent: 1
-- proto: TowelColorDarkGreen
-  entities:
-  - uid: 49119
-    components:
-    - type: Transform
-      pos: 186.70757,-94.24752
       parent: 1
 - proto: TowelColorWhite
   entities:

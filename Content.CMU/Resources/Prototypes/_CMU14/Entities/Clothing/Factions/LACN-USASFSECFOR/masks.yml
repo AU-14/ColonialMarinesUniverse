@@ -5,7 +5,7 @@
   description: A mask attached to LACN LAH-99 helmets to provide aircrew with breathable oxygen.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/LACN/PilotGear/mask.rsi
+    sprite: _CMU14/Clothing/LACN/PilotGear/mask.rsi
     layers:
     - state: icon
       map: [ "unfoldedLayer" ]
@@ -19,7 +19,7 @@
     - HeadSide
     - Snout
   - type: Clothing
-    sprite: _AU14/Clothing/LACN/PilotGear/mask.rsi
+    sprite: _CMU14/Clothing/LACN/PilotGear/mask.rsi
   - type: BreathMask
   - type: IdentityBlocker
     coverage: MOUTH

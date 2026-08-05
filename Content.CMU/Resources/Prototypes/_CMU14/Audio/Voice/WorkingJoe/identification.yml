@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeDidThatBelongToYou
   name: emote-name-workingjoe-did-that-belong-to-you
-  category: Identification
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeDoesThisBelongToYou
   name: emote-name-workingjoe-does-this-belong-to-you
-  category: Identification
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeIsAnybodyThere
   name: emote-name-workingjoe-is-anybody-there
-  category: Identification
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeIsSomeoneThere
   name: emote-name-workingjoe-is-someone-there
-  category: Identification
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeWhatAreYou
   name: emote-name-workingjoe-what-are-you
-  category: Identification
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeWhosThere
   name: emote-name-workingjoe-whos-there
-  category: Identification
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

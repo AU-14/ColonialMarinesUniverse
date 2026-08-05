@@ -18,7 +18,7 @@
   description: cmu-reagent-property-desc-hypoxemic
   rarity: common
   value: -1
-  
+
 - type: reagentProperty
   id: Toxic
   parent: Negative
@@ -760,7 +760,7 @@
   name: cmu-reagent-property-name-antiaddictive
   description: cmu-reagent-property-desc-antiaddictive
   code: AAD
-  rarity: rare 
+  rarity: rare
   category: stimulant
   effectName: Antiaddictive
 

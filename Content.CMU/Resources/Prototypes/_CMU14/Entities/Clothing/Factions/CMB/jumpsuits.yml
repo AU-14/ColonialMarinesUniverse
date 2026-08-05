@@ -5,4 +5,4 @@
   description: The uniform of the Colonial Marshal Bureau.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/CMB/cmbmarshal.rsi
+    sprite: _CMU14/Clothing/CMB/cmbmarshal.rsi

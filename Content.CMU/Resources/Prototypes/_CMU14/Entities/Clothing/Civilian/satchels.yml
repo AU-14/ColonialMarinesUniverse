@@ -5,7 +5,7 @@
   description: A very sturdy satchel. This one has a sling strap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Civilian/Satchel/blueslingsatchel.rsi
+    sprite: _CMU14/Clothing/Civilian/Satchel/blueslingsatchel.rsi
   - type: Storage
     grid:
     - 0,0,14,1 # 15
@@ -21,7 +21,7 @@
   description: A very sturdy satchel. This one has a sling strap.
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Civilian/Satchel/blackslingsatchel.rsi
+    sprite: _CMU14/Clothing/Civilian/Satchel/blackslingsatchel.rsi
   - type: Storage
     grid:
     - 0,0,14,1 # 15

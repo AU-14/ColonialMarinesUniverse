@@ -8,12 +8,12 @@ public sealed class CrtStyleBox : StyleBox
 {
     public Color BackgroundColor { get; set; }
     public Color BorderColor { get; set; }
-    public Color ScanlineColor { get; set; } = StyleNano.CrtGreen.WithAlpha(0.018f);
-    public Color GridColor { get; set; } = StyleNano.CrtGreen.WithAlpha(0.018f);
-    public Color NoiseColor { get; set; } = StyleNano.CrtGreenSoft.WithAlpha(0.045f);
-    public Color CornerColor { get; set; } = StyleNano.CrtGreen.WithAlpha(0.55f);
-    public Color PixelationColor { get; set; } = StyleNano.CrtGreen.WithAlpha(0.04f);
-    public Color PixelationShadowColor { get; set; } = StyleNano.CrtButtonBackground.WithAlpha(0.18f);
+    public Color ScanlineColor { get; set; } = CrtThemePalette.Accent.WithAlpha(0.018f);
+    public Color GridColor { get; set; } = CrtThemePalette.Accent.WithAlpha(0.018f);
+    public Color NoiseColor { get; set; } = CrtThemePalette.AccentSoft.WithAlpha(0.045f);
+    public Color CornerColor { get; set; } = CrtThemePalette.Accent.WithAlpha(0.55f);
+    public Color PixelationColor { get; set; } = CrtThemePalette.Accent.WithAlpha(0.04f);
+    public Color PixelationShadowColor { get; set; } = CrtThemePalette.ButtonBackground.WithAlpha(0.18f);
 
     public Thickness BorderThickness { get; set; }
     public bool DrawScanlines { get; set; } = true;

@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeAPotentialHazard
   name: emote-name-workingjoe-a-potential-hazard
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeAlarmActivatedInvestigationCommencing
   name: emote-name-workingjoe-alarm-activated-investigation-commencing
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeAlarmDetectedAreaWillBeExamined
   name: emote-name-workingjoe-alarm-detected-area-will-be-examined
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeEnergySurgeDetected
   name: emote-name-workingjoe-energy-surge-detected
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeFireDrill
   name: emote-name-workingjoe-fire-drill
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeHazardContainmentBreachLogged
   name: emote-name-workingjoe-hazard-containment-breach-logged
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoeLevelOmegaPermissions
   name: emote-name-workingjoe-level-omega-permissions
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeNoLaughingMatter
   name: emote-name-workingjoe-no-laughing-matter
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -113,7 +113,7 @@
 - type: emote
   id: WorkingJoeProtectedAreaCompromised
   name: emote-name-workingjoe-protected-area-compromised
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -127,7 +127,7 @@
 - type: emote
   id: WorkingJoeSafetyLogUpdated
   name: emote-name-workingjoe-safety-log-updated
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -141,7 +141,7 @@
 - type: emote
   id: WorkingJoeSeegsonEmergencyAlarmProtocolBetaInOperation
   name: emote-name-workingjoe-seegson-emergency-alarm-protocol-beta-in-operation
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -155,7 +155,7 @@
 - type: emote
   id: WorkingJoeThatIsntAuthorizedInThisFacility
   name: emote-name-workingjoe-that-isnt-authorized-in-this-facility
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -169,7 +169,7 @@
 - type: emote
   id: WorkingJoeThisAreaIsRestricted
   name: emote-name-workingjoe-this-area-is-restricted
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -183,7 +183,7 @@
 - type: emote
   id: WorkingJoeThisIsABreachOfMultipleSafetyDirectives
   name: emote-name-workingjoe-this-is-a-breach-of-multiple-safety-directives
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -197,7 +197,7 @@
 - type: emote
   id: WorkingJoeThisIsASafetyBreachAndWillNotBeTolerated
   name: emote-name-workingjoe-this-is-a-safety-breach-and-will-not-be-tolerated
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -211,7 +211,7 @@
 - type: emote
   id: WorkingJoeTodaysHazardContainmentAlertCurrentlyStandsAtOmega
   name: emote-name-workingjoe-todays-hazard-containment-alert-currently-stands-at-omega
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -225,7 +225,7 @@
 - type: emote
   id: WorkingJoeWeAreExperiencingAHeightenedContainmentHazardLevelToday
   name: emote-name-workingjoe-we-are-experiencing-a-heightened-containment-hazard-level-today
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -239,7 +239,7 @@
 - type: emote
   id: WorkingJoeYouAreNotAllowedInThere
   name: emote-name-workingjoe-you-are-not-allowed-in-there
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -253,7 +253,7 @@
 - type: emote
   id: WorkingJoeYouAreTrespassing
   name: emote-name-workingjoe-you-are-trespassing
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -267,7 +267,7 @@
 - type: emote
   id: WorkingJoeYouReallyShouldntBeHere
   name: emote-name-workingjoe-you-really-shouldnt-be-here
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -281,7 +281,7 @@
 - type: emote
   id: WorkingJoeYoureNotAllowedInThere
   name: emote-name-workingjoe-youre-not-allowed-in-there
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -295,7 +295,7 @@
 - type: emote
   id: WorkingJoeYourPresenceHasBeenLogged
   name: emote-name-workingjoe-your-presence-has-been-logged
-  category: Alert
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:

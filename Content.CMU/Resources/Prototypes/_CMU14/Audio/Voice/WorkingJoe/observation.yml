@@ -1,7 +1,7 @@
 - type: emote
   id: WorkingJoeADisturbance
   name: emote-name-workingjoe-a-disturbance
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -15,7 +15,7 @@
 - type: emote
   id: WorkingJoeAnUnauthorizedUseOfLightingEquipment
   name: emote-name-workingjoe-an-unauthorized-use-of-lighting-equipment
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -29,7 +29,7 @@
 - type: emote
   id: WorkingJoeAnotherProblem
   name: emote-name-workingjoe-another-problem
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -43,7 +43,7 @@
 - type: emote
   id: WorkingJoeCurious
   name: emote-name-workingjoe-curious
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -57,7 +57,7 @@
 - type: emote
   id: WorkingJoeHmm
   name: emote-name-workingjoe-hmm
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -71,7 +71,7 @@
 - type: emote
   id: WorkingJoeOutOfPlace
   name: emote-name-workingjoe-out-of-place
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -85,7 +85,7 @@
 - type: emote
   id: WorkingJoePyrotechnicLightingIShouldInvestigate
   name: emote-name-workingjoe-pyrotechnic-lighting-i-should-investigate
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -99,7 +99,7 @@
 - type: emote
   id: WorkingJoeSomeonesBeenHere
   name: emote-name-workingjoe-someones-been-here
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -113,7 +113,7 @@
 - type: emote
   id: WorkingJoeSomethingAmiss
   name: emote-name-workingjoe-something-amiss
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -127,7 +127,7 @@
 - type: emote
   id: WorkingJoeStrange
   name: emote-name-workingjoe-strange
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -141,7 +141,7 @@
 - type: emote
   id: WorkingJoeThatsOdd
   name: emote-name-workingjoe-thats-odd
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -155,7 +155,7 @@
 - type: emote
   id: WorkingJoeTheresStillSomethingAmissHere
   name: emote-name-workingjoe-theres-still-something-amiss-here
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -169,7 +169,7 @@
 - type: emote
   id: WorkingJoeThisDoesntUsuallyHappen
   name: emote-name-workingjoe-this-doesnt-usually-happen
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -183,7 +183,7 @@
 - type: emote
   id: WorkingJoeThisSeemsSomewhatIrregular
   name: emote-name-workingjoe-this-seems-somewhat-irregular
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -197,7 +197,7 @@
 - type: emote
   id: WorkingJoeThisShouldntBeHere
   name: emote-name-workingjoe-this-shouldnt-be-here
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -211,7 +211,7 @@
 - type: emote
   id: WorkingJoeUnidentifiedSpecies
   name: emote-name-workingjoe-unidentified-species
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
@@ -225,7 +225,7 @@
 - type: emote
   id: WorkingJoeWhatAnAwfulMess
   name: emote-name-workingjoe-what-an-awful-mess
-  category: Observation
+  category: Vocal
   icon: Interface/Emotes/scream.png
   available: false
   chatMessages:
