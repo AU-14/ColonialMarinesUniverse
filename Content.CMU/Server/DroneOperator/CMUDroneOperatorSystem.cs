@@ -25,6 +25,7 @@ using Content.Shared.Dataset;
 using Content.Shared.DoAfter;
 using Content.Shared.Chat;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;

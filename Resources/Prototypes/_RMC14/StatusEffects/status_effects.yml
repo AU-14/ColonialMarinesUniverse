@@ -15,6 +15,11 @@
   id: Unconscious
   alert: RMCUnconscious
 
+- type: entity
+  parent: MutedStatusEffectBase
+  id: RMCStatusEffectUnconsciousMuted
+  name: unconscious mute
+
 - type: statusEffect
   id: RMCMuted
   alwaysAllowed: true

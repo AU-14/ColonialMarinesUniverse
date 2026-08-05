@@ -25,6 +25,7 @@ using Content.Shared.Doors.Components;
 using Content.Shared.DragDrop;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;

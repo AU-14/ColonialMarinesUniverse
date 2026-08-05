@@ -79,7 +79,7 @@ public sealed class RMCVehicleMoverPrototypeTest : GameTest
             Assert.That(playerManager.SetAttachedEntity(session, driver), Is.True);
 
             var vehicle = SEntMan.GetComponent<VehicleComponent>(tank);
-            var vehicleSystem = SEntMan.System<Content.Shared.Vehicle.VehicleSystem>();
+            var vehicleSystem = SEntMan.System<Content.Shared.Vehicle.Systems.VehicleSystem>();
             Assert.That(vehicleSystem.TrySetOperator((tank, vehicle), driver), Is.True);
         });
 
@@ -112,7 +112,7 @@ public sealed class RMCVehicleMoverPrototypeTest : GameTest
             vehicleUid = SEntMan.SpawnEntity(Janicart, map.GridCoords);
 
             var vehicle = SEntMan.GetComponent<VehicleComponent>(vehicleUid);
-            var vehicleSystem = SEntMan.System<Content.Shared.Vehicle.VehicleSystem>();
+            var vehicleSystem = SEntMan.System<Content.Shared.Vehicle.Systems.VehicleSystem>();
             Assert.That(vehicle.MovementKind, Is.EqualTo(VehicleMovementKind.Standard));
             Assert.That(vehicleSystem.TrySetOperator((vehicleUid, vehicle), driver), Is.True);
         });

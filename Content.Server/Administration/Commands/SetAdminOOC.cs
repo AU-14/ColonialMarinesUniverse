@@ -28,7 +28,7 @@ namespace Content.Server.Administration.Commands
             if (string.IsNullOrEmpty(colorArg))
                 return;
 
-            if (Color.TryFromHex(colorArg) is not { } color)
+            if (!Color.TryFromHex(colorArg, out var color))
             {
                 shell.WriteError(Loc.GetString("shell-invalid-color-hex"));
                 return;

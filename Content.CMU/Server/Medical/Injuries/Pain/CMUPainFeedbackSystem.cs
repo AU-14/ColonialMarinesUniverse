@@ -1,5 +1,4 @@
 using Content.Shared._CMU14.Medical.Core;
-using Content.Server.Speech.Components;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared._CMU14.Medical.Injuries.Vision;
@@ -11,6 +10,7 @@ using Content.Shared.Drunk;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
+using Content.Shared.Speech.Components;
 using Content.Shared.StatusEffect;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;

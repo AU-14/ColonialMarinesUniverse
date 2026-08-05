@@ -1,9 +1,10 @@
 using Content.Server.Zombies;
-using Content.Server.Speech.Components;
 using Content.Server.Ghost.Roles.Components;
+using Content.Shared.Speech.Components;
 using Content.Shared.Zombies;
 using Content.Shared.NPC.Systems;
 using Content.Shared.NPC.Prototypes;
+using Content.Shared.Speech.EntitySystems;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared._RMC14.Marines.Orders;
 using Content.Shared._RMC14.Weapons.Ranged.Whitelist;
@@ -17,6 +18,7 @@ public sealed partial class RMCZombieSystem : EntitySystem
     private static readonly ProtoId<NpcFactionPrototype> DumbFaction = "RMCDumb";
 
     [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private ReplacementAccentSystem _replacementAccent = default!;
     public override void Initialize()
     {
         base.Initialize();
@@ -67,6 +69,6 @@ public sealed partial class RMCZombieSystem : EntitySystem
         if (TryComp<ZombieAccentOverrideComponent>(target, out var accent))
             accentType = accent.Accent;
 
-        EnsureComp<ReplacementAccentComponent>(target).Accent = accentType;
+        _replacementAccent.ApplyAccent(target, accentType);
     }
 }

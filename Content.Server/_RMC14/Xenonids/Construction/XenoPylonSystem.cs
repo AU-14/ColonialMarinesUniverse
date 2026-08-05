@@ -1,7 +1,6 @@
 using Content.Server._RMC14.Damage;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
-using Content.Server.Ghost.Roles.Events;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction;
@@ -13,6 +12,7 @@ using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
+using Content.Shared.Ghost;
 using Content.Shared.Ghost.Roles.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;

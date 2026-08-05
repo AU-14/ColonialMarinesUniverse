@@ -29,7 +29,7 @@ public sealed class RMCVehicleDriverMovementTest : MovementTest
 
         await Server.WaitAssertion(() =>
         {
-            var vehicles = SEntMan.System<Content.Shared.Vehicle.VehicleSystem>();
+            var vehicles = SEntMan.System<Content.Shared.Vehicle.Systems.VehicleSystem>();
             var vehicle = SEntMan.GetComponent<VehicleComponent>(tank);
 
             Assert.That(SEntMan.GetComponent<BuckleComponent>(SPlayer).Buckled, Is.True);

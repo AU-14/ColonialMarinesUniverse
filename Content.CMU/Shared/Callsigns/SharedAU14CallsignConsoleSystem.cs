@@ -1,5 +1,6 @@
 using Content.Shared.Administration.Managers;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Content.Shared.UserInterface;
 using Content.Shared._CMU14.Threats.Mobs.CLF;

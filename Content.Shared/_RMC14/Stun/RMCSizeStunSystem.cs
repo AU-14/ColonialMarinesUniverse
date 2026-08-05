@@ -11,7 +11,6 @@ using Content.Shared.Flash;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
-using Content.Shared.Speech.Muting;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
@@ -26,6 +25,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Stun;
 
@@ -34,6 +34,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
     private const double DazedMultiplierSmallXeno = 0.7;
     private const double DazedMultiplierBigXeno = 1.2;
     private static readonly ProtoId<StatusEffectPrototype> KnockedOut = "Unconscious";
+    private static readonly EntProtoId UnconsciousMuted = "RMCStatusEffectUnconsciousMuted";
 
     [Dependency] private RMCDazedSystem _dazed = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
@@ -52,6 +53,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _marines = new();
@@ -328,7 +330,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
         EnsureComp<StunnedComponent>(ent);
         EnsureComp<KnockedDownComponent>(ent);
         EnsureComp<TemporaryBlindnessComponent>(ent);
-        EnsureComp<MutedComponent>(ent);
+        _newStatusEffects.TrySetStatusEffectDuration(ent, UnconsciousMuted);
         EnsureComp<DeafComponent>(ent);
     }
 
@@ -341,8 +343,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
             RemCompDeferred<KnockedDownComponent>(ent);
         if (!_status.TryGetTime(ent, "TemporaryBlindness", out statusTime) || statusTime.Value.Item2 < time)
             RemCompDeferred<TemporaryBlindnessComponent>(ent);
-        if (!_status.TryGetTime(ent, "Muted", out statusTime) || statusTime.Value.Item2 < time)
-            RemCompDeferred<MutedComponent>(ent);
+        _newStatusEffects.TryRemoveStatusEffect(ent, UnconsciousMuted);
         if (!_status.TryGetTime(ent, "Deaf", out statusTime) || statusTime.Value.Item2 < time)
             RemCompDeferred<DeafComponent>(ent);
     }
@@ -356,7 +357,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
         EnsureComp<StunnedComponent>(ent);
         EnsureComp<KnockedDownComponent>(ent);
         EnsureComp<TemporaryBlindnessComponent>(ent);
-        EnsureComp<MutedComponent>(ent);
+        _newStatusEffects.TrySetStatusEffectDuration(ent, UnconsciousMuted);
         EnsureComp<DeafComponent>(ent);
     }
 

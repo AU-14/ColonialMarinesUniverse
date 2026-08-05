@@ -16,7 +16,7 @@ public sealed partial class VehicleWheelSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private HardpointSystem _hardpoints = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;
-    [Dependency] private Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
+    [Dependency] private Content.Shared.Vehicle.Systems.VehicleSystem _vehicles = default!;
 
     public override void Initialize()
     {

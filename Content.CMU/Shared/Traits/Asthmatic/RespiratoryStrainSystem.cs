@@ -28,7 +28,7 @@ public sealed partial class RespiratoryStrainSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()

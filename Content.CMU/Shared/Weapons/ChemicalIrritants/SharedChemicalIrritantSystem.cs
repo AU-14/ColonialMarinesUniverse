@@ -36,7 +36,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private DamageableSystem _damage = default!;

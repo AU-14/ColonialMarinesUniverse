@@ -1,5 +1,6 @@
 using Content.Shared._RMC14.Stun;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Map;
 
 namespace Content.Shared._RMC14.Explosion.Implosion;

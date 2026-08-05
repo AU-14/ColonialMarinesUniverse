@@ -161,7 +161,9 @@ public abstract partial class SharedChatSystem
 
     protected virtual bool PlayEmoteSound(EntityUid uid, SoundSpecifier sound, AudioParams audioParams)
     {
-        _audio.PlayPvs(sound, uid, audioParams);
+        if (_net.IsServer) // TODO: replace this call with PlayPredicted when chat is predicted.
+            _audio.PlayPvs(sound, uid, audioParams);
+
         return true;
     }
 
@@ -237,10 +239,6 @@ public abstract partial class SharedChatSystem
 
         if (beforeEv.Cancelled)
         {
-            // Chat is not predicted anyways, so no need to predict this popup either.
-            if (_net.IsClient)
-                return false;
-
             if (beforeEv.Blocker != null)
             {
                 _popup.PopupEntity(
@@ -266,7 +264,7 @@ public abstract partial class SharedChatSystem
             return false;
         }
 
-        var ev = new EmoteEvent(proto);
+        var ev = new EmoteEvent(GetNetEntity(uid), proto);
         RaiseLocalEvent(uid, ref ev);
 
         return true;

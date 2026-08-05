@@ -64,7 +64,7 @@ public sealed partial class HardpointSystem : EntitySystem
     [Dependency] private VehicleSpotlightSystem _spotlight = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private VehicleTopologySystem _topology = default!;
-    [Dependency] private Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
+    [Dependency] private Content.Shared.Vehicle.Systems.VehicleSystem _vehicles = default!;
     [Dependency] private VehicleWeaponsSystem _weapons = default!;
     [Dependency] private VehicleWheelSystem _wheels = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;

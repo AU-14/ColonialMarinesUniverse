@@ -1,8 +1,6 @@
 using System.Linq;
 using System.Text.RegularExpressions;
 using Content.Server.Chat.Managers;
-using Content.Server.Speech.EntitySystems;
-using Content.Server.Speech.Prototypes;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Mentor.ImaginaryFriend;
@@ -13,6 +11,8 @@ using Content.Shared.Inventory;
 using Content.Shared.Popups;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
+using Content.Shared.Speech.EntitySystems;
+using Content.Shared.Speech.Prototypes;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;

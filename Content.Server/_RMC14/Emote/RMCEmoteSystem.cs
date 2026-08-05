@@ -1,5 +1,5 @@
 ﻿using Content.Server.Chat.Systems;
-using Content.Server.Speech.EntitySystems;
+using Content.Shared.Speech.EntitySystems;
 using Content.Shared._RMC14.Emote;
 using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;

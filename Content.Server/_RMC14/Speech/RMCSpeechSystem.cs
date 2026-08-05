@@ -1,6 +1,4 @@
-﻿using Content.Server.Speech.Components;
-
-using Content.Shared.Speech.Components;
+﻿using Content.Shared.Speech.Components;
 
 namespace Content.Server._RMC14.Speech;
 

@@ -20,6 +20,7 @@ using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;

@@ -8,6 +8,7 @@ using Content.Shared.Actions;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;

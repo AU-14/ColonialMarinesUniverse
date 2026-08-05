@@ -12,11 +12,11 @@ using Content.Shared.IdentityManagement;
 using Content.Shared.IdentityManagement.Components;
 using Content.Server.Humanoid;
 using Content.Server.Humanoid.Systems;
-using Content.Server.Speech.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Speech;
 using Content.Shared.Speech.Components;
+using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.Whitelist;
 using Content.Shared.Weapons.Melee;
@@ -37,6 +37,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCStatusEffectSystem _rmcStatusEffects = default!;
     [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private VocalSystem _vocal = default!;
 
     private const string YautjaSpecies = "Yautja";
     private const string DreadlocksMarking = "CMUYautjaDreadlocksStandard";
@@ -121,9 +122,8 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         if (TryComp(ent, out HumanoidAppearanceComponent? vocalAppearance) &&
             ent.Comp.VocalSounds.TryGetValue(vocalAppearance.Sex, out var vocalSounds))
         {
-            vocal.EmoteSounds = vocalSounds;
+            _vocal.SetEmoteSounds((ent, vocal), vocalSounds);
         }
-        Dirty(ent, vocal);
 
         GrantAllSkills(ent);
         ClearMarineHudIcon(ent);

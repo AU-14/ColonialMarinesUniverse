@@ -52,8 +52,8 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
-    [Dependency] private SharedSlurredSystem _slurred = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private SlurredSystem _slurred = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private DamageableSystem _damage = default!;
@@ -343,7 +343,7 @@ public abstract partial class SharedNeurotoxinSystem : EntitySystem
             {
                 neurotoxin.LastAccentTime = currTime;
                 if (_random.Prob(0.5f))
-                    _slurred.DoSlur(victim, neurotoxin.AccentTime);
+                    _newStatusEffects.TryUpdateStatusEffectDuration(victim, SlurredSystem.Stutter, neurotoxin.AccentTime);
                 else
                     _stutter.DoStutter(victim, neurotoxin.AccentTime, true);
             }

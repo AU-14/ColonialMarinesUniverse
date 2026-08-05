@@ -15,6 +15,8 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
+using Content.Shared.Ghost.Systems;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;

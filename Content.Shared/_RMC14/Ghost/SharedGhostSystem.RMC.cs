@@ -1,6 +1,6 @@
 using Content.Shared._RMC14.Ghost;
 
-namespace Content.Shared.Ghost;
+namespace Content.Shared.Ghost.Systems;
 
 public abstract partial class SharedGhostSystem
 {

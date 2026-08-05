@@ -310,7 +310,7 @@ public sealed partial class CMDistressSignalRuleSystem
 
                 if (TryComp<TemperatureComponent>(target, out var temperature))
                 {
-                    _temperature.ChangeHeat(target, heatJoules, temperature: temperature);
+                    _temperature.ChangeHeat((target, temperature), heatJoules);
 
                     // Keep scuttle lethal for mobs that do not define upstream temperature damage.
                     if (!TryComp<TemperatureDamageComponent>(target, out var temperatureDamage) ||

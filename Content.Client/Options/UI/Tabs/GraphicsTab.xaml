@@ -16,6 +16,7 @@
                 <CheckBox Name="ParallaxLowQualityCheckBox" Text="{Loc 'ui-options-parallax-low-quality'}" />
                 <CheckBox Name="AmbientOcclusionCheckBox" Text="{Loc 'ui-options-ambient-occlusion'}" />
                 <ui:OptionSlider Name="ZLevelBlurSlider" Title="{Loc 'ui-options-zlevel-blur'}" />
+                <ui:OptionSlider Name="SharpnessSlider" Title="{Loc 'ui-options-sharpness'}" />
 
                 <!-- Interface -->
                 <Label Text="{Loc 'ui-options-interface-label'}" StyleClasses="LabelKeyText"/>

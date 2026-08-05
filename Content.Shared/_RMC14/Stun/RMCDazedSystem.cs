@@ -16,7 +16,7 @@ public sealed partial class RMCDazedSystem : EntitySystem
     [Dependency] private SharedChargesSystem _charges = default!;
     [Dependency] private CurrentStatusEffectsSystem _statusEffect = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
 
     public static readonly EntProtoId StatusEffectDazed = "Dazed";
 

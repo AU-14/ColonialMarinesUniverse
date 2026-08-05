@@ -9,6 +9,7 @@ using Content.Shared.Database;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Lock;
 using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;

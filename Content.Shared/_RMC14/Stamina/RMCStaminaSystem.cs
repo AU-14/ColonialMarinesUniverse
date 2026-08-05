@@ -28,7 +28,7 @@ public sealed partial class RMCStaminaSystem : EntitySystem
     [Dependency] private INetManager _net = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private TemporarySpeedModifiersSystem _temporarySpeed = default!;

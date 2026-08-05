@@ -1,4 +1,3 @@
-using Content.Server.Speech.Components;
 using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
 using Content.Shared._CMU14.Medical.Injuries.Vision;
@@ -9,6 +8,7 @@ using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
+using Content.Shared.Speech.Components;
 using Content.Shared.Standing;
 using Content.Shared.Stunnable;
 using Robust.Shared.GameObjects;

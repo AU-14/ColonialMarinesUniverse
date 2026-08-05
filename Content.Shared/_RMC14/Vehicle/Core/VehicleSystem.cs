@@ -13,6 +13,7 @@ using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Mind;
@@ -61,7 +62,7 @@ public sealed partial class VehicleSystem : EntitySystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private VehicleLockSystem _vehicleLock = default!;
     [Dependency] private VehicleDeploySystem _vehicleDeploy = default!;
-    [Dependency] private Content.Shared.Vehicle.VehicleSystem _vehicles = default!;
+    [Dependency] private Content.Shared.Vehicle.Systems.VehicleSystem _vehicles = default!;
     [Dependency] private VehicleViewToggleSystem _viewToggle = default!;
 
     private readonly HashSet<EntityUid> _intersecting = new();

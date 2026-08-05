@@ -7,6 +7,7 @@ using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.Examine;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;

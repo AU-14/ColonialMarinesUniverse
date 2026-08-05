@@ -2,6 +2,7 @@ using Content.Shared.Actions;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Systems;
 using Content.Shared._RMC14.Roles.FindParasite;
 
 namespace Content.Shared._RMC14.Mobs;
