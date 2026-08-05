@@ -1,0 +1,938 @@
+# Base
+- type: entity
+  parent: BaseStructureDynamic
+  id: RMCCrateBase
+  name: crate
+  description: A rectangular metal crate.
+  components:
+  - type: Transform
+    noRot: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/basic.rsi
+    noRot: true
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/basic.rsi
+    state: icon
+  - type: RequisitionsCrate
+  - type: InteractionOutline
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.29"
+        density: 50
+        mask:
+        - CrateMask
+        layer:
+        - MachineLayer
+  - type: EntityStorage
+  - type: PlaceableSurface
+    isPlaceable: false
+  - type: Damageable
+    damageContainer: StructuralInorganic
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: RMCContainerEmptyOnDestruction
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateDoorOpen: open
+    stateDoorClosed: closed
+  - type: GenericVisualizer
+    visuals:
+      enum.PaperLabelVisuals.HasLabel:
+        enum.PaperLabelVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+      enum.PaperLabelVisuals.LabelType:
+        enum.PaperLabelVisuals.Layer:
+          Invoice: { state: invoice }
+  - type: PaperLabel
+    labelSlot:
+      insertVerbText: Attach Invoice
+      ejectVerbText: Remove Invoice
+      whitelist:
+        components:
+        - RequisitionsInvoice
+  - type: ContainerContainer
+    containers:
+      entity_storage: !type:Container
+      paper_label: !type:ContainerSlot
+  - type: ItemSlots
+  - type: StaticPrice
+    price: 50
+  - type: Weldable
+  - type: RMCWeldEffectSource
+    startingOffset: -0.45, 0
+    endingOffset: 0.45, 0
+  - type: ResistLocker
+  - type: RequireProjectileTarget
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CanBeSupplyDropped
+    landingDamage:
+      types:
+        Blunt: 5000
+  - type: PowerLoaderGrabbable
+    virtualRight: RMCVirtualCrateRight
+    virtualLeft: RMCVirtualCrateLeft
+  - type: RMCCanBeFultoned
+  - type: ReceiverXenoClaws
+    minimumClawStrength: ImpossiblySharp
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Blunt: 0
+    throwRange: 2
+  - type: CrashLandable
+  - type: ParaDroppable
+    dropScatter: 4
+  - type: AnimationPlayer
+  - type: RMCMesonsNonviewable
+  - type: EntityStorageCloseOnMapInit
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateAlpha
+  name: alpha squad crate
+  description: A crate with alpha squad's symbol on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/alpha.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/alpha.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateBravo
+  name: bravo squad crate
+  description: A crate with bravo squad's symbol on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/bravo.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/bravo.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateCharlie
+  name: charlie squad crate
+  description: A crate with charlie squad's symbol on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/charlie.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/charlie.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateDelta
+  name: delta squad crate
+  description: A crate with delta squad's symbol on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/delta.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/delta.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateAmmo
+  name: ammunitions crate
+  description: An ammunitions crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/ammo.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/ammo.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateGreen
+  name: green crate
+  description: A standard green storage crate employed by the Marines. These things are so common, just about anything could be inside.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/green.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/green.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateConstruction
+  name: construction crate
+  description: A construction crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/construction.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/construction.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateExplosives
+  name: explosives crate
+  description: An explosives crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/explosives.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/explosives.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateFreezer
+  name: freezer crate
+  description: A freezer crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/freezer.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/freezer.rsi
+  - type: AntiRottingContainer
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateHydro
+  name: hydroponics crate
+  description: All you need to destroy those pesky weeds and pests.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/hydro.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/hydro.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateInternals
+  name: internals crate
+  description: An internals crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/oxygen.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/oxygen.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCratePlastic
+  name: plastic crate
+  description: A rectangular plastic crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/plastic.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/plastic.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateRadiation
+  name: radioactive gear crate
+  description: A crate with a radiation sign on it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/radioactive.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/radioactive.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateScience
+  name: science crate
+  description: A science crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/science.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/science.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateSupply
+  name: supply crate
+  description: A supply crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/supply.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/supply.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateWeapons
+  name: weapons crate
+  description: A weapons crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/weapons.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/weapons.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateMedical
+  name: medical crate
+  description: A medical crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/medical.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/medical.rsi
+
+# Secure
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateSecure
+  name: secure crate
+  description: A secure crate.
+  suffix: Secure
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_basic.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+      visible: false
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      offset: "0.28125,0.0"
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: LockVisuals
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_basic.rsi
+    state: icon
+  - type: Lock
+  - type: AccessReader
+    access: [["CMAccessRequisitions"]]
+
+- type: entity
+  parent: RMCCrateSecure
+  id: RMCCrateSecureAmmo
+  name: secure ammunitions crate
+  description: A secure ammunitions crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_ammo.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+      visible: false
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      offset: "-0.03125,0.0"
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_ammo.rsi
+
+- type: entity
+  parent: RMCCrateSecure
+  id: RMCCrateSecureExplosives
+  name: explosives crate
+  description: An explosives crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_explosives.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+      visible: false
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      offset: "-0.03125,0.0"
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_explosives.rsi
+
+- type: entity
+  parent: RMCCrateSecureAmmo
+  id: RMCCrateSecureGear
+  name: gear crate
+  description: A secure gear crate.
+
+- type: entity
+  parent: RMCCrateSecure
+  id: RMCCrateSecureHydro
+  name: secure hydroponics crate
+  description: A crate with a lock on it, painted in the scheme of the station's botanists.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_hydro.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+      visible: false
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      offset: "0.28125,0.0"
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_hydro.rsi
+
+- type: entity
+  parent: RMCCrateSecure
+  id: CMCrateSecureSurgery
+  name: surgery crate
+  description: A surgery crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_medical.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+      visible: false
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      offset: "-0.03125,0.0"
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_medical.rsi
+  - type: AccessReader
+    access: [["CMAccessRequisitions"],["CMAccessMedical"]]
+
+- type: entity
+  parent: RMCCrateSecure
+  id: RMCCrateSecureWeapons
+  name: weapons crate
+  description: A secure weapons crate.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_weapons.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+      visible: false
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      offset: "0.28125,0.0"
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_weapons.rsi
+
+- type: entity
+  parent: RMCCrateSecure
+  id: RMCCrateSecureWeYa
+  name: secure We-Ya crate
+  description: A secure crate with a We-Ya insignia on it.
+  suffix: We-Ya, Req, Locked
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/secure_we_ya.rsi
+    layers:
+    - state: base
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      map: ["enum.WeldableLayers.BaseWelded"]
+      visible: false
+    - state: locked
+      map: ["enum.LockVisualLayers.Lock"]
+      shader: unshaded
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      offset: "0.3475,0.0"
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/secure_we_ya.rsi
+  - type: AccessReader
+    access: [["RMCAccessWeYa"]]
+
+- type: entity
+  parent: RMCCrateSecure
+  id: RMCCrateSecurePhoron
+  name: phoron crate
+  description: A phoron crate.
+  components:
+  - type: AccessReader
+    access: [["CMAccessResearch"],["CMAccessEngineering"]]
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateMinecart
+  name: minecart
+  description: Essentially a big metal bucket on wheels. This one has a modern plastic shroud.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/minecart.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/minecart.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateMinecartYellow
+  name: minecart
+  suffix: yellow
+  description: Essentially a big metal bucket on wheels. This one has a modern plastic shroud.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/minecart_y.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/minecart_y.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateMortarAmmo
+  name: mortar ammo crate
+  description: A crate containing live mortar shells with various payloads. DO NOT DROP. KEEP AWAY FROM FIRE SOURCES.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/mortar_ammo.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/weapons.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateAmmoAlt
+  name: ammunitions crate
+  suffix: black
+  description: A crate that contains ammunition, this one is black.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/ammo_alt.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/ammo_alt.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateAmmoAlt2
+  name: ammunitions crate
+  suffix: flammable
+  description: A black crate. Warning, contents are flammable!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/ammo_alt2.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/ammo_alt2.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCTrashCart
+  name: trash cart
+  description: A heavy, metal trashcart with wheels.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/trash_cart.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/trash_cart.rsi
+
+- type: entity
+  parent: RMCCrateBase
+  id: RMCFoodCart
+  name: food cart
+  description: A heavy, metal foodcart with wheels.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/foodcart_1.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/foodcart_1.rsi
+
+- type: entity
+  parent: RMCFoodCart
+  id: RMCFoodCartalt
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/foodcart_2.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/foodcart_2.rsi
+
+# Buildable crates, req cannot sell them
+- type: entity
+  parent: RMCCrateBase
+  id: RMCCrateMetalBuildable
+  suffix: Buildable, No Req Reward
+  components:
+  - type: RequisitionsCrate
+    reward: 0
+
+- type: entity
+  parent: RMCCratePlastic
+  id: RMCCratePlasticBuildable
+  suffix: Buildable, No Req Reward
+  components:
+  - type: RequisitionsCrate
+    reward: 0
+
+- type: entity
+  parent: RMCCrateMetalBuildable
+  id: RMCCrateWoodenBuildable
+  name: wooden crate
+  description: A wooden crate. Shoddily assembled, spacious and worthless on the ASRS.
+  suffix: Buildable, No Req Reward
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Crates/woodcrate.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: invoice
+      sprite: _RMC14/Structures/Storage/Crates/labels.rsi
+      visible: false
+      map: ["enum.PaperLabelVisuals.Layer"]
+  - type: Icon
+    sprite: _RMC14/Structures/Storage/Crates/woodcrate.rsi

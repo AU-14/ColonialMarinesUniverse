@@ -1,0 +1,252 @@
+using System.Numerics;
+using Content.Server.Atmos.Components;
+using Content.Server.Spreader;
+using Content.Shared._RMC14.Barricade;
+using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.Communications;
+using Content.Shared._RMC14.Map;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.Weeds;
+using Content.Shared.Atmos;
+using Content.Shared.Coordinates;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Maps;
+using Content.Shared.Physics;
+using Content.Shared.Tag;
+using Robust.Server.GameObjects;
+using Robust.Shared.Configuration;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+
+namespace Content.Server._RMC14.Xenonids.Weeds;
+
+public sealed partial class XenoWeedsSystem : SharedXenoWeedsSystem
+{
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TransformSystem _transform = default!;
+    [Dependency] private AppearanceSystem _appearance = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private SharedDirectionalAttackBlockSystem _directionBlocker = default!;
+    [Dependency] private TurfSystem _turf = default!;
+
+    private static readonly ProtoId<TagPrototype> IgnoredTag = "SpreaderIgnore";
+
+    private readonly List<EntityUid> _anchored = new();
+    private readonly List<WeedSpreadJob> _spread = new();
+
+    private EntityQuery<AirtightComponent> _airtightQuery;
+    private EntityQuery<AllowWeedSpreadComponent> _allowWeedSpreadQuery;
+    private EntityQuery<MapGridComponent> _mapGridQuery;
+    private EntityQuery<XenoNestSurfaceComponent> _xenoNestSurfaceQuery;
+    private EntityQuery<XenoWeedableComponent> _xenoWeedableQuery;
+    private EntityQuery<XenoWeedsComponent> _xenoWeedsQuery;
+
+    private TimeSpan _maxProcessTime;
+
+    private readonly record struct WeedSpreadJob(Entity<XenoWeedsComponent> Weeds, TimeSpan ExpectedProcessAt);
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        _airtightQuery = GetEntityQuery<AirtightComponent>();
+        _allowWeedSpreadQuery = GetEntityQuery<AllowWeedSpreadComponent>();
+        _mapGridQuery = GetEntityQuery<MapGridComponent>();
+        _xenoNestSurfaceQuery = GetEntityQuery<XenoNestSurfaceComponent>();
+        _xenoWeedableQuery = GetEntityQuery<XenoWeedableComponent>();
+        _xenoWeedsQuery = GetEntityQuery<XenoWeedsComponent>();
+
+        Subs.CVar(
+            _config,
+            RMCCVars.RMCWeedSpreadMaxProcessTimeMilliseconds,
+            v => _maxProcessTime = TimeSpan.FromMilliseconds(v),
+            true
+        );
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var time = _timing.CurTime;
+        var processStartedAt = _timing.RealTime;
+        for (var i = _spread.Count - 1; i >= 0; i--)
+        {
+            if (_timing.RealTime - processStartedAt > _maxProcessTime)
+                return;
+
+            var job = _spread[i];
+            _spread.RemoveAt(i);
+            var (uid, weeds) = job.Weeds;
+
+            if (_transform.GetGrid(uid) is not { } gridId ||
+                !_mapGridQuery.TryComp(gridId, out var gridComp))
+            {
+                continue;
+            }
+
+            var grid = new Entity<MapGridComponent>(gridId, gridComp);
+            var indices = _map.CoordinatesToTile(gridId, gridComp, uid.ToCoordinates());
+            foreach (var cardinal in _rmcMap.AtmosCardinalDirections)
+            {
+                var blocked = false;
+                EntityUid? weedsToReplace = null;
+                var neighbor = indices.Offset(cardinal);
+                var anchored = _rmcMap.GetAnchoredEntitiesEnumerator(grid, neighbor);
+                while (anchored.MoveNext(out var anchoredId))
+                {
+                    if (_airtightQuery.TryGetComponent(anchoredId, out var airtight) &&
+                        airtight.AirBlocked &&
+                        !_tag.HasTag(anchoredId, IgnoredTag) &&
+                        !_allowWeedSpreadQuery.HasComp(anchoredId))
+                    {
+                        blocked = true;
+                        continue;
+                    }
+
+                    if (!_map.TryGetTileRef(grid, grid, neighbor, out var tileRef) ||
+                        tileRef.Tile.IsEmpty ||
+                        _turf.IsSpace(tileRef))
+                    {
+                        blocked = true;
+                        continue;
+                    }
+
+                    if (_xenoWeedsQuery.TryComp(anchoredId, out var otherWeeds))
+                    {
+                        if (otherWeeds.Level >= weeds.Level)
+                            blocked = true;
+                        else
+                            weedsToReplace = anchoredId;
+                    }
+                }
+
+                if (_directionBlocker.IsDirectionBlocked(uid,
+                        cardinal,
+                        collisionGroup: CollisionGroup.BarricadeImpassable))
+                    blocked = true;
+
+                if (blocked)
+                    continue;
+
+                var source = weeds.IsSource ? uid : weeds.Source;
+                var sourceWeeds = CompOrNull<XenoWeedsComponent>(source);
+
+                if (source != null && sourceWeeds != null)
+                    Dirty(source.Value, sourceWeeds);
+
+                if (!Exists(source) ||
+                    !TryComp(source, out TransformComponent? transform) ||
+                    weeds.Spawns.Id is not { } prototype)
+                {
+                    continue;
+                }
+
+                var sourceLocal = _map.CoordinatesToTile(grid, gridComp, transform.Coordinates);
+                var diff = Vector2.Abs(neighbor - sourceLocal);
+                if (diff.X >= weeds.Range || diff.Y >= weeds.Range)
+                {
+                    if (sourceWeeds != null && !sourceWeeds.HasHealed)
+                    {
+                        sourceWeeds.HasHealed = true;
+                        _damageable.TryChangeDamage(source, sourceWeeds.HealOnStopSpreading, true);
+                        Dirty(source.Value, sourceWeeds);
+                    }
+
+                    break;
+                }
+
+                if (!CanSpreadWeedsPopup(grid, neighbor, null, null, weeds.SpreadsOnSemiWeedable))
+                    continue;
+
+                if (weedsToReplace != null)
+                    QueueDel(weedsToReplace.Value);
+
+                var coords = _map.GridTileToLocal(grid, grid, neighbor);
+                var neighborWeeds = Spawn(prototype, coords);
+                var neighborWeedsEnt = AssignSource(neighborWeeds, (source.Value, sourceWeeds));
+
+                // Keep later growth waves on the original RMC cadence when this job was deferred by the frame budget.
+                if (TryComp(neighborWeeds, out XenoWeedsSpreadingComponent? neighborSpreading))
+                {
+                    neighborSpreading.SpreadAt = job.ExpectedProcessAt + neighborSpreading.SpreadDelay;
+                    Dirty(neighborWeeds, neighborSpreading);
+                }
+
+                _hive.SetSameHive(uid, neighborWeeds);
+
+                EnsureComp<ActiveEdgeSpreaderComponent>(neighborWeeds);
+
+                for (var j = 0; j < 4; j++)
+                {
+                    var dir = (AtmosDirection)(1 << j);
+                    var pos = neighbor.Offset(dir);
+                    if (!_map.TryGetTileRef(grid, grid, pos, out var adjacent))
+                        continue;
+
+                    _anchored.Clear();
+                    _map.GetAnchoredEntities(grid, adjacent.GridIndices, _anchored);
+                    foreach (var anchoredId in _anchored)
+                    {
+                        if (!_xenoWeedableQuery.TryComp(anchoredId, out var weedable) ||
+                            !TryComp(anchoredId, out TransformComponent? weedableTransform) ||
+                            !weedableTransform.Anchored ||
+                            weedable.Entity != null)
+                        {
+                            continue;
+                        }
+
+                        if (source != null)
+                        {
+                            var ev = new AfterEntityWeedingEvent(neighborWeeds, anchoredId);
+                            RaiseLocalEvent(source.Value, ref ev);
+                        }
+
+                        neighborWeedsEnt.Comp.LocalWeeded.Add(anchoredId);
+
+                        if (!HasComp<CommunicationsTowerComponent>(anchoredId))
+                            _appearance.SetData(anchoredId, WeededEntityLayers.Layer, true);
+
+                        if (weedable.Spawn == null)
+                            continue;
+
+                        weedable.Entity = SpawnAtPosition(weedable.Spawn, anchoredId.ToCoordinates());
+                        var wallWeeds = EnsureComp<XenoWallWeedsComponent>(weedable.Entity.Value);
+                        wallWeeds.Weeds = source;
+                        Dirty(weedable.Entity.Value, wallWeeds);
+
+                        if (_xenoNestSurfaceQuery.TryComp(weedable.Entity, out var surface))
+                        {
+                            surface.Weedable = anchoredId;
+                            Dirty(weedable.Entity.Value, surface);
+                        }
+
+                        sourceWeeds?.Spread.Add(weedable.Entity.Value);
+                    }
+                }
+            }
+        }
+
+        if (_spread.Count > 0)
+            return;
+
+        var spreadingQuery = EntityQueryEnumerator<XenoWeedsSpreadingComponent, XenoWeedsComponent>();
+        while (spreadingQuery.MoveNext(out var uid, out var spreading, out var weeds))
+        {
+            if (time < spreading.SpreadAt)
+                continue;
+
+            RemCompDeferred<XenoWeedsSpreadingComponent>(uid);
+            // Due spreads are collected after the processing pass, so upstream would process them next tick.
+            _spread.Add(new((uid, weeds), spreading.SpreadAt + _timing.TickPeriod));
+        }
+    }
+}

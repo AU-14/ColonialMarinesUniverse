@@ -1,0 +1,201 @@
+- type: entity
+  id: XenoConstructionGhost
+  name: construction ghost
+  description: A preview of what will be built.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Overlays
+    color: "#30FF3080"
+    noRot: true
+
+- type: entity
+  id: RMCBaseEffectXenoStructure
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: True
+  - type: Sprite
+    drawdepth: Effects
+    sprite: /Textures/_RMC14/Effects/xeno_structure_animations.rsi
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+  - type: TimedDespawn
+    lifetime: 5.0
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: XenoConstructionAnimation
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectWallXenoResinThick
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: thick
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectWallXenoMembraneThick
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: thickmembrane
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectDoorXenoResinThick
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: thickdoor
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectWallXenoResin
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: wall
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectWallXenoResinReflective
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: wall # TODO RMC14 Make this have it's own build animation once the reflective wall stops using the skeletal resin sprite.
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectWallXenoMembrane
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: membrane
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectDoorXenoResin
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+    - sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+      state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: door
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectXenoStickyResin
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/_RMC14/Effects/xeno_secrete.rsi
+    layers:
+    - state: secrete_base
+
+- type: entity
+  parent: RMCEffectXenoStickyResin
+  id: RMCEffectXenoFastResin
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCEffectXenoStickyResin
+  id: RMCEffectXenoResinSpikes
+  categories: [ HideSpawnMenu ]
+
+- type: entity
+  parent: RMCBaseEffectXenoStructure
+  id: RMCEffectXenoWeedsSource
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: /Textures/_RMC14/Effects/alert.rsi
+    layers:
+    - state: alert_greyscale
+      color: "#A800FF7F"
+
+- type: entity
+  parent: RMCEffectXenoWeedsSource
+  id: RMCEffectHiveAcidPillarXeno
+  categories: [ HideSpawnMenu ]
+
+#Surge
+- type: entity
+  parent: RMCBaseEffect
+  id: XenoSurgeResinWall
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: TimedDespawn
+    lifetime: 15
+  - type: Sprite
+    sprite: /Textures/_RMC14/Structures/Xenos/xeno_surge_glow.rsi
+    noRot: true
+    drawdepth: Effects
+    layers:
+      - state: surge-wall
+        shader: unshaded
+  - type: Tag
+    tags:
+    - HideContextMenu
+
+- type: entity
+  parent: XenoSurgeResinWall
+  id: XenoSurgeResinDoor
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    layers:
+      - state: surge-door
+        shader: unshaded
+
+- type: entity
+  parent: WallXenoResinThick
+  id: WallXenoResinQueen
+  name: queen resin wall
+  description: A heavily reinforced wall of resin, built with the queen's enhanced abilities.
+  components:
+  - type: Sprite
+
+- type: entity
+  parent: WallXenoMembraneThick
+  id: WallXenoMembraneQueen
+  name: queen membrane wall
+  description: A heavily reinforced membrane wall, built with the queen's enhanced abilities.
+
+- type: entity
+  parent: DoorXenoResinThick
+  id: DoorXenoResinQueen
+  name: queen resin door
+  description: A heavily reinforced resin door, built with the queen's enhanced abilities.

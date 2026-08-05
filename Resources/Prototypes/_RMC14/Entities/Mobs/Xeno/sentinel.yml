@@ -1,0 +1,181 @@
+- type: entity
+  abstract: true
+  parent:
+  - CMXenoDeveloped
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  - RMCXenoVentCrawler
+  id: RMCXenoSentinelBase
+  name: Sentinel
+  description: A slithery, spitting kind of alien.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Sentinel/sentinel.rsi # AU14-Edit
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      500: Critical
+      600: Dead
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - RMCSynthGrabbable
+  - type: Xeno
+    role: CMXenoSentinel
+    tier: 1
+    hudOffset: -0.15,0.157
+    unlockAt: 300 # 5 minutes
+  - type: XenoLight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoLarva
+    canBeDevolvedByOther: false
+  - type: XenoDevour
+  - type: XenoPlasma
+    plasma: 400
+    maxPlasma: 400
+    plasmaRegenOnWeeds: 3
+  - type: CMArmor
+    explosionArmor: 10
+  - type: XenoEvolution
+    canEvolveWithoutGranter: true
+    max: 200
+    evolvesTo:
+    - CMXenoSpitter
+    evolvesToWithoutPoints:
+    - CMXenoQueen
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 22.5
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 30
+  - type: Tackle
+    min: 4
+    max: 4
+    chance: 0.5
+    stunMin: 4
+    stunMax: 4
+  - type: RMCXenoDamageVisuals
+    prefix: sentinel
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: sentinel
+  - type: AcidTrap
+    trapLevel: 1
+    cost: 70
+    spray: XenoAcidSprayTrapWeak
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.1
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT1
+  - type: VentCrawler
+    ventCrawlIcon: sentinel
+  - type: CMUXenoZJump
+
+- type: entity
+  parent:
+  - CMXenoTail
+  - RMCXenoSentinelBase
+  id: CMXenoSentinel
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleSentinel
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoAcidWeak
+    - ActionXenoSlowingSpit
+    - ActionXenoScatteredSpit
+    - ActionXenoParalyzingSlash
+    - ActionXenoDevolve
+  - type: XenoEvolution
+    strains:
+    - RMCXenoSentinelToxic
+  - type: XenoAcid
+  - type: XenoParalyzingSlash
+  - type: XenoSlowingSpit
+  - type: XenoScatteredSpit
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 30
+  - type: RMCActionOrder
+    id: CMXenoSentinel
+
+- type: entity
+  parent: RMCXenoSentinelBase
+  id: RMCXenoSentinelToxic
+  suffix: Manticore
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Sentinel/toxic_sentinel.rsi
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoAcidWeak
+    - ActionXenoToxicSpit
+    - ActionXenoToxicSlash
+    - ActionXenoDrainSting
+    - ActionXenoDevolve
+  - type: XenoPlasma
+    plasma: 600
+    maxPlasma: 600
+    plasmaRegenOnWeeds: 3
+  - type: CMArmor
+    xenoArmor: 10
+    explosionArmor: 10
+  - type: XenoAcid
+  - type: XenoToxicSpit
+  - type: XenoToxicSlash
+  - type: XenoDrainSting
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 25
+  - type: XenoStrain
+    name: rmc-xeno-toxic-name
+    description: rmc-xeno-toxic-description
+    popup: rmc-xeno-toxic-popup
+  - type: XenoHidden
+  - type: RMCActionOrder
+    id: RMCXenoSentinelToxic

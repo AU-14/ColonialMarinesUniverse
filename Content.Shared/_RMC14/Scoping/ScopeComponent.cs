@@ -1,0 +1,89 @@
+﻿using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization;
+
+namespace Content.Shared._RMC14.Scoping;
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(SharedScopeSystem))]
+public sealed partial class ScopeComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public int CurrentZoomLevel;
+
+    [DataField, AutoNetworkedField]
+    public List<ScopeZoomLevel> ZoomLevels = new()
+    {
+        new ScopeZoomLevel(null, 1f, 15, false, TimeSpan.FromSeconds(1))
+    };
+
+    /// <summary>
+    /// The entity that's scoping
+    /// </summary>
+    [ViewVariables, AutoNetworkedField]
+    public EntityUid? User;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId? ScopingToggleAction = "CMActionToggleScope";
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? ScopingToggleActionEntity;
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId CycleZoomLevelAction = "RMCActionCycleZoomLevel";
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? CycleZoomLevelActionEntity;
+
+    [DataField, AutoNetworkedField]
+    public bool RequireWielding;
+
+    [DataField, AutoNetworkedField]
+    public bool UseInHand;
+
+    [DataField, AutoNetworkedField]
+    public Direction? ScopingDirection;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? RelayEntity;
+
+    [DataField, AutoNetworkedField]
+    public bool Attachment;
+
+    [DataField, AutoNetworkedField]
+    public bool CanUseInsideContainer;
+
+    [DataField, AutoNetworkedField]
+    public string? ScopePopup = "cm-action-popup-scoping-user";
+
+    [DataField, AutoNetworkedField]
+    public string? UnScopePopup = "cm-action-popup-scoping-stopping-user";
+
+    [DataField, AutoNetworkedField]
+    public bool CanUseNightVision;
+
+    [DataField, AutoNetworkedField]
+    public string? ScopedHeldSuffix;
+
+    [ViewVariables, AutoNetworkedField]
+    public string? UnscopedHeldPrefix;
+}
+
+/// <param name="Name">This is used in the popup when cycling through zoom levels.</param>
+/// <param name="Zoom">Value to which zoom will be set when scoped in.</param>
+/// <param name="Offset">How much to offset the user's view by when scoping.</param>
+/// <param name="AllowMovement">If set to true, the user's movement won't interrupt the scoping action.</param>
+/// <param name="DoAfter">The length of the doafter to zoom in.</param>
+[DataRecord, Serializable, NetSerializable]
+public partial record struct ScopeZoomLevel(
+    string? Name,
+    float Zoom,
+
+    // TODO RMC14 scoping making this too high causes pop-in
+    // wait until https://github.com/space-wizards/RobustToolbox/pull/5228 is fixed to increase it
+    // cm13 values: 11 tile offset, 24x24 view in 4x | 6 tile offset, normal view in 2x.
+    // right now we are doing a mix of both and only one setting.
+    float Offset,
+    bool AllowMovement,
+    TimeSpan DoAfter
+);

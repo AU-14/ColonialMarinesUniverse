@@ -1,0 +1,66 @@
+<DefaultWindow xmlns="https://spacestation14.io"
+               xmlns:controls="clr-namespace:Content.Client.UserInterface.Controls">
+    <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical" MinWidth="243" Margin="0 0 5 0">
+            <BoxContainer Orientation="Horizontal" HorizontalExpand="True">
+                <LineEdit Name="SearchBar" PlaceHolder="{Loc 'construction-menu-search'}" HorizontalExpand="True"/>
+                <OptionButton Name="OptionCategories" Access="Public" MinSize="130 0"/>
+            </BoxContainer>
+            <BoxContainer SizeFlagsStretchRatio="0.5" Margin="0 3 0 5" SeparationOverride="3">
+                <Button
+                    Name="PreviousRecipeInHistoryButton"
+                    HorizontalExpand="True"
+                    Disabled="True"
+                    StyleClasses="OpenRight">
+                    <Label
+                        StyleIdentifier="RecipeHistoryNavButtonLabel"
+                        Align="Center"
+                        Text="{Loc construction-menu-history-select-previous-recipe}"
+                    />
+                </Button>
+                <Button
+                    Name="NextRecipeInHistoryButton"
+                    HorizontalExpand="True"
+                    Disabled="True"
+                    StyleClasses="OpenLeft">
+                    <Label
+                        StyleIdentifier="RecipeHistoryNavButtonLabel"
+                        Align="Center"
+                        Text="{Loc construction-menu-history-select-next-recipe}" />
+                </Button>
+            </BoxContainer>
+            <controls:ListContainer Name="ListViewRecipes" Access="Public" Group="True" Toggle="True" VerticalExpand="True" />
+            <ScrollContainer Name="GridViewRecipesScrollContainer" VerticalExpand="True" Access="Public" Visible="False">
+                <GridContainer Name="GridViewRecipes" Columns="5" Access="Public"/>
+            </ScrollContainer>
+        </BoxContainer>
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True">
+            <BoxContainer Orientation="Horizontal">
+                <Button Name="MenuGridViewButton" ToggleMode="True" Text="{Loc construction-menu-grid-view}"/>
+                <Button Name="FavoriteButton" Visible="false"/>
+            </BoxContainer>
+            <Control>
+                <BoxContainer Orientation="Vertical" HorizontalExpand="True" Margin="0 0 0 5">
+                    <BoxContainer Orientation="Horizontal" Align="Center">
+                        <EntityPrototypeView Name="TargetTexture" HorizontalAlignment="Right" Stretch="Fill" Margin="0 0 10 0"/>
+                        <BoxContainer Orientation="Vertical">
+                            <RichTextLabel Name="TargetName"/>
+                            <RichTextLabel Name="TargetDesc"/>
+                        </BoxContainer>
+                    </BoxContainer>
+                </BoxContainer>
+            </Control>
+            <RichTextLabel Name="ConstructionSkillInfo" Visible="False" HorizontalExpand="True" Margin="4 0 0 3"/>
+            <ItemList Name="RecipeStepList" Access="Public" VerticalExpand="True" Margin="0 0 0 5"/>
+            <BoxContainer Orientation="Vertical">
+                <Button Name="BuildButton" Disabled="True" ToggleMode="True"
+                        VerticalExpand="True" SizeFlagsStretchRatio="0.5"/>
+                <BoxContainer Orientation="Horizontal" VerticalExpand="True" SizeFlagsStretchRatio="0.5">
+                    <Button Name="EraseButton" ToggleMode="True"
+                        HorizontalExpand="True" SizeFlagsStretchRatio="0.7"/>
+                    <Button Name="ClearButton" HorizontalExpand="True" SizeFlagsStretchRatio="0.3"/>
+                </BoxContainer>
+            </BoxContainer>
+        </BoxContainer>
+    </BoxContainer>
+</DefaultWindow>

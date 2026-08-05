@@ -1,0 +1,15 @@
+- type: species
+  id: SlimePerson
+  name: species-name-slime
+  roundStart: false
+  prototype: MobSlimePerson
+  defaultSkinTone: "#b8b8b8"
+  dollPrototype: AppearanceSlimePerson
+  skinColoration: Hues
+  defaultSoundsBySex:
+  - MaleSlime
+  - FemaleSlime
+  - MaleSlime
+  voices:
+  - MaleSlime
+  - FemaleSlime

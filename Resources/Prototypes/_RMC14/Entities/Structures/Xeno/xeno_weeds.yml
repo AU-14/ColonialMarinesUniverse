@@ -1,0 +1,498 @@
+- type: entity # TODO RMC14 sound
+  id: XenoWeeds
+  name: weeds
+  description: Weird black weeds...
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+    whitelist:
+      components:
+      - Marine
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: XenoWeeds
+    level: 1
+  - type: RMCMesonsNonviewable
+  - type: Clickable
+  - type: XenoWeedsSpreading
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: weed0
+  - type: IconSmooth
+    key: cm_xeno_weeds
+    base: weed_dir
+    mode: CardinalFlags
+  - type: IconSmoothRandom
+    overrides:
+    - weed_dir0
+    - weed_dir15
+  - type: RandomSprite
+    available:
+    - 0:
+        weed0: ""
+    - 0:
+        weed1: ""
+    - 0:
+        weed2: ""
+    - 0:
+        weed3: ""
+    - 0:
+        weed4: ""
+    - 0:
+        weed5: ""
+    - 0:
+        weed6: ""
+    - 0:
+        weed7: ""
+    - 0:
+        weed8: ""
+    - 0:
+        weed9: ""
+    - 0:
+        weed10: ""
+    - 0:
+        weed11: ""
+    - 0:
+        weed12: ""
+    - 0:
+        weed13: ""
+    - 0:
+        weed14: ""
+    - 0:
+        weed15: ""
+  - type: XenoFriendly
+  - type: Damageable
+    damageContainer: StructuralXeno
+    damageModifierSet: Weed
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ImmuneToUnarmed
+  - type: CMIconSmooth
+    smooth: true
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        collection: XenoResinBreak
+  - type: ExplosionRandomResistance
+    min: 0.06
+    max: 0.3
+  - type: DeletedByWeedKiller
+  - type: RMCDeleteAnchoredOnInit
+    enabled: false
+    whitelist:
+      tags:
+      - XenoWeedTile
+  - type: Tag
+    tags:
+    - XenoWeedTile
+  - type: Flammable
+    fireSpread: false
+    maximumFireStacks: 0.5
+    damage:
+      types:
+        Heat: 1
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+    reactions:
+    - reagents: [WeedKiller, PlantBGone]
+      methods: [Touch]
+      effects:
+      - !type:HealthChange
+        scaleByQuantity: true
+        damage:
+          types:
+            Heat: 4
+  - type: XenoChargeDontHit
+#  - type: Physics
+#    bodyType: Static
+#  - type: FootstepModifier
+#    footstepSoundCollection:
+#      collection: FootstepWater
+#      params:
+#        volume: 8
+
+- type: entity # TODO RMC14 sound
+  parent: XenoWeeds
+  id: XenoWeedsSource
+  name: weed node
+  description: A weird, pulsating node
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: weed0
+    - state: constructionnode
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 11
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: XenoConstructionPlasmaCost
+    plasma: 215
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: Damageable
+    damage:
+      groups:
+        Brute: 6
+  - type: XenoWeeds
+    healOnStopSpreading:
+      groups:
+        Brute: -6
+  - type: Tag
+    tags:
+    - XenoWeedNode
+
+- type: entity
+  parent: XenoWeeds
+  id: XenoWeedsSourceHidden
+  suffix: Hidden Node
+  components:
+  - type: Sprite
+    layers:
+    - state: weed0
+    - sprite: _RMC14/Markers/landmarks.rsi
+      state: weednode
+      map: ["enum.RMCGhostVisibleOnlyVisualLayers.Base"]
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: Tag
+    tags:
+    - XenoWeedNode
+    - XenoWeedTile
+  - type: RMCVisibleToGhostsOnly
+
+- type: entity # TODO RMC14 sound
+  parent: XenoWeeds
+  id: XenoHiveWeeds
+  name: hive weeds
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: XenoWeeds
+    range: 7
+    spawns: XenoHiveWeeds
+    level: 3
+    speedMultiplierOutsider: 0.338
+    speedMultiplierOutsiderArmor: 0.4856
+    blockOtherWeeds: true
+    spreadsOnSemiWeedable: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: hive_weed0
+  - type: HiveWeeds
+  - type: XenoWeedsSpreading
+    spreadDelay: 1.25
+  - type: IconSmooth
+    key: cm_xeno_weeds
+    base: hive_weed
+    mode: CardinalFlags
+  - type: IconSmoothRandom
+    overrides:
+    - hive_weed0
+    - hive_weed15
+  - type: RandomSprite
+    available:
+    - 0:
+        hive_weed0: ""
+    - 0:
+        hive_weed1: ""
+    - 0:
+        hive_weed2: ""
+    - 0:
+        hive_weed3: ""
+    - 0:
+        hive_weed4: ""
+    - 0:
+        hive_weed5: ""
+    - 0:
+        hive_weed6: ""
+    - 0:
+        hive_weed7: ""
+    - 0:
+        hive_weed8: ""
+    - 0:
+        hive_weed9: ""
+    - 0:
+        hive_weed10: ""
+    - 0:
+        hive_weed11: ""
+    - 0:
+        hive_weed12: ""
+    - 0:
+        hive_weed13: ""
+    - 0:
+        hive_weed14: ""
+    - 0:
+        hive_weed15: ""
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: XenoHiveWeeds
+  id: XenoHiveWeedsCluster
+  components:
+  - type: XenoWeeds
+    range: 6
+    spawns: XenoHiveWeedsCluster
+    level: 3
+
+- type: entity
+  parent: XenoHiveWeeds
+  id: XenoHiveWeedsCore
+  components:
+  - type: XenoWeeds
+    range: 8
+    spawns: XenoHiveWeedsCore
+    level: 3
+
+- type: entity # TODO RMC14 sound
+  parent: XenoHiveWeeds
+  id: XenoHiveWeedsSource
+  name: hive weed node
+  description: A weird, pulsating node
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: hive_weed0
+    - state: constructionnode
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 11 # TODO RMC14 30 after it finishes spreading
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: XenoWeeds
+    healOnStopSpreading:
+      groups:
+        Brute: -6
+  - type: XenoConstructionPlasmaCost
+    plasma: 75
+  - type: Tag
+    tags:
+    - XenoWeedNode
+
+- type: entity
+  parent: XenoHiveWeeds
+  id: XenoHiveWeedsSourceHidden
+  suffix: Hidden Node
+  components:
+  - type: Sprite
+    layers:
+    - state: hive_weed0
+    - sprite: _RMC14/Markers/landmarks.rsi
+      state: weednode
+      map: ["enum.RMCGhostVisibleOnlyVisualLayers.Base"]
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: Tag
+    tags:
+    - XenoWeedNode
+    - XenoWeedTile
+  - type: RMCVisibleToGhostsOnly
+
+
+- type: entity
+  id: XenoWeedsWall
+  name: weeds
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+  - type: Clickable
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: Objects
+#    layers:
+#    - state: weedwall
+  - type: IconSmooth
+    key: cm_xeno_weeds_walls
+    base: weedwall
+    mode: Corners
+  - type: XenoNestSurface
+  - type: XenoFriendly
+  - type: Damageable
+    damageContainer: StructuralXeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: ImmuneToUnarmed
+  - type: WallMount
+    arc: 360
+  - type: RMCNightVisionVisible
+    priority: -1
+    transparency: 0.2
+  - type: XenoChargeDontHit
+
+# Gardener's weeds
+- type: entity # TODO RMC14 sound
+  parent: XenoWeeds
+  id: XenoHardyWeeds
+  components:
+  - type: Sprite
+    color: "#a1a1a1"
+  - type: XenoWeeds
+    level: 2
+    spawns: XenoHardyWeeds
+    spreadsOnSemiWeedable: true
+    fruitGrowthMultiplier: 0.8
+    speedMultiplierOutsider: 0.508
+    speedMultiplierOutsiderArmor: 0.6177
+  - type: XenoWeedsSpreading
+    spreadDelay: 3.125
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 10
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity # TODO RMC14 sound
+  parent: XenoHardyWeeds
+  id: XenoHardyWeedsSource
+  name: hardy weed node
+  description: A weird, pulsating node
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Xenos/xeno_weeds.rsi
+    drawdepth: FloorTiles
+    color: "#a1a1a1"
+    layers:
+    - state: weed0
+    - state: constructionnode
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 11
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: XenoWeeds
+    healOnStopSpreading:
+      groups:
+        Brute: -6
+  - type: Tag
+    tags:
+    - XenoWeedNode
+
+
+- type: entity
+  parent: XenoHardyWeeds
+  id: XenoHardyWeedsSourceHidden
+  suffix: Hidden Node
+  components:
+  - type: Sprite
+    layers:
+    - state: weed0
+    - sprite: _RMC14/Markers/landmarks.rsi
+      state: weednode
+      map: ["enum.RMCGhostVisibleOnlyVisualLayers.Base"]
+  - type: Tag
+    tags:
+    - XenoWeedNode
+    - XenoWeedTile
+  - type: RMCVisibleToGhostsOnly
+
+- type: Tag
+  id: XenoWeedTile
+
+- type: Tag
+  id: XenoWeedNode

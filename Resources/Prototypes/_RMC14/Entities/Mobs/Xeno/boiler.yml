@@ -1,0 +1,270 @@
+- type: entity
+  abstract: true
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  id: CMXenoBoiler
+  name: Boiler
+  description: A huge, grotesque xenonid covered in glowing, oozing acid slime.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleBoiler
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 185
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 185
+        layer:
+        - BulletImpassable
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+  - type: Xeno
+    role: CMXenoBoiler
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStabBoiler
+    - ActionXenoAcidStrong
+    - ActionXenoBombard
+    - ActionXenoToggleGasType
+    - ActionXenoSprayAcidBoiler
+    - ActionXenoZoom
+    - ActionXenoAcidShroud
+    - ActionXenoDevolve
+    tier: 3
+    hudOffset: -0.15,0.05
+    unlockAt: 900 # 15 minutes
+  - type: XenoHeavy
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoSpitter
+  - type: XenoPlasma
+    plasma: 400
+    maxPlasma: 400
+    plasmaRegenOnWeeds: 7
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
+  - type: XenoAcid
+  - type: CMArmor
+    xenoArmor: 20
+    explosionArmor: 20
+  - type: XenoDevour
+  - type: XenoZoom
+    zoom: 1, 1
+    offsetLength: 3
+    speed: 0.8
+    doAfter: 0.5
+  - type: XenoBombard
+  - type: XenoAcidShroud
+  - type: XenoGasToggle
+  - type: XenoTailStab
+    toggle: true
+    inject:
+      RMCMolecularAcid: 6
+    tailDamage:
+      groups:
+        Brute: 30
+  - type: XenoSprayAcid
+    acid: XenoAcidSprayStrong
+    barricadeDamage:
+      types:
+        Heat: 5
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 22.5
+  - type: Tackle
+    chance: 0.25
+    stunMin: 3
+    stunMax: 4
+  - type: AcidBloodSplash
+    isActivateSplashOnGib: false
+  - type: RMCGibOnDeath
+    gibChance: 1.0
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3.5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6375
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.7075
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.475
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: PointLight
+    enabled: true
+    radius: 1.8
+    softness: 1
+    autoRot: true
+  - type: RMCSize
+    size: Big
+  - type: XenoDeathcloud
+  - type: NeurotoxinInjector
+    neuroPerSecond: 20
+    injectInContact: false
+    affectsDead: false
+    affectsInfectedNested: false
+    toxinDamage:
+        groups:
+          Toxin: 2
+    oxygenDamage:
+        types:
+          Asphyxiation: 150
+    coughDamage:
+        groups:
+          Brute: 5
+  - type: RMCXenoDamageVisuals
+    prefix: boiler
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: boiler
+  - type: Flammable
+    damage: #per second, scales with number of fire 'stacks'
+      types:
+        Heat: 3
+  - type: XenoToggleChargingKnockback
+    enabled: false
+  - type: XenoToggleChargingStop
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+  - type: RMCActionOrder
+    id: CMXenoBoiler
+
+    #CMXenoBoiler
+- type: entity
+  parent: CMXenoBoiler
+  id: RMCXenoBoiler
+  components:
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStabBoiler
+    - ActionXenoAcidStrong
+    - ActionXenoBombard
+    - ActionXenoToggleGasType
+    - ActionXenoSprayAcidBoiler
+    - ActionXenoZoom
+    - ActionXenoAcidShroud
+    - ActionXenoDevolve
+  - type: XenoDeathcloud
+  - type: NeurotoxinInjector
+  - type: XenoEvolution
+    strains:
+      - RMCXenoBoilerSapper
+  - type: RMCActionOrder
+    id: RMCXenoBoiler
+
+    # Sapper strain
+- type: entity
+  parent: CMXenoBoiler
+  id: RMCXenoBoilerSapper
+  suffix: Sapper
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Boiler/boiler.rsi # AU14-Edit
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoTailStabBoiler
+    - ActionXenoWatch
+    - ActionXenoAcidStrong
+    - ActionXenoAcidMine
+    - ActionXenoAcidShotgun
+    - ActionXenoDeployTraps
+    - ActionXenoZoom
+    - ActionXenoDevolve
+  - type: XenoStrain
+    name: rmc-xeno-trapper-name
+    description: rmc-xeno-trapper-description
+    popup: rmc-xeno-trapper-popup
+  - type: CMArmor
+    xenoArmor: 0
+    explosionArmor: 20
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 1.50
+    baseSprintSpeed: 3.00
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      590: Critical
+      690: Dead
+  - type: XenoZoom
+    zoom: 1.75, 1.75
+    offsetLength: 0
+    speed: 1
+    doAfter: 0
+  - type: XenoTailStab
+    toggle: true
+    inject:
+      RMCMolecularAcid: 6
+    tailDamage:
+      groups:
+        Brute: 30
+  - type: XenoAcidMine
+  - type: XenoAcidShotgun
+  - type: XenoDeployTraps
+  - type: XenoInsight
+  - type: XenoAdrenalineSurge
+  - type: RMCActionOrder
+    id: RMCXenoBoilerSapper
+
+

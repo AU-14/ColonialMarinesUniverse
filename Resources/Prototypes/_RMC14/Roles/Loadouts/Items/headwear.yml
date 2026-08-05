@@ -1,0 +1,128 @@
+# Headwear
+- type: loadout
+  id: SquadBeretRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBeretSquad
+
+- type: loadout
+  id: GreenBeretRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBeretGreen
+
+- type: loadout
+  id: TanBeretRMC
+  cost: 2
+  equipment:
+    head: CMHeadBeretTan
+
+- type: loadout
+  id: CamoBeretRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBeret
+
+- type: loadout
+  id: BoonieRMC
+  cost: 2
+  equipment:
+    head: RMCBoonie
+
+- type: loadout
+  id: BoonieTanRMC
+  cost: 2
+  equipment:
+    head: RMCBoonieTan
+
+- type: loadout
+  id: CapRMC
+  cost: 2
+  equipment:
+    head: RMCHeadCapFlippable
+
+- type: loadout
+  id: CapRoyalRMC
+  cost: 2
+  equipment:
+    head: RMCHeadCapRoyal
+
+- type: loadout
+  id: BoonieRoyalRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBoonieRoyal
+
+- type: loadout
+  id: BrownHeadbandRMC
+  cost: 2
+  equipment:
+    head: CMHeadBandBrown
+
+- type: loadout
+  id: GreenHeadbandRMC
+  cost: 2
+  equipment:
+    head: CMHeadBandGreen
+
+- type: loadout
+  id: GrayHeadbandRMC
+  cost: 2
+  equipment:
+    head: CMHeadBandGray
+
+- type: loadout
+  id: RedHeadbandRMC
+  cost: 2
+  equipment:
+    head: CMHeadBandRed
+
+- type: loadout
+  id: TanHeadbandRMC
+  cost: 2
+  equipment:
+    head: CMHeadBandTan
+
+- type: loadout
+  id: SquadHeadbandRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBandSquad
+
+- type: loadout
+  id: HeadBeanieRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBeanie
+
+- type: loadout
+  id: HeadBeanieTanRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBeanieTan
+
+- type: loadout
+  id: HeadBeanieGreenRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBeanieGreen
+
+- type: loadout
+  id: HeadBeanieGrayRMC
+  cost: 2
+  equipment:
+    head: RMCHeadBeanieGray
+
+- type: loadout
+  id: UNMCHeadsetRMC
+  cost: 2
+  storage:
+    back:
+    - RMCHeadUNMCHeadset
+
+- type: loadout
+  id: HeadsetRoyalRMC
+  cost: 2
+  storage:
+    back:
+    - RMCHeadRoyalHeadset

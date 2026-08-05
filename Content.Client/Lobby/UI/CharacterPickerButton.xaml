@@ -1,0 +1,47 @@
+
+<ContainerButton xmlns="https://spacestation14.io"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:style="clr-namespace:Content.Client.Stylesheets"
+         xmlns:profile="clr-namespace:Content.Client.Lobby.UI.ProfileEditorControls">
+    <BoxContainer Orientation="Horizontal"
+                  HorizontalExpand="True"
+                  SeparationOverride="0"
+                  Name="InternalHBox">
+        <profile:ProfilePreviewSpriteView Scale="2 2"
+                    Margin="0 4 4 4"
+                    OverrideDirection="South"
+                    Name="View"
+                    SetSize="64 64"/>
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalAlignment="Center"
+                      MinWidth="145"
+                      MaxWidth="145">
+            <Label Name="NameLabel"
+                   StyleClasses="CharacterName"
+                   ClipText="True"
+                   MinWidth="145"
+                   MaxWidth="145"
+                   HorizontalExpand="True"/>
+            <Label Name="JobLabel"
+                   ClipText="True"
+                   MinWidth="145"
+                   MaxWidth="145"
+                   HorizontalExpand="True"
+                   StyleClasses="CrtDimText"/>
+        </BoxContainer>
+        <Button Name="DeleteButton"
+                MinWidth="88"
+                MaxWidth="88"
+                VerticalAlignment="Center"
+                Text="{Loc 'character-setup-gui-character-picker-button-delete-button'}"/>
+        <Button Name="ConfirmDeleteButton"
+                MinWidth="88"
+                MaxWidth="88"
+                VerticalAlignment="Center"
+                Text="{Loc 'character-setup-gui-character-picker-button-confirm-delete-button'}"
+                Visible="False"
+                ModulateSelfOverride="{x:Static style:StyleNano.ButtonColorCautionDefault}"/>
+
+    </BoxContainer>
+</ContainerButton>

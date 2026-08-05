@@ -1,0 +1,55 @@
+#nullable enable
+
+using Content.Shared.Chemistry.Reagent;
+using Content.Shared.EntityEffects;
+using Content.Shared.EntityEffects.Effects.StatusEffects;
+using Content.Shared.Mobs.Components;
+using Content.Shared.StatusEffectNew;
+using Robust.Shared.GameObjects;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+
+namespace Content.IntegrationTests.Tests.Chemistry;
+
+[TestFixture]
+[TestOf(typeof(ModifyStatusEffect))]
+public sealed class DiphenhydramineDrowsinessTest
+{
+    private static readonly ProtoId<ReagentPrototype> Diphenhydramine = "Diphenhydramine";
+
+    [Test]
+    public async Task RepeatedMetabolismDoesNotAccumulateDrowsiness()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.ResolveDependency<IEntityManager>();
+            var protoMan = server.ResolveDependency<IPrototypeManager>();
+            var effects = entMan.System<SharedEntityEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
+            var reagent = protoMan.Index(Diphenhydramine);
+
+            var effect = reagent.Metabolisms!.Metabolisms.Values
+                .SelectMany(entry => entry.Effects)
+                .OfType<ModifyStatusEffect>()
+                .Single(entry => entry.EffectProto == "StatusEffectDrowsiness");
+
+            Assert.That(effect.Type, Is.EqualTo(StatusEffectMetabolismType.Update));
+
+            var target = entMan.SpawnEntity(null, MapCoordinates.Nullspace);
+            entMan.AddComponent<MobStateComponent>(target);
+
+            effects.ApplyEffect(target, effect);
+            Assert.That(status.TryGetTime(target, effect.EffectProto, out var first), Is.True);
+            Assert.That(first.EndEffectTime, Is.Not.Null);
+
+            effects.ApplyEffect(target, effect);
+            Assert.That(status.TryGetTime(target, effect.EffectProto, out var second), Is.True);
+            Assert.That(second.EndEffectTime, Is.EqualTo(first.EndEffectTime));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+}

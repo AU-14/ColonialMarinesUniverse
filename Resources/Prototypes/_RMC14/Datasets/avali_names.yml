@@ -1,0 +1,11 @@
+- type: localizedDataset
+  id: RMCNamesAvaliFirst
+  values:
+    prefix: rmc-name-avali-first-
+    count: 24
+
+- type: localizedDataset
+  id: RMCNamesAvaliLast
+  values:
+    prefix: rmc-name-avali-last-
+    count: 130

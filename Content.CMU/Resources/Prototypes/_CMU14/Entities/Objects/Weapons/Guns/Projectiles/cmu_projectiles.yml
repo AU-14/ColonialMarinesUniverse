@@ -1,0 +1,131 @@
+- type: entity
+  parent: RMCProjectileLTBCannon
+  id: CMUProjectileLTBCannonAPFSDS
+  name: LTB APFSDS cannon shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 45
+    maxFixedRange: 0
+  - type: VehicleDamageMultiplier
+    multiplier: 20
+  - type: CMArmorPiercing
+    amount: 70
+  - type: SpawnOnTerminate
+    spawn: CMULTBCannonImpactAPFSDS
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnelJagged
+    rebounds: true
+    capacity: 0
+    spreadAngle: 25
+
+- type: entity
+  parent: RMCProjectileLTBCannon
+  id: CMUProjectileLTBCannonHEAT
+  name: LTB HEAT cannon shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 20
+        Heat: 6
+    maxFixedRange: 0
+  - type: VehicleDamageMultiplier
+    multiplier: 12
+  - type: CMArmorPiercing
+    amount: 40
+  - type: SpawnOnTerminate
+    spawn: CMULTBCannonImpactHEAT
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnelJagged
+    rebounds: true
+    capacity: 4
+    spreadAngle: 20
+
+- type: entity
+  parent: RMCProjectileLTBCannon
+  id: CMUProjectileLTBCannonHE
+  name: LTB HE cannon shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Blunt: 6
+        Piercing: 2
+    maxFixedRange: 0
+  - type: VehicleDamageMultiplier
+    multiplier: 3
+  - type: SpawnOnTerminate
+    spawn: CMULTBCannonImpactHE
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnelJagged
+    rebounds: true
+    capacity: 16
+    spreadAngle: 45
+
+- type: entity
+  parent: RMCProjectileLTBCannon
+  id: CMUProjectileLTBCannonCanister
+  name: LTB canister cannon shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 4
+    maxFixedRange: 5
+  - type: VehicleDamageMultiplier
+    multiplier: 1
+  - type: SpawnOnTerminate
+    spawn: CMULTBCannonImpactCanister
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnelJagged
+    rebounds: true
+    capacity: 45
+    spreadAngle: 120
+
+- type: entity
+  parent: RMCProjectileLTBCannon
+  id: CMUProjectileLTBCannonNapalm
+  name: LTB napalm cannon shell
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    damage:
+      types:
+        Piercing: 4
+        Heat: 6
+    maxFixedRange: 0
+  - type: VehicleDamageMultiplier
+    multiplier: 2
+  - type: SpawnOnTerminate
+    spawn: CMULTBCannonImpactNapalm
+  - type: ProjectileGrenade
+    evenSpread: true
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    fillPrototype: RMCShrapnelJagged
+    rebounds: true
+    capacity: 0
+    spreadAngle: 25

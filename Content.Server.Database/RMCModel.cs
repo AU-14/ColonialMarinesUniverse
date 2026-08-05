@@ -1,0 +1,520 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Content.Shared.Database;
+using Microsoft.EntityFrameworkCore;
+using NpgsqlTypes;
+
+namespace Content.Server.Database;
+
+[Table("rmc_discord_accounts")]
+public sealed class RMCDiscordAccount
+{
+    [Key]
+    public ulong Id { get; set; }
+
+    public RMCLinkedAccount LinkedAccount { get; set; } = default!;
+    public List<RMCLinkedAccountLogs> LinkedAccountLogs { get; set; } = default!;
+}
+
+[Table("rmc_linked_accounts")]
+public sealed class RMCLinkedAccount
+{
+    [Key]
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public ulong DiscordId { get; set; }
+
+    public RMCDiscordAccount Discord { get; set; } = default!;
+}
+
+[Table("rmc_patron_tiers")]
+public sealed class RMCPatronTier
+{
+    [Key]
+    public int Id { get; set; }
+
+    public bool ShowOnCredits { get; set; }
+
+    public bool GhostColor { get; set; }
+
+    public bool NamedItems { get; set; }
+
+    public bool Figurines { get; set; }
+
+    public bool LobbyMessage { get; set; }
+
+    public bool RoundEndShoutout { get; set; }
+
+    public string Name { get; set; } = default!;
+
+    public ulong DiscordRole { get; set; }
+
+    public int Priority { get; set; }
+
+    public List<RMCPatron> Patrons { get; set; } = default!;
+}
+
+[Table("rmc_patrons")]
+[Index(nameof(TierId))]
+public sealed class RMCPatron
+{
+    [Key]
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public int TierId { get; set; }
+
+    public RMCPatronTier Tier { get; set; } = default!;
+    public int? GhostColor { get; set; } = default!;
+    public RMCPatronLobbyMessage? LobbyMessage { get; set; } = default!;
+    public RMCPatronRoundEndMarineShoutout? RoundEndMarineShoutout { get; set; } = default!;
+    public RMCPatronRoundEndXenoShoutout? RoundEndXenoShoutout { get; set; } = default!;
+}
+
+[Table("rmc_linking_codes")]
+[Index(nameof(Code))]
+public sealed class RMCLinkingCodes
+{
+    [Key]
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public Guid Code { get; set; }
+
+    public DateTime CreationTime { get; set; }
+}
+
+[Table("rmc_named_items")]
+public sealed class RMCNamedItems
+{
+    [Key, ForeignKey("Profile")]
+    public int ProfileId { get; set; }
+
+    public Profile Profile { get; set; } = default!;
+
+    [StringLength(20)]
+    public string? PrimaryGunName { get; set; } = default!;
+
+    [StringLength(20)]
+    public string? SidearmName { get; set; } = default!;
+
+    [StringLength(20)]
+    public string? HelmetName { get; set; } = default!;
+
+    [StringLength(20)]
+    public string? ArmorName { get; set; } = default!;
+
+    [StringLength(20)]
+    public string? SentryName { get; set; } = default!;
+}
+
+[Table("rmc_linked_accounts_logs")]
+[Index(nameof(PlayerId))]
+[Index(nameof(DiscordId))]
+[Index(nameof(At))]
+public sealed class RMCLinkedAccountLogs
+{
+    [Key]
+    public int Id { get; set; }
+
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public ulong DiscordId { get; set; }
+
+    public RMCDiscordAccount Discord { get; set; } = default!;
+
+    public DateTime At { get; set; }
+}
+
+[Table(("rmc_patron_lobby_messages"))]
+public sealed class RMCPatronLobbyMessage
+{
+    [Key, ForeignKey("Patron")]
+    public Guid PatronId { get; set; }
+
+    public RMCPatron Patron { get; set; } = default!;
+
+    [StringLength(500)]
+    public string Message { get; set; } = default!;
+}
+
+[Table(("rmc_patron_round_end_marine_shoutouts"))]
+public sealed class RMCPatronRoundEndMarineShoutout
+{
+    [Key, ForeignKey("Patron")]
+    public Guid PatronId { get; set; }
+
+    public RMCPatron Patron { get; set; } = default!;
+
+    [StringLength(100), Required]
+    public string Name { get; set; } = default!;
+}
+
+[Table(("rmc_patron_round_end_xeno_shoutouts"))]
+public sealed class RMCPatronRoundEndXenoShoutout
+{
+    [Key, ForeignKey("Patron")]
+    public Guid PatronId { get; set; }
+
+    public RMCPatron Patron { get; set; } = default!;
+
+    [StringLength(100), Required]
+    public string Name { get; set; } = default!;
+}
+
+[Table("rmc_role_timer_excludes")]
+[PrimaryKey(nameof(PlayerId), nameof(Tracker))]
+public sealed class RMCRoleTimerExclude
+{
+    [ForeignKey("Player")]
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public string Tracker { get; set; } = default!;
+}
+
+[Table("rmc_squad_preferences")]
+public sealed class RMCSquadPreference
+{
+    [Key, ForeignKey("Player")]
+    public int ProfileId { get; set; }
+
+    public Profile Profile { get; set; } = default!;
+
+    public string? Squad { get; set; } // EntProtoId<SquadTeamComponent>
+}
+
+[Table("rmc_commendations")]
+public sealed class RMCCommendation
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id;
+
+    [ForeignKey("Giver")]
+    public Guid GiverId { get; set; }
+
+    public Player Giver { get; set; } = default!;
+
+    [ForeignKey("Receiver")]
+    public Guid ReceiverId { get; set; }
+
+    public Player Receiver { get; set; } = default!;
+
+    [ForeignKey("Round")]
+    public int RoundId { get; set; }
+
+    public Round Round { get; set; } = default!;
+
+    public string GiverName { get; set; } = string.Empty;
+
+    public string ReceiverName { get; set; } = string.Empty;
+
+    public string Name { get; set; } = string.Empty;
+
+    public string Text { get; set; } = string.Empty;
+
+    public CommendationType Type { get; set; }
+
+    public bool Deleted { get; set; }
+
+    [ForeignKey("DeletedBy")]
+    public Guid? DeletedById { get; set; }
+
+    public Player? DeletedBy { get; set; }
+
+    public DateTime? DeletedAt { get; set; }
+}
+
+[Table("rmc_player_stats")]
+public sealed class RMCPlayerStats
+{
+    [Key]
+    [ForeignKey("Player")]
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public int ParasiteInfects { get; set; }
+}
+
+[Table("rmc_player_action_order")]
+[PrimaryKey(nameof(PlayerId), nameof(Id))]
+public sealed class RMCPlayerActionOrder
+{
+    [ForeignKey("Player")]
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public string Id { get; set; } = default!;
+
+    public List<string> Actions { get; set; } = default!;
+}
+
+[Table("rmc_chat_bans"), Index(nameof(PlayerId)), Index(nameof(Address))]
+public sealed class RMCChatBans
+{
+    [Key]
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; set; }
+
+    [ForeignKey(nameof(Round))]
+    public int? RoundId { get; set; }
+    public Round? Round { get; set; }
+
+    [ForeignKey(nameof(Player))]
+    public Guid PlayerId { get; set; }
+    public Player Player { get; set; } = default!;
+    public NpgsqlInet? Address { get; set; }
+    public TypedHwid? HWId { get; set; }
+
+    public ChatType Type { get; set; }
+
+    public DateTime BannedAt { get; set; }
+
+    public DateTime? ExpiresAt { get; set; }
+
+    public string Reason { get; set; } = null!;
+
+    public Guid? BanningAdminId { get; set; }
+    public Player? BanningAdmin { get; set; }
+
+    public Guid? UnbanningAdminId { get; set; }
+    public Player? UnbanningAdmin { get; set; }
+    public DateTime? UnbannedAt { get; set; }
+
+    public Guid? LastEditedById { get; set; }
+    public Player? LastEditedBy { get; set; }
+    public DateTime? LastEditedAt { get; set; }
+}
+
+public abstract partial class ServerDbContext
+{
+    public DbSet<RMCDiscordAccount> RMCDiscordAccounts { get; set; } = default!;
+    public DbSet<RMCLinkedAccount> RMCLinkedAccounts { get; set; } = default!;
+    public DbSet<RMCPatronTier> RMCPatronTiers { get; set; } = default!;
+    public DbSet<RMCPatron> RMCPatrons { get; set; } = default!;
+    public DbSet<RMCLinkingCodes> RMCLinkingCodes { get; set; } = default!;
+    public DbSet<RMCNamedItems> RMCNamedItems { get; set; } = default!;
+    public DbSet<RMCLinkedAccountLogs> RMCLinkedAccountLogs { get; set; } = default!;
+    public DbSet<RMCPatronLobbyMessage> RMCPatronLobbyMessages { get; set; } = default!;
+    public DbSet<RMCPatronRoundEndMarineShoutout> RMCPatronRoundEndMarineShoutouts { get; set; } = default!;
+    public DbSet<RMCPatronRoundEndXenoShoutout> RMCPatronRoundEndXenoShoutouts { get; set; } = default!;
+    public DbSet<RMCRoleTimerExclude> RMCRoleTimerExcludes { get; set; } = default!;
+    public DbSet<RMCSquadPreference> RMCSquadPreferences { get; set; } = default!;
+    public DbSet<RMCCommendation> RMCCommendations { get; set; } = default!;
+    public DbSet<RMCPlayerStats> RMCPlayerStats { get; set; } = default!;
+    public DbSet<RMCPlayerActionOrder> RMCPlayerActionOrder { get; set; } = default!;
+    public DbSet<RMCChatBans> RMCPlayerChatBans { get; set; } = default!;
+}
+
+public partial class Profile
+{
+    public RMCNamedItems? NamedItems { get; set; }
+    public RMCSquadPreference? SquadPreference { get; set; }
+    public string ArmorPreference { get; set; } = "Random";
+    public List<Rank> Ranks { get; } = new();
+    public bool PlaytimePerks { get; set; } = true;
+    public string XenoPrefix { get; set; } = string.Empty;
+    public string XenoPostfix { get; set; } = string.Empty;
+}
+
+public partial class Player
+{
+    public RMCLinkedAccount? LinkedAccount { get; set; }
+    public RMCPatron? Patron { get; set; }
+    public RMCLinkingCodes? LinkingCodes { get; set; }
+    public List<RMCLinkedAccountLogs> LinkedAccountLogs { get; set; } = default!;
+    public List<RMCRoleTimerExclude> RoleTimerExcludes { get; set; } = default!;
+    public List<RMCCommendation> CommendationsGiven { get; set; } = default!;
+    public List<RMCCommendation> CommendationsReceived { get; set; } = default!;
+    public List<RMCCommendation> CommendationsDeleted { get; set; } = default!;
+    public RMCPlayerStats Stats { get; set; } = default!;
+    public List<RMCPlayerActionOrder> ActionOrder { get; set; } = default!;
+    public List<RMCChatBans> ChatBans { get; set; } = default!;
+    public List<RMCChatBans> AdminChatBansCreated { get; set; } = default!;
+    public List<RMCChatBans> AdminChatBansLastEdited { get; set; } = default!;
+    public List<RMCChatBans> AdminChatBansPardoned { get; set; } = default!;
+}
+
+public partial class Round
+{
+    public List<RMCCommendation> Commendations { get; set; } = default!;
+}
+
+internal static class RMCModelConfiguration
+{
+    public static void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Profile>()
+            .Property(p => p.PlaytimePerks)
+            .HasDefaultValue(true);
+
+        modelBuilder.Entity<Profile>()
+            .Property(p => p.XenoPrefix)
+            .HasDefaultValue(string.Empty);
+
+        modelBuilder.Entity<Profile>()
+            .Property(p => p.XenoPostfix)
+            .HasDefaultValue(string.Empty);
+
+        modelBuilder.Entity<RMCLinkedAccount>()
+            .HasOne(l => l.Player)
+            .WithOne(p => p.LinkedAccount)
+            .HasForeignKey<RMCLinkedAccount>(l => l.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCLinkedAccount>()
+            .HasOne(l => l.Discord)
+            .WithOne(d => d.LinkedAccount)
+            .HasForeignKey<RMCLinkedAccount>(l => l.DiscordId)
+            .HasPrincipalKey<RMCDiscordAccount>(d => d.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPatron>()
+            .HasOne(p => p.Player)
+            .WithOne(p => p.Patron)
+            .HasForeignKey<RMCPatron>(p => p.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPatron>()
+            .HasOne(p => p.Tier)
+            .WithMany(t => t.Patrons)
+            .HasForeignKey(p => p.TierId)
+            .HasPrincipalKey(p => p.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPatronTier>()
+            .HasIndex(t => t.DiscordRole)
+            .IsUnique();
+
+        modelBuilder.Entity<RMCLinkingCodes>()
+            .HasOne(l => l.Player)
+            .WithOne(p => p.LinkingCodes)
+            .HasForeignKey<RMCLinkingCodes>(l => l.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCLinkedAccountLogs>()
+            .HasOne(l => l.Player)
+            .WithMany(p => p.LinkedAccountLogs)
+            .HasForeignKey(l => l.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCLinkedAccountLogs>()
+            .HasOne(l => l.Discord)
+            .WithMany(p => p.LinkedAccountLogs)
+            .HasForeignKey(l => l.DiscordId)
+            .HasPrincipalKey(p => p.Id)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCRoleTimerExclude>()
+            .HasOne(r => r.Player)
+            .WithMany(p => p.RoleTimerExcludes)
+            .HasForeignKey(r => r.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasKey(c => c.Id);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .Property(c => c.Id)
+            .ValueGeneratedOnAdd();
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasOne(r => r.Giver)
+            .WithMany(p => p.CommendationsGiven)
+            .HasForeignKey(r => r.GiverId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasOne(r => r.Receiver)
+            .WithMany(p => p.CommendationsReceived)
+            .HasForeignKey(r => r.ReceiverId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCCommendation>()
+            .HasOne(r => r.DeletedBy)
+            .WithMany(p => p.CommendationsDeleted)
+            .HasForeignKey(r => r.DeletedById)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCPlayerStats>()
+            .HasOne(s => s.Player)
+            .WithOne(p => p.Stats)
+            .HasForeignKey<RMCPlayerStats>(p => p.PlayerId)
+            .HasPrincipalKey<Player>(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCPlayerActionOrder>()
+            .HasOne(a => a.Player)
+            .WithMany(p => p.ActionOrder)
+            .HasForeignKey(a => a.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.Player)
+            .WithMany(p => p.ChatBans)
+            .HasForeignKey(b => b.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.BanningAdmin)
+            .WithMany(p => p.AdminChatBansCreated)
+            .HasForeignKey(b => b.BanningAdminId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.UnbanningAdmin)
+            .WithMany(p => p.AdminChatBansPardoned)
+            .HasForeignKey(b => b.UnbanningAdminId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .HasOne(b => b.LastEditedBy)
+            .WithMany(p => p.AdminChatBansLastEdited)
+            .HasForeignKey(b => b.LastEditedById)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.SetNull);
+
+        modelBuilder.Entity<RMCChatBans>()
+            .OwnsOne(b => b.HWId)
+            .Property(h => h.Hwid)
+            .HasColumnName("hwid");
+
+        modelBuilder.Entity<RMCChatBans>()
+            .OwnsOne(b => b.HWId)
+            .Property(h => h.Type)
+            .HasDefaultValue(HwidType.Legacy);
+    }
+}
+
+public sealed class Rank
+{
+    public int Id { get; set; }
+    public Profile Profile { get; set; } = default!;
+    public int ProfileId { get; set; }
+    public string JobName { get; set; } = default!;
+    public string RankName { get; set; } = default!;
+}

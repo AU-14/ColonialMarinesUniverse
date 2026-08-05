@@ -1,0 +1,43 @@
+- type: entity
+  name: chainsaw
+  parent: BaseItem
+  id: Chainsaw
+  description: A very large chainsaw. Usually you use this for cutting down trees... usually.
+  components:
+  - type: Tool
+    qualities:
+    - Slicing
+    - Sawing
+  - type: Wieldable
+    wieldSound: !type:SoundPathSpecifier
+      path: /Audio/Weapons/chainsaw_pull.ogg
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/chainsaw.rsi
+    state: icon
+  - type: MeleeWeapon
+    autoAttack: true
+    angle: 0
+    wideAnimationRotation: -135
+    attackRate: 4
+    damage:
+      types:
+        Slash: 2
+        Blunt: 2
+        Structural: 4
+    soundHit:
+      path: /Audio/Weapons/chainsaw_rev.ogg
+      params:
+        volume: -2
+  - type: IncreaseDamageOnWield
+    damage:
+      types:
+        Slash: 4
+        Structural: 4
+  - type: Item
+    size: Large
+    shape:
+    - 0,0,2,2
+    sprite: Objects/Weapons/Melee/chainsaw.rsi
+  - type: DisarmMalus
+  - type: UseDelay
+    delay: 1

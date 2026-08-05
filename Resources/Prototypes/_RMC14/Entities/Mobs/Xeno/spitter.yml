@@ -1,0 +1,148 @@
+- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  - RMCXenoVentCrawler
+  id: CMXenoSpitter
+  name: Spitter
+  description: A gross, oozing alien of some kind.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleSpitter
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Spitter/spitter.rsi #AU14-Edit
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      550: Critical
+      650: Dead
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - RMCSynthGrabbable
+  - type: Xeno
+    role: CMXenoSpitter
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStabCorrosive
+    - ActionXenoAcidNormal
+    - ActionXenoSpit
+    - ActionXenoChargeSpit
+    - ActionXenoSprayAcid
+    - ActionXenoDevolve
+    tier: 2
+    hudOffset: -0.15,0.025
+    unlockAt: 540 # 9 minutes
+  - type: XenoHeavy
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoSentinel
+  - type: XenoAcid
+  - type: XenoDevour
+  - type: XenoPlasma
+    plasma: 600
+    maxPlasma: 600
+    plasmaRegenOnWeeds: 4
+  - type: XenoEvolution
+    max: 500
+    evolvesTo:
+    - RMCXenoBoiler
+    - CMXenoPraetorian
+    - RMCXenoDespoiler
+    strains:
+    - CMXenoSpitterVenator
+    - CMXenoSpitterAlchemist
+  - type: XenoSpit
+  - type: XenoChargeSpit
+  - type: XenoScatteredSpit
+  - type: XenoSprayAcid
+    barricadeDamage:
+      types:
+        Heat: 5
+  - type: XenoTailStab
+    inject:
+      RMCMolecularAcid: 2
+    tailDamage:
+      groups:
+        Brute: 36
+  - type: CMArmor
+    xenoArmor: 15
+    explosionArmor: 20
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 25
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.45
+    stunMin: 4
+    stunMax: 5
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3.5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6375
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.7075
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.475
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaNeuro
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 1
+  - type: RMCXenoDamageVisuals
+    prefix: spitter
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: spitter
+  - type: AcidTrap
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.2
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT2
+  - type: VentCrawler
+    ventCrawlIcon: spitter
+  - type: RMCActionOrder
+    id: CMXenoSpitter
+  - type: CMUXenoZJump

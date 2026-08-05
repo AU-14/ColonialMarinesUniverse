@@ -1,0 +1,49 @@
+﻿# riot
+- type: entity
+  parent: RMCBaseArmor
+  id: CMArmorRiot
+  name: M5 riot control armor
+  description: A heavily modified suit of M2 MP Armor used to suppress riots from buckethead marines. Slows you down a lot.
+  suffix: Marine
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/riot.rsi
+  - type: Clothing
+    equipDelay: 2
+    unequipDelay: 2
+  - type: RMCArmorSpeedTier
+    speedTier: heavy
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LOWHEAVY
+    walkModifier: 0.64
+    sprintModifier: 0.64
+  - type: CMArmor
+    melee: 30
+    bullet: 30
+    explosionArmor: 10
+  - type: CMHardArmor
+  - type: RMCNameItemOnVend
+    item: Armor
+  - type: RMCBulkyArmor
+
+- type: entity
+  parent: CMArmorRiot
+  id: RMCArmorRiotCivilian
+  name: riot suit
+  description: A suit of armor with heavy padding to protect against melee attacks. Looks like it might impair movement.
+  suffix: Civilian
+  components:
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_HEAVY
+    walkModifier: 0.62
+    sprintModifier: 0.62
+  - type: CMArmor
+    melee: 30
+    bullet: 10
+    explosionArmor: 10
+
+- type: entity
+  parent: CMArmorRiot
+  id: CMArmorRiotOld
+  description: Barring the slightly off-color plates, it's preserved quite well.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/Armor/old_riot.rsi

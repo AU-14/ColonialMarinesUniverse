@@ -1,0 +1,110 @@
+- type: Tag
+  id: CMFireExtinguisherPortable
+
+- type: entity
+  parent: FireExtinguisher
+  id: CMFireExtinguisher
+  name: fire extinguisher
+  description: A traditional red fire extinguisher.
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/fire_extinguisher.rsi
+  - type: Spray
+    transferAmount: 5
+    sprayedPrototype: RMCExtinguisherSpray
+    vaporAmount: 3
+    sprayDistance: 5
+    sprayVelocity: 5
+    pushbackAmount: 0
+  - type: Solution
+    id: spray
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Water
+        Quantity: 50
+  - type: Sprite
+    sprite: _RMC14/Objects/fire_extinguisher.rsi
+    layers:
+    - state: fire_extinguisher0
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: fire_extinguisher1 } # TODO RMC14
+          False: { state: fire_extinguisher0 }
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Clothing
+    sprite: _RMC14/Objects/fire_extinguisher.rsi
+    quickEquip: false
+    slots:
+    - Belt
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 90
+
+- type: entity
+  parent: CMFireExtinguisher
+  id: CMFireExtinguisherPortable
+  name: portable fire extinguisher
+  description: A light and compact fibreglass-framed model fire extinguisher.
+  components:
+  - type: Item
+    sprite: _RMC14/Objects/fire_extinguisher_mini.rsi
+    size: Small
+  - type: Solution
+    id: spray
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Water
+        Quantity: 30
+  - type: Sprite
+    sprite: _RMC14/Objects/fire_extinguisher_mini.rsi
+    layers:
+    - state: minife1
+      map: [ "enum.ToggleableVisuals.Layer" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { state: minife1 } # TODO RMC14
+          False: { state: minife0 }
+  - type: Tag
+    tags:
+    - CMFireExtinguisherPortable
+  - type: Clothing
+    sprite: _RMC14/Objects/fire_extinguisher_mini.rsi
+
+- type: entity
+  parent: ExtinguisherSpray
+  id: RMCExtinguisherSpray
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        hard: false
+        mask:
+        - FullTileMask
+        - Opaque
+        - ItemMask
+        - VaporMask
+        layer:
+        - ItemMask
+  - type: Undisposable
+
+- type: entity
+  parent: RMCExtinguisherSpray
+  id: RMCExtinguisherSpraySpec
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RMCExtinguisherPower
+    power: 48

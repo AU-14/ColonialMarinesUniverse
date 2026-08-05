@@ -1,0 +1,168 @@
+﻿rmc-dropship-pre-flight-fueling = The shuttle is still undergoing pre-flight fueling and cannot depart yet. Please wait another {$minutes} minutes before trying again.
+rmc-dropship-pre-hijack = This terminal won't be operational for another {$minutes} minutes.
+rmc-dropship-invalid-hijack = Lights flash from the terminal but you can't comprehend their meaning.
+rmc-dropship-terminal-clueless = You stare cluelessly at the {$terminal}.
+rmc-dropship-no-destinations-nearby = There are no dropship destinations near you!
+rmc-dropship-already-incoming = There is already a dropship coming here!
+rmc-dropship-already-here = There is already a dropship here!
+rmc-dropship-not-primary-shuttle = The shuttle isn't responding to prompts, it looks like this isn't the primary shuttle.
+rmc-dropship-call-to-location = You call down one of the dropships to your location.
+rmc-dropship-none-available = There are no available dropships! Wait a moment.
+rmc-dropship-no-remote-control = This dropship does not have remote-control enabled.
+rmc-dropship-busy = This dropship is currently busy. Please try again later.
+rmc-dropship-now-on-its-way = This dropship is now on its way.
+
+rmc-dropship-weapons-title = Weapons Console
+
+rmc-dropship-weapons-main-screen-text = U.N.M.C.
+  Dropship Weapons Control System
+  V 0.1
+
+rmc-dropship-weapons-weapon-selected = {$weapon}
+  No ammo
+rmc-dropship-weapons-weapon-selected-ammo = {$weapon}
+  {$ammo}
+  Ammo {$rounds} / {$maxRounds}
+
+rmc-dropship-weapons-target-strike = Target Acquisition
+
+  Strike mode: {$mode}
+
+  Target mode: {$targetMode}
+
+  Strike configuration {$weapon}
+
+  Target selected: {$target}
+
+  Offset {$xOffset},{$yOffset}
+
+#  Attack Vector {$vector}
+
+#  Offset 0,0
+
+#  Guidance computer INCOMPLETE
+
+rmc-dropship-weapons-equip-weapon-ammo = {$weapon}
+  {$rounds} rounds
+
+rmc-dropship-weapons-equip = EQUIP
+rmc-dropship-weapons-fire-mission = F-MISS
+rmc-dropship-weapons-target = TARGET
+rmc-dropship-weapons-maps = MAPS
+rmc-dropship-weapons-cams = CAMS
+rmc-dropship-weapons-cancel = CANCEL
+rmc-dropship-weapons-exit = EXIT
+rmc-dropship-weapons-lock = LOCK
+rmc-dropship-weapons-clear = CLEAR
+rmc-dropship-weapons-enable = ENABLE
+rmc-dropship-weapons-disable = DISABLE
+rmc-dropship-weapons-deploy = DEPLOY
+rmc-dropship-weapons-retract = RETRACT
+rmc-dropship-weapons-auto-deploy = AUTO-DEPLOY
+
+rmc-dropship-weapons-offset-calibration = Camera
+  Offset
+rmc-dropship-weapons-offset-calibration-does-not-affect-direct-bombardment = Does not affect direct bombardment!
+
+rmc-dropship-weapons-fire = FIRE
+rmc-dropship-weapons-strike = STRIKE
+rmc-dropship-weapons-vector = VECTOR
+rmc-dropship-weapons-quick = QUICK
+# TODO RMC14 fire missions: restore these labels with fire mission vector controls.
+# rmc-dropship-weapons-north = NORTH
+# rmc-dropship-weapons-south = SOUTH
+# rmc-dropship-weapons-east = EAST
+# rmc-dropship-weapons-west = WEST
+rmc-dropship-weapons-target-mode-quick = QUICK
+rmc-dropship-weapons-target-mode-standard = STANDARD
+
+rmc-dropship-weapons-night-vision-on = NV-ON
+rmc-dropship-weapons-night-vision-off = NV-OFF
+
+rmc-dropship-weapons-weapon = WEAPON
+
+rmc-dropship-weapons-previous = ^
+rmc-dropship-weapons-next = v
+
+rmc-dropship-weapons-fire-no-weapon = No weapon selected.
+rmc-dropship-weapons-fire-not-flying = Dropships can only fire fire while in flight.
+rmc-dropship-weapons-fire-not-skilled = You don't have the training to fire this weapon!
+rmc-dropship-weapons-fire-no-ammo = {$weapon} has no ammo.
+rmc-dropship-weapons-fire-cooldown = {$weapon} just fired, wait for it to cool down.
+
+rmc-dropship-attached = It has a {$attachment} loaded.
+
+rmc-dropship-weapons-point-ammo = It has a {$ammo} loaded.
+rmc-dropship-weapons-rounds-left = It has {$current} out of {$max} rounds left.
+
+rmc-dropship-utility-activate-not-flying = Utility Systems can only activate while in flight.
+rmc-dropship-utility-not-flyby = {$utility} can only be used during flyby.
+rmc-dropship-utility-not-skilled = You don't have the training to use this system!
+rmc-dropship-utility-cooldown = {$utility} was just used, you need to wait a bit before using it again.
+
+rmc-dropship-flyby-no-skill = You don't have the skill to perform a flyby.
+
+rmc-dropship-fabricator-title = Part Fabricator
+rmc-dropship-fabricator-points = Points: {$points}
+rmc-dropship-fabricator-equipment = [bold]Equipment[/bold]
+rmc-dropship-fabricator-ammo = [bold]Ammo[/bold]
+rmc-dropship-fabricator-fabricate = Fabricate ({$cost})
+rmc-dropship-fabricator-busy = The dropship part fabricator is busy. Please wait for completion of previous operation.
+rmc-dropship-fabricator-current = [bold]Current:[/bold] {$item}
+rmc-dropship-fabricator-idle = [bold]Current:[/bold] Idle
+rmc-dropship-fabricator-queue = [bold]Queue:[/bold] {$count}/{$max}
+rmc-dropship-fabricator-queue-empty = No pending orders.
+rmc-dropship-fabricator-queue-entry = {$position}. {$item} ({$cost})
+rmc-dropship-fabricator-cancel = Cancel
+rmc-dropship-fabricator-queue-full = The dropship part fabricator queue is full.
+rmc-dropship-fabricator-insufficient-points = You don't have enough points to fabricate that.
+
+rmc-dropship-firemission-warning = A DROPSHIP FIRES TOWARDS THE {$direction}
+rmc-dropship-firemission-warning-above = A DROPSHIP FIRES RIGHT ONTOP OF YOU!
+
+rmc-dropship-paradrop-target-screen-text = HPU-1 Paradrop Deployment System
+    {$hasTarget}
+
+rmc-dropship-paradrop-target-screen-target-none = No locked target found.
+    Paradropping not available.
+
+rmc-dropship-paradrop-target-screen-target-targeting = Locked to {$dropTarget}.
+    Paradropping available.
+
+rmc-dropship-paradrop-lock-no-target = No target selected.
+rmc-dropship-paradrop-lock-target-not-flying = You can only enable the paradrop module while in flight.
+
+rmc-dropship-paradrop-failed = Your harness got stuck and is preventing you from jumping
+
+rmc-dropship-medevac-system-screen-text = RMU-4M Medevac System
+
+rmc-dropship-fulton-system-screen-text = RMU-19 Fulton Recovery System
+
+rmc-dropship-locked = This bird is now ours for the next {$minutes} minutes.
+rmc-dropship-locked-out = The shuttle is not responding, try again in {$minutes} minutes.
+rmc-dropship-locked-out-bypass = You partially bypassed the lockout, try again!
+rmc-dropship-locked-out-bypass-complete = You successfully removed the lockout!
+
+rmc-dropship-equipment-deployer-text = {$deployName}
+rmc-dropship-equipment-deployer-health = Condition: {$status}
+rmc-dropship-equipment-deployer-ammo = Ammo: {$ammoCount} / {$totalAmmoCount}
+rmc-dropship-equipment-deployer-status = Deploy Status: {$deployed}
+rmc-dropship-equipment-deployer-auto-deploy = Auto-Deploy: {$autoDeploy}
+
+rmc-dropship-equipment-enabled = ENABLED
+rmc-dropship-equipment-disabled = DISABLED
+rmc-dropship-equipment-deployed = DEPLOYED
+rmc-dropship-equipment-undeployed = UNDEPLOYED
+rmc-dropship-equipment-operational = OPERATIONAL
+rmc-dropship-equipment-damaged = DAMAGED
+rmc-dropship-equipment-destroyed = DESTROYED
+
+rmc-dropship-launch-bay-fire-not-flying = You can only launch equipment while in flight.
+rmc-dropship-launch-bay-screen-text = LAG-14 Internal Sentry Launcher
+rmc-dropship-launch-bay-screen-text-loaded = LAG-14 Internal Sentry Launcher
+
+    Loaded: {$loaded}
+
+    Ammo: {$current} / {$max}
+
+rmc-dropship-launch-alarm-xeno-shutdown = We slash at {$console}, silencing its squawking!

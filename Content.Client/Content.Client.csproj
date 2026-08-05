@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <OutputPath>..\bin\Content.Client\</OutputPath>
+    <OutputType Condition="'$(FullRelease)' != 'True'">Exe</OutputType>
+    <WarningsAsErrors>RA0032;nullable</WarningsAsErrors>
+  </PropertyGroup>
+  <Import Project="../MSBuild/Content.props" />
+  <ItemGroup>
+    <Compile Include="..\Content.CMU\Client\**\*.cs"
+             Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Update="..\Content.CMU\Client\**\*.xaml.cs">
+      <DependentUpon>%(Filename)</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="..\Content.CMU\Client\**\*.xaml"
+                      Link="_CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Include="..\Content.CMU\Client\**\*.xaml"
+                     Link="_CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+
+    <!-- Keep XAML logical paths aligned with their existing CLR namespaces after
+         physically flattening the legacy AU14 folders into Content.CMU/Client. -->
+    <EmbeddedResource Update="..\Content.CMU\Client\ColonyCommsConsole.xaml;..\Content.CMU\Client\AllianceConsole\**\*.xaml;..\Content.CMU\Client\Ambassador\**\*.xaml;..\Content.CMU\Client\ColonyEconomy\**\*.xaml;..\Content.CMU\Client\Objectives\**\*.xaml;..\Content.CMU\Client\WithdrawConsole\**\*.xaml"
+                      Link="AU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Update="..\Content.CMU\Client\ColonyCommsConsole.xaml;..\Content.CMU\Client\AllianceConsole\**\*.xaml;..\Content.CMU\Client\Ambassador\**\*.xaml;..\Content.CMU\Client\ColonyEconomy\**\*.xaml;..\Content.CMU\Client\Objectives\**\*.xaml;..\Content.CMU\Client\WithdrawConsole\**\*.xaml"
+                     Link="AU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Update="..\Content.CMU\Client\Callsigns\**\*.xaml;..\Content.CMU\Client\Chemistry\**\*.xaml;..\Content.CMU\Client\Construction\**\*.xaml;..\Content.CMU\Client\Radio\**\*.xaml"
+                      Link="_AU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Update="..\Content.CMU\Client\Callsigns\**\*.xaml;..\Content.CMU\Client\Chemistry\**\*.xaml;..\Content.CMU\Client\Construction\**\*.xaml;..\Content.CMU\Client\Radio\**\*.xaml"
+                     Link="_AU14\%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Nett" />
+    <PackageReference Include="JetBrains.Annotations" PrivateAssets="All" />
+    <PackageReference Include="SixLabors.ImageSharp" />
+    <PackageReference Include="Pidgin" />
+    <PackageReference Include="Robust.Shared.AuthLib" />
+  </ItemGroup>
+
+  <Import Project="..\RobustToolbox\Imports\Lidgren.props" />
+  <Import Project="..\RobustToolbox\Imports\Client.props" />
+  <Import Project="..\RobustToolbox\Imports\Shared.props" />
+
+  <ItemGroup>
+    <ProjectReference Include="..\Content.Shared\Content.Shared.csproj" />
+  </ItemGroup>
+  <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
+  <Import Project="..\RobustToolbox\MSBuild\XamlIL.targets" />
+  <Import Project="..\RobustToolbox\MSBuild\Robust.EntitySystemSubscriptionsGenerator.targets" />
+</Project>

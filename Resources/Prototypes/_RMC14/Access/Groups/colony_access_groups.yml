@@ -1,0 +1,150 @@
+﻿- type: accessGroup
+  id: Colony
+  tags:
+  - CMAccessColonyPublic # any public doors that would be locked for outsiders but not your common civilian
+  - CMAccessColonyLogistics # colony cargo
+  - CMAccessColonyEngineering # colony engineering
+  - CMAccessColonyResearch # colony research
+  - CMAccessColonyBrig # colony general security
+  - CMAccessColonyMedbay # colony medical
+  - CMAccessColonyCommand # colony command
+  - CMAccessColonyChem # Access for chemistry in colony buildings.
+  - CMAccessColonyArmory # Access for gun cabinets
+
+- type: accessGroup
+  id: Colonist
+  tags:
+  - CMAccessColonyPublic
+
+- type: accessGroup
+  id: ColonistObserver
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyCommand
+
+- type: accessGroup
+  id: ColonyCorrespondent
+  tags:
+  - RMCAccessCommand
+  - CMAccessResearch
+  - CMAccessMedical
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+  - CMAccessColonyBrig
+  - CMAccessColonyMedbay
+  - CMAccessColonyCommand
+  - CMAccessPress
+
+- type: accessGroup
+  id: CMCorrespondent
+  tags:
+  - RMCAccessCommand
+  - CMAccessPress
+  - CMAccessMarinePrep
+
+- type: accessGroup
+  id: ColonistEngi
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+
+- type: accessGroup
+  id: ColonistSec
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyBrig
+  - CMAccessColonyCommand
+
+- type: accessGroup
+  id: ColonistCMBSurvivor
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+  - CMAccessColonyBrig
+  - CMAccessColonyMedbay
+  - CMAccessColonyCommand
+
+- type: accessGroup
+  id: ColonistMedical
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyMedbay
+  - CMAccessColonyChem
+
+- type: accessGroup
+  id: ColonistCorporate
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyCommand
+  - RMCAccessWeYa # TODO RMC14 weya colonial, weya exec
+
+- type: accessGroup
+  id: ColonistPMC
+  tags:
+  - RMCAccessWeYa # TODO RMC14 weya general, colonial, medical, security, research, armory
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+  - CMAccessColonyBrig
+  - CMAccessColonyMedbay
+  - CMAccessColonyCommand
+
+- type: accessGroup
+  id: ColonistAllAccessNoArmory
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyResearch
+  - CMAccessColonyEngineering
+  - CMAccessColonyLogistics
+  - CMAccessColonyBrig
+  - CMAccessColonyMedbay
+  - CMAccessColonyCommand
+
+- type: accessGroup
+  id: ColonistTSEPA
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyBrig
+  - CMAccessColonyCommand
+  - RMCAccessTSEPA
+
+- type: accessGroup
+  id: ColonistTSEPABrig
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyBrig
+  - CMAccessColonyCommand
+  - RMCAccessTSEPA
+  - RMCAccessTSEPABrig
+
+- type: accessGroup
+  id: ColonistTSEPAInspector
+  tags:
+  - CMAccessColonyPublic
+  - CMAccessColonyBrig
+  - CMAccessColonyCommand
+  - RMCAccessTSEPA
+  - RMCAccessTSEPABrig
+  - RMCAccessTSEPAInspector
+
+# Survivor Synth Access
+- type: accessGroup
+  id: ColonistSynthShipside
+  tags:
+  - CMAccessCMO
+  - CMAccessMedical
+  - CMAccessResearch
+  - CMAccessChemistry
+  - CMAccessMaint
+  - CMAccessEngineering
+  - CMAccessCE
+  - CMAccessOT
+  - RMCAccessSynth
+  - RMCAccessDatabase

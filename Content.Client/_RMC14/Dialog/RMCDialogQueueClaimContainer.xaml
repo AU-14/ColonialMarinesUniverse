@@ -1,0 +1,42 @@
+<controls:RMCDialogQueueClaimContainer
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._RMC14.Dialog"
+    MinSize="430 165"
+    Orientation="Vertical"
+    SeparationOverride="10"
+    Margin="8">
+    <Label Text="QUEUE READY"
+           StyleClasses="CrtHeading"
+           HorizontalAlignment="Center" />
+
+    <PanelContainer StyleClasses="CrtInsetPanel"
+                    HorizontalExpand="True">
+        <BoxContainer Orientation="Vertical"
+                      SeparationOverride="6"
+                      Margin="10">
+            <RichTextLabel Name="MessageLabel"
+                           Access="Public"
+                           HorizontalExpand="True" />
+            <Label Text="No response within the timer removes your spot."
+                   StyleClasses="CrtDimText"
+                   HorizontalAlignment="Center" />
+        </BoxContainer>
+    </PanelContainer>
+
+    <BoxContainer Orientation="Horizontal"
+                  SeparationOverride="8"
+                  HorizontalExpand="True">
+        <Button Name="DeclineButton"
+                Access="Public"
+                MinHeight="36"
+                MinWidth="118"
+                HorizontalExpand="True"
+                StyleClasses="ButtonColorRed" />
+        <Button Name="ConfirmButton"
+                Access="Public"
+                MinHeight="36"
+                MinWidth="220"
+                HorizontalExpand="True"
+                StyleClasses="ButtonColorGreen" />
+    </BoxContainer>
+</controls:RMCDialogQueueClaimContainer>

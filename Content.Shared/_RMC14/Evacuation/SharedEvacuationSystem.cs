@@ -1,0 +1,813 @@
+﻿using System.Linq;
+using System.Numerics;
+using System.Text;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Dropship;
+using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.Marines.Announce;
+using Content.Shared._RMC14.Marines.HyperSleep;
+using Content.Shared._RMC14.Power;
+using Content.Shared._RMC14.Xenonids.Announce;
+using Content.Shared.Audio;
+using Content.Shared.CCVar;
+using Content.Shared.Coordinates;
+using Content.Shared.Doors;
+using Content.Shared.Doors.Components;
+using Content.Shared.Doors.Systems;
+using Content.Shared.Examine;
+using Content.Shared.GameTicking;
+using Content.Shared.Maps;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Physics;
+using Content.Shared.Popups;
+using Content.Shared.Prying.Components;
+using Content.Shared.UserInterface;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
+using Robust.Shared.Containers;
+using Robust.Shared.EntitySerialization.Systems;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Network;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+
+namespace Content.Shared._RMC14.Evacuation;
+
+public abstract partial class SharedEvacuationSystem : EntitySystem
+{
+    [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedDoorSystem _door = default!;
+    [Dependency] private SharedHyperSleepChamberSystem _hyperSleep = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
+    [Dependency] private SharedRMCPowerSystem _rmcPower = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+
+    private EntityQuery<AreaComponent> _areaQuery;
+    private EntityQuery<DoorComponent> _doorQuery;
+    private EntityQuery<MobStateComponent> _mobStateQuery;
+
+    private MapId? _map;
+    private int _index;
+
+    public override void Initialize()
+    {
+        _areaQuery = GetEntityQuery<AreaComponent>();
+        _doorQuery = GetEntityQuery<DoorComponent>();
+        _mobStateQuery = GetEntityQuery<MobStateComponent>();
+
+        SubscribeLocalEvent<DropshipHijackLandedEvent>(OnDropshipHijackLanded, after: [typeof(SharedRMCPowerSystem)]);
+        SubscribeLocalEvent<EvacuationEnabledEvent>(OnEvacuationEnabled);
+        SubscribeLocalEvent<EvacuationDisabledEvent>(OnEvacuationDisabled);
+        SubscribeLocalEvent<EvacuationProgressEvent>(OnEvacuationProgress);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+
+        SubscribeLocalEvent<GridSpawnerComponent, MapInitEvent>(OnGridSpawnerMapInit);
+
+        SubscribeLocalEvent<EvacuationDoorComponent, BeforeDoorOpenedEvent>(OnEvacuationDoorBeforeOpened);
+        SubscribeLocalEvent<EvacuationDoorComponent, BeforeDoorClosedEvent>(OnEvacuationDoorBeforeClosed);
+        SubscribeLocalEvent<EvacuationDoorComponent, BeforePryEvent>(OnEvacuationDoorBeforePry);
+
+        SubscribeLocalEvent<EvacuationComputerComponent, ExaminedEvent>(OnEvacuationComputerExamined);
+        SubscribeLocalEvent<EvacuationComputerComponent, ActivatableUIOpenAttemptEvent>(OnEvacuationComputerUIOpenAttempt);
+
+        SubscribeLocalEvent<LifeboatComputerComponent, ActivatableUIOpenAttemptEvent>(OnLifeboatComputerUIOpenAttempt);
+
+        SubscribeLocalEvent<EvacuationPumpComponent, ExaminedEvent>(OnEvacuationPumpExamined);
+
+        Subs.BuiEvents<EvacuationComputerComponent>(EvacuationComputerUi.Key,
+            subs =>
+            {
+                subs.Event<EvacuationComputerLaunchBuiMsg>(OnEvacuationComputerLaunch);
+            });
+
+        Subs.BuiEvents<LifeboatComputerComponent>(LifeboatComputerUi.Key,
+            subs =>
+            {
+                subs.Event<LifeboatComputerLaunchBuiMsg>(OnLifeboatComputerLaunch);
+            });
+    }
+
+    private void OnDropshipHijackLanded(ref DropshipHijackLandedEvent ev)
+    {
+        var evacuationProgress = EnsureComp<EvacuationProgressComponent>(ev.Map);
+        evacuationProgress.DropShipCrashed = true;
+
+        var doors = EntityQueryEnumerator<EvacuationDoorComponent>();
+        while (doors.MoveNext(out var uid, out var door))
+        {
+            door.Locked = false;
+            Dirty(uid, door);
+        }
+
+        if (IsEvacuationEnabled())
+            OpenEvacuationDoors();
+
+        _config.SetCVar(CCVars.GameDisallowLateJoins, true);
+    }
+
+    private void OnEvacuationEnabled(ref EvacuationEnabledEvent ev)
+    {
+        var lifeboats = EntityQueryEnumerator<LifeboatComputerComponent>();
+        while (lifeboats.MoveNext(out var uid, out var computer))
+        {
+            computer.Enabled = true;
+            Dirty(uid, computer);
+        }
+
+        OpenEvacuationDoors();
+
+        var evacuation = EntityQueryEnumerator<EvacuationComputerComponent>();
+        while (evacuation.MoveNext(out var computerId, out var computer))
+        {
+            if (computer.Mode == EvacuationComputerMode.Disabled)
+            {
+                computer.Mode = EvacuationComputerMode.Ready;
+                Dirty(computerId, computer);
+            }
+        }
+    }
+
+    private void OnEvacuationDisabled(ref EvacuationDisabledEvent ev)
+    {
+        var lifeboats = EntityQueryEnumerator<LifeboatComputerComponent>();
+        while (lifeboats.MoveNext(out var uid, out var computer))
+        {
+            computer.Enabled = false;
+            Dirty(uid, computer);
+        }
+    }
+
+    private void OnEvacuationProgress(ref EvacuationProgressEvent ev)
+    {
+        var evacuation = EntityQueryEnumerator<EvacuationComputerComponent>();
+        while (evacuation.MoveNext(out var computerId, out var computer))
+        {
+            if (computer.Mode == EvacuationComputerMode.Disabled)
+            {
+                computer.Mode = EvacuationComputerMode.Ready;
+                Dirty(computerId, computer);
+            }
+        }
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        _map = null;
+        _index = 0;
+    }
+
+    private void OnGridSpawnerMapInit(Entity<GridSpawnerComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.Spawn is not { } spawn)
+            return;
+
+        if (_net.IsClient)
+            return;
+
+        if (!_config.GetCVar(CCVars.GridFill))
+            return;
+
+        if (_map == null)
+        {
+            _mapSystem.CreateMap(out var mapId);
+            _map = mapId;
+        }
+
+        var offset = new Vector2(_index * 50, _index * 50);
+        _index++;
+
+        if (!_mapSystem.MapExists(_map) ||
+            !_mapLoader.TryLoadGrid(_map.Value, spawn, out var result, offset: offset))
+        {
+            return;
+        }
+
+        var grid = result.Value;
+        var xform = Transform(ent);
+        var coordinates = _transform.GetMapCoordinates(ent, xform);
+        coordinates = coordinates.Offset(ent.Comp.Offset);
+        _transform.SetMapCoordinates(grid, coordinates);
+
+        if (TryComp(grid, out PhysicsComponent? physics) &&
+            TryComp(grid, out FixturesComponent? fixtures))
+        {
+            _physics.SetBodyType(grid, BodyType.Static, manager: fixtures, body: physics);
+            _physics.SetBodyStatus(grid, physics, BodyStatus.OnGround);
+            _physics.SetFixedRotation(grid, true, manager: fixtures, body: physics);
+        }
+    }
+
+    private void OnEvacuationDoorBeforeOpened(Entity<EvacuationDoorComponent> ent, ref BeforeDoorOpenedEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (ent.Comp.Locked)
+            args.Cancel();
+    }
+
+    private void OnEvacuationDoorBeforeClosed(Entity<EvacuationDoorComponent> ent, ref BeforeDoorClosedEvent args)
+    {
+        if (TryComp(ent, out RMCOpenOnEvacuationComponent? openOnEvacuation) &&
+            openOnEvacuation.Enabled)
+        {
+            args.Cancel();
+            return;
+        }
+
+        if (ent.Comp.Locked)
+            args.PerformCollisionCheck = false;
+    }
+
+    private void OnEvacuationDoorBeforePry(Entity<EvacuationDoorComponent> ent, ref BeforePryEvent args)
+    {
+        if (ent.Comp.Locked)
+            args.Cancelled = true;
+    }
+
+    private void OnEvacuationComputerExamined(Entity<EvacuationComputerComponent> ent, ref ExaminedEvent args)
+    {
+        if (ent.Comp.MaxMobs is { } maxMobs)
+        {
+            using (args.PushGroup(nameof(EvacuationComputerComponent)))
+            {
+                args.PushMarkup(Loc.GetString("rmc-evacuation-pod-max-occupants", ("max", maxMobs)));
+            }
+        }
+    }
+
+    private void OnEvacuationComputerUIOpenAttempt(Entity<EvacuationComputerComponent> ent, ref ActivatableUIOpenAttemptEvent args)
+    {
+        if (args.Cancelled || ent.Comp.Mode == EvacuationComputerMode.Ready)
+            return;
+
+        args.Cancel();
+
+        var msg = ent.Comp.Mode switch
+        {
+            EvacuationComputerMode.Disabled => Loc.GetString("rmc-evacuation-not-started"),
+            EvacuationComputerMode.Ready => "",
+            EvacuationComputerMode.Travelling => Loc.GetString("rmc-evacuation-pod-already-launched"),
+            EvacuationComputerMode.Crashed => Loc.GetString("rmc-evacuation-pod-crashed"),
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+
+        _popup.PopupClient(msg, ent, args.User, PopupType.SmallCaution);
+    }
+
+    private void OnEvacuationPumpExamined(Entity<EvacuationPumpComponent> ent, ref ExaminedEvent args)
+    {
+        if (!IsEvacuationInProgress())
+            return;
+        using (args.PushGroup(nameof(EvacuationPumpComponent)))
+        {
+            var progress = GetEvacuationProgress();
+            if (progress < 25)
+                args.PushMarkup(Loc.GetString("rmc-evacuation-pump-examine-empty"));
+            else if (progress < 50)
+                args.PushMarkup(Loc.GetString("rmc-evacuation-pump-examine-low"));
+            else if (progress < 75)
+                args.PushMarkup(Loc.GetString("rmc-evacuation-pump-examine-half"));
+            else if (progress < 100)
+                args.PushMarkup(Loc.GetString("rmc-evacuation-pump-examine-almost-full"));
+            else
+                args.PushMarkup(Loc.GetString("rmc-evacuation-pump-examine-full"));
+        }
+    }
+
+    private void OnLifeboatComputerUIOpenAttempt(Entity<LifeboatComputerComponent> ent, ref ActivatableUIOpenAttemptEvent args)
+    {
+        if (args.Cancelled || ent.Comp.Enabled)
+            return;
+
+        args.Cancel();
+        _popup.PopupClient(Loc.GetString("rmc-evacuation-not-authorized"), ent, args.User, PopupType.SmallCaution);
+    }
+
+    private void OnEvacuationComputerLaunch(Entity<EvacuationComputerComponent> ent, ref EvacuationComputerLaunchBuiMsg args)
+    {
+        var user = args.Actor;
+        if (ent.Comp.Mode != EvacuationComputerMode.Ready)
+        {
+            Log.Warning($"{ToPrettyString(user)} tried to activate evacuation computer {ToPrettyString(ent)} that is not ready. Mode: {ent.Comp.Mode}");
+            return;
+        }
+
+        if (Transform(ent).GridUid is not { } gridId)
+        {
+            Log.Warning($"{ToPrettyString(user)} tried to activate evacuation computer {ToPrettyString(ent)} not on grid");
+            return;
+        }
+
+        var gridTransform = Transform(gridId);
+        if (ent.Comp.MaxMobs is { } maxMobs)
+        {
+            var mobs = new HashSet<EntityUid>();
+            var children = gridTransform.ChildEnumerator;
+            while (children.MoveNext(out var uid))
+            {
+                if (_mobStateQuery.HasComp(uid))
+                {
+                    mobs.Add(uid);
+                }
+                else if (TryComp(uid, out ContainerManagerComponent? containerManager))
+                {
+                    foreach (var container in _container.GetAllContainers(uid, containerManager))
+                    {
+                        foreach (var mob in container.ContainedEntities.Where(_mobStateQuery.HasComp).ToList())
+                        {
+                            mobs.Add(mob);
+                        }
+                    }
+                }
+
+                if (_doorQuery.TryComp(uid, out var door))
+                {
+                    var evacuationDoor = EnsureComp<EvacuationDoorComponent>(uid);
+                    evacuationDoor.Locked = true;
+                    Dirty(uid, evacuationDoor);
+                    _door.TryClose(uid, door);
+                }
+            }
+
+            if (mobs.Count > maxMobs)
+            {
+                _popup.PopupPredicted(Loc.GetString("rmc-evacuation-pod-overloaded"), ent, null, PopupType.LargeCaution);
+                ent.Comp.Mode = EvacuationComputerMode.Crashed;
+                Dirty(ent);
+
+                var time = _timing.CurTime;
+                var detonating = EnsureComp<DetonatingEvacuationComputerComponent>(ent);
+                detonating.DetonateAt = time + ent.Comp.DetonateDelay;
+                detonating.EjectAt = time + ent.Comp.EjectDelay;
+            }
+        }
+
+        _audio.PlayPredicted(ent.Comp.WarmupSound, ent, user);
+
+        if (ent.Comp.Mode == EvacuationComputerMode.Crashed)
+            return;
+
+        ent.Comp.Mode = EvacuationComputerMode.Travelling;
+        Dirty(ent);
+
+        var crashChance = IsEvacuationComplete() ? 0 : ent.Comp.EarlyCrashChance;
+        LaunchEvacuationFTL(gridId, crashChance, ent.Comp.LaunchSound);
+    }
+
+    private void OnLifeboatComputerLaunch(Entity<LifeboatComputerComponent> ent, ref LifeboatComputerLaunchBuiMsg args)
+    {
+        var user = args.Actor;
+        if (!ent.Comp.Enabled)
+        {
+            Log.Warning($"{ToPrettyString(user)} tried to activate lifeboat computer {ToPrettyString(ent)} that is not ready.");
+            return;
+        }
+
+        if (Transform(ent).GridUid is not { } gridId)
+            return;
+
+        ent.Comp.Enabled = false;
+        Dirty(ent);
+
+        var crashChance = IsEvacuationComplete() ? 0 : ent.Comp.EarlyCrashChance;
+        LaunchEvacuationFTL(gridId, crashChance, null);
+    }
+
+    protected virtual void LaunchEvacuationFTL(EntityUid grid, float crashLandChance, SoundSpecifier? launchSound)
+    {
+    }
+
+    private void OpenEvacuationDoors()
+    {
+        var doors = EntityQueryEnumerator<RMCOpenOnEvacuationComponent, DoorComponent>();
+        while (doors.MoveNext(out var uid, out _, out var door))
+        {
+            if (door.State is not DoorState.Open and not DoorState.Opening &&
+                !_door.TryOpen(uid, door))
+            {
+                continue;
+            }
+
+            TryEnableEvacuationOpen(uid);
+        }
+    }
+
+    protected bool TryDisableEvacuationOpen(EntityUid uid)
+    {
+        if (!TryComp(uid, out RMCOpenOnEvacuationComponent? openOnEvacuation) ||
+            !openOnEvacuation.Enabled)
+        {
+            return false;
+        }
+
+        openOnEvacuation.Enabled = false;
+        Dirty(uid, openOnEvacuation);
+        return true;
+    }
+
+    private bool TryEnableEvacuationOpen(EntityUid uid)
+    {
+        if (!TryComp(uid, out RMCOpenOnEvacuationComponent? openOnEvacuation))
+            return false;
+
+        if (openOnEvacuation.Enabled)
+            return true;
+
+        openOnEvacuation.Enabled = true;
+        Dirty(uid, openOnEvacuation);
+        return true;
+    }
+
+    private void SetPumpAppearance(EvacuationPumpVisuals visual)
+    {
+        var pumps = EntityQueryEnumerator<EvacuationPumpComponent>();
+        while (pumps.MoveNext(out var uid, out _))
+        {
+            _appearance.SetData(uid, EvacuationPumpLayers.Layer, visual);
+        }
+    }
+
+    private void SetPumpAmbience()
+    {
+        var pumps = EntityQueryEnumerator<EvacuationPumpComponent>();
+        while (pumps.MoveNext(out var uid, out var pump))
+        {
+            _ambientSound.SetSound(uid, pump.ActiveSound);
+        }
+    }
+
+    private string EvacuationAreaStatus(EntityUid area, bool powered)
+    {
+        var status = Loc.GetString(powered
+            ? "rmc-evacuation-area-status-online"
+            : "rmc-evacuation-area-status-offline");
+
+        return Loc.GetString("rmc-evacuation-area-status",
+            ("area", Name(area)),
+            ("status", status));
+    }
+
+    private IEnumerable<EntityUid> GetEvacuationAreas(EntityCoordinates coordinates)
+    {
+        var ent = coordinates.EntityId;
+        if (!ent.IsValid() || !TryComp(ent, out TransformComponent? entXform) ||
+            entXform.MapUid is not { } targetMap)
+            yield break;
+
+        var searchMaps = new HashSet<EntityUid> { targetMap };
+        if (_zLevels.TryGetZNetwork(targetMap, out var network))
+        {
+            foreach (var (_, netMapUid) in network.Value.Comp.ZLevels)
+            {
+                if (netMapUid.HasValue)
+                    searchMaps.Add(netMapUid.Value);
+            }
+        }
+
+        var seen = new HashSet<EntityUid>();
+        var gridQuery = EntityQueryEnumerator<AreaGridComponent, TransformComponent>();
+        while (gridQuery.MoveNext(out _, out _, out var gridXform))
+        {
+            if (!searchMaps.Contains(gridXform.MapUid ?? EntityUid.Invalid) ||
+                !_area.TryGetAllAreas(gridXform.Coordinates, out var areaGrid))
+            {
+                continue;
+            }
+
+            foreach (var areaId in areaGrid.Value.Comp.AreaEntities.Values)
+            {
+                if (!seen.Add(areaId) ||
+                    !_areaQuery.TryComp(areaId, out var area) ||
+                    !area.HijackEvacuationArea)
+                {
+                    continue;
+                }
+
+                yield return areaId;
+            }
+        }
+    }
+
+    private bool IsAreaPumpPowered(EntityUid area)
+    {
+        return _rmcPower.IsAreaPowered(area, RMCPowerChannel.Equipment);
+    }
+
+    public void ToggleEvacuation(SoundSpecifier? startSound, SoundSpecifier? cancelSound, EntityUid? map)
+    {
+        DebugTools.Assert(map != null);
+
+        var progress = EnsureComp<EvacuationProgressComponent>(map.Value);
+
+        progress.Enabled = !progress.Enabled;
+        Dirty(map.Value, progress);
+
+        if (progress.Enabled)
+        {
+            _marineAnnounce.AnnounceARESStaging(
+                null,
+                Loc.GetString("rmc-evacuation-started"),
+                startSound
+            );
+            var ev = new EvacuationEnabledEvent();
+            RaiseLocalEvent(map.Value, ref ev, true);
+        }
+        else
+        {
+            _marineAnnounce.AnnounceARESStaging(null, Loc.GetString("rmc-evacuation-cancelled"), cancelSound);
+            var ev = new EvacuationDisabledEvent();
+            RaiseLocalEvent(map.Value, ref ev, true);
+        }
+    }
+
+    public bool IsEvacuationInProgress()
+    {
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out _))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void TriggerColonyEvacuation(EntityUid map)
+    {
+        var progress = EnsureComp<EvacuationProgressComponent>(map);
+        if (progress.Enabled)
+            return;
+
+        progress.Enabled = true;
+        Dirty(map, progress);
+        var ev = new EvacuationEnabledEvent();
+        RaiseLocalEvent(map, ref ev, true);
+    }
+
+    public bool IsEvacuationEnabled()
+    {
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var progress))
+        {
+            if (progress.Enabled)
+                return true;
+        }
+
+        return false;
+    }
+
+    public int GetEvacuationProgress()
+    {
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var progress))
+        {
+            return (int) progress.Progress;
+        }
+
+        return 0;
+    }
+
+    public bool IsEvacuationComplete()
+    {
+        return GetEvacuationProgress() >= 100;
+    }
+
+    public void StopEvacuationProgress()
+    {
+        if (_net.IsClient)
+            return;
+
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var uid, out _))
+        {
+            RemCompDeferred<EvacuationProgressComponent>(uid);
+        }
+    }
+
+    private void ProcessEvacuation()
+    {
+        if (_net.IsClient)
+            return;
+
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var uid, out var progress))
+        {
+            //Only start fueling once the dropship has crashed into the Almayer
+            if (!progress.DropShipCrashed)
+                return;
+
+            if (!progress.StartAnnounced)
+            {
+                progress.StartAnnounced = true;
+                SetPumpAppearance(EvacuationPumpVisuals.Empty);
+                SetPumpAmbience();
+
+                var areas = new StringBuilder();
+                foreach (var areaId in GetEvacuationAreas(uid.ToCoordinates()))
+                {
+                    var powered = IsAreaPumpPowered(areaId);
+                    areas.AppendLine(EvacuationAreaStatus(areaId, powered));
+                }
+
+                areas.Append(Loc.GetString("rmc-evacuation-fuel-start"));
+                _marineAnnounce.AnnounceARESStaging(null, areas.ToString());
+            }
+
+            if (progress.NextUpdate > time)
+                continue;
+
+            progress.NextUpdate = time + progress.UpdateEvery;
+            Dirty(uid, progress);
+
+            double progressAdd = 0;
+            double progressMultiply = 1;
+            foreach (var areaId in GetEvacuationAreas(uid.ToCoordinates()))
+            {
+                if (!_areaQuery.TryComp(areaId, out var area) ||
+                    !area.HijackEvacuationArea)
+                {
+                    continue;
+                }
+
+                var powered = IsAreaPumpPowered(areaId);
+                if (progress.LastPower.TryGetValue(areaId, out var lastPower) &&
+                    lastPower != powered)
+                {
+                    _marineAnnounce.AnnounceARESStaging(null, EvacuationAreaStatus(areaId, powered));
+                }
+
+                progress.LastPower[areaId] = powered;
+                if (!powered)
+                    continue;
+
+                switch (area.HijackEvacuationType)
+                {
+                    case AreaHijackEvacuationType.Add:
+                        progressAdd += area.HijackEvacuationWeight;
+                        break;
+                    case AreaHijackEvacuationType.Multiply:
+                        progressMultiply += area.HijackEvacuationWeight;
+                        break;
+                    default:
+                        continue;
+                }
+            }
+
+            progress.Progress = Math.Min(progress.Required, progress.Progress + progressAdd * progressMultiply);
+
+            if (progress.Progress >= progress.NextAnnounce)
+            {
+                var current = progress.NextAnnounce;
+                progress.NextAnnounce = current + progress.AnnounceEvery;
+
+                var onAreas = string.Join(", ",
+                    progress.LastPower.Where(kvp => kvp.Value).Select(kvp => Name(kvp.Key)));
+                var offAreas = string.Join(", ",
+                    progress.LastPower.Where(kvp => !kvp.Value).Select(kvp => Name(kvp.Key)));
+
+                string MarinePercentageString(int percentage)
+                {
+                    if (offAreas.Length == 0)
+                    {
+                        return Loc.GetString("rmc-evacuation-fuel-progress-operational",
+                            ("percentage", percentage));
+                    }
+
+                    return Loc.GetString("rmc-evacuation-fuel-progress-restore",
+                        ("percentage", percentage),
+                        ("areas", offAreas));
+                }
+
+                string XenoProgressString(string message)
+                {
+                    if (onAreas.Length == 0)
+                        return Loc.GetString(message);
+
+                    return Loc.GetString("rmc-evacuation-xeno-progress-disable",
+                        ("message", Loc.GetString(message)),
+                        ("areas", onAreas));
+                }
+
+                if (progress.Progress >= progress.Required)
+                {
+                    _marineAnnounce.AnnounceARESStaging(null, Loc.GetString("rmc-evacuation-fuel-progress-complete"));
+                    _xenoAnnounce.AnnounceAll(default, Loc.GetString("rmc-evacuation-xeno-progress-complete"));
+                    SetPumpAppearance(EvacuationPumpVisuals.Full);
+                    var ev = new EvacuationProgressEvent(100);
+                    RaiseLocalEvent(uid, ref ev, true);
+                }
+                else if (progress.Progress >= progress.Required * 0.75)
+                {
+                    _marineAnnounce.AnnounceARESStaging(null, MarinePercentageString(75));
+                    _xenoAnnounce.AnnounceAll(default, XenoProgressString("rmc-evacuation-xeno-progress-75"));
+                    SetPumpAppearance(EvacuationPumpVisuals.SeventyFive);
+
+                    var ev = new EvacuationProgressEvent(75);
+                    RaiseLocalEvent(uid, ref ev, true);
+                }
+                else if (progress.Progress >= progress.Required * 0.5)
+                {
+                    _marineAnnounce.AnnounceARESStaging(null, MarinePercentageString(50));
+                    _xenoAnnounce.AnnounceAll(default, XenoProgressString("rmc-evacuation-xeno-progress-50"));
+                    SetPumpAppearance(EvacuationPumpVisuals.Fifty);
+                    var ev = new EvacuationProgressEvent(50);
+                    RaiseLocalEvent(uid, ref ev, true);
+                }
+                else if (progress.Progress >= progress.Required * 0.25)
+                {
+                    var marineAnnounce = offAreas.Length == 0
+                        ? Loc.GetString("rmc-evacuation-fuel-progress-25-operational")
+                        : Loc.GetString("rmc-evacuation-fuel-progress-25-restore", ("areas", offAreas));
+
+                    _marineAnnounce.AnnounceARESStaging(null, marineAnnounce);
+                    _xenoAnnounce.AnnounceAll(default, XenoProgressString("rmc-evacuation-xeno-progress-25"));
+
+                    SetPumpAppearance(EvacuationPumpVisuals.TwentyFive);
+                    var ev = new EvacuationProgressEvent(25);
+                    RaiseLocalEvent(uid, ref ev, true);
+                }
+            }
+        }
+    }
+
+    private void ProcessExplodingPods()
+    {
+        if (_net.IsClient)
+            return;
+
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<DetonatingEvacuationComputerComponent>();
+        while (query.MoveNext(out var uid, out var detonating))
+        {
+            if (Transform(uid).GridUid is not { } grid)
+                continue;
+
+            if (!TryComp(grid, out MapGridComponent? gridComp))
+                continue;
+
+            var gridTransform = Transform(grid);
+
+            if (!detonating.Detonated && time >= detonating.DetonateAt)
+            {
+                detonating.Detonated = true;
+                Dirty(uid, detonating);
+
+                var coordinates = _transform.ToMapCoordinates(gridTransform.Coordinates);
+                _rmcExplosion.QueueExplosion(coordinates, "RMC", 40, 5, 25, uid, canCreateVacuum: false);
+            }
+
+            if (!detonating.Ejected && time >= detonating.EjectAt)
+            {
+                detonating.Ejected = true;
+                Dirty(uid, detonating);
+
+                var children = gridTransform.ChildEnumerator;
+
+                while (children.MoveNext(out var child))
+                {
+                    _hyperSleep.EjectChamber(child);
+
+                    if (_doorQuery.TryComp(child, out var door))
+                    {
+                        var evacuationDoor = EnsureComp<EvacuationDoorComponent>(child);
+                        evacuationDoor.Locked = false;
+                        Dirty(child, evacuationDoor);
+
+                        // Bypass the checks in TryOpenAndBolt:
+                        _door.SetState(child, DoorState.Emagging, door);
+                    }
+                }
+            }
+
+            if (detonating.Detonated && detonating.Ejected)
+                RemCompDeferred<DetonatingEvacuationComputerComponent>(uid);
+        }
+    }
+
+    public override void Update(float frameTime)
+    {
+        ProcessEvacuation();
+        ProcessExplodingPods();
+    }
+}

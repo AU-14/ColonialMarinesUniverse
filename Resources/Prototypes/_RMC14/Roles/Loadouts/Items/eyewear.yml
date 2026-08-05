@@ -1,0 +1,294 @@
+# Eyewear
+- type: loadout
+  id: AviatorsRMC
+  cost: 2
+  equipment:
+    eyes: RMCGlassesAviators
+
+- type: loadout
+  id: AviatorsSilverRMC
+  cost: 2
+  equipment:
+    eyes: RMCGlassesAviatorsSilver
+
+- type: loadout
+  id: EyepatchRMC
+  cost: 2
+  equipment:
+    eyes: RMCEyepatch
+
+- type: loadout
+  id: GlassesRPGRMC
+  cost: 2
+  equipment:
+    eyes: RMCGlassesMarineRpg
+
+- type: loadout
+  id: GlassesRPGRMCOld
+  cost: 2
+  equipment:
+    eyes: RMCGlassesMarineRpgOld
+
+- type: loadout
+  id: GlassesPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCHipsterGlasses
+
+- type: loadout
+  id: HippieGlassesRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlasses
+
+- type: loadout
+  id: GlassesTriMaxYellowRMC
+  cost: 2
+  equipment:
+    eyes: RMCGlassesTriMaxYellowFake
+
+- type: loadout
+  id: GlassesTriMaxBronzeRMC
+  cost: 2
+  equipment:
+    eyes: RMCGlassesTriMaxBronzeFake
+
+- type: loadout
+  id: GlassesTriMaxBlackRMC
+  cost: 2
+  equipment:
+    eyes: RMCGlassesTriMaxBlackFake
+
+- type: loadout
+  id: SunglassesPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionSunglasses
+
+- type: loadout
+  id: PersonalShadesPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionSunglassesBigFake
+
+- type: loadout
+  id: GlassesTriMaxYellowPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionGlassesTriMaxYellowFake
+
+- type: loadout
+  id: GlassesTriMaxBronzePrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionGlassesTriMaxBronzeFake
+
+- type: loadout
+  id: GlassesTriMaxBlackPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCPrescriptionGlassesTriMaxBlackFake
+
+- type: loadout
+  id: GogglesRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallistic
+
+- type: loadout
+  id: GogglesPrescriptionRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesPrescriptionBallistic
+
+- type: loadout
+  id: GogglesBlackRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticBlack
+
+- type: loadout
+  id: GogglesOrangeRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticOrange
+
+- type: loadout
+  id: GogglesRedRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticRed
+
+- type: loadout
+  id: GogglesBlueRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticBlue
+
+- type: loadout
+  id: GogglesPurpleRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticPurple
+
+- type: loadout
+  id: GogglesYellowRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticYellow
+
+- type: loadout
+  id: GogglesAdvancedRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticSquad
+
+- type: loadout
+  id: GogglesM1A1RMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesM1A1Ballistic
+
+- type: loadout
+  id: GogglesPolarizedBlueRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticPolarizedBlue
+
+- type: loadout
+  id: GogglesPolarizedOrangeRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesBallisticPolarizedOrange
+
+- type: loadout
+  id: GogglesM1A1BlueRMC
+  cost: 2
+  equipment:
+    eyes: RMCGogglesM1A1BallisticBlue
+
+- type: loadout
+  id: PersonalShadesRMC
+  cost: 2
+  equipment:
+    eyes: RMCSunglassesBigFake
+
+- type: loadout
+  id: SunglassesRMC
+  cost: 2
+  equipment:
+    eyes: RMCSunglasses
+
+- type: loadout
+  id: HippieGlassesBloodredRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlassesBloodred
+
+- type: loadout
+  id: HippieGlassesGreenRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlassesGreen
+
+- type: loadout
+  id: HippieGlassesMidnightRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlassesMidnight
+
+- type: loadout
+  id: HippieGlassesNightblueRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlassesNightblue
+
+- type: loadout
+  id: HippieGlassesPinkRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlassesPink
+
+- type: loadout
+  id: HippieGlassesSunriseRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlassesSunrise
+
+- type: loadout
+  id: HippieGlassesSunsetRMC
+  cost: 2
+  equipment:
+    eyes: RMCHippieGlassesSunset
+
+- type: loadout
+  id: GogglesM1A1ClearAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1ClearBallistic
+
+- type: loadout
+  id: GogglesM1A1AU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1Ballistic
+
+- type: loadout
+  id: GogglesM1A1DarkAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1DarkBallistic
+
+- type: loadout
+  id: GogglesM1A1LaserAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1LaserBallistic
+
+- type: loadout
+  id: GogglesM1A1OrangeAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1OrangeBallistic
+
+- type: loadout
+  id: GogglesM1A1PolarizedAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesM1A1PolarizedBallistic
+
+- type: loadout
+  id: GogglesM1A1ClearPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1ClearBallistic
+
+- type: loadout
+  id: GogglesM1A1PrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1Ballistic
+
+- type: loadout
+  id: GogglesM1A1DarkPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1DarkBallistic
+
+- type: loadout
+  id: GogglesM1A1LaserPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1LaserBallistic
+
+- type: loadout
+  id: GogglesM1A1OrangePrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1OrangeBallistic
+
+- type: loadout
+  id: GogglesM1A1PolarizedPrescriptionAU14
+  cost: 2
+  equipment:
+    eyes: AU14GogglesPrescriptionM1A1PolarizedBallistic

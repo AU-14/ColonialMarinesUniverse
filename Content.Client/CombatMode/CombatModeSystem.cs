@@ -1,0 +1,92 @@
+using Content.Client.Hands.Systems;
+using Content.Shared.CCVar;
+using Content.Shared.CombatMode;
+using Robust.Client.Graphics;
+using Robust.Client.Input;
+using Robust.Client.Player;
+using Robust.Client.ResourceManagement;
+using Robust.Shared.Configuration;
+
+namespace Content.Client.CombatMode;
+
+public sealed partial class CombatModeSystem : SharedCombatModeSystem
+{
+    [Dependency] private IOverlayManager _overlayManager = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IInputManager _inputManager = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IResourceCache _resourceCache = default!;
+
+    /// <summary>
+    /// Raised whenever combat mode changes.
+    /// </summary>
+    public event Action<bool>? LocalPlayerCombatModeUpdated;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<CombatModeComponent, AfterAutoHandleStateEvent>(OnHandleState);
+
+        Subs.CVar(_cfg, CCVars.CombatModeIndicatorsPointShow, OnShowCombatIndicatorsChanged, true);
+    }
+
+    private void OnHandleState(EntityUid uid, CombatModeComponent component, ref AfterAutoHandleStateEvent args)
+    {
+        UpdateHud(uid);
+    }
+
+    public override void Shutdown()
+    {
+        _overlayManager.RemoveOverlay<CombatModeIndicatorsOverlay>();
+
+        base.Shutdown();
+    }
+
+    public bool IsInCombatMode()
+    {
+        var entity = _playerManager.LocalEntity;
+
+        if (entity == null)
+            return false;
+
+        return IsInCombatMode(entity.Value);
+    }
+
+    public override void SetInCombatMode(EntityUid entity, bool value, CombatModeComponent? component = null)
+    {
+        base.SetInCombatMode(entity, value, component);
+        UpdateHud(entity);
+    }
+
+    private void UpdateHud(EntityUid entity)
+    {
+        if (entity != _playerManager.LocalEntity || !Timing.IsFirstTimePredicted)
+        {
+            return;
+        }
+
+        var inCombatMode = IsInCombatMode();
+        LocalPlayerCombatModeUpdated?.Invoke(inCombatMode);
+    }
+
+    private void OnShowCombatIndicatorsChanged(bool isShow)
+    {
+        if (isShow)
+        {
+            _overlayManager.AddOverlay(new CombatModeIndicatorsOverlay(
+                _inputManager,
+                EntityManager,
+                _eye,
+                this,
+                EntityManager.System<HandsSystem>(),
+                _playerManager,
+                _resourceCache));
+        }
+        else
+        {
+            _overlayManager.RemoveOverlay<CombatModeIndicatorsOverlay>();
+        }
+    }
+}

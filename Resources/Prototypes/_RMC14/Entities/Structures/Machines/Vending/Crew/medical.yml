@@ -1,0 +1,214 @@
+# MEDICAL
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechCrewMedicalEquipment
+  name: ColMarTech medical equipment rack
+  description: An automated equipment vendor for the Medical Department.
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessMedical" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_equipment.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMNurse
+    - CMDoctor
+    - RMCFieldDoctor
+    - CMResearcher
+    - CMCMO
+    sections:
+    - name: Medical Set (Mandatory)
+      jobs:
+      - CMDoctor
+      - RMCFieldDoctor
+      - CMResearcher
+      - CMCMO
+      takeAll: CMMedicalSet
+      entries:
+      - id: RMCVendorBundleCrewMedicalEssentialsDoctor
+    - name: Medical Set (Mandatory)
+      jobs:
+      - CMNurse
+      takeAll: CMMedicalSet
+      entries:
+      - id: CMVendorBundleCrewMedicalEssentialsNurse
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMHandsLatex
+      - id: CMHeadsetMedical
+    - name: Eyewear
+      choices: { CMEyewear: 1 }
+      entries:
+      - id: RMCGlassesMedicalHUDGlasses
+#      - id: Prescription Medical HUD Glasses
+    - name: Uniform
+      choices: { CMUniform: 1 }
+      jobs:
+      - CMNurse
+      entries:
+      - id: RMCScrubsLightBlue
+        recommended: true
+      - id: RMCScrubsPharm
+      - id: CMScrubsPurple
+      - id: RMCScrubsOlive
+      - id: RMCScrubsGrey
+      - id: RMCScrubsBrown
+      - id: RMCScrubsWhite
+      - id: RMCScrubsBlack
+    - name: Uniform
+      choices: { CMUniform: 1 }
+      jobs:
+      - CMDoctor
+      - RMCFieldDoctor
+      - CMCMO
+      - CMResearcher
+      entries:
+      - id: CMScrubsBlue
+        recommended: true
+      - id: CMScrubsGreen
+        recommended: true
+      - id: RMCScrubsPharm
+        recommended: true
+      - id: CMScrubsPurple
+      - id: RMCScrubsOlive
+      - id: RMCScrubsGrey
+      - id: RMCScrubsBrown
+      - id: RMCScrubsWhite
+      - id: RMCScrubsBlack
+      - id: RMCScrubsLightBlue
+    - name: Suit
+      jobs:
+      - CMNurse
+      choices: { CMSuit: 1 }
+      entries:
+      - id: RMCMedicalApron
+    - name: Suit
+      jobs:
+      - CMDoctor
+      - RMCFieldDoctor
+      - CMCMO
+      - CMResearcher
+      choices: { CMSuit: 1 }
+      entries:
+      - id: RMCLabcoat
+        recommended: true
+      - id: RMCLabcoatShort
+        name: High-Cut Labcoat
+      - id: RMCLabcoatLong
+        name: Low-Cut Labcoat
+      - id: RMCLabcoatPharm
+        recommended: true
+      - id: RMCMedicalApron
+    - name: Snow gear (Snow use only)
+      takeAll: CMMedicalSet
+      entries:
+      - id: RMCCoatSnow
+      - id: RMCMaskBalaclava
+      - id: RMCMaskTornScarfBlack
+        name: Snow Scarf 
+    - name: Headwear
+      choices: { CMHeadwear: 1 }
+      jobs:
+      - CMNurse
+      entries:
+      - id: CMHeadCapSurgLightBlue
+        recommended: true
+      - id: CMHeadCapSurgPharm
+      - id: CMHeadCapSurgPurple
+      - id: CMHeadCapSurgOlive
+      - id: CMHeadCapSurgGrey
+      - id: CMHeadCapSurgBrown
+      - id: CMHeadCapSurgWhite
+      - id: CMHeadCapSurgBlack
+    - name: Headwear
+      choices: { CMHeadwear: 1 }
+      jobs:
+      - CMDoctor
+      - RMCFieldDoctor
+      - CMCMO
+      - CMResearcher
+      entries:
+      - id: CMHeadCapSurgBlue
+        recommended: true
+      - id: CMHeadCapSurgGreen
+        recommended: true
+      - id: CMHeadCapSurgPharm
+        recommended: true
+      - id: CMHeadCapSurgPurple
+      - id: CMHeadCapSurgOlive
+      - id: CMHeadCapSurgGrey
+      - id: CMHeadCapSurgBrown
+      - id: CMHeadCapSurgWhite
+      - id: CMHeadCapSurgBlack
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMBackpackMarine
+        name: backpack
+        replaceSlot: back
+      - id: CMSatchelMarine
+        name: satchel
+        replaceSlot: back
+      - id: CMBackpackMedical
+        replaceSlot: back
+        recommended: true
+      - id: CMSatchelMedical
+        replaceSlot: back
+        recommended: true
+    - name: Belt
+      choices: { CMBelt: 1 }
+      entries:
+      - id: CMBeltMedicBagFilled
+        name: M276 pattern lifesaver bag (Full)
+        recommended: true
+      - id: CMBeltMedicalFilled
+        name: M276 pattern medical storage rig (Full)
+        recommended: true
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchAutoinjector
+      - id: RMCPouchFirstAidInjectors
+        name: first-aid pouch (refillable injectors)
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints comma
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchMedical
+        recommended: true
+      - id: RMCPouchMedkit
+        recommended: true
+      - id: RMCPouchReagentCanisterBicaridine
+        recommended: true
+        name: Pressurized Reagent Canister Pouch\n(Bicaridine)
+      - id: RMCPouchReagentCanisterKelotane
+        recommended: true
+        name: Pressurized Reagent Canister Pouch\n(Kelotane)
+      - id: RMCPouchReagentCanisterTricordrazineRevival
+        recommended: true
+        name: Pressurized Reagent Canister Pouch\n(Revival Mix - Tricordrazine)
+      #      - id: CMPressurizedReagentCanisterPouchPeridaxonRevivalMix
+      #        recommended: true
+      #        name: Pressurized Reagent Canister Pouch\n(Revival Mix - Peridaxon)
+      - id: RMCPouchReagentCanisterTricordrazine
+        recommended: true
+        name: Pressurized Reagent Canister Pouch\n(Tricordrazine)
+      - id: RMCPouchReagentCanister
+        recommended: true
+        name: Pressurized Reagent Canister Pouch\n(EMPTY)
+      - id: RMCPouchSling
+    - name: Accessories
+      choices: { CMAccessories: 1 }
+      entries:
+      - id: CMWebbingBrown
+      - id: CMWebbingBlack
+      - id: RMCWebbingLegPouch
+      - id: RMCWebbingLegPouchBlack
+      - id: CMWebbing
+      - id: RMCWebbingBlackSmall
+      - id: RMCWebbingDropPouch
+      - id: RMCWebbingDropPouchBlack

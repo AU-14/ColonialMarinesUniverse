@@ -1,0 +1,39 @@
+using Content.Shared._RMC14.Slow;
+using Content.Shared.Movement.Systems;
+using Content.Shared.Standing;
+using Content.Shared.Weapons.Melee.Events;
+
+namespace Content.Shared._RMC14.Xenonids.MeleeSlow;
+
+public sealed partial class XenoMeleeSlowSystem : EntitySystem
+{
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+    [Dependency] private StandingStateSystem _standing = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<XenoMeleeSlowComponent, MeleeHitEvent>(OnHit);
+    }
+
+    private void OnHit(Entity<XenoMeleeSlowComponent> xeno, ref MeleeHitEvent args)
+    {
+        if (!args.IsHit || args.HitEntities.Count == 0)
+            return;
+
+        foreach (var entity in args.HitEntities)
+        {
+            if (!_xeno.CanAbilityAttackTarget(xeno, entity))
+                return;
+
+            if (xeno.Comp.RequiresKnockDown && !_standing.IsDown(entity))
+                return;
+
+            var slow = xeno.Comp.HigherOnXenos ? _xeno.TryApplyXenoDebuffMultiplier(entity, xeno.Comp.SlowTime) : xeno.Comp.SlowTime;
+            _slow.TrySlowdown(entity, slow, ignoreDurationModifier: true);
+
+            break;
+        }
+    }
+}

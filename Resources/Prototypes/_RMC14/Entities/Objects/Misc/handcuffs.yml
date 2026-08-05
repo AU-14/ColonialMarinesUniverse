@@ -1,0 +1,54 @@
+- type: entity
+  parent: Handcuffs
+  id: RMCHandcuffs
+  name: handcuffs
+  description: Use this to keep prisoners in line.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/handcuffs.rsi
+  - type: Handcuff
+    cuffedRSI: _RMC14/Objects/Misc/handcuffs.rsi
+    breakoutTime: 60 # 1minute, just like in code/game/objects/items/handcuffs.dm on line 5
+  - type: UseDelay
+    delay: 4
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitstorage
+  - type: RequiresSkill
+    skills:
+      RMCSkillPolice: 1
+  - type: MeleeRequiresSkill
+    skills:
+      RMCSkillPolice: 1
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleMilitaryPolice
+
+- type: entity
+  parent: RMCHandcuffs
+  id: RMCZipties
+  name: zipties
+  description: Tough single-use plastic zipties, ideal for restraining rowdy prisoners.
+  suffix: RMC
+  components:
+  - type: UseDelay
+    delay: 4
+  - type: Handcuff
+    breakoutTime: 60
+    cuffedRSI: Objects/Misc/cablecuffs.rsi
+    bodyIconState: body-overlay
+    breakOnRemove: true
+    startCuffSound:
+      path: /Audio/Items/Handcuffs/ziptie_start.ogg
+    endCuffSound:
+      path: /Audio/Items/Handcuffs/ziptie_end.ogg
+    startUncuffSound:
+      path: /Audio/Items/Handcuffs/rope_start.ogg
+    endUncuffSound:
+      path: /Audio/Items/Handcuffs/rope_breakout.ogg
+    startBreakoutSound:
+      path: /Audio/Items/Handcuffs/rope_takeoff.ogg
+  - type: Sprite
+    sprite: Objects/Misc/zipties.rsi
+    state: cuff

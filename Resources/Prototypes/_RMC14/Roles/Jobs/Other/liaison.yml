@@ -1,0 +1,92 @@
+﻿- type: job
+  parent: RMCJobNametagBase
+  id: CMLiaison
+  name: cm-job-name-liaison
+  description: cm-job-description-liaison
+  newToJobInfo: rmc-new-to-job-cl
+  requirements:
+  - !type:TotalDepartmentsTimeRequirement
+    group: CMDepartmentsHuman
+    time: 36000 # 10 hours
+  ranks:
+    RMCRankWeYaExecutiveSpecialist:
+    - !type:RoleTimeRequirement
+      role: CMJobLiaison
+      time: 630000 # 175 hours
+    RMCRankWeYaSeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: CMJobLiaison
+      time: 252000 # 70 hours
+    RMCRankWeYaExecutive:
+    - !type:RoleTimeRequirement
+      role: CMJobLiaison
+      time: 90000 # 25 hours
+    RMCRankWeYaJuniorExecutive: []
+  playTimeTracker: CMJobLiaison
+  startingGear: CMGearLiaison
+  icon: "CMJobIconLiaison"
+  joinNotifyCrew: false
+  supervisors: cm-job-supervisors-we-ya
+  accessGroups:
+  - RMCWeYaExecColony
+  roleWeight: 0.25
+  special:
+  - !type:AddComponentSpecial
+    components:
+    - type: RMCUserBulkyArmorIncapable
+    - type: NpcFactionMember
+      factions:
+      - WeYa
+      - UNMC
+    - type: Skills
+      skills:
+        RMCSkillFirearms: 0
+        RMCSkillVehicles: 1
+    - type: CMVendorUser
+      id: CMLiaison
+      points: 40
+    - type: RMCVendorUserRecharge
+      maxPoints: 50
+      pointsPerUpdate: 1
+      timePerUpdate: 40 # 1 / (0.05 / 2)
+    - type: JobPrefix
+      prefix: cm-job-prefix-liaison
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: cl
+      background:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: background_goon
+    - type: RMCTrackable
+
+- type: startingGear
+  id: CMGearLiaison
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonIvy
+    shoes: RMCShoesLaceup
+    id: CMIDCardLiaison
+    ears: RMCHeadsetLiaison
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMSpawnPointLiaison
+  name: liaison spawn point
+  components:
+  - type: SpawnPoint
+    job_id: CMLiaison
+  - type: Sprite
+    state: cl_spawn
+
+- type: entity
+  parent: CMGuidebookRole
+  id: CMGuidebookRoleLiaisonYou
+  name: A Typical Weston-Yamada Liaison
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    state: corp_liaison
+
+- type: playTimeTracker
+  id: CMJobLiaison
+  isHumanoid: true

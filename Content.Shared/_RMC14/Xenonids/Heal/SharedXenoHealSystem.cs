@@ -1,0 +1,450 @@
+using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Atmos;
+using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Xenonids.Announce;
+using Content.Shared._RMC14.Xenonids.Energy;
+using Content.Shared._RMC14.Xenonids.Eye;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared._RMC14.Xenonids.Plasma;
+using Content.Shared._RMC14.Xenonids.Strain;
+using Content.Shared.Gibbing;
+using Content.Shared.Coordinates;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.FixedPoint;
+using Content.Shared.Interaction;
+using Content.Shared.Jittering;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Popups;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using CurrentStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
+using LegacyStatusEffectsSystem = Content.Shared.StatusEffect.StatusEffectsSystem;
+
+namespace Content.Shared._RMC14.Xenonids.Heal;
+
+public abstract partial class SharedXenoHealSystem : EntitySystem
+{
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedRMCFlammableSystem _flammable = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedInteractionSystem _interact = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private MobThresholdSystem _mobThreshold = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private QueenEyeSystem _queenEye = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private CurrentStatusEffectsSystem _statusEffect = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private XenoEnergySystem _xenoEnergy = default!;
+    [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private XenoStrainSystem _xenoStrain = default!;
+    [Dependency] private LegacyStatusEffectsSystem _status = default!;
+
+    private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
+    private static readonly ProtoId<DamageGroupPrototype> BurnGroup = "Burn";
+    private static readonly ProtoId<DamageTypePrototype> BluntGroup = "Blunt";
+
+    private readonly HashSet<Entity<XenoComponent>> _xenos = new();
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<XenoHealComponent, XenoHealActionEvent>(OnXenoHealAction);
+        SubscribeLocalEvent<XenoComponent, XenoApplySalveActionEvent>(OnXenoApplySalveAction);
+        SubscribeLocalEvent<XenoComponent, XenoSacrificeHealActionEvent>(OnXenoSacrificeHealAction);
+    }
+
+    private void OnXenoHealAction(Entity<XenoHealComponent> ent, ref XenoHealActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (_queenEye.IsInQueenEye(ent.Owner) &&
+            !_queenEye.CanSeeTarget(ent.Owner, args.Target))
+        {
+            return;
+        }
+
+        if (!_rmcActions.TryUseAction(args))
+            return;
+
+        args.Handled = true;
+
+        _xenos.Clear();
+        _entityLookup.GetEntitiesInRange(args.Target, ent.Comp.Radius, _xenos);
+
+        if (_xenos.Count == 0)
+            return;
+
+        var msg = "We channel our plasma to heal our sisters' wounds around this area.";
+        _popup.PopupClient(msg, args.Target, ent, PopupType.Large);
+
+        foreach (var xeno in _xenos)
+        {
+            if (_mobState.IsDead(xeno) ||
+                _flammable.IsOnFire(xeno.Owner))
+            {
+                continue;
+            }
+
+            if (!_mobThreshold.TryGetIncapThreshold(xeno, out var threshold) ||
+                threshold <= FixedPoint2.Zero)
+            {
+                continue;
+            }
+
+            if (!_hive.FromSameHive(ent.Owner, xeno.Owner))
+                continue;
+
+            var heal = EnsureComp<XenoBeingHealedComponent>(xeno);
+            var healStack = new XenoHealStack()
+            {
+                HealAmount = threshold.Value * ent.Comp.Percentage /
+                             (ent.Comp.Duration.TotalSeconds * 10) *
+                             (ent.Comp.TimeBetweenHeals.TotalSeconds * 10),
+                Charges = (int)(ent.Comp.Duration.TotalSeconds / ent.Comp.TimeBetweenHeals.TotalSeconds),
+                TimeBetweenHeals = ent.Comp.TimeBetweenHeals,
+            };
+
+            heal.HealStacks.Add(healStack);
+
+            if (_net.IsServer)
+                SpawnAttachedTo(ent.Comp.HealEffect, xeno.Owner.ToCoordinates());
+        }
+    }
+
+    private void OnXenoApplySalveAction(Entity<XenoComponent> ent, ref XenoApplySalveActionEvent args)
+    {
+        var target = args.Target;
+
+        LocId? failureMessageId = null;
+
+        if (!HasComp<XenoComponent>(target))
+            failureMessageId = "rmc-xeno-apply-salve-target-not-xeno-failure";
+
+        if (ent.Owner == target)
+            failureMessageId = "rmc-xeno-apply-salve-target-self-failure";
+
+        if (!_hive.FromSameHive(ent.Owner, target))
+            failureMessageId = "rmc-xeno-apply-salve-target-hostile-failure";
+
+        if (!_interact.InRangeUnobstructed(ent.Owner, target, args.Range))
+            failureMessageId = "rmc-xeno-apply-salve-target-too-far-away-failure";
+
+        if (_mobState.IsDead(target))
+            failureMessageId = "rmc-xeno-apply-salve-target-dead-failure";
+
+        if (_flammable.IsOnFire(target))
+            failureMessageId = "rmc-xeno-apply-salve-target-on-fire-failure";
+
+        if (TryComp(target, out DamageableComponent? damageComp) &&
+            _damageable.GetTotalDamage((target, damageComp)) == 0)
+            failureMessageId = "rmc-xeno-apply-salve-target-full-health-failure";
+
+        if (failureMessageId != null)
+        {
+            _popup.PopupClient(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
+            return;
+        }
+
+        var totalHealAmount = args.StandardHealAmount;
+        var damageTakenModifier = args.DamageTakenModifier;
+        var healedHealerOrSmallXeno = false;
+        if (TryComp(target, out RMCSizeComponent? sizeComp) && (sizeComp.Size == RMCSizes.Small || sizeComp.Size  == RMCSizes.VerySmallXeno))
+        {
+            totalHealAmount = args.SmallHealAmount;
+            damageTakenModifier = 1;
+            healedHealerOrSmallXeno = true;
+        }
+
+        if (_xenoStrain.AreSameStrain(ent.Owner, target))
+        {
+            damageTakenModifier = 1;
+            healedHealerOrSmallXeno = true;
+        }
+
+        if (!_xenoPlasma.TryRemovePlasmaPopup(ent.Owner, (totalHealAmount * args.PlasmaCostModifier)))
+        {
+            return;
+        }
+
+        var damageTaken = totalHealAmount * damageTakenModifier;
+
+        var damageTakenSpecifier = new DamageSpecifier
+        {
+            DamageDict =
+            {
+                [BluntGroup] = damageTaken,
+            },
+        };
+
+        if (TryComp<DamageableComponent>(ent, out var damage))
+            _damageable.AddDamage(ent.Owner, damage, damageTakenSpecifier);
+
+        _popup.PopupClient(Loc.GetString("rmc-xeno-apply-salve-self", ("target_xeno", target)), ent, PopupType.Medium);
+
+        args.Handled = true;
+
+        var heal = EnsureComp<XenoBeingHealedComponent>(target);
+        var healStack = new XenoHealStack()
+        {
+            Charges = (int) (args.TotalHealDuration.TotalSeconds / args.TimeBetweenHeals.TotalSeconds),
+            TimeBetweenHeals = args.TimeBetweenHeals,
+        };
+        healStack.HealAmount = totalHealAmount / healStack.Charges;
+        healStack.NextHealAt = _timing.CurTime + healStack.TimeBetweenHeals;
+        heal.HealStacks.Add(healStack);
+        heal.ParallizeHealing = true;
+        var salved = EnsureComp<RecentlySalvedComponent>(ent);
+        salved.ExpiresAt = _timing.CurTime + args.TotalHealDuration;
+
+        if(_net.IsServer)
+            SpawnAttachedTo(args.HealEffect, target.ToCoordinates());
+
+        _jitter.DoJitter(target, TimeSpan.FromSeconds(1), true, 80, 8, true);
+
+        _audio.PlayPredicted(args.HealSound, target.ToCoordinates(), ent);
+
+        _popup.PopupClient(Loc.GetString("rmc-xeno-apply-salve-target", ("healer_xeno", ent)), target, PopupType.SmallCaution);
+
+        if (!healedHealerOrSmallXeno && TryComp(ent, out XenoEnergyComponent? xenoEnergyComp) && !_xenoEnergy.HasEnergy((ent, xenoEnergyComp), xenoEnergyComp.Max))
+        {
+            _xenoEnergy.AddEnergy((ent, xenoEnergyComp), (int)damageTaken, false);
+            if (_xenoEnergy.HasEnergy((ent, xenoEnergyComp), xenoEnergyComp.Max))
+            {
+                _popup.PopupClient(Loc.GetString("rmc-xeno-sacrifice-heal-will-respawn"), ent, PopupType.Large);
+            }
+        }
+        Dirty(target, heal);
+    }
+
+    private void OnXenoSacrificeHealAction(Entity<XenoComponent> ent, ref XenoSacrificeHealActionEvent args)
+    {
+        var target = args.Target;
+
+        LocId? failureMessageId = null;
+
+        if (!HasComp<XenoComponent>(target))
+            failureMessageId = "rmc-xeno-sacrifice-heal-target-not-xeno-failure";
+
+        if (ent.Owner == target)
+            failureMessageId = "rmc-xeno-sacrifice-heal-target-self-failure";
+
+        if (HasComp<XenoParasiteComponent>(target) ||
+            (TryComp(target, out RMCSizeComponent? rmcSizeComp) && rmcSizeComp.Size == RMCSizes.VerySmallXeno))
+        {
+            failureMessageId = "rmc-xeno-sacrifice-heal-target-low-level-failure";
+        }
+
+        if (!_hive.FromSameHive(ent.Owner, target))
+            failureMessageId = "rmc-xeno-sacrifice-heal-target-hostile-failure";
+
+        if (!_interact.InRangeUnobstructed(ent.Owner, target, args.Range))
+            failureMessageId = "rmc-xeno-sacrifice-heal-target-too-far-away-failure";
+
+        if (_mobState.IsDead(target))
+            failureMessageId = "rmc-xeno-sacrifice-heal-target-dead-failure";
+
+        if (TryComp(target, out DamageableComponent? targetDamageComp) &&
+            _damageable.GetTotalDamage((target, targetDamageComp)) == 0)
+            failureMessageId = "rmc-xeno-sacrifice-heal-target-full-health-failure";
+
+        if (failureMessageId != null)
+        {
+            _popup.PopupClient(Loc.GetString(failureMessageId, ("target_xeno", target)), ent);
+            return;
+        }
+
+        if (!TryComp(target, out targetDamageComp) ||
+            !TryComp(ent, out DamageableComponent? userDamageComp) ||
+            !TryComp(target, out MobThresholdsComponent? targetThresholdsComp) ||
+            !TryComp(ent, out MobThresholdsComponent? userThresholdsComp))
+        {
+            return;
+        }
+
+
+        _flammable.Extinguish(target);
+
+        FixedPoint2? targetCriticalThreshold = null;
+        foreach (var threshold in targetThresholdsComp.Thresholds)
+        {
+            if (threshold.Value == MobState.Critical)
+            {
+                targetCriticalThreshold = threshold.Key;
+            }
+        }
+
+        FixedPoint2? userDeathThreshold = null;
+        foreach (var threshold in userThresholdsComp.Thresholds)
+        {
+            if (threshold.Value == MobState.Dead)
+            {
+                userDeathThreshold = threshold.Key;
+            }
+        }
+
+        if (userDeathThreshold is null ||
+            targetCriticalThreshold is null)
+        {
+            return;
+        }
+
+        SacrificialHealShout(ent);
+        _xenoAnnounce.AnnounceSameHive(ent.Owner, Loc.GetString("rmc-xeno-sacrifice-heal-target-announcement", ("healer_xeno", ent), ("target_xeno", target)), popup:PopupType.Large);
+        _popup.PopupPredicted(Loc.GetString("rmc-xeno-sacrifice-heal-target-enviorment", ("healer_xeno", ent), ("target_xeno", target)), target, ent, PopupType.Medium);
+
+        // Heal from crit
+        var targetTotalDamage = _damageable.GetTotalDamage((target, targetDamageComp));
+        var diffToThreshold = targetTotalDamage - targetCriticalThreshold.Value;
+
+        if (diffToThreshold > 0)
+            Heal(target, diffToThreshold);
+
+        // Use up user's health to heal target
+        var userTotalDamage = _damageable.GetTotalDamage((ent.Owner, userDamageComp));
+        var remainingHealth = userDeathThreshold.Value - userTotalDamage;
+        var healAmount = remainingHealth * args.TransferProportion;
+
+        Heal(target, healAmount);
+
+
+        foreach (var status in args.AilmentsRemove)
+        {
+            _status.TryRemoveStatusEffect(target, status);
+        }
+
+        foreach (var status in args.AilmentsRemoveNew)
+        {
+            _statusEffect.TryRemoveStatusEffect(target, status);
+        }
+
+        EntityManager.RemoveComponents(target, args.ComponentsRemove);
+
+        _jitter.DoJitter(target, TimeSpan.FromSeconds(1), true, 80, 8, true);
+
+        if (TryComp(ent, out XenoEnergyComponent? xenoEnergyComp) &&
+            _xenoEnergy.HasEnergy((ent, xenoEnergyComp), xenoEnergyComp.Max))
+        {
+            var corpsePosition = _transform.GetMoverCoordinates(ent);
+
+            if (_hive.TryGetHiveCore(ent, out var core))
+                SacrificialHealRespawn(ent, args.RespawnDelay, true, _transform.GetMoverCoordinates(core.Value));
+            else
+                SacrificialHealRespawn(ent, args.RespawnDelay, true, corpsePosition);
+        }
+        else
+        {
+            SacrificeNoRespawn(ent);
+        }
+
+        if (_net.IsServer)
+        {
+            SpawnAttachedTo(args.HealEffect, target.ToCoordinates());
+            _gibbing.Gib(ent, dropGiblets: false);
+        }
+    }
+
+    public void Heal(EntityUid target, FixedPoint2 amount)
+    {
+        var damage = _rmcDamageable.DistributeDamageCached(target, BruteGroup, amount);
+        var totalHeal = damage.GetTotal();
+        var leftover = amount - totalHeal;
+        if (leftover > FixedPoint2.Zero)
+            damage = _rmcDamageable.DistributeDamageCached(target, BurnGroup, leftover, damage);
+        _damageable.TryChangeDamage(target, -damage, true);
+    }
+
+    public void CreateHealStacks(EntityUid target, FixedPoint2 healAmount, TimeSpan timeBetweenHeals, int charges, TimeSpan nextHealAt, bool ignoreFire = false)
+    {
+        if (!ignoreFire && _flammable.IsOnFire(target))
+            return;
+
+        var heal = EnsureComp<XenoBeingHealedComponent>(target);
+        var healStack = new XenoHealStack()
+        {
+            Charges = charges,
+            TimeBetweenHeals = timeBetweenHeals,
+        };
+
+        healStack.HealAmount = healAmount;
+        healStack.NextHealAt = _timing.CurTime + nextHealAt;
+        heal.HealStacks.Add(healStack);
+        heal.ParallizeHealing = true;
+    }
+
+
+    protected virtual void SacrificialHealShout(EntityUid xeno)
+    {
+    }
+
+    protected virtual void SacrificialHealRespawn(EntityUid xeno, TimeSpan time, bool atCorpse = false, EntityCoordinates? corpse = null)
+    {
+    }
+
+    protected virtual void SacrificeNoRespawn(EntityUid xeno)
+    {
+    }
+
+    public override void Update(float frameTime)
+    {
+        var time = _timing.CurTime;
+        var healQuery = EntityQueryEnumerator<XenoBeingHealedComponent>();
+        while (healQuery.MoveNext(out var uid, out var heal))
+        {
+            if (heal.HealStacks.Count == 0 || _mobState.IsDead(uid))
+            {
+                RemCompDeferred<XenoBeingHealedComponent>(uid);
+                continue;
+            }
+
+            List<XenoHealStack> finishedStacks = new();
+
+            foreach (var healStack in heal.HealStacks)
+            {
+                if (healStack.Charges <= 0)
+                {
+                    finishedStacks.Add(healStack);
+                    continue;
+                }
+
+                if (healStack.NextHealAt > time)
+                {
+                    continue;
+                }
+
+                Dirty(uid, heal);
+
+                Heal(uid, healStack.HealAmount);
+
+                healStack.NextHealAt = time + healStack.TimeBetweenHeals;
+                healStack.Charges = healStack.Charges - 1;
+
+                if (!heal.ParallizeHealing)
+                {
+                    break;
+                }
+            }
+
+            foreach (var stack in finishedStacks)
+            {
+                heal.HealStacks.Remove(stack);
+            }
+        }
+    }
+}

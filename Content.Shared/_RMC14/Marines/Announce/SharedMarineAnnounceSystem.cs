@@ -1,0 +1,294 @@
+﻿using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
+using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Marines.ControlComputer;
+using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Marines.Squads;
+using Content.Shared._RMC14.Overwatch;
+using Content.Shared._RMC14.TacticalMap;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.Access.Systems;
+using Content.Shared.Administration.Logs;
+using Content.Shared.CCVar;
+using Content.Shared.Database;
+using Content.Shared.Ghost;
+using Content.Shared.Popups;
+using Content.Shared.Radio;
+using Robust.Shared.Audio;
+using Robust.Shared.Configuration;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+
+namespace Content.Shared._RMC14.Marines.Announce;
+
+public abstract partial class SharedMarineAnnounceSystem : EntitySystem
+{
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private ARESCoreSystem _core = default!;
+    [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private SharedMarineControlComputerSystem _marineControlComputer = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRankSystem _rankSystem = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private SquadSystem _squad = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedUserInterfaceSystem _ui = default!;
+
+    public static readonly SoundSpecifier DefaultAnnouncementSound = new SoundPathSpecifier("/Audio/_RMC14/Announcements/Marine/notice2.ogg");
+    public static readonly SoundSpecifier DefaultSquadSound = new SoundPathSpecifier("/Audio/_RMC14/Effects/tech_notification.ogg");
+    public static readonly SoundSpecifier AresAnnouncementSound = new SoundPathSpecifier("/Audio/_RMC14/AI/announce.ogg");
+
+    public int CharacterLimit = 1000;
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabAnnouncementLogs";
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<MarineCommunicationsComputerComponent, EchoSquadReasonEvent>(OnEchoSquadReason);
+        SubscribeLocalEvent<MarineCommunicationsComputerComponent, EchoSquadConfirmEvent>(OnEchoSquadConfirm);
+
+        Subs.BuiEvents<MarineCommunicationsComputerComponent>(MarineCommunicationsComputerUI.Key,
+            subs =>
+            {
+                subs.Event<MarineCommunicationsComputerMsg>(OnMarineCommunicationsComputerMsg);
+                subs.Event<MarineCommunicationsOpenMapMsg>(OnMarineCommunicationsOpenMapMsg);
+                subs.Event<MarineCommunicationsEchoSquadMsg>(OnMarineCommunicationsEchoMsg);
+                subs.Event<MarineCommunicationsOverwatchMsg>(OnMarineCommunicationsOverwatchMsg);
+                subs.Event<MarineControlComputerMedalMsg>(OnMarineCommunicationsMedalMsg);
+            });
+
+        Subs.CVar(_config, CCVars.ChatMaxMessageLength, limit => CharacterLimit = limit, true);
+    }
+
+    private void OnEchoSquadReason(Entity<MarineCommunicationsComputerComponent> ent, ref EchoSquadReasonEvent args)
+    {
+        if (!ent.Comp.CanCreateEcho)
+            return;
+
+        if (!TryGetEntity(args.User, out var user))
+            return;
+
+        var ev = new EchoSquadConfirmEvent(args.User, args.Message);
+        _dialog.OpenConfirmation(
+            ent,
+            user.Value,
+            "Confirm Activation",
+            $"Confirm activation of Echo Squad for {args.Message}",
+            ev
+        );
+    }
+
+    private void OnEchoSquadConfirm(Entity<MarineCommunicationsComputerComponent> ent, ref EchoSquadConfirmEvent args)
+    {
+        if (!ent.Comp.CanCreateEcho)
+            return;
+
+        if (!TryGetEntity(args.User, out var user))
+            return;
+
+        ent.Comp.CanCreateEcho = false;
+        Dirty(ent);
+
+        if (_squad.HasSquad(SquadSystem.EchoSquadId))
+            return;
+
+        _squad.TryEnsureSquad(SquadSystem.EchoSquadId, out _);
+        _adminLog.Add(LogType.RMCSquadCreated, $"Echo squad was created by {ToPrettyString(user)} with reason {args.Message}");
+    }
+
+    private void OnMarineCommunicationsComputerMsg(Entity<MarineCommunicationsComputerComponent> ent, ref MarineCommunicationsComputerMsg args)
+    {
+        if (string.IsNullOrWhiteSpace(args.Text))
+            return;
+
+        if (!_skills.HasSkill(args.Actor, ent.Comp.AnnounceSkill, ent.Comp.AnnounceSkillLevel))
+        {
+            _popup.PopupClient(Loc.GetString("rmc-skills-no-training", ("target", ent)), args.Actor, PopupType.MediumCaution);
+            return;
+        }
+
+        var time = _timing.CurTime;
+        if (_timing.CurTime < ent.Comp.LastAnnouncement + ent.Comp.Cooldown)
+        {
+            var cooldownMessage = Loc.GetString("rmc-announcement-cooldown", ("seconds", (int) ent.Comp.Cooldown.TotalSeconds));
+            _popup.PopupClient(cooldownMessage, args.Actor, PopupType.SmallCaution);
+            return;
+        }
+
+        _ui.CloseUi(ent.Owner, MarineCommunicationsComputerUI.Key);
+        var text = args.Text;
+        if (text.Length > CharacterLimit)
+            text = text[..CharacterLimit].Trim();
+
+        AnnounceSigned(args.Actor, text, name: ent.Comp.AnnounceName);
+
+        ent.Comp.LastAnnouncement = time;
+        Dirty(ent);
+    }
+
+    private void OnMarineCommunicationsOpenMapMsg(Entity<MarineCommunicationsComputerComponent> ent, ref MarineCommunicationsOpenMapMsg args)
+    {
+        _ui.TryOpenUi(ent.Owner, TacticalMapComputerUi.Key, args.Actor);
+    }
+
+    private void OnMarineCommunicationsEchoMsg(Entity<MarineCommunicationsComputerComponent> ent, ref MarineCommunicationsEchoSquadMsg args)
+    {
+        if (!ent.Comp.CanCreateEcho)
+            return;
+
+        if (_squad.HasSquad(SquadSystem.EchoSquadId))
+            return;
+
+        var ev = new EchoSquadReasonEvent(GetNetEntity(args.Actor));
+        _dialog.OpenInput(ent, args.Actor, "What is the purpose of Echo Squad?", ev);
+    }
+
+    private void OnMarineCommunicationsOverwatchMsg(Entity<MarineCommunicationsComputerComponent> ent, ref MarineCommunicationsOverwatchMsg args)
+    {
+        if (!_skills.HasSkill(args.Actor, ent.Comp.OverwatchSkill, ent.Comp.OverwatchSkillLevel))
+        {
+            _popup.PopupClient("You are not trained in overwatch!", args.Actor, PopupType.LargeCaution);
+            return;
+        }
+
+        _ui.TryOpenUi(ent.Owner, OverwatchConsoleUI.Key, args.Actor);
+    }
+
+    private void OnMarineCommunicationsMedalMsg(Entity<MarineCommunicationsComputerComponent> ent, ref MarineControlComputerMedalMsg args)
+    {
+        if (!ent.Comp.CanGiveMedals)
+            return;
+
+        _marineControlComputer.GiveMedal(ent, args.Actor);
+    }
+
+    public virtual void AnnounceRadio(
+        EntityUid sender,
+        string message,
+        ProtoId<RadioChannelPrototype> channel)
+    {
+    }
+
+    public virtual void AnnounceARESStaging(
+        EntityUid? source,
+        string message,
+        SoundSpecifier? sound = null,
+        LocId? announcement = null)
+    {
+    }
+
+    public void AnnounceARES(
+        EntityUid? source,
+        string message,
+        SoundSpecifier? sound = null)
+    {
+        AnnounceARESStaging(source, message, sound, "rmc-announcement-ares-command");
+    }
+
+    public virtual void AnnounceSquad(
+        string message,
+        EntProtoId<SquadTeamComponent> squad,
+        SoundSpecifier? sound = null)
+    {
+    }
+
+    public virtual void AnnounceSquad(
+        string message,
+        EntityUid squad,
+        SoundSpecifier? sound = null)
+    {
+    }
+
+    public virtual void AnnounceSingle(
+        string message,
+        EntityUid receiver,
+        SoundSpecifier? sound = null)
+    {
+    }
+
+    /// <summary>
+    ///     Dispatches already wrapped announcement to Marines.
+    /// </summary>
+    /// <param name="message">The content of the announcement.</param>
+    /// <param name="sound">GlobalSound for announcement.</param>
+    /// <param name="filter">Who should be able to see and hear the announcement.</param>
+    public virtual void AnnounceToMarines(
+        string message,
+        SoundSpecifier? sound = null,
+        Filter? filter = null,
+        bool excludeSurvivors = true,
+        string? faction = null)
+    {
+    }
+
+    /// <summary>
+    /// Dispatches an unsigned announcement to Marines.
+    /// </summary>
+    /// <param name="message">The content of the announcement.</param>
+    /// <param name="author">The author of the message, UNMC High Command by default.</param>
+    /// <param name="sound">GlobalSound for announcement.</param>
+    public virtual void AnnounceHighCommand(
+        string message,
+        string? author = null,
+        SoundSpecifier? sound = null)
+    {
+    }
+
+    /// <summary>
+    /// Dispatches a signed announcement to Marines.
+    /// </summary>
+    /// <param name="sender">EntityUid of sender, for job and name params.</param>
+    /// <param name="message">The content of the announcement.</param>
+    /// <param name="author">The author of the message, Command by default.</param>
+    /// <param name="name">The name to sign the message with, defaults to the name of <see cref="author"/>.</param>
+    /// <param name="sound">GlobalSound for announcement.</param>
+    /// <param name="filter">Who should be able to see and hear the announcement.</param>
+    public void AnnounceSigned(
+        EntityUid sender,
+        string message,
+        string? author = null,
+        string? name = null,
+        SoundSpecifier? sound = null,
+        Filter? filter = null)
+    {
+        if (_net.IsClient)
+            return;
+
+        author ??= Loc.GetString("rmc-announcement-author"); // Get "Command" fluent string if author==null
+        name ??= _rankSystem.GetSpeakerFullRankName(sender) ?? Name(sender);
+        var wrappedMessage = Loc.GetString("rmc-announcement-message-signed", ("author", author), ("message", message), ("name", name));
+
+        AnnounceToMarines(wrappedMessage, sound, filter);
+        _adminLog.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(sender):source} marine announced message: {message}");
+
+        if (_idCard.TryFindIdCard(sender, out var idCard) && TryComp(idCard, out ItemIFFComponent? idCardIFF))
+            foreach (var faction in idCardIFF.Factions)
+            {
+                _core.CreateARESLog(faction, LogCat, (string)$"{Name(sender)} sent an announcement: {message}");
+            }
+    }
+
+    public string FormatHighCommand(string? author, string message)
+    {
+        author ??= Loc.GetString("rmc-announcement-author-highcommand");
+        return Loc.GetString("rmc-announcement-message", ("author", author), ("message", message));
+    }
+
+    public string FormatARESStaging(LocId? author, string message)
+    {
+        author ??= "rmc-announcement-ares-message";
+        return Loc.GetString(author, ("message", FormattedMessage.EscapeText(message)));
+    }
+
+    public string FormatARES(string message)
+    {
+        return FormatARESStaging("rmc-announcement-ares-command", message);
+    }
+}

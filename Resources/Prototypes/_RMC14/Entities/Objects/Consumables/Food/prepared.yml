@@ -1,0 +1,566 @@
+- type: entity
+  abstract: true
+  parent: CMFoodBase
+  id: CMMarinePreparedMealBase
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 9
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
+  - type: Extractable
+    grindableSolutionName: food
+  - type: InjectableSolution
+    solution: food
+  - type: DrawableSolution
+    solution: food
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: CMMarinePreparedMealCornbread
+  name: UNMC prepared meal (cornbread)
+  description: A tray of standard UNMC food. Stale cornbread, tomato paste and some green goop fill this tray.
+  components:
+  - type: Sprite
+    state: cornbread
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 9
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: CMMarinePreparedMealChicken
+  name: UNMC prepared meal (chicken)
+  description: A tray of standard UNMC food. Moist chicken, dry rice and a mildly depressed piece of broccoli fill this tray.
+  components:
+  - type: Sprite
+    state: chicken
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 10
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: CMMarinePreparedMealPasta
+  name: UNMC prepared meal (pasta)
+  description: A tray of standard UNMC food. Overcooked spaghetti, waterlogged carrots and two french fries fill this tray.
+  components:
+  - type: Sprite
+    state: pasta
+  - type: Edible
+    transferAmount: 3
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 9
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: CMMarinePreparedMealPizza
+  name: UNMC prepared meal (pizza)
+  description: A tray of standard UNMC food. Cold pizza, wet green beans and a shitty egg fill this tray. Get something other than pizza, lardass.
+  components:
+  - type: Sprite
+    state: pizza
+  - type: Edible
+    transferAmount: 8
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 8
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: CMMarinePreparedMealPork
+  name: UNMC prepared meal (pork)
+  description: A tray of standard UNMC food. Partially raw pork, goopy corn and some watery mashed potatoes fill this tray.
+  components:
+  - type: Sprite
+    state: pork
+  - type: Edible
+    transferAmount: 4.5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 9
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: CMMarinePreparedMealTofu
+  name: UNMC prepared meal (tofu)
+  description: The UNMC doesn't serve tofu you grass sucking hippie. The flag signifies your defeat.
+  components:
+  - type: Sprite
+    state: tofu
+  - type: Edible
+    transferAmount: 1
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 2
+
+# SPP Tray Meals
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPBanush
+  name: SPP prepared meal (banush)
+  description: A Ukrainian style Banush cornmeal stew, dried apricots, and a couple vienna sausages.
+  components:
+  - type: Sprite
+    state: spp_banush
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPChowMein
+  name: SPP prepared meal (chow mein)
+  description: Chow mein with imitation shrimp, two slightly overcooked spring rolls, some type of porridge and a small tofu cube.
+  components:
+  - type: Sprite
+    state: spp_chowmein
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPCuban
+  name: SPP prepared meal (cuban rice)
+  description: Cuban rice with bland-ish eggs pieces, tomato sauce, potato salad, and a dry biscuit.
+  components:
+  - type: Sprite
+    state: spp_cuban
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPFrankfurter
+  name: SPP prepared meal (frankfurter)
+  description: A large, juicy frankfurter with mashed potato, crispy potato pancakes and saurkraut.
+  components:
+  - type: Sprite
+    state: spp_frankfurter
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPJiaozi
+  name: SPP prepared meal (jiaozi)
+  description: Four boiled dumplings, soy-vinegar dipping sauce, pickled red cucumbers and two rye biscuits.
+  components:
+  - type: Sprite
+    state: spp_jiaozi
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPLuncheon
+  name: SPP prepared meal (luncheon)
+  description: Two scoops of slightly dried out rice, a square of some kind of luncheon meat, two carrot sticks, and a 'fruit' bar.
+  components:
+  - type: Sprite
+    state: spp_luncheon
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPMeatballs
+  name: SPP prepared meal (meatballs)
+  description: Königsberger Klopse meatballs, a creamy sauce, some spinach, and a scoop of rice. One of the better options out of the pre-packaged meals and is rarely ever in stock.
+  components:
+  - type: Sprite
+    state: spp_meatballs
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPShrimp
+  name: SPP prepared meal (shrimp)
+  description: A greasy rice patty with bits of fake imitation shrimp and egg flavoring. Smells quite off. On the side there's a slightly soggy spring roll.
+  components:
+  - type: Sprite
+    state: spp_meatballs
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealSPPWursts
+  name: SPP prepared meal (wursts)
+  description: Two scoops of rice, two Weiner wursts, a tortilla with tomato sauce and a small bowl of Mungbean soup fill this tray.
+  components:
+  - type: Sprite
+    state: spp_wursts
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: RMCTrayEmpty
+  id: RMCTrayEmptySPP
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
+    state: spp_tray
+
+# PMC
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealPMCIkanBakar
+  name: PMC prepared meal (Ikan Bakar)
+  description: A chunk of grilled fish, Gado-Gado with 2 hard-boiled eggs, and a fermented soybean cake fill this tray.
+  components:
+  - type: Sprite
+    state: pmc_ikanbakar
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: RMCMarinePreparedMealPMCIkanBakar
+  id: RMCMarinePreparedMealPMCSoba
+  name: PMC prepared meal (Soba Noodles)
+  description: Soba Noodles with Sesame seeds, 2 pieces of Onigiri, and a bowl of Miso soup with surprisingly okay tofu chunks.
+  components:
+  - type: Sprite
+    state: pmc_soba
+
+- type: entity
+  parent: RMCMarinePreparedMealPMCIkanBakar
+  id: RMCMarinePreparedMealPMCAlooGobi
+  name: PMC prepared meal (Aloo Gobi Curry)
+  description: A tray filled with Aloo Gobi curry, A thick piece of Paratha flatbread, and a few greasy vegetable Pekoras. A foremost vegetarian option for PMCs.
+  components:
+  - type: Sprite
+    state: pmc_aloogobi
+
+- type: entity
+  parent: RMCMarinePreparedMealPMCIkanBakar
+  id: RMCMarinePreparedMealPMCFishAndChips
+  name: PMC prepared meal (Fish & Chips)
+  description: A tray filled with a piece of crispy fried fish, 3 dry Yorkshire puddings, and a few spoonfuls of runny Baked Beans.
+  components:
+  - type: Sprite
+    state: pmc_fishandchips
+
+- type: entity
+  parent: RMCMarinePreparedMealPMCIkanBakar
+  id: RMCMarinePreparedMealPMCButterChicken
+  name: PMC prepared meal (Butter Chicken)
+  description: A helping of Butter Chicken loaded onto a bed of fluffy rice, alongside a few Samosas and Aloo Tikki with Tamarind sauce.
+  components:
+  - type: Sprite
+    state: pmc_butterchicken
+
+- type: entity
+  parent: RMCMarinePreparedMealPMCIkanBakar
+  id: RMCMarinePreparedMealPMCBirria
+  name: PMC prepared meal (Birria)
+  description: A tray filled with a piece of Birria, alongside a few spoonfuls of Orange Rice and some consommé for dipping.
+  components:
+  - type: Sprite
+    state: pmc_birria
+
+- type: entity
+  parent: RMCMarinePreparedMealPMCIkanBakar
+  id: RMCMarinePreparedMealPMCBobotie
+  name: PMC prepared meal (Bobotie)
+  description: A tray filled with a slice of Bobotie, a large Roosterkoek breadroll, and spicy Chakalaka.
+  components:
+  - type: Sprite
+    state: pmc_bobotie
+
+- type: entity
+  parent: RMCTrayEmpty
+  id: RMCTrayEmptyPMC
+  description: A standard WEYA-produced plastic tray, built for PMCs, by PMCs, to help PMCs meet their nutrient requirements.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
+    state: pmc_tray
+
+# Festive
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealCookies
+  name: "Marine 'X-MAS' Meal: Sugar Cookies"
+  description: The UNMC M25 Sugar Cookies Meal was designed to give marines a feeling of Christmas joy. But to the bemusement of superior officers, the costs-savings measure of simply fabricating protein bars in the shape of cookies with chocolate substitute chips and the replacement of the expected milk with artificially colored water did not go over well with most marines.
+  components:
+  - type: Sprite
+    state: cookies
+  - type: Edible
+    transferAmount: 8
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+      - ReagentId: RMCSugar
+        Quantity: 9
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealGingerbread
+  name: "Marine 'X-MAS' Meal: Gingerbread Cookies"
+  description: The UNMC M25 Gingerbread Cookies Meal was designed to give marines convenient and cheap access to gingerbread cookies as a replacement for annual gingerbread making classes due to rising expenses and comically low success rates for the Basic Holidays Festivities Course. However, due to cost saving measures, these cookies seldom inspire happiness, nor holiday spirit.
+  components:
+  - type: Sprite
+    state: gingerbread
+  - type: Edible
+    transferAmount: 8
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+      - ReagentId: RMCSugar
+        Quantity: 9
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealFruitcake
+  name: "Marine 'X-MAS' Meal: Fruitcake"
+  description: The UNMC M25 Fruitcake Meal was the third meal designed by an officers' committee as part of the M25 Project; this shows through the terrible hardness and tartness of the bread and raisined fruits. It can be logically deduced that the people who vended this option are worse than the Grinch and the Miser combined, along with the people who designed and prepared this fruitcake.
+  components:
+  - type: Sprite
+    state: fruit_cake
+  - type: Edible
+    transferAmount: 8
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+      - ReagentId: RMCSugar
+        Quantity: 9
+
+# Empty Tray
+
+- type: entity
+  parent: BaseItem
+  id: RMCTrayEmpty
+  name: empty tray
+  description: Finished with its tour of duty.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
+    state: mretray_empty
+  - type: Item
+    sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
+    size: Small
+  - type: Tag
+    tags:
+    - Trash
+  - type: SpaceGarbage
+
+# RCM tray meals
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealRCMFish
+  name: RCM prepared meal (seafood platter)
+  description: Numerous kinds of sushi occupy the side-component slots of this tray, with the main component being several slices of salmon sashimi atop cold, boiled rice.
+  components:
+  - type: Sprite
+    state: rmc_fish
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealRCMKatsu
+  name: RCM prepared meal (katsu curry)
+  description: Breaded chicken strips slathered in a Japanese style curry sauce. Comes with a helping of fluffy rice and an unidentifiable mound of overcooked veg as the side components.
+  components:
+  - type: Sprite
+    state: rmc_katsu
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealRCMSausage
+  name: RCM prepared meal (sausage and eggs)
+  description: Several overdone sausages, a wodge of scrambled eggs, and a load of sweet potato fries & green beans fill this tray.
+  components:
+  - type: Sprite
+    state: rmc_sausage
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealRCMMeat
+  name: RCM prepared meal (roast beef)
+  description: A slab of imitation beef drenched in too-salty gravy, with a portion of undercooked peas, soggy carrots and oddly dry mashed potatoes.
+  components:
+  - type: Sprite
+    state: rmc_meat
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: CMMarinePreparedMealBase
+  id: RMCMarinePreparedMealRCMTikka
+  name: RCM prepared meal (tikka curry)
+  description: Chunks of pork and potato submerged in a mass of mild Indian curry sauce, with a side of fluffy rice and a lukewarm bit of naan flatbread.
+  components:
+  - type: Sprite
+    state: rmc_tikka
+  - type: Edible
+    transferAmount: 5
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 15
+
+- type: entity
+  parent: RMCTrayEmpty
+  id: RMCTrayEmptyRCM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
+    state: rmc_tray_empty

@@ -1,0 +1,196 @@
+﻿- type: entity
+  id: RMCGeneratorFusionFake
+  name: permanently destroyed S-52 fusion reactor
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        mask:
+        - FullTileMask
+        layer:
+        - AirlockLayer
+        - LowImpassable
+  - type: Sprite
+    drawdepth: WallMountedItems
+    sprite: _RMC14/Structures/Power/fusion_reactor.rsi
+    layers:
+    - state: "off"
+      map: [ "base" ]
+  - type: Clickable
+
+- type: entity
+  parent: RMCGeneratorFusionFake
+  id: RMCGeneratorFusion
+  name: S-52 fusion reactor
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCombatTechnician
+  - type: InteractionOutline
+  - type: Appearance
+  - type: Corrodible
+    isCorrodible: false
+  - type: RMCFusionReactor
+    watts: 50000
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCFusionReactorLayers.Layer:
+        base:
+          Off: { state: "off" }
+          Weld: { state: "weld" }
+          Wire: { state: "wire" }
+          Wrench: { state: "wrench" }
+          Ten: { state: "on-10" }
+          TwentyFive: { state: "on-25" }
+          Fifty: { state: "on-50" }
+          SeventyFive: { state: "on-75" }
+          Hundred: { state: "on-100" }
+          Overloaded: { state: "overloaded" }
+  - type: BlockXenoConstruction
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: RMCGeneratorFusion
+  id: RMCGeneratorFusionColony
+  name: G-11 geothermal generator
+  description: A thermoelectric generator sitting atop a plasma-filled borehole.
+  components:
+  - type: RMCFusionReactor
+    watts: 100000
+    randomizeDamage: true
+  - type: IntelPowerObjective
+  - type: Sprite
+    drawdepth: WallMountedItems
+    sprite: _RMC14/Structures/Power/geothermal_generator.rsi
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCFusionReactorLayers.Layer:
+        base:
+          Off: { state: "off" }
+          Weld: { state: "weld" }
+          Wire: { state: "wire" }
+          Wrench: { state: "wrench" }
+          Ten: { state: "on-10" }
+          TwentyFive: { state: "on-25" }
+          Fifty: { state: "on-50" }
+          SeventyFive: { state: "on-75" }
+          Hundred: { state: "on-100" }
+  - type: MarineMapTracked
+  - type: XenoMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: generator
+
+- type: entity
+  parent: RMCGeneratorFusionColony
+  id: RMCGeneratorFusionColonyNoMapIcon
+  suffix: No Map Icon
+  components:
+  - type: RemoveComponents
+    components:
+    - type: MarineMapTracked
+    - type: XenoMapTracked
+    - type: TacticalMapTracked
+    - type: TacticalMapIcon
+      icon:
+        sprite: /Textures/_RMC14/Interface/map_blips.rsi
+        state: generator
+
+- type: entity
+  parent: BaseItem
+  id: RMCGeneratorFusionCell
+  name: WL-6 universal fuel cell
+  description: A rechargeable fuel cell.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Power/fusion_fuel_cell.rsi
+    state: cell-full
+  - type: Item
+    size: Normal
+  - type: RMCFusionCell
+
+- type: entity
+  abstract: true
+  id: RMCPortableGeneratorBase # TODO RMC14 - Functionality
+  parent: [ BaseMachine, SmallConstructibleMachine, StructureWheeled]
+  components:
+    - type: GuideHelp
+      guides:
+      - RMCGuideRoleCombatTechnician
+    - type: Transform
+      anchored: False
+    - type: Physics
+      bodyType: Dynamic
+    - type: Fixtures
+      fixtures:
+        fix1:
+          shape:
+            !type:PhysShapeAabb
+            bounds: "-0.40,-0.40,0.40,0.40"
+          density: 155
+          mask:
+            - MachineMask
+          layer:
+            - MachineLayer
+    - type: Appearance
+    - type: Sprite
+      sprite: _RMC14/Structures/Power/generators.rsi
+      noRot: true
+    - type: Destructible
+      thresholds:
+        - trigger:
+            !type:DamageTrigger
+            damage: 200
+          behaviors:
+            - !type:DoActsBehavior
+              acts: [ "Destruction" ]
+        - trigger:
+            !type:DamageTrigger
+            damage: 100
+          behaviors:
+            - !type:PlaySoundBehavior
+              sound:
+                collection: MetalBreak
+            - !type:ChangeConstructionNodeBehavior
+              node: machineFrame
+            - !type:DoActsBehavior
+              acts: ["Destruction"]
+
+- type: entity
+  parent: RMCPortableGeneratorBase
+  id: RMCPortableGenerator
+  name: "P.A.C.M.A.N.-type Portable Generator"
+  description: A portable generator for emergency backup power.
+  components:
+    - type: Sprite
+      state: portgen0
+    - type: Machine
+      board: RMCPortableGeneratorPacmanMachineCircuitBoard
+
+- type: entity
+  parent: RMCPortableGeneratorBase
+  id: RMCPortableGenerator2
+  name: "S.U.P.E.R.P.A.C.M.A.N.-type Portable Generator"
+  description: A portable generator for emergency backup power.
+  components:
+    - type: Sprite
+      state: portgen1
+    - type: Machine
+      board: RMCPortableGeneratorSuperPacmanMachineCircuitboard

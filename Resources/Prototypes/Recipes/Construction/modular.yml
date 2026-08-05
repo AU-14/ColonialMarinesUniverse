@@ -1,0 +1,11 @@
+- type: construction
+  parent: BaseWeapon
+  id: ModularGrenadeRecipe
+  graph: ModularGrenadeGraph
+  targetNode: grenade
+
+- type: construction
+  parent: BaseWeapon
+  id: ModularMineRecipe
+  graph: ModularMineGraph
+  targetNode: mine

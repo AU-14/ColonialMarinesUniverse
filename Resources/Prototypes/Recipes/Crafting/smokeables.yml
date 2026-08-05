@@ -1,0 +1,49 @@
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableJoint
+  graph: smokeableJoint
+  targetNode: joint
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableJointRainbow
+  name: construction-smokeable-joint-rainbow
+  graph: smokeableJointRainbow
+  targetNode: jointRainbow
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableBlunt
+  graph: smokeableBlunt
+  targetNode: blunt
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableBluntRainbow
+  name: construction-smokeable-blunt-rainbow
+  graph: smokeableBluntRainbow
+  targetNode: bluntRainbow
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableCigarette
+  graph: smokeableCigarette
+  targetNode: cigarette
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableGroundCannabis
+  graph: smokeableGroundCannabis
+  targetNode: ground
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableGroundCannabisRainbow
+  graph: smokeableGroundCannabisRainbow
+  targetNode: groundRainbow
+
+- type: construction
+  parent: BaseItemMisc
+  id: smokeableGroundTobacco
+  graph: smokeableGroundTobacco
+  targetNode: ground

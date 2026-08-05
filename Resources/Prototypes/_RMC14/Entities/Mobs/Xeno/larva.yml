@@ -1,0 +1,123 @@
+- type: entity
+  parent:
+  - CMXenoUndeveloped
+  - CMXenoFlammable
+  - RMCXenoVentCrawler
+  id: CMXenoLarva
+  name: Larva
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleDrone
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Larva/larva.rsi # AU14-Edit
+  - type: FiremanCarriable
+    canThrow: true
+    carrierWhitelist:
+      components:
+      - Synth
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      35: Critical
+      70: Dead
+  - type: Xeno
+    role: CMXenoLarva
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoHide
+    hudOffset: -0.1,0.25
+    tier: 0
+    unlockAt: 0
+    emoteSounds: Larva
+  - type: XenoRegen
+    healOffWeeds: true
+  - type: XenoLight
+  - type: XenoPlasma
+    plasma: 10
+    maxPlasma: 10
+    plasmaRegenOnWeeds: 0.1
+  - type: RMCGibOnDeath
+    gibChance: 0.25
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    # - RMCDecalSpawnerGibsLarva # TODO
+    - RMCGibEffectXenoSmall
+  - type: XenoEvolution
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 60
+    evolvesTo:
+    - CMXenoDrone
+    - CMXenoDefender
+    - CMXenoSentinel
+    - CMXenoRunner
+  - type: XenoHide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 185
+        mask:
+        - SmallMobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - SmallMobLayer
+  - type: Flammable
+    canResistFire: false
+  - type: IgnoreBlockPullingDead
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.7
+    baseSprintSpeed: 6.7
+  - type: RestrictEvolveOffWeeds
+  - type: Speech
+    speechSounds: XenonidLarva
+    allowedEmotes: [ "XenoRoar" ]
+  - type: RMCSize
+    size: Small
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: larva
+  - type: Tag
+    tags:
+    - RMCXenoLarva
+    - RMCSynthGrabbable
+  - type: RMCBuckleOffset
+    offset: 0, 0
+  - type: XenoRankNames
+    rankNames:
+      0: rmc-xeno-young-larva
+      2: rmc-xeno-mature-larva
+      3: rmc-xeno-elder-larva
+      4: rmc-xeno-elder-larva
+      5: rmc-xeno-elder-larva
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+  - type: VentCrawler
+    ventCrawlIcon: larva
+  - type: RMCActionOrder
+    id: CMXenoLarva
+
+# For surgeries/failed incubations
+- type: entity
+  id: RMCXenoEmbryo
+  parent: BaseItem
+  name: alien embryo
+  description: All slimy and yucky.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Mobs/Xenos/Larva/larva.rsi # AU14-Edit
+      noRot: true
+      state: embryo

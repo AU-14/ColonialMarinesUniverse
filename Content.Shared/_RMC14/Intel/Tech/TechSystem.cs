@@ -1,0 +1,191 @@
+using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES.Logs;
+using Content.Shared._RMC14.Dropship.Fabricator;
+using Content.Shared._RMC14.Marines.Announce;
+using Content.Shared._RMC14.Requisitions;
+using Content.Shared._RMC14.Scaling;
+using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.Access.Systems;
+using Content.Shared.GameTicking;
+using Content.Shared.UserInterface;
+using Robust.Shared.Network;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+
+namespace Content.Shared._RMC14.Intel.Tech;
+
+public sealed partial class TechSystem : EntitySystem
+{
+    [Dependency] private ARESCoreSystem _core = default!;
+    [Dependency] private DropshipFabricatorSystem _dropshipFabricator = default!;
+    [Dependency] private SharedIdCardSystem _idCard = default!;
+    [Dependency] private IntelSystem _intel = default!;
+    [Dependency] private SharedMarineAnnounceSystem _marineAnnounce = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedRequisitionsSystem _requisitions = default!;
+    [Dependency] private ScalingSystem _scaling = default!;
+    [Dependency] private SharedGameTicker _ticker = default!;
+
+    private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabIntelLogs";
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<TechAnnounceEvent>(OnTechAnnounce);
+        SubscribeLocalEvent<TechUnlockTierEvent>(OnTechUnlockTier);
+        SubscribeLocalEvent<TechRequisitionsBudgetEvent>(OnTechRequisitionsBudget);
+        SubscribeLocalEvent<TechDropshipBudgetEvent>(OnTechDropshipBudget);
+        SubscribeLocalEvent<TechLogisticsDeliveryEvent>(OnTechLogisticsDelivery);
+
+        SubscribeLocalEvent<TechControlConsoleComponent, BeforeActivatableUIOpenEvent>(OnControlConsoleBeforeOpen);
+
+        Subs.BuiEvents<TechControlConsoleComponent>(TechControlConsoleUI.Key,
+            subs =>
+            {
+                subs.Event<TechPurchaseOptionBuiMsg>(OnPurchaseOptionMsg);
+            });
+    }
+
+    private void OnTechAnnounce(TechAnnounceEvent ev)
+    {
+        var author = Localize(ev.Author);
+        var message = Localize(ev.Message);
+        var msg = Loc.GetString("rmc-announcement-message-raw", ("author", author), ("message", message));
+        _marineAnnounce.AnnounceToMarines(msg, ev.Sound);
+    }
+
+    private void OnTechUnlockTier(TechUnlockTierEvent ev)
+    {
+        var tree = _intel.EnsureTechTree();
+        tree.Comp.Tree.Tier = ev.Tier;
+        Dirty(tree);
+    }
+
+    private void OnTechRequisitionsBudget(TechRequisitionsBudgetEvent ev)
+    {
+        var scaling = _scaling.GetAliveHumanoids() / 50;
+        scaling = Math.Max(1, scaling);
+        _requisitions.ChangeBudget(ev.Amount * scaling);
+    }
+
+    private void OnTechDropshipBudget(TechDropshipBudgetEvent ev)
+    {
+        _dropshipFabricator.ChangeBudget(ev.Amount);
+    }
+
+    private void OnTechLogisticsDelivery(TechLogisticsDeliveryEvent ev)
+    {
+        _requisitions.CreateSpecialDelivery(ev.Object);
+    }
+
+    private void OnControlConsoleBeforeOpen(Entity<TechControlConsoleComponent> ent, ref BeforeActivatableUIOpenEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        ent.Comp.Tree = _intel.EnsureTechTree().Comp.Tree;
+        Dirty(ent);
+    }
+
+    private void OnPurchaseOptionMsg(Entity<TechControlConsoleComponent> ent, ref TechPurchaseOptionBuiMsg args)
+    {
+        if (_net.IsClient)
+            return;
+
+        var tree = _intel.EnsureTechTree();
+        if (tree.Comp.Tree.Tier < args.Tier ||
+            !tree.Comp.Tree.Options.TryGetValue(args.Tier, out var tier))
+        {
+            Log.Warning($"{ToPrettyString(args.Actor)} tried to buy tech option with invalid tier {args.Tier}");
+            return;
+        }
+
+        if (args.Index < 0 ||
+            !tier.TryGetValue(args.Index, out var option))
+        {
+            Log.Warning($"{ToPrettyString(args.Actor)} tried to buy tech option with invalid index {args.Index}");
+            return;
+        }
+
+        if (option.TimeLock > _ticker.RoundDuration())
+            return;
+
+        if (option.Purchased && !option.Repurchasable)
+            return;
+
+        if (option.Disabled)
+            return;
+
+        if (!_intel.TryUsePoints(option.CurrentCost))
+            return;
+
+        tier[args.Index] = option with
+        {
+            CurrentCost = option.CurrentCost + option.Increase,
+            Purchased = true,
+        };
+        Dirty(ent);
+
+        foreach (var ev in option.Events)
+        {
+            RaiseLocalEvent(ev);
+        }
+
+        _intel.UpdateTree(tree);
+
+        if (_idCard.TryFindIdCard(args.Actor, out var idCard) && TryComp(idCard, out ItemIFFComponent? idCardIFF))
+            foreach (var faction in idCardIFF.Factions)
+            {
+                _core.CreateARESLog(faction, LogCat, (string)$"{Name(args.Actor)} purchased intel node: {option.Name}");
+            }
+        else
+        {
+            _core.CreateARESLog(ent, LogCat, (string)$"{Name(args.Actor)} purchased intel node: {option.Name}");
+        }
+    }
+
+    private string Localize(string text)
+    {
+        return Loc.TryGetString(text, out var localized) ? localized : text;
+    }
+
+    public bool SetVehicleUnlockOptionDisabled(EntProtoId unlockId, bool disabled)
+    {
+        var tree = _intel.EnsureTechTree();
+        var changed = false;
+
+        foreach (var tier in tree.Comp.Tree.Options)
+        {
+            for (var i = 0; i < tier.Count; i++)
+            {
+                var option = tier[i];
+                if (!OptionUnlocksVehicle(option, unlockId) || option.Disabled == disabled)
+                    continue;
+
+                tier[i] = option with { Disabled = disabled };
+                changed = true;
+            }
+        }
+
+        if (!changed)
+            return false;
+
+        Dirty(tree);
+        _intel.UpdateTree(tree);
+        return true;
+    }
+
+    private static bool OptionUnlocksVehicle(TechOption option, EntProtoId unlockId)
+    {
+        foreach (var ev in option.Events)
+        {
+            if (ev is TechUnlockVehicleEvent unlock &&
+                unlock.Unlock == unlockId)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+}

@@ -1,0 +1,417 @@
+# SPP armors
+- type: entity
+  parent: CMArmorM3Medium
+  id: RMCArmorSPP
+  name: UM5 personal armor
+  description: Standard body armor of the SPP military, the UM5 (Union Medium MK5) is a medium body armor, roughly on par with the M3 pattern body armor in service with the UNMC, specialized towards ballistics protection. Unlike the M3, however, the plate has a heavier neckplate. This has earned many UN members to refer to SPP soldiers as 'tin men'.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/spp.rsi
+  - type: CMArmor
+    bullet: 30 # CLOTHING_ARMOR_HIGH
+    bio: 15 # CLOTHING_ARMOR_MEDIUMLOW
+    explosionArmor: 20 # CLOTHING_ARMOR_MEDIUM
+  - type: RMCArmorSpeedTier
+    speedTier: medium
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_MEDIUM
+    walkModifier: 0.666
+    sprintModifier: 0.666
+  - type: Storage
+    grid:
+    - 0,0,1,1 # 1 slot
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: ClothingRequireEquipped
+    autoUnequip: true
+    denyReason: rmc-armor-not-spp-jumpsuit
+    whitelist:
+      tags:
+      - RMCUniformSPP
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPRifleman
+  suffix: Filled, Rifleman
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBinoculars
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPSupport
+  name: UL6 personal armor
+  description: Standard body armor of the SPP military, the UL6 (Union Light MK6) is a light body armor, slightly weaker than the M3 pattern body armor in service with the UNMC, specialized towards ballistics protection. This set of personal armor lacks the iconic neck piece and some of the armor in favor of user mobility.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/support.rsi
+  - type: CMArmor
+    melee: 30 # CLOTHING_ARMOR_HIGH
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: Storage
+    grid:
+    - 0,0,5,1 # 3 slots
+
+- type: entity
+  parent: RMCArmorSPPSupport
+  id: RMCArmorSPPSupportSynth
+  name: SPP UL6 synthetic personal armor
+  description: Modified variant of the UL6 personal armor system intended to be usable by Synthetic units. Offers no protection but very little movement impairment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/support.rsi
+  - type: Clothing
+    equipDelay: 1
+    unequipDelay: 0.5
+  - type: CMArmor
+    melee: 0 # CLOTHING_ARMOR_NONE
+    bullet: 0
+    bio: 0
+    explosionArmor: 0
+  - type: RMCArmorSpeedTier
+    speedTier: very light
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_VERY_LIGHT
+    walkModifier: 0.897
+    sprintModifier: 0.897
+
+- type: entity
+  parent: RMCArmorSPPSupportSynth
+  id: RMCArmorSPPSupportSynthFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    #- id: RMCTelebaton // TODO RMC14 should be telebaton
+    - id: RMCHandcuffs
+    - id: RMCHandcuffs
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPCommando
+  name: SPP UM5CU personal armor
+  description: A modification of the UM5, designed for stealth operations.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/commando.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: Tag
+    tags:
+      - RMCScoutArmor
+  - type: Storage
+    grid:
+    - 0,0,3,1 # 2 slots
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPHeavy
+  name: UH7 heavy plated armor
+  description: An extremely heavy-duty set of body armor in service with the SPP military, the UH7 (Union Heavy MK7) is known for having powerful ballistic protection, alongside a noticeable neck guard, fortified in order to allow the wearer to endure the stresses of the bulky helmet.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/heavy.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: heavy
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_HEAVY
+    walkModifier: 0.62
+    sprintModifier: 0.62
+  - type: CMArmor
+    melee: 25 # CLOTHING_ARMOR_MEDIUMHIGH (melee)
+    bullet: 35 # CLOTHING_ARMOR_HIGHPLUS (bullets)
+    bio: 20 # CLOTHING_ARMOR_MEDIUM
+    explosionArmor: 30 # CLOTHING_ARMOR_HIGH
+  - type: Storage
+    grid:
+    - 0,0,5,1 # 3 slots
+
+- type: entity
+  parent: RMCArmorSPPHeavy
+  id: RMCArmorSPPHeavySpecialist
+  suffix: Filled, Specialist, QYJ72
+  components:
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - RMCMagazineLMGQYJ72
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineLMGQYJ72
+      amount: 3
+
+- type: entity
+  parent: CMArmorM3Medium
+  id: RMCArmorSPPArmy
+  name: 6B80 personal body armor
+  description: An older SPP personal armor system that's since been replaced by the SPP Army Standard 6B90 body armor. It is still used by certain SPP Army units that the SPP doesn't expect to see much combat.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/army.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/army.rsi
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: CMArmor
+    melee: 15 # CLOTHING_ARMOR_MEDIUMLOW
+    bullet: 15 # CLOTHING_ARMOR_MEDIUM
+    #energy: 15 # CLOTHING_ARMOR_MEDIUMLOW
+    #rad: 20 # CLOTHING_ARMOR_MEDIUM
+    explosionArmor: 15 # CLOTHING_ARMOR_MEDIUMLOW
+    #internal: 20 # CLOTHING_ARMOR_MEDIUM
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: ClothingRequireEquipped
+    autoUnequip: true
+    denyReason: rmc-armor-not-spp-jumpsuit
+    whitelist:
+      tags:
+      - RMCUniformSPP
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPSOF
+  name: SPP CCC5-L tactical vest
+  description: A lightweight SPP-issued armor vest designed for space operations forces. It features polymer-ceramic composite plating for improved protection while allowing greater mobility. Equipped with modular pouches for ammunition and gear, it ensures rapid access to essential supplies.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/sof_vest.rsi
+  - type: CMArmor # Covers arms
+    melee: 15
+    bullet: 20
+    bio: 20
+    explosionArmor: 10
+  - type: CMHardArmor
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: Storage
+    grid:
+    - 0,0,7,1 # 4 slots
+
+- type: entity
+  parent: RMCArmorSPPSOF
+  id: RMCArmorSPPSOFFilled
+  suffix: Filled, Survivor
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTacticalPrybar
+    - id: RMCMagazineRifleType77
+    - id: RMCMagazineRifleType77
+    - id: RMCRadioHandheldColony
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPSOFHeavy
+  name: SPP CCC5-L heavy tactical vest
+  description: A heavily reinforced SPP-issued tactical vest designed for space operations forces operating in high-risk environments. The CCC5-L Heavy-Plated Tactical Vest features additional polymer-ceramic composite plating across the chest and torso, providing superior protection against ballistic and explosive threats. Despite its bulk, the vest maintains a balance between protection and mobility, with modular pouches for quick access to essential gear.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/sof_heavy.rsi
+  - type: CMArmor # Covers arms and groin
+    melee: 20
+    bullet: 25
+    bio: 20
+    explosionArmor: 15
+  - type: CMHardArmor
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: Storage
+    grid:
+    - 0,0,7,1 # 4 slots
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPSOFPlated
+  name: SPP CCC5-L plated tactical vest
+  description: A lightweight SPP-issued armor vest designed for space operations forces. It features polymer-ceramic composite plating for improved protection while allowing greater mobility. Equipped with modular pouches for ammunition and gear, it ensures rapid access to essential supplies.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/sof_plated.rsi
+  - type: CMArmor # Covers arms
+    melee: 15
+    bullet: 25
+    bio: 20
+    explosionArmor: 15
+  - type: CMHardArmor
+  - type: RMCArmorSpeedTier
+    speedTier: light
+  - type: ClothingSpeedModifier # SLOWDOWN_ARMOR_LIGHT
+    walkModifier: 0.725
+    sprintModifier: 0.725
+  - type: Storage
+    grid:
+    - 0,0,7,1 # 4 slots
+
+# SPP coats
+- type: entity
+  parent: RMCCoatBureauDeputy
+  id: RMCCoatSPP
+  name: SPP UL4 officer jacket
+  description: A lightweight jacket, issued to officers of the SPP's military. Slightly protective from incoming damage, best off with proper armor however.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/officer.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/officer.rsi
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: Storage
+    grid:
+    - 0,0,5,1 # 3 slots
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCCoatBureauDeputy
+  id: RMCCoatSPPSenior
+  name: SPP UL4 senior officer jacket
+  description: A lightweight jacket, issued to senior officers of the SPP's military. Made of high-quality materials, even going as far as having the ranks and insignia of the Kapitan and their Company emblazoned on the shoulders and front of the jacket. Slightly protective from incoming damage, best off with proper armor however.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/senior.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/senior.rsi
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: Storage
+    grid:
+    - 0,0,7,1 # 4 slots
+
+- type: entity
+  parent: RMCCoatSPPSenior
+  id: RMCCoatSPPMP
+  name: SPP UL4 camouflaged jacket
+  description: A lightweight jacket, issued to troops when they're not expected to engage in combat. Still studded to the brim with kevlar shards, though the synthread construction reduces its effectiveness.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/mp.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/mp.rsi
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+- type: entity
+  parent: RMCCoatSPPSenior
+  id: RMCCoatSPPSeniorFilled
+  suffix: Filled, Command
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRangefinder
+    - id: CMGauze10
+
+- type: entity
+  parent: RMCCoatBureauDeputy
+  id: RMCCoatOfficerShortWhite
+  name: SPP UL5-W
+  description: A somewhat armored jacket that is primarily utilised by Naval or Marine Infantry COs.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarwhitecoat.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarwhitecoat.rsi
+  - type: CMArmor
+    melee: 10
+    bullet: 10
+    bio: 10
+    explosionArmor: 10
+  - type: Storage
+    grid:
+    - 0,0,5,1 # 3 slots
+
+- type: entity
+  parent: RMCCoatOfficerShortWhite
+  id: RMCCoatOfficerLongWhite
+  name:  SPP UL5-W Shinel
+  description: A longer variant of the Naval UL5-W jacket found mainly during ceremonial functions and the winter months. Primarily used by COs.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarwhiteshinel.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarwhiteshinel.rsi
+
+- type: entity
+  parent: RMCCoatOfficerShortWhite
+  id: RMCCoatKommissarShortBlack
+  name: SPP UL5-B
+  description: A somewhat armored jacket that is primarily utilised by Political Kommisars, reminds you of october.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarblackcoat.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarblackcoat.rsi
+
+- type: entity
+  parent: RMCCoatOfficerShortWhite
+  id: RMCCoatKommissarLongBlack
+  name:  SPP UL5-B Shinel
+  description: A longer variant of the Naval UPL5-B jacket found mainly during ceremonial functions and the winter months, this black variant is most common during celebrations of the founding of the SPP, it reminds you of october.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarblackshinel.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/OuterClothing/SPP/kommisarblackshinel.rsi
+
+# Survivor fills
+
+- type: entity
+  parent: RMCArmorSPPSupport
+  id: RMCArmorSPPSupportSurvivorFill
+  suffix: Filled, Survivor
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMCrowbar
+    - id: RMCMRESPP
+
+- type: entity
+  parent: RMCArmorSPP
+  id: RMCArmorSPPSurvivorFill
+  suffix: Filled, Survivor
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMCrowbar
+
+- type: entity
+  parent: RMCArmorSPPHeavy
+  id: RMCArmorSPPHeavySurvivorFill
+  suffix: Filled, Survivor
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMCrowbar
+
+- type: entity
+  parent: RMCCoatSPP
+  id: RMCCoatSPPSurvivorFill
+  suffix: Filled, Survivor
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMCrowbar

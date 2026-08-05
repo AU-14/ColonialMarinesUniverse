@@ -1,0 +1,41 @@
+- type: entity
+  parent: ActionMarineBase
+  id: ActionMarineFocus
+  name: Issue Order - Focus
+  description: Increases gun accuracy for nearby marines.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_actions.rsi
+      state: focus
+  - type: InstantAction
+    event: !type:FocusActionEvent
+
+- type: entity
+  parent: ActionMarineBase
+  id: ActionMarineHold
+  name: Issue Order - Hold
+  description: Increases damage resistance for nearby marines.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_actions.rsi
+      state: hold
+  - type: InstantAction
+    event: !type:HoldActionEvent
+
+- type: entity
+  id: ActionMarineMove
+  parent: ActionMarineBase
+  name: Issue Order - Move
+  description: Increases speed for nearby marines. [color=red]This won't affect anyone without armor![/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/marine_actions.rsi
+      state: move
+  - type: InstantAction
+    event: !type:MoveActionEvent

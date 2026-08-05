@@ -1,0 +1,70 @@
+using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Slow;
+using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Xenonids.Finesse;
+using Content.Shared._RMC14.Xenonids.Sweep;
+using Content.Shared.Coordinates;
+using Content.Shared.Movement.Systems;
+using Content.Shared.Popups;
+using Content.Shared.Speech.EntitySystems;
+using Content.Shared.Stunnable;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
+
+namespace Content.Shared._RMC14.Xenonids.TailTrip;
+
+public sealed partial class XenoTailTripSystem : EntitySystem
+{
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private RMCDazedSystem _daze = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<XenoTailTripComponent, XenoTailTripActionEvent>(OnXenoTailTripAction);
+    }
+
+    private void OnXenoTailTripAction(Entity<XenoTailTripComponent> xeno, ref XenoTailTripActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        if (!_rmcActions.TryUseAction(args))
+            return;
+
+        if (_net.IsServer)
+            SpawnAttachedTo(xeno.Comp.TailEffect, args.Target.ToCoordinates());
+
+        EnsureComp<XenoSweepingComponent>(xeno);
+        _audio.PlayPredicted(xeno.Comp.Sound, xeno, xeno);
+
+        var criticalMark = false;
+
+        if (TryComp<XenoMarkedComponent>(args.Target, out var mark))
+        {
+            criticalMark = mark.IsCriticalTag;
+
+            if (criticalMark)
+                _popup.PopupEntity(Loc.GetString("rmc-xeno-marked-critical-consumed"), args.Target, args.Target, PopupType.SmallCaution);
+
+            if (!_size.TryGetSize(args.Target, out var size) || size < RMCSizes.Big)
+                _stun.TryParalyze(args.Target, xeno.Comp.MarkedStunTime, true);
+
+            _daze.TryDaze(args.Target, xeno.Comp.MarkedDazeTime, true, stutter: true);
+            RemCompDeferred<XenoMarkedComponent>(args.Target);
+        }
+        else
+        {
+            if (!_size.TryGetSize(args.Target, out var size) || size < RMCSizes.Big)
+                _stun.TryParalyze(args.Target, xeno.Comp.StunTime, true);
+            _slow.TrySlowdown(args.Target, xeno.Comp.SlowTime, ignoreDurationModifier: true);
+        }
+
+        args.Handled = !criticalMark;
+    }
+}

@@ -1,0 +1,182 @@
+# Humanoid Role Trackers
+- type: trackerMode
+  id: AuxiliarySupportOfficer
+  job: CMAuxiliarySupportOfficer
+
+- type: trackerMode
+  id: ChiefEngineer
+  job: CMChiefEngineer
+
+- type: trackerMode
+  id: Quartermaster
+  job: CMQuartermaster
+
+- type: trackerMode
+  id: MilitaryWarden
+  job: CMMilitaryWarden
+
+- type: trackerMode
+  id: SquadLeader
+  job: CMSquadLeader
+
+- type: trackerMode
+  id: SectionSergeant
+  job: CMPVESectionSergeant
+  alert: SquadTrackerSunRiders
+
+- type: trackerMode
+  id: FireteamLeader
+  job: CMFireteamLeader
+  alert: SquadTrackerTeamLeader
+
+- type: trackerMode
+  id: PVESquadLeader
+  job: CMPVESquadLeader
+  alert: SquadTrackerSunRiders
+
+- type: trackerMode
+  id: Rifleman
+  job: CMRifleman
+
+- type: trackerMode
+  id: DirectorPmc
+  job: RMCPMCDirector
+
+- type: trackerMode
+  id: LeaderPmc
+  job: RMCPMCLeader
+  alert: SquadTrackerTeamLeader
+
+- type: trackerMode
+  id: LeaderPmcPVE
+  job: CMPMCForceLeadPVE
+  alert: SquadTrackerPMCForceLeader
+
+- type: trackerMode
+  id: TeamLeaderPmcPVE
+  job: CMPMCTeamLeadPVE
+  alert: SquadTrackerTeamLeader
+
+- type: trackerMode
+  id: CorporateLiaison
+  job: CMLiaison
+  alert: SquadTrackerCorporateLiaison
+
+- type: trackerMode
+  id: SupervisorWeYa
+  job: RMCWeYaLawyerSupervisor
+
+- type: trackerMode
+  id: LawyerWeYa
+  job: RMCWeYaLawyer
+
+- type: trackerMode
+  id: LeaderGoon
+  job: RMCWeYaGoonLead
+
+- type: trackerMode
+  id: SupervisorWeYaExecutive
+  job: CMCorporateExecutiveSupervisorLegal
+
+- type: trackerMode
+  id: SupervisorWeYaSpecialist
+  job: CMCorporateExecutiveSpecialistLegal
+
+- type: trackerMode
+  id: LeaderSpp
+  job: RMCSPPLeader
+
+- type: trackerMode
+  id: FreelancerLeader
+  job: CMFreelancerLeader
+
+- type: trackerMode
+  id: SeniorConstableTSEPA
+  job: RMCTSEPASeniorConstable
+
+- type: trackerMode
+  id: InspectorTSEPA
+  job: RMCTSEPAInspector
+
+- type: trackerMode
+  id: FORECONCommandingOfficer
+  job: RMCSurvivorForeconCommander
+  alert: SquadTrackerCommandingOfficer
+
+- type: trackerMode
+  id: ParaTeamLeader
+  job: RMCSurvivorParaTeamLeader
+  alert: SquadTrackerParaTeamLeader
+
+- type: trackerMode
+  id: ParaCommander
+  job: RMCSurvivorParaCommander
+  alert: SquadTrackerCommandingOfficer
+
+- type: trackerMode
+  id: RCMPVESectionLead
+  job: CMRoyalMarinesSectionLeaderPVE
+  alert: SquadTrackerRCMPVESectionLead
+
+- type: trackerMode
+  id: RCMPVETroopSergeant
+  job: CMRoyalMarinesTroopSargePVE
+  alert: SquadTrackerRCMPVETroopSergeant
+
+- type: trackerMode
+  id: RCMPVETeamLead
+  job: CMRoyalMarinesTeamLeaderPVE
+  alert: SquadTrackerRCMPVETeamLead
+
+- type: trackerMode
+  id: RCMPVETroopCommander
+  job: CMRoyalMarinesTroopCommanderPVE
+  alert: SquadTrackerRCMPVETroopCommander
+
+- type: trackerMode
+  id: RCMTeamLead
+  job: CMRoyalMarinesTeamlead
+  alert: SquadTrackerRCMTeamLead
+
+- type: trackerMode
+  id: RCMLieutenant
+  job: CMRoyalMarinesLieutenant
+  alert: SquadTrackerRCMLieutenant
+
+- type: trackerMode
+  id: MARSOCLeader
+  job: CMMarineRaiderLeader
+
+- type: trackerMode
+  id: SPPAirborneSL
+  job: RMCSurvivorSPPCrashlandSL
+  alert: SquadTrackerAirborne
+
+# Humanoid component trackers
+
+- type: trackerMode
+  id: PrimaryLandingZone
+  component: PrimaryLandingZone
+  alert: SquadTrackerLandingZone
+
+# Xeno component trackers
+
+- type: trackerMode
+  id: Queen
+  component: XenoOvipositorCapable
+  alert: HiveTracker
+
+- type: trackerMode
+  id: HiveLeader
+  component: HiveLeader
+  alert: LeaderTracker
+
+- type: trackerMode
+  id: Tunnel
+  component: XenoTunnel
+  alert: TunnelTracker
+
+- type: trackerMode
+  id: HiveCore
+  component: HiveCore
+  alert: HiveCoreTracker

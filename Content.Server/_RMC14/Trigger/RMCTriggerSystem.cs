@@ -1,0 +1,116 @@
+using Content.Shared._RMC14.Weapons.Ranged;
+using Content.Shared.Explosion.Components;
+using Content.Shared.Throwing;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Components;
+using Content.Shared.Trigger.Systems;
+using Content.Shared.Weapons.Ranged.Events;
+using Robust.Shared.Audio;
+using Robust.Shared.Timing;
+
+namespace Content.Server._RMC14.Trigger;
+
+public sealed partial class RMCTriggerSystem : EntitySystem
+{
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<OnShootTriggerAmmoTimerComponent, AmmoShotEvent>(OnTriggerTimerAmmoShot);
+        SubscribeLocalEvent<TriggerOnThrowEndComponent, StopThrowEvent>(OnThrownAmmoStops);
+        SubscribeLocalEvent<TriggerOnThrowEndComponent, TriggerEvent>(OnTrigger);
+
+        SubscribeLocalEvent<TriggerOnFixedDistanceStopComponent, ProjectileFixedDistanceStopEvent>(OnTriggerOnFixedDistanceStop);
+    }
+
+    private void OnTriggerTimerAmmoShot(Entity<OnShootTriggerAmmoTimerComponent> ent, ref AmmoShotEvent args)
+    {
+        foreach (var projectile in args.FiredProjectiles)
+        {
+            switch (ent.Comp.TimerStart)
+            {
+                case TimerStartMode.OnShoot:
+                    ActivateTimer(
+                        projectile,
+                        TimeSpan.FromSeconds(ent.Comp.Delay),
+                        ent.Comp.BeepInterval,
+                        ent.Comp.InitialBeepDelay,
+                        ent.Comp.BeepSound);
+                    break;
+                case TimerStartMode.OnHitGround:
+                    var primedAmmoComp = EnsureComp<TriggerOnThrowEndComponent>(projectile);
+                    primedAmmoComp.Delay = TimeSpan.FromSeconds(ent.Comp.Delay);
+                    primedAmmoComp.BeepInterval = ent.Comp.BeepInterval;
+                    primedAmmoComp.InitialBeepDelay = ent.Comp.InitialBeepDelay;
+                    primedAmmoComp.BeepSound = ent.Comp.BeepSound;
+                    break;
+
+            }
+        }
+    }
+
+    private void OnThrownAmmoStops(Entity<TriggerOnThrowEndComponent> ent, ref StopThrowEvent args)
+    {
+        ActivateTimer(
+            ent,
+            ent.Comp.Delay,
+            ent.Comp.BeepInterval,
+            ent.Comp.InitialBeepDelay,
+            ent.Comp.BeepSound);
+    }
+
+    private void OnTriggerOnFixedDistanceStop(Entity<TriggerOnFixedDistanceStopComponent> ent, ref ProjectileFixedDistanceStopEvent args)
+    {
+        var active = EnsureComp<ActiveTriggerOnThrowEndComponent>(ent);
+        active.TriggerAt = _timing.CurTime + ent.Comp.Delay;
+    }
+
+    private void OnTrigger(Entity<TriggerOnThrowEndComponent> ent, ref TriggerEvent args)
+    {
+        RemCompDeferred<TriggerOnThrowEndComponent>(ent);
+    }
+
+    private void ActivateTimer(
+        EntityUid uid,
+        TimeSpan delay,
+        float beepInterval,
+        float? initialBeepDelay,
+        SoundSpecifier? beepSound)
+    {
+        var timer = EnsureComp<TimerTriggerComponent>(uid);
+        timer.Delay = delay;
+        timer.BeepInterval = TimeSpan.FromSeconds(beepInterval);
+        timer.InitialBeepDelay = initialBeepDelay is { } initial
+            ? TimeSpan.FromSeconds(initial)
+            : null;
+        timer.BeepSound = beepSound;
+        Dirty(uid, timer);
+
+        _trigger.ActivateTimerTrigger((uid, timer));
+    }
+
+    public override void Update(float frameTime)
+    {
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<ActiveTriggerOnThrowEndComponent>();
+        while (query.MoveNext(out var uid, out var active))
+        {
+            if (time < active.TriggerAt)
+                continue;
+
+            if (HasComp<ScatteringGrenadeComponent>(uid))
+            {
+                _trigger.Trigger(uid);
+                RemCompDeferred<ActiveTriggerOnThrowEndComponent>(uid);
+
+                // ScatteringGrenadeSystem spawns its payload during Update and deletes the source afterwards.
+                continue;
+            }
+
+            _trigger.Trigger(uid);
+            if (!EntityManager.IsQueuedForDeletion(uid) && !TerminatingOrDeleted(uid))
+                QueueDel(uid);
+        }
+    }
+}

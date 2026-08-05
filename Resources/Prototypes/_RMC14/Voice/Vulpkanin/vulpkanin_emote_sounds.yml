@@ -1,0 +1,21 @@
+- type: emoteSounds
+  id: RMCUnisexVulpkanin
+  sounds:
+    Growl:
+      collection: RMCVulpkaninGrowls
+    Snarl:
+      collection: RMCVulpkaninSnarls
+    Bark:
+      collection: RMCVulpkaninBarks
+    Whine:
+      collection: RMCVulpkaninWhines
+    Yip:
+      path: /Audio/Animals/fox_squeak.ogg
+
+- type: emoteSounds
+  parent: [RMCUnisexVulpkanin, RMCMaleHuman]
+  id: RMCMaleVulpkanin
+
+- type: emoteSounds
+  parent: [RMCUnisexVulpkanin, RMCFemaleHuman]
+  id: RMCFemaleVulpkanin

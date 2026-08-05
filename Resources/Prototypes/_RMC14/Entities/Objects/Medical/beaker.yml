@@ -1,0 +1,582 @@
+- type: entity
+  parent: BaseBeaker
+  id: CMBeakerBase
+  abstract: true
+  components:
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+          params:
+            volume: -4
+      - !type:SpillBehavior
+        solution: beaker
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DamageOnLand
+    damage: {}
+  - type: DamageOtherOnHit
+    damage: {}
+  - type: DamageOnHighSpeedImpact
+    minimumSpeed: 2
+    damage: {}
+  - type: RMCSmartFridgeInsertable
+
+- type: entity
+  parent: BaseBeakerMetallic
+  id: RMCBeakerBaseMetallic
+  abstract: true
+  components:
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+          params:
+            volume: -4
+      - !type:SpillBehavior
+        solution: beaker
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: CMBeakerBase
+  id: CMBeaker
+  name: beaker
+  description: A beaker. Can hold up to 60 units.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/beaker.rsi
+    layers:
+    - state: beaker
+    - state: beaker1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: lid_beaker
+      map: ["enum.OpenableVisuals.Layer"]
+      visible: false
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Medical/beaker.rsi
+  - type: SolutionContainerVisuals
+    maxFillLevels: 5
+    fillBaseName: beaker
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 60
+  - type: Openable
+    opened: true
+    closeable: true
+    examineText: rmc-bottle-open
+    openVerbText: rmc-bottle-remove-lid
+    closeVerbText: rmc-bottle-put-lid
+    sound: null
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: {visible: false}
+          False: {visible: true}
+  - type: Spillable
+    solution: beaker
+  - type: StaticPrice
+    price: 10
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitstorage
+  - type: PhysicalComposition
+    materialComposition:
+      CMGlass: 500
+
+- type: entity
+  parent: CMBeakerBase
+  id: CMBeakerLarge
+  name: large beaker
+  description: A large beaker. Can hold up to 120 units.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/large_beaker.rsi
+    layers:
+    - state: beakerlarge
+    - state: beakerlarge1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: lid_beakerlarge
+      map: ["enum.OpenableVisuals.Layer"]
+      visible: false
+  - type: Item
+    sprite: _RMC14/Objects/Medical/large_beaker.rsi
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 120
+  - type: SolutionContainerVisuals
+    maxFillLevels: 5
+    fillBaseName: beakerlarge
+  - type: Openable
+    opened: true
+    closeable: true
+    examineText: rmc-bottle-open
+    openVerbText: rmc-bottle-remove-lid
+    closeVerbText: rmc-bottle-put-lid
+    sound: null
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: {visible: false}
+          False: {visible: true}
+  - type: Spillable
+    solution: beaker
+  - type: StaticPrice
+    price: 20
+  - type: PhysicalComposition
+    materialComposition:
+      CMGlass: 5000
+
+- type: entity
+  parent: RMCBeakerBaseMetallic
+  id: RMCBeakerHighCapacity
+  name: high-capacity beaker
+  description: A beaker with an enlarged holding capacity, made with blue-tinted plexiglass in order to withstand greater pressure. Can hold up to 300 units.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
+    layers:
+    - state: beakerbluespace
+    - state: beakerbluespace1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: lid_beakerbluespace
+      map: ["enum.OpenableVisuals.Layer"]
+      visible: false
+  - type: Item
+    sprite: _RMC14/Objects/Medical/high_capacity_beaker.rsi
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 300
+  - type: SolutionContainerVisuals
+    maxFillLevels: 5
+    fillBaseName: beakerbluespace
+  - type: SolutionTransfer
+    transferAmount: 100
+    maxTransferAmount: 300
+    canChangeTransferAmount: true
+    transferAmounts:
+    - 5
+    - 10
+    - 15
+    - 20
+    - 25
+    - 30
+    - 40
+    - 60
+    - 80
+    - 100
+    - 120
+    - 240
+    - 300
+  - type: Openable
+    opened: true
+    closeable: true
+    examineText: rmc-bottle-open
+    openVerbText: rmc-bottle-remove-lid
+    closeVerbText: rmc-bottle-put-lid
+    sound: null
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: {visible: false}
+          False: {visible: true}
+  - type: Spillable
+    solution: beaker
+  - type: StaticPrice
+    price: 20
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitstorage
+  - type: PhysicalComposition
+    materialComposition:
+      CMGlass: 10000
+
+# Parent for containers that cannot be filled/drained by hand.
+- type: entity
+  parent: BaseItem
+  id: RMCSealedChemicalContainer
+  abstract: true
+  components:
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+          params:
+            volume: -4
+      - !type:SpillBehavior
+        solution: beaker
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: MeleeWeapon
+    soundNoDamage:
+      path: "/Audio/Effects/Fluids/splat.ogg"
+    damage:
+      types:
+        Blunt: 0
+  - type: MixableSolution
+    solution: beaker
+  - type: FitsInDispenser
+    solution: beaker
+  - type: ExaminableSolution
+    solution: beaker
+  - type: SolutionTransfer
+    canChangeTransferAmount: true
+    canSend: false
+    canReceive: false
+  - type: RMCPressurizedSolution
+    solution: beaker
+  - type: SolutionItemStatus
+    solution: beaker
+  - type: UserInterface
+    interfaces:
+      enum.TransferAmountUiKey.Key:
+        type: TransferAmountBoundUserInterface
+  - type: Appearance
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Glass
+  - type: DnaSubstanceTrace
+
+# Minitank /obj/item/reagent_container/glass/minitank
+- type: entity
+  parent: RMCBeakerBaseMetallic
+  id: CMMiniTank
+  name: MS-11 Smart Refill Tank
+  description: A robust little tank capable of refilling autoinjectors that previously required a nanomed system to refill. Using the wonders of microchips, it automatically sorts the correct chemicals into most single reagent autoinjectors. It is unable to partially fill them however. A valve exists on the top to transfer reagents to another container or to flush it entirely.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tanks/minitank.rsi
+    layers:
+    - state: icon
+    - state: minitank1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Tanks/minitank.rsi
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 180
+  - type: SolutionContainerVisuals
+    maxFillLevels: 5
+    fillBaseName: minitank
+  - type: StaticPrice
+    price: 20
+  - type: Tag
+    tags:
+    - RMCMiniTank
+    - ChemDispensable
+  - type: RMCSmartRefillTank
+    solution: beaker
+  - type: SolutionTransfer
+    transferAmount: 180
+    maxTransferAmount: 180
+    canChangeTransferAmount: true
+    transferAmounts:
+    - 5
+    - 10
+    - 15
+    - 30
+    - 45
+    - 60
+    - 90
+    - 120
+    - 180
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 500
+
+- type: Tag
+  id: RMCMiniTank
+
+# Pressurised Canister /obj/item/reagent_container/glass/pressurized_canister
+- type: entity
+  parent: RMCSealedChemicalContainer
+  id: RMCPressurizedCanister
+  name: pressurized canister
+  description: A pressurized container. The inner part of a pressurized reagent canister pouch. Only compatible with its pouch, machinery or a storage tank.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tanks/pressurized_reagent_container.rsi
+    layers:
+    - state: icon
+    - state: can1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Item
+    size: Large
+    sprite: _RMC14/Objects/Tanks/pressurized_reagent_container.rsi
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+  - type: SolutionContainerVisuals
+    maxFillLevels: 4
+    fillBaseName: can
+  - type: SolutionTransfer
+    transferAmount: 100
+  - type: StaticPrice
+    price: 40
+  - type: Tag
+    tags:
+    - PressurizedCanister
+    - ChemDispensable
+  - type: PhysicalComposition
+    materialComposition:
+      CMGlass: 2000
+
+- type: entity
+  parent: RMCPressurizedCanister
+  id: RMCPressurizedCanisterBicaridine
+  suffix: Bicaridine
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 480
+
+- type: entity
+  parent: RMCPressurizedCanister
+  id: RMCPressurizedCanisterKelotane
+  suffix: Kelotane
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 480
+
+- type: entity
+  parent: RMCPressurizedCanister
+  id: RMCPressurizedCanisterTricordrazineRevival
+  suffix: Tricordrazine - Revival
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 160
+      - ReagentId: CMInaprovaline
+        Quantity: 160
+      - ReagentId: CMTricordrazine
+        Quantity: 160
+
+- type: entity
+  parent: RMCPressurizedCanister
+  id: RMCPressurizedCanisterTricordrazine
+  suffix: Tricordrazine
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 480
+
+- type: entity
+  parent: RMCPressurizedCanister
+  id: RMCPressurizedCanisterMeraBic
+  suffix: MeraBic
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMMeralyne
+        Quantity: 240
+      - ReagentId: CMBicaridine
+        Quantity: 240
+
+- type: entity
+  parent: RMCPressurizedCanister
+  id: RMCPressurizedCanisterKeloDerm
+  suffix: KeloDerm
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 480
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 240
+      - ReagentId: CMDermaline
+        Quantity: 240
+
+- type: Tag
+  id: PressurizedCanister
+
+- type: entity
+  parent: CMBeakerBase
+  id: RMCVial
+  name: vial
+  description: A small glass vial. Can hold up to 30 units.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Chemistry/vials.rsi
+    layers:
+    - state: vial
+    - state: vial1
+      map: ["enum.SolutionContainerLayers.Fill"]
+    - state: vial-lid
+      map: ["enum.OpenableVisuals.Layer"]
+      visible: false
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Chemistry/vials.rsi
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+    fillBaseName: vial
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 30
+  - type: SolutionTransfer
+    transferAmount: 5
+    maxTransferAmount: 30
+    canChangeTransferAmount: true
+    transferAmounts:
+    - 5
+    - 10
+    - 15
+    - 25
+    - 30
+  - type: Spillable
+    solution: beaker
+  - type: Openable
+    opened: true
+    closeable: true
+    examineText: rmc-bottle-open
+    openVerbText: rmc-bottle-remove-lid
+    closeVerbText: rmc-bottle-put-lid
+    sound: null
+  - type: GenericVisualizer
+    visuals:
+      enum.OpenableVisuals.Opened:
+        enum.OpenableVisuals.Layer:
+          True: {visible: false}
+          False: {visible: true}
+  - type: Vial
+  - type: StaticPrice
+    price: 10
+  - type: PhysicalComposition
+    materialComposition: {}
+
+- type: entity
+  parent: RMCVial
+  id: RMCVialTricordrazine
+  name: tricordrazine vial
+  description: A small glass vial. Can hold up to 30 units. Contains Tricordrazine, a weak general use medicine for treating damage.
+  suffix: Filled, Tricordrazine
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 30
+  - type: CMRefillableSolution
+    solution: beaker
+    reagents:
+      CMTricordrazine: 30
+
+- type: entity
+  parent: RMCVial
+  id: RMCVialEpinephrine
+  name: epinephrine vial
+  description: A small glass vial. Can hold up to 30 units. Contains Epinephrine, a cardiostimulant used to assist in revival.
+  suffix: Filled, Epinephrine
+  components:
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 30
+  - type: CMRefillableSolution
+    solution: beaker
+    reagents:
+      CMEpinephrine: 30
+
+## Hi-cap replacement
+- type: entity
+  parent: RMCBeakerHighCapacity
+  id: RMCReagentJug
+  name: reagent jug
+  description: A large jug made of non-reactive plastic, capable of carrying large amounts of diverse chemicals to wherever they are needed. Holds 500 units.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Chemistry/reagent_jug.rsi
+    layers:
+    - state: reagentjug
+    - map: [ "enum.SolutionContainerLayers.Fill" ]
+      state: reagentjug-1
+      visible: false
+    - state: lid_reagentjug
+      map: ["enum.OpenableVisuals.Layer"]
+      visible: false
+  - type: Item
+    sprite: _RMC14/Objects/Chemistry/reagent_jug.rsi
+  - type: Solution
+    id: beaker
+    solution:
+      maxVol: 500
+  - type: SolutionContainerVisuals
+    fillBaseName: reagentjug-
+    inHandsMaxFillLevels: 5
+    inHandsFillBaseName: -fill-
+  - type: PhysicalComposition
+    materialComposition:
+      CMGlass: 30000
+  - type: StaticPrice
+    price: 60

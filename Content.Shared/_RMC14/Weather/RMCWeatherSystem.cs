@@ -1,0 +1,163 @@
+﻿using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Light;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
+using Content.Shared.Light.Components;
+using Content.Shared.Light.EntitySystems;
+using Content.Shared.Weather;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
+
+namespace Content.Shared._RMC14.Weather;
+
+public sealed partial class RMCWeatherSystem : EntitySystem
+{
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedRoofSystem _roof = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedWeatherSystem _weather = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private RMCAmbientLightSystem _rmcLight = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
+
+    private EntityQuery<BlockWeatherComponent> _blockQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        _blockQuery = GetEntityQuery<BlockWeatherComponent>();
+
+        SubscribeLocalEvent<RMCWeatherCycleComponent, MapInitEvent>(OnMapInit);
+    }
+
+    private void OnMapInit(Entity<RMCWeatherCycleComponent> ent, ref MapInitEvent args)
+    {
+        if (ent.Comp.WeatherEvents.Count <= 0)
+            return;
+
+        EnsureComp<RMCAmbientLightComponent>(ent);
+        EnsureComp<RMCAmbientLightEffectsComponent>(ent);
+
+        ent.Comp.LastEventCooldown = _random.Next(ent.Comp.MinTimeBetweenEvents);
+
+    }
+
+    public bool CanWeatherAffectArea(EntityUid uid, MapGridComponent grid, TileRef tileRef, RoofComponent? roofComp = null)
+    {
+        if (Resolve(uid, ref roofComp, false) && _roof.IsRooved((uid, grid, roofComp), tileRef.GridIndices))
+            return false;
+
+        if (!_area.IsWeatherEnabled((uid, grid), tileRef.GridIndices))
+            return false;
+
+        var anchoredEntities = _mapSystem.GetAnchoredEntitiesEnumerator(uid, grid, tileRef.GridIndices);
+
+        while (anchoredEntities.MoveNext(out var ent))
+        {
+            if (_blockQuery.HasComponent(ent.Value))
+                return false;
+        }
+
+        return true;
+    }
+
+    public void HandleWeatherEffects(Entity<RMCWeatherCycleComponent> ent)
+    {
+        if (ent.Comp.CurrentEvent == null)
+            return;
+
+        if (ent.Comp.CurrentEvent.LightningChance <= 0 || ent.Comp.CurrentEvent.LightningEffects.Count <= 0)
+            return;
+
+        if (!_random.Prob(ent.Comp.CurrentEvent.LightningChance))
+            return;
+
+        EnsureComp<RMCAmbientLightComponent>(ent, out var lightComp);
+        EnsureComp<MapLightComponent>(ent, out var mapLightComp);
+
+        //Since lightning animation runs from Black to Black, we don't run it if the lighting is different
+        if (lightComp.IsAnimating || mapLightComp.AmbientLightColor != Color.Black)
+            return;
+
+        var lightningEffect = _rmcLight.ProcessPrototype(_random.Pick(ent.Comp.CurrentEvent.LightningEffects));
+        var lightningDuration = ent.Comp.CurrentEvent.LightningDuration;
+        _rmcLight.SetColor((ent, lightComp), lightningEffect, lightningDuration);
+
+        var sound = ent.Comp.CurrentEvent.LightningSound;
+        _audio.PlayGlobal(_audio.ResolveSound(sound), Filter.BroadcastMap(Transform(ent).MapID), true);
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        var weatherQuery = EntityQueryEnumerator<RMCWeatherCycleComponent>();
+
+        while (weatherQuery.MoveNext(out var uid, out var cycle))
+        {
+            cycle.LastEventCooldown -= TimeSpan.FromSeconds(frameTime);
+
+            // Process whether to start a weather event
+            if(cycle.LastEventCooldown <= TimeSpan.Zero)
+            {
+                var weatherPick = _random.Pick(cycle.WeatherEvents);
+                cycle.CurrentEvent = weatherPick;
+                cycle.CurrentEvent.DurationRemaining = weatherPick.Duration;
+                SetWeatherForMapOrZNetwork(uid, weatherPick.WeatherType, weatherPick.Duration);
+
+                var minTimeVariance = (-cycle.MinTimeVariance * 0.5) + _random.Next(cycle.MinTimeVariance);
+                cycle.LastEventCooldown = weatherPick.Duration + cycle.MinTimeBetweenEvents + minTimeVariance;
+            }
+
+            // Process effects for ongoing weather event
+            if (cycle.CurrentEvent != null)
+            {
+                cycle.CurrentEvent.DurationRemaining -= TimeSpan.FromSeconds(frameTime);
+                if (cycle.CurrentEvent.DurationRemaining <= TimeSpan.Zero)
+                {
+                    cycle.CurrentEvent = null;
+                    continue;
+                }
+
+                cycle.CurrentEvent.LightningCooldown -= TimeSpan.FromSeconds(frameTime);
+                if (cycle.CurrentEvent.LightningCooldown <= TimeSpan.Zero)
+                {
+                    HandleWeatherEffects((uid, cycle));
+                    cycle.CurrentEvent.LightningCooldown = cycle.CurrentEvent.LightningCooldownDuration;
+                }
+            }
+        }
+    }
+
+    private void SetWeatherForMapOrZNetwork(EntityUid uid, EntProtoId weatherProto, TimeSpan duration)
+    {
+        var xform = Transform(uid);
+        if (xform.MapUid is not { } mapUid ||
+            !_zLevels.TryGetZNetwork(mapUid, out var network) ||
+            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+        {
+            _weather.TrySetWeather(xform.MapID, weatherProto, out _, duration);
+            return;
+        }
+
+        for (var depth = minDepth; depth <= maxDepth; depth++)
+        {
+            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var zMap) ||
+                !TryComp<MapComponent>(zMap, out var mapComp))
+            {
+                continue;
+            }
+
+            _weather.TrySetWeather(mapComp.MapId, weatherProto, out _, duration);
+        }
+    }
+}

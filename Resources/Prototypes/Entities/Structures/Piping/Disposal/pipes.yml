@@ -1,0 +1,530 @@
+# Base
+
+- type: entity
+  id: DisposalPipeBase
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Disposal
+  components:
+  - type: Sprite
+    drawdepth: ThickPipe
+    sprite: Structures/Piping/disposal.rsi
+    visible: false
+  - type: Appearance
+  - type: Visibility
+    layer: 1
+  - type: SubFloorHide
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.5,0.25,0.5"
+        mask:
+        - SubfloorMask
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+  - type: Damageable
+    damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100 #excess damage (nuke?). avoid computational cost of spawning entities.
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: ["Breakage"]
+      - !type:ChangeConstructionNodeBehavior
+        node: broken
+  - type: Rotatable
+  - type: Pullable
+  - type: CollideOnAnchor
+  - type: DisposalTube
+  - type: StaticPrice
+    price: 30
+
+- type: entity
+  id: DisposalHolder
+  categories: [ HideSpawnMenu ]
+  name: disposal holder
+  components:
+  - type: DisposalHolder
+    traversalSpeed: 10
+    exitDistanceMultiplier: 1.5
+    exitSpeedMultiplier: 1
+    container:
+      occludes: true
+      showEnts: false
+      ents: []
+  - type: ContainerContainer
+    containers:
+      DisposalHolderComponent: !type:Container
+  - type: Physics
+    bodyType: Kinematic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+
+# Pipes
+
+- type: entity
+  id: DisposalPipeBroken
+  parent: DisposalPipeBase
+  name: broken disposal pipe
+  description: A BBP (big broken pipe).
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: pipe-b
+  - type: Construction
+    graph: DisposalPipe
+    node: broken
+
+- type: entity
+  id: DisposalPipe
+  parent: DisposalPipeBase
+  name: disposal pipe segment
+  description: A huge pipe segment used for constructing disposal systems.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-s
+  - type: DisposalTube
+    exits:
+    - South
+    - North
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-s }
+          True: { state: pipe-s }
+  - type: Construction
+    graph: DisposalPipe
+    node: pipe
+
+- type: entity
+  id: DisposalTagger
+  parent: DisposalPipeBase
+  name: disposal pipe tagger
+  description: A pipe that tags entities for routing.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-tagger
+  - type: DisposalTube
+    exits:
+    - South
+    - North
+  - type: DisposalTagger
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-tagger }
+          True: { state: pipe-tagger }
+  - type: ActivatableUI
+    key: enum.DisposalTaggerUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.DisposalTaggerUiKey.Key:
+        type: DisposalTaggerBoundUserInterface
+  - type: Construction
+    graph: DisposalPipe
+    node: tagger
+
+- type: entity
+  id: DisposalSignaller
+  parent: DisposalPipeBase
+  name: disposal signaller
+  description: A pipe that emits a signal when in item goes through it.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-signaller
+  - type: DisposalTube
+    exits:
+    - South
+    - North
+  - type: DisposalSignaller
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: BasicDevice
+  - type: DeviceLinkSource
+    ports:
+    - ItemDetected
+  - type: WirelessNetworkConnection
+    range: 200
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-signaller }
+          True: { state: pipe-signaller }
+  - type: Construction
+    graph: DisposalPipe
+    node: pipe
+
+- type: entity
+  id: DisposalTrunk
+  parent: DisposalPipeBase
+  name: disposal trunk
+  description: A pipe trunk used as an entry point for disposal systems.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-t
+  - type: DisposalTube
+  - type: DisposalEntry
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-t }
+          True: { state: pipe-t }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.5,0.25,0.4"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    graph: DisposalPipe
+    node: trunk
+
+- type: entity
+  id: DisposalRouter
+  parent: DisposalPipeBase
+  name: disposal router
+  description: A three-way router. Entities with matching tags get routed to the side via configurable filters.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-j1s
+  - type: DisposalTube
+    exits:
+    - West
+    - South
+    - North
+  - type: DisposalRouter
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-j1s }
+          True: { state: pipe-j1s }
+  - type: Flippable
+    mirrorEntity: DisposalRouterFlipped
+  - type: ActivatableUI
+    key: enum.DisposalRouterUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.DisposalRouterUiKey.Key:
+        type: DisposalRouterBoundUserInterface
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.25,0.5"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    graph: DisposalPipe
+    node: router
+
+- type: entity
+  id: DisposalRouterFlipped
+  description: A three-way router. Entities with matching tags get routed to the side.
+  parent: DisposalRouter
+  suffix: flipped
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-j2s
+  - type: DisposalTube
+    exits:
+    - East
+    - South
+    - North
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-j2s }
+          True: { state: pipe-j2s }
+  - type: Flippable
+    mirrorEntity: DisposalRouter
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.5,0.5,0.5"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    node: routerflipped
+
+- type: entity
+  id: DisposalJunction
+  parent: DisposalPipeBase
+  name: disposal junction
+  description: A three-way junction. The arrow indicates where items exit.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-j1
+    visible: true
+  - type: DisposalTube
+    exits:
+    - South
+    - West
+    - North
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-j1 }
+          True: { state: pipe-j1 }
+  - type: Flippable
+    mirrorEntity: DisposalJunctionFlipped
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.25,0.5"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    graph: DisposalPipe
+    node: junction
+
+- type: entity
+  id: DisposalJunctionFlipped
+  description: A three-way junction. The arrow indicates where items exit.
+  parent: DisposalJunction
+  suffix: flipped
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-j2
+  - type: DisposalTube
+    exits:
+    - South
+    - East
+    - North
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-j2 }
+          True: { state: pipe-j2 }
+  - type: Flippable
+    mirrorEntity: DisposalJunction
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.5,0.5,0.5"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    graph: DisposalPipe
+    node: junctionflipped
+
+- type: entity
+  id: DisposalYJunction
+  parent: DisposalPipeBase
+  name: disposal y-junction
+  description: A three-way junction with another exit point.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-y
+  - type: DisposalTube
+    exits:
+    - South
+    - West
+    - East
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-y }
+          True: { state: pipe-y }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.25"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    graph: DisposalPipe
+    node: yJunction
+
+- type: entity
+  id: DisposalXJunction
+  parent: DisposalPipeBase
+  name: disposal x-junction
+  description: A four-way junction. The arrow indicates where items exit.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-x
+    visible: true
+  - type: DisposalTube
+    exits:
+    - South
+    - East
+    - North
+    - West
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-x }
+          True: { state: pipe-x }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    graph: DisposalPipe
+    node: xJunction
+
+- type: entity
+  id: DisposalBend
+  parent: DisposalPipeBase
+  name: disposal bend
+  description: A tube bent at a 90 degree angle.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: conpipe-c
+  - type: DisposalTube
+    exits:
+    - South
+    - West
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: conpipe-c }
+          True: { state: pipe-c }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.25,0.25"
+        mask:
+        - SubfloorMask
+  - type: Construction
+    graph: DisposalPipe
+    node: bend
+
+- type: entity
+  parent: DisposalJunction
+  id: DisposalSignalRouter
+  name: disposal signal router
+  description: A signal-controlled three-way router.
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: signal-router-free
+  - type: DisposalTube
+    exits:
+    - West
+    - South
+    - North
+  - type: DisposalSignalRouter
+  - type: DeviceLinkSink
+    ports:
+    - On
+    - Off
+    - Toggle
+  - type: DeviceNetwork
+    deviceNetId: Wireless
+    receiveFrequencyId: BasicDevice
+  - type: WirelessNetworkConnection
+    range: 200
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: signal-router-free }
+          True: { state: signal-router }
+  - type: Flippable
+    mirrorEntity: DisposalSignalRouterFlipped
+  - type: Construction
+    graph: DisposalPipe
+    node: signal_router
+
+- type: entity
+  parent: DisposalSignalRouter
+  id: DisposalSignalRouterFlipped
+  suffix: flipped
+  components:
+  - type: Sprite
+    layers:
+    - map: [ "pipe" ]
+      state: signal-router-flipped-free
+  - type: DisposalTube
+    exits:
+    - East
+    - South
+    - North
+  - type: GenericVisualizer
+    visuals:
+      enum.AnchorVisuals.Anchored:
+        pipe:
+          False: { state: signal-router-flipped-free }
+          True: { state: signal-router-flipped }
+  - type: Construction
+    node: signal_router_flipped

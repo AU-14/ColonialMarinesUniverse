@@ -1,0 +1,50 @@
+# Couch
+- type: entity
+  parent: SeatBase
+  id: RMCBenchLeft
+  name: bench
+  description: A metal frame, with seats that are fitted with synthetic leather, they've faded in time.
+  suffix: Left
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Strap
+    enabled: false
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/bench.rsi
+    state: bench_left
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 51
+    otherMultiplier: 1
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  parent: RMCBenchLeft
+  id: RMCBenchRight
+  suffix: Right
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/bench.rsi
+    state: bench_right

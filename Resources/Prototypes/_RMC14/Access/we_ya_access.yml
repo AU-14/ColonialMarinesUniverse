@@ -1,0 +1,7 @@
+﻿- type: accessLevel
+  id: RMCAccessWeYa
+  name: cm-job-name-liaison
+
+- type: accessLevel
+  id: RMCAccessWeYaFlight
+  name: cm-job-name-liaison

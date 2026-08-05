@@ -1,0 +1,20 @@
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMJobIconQuartermaster
+  icon:
+    sprite: _RMC14/Interface/job_icons/UNMC/requisition.rsi
+    state: hudsquad_ro
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMJobIconCargoTech
+  icon:
+    sprite: _RMC14/Interface/job_icons/UNMC/requisition.rsi
+    state: hudsquad_ct
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMJobIconMessTech
+  icon:
+    sprite: _RMC14/Interface/job_icons/UNMC/other.rsi
+    state: hudsquad_messtech

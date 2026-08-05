@@ -1,0 +1,225 @@
+﻿- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM96SMixed
+  name: M96S Sniper Mixed Magazine Crate (marksman x2, flak x2, incendiary x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96S
+      amount: 2
+    - id: CMMagazineSniperM96SFlak
+      amount: 2
+    - id: CMMagazineSniperM96SIncendiary
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM96SStandard
+  name: M96S Sniper Standard Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96S
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM96SFlak
+  name: M96S Sniper Flak Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96SFlak
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM96SIncendiary
+  name: M96S Sniper Incendiary Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSniperM96SIncendiary
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineXM43E1Standard
+  name: XM43E1 Anti-Materiel Sniper Standard Magazine Crate (x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSniperXM43E1AntiMateriel
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateM5DemoSpecMixed
+  name: M5-ATL Mixed Crate (HE x1, AP x1, WP x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocket84mm
+      amount: 1
+    - id: RMCRocket84mmAntiArmor
+      amount: 1
+    - id: RMCRocket84mmWhitePhosphorus
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEMBLRMixed
+  name: EMBLR Mixed Crate (HE x2, AP x1, WP x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mm
+      amount: 2
+    - id: CMURocket70mmWhitePhosphorus
+      amount: 1
+    - id: CMURocket70mmAntiArmor
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEMBLRAP
+  name: EMBLR Crate (x4 AP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mmAntiArmor
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEMBLRWP
+  name: EMBLR Crate (x4 WP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mmWhitePhosphorus
+      amount: 4
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateEMBLRHE
+  name: EMBLR Crate (x4 HE)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMURocket70mm
+      amount: 4
+
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateM5DemoSpecHighExplosive
+  name: M5-ATL High Explosives Crate (HE x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocket84mm
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateM5DemoSpecAntiArmor
+  name: M5-ATL Anti-Armor Crate (AP x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocket84mmAntiArmor
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateM5DemoSpecWhitePhosphorus
+  name: M5-ATL White Phosphorus Crate (WP x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCRocket84mmWhitePhosphorus
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM4SPRCustomMixed
+  name: M4SPR Scout Mixed Magazine Crate (regular x2, incendiary x2, impact x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19
+      amount: 2
+    - id: RMCMagazineRifleM4SPRA19Impact
+      amount: 2
+    - id: RMCMagazineRifleM4SPRA19Incendiary
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM4SPRCustomStandard
+  name: M4SPR Scout Magazine Crate (x5)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19
+      amount: 5
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM4SPRCustomImpact
+  name: M4SPR Scout Impact Magazine Crate (x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19Impact
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCrateMagazineM4SPRCustomIncendiary
+  name: M4SPR Scout Incendiary Magazine Crate (x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM4SPRA19Incendiary
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCratePyroTankMixed
+  name: M34-T Mixed Fuel Tank Crate (extended x1, type-B x1, type-X x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamerLarge
+    - id: RMCTankFlamerLargeB
+    - id: RMCTankFlamerLargeX
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCratePyroTankExtended
+  name: M34-T Extended Fuel Tank Crate (x3)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamerLarge
+      amount: 3
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCratePyroTankTypeB
+  name: M34-T Type-B Fuel Tank Crate (x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamerLargeB
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: RMCCratePyroTankTypeX
+  name: M34-T Type-X Fuel Tank Crate (x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamerLargeX

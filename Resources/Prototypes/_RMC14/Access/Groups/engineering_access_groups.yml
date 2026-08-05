@@ -1,0 +1,34 @@
+﻿- type: accessGroup
+  id: CMCE
+  parent: RMCBaseEngineeringJob
+  name: Chief Engineer
+  tags:
+  - CMAccessCE
+  - CMAccessEngineering
+  - RMCAccessCommand
+  - CMAccessColonyEngineering
+  - CMAccessMaint
+  - CMAccessOT
+  - CMAccessDropship
+  - RMCAccessDatabase
+  - RMCAccessSeniorCommand
+  - RMCAccessLogs
+
+- type: accessGroup
+  id: OT
+  parent: RMCBaseEngineeringJob
+  name: Ordnance Technician
+  tags:
+  - CMAccessEngineering
+  - CMAccessColonyEngineering
+  - CMAccessMaint
+  - CMAccessOT
+
+- type: accessGroup
+  id: MaintTech
+  parent: RMCBaseEngineeringJob
+  name: Maintenance Technician
+  tags:
+  - CMAccessEngineering
+  - CMAccessColonyEngineering
+  - CMAccessMaint

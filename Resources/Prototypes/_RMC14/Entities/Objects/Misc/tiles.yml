@@ -1,0 +1,61 @@
+- type: entity
+  parent: FloorTileItemBase
+  id: CMTileItemBase
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tiles/tiles.rsi
+  - type: Item
+    sprite: _RMC14/Objects/Tiles/tiles.rsi
+    size: Normal
+
+- type: entity
+  parent: CMTileItemBase
+  id: CMTileItemSteel
+  name: metal floor
+  components:
+  - type: Sprite
+    state: steel
+  - type: Item
+    heldPrefix: metal
+  - type: FloorTile
+    outputs:
+    - Plating
+    - CMFloorSteel
+  - type: Stack
+    stackType: RMCTileSteel
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 938 # 937.5 Needs to be an integer.
+
+- type: entity
+  parent: CMTileItemBase
+  id: CMTileItemWood
+  name: wooden floor tile
+  components:
+  - type: Sprite
+    state: wood
+  - type: Item
+    heldPrefix: wood
+  - type: FloorTile
+    outputs:
+    - Plating
+    - CMFloorWood
+  - type: Stack
+    stackType: RMCTileWood
+  - type: Construction
+    graph: RMCTileWood
+    node: start
+
+- type: stack
+  id: RMCTileSteel
+  name: steel tile
+  spawn: CMTileItemSteel
+  maxCount: 60
+
+- type: stack
+  id: RMCTileWood
+  name: wooden floor tile
+  spawn: CMTileItemWood
+  maxCount: 60

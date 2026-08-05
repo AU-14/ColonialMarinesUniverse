@@ -1,0 +1,61 @@
+- type: entity
+  save: false
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMMobHuman
+  name: Urist C.M. McHands
+  suffix: RMC14
+  components:
+  - type: FlareStomper
+  - type: Vocal
+    emoteSounds: RMCMaleHuman
+  - type: EmoteOnDamage
+    emotes:
+    - Scream
+    emoteChance: 1
+    damageThreshold: 5
+    emoteCooldown: 6
+    withChat: true
+    hiddenFromChatWindow: true
+  - type: GaspOnAsphyxiation
+  - type: FixedIdentity
+    name: cm-chatsan-replacement-human
+  - type: CMUHumanMedical
+  - type: YautjaTrophySource
+  - type: HitLocation
+  - type: PainShock
+  - type: BodyZoneTargeting
+  - type: Body
+    prototype: CMUHumanBody
+    requiredLegs: 2
+  - type: UserInterface
+    interfaces:
+      enum.VoiceMaskUIKey.Key:
+        type: VoiceMaskBoundUserInterface
+      enum.HumanoidMarkingModifierKey.Key:
+        type: HumanoidMarkingModifierBoundUserInterface
+      enum.StrippingUiKey.Key:
+        type: StrippableBoundUserInterface
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
+      enum.HolocardChangeUIKey.Key:
+        type: HolocardChangeBoundUserInterface
+        interactionRange: 0
+        requireInputValidation: false
+      enum.CMMobStateActionsUI.Key:
+        type: CMGhostActionBui
+        requireInputValidation: false
+      enum.TacticalMapUserUi.Key:
+        type: TacticalMapUserBui
+      enum.SquadLeaderTrackerUI.Key:
+        type: SquadInfoBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.ViewIntelObjectivesUI.Key:
+        type: ViewIntelObjectivesBui
+      enum.BodyPartPickerUIKey.Key:
+        type: BodyPartPickerBui
+      enum.CMUSurgeryUIKey.Key:
+        type: CMUSurgeryBui
+      enum.CMUMedicalFieldCraftingUI.Key:
+        type: CMUMedicalFieldCraftingBui
+        requireInputValidation: false

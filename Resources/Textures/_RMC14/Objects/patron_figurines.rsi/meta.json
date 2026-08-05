@@ -1,0 +1,785 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Characters created by their respective owners. Each item worn has its respective license and copyright. Final figurine sprites made by DrSmugleaf.",
+  "size": {
+    "x": 32,
+    "y": 34
+  },
+  "states": [
+    {
+      "name": "Fox_Bridgeton"
+    },
+    {
+      "name": "Fritz_Vohlkson"
+    },
+    {
+      "name": "minerva_hostel"
+    },
+    {
+      "name": "Tempestas_Frostbite_Glacies"
+    },
+    {
+      "name": "Silvano_dAndrea"
+    },
+    {
+      "name": "Iantha_Atikson"
+    },
+    {
+      "name": "Scott_Hoover"
+    },
+    {
+      "name": "ryan_rockstar_ruan"
+    },
+    {
+      "name": "kasumi_ayako"
+    },
+    {
+      "name": "chiki_sugimoto"
+    },
+    {
+      "name": "archylle_catleay"
+    },
+    {
+      "name": "tessie_terrence"
+    },
+    {
+      "name": "dagobert_dogburglar"
+    },
+    {
+      "name": "herbsquirto"
+    },
+    {
+      "name": "rainy_cloudly"
+    },
+    {
+      "name": "atlas_bootes"
+    },
+    {
+      "name": "kameron_cook"
+    },
+    {
+      "name": "satoru_suzuki"
+    },
+    {
+      "name": "rytil_pyain"
+    },
+    {
+      "name": "bill_titan"
+    },
+    {
+      "name": "jimmy_punished_pit_johnson"
+    },
+    {
+      "name": "simon_starseeker"
+    },
+    {
+      "name": "lena_milize"
+    },
+    {
+      "name": "bites-the-dust"
+    },
+    {
+      "name": "orion_blackburn"
+    },
+    {
+      "name": "lilly_pipsqueak_harding"
+    },
+    {
+      "name": "kaylie_rowleyininski"
+    },
+    {
+      "name": "amari_dropping_hot_williams"
+    },
+    {
+      "name": "alex_gregory"
+    },
+    {
+      "name": "shawn_fox"
+    },
+    {
+      "name": "madelynn_buzz_lewis"
+    },
+    {
+      "name": "pandi_fackler"
+    },
+    {
+      "name": "jermaine_bait_mcclune"
+    },
+    {
+      "name": "mazy_the_fortress_tusji"
+    },
+    {
+      "name": "astor_debb"
+    },
+    {
+      "name": "nesart_onan"
+    },
+    {
+      "name": "dalton_harris"
+    },
+    {
+      "name": "chad_scott"
+    },
+    {
+      "name": "worships-the-gods"
+    },
+    {
+      "name": "sukuna_kurze"
+    },
+    {
+      "name": "the_soil_of_martyrs"
+    },
+    {
+      "name": "lance_victors"
+    },
+    {
+      "name": "bred_dahne"
+    },
+    {
+      "name": "darting_sleepy_groth"
+    },
+    {
+      "name": "sam_ali"
+    },
+    {
+      "name": "walks-the-graves"
+    },
+    {
+      "name": "honkzee_beezs"
+    },
+    {
+      "name": "vella_mortician_sakeao"
+    },
+    {
+      "name": "seeks-to-fight"
+    },
+    {
+      "name": "stares-at-stars"
+    },
+    {
+      "name": "rhett_rainman_mcindrick"
+    },
+    {
+      "name": "does-the-dishes"
+    },
+    {
+      "name": "tempest"
+    },
+    {
+      "name": "beatrice_bea_bootes"
+    },
+    {
+      "name": "kate_gel_fleming"
+    },
+    {
+      "name": "fishy_mctuna"
+    },
+    {
+      "name": "jester-who-helps"
+    },
+    {
+      "name": "flynn_wendigo_suziko"
+    },
+    {
+      "name": "julie_sniper_walker"
+    },
+    {
+      "name": "alec_protag_buchanan"
+    },
+    {
+      "name": "kon_kleemaan"
+    },
+    {
+      "name": "porter_zombie_coolidge"
+    },
+    {
+      "name": "fumbles-the-rifle"
+    },
+    {
+      "name": "nova_quinn"
+    },
+    {
+      "name": "stella_lake_poley"
+    },
+    {
+      "name": "darfman_forgemog"
+    },
+    {
+      "name": "ronan_rick_oshea"
+    },
+    {
+      "name": "james_rockler"
+    },
+    {
+      "name": "mizuno_kitty_drakonovisch"
+    },
+    {
+      "name": "merlin_leander"
+    },
+    {
+      "name": "kazi_priestess"
+    },
+    {
+      "name": "marrik"
+    },
+    {
+      "name": "xalos-of-europa"
+    },
+    {
+      "name": "carlos_miguel"
+    },
+    {
+      "name": "emily_klutz_rathen"
+    },
+    {
+      "name": "ranuko"
+    },
+    {
+      "name": "consumes-the-petrol"
+    },
+    {
+      "name": "lenny_dugs"
+    },
+    {
+      "name": "kael_shark_voss"
+    },
+    {
+      "name": "mark_sholl"
+    },
+    {
+      "name": "dave_big_dave_small"
+    },
+    {
+      "name": "cyril_cloves_culkins"
+    },
+    {
+      "name": "hexathele_hasselti"
+    },
+    {
+      "name": "fae_petrovic"
+    },
+    {
+      "name": "kasumi"
+    },
+    {
+      "name": "muz"
+    },
+    {
+      "name": "nova_stargazer"
+    },
+    {
+      "name": "kipped_kipper"
+    },
+    {
+      "name": "kyrus"
+    },
+    {
+      "name": "taleryn_vogsburg"
+    },
+    {
+      "name": "penelope_cyclops_david"
+    },
+    {
+      "name": "william_spurs_crockett"
+    },
+    {
+      "name": "rina_shell-shocked_gensvil"
+    },
+    {
+      "name": "sips-on-puddles"
+    },
+    {
+      "name": "duke_big_boss_morris"
+    },
+    {
+      "name": "kamiel_lancoaster"
+    },
+    {
+      "name": "eric_rasczak"
+    },
+    {
+      "name": "nan_snow_bunny_mazu"
+    },
+    {
+      "name": "zver_nemesis"
+    },
+    {
+      "name": "hazzy_licious"
+    },
+    {
+      "name": "flaps_conflag_moth"
+    },
+    {
+      "name": "juno_kleptocat_kaneko"
+    },
+    {
+      "name": "stella_cowabunga__stewart"
+    },
+    {
+      "name": "rosalind_hex_volkov"
+    },
+    {
+      "name": "colten_ripcord_bailey"
+    },
+    {
+      "name": "spike_light-foot__fluff-usta"
+    },
+    {
+      "name": "fast-paws_chip"
+    },
+    {
+      "name": "nells-the-jobs"
+    },
+    {
+      "name": "dry_wetbrush"
+    },
+    {
+      "name": "hailey_morgan"
+    },
+    {
+      "name": "osborn_cheeseball_curry"
+    },
+    {
+      "name": "gregor_cain"
+    },
+    {
+      "name": "jessie_first_daily"
+    },
+    {
+      "name": "khauni_brooks"
+    },
+    {
+      "name": "burni_heat_senira"
+    },
+    {
+      "name": "shei-teegla"
+    },
+    {
+      "name": "jazzy_june"
+    },
+    {
+      "name": "angler_angus_seawing"
+    },
+    {
+      "name": "liliana_shork_godwin"
+    },
+    {
+      "name": "kuafu_speed_demon_lightweaver"
+    },
+    {
+      "name": "jack_hunter_dunes"
+    },
+    {
+      "name": "durgan_chum_carlyle"
+    },
+    {
+      "name": "adrian_archangel_gutierrez"
+    },
+    {
+      "name": "neza"
+    },
+    {
+      "name": "jade_fiend_eria"
+    },
+    {
+      "name": "ash_winter"
+    },
+    {
+      "name": "lore_wulbren_era"
+    },
+    {
+      "name": "lydia_sanitater"
+    },
+    {
+      "name": "vince_dog_petrov"
+    },
+    {
+      "name": "kall_kallovski"
+    },
+    {
+      "name": "atlas_wolfy_snowlight"
+    },
+    {
+      "name": "mixes-the-fuel"
+    },
+    {
+      "name": "anne_taylor"
+    },
+    {
+      "name": "yeo_sakura_bunnia"
+    },
+    {
+      "name": "rano"
+    },
+    {
+      "name": "valerie_hawkins"
+    },
+    {
+      "name": "cargo_nahami"
+    },
+    {
+      "name": "samson_parker"
+    },
+    {
+      "name": "kasuni"
+    },
+    {
+      "name": "rikki_nakesone"
+    },
+    {
+      "name": "sudie-mim"
+    },
+    {
+      "name": "jazmin_ludwig"
+    },
+    {
+      "name": "jake_foster"
+    },
+    {
+      "name": "forge_grimes"
+    },
+    {
+      "name": "corey_shaffer"
+    },
+    {
+      "name": "corla_blitz_dreams"
+    },
+    {
+      "name": "red_machina_swiftcleave"
+    },
+    {
+      "name": "minji_failsafe_kilgrim"
+    },
+    {
+      "name": "john_rook_weller"
+    },
+    {
+      "name": "hazel_skyfall_singh"
+    },
+    {
+      "name": "silas_alatus"
+    },
+    {
+      "name": "thrukia_longbow"
+    },
+    {
+      "name": "roxanne_floppy_ears_dreams"
+    },
+    {
+      "name": "gallagin_gc_addict_caitman"
+    },
+    {
+      "name": "zeth_xi"
+    },
+    {
+      "name": "kurt_doc_holiday_lachner"
+    },
+    {
+      "name": "amber_falls_lamplight"
+    },
+    {
+      "name": "arthur_nash"
+    },
+    {
+      "name": "agu_seal"
+    },
+    {
+      "name": "eric_lunaheart"
+    },
+    {
+      "name": "leah_loca_harding"
+    },
+    {
+      "name": "zayden_soap_kirkson"
+    },
+    {
+      "name": "psy_juni_juniper"
+    },
+    {
+      "name": "icey_iana"
+    },
+    {
+      "name": "kaizer_deathwish_valentine"
+    },
+    {
+      "name": "lost-in-stars"
+    },
+    {
+      "name": "luxi_la_lustriana"
+    },
+    {
+      "name": "artemis_lua"
+    },
+    {
+      "name": "zoey_marz"
+    },
+    {
+      "name": "greedy_jamie"
+    },
+    {
+      "name": "bailey"
+    },
+    {
+      "name": "vicky_howlitzer"
+    },
+    {
+      "name": "ignis_nightfire_nyx"
+    },
+    {
+      "name": "hethryn_cliffton"
+    },
+    {
+      "name": "seneca_archibald"
+    },
+    {
+      "name": "keegan_rockwell"
+    },
+    {
+      "name": "TheLazySlothComu"
+    },
+    {
+      "name": "anne_artichoke_powell"
+    },
+    {
+      "name": "vexs_zirnita"
+    },
+    {
+      "name": "daniel_diversicolor"
+    },
+    {
+      "name": "mozaac_vin"
+    },
+    {
+      "name": "hugs-the-void"
+    },
+    {
+      "name": "marvin_potshot_stange"
+    },
+    {
+      "name": "vaelor_glowleaf"
+    },
+    {
+      "name": "isaak_bennett"
+    },
+    {
+      "name": "kaitlin_zalack"
+    },
+    {
+      "name": "iris_nades_moondancer"
+    },
+    {
+      "name": "eidu-hughe"
+    },
+    {
+      "name": "runs-with-boxes"
+    },
+    {
+      "name": "cassandra_reed"
+    },
+    {
+      "name": "austin_austie_eventide"
+    },
+    {
+      "name": "trinity_rathens"
+    },
+    {
+      "name": "seth_xi"
+    },
+    {
+      "name": "eats-the-crayons"
+    },
+    {
+      "name": "kali_darland"
+    },
+    {
+      "name": "jackie_cratehead_taylor"
+    },
+    {
+      "name": "einuko_twitch_steelfeather"
+    },
+    {
+      "name": "kara_hathaway"
+    },
+    {
+      "name": "albrecht_alby_herrmann"
+    },
+    {
+      "name": "amelia_fields"
+    },
+    {
+      "name": "atreiya_vuctoiris"
+    },
+    {
+      "name": "emmalise_isabel_chambers"
+    },
+    {
+      "name": "evad_esrever"
+    },
+    {
+      "name": "hudson_demuth"
+    },
+    {
+      "name": "katerina_aw_dragunov"
+    },
+    {
+      "name": "keenan_foolish_hound_epiolos"
+    },
+    {
+      "name": "kyriss_snow_winters"
+    },
+    {
+      "name": "nato_ach_menoe"
+    },
+    {
+      "name": "nitrum_n_jucundus"
+    },
+    {
+      "name": "oleen_starseeker"
+    },
+    {
+      "name": "olive_orr"
+    },
+    {
+      "name": "pepper"
+    },
+    {
+      "name": "rhys_hendricks"
+    },
+    {
+      "name": "rosemary_shenaniganizer_smox"
+    },
+    {
+      "name": "zozie_wristwatch"
+    },
+    {
+      "name": "ardy_ape_man_guy"
+    },
+    {
+      "name": "selina_cavity_alara"
+    },
+    {
+      "name": "kara_lifeline_greenland"
+    },
+    {
+      "name": "boris_scavmanchez"
+    },
+    {
+      "name": "rodrick_royal"
+    },
+    {
+      "name": "bugs_paperboy_swedersson"
+    },
+    {
+      "name": "eris_voltia"
+    },
+    {
+      "name": "silas_chitter_candlewing"
+    },
+    {
+      "name": "michael_mikey_mcgoggins"
+    },
+    {
+      "name": "edith_hesti_b_clausell"
+    },
+    {
+      "name": "guppy_deboots"
+    },
+    {
+      "name": "zoey_killer_grimshaw"
+    },
+    {
+      "name": "dru_misinput_keller"
+    },
+    {
+      "name": "renomi"
+    },
+    {
+      "name": "carlos_kennedy"
+    },
+    {
+      "name": "gunner_wilo"
+    },
+    {
+      "name": "khaunami"
+    },
+    {
+      "name": "lyon_surgeon_august"
+    },
+    {
+      "name": "riley_tilter_stone"
+    },
+    {
+      "name": "kala_lightseeker"
+    },
+    {
+      "name": "big_whiskerfield"
+    },
+    {
+      "name": "bethany_aw_xiphos"
+    },
+    {
+      "name": "patches-it-up"
+    },
+    {
+      "name": "lumen_losinfob_lamplight"
+    },
+    {
+      "name": "vera_williams"
+    },
+    {
+      "name": "autumn_cocktail_sheauvern"
+    },
+    {
+      "name": "traces-the-constellations"
+    },
+    {
+      "name": "slye_welding"
+    },
+    {
+      "name": "mathew_mothew_lampyris"
+    },
+    {
+      "name": "ambrose_momma_bear_helichrysum"
+    },
+    {
+      "name": "reika_sweettooth_inazuma"
+    },
+    {
+      "name": "nezuni-arksai"
+    },
+    {
+      "name": "spits-the-fire"
+    },
+    {
+      "name": "dreja_scraps_kel"
+    },
+    {
+      "name": "elle"
+    },
+    {
+      "name": "liam_property_damage_harper"
+    },
+    {
+      "name": "petra_meow_meow_york"
+    },
+    {
+      "name": "aria_shark-scale"
+    },
+    {
+      "name": "wyatt_hoss_cross"
+    },
+    {
+      "name": "shana_snow_mctavish"
+    },
+    {
+      "name": "rhona_deer_hanes"
+    },
+    {
+      "name": "jatayu_nerd_corvuson"
+    },
+    {
+      "name": "cade_stripes_sagan"
+    }
+  ]
+}

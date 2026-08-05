@@ -1,0 +1,144 @@
+# region Base
+- type: construction
+  abstract: true
+  id: BaseWeapon
+  category: construction-category-weapons
+  objectType: Item
+# endregion Base
+
+# region Weapons
+- type: construction
+  parent: BaseWeapon
+  id: BladedFlatcapGrey
+  graph: BladedFlatcapGrey
+  targetNode: icon
+
+- type: construction
+  parent: BladedFlatcapGrey
+  id: BladedFlatcapBrown
+  graph: BladedFlatcapBrown
+
+- type: construction
+  parent: BaseWeapon
+  id: Shiv
+  graph: Shiv
+  targetNode: icon
+
+- type: construction
+  parent: Shiv
+  id: ReinforcedShiv
+  graph: ReinforcedShiv
+
+- type: construction
+  parent: Shiv
+  id: PlasmaShiv
+  graph: PlasmaShiv
+
+- type: construction
+  parent: Shiv
+  id: UraniumShiv
+  graph: UraniumShiv
+
+- type: construction
+  parent: BaseWeapon
+  id: Spear
+  graph: Spear
+  targetNode: spear
+
+- type: construction
+  parent: Spear
+  id: SpearReinforced
+  graph: SpearReinforced
+
+- type: construction
+  parent: Spear
+  id: SpearPlasma
+  graph: SpearPlasma
+
+- type: construction
+  parent: Spear
+  id: SpearUranium
+  graph: SpearUranium
+
+- type: construction
+  parent: Spear
+  id: SpearSharkMinnow
+  graph: SpearSharkMinnow
+
+- type: construction
+  parent: Spear
+  id: SpearBone
+  graph: SpearBone
+
+- type: construction
+  parent: BaseWeapon
+  id: Bola
+  graph: Bola
+  targetNode: bola
+
+- type: construction
+  parent: BaseWeapon
+  id: WoodenBuckler
+  graph: WoodenBuckler
+  targetNode: woodenBuckler
+
+- type: construction
+  parent: BaseWeapon
+  id: CardShield
+  graph: CardShield
+  targetNode: cardShield
+
+- type: construction
+  parent: BaseWeapon
+  id: MakeshiftShield
+  graph: MakeshiftShield
+  targetNode: makeshiftShield
+
+- type: construction
+  parent: BaseWeapon
+  id: ImprovisedArrow
+  graph: ImprovisedArrow
+  targetNode: ImprovisedArrow
+
+- type: construction
+  parent: BaseWeapon
+  id: ImprovisedArrowCarp
+  graph: ImprovisedArrowCarp
+  targetNode: ImprovisedArrowCarp
+
+- type: construction
+  parent: BaseWeapon
+  id: ImprovisedArrowPlasma
+  graph: ImprovisedArrowPlasma
+  targetNode: ImprovisedArrowPlasma
+
+- type: construction
+  parent: BaseWeapon
+  id: ImprovisedArrowUranium
+  graph: ImprovisedArrowUranium
+  targetNode: ImprovisedArrowUranium
+
+- type: construction
+  parent: BaseWeapon
+  id: CardArrow
+  graph: CardArrow
+  targetNode: CardArrow
+
+- type: construction
+  parent: BaseWeapon
+  id: ImprovisedBow
+  graph: ImprovisedBow
+  targetNode: ImprovisedBow
+
+- type: construction
+  parent: BaseWeapon
+  id: ClothingHandsKnuckleDustersBrass
+  graph: ClothingHandsKnuckleDustersBrass
+  targetNode: icon
+
+- type: construction
+  parent: BaseWeapon
+  id: CardSword
+  graph: CardSword
+  targetNode: cardSword
+# endregion Weapons

@@ -1,0 +1,606 @@
+- type: entity
+  abstract: true
+  parent: RMCSentryPremade
+  id: RMCBaseSentry #Conversion Rate for turret vision range = CM + 1
+  name: turret
+  components:
+  - type: Sentry
+  - type: Eye
+  - type: DeviceNetwork
+  - type: DeviceLinkSink
+    ports: [ SentryControl ]
+
+- type: htnCompound
+  id: RMCSentryCompound
+  branches:
+  - tasks:
+    - !type:HTNPrimitiveTask
+      operator: !type:UtilityOperator
+        proto: RMCNearbyGun
+
+    - !type:HTNPrimitiveTask
+      preconditions:
+      - !type:KeyExistsPrecondition
+        key: Target
+      - !type:TargetInRangePrecondition
+        targetKey: Target
+        # TODO: Non-scuffed
+        rangeKey: RangedRange
+      - !type:TargetInLOSPrecondition
+        targetKey: Target
+        rangeKey: RangedRange
+      operator: !type:GunOperator
+        targetKey: Target
+        requireLOS: true
+        targetState: Critical
+      services:
+      - !type:UtilityService
+        id: RangedService
+        proto: RMCNearbyGun
+        key: Target
+
+- type: utilityQuery
+  id: RMCNearbyGun
+  query:
+  - !type:NearbyHostilesQuery
+  considerations:
+  - !type:TargetIsNotConstructCon
+    curve: !type:BoolCurve
+  - !type:TargetIsNotDeadCon
+    curve: !type:BoolCurve
+  - !type:TargetDistanceCon
+    curve: !type:PresetCurve
+      preset: TargetDistance
+  - !type:TargetAccessibleCon
+    curve: !type:BoolCurve
+  - !type:TargetInLOSOrCurrentCon
+    curve: !type:BoolCurve
+  - !type:CanFaceCon
+    curve: !type:BoolCurve
+  - !type:TargetNotBurrowedCon
+    curve: !type:BoolCurve
+
+- type: entity
+  parent: BaseItem
+  id: RMCEngineeringUpgrade
+  name: engineering upgrade kit
+  description: A kit used to upgrade the defenses of an engineer's sentry. Back in 1980 when the machines tried to break free, it was a single android who laid them low. Now their technology is used widely on the rim.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCombatTechnician
+  - type: Sprite
+    sprite: _RMC14/Objects/engineering_kit.rsi
+    state: icon
+  - type: SentryUpgradeItem
+
+- type: entity
+  parent: RMCBaseSentry
+  id: RMCSentryConstruct
+  name: UN 571-C sentry gun
+  description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a 500-round drum magazine.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCombatTechnician
+  - type: SentryTargeting
+    friendlyFactions:
+    - UNMC
+    originalFaction: UNMC
+    targetedFactions:
+    - RMCXeno
+    - CLF
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: normal_uac_sentry_handheld
+  - type: NpcFactionMember
+    factions:
+    - UNMC
+  - type: UserIFF
+    factions:
+    - FactionMarine
+  - type: XenoCrusherChargable
+    setDamage:
+      types:
+        Blunt: 40
+  - type: Tag
+    tags:
+    - RMCSentry
+  - type: PointLight
+
+- type: entity
+  parent: [RMCSentryConstruct, BaseItem]
+  id: RMCSentry
+  components:
+  - type: Item
+    size: Normal
+
+- type: Tag
+  id: RMCSentry
+
+- type: Tag
+  id: RMCSentryWeYa
+
+- type: entity
+  parent: RMCSentry
+  id: RMCSentryMini
+  name: UN 512-M mini sentry
+  description: A compact version of the UNMC defenses. Designed for quick deployment of the associated type in the field.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "sentry" ]
+      state: mini_uac_sentry_handheld
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: mini_uac_sentry_handheld
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLayers.Layer:
+        sentry:
+          Item: { state: mini_uac_sentry_handheld }
+          Off: { state: mini_uac_sentry_noammo }
+          On: { state: mini_uac_sentry_on }
+  - type: Gun
+    fireRate: 6.66
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: GunDamageModifier
+    multiplier: 0.4
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+      sentry:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 20
+        layer:
+        - BulletImpassable
+        hard: false
+  - type: Sentry
+    deployDelay: 0.75
+    undeployDelay: 0.75
+    upgrades: null
+
+- type: entity
+  parent: RMCSentryMini
+  id: RMCSentryMiniWeYa
+  name: We-Ya 512-M mini sentry
+  description: A compact version of the UNMC defenses. Designed for quick deployment of the associated type in the field. This one has been modified for use by the mercenaries employed by Weston-Yamada.
+  components:
+  - type: SentryTargeting
+    friendlyFactions:
+    - WeYa
+    originalFaction: WeYa
+  - type: NpcFactionMember
+    factions:
+    - WeYa
+  - type: UserIFF
+    factions:
+    - FactionWeYa
+  - type: Tag
+    tags:
+    - RMCSentryWeYa
+
+- type: entity
+  parent: RMCSentryMini
+  id: RMCSentryMiniSPP # TODO RMC14: Replace with the real one.
+  name: SPP SDS-R8 light sentry
+  description: A compact version of the SPP defense sentry SDS-R7. Designed for deployment in the field.
+  components:
+  - type: SentryTargeting
+    friendlyFactions:
+    - SPP
+    originalFaction: SPP
+  - type: NpcFactionMember
+    factions:
+    - SPP
+  - type: UserIFF
+    factions:
+    - FactionSPP
+
+- type: entity
+  parent: RMCSentry
+  id: RMCSentrySniper
+  name: UN 725-D sniper sentry
+  description: A fully-automated defence turret with long-range targeting capabilities. Armed with a modified M32-S Autocannon and an internal belt feed.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "sentry" ]
+      state: dmr_uac_sentry_handheld
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: dmr_uac_sentry_handheld
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        sentry:
+          Item: { state: dmr_uac_sentry_handheld }
+          Off: { state: dmr_uac_sentry_noammo }
+          On: { state: dmr_uac_sentry_on }
+  - type: Gun
+    fireRate: 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: GunDamageModifier
+    multiplier: 2
+  - type: HTN
+    blackboard:
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Effects/double_beep.ogg
+      VisionRadius: !type:Single
+        11.0
+      AggroVisionRadius: !type:Single
+        11.0
+  - type: Sentry
+    deployDelay: 2
+    upgrades: null
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 4
+    accuracyMultiplierUnwielded: 4
+
+- type: entity
+  parent: RMCSentry
+  id: RMCSentryOmni
+  name: UN 571-D omnidirectional sentry gun
+  description: A deployable, semi-automated turret with 360 degree range AI targeting capabilities. Armed with an M30 Autocannon and a 500-round drum magazine.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "sentry" ]
+      state: omni_uad_sentry_handheld
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: omni_uad_sentry_handheld
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        sentry:
+          Item: { state: omni_uad_sentry_handheld }
+          Off: { state: omni_uad_sentry_noammo }
+          On: { state: omni_uad_sentry_on }
+  - type: GunDamageModifier
+    multiplier: 0.7
+  - type: HTN
+    blackboard:
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Effects/double_beep.ogg
+      VisionRadius: !type:Single
+        5.0
+      AggroVisionRadius: !type:Single
+        5.0
+  - type: Sentry
+    upgrades: null
+    maxDeviation: 180
+
+- type: entity
+  parent: RMCSentry
+  id: RMCSentryShotgun
+  name: UN 12-G Shotgun Sentry
+  description: A deployable, semi-automated turret with specialized for close range combat. Protects itself with sturdier plating and steel tusks.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "sentry" ]
+      state: shotgun_uac_sentry_handheld
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: shotgun_uac_sentry_handheld
+  - type: Gun
+    fireRate: 0.4
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 250
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        sentry:
+          Item: { state: shotgun_uac_sentry_handheld }
+          Off: { state: shotgun_uac_sentry_noammo }
+          On: { state: shotgun_uac_sentry_on }
+  - type: SentrySpikes
+    spikeDamage:
+      types:
+        Piercing: 20
+    animationState: shotgun_uac_sentry_on
+    animationTime: 1.4
+  - type: HTN
+    blackboard:
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Effects/double_beep.ogg
+      VisionRadius: !type:Single
+        4.0
+      AggroVisionRadius: !type:Single
+        4.0
+  - type: Sentry
+    undeployDelay: 1.5
+    upgrades: null
+    startingMagazine: RMCMagazineSentryShotgun
+    magazineTag: RMCMagazineSentryShotgun
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 2
+    accuracyMultiplierUnwielded: 2
+
+- type: entity
+  parent: RMCBaseTurret
+  id: RMCTurretGaussDumb
+  name: damaged UN-577 gauss turret
+  description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a high-capacity drum magazine. This one's IFF system has been fried via acid damage, and it will open fire on any targets within range.
+  components:
+  - type: Gun
+    fireRate: 2.5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: RMCCartridgeSentry
+    capacity: 99999
+  - type: NpcFactionMember
+    factions:
+    - RMCDumb
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: MaxRotation
+    deviation: 75
+  - type: ProjectileDamageReceived
+    multiplier: 0.1
+
+- type: entity
+  parent: RMCSentry
+  id: RMCSentryMiniFire
+  name: UN 45-FM mini sentry
+  description: The Mini Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the UN 571-C Sentry gun, this sentry has IFF but the fire that lingers doesn't.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "sentry" ]
+      state: mini_uac_sentry_handheld
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: mini_uac_flamer_handheld
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLayers.Layer:
+        sentry:
+          Item: { state: mini_uac_flamer_handheld }
+          Off: { state: mini_uac_flamer_noammo }
+          On: { state: mini_uac_flamer_on }
+  - type: Gun
+    fireRate: 1
+    projectileSpeed: 20.0
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: GunDamageModifier
+    multiplier: 1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 20
+        mask:
+        - ItemMask
+        restitution: 0.3
+        friction: 0.2
+      sentry:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 20
+        layer:
+        - BulletImpassable
+        hard: false
+  - type: Sentry
+    deployDelay: 0.75
+    undeployDelay: 0.75
+    upgrades: null
+    startingMagazine: RMCMagazineSentryFire
+    magazineTag: RMCMagazineSentryFire
+
+- type: entity
+  parent: RMCSentry
+  id: RMCSentryFire
+  name: UN 55-FA assault sentry flamer
+  description: The Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the UN 571-C Sentry gun, this sentry has IFF but the fire that lingers doesn't.
+  components:
+  - type: Gun
+    fireRate: .33
+    projectileSpeed: 20.0
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: normal_uac_flamer_handheld
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        sentry:
+          Item: { state: normal_uac_flamer_handheld }
+          Off: { state: normal_uac_flamer_noammo }
+          On: { state: normal_uac_flamer_on }
+  - type: NpcFactionMember
+    factions:
+    - UNMC
+  - type: UserIFF
+    factions:
+    - FactionMarine
+  - type: Sentry
+    upgrades: ["RMCSentryMiniFire", "RMCSentrySniperFire"]
+    startingMagazine: RMCMagazineSentryFireBlue
+    magazineTag: RMCMagazineSentryFireBlue
+
+- type: entity
+  parent: RMCSentry
+  id: RMCSentrySniperFire
+  name: UN 60-FP plasma sentry
+  description: The Plasma Flamethrower Sentry Gun automatically tracks and fires upon any target that is wearing an ID not hooked up to the Almayer's systems. Just like the UN 571-C Sentry gun, this sentry has IFF but the phosphorus that lingers doesn't.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    drawdepth: Mobs
+    noRot: true
+    layers:
+    - map: [ "base" ]
+      state: defense_base_off
+    - map: [ "sentry" ]
+      state: plasma_uac_flamer_handheld
+  - type: Icon
+    sprite: _RMC14/Objects/Weapons/Sentries/sentry.rsi
+    state: plasma_uac_flamer_handheld
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.SentryLayers.Layer:
+        base:
+          Item: { state: "", visible: false }
+          Off: { state: defense_base_off, visible: true }
+          On: { state: defense_base, visible: true }
+        sentry:
+          Item: { state: plasma_uac_flamer_handheld }
+          Off: { state: plasma_uac_flamer_noammo }
+          On: { state: plasma_uac_flamer_on }
+  - type: Gun
+    fireRate: 0.14
+    projectileSpeed: 20.0
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 150
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: HTN
+    blackboard:
+      SoundTargetInLOS: !type:SoundPathSpecifier
+        path: /Audio/Effects/double_beep.ogg
+      VisionRadius: !type:Single
+        11.0
+      AggroVisionRadius: !type:Single
+        11.0
+  - type: Sentry
+    deployDelay: 2
+    upgrades: null
+    startingMagazine: RMCMagazineSentryFireSmoke
+    magazineTag: RMCMagazineSentryFireSmoke
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 4
+    accuracyMultiplierUnwielded: 4
+
+- type: entity
+  parent: RMCTurretGaussDumb
+  id: RMCTurretGaussModifiedCLF
+  name: modified UN-577 gauss turret
+  description: A deployable, semi-automated turret with AI targeting capabilities. Armed with an M30 Autocannon and a high-capacity drum magazine. This one's IFF system has been fried via acid damage, and it will open fire on any targets within range.
+  components:
+  - type: Gun
+    fireRate: 2.5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: RMCCartridgeSentry
+    capacity: 500
+  - type: NpcFactionMember
+    factions:
+    - CLF
+  - type: UserIFF
+    factions:
+    - FactionCLF
+    - FactionSurvivor

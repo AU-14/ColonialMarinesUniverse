@@ -1,0 +1,447 @@
+- type: entity
+  parent: CrateFreezer
+  id: CrateServiceBarSupply
+  name: bartending supplies crate
+  description: Extra bar supplies, in case the clown was allowed in the bar unsupervised.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: DrinkGlass
+          amount: 5
+        - id: DrinkShotGlass
+          amount: 5
+        - id: DrinkShaker
+          amount: 2
+        - id: DrinkOrangeJuice
+          amount: 2
+        - id: DrinkLimeJuice
+          amount: 2
+        - id: DrinkTomatoJuice
+          amount: 2
+        - id: DrinkWaterBottleFull
+          amount: 2
+        - id: DrinkSodaWaterCan
+          amount: 2
+        - id: DrinkCreamCarton
+          amount: 2
+
+- type: entity
+  parent: CrateFreezer
+  id: CrateServiceCooking
+  name: kitchen supplies crate
+  description: Extra kitchen supplies, in case the botanists are absent.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: ReagentContainerFlour
+          amount: 3
+        - id: ReagentContainerRice
+          amount: 3
+        - id: FoodBoxCloth
+        - id: DrinkMilkCarton
+          amount: 4
+        - id: DrinkSoyMilkCarton
+          amount: 2
+        - id: ReagentContainerSugar
+          amount: 2
+        - id: FoodCondimentPacketSalt
+          amount: 3
+        - id: FoodCondimentBottleEnzyme
+          amount: 2
+        - id: FoodContainerEgg
+          amount: 2
+
+- type: entity
+  parent: CratePlastic
+  id: CrateServiceDinnerware
+  name: kitchen dinnerware crate
+  description: Extra kitchen supplies, in case the clown was allowed in the cafeteria unsupervised.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: FoodBowlBig
+          amount: 4
+        - id: FoodPlate
+          amount: 4
+        - id: FoodPlateSmall
+          amount: 4
+        - id: FoodKebabSkewer
+          amount: 4
+        - id: KitchenKnife
+        - id: DrinkGlass
+          amount: 4
+        - id: FoodPlateMuffinTin
+          amount: 4
+        - id: FoodPlateTin
+          amount: 4
+        - id: BoxUtensil
+
+- type: entity
+  parent: CrateFreezer
+  id: CrateServiceGetMore
+  name: Getmore Bakemore crate
+  description: Getmore branded snacks and baking supplies for the creative chef, all without the need of emptying your station's Getmore machines!
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: FoodSnackRaisins
+          amount: 6
+        - id: FoodSnackChocolate
+          amount: 6
+        - id: FoodSnackPistachios
+          amount: 2
+        - id: ReagentContainerFlour
+          amount: 3
+        - id: ReagentContainerSugar
+          amount: 2
+        - id: FoodCondimentPacketSalt
+          amount: 3
+        - id: DrinkMilkCarton
+          amount: 2
+        - id: DrinkSoyMilkCarton
+          amount: 1
+        - id: FoodContainerEgg
+          amount: 2
+        - id: FoodBoxCloth
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateServiceSmokeables
+  name: smokeables crate
+  description: Tired of a quick death on the station? Order this crate and chain-smoke your way to a coughy demise!
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - !type:GroupSelector
+          children:
+          - id: CigCartonGreen
+            weight: 0.50
+          - id: CigCartonRed
+        - !type:GroupSelector
+          children:
+          - id: CigCartonBlue
+            weight: 0.50
+          - id: CigCartonBlack
+        - !type:GroupSelector
+          children:
+          - id: CigarGoldCase
+            weight: 0.05
+          - id: CigarCase
+        - id: Matchbox
+          amount: 2
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateServiceTheatre
+  name: theatrical performances crate
+  description: Contains a moth cloak, barber scissors, maid uniform, clown and mime attributes, and other performance charms.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: BarberScissors
+        - id: ClothingOuterSuitMonkey
+        - id: ClothingHeadHatAnimalMonkey
+        - id: ClothingUniformJumpskirtJanimaid
+        - id: ClothingUniformJumpskirtOldDress
+        - id: ClothingHeadHatMagician
+        - !type:AllSelector # Cloaks
+          children:
+          - id: ClothingNeckCloakMoth
+          - id: ClothingNeckCloakVoid
+        - !type:AllSelector # Clown starter kit
+          children:
+          - id: ClothingMaskClown
+          - id: ClownRecorder
+          - !type:GroupSelector
+            children:
+            - id: ClothingShoesClown
+            - id: ClothingShoesClownLarge
+              weight: 0.1
+          - !type:NestedSelector
+            tableId: RandomBikeHornTable
+        - !type:AllSelector # Mime starter kit
+          children:
+          - id: ClothingMaskMime
+          - id: ClothingBeltSuspendersRed
+          - id: ClothingBeltSuspendersBlack
+        - !type:AllSelector # Performer starter kit
+          children:
+          - id: ClothingUniformJumpskirtPerformer
+          - id: ClothingShoesBootsPerformer
+          - id: ClothingHeadPerformerWig
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateServiceCustomSmokable
+  name: DIY smokeables crate
+  description: Want to get a little creative with what you use to destroy your lungs? Then this crate is for you! Has everything you need to roll your own cigarettes.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: PackPaperRolling
+        - id: CigaretteFilter
+          amount: 8
+        - id: GroundTobacco
+          amount: 4
+        - id: SmokingPipe
+        - id: Matchbox
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateServiceBureaucracy
+  name: bureaucracy crate
+  description: Several stacks of paper, a few pens and an office toy. What more could you ask for?
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: Paper
+          amount: 12
+        - id: PaperOffice
+          amount: 6
+        - id: Pen
+          amount: 2
+        - id: BoxFolderClipboardEmpty
+          amount: 2
+        - id: HandLabeler
+        - id: BoxFolderBlueEmpty
+        - id: BoxFolderRedEmpty
+        - id: BoxFolderYellowEmpty
+        - id: NewtonCradle
+        - id: BoxEnvelope
+        - id: BrbSign
+        - id: DeskBell
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateServiceFaxMachine
+  name: fax machine crate
+  description: A fax machine and a screwdriver to set the name with.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: Screwdriver
+        - id: FaxMachineFlatpack
+
+- type: entity
+  parent: CrateCommandSecure
+  id: CrateServicePersonnel
+  name: personnel crate
+  description: Contains a box of blank ID cards and PDAs.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: BoxPDA
+        - id: BoxID
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateServiceBooks
+  name: books crate
+  description: Contains 10 empty books of random appearance.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: BookRandom
+        amount: 10
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateServiceGuidebooks
+  name: guidebooks crate
+  description: Contains guidebooks.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: BookSpaceEncyclopedia
+        - id: BookTheBookOfControl
+        - id: BookBartendersManual
+        - id: BookHowToCookForFortySpaceman
+        - id: BookLeafLoversSecret
+        - id: BookEngineersHandbook
+        - id: BookScientistsGuidebook
+        - id: BookSecurity
+        - id: BookHowToKeepStationClean
+        - id: BookHowToRockAndStone
+        - id: BookMedicalReferenceBook
+        - id: BookHowToSurvive
+        - id: BookChemicalCompendium
+        - id: BookSpaceLaw
+
+- type: entity
+  parent: CrateFreezer
+  id: CrateServiceSodaDispenser
+  name: soda dispenser refill crate
+  description: Contains refills for soda dispensers.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: DrinkCoffeeJug
+        - id: DrinkColaBottleFull
+        - id: DrinkCreamCartonXL
+        - id: DrinkDrGibbJug
+        - id: DrinkEnergyDrinkJug
+        - id: DrinkGreenTeaJug
+        - id: DrinkIceJug
+        - id: DrinkJuiceLimeCartonXL
+        - id: DrinkJuiceOrangeCartonXL
+        - id: DrinkLemonLimeJug
+        - id: DrinkRootBeerJug
+        - id: DrinkSodaWaterBottleFull
+        - id: DrinkSpaceMountainWindBottleFull
+        - id: DrinkSpaceUpBottleFull
+        - id: DrinkSugarJug
+        - id: DrinkTeaJug
+        - id: DrinkTonicWaterBottleFull
+        - id: DrinkWaterMelonJuiceJug
+
+- type: entity
+  parent: CrateFreezer
+  id: CrateServiceBoozeDispenser
+  name: booze dispenser refill crate
+  description: Contains refills for booze dispensers.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: DrinkAleBottleFullGrowler
+        - id: DrinkBeerGrowler
+        - id: DrinkCoffeeLiqueurBottleFull
+        - id: DrinkCognacBottleFull
+        - id: DrinkGinBottleFull
+        - id: DrinkMeadJug
+        - id: DrinkRumBottleFull
+        - id: DrinkTequilaBottleFull
+        - id: DrinkVermouthBottleFull
+        - id: DrinkVodkaBottleFull
+        - id: DrinkWhiskeyBottleFull
+        - id: DrinkWineBottleFull
+
+- type: entity
+  parent: CratePlastic
+  id: CrateServiceBox
+  name: boxes crate
+  description: Contains 6 empty multipurpose boxes.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: BoxCardboard
+        amount: 6
+
+- type: entity
+  parent: CrateTrashCart
+  id: CrateTrashCartFilled
+  suffix: Filled
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+          # Creatures
+        - id: MobCockroach
+          prob: 0.05
+        - id: MobMothroach
+          prob: 0.03
+        - id: MobMouse
+          prob: 0.05
+          # Food Packaging
+        - id: FoodPacketBoritosTrash
+          prob: 0.1
+        - id: FoodPacketCheesieTrash
+          prob: 0.1
+        - id: FoodPacketChipsTrash
+          prob: 0.1
+        - id: FoodPacketSusTrash
+          prob: 0.1
+        - id: FoodPacketSyndiTrash
+          prob: 0.1
+        - id: FoodPacketChowMeinTrash
+          prob: 0.1
+        - id: FoodPacketDanDanTrash
+          prob: 0.1
+        - id: FoodPacketMRETrash
+          prob: 0.1
+        - id: FoodPacketPistachioTrash
+          prob: 0.1
+        - id: FoodPacketSemkiTrash
+          prob: 0.1
+        - id: FoodPacketRaisinsTrash
+          prob: 0.1
+          # Cans
+        - id: FoodTinBeansTrash
+          prob: 0.15
+        - id: FoodTinPeachesTrash
+          prob: 0.15
+        - id: FoodTinMRETrash
+          prob: 0.15
+          # Cigarette Stuff
+        - id: Ash
+          prob: 0.15
+        - id: CigaretteSpent
+          prob: 0.15
+          # Bacteria
+        - id: FoodBreadMoldySlice
+          prob: 0.15
+        - id: FoodPizzaMoldySlice
+          prob: 0.15
+          # Botanical Waste
+        - id: TrashBananaPeel
+          prob: 0.15
+        - id: FoodCornTrash
+          prob: 0.15
+          # Misc
+        - id: DrinkGlass
+          prob: 0.15
+        - id: BrokenBottle
+          prob: 0.15
+        - id: LightTubeBroken
+          prob: 0.15
+        - id: LightBulbBroken
+          prob: 0.15
+        - id: MobMouseDead
+          prob: 0.1
+        - id: Syringe
+          prob: 0.1
+        - id: ShardGlassPlasma
+          prob: 0.1
+
+- type: entity
+  parent: CrateGenericSteel
+  id: CrateCandles
+  name: candles crate
+  description: Contains 4 boxes of candles, 2 large and 2 small. For atmosphere or something.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: BoxCandle
+          amount: 2
+        - id: BoxCandleSmall
+          amount: 2

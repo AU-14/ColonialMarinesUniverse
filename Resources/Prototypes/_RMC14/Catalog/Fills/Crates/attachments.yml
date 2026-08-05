@@ -1,0 +1,219 @@
+- type: entity
+  id: RMCCrateAttachmentRedDot
+  parent: RMCCrateBase
+  name: red-dot sight attachment crate (x8)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentS5RedDotSight
+        amount: 8
+
+- type: entity
+  id: RMCCrateAttachmentSmartScope
+  parent: RMCCrateBase
+  name: B8 smart-scope attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentB8SmartScope
+        amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentRailFlashlight
+  parent: RMCCrateBase
+  name: rail flashlight crate (x8)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
+
+- type: entity
+  id: RMCCrateAttachmentTelescopicScope
+  parent: RMCCrateBase
+  name: railscope attachment crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentS84xTelescopicScope
+        amount: 2
+
+- type: entity
+  id: RMCCrateAttachmentMiniScope
+  parent: RMCCrateBase
+  name: mini railscope attachment crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentS42xTelescopicMiniscope
+        amount: 2
+
+- type: entity
+  id: RMCCrateAttachmentMagneticHarness
+  parent: RMCCrateBase
+  name: magnetic harness attachment crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentMagneticHarness
+        amount: 6
+
+- type: entity
+  id: RMCCrateAttachmentSuppressor
+  parent: RMCCrateBase
+  name: suppressor attachment crate (x8)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentSuppressor
+        amount: 8
+
+- type: entity
+  id: RMCCrateAttachmentExtendedBarrel
+  parent: RMCCrateBase
+  name: extended barrel attachment crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentExtendedBarrel
+        amount: 6
+
+- type: entity
+  id: RMCCrateAttachmentCompensator
+  parent: RMCCrateBase
+  name: compensator attachment crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentRecoilCompensator
+        amount: 6
+
+- type: entity
+  id: RMCCrateAttachmentForegrip
+  parent: RMCCrateBase
+  name: foregrip attachment crate (x8)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentVerticalGrip
+        amount: 4
+      - id: RMCAttachmentAngledGrip
+        amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentGyro
+  parent: RMCCrateBase
+  name: gyroscopic stabilizer attachment crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentGyroscopicStabilizer
+        amount: 2
+
+- type: entity
+  id: RMCCrateAttachmentBipod
+  parent: RMCCrateBase
+  name: bipod attachment crate (x6)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentBipod
+        amount: 6
+
+- type: entity
+  id: RMCCrateAttachmentUnderbarrelShotgun
+  parent: RMCCrateBase
+  name: underbarrel shotgun attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentU7UnderbarrelShotgun
+        amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentUnderbarrelExtinguisher
+  parent: RMCCrateBase
+  name: underbarrel extinguisher attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentUnderbarrelExtinguisher
+        amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentUnderbarrelFlamer
+  parent: RMCCrateBase
+  name: underbarrel flamer attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCAttachmentMiniFlamethrower
+      amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentBurstfire
+  parent: RMCCrateBase
+  name: burstfire assembly attachment crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentBurstFireAssembly
+        amount: 2
+
+- type: entity
+  id: RMCCrateAttachmentAllStocks
+  parent: RMCCrateBase
+  name: stock attachments crate (x3 each, x1 paratroopers)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentM44MagnumSharpshooterStock
+        amount: 3
+      - id: RMCAttachmentM54CStockSolid
+        amount: 3
+      - id: RMCAttachmentM63Stock
+        amount: 3
+      - id: RMCAttachmentM42A2CollapsibleStock
+        amount: 3
+      - id: RMCAttachmentM63ArmBrace
+        amount: 1
+
+- type: entity
+  id: RMCCrateAttachmentRevolverStock
+  parent: RMCCrateBase
+  name: revolver stock attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentM44MagnumSharpshooterStock
+        amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentRifleStock
+  parent: RMCCrateBase
+  name: rifle stock attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentM54CStockSolid
+        amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentShotgunStock
+  parent: RMCCrateBase
+  name: shotgun stock attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentM42A2CollapsibleStock
+        amount: 4
+
+- type: entity
+  id: RMCCrateAttachmentSmgStock
+  parent: RMCCrateBase
+  name: submachinegun solid stock attachment crate (x4)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCAttachmentM63Stock
+        amount: 4

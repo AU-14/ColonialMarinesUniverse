@@ -1,0 +1,140 @@
+# EQUIPMENT VENDOR
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechCrewCombatCorrespondent
+  name: ColMarTech Combat Correspondent Equipment Rack
+  description: An automated rack hooked up to a colossal storage of Reporter standard-issue equipment.
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessPress" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMCorrespondent
+    - CMCombatCorrespondent
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: RMCVendorBundleCrewCombatCorrespondent
+      - id: RMCCameraBroadcasting
+        name: Press Broadcasting Camera
+        recommended: true
+    - name: Civilian Equipment
+      jobs:
+      - CMCorrespondent
+      takeAll: CMCivilian
+      entries:
+      - id: RMCPortablePressFax
+        name: Portable Press Fax Machine
+        recommended: true
+      - id: RMCTentUNMCExtendedCorrespondentFolded
+        name: Correspondent Field Tent
+    - name: Satchel
+      jobs:
+      - CMCorrespondent
+      choices: { CMSatchel: 1 }
+      entries:
+      - id: CMSatchel
+        name: Leather Satchel
+      - id: RMCBackpackRTOBagPhone
+        name: Portable Phone Bag
+    - name: Combat Backpack
+      jobs:
+      - CMCombatCorrespondent
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMBackpackMarine
+        replaceSlot: back
+        name: Marine Backpack
+      - id: CMSatchelMarine
+        replaceSlot: back
+        name: Marine Satchel
+        recommended: true
+    - name: Combat Sidearm
+      jobs:
+      - CMCombatCorrespondent
+      choices: { CMBelt: 1 }
+      entries:
+      - id: RMCM1984BeltFilled
+        name: M1984 Pistol Holster Rig
+        recommended: true
+    - name: Combat Webbing
+      jobs:
+      - CMCombatCorrespondent
+      choices: { CMWebbing: 1 }
+      entries:
+      - id: CMWebbingBrown
+        name: Brown Webbing
+        recommended: true
+    - name: Combat Pouches
+      jobs:
+      - CMCombatCorrespondent
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchGeneralMedium
+        name: Medium General Pouch
+        recommended: true
+    - name: Uniform
+      choices: { CMUniform: 1 }
+      entries:
+      - id: RMCJumpsuitCorrespondentBlack
+        name: Black Uniform
+      - id: RMCJumpsuitCorrespondentOrange
+        name: Orange Uniform
+      - id: RMCJumpsuitCorrespondentRed
+        name: Red Uniform
+    - name: Armor
+      choices: { CMArmor: 1 }
+      entries:
+      - id: CMArmorPress
+        name: Combat Correspondent's Armor
+        recommended: true
+      - id: RMCCoatCorrespondentBlue
+        name: Blue Vest
+      - id: RMCHazardVestBlack
+        name: Black Vest
+      - id: RMCCoatCorrespondentBlack
+        name: Black Coat
+      - id: RMCCoatCorrespondentGreen
+        name: Green Coat
+      - id: RMCCoatCorrespondent
+        name: Brown Coat
+      - id: RMCCoatCorrespondentGreenJacket
+        name: Green Jacket
+      - id: RMCCoatCorrespondentBlueJacket
+        name: Blue Jacket
+      - id: RMCCoatCorrespondentTan
+        name: Tan Jacket
+      - id: RMCCoatCorrespondentBrownJacket
+        name: Brown Jacket
+    - name: Helmet
+      choices: { CMHelmet: 1 }
+      entries:
+      - id: CMArmorHelmetPress
+        name: Combat Correspondent's Helmet
+        recommended: true
+      - id: RMCHeadCapCorrespondent
+        name: Combat Correspondent's Cap
+      - id: RMCHeadCapFedoraGrey
+        name: Fedora
+    - name: Refills
+      entries:
+      #- id: /obj/item/device/camera
+      #  name: Camera
+      #  points: 10
+      #- id: /obj/item/device/camera_film
+      #  name: Camera Film
+      #  points: 5
+      #- id: /obj/item/device/toner
+      #  name: Toner
+      # points: 5
+      - id: RMCBoxRegulationTapes
+        name: Regulation Tapes
+        points: 15
+      - id: CMPaperBin30
+        name: Paper Bin
+        points: 10

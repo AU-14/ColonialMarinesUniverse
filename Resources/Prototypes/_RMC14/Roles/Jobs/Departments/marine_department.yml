@@ -1,0 +1,36 @@
+﻿- type: department
+  parent: CMDepartmentBase
+  id: CMSquad
+  name: department-CMSquad
+  description: cm-department-Marine-description
+  color: "#DE3A3A"
+  roles:
+  - CMRifleman
+  - CMSquadLeader
+  - CMFireteamLeader
+  - CMWeaponsSpecialist
+  - CMSmartGunOperator
+  - CMHospitalCorpsman
+  - CMCombatTech
+  - CMPVERifleman # PVE UNMC
+  - CMPVEHospitalCorpsman
+  - CMPVESquadLeader
+  - CMPVESmartGunOperator
+  - CMPVESectionSergeant
+  - CMRoyalMarinesTroopSargePVE # PVE RCM
+  - CMRoyalMarinesSectionLeaderPVE
+  - CMRoyalMarinesTeamLeaderPVE
+  - CMRoyalMarinesAssaultEngineerPVE
+  - CMRoyalMarinesSmartgunnerPVE
+  - CMRoyalMarinesBombSpecPVE
+  - CMRoyalMarinesScoutSniperPVE
+  - CMRoyalMarinesMedicPVE
+  - CMRoyalMarinesRiflemanPVE
+  - RMCFORECONPVESquadLead # PVE FORECON
+  - RMCFORECONPVEAssistantSL
+  - RMCFORECONPVERadioTelephoneOperator
+  - RMCFORECONPVECorpsman
+  - RMCFORECONPVESmartgunner
+  - RMCFORECONPVERifleman
+  departmentRadio: null
+  headOfDepartment: CMSquadLeader

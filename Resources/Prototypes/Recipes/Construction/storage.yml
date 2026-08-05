@@ -1,0 +1,91 @@
+# region Base
+- type: construction
+  abstract: true
+  id: BaseStorageStructure
+  category: construction-category-storage
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  abstract: true
+  parent: BaseStorageStructure
+  id: BaseShelf
+  graph: Shelf
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition
+# endregion Base
+
+# region Bureaucracy
+- type: construction
+  parent: BaseStorageStructure
+  id: FilingCabinet
+  graph: FilingCabinet
+  targetNode: filingCabinet
+
+- type: construction
+  parent: FilingCabinet
+  id: TallCabinet
+  targetNode: tallCabinet
+
+- type: construction
+  parent: FilingCabinet
+  id: ChestDrawer
+  targetNode: chestDrawer
+# endregion Bureaucracy
+
+# region Item Cabinets
+- type: construction
+  parent: BaseStorageStructure
+  id: ShowCase
+  graph: GlassBox
+  targetNode: glassBox
+# endregion Item Cabinets
+
+# region Shelves
+- type: construction
+  parent: BaseShelf
+  id: ShelfWood
+  targetNode: ShelfWood
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfMetal
+  targetNode: ShelfMetal
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfGlass
+  targetNode: ShelfGlass
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfRWood
+  targetNode: ShelfRWood
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfRMetal
+  targetNode: ShelfRMetal
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfRGlass
+  targetNode: ShelfRGlass
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfBar
+  targetNode: ShelfBar
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfKitchen
+  targetNode: ShelfKitchen
+
+- type: construction
+  parent: BaseShelf
+  id: ShelfChemistry
+  targetNode: ShelfChemistry
+# endregion Shelves

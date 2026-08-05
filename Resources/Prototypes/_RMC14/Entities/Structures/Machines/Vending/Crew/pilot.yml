@@ -1,0 +1,317 @@
+# Flight Crew Vendors #
+
+# Equipment Rack
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechDropshipCrewEquipment
+  name: ColMarTech Dropship Crew Equipment Rack
+  description: An automated equipment vendor for Dropship Crew
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessPilot" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/equipment.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMDropshipCrewChief
+    - CMPilotDropship
+    - CMPilotGunship
+    sections:
+    # Pilots Section
+    - name: Standard Equipment
+      jobs:
+      - CMPilotDropship
+      - CMPilotGunship
+      takeAll: CMEquipment
+      entries:
+      - id: RMCJumpsuitPilotAlt
+      - id: CMArmorHelmetM30
+      - id: RMCHeadCapPatrol
+      - id: CMMRE
+    # Dropship Crew Chief Section Start
+    - name: Standard Equipment
+      jobs:
+      - CMDropshipCrewChief
+      takeAll: CMEquipment
+      entries:
+      - id: CMArmorHelmetM30
+      - id: RMCHeadCapPatrol
+      - id: CMMRE
+    # Dropship Crew Chief Section End
+    - name: Gloves
+      choices: { CMHands: 1 }
+      entries:
+      - id: CMHandsInsulated
+      - id: CMHandsBlackInsulated
+    # Pilots Section
+    - name: Armour
+      jobs:
+      - CMPilotDropship
+      - CMPilotGunship
+      choices: { CMArmour: 1 }
+      entries:
+      - id: RMCArmorVestFlak
+      - id: CMArmorM3VLFlakVest
+      - id: RMCCoatPilot
+    # Dropship Crew Chief Section Start
+    - name: Armour
+      jobs:
+      - CMDropshipCrewChief
+      choices: { CMArmour: 1 }
+      entries:
+      - id: RMCArmorVestFlak
+      - id: CMArmorM3VLFlakVest
+    # Dropship Crew Chief Section End
+    - name: Personal Sidearm
+      choices: { CMSidearm: 1 }
+      entries:
+      - id: CMWeaponPistolM1984
+      - id: RMCMK80
+    - name: Belts
+      choices: { CMBelt: 1 }
+      entries:
+      - id: RMCBeltUtilityGeneral
+      - id: CMBeltMarine
+      - id: CMBeltMedicBagFilled
+        name: M276 pattern lifesaver bag (Full)
+        recommended: true
+      - id: CMBeltMedicalFilled
+        name: M276 pattern medical storage rig (Full)
+        recommended: true
+      - id: RMCBeltHolsterSMGPouch
+      - id: RMCBeltHolsterPistol
+      - id: RMCBeltHolsterM13
+      - id: RMCBeltHolsterRevolver
+      - id: RMCM82FHolster
+      - id: RMCM276ShotgunShellLoadingRig
+    - name: Pouches
+      choices: { CMPouches: 2 }
+      entries:
+      - id: RMCPouchFirstAidInjectors
+        name: first-aid pouch (refillable injectors)
+        recommended: true
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment)
+        recommended: true
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+        recommended: true
+      - id: RMCPouchFirstResponder
+      - id: RMCPouchFlareFilled
+        name: flare pouch (Full)
+      - id: RMCPouchGeneralLarge
+      - id: RMCPouchMagazineLarge
+      - id: RMCPouchMagazinePistolLarge
+      - id: RMCPouchShotgunLarge
+      - id: RMCPouchMedical
+      - id: RMCPouchMedkit
+      - id: RMCPouchPistol
+      - id: RMCPouchSling
+    - name: Accessories
+      choices: { CMAccessories: 1 }
+      entries:
+      - id: CMWebbingBrown
+        recommended: true
+      - id: CMWebbingBlack
+        recommended: true
+      - id: RMCWebbingLegPouch
+      - id: RMCWebbingLegPouchBlack
+      - id: RMCWebbingDropPouch
+      - id: RMCWebbingDropPouchBlack
+      - id: CMWebbing
+      - id: RMCWebbingBlackSmall
+      - id: CMWebbingHolster
+      - id: RMCWebbingHolsterBlack
+    - name: Glasses
+      choices: { CMGlasses: 1 }
+      entries:
+      - id: RMCSunglasses
+      - id: RMCGlassesMedicalHUDGlasses
+      - id: RMCGlassesAviatorsSilver
+      - id: RMCGlassesAviators
+    - name: Flight Visor
+      choices: { CMFlightVisor: 1 }
+      entries:
+      - id: RMCVisorPilotBlack
+      - id: RMCVisorPilotDarkblue
+      - id: RMCVisorPilotLightblue
+      - id: RMCVisorPilotPurple
+      - id: RMCVisorPilotRed
+      - id: RMCVisorPilotYellow
+    - name: Masks
+      choices: { CMMasks: 1 }
+      entries:
+      - id: CMMaskGas
+      - id: CMMaskCoif
+      - id: RMCMaskRebreather
+    - name: Attachments
+      entries:
+      - id: RMCAttachmentAngledGrip
+        points: 10
+      - id: RMCAttachmentExtendedBarrel
+        points: 10
+      - id: RMCAttachmentExtendedCompensator
+        points: 10
+      - id: RMCAttachmentRecoilCompensatorM13
+        points: 10
+      - id: RMCAttachmentGyroscopicStabilizer
+        points: 10
+      - id: RMCAttachmentLaserSight
+        points: 10
+      - id: RMCAttachmentU7UnderbarrelShotgun # This is called "Masterkey" in flight vend; not sure if accurate.
+        points: 10
+      - id: RMCAttachmentM13StockSolid
+        points: 10
+      - id: RMCAttachmentM13StockCollapsible
+        points: 10
+      - id: RMCAttachmentM42A2CollapsibleStock
+        points: 10
+      - id: RMCAttachmentM63Stock
+        points: 10
+      - id: RMCAttachmentM54CStockSolid
+        points: 10
+      - id: RMCAttachmentRecoilCompensator
+        points: 10
+      - id: RMCAttachmentS5RedDotSight
+        points: 10
+      - id: RMCAttachmentS5MicroRedDotSight
+        points: 10
+      - id: RMCAttachmentS6ReflexSight
+        points: 10
+      - id: RMCAttachmentSuppressor
+        points: 10
+      - id: RMCAttachmentSuppressorCompact
+        points: 10
+      - id: RMCAttachmentVerticalGrip
+        points: 10
+    - name: Ammunition
+      entries:
+      - id: CMMagazineRifleM4SPRAP
+        points: 10
+      - id: CMMagazineRifleM4SPRExt
+        points: 10
+      - id: CMMagazineSMGM63AP
+        points: 10
+      - id: CMMagazineSMGM63Ext
+        points: 10
+      - id: CMMagazineRifleM54CAP
+        points: 10
+      - id: CMMagazineRifleM54CExt
+        points: 10
+      - id: RMCSpeedLoader44Marksman
+        points: 10
+    - name: Utilities
+      entries:
+      # - id: CMPOFlightsuit # TODO: Port Flightsuit (not the uniform they normally wear)
+      #   points: 10
+      - id: CMFireExtinguisherPortable
+        name: Fire Extinguisher (Portable)
+        points: 5
+      - id: RMCPouchGeneralLarge
+        points: 15
+      - id: RMCPouchMagazineLarge
+        points: 15
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        points: 10
+      - id: RMCPouchMacheteFilled
+        name: machete pouch (Full)
+        points: 15
+      - id: RMCMotionDetector
+        points: 15
+        recommended: true
+
+# Weapon Rack
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechDropshipCrewWeapon
+  name: ColMarTech Dropship Crew Weapon Rack
+  description: An automated combat equipment vendor for Dropship Crew
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessPilot" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+    canManualRestock: true
+    ignoreBulkRestockById:
+    - RMCBoxShotgunBuckshot
+    - RMCBoxShotgunFlechette
+    - RMCBoxShotgunSlugs
+    jobs:
+    - CMDropshipCrewChief
+    - CMPilotDropship
+    - CMPilotGunship
+    sections:
+    - name: Primary Firearms
+      entries:
+      - id: WeaponRifleM4SPR
+        amount: 4
+      - id: WeaponSMGM63
+        amount: 4
+      - id: WeaponShotgunM42A2
+        amount: 4
+      - id: RMCWeaponRifleM54C
+        amount: 4
+    - name: Primary Ammunition
+      entries:
+      - id: RMCBoxShotgunBuckshot
+        amount: 12
+      - id: RMCBoxShotgunFlechette
+        amount: 12
+      - id: RMCBoxShotgunSlugs
+        amount: 12
+      - id: CMMagazineRifleM4SPR
+        amount: 24
+      - id: CMMagazineSMGM63
+        amount: 24
+      - id: CMMagazineRifleM54C
+        amount: 24
+    - name: Sidearms
+      entries:
+      - id: RMCWeaponPistolM77Empty
+        amount: 4
+      - id: RMCWeaponRevolverM44Empty
+        amount: 4
+      - id: CMWeaponPistolM1984Empty
+        amount: 4
+      - id: RMCWeaponPistolM13Empty
+        amount: 4
+      - id: RMCWeaponPistolM82FEmpty
+        amount: 4
+    - name: Sidearm Ammunition
+      entries:
+      - id: CMMagazinePistolM77AP
+        amount: 20
+      - id: RMCSpeedLoaderM44
+        amount: 20
+      - id: CMMagazinePistolM1984
+        amount: 20
+      - id: RMCMagazinePistolM1984AP
+        amount: 14
+      #- id: CMMagazinePistolMK80HP # TODO RMC14 Pistol AP varieties
+      # amount: 14
+      - id: CMMagazinePistolMK80
+        amount: 16
+      - id: RMCMagazinePistolM13
+        amount: 10
+      - id: RMCMagazinePistolM13Ext
+        amount: 10
+    - name: Attachments
+      entries:
+      - id: RMCAttachmentRailFlashlight
+        amount: 8
+      - id: RMCAttachmentFlashlightGrip
+        amount: 4
+    - name: Utilities
+      entries:
+      - id: RMCFlashlight
+        amount: 4
+      - id: RMCM5Bayonet
+        amount: 4
+      - id: RMCPackFlareCAS
+        amount: 1
+      - id: CMPackFlare
+        amount: 10

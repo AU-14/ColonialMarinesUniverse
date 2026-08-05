@@ -1,0 +1,500 @@
+- type: entity
+  parent: Screwdriver
+  id: CMScrewdriver
+  components:
+  - type: RandomSprite
+    available:
+    - enum.DamageStateVisualLayers.Base:
+        screwdriver: Rainbow
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/screwdriver.rsi
+    layers:
+    - state: screwdriver
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+    - state: screwdriver-screwybits
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Tools/screwdriver.rsi
+    storedRotation: 0
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/screwdriver_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/screwdriver_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/screwdriver_drop.ogg
+      params:
+        volume: -4
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Ears
+    - Suitstorage
+    - Mask
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 75
+
+- type: entity
+  parent: Wirecutter
+  id: CMWirecutter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/wirecutters.rsi
+    layers:
+    - state: cutters
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+    - state: cutters-cutty-thingy
+  - type: RandomSprite
+    available:
+    - enum.DamageStateVisualLayers.Base:
+        cutters: Rainbow
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Tools/wirecutters.rsi
+    storedRotation: 0
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/wirecutter_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/wirecutter_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/wirecutter_drop.ogg
+      params:
+        volume: -4
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Suitstorage
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 80
+
+- type: entity
+  parent: Wrench
+  id: CMWrench
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/wrench.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Tools/wrench.rsi
+    storedRotation: 0
+    storedSprite:
+      sprite: _RMC14/Objects/Tools/wrench.rsi
+      state: icon
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/wrench_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/wrench_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/wrench_drop.ogg
+      params:
+        volume: -4
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Suitstorage
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 150
+
+- type: entity
+  parent: Multitool
+  id: CMMultitool
+  name: access tuner
+  description: A small handheld tool used to override or connect various machine functions.
+  suffix: Multitool
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/multitool.rsi
+    layers: []
+    state: multitool
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Tools/multitool.rsi
+    storedRotation: 0
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/multitool_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+      params:
+        volume: -4
+  - type: Multitool
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Suitstorage
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 50
+      CMGlass: 20
+
+- type: entity
+  parent: trayScanner
+  id: CMTRayScanner
+  name: t-ray scanner
+  description: A high-tech scanning device that uses terahertz radiation to detect subfloor infrastructure.
+  suffix: trayScanner
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/t-ray.rsi
+    layers:
+    - state: tray-off
+      map: [ "base" ]
+  - type: TrayScanner
+    range: 1
+  - type: Item
+    sprite: _RMC14/Objects/Tools/t-ray.rsi
+    storedRotation: 0
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.TrayScannerVisual.Visual:
+        base:
+          On: { state: tray-on }
+          Off: { state: tray-off }
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/multitool_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/multitool_drop.ogg
+      params:
+        volume: -4
+  - type: Multitool
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Suitstorage
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 150
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: [Crowbar, RMCBaseMeleeWeapon]
+  id: CMCrowbar
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/crowbar.rsi
+    state: icon
+  - type: Item
+    size: Small
+    sprite: null
+    storedSprite: null
+    shape: null
+    storedRotation: 0
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/crowbar_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/crowbar_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/crowbar_drop.ogg
+      params:
+        volume: -4
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Belt
+    - Suitstorage
+  - type: Prying
+    speedModifier: 100000
+  - type: ToolTileCompatible
+    delay: 0
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 50
+
+- type: entity
+  parent: CMCrowbar
+  id: CMCrowbarRed
+  name: emergency crowbar
+  components:
+  - type: Tag
+    tags:
+    - Crowbar
+    - CrowbarRed
+  - type: Sprite
+    state: red-icon
+  - type: Item
+    heldPrefix: red
+    storedSprite: null
+
+- type: entity
+  parent: BaseItem
+  id: MaintenanceJack
+  name: vehicle maintenance jack
+  description: A heavy-duty hardpoint jack for servicing armored vehicles. Works where a crowbar can't.
+  suffix: RMC
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    slots:
+    - Suitstorage
+    - Belt
+  - type: Tool
+    qualities:
+    - VehicleServicing
+    speedModifier: 1.0
+  - type: PhysicalComposition
+    materialComposition:
+      Steel: 200
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 12
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+  - type: CMSurgeryTool
+  - type: CMRetractor
+  - type: CMBoneSetter
+  - type: CMUImprovisedSurgeryTool
+    delayMultiplier: 1.8
+    mishapChance: 0.14
+    mishapDamageType: Blunt
+    mishapDamageAmount: 5
+    failurePenalty: 1
+
+- type: entity
+  parent: CMCrowbar
+  id: RMCTacticalPrybar
+  name: tactical prybar
+  description: Holding this makes you want to raid a townhouse filled with terrorists. Also doubles as a blunt weapon.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/tac_prybar.rsi
+  - type: Item
+    sprite: _RMC14/Objects/Tools/crowbar.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Tools/crowbar.rsi
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 25
+    soundHit:
+      path: /Audio/_RMC14/Weapons/genhit3.ogg
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+
+- type: entity
+  parent: [BaseItem, RMCBaseMeleeWeapon]
+  id: RMCMaintenanceJack
+  name: maintenance jack
+  description: A heavy synthetic-grade maintenance tool that can pry doors and work as a wrench.
+  suffix: RMC, Synth
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    storedRotation: 0
+  - type: Clothing
+    quickEquip: false
+    sprite: _RMC14/Objects/Tools/maintenance_jack.rsi
+    slots:
+    - Back
+    - Suitstorage
+  - type: Tool
+    qualities:
+    - Prying
+    - Anchoring
+    - VehicleServicing
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+  - type: Prying
+    pryPowered: true
+    force: true
+    speedModifier: 2
+    useSound:
+      path: /Audio/Items/jaws_pry.ogg
+  - type: ToolTileCompatible
+    delay: 0
+  - type: MeleeWeapon
+    wideAnimationRotation: -135
+    attackRate: 0.8
+    damage:
+      types:
+        Blunt: 20
+        Structural: 30
+    soundHit:
+      collection: MetalThud
+  - type: DamageImpactProfile
+    melee:
+      contact: Crush
+      penetration: None
+      energy: Medium
+  - type: RMCSynthItemRestriction
+    checkPickup: false
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 200
+
+- type: entity
+  parent: HandLabeler
+  id: CMHandLabeler
+  suffix: RMC14
+  components:
+    - type: Sprite
+      sprite: _RMC14/Objects/Tools/hand_labeler.rsi
+      state: hand_labeler
+    - type: Item
+      size: Small
+      sprite: _RMC14/Objects/Tools/hand_labeler.rsi
+      storedRotation: 0
+    - type: RMCHandLabeler
+    - type: UserInterface
+      interfaces:
+        enum.HandLabelerUiKey.Key:
+          type: HandLabelerBoundUserInterface
+        enum.RMCHandLabelerUiKey.PillBottleColor:
+          type: RMCHandLabelerPillBottleColorBui
+    - type: PhysicalComposition
+      materialComposition:
+        CMSteel: 125
+
+- type: entity
+  parent: Shovel
+  id: RMCShovel
+  suffix: RMC
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/shovel.rsi
+    state: icon
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Tools/shovel.rsi
+    storedRotation: 0
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Suitstorage
+  - type: EntrenchingTool
+  - type: RMCShovel
+  - type: UseDelay
+    delay: 0.25
+  - type: Appearance
+  - type: XenoTunnelFiller
+  - type: Shovel
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 50
+
+#PVE Tool
+- type: entity
+  parent: BaseItem
+  id: RMCWireSnappers
+  name: wire snappers
+  description: The jaws are perfect for snipping large wires and other small metal bits, but are a bit too heavy for delicate work.
+  suffix: INSTANT, Repeating
+  components:
+  - type: RMCDeviceBreaker
+    useSound: /Audio/Items/jaws_pry.ogg
+  - type: Sprite
+    sprite: _RMC14/Objects/Tools/wirecutters.rsi
+    layers:
+    - state: cutters
+      map: [ "enum.DamageStateVisualLayers.Base" ]
+    - state: cutters-cutty-thingy
+      color: "#808080"
+  - type: RandomSprite
+    available:
+    - enum.DamageStateVisualLayers.Base:
+        cutters: Rainbow
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Tools/wirecutters.rsi
+    storedRotation: 0
+  - type: EmitSoundOnPickup
+    sound:
+      path: /Audio/_RMC14/Handling/wirecutter_pickup.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnDrop
+    sound:
+      path: /Audio/Items/wirecutter_drop.ogg
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      path: /Audio/Items/wirecutter_drop.ogg
+      params:
+        volume: -4
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - Suitstorage
+
+- type: entity
+  parent: RMCWireSnappers
+  id: RMCWireSnappersNoRepeat
+  suffix: INSTANT
+  components:
+  - type: RMCDeviceBreaker
+    repeat: false
+
+- type: entity
+  parent: RMCWireSnappers
+  id: RMCWireSnappersNormal
+  suffix: Slow
+  components:
+  - type: RMCDeviceBreaker
+    doAfterTime: 7

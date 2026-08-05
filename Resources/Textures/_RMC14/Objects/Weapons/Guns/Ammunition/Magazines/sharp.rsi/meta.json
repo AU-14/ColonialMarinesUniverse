@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-devs/cmss13 PR #8569 (Windhealer, totalepicness, monkeysfist101)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "sharp_explosive_mag"
+    },
+    {
+      "name": "sharp_explosive_mag_e"
+    },
+    {
+      "name": "sharp_incendiary_mag"
+    },
+    {
+      "name": "sharp_incendiary_mag_e"
+    },
+    {
+      "name": "sharp_flechette_mag"
+    },
+    {
+      "name": "sharp_flechette_mag_e"
+    }
+  ]
+}

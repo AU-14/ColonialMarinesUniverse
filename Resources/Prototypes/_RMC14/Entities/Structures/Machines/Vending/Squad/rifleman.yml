@@ -1,0 +1,250 @@
+# RIFLEMAN
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechEquipment
+  name: ColMarTech automated marine equipment rack
+  description: An automated rack hooked up to a colossal storage of Marine Rifleman standard-issue equipment.
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessMarineRifleman" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/equipment.rsi
+  - type: CMAutomatedVendor
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMVendorBundleRiflemanApparel
+      - id: CMMRE
+        name: MRE
+      #- id: CMMap # TODO: Make a map
+    - name: Armor
+      choices: { CMArmour: 1 }
+      entries:
+      - id: RMCArmorVestSquad
+        name: armor vest
+      - id: RMCArmorM3LightVariants
+        name: light armor
+      - id: RMCArmorM3MediumVariants
+        name: medium armor
+        recommended: true
+      - id: RMCArmorM3HeavyVariants
+        name: heavy armor
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: CMBackpackMarine
+        replaceSlot: back
+        name: backpack
+      - id: CMSatchelMarine
+        replaceSlot: back
+        name: satchel
+        recommended: true
+      - id: RMCScabbardShotgun
+    - name: Belt
+      choices: { CMBelt: 1 }
+      entries:
+      - id: CMBeltMarine
+        recommended: true
+      - id: CMBeltKnifeFilled
+        name: M276 knife rig (Full)
+      - id: RMCBeltHolsterPistol
+      - id: RMCBeltHolsterRevolver
+      - id: RMCBeltHolsterSMG
+      - id: RMCBeltHolsterSMGPouch
+      - id: RMCM82FHolster
+      - id: RMCM276ShotgunShellLoadingRig
+      - id: CMBeltUtility
+      - id: RMCBeltUtilityGeneral
+      - id: RMCBeltGrenade
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchBayonetFill
+        name: bayonet sheath (Full)
+      - id: RMCPouchFirstAidInjectors
+        name: first-aid pouch (refillable injectors)
+        recommended: true
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints comma
+        recommended: true
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+        recommended: true
+      - id: RMCPouchFlareFilled
+        name: Flare pouch (Full)
+        recommended: true
+      - id: RMCPouchDocumentSmall
+      - id: RMCPouchMagazine
+      - id: RMCPouchShotgun
+      - id: RMCPouchGeneral
+      - id: RMCPouchMagazinePistol
+      - id: RMCPouchPistol
+    - name: Mask
+      choices: { CMMask: 1 }
+      entries:
+      - id: CMMaskGas
+      - id: CMMaskCoif
+      - id: RMCMaskRebreather
+    - name: Engineering Supplies
+      entries:
+      - id: CMEntrenchingTool
+        points: 5
+      - id: CMSandbagEmpty25
+        name: sandbags x25
+        points: 20
+#      - id: ES-11 Mobile Fuel Canister
+#        points: 5
+      - id: CMWelderSmall
+        points: 5
+    - name: Restricted Firearms
+      entries:
+      - id: RMCGunCasePistolMK80
+        points: 15
+      - id: RMCGunCasePistolSmart
+        points: 15
+      - id: RMCM85A1Case
+        points: 30
+    - name: Explosives
+      entries:
+      - id: CMPacketGrenadeHighExplosiveFilled
+        points: 20
+      - id: RMCPacketGrenadeIncendiaryFilled
+        points: 20
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        points: 20
+      - id: RMCPacketGrenadeSmokeFilled
+        points: 10
+      - id: RMCPacketGrenadeM74AGMFFilled
+        points: 15
+      - id: RMCPacketGrenadeM74AGMIFilled
+        points: 15
+      - id: RMCPacketGrenadeM74AGMSFilled
+        points: 10
+      - id: RMCPacketGrenadeM74AGMSHornetFilled
+        points: 15
+      - id: RMCBoxClaymoreMineFilled
+        points: 20
+    - name: Primary Ammunition
+      entries:
+      - id: CMMagazineRifleM4SPRAP
+        points: 10
+      - id: CMMagazineRifleM4SPRExt
+        points: 10
+      - id: CMMagazineSMGM63AP
+        points: 10
+      - id: CMMagazineSMGM63Ext
+        points: 10
+      - id: CMMagazineRifleM54CAP
+        points: 10
+      - id: CMMagazineRifleM54CExt
+        points: 10
+    - name: Sidearm Ammunition
+      entries:
+      - id: RMCMagazinePistolM13Ext
+        points: 6
+      #- id: M44 Heavy Speedloader
+      #  points: 10
+      - id: RMCSpeedLoader44Marksman
+        points: 10
+      - id: RMCMagazinePistolM1984HP
+        points: 5
+      - id: RMCMagazinePistolM1984AP
+        points: 5
+      - id: CMMagazinePistolMK80
+        points: 5
+      - id: RMCMagazinePistolSU6
+        points: 10
+    - name: Armors
+      entries:
+      - id: CMArmorB12
+        points: 30
+      - id: CMArmorM4
+        points: 20
+    - name: Clothing Items
+      entries:
+      - id: CMWebbing
+        points: 10
+      - id: RMCWebbingBlackSmall
+        points: 10
+      - id: CMWebbingBrown
+        points: 15
+      - id: CMWebbingBlack
+        points: 15
+      - id: RMCWebbingLegPouch
+        points: 15
+      - id: RMCWebbingLegPouchBlack
+        points: 15
+      - id: RMCWebbingDropPouch
+        points: 15
+      - id: RMCWebbingDropPouchBlack
+        points: 15
+      - id: CMWebbingHolster
+        points: 15
+      - id: RMCWebbingHolsterBlack
+        points: 15
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        points: 15
+      - id: RMCPouchMacheteFilled
+        name: machete pouch (Full)
+        points: 15
+      - id: RMCBackpackRTO
+        replaceSlot: back
+        points: 15
+      - id: RMCPouchFuelTank
+        points: 5
+      - id: RMCWeldingGoggles
+        points: 5
+      - id: RMCPouchSling
+        points: 15
+      - id: RMCPouchGeneralLarge
+        points: 15
+    - name: Utilities
+      entries:
+      - id: CMRollerBedSpawnFolded
+        points: 5
+      - id: RMCFulton20
+        points: 5
+      - id: CMFireExtinguisherPortable
+        points: 5
+      - id: RMCMotionDetector
+        points: 15
+      - id: RMCIntelDetector
+        points: 15
+      - id: RMCWhistle
+        points: 5
+    - name: Binoculars
+      entries:
+      - id: RMCBinoculars
+        points: 5
+      - id: RMCRangefinder
+        points: 10
+      - id: RMCLaserDesignator
+        points: 15
+    - name: Helmet Optics
+      entries:
+      - id: RMCVisorMedical
+        points: 15
+      - id: RMCVisorWelding
+        points: 5
+    - name: Pamphlets
+      entries:
+      - id: CMPamphletJTAC
+        points: 15
+      - id: CMPamphletEngineer
+        points: 15
+    - name: Radio Keys
+      entries:
+      - id: CMEncryptionKeyEngineer
+        points: 5
+      - id: CMEncryptionKeyIntel
+        points: 5
+      - id: CMEncryptionKeyJTAC
+        points: 5
+      - id: CMEncryptionKeyRequisition
+        points: 5
+      - id: CMEncryptionKeyMedical
+        points: 5

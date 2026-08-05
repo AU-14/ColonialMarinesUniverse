@@ -1,0 +1,160 @@
+# region Base
+- type: construction
+  abstract: true
+  id: BaseItemMisc
+  category: construction-category-misc
+  objectType: Item
+# endregion
+
+# region Weapons
+- type: construction
+  parent: BaseWeapon
+  id: bat
+  graph: WoodenBat
+  targetNode: bat
+
+- type: construction
+  parent: BaseWeapon
+  id: makeshiftstunprod
+  graph: makeshiftstunprod
+  targetNode: msstunprod
+
+- type: construction
+  parent: BaseWeapon
+  id: pneumaticcannon
+  graph: PneumaticCannon
+  targetNode: cannon
+
+- type: construction
+  parent: BaseWeapon
+  id: improvisedshotgun
+  graph: ImprovisedShotgunGraph
+  targetNode: shotgun
+
+- type: construction
+  parent: BaseWeapon
+  id: ShellShotgunImprovised
+  graph: ImprovisedShotgunShellGraph
+  targetNode: shell
+
+- type: construction
+  parent: BaseWeapon
+  id: riflestock
+  graph: RifleStockGraph
+  targetNode: riflestock
+
+- type: construction
+  parent: BaseWeapon
+  id: firebomb
+  graph: FireBomb
+  targetNode: firebomb
+
+- type: construction
+  parent: BaseWeapon
+  id: pipebomb
+  graph: PipeBomb
+  targetNode: pipebomb
+# endregion Weapons
+
+# region Clothing
+- type: construction
+  parent: BaseClothing
+  id: ghost_sheet
+  graph: GhostSheet
+  targetNode: ghost_sheet
+
+- type: construction
+  parent: BaseClothing
+  id: flowerwreath
+  graph: flowerwreath
+  targetNode: flowerwreath
+
+- type: construction
+  parent: BaseClothing
+  id: strawHat
+  graph: StrawHat
+  targetNode: strawhat
+
+- type: construction
+  parent: BaseClothing
+  id: HardsuitGoliath
+  graph: HardsuitGoliath
+  targetNode: hardsuitGoliath
+
+- type: construction
+  parent: BaseClothing
+  id: scraparmor
+  graph: scraparmor
+  targetNode: scraparmorfinished
+
+- type: construction
+  parent: BaseClothing
+  id: scraphelmet
+  graph: scraphelmet
+  targetNode: scraphelmet
+
+- type: construction
+  parent: BaseClothing
+  id: ClothingBagPet
+  graph: ClothingBagPet
+  targetNode: bagPet
+# endregion Clothing
+
+# region Tools
+- type: construction
+  parent: BaseTool
+  id: makeshifthandcuffs
+  graph: makeshifthandcuffs
+  targetNode: cuffscable
+
+- type: construction
+  parent: BaseTool
+  id: muzzle
+  graph: Muzzle
+  targetNode: muzzle
+
+- type: construction
+  parent: BaseTool
+  id: gauze
+  graph: Gauze
+  targetNode: gauze
+
+- type: construction
+  parent: BaseTool
+  id: blindfold
+  graph: Blindfold
+  targetNode: blindfold
+
+- type: construction
+  parent: BaseTool
+  id: rag
+  graph: Rag
+  targetNode: rag
+
+- type: construction
+  parent: BaseTool
+  id: rollingpin
+  graph: WoodenRollingPin
+  targetNode: rollingpin
+# endregion Tools
+
+# region Miscellaneous
+- type: construction
+  parent: BaseItemMisc
+  id: CottonWovenCloth
+  graph: CottonObjects
+  targetNode: cottoncloth
+  category: construction-category-materials
+
+- type: construction
+  parent: BaseItemMisc
+  id: PetCarrier
+  graph: PetCarrier
+  targetNode: petCarrier
+
+- type: construction
+  parent: BaseItemMisc
+  id: RepairMothershipPinpointer
+  graph: RepairMothershipPinpointer
+  targetNode: repairedPinpointer
+# endregion Miscellaneous

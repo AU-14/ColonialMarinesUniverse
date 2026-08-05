@@ -1,0 +1,344 @@
+using System.Numerics;
+using Content.Shared._RMC14.Evasion;
+using Content.Shared._RMC14.Random;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared.Examine;
+using Content.Shared.FixedPoint;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC.Systems;
+using Content.Shared.Popups;
+using Content.Shared.Projectiles;
+using Content.Shared.Whitelist;
+using Robust.Shared.Network;
+using Robust.Shared.Physics.Events;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Timing;
+
+namespace Content.Shared._RMC14.Projectiles;
+
+public sealed partial class RMCProjectileSystem : EntitySystem
+{
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _npcFaction = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<DeleteOnCollideComponent, StartCollideEvent>(OnDeleteOnCollideStartCollide);
+        SubscribeLocalEvent<ModifyTargetOnHitComponent, ProjectileHitEvent>(OnModifyTargetOnHit);
+        SubscribeLocalEvent<ProjectileMaxRangeComponent, MapInitEvent>(OnProjectileMaxRangeMapInit);
+        SubscribeLocalEvent<ProjectileMaxRangeComponent, PreventCollideEvent>(OnProjectileMaxRangePreventCollide);
+
+        SubscribeLocalEvent<RMCProjectileDamageFalloffComponent, MapInitEvent>(OnFalloffProjectileMapInit);
+        SubscribeLocalEvent<RMCProjectileDamageFalloffComponent, ProjectileHitEvent>(OnFalloffProjectileHit);
+
+        SubscribeLocalEvent<RMCProjectileAccuracyComponent, MapInitEvent>(OnProjectileAccuracyMapInit);
+        SubscribeLocalEvent<RMCProjectileAccuracyComponent, PreventCollideEvent>(OnProjectileAccuracyPreventCollide);
+
+        SubscribeLocalEvent<SpawnOnTerminateComponent, MapInitEvent>(OnSpawnOnTerminatingMapInit);
+        SubscribeLocalEvent<SpawnOnTerminateComponent, EntityTerminatingEvent>(OnSpawnOnTerminatingTerminate);
+        SubscribeLocalEvent<SpawnOnTerminateComponent, ProjectileHitEvent>(OnSpawnOnTerminateProjectileHit);
+
+        SubscribeLocalEvent<PreventCollideWithDeadComponent, PreventCollideEvent>(OnPreventCollideWithDead);
+    }
+
+    private void OnDeleteOnCollideStartCollide(Entity<DeleteOnCollideComponent> ent, ref StartCollideEvent args)
+    {
+        if (_net.IsServer)
+            QueueDel(ent);
+    }
+
+    private void OnModifyTargetOnHit(Entity<ModifyTargetOnHitComponent> ent, ref ProjectileHitEvent args)
+    {
+        if (!_whitelist.IsWhitelistPassOrNull(ent.Comp.Whitelist, args.Target))
+            return;
+        if (ent.Comp.Add is { } add)
+            EntityManager.AddComponents(args.Target, add);
+    }
+
+    private void OnProjectileMaxRangeMapInit(Entity<ProjectileMaxRangeComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.Origin = _transform.GetMoverCoordinates(ent);
+        Dirty(ent);
+    }
+
+    private void OnFalloffProjectileMapInit(Entity<RMCProjectileDamageFalloffComponent> projectile, ref MapInitEvent args)
+    {
+        projectile.Comp.ShotFrom = _transform.GetMoverCoordinates(projectile.Owner);
+        Dirty(projectile);
+    }
+
+    private void OnFalloffProjectileHit(Entity<RMCProjectileDamageFalloffComponent> projectile, ref ProjectileHitEvent args)
+    {
+        if (projectile.Comp.ShotFrom == null || projectile.Comp.MinRemainingDamageMult < 0)
+            return;
+
+        var distance = (_transform.GetMoverCoordinates(args.Target).Position - projectile.Comp.ShotFrom.Value.Position).Length();
+        var minDamage = args.Damage.GetTotal() * projectile.Comp.MinRemainingDamageMult;
+        foreach (var threshold in projectile.Comp.Thresholds)
+        {
+            var pastEffectiveRange = distance - threshold.Range;
+
+            if (pastEffectiveRange <= 0)
+                continue;
+
+            var totalDamage = args.Damage.GetTotal();
+            if (totalDamage <= minDamage)
+                break;
+
+            var extraMult = threshold.IgnoreModifiers ? 1 : projectile.Comp.WeaponMult;
+            var minMult = FixedPoint2.Min(minDamage / totalDamage, 1);
+
+            args.Damage *= FixedPoint2.Clamp((totalDamage - pastEffectiveRange * threshold.Falloff * extraMult) / totalDamage, minMult, 1);
+        }
+    }
+
+    public void SetProjectileFalloffWeaponMult(Entity<RMCProjectileDamageFalloffComponent> projectile, FixedPoint2 mult, float range)
+    {
+        var count = 0;
+        while (projectile.Comp.Thresholds.Count > count)
+        {
+            var threshold = projectile.Comp.Thresholds[count];
+            projectile.Comp.Thresholds[count] = threshold with { Range = threshold.Range + range };
+            count++;
+        }
+
+        projectile.Comp.WeaponMult = mult;
+        Dirty(projectile);
+    }
+
+    private void OnProjectileAccuracyMapInit(Entity<RMCProjectileAccuracyComponent> projectile, ref MapInitEvent args)
+    {
+        projectile.Comp.ShotFrom = _transform.GetMoverCoordinates(projectile.Owner);
+        projectile.Comp.Tick = _timing.CurTick.Value;
+
+        Dirty(projectile);
+    }
+
+    private void OnProjectileAccuracyPreventCollide(Entity<RMCProjectileAccuracyComponent> projectile, ref PreventCollideEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        var netOther = GetNetEntity(args.OtherEntity);
+        if (projectile.Comp.Dodged.Contains(netOther))
+        {
+            args.Cancelled = true;
+            return;
+        }
+
+        var ev = new RMCBeforeProjectileAccuracyEvent(projectile);
+        RaiseLocalEvent(args.OtherEntity, ref ev);
+
+        if (!ev.GuaranteedMiss)
+        {
+            if (projectile.Comp.ForceHit || projectile.Comp.ShotFrom == null)
+                return;
+
+            if (!TryComp(projectile.Owner, out ProjectileComponent? projectileComponent))
+                return;
+
+            if (!TryComp(args.OtherEntity, out EvasionComponent? evasionComponent))
+                return;
+
+            var accuracy = projectile.Comp.Accuracy;
+            var targetCoords = _transform.GetMoverCoordinates(args.OtherEntity);
+            var distance = (targetCoords.Position - projectile.Comp.ShotFrom.Value.Position).Length();
+
+            foreach (var threshold in projectile.Comp.Thresholds)
+            {
+                var pastRange = distance - threshold.Range;
+
+                if (threshold.Buildup)
+                {
+                    if (pastRange >= 0)
+                        continue;
+
+                    accuracy += threshold.Falloff * pastRange;
+                    continue;
+                }
+
+                if (pastRange <= 0)
+                    continue;
+
+                accuracy -= threshold.Falloff * pastRange;
+            }
+
+            if (!_examine.InRangeUnOccluded(_transform.ToMapCoordinates(projectile.Comp.ShotFrom.Value), _transform.ToMapCoordinates(targetCoords), distance, null))
+                accuracy += (int)AccuracyModifiers.TargetOccluded;
+
+            if (!projectile.Comp.IgnoreFriendlyEvasion && IsProjectileTargetFriendly(projectile.Owner, args.OtherEntity))
+                accuracy -= evasionComponent.ModifiedEvasionFriendly;
+
+            accuracy -= evasionComponent.ModifiedEvasion;
+
+            accuracy = accuracy > projectile.Comp.MinAccuracy ? accuracy : projectile.Comp.MinAccuracy;
+
+            var targetId = (uint) GetNetEntity(args.OtherEntity).Id;
+            var randomSeed = (long) (uint) projectile.Comp.Tick << 32 | targetId;
+            var random = new Xoshiro128P(projectile.Comp.GunSeed, randomSeed).NextFloat(0f, 100f);
+
+            if (accuracy >= random)
+                return;
+        }
+
+        args.Cancelled = true;
+
+        projectile.Comp.Dodged.Add(netOther);
+        Dirty(projectile);
+    }
+
+    private bool IsProjectileTargetFriendly(EntityUid projectile, EntityUid target)
+    {
+        if (!TryComp(projectile, out ProjectileComponent? projectileComp) || projectileComp.Shooter == null)
+            return false;
+
+        return _npcFaction.IsEntityFriendly(projectileComp.Shooter.Value, target);
+    }
+
+    private void OnSpawnOnTerminatingMapInit(Entity<SpawnOnTerminateComponent> ent, ref MapInitEvent args)
+    {
+        ent.Comp.Origin = _transform.GetMoverCoordinates(ent);
+        Dirty(ent);
+    }
+
+    private void OnSpawnOnTerminatingTerminate(Entity<SpawnOnTerminateComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        if (!TryComp(ent, out TransformComponent? transform))
+            return;
+
+        if (TerminatingOrDeleted(transform.ParentUid))
+            return;
+
+        var coordinates = transform.Coordinates;
+        if (ent.Comp.Origin is { } origin &&
+            coordinates.TryDelta(EntityManager, _transform, origin, out var delta))
+        {
+            var deltaLength = delta.Length();
+
+            if (deltaLength > 0f)
+            {
+                var direction = delta / deltaLength;
+
+                if (TryComp(ent, out ProjectileMaxRangeComponent? projectileMaxRange) &&
+                    deltaLength > projectileMaxRange.Max)
+                {
+                    deltaLength = projectileMaxRange.Max;
+                    delta = direction * deltaLength;
+                    coordinates = origin.Offset(delta);
+                }
+
+                if (ent.Comp.AdjustSpawn && ent.Comp.SpawnOffset != 0f)
+                    coordinates = coordinates.Offset(direction * ent.Comp.SpawnOffset);
+            }
+        }
+
+        var spawn = SpawnAtPosition(ent.Comp.Spawn, coordinates);
+        _hive.SetSameHive(ent.Owner, spawn);
+
+        if (ent.Comp.Popup is { } popup)
+            _popup.PopupCoordinates(Loc.GetString(popup), coordinates, ent.Comp.PopupType ?? PopupType.Small);
+    }
+
+    private void OnSpawnOnTerminateProjectileHit(Entity<SpawnOnTerminateComponent> ent, ref ProjectileHitEvent args)
+    {
+        ent.Comp.AdjustSpawn = true;
+        Dirty(ent);
+    }
+
+    public void SetSpawnOffset(Entity<SpawnOnTerminateComponent> ent, float offset)
+    {
+        ent.Comp.SpawnOffset = offset;
+        Dirty(ent);
+    }
+
+    private void OnPreventCollideWithDead(Entity<PreventCollideWithDeadComponent> ent, ref PreventCollideEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (_mobState.IsDead(args.OtherEntity))
+            args.Cancelled = true;
+    }
+
+    public void SetMaxRange(EntityUid projectile, float max)
+    {
+        var maxRange = EnsureComp<ProjectileMaxRangeComponent>(projectile);
+
+        maxRange.Max = max;
+        Dirty(projectile, maxRange);
+    }
+
+    private void StopProjectile(Entity<ProjectileMaxRangeComponent> ent)
+    {
+        if (ent.Comp.Delete)
+        {
+            if (_net.IsServer || IsClientSide(ent))
+                QueueDel(ent);
+        }
+        else
+        {
+            _physics.SetLinearVelocity(ent, Vector2.Zero);
+            RemCompDeferred<ProjectileMaxRangeComponent>(ent);
+        }
+    }
+
+    private void OnProjectileMaxRangePreventCollide(Entity<ProjectileMaxRangeComponent> ent, ref PreventCollideEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (ent.Comp.Origin is not { } origin)
+            return;
+
+        if (!origin.TryDistance(EntityManager, _transform.GetMoverCoordinates(ent), out var distance))
+            return;
+
+        if (distance < ent.Comp.Max)
+            return;
+
+        args.Cancelled = true;
+        StopProjectile(ent);
+    }
+
+    public void SetProjectileAccuracy(EntityUid projectile, float accuracy)
+    {
+        var accuracyComponent = EnsureComp<RMCProjectileAccuracyComponent>(projectile);
+
+        accuracyComponent.Accuracy = accuracy;
+        Dirty(projectile, accuracyComponent);
+    }
+
+    public override void Update(float frameTime)
+    {
+        var maxQuery = EntityQueryEnumerator<ProjectileMaxRangeComponent>();
+        while (maxQuery.MoveNext(out var uid, out var comp))
+        {
+            var coordinates = _transform.GetMoverCoordinates(uid);
+            if (comp.Origin is not { } origin ||
+                !coordinates.TryDistance(EntityManager, _transform, origin, out var distance))
+            {
+                StopProjectile((uid, comp));
+                continue;
+            }
+
+            if (distance < comp.Max && Math.Abs(distance - comp.Max) > 0.1f)
+                continue;
+
+            StopProjectile((uid, comp));
+        }
+    }
+}
+
+[ByRefEvent]
+public record struct ProjectileShotEvent(EntityUid? Shooter, bool Predicted = true);

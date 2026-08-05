@@ -1,0 +1,342 @@
+# Dress Shoes
+- type: entity
+  parent: RMCShoesLaceupDress
+  id: CMShoesLaceupCommander
+  name: commanding officer dress shoes
+  description: Has special soles for better trampling those underneath.
+
+- type: entity
+  abstract: true
+  id: RMCItemSlotM5Bayonet
+  suffix: Filled
+  components:
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - Knife
+          - Holdout
+          - Screwdriver
+          - RMCScalpel
+          - ThrowingKnife
+        startingItem: RMCM5Bayonet
+  - type: CMItemSlots
+    startingItem: RMCM5Bayonet
+  - type: Appearance
+
+# Black Boots
+- type: entity
+  parent: ClothingShoesMilitaryBase
+  id: CMBootsBlack
+  name: marine combat boots
+  description: Standard issue combat boots for combat scenarios or combat situations. All combat, all the time.
+  components:
+  - type: RMCCryoUnavailableOnStore
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/black.rsi
+    layers:
+    - state: icon
+    - state: filled
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+  - type: EmitSoundOnDrop
+    sound:
+      collection: RMCEquipArmor
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      collection: RMCEquipArmor
+      params:
+        volume: -4
+  - type: Clothing
+    unequipSound:
+      collection: RMCEquipArmor
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/black.rsi
+  - type: ContainerContainer
+    containers:
+      item: !type:ContainerSlot
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - Knife
+          - Holdout
+          - Screwdriver
+          - RMCScalpel
+  - type: Matchbox
+  - type: CMHolster
+  - type: CMItemSlots
+  - type: UsableWhileDevoured
+  - type: CMArmor
+    melee: 25
+    bullet: 25
+    explosionArmor: 20
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMBootsBlack]
+  id: CMBootsBlackFilled
+  suffix: Filled
+
+- type: entity
+  parent: CMBootsBlackFilled
+  id: RMCScoutShoes
+  name: infiltrator boots
+  description: A modified pair of combat boots, including several trimmed down areas and padded with cloth alongside some form of leather.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/swat.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/swat.rsi
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepCatwalk
+      params:
+        volume: -100
+        maxDistance: 0
+
+- type: entity
+  parent: CMBootsBlack
+  id: RMCShoesCombat
+  name: combat boots
+  description: When you REALLY want to turn up the heat.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/swat.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/swat.rsi
+
+# Brown Boots
+- type: entity
+  parent: CMBootsBlack
+  id: CMBootsBrown
+  description: Standard issue combat boots for combat scenarios or combat situations. All combat, all the time. These are brown.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/brown.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/brown.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMBootsBrown]
+  id: CMBootsBrownFilled
+  suffix: Filled
+
+# Urban Boots
+- type: entity
+  parent: CMBootsBlack
+  id: CMBootsUrban
+  name: urban boots
+  description: Don't go walkin' slow, the devil's on the loose.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/urban.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/urban.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMBootsUrban]
+  id: CMBootsUrbanFilled
+  suffix: Filled
+
+# Grey Boots
+- type: entity
+  parent: CMBootsBlack
+  id: CMBootsGrey
+  name: grey boots
+  description: Standard issue combat boots for combat scenarios or combat situations. All combat, all the time. These are grey.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/grey.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/grey.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMBootsGrey]
+  id: CMBootsGreyFilled
+  suffix: Filled
+
+# Jungle Boots
+- type: entity
+  parent: CMBootsBlack
+  id: CMBootsJungle
+  name: jungle boots
+  description: Don't go walkin' slow, the devil's on the loose.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/jungle.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/jungle.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, CMBootsJungle]
+  id: CMBootsJungleFilled
+  suffix: Filled
+
+# Corporate
+- type: entity
+  parent: CMBootsBlack
+  id: RMCBootsCorporate
+  name: rugged boots
+  description: These synth-leather boots seem high quality when first worn, but quickly deteriorate, especially in the environments the corporate security members these are issued to operate in. Still, better than nothing.
+
+
+# SPP
+- type: entity
+  parent: CMBootsBrown
+  id: RMCBootsSPP
+  name: military combat boots
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsSPP]
+  id: RMCBootsSPPFilled
+  suffix: Filled
+  components:
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - Knife
+          - Holdout
+          - Screwdriver
+          - RMCScalpel
+          - ThrowingKnife
+        startingItem: RMCCombatUtilityKnifeA
+  - type: CMItemSlots
+    startingItem: RMCCombatUtilityKnifeA
+
+- type: entity
+  parent: CMBootsBlack
+  id: RMCBootsSPPBlack
+  name: military combat boots
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsSPPBlack]
+  id: RMCBootsSPPBlackFilled
+  suffix: Filled
+  components:
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - Knife
+          - Holdout
+          - Screwdriver
+          - RMCScalpel
+          - ThrowingKnife
+        startingItem: RMCCombatUtilityKnifeA
+  - type: CMItemSlots
+    startingItem: RMCCombatUtilityKnifeA
+
+# PMC
+- type: entity
+  parent: CMBootsBlack
+  id: RMCBootsPMC
+  name: polished shoes
+  description: The height of fashion, but these look to be woven with protective fiber.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/jackboots.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/jackboots.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsPMC]
+  id: RMCBootsPMCFilled
+  suffix: Filled
+
+# PMC Commando
+- type: entity
+  parent: RMCBootsPMC
+  id: RMCBootsPMCCommando
+  name: PMC commando boots
+  description: A pair of heavily armored, acid-resistant boots.
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsPMCCommando]
+  id: RMCBootsPMCCommandoFilled
+  suffix: Filled
+
+# Van Bandolier
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsPMC]
+  id: RMCBootsVanBandolier
+  name: hiking boots
+  description: Over stone, over ice, through sun and sand, mud and snow, into raging water and hungry bog, these will never let you down.
+
+# CBRN
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsPMCCommando]
+  id: RMCBootsCBRN
+  name: M3 MOPP boots
+  description: M3 MOPP boots have been designed to protect the wearer from contact with any possible infection vectors or hazardous substances that may have contaminated the area of operations. This includes further enhancements in conjunction with the standard durability of M3 boots, reducing the probability of punctures or cuts as well as the effects of radiation.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/cbrn.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/cbrn.rsi
+
+- type: entity
+  parent: ClothingShoesBase
+  id: RMCShoesTychoBoots
+  name: Tycho 4000 radiation protection boots
+  description: The burn-resistant boots for the Weston-Yamada Tycho 4000 Radiation Protection Suit. It's lined with lead, and the boot is steel-toed, perfect for trouncing around detonated nuclear reactors and avoiding radiation poisoning.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/rad_boots_weya.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/rad_boots_weya.rsi
+
+
+# Royal Crown Marines
+- type: entity
+  parent: CMBootsBlack
+  id: RMCBootsRoyal
+  name: L10 pattern combat boots
+  description: Standard issue combat boots for combat scenarios or combat situations. Used by the Three Sun Empire's Royal Crown Marines.
+  suffix: TSE, RCM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/rmc.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Shoes/Boots/rmc.rsi
+
+- type: entity
+  parent: [RMCItemSlotM5Bayonet, RMCBootsRoyal]
+  id: RMCBootsRoyalFilled
+  suffix: Filled
+  components:
+  - type: ItemSlots
+    slots:
+      item:
+        name: cm-knife
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/m42a2.ogg
+        whitelist:
+          tags:
+          - Knife
+          - Holdout
+          - Screwdriver
+          - RMCScalpel
+          - ThrowingKnife
+        startingItem: RMCTantoA
+  - type: CMItemSlots
+    startingItem: RMCTantoA

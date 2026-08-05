@@ -1,0 +1,222 @@
+# Airlocks
+- type: construction
+  parent: RMC
+  name: airlock
+  id: CMAirlock
+  graph: CMAirlock
+  startNode: start
+  targetNode: airlock
+  category: construction-category-cm-structures
+  description: It opens, it closes, and maybe crushes you.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: glass airlock
+  id: CMAirlockGlass
+  graph: CMAirlock
+  startNode: start
+  targetNode: glassAirlock
+  category: construction-category-cm-structures
+  description: It opens, it closes, and maybe crushes you.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+  # Directional Windows
+- type: construction
+  parent: RMC
+  name: directional window
+  id: RMCWindowDirectional
+  graph: RMCWindowDirectional
+  startNode: start
+  targetNode: windowDirectional
+  category: construction-category-cm-structures
+  description: A glass window. It looks thin and flimsy.
+  canBuildInImpassable: true
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+  objectType: Structure
+  placementMode: SnapgridCenter
+
+- type: construction
+  parent: RMC
+  name: directional reinforced window
+  id: RMCWindowReinforcedDirectional
+  graph: RMCWindowDirectional
+  startNode: start
+  targetNode: windowReinforcedDirectional
+  category: construction-category-cm-structures
+  description: A glass window reinforced with bracing rods. It looks rather strong.
+  canBuildInImpassable: true
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+  objectType: Structure
+  placementMode: SnapgridCenter
+
+# Windoors
+- type: construction
+  parent: RMC
+  name: windoor
+  id: CMWindoor
+  graph: CMWindoor
+  startNode: start
+  targetNode: windoor
+  category: construction-category-cm-structures
+  description: It opens, it closes, and you can see through it!
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: secure windoor
+  id: CMWindoorSecure
+  graph: CMWindoor
+  startNode: start
+  targetNode: windoorSecure
+  category: construction-category-cm-structures
+  description: It opens, it closes, and you can see through it! This one looks tough.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: true
+  conditions:
+  - !type:TileNotBlocked
+
+  # Barricades
+  # AU14 building overhaul: the construction-menu barricade entries are hidden here (hide: true) and replaced by
+  # ghost-placed versions in Buildables/au14_barricades.yml, so barricades use "Place construction ghost"
+  # instead of the RMC "Build here" radial. The RMC engineering-kit radial (rmcPrototype) is a separate build
+  # prototype and is unaffected.
+- type: construction
+  parent: RMC
+  name: Metal Barricade
+  id: CMBarricadeMetal
+  graph: BarricadeMetalGraph
+  startNode: start
+  targetNode: nodeMetal
+  category: construction-category-cm-structures
+  description: A military-grade metal barricade.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeMetalRecipe
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+  rmcPrototype: RMCMetalBarricadeBuild
+
+- type: construction
+  parent: RMC
+  name: Plasteel Barricade
+  id: RMCBarricadePlasteel
+  graph: BarricadePlasteelGraph
+  startNode: start
+  targetNode: nodePlasteel
+  category: construction-category-cm-structures
+  description: A military-grade hardened plasteel barricade.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadePlasteelRecipe
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+  rmcPrototype: RMCPlasteelBarricadeBuild
+
+- type: construction
+  parent: RMC
+  name: Wooden Barricade
+  id: RMCBarricadeWood
+  graph: BarricadeWoodGraph
+  startNode: start
+  targetNode: nodeWood
+  category: construction-category-cm-structures
+  description: A makeshift wooden barricade.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeWoodRecipe
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+  rmcPrototype: RMCWoodenBarricadeBuild
+
+- type: construction
+  parent: RMC
+  name: Folding Metal Barricade
+  id: CMBarricadeMetalDoor
+  graph: BarricadeMetalDoorGraph
+  startNode: start
+  targetNode: nodeBarricadeMetalDoor
+  category: construction-category-cm-structures
+  description: A barricade that can be folded or opened to allow marines through.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadeMetalDoorRecipe
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+  rmcPrototype: RMCMetalBarricadeFoldableBuild
+
+- type: construction
+  parent: RMC
+  name: Folding Plasteel Barricade
+  id: CMBarricadePlasteelDoor
+  graph: BarricadePlasteelDoorGraph
+  startNode: start
+  targetNode: nodeBarricadePlasteelDoor
+  category: construction-category-cm-structures
+  description: A barricade that can be folded or opened to allow marines through. Made from hardened plasteel.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  hide: true # AU14 building overhaul: replaced by ghost-placed AU14BarricadePlasteelDoorRecipe
+  conditions:
+  - !type:TileNotBlocked
+  - !type:TileBarricadeClear
+  rmcPrototype: RMCPlasteelBarricadeFoldableBuild
+
+#lighting
+- type: construction
+  parent: RMC
+  name: tube light fixture
+  id: RMCLightTubeFixture
+  graph: RMCLightFixture
+  startNode: start
+  targetNode: tubeLight
+  category: construction-category-cm-structures
+  description: A wallmounted fixture for tube lights.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: bulb light fixture
+  id: RMCLightBulbFixture
+  graph: RMCLightFixture
+  startNode: start
+  targetNode: bulbLight
+  category: construction-category-cm-structures
+  description: A wallmounted fixture for bulb lights.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: false
+  conditions:
+  - !type:TileNotBlocked

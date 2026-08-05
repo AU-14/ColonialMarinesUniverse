@@ -1,0 +1,108 @@
+- type: entity
+  id: RMCBasePipe
+  abstract: true
+  components:
+  - type: Item
+    size: Small
+    shape: null
+  - type: RMCHijackRandomDamageTarget
+    category: Pipe
+  - type: VentExit
+  - type: RMCContainerEmptyOnDestruction
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+      rmc_vent_container: !type:Container
+        showEnts: False
+        occludes: True
+        ents: []
+  - type: Construction
+    graph: RMCGasPipe
+    node: broken
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -8
+      - !type:DoActsBehavior
+        acts: ["Breakage"]
+
+- type: entity
+  parent: [RMCBasePipe, GasPipeHalf]
+  id: RMCGasPipeHalf
+  suffix: RMC Half
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: VentCrawlable
+    travelDirection: South
+  - type: Construction
+    graph: RMCGasPipe
+    node: half
+
+- type: entity
+  parent: [RMCBasePipe, GasPipeStraight]
+  id: RMCGasPipeStraight
+  suffix: RMC Straight
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: VentCrawlable
+    travelDirection: Longitudinal
+  - type: Construction
+    graph: RMCGasPipe
+    node: straight
+
+- type: entity
+  parent: [RMCBasePipe, GasPipeBend]
+  id: RMCGasPipeBend
+  suffix: RMC Bend
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: VentCrawlable
+    travelDirection: SWBend
+  - type: Construction
+    graph: RMCGasPipe
+    node: bend
+
+- type: entity
+  parent: [RMCBasePipe, GasPipeTJunction]
+  id: RMCGasPipeTJunction
+  suffix: RMC TJunction
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: VentCrawlable
+    travelDirection: TSouth
+  - type: Construction
+    graph: RMCGasPipe
+    node: tjunction
+
+- type: entity
+  parent: [RMCBasePipe, GasPipeFourway]
+  id: RMCGasPipeFourway
+  suffix: RMC Fourway
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: VentCrawlable
+    travelDirection: Fourway
+  - type: Construction
+    graph: RMCGasPipe
+    node: fourway

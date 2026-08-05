@@ -1,0 +1,14 @@
+﻿- type: entity
+  parent: MobObserverBase
+  id: ReplayObserver
+  categories: [ HideSpawnMenu ]
+  save: false
+  components:
+  - type: MovementSpeedModifier
+    baseSprintSpeed: 24
+    baseWalkSpeed: 16
+  - type: Tag
+    tags:
+    - AllowPortalTraversal
+    - BypassInteractionRangeChecks
+    - PreventPortalCollision

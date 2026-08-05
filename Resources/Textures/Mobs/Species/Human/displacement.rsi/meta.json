@@ -1,0 +1,34 @@
+﻿{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "jumpsuit-female made by TheShuEd, dwarfism sprites made by SlamBamActionman (Github)",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "load": {
+        "srgb": false
+    },
+    "states": [
+        {
+            "name": "jumpsuit-female",
+            "directions": 4
+        },
+        {
+            "name": "dwarfism",
+            "directions": 4
+        },
+        {
+            "name": "dwarfism_hand_left",
+            "directions": 4
+        },
+        {
+            "name": "dwarfism_hand_right",
+            "directions": 4
+        },
+        {
+            "name": "dwarfism_vertical",
+            "directions": 1
+        }
+    ]
+}

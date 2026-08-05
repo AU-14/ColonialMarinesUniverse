@@ -1,0 +1,42 @@
+﻿- type: entity
+  abstract: true
+  parent: CMFoodBase
+  id: CMBarFoodBase
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/bar.rsi
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 8
+  - type: Item
+    size: Tiny
+    sprite: _RMC14/Objects/Consumable/Food/bar.rsi
+  - type: Extractable
+    grindableSolutionName: food
+  - type: InjectableSolution
+    solution: food
+  - type: DrawableSolution
+    solution: food
+
+- type: entity
+  parent: CMBarFoodBase
+  id: CMMarineProteinBar
+  name: stale Marine protein bar
+  description: The most fake-looking protein bar you have ever laid eyes on, covered in a substitution chocolate. The powder used to make these is a substitute of a substitute of whey substitute.
+  components:
+  - type: Sprite
+    state: protein_bar
+
+- type: entity
+  parent: CMBarFoodBase
+  id: RMCMarineRCMSnackBar
+  name: Biscuits Brown snack bar
+  description: The devil in disguise. Quick to eat, with a fairly pleasant taste and texture, but consuming more than one in a short span of time will ensure you won't be digging latrine holes out in the field for at least two weeks.
+  components:
+  - type: Sprite # TODO RMC14 find a proper sprite for this
+    sprite: _RMC14/Objects/Consumable/Food/packaged.rsi
+    state: barcardine-o

@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-24",
+  "baselineCommit": "9d23f8dd2fdb641128f3811d5b2aab6f978e1588",
+  "protocol": {
+    "mapPrototype": "USSBushRedux",
+    "loadedMaps": 5,
+    "depths": [-1, 0, 1, 2, 3],
+    "warmupTicks": 60,
+    "captureTicks": 300,
+    "pvsSamples": 30,
+    "periodicProbeSamples": 38,
+    "probeUpdateHz": 4
+  },
+  "change": {
+    "description": "Use the allocation-free OccluderSystem first-hit query for server stair-preview and visible-opening LOS checks.",
+    "behaviorPreservationEvidence": "Every before/after pair retained the same viewer, visible-opening candidate, visible-opening LOS, and stair-tile counts. All headless correctness gates passed."
+  },
+  "captures": [
+    {
+      "viewers": 16,
+      "before": {
+        "artifact": "artifacts/multiz-phase4/20260724-002912/evidence.json",
+        "sha256": "9DA99495031B9C660A9AF824E413C0DABE04BD79B1E11C18031F35CA35CADB35",
+        "probeP50Milliseconds": 1.2069999938830733,
+        "probeP95Milliseconds": 1.5376999508589506,
+        "probeP50AllocatedBytes": 106192
+      },
+      "after": {
+        "artifact": "artifacts/multiz-phase4/20260724-004457/evidence.json",
+        "sha256": "E95BE7330D9884604502DC9E7F6C57D92427312CAE52FD82DAE73FDD33AABFD0",
+        "probeP50Milliseconds": 0.6432000081986189,
+        "probeP95Milliseconds": 0.9047000203281641,
+        "probeP50AllocatedBytes": 30528
+      },
+      "workCounts": {
+        "visibleOpeningCandidates": 360,
+        "visibleOpeningLosChecks": 170,
+        "stairTiles": 1936
+      }
+    },
+    {
+      "viewers": 32,
+      "before": {
+        "artifact": "artifacts/multiz-phase4/20260724-003227/evidence.json",
+        "sha256": "2DF04C40640936BB0A34533FA6354E74CF42FA4D443CD4987514EC82367E7D59",
+        "probeP50Milliseconds": 2.6279999874532223,
+        "probeP95Milliseconds": 19.745800644159317,
+        "probeP50AllocatedBytes": 221136
+      },
+      "after": {
+        "artifact": "artifacts/multiz-phase4/20260724-004755/evidence.json",
+        "sha256": "720CD9A17E50177DE065F540A08132B0DF5A8E9B80DC5D5E9D6216AFA386C72A",
+        "probeP50Milliseconds": 2.462799893692136,
+        "probeP95Milliseconds": 3.040499985218048,
+        "probeP50AllocatedBytes": 62656
+      },
+      "workCounts": {
+        "visibleOpeningCandidates": 730,
+        "visibleOpeningLosChecks": 350,
+        "stairTiles": 3872
+      }
+    },
+    {
+      "viewers": 64,
+      "before": {
+        "artifact": "artifacts/multiz-phase4/20260724-003522/evidence.json",
+        "sha256": "D3A42BF09FF25B7DD5C976F318E759B45496ECF90634888482FA0AC11AD4BF6C",
+        "probeP50Milliseconds": 6.294299848377705,
+        "probeP95Milliseconds": 7.6211001724004745,
+        "probeP50AllocatedBytes": 442064
+      },
+      "after": {
+        "artifact": "artifacts/multiz-phase4/20260724-005001/evidence.json",
+        "sha256": "51774CCFCD397735C30F9DEFC6CF883E4BD02A2CC1930D5D89DF5ED510933671",
+        "probeP50Milliseconds": 5.014600232243538,
+        "probeP95Milliseconds": 5.957200191915035,
+        "probeP50AllocatedBytes": 127552
+      },
+      "workCounts": {
+        "visibleOpeningCandidates": 1512,
+        "visibleOpeningLosChecks": 714,
+        "stairTiles": 7744
+      }
+    }
+  ],
+  "deferredRisks": [
+    "The headless runner does not measure real PVS packets, bandwidth, late join, reconnect, or live populated-round scheduling.",
+    "The 32-viewer baseline p95 contains a host-scheduling tail and is not used as proof of a stable CPU-time ratio.",
+    "Opening candidate materialization and the remaining approximately 1.9-2.0 KB per viewer per rebuild were not changed because the measured sort cost was negligible and no visibility cap or cache is justified."
+  ]
+}

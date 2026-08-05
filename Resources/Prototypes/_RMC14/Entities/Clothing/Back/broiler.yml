@@ -1,0 +1,132 @@
+- type: entity
+  parent: [ Clothing, ClothingSlotBase ]
+  id: RMCBackpackBroiler
+  name: Broiler-T flexible refueling system
+  description: A specialized back harness that carries the Broiler-T flexible refueling system. Designed by and for USCM Pyrotechnicians.
+  components:
+  - type: Corrodible
+    isCorrodible: false
+  - type: Item
+    size: Large
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/broiler/jungle.rsi
+    state: icon
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/broiler/jungle.rsi
+    quickEquip: false
+    slots:
+    - back
+  - type: ItemMapper
+    mapLayers:
+      incinerator:
+        whitelist:
+          tags:
+          - RMCWeaponIncineratorM34T
+  - type: Appearance
+  - type: CMHolster
+    whitelist:
+      tags:
+      - RMCWeaponIncineratorM34T
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CMItemSlots
+    count: 3
+    startingItems:
+    - RMCTankFlamerLarge
+    - RMCTankFlamerLargeB
+    - RMCTankFlamerLargeX
+    slot:
+      name: Tank
+      whitelist:
+        tags:
+        - RMCTankFlamer
+        - RMCTankFlamerLarge
+  - type: ItemSlots
+    slots:
+      item:
+        name: Incinerator
+        insertVerbText: sheath-insert-verb
+        ejectVerbText: sheath-eject-verb
+        insertSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        whitelist:
+          tags:
+          - RMCWeaponIncineratorM34T
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: RMCMagneticItemReceiver
+  - type: RMCBroiler
+
+- type: entity
+  parent: [ Clothing, ClothingSlotBase ]
+  id: RMCBackpackBroilerUPP
+  name: Broiler-T flexible refueling system
+  suffix: UPP
+  description: A specialized back harness that carries the Broiler-T flexible refueling system. A reverse engineered version for UPP Pyrotechnicians.
+  components:
+  - type: Corrodible
+    isCorrodible: false
+  - type: Item
+    size: Large
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/broiler/jungle.rsi
+    state: icon
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Back/Satchels/Marines/broiler/jungle.rsi
+    quickEquip: false
+    slots:
+    - back
+  - type: ItemMapper
+    mapLayers:
+      incinerator:
+        whitelist:
+          tags:
+          - RMCWeaponFlamerSpecUPP
+  - type: Appearance
+  - type: CMHolster
+    whitelist:
+      tags:
+      - RMCWeaponFlamerSpecUPP
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: CMItemSlots
+    count: 3
+    startingItems:
+    - RMCTankFlamerLargeUPP
+    - RMCTankFlamerBLargeUPP
+    - RMCTankFlamerXLargeUPP
+    slot:
+      name: Tank
+      whitelist:
+        tags:
+        - RMCTankFlamerLargeUPP
+        - RMCTankFlamerLarge
+        - RMCTankFlamerBLargeUPP
+        - RMCTankFlamerXLargeUPP
+  - type: ItemSlots
+    slots:
+      item:
+        name: Incinerator
+        insertVerbText: sheath-insert-verb
+        ejectVerbText: sheath-eject-verb
+        insertSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        whitelist:
+          tags:
+          - RMCWeaponFlamerSpecUPP
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: RMCMagneticItemReceiver
+  - type: RMCBroiler
+
+- type: entity
+  parent: RMCBackpackBroiler
+  id: RMCBackpackBroilerEmpty
+  suffix: empty
+  components:
+  - type: CMItemSlots
+    startingItems: []

@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/b0bca8ef7dedf94a30f456544bec6ef3aaa7ec8a/icons/obj/items/items.dmi, hhttps://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_lefthand.dmi, and https://github.com/cmss13-devs/cmss13/blob/a4f7021eba78932d6cc05bdf2eb669b4dabe4ded/icons/obj/items/surgery_tools.dmi, https://github.com/cmss13-devs/cmss13/blob/0525b5ada7da1afcd9b260e76d5fea01500d9c8d/icons/obj/items/medical_stacks.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "gauze"
+    },
+    {
+      "name": "gauze-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "gauze-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "ointment"
+    },
+    {
+      "name": "ointment-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "ointment-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "line_brute"
+    },
+    {
+      "name": "line_brute-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "line_brute-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "line_burn"
+    },
+    {
+      "name": "line_burn-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "line_burn-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "traumakit"
+    },
+    {
+      "name": "traumakit-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "traumakit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "burnkit"
+    },
+    {
+      "name": "burnkit-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "burnkit-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "burnkit_upgraded"
+    },
+    {
+      "name": "traumakit_upgraded"
+    }
+  ]
+}

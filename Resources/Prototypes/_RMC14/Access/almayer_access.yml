@@ -1,0 +1,81 @@
+﻿# Marine Almayer access in marine_access.yml
+
+#Req
+- type: accessLevel
+  id: CMAccessRequisitions
+  parent: RMCBaseCommandAccess
+  name: cm-access-requisitions
+
+
+- type: accessLevel
+  id: CMAccessKitchen
+  parent: RMCBaseMarineAccess
+  name: cm-job-name-messtech
+
+
+#vehicles
+- type: accessLevel
+  id: RMCAccessVehicleCrew
+  parent: RMCBaseMarineAccess
+  name: rmc-access-vehicle-bay
+
+
+#engineering
+- type: accessLevel
+  id: CMAccessEngineering
+  parent: RMCBaseEngineeringAccess
+  name: id-card-access-level-engineering
+
+
+- type: accessLevel
+  id: CMAccessMaint
+  parent: RMCBaseEngineeringAccess
+  name: id-card-access-level-maintenance
+
+
+- type: accessLevel
+  id: CMAccessOT
+  parent: RMCBaseEngineeringAccess
+  name: cm-job-name-ordnance-tech
+
+
+#medical
+- type: accessLevel
+  id: CMAccessMedical
+  parent: RMCBaseMedicalAccess
+  name: id-card-access-level-medical
+
+- type: accessLevel
+  id: RMCAccessMorgue
+  parent: RMCBaseMedicalAccess
+  name: id-card-access-level-morgue
+
+- type: accessLevel
+  id: CMAccessChemistry
+  parent: RMCBaseMedicalAccess
+  name: id-card-access-level-chemistry
+
+
+- type: accessLevel
+  id: CMAccessResearch
+  parent: RMCBaseMedicalAccess
+  name: rmc-job-name-researcher
+
+- type: accessLevel
+  id: RMCAccessFieldDoctor
+  parent: RMCBaseMedicalAccess
+  name: rmc-job-name-field-doctor
+
+# correspondent
+- type: accessLevel
+  id: CMAccessPress
+  parent: RMCBaseHidden
+  name: cm-access-press
+
+
+# synthetic
+- type: accessLevel
+  id: RMCAccessSynth
+  parent: RMCBaseHidden
+  name: rmc-job-name-synth
+

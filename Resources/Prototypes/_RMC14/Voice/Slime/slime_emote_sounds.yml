@@ -1,0 +1,25 @@
+- type: emoteSounds
+  parent: RMCMaleHuman
+  id: RMCMaleSlime
+  sounds:
+    Squish:
+      collection: Squishes
+    RMCSlimeBubble:
+      collection: Bubbles
+    RMCSlimePop:
+      collection: Pops
+    RMCSlimeWobble:
+      collection: Wobbles
+
+- type: emoteSounds
+  parent: RMCFemaleHuman
+  id: RMCFemaleSlime
+  sounds:
+    Squish:
+      collection: Squishes
+    RMCSlimeBubble:
+      collection: Bubbles
+    RMCSlimePop:
+      collection: Pops
+    RMCSlimeWobble:
+      collection: Wobbles

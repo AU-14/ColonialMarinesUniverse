@@ -1,0 +1,60 @@
+﻿- type: entity
+  parent: BaseItem
+  id: CMFortuneCookie
+  name: fortune cookie
+  description: A golden brown fortune cookie. Some say the paper inside even has the ability to predict the future, whatever that means.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/fortune_cookie.rsi
+    state: base
+  - type: Item
+    size: Small
+    heldPrefix: null
+  - type: SpawnItemsOnUse
+    items:
+    - id: CMFortuneCookieCracked
+    - id: CMFortuneCookiePaper
+    sound:
+      path: /Audio/_RMC14/Food/pillbottle.ogg
+  - type: MREItem
+
+- type: entity
+  parent: CMFoodBase
+  id: CMFortuneCookieCracked
+  name: broken fortune cookie
+  description: A golden brown fortune cookie. Some say the paper inside even has the ability to predict the future, whatever that means.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/fortune_cookie.rsi
+    state: open
+  - type: Item
+    size: Small
+  - type: FlavorProfile
+    flavors:
+    - fortunecookie
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 1
+      reagents:
+      - ReagentId: Nutriment
+        Quantity: 1
+
+- type: entity
+  parent: FoodCookieFortune
+  id: CMFortuneCookiePaper
+  name: fortune
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Food/fortune_paper.rsi
+    state: paper
+  - type: Item
+    size: Tiny
+  - type: RandomMetadata
+    descriptionSegments: [CMFortunes]
+
+- type: localizedDataset
+  id: CMFortunes
+  values:
+    prefix: rmc-fortune-
+    count: 380

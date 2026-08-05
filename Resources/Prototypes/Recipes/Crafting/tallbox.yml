@@ -1,0 +1,41 @@
+# region Base
+- type: construction
+  abstract: true
+  id: BaseCloset
+  targetNode: done
+  category: construction-category-storage
+  canRotate: false
+# endregion
+
+# region Closets
+- type: construction
+  parent: BaseCloset
+  id: ClosetSteel
+  graph: ClosetSteel
+
+- type: construction
+  parent: BaseCloset
+  id: ClosetSteelSecure
+  graph: ClosetSteelSecure
+
+- type: construction
+  parent: BaseCloset
+  id: ClosetFreezer
+  name: construction-recipe-closet-freezer
+  graph: ClosetFreezer
+
+- type: construction
+  parent: BaseCloset
+  id: GunSafe
+  graph: GunSafe
+
+- type: construction
+  parent: BaseCloset
+  id: ClosetWall
+  graph: ClosetWall
+  placementMode: SnapgridCenter
+  canRotate: true
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition
+# endregion Closets

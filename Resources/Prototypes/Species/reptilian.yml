@@ -1,0 +1,18 @@
+- type: species
+  id: Reptilian
+  name: species-name-reptilian
+  roundStart: false
+  prototype: MobReptilian
+  defaultSkinTone: "#34a223"
+  dollPrototype: AppearanceReptilian
+  skinColoration: Hues
+  maleFirstNames: NamesReptilianMale
+  femaleFirstNames: NamesReptilianFemale
+  naming: FirstDashFirst
+  defaultSoundsBySex:
+  - MaleReptilian
+  - FemaleReptilian
+  - MaleReptilian
+  voices:
+  - MaleReptilian
+  - FemaleReptilian

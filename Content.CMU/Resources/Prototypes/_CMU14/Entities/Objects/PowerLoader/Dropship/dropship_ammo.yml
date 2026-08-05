@@ -1,0 +1,26 @@
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoRocketBansheeHorde
+  name: AIM-207 'Cutlass' rack
+  description: A four-round launch rack of AIM-207 "Cutlass" missiles modified for ground strikes. Originally an air-to-air missile, the Cutlass was adapted with a simplified guidance package and a proximity-fused warhead, allowing the rack to disperse all four rockets in a wide saturation pattern over a designated target area. It can be loaded into the LAU-444 Guided Missile Launcher.
+  components:
+  - type: Sprite
+    layers:
+    - state: banshee
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    rounds: 4
+    maxRounds: 4
+    roundsPerShot: 4
+    bulletSpread: 5
+    travelTime: 6
+    explosion:
+      total: 190
+      slope: 11
+      max: 78
+    impactEffects:
+    - RMCEffectExplosionParticle
+    - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 700

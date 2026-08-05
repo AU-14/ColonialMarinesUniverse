@@ -1,0 +1,425 @@
+using Content.Shared._CMU14.Doors;
+using Content.Shared._RMC14.Marines.Announce;
+using Content.Shared._RMC14.Power;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Access.Systems;
+using Content.Shared.Directions;
+using Content.Shared.Doors;
+using Content.Shared.Doors.Components;
+using Content.Shared.Doors.Systems;
+using Content.Shared.GameTicking;
+using Content.Shared.Interaction;
+using Content.Shared.Popups;
+using Content.Shared.Prying.Components;
+using Content.Shared.Prying.Systems;
+using Content.Shared.Tools.Components;
+using Content.Shared.Tools.Systems;
+using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Map.Enumerators;
+using Robust.Shared.Network;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Systems;
+using Robust.Shared.Player;
+using Robust.Shared.Timing;
+using Robust.Shared.Audio.Systems;
+
+namespace Content.Shared._RMC14.Doors;
+
+public sealed partial class CMDoorSystem : EntitySystem
+{
+    [Dependency] private AccessReaderSystem _accessReader = default!;
+    [Dependency] private SharedMarineAnnounceSystem _announce = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDoorSystem _doors = default!;
+    [Dependency] private SharedGameTicker _gameTicker = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCPowerSystem _rmcPower = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private WeldableSystem _weldable = default!;
+
+    private EntityQuery<DoorComponent> _doorQuery;
+    private EntityQuery<CMDoubleDoorComponent> _doubleQuery;
+    private readonly HashSet<EntityUid> _pairCloseCheck = new();
+
+    public override void Initialize()
+    {
+        _doorQuery = GetEntityQuery<DoorComponent>();
+        _doubleQuery = GetEntityQuery<CMDoubleDoorComponent>();
+
+        SubscribeLocalEvent<CMDoubleDoorComponent, DoorStateChangedEvent>(OnDoorStateChanged);
+        SubscribeLocalEvent<CMDoubleDoorComponent, BeforeDoorClosedEvent>(OnDoubleDoorBeforeClosed);
+        SubscribeLocalEvent<CMDoubleDoorComponent, WeldableChangedEvent>(OnDoubleDoorWeldChanged);
+        SubscribeLocalEvent<CMDoubleDoorComponent, EntityTerminatingEvent>(OnDoubleDoorTerminating);
+
+        SubscribeLocalEvent<RMCDoorButtonComponent, ActivateInWorldEvent>(OnButtonActivateInWorld);
+
+        SubscribeLocalEvent<DoorComponent, RMCDoorPryEvent>(OnDoorPry);
+
+        SubscribeLocalEvent<DoorComponent, RMCBeforePryEvent>(OnBeforePry);
+
+        SubscribeLocalEvent<RMCPodDoorComponent, GetPryTimeModifierEvent>(OnPodDoorGetPryTimeModifier);
+
+        SubscribeLocalEvent<LayerChangeOnWeldComponent, DoorBoltsChangedEvent>(OnDoorBoltStateChanged);
+
+        SubscribeLocalEvent<RMCOpenOnlyWhenUnanchoredComponent, BeforeDoorClosedEvent>(OnOpenOnlyWhenUnanchoredBeforeClosed);
+    }
+
+    private void OnDoorStateChanged(Entity<CMDoubleDoorComponent> door, ref DoorStateChangedEvent args)
+    {
+        switch (args.State)
+        {
+            case DoorState.Opening:
+                Open(door);
+                break;
+            case DoorState.Closing:
+                Close(door);
+                break;
+        }
+    }
+
+    private void OnDoubleDoorBeforeClosed(Entity<CMDoubleDoorComponent> ent, ref BeforeDoorClosedEvent args)
+    {
+        if (_pairCloseCheck.Contains(ent.Owner))
+            return;
+
+        if (!TryGetPairedDoubleDoor(ent, out var paired))
+            return;
+
+        if (!_doorQuery.TryGetComponent(paired, out var pairedDoor))
+            return;
+
+        _pairCloseCheck.Add(ent.Owner);
+        _pairCloseCheck.Add(paired.Owner);
+
+        try
+        {
+            if (!_doors.CanClose(paired.Owner, pairedDoor, partial: args.Partial))
+                args.Cancel();
+        }
+        finally
+        {
+            _pairCloseCheck.Remove(ent.Owner);
+            _pairCloseCheck.Remove(paired.Owner);
+        }
+    }
+
+    private void OnDoubleDoorWeldChanged(Entity<CMDoubleDoorComponent> ent, ref WeldableChangedEvent args)
+    {
+        if (!TryGetPairedDoubleDoor(ent, out var paired))
+            return;
+
+        if (!TryComp<WeldableComponent>(paired, out var weldable) ||
+            weldable.IsWelded == args.IsWelded)
+        {
+            return;
+        }
+
+        _weldable.SetWeldedState(paired.Owner, args.IsWelded, weldable);
+    }
+
+    private void OnDoubleDoorTerminating(Entity<CMDoubleDoorComponent> ent, ref EntityTerminatingEvent args)
+    {
+        if (_net.IsClient)
+            return;
+
+        if (!TryGetPairedDoubleDoor(ent, out var paired))
+            return;
+
+        if (TerminatingOrDeleted(paired))
+            return;
+
+        QueueDel(paired);
+    }
+
+    private void OnButtonActivateInWorld(Entity<RMCDoorButtonComponent> button, ref ActivateInWorldEvent args)
+    {
+        var user = args.User;
+        if (HasComp<XenoComponent>(user))
+            return;
+
+        if (!_rmcPower.IsPowered(button))
+        {
+            _popup.PopupClient(Loc.GetString("rmc-machines-unpowered"), button, args.User, PopupType.SmallCaution);
+            return;
+        }
+
+        var buttonName = button.Comp.Id ?? Name(button);
+        var buttonTransform = Transform(button);
+
+        if (IsAnyLinkedDoorLocked(buttonName, buttonTransform.MapID))
+        {
+            _popup.PopupClient(Loc.GetString("cmu-machines-button-locked-open"), button, user, PopupType.SmallCaution);
+            return;
+        }
+
+        if (button.Comp.MinimumRoundTimeToPress is { } minimumTime && _gameTicker.RoundDuration() <= minimumTime)
+        {
+            var minutesLeft = (int)(minimumTime.TotalMinutes - _gameTicker.RoundDuration().TotalMinutes);
+            var timeMessage = Loc.GetString(button.Comp.NoTimeMessage, ("minutes", minutesLeft));
+            _popup.PopupClient(timeMessage, user, user, PopupType.SmallCaution);
+            return;
+        }
+
+        if (button.Comp.Used && button.Comp.UseOnlyOnce)
+        {
+            _popup.PopupClient(Loc.GetString(button.Comp.AlreadyUsedMessage), button, user, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!_accessReader.IsAllowed(user, button))
+        {
+            _popup.PopupClient(Loc.GetString("cm-vending-machine-access-denied"), button, user, PopupType.SmallCaution);
+            DoPodDoorButtonAnimation(button, button.Comp.DeniedState);
+            return;
+        }
+
+        var time = _timing.CurTime;
+        if (time < button.Comp.LastUse + button.Comp.Cooldown)
+            return;
+
+        button.Comp.LastUse = time;
+        button.Comp.Used = true;
+        Dirty(button);
+
+        var doors = EntityQueryEnumerator<RMCPodDoorComponent, DoorComponent, TransformComponent, MetaDataComponent>();
+        while (doors.MoveNext(out var door, out var podDoor, out var doorComp, out var doorTransform, out var metaData))
+        {
+            if (TerminatingOrDeleted(door))
+                continue;
+
+            if (buttonTransform.MapID != doorTransform.MapID)
+                continue;
+
+            var id = podDoor.Id ?? metaData.EntityName;
+            if (buttonName != id)
+                continue;
+
+            if (doorComp.State == DoorState.Open)
+            {
+                _doors.StartClosing(door);
+            }
+            else
+            {
+                _doors.TryOpen(door, doorComp);
+            }
+        }
+
+        var selfMsg = Loc.GetString("rmc-door-button-pressed-self", ("button", button));
+        var othersMsg = Loc.GetString("rmc-door-button-pressed-others", ("user", user), ("button", button));
+        _popup.PopupPredicted(selfMsg, othersMsg, user, user);
+
+        DoPodDoorButtonAnimation(button, button.Comp.OnState);
+
+        if (button.Comp.MarineAnnouncement != null)
+        {
+            var announceText = Loc.GetString(button.Comp.MarineAnnouncement);
+            var author = Loc.GetString(button.Comp.MarineAnnouncementAuthor);
+            _announce.AnnounceHighCommand(announceText, author);
+        }
+    }
+
+    public void DoPodDoorButtonAnimation(EntityUid button, string animState)
+    {
+        if (_net.IsClient)
+            return;
+
+        RaiseNetworkEvent(new RMCPodDoorButtonPressedEvent(GetNetEntity(button), animState), Filter.PvsExcept(button));
+    }
+
+    /// <summary>
+    /// Checks whether any door linked to a button by name/id (see <see cref="OnButtonActivateInWorld"/>) has been
+    /// permanently locked open via <see cref="CMUAdjutantLockDoorComponent"/>, in which case the button should
+    /// stop responding entirely.
+    /// </summary>
+    private bool IsAnyLinkedDoorLocked(string buttonName, MapId mapId)
+    {
+        var doors = EntityQueryEnumerator<CMUAdjutantLockDoorComponent, RMCPodDoorComponent, TransformComponent, MetaDataComponent>();
+        while (doors.MoveNext(out var door, out var lockComp, out var podDoor, out var doorTransform, out var metaData))
+        {
+            if (!lockComp.Locked || TerminatingOrDeleted(door))
+                continue;
+
+            if (mapId != doorTransform.MapID)
+                continue;
+
+            var id = podDoor.Id ?? metaData.EntityName;
+            if (buttonName == id)
+                return true;
+        }
+
+        return false;
+    }
+
+    private void OnBeforePry(Entity<DoorComponent> ent, ref RMCBeforePryEvent args)
+    {
+        if (TryComp(ent, out DoorComponent? door) && door.State != DoorState.Closed)
+        {
+            if (HasComp<RMCPodDoorComponent>(ent) || HasComp<XenoComponent>(args.User))
+                args.Cancelled = true;
+        }
+
+        if (HasComp<XenoComponent>(args.User) && HasComp<AirlockComponent>(ent))
+            return;
+
+        if (_rmcPower.IsPowered(ent))
+            args.Cancelled = true;
+    }
+
+    private void OnDoorPry(Entity<DoorComponent> ent, ref RMCDoorPryEvent args)
+    {
+        if (args.Cancelled)
+        {
+            _audio.Stop(ent.Comp.SoundEntity);
+        }
+        if (HasComp<XenoComponent>(args.User) && _net.IsServer && !args.Cancelled)
+        {
+            if (HasComp<RMCPodDoorComponent>(ent.Owner))
+            {
+                ent.Comp.SoundEntity = _audio.PlayPredicted(ent.Comp.XenoPodDoorPrySound, ent.Owner, ent.Owner)?.Entity;
+            }
+            else
+            {
+                ent.Comp.SoundEntity = _audio.PlayPredicted(ent.Comp.XenoPrySound, ent.Owner, ent.Owner)?.Entity;
+            }
+        }
+    }
+
+    private void OnPodDoorGetPryTimeModifier(Entity<RMCPodDoorComponent> ent, ref GetPryTimeModifierEvent args)
+    {
+        if (HasComp<XenoComponent>(args.User))
+        {
+            args.PryTimeModifier *= ent.Comp.XenoPodlockPryMultiplier;
+        }
+    }
+
+    private void OnDoorBoltStateChanged(Entity<LayerChangeOnWeldComponent> ent, ref DoorBoltsChangedEvent args)
+    {
+        if(!TryComp(ent, out FixturesComponent? fixtureComp) || !TryComp(ent, out DoorComponent? door))
+            return;
+
+        foreach (var fixture in fixtureComp.Fixtures)
+        {
+            switch (args.BoltsDown)
+            {
+                case true when fixture.Value.CollisionLayer == (int) ent.Comp.UnWeldedLayer && door.State == DoorState.Closed:
+                    _physics.SetCollisionLayer(ent, fixture.Key, fixture.Value, (int) ent.Comp.WeldedLayer);
+                    break;
+                case false when fixture.Value.CollisionLayer == (int) ent.Comp.WeldedLayer:
+                    _physics.SetCollisionLayer(ent, fixture.Key, fixture.Value, (int) ent.Comp.UnWeldedLayer);
+                    break;
+            }
+        }
+    }
+
+    private void OnOpenOnlyWhenUnanchoredBeforeClosed(Entity<RMCOpenOnlyWhenUnanchoredComponent> ent, ref BeforeDoorClosedEvent args)
+    {
+        if (TryComp(ent, out TransformComponent? xform) &&
+            xform.Anchored)
+        {
+            return;
+        }
+
+        args.Cancel();
+    }
+
+    private AnchoredEntitiesEnumerator? GetAdjacentEnumerator(Entity<CMDoubleDoorComponent> ent)
+    {
+        if (!TryComp(ent, out TransformComponent? transform) ||
+            !TryComp(transform.GridUid, out MapGridComponent? grid))
+        {
+            return default;
+        }
+
+        var adjacent = transform.Coordinates.Offset(transform.LocalRotation.GetCardinalDir());
+        var position = _map.LocalToTile(transform.GridUid.Value, grid, adjacent);
+        return _map.GetAnchoredEntitiesEnumerator(transform.GridUid.Value, grid, position);
+    }
+
+    // RMC TODO: Once all legacy CMDoubleDoors are removed this can be removed
+    private bool TryGetPairedDoubleDoor(Entity<CMDoubleDoorComponent> ent, out Entity<CMDoubleDoorComponent> paired)
+    {
+        paired = default;
+
+        if (GetAdjacentEnumerator(ent) is not { } enumerator)
+            return false;
+
+        while (enumerator.MoveNext(out var anchored))
+        {
+            if (anchored == ent.Owner || TerminatingOrDeleted(anchored))
+                continue;
+
+            if (!_doubleQuery.TryGetComponent(anchored, out var doubleDoor) ||
+                !AreFacing(ent, anchored.Value))
+            {
+                continue;
+            }
+
+            paired = (anchored.Value, doubleDoor);
+            return true;
+        }
+
+        return false;
+    }
+
+    private bool AreFacing(EntityUid one, EntityUid two)
+    {
+        return TryComp(one, out TransformComponent? transformOne) &&
+               TryComp(two, out TransformComponent? transformTwo) &&
+               transformOne.LocalRotation.GetCardinalDir().GetOpposite() ==
+               transformTwo.LocalRotation.GetCardinalDir();
+    }
+
+    private void Open(Entity<CMDoubleDoorComponent> ent)
+    {
+        if (!TryGetPairedDoubleDoor(ent, out var paired))
+            return;
+
+        var time = _timing.CurTime;
+
+        ent.Comp.LastOpeningAt = time;
+        Dirty(ent);
+
+        if (paired.Comp.LastOpeningAt != time &&
+            _doorQuery.TryGetComponent(paired, out var door) &&
+            door.State != DoorState.Opening)
+        {
+            paired.Comp.LastOpeningAt = time;
+            Dirty(paired);
+
+            var sound = door.OpenSound;
+            door.OpenSound = null;
+            door.Partial = false;
+            _doors.StartOpening(paired, door);
+            door.OpenSound = sound;
+        }
+    }
+
+    private void Close(Entity<CMDoubleDoorComponent> ent)
+    {
+        if (!TryGetPairedDoubleDoor(ent, out var paired))
+            return;
+
+        var time = _timing.CurTime;
+
+        ent.Comp.LastClosingAt = time;
+        Dirty(ent);
+
+        if (paired.Comp.LastClosingAt != time &&
+            _doorQuery.TryGetComponent(paired, out var door) &&
+            door.State != DoorState.Closing)
+        {
+            paired.Comp.LastClosingAt = time;
+            Dirty(paired);
+
+            var sound = door.CloseSound;
+            door.CloseSound = null;
+            door.Partial = false;
+            _doors.StartClosing(paired, door);
+            door.CloseSound = sound;
+        }
+    }
+}

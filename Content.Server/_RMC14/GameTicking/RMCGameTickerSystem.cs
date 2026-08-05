@@ -1,0 +1,48 @@
+using Content.Server.GameTicking;
+using Content.Shared._RMC14.CCVar;
+using Content.Shared._RMC14.GameTicking;
+using Content.Shared.GameTicking;
+using Robust.Shared.Configuration;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
+
+namespace Content.Server._RMC14.GameTicking;
+
+public sealed partial class RMCGameTickerSystem : SharedRMCGameTickerSystem
+{
+    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
+
+    public override IReadOnlyDictionary<NetUserId, PlayerGameStatus> PlayerGameStatuses => _gameTicker.PlayerGameStatuses;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<PlayerJoinedLobbyEvent>(OnPlayerJoinedLobby);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
+
+    private void OnPlayerJoinedLobby(PlayerJoinedLobbyEvent ev)
+    {
+        var rmcEv = new RMCPlayerJoinedLobbyEvent(ev.PlayerSession);
+        RaiseLocalEvent(ref rmcEv);
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        _config.SetCVar(RMCCVars.RMCDelayRoundEnd, false);
+
+        if (_gameTicker.LobbyEnabled && _config.GetCVar(RMCCVars.RMCLobbyStartPaused))
+            _gameTicker.PauseStart();
+    }
+
+    public override void PlayerJoinGame(ICommonSession session, bool silent = false)
+    {
+        base.PlayerJoinGame(session);
+        _gameTicker.PlayerJoinGame(session, silent);
+    }
+
+    public override bool ServerOnlyIsInRound()
+    {
+        return _gameTicker.RunLevel == GameRunLevel.InRound;
+    }
+}

@@ -1,0 +1,699 @@
+# region Base
+- type: construction
+  abstract: true
+  id: BaseStructure
+  category: construction-category-structures
+  placementMode: SnapgridCenter
+
+- type: construction
+  abstract: true
+  parent: BaseStructure
+  id: BaseStructureFullTile
+  canRotate: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  abstract: true
+  parent: BaseStructure
+  id: BaseStructureFullTileDirectional
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  abstract: true
+  parent: BaseStructure
+  id: BaseWindow
+  graph: Window
+  canBuildInImpassable: true
+  canRotate: false
+  conditions:
+  - !type:EmptyOrWindowValidInTile
+  - !type:NoWindowsInTile
+
+- type: construction
+  abstract: true
+  parent: BaseWindow
+  id: BaseWindowDiagonal
+  graph: WindowDiagonal
+  canRotate: true
+
+- type: construction
+  abstract: true
+  parent: BaseStructure
+  id: BaseShutters
+  graph: Shutters
+  canBuildInImpassable: true
+# endregion Base
+
+# region Walls
+- type: construction
+  parent: BaseStructureFullTile
+  id: Girder
+  graph: Girder
+  targetNode: girder
+
+- type: construction
+  parent: Girder
+  id: ReinforcedGirder
+  targetNode: reinforcedGirder
+
+- type: construction
+  parent: Girder
+  id: ClockworkGirder
+  graph: ClockworkGirder
+  targetNode: clockGirder
+
+- type: construction
+  parent: Girder
+  id: Wall
+  targetNode: wall
+
+- type: construction
+  parent: Girder
+  id: ReinforcedWall
+  targetNode: reinforcedWall
+
+- type: construction
+  parent: ClockworkGirder
+  id: WallClock
+  targetNode: clockworkWall
+
+- type: construction
+  parent: Girder
+  id: WoodWall
+  graph: Barricade
+  targetNode: woodWall
+
+- type: construction
+  parent: Girder
+  id: UraniumWall
+  targetNode: uraniumWall
+
+- type: construction
+  parent: Girder
+  id: SilverWall
+  targetNode: silverWall
+
+- type: construction
+  parent: Girder
+  id: PlasticWall
+  targetNode: plasticWall
+
+- type: construction
+  parent: Girder
+  id: PlasmaWall
+  targetNode: plasmaWall
+
+- type: construction
+  parent: Girder
+  id: GoldWall
+  targetNode: goldWall
+
+- type: construction
+  parent: Girder
+  id: ShuttleWall
+  targetNode: shuttleWall
+
+- type: construction
+  parent: Girder
+  id: DiagonalShuttleWall
+  name: construction-recipe-diagonal-shuttle-wall
+  targetNode: diagonalshuttleWall
+  canRotate: true
+
+- type: construction
+  parent: Girder
+  id: ClownWall
+  targetNode: bananiumWall
+
+- type: construction
+  parent: Girder
+  id: MeatWall
+  targetNode: meatWall
+
+- type: construction
+  parent: Girder
+  id: Cardwall
+  graph: Cardwall
+  targetNode: cardwall
+  conditions:
+  - !type:TileNotBlocked
+    failIfSpace: false
+# endregion Walls
+
+# region Grilles
+- type: construction
+  parent: BaseStructureFullTile
+  id: Grille
+  graph: Grille
+  targetNode: grille
+  conditions:
+  - !type:TileNotBlocked
+    failIfSpace: false
+
+- type: construction
+  parent: Grille
+  id: ClockGrille
+  graph: ClockGrille
+  targetNode: clockGrille
+
+- type: construction
+  parent: Grille
+  id: GrilleDiagonal
+  graph: GrilleDiagonal
+  targetNode: grilleDiagonal
+  canRotate: true
+
+- type: construction
+  parent: GrilleDiagonal
+  id: ClockworkGrilleDiagonal
+  targetNode: clockworkGrilleDiagonal
+# endregion Grilles
+
+# region Windows
+- type: construction
+  parent: BaseWindow
+  id: Window
+  targetNode: window
+
+- type: construction
+  parent: BaseWindowDiagonal
+  id: WindowDiagonal
+  name: construction-window-diagonal
+  targetNode: windowDiagonal
+
+- type: construction
+  parent: BaseWindow
+  id: ReinforcedWindow
+  targetNode: reinforcedWindow
+
+- type: construction
+  parent: BaseWindowDiagonal
+  id: ReinforcedWindowDiagonal
+  name: construction-recipe-reinforced-window-diagonal
+  targetNode: reinforcedWindowDiagonal
+
+- type: construction
+  parent: BaseWindow
+  id: TintedWindow
+  targetNode: tintedWindow
+
+- type: construction
+  parent: BaseWindow
+  id: ClockworkWindow
+  targetNode: clockworkWindow
+
+- type: construction
+  parent: BaseWindowDiagonal
+  id: ClockworkWindowDiagonal
+  name: construction-recipe-clockwork-window-diagonal
+  targetNode: clockworkWindowDiagonal
+
+- type: construction
+  parent: BaseWindow
+  id: PlasmaWindow
+  targetNode: plasmaWindow
+
+- type: construction
+  parent: BaseWindow
+  id: ReinforcedPlasmaWindow
+  targetNode: reinforcedPlasmaWindow
+
+- type: construction
+  parent: BaseWindow
+  id: ShuttleWindow
+  targetNode: shuttleWindow
+
+- type: construction
+  parent: BaseWindowDiagonal
+  id: PlasmaWindowDiagonal
+  name: construction-recipe-plasma-window-diagonal
+  targetNode: plasmaWindowDiagonal
+
+- type: construction
+  parent: BaseWindowDiagonal
+  id: ReinforcedPlasmaWindowDiagonal
+  name: construction-recipe-reinforced-plasma-window-diagonal
+  targetNode: reinforcedPlasmaWindowDiagonal
+
+- type: construction
+  parent: BaseWindow
+  id: UraniumWindow
+  targetNode: uraniumWindow
+
+- type: construction
+  parent: BaseWindow
+  id: ReinforcedUraniumWindow
+  targetNode: reinforcedUraniumWindow
+
+- type: construction
+  parent: BaseWindowDiagonal
+  id: UraniumWindowDiagonal
+  name: construction-recipe-uranium-window-diagonal
+  targetNode: uraniumWindowDiagonal
+
+- type: construction
+  parent: BaseWindowDiagonal
+  id: ReinforcedUraniumWindowDiagonal
+  name: construction-recipe-reinforced-uranium-window-diagonal
+  targetNode: reinforcedUraniumWindowDiagonal
+
+- type: construction
+  parent: BaseWindow
+  id: WindowDirectional
+  graph: WindowDirectional
+  targetNode: windowDirectional
+  canRotate: true
+
+- type: construction
+  parent: WindowDirectional
+  id: WindowReinforcedDirectional
+  targetNode: windowReinforcedDirectional
+
+- type: construction
+  parent: WindowDirectional
+  id: WindowClockworkDirectional
+  targetNode: windowClockworkDirectional
+
+- type: construction
+  parent: WindowDirectional
+  id: PlasmaWindowDirectional
+  targetNode: plasmaWindowDirectional
+
+- type: construction
+  parent: WindowDirectional
+  id: PlasmaReinforcedWindowDirectional
+  targetNode: plasmaReinforcedWindowDirectional
+# endregion Windows
+
+# region Firelocks
+- type: construction
+  parent: BaseStructureFullTile
+  id: Firelock
+  graph: Firelock
+  targetNode: Firelock
+
+- type: construction
+  parent: Firelock
+  id: FirelockGlass
+  targetNode: FirelockGlass
+
+- type: construction
+  parent: Firelock
+  id: FirelockEdge
+  name: construction-recipe-firelock-edge
+  targetNode: FirelockEdge
+  canRotate: true
+# endregion Firelocks
+
+# region Shutters
+- type: construction
+  parent: BaseShutters
+  id: Shutters
+  targetNode: Shutters
+
+- type: construction
+  parent: BaseShutters
+  id: ShuttersWindow
+  targetNode: ShuttersWindow
+
+- type: construction
+  parent: BaseShutters
+  id: ShuttersRadiation
+  targetNode: ShuttersRadiation
+
+- type: construction
+  parent: BaseShutters
+  id: BlastDoor
+  graph: BlastDoor
+  targetNode: blastdoor
+# endregion Shutters
+
+# region Floors
+- type: construction
+  parent: BaseStructureFullTile
+  id: Catwalk
+  graph: Catwalk
+  targetNode: Catwalk
+  conditions:
+  - !type:TileNotBlocked
+    failIfSpace: false
+  - !type:TileType
+    targets:
+    - Lattice
+    - Plating
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: FloorBananium
+  graph: FloorBananium
+  targetNode: BananiumFloor
+  conditions:
+  - !type:TileNotBlocked
+    failIfSpace: false
+  - !type:TileType
+    targets:
+    - Plating
+# endregion Floors
+
+# region Barricades
+- type: construction
+  parent: BaseStructureFullTile
+  id: Barricade
+  graph: Barricade
+  targetNode: barricadefull
+
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: BarricadeDirectional
+  name: construction-recipe-barricade-directional
+  graph: BarricadeDirectional
+  targetNode: barricadefull
+# endregion Barricades
+
+# region Railings
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: Railing
+  graph: Railing
+  targetNode: railing
+
+- type: construction
+  parent: Railing
+  id: RailingCorner
+  name: construction-recipe-railing-corner
+  targetNode: railingCorner
+
+- type: construction
+  parent: Railing
+  id: RailingCornerSmall
+  name: construction-recipe-railing-corner-small
+  targetNode: railingCornerSmall
+
+- type: construction
+  parent: Railing
+  id: RailingRound
+  name: construction-recipe-railing-round
+  targetNode: railingRound
+# endregion Railings
+
+# region Fencing
+# Metal
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: FenceMetal
+  graph: FenceMetal
+  targetNode: straight
+
+- type: construction
+  parent: FenceMetal
+  id: FenceMetalCorner
+  name: construction-recipe-fence-metal-corner
+  targetNode: corner
+
+- type: construction
+  parent: FenceMetal
+  id: FenceMetalEnd
+  name: construction-recipe-fence-metal-end
+  targetNode: end
+
+- type: construction
+  parent: FenceMetal
+  id: FenceMetalGate
+  graph: FenceMetal
+  targetNode: gate
+
+# Wood
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: FenceWood
+  graph: FenceWood
+  targetNode: straight
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodEnd
+  name: construction-recipe-fence-wood-end
+  targetNode: end
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodCorner
+  name: construction-recipe-fence-wood-corner
+  targetNode: corner
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodTJunction
+  name: construction-recipe-fence-wood-t-junction
+  targetNode: tjunction
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodGate
+  targetNode: gate
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodSmall
+  graph: FenceWood
+  targetNode: straight_small
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodEndSmall
+  name: construction-recipe-fence-wood-end-small
+  targetNode: end_small
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodCornerSmall
+  name: construction-recipe-fence-wood-corner-small
+  targetNode: corner_small
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodTJunctionSmall
+  name: construction-recipe-fence-wood-t-junction-small
+  targetNode: tjunction_small
+
+- type: construction
+  parent: FenceWood
+  id: FenceWoodGateSmall
+  name: construction-recipe-fence-wood-gate-small
+  targetNode: gate_small
+# endregion Fencing
+
+# region Airlocks
+- type: construction
+  parent: BaseStructureFullTile
+  id: Airlock
+  graph: Airlock
+  targetNode: airlock
+
+- type: construction
+  parent: Airlock
+  id: AirlockGlass
+  targetNode: glassAirlock
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: PinionAirlock
+  name: construction-recipe-pinion-airlock
+  graph: PinionAirlock
+  targetNode: airlock
+
+- type: construction
+  parent: PinionAirlock
+  id: PinionAirlockGlass
+  name: construction-recipe-pinion-airlock-glass
+  targetNode: glassAirlock
+
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: AirlockShuttle
+  graph: AirlockShuttle
+  targetNode: airlock
+
+- type: construction
+  parent: AirlockShuttle
+  id: AirlockGlassShuttle
+  name: construction-recipe-airlock-glass-shuttle
+  targetNode: airlockGlass
+# endregion Airlocks
+
+# region Windoors
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: Windoor
+  graph: Windoor
+  targetNode: windoor
+
+- type: construction
+  parent: Windoor
+  id: SecureWindoor
+  targetNode: windoorSecure
+
+- type: construction
+  parent: Windoor
+  id: ClockworkWindoor
+  targetNode: windoorClockwork
+# endregion Windoors
+
+# region Lighting
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: LightTubeFixture
+  graph: LightFixture
+  targetNode: tubeLight
+  conditions:
+  - !type:TileNotBlocked
+  - !type:AgainstWall
+
+- type: construction
+  parent: LightTubeFixture
+  id: LightSmallFixture
+  targetNode: bulbLight
+
+- type: construction
+  parent: LightTubeFixture
+  id: EmergencyLightFixture
+  targetNode: emergencyLight
+
+- type: construction
+  parent: LightTubeFixture
+  id: LightStrobeFixture
+  targetNode: strobeLight
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: LightGroundFixture
+  graph: LightFixture
+  targetNode: groundLight
+# endregion Lighting
+
+# region Material Doors
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: MetalDoor
+  graph: DoorGraph
+  targetNode: metalDoor
+
+- type: construction
+  parent: MetalDoor
+  id: WoodDoor
+  targetNode: woodDoor
+
+- type: construction
+  parent: MetalDoor
+  id: PlasmaDoor
+  targetNode: plasmaDoor
+
+- type: construction
+  parent: MetalDoor
+  id: GoldDoor
+  targetNode: goldDoor
+
+- type: construction
+  parent: MetalDoor
+  id: SilverDoor
+  targetNode: silverDoor
+
+- type: construction
+  parent: MetalDoor
+  id: PaperDoor
+  targetNode: paperDoor
+
+- type: construction
+  parent: MetalDoor
+  id: CardDoor
+  targetNode: cardDoor
+
+- type: construction
+  parent: MetalDoor
+  id: BananiumDoor
+  targetNode: bananiumDoor
+# endregion Material Doors
+
+# region Plastic Flaps
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: PlasticFlapsClear
+  name: construction-recipe-plastic-flaps-clear
+  graph: PlasticFlapsGraph
+  targetNode: plasticFlaps
+
+- type: construction
+  parent: PlasticFlapsClear
+  id: PlasticFlapsOpaque
+  name: construction-recipe-plastic-flaps-opaque
+  targetNode: opaqueFlaps
+# endregion Plastic Flaps
+
+# region Decoration
+- type: construction
+  parent: BaseStructureFullTile
+  id: CarpStatue
+  graph: CarpStatue
+  targetNode: statue
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: BananiumClownStatue
+  graph: BananiumStatueClown
+  targetNode: bananiumStatue
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: BananiumAltar
+  graph: BananiumAltarGraph
+  targetNode: bananiumAltar
+# endregion Decoration
+
+# region Miscallaneous
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: SolidSecretDoor
+  name: recipes-secret-door-name
+  description: recipes-secret-door-desc
+  graph: SecretDoor
+  targetNode: solidSecretDoor
+  placementMode: SnapgridCenter
+
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: Turnstile
+  graph: Turnstile
+  targetNode: turnstile
+
+- type: construction
+  parent: BaseStructureFullTileDirectional
+  id: ConveyorBelt
+  graph: ConveyorGraph
+  targetNode: entity
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: FungalSoil
+  graph: Soil
+  targetNode: fungalSoil
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: StationAiCore
+  graph: StationAiCore
+  targetNode: stationAiCore
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: Bonfire
+  graph: Bonfire
+  targetNode: bonfire
+
+- type: construction
+  parent: BaseStructureFullTile
+  id: BonfireStake
+  graph: Bonfire
+  targetNode: bonfireStake
+# endregion Miscallaneous

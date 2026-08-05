@@ -1,0 +1,128 @@
+{
+  "version": 2,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from tgstation at commit https://github.com/tgstation/tgstation/commit/8e33113cfe8b5da0e64d74c842bec0e6059d992d and modified by Swept and Peperos, switch-fwd and switch-rev modified by RedBookcase (Github)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "conveyor_loose"
+    },
+    {
+      "name": "conveyor_loose_2"
+    },
+    {
+      "name": "conveyor_loose_3"
+    },
+    {
+      "name": "conveyor_started",
+      "directions": 4,
+      "delays": [
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ],
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ],
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ],
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ]
+      ]
+    },
+    {
+      "name": "conveyor_started_r",
+      "directions": 4,
+      "delays": [
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ],
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ],
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ],
+        [
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032,
+            0.032
+        ]
+      ]
+    },
+    {
+      "name": "conveyor_stopped",
+      "directions": 4
+    },
+    {
+      "name": "switch"
+    },
+    {
+      "name": "switch-fwd"
+    },
+    {
+      "name": "switch-off"
+    },
+    {
+      "name": "switch-rev"
+    }
+  ]
+}

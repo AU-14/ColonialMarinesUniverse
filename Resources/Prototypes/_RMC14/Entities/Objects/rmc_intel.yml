@@ -1,0 +1,491 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: RMCIntelBase
+  name: intel item
+  components:
+  - type: Corrodible
+    isCorrodible: false
+  - type: IntelDetectorTracked
+
+- type: entity
+  abstract: true
+  parent: RMCIntelBase
+  id: RMCIntelReadableBase
+  components:
+  - type: IntelReadObjective
+    value: 0.1
+  - type: IntelRetrieveItemObjective
+    value: 0.1
+  - type: Tag
+    tags:
+    - RMCIntelItem
+  - type: GuideHelp
+    guides:
+    - RMCIntel
+
+- type: entity
+  parent: RMCIntelReadableBase
+  id: RMCIntelPaperScrap
+  name: paper scrap
+  description: A scrap of paper, you think some of the words might still be readable.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    state: paper_words
+  - type: Item
+    size: Tiny
+  - type: IntelReadObjective
+    state: Active
+  - type: IntelClues
+    clue: rmc-intel-clue-paper-scrap
+
+- type: entity
+  parent: RMCIntelReadableBase
+  id: RMCIntelProgressReport
+  name: progress report
+  description: A written report from someone for their supervisor about the status of some kind of project.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    state: paper_p_words
+  - type: Item
+    size: Tiny
+  - type: IntelReadObjective
+    value: 0.2
+    delay: 6
+  - type: IntelClues
+    clue: rmc-intel-clue-progress-report
+    category: rmc-intel-reports
+
+- type: entity
+  parent: RMCIntelReadableBase
+  id: RMCIntelFolder
+  name: intel folder
+  description: A folder with some documents inside.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/paper.rsi
+    layers:
+    - state: folder
+      map: ["base" ]
+  - type: Item
+    size: Tiny
+  - type: IntelReadObjective
+    value: 0.2
+    delay: 4
+  - type: IntelRequires
+    requiresCount: 2
+  - type: IntelClues
+    clue: rmc-intel-clue-folder
+    category: rmc-intel-folders
+  - type: RandomSprite
+    available:
+    - base:
+        folder: ""
+        folder_black: ""
+        folder_blue: ""
+        folder_red: ""
+        folder_yellow: ""
+
+- type: entity
+  parent: RMCIntelReadableBase
+  id: RMCIntelTechnicalManual
+  name: technical manual
+  description: A highly specified technical manual, may be of use to someone in the relevant field.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Misc/Books/Other/book.rsi
+    state: icon
+  - type: Item
+    size: Tiny
+  - type: IntelReadObjective
+    value: 0.35
+    delay: 20
+  - type: IntelRequires
+    requiresCount: 2
+  - type: IntelClues
+    clue: rmc-intel-clue-technical-manual
+    category: rmc-intel-manuals
+
+- type: entity
+  abstract: true
+  parent: RMCIntelBase
+  id: RMCIntelRetrieveDeviceBase
+  components:
+  - type: IntelRetrieveItemObjective
+    state: Active
+    value: 0.7
+  - type: IntelClues
+    clues: 8
+    category: rmc-intel-retrieve
+  - type: IntelSerial
+  - type: GuideHelp
+    guides:
+    - RMCIntel
+
+- type: entity
+  parent: RMCIntelRetrieveDeviceBase
+  id: RMCIntelRetrieveMassSpectrometer
+  name: advanced mass-spectrometer
+  description: A hand-held mass spectrometer which identifies trace chemicals in a blood sample.
+  suffix: Intel, Experimental Device
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/experimental_devices.rsi
+    state: adv_spectrometer
+  - type: IntelClues
+    clue: rmc-intel-clue-experimental-device
+
+- type: entity
+  parent: RMCIntelRetrieveDeviceBase
+  id: RMCIntelRetrieveReagentScanner
+  name: advanced reagent scanner
+  description: A hand-held reagent scanner which identifies chemical agents.
+  suffix: Intel, Experimental Device
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/experimental_devices.rsi
+    state: adv_spectrometer
+  - type: IntelClues
+    clue: rmc-intel-clue-experimental-device
+
+- type: entity
+  parent: [CMHealthAnalyzer, RMCIntelRetrieveDeviceBase]
+  id: RMCIntelRetrieveHealthAnalyzer
+  name: HF2 health analyzer
+  description: A hand-held body scanner able to distinguish vital signs of the subject. The front panel is able to provide the basic readout of the subject's status.
+  suffix: Intel, Experimental Device
+  components:
+  - type: IntelClues
+    clue: rmc-intel-clue-experimental-device
+
+- type: entity
+  parent: RMCIntelRetrieveDeviceBase
+  id: RMCIntelRetrieveAutopsyScanner
+  name: autopsy scanner
+  description: Extracts information on wounds.
+  suffix: Intel, Experimental Device
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/experimental_devices.rsi
+    state: autopsy_scanner
+  - type: IntelClues
+    clue: rmc-intel-clue-experimental-device
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTechTreeConsole
+  name: tech tree console
+  description: A console used to make tech purchases.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - map: ["base"]
+      state: "techweb0"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "techweb"
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TechControlConsoleUI.Key
+  - type: UserInterface
+    interfaces:
+      enum.TechControlConsoleUI.Key:
+        type: TechControlConsoleBui
+  - type: TechControlConsole
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntel
+  name: intel computer
+  description: An intel computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+    layers: []
+  - type: InteractionOutline
+  - type: IntelConsole
+  - type: GuideHelp
+    guides:
+    - RMCIntel
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCSigintTerminal
+  name: SIGINT terminal
+  description: A computer capable of uploading data to the intelligence database. It has a disk reader slot built into the bottom, as well.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: medlaptop
+    layers: []
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 10
+    channel: Equipment
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: IntelConsole
+  - type: IntelDiskReader
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCIntelDataTerminal
+  name: data terminal
+  description: A computer data terminal with an incomprehensible label.
+  suffix: Intel
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - map: ["base"]
+      state: "medlaptop0"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "medlaptop"
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 10
+    channel: Equipment
+  - type: UserInterface
+    interfaces:
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: IntelDataTerminalCandidate
+
+- type: entity
+  id: RMCIntelTechTree
+  name: intel tech tree
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: rmc-intel-tech-unlock-tier-1-name
+          description: rmc-intel-tech-unlock-tier-description
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: rmc-intel-tech-requisition-arc-name
+          description: rmc-intel-tech-requisition-arc-description
+          cost: 5
+          events:
+          - !type:TechUnlockVehicleEvent
+            unlock: VehicleHumveeARC
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-arc
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: humvee
+        - name: rmc-intel-tech-requisition-budget-name
+          description: rmc-intel-tech-requisition-budget-description
+          cost: 7
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-requisition-budget
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: rmc-intel-tech-dropship-budget-name
+          description: rmc-intel-tech-dropship-budget-description
+          cost: 6
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechDropshipBudgetEvent
+            amount: 2000
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-dropship-budget
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_ds
+        - name: rmc-intel-tech-unlock-tier-2-name
+          description: rmc-intel-tech-unlock-tier-description
+          cost: 5
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 2
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-defcon-author
+            message: rmc-intel-tech-announcement-tier-2
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: rmc-intel-tech-ob-he-name
+          description: rmc-intel-tech-ob-he-description
+          cost: 5
+          increase: 2
+          repurchasable: true
+          events:
+          - !type:TechLogisticsDeliveryEvent
+            object: RMCOrbitalCannonWarheadExplosive
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-ob-he
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_he
+        - name: rmc-intel-tech-ob-incendiary-name
+          description: rmc-intel-tech-ob-incendiary-description
+          cost: 5
+          increase: 2
+          repurchasable: true
+          events:
+          - !type:TechLogisticsDeliveryEvent
+            object: RMCOrbitalCannonWarheadIncendiary
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-ob-incendiary
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_incend
+        - name: rmc-intel-tech-ob-cluster-name
+          description: rmc-intel-tech-ob-cluster-description
+          cost: 5
+          increase: 2
+          repurchasable: true
+          events:
+          - !type:TechLogisticsDeliveryEvent
+            object: RMCOrbitalCannonWarheadCluster
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-ob-cluster
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: ob_cluster
+        - name: rmc-intel-tech-unlock-tier-3-name
+          description: rmc-intel-tech-unlock-tier-description
+          cost: 5
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 3
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-defcon-author
+            message: rmc-intel-tech-announcement-tier-3
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: rmc-intel-tech-wake-troops-name
+          description: rmc-intel-tech-wake-troops-description
+          cost: 6
+          increase: 6
+          repurchasable: true
+          events:
+          - !type:TechCryoMarinesEvent
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-wake-troops
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: cryotroops
+        - name: rmc-intel-tech-wake-specialist-name
+          description: rmc-intel-tech-wake-specialist-description
+          cost: 8
+          events:
+          - !type:TechCryoSpecEvent
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-wake-specialist
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: overshield
+        - name: rmc-intel-tech-unlock-tier-4-name
+          description: rmc-intel-tech-unlock-tier-description
+          cost: 5
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 4
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-defcon-author
+            message: rmc-intel-tech-announcement-tier-4
+            sound: /Audio/_RMC14/AI/commandreport.ogg
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: rmc-intel-tech-nuclear-device-name
+          description: rmc-intel-tech-nuclear-device-description
+          cost: 5
+          timeLock: 115m
+          events:
+          - !type:TechLogisticsDeliveryEvent
+            object: RMCNuke
+          - !type:TechAnnounceEvent
+            author: rmc-intel-tech-announcement-special-assets-author
+            message: rmc-intel-tech-announcement-nuclear-device
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: nuke
+- type: Tag
+  id: RMCIntelItem
+
+- type: entity
+  parent: RMCIntelPaperScrap
+  id: RMCIntelDebug
+  suffix: DEBUG, DO NOT MAP
+  components:
+  - type: IntelReadObjective
+    state: Active
+    value: 999
+
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCComputerIntelCLF
+  name: CLF intel computer
+  description: A CLF Intel Computer for data cataloguing and distribution.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal1_old
+  - type: InteractionOutline
+  - type: IntelConsole
+    team: clf
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable

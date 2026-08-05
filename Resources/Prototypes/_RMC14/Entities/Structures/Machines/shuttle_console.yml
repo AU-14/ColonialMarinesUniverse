@@ -1,0 +1,322 @@
+﻿- type: entity
+  parent: CMBaseStructure
+  abstract: true
+  id: CMComputerDropship
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/shuttle_console.rsi
+    drawdepth: SmallObjects
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: false
+  - type: RMCPowerReceiver
+    idleLoad: 300
+    activeLoad: 300
+    channel: Equipment
+
+- type: entity
+  parent: CMComputerDropship
+  id: CMComputerDropshipNavigation
+  name: dropship navigation computer
+  description: A flight computer that can be used for autopilot or long-range flights.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCAS
+  - type: Sprite
+    state: console
+  - type: DropshipNavigationComputer
+  - type: ActivatableUI
+    key: enum.DropshipNavigationUiKey.Key
+  - type: AccessReader
+    access: [["CMAccessSquadLeaderPrep"], ["CMAccessDropship"], ["CMAccessXeno"]] # Xeno have access as to not cause the "Access denied!" popup.
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.DropshipNavigationUiKey.Key:
+        type: DropshipNavigationBui
+      enum.DropshipHijackerUiKey.Key:
+        type: DropshipHijackerBui
+
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMComputerDropshipNavigationERT
+  name: transport shuttle
+  description: A transport shuttle flight computer.
+  components:
+  - type: Sprite
+    state: syndishuttle
+  - type: DropshipNavigationComputer
+    hijackable: false
+
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMComputerDropshipNavigationERTTSE
+  name: transport shuttle
+  description: A transport shuttle flight computer.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/hybrisa_computer_props.rsi
+    state: blacksensor_comp2
+  - type: DropshipNavigationComputer
+    hijackable: false
+  - type: Transform
+    anchored: false
+
+- type: entity
+  parent: CMComputerDropshipNavigation
+  id: CMComputerDropshipNavigationERTCLF
+  name: transport shuttle
+  description: A transport shuttle flight computer.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Dropships/clf.rsi
+    state: 93
+  - type: DropshipNavigationComputer
+    hijackable: false
+  - type: Transform
+    anchored: false
+
+- type: entity
+  parent: CMComputerDropship
+  id: CMComputerDropshipNavigationPlanetside
+  name: dropship navigation computer
+  description: A flight computer that can be used to direct linked dropships.
+  suffix: Planetside
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/dropship_nav_computer.rsi
+    layers:
+    - map: ["base"]
+      state: off
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "on"
+  - type: Appearance
+  - type: ActivatableUI
+    key: enum.DropshipTerminalUiKey.Key
+  - type: AccessReader
+    access: [["CMAccessDropship"], ["CMAccessSquadLeaderPrep"], ["CMAccessXeno"]] # Xeno have access as to not cause the "Access denied!" popup.
+  - type: ActivatableUIRequiresAccess
+  - type: DropshipTerminal
+  - type: UserInterface
+    interfaces:
+      enum.DropshipTerminalUiKey.Key:
+        type: DropshipTerminalBui
+
+- type: entity
+  parent: CMComputerDropship
+  id: CMComputerDropshipCamerasAlamo
+  name: camera controls
+  description: A computer to monitor cameras linked to the dropship.
+  suffix: Alamo
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCAS
+  - type: Sprite
+    state: consoleleft
+  - type: UserInterface
+    interfaces:
+      enum.RMCCameraUiKey.Key:
+        type: RMCCameraBui
+  - type: RMCCameraComputer
+    protoIds:
+    - RMCMonitorCameraAlamo
+    - RMCFlareCAS
+    - RMCAirFlareCAS
+    - RMCLaserDesignatorTarget
+  - type: ActivatableUI
+    key: enum.RMCCameraUiKey.Key
+
+- type: entity
+  parent: CMComputerDropshipCamerasAlamo
+  id: RMCComputerDropshipCamerasNormandy
+  name: camera controls
+  description: A computer to monitor cameras linked to the dropship.
+  suffix: Normandy
+  components:
+  - type: RMCCameraComputer
+    protoIds:
+    - RMCMonitorCameraNormandy
+    - RMCFlareCAS
+    - RMCAirFlareCAS
+    - RMCLaserDesignatorTarget
+
+- type: entity
+  parent: CMComputerDropship
+  id: CMComputerDropshipWeapons
+  name: weapons controls
+  description: A computer to manage equipment, weapons and simulations installed on the dropship.
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleCAS
+  - type: Sprite
+    state: consoleright
+  - type: ActivatableUI
+    key: enum.DropshipTerminalWeaponsUi.Key
+  - type: AccessReader
+    access: [ [ "CMAccessPilot" ], [ "CMAccessSquadLeaderPrep" ], [ "RMCAccessWeYaFlight" ] ]
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.DropshipTerminalWeaponsUi.Key:
+        type: DropshipWeaponsBui
+  - type: DropshipTerminalWeapons
+  - type: TacticalMapComputer
+  - type: RequiresSkill
+    skills:
+      RMCSkillPilot: 1
+
+- type: entity
+  parent: CMBaseStructure
+  id: RMCComputerDropshipNavigationSmall
+  name: dropship navigation computer
+  description: A flight computer that can be used for autopilot or long-range flights.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - state: "security_cam0"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "security_cam"
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: RMCPowerReceiver
+    idleLoad: 300
+    activeLoad: 300
+    channel: Equipment
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: WallMount
+    arc: 360
+  - type: DropshipNavigationComputer
+  - type: ActivatableUI
+    key: enum.DropshipNavigationUiKey.Key
+  - type: AccessReader
+    access: [ ["CMAccessSquadLeaderPrep"], [ "CMAccessDropship" ] ]
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.DropshipNavigationUiKey.Key:
+        type: DropshipNavigationBui
+      enum.DropshipHijackerUiKey.Key:
+        type: DropshipHijackerBui
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    netsync: true
+    energy: 1
+    offset: "0,0"
+    color: "#FFEFD2"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+
+- type: entity
+  parent: CMBaseStructure
+  id: RMCComputerDropshipWeaponsSmall
+  name: weapons controls
+  description: A computer to manage equipment, weapons and simulations installed on the dropship.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    drawdepth: Objects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - state: "security_cam0"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "security_cam"
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: WallMount
+    arc: 360
+  - type: AccessReader
+    access: [ ["CMAccessSquadLeaderPrep"], [ "CMAccessDropship" ] ]
+  - type: PointLight
+    enabled: true
+    radius: 1.5
+    netsync: true
+    energy: 1
+    offset: "0,0"
+    color: "#FFEFD2"
+    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+  - type: ActivatableUI
+    key: enum.DropshipTerminalWeaponsUi.Key
+  - type: ActivatableUIRequiresAccess
+  - type: UserInterface
+    interfaces:
+      enum.DropshipTerminalWeaponsUi.Key:
+        type: DropshipWeaponsBui
+  - type: DropshipTerminalWeapons
+  - type: TacticalMapComputer
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipDestination
+  name: dropship destination
+  description: Defines a valid location for the dropships to FTL to when piloted.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipDestination
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+- type: entity
+  parent: CMDropshipDestination
+  id: CMDropshipDestinationAlamo
+  suffix: Alamo
+  components:
+  - type: DropshipDestination
+    spawn: "/Maps/_RMC14/alamo.yml" # The actual Dropship files are private. These are debug versions to ensure tests pass.
+
+- type: entity
+  parent: CMDropshipDestination
+  id: CMDropshipDestinationNormandy
+  suffix: Normandy
+  components:
+  - type: DropshipDestination
+    spawn: "/Maps/_RMC14/normandy.yml" # The actual Dropship files are private. These are debug versions to ensure tests pass.
+
+- type: entity
+  parent: MarkerBase
+  id: CMDropshipHijackDestination
+  name: hijack destination
+  description: Defines a valid location for the dropships to FTL to when hijacked.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    state: green
+  - type: FTLBeacon
+  - type: DropshipHijackDestination
+  - type: FTLSmashImmune
+  - type: NoFTL

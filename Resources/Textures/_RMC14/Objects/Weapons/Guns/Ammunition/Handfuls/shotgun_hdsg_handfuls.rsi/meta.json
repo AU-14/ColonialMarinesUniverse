@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13-devs/cmss13 PR #11488 (Thwomper, Carlarc)",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "hdsg_1"
+    },
+    {
+      "name": "hdsg_2"
+    },
+    {
+      "name": "hdsg_3"
+    },
+    {
+      "name": "hdsg_4"
+    },
+    {
+      "name": "hdsg_5"
+    }
+  ]
+}

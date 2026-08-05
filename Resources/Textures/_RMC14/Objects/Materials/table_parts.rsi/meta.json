@@ -1,0 +1,88 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/items/table_parts.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/construction_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/construction_lefthand.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "almayer"
+    },
+    {
+      "name": "almayer-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "almayer-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "fancy_wood"
+    },
+    {
+      "name": "fwood-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "fwood-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "gamble"
+    },
+    {
+      "name": "gamble-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "gamble-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "poor_wood"
+    },
+    {
+      "name": "pwood-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "pwood-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "reinforced"
+    },
+    {
+      "name": "reinf-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "reinf-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "tan"
+    },
+    {
+      "name": "tan-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "tan-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "wood"
+    },
+    {
+      "name": "wood-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "wood-inhand-right",
+      "directions": 4
+    }
+  ]
+}

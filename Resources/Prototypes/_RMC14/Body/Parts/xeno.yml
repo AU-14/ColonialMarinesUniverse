@@ -1,0 +1,12 @@
+- type: entity
+  parent: OrganBase
+  id: RMCHeadXeno
+  name: "xenonid head"
+  categories:
+  - HideSpawnMenu
+  components:
+  - type: Organ
+    category: Head
+  - type: Tag
+    tags:
+      - Head

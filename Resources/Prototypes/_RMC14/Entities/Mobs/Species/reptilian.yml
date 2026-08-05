@@ -1,0 +1,37 @@
+- type: entity
+  save: false
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMMobReptilian
+  name: Urisst' C-M Mzhand
+  suffix: RMC14
+  components:
+  - type: HumanoidAppearance
+    species: Reptilian
+    hideLayersOnEquip:
+    - UndergarmentTop
+    - Snout
+    - HeadTop
+    - HeadSide
+  - type: Icon
+    sprite: Mobs/Species/Reptilian/parts.rsi
+    state: full
+  - type: LizardAccent
+  - type: Speech
+    speechSounds: Lizard
+    speechVerb: Reptilian
+    allowedEmotes: ['Thump', 'Hiss', 'Purr', 'RMCReptileRattle']
+  - type: BodyEmotes
+    soundsId: RMCReptilianBodyEmotes
+  - type: TypingIndicator
+    proto: lizard
+  - type: Vocal
+    emoteSounds: RMCUnisexReptilian
+  - type: Wagging
+  - type: MeleeWeapon
+    soundHit:
+      path: /Audio/Weapons/pierce.ogg
+    animation: WeaponArcClaw
+  - type: Inventory
+    speciesId: reptilian
+  - type: FixedIdentity
+    name: cm-chatsan-replacement-reptilian

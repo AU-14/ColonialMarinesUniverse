@@ -1,0 +1,74 @@
+﻿- type: accessGroup
+  id: ASO
+  parent: RMCBaseAuxiliaryJob
+  name: Auxiliary Support Officer
+  tags:
+  - CMAccessASO
+  - RMCAccessCommand
+  - CMAccessBrig
+  - CMAccessArmory
+  - CMAccessMedical
+  - CMAccessResearch
+  - CMAccessCE
+  - CMAccessEngineering
+  - CMAccessMaint
+  - CMAccessOT
+  - CMAccessRequisitions
+  - CMAccessMarinePrep
+  - CMAccessAlpha
+  - CMAccessBravo
+  - CMAccessCharlie
+  - CMAccessDelta
+  - CMAccessPilot
+  - CMAccessDropship
+  - CMAccessKitchen
+  - CMAccessPress
+  - CMAccessCrewman
+  - RMCAccessDatabase
+  - RMCAccessFieldDoctor
+  - RMCAccessSeniorCommand
+  - RMCAccessLogs
+
+- type: accessGroup
+  id: Pilot
+  parent: RMCBaseAuxiliaryJob
+  name: Pilot
+  tags:
+  - RMCAccessCommand
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessCrewman
+  - CMAccessMedical
+
+- type: accessGroup
+  id: DropshipCrewChief
+  parent: RMCBaseAuxiliaryJob
+  name: Dropship Crew Chief
+  tags:
+  - CMAccessCrewman
+  - RMCAccessCommand
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessMedical
+
+- type: accessGroup
+  id: IntelOfficer
+  parent: RMCBaseAuxiliaryJob
+  name: Intelligence Officer
+  tags:
+  - RMCAccessCommand
+  - CMAccessDropship
+  - CMAccessMarinePrep
+  - CMAccessCombatTechPrep
+  - CMAccessColonyEngineering
+
+- type: accessGroup
+  id: VehicleCrewman
+  tags:
+  - CMAccessCrewman
+  - CMAccessAlpha
+  - CMAccessBravo
+  - CMAccessCharlie
+  - CMAccessDelta
+  - CMAccessMarinePrep
+  - RMCAccessVehicleCrew

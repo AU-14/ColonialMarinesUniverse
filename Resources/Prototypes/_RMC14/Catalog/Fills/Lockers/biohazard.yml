@@ -1,0 +1,59 @@
+ - type: entity
+   id: CMClosetBioFilled
+   suffix: Filled, Generic, RMC
+   parent: CMClosetBio
+   components:
+   - type: StorageFill
+     contents:
+       - id: RMCSuitBioGeneral
+       - id: RMCHoodBioGeneral
+
+ - type: entity
+   id: CMClosetBioVirologyFilled
+   suffix: Filled, Virology, RMC
+   parent: CMClosetBioVirology
+   components:
+   - type: StorageFill
+     contents:
+       - id: RMCSuitBioVirology
+       - id: RMCHoodBioVirology
+
+ - type: entity
+   id: CMClosetBioMedicalFilled
+   suffix: Filled, Medical, RMC
+   parent: CMClosetBioMedical
+   components:
+   - type: StorageFill
+     contents:
+       - id: RMCSuitBioMedical
+       - id: RMCHoodBioMedical
+
+ - type: entity
+   id: CMClosetBioSecurityFilled
+   suffix: Filled, Security, RMC
+   parent: CMClosetBioSecurity
+   components:
+   - type: StorageFill
+     contents:
+       - id: RMCSuitBioSecurity
+       - id: RMCHoodBioSecurity
+
+ - type: entity
+   id: CMClosetBioJanitorFilled
+   suffix: Filled, Janitor, RMC
+   parent: CMClosetBioJanitor
+   components:
+   - type: StorageFill
+     contents:
+       - id: RMCSuitBioGeneral # TODO Janitor Biosuit
+       - id: RMCHoodBioGeneral
+
+ - type: entity
+   id: CMClosetBioScientistFilled
+   suffix: Filled, Science, RMC
+   parent: CMClosetBioScientist
+   components:
+   - type: StorageFill
+     contents:
+       - id: RMCSuitBioScientist
+       - id: RMCHoodBioScientist

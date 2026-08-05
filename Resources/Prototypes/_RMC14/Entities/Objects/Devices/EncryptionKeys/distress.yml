@@ -1,0 +1,68 @@
+# Bureau
+- type: entity
+  parent: CMEncryptionKey
+  id: RMCEncryptionKeyBureau
+  name: bureau encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMB
+    - MarineCommon
+    - MarineCommand
+    - MarineMedical
+    - MarineIntel
+    - Colony
+    defaultChannel: CMB
+  - type: Sprite
+    state: cap_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: RMCEncryptionKeyBureauDamaged
+  name: damaged bureau encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - CMB
+    - Colony
+    defaultChannel: Colony
+  - type: Sprite
+    state: cap_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: RMCEncryptionKeyDukes
+  name: duke encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineCommon # TODO RMC14 add Freelancer (Duke) channel
+    - Colony
+    defaultChannel: Colony
+  - type: Sprite
+    state: cap_key
+
+# ERT
+- type: entity
+  parent: CMEncryptionKey
+  id: RMCEncryptionKeyERT
+  name: ERT encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineCommon
+    - MarineCommand
+    - MarineAlpha
+    - MarineBravo
+    - MarineCharlie
+    - MarineDelta
+    - MarineEcho
+    - MarineFoxtrot
+    - MarineEngineer
+    - MarineMedical
+    - MarineRequisition
+    - MarineJTAC
+    - MarineIntel
+    defaultChannel: MarineCommon
+  - type: Sprite
+    state: cmp_key

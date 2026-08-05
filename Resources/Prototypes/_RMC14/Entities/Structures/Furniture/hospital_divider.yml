@@ -1,0 +1,53 @@
+- type: entity
+  parent: BaseStructureDynamic
+  id: RMCHospitalDivider
+  name: hospital divider
+  description: A hospital divider for privacy.
+  components:
+  - type: Transform
+    noRot: true
+  - type: VehicleSmashable
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/hospital_divider.rsi
+    state: hospitalcurtain
+    noRot: true
+    drawdepth: Overdoors
+  - type: InteractionOutline
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.03
+        density: 155
+        mask:
+        - MachineMask
+        layer:
+        - MobMask
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 51
+    otherMultiplier: 1
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Appearance

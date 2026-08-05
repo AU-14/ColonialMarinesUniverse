@@ -1,0 +1,27 @@
+- type: entity
+  id: RMCCrateRestrictedEquipmentArmorM4
+  parent: RMCCrateBase
+  name: M4 pattern marine armor crate (x1 helmet, x1 armor)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMArmorM4
+    - id: CMArmorHelmetM12
+
+- type: entity
+  id: RMCCrateRestrictedEquipmentArmorB12
+  parent: RMCCrateBase
+  name: B12 pattern marine armor crate (x1 helmet, x1 armor)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMArmorB12
+    - id: CMArmorHelmetM11
+- type: entity
+  id: RMCCrateRestrictedEquipmentIntelSupportKit
+  parent: RMCCrateBase
+  name: Field Intelligence Support Kit crate (x1 fulton, x1 data detector, 1x intel pamphlet, 1x large document pouch, 1x intel radio key)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCKitIntel

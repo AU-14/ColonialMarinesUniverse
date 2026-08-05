@@ -1,0 +1,403 @@
+# Large general pouch
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RMCPouchGeneralLargeBureauObserverFill
+  suffix: Bureau Observer, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMFireExtinguisherPortable
+    - id: CMRollerBedSpawnFolded # TODO RMC14 pepper spray
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RMCPouchGeneralLargeICBLiaison
+  suffix: Interstellar Commerce Bureau Liaison, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCCigarettePackWeYaGold
+    - id: RMCZippo
+    - id: RMCSpaceCash1000
+    - id: RMCUniversalRecorder
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RMCPouchGeneralLargeM63AP
+  suffix: M63 AP, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSMGM63AP
+    
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RMCPouchGeneralLargeFillWheat
+  suffix: Wheat, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: WheatBushel
+      amount: 3
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RMCPouchGeneralLargeFillHighroller
+  suffix: Dice, Smokes, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTarbackTube
+    - id: d6Dice
+    - id: RMCZippoGold
+    - id: RMCSpaceCash1000
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RMCPouchGeneralLargeFillSPPRations
+  suffix: SPP Rations, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMarinePreparedMealSPPCuban
+    - id: RMCMarinePreparedMealSPPBanush
+    - id: CMCanteen
+
+- type: entity
+  parent: RMCPouchGeneralLarge
+  id: RMCPouchGeneralLargeFillStowaway
+  suffix: Stowaway, .38 Magnum, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpaceCash1000
+    - id: RMCSpeedLoader38
+      amount: 2
+
+# Magazine Pouch
+- type: entity
+  parent: RMCPouchMagazine
+  id: RMCPouchMagazineFilledMP5
+  suffix: Filled, MP5
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSMGMP5
+      amount: 3
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: RMCPouchMagazineFilledM16
+  suffix: Filled, M16
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleM16
+      amount: 3
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: RMCPouchMagazineFilledPDW90
+  suffix: Filled, PDW90
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGPDW90
+      amount: 3
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: RMCPouchMagazineFilledKT42
+  suffix: Filled, KT42
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazinePistolKT42
+      amount: 3
+
+- type: entity
+  parent: RMCPouchMagazine
+  id: RMCPouchMagazineFilledMAR40Ext
+  suffix: Filled, MAR-40 Extended
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleMAR40Ext
+      amount: 3
+
+# Large Magazine Pouch
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: RMCPouchMagazineLargeMP5
+  suffix: Filled, MP5
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSMGMP5
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: RMCPouchMagazineType64
+  suffix: Filled, Type 64
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSMGType64
+      amount: 4
+
+- type: entity
+  parent: RMCPouchMagazinePistol
+  id: RMCPouchMagazinePistolFilledMateba
+  suffix: Filled, Mateba High Impact
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCSpeedLoaderMatebaHIAP
+      amount: 4
+
+# Shotgun Pouch
+- type: entity
+  parent: RMCPouchShotgun
+  id: RMCPouchShotgunFilledBuckshot
+  suffix: Filled, Buckshot
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunBuckshot
+      amount: 4
+
+- type: entity
+  parent: RMCPouchShotgun
+  id: RMCPouchShotgunFilledPolicing
+  suffix: Filled, Policing
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunSlugs
+      amount: 2
+    - id: CMShellShotgunBuckshot
+      amount: 1
+    - id: CMShellShotgunBeanbag
+      amount: 1
+
+- type: entity
+  parent: RMCPouchShotgun
+  id: RMCPouchShotgunFilledBeanbag
+  suffix: Filled, Beanbag
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunBeanbag
+      amount: 4
+
+# Large Shotgun Pouch
+- type: entity
+  parent: RMCPouchShotgunLarge
+  id: RMCPouchShotgunLargeBeanbag
+  suffix: Filled, Beanbag
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunBeanbag
+      amount: 7
+
+- type: entity
+  parent: RMCPouchShotgunLarge
+  id: RMCPouchShotgunLargeSlugs
+  suffix: Filled, Slugs
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMShellShotgunSlugs
+      amount: 7
+
+# Flare Pouch
+- type: entity
+  parent: RMCPouchFlare
+  id: RMCPouchFlareFilled
+  suffix: Filled
+  components:
+  - type: CMItemSlots
+    startingItem: CMFlare
+
+- type: entity
+  parent: RMCPouchFlareL96
+  id: RMCPouchFlareL96Filled
+  suffix: Filled, RCM
+  components:
+  - type: CMItemSlots
+    startingItem: RMCFlareL96
+
+- type: entity
+  parent: RMCPouchFlareR44
+  id: RMCPouchFlareR44Filled
+  suffix: Filled, SPP
+  components:
+  - type: CMItemSlots
+    startingItem: RMCFlareR44
+
+- type: entity
+  parent: RMCPouchFlareC18
+  id: RMCPouchFlareC18Filled
+  suffix: Filled, PMC
+  components:
+  - type: CMItemSlots
+    startingItem: RMCFlareC18
+
+# Electronics Pouch
+- type: entity
+  parent: RMCPouchElectronics
+  id: RMCPouchElectronicsFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAPCElectronics
+      amount: 3
+    - id: RMCPowerCellHigh
+      amount: 3
+
+# Tools Pouch
+- type: entity
+  parent: RMCPouchTools
+  id: RMCPouchToolsFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWirecutter
+    - id: CMMultitool
+    - id: CMWrench
+
+- type: entity
+  parent: RMCPouchToolsSoc
+  id: RMCPouchToolsSocFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWirecutter
+    - id: CMCrowbar
+    - id: RMCCableCoil
+    - id: CMMultitool
+    - id: CMWrench
+
+- type: entity
+  parent: RMCPouchToolsSoc
+  id: RMCPouchToolsSocMarineRaiderFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMScrewdriver
+    - id: CMWirecutter
+    - id: CMCrowbar
+    - id: RMCCableCoil
+    - id: CMMultitool
+    - id: CMWrench
+    - id: RMCExplosivePlastic
+      amount: 2
+
+# Smartgun Pouch
+- type: entity
+  parent: RMCPouchDrumPMC
+  id: RMCPouchDrumPMCFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineSmartGunirradiated
+      amount: 3
+
+# Fuel Tank Strap Pouch
+- type: entity
+  parent: RMCPouchFuelTank
+  id: RMCPouchFuelTankFlamertankExtinguisher
+  suffix: Flamertank, Extinguisher, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCTankFlamer
+    - id: CMFireExtinguisher
+
+# Survival pouch
+- type: entity
+  parent: RMCPouchSurvival
+  id: RMCPouchSurvivalFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCFlashlightLantern
+    - id: CMCrowbarRed
+    - id: CMPacketPillsTricordrazine
+    - id: CMGauze10
+    - id: RMCRadioHandheldColony
+    - id: RMCM5Bayonet
+      # 5 splints
+
+- type: entity
+  parent: RMCPouchSurvival
+  id: RMCPouchSurvivalFillRadioOff
+  suffix: Filled Radio OFF
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCFlashlightLantern
+    - id: CMCrowbarRed
+    - id: CMPacketPillsTricordrazine
+    - id: CMGauze10
+    - id: RMCRadioHandheldColonyOff
+    - id: RMCM5Bayonet
+      # 5 splints
+
+- type: entity
+  parent: [ RMCPouchSurvivalBlack, RMCPouchSurvivalFill ]
+  id: RMCPouchSurvivalBlackFilled
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/survivalpouch_black.rsi
+
+- type: entity
+  parent: RMCPouchSurvivalSynth
+  id: RMCPouchSurvivalSynthFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSheetMetal50
+    - id: CMCrowbarRed
+    - id: CMWelder
+    - id: RMCCableCoil
+    - id: RMCRadioHandheldColony
+    - id: RMCM5Bayonet
+
+# Auto Injector Pouch
+- type: entity
+  parent: RMCPouchAutoinjector
+  id: RMCPouchAutoinjectorFill
+  suffix: Filled, Default
+  components:
+  - type: StorageFill
+    contents: # todo rmc14 autoinjectors kelo x2, tramad x2, emerg
+    - id: CMBicaridineAutoInjector
+      amount: 2
+    - id: CMKelotaneAutoInjector
+      amount: 2
+#    - id: CMTramadolAutoInjector
+#      amount: 2
+    - id: CMEmergencyAutoInjector
+      amount: 1
+
+- type: entity
+  parent: RMCPouchAutoinjector
+  id: RMCPouchAutoinjectorFillEmergencyInjectors
+  suffix: Filled, Emergency Injectors
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMEmergencyAutoInjector
+      amount: 4

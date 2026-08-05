@@ -1,0 +1,38 @@
+- type: entity
+  parent: OrganHumanLungs
+  id: RMCOrganHumanLungs
+  components:
+  - type: Metabolizer
+    solutions:
+      Respiration:
+        solutionName: Lung
+        solutionOnBody: false
+        metabolizeAll: true
+        transferSolutionName: chemicals
+    stages: [ Respiration ]
+
+- type: entity
+  parent: OrganHumanHeart
+  id: RMCOrganHumanHeart
+  components:
+  - type: Metabolizer
+    maxReagents: 10
+    solutions:
+      Bloodstream:
+        solutionName: chemicals
+        transferSolutionName: metabolites
+    stages: [ Bloodstream ]
+
+- type: entity
+  parent: OrganHumanStomach
+  id: RMCOrganHumanStomach
+  components:
+  - type: Metabolizer
+    maxReagents: 3
+    solutions:
+      Digestion:
+        solutionName: stomach
+        solutionOnBody: false
+        transferSolutionName: chemicals
+        transferEfficacy: 0.5
+    stages: [ Digestion ]

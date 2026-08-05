@@ -1,0 +1,228 @@
+- type: entity
+  parent: BaseItem
+  id: CMBaseDefibrillator
+  name: emergency defibrillator
+  description: A handheld emergency defibrillator, used to restore fibrillating patients. Can optionally bring people back from the dead.
+  abstract: true
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/defib.rsi
+    layers:
+    - state: defib
+    - state: defib_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+  - type: Appearance
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Medical/defib.rsi
+    heldPrefix: defib
+  - type: Speech
+    speechVerb: Robotic
+  - type: ItemToggle
+    soundActivate:
+      path: /Audio/_RMC14/Medical/defib_SafetyOn.ogg
+    soundDeactivate:
+      path: /Audio/_RMC14/Medical/defib_safetyOff.ogg
+  - type: Defibrillator
+    zapDelay: 0
+    doAfterDuration: 4
+    allowDoAfterMovement: false
+    canDefibCrit: false
+    rmcZapHeal:
+    - Brute: -12
+    - Burn: -12
+    - Toxin: -12
+    - Genetic: -12
+    zapHeal:
+      groups:
+        Airloss: -400
+    zapSound:
+      path: /Audio/_RMC14/Medical/defib_release.ogg
+      params:
+        volume: -6
+    chargeSound:
+      path: /Audio/_RMC14/Medical/defib_charge.ogg
+      params:
+        volume: -8
+    failureSound:
+      path: /Audio/_RMC14/Medical/defib_failed.ogg
+      params:
+        volume: -6
+    successSound:
+      path: /Audio/_RMC14/Medical/defib_success.ogg
+      params:
+        volume: -6
+    readySound:
+      path: /Audio/_RMC14/Medical/defib_ready.ogg
+      params:
+        volume: -6
+    zapDamage: 0
+  - type: DoAfter
+  - type: UseDelay
+  - type: StaticPrice
+    price: 100
+  - type: GuideHelp
+    guides:
+    - RMCMedical
+  - type: RequiresSkill
+    skills:
+      RMCSkillMedical: 2
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  id: CMDefibrillator
+  parent: [CMBaseDefibrillator, RMCPowerCellSlotUnremovable]
+  suffix: RMC14
+  components:
+  - type: Sprite
+    layers:
+    - state: defib
+    - state: defib_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+    - state: full
+      map: [ "enum.DefibrillatorVisualLayers.Overlay"]
+  - type: GenericVisualizer
+    visuals:
+      enum.ToggleableVisuals.Enabled:
+        enum.ToggleableVisuals.Layer:
+          True: { visible: true }
+          False: { visible: false }
+      enum.DefibrillatorVisuals.DefibrillatorCharge:
+        enum.DefibrillatorVisualLayers.Overlay:
+          Empty: { state: empty }
+          Low: { state: low }
+          Half: { state: half }
+          Full: { state: full }
+  - type: PowerCellDraw
+    enabled: false
+    useCharge: 66
+  - type: RMCPowerUsageDisplay
+  - type: UseOnSynthBlocked
+    whitelist:
+      components:
+        - Marine
+
+- type: entity
+  id: CMDefibrillatorEmpty
+  parent: CMDefibrillator
+  suffix: RMC14, Empty
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/defib.rsi
+    layers:
+    - state: defib
+    - state: defib_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+    - state: empty
+      map: [ "enum.DefibrillatorVisualLayers.Overlay"]
+  - type: ItemSlots
+    slots:
+      cell_slot:
+        name: power-cell-slot-component-slot-name-default
+
+- type: entity
+  parent: CMBaseDefibrillator
+  id: CMDefibrillatorInfinite
+  suffix: RMC14, Infinite
+
+- type: entity
+  id: RMCDefibrillatorCompact
+  parent: CMDefibrillator
+  name: compact defibrillator
+  description: This particular defibrillator has halved charge capacity compared to the standard emergency defibrillator, but can fit in your pocket.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/compact_defib.rsi
+  - type: Item
+    sprite: _RMC14/Objects/Medical/compact_defib.rsi
+    size: Small
+  - type: PowerCellDraw
+    useCharge: 132
+
+- type: entity
+  parent: [CMBaseDefibrillator, RMCPowerCellSlotUnremovable]
+  id: RMCSynthResetKey
+  name: WeYa synthetic reset key
+  description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/reset_key.rsi
+    layers:
+    - state: defib
+    - state: defib_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+  - type: PowerCellDraw
+    enabled: false
+    useCharge: 1000
+  - type: RMCPowerUsageDisplay
+  - type: RequiresSkill
+    skills:
+      RMCSkillEngineer: 1
+  - type: ItemToggle
+    soundActivate:
+      path: /Audio/_RMC14/Machines/click.ogg
+    soundDeactivate:
+      path: /Audio/_RMC14/Machines/click.ogg
+  - type: Defibrillator
+    zapSound:
+      path: /Audio/_RMC14/Medical/reset_key_release.ogg
+      params:
+        volume: -6
+    chargeSound:
+      path: /Audio/_RMC14/Medical/reset_key_powerup.ogg
+      params:
+        volume: -8
+    failureSound:
+      path: /Audio/_RMC14/Medical/reset_key_shortbeep.ogg
+      params:
+        volume: -6
+    successSound:
+      path: /Audio/_RMC14/Medical/reset_key_boot_on.ogg
+      params:
+        volume: -6
+  - type: UseOnSynthBlocked
+    reversed: true
+    popup: rmc-species-synth-reset-key-invalid
+    whitelist:
+      components:
+        - Marine
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Devices/reset_key.rsi
+    heldPrefix: null
+  - type: Tag
+    tags:
+    - RMCSynthResetKey
+
+- type: entity
+  parent: RMCSynthResetKey
+  id: RMCSynthResetKeySMART
+  name: SMART WeYa synthetic reset key
+  description: This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset. This one has a microfunction AI and can be operated by anyone.
+  components:
+  - type: RequiresSkill
+    skills:
+      RMCSkillEngineer: 0
+
+- type: entity
+  parent: RMCSynthResetKey
+  id: RMCSynthResetKeyNovaris # TODO RMC14 unique sprite for this
+  name: Novaris synthetic reset key
+  description: An independent Novaris design, based on a previous collaboration with Weston-Yamada. This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset.
+
+- type: entity
+  parent: RMCSynthResetKey
+  id: RMCSynthResetKeyNovarisSMART # TODO RMC14 unique sprite for this
+  name: SMART Novaris synthetic reset key
+  description: An independent Novaris design, based on a previous collaboration with Weston-Yamada. This device can fix major glitches or programming errors of synthetic units, as well as being able to restart a synthetic that has suffered critical failure. It can only be used once before being reset. This one has a micro-function AI and can be operated by anyone.
+  components:
+  - type: RequiresSkill
+    skills:
+      RMCSkillEngineer: 0

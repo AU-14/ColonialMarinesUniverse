@@ -1,0 +1,90 @@
+﻿# region Base
+- type: construction
+  abstract: true
+  id: BaseLight
+  targetNode: icon
+  category: construction-category-utilities
+  objectType: Item
+# endregion Base
+
+# region Lights
+- type: construction
+  parent: BaseLight
+  id: CyanLight
+  graph: CyanLight
+
+- type: construction
+  parent: BaseLight
+  id: BlueLight
+  graph: BlueLight
+
+- type: construction
+  parent: BaseLight
+  id: YellowLight
+  graph: YellowLight
+
+- type: construction
+  parent: BaseLight
+  id: PinkLight
+  graph: PinkLight
+
+- type: construction
+  parent: BaseLight
+  id: OrangeLight
+  graph: OrangeLight
+
+- type: construction
+  parent: BaseLight
+  id: BlackLight
+  graph: BlackLight
+
+- type: construction
+  parent: BaseLight
+  id: RedLight
+  graph: RedLight
+
+- type: construction
+  parent: BaseLight
+  id: GreenLight
+  graph: GreenLight
+
+- type: construction
+  parent: BaseLight
+  id: CyanLightBulb
+  graph: CyanLightBulb
+
+- type: construction
+  parent: BaseLight
+  id: BlueLightBulb
+  graph: BlueLightBulb
+
+- type: construction
+  parent: BaseLight
+  id: YellowLightBulb
+  graph: YellowLightBulb
+
+- type: construction
+  parent: BaseLight
+  id: PinkLightBulb
+  graph: PinkLightBulb
+
+- type: construction
+  parent: BaseLight
+  id: OrangeLightBulb
+  graph: OrangeLightBulb
+
+- type: construction
+  parent: BaseLight
+  id: BlackLightBulb
+  graph: BlackLightBulb
+
+- type: construction
+  parent: BaseLight
+  id: RedLightBulb
+  graph: RedLightBulb
+
+- type: construction
+  parent: BaseLight
+  id: GreenLightBulb
+  graph: GreenLightBulb
+# endregion Lights

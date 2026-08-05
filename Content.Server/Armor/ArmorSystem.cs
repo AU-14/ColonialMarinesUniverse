@@ -1,0 +1,31 @@
+using Content.Shared.Armor;
+using Content.Shared.Cargo;
+using Content.Shared.Damage.Prototypes;
+
+namespace Content.Server.Armor;
+
+/// <inheritdoc/>
+public sealed partial class ArmorSystem : SharedArmorSystem
+{
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<ArmorComponent, PriceCalculationEvent>(GetArmorPrice);
+    }
+
+    private void GetArmorPrice(EntityUid uid, ArmorComponent component, ref PriceCalculationEvent args)
+    {
+        foreach (var modifier in component.Modifiers.Coefficients)
+        {
+            var damageType = ProtoMan.Index<DamageTypePrototype>(modifier.Key);
+            args.Price += component.PriceMultiplier * damageType.ArmorPriceCoefficient * 100 * (1 - modifier.Value);
+        }
+
+        foreach (var modifier in component.Modifiers.FlatReduction)
+        {
+            var damageType = ProtoMan.Index<DamageTypePrototype>(modifier.Key);
+            args.Price += component.PriceMultiplier * damageType.ArmorPriceFlat * modifier.Value;
+        }
+    }
+}

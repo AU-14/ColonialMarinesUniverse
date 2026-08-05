@@ -1,0 +1,480 @@
+# Basic
+- type: entity
+  parent: TableBase
+  id: CMTable
+  name: table
+  description: A square metal surface resting on four legs. Useful to put stuff on.
+  components:
+  - type: VehicleSmashable
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/standard.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/standard.rsi
+    state: full
+  - type: Damageable
+    damageModifierSet: null
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -4
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: RMCTable
+    node: Tan
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+  - type: XenoToggleChargingDamage
+    destroy: true
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: CMTable
+  id: RMCTableBrown
+  suffix: Brown
+  components:
+  - type: Sprite
+    color: "#8B7B5B"
+  - type: Icon
+    color: "#8B7B5B"
+
+- type: entity
+  parent: BaseStructure
+  id: RMCLargeTable
+  name: table
+  description: A square metal surface resting on four legs. Useful to put stuff on.
+  abstract: true
+  components:
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/standard.rsi
+    state: full
+    offset: 0.5, 0.5
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/standard.rsi
+    state: full
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -4
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DamageMultiplierFlags
+    flags: Breaching
+  - type: XenoLeapDestroyOnPass
+  - type: XenoToggleChargingDamage
+    destroy: true
+  - type: Animateable
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: PlaceableSurface
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,1.45,0.45"
+        density: 55
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: SpriteFade
+  - type: Climbable
+  - type: Bonkable
+    bonkDamage:
+      types:
+        Blunt: 4
+  - type: Clickable
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepHull
+  - type: Tag
+    tags:
+    - ForceFixRotations
+
+# Reinforced
+- type: entity
+  parent: CMTable
+  id: CMTableReinforced
+  name: reinforced table
+  description: A square metal surface resting on four legs. This one has side panels, making it useful as a desk.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/reinforced.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/reinforced.rsi
+  - type: Construction
+    graph: RMCTable
+    node: Reinforced
+  - type: RMCWeldEffectSource
+    startingOffset: -0.35, -0.35
+    pathOffsets:
+    - -0.35, -0.35
+    - 0.35, -0.35
+    - 0.35, 0.35
+    - -0.35, 0.35
+    - -0.35, -0.35
+  - type: XenoLeapDestroyOnPass
+    spawnPrototype: CMRodMetal1 # TODO 50% to spawn 2, 50% to spawn 0
+
+# Reinforced Requisition
+- type: entity
+  parent: CMTableReinforced
+  id: CMTableReinforcedRequisition
+  description: A square metal surface resting on its fat metal bottom.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/requisition.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/requisition.rsi
+
+- type: entity
+  parent: CMTableReinforcedRequisition
+  id: RMCTableReinforcedRequisitionBrown
+  components:
+  - type: Sprite
+    color: "#ffb84d"
+  - type: Icon
+    color: "#ffb84d"
+
+- type: entity
+  parent: RMCTableReinforcedRequisitionBrown
+  id: RMCTableReinforcedRequisitionBrownOffset
+  suffix: Offset
+  components:
+  - type: Sprite
+    offset: 0, 0.1
+
+# Reinforced Black
+- type: entity
+  parent: CMTableReinforced
+  id: CMTableReinforcedBlack
+  name: black table
+  description: A sleek black metal table. Its legs are securely bolted to the floor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/black.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/black.rsi
+
+# Wooden Basic
+- type: entity
+  parent: CMTable
+  id: CMTableWooden
+  name: wooden table
+  description: A square wood surface resting on four legs. Useful to put stuff on.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/wood.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/wood.rsi
+  - type: Construction
+    graph: RMCTable
+    node: Wood
+
+# Wooden Poor
+- type: entity
+  parent: CMTableWooden
+  id: CMTableWoodenPoor
+  name: poor wooden table
+  description: A semi-poorly constructed wood surface resting on four legs. Useful to put stuff on.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/poor_wood.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/poor_wood.rsi
+  - type: Construction
+    graph: RMCTable
+    node: PoorWood
+
+# Wooden Fancy
+- type: entity
+  parent: CMTableWooden
+  id: CMTableWoodenFancy
+  name: fancy wooden table
+  description: A nicely crafted mahogany wood surface resting on four legs. Useful to put stuff on.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/fancy_wood.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/fancy_wood.rsi
+  - type: Construction
+    graph: RMCTable
+    node: FancyWood
+
+# Wooden Gambling
+- type: entity
+  parent: CMTableWooden
+  id: CMTableWoodenGambling
+  name: gambling table
+  description: A curved wood and carpet surface resting on four legs. Used for gambling games.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/gambling.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/gambling.rsi
+  - type: Construction
+    graph: RMCTable
+    node: Gambling
+
+# Almayer
+- type: entity
+  parent: CMTable
+  id: CMTableAlmayer
+  name: table
+  description: A square metal surface resting on four legs. Useful to put stuff on. Can be flipped in emergencies to act as cover.
+  suffix: Almayer
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/almayer.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/almayer.rsi
+  - type: Construction
+    graph: RMCTable
+    node: Almayer
+
+# Prison
+- type: entity
+  parent: CMTableReinforced
+  id: RMCTablePrison
+  name: table
+  description: A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip.
+  suffix: Prison
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/prison.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/prison.rsi
+
+- type: entity
+  parent: RMCTablePrison
+  id: RMCTablePrisonSoro
+  suffix: Prison, Blue
+  components:
+  - type: Sprite
+    color: "#98A3AB"
+  - type: Icon
+    color: "#98A3AB"
+
+- type: entity
+  parent: RMCTablePrison
+  id: RMCTablePrisonBeige
+  suffix: Prison, Beige
+  components:
+  - type: Sprite
+    color: "#ffe6e6"
+  - type: Icon
+    color: "#ffe6e6"
+
+- type: entity
+  parent: RMCTablePrison
+  id: RMCTablePrisonBrown
+  suffix: Prison, Brown
+  components:
+  - type: Sprite
+    color: "#8B7B5B"
+  - type: Icon
+    color: "#8B7B5B"
+
+# Hunter
+- type: entity
+  parent: CMTable
+  id: RMCTableHunter
+  name: table
+  description: A square metal surface resting on four legs. This one has side panels, making it useful as a desk, but impossible to flip.
+  suffix: Hunter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/hunter.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/hunter.rsi
+
+# Bar
+- type: entity
+  parent: RMCLargeTable
+  id: RMCLargeTableBar
+  name: bar table
+  description: A wooden table that has seen better days. There's the stickly sensation of spilled drinks within the cracks of the wood.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/bar.rsi
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/bar.rsi
+
+- type: entity
+  abstract: true
+  parent: BaseStructure
+  id: RMCTableVariantBase
+  name: table
+  description: A manually placed table variant.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: Damageable
+    damageContainer: StructuralInorganic
+    damageModifierSet: Metallic
+  - type: PlaceableSurface
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 55
+        mask:
+        - TableMask
+        layer:
+        - TableLayer
+  - type: SpriteFade
+  - type: Sprite
+  - type: Icon
+  - type: Climbable
+  - type: Bonkable
+    bonkDamage:
+      types:
+        Blunt: 4
+  - type: Clickable
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepHull
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: Tag
+    tags:
+    - ForceFixRotations
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableCloth
+  name: cloth-covered table
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothtable
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothtable
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableClothMiddle
+  name: cloth-covered table middle
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothmiddle
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothmiddle
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableClothEnd
+  name: cloth-covered table end
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: cloth1tileendtable
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: cloth1tileendtable
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableClothThick
+  name: cloth-covered thick table
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: cloth1tilethick
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: cloth1tilethick
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableClothDir
+  name: cloth-covered table corner
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothdir
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothdir
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableClothDir2
+  name: cloth-covered table segment
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothdir2
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothdir2
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableClothDir3
+  name: cloth-covered table junction
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothdir3
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/cloth.rsi
+    state: clothdir3
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableTOCEast
+  name: tactical operations table east
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/toc.rsi
+    state: tocEtable
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/toc.rsi
+    state: tocEtable
+
+- type: entity
+  parent: RMCTableVariantBase
+  id: RMCTableTOCWest
+  name: tactical operations table west
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/Tables/toc.rsi
+    state: tocWtable
+  - type: Icon
+    sprite: _RMC14/Structures/Furniture/Tables/toc.rsi
+    state: tocWtable

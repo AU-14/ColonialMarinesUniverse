@@ -1,0 +1,685 @@
+- type: entity
+  abstract: true
+  parent: ChemicalMedipen
+  id: CMAutoInjectorBase
+  name: autoinjector
+  description: An autoinjector.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/auto_injectors.rsi
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Item
+    size: Small
+    sprite: null
+    inhandVisuals: { }
+  - type: Hypospray
+    solutionName: pen
+    injectSound: /Audio/_RMC14/Medical/hypospray.ogg
+    transferAmount: 15
+    injectOnly: true
+    onlyAffectsMobs: true
+    canContainerDraw: false
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+  - type: SolutionContainerVisuals
+    maxFillLevels: 3
+    fillBaseName: autoinjector
+    emptySpriteName: autoinjector
+    changeColor: true
+  - type: Tag
+    tags:
+    - CMAutoInjector
+  - type: UseDelay
+    delay: 0.333
+  - type: IconLabel
+    textColor: White
+    storedOffset: -12, 12
+  - type: RMCSmartFridgeInsertable
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 300
+
+- type: entity
+  parent: CMAutoInjectorBase
+  id: CMAutoInjector
+  abstract: true
+  components:
+  - type: MedicallyUnskilledDoAfter
+  - type: CMRefillableSolution
+    solution: pen
+    reagents: {}
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMEmergencyAutoInjector
+  name: emergency autoinjector (CAUTION)
+  description: An autoinjector loaded with a special cocktail of chemicals, to be used in life-threatening situations. Doesn't require any training to use.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+  - type: Item
+    sprite: null
+  - type: Hypospray
+    transferAmount: 58 # TODO RMC14 77
+    injectSound: /Audio/_RMC14/Medical/air_release.ogg
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 58 # TODO RMC14 77
+        reagents:
+        - ReagentId: CMBicaridine
+          Quantity: 29
+        - ReagentId: CMKelotane
+          Quantity: 29
+#        - ReagentId: CMOxycodone # TODO RMC14 oxycodone
+#          Quantity: 19
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    changeColor: false
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+    doAfter: 0
+  - type: IconLabel
+    labelTextLocId: rmc-emergency-medicine-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMTricordrazineAutoInjector
+  name: tricordrazine autoinjector
+  description: An autoinjector loaded with 3 uses of Tricordrazine, a weak general use medicine for treating damage.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: CMTricordrazine
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMTricordrazine: 45
+  - type: IconLabel
+    labelTextLocId: rmc-tricordazine-container-label-text
+
+- type: entity
+  parent: CMTricordrazineAutoInjector
+  id: CMTricordrazineAutoInjectorNoSkill
+  name: first-aid autoinjector
+  description: An autoinjector loaded with a small dose of medicine for marines to treat themselves with.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/auto_injectors.rsi
+    layers:
+    - state: tricord1
+      map: ["enum.SolutionContainerLayers.Fill"]
+  - type: MedicallyUnskilledDoAfter
+    min: 0
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 15
+        reagents:
+        - ReagentId: CMTricordrazine
+          Quantity: 15
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    emptySpriteName: tricord0
+    fillBaseName: tricord
+    changeColor: false
+  - type: CMRefillableSolution
+    reagents:
+      CMTricordrazine: 15
+  - type: IconLabel
+    labelTextLocId: rmc-first-aid-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMKelotaneAutoInjector
+  name: kelotane autoinjector
+  description: An autoinjector loaded with 3 uses of Kelotane, a common burn medicine.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: CMKelotane
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMKelotane: 45
+  - type: IconLabel
+    labelTextLocId: rmc-kelotane-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMDexalinPlusAutoInjector
+  name: dexalin plus autoinjector
+  description: An autoinjector loaded with 3 uses of Dexalin+, designed to immediately oxygenate the entire body.
+  components:
+  - type: Hypospray
+    transferAmount: 1
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 3
+        reagents:
+        - ReagentId: CMDexalinPlus
+          Quantity: 3
+  - type: CMRefillableSolution
+    reagents:
+      CMDexalinPlus: 3
+  - type: IconLabel
+    labelTextLocId: rmc-dexalin-plus-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: RMCDyloveneAutoInjector
+  name: dylovene autoinjector
+  description: An autoinjector loaded with 3 doses of 15u of Dylovene, a common toxin damage medicine. You can refill it at Weya-Med vending machines.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: CMDylovene
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMDylovene: 45
+  - type: IconLabel
+    labelTextLocId: rmc-dylovene-container-label-text
+
+# TODO RMC14 tramadol
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMBicaridineAutoInjector
+  name: bicaridine autoinjector
+  description: An autoinjector loaded with 3 uses of Bicaridine, a common brute and circulatory damage medicine.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: CMBicaridine
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMBicaridine: 45
+  - type: IconLabel
+    labelTextLocId: rmc-bicaridine-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMInaprovalineAutoInjector
+  name: inaprovaline autoinjector
+  description: An autoinjector loaded with 3 uses of Inaprovaline, an emergency stabilization medicine for patients in critical condition.
+  components:
+  - type: Hypospray
+    transferAmount: 30
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMInaprovaline
+          Quantity: 90
+  - type: CMRefillableSolution
+    reagents:
+      CMInaprovaline: 90
+  - type: IconLabel
+    labelTextLocId: rmc-inaprovaline-container-label-text
+
+# TODO RMC14 oxycodone
+
+- type: entity
+  parent: CMAutoInjector
+  id: CMEpinephrineAutoInjector
+  name: epinephrine autoinjector
+  description: An autoinjector loaded with 3 uses of Epinephrine, better known as Adrenaline, a nerve stimulant useful in restarting the heart.
+  components:
+  - type: Hypospray
+    transferAmount: 5.25
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 15.75
+        reagents:
+        - ReagentId: CMEpinephrine
+          Quantity: 15.75
+  - type: CMRefillableSolution
+    reagents:
+      CMEpinephrine: 15.75
+  - type: IconLabel
+    labelTextLocId: rmc-epinephrine-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: RMCIronAutoInjector
+  name: iron autoinjector
+  description: An autoinjector loaded with 3 uses of iron, a chemical commonly used to treat blood loss.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: RMCIron
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      RMCIron: 45
+  - type: IconLabel
+    labelTextLocId: rmc-iron-container-label-text
+
+- type: entity
+  parent: CMAutoInjector
+  id: RMCDermalineAutoInjector
+  name: dermaline autoinjector
+  description: An autoinjector loaded with 3 uses of Dermaline, an advanced burn treatment chemical.
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+        reagents:
+        - ReagentId: CMDermaline
+          Quantity: 45
+  - type: CMRefillableSolution
+    reagents:
+      CMDermaline: 45
+  - type: IconLabel
+    labelTextLocId: rmc-dermaline-container-label-text
+
+- type: entity
+  parent: RMCMedicAutoInjectorBase
+  id: RMCMedicAutoInjector15
+  name: medic autoinjector (M-XL)
+  description: A custom-made professional injector, likely from research. Has a similar lock to pill bottles, and fits up to 6 injections.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/medic_auto_injector.rsi
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#FF9F00"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+  - type: SolutionContainerVisuals
+    maxFillLevels: 6
+  - type: RequiresSkill
+    skills:
+      RMCSkillMedical: 2
+  - type: Hypospray
+    transferAmount: 15
+
+- type: entity
+  parent: RMCMedicAutoInjector15
+  id: RMCMedicAutoInjector30
+  name: medic autoinjector (M-XXL)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#FF0000"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 180
+  - type: Hypospray
+    transferAmount: 30
+
+- type: entity
+  parent: RMCMedicAutoInjectorBase
+  id: RMCMedicAutoInjectorEZ1
+  name: autoinjector (E-U)
+  description: A custom-made EZ autoinjector, likely from research. Injects its entire payload immediately and doesn't require any training.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/ez_medic_auto_injector.rsi
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#FFFFFF"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 1
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+  - type: Hypospray
+    transferAmount: 1
+
+- type: entity
+  parent: RMCMedicAutoInjectorEZ1
+  id: RMCMedicAutoInjectorEZ5
+  name: autoinjector (E-T)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#DD95FF"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 5
+  - type: Hypospray
+    transferAmount: 5
+
+- type: entity
+  parent: RMCMedicAutoInjectorEZ1
+  id: RMCMedicAutoInjectorEZ10
+  name: autoinjector (E-XXS)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#1EF6FF"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 10
+  - type: Hypospray
+    transferAmount: 10
+
+- type: entity
+  parent: RMCMedicAutoInjectorEZ1
+  id: RMCMedicAutoInjectorEZ15
+  name: autoinjector (E-XS)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#21A0FF"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 15
+  - type: Hypospray
+    transferAmount: 15
+
+- type: entity
+  parent: RMCMedicAutoInjectorEZ1
+  id: RMCMedicAutoInjectorEZ30
+  name: autoinjector (E-S)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#171DFF"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 30
+  - type: Hypospray
+    transferAmount: 30
+
+- type: entity
+  parent: RMCMedicAutoInjectorEZ1
+  id: RMCMedicAutoInjectorEZ45
+  name: autoinjector (E-M)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#00FF07"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+  - type: Hypospray
+    transferAmount: 45
+
+- type: entity
+  parent: RMCMedicAutoInjectorEZ1
+  id: RMCMedicAutoInjectorEZ60
+  name: autoinjector (E-L)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#E8FF00"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 60
+  - type: Hypospray
+    transferAmount: 60
+
+- type: entity
+  parent: RMCMedicAutoInjector15
+  id: RMCMedicAutoInjectorBicaridine15
+  suffix: Bicaridine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMBicaridine
+          Quantity: 90
+
+- type: entity
+  parent: RMCMedicAutoInjector15
+  id: RMCMedicAutoInjectorKelotane15
+  suffix: Kelotane
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMKelotane
+          Quantity: 90
+
+- type: entity
+  parent: RMCMedicAutoInjector15
+  id: RMCMedicAutoInjectorTricordrazineRevival15
+  suffix: Tricordrazine - Revival
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMEpinephrine
+          Quantity: 30
+        - ReagentId: CMInaprovaline
+          Quantity: 30
+        - ReagentId: CMTricordrazine
+          Quantity: 30
+
+- type: entity
+  parent: RMCMedicAutoInjector15
+  id: RMCMedicAutoInjectorTricordrazine15
+  suffix: Tricordrazine
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMTricordrazine
+          Quantity: 90
+
+- type: entity
+  parent: RMCMedicAutoInjector15
+  id: RMCMedicAutoInjectorMeraBic15
+  suffix: MeraBic
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMMeralyne
+          Quantity: 45
+        - ReagentId: CMBicaridine
+          Quantity: 45
+
+- type: entity
+  parent: RMCMedicAutoInjector15
+  id: RMCMedicAutoInjectorKeloDerm15
+  suffix: KeloDerm
+  components:
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+        reagents:
+        - ReagentId: CMKelotane
+          Quantity: 45
+        - ReagentId: CMDermaline
+          Quantity: 45
+
+- type: entity
+  parent: CMAutoInjectorBase
+  id: RMCMedicAutoInjectorBase
+  abstract: true
+  components:
+  - type: Tag
+    tags:
+    - CMAutoInjector
+    - RMCAutoInjectorMedical
+  - type: RMCEmptySolution
+  - type: SolutionStorageFillable
+    solution: pen
+
+- type: entity
+  parent: RMCMedicAutoInjectorBase
+  id: RMCMedicAutoInjectorCS5
+  name: autoinjector (C-XS)
+  description: A custom-made autoinjector, likely from research.
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#21A0FF"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 15
+  - type: Hypospray
+    transferAmount: 5
+  - type: MedicallyUnskilledDoAfter
+
+- type: entity
+  parent: RMCMedicAutoInjectorCS5
+  id: RMCMedicAutoInjectorCS15
+  name: autoinjector (C-M)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#00FF07"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 45
+  - type: Hypospray
+    transferAmount: 15
+
+- type: entity
+  parent: RMCMedicAutoInjectorCS5
+  id: RMCMedicAutoInjectorCS30
+  name: autoinjector (C-XL)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#FF9F00"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 90
+  - type: Hypospray
+    transferAmount: 30
+
+- type: entity
+  parent: RMCMedicAutoInjectorCS5
+  id: RMCMedicAutoInjectorCS60
+  name: autoinjector (C-XXL)
+  components:
+  - type: Sprite
+    layers:
+    - state: autoinjector
+    - state: autoinjector1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: autoinjector_tag
+      color: "#FF0000"
+  - type: SolutionContainerManager
+    solutions:
+      pen:
+        maxVol: 180
+  - type: Hypospray
+    transferAmount: 60
+
+- type: Tag
+  id: CMAutoInjector
+
+- type: Tag
+  id: RMCAutoInjectorMedical

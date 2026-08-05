@@ -1,0 +1,241 @@
+# Headbands
+- type: entity
+  parent: CMHeadCap
+  id: CMHeadBandGreen
+  name: green headband
+  description: Piece of cloth to wrap around the head.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/green.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/green.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/green.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/green.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandGreen
+  id: CMHeadBandBrown
+  name: brown headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/brown.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/brown.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/brown.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/brown.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandGreen
+  id: CMHeadBandGray
+  name: gray headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/gray.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/gray.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/gray.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/gray.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandGreen
+  id: CMHeadBandRed
+  name: red headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/red.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/red.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/red.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/red.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandGreen
+  id: CMHeadBandTan
+  name: tan headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/tan.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/tan.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/tan.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/tan.rsi
+      state: hat
+
+# Squad headbands
+- type: entity
+  parent: CMHeadBandGreen
+  id: RMCHeadBandSquad
+  name: UNMC squad headband
+  suffix: DO NOT MAP
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/squad.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/squad.rsi
+  - type: RMCMapToSquad
+    map:
+      SquadAlpha: CMHeadBandAlpha
+      SquadBravo: CMHeadBandBravo
+      SquadCharlie: CMHeadBandCharlie
+      SquadDelta: CMHeadBandDelta
+      SquadEcho: CMHeadBandEcho
+      SquadFoxtrot: CMHeadBandFoxtrot
+      SquadIntel: CMHeadBandIntel
+
+- type: entity
+  parent: CMHeadBandGreen
+  id: CMHeadBandAlpha
+  name: alpha headband
+  description: Piece of cloth in colors of your squad.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/alpha.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/alpha.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/alpha.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/alpha.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandAlpha
+  id: CMHeadBandBravo
+  name: bravo headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/bravo.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/bravo.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/bravo.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/bravo.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandAlpha
+  id: CMHeadBandCharlie
+  name: charlie headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/charlie.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/charlie.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/charlie.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/charlie.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandAlpha
+  id: CMHeadBandDelta
+  name: delta headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/delta.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/delta.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/delta.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/delta.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandAlpha
+  id: CMHeadBandEcho
+  name: echo headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/echo.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/echo.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/echo.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/echo.rsi
+      state: hat
+
+- type: entity
+  parent: CMHeadBandAlpha
+  id: CMHeadBandFoxtrot
+  name: foxtrot headband
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/foxtrot.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/foxtrot.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/foxtrot.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/foxtrot.rsi
+      state: hat
+
+# Role specific
+- type: entity
+  parent: CMHeadBandRed
+  id: CMHeadBandIntel
+  name: intel headband
+  description: A piece of cloth that belonged to an experienced special forces operative, nobody seems to recall his name though. Viper..? Serpent..?
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/intel.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/intel.rsi
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/intel.rsi
+      state: helmet
+    hatRsi:
+      sprite: _RMC14/Objects/Clothing/Head/Hats/headband/intel.rsi
+      state: hat
+
+# civilian
+- type: entity
+  parent: CMHeadCap
+  id: CMHeadBandRebel
+  name: rebel headband
+  description: A headband made from a simple strip of cloth. The words "DOWN WITH TYRANTS" are emblazoned on the front.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/rebel.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/headband/rebel.rsi

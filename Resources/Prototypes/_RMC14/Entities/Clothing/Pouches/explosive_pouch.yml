@@ -1,0 +1,78 @@
+﻿- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: RMCPouchExplosive
+  name: explosive pouch
+  description: It can carry grenades, plastic explosives, mine boxes, and other explosives.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/large_explosive.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,11,1 #6 slots
+    whitelist:
+      tags:
+      - Grenade
+      - RMCExplosiveBreachingCharge
+      - RMCExplosiveClaymoreMine
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCPouchExplosive
+  id: RMCPouchExplosiveFilledPlasticExplosives
+  suffix: C4
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCExplosivePlastic
+      amount: 6
+
+- type: entity
+  parent: RMCPouchExplosive
+  id: RMCPouchExplosiveFilledHEFA
+  name: HEFA pouch
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeFrag
+      amount: 6
+
+- type: entity
+  parent: RMCPouchExplosive
+  id: RMCPouchExplosiveFilledHEDP
+  suffix: HEDP
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeHighExplosive
+      amount: 6
+
+- type: entity
+  parent: RMCPouchExplosive
+  id: RMCPouchExplosiveFilledSPP
+  suffix: SPP, M15
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeFragOld
+      amount: 4
+
+- type: entity
+  parent: RMCPouchExplosive
+  id: RMCPouchExplosiveFilledC4SPP
+  suffix: SPP, C4
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCExplosivePlastic
+      amount: 4
+
+- type: entity
+  parent: RMCPouchExplosive
+  id: RMCPouchExplosiveFilledHIRR
+  suffix: HIRR
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBatonSlugHIRR
+      amount: 4

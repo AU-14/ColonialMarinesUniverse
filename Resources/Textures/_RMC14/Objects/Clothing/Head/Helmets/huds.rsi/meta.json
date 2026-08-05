@@ -1,0 +1,133 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/a0922d708fa6ef0e4d09d08e742c188ae9bb5d4e/icons/mob/humans/onmob/clothing/helmet_garb/huds.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "hud_sight_right",
+      "directions": 4
+    },
+    {
+      "name": "nvg_sight_right",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "nvg_sight_right_raider",
+      "directions": 4
+    },
+    {
+      "name": "meson_sight_right",
+      "directions": 4
+    },
+    {
+      "name": "med_sight_right",
+      "directions": 4
+    },
+    {
+      "name": "sec_sight_right",
+      "directions": 4
+    },
+    {
+      "name": "hud_sight_left",
+      "directions": 4
+    },
+    {
+      "name": "meson_sight_left",
+      "directions": 4
+    },
+    {
+      "name": "med_sight_left",
+      "directions": 4
+    },
+    {
+      "name": "sec_sight_left",
+      "directions": 4
+    },
+    {
+      "name": "weld_visor",
+      "directions": 4
+    },
+    {
+      "name": "tanker_weld_visor",
+      "directions": 4
+    },
+    {
+      "name": "goon_weld_visor",
+      "directions": 4
+    },
+    {
+      "name": "po_visor_purple",
+      "directions": 4
+    },
+    {
+      "name": "po_visor_lightblue",
+      "directions": 4
+    },
+    {
+      "name": "po_visor_red",
+      "directions": 4
+    },
+    {
+      "name": "po_visor_darkblue",
+      "directions": 4
+    },
+    {
+      "name": "po_visor_yellow",
+      "directions": 4
+    },
+    {
+      "name": "po_visor_black",
+      "directions": 4
+    }
+  ]
+}

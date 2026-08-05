@@ -1,0 +1,148 @@
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeySquadLeader
+  name: squad leader's encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineCommand
+    - MarineJTAC
+    - MarineRequisition
+    defaultChannel: MarineCommand
+  - type: Sprite
+    state: sl_key
+
+# Alpha
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyAlpha
+  name: alpha encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineAlpha
+    defaultChannel: MarineAlpha
+  - type: Sprite
+    state: alpha_key
+
+# Bravo
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyBravo
+  name: bravo encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineBravo
+    defaultChannel: MarineBravo
+  - type: Sprite
+    state: bravo_key
+
+# Charlie
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyCharlie
+  name: charlie encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineCharlie
+    defaultChannel: MarineCharlie
+  - type: Sprite
+    state: charlie_key
+
+# Delta
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyDelta
+  name: delta encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineDelta
+    defaultChannel: MarineDelta
+  - type: Sprite
+    state: delta_key
+
+# Echo
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyEcho
+  name: echo encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineEcho
+    defaultChannel: MarineEcho
+  - type: Sprite
+    state: echo_key
+
+# Foxtrot
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeyFoxtrot
+  name: foxtrot encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineFoxtrot
+    defaultChannel: MarineFoxtrot
+  - type: Sprite
+    state: cryo_key
+
+# Marine Special Forces (ERT)
+- type: entity
+  parent: CMEncryptionKey
+  id: CMEncryptionKeySOF
+  name: sof's encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineCommand
+    - MarineRequisition
+    - MarineMedical
+    - MarineEngineer
+    - MarineIntel
+    - MarineJTAC
+    - MarineHighCommand
+    defaultChannel: MarineHighCommand
+  - type: Sprite
+    state: binary_key
+
+- type: entity
+  parent: CMEncryptionKey
+  id: RMCEncryptionKeyFORECON
+  name: forecon encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineCommand
+    - MarineAlpha
+    - MarineBravo
+    - MarineCharlie
+    - MarineDelta
+    - MarineEcho
+    - MarineFoxtrot
+    - MarineEngineer
+    - MarineMedical
+    - MarineRequisition
+    - MarineJTAC
+    - MarineIntel
+    - MarineCommon
+    defaultChannel: MarineSOF
+  - type: Sprite
+    state: sl_key
+
+# PVE
+
+- type: entity
+  parent: CMEncryptionKey
+  id: RMCEncryptionKeySunRiders
+  name: sun riders encryption key
+  components:
+  - type: EncryptionKey
+    channels:
+    - MarineAlpha
+    defaultChannel: MarineAlpha
+  - type: Sprite
+    state: delta_key

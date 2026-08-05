@@ -1,0 +1,158 @@
+- type: entity
+  id: AUShepFloorWaterEntity
+  name: shallow water
+  description: ""
+  abstract: true
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Sprite
+    drawdepth: BelowFloor
+    sprite: _RMC14/Tiles/sheperd/shep_beach.rsi
+  - type: Transform
+    anchored: true
+  - type: SyncSprite
+  - type: Clickable
+  - type: SolutionContainerManager
+    solutions:
+      pool:
+        maxVol: 9999999 #.inf seems to break the whole yaml file, but would definitely be preferable.
+        reagents:
+        - ReagentId: Water
+          Quantity: 9999999
+  - type: DrainableSolution
+    solution: pool
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepWater
+      params:
+        volume: 8
+  - type: BlockWeeds
+  - type: MinimapColor
+    color: "#94b0d59c"
+  - type: RMCWater
+    cover:
+      tags:
+      - Catwalk
+  - type: FTLSmashImmune
+  - type: NoFTL
+
+- type: entity
+  parent: AUShepFloorWaterEntity
+  id: AUEntityShepBeachCorner
+  components:
+  - type: Sprite
+    layers:
+    - state: shallow_corner
+
+- type: entity
+  parent: AUShepFloorWaterEntity
+  id: AUEntityShepBeachCornerEdge
+  components:
+  - type: Sprite
+    state: shallow_corner_edge
+
+- type: entity
+  parent: AUShepFloorWaterEntity
+  id: AUEntityShepBeachEdge
+  components:
+  - type: Sprite
+    state: shallow_edge
+
+- type: entity
+  parent: RMCEntityDesertWaterDeep
+  id: CMUEntityShepDesertWaterDeep
+  components:
+  - type: Sprite
+    color: '#FFFFFF33'
+  - type: FTLSmashImmune
+  - type: NoFTL
+  # Shepherd's deep river sits on the underground z-level. These entities are saved unanchored (water must
+  # not take a snap-grid slot), so the cave-in system saw an empty tile and treated the whole riverbed as an
+  # over-mined cavern - collapsing it and dropping the bridges built above. This marks the riverbed as holding
+  # up its own roof, the same way rock and walls do.
+  - type: ZLoadBearingTerrain
+
+- type: entity
+  id: CMUOverlayWater
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Sprite
+    drawdepth: Overlays
+    sprite: _RMC14/Tiles/planet/desert_water.rsi
+    color: '#FFFFFF33'
+    layers:
+    - state: deep
+  - type: Transform
+    anchored: true
+  - type: SyncSprite
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.375
+    sprintSpeedModifier: 0.375
+    ignoreWhitelist:
+      components:
+      - Xeno
+      tags:
+      - Carp
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+          - SlipLayer
+        mask:
+          - ItemMask
+        density: 1000
+        hard: false
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.1
+  - type: TileEntityEffect
+    effects:
+    - !type:Extinguish
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepWater
+      params:
+        volume: 8
+  - type: DamageOverTime
+    affectsDead: false
+    armorPiercingDamage:
+      types:
+        Asphyxiation: 4.6
+    emotes:
+    multipliers:
+    - multiplier: 0
+      whitelist:
+        tags:
+        - Carp
+    - multiplier: 0
+      whitelist:
+        components:
+        - Xeno
+        - Synth
+  - type: FTLSmashImmune
+  - type: NoFTL

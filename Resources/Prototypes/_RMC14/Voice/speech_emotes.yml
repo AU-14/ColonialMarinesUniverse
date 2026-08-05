@@ -1,0 +1,304 @@
+- type: emote
+  id: Hiss
+  name: rmc-emote-name-hiss
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+    - Xeno
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: { sprite: _RMC14/Actions/xeno_emotes.rsi, state: hiss }
+  chatMessages: ["rmc-emote-hiss"]
+  chatTriggers:
+    - hiss
+    - hisses
+    - hissing
+    - hissed
+
+- type: emote
+  id: Meow
+  name: rmc-emote-name-meow
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: meow }
+  chatMessages: ["rmc-emote-meow"]
+  chatTriggers:
+    - meow
+    - meows
+    - meowing
+    - meowed
+    - miau
+    - miaus
+    - nya
+    - nyas
+
+- type: emote
+  id: Mew
+  name: rmc-emote-name-mew
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: mew }
+  chatMessages: ["rmc-emote-mew"]
+  chatTriggers:
+    - mew
+    - mews
+    - mewing
+    - mewed
+
+- type: emote
+  id: Purr
+  name: rmc-emote-name-purr
+  category: Vocal
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: purr }
+  chatMessages: ["rmc-emote-purr"]
+  chatTriggers:
+    - purr
+    - purrs
+    - purring
+    - purred
+
+#Vulpkanin
+
+- type: emote
+  id: Yip
+  name: rmc-emote-name-yip
+  category: Vocal
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: bark }
+  whitelist:
+    components:
+      - Vocal
+  blacklist:
+    components:
+      - BorgChassis
+  chatMessages: ["rmc-emote-yip"]
+  chatTriggers:
+    - yip
+    - yip.
+    - yip?
+    - yip!
+    - yips
+    - yips.
+    - yips?
+    - yips!
+
+- type: emote
+  id: Gnash
+  name: rmc-emote-name-gnash
+  category: Vocal
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: gnash }
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-gnash"]
+  chatTriggers:
+    - gnash
+    - gnashes
+    - gnashes.
+    - gnashes!
+    - gnash.
+    - gnash!
+    - gnashes teeth
+    - gnashes their teeth
+    - gnashes her teeth
+    - gnashes his teeth
+    - gnashes its teeth
+
+# Skrell
+- type: emote
+  id: RMCSkrellAnger
+  name: rmc-emote-name-anger
+  category: Vocal
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: skrellanger }
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-anger"]
+  chatTriggers:
+    - anger
+    - anger.
+    - anger!
+    - angers
+    - angers.
+    - angers!
+    - trill angrily
+    - trill angrily.
+    - trill angrily!
+    - trills angrily
+    - trills angrily.
+    - trills angrily!
+
+- type: emote
+  id: RMCSkrellPeep
+  name: rmc-emote-name-peep
+  category: Vocal
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: peep }
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-peep"]
+  chatTriggers:
+    - peep
+    - peep.
+    - peep!
+    - peeps
+    - peeps.
+    - peeps!
+
+- type: emote
+  id: RMCSkrellTrill
+  name: rmc-emote-name-trill
+  category: Vocal
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: trill }
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-trill"]
+  chatTriggers:
+    - trill
+    - trill.
+    - trill!
+    - trills
+    - trills.
+    - trills!
+
+- type: emote
+  id: RMCSkrellWarble
+  name: rmc-emote-name-warble
+  category: Vocal
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: warble }
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-warble"]
+  chatTriggers:
+    - warble
+    - warble.
+    - warble!
+    - warbles
+    - warbles.
+    - warbles!
+
+# Reptilian
+
+- type: emote
+  id: RMCReptileRattle
+  name: rmc-emote-name-r-rattle
+  category: Hands
+  available: false
+  icon: { sprite: _RMC14/Actions/species_emotes.rsi, state: snarl }
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-r-rattle"]
+  chatTriggers:
+    - rattle
+    - rattles
+    - rattling
+    - rattled
+    - rattle tail
+    - rattles tail
+    - rattles their tail
+    - rattles her tail
+    - rattles his tail
+    - rattles its tail
+
+# Slime
+
+- type: emote
+  id: RMCSlimeBubble
+  name: rmc-emote-name-slime-bubble
+  category: Vocal
+  available: false
+  icon: Interface/Emotes/squish.png # todo: new icons?
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-slime-bubble"]
+  chatTriggers:
+  - bubbles
+  - bubbling
+
+- type: emote
+  id: RMCSlimePop
+  name: rmc-emote-name-slime-pop
+  category: Vocal
+  available: false
+  icon: Interface/Emotes/squish.png # todo: new icons?
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-slime-pop"]
+  chatTriggers:
+  - pops
+  - popping
+
+- type: emote
+  id: RMCSlimeWobble
+  name: rmc-emote-name-slime-wobble
+  category: Vocal
+  available: false
+  icon: Interface/Emotes/squish.png # todo: new icons?
+  whitelist:
+    components:
+    - Vocal
+  blacklist:
+    components:
+    - BorgChassis
+  chatMessages: ["rmc-emote-slime-wobble"]
+  chatTriggers:
+  - wobbles
+  - wobbling
+  - wibbles
+  - wibbling

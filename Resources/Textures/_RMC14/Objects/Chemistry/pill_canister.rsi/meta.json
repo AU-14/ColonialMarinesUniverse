@@ -1,0 +1,163 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/311e8f06c0eae7c6a0ab71ba04943c93c55850eb/icons/obj/items/chemistry.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/master/icons/mob/humans/onmob/inhands/equipment/medical_lefthand.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "pill_canister"
+    },
+    {
+      "name": "pill_canister0"
+    },
+    {
+      "name": "pill_canister1"
+    },
+    {
+      "name": "pill_canister2"
+    },
+    {
+      "name": "pill_canister3"
+    },
+    {
+      "name": "pill_canister4"
+    },
+    {
+      "name": "pill_canister5"
+    },
+    {
+      "name": "pill_canister6"
+    },
+    {
+      "name": "pill_canister7"
+    },
+    {
+      "name": "pill_canister8"
+    },
+    {
+      "name": "pill_canister9"
+    },
+    {
+      "name": "pill_canister10"
+    },
+    {
+      "name": "pill_canister11"
+    },
+    {
+      "name": "pill_canister12"
+    },
+    {
+      "name": "open"
+    },
+    {
+      "name": "closed"
+    },
+    {
+      "name": "inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "1-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "1-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "2-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "2-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "3-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "3-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "4-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "4-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "5-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "5-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "6-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "6-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "7-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "7-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "8-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "8-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "9-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "9-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "10-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "10-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "11-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "11-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "12-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "12-inhand-right",
+      "directions": 4
+    }
+  ]
+}

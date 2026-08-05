@@ -1,0 +1,250 @@
+# Tactical Medical
+- type: entity
+  parent: RMCPouchMedical
+  id: RMCPouchMedicalSoc
+  name: tactical medical pouch
+  description: A heavy pouch containing everything one needs to get themselves back on their feet. Quite the selection.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/socmed.rsi
+  - type: Storage
+    grid:
+    - 0,0,25,1 #13 slots
+    whitelist:
+      tags:
+      - CMTraumaKit
+      - CMBurnKit
+      - CMOintment
+      - Brutepack
+      - CMBloodPack
+      #      - TODO RMC14 splint
+      - PillCanister
+      - DiscreteHealthAnalyzer
+      - CMFireExtinguisherPortable
+      - CMSurgicalLine
+      - CMSynthGraft
+      - Hypospray
+      - PillPacket
+      components:
+      - Hypospray
+      - Injector
+
+- type: entity
+  parent: RMCPouchMedicalSoc
+  id: RMCPouchMedicalSocFill
+  suffix: Filled
+  components:
+  - type: StorageFill # todo rmc14 autoinjectors oxycodone
+    contents:
+    - id: CMHealthAnalyzer
+      # splint
+    - id: CMTraumaKit10
+    - id: CMBurnKit10
+    - id: CMKelotaneAutoInjector
+    - id: CMBicaridineAutoInjector
+    #- id: CMOxycodoneAutoInjector
+    - id: CMEmergencyAutoInjector
+    - id: CMEmergencyAutoInjector
+
+
+# Tactical Medical Dutch`s Butch
+- type: entity
+  parent: RMCPouchMedicalSoc
+  id: RMCPouchMedicalSocDutch
+  name: Dutch's Medical Pouch
+  description: A pouch bought from a black market trader by Dutch quite a few years ago. Rumoured to be stolen from secret Marine assets. Its contents have been slowly used up and replaced over the years.
+
+- type: entity
+  parent: RMCPouchMedicalSocDutch
+  id: RMCPouchMedicalSocDutchFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+      # splint x2
+    - id: CMTraumaKit10
+      amount: 2
+    - id: CMBurnKit10
+      amount: 2
+    # todo rmc14 autoinjectors oxycodone x2
+#    - id: CMOxycodoneAutoInjector
+#      amount: 2
+    - id: CMEmergencyAutoInjector
+      amount: 1
+
+- type: entity
+  parent: RMCPouchMedicalSoc
+  id: RMCPouchMedicalSocMarineRaiderFill
+  suffix: Filled
+  components:
+  - type: StorageFill # TODO RMC14
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMTraumaKit10
+      amount: 2
+    - id: CMBurnKit10
+    - id: CMBicaridineAutoInjector
+    - id: CMKelotaneAutoInjector
+    - id: CMEmergencyAutoInjector
+      amount: 2
+    - id: CMFireExtinguisherPortable
+    - id: Stimpack
+      amount: 3
+
+- type: entity
+  parent: RMCPouchMedicalSocDutch
+  id: RMCPouchMedicalSocDutchUnmarked
+  name: tactical medical pouch
+  description: A heavy pouch containing everything one needs to get themselves back on their feet. Quite the selection. Somehow, the whole pouch manages to look classified, you feel like you're going to get court-marshalled for even looking at it.
+
+
+# Pouch First Responder
+- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: RMCPouchFirstResponder
+  name: first responder pouch
+  description: A pouch designed for carrying supplies to assist medical personnel and quickly respond to injuries on the battlefield without immediately treating them. Can hold supplies such as roller beds, stasis bags, and health analysers.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/frt_med.rsi
+  - type: Storage
+    maxItemSize: Large
+    grid:
+    - 0,0,7,1 #4 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Pill
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - CMOintment
+      - Brutepack
+      - CMBloodPack
+      #      - TODO RMC14 splint
+      - CMAutoInjector
+      - CMFireExtinguisherPortable
+      - CMRollerItem
+      - BodyBag
+      - PillPacket
+      - Hypospray
+      components:
+      - Hypospray
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCPouchFirstResponder
+  id: RMCPouchFirstResponderFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMRollerBedSpawnFolded
+    - id: CMFireExtinguisherPortable
+    - id: CMStasisBagFolded
+
+
+# Vial Pouch
+- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: RMCPouchVial
+  name: vial pouch
+  description: A pouch for carrying glass vials.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/vial.rsi
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,11,1 #6 slots
+    whitelist:
+      components:
+      - Vial
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCPouchVial
+  id: RMCPouchVialFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCVial
+      amount: 6
+
+
+# Chemist Pouch
+- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: RMCPouchChem
+  name: chemist pouch
+  description: A pouch for carrying glass beakers.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/chemist.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,3,1 #2 slots
+    whitelist:
+      tags:
+      - GlassBeaker
+      - Bottle
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCPouchChem
+  id: RMCPouchChemFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMBeakerLarge
+    - id: CMBeaker
+
+# Auto-Injector Pouch
+- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: RMCPouchAutoinjector
+  name: auto-injector pouch
+  description: A pouch specifically for auto-injectors.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/injectors.rsi
+  - type: Storage
+    grid:
+    - 0,0,13,1 #7 slots
+    whitelist:
+      tags:
+      - CMAutoInjector
+  - type: FixedItemSizeStorage
+
+# Syringe Pouch
+- type: entity
+  parent: [RMCPouchOpenClosed, RMCPouchStorage]
+  id: RMCPouchSyringe
+  name: syringe pouch
+  description: It can carry syringes.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Pouches/syringe.rsi
+  - type: Storage
+    grid:
+    - 0,0,11,1 #6 slots
+    whitelist:
+      tags:
+      - Syringe
+  - type: FixedItemSizeStorage
+
+- type: entity
+  parent: RMCPouchSyringe
+  id: RMCPouchSyringeFill
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSyringe
+      amount: 6

@@ -1,0 +1,120 @@
+- type: entity
+  id: RMCCrateMedicalSurgery
+  parent: CMCrateSecureSurgery
+  name: surgery crate (tray,anesthetics,surgeon gear)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCSurgicalTray
+      - id: CMMaskGasMedical
+      - id: CMScrubsGreen
+      - id: RMCBoxSterileMask
+      - id: RMCBoxLatexGloves
+      - id: CMAnestheticTankFilled
+
+- type: entity
+  id: RMCCrateFieldDoctor
+  parent: CMCrateSecureSurgery
+  name: field doctor crate (replacement field doctor gear)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCTentUNMCStandardMedicalFolded
+      - id: RMCWebbingSurgicalGreen
+      - id: CMPortableSurgicalBedSpawnFolded
+      - id: RMCPortableDialysis
+      #- id: CMIV # TODO RMC14 Make IV fit in crate.
+      - id: RMCSprayBottleSpaceCleaner
+      - id: CMMaskGasMedical
+      - id: RMCBoxSterileMask
+      - id: RMCBoxLatexGloves
+      - id: CMWrench
+      - id: CMCrowbar
+
+- type: entity
+  id: RMCCrateMedicalBodyBag
+  parent: RMCCrateMedical
+  name: body bag crate (x28)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCBoxBodyBag
+        amount: 4
+
+- type: entity
+  id: RMCCrateMedicalStasisBag
+  parent: RMCCrateMedical
+  name: stasis bag crate (x3)
+  components:
+  - type: StorageFill
+    contents:
+      - id: CMStasisBagFolded
+        amount: 3
+
+- type: entity
+  id: RMCCrateMedicalFirstAid
+  parent: RMCCrateMedical
+  name: first aid kit crate (x2 each)
+  components:
+  - type: StorageFill
+    contents:
+      - id: CMFirstAidKitFilled
+        amount: 2
+      - id: CMBurnAidKitFilled
+        amount: 2
+      - id: CMToxinAidKitFilled
+        amount: 2
+      - id: CMFirstAidO2KitFilled
+        amount: 2
+      - id: CMAdvFirstAidKitFilled
+        amount: 2
+
+- type: entity
+  id: RMCCrateMedicalFilled
+  parent: RMCCrateMedical
+  name: medical crate
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents: # TODO RMC14 missing bottles
+      - id: RMCBoxPillCanister
+      - id: RMCBoxSyringe
+      - id: CMBottleInaprovaline
+      - id: CMBottleDylovene
+      - id: CMBottleBicaridine
+      - id: CMBottleDexalin
+      - id: CMBottleKelotane
+      # - id: CMBottleTramadol
+      - id: CMPillCanisterInaprovaline
+      - id: CMPillCanisterDylovene
+      - id: CMPillCanisterBicaridine
+      - id: CMPillCanisterDexalin
+      - id: CMPillCanisterKelotane
+      # - id: CMPillCanisterTramadol
+      # - id: CMPillCanisterPeridaxon
+
+- type: entity
+  id: RMCCrateMedicalPill
+  parent: RMCCrateMedical
+  name: pill bottle crate (x2 each)
+  components:
+  - type: StorageFill
+    contents: # TODO RMC14 missing pill bottles
+      - id: RMCBoxPillCanister
+        amount: 2
+      - id: CMPillCanisterInaprovaline
+        amount: 2
+      - id: CMPillCanisterDylovene
+        amount: 2
+      - id: CMPillCanisterBicaridine
+        amount: 2
+      - id: CMPillCanisterDexalin
+        amount: 2
+      - id: CMPillCanisterKelotane
+        amount: 2
+      # - id: CMPillCanisterTramadol
+      #  amount: 2
+      # - id: CMPillCanisterPeridaxon
+      #  amount: 2
+
+# TODO RMC14 peridaxon, tramadol

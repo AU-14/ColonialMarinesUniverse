@@ -1,0 +1,158 @@
+- type: entity
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  - RMCXenoVentCrawler
+  id: CMXenoBurrower
+  name: Burrower
+  description: A hefty alien with sharp claws.
+  components:
+  - type: CanBuildThickFromConstructNode
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleBurrower
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Burrower/burrower.rsi # AU14-Edit
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - RMCSynthGrabbable
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      500: Critical
+      600: Dead
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaPurple
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 1
+  - type: Xeno
+    role: CMXenoBurrower
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoAcidNormal
+    - ActionXenoPheromones
+    - ActionXenoOrderConstruction
+    - ActionXenoDigTunnel
+    - ActionXenoPlantWeeds
+    - ActionXenoResinHole
+    - ActionXenoBurrow
+    - ActionXenoTremor
+    - ActionXenoDevolve
+    tier: 2
+    hudOffset: -0.15,0.56
+    unlockAt: 420 # 7 minutes
+  - type: XenoLight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoDrone
+  - type: XenoPlasma
+    plasma: 600
+    maxPlasma: 600
+    plasmaRegenOnWeeds: 4.5
+  - type: XenoAcid
+  - type: CMArmor
+    xenoArmor: 25
+    explosionArmor: 40
+  - type: XenoDevour
+  - type: XenoPheromones
+    pheromonesMultiplier: 2
+  - type: XenoStomp
+    selfEffect: CMEffectSelfStomp
+    shortRange: 0
+    range: 4
+    stompsThroughBarricades: true
+    plasmaCost: 100
+    paralyzeTime: 2
+    slowBigInsteadOfStun: true
+    slows: false
+    sound: /Audio/_RMC14/Xeno/alien_footstep_charge1.ogg
+    debuffsHurtXenosMore: false
+  - type: XenoBurrow
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 27.5
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 36
+  - type: Tackle
+    min: 3
+    max: 5
+    chance: 0.4
+    stunMin: 4
+    stunMax: 5
+  - type: TunnelRenamer
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2
+    baseSprintSpeed: 3.5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.6425
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.7125
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.4775
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: RMCXenoDamageVisuals
+    prefix: burrower
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: burrower
+  - type: AcidTrap #Do 2 CM code they make level 3 traps at a level 2 cost
+    trapLevel: 3
+    spray: XenoAcidSprayTrapStrong
+  - type: XenoConstruction
+    canOrderConstruction:
+    - HiveCoreXenoConstructionNode
+    - HiveEggMorpherXenoConstructionNode
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.2
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT2
+  - type: VentCrawler
+    ventCrawlIcon: burrower
+  - type: RMCActionOrder
+    id: CMXenoBurrower

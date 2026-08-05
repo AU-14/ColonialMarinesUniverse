@@ -1,0 +1,398 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/ec4ab3ab5734c5388a95f723d1c98b178519d0ae/icons/turf/ert_shuttle.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "left_engine_01",
+      "directions": 4
+    },
+    {
+      "name": "left_engine_02",
+      "directions": 4
+    },
+    {
+      "name": "left_engine_03",
+      "directions": 4
+    },
+    {
+      "name": "right_engine_01",
+      "directions": 4
+    },
+    {
+      "name": "right_engine_02",
+      "directions": 4
+    },
+    {
+      "name": "right_engine_03",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_01",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_02",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_03",
+      "directions": 4
+    },
+    {
+      "name": "standard_leftward_wall",
+      "directions": 4
+    },
+    {
+      "name": "standard_rightward_wall",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_04",
+      "directions": 4
+    },
+    {
+      "name": "standard_inner_wall_02",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_05",
+      "directions": 4
+    },
+    {
+      "name": "standard_left_engine",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_08",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_09",
+      "directions": 4
+    },
+    {
+      "name": "standard_right_engine",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_20",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_21",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_22",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_23",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_25",
+      "directions": 4
+    },
+    {
+      "name": "standard_wall_27",
+      "directions": 4
+    },
+    {
+      "name": "standard_t_wall_inverted",
+      "directions": 4
+    },
+    {
+      "name": "standard_t_wall",
+      "directions": 4
+    },
+    {
+      "name": "standard_outer_wall",
+      "directions": 4
+    },
+    {
+      "name": "standard_inner_southward_wall",
+      "directions": 4
+    },
+    {
+      "name": "standard_inner_rightward_t_wall",
+      "directions": 4
+    },
+    {
+      "name": "standard_inner_leftward_t_wall",
+      "directions": 4
+    },
+    {
+      "name": "standard_inner_wall_01",
+      "directions": 4
+    },
+    {
+      "name": "standard_inner_t_wall",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_01",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_02",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_03",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_04",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_05",
+      "directions": 4
+    },
+    {
+      "name": "spp_left_engine",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_08",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_09",
+      "directions": 4
+    },
+    {
+      "name": "spp_right_engine",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_16",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_20",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_21",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_22",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_23",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_25",
+      "directions": 4
+    },
+    {
+      "name": "spp_wall_27",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_01",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_02",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_03",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_04",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_05",
+      "directions": 4
+    },
+    {
+      "name": "weya_left_engine",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_08",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_09",
+      "directions": 4
+    },
+    {
+      "name": "weya_right_engine",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_12",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_13",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_14",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_15",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_16",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_17",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_18"
+    },
+    {
+      "name": "weya_wall_19"
+    },
+    {
+      "name": "weya_wall_20",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_21",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_22",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_23",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_25",
+      "directions": 4
+    },
+    {
+      "name": "weya_wall_27",
+      "directions": 4
+    },
+    {
+      "name": "nightmare_spp_wall_01"
+    },
+    {
+      "name": "nightmare_spp_wall_02"
+    },
+    {
+      "name": "nightmare_spp_wall_03"
+    },
+    {
+      "name": "nightmare_spp_wall_04"
+    },
+    {
+      "name": "nightmare_spp_wall_05"
+    },
+    {
+      "name": "nightmare_spp_wall_06"
+    },
+    {
+      "name": "nightmare_spp_wall_15"
+    },
+    {
+      "name": "nightmare_spp_wall_07"
+    },
+    {
+      "name": "nightmare_spp_wall_08"
+    },
+    {
+      "name": "nightmare_spp_wall_20"
+    },
+    {
+      "name": "nightmare_spp_left_engine_01"
+    },
+    {
+      "name": "nightmare_spp_right_engine_01"
+    },
+    {
+      "name": "nightmare_spp_left_engine_02"
+    },
+    {
+      "name": "nightmare_spp_right_engine_02"
+    },
+    {
+      "name": "nightmare_spp_wall_11"
+    },
+    {
+      "name": "nightmare_spp_wall_16"
+    },
+    {
+      "name": "nightmare_spp_wall_12"
+    },
+    {
+      "name": "nightmare_spp_wall_13"
+    },
+    {
+      "name": "nightmare_spp_wall_14"
+    },
+    {
+      "name": "tse_wall_01"
+    },
+    {
+      "name": "tse_wall_02"
+    },
+    {
+      "name": "tse_wall_03"
+    },
+    {
+      "name": "tse_wall_04"
+    },
+    {
+      "name": "tse_wall_05"
+    },
+    {
+      "name": "tse_left_engine"
+    },
+    {
+      "name": "tse_wall_08"
+    },
+    {
+      "name": "tse_wall_09"
+    },
+    {
+      "name": "tse_right_engine"
+    },
+    {
+      "name": "tse_wall_16"
+    },
+    {
+      "name": "tse_wall_20"
+    },
+    {
+      "name": "tse_wall_21"
+    },
+    {
+      "name": "tse_wall_22"
+    },
+    {
+      "name": "tse_wall_23"
+    },
+    {
+      "name": "tse_wall_25"
+    },
+    {
+      "name": "tse_wall_27"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+- type: healthIcon
+  abstract: true
+  id: HolocardIcon
+  priority: 3
+  locationPreference: Left
+  isShaded: true
+
+- type: healthIcon
+  parent: HolocardIcon
+  id: UrgentHolocardIcon
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud_holocard.rsi
+    state: hudhcorange
+
+- type: healthIcon
+  parent: HolocardIcon
+  id: EmergencyHolocardIcon
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud_holocard.rsi
+    state: hudhcred
+
+- type: healthIcon
+  parent: HolocardIcon
+  id: PermaHolocardIcon
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud_holocard.rsi
+    state: hudhcblack
+
+- type: healthIcon
+  parent: HolocardIcon
+  id: XenoHolocardIcon
+  icon:
+    sprite: /Textures/_RMC14/Interface/health_hud_holocard.rsi
+    state: hudhcpurple

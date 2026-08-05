@@ -1,0 +1,96 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-24",
+  "branch": "Chip/multiz-modernization",
+  "baseCommit": "0c23f36f088d1c19b0c22753efba9ce2e4f3e3f0",
+  "finding": "MZ-073",
+  "reportedBaseline": {
+    "unknownMessageWarningInstances": 18,
+    "locale": "en-US",
+    "example": "Unknown messageId (\"en-US\"): \"MultiZ Destroyable Grate 3\""
+  },
+  "sourceBaseline": {
+    "rawEnglishNameAssignments": 22,
+    "distinctRawEnglishNames": 16,
+    "concreteTileDefinitions": 20,
+    "abstractParentDefinitions": 2,
+    "rootCause": "The client tile-spawning UI calls Loc.GetString(tile.Name), but the CMU Multi-Z grate tile prototypes supplied raw English display text instead of Fluent message IDs."
+  },
+  "change": {
+    "prototypeFile": "Content.CMU/Resources/Prototypes/_CMU14/Tiles/multiztiles.yml",
+    "localeFile": "Content.CMU/Resources/Locale/en-US/_CMU14/zlevels/zLevels.ftl",
+    "localizedNameReferences": 22,
+    "distinctFluentIds": 16,
+    "missingFluentIdsAfter": 0,
+    "behavior": "Preserve the exact existing en-US display labels while changing only the localization data contract."
+  },
+  "focusedValidation": {
+    "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --filter FullyQualifiedName~CMUMultiZTileLocalizationTest -m:1 /nr:false -v:minimal",
+    "passed": 1,
+    "failed": 0,
+    "skipped": 0,
+    "duration": "37 s",
+    "concreteTilesChecked": 20,
+    "coverage": "Client ILocalizationManager.HasString and GetString for every concrete Multi-Z grate tile, including exact existing visible labels.",
+    "stdoutSha256": "0E0E26F1D38BD95D40CCC3457EC17BB0F06B307655007417FD37B800F657E1C1"
+  },
+  "requiredGates": {
+    "integration": {
+      "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --no-build --filter FullyQualifiedName~SandboxTest.Test|FullyQualifiedName~USSBushMultiZTest.LoadsNetworkAndResolvesActiveShipMarkers|FullyQualifiedName~USSBushMultiZTest.ReplicatesMinimumFallingAndVehicleTraversalState|FullyQualifiedName~USSBushMultiZTest.CombinesExistingMapsThroughLifecycle|FullyQualifiedName~CMUMultiZTileLocalizationTest -m:1 /nr:false -v:minimal",
+      "passed": 5,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1 m 20 s",
+      "stdoutSha256": "B03E62A5C04BB1B4FD7A74F6EEEAE6D1D9D6A6AFED3BC96D835CAA66403E9AD4"
+    },
+    "releaseBuilds": {
+      "client": {
+        "warnings": 0,
+        "errors": 0,
+        "elapsed": "00:00:58.29"
+      },
+      "server": {
+        "warnings": 0,
+        "errors": 0,
+        "elapsed": "00:00:20.85"
+      }
+    },
+    "clientServerStability": {
+      "artifact": "artifacts/multiz-phase4/20260724-tile-localization-after",
+      "durationSeconds": 68.847028,
+      "serverWarmupSeconds": 20,
+      "clientWarmupSeconds": 30,
+      "captureSeconds": 10,
+      "serverExitCode": 0,
+      "clientExitCode": 0,
+      "serverStderrBytes": 0,
+      "clientStderrBytes": 0,
+      "fullGameStateBytes": 929193,
+      "enteredInGame": true,
+      "multiZTileLocalizationWarnings": 0,
+      "allUnknownMessageIdWarnings": 0,
+      "mainLoopCannotKeepUpWarnings": 3,
+      "fatalOrUnhandledSignatures": 0,
+      "lateMessage": "Got late MsgEntity! Diff: -209, msgT: 0, cT: 209, msg: Content.Shared.Guidebook.RequestGuidebookDataEvent",
+      "hashes": {
+        "manifest": "8BC261F62692ED30819C833A581ECE9C58C9697CE7B36D72ACE4550407327899",
+        "serverStdout": "5349906F6258A3FD20330F2BA0A928F751C7D2C20F7B84393AC157FA55ADA00F",
+        "clientStdout": "08C5586AD057696A882015576357943ABC43A6269BAD804B2164FC3FAF8C2625"
+      }
+    }
+  },
+  "yamlValidator": {
+    "command": "dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll",
+    "aggregateErrors": 524,
+    "emittedErrorLines": 964,
+    "changedMultiZTileOrLocalizationErrors": 0,
+    "stdoutSha256": "113AD1770391FD7126A7F023700CA9BDE9A08443B5BC952D7DA64BC763588F97",
+    "note": "The repo-wide validator remains red on unrelated existing RMC/upstream schema and localization debt; no emitted error references the changed CMU resources."
+  },
+  "claim": "Correctness and stability fix only; no CPU, GPU, allocation, packet, or load-time performance improvement is claimed.",
+  "deferredRisks": [
+    "The four indestructible half-grate prototypes retain their existing visible Destroyable Half Grate labels to avoid an unrequested behavior/presentation change.",
+    "The stability run still emitted three MainLoop: Cannot keep up! warnings; investigate those with separate load/tick profiling rather than attributing them to localization.",
+    "The automated regression exercises the tile-menu localization operation directly but does not replace a manual visual pass through the complete tile-spawning window."
+  ]
+}

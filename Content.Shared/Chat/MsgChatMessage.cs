@@ -1,0 +1,147 @@
+using System.IO;
+using JetBrains.Annotations;
+using Lidgren.Network;
+using Robust.Shared.Network;
+using Robust.Shared.Serialization;
+using Robust.Shared.Utility;
+
+namespace Content.Shared.Chat
+{
+    [Serializable, NetSerializable]
+    public enum ChatDisplayKind : byte
+    {
+        Unknown, Local, Whisper, Emote, Radio, LOOC, OOC, Dead, Admin, Mentor, System, Combat,
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class ChatDisplayMetadata(
+        ChatDisplayKind kind,
+        string? senderName = null,
+        string? senderPrefix = null,
+        string? verb = null,
+        string? channelLabel = null,
+        bool quoteBody = false,
+        Color? accentColor = null,
+        Color? backgroundColorOverride = null)
+    {
+        public ChatDisplayKind Kind = kind;
+        public string? SenderName = senderName;
+        public string? SenderPrefix = senderPrefix;
+        public string? Verb = verb;
+        public string? ChannelLabel = channelLabel;
+        public bool QuoteBody = quoteBody;
+        public Color? AccentColor = accentColor;
+        public Color? BackgroundColorOverride = backgroundColorOverride;
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class ChatMessage
+    {
+        public ChatChannel Channel;
+
+        /// <summary>
+        /// This is the text spoken by the entity, after accents and such were applied.
+        /// This should have <see cref="FormattedMessage.EscapeText"/> applied before using it in any rich text box.
+        /// </summary>
+        public string Message;
+
+        /// <summary>
+        /// This is the <see cref="Message"/> but with special characters escaped and wrapped in some rich text
+        /// formatting tags.
+        /// </summary>
+        public string WrappedMessage;
+
+        public NetEntity SenderEntity;
+
+        public NetEntity GhostFollowEntity;
+
+        public NetEntity XenoWatchEntity;
+
+        /// <summary>
+        ///     Identifier sent when <see cref="SenderEntity"/> is <see cref="NetEntity.Invalid"/>
+        ///     if this was sent by a player to assign a key to the sender of this message.
+        ///     This is unique per sender.
+        /// </summary>
+        public int? SenderKey;
+
+        public bool HideChat;
+        public Color? MessageColorOverride;
+        public string? AudioPath;
+        public float AudioVolume;
+        public ChatDisplayMetadata? Display;
+        public bool HidePopup;
+        public bool UseEmoteSpeechBubble;
+        public string? SpeechStyleClass;
+        public string? LanguageIcon;
+        public bool RepeatCheckSender;
+
+        [NonSerialized]
+        public bool Read;
+
+        public ChatMessage(ChatChannel channel, string message, string wrappedMessage, NetEntity source, int? senderKey, bool hideChat = false, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, bool repeatCheckSender = true, ChatDisplayMetadata? display = null, NetEntity ghostFollowEntity = default, NetEntity xenoWatchEntity = default)
+        {
+            Channel = channel;
+            Message = message;
+            WrappedMessage = wrappedMessage;
+            SenderEntity = source;
+            SenderKey = senderKey;
+            HideChat = hideChat;
+            MessageColorOverride = colorOverride;
+            AudioPath = audioPath;
+            AudioVolume = audioVolume;
+            RepeatCheckSender = repeatCheckSender;
+            Display = display;
+            GhostFollowEntity = ghostFollowEntity;
+            XenoWatchEntity = xenoWatchEntity;
+        }
+
+        public ChatMessage(ChatMessage copyFrom)
+        {
+            Channel = copyFrom.Channel;
+            Message = copyFrom.Message;
+            WrappedMessage = copyFrom.WrappedMessage;
+            SenderEntity = copyFrom.SenderEntity;
+            SenderKey = copyFrom.SenderKey;
+            HideChat = copyFrom.HideChat;
+            MessageColorOverride = copyFrom.MessageColorOverride;
+            AudioPath = copyFrom.AudioPath;
+            AudioVolume = copyFrom.AudioVolume;
+            RepeatCheckSender = copyFrom.RepeatCheckSender;
+            Display = copyFrom.Display;
+            HidePopup = copyFrom.HidePopup;
+            UseEmoteSpeechBubble = copyFrom.UseEmoteSpeechBubble;
+            SpeechStyleClass = copyFrom.SpeechStyleClass;
+            LanguageIcon = copyFrom.LanguageIcon;
+            GhostFollowEntity = copyFrom.GhostFollowEntity;
+            XenoWatchEntity = copyFrom.XenoWatchEntity;
+            Read = copyFrom.Read;
+        }
+    }
+
+    /// <summary>
+    ///     Sent from server to client to notify the client about a new chat message.
+    /// </summary>
+    [UsedImplicitly]
+    public sealed class MsgChatMessage : NetMessage
+    {
+        public override MsgGroups MsgGroup => MsgGroups.Command;
+
+        public ChatMessage Message = default!;
+
+        public override void ReadFromBuffer(NetIncomingMessage buffer, IRobustSerializer serializer)
+        {
+            var length = buffer.ReadVariableInt32();
+            using var stream = new MemoryStream(length);
+            buffer.ReadAlignedMemory(stream, length);
+            serializer.DeserializeDirect(stream, out Message);
+        }
+
+        public override void WriteToBuffer(NetOutgoingMessage buffer, IRobustSerializer serializer)
+        {
+            var stream = new MemoryStream();
+            serializer.SerializeDirect(stream, Message);
+            buffer.WriteVariableInt32((int) stream.Length);
+            buffer.Write(stream.AsSpan());
+        }
+    }
+}

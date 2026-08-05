@@ -1,0 +1,28 @@
+- type: entity
+  save: false
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMMobFelinid
+  name: Urist McFelinid
+  suffix: RMC14
+  components:
+  - type: HumanoidAppearance
+    species: Felinid
+    hideLayersOnEquip:
+    - UndergarmentTop
+    - Hair
+    - HeadTop
+  - type: Sprite
+    drawdepth: Mobs
+  - type: Wagging
+    action: ActionToggleFelinidWagging
+  - type: Vocal
+    emoteSounds: RMCUnisexFelinid
+  - type: Speech
+    allowedEmotes: ['Hiss', 'Meow', 'Mew', 'Growl', 'Purr']
+  - type: FixedIdentity
+    name: cm-chatsan-replacement-felinid
+
+- type: entity
+  parent: BaseSpeciesDummy
+  id: MobFelinidDummy
+  categories: [ HideSpawnMenu ]

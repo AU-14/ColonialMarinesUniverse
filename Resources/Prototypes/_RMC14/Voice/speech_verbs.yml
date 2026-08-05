@@ -1,0 +1,44 @@
+- type: speechVerb
+  id: RMCVulpkanin
+  name: rmc-chat-speech-verb-name-vulpkanin
+  speechVerbStrings:
+  - rmc-chat-speech-verb-vulpkanin-1
+  - rmc-chat-speech-verb-vulpkanin-2
+  - rmc-chat-speech-verb-vulpkanin-3
+  - rmc-chat-speech-verb-vulpkanin-4
+
+- type: speechVerb
+  id: Rodentia
+  name: chat-speech-verb-name-rodentia
+  speechVerbStrings:
+  - chat-speech-verb-rodentia-1
+  - chat-speech-verb-rodentia-2
+  - chat-speech-verb-rodentia-3
+  - chat-speech-verb-rodentia-4
+
+- type: speechVerb
+  id: Feroxi
+  name: chat-speech-verb-name-feroxi
+  speechVerbStrings:
+  - chat-speech-verb-feroxi-1
+  - chat-speech-verb-feroxi-2
+  - chat-speech-verb-feroxi-3
+  - chat-speech-verb-feroxi-4
+
+- type: speechVerb
+  id: Skrell
+  name: chat-speech-verb-name-skrell
+  speechVerbStrings:
+  - chat-speech-verb-skrell-1
+  - chat-speech-verb-skrell-2
+  - chat-speech-verb-skrell-3
+  - chat-speech-verb-skrell-4
+
+- type: speechVerb
+  id: Megaphone
+  name: chat-speech-verb-name-megaphone
+  speechVerbStrings:
+  - chat-speech-verb-megaphone-1
+  - chat-speech-verb-megaphone-2
+  priority: 1000
+  bold: true

@@ -1,0 +1,19 @@
+- type: entity
+  id: CMBaseElectronics
+  parent: BaseElectronics
+  name: base electronics
+  abstract: true
+  suffix: Electronics
+  components:
+    - type: Sprite
+      sprite: _RMC14/Objects/Misc/module.rsi
+      state: door_electronics
+    - type: Tag
+      tags:
+      - RMCCircuitboard
+    - type: PhysicalComposition
+      materialComposition:
+        CMSteel: 50
+        CMGlass: 50
+      chemicalComposition:
+        RMCSilicon: 20

@@ -1,0 +1,8 @@
+﻿- type: entity
+  id: CMDistressSignal
+  parent: BaseGameRule
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GameRule
+    minPlayers: 1
+  - type: CMDistressSignalRule

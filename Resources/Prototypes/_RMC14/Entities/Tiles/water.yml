@@ -1,0 +1,104 @@
+﻿- type: entity
+  id: CMFloorShallowWaterEntity
+  name: shallow water
+  description: ""
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Sprite
+    drawdepth: BelowFloor
+    sprite: _RMC14/Tiles/planet/water.rsi
+    layers:
+    - state: seashallow
+  - type: FloorOccluder
+  - type: Transform
+    anchored: true
+  - type: SyncSprite
+  - type: Clickable
+  - type: SolutionContainerManager
+    solutions:
+      pool:
+        maxVol: 9999999 #.inf seems to break the whole yaml file, but would definitely be preferable.
+        reagents:
+        - ReagentId: Water
+          Quantity: 9999999
+  - type: DrainableSolution
+    solution: pool
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.5
+    sprintSpeedModifier: 0.5
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: FootstepWater
+      params:
+        volume: 8
+  - type: BlockWeeds
+  - type: BlockXenoConstruction
+  - type: MinimapColor
+    color: "#94b0d59c"
+  - type: RMCWater
+    cover:
+      tags:
+      - Catwalk
+
+- type: entity
+  parent: CMFloorShallowWaterEntity
+  id: CMFloorDeepWaterEntity
+  name: deep water
+  description: ""
+  components:
+  - type: Sprite
+    sprite: _RMC14/Tiles/planet/water.rsi
+    layers:
+    - state: seadeep
+  - type: SpeedModifierContacts
+    walkSpeedModifier: 0.25
+    sprintSpeedModifier: 0.25
+
+- type: entity
+  parent: CMFloorShallowWaterEntity
+  id: RMCRiverSorokyne
+  name: river
+  components:
+  - type: Sprite
+    sprite: _RMC14/Tiles/planet/sorokyne/sorokyne_water.rsi
+
+- type: entity
+  parent: CMFloorShallowWaterEntity
+  id: RMCFloorShallowWaterEntityRed
+  suffix: Red
+  components:
+  - type: Sprite
+    color: "#995555"
+
+- type: entity
+  parent: RMCFloorShallowWaterEntityRed
+  id: RMCFloorShallowWaterEntityDarkRed
+  suffix: Dark Red
+  components:
+  - type: Sprite
+    color: "#990000"
+
+- type: entity
+  parent: CMFloorShallowWaterEntity
+  id: RMCFloorShallowWaterEntityBelowPipes
+  suffix: Below Pipes
+  components:
+  - type: Sprite
+    drawdepth: LowFloors

@@ -1,0 +1,152 @@
+﻿- type: entity
+  id: RMCRotaryPhone
+  name: rotary phone
+  description: The finger plate is a little stiff.
+  components:
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Sprite
+    sprite: _RMC14/Structures/rotary_phone.rsi
+    drawdepth: WallMountedItems
+    layers:
+    - state: rotary_phone
+      map: [ "base" ]
+  - type: InteractionOutline
+  - type: Clickable
+  - type: RotaryPhone
+  - type: ContainerContainer
+    containers:
+      rmc_rotary_phone_telephone: !type:ContainerSlot
+  - type: ActivatableUI
+    key: enum.RMCTelephoneUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.RMCTelephoneUiKey.Key:
+        type: RMCTelephoneBui
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.RotaryPhoneLayers.Layer:
+        base:
+          Base: { state: rotary_phone }
+          Ring: { state: rotary_phone_ring }
+          Ear: { state: rotary_phone_ear }
+  - type: WallMount
+    arc: 360
+  - type: GuideHelp
+    guides:
+    - RMCGuideMarineCommunications
+    - RMCLanguage
+    - RMCGuideCommunicationsTowers
+    - RMCGuideRoleCombatTechnician
+    - RMCGuideRoleMaintenanceTechnician
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: RMCRotaryPhone
+  id: RMCRotaryPhoneWallmount
+  name: wall-mounted phone
+  description: "It is a wall mounted telephone. The fine text reads: To log your details with the mainframe please insert your keycard into the slot below. Unfortunately the slot is jammed. You can still use the phone, however."
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/wallmount_phone.rsi
+    layers:
+      - state: wall_phone
+        map: [ "base" ]
+  - type: GenericVisualizer
+    visuals:
+      enum.RotaryPhoneLayers.Layer:
+        base:
+          Base: { state: wall_phone }
+          Ring: { state: wall_phone_ring }
+          Ear: { state: wall_phone_ear }
+
+- type: entity
+  parent: BaseItem
+  id: RMCTelephone
+  name: telephone
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/phone.rsi
+    state: rpb_phone
+  - type: Item
+    size: Invalid
+  - type: RMCTelephone
+  - type: Corrodible
+    isCorrodible: false
+  - type: BlockEntityStorage
+  - type: Undisposable
+  - type: GuideHelp
+    guides:
+    - RMCGuideMarineCommunications
+    - RMCLanguage
+    - RMCGuideCommunicationsTowers
+    - RMCGuideRoleCombatTechnician
+    - RMCGuideRoleMaintenanceTechnician
+
+- type: entity
+  parent: RMCTelephone
+  id: RMCTelephoneScout
+  name: helmet microphone
+  description: A small microphone attached to the helmet, used to communicate with the internal radio transmitter.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/phone.rsi
+    state: scout_microphone
+  - type: Item
+    size: Invalid
+    inhandVisuals:
+      left: []
+      right: []
+
+# Misc
+- type: entity
+  parent: RMCRotaryPhone
+  id: RMCRotaryPhoneCommandTent
+  name: Command tent
+
+- type: entity
+  parent: RMCRotaryPhone
+  id: RMCRotaryPhoneReqTent
+  name: Requisitions Tent
+
+- type: entity
+  parent: RMCRotaryPhone
+  id: RMCRotaryPhoneMessTent
+  name: Mess Tent
+
+- type: entity
+  parent: RMCRotaryPhone
+  id: RMCRotaryPhoneMPTent
+  name: Military Police Tent
+
+- type: entity
+  parent: RMCRotaryPhone
+  id: RMCRotaryPhoneCorrespondentTent
+  name: Correspondent Tent
+
+# Admin
+- type: entity
+  parent: RMCRotaryPhone
+  id: RMCRotaryPhoneAdmin
+  suffix: Admin
+  components:
+  - type: RotaryPhone
+    canDnd: true
+    category: Comms Relay
+    notifyAdmins: true
+
+- type: entity
+  parent: RMCRotaryPhoneWallmount
+  id: RMCRotaryPhoneWallmountAdmin
+  suffix: Admin
+  components:
+  - type: RotaryPhone
+    canDnd: true
+    category: Comms Relay
+    notifyAdmins: true

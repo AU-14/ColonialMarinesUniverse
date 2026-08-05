@@ -1,0 +1,38 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/items/disk.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "nucleardisk"
+    },
+    {
+      "name": "datadisk0"
+    },
+    {
+      "name": "datadisk1"
+    },
+    {
+      "name": "datadisk2"
+    },
+    {
+      "name": "datadisk3"
+    },
+    {
+      "name": "datadisk4"
+    },
+    {
+      "name": "datadisk5"
+    },
+    {
+      "name": "datadisk6"
+    },
+    {
+      "name": "botanydisk"
+    }
+  ]
+}

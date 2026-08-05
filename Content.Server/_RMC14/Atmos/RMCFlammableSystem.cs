@@ -1,0 +1,73 @@
+using Content.Server.Atmos.EntitySystems;
+using Content.Shared._RMC14.Atmos;
+using Content.Shared.ActionBlocker;
+using Content.Shared.Atmos.Components;
+using Content.Shared.Damage;
+using Robust.Shared.Player;
+
+namespace Content.Server._RMC14.Atmos;
+
+public sealed partial class RMCFlammableSystem : SharedRMCFlammableSystem
+{
+    [Dependency] private FlammableSystem _flammable = default!;
+    [Dependency] private ActionBlockerSystem _actionBlocker = default!;
+
+    public override bool Ignite(Entity<FlammableComponent?> flammable, int intensity, int duration, int? maxStacks, bool igniteDamage = true, DamageSpecifier? tileDamage = null)
+    {
+        base.Ignite(flammable, intensity, duration, maxStacks, igniteDamage, tileDamage);
+
+        if (!Resolve(flammable, ref flammable.Comp, false))
+            return false;
+
+        var hadBypassComponent = HasComp<RMCFireBypassActiveComponent>(flammable);
+
+        var stacks = flammable.Comp.FireStacks + duration;
+        if (maxStacks != null && stacks > maxStacks)
+            stacks = maxStacks.Value;
+
+        _flammable.SetFireStacks(flammable, stacks, flammable, true);
+        if (!flammable.Comp.OnFire)
+            return false;
+
+        if (hadBypassComponent)
+        {
+            EnsureComp<RMCFireBypassActiveComponent>(flammable);
+        }
+
+        return true;
+    }
+
+    public override void Extinguish(Entity<FlammableComponent?> flammable)
+    {
+        base.Extinguish(flammable);
+
+        if (!Resolve(flammable, ref flammable.Comp, false))
+            return;
+
+        _flammable.Extinguish(flammable, flammable);
+    }
+
+    public override void Pat(Entity<FlammableComponent?> flammable, int stacks)
+    {
+        if (!Resolve(flammable, ref flammable.Comp, false))
+            return;
+
+        _flammable.AdjustFireStacks(flammable, stacks, flammable);
+    }
+
+    public override void AdjustStacks(Entity<FlammableComponent?> flammable, int stacks)
+    {
+        if (!Resolve(flammable, ref flammable.Comp, false))
+            return;
+
+        _flammable.AdjustFireStacks(flammable, stacks, flammable);
+    }
+
+    public override void DoStopDropRollAnimation(EntityUid uid)
+    {
+        if (!_actionBlocker.CanMove(uid))
+            return;
+
+        RaiseNetworkEvent(new RMCStopDropRollVisualsNetworkEvent(GetNetEntity(uid)), Filter.Pvs(uid)); // RMC14
+    }
+}

@@ -1,0 +1,204 @@
+- type: rank
+  id: RMCRankTSEMarine
+  name: Marine
+  prefix: Mne.
+  paygrade: E1
+
+- type: rank
+  id: RMCRankTSELanceCorporal
+  name: Lance Corporal
+  prefix: LCpl.
+  paygrade: E2
+
+- type: rank
+  id: RMCRankTSECorporal
+  name: Corporal
+  prefix: Cpl.
+  paygrade: E3
+
+- type: rank
+  id: RMCRankTSESergeant
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E4
+
+- type: rank
+  id: RMCRankTSEColourSergeant
+  name: Colour Sergeant
+  prefix: CSgt.
+  paygrade: E5
+
+- type: rank
+  id: RMCRankTSEWarrantOfficer1
+  name: Warrant Officer Class 1
+  prefix: WO1.
+  paygrade: E6
+
+- type: rank
+  id: RMCRankTSEWarrantOfficer2
+  name: Warrant Officer Class 2
+  prefix: WO2.
+  paygrade: E7
+
+- type: rank
+  id: RMCRankTSESecondLieutenant
+  name: Second Lieutenant
+  prefix: 2nd LT
+  paygrade: O1
+
+- type: rank
+  id: RMCRankTSELieutenant
+  name: Lieutenant
+  prefix: Lt.
+  paygrade: O2
+
+- type: rank
+  id: RMCRankTSECaptain
+  name: Captain
+  prefix: Capt.
+  paygrade: O3
+
+- type: rank
+  id: RMCRankTSEMajor
+  name: Major
+  prefix: Maj.
+  paygrade: O4
+
+- type: rank
+  id: RMCRankTSELieutenantColonel
+  name: Lieutenant Colonel
+  prefix: Lt.Col.
+  paygrade: O5
+
+- type: rank
+  id: RMCRankTSEColonel
+  name: Colonel
+  prefix: Col.
+  paygrade: O6
+
+- type: rank
+  id: RMCRankTSEBrigadier
+  name: Brigadier
+  prefix: Brig.
+  paygrade: O7
+
+- type: rank
+  id: RMCRankTSEMajorGeneral
+  name: Major General
+  prefix: Maj Gen.
+  paygrade: O8
+
+- type: rank
+  id: RMCRankTSELieutenantGeneral
+  name: Lieutenant General
+  prefix: Lt Gen.
+  paygrade: O9
+
+- type: rank
+  id: RMCRankTSEGeneral
+  name: General
+  prefix: Gen.
+  paygrade: O10
+  
+- type: rank
+  id: RMCRankTSEEmpress
+  name: Empress # This needs to be changed to allow it to change dynamically for genders
+  prefix: HRM.
+
+# The below ranks are for the Para insert on Hybrisa
+
+- type: rank
+  id: RMCRankParaPrivate
+  name: Private
+  prefix: Pte.
+  paygrade: E1
+
+- type: rank
+  id: RMCRankParaPrivateSecondClass
+  name: Private Second Class
+  prefix: Pte2.
+  paygrade: E2
+
+- type: rank
+  id: RMCRankParaLanceCorporal
+  name: Lance Corporal
+  prefix: LCpl.
+  paygrade: E3
+
+- type: rank
+  id: RMCRankParaCorporal
+  name: Corporal
+  prefix: Cpl.
+  paygrade: E4
+
+- type: rank
+  id: RMCRankParaSergeant
+  name: Sergeant
+  prefix: Sgt.
+  paygrade: E5
+
+- type: rank
+  id: RMCRankParaStaffSergeant
+  name: Staff Sergeant
+  prefix: SSgt.
+  paygrade: E6
+
+- type: rank
+  id: RMCRankParaWarrantOfficerClass2
+  name: Warrant Officer Class 2
+  prefix: WO2.
+  paygrade: E7
+
+- type: rank
+  id: RMCRankParaSecondLieutenant
+  name: Second Lieutenant.
+  prefix: 2Lt.
+  paygrade: O1
+
+- type: rank
+  id: RMCRankParaLieutenant
+  name: Lieutenant
+  prefix: Lt.
+  paygrade: O2
+
+- type: rank
+  id: RMCRankParaCaptain
+  name: Captain
+  prefix: Capt.
+  paygrade: O3
+
+- type: rank
+  id: RMCRankParaMajor
+  name: Major
+  prefix: Maj.
+  paygrade: O4
+
+- type: rank
+  id: RMCRankParaLieutenantColonel
+  name: Lieutenant Colonel
+  prefix: LtCol.
+  paygrade: O5
+
+- type: rank
+  id: RMCRankParaColonel
+  name: Colonel
+  prefix: Col.
+  paygrade: O6
+
+- type: rank
+  id: RMCRankParaBrigadier
+  name: Brigadier
+  prefix: Brig.
+  paygrade: O7
+
+- type: rank
+  id: RMCRankParaMajorGeneral
+  name: Major General
+  prefix: MajGen.
+  paygrade: O8
+
+- type: rank
+  id: RMCRankParaGeneralBrigade
+  name: General of the Brigade
+  prefix: GenBrig.
+  paygrade: O9

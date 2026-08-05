@@ -1,0 +1,102 @@
+# TODO RMC14 all of these vendor inventories
+# TODO RMC14 deny and vend states
+- type: entity
+  abstract: true
+  id: ColMarTechBase
+  name: ColMarTech vendor
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+    noRot: true
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.45"
+        density: 200
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        - BulletImpassable # TODO Remove this after vendor tipping is added.
+  - type: Tag
+    tags:
+    - Structure
+  #    offState: off
+  #    brokenState: broken
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/colmartechweapons.rsi
+    layers:
+    - map: [ "enum.VendingMachineVisualLayers.Base" ]
+      state: "off"
+    - map: ["enum.PowerDeviceVisualLayers.Powered", "rmc_flick_animation"]
+      state: "base"
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 0
+    channel: Equipment
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMAutomatedVendorBui
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -9
+    range: 3
+    enabled: false
+    sound:
+      path: /Audio/Ambience/Objects/vending_machine_hum.ogg
+  - type: ActivatableUI
+    key: enum.CMAutomatedVendorUI.Key
+  - type: ActivatableUIRequiresAccess
+  - type: WallMount
+    arc: 360
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  abstract: true
+  parent: ColMarTechBase
+  id: ColMarTechBaseAnchorable
+  components:
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+  - type: Pullable
+  - type: Physics
+    bodyType: Static
+  - type: Damageable
+    damageContainer: StructuralMarine
+  - type: Destructible # TODO RMC14 some of these should just be knocked over with a do after by xenos
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  # - type: XenoCrusherChargable TODO knock over by crusher

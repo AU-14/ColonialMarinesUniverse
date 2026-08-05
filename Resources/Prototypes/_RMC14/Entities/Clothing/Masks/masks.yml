@@ -1,0 +1,435 @@
+- type: entity
+  parent: ClothingMaskPullableBase
+  id: CMBaseMask
+  abstract: true
+  components:
+  - type: HideLayerClothing
+    layers:
+      Snout: Mask
+    hideOnToggle: true
+  - type: Appearance
+
+- type: entity
+  parent: CMBaseMask
+  id: CMMaskGas
+  name: gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/gas.rsi
+    layers:
+    - state: base
+    - state: camo
+      map: [ "enum.ItemCamouflageLayers.Layer" ]
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/gas.rsi
+    slots:
+    - Mask
+    - Suitstorage
+  - type: ItemCamouflage
+    colors:
+      Jungle: "#ccd08d"
+      Desert: "#ffd2a6"
+      Snow: "#ddcbc9"
+      Classic: "#c7e7d9"
+      Urban: "#acb8c7"
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask
+
+- type: entity
+  parent: CMBaseMask
+  id: RMCMaskGasSPP
+  name: ShMB/4 gasmask
+  description: The standard issue gasmask utilized by the SPP Vanguard Collective and many SPP civilian organizations.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/spp_gasmask.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/spp_gasmask.rsi
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - HeadTop
+    - HeadSide
+    - Snout
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask
+
+- type: entity
+  parent: CMBaseMask
+  id: RMCMaskGasRCM
+  name: L4 pattern respirator
+  suffix: PVE, Royal # RMC14 TODO: remove PVE suffix when you fix all the RCM gas mask TODOs
+  description: The L4 pattern service CBRN respirator is the standard-issue protective gas mask of the Royal Crown Marines, equipped with a secondary speech transmitter and drinking straw for extended wear in adverse conditions.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/gas_rcm.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/gas_rcm.rsi
+  - type: HideLayerClothing
+    slots:
+    - Snout
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - GasMask
+
+- type: Tag
+  id: GasMask
+
+# Prescription variants
+
+- type: entity
+  parent: CMMaskGas
+  id: CMMaskPrescriptionGas
+  name: prescription gas mask
+  description: A face-covering mask that can be connected to an air supply. Filters harmful gases from the air. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: RMCMaskGasSPP
+  id: RMCMaskPrescriptionGasSPP
+  name: prescription ShMB/4 gasmask
+  description: The standard issue gasmask utilized by the UPP Vanguard Collective and many UPP civilian organizations. Contains prescription lenses.
+  components:
+  - type: VisionCorrection
+    visionBonus: -4
+
+- type: entity
+  parent: CMBaseMask
+  id: CMMaskSterile
+  name: sterile mask
+  description: A sterile mask designed to help prevent the spread of diseases.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/sterile.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/sterile.rsi
+  - type: Item
+    storedRotation: -90
+  - type: Tag
+    tags:
+    - SterileMask
+
+- type: Tag
+  id: SterileMask
+
+- type: entity # TODO RMC14 this needs a lizard sprite
+  parent: ClothingMaskGas
+  id: CMMaskGasMedical
+  name: medical gas mask
+  description: A close-fitting sterile mask that can be connected to an air supply.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/medical.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/medical.rsi
+
+- type: entity
+  parent: CMBaseMask
+  id: RMCMaskBreath
+  name: breath mask
+  description: A close-fitting mask that can be connected to an air supply.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/breath.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/breath.rsi
+    slots:
+    - Mask
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: CMBaseMask
+  id: RMCMaskRebreather
+  name: rebreather
+  description: A close-fitting device that instantly heats or cools down air when you inhale so it doesn't damage your lungs.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/rebreather.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/rebreather.rsi
+    slots:
+    - Mask
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: CMBaseMask
+  id: RMCMaskKutjevoRespirator
+  name: kutjevo respirator
+  description: A respirator worn on the face that filters out harmful air particles often present in the air of Kutjevo.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/kutjevo_respirator.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/kutjevo_respirator.rsi
+    slots:
+    - Mask
+  - type: Item
+    size: Small
+
+# Coifs
+- type: entity
+  parent: [ClothingMaskBase, BaseFoldable]
+  id: CMMaskCoif
+  name: heat absorbent coif
+  description: A close-fitting cap that covers the top, back, and sides of the head. Can also be adjusted to cover the lower part of the face so it keeps the user warm in harsh conditions.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/coif.rsi
+    layers:
+    - state: icon
+      map: [ "unfoldedLayer" ]
+    - state: icon
+      map: ["foldedLayer"]
+      visible: false
+  - type: HideLayerClothing
+    slots:
+    - Hair
+    - HeadTop
+    - HeadSide
+    - Snout
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/coif.rsi
+  - type: IdentityBlocker
+    coverage: MOUTH
+  - type: Item
+    storedRotation: -90
+  - type: Appearance
+  - type: Foldable
+    canFoldInsideContainer: true
+  - type: FoldableClothing
+    foldedEquippedPrefix: up
+    foldedHeldPrefix: up
+    foldedHideLayers:
+    - Hair
+    - HeadTop
+    - HeadSide
+    unfoldedHideLayers:
+    - Hair
+    - HeadTop
+    - HeadSide
+    - Snout
+
+- type: entity
+  parent: CMMaskCoif
+  id: RMCMaskCoifGreen
+  name: UNMC green balaclava
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/green_coif.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/green_coif.rsi
+
+- type: entity
+  parent: CMMaskCoif
+  id: RMCMaskCoifGrey
+  name: UNMC grey balaclava
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/grey_coif.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/grey_coif.rsi
+
+- type: entity
+  parent: CMMaskCoif
+  id: RMCMaskCoifTan
+  name: UNMC tan balaclava
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/tan_coif.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/tan_coif.rsi
+
+- type: entity
+  parent: CMMaskCoif
+  id: RMCMaskCoifPMC
+  name: M8 pattern armored coif
+  description: An armored coif designed to conceal both the identity of the operator and act as an air-filter.
+  components:
+  - type: CMArmor
+    melee: 10
+    bio: 30
+    explosionArmor: 10
+
+# Balaclavas
+- type: entity
+  parent: CMBaseMask
+  id: RMCMaskBalaclava
+  name: balaclava
+  description: A basic single eye-hole balaclava, available in almost every sporting goods, outdoor supply, or military surplus store in existence, protects your face from the cold almost as well as it conceals it. This one is in a standard black color.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/balaclava.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/balaclava.rsi
+  - type: IdentityBlocker
+    coverage: MOUTH
+  - type: Item
+    storedRotation: -90
+  - type: HideLayerClothing
+    slots:
+    - HeadTop
+    - HeadSide
+    - Hair
+    - Snout
+
+- type: entity
+  parent: RMCMaskBalaclava
+  id: RMCMaskBalaclavaGreen
+  name: green balaclava
+  description: A basic single eye-hole balaclava, available in almost every sporting goods, outdoor supply, or military surplus store in existence, protects your face from the cold almost as well as it conceals it. This one is in a non-standard green color.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/swatclava.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/swatclava.rsi
+
+- type: entity
+  parent: RMCMaskCoifPMC
+  id: RMCMaskBalaclavaMARSOC
+  name: SOF armored balaclava
+  description: Designed for maximum protection -- and badassery. Provides protection against facial attacks, filters toxins, and conceals the wearer's identity.
+
+- type: entity
+  parent: RMCMaskBalaclavaMARSOC
+  id: RMCMaskBalaclavaSPPCommando
+  name: SPP armored commando balaclava
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/spp_commando_coif.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/spp_commando_coif.rsi
+
+- type: entity
+  parent: RMCMaskBalaclava
+  id: RMCMaskBalaclavaSkullBlue
+  name: skull balaclava
+  description: The face of your nightmares. Or at least that's how you imagined it'd be. Additionally protects against the cold.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/skull_coif_blue.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/skull_coif_blue.rsi
+
+- type: entity
+  parent: RMCMaskBalaclavaSkullBlue
+  id: RMCMaskBalaclavaSkullBlack
+  description: The face of your nightmares. Or at least that's how you imagined it'd be. Now in black!
+  suffix: Black
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/skull_coif.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/skull_coif.rsi
+
+- type: entity
+  parent: CMBaseMask
+  id: RMCMaskSWAT
+  name: SWAT mask
+  description: A close-fitting tactical mask that can be connected to an air supply.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/swat_mask.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/swat_mask.rsi
+    slots:
+    - Mask
+  - type: Item
+    size: Small
+
+- type: entity
+  parent: [CMBaseMask, RMCHelmetGarbToggleableBase]
+  id: RMCVisorSWAT
+  name: TC2 CMB riot shield
+  description: Yellowish protective glass piece, can be lifted up when needed, makes you see everything in yellow.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/swat_shield.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/swat_shield.rsi
+    slots:
+    - Mask
+  - type: Item
+    size: Small
+  - type: HelmetAccessory
+    rsi:
+      sprite: _RMC14/Objects/Clothing/Mask/swat_shield.rsi
+      state: helmet
+    toggledRsi:
+      sprite: _RMC14/Objects/Clothing/Mask/swat_shield.rsi
+      state: helmet-down
+  - type: ItemToggle
+    activated: true
+
+
+# Keffiyehs
+
+- type: entity
+  parent: CMMaskCoif
+  id: RMCMaskKeffiyeh
+  name: keffiyeh
+  description: A traditional headscarf worn for protection from the elements and to conceal the face. Typically made of cotton, it can provide shade from the sun, guard against dust, and serve as camouflage in arid environments. Often worn by soldiers and civilians alike in desert and hostile regions, the keffiyeh has become a symbol of cultural identity and resilience.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh.rsi
+  - type: FoldableClothing
+    foldedHideLayers: [ ]
+
+- type: entity
+  parent: RMCMaskKeffiyeh
+  id: RMCMaskKeffiyehBlack
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_black.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_black.rsi
+
+- type: entity
+  parent: RMCMaskKeffiyeh
+  id: RMCMaskKeffiyehBlue
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_blue.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_blue.rsi
+
+- type: entity
+  parent: RMCMaskKeffiyeh
+  id: RMCMaskKeffiyehGreen
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_green.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_green.rsi
+
+- type: entity
+  parent: RMCMaskKeffiyeh
+  id: RMCMaskKeffiyehWhite
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_white.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_white.rsi
+
+- type: entity
+  parent: RMCMaskKeffiyeh
+  id: RMCMaskKeffiyehRed
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_red.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Mask/Keffiyeh/keffiyeh_red.rsi

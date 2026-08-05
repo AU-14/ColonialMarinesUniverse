@@ -1,0 +1,17 @@
+- type: construction
+  parent: BaseItemMisc
+  id: PowerCellPotato
+  graph: PowerCellPotato
+  targetNode: potatobattery
+
+- type: construction
+  parent: BaseItemMisc
+  id: PotatoAI
+  graph: PotatoAI
+  targetNode: potatoai
+
+- type: construction
+  parent: BaseItemMisc
+  id: PotatoAIChip
+  graph: PotatoAIChip
+  targetNode: potatoaichip

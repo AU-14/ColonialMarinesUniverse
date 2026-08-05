@@ -1,0 +1,328 @@
+- type: tile
+  parent: CMTileBase
+  id: CMFloorSteel
+  name: tiles-cm-default
+  sprite: /Textures/_RMC14/Tiles/almayer/default.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMFloorSteel
+  id: CMFloorSteelNoWeeds
+  name: tiles-cm-default-no-weeds
+  sprite: /Textures/_RMC14/Tiles/almayer/default.png
+  weedsSpreadable: false
+  baseTurf: null
+  deconstructTools: [ ]
+
+- type: tile
+  parent: CMFloorSteelNoWeeds
+  id: RMCFloorUnderplatingNoWeeds
+  name: tiles-rmc-underplating-no-weeds
+  sprite: /Textures/_RMC14/Tiles/shiva/plating.png
+  weedsSpreadable: false
+  baseTurf: null
+  deconstructTools: [ ]
+  isSubfloor: true
+
+- type: tile
+  parent: CMFloorPlating
+  id: RMCFloorPlatingNoBuild
+  name: tiles-cm-plating
+  sprite: /Textures/_RMC14/Tiles/almayer/plating.png
+  baseTurf: null
+  deconstructTools: [ ]
+  blockAnchoring: true
+  blockConstruction: true
+  weedsSpreadable: false
+  friction: 1
+
+- type: tile
+  parent: CMFloorSteel
+  id: RMCFloorPlatingNorthEast
+  sprite: /Textures/_RMC14/Tiles/almayer/plating.png
+
+- type: tile
+  parent: CMFloorSteel
+  id: RMCFloorUnderplatingNoBuild
+  baseTurf: null
+  deconstructTools: [ ]
+  blockAnchoring: true
+  blockConstruction: true
+  weedsSpreadable: false
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorPlate
+  name: tiles-cm-plate
+  sprite: /Textures/_RMC14/Tiles/almayer/plate.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge1
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_1.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge2
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_2.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge3
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_3.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge4
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_4.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge5
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_5.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge6
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_6.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge7
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_7.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdge8
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_8.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth1
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_1.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth2
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_2.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth3
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_3.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth4
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_4.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth5
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_5.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth6
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_6.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth7
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_7.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth8
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s_8.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmoothCorner1
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_sc_1.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmoothCorner2
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_sc_2.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmoothCorner3
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_sc_3.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmoothCorner4
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_sc_4.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth21
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s2_1.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth22
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s2_2.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth23
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s2_3.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth24
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s2_4.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth31
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s3_1.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth32
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s3_2.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth33
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s3_3.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorAlmayerEdgeSmooth34
+  sprite: /Textures/_RMC14/Tiles/almayer/floor_edge_s3_4.png
+
+- type: tile
+  parent: CMFloorPlate
+  id: RMCFloorPlateNoBuild
+  baseTurf: null
+  deconstructTools: [ ]
+  blockAnchoring: true
+  blockConstruction: true
+  weedsSpreadable: false
+
+- type: tile
+  parent: CMTileBase
+  id: RMCFloorMono
+  name: tiles-rmc-mono
+  sprite: /Textures/_RMC14/Tiles/almayer/mono.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorOffice
+  name: tiles-cm-office
+  sprite: /Textures/_RMC14/Tiles/almayer/office_tile.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorSterile
+  name: tiles-cm-sterile
+  sprite: /Textures/_RMC14/Tiles/almayer/sterile.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorWhite
+  name: tiles-cm-white
+  sprite: /Textures/_RMC14/Tiles/almayer/whitefull.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorWhiteSterile
+  name: tiles-cm-white-sterile
+  sprite: /Textures/_RMC14/Tiles/almayer/white_sterile.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorBlack
+  name: tiles-cm-black
+  sprite: /Textures/_RMC14/Tiles/almayer/blackfull.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack0
+  sprite: /Textures/_RMC14/Tiles/almayer/black_0.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack1
+  sprite: /Textures/_RMC14/Tiles/almayer/black_1.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack2
+  sprite: /Textures/_RMC14/Tiles/almayer/black_2.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack3
+  sprite: /Textures/_RMC14/Tiles/almayer/black_3.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack4
+  sprite: /Textures/_RMC14/Tiles/almayer/black_4.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack5
+  sprite: /Textures/_RMC14/Tiles/almayer/black_5.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack6
+  sprite: /Textures/_RMC14/Tiles/almayer/black_6.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlack7
+  sprite: /Textures/_RMC14/Tiles/almayer/black_7.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlackCorner1
+  sprite: /Textures/_RMC14/Tiles/almayer/blackcorner_1.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlackCorner2
+  sprite: /Textures/_RMC14/Tiles/almayer/blackcorner_2.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlackCorner3
+  sprite: /Textures/_RMC14/Tiles/almayer/blackcorner_3.png
+
+- type: tile
+  parent: CMFloorBlack
+  id: RMCFloorBlackCorner4
+  sprite: /Textures/_RMC14/Tiles/almayer/blackcorner_4.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorTComms0
+  name: tiles-cm-tcomms
+  sprite: /Textures/_RMC14/Tiles/almayer/tcomms_0.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMFloorTComms1
+  name: tiles-cm-tcomms
+  sprite: /Textures/_RMC14/Tiles/almayer/tcomms_1.png
+  canPlaceTunnel: false
+
+- type: tile
+  parent: CMFloorPlate
+  id: CMFloorOuterHullPlate
+  name: tiles-cm-plate
+  sprite: /Textures/_RMC14/Tiles/almayer/outerhull.png

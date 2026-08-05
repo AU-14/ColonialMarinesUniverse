@@ -1,0 +1,296 @@
+- type: entity
+  parent:
+  - CMBaseDoor
+  - CMBaseDoorConstructible
+  id: CMAirlock
+  name: airlock
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/personal_door.rsi
+  - type: Occluder
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockShuttle
+  suffix: Shuttle
+  components:
+  - type: Airlock
+    powered: true
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false
+  - type: Docking
+  - type: DockingSignalControl
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockCommand
+  name: command airlock
+  suffix: Command
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/com_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockEngineer
+  name: engineering airlock
+  suffix: Engineering
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/engi_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockMedical
+  name: medical airlock
+  suffix: Medical
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/medi_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockSecurity
+  name: security airlock
+  suffix: Security
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/sec_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockMaint
+  name: maintenance hatch
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/maint_door.rsi
+
+- type: entity
+  parent: CMAirlockMaint
+  id: CMAirlockMaintReinforced
+  name: reinforced maintenance hatch
+  suffix: Reinforced
+  components:
+  - type: AirlockReceiverXenoClaws
+    maxHealth: 1200
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockSecure
+  name: secure airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/secure_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockCell
+  name: cell door
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/cell_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockPrison
+  name: maintenance hatch
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/prison_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: RMCAirlockHybrisa
+  name: airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/hybrisa_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: RMCAirlockHybrisaPersonal
+  name: airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/hybrisa_personal_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: RMCAirlockRusted
+  name: airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/rusted_door.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: RMCAirlockRustedWhite
+  name: airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/rusted_white_door.rsi
+
+# Glass
+- type: entity
+  parent: CMAirlock
+  id: CMAirlockGlass
+  name: glass airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/personal_door_glass.rsi
+  - type: Door
+    occludes: false
+  - type: Occluder
+    enabled: false
+  - type: AnimationPlayer
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        mask:
+        - FullTileMask
+        layer:
+        - GlassAirlockLayer
+  - type: Construction
+    graph: CMAirlock
+    node: glassAirlock
+  - type: Paintable
+    group: AirlockGlass
+  - type: Tag
+    tags:
+    - GlassAirlock
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockGlassEngineer
+  name: engineering airlock
+  suffix: Engineer
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/engi_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockGlassMedical
+  name: medical airlock
+  suffix: Medical
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/medi_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockGlassSecurity
+  name: security airlock
+  suffix: Security
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/sec_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockGlassHybrisa
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/hybrisa_door_glass.rsi
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockGlassHybrisaPersonal
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/hybrisa_personal_door_glass.rsi
+
+# Prep
+- type: entity
+  parent: CMAirlockGlass
+  id: CMAirlockPrep
+  name: preparations airlock
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/prep_door.rsi
+
+- type: entity
+  parent: CMAirlockPrep
+  id: CMAirlockPrepAlpha
+  name: alpha squad preparations
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/prep_door_alpha.rsi
+
+- type: entity
+  parent: CMAirlockPrep
+  id: CMAirlockPrepBravo
+  name: bravo squad preparations
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/prep_door_bravo.rsi
+
+- type: entity
+  parent: CMAirlockPrep
+  id: CMAirlockPrepCharlie
+  name: charlie squad preparations
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/prep_door_charlie.rsi
+
+- type: entity
+  parent: CMAirlockPrep
+  id: CMAirlockPrepDelta
+  name: delta squad preparations
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/prep_door_delta.rsi
+
+- type: entity
+  parent: CMAirlock
+  id: RMCAirlockStrata
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/strata_door.rsi
+
+# SPP
+- type: entity
+  parent: CMAirlock
+  id: RMCAirlockSPPGrey
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/SPP/spp_grey_airlock.rsi
+
+- type: entity
+  parent: RMCAirlockSPPGrey
+  id: RMCAirlockSPPUtility
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/SPP/spp_utility_airlock.rsi
+
+- type: entity
+  parent: CMAirlockGlass
+  id: RMCAirlockSPPGreyGlass
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Doors/Airlocks/SPP/spp_grey_airlock_glass.rsi

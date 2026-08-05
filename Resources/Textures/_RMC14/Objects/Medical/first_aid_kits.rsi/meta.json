@@ -1,0 +1,125 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/ca94d2e8715b73103fa9f213be53d343359b4107/icons/obj/items/storage.dmi, https://github.com/cmss13-devs/cmss13/blob/09583166e0082a417aef46dbb280675fa93a81e8/icons/mob/humans/onmob/inhands/equipment/medical_righthand.dmi, https://github.com/cmss13-devs/cmss13/blob/09583166e0082a417aef46dbb280675fa93a81e8/icons/mob/humans/onmob/inhands/equipment/medical_lefthand.dmi, https://github.com/cmss13-devs/cmss13-pve/blob/d393d64e20ab878b476dd43900e32b0fbb4cb484/icons/obj/items/storage/medical.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "firstaid"
+    },
+    {
+      "name": "ointment"
+    },
+    {
+      "name": "firefirstaid"
+    },
+    {
+      "name": "antitoxin"
+    },
+    {
+      "name": "radfirstaid"
+    },
+    {
+      "name": "purplefirstaid"
+    },
+    {
+      "name": "o2"
+    },
+    {
+      "name": "bezerk"
+    },
+    {
+      "name": "advfirstaid"
+    },
+    {
+      "name": "kit_empty"
+    },
+    {
+      "name": "softpack_empty"
+    },
+    {
+      "name": "softpack_basic"
+    },
+    {
+      "name": "softpack_brute"
+    },
+    {
+      "name": "softpack_burn"
+    },
+    {
+      "name": "firstaid-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "ointment-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "antitoxin-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "advfirstaid-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "o2-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "firstaid-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "ointment-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "antitoxin-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "advfirstaid-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "o2-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "firefirstaid-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "firefirstaid-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "purplefirstaid-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "purplefirstaid-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "radfirstaid-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "radfirstaid-inhand-right",
+      "directions": 4
+    },
+    {
+      "name": "beserk-inhand-left",
+      "directions": 4
+    },
+    {
+      "name": "beserk-inhand-right",
+      "directions": 4
+    }
+  ]
+}

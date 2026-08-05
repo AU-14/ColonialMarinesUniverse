@@ -1,0 +1,112 @@
+- type: entity
+  parent: CratePlastic
+  id: CrateFoodPizza
+  name: emergency pizza delivery
+  description: Help do your part to end station hunger by distributing pizza to underfunded departments! Includes 4 pizzas.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: FoodBoxPizzaFilled
+          amount: 3
+        - id: FoodBoxPizzaCotton
+        - id: LidSalami
+          prob: 0.01
+
+- type: entity
+  parent: CratePlastic
+  id: CrateFoodMRE
+  name: MRE crate
+  description: A military style meal fit to feed a whole department.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: BoxMRE
+        amount: 6
+
+- type: entity
+  parent: CrateFreezer
+  id: CrateFoodSoftdrinks
+  name: softdrinks crate
+  description: A variety of sodas to complement a small party, without having to empty the soda machines. Includes 14 sodas.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: DrinkColaCan
+          amount: 4
+        - id: DrinkGrapeCan
+          amount: 2
+        - id: DrinkRootBeerCan
+          amount: 2
+        - id: DrinkIcedTeaCan
+          amount: 2
+        - id: DrinkLemonLimeCan
+          amount: 2
+        - id: DrinkLemonLimeCranberryCan
+          amount: 2
+        - id: DrinkFourteenLokoCan
+          amount: 2
+
+- type: entity
+  parent: CrateFreezer
+  id: CrateFoodIceCream
+  name: ice cream delivery
+  description: An assortment of ice cream delights for any occasion! Includes 16 frozen treats.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: FoodFrozenSandwich
+          amount: 3
+        - id: FoodFrozenSandwichStrawberry
+          amount: 2
+        - id: FoodFrozenPopsicleOrange
+          amount: 2
+        - id: FoodFrozenPopsicleBerry
+          amount: 2
+        - id: FoodFrozenPopsicleJumbo
+          amount: 3
+        - id: FoodFrozenCornuto
+          amount: 2
+        - id: FoodFrozenSundae
+          amount: 2
+
+- type: entity
+  parent: CrateFreezer
+  id: CrateFoodSnowcone
+  name: snowcone delivery
+  description: A freezer packed with refreshing snowcones for a hard working crew, or even a lazy one! Includes 16 snowcones.
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:AllSelector
+        children:
+        - id: FoodFrozenSnowconeBase
+          amount: 3
+        - id: FoodFrozenSnowconeBerry
+          amount: 3
+        - id: FoodFrozenSnowconeFruit
+          amount: 3
+        - id: FoodFrozenSnowconeRainbow
+          amount: 3
+        - id: FoodFrozenSnowconeClown
+          amount: 2
+        - id: FoodFrozenSnowconeMime
+          amount: 2
+
+- type: entity
+  parent: CratePlastic
+  id: CrateFoodHappyHonkBigBite
+  name: Happy Honk meal delivery
+  description: Two fully loaded Happy Honk Big Bite burger meals, complete with cheesy fries, a bottle of Space Cola, a slice of apple pie and a toy!
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage:
+        id: FoodMealHappyHonkBigBite
+        amount: 2

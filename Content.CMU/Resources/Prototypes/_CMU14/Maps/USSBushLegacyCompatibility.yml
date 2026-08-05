@@ -1,0 +1,110 @@
+# Compatibility prototypes required by the pre-rebase USS Bush Redux maps.
+# Keep aliases and legacy marker data here so each modernization can be audited.
+
+# The legacy warship station intentionally excluded cargo/evacuation systems.
+# Current StandardUNMCWarship gained those parents after the rebase, so the
+# Bush keeps its original station composition here.
+- type: entity
+  id: CMUUSSBushStation
+  parent:
+  - BaseStation
+  - BaseStationNews
+  - BaseStationJobsSpawning
+  - BaseStationRecords
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+
+- type: entity
+  parent: RMCGuidebookLawMarine
+  id: AU14GuidebookLawMarine
+
+- type: entity
+  parent: RMCGuidebookSOP
+  id: AU14GuidebookSOP
+
+- type: entity
+  parent: RMCOrbitalCannon
+  id: AU14OrbitalCannonGovfor
+
+- type: entity
+  parent: RMCComputerIntel
+  id: RMCComputerIntelGovfor
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMULegacyBushAirlockGlassCommandLocked
+  suffix: Command, Locked, Glass
+  components:
+  - type: AccessReader
+    access: [["RMCAccessCommand"]]
+
+- type: entity
+  parent: CMAirlockGlass
+  id: CMULegacyBushAirlockGlassMarineLocked
+  suffix: Marine, Locked, Glass
+  components:
+  - type: AccessReader
+    access: [["CMAccessMarinePrep"], ["RMCAccessCommand"]]
+
+- type: entity
+  abstract: true
+  id: AU14ContainerTartarusBase
+  name: cargo container
+  description: A huge industrial shipping container.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.8"
+        density: 190
+        layer:
+        - MobMask
+  - type: Sprite
+    sprite: _CMU14/Structures/containers.rsi
+  - type: Clickable
+  - type: Occluder
+    boundingBox: "-0.5,-0.5,0.5,0.8"
+  - type: DeleteOnExplosion
+  - type: XenoToggleChargingDamage
+    stageLoss: 4
+    destroy: true
+
+# Fallout-derived floor clutter retained by the Bush maps.
+- type: entity
+  abstract: true
+  id: CMULegacyBushFloorDecor
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: Sprite
+    sprite: _CMU14/N14content/world.rsi
+    noRot: true
+    drawdepth: FloorObjects
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+
+# Legacy platoon markers. The replacement field selects the current default
+# UNMC equivalent without restoring the removed AU platoon framework.
+- type: entity
+  abstract: true
+  parent: MarkerBase
+  id: CMULegacyBushShipMarker
+  components:
+  - type: VendorMarker
+    ship: true
+  - type: Sprite
+    state: green

@@ -1,0 +1,7 @@
+[submodule "RobustToolbox"]
+	path = RobustToolbox
+	url = https://github.com/space-wizards/RobustToolbox.git
+	branch = master
+[submodule "RSI.NET"]
+	path = RSI.NET
+	url = https://github.com/space-wizards/RSI.NET.git

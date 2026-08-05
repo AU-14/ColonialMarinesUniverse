@@ -1,0 +1,29 @@
+using Content.Shared._RMC14.Vendors;
+using Content.Shared.Power.EntitySystems;
+using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
+using Robust.Server.GameObjects;
+
+namespace Content.Server._RMC14.Vendors;
+
+public sealed partial class CMAutomatedVendorSystem : SharedCMAutomatedVendorSystem
+{
+    [Dependency] private SharedBatterySystem _battery = default!;
+    [Dependency] private PowerCellSystem _powerCell = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+
+    protected override void OnVendBui(Entity<CMAutomatedVendorComponent> vendor, ref CMVendorVendBuiMsg args)
+    {
+        base.OnVendBui(vendor, ref args);
+
+        var msg = new CMVendorRefreshBuiMsg();
+        _ui.ServerSendUiMessage(vendor.Owner, args.UiKey, msg, args.Actor);
+    }
+
+    protected override (float currentCharge, float maxCharge) GetBatteryCharge(EntityUid item, PowerCellSlotComponent powerCellSlot)
+    {
+        return _powerCell.TryGetBatteryFromSlot((item, powerCellSlot), out var battery)
+            ? (_battery.GetCharge(battery.Value.AsNullable()), battery.Value.Comp.MaxCharge)
+            : (0, 0);
+    }
+}

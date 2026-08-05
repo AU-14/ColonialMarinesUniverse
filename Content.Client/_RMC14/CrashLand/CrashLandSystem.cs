@@ -1,0 +1,62 @@
+using System.Numerics;
+using Content.Client._RMC14.ParaDrop;
+using Content.Client._RMC14.Sprite;
+using Content.Shared._RMC14.CrashLand;
+using Content.Shared.ParaDrop;
+using Robust.Client.GameObjects;
+
+namespace Content.Client._RMC14.CrashLand;
+
+public sealed partial class CrashLandSystem : SharedCrashLandSystem
+{
+    [Dependency] private AnimationPlayerSystem _animPlayer = default!;
+    [Dependency] private ParaDropSystem _paraDrop = default!;
+    [Dependency] private RMCSpriteSystem _rmcSprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+
+    private const string CrashingAnimationKey = "crashing-animation";
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<CrashLandingComponent, ComponentRemove>(OnRemove);
+    }
+
+    private void OnRemove(Entity<CrashLandingComponent> ent, ref ComponentRemove args)
+    {
+        if (TerminatingOrDeleted(ent))
+            return;
+
+        if (TryComp(ent, out AnimationPlayerComponent? animation))
+            _animPlayer.Stop((ent, animation),CrashingAnimationKey);
+
+        if (!TryComp(ent, out SpriteComponent? sprite))
+            return;
+
+        var offset = new Vector2();
+
+        if (TryComp(ent, out CrashLandableComponent? crashLandable))
+            offset = crashLandable.OriginalSpriteOffset;
+
+        _sprite.SetOffset(ent.Owner, offset);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+        var query = EntityQueryEnumerator<CrashLandableComponent, CrashLandingComponent, SpriteComponent>();
+        while (query.MoveNext(out var uid, out var crashLandable, out var crashLanding, out var sprite))
+        {
+            if (!HasComp<SkyFallingComponent>(uid))
+            {
+                if (!_animPlayer.HasRunningAnimation(uid, CrashingAnimationKey) && crashLandable.LastCrash != null)
+                {
+                    crashLandable.OriginalSpriteOffset = sprite.Offset;
+                    _paraDrop.PlayFallAnimation(uid, crashLandable.CrashDuration, crashLanding.RemainingTime, crashLandable.FallHeight, CrashingAnimationKey);
+                }
+
+                _rmcSprite.UpdatePosition(uid);
+            }
+        }
+    }
+}

@@ -1,0 +1,141 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-24",
+  "branch": "Chip/multiz-modernization",
+  "baseCommit": "bd537c8f71bb4d1f82e172634c668d6b45f7b23d",
+  "findings": [
+    "MZ-071",
+    "MZ-072"
+  ],
+  "blurDefault": {
+    "reportedFailure": "Z-level blur appeared disabled even though the Graphics strength slider was non-zero.",
+    "reproducedConfiguration": {
+      "cmu.zlevels.blur_enabled": false,
+      "cmu.zlevels.blur_strength": 2.0
+    },
+    "rootCause": "The overlay required both a hidden archived Boolean and the visible strength slider. The Graphics tab only controlled strength, so the two archived values could disagree.",
+    "change": "Use blur strength as the only effective on/off setting. The positive 1.0 default enables blur and zero disables it. Keep the legacy Boolean registered, but behaviorally ignored, so old client configs load without an unknown-CVar warning.",
+    "before": {
+      "focusedPolicyTests": {
+        "passed": 4,
+        "failed": 0,
+        "duration": "27 ms",
+        "gap": "The suite covered pass direction but did not assert effective default enablement."
+      }
+    },
+    "after": {
+      "command": "dotnet test Content.Tests/Content.Tests.csproj -c DebugOpt --no-restore --filter FullyQualifiedName~ZLevelBlurOverlayTest -m:1 /nr:false -v:minimal",
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "19 ms",
+      "coverage": [
+        "Positive shipped default enables blur",
+        "Zero strength disables blur",
+        "Positive strength enables blur",
+        "Lower, base, and looked-up pass policy remains unchanged"
+      ]
+    }
+  },
+  "gridVehicleDriverInput": {
+    "reportedFailure": "Pressing WASD while buckled into a grid-vehicle driver seat unbuckled the driver.",
+    "rootCause": "VehicleSystem installed the standard movement relay for every vehicle. The RMC grid hook removed it after entry, but the operator retained CanMove=true. WASD then moved the buckled driver by 0.025 tiles, violating the seat-offset invariant and triggering automatic unbuckling.",
+    "change": "Install the standard movement relay only for VehicleMovementKind.Standard. Grid vehicles continue to read the operator InputMover directly and never enter the transient relay state.",
+    "before": {
+      "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --filter FullyQualifiedName~RMCVehicleDriverMovementTest -m:1 /nr:false -v:minimal",
+      "passed": 0,
+      "failed": 1,
+      "duration": "46 s",
+      "observed": {
+        "operatorCanMove": true,
+        "driverBuckled": false,
+        "driverBuckledTo": null,
+        "movementInputSeconds": 0.25,
+        "seatOffsetX": 0.0,
+        "observedLocalPositionX": 0.024999976,
+        "offsetDeltaSquared": 0.0006249988
+      }
+    },
+    "after": {
+      "focusedCommand": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --filter FullyQualifiedName~RMCVehicleDriverMovementTest -m:1 /nr:false -v:minimal",
+      "focusedPassed": 1,
+      "focusedFailed": 0,
+      "focusedDuration": "36 s",
+      "vehicleSuite": {
+        "passed": 5,
+        "failed": 0,
+        "skipped": 0,
+        "duration": "58 s",
+        "coverage": [
+          "Grid driver remains buckled after client WASD",
+          "Grid operator remains non-relayed and cannot move its buckled mob",
+          "SPP command tank remains a dynamic grid vehicle without InputMover",
+          "Grid operator input and prediction markers remain present",
+          "Standard Janicart retains source and target movement relays"
+        ]
+      },
+      "ordinaryBuckleMovement": {
+        "passed": 1,
+        "failed": 0,
+        "skipped": 0,
+        "duration": "37 s"
+      }
+    }
+  },
+  "requiredGates": {
+    "combinedIntegration": {
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1 m 25 s",
+      "coverage": [
+        "SandboxTest.Test",
+        "USSBushMultiZTest.LoadsNetworkAndResolvesActiveShipMarkers",
+        "USSBushMultiZTest.ReplicatesMinimumFallingAndVehicleTraversalState",
+        "USSBushMultiZTest.CombinesExistingMapsThroughLifecycle",
+        "All five RMCVehicle focused regressions"
+      ]
+    },
+    "releaseBuilds": {
+      "client": {
+        "warnings": 0,
+        "errors": 0,
+        "elapsed": "00:00:55.02"
+      },
+      "server": {
+        "warnings": 0,
+        "errors": 0,
+        "elapsed": "00:00:21.58"
+      }
+    },
+    "clientServerStability": {
+      "artifact": "artifacts/multiz-phase4/20260724-blur-driver-fix-stability",
+      "startedAtUtc": "2026-07-24T17:07:39.3840000+00:00",
+      "finishedAtUtc": "2026-07-24T17:08:48.0670000+00:00",
+      "durationSeconds": 68.683606,
+      "serverWarmupSeconds": 20,
+      "clientWarmupSeconds": 30,
+      "captureSeconds": 10,
+      "serverExitCode": 0,
+      "clientExitCode": 0,
+      "serverStderrBytes": 0,
+      "clientStderrBytes": 0,
+      "fullGameStateBytes": 928762,
+      "enteredInGame": true,
+      "unknownLegacyBlurCVarWarnings": 0,
+      "fatalOrUnhandledSignatures": 0,
+      "lateMessage": "Got late MsgEntity! Diff: -262, msgT: 0, cT: 262, msg: Content.Shared.Guidebook.RequestGuidebookDataEvent",
+      "hashes": {
+        "manifest": "DBF3B6E7E93F1674EFFA7BBCB4CA8B5B485B02CBC44C80B3C7BBE56753E46F2B",
+        "serverStdout": "FB340E8140B03F23F63C9AB46C6CEEC1C29A50F3BC716A2D886F5D5F1970DA3B",
+        "clientStdout": "54D37C48832A45BEABFC9AB27C476F1E9AEA87A7DC8C878B13F37A8035375F4B"
+      }
+    }
+  },
+  "claim": "Correctness fixes only; no CPU, GPU, allocation, or packet performance improvement is claimed.",
+  "deferredRisks": [
+    "Confirm the effective default blur visually on a qualifying lower-level pass with the user's archived profile; the stability run proves config compatibility and process health, not pixels or GPU timing.",
+    "Run a populated production vehicle drive with client prediction, correction, injected latency, exit/re-entry, and a real RMC driver seat.",
+    "Exercise a driven vehicle edge transition/fall and late join with a second client."
+  ]
+}

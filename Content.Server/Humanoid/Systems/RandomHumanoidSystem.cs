@@ -1,0 +1,62 @@
+using Content.Server.Humanoid.Components;
+using Content.Server.RandomMetadata;
+using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Preferences;
+using Robust.Shared.Map;
+using Robust.Shared.Prototypes;
+
+namespace Content.Server.Humanoid.Systems;
+
+/// <summary>
+///     This deals with spawning and setting up random humanoids.
+/// </summary>
+public sealed partial class RandomHumanoidSystem : EntitySystem
+{
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
+
+    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+
+    /// <inheritdoc/>
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<RandomHumanoidSpawnerComponent, MapInitEvent>(OnMapInit,
+            after: new []{ typeof(RandomMetadataSystem) });
+    }
+
+    private void OnMapInit(EntityUid uid, RandomHumanoidSpawnerComponent component, MapInitEvent args)
+    {
+        QueueDel(uid);
+        if (component.SettingsPrototypeId != null)
+            SpawnRandomHumanoid(component.SettingsPrototypeId, Transform(uid).Coordinates, MetaData(uid).EntityName);
+    }
+
+    public EntityUid SpawnRandomHumanoid(string prototypeId, EntityCoordinates coordinates, string name)
+    {
+        if (!_prototypeManager.TryIndex<RandomHumanoidSettingsPrototype>(prototypeId, out var prototype))
+            throw new ArgumentException("Could not get random humanoid settings");
+
+        var profile = HumanoidCharacterProfile.Random(prototype.SpeciesBlacklist);
+        var speciesProto = _prototypeManager.Index<SpeciesPrototype>(profile.Species);
+        var humanoid = EntityManager.CreateEntityUninitialized(speciesProto.Prototype, coordinates);
+
+        _metaData.SetEntityName(humanoid, prototype.RandomizeName ? profile.Name : name);
+
+        _humanoid.LoadProfile(humanoid, profile);
+
+        if (prototype.Components != null)
+            EntityManager.AddComponents(humanoid, prototype.Components);
+
+        EntityManager.InitializeAndStartEntity(humanoid);
+
+        RaiseLocalEvent(humanoid, new RandomHumanoidSpawnedEvent(prototypeId, profile.Species));
+
+        return humanoid;
+    }
+}
+
+public sealed partial class RandomHumanoidSpawnedEvent(string settingsPrototypeId, string species) : EntityEventArgs
+{
+    public readonly string SettingsPrototypeId = settingsPrototypeId;
+    public readonly string Species = species;
+}

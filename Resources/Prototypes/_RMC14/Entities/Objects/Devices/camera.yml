@@ -1,0 +1,38 @@
+- type: entity
+  parent: BaseItem
+  id: RMCCameraBroadcasting
+  name: broadcasting camera
+  description: Actively document everything you see, from the mundanity of shipside to the brutal battlefields below. # TODO Has a built-in printer for action shots.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/broadcasting_camera.rsi
+    state: icon
+  - type: Item
+    size: Huge
+  - type: Wieldable
+    freeHandsRequired: 0
+  - type: Eye
+    zoom: 0.5, 0.5
+  - type: RMCStaticZoomLevel
+  - type: Scope
+    useInHand: true
+    requireWielding: true
+    zoomLevels:
+    - zoom: 1.6
+      offset: 14
+      allowMovement: true
+      doAfter: 0
+  - type: SurveillanceCameraMicrophone
+    blacklist:
+      components:
+        - SurveillanceCamera
+        - SurveillanceCameraMonitor
+        - RadioSpeaker
+        - Xeno
+  - type: ActiveListener
+    range: 10
+  - type: RMCCamera
+    id: RMCTelevision
+    rename: false
+  - type: Corrodible
+    isCorrodible: false

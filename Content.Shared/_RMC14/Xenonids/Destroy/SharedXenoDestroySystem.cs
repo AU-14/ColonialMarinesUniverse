@@ -1,0 +1,348 @@
+using Content.Shared._RMC14.Actions;
+using Content.Shared._RMC14.Admin;
+using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.CameraShake;
+using Content.Shared._RMC14.Emote;
+using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.Gibbing;
+using Content.Shared._RMC14.Map;
+using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Stun;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Xenonids.Devour;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared._RMC14.Xenonids.ScissorCut;
+using Content.Shared.ActionBlocker;
+using Content.Shared.Actions;
+using Content.Shared.Body;
+using Content.Shared.Damage;
+using Content.Shared.DoAfter;
+using Content.Shared.Explosion;
+using Content.Shared.Hands;
+using Content.Shared.Gibbing;
+using Content.Shared.Interaction;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Item;
+using Content.Shared.Jittering;
+using Content.Shared.Maps;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.Movement.Events;
+using Content.Shared.Movement.Pulling.Events;
+using Content.Shared.Movement.Systems;
+using Content.Shared.Popups;
+using Content.Shared.Throwing;
+using Content.Shared.Whitelist;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
+using Robust.Shared.Timing;
+using System.Numerics;
+
+namespace Content.Shared._RMC14.Xenonids.Destroy;
+public abstract partial class SharedXenoDestroySystem : EntitySystem
+{
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private AreaSystem _area = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private SharedDoAfterSystem _doafter = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private RotateToFaceSystem _rotateToFace = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private MobStateSystem _mob = default!;
+    [Dependency] protected IGameTiming _timing = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private RMCGibSystem _rmcGib = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCPullingSystem _rmcPull = default!;
+    [Dependency] private ActionBlockerSystem _blocker = default!;
+
+    private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<XenoDestroyComponent, XenoDestroyActionEvent>(OnXenoDestroyAction);
+        SubscribeLocalEvent<XenoDestroyComponent, XenoDestroyLeapDoafter>(OnXenoDestroyDoafter);
+
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, AttemptMobCollideEvent>(OnLeapCollide);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, AttemptMobTargetCollideEvent>(OnLeapTargetCollide);
+
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, ComponentInit>(OnLeapingInit);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, ComponentRemove>(OnLeapingRemove);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, DropAttemptEvent>(OnLeapingCancel);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, UseAttemptEvent>(OnLeapingCancel);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, PickupAttemptEvent>(OnLeapingCancel);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, AttackAttemptEvent>(OnLeapingCancel);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, ThrowAttemptEvent>(OnLeapingCancel);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, ChangeDirectionAttemptEvent>(OnLeapingCancel);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, InteractionAttemptEvent>(OnLeapingCancelInteract);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, PullAttemptEvent>(OnLeapingCancelPull);
+        SubscribeLocalEvent<XenoDestroyLeapingComponent, UpdateCanMoveEvent>(OnLeapingCancel);
+    }
+
+    private void OnXenoDestroyAction(Entity<XenoDestroyComponent> xeno, ref XenoDestroyActionEvent args)
+    {
+        if (args.Handled || !_turf.TryGetTileRef(args.Target, out var tile))
+            return;
+
+        var target = _turf.GetTileCenter(tile.Value);
+
+        if (!_interaction.InRangeUnobstructed(xeno, target, xeno.Comp.Range) || _rmcMap.IsTileBlocked(target))
+        {
+            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
+            return;
+        }
+
+        if (!_area.TryGetArea(target, out var area, out var _) || area.Value.Comp.NoTunnel)
+        {
+            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-area"), xeno, xeno, PopupType.SmallCaution);
+            return;
+        }
+
+        _jitter.DoJitter(xeno, xeno.Comp.JumpTime, true, 80, 8, true);
+
+        var doAfter = new DoAfterArgs(EntityManager, xeno, xeno.Comp.JumpTime, new XenoDestroyLeapDoafter(GetNetCoordinates(target)), xeno)
+        {
+            BreakOnMove = true,
+            BreakOnRest = true
+        };
+
+        _doafter.TryStartDoAfter(doAfter);
+        Dirty(xeno);
+    }
+
+    private void OnXenoDestroyDoafter(Entity<XenoDestroyComponent> xeno, ref XenoDestroyLeapDoafter args)
+    {
+        if (args.Handled || args.Cancelled)
+            return;
+
+        if (_net.IsClient)
+            return;
+
+        args.Handled = true;
+
+        var coords = GetCoordinates(args.TargetCoords);
+
+        if (!_interaction.InRangeUnobstructed(xeno, coords, xeno.Comp.Range) || _rmcMap.IsTileBlocked(coords))
+        {
+            _popup.PopupClient(Loc.GetString("rmc-destroy-cant-reach"), xeno, xeno, PopupType.SmallCaution);
+            return;
+        }
+
+        _rotateToFace.TryFaceCoordinates(xeno, _transform.ToMapCoordinates(args.TargetCoords).Position);
+        _rmcPull.TryStopAllPullsFromAndOn(xeno);
+
+        if (_net.IsServer)
+        {
+            var leaping = EnsureComp<XenoDestroyLeapingComponent>(xeno);
+            leaping.Target = coords;
+            leaping.LeapMoveAt = _timing.CurTime + xeno.Comp.CrashTime / 2;
+            leaping.LeapEndAt = _timing.CurTime + xeno.Comp.CrashTime;
+            Dirty(xeno.Owner, leaping);
+
+            var filter = Filter.Pvs(xeno);
+            Vector2 offset = _transform.ToMapCoordinates(coords).Position - _transform.GetMapCoordinates(xeno).Position;
+
+            var ev = new XenoDestroyLeapStartEvent(GetNetEntity(xeno), offset);
+            RaiseNetworkEvent(ev, filter);
+        }
+
+        PredictedSpawnAtPosition(xeno.Comp.Telegraph, coords);
+
+        _emote.TryEmoteWithChat(xeno, xeno.Comp.Emote);
+    }
+
+    private void OnLeapCollide(Entity<XenoDestroyLeapingComponent> xeno, ref AttemptMobCollideEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    private void OnLeapTargetCollide(Entity<XenoDestroyLeapingComponent> xeno, ref AttemptMobTargetCollideEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    private void OnLeapingCancel<T>(Entity<XenoDestroyLeapingComponent> ent, ref T args) where T : CancellableEntityEventArgs
+    {
+        args.Cancel();
+    }
+
+    private void OnLeapingCancelInteract(Entity<XenoDestroyLeapingComponent> ent, ref InteractionAttemptEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+    private void OnLeapingCancelPull(Entity<XenoDestroyLeapingComponent> ent, ref PullAttemptEvent args)
+    {
+        args.Cancelled = true;
+    }
+
+
+    private void CrashDown(Entity<XenoDestroyComponent> xeno)
+    {
+        RemCompDeferred<XenoDestroyLeapingComponent>(xeno);
+
+        if (_transform.GetGrid(xeno.Owner) is not { } gridId || !TryComp<MapGridComponent>(gridId, out var grid))
+            return;
+
+        if (_net.IsServer)
+            _audio.PlayPvs(xeno.Comp.Sound, xeno);
+
+        foreach (var tile in _map.GetTilesIntersecting(gridId, grid, Box2.CenteredAround(_transform.GetMoverCoordinates(xeno).Position, new Vector2(2, 2))))
+        {
+            //Gib mobs, knockback items, also kill structures
+            foreach (var ent in _entityLookup.GetEntitiesInTile(tile, LookupFlags.All))
+            {
+                if (CanGib(xeno, ent))
+                {
+                    if (!xeno.Comp.Gibs || !HasComp<BodyComponent>(ent))
+                    {
+                        //just do a ton of damage instead
+                        _damage.TryChangeDamage(ent, xeno.Comp.MobDamage, true, origin: xeno, tool: xeno);
+                        continue;
+                    }
+
+                    if (_net.IsServer)
+                    {
+                        _rmcGib.ScatterInventoryItems(ent);
+                        _gibbing.Gib(ent);
+                    }
+                    continue;
+                }
+
+                if (HasComp<ItemComponent>(ent) && !Transform(ent).Anchored)
+                {
+                    _size.KnockBack(ent, _transform.GetMapCoordinates(xeno), xeno.Comp.Knockback, xeno.Comp.Knockback, 15, true);
+                    continue;
+                }
+
+                if (_whitelist.IsWhitelistPass(xeno.Comp.Structures, ent))
+                {
+                    var ev = new GetExplosionResistanceEvent(xeno.Comp.ExplosionType.Id);
+                    RaiseLocalEvent(ent, ref ev);
+
+                    _damage.TryChangeDamage(ent, xeno.Comp.StructureDamage * ev.DamageCoefficient, true, origin: xeno, tool: xeno);
+                    continue;
+                }
+            }
+
+            PredictedSpawnAtPosition(xeno.Comp.SmokeEffect, _turf.GetTileCenter(tile));
+        }
+
+        //Shake - effects everyone
+        _mobs.Clear();
+        _entityLookup.GetEntitiesInRange(Transform(xeno).Coordinates, xeno.Comp.ShakeCameraRange, _mobs);
+
+        foreach (var mob in _mobs)
+        {
+            if (mob.Owner == xeno.Owner)
+            {
+                //Smaller
+                _cameraShake.ShakeCamera(mob, 5, 1);
+                continue;
+            }
+
+            _cameraShake.ShakeCamera(mob, 15, 1);
+        }
+
+        SetCooldown(xeno);
+    }
+
+    private bool CanGib(EntityUid king, EntityUid target)
+    {
+        if (king == target)
+            return false;
+
+        // hiveless xenos can attack eachother
+        if (_hive.FromSameHive(king, target))
+            return false;
+
+        if (HasComp<DevouredComponent>(target))
+            return false;
+
+        if (HasComp<XenoNestedComponent>(target))
+            return false;
+
+        return HasComp<MobStateComponent>(target);
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<XenoDestroyLeapingComponent, XenoDestroyComponent>();
+
+        while (query.MoveNext(out var uid, out var leaping, out var destroy))
+        {
+            if (_mob.IsDead(uid))
+            {
+                RemCompDeferred<XenoDestroyLeapingComponent>(uid);
+                continue;
+            }
+
+            if (leaping.LeapMoveAt != null && time > leaping.LeapMoveAt)
+            {
+                if (leaping.Target != null)
+                    _transform.SetCoordinates(uid, leaping.Target.Value);
+
+                leaping.LeapMoveAt = null;
+                Dirty(uid, leaping);
+            }
+
+            if (leaping.LeapEndAt == null || time < leaping.LeapEndAt)
+                continue;
+
+            CrashDown((uid, destroy));
+        }
+    }
+
+    private void SetCooldown(Entity<XenoDestroyComponent> xeno)
+    {
+        foreach (var (actionId, action) in _rmcActions.GetActionsWithEvent<XenoDestroyActionEvent>(xeno))
+        {
+            _actions.SetCooldown(actionId, xeno.Comp.Cooldown);
+            break;
+        }
+    }
+
+    private void OnLeapingInit(Entity<XenoDestroyLeapingComponent> xeno, ref ComponentInit args)
+    {
+        var actions = _actions.GetActions(xeno);
+        foreach (var action in actions)
+        {
+            _actions.SetEnabled(action.AsNullable(), false);
+        }
+
+        _blocker.UpdateCanMove(xeno);
+    }
+
+    protected virtual void OnLeapingRemove(Entity<XenoDestroyLeapingComponent> xeno, ref ComponentRemove args)
+    {
+        var actions = _actions.GetActions(xeno);
+        foreach (var action in actions)
+        {
+            _actions.SetEnabled(action.AsNullable(), true);
+        }
+
+        _blocker.UpdateCanMove(xeno);
+    }
+}

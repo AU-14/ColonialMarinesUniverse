@@ -1,0 +1,196 @@
+﻿- type: entity
+  parent: [StorageTank, StructureWheeled]
+  id: RMCTankReagentEmpty
+  name: reagent tank
+  description: A reagent tank, typically used to store large quantities of chemicals.
+  suffix: Empty
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/reagent_tank.rsi
+    layers:
+    - state: tank_normal
+    - state: tn_color-1
+    - state: tn_color-1
+      map: ["enum.SolutionContainerLayers.Fill"]
+      visible: false
+    - state: t_inactive
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        density: 155
+        mask:
+        - MachineMask
+        - HighImpassable
+        layer:
+        - HighImpassable
+        - BulletImpassable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Appearance
+  - type: SolutionContainerVisuals
+    maxFillLevels: 2
+    fillBaseName: tn_color-
+  - type: DetailedExaminableSolution
+    solution: tank
+  - type: RMCToggleableSolutionTransfer
+    solution: tank
+  - type: Solution
+    id: tank
+    solution:
+      maxVol: 1000
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: Tag
+    tags:
+    - RMCTankReagent
+    - Structure
+  - type: XenoCrusherChargable
+    instantDestroy: true
+    passOnDestroy: true
+  - type: RMCMesonsNonviewable
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentWater
+  suffix: Water
+  components:
+  - type: Solution
+    id: tank
+    solution:
+      reagents:
+      - ReagentId: Water
+        Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-water
+
+- type: entity
+  parent: RMCTankReagentWater
+  id: RMCTankReagentWaterLocked
+  suffix: Water, Locked
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Anchorable
+    flags: None
+
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentFuel
+  name: fuel tank
+  description: A fuel tank, normally used to hold welding fuel. It's painted red with explosive warning labels.
+  suffix: Fuel
+  components:
+  - type: Sprite
+    layers:
+    - state: weldtank
+  - type: Solution
+    id: tank
+    solution:
+      reagents:
+      - ReagentId: WeldingFuel
+        Quantity: 1000
+  - type: Explosive
+    explosionType: Default
+    totalIntensity: 60
+  - type: ReagentTank
+    tankType: Fuel
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:SolutionExplosionBehavior
+        solution: tank
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: DamageOnToolInteract
+    tools: Welding
+    weldingDamage:
+      types:
+        Heat: 100
+  - type: Label
+    currentLabel: reagent-name-welding-fuel
+  - type: Tag
+    tags:
+    - RMCTankFuel
+    - RMCTankReagent
+
+- type: Tag
+  id: RMCTankFuel
+
+- type: Tag
+  id: RMCTankReagent
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentMeralyne
+  suffix: Meralyne
+  components:
+  - type: Solution
+    id: tank
+    solution:
+      reagents:
+      - ReagentId: CMMeralyne
+        Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-cmmeralyne
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentDermaline
+  suffix: Dermaline
+  components:
+  - type: Solution
+    id: tank
+    solution:
+      reagents:
+      - ReagentId: CMDermaline
+        Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-cmdermaline
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentPhoron
+  suffix: Phoron
+  components:
+  - type: Solution
+    id: tank
+    solution:
+      reagents:
+      - ReagentId: RMCPhoron
+        Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-rmcphoron
+
+- type: entity
+  parent: RMCTankReagentEmpty
+  id: RMCTankReagentSulphuricAcid
+  suffix: SulphuricAcid
+  components:
+  - type: Solution
+    id: tank
+    solution:
+      reagents:
+      - ReagentId: RMCSulphuricAcid
+        Quantity: 1000
+  - type: Label
+    currentLabel: reagent-name-rmc-sulphuric-acid

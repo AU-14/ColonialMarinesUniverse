@@ -1,0 +1,348 @@
+# Base
+- type: entity
+  parent: ClosetBase
+  id: CMClosetBaseUnanchored
+  name: closet
+  description: It's a basic storage unit.
+  suffix: Unanchored
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/standard.rsi
+    layers:
+    - state: base
+      map: ["enum.StorageVisualLayers.Base"]
+    - state: closed
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: welded
+      visible: false
+      map: ["enum.WeldableLayers.BaseWelded"]
+    - state: paper
+      visible: false
+      sprite: Structures/Storage/closet_labels.rsi
+      map: [ "enum.PaperLabelVisuals.Layer" ]
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: base
+    stateDoorOpen: open
+    stateDoorClosed: closed
+  - type: InsertBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: RMCContainerEmptyOnDestruction
+  - type: Anchorable
+    flags:
+    - None
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -6
+  - type: EntityStorageCloseOnMapInit
+  - type: XenoToggleChargingDamage
+    stageLoss: 2
+    damage:
+      types:
+        Blunt: 40
+
+- type: entity
+  parent: CMClosetBaseUnanchored
+  id: CMClosetBase
+  suffix: Anchored
+  components:
+  - type: Transform
+    anchored: true
+  - type: RMCMesonsNonviewable
+
+- type: entity
+  parent: CMClosetBase
+  id: RMCCabinetBase
+  name: cabinet
+  description: Old will forever be in fashion.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Lockers/cabinet.rsi
+  - type: EntityStorage
+    closeSound:
+      path: /Audio/Effects/woodenclosetclose.ogg
+    openSound:
+      path: /Audio/Effects/woodenclosetopen.ogg
+
+- type: entity
+  parent: RMCCabinetBase
+  id: RMCCabinetBaseUnanchored
+  suffix: Unanchored
+  components:
+  - type: Anchorable
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+
+# Colored
+- type: entity
+  parent: CMClosetBase
+  id: RMCClosetBlack
+  name: formal closet
+  description: It's a storage unit for formal clothing.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/black.rsi
+
+- type: entity
+  parent: CMClosetBase
+  id: RMCClosetBlue
+  name: legal closet
+  description: It's a storage unit for courtroom apparel and items.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/blue.rsi
+
+- type: entity
+  parent: CMClosetBase
+  id: RMCClosetPurple
+  name: custodial closet
+  description: It's a storage unit for janitorial clothes and gear.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/purple.rsi
+
+# Utilities
+- type: entity
+  parent: CMClosetBase
+  id: CMClosetEmergency
+  name: emergency closet
+  description: It's a storage unit for emergency breathmasks and o2 tanks.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/emergency.rsi
+
+- type: entity
+  parent: CMClosetBase
+  id: CMClosetFire
+  name: fire-safety closet
+  description: It's a storage unit for fire-fighting supplies.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/firecloset.rsi
+
+- type: entity
+  parent: CMClosetBase
+  id: CMClosetTool
+  name: tool closet
+  description: It's a storage unit for tools.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/toolcloset.rsi
+
+- type: entity
+  parent: CMClosetBase
+  id: CMClosetRadiation
+  name: radiation suit closet
+  description: It's a storage unit for rad-protective suits.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/radsuit.rsi
+
+- type: entity
+  parent: CMClosetBase
+  id: CMClosetBomb
+  name: EOD closet
+  description: It's a storage unit for explosion-protective suits.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/bombsuit.rsi
+
+# Bio suits
+- type: entity
+  parent: CMClosetBase
+  id: CMClosetBio
+  name: level-3 biohazard suit closet
+  description: It's a storage unit for level-3 biohazard gear.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/bio.rsi
+
+- type: entity
+  parent: CMClosetBio
+  id: CMClosetBioVirology
+  suffix: Virology
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/bio_virology.rsi
+
+- type: entity
+  parent: CMClosetBio
+  id: CMClosetBioSecurity
+  suffix: Security
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/bio_security.rsi
+
+- type: entity
+  parent: CMClosetBio
+  id: CMClosetBioJanitor
+  suffix: Janitor
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/bio_janitor.rsi
+
+- type: entity
+  parent: CMClosetBio
+  id: CMClosetBioScientist
+  suffix: Scientist
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/bio_scientist.rsi
+
+- type: entity
+  parent: CMClosetBio
+  id: CMClosetBioMedical
+  suffix: Medical
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/bio_medical.rsi
+
+# Gimmics
+- type: entity
+  parent: CMClosetBase
+  id: CMClosetAlien
+  name: strange closet
+  description: It looks alien!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/acloset.rsi
+
+# Jobs
+- type: entity
+  parent: CMClosetBaseUnanchored
+  id: RMCClosetMiner
+  name: miner's equipment
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/Closets/mining.rsi
+
+# PVE
+- type: entity
+  parent: CMClosetBaseUnanchored
+  id: RMCClosetGoldenArrowGear
+  name: personal locker
+  description: An immobile storage unit.
+  suffix: PvE, Sun Riders
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetGoldenArrowFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetPMCGear
+  suffix: PvE, PMC
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetPMCGearFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetSPPGear
+  suffix: PvE, SPP
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetSPPGearFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetRCMGear
+  suffix: PVE, RCM
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetRCMFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetRCMTroopSgtGear
+  name: troop sergeant locker
+  suffix: PVE, RCM, Troop Sergeant
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetRCMTroopSgtFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetRCMSectionLeaderGear
+  name: section leader locker
+  suffix: PVE, RCM, Section Leader
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetRCMSectionLeaderFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetRCMGPMGGear
+  name: GPMG gunner locker
+  suffix: PVE, RCM, GPMG Gunner
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetRCMGPMGFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetRCMTeamLeaderGear
+  name: team leader locker
+  suffix: PVE, RCM, Team Leader
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetRCMTeamLeaderFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetRCMTroopCommanderGear
+  name: troop commander locker
+  suffix: PVE, RCM, Troop Commander
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetRCMTroopCommanderFill
+
+- type: entity
+  parent: RMCClosetGoldenArrowGear
+  id: RMCClosetRCMSapperGear
+  name: sapper locker
+  suffix: PVE, RCM, Sapper
+  components:
+  - type: EntityTableContainerFill
+    containers:
+      entity_storage: !type:NestedSelector
+        tableId: RMCClosetRCMSapperFill

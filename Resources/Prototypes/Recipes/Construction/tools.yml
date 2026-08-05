@@ -1,0 +1,61 @@
+# region Base
+- type: construction
+  abstract: true
+  id: BaseTool
+  category: construction-category-tools
+  objectType: Item
+# endregion Base
+
+# region Logic Gates
+- type: construction
+  parent: BaseTool
+  id: LogicGate
+  graph: LogicGate
+  targetNode: logic_gate
+
+- type: construction
+  parent: LogicGate
+  id: EdgeDetector
+  targetNode: edge_detector
+
+- type: construction
+  parent: LogicGate
+  id: PowerSensor
+  targetNode: power_sensor
+
+- type: construction
+  parent: LogicGate
+  id: MemoryCell
+  targetNode: memory_cell
+
+- type: construction
+  parent: LogicGate
+  id: RandomGate
+  targetNode: random_gate
+# endregion Logic Gates
+
+# region Miscellaneous
+- type: construction
+  parent: BaseTool
+  id: LightTorch
+  graph: LightTorch
+  targetNode: torch
+
+- type: construction
+  parent: BaseTool
+  id: MakeshiftMortarAndPestle
+  graph: MakeshiftMortarAndPestle
+  targetNode: mortarAndPestle
+
+- type: construction
+  parent: BaseTool
+  id: MakeshiftJuicer
+  graph: MakeshiftJuicer
+  targetNode: juicer
+
+- type: construction
+  parent: BaseTool
+  id: MakeshiftCentrifuge
+  graph: MakeshiftCentrifuge
+  targetNode: makeshiftCentrifuge
+# endregion Miscellaneous

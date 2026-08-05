@@ -1,0 +1,6 @@
+﻿# TODO RMC14
+- type: soundCollection
+  id: RMCSelfDestruct
+  files:
+  - /Audio/_RMC14/Announcements/RoundEnd/its_only_game.ogg
+  - /Audio/_RMC14/Announcements/RoundEnd/lets_get_outta_here.ogg

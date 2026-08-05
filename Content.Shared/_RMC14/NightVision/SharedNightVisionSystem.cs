@@ -1,0 +1,382 @@
+using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Scoping;
+using Content.Shared._RMC14.Visor;
+using Content.Shared.Actions;
+using Content.Shared.Alert;
+using Content.Shared.IgnitionSource;
+using Content.Shared.Inventory;
+using Content.Shared.Inventory.Events;
+using Content.Shared.Popups;
+using Content.Shared.Rounding;
+using Content.Shared.Toggleable;
+using Content.Shared.Verbs;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Timing;
+
+namespace Content.Shared._RMC14.NightVision;
+
+public abstract partial class SharedNightVisionSystem : EntitySystem
+{
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SkillsSystem _skills = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private VisorSystem _visor = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<RMCNightVisionComponent, ComponentStartup>(OnNightVisionStartup);
+        SubscribeLocalEvent<RMCNightVisionComponent, MapInitEvent>(OnNightVisionMapInit);
+        SubscribeLocalEvent<RMCNightVisionComponent, AfterAutoHandleStateEvent>(OnNightVisionAfterHandle);
+        SubscribeLocalEvent<RMCNightVisionComponent, ComponentRemove>(OnNightVisionRemove);
+        SubscribeLocalEvent<RMCNightVisionComponent, ToggleNightVisionAlertEvent>(OnNightVisionToggle);
+
+        SubscribeLocalEvent<NightVisionItemComponent, GetItemActionsEvent>(OnNightVisionItemGetActions);
+        SubscribeLocalEvent<NightVisionItemComponent, ToggleActionEvent>(OnNightVisionItemToggle);
+        SubscribeLocalEvent<NightVisionItemComponent, GotEquippedEvent>(OnNightVisionItemGotEquipped);
+        SubscribeLocalEvent<NightVisionItemComponent, GotUnequippedEvent>(OnNightVisionItemGotUnequipped);
+        SubscribeLocalEvent<NightVisionItemComponent, ActionRemovedEvent>(OnNightVisionItemActionRemoved);
+        SubscribeLocalEvent<NightVisionItemComponent, ComponentRemove>(OnNightVisionItemRemove);
+        SubscribeLocalEvent<NightVisionItemComponent, EntityTerminatingEvent>(OnNightVisionItemTerminating);
+        SubscribeLocalEvent<NightVisionItemComponent, GetVerbsEvent<AlternativeVerb>>(OnNightVisionItemGetAltVerbs);
+
+        SubscribeLocalEvent<NightVisionVisorComponent, ActivateVisorEvent>(OnNightVisionActivate);
+        SubscribeLocalEvent<NightVisionVisorComponent, DeactivateVisorEvent>(OnNightVisionDeactivate);
+        SubscribeLocalEvent<NightVisionVisorComponent, VisorRelayedEvent<ScopedEvent>>(OnNightVisionScoped);
+
+        SubscribeLocalEvent<RMCNightVisionVisibleOnIgniteComponent, IgnitionEvent>(OnNightVisionVisibleIgnition);
+    }
+
+    private void OnNightVisionStartup(Entity<RMCNightVisionComponent> ent, ref ComponentStartup args)
+    {
+        NightVisionChanged(ent);
+    }
+
+    private void OnNightVisionAfterHandle(Entity<RMCNightVisionComponent> ent, ref AfterAutoHandleStateEvent args)
+    {
+        NightVisionChanged(ent);
+    }
+
+    private void OnNightVisionMapInit(Entity<RMCNightVisionComponent> ent, ref MapInitEvent args)
+    {
+        UpdateAlert(ent);
+    }
+
+    private void OnNightVisionRemove(Entity<RMCNightVisionComponent> ent, ref ComponentRemove args)
+    {
+        if (ent.Comp.Alert is { } alert)
+            _alerts.ClearAlert(ent, alert);
+
+        NightVisionRemoved(ent);
+    }
+
+    private void OnNightVisionToggle(Entity<RMCNightVisionComponent> ent, ref ToggleNightVisionAlertEvent args)
+    {
+        Toggle((ent, ent));
+    }
+
+    private void OnNightVisionItemGetActions(Entity<NightVisionItemComponent> ent, ref GetItemActionsEvent args)
+    {
+        if (ent.Comp.ActionId == null)
+            return;
+
+        if (args.InHands || !ent.Comp.Toggleable)
+            return;
+
+        if (ent.Comp.SlotFlags != args.SlotFlags)
+            return;
+
+        args.AddAction(ref ent.Comp.Action, ent.Comp.ActionId);
+    }
+
+    private void OnNightVisionItemToggle(Entity<NightVisionItemComponent> ent, ref ToggleActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        ToggleNightVisionItem(ent, args.Performer);
+    }
+
+    private void OnNightVisionItemGotEquipped(Entity<NightVisionItemComponent> ent, ref GotEquippedEvent args)
+    {
+        if (ent.Comp.SlotFlags != args.SlotFlags)
+            return;
+
+        EnableNightVisionItem(ent, args.Equipee);
+    }
+
+    private void OnNightVisionItemGotUnequipped(Entity<NightVisionItemComponent> ent, ref GotUnequippedEvent args)
+    {
+        if (ent.Comp.SlotFlags != args.SlotFlags)
+            return;
+
+        DisableNightVisionItem(ent, args.Equipee);
+    }
+
+    private void OnNightVisionItemActionRemoved(Entity<NightVisionItemComponent> ent, ref ActionRemovedEvent args)
+    {
+        DisableNightVisionItem(ent, ent.Comp.User);
+    }
+
+    private void OnNightVisionItemRemove(Entity<NightVisionItemComponent> ent, ref ComponentRemove args)
+    {
+        DisableNightVisionItem(ent, ent.Comp.User);
+    }
+
+    private void OnNightVisionItemTerminating(Entity<NightVisionItemComponent> ent, ref EntityTerminatingEvent args)
+    {
+        DisableNightVisionItem(ent, ent.Comp.User);
+    }
+
+    private void OnNightVisionItemGetAltVerbs(Entity<NightVisionItemComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract)
+            return;
+
+        if (ent.Comp.User != null && ent.Comp.User != args.User)
+            return;
+
+        var nextState = GetNextItemNightVisionState(ent.Comp.DefaultState);
+        var nextStateText = Loc.GetString(nextState == NightVisionState.Full
+            ? "rmc-ui-xeno-night-vision-default-full"
+            : "rmc-ui-xeno-night-vision-default-half");
+
+        var user = args.User;
+        var verb = new AlternativeVerb
+        {
+            Text = Loc.GetString("rmc-night-vision-mode-verb", ("mode", nextStateText)),
+            Act = () => ToggleNightVisionItemMode(ent, user),
+        };
+
+        args.Verbs.Add(verb);
+    }
+
+    private void OnNightVisionActivate(Entity<NightVisionVisorComponent> ent, ref ActivateVisorEvent args)
+    {
+        if (args.User != null && HasComp<ScopingComponent>(args.User))
+        {
+            _popup.PopupClient("You cannot use the night vision optic while using optics.",
+                args.User.Value,
+                args.User,
+                PopupType.SmallCaution);
+            return;
+        }
+
+        args.Handled = true;
+        if (_timing.ApplyingState)
+            return;
+
+        var comp = new NightVisionItemComponent()
+        {
+            ActionId = null,
+            SlotFlags = SlotFlags.HEAD,
+            Green = true,
+            BlockScopes = true,
+        };
+        AddComp(args.CycleableVisor, comp, true);
+        Dirty(args.CycleableVisor, comp);
+
+        if (_inventory.InSlotWithFlags(args.CycleableVisor.Owner, comp.SlotFlags) && args.User != null)
+        {
+            EnableNightVisionItem((args.CycleableVisor, comp), args.User.Value);
+            _audio.PlayLocal(ent.Comp.SoundOn, ent, args.User);
+        }
+    }
+
+    private void OnNightVisionDeactivate(Entity<NightVisionVisorComponent> ent, ref DeactivateVisorEvent args)
+    {
+        if (_timing.ApplyingState)
+            return;
+
+        if (TerminatingOrDeleted(ent))
+            return;
+
+        RemComp<NightVisionItemComponent>(args.CycleableVisor);
+        _audio.PlayLocal(ent.Comp.SoundOff, ent, args.User);
+    }
+
+    private void OnNightVisionScoped(Entity<NightVisionVisorComponent> ent, ref VisorRelayedEvent<ScopedEvent> args)
+    {
+        if (args.Event.Scope.Comp.CanUseNightVision)
+            return;
+
+        _visor.DeactivateVisor(args.CycleableVisor, ent.Owner, args.Event.User);
+    }
+
+    private void OnNightVisionVisibleIgnition(Entity<RMCNightVisionVisibleOnIgniteComponent> ent, ref IgnitionEvent args)
+    {
+        if (_timing.ApplyingState)
+            return;
+
+        if (args.Ignite)
+            EnsureComp<RMCNightVisionVisibleComponent>(ent);
+        else
+            RemCompDeferred<RMCNightVisionVisibleComponent>(ent);
+    }
+
+    public NightVisionState Toggle(Entity<RMCNightVisionComponent?> ent)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return NightVisionState.Off;
+
+        ent.Comp.State = ent.Comp.State switch
+        {
+            NightVisionState.Off => NightVisionState.Half,
+            NightVisionState.Half => ent.Comp.OnlyHalf ? NightVisionState.Off : NightVisionState.Full,
+            NightVisionState.Full => NightVisionState.Off,
+            _ => throw new ArgumentOutOfRangeException(),
+        };
+
+        Dirty(ent);
+        UpdateAlert((ent, ent.Comp));
+        return ent.Comp.State;
+    }
+
+    private void UpdateAlert(Entity<RMCNightVisionComponent> ent)
+    {
+        if (ent.Comp.Alert is { } alert)
+        {
+            var state = (short)ent.Comp.State;
+            var max = _alerts.GetMaxSeverity(alert);
+            var min = _alerts.GetMinSeverity(alert);
+            var severity = state > max ? max : (state < min ? min : state);
+            _alerts.ShowAlert(ent, alert, severity);
+        }
+
+        NightVisionChanged(ent);
+    }
+
+    private void ToggleNightVisionItem(Entity<NightVisionItemComponent> item, EntityUid user)
+    {
+        if (item.Comp.User == user && item.Comp.Toggleable)
+        {
+            DisableNightVisionItem(item, item.Comp.User);
+            _audio.PlayLocal(item.Comp.SoundOff, item.Owner, user);
+            return;
+        }
+
+        EnableNightVisionItem(item, user);
+        _audio.PlayLocal(item.Comp.SoundOn, item.Owner, user);
+    }
+
+    public void EnableNightVisionItem(Entity<NightVisionItemComponent> item, EntityUid user)
+    {
+        DisableNightVisionItem(item, item.Comp.User);
+
+        if (item.Comp.Skills != null && !_skills.HasAllSkills(user, item.Comp.Skills))
+        {
+            _popup.PopupClient(Loc.GetString("rmc-skills-hud-toggle"), user, user, PopupType.MediumCaution);
+            return;
+        }
+
+        item.Comp.User = user;
+        Dirty(item);
+
+        _appearance.SetData(item, NightVisionItemVisuals.Active, true);
+
+        if (!_timing.ApplyingState)
+        {
+            var defaultState = item.Comp.DefaultState;
+            if (TryComp(user, out RMCNightVisionComponent? nightVision))
+            {
+                nightVision = EnsureComp<RMCNightVisionComponent>(user);
+                if (nightVision.OnlyHalf && defaultState == NightVisionState.Full)
+                    defaultState = NightVisionState.Half;
+
+                nightVision.State = defaultState;
+                nightVision.Green = item.Comp.Green;
+                nightVision.Mesons = item.Comp.Mesons;
+                nightVision.BlockScopes = item.Comp.BlockScopes;
+                Dirty(user, nightVision);
+            }
+            else
+            {
+                nightVision = new RMCNightVisionComponent()
+                {
+                    State = defaultState,
+                    Green = item.Comp.Green,
+                    Mesons = item.Comp.Mesons,
+                    BlockScopes = item.Comp.BlockScopes,
+                };
+
+                AddComp(user, nightVision, true);
+                Dirty(user, nightVision);
+            }
+        }
+
+        _actions.SetToggled(item.Comp.Action, true);
+    }
+
+    protected virtual void NightVisionChanged(Entity<RMCNightVisionComponent> ent)
+    {
+    }
+
+    protected virtual void NightVisionRemoved(Entity<RMCNightVisionComponent> ent)
+    {
+    }
+
+    public void DisableNightVisionItem(Entity<NightVisionItemComponent> item, EntityUid? user)
+    {
+        _actions.SetToggled(item.Comp.Action, false);
+
+        item.Comp.User = null;
+        Dirty(item);
+
+        _appearance.SetData(item, NightVisionItemVisuals.Active, false);
+
+        if (TryComp(user, out RMCNightVisionComponent? nightVision) &&
+            !nightVision.Innate)
+        {
+            RemCompDeferred<RMCNightVisionComponent>(user.Value);
+        }
+    }
+
+    private void ToggleNightVisionItemMode(Entity<NightVisionItemComponent> item, EntityUid user)
+    {
+        var nextState = GetNextItemNightVisionState(item.Comp.DefaultState);
+        item.Comp.DefaultState = nextState;
+        Dirty(item);
+
+        if (item.Comp.User is { } activeUser && TryComp(activeUser, out RMCNightVisionComponent? nightVision))
+            SetState((activeUser, nightVision), nextState);
+    }
+
+    private static NightVisionState GetNextItemNightVisionState(NightVisionState current)
+    {
+        return current switch
+        {
+            NightVisionState.Full => NightVisionState.Half,
+            _ => NightVisionState.Full,
+        };
+    }
+
+    public void SetSeeThroughContainers(Entity<RMCNightVisionComponent?> ent, bool see)
+    {
+        if (!Resolve(ent, ref ent.Comp, false))
+            return;
+
+        ent.Comp.SeeThroughContainers = see;
+        Dirty(ent);
+    }
+
+    public void SetState(Entity<RMCNightVisionComponent?> ent, NightVisionState state)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        if (ent.Comp.OnlyHalf && state == NightVisionState.Full)
+            state = NightVisionState.Half;
+
+        if (ent.Comp.State == state)
+            return;
+
+        ent.Comp.State = state;
+        Dirty(ent);
+        UpdateAlert((ent, ent.Comp));
+    }
+}

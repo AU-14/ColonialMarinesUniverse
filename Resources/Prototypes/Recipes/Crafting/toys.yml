@@ -1,0 +1,17 @@
+﻿- type: construction
+  parent: BaseItemMisc
+  id: PlushieGhostRevenant
+  graph: PlushieGhostRevenant
+  targetNode: plushie
+
+- type: construction
+  parent: BaseClothing
+  id: ClothingOuterSuitIan
+  graph: ClothingOuterSuitIan
+  targetNode: suit
+
+- type: construction
+  parent: BaseItemMisc
+  id: MoproachShoes
+  graph: MoproachShoes
+  targetNode: shoes

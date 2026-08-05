@@ -1,0 +1,36 @@
+﻿using Content.Shared._RMC14.Actions;
+using Content.Shared.Actions;
+
+namespace Content.Shared._RMC14.Xenonids.Hide;
+
+public sealed partial class XenoHideSystem : EntitySystem
+{
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<XenoHideComponent, XenoHideActionEvent>(OnXenoHideAction);
+    }
+
+    private void OnXenoHideAction(Entity<XenoHideComponent> xeno, ref XenoHideActionEvent args)
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+
+        xeno.Comp.Hiding = !xeno.Comp.Hiding;
+        Dirty(xeno);
+
+        foreach (var action in _rmcActions.GetActionsWithEvent<XenoHideActionEvent>(xeno))
+        {
+            _actions.SetToggled(action.AsNullable(), xeno.Comp.Hiding);
+        }
+
+        _appearance.SetData(xeno, XenoVisualLayers.Hide, xeno.Comp.Hiding);
+    }
+}

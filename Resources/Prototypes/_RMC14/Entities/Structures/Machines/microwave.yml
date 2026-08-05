@@ -1,0 +1,54 @@
+- type: entity
+  parent: KitchenMicrowave
+  id: CMMicrowave
+  components:
+  - type: Microwave
+    maxItemSize: Huge
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 100
+    channel: Equipment
+  - type: ActivatableUIRequiresPower
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/microwave.rsi
+    drawdepth: SmallObjects
+    snapCardinals: true
+    layers:
+    - state: mw0
+      map: ["enum.MicrowaveVisualizerLayers.Base"]
+    - state: mw_unlit
+      shader: unshaded
+      map: ["enum.MicrowaveVisualizerLayers.BaseUnlit"]
+    - state: mwbloody0
+      map: ["bloody"]
+      visible: false
+    - state: mwbloody1
+      shader: unshaded
+      map: ["bloodyunshaded"]
+      visible: false
+  - type: Machine
+    board: CMCircuitboardMicrowave
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: CMMicrowave
+  id: CMMicrowaveLockedPowered
+  suffix: Locked, Powered
+  components:
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+    flags: None
+  - type: ApcPowerReceiver
+    needsPower: false # intentionally!
+    powerLoad: 0

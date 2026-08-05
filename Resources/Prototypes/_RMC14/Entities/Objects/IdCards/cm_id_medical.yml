@@ -1,0 +1,31 @@
+﻿- type: entity
+  parent: CMIDCardSilver
+  id: CMIDCardCMO
+  name: chief medical officer ID card
+  components:
+  - type: PresetIdCard
+    job: CMCMO
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMIDCardDoctor
+  name: doctor's ID card
+  components:
+  - type: PresetIdCard
+    job: CMDoctor
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMIDCardNurse
+  name: nurse's ID card
+  components:
+  - type: PresetIdCard
+    job: CMNurse
+
+- type: entity
+  parent: CMIDCardBase
+  id: CMIDCardResearcher
+  name: researcher's ID card
+  components:
+  - type: PresetIdCard
+    job: CMResearcher

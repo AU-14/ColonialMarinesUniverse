@@ -1,0 +1,53 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "PEPW",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "basement"
+    },
+    {
+      "name": "floor1"
+    },
+    {
+      "name": "floor2"
+    },
+    {
+      "name": "floor3"
+    },
+    {
+      "name": "floor4"
+    },
+    {
+      "name": "floor5"
+    },
+    {
+      "name": "floor6"
+    },
+    {
+      "name": "floor7"
+    },
+    {
+      "name": "floor8"
+    },
+    {
+      "name": "floor9"
+    },
+    {
+      "name": "roof"
+    },
+    {
+      "name": "out"
+    },
+    {
+      "name": "lz"
+    },
+    {
+      "name": "midair"
+    }
+  ]
+}

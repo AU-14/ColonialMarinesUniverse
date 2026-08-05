@@ -1,0 +1,91 @@
+{
+  "schemaVersion": 1,
+  "capturedAtUtc": "2026-07-24",
+  "finding": "MZ-070",
+  "reportedFailure": {
+    "prototype": "VehicleSPPTankCommand",
+    "physicsBodyType": "Dynamic",
+    "unexpectedComponent": "InputMover",
+    "fatalPath": "Content.Shared.Movement.Systems.SharedMoverController.HandleMobMovement",
+    "precedingWarning": "Got late MsgEntity! Diff: -4, msgT: 19921, cT: 19925"
+  },
+  "rootCause": "RMCVehicleBase supplied InputMover to a dynamic grid vehicle. The current grid-vehicle path reads the operator's InputMover directly and removes the generic movement relay, so the vehicle-side mover was redundant and routed an attached tank through the kinematic-only mob mover.",
+  "change": {
+    "path": "Resources/Prototypes/_RMC14/Vehicles/base_vehicle.yml",
+    "behavior": "Remove InputMover from RMCVehicleBase while retaining dynamic physics, GridVehicleMover, operator input, and prediction."
+  },
+  "before": {
+    "command": "dotnet test Content.IntegrationTests/Content.IntegrationTests.csproj -c DebugOpt --no-restore --filter FullyQualifiedName~RMCVehicleMoverPrototypeTest -m:1 /nr:false -v:minimal",
+    "passed": 0,
+    "failed": 1,
+    "skipped": 0,
+    "duration": "36 s",
+    "failure": "VehicleSPPTankCommand inherited InputMover while its Physics body was Dynamic."
+  },
+  "after": {
+    "tankFocused": {
+      "passed": 3,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "42 s",
+      "coverage": [
+        "Prototype component/body invariant",
+        "Direct connected-player attachment plus five synchronized physics ticks",
+        "Ordinary driver operator-input routing without source or target movement relays"
+      ]
+    },
+    "combinedGate": {
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "duration": "1 m 2 s",
+      "tests": [
+        "SandboxTest.Test",
+        "USSBushMultiZTest.LoadsNetworkAndResolvesActiveShipMarkers",
+        "USSBushMultiZTest.ReplicatesMinimumFallingAndVehicleTraversalState",
+        "USSBushMultiZTest.CombinesExistingMapsThroughLifecycle",
+        "RMCVehicleMoverPrototypeTest.SPPCommandTankDoesNotUseMobMoverTest",
+        "RMCVehicleMoverPrototypeTest.SPPCommandTankPlayerAttachmentDoesNotEnterMobMoverPhysicsTest",
+        "RMCVehicleMoverPrototypeTest.SPPCommandTankRoutesDriverInputWithoutVehicleMobMoverTest"
+      ]
+    },
+    "releaseBuilds": {
+      "client": {
+        "warnings": 0,
+        "errors": 0,
+        "elapsed": "00:01:20.91"
+      },
+      "server": {
+        "warnings": 0,
+        "errors": 0,
+        "elapsed": "00:00:32.42"
+      }
+    },
+    "clientServerStability": {
+      "artifact": "artifacts/multiz-phase4/20260724-vehicle-mover-fix-stability",
+      "durationSeconds": 88.7970957,
+      "serverWarmupSeconds": 20,
+      "clientWarmupSeconds": 45,
+      "captureSeconds": 15,
+      "serverExitCode": 0,
+      "clientExitCode": 0,
+      "serverStderrBytes": 0,
+      "clientStderrBytes": 0,
+      "fullGameStateBytes": 928762,
+      "enteredInGame": true,
+      "lateMessage": "Got late MsgEntity! Diff: -218, msgT: 0, cT: 218, msg: Content.Shared.Guidebook.RequestGuidebookDataEvent",
+      "vehicleCrashSignatures": 0,
+      "hashes": {
+        "manifest": "FF37B7420612F0931502B8C6EAD19E90D9430A51286C0EC18470D8C586BA93EB",
+        "serverStdout": "7C4AE8F57E156C1E6BF2C1996355476C2BC85E33AF89E4665FFA75801AD71CA4",
+        "clientStdout": "8471A1F4048C3E4DA78B70F8E12D0BF74F7FD597B62DEBD34C0780AF1BE1623E"
+      },
+      "knownNoise": "After graceful client shutdown, the pre-existing RMC Mentor disconnect handler attempted to send MentorMessagesReceivedMsg to the disconnected channel."
+    }
+  },
+  "claim": "Crash compatibility fix only; no performance improvement is claimed.",
+  "deferredRisks": [
+    "Run a populated production vehicle drive with client prediction, correction, and injected latency.",
+    "Exercise a driven vehicle edge transition/fall and late join with a second client."
+  ]
+}

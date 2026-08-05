@@ -1,0 +1,37 @@
+﻿using Content.Shared.CCVar;
+using Content.Shared.Mind.Components;
+using Content.Shared.Mobs.Systems;
+using Content.Shared.NPC;
+using Content.Shared.SSDIndicator;
+using Content.Shared.StatusIcon.Components;
+using Robust.Shared.Configuration;
+
+namespace Content.Client.SSDIndicator;
+
+/// <summary>
+///     Handles displaying SSD indicator as status icon
+/// </summary>
+public sealed partial class SSDIndicatorSystem : EntitySystem
+{
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<SSDIndicatorComponent, GetStatusIconsEvent>(OnGetStatusIcon);
+    }
+
+    private void OnGetStatusIcon(EntityUid uid, SSDIndicatorComponent component, ref GetStatusIconsEvent args)
+    {
+        if (component.IsSSD &&
+            _cfg.GetCVar(CCVars.ICShowSSDIndicator) &&
+            !_mobState.IsDead(uid) &&
+            !HasComp<ActiveNPCComponent>(uid) &&
+            HasComp<MindExaminableComponent>(uid))
+        {
+            args.StatusIcons.Add(ProtoMan.Index(component.Icon));
+        }
+    }
+}

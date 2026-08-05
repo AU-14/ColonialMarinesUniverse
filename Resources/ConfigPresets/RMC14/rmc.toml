@@ -1,0 +1,132 @@
+﻿[accessibility]
+screen_shake_intensity = 1
+
+[admin]
+deadmin_on_join = true
+see_own_notes = true
+server_ban_erase_player = true
+new_player_threshold = 600
+alert.explosion_min_intensity = -1
+
+[adminlogs]
+server_name = "rouny"
+
+[atmos]
+space_wind = false
+monstermos_rip_tiles = false
+grid_impulse = false
+max_process_time = 1
+
+[auth]
+mode = 1
+
+[events]
+enabled = false
+
+[explosion]
+can_create_vacuum = false
+
+[game]
+defaultpreset = "CMDistressSignal"
+fallbackenabled = false
+fallbackpreset = "CMDistressSignal"
+round_end_sound_collection = "CMRoundEnd"
+contraband_examine = false
+maxplayers = 500
+soft_max_players = 350
+panic_bunker.enabled = false
+round_end_pvs_overrides = false
+round_restart_time = 180
+lobbyduration = 180
+new_character_jobs = "CMRifleman"
+
+[gateway]
+generator_enabled = false
+
+[ghost]
+kill_crit = false
+role_time = 0
+
+[guidebook]
+show_editor_species_button = false
+
+[hub]
+# Set to true to show this server on the public server list
+# Before enabling this, read: https://docs.spacestation14.io/hosts/hub-rules
+advertise = true
+
+# Comma-separated list of tags, useful for categorizing your server.
+# See https://docs.spacestation14.io/hosts/hub-rules for more details on this when it becomes relevant.
+tags = "lang:en,region:am_n_e,rp:med"
+
+[ic]
+flavor_text = true
+id_job_length = 50
+
+[infolinks]
+#appeal = "https://appeal.rouny-ss14.com"
+bug_report = "https://github.com/RMC-14/RMC-14/issues/new?assignees=&labels=&projects=&template=issue_report.md&title="
+discord = "https://discord.gg/rouny"
+#forum = "https://forum.rouny-ss14.com"
+github = "https://github.com/RMC-14/RMC-14"
+patreon = "https://www.patreon.com/RMC14"
+#website = ""
+wiki = "https://wiki.rouny-ss14.com"
+
+[net]
+tickrate = 25
+bindto = "::,0.0.0.0"
+log_late_msg = false
+
+[physics]
+grid_splitting = false
+maxlinvelocity = 72
+target_minimum_tickrate = 120
+
+[pointing]
+cooldown_seconds = 1
+
+[procgen]
+preload = false
+
+[replay]
+auto_record = true
+max_compressed_size = 4194304
+max_uncompressed_size = 8388608
+auto_record_temp_dir = "recording"
+auto_record_name = "done/{year}_{month}_{day}-{hour}_{minute}-round_{round}.zip"
+
+[rmc]
+discord_account_linking_message_link = "https://discord.com/channels/1168210010233376858/1256765329002991679/1256767294839980132"
+
+[server]
+rules_file = "RMCOverview"
+default_guide = "RMC14"
+
+[shuttle]
+arrivals_planet = false
+arrivals = false
+preload_grids = false
+startup_time = 10
+travel_time = 100
+arrival_time = 10
+cooldown = 120
+mass_limit = -1
+emergency = false
+auto_call_time = 0
+
+[status]
+# The status server is the TCP side, used by the launcher to determine engine version, etc.
+# To be clear: Disabling it makes the launcher unable to connect!
+enabled = true
+privacy_policy_link = "https://wiki.rouny-ss14.com/wiki/Privacy_Policy"
+privacy_policy_identifier = "rmc14"
+privacy_policy_version = "2025-04-12"
+
+[tips]
+dataset = "RMC_Tips"
+login_dataset = "RMC_Tips"
+
+[vote]
+preset_enabled = false
+restart_ghost_percentage = 75

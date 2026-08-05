@@ -1,0 +1,150 @@
+﻿- type: entity
+  id: RMCSurveillanceCameraAlmayer
+  name: ship-grade camera
+  description: It's used to monitor rooms.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wallmount
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Clickable
+  - type: InteractionOutline
+  - type: WallMount
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 10
+    channel: Equipment
+    mode: Active # Unsure if it's needed, but CM does use_power:2 specifically with cams
+  - type: ExtensionCableReceiver
+  - type: Eye
+    zoom: 0.5, 0.5
+  - type: RMCStaticZoomLevel
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Sprite
+    drawdepth: WallMountedItems
+    sprite: _RMC14/Structures/Wallmounts/camera.rsi
+    layers:
+    - map: [ "enum.SurveillanceCameraVisualsKey.Layer" ]
+      state: camera
+      cycle: true
+  - type: Appearance
+  - type: SurveillanceCameraVisuals
+    sprites:
+      Active: camera
+      Disabled: camera
+      InUse: camera1
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+          params:
+            volume: -8
+  - type: RMCCamera
+    id: RMCSurveillanceCameraAlmayer
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMBaseStructure
+  id: RMCMonitorCameraAlmayer
+  name: ship security cameras
+  description: Used to access the various cameras on the station.
+  suffix: Almayer
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - state: "security_cam0"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "security_cam"
+    drawdepth: SmallObjects
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 300
+    activeLoad: 300
+    channel: Equipment
+  - type: ActivatableUIRequiresPower
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.RMCCameraUiKey.Key
+  - type: UserInterface
+    interfaces:
+      enum.RMCCameraUiKey.Key:
+        type: RMCCameraBui
+  - type: RMCCameraComputer
+    protoIds:
+    - RMCSurveillanceCameraAlmayer
+    - RMCMonitorCameraAlamo
+    - RMCMonitorCameraNormandy
+  - type: WallMount
+    arc: 360
+
+- type: entity
+  parent: RMCSurveillanceCameraAlmayer
+  id: RMCMonitorCameraAlamo
+  description: It's used to monitor the dropship.
+  suffix: "Alamo"
+  components:
+  - type: RMCCamera
+    id: RMCMonitorCameraAlamo
+
+- type: entity
+  parent: RMCSurveillanceCameraAlmayer
+  id: RMCMonitorCameraNormandy
+  description: It's used to monitor the dropship.
+  suffix: "Normandy"
+  components:
+  - type: RMCCamera
+    id: RMCMonitorCameraNormandy
+
+- type: entity
+  parent: MarkerBase
+  id: RMCMonitorCameraLandingZone
+  name: landing zone camera
+  suffix: "LZ Detector"
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Wallmounts/camera.rsi
+    layers:
+    - map: [ "enum.SurveillanceCameraVisualsKey.Layer" ]
+      state: camera
+      cycle: true
+    state: camera
+    cycle: true
+  - type: RMCCamera
+    id: RMCMonitorCameraLandingZone
+  - type: RMCStaticZoomLevel
+  - type: Eye
+    zoom: 0.9, 0.9
+    pvsScale: 1.5
+    drawFov: false
+  - type: FTLSmashImmune
+  - type: NoFTL

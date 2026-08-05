@@ -1,0 +1,206 @@
+using Content.Shared._RMC14.Explosion;
+using Content.Shared._RMC14.UniformAccessories;
+using Content.Shared.Clothing.Components;
+using Content.Shared.Clothing.EntitySystems;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction.Events;
+using Content.Shared.Inventory;
+using Content.Shared.Inventory.Events;
+using Content.Shared.Item;
+using Content.Shared.Movement.Systems;
+using Content.Shared.Popups;
+using Content.Shared.Verbs;
+using Content.Shared.Whitelist;
+using Robust.Shared.Utility;
+
+namespace Content.Shared._RMC14.Clothing;
+
+public sealed partial class RMCClothingSystem : EntitySystem
+{
+    [Dependency] private ClothingSystem _clothing = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedItemSystem _item = default!;
+    [Dependency] private SharedUniformAccessorySystem _uniformAccessories = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private EntityWhitelistSystem _whitelist = default!;
+    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
+
+    private EntityQuery<ClothingLimitComponent> _clothingLimitQuery;
+
+    public override void Initialize()
+    {
+        _clothingLimitQuery = GetEntityQuery<ClothingLimitComponent>();
+
+        SubscribeLocalEvent<ClothingLimitComponent, BeingEquippedAttemptEvent>(OnClothingLimitBeingEquippedAttempt);
+
+        SubscribeLocalEvent<ClothingRequireEquippedComponent, BeingEquippedAttemptEvent>(OnRequireEquippedBeingEquippedAttempt);
+
+        // this is here so clothing with ClothingRequireEquippedComponent can drop when required clothing is unequipped
+        // ex: scout cloak should not stay on when they take off the armor required for it
+        SubscribeLocalEvent<ClothingComponent, DroppedEvent>(OnDropped);
+
+        SubscribeLocalEvent<NoClothingSlowdownComponent, ComponentStartup>(OnNoClothingSlowUpdate);
+        SubscribeLocalEvent<NoClothingSlowdownComponent, DidEquipEvent>(OnNoClothingSlowUpdate);
+        SubscribeLocalEvent<NoClothingSlowdownComponent, DidUnequipEvent>(OnNoClothingSlowUpdate);
+        SubscribeLocalEvent<NoClothingSlowdownComponent, RefreshMovementSpeedModifiersEvent>(OnNoClothingSlowRefresh);
+
+        SubscribeLocalEvent<RMCClothingFoldableComponent, GetVerbsEvent<AlternativeVerb>>(AddFoldVerb);
+
+        SubscribeLocalEvent<ClothingPrefixOnTimerTriggerComponent, RMCActiveTimerTriggerEvent>(OnClothingPrefixActiveTimerTrigger);
+        SubscribeLocalEvent<ClothingPrefixOnTimerTriggerComponent, RMCTriggerEvent>(OnClothingPrefixTrigger);
+    }
+
+    private void OnClothingLimitBeingEquippedAttempt(Entity<ClothingLimitComponent> ent, ref BeingEquippedAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if ((args.SlotFlags & ent.Comp.Slot) == 0)
+            return;
+
+        var slots = _inventory.GetSlotEnumerator(args.EquipTarget, ent.Comp.Slot);
+        while (slots.MoveNext(out var slot))
+        {
+            if (_clothingLimitQuery.TryComp(slot.ContainedEntity, out var otherLimit) &&
+                otherLimit.Id == ent.Comp.Id)
+            {
+                args.Reason = "rmc-clothing-limit";
+                args.Cancel();
+            }
+        }
+    }
+
+    private void OnNoClothingSlowUpdate<T>(Entity<NoClothingSlowdownComponent> ent, ref T args) where T : EntityEventArgs
+    {
+        ent.Comp.Active = !_inventory.TryGetSlotEntity(ent, ent.Comp.Slot, out _);
+        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+    }
+
+    private void OnNoClothingSlowRefresh(Entity<NoClothingSlowdownComponent> ent, ref RefreshMovementSpeedModifiersEvent args)
+    {
+        if (ent.Comp.Active)
+            args.ModifySpeed(ent.Comp.WalkModifier, ent.Comp.SprintModifier);
+    }
+
+    private void OnRequireEquippedBeingEquippedAttempt(Entity<ClothingRequireEquippedComponent> ent, ref BeingEquippedAttemptEvent args)
+    {
+        if (args.Cancelled)
+            return;
+
+        if (HasEquippedItemsWithinWhitelist(args.EquipTarget, ent.Comp.Whitelist))
+            return;
+
+        args.Cancel();
+
+        var denyReason = Loc.GetString(ent.Comp.DenyReason);
+        _popup.PopupClient(denyReason, args.EquipTarget, args.EquipTarget, PopupType.SmallCaution);
+    }
+
+    private void OnDropped(Entity<ClothingComponent> ent, ref DroppedEvent args)
+    {
+        var slots = _inventory.GetSlotEnumerator(args.User);
+        while (slots.MoveNext(out var slot))
+        {
+            if (slot.ContainedEntity is not { } contained)
+                continue;
+
+            if (TryComp<ClothingRequireEquippedComponent>(contained, out var requiresEquipped) && requiresEquipped.AutoUnequip && _whitelist.IsWhitelistPassOrNull(requiresEquipped.Whitelist, ent.Owner))
+            {
+                if (HasEquippedItemsWithinWhitelist(args.User, requiresEquipped.Whitelist))
+                    continue;
+
+                _inventory.TryUnequip(args.User, slot.ID);
+            }
+        }
+    }
+
+    private bool HasEquippedItemsWithinWhitelist(EntityUid uid, EntityWhitelist? whitelist)
+    {
+        foreach (var held in _hands.EnumerateHeld(uid))
+        {
+            if (_whitelist.IsWhitelistPassOrNull(whitelist, held))
+                return true;
+        }
+
+        var slots = _inventory.GetSlotEnumerator(uid);
+        while (slots.MoveNext(out var slot))
+        {
+            if (slot.ContainedEntity is not { } contained)
+                continue;
+
+            if (_whitelist.IsWhitelistPassOrNull(whitelist, contained))
+                return true;
+        }
+
+        return false;
+    }
+
+    private void AddFoldVerb(Entity<RMCClothingFoldableComponent> ent, ref GetVerbsEvent<AlternativeVerb> args)
+    {
+        if (!args.CanAccess || !args.CanInteract || args.Hands == null)
+            return;
+
+        var user = args.User;
+        foreach (var type in ent.Comp.Types)
+        {
+            AlternativeVerb verb = new()
+            {
+                Act = () => TryToggleFold(ent, type, user),
+                Text = Loc.GetString(type.Name),
+                Icon = new SpriteSpecifier.Texture(new("/Textures/Interface/VerbIcons/fold.svg.192dpi.png")),
+                Priority = type.Priority,
+            };
+
+            args.Verbs.Add(verb);
+        }
+    }
+
+    public void TryToggleFold(Entity<RMCClothingFoldableComponent> ent, FoldableType type, EntityUid? user)
+    {
+        if (type.Prefix == ent.Comp.ActivatedPrefix) // already activated
+        {
+            SetPrefix(ent, null, false);
+        }
+        else
+        {
+            if (type.BlacklistedPrefix == ent.Comp.ActivatedPrefix && ent.Comp.ActivatedPrefix != null)
+            {
+                if (type.BlacklistPopup != null && user != null)
+                {
+                    var msg = Loc.GetString(type.BlacklistPopup);
+                    _popup.PopupClient(msg, user.Value, user.Value, PopupType.SmallCaution);
+                }
+
+                return;
+            }
+
+            SetPrefix(ent, type.Prefix, type.HideAccessories);
+        }
+    }
+
+    public void SetPrefix(Entity<RMCClothingFoldableComponent> ent, string? prefix, bool hideAccessories)
+    {
+        ent.Comp.ActivatedPrefix = prefix;
+        Dirty(ent);
+
+        _clothing.SetEquippedPrefix(ent.Owner, ent.Comp.ActivatedPrefix);
+        _uniformAccessories.SetAccessoriesHidden(ent.Owner, hideAccessories);
+    }
+
+    private void OnClothingPrefixActiveTimerTrigger(Entity<ClothingPrefixOnTimerTriggerComponent> ent, ref RMCActiveTimerTriggerEvent args)
+    {
+        if (TryComp(ent, out ClothingComponent? clothing))
+        {
+            ent.Comp.OriginalPrefix = clothing.EquippedPrefix;
+            Dirty(ent);
+        }
+
+        _clothing.SetEquippedPrefix(ent, ent.Comp.Prefix);
+    }
+
+    private void OnClothingPrefixTrigger(Entity<ClothingPrefixOnTimerTriggerComponent> ent, ref RMCTriggerEvent args)
+    {
+        _clothing.SetEquippedPrefix(ent, ent.Comp.OriginalPrefix);
+    }
+}

@@ -1,0 +1,98 @@
+- type: entity
+  parent: hydroponicsSoil
+  name: hydroponics tray
+  id: CMHydroponicsTray
+  description: Used for growing plants.
+  components:
+  - type: VehicleSmashable
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.45,-0.45,0.45,0.1"
+        density: 190
+        hard: true
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+  # - type: ApcPowerReceiver  TODO RMC14 power figure out the unpowered visuals
+  #   powerLoad: 250
+  #   needsPower: true
+  # - type: RMCPowerReceiver
+  #   idleLoad: 0
+  #   activeLoad: 0
+  #   channel: Equipment
+  - type: Anchorable
+  - type: Pullable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Sprite
+    sprite: _RMC14/Structures/hydroponics.rsi
+    layers:
+    - state: hydrotray3
+    - state: over_lowhealth3
+      map: [ "health_alert" ]
+      visible: false
+    - state: over_lowwater3
+      map: [ "water_alert" ]
+      visible: false
+    - state: over_lownutri3
+      map: [ "nutri_alert" ]
+      visible: false
+    - state: over_alert3
+      map: [ "undefined_alert" ]
+      visible: false
+    - state: over_harvest3
+      map: [ "harvest_alert" ]
+      visible: false
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PlantHolderVisuals.HealthLight:
+        health_alert:
+          True: { visible: true }
+          False: { visible: false }
+      enum.PlantHolderVisuals.WaterLight:
+        water_alert:
+          True: { visible: true }
+          False: { visible: false }
+      enum.PlantHolderVisuals.NutritionLight:
+        nutri_alert:
+          True: { visible: true }
+          False: { visible: false }
+      enum.PlantHolderVisuals.AlertLight:
+        undefined_alert:
+          True: { visible: true }
+          False: { visible: false }
+      enum.PlantHolderVisuals.HarvestLight:
+        harvest_alert:
+          True: { visible: true }
+          False: { visible: false }
+  - type: PlantHolder
+    drawWarnings: true
+  - type: AmbientSound
+    volume: -9
+    range: 5
+    sound:
+      path: /Audio/Ambience/Objects/flowing_water_open.ogg
+  - type: GuideHelp
+    guides:
+    - Botany
+    - Chemicals
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: RequireProjectileTarget
+

@@ -1,0 +1,82 @@
+﻿# region Base
+- type: construction
+  abstract: true
+  id: BaseMachine
+  category: construction-category-machines
+  placementMode: SnapgridCenter
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  abstract: true
+  parent: BaseMachine
+  id: BaseSwitch
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition
+# endregion Base
+
+# region Machines
+- type: construction
+  parent: BaseMachine
+  id: Computer
+  graph: Computer
+  targetNode: computer
+
+- type: construction
+  parent: BaseMachine
+  id: MachineFrame
+  graph: Machine
+  targetNode: machine
+# endregion Machines
+
+# region Switching
+- type: construction
+  parent: BaseMachine
+  id: TwoWayLeverRecipe
+  graph: LeverGraph
+  targetNode: LeverNode
+  placementMode: PlaceFree
+
+- type: construction
+  parent: BaseSwitch
+  id: LightSwitchRecipe
+  graph: LightSwitchGraph
+  targetNode: LightSwitchNode
+  hide: true #TODO: Fix the lightswitch, issue #34659. Until then, keep hidden so people don't build it and get confused.
+
+- type: construction
+  parent: BaseSwitch
+  id: SignalSwitchRecipe
+  graph: SignalSwitchGraph
+  targetNode: SignalSwitchNode
+  category: construction-category-machines
+
+- type: construction
+  parent: BaseSwitch
+  id: SignalButtonRecipe
+  graph: SignalButtonGraph
+  targetNode: SignalButtonNode
+
+- type: construction
+  parent: BaseSwitch
+  id: LightSwitchDirectionalRecipe
+  name: construction-recipe-light-switch-directional
+  graph: LightSwitchDirectionalGraph
+  targetNode: LightSwitchDirectionalNode
+  hide: true #TODO: Fix the lightswitch, issue #34659. Until then, keep hidden so people don't build it and get confused.
+
+- type: construction
+  parent: BaseSwitch
+  id: SignalSwitchDirectionalRecipe
+  name: construction-recipe-signal-switch-directional
+  graph: SignalSwitchDirectionalGraph
+  targetNode: SignalSwitchDirectionalNode
+
+- type: construction
+  parent: BaseSwitch
+  id: SignalButtonDirectionalRecipe
+  name: construction-recipe-signal-button-directional
+  graph: SignalButtonDirectionalGraph
+  targetNode: SignalButtonDirectionalNode
+# endregion Switching

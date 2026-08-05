@@ -1,0 +1,492 @@
+- type: entity
+  parent: PillCanister
+  id: RMCPillCanisterNoSkill
+  name: pill bottle
+  description: It's an airtight container for storing medication.
+  suffix: No Skill
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Chemistry/pill_canister.rsi
+    layers:
+    - state: pill_canister
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: Storage
+    quickInsert: true
+    areaInsert: true
+    areaInsertRadius: 1
+    storageInsertSound: /Audio/Effects/pill_insert.ogg
+    storageRemoveSound: /Audio/Effects/pill_remove.ogg
+    grid:
+    - 0,0,15,1 # 16
+    storageOpenSound:
+      collection: CMPillBottleOpen
+    maxItemSize: Small
+    whitelist:
+      components:
+      - Pill
+      tags:
+      - Dice
+      - Paper
+  - type: Item
+    size: Small
+    sprite: _RMC14/Objects/Chemistry/pill_canister.rsi
+  - type: GenericVisualizer
+    visuals:
+      enum.RMCPillBottleVisuals.Color:
+        bottleSurfaceLayer:
+          Orange: { state: pill_canister }
+          Blue: { state: pill_canister1 }
+          Yellow: { state: pill_canister2 }
+          LightPurple: { state: pill_canister3 }
+          LightGrey: { state: pill_canister4 }
+          White: { state: pill_canister5 }
+          LightGreen: { state: pill_canister6 }
+          Cyan: { state: pill_canister7 }
+          Pink: { state: pill_canister8 }
+          Aquamarine: { state: pill_canister9 }
+          Grey: { state: pill_canister10 }
+          Red: { state: pill_canister11 }
+          Black: { state: pill_canister12 }
+      enum.SharedBagOpenVisuals.BagState:
+        openLayer:
+          Open: { visible: true }
+          Closed: { visible: false }
+        closedLayer:
+          Open: { visible: false }
+          Closed: { visible: true }
+  - type: Appearance
+  - type: Tag
+    tags:
+    - PillCanister
+  - type: IconLabel
+    textColor: White
+    storedOffset: -12, 12
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitstorage
+  - type: RMCStorageEjectHand
+    state: Last
+    canToggleStorage: false
+    ejectWhenEmpty: true
+    nestedWhitelist:
+      tags:
+      - RMCBeltMedical
+  - type: RMCSmartFridgeInsertable
+    category: Pills
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 500
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: CMPillCanister
+  suffix: Skill Required
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterBicaridineNoSkill
+  name: bicaridine pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Bicaridine (15u, 2 pill OD) Used to treat brute damage."
+  suffix: Bicaridine, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 11
+  - type: Sprite
+    layers:
+    - state: pill_canister11
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: CMPillBicaridine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-bicaridine-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterBicaridineNoSkill
+  id: CMPillCanisterBicaridine
+  suffix: Bicaridine, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterMeralyneBicaridineNoSkill
+  name: meralyne-bicaridine pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Meralyne-Bicaridine (7.5u/7.5u, 2 pill OD) Rapidly treats brute damage."
+  suffix: Meralyne-Bicaridine, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 2
+  - type: Sprite
+    layers:
+    - state: pill_canister11
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: RMCPillMeralyneBicaridine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-merabic-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterMeralyneBicaridineNoSkill
+  id: RMCPillCanisterMeralyneBicaridine
+  suffix: Meralyne-Bicaridine, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterDexalinNoSkill
+  name: dexalin pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Dexalin (15u, 2 pill OD) Used to treat oxygen deprivation."
+  suffix: Dexalin, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 1
+  - type: Sprite
+    layers:
+    - state: pill_canister1
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: CMPillDexalin
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-dexalin-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterDexalinNoSkill
+  id: CMPillCanisterDexalin
+  suffix: Dexaline, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterDyloveneNoSkill
+  name: dylovene pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Dylovene (15u, 2 pill OD) An anti-toxin medication. It neutralizes many common toxins, as well as treating toxin damage."
+  suffix: Dylovene, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 6
+  - type: Sprite
+    layers:
+    - state: pill_canister6
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: CMPillDylovene
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-dylovene-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterDyloveneNoSkill
+  id: CMPillCanisterDylovene
+  suffix: Dylovene, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterInaprovalineNoSkill
+  name: inaprovaline pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Inaprovaline (15u, 4 pill OD) Used to stabilize patients."
+  suffix: Inaprovaline, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 3
+  - type: Sprite
+    layers:
+    - state: pill_canister3
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: CMPillInaprovaline
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-inaprovaline-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterInaprovalineNoSkill
+  id: CMPillCanisterInaprovaline
+  suffix: Inaprovaline, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterKelotaneNoSkill
+  name: kelotane pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Kelotane (15u, 2 pill OD) Used to treat burns."
+  suffix: Kelotane, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 2
+  - type: Sprite
+    layers:
+    - state: pill_canister2
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: CMPillKelotane
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-kelotane-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterKelotaneNoSkill
+  id: CMPillCanisterKelotane
+  suffix: Kelotane, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterKelotaneDermalineNoSkill
+  name: kelotane-dermaline pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Kelotane-Dermaline (7.5u/7.5u, 2 pill OD) Rapidly treats burn damage."
+  suffix: Kelotane-Dermaline, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 2
+  - type: Sprite
+    layers:
+    - state: pill_canister2
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: RMCPillKelotaneDermaline
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-keloderm-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterKelotaneDermalineNoSkill
+  id: CMPillCanisterKelotaneDermaline
+  suffix: Kelotane-Dermaline, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterTricordrazineNoSkill
+  name: tricordrazine pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Tricordrazine (15u, 2 pill OD) A weak general use medication for treating damage."
+  suffix: Tricordrazine, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 7
+  - type: Sprite
+    layers:
+    - state: pill_canister
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: CMPillTricordrazine
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-tricordazine-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterTricordrazineNoSkill
+  id: CMPillCanisterTricordrazine
+  suffix: Tricordrazine, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterRussianRedNoSkill
+  name: russian red pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Russian Red (10u, 2 pill OD) A very dangerous radiation-countering substance."
+  suffix: Russian Red, 16, No Skill
+  components:
+  - type: Sprite
+    layers:
+    - state: pill_canister
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: RMCPillRussianRed
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-russianred-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterRussianRedNoSkill
+  id: RMCPillCanisterRussianRed
+  suffix: Russian Red, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterImidazolineNoSkill
+  name: imidazoline pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Imidazoline (1u, 30 pill OD) Used to restore vision from non-congenital eye damage."
+  suffix: Imidazoline, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 7
+  - type: Sprite
+    layers:
+    - state: pill_canister9
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: RMCPillImidazoline
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-imidazoline-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterImidazolineNoSkill
+  id: RMCPillCanisterImidazoline
+  suffix: Imidazoline, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+# TODO RMC14 peridaxon, tramadol
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterDexalinPlusNoSkill
+  name: dexalin plus pill bottle
+  description: It's an airtight container for storing medication. It's labeled "Dexalin Plus (10u, 15u OD) Used to instantly treat oxygen deprivation."
+  suffix: DexalinPlus, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 3
+  - type: Sprite
+    layers:
+    - state: pill_canister1
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: RMCPillDexalinPlus
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-dexalin-plus-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterDexalinPlusNoSkill
+  id: RMCPillCanisterDexalinPlus
+  suffix: DexalinPlus, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2
+
+- type: entity
+  parent: RMCPillCanisterNoSkill
+  id: RMCPillCanisterIronNoSkill
+  name: iron pill bottle
+  description: It's an airtight container for storing medication. It's labeled "FN (Iron 10u, Nutriment 5u, No OD) Used to quickly restore blood."
+  suffix: Iron, 16, No Skill
+  components:
+  - type: Item
+    heldPrefix: 3
+  - type: Sprite
+    layers:
+    - state: pill_canister12
+      map: [ "bottleSurfaceLayer" ]
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: StorageFill
+    contents:
+    - id: RMCPillIron
+      amount: 16
+  - type: IconLabel
+    labelTextLocId: rmc-iron-container-label-text
+
+- type: entity
+  parent: RMCPillCanisterIronNoSkill
+  id: RMCPillCanisterIron
+  suffix: Iron, 16
+  components:
+  - type: StorageSkillRequired
+    skills:
+      RMCSkillMedical: 2

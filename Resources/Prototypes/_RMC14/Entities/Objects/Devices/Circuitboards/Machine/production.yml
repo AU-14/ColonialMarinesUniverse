@@ -1,0 +1,173 @@
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMSMESMachineCircuitboard
+  name: SMES machine board
+  description: A machine printed circuit board for a SMES.
+  components:
+  - type: Sprite
+    state: power_mod
+  - type: MachineBoard
+    prototype: CMSMESEmpty
+#    requirements:
+#      Capacitor: 1
+#      PowerCell: 4
+#    materialRequirements:
+#      CableHV: 10
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMAutolatheMachineCircuitboard
+  name: autolathe machine board
+  description: A machine printed circuit board for an autolathe
+  components: # TODO RMC14 autolathe
+    - type: MachineBoard
+      prototype: RMCAutolatheEmpty
+#      requirements:
+#        MatterBin: 3
+#        Manipulator: 1
+#      materialRequirements:
+#        CMGlass: 1
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: RMCPortableGeneratorPacmanMachineCircuitBoard
+  name: P.A.C.M.A.N.-type portable generator machine board
+  components:
+    - type: Sprite
+      state: power_mod
+    - type: MachineBoard
+      prototype: RMCPortableGenerator
+# TODO RMC14 material requirements
+#		/obj/item/stock_parts/matter_bin = 1,
+#		/obj/item/stock_parts/micro_laser = 1,
+#		/obj/item/stack/cable_coil = 2,
+#		/obj/item/stock_parts/capacitor = 1,
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: RMCPortableGeneratorSuperPacmanMachineCircuitboard
+  name: S.U.P.E.R.P.A.C.M.A.N.-type portable generator machine board
+  components:
+    - type: Sprite
+      state: power_mod
+    - type: MachineBoard
+      prototype: RMCPortableGenerator2
+# TODO RMC14 material requirements
+#		/obj/item/stock_parts/matter_bin = 1,
+#		/obj/item/stock_parts/micro_laser = 1,
+#		/obj/item/stack/cable_coil = 2,
+#		/obj/item/stock_parts/capacitor = 1,
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMCircuitboardDispenserChem
+  name: chem dispenser machine board
+  description: A machine printed circuit board for a chemical dispenser.
+  components:
+  - type: Sprite
+    state: blank_mod
+  - type: MachineBoard
+    prototype: RMCChemDispenserGround
+    # TODO RMC14 material requirements
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMCircuitboardDispenserBooze
+  name: booze dispenser machine board
+  description: A machine printed circuit board for a booze dispenser.
+  components:
+  - type: Sprite
+    state: blank_mod
+  - type: MachineBoard
+    prototype: CMDispenserBoozeEmpty
+    # TODO RMC14 material requirements
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMCircuitboardDispenserSoda
+  name: soda dispenser machine board
+  description: A machine printed circuit board for a soda dispenser.
+  components:
+  - type: Sprite
+    state: blank_mod
+  - type: MachineBoard
+    prototype: CMDispenserSoda
+    # TODO RMC14 material requirements
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMCircuitboardChemMaster
+  name: chem master machine board
+  description: A machine printed circuit board for a chem master.
+  components:
+  - type: Sprite
+    state: blank_mod
+  - type: MachineBoard
+    prototype: CMChemMaster
+    # TODO RMC14 material requirements
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: RMCCircuitboardIndustrialChemMaster
+  name: chem master machine board
+  description: A machine printed circuit board for a industrial chem master.
+  components:
+  - type: Sprite
+    state: blank_mod
+  - type: MachineBoard
+    prototype: RMCChemMasterIndustrial
+    # TODO RMC14 material requirements
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMCircuitboardMicrowave
+  name: microwave machine board
+  description: A machine printed circuit board for a microwave.
+  components:
+  - type: Sprite
+    state: blank_mod
+  - type: MachineBoard
+    prototype: CMMicrowave
+#    # TODO RMC14 material requirements
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: RMCArmylatheMachineCircuitboard
+  name: armylathe machine board
+  description: A machine printed circuit board for an armylathe
+  components:
+    - type: MachineBoard
+      prototype: RMCArmylatheEmpty
+
+# - type: entity
+#   parent: CMBaseMachineCircuitboard
+#   id: RMCCircuitboardFireAlarm
+#   name: fire alarm machine board
+#   description: A machine printed circuit board for a fire alarm
+#   components:
+#     - type: MachineBoard
+#       prototype: RMCFireAlarm # TODO RMC14 Fire Alarm
+
+# - type: entity
+#   parent: CMBaseMachineCircuitboard
+#   id: RMCCircuitboardComputer
+#   name: computer circuit board
+#   description: A machine printed circuit board for a computer
+#   components:
+#     - type: MachineBoard
+#       prototype: RMCComputer # TODO RMC14 Computer building
+
+# - type: entity
+#   parent: DoorElectronics
+#   id: RMCElectronicsAirlock
+#   name: airlock electronics
+#   description: A machine printed circuit board for an airlock # TODO RMC14 Airlock Building
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: RMCRechargerCircuitboard
+  name: recharger machine board
+  description: A machine printed circuit board for a recharger
+  components:
+    - type: MachineBoard
+      prototype: RMCRecharger

@@ -1,0 +1,22 @@
+- type: entity
+  save: false
+  parent: RMCBaseMobSpeciesOrganic
+  id: CMMobDwarf
+  name: Urist C.M McHands The Dwarf
+  suffix: RMC14
+  components:
+  - type: Icon
+    sprite: Mobs/Species/Slime/parts.rsi
+    state: full
+  - type: Sprite
+    noRot: true
+    drawdepth: Mobs
+    scale: 1, 0.8
+  - type: Vocal
+    emoteSounds: RMCMaleDwarf
+  - type: ReplacementAccent
+    accent: dwarf
+  - type: Speech
+    speechSounds: Bass
+  - type: FixedIdentity
+    name: cm-chatsan-replacement-dwarf

@@ -1,0 +1,260 @@
+- type: entity # TODO RMC14 split these into per file categories and inherit all to ASRS
+  abstract: true
+  parent: [ CMUASRSResearchGoodies, CMUASRSBotanyGoodies ]
+  id: CMCargoCatalog
+  components:
+  - type: Speech
+    speechVerb: Robotic
+  - type: RequisitionsComputer
+    categories:
+    - name: Engineering
+      entries:
+      - cost: 370
+        crate: RMCCrateSandbagsConstructionKit
+      - cost: 900
+        crate: RMCCrateElectricalMaintenance
+      - cost: 350
+        crate: RMCCrateMechanicalMaintenance
+      - cost: 350
+        crate: RMCCrateReplacementLights
+      - cost: 350
+        crate: PortableGeneratorPacman
+      - cost: 350
+        crate: RMCCratePacmanParts
+      - cost: 375
+        crate: RMCCrateSuperPacmanParts
+      - cost: 350
+        crate: RMCCrateHighCapacityPowerCell
+      - cost: 400
+        crate: AU14CrateBoxFusionCells
+      - cost: 3500
+        crate: AU14CrateBoxToolbelt
+      - cost: 3000
+        crate: AU14CrateBoxFieldSupplyEngin
+      - cost: 350
+        crate: AU14CrateBoxFloorTiles
+      - cost: 350
+        crate: AU14CrateBoxFloorTilesWood
+      - cost: 350
+        crate: CMUCrateBiosuitGeneral #the colors on this one are yellow therefore engineering
+    - name: Materials
+      entries:
+      - cost: 350
+        crate: RMCCrateResearchPhoron
+      - cost: 350
+        crate: RMCCrateResearchPlastic
+      - cost: 900
+        crate: RMCCrateEmptySandbags
+      - cost: 1200
+        crate: RMCCrateMetalSheets
+      - cost: 1400
+        crate: RMCCratePlasteelSheets
+      - cost: 350
+        crate: RMCCrateGlassSheets
+      - cost: 350
+        crate: RMCCrateWoodenPlanks
+      - cost: 2000
+        crate: RMCCrateFoldingBarricades
+      - cost: 350
+        crate: RMCCrateSuppliesBoxes
+    - name: Food and Drinks
+      entries:
+      - cost: 380
+        crate: AU14CrateBoxboxofingredients
+      - cost: 390
+        crate: AU14CrateBoxMeat
+      - cost: 330
+        crate: RMCCrateFoodDonuts
+      - cost: 345
+        crate: AU14CrateBoxPizza
+      - cost: 350
+        crate: AU14Cratealcoholicdrinks
+    - name: Gear
+      entries:
+      - cost: 350
+        crate: AU14CrateBoxCivBinocs
+      - cost: 385
+        crate: RMCCrateGearPackFlare
+      - cost: 340
+        crate: RMCCrateFlashlights
+      - cost: 340
+        crate: AU14CrateBoxBackpacks
+      - cost: 320
+        crate: AU14CrateBoxHandhelds
+      - cost: 390
+        crate: RMCCrateClothingLargePouches
+      - cost: 320
+        crate: RMCCrateClothingMedicalPouches
+      - cost: 350
+        crate: AU14CrateBoxFirefighting
+      - cost: 300
+        crate: CMUCrateGasMaskFilter
+      - cost: 1500
+        crate: CMUCrateGasMaskFilterHAZOPS
+      - cost: 350
+        crate: CMUCrateBiosuitSecurity
+    - name: Medical
+      entries:
+      - cost: 350
+        crate: RMCCrateMedicalSurgery
+      - cost: 335
+        crate: RMCCrateMedicalBodyBag
+      - cost: 350
+        crate: RMCCrateMedicalFirstAid
+      - cost: 310
+        crate: RMCCrateMedicalFilled
+      - cost: 370
+        crate: RMCCrateMedicalPill
+      - cost: 500
+        crate: CMUCrateMedicalFieldTreatments
+        maxStock: 2
+        stockReplenishDelay: 480
+      - cost: 320
+        crate: AU14CrateBoxHospitalBeds
+      - cost: 475
+        crate: AU14CrateBoxDefibrillator
+        maxStock: 4
+        stockReplenishDelay: 600
+      - cost: 850
+        crate: CMUCrateLabGlassware
+      - cost: 350
+        crate: CMUCrateBiosuitMedical
+    - name: Supplies
+      entries:
+      - cost: 350
+        crate: RMCCrateSupplyInternals
+      - cost: 370
+        crate: RMCCrateSupplyEvacuation
+      - cost: 390
+        crate: RMCCrateSupplyJanitor
+      - cost: 330
+        crate: AU14CrateWorkTools
+      - cost: 380
+        crate: AU14CrateCivilianClothingRandom
+      - cost: 2000
+        crate: RMCCrateSuppliesCrayons
+    - name: Weapons
+      entries:
+      - cost: 2000
+        crate: AU14CrateBoxAR10
+      - cost: 1300
+        crate: AU14CrateBoxMod88
+      - cost: 1250
+        crate: AU14CrateBoxRevolverM2019
+      - cost: 1400
+        crate: AU14CrateBoxRSH9
+      - cost: 1200
+        crate: AU14CrateBoxHuntingRifleCrate
+      - cost: 950
+        crate: AU14CrateBoxTPR23B
+      - cost: 950
+        crate: AU14CrateBoxM4A3
+      - cost: 1000
+        crate: AU14CrateBoxSkeetShootingCrate
+      - cost: 800
+        crate: AU14CrateBoxM44
+      - cost: 1300
+        crate: AU14CrateBoxHuntingRifleABRCrate
+      - cost: 353
+        crate: AU14CrateBoxD18
+      - cost: 330
+        crate: AU14CrateAssortedKnives
+    - name: Ammunition
+      entries:
+      - cost: 533
+        crate: AU14CrateBoxAR10Magazines
+      - cost: 483
+        crate: AU14CrateBox357HP
+      - cost: 400
+        crate: AU14CrateBox357
+      - cost: 400
+        crate: AU14CrateBoxMod88Mags
+      - cost: 400
+        crate: AU14CrateBoxRSH9SL
+      - cost: 400
+        crate: AU14CrateBoxBasiraMagazines
+      - cost: 433
+        crate: AU14CrateBoxShotgunShells
+      - cost: 333
+        crate: AU14CrateBoxTPR23BMag
+      - cost: 350
+        crate: AU14CrateBoxM44SL
+      - cost: 350
+        crate: AU14CrateBoxM44SLM
+      - cost: 350
+        crate: AU14CrateBoxD18Magazines
+      - cost: 355
+        crate: AU14CrateBoxABR40Magazines
+    - name: Vehicle Ammo
+      entries:
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonMixed
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoLTAAAP
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoAceAutocannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1700
+        crate: RMCCrateVehicleAmmoDragonFlamer
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoBoyarsDualCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 900
+        crate: CMUCrateVehicleAmmoGrenadeLauncherMixed
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 700
+        crate: RMCCrateVehicleAmmoSmokeLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 2200
+        crate: RMCCrateVehicleAmmoTowLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1025
+        crate: CMUCrateVehicleAmmoCupolaMixed
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1050
+        crate: CMUCrateVehicleAmmoCupolaTracer
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1200
+        crate: RMCCrateVehicleAmmoLZRNFlamer
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1000
+        crate: RMCCrateVehicleAmmoFrontalCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 700
+        crate: RMCCrateVehicleAmmoFlareLauncher
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1800
+        crate: RMCCrateVehicleAmmoRotaryCannon
+        maxStock: 2
+        stockReplenishDelay: 300
+    - name: Furniture
+      entries:
+      - cost: 320
+        crate: AU14CrateBoxReinforcedTableParts
+      - cost: 320
+        crate: AU14CrateBoxGamblingTableParts
+      - cost: 390
+        crate: AU14CrateBoxGrayTableParts
+      - cost: 390
+        crate: AU14CrateBoxtanTableParts
+    - name: "Machines and Vendors (Wrench Required)"
+      entries:
+
+      - cost: 350
+        crate: RMCTelevision

@@ -1,0 +1,15 @@
+cm-vending-machine-wrong-card = Wrong ID card owner detected.
+cm-vending-machine-access-denied = Access denied.
+cm-vending-machine-specialist-max = That set is already taken.
+rmc-vending-machine-can-hack = You believe you can hack this one with an [color=cyan]access tuner[/color] to remove the access requirements.
+rmc-vending-machine-cannot-hack = You are unable to hack access restrictions in {THE($vendor)}.
+rmc-vending-machine-hack-no-skill = You do not understand how to tweak the access requirements of {THE($vendor)}
+rmc-vending-machine-hack-start = You start tweaking access restrictions in {THE($vendor)}
+rmc-vending-machine-hack-finish-remove = You have successfully removed access restrictions in {THE($vendor)}
+rmc-vending-machine-hack-finish-restore = You have restored access restrictions in {THE($vendor)}
+# Stock line shown on each vendor item. "remaining" is the total left to buy, "infinite" when uncapped.
+rmc-vending-stock-remaining = x{$count}
+rmc-vending-stock-infinite = ∞
+
+rmc-vendor-points-token-redeem = You insert {THE($token)} into {THE($vendor)}. {$points} points are added to your account.
+rmc-vendor-points-token-wrong-vendor = {CAPITALIZE(THE($token))} does not fit into {THE($vendor)}.

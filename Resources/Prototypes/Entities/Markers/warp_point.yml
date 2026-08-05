@@ -1,0 +1,28 @@
+- type: entity
+  id: WarpPoint
+  parent: MarkerBase
+  name: warp point
+  components:
+  - type: WarpPoint
+  - type: Sprite
+    state: pink
+
+- type: entity
+  id: WarpPointBeacon
+  parent: WarpPoint
+  name: warp point (beacon)
+  components:
+  - type: NavMapBeacon
+  - type: WarpPoint
+    location: location-beacon
+
+- type: entity
+  id: TeleportScrollWarpPoint # You can teleport to this warp point using a teleport scroll.
+  parent: MarkerBase
+  name: teleport scroll warp point
+  components:
+  - type: Tag
+    tags:
+    - TeleportScrollWarp
+  - type: Sprite
+    state: pink

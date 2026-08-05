@@ -1,0 +1,385 @@
+# COMBAT TECHNICIAN
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSCTGear
+  name: ColMarTech squad comtech gear rack
+  description: An automated gear rack for combat technicians.
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessCombatTechPrep" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+  - type: CMAutomatedVendor
+    jobs:
+    - CMCombatTech
+    sections:
+    - name: Engineer Set (Mandatory)
+      takeAll: CMEngineerSet
+      entries:
+      - id: CMVendorBundleCombatTechnicianEssentials
+    - name: Handheld Defense
+      choices:  { CMHandheldDefense : 1 }
+      entries:
+    #    CMJIMAPlantedFlag
+      - id: RMCSentry
+        recommended: true
+      - id: RMCTesla
+      - id: RMCSentryFire
+    - name: Handheld Defense Upgrade
+      choices: { CMHandheldDefenseUpgrade: 1 }
+      entries:
+      - id: RMCEngineeringUpgrade
+        points: 15
+    - name: Engineering Supplies
+      entries:
+    #- id: CMAirlockCircuitBoard
+    #  points: 2
+      - id: CMAPCElectronics
+        points: 2
+      - id: CMEntrenchingTool
+        points: 2
+      - id: RMCPowerCellHigh
+        points: 3
+      - id: CMSheetMetal10
+        name: metal x10
+        points: 5
+        recommended: true
+      - id: CMSheetPlasteel10
+        name: plasteel x10
+        points: 7
+        recommended: true
+      - id: RMCExplosivePlastic
+        points: 3
+      - id: RMCExplosiveBreachingCharge
+        points: 5
+        recommended: true
+      - id: CMSandbagEmpty25
+        name: sandbags x25
+        points: 10
+        recommended: true
+      - id: RMCPowerCellSuper
+        points: 10
+    #- id: CMES11MobileFuelCanister
+    #  points: 4
+    - name: Explosives
+      entries:
+      - id: CMPacketGrenadeHighExplosiveFilled
+        points: 18
+      - id: RMCPacketGrenadeIncendiaryFilled
+        points: 18
+      - id: RMCPacketGrenadeWhitePhosphorusFilled
+        points: 18
+      - id: RMCPacketGrenadeSmokeFilled
+        points: 9
+      - id: RMCPacketGrenadeM74AGMFFilled
+        points: 13
+      - id: RMCPacketGrenadeM74AGMIFilled
+        points: 13
+      - id: RMCPacketGrenadeM74AGMSFilled
+        points: 9
+      - id: RMCPacketGrenadeM74AGMSHornetFilled
+        points: 13
+      - id: RMCBoxClaymoreMineFilled
+        points: 18
+    # - id: CMM40MFHSMetalFoamGrenade
+    #   points: 5
+    # - id: RMCElectroshockGrenadex3
+    #   points: 16
+    - name: Ammunition
+      entries:
+      - id: CMMagazineRifleM4SPRAP
+        points: 6
+      - id: CMMagazineRifleM4SPRExt
+        points: 6
+      - id: CMMagazineSMGM63AP
+        points: 6
+      - id: CMMagazineSMGM63Ext
+        points: 6
+      - id: CMMagazineRifleM54CAP
+        points: 6
+      - id: CMMagazineRifleM54CExt
+        points: 6
+    - name: Sidearm Ammunition
+      entries:
+      - id: RMCMagazinePistolM13Ext
+        points: 6
+      # - id: RMCSpeedLoader44Heavy
+      #   points: 6
+      - id: RMCSpeedLoader44Marksman
+        points: 6
+      - id: RMCMagazinePistolM1984HP
+        points: 3
+      - id: RMCMagazinePistolM1984AP
+        points: 3
+      - id: CMMagazinePistolMK80
+        points: 3
+      - id: RMCMagazinePistolSU6
+        points: 6
+    - name: Armors
+      entries:
+      - id: CMArmorB12
+        points: 24
+      - id: CMArmorM4
+        points: 16
+    - name: Restricted Firearms
+      entries:
+      - id: RMCGunCasePistolMK80
+        points: 8
+      - id: RMCGunCasePistolSmart
+        points: 12
+      - id: RMCCaseFlamer
+        points: 12
+      - id: RMCM85A1Case
+        points: 24
+      - id: RMCML66DCase
+        points: 24
+    - name: Clothing Items
+      entries:
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+        points: 6
+      - id: RMCPouchMacheteFilled
+        name: machete pouch (Full)
+        points: 8
+      - id: RMCBackpackRTO
+        replaceSlot: back
+        points: 15
+      - id: RMCPouchFuelTank
+        points: 4
+      - id: RMCPouchSling
+        points: 6
+      - id: RMCPouchGeneralLarge
+        points: 6
+      - id: CMBeltUtilityCombat
+        points: 15
+    - name: Utilities
+      entries:
+      - id: CMRollerBedSpawnFolded
+        points: 5
+      - id: RMCFulton20
+        points: 5
+      - id: CMFireExtinguisherPortable
+        points: 3
+      - id: RMCMotionDetector
+        points: 8
+      - id: RMCWhistle
+        points: 3
+      - id: RMCSynthResetKey
+        points: 10
+    - name: Binoculars
+      entries:
+      - id: RMCBinoculars
+        points: 5
+      - id: RMCRangefinder
+        points: 10
+      - id: RMCLaserDesignator
+        points: 15
+    - name: Helmet Optics
+      entries:
+      - id: RMCVisorMedical
+        points: 12
+      - id: RMCVisorWelding
+        points: 5
+    - name: Pamphlets
+      entries:
+      - id: CMPamphletJTAC
+        points: 15
+    - name: Radio Keys
+      entries:
+      - id: CMEncryptionKeyIntel
+        points: 3
+      - id: CMEncryptionKeyJTAC
+        points: 3
+      - id: CMEncryptionKeyRequisition
+        points: 3
+      - id: CMEncryptionKeyMedical
+        points: 3
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSCTEquipment
+  name: ColMarTech squad comtech equipment rack
+  description: An automated rack hooked up to a colossal storage of combat technician standard-issue equipment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: AccessReader
+    access:
+    - [ "CMAccessCombatTechPrep" ]
+  - type: CMAutomatedVendor
+    jobs:
+    - CMCombatTech
+    sections:
+    - name: Standard Equipment
+      takeAll: CMStandard
+      entries:
+      - id: CMVendorBundleCombatTechnicianApparel
+      - id: CMMRE
+      #- id: CMMap # TODO: Make a map
+    - name: Gloves
+      choices: { CMHands: 1 }
+      entries:
+      - id: CMHandsInsulated
+      - id: CMHandsBlackInsulated
+    - name: Helmet
+      choices: { CMHelmet: 1 }
+      entries:
+      - id: CMArmorHelmetM10Tech
+      - id: RMCArmorHelmetM10Welding
+    - name: Armor
+      choices: { CMArmor: 1 }
+      entries:
+      - id: RMCArmorVestSquad
+      - id: RMCArmorM3LightVariants
+        name: light armor
+      - id: RMCArmorM3MediumVariants
+        name: medium armor
+        recommended: true
+      - id: RMCArmorM3HeavyVariants
+        name: heavy armor
+    - name: Backpack
+      choices: { CMBackpack: 1 }
+      entries:
+      - id: RMCScabbardMacheteFilled
+        name: machete scabbard (Full)
+      - id: CMBackpackMarineTech
+        replaceSlot: back
+      - id: CMSatchelMarineTech
+        replaceSlot: back
+      - id: CMBackpackWelder
+        replaceSlot: back
+        recommended: true
+      - id: RMCSatchelWelder
+        replaceSlot: back
+      - id: RMCSatchelWelderChestrig
+        replaceSlot: back
+        recommended: true
+    - name: Belt
+      choices: { CMBelt: 1 }
+      entries:
+      - id: RMCBeltConstruction
+        recommended: true
+      - id: CMBeltUtilityFilled
+        name: M276 pattern toolbelt rig (Full)
+        # mandatory: true, TODO allow vendors to mark entries as mandatory
+      - id: RMCBeltUtilityGeneral
+      - id: CMBeltMarine
+      - id: RMCBeltHolsterPistol
+      - id: RMCBeltHolsterRevolver
+      - id: RMCBeltHolsterSMG
+      - id: RMCBeltHolsterSMGPouch
+      - id: RMCM82FHolster
+      - id: RMCM276ShotgunShellLoadingRig
+      - id: RMCBeltGrenade
+    - name: Pouches
+      choices: { RMCPouch: 2 }
+      entries:
+      - id: RMCPouchConstruction
+        recommended: true
+      - id: RMCPouchFirstAidInjectors
+        name: first-aid pouch (refillable injectors)
+        recommended: true
+      - id: RMCPouchFirstAidSplintsGauzeOintment
+        name: first-aid pouch (gauze, ointment) # TODO RMC14 splints comma
+        recommended: true
+      - id: RMCPouchFirstAidPills
+        name: first-aid pouch (pills)
+        recommended: true
+      - id: RMCPouchElectronicsFill
+        name: electronics pouch (Full)
+      - id: RMCPouchExplosive
+      - id: RMCPouchFlareFilled
+        name: Flare pouch (Full)
+      - id: RMCPouchMagazinePistolLarge
+      - id: RMCPouchMagazine
+      - id: RMCPouchShotgun
+      - id: RMCPouchGeneralMedium
+      - id: RMCPouchPistol
+      - id: RMCPouchToolsFill
+        name: Tools pouch (Full)
+      - id: RMCPouchEngineerKit
+    - name: Accessories
+      choices: { CMAccessories: 1 }
+      entries:
+      - id: RMCToolWebbingSmallFilled
+        name: small tool webbing (Full)
+        recommended: true
+      - id: CMWebbingBlack
+      - id: CMWebbingBrown
+      - id: RMCWebbingLegPouch
+      - id: RMCWebbingLegPouchBlack
+      - id: CMWebbing
+      - id: RMCWebbingBlackSmall
+      - id: RMCWebbingDropPouch
+      - id: RMCWebbingDropPouchBlack
+      - id: CMWebbingHolster
+      - id: RMCWebbingHolsterBlack
+    - name: Mask
+      choices: { CMMask: 1 }
+      entries:
+      - id: CMMaskGas
+      - id: CMMaskCoif
+      - id: RMCMaskRebreather
+
+- type: entity
+  parent: ColMarTechBase
+  id: ColMarTechSCTTools
+  name: ColMarTech squad comTech tools vendor
+  description: A vending machine that stores various extra tools that are useful on the field.
+  components:
+  - type: AccessReader
+    access:
+    - [ "CMAccessCombatTechPrep" ]
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/tool.rsi
+    layers:
+    - state: "off"
+      map: [ "enum.VendingMachineVisualLayers.Base" ]
+    - state: "normal-unshaded"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
+  - type: CMAutomatedVendor
+    canManualRestock: true
+    access:
+    - "CMAccessCombatTechPrep"
+    hackable: true
+    jobs:
+    - CMCombatTech
+    sections:
+    - name: Equipment
+      entries:
+      - id: CMBeltUtility
+        name: utility tool belt
+        amount: 4
+      - id: RMCCableCoil
+        amount: 4
+      - id: RMCWeldingGoggles
+        amount: 2
+      - id: RMCEngineerKit
+        amount: 2
+    - name: Tools
+      entries:
+      - id: CMWelder
+        amount: 4
+      - id: CMCrowbar
+        amount: 4
+      - id: CMScrewdriver
+        amount: 4
+      - id: CMWirecutter
+        amount: 4
+      - id: CMWrench
+        amount: 4
+      - id: CMMultitool
+        amount: 4
+      - id: CMWelderSmall
+        amount: 2
+      - id: RMCLightReplacer
+        amount: 4
+    - name: Utility
+      entries:
+      - id: RMCSentryLaptop
+        name: sentry gun network laptop
+        amount: 4
+    #   - id: Sentry Gun Network Encryption KEy
+    #     amount: 4

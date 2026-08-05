@@ -1,0 +1,14 @@
+﻿using Robust.Shared.GameStates;
+
+namespace Content.Shared._RMC14.Intel;
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[Access(typeof(IntelSystem))]
+public sealed partial class IntelKnowledgeComponent : Component
+{
+    [DataField("read"), AutoNetworkedField]
+    public HashSet<EntityUid> ReadIntel = new();
+
+    [DataField, AutoNetworkedField]
+    public Dictionary<NetEntity, string> PersonalClues = new();
+}

@@ -1,0 +1,71 @@
+- type: entity
+  parent: BoozeDispenserEmpty
+  id: CMDispenserBooze
+  name: booze dispenser
+  suffix: Filled
+  description: A technological marvel, supposedly able to mix just the mixture you'd like to drink the moment you ask for one.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/Science/small_dispensers.rsi
+    state: booze_dispenser
+    snapCardinals: true
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: null
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 200
+      behaviors:
+        - !type:DoActsBehavior
+          acts: [ "Destruction" ]
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+  - type: StorageFill
+    contents:
+    # Water
+    - id: DrinkIceJug
+    - id: DrinkSodaWaterBottleFull
+    - id: DrinkSugarJug
+    - id: DrinkTonicWaterBottleFull
+    - id: DrinkBeerGrowler
+    # Kahlua
+    - id: DrinkWhiskeyBottleFull
+    # Sake
+    - id: DrinkWineBottleFull
+    - id: DrinkVodkaBottleFull
+    - id: DrinkGinBottleFull
+    - id: DrinkRumBottleFull
+    - id: DrinkVermouthBottleFull
+    - id: DrinkCognacBottleFull
+    - id: DrinkAleBottleFullGrowler
+    - id: DrinkMeadJug
+    # Thirteen loko
+    - id: DrinkTequilaBottleFull
+  - type: Machine
+    board: CMCircuitboardDispenserBooze
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: ApcPowerReceiver
+    needsPower: false
+
+- type: entity
+  parent: CMDispenserBooze
+  id: CMDispenserBoozeEmpty
+  suffix: Empty
+  components:
+  - type: StorageFill
+    contents: []

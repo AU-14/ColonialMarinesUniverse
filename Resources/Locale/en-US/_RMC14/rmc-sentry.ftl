@@ -1,0 +1,36 @@
+﻿rmc-sentry-need-open-area = You need a clear, open area to build a {$sentry}, something is blocking the way in front of you!
+rmc-sentry-on = {CAPITALIZE(THE($sentry))} hums to life and emits several beeps.
+rmc-sentry-off = {CAPITALIZE(THE($sentry))} powers down and goes silent.
+rmc-sentry-magazine-invalid = {CAPITALIZE(THE($item))} isn't a valid sentry magazine!
+rmc-sentry-magazine-swap-not-empty = You can't swap the magazine until it's empty.
+rmc-sentry-magazine-swap-start-user = You begin swapping a new {$magazine} into {THE($sentry)}.
+rmc-sentry-magazine-swap-start-others = {$user} begins swapping a new {$magazine} into {THE($sentry)}.
+rmc-sentry-magazine-swap-finish-user = You swap a new {$magazine} into {THE($sentry)}.
+rmc-sentry-magazine-swap-finish-others = {$user} swaps a new {$magazine} into {THE($sentry)}.
+rmc-sentry-limited-rotation = [color=red]It can only turn a maximum of {$degrees} degrees when firing.[/color]
+rmc-sentry-disassembled-with-multitool = It can be disassembled with a [color=cyan]multitool[/color].
+rmc-sentry-rotate-with-screwdriver = It can be rotated with a [color=cyan]screwdriver[/color].
+rmc-sentry-too-close = This is too close to {INDEFINITE($defense)} {$defense}!
+rmc-sentry-active-norot = {CAPITALIZE(THE($sentry))} is currently active. The motors will prevent you from rotating it safely.
+rmc-sentry-item-norot = You can't rotate it like this!
+rmc-sentry-magazine-does-not-fit = {CAPITALIZE(THE($magazine))} doesn't fit into {THE($sentry)}!
+
+rmc-sentry-upgrade-not-item = You need to disassemble {THE($sentry)} with a multitool before upgrading it!
+rmc-sentry-upgrade-not-holding = You need to be holding an upgrade kit in your active hand to upgrade {THE($sentry)}!
+rmc-sentry-upgrade-not-upgradeable = You can't upgrade {THE($sentry)}!
+
+rmc-sentry-spikes-self = The sentry's steel tusks cut into you!
+rmc-sentry-spikes-others = The sentry's steel tusks cut into {$target}!
+
+rmc-sentry-rotate-self = You rotate {THE($sentry)}.
+rmc-sentry-rotate-others = {$user} rotates {THE($sentry)}.
+
+rmc-sentry-disassemble-start-self = You begin disassembling {THE($sentry)}.
+rmc-sentry-disassemble-start-others = {$user} begins disassembling {THE($sentry)}.
+rmc-sentry-disassemble-finish-self = You disassemble {THE($sentry)}.
+rmc-sentry-disassemble-finish-others = {$user} disassembles {THE($sentry)}.
+
+rmc-sentry-unanchor-is-on = {CAPITALIZE(THE($sentry))} is currently active. The motors will prevent you from unanchoring it safely.
+
+rmc-sentry-not-emergency = {CAPITALIZE(THE($deployer))} can only be activated in emergencies.
+rmc-sentry-deploy = You deploy {THE($spawned)}

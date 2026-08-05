@@ -1,0 +1,62 @@
+using Content.Shared._RMC14.Entrenching;
+using Content.Shared._RMC14.Xenonids.Acid;
+using Content.Server.Light.Components;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.Light.Components;
+using Robust.Shared.Timing;
+using Robust.Shared.Configuration;
+using Content.Shared._RMC14.CCVar;
+
+namespace Content.Server._RMC14.Xenonids.Acid;
+
+public sealed partial class XenoAcidSystem : SharedXenoAcidSystem
+{
+	[Dependency] private IGameTiming _timing = default!;
+	[Dependency] private IConfigurationManager _config = default!;
+
+	private int CorrosiveAcidDamageTimeSeconds;
+	public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<ExpendableLightComponent, CorrodingEvent>(OnExpendableLightCorrodingEvent);
+        SubscribeLocalEvent<BarricadeComponent, CorrodingEvent>(OnBarricadeCorrodingEvent);
+
+        Subs.CVar(_config, RMCCVars.RMCCorrosiveAcidDamageTimeSeconds, obj => CorrosiveAcidDamageTimeSeconds = obj, true);
+    }
+
+    private void OnExpendableLightCorrodingEvent(Entity<ExpendableLightComponent> target, ref CorrodingEvent args)
+    {
+        // Rationale and formula: https://github.com/RMC-14/RMC-14/issues/2952#issuecomment-2227035752
+        var expendableLight = target.Comp;
+        var expendableLightDps = args.ExpendableLightDps + 1;
+        if (args.AcidStrength > XenoAcidStrength.Weak)
+            expendableLightDps *= target.Comp.AcidDamageMultiplier;
+        expendableLight.StateExpiryTime /= expendableLightDps;
+        // In case expandable light is activated shortly after being corroded. Or in case we decide to not destroy corrosive lights on timers like the rest of items for whatever the reason.
+        expendableLight.GlowDuration /= expendableLightDps;
+        expendableLight.PhaseOneDuration /= expendableLightDps;
+        expendableLight.PhaseTwoDuration /= expendableLightDps;
+        expendableLight.PhaseThreeDuration /= expendableLightDps;
+        expendableLight.PhaseFourDuration /= expendableLightDps;
+        expendableLight.PhaseFiveDuration /= expendableLightDps;
+        expendableLight.FadeOutDuration /= expendableLightDps;
+
+        Dirty(target);
+    }
+
+    private void OnBarricadeCorrodingEvent(Entity<BarricadeComponent> target, ref CorrodingEvent args)
+    {
+        AddComp(target, new DamageableCorrodingComponent
+        {
+            Acid = args.Acid,
+            Dps = args.Dps,
+            Damage = new(PrototypeManager.Index<DamageTypePrototype>(CorrosiveAcidDamageTypeStr), args.Dps * CorrosiveAcidTickDelaySeconds),
+            Strength = args.AcidStrength,
+            AcidExpiresAt = _timing.CurTime + TimeSpan.FromSeconds(CorrosiveAcidDamageTimeSeconds),
+        });
+
+        args.Cancelled = true;
+    }
+}
+

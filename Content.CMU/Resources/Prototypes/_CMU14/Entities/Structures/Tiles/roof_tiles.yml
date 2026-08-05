@@ -1,0 +1,143 @@
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull8
+  name: roof outer hull 8
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_8.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull9
+  name: roof outer hull 9
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_9.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull10
+  name: roof outer hull 10
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_10.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull11
+  name: roof outer hull 11
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_11.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull12
+  name: roof outer hull 12
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_12.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull13
+  name: roof outer hull 13
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_13.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull14
+  name: roof outer hull 14
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_14.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull15
+  name: roof outer hull 15
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_15.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull16
+  name: roof outer hull 16
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_16.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull17
+  name: roof outer hull 17
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_17.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull18
+  name: roof outer hull 18
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_18.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull19
+  name: roof outer hull 19
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_19.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull20
+  name: roof outer hull 20
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_20.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull21
+  name: roof outer hull 21
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_21.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull22
+  name: roof outer hull 22
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_22.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull23
+  name: roof outer hull 23
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_23.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull24
+  name: roof outer hull 24
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_24.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull25
+  name: roof outer hull 25
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_25.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull26
+  name: roof outer hull 26
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_26.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull27
+  name: roof outer hull 27
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_27.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull28
+  name: roof outer hull 28
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_28.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull29
+  name: roof outer hull 29
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_29.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull30
+  name: roof outer hull 30
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_30.png
+
+- type: tile
+  parent: CMTileBase
+  id: CMURoofOuterHull31
+  name: roof outer hull 31
+  sprite: /Textures/_CMU14/Tiles/Roofs/outerhull_dir_31.png

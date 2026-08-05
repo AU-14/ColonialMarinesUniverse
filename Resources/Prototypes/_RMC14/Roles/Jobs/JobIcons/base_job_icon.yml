@@ -1,0 +1,6 @@
+﻿- type: jobIcon
+  parent: JobIcon
+  id: CMJobIconBase
+  abstract: true
+  locationPreference: Left
+  offset: 3

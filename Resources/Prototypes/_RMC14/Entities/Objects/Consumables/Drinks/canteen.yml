@@ -1,0 +1,109 @@
+- type: entity
+  abstract: true
+  parent: DrinkBase
+  id: CMCanteenBase
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Drinks/canteen.rsi
+  - type: Item
+    size: Small
+  - type: Edible
+    edible: Drink
+    solution: drink
+    destroyOnEmpty: false
+    transferAmount: 5
+    utensil: None
+    delay: 0.5
+    forceFeedDelay: 3
+    useSound: /Audio/Items/drink.ogg
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: Water
+        Quantity: 60
+  - type: Tag
+    tags:
+    - DrinkGlass
+  - type: SolutionTransfer
+    transferAmount: 60
+    maxTransferAmount: 60
+    canChangeTransferAmount: true
+    transferAmounts:
+    - 5
+    - 10
+    - 15
+    - 25
+    - 30
+    - 40
+    - 60
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: GlassBreak
+      - !type:SpillBehavior { }
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: RMCFlask
+
+- type: entity
+  parent: CMCanteenBase
+  id: CMCanteen
+  name: canteen
+  description: You take a sip from your trusty Marine canteen...
+  components:
+  - type: Sprite
+    state: canteen
+
+- type: entity
+  parent: CMCanteenBase
+  id: CMMetalFlask
+  name: metal flask
+  description: A metal flask with a decent liquid capacity.
+  suffix: Empty
+  components:
+  - type: Sprite
+    state: flask
+  - type: Solution
+    id: drink
+    solution:
+      maxVol: 60
+
+- type: entity
+  parent: CMCanteenBase
+  id: CMMarineFlask
+  name: Marine flask
+  description: A metal flask embossed with the Marine logo and probably filled with a slurry of water, motor oil, and medicinal alcohol.
+  components:
+  - type: Sprite
+    state: flask_marine
+
+- type: entity
+  parent: CMCanteenBase
+  id: CMWEYAFlask
+  name: We-Ya flask
+  description: A metal flask embossed with We-Ya's signature logo that some corporate bootlicker probably ordered to be stocked in military vessels' canteen vendors.
+  components:
+  - type: Sprite
+    state: flask_we_ya
+
+- type: entity
+  parent: [CMCanteenBase, DrinkVisualsOpenable]
+  id: RMCWeYaThermos
+  name: We-Ya thermos
+  description: A sleek metal thermos, decorated with the colours of the Weston-Yamada Corporation. The marketing claims it can withstands equivalent to a nuclear blast, though that's probably just PR talking.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Consumable/Drinks/weya_thermos.rsi

@@ -1,0 +1,11 @@
+- type: gamePreset
+  id: CMDistressSignal
+  alias:
+  - rmcdistresssignal
+  - cmdistresssignal
+  - rmcds
+  name: rmc-distress-signal-title
+  description: rmc-distress-signal-description
+  showInVote: false
+  rules:
+  - CMDistressSignal

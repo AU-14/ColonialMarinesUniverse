@@ -1,0 +1,266 @@
+using System.Linq;
+using Content.Client.Gameplay;
+using Content.Shared.Audio;
+using Content.Shared.CCVar;
+using Content.Shared.EntityConditions;
+using Content.Shared.GameTicking;
+using Robust.Client.Player;
+using Robust.Client.State;
+using Robust.Shared.Audio;
+using Robust.Shared.Audio.Components;
+using Robust.Shared.Audio.Systems;
+using Robust.Shared.Configuration;
+using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
+using Robust.Shared.Timing;
+using Robust.Shared.Utility;
+
+namespace Content.Client.Audio;
+
+public sealed partial class ContentAudioSystem
+{
+    [Dependency] private IConfigurationManager _configManager = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IStateManager _state = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedEntityConditionsSystem _conditions = default!;
+
+    private readonly TimeSpan _minAmbienceTime = TimeSpan.FromSeconds(40);
+    private readonly TimeSpan _maxAmbienceTime = TimeSpan.FromSeconds(100);
+
+    private const float AmbientMusicFadeTime = 10f;
+    private static float _volumeSlider;
+
+    // Don't need to worry about this being serializable or pauseable as it doesn't affect the sim.
+    private TimeSpan _nextAudio;
+
+    private EntityUid? _ambientMusicStream;
+    private AmbientMusicPrototype? _musicProto;
+    private AmbientMusicPrototype? _lastMusicProto;
+
+    /// <summary>
+    /// If we find a better ambient music proto can we interrupt this one.
+    /// </summary>
+    private bool _interruptable;
+
+    /// <summary>
+    /// Track what ambient sounds we've played. This is so they all get played an even
+    /// number of times.
+    /// When we get to the end of the list we'll re-shuffle
+    /// </summary>
+    private readonly Dictionary<string, List<ResPath>> _ambientSounds = new();
+
+    private ISawmill _sawmill = default!;
+
+    private void InitializeAmbientMusic()
+    {
+        Subs.CVar(_configManager, CCVars.AmbientMusicVolume, AmbienceCVarChanged, true);
+        _sawmill = LogManager.GetSawmill("audio.ambience");
+
+        // Reset audio
+        _nextAudio = TimeSpan.MaxValue;
+
+        SetupAmbientSounds();
+        SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnProtoReload);
+        _state.OnStateChanged += OnStateChange;
+        // On round end summary OR lobby cut audio.
+        SubscribeNetworkEvent<RoundEndMessageEvent>(OnRoundEndMessage);
+    }
+
+    private void AmbienceCVarChanged(float obj)
+    {
+        _volumeSlider = SharedAudioSystem.GainToVolume(obj);
+
+        if (_ambientMusicStream != null && _musicProto != null)
+        {
+            _audio.SetVolume(_ambientMusicStream, _musicProto.Sound.Params.Volume + _volumeSlider);
+        }
+    }
+
+    private void ShutdownAmbientMusic()
+    {
+        _state.OnStateChanged -= OnStateChange;
+        _ambientMusicStream = _audio.Stop(_ambientMusicStream);
+    }
+
+    private void OnProtoReload(PrototypesReloadedEventArgs obj)
+    {
+        if (obj.WasModified<AmbientMusicPrototype>())
+            SetupAmbientSounds();
+    }
+
+    private void OnStateChange(StateChangedEventArgs obj)
+    {
+        if (obj.NewState is not GameplayState)
+            return;
+
+        // If they go to game then reset the ambience timer.
+        _nextAudio = _timing.CurTime + _random.Next(_minAmbienceTime, _maxAmbienceTime);
+    }
+
+    private void SetupAmbientSounds()
+    {
+        _ambientSounds.Clear();
+        foreach (var ambience in ProtoMan.EnumeratePrototypes<AmbientMusicPrototype>())
+        {
+            var tracks = _ambientSounds.GetOrNew(ambience.ID);
+            RefreshTracks(ambience.Sound, tracks, null);
+            _random.Shuffle(tracks);
+        }
+    }
+
+    private void OnRoundEndMessage(RoundEndMessageEvent ev)
+    {
+        // If scoreboard shows then just stop the music
+        _ambientMusicStream = _audio.Stop(_ambientMusicStream);
+        _nextAudio = TimeSpan.FromMinutes(3);
+    }
+
+    private void RefreshTracks(SoundSpecifier sound, List<ResPath> tracks, ResPath? lastPlayed)
+    {
+        DebugTools.Assert(tracks.Count == 0);
+
+        switch (sound)
+        {
+            case SoundCollectionSpecifier collection:
+                if (collection.Collection == null)
+                    break;
+
+                var slothCud = ProtoMan.Index<SoundCollectionPrototype>(collection.Collection);
+                tracks.AddRange(slothCud.PickFiles);
+                break;
+            case SoundPathSpecifier path:
+                tracks.Add(path.Path);
+                break;
+        }
+
+        // Just so the same track doesn't play twice
+        if (tracks.Count > 1 && tracks[^1] == lastPlayed)
+        {
+            (tracks[0], tracks[^1]) = (tracks[^1], tracks[0]);
+        }
+    }
+
+    private void UpdateAmbientMusic()
+    {
+        // Update still runs in lobby so just ignore it.
+        if (_state.CurrentState is not GameplayState)
+        {
+            _ambientMusicStream = Audio.Stop(_ambientMusicStream);
+            _musicProto = null;
+            return;
+        }
+
+        bool? isDone = null;
+
+        if (TryComp(_ambientMusicStream, out AudioComponent? audioComp))
+        {
+            isDone = !audioComp.Playing;
+        }
+
+        if (_interruptable)
+        {
+            var player = _player.LocalSession?.AttachedEntity;
+
+            if (player == null || _musicProto == null || !_conditions.TryConditions(player.Value, _musicProto.Conditions))
+            {
+                FadeOut(_ambientMusicStream, duration: AmbientMusicFadeTime);
+                _musicProto = null;
+                _interruptable = false;
+                isDone = true;
+            }
+        }
+
+        // Still running existing ambience
+        if (isDone == false)
+            return;
+
+        // If ambience finished reset the CD (this also means if we have long ambience it won't clip)
+        if (isDone == true)
+        {
+            // Also don't need to worry about rounding here as it doesn't affect the sim
+            _nextAudio = _timing.CurTime + _random.Next(_minAmbienceTime, _maxAmbienceTime);
+        }
+
+        _ambientMusicStream = null;
+
+        if (_nextAudio > _timing.CurTime)
+            return;
+
+        _musicProto = GetAmbience();
+
+        if (_musicProto == null || _musicProto == _lastMusicProto && !_musicProto.AllowRepeat)
+        {
+            _interruptable = false;
+            _nextAudio = _timing.CurTime + _random.Next(_minAmbienceTime, _maxAmbienceTime);
+            return;
+        }
+
+        _interruptable = _musicProto.Interruptable;
+        var tracks = _ambientSounds[_musicProto.ID];
+
+        var track = tracks[^1];
+        tracks.RemoveAt(tracks.Count - 1);
+
+        var strim = _audio.PlayGlobal(
+            track.ToString(),
+            Filter.Local(),
+            false,
+            AudioParams.Default.WithVolume(_musicProto.Sound.Params.Volume + _volumeSlider));
+
+        _ambientMusicStream = strim?.Entity;
+
+        if (_musicProto.FadeIn && strim != null)
+        {
+            FadeIn(_ambientMusicStream, strim.Value.Component, AmbientMusicFadeTime);
+        }
+
+        // Refresh the list
+        if (tracks.Count == 0)
+        {
+            RefreshTracks(_musicProto.Sound, tracks, track);
+        }
+
+        _lastMusicProto = _musicProto;
+    }
+
+    private AmbientMusicPrototype? GetAmbience()
+    {
+        if (_player.LocalEntity is not { } player)
+            return null;
+
+        var ev = new PlayAmbientMusicEvent();
+        RaiseLocalEvent(ref ev);
+
+        if (ev.Cancelled)
+            return null;
+
+        var ambiences = ProtoMan.EnumeratePrototypes<AmbientMusicPrototype>().ToList();
+        ambiences.Sort((x, y) => y.Priority.CompareTo(x.Priority));
+
+        foreach (var amb in ambiences)
+        {
+            if (!_conditions.TryConditions(player, amb.Conditions))
+            {
+                continue;
+            }
+
+            return amb;
+        }
+
+        _sawmill.Warning($"Unable to find fallback ambience track");
+        return null;
+    }
+
+    /// <summary>
+    /// Fades out the current ambient music temporarily.
+    /// </summary>
+    public void DisableAmbientMusic()
+    {
+        FadeOut(_ambientMusicStream);
+        _ambientMusicStream = null;
+    }
+}

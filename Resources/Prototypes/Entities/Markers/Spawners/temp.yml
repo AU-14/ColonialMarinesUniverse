@@ -1,0 +1,12 @@
+- type: entity
+  id: TemporaryEntityForTimedDespawnSpawners
+  categories: [ HideSpawnMenu, Spawner ]
+  components:
+  - type: Transform
+    anchored: True
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: TimedDespawn
+  - type: SpawnOnDespawn
+    prototype: Ash # placeholder (required by component), overridden at runtime

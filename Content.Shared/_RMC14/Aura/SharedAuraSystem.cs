@@ -1,0 +1,64 @@
+using Content.Shared._RMC14.Stealth;
+using Robust.Shared.Network;
+using Robust.Shared.Timing;
+
+namespace Content.Shared._RMC14.Aura;
+
+public abstract partial class SharedAuraSystem : EntitySystem
+{
+
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+
+    /// <summary>
+    /// Gives an entity the aura component, and replaces any previous auras
+    /// </summary>
+    /// <param name="ent"></param>
+    /// <param name="auraColor"></param>
+    /// <param name="duration">null = lasts forever</param>
+    public void GiveAura(
+        EntityUid ent,
+        Color auraColor,
+        TimeSpan? duration,
+        float outlineWidth = 2,
+        bool flash = false,
+        float flashFrequency = 4,
+        float flashMinAlpha = 0.2f,
+        float flashMaxAlpha = 1)
+    {
+        //No aura to invis lurkers etc
+        if (HasComp<EntityActiveInvisibleComponent>(ent))
+            return;
+
+        var aura = EnsureComp<AuraComponent>(ent);
+
+        aura.Color = auraColor;
+        aura.Flash = flash;
+        aura.FlashFrequency = MathF.Max(0, flashFrequency);
+        aura.FlashMinAlpha = Math.Clamp(flashMinAlpha, 0, 1);
+        aura.FlashMaxAlpha = Math.Clamp(flashMaxAlpha, aura.FlashMinAlpha, 1);
+        aura.ExpiresAt = _timing.CurTime + duration;
+        aura.OutlineWidth = outlineWidth;
+
+        Dirty(ent, aura);
+    }
+
+
+    public override void Update(float frameTime)
+    {
+        if (_net.IsClient)
+            return;
+
+        var time = _timing.CurTime;
+
+        var auraQuery = EntityQueryEnumerator<AuraComponent>();
+
+        while (auraQuery.MoveNext(out var uid, out var aura))
+        {
+            if (aura.ExpiresAt == null || time < aura.ExpiresAt)
+                continue;
+
+            RemCompDeferred<AuraComponent>(uid);
+        }
+    }
+}

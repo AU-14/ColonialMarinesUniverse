@@ -1,0 +1,15 @@
+﻿- type: department
+  parent: CMDepartmentBase
+  id: CMCommand
+  name: department-CMCommand
+  description: cm-department-Command-description
+  color: "#334E6D"
+  roles:
+  - CMCommandingOfficer
+  - CMExecutiveOfficer
+  - CMStaffOfficer
+  - CMPVEPlatoonCommander
+  - CMRoyalMarinesTroopCommanderPVE
+  primary: false
+  departmentRadio: MarineCommand
+  headOfDepartment: CMCommandingOfficer

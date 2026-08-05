@@ -1,0 +1,71 @@
+using Content.Shared._RMC14.Movement;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared.Movement.Events;
+using Robust.Shared.Containers;
+using Robust.Shared.Timing;
+
+namespace Content.Shared._RMC14.Marines.HyperSleep;
+
+public abstract partial class SharedHyperSleepChamberSystem : EntitySystem
+{
+    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private RMCMovementSystem _rmcMovement = default!;
+    [Dependency] private IGameTiming _timing = default!;
+
+    private EntityQuery<HyperSleepChamberComponent> _hyperSleepQuery;
+
+    public override void Initialize()
+    {
+        _hyperSleepQuery = GetEntityQuery<HyperSleepChamberComponent>();
+
+        SubscribeLocalEvent<HyperSleepChamberComponent, MapInitEvent>(OnMapInit);
+        SubscribeLocalEvent<HyperSleepChamberComponent, ContainerIsInsertingAttemptEvent>(OnInsertAttempt);
+        SubscribeLocalEvent<HyperSleepChamberComponent, EntInsertedIntoContainerMessage>(OnInserted);
+
+        SubscribeLocalEvent<InsideHyperSleepChamberComponent, MoveInputEvent>(OnMoveInput);
+    }
+
+    private void OnMapInit(Entity<HyperSleepChamberComponent> ent, ref MapInitEvent args)
+    {
+        _containers.EnsureContainer<Container>(ent, ent.Comp.ContainerId);
+    }
+
+    private void OnInsertAttempt(Entity<HyperSleepChamberComponent> ent, ref ContainerIsInsertingAttemptEvent args)
+    {
+        if (HasComp<XenoComponent>(args.EntityUid))
+        {
+            args.Cancel();
+            return;
+        }
+    }
+
+    private void OnInserted(Entity<HyperSleepChamberComponent> ent, ref EntInsertedIntoContainerMessage args)
+    {
+        if (!_timing.ApplyingState)
+            EnsureComp<InsideHyperSleepChamberComponent>(args.Entity).Chamber = ent;
+    }
+
+    private void OnMoveInput(Entity<InsideHyperSleepChamberComponent> ent, ref MoveInputEvent args)
+    {
+        if (!args.HasDirectionalMovement)
+            return;
+
+        if (_timing.ApplyingState)
+            return;
+
+        if (ent.Comp.Chamber is not { } chamber)
+            return;
+
+        RemCompDeferred<InsideHyperSleepChamberComponent>(ent);
+        _rmcMovement.SuppressCollisionOnExit(ent, chamber);
+    }
+
+    public void EjectChamber(Entity<HyperSleepChamberComponent?> ent)
+    {
+        if (!_hyperSleepQuery.Resolve(ent, ref ent.Comp, false))
+            return;
+
+        if (_containers.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
+            _containers.EmptyContainer(container);
+    }
+}

@@ -1,0 +1,133 @@
+using Content.Shared._RMC14.NightVision;
+using Content.Shared._RMC14.Xenonids;
+using Content.Shared._RMC14.Xenonids.Burrow;
+using Content.Shared.Examine;
+using Robust.Client.GameObjects;
+using Robust.Client.Graphics;
+using Robust.Client.Player;
+using Robust.Shared.Player;
+
+namespace Content.Client._RMC14.NightVision;
+
+public sealed partial class NightVisionSystem : SharedNightVisionSystem
+{
+    [Dependency] private IEntityManager _entity = default!;
+    [Dependency] private ILightManager _light = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+
+    private EntityQuery<XenoComponent> _xenoQuery;
+    private EntityQuery<RMCNightVisionComponent> _nvQuery;
+
+    public override void Initialize()
+    {
+        base.Initialize();
+
+        SubscribeLocalEvent<RMCNightVisionComponent, LocalPlayerAttachedEvent>(OnNightVisionAttached);
+        SubscribeLocalEvent<RMCNightVisionComponent, LocalPlayerDetachedEvent>(OnNightVisionDetached);
+
+        _xenoQuery = _entity.GetEntityQuery<XenoComponent>();
+        _nvQuery = _entity.GetEntityQuery<RMCNightVisionComponent>();
+    }
+
+    private void OnNightVisionAttached(Entity<RMCNightVisionComponent> ent, ref LocalPlayerAttachedEvent args)
+    {
+        NightVisionChanged(ent);
+    }
+
+    private void OnNightVisionDetached(Entity<RMCNightVisionComponent> ent, ref LocalPlayerDetachedEvent args)
+    {
+        Off();
+    }
+
+    protected override void NightVisionChanged(Entity<RMCNightVisionComponent> ent)
+    {
+        if (ent != _player.LocalEntity)
+            return;
+
+        switch (ent.Comp.State)
+        {
+            case NightVisionState.Off:
+                Off();
+                break;
+            case NightVisionState.Half:
+                Half(ent);
+                break;
+            case NightVisionState.Full:
+                Full(ent);
+                break;
+            default:
+                throw new ArgumentOutOfRangeException();
+        }
+    }
+
+    protected override void NightVisionRemoved(Entity<RMCNightVisionComponent> ent)
+    {
+        if (ent != _player.LocalEntity)
+            return;
+
+        Off();
+    }
+
+    private void SetMesons(bool on)
+    {
+        // TODO RMC14: Re-enable after the meson implementation is made performant.
+    }
+
+    private void Off()
+    {
+        _overlay.RemoveOverlay<NightVisionOverlay>();
+        _overlay.RemoveOverlay<NightVisionFilterOverlay>();
+        _overlay.RemoveOverlay<HalfNightVisionBrightnessOverlay>();
+        _light.DrawLighting = true;
+        SetMesons(false);
+        SetMesonSprites(false);
+    }
+
+    private void Half(Entity<RMCNightVisionComponent> ent)
+    {
+        if (ent.Comp.Overlay)
+            _overlay.AddOverlay(new NightVisionOverlay());
+
+        if (ent.Comp.Green)
+            _overlay.AddOverlay(new NightVisionFilterOverlay());
+
+        _overlay.AddOverlay(new HalfNightVisionBrightnessOverlay());
+
+        _light.DrawLighting = true;
+        SetMesons(ent.Comp.Mesons);
+    }
+
+    private void Full(Entity<RMCNightVisionComponent> ent)
+    {
+        if (ent.Comp.Overlay)
+            _overlay.AddOverlay(new NightVisionOverlay());
+
+        if (ent.Comp.Green)
+            _overlay.AddOverlay(new NightVisionFilterOverlay());
+
+        _light.DrawLighting = false;
+        SetMesons(ent.Comp.Mesons);
+    }
+
+    private void SetMesonSprites(bool mesons)
+    {
+        // TODO RMC14: Re-enable after the meson implementation is made performant.
+    }
+
+    public override void Update(float frameTime)
+    {
+        if (_player.LocalEntity == null)
+            return;
+
+        if (!_nvQuery.TryComp(_player.LocalEntity.Value, out var nightVision))
+            return;
+
+        if (nightVision.State == NightVisionState.Off)
+            return;
+
+        SetMesonSprites(nightVision.Mesons);
+    }
+}

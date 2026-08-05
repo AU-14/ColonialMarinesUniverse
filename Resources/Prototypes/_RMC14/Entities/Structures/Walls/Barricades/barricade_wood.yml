@@ -1,0 +1,50 @@
+- type: entity
+  parent: CMBarricadeBase
+  id: RMCBarricadeWood
+  name: wooden barricade
+  description: A wall made out of wooden planks nailed together. Not very sturdy, but can provide some concealment.
+  components:
+  - type: VehicleSmashable
+  - type: Sprite
+    drawdepth: WallTops
+    sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi
+    layers:
+    - state: wooden
+    - map: [ "acided" ]
+  - type: Appearance
+  - type: Damageable
+    damageContainer: Inorganic
+    damageModifierSet: Wood
+  - type: NailgunRepairable
+    # cm13 max_health%: 1
+    repairValues:
+      RMCWood: 100
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          RMCPlankWood1:
+            min: 3
+            max: 3
+      - !type:PlaySoundBehavior
+        sound:
+          collection: WoodDestroy
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Construction
+    graph: BarricadeWoodGraph
+    node: nodeWood
+  - type: XenoToggleChargingDamage
+    sound:
+      collection: WoodDestroy
+    damage:
+      types:
+        Blunt: 22
+    destroy: true
+  - type: XenoCrusherChargable
+    instantDestroy: true
+  - type: Climbable

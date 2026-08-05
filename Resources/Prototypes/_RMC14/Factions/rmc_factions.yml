@@ -1,0 +1,72 @@
+﻿- type: npcFaction
+  id: UNMC
+  hostile:
+  - RMCXeno
+  - CLF
+  - HEFA
+
+- type: npcFaction
+  id: RMCXeno
+  hostile:
+  - UNMC
+  - SPP
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - HEFA
+
+- type: npcFaction
+  id: RMCDumb
+  hostile:
+  - UNMC
+  - RMCXeno
+  - SPP
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - HEFA
+
+- type: npcFaction
+  id: SPP
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: Halcyon
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: WeYa
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: Civilian
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: RoyalMarines
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: Bureau
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: TSE
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: HEFA
+  hostile:
+  - RMCXeno
+  - UNMC

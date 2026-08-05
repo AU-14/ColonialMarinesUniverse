@@ -1,0 +1,25 @@
+- type: soundCollection
+  id: RMCVulpkaninBarks
+  files:
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_bark1.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_bark2.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_bark3.ogg
+
+- type: soundCollection
+  id: RMCVulpkaninGrowls
+  files:
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_growl1.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_growl2.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_growl3.ogg
+
+- type: soundCollection
+  id: RMCVulpkaninSnarls
+  files:
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_snarl1.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_snarl2.ogg
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_snarl3.ogg
+
+- type: soundCollection
+  id: RMCVulpkaninWhines
+  files:
+  - /Audio/_RMC14/Voice/Vulpkanin/dog_whine.ogg

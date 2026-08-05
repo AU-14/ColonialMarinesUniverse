@@ -1,0 +1,99 @@
+# SUPPLIES
+# code/datums/supply_packs/misc.dm
+
+# /datum/supply_packs/internals
+- type: entity
+  parent: RMCCrateSupply
+  id: RMCCrateSupplyInternals
+  name: oxygen internals crate (x3 masks, x3 tanks)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMaskGas
+      amount: 3
+    - id: RMCGasTankOxygenFilled
+      amount: 3
+
+# /datum/supply_packs/evacuation
+- type: entity
+  parent: RMCCrateSupply
+  id: RMCCrateSupplyEvacuation
+  name: emergency equipment (x2 toolbox, x2 hazard vest, x5 oxygen tank, x5 masks)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCToolboxEmergencyFilled
+      amount: 2
+    - id: RMCHazardVest
+      amount: 2
+    - id: RMCEmergencyOxygenTankFilled
+      amount: 5
+    - id: CMMaskGas
+      amount: 5
+
+# /datum/supply_packs/boxes
+- type: entity
+  id: RMCCrateSuppliesBoxes
+  parent: RMCCrateSupply
+  name: cardboard sheets (x50) #empty boxes (x10)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCSheetCardboard #CMBoxCardboard
+        amount: 1 #10
+
+# /datum/supply_packs/janitor
+- type: entity
+  parent: RMCCrateSupply
+  id: RMCCrateSupplyJanitor
+  name: assorted janitorial supplies
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCBucket
+      amount: 5
+    - id: CMMop
+      amount: 1
+    - id: CMWetSign
+      amount: 3
+    - id: TrashBag
+      amount: 1
+    - id: SprayBottleSpaceCleaner
+      amount: 1
+    - id: RagItem
+      amount: 1
+    - id: CleanerGrenade
+      amount: 3
+    - id: CMBucketMop
+      amount: 1
+
+# /datum/supply_packs/poster
+# /obj/item/poster x 5
+
+# /datum/supply_packs/crayons
+- type: entity
+  id: RMCCrateSuppliesCrayons
+  parent: RMCCrateSupply
+  name: boxes of crayons
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCCrayonBox
+        amount: 5
+
+# /datum/supply_packs/presents
+# /datum/supply_packs/wrapping_supplies
+
+# AEGIS Lobby Event Crate
+- type: entity
+  parent: RMCCrateSupply
+  id: RMCCrateAegisLobby
+  name: AEGIS tracking equipment crate (x3 pinpointers, x1 pamphlet)
+  description: A supply crate containing AEGIS ID tracking equipment and documentation.
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCPinpointerAegisID
+      amount: 3
+    - id: CMPamphletPowerloader
+      amount: 1

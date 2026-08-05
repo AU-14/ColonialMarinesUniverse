@@ -1,0 +1,23 @@
+﻿<Document>
+  # Standard Operating Procedure
+
+  These are sets of regulations and policies of the UNMC.
+  \nFailure to follow the Standard Operating Procedure may result in [bold]Failure to Follow Procedure[/bold] charges.
+
+ ## Categories
+  - [textlink="General Regulations" link="RMCMarineSOPGeneral"]
+  - [textlink="Equipment" link="RMCMarineSOPEquipment"]
+  - [textlink="Department" link="RMCMarineSOPDepartment"]
+  - [textlink="NON-Modifiable SOP" link="RMCMarineSOPNONMod"]
+
+  ## NON-Modifiable SOP
+
+  The SOP written in these sections may only be modified with [color=#ffa500][bold]Provost Marshal Office[/bold][/color] permission.
+
+  - [textlink="NON-Modifiable Department" link="RMCMarineSOPNONModDepartment"]
+  - [textlink="NON-Modifiable Command SOP" link="RMCMarineSOPNONModCommand"]
+  - [textlink="NON-Modifiable Deployment Restrictions" link="RMCMarineSOPNONModDeployment"]
+  - [textlink="NON-Modifiable Third-Party Personnel" link="RMCMarineSOPNONModThirdparty"]
+
+
+</Document>

@@ -1,0 +1,313 @@
+# Marine raider
+- type: entity
+  parent: ArmorHelmetM10
+  id: RMCArmorHelmetMARSOC
+  name: SOF operator helmet
+  description: A special variant of the M10 Pattern Helmet worn by UNMC SOF.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/marsoc.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/marsoc.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: CMArmor
+    melee: 25
+    bullet: 30
+    bio: 25
+    # armor_energy = 15
+
+# Dutch's Dozen
+- type: entity
+  parent: ArmorHelmetM10
+  id: RMCArmorHelmetDutch
+  name: dutch's dozen helmet
+  description: A protective helmet worn by some seriously experienced mercs.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/helmet.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/helmet.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: CMArmor
+    melee: 30
+    bullet: 35
+    explosionArmor: 20
+    # armor_energy = 15
+    # armor_rad = 20
+
+- type: entity
+  parent: RMCArmorHelmetDutch
+  id: RMCArmorHelmetDutchCap
+  name: dutch's dozen cap
+  description: A protective cap worn by some seriously experienced mercs.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/cap.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/cap.rsi
+
+- type: entity
+  parent: RMCArmorHelmetDutch
+  id: RMCArmorHelmetDutchBand
+  name: dutch's dozen band
+  description: A protective band worn by some seriously experienced mercs.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/band.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/band.rsi
+
+# Iron Bear
+# I can't find this in cm?
+- type: entity
+  parent: RMCArmorHelmetDutch
+  id: RMCArmorHelmetBear
+  name: iron bear helmet
+  description: Is good for winter, because it has hole to put vodka through.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/helmet.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Dutch/helmet.rsi
+
+# Skullcap
+- type: entity
+  parent: [RMCHelmetBase, RMCFoldableHelmetBase]
+  id: RMCArmorHelmetSkullcap
+  name: skullcap
+  description: Good for keeping sweat out of your eyes.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/skullcap.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/skullcap.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: CMArmor
+    melee: 15
+    bullet: 15
+    bio: 15
+    explosionArmor: 10
+    # armor_laser = 10
+    # armor_rad = 15
+    # armor_internaldamage = 10
+
+- type: entity
+  parent: RMCArmorHelmetSkullcap
+  id: RMCArmorHelmetSkullcapCowl
+  name: M8 marksman cowl
+  description: A cowl worn to conceal the face of a marksman in the jungle.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/skullcapm.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/skullcapm.rsi
+
+# Mercenaries
+- type: entity
+  parent: ArmorHelmetM10
+  id: RMCArmorHelmetMercenary
+  name: mercenary K12 ceramic helmet
+  description: A sturdy helmet worn by an unknown mercenary group.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/heavy.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/heavy.rsi
+  - type: ItemCamouflage
+    camouflageVariations: {}
+  - type: CMArmor
+    melee: 40
+    bullet: 40
+    bio: 35
+    explosionArmor: 20
+    # armor_energy = 15
+    # armor_rad = 20
+    # armor_internaldamage = 35
+
+- type: entity
+  parent: RMCArmorHelmetMercenary
+  id: RMCArmorHelmetMercenaryReinforced
+  name: mercenary modified K12 ceramic helmet
+  description: A sturdy helmet worn by an unknown mercenary group. Reinforced with extra plating.
+  components:
+  - type: CMArmor
+    melee: 50
+    bullet: 55
+    explosionArmor: 35
+    # armor_rad = 20
+    # armor_internaldamage = 45
+
+- type: entity
+  parent: RMCArmorHelmetMercenary
+  id: RMCArmorHelmetMercenaryMiner
+  name: mercenary Y8 miner helmet
+  description: A sturdy helmet, specialised for mining, worn by an unknown mercenary group.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/miner.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/miner.rsi
+
+- type: entity
+  parent: RMCArmorHelmetMercenary
+  id: RMCArmorHelmetMercenarySupport
+  name: mercenary Z7 support helmet
+  description: A sturdy helmet worn by an unknown mercenary group.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/engi.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/engi.rsi
+
+- type: entity
+  parent: RMCArmorHelmetMercenarySupport
+  id: RMCArmorHelmetMercenaryEngineer
+  name: mercenary Z7 engineer helmet
+  description: A sturdy helmet worn by an unknown mercenary group. This one includes a protective welding visor.
+  components:
+  - type: CycleableVisor
+    containers:
+    - rmc_visor_one
+    - rmc_visor_two
+    - rmc_visor_three
+  - type: IntegratedVisors
+    visorsToAdd:
+    - RMCVisorSquadIntegrated
+    - RMCVisorWeldingIntegrated
+
+# HEFA
+- type: entity
+  parent: RMCArmorHelmetM3G4
+  id: RMCArmorHelmetHEFA
+  name: HEFA helmet
+  description: For some reason, seeing this helmet causes you to feel extremely distressed.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/hefa.rsi
+    layers:
+    - state: icon
+      map: ["enum.TriggerVisualLayers.Base"]
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Mercenary/hefa.rsi
+    quickEquip: false
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: CMArmor
+    melee: 40
+    bullet: 40
+    bio: 30
+    explosionArmor: 70
+    # armor_rad = 30
+    # armor_internaldamage = 30
+  - type: IgnoreContentsSize
+    items:
+      components:
+      - RMCLighter
+      - RMCFlask
+      - CMScalpel
+      - Figurine
+      - HelmetAccessory
+      - CassettePlayer
+      - CassetteTape
+      tags:
+      - CigPack
+      - Cigarette
+      #- TODO RMC14 cards
+      - Slice
+      #- TODO RMC14 glasses (eyewear)
+      - Pen
+      - Crayon
+      - RMCHandful
+      - Flashlight
+      - Brutepack
+      - CMOintment
+      - CMAutoInjector
+      - PillPacket
+      - RMCGrenadeHEFA # Repeating all these just to fit HEFA nades. :(
+  - type: Appearance
+  - type: AnimationPlayer
+  - type: GenericVisualizer
+    visuals:
+      enum.Trigger.TriggerVisuals.VisualState:
+        enum.TriggerVisualLayers.Base:
+          Primed: { state: primed }
+          Unprimed: { state: icon }
+  - type: ClothingPrefixOnTimerTrigger
+    prefix: primed
+  - type: TriggerOnUse
+    keyOut: startTimer
+  - type: TimerTrigger
+    keysIn:
+    - startTimer
+    keyOut: trigger
+    delay: 4
+    beepSound:
+      path: "/Audio/_RMC14/Explosion/armbomb.ogg"
+      params:
+        volume: -5
+    initialBeepDelay: 0
+    beepInterval: 10
+    popup: null
+  - type: ExplodeOnTrigger
+  - type: Explosive
+    explosionType: RMC
+    maxIntensity: 8 # max 40 brute 40 burn
+    intensitySlope: 4
+    totalIntensity: 110
+    deleteAfterExplosion: false
+  - type: ProjectileGrenade
+    triggerKey: trigger
+    fillPrototype: CMProjectileShrapnel
+    capacity: 48
+    minVelocity: 0.5
+    maxVelocity: 1.5
+    evenSpread: true
+  - type: ContainerContainer
+    containers:
+      cluster-payload: !type:Container
+  - type: ClusterLimitHits
+  - type: CMExplosionEffect
+    maxShrapnel: 0
+  - type: CMVocalizeTrigger
+  - type: RMCScorchEffect
+  - type: IgnorePredictionHide
+  - type: ChangeItemSizeOnTimerTrigger
+  - type: CancelUseWithCloak
+
+- type: entity
+  parent: RMCArmorHelmetHEFA
+  id: RMCArmorHelmetHEFAFilled
+  suffix: HEFA, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMGrenadeFrag
+      amount: 2
+
+# CBRN
+- type: entity
+  parent: ArmorHelmetM10
+  id: RMCArmorHelmetCBRN
+  name: CBRN M3 MOPP mask
+  description: The M3 MOPP mask includes a full covering cowl that securely attaches to the MOPP suit. The mask filters out harmful particles in the air to allow the wearer to breathe safely in the field. Depending on the hostility of the contaminated area the mask’s filter will last an average of 12 hours or less.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/cbrn.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Helmets/cbrn.rsi
+  - type: ItemCamouflage
+    camouflageVariations: { }
+  - type: CMArmor
+    melee: 15
+    bullet: 15
+    bio: 100
+    explosionArmor: 20
+    # armor_rad = 55
+  - type: ClothingGrantComponents
+    components:
+    - type: RMCImmuneToIgnition
+    - type: RMCImmuneToFireTileDamage
+# TODO: add advanced version of CBRN helmet

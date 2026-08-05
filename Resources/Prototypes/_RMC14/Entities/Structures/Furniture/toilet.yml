@@ -1,0 +1,64 @@
+- type: entity
+  parent: CMSeatBase
+  id: CMToiletEmpty
+  name: toilet
+  suffix: Empty
+  description: The HT-451, a torque rotation-based, waste disposal unit for small matter. This one seems remarkably clean.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Disposal
+  components:
+  - type: Anchorable
+    flags:
+    - Anchorable
+  - type: Sprite
+    sprite: _RMC14/Structures/Furniture/toilet.rsi
+    layers:
+    - state: closed_seat_up
+      map: [ "SeatVisualState.SeatUp" ]
+  #    - map: [ "DoorVisualState.DoorOpen" ]
+  - type: Rotatable
+  - type: Transform
+    anchored: true
+    noRot: false
+  - type: Strap
+    whitelist:
+      components:
+      - HumanoidAppearance
+  - type: Toilet
+  - type: ContainerContainer
+    containers:
+      stash: !type:ContainerSlot { }
+  - type: Physics
+    bodyType: Static
+  - type: PlungerUse
+  - type: Appearance
+  - type: Drain
+    autoDrain: false
+  - type: StaticPrice
+    price: 25
+  - type: Rummageable
+    table: !type:NestedSelector
+      tableId: RatKingLoot
+  - type: SolutionContainerManager
+    solutions:
+      drainBuffer:
+        maxVol: 100
+      tank:
+        maxVol: 500
+  - type: DrainableSolution
+    solution: tank
+  - type: ReagentTank
+  - type: DumpableSolution
+    solution: drainBuffer
+  - type: GenericVisualizer
+    visuals:
+      enum.ToiletVisuals.SeatVisualState:
+        SeatVisualState.SeatUp:
+          SeatUp: { state: closed_seat_up }
+          SeatDown: { state: closed_seat_down }
+#      enum.StashVisuals.DoorVisualState:
+#        DoorVisualState.DoorOpen:
+#          DoorOpen: { state: disposal-open }
+#          DoorClosed: { state: disposal-closed }

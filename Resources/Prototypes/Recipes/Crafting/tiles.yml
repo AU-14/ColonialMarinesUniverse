@@ -1,0 +1,59 @@
+# TODO: should these be removed, relying on the lathe instead?
+
+# region Base
+- type: construction
+  abstract: true
+  id: BaseTile
+  category: construction-category-tiles
+  objectType: Item
+# endregion Base
+
+# region Tiles
+- type: construction
+  parent: BaseTile
+  id: TileSteel
+  graph: TileSteel
+  targetNode: steeltile
+
+- type: construction
+  parent: BaseTile
+  id: TileWood
+  graph: TileWood
+  targetNode: woodtile
+
+- type: construction
+  parent: BaseTile
+  id: TileBrassFilled
+  graph: TilesBrass
+  targetNode: filledPlate
+
+- type: construction
+  parent: BaseTile
+  id: TileBrassReebe
+  graph: TilesBrass
+  targetNode: reebe
+
+- type: construction
+  parent: BaseTile
+  id: TileWhite
+  graph: TileWhite
+  targetNode: whitetile
+
+- type: construction
+  parent: BaseTile
+  id: TileDark
+  graph: TileDark
+  targetNode: darktile
+
+- type: construction
+  parent: BaseTile
+  id: TileFlesh
+  graph: TileFlesh
+  targetNode: fleshTile
+
+- type: construction
+  parent: BaseTile
+  id: TileWoodLarge
+  graph: TileWoodLarge
+  targetNode: woodtilelarge
+# endregion Tiles

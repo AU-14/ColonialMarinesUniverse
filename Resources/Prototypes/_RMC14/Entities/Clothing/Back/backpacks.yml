@@ -1,0 +1,635 @@
+# Almayer personnel
+- type: entity
+  parent: ClothingBackpack
+  abstract: true
+  id: CMPersonalStorageBase
+  name: backpack
+  description: You wear this on your back and put items into it.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Civilians/standard.rsi
+    layers:
+    - state: icon
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: Appearance
+  - type: CMStorageVisualizer
+    storageClosed: closedLayer
+    storageOpen: openLayer
+  - type: EmitSoundOnDrop
+    sound:
+      collection: RMCEquipArmor
+      params:
+        volume: -4
+  - type: EmitSoundOnLand
+    sound:
+      collection: RMCEquipArmor
+      params:
+        volume: -4
+  - type: Clothing
+    equipSound:
+      collection: storageRustle
+    unequipSound:
+      collection: RMCEquipArmor
+    quickEquip: false
+    slots:
+    - back
+  - type: Item
+    size: Large
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,20,1
+    blacklist: {}
+  - type: ContainerContainer
+    containers:
+      storagebase: !type:Container
+        ents: []
+  - type: UserInterface
+    interfaces:
+      enum.StorageUiKey.Key:
+        type: StorageBoundUserInterface
+  - type: ExplosionResistance
+    damageCoefficient: 0
+    worn: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: StorageStoreSkillRequired
+    entries:
+    - whitelist:
+        tags:
+        - RMCEngineerKit
+      skills:
+        all:
+          RMCSkillEngineer: 2
+    - whitelist:
+        tags:
+        - CMFirstAidKit
+      skills:
+        all:
+          RMCSkillMedical: 2
+  - type: RMCStorageEjectHand
+  - type: StoreAfterFailedInteract
+
+- type: entity
+  parent: CMPersonalStorageBase
+  id: CMBackpack
+  name: backpack
+  description: You wear this on your back and put items into it.
+  components:
+  - type: StorageOpenDoAfter
+    skipInHand: true
+    skipOnGround: true
+  - type: StorageCloseOnMove
+    skipInHand: true
+
+- type: entity
+  parent: CMBackpack
+  id: CMBackpackEngineer
+  name: industrial backpack
+  description: It's a tough backpack lookin' backpack used by engineers and the like.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Civilians/engineer.rsi
+
+- type: entity
+  parent: CMBackpack
+  id: CMBackpackMedical
+  name: medical backpack
+  description: It's a backpack especially designed for use in a sterile environment.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Civilians/medical.rsi
+
+- type: entity
+  parent: CMBackpack
+  id: CMBackpackSecurity
+  name: security backpack
+  description: It's a very robust backpack.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Civilians/security.rsi
+
+- type: entity
+  parent: CMBackpack
+  id: CMBackpackCommand
+  name: marine commanding officer backpack
+  description: The contents of this backpack are top secret.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,29,1
+
+# Marine
+- type: entity
+  parent: CMBackpack
+  id: CMBackpackMarine
+  name: lightweight IMP backpack
+  description: The standard-issue pack of the UNMC forces. Designed to lug gear into the battlefield.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/jungle-desert-classic.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/jungle-desert-classic.rsi
+      Desert: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/jungle-desert-classic.rsi
+      Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/jungle-desert-classic.rsi
+      Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/snow-urban.rsi
+      Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard/snow-urban.rsi
+
+- type: entity
+  parent: CMBackpackMarine
+  id: CMBackpackMarineMedic
+  name: UNMC corpsman backpack
+  description: A standard-issue backpack worn by UNMC medics.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/medic/jungle-desert-classic.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Clothing/Back/Backpacks/Marines/medic/jungle-desert-classic.rsi
+      Desert: _RMC14/Objects/Clothing/Back/Backpacks/Marines/medic/jungle-desert-classic.rsi
+      Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/medic/jungle-desert-classic.rsi
+      Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/medic/snow-urban.rsi
+      Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/medic/snow-urban.rsi
+
+- type: entity
+  parent: CMBackpackMarine
+  id: CMBackpackMarineTech
+  name: UNMC technician backpack
+  description: A standard-issue backpack worn by UNMC technicians.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/jungle-desert-classic.rsi
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/jungle-desert-classic.rsi
+      Desert: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/jungle-desert-classic.rsi
+      Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/jungle-desert-classic.rsi
+      Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/snow-urban.rsi
+      Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/tech/snow-urban.rsi
+
+# Specific
+- type: entity
+  parent: CMBackpack
+  id: CMBackpackMortar
+  name: UNMC mortar shell backpack
+  description: A backpack specifically designed to hold ammunition for the M402 mortar.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/mortar/jungle-desert-classic.rsi
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,11,3
+    whitelist:
+      components:
+      - MortarShell
+  - type: FixedItemSizeStorage
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Clothing/Back/Backpacks/Marines/mortar/jungle-desert-classic.rsi
+      Desert: _RMC14/Objects/Clothing/Back/Backpacks/Marines/mortar/jungle-desert-classic.rsi
+      Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/mortar/jungle-desert-classic.rsi
+      Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/mortar/snow-urban.rsi
+      Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/mortar/snow-urban.rsi
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleMortar
+
+- type: entity
+  parent: CMBackpack
+  id: CMBackpackWelder
+  name: UNMC technician welderpack
+  description: A specialized backpack worn by UNMC technicians. It carries a fueltank for quick welder refueling and use.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/welder/jungle-desert-classic.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,17,1
+  - type: ExaminableSolution
+    solution: tank
+  - type: SolutionContainerManager
+    solutions:
+      tank:
+        maxVol: 650 # TODO RMC14 260 when welders are fixed
+        reagents:
+        - ReagentId: WeldingFuel
+          Quantity: 650
+  - type: ReagentTank
+    tankType: Fuel
+  - type: DrainableSolution
+    solution: tank
+  - type: SolutionTransfer
+    transferAmount: 50
+    maxTransferAmount: 100
+    minTransferAmount: 10
+    canChangeTransferAmount: true
+  - type: RefillableSolution
+    solution: tank
+  - type: DrawableSolution
+    solution: tank
+  - type: RMCSolutionTransferWhitelist
+    popup: rmc-solution-transfer-whitelist-failed-not-welding-tank
+    sourceWhitelist:
+      components:
+      - RMCFlamerTank
+      - Welder
+    targetWhitelist:
+      tags:
+      - RMCTankFuel
+  - type: ItemCamouflage
+    camouflageVariations:
+      Jungle: _RMC14/Objects/Clothing/Back/Backpacks/Marines/welder/jungle-desert-classic.rsi
+      Desert: _RMC14/Objects/Clothing/Back/Backpacks/Marines/welder/jungle-desert-classic.rsi
+      Classic: _RMC14/Objects/Clothing/Back/Backpacks/Marines/welder/jungle-desert-classic.rsi
+      Snow: _RMC14/Objects/Clothing/Back/Backpacks/Marines/welder/snow-urban.rsi
+      Urban: _RMC14/Objects/Clothing/Back/Backpacks/Marines/welder/snow-urban.rsi
+
+- type: entity
+  parent: CMBackpack
+  id: RMCBackpackAmmo
+  name: IMP ammo rack
+  description: A bare IMP frame with buckles designed to hold multiple ammo cans, but can fit any cumbersome box thanks to UNMC ingenuity. Helps you lug around extra rounds or supplies.
+  components:
+  - type: Item
+    size: Huge
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/standard.rsi
+  - type: FixedItemSizeStorage
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Marines/ammo_rack.rsi
+    layers:
+    - state: ammo_pack-0
+      map: ["enum.StorageFillLayers.Fill"]
+  - type: ClothingSpeedModifier
+    walkModifier: 0.910
+    sprintModifier: 0.850
+  - type: HeldSpeedModifier
+  - type: StorageFillVisualizer
+    fillBaseName: ammo_pack
+    maxFillLevels: 4
+  - type: Storage
+    maxItemSize: Huge
+    grid:
+    - 0,0,5,1 #3 slots
+    whitelist:
+      tags:
+      - RMCAmmoBox
+      components:
+      - EmptySandbag
+      - FullSandbag
+      - RMCFoldingBarricadeStack
+  - type: CMStorageVisualizer
+    storageClosed: null
+    storageOpen: null
+
+- type: entity
+  parent: RMCBackpackAmmo
+  id: RMCBackpackAmmoRCM
+  name: RCM carry frame
+  description: A backpack specifically designed to hold equipment for RCM commandos.
+  components:
+  - type: Storage
+    grid:
+    - 0,0,13,1 # 7 slots
+    whitelist:
+      tags:
+      - RMCAmmoBox
+      - CMFirstAidKit
+      - RMCPacketGrenade
+      components:
+      - EmptySandbag
+      - FullSandbag
+      - RMCFoldingBarricadeStack
+      - MortarShell
+
+- type: entity
+  parent: RMCSatchelPMC
+  id: RMCSatchelPMCCommando
+  name: We-Ya Commando combat backpack
+  description: Ergonomic, protected, high capacity backpack, designed for Weston-Yamada Commandos.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/PMC/commando.rsi
+
+# RCM backpacks
+
+- type: entity
+  parent: CMPersonalStorageBase
+  id: RMCBackpackRCMSmall
+  name: lightweight RCM backpack
+  description: "A TSE military light-carry RCM combat pack MK3."
+  suffix: PVE, RCM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/RCM/small.rsi
+    layers:
+    - state: icon
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: CMStorageVisualizer
+    storageClosed: closedLayer
+    storageOpen: openLayer
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,14,1
+
+- type: entity
+  parent: RMCBackpackRCMSmall
+  id: RMCBackpackRCMSmallPVP
+  suffix: PVP, RCM
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,20,1 # 21 Slots
+
+- type: entity
+  parent: RMCBackpackRCMSmallPVP
+  id: RMCBackpackRCMSmallPVPLieutenant
+  suffix: PVP, RCM, Filled Lieutenant
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCSyringeCase
+    - id: RMCPackFlareL96
+    - id: RMCMagazineRifleL24
+
+- type: entity
+  parent: RMCBackpackRCMSmallPVP
+  id: RMCBackpackRCMSmallPVPMajor
+  suffix: PVP, RCM, Filled Major
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCSyringeCase
+    - id: RMCPackFlareL96
+
+- type: entity
+  parent: RMCBackpackRCMSmallPVP
+  id: RMCBackpackRCMSmallPVPMarksman
+  suffix: PVP, RCM, Filled Marksman
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleL24AP
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCPackFlareL96
+
+- type: entity
+  parent: RMCBackpackRCMSmallPVP
+  id: RMCBackpackRCMSmallPVPRifleman
+  suffix: PVP, RCM, Filled Rifleman
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMagazineRifleL83A3AP
+    - id: RMCMagazineRifleL83A3
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCPackFlareL96
+
+- type: entity
+  parent: RMCBackpackRCMSmallPVP
+  id: RMCBackpackRCMSmallPVPSmartgun
+  suffix: PVP, RCM, Filled Smartgun
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMFirstAidKitFilled
+    - id: RMCPowerCellSmartgun
+    - id: RMCMagazineSmartGunHT
+      amount: 2
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCPackFlareL96
+
+- type: entity
+  parent: RMCBackpackRCMSmallPVP
+  id: RMCBackpackRCMSmallPVPTeamlead
+  suffix: PVP, RCM, Filled Teamlead
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCSyringeCase
+    - id: CMCautery
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175
+    - id: RMCMagazineRifleL24
+    - id: RMCPackFlareL96
+
+- type: entity
+  parent: CMPersonalStorageBase
+  id: RMCBackpackRCMMedium
+  name: standard RCM backpack
+  description: "A TSE military standard-carry RCM combat pack MK3."
+  suffix: PVE, RCM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/RCM/medium.rsi
+    layers:
+    - state: icon
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: CMStorageVisualizer
+    storageClosed: closedLayer
+    storageOpen: openLayer
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,17,1
+  - type: StorageCloseOnMove
+    skipInHand: true
+
+- type: entity
+  parent: RMCBackpackRCMMedium
+  id: RMCBackpackRCMMediumPVP
+  suffix: PVP, RCM
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,23,1 # 24 Slots
+
+- type: entity
+  parent: RMCBackpackRCMMediumPVP
+  id: RMCBackpackRCMMediumPVPFilled
+  suffix: PVP, RCM, Filled Captain
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCPacketGrenadeIncendiaryFilled
+    - id: CMPacketGrenadeHighExplosiveFilled
+    - id: RMCHeadRoyalBeret
+    - id: RMCMaskGasRCM
+    - id: RMCSyringeCase
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: RMCTacticalPrybar
+    - id: RMCMRETSE
+
+- type: entity
+  parent: CMBackpack
+  id: RMCBackpackRCMLarge
+  name: heavyweight RCM backpack
+  description: "The heavy-carry pack of the RCM forces. Designed to lug the most amount of gear into the battlefield."
+  suffix: PVE, RCM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/RCM/large.rsi
+    layers:
+    - state: icon
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: CMStorageVisualizer
+    storageClosed: closedLayer
+    storageOpen: openLayer
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,23,1
+
+- type: entity
+  parent: RMCBackpackRCMLarge
+  id: RMCBackpackRCMLargePVP
+  suffix: PVP, RCM
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,26,1 # 27 Slots
+
+- type: entity
+  parent: RMCSatchelWelder
+  id: RMCBackpackRCMTechnician
+  name: RCM engineering backpack
+  description: "A TSE military standard-carry RCM combat pack MK3. Modified by ingenious Royal Engineers to better fit their requirements."
+  suffix: PVE, RCM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/RCM/tech.rsi
+    layers:
+    - state: icon
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: CMStorageVisualizer
+    storageClosed: closedLayer
+    storageOpen: openLayer
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,17,1
+
+- type: entity
+  parent: CMPersonalStorageBase
+  id: RMCBackpackRCMMedic
+  name: RCM medical backpack
+  description: "A TSE military standard-carry RCM combat pack MK3. Modified by Medical Assistants to fit their needs better."
+  suffix: PVE, RCM
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/RCM/medic.rsi
+    layers:
+    - state: icon
+    - state: open
+      map: [ "openLayer" ]
+    - state: closed
+      map: [ "closedLayer" ]
+  - type: CMStorageVisualizer
+    storageClosed: closedLayer
+    storageOpen: openLayer
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,20,1
+
+- type: entity
+  parent: RMCBackpackRCMMedic
+  id: RMCBackpackRCMMedicPVP
+  suffix: PVP, RCM
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,23,1 # 24 Slots
+
+- type: entity
+  parent: RMCBackpackRCMMedicPVP
+  id: RMCBackpackRCMMedicPVPFilled
+  suffix: PVP, RCM, Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMAdvFirstAidKitFilled
+    - id: RMCDefibrillatorCompact
+    - id: RMCPacketGrenadeIncendiaryFilled # TODO RMC14 R2175
+    - id: CMPacketGrenadeHighExplosiveFilled # TODO RMC14 R2175 // Why the FUCK does the medic get nades?
+    - id: RMCHeadRoyalBeret
+    - id: RMCMaskGasRCM
+    - id: RMCSyringeCase
+    - id: CMPortableSurgicalBedSpawnFolded
+    - id: RMCTacticalPrybar
+    - id: RMCMRETSE
+
+- type: entity
+  parent: RMCBackpackRCMMedicPVP
+  id: RMCBackpackRCMMedicPVPFilledParaMedic
+  suffix: PVP, RCM, Filled Paramarine
+  components:
+    - type: StorageFill
+      contents:
+        - id: RMCRadioHandheldColony
+        - id: RMCHeadRoyalL1HelmetBallistic
+        - id: CMFireExtinguisherPortable
+        - id: CMDefibrillator
+        - id: CMHealthAnalyzer
+
+- type: entity
+  parent: RMCSatchelPMC
+  id: RMCBackpackBobda
+  name: back mounted Bobda vending machine
+  description: The loading mechanism for the Bobda Slinger Supremo and a portable Bobda vendor!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Back/Backpacks/Civilians/bobda.rsi
+  - type: Storage
+    grid:
+    - 0,0,29,1 # 30
+    storageOpenSound:
+      path:  /Audio/Machines/machine_vend.ogg
+      params:
+        volume: -7
+  - type: Corrodible
+    isCorrodible: false
+  - type: RMCUnstrippable
+    policeCanStrip: false

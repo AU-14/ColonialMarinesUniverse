@@ -1,0 +1,12 @@
+﻿[adminlogs]
+server_name = "ravager"
+
+[game]
+desc = "Join and play as a marine, responding to a mysterious distress signal, or a xenonid, building out your hive and defending it from the marines."
+hostname = "[EN][MRP] Rouny's Marine Corps Ravager [US East]"
+
+[hub]
+tags = "lang:en,region:am_n_e,rp:med"
+
+[loki]
+name = "ravager"

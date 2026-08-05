@@ -1,0 +1,18 @@
+﻿- type: department
+  parent: CMDepartmentBase
+  id: CMSurvivor
+  name: department-CMSurvivor
+  description: cm-department-Survivor-description
+  color: "#C38312"
+  roles:
+  - RMCSyntheticColony
+  - CMSurvivor
+  - CMSurvivorDoctor
+  - CMSurvivorEngineer
+  - CMSurvivorSecurity
+  - CMSurvivorScientist
+  - CMSurvivorCorporate
+  - RMCSurvivorCommandingOfficer
+  - RMCSurvivorMilitary
+  departmentRadio: null
+  headOfDepartment: null

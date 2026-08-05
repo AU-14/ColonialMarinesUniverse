@@ -1,0 +1,140 @@
+- type: entity
+  id: RMCMorgueBase
+  abstract: true
+  components:
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: StructuralMarine
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: Climbable
+    delay: 2
+  - type: MeleeSound
+    soundGroups:
+      Brute:
+        path:
+          "/Audio/_RMC14/Structures/metalhit.ogg"
+  - type: InsertBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: ReceiverXenoClaws
+    maxHealth: 100
+    minimumClawStrength: Normal
+    hitsToDestroy: 4 # todo allow only xenos to do melee damage to this, without forcing a limit, choose 4 hits or "25"dmg, since thats on the low end of what xenos can do.
+
+- type: entity
+  parent: RMCMorgueBase
+  id: CMMorgue
+  name: morgue
+  description: Used to store bodies until someone fetches them.
+  components:
+  - type: Pullable
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        density: 1000
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        - BulletImpassable
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/morgue.rsi
+    layers:
+    - state: morgue_closed
+      map: ["enum.MorgueVisualLayers.Base"]
+    - state: morgue_tray
+      offset: 0, -1
+      visible: false
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: morgue_contents
+      visible: false
+      map: ["enum.MorgueVisualLayers.Light"]
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.StorageVisuals.Open:
+        # basic open.close layer:
+        enum.MorgueVisualLayers.Base:
+          True: { state: morgue_open}
+          False: { state: morgue_closed}
+        # show/hide morgue tray:
+        enum.StorageVisualLayers.Door:
+          True: { visible: true}
+          False: { visible: false}
+      enum.MorgueVisuals.Contents:
+        # toggle contents light indicator:
+        enum.MorgueVisualLayers.Light:
+          Empty: {visible: false}
+          HasContents: {visible: true}
+          HasMob: {visible: true}
+          HasSoul: {visible: true}
+  - type: Anchorable
+    flags: None
+  - type: EntityStorage
+    isCollidableWhenOpen: true
+    showContents: false
+    capacity: 30
+    enteringOffset: 0, -1
+    closeSound:
+      path: /Audio/Items/deconstruct.ogg
+    openSound:
+      path: /Audio/Items/deconstruct.ogg
+  - type: EntityStorageLayingDownOverride
+  - type: Morgue
+  - type: ContainerContainer
+    containers:
+      entity_storage: !type:Container
+  - type: Transform
+    anchored: true
+  - type: RequireProjectileTarget
+
+- type: entity
+  parent: [ Crematorium, RMCMorgueBase ]
+  id: CMCrematorium
+  name: crematorium
+  description: A human incinerator. Works well on barbecue nights.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Storage/morgue.rsi
+    layers:
+    - state: crema_closed
+      map: ["enum.CrematoriumVisualLayers.Base", "enum.StorageVisualLayers.Base"]
+    - state: crema_tray
+      offset: 0, -1
+      map: ["enum.StorageVisualLayers.Door"]
+    - state: crema_contents
+      visible: false
+      map: ["enum.CrematoriumVisualLayers.LightContent"]
+    - state: crema_active
+      visible: false
+      map: ["enum.CrematoriumVisualLayers.LightBurning"]
+  - type: Appearance
+  - type: EntityStorageVisuals
+    stateBaseClosed: crema_closed
+    stateBaseOpen: crema_open
+    stateDoorOpen: crema_tray
+  - type: GenericVisualizer
+    visuals:
+      enum.CrematoriumVisuals.Burning:
+        enum.CrematoriumVisualLayers.LightBurning:
+          True: { visible: true }
+          False: { visible: false }
+      enum.StorageVisuals.HasContents:
+        enum.CrematoriumVisualLayers.LightContent:
+          True: { visible: true }
+          False: { visible: false }

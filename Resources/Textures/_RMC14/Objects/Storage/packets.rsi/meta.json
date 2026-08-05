@@ -1,0 +1,245 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/789a362bc55d2d6331bc89699bb4f9f792695853/icons/obj/items/storage/packets.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "nade_placeholder"
+    },
+    {
+      "name": "nade_placeholder_e"
+    },
+    {
+      "name": "s_nade_placeholder"
+    },
+    {
+      "name": "s_nade_placeholder_e"
+    },
+    {
+      "name": "teargas_packet"
+    },
+    {
+      "name": "teargas_packet_e"
+    },
+    {
+      "name": "teargas_airburst_packet"
+    },
+    {
+      "name": "teargas_airburst_packet_e"
+    },
+    {
+      "name": "d_nade_placeholder"
+    },
+    {
+      "name": "d_nade_placeholder_e"
+    },
+    {
+      "name": "c_nade_placeholder"
+    },
+    {
+      "name": "c_nade_placeholder_e"
+    },
+    {
+      "name": "u_nade_placeholder"
+    },
+    {
+      "name": "u_nade_placeholder_e"
+    },
+    {
+      "name": "train_nade_placeholder"
+    },
+    {
+      "name": "train_nade_placeholder_e"
+    },
+    {
+      "name": "teargas_nade_placeholder"
+    },
+    {
+      "name": "teargas_nade_placeholder_e"
+    },
+    {
+      "name": "m94"
+    },
+    {
+      "name": "m94_e"
+    },
+    {
+      "name": "m89"
+    },
+    {
+      "name": "m89_e"
+    },
+    {
+      "name": "minebox"
+    },
+    {
+      "name": "minebox_e"
+    },
+    {
+      "name": "mineboxi"
+    },
+    {
+      "name": "minebox_ei"
+    },
+    {
+      "name": "flashbang"
+    },
+    {
+      "name": "flashbang_e"
+    },
+    {
+      "name": "emp"
+    },
+    {
+      "name": "emp_e"
+    },
+    {
+      "name": "general_packet"
+    },
+    {
+      "name": "general_packet_e"
+    },
+    {
+      "name": "hedp_packet"
+    },
+    {
+      "name": "hedp_packet_e"
+    },
+    {
+      "name": "hidp_packet"
+    },
+    {
+      "name": "hidp_packet_e"
+    },
+    {
+      "name": "hsdp_packet"
+    },
+    {
+      "name": "hsdp_packet_e"
+    },
+    {
+      "name": "hpdp_packet"
+    },
+    {
+      "name": "hpdp_packet_e"
+    },
+    {
+      "name": "hefa_packet"
+    },
+    {
+      "name": "hefa_packet_e"
+    },
+    {
+      "name": "agmf_packet"
+    },
+    {
+      "name": "agmf_packet_e"
+    },
+    {
+      "name": "agmi_packet"
+    },
+    {
+      "name": "agmi_packet_e"
+    },
+    {
+      "name": "agms_packet"
+    },
+    {
+      "name": "agms_packet_e"
+    },
+    {
+      "name": "m15_packet"
+    },
+    {
+      "name": "m15_packet_e"
+    },
+    {
+      "name": "baton_packet"
+    },
+    {
+      "name": "baton_packet_e"
+    },
+    {
+      "name": "hornet_packet"
+    },
+    {
+      "name": "hornet_packet_e"
+    },
+    {
+      "name": "starshell_packet"
+    },
+    {
+      "name": "starshell_packet_e"
+    },
+    {
+      "name": "sebb_packet_e"
+    },
+    {
+      "name": "sebb_packet"
+    },
+    {
+      "name": "model_m40"
+    },
+    {
+      "name": "model_mo7"
+    },
+    {
+      "name": "model_m74"
+    },
+    {
+      "name": "model_m66"
+    },
+    {
+      "name": "hedp"
+    },
+    {
+      "name": "hidp"
+    },
+    {
+      "name": "agmi"
+    },
+    {
+      "name": "hefa"
+    },
+    {
+      "name": "agmf"
+    },
+    {
+      "name": "ccdp"
+    },
+    {
+      "name": "ccdp_packet"
+    },
+    {
+      "name": "ccdp_packet_e"
+    },
+    {
+      "name": "wpdp_packet"
+    },
+    {
+      "name": "wpdp_packet_e"
+    },
+    {
+      "name": "mfhs_packet"
+    },
+    {
+      "name": "mfhs_packet_e"
+    },
+    {
+      "name": "model_r2175"
+    },
+    {
+      "name": "rmchedp"
+    },
+    {
+      "name": "rmchidp"
+    },
+    {
+      "name": "rmcgas"
+    }
+  ]
+}

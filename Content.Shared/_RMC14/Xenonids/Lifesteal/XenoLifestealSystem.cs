@@ -1,0 +1,108 @@
+using Content.Shared._RMC14.Aura;
+using Content.Shared._RMC14.Damage;
+using Content.Shared._RMC14.Emote;
+using Content.Shared._RMC14.Marines;
+using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared.Coordinates;
+using Content.Shared.Damage;
+using Content.Shared.FixedPoint;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
+using Content.Shared.Popups;
+using Content.Shared.Weapons.Melee.Events;
+using Robust.Shared.Network;
+using Robust.Shared.Player;
+
+namespace Content.Shared._RMC14.Xenonids.Lifesteal;
+
+public sealed partial class XenoLifestealSystem : EntitySystem
+{
+    [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _entityLookup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedRMCEmoteSystem _rmcEmote = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private SharedAuraSystem _aura = default!;
+    [Dependency] private INetManager _net = default!;
+
+    private readonly HashSet<Entity<MobStateComponent>> _targets = new();
+
+    private EntityQuery<DamageableComponent> _damageableQuery;
+    private EntityQuery<MarineComponent> _marineQuery;
+
+    public override void Initialize()
+    {
+        _damageableQuery = GetEntityQuery<DamageableComponent>();
+        _marineQuery = GetEntityQuery<MarineComponent>();
+
+        SubscribeLocalEvent<XenoLifestealComponent, MeleeHitEvent>(OnMeleeHit);
+    }
+
+    private void OnMeleeHit(Entity<XenoLifestealComponent> xeno, ref MeleeHitEvent args)
+    {
+        if (!args.IsHit)
+            return;
+
+        if (!_xeno.CanHeal(xeno.Owner))
+            return;
+
+        var found = false;
+        foreach (var hit in args.HitEntities)
+        {
+            if (!_xeno.CanAbilityAttackTarget(xeno, hit))
+                continue;
+
+            found = true;
+            break;
+        }
+
+        if (!found)
+            return;
+
+        if (xeno.Comp.Emote is { } emote)
+            _rmcEmote.TryEmoteWithChat(xeno, emote, cooldown: xeno.Comp.EmoteCooldown);
+
+        if (!_damageableQuery.TryComp(xeno, out var damageable))
+            return;
+
+        var total = _damageable.GetTotalDamage((xeno.Owner, damageable));
+        if (total == FixedPoint2.Zero)
+            return;
+
+        _targets.Clear();
+        _entityLookup.GetEntitiesInRange(xeno.Owner.ToCoordinates(), xeno.Comp.TargetRange, _targets);
+
+        var lifesteal = xeno.Comp.BasePercentage;
+        foreach (var hit in _targets)
+        {
+            if (!_xeno.CanAbilityAttackTarget(xeno, hit))
+                continue;
+
+            lifesteal += xeno.Comp.TargetIncreasePercentage;
+            if (lifesteal >= xeno.Comp.MaxPercentage)
+            {
+                lifesteal = xeno.Comp.MaxPercentage;
+                break;
+            }
+        }
+
+        var amount = -FixedPoint2.Clamp(total * lifesteal, xeno.Comp.MinHeal, xeno.Comp.MaxHeal);
+        var heal = _rmcDamageable.DistributeTypes(xeno.Owner, amount);
+        _damageable.TryChangeDamage(xeno, heal, true, origin: xeno, tool: xeno);
+
+        if (lifesteal >= xeno.Comp.MaxPercentage)
+        {
+            var marines = Filter.PvsExcept(xeno).RemoveWhereAttachedEntity(e => !_marineQuery.HasComp(e));
+            var marineMsg = Loc.GetString("rmc-lifesteal-more-marine", ("xeno", xeno.Owner));
+            _popup.PopupEntity(marineMsg, xeno, marines, true, PopupType.SmallCaution);
+
+            var selfMsg = Loc.GetString("rmc-lifesteal-more-self");
+            _popup.PopupClient(selfMsg, xeno, xeno);
+            _aura.GiveAura(xeno, xeno.Comp.AuraColor, TimeSpan.FromSeconds(1));
+
+            if (_net.IsServer && xeno.Comp.MaxEffect is { } effect)
+                SpawnAttachedTo(effect, xeno.Owner.ToCoordinates());
+        }
+    }
+}

@@ -1,0 +1,392 @@
+- type: entity
+  parent: BaseStorageItem
+  id: CMFirstAidKit
+  name: first-aid kit
+  description: It's an emergency medical kit for those serious boo-boos. With medical training you can fit this in a backpack.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/first_aid_kits.rsi
+    layers:
+    - state: firstaid
+    - state: kit_empty
+      map: [ "openLayer" ]
+      visible: false
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,13,1 # 7 slots
+    whitelist:
+      tags:
+      - CMMedicalUpgradeKit
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - Pill
+      - PillPacket
+      - Bottle
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - Ointment
+      - CMOintment
+      - Brutepack
+      - Bloodpack
+      #      - TODO RMC14 splint
+      - RMCPenlight
+      - CMAutoInjector
+      - RMCSyringeCase
+      - CMSurgicalLine
+      - CMSynthGraft
+      - CMRollerItem
+      - BodyBag
+      - Hypospray
+      - CMBloodPack
+      - CMSurgicalCase
+      components:
+      - Hypospray
+  - type: Item
+    size: Normal
+    sprite: _RMC14/Objects/Medical/first_aid_kits.rsi
+    heldPrefix: firstaid
+  - type: Tag
+    tags:
+    - CMFirstAidKit
+  - type: GenericVisualizer
+    visuals:
+      enum.SharedBagOpenVisuals.BagState:
+        openLayer:
+          Open: { visible: true }
+          Closed: { visible: false }
+  - type: Appearance
+  - type: IgnoreContentsSize
+    items:
+      tags:
+      - CMMedicalUpgradeKit
+      - PillPacket
+      - PillCanister
+      - CMSurgicalCase
+      - RMCSyringeCase
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: StorageNestedOpenSkillRequired
+    skills:
+      all:
+        RMCSkillMedical: 2
+  - type: PhysicalComposition
+    materialComposition:
+      RMCPlastic: 2000
+
+- type: entity
+  parent: CMFirstAidKit
+  id: CMFirstAidKitSurgery
+  name: basic field surgery kit
+  components:
+  - type: Storage
+    maxItemSize: Small
+    grid:
+    - 0,0,13,1 # 7 slots
+    whitelist:
+      tags:
+      - DiscreteHealthAnalyzer
+      - Dropper
+      - Pill
+      - Bottle
+      - Syringe
+      - PillCanister
+      - CMTraumaKit
+      - CMBurnKit
+      - Ointment
+      - CMOintment
+      - Brutepack
+      - Bloodpack
+      #      - TODO RMC14 splint
+      - RMCPenlight
+      - CMAutoInjector
+      - RMCSyringeCase
+      - CMSurgicalLine
+      - CMSynthGraft
+      - CMRollerItem
+      - BodyBag
+      - Hypospray
+      - CMBloodPack
+      - CMSurgicalCase
+      components:
+      - Hypospray
+      - CMSurgeryTool
+
+- type: entity
+  parent: CMFirstAidKit
+  id: CMFirstAidKitFilled
+  description: It's an emergency medical kit containing basic medication and equipment. No training required to use. With medical training you can fit this in a backpack.
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMTricordrazineAutoInjectorNoSkill
+#    - id: CMPainStopAutoInjectorNoSkill
+    - id: CMInaprovalineAutoInjector
+    - id: CMGauze10
+    - id: CMOintment10
+#    - id: CMMedicalSplint5
+
+- type: entity
+  parent: CMFirstAidKit
+  id: CMFirstAidKitFilledRobust
+  suffix: Filled, Robust
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMPillCanisterBicaridine
+    - id: CMPillCanisterKelotane
+    #    - id: CMPillCanisterTramadol # TODO RMC14
+    - id: CMGauze10
+    - id: CMBurnKit10
+#    - id: CMSplints5 # TODO RMC14
+
+- type: entity
+  parent: CMFirstAidKitSurgery
+  id: CMFirstAidKitSurgeryFilled
+  description: Contains a surgical line, cautery, scalpel, hemostat, retractor, drapes and an oxycodone injector for tending wounds surgically. With medical training you can fit this in a backpack.
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSurgicalLine
+    - id: CMCautery
+    - id: CMScalpel
+    - id: CMHemostat
+    - id: CMRetractor
+#    - id: CMOxycodoneAutoinjector # TODO RMC14
+#    - id: CMOxycodoneAutoinjector # TODO RMC14
+
+- type: entity
+  parent: CMFirstAidKit
+  id: CMBurnAidKit
+  name: fire first-aid kit
+  description: It's an emergency medical kit for when the dropship ammo storage spontaneously burns down. With medical training you can fit this in a backpack.
+  components:
+  - type: Sprite
+    layers:
+    - state: firefirstaid
+    - state: kit_empty
+      map: [ "openLayer" ]
+      visible: false
+  - type: Item
+    heldPrefix: firefirstaid
+
+- type: entity
+  parent: CMBurnAidKit
+  id: CMBurnAidKitFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMOintment10
+      amount: 2
+    - id: CMKelotaneAutoInjector
+      amount: 3
+#    - id: CMPainStopAutoInjectorNoSkill
+
+- type: entity
+  parent: CMFirstAidKit
+  id: CMFirstAidO2Kit
+  name: oxygen deprivation first-aid kit
+  description: A box full of reoxygenating goodies. With medical training you can fit this in a backpack.
+  components:
+  - type: Sprite
+    layers:
+    - state: o2
+    - state: kit_empty
+      map: [ "openLayer" ]
+      visible: false
+  - type: Item
+    heldPrefix: o2
+
+- type: entity
+  parent: CMFirstAidO2Kit
+  id: CMFirstAidO2KitFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMPillDexalin
+      amount: 2
+    - id: CMDexalinPlusAutoInjector
+      amount: 3
+    - id: CMInaprovalineAutoInjector
+
+- type: entity
+  parent: CMFirstAidKit
+  id: CMAdvFirstAidKit
+  name: advanced first-aid kit
+  description: Contains more effective methods of medical treatment than a basic first-aid kit, such as burn and trauma kits. With medical training you can fit this in a backpack.
+  components:
+  - type: Sprite
+    layers:
+    - state: advfirstaid
+    - state: kit_empty
+      map: [ "openLayer" ]
+      visible: false
+  - type: Item
+    heldPrefix: advfirstaid
+
+- type: entity
+  parent: CMAdvFirstAidKit
+  id: CMAdvFirstAidKitFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMTricordrazineAutoInjector
+    - id: CMTraumaKit10
+      amount: 3
+    - id: CMBurnKit10
+      amount: 2
+#    - id: CMMedicalSplints5
+
+- type: entity
+  parent: CMFirstAidKit
+  id: CMToxinAidKit
+  name: toxin first-aid kit
+  description: It's an emergency medical kit containing lifesaving anti-toxic medication. With medical training you can fit this in a backpack.
+  components:
+  - type: Sprite
+    layers:
+    - state: antitoxin
+    - state: kit_empty
+      map: [ "openLayer" ]
+      visible: false
+  - type: Item
+    heldPrefix: antitoxin
+
+- type: entity
+  parent: CMToxinAidKit
+  id: CMToxinAidKitFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMHealthAnalyzer
+    - id: CMPillCanisterDylovene
+    - id: CMPillDylovene
+      amount: 3
+
+- type: entity
+  parent: CMFirstAidKit
+  id: RMCRadiationAidKit
+  name: radiation first-aid kit
+  description: Contains treatment for radiation exposure. With medical training you can fit this in a backpack.
+  components:
+  - type: Sprite
+    layers:
+    - state: purplefirstaid
+    - state: kit_empty
+      map: [ "openLayer" ]
+      visible: false
+  - type: Item
+    heldPrefix: purplefirstaid
+
+- type: entity
+  parent: RMCRadiationAidKit
+  id: RMCRadiationAidKitFilled
+  suffix: Filled
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCPillRussianRed
+      amount: 4
+    - id: CMBicaridineAutoInjector
+      amount: 2
+
+- type: entity
+  parent: CMFirstAidKit
+  id: RMCStandardAidKitPVE
+  name: standard-issue first-aid pack
+  description: A soft first-aid pack typically containing essential medical supplies for use in the field.
+  suffix: PVE
+  components:
+  - type: Sprite
+    layers:
+    - state: softpack_basic
+    - state: softpack_empty
+      map: [ "openLayer" ]
+      visible: false
+
+- type: entity
+  parent: RMCStandardAidKitPVE
+  id: RMCStandardAidKitFilledPVE
+  suffix: Filled, PVE
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMTraumaKit10
+    - id: CMTraumaKit10
+    - id: CMBurnKit10
+    - id: CMBurnKit10
+#   - id: CMMedicalSplint5
+#   - id: CMOxycodoneAutoInjector
+    - id: CMDexalinPlusAutoInjector
+
+- type: entity
+  parent: CMFirstAidKit
+  id: RMCBruteAidKitPVE
+  name: brute first-aid pack
+  description: A soft first-aid pack containing equipment for physical treatment in the field.
+  suffix: PVE
+  components:
+  - type: Sprite
+    layers:
+    - state: softpack_brute
+    - state: softpack_empty
+      map: [ "openLayer" ]
+      visible: false
+
+- type: entity
+  parent: RMCBruteAidKitPVE
+  id: RMCBruteAidKitFilledPVE
+  suffix: Filled, PVE
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMTraumaKit10
+    - id: CMTraumaKit10
+    - id: CMTraumaKit10
+#   - id: CMMedicalSplint5
+    - id: CMSurgicalLine
+    - id: RMCIronAutoInjector
+    - id: CMBicaridineAutoInjector
+
+- type: entity
+  parent: CMFirstAidKit
+  id: RMCBurnAidKitPVE
+  name: burn first-aid pack
+  description: A soft first-aid pack containing equipment for burns treatment in the field.
+  suffix: PVE
+  components:
+  - type: Sprite
+    layers:
+    - state: softpack_burn
+    - state: softpack_empty
+      map: [ "openLayer" ]
+      visible: false
+
+- type: entity
+  parent: RMCBurnAidKitPVE
+  id: RMCBurnAidKitFilledPVE
+  suffix: Filled, PVE
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMBurnKit10
+    - id: CMBurnKit10
+    - id: CMBurnKit10
+    - id: CMSynthGraft
+    - id: RMCDermalineAutoInjector
+    - id: CMKelotaneAutoInjector
+#   - id: CMOxycodoneAutoInjector

@@ -1,0 +1,335 @@
+- type: entity
+  parent: RMCAreaBase
+  id: RMCAreaFlight
+  name: Flight
+  components:
+  - type: Sprite
+    sprite: _RMC14/Areas/areas_flight.rsi
+    state: lz
+  - type: Area
+    buildSpecial: true
+    powerNet: ground
+    minimapColor: '#91BDCFE7'
+
+- type: entity
+  parent: RMCAreaFlight
+  id: RMCAreaFlightIn
+  name: Flight - Indoors
+  components:
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: false
+    mortarFire: true
+    lasing: false
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: true
+    weatherEnabled: false
+    noTunnel: true
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightBasement
+  name: Basement
+  components:
+  - type: Sprite
+    state: basement
+  - type: Area
+    CAS: false
+    fulton: false
+    mortarFire: false
+    OB: false
+    supplyDrop: false
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor1
+  name: 1st Floor
+  components:
+  - type: Sprite
+    state: floor1
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor2
+  name: 2nd Floor
+  components:
+  - type: Sprite
+    state: floor2
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor3
+  name: 3rd Floor
+  components:
+  - type: Sprite
+    state: floor3
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor4
+  name: 4th Floor
+  components:
+  - type: Sprite
+    state: floor4
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor5
+  name: 5th Floor
+  components:
+  - type: Sprite
+    state: floor5
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor6
+  name: 6th Floor
+  components:
+  - type: Sprite
+    state: floor6
+
+- type: entity
+  parent: RMCAreaFlightFloor6
+  id: RMCAreaFlightFloor6LZ
+  name: 'LZ2: Indoor Hanger 6th Floor'
+  components:
+  - type: Sprite
+    layers:
+    - state: floor6
+    - state: lz
+  - type: Area
+    resinAllowed: false
+    landingZone: true
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor7
+  name: 7th Floor
+  components:
+  - type: Sprite
+    state: floor7
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor8
+  name: 8th Floor
+  components:
+  - type: Sprite
+    state: floor8
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightFloor9
+  name: 9th Floor
+  components:
+  - type: Sprite
+    state: floor9
+
+- type: entity
+  parent: RMCAreaFlightIn
+  id: RMCAreaFlightRoof
+  name: Roof
+  components:
+  - type: Sprite
+    state: roof
+
+- type: entity
+  parent: RMCAreaFlight
+  id: RMCAreaFlightOut
+  name: Flight - Outdoors
+  components:
+  - type: Sprite
+    state: out
+  - type: Area
+    CAS: true
+    fulton: true
+    mortarPlacement: true
+    mortarFire: true
+    lasing: true
+    medevac: true
+    paradropping: true
+    OB: true
+    supplyDrop: true
+    weatherEnabled: true
+
+- type: entity
+  parent: RMCAreaFlightOut
+  id: RMCAreaFlightFloor1Out
+  name: Building - Exterior
+  components:
+  - type: Sprite
+    layers:
+    - state: floor1
+    - state: out
+
+- type: entity
+  parent: RMCAreaFlightFloor1Out
+  id: RMCAreaFlightFloor1OutLZ
+  name: 'LZ1: West Hanger'
+  components:
+  - type: Sprite
+    layers:
+    - state: floor1
+    - state: out
+    - state: lz
+  - type: Area
+    resinAllowed: false
+    landingZone: true
+
+- type: entity
+  parent: RMCAreaFlightOut
+  id: RMCAreaFlightFloor7Out
+  name: 7th Floor - Outdoors
+  components:
+  - type: Sprite
+    layers:
+    - state: floor7
+    - state: out
+
+- type: entity
+  parent: RMCAreaFlightOut
+  id: RMCAreaFlightFloor8Out
+  name: 8th Floor - Outdoors
+  components:
+  - type: Sprite
+    layers:
+    - state: floor8
+    - state: out
+
+- type: entity
+  parent: RMCAreaFlightOut
+  id: RMCAreaFlightRoofOut
+  name: Roof
+  components:
+  - type: Sprite
+    layers:
+    - state: roof
+    - state: out
+
+- type: entity
+  parent: RMCAreaFlightRoofOut
+  id: RMCAreaFlightRoofOutLZ
+  name: Roof
+  components:
+  - type: Sprite
+    layers:
+    - state: roof
+    - state: out
+    - state: lz
+  - type: Area
+    resinAllowed: false
+    landingZone: true
+
+- type: entity
+  parent: RMCAreaFlight
+  id: RMCAreaFlightMid
+  name: Flight - Midair
+  components:
+  - type: Area
+    CAS: true
+    fulton: false
+    mortarPlacement: false
+    mortarFire: true
+    lasing: true
+    medevac: false
+    paradropping: false
+    OB: true
+    supplyDrop: false
+    resinAllowed: false
+    avoidBioscan: false
+    noTunnel: true
+    unweedable: true
+    weatherEnabled: true
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor2Mid
+  name: 2nd Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor2
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor3Mid
+  name: 3rd Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor3
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor4Mid
+  name: 4th Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor4
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor5Mid
+  name: 5th Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor5
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor6Mid
+  name: 6th Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor6
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor7Mid
+  name: 7th Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor7
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor8Mid
+  name: 8th Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor8
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightFloor9Mid
+  name: 9th Floor - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: floor9
+    - state: midair
+
+- type: entity
+  parent: RMCAreaFlightMid
+  id: RMCAreaFlightRoofMid
+  name: Roof - Midair
+  components:
+  - type: Sprite
+    layers:
+    - state: roof
+    - state: midair

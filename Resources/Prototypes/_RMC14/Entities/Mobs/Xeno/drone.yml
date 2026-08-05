@@ -1,0 +1,324 @@
+- type: entity
+  abstract: true
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoMobCollision
+  - RMCXenoVentCrawler
+  id: CMXenoDroneBase
+  name: Drone
+  description: An alien drone.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-xeno-unknown
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      500: Critical
+      600: Dead
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - RMCSynthGrabbable
+  - type: DrawableSolution
+    solution: blood
+  - type: SolutionContainerManager
+    solutions:
+      blood:
+        maxVol: 600
+        reagents:
+        - ReagentId: CMUXenoBlood
+          Quantity: 300
+        - ReagentId: CMUXenoPlasmaPurple
+          Quantity: 300
+  - type: SolutionRegeneration
+    solution: blood
+    generated:
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 1
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 1
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 22.5
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 30
+  - type: Xeno
+    role: CMXenoDrone
+    hudOffset: -0.1,0.15
+    tier: 1
+    bypassTierCount: true
+    unlockAt: 60 # 1 minute
+  - type: XenoLight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMXenoLarva
+    canBeDevolvedByOther: false
+  - type: XenoDevour
+  - type: XenoPheromones
+    pheromonesMultiplier: 2
+  - type: XenoPlasma
+    plasma: 1000
+    maxPlasma: 1000
+    plasmaRegenOnWeeds: 4.5
+  - type: Tackle
+    max: 4
+    stunMin: 3
+    stunMax: 4
+  - type: WhitelistPickup
+    whitelist:
+      components:
+      - XenoParasite
+      - XenoEgg
+      - XenoFruit
+  - type: TunnelRenamer
+  - type: EggPlantTime
+    plantTime: 2.5
+  - type: MultiHandedHolder
+    items:
+    - hands: 2
+      whitelist:
+        components:
+        - XenoEgg
+  - type: RMCXenoDamageVisuals
+    prefix: drone
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: drone
+  - type: XenoConstruction
+    buildDelay: 2
+    canOrderConstruction:
+    - HiveCoreXenoConstructionNode
+    - HiveEggMorpherXenoConstructionNode
+    - HiveClusterXenoConstructionNode
+    - HiveRecoveryNodeXenoConstructionNode
+    - HivePlasmaTreeXenoConstructionNode
+  - type: XenoEvolution
+    canEvolveWithoutGranter: true
+    max: 200
+    evolvesTo:
+    - CMXenoCarrier
+    - CMXenoBurrower
+    - CMXenoHivelord
+    earlyEvolvesTo:
+    - CMXenoLurker
+    - CMXenoSpitter
+    - CMXenoWarrior
+    evolvesToWithoutPoints:
+    - CMXenoQueen
+  - type: Evasion
+    evasion: 15
+  - type: XenoInhands
+    prefix: drone
+  - type: IntelRecoverCorpseObjectiveOnDeath
+    value: 0.1
+  - type: FixedIdentity
+    name: cmu-job-name-xeno-unknown
+  - type: RMCSurgeryXenoHeart
+    item: RMCOrganXenoHeartT1
+  - type: CMUXenoZJump
+
+- type: entity
+  parent: CMXenoDroneBase
+  id: CMXenoDrone
+  components:
+  - type: GuideHelp
+    guides:
+    - RMCGuideRoleDrone
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Drone/drone.rsi # AU14-Edit
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoAcidWeak
+    - ActionXenoPheromones
+    - ActionXenoOrderConstruction
+    - ActionXenoPlantWeeds
+    - ActionXenoChooseStructure
+    - ActionXenoSecreteStructure
+    - ActionXenoTransferPlasma
+    - ActionXenoDevolve
+  - type: XenoEvolution
+    strains:
+    - CMXenoDroneGardener
+    - CMXenoDroneHealer
+  - type: XenoAcid
+  - type: AcidTrap
+    trapLevel: 1
+    cost: 70
+    spray: XenoAcidSprayTrapWeak
+  - type: XenoConstruction
+    canBuild:
+    - WallXenoResin
+    - WallXenoMembrane
+    - DoorXenoResin
+    - XenoStickyResin
+    - XenoFastResin
+    - XenoCollapseResin
+    - XenoResinSpikes
+  - type: VentCrawler
+    ventCrawlIcon: drone
+  - type: RMCActionOrder
+    id: CMXenoDrone
+
+- type: entity
+  parent: CMXenoDroneBase
+  id: CMXenoDroneGardener
+  suffix: Gardener
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Drone/gardener_drone.rsi # AU14-Edit
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.XenoFruitVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.RMCDamageVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "enum.RMCShieldVisuals.Base" ]
+      sprite: _RMC14/Effects/xeno_shields.rsi
+      visible: false
+  - type: XenoFruitPlanterVisuals
+    rsi: _RMC14/Mobs/Xenonids/Drone/gardener_drone.rsi
+    prefix: gardener
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoPheromones
+    - ActionXenoOrderConstruction
+    - ActionXenoPlantWeeds
+    - ActionXenoPlantWeedsHardy
+    - ActionXenoFruitPlant
+    - ActionXenoFruitChoose
+    - ActionXenoResinSurge
+    - ActionXenoTransferPlasma
+    - ActionXenoDevolve
+  - type: XenoRegen
+    critHealMultiplier: 0.3465  # 5% increased regeneration
+    standHealingMultiplier: 0.42
+    restHealMultiplier: 1.05
+  - type: XenoStrain
+    name: rmc-xeno-gardener-name
+    description: rmc-xeno-gardener-description
+    popup: rmc-xeno-gardener-popup
+  - type: XenoFruitPlanter
+    canPlant:
+    - XenoFruitGreater
+    - XenoFruitPlasma
+    - XenoFruitSpeed
+    - XenoFruitSpore
+    - XenoFruitUnstable
+    maxFruitAllowed: 6
+    fruitPickingMultiplier: 0.5
+    fruitFeedingMultiplier: 0.5
+  - type: XenoResinSurge
+  - type: XenoHidden
+  - type: VentCrawler
+    ventCrawlIcon: gardener
+  - type: RMCActionOrder
+    id: CMXenoDroneGardener
+
+- type: entity
+  parent: CMXenoDroneBase
+  id: CMXenoDroneHealer
+  suffix: Healer
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenos/Drone/healer_drone.rsi # AU14-Edit
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.XenoHealerVisualLayers.Goop" ]
+      visible: false
+    - map: [ "enum.RMCDamageVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "enum.RMCShieldVisuals.Base" ]
+      sprite: _RMC14/Effects/xeno_shields.rsi
+      visible: false
+  - type: RMCXenoDamageVisuals
+    prefix: drone
+  - type: Xeno
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoRegurgitate
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoAcidWeak
+    - ActionXenoPheromones
+    - ActionXenoOrderConstruction
+    - ActionXenoPlantWeeds
+    - ActionXenoFruitPlantLesser
+    - ActionXenoApplySalve
+    - ActionXenoHealerDroneTransferPlasma
+    - ActionXenoSacrifice
+    - ActionXenoDevolve
+  - type: XenoPlasma
+    plasma: 1000
+    maxPlasma: 1000
+    plasmaRegenOnWeeds: 4.5
+    plasmaTransferDelay: 1.5
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 17.5
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 25
+  - type: XenoPheromones
+    pheromonesMultiplier: 3
+    pheroSuffix: strong
+  - type: XenoStrain
+    name: rmc-xeno-healer-name
+    description: rmc-xeno-healer-description
+    popup: rmc-xeno-healer-popup
+  - type: XenoFruitPlanter
+    fruitChoice: XenoFruitLesser
+    canPlant:
+    - XenoFruitLesser
+    maxFruitAllowed: 3
+  - type: Tackle
+    max: 4
+    stunMin: 3
+    stunMax: 4
+    chance: 0.30
+  - type: XenoEnergy
+    alert: XenoEnergyHealer
+    max: 7500
+    gain: 0
+    gainAttack: 0
+    gainAttackDowned: 0
+  - type: XenoAcid
+  - type: XenoSalveVisuals
+  - type: XenoHidden
+  - type: VentCrawler
+    ventCrawlIcon: healer
+  - type: RMCActionOrder
+    id: CMXenoDroneHealer

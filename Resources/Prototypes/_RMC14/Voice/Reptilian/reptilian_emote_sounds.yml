@@ -1,0 +1,37 @@
+- type: emoteSounds
+  id: RMCUnisexReptilian
+  sounds:
+    Scream:
+      collection: RMCReptilianScreams
+      params:
+        variation: 0.125
+    Laugh:
+      path: /Audio/Animals/lizard_happy.ogg
+      params:
+        variation: 0.125
+    Hiss:
+      collection: RMCReptilianHisses
+      params:
+        variation: 0.125
+    Purr:
+      path: /Audio/_RMC14/Voice/Reptilian/lizard_purr.ogg
+      params:
+        variation: 0.125
+
+- type: emoteSounds
+  parent: [RMCBaseMaleSounds, RMCUnisexReptilian]
+  id: RMCMaleReptilian
+
+- type: emoteSounds
+  parent: [RMCBaseFemaleSounds, RMCUnisexReptilian]
+  id: RMCFemaleReptilian
+
+- type: emoteSounds
+  parent: [ReptilianBodyEmotes]
+  id: RMCReptilianBodyEmotes
+  sounds:
+    RMCReptileRattle:
+      path: /Audio/_RMC14/Voice/Reptilian/lizard_rattle.ogg
+      params:
+        variation: 0.125
+        volume: -1

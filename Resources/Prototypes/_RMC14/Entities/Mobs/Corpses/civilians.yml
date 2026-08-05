@@ -1,0 +1,547 @@
+# Prisoner
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpsePrisoner
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpsePrisoner ]
+
+- type: startingGear
+  id: RMCGearCorpsePrisoner
+  equipment:
+    jumpsuit: RMCJumpsuitOrange
+    back: CMSatchel
+    shoes: RMCShoesOrange
+    id: RMCIDCardPrisonerCorpse
+  storage:
+    back:
+    - RMCM5Bayonet
+    - RMCRadioHandheldColonyOff
+
+# Chef
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseChef
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseChef ]
+
+- type: startingGear
+  id: RMCGearCorpseChef
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitChef
+    back: CMSatchel
+    shoes: RMCShoesBlack
+    head: ClothingHeadHatChef
+    outerClothing: RMCChefApron
+    id: RMCIDCardChefCorpse
+    ears: CMHeadsetColony
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+
+# Doctor
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseDoctor
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseDoctor, RMCGearCorpseDoctorAltOne, RMCGearCorpseDoctorAltTwo ]
+  - type: VictimBurst
+  - type: Rank
+    rank: RMCRankCivilianDoctor
+
+- type: startingGear
+  id: RMCGearCorpseDoctor
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitMedicalDoctor
+    back: CMSatchelMedical
+    shoes: CMBootsBlackFilled
+    eyes: RMCGlassesMedicalHUDGlasses
+    gloves: CMHandsLatex
+    id: CMIDCardColonistDoctor
+    ears: CMHeadsetColony
+    mask: CMMaskSterile
+    outerClothing: RMCMedicalApron
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+
+- type: startingGear
+  parent: RMCGearCorpseDoctor
+  id: RMCGearCorpseDoctorAltOne
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+    - CMFirstAidKitFilledRobust
+
+- type: startingGear
+  parent: RMCGearCorpseDoctor
+  id: RMCGearCorpseDoctorAltTwo
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+    # - CMFirstAidKitFilledRobust Uncomment when surgery kit is added
+    # TODO Surgery kit
+
+# Engineer
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseEngineer
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseEngineer ]
+  - type: VictimBurst
+
+- type: startingGear
+  id: RMCGearCorpseEngineer
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitEngineering
+    back: CMSatchelEngineer
+    shoes: CMBootsBlackFilled
+    head: RMCHardHat
+    eyes: RMCWeldingGoggles
+    gloves: CMHandsInsulated
+    outerClothing: RMCHazardVest
+    id: CMIDCardColonistEngineer
+    ears: CMHeadsetColony
+    belt: CMBeltUtilityFilled
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+
+# Scientist
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseScientist
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseScientist ]
+  - type: VictimBurst
+  - type: Rank
+    rank: RMCRankCivilianDoctor
+
+- type: startingGear
+  id: RMCGearCorpseScientist
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianVirologist
+    back: RMCSatchelVirology
+    shoes: CMBootsBlackFilled
+    gloves: CMHandsLatex
+    outerClothing: RMCLabcoat
+    id: RMCIDCardColonistScientist
+    mask: CMMaskSterile
+    eyes: RMCGlassesReagentHUDGlasses
+    ears: CMHeadsetColony
+    head: CMHeadCapSurgGreen
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+    - RMCMotionDetector
+#    # T3 research notes
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseScientistAegis
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseScientistAegis ]
+
+- type: startingGear
+  id: RMCGearCorpseScientistAegis
+  equipment:
+    jumpsuit: ClothingUniformJumpsuitVirology
+    back: CMSatchelMedical
+    shoes: CMBootsBlackFilled
+    gloves: CMHandsLatex
+    outerClothing: ClothingOuterCoatLab
+    id: RMCIDCardAegisIntel
+    ears: CMHeadsetColony
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+
+# Miner
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseMiner
+  components:
+  - type: Loadout
+    prototypes: # Certain prototypes are repeated to increase their spawn weight
+    - RMCGearCorpseMiner
+    - RMCGearCorpseMiner
+    - RMCGearCorpseMiner
+    - RMCGearCorpseMinerAltOne
+    - RMCGearCorpseMinerAltOne
+    - RMCGearCorpseMinerAltOne
+    - RMCGearCorpseMinerAltTwo
+    - RMCGearCorpseMinerAltTwo
+    - RMCGearCorpseMinerAltTwo
+    - RMCGearCorpseMinerAltThree
+    - RMCGearCorpseMinerAltThree
+    - RMCGearCorpseMinerAltFour
+  - type: VictimBurst
+
+- type: startingGear
+  id: RMCGearCorpseMiner
+  equipment:
+    jumpsuit: RMCJumpsuitTMCC
+    back: CMBackpackEngineer
+    shoes: RMCShoesJackboots
+    head: RMCHardhatRedTMCC
+    outerClothing: RMCArmorTMCCAlt
+    id: RMCIDCardMinerCorpse
+    ears: CMHeadsetColony
+    pocket1: RMCPouchToolsFill
+    gloves: RMCHandsCombat
+  storage:
+    back:
+    - RMCFlashlightLantern
+    - RMCRadioHandheldColonyOff
+
+- type: startingGear
+  parent: RMCGearCorpseMiner
+  id: RMCGearCorpseMinerAltOne
+  equipment:
+    head: RMCArmorHelmetTMCCMiner
+    outerClothing: RMCArmorTMCCAlt
+
+- type: startingGear
+  parent: RMCGearCorpseMiner
+  id: RMCGearCorpseMinerAltTwo
+  equipment:
+    head: RMCHardhatRedTMCC
+    outerClothing: RMCHazardVest
+
+- type: startingGear
+  parent: RMCGearCorpseMiner
+  id: RMCGearCorpseMinerAltThree
+  equipment:
+    head: RMCArmorHelmetTMCCMiner
+    outerClothing: RMCArmorTMCC
+
+- type: startingGear
+  parent: RMCGearCorpseMiner
+  id: RMCGearCorpseMinerAltFour
+  equipment:
+    back: RMCSatchelLightpack
+    shoes: RMCBootsRoyalFilled
+    hands: RMCHandsVeteranRoyalMarine
+    head: RMCArmorHelmetTMCCMiner
+    outerClothing: RMCArmorTMCCAlt
+    id: RMCIDCardMinerCorpse
+    ears: CMHeadsetColony
+
+# Security
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseSecurity
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseSecurity ]
+  - type: VictimBurst
+  - type: Rank
+    rank: RMCRankCivilianOfficer
+
+- type: startingGear
+  id: RMCGearCorpseSecurity
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianSecurity
+    back: CMSatchelSecurity
+    head: RMCArmorHelmetSecurity
+    outerClothing: RMCArmorSecurity
+    shoes: RMCShoesJackboots
+    eyes: CMGlassesSecurity
+    gloves: CMHandsBlackMarine
+    id: CMIDCardColonistSecurity
+    ears: CMHeadsetColony
+    belt: CMBeltSecurityMPFilled
+  storage:
+    back:
+    - RMCM5Bayonet
+    - RMCRadioHandheldColonyOff
+
+# Corporate Liaison
+- type: randomHumanoidSettings
+  parent: RMCCorpseWeYa
+  id: RMCCorpseLiaison
+  components:
+  - type: Loadout
+    prototypes:
+    - RMCGearCorpseLiaison
+    - RMCGearCorpseLiaisonBlue
+    - RMCGearCorpseLiaisonBrown
+    - RMCGearCorpseLiaisonWhite
+  - type: VictimBurst
+  - type: Rank
+    rank: RMCRankWeYaExecutive
+  - type: Marine
+    icon:
+      sprite: _RMC14/Interface/job_icons/We-Ya/liaison_ranks.rsi
+      state: hudsquad_liaison
+
+- type: startingGear
+  id: RMCGearCorpseLiaison
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlack
+    outerClothing: RMCArmorVest
+    back: CMSatchel # TODO lockable satchel
+    shoes: RMCShoesLaceup
+    eyes: RMCGlassesAviators
+    id: CMIDCardLiaisonColony
+    ears: RMCHeadsetDistressWeYa
+    belt: RMCM77BeltPMCFilled
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+    # TODO random CL survivor notes
+
+- type: startingGear
+  parent: RMCGearCorpseLiaison
+  id: RMCGearCorpseLiaisonBlue
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBlue
+
+- type: startingGear
+  parent: RMCGearCorpseLiaison
+  id: RMCGearCorpseLiaisonBrown
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonBrown
+
+- type: startingGear
+  parent: RMCGearCorpseLiaison
+  id: RMCGearCorpseLiaisonWhite
+  equipment:
+    jumpsuit: CMJumpsuitLiaisonCorporateFormal
+
+# Prison Guard
+- type: randomHumanoidSettings
+  parent: RMCCorpseSecurity
+  id: RMCCorpsePrisonGuard
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpsePrisonGuard ]
+
+- type: startingGear
+  id: RMCGearCorpsePrisonGuard
+  equipment:
+    jumpsuit: RMCJumpsuitCivilianSecurity
+    back: CMSatchelSecurity
+    shoes: RMCShoesJackboots
+    gloves: CMHandsBlackMarine
+    ears: CMHeadsetColony
+    outerClothing: RMCArmorVest
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+
+# Colonist
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseColonist
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseColonist ]
+
+- type: startingGear
+  id: RMCGearCorpseColonist
+  equipment:
+    jumpsuit: CMJumpsuitColonist
+    back: CMSatchel
+    shoes: CMBootsBlack
+    id: CMIDCardColonist
+    ears: CMHeadsetColony
+
+- type: randomHumanoidSettings
+  parent: RMCCorpseColonist
+  id: RMCCorpseColonistBurst
+  components:
+  - type: VictimBurst
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseColonistKutjevo
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseColonistKutjevo, RMCGearCorpseColonistKutjevoDrysuit ]
+
+- type: startingGear
+  id: RMCGearCorpseColonistKutjevo
+  parent: RMCGearCorpseColonist
+  equipment:
+    eyes: RMCGogglesKutjevo
+    head: ArmorHelmetPMCKutjevo
+    mask: RMCMaskKutjevoRespirator
+    jumpsuit: RMCJumpsuitKutjevoJumper
+
+- type: startingGear
+  id: RMCGearCorpseColonistKutjevoDrysuit
+  parent: RMCGearCorpseColonistKutjevo
+  equipment:
+    jumpsuit: RMCJumpsuitKutjevoDrysuit
+
+- type: randomHumanoidSettings
+  parent: RMCCorpseColonistKutjevo
+  id: RMCCorpseColonistKutjevoBurst
+  components:
+  - type: VictimBurst
+
+# Guidebook Colonist
+- type: entity
+  id: RMCGuidebookCorpseColonistBurst
+  parent: MobHuman
+  name: Dead Colonist
+  categories: [ DoNotMap, HideSpawnMenu ]
+  components:
+  - type: VictimBurst
+  - type: Loadout
+    prototypes: [ RMCGearCorpseColonist ]
+  - type: Damageable
+    damage:
+      types:
+        Bloodloss: 36
+        Asphyxiation: 44
+        Slash: 77
+        Blunt: 43
+
+# CMB Riot Control Officer
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseUnitedNationsRiotOfficer
+  components:
+  - type: Loadout
+    prototypes:
+    - RMCGearCorpseUnitedNationsRiotOfficerAltOne
+    - RMCGearCorpseUnitedNationsRiotOfficerAltTwo
+    - RMCGearCorpseUnitedNationsRiotOfficerAltThree
+    - RMCGearCorpseUnitedNationsRiotOfficerAltFour
+    - RMCGearCorpseUnitedNationsRiotOfficerAltFive
+  - type: Rank
+    rank: RMCRankCMBRiotControlOfficer
+
+- type: randomHumanoidSettings
+  parent: RMCCorpseUnitedNationsRiotOfficer
+  id: RMCCorpseUnitedNationsRiotOfficerBurst
+  components:
+  - type: VictimBurst
+
+- type: startingGear
+  id: RMCGearCorpseUnitedNationsRiotOfficer
+  equipment:
+    head: ArmorHelmetPMCRiotShield
+    jumpsuit: RMCJumpsuitRiotControl
+    outerClothing: RMCArmorPMCRiot
+    belt: CMStunbaton
+    gloves: CMHandsBlackMarine
+    ears: CMHeadsetColony
+    back: CMSatchelSecurity
+    id: RMCIDCardRiotOfficerCorpse
+    shoes: CMBootsBlack
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+
+- type: startingGear
+  parent: RMCGearCorpseUnitedNationsRiotOfficer
+  id: RMCGearCorpseUnitedNationsRiotOfficerAltOne
+  equipment:
+    eyes: RMCSunglasses
+
+- type: startingGear
+  parent: RMCGearCorpseUnitedNationsRiotOfficer
+  id: RMCGearCorpseUnitedNationsRiotOfficerAltTwo
+  equipment:
+    eyes: RMCSunglassesBig
+
+- type: startingGear
+  parent: RMCGearCorpseUnitedNationsRiotOfficer
+  id: RMCGearCorpseUnitedNationsRiotOfficerAltThree
+  equipment:
+    eyes: RMCGlassesAviators
+
+- type: startingGear
+  parent: RMCGearCorpseUnitedNationsRiotOfficer
+  id: RMCGearCorpseUnitedNationsRiotOfficerAltFour
+  equipment:
+    eyes: CMGlassesSecurity
+
+- type: startingGear
+  parent: RMCGearCorpseUnitedNationsRiotOfficer
+  id: RMCGearCorpseUnitedNationsRiotOfficerAltFive
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+    - CMGrenadeFrag
+
+# Corporate Supervisor
+- type: randomHumanoidSettings
+  parent: RMCCorpseWeYa
+  id: RMCCorpseWeYaManager
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseWeYaManager ]
+  - type: Rank
+    rank: RMCRankWeYaExecutiveSupervisor
+  - type: Marine
+    icon:
+      sprite: _RMC14/Interface/job_icons/We-Ya/liaison_ranks.rsi
+      state: weya_execsuper
+
+- type: startingGear
+  id: RMCGearCorpseWeYaManager # TODO lockable satchel and random research notes
+  equipment:
+    ears: RMCHeadsetDistressWeYa
+    back: CMSatchel
+    head: RMCHeadCapManager
+    jumpsuit: RMCJumpsuitLiaisonManager
+    outerClothing: RMCJacketCorporateManager
+    belt: RMCMK80BeltPMCFilled
+    shoes: RMCShoesLaceup
+    id: RMCIDCardExecutiveCorporateSupervisor
+    pocket2: RMCPouchToolsFill
+  storage:
+    back:
+    - RMCRadioHandheldColonyOff
+
+# CLF
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseCLF
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseCLF ]
+
+- type: startingGear
+  id: RMCGearCorpseCLF
+  equipment:
+    head: RMCHeadMilitiaHood
+    ears: CMHeadsetColony
+    jumpsuit: RMCJumpsuitCLFSoldier
+    outerClothing: RMCCoatMilitiaVest
+    gloves: CMHandsBlackMarine
+    shoes: RMCShoesBrown
+    id: RMCIDCardCLFSoldier
+    pocket1: RMCFlashlight
+
+# Russian
+
+- type: randomHumanoidSettings
+  parent: RMCCorpse
+  id: RMCCorpseRussian
+  components:
+  - type: Loadout
+    prototypes: [ RMCGearCorpseRussian ]
+
+- type: startingGear
+  id: RMCGearCorpseRussian
+  equipment:
+    jumpsuit: CMJumpsuitSPP # TODO RMC14 Soviet jumpsuit
+    back: CMSatchelSecurity
+    belt: CMBeltMarine
+    head: RMCHeadUshanka
+    shoes: RMCBootsSPPBlackFilled
+    gloves: CMHandsBlackMarine
+    ears: CMHeadsetColony
+    mask: RMCMaskRebreather
+    outerClothing: RMCCoatSnowSoviet
+    id: CMIDCardColonist

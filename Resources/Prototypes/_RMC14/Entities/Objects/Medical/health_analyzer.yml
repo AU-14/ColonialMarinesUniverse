@@ -1,0 +1,56 @@
+- type: entity
+  parent: BaseItem
+  id: CMHealthAnalyzer
+  name: HF2 health analyzer
+  description: A hand-held body scanner able to distinguish vital signs of the subject. The front panel is able to provide the basic readout of the subject's status.
+  suffix: RMC14
+  components:
+  - type: Item
+    size: Small
+  - type: Tag
+    tags:
+    - DiscreteHealthAnalyzer
+  - type: Sprite
+    sprite: _RMC14/Objects/Medical/health_analyzer.rsi
+    state: health
+  - type: ActivatableUI
+    key: enum.HealthScannerUIKey.Key
+    inHandsOnly: false
+  - type: UserInterface
+    interfaces:
+      enum.HealthScannerUIKey.Key:
+        type: HealthScannerBui
+  - type: HealthScanner
+    sound:
+      path: "/Audio/_RMC14/Medical/healthanalyzer.ogg"
+  - type: Appearance
+  - type: GuideHelp
+    guides:
+    - MedicalDoctor
+  - type: UseDelay
+    delay: 1
+  - type: MedicallyUnskilledDoAfter
+  - type: Clothing
+    quickEquip: false
+    slots:
+    - suitstorage
+  - type: RMCItemKeepUIOpenOnStorageClosed
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 200
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+
+- type: entity
+  parent: CMHealthAnalyzer
+  id: RMCAdminHealthAnalyzer
+  name: HF2 advanced health analyzer
+  description: A highly advanced hand-held body scanner capable of providing a detailed health readout of the subject.
+  suffix: RMC14, Admin
+  components:
+  - type: Sprite
+    state: golden_health
+  - type: HealthScanner
+    detailLevel: Full

@@ -1,0 +1,147 @@
+# High Command
+- type: radioChannel #UNMC High Command, for events and such, basically CentComm channel
+  id: MarineHighCommand
+  name: chat-radio-marine-highcommand
+  keycode: "Ĥ" #z in cm13
+  frequency: 1471
+  color: "#318779"
+  longRange: true
+
+# Almayer channels
+- type: radioChannel
+  id: MarineCommon
+  name: chat-radio-marine-common
+  keycode: "ć" #; and g in cm13
+  frequency: 1480
+  color: "#B4B4B4"
+  colorblindColor: "#6FD08C"
+  longRange: true
+  tower: true
+  planet: false
+
+- type: radioChannel
+  id: MarineCommand
+  name: chat-radio-marine-command
+  keycode: "ü" #v in cm13
+  frequency: 1481
+  color: "#5b96d4"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineMedical
+  name: chat-radio-marine-medical
+  keycode: "ň" #m in cm13
+  frequency: 1482
+  color: "#009771"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineEngineer
+  name: chat-radio-marine-engineer
+  keycode: "ě" #n in cm13
+  frequency: 1483
+  color: "#e4860c"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineMilitaryPolice
+  name: chat-radio-marine-military-police
+  keycode: "Þ" #p in cm13
+  frequency: 1484
+  color: "#be324f"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineRequisition
+  name: chat-radio-marine-requisition
+  keycode: "?" #u in cm13
+  frequency: 1485
+  color: "#b17324"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineIntel
+  name: chat-radio-marine-intel
+  keycode: "ź" #t in cm13
+  frequency: 1486
+  color: "#059705"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineJTAC
+  name: chat-radio-marine-jtac
+  keycode: "ø" #j in CM13
+  frequency: 1487
+  color: "#ad3b98"
+  longRange: true
+  tower: true
+
+# Squad channels
+- type: radioChannel
+  id: MarineAlpha
+  name: chat-radio-marine-alpha
+  keycode: "ä" #a in cm13
+  frequency: 1491
+  color: "#F0433E"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineBravo
+  name: chat-radio-marine-bravo
+  keycode: "ó" #b in cm13
+  frequency: 1492
+  color: "#B9A76D"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineCharlie
+  name: chat-radio-marine-charlie
+  keycode: "í" #c in cm13
+  frequency: 1493
+  color: "#7A967E"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineDelta
+  name: chat-radio-marine-delta
+  keycode: "Ɖ" #d in cm13
+  frequency: 1494
+  color: "#038ae1"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineEcho
+  name: chat-radio-marine-echo
+  keycode: "ɨ" #e in cm13
+  frequency: 1495
+  color: "#3be1b1"
+  longRange: true
+  tower: true
+
+- type: radioChannel
+  id: MarineFoxtrot
+  name: chat-radio-marine-foxtrot
+  keycode: "ƒ" #f in cm13
+  frequency: 1496
+  color: "#c23c07"
+  longRange: true
+  tower: true
+
+#- type: radioChannel
+#  id: RoyalMarine
+#  name: chat-radio-royal-marine
+#  keycode: "q"
+#  frequency: 1551
+#  color: "#e1580e"
+#  longRange: true
+#  tower: true

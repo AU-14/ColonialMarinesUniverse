@@ -1,0 +1,74 @@
+﻿# region Base
+- type: construction
+  abstract: true
+  id: BaseMaterial
+  category: construction-category-materials
+  objectType: Item
+# endregion Base
+
+# region Materials
+- type: construction
+  parent: BaseMaterial
+  id: MetalRod
+  graph: MetalRod
+  targetNode: MetalRod
+
+- type: construction
+  parent: BaseMaterial
+  id: MaterialDurathread
+  graph: Durathread
+  targetNode: MaterialDurathread
+# endregion Materials
+
+# region Glass
+- type: construction
+  parent: BaseMaterial
+  id: SheetRGlass
+  graph: Glass
+  targetNode: SheetRGlass
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetClockworkGlass
+  targetNode: SheetClockworkGlass
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetPGlass
+  targetNode: SheetPGlass
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetRPGlass
+  targetNode: SheetRPGlass
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetRPGlass0
+  targetNode: SheetRPGlass0
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetRPGlass1
+  targetNode: SheetRPGlass1
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetUGlass
+  targetNode: SheetUGlass
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetRUGlass
+  targetNode: SheetRUGlass
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetRUGlass0
+  targetNode: SheetRUGlass0
+
+- type: construction
+  parent: SheetRGlass
+  id: SheetRUGlass1
+  targetNode: SheetRUGlass1
+# endregion Glass

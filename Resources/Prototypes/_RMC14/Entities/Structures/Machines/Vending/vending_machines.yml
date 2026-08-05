@@ -1,0 +1,990 @@
+# Base Vender
+- type: entity
+  parent: VendingMachine
+  id: CMVendor
+  name: Vendomat
+  description: A generic vending machine.
+  components:
+  - type: Transform
+    anchored: false
+    noRot: true
+  - type: Physics
+    bodyType: Static
+  - type: AmbientOnPowered
+  - type: AmbientSound
+    volume: -9
+    range: 3
+    enabled: false
+    sound:
+      path: /Audio/Ambience/Objects/vending_machine_hum.ogg
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.45,0.25,0.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        - BulletImpassable #TODO Remove this after vendor tipping is added
+        density: 200
+  - type: Repairable
+    doAfterDelay: 8
+  - type: ActivatableUI
+    key: enum.VendingMachineUiKey.Key
+  - type: ActivatableUIRequiresPower
+  - type: UserInterface
+    interfaces:
+      enum.VendingMachineUiKey.Key:
+        type: VendingMachineBoundUserInterface
+      enum.WiresUiKey.Key:
+        type: WiresBoundUserInterface
+  - type: TypingIndicator
+    proto: robot
+  - type: Speech
+    speechVerb: Robotic
+    speechSounds: Vending
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Binary
+  - type: ActiveRadio
+    channels:
+    - Binary
+    - Common
+  - type: DoAfter
+  - type: Electrified
+    enabled: false
+    usesApcPower: true
+  - type: PointLight
+    enabled: false
+    castShadows: false
+    radius: 1.5
+  - type: LitOnPowered
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 10
+    activeLoad: 0
+    channel: Equipment # TODO RMC14 vend_power_usage: 150
+  - type: Appearance
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/generic.rsi
+    snapCardinals: true
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "off"
+      map: [ "enum.VendingMachineVisualLayers.BaseUnshaded" ]
+      shader: unshaded
+    - state: "panel"
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: VendingMachine
+    pack: CMVendomat
+    dispenseOnHitChance: 0.25
+    dispenseOnHitThreshold: 2
+    offState: off
+    brokenState: broken
+    normalState: normal-unshaded
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: null
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 50
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Breakage"]
+      - !type:EjectVendorItems
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:SpawnEntitiesBehavior
+        spawn:
+          CMSheetMetal1:
+            min: 1
+            max: 1
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalGlassBreak
+  - type: XenoCrusherChargable #TODO RMC14 tip over
+
+- type: vendingMachineInventory
+  id: CMVendomat
+
+- type: entity
+  parent: CMBaseStructure
+  id: VehicleHardpointVendor
+  name: vehicle hardpoint printer
+  description: A machine for printing vehicle hardpoints.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/vending_64x32.rsi
+    layers:
+    - state: "vehicle_gear_off"
+    - state: "vehicle_gear"
+      map: [ "rmc_flick_animation" ]
+      shader: unshaded
+    - state: vehicle_gear_panel
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.45,0.25,0.45"
+        mask:
+        - MachineMask
+        layer:
+        - MachineLayer
+        density: 200
+  - type: ActivatableUI
+    key: enum.CMAutomatedVendorUI.Key
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "RMCAccessVehicleCrew" ] ]
+  - type: UserInterface
+    interfaces:
+      enum.CMAutomatedVendorUI.Key:
+        type: CMAutomatedVendorBui
+  - type: CMAutomatedVendor
+    scaling: false
+    sound:
+      path: /Audio/_RMC14/Machines/vending_drop.ogg
+      params:
+        maxDistance: 2
+        volume: -4
+    baseSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/vending_64x32.rsi
+      state: vehicle_gear
+    animationSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/vending_64x32.rsi
+      state: vehicle_gear_vend
+    sections: []
+  - type: VehicleHardpointVendor
+  - type: InteractionOutline
+  - type: RequireProjectileTarget
+
+
+# Coffee
+- type: entity
+  parent: CMVendor
+  id: CMVendorCoffee
+  name: Hot Drinks machine
+  description: A vending machine which dispenses hot drinks.
+  components:
+  - type: VehicleSmashable
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
+  - type: VendingMachine
+    pack: CMVendorCoffee
+    ejectState: eject-unshaded
+
+- type: entity
+  parent: CMVendorCoffee
+  id: CMVendorCoffeeLockedPowered
+  suffix: Locked, Powered
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false # intentionally!
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+    flags: None
+
+- type: vendingMachineInventory
+  id: CMVendorCoffee
+  startingInventory:
+    RMCDrinkCoffee: 25 # ?
+    RMCDrinkTea: 25 # $1.5
+    RMCDrinkHotCocoa: 25
+    #IceCup #Contraband
+
+- type: entity
+  parent: CMVendorCoffee
+  id: RMCVendorCoffeeSimple
+  name: Hot Coffee Machine
+  suffix: Simple, Coco and Coffee only
+  components:
+  - type: VendingMachine
+    pack: RMCVendorCoffeeSimple
+
+- type: vendingMachineInventory
+  id: RMCVendorCoffeeSimple
+  startingInventory:
+    RMCDrinkCoffee: 40
+    RMCDrinkHotCocoa: 25 #Contraband
+
+
+# Snack
+- type: entity
+  parent: CMVendor
+  id: CMVendorSnack
+  name: Hot Foods Machine
+  description: A vending machine full of ready to cook meals, mhmmmm taste the nutritional goodness!
+  components:
+  - type: VehicleSmashable
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/snack.rsi
+  - type: VendingMachine
+    pack: CMVendorSnack
+
+- type: vendingMachineInventory
+  id: CMVendorSnack
+  startingInventory: # TODO RMC14
+    RMCFoodSnackCheeseburgerPackaged: 12
+    RMCFoodSnackBurritoPackaged: 12
+    RMCFoodSnackHotdogPackaged: 12
+    RMCFoodSnackSamosaPackaged: 12
+    RMCFoodSnackKeplarCrisps: 12
+    RMCFoodSnackKeplarFlamehotCrisps: 12
+    RMCFoodSnackChipsPepper: 12
+    RMCFoodSnackEATBar: 12
+    RMCFoodSnackBoonie: 6
+    RMCFoodSnackCHUNK: 6
+    RMCFoodSnackBarcaridine: 6
+
+- type: entity
+  parent: CMVendorSnack
+  id: RMCVendorSnackSimple
+  suffix: Simple, Packaged Only
+  components:
+  - type: VendingMachine
+    pack: RMCVendorSnackSimple
+
+- type: vendingMachineInventory
+  id: RMCVendorSnackSimple
+  startingInventory:
+    RMCFoodSnackCheeseburgerPackaged: 40
+    RMCFoodSnackBurritoPackaged: 40
+    RMCFoodSnackHotdogPackaged: 40
+    RMCFoodSnackSamosaPackaged: 40
+
+- type: entity
+  parent: CMVendorSnack
+  id: RMCVendorSnackSPP
+  name: Surplus Ration Vendor
+  description: A vending machine full of surplus rations, viewed as the luxury of ready-avaliable SPP rations.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/spp_snack.rsi
+
+# Cola
+- type: entity
+  parent: CMVendor
+  id: CMVendorCola
+  name: Bobda Softdrinks
+  description: A softdrink vendor provided by Bobda Soda Company, Havana.
+  components:
+  - type: VehicleSmashable
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/cola.rsi
+  - type: VendingMachine
+    pack: CMVendorCola
+
+- type: vendingMachineInventory
+  id: CMVendorCola
+  startingInventory:
+    # BASIC
+    CMDrinkCanBobdaClassic: 10
+    CMDrinkCanBobdaCherry: 10
+    CMDrinkCanBobdaLime: 10
+    CMDrinkCanBobdaGrape: 10
+    CMDrinkCanBobdaBlue: 10
+    CMDrinkCanBobdaPeach: 10
+    CMDrinkCanBobdaCranberry: 10
+    CMDrinkCanBobdaVanilla: 10
+    CMDrinkCanBobdaPineapple: 10
+    # DIET
+    CMDrinkCanBobdaClassicDiet: 10
+    CMDrinkCanBobdaCherryDiet: 10
+    CMDrinkCanBobdaLimeDiet: 10
+    CMDrinkCanBobdaGrapeDiet: 10
+    CMDrinkCanBobdaBlueDiet: 10
+    CMDrinkCanBobdaPeachDiet: 10
+    CMDrinkCanBobdaCranberryDiet: 10
+    CMDrinkCanBobdaVanillaDiet: 10
+    CMDrinkCanBobdaPineappleDiet: 10
+    # NON BOBDA
+    CMDrinkCanCola: 10
+
+- type: entity
+  parent: CMVendorCola
+  id: RMCVendorColaResearch
+  description: A softdrink vendor provided by Bobda Soda Company, Havana. This one is bound to the Research Budget card and doesn't require swiping
+  suffix: Research
+  components:
+  - type: VendingMachine
+    pack: RMCVendorColaResearch
+
+- type: vendingMachineInventory
+  id: RMCVendorColaResearch
+  startingInventory:
+    CMDrinkCanBobdaClassic: 10
+    CMDrinkCanBobdaCherry: 10
+    CMDrinkCanBobdaLime: 10
+    CMDrinkCanBobdaGrape: 10
+    CMDrinkCanBobdaBlue: 10
+    CMDrinkCanBobdaPeach: 10
+    CMDrinkCanBobdaCranberry: 10
+    CMDrinkCanBobdaVanilla: 10
+    CMDrinkCanBobdaPineapple: 10
+
+- type: entity
+  parent: CMVendorCola
+  id: RMCVendorNutriCoDrink
+  name: NutriCo AutoDrink
+  description: A NutriCo AutoDrink dispenser, capable of making a variety of drinks to consume from a mixture of water and instant flavoring juice and caffeine additives.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
+    offset: 0, 0.5
+
+- type: entity
+  parent: CMVendorCola
+  id: RMCVendorColaSPP
+  name: Xuanshi Drinks
+  description: A drinks vendors from a long forgotten branch of the SPP, selling rationed water mixed with thrice diluted 5% flavourments.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/spp_cola.rsi
+
+- type: entity
+  parent: RMCVendorColaSPP
+  id: RMCVendorNutriCoDrinkSPP
+  name: drink dispenser
+  suffix: SPP
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/NutriCo/drink.rsi
+    offset: 0, 0.5
+
+- type: entity
+  parent: CMVendor
+  id: RMCVendorSoda
+  name: Cold Drinks machine
+  description: A vending machine that contains cold drinks. This one appears to be produced by Tsumetai-Umi, a subsidairy of Neterai Foods International, which itself is subsidiary of Weston-Yamada.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/sodavend.rsi
+  - type: VendingMachine
+    pack: RMCVendorSoda
+
+- type: vendingMachineInventory
+  id: RMCVendorSoda
+  startingInventory: # TODO RMC14
+    CMDrinkCanCola: 10
+    CMDrinkCanMountainWind: 10
+    CMDrinkCanThirteenLoko: 10
+    CMDrinkCanDrGibb: 10
+    CMDrinkCanStarkist: 10
+    CMDrinkCanSpaceUp: 10
+    CMDrinkCanLemonLime: 10
+    CMDrinkCanIcedTea: 10
+    CMDrinkCanGrape: 10
+    CMDrinkCanTonic: 10
+    CMDrinkCanSoda: 10
+    CMDrinkCanFruitBeer: 10
+
+# Cigarettes
+- type: entity
+  parent: CMVendor
+  id: CMVendorCigs
+  name: Cigarette Machine
+  description: If you want to get cancer, might as well do it in style!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/cigs.rsi
+  - type: VendingMachine
+    pack: CMVendorCigs
+
+- type: vendingMachineInventory
+  id: CMVendorCigs
+  startingInventory:
+    RMCCigarettePackLuckySloths: 50
+    RMCCigarettePackArcturianAce: 50
+    RMCCigarettePackLadyFingers: 50
+    RMCCigarettePackEmeraldGreens: 50
+    RMCCigarettePackElectroGolds: 50
+    RMCCigarettePackSolRedsTurquoise: 25
+    RMCCigarettePackSolRedsYellow: 25
+    RMCTarbackTube: 20
+    RMCMatchboxFull: 15
+    RMCLighter: 25
+    RMCZippo: 10
+
+- type: entity
+  parent: CMVendorCigs
+  id: RMCVendorCigsFree
+  suffix: Free
+  components:
+  - type: VendingMachine
+    pack: RMCVendorCigsFree
+
+- type: vendingMachineInventory
+  id: RMCVendorCigsFree
+  startingInventory:
+    RMCCigarettePackElectroGolds: 99
+    RMCCigarettePackLuckySloths: 99
+    #TradingCardCigPack: 99
+    RMCCigarettePackLadyFingers: 99
+    RMCCigarettePackWeYaGold: 99
+    RMCCigarettePackEmeraldGreens: 99
+    RMCCigarettePackArcturianAce: 99
+    RMCCigarettePackExecutiveSelect: 99
+    RMCCigarCase: 99
+    RMCTarbackTube: 99
+    RMCTarbackCase: 99
+    CMExecutiveSelectMatchbook: 99
+    CMExecutiveWEYAMatchbook: 99
+    CMElectroMatchbook: 99
+    CMBrownMatchBook: 99
+    RMCMatchboxFull: 99
+    RMCLighter: 99
+    RMCZippo: 99
+
+- type: entity
+  parent: CMVendorCigs
+  id: RMCVendorCigsElectro
+  name: Electro Brand Cigarette Machine
+  description: An Electro brand cigarette vending machine. Comes with Lucky Sloths, Lady Fingers, Electro Golds of course, and a few smaller brands you've barely heard of.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/electro_cigs.rsi
+  - type: VendingMachine
+    pack: RMCVendorCigsElectro
+
+- type: vendingMachineInventory
+  id: RMCVendorCigsElectro
+  startingInventory:
+    RMCCigarettePackElectroGolds: 20
+    RMCCigarettePackLuckySloths: 20
+    RMCCigarettePackLadyFingers: 20
+    RMCCigarettePackSolRedsTurquoise: 10
+    RMCCigarettePackSolRedsYellow: 10
+    RMCTarbackTube: 10
+    RMCMatchboxFull: 5
+    CMElectroMatchbook: 5
+    CMBrownMatchBook: 10
+    RMCLighter: 20
+    RMCZippo: 10
+    #BlueZippo: 5
+
+- type: entity
+  parent: CMVendorCigs
+  id: RMCVendorCigsWeYa
+  name: Weston-Yamada Brand Cigarette Machine
+  description: A Weston-Yamada Brand cigarette vending machine, looks like a We-Ya Gold pack. Comes with Emerald Greens, We-Ya Golds of course, Arcturian Aces, and some Three Suns Empire brand you've barely heard of. Executive Selects are still out of stock due to shipping issues...
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/weya_cigs.rsi
+  - type: VendingMachine
+    pack: RMCVendorCigsWeYa
+
+- type: vendingMachineInventory
+  id: RMCVendorCigsWeYa
+  startingInventory:
+    RMCCigarettePackWeYaGold: 15
+    RMCCigarettePackEmeraldGreens: 30
+    RMCCigarettePackArcturianAce: 10
+    #BalajiImperialCigPack: 10
+    RMCCigarettePackExecutiveSelect: 0 #Random between 0-2
+    RMCShioRoyalsTube: 10
+    RMCMatchboxFull: 5
+    CMExecutiveSelectMatchbook: 10
+    #BalajiImperialMatchbook: 10
+    CMExecutiveWEYAMatchbook: 10
+    RMCLighter: 20
+    #BlackZippo: 5
+    RMCZippoExec: 1
+
+- type: entity
+  parent: CMVendorCigs
+  id: RMCVendorCigsSPP
+  name: Komandir Cigarettes Vendor
+  description: A state-owned cigarette vendor. Its drab colour was chosen to discourage purchases, but its existence is an admittance to the necessity for such machines to exist in the first place.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/spp_cigs.rsi
+
+# Security
+- type: entity
+  parent: CMVendor
+  id: CMVendorSec
+  name: SecTech
+  description: A security equipment vendor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
+  - type: VendingMachine
+    pack: CMVendorSec
+    denyState: deny-unshaded
+    ejectState: eject-unshaded
+  - type: AccessReader
+    access: [["CMAccessBrig"]]
+
+- type: vendingMachineInventory
+  id: CMVendorSec
+  startingInventory: # TODO RMC14
+    RMCHandcuffs: 8
+    RMCZipties: 10
+    RMCGrenadeFlashBang: 4
+    RMCWeaponTaser: 4
+    # Pepper spray 4
+    # InvestigationPepperSpray: 4
+    CMStunbaton: 4
+    RMCFlashlight: 4
+    CMBeltSecurityMP: 10
+    CMFlash: 5
+    RMCFoodDonut: 12
+    # Evidence box 6
+    CMArmorHelmetM10MP: 6
+    # PeakedMPCap: 6
+    CMHeadCapMP: 6
+    CMJumpsuitMP: 2
+    CMHeadBeretRed: 6
+    CMGlassesSecurity: 3
+    CMHeadset: 6
+    #RegulationTape: 5
+    #TapeRecorder: 3
+    #ClueScanner: 3
+    #Camera: 8
+    #CameraFilm: 8
+    RMCWhistle: 5
+    RMCSunglasses: 2 #Contraband
+    RMCBoxDonut: 2 #Contraband
+
+- type: entity
+  parent: CMVendor
+  id: RMCVendorSecArmory
+  name: Riot Tech
+  description: A security riot equipment vendor.
+  suffix: Military Police
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
+  - type: VendingMachine
+    pack: RMCVendorRiot
+    denyState: deny-unshaded
+    ejectState: eject-unshaded
+  - type: AccessReader
+    access: [["CMAccessBrig"]]
+
+- type: vendingMachineInventory
+  id: RMCVendorRiot
+  startingInventory: # TODO RMC14
+    RMCZipties: 40
+    RMCGrenadeFlashBang: 20
+    RMCMagazineSMGM63Rubber: 40
+    ##RMCGrenadeTearGas: 40
+    RMCMagazinePistolM1984Rubber: 40
+    RMCMagazinePistolM77Rubber: 40
+    RMCMagazineRifleM54CRubber: 40
+    RMCMagazineRifleM54CMK1Rubber: 10
+    RMCMagazineRifleM4SPRRubber: 40
+    CMArmorHelmetM10MP: 8
+    RMCExplosiveBreachingChargeRubber: 6
+    RMCSunglasses: 2 #Contraband - inherited from SecTech
+    RMCBoxDonut: 2 #Contraband
+
+# Senior Enlisted Advisor
+- type: entity
+  parent: CMVendor
+  id: CMVendorSEA
+  name: SEATech
+  description: An equipment vendor designed to save lives
+  suffix: SEA
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
+  - type: VendingMachine
+    pack: CMVendorSEA
+    denyState: deny-unshaded
+    ejectState: eject-unshaded
+  - type: AccessReader
+    access: [["CMAccessSEA"]]
+
+- type: vendingMachineInventory
+  id: CMVendorSEA
+  startingInventory: # TODO RMC14
+    RMCMagazineSMGM63Rubber: 20
+    RMCMagazinePistolM1984Rubber: 20
+    RMCMagazinePistolM77Rubber: 20
+    RMCMagazineRifleM54CRubber: 20
+    RMCMagazineRifleM4SPRRubber: 20
+    CMShellShotgunBeanbag: 20
+    CMFirstAidKitFilled: 2
+    CMBurnAidKitFilled: 2
+    RMCRadiationAidKitFilled: 1
+    RMCCPRDummy: 5
+    # Crew Monitor
+
+
+# Nutriments
+- type: entity
+  parent: CMVendor
+  id: CMVendorNutri
+  name: NutriMax
+  description: A plant nutrients vendor.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/nutri.rsi
+  - type: VendingMachine
+    pack: CMVendorNutri
+    denyState: deny-unshaded
+    ejectState: eject-unshaded
+
+- type: vendingMachineInventory
+  id: CMVendorNutri
+  startingInventory:
+    ChemistryBottleEZNutrient: 35
+    ChemistryBottleLeft4Zed: 25
+    ChemistryBottleRobustHarvest: 15
+    PestSpray: 20
+    Syringe: 5
+    RMCStoragePlantBag: 5
+    RMCToolSpade: 3
+    RMCToolHatchet: 3
+    # AmmoniaBottle: 10 #Premium
+    # DiethylamineBottle: 5 #Premium
+    HydroponicsToolSpade: 3
+    HydroponicsToolHatchet: 3
+    HydroponicsToolScythe: 3
+
+
+# Seeds
+- type: entity
+  parent: CMVendor
+  id: CMVendorSeeds
+  name: MegaSeed Servitor
+  description: When you need seeds fast!
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/seeds.rsi
+  - type: VendingMachine
+    pack: CMVendorSeeds
+    denyState: deny-unshaded
+    ejectState: eject-unshaded
+
+- type: vendingMachineInventory
+  id: CMVendorSeeds
+  startingInventory: # TODO RMC14
+    BananaSeeds: 3
+    BerrySeeds: 3
+    CarrotSeeds: 3
+    ChanterelleSeeds: 2
+    ChiliSeeds: 3
+    CornSeeds: 3
+    CottonSeeds: 3
+    EggplantSeeds: 3
+    PotatoSeeds: 3
+    SoybeanSeeds: 3
+    SunflowerSeeds: 2
+    TomatoSeeds: 3
+    WheatSeeds: 3
+    OatSeeds: 3
+    AppleSeeds: 3
+    PoppySeeds: 3
+    SugarcaneSeeds: 3
+    PeanutSeeds: 3
+    WhiteBeetSeeds: 3
+    WatermelonSeeds: 3
+    LimeSeeds: 3
+    LemonSeeds: 3
+    OrangeSeeds: 3
+    PineappleSeeds: 3
+    GrassSeeds: 3
+    CocoaSeeds: 3
+    PlumpSeeds: 2
+    CabbageSeeds: 3
+    GrapeSeeds: 3
+    PumpkinSeeds: 3
+    CherrySeeds: 3
+    RiceSeeds: 3
+    # LibertyMycelium: 1 #Contraband
+    # MessaTearSeeds: 1 #Contraband
+    # AmbrosiaVulgarisSeeds: 1 #Contraband
+    NettleSeeds: 1 #Contraband
+    LingzhiSeeds: 1 #ReishiMycelium #Contraband
+    # WaterFlower: 1 #Premium
+    GarlicSeeds: 3
+    OnionSeeds: 3
+    OnionRedSeeds: 3
+    RMCMangoSeeds: 3
+
+
+# Dinnerware
+- type: entity
+  parent: ColMarTechBaseAnchorable
+  id: CMVendorDinnerware
+  name: Dinnerware
+  description: A kitchen and restaurant equipment vendor.
+  components:
+  - type: VehicleSmashable
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/dinnerware.rsi
+    snapCardinals: true
+    layers:
+    - state: "off"
+      map: ["enum.VendingMachineVisualLayers.Base"]
+    - state: "normal-unshaded"
+      map: [ "enum.PowerDeviceVisualLayers.Powered" ]
+      shader: unshaded
+    - state: "panel"
+      map: ["enum.WiresVisualLayers.MaintenancePanel"]
+  - type: ApcPowerReceiver
+    needsPower: true # TODO RMC14
+    powerLoad: 250
+  - type: RMCPowerReceiver
+    idleLoad: 10
+    activeLoad: 0
+    channel: Equipment
+  - type: ActivatableUIRequiresPower
+  - type: Appearance
+  - type: LitOnPowered
+  - type: Wires
+    boardName: wires-board-name-vendingmachine
+    layoutId: Vending
+  - type: WiresPanel
+  - type: WiresVisuals
+  - type: Corrodible
+    timeToApply: 4
+    structure: true
+  - type: CMAutomatedVendor
+    scaling: false
+    sections:
+    - name: Products
+      entries:
+      - id: RMCFork
+        amount: 6
+      - id: RMCSpoon
+        amount: 4
+      - id: RMCKitchenKnife
+        amount: 5
+      - id: DrinkShaker
+        amount: 5
+      - id: RMCDrinkGlass
+        amount: 8
+      - id: DrinkGlass
+        amount: 4
+      - id: ClothingOuterApronChef
+        amount: 2
+      - id: RMCCondimentSmallSalt
+        amount: 4
+      - id: RMCCondimentSmallPepper
+        amount: 4
+      - id: RMCCondimentEnzyme
+        amount: 1
+      - id: RMCCondiment
+        amount: 8
+      - id: FoodPlateTin
+        amount: 5
+      - id: FoodBowlBig
+        amount: 10
+      - id: RMCKitchenKnifeButcher
+        amount: 1
+      - id: RMCKitchenKnifeChef
+        amount: 3
+      - id: RMCRollingPin
+        amount: 4
+      - id: PairedChopsticks
+        amount: 4
+      - id: FoodPlate
+        amount: 10
+      - id: FoodPlateSmall
+        amount: 10
+      - id: FoodPlateMuffinTin
+        amount: 5
+      - id: FoodKebabSkewer
+        amount: 5
+      - id: CMBeaker
+        amount: 5
+      - id: CMBeakerLarge
+        amount: 5
+      - id: Pitcher
+        amount: 2
+      - id: DrinkMug
+        amount: 5
+      - id: DrinkMugBlack
+        amount: 2
+      - id: DrinkMugBlue
+        amount: 2
+      - id: DrinkMugGreen
+        amount: 2
+      - id: DrinkMugHeart
+        amount: 1
+      - id: DrinkMugMetal
+        amount: 2
+      - id: DrinkMugMoebius
+        amount: 1
+      - id: DrinkMugOne
+        amount: 1
+      - id: DrinkMugRainbow
+        amount: 2
+      - id: DrinkMugRed
+        amount: 2
+
+- type: entity
+  parent: CMVendorDinnerware
+  id: CMVendorDinnerwareLockedPowered
+  suffix: Locked, Powered
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false # intentionally!
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+    flags: None
+
+
+# BODA
+- type: entity
+  parent: CMVendor
+  id: CMVendorSodaSoviet
+  name: BODA
+  description: An old sweet water vending machine, how did this end up here?
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/sovietsoda.rsi
+  - type: VendingMachine
+    pack: CMVendorSodaSoviet
+
+- type: vendingMachineInventory
+  id: CMVendorSodaSoviet
+  startingInventory:
+    CMDrinkCanBoda: 30
+    CMDrinkCanBodaPlyus: 20 #Contraband
+
+
+# Ingredients
+- type: entity
+  parent: CMVendorDinnerware
+  id: CMVendorIngredients
+  name: Galley Auxiliary Storage Requisition System
+  description: A vending machine meant to be use for cooks.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/snack.rsi
+  - type: CMAutomatedVendor
+    scaling: false
+    sections:
+    - name: Products
+      entries:
+      - id: FoodContainerEgg
+        amount: 12
+      - id: FoodMeatChicken
+        amount: 24
+      - id: FoodMeatFish
+        amount: 18
+      - id: RMCFoodMeatFish
+        amount: 12
+      - id: FoodMeat
+        amount: 24
+      - id: FoodMeatBacon
+        amount: 24
+      - id: FoodMeatSausage
+        amount: 18
+      - id: RMCDrinkMilkCarton
+        amount: 24
+      - id: RMCDrinkSoyMilkCarton
+        amount: 12
+      - id: RMCCondimentEnzyme
+        amount: 12
+      - id: ReagentContainerFlour
+        amount: 12
+      - id: RMCCondimentSugar
+        amount: 12
+      - id: RMCCondimentCornOil
+        amount: 12
+      - id: RMCCondimentSmallSalt
+        amount: 12
+      - id: RMCCondimentSmallPepper
+        amount: 12
+      # TODO RMC14 Mint 12
+      - id: FoodApple
+        amount: 12
+      - id: FoodBanana
+        amount: 12
+      - id: FoodMushroom
+        amount: 12
+      - id: FoodCherry
+        amount: 12
+      - id: FoodChiliPepper
+        amount: 12
+      - id: FoodCabbage
+        amount: 12
+      - id: FoodCarrot
+        amount: 12
+      - id: FoodCorn
+        amount: 12
+      - id: FoodEggplant
+        amount: 12
+      - id: FoodLemon
+        amount: 12
+      - id: FoodLime
+        amount: 12
+      - id: FoodOrange
+        amount: 12
+      - id: FoodPotato
+        amount: 12
+      - id: FoodTomato
+        amount: 12
+      - id: FoodWhiteBeet
+        amount: 12
+      - id: FoodOnion
+        amount: 12
+      - id: FoodOnionRed
+        amount: 12
+      - id: FoodGarlic
+        amount: 12
+      - id: ReagentContainerRice
+        amount: 12
+      - id: ReagentContainerOliveoil
+        amount: 12
+      - id: FoodCondimentBottleVinegar
+        amount: 12
+      - id: ReagentContainerCornmeal
+        amount: 12
+      - id: ReagentContainerMayo
+        amount: 12
+
+- type: entity
+  parent: CMVendorIngredients
+  id: CMVendorIngredientsLockedPowered
+  suffix: Locked, Powered
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false # intentionally!
+  - type: Transform
+    anchored: true
+  - type: Anchorable
+    flags: None
+
+
+# PVE
+
+- type: entity
+  parent: CMVendorSec
+  id: RMCVendorSecTSEPA
+  suffix: TSEPA
+  components:
+  - type: AccessReader
+    access: [["RMCAccessTSEPA"]]

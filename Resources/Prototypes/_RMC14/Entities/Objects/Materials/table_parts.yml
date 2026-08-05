@@ -1,0 +1,201 @@
+- type: entity
+  abstract: true
+  parent: BaseItem
+  id: RMCTablePartBase
+  name: table parts
+  description: A kit for a table, including a large, flat metal surface and four legs. Some assembly required.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Materials/table_parts.rsi
+  - type: Item
+    sprite: _RMC14/Objects/Materials/table_parts.rsi
+    inhandVisuals:
+      left:
+      - state: almayer-inhand-left
+      right:
+      - state: almayer-inhand-right
+    size: Normal
+  - type: Construction
+    graph: RMCTablePart
+    node: Metal
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 7500
+  - type: Tag
+    tags:
+    - RMCTablePartMetal
+
+
+- type: entity
+  parent: RMCTablePartBase
+  id: RMCTablePartTan
+  name: tan table parts
+  components:
+  - type: Sprite
+    state: tan
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: tan-inhand-left
+      right:
+      - state: tan-inhand-right
+  - type: Tag
+    tags:
+      - RMCTablePartTan
+      - RMCTablePartMetal
+
+- type: Tag
+  id: RMCTablePartTan
+
+- type: entity
+  parent: RMCTablePartBase
+  id: RMCTablePartReinforced
+  name: reinforced table parts
+  description: A kit for a table, including a large, flat metal surface and four legs. This kit has side panels. Some assembly required.
+  components:
+  - type: Sprite
+    state: reinforced
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: reinf-inhand-left
+      right:
+      - state: reinf-inhand-right
+  - type: Tag
+    tags:
+      - RMCTablePartReinforced
+      - RMCTablePartMetalReinforced
+  - type: Construction
+    node: MetalReinforced
+  - type: Material
+  - type: PhysicalComposition
+    materialComposition:
+      CMSteel: 15000
+
+- type: Tag
+  id: RMCTablePartReinforced
+
+- type: entity
+  parent: RMCTablePartBase
+  id: RMCTablePartWood
+  name: wooden table parts
+  description: A kit for a table, including a large, flat wooden surface and four legs. Some assembly required.
+  components:
+  - type: Sprite
+    state: wood
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: wood-inhand-left
+      right:
+      - state: wood-inhand-right
+  - type: Tag
+    tags:
+      - RMCTablePartWood
+      - RMCTablePartWoodPart
+  - type: Construction
+    node: Wood
+
+- type: Tag
+  id: RMCTablePartWood
+
+- type: entity
+  parent: RMCTablePartWood
+  id: RMCTablePartWoodPoor
+  name: poor wooden table parts
+  description: A kit for a poorly crafted table, including a large, flat wooden surface and four legs. Some assembly required.
+  components:
+  - type: Sprite
+    state: poor_wood
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: pwood-inhand-left
+      right:
+      - state: pwood-inhand-right
+  - type: Tag
+    tags:
+      - RMCTablePartWoodPoor
+      - RMCTablePartWoodPart
+
+- type: Tag
+  id: RMCTablePartWoodPoor
+
+- type: entity
+  parent: RMCTablePartWood
+  id: RMCTablePartWoodFancy
+  name: fancy wooden table parts
+  description: A kit for a finely crafted mahogany table, including a large, flat wooden surface and four legs. Some assembly required.
+  components:
+  - type: Sprite
+    state: fancy_wood
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: fwood-inhand-left
+      right:
+      - state: fwood-inhand-right
+  - type: Tag
+    tags:
+      - RMCTablePartWoodFancy
+      - RMCTablePartWoodPart
+
+- type: Tag
+  id: RMCTablePartWoodFancy
+
+- type: entity
+  parent: RMCTablePartBase
+  id: RMCTablePartGambling
+  name: gambling table parts
+  components:
+  - type: Sprite
+    state: gamble
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: gamble-inhand-left
+      right:
+      - state: gamble-inhand-right
+  - type: Tag
+    tags:
+      - RMCTablePartGambling
+      - RMCTablePartWoodCarpet
+  - type: Construction
+    node: WoodCarpet
+
+- type: Tag
+  id: RMCTablePartGambling
+
+- type: entity
+  parent: RMCTablePartBase
+  id: RMCTablePartAlmayer
+  name: gray table parts
+  components:
+  - type: Sprite
+    state: almayer
+  - type: Item
+    inhandVisuals:
+      left:
+      - state: almayer-inhand-left
+      right:
+      - state: almayer-inhand-right
+  - type: Tag
+    tags:
+      - RMCTablePartAlmayer
+      - RMCTablePartMetal
+
+- type: Tag
+  id: RMCTablePartAlmayer
+
+- type: Tag
+  id: RMCTablePartMetal
+
+- type: Tag
+  id: RMCTablePartMetalReinforced
+
+- type: Tag
+  id: RMCTablePartWoodPart
+
+- type: Tag
+  id: RMCTablePartWoodCarpet

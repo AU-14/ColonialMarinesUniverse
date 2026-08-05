@@ -1,0 +1,200 @@
+#chairs
+- type: construction
+  parent: RMC
+  name: chair
+  id: CMChair
+  graph: CMSeat
+  startNode: start
+  targetNode: chair
+  category: construction-category-cm-furniture
+  description: A basic chair for sitting.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: stool
+  id: CMStool
+  graph: CMSeat
+  startNode: start
+  targetNode: stool
+  category: construction-category-cm-furniture
+  description: Apply butt.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: dark office chair
+  id: CMChairOfficeDark
+  graph: CMSeat
+  startNode: start
+  targetNode: chairOfficeDark
+  category: construction-category-cm-furniture
+  description: An office chair for sitting.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: white office chair
+  id: CMChairOfficeWhite
+  graph: CMSeat
+  startNode: start
+  targetNode: chairOfficeWhite
+  category: construction-category-cm-furniture
+  description: An office chair for sitting.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+
+# Tables
+
+- type: construction
+  parent: RMC
+  id: RMCTable
+  name: table
+  description: A square metal surface resting on four legs. Useful to put stuff on.
+  graph: RMCTable
+  startNode: start
+  targetNode: Tan
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  id: RMCTableReinforced
+  name: reinforced table
+  description: A square metal surface resting on four legs. This one has side panels, making it useful as a desk.
+  graph: RMCTable
+  startNode: start
+  targetNode: Reinforced
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  id: RMCTableWood
+  name: wooden table
+  description: A square wood surface resting on four legs. Useful to put stuff on.
+  graph: RMCTable
+  startNode: start
+  targetNode: Wood
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  id: RMCTableWoodPoor
+  name: poor wooden table
+  description: A semi-poorly constructed wood surface resting on four legs. Useful to put stuff on.
+  graph: RMCTable
+  startNode: start
+  targetNode: PoorWood
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  id: RMCTableWoodFancy
+  name: fancy wooden table
+  description: A nicely crafted mahogany wood surface resting on four legs. Useful to put stuff on.
+  graph: RMCTable
+  startNode: start
+  targetNode: FancyWood
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  id: RMCTableGambling
+  name: gambling table
+  description: A curved wood and carpet surface resting on four legs. Used for gambling games.
+  graph: RMCTable
+  startNode: start
+  targetNode: Gambling
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  id: RMCTableAlmayer
+  name: table
+  description: A square metal surface resting on four legs. Useful to put stuff on. Can be flipped in emergencies to act as cover.
+  graph: RMCTable
+  startNode: start
+  targetNode: Almayer
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+#misc
+
+- type: construction
+  parent: RMC
+  id: RMCBed
+  name: bed
+  description: A mattress seated on a rectangular metallic frame.
+  graph: RMCBed
+  startNode: start
+  targetNode: bed
+  category: construction-category-cm-furniture
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked
+
+- type: construction
+  parent: RMC
+  name: rack
+  id: CMRack
+  graph: RMCRack
+  startNode: start
+  targetNode: rack
+  category: construction-category-cm-furniture
+  description: A bunch of metal shelves stacked on top of each other. Excellent for storage purposes, less so as cover.
+  objectType: Structure
+  placementMode: SnapgridCenter
+  canBuildInImpassable: false
+  conditions:
+    - !type:TileNotBlocked

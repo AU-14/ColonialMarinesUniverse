@@ -1,0 +1,135 @@
+- type: entity
+  id: RMCCrateM54CMK1
+  parent: RMCCrateWeapons
+  name: M54C MK1 Rifle Crate (x2 mk1, x2 magazines)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCWeaponRifleM54CMK1
+        amount: 2
+      - id: CMMagazineRifleM54CMK1
+        amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RMCCrateM54CE2
+  name: M54CE2 HAR crate (HAR x2, HAR ammo box x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGunCaseRifleM54CE2
+      amount: 2
+
+- type: entity
+  id: RMCCrateMK80
+  parent: RMCCrateWeapons
+  name: MK80 Hand Cannon Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGunCasePistolMK80
+      amount: 2
+    - id: CMMagazinePistolMK80
+      amount: 4
+
+- type: entity
+  id: RMCCrateXM88
+  parent: RMCCrateWeapons
+  name: XM88 Heavy Rifle crate (XM88 x2)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCCaseXM88
+        amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RMCCrateSmartGunSet
+  name: ML66A Smart Gun System Package
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMSmartGunOperatorEquipmentCase
+      amount: 1
+
+- type: entity
+  id: RMCCrateSU6
+  parent: RMCCrateWeapons
+  name: SU-6 Smart Pistol Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCGunCasePistolSmart
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RMCCrateM34
+  name: M34 Flamethrower Crate (M34 x2, G4-1 fueltank x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCCaseFlamer
+      amount: 2
+    - id: RMCBackpackFlamer
+      amount: 2
+
+- type: entity
+  id: RMCCrateMOU53
+  parent: RMCCrateWeapons
+  name: MOU-53 Break Action Shotgun Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMOU53Case
+      amount: 2
+
+- type: entity
+  id: CMUCrateOlympiets
+  parent: RMCCrateWeapons
+  name: Olympiets Break Action Shotgun Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUOlympietsCase
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RMCCrateXM51
+  name: XM51 Breaching Scattergun Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCXM51Case
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RMCCrateM85A1
+  name: M85A1 Grenade Launcher Crate (x2)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCM85A1Case
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RMCCrateML66D
+  name: ML66D Machine Gun Crate (x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCML66DCase
+      amount: 1
+
+- type: entity
+  parent: RMCCrateWeapons
+  id: RMCCrateM2C
+  name: M2C Machine Gun Crate (x1)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCM2CCase
+      amount: 1

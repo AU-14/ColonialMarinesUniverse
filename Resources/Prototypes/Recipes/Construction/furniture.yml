@@ -1,0 +1,385 @@
+# region Base
+- type: construction
+  abstract: true
+  id: BaseFurniture
+  category: construction-category-furniture
+  placementMode: SnapgridCenter
+
+- type: construction
+  abstract: true
+  parent: BaseFurniture
+  id: BaseChair
+  graph: Seat
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  abstract: true
+  parent: BaseFurniture
+  id: BaseTable
+  graph: Table
+  canRotate: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  abstract: true
+  parent: BaseFurniture
+  id: BaseBed
+  graph: bed
+  canRotate: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  abstract: true
+  parent: BaseFurniture
+  id: BaseCurtains
+  graph: Curtains
+  canBuildInImpassable: true
+# endregion Base
+
+# region Chairs
+- type: construction
+  parent: BaseChair
+  id: Chair
+  targetNode: chair
+
+- type: construction
+  parent: BaseChair
+  id: Stool
+  targetNode: stool
+
+- type: construction
+  parent: BaseChair
+  id: StoolBar
+  targetNode: stoolBar
+
+- type: construction
+  parent: BaseChair
+  id: ChairBrass
+  targetNode: chairBrass
+
+- type: construction
+  parent: BaseChair
+  id: ChairOfficeLight
+  targetNode: chairOffice
+
+- type: construction
+  parent: BaseChair
+  id: ChairOfficeDark
+  targetNode: chairOfficeDark
+
+- type: construction
+  parent: BaseChair
+  id: ChairComfy
+  targetNode: chairComfy
+
+- type: construction
+  parent: BaseChair
+  id: chairPilotSeat
+  targetNode: chairPilotSeat
+
+- type: construction
+  parent: BaseChair
+  id: ChairWood
+  targetNode: chairWood
+
+- type: construction
+  parent: BaseChair
+  id: ChairMeat
+  targetNode: chairMeat
+
+- type: construction
+  parent: BaseChair
+  id: ChairRitual
+  graph: RitualSeat
+  startNode: start
+  targetNode: chairRitual
+
+- type: construction
+  parent: BaseChair
+  id: ChairFolding
+  targetNode: chairFolding
+
+- type: construction
+  parent: BaseChair
+  id: ChairSteelBench
+  targetNode: chairSteelBench
+
+- type: construction
+  parent: BaseChair
+  id: StoolCard
+  targetNode: stoolCard
+
+- type: construction
+  parent: BaseChair
+  id: ChairWoodBench
+  targetNode: chairWoodBench
+
+- type: construction
+  parent: BaseChair
+  id: RedComfBench
+  name: construction-recipe-red-comf-bench
+  targetNode: redComfBench
+
+- type: construction
+  parent: BaseChair
+  id: BlueComfBench
+  name: construction-recipe-blue-comf-bench
+  targetNode: blueComfBench
+# endregion Chairs
+
+# region Tables
+- type: construction
+  parent: BaseTable
+  id: Table
+  targetNode: Table
+
+- type: construction
+  parent: BaseTable
+  id: TableReinforced
+  targetNode: TableReinforced
+
+- type: construction
+  parent: BaseTable
+  id: TableGlass
+  targetNode: TableGlass
+
+- type: construction
+  parent: BaseTable
+  id: TableCard
+  graph: Table
+  targetNode: TableCard
+
+- type: construction
+  parent: BaseTable
+  id: TableReinforcedGlass
+  targetNode: TableReinforcedGlass
+
+- type: construction
+  parent: BaseTable
+  id: TablePlasmaGlass
+  targetNode: TablePlasmaGlass
+
+- type: construction
+  parent: BaseTable
+  id: TableBrass
+  targetNode: TableBrass
+
+- type: construction
+  parent: BaseTable
+  id: TableWood
+  targetNode: TableWood
+
+- type: construction
+  parent: BaseTable
+  id: TableCarpet
+  targetNode: TableCarpet
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyBlack
+  name: construction-recipe-table-fancy-black
+  targetNode: TableFancyBlack
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyBlue
+  name: construction-recipe-table-fancy-blue
+  targetNode: TableFancyBlue
+
+- type: construction
+  parent: BaseTable
+  id: TableFancySkyBlue
+  name: construction-recipe-table-fancy-sky-blue
+  targetNode: TableFancySkyBlue
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyCyan
+  name: construction-recipe-table-fancy-cyan
+  targetNode: TableFancyCyan
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyGreen
+  name: construction-recipe-table-fancy-green
+  targetNode: TableFancyGreen
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyOrange
+  name: construction-recipe-table-fancy-orange
+  targetNode: TableFancyOrange
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyPurple
+  targetNode: TableFancyPurple
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyPink
+  name: construction-recipe-table-fancy-pink
+  targetNode: TableFancyPink
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyRed
+  name: construction-recipe-table-fancy-red
+  targetNode: TableFancyRed
+
+- type: construction
+  parent: BaseTable
+  id: TableFancyWhite
+  name: construction-recipe-table-fancy-white
+  targetNode: TableFancyWhite
+
+- type: construction
+  parent: BaseTable
+  id: TableCounterMetal
+  targetNode: CounterMetal
+
+- type: construction
+  parent: BaseTable
+  id: TableCounterWood
+  targetNode: CounterWood
+# endregion Tables
+
+# region Bedroom
+- type: construction
+  parent: BaseBed
+  id: Bed
+  targetNode: bed
+
+- type: construction
+  parent: BaseBed
+  id: MedicalBed
+  targetNode: medicalbed
+
+- type: construction
+  parent: BaseBed
+  id: DogBed
+  targetNode: dogbed
+
+- type: construction
+  parent: BaseTable # close enough
+  id: Dresser
+  graph: Dresser
+  targetNode: dresser
+# endregion Bedroom
+
+# region Curtains
+- type: construction
+  parent: BaseCurtains
+  id: Curtains
+  name: construction-recipe-curtains-cloth
+  targetNode: Curtains
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsBlack
+  name: construction-recipe-curtains-black
+  targetNode: CurtainsBlack
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsBlue
+  name: construction-recipe-curtains-blue
+  targetNode: CurtainsBlue
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsSkyBlue
+  name: construction-recipe-curtains-sky-blue
+  targetNode: CurtainsSkyBlue
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsCyan
+  name: construction-recipe-curtains-cyan
+  targetNode: CurtainsCyan
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsGreen
+  name: construction-recipe-curtains-green
+  targetNode: CurtainsGreen
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsOrange
+  name: construction-recipe-curtains-orange
+  targetNode: CurtainsOrange
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsPink
+  name: construction-recipe-curtains-pink
+  targetNode: CurtainsPink
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsPurple
+  name: construction-recipe-curtains-purple
+  targetNode: CurtainsPurple
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsRed
+  name: construction-recipe-curtains-red
+  targetNode: CurtainsRed
+
+- type: construction
+  parent: BaseCurtains
+  id: CurtainsWhite
+  name: construction-recipe-curtains-white
+  targetNode: CurtainsWhite
+
+# region Misc
+- type: construction
+  parent: BaseFurniture
+  id: MeatSpike
+  graph: MeatSpike
+  targetNode: MeatSpike
+  canRotate: false
+  conditions:
+  - !type:TileNotBlocked
+
+- type: construction
+  parent: BaseTable # close enough
+  id: Bookshelf
+  graph: Bookshelf
+  targetNode: bookshelf
+
+- type: construction
+  parent: BaseTable # close enough
+  id: Rack
+  graph: Rack
+  targetNode: Rack
+
+- type: construction
+  parent: BaseChair # close enough
+  id: ToiletEmpty
+  graph: Toilet
+  targetNode: toilet
+
+- type: construction
+  parent: BaseFurniture
+  id: NoticeBoard
+  graph: NoticeBoard
+  targetNode: noticeBoard
+  canRotate: true
+  canBuildInImpassable: true
+  conditions:
+  - !type:WallmountCondition
+
+- type: construction
+  parent: BaseFurniture
+  id: Mannequin
+  graph: Mannequin
+  targetNode: mannequin
+  canRotate: true
+  conditions:
+  - !type:TileNotBlocked

@@ -1,0 +1,374 @@
+﻿- type: entity
+  abstract: true
+  parent: CMBaseStructure
+  id: RMCCommunicationsConsoleBase
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Structures/Machines/rmc_groundside_communications_console.rsi
+    layers:
+    - map: ["base"]
+      state: "off"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "on"
+  - type: Appearance
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+        base:
+          True: { visible: false }
+          False: { visible: true }
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Corrodible
+    isCorrodible: false
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 300
+    activeLoad: 300
+    channel: Equipment
+  - type: ActivatableUIRequiresPower
+  - type: WallMount
+    arc: 360
+  - type: EmitSoundOnUIOpen
+    sound:
+      collection: RMCKeyboardTyping
+      params:
+        volume: -1
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCGroundsideOperationsConsole
+  name: groundside operations console
+  description: This can be used for various important functions.
+  components:
+  - type: ActivatableUI
+    key: enum.MarineCommunicationsComputerUI.Key
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "RMCAccessSeniorCommand" ] ]
+  - type: UserInterface
+    interfaces:
+      enum.MarineCommunicationsComputerUI.Key:
+        type: MarineCommunicationsComputerBui
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: MarineCommunicationsComputer
+  - type: OverwatchConsole
+    canMessageSquad: false
+  - type: TacticalMapComputer
+  - type: GuideHelp
+    guides:
+    - RMCGuideMarineCommunications
+    - RMCLanguage
+    - RMCGuideCommunicationsTowers
+    - RMCGuideRoleCombatTechnician
+    - RMCGuideRoleMaintenanceTechnician
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCWarshipControlConsole
+  name: almayer control console
+  description: This is used for controlling ship and its related functions.
+  components:
+  - type: ActivatableUI
+    key: enum.MarineControlComputerUi.Key
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "RMCAccessSeniorCommand" ] ]
+  - type: UserInterface
+    interfaces:
+      enum.MarineControlComputerUi.Key:
+        type: MarineControlComputerBui
+      enum.MarineControlComputerUi.MedalsPanel:
+        type: MedalsPanelBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: MarineControlComputer
+
+- type: entity
+  abstract: true
+  parent: RMCCommunicationsConsoleBase
+  id: RMCOverwatchConsoleBase
+  name: overwatch console
+  description: State of the art machinery for giving orders to a squad.
+  components:
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Static
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.OverwatchConsoleUI.Key
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "RMCAccessCommand" ] ]
+  - type: UserInterface
+    interfaces:
+      enum.OverwatchConsoleUI.Key:
+        type: OverwatchConsoleBui
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+      enum.DialogUiKey.Key:
+        type: DialogBui
+  - type: RequiresSkill
+    skills:
+      RMCSkillOverwatch: 1
+  - type: OverwatchConsole
+  - type: TacticalMapComputer
+  - type: SupplyDropComputer
+  - type: GuideHelp
+    guides:
+    - RMCGuideMarineCommunications
+    - RMCLanguage
+    - RMCGuideCommunicationsTowers
+    - RMCGuideRoleCombatTechnician
+    - RMCGuideRoleMaintenanceTechnician
+
+- type: entity
+  parent: RMCOverwatchConsoleBase
+  id: RMCOverwatchConsole
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - map: ["base"]
+      state: "overwatch0"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "overwatch"
+    overrideDir: West
+    enableOverrideDir: true
+
+- type: entity
+  parent: RMCOverwatchConsole
+  id: RMCOverwatchConsoleRotating
+  suffix: Rotating
+  components:
+  - type: Sprite
+    overrideDir: South
+    enableOverrideDir: false
+
+- type: entity
+  parent: RMCOverwatchConsoleRotating
+  id: RMCOverwatchConsoleRotatingPowered
+  suffix: Rotating, Powered
+  components:
+  - type: ApcPowerReceiver
+    powerLoad: 0
+    needsPower: false # intentionally!
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCTacticalMapTable
+  name: map table
+  description: A table that displays a map of the current operation location.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/map_table.rsi
+    state: maptable
+    layers: []
+  - type: RMCPowerReceiver
+    idleLoad: 0
+    activeLoad: 2
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TacticalMapComputerUi.Key
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "RMCAccessCommand" ] ]
+  - type: UserInterface
+    interfaces:
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+  - type: TacticalMapComputer
+  - type: EmitSoundOnUIOpen
+    sound: null
+  - type: GuideHelp
+    guides:
+    - RMCGuideMarineCommunications
+    - RMCLanguage
+    - RMCGuideCommunicationsTowers
+    - RMCGuideRoleCombatTechnician
+    - RMCGuideRoleMaintenanceTechnician
+
+- type: entity
+  parent: RMCTacticalMapTable
+  id: RMCTacticalMapTableLarge
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/large_map_table.rsi
+    offset: 1, 0.5
+    drawdepth: Objects
+    layers:
+    - state: maptable
+    - state: maptable-on
+      map: ["enum.PowerDeviceVisualLayers.Powered"]
+      shader: unshaded
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.TacticalMapComputerUi.Key
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "RMCAccessCommand" ] ]
+  - type: UserInterface
+    interfaces:
+      enum.TacticalMapComputerUi.Key:
+        type: TacticalMapComputerBui
+  - type: TacticalMapComputer
+  - type: EmitSoundOnUIOpen
+    sound: null
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 5
+    activeLoad: 10
+    channel: Equipment
+  - type: GenericVisualizer
+    visuals:
+      enum.PowerDeviceVisuals.Powered:
+        enum.PowerDeviceVisualLayers.Powered:
+          True: { visible: true }
+          False: { visible: false }
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.5,2.4,1.4"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+  - type: PlaceableSurface
+
+- type: entity
+  parent: RMCTacticalMapTableLarge
+  id: RMCTacticalMapTableLargeRotated
+  suffix: Rotated
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/large_map_table_rotated.rsi
+    offset: 0.5, 1
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.4,1.4,2.4"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+
+- type: entity
+  parent: RMCTacticalMapTableLarge
+  id: RMCTacticalMapTableLargeSquare
+  suffix: 2x2
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/2x2_map_table.rsi
+    offset: 0.5, 0.5
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,1.4,1.4"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCEscapePodController
+  name: escape pod controller
+  description: A shuttle control computer.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/escape_pod_panel.rsi
+    layers:
+    - map: ["base"]
+      state: "airlock_control_off"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "airlock_control_standby"
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.EvacuationComputerUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.EvacuationComputerUi.Key:
+        type: EvacuationComputerBui
+  - type: EvacuationComputer
+    maxMobs: 3
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: ApcPowerReceiver
+    powerLoad: 250
+    needsPower: true
+  - type: RMCPowerReceiver
+    idleLoad: 300
+    activeLoad: 300
+    channel: Equipment
+
+- type: entity
+  parent: RMCEscapePodController
+  id: RMCEscapePodControllerLiaison
+  suffix: Liaison, Fueled
+  components:
+  - type: EvacuationComputer
+    earlyCrashChance: 0
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "RMCAccessWeYa" ] ]
+
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: RMCLifeboatConsole
+  name: lifeboat console
+  description: A lifeboat control computer.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    layers:
+    - map: ["base"]
+      state: "terminal0"
+    - map: ["enum.PowerDeviceVisualLayers.Powered"]
+      state: "terminal"
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.LifeboatComputerUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.LifeboatComputerUi.Key:
+        type: LifeboatComputerBui
+  - type: LifeboatComputer
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [ [ "CMAccessDropship" ], [ "RMCAccessSeniorCommand" ] ]
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno

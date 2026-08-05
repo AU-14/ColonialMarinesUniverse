@@ -1,0 +1,20 @@
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMJobIconChiefEngineer
+  icon:
+    sprite: _RMC14/Interface/job_icons/UNMC/engineering.rsi
+    state: hudsquad_ce
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMJobIconOrdnanceTech
+  icon:
+    sprite: _RMC14/Interface/job_icons/UNMC/engineering.rsi
+    state: hudsquad_ot
+
+- type: jobIcon
+  parent: CMJobIconBase
+  id: CMJobIconMaintTech
+  icon:
+    sprite: _RMC14/Interface/job_icons/UNMC/engineering.rsi
+    state: hudsquad_mt
