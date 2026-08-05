@@ -1,29 +1,35 @@
 # CMU Content
 
-This directory is the authoritative home for CMU-only gameplay code and resources.
+This folder is the home for code and assets made specifically for Colonial Marines Universe (CMU).
+New CMU features should usually be placed here.
 
-## Layout
+## Where things go
 
 ```text
 Content.CMU/
-  Shared/     Shared components, events, systems, and prediction-safe logic
-  Server/     Authoritative, database-facing, and server-only behavior
-  Client/     UI, overlays, input, audio, and visual presentation
-  Resources/  Prototypes, textures, audio, maps, localization, and other assets
+  Shared/     Gameplay used by both the client and server
+  Server/     Server-only gameplay and data handling
+  Client/     Interfaces, visuals, audio, and player input
+  Resources/  Prototypes, textures, sounds, maps, and translations
 ```
 
-The three code directories compile into the existing `Content.Shared`, `Content.Server`, and
-`Content.Client` assemblies. They are not separate assemblies. This preserves Robust source
-generators, XAML compilation, partial types, internal access, networking, and runtime discovery.
+The code folders are part of the existing Shared, Server, and Client projects. You do not need to
+create a separate project for CMU code.
 
-Use namespaces that match the destination assembly, such as `Content.Shared.CMU`,
-`Content.Server.CMU`, and `Content.Client.CMU`. Ported code may retain a compatible existing
-namespace when changing it would add unnecessary migration churn.
+Match namespaces to the folder where the code lives:
+
+```text
+Shared/  -> Content.Shared.CMU
+Server/  -> Content.Server.CMU
+Client/  -> Content.Client.CMU
+```
+
+Existing code can keep a compatible namespace when renaming it would create unnecessary work.
 
 ## Resources
 
-`Content.CMU/Resources` is mounted at the VFS root in development and tests and is merged into
-client, server, and ACZ production packages. Mirror normal resource paths directly:
+Put CMU assets in `Content.CMU/Resources` and use the same folder structure as the main
+`Resources` directory:
 
 ```text
 Content.CMU/Resources/Prototypes/...
@@ -33,13 +39,23 @@ Content.CMU/Resources/Locale/...
 Content.CMU/Resources/Maps/...
 ```
 
-For example, `Content.CMU/Resources/Textures/Medical/scanner.rsi` is addressed in content as
-`/Textures/Medical/scanner.rsi`.
+When referencing an asset in code or YAML, leave `Content.CMU/Resources` out of its path. For
+example:
 
-Every relative resource path must be unique across `Resources/` and `Content.CMU/Resources/`.
-The standard resource root is mounted first during development, so ambiguous overrides are
-rejected to keep development and packaged behavior identical. Global singleton files such as
-`manifest.yml` remain in the canonical `Resources/` root.
+```text
+Content.CMU/Resources/Textures/Medical/scanner.rsi
+```
 
-Tests remain in `Content.Tests` or `Content.IntegrationTests` so the existing test runners can
-discover them.
+is referenced as:
+
+```text
+/Textures/Medical/scanner.rsi
+```
+
+Do not create the same resource path in both `Resources/` and `Content.CMU/Resources/`. Keep
+project-wide files, such as `manifest.yml`, in the main `Resources/` directory.
+
+## Tests
+
+Put unit tests in `Content.Tests` and integration tests in `Content.IntegrationTests` so the existing
+test tools can find and run them.
