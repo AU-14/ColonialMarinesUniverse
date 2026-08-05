@@ -10,6 +10,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared._RMC14.Xenonids.Egg;
 
 namespace Content.Shared._RMC14.Xenonids.Construction.PlasmaTree;
 

@@ -124,6 +124,9 @@ public sealed partial class RMCConstructionSystem : EntitySystem
         if (_net.IsClient)
             return false;
 
+        if (amount <= 0)
+            return false;
+
         if (!_prototype.TryIndex<RMCConstructionPrototype>(protoID, out var proto))
             return false;
 
