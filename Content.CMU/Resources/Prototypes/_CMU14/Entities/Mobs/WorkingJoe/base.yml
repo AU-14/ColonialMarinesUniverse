@@ -85,10 +85,7 @@
     speechVerb: WorkingJoe
     speechSounds: null
   - type: Vocal
-    sounds:
-      Male: AU14WorkingJoeSounds
-      Female: AU14WorkingJoeSounds
-      Unsexed: AU14WorkingJoeSounds
+    emoteSounds: AU14WorkingJoeSounds
   - type: TypingIndicator
     proto: joe
   - type: Deathgasp

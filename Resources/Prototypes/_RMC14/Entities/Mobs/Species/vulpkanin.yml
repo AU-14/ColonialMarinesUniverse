@@ -21,10 +21,7 @@
     speechVerb: RMCVulpkanin
     allowedEmotes: [ 'Bark', 'Snarl', 'Whine', 'Growl', 'Yip' ]
   - type: Vocal
-    sounds:
-      Male: RMCMaleVulpkanin
-      Female: RMCFemaleVulpkanin
-      Unsexed: RMCMaleVulpkanin
+    emoteSounds: RMCMaleVulpkanin
   - type: Wagging
     action: ActionToggleVulpkaninWagging
   - type: MeleeWeapon

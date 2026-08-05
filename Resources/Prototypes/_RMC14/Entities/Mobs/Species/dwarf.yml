@@ -13,10 +13,7 @@
     drawdepth: Mobs
     scale: 1, 0.8
   - type: Vocal
-    sounds:
-      Male: RMCMaleDwarf
-      Unsexed: RMCMaleDwarf #sorry fem-leaning enbies
-      Female: RMCFemaleDwarf
+    emoteSounds: RMCMaleDwarf
   - type: ReplacementAccent
     accent: dwarf
   - type: Speech

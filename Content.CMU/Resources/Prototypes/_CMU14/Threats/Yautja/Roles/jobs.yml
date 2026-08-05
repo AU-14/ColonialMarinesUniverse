@@ -459,10 +459,7 @@
     - CMUYautjaDeathCry
     - CMUYautjaDeathLaugh
   - type: Vocal
-    sounds:
-      Male: CMUMaleYautja
-      Female: CMUFemaleYautja
-      Unsexed: CMUMaleYautja
+    emoteSounds: CMUMaleYautja
 
 - type: playTimeTracker
   id: CMUYautjaHunter

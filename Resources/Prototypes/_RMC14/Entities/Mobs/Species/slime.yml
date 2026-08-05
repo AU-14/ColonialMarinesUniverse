@@ -17,10 +17,7 @@
   - type: TypingIndicator
     proto: slime
   - type: Vocal
-    sounds:
-      Male: RMCMaleSlime
-      Female: RMCFemaleSlime
-      Unsexed: RMCMaleSlime
+    emoteSounds: RMCMaleSlime
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:

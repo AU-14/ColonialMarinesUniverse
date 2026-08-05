@@ -19,10 +19,7 @@
   - type: TypingIndicator
     proto: moth
   - type: Vocal
-    sounds:
-      Male: RMCMaleMoth
-      Female: RMCFemaleMoth
-      Unsexed: UnisexMoth
+    emoteSounds: UnisexMoth
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:

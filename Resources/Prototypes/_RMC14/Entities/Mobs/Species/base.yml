@@ -127,6 +127,18 @@
   - type: Body
     prototype: CMUHumanBody
     requiredLegs: 2
+  # CMU humans still use the legacy body-part graph, while upstream now adds
+  # hands through HandOrganComponent. Keep these IDs aligned with the legacy
+  # body-part container slots so severance and surgery can remove/restore them.
+  - type: Hands
+    hands:
+      body_part_slot_right_hand:
+        location: Right
+      body_part_slot_left_hand:
+        location: Left
+    sortedHands:
+    - body_part_slot_right_hand
+    - body_part_slot_left_hand
   - type: Internals
   - type: BodyZoneTargeting
   - type: CMUHumanMedical
@@ -138,10 +150,7 @@
     damageModifierSet: null
     healthBarThreshold: 5
   - type: Vocal
-    sounds:
-      Male: MaleHuman
-      Female: FemaleHuman
-      Unsexed: MaleHuman
+    emoteSounds: MaleHuman
   - type: Flammable
     fireSpread: false
     canResistFire: true

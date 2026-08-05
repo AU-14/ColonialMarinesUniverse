@@ -11,10 +11,7 @@
     speechVerb: Skrell
     allowedEmotes: [ 'RMCSkrellPeep', 'RMCSkrellAnger', 'RMCSkrellTrill', 'RMCSkrellWarble' ]
   - type: Vocal
-    sounds:
-      Male: RMCMaleSkrell
-      Unsexed: RMCMaleSkrell
-      Female: RMCFemaleSkrell
+    emoteSounds: RMCMaleSkrell
   - type: DamageVisuals
     damageOverlayGroups:
       Brute:

@@ -7,10 +7,7 @@
   components:
   - type: FlareStomper
   - type: Vocal
-    sounds:
-      Male: RMCMaleHuman
-      Unsexed: RMCMaleHuman #sorry fem-leaning enbies
-      Female: RMCFemaleHuman
+    emoteSounds: RMCMaleHuman
   - type: EmoteOnDamage
     emotes:
     - Scream

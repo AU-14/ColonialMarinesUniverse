@@ -18,10 +18,7 @@
     speechVerb: Feroxi
     allowedEmotes: [ 'Gnash', 'Thump' ] #added thump cuz why not, it makes sense
   - type: Vocal
-    sounds:
-      Male: RMCMaleFeroxi
-      Female: RMCFemaleFeroxi
-      Unsexed: RMCMaleFeroxi
+    emoteSounds: RMCMaleFeroxi
   - type: Sprite
     netsync: false
     noRot: true

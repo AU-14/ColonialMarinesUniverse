@@ -25,10 +25,7 @@
   - type: TypingIndicator
     proto: lizard
   - type: Vocal
-    sounds:
-      Male: RMCMaleReptilian
-      Female: RMCFemaleReptilian
-      Unsexed: RMCUnisexReptilian
+    emoteSounds: RMCUnisexReptilian
   - type: Wagging
   - type: MeleeWeapon
     soundHit:

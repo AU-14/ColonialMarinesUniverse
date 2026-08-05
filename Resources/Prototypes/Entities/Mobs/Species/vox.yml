@@ -18,10 +18,7 @@
   - type: TypingIndicator
     proto: vox
   - type: Vocal
-    sounds:
-      Male: UnisexVox
-      Female: UnisexVox
-      Unsexed: UnisexVox
+    emoteSounds: UnisexVox
   - type: Butcherable
     butcheringType: Spike
     spawned:

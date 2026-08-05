@@ -14,10 +14,7 @@
   - type: Sprite
     drawdepth: Mobs
   - type: Vocal
-    sounds:
-      Male: RMCMaleAvali
-      Unsexed: RMCMaleAvali
-      Female: RMCFemaleAvali
+    emoteSounds: RMCMaleAvali
   - type: Wagging
     action: ActionToggleAvaliWagging
   - type: Speech

@@ -16,10 +16,7 @@
   - type: Wagging
     action: ActionToggleFelinidWagging
   - type: Vocal
-    sounds:
-      Male: RMCMaleFelinid
-      Unsexed: RMCUnisexFelinid
-      Female: RMCFemaleFelinid
+    emoteSounds: RMCUnisexFelinid
   - type: Speech
     allowedEmotes: ['Hiss', 'Meow', 'Mew', 'Growl', 'Purr']
   - type: FixedIdentity

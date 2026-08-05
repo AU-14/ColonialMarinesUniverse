@@ -26,10 +26,7 @@
   - type: TypingIndicator
     proto: diona
   - type: Vocal
-    sounds:
-      Male: RMCMaleDiona
-      Female: RMCFemaleDiona
-      Unsexed: UnisexDiona
+    emoteSounds: UnisexDiona
   - type: BodyEmotes
     soundsId: DionaBodyEmotes
   - type: FixedIdentity

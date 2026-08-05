@@ -19,10 +19,7 @@
     speechSounds: Arachnid
     allowedEmotes: ['Click', 'Chitter']
   - type: Vocal
-    sounds:
-      Male: RMCUnisexArachnid
-      Female: RMCUnisexArachnid
-      Unsexed: RMCUnisexArachnid
+    emoteSounds: RMCUnisexArachnid
   - type: TypingIndicator
     proto: spider
   - type: MeleeWeapon

@@ -186,10 +186,7 @@
     - Mouse
     - Meat
   - type: Vocal
-    sounds:
-      Male: Mouse
-      Female: Mouse
-      Unsexed: Mouse
+    emoteSounds: Mouse
   - type: CombatMode # I dont think this is needed
   - type: MeleeWeapon
     soundHit:

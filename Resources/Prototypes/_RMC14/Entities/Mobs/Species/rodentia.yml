@@ -74,10 +74,7 @@
       path: /Audio/Weapons/pierce.ogg
     animation: WeaponArcClaw
   - type: Vocal
-    sounds:
-      Male: RMCMaleRodentia
-      Female: RMCFemaleRodentia
-      Unsexed: RMCMaleRodentia
+    emoteSounds: RMCMaleRodentia
   - type: Inventory
     speciesId: rodentia
   - type: FixedIdentity
