@@ -245,6 +245,8 @@
   - type: InfectOnPullAttemptImmune
   - type: GhostTakeoverAvailable
   - type: LarvaQueueable
+  # CMU14 - Retain the CMU larva queue alongside the upstream queue.
+  - type: CanBeLarvaQueued
   - type: GhostRole
     makeSentient: true
     allowSpeech: true

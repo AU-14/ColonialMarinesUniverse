@@ -109,6 +109,7 @@
     noiseAmount: 0 # In case default values change
     noiseMultiplier: 0 # In case default values change
   # RMC14
+  - type: JoinXeno
   - type: UserInterface
     interfaces:
       enum.DialogUiKey.Key:

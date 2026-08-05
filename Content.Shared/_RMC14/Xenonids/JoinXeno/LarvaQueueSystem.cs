@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared._CMU14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Parasite;
@@ -56,6 +57,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<JoinXenoComponent, CMUJoinLarvaQueueEvent>(OnJoinLarvaQueue);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnCleanup);
         SubscribeLocalEvent<BurrowedLarvaAddedEvent>(OnBurrowedLarvaAdded);
         SubscribeLocalEvent<PlayerAttachedEvent>(OnPlayerAttached);
@@ -194,7 +196,7 @@ public sealed partial class LarvaQueueSystem : EntitySystem
         _disconnectExpiresAt.Clear();
     }
 
-    private void OnJoinLarvaQueue(Entity<JoinXenoComponent> ent, ref JoinLarvaQueueEvent args)
+    private void OnJoinLarvaQueue(Entity<JoinXenoComponent> ent, ref CMUJoinLarvaQueueEvent args)
     {
         if (_net.IsClient)
             return;

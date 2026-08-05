@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.GameTicking;
@@ -108,7 +109,7 @@ public sealed partial class JoinXenoSystem : EntitySystem
                 optionText = $"Join Larva Queue for ({Name(hiveId)})";
             }
 
-            options.Add(new DialogOption(optionText, new JoinLarvaQueueEvent(GetNetEntity(hiveId))));
+            options.Add(new DialogOption(optionText, new CMUJoinLarvaQueueEvent(GetNetEntity(hiveId))));
         }
 
         _dialog.OpenOptions(ent, "Join as Xeno", options, "Available Hives");
