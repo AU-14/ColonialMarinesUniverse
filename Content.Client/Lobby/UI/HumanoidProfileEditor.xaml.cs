@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Content.Client.Humanoid;
 using Content.Client.Lobby.UI.Roles;
 using Content.Client.Message;
@@ -21,6 +22,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Enums;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
 
@@ -29,6 +31,8 @@ namespace Content.Client.Lobby.UI
     [GenerateTypedNameReferences]
     public sealed partial class HumanoidProfileEditor : BoxContainer
     {
+        private const float JobPreviewScrollDelay = 2.75f;
+
         private readonly IClientPreferencesManager _preferencesManager;
         private readonly IConfigurationManager _cfgManager;
         private readonly IEntityManager _entManager;
@@ -61,6 +65,10 @@ namespace Content.Client.Lobby.UI
         public HumanoidCharacterProfile? Profile;
 
         private Direction _previewRotation = Direction.North;
+        private readonly List<LobbyHighJobPreviewEntry> _previewJobs = new();
+        private int _previewJobIndex;
+        private float _previewJobTimer;
+        private string _previewJobSignature = string.Empty;
 
         private bool _isDirty;
 
@@ -418,10 +426,56 @@ namespace Content.Client.Lobby.UI
             if (Profile == null)
                 return;
 
-            SpriteView.LoadPreview(Profile, JobOverride, ShowClothes.Pressed);
+            RefreshPreviewJobs();
+            RenderPreview();
 
             // Check and set the dirty flag to enable the save/reset buttons as appropriate.
             SetDirty();
+        }
+
+        private void RenderPreview()
+        {
+            if (Profile == null)
+                return;
+
+            var entry = JobOverride == null && _previewJobs.Count > 0
+                ? _previewJobs[_previewJobIndex]
+                : null;
+            var job = JobOverride ?? entry?.Job;
+
+            SpriteView.LoadPreview(Profile, job, ShowClothes.Pressed);
+            PreviewJobLabel.Text = entry?.DisplayName ??
+                                   (JobOverride == null
+                                       ? string.Empty
+                                       : LobbyHighJobPreview.GetDisplayJobName(JobOverride));
+            PreviewJobLabel.Visible = job != null;
+        }
+
+        private void RefreshPreviewJobs()
+        {
+            if (Profile == null)
+                return;
+
+            var jobs = LobbyHighJobPreview.GetHighPriorityJobs(Profile, _prototypeManager);
+            var signature = LobbyHighJobPreview.GetSignature(jobs);
+            if (signature == _previewJobSignature)
+                return;
+
+            _previewJobs.Clear();
+            _previewJobs.AddRange(jobs);
+            _previewJobSignature = signature;
+            _previewJobIndex = 0;
+            _previewJobTimer = 0;
+        }
+
+        private void ResetPreviewJobs()
+        {
+            _previewJobs.Clear();
+            _previewJobSignature = string.Empty;
+            _previewJobIndex = 0;
+            _previewJobTimer = 0;
+            PreviewJobLabel.Text = string.Empty;
+            PreviewJobLabel.Visible = false;
         }
 
         /// <summary>
@@ -443,6 +497,7 @@ namespace Content.Client.Lobby.UI
             CharacterSlot = slot;
             IsDirty = false;
             JobOverride = null;
+            ResetPreviewJobs();
 
             UpdateNameEdit();
             UpdateFlavorTextEdit();
@@ -503,6 +558,22 @@ namespace Content.Client.Lobby.UI
         {
             base.EnteredTree();
             ReloadPreview();
+        }
+
+        protected override void FrameUpdate(FrameEventArgs args)
+        {
+            base.FrameUpdate(args);
+
+            if (Profile == null || JobOverride != null || _previewJobs.Count <= 1)
+                return;
+
+            _previewJobTimer += args.DeltaSeconds;
+            if (_previewJobTimer < JobPreviewScrollDelay)
+                return;
+
+            _previewJobTimer -= JobPreviewScrollDelay;
+            _previewJobIndex = (_previewJobIndex + 1) % _previewJobs.Count;
+            RenderPreview();
         }
 
         private void UpdateSaveButton()
