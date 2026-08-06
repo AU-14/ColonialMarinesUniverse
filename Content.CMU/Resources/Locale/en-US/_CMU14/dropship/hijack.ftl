@@ -10,5 +10,6 @@ cmu-dropship-hijack-decline-final-text = This will end the round immediately and
 cmu-dropship-hijack-decline-final-accept = End the round
 cmu-dropship-hijack-decline-final-deny = Go back
 cmu-dropship-hijack-decline-unavailable = The hive cannot end the round this way right now.
+rmc-grenade-blocked-before-hijack = Grenades cannot be armed aboard the USS George W. Bush until a dropship hijack begins.
 
 cmu-distress-signal-minorxenovictory-no-hijack = [color=green]The surviving marines escaped aboard the metal bird after the Queen chose not to pursue them into the metal hive.[/color] [color=purple]Though the hosts escaped, the surface remains overrun, and the xenonids endure.[/color]
