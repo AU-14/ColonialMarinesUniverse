@@ -49,6 +49,8 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         SubscribeLocalEvent<PuddleComponent, SpreadNeighborsEvent>(OnPuddleSpread);
         SubscribeLocalEvent<PuddleComponent, SlipEvent>(OnPuddleSlip);
+
+        InitializeCmuPuddles();
     }
 
     // TODO: This can be predicted once https://github.com/space-wizards/RobustToolbox/pull/5849 is merged
@@ -290,7 +292,8 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         Solution addedSolution,
         bool sound = true,
         bool checkForOverflow = true,
-        PuddleComponent? puddleComponent = null)
+        PuddleComponent? puddleComponent = null,
+        EntityCoordinates? decalCoordinates = null)
     {
         if (!Resolve(puddleUid, ref puddleComponent))
             return false;
@@ -305,12 +308,10 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             EnsureComp<ActiveEdgeSpreaderComponent>(puddleUid);
         }
 
-        if (!sound)
-        {
-            return true;
-        }
+        if (sound)
+            Audio.PlayPvs(puddleComponent.SpillSound, puddleUid);
 
-        Audio.PlayPvs(puddleComponent.SpillSound, puddleUid);
+        TrySpawnPuddleDecal(puddleUid, decalCoordinates);
         return true;
     }
 
@@ -456,7 +457,13 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             return false;
         }
 
-        return TrySpillAt(_map.GetTileRef(gridUid.Value, mapGrid, coordinates), solution, out puddleUid, sound);
+        return TrySpillAt(
+            _map.GetTileRef(gridUid.Value, mapGrid, coordinates),
+            coordinates,
+            solution,
+            out puddleUid,
+            sound,
+            mapGrid: mapGrid);
     }
 
     /// <inheritdoc/>
@@ -476,6 +483,26 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     public override bool TrySpillAt(TileRef tileRef, Solution solution, out EntityUid puddleUid, bool sound = true,
         bool tileReact = true)
     {
+        var gridId = tileRef.GridUid;
+        if (!TryComp<MapGridComponent>(gridId, out var mapGrid))
+        {
+            puddleUid = EntityUid.Invalid;
+            return false;
+        }
+
+        var coordinates = _map.GridTileToLocal(gridId, mapGrid, tileRef.GridIndices);
+        return TrySpillAt(tileRef, coordinates, solution, out puddleUid, sound, tileReact, mapGrid);
+    }
+
+    private bool TrySpillAt(
+        TileRef tileRef,
+        EntityCoordinates spillCoordinates,
+        Solution solution,
+        out EntityUid puddleUid,
+        bool sound = true,
+        bool tileReact = true,
+        MapGridComponent? mapGrid = null)
+    {
         if (solution.Volume <= 0)
         {
             puddleUid = EntityUid.Invalid;
@@ -491,7 +518,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         // Let's not spill to invalid grids.
         var gridId = tileRef.GridUid;
-        if (!TryComp<MapGridComponent>(gridId, out var mapGrid))
+        if (!Resolve(gridId, ref mapGrid, false))
         {
             puddleUid = EntityUid.Invalid;
             return false;
@@ -512,6 +539,10 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
 
         // Get normalized co-ordinate for spill location and spill it in the centre
         // TODO: Does SnapGrid or something else already do this?
+        var puddlePrototype = GetPuddlePrototype(solution);
+        var decalCoordinates = puddlePrototype == BloodDecalPuddlePrototype
+            ? spillCoordinates
+            : _map.GridTileToLocal(gridId, mapGrid, tileRef.GridIndices);
         var anchored = _map.GetAnchoredEntitiesEnumerator(gridId, mapGrid, tileRef.GridIndices);
 
         while (anchored.MoveNext(out var ent))
@@ -526,7 +557,12 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
             if (!_puddleQuery.TryGetComponent(ent, out var puddle))
                 continue;
 
-            if (TryAddSolution(ent.Value, solution, sound, puddleComponent: puddle))
+            if (TryAddSolution(
+                    ent.Value,
+                    solution,
+                    sound,
+                    puddleComponent: puddle,
+                    decalCoordinates: decalCoordinates))
             {
                 EnsureComp<ActiveEdgeSpreaderComponent>(ent.Value);
             }
@@ -536,9 +572,9 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
         }
 
         var coords = _map.GridTileToLocal(gridId, mapGrid, tileRef.GridIndices);
-        puddleUid = Spawn("Puddle", coords);
+        puddleUid = Spawn(puddlePrototype, coords);
         EnsureComp<PuddleComponent>(puddleUid);
-        if (TryAddSolution(puddleUid, solution, sound))
+        if (TryAddSolution(puddleUid, solution, sound, decalCoordinates: decalCoordinates))
         {
             EnsureComp<ActiveEdgeSpreaderComponent>(puddleUid);
         }
@@ -551,7 +587,7 @@ public sealed partial class PuddleSystem : SharedPuddleSystem
     /// <summary>
     /// Tries to get the relevant puddle entity for a tile.
     /// </summary>
-    public bool TryGetPuddle(TileRef tile, out EntityUid puddleUid)
+    public override bool TryGetPuddle(TileRef tile, out EntityUid puddleUid)
     {
         puddleUid = EntityUid.Invalid;
 

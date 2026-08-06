@@ -9,6 +9,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Fluids.Components;
+using Content.Shared.FootPrint;
 using Content.Shared.Friction;
 using Content.Shared.Maps;
 using Content.Shared.Movement.Components;
@@ -252,9 +253,9 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         if (!_stepTriggerQuery.TryComp(entity, out var comp))
             return;
 
-        // Ensure we actually have the component
+        var canPrintFootprints = HasComp<PuddleFootPrintsComponent>(entity);
+
         EnsureComp<TileFrictionModifierComponent>(entity);
-        EnsureComp<SlipperyComponent>(entity, out var slipComp);
 
         // This is the base amount of reagent needed before a puddle can be considered slippery. Is defined based on
         // the sprite threshold for a puddle larger than 5 pixels.
@@ -280,11 +281,27 @@ public abstract partial class SharedPuddleSystem : EntitySystem
         // Check if the puddle is big enough to slip in to avoid doing unnecessary logic
         if (solution.Volume <= smallPuddleThreshold)
         {
-            _stepTrigger.SetActive(entity, false, comp);
+            _stepTrigger.SetActive(entity, canPrintFootprints, comp);
+            if (canPrintFootprints)
+                _stepTrigger.SetRequiredTriggerSpeed(entity, 0f, comp);
+
             _tile.SetModifier(entity, 1f);
-            slipComp.SlipData.SlipFriction = 1f;
-            slipComp.AffectsSliding = false;
-            Dirty(entity, slipComp);
+            if (TryComp<SlipperyComponent>(entity, out var smallSlipComp))
+            {
+                smallSlipComp.SlipData.SlipFriction = 1f;
+                smallSlipComp.AffectsSliding = false;
+                Dirty(entity, smallSlipComp);
+            }
+
+            return;
+        }
+
+        if (!TryComp<SlipperyComponent>(entity, out var slipComp))
+        {
+            _stepTrigger.SetActive(entity, canPrintFootprints, comp);
+            if (canPrintFootprints)
+                _stepTrigger.SetRequiredTriggerSpeed(entity, 0f, comp);
+
             return;
         }
 
@@ -315,13 +332,15 @@ public abstract partial class SharedPuddleSystem : EntitySystem
                 superSlipperyUnits += quantity;
         }
 
-        // Turn on the step trigger if it's slippery
-        _stepTrigger.SetActive(entity, slipperyUnits > smallPuddleThreshold, comp);
-
         // This is based of the total volume and not just the slippery volume because there is a default
         // slippery for all reagents even if they aren't technically slippery.
-        slipComp.SlipData.RequiredSlipSpeed = (float)(slipStepTrigger / solution.Volume);
+        slipComp.SlipData.RequiredSlipSpeed = canPrintFootprints
+            ? 0f
+            : (float)(slipStepTrigger / solution.Volume);
         _stepTrigger.SetRequiredTriggerSpeed(entity, slipComp.SlipData.RequiredSlipSpeed);
+
+        // Turn on the step trigger if it's slippery or can transfer footprints.
+        _stepTrigger.SetActive(entity, canPrintFootprints || slipperyUnits > smallPuddleThreshold, comp);
 
         // Divide these both by only total amount of slippery reagents.
         // A puddle with 10 units of lube vs a puddle with 10 of lube and 20 catchup should stun and launch forward the same amount.
@@ -375,6 +394,31 @@ public abstract partial class SharedPuddleSystem : EntitySystem
 
             solution.RemoveReagent(reagent, removed);
         }
+    }
+
+    /// <summary>
+    /// Removes cleanable decals from a tile. Server-side puddle systems override this.
+    /// </summary>
+    public virtual bool CleanDecalsAt(TileRef tileRef)
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Returns true if a tile has any cleanable decals. Server-side puddle systems override this.
+    /// </summary>
+    public virtual bool HasCleanableDecalsAt(TileRef tileRef)
+    {
+        return false;
+    }
+
+    /// <summary>
+    /// Tries to get the puddle entity for a tile. On the client, this always returns false.
+    /// </summary>
+    public virtual bool TryGetPuddle(TileRef tile, out EntityUid puddleUid)
+    {
+        puddleUid = EntityUid.Invalid;
+        return false;
     }
 
     #region Spill

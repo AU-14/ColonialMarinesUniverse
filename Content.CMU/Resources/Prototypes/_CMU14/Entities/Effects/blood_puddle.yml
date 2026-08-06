@@ -1,0 +1,63 @@
+- type: entity
+  parent: SolutionTile
+  id: BloodDecalPuddle
+  name: blood puddle
+  description: A puddle of blood.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: TimedDespawn
+    lifetime: 60
+  - type: Clickable
+  - type: Transform
+    noRot: true
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      slipFixture:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.4,-0.4,0.4,0.4"
+        mask:
+        - ItemMask
+        layer:
+        - SlipLayer
+        hard: false
+  - type: Puddle
+  - type: PuddleFootPrints
+  - type: PuddleDecalVisuals
+    decals:
+    - RMCDecalBloodFloor1
+    - RMCDecalBloodFloor2
+    - RMCDecalBloodFloor3
+    - RMCDecalBloodFloor4
+    - RMCDecalBloodFloor5
+    - RMCDecalBloodFloor6
+    - RMCDecalBloodFloor7
+  - type: Solution
+    id: puddle
+  - type: MixableSolution
+    solution: puddle
+  - type: Appearance
+  - type: ActiveEdgeSpreader
+  - type: EdgeSpreader
+    id: Puddle
+  - type: StepTrigger
+  - type: Edible
+    edible: Drink
+    delay: 3
+    transferAmount: 1
+    solution: puddle
+    utensil: Spoon
+  - type: ExaminableSolution
+    solution: puddle
+    locVolume: "examinable-solution-on-examine-volume-puddle"
+  - type: DrawableSolution
+    solution: puddle
+  - type: BadDrink
+  - type: IgnoresFingerprints
+  - type: Tag
+    tags:
+    - DNASolutionScannable
