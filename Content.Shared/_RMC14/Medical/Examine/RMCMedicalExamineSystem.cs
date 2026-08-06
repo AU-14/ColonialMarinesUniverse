@@ -43,7 +43,10 @@ public sealed partial class RMCMedicalExamineSystem : EntitySystem
     {
         var msg = new FormattedMessage();
 
-        if (TryComp<BloodstreamComponent>(ent, out var bloodstream) && bloodstream.BleedAmount > 0)
+        // Keep RMC state text for CMU patients, but let their wound examiner own bleeding output.
+        if (!HasComp<Content.Shared._CMU14.Medical.Core.CMUHumanMedicalComponent>(ent) &&
+            TryComp<BloodstreamComponent>(ent, out var bloodstream) &&
+            bloodstream.BleedAmount > 0)
         {
             msg.AddMarkupOrThrow(Loc.GetString(ent.Comp.BleedText, ("victim", ent.Owner)));
             msg.PushNewline();

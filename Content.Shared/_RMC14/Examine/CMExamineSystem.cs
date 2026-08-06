@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Access.Components;
 using Content.Shared.Access.Systems;
@@ -94,6 +95,10 @@ public sealed partial class CMExamineSystem : EntitySystem
 
     private void OnHealthExamined(Entity<HealthExaminableComponent> ent, ref ExaminedEvent args)
     {
+        // CMU patients use the per-body-part medical examiner instead.
+        if (HasComp<CMUHumanMedicalComponent>(ent))
+            return;
+
         using (args.PushGroup(nameof(CMExamineSystem), -1))
         {
             if (TryComp(ent, out DamageableComponent? damageable))
