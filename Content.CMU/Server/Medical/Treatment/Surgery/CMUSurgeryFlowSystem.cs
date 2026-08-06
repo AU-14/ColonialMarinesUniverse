@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
+using Content.Shared._RMC14.Medical.Surgery.Tools;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Stun;
@@ -90,20 +91,6 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             "CMSurgeryStepMendRibcage",
         }.ToFrozenSet();
 
-    private static readonly FrozenDictionary<string, SoundSpecifier> ToolCategorySounds =
-        new Dictionary<string, SoundSpecifier>
-        {
-            ["scalpel"] = new SoundCollectionSpecifier("RMCSurgeryScalpel"),
-            ["hemostat"] = new SoundCollectionSpecifier("RMCSurgeryHemostat"),
-            ["retractor"] = new SoundCollectionSpecifier("RMCSurgeryRetractor"),
-            ["cautery"] = new SoundCollectionSpecifier("RMCSurgeryCautery"),
-            ["bone_saw"] = new SoundCollectionSpecifier("RMCSurgerySaw"),
-            ["bone_setter"] = new SoundCollectionSpecifier("RMCSurgerySplint"),
-            ["fix_o_vein"] = new SoundCollectionSpecifier("RMCSurgeryHemostat"),
-            ["organ_clamp"] = new SoundCollectionSpecifier("RMCSurgeryOrgan"),
-            ["scalpel_or_burn_kit"] = new SoundCollectionSpecifier("RMCSurgeryScalpel"),
-        }.ToFrozenDictionary();
-
     protected override bool StartStepDoAfter(EntityUid patient, CMUSurgeryArmedStepComponent armed, EntityUid surgeon, EntityUid tool, EntityUid targetPart)
     {
         var stepProtoId = ResolveStepPrototypeId(armed.SurgeryId, armed.StepIndex);
@@ -139,9 +126,10 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             armed.LeafSurgeryId,
             armed.StepIndex,
             committedStep,
+            GetNetEntity(targetPart),
             armed.TargetPartType,
             armed.TargetSymmetry);
-        var doAfter = new DoAfterArgs(EntityManager, surgeon, delay, ev, patient, targetPart, tool)
+        var doAfter = new DoAfterArgs(EntityManager, surgeon, delay, ev, patient, patient, tool)
         {
             AttemptFrequency = AttemptFrequency.EveryTick,
             BreakOnDamage = true,
@@ -163,10 +151,10 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             return true;
         }
 
-        if (armed.RequiredToolCategory is { } category
-            && ToolCategorySounds.TryGetValue(category, out var sound))
+        if (TryComp<CMSurgeryToolComponent>(tool, out var surgeryTool)
+            && surgeryTool.StartSound is { } startSound)
         {
-            _audio.PlayPvs(sound, patient);
+            _audio.PlayPvs(startSound, tool);
         }
 
         return true;

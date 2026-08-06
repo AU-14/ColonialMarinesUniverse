@@ -46,13 +46,14 @@
     - id: CMScalpel
     - id: CMHemostat
     - id: CMRetractor
+    - id: CMUFixOVein
+    - id: CMUOrganClampItem
     - id: CMTraumaKit10
     - id: CMCautery
     - id: CMCircularSaw
     - id: CMSurgicalDrill
     - id: CMBoneGel
     - id: CMBonesetter
-#   - FixOVein
 #   - Nanopaste
     - id: CMSurgicalLine
     - id: CMSynthGraft

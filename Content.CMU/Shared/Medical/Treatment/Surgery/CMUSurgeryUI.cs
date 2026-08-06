@@ -12,6 +12,9 @@ public enum CMUSurgeryUIKey : byte
 }
 
 [Serializable, NetSerializable]
+public sealed class CMUSurgeryRequestStateMessage : BoundUserInterfaceMessage;
+
+[Serializable, NetSerializable]
 public sealed class CMUSurgeryBuiState : BoundUserInterfaceState
 {
     public NetEntity Patient;

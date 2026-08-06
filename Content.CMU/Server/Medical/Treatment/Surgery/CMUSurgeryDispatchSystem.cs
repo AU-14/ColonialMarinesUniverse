@@ -36,6 +36,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         // handler calls TryDispatch directly so CMU surgery can win the click.
         Subs.BuiEvents<CMUSurgeryWindowOpenComponent>(CMUSurgeryUIKey.Key, subs =>
         {
+            subs.Event<CMUSurgeryRequestStateMessage>(OnRequestStateMessage);
             subs.Event<CMUSurgeryArmStepMessage>(OnArmStepMessage);
             subs.Event<CMUSurgeryClearArmedMessage>(OnClearArmedMessage);
             subs.Event<BoundUIClosedEvent>(OnUiClosed);
@@ -100,9 +101,19 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 
         var state = BuildBuiStateForViewer(patient, surgeon, marker, parts, armed);
 
-        _ui.SetUiState(surgeon, CMUSurgeryUIKey.Key, state);
         _ui.OpenUi(surgeon, CMUSurgeryUIKey.Key, surgeon);
+        _ui.SetUiState(surgeon, CMUSurgeryUIKey.Key, state);
         return true;
+    }
+
+    private void OnRequestStateMessage(
+        Entity<CMUSurgeryWindowOpenComponent> ent,
+        ref CMUSurgeryRequestStateMessage args)
+    {
+        if (!ent.Comp.Patient.IsValid() || TerminatingOrDeleted(ent.Comp.Patient))
+            return;
+
+        RefreshUiForPatient(ent.Comp.Patient);
     }
 
     /// <summary>

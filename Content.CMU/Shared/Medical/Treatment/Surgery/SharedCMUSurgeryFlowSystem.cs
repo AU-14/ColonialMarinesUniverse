@@ -1090,9 +1090,12 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         var (patient, armed) = ent;
         var ev = args.Event;
 
-        if (!ArmedMatchesDoAfter(armed, ev)
-            || (Net.IsServer && !SurgerySessions.IsAttemptCurrent(patient, ev.Attempt, ev.User, ev.Used, ev.Target, ev.StepId))
-            || (Net.IsServer && !IsAttemptTargetStillValid(patient, armed, ev.Target))
+        if (!TryGetEntity(ev.TargetPart, out var targetPart)
+            || targetPart is null
+            || ev.Target != patient
+            || !ArmedMatchesDoAfter(armed, ev)
+            || (Net.IsServer && !SurgerySessions.IsAttemptCurrent(patient, ev.Attempt, ev.User, ev.Used, targetPart, ev.StepId))
+            || (Net.IsServer && !IsAttemptTargetStillValid(patient, armed, targetPart))
             || !CanOperateOnPatient(patient, ev.User)
             || ShouldRejectSurgeryStepForPain(patient))
         {
@@ -1104,20 +1107,25 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
     {
         var (patient, armed) = ent;
 
-        if (!ArmedMatchesDoAfter(armed, args))
+        if (!TryGetEntity(args.TargetPart, out var targetPart)
+            || targetPart is null
+            || args.Target != patient
+            || !ArmedMatchesDoAfter(armed, args))
+        {
             return;
+        }
 
         if (!Net.IsServer
-            || !SurgerySessions.IsAttemptCurrent(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
+            || !SurgerySessions.IsAttemptCurrent(patient, args.Attempt, args.User, args.Used, targetPart, args.StepId))
         {
             return;
         }
 
         if (args.Cancelled)
         {
-            if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
+            if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, targetPart, args.StepId))
             {
-                if (!IsAttemptTargetStillValid(patient, armed, args.Target))
+                if (!IsAttemptTargetStillValid(patient, armed, targetPart))
                 {
                     AbandonInvalidTarget(patient, armed);
                     return;
@@ -1137,7 +1145,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
 
         if (!CanOperateOnPatient(patient, args.User, popup: true))
         {
-            SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId);
+            SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, targetPart, args.StepId);
             ReturnToAwaitingAction(patient, armed);
             return;
         }
@@ -1145,22 +1153,22 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (ShouldRejectSurgeryStepForPain(patient))
         {
             ShowSurgeryPainFailure(patient, args.User, applyReaction: true);
-            SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId);
+            SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, targetPart, args.StepId);
             ReturnToAwaitingAction(patient, armed);
             return;
         }
 
-        if (!IsAttemptTargetStillValid(patient, armed, args.Target))
+        if (!IsAttemptTargetStillValid(patient, armed, targetPart))
         {
-            if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
+            if (SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, targetPart, args.StepId))
                 AbandonInvalidTarget(patient, armed);
             return;
         }
 
-        if (!SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, args.Target, args.StepId))
+        if (!SurgerySessions.TryConsumeAttempt(patient, args.Attempt, args.User, args.Used, targetPart, args.StepId))
             return;
 
-        RunStepEffect(patient, armed, args.User, args.Used, args.Target, args.StepId);
+        RunStepEffect(patient, armed, args.User, args.Used, targetPart, args.StepId);
     }
 
     private void ReturnToAwaitingAction(EntityUid patient, CMUSurgeryArmedStepComponent armed)

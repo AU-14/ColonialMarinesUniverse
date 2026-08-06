@@ -52,6 +52,8 @@ public sealed partial class CMUSurgeryBui : BoundUserInterface
         _window.Title = Loc.GetString("cmu-medical-surgery-window-title");
         if (State is CMUSurgeryBuiState s)
             Refresh(s);
+
+        SendMessage(new CMUSurgeryRequestStateMessage());
     }
 
     protected override void UpdateState(BoundUserInterfaceState state)

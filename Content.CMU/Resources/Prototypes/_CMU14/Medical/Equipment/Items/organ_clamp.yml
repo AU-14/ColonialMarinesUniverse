@@ -1,11 +1,11 @@
 - type: entity
-  parent: BaseItem
+  parent: CMBaseToolSurgery
   id: CMUOrganClampItem
-  name: organ vessel clamp
-  description: A surgical clamp for sealing organ vessels mid-surgery.
+  name: organ clamp
+  description: A surgical clamp used to control organ hemorrhage and clamp vessels before repairing, removing, or transplanting organs.
   components:
   - type: Item
-    size: Small
+    sprite: _CMU14/Objects/Medical/organclamp.rsi
   - type: CMUOrganClamp
   - type: Tag
     tags:

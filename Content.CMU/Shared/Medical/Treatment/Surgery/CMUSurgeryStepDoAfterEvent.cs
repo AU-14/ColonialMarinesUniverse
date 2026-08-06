@@ -14,6 +14,7 @@ public sealed partial class CMUSurgeryStepDoAfterEvent : DoAfterEvent
     public readonly string LeafSurgeryId;
     public readonly int StepIndex;
     public readonly EntProtoId<CMSurgeryStepComponent> StepId;
+    public readonly NetEntity TargetPart;
     public readonly BodyPartType TargetPartType;
     public readonly BodyPartSymmetry TargetSymmetry;
 
@@ -23,6 +24,7 @@ public sealed partial class CMUSurgeryStepDoAfterEvent : DoAfterEvent
         string leafSurgeryId,
         int stepIndex,
         EntProtoId<CMSurgeryStepComponent> stepId,
+        NetEntity targetPart,
         BodyPartType targetPartType,
         BodyPartSymmetry targetSymmetry)
     {
@@ -31,6 +33,7 @@ public sealed partial class CMUSurgeryStepDoAfterEvent : DoAfterEvent
         LeafSurgeryId = leafSurgeryId;
         StepIndex = stepIndex;
         StepId = stepId;
+        TargetPart = targetPart;
         TargetPartType = targetPartType;
         TargetSymmetry = targetSymmetry;
     }
@@ -43,6 +46,7 @@ public sealed partial class CMUSurgeryStepDoAfterEvent : DoAfterEvent
             LeafSurgeryId,
             StepIndex,
             StepId,
+            TargetPart,
             TargetPartType,
             TargetSymmetry);
     }
