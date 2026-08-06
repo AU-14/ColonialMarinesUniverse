@@ -2,6 +2,7 @@ using System.Linq;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.EUI;
+using Content.Server.GameTicking;
 using Content.Server.GameTicking.Events;
 using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Ghost.Roles.Raffles;
@@ -45,6 +46,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
     [Dependency] private IBanManager _ban = default!;
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private EuiManager _euiManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IAdminLogManager _adminLogger = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -129,9 +131,12 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     public void OpenEui(ICommonSession session)
     {
-        if (session.AttachedEntity is not { Valid: true } attached ||
-            !HasComp<GhostComponent>(attached))
+        if (!CanUseGhostRoleUi(session))
+        {
+            LeaveAllRaffles(session);
+            CloseEui(session);
             return;
+        }
 
         if (_openUis.ContainsKey(session))
             CloseEui(session);
@@ -219,6 +224,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
             if (meta.EntityPaused)
                 continue;
 
+            if (raffle.CurrentMembers.RemoveWhere(session => !CanRequestGhostRole(session)) > 0)
+                UpdateAllEui();
+
             // if all participants leave/were removed from the raffle, the raffle is canceled.
             if (raffle.CurrentMembers.Count == 0)
             {
@@ -270,16 +278,23 @@ public sealed partial class GhostRoleSystem : EntitySystem
         }
     }
 
-    private bool TryTakeover(ICommonSession player, uint identifier)
+    private bool CanUseGhostRoleUi(ICommonSession player)
     {
-        // TODO: the following two checks are kind of redundant since they should already be removed
-        //           from the raffle
-        // can't win if you are disconnected (although you shouldn't be a candidate anyway)
-        if (player.Status != SessionStatus.InGame)
+        return CanRequestGhostRole(player);
+    }
+
+    private bool CanRequestGhostRole(ICommonSession player)
+    {
+        if (player.Status is SessionStatus.Disconnected or SessionStatus.Zombie)
             return false;
 
-        // can't win if you are no longer a ghost (e.g. if you returned to your body)
-        if (player.AttachedEntity == null || !HasComp<GhostComponent>(player.AttachedEntity))
+        // CMU: Lobby sessions have no attached entity but may still browse and take ghost roles.
+        return player.AttachedEntity is not { } entity || HasComp<GhostComponent>(entity);
+    }
+
+    private bool TryTakeover(ICommonSession player, uint identifier)
+    {
+        if (!CanRequestGhostRole(player))
             return false;
 
         if (Takeover(player, identifier))
@@ -393,6 +408,9 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
+        if (!CanRequestGhostRole(player))
+            return;
+
         // get raffle or create a new one if it doesn't exist
         var raffle = _ghostRoleRaffles.TryGetValue(identifier, out var raffleEnt)
             ? raffleEnt.Comp
@@ -463,6 +481,12 @@ public sealed partial class GhostRoleSystem : EntitySystem
     /// <param name="identifier">ID of the ghost role.</param>
     public void Request(ICommonSession player, uint identifier)
     {
+        if (!CanRequestGhostRole(player))
+        {
+            LeaveAllRaffles(player);
+            return;
+        }
+
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
@@ -570,8 +594,14 @@ public sealed partial class GhostRoleSystem : EntitySystem
     /// <returns>True if takeover was successful, otherwise false.</returns>
     public bool Takeover(ICommonSession player, uint identifier)
     {
+        if (!CanRequestGhostRole(player))
+            return false;
+
         if (!_ghostRoles.TryGetValue(identifier, out var role))
             return false;
+
+        var playerNotInGame = _gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status)
+            && status != PlayerGameStatus.JoinedGame;
 
         var ev = new TakeGhostRoleEvent(player);
         RaiseLocalEvent(role, ref ev);
@@ -582,12 +612,30 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (player.AttachedEntity != null)
             _adminLogger.Add(LogType.GhostRoleTaken, LogImpact.Low, $"{player:player} took the {role.Comp.RoleName:roleName} ghost role {ToPrettyString(player.AttachedEntity.Value):entity}");
 
+        if (playerNotInGame)
+        {
+            if (player.Status != SessionStatus.InGame)
+                _playerManager.SetStatus(player, SessionStatus.InGame);
+
+            if (_mindSystem.TryGetMind(player.UserId, out _, out var mind) && mind.CurrentEntity is { } entity)
+                _playerManager.SetAttachedEntity(player, entity, true);
+
+            _gameTicker.PlayerJoinGame(player);
+        }
+
         CloseEui(player);
         return true;
     }
 
     public void Follow(ICommonSession player, uint identifier)
     {
+        if (!CanUseGhostRoleUi(player))
+        {
+            LeaveAllRaffles(player);
+            CloseEui(player);
+            return;
+        }
+
         if (!_ghostRoles.TryGetValue(identifier, out var role))
             return;
 
@@ -602,8 +650,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!Resolve(roleUid, ref role))
             return;
 
-        DebugTools.AssertNotNull(player.ContentData());
-
+        // CMU: Lobby sessions do not have content data or an attached entity yet.
         // After taking a ghost role, the player cannot return to the original body, so wipe the player's current mind
         // unless it is a visiting mind
         if(_mindSystem.TryGetMind(player.UserId, out _, out var mind) && !mind.IsVisitingEntity)
@@ -634,6 +681,13 @@ public sealed partial class GhostRoleSystem : EntitySystem
     /// </param>
     public GhostRoleInfo[] GetGhostRolesInfo(ICommonSession? player)
     {
+        if (player != null && !CanUseGhostRoleUi(player))
+        {
+            LeaveAllRaffles(player);
+            CloseEui(player);
+            return [];
+        }
+
         var roles = new List<GhostRoleInfo>();
 
         foreach (var (id, (uid, role)) in _ghostRoles)

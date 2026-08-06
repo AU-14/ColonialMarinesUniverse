@@ -97,10 +97,10 @@ public sealed partial class HealthScannerSystem : EntitySystem
         Dirty(scanner);
 
         _audio.PlayPredicted(scanner.Comp.Sound, scanner, args.User);
-        _ui.OpenUi(scanner.Owner, HealthScannerUIKey.Key, args.User);
+        UpdateUI(scanner, args.User);
 
-        if (_timing.IsFirstTimePredicted)
-            UpdateUI(scanner);
+        if (scanner.Comp.Target != null)
+            _ui.OpenUi(scanner.Owner, HealthScannerUIKey.Key, args.User);
     }
 
     /// <param name="scanner">The Health Scanner</param>
@@ -151,8 +151,11 @@ public sealed partial class HealthScannerSystem : EntitySystem
         return true;
     }
 
-    private void UpdateUI(Entity<HealthScannerComponent> scanner)
+    private void UpdateUI(Entity<HealthScannerComponent> scanner, EntityUid? viewer = null)
     {
+        if (_net.IsClient)
+            return;
+
         if (scanner.Comp.Target is not { } target)
             return;
 
@@ -165,9 +168,22 @@ public sealed partial class HealthScannerSystem : EntitySystem
             return;
         }
 
-        if (!_rmcHands.TryGetHolder(scanner, out var viewer))
+        EntityUid actualViewer;
+        if (viewer is { } suppliedViewer)
+            actualViewer = suppliedViewer;
+        else if (!_rmcHands.TryGetHolder(scanner, out actualViewer))
             return;
 
+        var uiState = BuildStateForViewer(scanner, target, actualViewer);
+        _ui.SetUiState(scanner.Owner, HealthScannerUIKey.Key, uiState);
+    }
+
+    /// <summary>
+    ///     Builds an isolated scanner projection for one viewer. Skill-gated
+    ///     CMU medical details must not leak between different examiners.
+    /// </summary>
+    public HealthScannerBuiState BuildStateForViewer(EntityUid scanner, EntityUid target, EntityUid viewer)
+    {
         FixedPoint2 blood = 0;
         FixedPoint2 maxBlood = 0;
         if (_rmcBloodstream.TryGetBloodSolution(target, out var bloodstream))
@@ -181,12 +197,14 @@ public sealed partial class HealthScannerSystem : EntitySystem
 
         var pulse = _rmcPulse.TryGetPulseReading(target, true, out _);
         var bleeding = _rmcBloodstream.IsBleeding(target);
-        var state = new HealthScanState(GetNetEntity(target), blood, maxBlood, temperature, pulse, chemicals, bleeding, scanner.Comp.DetailLevel);
+        var detailLevel = Comp<HealthScannerComponent>(scanner).DetailLevel;
+        var state = new HealthScanState(GetNetEntity(target), blood, maxBlood, temperature, pulse, chemicals, bleeding, detailLevel);
 
         var uiState = new HealthScannerBuiState(state);
         var buildEv = new HealthScannerBuildStateEvent(scanner, target, viewer, uiState);
         RaiseLocalEvent(scanner, ref buildEv);
-        _ui.SetUiState(scanner.Owner, HealthScannerUIKey.Key, uiState);
+
+        return uiState;
     }
 
     public override void Update(float frameTime)

@@ -1,4 +1,5 @@
 using Content.Server.Access.Systems;
+using Content.Server.AU14.Roles;
 using Content.Server.Humanoid;
 using Content.Server.Mind;
 using Content.Server.PDA;
@@ -45,6 +46,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
     [Dependency] private MetaDataSystem _metaSystem = default!;
     [Dependency] private PdaSystem _pdaSystem = default!;
     [Dependency] private MindSystem _mindSystem = default!;
+    [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
 
     /// <summary>
     /// Attempts to spawn a player character onto the given station.
@@ -153,9 +155,13 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
 
         if (profile != null)
         {
-            _visualBody.ApplyProfileTo(entity.Value, profile);
-            _humanoidProfile.ApplyProfileTo(entity.Value, profile);
-            _humanoidAppearance.LoadProfile(entity.Value, profile);
+            if (HasComp<VisualBodyComponent>(entity.Value))
+                _visualBody.ApplyProfileTo(entity.Value, profile);
+            if (HasComp<HumanoidProfileComponent>(entity.Value))
+                _humanoidProfile.ApplyProfileTo(entity.Value, profile);
+            if (HasComp<HumanoidAppearanceComponent>(entity.Value))
+                _humanoidAppearance.LoadProfile(entity.Value, profile);
+
             _metaSystem.SetEntityName(entity.Value, profile.Name);
 
             if (profile.FlavorText != "" && _configurationManager.GetCVar(CCVars.FlavorText))
@@ -197,6 +203,8 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         {
             jobSpecial.AfterEquip(entity);
         }
+
+        _roundJobProfiles.ApplyJobProfile(entity, prototype);
     }
 
     /// <summary>

@@ -1,6 +1,8 @@
 ﻿using Content.Server._RMC14.Medical.Wounds;
+using Content.Server._CMU14.Medical.Treatment.Surgery;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
+using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery;
@@ -25,6 +27,7 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 {
     [Dependency] private BodySystem _body = default!;
     [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private CMUSurgeryDispatchSystem _cmuDispatch = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -56,6 +59,8 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
     protected override void RefreshUI(EntityUid body)
     {
         if (!HasComp<CMSurgeryTargetComponent>(body))
+            return;
+        if (HasComp<CMUHumanMedicalComponent>(body))
             return;
 
         var surgeries = new Dictionary<NetEntity, List<EntProtoId>>();
@@ -101,7 +106,26 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 
         if (user == args.Target)
         {
-            _popup.PopupEntity("You can't perform surgery on yourself!", user, user);
+            if (_cmuDispatch.TryDispatch(user, args.Target.Value, ent.Owner))
+            {
+                args.Handled = true;
+                return;
+            }
+
+            _popup.PopupEntity(Loc.GetString("cmu-medical-surgery-self-not-allowed"), user, user);
+            args.Handled = true;
+            return;
+        }
+
+        if (_cmuDispatch.TryDispatch(user, args.Target.Value, ent.Owner))
+        {
+            args.Handled = true;
+            return;
+        }
+
+        if (HasComp<CMUHumanMedicalComponent>(args.Target.Value))
+        {
+            args.Handled = true;
             return;
         }
 

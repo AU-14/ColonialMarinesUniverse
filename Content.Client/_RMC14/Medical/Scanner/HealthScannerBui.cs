@@ -22,6 +22,9 @@ public sealed partial class HealthScannerBui(EntityUid owner, Enum uiKey) : Boun
 
     protected override void UpdateState(BoundUserInterfaceState state)
     {
+        if (!IsOpened || _window is { Disposed: true })
+            return;
+
         if (state is HealthScannerBuiState uiState)
             UpdateState(uiState);
     }

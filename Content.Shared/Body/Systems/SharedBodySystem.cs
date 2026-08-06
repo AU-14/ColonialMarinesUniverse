@@ -1,3 +1,4 @@
+using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Standing;
@@ -44,6 +45,27 @@ public abstract partial class SharedBodySystem : EntitySystem
 
         InitializeBody();
         InitializeParts();
+    }
+
+    /// <summary>
+    ///     Registers only the legacy body-graph events that are not owned by
+    ///     the modern shared body system.
+    /// </summary>
+    protected void InitializeBodyGraphCompatibility()
+    {
+        SubscribeLocalEvent<BodyComponent, MapInitEvent>(OnBodyMapInit);
+        SubscribeLocalEvent<BodyPartComponent, EntInsertedIntoContainerMessage>(OnBodyPartInserted);
+        SubscribeLocalEvent<BodyPartComponent, EntRemovedFromContainerMessage>(OnBodyPartRemoved);
+    }
+
+    internal void HandleRootPartInserted(Entity<BodyComponent> body, ref EntInsertedIntoContainerMessage args)
+    {
+        OnBodyInserted(body, ref args);
+    }
+
+    internal void HandleRootPartRemoved(Entity<BodyComponent> body, ref EntRemovedFromContainerMessage args)
+    {
+        OnBodyRemoved(body, ref args);
     }
 
     /// <summary>

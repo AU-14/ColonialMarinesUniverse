@@ -109,6 +109,9 @@ public partial class SharedBodySystem
 
     private void MapInitBody(EntityUid bodyEntity, BodyPrototype prototype)
     {
+        var body = Comp<BodyComponent>(bodyEntity);
+        body.RootContainer = Containers.EnsureContainer<ContainerSlot>(bodyEntity, BodyRootContainerId);
+
         var protoRoot = prototype.Slots[prototype.Root];
         if (protoRoot.Part is null)
             return;

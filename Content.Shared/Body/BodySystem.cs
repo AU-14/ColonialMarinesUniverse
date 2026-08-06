@@ -18,6 +18,7 @@ namespace Content.Shared.Body;
 public sealed partial class BodySystem : EntitySystem
 {
     [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private Systems.SharedBodySystem _legacyBody = default!;
 
     [Dependency] private EntityQuery<BodyComponent> _bodyQuery = default!;
     [Dependency] private EntityQuery<OrganComponent> _organQuery = default!;
@@ -51,6 +52,15 @@ public sealed partial class BodySystem : EntitySystem
 
     private void OnBodyEntInserted(Entity<BodyComponent> ent, ref EntInsertedIntoContainerMessage args)
     {
+        if (args.Container.ID == Systems.SharedBodySystem.BodyRootContainerId)
+        {
+            if (args.Container is ContainerSlot rootContainer)
+                ent.Comp.RootContainer = rootContainer;
+
+            _legacyBody.HandleRootPartInserted(ent, ref args);
+            return;
+        }
+
         if (args.Container.ID != BodyComponent.ContainerID)
             return;
 
@@ -72,6 +82,12 @@ public sealed partial class BodySystem : EntitySystem
 
     private void OnBodyEntRemoved(Entity<BodyComponent> ent, ref EntRemovedFromContainerMessage args)
     {
+        if (args.Container.ID == Systems.SharedBodySystem.BodyRootContainerId)
+        {
+            _legacyBody.HandleRootPartRemoved(ent, ref args);
+            return;
+        }
+
         if (args.Container.ID != BodyComponent.ContainerID)
             return;
 

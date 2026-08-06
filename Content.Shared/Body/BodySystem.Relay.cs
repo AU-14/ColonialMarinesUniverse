@@ -40,10 +40,19 @@ public sealed partial class BodySystem
     public void RelayEvent<T>(Entity<BodyComponent> ent, ref T args) where T : struct
     {
         var ev = new BodyRelayedEvent<T>(ent, args);
+        var relayed = new HashSet<EntityUid>();
         foreach (var organ in ent.Comp.Organs?.ContainedEntities ?? [])
         {
+            relayed.Add(organ);
             RaiseLocalEvent(organ, ref ev);
         }
+
+        foreach (var (organ, _) in _legacyBody.GetBodyOrgans(ent.Owner, ent.Comp))
+        {
+            if (relayed.Add(organ))
+                RaiseLocalEvent(organ, ref ev);
+        }
+
         args = ev.Args;
     }
 
@@ -57,9 +66,17 @@ public sealed partial class BodySystem
     public void RelayEvent<T>(Entity<BodyComponent> ent, T args) where T : class
     {
         var ev = new BodyRelayedEvent<T>(ent, args);
+        var relayed = new HashSet<EntityUid>();
         foreach (var organ in ent.Comp.Organs?.ContainedEntities ?? [])
         {
+            relayed.Add(organ);
             RaiseLocalEvent(organ, ref ev);
+        }
+
+        foreach (var (organ, _) in _legacyBody.GetBodyOrgans(ent.Owner, ent.Comp))
+        {
+            if (relayed.Add(organ))
+                RaiseLocalEvent(organ, ref ev);
         }
     }
 }

@@ -26,8 +26,9 @@ public sealed partial class BodySystem : SharedBodySystem
 
     public override void Initialize()
     {
-        // Compatibility facade for retained CMU callers. The modern shared BodySystem
-        // owns subscriptions for BodyComponent, so this legacy system must not duplicate them.
+        InitializeBodyGraphCompatibility();
+
+        SubscribeLocalEvent<BodyComponent, MoveInputEvent>(OnRelayMoveInput);
     }
 
     private void OnRelayMoveInput(Entity<BodyComponent> ent, ref MoveInputEvent args)

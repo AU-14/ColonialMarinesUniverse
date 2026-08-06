@@ -1,6 +1,7 @@
 using Content.Shared.GameTicking.Prototypes;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
+using System;
 using System.Linq;
 
 namespace Content.Server.GameTicking;
@@ -13,6 +14,7 @@ public sealed partial class GameTicker
     [ViewVariables]
     private List<ProtoId<LobbyBackgroundPrototype>>? _lobbyBackgrounds;
 
+    private const string CmuLobbyBackgroundPrefix = "/Textures/_CMU14/Lobby/";
     private static readonly string[] WhitelistedBackgroundExtensions = new string[] {"png", "jpg", "jpeg", "webp"};
 
     private void InitializeLobbyBackground()
@@ -23,6 +25,10 @@ public sealed partial class GameTicker
         //create protoids from them
         foreach (var proto in allprotos)
         {
+            // CMU: Keep upstream and RMC art out of the CMU lobby rotation.
+            if (!proto.Background.ToString().StartsWith(CmuLobbyBackgroundPrefix, StringComparison.Ordinal))
+                continue;
+
             var ext = proto.Background.Extension;
             if (!WhitelistedBackgroundExtensions.Contains(ext))
                 continue;
