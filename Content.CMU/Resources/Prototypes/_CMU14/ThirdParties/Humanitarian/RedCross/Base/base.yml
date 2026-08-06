@@ -107,6 +107,9 @@
   id: CMUBeltMedicBagICRCDoctor
   suffix: Filled, ICRC Doctor
   components:
+  - type: Storage
+    grid:
+    - 0,0,15,5 # 24 slots
   - type: StorageFill
     contents:
     - id: AU14Tourniquet

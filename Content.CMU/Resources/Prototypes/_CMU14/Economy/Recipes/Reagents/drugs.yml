@@ -54,13 +54,13 @@
   name: Speed Demon Pill
   description: A pill containing the dangerous street drug Speed Demon.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: AU14DrugSpeedDemon
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: AU14DrugSpeedDemon
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill2
@@ -89,13 +89,13 @@
   name: Grounded Mushrooms Pill
   description: A pill containing the psychoactive compound Psilocybin.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: RMCPsilocybin
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: RMCPsilocybin
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill2

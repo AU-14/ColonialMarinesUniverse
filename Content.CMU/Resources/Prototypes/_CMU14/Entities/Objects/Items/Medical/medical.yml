@@ -2,13 +2,13 @@
   parent: CMPill
   id: AU14PillEthylredoxrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMEthylredoxrazine
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMEthylredoxrazine
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill6
@@ -20,13 +20,13 @@
   parent: CMPill
   id: AU14PillDermaline
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMDermaline
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMDermaline
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill7
@@ -38,13 +38,13 @@
   parent: CMPill
   id: AU14PillMeralyne
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMMeralyne
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMMeralyne
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill4
@@ -56,13 +56,13 @@
   parent: CMPill
   id: AU14PillImidazoline
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMImidazoline
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMImidazoline
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill2
@@ -74,13 +74,13 @@
   parent: CMPill
   id: AU14PillCryoxadone
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMCryoxadone
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMCryoxadone
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill2
@@ -92,13 +92,13 @@
   parent: CMPill
   id: AU14PillLeporazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMLeporazine
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMLeporazine
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill2
@@ -110,13 +110,13 @@
   parent: CMPill
   id: AU14PillAlbuterol
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 15
-        reagents:
-        - ReagentId: AU14Albuterol
-          Quantity: 15
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: AU14Albuterol
+        Quantity: 15
   - type: Sprite
     layers:
     - state: pill2
@@ -128,13 +128,13 @@
   parent: CMPill
   id: AU14PillCMUParacetamol
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUParacetamol
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUParacetamol
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
@@ -146,13 +146,13 @@
   parent: CMPill
   id: AU14PillCMUTramadol
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUTramadol
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUTramadol
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill10
@@ -164,13 +164,13 @@
   parent: CMPill
   id: AU14PillCMUOxycodone
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUOxycodone
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUOxycodone
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
@@ -184,13 +184,13 @@
   parent: CMPill
   id: AU14PillCMUHepatocytin
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUHepatocytin
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUHepatocytin
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
@@ -202,13 +202,13 @@
   parent: CMPill
   id: AU14PillCMUPulmovine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUPulmovine
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUPulmovine
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
@@ -220,13 +220,13 @@
   parent: CMPill
   id: AU14PillCMUNephronate
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUNephronate
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUNephronate
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
@@ -238,13 +238,13 @@
   parent: CMPill
   id: AU14PillCMUCardiocaine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUCardiocaine
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUCardiocaine
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
@@ -256,13 +256,13 @@
   parent: CMPill
   id: CMU14PillAlkysine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUAlkysine
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUAlkysine
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
@@ -274,13 +274,13 @@
   parent: CMPill
   id: AU14PillCMUOsteoCalc
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 10
-        reagents:
-        - ReagentId: CMUOsteoCalc
-          Quantity: 10
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 10
+      reagents:
+      - ReagentId: CMUOsteoCalc
+        Quantity: 10
   - type: Sprite
     layers:
     - state: pill2
