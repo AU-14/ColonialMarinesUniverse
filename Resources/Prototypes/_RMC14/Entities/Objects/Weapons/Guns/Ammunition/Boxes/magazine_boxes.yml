@@ -630,11 +630,11 @@
         tags:
         - CMMagazineRifleM4SPRExt
 
-# L24 REG
+# L23 REG
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24Empty
-  name: magazine box (L24 x 16)
+  name: magazine box (L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -675,11 +675,11 @@
         tags:
         - RMCMagazineRifleL24
 
-# L24 AP
+# L23 AP
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24APEmpty
-  name: magazine box (AP L24 x 16)
+  name: magazine box (AP L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -720,11 +720,11 @@
         tags:
         - RMCMagazineRifleL24AP
 
-# L24 EXT
+# L23 EXT
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24ExtEmpty
-  name: magazine box (Ext L24 x 12)
+  name: magazine box (Ext L23 x 12)
   components:
   - type: Sprite
     layers:
@@ -765,11 +765,11 @@
         tags:
         - RMCMagazineRifleL24Extended
 
-# L24 HEAP
+# L23 HEAP
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24HEAPEmpty
-  name: magazine box (HEAP L24 x 16)
+  name: magazine box (HEAP L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -810,11 +810,11 @@
         tags:
         - RMCMagazineRifleL24HEAP
 
-# L24 Inc
+# L23 Inc
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24IncendiaryEmpty
-  name: magazine box (Inc L24 x 16)
+  name: magazine box (Inc L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -1701,11 +1701,11 @@
         tags:
         - RMCMagazineSniperType88
 
-# L90/91 REG
+# SLR REG
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90Empty
-  name: magazine box (L90/91 x 12)
+  name: magazine box (SLR x 12)
   components:
   - type: Sprite
     layers:
@@ -1746,11 +1746,11 @@
         tags:
         - RMCMagazineRifleL90
 
-# L90/91 DRUM
+# SLR DRUM
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90DrumEmpty
-  name: magazine box (Drum L90/91 x 8)
+  name: magazine box (Drum SLR x 8)
   components:
   - type: Sprite
     layers:
@@ -1791,11 +1791,11 @@
         tags:
         - RMCMagazineRifleL90Drum
 
-# L90/91 AP
+# SLR AP
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90APEmpty
-  name: magazine box (AP L90/91 x 12)
+  name: magazine box (AP SLR x 12)
   components:
   - type: Sprite
     layers:
@@ -1836,11 +1836,11 @@
         tags:
         - RMCMagazineRifleL90AP
 
-# L90/91 AP DRUM
+# SLR AP DRUM
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90DrumAPEmpty
-  name: magazine box (AP Drum L90/91 x 8)
+  name: magazine box (AP Drum SLR x 8)
   components:
   - type: Sprite
     layers:
@@ -2117,7 +2117,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGBase
   id: RMCBoxMagazineSMGM63APEmpty
-  name: magazine box (AP M63 x 12)
+  name: magazine box (AP M39 x 12)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -2165,7 +2165,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGBase
   id: RMCBoxMagazineSMGM63ExtEmpty
-  name: magazine box (Ext M63 x 10)
+  name: magazine box (Ext M39 x 10)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -2214,7 +2214,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGBase
   id: RMCBoxMagazineSMGM63HEAPEmpty
-  name: magazine box (HEAP M63 x 12)
+  name: magazine box (HEAP M39 x 12)
   components:
   - type: Sprite
     layers:
@@ -2973,7 +2973,7 @@
 - type: entity
   parent: RMCBoxFlamerTankBase
   id: RMCBoxFlamerTankEmpty
-  name: flamer tank box (UT-Napthal Fuel x 8)
+  name: flamer tank box (Incinerator tank x 8)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -2998,12 +2998,83 @@
         - RMCFlamerTank
 
 - type: entity
-  parent: RMCBoxFlamerTankEmpty
-  id: RMCBoxFlamerTank
+  parent: RMCBoxFlamerTankBase
+  id: RMCBoxFlamerTankUTNapthalEmpty
+  name: flamer tank box (UT-Napthal Fuel x 8)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RMCBoxFlamerTankEmpty
+  - type: Sprite
+    layers:
+    - state: flamer_box
+      color: "#3d3832"
+    - state: flamer_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: flamer_ammo_full_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#c18f1a"
+    - state: rifle_box_marking
+      color: "#D49600"
+    - state: flamer_lid
+      map: [ "lid" ]
+      color: "#3d3832"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        components:
+        - RMCFlamerTank
+
+- type: entity
+  parent: RMCBoxFlamerTankUTNapthalEmpty
+  id: RMCBoxFlamerTankUTNapthal
   suffix: Full
   components:
   - type: CMItemSlots
     startingItem: RMCTankFlamer
+    count: 8
+    slot:
+      whitelist:
+        components:
+        - RMCFlamerTank
+
+- type: entity
+  parent: RMCBoxFlamerTankBase
+  id: RMCBoxFlamerTankBGelEmpty
+  name: flamer tank box (B-Gel Fuel x 8)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RMCBoxFlamerTankEmpty
+  - type: Sprite
+    layers:
+    - state: flamer_box
+      color: "#3d3832"
+    - state: flamer_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: flamer_ammo_full_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#c18f1a"
+    - state: rifle_box_marking
+      color: "#00BE00"
+    - state: flamer_lid
+      map: [ "lid" ]
+      color: "#3d3832"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        components:
+        - RMCFlamerTank
+
+- type: entity
+  parent: RMCBoxFlamerTankBGelEmpty
+  id: RMCBoxFlamerTankBGel
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCTankFlamerBGel
     count: 8
     slot:
       whitelist:

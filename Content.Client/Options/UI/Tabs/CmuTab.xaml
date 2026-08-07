@@ -23,6 +23,9 @@
                 <CheckBox Name="TargetedHealingCheckBox"
                           Text="{Loc 'cmu-ui-options-targeted-healing'}"
                           ToolTip="{Loc 'cmu-ui-options-targeted-healing-tooltip'}" />
+                <CheckBox Name="AutoReapplyKitsCheckBox"
+                          Text="{Loc 'cmu-ui-options-auto-reapply-kits'}"
+                          ToolTip="{Loc 'cmu-ui-options-auto-reapply-kits-tooltip'}" />
                 <CheckBox Name="UiLessSurgeryCheckBox"
                           Text="{Loc 'cmu-ui-options-ui-less-surgery'}"
                           ToolTip="{Loc 'cmu-ui-options-ui-less-surgery-tooltip'}" />

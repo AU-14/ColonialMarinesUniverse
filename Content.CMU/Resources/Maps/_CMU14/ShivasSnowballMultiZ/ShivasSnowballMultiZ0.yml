@@ -36664,7 +36664,6 @@ entities:
     - type: Transform
       pos: 99.5,79.5
       parent: 1
-    - type: MarkedForDestroy
 - proto: AU14SensorTower
   entities:
   - uid: 15952
@@ -54248,7 +54247,7 @@ entities:
     - type: Transform
       pos: 6.5,0.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 3185
     components:

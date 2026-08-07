@@ -28,6 +28,7 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         { "CLF", "FactionCLF" },
         { "SPP", "FactionSPP" },
         { "Halcyon", "FactionHalcyon" },
+        { "AUWeYu", "FactionWEYU" },
         { "WeYa", "FactionWeYa" },
         { "Civilian", "FactionSurvivor" },
         { "RoyalMarines", "FactionRoyalMarines" },
@@ -42,6 +43,7 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     private readonly HashSet<Entity<NpcFactionMemberComponent>> _factionLookupBuffer = new();
     private readonly HashSet<Entity<UserIFFComponent>> _userIffLookupBuffer = new();
     private readonly HashSet<EntityUid> _candidateLookupBuffer = new();
+    private readonly HashSet<string> _friendlyNpcFactionBuffer = new();
 
     public override void Initialize()
     {
@@ -54,12 +56,17 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         if (TryComp<NpcFactionMemberComponent>(ent.Owner, out var factionMember) && factionMember.Factions.Count > 0)
             ent.Comp.OriginalFaction = factionMember.Factions.First();
 
+        RestoreLockedFriendlyFactions(ent, true);
+
         if (!HasComp<GunIFFComponent>(ent.Owner) && HasComp<GunComponent>(ent.Owner))
             _iff.EnableIntrinsicIFF(ent);
     }
 
     private void OnTargetingStartup(Entity<SentryTargetingComponent> ent, ref ComponentStartup args)
     {
+        if (RestoreLockedFriendlyFactions(ent, true))
+            return;
+
         if (ent.Comp.FriendlyFactions.Count == 0 && !string.IsNullOrEmpty(ent.Comp.OriginalFaction))
             ent.Comp.FriendlyFactions.Add(ent.Comp.OriginalFaction);
 
@@ -70,6 +77,9 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     public void ApplyDeployerFactions(EntityUid sentry, EntityUid deployer)
     {
         var targeting = EnsureComp<SentryTargetingComponent>(sentry);
+        if (RestoreLockedFriendlyFactions((sentry, targeting), true))
+            return;
+
         targeting.FriendlyFactions.Clear();
         targeting.HumanoidAdded.Clear();
 
@@ -106,8 +116,39 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         Dirty(sentry, targeting);
     }
 
+    public bool TryApplyDefaultFaction(EntityUid sentry, string? faction = null)
+    {
+        if (!TryComp<SentryTargetingComponent>(sentry, out var targeting))
+            return false;
+
+        if (RestoreLockedFriendlyFactions((sentry, targeting), true))
+            return true;
+
+        faction = string.IsNullOrWhiteSpace(faction) ? targeting.OriginalFaction : faction;
+        var sentryFaction = SentryAllowedFactions.FirstOrDefault(allowed =>
+            allowed.Equals(faction, StringComparison.OrdinalIgnoreCase));
+        if (sentryFaction == null)
+            return false;
+
+        targeting.OriginalFaction = sentryFaction;
+        targeting.FriendlyFactions.Clear();
+        targeting.FriendlyFactions.Add(sentryFaction);
+        targeting.DeployedFriendlyFactions.Clear();
+        targeting.DeployedFriendlyFactions.Add(sentryFaction);
+        targeting.HumanoidAdded.Clear();
+
+        if (_net.IsServer)
+            ApplyTargeting((sentry, targeting));
+
+        Dirty(sentry, targeting);
+        return true;
+    }
+
     public void SetFriendlyFactions(Entity<SentryTargetingComponent> ent, HashSet<string> factions)
     {
+        if (RestoreLockedFriendlyFactions(ent, true))
+            return;
+
         ent.Comp.FriendlyFactions.Clear();
         ent.Comp.HumanoidAdded.Clear();
 
@@ -134,6 +175,9 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
 
     public void ResetToDefault(Entity<SentryTargetingComponent> ent)
     {
+        if (RestoreLockedFriendlyFactions(ent, true))
+            return;
+
         ent.Comp.FriendlyFactions.Clear();
         ent.Comp.HumanoidAdded.Clear();
 
@@ -148,6 +192,9 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
 
     public void ToggleFaction(Entity<SentryTargetingComponent> ent, string faction, bool friendly)
     {
+        if (RestoreLockedFriendlyFactions(ent, true))
+            return;
+
         if (faction == SentryExcludedFaction)
             return;
 
@@ -173,6 +220,9 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
 
     public void ToggleHumanoid(Entity<SentryTargetingComponent> ent, bool friendly)
     {
+        if (RestoreLockedFriendlyFactions(ent, true))
+            return;
+
         if (friendly)
         {
             foreach (var faction in GetHumanoidFactions())
@@ -221,6 +271,24 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         if (!HasComp<UserIFFComponent>(target) && !HasComp<NpcFactionMemberComponent>(target))
             return false;
 
+        if (sentry.Comp.FriendlyFactions.Count == 0)
+            return false;
+
+        if (TryComp<NpcFactionMemberComponent>(target, out var targetFaction))
+        {
+            foreach (var allianceFriendly in sentry.Comp.AllianceFriendlyNpcFactions)
+            {
+                if (targetFaction.Factions.Contains(allianceFriendly))
+                    return false;
+            }
+
+            foreach (var faction in sentry.Comp.FriendlyFactions)
+            {
+                if (targetFaction.Factions.Contains(faction))
+                    return false;
+            }
+        }
+
         BuildFriendlyIff(sentry.Comp);
         var friendly = IsFriendlyByIff(target);
         _friendlyIffBuffer.Clear();
@@ -231,6 +299,13 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     public IEnumerable<EntityUid> GetNearbyIffHostiles(Entity<SentryTargetingComponent> ent, float range)
     {
         BuildFriendlyIff(ent.Comp);
+
+        _friendlyNpcFactionBuffer.Clear();
+        foreach (var faction in ent.Comp.FriendlyFactions)
+            _friendlyNpcFactionBuffer.Add(faction);
+
+        foreach (var faction in ent.Comp.AllianceFriendlyNpcFactions)
+            _friendlyNpcFactionBuffer.Add(faction.Id);
 
         var coords = _xform.GetMapCoordinates(ent);
 
@@ -251,8 +326,27 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
             if (_container.IsEntityInContainer(target))
                 continue;
 
-            if (!IsFriendlyByIff(target))
-                yield return target;
+            if (IsFriendlyByIff(target))
+                continue;
+
+            if (_friendlyNpcFactionBuffer.Count > 0 &&
+                TryComp<NpcFactionMemberComponent>(target, out var targetNpc))
+            {
+                var isFriendly = false;
+                foreach (var faction in targetNpc.Factions)
+                {
+                    if (!_friendlyNpcFactionBuffer.Contains(faction.Id))
+                        continue;
+
+                    isFriendly = true;
+                    break;
+                }
+
+                if (isFriendly)
+                    continue;
+            }
+
+            yield return target;
         }
 
         _candidateLookupBuffer.Clear();
@@ -260,6 +354,7 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         _factionLookupBuffer.Clear();
         _friendlyIffBuffer.Clear();
         _targetIffBuffer.Clear();
+        _friendlyNpcFactionBuffer.Clear();
     }
 
     private void ApplyTargeting(Entity<SentryTargetingComponent> ent)
@@ -294,6 +389,9 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
     public void ApplyAllianceStateToSentry(EntityUid sentryUid, SentryTargetingComponent targeting,
         Dictionary<string, Dictionary<string, Content.Shared.AU14.AllianceConsole.AllianceStatus>> globalState)
     {
+        if (RestoreLockedFriendlyFactions((sentryUid, targeting), true))
+            return;
+
         targeting.AllianceFriendlyNpcFactions.Clear();
         foreach (var (side, states) in globalState)
         {
@@ -332,6 +430,9 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
 
     public void ClearFactionAssignment(Entity<SentryTargetingComponent> ent)
     {
+        if (RestoreLockedFriendlyFactions(ent, true))
+            return;
+
         ent.Comp.FriendlyFactions.Clear();
         ent.Comp.DeployedFriendlyFactions.Clear();
         ent.Comp.HumanoidAdded.Clear();
@@ -340,5 +441,28 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
             ApplyTargeting(ent);
 
         Dirty(ent.Owner, ent.Comp);
+    }
+
+    private bool RestoreLockedFriendlyFactions(Entity<SentryTargetingComponent> ent, bool updateDeployed)
+    {
+        if (ent.Comp.LockedFriendlyFactions.Count == 0)
+            return false;
+
+        ent.Comp.FriendlyFactions.Clear();
+        ent.Comp.FriendlyFactions.UnionWith(ent.Comp.LockedFriendlyFactions);
+        ent.Comp.HumanoidAdded.Clear();
+        ent.Comp.AllianceFriendlyNpcFactions.Clear();
+
+        if (updateDeployed)
+        {
+            ent.Comp.DeployedFriendlyFactions.Clear();
+            ent.Comp.DeployedFriendlyFactions.UnionWith(ent.Comp.LockedFriendlyFactions);
+        }
+
+        if (_net.IsServer)
+            ApplyTargeting(ent);
+
+        Dirty(ent.Owner, ent.Comp);
+        return true;
     }
 }

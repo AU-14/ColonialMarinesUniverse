@@ -1,12 +1,14 @@
 - type: entity
   id: PlatoonSpawn
   parent: BaseGameRule
+  name: Spawn Platoon
   components:
   - type: PlatoonSpawnRule
 
 - type: entity
   id: AddGovfor
   parent: BaseGameRule
+  name: Spawn Govfor
   components:
   - type: AddJobsRule
     addToShip: true
@@ -45,6 +47,7 @@
 - type: entity
   id: AddOpfor
   parent: BaseGameRule
+  name: Spawn Opfor
   components:
   - type: AddJobsRule
     shipFaction: opfor
@@ -80,6 +83,7 @@
 - type: entity
   id: AddGovforCorrespondent
   parent: BaseGameRule
+  name: Add Combat Reporter
   components:
   - type: AddJobsRule
     addToShip: true
@@ -90,6 +94,7 @@
 - type: entity
   id: AddClf
   parent: BaseGameRule
+  name: Spawn CLF
   components:
   - type: AddJobsRule
     jobs:
@@ -112,7 +117,7 @@
 - type: entity
   id: AuVoteRule
   parent: BaseGameRule
-  name: AU Vote Rule
+  name: Start Game Votes
   description: Loads AU/CMU round votes, planets, platoons, and bioscan.
   components:
   - type: AuVoteRule

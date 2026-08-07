@@ -1,3 +1,4 @@
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Kitchen;
 using Content.Shared.Kitchen.Components;
@@ -19,9 +20,12 @@ public sealed class ReagentGrinderBoundUserInterface(EntityUid owner, Enum uiKey
         _menu.OnToggleAuto += ToggleAutoMode;
         _menu.OnGrind += StartGrinding;
         _menu.OnJuice += StartJuicing;
+        _menu.OnLink += Link;
         _menu.OnEjectAll += EjectAll;
         _menu.OnEjectBeaker += EjectBeaker;
         _menu.OnEjectChamber += EjectChamberContent;
+        _menu.OnBottle += Bottle;
+        _menu.OnDisposeReagent += DisposeReagent;
     }
 
     public override void Update()
@@ -69,6 +73,21 @@ public sealed class ReagentGrinderBoundUserInterface(EntityUid owner, Enum uiKey
     public void EjectBeaker()
     {
         SendPredictedMessage(new ItemSlotButtonPressedEvent(ReagentGrinderComponent.BeakerSlotId));
+    }
+
+    public void Link()
+    {
+        SendMessage(new ReagentGrinderLinkMessage());
+    }
+
+    public void Bottle(ReagentQuantity reagent)
+    {
+        SendMessage(new ReagentGrinderBottleMessage(reagent));
+    }
+
+    public void DisposeReagent(ReagentQuantity reagent)
+    {
+        SendMessage(new ReagentGrinderDisposeMessage(reagent));
     }
 
     /// <summary>

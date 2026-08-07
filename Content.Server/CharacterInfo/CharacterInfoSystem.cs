@@ -64,6 +64,8 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             briefing = _roles.MindGetBriefing(mindId);
         }
 
+        briefing = AddCLFStandingOrders(briefing, entity);
+
         RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), objectives, briefing, job), args.SenderSession);
     }
 }

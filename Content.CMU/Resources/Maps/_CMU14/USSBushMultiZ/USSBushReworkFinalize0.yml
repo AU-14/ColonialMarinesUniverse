@@ -11200,6 +11200,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: USS George Bush CIC Office
+      groups:
+      - warship-command
   - uid: 695
     components:
     - type: Transform
@@ -11207,6 +11209,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: USS George Bush CIC
+      groups:
+      - warship-command
   - uid: 696
     components:
     - type: Transform
@@ -11214,6 +11218,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: USS George Bush Engineering
+      groups:
+      - warship-engineering
   - uid: 697
     components:
     - type: Transform

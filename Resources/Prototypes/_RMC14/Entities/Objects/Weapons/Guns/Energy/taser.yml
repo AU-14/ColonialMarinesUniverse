@@ -1,8 +1,8 @@
 - type: entity
   parent: BaseWeaponBatterySmall
   id: RMCWeaponTaser
-  name: disabler gun
-  description: An advanced stun device capable of firing balls of ionized electricity. Used for nonlethal takedowns.
+  name: projectile disabler gun
+  description: An advanced stun device capable of firing balls of ionized electricity. Used for nonlethal takedowns. Requires recharging after 8 shots.
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Energy/taser.rsi
@@ -24,7 +24,7 @@
     startingCharge: 800
   - type: BatteryAmmoProvider
     proto: RMCProjectileTaser
-    fireCost: 50
+    fireCost: 100
   - type: MagazineVisuals
     magState: mag
     steps: 5

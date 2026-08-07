@@ -2,6 +2,7 @@ using Content.Server._RMC14.NPC;
 using Content.Server._RMC14.NPC.HTN;
 using Content.Shared._RMC14.CrashLand;
 using Content.Shared._RMC14.Dropship.Utility.Systems;
+using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.SupplyDrop;
 using Content.Shared.ParaDrop;
 using Robust.Server.GameObjects;
@@ -42,6 +43,9 @@ public sealed partial class RMCOrbitalDeployerSystem : SharedRMCOrbitalDeployerS
                 var deployedEntities = Container.EmptyContainer(container, true);
                 foreach (var entity in deployedEntities)
                 {
+                    if (HasComp<SentryTargetingComponent>(entity))
+                        _rmcNpc.WakeNPC(entity);
+
                     var ev = new ParaDropFinishedEvent();
                     RaiseLocalEvent(entity, ref ev);
                 }

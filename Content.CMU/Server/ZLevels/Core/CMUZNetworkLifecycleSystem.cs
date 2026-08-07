@@ -1,4 +1,7 @@
+using System.Linq;
 using Content.Server.GameTicking;
+using Content.Server.Station.Components;
+using Content.Server.Station.Systems;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Maps;
 using Robust.Server.GameObjects;
@@ -22,6 +25,7 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private MetaDataSystem _meta = default!;
     [Dependency] private ISerializationManager _serialization = default!;
+    [Dependency] private StationSystem _station = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     private readonly Dictionary<EntityUid, NetworkConstructionTransaction> _pendingRoundNetworks = new();
@@ -31,7 +35,7 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<PostGameMapLoad>(OnGameMapLoad);
+        SubscribeLocalEvent<PostGameMapLoad>(OnGameMapLoad, after: [typeof(StationSystem)]);
         SubscribeLocalEvent<CMUZLevelMapComponent, MapInitEvent>(OnMapInit);
     }
 
@@ -44,7 +48,19 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
         }
 
         var baseLevel = _map.GetMap(ev.Map);
-        if (TryCreateRoundNetwork(ev.GameMap, baseLevel, out var error))
+        var stationsById = new Dictionary<string, EntityUid>(StringComparer.OrdinalIgnoreCase);
+        var stations = new HashSet<EntityUid>();
+        foreach (var grid in ev.Grids)
+        {
+            if (_station.GetOwningStation(grid) is not { } station)
+                continue;
+
+            stations.Add(station);
+            if (TryComp<BecomesStationComponent>(grid, out var becomesStation))
+                stationsById[becomesStation.Id] = station;
+        }
+
+        if (TryCreateRoundNetwork(ev.GameMap, baseLevel, stationsById, stations, out var error))
             return;
 
         throw new InvalidOperationException(error);
@@ -78,7 +94,24 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
         EntityUid baseLevel,
         out string error)
     {
-        if (!TryLoadLevels(gameMap, baseLevel, null, out var levels, out error))
+        return TryCreateRoundNetwork(gameMap, baseLevel, null, null, out error);
+    }
+
+    private bool TryCreateRoundNetwork(
+        GameMapPrototype gameMap,
+        EntityUid baseLevel,
+        IReadOnlyDictionary<string, EntityUid>? stationsById,
+        IReadOnlySet<EntityUid>? stations,
+        out string error)
+    {
+        if (!TryLoadLevels(
+                gameMap,
+                baseLevel,
+                null,
+                stationsById,
+                stations,
+                out var levels,
+                out error))
             return false;
 
         if (!TryCommitNetwork(
@@ -122,7 +155,7 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
     {
         result = default;
         var options = new DeserializationOptions { StoreYamlUids = true };
-        if (!TryLoadLevels(gameMap, null, options, out var levels, out error))
+        if (!TryLoadLevels(gameMap, null, options, null, null, out var levels, out error))
             return false;
 
         if (!TryCommitNetwork(
@@ -217,6 +250,8 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
         GameMapPrototype gameMap,
         EntityUid? suppliedBaseLevel,
         DeserializationOptions? options,
+        IReadOnlyDictionary<string, EntityUid>? stationsById,
+        IReadOnlySet<EntityUid>? stations,
         out List<LoadedZLevel> levels,
         out string error)
     {
@@ -234,27 +269,27 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
 
             levels.Add(new LoadedZLevel((baseLevel, baseMap), 0, false));
         }
-        else if (!TryLoadLevel(gameMap.MapPath, 0, options, levels, out error))
+        else if (!TryLoadLevel(gameMap.MapPath, 0, options, levels, stationsById, stations, out error))
         {
             return false;
         }
 
-        var depth = -gameMap.MapsBelow.Count;
+        var depth = -1;
         foreach (var path in gameMap.MapsBelow)
         {
-            if (!TryLoadLevel(path, depth, options, levels, out error))
+            if (!TryLoadLevel(path, depth, options, levels, stationsById, stations, out error))
             {
                 RollbackOwnedLevels(levels);
                 return false;
             }
 
-            depth++;
+            depth--;
         }
 
         depth = 1;
         foreach (var path in gameMap.MapsAbove)
         {
-            if (!TryLoadLevel(path, depth, options, levels, out error))
+            if (!TryLoadLevel(path, depth, options, levels, stationsById, stations, out error))
             {
                 RollbackOwnedLevels(levels);
                 return false;
@@ -271,12 +306,15 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
         int depth,
         DeserializationOptions? options,
         List<LoadedZLevel> levels,
+        IReadOnlyDictionary<string, EntityUid>? stationsById,
+        IReadOnlySet<EntityUid>? stations,
         out string error)
     {
         Entity<MapComponent>? map;
+        HashSet<Entity<MapGridComponent>> grids;
         var loaded = options is { } loadOptions
-            ? _mapLoader.TryLoadMap(path, out map, out _, loadOptions)
-            : _mapLoader.TryLoadMap(path, out map, out _);
+            ? _mapLoader.TryLoadMap(path, out map, out grids, loadOptions)
+            : _mapLoader.TryLoadMap(path, out map, out grids);
 
         if (!loaded ||
             map is not { } loadedMap)
@@ -285,9 +323,40 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
             return false;
         }
 
+        if (stationsById != null && stations != null)
+            AddZLevelGridsToStations(grids, stationsById, stations);
+
         levels.Add(new LoadedZLevel(loadedMap, depth, true));
         error = string.Empty;
         return true;
+    }
+
+    private void AddZLevelGridsToStations(
+        HashSet<Entity<MapGridComponent>> grids,
+        IReadOnlyDictionary<string, EntityUid> stationsById,
+        IReadOnlySet<EntityUid> stations)
+    {
+        foreach (var grid in grids)
+        {
+            EntityUid? station = null;
+            if (TryComp<BecomesStationComponent>(grid, out var becomesStation) &&
+                stationsById.TryGetValue(becomesStation.Id, out var matchingStation))
+            {
+                station = matchingStation;
+            }
+            else if (grids.Count == 1 && stations.Count == 1)
+            {
+                station = stations.First();
+            }
+
+            if (station is not { } resolvedStation)
+            {
+                Log.Warning($"Could not associate Z-level grid {ToPrettyString(grid)} with a station.");
+                continue;
+            }
+
+            _station.AddGridToStation(resolvedStation, grid);
+        }
     }
 
     private bool TryCommitNetwork(

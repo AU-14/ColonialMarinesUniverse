@@ -62700,14 +62700,11 @@ entities:
     - type: Transform
       pos: 108.5,-200.5
       parent: 1
-    - type: MarkedForDestroy
   - uid: 7990
     components:
     - type: Transform
       pos: 128.5,-48.5
       parent: 1
-    - type: DestroyObjectiveTracker
-    - type: MarkedForDestroy
 - proto: AU14ObjectiveItemAtmosphericRadarStorageUnit
   entities:
   - uid: 9
@@ -62715,7 +62712,6 @@ entities:
     - type: Transform
       pos: 55.5,-55.5
       parent: 1
-    - type: AuFetchItem
 - proto: AU14SpawnerCorpseUSCMRifleman
   entities:
   - uid: 10
@@ -105172,7 +105168,7 @@ entities:
     - type: Transform
       pos: 15.5,-17.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 7870
     components:

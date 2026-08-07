@@ -3592,6 +3592,8 @@ entities:
       parent: 2
     - type: FaxMachine
       name: Colony Marshal Bureau Relay
+      groups:
+      - marshal-bureau
 - proto: CMFaxHighCom
   entities:
   - uid: 119
@@ -3603,6 +3605,9 @@ entities:
       parent: 2
     - type: FaxMachine
       name: Colonial Administration Relay
+      groups:
+      - marshal-bureau
+      - colony-command
 - proto: CMFaxPress
   entities:
   - uid: 120

@@ -49,7 +49,7 @@ public sealed partial class HiveCollapseRuleSystem : GameRuleSystem<HiveCollapse
         return false;
     }
 
-    private void OnQueenChanged(ref XenoHiveQueenChangedEvent ev)
+    private void OnQueenChanged(XenoHiveQueenChangedEvent ev)
     {
         if (!_gameTicker.IsGameRuleActive<HiveCollapseRuleComponent>())
             return;

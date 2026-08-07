@@ -2,7 +2,7 @@
 engine_version = "v278.0.0"
 
 [game]
-defaultpreset = "ColonyFall"
+defaultpreset = "Insurgency"
 # Straight in-game baby
 map = "USSBushRedux"
 lobbyenabled = false

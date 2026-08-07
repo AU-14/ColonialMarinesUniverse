@@ -2,7 +2,6 @@ using Content.Server._RMC14.Telephone;
 using Content.Server.Power.Components;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
-using Content.Shared._AU14.CCVar;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._AU14.Radio;
 using Content.Shared.Ghost;
@@ -10,9 +9,9 @@ using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Radio;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
-using Robust.Shared.Configuration;
 using Robust.Shared.Map;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._AU14.Radio;
@@ -22,20 +21,16 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedCMChatSystem _cmChat = default!;
     [Dependency] private ANPRCGarbleSystem _garble = default!;
-    [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private AU14CommsToggleSystem _comms = default!;
 
     public const float FullSignalRange = 30f;
     public const float PartialSignalRange = 45f;
 
     private const float StationaryVelocityThresholdSquared = 0.01f;
 
-    private bool _commsEnabled;
-
     public override void Initialize()
     {
-        Subs.CVar(_config, AU14CCVars.NewCommsSystem, v => _commsEnabled = v, true);
-
         SubscribeLocalEvent<RadioSendAttemptEvent>(
             OnSendAttempt,
             after: [typeof(RMCTelephoneSystem), typeof(JammerSystem)]);
@@ -47,12 +42,24 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
 
     private void OnSendAttempt(ref RadioSendAttemptEvent args)
     {
-        if (!_commsEnabled)
+        if (!_comms.Enabled)
             return;
 
         if (TryComp(args.RadioSource, out RMCRadioFilterComponent? sourceFilter) &&
             sourceFilter.DisabledChannels.Contains(args.Channel.ID))
         {
+            return;
+        }
+
+        // the CLF nets can be handed back to stock radio on their own. clear the cancel
+        // rather than yielding - the telecom gate has already killed this for want of a
+        // comms tower the cell never had, so yielding would silence them, not free them.
+        // jamming still applies
+        if (!_comms.EnabledOn(args.Channel))
+        {
+            if (_garble.GetJamIntensity(args.RadioSource) == RadioJamIntensity.None)
+                args.Cancelled = false;
+
             return;
         }
 
@@ -78,7 +85,13 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
             {
                 args.Cancelled = true;
 
-                var wearer = Transform(args.RadioSource).ParentUid;
+                // a headset or pack is an item in someone's inventory, but an earpiece
+                // grants intrinsic radio and the source is the wearer themselves - whose
+                // parent is the map. without this the earpiece user gets silence and no
+                // explanation for it
+                var wearer = HasComp<ActorComponent>(args.RadioSource)
+                    ? args.RadioSource
+                    : Transform(args.RadioSource).ParentUid;
 
                 if (wearer.IsValid())
                 {
@@ -107,12 +120,20 @@ public sealed partial class ANPRCRangeSystem : EntitySystem
 
     private void OnReceiveAttempt(ref RadioReceiveAttemptEvent args)
     {
-        if (!_commsEnabled)
+        if (!_comms.Enabled)
             return;
 
         if (TryComp(args.RadioReceiver, out RMCRadioFilterComponent? receiverFilter) &&
             receiverFilter.DisabledChannels.Contains(args.Channel.ID))
         {
+            return;
+        }
+
+        // as above - stock radio for the cell has to mean everyone on the net hears it,
+        // not everyone waiting on a tower that does not exist
+        if (!_comms.EnabledOn(args.Channel))
+        {
+            args.Cancelled = false;
             return;
         }
 

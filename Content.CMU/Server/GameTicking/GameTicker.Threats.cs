@@ -90,12 +90,16 @@ public sealed partial class GameTicker
             return;
         }
 
-        if (_auRoundSystem.SelectedThreat is not { } selectedThreat)
-            return;
-
         try
         {
-            _cmuThirdParty.StartThirdPartySpawning(selectedThreat, assignedJobs);
+            if (_auRoundSystem.SelectedThreat is { } selectedThreat)
+            {
+                _cmuThirdParty.StartThirdPartySpawning(selectedThreat, assignedJobs);
+            }
+            else if (_auRoundSystem.SelectedPreset is { ThirdPartyAutoSpawn: true } preset)
+            {
+                _cmuThirdParty.StartThirdPartySpawning(preset, assignedJobs);
+            }
         }
         catch (Exception ex)
         {

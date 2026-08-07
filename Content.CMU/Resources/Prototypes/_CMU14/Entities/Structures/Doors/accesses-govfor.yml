@@ -367,3 +367,43 @@
   components:
   - type: AccessReader
     access: [["AU14AccessGovforReq"]]
+
+- type: entity
+  parent: CMUAirlockUPPMaints
+  id: CMUAirlockUPPMaintsGovforLocked
+  suffix: Govfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]
+
+- type: entity
+  parent: CMUAirlockUPPGrey
+  id: CMUAirlockUPPGreyGovforLocked
+  suffix: Govfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]
+
+- type: entity
+  parent: CMUAirlockUPPGreen
+  id: CMUAirlockUPPGreenGovforLocked
+  suffix: Govfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]
+
+- type: entity
+  parent: CMUAirlockGlassGreenUPP
+  id: CMUAirlockGlassGreenUPPGovforLocked
+  suffix: Govfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]
+
+- type: entity
+  parent: CMUAirlockGlassGreyUPP
+  id: CMUAirlockGlassGreyUPPGovforLocked
+  suffix: Govfor, Locked, UPP
+  components:
+  - type: AccessReader
+    access: [["AU14AccessGovfor"]]

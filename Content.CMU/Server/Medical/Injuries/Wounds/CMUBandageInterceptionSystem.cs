@@ -125,17 +125,21 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var canInstantWound = woundTarget != null && CanApplyInstantWoundTreatment(args.User, treater);
         var canInstantKit = CanApplyInstantKit(args.User, used);
         var canApplyInstantTreatment = canInstantWound || canInstantKit;
+        var autoReapplyKit = ShouldAutoReapplyKit(args.User, used, treater);
         if (canApplyInstantTreatment &&
             !targetSelection.UsedSearch &&
-            TryApplyInstantTreatment(args.User, patient, targetPart, used, treater))
+            !autoReapplyKit &&
+            TryApplyInstantTreatment(args.User, patient, targetPart, used, treater, out _))
         {
             args.Handled = true;
             return;
         }
 
-        var deferInstantTreatment = canApplyInstantTreatment && targetSelection.UsedSearch;
+        var deferInstantTreatment = canApplyInstantTreatment && (targetSelection.UsedSearch || autoReapplyKit);
         var fumblingDelay = TimeSpan.Zero;
-        var delay = ResolveSearchDelay(targetSelection);
+        var delay = deferInstantTreatment && autoReapplyKit
+            ? SearchTreatmentDelay
+            : ResolveSearchDelay(targetSelection);
         if (!deferInstantTreatment)
             delay += ResolveBandageDelay(args.User, patient, targetPart, used, treater, out fumblingDelay);
 
@@ -166,6 +170,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         pending.Treater = used;
         pending.PartHealthCapPart = targetPart;
         pending.PartHealthCap = partHealthCap;
+        pending.AutoReapplyKit = autoReapplyKit;
 
         _audio.PlayPvs(treater.TreatBeginSound, args.User);
         if (args.User != patient && treater.TargetStartPopup is { } startPopup)
@@ -281,6 +286,32 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
     {
         return TryComp<ActorComponent>(medic, out var actor) &&
             _netConfig.GetClientCVar(actor.PlayerSession.Channel, CMUMedicalCCVars.TargetedHealingEnabled);
+    }
+
+    private bool IsAutoReapplyKitsEnabled(EntityUid medic)
+    {
+        return TryComp<ActorComponent>(medic, out var actor) &&
+            _netConfig.GetClientCVar(actor.PlayerSession.Channel, CMUMedicalCCVars.AutoReapplyKitsEnabled);
+    }
+
+    private bool IsTraumaOrBurnKit(EntityUid treaterUid, WoundTreaterComponent treater)
+    {
+        if (!treater.CMUTreatsWounds || !TryComp<StackComponent>(treaterUid, out var stack))
+            return false;
+
+        return stack.StackTypeId == BurnKitStack || stack.StackTypeId == TraumaKitStack;
+    }
+
+    private bool ShouldAutoReapplyKit(EntityUid medic, EntityUid treaterUid, WoundTreaterComponent treater)
+    {
+        if (!IsAutoReapplyKitsEnabled(medic) ||
+            !IsTraumaOrBurnKit(treaterUid, treater) ||
+            !TryComp<StackComponent>(treaterUid, out var stack))
+        {
+            return false;
+        }
+
+        return stack.Unlimited || stack.Count > 1;
     }
 
     private static TimeSpan ResolveSearchDelay(TreatmentTarget target)
@@ -562,8 +593,23 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
 
         if (args.ApplyInstantTreatment)
         {
-            TryApplyInstantTreatment(medic, patient, part, treaterUid, treater);
-            RemComp<CMUBandagePendingComponent>(ent);
+            var instantTreated = TryApplyInstantTreatment(medic, patient, part, treaterUid, treater, out var instantHasTreater);
+            var instantRepeatPart = instantTreated && instantHasTreater && ent.Comp.AutoReapplyKit
+                ? GetAutoReapplyKitPart(medic, patient, part, treater)
+                : null;
+            args.Repeat = instantRepeatPart != null;
+            if (instantRepeatPart is { } instantNextTarget)
+            {
+                args.Part = GetNetEntity(instantNextTarget.Part);
+                args.Args.Delay = ResolveSearchDelay(instantNextTarget);
+                _audio.PlayPvs(treater.TreatBeginSound, medic);
+                if (medic != patient && treater.TargetStartPopup is { } startPopup)
+                    _popup.PopupEntity(Loc.GetString(startPopup, ("user", medic)), patient, patient, PopupType.Medium);
+            }
+            else
+            {
+                RemComp<CMUBandagePendingComponent>(ent);
+            }
             return;
         }
 
@@ -648,7 +694,11 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         _audio.PlayPvs(treater.TreatEndSound, medic);
 
         var hasTreater = ConsumeTreater(treaterUid, treater);
-        var repeatPart = GetRepeatPart(medic, patient, part, treater, repeatPartHealthCap);
+        var repeatPart = IsTraumaOrBurnKit(treaterUid, treater)
+            ? ent.Comp.AutoReapplyKit
+                ? GetAutoReapplyKitPart(medic, patient, part, treater)
+                : null
+            : GetRepeatPart(medic, patient, part, treater, repeatPartHealthCap);
         args.Repeat = hasTreater && repeatPart != null;
         if (args.Repeat && repeatPart is { } nextTarget)
         {
@@ -716,6 +766,18 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         return PickDamageOnlyTarget(medic, patient, treater, currentPart, partHealthCap);
     }
 
+    private TreatmentTarget? GetAutoReapplyKitPart(
+        EntityUid medic,
+        EntityUid patient,
+        EntityUid currentPart,
+        WoundTreaterComponent treater)
+    {
+        if (IsAttachedPart(patient, currentPart) && PartHasTreatableWound(currentPart, treater))
+            return new TreatmentTarget(currentPart, false);
+
+        return PickBandageTarget(medic, patient, treater);
+    }
+
     private bool TryTreatOneWoundWithTreater(EntityUid part, WoundTreaterComponent treater, out bool completed)
     {
         return _wounds.TryTreatWound(
@@ -742,8 +804,10 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         EntityUid patient,
         EntityUid firstPart,
         EntityUid treaterUid,
-        WoundTreaterComponent treater)
+        WoundTreaterComponent treater,
+        out bool hasTreater)
     {
+        hasTreater = false;
         var maxWounds = Math.Max(1, treater.WoundsTreatedPerUse);
         var treatedWounds = 0;
         var part = firstPart;
@@ -801,7 +865,7 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
             return false;
 
         _audio.PlayPvs(treater.TreatEndSound, medic);
-        ConsumeTreater(treaterUid, treater);
+        hasTreater = ConsumeTreater(treaterUid, treater);
 
         var userPopup = treater.UserFinishPopup ?? treater.UserPopup;
         var targetPopup = treater.TargetFinishPopup ?? treater.TargetPopup;

@@ -81,8 +81,12 @@
         crate: CMUCrateSim
       - cost: 4000
         crate: CMUMonkeyCubeCrate
+        maxStock: 1
+        stockReplenishDelay: 1800
       - cost: 8000
         crate: CMUExoticCubeCrate
+        maxStock: 1
+        stockReplenishDelay: 1800
       - cost: 250
         crate: CMUCrateChemGlasses
       - cost: 400

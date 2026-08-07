@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Numerics;
+using Content.Shared._CMU14.Round.Objectives;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Attachable.Components;
@@ -672,29 +673,50 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
         if (entry.Points != null)
         {
-            if (user == null)
+            if (vendor.Comp.UseObjectivePoints)
+            {
+                var available = vendor.Comp.CachedFactionWinPoints;
+                if (available < entry.Points.Value)
+                {
+                    _popup.PopupEntity(Loc.GetString("cm-vending-machine-not-enough-points"), vendor, actor);
+                    ResetChoices();
+                    return;
+                }
+
+                var faction = vendor.Comp.Faction.ToLowerInvariant();
+                RaiseLocalEvent(new SpendWinPointsEvent
+                {
+                    Team = faction,
+                    Amount = entry.Points.Value,
+                });
+
+                UpdateVendorFactionPointsCache(faction, available - entry.Points.Value);
+            }
+            else if (user == null)
             {
                 Log.Error(
                     $"{ToPrettyString(actor)} tried to buy {entry.Id} for {entry.Points} points without having points.");
                 return;
             }
-
-            var userPoints = vendor.Comp.PointsType == null
-                ? user.Points
-                : user.ExtraPoints?.GetValueOrDefault(vendor.Comp.PointsType) ?? 0;
-            if (userPoints < entry.Points)
+            else
             {
-                Log.Error(
-                    $"{ToPrettyString(actor)} with {user.Points} tried to buy {entry.Id} for {entry.Points} points without having enough points.");
-                return;
+                var userPoints = vendor.Comp.PointsType == null
+                    ? user.Points
+                    : user.ExtraPoints?.GetValueOrDefault(vendor.Comp.PointsType) ?? 0;
+                if (userPoints < entry.Points)
+                {
+                    Log.Error(
+                        $"{ToPrettyString(actor)} with {user.Points} tried to buy {entry.Id} for {entry.Points} points without having enough points.");
+                    return;
+                }
+
+                if (vendor.Comp.PointsType == null)
+                    user.Points -= entry.Points.Value;
+                else if (user.ExtraPoints != null)
+                    user.ExtraPoints[vendor.Comp.PointsType] = userPoints - (entry.Points ?? 0);
+
+                Dirty(actor, user);
             }
-
-            if (vendor.Comp.PointsType == null)
-                user.Points -= entry.Points.Value;
-            else if (user.ExtraPoints != null)
-                user.ExtraPoints[vendor.Comp.PointsType] = userPoints - (entry.Points ?? 0);
-
-            Dirty(actor, user);
         }
 
         if (entry.Amount != null)

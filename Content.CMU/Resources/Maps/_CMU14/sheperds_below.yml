@@ -11804,6 +11804,9 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Colony Administrator
+      groups:
+      - colony-command
+      - marshal-bureau
 - proto: CMMop
   entities:
   - uid: 320181

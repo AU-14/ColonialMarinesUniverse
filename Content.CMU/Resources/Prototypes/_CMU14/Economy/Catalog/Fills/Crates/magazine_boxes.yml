@@ -57,7 +57,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: AU14CrateBoxMagazineRifleL24AP
-  name: Magazine box (L23/L24, 10x AP mags)
+  name: Magazine box (L23, 10x AP mags)
   components:
   - type: StorageFill
     contents:

@@ -18,7 +18,7 @@
       params:
         volume: 5
   - type: RMCStaminaDamageOnCollide
-    damage: 60
+    damage: 35
   - type: Projectile
     damage:
       types:

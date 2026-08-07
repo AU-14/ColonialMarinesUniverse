@@ -17,6 +17,7 @@
   - AUPlanetCorsatStation
   - AUPlanetSorokyne
   - AUPlanetStableGarrison
+  - CMUPlanetStableGarrisonRedux
   - AUPlanetTrijent
   - CMUPlanetLament
   - CMUPlanetHopesRetreat
@@ -36,11 +37,16 @@
   description: Insurgency mode
   minPlayers: 35
   requiresGovforVote: true
+  thirdPartyAutoSpawn: true
+  thirdPartyInterval: 3600
+  thirdPartyRatio: 0.15
+  maxThirdParties: 3
   supportedPlanets:
     - AUPlanetShepherdsPride
    # - AUPlanetLV327
     - CMUPlanetLament
     - AUPlanetStableGarrison
+    - CMUPlanetStableGarrisonRedux
     #- AUPlanetLV747
     #- AUPlanetSorokyne
     #- AuPlanetChances
@@ -55,6 +61,8 @@
 
 - type: gamePreset
   id: DistressSignal
+  alias:
+  - distresssignal
   name: Distress Signal
   showInVote: true
   description: Investigate a mysterious distress signal as government forces.
@@ -90,6 +98,7 @@
     - AUPlanetShepherdsPride
 #    - AUPlanetLV327
     - AUPlanetStableGarrison
+    - CMUPlanetStableGarrisonRedux
     - CMUPlanetLament
 #    - AUPlanetSorokyne
 #    - AuPlanetChances

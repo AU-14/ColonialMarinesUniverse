@@ -273,15 +273,6 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                     var stationJobs = EntityManager.GetComponentOrNull<StationJobsComponent>(stationUid.Value);
                     if (stationJobs != null)
                     {
-                        if (isDistressPreset)
-                        {
-                            var existing = stationJobs.JobList.Keys.ToList();
-                            foreach (var jobKey in existing)
-                            {
-                                _stationJobs.TrySetJobSlot(stationUid.Value, jobKey.ToString(), 0, false, stationJobs);
-                            }
-                        }
-
                         foreach (var entry in component.Jobs)
                         {
                             var jobId = entry.Key;

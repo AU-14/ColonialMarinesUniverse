@@ -83390,6 +83390,9 @@ entities:
       parent: 1
     - type: FaxMachine
       name: LV-624 Colonial Administration
+      groups:
+      - marshal-bureau
+      - colony-command
 - proto: CMFaxCLF
   entities:
   - uid: 901
@@ -217151,7 +217154,7 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 91.5,-49.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 26033
     components:

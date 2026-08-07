@@ -5,23 +5,23 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: killteamobjbasic
-    factioneutral: true
-    applicableModes:
+    factionNeutral: true
+    allowedPresets:
     - ForceOnForce
-    possiblefactions:
+    factions:
     - opfor
     - govfor
     repeating: true
-    objectivelevel: 1
-    custompoints: 3
-    maxrepeatable: 1
-    ObjectiveDescription: "Kill the enemy"
-    nexttier: destroy_mineable_solaris_steel
+    objectiveLevel: 1
+    customPoints: 3
+    maxRepeatable: 1
+    objectiveDescription: "Kill the enemy"
+    nextTierObjective: destroy_mineable_solaris_steel
   - type: KillObjective
-    factiontokill: govfor
-    amounttokill: 2
+    factionToKill: govfor
+    killCount: 2
 
 - type: entity
   name: "Kill the OPFOR Commander (FOF)"
@@ -30,22 +30,22 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
-    factioneutral: false
+  - type: CMUObjective
+    factionNeutral: false
     id: govforkillplatcoobj
-    applicableModes:
+    allowedPresets:
     - ForceOnForce
-    possiblefactions:
+    factions:
     - govfor
     repeating: false
-    objectivelevel: 1
-    custompoints: 10
-    ObjectiveDescription: "Kill the OPFOR Commander"
+    objectiveLevel: 1
+    customPoints: 10
+    objectiveDescription: "Kill the OPFOR Commander"
     roundEndMessage: "By Killing the OPFOR Commander"
   - type: KillObjective
-    factiontokill: opfor
-    amounttokill: 1
-    specificjob: AU14JobOPFORPlatCo
+    factionToKill: opfor
+    killCount: 1
+    specificJob: AU14JobOPFORPlatCo
 
 - type: entity
   name: "Kill the GOVFOR Commander (FOF)"
@@ -54,22 +54,22 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
-    factioneutral: false
+  - type: CMUObjective
+    factionNeutral: false
     id: opforkillplatcoobj
-    applicableModes:
+    allowedPresets:
     - ForceOnForce
-    possiblefactions:
+    factions:
     - opfor
     repeating: false
-    objectivelevel: 1
-    custompoints: 30
-    ObjectiveDescription: "Kill the GOVFOR Commander"
+    objectiveLevel: 1
+    customPoints: 30
+    objectiveDescription: "Kill the GOVFOR Commander"
     roundEndMessage: "By Killing the GOVFOR Commander"
   - type: KillObjective
-    factiontokill: govfor
-    amounttokill: 1
-    specificjob: AU14JobGOVFORPlatCo
+    factionToKill: govfor
+    killCount: 1
+    specificJob: AU14JobGOVFORPlatCo
 
 - type: entity
   name: Kill GOVFOR Commander
@@ -78,22 +78,22 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
-    factioneutral: false
+  - type: CMUObjective
+    factionNeutral: false
     id: clfkillplatcoobj
-    applicableModes:
+    allowedPresets:
     - Insurgency
-    possiblefactions:
+    factions:
     - clf
     repeating: false
-    objectivelevel: 1
-    custompoints: 10
-    ObjectiveDescription: "Kill the GOVFOR Commander"
+    objectiveLevel: 1
+    customPoints: 10
+    objectiveDescription: "Kill the GOVFOR Commander"
     roundEndMessage: "By Killing the GOVFOR Commander"
   - type: KillObjective
-    factiontokill: GOVFOR
-    amounttokill: 1
-    specificjob: AU14JobGOVFORPlatCo
+    factionToKill: GOVFOR
+    killCount: 1
+    specificJob: AU14JobGOVFORPlatCo
 
 - type: entity
   name: Kill the CLF Cell Leader
@@ -102,22 +102,22 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: killclfleaderobj
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - Insurgency
-    possiblefactions:
+    factions:
     - govfor
     repeating: false
-    objectivelevel: 1
-    custompoints: 10
-    ObjectiveDescription: "Eliminate the Threat Leader"
+    objectiveLevel: 1
+    customPoints: 10
+    objectiveDescription: "Eliminate the Threat Leader"
     roundEndMessage: "By Killing the Cell Leader"
   - type: KillObjective
-    factiontokill: clf
-    amounttokill: 1
-    specificjob: AU14JobCLFCellLeader
+    factionToKill: clf
+    killCount: 1
+    specificJob: AU14JobCLFCellLeader
 
 
 - type: entity
@@ -127,21 +127,21 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: killinsurgentsobj
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - Insurgency
-    possiblefactions:
+    factions:
     - govfor
     repeating: true
-    objectivelevel: 2
-    custompoints: 20
-    maxrepeatable: 8
-    ObjectiveDescription: "Eliminate Threats"
+    objectiveLevel: 2
+    customPoints: 20
+    maxRepeatable: 8
+    objectiveDescription: "Eliminate Threats"
   - type: KillObjective
-    factiontokill: clf
-    amounttokill: 2
+    factionToKill: clf
+    killCount: 2
 
 - type: entity
   name: Kill GOVFOR Forces
@@ -150,21 +150,21 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: killgovforobj
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - Insurgency
-    possiblefactions:
+    factions:
     - clf
     repeating: true
-    maxrepeatable: 30
-    objectivelevel: 2
-    custompoints: 10
-    ObjectiveDescription: "Kill GOVFOR Forces"
+    maxRepeatable: 30
+    objectiveLevel: 2
+    customPoints: 10
+    objectiveDescription: "Kill GOVFOR Forces"
   - type: KillObjective
-    factiontokill: GOVFOR
-    amounttokill: 1
+    factionToKill: GOVFOR
+    killCount: 1
 
 # - type: entity
 #   name: Kill Platoon Commander UPP
@@ -173,19 +173,19 @@
 #   components:
 #   - type: Sprite
 #     state: red
-#   - type: AuObjective
+#   - type: CMUObjective
 #     id: killplatcouppobj
-#     factioneutral: false
-#     applicableModes:
+#     factionNeutral: false
+#     allowedPresets:
 #     - ForceOnForce
-#     possiblefactions:
+#     factions:
 #     - opfor
 #     repeating: false
-#     objectivelevel: 3
+#     objectiveLevel: 3
 #     WhitelistedPlatoons:
 #     - LACN
-#     custompoints: 20
-#     ObjectiveDescription: "Kill the Platoon Commander"
+#     customPoints: 20
+#     objectiveDescription: "Kill the Platoon Commander"
 #     roundEndMessage: "By Killing the Commander"
 #   - type: KillObjective
 #     factiontokill: govfor
@@ -199,19 +199,19 @@
 #   components:
 #   - type: Sprite
 #     state: red
-#   - type: AuObjective
+#   - type: CMUObjective
 #     id: killplatcormcobj
-#     factioneutral: false
-#     applicableModes:
+#     factionNeutral: false
+#     allowedPresets:
 #     - ForceOnForce
-#     possiblefactions:
+#     factions:
 #     - opfor
 #     repeating: false
-#     objectivelevel: 3
+#     objectiveLevel: 3
 #     WhitelistedPlatoons:
 #     - UPP
-#     custompoints: 20
-#     ObjectiveDescription: "Kill the Platoon Commander"
+#     customPoints: 20
+#     objectiveDescription: "Kill the Platoon Commander"
 #     roundEndMessage: "By Killing the Commander"
 #   - type: KillObjective
 #     factiontokill: govfor
@@ -225,21 +225,21 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
-    factioneutral: false
+  - type: CMUObjective
+    factionNeutral: false
     id: threatkillleaderobj
-    applicableModes:
+    allowedPresets:
     - DistressSignal
-    possiblefactions:
+    factions:
     - govfor
     repeating: false
-    objectivelevel: 1
-    custompoints: 35
-    ObjectiveDescription: "Eliminate the threat's leader."
+    objectiveLevel: 1
+    customPoints: 35
+    objectiveDescription: "Eliminate the threat's leader."
     roundEndMessage: "By Killing the threat leader."
   - type: KillObjective
-    amounttokill: 1
-    specificjob: AU14JobThreatLeader
+    killCount: 1
+    specificJob: AU14JobThreatLeader
 
 - type: entity
   name: "Kill the threat (DS)"
@@ -248,21 +248,21 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
-    factioneutral: false
+  - type: CMUObjective
+    factionNeutral: false
     id: threatkillobj
-    applicableModes:
+    allowedPresets:
     - DistressSignal
-    possiblefactions:
+    factions:
     - govfor
     repeating: true
-    objectivelevel: 1
-    custompoints: 5
-    ObjectiveDescription: "Eliminate the threat."
+    objectiveLevel: 1
+    customPoints: 5
+    objectiveDescription: "Eliminate the threat."
     roundEndMessage: "By killing the threat."
   - type: KillObjective
-    amounttokill: 1
-    specificjob: AU14JobThreatMember
+    killCount: 1
+    specificJob: AU14JobThreatMember
 
 - type: entity
   name: Kill the Carp
@@ -271,17 +271,17 @@
   components:
   - type: Sprite
     state: red
-  - type: AuObjective
+  - type: CMUObjective
     id: killcarpobj
-    factioneutral: false
-    applicableModes:
+    factionNeutral: false
+    allowedPresets:
     - insurgency
-    possiblefactions:
+    factions:
     - clf
     repeating: true
-    objectivelevel: 1
-    custompoints: 5
-    ObjectiveDescription: "Kill the Carp"
+    objectiveLevel: 1
+    customPoints: 5
+    objectiveDescription: "Kill the Carp"
   - type: KillObjective
-    mobtokill: CMUMobCarp
-    factiontokill: SimpleNeutral
+    targetPrototype: CMUMobCarp
+    factionToKill: SimpleNeutral

@@ -74547,19 +74547,16 @@ entities:
     - type: Transform
       pos: 224.5,-147.5
       parent: 1
-    - type: InteractObjectiveTracker
   - uid: 408
     components:
     - type: Transform
       pos: 212.5,-100.5
       parent: 1
-    - type: InteractObjectiveTracker
   - uid: 409
     components:
     - type: Transform
       pos: 180.5,-120.5
       parent: 1
-    - type: InteractObjectiveTracker
 - proto: AU14Patch32ndAB
   entities:
   - uid: 45
@@ -85314,6 +85311,8 @@ entities:
       parent: 1
     - type: FaxMachine
       destinationAddress: CMB Marshal's Office
+      groups:
+      - marshal-bureau
   - uid: 2032
     components:
     - type: Transform
@@ -115467,7 +115466,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -0.5,-1.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 7389
     components:

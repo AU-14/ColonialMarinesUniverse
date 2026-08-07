@@ -2,12 +2,10 @@ using System.Numerics;
 using System.Text;
 using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
-using Content.Shared._AU14.CCVar;
 using Content.Shared._AU14.Radio;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
-using Robust.Shared.Configuration;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
@@ -20,7 +18,7 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
     [Dependency] private ANPRCCryptoSystem _crypto = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private AU14CommsToggleSystem _comms = default!;
 
     private static readonly string[] LightNoise = ["~~~~", "~~~~", "~~~~", "---"];
     private static readonly string[] MediumNoise = ["~~~~", "*static*", "kzzkt", "---", "~~~~"];
@@ -29,12 +27,8 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
     private GameTick _jamCacheTick;
     private readonly Dictionary<EntityUid, RadioJamIntensity> _jamCache = new();
 
-    private bool _commsEnabled;
-
     public override void Initialize()
     {
-        Subs.CVar(_config, AU14CCVars.NewCommsSystem, v => _commsEnabled = v, true);
-
         SubscribeLocalEvent<TunableHeadsetComponent, RadioReceiveEvent>(
             OnRadioReceive,
             before: [typeof(HeadsetSystem)]);
@@ -42,7 +36,7 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
 
     private void OnRadioReceive(Entity<TunableHeadsetComponent> receiver, ref RadioReceiveEvent args)
     {
-        if (!_commsEnabled)
+        if (!_comms.EnabledOn(args.Channel))
             return;
 
         RadioMode? txMode = null;
@@ -332,6 +326,9 @@ public sealed partial class ANPRCGarbleSystem : EntitySystem
         RadioChannelPrototype channel,
         string message)
     {
+        if (!_comms.EnabledOn(channel))
+            return message;
+
         if (string.IsNullOrEmpty(channel.Faction))
             return message;
 

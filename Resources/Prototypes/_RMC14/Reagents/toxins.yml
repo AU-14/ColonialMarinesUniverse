@@ -132,7 +132,7 @@
       - !type:Emote # Sedative 6
         emote: Yawn
         showInChat: true
-        probability: 0.25 #TODO makes them confused and eventually sleepy
+        probability: 0.01 #TODO makes them confused and eventually sleepy
       - !type:GenericStatusEffect
         conditions:
         - !type:ReagentThreshold
@@ -141,7 +141,7 @@
         component: RMCUnconscious
         type: Add
         time: 3
-        refresh: false
+        refresh: true
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold

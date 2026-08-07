@@ -86,9 +86,6 @@ cm-chatsan-replacement-sw = south-west
 
 
 # Xeno
-cm-chatsan-word-admins-xeno = admins
-cm-chatsan-replacement-admins-xeno = grandmothers
-
 cm-chatsan-word-eorg-xeno = eorg
 cm-chatsan-replacement-eorg-xeno = sister harm
 
@@ -400,10 +397,6 @@ cm-chatsan-word-kitties = kitties
 cm-chatsan-word-kittens = kittens
 cm-chatsan-replacement-cats = felines
 
-cm-chatsan-word-fish = fish
-cm-chatsan-word-carp = carp
-cm-chatsan-replacement-fish = aquatic creature
-
 cm-chatsan-word-rat = rat
 cm-chatsan-word-mouse = mouse
 cm-chatsan-replacement-rat = squeaking creature
@@ -544,13 +537,13 @@ cm-chatsan-word-survivor = survivor
 cm-chatsan-replacement-survivor = planet tall
 
 cm-chatsan-word-survivors = survivors
-cm-chatsan-replacement-survivors = planet hosts
+cm-chatsan-replacement-survivors = planet talls
 
 cm-chatsan-word-surv = surv
 cm-chatsan-replacement-surv = planet tall
 
 cm-chatsan-word-survs = survs
-cm-chatsan-replacement-survs = planet hosts
+cm-chatsan-replacement-survs = planet talls
 
 cm-chatsan-word-bro = bro
 cm-chatsan-replacement-bro = sister
@@ -597,9 +590,6 @@ cm-chatsan-replacement-mcxonalds = tall garden
 cm-chatsan-word-slop = slop
 cm-chatsan-replacement-slop = hell
 
-cm-chatsan-word-spam = spam
-cm-chatsan-replacement-spam = flood
-
 cm-chatsan-word-god = god
 cm-chatsan-replacement-god = queen mother
 
@@ -614,9 +604,6 @@ cm-chatsan-replacement-xesus = queen mother
 
 cm-chatsan-word-jesus-christ = jesus christ
 cm-chatsan-replacement-jesus-christ = queen mother
-
-cm-chatsan-word-froot = froot
-cm-chatsan-replacement-froot = fruit
 
 cm-chatsan-word-yung = yung
 cm-chatsan-replacement-yung = young
@@ -638,14 +625,6 @@ cm-chatsan-replacement-sigma = prime
 
 cm-chatsan-word-xigma = xigma
 cm-chatsan-replacement-xigma = prime
-
-cm-chatsan-word-para = para
-cm-chatsan-word-parasite = parasite
-cm-chatsan-replacement-parasite = child
-
-cm-chatsan-word-paras = paras
-cm-chatsan-word-parasites = parasites
-cm-chatsan-replacement-parasites = children
 
 cm-chatsan-word-barricade = barricade
 cm-chatsan-word-cade = cade
@@ -725,21 +704,11 @@ cm-chatsan-replacement-baton = shock stick
 cm-chatsan-word-batons = batons
 cm-chatsan-replacement-batons = shock sticks
 
-cm-chatsan-word-flashbang = flashbang
-cm-chatsan-replacement-flashbang = bright bang
-
 cm-chatsan-word-prisoner = prisoner
 cm-chatsan-replacement-prisoner = caged one
 
 cm-chatsan-word-battery = battery
 cm-chatsan-replacement-battery = light core
-
-cm-chatsan-word-console = console
-cm-chatsan-word-radio = radio
-cm-chatsan-word-computer = computer
-cm-chatsan-word-terminal = terminal
-cm-chatsan-word-tablet = tablet
-cm-chatsan-replacement-console = talk box
 
 cm-chatsan-word-generator = generator
 cm-chatsan-replacement-generator = light core
@@ -747,21 +716,11 @@ cm-chatsan-replacement-generator = light core
 cm-chatsan-word-generators = generators
 cm-chatsan-replacement-generators = light cores
 
-cm-chatsan-word-disk = disk
-cm-chatsan-word-disc = disc
-cm-chatsan-replacement-disk = memory wheel
-
 cm-chatsan-word-flashlight = flashlight
 cm-chatsan-replacement-flashlight = glow tube
 
 cm-chatsan-word-flashlights = flashlights
 cm-chatsan-replacement-flashlights = glow tubes
-
-cm-chatsan-word-window = window
-cm-chatsan-replacement-window = tall membrane
-
-cm-chatsan-word-windows = windows
-cm-chatsan-replacement-windows = tall membranes
 
 cm-chatsan-word-light-bulb = light bulb
 cm-chatsan-word-lightbulb = lightbulb
@@ -770,12 +729,6 @@ cm-chatsan-replacement-light-bulb = glow orb
 cm-chatsan-word-light-bulbs = light bulbs
 cm-chatsan-word-lightbulbs = lightbulbs
 cm-chatsan-replacement-light-bulbs = glow orbs
-
-cm-chatsan-word-crate = crate
-cm-chatsan-replacement-crate = containment box
-
-cm-chatsan-word-crates = crates
-cm-chatsan-replacement-crates = containment boxes
 
 cm-chatsan-word-gunshot = gunshot
 cm-chatsan-replacement-gunshot = spit burst
@@ -792,15 +745,6 @@ cm-chatsan-replacement-folder = sheet holder
 cm-chatsan-word-papers = papers
 cm-chatsan-replacement-papers = message sheets
 
-cm-chatsan-word-folders = folders
-cm-chatsan-replacement-folders = sheet holders
-
-cm-chatsan-word-zerker = zerker
-cm-chatsan-word-replacement-zerker = berserker
-
-cm-chatsan-word-zerkers = zerkers
-cm-chatsan-word-replacement-zerkers = berserkers
-
 cm-chatsan-word-rav = rav
 cm-chatsan-word-replacement-rav = ravager
 
@@ -812,12 +756,6 @@ cm-chatsan-word-replacement-prae = praetorian
 
 cm-chatsan-word-praes = praes
 cm-chatsan-word-replacement-praes = praetorians
-
-cm-chatsan-word-hivey = hivey
-cm-chatsan-word-replacement-hivey = hivelord
-
-cm-chatsan-word-hiveys = hiveys
-cm-chatsan-word-replacement-hiveys = hivelords
 
 cm-chatsan-word-cap = cap
 cm-chatsan-word-replacement-cap = capture

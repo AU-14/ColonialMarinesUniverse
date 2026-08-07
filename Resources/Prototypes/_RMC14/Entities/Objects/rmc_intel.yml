@@ -465,6 +465,7 @@
   parent: RMCCommunicationsConsoleBase
   id: RMCComputerIntelCLF
   name: CLF intel computer
+  suffix: RMC, Don't Use
   description: A CLF Intel Computer for data cataloguing and distribution.
   components:
   - type: Sprite

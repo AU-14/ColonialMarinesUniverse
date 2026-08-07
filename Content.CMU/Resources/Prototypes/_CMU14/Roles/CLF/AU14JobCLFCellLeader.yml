@@ -92,6 +92,7 @@
   storage:
     back:
     - ANPRCFillCardCLF
+    - AU14CLFStandingOrdersPad
 
 - type: entity
   parent: CMSpawnPointJobBase

@@ -23,4 +23,7 @@ public sealed partial class CMUBandagePendingComponent : Component
 
     [DataField]
     public FixedPoint2? PartHealthCap;
+
+    [DataField]
+    public bool AutoReapplyKit;
 }

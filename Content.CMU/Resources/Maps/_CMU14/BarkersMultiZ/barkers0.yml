@@ -156457,6 +156457,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Military CIC
+      groups:
+      - military-command
       notifyAdmins: True
   - uid: 1886
     components:
@@ -156531,6 +156533,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Office of the Colonial Marshals
+      groups:
+      - marshal-bureau
   - uid: 1895
     components:
     - type: Transform
@@ -156559,6 +156563,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Military Provost Office
+      groups:
+      - military-command
 - proto: CMFaxSPP
   entities:
   - uid: 1899

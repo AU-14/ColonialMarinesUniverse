@@ -34,7 +34,7 @@
     availableModes:
     - SemiAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_l90.ogg
+      collection: AU14SLRFireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -120,7 +120,7 @@
     - SemiAuto
     - FullAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_l90.ogg
+      collection: AU14SLRFireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -210,7 +210,7 @@
     - SemiAuto
     - FullAuto
     soundGunshot:
-      path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_l90.ogg
+      collection: AU14SLRFireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto

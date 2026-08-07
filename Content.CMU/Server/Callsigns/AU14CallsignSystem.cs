@@ -1,3 +1,4 @@
+using Content.Server._AU14.Radio;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
@@ -28,6 +29,7 @@ public sealed partial class AU14CallsignSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private AU14CommsToggleSystem _comms = default!;
 
     private static readonly Dictionary<string, string> DefaultCommandWords = new()
     {
@@ -401,7 +403,9 @@ public sealed partial class AU14CallsignSystem : EntitySystem
     // handler runs first wins safely
     private void OnCallsignSpeak(Entity<AU14CallsignComponent> ent, ref EntitySpokeEvent args)
     {
-        if (!_commsEnabled || args.Channel == null || string.IsNullOrEmpty(ent.Comp.Callsign))
+        // the CLF nets can be dropped back to stock radio on their own, and stock radio
+        // puts a speaker on air under their own name
+        if (!_comms.EnabledOn(args.Channel) || args.Channel == null || string.IsNullOrEmpty(ent.Comp.Callsign))
             return;
 
         // the callsign only holds on the callsign factions' nets. on an open named

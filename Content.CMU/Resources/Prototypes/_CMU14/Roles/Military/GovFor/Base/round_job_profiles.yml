@@ -23,6 +23,14 @@
     - type: NpcFactionMember
       factions:
       - OPFOR
+  forceComponents:
+    WYPMC:
+    - type: UserIFF
+      factions:
+      - FactionWEYU
+    - type: NpcFactionMember
+      factions:
+      - AUWeYu
 
 - type: roundJobProfile
   parent: AU14RoundJobProfileMilitaryBase

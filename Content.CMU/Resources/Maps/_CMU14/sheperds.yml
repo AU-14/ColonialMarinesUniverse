@@ -78971,6 +78971,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Colonial Wilderness Preservation Service
+      groups:
+      - marshal-bureau
 - proto: CMFence
   entities:
   - uid: 314143

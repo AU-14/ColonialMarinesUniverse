@@ -84704,6 +84704,8 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Colony Marshal Bureau 6th Floor
+      groups:
+      - marshal-bureau
 - proto: CMFaxColonyAdmin
   entities:
   - uid: 3761
@@ -84715,6 +84717,9 @@ entities:
       parent: 1
     - type: FaxMachine
       name: Colony Administrator Office 6th Floor
+      groups:
+      - marshal-bureau
+      - colony-command
 - proto: CMFaxWY
   entities:
   - uid: 3762
@@ -278234,7 +278239,7 @@ entities:
     - type: Transform
       pos: 2.5,3.5
       parent: 1
-- proto: fetchobjectivemarkergenericspawnpoint
+- proto: fetchgenericmarker
   entities:
   - uid: 41899
     components:

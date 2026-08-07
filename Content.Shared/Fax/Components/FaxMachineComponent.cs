@@ -17,6 +17,14 @@ public sealed partial class FaxMachineComponent : Component
     public string FaxName { get; set; } = "Unknown";
 
     /// <summary>
+    /// Tags (single/multiple) describing the owner/location this fax represents,
+    /// independent of factions ("warship-cic") can exist for both Govfor/Opfor.
+    /// </summary>
+    [ViewVariables(VVAccess.ReadWrite)]
+    [DataField]
+    public List<string> Groups { get; set; } = new();
+
+    /// <summary>
     /// Sprite to use when inserting an object.
     /// </summary>
     [DataField, AutoNetworkedField]

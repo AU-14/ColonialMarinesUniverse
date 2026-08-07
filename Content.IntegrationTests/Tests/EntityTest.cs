@@ -59,6 +59,8 @@ namespace Content.IntegrationTests.Tests
                     .Where(p => !p.Components.ContainsKey("RoomFill")) // This comp can delete all entities, and spawn others
                     .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an audio announcement.
                     .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawns an audio announcement on deletion.
+                    .Where(p => !p.Components.ContainsKey("CMUObjective")) // Starts objective state when spawned directly.
+                    .Where(p => !p.Components.ContainsKey("CMUObjectiveMaster")) // Activates unrelated objectives as a side effect.
                     .Select(p => p.ID)
                     .ToList();
             });
@@ -189,6 +191,8 @@ namespace Content.IntegrationTests.Tests
                 .Where(p => !p.Components.ContainsKey("MapGrid")) // This will smash stuff otherwise.
                 .Where(p => !p.Components.ContainsKey("HiveKingCocoon")) // Spawns an audio announcement.
                 .Where(p => !p.Components.ContainsKey("HivePylon")) // Spawns an audio announcement on deletion.
+                .Where(p => !p.Components.ContainsKey("CMUObjective")) // Starts objective state when spawned directly.
+                .Where(p => !p.Components.ContainsKey("CMUObjectiveMaster")) // Activates unrelated objectives as a side effect.
                 .Select(p => p.ID)
                 .ToList();
 
@@ -278,6 +282,8 @@ namespace Content.IntegrationTests.Tests
 
                 // makes an announcement on mapInit.
                 "AnnounceOnSpawn",
+                "CMUObjective",
+                "CMUObjectiveMaster",
             };
 
             Assert.That(server.CfgMan.GetCVar(CVars.NetPVS), Is.False);

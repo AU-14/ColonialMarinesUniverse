@@ -129,8 +129,8 @@
   name: reagent-name-cmdexalinplus
   desc: reagent-desc-cmdexalinplus
   color: "#5887D5"
-  overdose: 15
-  criticalOverdose: 25
+  overdose: 5
+  criticalOverdose: 15
   class: Uncommon
   metabolisms:
     Medicine:
@@ -342,16 +342,20 @@
   name: reagent-name-rmcrussianred
   desc: reagent-desc-rmcrussianred
   color: "#ce2727"
-  overdose: 20
-  criticalOverdose: 30
+  overdose: 15
+  criticalOverdose: 25
   metabolisms:
     Medicine:
-      metabolismRate: 0.5
+      metabolismRate: 0.1
       effects:
-      - !type:Antitoxic
-        potency: 1
-      - !type:Biocidic
-        potency: 2
+      - !type:EqualHealthChange
+        conditions:
+        damage:
+        - Genetic: -0.1
+      - !type:Toxic
+        potency: 4
+      - !type:Corrosive
+        potency: 4
 
 # Antidepressants/ADHD meds
 - type: reagent

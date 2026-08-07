@@ -29,13 +29,18 @@ public sealed partial class ColonyCommsConsoleSystem : EntitySystem
 
     private void OnMessageSent(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleMessage args)
     {
+        BroadcastColonyAlert(uid, args.Message);
+    }
+
+    public void BroadcastColonyAlert(EntityUid source, string message)
+    {
         // Send to radio channel (for intercoms)
-        _radioSystem.SendRadioMessage(uid, args.Message, "colonyAlert", uid);
+        _radioSystem.SendRadioMessage(source, message, "colonyAlert", source);
 
         // Send global announcement to everyone
         var sender = Loc.GetString("colony-comms-console-announcement-title");
         var announcementSound = new SoundPathSpecifier("/Audio/Announcements/announce.ogg");
-        _chatSystem.DispatchGlobalAnnouncement(args.Message, sender, playSound: true, announcementSound: announcementSound);
+        _chatSystem.DispatchGlobalAnnouncement(message, sender, playSound: true, announcementSound: announcementSound);
     }
 
     private void OnSendMessageBuiMsg(EntityUid uid, ColonyCommsConsoleComponent component, ColonyCommsConsoleSendMessageBuiMsg args)

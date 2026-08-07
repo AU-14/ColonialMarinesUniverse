@@ -14928,7 +14928,7 @@ entities:
     - type: Transform
       pos: 34.5,-10.5
       parent: 1
-- proto: CMEncryptionKeyWEYAColony
+- proto: CMEncryptionKeyWEYUColony
   entities:
   - uid: 766
     components:
@@ -104890,6 +104890,53 @@ entities:
     components:
     - type: Transform
       pos: 250.46077,-105.584465
+      parent: 1
+- proto: TowelColorBrown
+  entities:
+  - uid: 16952
+    components:
+    - type: Transform
+      pos: 177.63268,-101.71812
+      parent: 1
+- proto: TowelColorDarkBlue
+  entities:
+  - uid: 16953
+    components:
+    - type: Transform
+      pos: 171.33789,-94.59151
+      parent: 1
+  - uid: 16954
+    components:
+    - type: Transform
+      pos: 177.6431,-94.852104
+      parent: 1
+- proto: TowelColorDarkGreen
+  entities:
+  - uid: 16955
+    components:
+    - type: Transform
+      pos: 186.70757,-94.24752
+      parent: 1
+- proto: TowelColorLightBlue
+  entities:
+  - uid: 16956
+    components:
+    - type: Transform
+      pos: 117.11566,-122.95005
+      parent: 1
+- proto: TowelColorLightBrown
+  entities:
+  - uid: 16957
+    components:
+    - type: Transform
+      pos: 186.1969,-103.29852
+      parent: 1
+- proto: TowelColorOrange
+  entities:
+  - uid: 16958
+    components:
+    - type: Transform
+      pos: 173.56549,-113.74909
       parent: 1
 - proto: ToyRubberDuck
   entities:

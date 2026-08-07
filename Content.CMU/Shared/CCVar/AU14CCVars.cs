@@ -18,7 +18,15 @@ public sealed partial class AU14CCVars : CVars
     // master switch for the AU14 comms overhaul, off = stock radio behavior
     public static readonly CVarDef<bool> NewCommsSystem =
         CVarDef.Create("au14.new_comms_system", true, CVar.SERVERONLY);
-        
+
+    // same switch scoped to the CLF/INSFOR nets. off = their channels fall back to stock
+    // radio (no anchor gating, distance garble, COMSEC static or callsign masking) while
+    // GOVFOR and OPFOR keep the system. flip it with the clfcomms command, not cvar - the
+    // cvar command is host-only and admins need this mid-round
+    public static readonly CVarDef<bool> NewCommsSystemClf =
+        CVarDef.Create("au14.new_comms_system_clf", true, CVar.SERVERONLY);
+
+
     /// <summary>
     /// With the "Separated" HUD layout the chat panel sits to the right of the viewport, which pushes the
     /// game view left of the monitor centre. When on, the viewport pane is padded so the game view sits in

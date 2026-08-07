@@ -227,6 +227,8 @@
         crate: RMCCrateMOU53
       - cost: 400
         crate: RMCCrateM85A1
+      - cost: 1200
+        crate: AU14KitWeaponRXFM
       - cost: 100
         crate: AU14CrateAssortedKnives
       - cost: 1500

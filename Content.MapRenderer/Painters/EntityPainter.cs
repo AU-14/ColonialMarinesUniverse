@@ -138,8 +138,8 @@ public sealed class EntityPainter
             coloredImage.Mutate(o => o.BackgroundColor(imageColor));
 
             var (imgX, imgY) = rsi?.Size ?? (EyeManager.PixelsPerMeter, EyeManager.PixelsPerMeter);
-            var offsetX = (int)(entity.Sprite.Offset.X + customOffset.X) * EyeManager.PixelsPerMeter;
-            var offsetY = (int)(entity.Sprite.Offset.Y + customOffset.X) * EyeManager.PixelsPerMeter;
+            var offsetX = (int) ((entity.Sprite.Offset.X + customOffset.X) * EyeManager.PixelsPerMeter);
+            var offsetY = (int) ((entity.Sprite.Offset.Y + customOffset.Y) * EyeManager.PixelsPerMeter);
             image.Mutate(o => o
                 .DrawImage(coloredImage, PixelColorBlendingMode.Multiply, PixelAlphaCompositionMode.SrcAtop, 1)
                 .Resize(imgX, imgY)

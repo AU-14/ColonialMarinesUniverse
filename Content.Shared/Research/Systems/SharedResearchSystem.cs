@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.Round.Objectives.Component;
 using Content.Shared.Lathe;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;
@@ -81,6 +82,18 @@ public abstract partial class SharedResearchSystem : EntitySystem
         foreach (var prereq in tech.TechnologyPrerequisites)
         {
             if (!component.UnlockedTechnologies.Contains(prereq))
+                return false;
+        }
+
+        var objectiveQuery = EntityQueryEnumerator<CMUObjectiveComponent>();
+        while (objectiveQuery.MoveNext(out _, out var objective))
+        {
+            if (!objective.TechUnlocks.Contains(tech.ID))
+                continue;
+
+            var completed = objective.StatusesPerFaction.Values.Any(status =>
+                status == CMUObjectiveComponent.ObjectiveStatus.Completed);
+            if (!completed)
                 return false;
         }
 

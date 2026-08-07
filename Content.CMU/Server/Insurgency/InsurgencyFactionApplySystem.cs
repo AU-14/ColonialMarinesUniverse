@@ -4,9 +4,9 @@ using Content.Server._AU14.Insurgency.Selection;
 using Content.Shared._AU14.Insurgency;
 using Content.Shared._AU14.Insurgency.Selection;
 using Content.Shared._CMU14.Threats.Mobs.CLF;
+using Content.Shared._CMU14.Round.Objectives.Type;
 using Content.Shared._AU14.Vendors;
 using Content.Shared._RMC14.Vendors;
-using Content.Shared.AU14;
 using Content.Shared.Access.Components;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Construction.Components;
@@ -330,14 +330,14 @@ public sealed class InsurgencyFactionApplySystem : EntitySystem
     ///     Applies the active faction's submittable-for-points table onto a deployed analyzer machine.
     ///     No table means the analyzer keeps its built-in dollars behavior. When a table is set, the
     ///     analyzer's cash-slot whitelist is opened so the configured goods can be inserted; anything
-    ///     not in the table is simply not credited (handled in AnalyzerSystem).
+    ///     not in the table is simply not credited (handled by ObjFetchAnalyzerSystem).
     /// </summary>
     public void ConfigureFactionAnalyzer(EntityUid analyzer)
     {
         if (_activeFaction == null)
             return;
 
-        if (!TryComp(analyzer, out AnalyzerComponent? comp))
+        if (!TryComp(analyzer, out FetchAnalyzerComponent? comp))
             return;
 
         var economy = _activeFaction.Economy;

@@ -1,0 +1,216 @@
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleSLREmptyBuild
+  name: rifle ammunition box (7?43mm)
+  prototype: CMUBoxBulletsRifleSLREmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleSLRAPEmptyBuild
+  name: rifle ammunition box (7?43mm AP)
+  prototype: CMUBoxBulletsRifleSLRAPEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleL23EmptyBuild
+  name: rifle ammunition box (8.88?51mm)
+  prototype: CMUBoxBulletsRifleL23Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleL23APEmptyBuild
+  name: rifle ammunition box (8.88?51mm AP)
+  prototype: CMUBoxBulletsRifleL23APEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleType71EmptyBuild
+  name: rifle ammunition box (5.45?39mm)
+  prototype: CMUBoxBulletsRifleType71Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleType71APEmptyBuild
+  name: rifle ammunition box (5.45?39mm AP)
+  prototype: CMUBoxBulletsRifleType71APEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleAG80EmptyBuild
+  name: rifle ammunition box (9.7?16mm)
+  prototype: CMUBoxBulletsRifleAG80Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleAG80APEmptyBuild
+  name: rifle ammunition box (9.7?16mm AP)
+  prototype: CMUBoxBulletsRifleAG80APEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifle556x45MMEmptyBuild
+  name: rifle ammunition box (5.56?45mm)
+  prototype: CMUBoxBulletsRifle556x45MMEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsRifleMAREmptyBuild
+  name: rifle ammunition box (7.62?39mm)
+  prototype: CMUBoxBulletsRifleMAREmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsSMGP90EmptyBuild
+  name: SMG ammunition box (5.7?28mm)
+  prototype: CMUBoxBulletsSMGP90Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsSMGP90APEmptyBuild
+  name: SMG ammunition box (5.7?28mm AP)
+  prototype: CMUBoxBulletsSMGP90APEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsSMGType19EmptyBuild
+  name: SMG ammunition box (7.62?25mm)
+  prototype: CMUBoxBulletsSMGType19Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol9MMEmptyBuild
+  name: pistol ammunition box (9?19mm Parabellum)
+  prototype: CMUBoxBulletsPistol9MMEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol9MMAPEmptyBuild
+  name: pistol ammunition box (9?19mm AP)
+  prototype: CMUBoxBulletsPistol9MMAPEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol9MMSHEmptyBuild
+  name: pistol ammunition box (9?19mm Squash-Head)
+  prototype: CMUBoxBulletsPistol9MMSHEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistolType73EmptyBuild
+  name: pistol ammunition box (7.62?25mm)
+  prototype: CMUBoxBulletsPistolType73Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol45EmptyBuild
+  name: pistol ammunition box (.45)
+  prototype: CMUBoxBulletsPistol45Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxBulletsPistol50EmptyBuild
+  name: pistol ammunition box (.50)
+  prototype: CMUBoxBulletsPistol50Empty
+
+# empty magazine boxes (UA/LA)
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleM54CMK1EmptyBuild
+  name: M41A Mk1 magazine box
+  prototype: CMUBoxMagazineRifleM54CMK1Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleKramerEmptyBuild
+  name: Kramer magazine box
+  prototype: CMUBoxMagazineRifleKramerEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGXMP5A6EmptyBuild
+  name: XMP5A6 magazine box
+  prototype: CMUBoxMagazineSMGXMP5A6Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGL90A2EmptyBuild
+  name: L90A2 magazine box
+  prototype: CMUBoxMagazineSMGL90A2Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGPDW90EmptyBuild
+  name: P90 magazine box
+  prototype: CMUBoxMagazineSMGPDW90Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGMP5EmptyBuild
+  name: MP5 magazine box
+  prototype: CMUBoxMagazineSMGMP5Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleAG80EmptyBuild
+  name: AG-80 magazine box
+  prototype: CMUBoxMagazineRifleAG80Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleMAR40EmptyBuild
+  name: MAR30/40magazine box
+  prototype: CMUBoxMagazineRifleMAR40Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleProdigyStandardEmptyBuild
+  name: MCS-X magazine box
+  prototype: CMUBoxMagazineRifleProdigyStandardEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleM20AEmptyBuild
+  name: M20A magazine box
+  prototype: CMUBoxMagazineRifleM20AEmpty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGFP9000EmptyBuild
+  name: FP9000 magazine box
+  prototype: CMUBoxMagazineSMGFP9000Empty
+
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: AU14BoxMagazinePistolL165A1EmptyBuild
+  name: L165A1 magazine box
+  prototype: AU14BoxMagazinePistolL165A1Empty

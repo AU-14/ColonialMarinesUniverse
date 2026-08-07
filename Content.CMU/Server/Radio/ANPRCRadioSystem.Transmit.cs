@@ -5,6 +5,7 @@ using Content.Shared._AU14.Callsigns;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.AU14.Radio;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
@@ -254,12 +255,13 @@ public sealed partial class ANPRCRadioSystem
         // callsigns are procedure on the callsign factions' nets only. a pack tuned
         // to an open channel - colony, WEYU, CMB - puts the speaker on air under
         // their own name and rank, and the log records what actually went out
-        var callsignNet = _commsEnabled && AU14Callsigns.IsCallsignChannel(channel);
+        var callsignNet = _comms.EnabledOn(channel) && AU14Callsigns.IsCallsignChannel(channel);
 
         if (!callsignNet)
             senderName = Name(speaker);
 
-        var unsecured = !string.IsNullOrEmpty(channel.Faction) &&
+        var unsecured = _comms.EnabledOn(channel) &&
+                        !string.IsNullOrEmpty(channel.Faction) &&
                         radio.Mode != RadioMode.PlainText &&
                         !_crypto.HasMatchingCrypto(pack.Owner, channel);
 
@@ -336,7 +338,7 @@ public sealed partial class ANPRCRadioSystem
         RadioChannelPrototype channel,
         bool unsecured)
     {
-        if (!_commsEnabled || string.IsNullOrEmpty(channel.Faction))
+        if (!_comms.EnabledOn(channel) || string.IsNullOrEmpty(channel.Faction))
             return;
 
         var plainText = radio.Mode == RadioMode.PlainText;
@@ -474,6 +476,35 @@ public sealed partial class ANPRCRadioSystem
 
             AddStation(ent.Owner, wearerUid, gated, channelId.Id, senderPos, fullRange, partialRange,
                 label, clear, degraded);
+        }
+
+        // earpieces grant the net to the wearer directly rather than through a worn
+        // headset, so the queries above miss them. a cell of earpieces and one manpack
+        // would otherwise report nothing heard while the whole cell is listening
+        var earpieceQuery = EntityQueryEnumerator<AccessoryHeadsetComponent>();
+
+        while (earpieceQuery.MoveNext(out _, out var earpiece))
+        {
+            if (earpiece.RadioGrantedTo is not { } earpieceWearer ||
+                earpieceWearer == senderWearer ||
+                !Exists(earpieceWearer))
+            {
+                continue;
+            }
+
+            if (!earpiece.Channels.Contains(channelId))
+                continue;
+
+            if (!_range.InVerticalReach(Transform(earpieceWearer).MapID, senderMap, 1))
+                continue;
+
+            var earpieceLabel = TryComp(earpieceWearer, out AU14CallsignComponent? earpieceCallsign) &&
+                                !string.IsNullOrEmpty(earpieceCallsign.Callsign)
+                ? earpieceCallsign.Callsign
+                : Name(earpieceWearer);
+
+            AddStation(ent.Owner, earpieceWearer, gated, channelId.Id, senderPos, fullRange, partialRange,
+                earpieceLabel, clear, degraded);
         }
 
         var nothingHeard = Loc.GetString("anprc-radio-check-nothing-heard");

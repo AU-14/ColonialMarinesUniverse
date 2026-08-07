@@ -51,6 +51,13 @@ public sealed partial class CMUMedicalCCVars : CVars
         CVarDef.Create("cmu.medical.targeted_healing.enabled", false, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
 
     /// <summary>
+    ///     Whether stacked trauma and burn kits automatically continue to the next applicable wound.
+    ///     Replicated so the server can honor the treating player's preference.
+    /// </summary>
+    public static readonly CVarDef<bool> AutoReapplyKitsEnabled =
+        CVarDef.Create("cmu.medical.auto_reapply_kits.enabled", true, CVar.REPLICATED | CVar.CLIENT | CVar.ARCHIVE);
+
+    /// <summary>
     ///     Whether this client performs surgery directly from tool intent instead of opening the surgery window.
     ///     Replicated so the server can honor the operating player's preference.
     /// </summary>
