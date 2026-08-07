@@ -239,7 +239,7 @@ def changelog_entries_to_message_lines(entries: Iterable[ChangelogEntry]) -> lis
                 emoji = TYPES_TO_EMOJI.get(change["type"], "❓")
                 message = change["message"]
 
-                if EXPERIMENTAL_LABEL in entry["labels"]:
+                if EXPERIMENTAL_LABEL in entry.get("labels", []):
                     emoji = f"{emoji}{EXPERIMENTAL_EMOJI}"
 
                 # if a single line is longer than the limit, it needs to be truncated
