@@ -2,7 +2,7 @@
 
 This folder is the home for code and assets made specifically for Colonial Marines Universe (CMU).
 New CMU features should usually be placed here.
-
+ 
 ## Where things go
 
 ```text
