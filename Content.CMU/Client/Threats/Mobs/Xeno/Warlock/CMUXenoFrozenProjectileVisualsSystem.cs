@@ -20,9 +20,9 @@ namespace Content.Client._CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
 /// </summary>
 public sealed partial class CMUXenoFrozenProjectileVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     // Reuse the existing RMCAuraOutline shader prototype so we behave exactly like Ravager's
     // outline path - only the colour endpoints and pulse rate are ours.

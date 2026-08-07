@@ -8,7 +8,6 @@ using Content.Shared._RMC14.Marines;
 using Content.Shared.AU14.Radio;
 using Content.Shared.Chat;
 using Content.Shared.Radio;
-using Content.Shared.Radio.Components;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 

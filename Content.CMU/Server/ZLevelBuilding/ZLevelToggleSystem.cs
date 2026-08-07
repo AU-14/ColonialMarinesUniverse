@@ -31,14 +31,14 @@ namespace Content.Server._AU14.ZLevelBuilding;
 /// Mapper-authored opt-outs (a ZBuildableMap { enabled: false } on the map prototype itself) still work; this
 /// tool simply overrides the component's Enabled at runtime for maps the admin has denied.
 /// </summary>
-public sealed class ZLevelToggleSystem : EntitySystem
+public sealed partial class ZLevelToggleSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IResourceManager _resource = default!;
-    [Dependency] private readonly SharedMapSystem _mapManager = default!;
-    [Dependency] private readonly CustomConstructionMenuSystem _menu = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IResourceManager _resource = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
+    [Dependency] private CustomConstructionMenuSystem _menu = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
 
     /// <summary>Persisted denial list (one GameMapPrototype id per line) in the server's user-data folder.</summary>
     private static readonly ResPath SaveFile = new("/au14_zlevel_disabled.txt");

@@ -10,7 +10,7 @@ using Content.Shared.Tools.Components;
 
 namespace Content.Shared._CMU14.Round.Objectives;
 
-public sealed class SharedInteractObjectiveSystem : EntitySystem
+public sealed partial class SharedInteractObjectiveSystem : EntitySystem
 {
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

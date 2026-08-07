@@ -12,9 +12,9 @@ namespace Content.Client._AU14.ZLevelBuilding;
 /// shrunken and tinted dark so players can tell at a glance it's debris, not an intact wall. Applied when
 /// the networked <see cref="ZFallenDebrisComponent"/> arrives from the server.
 /// </summary>
-public sealed class ZFallenDebrisVisualsSystem : EntitySystem
+public sealed partial class ZFallenDebrisVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     // 🔧 TUNABLE: how much fallen debris shrinks and darkens. Scale multiplies the sprite's current scale
     // (so half-scale 1-tile sprites stay proportional); the color is a flat dark-grey modulate.

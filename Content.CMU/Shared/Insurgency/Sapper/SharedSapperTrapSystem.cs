@@ -26,7 +26,7 @@ namespace Content.Shared._AU14.Insurgency.Sapper;
 ///     Arming is scheduled once by the server subclass when deployment completes. Hiding/revealing is a purely
 ///     per-viewer, client-side decision in SapperTrapVisualsSystem.
 /// </summary>
-public abstract class SharedSapperTrapSystem : EntitySystem
+public abstract partial class SharedSapperTrapSystem : EntitySystem
 {
     [Dependency] private   CollisionWakeSystem _collisionWake = default!;
     [Dependency] private   SharedContainerSystem _container = default!;

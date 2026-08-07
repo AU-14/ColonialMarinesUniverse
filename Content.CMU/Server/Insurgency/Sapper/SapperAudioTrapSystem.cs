@@ -17,7 +17,7 @@ namespace Content.Server._AU14.Insurgency.Sapper;
 ///     - when the wire is crossed, blows the whistle at the wire and reports the trap's name and area
 ///       over the CLF radio channel, then re-arms after a cooldown.
 /// </summary>
-public sealed class SapperAudioTrapSystem : EntitySystem
+public sealed partial class SapperAudioTrapSystem : EntitySystem
 {
     [Dependency] private QuickDialogSystem _dialog = default!;
     [Dependency] private RadioSystem _radio = default!;

@@ -26,6 +26,8 @@ public sealed partial class BodySystem : SharedBodySystem
 
     public override void Initialize()
     {
+        base.Initialize();
+
         InitializeBodyGraphCompatibility();
 
         SubscribeLocalEvent<BodyComponent, MoveInputEvent>(OnRelayMoveInput);

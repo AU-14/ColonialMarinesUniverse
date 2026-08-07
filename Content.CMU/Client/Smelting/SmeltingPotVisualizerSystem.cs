@@ -16,10 +16,10 @@ namespace Content.Client._AU14.Smelting;
 /// The pip positions come from a fixed scatter table rather than being randomised per update: a pip must stay
 /// where it is while its neighbours are consumed, otherwise the whole pile reshuffles every few seconds.
 /// </summary>
-public sealed class SmeltingPotVisualizerSystem : EntitySystem
+public sealed partial class SmeltingPotVisualizerSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SpriteSystem _sprite = default!;
 
     /// <summary>🔧 TUNABLE: most pips drawn at once. Past this each pip stands for several units - 100 real
     /// layers per pot, rebuilt on every change, is not worth the fidelity when several pots share a fire.</summary>

@@ -13,7 +13,7 @@ namespace Content.Server._AU14.Insurgency;
 ///     factions that list the round's chosen GOVFOR platoon are offered, and the match is re-checked
 ///     here before a faction is applied so a tampered client cannot force an unmatched faction.
 /// </summary>
-public sealed class InsurgencyFactionSelectionSystem : EntitySystem
+public sealed partial class InsurgencyFactionSelectionSystem : EntitySystem
 {
     [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
     [Dependency] private InsurgencyFactionDbSystem _db = default!;

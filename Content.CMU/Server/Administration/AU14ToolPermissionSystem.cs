@@ -19,12 +19,12 @@ namespace Content.Server._AU14.Administration;
 /// work for offline players (they are plain ckeys), and each tool is granted separately. Persisted in the
 /// server user-data folder as "ckey:tool" lines, one grant per line.
 /// </summary>
-public sealed class AU14ToolPermissionSystem : EntitySystem
+public sealed partial class AU14ToolPermissionSystem : EntitySystem
 {
-    [Dependency] private readonly IAdminManager _adminManager = default!;
-    [Dependency] private readonly IResourceManager _resource = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private IAdminManager _adminManager = default!;
+    [Dependency] private IResourceManager _resource = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
 
     private static readonly ResPath SaveFile = new("/au14_tool_permissions.txt");
 

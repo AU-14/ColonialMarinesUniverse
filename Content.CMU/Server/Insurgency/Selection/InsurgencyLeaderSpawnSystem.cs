@@ -16,7 +16,7 @@ namespace Content.Server._AU14.Insurgency.Selection;
 ///
 ///     Event-driven: one subscription to the spawn-complete event, no polling.
 /// </summary>
-public sealed class InsurgencyLeaderSpawnSystem : EntitySystem
+public sealed partial class InsurgencyLeaderSpawnSystem : EntitySystem
 {
     [Dependency] private EuiManager _eui = default!;
     [Dependency] private IAdminManager _admin = default!;

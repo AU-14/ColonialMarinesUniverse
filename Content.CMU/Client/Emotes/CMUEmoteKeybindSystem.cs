@@ -14,10 +14,10 @@ namespace Content.Client._CMU14.Emotes;
 // emotes wheel. Which emote (if any) each of the 8 slots triggers is picked in the keybinds tab
 // and stored in CCVars.EmoteSlot1-8.
 [UsedImplicitly]
-public sealed class CMUEmoteKeybindSystem : EntitySystem
+public sealed partial class CMUEmoteKeybindSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private static readonly (BoundKeyFunction Function, CVarDef<string> CVar)[] Slots =
     {

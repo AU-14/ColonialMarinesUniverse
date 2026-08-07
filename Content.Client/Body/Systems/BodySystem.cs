@@ -6,6 +6,8 @@ public sealed class BodySystem : SharedBodySystem
 {
     public override void Initialize()
     {
+        base.Initialize();
+
         // Compatibility facade only; the modern shared BodySystem owns subscriptions.
     }
 }

@@ -23,7 +23,7 @@ namespace Content.Server._AU14.Insurgency.Package;
 ///     Event-driven: grant happens once on the applied event, dispense happens on the item's use.
 ///     Nothing polls.
 /// </summary>
-public sealed class APackageSystem : EntitySystem
+public sealed partial class APackageSystem : EntitySystem
 {
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedMindSystem _mind = default!;

@@ -30,19 +30,19 @@ namespace Content.Client._AU14.SavedBuilds;
 /// places vanilla construction ghosts for each entity, which they then build normally (consuming
 /// materials) — i.e. building the whole saved structure the vanilla way.
 /// </summary>
-public sealed class SavedBuildPlacementSystem : EntitySystem
+public sealed partial class SavedBuildPlacementSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IEyeManager _eye = default!;
-    [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly IResourceCache _cache = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly IComponentFactory _componentFactory = default!;
-    [Dependency] private readonly CMUClientZLevelsSystem _zLevels = default!;
+    [Dependency] private IOverlayManager _overlays = default!;
+    [Dependency] private IEyeManager _eye = default!;
+    [Dependency] private IInputManager _input = default!;
+    [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private IClientAdminManager _admin = default!;
+    [Dependency] private IResourceCache _cache = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _mapSystem = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private CMUClientZLevelsSystem _zLevels = default!;
 
     public bool Active { get; private set; }
     public bool IsAdmin { get; private set; }

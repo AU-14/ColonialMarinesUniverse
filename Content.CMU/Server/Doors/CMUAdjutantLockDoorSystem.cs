@@ -12,11 +12,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Doors;
 
-public sealed class CMUAdjutantLockDoorSystem : EntitySystem
+public sealed partial class CMUAdjutantLockDoorSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoorSystem _doors = default!;
-    [Dependency] private readonly SharedGameTicker _gameTicker = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private SharedDoorSystem _doors = default!;
+    [Dependency] private SharedGameTicker _gameTicker = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
 
     private static readonly ProtoId<JobPrototype> AdjutantJob = "AU14JobGOVFORAdjutant";
     private static readonly ProtoId<JobPrototype> PlatCoJob = "AU14JobGOVFORPlatCo";

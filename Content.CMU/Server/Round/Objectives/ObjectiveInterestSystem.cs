@@ -8,7 +8,7 @@ public sealed class ObjectiveWatchedEntityStartupEvent(EntityUid uid) : EntityEv
     public readonly EntityUid Uid = uid;
 }
 
-public sealed class ObjectiveInterestSystem : EntitySystem
+public sealed partial class ObjectiveInterestSystem : EntitySystem
 {
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;

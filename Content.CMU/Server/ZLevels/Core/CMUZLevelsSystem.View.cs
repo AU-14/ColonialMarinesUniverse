@@ -1205,7 +1205,7 @@ public sealed partial class CMUZLevelsSystem
     /// This uses the maintained probe/subscriber index, including remote view origins,
     /// instead of performing another scan over every attached session.
     /// </summary>
-    public Filter AddZLevelViewers(Filter filter, MapCoordinates coordinates, float rangeMultiplier = 2f)
+    public new Filter AddZLevelViewers(Filter filter, MapCoordinates coordinates, float rangeMultiplier = 2f)
     {
         if (coordinates.MapId == MapId.Nullspace ||
             !_config.GetCVar(CVars.NetPVS))

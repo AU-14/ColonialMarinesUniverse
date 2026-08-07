@@ -20,7 +20,7 @@ namespace Content.Server._AU14.Insurgency.Database;
 ///     Serialization stays here (Content.Server) rather than in the low-level DB project, which must
 ///     not depend on content. Only the known schema is ever deserialized, never executable content.
 /// </summary>
-public sealed class InsurgencyFactionDbSystem : EntitySystem
+public sealed partial class InsurgencyFactionDbSystem : EntitySystem
 {
     [Dependency] private IServerDbManager _db = default!;
     [Dependency] private ISerializationManager _serialization = default!;

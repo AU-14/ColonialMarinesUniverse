@@ -15,10 +15,10 @@ namespace Content.Server._CMU14.Roles;
 /// already enforce the stricter "character marked Synthetic" requirement separately;
 /// this is a whitelist-only floor for jobs where no character is involved.
 /// </summary>
-public sealed class SyntheticJobSystem : EntitySystem
+public sealed partial class SyntheticJobSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototypes = default!;
-    [Dependency] private readonly JobWhitelistManager _jobWhitelist = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
+    [Dependency] private JobWhitelistManager _jobWhitelist = default!;
 
     public override void Initialize()
     {

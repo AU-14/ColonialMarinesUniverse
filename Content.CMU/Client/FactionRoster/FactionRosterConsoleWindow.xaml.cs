@@ -12,7 +12,7 @@ namespace Content.Client._CMU14.FactionRoster;
 [GenerateTypedNameReferences]
 public sealed partial class FactionRosterConsoleWindow : DefaultWindow
 {
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     private readonly List<FactionRosterEntryWindow> _openEntryWindows = new();
 

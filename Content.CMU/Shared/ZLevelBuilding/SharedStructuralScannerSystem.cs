@@ -10,9 +10,9 @@ namespace Content.Shared._AU14.ZLevelBuilding;
 /// Building overhaul (z-level): toggles the <see cref="StructuralScannerComponent"/> heat-map on use-in-hand.
 /// The actual overlay rendering is client-side and holder-only (see the client scanner system).
 /// </summary>
-public sealed class SharedStructuralScannerSystem : EntitySystem
+public sealed partial class SharedStructuralScannerSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()
     {

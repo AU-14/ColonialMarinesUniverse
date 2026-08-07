@@ -1,12 +1,10 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._AU14.Insurgency.Sapper;
 using Content.Shared._CMU14.Threats.Mobs.CLF;
 using Content.Shared.Examine;
 using Content.Shared.Explosion.Components;
-using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -32,18 +30,17 @@ namespace Content.Server._AU14.Insurgency.Sapper;
 ///     handled by the shared sapper system; this system runs out the wire, cleans it up, attaches explosive
 ///     payloads, and fires everything when the wire is crossed.
 /// </summary>
-public sealed class SapperTripwireSystem : EntitySystem
+public sealed partial class SapperTripwireSystem : EntitySystem
 {
-    [Dependency] private readonly SharedContainerSystem _container = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly CollisionWakeSystem _collisionWake = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
-    [Dependency] private readonly SharedExplosionSystem _explosion = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly TriggerSystem _trigger = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private CollisionWakeSystem _collisionWake = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
 
     // Very short fuse the attached devices are set off on, so each fires its own real prototype effect.
     private const float PayloadFuseDelay = 0.2f;

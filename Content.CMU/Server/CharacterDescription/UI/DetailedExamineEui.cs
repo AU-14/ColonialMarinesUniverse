@@ -11,10 +11,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server._CMU14.CharacterDescription.UI;
 
 [UsedImplicitly]
-public sealed class DetailedExamineEui : BaseEui
+public sealed partial class DetailedExamineEui : BaseEui
 {
-    [Dependency] private readonly IEntityManager _entManager = default!;
-    [Dependency] private readonly IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IEntityManager _entManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
 
     private readonly RMCReagentSystem _reagentSystem;
     private readonly NetEntity _target;

@@ -11,7 +11,7 @@ namespace Content.Client._CMU14.CharacterDescription.UI;
 [GenerateTypedNameReferences]
 public sealed partial class DetailedExamineWindow : DefaultWindow
 {
-    [Dependency] private readonly IStylesheetManager _stylesheetManager = default!;
+    [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
     public DetailedExamineWindow()
     {

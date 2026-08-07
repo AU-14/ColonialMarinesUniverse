@@ -7,7 +7,6 @@ using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
-using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
 using Content.Shared.Coordinates;

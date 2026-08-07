@@ -179,7 +179,7 @@ public sealed partial class ReagentGrinderSystem
 
     private bool IsValidLink(Entity<ReagentGrinderComponent> grinder, EntityUid fridge)
     {
-        return EntityManager.EntityExists(fridge) &&
+        return Exists(fridge) &&
                HasComp<RMCSmartFridgeComponent>(fridge) &&
                _cmuTransform.GetMapId(grinder.Owner) == _cmuTransform.GetMapId(fridge) &&
                Vector2.Distance(

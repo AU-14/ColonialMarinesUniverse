@@ -32,19 +32,21 @@ namespace Content.Server._AU14.ZLevelBuilding;
 /// Opt a map out via <see cref="ZBuildableMapComponent"/> (<c>enabled: false</c>) or globally via
 /// <see cref="GloballyEnabled"/> in code.
 /// </summary>
-public sealed class ZLevelBuildingSystem : EntitySystem
+public sealed partial class ZLevelBuildingSystem : EntitySystem
 {
-    [Dependency] private readonly CMUZLevelsSystem _zLevels = default!;
-    [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly SharedMapSystem _mapManager = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly TurfSystem _turf = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly ZBorderSyncSystem _borderSync = default!;
+    [Dependency] private CMUZLevelsSystem _zLevels = default!;
+    [Dependency] private MapSystem _map = default!;
+    [Dependency] private SharedMapSystem _mapManager = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ITileDefinitionManager _tileDef = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private TurfSystem _turf = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private ZBorderSyncSystem _borderSync = default!;
+
+    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
 
     /// <summary>
     /// Global code switch for the whole building overhaul. Set to <c>false</c> to disable dig-down / lazy
@@ -580,7 +582,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     /// CMBaseWallInvincible family). These mark the playfield boundary.</summary>
     private bool IsIndestructibleWall(EntityUid uid)
     {
-        return _tag.HasTag(uid, "Wall") && !HasComp<Content.Shared.Damage.Components.DamageableComponent>(uid);
+        return _tag.HasTag(uid, WallTag) && !HasComp<Content.Shared.Damage.Components.DamageableComponent>(uid);
     }
 
     /// <summary>If an indestructible border wall stands at <paramref name="worldPos"/> on the level directly

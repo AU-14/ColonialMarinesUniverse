@@ -33,20 +33,20 @@ namespace Content.Server._AU14.Smelting;
 /// walk away or take a hit, which is wrong for a pot left on a campfire. Feedback is carried by the sprite,
 /// the steam, the boiling loop and the examine text instead.
 /// </summary>
-public sealed class SmeltingPotSystem : EntitySystem
+public sealed partial class SmeltingPotSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly SharedStackSystem _stack = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedHandsSystem _hands = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly SharedRMCEmoteSystem _emote = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private SharedStackSystem _stack = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private SharedRMCEmoteSystem _emote = default!;
 
     /// <summary>Played once when a batch finishes.</summary>
     private static readonly SoundSpecifier BatchDoneSound = new SoundPathSpecifier("/Audio/Effects/sizzle.ogg");

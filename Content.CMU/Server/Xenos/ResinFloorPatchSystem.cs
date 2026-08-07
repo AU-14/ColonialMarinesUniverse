@@ -12,11 +12,11 @@ namespace Content.Server._AU14.Xenos;
 /// Lays and removes the floor tile under a resin patch, so the hive can bridge holes punched by cave-ins and
 /// marines can reopen them by cutting the resin back out.
 /// </summary>
-public sealed class ResinFloorPatchSystem : EntitySystem
+public sealed partial class ResinFloorPatchSystem : EntitySystem
 {
-    [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private ITileDefinitionManager _tileDef = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     public override void Initialize()
     {

@@ -8,7 +8,7 @@ namespace Content.Shared._CMU14.Round.Objectives;
 
 public sealed partial class SharedObjectiveCaptureSystem : EntitySystem
 {
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
 
     public override void Initialize()
     {

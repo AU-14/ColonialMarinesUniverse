@@ -167,7 +167,7 @@ public sealed partial class PopupSystem : SharedPopupSystem
     /// </remarks>
     /// <param name="message">The message to display.</param>
     /// <param name="type">Used to customize how this popup should appear visually.</param>
-    public void PopupCursor(string? message, PopupType type = PopupType.Small)
+    public new void PopupCursor(string? message, PopupType type = PopupType.Small)
     {
         if (!Timing.IsFirstTimePredicted || message is null)
             return;

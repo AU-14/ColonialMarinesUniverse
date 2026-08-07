@@ -12,7 +12,7 @@ namespace Content.Shared._AU14.Callsigns;
 // this lives in shared rather than on the server system because ActivatableUISystem is
 // shared and the client predicts the open: a server-only refusal lets the window appear
 // for a tick before the correction lands, which is long enough to read a name off it
-public sealed class SharedAU14CallsignConsoleSystem : EntitySystem
+public sealed partial class SharedAU14CallsignConsoleSystem : EntitySystem
 {
     [Dependency] private ISharedAdminManager _admin = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

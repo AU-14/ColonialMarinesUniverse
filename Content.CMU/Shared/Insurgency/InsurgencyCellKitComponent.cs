@@ -19,7 +19,7 @@ public sealed partial class InsurgencyCellKitComponent : Component
     ///     lazily the first time the UI is opened, since the faction is chosen after spawn.
     /// </summary>
     [DataField]
-    public bool Initialized;
+    public new bool Initialized;
 
     /// <summary>
     ///     Deployables still available in this kit. Consumed one at a time as they are placed.

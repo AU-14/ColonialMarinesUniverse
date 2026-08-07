@@ -9,9 +9,9 @@ namespace Content.Client._AU14.ZLevelBuilding;
 /// Building overhaul (z-level): registers the holder-only structural scanner heat-map overlay. The overlay itself
 /// decides each frame whether to render (only while the local player holds an enabled scanner underground).
 /// </summary>
-public sealed class StructuralScannerSystem : EntitySystem
+public sealed partial class StructuralScannerSystem : EntitySystem
 {
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {

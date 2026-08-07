@@ -40,24 +40,25 @@ namespace Content.Server._AU14.ZLevelBuilding;
 ///
 /// Counterplay: don't over-mine, or plant pillars in the middle of big caverns - exactly like real mines.
 /// </summary>
-public sealed class ZCaveInSystem : EntitySystem
+public sealed partial class ZCaveInSystem : EntitySystem
 {
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     private SharedMapSystem _mapManager => _map;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly DamageableSystem _damage = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly ThrowingSystem _throwing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly IChatManager _chat = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly IPrototypeManager _protoManager = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private ThrowingSystem _throwing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private IChatManager _chat = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private IPrototypeManager _protoManager = default!;
 
+    private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly TimeSpan WarningTime = TimeSpan.FromSeconds(8);
 
     // How often the (small) set of dirty + pending tiles is re-evaluated. This is NOT a full scan - it only
@@ -515,7 +516,7 @@ public sealed class ZCaveInSystem : EntitySystem
             if (IsIndestructibleWall(uid))
                 continue; // never drop map-border walls
 
-            if (!TryComp<TransformComponent>(uid, out var xform))
+            if (!TryComp(uid, out TransformComponent? xform))
                 continue;
 
             _transform.Unanchor(uid, xform);
@@ -567,7 +568,7 @@ public sealed class ZCaveInSystem : EntitySystem
     /// CMBaseWallInvincible family). These are map boundaries and must never fall or be moved.</summary>
     private bool IsIndestructibleWall(EntityUid uid)
     {
-        return _tag.HasTag(uid, "Wall") && !HasComp<DamageableComponent>(uid);
+        return _tag.HasTag(uid, WallTag) && !HasComp<DamageableComponent>(uid);
     }
 
     /// <summary>Turns a structure that has fallen through a collapsed floor into inert rubble: every fixture's

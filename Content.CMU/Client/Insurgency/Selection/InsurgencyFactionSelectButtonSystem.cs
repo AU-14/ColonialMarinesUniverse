@@ -15,10 +15,10 @@ namespace Content.Client._AU14.Insurgency.Selection;
 ///     Pressing the button sends a reopen request the server re-validates. No polling: the button is
 ///     created and torn down in response to the component and player-attach events.
 /// </summary>
-public sealed class InsurgencyFactionSelectButtonSystem : EntitySystem
+public sealed partial class InsurgencyFactionSelectButtonSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly IUserInterfaceManager _ui = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private IUserInterfaceManager _ui = default!;
 
     // ---------------------------------------------------------------------
     // Placement tunables. The button is anchored to the top-left of the active screen. Nudge these to

@@ -24,7 +24,7 @@ namespace Content.Shared._AU14.Weapons.GunSwitch;
 ///     Runs the "Switch" auto-sear chip: rate-of-fire and accuracy changes while the chip's toggle
 ///     is engaged, the per-shot jam roll, and the rack-to-clear interaction on a jammed gun.
 /// </summary>
-public sealed class GunSwitchSystem : EntitySystem
+public sealed partial class GunSwitchSystem : EntitySystem
 {
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;

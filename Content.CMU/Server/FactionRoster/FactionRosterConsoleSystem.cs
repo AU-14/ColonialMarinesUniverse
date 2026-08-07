@@ -13,13 +13,13 @@ using Robust.Server.GameObjects;
 
 namespace Content.Server._CMU14.FactionRoster;
 
-public sealed class FactionRosterConsoleSystem : EntitySystem
+public sealed partial class FactionRosterConsoleSystem : EntitySystem
 {
-    [Dependency] private readonly UserInterfaceSystem _ui = default!;
-    [Dependency] private readonly JobSystem _jobs = default!;
-    [Dependency] private readonly MindSystem _minds = default!;
-    [Dependency] private readonly Robust.Shared.Prototypes.IPrototypeManager _prototypeManager = default!;
-    [Dependency] private readonly RMCReagentSystem _reagentSystem = default!;
+    [Dependency] private UserInterfaceSystem _ui = default!;
+    [Dependency] private JobSystem _jobs = default!;
+    [Dependency] private MindSystem _minds = default!;
+    [Dependency] private Robust.Shared.Prototypes.IPrototypeManager _prototypeManager = default!;
+    [Dependency] private RMCReagentSystem _reagentSystem = default!;
 
     private const string ColonyFactionId = "AUColonist";
     private const string ClfFactionId = "CLF";

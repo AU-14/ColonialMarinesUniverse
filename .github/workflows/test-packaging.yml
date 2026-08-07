@@ -6,7 +6,7 @@ on:
     paths:
       - '**.cs'
       - '**.csproj'
-      - '**.sln'
+      - '**.slnx'
       - '**.git**'
       - '**.yml'
       # no docs on which one of these is supposed to work, so
@@ -20,7 +20,7 @@ on:
     paths:
       - '**.cs'
       - '**.csproj'
-      - '**.sln'
+      - '**.slnx'
       - '**.git**'
       - '**.yml'
       - 'RobustToolbox'

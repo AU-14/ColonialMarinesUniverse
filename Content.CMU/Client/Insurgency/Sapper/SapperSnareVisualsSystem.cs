@@ -22,11 +22,11 @@ namespace Content.Client._AU14.Insurgency.Sapper;
 ///     by a separate UI pass that has no rotation transform, so it stays upright; only the world view
 ///     turns over. That is the disorientation the snare is going for.
 /// </summary>
-public sealed class SapperSnareVisualsSystem : EntitySystem
+public sealed partial class SapperSnareVisualsSystem : EntitySystem
 {
-    [Dependency] private readonly IPlayerManager _player = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly IOverlayManager _overlay = default!;
+    [Dependency] private IPlayerManager _player = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private IOverlayManager _overlay = default!;
 
     public override void Initialize()
     {

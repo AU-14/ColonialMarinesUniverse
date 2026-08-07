@@ -33,12 +33,12 @@ namespace Content.Server._AU14.ZLevelBuilding;
 /// The traversal stair / companion (<see cref="ZStairComponent.PartnerProto"/>) carries NO ZStairComponent,
 /// so this system never fires for it and there is no recursive setup.
 /// </summary>
-public sealed class ZStairSystem : EntitySystem
+public sealed partial class ZStairSystem : EntitySystem
 {
-    [Dependency] private readonly ZLevelBuildingSystem _building = default!;
-    [Dependency] private readonly SharedMapSystem _map = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
+    [Dependency] private ZLevelBuildingSystem _building = default!;
+    [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private ITileDefinitionManager _tileDef = default!;
 
     private EntityQuery<MapGridComponent> _gridQuery;
     private int _deferSetup;

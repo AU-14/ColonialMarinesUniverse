@@ -8,10 +8,10 @@ using Robust.Shared.Utility;
 
 namespace Content.Server._CMU14.CharacterDescription;
 
-public sealed class DetailedExamineSystem : EntitySystem
+public sealed partial class DetailedExamineSystem : EntitySystem
 {
-    [Dependency] private readonly EuiManager _euiManager = default!;
-    [Dependency] private readonly ExamineSystemShared _examine = default!;
+    [Dependency] private EuiManager _euiManager = default!;
+    [Dependency] private ExamineSystemShared _examine = default!;
 
     public override void Initialize()
     {

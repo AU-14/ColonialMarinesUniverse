@@ -7,7 +7,7 @@ namespace Content.Client._AU14.Overwatch;
 // injects the comms directory tab into open overwatch consoles from outside the
 // upstream BUI, so no RMC file needs to wire the button in. only entities that
 // carry the directory component qualify, stock RMC consoles are never touched
-public sealed class AU14OverwatchDirectoryButtonSystem : EntitySystem
+public sealed partial class AU14OverwatchDirectoryButtonSystem : EntitySystem
 {
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
 

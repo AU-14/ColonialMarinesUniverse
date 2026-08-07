@@ -23,9 +23,9 @@ namespace Content.Client._AU14.SavedBuilds;
 /// Sharing is manual - players copy .build.yml files between their folders. The server only produces
 /// the file content on save (<see cref="SavedBuildDataEvent"/>) and consumes it again on placement.
 /// </summary>
-public sealed class SavedBuildListSystem : EntitySystem
+public sealed partial class SavedBuildListSystem : EntitySystem
 {
-    [Dependency] private readonly IResourceManager _resource = default!;
+    [Dependency] private IResourceManager _resource = default!;
 
     public const string SaveDir = "/saved_builds";
 

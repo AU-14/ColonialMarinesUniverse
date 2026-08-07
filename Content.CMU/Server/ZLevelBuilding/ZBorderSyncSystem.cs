@@ -6,7 +6,6 @@ using Content.Server._AU14.Construction.CustomConstruction;
 using Content.Server.AU14.Round;
 using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.ZLevelBuilding;
-using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Maps;
@@ -27,15 +26,14 @@ namespace Content.Server._AU14.ZLevelBuilding;
 /// explicit global whitelist entries so admins can see and edit it through the same menu. Persisted
 /// across rounds in the server user-data folder.
 /// </summary>
-public sealed class ZBorderSyncSystem : EntitySystem
+public sealed partial class ZBorderSyncSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _prototype = default!;
-    [Dependency] private readonly IResourceManager _resource = default!;
-    [Dependency] private readonly CustomConstructionMenuSystem _menu = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly RMCPlanetSystem _planets = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private IResourceManager _resource = default!;
+    [Dependency] private CustomConstructionMenuSystem _menu = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
 
     private static readonly ResPath SaveFile = new("/au14_zborder_sync.txt");
 

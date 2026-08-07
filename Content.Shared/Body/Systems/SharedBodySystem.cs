@@ -42,9 +42,6 @@ public abstract partial class SharedBodySystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        InitializeBody();
-        InitializeParts();
     }
 
     /// <summary>

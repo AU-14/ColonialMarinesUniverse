@@ -8,7 +8,6 @@ using Content.Shared.Chat;
 using Content.Shared.Hands;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
-using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 

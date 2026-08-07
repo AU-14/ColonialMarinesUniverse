@@ -16,7 +16,7 @@ namespace Content.Client._AU14.Insurgency.Sapper;
 ///     - Planted, enemy viewer within the trap's RevealRadius: fully drawn (for that viewer only).
 ///     - Planted, enemy viewer further away: drawn only faintly, so a sharp eye can just make it out.
 /// </summary>
-public sealed class SapperTrapVisualsSystem : EntitySystem
+public sealed partial class SapperTrapVisualsSystem : EntitySystem
 {
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SharedTransformSystem _transform = default!;

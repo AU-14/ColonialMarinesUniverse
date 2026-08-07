@@ -99,7 +99,7 @@ public abstract partial class RMCChemicalEffect : EntityEffectBase<RMCChemicalEf
 
     public float NutrimentFactor => NutFactor * NutMetabolism;
 
-    protected abstract string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys);
+    protected abstract override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys);
 
     public sealed override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {

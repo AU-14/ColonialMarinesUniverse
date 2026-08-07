@@ -13,7 +13,7 @@ namespace Content.Server._AU14.Insurgency.Sapper;
 ///     the trap to everyone once any enemy walked near. It is now a per-viewer decision made entirely
 ///     client-side in SapperTrapVisualsSystem (only the approaching player sees it).
 /// </summary>
-public sealed class SapperTrapSystem : SharedSapperTrapSystem
+public sealed partial class SapperTrapSystem : SharedSapperTrapSystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
 

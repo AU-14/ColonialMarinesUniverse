@@ -30,7 +30,7 @@ namespace Content.Server._AU14.Insurgency;
 ///     This is the single consume point for the schema. The apply runs once per faction selection,
 ///     driven by <see cref="ApplyFaction"/>, never by a tick loop. State is cleared on round restart.
 /// </summary>
-public sealed class InsurgencyFactionApplySystem : EntitySystem
+public sealed partial class InsurgencyFactionApplySystem : EntitySystem
 {
     [Dependency] private AntagSelectionSystem _antag = default!;
     [Dependency] private EuiManager _eui = default!;

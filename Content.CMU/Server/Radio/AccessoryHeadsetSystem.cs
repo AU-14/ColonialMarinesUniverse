@@ -7,7 +7,6 @@ using Content.Shared.Radio;
 using Robust.Shared.Containers;
 using Content.Server._AU14.Marines.Roles.Ranks;
 using Content.Shared._AU14.Marines.Roles.Ranks;
-using Content.Server._RMC14.Marines.Roles.Ranks;
 
 namespace Content.Server._AU14.Radio;
 
@@ -21,7 +20,6 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private RankChangerSystem _rankChanger = default!;
-    [Dependency] private RankSystem _rank = default!;
 
     public override void Initialize()
     {

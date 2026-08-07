@@ -6,9 +6,9 @@ using Content.Shared.GameTicking;
 
 namespace Content.Server._RMC14.Xenonids.Construction;
 
-public sealed class QueenBuildingBoostSystem : EntitySystem
+public sealed partial class QueenBuildingBoostSystem : EntitySystem
 {
-    [Dependency] private readonly GameTicker _gameTicker = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
 
     private static readonly TimeSpan QueenBoostDuration = TimeSpan.FromMinutes(30);
     private const float QueenBoostSpeedMultiplier = 0.5f;

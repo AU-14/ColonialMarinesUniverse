@@ -12,9 +12,9 @@ namespace Content.Server._CMU14.TileMovement;
 /// mover while it's enabled. Never touches entities that already had <see cref="CMUTileMovementComponent"/>
 /// before the toggle (e.g. via the trait), so turning the toggle back off doesn't strip those.
 /// </summary>
-public sealed class CMUGlobalTileMovementSystem : EntitySystem
+public sealed partial class CMUGlobalTileMovementSystem : EntitySystem
 {
-    [Dependency] private readonly IConfigurationManager _cfg = default!;
+    [Dependency] private IConfigurationManager _cfg = default!;
 
     private bool _forcedForAll;
 
