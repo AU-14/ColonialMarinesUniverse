@@ -1,4 +1,4 @@
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Robust.Shared.GameStates;
 
 namespace Content.Shared._CMU14.Round.Objectives.Type;

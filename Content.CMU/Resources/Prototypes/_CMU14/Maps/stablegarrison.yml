@@ -2,15 +2,15 @@
   id: StableGarrisonRedux
   mapName: Stable Garrison
   allegiance: UA
-  mapPath: /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
+  mapPath: /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
   mapsBelow:
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ-1.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ-2.yml
+  - /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ-1.yml
+  - /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ-2.yml
   mapsAbove:
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ1.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ2.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ3.yml
-  - /Maps/_AU14/StableGarrisonMultiZ/StableGarrisonMultiZ4.yml
+  - /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ1.yml
+  - /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ2.yml
+  - /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ3.yml
+  - /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ4.yml
   minPlayers: 0
   maxPlayers: 250
   maxRandomOffset: 0

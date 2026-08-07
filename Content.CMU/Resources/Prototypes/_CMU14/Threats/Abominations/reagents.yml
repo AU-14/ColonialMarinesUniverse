@@ -9,7 +9,7 @@
   flavor: bitter
   color: "#56213a"
   metabolisms:
-    Poison:
+    Bloodstream:
       effects:
       - !type:CauseAbominationInfection
         probability: 1.0

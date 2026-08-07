@@ -22,7 +22,7 @@
   - type: AssignSquad
     whitelist:
       tags:
-      - SquadPMC
+      - RMCSquadPMC
 
   name: au14-job-name-civiliancorporateassistant
   playTimeTracker: AU14JobCivilianCorporateAssistant

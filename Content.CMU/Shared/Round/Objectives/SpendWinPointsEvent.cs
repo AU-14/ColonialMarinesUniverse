@@ -4,4 +4,5 @@ public sealed class SpendWinPointsEvent : EntityEventArgs
 {
     public string Team = string.Empty;
     public int Amount = 0;
+    public bool Succeeded;
 }

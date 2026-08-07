@@ -1,0 +1,5 @@
+- type: entity
+  id: Footstep
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: FootPrint

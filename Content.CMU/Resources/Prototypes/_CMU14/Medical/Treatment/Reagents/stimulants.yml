@@ -7,7 +7,7 @@
   physicalDesc: reagent-physical-desc-volatile
   color: "#c9c96b"
   metabolisms:
-    Poison:
+    Bloodstream:
       effects:
       - !type:HealthChange
         damage:
@@ -23,7 +23,7 @@
   physicalDesc: reagent-physical-desc-oily
   color: "#e8d98a"
   metabolisms:
-    Poison:
+    Bloodstream:
       effects:
       - !type:HealthChange
         damage:
@@ -41,7 +41,8 @@
   overdose: 25
   criticalOverdose: 40
   metabolisms:
-    Poison:
+    Bloodstream:
+      metabolismRate: 0.1
       effects:
       - !type:HealthChange
         damage:
@@ -55,9 +56,6 @@
           types:
             Poison: 3
             Asphyxiation: 2
-    Narcotic:
-      metabolismRate: 0.1
-      effects:
       - !type:MovementSpeedModifier
         walkSpeedModifier: 1.4
         sprintSpeedModifier: 1.4

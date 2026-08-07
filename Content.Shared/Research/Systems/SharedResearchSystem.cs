@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared.Lathe;
 using Content.Shared.Research.Components;
 using Content.Shared.Research.Prototypes;

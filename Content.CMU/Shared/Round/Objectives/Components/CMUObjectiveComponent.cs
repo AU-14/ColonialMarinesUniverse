@@ -1,7 +1,7 @@
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
-namespace Content.Shared._CMU14.Round.Objectives.Component;
+namespace Content.Shared._CMU14.Round.Objectives.Components;
 
 public sealed class ObjectiveActivatedEvent(bool lateActivation = false) : EntityEventArgs
 {

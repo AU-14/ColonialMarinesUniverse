@@ -1,5 +1,5 @@
 ﻿using Content.Shared._RMC14.Medical.Refill;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared._RMC14.Vendors;
 
 namespace Content.Client._RMC14.Vendors;

@@ -445,6 +445,7 @@ public sealed partial class IntelSystem : EntitySystem
             return;
 
         var tree = EnsureTechTree();
+        ResolveTechTreeForUser(user, ref tree);
         tree.Comp.Tree.Documents.Current++;
         RemoveClue(tree, ent);
         AddPoints(tree, ent.Comp.Value);
@@ -502,8 +503,10 @@ public sealed partial class IntelSystem : EntitySystem
     {
         if (_net.IsServer)
         {
-            var tree = EnsureTechTree().Comp.Tree;
-            ent.Comp.Tree = tree;
+            var tree = EnsureTechTree();
+            ResolveTechTreeForUser(actor, ref tree);
+            ent.Comp.Tree = tree.Comp.Tree;
+            SetIntelObjectivesViewTeam(ent, tree);
             ent.Comp.PersonalClues = GetPersonalClues(actor);
             Dirty(ent);
         }
@@ -682,7 +685,7 @@ public sealed partial class IntelSystem : EntitySystem
         }
 
         if (TryComp(unlock, out IntelCluesComponent? cluesComp))
-            ShowClue(unlock.Value, cluesComp, args.User, true);
+            ShowClue(unlock.Value, cluesComp, args.User, true, ent.Comp.Team);
 
         unlocks.Unlocks.Remove(unlock.Value);
         Dirty(intel.Value, unlocks);
@@ -717,7 +720,12 @@ public sealed partial class IntelSystem : EntitySystem
         return shown;
     }
 
-    private bool ShowClue(EntityUid target, IntelCluesComponent clues, EntityUid user, bool storeGlobal)
+    private bool ShowClue(
+        EntityUid target,
+        IntelCluesComponent clues,
+        EntityUid user,
+        bool storeGlobal,
+        string? team = null)
     {
         var clue = GetClueMessage(target, clues);
 
@@ -734,6 +742,7 @@ public sealed partial class IntelSystem : EntitySystem
         }
 
         var tree = EnsureTechTree();
+        ResolveTechTreeForTeam(team, ref tree);
         var clueGroup = tree.Comp.Tree.Clues.GetOrNew(category);
         clueGroup[GetNetEntity(target)] = clue;
         Dirty(tree);
@@ -1374,6 +1383,11 @@ public sealed partial class IntelSystem : EntitySystem
         var techTreeQuery = EntityQueryEnumerator<IntelTechTreeComponent>();
         while (techTreeQuery.MoveNext(out var uid, out var comp))
         {
+            var isDefault = true;
+            IsDefaultTechTree(comp, ref isDefault);
+            if (!isDefault)
+                continue;
+
             tree = (uid, comp);
             return true;
         }
@@ -1839,24 +1853,6 @@ public sealed partial class IntelSystem : EntitySystem
         return true;
     }
 
-    public int GetIntelPoints(string team)
-    {
-        return TryGetTechTree(out var tree)
-            ? (int) Math.Floor(tree.Value.Comp.Tree.Points.Double())
-            : 0;
-    }
-
-    public bool TrySpendIntelPoints(string team, double amount)
-    {
-        return TryUsePoints(FixedPoint2.New(amount));
-    }
-
-    public void SetTeamTechTreeOverride(string team, string? protoId)
-    {
-        // The newer RMC tech-tree implementation has one authoritative tree.
-        // Keep the CMU call compatible until faction trees are split upstream again.
-    }
-
     public void AddPoints(Entity<IntelTechTreeComponent> tree, FixedPoint2 points)
     {
         tree.Comp.Tree.Points += points;
@@ -1873,6 +1869,11 @@ public sealed partial class IntelSystem : EntitySystem
 
     public void UpdateTree(Entity<IntelTechTreeComponent> tree)
     {
+        var handled = false;
+        TryUpdateFactionTree(tree, ref handled);
+        if (handled)
+            return;
+
         var query = EntityQueryEnumerator<TechControlConsoleComponent>();
         while (query.MoveNext(out var uid, out var console))
         {
@@ -1887,6 +1888,18 @@ public sealed partial class IntelSystem : EntitySystem
             Dirty(uid, view);
         }
     }
+
+    partial void ResolveTechTreeForUser(EntityUid user, ref Entity<IntelTechTreeComponent> tree);
+
+    partial void ResolveTechTreeForTeam(string? team, ref Entity<IntelTechTreeComponent> tree);
+
+    partial void SetIntelObjectivesViewTeam(
+        Entity<ViewIntelObjectivesComponent> view,
+        Entity<IntelTechTreeComponent> tree);
+
+    partial void IsDefaultTechTree(IntelTechTreeComponent tree, ref bool isDefault);
+
+    partial void TryUpdateFactionTree(Entity<IntelTechTreeComponent> tree, ref bool handled);
 
     public override void Update(float frameTime)
     {

@@ -11,8 +11,8 @@ public sealed partial class PowerLoaderGrabbableComponent : Component
     public TimeSpan Delay;
 
     [DataField, AutoNetworkedField]
-    public EntProtoId VirtualRight;
+    public EntProtoId VirtualRight = "RMCVirtualDropshipGearRight";
 
     [DataField, AutoNetworkedField]
-    public EntProtoId VirtualLeft;
+    public EntProtoId VirtualLeft = "RMCVirtualDropshipGearLeft";
 }

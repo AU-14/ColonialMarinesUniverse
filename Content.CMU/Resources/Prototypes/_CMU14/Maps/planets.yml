@@ -163,6 +163,7 @@
   name: Stable Garrison Redux
   components:
   - type: RMCPlanetMapPrototype
+    map: /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
     votename: "Stable Garrison Redux"
     mapId: StableGarrisonRedux
     lorePrimer: AU14PrimerPlanetStableGarrison

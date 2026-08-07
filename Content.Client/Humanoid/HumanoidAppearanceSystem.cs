@@ -97,12 +97,15 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
 
         // add default species layers
         var speciesProto = _prototypeManager.Index(component.Species);
-        var baseSprites = _prototypeManager.Index(speciesProto.SpriteSet);
-        foreach (var (key, id) in baseSprites.Sprites)
+        if (speciesProto.SpriteSet is { } spriteSet &&
+            _prototypeManager.TryIndex(spriteSet, out var baseSprites))
         {
-            oldLayers.Remove(key);
-            if (!component.CustomBaseLayers.ContainsKey(key))
-                SetLayerData(entity, component, sprite, key, id, sexMorph: true);
+            foreach (var (key, id) in baseSprites.Sprites)
+            {
+                oldLayers.Remove(key);
+                if (!component.CustomBaseLayers.ContainsKey(key))
+                    SetLayerData(entity, component, sprite, key, id, sexMorph: true);
+            }
         }
 
         // add custom layers
@@ -176,7 +179,7 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         var customBaseLayers = new Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo>();
 
         var speciesPrototype = _prototypeManager.Index<SpeciesPrototype>(profile.Species);
-        var markings = new MarkingSet(speciesPrototype.MarkingPoints, _markingManager, _prototypeManager);
+        var markings = new MarkingSet(speciesPrototype.MarkingPoints?.Id, _markingManager, _prototypeManager);
 
         // Add markings that doesn't need coloring. We store them until we add all other markings that doesn't need it.
         var markingFColored = new Dictionary<Marking, MarkingPrototype>();

@@ -110,7 +110,7 @@ public sealed partial class MarkingManager
     {
         var onlyWhitelisted = false;
         if (prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesPrototype) &&
-            speciesPrototype.MarkingPoints.Id is { Length: > 0 } markingPoints &&
+            speciesPrototype.MarkingPoints?.Id is { Length: > 0 } markingPoints &&
             prototypeManager.TryIndex(markingPoints, out MarkingPointsPrototype? pointsPrototype))
         {
             onlyWhitelisted = pointsPrototype.OnlyWhitelisted ||
@@ -134,7 +134,7 @@ public sealed partial class MarkingManager
     {
         IoCManager.Resolve(ref prototypeManager);
         var speciesPrototype = prototypeManager.Index<SpeciesPrototype>(species);
-        var spriteSet = speciesPrototype.SpriteSet.Id;
+        var spriteSet = speciesPrototype.SpriteSet?.Id;
         if (string.IsNullOrEmpty(spriteSet) ||
             !prototypeManager.TryIndex(spriteSet, out HumanoidSpeciesBaseSpritesPrototype? baseSprites) ||
             !baseSprites.Sprites.TryGetValue(layer, out var spriteName) ||

@@ -7,10 +7,10 @@ namespace Content.Shared.Humanoid.Prototypes
     public sealed partial class SpeciesPrototype
     {
         [DataField("sprites")]
-        public ProtoId<HumanoidSpeciesBaseSpritesPrototype> SpriteSet { get; private set; } = default!;
+        public ProtoId<HumanoidSpeciesBaseSpritesPrototype>? SpriteSet { get; private set; }
 
         [DataField("markingLimits")]
-        public ProtoId<MarkingPointsPrototype> MarkingPoints { get; private set; } = default!;
+        public ProtoId<MarkingPointsPrototype>? MarkingPoints { get; private set; }
     }
 }
 

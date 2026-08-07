@@ -22,8 +22,8 @@ using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
@@ -1440,7 +1440,7 @@ public sealed class RMCHumanPrototypeRegressionTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var damage = entMan.GetComponent<DamageableComponent>(human);
 
             Assert.Multiple(() =>
@@ -1894,8 +1894,6 @@ public sealed class RMCHumanPrototypeRegressionTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var mapManager = server.ResolveDependency<IMapManager>();
-
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
@@ -1970,7 +1968,6 @@ public sealed class RMCHumanPrototypeRegressionTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var mapManager = server.ResolveDependency<IMapManager>();
         var tileDefinitionManager = server.ResolveDependency<ITileDefinitionManager>();
 
         await server.WaitAssertion(() =>

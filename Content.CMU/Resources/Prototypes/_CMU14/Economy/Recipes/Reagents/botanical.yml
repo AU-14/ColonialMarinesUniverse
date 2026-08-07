@@ -16,7 +16,7 @@
   - !type:PlantAdjustPotency
     amount: 0.1
   metabolisms:
-    Poison:
+    Bloodstream:
       effects:
         - !type:Toxic
           potency: 3
@@ -52,7 +52,7 @@
   class: Uncommon
   group: Botanical
   metabolisms:
-    Poison:
+    Bloodstream:
       effects:
         - !type:Carcinogenic
           potency: 1
@@ -71,7 +71,7 @@
   group: Botanical
   reward: 2
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Electrogenetic
@@ -94,7 +94,7 @@
   group: Botanical
   reward: 2
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Antiparasitic
@@ -113,7 +113,7 @@
   group: Botanical
   reward: 2
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Carcinogenic
@@ -134,7 +134,7 @@
   overdose: 6
   criticalOverdose: 10
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Hypnotic
@@ -161,7 +161,7 @@
   overdose: 6
   criticalOverdose: 10
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Cardiotoxic
@@ -182,7 +182,7 @@
   overdose: 10.5
   criticalOverdose: 20
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Cardiopeutic
@@ -205,7 +205,7 @@
   overdose: 6
   criticalOverdose: 10
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Allergenic
@@ -228,7 +228,7 @@
   overdose: 10.5
   criticalOverdose: 20
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
         - !type:Intravenous
@@ -251,7 +251,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.5
       effects:
         - !type:Toxic
@@ -272,7 +272,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.2
       effects:
         - !type:Hypoxemic
@@ -294,7 +294,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.5
       effects:
         - !type:Toxic

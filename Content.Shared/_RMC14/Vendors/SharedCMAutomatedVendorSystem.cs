@@ -684,13 +684,19 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
                 }
 
                 var faction = vendor.Comp.Faction.ToLowerInvariant();
-                RaiseLocalEvent(new SpendWinPointsEvent
+                var spend = new SpendWinPointsEvent
                 {
                     Team = faction,
                     Amount = entry.Points.Value,
-                });
+                };
+                RaiseLocalEvent(spend);
 
-                UpdateVendorFactionPointsCache(faction, available - entry.Points.Value);
+                if (!spend.Succeeded)
+                {
+                    _popup.PopupEntity(Loc.GetString("cm-vending-machine-not-enough-points"), vendor, actor);
+                    ResetChoices();
+                    return;
+                }
             }
             else if (user == null)
             {

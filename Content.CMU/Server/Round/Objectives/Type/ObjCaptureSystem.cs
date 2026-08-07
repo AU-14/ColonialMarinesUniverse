@@ -3,7 +3,7 @@ using Content.Server.AU14.Round;
 using Content.Server.Popups;
 using Content.Shared._CMU14.Round.Objectives;
 using Content.Shared._CMU14.Round.Objectives.Type;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared.Damage;
 using Content.Shared.NPC.Components;
 using Content.Shared.Popups;

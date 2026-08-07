@@ -948,4 +948,4 @@ CMWeaponLauncherM79: RMCWeaponLauncherM85A1
 FishBass: RMCFoodFishBass
 RMCTray_empty: RMCTrayEmpty
 CMUMultiZStairsFlight: CMUMultiZStairsRamplower
-fetchgenericmarker: fetchobjectivemarkergenericspawnpoint
+fetchobjectivemarkergenericspawnpoint: fetchgenericmarker

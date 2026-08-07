@@ -13,6 +13,17 @@
   - predclick
 
 - type: emote
+  id: Warcry
+  name: cmu-yautja-emote-name-warcry
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-warcry"]
+
+- type: emote
   id: CMUYautjaRoar
   name: cmu-yautja-emote-name-roar
   category: Vocal

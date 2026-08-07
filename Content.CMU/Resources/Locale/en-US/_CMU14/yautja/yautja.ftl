@@ -328,6 +328,8 @@ reagent-desc-cmu-yautja-blood = Vivid green alien blood with a sharp metallic sm
 
 cmu-yautja-emote-name-click = Clicks
 cmu-yautja-emote-msg-click = clicks mandibles together.
+cmu-yautja-emote-name-warcry = Warcry
+cmu-yautja-emote-msg-warcry = bellows a fierce hunting cry.
 cmu-yautja-emote-name-roar = Roar
 cmu-yautja-emote-msg-roar = unleashes a deep hunting roar.
 cmu-yautja-emote-name-laugh = Laugh

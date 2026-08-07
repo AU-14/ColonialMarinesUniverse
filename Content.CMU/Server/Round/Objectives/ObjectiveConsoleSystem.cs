@@ -1,11 +1,11 @@
 using System.Linq;
 using Content.Shared._CMU14.Round.Objectives;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared._CMU14.Round.Objectives.Type;
 using Content.Shared._RMC14.Intel;
 using Robust.Server.GameObjects;
 using Robust.Shared.Prototypes;
-using ObjectivesConsoleComponent = Content.Shared._CMU14.Round.Objectives.Component.ObjectivesConsoleComponent;
+using ObjectivesConsoleComponent = Content.Shared._CMU14.Round.Objectives.Components.ObjectivesConsoleComponent;
 
 namespace Content.Server._CMU14.Round.Objectives;
 

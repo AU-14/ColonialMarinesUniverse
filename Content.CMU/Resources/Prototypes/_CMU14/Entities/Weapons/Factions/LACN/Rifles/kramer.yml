@@ -88,8 +88,8 @@
           tags:
           - RMCAttachmentAngledGrip
           - RMCAttachmentVerticalGrip
-          - RMCAttachmentExtinguisher
-          - RMCAttachmentFlamer
+          - RMCAttachmentUnderbarrelExtinguisher
+          - RMCAttachmentMiniFlamethrower
           - RMCAttachmentLaserSight
   - type: AttachableHolderVisuals
     offsets:

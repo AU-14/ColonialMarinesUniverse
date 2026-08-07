@@ -1,0 +1,20 @@
+- type: emote
+  id: PainGrimace
+  name: cmu-chat-emote-name-pain-grimace
+  category: Hands
+  available: false
+  chatMessages: ["cmu-chat-emote-msg-pain-grimace"]
+
+- type: emote
+  id: TroubleEyeOpen
+  name: cmu-chat-emote-name-trouble-eye-open
+  category: Hands
+  available: false
+  chatMessages: ["cmu-chat-emote-msg-trouble-eye-open"]
+
+- type: emote
+  id: TroubleStanding
+  name: cmu-chat-emote-name-trouble-standing
+  category: Hands
+  available: false
+  chatMessages: ["cmu-chat-emote-msg-trouble-standing"]

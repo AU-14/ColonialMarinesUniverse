@@ -112,7 +112,7 @@ public sealed partial class ReagentGrinderSystem
         while (remaining > FixedPoint2.Zero)
         {
             var bottle = Spawn("CMBottleEmpty");
-            if (!_cmuSolutions.EnsureSolutionEntity(bottle, "drink", out var bottleSolution))
+            if (!_cmuSolutions.TryGetSolution(bottle, "drink", out var bottleSolution))
             {
                 QueueDel(bottle);
                 break;

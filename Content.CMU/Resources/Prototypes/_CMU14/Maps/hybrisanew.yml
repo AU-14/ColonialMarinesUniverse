@@ -2,16 +2,16 @@
   id: hybrisanew
   mapName: LV-759
   allegiance: IndependentSystems # ICSC
-  mapPath: /Maps/_AU14/HybrisaMultiZ/hybrisa0.yml
+  mapPath: /Maps/_CMU14/HybrisaMultiZ/hybrisa0.yml
   mapsBelow:
-  - /Maps/_AU14/HybrisaMultiZ/hybrisa-2.yml
-  - /Maps/_AU14/HybrisaMultiZ/hybrisa-1.yml
+  - /Maps/_CMU14/HybrisaMultiZ/hybrisa-2.yml
+  - /Maps/_CMU14/HybrisaMultiZ/hybrisa-1.yml
   mapsAbove:
-  - /Maps/_AU14/HybrisaMultiZ/hybrisa1.yml
-  - /Maps/_AU14/HybrisaMultiZ/hybrisa2.yml
-  - /Maps/_AU14/HybrisaMultiZ/hybrisa3.yml
-  - /Maps/_AU14/HybrisaMultiZ/hybrisa4.yml
-  - /Maps/_AU14/HybrisaMultiZ/hybrisa5.yml
+  - /Maps/_CMU14/HybrisaMultiZ/hybrisa1.yml
+  - /Maps/_CMU14/HybrisaMultiZ/hybrisa2.yml
+  - /Maps/_CMU14/HybrisaMultiZ/hybrisa3.yml
+  - /Maps/_CMU14/HybrisaMultiZ/hybrisa4.yml
+  - /Maps/_CMU14/HybrisaMultiZ/hybrisa5.yml
   minPlayers: 0
   maxPlayers: 200
   maxRandomOffset: 0

@@ -30,6 +30,9 @@
 - type: entity
   parent: RMCComputerIntel
   id: RMCComputerIntelGovfor
+  components:
+  - type: IntelConsole
+    team: govfor
 
 - type: entity
   parent: CMAirlockGlass
@@ -72,7 +75,11 @@
     sprite: _CMU14/Structures/containers.rsi
   - type: Clickable
   - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,0.8"
+    polygon:
+    - "-0.5,0.8"
+    - "0.5,0.8"
+    - "0.5,-0.5"
+    - "-0.5,-0.5"
   - type: DeleteOnExplosion
   - type: XenoToggleChargingDamage
     stageLoss: 4

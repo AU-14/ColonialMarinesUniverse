@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Round.Objectives.Component;
+namespace Content.Shared._CMU14.Round.Objectives.Components;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
 public sealed partial class CMUObjectiveMasterComponent : Robust.Shared.GameObjects.Component

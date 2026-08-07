@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <!--
-      RobustToolbox v283 marks several still-supported transition APIs obsolete while the
+      RobustToolbox v287 marks several still-supported transition APIs obsolete while the
       corresponding content migrations remain incomplete upstream (notably legacy status
       effects, Control disposal, and component-owned VV setters). Apply this after project-local
       NoWarn values (Content.Server defines its own baseline); the migration inventory documents

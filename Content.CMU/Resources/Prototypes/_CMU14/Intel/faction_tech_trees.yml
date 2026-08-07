@@ -1,0 +1,240 @@
+- type: entity
+  id: RMCIntelTechTree_opfor
+  parent: RMCIntelTechTree
+  name: intel tech tree (OpFor)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 2
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: SPECIAL ASSETS AUTHORIZED
+            message: Additional supply budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+
+- type: entity
+  id: RMCIntelTechTree_ua
+  parent: RMCIntelTechTree
+  name: intel tech tree (UA)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 5
+          increase: 2
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 7500
+          - !type:TechAnnounceEvent
+            author: SPECIAL ASSETS AUTHORIZED
+            message: Additional supply budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: Unlock Tier 3
+          description: Transitions the tree to another tier.
+          cost: 1
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 3
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: US Army 32nd ArmDiv reinforcements
+          description: Summon a squad from US Army 32nd Armored Division.
+          cost: 80
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: USArmyArmored
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A US Army 32nd Armored Division squad has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Prodigy Armed Repair Team Yankee
+          description: Summon a PMC team from PART, specifically Yankee Squad.
+          cost: 70
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTSParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+- type: entity
+  id: RMCIntelTechTree_govfor
+  parent: RMCIntelTechTree
+  name: intel tech tree (GovFor)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 20
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          - !type:TechAnnounceEvent
+            author: SPECIAL ASSETS AUTHORIZED
+            message: Additional supply budget has been authorised for this operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: CMB Investigation Party
+          description: Summon a CMB investigation party to the area.
+          cost: 10
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CMBInvestigationPartyAlt
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A CMB investigation party has been dispatched to investigate intel leads.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Prodigy Armed Repair Team Sierra
+          description: Summon a PART Sierra Squad to the area.
+          cost: 60
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTSParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+
+- type: entity
+  id: RMCIntelTechTree_clf
+  parent: RMCIntelTechTree
+  name: intel tech tree (CLF)
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IntelTechTree
+    tree:
+      options:
+      -
+        - name: Unlock Tier 1
+          description: Transitions the tree to another tier.
+          cost: 0
+          events:
+          - !type:TechUnlockTierEvent
+            tier: 1
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: upgrade
+      -
+        - name: Requisition Budget Increase
+          description: Distributes resources to requisitions for spending.
+          cost: 2
+          increase: 1
+          repurchasable: true
+          events:
+          - !type:TechRequisitionsBudgetEvent
+            amount: 5000
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: budget_req
+        - name: Insurgent Reinforcements
+          description: Summon reinforcements from a neighboring cell.
+          cost: 75
+          increase: 20
+          repurchasable: true
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CLFCellReinforcementsIntel
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Machine Gunner
+          description: Summon a machine gunner from a neighboring cell.
+          cost: 20
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: CLFCellReinforcementsIntelMachineGunner
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Call VAISO read on WY
+          description: Send intel on the local WY facility to VAISO, summoning them for a raid.
+          cost: 80
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: VAISO
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon
+        - name: Call Prodigy Armed Repair Team Yankee
+          description: Summon a PMC team from PART, specifically Sierra Squad.
+          cost: 70
+          repurchasable: false
+          events:
+          - !type:TechPartySpawnEvent
+            thirdPartyId: ProdigyPARTSParty
+          - !type:TechAnnounceEvent
+            author: INTEL OPERATIONS
+            message: A Prodigy Armed Repair Team has been dispatched to aid with the operation.
+          icon:
+            sprite: _RMC14/Interface/tech_tree.rsi
+            state: beacon

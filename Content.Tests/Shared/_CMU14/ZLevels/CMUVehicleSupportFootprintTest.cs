@@ -28,12 +28,15 @@ public sealed class CMUVehicleSupportFootprintTest
     }
 
     [Test]
-    public void NormalizesInvertedBounds()
+    public void SamplesBoundsCreatedFromInvertedPoints()
     {
         var samples = new List<Vector2>();
+        var bounds = Box2.FromTwoPoints(
+            new Vector2(-0.5f, 1.5f),
+            new Vector2(0.5f, -0.5f));
 
         CMUVehicleSupportFootprint.GenerateLocalSamples(
-            new Box2(-0.5f, 1.5f, 0.5f, -0.5f),
+            bounds,
             1f,
             0f,
             samples);

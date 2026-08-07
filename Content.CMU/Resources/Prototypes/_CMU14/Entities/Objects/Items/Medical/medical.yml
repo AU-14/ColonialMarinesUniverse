@@ -691,7 +691,7 @@
   color: "#1f83a7"
   overdose: 20
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.04
       effects:
       - !type:EqualHealthChange
@@ -722,7 +722,7 @@
   color: "#a3adbf"
   overdose: 200
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.02
       effects:
       - !type:RemoveDamage

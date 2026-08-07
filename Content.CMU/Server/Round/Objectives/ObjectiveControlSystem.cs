@@ -3,7 +3,7 @@ using System.Numerics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared._CMU14.Round.Objectives.Type;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Rules;
@@ -170,7 +170,7 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
     private void OnSpendWinPoints(SpendWinPointsEvent ev)
     {
-        if (string.IsNullOrEmpty(ev.Team) || ev.Team == "none")
+        if (ev.Amount < 0 || string.IsNullOrEmpty(ev.Team) || ev.Team == "none")
             return;
 
         if (GetOrReselectObjMaster() is not { } master)
@@ -181,8 +181,14 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
         var key = ev.Team.ToLowerInvariant();
         var data = master.GetOrCreateFactionData(key);
-        data.CurrentWinPoints = Math.Max(0, data.CurrentWinPoints - ev.Amount);
+        if (data.CurrentWinPoints < ev.Amount)
+            return;
+
+        data.CurrentWinPoints -= ev.Amount;
         DirtyObjectiveMaster();
+        _vendorSystem.UpdateVendorFactionPointsCache(key, data.CurrentWinPoints);
+        _intel.UpdateTree(_intel.EnsureTechTree(key));
+        ev.Succeeded = true;
     }
 
     private CMUObjectiveMasterComponent? GetOrReselectObjMaster()

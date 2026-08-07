@@ -11,7 +11,7 @@
   class: Hydro
   toxin: true
   metabolisms:
-    Poison:
+    Bloodstream:
       metabolismRate: 4
       effects:
       - !type:Vomit
@@ -30,7 +30,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.5
       effects:
         - !type:Toxic
@@ -50,7 +50,7 @@
   flags: NoGeneration
   toxin: true
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 1
       effects:
       - !type:Ciphering
@@ -61,7 +61,7 @@
   id: CMUCorruptedCipherToxin
   color: "#113311"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 1
       effects:
       - !type:Ciphering
@@ -72,7 +72,7 @@
   id: CMUAlphaCipherToxin
   color: "#331111"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 1
       effects:
       - !type:Ciphering
@@ -83,7 +83,7 @@
   id: CMUBravoCipherToxin
   color: "#333311"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 1
       effects:
       - !type:Ciphering
@@ -94,7 +94,7 @@
   id: CMUCharlieCipherToxin
   color: "#551155"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 1
       effects:
       - !type:Ciphering
@@ -105,7 +105,7 @@
   id: CMUDeltaCipherToxin
   color: "#111133"
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 1
       effects:
       - !type:Ciphering

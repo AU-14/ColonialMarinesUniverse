@@ -18,6 +18,49 @@
     team: govfor
 
 - type: entity
+  parent: RMCTechTreeConsole
+  id: RMCTechTreeConsoleOpfor
+  name: opfor tech tree console
+  description: An OpFor tech console used to make tech purchases for OpFor.
+  components:
+  - type: TechControlConsole
+    team: opfor
+
+- type: entity
+  parent: RMCComputerIntel
+  id: RMCComputerIntelOpfor
+  name: opfor intel computer
+  description: An OpFor computer used to upload and process intelligence.
+  components:
+  - type: IntelConsole
+    team: opfor
+
+- type: entity
+  parent: RMCTechTreeConsole
+  id: RMCTechTreeConsoleCLF
+  name: CLF tech tree console
+  description: A CLF tech console used to make tech purchases for CLF.
+  components:
+  - type: TechControlConsole
+    team: clf
+  - type: Transform
+    anchored: false
+  - type: Physics
+    bodyType: Dynamic
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 60
+        mask:
+        - MachineMask
+        layer:
+        - MidImpassable
+        - LowImpassable
+
+- type: entity
   parent: RMCTacticalMapTable
   id: RMCTacticalMapTableGovfor
   suffix: Govfor

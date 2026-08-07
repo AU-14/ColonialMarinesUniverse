@@ -20,7 +20,7 @@
   - type: AssignSquad
     whitelist:
       tags:
-      - SquadPMC
+      - RMCSquadPMC
   - type: JobPrefix
     prefix: au14-job-prefix-colonysecurityofficer
   - type: TacticalMapIcon

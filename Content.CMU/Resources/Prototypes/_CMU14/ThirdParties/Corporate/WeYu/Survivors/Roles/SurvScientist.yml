@@ -27,7 +27,7 @@
   - type: AssignSquad
     whitelist:
       tags:
-      - SquadPMC
+      - RMCSquadPMC
 
   name: au14-job-name-civilianscientist
   description: au14-wysurv-description

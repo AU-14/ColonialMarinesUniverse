@@ -1,6 +1,6 @@
 using Robust.Shared.GameStates;
 
-namespace Content.Shared._CMU14.Round.Objectives.Component;
+namespace Content.Shared._CMU14.Round.Objectives.Components;
 
 [RegisterComponent, NetworkedComponent]
 public sealed partial class ObjectivesConsoleComponent : Robust.Shared.GameObjects.Component

@@ -311,20 +311,21 @@ public sealed partial class CMUZNetworkLifecycleSystem : EntitySystem
         out string error)
     {
         Entity<MapComponent>? map;
-        HashSet<Entity<MapGridComponent>> grids;
+        HashSet<Entity<MapGridComponent>>? grids;
         var loaded = options is { } loadOptions
             ? _mapLoader.TryLoadMap(path, out map, out grids, loadOptions)
             : _mapLoader.TryLoadMap(path, out map, out grids);
 
         if (!loaded ||
-            map is not { } loadedMap)
+            map is not { } loadedMap ||
+            grids is not { } loadedGrids)
         {
             error = $"Failed to load Z-level at depth {depth}: {path}.";
             return false;
         }
 
         if (stationsById != null && stations != null)
-            AddZLevelGridsToStations(grids, stationsById, stations);
+            AddZLevelGridsToStations(loadedGrids, stationsById, stations);
 
         levels.Add(new LoadedZLevel(loadedMap, depth, true));
         error = string.Empty;

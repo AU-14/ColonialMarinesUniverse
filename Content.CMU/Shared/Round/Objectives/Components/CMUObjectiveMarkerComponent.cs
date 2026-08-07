@@ -1,4 +1,4 @@
-namespace Content.Shared._CMU14.Round.Objectives.Component;
+namespace Content.Shared._CMU14.Round.Objectives.Components;
 
 /// <summary>Mappers place these to mark obj ent spawnpoints, used by FindMarkers/ResolveMarkers.
 /// </summary>

@@ -1,8 +1,8 @@
-# RobustToolbox v283.0.0 migration
+# RobustToolbox v283.0.0 migration (historical)
 
 Date: 2026-07-19
 
-This document records the RobustToolbox release selection, the engine-side change inventory, and the content/build migrations required to move the fresh RMC14 baseline to RobustToolbox v283.0.0.
+This document records the historical content/build migration that moved the fresh RMC14 baseline to RobustToolbox v283.0.0. The current engine selection is recorded in [the v287 migration](robust-toolbox-v287-migration.md).
 
 ## Selected release and pins
 
@@ -16,7 +16,7 @@ This document records the RobustToolbox release selection, the engine-side chang
 | XamlX | previous pin | `5da4e1` |
 | CefGlue | previous pin | `f8f5135` |
 
-`v283.0.0` was selected because it is the newest version with a published RobustToolbox release and authored release notes. A later `v283.1.0` Git tag exists, but it is not a published GitHub Release and was deliberately not used. See the [v283.0.0 release](https://github.com/space-wizards/RobustToolbox/releases/tag/v283.0.0).
+At the time of this migration, `v283.0.0` was the newest version with a published RobustToolbox release and authored release notes. A later `v283.1.0` Git tag existed, but it was not a published GitHub Release and was deliberately not used. See the [v283.0.0 release](https://github.com/space-wizards/RobustToolbox/releases/tag/v283.0.0).
 
 ## Comparison limits
 

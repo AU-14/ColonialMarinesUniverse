@@ -26,7 +26,7 @@
   - type: AssignSquad
     whitelist:
       tags:
-      - SquadPMC
+      - RMCSquadPMC
   - type: NpcFactionMember
     factions:
     - GOVFOR

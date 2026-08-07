@@ -1,5 +1,5 @@
-using Content.Shared._CMU14.Round.Objectives.Component;
-using Content.Server._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
+using Content.Server._CMU14.Round.Objectives.Components;
 using Content.Shared._CMU14.Round.Objectives.Type;
 using Robust.Shared.Map;
 

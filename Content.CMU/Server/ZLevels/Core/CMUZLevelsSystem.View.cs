@@ -868,7 +868,7 @@ public sealed partial class CMUZLevelsSystem
                         HighGround: highGroundUid,
                         Origin: origin.Position,
                         Target: target.Position,
-                        Transform: _transform);
+                        Occluder: _occluder);
                     if (_occluder.InRangeUnoccluded(
                             origin,
                             target,
@@ -882,9 +882,8 @@ public sealed partial class CMUZLevelsSystem
                                     return true;
                                 }
 
-                                return OccluderSystem.IsTouchingEndpoint(
-                                    ent,
-                                    (state.Transform, state.Origin, state.Target));
+                                return state.Occluder.ContainsPoint(ent.Comp1, ent.Comp2, state.Origin) ||
+                                       state.Occluder.ContainsPoint(ent.Comp1, ent.Comp2, state.Target);
                             }))
                     {
                         AddStairPreviewPosition(previewPositions, target.Position);

@@ -82,8 +82,8 @@
           - RMCAttachmentGyroscopicStabilizer
           - RMCAttachmentBipod
           - RMCAttachmentBurstFireAssembly
-          - RMCAttachmentExtinguisher
-          - RMCAttachmentFlamer
+          - RMCAttachmentUnderbarrelExtinguisher
+          - RMCAttachmentMiniFlamethrower
           - RMCAttachmentMK1GrenadeLauncher
           - RMCAttachmentLaserSight
   - type: AttachableHolderVisuals

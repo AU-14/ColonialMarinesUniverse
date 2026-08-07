@@ -28,7 +28,7 @@
   - type: AssignSquad
     whitelist:
       tags:
-      - SquadPMC
+      - RMCSquadPMC
 
   name: au14-job-name-wyguard
   description: au14-wysurv-description

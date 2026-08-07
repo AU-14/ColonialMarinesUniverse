@@ -80,6 +80,11 @@ public sealed partial class TechSystem : EntitySystem
 
     private void OnControlConsoleBeforeOpen(Entity<TechControlConsoleComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
+        var handled = false;
+        TryOpenFactionConsole(ent, ref handled);
+        if (handled)
+            return;
+
         if (_net.IsClient)
             return;
 
@@ -89,6 +94,11 @@ public sealed partial class TechSystem : EntitySystem
 
     private void OnPurchaseOptionMsg(Entity<TechControlConsoleComponent> ent, ref TechPurchaseOptionBuiMsg args)
     {
+        var handled = false;
+        TryPurchaseFactionOption(ent, args, ref handled);
+        if (handled)
+            return;
+
         if (_net.IsClient)
             return;
 
@@ -143,6 +153,13 @@ public sealed partial class TechSystem : EntitySystem
             _core.CreateARESLog(ent, LogCat, (string)$"{Name(args.Actor)} purchased intel node: {Loc.GetString(option.Name)}");
         }
     }
+
+    partial void TryOpenFactionConsole(Entity<TechControlConsoleComponent> ent, ref bool handled);
+
+    partial void TryPurchaseFactionOption(
+        Entity<TechControlConsoleComponent> ent,
+        TechPurchaseOptionBuiMsg args,
+        ref bool handled);
 
     private string Localize(string text)
     {

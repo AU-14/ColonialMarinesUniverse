@@ -9,7 +9,7 @@
   overdose: 60
   criticalOverdose: 100
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Allergenic
@@ -52,7 +52,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Allergenic
@@ -100,7 +100,7 @@
   overdose: 20
   criticalOverdose: 30
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Allergenic
@@ -154,7 +154,7 @@
   physicalDesc: reagent-physical-desc-volatile
   color: "#b8c2cc"
   metabolisms:
-    Poison:
+    Bloodstream:
       effects:
       - !type:HealthChange
         damage:
@@ -172,7 +172,7 @@
   overdose: 10
   criticalOverdose: 15
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.15
       effects:
       - !type:Allergenic
@@ -229,7 +229,7 @@
   overdose: 20
   criticalOverdose: 30
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.2
       effects:
       - !type:CMUApplyPainSuppressionEffect
@@ -271,7 +271,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:CMUApplyPainSuppressionEffect

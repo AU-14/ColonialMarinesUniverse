@@ -8,7 +8,7 @@
   color: "#a87830"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -34,7 +34,7 @@
   color: "#80c0ff"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -60,7 +60,7 @@
   color: "#a0e070"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -86,7 +86,7 @@
   color: "#c02020"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -114,7 +114,7 @@
   color: "#e0e0c0"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:CMUBoneRegenBoostEffect
@@ -140,7 +140,7 @@
   color: "#e9d191"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect

@@ -459,5 +459,3 @@ ui-options-admin-overlay-ghost-hide-distance = Ghost overlay hide range from mou
 
 ui-options-admin-strip-overlay-title = Strip Overlay
 ui-options-admin-strip-overlay-setting = Show strip overlay by default
-cmu-ui-options-auto-reapply-kits = Auto reapply kits on valid wounds
-cmu-ui-options-auto-reapply-kits-tooltip = Automatically continues using stacked trauma and burn kits while the patient has applicable untreated wounds.
