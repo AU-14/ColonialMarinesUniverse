@@ -28,6 +28,15 @@ public sealed partial class CCVars
         CVarDef.Create("ahelp.admin_prefix", false, CVar.SERVERONLY);
 
     /// <summary>
+    ///     Should the administrator's position be displayed in the webhook.
+    ///     If false, only the admin's ckey will be displayed in the webhook.
+    /// </summary>
+    /// <seealso cref="AdminUseCustomNamesAdminRank"/>
+    /// <seealso cref="AhelpAdminPrefix"/>
+    public static readonly CVarDef<bool> AhelpAdminPrefixWebhook =
+        CVarDef.Create("ahelp.admin_prefix_webhook", false, CVar.SERVERONLY);
+
+    /// <summary>
     /// Maximum possible amount of candidates to show for admin help "quick info" links.
     /// </summary>
     public static readonly CVarDef<int> AhelpMaxQuickInfoCandidates =
