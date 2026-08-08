@@ -36,6 +36,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IResourceManager _resources = default!;
     [Dependency] private ProfManager _prof = default!;
+    [Dependency] private ScenarioSpawnIndexSystem _spawnIndex = default!;
 
     private readonly Dictionary<string, IReadOnlyList<ResolvedSpawnMarker>> _mapMarkerCache = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, IReadOnlyList<ResolvedSpawnMarker>> _mapPathMarkerCache = new(StringComparer.OrdinalIgnoreCase);
@@ -2490,94 +2491,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         MapId mapId,
         IReadOnlyList<string> requiredTags)
     {
-        var markers = new List<EntityUid>();
-        var explicitMarkers = new HashSet<EntityUid>();
-
-        var scenarioMarkerQuery = EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent>();
-        while (scenarioMarkerQuery.MoveNext(out var uid, out var scenarioMarker, out var transform))
-        {
-            if (transform.MapID != mapId)
-                continue;
-
-            explicitMarkers.Add(uid);
-            var scenarioTags = ScenarioMarkerTagsFor(scenarioMarker.Tags, HasComp<ParachuteMarkerComponent>(uid));
-            if (requiredTags.All(tag => scenarioTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
-                markers.Add(uid);
-        }
-
-        var query = EntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var marker, out var transform))
-        {
-            if (transform.MapID != mapId ||
-                explicitMarkers.Contains(uid))
-                continue;
-
-            var markerTags = ThreatMarkerTags(
-                marker.ThreatMarkerType,
-                marker.ID,
-                marker.ThirdParty,
-                HasComp<ParachuteMarkerComponent>(uid));
-            if (requiredTags.All(tag => markerTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
-                markers.Add(uid);
-        }
-
-        var safehouseQuery = EntityQueryEnumerator<SafehouseMarkerComponent, TransformComponent>();
-        while (safehouseQuery.MoveNext(out var uid, out _, out var transform))
-        {
-            if (transform.MapID != mapId ||
-                explicitMarkers.Contains(uid))
-                continue;
-
-            var markerTags = new[] { ClfSafehouseTag() };
-            if (requiredTags.All(tag => markerTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
-                markers.Add(uid);
-        }
-
-        var spawnPointQuery = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
-        while (spawnPointQuery.MoveNext(out var uid, out var spawnPoint, out var transform))
-        {
-            if (transform.MapID != mapId ||
-                explicitMarkers.Contains(uid) ||
-                spawnPoint.Job == null ||
-                !spawnPoint.Job.Value.Id.Equals(ColonyCivilianJobId, StringComparison.OrdinalIgnoreCase))
-            {
-                continue;
-            }
-
-            var markerTags = new[] { ClfCivilianSpawnTag() };
-            if (requiredTags.All(tag => markerTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
-                markers.Add(uid);
-        }
-
-        var leaderTags = ThreatMarkerTags(ThreatMarkerType.Leader, string.Empty, thirdParty: false);
-        var leaderQuery = EntityQueryEnumerator<XenoLeaderSpawnPointComponent, TransformComponent>();
-        while (leaderQuery.MoveNext(out var uid, out _, out var transform))
-        {
-            if (transform.MapID != mapId ||
-                explicitMarkers.Contains(uid))
-            {
-                continue;
-            }
-
-            if (requiredTags.All(tag => leaderTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
-                markers.Add(uid);
-        }
-
-        var memberTags = ThreatMarkerTags(ThreatMarkerType.Member, string.Empty, thirdParty: false);
-        var memberQuery = EntityQueryEnumerator<XenoSpawnPointComponent, TransformComponent>();
-        while (memberQuery.MoveNext(out var uid, out _, out var transform))
-        {
-            if (transform.MapID != mapId ||
-                explicitMarkers.Contains(uid))
-            {
-                continue;
-            }
-
-            if (requiredTags.All(tag => memberTags.Contains(tag, StringComparer.OrdinalIgnoreCase)))
-                markers.Add(uid);
-        }
-
-        return markers;
+        return _spawnIndex.Resolve(mapId, requiredTags);
     }
 
     private static bool IsPostRoundstartThreatVotePreset(string presetId)

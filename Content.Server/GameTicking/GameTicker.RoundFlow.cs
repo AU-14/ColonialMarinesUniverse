@@ -94,20 +94,25 @@ namespace Content.Server.GameTicking
         /// </remarks>
         private void LoadMaps()
         {
+            // CMU14: Commit lobby choices at the existing map-preload boundary.
+            var roundSelection = FreezeCmuRoundSelection();
             if (_map.MapExists(DefaultMap))
+            {
+                _cmuRoundDirector.MarkMapsLoaded();
                 return;
+            }
 
             AddGamePresetRules();
 
             var maps = new List<GameMapPrototype>();
 
-            var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
-            if (selectedPlanet != null)
+            var selectedPlanetMapId = roundSelection.MapId;
+            if (!string.IsNullOrWhiteSpace(selectedPlanetMapId))
             {
-                if (ProtoMan.TryIndex<GameMapPrototype>(selectedPlanet.MapId, out var planetMap))
+                if (ProtoMan.TryIndex<GameMapPrototype>(selectedPlanetMapId, out var planetMap))
                     maps.Add(planetMap);
                 else
-                    _sawmill.Error($"Selected CMU planet map prototype '{selectedPlanet.MapId}' does not exist.");
+                    _sawmill.Error($"Selected CMU planet map prototype '{selectedPlanetMapId}' does not exist.");
             }
             else
             {
@@ -144,6 +149,7 @@ namespace Content.Server.GameTicking
             {
                 _map.CreateMap(out var mapId, runMapInit: false);
                 DefaultMap = mapId;
+                _cmuRoundDirector.MarkMapsLoaded();
                 return;
             }
 
@@ -156,7 +162,7 @@ namespace Content.Server.GameTicking
                 {
                     DefaultMap = mapId;
 
-                    if (selectedPlanet != null)
+                    if (!string.IsNullOrWhiteSpace(roundSelection.PlanetId))
                     {
                         var mapEntity = _map.GetMap(mapId);
                         EnsureComp<RMCPlanetComponent>(mapEntity);
@@ -165,10 +171,11 @@ namespace Content.Server.GameTicking
                 }
             }
 
-            LoadSelectedFactionShip(_auRoundSystem.GetSelectedGovforShip(), "govfor");
-            LoadSelectedFactionShip(_auRoundSystem.GetSelectedOpforShip(), "opfor");
+            LoadSelectedFactionShip(roundSelection.GovforShipId, "govfor");
+            LoadSelectedFactionShip(roundSelection.OpforShipId, "opfor");
 
             LoadAdminFaxHubMap();
+            _cmuRoundDirector.MarkMapsLoaded();
         }
 
         private void LoadSelectedFactionShip(string? mapPrototypeId, string faction)
@@ -493,8 +500,11 @@ namespace Content.Server.GameTicking
 
             // MapInitialize *before* spawning players, our codebase is too shit to do it afterwards...
             _map.InitializeMap(DefaultMap);
+            // CMU14: Publish the completed one-shot preparation stages to the round director.
+            _cmuRoundDirector.MarkWorldInitialized();
 
             SpawnPlayers(readyPlayers, readyPlayerProfiles, force);
+            _cmuRoundDirector.MarkPlayersSpawned();
 
             _roundStartDateTime = DateTime.UtcNow;
             RunLevel = GameRunLevel.InRound;

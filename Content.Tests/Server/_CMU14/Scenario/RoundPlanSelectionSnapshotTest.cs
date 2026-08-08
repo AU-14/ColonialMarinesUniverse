@@ -56,4 +56,35 @@ public sealed class RoundPlanSelectionSnapshotTest
 
         Assert.That(snapshot.HasWorldSelection, Is.False);
     }
+
+    [Test]
+    public void RuntimeContextKeepsFrozenWorldAndShipsWhileUsingTheEffectivePreset()
+    {
+        var frozen = new RoundPlanSelectionSnapshot(
+            "UnavailablePreset",
+            60,
+            "GovforPlatoon",
+            "OpforPlatoon",
+            "LV624",
+            "LV624Map",
+            null,
+            "GovforShip",
+            "OpforShip");
+
+        var runtime = frozen.WithRuntimeContext(80, "DistressSignal", "XenoThreatDS");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(runtime.PresetId, Is.EqualTo("DistressSignal"));
+            Assert.That(runtime.PlayerCount, Is.EqualTo(80));
+            Assert.That(runtime.SelectedThreatId, Is.EqualTo("XenoThreatDS"));
+            Assert.That(frozen.PresetId, Is.EqualTo("UnavailablePreset"));
+            Assert.That(runtime.PlanetId, Is.EqualTo(frozen.PlanetId));
+            Assert.That(runtime.MapId, Is.EqualTo(frozen.MapId));
+            Assert.That(runtime.GovforPlatoonId, Is.EqualTo(frozen.GovforPlatoonId));
+            Assert.That(runtime.OpforPlatoonId, Is.EqualTo(frozen.OpforPlatoonId));
+            Assert.That(runtime.GovforShipId, Is.EqualTo(frozen.GovforShipId));
+            Assert.That(runtime.OpforShipId, Is.EqualTo(frozen.OpforShipId));
+        });
+    }
 }

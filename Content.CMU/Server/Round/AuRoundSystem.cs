@@ -75,6 +75,7 @@ namespace Content.Server.AU14.Round
         private readonly AuRoundSelectionState _state = new();
         private readonly AuRoundVoteSequenceTracker _voteSequence = new();
         private readonly ISawmill _sawmill = Logger.GetSawmill("content");
+        private RoundPlanSelectionSnapshot? _frozenRoundPlanSelection;
         private PlatoonSpawnRuleSystem? _platoonSpawnRule;
 
         private GamePresetPrototype? _selectedPreset
@@ -128,7 +129,8 @@ namespace Content.Server.AU14.Round
         }
 
         /// <summary>
-        /// Captures the current mutable round selections for one immutable planning operation.
+        /// Captures the current round selections for one planning operation.
+        /// Once preloading freezes the world, later captures retain its planet, platoons, and ships.
         /// </summary>
         public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount)
         {
@@ -139,12 +141,16 @@ namespace Content.Server.AU14.Round
         }
 
         /// <summary>
-        /// Captures the current mutable world selections with an explicit preset and threat context.
+        /// Captures the current world selections with an explicit runtime preset and threat context.
+        /// Once preloading freezes the world, later captures retain its planet, platoons, and ships.
         /// </summary>
         public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount,
             string presetId,
             string? selectedThreatId)
         {
+            if (_frozenRoundPlanSelection is { } frozen)
+                return frozen.WithRuntimeContext(playerCount, presetId, selectedThreatId);
+
             var platoons = _platoonSpawnRule ??=
                 _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
 
@@ -158,6 +164,27 @@ namespace Content.Server.AU14.Round
                 selectedThreatId,
                 _selectedGovforShip,
                 _selectedOpforShip);
+        }
+
+        /// <summary>
+        /// Commits the lobby's world selection for this round generation.
+        /// </summary>
+        internal RoundPlanSelectionSnapshot FreezeRoundPlanSelection(RoundPlanSelectionSnapshot selection)
+        {
+            if (_frozenRoundPlanSelection == null)
+            {
+                _frozenRoundPlanSelection = selection;
+                // Invalidate callbacks before cancelling their handles so an in-flight vote cannot
+                // mutate planet, platoon, or ship choices after map preloading has consumed them.
+                _voteSequence.Restart();
+            }
+
+            return _frozenRoundPlanSelection.Value;
+        }
+
+        internal void ResetRoundPlanSelection()
+        {
+            _frozenRoundPlanSelection = null;
         }
 
         public bool UsesPostRoundstartThreatVote()
@@ -180,6 +207,7 @@ namespace Content.Server.AU14.Round
             base.Initialize();
             _voteSequence.Reset();
             _state.Reset();
+            ResetRoundPlanSelection();
             SelectedPlanetMap = null;
 
         }

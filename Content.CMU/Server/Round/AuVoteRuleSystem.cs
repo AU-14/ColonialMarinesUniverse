@@ -15,6 +15,7 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
 
     private bool _waitingForMinimumPlayers;
 
@@ -35,7 +36,7 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
-        TryStartVoteSequence();
+        TryStartVoteSequence(roundRestart: true);
     }
 
     private void PlayerStatusChanged(object? sender, SessionStatusEventArgs args)
@@ -50,14 +51,23 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
     private void TryStartVoteSequence()
     {
+        TryStartVoteSequence(roundRestart: false);
+    }
+
+    private void TryStartVoteSequence(bool roundRestart)
+    {
+        var acceptingSelections = roundRestart ||
+                                  _roundDirector.Phase == CMURoundPhase.AwaitingSelection;
         if (!AuLobbyVoteGate.ShouldStartVoteSequence(
                 GameTicker.LobbyEnabled,
                 GameTicker.RunLevel,
+                acceptingSelections,
                 _playerManager.PlayerCount,
                 _cfg.GetCVar(RMCCVars.RMCLobbyMinimumPlayers)))
         {
             _waitingForMinimumPlayers = GameTicker.LobbyEnabled &&
-                                        GameTicker.RunLevel == GameRunLevel.PreRoundLobby;
+                                        GameTicker.RunLevel == GameRunLevel.PreRoundLobby &&
+                                        acceptingSelections;
             return;
         }
 

@@ -1,8 +1,9 @@
 namespace Content.Server.AU14.Scenario;
 
 /// <summary>
-/// Immutable view of every round selection consumed by Scenario Plan resolution.
-/// Capture this once when round-start selections are frozen instead of rereading mutable systems per stage.
+/// Immutable view of the world and faction selections consumed by Scenario Plan resolution.
+/// Runtime copies may update player count, the effective fallback preset, and a deferred threat without
+/// rereading or changing the planet, platoons, and ships frozen for map preloading.
 /// </summary>
 public readonly record struct RoundPlanSelectionSnapshot(
     string PresetId,
@@ -22,6 +23,23 @@ public readonly record struct RoundPlanSelectionSnapshot(
         !string.IsNullOrWhiteSpace(PresetId) &&
         !string.IsNullOrWhiteSpace(PlanetId) &&
         !string.IsNullOrWhiteSpace(MapId);
+
+    /// <summary>
+    /// Derives a runtime request while retaining the world and faction maps frozen at preload.
+    /// The effective preset may differ when GameTicker starts its configured fallback after maps were loaded.
+    /// </summary>
+    public RoundPlanSelectionSnapshot WithRuntimeContext(
+        int playerCount,
+        string presetId,
+        string? selectedThreatId)
+    {
+        return this with
+        {
+            PresetId = string.IsNullOrWhiteSpace(presetId) ? PresetId : presetId,
+            PlayerCount = playerCount,
+            SelectedThreatId = selectedThreatId,
+        };
+    }
 
     /// <summary>
     /// Converts the frozen selection into the existing Scenario Plan resolver contract.

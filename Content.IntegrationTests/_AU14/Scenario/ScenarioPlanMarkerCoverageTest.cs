@@ -1967,6 +1967,89 @@ public sealed class ScenarioPlanMarkerCoverageTest
         await pair.CleanReturnAsync();
     }
 
+    [Test]
+    public async Task RuntimeSpawnIndexMatchesActiveQueryPauseSemantics()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitPost(() =>
+        {
+            server.EntMan.SpawnEntity(ScenarioClfSafehouseMarker, map.GridCoords);
+            server.EntMan.SpawnEntity(StandaloneClfCivilianMarker, map.GridCoords);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var generator = server.System<ScenarioPlanSystem>();
+            var mapSystem = server.System<SharedMapSystem>();
+            var request = new ScenarioPlanValidationRequest(
+                InsurgencyPreset,
+                MarkerValidationPlayerCount);
+
+            Assert.That(
+                generator.TryResolveClfSpawnMarkers(request, map.MapId, out _, out var activeDiagnostic),
+                Is.True,
+                activeDiagnostic);
+
+            mapSystem.SetPaused(map.MapId, true);
+            try
+            {
+                Assert.That(
+                    generator.TryResolveClfSpawnMarkers(request, map.MapId, out _, out _),
+                    Is.False);
+            }
+            finally
+            {
+                mapSystem.SetPaused(map.MapId, false);
+            }
+
+            Assert.That(
+                generator.TryResolveClfSpawnMarkers(request, map.MapId, out _, out var resumedDiagnostic),
+                Is.True,
+                resumedDiagnostic);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RuntimeSpawnIndexUsesCurrentMapAndRejectsDeletedMarkers()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var firstMap = await pair.CreateTestMap();
+        var secondMap = await pair.CreateTestMap();
+        var marker = EntityUid.Invalid;
+
+        await server.WaitPost(() =>
+        {
+            marker = server.EntMan.SpawnEntity(ScenarioClfSafehouseMarker, firstMap.GridCoords);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var index = server.System<ScenarioSpawnIndexSystem>();
+            var transform = server.System<SharedTransformSystem>();
+            var requiredTags = new[] { ScenarioMarkerTags.ForceClfSafehouse };
+
+            Assert.That(index.Resolve(firstMap.MapId, requiredTags), Is.EqualTo(new[] { marker }));
+
+            transform.SetCoordinates(marker, secondMap.GridCoords);
+            Assert.Multiple(() =>
+            {
+                Assert.That(index.Resolve(firstMap.MapId, requiredTags), Is.Empty);
+                Assert.That(index.Resolve(secondMap.MapId, requiredTags), Is.EqualTo(new[] { marker }));
+            });
+
+            server.EntMan.DeleteEntity(marker);
+            Assert.That(index.Resolve(secondMap.MapId, requiredTags), Is.Empty);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [TestCase("DistressSignal")]
     [TestCase("Insurgency")]
     [TestCase("ColonyFall")]
