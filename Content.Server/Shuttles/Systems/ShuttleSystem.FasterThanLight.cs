@@ -6,6 +6,7 @@ using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Events;
 using Content.Server.Station.Events;
 using Content.Shared._RMC14.Areas;
+using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Water;
 using Content.Shared.Body.Components;
 using Content.Shared.CCVar;
@@ -542,7 +543,15 @@ public sealed partial class ShuttleSystem
             // Couldn't dock somehow so just fallback to regular position FTL.
             if (config == null)
             {
-                TryFTLProximity(uid, target.EntityId);
+                if (TryComp(uid, out DropshipComponent? dropship) &&
+                    HasComp<DropshipDestinationComponent>(dropship.Destination))
+                {
+                    _transform.SetCoordinates(uid, xform, target, rotation: entity.Comp1.TargetAngle);
+                }
+                else
+                {
+                    TryFTLProximity(uid, target.EntityId);
+                }
             }
             else
             {
