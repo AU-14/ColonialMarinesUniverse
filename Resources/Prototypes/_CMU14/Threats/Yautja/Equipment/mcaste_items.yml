@@ -100,11 +100,13 @@
   - type: Item
     size: Normal
   - type: Clothing
-    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
     slots: OUTERCLOTHING
+    equippedState: fullarmor_soldier
     clothingVisuals:
       outerClothing:
-      - state: fullarmor_soldier
+      - sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
+        state: fullarmor_soldier
     equipDelay: 10
     unequipDelay: 10
   - type: CMArmor
@@ -132,9 +134,12 @@
     sprite: _CMU14/Yautja/mcaste_gear.rsi
     state: fullarmor_soldier_lead
   - type: Clothing
+    sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
+    equippedState: fullarmor_soldier_lead
     clothingVisuals:
       outerClothing:
-      - state: fullarmor_soldier_lead
+      - sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
+        state: fullarmor_soldier_lead
 
 - type: entity
   parent: CMUYautjaGreavesBase
@@ -149,11 +154,13 @@
   - type: Item
     size: Normal
   - type: Clothing
-    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
     slots: FEET
+    equippedState: y-boots_powered
     clothingVisuals:
       shoes:
-      - state: y-boots_powered
+      - sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
+        state: y-boots_powered
     equipDelay: 10
     unequipDelay: 10
   - type: CMArmor
@@ -178,11 +185,13 @@
   - type: Item
     size: Normal
   - type: Clothing
-    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
     slots: HEAD
+    equippedState: helmet_powered
     clothingVisuals:
       head:
-      - state: helmet_powered
+      - sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
+        state: helmet_powered
     equipDelay: 10
     unequipDelay: 10
   - type: CMArmor
@@ -253,11 +262,13 @@
     sprite: _CMU14/Yautja/mcaste_gear.rsi
     heldPrefix: cannonpack
   - type: Clothing
-    sprite: _CMU14/Yautja/mcaste_gear.rsi
+    sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
     slots: BACK
+    equippedState: cannonpack
     clothingVisuals:
       back:
-      - state: cannonpack
+      - sprite: _CMU14/Yautja/mcaste_gear_worn.rsi
+        state: cannonpack
     equipDelay: 10
     unequipDelay: 10
   - type: YautjaCannonPack
