@@ -108,6 +108,25 @@ public sealed partial class CustomConstructionMenuSystem
                 continue;
             }
 
+            if (row.Kind == DbKindEntries &&
+                GetEntryValidationFailure(ReadHeaders(row.Yaml.Split('\n'))) is { } invalidReason)
+            {
+                Log.Error($"Skipping invalid custom construction entry {row.Kind}/{row.EntryKey}: {invalidReason}. The DB row will be removed so startup cannot crash on it again.");
+                DbDelete(row.Kind, row.EntryKey);
+
+                try
+                {
+                    if (File.Exists(path))
+                        File.Delete(path);
+                }
+                catch (Exception e)
+                {
+                    Log.Warning($"Failed to delete invalid restored custom construction file {path}: {e}");
+                }
+
+                continue;
+            }
+
             try
             {
                 if (!File.Exists(path))

@@ -969,37 +969,41 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         if (!File.Exists(path))
             return null;
 
-        string entity = string.Empty, spawnlist = DefaultSpawnlist, category = DefaultCategory, stepsRaw = string.Empty, deconstructRaw = string.Empty;
-        var health = 0;
         try
         {
-            foreach (var line in File.ReadLines(path))
-            {
-                if (line.StartsWith(HeaderHealth))
-                {
-                    int.TryParse(line[HeaderHealth.Length..].Trim(), out health);
-                    continue;
-                }
-                // Order matters: "# deconstruct:" must be tested before "# steps:" would never match it, but
-                // since both are distinct prefixes the order between them is irrelevant - each is exclusive.
-                if (line.StartsWith(HeaderEntity))
-                    entity = line[HeaderEntity.Length..].Trim();
-                else if (line.StartsWith(HeaderSpawnlist))
-                    spawnlist = line[HeaderSpawnlist.Length..].Trim();
-                else if (line.StartsWith(HeaderCategory))
-                    category = line[HeaderCategory.Length..].Trim();
-                else if (line.StartsWith(HeaderDeconstruct))
-                    deconstructRaw = line[HeaderDeconstruct.Length..].Trim();
-                else if (line.StartsWith(HeaderSteps))
-                    stepsRaw = line[HeaderSteps.Length..].Trim();
-                else if (!line.StartsWith('#'))
-                    break;
-            }
+            return ReadHeaders(File.ReadLines(path));
         }
         catch (Exception e)
         {
             Log.Warning($"Failed to read custom construction entry {path}: {e}");
             return null;
+        }
+    }
+
+    private static EntryInfo ReadHeaders(IEnumerable<string> lines)
+    {
+        string entity = string.Empty, spawnlist = DefaultSpawnlist, category = DefaultCategory, stepsRaw = string.Empty, deconstructRaw = string.Empty;
+        var health = 0;
+        foreach (var line in lines)
+        {
+            if (line.StartsWith(HeaderHealth))
+            {
+                int.TryParse(line[HeaderHealth.Length..].Trim(), out health);
+                continue;
+            }
+
+            if (line.StartsWith(HeaderEntity))
+                entity = line[HeaderEntity.Length..].Trim();
+            else if (line.StartsWith(HeaderSpawnlist))
+                spawnlist = line[HeaderSpawnlist.Length..].Trim();
+            else if (line.StartsWith(HeaderCategory))
+                category = line[HeaderCategory.Length..].Trim();
+            else if (line.StartsWith(HeaderDeconstruct))
+                deconstructRaw = line[HeaderDeconstruct.Length..].Trim();
+            else if (line.StartsWith(HeaderSteps))
+                stepsRaw = line[HeaderSteps.Length..].Trim();
+            else if (!line.StartsWith('#'))
+                break;
         }
 
         return new EntryInfo(entity, spawnlist, category, DeserializeSteps(stepsRaw), DeserializeSteps(deconstructRaw), health);
@@ -1114,16 +1118,7 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
         foreach (var file in Directory.EnumerateFiles(_generatedDir, "*.yml"))
         {
             var info = ReadHeaders(file);
-            string? reason = null;
-
-            if (info == null)
-                reason = "unreadable header";
-            else if (string.IsNullOrEmpty(info.Entity) || !_prototype.TryIndex<EntityPrototype>(info.Entity, out var entProto))
-                reason = $"missing entity '{info?.Entity}'";
-            else if (!ValidateSteps(info.Steps, entProto.TryGetComponent<ItemComponent>(out _, _componentFactory), out var stepReason))
-                reason = stepReason;
-            else if (!ValidateDeconstructSteps(info.DeconstructSteps, out var deconstructReason))
-                reason = deconstructReason;
+            var reason = GetEntryValidationFailure(info);
 
             if (reason == null)
                 continue;
@@ -1139,6 +1134,20 @@ public sealed partial class CustomConstructionMenuSystem : EntitySystem
                 Log.Error($"Failed to remove invalid custom construction entry '{file}': {e}");
             }
         }
+    }
+
+    private string? GetEntryValidationFailure(EntryInfo? info)
+    {
+        if (info == null)
+            return "unreadable header";
+        if (string.IsNullOrEmpty(info.Entity) || !_prototype.TryIndex<EntityPrototype>(info.Entity, out var entProto))
+            return $"missing entity '{info.Entity}'";
+        if (!ValidateSteps(info.Steps, entProto.TryGetComponent<ItemComponent>(out _, _componentFactory), out var stepReason))
+            return stepReason;
+        if (!ValidateDeconstructSteps(info.DeconstructSteps, out var deconstructReason))
+            return deconstructReason;
+
+        return null;
     }
 
     // -------------------------------------------------------------------------
