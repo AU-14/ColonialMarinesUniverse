@@ -252,9 +252,10 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         SubscribeLocalEvent<LoadingMapsEvent>(OnMapLoading);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<RulePlayerSpawningEvent>(OnRulePlayerSpawning);
+        InitializeCmuSpawnSnapshot(); // CMU14
         SubscribeLocalEvent<RoundStartAttemptEvent>(OnStartAttempt);
         SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning,
-             before: [typeof(ArrivalsSystem), typeof(SpawnPointSystem)]);
+             before: [typeof(ArrivalsSystem), typeof(ContainerSpawnPointSystem), typeof(SpawnPointSystem)]);
         SubscribeLocalEvent<RoundEndMessageEvent>(OnRoundEndMessage);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
         SubscribeLocalEvent<DropshipLandedOnPlanetEvent>(OnDropshipLandedOnPlanet);

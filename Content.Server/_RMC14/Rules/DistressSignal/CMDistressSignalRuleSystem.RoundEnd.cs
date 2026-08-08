@@ -273,6 +273,7 @@ public sealed partial class CMDistressSignalRuleSystem
         OperationName = null;
         _usingCustomOperationName = false;
         ActiveNightmareScenario = null;
+        ClearCmuSpawnSnapshot(); // CMU14
         _config.SetCVar(CCVars.GameDisallowLateJoins, false);
 
         if (!_autoBalance)

@@ -426,7 +426,8 @@ public sealed partial class CMDistressSignalRuleSystem
 
     private void OnPlayerSpawning(PlayerSpawningEvent ev)
     {
-        if (ev.Job is not { } jobId ||
+        if (ev.SpawnResult != null ||
+            ev.Job is not { } jobId ||
             !_prototypes.TryIndex(jobId, out var job) ||
             !job.IsCM)
         {

@@ -256,41 +256,21 @@ public sealed partial class CMDistressSignalRuleSystem
     }
 
     /// <summary>
-    /// Collects and categorizes all squad-based spawn points by squad, job, and availability.
+    /// Collects and categorizes all squad-based spawn targets by squad and job.
     /// </summary>
     private void CollectSquadSpawners(Spawners spawners)
     {
         var squadQuery = EntityQueryEnumerator<SquadSpawnerComponent>();
         while (squadQuery.MoveNext(out var uid, out var spawner))
         {
-            if (IsChamberFull(uid))
-            {
-                if (spawner.Role == null)
-                    spawners.SquadAnyFull.GetOrNew(spawner.Squad).Add(uid);
-                else
-                    spawners.SquadFull.GetOrNew(spawner.Squad).GetOrNew(spawner.Role.Value).Add(uid);
-                continue;
-            }
+            var target = uid;
+            if (!IsChamberFull(uid) && TryFindAttachedChamber(uid, out var attachedChamber))
+                target = attachedChamber;
 
-            var found = TryFindAttachedChamber(uid, out var attachedChamber);
-            if (found)
-            {
-                var isFull = IsChamberFull(attachedChamber);
-                var target = isFull ? spawners.SquadAnyFull : spawners.SquadAny;
-                var targetWithRole = isFull ? spawners.SquadFull : spawners.Squad;
-
-                if (spawner.Role == null)
-                    target.GetOrNew(spawner.Squad).Add(attachedChamber);
-                else
-                    targetWithRole.GetOrNew(spawner.Squad).GetOrNew(spawner.Role.Value).Add(attachedChamber);
-            }
+            if (spawner.Role == null)
+                spawners.SquadAny.GetOrNew(spawner.Squad).Add(target);
             else
-            {
-                if (spawner.Role == null)
-                    spawners.SquadAny.GetOrNew(spawner.Squad).Add(uid);
-                else
-                    spawners.Squad.GetOrNew(spawner.Squad).GetOrNew(spawner.Role.Value).Add(uid);
-            }
+                spawners.Squad.GetOrNew(spawner.Squad).GetOrNew(spawner.Role.Value).Add(target);
         }
     }
 
@@ -312,30 +292,16 @@ public sealed partial class CMDistressSignalRuleSystem
         return false;
     }
 
-    /// <summary>
-    /// Collects and categorizes all non-squad spawn points by job and availability.
-    /// </summary>
-    private void CollectNonSquadSpawners(Spawners spawners)
-    {
-        var nonSquadQuery = EntityQueryEnumerator<SpawnPointComponent>();
-        while (nonSquadQuery.MoveNext(out var uid, out var spawner))
-        {
-            if (spawner.Job == null)
-                continue;
-
-            var target = IsChamberFull(uid)
-                ? spawners.NonSquadFull.GetOrNew(spawner.Job.Value)
-                : spawners.NonSquad.GetOrNew(spawner.Job.Value);
-
-            target.Add(uid);
-        }
-    }
-
     private Spawners GetSpawners()
     {
         var spawners = new Spawners();
         CollectSquadSpawners(spawners);
-        CollectNonSquadSpawners(spawners);
+        var spawnPoints = EntityQueryEnumerator<SpawnPointComponent>();
+        while (spawnPoints.MoveNext(out var uid, out var spawnPoint))
+        {
+            spawners.AddSpawnPoint(uid, spawnPoint.Job, spawnPoint.SpawnType);
+        }
+
         return spawners;
     }
 
@@ -382,7 +348,10 @@ public sealed partial class CMDistressSignalRuleSystem
         JobPrototype job,
         EntProtoId<SquadTeamComponent>? preferred)
     {
-        var allSpawners = GetSpawners();
+        // CMU14: The shared cache owns the lifetime of this derived Distress lookup.
+        var allSpawners = _roundSpawnPoints.Active && _roundStartSpawners is { } cached
+            ? cached
+            : GetSpawners();
         EntityUid? squad = null;
         EntProtoId? squadId = null;
 
@@ -393,69 +362,73 @@ public sealed partial class CMDistressSignalRuleSystem
             squad = squadEnt;
 
             if (allSpawners.Squad.TryGetValue(nextSquadId, out var jobSpawners) &&
-                jobSpawners.TryGetValue(job.ID, out var spawners))
+                jobSpawners.TryGetValue(job.ID, out var spawners) &&
+                TryPickSpawner(spawners, availableOnly: true, out var spawner))
             {
-                return (_random.Pick(spawners), squadEnt);
+                return (spawner, squadEnt);
             }
 
-            if (allSpawners.SquadAny.TryGetValue(nextSquadId, out var anySpawners))
-                return (_random.Pick(anySpawners), squadEnt);
-
-            if (allSpawners.SquadFull.TryGetValue(nextSquadId, out jobSpawners) &&
-                jobSpawners.TryGetValue(job.ID, out spawners))
+            if (allSpawners.SquadAny.TryGetValue(nextSquadId, out var anySpawners) &&
+                TryPickSpawner(anySpawners, availableOnly: true, out spawner))
             {
-                return (_random.Pick(spawners), squadEnt);
+                return (spawner, squadEnt);
             }
 
-            if (allSpawners.SquadAnyFull.TryGetValue(nextSquadId, out anySpawners))
-                return (_random.Pick(anySpawners), squadEnt);
+            if (jobSpawners != null &&
+                jobSpawners.TryGetValue(job.ID, out spawners) &&
+                TryPickSpawner(spawners, availableOnly: false, out spawner))
+            {
+                return (spawner, squadEnt);
+            }
+
+            if (anySpawners != null &&
+                TryPickSpawner(anySpawners, availableOnly: false, out spawner))
+            {
+                return (spawner, squadEnt);
+            }
 
             Log.Debug($"No squad spawn found for player. Falling back to generic spawn points. Squad: {nextSquadId}, job: {job.ID}");
 
-            if (allSpawners.NonSquad.TryGetValue(job.ID, out spawners))
-                return (_random.Pick(spawners), squadEnt);
+            if (allSpawners.NonSquad.TryGetValue(job.ID, out spawners) &&
+                TryPickSpawner(spawners, availableOnly: true, out spawner))
+            {
+                return (spawner, squadEnt);
+            }
 
-            if (allSpawners.NonSquadFull.TryGetValue(job.ID, out spawners))
-                return (_random.Pick(spawners), squadEnt);
+            if (spawners != null &&
+                TryPickSpawner(spawners, availableOnly: false, out spawner))
+            {
+                return (spawner, squadEnt);
+            }
         }
         else
         {
-            if (allSpawners.NonSquad.TryGetValue(job.ID, out var spawners))
-                return (_random.Pick(spawners), null);
+            if (allSpawners.NonSquad.TryGetValue(job.ID, out var spawners) &&
+                TryPickSpawner(spawners, availableOnly: true, out var spawner))
+            {
+                return (spawner, null);
+            }
 
-            if (allSpawners.NonSquadFull.TryGetValue(job.ID, out spawners))
-                return (_random.Pick(spawners), null);
+            if (spawners != null &&
+                TryPickSpawner(spawners, availableOnly: false, out spawner))
+            {
+                return (spawner, null);
+            }
 
             Log.Debug($"No job-specific spawn found for player. Falling back to generic spawn points. Job: {job.ID}");
         }
 
-        var pointsQuery = EntityQueryEnumerator<SpawnPointComponent>();
-        var jobPoints = new List<EntityUid>();
-        var anyJobPoints = new List<EntityUid>();
-        var latePoints = new List<EntityUid>();
-
-        while (pointsQuery.MoveNext(out var uid, out var point))
+        if (allSpawners.JobPoints.TryGetValue(job.ID, out var jobPoints) &&
+            TryPickSpawner(jobPoints, availableOnly: false, out var fallback))
         {
-            if (point.SpawnType == SpawnPointType.Job)
-            {
-                if (point.Job?.Id == job.ID)
-                    jobPoints.Add(uid);
-                else
-                    anyJobPoints.Add(uid);
-            }
-
-            if (point.SpawnType == SpawnPointType.LateJoin)
-                latePoints.Add(uid);
+            return (fallback, squad);
         }
 
-        if (jobPoints.Count > 0)
-            return (_random.Pick(jobPoints), squad);
+        if (TryPickSpawner(allSpawners.AllJobPoints, availableOnly: false, out fallback))
+            return (fallback, squad);
 
-        if (anyJobPoints.Count > 0)
-            return (_random.Pick(anyJobPoints), squad);
-
-        if (latePoints.Count > 0)
-            return (_random.Pick(latePoints), squad);
+        if (TryPickSpawner(allSpawners.LatePoints, availableOnly: false, out fallback))
+            return (fallback, squad);
 
         if (squadId is { } failedSquad)
             Log.Error($"No valid spawn found for player. Squad: {failedSquad}, job: {job.ID}");
@@ -463,6 +436,34 @@ public sealed partial class CMDistressSignalRuleSystem
             Log.Error($"No valid spawn found for player. Job: {job.ID}");
 
         return null;
+    }
+
+    private bool TryPickSpawner(
+        IReadOnlyList<EntityUid> spawners,
+        bool availableOnly,
+        out EntityUid spawner)
+    {
+        _spawnPointCandidates.Clear();
+        foreach (var candidate in spawners)
+        {
+            if (TerminatingOrDeleted(candidate) ||
+                (TryComp(candidate, out MetaDataComponent? meta) && meta.EntityPaused) ||
+                (availableOnly && IsChamberFull(candidate)))
+            {
+                continue;
+            }
+
+            _spawnPointCandidates.Add(candidate);
+        }
+
+        if (_spawnPointCandidates.Count == 0)
+        {
+            spawner = default;
+            return false;
+        }
+
+        spawner = _random.Pick(_spawnPointCandidates);
+        return true;
     }
 
     private void ReloadPrototypes()
@@ -485,22 +486,35 @@ public sealed partial class CMDistressSignalRuleSystem
     }
 
     /// <summary>
-    /// Container class for organizing spawn points by category (squad vs. non-squad, full vs. available).
-    /// Used to efficiently manage and query spawn point availability during player spawning.
+    /// Container class for organizing structural spawn candidates for one player-spawn batch.
+    /// Chamber availability is checked live because earlier serial spawns can fill them.
     /// </summary>
     private sealed class Spawners
     {
-        // Squad spawners with available slots, organized by squad and job
         public readonly Dictionary<EntProtoId, Dictionary<ProtoId<JobPrototype>, List<EntityUid>>> Squad = new();
-        // Squad spawners with any job slot, organized by squad
         public readonly Dictionary<EntProtoId, List<EntityUid>> SquadAny = new();
-        // Full squad spawners with available slots, organized by squad and job
-        public readonly Dictionary<EntProtoId, Dictionary<ProtoId<JobPrototype>, List<EntityUid>>> SquadFull = new();
-        // Full squad spawners with any job slot, organized by squad
-        public readonly Dictionary<EntProtoId, List<EntityUid>> SquadAnyFull = new();
-        // Non-squad spawners with available slots, organized by job
         public readonly Dictionary<ProtoId<JobPrototype>, List<EntityUid>> NonSquad = new();
-        // Full non-squad spawners, organized by job
-        public readonly Dictionary<ProtoId<JobPrototype>, List<EntityUid>> NonSquadFull = new();
+        public readonly Dictionary<ProtoId<JobPrototype>, List<EntityUid>> JobPoints = new();
+        public readonly List<EntityUid> AllJobPoints = [];
+        public readonly List<EntityUid> LatePoints = [];
+
+        public void AddSpawnPoint(
+            EntityUid uid,
+            ProtoId<JobPrototype>? job,
+            SpawnPointType spawnType)
+        {
+            if (job is { } jobId)
+                NonSquad.GetOrNew(jobId).Add(uid);
+
+            if (spawnType == SpawnPointType.Job)
+            {
+                AllJobPoints.Add(uid);
+                if (job is { } pointJob)
+                    JobPoints.GetOrNew(pointJob).Add(uid);
+            }
+
+            if (spawnType == SpawnPointType.LateJoin)
+                LatePoints.Add(uid);
+        }
     }
 }

@@ -131,16 +131,28 @@ namespace Content.Server.GameTicking
             _stationJobs.CalcExtendedAccess(stationJobCounts);
 
             // Spawn everybody in!
-            foreach (var (player, (job, station)) in assignedJobs)
+            try
             {
-                // CMU14: ThreatSystem spawns and assigns these bodies at threat markers.
-                if (IsCmuThreatJob(job))
-                    continue;
+                // CMU14: Build shared spawn lookup data after rules finish map setup and before the serial body-spawn batch.
+                var spawnBatch = new RoundStartPlayerSpawnBatchEvent();
+                RaiseLocalEvent(ref spawnBatch);
 
-                if (job == null)
-                    continue;
+                foreach (var (player, (job, station)) in assignedJobs)
+                {
+                    // CMU14: ThreatSystem spawns and assigns these bodies at threat markers.
+                    if (IsCmuThreatJob(job))
+                        continue;
 
-                SpawnPlayer(_playerManager.GetSessionById(player), profiles[player], station, job, false);
+                    if (job == null)
+                        continue;
+
+                    SpawnPlayer(_playerManager.GetSessionById(player), profiles[player], station, job, false);
+                }
+            }
+            finally
+            {
+                var spawnBatchFinished = new RoundStartPlayerSpawnBatchFinishedEvent();
+                RaiseLocalEvent(ref spawnBatchFinished);
             }
 
             RefreshLateJoinAllowed();

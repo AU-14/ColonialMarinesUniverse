@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Server._RMC14.Rules.DistressSignal;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking;
@@ -72,7 +73,10 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
-        SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning, new[] { typeof(SpawnPointSystem) });
+        // CLF roles own safehouse placement before Distress Signal's broader CM job handler.
+        SubscribeLocalEvent<PlayerSpawningEvent>(
+            OnPlayerSpawning,
+            before: [typeof(CMDistressSignalRuleSystem), typeof(SpawnPointSystem)]);
         SubscribeLocalEvent<RulePlayerSpawningEvent>(OnRulePlayerSpawning);
     }
 

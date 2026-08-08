@@ -23,6 +23,10 @@ public sealed partial class SpawnPointSystem : EntitySystem
         if (args.SpawnResult != null)
             return;
 
+        // CMU14: Use the batch snapshot while round-start bodies are spawned serially.
+        if (TrySpawnAtCachedPoint(args))
+            return;
+
         // TODO: Cache all this if it ends up important.
         var points = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
         var possiblePositions = new List<EntityCoordinates>();
@@ -53,7 +57,7 @@ public sealed partial class SpawnPointSystem : EntitySystem
 
             if (points2.MoveNext(out _, out var xform))
             {
-                Log.Error($"Unable to pick a valid spawn point, picking random spawner as a backup.\nRunLevel: {_gameTicker.RunLevel} Station: {ToPrettyString(args.Station)} Job: {args.Job}");
+                LogFallbackSpawnPoint(args);
                 possiblePositions.Add(xform.Coordinates);
             }
             else
@@ -65,9 +69,19 @@ public sealed partial class SpawnPointSystem : EntitySystem
 
         var spawnLoc = _random.Pick(possiblePositions);
 
+        SpawnAt(spawnLoc, args);
+    }
+
+    private void LogFallbackSpawnPoint(PlayerSpawningEvent args)
+    {
+        Log.Error($"Unable to pick a valid spawn point, picking random spawner as a backup.\nRunLevel: {_gameTicker.RunLevel} Station: {ToPrettyString(args.Station)} Job: {args.Job}");
+    }
+
+    private void SpawnAt(EntityCoordinates coordinates, PlayerSpawningEvent args)
+    {
         //RMC14
         args.SpawnResult = _stationSpawning.SpawnPlayerMob(
-            spawnLoc,
+            coordinates,
             args.Job,
             args.HumanoidCharacterProfile,
             args.Station,

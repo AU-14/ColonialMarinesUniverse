@@ -1,3 +1,4 @@
+using Content.Server._RMC14.Rules.DistressSignal;
 using Content.Server.AU14.Roles;
 using Content.Server.AU14.Round;
 using Content.Server.Spawners.Components;
@@ -21,6 +22,7 @@ public sealed partial class CMUFactionSpawnPointSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
+    [Dependency] private CMURoundSpawnPointSnapshotSystem _roundSpawnPoints = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
     [Dependency] private StationSystem _station = default!;
 
@@ -28,7 +30,10 @@ public sealed partial class CMUFactionSpawnPointSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<PlayerSpawningEvent>(OnPlayerSpawning, before: new[] { typeof(SpawnPointSystem) });
+        SubscribeLocalEvent<PlayerSpawningEvent>(
+            OnPlayerSpawning,
+            before: [typeof(SpawnPointSystem)],
+            after: [typeof(CMDistressSignalRuleSystem)]);
     }
 
     private void OnPlayerSpawning(PlayerSpawningEvent args)
@@ -52,6 +57,20 @@ public sealed partial class CMUFactionSpawnPointSystem : EntitySystem
             ? planet?.GovforInShip ?? false
             : planet?.OpforInShip ?? false;
 
+        if (_roundSpawnPoints.Active)
+        {
+            var spawned = factionInShip
+                ? TrySpawnOnCachedShip(args, side)
+                : TrySpawnOnCachedPlanet(args, side);
+            if (_roundSpawnPoints.Active)
+            {
+                if (factionInShip && !spawned)
+                    Log.Error($"No spawn points found on the selected {faction} ship for job '{jobId}'.");
+
+                return;
+            }
+        }
+
         GetFactionShips(faction, out var factionShipGrids, out var allShipGrids,
             out var factionShipStations, out var allShipStations);
 
@@ -66,6 +85,27 @@ public sealed partial class CMUFactionSpawnPointSystem : EntitySystem
         }
 
         TrySpawnOnPlanet(args, side, allShipGrids, allShipStations);
+    }
+
+    private bool TrySpawnOnCachedShip(PlayerSpawningEvent args, RoundJobSide side)
+    {
+        return _roundSpawnPoints.TryPickFactionShip(side, args.Job, _random, out var spawnPoint) &&
+               TrySpawnAtCachedPoint(spawnPoint, args);
+    }
+
+    private bool TrySpawnOnCachedPlanet(PlayerSpawningEvent args, RoundJobSide side)
+    {
+        return _roundSpawnPoints.TryPickFactionPlanet(side, args.Job, _random, out var spawnPoint) &&
+               TrySpawnAtCachedPoint(spawnPoint, args);
+    }
+
+    private bool TrySpawnAtCachedPoint(EntityUid spawnPoint, PlayerSpawningEvent args)
+    {
+        if (!TryComp(spawnPoint, out TransformComponent? transform))
+            return false;
+
+        args.SpawnResult = SpawnPlayer(transform.Coordinates, args);
+        return true;
     }
 
     private void GetFactionShips(
