@@ -513,6 +513,7 @@ public sealed partial class ShuttleSystem
         _physics.SetAngularVelocity(uid, 0f, body: body);
 
         var target = entity.Comp1.TargetCoordinates;
+        var exactYautjaLanding = false;
 
         //RMC14
         var ev = new BeforeFTLFinishedEvent();
@@ -547,7 +548,16 @@ public sealed partial class ShuttleSystem
                     TryComp(dropship.Destination, out DropshipDestinationComponent? destination) &&
                     string.Equals(destination.FactionController, "yautja", StringComparison.OrdinalIgnoreCase))
                 {
-                    _transform.SetCoordinates(uid, xform, target, rotation: entity.Comp1.TargetAngle);
+                    exactYautjaLanding = true;
+                    var mapUid = _mapSystem.GetMap(mapCoordinates.MapId);
+                    var destinationRotation = entity.Comp1.TargetAngle + _transform.GetWorldRotation(target.EntityId);
+                    var shuttleCenter = Comp<MapGridComponent>(uid).LocalAABB.Center;
+                    var gridOrigin = mapCoordinates.Position - destinationRotation.RotateVec(shuttleCenter);
+                    _transform.SetCoordinates(
+                        uid,
+                        xform,
+                        new EntityCoordinates(mapUid, gridOrigin),
+                        rotation: destinationRotation);
                 }
                 else
                 {
@@ -564,7 +574,6 @@ public sealed partial class ShuttleSystem
         // Position ftl
         else
         {
-            // TODO: This should now use tryftlproximity
             mapId = _transform.GetMapId(target);
             _transform.SetCoordinates(uid, xform, target, rotation: entity.Comp1.TargetAngle);
         }
@@ -576,7 +585,7 @@ public sealed partial class ShuttleSystem
 
             // Disable shuttle if it's on a planet; unfortunately can't do this in parent change messages due
             // to event ordering and awake body shenanigans (at least for now).
-            if (HasComp<MapGridComponent>(xform.MapUid))
+            if (exactYautjaLanding || HasComp<MapGridComponent>(xform.MapUid))
             {
                 Disable(uid, component: body);
             }

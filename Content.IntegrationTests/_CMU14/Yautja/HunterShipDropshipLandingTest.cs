@@ -14,6 +14,10 @@ using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
+using Robust.Shared.Maths;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Utility;
 
 namespace Content.IntegrationTests._CMU14.Yautja;
@@ -36,12 +40,15 @@ public sealed class HunterShipDropshipLandingTest
             Destructive = true,
         });
         var server = pair.Server;
-        var departures = await Task.WhenAll(
-            pair.CreateTestMap(),
-            pair.CreateTestMap(),
-            pair.CreateTestMap());
+        var departures = new[]
+        {
+            await pair.CreateTestMap(),
+            await pair.CreateTestMap(),
+            await pair.CreateTestMap(),
+        };
 
         EntityUid hunterShip = default;
+        EntityUid hunterGrid = default;
         var destinations = new Dictionary<string, EntityUid>();
         var shuttles = new List<(EntityUid Shuttle, EntityUid Console, EntityUid Destination)>();
 
@@ -59,7 +66,7 @@ public sealed class HunterShipDropshipLandingTest
             Assert.That(hunterGrids, Has.Count.EqualTo(1));
             hunterShip = hunterMap!.Value.Owner;
 
-            var hunterGrid = hunterGrids!.Single().Owner;
+            hunterGrid = hunterGrids!.Single().Owner;
             var destinationPrototypes = HunterDestinationPrototypes.ToHashSet();
             var entities = entMan.EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
             while (entities.MoveNext(out var uid, out var metadata, out var transform))
@@ -87,6 +94,8 @@ public sealed class HunterShipDropshipLandingTest
                 shuttles.Add((shuttle, console, destinations[prototype]));
             }
         });
+        Assert.That(shuttles, Has.Count.EqualTo(HunterDestinationPrototypes.Length),
+            "The landing regression must exercise all three Hunter Ship destinations.");
 
         await pair.RunTicksSync(1);
 
@@ -95,6 +104,7 @@ public sealed class HunterShipDropshipLandingTest
             var entMan = server.EntMan;
             var dropship = entMan.System<DropshipSystem>();
             var docking = entMan.System<DockingSystem>();
+            var transform = entMan.System<SharedTransformSystem>();
 
             server.CfgMan.SetCVar(CCVars.FTLTravelTime, 0.1f);
             server.CfgMan.SetCVar(CCVars.FTLArrivalTime, 0.1f);
@@ -103,12 +113,34 @@ public sealed class HunterShipDropshipLandingTest
             foreach (var (shuttle, console, destination) in shuttles)
             {
                 var computer = (console, entMan.GetComponent<DropshipNavigationComputerComponent>(console));
+                var destinationTransform = entMan.GetComponent<TransformComponent>(destination);
+                var destinationComponent = entMan.GetComponent<DropshipDestinationComponent>(destination);
+                Assert.That(destinationComponent.FactionController, Is.EqualTo("yautja"));
+                Assert.That(destinationTransform.GridUid, Is.Not.Null);
+                Assert.That(entMan.HasComponent<MapGridComponent>(destinationTransform.GridUid.Value), Is.True);
                 Assert.That(dropship.FlyTo(computer, destination, null, startupTime: 0f, hyperspaceTime: 0f), Is.True);
                 Assert.That(entMan.HasComponent<FTLComponent>(shuttle), Is.True);
 
                 var ftl = entMan.GetComponent<FTLComponent>(shuttle);
+                Assert.That(ftl.TargetCoordinates.EntityId, Is.EqualTo(hunterGrid),
+                    $"{entMan.ToPrettyString(shuttle)} must keep the selected Hunter Ship destination grid-relative during FTL.");
                 Assert.That(docking.GetDockingConfigAt(shuttle, ftl.TargetCoordinates.EntityId, ftl.TargetCoordinates, ftl.TargetAngle), Is.Null);
             }
+
+            var hunterTransform = entMan.GetComponent<TransformComponent>(hunterGrid);
+            transform.SetLocalPositionRotation(
+                hunterGrid,
+                hunterTransform.LocalPosition + new Vector2(4f, -3f),
+                hunterTransform.LocalRotation + Angle.FromDegrees(90),
+                hunterTransform);
+
+            var hunterBody = entMan.GetComponent<PhysicsComponent>(hunterGrid);
+            var hunterFixtures = entMan.GetComponent<FixturesComponent>(hunterGrid);
+            var physics = entMan.System<PhysicsSystem>();
+            physics.SetLinearVelocity(hunterGrid, Vector2.Zero, body: hunterBody);
+            physics.SetAngularVelocity(hunterGrid, 0f, body: hunterBody);
+            physics.SetBodyType(hunterGrid, BodyType.Static, manager: hunterFixtures, body: hunterBody);
+            physics.SetFixedRotation(hunterGrid, true, manager: hunterFixtures, body: hunterBody);
         });
 
         await PoolManager.WaitUntil(server, () =>
@@ -124,12 +156,25 @@ public sealed class HunterShipDropshipLandingTest
 
             foreach (var (shuttle, _, destination) in shuttles)
             {
-                Assert.That(entMan.GetComponent<TransformComponent>(shuttle).MapUid, Is.EqualTo(hunterShip));
+                var shuttleTransform = entMan.GetComponent<TransformComponent>(shuttle);
+                Assert.That(shuttleTransform.MapUid, Is.EqualTo(hunterShip));
+                Assert.That(shuttleTransform.ParentUid, Is.EqualTo(hunterShip),
+                    $"{entMan.ToPrettyString(shuttle)} must be parented to the Hunter Ship map, not nested under its grid.");
 
-                var distance = Vector2.Distance(
-                    transform.GetMapCoordinates(shuttle).Position,
-                    transform.GetMapCoordinates(destination).Position);
-                Assert.That(distance, Is.LessThanOrEqualTo(2f), $"{entMan.ToPrettyString(shuttle)} must arrive at its selected destination, not near the Hunter Ship grid.");
+                var shuttleGrid = entMan.GetComponent<MapGridComponent>(shuttle);
+                var shuttleAabb = transform.GetWorldMatrix(shuttle).TransformBox(shuttleGrid.LocalAABB);
+                var destinationPosition = transform.GetMapCoordinates(destination).Position;
+                var centerDistance = Vector2.Distance(shuttleAabb.Center, destinationPosition);
+                Assert.That(centerDistance, Is.EqualTo(0f).Within(0.01f),
+                    $"{entMan.ToPrettyString(shuttle)} hull center must match the landing pad's current position.");
+                Assert.That(transform.GetWorldRotation(shuttle).GetCardinalDir(),
+                    Is.EqualTo(transform.GetWorldRotation(destination).GetCardinalDir()),
+                    $"{entMan.ToPrettyString(shuttle)} must match the landing pad's current orientation.");
+                var shuttlePhysics = entMan.GetComponent<PhysicsComponent>(shuttle);
+                Assert.That(shuttlePhysics.BodyType, Is.EqualTo(BodyType.Static),
+                    $"{entMan.ToPrettyString(shuttle)} must remain static after landing on the Hunter Ship.");
+                Assert.That(shuttlePhysics.FixedRotation, Is.True,
+                    $"{entMan.ToPrettyString(shuttle)} must preserve its initial fixed rotation after landing.");
             }
         });
 
