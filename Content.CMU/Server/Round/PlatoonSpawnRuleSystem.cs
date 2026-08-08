@@ -69,11 +69,29 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             return;
         }
 
-        // Fallback to default platoon if none selected, using planet component
-        if (govPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultGovforPlatoon))
+        var preset = _auRoundSystem.SelectedPreset;
+        var activeFactions = preset == null
+            ? AuRoundVoteBranch.Govfor | AuRoundVoteBranch.Opfor
+            : AuRoundSelectionRules.GetActiveFactionBranches(
+                preset.RequiresGovforVote,
+                preset.RequiresOpforVote,
+                preset.UsesGovforPlatoon,
+                preset.UsesOpforPlatoon);
+
+        // Fallback only for factions enabled by the finalized preset.
+        if ((activeFactions & AuRoundVoteBranch.Govfor) != 0 &&
+            govPlatoon == null &&
+            !string.IsNullOrEmpty(planetComp.DefaultGovforPlatoon))
+        {
             govPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultGovforPlatoon);
-        if (opPlatoon == null && !string.IsNullOrEmpty(planetComp.DefaultOpforPlatoon))
+        }
+
+        if ((activeFactions & AuRoundVoteBranch.Opfor) != 0 &&
+            opPlatoon == null &&
+            !string.IsNullOrEmpty(planetComp.DefaultOpforPlatoon))
+        {
             opPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultOpforPlatoon);
+        }
 
         // Store the resolved selections back onto the system so other systems can access them
         SelectedGovforPlatoon = govPlatoon;

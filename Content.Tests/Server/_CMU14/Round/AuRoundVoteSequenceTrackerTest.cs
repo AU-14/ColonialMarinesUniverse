@@ -33,6 +33,47 @@ public sealed class AuRoundVoteSequenceTrackerTest
         });
     }
 
+    [Test]
+    public void ResetInvalidatesCallbacksBeforeCancellingAndNeverReusesGeneration()
+    {
+        var tracker = new AuRoundVoteSequenceTracker();
+        var sequence = tracker.Restart();
+        var handle = new TestVoteHandle();
+        var staleCallbackAccepted = false;
+        handle.OnCancelled += _ => staleCallbackAccepted = tracker.IsCurrent(sequence);
+        tracker.Track(handle);
+        tracker.Running = true;
+
+        tracker.Reset();
+        var resetSequence = tracker.SequenceId;
+        var nextSequence = tracker.Restart();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(handle.Cancelled, Is.True);
+            Assert.That(staleCallbackAccepted, Is.False);
+            Assert.That(resetSequence, Is.GreaterThan(sequence));
+            Assert.That(nextSequence, Is.GreaterThan(resetSequence));
+            Assert.That(tracker.Running, Is.False);
+        });
+    }
+
+    [Test]
+    public void FinishSignalsExactlyOnceForCurrentRunningGeneration()
+    {
+        var tracker = new AuRoundVoteSequenceTracker();
+        var sequence = tracker.Restart();
+        tracker.Running = true;
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(tracker.TryFinish(sequence - 1), Is.False);
+            Assert.That(tracker.TryFinish(sequence), Is.True);
+            Assert.That(tracker.TryFinish(sequence), Is.False);
+            Assert.That(tracker.Running, Is.False);
+        });
+    }
+
     private sealed class TestVoteHandle : IVoteHandle
     {
         public int Id => 1;

@@ -8,6 +8,50 @@ namespace Content.Server.AU14.Round;
 
 internal static class AuRoundSelectionRules
 {
+    public static AuRoundVoteBranch GetRequiredFactionBranches(
+        bool requiresGovforSelection,
+        bool requiresOpforSelection)
+    {
+        var required = AuRoundVoteBranch.None;
+        if (requiresGovforSelection)
+            required |= AuRoundVoteBranch.Govfor;
+        if (requiresOpforSelection)
+            required |= AuRoundVoteBranch.Opfor;
+
+        return required;
+    }
+
+    public static AuRoundVoteBranch GetActiveFactionBranches(
+        bool requiresGovforSelection,
+        bool requiresOpforSelection,
+        bool usesGovforPlatoon,
+        bool usesOpforPlatoon)
+    {
+        return GetRequiredFactionBranches(
+            requiresGovforSelection || usesGovforPlatoon,
+            requiresOpforSelection || usesOpforPlatoon);
+    }
+
+    public static string? SelectCandidate(
+        IReadOnlyList<string> candidates,
+        string? selected,
+        string? preferred = null)
+    {
+        if (TryGetCandidate(candidates, selected, out var match))
+            return match;
+
+        if (TryGetCandidate(candidates, preferred, out match))
+            return match;
+
+        return candidates.Count > 0 ? candidates[0] : null;
+    }
+
+    public static bool IsPlayerCountAllowed(int playerCount, int minimum, int maximum)
+    {
+        return (minimum <= 0 || playerCount >= minimum) &&
+               (maximum <= 0 || playerCount <= maximum);
+    }
+
     public static bool IsExplicitlyWhitelistedForGamemode(ThirdPartyPrototype proto, string gamemode)
     {
         return ContainsIgnoreCase(proto.whitelistedgamemodes, gamemode);
@@ -151,5 +195,26 @@ internal static class AuRoundSelectionRules
     private static bool ContainsIgnoreCase(IEnumerable<string> values, string value)
     {
         return values.Any(candidate => candidate.Equals(value, StringComparison.OrdinalIgnoreCase));
+    }
+
+    private static bool TryGetCandidate(
+        IReadOnlyList<string> candidates,
+        string? requested,
+        out string? match)
+    {
+        if (!string.IsNullOrWhiteSpace(requested))
+        {
+            foreach (var candidate in candidates)
+            {
+                if (!candidate.Equals(requested, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                match = candidate;
+                return true;
+            }
+        }
+
+        match = null;
+        return false;
     }
 }

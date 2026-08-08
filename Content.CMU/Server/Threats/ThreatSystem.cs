@@ -194,8 +194,8 @@ public sealed partial class ThreatSystem : EntitySystem
     }
 
     /// <summary>
-    ///     In Colony Fall: schedules threat entity spawning and win condition activation after a random
-    ///     delay via the game update loop. In all other presets: spawns and starts win conditions immediately.
+    ///     For delayed-threat presets, schedules entity spawning and win condition activation after a random
+    ///     delay via the game update loop. Other presets spawn and start win conditions immediately.
     /// </summary>
     public void SpawnThreatAtRoundStart(ThreatPrototype threat,
         MapId mapId,
@@ -217,14 +217,11 @@ public sealed partial class ThreatSystem : EntitySystem
                     assignmentCounts.Members}, roundStartSpawn={threat.RoundStartSpawn}.");
         }
 
-        bool isColonyFall = string.Equals(_auRound.SelectedPreset?.ID, "ColonyFall",
-            StringComparison.OrdinalIgnoreCase);
-
-        if (isColonyFall)
+        if (_auRound.SelectedPreset?.UsesThreatSpawnDelay == true)
         {
             double delaySeconds = _random.NextDouble() * (threat.SpawnDelayMax - threat.SpawnDelayMin)
                 + threat.SpawnDelayMin;
-            _sawmill.Debug($"[ThreatSystem] Colony Fall threat '{threat.ID}' will spawn in {delaySeconds:F1}s.");
+            _sawmill.Debug($"[ThreatSystem] Delayed threat '{threat.ID}' will spawn in {delaySeconds:F1}s.");
             SchedulePendingThreatSpawn(threat,
                 mapId,
                 assignedJobs,
@@ -260,14 +257,11 @@ public sealed partial class ThreatSystem : EntitySystem
                 }, threatMembers={assignmentCounts.Members}, roundStartSpawn={threat.RoundStartSpawn}.");
         }
 
-        bool isColonyFall = string.Equals(_auRound.SelectedPreset?.ID, "ColonyFall",
-            StringComparison.OrdinalIgnoreCase);
-
-        if (isColonyFall)
+        if (_auRound.SelectedPreset?.UsesThreatSpawnDelay == true)
         {
             double delaySeconds = _random.NextDouble() * (threat.SpawnDelayMax - threat.SpawnDelayMin)
                 + threat.SpawnDelayMin;
-            _sawmill.Debug($"[ThreatSystem] Colony Fall voted threat '{threat.ID}' will spawn in {delaySeconds:F1}s.");
+            _sawmill.Debug($"[ThreatSystem] Delayed voted threat '{threat.ID}' will spawn in {delaySeconds:F1}s.");
             SchedulePendingThreatSpawn(threat,
                 mapId,
                 assignedJobs,

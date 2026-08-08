@@ -21,8 +21,6 @@ using Robust.Server.Player;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Random;
-using Robust.Shared.Serialization.Manager;
-using Robust.Shared.Timing;
 using Content.Shared._RMC14.Item;
 
 namespace Content.Server.AU14.Round
@@ -34,33 +32,15 @@ namespace Content.Server.AU14.Round
     {
         private const string DistressSignalPresetId = "DistressSignal";
 
-        private static readonly HashSet<string> NoThreatPresets = new(StringComparer.OrdinalIgnoreCase)
-        {
-            "ForceOnForce",
-            "Insurgency",
-        };
-
-        private static readonly HashSet<string> PostRoundstartThreatVotePresets = new(StringComparer.OrdinalIgnoreCase)
-        {
-            "DistressSignal",
-            "ColonyFall",
-        };
-
-        private static readonly HashSet<string> ThreatSelectionPresets = new(StringComparer.OrdinalIgnoreCase)
-        {
-            "Prometheus",
-            "ColonyFall",
-            "DistressSignal",
-            "Jailbreak",
-        };
-
-        [Dependency] private IVoteManager _voteManager = default!;
+        [Dependency] private IComponentFactory _componentFactory = default!;
         [Dependency] private IConfigurationManager _cfg = default!;
-        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IEntityManager _entityManager = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
-        [Dependency] private IServerPreferencesManager _prefsManager = default!;
+        [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IRobustRandom _random = default!;
+        [Dependency] private IServerPreferencesManager _prefsManager = default!;
+        [Dependency] private IVoteManager _voteManager = default!;
+        [Dependency] private IntelSystem _intel = default!;
         [Dependency] private ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
@@ -74,9 +54,12 @@ namespace Content.Server.AU14.Round
 
         private readonly AuRoundSelectionState _state = new();
         private readonly AuRoundVoteSequenceTracker _voteSequence = new();
+        private readonly AuRoundVoteCompletionState _voteCompletion = new();
         private readonly ISawmill _sawmill = Logger.GetSawmill("content");
         private RoundPlanSelectionSnapshot? _frozenRoundPlanSelection;
         private PlatoonSpawnRuleSystem? _platoonSpawnRule;
+        private Action? _voteSequenceFinished;
+        private bool _selectionFinalized;
 
         private GamePresetPrototype? _selectedPreset
         {
@@ -174,9 +157,11 @@ namespace Content.Server.AU14.Round
             if (_frozenRoundPlanSelection == null)
             {
                 _frozenRoundPlanSelection = selection;
-                // Invalidate callbacks before cancelling their handles so an in-flight vote cannot
-                // mutate planet, platoon, or ship choices after map preloading has consumed them.
-                _voteSequence.Restart();
+                if (!_selectionFinalized)
+                {
+                    // Keep direct callers safe: invalidate callbacks before cancelling their handles.
+                    _voteSequence.Restart();
+                }
             }
 
             return _frozenRoundPlanSelection.Value;
@@ -189,13 +174,7 @@ namespace Content.Server.AU14.Round
 
         public bool UsesPostRoundstartThreatVote()
         {
-            var presetId = _selectedPreset?.ID;
-            return IsPostRoundstartThreatVotePreset(presetId);
-        }
-
-        public static bool IsPostRoundstartThreatVotePreset(string? presetId)
-        {
-            return presetId != null && PostRoundstartThreatVotePresets.Contains(presetId);
+            return _selectedPreset?.ThreatSelectionMode == CmuThreatSelectionMode.PostRoundstartVote;
         }
 
         private List<ThirdPartyPrototype> _selectedThirdParties => _state.SelectedThirdParties;
@@ -203,58 +182,25 @@ namespace Content.Server.AU14.Round
 
         public override void Initialize()
         {
-
             base.Initialize();
+            SubscribeLocalEvent<AuRoundVoteContinuationEvent>(OnVoteContinuation);
             _voteSequence.Reset();
             _state.Reset();
             ResetRoundPlanSelection();
             SelectedPlanetMap = null;
-
         }
 
         /// <summary>
-        /// Starts the full vote sequence: preset, planet, then platoons.
-        /// Each vote method takes a callback to call when finished
+        /// Starts the full vote sequence: preset, planet, faction platoons, and faction ships.
         /// </summary>
-        private IVoteHandle? StartPresetVote(int sequenceId, Action<string?> onFinished)
-        {
-            var existingVotes = _voteManager.ActiveVotes
-                .Select(vote => vote.Id)
-                .ToHashSet();
-
-            _voteManager.CreateStandardVote(null, StandardVoteType.Preset);
-            foreach (var vote in _voteManager.ActiveVotes.Where(vote => !existingVotes.Contains(vote.Id)))
-            {
-                vote.OnFinished += (_, args) =>
-                {
-                    if (!IsCurrentVoteSequence(sequenceId))
-                        return;
-
-                    Logger.GetSawmill("content").Debug("[PlatoonVoteManagerSystem] Preset vote finished.");
-                    var winner = GetPresetVoteWinner(args);
-                    Timer.Spawn(0, () => onFinished(winner));
-                };
-                TrackVoteHandle(vote);
-                return vote;
-            }
-
-            Logger.GetSawmill("content").Warning("[PlatoonVoteManagerSystem] Preset vote could not be found after starting it.");
-            return null;
-        }
-
         private bool IsCurrentVoteSequence(int sequenceId)
         {
-            return _voteSequence.IsCurrent(sequenceId);
+            return _voteSequence.IsRunning(sequenceId);
         }
 
         private void TrackVoteHandle(IVoteHandle handle)
         {
             _voteSequence.Track(handle);
-        }
-
-        private void CancelActiveVoteHandles()
-        {
-            _voteSequence.CancelActive();
         }
 
         private static string? GetPresetVoteWinner(VoteFinishedEventArgs args)
@@ -275,135 +221,9 @@ namespace Content.Server.AU14.Round
         {
             if (_voteSequenceRunning)
                 return;
+
             _voteSequenceRunning = true;
-            _selectedPreset = null;
-            _selectedPlanet = null;
-            _selectedPlanetId = null;
-            _selectedGovforShip = null;
-            _selectedOpforShip = null;
-            var platoons = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-            platoons.SelectedGovforPlatoon = null;
-            platoons.SelectedOpforPlatoon = null;
-            _state.SelectedThreat = null;
-            _state.ResetDistressSignalThirdPartyLock();
-            _selectedThirdParties.Clear();
-            var sequenceId = _voteSequenceId;
-            var presetVote = StartPresetVote(sequenceId, presetId =>
-            {
-                if (!IsCurrentVoteSequence(sequenceId))
-                    return;
-
-                if (string.IsNullOrEmpty(presetId) ||
-                    !_prototypeManager.TryIndex<GamePresetPrototype>(presetId, out var preset))
-                {
-                    _voteSequenceRunning = false;
-                    return;
-                }
-
-                _selectedPreset = preset;
-
-                // Get planet list from either pool or direct list
-                List<string>? planetIds = null;
-                // Prefer pool if set, fallback to supportedPlanets
-                if (!string.IsNullOrEmpty(_selectedPreset.PlanetPool) &&
-                    _prototypeManager.TryIndex<GamePlanetPoolPrototype>(_selectedPreset.PlanetPool,
-                        out var poolProto))
-                {
-                    planetIds = poolProto.Planets;
-                }
-                else if (_selectedPreset.SupportedPlanets != null && _selectedPreset.SupportedPlanets.Count > 0)
-                {
-                    planetIds = _selectedPreset.SupportedPlanets;
-                }
-
-                if (planetIds == null || planetIds.Count == 0)
-                {
-                    _voteSequenceRunning = false;
-                    return;
-                }
-
-                // Build planet options from planetIds
-                var planetProtos = new List<(string Id, RMCPlanetMapPrototypeComponent Planet)>();
-                foreach (var pid in planetIds)
-                {
-                    if (_prototypeManager.TryIndex<EntityPrototype>(pid, out var proto) &&
-                        proto.TryComp(out RMCPlanetMapPrototypeComponent? planetComp,
-                            IoCManager.Resolve<IComponentFactory>()))
-                    {
-                        planetProtos.Add((pid, planetComp));
-                    }
-                    else
-                    {
-                        Logger.GetSawmill("content").Warning(
-                            $"[AuRoundSystem] Could not find RMCPlanetMapPrototypeComponent for planet ID: {pid}");
-                    }
-                }
-
-                // Filter planets by their MinPlayers/MaxPlayers so planets intended for
-                // specific player counts cannot be voted for when out of range.
-                var playerCount = _playerManager.PlayerCount;
-                planetProtos.RemoveAll(p =>
-                    // If MinPlayers is set (>0) and current players are fewer, exclude.
-                    (p.Planet.MinPlayers > 0 && playerCount < p.Planet.MinPlayers) ||
-                    // If MaxPlayers is set (>0) and current players exceed it, exclude.
-                    (p.Planet.MaxPlayers > 0 && playerCount > p.Planet.MaxPlayers)
-                );
-
-                if (planetProtos.Count == 0)
-                {
-                    _voteSequenceRunning = false;
-                    return;
-                }
-
-                var planets = planetProtos
-                    .Select(planet => planet.Planet)
-                    .ToList();
-                var vote = BuildPlanetVoteOptions(preset.ID, planets, TimeSpan.FromSeconds(30));
-                vote.SetInitiatorOrServer(null);
-                var planetByMapId = planetProtos
-                    .GroupBy(planet => planet.Planet.MapId, StringComparer.OrdinalIgnoreCase)
-                    .ToDictionary(group => group.Key, group => group.First(), StringComparer.OrdinalIgnoreCase);
-                var handle = _voteManager.CreateVote(vote);
-                TrackVoteHandle(handle);
-
-                // Use OnFinished handler to set _selectedPlanet
-                handle.OnFinished += (_, args) =>
-                {
-                    if (!IsCurrentVoteSequence(sequenceId))
-                        return;
-
-                    string? picked = null;
-                    if (args.Winner is string winner)
-                        picked = winner;
-                    else if (args.Winners is var winnersArray && winnersArray.Length > 0)
-                        picked = winnersArray[0] as string;
-                    if (picked == null && vote.Options.Count > 0)
-                        picked = vote.Options[0].data as string;
-                    if (picked != null && planetByMapId.TryGetValue(picked, out var planet))
-                    {
-                        args.ResolveWinner(picked);
-                        _state.SetPlanet(planet.Id, planet.Planet);
-                    }
-                };
-
-                Timer.Spawn(TimeSpan.FromSeconds(32),
-                    () =>
-                    {
-                        if (!IsCurrentVoteSequence(sequenceId))
-                            return;
-
-                        // Fallback: if _selectedPlanet wasn't set by handler, pick manually
-                        if (_selectedPlanet == null && planetProtos.Count > 0)
-                        {
-                            _state.SetPlanet(planetProtos[0].Id, planetProtos[0].Planet);
-                        }
-                        SetCamoType();
-                        StartPlatoonVotes(sequenceId);
-                    });
-            });
-
-            if (presetVote == null)
-                _voteSequenceRunning = false;
+            BeginPresetSelection(_voteSequenceId);
         }
 
         public bool IsThirdPartyAllowedForCurrentContext(ThirdPartyPrototype proto)
@@ -877,205 +697,6 @@ namespace Content.Server.AU14.Round
             _state.ResetDistressSignalThirdPartyLock();
         }
 
-        private void StartPlatoonVotes(int sequenceId)
-        {
-            if (!IsCurrentVoteSequence(sequenceId))
-                return;
-
-            if (_selectedPreset == null || _selectedPlanet == null)
-            {
-                _voteSequenceRunning = false;
-                _selectedPreset = null;
-                _selectedPlanet = null;
-                _selectedPlanetId = null;
-                return;
-            }
-
-            var presetProto = _selectedPreset;
-            var planetProto = _selectedPlanet;
-
-            Timer.Spawn(TimeSpan.FromMilliseconds(100),
-                () =>
-                {
-                    if (!IsCurrentVoteSequence(sequenceId))
-                        return;
-
-                    ChooseThreat(planetProto);
-                });
-            Timer.Spawn(TimeSpan.FromMilliseconds(200),
-                () =>
-                {
-                    if (!IsCurrentVoteSequence(sequenceId))
-                        return;
-
-                    PreselectThirdParties();
-                });
-
-            var govforPlatoons = planetProto.PlatoonsGovfor;
-            var opforPlatoons = planetProto.PlatoonsOpfor;
-            var duration = TimeSpan.FromSeconds(_cfg.GetCVar(CCVars.VotePlatoonDuration));
-            var platoonSpawnRuleSystem =
-                _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-            var planetId = _selectedPlanetId ?? planetProto.MapId;
-
-            void StartShipVote(
-                List<string> possibleShips,
-                string faction,
-                PlatoonPrototype platoon,
-                Action<string> onShipSelected)
-            {
-                if (possibleShips.Count == 0)
-                {
-                    onShipSelected(string.Empty);
-                    return;
-                }
-
-                var voteopt = AuRoundSelectionRules.BuildShipVoteOptions(
-                    faction,
-                    presetProto.ID,
-                    planetId,
-                    platoon,
-                    possibleShips,
-                    duration);
-                voteopt.SetInitiatorOrServer(null);
-
-                var handle = _voteManager.CreateVote(voteopt);
-                TrackVoteHandle(handle);
-                handle.OnFinished += (_, args) =>
-                {
-                    if (!IsCurrentVoteSequence(sequenceId))
-                        return;
-
-                    string? winner = args.Winner as string;
-                    if (winner == null && args.Winners is var arr && arr.Length > 0)
-                        winner = arr[0] as string;
-                    if (winner == null && voteopt.Options.Count > 0)
-                        winner = voteopt.Options[0].data as string;
-                    if (winner != null)
-                        args.ResolveWinner(winner);
-                    onShipSelected(winner ?? string.Empty);
-                };
-            }
-
-            if (presetProto.RequiresGovforVote && govforPlatoons.Count > 0)
-            {
-                var platoons = new List<PlatoonPrototype>();
-                foreach (var platoonId in govforPlatoons)
-                {
-                    var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    platoons.Add(platoon);
-                }
-
-                var voteopt = AuRoundSelectionRules.BuildPlatoonVoteOptions(
-                    "Govfor",
-                    presetProto.ID,
-                    planetId,
-                    platoons,
-                    duration);
-                voteopt.SetInitiatorOrServer(null);
-                var handle = _voteManager.CreateVote(voteopt);
-                TrackVoteHandle(handle);
-                handle.OnFinished += (_, args) =>
-                {
-                    if (!IsCurrentVoteSequence(sequenceId))
-                        return;
-
-                    var winnerId = args.Winner as PlatoonPrototype;
-                    if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
-                        winnerId = winnersArray[0] as PlatoonPrototype;
-
-                    if (winnerId != null)
-                    {
-                        args.ResolveWinner(winnerId);
-                        platoonSpawnRuleSystem.SelectedGovforPlatoon = winnerId;
-
-                        // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
-                        var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
-                        if (!string.IsNullOrEmpty(winnerId.TechTree))
-                        {
-                            intelSys.SetTeamTechTreeOverride(Team.GovFor, winnerId.TechTree);
-                        }
-
-                        // Only start ship vote if planet allows govfor in ship
-                        if (planetProto.GovforInShip)
-                        {
-                            Timer.Spawn(TimeSpan.FromMilliseconds(100),
-                                () =>
-                                {
-                                    if (!IsCurrentVoteSequence(sequenceId))
-                                        return;
-
-                                    StartShipVote(winnerId.PossibleShips,
-                                        "Govfor",
-                                        winnerId,
-                                        shipId => _selectedGovforShip = shipId);
-                                });
-                        }
-                    }
-                };
-            }
-
-            if (presetProto.RequiresOpforVote && opforPlatoons.Count > 0)
-            {
-                var platoons = new List<PlatoonPrototype>();
-                foreach (var platoonId in opforPlatoons)
-                {
-                    var platoon = _prototypeManager.Index<PlatoonPrototype>(platoonId);
-                    platoons.Add(platoon);
-                }
-
-                var voteopt = AuRoundSelectionRules.BuildPlatoonVoteOptions(
-                    "Opfor",
-                    presetProto.ID,
-                    planetId,
-                    platoons,
-                    duration);
-                voteopt.SetInitiatorOrServer(null);
-                var handle = _voteManager.CreateVote(voteopt);
-                TrackVoteHandle(handle);
-                handle.OnFinished += (_, args) =>
-                {
-                    if (!IsCurrentVoteSequence(sequenceId))
-                        return;
-
-                    var winnerId = args.Winner as PlatoonPrototype;
-                    if (winnerId == null && args.Winners is var winnersArray && winnersArray.Length > 0)
-                        winnerId = winnersArray[0] as PlatoonPrototype;
-
-                    if (winnerId != null)
-                    {
-                        args.ResolveWinner(winnerId);
-                        platoonSpawnRuleSystem.SelectedOpforPlatoon = winnerId;
-
-                        // If this platoon declares a tech-tree, apply it immediately to the IntelSystem as a runtime override.
-                        var intelSys = _entityManager.EntitySysManager.GetEntitySystem<Content.Shared._RMC14.Intel.IntelSystem>();
-                        if (intelSys != null && !string.IsNullOrEmpty(winnerId.TechTree))
-                        {
-                            intelSys.SetTeamTechTreeOverride(Team.OpFor, winnerId.TechTree);
-                        }
-
-                        // Only start ship vote if planet allows opfor in ship
-                        if (planetProto.OpforInShip)
-                        {
-                            Timer.Spawn(TimeSpan.FromMilliseconds(100),
-                                () =>
-                                {
-                                    if (!IsCurrentVoteSequence(sequenceId))
-                                        return;
-
-                                    StartShipVote(winnerId.PossibleShips,
-                                        "Opfor",
-                                        winnerId,
-                                        shipId => _selectedOpforShip = shipId);
-                                });
-                        }
-                    }
-                };
-            }
-
-        }
-
-
         public string? GetSelectedGovforShip()
         {
             return _selectedGovforShip;
@@ -1094,11 +715,21 @@ namespace Content.Server.AU14.Round
         public void StartVoteSequence(Action? onFinished = null)
         {
             _voteSequence.Restart();
-            _state.Reset();
-            SelectedPlanetMap = null;
-
+            ResetMutableSelection();
+            _voteSequenceFinished = onFinished;
+            _selectionFinalized = false;
             StartFullVoteSequence();
-            onFinished?.Invoke();
+        }
+
+        /// <summary>
+        /// Clears mutable lobby choices when a new round generation begins, even when voting is below its player gate.
+        /// </summary>
+        internal void ResetLobbySelection()
+        {
+            _voteSequence.Reset();
+            ResetMutableSelection();
+            _voteSequenceFinished = null;
+            _selectionFinalized = false;
         }
 
         public RMCPlanetMapPrototypeComponent? GetSelectedPlanet()
@@ -1121,9 +752,6 @@ namespace Content.Server.AU14.Round
             var mapLoader = _entityManager.EntitySysManager.GetEntitySystem<MapLoaderSystem>();
             var mapSystem = _entityManager.EntitySysManager.GetEntitySystem<MapSystem>();
             var sawmill = Logger.GetSawmill("game");
-            // var compFactory = IoCManager.Resolve<IComponentFactory>();
-            // var serialization = IoCManager.Resolve<ISerializationManager>();
-
             // Try to load the selected planet's map
             if (!_prototypeManager.TryIndex<GameMapPrototype>(_selectedPlanet.MapId, out var mapProto))
             {
@@ -1163,10 +791,9 @@ namespace Content.Server.AU14.Round
         {
             if (_prototypeManager.TryIndex<EntityPrototype>(planetId, out var proto) &&
                 proto.TryComp(out RMCPlanetMapPrototypeComponent? planetComp,
-                IoCManager.Resolve<IComponentFactory>()))
+                _componentFactory))
             {
-                _state.SetPlanet(planetId, planetComp);
-                SetCamoType();
+                ApplyPlanetSelection(new PlanetCandidate(planetId, planetComp));
                 return true;
             }
 
@@ -1190,15 +817,16 @@ namespace Content.Server.AU14.Round
             if (_cfg.GetCVar(CCVars.GameDummyTicker))
                 return;
 
-            if (_selectedPreset != null && NoThreatPresets.Contains(_selectedPreset.ID))
+            var threatSelectionMode = _selectedPreset?.ThreatSelectionMode ?? CmuThreatSelectionMode.Disabled;
+            if (threatSelectionMode == CmuThreatSelectionMode.Disabled)
             {
                 _state.SelectedThreat = null;
-                _sawmill.Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset.ID}");
+                _sawmill.Debug($"[AuRoundSystem] Skipping threat selection for preset: {_selectedPreset?.ID ?? "null"}");
                 return;
             }
 
             var presetId = _selectedPreset?.ID;
-            if (IsPostRoundstartThreatVotePreset(presetId))
+            if (threatSelectionMode == CmuThreatSelectionMode.PostRoundstartVote)
             {
                 _state.SelectedThreat = null;
                 _sawmill.Debug($"[AuRoundSystem] Deferring threat selection for post-roundstart vote preset: {presetId}");
@@ -1206,7 +834,6 @@ namespace Content.Server.AU14.Round
             }
 
             if (string.IsNullOrEmpty(presetId) ||
-                !ThreatSelectionPresets.Contains(presetId) ||
                 planet is not { AllowedThreats.Count: >= 1 })
             {
                 return;

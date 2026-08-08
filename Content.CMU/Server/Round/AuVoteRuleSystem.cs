@@ -6,7 +6,6 @@ using Content.Shared._RMC14.CCVar;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
-using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.Round;
 
@@ -24,6 +23,7 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
     {
         base.Initialize();
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<AuVotePlayerCountChangedEvent>(OnPlayerCountChanged);
         _playerManager.PlayerStatusChanged += PlayerStatusChanged;
     }
 
@@ -36,6 +36,7 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
+        _entityManager.System<AuRoundSystem>().ResetLobbySelection();
         TryStartVoteSequence(roundRestart: true);
     }
 
@@ -45,8 +46,16 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
             return;
 
         // PlayerStatusChanged can be raised before PlayerCount includes the newly connected session.
-        // Check on the next tick so the twentieth player reliably starts the lobby vote sequence.
-        Timer.Spawn(0, TryStartVoteSequence);
+        // Queue the check so the twentieth player reliably starts the lobby vote sequence.
+        QueueLocalEvent(new AuVotePlayerCountChangedEvent());
+    }
+
+    private void OnPlayerCountChanged(AuVotePlayerCountChangedEvent ev)
+    {
+        if (!_waitingForMinimumPlayers)
+            return;
+
+        TryStartVoteSequence();
     }
 
     private void TryStartVoteSequence()
@@ -73,6 +82,8 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
         _waitingForMinimumPlayers = false;
         var voteManagerSystem = _entityManager.System<AuRoundSystem>();
-        voteManagerSystem.StartVoteSequence(() => { });
+        voteManagerSystem.StartVoteSequence();
     }
 }
+
+internal sealed class AuVotePlayerCountChangedEvent : EntityEventArgs;

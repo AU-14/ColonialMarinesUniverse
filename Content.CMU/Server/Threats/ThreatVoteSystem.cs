@@ -544,8 +544,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 
     private void MoveHeldPlayersToObservers(IReadOnlyCollection<NetUserId> heldPlayers, ThreatPrototype selected)
     {
-        bool isColonyFall = string.Equals(_auRound.SelectedPreset?.ID, "ColonyFall",
-            StringComparison.OrdinalIgnoreCase);
+        bool usesThreatSpawnDelay = _auRound.SelectedPreset?.UsesThreatSpawnDelay == true;
         int minMinutes = Math.Max(1, (int)Math.Round(selected.SpawnDelayMin / 60.0));
         int maxMinutes = Math.Max(minMinutes, (int)Math.Round(selected.SpawnDelayMax / 60.0));
 
@@ -556,7 +555,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
                 continue;
 
             _ticker.JoinAsObserver(session);
-            if (isColonyFall)
+            if (usesThreatSpawnDelay)
             {
                 _chat.DispatchServerMessage(session,
                     Loc.GetString("au14-threat-vote-colony-fall-observer-warning",

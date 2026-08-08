@@ -13,6 +13,78 @@ namespace Content.Tests.Server._CMU14.Round;
 [TestFixture]
 public sealed class AuRoundSelectionRulesTest
 {
+    [TestCase(false, false, (int) AuRoundVoteBranch.None)]
+    [TestCase(true, false, (int) AuRoundVoteBranch.Govfor)]
+    [TestCase(false, true, (int) AuRoundVoteBranch.Opfor)]
+    [TestCase(true, true, (int) (AuRoundVoteBranch.Govfor | AuRoundVoteBranch.Opfor))]
+    public void RequiredFactionBranchesAreDataDriven(
+        bool govfor,
+        bool opfor,
+        int expected)
+    {
+        Assert.That(
+            (int) AuRoundSelectionRules.GetRequiredFactionBranches(govfor, opfor),
+            Is.EqualTo(expected));
+    }
+
+    [TestCase(false, false, false, false, (int) AuRoundVoteBranch.None)]
+    [TestCase(true, false, false, false, (int) AuRoundVoteBranch.Govfor)]
+    [TestCase(false, false, true, false, (int) AuRoundVoteBranch.Govfor)]
+    [TestCase(false, false, true, true, (int) (AuRoundVoteBranch.Govfor | AuRoundVoteBranch.Opfor))]
+    public void FixedFactionBranchesDoNotRequireABallot(
+        bool requiresGovfor,
+        bool requiresOpfor,
+        bool usesGovfor,
+        bool usesOpfor,
+        int expected)
+    {
+        Assert.That(
+            (int) AuRoundSelectionRules.GetActiveFactionBranches(
+                requiresGovfor,
+                requiresOpfor,
+                usesGovfor,
+                usesOpfor),
+            Is.EqualTo(expected));
+    }
+
+    [Test]
+    public void CutoffCandidatePreservesSelectionThenUsesPreferredThenConfiguredOrder()
+    {
+        var candidates = new[] { "First", "Preferred", "Selected" };
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(
+                AuRoundSelectionRules.SelectCandidate(candidates, "selected", "preferred"),
+                Is.EqualTo("Selected"));
+            Assert.That(
+                AuRoundSelectionRules.SelectCandidate(candidates, "Missing", "preferred"),
+                Is.EqualTo("Preferred"));
+            Assert.That(
+                AuRoundSelectionRules.SelectCandidate(candidates, "Missing", "AlsoMissing"),
+                Is.EqualTo("First"));
+            Assert.That(
+                AuRoundSelectionRules.SelectCandidate(Array.Empty<string>(), "Selected", "Preferred"),
+                Is.Null);
+        });
+    }
+
+    [TestCase(19, 20, 0, false)]
+    [TestCase(20, 20, 0, true)]
+    [TestCase(60, 0, 60, true)]
+    [TestCase(61, 0, 60, false)]
+    [TestCase(100, 0, 0, true)]
+    public void PlanetEligibilityUsesInclusiveConfiguredBounds(
+        int playerCount,
+        int minimum,
+        int maximum,
+        bool expected)
+    {
+        Assert.That(
+            AuRoundSelectionRules.IsPlayerCountAllowed(playerCount, minimum, maximum),
+            Is.EqualTo(expected));
+    }
+
     [Test]
     public void PlanetVoteCarryoverIsSeparatedByPreset()
     {

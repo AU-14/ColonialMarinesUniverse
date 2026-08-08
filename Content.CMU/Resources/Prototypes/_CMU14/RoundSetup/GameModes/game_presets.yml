@@ -6,6 +6,7 @@
   showInVote: true
   description: Two units face each other in combat.
   minPlayers: 500
+  threatSelectionMode: Disabled
   requiresOpforVote: true
   requiresGovforVote: true
   supportedPlanets:
@@ -36,6 +37,7 @@
   showInVote: true
   description: Insurgency mode
   minPlayers: 35
+  threatSelectionMode: Disabled
   requiresGovforVote: true
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 3600
@@ -66,6 +68,7 @@
   name: Distress Signal
   showInVote: true
   description: Investigate a mysterious distress signal as government forces.
+  threatSelectionMode: PostRoundstartVote
   requiresGovforVote: true
   supportedPlanets:
 #  - AUPlanetLV747
@@ -94,6 +97,8 @@
   showInVote: true
   maxPlayers: 60
   description: Live in an offworld colony as it falls into chaos.
+  threatSelectionMode: PostRoundstartVote
+  usesThreatSpawnDelay: true
   supportedPlanets:
     - AUPlanetShepherdsPride
 #    - AUPlanetLV327
@@ -114,6 +119,7 @@
   name: Jailbreak
   showInVote: false
   description: Jailbreak mode
+  threatSelectionMode: PreRoundstart
   rules:
   - AuVoteRule
 
@@ -124,6 +130,7 @@
   name: Prometheus
   showInVote: false
   description: Prometheus mode
+  threatSelectionMode: PreRoundstart
   rules:
   - AuVoteRule
 

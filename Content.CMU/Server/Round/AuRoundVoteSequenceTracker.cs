@@ -12,9 +12,9 @@ internal sealed class AuRoundVoteSequenceTracker
 
     public void Reset()
     {
+        SequenceId++;
         CancelActive();
         Running = false;
-        SequenceId = 0;
     }
 
     public int Restart()
@@ -28,6 +28,20 @@ internal sealed class AuRoundVoteSequenceTracker
     public bool IsCurrent(int sequenceId)
     {
         return sequenceId == SequenceId;
+    }
+
+    public bool IsRunning(int sequenceId)
+    {
+        return Running && IsCurrent(sequenceId);
+    }
+
+    public bool TryFinish(int sequenceId)
+    {
+        if (!IsRunning(sequenceId))
+            return false;
+
+        Running = false;
+        return true;
     }
 
     public void Track(IVoteHandle handle)

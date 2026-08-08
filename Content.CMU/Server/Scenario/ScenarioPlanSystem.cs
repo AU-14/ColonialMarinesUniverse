@@ -1,6 +1,7 @@
 using System.IO;
 using System.Linq;
 using Content.Server._CMU14.Threats;
+using Content.Server.AU14.Round;
 using Content.Server.Chat.Managers;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
@@ -55,14 +56,14 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
 
     public IReadOnlyList<ScenarioPlan> GeneratePlans(ScenarioPlanValidationRequest request)
     {
-        if (!_prototypes.TryIndex<GamePresetPrototype>(request.PresetId, out var preset) ||
-            preset.SupportedPlanets is not { Count: > 0 })
+        if (!_prototypes.TryIndex<GamePresetPrototype>(request.PresetId, out var preset))
         {
             return Array.Empty<ScenarioPlan>();
         }
 
-        var plans = new List<ScenarioPlan>(preset.SupportedPlanets.Count);
-        foreach (var planetId in preset.SupportedPlanets)
+        var planetIds = GetPresetPlanetIds(preset, request.PlanetId);
+        var plans = new List<ScenarioPlan>(planetIds.Count);
+        foreach (var planetId in planetIds)
         {
             if (request.PlanetId != null &&
                 !planetId.Equals(request.PlanetId, StringComparison.OrdinalIgnoreCase))
@@ -1068,10 +1069,13 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         return new ScenarioForceTiming(timing.DelayMinSeconds, timing.DelayMaxSeconds);
     }
 
-    private static ScenarioForceTiming BuildLegacyThreatTiming(string presetId, ThreatPrototype threat)
+    private ScenarioForceTiming BuildLegacyThreatTiming(string presetId, ThreatPrototype threat)
     {
-        if (!presetId.Equals(ColonyFallPresetId, StringComparison.OrdinalIgnoreCase))
+        if (!_prototypes.TryIndex<GamePresetPrototype>(presetId, out var preset) ||
+            !preset.UsesThreatSpawnDelay)
+        {
             return ScenarioForceTiming.Immediate;
+        }
 
         return new ScenarioForceTiming(threat.SpawnDelayMin, threat.SpawnDelayMax);
     }
@@ -1185,9 +1189,9 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         var forces = new List<PlannedForce>();
         var deferredChoices = new List<DeferredForceChoice>();
 
-        AddPlatoonForces(preset, planet, request.PlayerCount, forces, deferredChoices);
+        AddPlatoonForces(preset, planet, request, forces, deferredChoices);
 
-        if (IsPostRoundstartThreatVotePreset(preset.ID))
+        if (preset.ThreatSelectionMode == CmuThreatSelectionMode.PostRoundstartVote)
         {
             AddDeferredThreatChoice(
                 preset.ID,
@@ -1555,27 +1559,134 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     private void AddPlatoonForces(
         GamePresetPrototype preset,
         RMCPlanetMapPrototypeComponent planet,
-        int playerCount,
+        ScenarioPlanValidationRequest request,
         List<PlannedForce> forces,
         List<DeferredForceChoice> deferredChoices)
     {
-        if (preset.RequiresGovforVote && planet.PlatoonsGovfor.Count > 0)
+        var active = AuRoundSelectionRules.GetActiveFactionBranches(
+            preset.RequiresGovforVote,
+            preset.RequiresOpforVote,
+            preset.UsesGovforPlatoon,
+            preset.UsesOpforPlatoon);
+
+        if ((active & AuRoundVoteBranch.Govfor) != 0 &&
+            preset.RequiresGovforVote &&
+            planet.PlatoonsGovfor.Count > 0)
         {
-            deferredChoices.Add(BuildPlatoonChoice("GovforPlatoon", planet.PlatoonsGovfor, playerCount));
+            deferredChoices.Add(BuildPlatoonChoice("GovforPlatoon", planet.PlatoonsGovfor, request.PlayerCount));
         }
-        else if (!string.IsNullOrWhiteSpace(planet.DefaultGovforPlatoon))
+        else if ((active & AuRoundVoteBranch.Govfor) != 0 &&
+                 TryGetFixedPlatoonId(
+                     request.GovforPlatoonId,
+                     planet.DefaultGovforPlatoon,
+                     planet.PlatoonsGovfor,
+                     out var govforPlatoonId))
         {
-            forces.Add(BuildPlatoonForce("GovforPlatoon", planet.DefaultGovforPlatoon, playerCount));
+            forces.Add(BuildPlatoonForce("GovforPlatoon", govforPlatoonId, request.PlayerCount));
         }
 
-        if (preset.RequiresOpforVote && planet.PlatoonsOpfor.Count > 0)
+        if ((active & AuRoundVoteBranch.Opfor) != 0 &&
+            preset.RequiresOpforVote &&
+            planet.PlatoonsOpfor.Count > 0)
         {
-            deferredChoices.Add(BuildPlatoonChoice("OpforPlatoon", planet.PlatoonsOpfor, playerCount));
+            deferredChoices.Add(BuildPlatoonChoice("OpforPlatoon", planet.PlatoonsOpfor, request.PlayerCount));
         }
-        else if (!string.IsNullOrWhiteSpace(planet.DefaultOpforPlatoon))
+        else if ((active & AuRoundVoteBranch.Opfor) != 0 &&
+                 TryGetFixedPlatoonId(
+                     request.OpforPlatoonId,
+                     planet.DefaultOpforPlatoon,
+                     planet.PlatoonsOpfor,
+                     out var opforPlatoonId))
         {
-            forces.Add(BuildPlatoonForce("OpforPlatoon", planet.DefaultOpforPlatoon, playerCount));
+            forces.Add(BuildPlatoonForce("OpforPlatoon", opforPlatoonId, request.PlayerCount));
         }
+    }
+
+    private static bool TryGetFixedPlatoonId(
+        string? selectedId,
+        string? defaultId,
+        IReadOnlyList<ProtoId<PlatoonPrototype>> candidates,
+        out string platoonId)
+    {
+        if (TryFindPlatoonId(selectedId, candidates, out platoonId) ||
+            TryFindPlatoonId(defaultId, candidates, out platoonId))
+            return true;
+
+        if (candidates.Count > 0)
+        {
+            platoonId = candidates[0].Id;
+            return true;
+        }
+
+        platoonId = string.Empty;
+        return false;
+    }
+
+    private static bool TryFindPlatoonId(
+        string? requestedId,
+        IReadOnlyList<ProtoId<PlatoonPrototype>> candidates,
+        out string platoonId)
+    {
+        if (!string.IsNullOrWhiteSpace(requestedId))
+        {
+            foreach (var candidate in candidates)
+            {
+                if (!candidate.Id.Equals(requestedId, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                platoonId = candidate.Id;
+                return true;
+            }
+        }
+
+        platoonId = string.Empty;
+        return false;
+    }
+
+    private IReadOnlyList<string> GetPresetPlanetIds(GamePresetPrototype preset, string? selectedPlanetId)
+    {
+        if (!string.IsNullOrWhiteSpace(selectedPlanetId))
+        {
+            if (PresetContainsPlanet(preset, selectedPlanetId))
+                return new[] { selectedPlanetId };
+
+            return Array.Empty<string>();
+        }
+
+        if (!string.IsNullOrWhiteSpace(preset.PlanetPool) &&
+            _prototypes.TryIndex<GamePlanetPoolPrototype>(preset.PlanetPool, out var pool) &&
+            pool.Planets.Count > 0)
+        {
+            return pool.Planets;
+        }
+
+        return preset.SupportedPlanets is { } supportedPlanets
+            ? supportedPlanets
+            : Array.Empty<string>();
+    }
+
+    private bool PresetContainsPlanet(GamePresetPrototype preset, string planetId)
+    {
+        if (!string.IsNullOrWhiteSpace(preset.PlanetPool) &&
+            _prototypes.TryIndex<GamePlanetPoolPrototype>(preset.PlanetPool, out var pool))
+        {
+            foreach (var candidate in pool.Planets)
+            {
+                if (candidate.Equals(planetId, StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+        }
+
+        if (preset.SupportedPlanets == null)
+            return false;
+
+        foreach (var candidate in preset.SupportedPlanets)
+        {
+            if (candidate.Equals(planetId, StringComparison.OrdinalIgnoreCase))
+                return true;
+        }
+
+        return false;
     }
 
     private DeferredForceChoice BuildPlatoonChoice(
@@ -2492,12 +2603,6 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         IReadOnlyList<string> requiredTags)
     {
         return _spawnIndex.Resolve(mapId, requiredTags);
-    }
-
-    private static bool IsPostRoundstartThreatVotePreset(string presetId)
-    {
-        return presetId.Equals(DistressSignalPresetId, StringComparison.OrdinalIgnoreCase) ||
-               presetId.Equals(ColonyFallPresetId, StringComparison.OrdinalIgnoreCase);
     }
 
     private static bool ThirdPartyUsesMarkerValidation(ThirdPartyPrototype thirdParty)

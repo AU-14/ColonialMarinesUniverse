@@ -48,7 +48,12 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
     {
         using var profile = _prof.Group("CMU Round Selection Freeze");
 
-        var presetId = fallbackPresetId ?? _round.SelectedPreset?.ID ?? string.Empty;
+        if (_state.Selection is { } existing)
+            return existing;
+
+        _round.FinalizeVoteSequence(playerCount, fallbackPresetId);
+
+        var presetId = _round.SelectedPreset?.ID ?? fallbackPresetId ?? string.Empty;
         var candidate = _round.CaptureRoundPlanSelection(
             playerCount,
             presetId,

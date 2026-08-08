@@ -52,8 +52,6 @@ public sealed class ThreatRoundFlowWiringTest
 
         Assert.Multiple(() =>
         {
-            Assert.That(AuRoundSystem.IsPostRoundstartThreatVotePreset("DistressSignal"), Is.True);
-            Assert.That(AuRoundSystem.IsPostRoundstartThreatVotePreset("ColonyFall"), Is.True);
             Assert.That(HasReachableCallFrom<GameTicker>("SpawnPlayers", prepareVote), Is.True,
                 "GameTicker must prepare the post-roundstart threat vote.");
             Assert.That(HasReachableCallFrom<GameTicker>("SpawnPlayers", startVote), Is.True,
