@@ -1179,7 +1179,7 @@ public partial class ChatBox : UIWidget
         if (_colorWholeMessage)
             formatted.Pop();
 
-        return FilterProblematicTags(formatted, allowCommandLinks: false);
+        return FilterProblematicTags(formatted, allowCommandLinks: message.Channel == ChatChannel.AdminAlert);
     }
 
     private static string StripChatActionCommandLink(string markup, ChatMessage message)
