@@ -1,5 +1,6 @@
 using System.Numerics;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Actions;
 using Content.Shared.DoAfter;
@@ -26,6 +27,7 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
     [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private YautjaTrophySystem _trophies = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private RMCObstacleSlammingSystem _obstacleSlamming = default!;
 
     public override void Initialize()
     {
@@ -109,6 +111,9 @@ public sealed partial class YautjaAbilitySystem : EntitySystem
             return;
 
         PrepareLeapCollision((ent.Owner, EnsureComp<YautjaLeapingComponent>(ent.Owner)));
+        // The throw movement collides with walls; obstacle slamming must not
+        // turn that intentional leap into self-inflicted blunt damage.
+        _obstacleSlamming.MakeImmune(ent.Owner, 0.5f);
 
         _throwing.TryThrow(
             ent.Owner,

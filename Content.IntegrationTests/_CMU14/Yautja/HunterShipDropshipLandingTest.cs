@@ -8,6 +8,7 @@ using Content.Server._RMC14.Dropship;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Shuttles.Components;
 using Content.Shared.Shuttles.Systems;
+using Content.Shared.CCVar;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
@@ -94,6 +95,10 @@ public sealed class HunterShipDropshipLandingTest
             var entMan = server.EntMan;
             var dropship = entMan.System<DropshipSystem>();
             var docking = entMan.System<DockingSystem>();
+
+            server.CfgMan.SetCVar(CCVars.FTLTravelTime, 0.1f);
+            server.CfgMan.SetCVar(CCVars.FTLArrivalTime, 0.1f);
+            server.CfgMan.SetCVar(CCVars.FTLCooldown, 0.1f);
 
             foreach (var (shuttle, console, destination) in shuttles)
             {

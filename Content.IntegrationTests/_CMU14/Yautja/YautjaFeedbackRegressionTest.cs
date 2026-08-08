@@ -4,6 +4,7 @@ using Content.Server.Database;
 using Content.Server.Station.Systems;
 using Content.Server._CMU14.Yautja;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
+using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Vendors;
@@ -147,6 +148,56 @@ public sealed class YautjaFeedbackRegressionTest
 
                 Assert.That(entMan.GetComponent<BodyPartWoundComponent>(part).ExternalBleeding,
                     Is.EqualTo(ExternalBleedTier.None));
+            });
+        }
+        finally
+        {
+            server.Dispose();
+        }
+    }
+
+    [Test]
+    public async Task MedicompClampClosesIncisionAndSurgicalBleeding()
+    {
+        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
+        EntityUid patient = default;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                patient = entMan.SpawnEntity("CMUMobYautja", MapCoordinates.Nullspace);
+                var body = entMan.System<SharedBodySystem>();
+                var part = body.GetBodyChildren(patient)
+                    .Select(entry => entry.Id)
+                    .First(uid => entMan.HasComponent<BodyPartComponent>(uid));
+
+                entMan.EnsureComponent<CMIncisionOpenComponent>(part);
+                entMan.EnsureComponent<CMBleedersClampedComponent>(part);
+                entMan.EnsureComponent<CMSkinRetractedComponent>(part);
+                var wounds = entMan.EnsureComponent<BodyPartWoundComponent>(part);
+                var ledger = entMan.System<CMUWoundLedgerSystem>();
+                ledger.TryUpdateExternalBleeding(part, ExternalBleedTier.Severe, wounds);
+
+                var woundSystem = entMan.System<SharedCMUWoundsSystem>();
+                woundSystem.SeedSurgicalInternalBleed(part);
+
+                var surgery = entMan.System<SharedCMSurgerySystem>();
+                var step = surgery.GetSingleton("CMUSurgeryStepMcompClampWound");
+                Assert.That(step, Is.Not.Null);
+                var ev = new CMSurgeryStepEvent(patient, patient, part, new List<EntityUid>());
+                entMan.EventBus.RaiseLocalEvent(step!.Value, ref ev);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(entMan.HasComponent<CMIncisionOpenComponent>(part), Is.False);
+                    Assert.That(entMan.HasComponent<CMBleedersClampedComponent>(part), Is.False);
+                    Assert.That(entMan.HasComponent<CMSkinRetractedComponent>(part), Is.False);
+                    Assert.That(entMan.HasComponent<CMUSurgicalInternalBleedingComponent>(part), Is.False);
+                    Assert.That(entMan.GetComponent<BodyPartWoundComponent>(part).ExternalBleeding,
+                        Is.EqualTo(ExternalBleedTier.None));
+                });
             });
         }
         finally

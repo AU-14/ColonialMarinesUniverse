@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Content.Server.Maps;
+using Content.Server.Ghost.Roles.Components;
 using Content.Shared.Audio;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared.Humanoid.Prototypes;
@@ -150,6 +151,15 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
                 Assert.That(setting, Does.StartWith("CMUYautjaHunt"), setting);
                 Assert.That(setting, Does.Not.Contain("RMC"), setting);
                 Assert.That(prototypes.HasIndex<RandomHumanoidSettingsPrototype>(setting), Is.True, setting);
+
+                var randomSettings = prototypes.Index<RandomHumanoidSettingsPrototype>(setting);
+                Assert.That(randomSettings.Components, Is.Not.Null, setting);
+                var ghostRoleId = factory.GetComponentName<GhostRoleComponent>();
+                Assert.That(randomSettings.Components!.TryGetComponent(ghostRoleId, out var ghostRoleValue),
+                    Is.True, $"{setting} must define a CMU ghost-role override.");
+                Assert.That(ghostRoleValue, Is.TypeOf<GhostRoleComponent>(), setting);
+                Assert.That(((GhostRoleComponent) ghostRoleValue!).Requirements, Is.Empty,
+                    $"{setting} must not inherit RMC playtime requirements.");
             }
         });
 

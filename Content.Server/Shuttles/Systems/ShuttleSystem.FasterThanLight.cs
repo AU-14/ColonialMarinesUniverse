@@ -544,7 +544,8 @@ public sealed partial class ShuttleSystem
             if (config == null)
             {
                 if (TryComp(uid, out DropshipComponent? dropship) &&
-                    HasComp<DropshipDestinationComponent>(dropship.Destination))
+                    TryComp(dropship.Destination, out DropshipDestinationComponent? destination) &&
+                    string.Equals(destination.FactionController, "yautja", StringComparison.OrdinalIgnoreCase))
                 {
                     _transform.SetCoordinates(uid, xform, target, rotation: entity.Comp1.TargetAngle);
                 }

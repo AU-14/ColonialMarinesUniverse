@@ -5,75 +5,132 @@
 - type: randomHumanoidSettings
   parent: RMCCLFSoldier
   id: CMUYautjaHuntCLFSoldier
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCCLFEngineer
   id: CMUYautjaHuntCLFEngineer
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCCLFMedic
   id: CMUYautjaHuntCLFMedic
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCCLFCellLeader
   id: CMUYautjaHuntCLFCellLeader
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCPMCStandardM63B2
   id: CMUYautjaHuntPMCStandardM63B2
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCPMCStandardSSG45
   id: CMUYautjaHuntPMCStandardSSG45
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCPMCStandardM54C2
   id: CMUYautjaHuntPMCStandardM54C2
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCRoyalMarinesCommando
   id: CMUYautjaHuntRoyalMarinesCommando
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCRoyalMarinesMedic
   id: CMUYautjaHuntRoyalMarinesMedic
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCFreelancerStandard
   id: CMUYautjaHuntFreelancerStandard
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCFreelancerLeader
   id: CMUYautjaHuntFreelancerLeader
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCPMCLeader
   id: CMUYautjaHuntPMCLeader
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCPMCSniper
   id: CMUYautjaHuntPMCSniper
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCPMCEngineer
   id: CMUYautjaHuntPMCEngineer
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCPMCMedic
   id: CMUYautjaHuntPMCMedic
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCRoyalMarinesTeamlead
   id: CMUYautjaHuntRoyalMarinesTeamlead
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCRoyalMarinesSGO
   id: CMUYautjaHuntRoyalMarinesSGO
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCRoyalMarinesBreacher
   id: CMUYautjaHuntRoyalMarinesBreacher
+  components:
+  - type: GhostRole
+    requirements: []
 
 - type: randomHumanoidSettings
   parent: RMCRoyalMarinesMarksman
   id: CMUYautjaHuntRoyalMarinesMarksman
+  components:
+  - type: GhostRole
+    requirements: []

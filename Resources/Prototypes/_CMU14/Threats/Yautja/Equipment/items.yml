@@ -1,42 +1,57 @@
 - type: radioChannel
   id: CMUYautja
   name: chat-radio-cmu-yautja
-  keycode: "е"
+  keycode: "r"
+  radioPrefix: "#"
   frequency: 1541
   color: "#b85440"
   longRange: true
+  tower: true
+  faction: "FactionYautja"
 
 - type: radioChannel
   id: CMUYautjaOverseer
   name: chat-radio-cmu-yautja-overseer
-  keycode: "н"
+  keycode: "o"
+  radioPrefix: "#"
   frequency: 1542
   color: "#d4a85b"
   longRange: true
+  tower: true
+  faction: "FactionYautja"
 
 - type: radioChannel
   id: CMUYautjaBadBlood
   name: chat-radio-cmu-yautja-badblood
-  keycode: "г"
+  keycode: "b"
+  radioPrefix: "#"
   frequency: 1543
   color: "#c44343"
   longRange: true
+  tower: true
+  faction: "FactionYautja"
 
 - type: radioChannel
   id: CMUYautjaStranded
   name: chat-radio-cmu-yautja-stranded
-  keycode: "д"
+  keycode: "s"
+  radioPrefix: "#"
   frequency: 1544
   color: "#a88762"
   longRange: true
+  tower: true
+  faction: "FactionYautja"
 
 - type: radioChannel
   id: CMUYautjaMilitary
   name: chat-radio-cmu-yautja-military
-  keycode: "ю"
+  keycode: "m"
+  radioPrefix: "#"
   frequency: 1545
   color: "#8db7d4"
   longRange: true
+  tower: true
+  faction: "FactionYautja"
 
 - type: entity
   abstract: true
@@ -173,6 +188,9 @@
     blockMelee: false
     blockThrow: false
   - type: YautjaCommunicator
+  - type: ItemIFF
+    factions:
+    - FactionYautja
   - type: StaticPrice
     price: 100
   - type: Corrodible
