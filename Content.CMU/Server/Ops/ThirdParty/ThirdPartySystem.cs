@@ -17,6 +17,7 @@ using Content.Shared.Access.Components;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
 using Content.Shared.Ghost;
+using Content.Shared.GameTicking;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mind;
@@ -42,23 +43,22 @@ namespace Content.Server._CMU14.Ops.ThirdParty;
 
 public sealed partial class ThirdPartySystem : EntitySystem
 {
-    [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
-    [Dependency] private MapLoaderSystem _mapLoader = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
-    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private IServerPreferencesManager _preferences = default!;
-    [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private IdCardSystem _idCard = default!;
     [Dependency] private IdentitySystem _identity = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private MapLoaderSystem _mapLoader = default!;
+    [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
+    [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
@@ -76,6 +76,35 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private float _spawnTimer;
     private List<ThirdPartyPrototype>? _thirdPartyList;
 
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
+
+    private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
+    {
+        if (ev.New != GameRunLevel.InRound)
+            ResetRoundState();
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        ResetRoundState();
+    }
+
+    private void ResetRoundState()
+    {
+        _currentThreat = null;
+        _nextThirdPartyIndex = 0;
+        _signalIntervalMultiplier = 1f;
+        _spawningActive = false;
+        _spawnInterval = TimeSpan.FromMinutes(5);
+        _spawnTimer = 0f;
+        _thirdPartyList = null;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -89,11 +118,6 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
         _spawnTimer += frameTime;
         ThirdPartyPrototype party = _thirdPartyList[_nextThirdPartyIndex];
-        if (party.RoundStart)
-        {
-            _nextThirdPartyIndex++;
-            return;
-        }
 
         TimeSpan interval = TimeSpan.FromTicks((long)(_spawnInterval.Ticks * _signalIntervalMultiplier));
         if (_spawnTimer < interval.TotalSeconds)
@@ -1059,16 +1083,12 @@ public sealed partial class ThirdPartySystem : EntitySystem
     {
         int playerCount = Math.Max(_playerManager.PlayerCount, assignedJobs?.Count ?? 0);
 
-        return new(
-            _auRoundSystem.SelectedPreset?.ID ?? string.Empty,
-            playerCount,
-            _platoonSpawnRule.SelectedGovforPlatoon?.ID,
-            _platoonSpawnRule.SelectedOpforPlatoon?.ID,
-            _auRoundSystem.GetSelectedPlanetId(),
-            _auRoundSystem.GetSelectedPlanet()?.MapId,
-            _currentThreat?.ID,
-            _auRoundSystem.GetSelectedGovforShip(),
-            _auRoundSystem.GetSelectedOpforShip());
+        return _auRoundSystem
+            .CaptureRoundPlanSelection(
+                playerCount,
+                _auRoundSystem.SelectedPreset?.ID ?? string.Empty,
+                _currentThreat?.ID)
+            .ToScenarioPlanRequest();
     }
 
     private string GetPlayerCharacterName(ICommonSession player, EntityUid? mind, string fallback)
@@ -1119,23 +1139,18 @@ public sealed partial class ThirdPartySystem : EntitySystem
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs)
     {
         _currentThreat = threat;
-        _thirdPartyList = _auRoundSystem.SelectedThirdParties.ToList();
+        (List<ThirdPartyPrototype> roundStartParties, List<ThirdPartyPrototype> scheduledParties) =
+            PartitionThirdParties(_auRoundSystem.SelectedThirdParties);
+        _thirdPartyList = scheduledParties;
         _nextThirdPartyIndex = 0;
         _spawnTimer = 0f;
         _spawnInterval = TimeSpan.FromSeconds(Math.Max(1, intervalSeconds));
 
-        var roundstartCount = 0;
-        foreach (ThirdPartyPrototype party in _thirdPartyList)
-        {
-            if (party.RoundStart)
-                roundstartCount++;
-        }
-
         ThirdPartyAssignmentCounts assignmentCounts = ThirdPartySystem.CountThirdPartyAssignments(assignedJobs);
         _sawmill.Info(
-            $"[ThirdPartySystem] Starting third-party queue: {scheduleContext}, selected={_thirdPartyList.Count}, roundstart={roundstartCount}, interval={_spawnInterval}, assignedJobs={assignedJobs?.Count ?? 0}, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members}.");
+            $"[ThirdPartySystem] Starting third-party queue: {scheduleContext}, selected={roundStartParties.Count + scheduledParties.Count}, roundstart={roundStartParties.Count}, scheduled={scheduledParties.Count}, interval={_spawnInterval}, assignedJobs={assignedJobs?.Count ?? 0}, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members}.");
 
-        if (_thirdPartyList.Count == 0)
+        if (roundStartParties.Count == 0 && scheduledParties.Count == 0)
         {
             _sawmill.Debug(
                 "[ThirdPartySystem] No third parties selected for this planet; skipping third-party spawning.");
@@ -1143,32 +1158,51 @@ public sealed partial class ThirdPartySystem : EntitySystem
             return;
         }
 
-        _spawningActive = true;
+        _spawningActive = scheduledParties.Count > 0;
 
         // Spawn all roundstart third parties immediately (called after jobs assigned)
-        foreach (ThirdPartyPrototype party in _thirdPartyList)
+        foreach (ThirdPartyPrototype party in roundStartParties)
         {
-            if (!party.RoundStart)
-                break;
-
             _sawmill.Debug($"[ThirdPartySystem] Attempting roundstart third-party ({party.ID}) with PartySpawn={party.PartySpawn}.");
-            if (_prototypeManager.TryIndex(party.PartySpawn, out PartySpawnPrototype? spawnProto))
+            try
             {
-                if (SpawnThirdParty(party, spawnProto, true, assignedJobs))
-                    _sawmill.Debug($"[ThirdPartySystem] Spawned roundstart third party ({party.ID})");
+                if (_prototypeManager.TryIndex(party.PartySpawn, out PartySpawnPrototype? spawnProto))
+                {
+                    if (SpawnThirdParty(party, spawnProto, true, assignedJobs))
+                        _sawmill.Debug($"[ThirdPartySystem] Spawned roundstart third party ({party.ID})");
+                    else
+                    {
+                        _sawmill.Warning(
+                            $"[ThirdPartySystem] Roundstart spawn attempt for third party ({party.ID}) failed.");
+                    }
+                }
                 else
                 {
-                    _sawmill.Warning(
-                        $"[ThirdPartySystem] Roundstart spawn attempt for third party ({party.ID}) failed.");
+                    _sawmill.Error($"[ThirdPartySystem] No spawn proto for roundstart third party ({party.ID}) PartySpawn={party.PartySpawn}");
                 }
             }
-            else
+            catch (Exception ex)
             {
-                _sawmill.Error($"[ThirdPartySystem] No spawn proto for roundstart third party ({party.ID}) PartySpawn={party.PartySpawn}");
+                _sawmill.Error($"[ThirdPartySystem] Exception spawning roundstart third party ({party.ID}): {ex}");
             }
-
-            _nextThirdPartyIndex++;
         }
+    }
+
+    internal static (List<ThirdPartyPrototype> RoundStart, List<ThirdPartyPrototype> Scheduled) PartitionThirdParties(
+        IReadOnlyList<ThirdPartyPrototype> selectedParties)
+    {
+        var roundStart = new List<ThirdPartyPrototype>();
+        var scheduled = new List<ThirdPartyPrototype>();
+
+        foreach (ThirdPartyPrototype party in selectedParties)
+        {
+            if (party.RoundStart)
+                roundStart.Add(party);
+            else
+                scheduled.Add(party);
+        }
+
+        return (roundStart, scheduled);
     }
 
     private bool TrySpawnAtMarker(string protoId,

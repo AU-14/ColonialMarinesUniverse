@@ -19,30 +19,27 @@ namespace Content.Server.AU14.Round;
 [UsedImplicitly]
 public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleComponent>
 {
-    [Dependency] private StationJobsSystem _stationJobs = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private StationSystem _stationSystem = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private StationSystem _stationSystem = default!;
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
-
-
-
         PlatoonPrototype? platoon = null;
         var planet = _auRoundSystem.GetSelectedPlanet();
-        var protoMgr = IoCManager.Resolve<IPrototypeManager>();
         var platoonSpawnRule = _platoonSpawnRule;
 
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
-        var isDistressPreset = !string.IsNullOrEmpty(presetId) && (
-            presetId.Equals("distresssignal", StringComparison.InvariantCultureIgnoreCase)
-        );
-        var isColonyFallPreset = !string.IsNullOrEmpty(presetId) && presetId.Equals("ColonyFall", StringComparison.InvariantCultureIgnoreCase);
+        var isDistressPreset = !string.IsNullOrEmpty(presetId) &&
+                               presetId.Equals("distresssignal", StringComparison.OrdinalIgnoreCase);
+        var isColonyFallPreset = !string.IsNullOrEmpty(presetId) &&
+                                 presetId.Equals("ColonyFall", StringComparison.OrdinalIgnoreCase);
 
-        if (component.ShipFaction != null && component.ShipFaction.ToLower() == "opfor")
+        if (string.Equals(component.ShipFaction, "opfor", StringComparison.OrdinalIgnoreCase))
         {
             platoon = platoonSpawnRule.SelectedOpforPlatoon;
         }
@@ -51,7 +48,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
             platoon = platoonSpawnRule.SelectedGovforPlatoon;
             if (platoon == null && planet != null && planet.PlatoonsGovfor.Count > 0)
             {
-                if (protoMgr.TryIndex<PlatoonPrototype>(planet.PlatoonsGovfor[0], out var foundPlatoon))
+                if (_prototypeManager.TryIndex<PlatoonPrototype>(planet.PlatoonsGovfor[0], out var foundPlatoon))
                     platoon = foundPlatoon;
             }
         }
@@ -66,7 +63,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
             foreach (var (jobClass, slotCount) in platoon.JobSlotOverride)
             {
                 var jobId = $"AU14Job{team}{jobClass}";
-                if (protoMgr.TryIndex<JobPrototype>(jobId, out var proto))
+                if (_prototypeManager.TryIndex<JobPrototype>(jobId, out var proto))
                     jobsToAdd[proto.ID] = slotCount;
                 else
                     Logger.GetSawmill("content").Warning($"[AddJobsRuleSystem] Could not find job prototype: {jobId}");
@@ -84,28 +81,28 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
             JobScalePrototype? scaleDef = null;
 
             var isInsurgency = !string.IsNullOrEmpty(presetId) &&
-                               presetId.Equals("insurgency", StringComparison.InvariantCultureIgnoreCase);
+                               presetId.Equals("insurgency", StringComparison.OrdinalIgnoreCase);
             var isFof = !string.IsNullOrEmpty(presetId) &&
-                        presetId.Equals("forceonforce", StringComparison.InvariantCultureIgnoreCase);
+                        presetId.Equals("forceonforce", StringComparison.OrdinalIgnoreCase);
 
             if (isDistressPreset || isColonyFallPreset)
             {
                 // ColonyFall / Distress — scaling comes from the selected threat
                 var threat = _auRoundSystem.SelectedThreat;
                 if (threat?.JobScaling != null)
-                    protoMgr.TryIndex<JobScalePrototype>(threat.JobScaling.Value, out scaleDef);
+                    _prototypeManager.TryIndex<JobScalePrototype>(threat.JobScaling.Value, out scaleDef);
             }
             else if (isFof)
             {
                 // ForceOnForce — scaling comes from planet's FOF field
                 if (planet?.JobScalingFof != null)
-                    protoMgr.TryIndex<JobScalePrototype>(planet.JobScalingFof.Value, out scaleDef);
+                    _prototypeManager.TryIndex<JobScalePrototype>(planet.JobScalingFof.Value, out scaleDef);
             }
             else if (isInsurgency)
             {
                 // Insurgency — scaling comes from planet's Insurgency field
                 if (planet?.JobScalingIns != null)
-                    protoMgr.TryIndex<JobScalePrototype>(planet.JobScalingIns.Value, out scaleDef);
+                    _prototypeManager.TryIndex<JobScalePrototype>(planet.JobScalingIns.Value, out scaleDef);
             }
 
             if (scaleDef != null)
@@ -174,15 +171,26 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
 
                                 if (entry.Benchmark != null)
                                 {
-                                    // Benchmark set: override to absolute value (with optional maximum cap).
-                                    _stationJobs.TrySetJobSlot(stationUid.Value, jobProtoId.ToString(), scaledSlots, true, stationJobs);
+                                    // Benchmarks replace the configured slot count with one absolute value.
+                                    _stationJobs.TrySetJobSlotAndRoundStart(stationUid.Value,
+                                        jobProtoId,
+                                        scaledSlots,
+                                        false,
+                                        stationJobs);
                                 }
                                 else
                                 {
-                                    // No benchmark: adjust to the computed absolute value (with optional maximum cap).
+                                    // Additive scaling must preserve any intentional difference between
+                                    // round-start and mid-round slot counts.
                                     var delta = scaledSlots - existingSlots;
                                     if (delta != 0)
-                                        _stationJobs.TryAdjustJobSlot(stationUid.Value, jobProtoId.ToString(), delta, false, false, stationJobs);
+                                    {
+                                        _stationJobs.TryAdjustJobSlotAndRoundStart(stationUid.Value,
+                                            jobProtoId,
+                                            delta,
+                                            false,
+                                            stationJobs);
+                                    }
                                 }
                             }
                         }
@@ -197,21 +205,22 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
             return;
 
         // If this is ColonyFall, don't add GOVFOR jobs
-        if (isColonyFallPreset && !string.IsNullOrEmpty(component.ShipFaction) && component.ShipFaction.Equals("govfor", StringComparison.InvariantCultureIgnoreCase))
+        if (isColonyFallPreset &&
+            string.Equals(component.ShipFaction, "govfor", StringComparison.OrdinalIgnoreCase))
             return;
 
         if (planet != null && !string.IsNullOrEmpty(component.ShipFaction))
         {
-            var faction = component.ShipFaction.ToLower();
+            var faction = component.ShipFaction;
             var addToShip = false;
             var addToPlanet = false;
 
-            if (faction == "govfor")
+            if (faction.Equals("govfor", StringComparison.OrdinalIgnoreCase))
             {
                 addToShip = planet.GovforInShip;
                 addToPlanet = !planet.GovforInShip;
             }
-            else if (faction == "opfor")
+            else if (faction.Equals("opfor", StringComparison.OrdinalIgnoreCase))
             {
                 addToShip = planet.OpforInShip;
                 addToPlanet = !planet.OpforInShip;
@@ -223,7 +232,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                 var query = AllEntityQuery<ShipFactionComponent>();
                 while (query.MoveNext(out var shipUid, out var shipFaction))
                 {
-                    if (string.IsNullOrEmpty(shipFaction.Faction) || shipFaction.Faction.ToLower() != faction)
+                    if (!string.Equals(shipFaction.Faction, faction, StringComparison.OrdinalIgnoreCase))
                         continue;
                     // Find the station entity that owns this ship
                     var stationUid = _stationSystem.GetOwningStation(shipUid);
@@ -237,25 +246,11 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                     {
                         var jobId = entry.Key;
                         var amount = entry.Value;
-                        _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
-                        // Also update the round-start setup slots so readied players can spawn on these jobs.
-                        try
-                        {
-                            // Compute current round-start amount (if any) and add to it.
-                            if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
-                            {
-                                var existing = arr[0];
-                                _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
-                            }
-                            else
-                            {
-                                _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
-                            }
-                        }
-                        catch
-                        {
-                            // If anything goes wrong, fall back to not crashing the rule system.
-                        }
+                        _stationJobs.TryAdjustJobSlotAndRoundStart(stationUid.Value,
+                            jobId,
+                            amount,
+                            true,
+                            stationJobs);
                     }
                     // Only add to the first matching ship's station
                     break;
@@ -277,23 +272,11 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                         {
                             var jobId = entry.Key;
                             var amount = entry.Value;
-                            _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
-                            // Keep round-start setup in sync so readied players see these jobs.
-                            try
-                            {
-                                if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
-                                {
-                                    var existing = arr[0];
-                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
-                                }
-                                else
-                                {
-                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
-                                }
-                            }
-                            catch
-                            {
-                            }
+                            _stationJobs.TryAdjustJobSlotAndRoundStart(stationUid.Value,
+                                jobId,
+                                amount,
+                                true,
+                                stationJobs);
                         }
                     }
                 }
@@ -305,12 +288,12 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
         {
             var addToPlanet = true;
             // Check if we should add to the planet instead of the ship
-            if (component.ShipFaction != null && component.ShipFaction.ToLower() == "opfor")
+            if (string.Equals(component.ShipFaction, "opfor", StringComparison.OrdinalIgnoreCase))
             {
                 // Opfor always adds to the ship
                 addToPlanet = false;
             }
-            else if (component.ShipFaction != null && component.ShipFaction.ToLower() == "govfor")
+            else if (string.Equals(component.ShipFaction, "govfor", StringComparison.OrdinalIgnoreCase))
             {
                 // Govfor adds to the planet only if the planet is not set to spawn in the ship
                 addToPlanet = !planet.GovforInShip;
@@ -332,7 +315,11 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                             var existing = stationJobs.JobList.Keys.ToList();
                             foreach (var jobKey in existing)
                             {
-                                _stationJobs.TrySetJobSlot(stationUid.Value, jobKey.ToString(), 0, false, stationJobs);
+                                _stationJobs.TrySetJobSlotAndRoundStart(stationUid.Value,
+                                    new ProtoId<JobPrototype>(jobKey),
+                                    0,
+                                    false,
+                                    stationJobs);
                             }
                         }
 
@@ -340,23 +327,11 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
                         {
                             var jobId = entry.Key;
                             var amount = entry.Value;
-                            _stationJobs.TryAdjustJobSlot(stationUid.Value, jobId.ToString(), amount, true, false, stationJobs);
-                            // Keep round-start setup in sync so readied players see these jobs.
-                            try
-                            {
-                                if (stationJobs.SetupAvailableJobs.TryGetValue(jobId, out var arr) && arr.Length > 0)
-                                {
-                                    var existing = arr[0];
-                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, existing + amount, stationJobs);
-                                }
-                                else
-                                {
-                                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobId, amount, stationJobs);
-                                }
-                            }
-                            catch
-                            {
-                            }
+                            _stationJobs.TryAdjustJobSlotAndRoundStart(stationUid.Value,
+                                jobId,
+                                amount,
+                                true,
+                                stationJobs);
                         }
                     }
                 }

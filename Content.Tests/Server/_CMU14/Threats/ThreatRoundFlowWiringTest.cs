@@ -40,6 +40,12 @@ public sealed class ThreatRoundFlowWiringTest
         var spawnVotedThreat = typeof(ThreatSystem).GetMethod(nameof(ThreatSystem.SpawnThreatFromVote))!;
         var scheduleThreat = typeof(ThreatSystem)
             .GetMethod("SchedulePendingThreatSpawn", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var abortVote = typeof(ThreatVoteSystem)
+            .GetMethod("AbortThreatVote", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var removeThreatAssignments = typeof(ThreatSystem)
+            .GetMethod("RemoveThreatJobAssignments", BindingFlags.NonPublic | BindingFlags.Static)!;
+        var releaseHeldPlayers = typeof(ThreatVoteSystem)
+            .GetMethod("ReleaseHeldPlayersToLobby", BindingFlags.NonPublic | BindingFlags.Instance)!;
         var forcedAssignments = typeof(AuJobSelectionSystem)
             .GetProperty(nameof(AuJobSelectionSystem.ForcedJobAssignments))!
             .GetMethod!;
@@ -58,6 +64,12 @@ public sealed class ThreatRoundFlowWiringTest
                 "Starting a prepared vote must reach voted threat spawning, including single-option auto-selection.");
             Assert.That(HasReachableCallFrom<ThreatSystem>("SpawnThreatFromVote", scheduleThreat), Is.True,
                 "Voted Colony Fall threats must reach delayed threat scheduling.");
+            Assert.That(HasReachableCallFrom<ThreatVoteSystem>("StartPreparedThreatVote", abortVote), Is.True,
+                "Failure to create a prepared threat vote must reach terminal cleanup.");
+            Assert.That(HasReachableCallFrom<ThreatVoteSystem>("AbortThreatVote", removeThreatAssignments), Is.True,
+                "Threat vote cleanup must remove held threat assignments.");
+            Assert.That(HasReachableCallFrom<ThreatVoteSystem>("AbortThreatVote", releaseHeldPlayers), Is.True,
+                "Threat vote cleanup must release held players.");
             Assert.That(HasReachableCallFrom<StationJobsSystem>("AssignJobs", forcedAssignments), Is.True,
                 "Station job assignment must consume forced threat-vote jobs.");
         });

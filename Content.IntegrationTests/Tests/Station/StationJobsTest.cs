@@ -11,6 +11,7 @@ using Robust.Shared.Log;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
 namespace Content.IntegrationTests.Tests.Station;
@@ -54,6 +55,13 @@ public sealed class StationJobsTest : GameTest
             TAssistant: [-1, -1]
             TCaptain: [5, 5]
             TClown: [5, 6]
+    NoOverflowStation:
+      mapNameTemplate: {StationMapId}
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationJobs
+          availableJobs:
+            TCaptain: [5, 5]
 
 - type: job
   id: TAssistant
@@ -167,6 +175,62 @@ public sealed class StationJobsTest : GameTest
     }
 
     [Test]
+    public async Task AssignOverflowJobsUsesOverflowStationTest()
+    {
+        var pair = Pair;
+        var server = pair.Server;
+
+        var prototypeManager = server.ResolveDependency<IPrototypeManager>();
+        var fooStationProto = prototypeManager.Index<GameMapPrototype>(StationMapId);
+        var entSysMan = server.ResolveDependency<IEntityManager>().EntitySysManager;
+        var random = server.ResolveDependency<IRobustRandom>();
+        var stationJobs = entSysMan.GetEntitySystem<StationJobsSystem>();
+        var stationSystem = entSysMan.GetEntitySystem<StationSystem>();
+
+        var noOverflowStation = EntityUid.Invalid;
+        var overflowStation = EntityUid.Invalid;
+        await server.WaitPost(() =>
+        {
+            noOverflowStation = stationSystem.InitializeNewStation(
+                fooStationProto.Stations["NoOverflowStation"],
+                null,
+                "No Overflow Station");
+            overflowStation = stationSystem.InitializeNewStation(
+                fooStationProto.Stations["Station"],
+                null,
+                "Overflow Station");
+        });
+
+        await server.WaitRunTicks(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var player = new NetUserId(Guid.NewGuid());
+            var assigned = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
+            var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+            {
+                [player] = HumanoidCharacterProfile.Random()
+                    .WithPreferenceUnavailable(PreferenceUnavailableMode.SpawnAsOverflow),
+            };
+
+            // Keep the no-overflow station first after shuffling so the selected station differs from index zero.
+            random.SetSeed(0);
+            stationJobs.AssignOverflowJobs(
+                ref assigned,
+                [player],
+                profiles,
+                [noOverflowStation, overflowStation]);
+
+            var assignment = assigned[player];
+            Assert.Multiple(() =>
+            {
+                Assert.That(assignment.Item1, Is.EqualTo((ProtoId<JobPrototype>?) "TAssistant"));
+                Assert.That(assignment.Item2, Is.EqualTo(overflowStation));
+            });
+        });
+    }
+
+    [Test]
     public async Task AdjustJobsTest()
     {
         var pair = Pair;
@@ -208,7 +272,20 @@ public sealed class StationJobsTest : GameTest
             });
             Assert.Multiple(() =>
             {
-                Assert.That(stationJobs.TrySetJobSlot(station, "TChaplain", 10, true), "Could not create 10 TChaplain slots.");
+                var assistant = new ProtoId<JobPrototype>("TAssistant");
+                Assert.That(stationJobs.GetOverflowJobs(station), Does.Contain(assistant));
+                Assert.That(stationJobs.TrySetJobSlotAndRoundStart(station, assistant, 0, false),
+                    "Could not set synchronized TAssistant slots to zero.");
+                Assert.That(stationJobs.GetOverflowJobs(station), Does.Not.Contain(assistant));
+
+                var chaplain = new ProtoId<JobPrototype>("TChaplain");
+                Assert.That(stationJobs.TrySetJobSlotAndRoundStart(station, chaplain, 10, true),
+                    "Could not create 10 synchronized TChaplain slots.");
+                Assert.That(stationJobs.TryAdjustJobSlotAndRoundStart(station, chaplain, -3, false),
+                    "Could not adjust synchronized TChaplain slots.");
+                Assert.That(stationJobs.TryGetJobSlot(station, "TChaplain", out var chaplainSlots));
+                Assert.That(chaplainSlots, Is.EqualTo(7));
+                Assert.That(stationJobs.GetRoundStartJobs(station)[chaplain], Is.EqualTo(7));
                 stationJobs.MakeJobUnlimited(station, "TChaplain");
                 Assert.That(stationJobs.IsJobUnlimited(station, "TChaplain"), "Could not make TChaplain unlimited.");
             });

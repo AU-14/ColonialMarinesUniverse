@@ -22,22 +22,23 @@ namespace Content.Server._CMU14.Threats;
 
 public sealed partial class ThreatVoteSystem : EntitySystem
 {
-    [Dependency] private AuRoundSystem _auRound = default!;
-    [Dependency] private IChatManager _chat = default!;
     [Dependency] private AuJobSelectionSystem _jobSelection = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private GameTicker _ticker = default!;
+    [Dependency] private IChatManager _chat = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private IVoteManager _voteManager = default!;
+    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private ThreatSystem _threat = default!;
-    [Dependency] private GameTicker _ticker = default!;
-    [Dependency] private IVoteManager _voteManager = default!;
     private static readonly TimeSpan VoteDuration = TimeSpan.FromSeconds(30);
     private const string VoteTitleLocId = "au14-threat-vote-title";
     private readonly HashSet<NetUserId> _roundJoinBlockedPlayers = new();
 
+    private IVoteHandle? _activeVote;
     private PreparedThreatVote? _prepared;
     private ISawmill? _sawmill;
     private ISawmill Sawmill => _sawmill ??= Logger.GetSawmill("au14.threat");
@@ -53,6 +54,22 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         if (ev.New == GameRunLevel.InRound) return;
 
         _prepared = null;
+        IVoteHandle? activeVote = _activeVote;
+        if (activeVote is { Finished: false })
+        {
+            try
+            {
+                activeVote.Cancel();
+            }
+            catch (Exception ex)
+            {
+                Sawmill.Error($"[ThreatVoteSystem] Failed to cancel the active threat vote during round cleanup: {ex}");
+            }
+        }
+
+        if (ReferenceEquals(_activeVote, activeVote))
+            _activeVote = null;
+
         ClearRoundJoinBlocks();
     }
 
@@ -187,6 +204,8 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         if (_prepared == null)
         {
             Sawmill.Warning("[ThreatVoteSystem] StartPreparedThreatVote called with no prepared vote.");
+            ThreatSystem.RemoveThreatJobAssignments(assignedJobs);
+            _jobSelection.ForcedJobAssignments.Clear();
             ClearRoundJoinBlocks();
 
             return false;
@@ -202,9 +221,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             Sawmill.Info($"[ThreatVoteSystem] Only one threat candidate '{selected.ID}' prepared for preset {
                 prepared.PresetId
             }; auto-selecting without starting a vote.");
-            FinishThreatVote(prepared, selected, assignedJobs);
-
-            return true;
+            return TryFinishThreatVote(prepared, selected, assignedJobs);
         }
 
         var voteOptions = new VoteOptions
@@ -221,16 +238,64 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         };
         voteOptions.SetInitiatorOrServer(null);
 
-        IVoteHandle handle = _voteManager.CreateVote(voteOptions);
-        handle.OnCancelled += _ => ClearRoundJoinBlocks();
+        int voteRoundId = _ticker.RoundId;
+        IVoteHandle handle;
+        try
+        {
+            handle = _voteManager.CreateVote(voteOptions);
+        }
+        catch (Exception ex)
+        {
+            Sawmill.Error($"[ThreatVoteSystem] Failed to create the prepared threat vote: {ex}");
+            AbortThreatVote(prepared, assignedJobs, "vote creation threw");
+
+            return false;
+        }
+
+        _activeVote = handle;
+        var concluded = false;
+        handle.OnCancelled += _ =>
+        {
+            if (!TryConcludeThreatVote(ref concluded))
+                return;
+
+            bool ownsActiveVote = ReferenceEquals(_activeVote, handle);
+            if (ownsActiveVote)
+                _activeVote = null;
+
+            if (!ownsActiveVote || _ticker.RoundId != voteRoundId)
+            {
+                Sawmill.Warning($"[ThreatVoteSystem] Ignoring cancellation from stale threat vote {handle.Id} for round {
+                    voteRoundId}; current round is {_ticker.RoundId}.");
+
+                return;
+            }
+
+            AbortThreatVote(prepared, assignedJobs, "vote was cancelled");
+        };
         handle.OnFinished += (_, args) =>
         {
+            if (!TryConcludeThreatVote(ref concluded))
+                return;
+
+            bool ownsActiveVote = ReferenceEquals(_activeVote, handle);
+            if (ownsActiveVote)
+                _activeVote = null;
+
+            if (!ownsActiveVote || _ticker.RoundId != voteRoundId)
+            {
+                Sawmill.Warning($"[ThreatVoteSystem] Ignoring result from stale threat vote {handle.Id} for round {
+                    voteRoundId}; current round is {_ticker.RoundId}.");
+
+                return;
+            }
+
             Sawmill.Debug($"[ThreatVoteSystem] Threat vote finished: winner={args.Winner}, tiedWinners={
                 args.Winners.Length
             }, heldPlayers={prepared.HeldPlayers.Count}.");
-            if (_ticker.RunLevel != GameRunLevel.InRound)
+            if (!CanFinishThreatVote(voteRoundId, _ticker.RoundId, _ticker.RunLevel))
             {
-                ClearRoundJoinBlocks();
+                AbortThreatVote(prepared, assignedJobs, "round was no longer running");
 
                 return;
             }
@@ -239,19 +304,86 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             if (selected == null)
             {
                 Sawmill.Warning("[ThreatVoteSystem] Threat vote finished without a resolvable selected threat.");
-                ClearRoundJoinBlocks();
+                AbortThreatVote(prepared, assignedJobs, "vote had no resolvable winner");
 
                 return;
             }
 
-            args.ResolveWinner(selected);
-            FinishThreatVote(prepared, selected, assignedJobs);
+            try
+            {
+                args.ResolveWinner(selected);
+            }
+            catch (Exception ex)
+            {
+                Sawmill.Error($"[ThreatVoteSystem] Failed to resolve the selected threat vote winner: {ex}");
+                AbortThreatVote(prepared, assignedJobs, "winner resolution threw");
+
+                return;
+            }
+
+            TryFinishThreatVote(prepared, selected, assignedJobs);
         };
 
         Sawmill.Debug($"[ThreatVoteSystem] Started threat vote with {prepared.Candidates.Count} candidate(s) and {
             prepared.HeldPlayers.Count} voter(s).");
 
         return true;
+    }
+
+    internal static bool CanFinishThreatVote(int voteRoundId, int currentRoundId, GameRunLevel runLevel)
+    {
+        return voteRoundId == currentRoundId && runLevel == GameRunLevel.InRound;
+    }
+
+    internal static bool TryConcludeThreatVote(ref bool concluded)
+    {
+        if (concluded)
+            return false;
+
+        concluded = true;
+
+        return true;
+    }
+
+    private bool TryFinishThreatVote(PreparedThreatVote prepared,
+        ThreatPrototype selected,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs)
+    {
+        try
+        {
+            FinishThreatVote(prepared, selected, assignedJobs);
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            Sawmill.Error($"[ThreatVoteSystem] Threat vote completion threw: {ex}");
+            AbortThreatVote(prepared, assignedJobs, "vote completion threw");
+
+            return false;
+        }
+    }
+
+    private void AbortThreatVote(PreparedThreatVote prepared,
+        Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,
+        string reason)
+    {
+        int removedAssignments = ThreatSystem.RemoveThreatJobAssignments(assignedJobs);
+        foreach (NetUserId playerId in prepared.HeldPlayers)
+        {
+            _jobSelection.ForcedJobAssignments.Remove(playerId);
+        }
+
+        if (removedAssignments > 0)
+        {
+            Sawmill.Warning($"[ThreatVoteSystem] Removed {removedAssignments} held threat assignment(s) because {
+                reason}.");
+        }
+
+        string candidateIds = string.Join(",", prepared.Candidates.Select(candidate => candidate.Threat.ID));
+        ReleaseHeldPlayersToLobby(prepared.HeldPlayers,
+            string.IsNullOrEmpty(candidateIds) ? "unselected" : candidateIds,
+            reason);
     }
 
     private bool TryBuildCandidatesFromScenarioPlan(RMCPlanetMapPrototypeComponent planet,
@@ -264,15 +396,9 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         candidates = [];
         heldBodyCount = default(ThreatVoteBodyCount);
 
-        var request = new ScenarioPlanValidationRequest(presetId,
-            playerCount,
-            GetSelectedGovforPlatoonId(),
-            GetSelectedOpforPlatoonId(),
-            _auRound.GetSelectedPlanetId(),
-            planet.MapId,
-            null,
-            _auRound.GetSelectedGovforShip(),
-            _auRound.GetSelectedOpforShip());
+        ScenarioPlanValidationRequest request = _auRound
+            .CaptureRoundPlanSelection(playerCount, presetId, null)
+            .ToScenarioPlanRequest();
 
         if (!_scenarioPlan.TryResolveDeferredThreatVote(request, out ResolvedDeferredThreatChoice? deferredChoice,
                 out diagnostic)
@@ -369,15 +495,13 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         _auRound.PreselectThirdPartiesForSelectedThreat();
         try
         {
-            _scenarioPlan.GenerateShadowPlan(new(prepared.PresetId,
+            ScenarioPlanValidationRequest request = _auRound
+                .CaptureRoundPlanSelection(
                     Math.Max(_player.PlayerCount, prepared.HeldPlayers.Count),
-                    GetSelectedGovforPlatoonId(),
-                    GetSelectedOpforPlatoonId(),
-                    _auRound.GetSelectedPlanetId(),
-                    _auRound.GetSelectedPlanet()?.MapId,
-                    selected.ID,
-                    _auRound.GetSelectedGovforShip(),
-                    _auRound.GetSelectedOpforShip()),
+                    prepared.PresetId,
+                    selected.ID)
+                .ToScenarioPlanRequest();
+            _scenarioPlan.GenerateShadowPlan(request,
                 "PostRoundstartThreatVoteFinished");
         }
         catch (Exception scenarioEx)
@@ -395,8 +519,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         catch (Exception threatEx)
         {
             Sawmill.Error($"[ThreatVoteSystem] SpawnThreatFromVote threw: {threatEx}");
-            ThreatSystem.RemoveThreatJobAssignments(assignedJobs);
-            ReleaseHeldPlayersToLobby(prepared.HeldPlayers, selected.ID, "threat spawn threw");
+            AbortThreatVote(prepared, assignedJobs, "threat spawn threw");
 
             return;
         }
@@ -411,6 +534,11 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         catch (Exception thirdPartyEx)
         {
             Sawmill.Error($"[ThreatVoteSystem] StartThirdPartySpawning threw: {thirdPartyEx}");
+        }
+
+        foreach (NetUserId playerId in prepared.HeldPlayers)
+        {
+            _jobSelection.ForcedJobAssignments.Remove(playerId);
         }
     }
 
@@ -453,7 +581,15 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             Sawmill.Info($"[ThreatVoteSystem] Releasing held threat vote player {session.Name} ({playerId}) for '{
                 threatId
             }' because {reason}; returning them to lobby.");
-            _ticker.Respawn(session);
+            try
+            {
+                _ticker.Respawn(session);
+            }
+            catch (Exception ex)
+            {
+                Sawmill.Error($"[ThreatVoteSystem] Failed to return held player {session.Name} ({playerId}) to the lobby: {
+                    ex}");
+            }
         }
     }
 
@@ -465,10 +601,6 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 
         return $"au14-threat:{prepared.PresetId}:{string.Join(",", candidateIds)}";
     }
-
-    private string? GetSelectedGovforPlatoonId() => _platoonSpawnRule.SelectedGovforPlatoon?.ID;
-
-    private string? GetSelectedOpforPlatoonId() => _platoonSpawnRule.SelectedOpforPlatoon?.ID;
 
     private string GetLocalizedThreatDisplayName(string threatId)
     {

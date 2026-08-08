@@ -276,13 +276,12 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         return false;
     }
 
-    private ScenarioPlanValidationRequest BuildClfScenarioPlanRequest() => new(
-        _ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? _auRound.SelectedPreset?.ID ?? string.Empty,
-        0,
-        PlanetId: _auRound.GetSelectedPlanetId(),
-        MapId: _auRound.GetSelectedPlanet()?.MapId,
-        GovforShipId: _auRound.GetSelectedGovforShip(),
-        OpforShipId: _auRound.GetSelectedOpforShip());
+    private ScenarioPlanValidationRequest BuildClfScenarioPlanRequest() => _auRound
+        .CaptureRoundPlanSelection(
+            0,
+            _ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? _auRound.SelectedPreset?.ID ?? string.Empty,
+            null)
+        .ToScenarioPlanRequest();
 
     private List<EntityUid> FilterSafehouseMarkers(IReadOnlyList<EntityUid> candidates)
     {

@@ -11,9 +11,9 @@ namespace Content.Server.AU14.Round;
 [UsedImplicitly]
 public sealed partial class RemoveJobsRuleSystem : GameRuleSystem<RemoveJobsRuleComponent>
 {
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private StationJobsSystem _stationJobs = default!;
     [Dependency] private StationSystem _stationSystem = default!;
-    [Dependency] private GameTicker _gameTicker = default!;
 
     protected override void Started(EntityUid uid, RemoveJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
@@ -32,19 +32,12 @@ public sealed partial class RemoveJobsRuleSystem : GameRuleSystem<RemoveJobsRule
             foreach (var jobKey in setupKeys)
             {
                 // Clear both the active job list and the round-start setup slots.
-                _stationJobs.TrySetJobSlot(stationUid.Value, jobKey.ToString(), 0, false, stationJobs);
-                try
-                {
-                    _stationJobs.SetRoundStartJobSlot(stationUid.Value, jobKey, 0, stationJobs);
-                }
-                catch
-                {
-                    // Swallow to avoid crashing if something odd happens.
-                }
+                _stationJobs.TrySetJobSlotAndRoundStart(stationUid.Value,
+                    jobKey,
+                    0,
+                    false,
+                    stationJobs);
             }
-
         }
-
-
     }
 }

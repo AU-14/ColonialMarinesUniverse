@@ -1,3 +1,4 @@
+using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking;
 using Content.Server.Preferences.Managers;
 using Content.Server.Voting.Managers;
@@ -74,6 +75,7 @@ namespace Content.Server.AU14.Round
         private readonly AuRoundSelectionState _state = new();
         private readonly AuRoundVoteSequenceTracker _voteSequence = new();
         private readonly ISawmill _sawmill = Logger.GetSawmill("content");
+        private PlatoonSpawnRuleSystem? _platoonSpawnRule;
 
         private GamePresetPrototype? _selectedPreset
         {
@@ -123,6 +125,39 @@ namespace Content.Server.AU14.Round
         {
             _state.SelectedThreat = threat;
             _sawmill.Debug($"[AuRoundSystem] Selected threat set to: {threat?.ID ?? "null"}");
+        }
+
+        /// <summary>
+        /// Captures the current mutable round selections for one immutable planning operation.
+        /// </summary>
+        public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount)
+        {
+            return CaptureRoundPlanSelection(
+                playerCount,
+                _selectedPreset?.ID ?? string.Empty,
+                SelectedThreat?.ID);
+        }
+
+        /// <summary>
+        /// Captures the current mutable world selections with an explicit preset and threat context.
+        /// </summary>
+        public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount,
+            string presetId,
+            string? selectedThreatId)
+        {
+            var platoons = _platoonSpawnRule ??=
+                _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+
+            return new(
+                presetId,
+                playerCount,
+                platoons.SelectedGovforPlatoon?.ID,
+                platoons.SelectedOpforPlatoon?.ID,
+                _selectedPlanetId,
+                _selectedPlanet?.MapId,
+                selectedThreatId,
+                _selectedGovforShip,
+                _selectedOpforShip);
         }
 
         public bool UsesPostRoundstartThreatVote()

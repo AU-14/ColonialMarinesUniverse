@@ -1,13 +1,15 @@
 using System.Linq;
 using Content.Server._CMU14.Threats;
 using Content.Server.AU14.Scenario;
+using Content.Server.GameTicking;
 using Content.Shared._CMU14.Threats;
-using Content.Shared.Preferences;
 using Content.Shared.AU14.util;
+using Content.Shared.GameTicking;
+using Content.Shared.Preferences;
 using Content.Shared.Roles;
+using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Network;
 
 namespace Content.Server.AU14.Round;
 
@@ -16,13 +18,30 @@ namespace Content.Server.AU14.Round;
 /// </summary>
 public sealed partial class AuJobSelectionSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
-
+    [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
 
     public Dictionary<NetUserId, string> ForcedJobAssignments { get; } = new();
+
+    public override void Initialize()
+    {
+        base.Initialize();
+        SubscribeLocalEvent<GameRunLevelChangedEvent>(OnRunLevelChanged);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+    }
+
+    private void OnRunLevelChanged(GameRunLevelChangedEvent ev)
+    {
+        if (ev.New != GameRunLevel.InRound)
+            ForcedJobAssignments.Clear();
+    }
+
+    private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
+    {
+        ForcedJobAssignments.Clear();
+    }
 
 
     public List<NetUserId> AssignThreatVotePoolJobs(
@@ -217,17 +236,9 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         out ThreatVoteBodyCount bodyCount,
         out string diagnostic)
     {
-        var platoonSpawnRuleSystem = EntityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-        var request = new ScenarioPlanValidationRequest(
-            selectedPresetId,
-            playerCount,
-            platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
-            platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
-            _auRoundSystem.GetSelectedPlanetId(),
-            _auRoundSystem.GetSelectedPlanet()?.MapId,
-            threat.ID,
-            _auRoundSystem.GetSelectedGovforShip(),
-            _auRoundSystem.GetSelectedOpforShip());
+        ScenarioPlanValidationRequest request = _auRoundSystem
+            .CaptureRoundPlanSelection(playerCount, selectedPresetId, threat.ID)
+            .ToScenarioPlanRequest();
 
         if (!_scenarioPlan.TryResolveSelectedThreatForce(request, out var force, out diagnostic) ||
             force == null)

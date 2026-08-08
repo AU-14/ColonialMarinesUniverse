@@ -13,6 +13,7 @@ using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Map;
+using Robust.Shared.Profiling;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using ParachuteMarkerComponent = Content.Shared._CMU14.Threats.ParachuteMarkerComponent;
@@ -34,6 +35,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
     [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IResourceManager _resources = default!;
+    [Dependency] private ProfManager _prof = default!;
 
     private readonly Dictionary<string, IReadOnlyList<ResolvedSpawnMarker>> _mapMarkerCache = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, IReadOnlyList<ResolvedSpawnMarker>> _mapPathMarkerCache = new(StringComparer.OrdinalIgnoreCase);
@@ -85,6 +87,8 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
 
     public ScenarioPlanShadowSnapshot GenerateShadowPlan(ScenarioPlanValidationRequest request, string reason)
     {
+        using var profile = _prof.Group("CMU Round Scenario Shadow");
+
         var report = ValidateMarkerCoverageWithBackup(request, out var usedBackup, out var backupDiagnostic);
 
         var snapshot = new ScenarioPlanShadowSnapshot(reason, request, report);
@@ -192,6 +196,8 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         ScenarioPlanValidationRequest request,
         string reason)
     {
+        using var profile = _prof.Group("CMU Round Scenario Resolve");
+
         if (request.PlanetId == null ||
             request.MapId == null)
         {

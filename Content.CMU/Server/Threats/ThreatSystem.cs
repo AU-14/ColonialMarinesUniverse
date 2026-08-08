@@ -45,7 +45,6 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
     [Dependency] private NpcFactionSystem _npcFaction = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
@@ -961,15 +960,12 @@ public sealed partial class ThreatSystem : EntitySystem
         if (voteHeldPlayers != null)
             playerCount = Math.Max(playerCount, voteHeldPlayers.Count);
 
-        return new(_auRound.SelectedPreset?.ID ?? string.Empty,
-            playerCount,
-            _platoonSpawnRule.SelectedGovforPlatoon?.ID,
-            _platoonSpawnRule.SelectedOpforPlatoon?.ID,
-            _auRound.GetSelectedPlanetId(),
-            _auRound.GetSelectedPlanet()?.MapId,
-            threat.ID,
-            _auRound.GetSelectedGovforShip(),
-            _auRound.GetSelectedOpforShip());
+        return _auRound
+            .CaptureRoundPlanSelection(
+                playerCount,
+                _auRound.SelectedPreset?.ID ?? string.Empty,
+                threat.ID)
+            .ToScenarioPlanRequest();
     }
 
     private List<NetUserId> GetEligibleVoteHeldPlayers(IReadOnlyList<NetUserId> heldPlayers,
