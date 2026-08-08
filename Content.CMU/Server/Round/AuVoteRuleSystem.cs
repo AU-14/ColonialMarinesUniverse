@@ -6,6 +6,7 @@ using Content.Shared._RMC14.CCVar;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.Round;
 
@@ -42,7 +43,9 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
         if (!_waitingForMinimumPlayers)
             return;
 
-        TryStartVoteSequence();
+        // PlayerStatusChanged can be raised before PlayerCount includes the newly connected session.
+        // Check on the next tick so the twentieth player reliably starts the lobby vote sequence.
+        Timer.Spawn(0, TryStartVoteSequence);
     }
 
     private void TryStartVoteSequence()
