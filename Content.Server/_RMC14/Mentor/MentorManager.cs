@@ -436,6 +436,8 @@ public sealed partial class MentorManager : IPostInjectInit
 
         if (author != null)
             SendTypingUpdate(author.Channel, destination, false);
+
+        QueueMentorHelpWebhook(destinationName, authorName, message, create);
     }
 
     private void SendTypingUpdate(INetChannel author, Guid destination, bool typing)
@@ -550,6 +552,8 @@ public sealed partial class MentorManager : IPostInjectInit
         _userDb.AddOnLoadPlayer(LoadData);
         _userDb.AddOnFinishLoad(FinishLoad);
         _userDb.AddOnPlayerDisconnect(ClientDisconnected);
+
+        InitializeDiscordRelay();
 
         if (_config.IsCVarRegistered(RMCCVars.RMCMentorHelpRateLimitPeriod.Name) &&
             _config.IsCVarRegistered(RMCCVars.RMCMentorHelpRateLimitCount.Name))

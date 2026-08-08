@@ -587,6 +587,7 @@ namespace Content.Server.GameTicking
 
             //Get the timespan of the round.
             var roundDuration = RoundDuration();
+            RememberRoundStatusGamemode(RoundId, gamemodeTitle, roundDuration);
 
             //Generate a list of basic player info to display in the end round summary.
             var listOfPlayerInfo = new List<RoundEndMessageEvent.RoundEndPlayerInfo>();
@@ -672,37 +673,6 @@ namespace Content.Server.GameTicking
             _replayRoundText = roundEndText;
         }
 
-        private async void SendRoundEndDiscordMessage()
-        {
-            try
-            {
-                if (_webhookIdentifier == null)
-                    return;
-
-                var duration = RoundDuration();
-                var content = Loc.GetString("discord-round-notifications-end",
-                    ("id", RoundId),
-                    ("hours", Math.Truncate(duration.TotalHours)),
-                    ("minutes", duration.Minutes),
-                    ("seconds", duration.Seconds));
-                var payload = new WebhookPayload { Content = content };
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-
-                if (DiscordRoundEndRole == null)
-                    return;
-
-                content = Loc.GetString("discord-round-notifications-end-ping", ("roleId", DiscordRoundEndRole));
-                payload = new WebhookPayload { Content = content };
-                payload.AllowedMentions.AllowRoleMentions();
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error while sending discord round end message:\n{e}");
-            }
-        }
 
         public void RestartRound()
         {
@@ -751,24 +721,6 @@ namespace Content.Server.GameTicking
             }
         }
 
-        private async void SendRoundStartingDiscordMessage()
-        {
-            try
-            {
-                if (_webhookIdentifier == null)
-                    return;
-
-                var content = Loc.GetString("discord-round-notifications-new");
-
-                var payload = new WebhookPayload { Content = content };
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error while sending discord round starting message:\n{e}");
-            }
-        }
 
         /// <summary>
         ///     Cleanup that has to run to clear up anything from the previous round.
@@ -832,6 +784,16 @@ namespace Content.Server.GameTicking
                 RoundLengthMetric.Inc(frameTime);
             }
 
+            if (TryGetPeriodicRoundStatusWebhookKind(RunLevel, out var updateKind) &&
+                RoundStatusWebhook.ShouldUpdate(
+                    _gameTiming.CurTime,
+                    _nextRoundStatusWebhookUpdate,
+                    DiscordRoundStatusUpdateInterval,
+                    _roundStatusWebhookMessageId != 0))
+            {
+                UpdateRoundStatusDiscordMessage(updateKind);
+            }
+
             if (_roundStartTime == TimeSpan.Zero ||
                 RunLevel != GameRunLevel.PreRoundLobby ||
                 Paused ||
@@ -870,25 +832,6 @@ namespace Content.Server.GameTicking
                 _audio.PlayGlobal(proto.Sound, Filter.Broadcast(), true);
         }
 
-        private async void SendRoundStartedDiscordMessage()
-        {
-            try
-            {
-                if (_webhookIdentifier == null)
-                    return;
-
-                var mapName = _gameMapManager.GetSelectedMap()?.MapName ?? Loc.GetString("discord-round-notifications-unknown-map");
-                var content = Loc.GetString("discord-round-notifications-started", ("id", RoundId), ("map", mapName));
-
-                var payload = new WebhookPayload { Content = content };
-
-                await _discord.CreateMessage(_webhookIdentifier.Value, payload);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"Error while sending discord round start message:\n{e}");
-            }
-        }
     }
 
     public enum GameRunLevel

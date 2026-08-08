@@ -24,7 +24,32 @@ namespace Content.Server.GameTicking
         [ViewVariables]
         private string? DiscordRoundEndRole { get; set; }
 
+        [ViewVariables]
+        private string? DiscordRoundStatusDistressSignalRole { get; set; }
+
+        [ViewVariables]
+        private string? DiscordRoundStatusColonyFallRole { get; set; }
+
+        [ViewVariables]
+        private string? DiscordRoundStatusInsurgencyRole { get; set; }
+
         private WebhookIdentifier? _webhookIdentifier;
+
+        private ulong _roundStatusWebhookMessageId;
+
+        private ulong _roundStatusRoundEndPingMessageId;
+
+        private ulong _roundStatusGamemodeVotePingMessageId;
+
+        private TimeSpan DiscordRoundStatusUpdateInterval { get; set; } = TimeSpan.FromSeconds(60);
+
+        private RoundStatusWebhookColors DiscordRoundStatusColors { get; set; } = RoundStatusWebhook.DefaultColors;
+
+        private TimeSpan _nextRoundStatusWebhookUpdate;
+
+        private bool _roundStatusWebhookUpdatePending;
+
+        private bool _roundStatusWebhookWakeSent;
 
         [ViewVariables]
         private string? RoundEndSoundCollection { get; set; }
@@ -58,25 +83,81 @@ namespace Content.Server.GameTicking
             }, true);
             Subs.CVar(_cfg, CCVars.DiscordRoundUpdateWebhook, value =>
             {
+                _webhookIdentifier = null;
+                _roundStatusWebhookMessageId = 0;
+                _roundStatusRoundEndPingMessageId = 0;
+                _roundStatusGamemodeVotePingMessageId = 0;
+                _roundStatusWebhookWakeSent = false;
                 if (!string.IsNullOrWhiteSpace(value))
                 {
-                    _discord.GetWebhook(value, data => _webhookIdentifier = data.ToIdentifier());
+                    _discord.GetWebhook(value, data =>
+                    {
+                        _webhookIdentifier = data.ToIdentifier();
+                        LoadRoundStatusWebhookMessageIds();
+                        TrySendInitialRoundStatusDiscordMessage();
+                    });
                 }
             }, true);
             Subs.CVar(_cfg, CCVars.DiscordRoundEndRoleWebhook, value =>
             {
-                DiscordRoundEndRole = value;
-
-                if (value == string.Empty)
+                DiscordRoundEndRole = NullIfEmpty(value);
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusDistressSignalRole, value =>
+            {
+                DiscordRoundStatusDistressSignalRole = NullIfEmpty(value);
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusColonyFallRole, value =>
+            {
+                DiscordRoundStatusColonyFallRole = NullIfEmpty(value);
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusInsurgencyRole, value =>
+            {
+                DiscordRoundStatusInsurgencyRole = NullIfEmpty(value);
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusUpdateInterval, value =>
+            {
+                DiscordRoundStatusUpdateInterval = TimeSpan.FromSeconds(value < 0 ? 0 : value);
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusStartingColor, value =>
+            {
+                DiscordRoundStatusColors = DiscordRoundStatusColors with
                 {
-                    DiscordRoundEndRole = null;
-                }
+                    Starting = RoundStatusWebhook.ParseColor(value, RoundStatusWebhook.DefaultColors.Starting),
+                };
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusRunningColor, value =>
+            {
+                DiscordRoundStatusColors = DiscordRoundStatusColors with
+                {
+                    Running = RoundStatusWebhook.ParseColor(value, RoundStatusWebhook.DefaultColors.Running),
+                };
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusEndedColor, value =>
+            {
+                DiscordRoundStatusColors = DiscordRoundStatusColors with
+                {
+                    Ended = RoundStatusWebhook.ParseColor(value, RoundStatusWebhook.DefaultColors.Ended),
+                };
+            }, true);
+            Subs.CVar(_cfg, CCVars.DiscordRoundStatusShutdownColor, value =>
+            {
+                DiscordRoundStatusColors = DiscordRoundStatusColors with
+                {
+                    Shutdown = RoundStatusWebhook.ParseColor(value, RoundStatusWebhook.DefaultColors.Shutdown),
+                };
             }, true);
             Subs.CVar(_cfg, CCVars.RoundEndSoundCollection, value => RoundEndSoundCollection = value, true);
 #if EXCEPTION_TOLERANCE
             Subs.CVar(_cfg, CCVars.RoundStartFailShutdownCount, value => RoundStartFailShutdownCount = value, true);
 #endif
             Subs.CVar(_cfg, CCVars.GameTickerIgnoredPresets, value => _ignoredRules = value.Split(","));
+        }
+
+        private static string? NullIfEmpty(string value)
+        {
+            return string.IsNullOrWhiteSpace(value)
+                ? null
+                : value;
         }
     }
 }
