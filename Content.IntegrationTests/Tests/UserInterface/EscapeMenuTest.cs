@@ -33,7 +33,6 @@ public sealed class EscapeMenuTest : GameTest
                     Assert.That(controls.OfType<PanelContainer>().Any(control => control.Name == "RoundStatusPanel"), Is.True);
                     Assert.That(controls.OfType<Button>().Any(control => control.Name == "CreditsButton"), Is.True);
                     Assert.That(controls.OfType<Button>().Any(control => control.Name == "PatronPerksButton"), Is.True);
-                    Assert.That(controls.OfType<Button>().Any(control => control.Name == "RoadmapButton"), Is.True);
                     Assert.That(controls, Has.None.InstanceOf<VoteCallMenuButton>());
                     Assert.That(lobbyControls, Has.None.InstanceOf<VoteCallMenuButton>());
                     Assert.That(console.AvailableCommands.ContainsKey("votemenu"), Is.False);

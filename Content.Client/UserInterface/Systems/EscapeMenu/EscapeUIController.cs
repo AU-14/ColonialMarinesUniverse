@@ -1,5 +1,4 @@
 using Content.Client._RMC14.LinkAccount;
-using Content.Client._RMC14.Roadmap;
 using Content.Client.Credits;
 using Content.Client.Gameplay;
 using Content.Client.GameTicking.Managers;
@@ -104,12 +103,6 @@ public sealed partial class EscapeUIController : UIController, IOnStateEntered<G
         {
             CloseEscapeWindow();
             UIManager.GetUIController<LinkAccountUIController>().TogglePatronPerksWindow();
-        };
-
-        _escapeWindow.RoadmapButton.OnPressed += _ =>
-        {
-            CloseEscapeWindow();
-            UIManager.GetUIController<RoadmapUIController>().ToggleRoadmap();
         };
 
         _escapeWindow.RulesButton.OnPressed += _ =>
