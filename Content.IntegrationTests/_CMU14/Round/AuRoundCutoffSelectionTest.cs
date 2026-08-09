@@ -1,5 +1,7 @@
 #nullable enable
 
+using System;
+using System.Collections.Generic;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking.Presets;
@@ -18,6 +20,7 @@ public sealed class AuRoundCutoffSelectionTest
     private const int PlayerCount = 40;
     private const string FixedFactionPresetId = "CMUTestFixedFactionPreset";
     private const string FixedBothSidesPresetId = "CMUTestFixedBothSidesPreset";
+    private const string MissingAsrsPresetId = "CMUTestMissingAsrsPreset";
     private const string ShepherdsPridePlanetId = "AUPlanetShepherdsPride";
     private static readonly ProtoId<PlatoonPrototype> HazopsPlatoon = "HAZOPS";
     private static readonly ProtoId<GamePresetPrototype> JailbreakPreset = "Jailbreak";
@@ -25,6 +28,16 @@ public sealed class AuRoundCutoffSelectionTest
     private static readonly ProtoId<PlatoonPrototype> RmcPlatoon = "RMC";
     private static readonly ProtoId<PlatoonPrototype> UppPlatoon = "UPP";
     private static readonly ProtoId<PlatoonPrototype> UscmPlatoon = "USCM";
+    private static readonly ProtoId<PlatoonPrototype> WeyuPlatoon = "WEYU";
+
+    private const string DuplicateAsrsProfile = """
+        - type: entity
+          id: CMUTestDuplicateUSCMAsrsProfile
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: USCM
+        """;
 
     [TestPrototypes]
     private static readonly string FixedFactionPreset = $"""
@@ -32,6 +45,27 @@ public sealed class AuRoundCutoffSelectionTest
           id: CMUTestFixedFactionPlanetPool
           planets:
           - AUPlanetShepherdsPride
+
+        - type: platoon
+          id: CMUTestMissingAsrsPlatoon
+          name: CMU missing ASRS profile test
+          possibleships:
+          - USSBushRedux
+
+        - type: entity
+          id: CMUTestMissingAsrsPlanet
+          components:
+          - type: RMCPlanetMapPrototype
+            map: /Maps/_CMU14/sheperds.yml
+            mapId: Sheperds
+            platoonsGovfor:
+            - CMUTestMissingAsrsPlatoon
+            defaultgovfor: CMUTestMissingAsrsPlatoon
+
+        - type: GamePlanetPool
+          id: CMUTestMissingAsrsPlanetPool
+          planets:
+          - CMUTestMissingAsrsPlanet
 
         - type: gamePreset
           id: {FixedFactionPresetId}
@@ -52,6 +86,15 @@ public sealed class AuRoundCutoffSelectionTest
           usesGovforPlatoon: true
           usesOpforPlatoon: true
           planetPool: CMUTestFixedFactionPlanetPool
+          rules: []
+
+        - type: gamePreset
+          id: {MissingAsrsPresetId}
+          name: CMU missing ASRS profile test
+          description: Tests catalog validation before the round plan is committed.
+          showInVote: false
+          usesGovforPlatoon: true
+          planetPool: CMUTestMissingAsrsPlanetPool
           rules: []
         """;
 
@@ -90,6 +133,144 @@ public sealed class AuRoundCutoffSelectionTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task FreezeCommitsStablePerSideAsrsCatalogsUntilReset()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var round = server.System<AuRoundSystem>();
+            var director = server.System<CMURoundDirectorSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    director.TryGetCommittedAsrsCatalog(RoundSide.Govfor, out var govforBeforeFreeze),
+                    Is.False);
+                Assert.That(govforBeforeFreeze, Is.Null);
+                Assert.That(
+                    director.TryGetCommittedAsrsCatalog(RoundSide.Opfor, out var opforBeforeFreeze),
+                    Is.False);
+                Assert.That(opforBeforeFreeze, Is.Null);
+            });
+
+            round.SetPreset(prototypes.Index<GamePresetPrototype>(FixedBothSidesPresetId));
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    director.TrySetLegacyPlanet(ShepherdsPridePlanetId),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetLegacyForce(RoundSide.Govfor, prototypes.Index(WeyuPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetLegacyForce(RoundSide.Opfor, prototypes.Index(UppPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+            });
+
+            var selection = director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+            Assert.That(
+                director.TryGetCommittedAsrsCatalog(RoundSide.Govfor, out var govforCatalog),
+                Is.True);
+            Assert.That(
+                director.TryGetCommittedAsrsCatalog(RoundSide.Opfor, out var opforCatalog),
+                Is.True);
+            Assert.That(govforCatalog, Is.Not.Null);
+            Assert.That(opforCatalog, Is.Not.Null);
+
+            var pouch = new RoundAsrsOfferId("LargeMagazinePouches");
+            Assert.That(govforCatalog!.TryGetOffer(pouch, out var govforPouch), Is.True);
+            Assert.That(opforCatalog!.TryGetOffer(pouch, out var opforPouch), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(selection.GovforAssignment?.Force, Is.EqualTo(govforCatalog.Force));
+                Assert.That(selection.OpforAssignment?.Force, Is.EqualTo(opforCatalog.Force));
+                Assert.That(govforPouch!.Crate.Id, Is.EqualTo("RMCCrateClothingMagazinePouchesLargePMC"));
+                Assert.That(opforPouch!.Crate.Id, Is.EqualTo("RMCCrateClothingMagazinePouchesLarge"));
+            });
+
+            Assert.That(
+                director.FreezeSelection(PlayerCount, FixedBothSidesPresetId),
+                Is.EqualTo(selection));
+            Assert.That(
+                director.TryGetCommittedAsrsCatalog(RoundSide.Govfor, out var repeatedGovforCatalog),
+                Is.True);
+            Assert.That(
+                director.TryGetCommittedAsrsCatalog(RoundSide.Opfor, out var repeatedOpforCatalog),
+                Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(repeatedGovforCatalog, Is.SameAs(govforCatalog));
+                Assert.That(repeatedOpforCatalog, Is.SameAs(opforCatalog));
+            });
+
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    director.TryGetCommittedAsrsCatalog(RoundSide.Govfor, out var govforAfterReset),
+                    Is.False);
+                Assert.That(govforAfterReset, Is.Null);
+                Assert.That(
+                    director.TryGetCommittedAsrsCatalog(RoundSide.Opfor, out var opforAfterReset),
+                    Is.False);
+                Assert.That(opforAfterReset, Is.Null);
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task InvalidAsrsProfilesDoNotLatchSelectionOrCatalogs()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        var server = pair.Server;
+
+        var changed = new Dictionary<Type, HashSet<string>>();
+        server.ProtoMan.LoadString(DuplicateAsrsProfile, changed: changed);
+        await server.WaitPost(() => server.ProtoMan.ReloadPrototypes(changed));
+
+        await server.WaitAssertion(() =>
+        {
+            var director = server.System<CMURoundDirectorSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            var missing = Assert.Throws<InvalidOperationException>(() =>
+                director.FreezeSelection(PlayerCount, MissingAsrsPresetId));
+            Assert.That(missing!.Message, Does.Contain("has no ASRS profile"));
+            AssertDirectorHasNoCommittedPlan(director);
+
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+            var duplicate = Assert.Throws<InvalidOperationException>(() =>
+                director.FreezeSelection(PlayerCount, FixedBothSidesPresetId));
+            Assert.That(duplicate!.Message, Does.Contain("has multiple ASRS profiles"));
+            AssertDirectorHasNoCommittedPlan(director);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static void AssertDirectorHasNoCommittedPlan(CMURoundDirectorSystem director)
+    {
+        Assert.Multiple(() =>
+        {
+            Assert.That(director.Selection, Is.Null);
+            Assert.That(
+                director.TryGetCommittedAsrsCatalog(RoundSide.Govfor, out var govforCatalog),
+                Is.False);
+            Assert.That(govforCatalog, Is.Null);
+            Assert.That(
+                director.TryGetCommittedAsrsCatalog(RoundSide.Opfor, out var opforCatalog),
+                Is.False);
+            Assert.That(opforCatalog, Is.Null);
+        });
     }
 
     [Test]

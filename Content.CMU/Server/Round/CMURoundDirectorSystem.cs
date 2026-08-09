@@ -2,6 +2,7 @@ using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking;
 using Content.Shared.GameTicking;
 using Robust.Shared.Profiling;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.Round;
 
@@ -10,7 +11,9 @@ namespace Content.Server.AU14.Round;
 /// </summary>
 public sealed partial class CMURoundDirectorSystem : EntitySystem
 {
+    [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private ProfManager _prof = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private AuRoundSystem _round = default!;
 
     private readonly CMURoundDirectorState _state = new();
@@ -73,10 +76,12 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
             playerCount,
             presetId,
             _round.SelectedThreat?.ID);
+        var asrsCatalogs = ResolveCommittedAsrsCatalogs(candidate);
 
         if (!_state.TryFreezeSelection(candidate, out var frozen))
             return frozen;
 
+        _committedAsrsCatalogs = asrsCatalogs;
         RaisePhaseChanged();
         return frozen;
     }
@@ -107,6 +112,7 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
+        _committedAsrsCatalogs = null;
         _state.Reset();
         _round.ResetLobbySelection();
         RaisePhaseChanged();
