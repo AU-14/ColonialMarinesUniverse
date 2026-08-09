@@ -5,6 +5,7 @@ using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
+using AudioComponent = Robust.Shared.Audio.Components.AudioComponent;
 
 namespace Content.Client.Audio;
 
@@ -15,7 +16,8 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
 
     // Admin music
     private bool _adminAudioEnabled = true;
-    private List<EntityUid?> _adminAudio = new(1);
+    private float _adminAudioVolume;
+    private readonly List<(EntityUid? Stream, float BaseVolume)> _adminAudio = new(1);
 
     // Event sounds (e.g. nuke timer)
     private bool _eventAudioEnabled = true;
@@ -27,6 +29,7 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestart);
         SubscribeNetworkEvent<AdminSoundEvent>(PlayAdminSound);
         Subs.CVar(_cfg, CCVars.AdminSoundsEnabled, ToggleAdminSound, true);
+        Subs.CVar(_cfg, CCVars.AdminSoundsVolume, SetAdminSoundVolume, true);
 
         SubscribeNetworkEvent<StationEventMusicEvent>(PlayStationEventMusic);
         SubscribeNetworkEvent<StopStationEventMusic>(StopStationEventMusic);
@@ -48,7 +51,7 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
 
     private void ClearAudio()
     {
-        foreach (var stream in _adminAudio)
+        foreach (var (stream, _) in _adminAudio)
         {
             _audio.Stop(stream);
         }
@@ -66,8 +69,13 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
     {
         if(!_adminAudioEnabled) return;
 
-        var stream = _audio.PlayGlobal(soundEvent.Specifier, Filter.Local(), false, soundEvent.AudioParams);
-        _adminAudio.Add(stream?.Entity);
+        var audioParams = soundEvent.AudioParams ?? AudioParams.Default;
+        var stream = _audio.PlayGlobal(
+            soundEvent.Specifier,
+            Filter.Local(),
+            false,
+            audioParams.AddVolume(_adminAudioVolume));
+        _adminAudio.Add((stream?.Entity, audioParams.Volume));
     }
 
     private void PlayStationEventMusic(StationEventMusicEvent soundEvent)
@@ -97,11 +105,24 @@ public sealed partial class ClientGlobalSoundSystem : SharedGlobalSoundSystem
     {
         _adminAudioEnabled = enabled;
         if (_adminAudioEnabled) return;
-        foreach (var stream in _adminAudio)
+        foreach (var (stream, _) in _adminAudio)
         {
             _audio.Stop(stream);
         }
         _adminAudio.Clear();
+    }
+
+    private void SetAdminSoundVolume(float volume)
+    {
+        _adminAudioVolume = SharedAudioSystem.GainToVolume(volume);
+
+        foreach (var (stream, baseVolume) in _adminAudio)
+        {
+            if (!TryComp(stream, out AudioComponent? component))
+                continue;
+
+            _audio.SetVolume(stream, baseVolume + _adminAudioVolume, component);
+        }
     }
 
     private void ToggleStationEventMusic(bool enabled)
