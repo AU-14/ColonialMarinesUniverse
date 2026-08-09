@@ -1,6 +1,7 @@
 #nullable enable
 
 using Content.Server.AU14.Scenario;
+using Content.Shared.CMU.Round;
 using NUnit.Framework;
 
 namespace Content.Tests.Server._CMU14.Scenario;
@@ -8,6 +9,38 @@ namespace Content.Tests.Server._CMU14.Scenario;
 [TestFixture]
 public sealed class RoundPlanSelectionSnapshotTest
 {
+    [Test]
+    public void TypedAssignmentsProjectTheLegacySelectionContract()
+    {
+        var govfor = new RoundForceAssignment(
+            RoundSide.Govfor,
+            new RoundForceId("USCM"),
+            "GovforShip");
+        var opfor = new RoundForceAssignment(
+            RoundSide.Opfor,
+            new RoundForceId("UPP"),
+            "OpforShip");
+
+        var snapshot = RoundPlanSelectionSnapshot.FromAssignments(
+            "DistressSignal",
+            80,
+            govfor,
+            opfor,
+            "LV624",
+            "LV624Map",
+            "XenoThreat");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(snapshot.GovforAssignment, Is.EqualTo(govfor));
+            Assert.That(snapshot.OpforAssignment, Is.EqualTo(opfor));
+            Assert.That(snapshot.GovforPlatoonId, Is.EqualTo("USCM"));
+            Assert.That(snapshot.OpforPlatoonId, Is.EqualTo("UPP"));
+            Assert.That(snapshot.GovforShipId, Is.EqualTo("GovforShip"));
+            Assert.That(snapshot.OpforShipId, Is.EqualTo("OpforShip"));
+        });
+    }
+
     [Test]
     public void ConvertsFrozenSelectionWithoutDroppingContext()
     {
