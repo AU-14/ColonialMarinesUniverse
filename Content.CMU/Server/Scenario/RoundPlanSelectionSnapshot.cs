@@ -48,6 +48,20 @@ public readonly record struct RoundPlanSelectionSnapshot
         string? mapId,
         string? selectedThreatId)
     {
+        if (govforAssignment is { Side: not RoundSide.Govfor })
+        {
+            throw new ArgumentException(
+                "The GOVFOR assignment must identify the GOVFOR side.",
+                nameof(govforAssignment));
+        }
+
+        if (opforAssignment is { Side: not RoundSide.Opfor })
+        {
+            throw new ArgumentException(
+                "The OPFOR assignment must identify the OPFOR side.",
+                nameof(opforAssignment));
+        }
+
         PresetId = presetId;
         PlayerCount = playerCount;
         GovforAssignment = govforAssignment;

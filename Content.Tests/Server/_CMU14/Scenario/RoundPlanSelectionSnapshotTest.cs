@@ -9,6 +9,30 @@ namespace Content.Tests.Server._CMU14.Scenario;
 [TestFixture]
 public sealed class RoundPlanSelectionSnapshotTest
 {
+    [TestCase(RoundSide.Opfor, true, "govforAssignment")]
+    [TestCase(RoundSide.Govfor, false, "opforAssignment")]
+    public void TypedAssignmentMustMatchItsSnapshotSide(
+        RoundSide assignmentSide,
+        bool useGovforSlot,
+        string expectedParameter)
+    {
+        var assignment = new RoundForceAssignment(
+            assignmentSide,
+            new RoundForceId("UPP"),
+            "USSBushRedux");
+
+        Assert.That(
+            () => RoundPlanSelectionSnapshot.FromAssignments(
+                "DistressSignal",
+                80,
+                useGovforSlot ? assignment : null,
+                useGovforSlot ? null : assignment,
+                "LV624",
+                "LV624Map",
+                null),
+            Throws.ArgumentException.With.Property("ParamName").EqualTo(expectedParameter));
+    }
+
     [Test]
     public void TypedAssignmentsProjectTheLegacySelectionContract()
     {
