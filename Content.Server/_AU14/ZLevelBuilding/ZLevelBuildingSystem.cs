@@ -736,7 +736,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
             if (_ghostQuery.HasComponent(uid))
                 continue;
 
-            if (xform.MapUid is not { } mapUid)
+            if (xform.MapUid is not { } mapUid || !IsEnabledOn(mapUid))
                 continue;
 
             if (!TryComp<ZGeneratedStoneComponent>(mapUid, out var stone) ||

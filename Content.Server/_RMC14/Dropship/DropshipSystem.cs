@@ -699,10 +699,10 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         var rotation = destTransform.LocalRotation;
 
         if (TryComp(dropshipId, out PhysicsComponent? physics))
-        {
             _physics.SetLocalCenter(dropshipId.Value, physics, Vector2.Zero);
-            destCoords = destCoords.Offset(-physics.LocalCenter);
-        }
+
+        if (newDestination is { } landingDestination)
+            destCoords = destCoords.Offset(landingDestination.LandingOffset);
 
         if (offset)
             destCoords = destCoords.Offset(new Vector2(-0.5f, -0.5f));

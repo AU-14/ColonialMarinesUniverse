@@ -1,4 +1,5 @@
-﻿using Robust.Shared.GameStates;
+using System.Numerics;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Dropship;
 
@@ -21,12 +22,18 @@ public sealed partial class DropshipDestinationComponent : Component
     [DataField("FactionControlling", required: false), AutoNetworkedField]
     public string FactionController = String.Empty;
 
-
     [DataField("destinationtype")]
-    public  DestinationType Destinationtype = DestinationType.Dropship;
+    public DestinationType Destinationtype = DestinationType.Dropship;
 
     [DataField("Home")]
     public bool Home = false;
+
+    /// <summary>
+    ///     Offset from this destination marker to the dropship grid origin on landing.
+    /// </summary>
+    [DataField("landingOffset")]
+    public Vector2 LandingOffset;
+
     public enum DestinationType
     {
         Figher,

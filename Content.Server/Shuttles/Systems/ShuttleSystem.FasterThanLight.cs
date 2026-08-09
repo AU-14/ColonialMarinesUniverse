@@ -551,12 +551,10 @@ public sealed partial class ShuttleSystem
                     exactYautjaLanding = true;
                     var mapUid = _mapSystem.GetMap(mapCoordinates.MapId);
                     var destinationRotation = entity.Comp1.TargetAngle + _transform.GetWorldRotation(target.EntityId);
-                    var shuttleCenter = Comp<MapGridComponent>(uid).LocalAABB.Center;
-                    var gridOrigin = mapCoordinates.Position - destinationRotation.RotateVec(shuttleCenter);
                     _transform.SetCoordinates(
                         uid,
                         xform,
-                        new EntityCoordinates(mapUid, gridOrigin),
+                        new EntityCoordinates(mapUid, mapCoordinates.Position),
                         rotation: destinationRotation);
                 }
                 else

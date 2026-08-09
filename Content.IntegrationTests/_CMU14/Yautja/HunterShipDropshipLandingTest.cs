@@ -154,28 +154,119 @@ public sealed class HunterShipDropshipLandingTest
             var entMan = server.EntMan;
             var transform = entMan.System<SharedTransformSystem>();
 
-            foreach (var (shuttle, _, destination) in shuttles)
+            foreach (var (shuttle, _, _) in shuttles)
             {
                 var shuttleTransform = entMan.GetComponent<TransformComponent>(shuttle);
                 Assert.That(shuttleTransform.MapUid, Is.EqualTo(hunterShip));
                 Assert.That(shuttleTransform.ParentUid, Is.EqualTo(hunterShip),
                     $"{entMan.ToPrettyString(shuttle)} must be parented to the Hunter Ship map, not nested under its grid.");
 
-                var shuttleGrid = entMan.GetComponent<MapGridComponent>(shuttle);
-                var shuttleAabb = transform.GetWorldMatrix(shuttle).TransformBox(shuttleGrid.LocalAABB);
-                var destinationPosition = transform.GetMapCoordinates(destination).Position;
-                var centerDistance = Vector2.Distance(shuttleAabb.Center, destinationPosition);
-                Assert.That(centerDistance, Is.EqualTo(0f).Within(0.01f),
-                    $"{entMan.ToPrettyString(shuttle)} hull center must match the landing pad's current position.");
-                Assert.That(transform.GetWorldRotation(shuttle).GetCardinalDir(),
-                    Is.EqualTo(transform.GetWorldRotation(destination).GetCardinalDir()),
-                    $"{entMan.ToPrettyString(shuttle)} must match the landing pad's current orientation.");
+                var ftl = entMan.GetComponent<FTLComponent>(shuttle);
+                var destinationPosition = transform.ToMapCoordinates(ftl.TargetCoordinates).Position;
+                var shuttlePosition = transform.GetWorldPosition(shuttle);
+                Assert.That(Vector2.Distance(shuttlePosition, destinationPosition), Is.EqualTo(0f).Within(0.01f),
+                    $"{entMan.ToPrettyString(shuttle)} origin must match the selected landing vector's current position.");
+                var destinationRotation = ftl.TargetAngle + transform.GetWorldRotation(ftl.TargetCoordinates.EntityId);
+                Assert.That(transform.GetWorldRotation(shuttle).Theta,
+                    Is.EqualTo(destinationRotation.Theta).Within(0.001f),
+                    $"{entMan.ToPrettyString(shuttle)} must match the selected landing vector's exact current orientation.");
                 var shuttlePhysics = entMan.GetComponent<PhysicsComponent>(shuttle);
                 Assert.That(shuttlePhysics.BodyType, Is.EqualTo(BodyType.Static),
                     $"{entMan.ToPrettyString(shuttle)} must remain static after landing on the Hunter Ship.");
                 Assert.That(shuttlePhysics.FixedRotation, Is.True,
                     $"{entMan.ToPrettyString(shuttle)} must preserve its initial fixed rotation after landing.");
             }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RoundStartHunterShuttleReturnsToItsInitialLandingPadPose()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Destructive = true,
+        });
+        var server = pair.Server;
+
+        EntityUid hunterShuttle = default;
+        EntityUid console = default;
+        EntityUid landingPad = default;
+        Vector2 initialPosition = default;
+        Angle initialRotation = default;
+        EntityCoordinates landingPadCoordinates = default;
+        Vector2 landingPadMapPosition = default;
+        EntityCoordinates ftlTarget = default;
+        Vector2 ftlTargetMapPosition = default;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var loader = entMan.System<MapLoaderSystem>();
+            var transform = entMan.System<SharedTransformSystem>();
+
+            Assert.That(loader.TryLoadMap(
+                new ResPath("/Maps/_CMU14/huntership_upper.yml"),
+                out _,
+                out _,
+                DeserializationOptions.Default with { InitializeMaps = true }), Is.True);
+
+            var grids = entMan.EntityQueryEnumerator<MapGridComponent, DropshipComponent>();
+            while (grids.MoveNext(out var uid, out _, out _))
+            {
+                if (FindNavigationConsoleOrNull(entMan, uid) is not { } foundConsole)
+                    continue;
+
+                hunterShuttle = uid;
+                console = foundConsole;
+                break;
+            }
+
+            Assert.That(hunterShuttle, Is.Not.EqualTo(EntityUid.Invalid), "The round-start Hunter Shuttle must be spawned on Landing Pad A.");
+            initialPosition = transform.GetWorldPosition(hunterShuttle);
+            initialRotation = transform.GetWorldRotation(hunterShuttle);
+
+            var entities = entMan.EntityQueryEnumerator<MetaDataComponent>();
+            while (entities.MoveNext(out var uid, out var metadata))
+            {
+                if (metadata.EntityPrototype?.ID == "CMUHunterShipYautjaLandingPadAFTLBeacon")
+                {
+                    landingPad = uid;
+                    break;
+                }
+            }
+
+            Assert.That(landingPad, Is.Not.EqualTo(EntityUid.Invalid));
+            Assert.That(entMan.GetComponent<DropshipDestinationComponent>(landingPad).LandingOffset,
+                Is.EqualTo(new Vector2(-0.5f, -0.5f)),
+                "Landing Pad A must target the Hunter Shuttle grid origin, not the marker's tile center.");
+            landingPadCoordinates = entMan.GetComponent<TransformComponent>(landingPad).Coordinates;
+            landingPadMapPosition = transform.GetMapCoordinates(landingPad).Position;
+            server.CfgMan.SetCVar(CCVars.FTLTravelTime, 0.1f);
+            server.CfgMan.SetCVar(CCVars.FTLArrivalTime, 0.1f);
+            server.CfgMan.SetCVar(CCVars.FTLCooldown, 0.1f);
+
+            var dropship = entMan.System<DropshipSystem>();
+            var navigation = (console, entMan.GetComponent<DropshipNavigationComputerComponent>(console));
+            Assert.That(dropship.FlyTo(navigation, landingPad, null, startupTime: 0f, hyperspaceTime: 0f), Is.True);
+            ftlTarget = entMan.GetComponent<FTLComponent>(hunterShuttle).TargetCoordinates;
+            ftlTargetMapPosition = transform.ToMapCoordinates(ftlTarget).Position;
+        });
+
+        await PoolManager.WaitUntil(server, () =>
+            server.EntMan.TryGetComponent<FTLComponent>(hunterShuttle, out var ftl) &&
+            ftl.State == FTLState.Cooldown,
+            maxTicks: 60);
+
+        await server.WaitAssertion(() =>
+        {
+            var transform = server.EntMan.System<SharedTransformSystem>();
+            var returnedPosition = transform.GetWorldPosition(hunterShuttle);
+            Assert.That(Vector2.Distance(returnedPosition, initialPosition), Is.EqualTo(0f).Within(0.01f),
+                $"A Hunter Shuttle returning to Landing Pad A must restore the same world position it had before launch. Initial: {initialPosition}; landing pad: {landingPadCoordinates}; landing pad map position: {landingPadMapPosition}; FTL target: {ftlTarget}; target map position: {ftlTargetMapPosition}; returned: {returnedPosition}.");
+            Assert.That((transform.GetWorldRotation(hunterShuttle) - initialRotation).Theta, Is.EqualTo(0f).Within(0.001f),
+                "A Hunter Shuttle returning to Landing Pad A must restore the same world rotation it had before launch.");
         });
 
         await pair.CleanReturnAsync();
@@ -192,5 +283,17 @@ public sealed class HunterShipDropshipLandingTest
 
         Assert.Fail($"Hunter shuttle {entMan.ToPrettyString(shuttle)} has no navigation console.");
         return default;
+    }
+
+    private static EntityUid? FindNavigationConsoleOrNull(IEntityManager entMan, EntityUid shuttle)
+    {
+        var consoles = entMan.EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
+        while (consoles.MoveNext(out var uid, out _, out var transform))
+        {
+            if (transform.GridUid == shuttle)
+                return uid;
+        }
+
+        return null;
     }
 }

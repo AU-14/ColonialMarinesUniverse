@@ -200,6 +200,7 @@
   - type: FTLBeacon
   - type: DropshipDestination
     FactionControlling: yautja
+    landingOffset: -0.5,-0.5
   - type: FTLSmashImmune
   - type: NoFTL
 
@@ -213,6 +214,7 @@
   - type: FTLBeacon
   - type: DropshipDestination
     FactionControlling: yautja
+    landingOffset: -0.5,-0.5
   - type: FTLSmashImmune
   - type: NoFTL
 
