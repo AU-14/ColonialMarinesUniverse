@@ -41,7 +41,6 @@ namespace Content.Server._CMU14.Threats;
 public sealed partial class ThreatSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRound = default!;
-    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
@@ -50,6 +49,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private ThreatVoteSystem _threatVote = default!;
