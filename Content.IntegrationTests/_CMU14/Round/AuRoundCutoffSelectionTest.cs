@@ -3,6 +3,7 @@
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking.Presets;
+using Content.Shared.CMU.Round;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting.Pool;
 
@@ -13,6 +14,7 @@ public sealed class AuRoundCutoffSelectionTest
 {
     private const int PlayerCount = 40;
     private const string FixedFactionPresetId = "CMUTestFixedFactionPreset";
+    private const string FixedBothSidesPresetId = "CMUTestFixedBothSidesPreset";
     private static readonly ProtoId<GamePresetPrototype> JailbreakPreset = "Jailbreak";
     private static readonly ProtoId<GamePresetPrototype> PrometheusPreset = "Prometheus";
 
@@ -33,7 +35,54 @@ public sealed class AuRoundCutoffSelectionTest
           usesThreatSpawnDelay: true
           planetPool: CMUTestFixedFactionPlanetPool
           rules: []
+
+        - type: gamePreset
+          id: {FixedBothSidesPresetId}
+          name: CMU fixed both-sides test
+          description: Tests committed typed assignments for both military sides.
+          showInVote: false
+          usesGovforPlatoon: true
+          usesOpforPlatoon: true
+          planetPool: CMUTestFixedFactionPlanetPool
+          rules: []
         """;
+
+    [Test]
+    public async Task FixedBothSidesCommitTypedDefaultAssignments()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var round = server.System<AuRoundSystem>();
+            var director = server.System<CMURoundDirectorSystem>();
+            round.ResetLobbySelection();
+
+            var selection = director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    selection.GovforAssignment,
+                    Is.EqualTo(
+                        new RoundForceAssignment(
+                            RoundSide.Govfor,
+                            new RoundForceId("USCM"),
+                            "USSBushRedux")));
+                Assert.That(
+                    selection.OpforAssignment,
+                    Is.EqualTo(
+                        new RoundForceAssignment(
+                            RoundSide.Opfor,
+                            new RoundForceId("UPP"),
+                            "USSBushRedux")));
+                Assert.That(director.Selection, Is.EqualTo(selection));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
 
     [TestCase(
         "DistressSignal",
