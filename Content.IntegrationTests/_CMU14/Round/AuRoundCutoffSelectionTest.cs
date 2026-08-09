@@ -2,9 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
+using Content.Server.CMU.Round;
 using Content.Server.GameTicking.Presets;
+using Content.Shared._RMC14.Requisitions;
+using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.Access.Components;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
 using Content.Shared.GameTicking;
@@ -228,6 +233,211 @@ public sealed class AuRoundCutoffSelectionTest
     }
 
     [Test]
+    public async Task SideAsrsConsolesProjectCommittedCatalogsWithoutChangingSideInfrastructure()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+
+        EntityUid govforConsole = default;
+        EntityUid opforConsole = default;
+        EntityUid secondGovforConsole = default;
+        EntityUid genericConsole = default;
+        EntityUid govforElevator = default;
+        EntityUid opforElevator = default;
+        NetEntity govforConsoleNet = default;
+        NetEntity opforConsoleNet = default;
+        EntityUid? govforAccount = null;
+        string? govforPrototype = null;
+        string? opforPrototype = null;
+        string[] govforAccess = [];
+        string[] opforAccess = [];
+        string[] expectedGovforCatalog = [];
+        string[] expectedOpforCatalog = [];
+        string[] initialGovforCatalog = [];
+        string[] initialGenericCatalog = [];
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var round = server.System<AuRoundSystem>();
+            var director = server.System<CMURoundDirectorSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            govforConsole = server.EntMan.SpawnEntity("CMASRSConsoleGovfor", map.GridCoords);
+            genericConsole = server.EntMan.SpawnEntity("CMASRSConsole", map.GridCoords);
+            govforElevator = server.EntMan.SpawnEntity("CMCargoElevatorGovfor", map.GridCoords);
+            govforConsoleNet = server.EntMan.GetNetEntity(govforConsole);
+
+            var govforComputer = server.EntMan.GetComponent<RequisitionsComputerComponent>(govforConsole);
+            govforAccount = govforComputer.Account;
+            govforPrototype = server.EntMan.GetComponent<MetaDataComponent>(govforConsole).EntityPrototype?.ID;
+            govforAccess = SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(govforConsole));
+            initialGovforCatalog = SnapshotCatalog(govforComputer);
+            initialGenericCatalog = SnapshotCatalog(
+                server.EntMan.GetComponent<RequisitionsComputerComponent>(genericConsole));
+
+            round.SetPreset(prototypes.Index<GamePresetPrototype>(FixedBothSidesPresetId));
+            Assert.Multiple(() =>
+            {
+                Assert.That(govforAccount, Is.Not.Null);
+                Assert.That(govforPrototype, Is.EqualTo("CMASRSConsoleGovfor"));
+                Assert.That(
+                    govforAccess,
+                    Is.EqualTo(new[] { "AU14AccessGovforCommand", "AU14AccessGovforReq" }));
+                Assert.That(
+                    director.TrySetLegacyPlanet(ShepherdsPridePlanetId),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetLegacyForce(RoundSide.Govfor, prototypes.Index(WeyuPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetLegacyForce(RoundSide.Opfor, prototypes.Index(UppPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+            });
+
+            director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+            director.MarkMapsLoaded();
+            Assert.Multiple(() =>
+            {
+                Assert.That(server.EntMan.HasComponent<RoundAsrsConsoleCatalogComponent>(govforConsole), Is.False);
+                Assert.That(SnapshotCatalog(govforComputer), Is.EqualTo(initialGovforCatalog));
+            });
+        });
+
+        await pair.RunTicksSync(5);
+        await client.WaitAssertion(() =>
+        {
+            var clientGovfor = client.EntMan.GetEntity(govforConsoleNet);
+            Assert.That(
+                SnapshotCatalog(client.EntMan.GetComponent<RequisitionsComputerComponent>(clientGovfor)),
+                Is.EqualTo(initialGovforCatalog));
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var director = server.System<CMURoundDirectorSystem>();
+            director.MarkWorldInitialized();
+
+            opforConsole = server.EntMan.SpawnEntity("CMASRSConsoleOpfor", map.GridCoords);
+            secondGovforConsole = server.EntMan.SpawnEntity("CMASRSConsoleGovfor", map.GridCoords);
+            opforElevator = server.EntMan.SpawnEntity("CMCargoElevatorOpfor", map.GridCoords);
+            opforConsoleNet = server.EntMan.GetNetEntity(opforConsole);
+            opforPrototype = server.EntMan.GetComponent<MetaDataComponent>(opforConsole).EntityPrototype?.ID;
+            opforAccess = SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(opforConsole));
+
+            Assert.That(director.TryGetCommittedAsrsCatalog(RoundSide.Govfor, out var govforCatalog), Is.True);
+            Assert.That(director.TryGetCommittedAsrsCatalog(RoundSide.Opfor, out var opforCatalog), Is.True);
+            expectedGovforCatalog = SnapshotCatalog(govforCatalog!);
+            expectedOpforCatalog = SnapshotCatalog(opforCatalog!);
+            var govforBinding = server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(govforConsole);
+            var opforBinding = server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(opforConsole);
+            var firstGovforComputer = server.EntMan.GetComponent<RequisitionsComputerComponent>(govforConsole);
+            var secondGovforComputer = server.EntMan.GetComponent<RequisitionsComputerComponent>(secondGovforConsole);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(initialGovforCatalog, Is.Not.EqualTo(expectedGovforCatalog));
+                Assert.That(
+                    SnapshotCatalog(server.EntMan.GetComponent<RequisitionsComputerComponent>(govforConsole)),
+                    Is.EqualTo(expectedGovforCatalog));
+                Assert.That(
+                    SnapshotCatalog(server.EntMan.GetComponent<RequisitionsComputerComponent>(opforConsole)),
+                    Is.EqualTo(expectedOpforCatalog));
+                Assert.That(SnapshotCatalog(secondGovforComputer), Is.EqualTo(expectedGovforCatalog));
+                Assert.That(govforBinding.Generation, Is.EqualTo(director.Generation));
+                Assert.That(opforBinding.Generation, Is.EqualTo(director.Generation));
+                Assert.That(govforBinding.Force, Is.EqualTo(govforCatalog!.Force));
+                Assert.That(opforBinding.Force, Is.EqualTo(opforCatalog!.Force));
+                Assert.That(SnapshotCatalogIds(govforBinding), Is.EqualTo(SnapshotCatalogIds(govforCatalog)));
+                Assert.That(SnapshotCatalogIds(opforBinding), Is.EqualTo(SnapshotCatalogIds(opforCatalog)));
+                Assert.That(SnapshotStock(govforBinding), Is.EqualTo(SnapshotStock(govforCatalog)));
+                Assert.That(SnapshotStock(opforBinding), Is.EqualTo(SnapshotStock(opforCatalog)));
+                Assert.That(
+                    SnapshotCatalog(server.EntMan.GetComponent<RequisitionsComputerComponent>(genericConsole)),
+                    Is.EqualTo(initialGenericCatalog));
+                Assert.That(
+                    server.EntMan.HasComponent<RoundAsrsConsoleCatalogComponent>(genericConsole),
+                    Is.False,
+                    "A force-neutral, unscoped console must remain untouched until semantic endpoint migration.");
+                Assert.That(firstGovforComputer.Categories, Is.Not.SameAs(secondGovforComputer.Categories));
+                Assert.That(firstGovforComputer.Categories[0], Is.Not.SameAs(secondGovforComputer.Categories[0]));
+                Assert.That(
+                    firstGovforComputer.Categories[0].Entries[0],
+                    Is.Not.SameAs(secondGovforComputer.Categories[0].Entries[0]));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsComputerComponent>(govforConsole).Faction,
+                    Is.EqualTo("govfor"));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsComputerComponent>(opforConsole).Faction,
+                    Is.EqualTo("opfor"));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsComputerComponent>(govforConsole).Account,
+                    Is.EqualTo(govforAccount));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsComputerComponent>(opforConsole).Account,
+                    Is.EqualTo(govforAccount),
+                    "The existing requisitions system deliberately shares one account across side shells.");
+                Assert.That(
+                    server.EntMan.GetComponent<MetaDataComponent>(govforConsole).EntityPrototype?.ID,
+                    Is.EqualTo(govforPrototype));
+                Assert.That(
+                    server.EntMan.GetComponent<MetaDataComponent>(opforConsole).EntityPrototype?.ID,
+                    Is.EqualTo(opforPrototype));
+                Assert.That(opforPrototype, Is.EqualTo("CMASRSConsoleOpfor"));
+                Assert.That(
+                    SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(govforConsole)),
+                    Is.EqualTo(govforAccess));
+                Assert.That(
+                    SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(opforConsole)),
+                    Is.EqualTo(opforAccess));
+                Assert.That(
+                    opforAccess,
+                    Is.EqualTo(new[] { "AU14AccessOpforCommand", "AU14AccessOpforReq" }));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsElevatorComponent>(govforElevator).Faction,
+                    Is.EqualTo("govfor"));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsElevatorComponent>(opforElevator).Faction,
+                    Is.EqualTo("opfor"));
+            });
+        });
+
+        await pair.RunTicksSync(5);
+        await client.WaitAssertion(() =>
+        {
+            var clientGovfor = client.EntMan.GetEntity(govforConsoleNet);
+            var clientOpfor = client.EntMan.GetEntity(opforConsoleNet);
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    SnapshotCatalog(client.EntMan.GetComponent<RequisitionsComputerComponent>(clientGovfor)),
+                    Is.EqualTo(expectedGovforCatalog));
+                Assert.That(
+                    SnapshotCatalog(client.EntMan.GetComponent<RequisitionsComputerComponent>(clientOpfor)),
+                    Is.EqualTo(expectedOpforCatalog));
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            server.EntMan.DeleteEntity(govforConsole);
+            server.EntMan.DeleteEntity(opforConsole);
+            server.EntMan.DeleteEntity(secondGovforConsole);
+            server.EntMan.DeleteEntity(genericConsole);
+            server.EntMan.DeleteEntity(govforElevator);
+            server.EntMan.DeleteEntity(opforElevator);
+        });
+        await pair.RunUntilSynced();
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task InvalidAsrsProfilesDoNotLatchSelectionOrCatalogs()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
@@ -255,6 +465,89 @@ public sealed class AuRoundCutoffSelectionTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    private static string[] SnapshotAccess(AccessReaderComponent access)
+    {
+        return access.AccessLists
+            .Select(group => string.Join(",", group.OrderBy(level => level.Id, StringComparer.Ordinal)))
+            .OrderBy(group => group, StringComparer.Ordinal)
+            .ToArray();
+    }
+
+    private static string[] SnapshotCatalog(ResolvedRoundAsrsCatalog catalog)
+    {
+        var snapshot = new List<string>();
+        for (var categoryIndex = 0; categoryIndex < catalog.Categories.Length; categoryIndex++)
+        {
+            var category = catalog.Categories[categoryIndex];
+            snapshot.Add($"C|{categoryIndex}|{category.Name}|{category.Offers.Length}");
+            for (var offerIndex = 0; offerIndex < category.Offers.Length; offerIndex++)
+            {
+                var offer = category.Offers[offerIndex];
+                snapshot.Add($"O|{categoryIndex}|{offerIndex}|{offer.Crate.Id}|{offer.Cost}");
+            }
+        }
+
+        return snapshot.ToArray();
+    }
+
+    private static string[] SnapshotCatalog(RequisitionsComputerComponent computer)
+    {
+        var snapshot = new List<string>();
+        for (var categoryIndex = 0; categoryIndex < computer.Categories.Count; categoryIndex++)
+        {
+            var category = computer.Categories[categoryIndex];
+            snapshot.Add($"C|{categoryIndex}|{category.Name}|{category.Entries.Count}");
+            for (var offerIndex = 0; offerIndex < category.Entries.Count; offerIndex++)
+            {
+                var offer = category.Entries[offerIndex];
+                snapshot.Add($"O|{categoryIndex}|{offerIndex}|{offer.Crate.Id}|{offer.Cost}");
+            }
+        }
+
+        return snapshot.ToArray();
+    }
+
+    private static string[] SnapshotCatalogIds(ResolvedRoundAsrsCatalog catalog)
+    {
+        return catalog.Categories
+            .SelectMany(category =>
+                new[] { $"C|{category.Id}" }
+                    .Concat(category.Offers.Select(offer => $"O|{offer.Id}")))
+            .ToArray();
+    }
+
+    private static string[] SnapshotCatalogIds(RoundAsrsConsoleCatalogComponent catalog)
+    {
+        return catalog.CategoryIds
+            .SelectMany((category, index) =>
+                new[] { $"C|{category}" }
+                    .Concat(catalog.OfferIdsByCategory[index].Select(offer => $"O|{offer}")))
+            .ToArray();
+    }
+
+    private static string[] SnapshotStock(ResolvedRoundAsrsCatalog catalog)
+    {
+        return catalog.Categories
+            .SelectMany(category => category.Offers)
+            .Where(offer => offer.Stock != null)
+            .Select(offer => SnapshotStock(offer.Id, offer.Stock!.Value))
+            .OrderBy(stock => stock, StringComparer.Ordinal)
+            .ToArray();
+    }
+
+    private static string[] SnapshotStock(RoundAsrsConsoleCatalogComponent catalog)
+    {
+        return catalog.StockPolicies
+            .Select(stock => SnapshotStock(stock.Key, stock.Value))
+            .OrderBy(stock => stock, StringComparer.Ordinal)
+            .ToArray();
+    }
+
+    private static string SnapshotStock(RoundAsrsOfferId offer, RoundAsrsStockPolicy stock)
+    {
+        return $"{offer}|{stock.Maximum}|{stock.ReplenishDelay.Ticks}|{stock.StartingStock}|{stock.ReplenishAmount}";
     }
 
     private static void AssertDirectorHasNoCommittedPlan(CMURoundDirectorSystem director)
