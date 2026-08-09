@@ -20,6 +20,30 @@ public sealed class RoundForceAssignmentTest
     }
 
     [Test]
+    public void DefaultForceIdentifierCannotBeAssigned()
+    {
+        Assert.That(
+            () => new RoundForceAssignment(
+                RoundSide.Govfor,
+                default,
+                "GovforShip"),
+            Throws.ArgumentException.With.Property("ParamName").EqualTo("force"));
+    }
+
+    [Test]
+    public void AssignmentCopyCannotReplaceForceWithDefault()
+    {
+        var assignment = new RoundForceAssignment(
+            RoundSide.Govfor,
+            new RoundForceId("USCM"),
+            "GovforShip");
+
+        Assert.That(
+            () => assignment with { Force = default },
+            Throws.ArgumentException.With.Property("ParamName").EqualTo("value"));
+    }
+
+    [Test]
     public void SameForceCanBeAssignedToDifferentRoundSides()
     {
         var force = new RoundForceId("UPP");

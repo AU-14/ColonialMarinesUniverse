@@ -9,6 +9,9 @@ namespace Content.Server.AU14.Scenario;
 /// </summary>
 public readonly record struct RoundPlanSelectionSnapshot
 {
+    private readonly RoundForceAssignment? _govforAssignment;
+    private readonly RoundForceAssignment? _opforAssignment;
+
     /// <summary>
     /// Compatibility constructor for callers that still provide legacy platoon selections.
     /// </summary>
@@ -48,24 +51,13 @@ public readonly record struct RoundPlanSelectionSnapshot
         string? mapId,
         string? selectedThreatId)
     {
-        if (govforAssignment is { Side: not RoundSide.Govfor })
-        {
-            throw new ArgumentException(
-                "The GOVFOR assignment must identify the GOVFOR side.",
-                nameof(govforAssignment));
-        }
-
-        if (opforAssignment is { Side: not RoundSide.Opfor })
-        {
-            throw new ArgumentException(
-                "The OPFOR assignment must identify the OPFOR side.",
-                nameof(opforAssignment));
-        }
+        ValidateAssignment(govforAssignment, RoundSide.Govfor, nameof(govforAssignment));
+        ValidateAssignment(opforAssignment, RoundSide.Opfor, nameof(opforAssignment));
 
         PresetId = presetId;
         PlayerCount = playerCount;
-        GovforAssignment = govforAssignment;
-        OpforAssignment = opforAssignment;
+        _govforAssignment = govforAssignment;
+        _opforAssignment = opforAssignment;
         PlanetId = planetId;
         MapId = mapId;
         SelectedThreatId = selectedThreatId;
@@ -73,8 +65,25 @@ public readonly record struct RoundPlanSelectionSnapshot
 
     public string PresetId { get; init; }
     public int PlayerCount { get; init; }
-    public RoundForceAssignment? GovforAssignment { get; init; }
-    public RoundForceAssignment? OpforAssignment { get; init; }
+    public RoundForceAssignment? GovforAssignment
+    {
+        get => _govforAssignment;
+        init
+        {
+            ValidateAssignment(value, RoundSide.Govfor, nameof(value));
+            _govforAssignment = value;
+        }
+    }
+
+    public RoundForceAssignment? OpforAssignment
+    {
+        get => _opforAssignment;
+        init
+        {
+            ValidateAssignment(value, RoundSide.Opfor, nameof(value));
+            _opforAssignment = value;
+        }
+    }
     public string? PlanetId { get; init; }
     public string? MapId { get; init; }
     public string? SelectedThreatId { get; init; }
@@ -159,4 +168,27 @@ public readonly record struct RoundPlanSelectionSnapshot
         SelectedThreatId,
         GovforShipId,
         OpforShipId);
+
+    private static void ValidateAssignment(
+        RoundForceAssignment? assignment,
+        RoundSide expectedSide,
+        string parameterName)
+    {
+        if (assignment == null)
+            return;
+
+        if (!assignment.Value.Force.IsValid)
+        {
+            throw new ArgumentException(
+                "The round force identifier cannot be missing.",
+                parameterName);
+        }
+
+        if (assignment.Value.Side == expectedSide)
+            return;
+
+        throw new ArgumentException(
+            $"The {expectedSide.ToString().ToUpperInvariant()} assignment must identify the {expectedSide.ToString().ToUpperInvariant()} side.",
+            parameterName);
+    }
 }

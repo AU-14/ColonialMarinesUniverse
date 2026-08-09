@@ -66,6 +66,45 @@ public sealed class RoundPlanSelectionSnapshotTest
     }
 
     [Test]
+    public void SnapshotCopyRejectsAssignmentOnWrongSide()
+    {
+        var snapshot = RoundPlanSelectionSnapshot.FromAssignments(
+            "DistressSignal",
+            80,
+            new RoundForceAssignment(
+                RoundSide.Govfor,
+                new RoundForceId("USCM"),
+                "GovforShip"),
+            null,
+            "LV624",
+            "LV624Map",
+            null);
+        var wrongSide = new RoundForceAssignment(
+            RoundSide.Opfor,
+            new RoundForceId("UPP"),
+            "OpforShip");
+
+        Assert.That(
+            () => snapshot with { GovforAssignment = wrongSide },
+            Throws.ArgumentException.With.Property("ParamName").EqualTo("value"));
+    }
+
+    [Test]
+    public void SnapshotRejectsDefaultForceAssignment()
+    {
+        Assert.That(
+            () => RoundPlanSelectionSnapshot.FromAssignments(
+                "DistressSignal",
+                80,
+                default(RoundForceAssignment),
+                null,
+                "LV624",
+                "LV624Map",
+                null),
+            Throws.ArgumentException.With.Property("ParamName").EqualTo("govforAssignment"));
+    }
+
+    [Test]
     public void ConvertsFrozenSelectionWithoutDroppingContext()
     {
         var snapshot = new RoundPlanSelectionSnapshot(
