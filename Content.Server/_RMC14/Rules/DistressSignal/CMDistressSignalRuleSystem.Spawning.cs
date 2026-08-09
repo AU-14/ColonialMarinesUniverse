@@ -67,7 +67,8 @@ public sealed partial class CMDistressSignalRuleSystem
         if (_spawnedDropships) return;
 
         _spawnedDropships = true;
-        InitializeDropships(comp);
+        if (ShouldInitializeLegacyDropships(HasCmuPlatoonDropshipSetup())) // CMU14
+            InitializeDropships(comp);
     }
 
     private bool InitializeXenoMap(Entity<CMDistressSignalRuleComponent> rule, CMDistressSignalRuleComponent comp)
