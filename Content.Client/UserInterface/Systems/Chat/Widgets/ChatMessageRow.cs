@@ -1,7 +1,9 @@
 using System;
 using System.Numerics;
-using Content.Client.Stylesheets;
+using Content.Client._RMC14.Chat;
 using Content.Client.Resources;
+using Content.Client.Stylesheets;
+using Content.Client.UserInterface.RichText;
 using Content.Shared._CMU14.Ghost;
 using Content.Shared._CMU14.Xenonids.Watch;
 using Content.Shared.Chat;
@@ -9,6 +11,7 @@ using Robust.Client.Console;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
 using Robust.Client.UserInterface.Controls;
+using Robust.Client.UserInterface.RichText;
 using Robust.Shared.IoC;
 using Robust.Shared.Utility;
 
@@ -16,6 +19,21 @@ namespace Content.Client.UserInterface.Systems.Chat.Widgets;
 
 public sealed partial class ChatMessageRow : PanelContainer
 {
+    private static readonly Type[] AllowedMessageTags =
+    [
+        typeof(BoldItalicTag),
+        typeof(BoldTag),
+        typeof(BulletTag),
+        typeof(ColorTag),
+        typeof(CommandLinkTag),
+        typeof(FontTag),
+        typeof(HeadingTag),
+        typeof(ItalicTag),
+        typeof(LanguageIconTag),
+        typeof(MonoTag),
+        typeof(ScrambleTag)
+    ];
+
     [Dependency] private IClientConsoleHost _consoleHost = default!;
     [Dependency] private IResourceCache _resourceCache = default!;
 
@@ -91,7 +109,7 @@ public sealed partial class ChatMessageRow : PanelContainer
             VerticalAlignment = VAlignment.Top,
             LineHeightScale = metrics.LineHeightScale
         };
-        _messageLabel.SetMessage(formatted, defaultColor: textColor);
+        _messageLabel.SetMessage(formatted, AllowedMessageTags, defaultColor: textColor);
         row.AddChild(_messageLabel);
 
         _repeatBadge = new Label
@@ -193,14 +211,14 @@ public sealed partial class ChatMessageRow : PanelContainer
     private static RowMetrics GetMetrics(int? fontSize)
     {
         if (fontSize == null)
-            return new RowMetrics(2, 4, 0, 1.06f, 42, 58, 25, 16);
+            return new RowMetrics(2, 4, 0, 1.06f, 42, 104, 25, 16);
 
         return fontSize.Value switch
         {
-            <= 9 => new RowMetrics(1, 3, 0, 1.0f, 34, 46, 20, 14),
-            <= 11 => new RowMetrics(1, 3, 0, 1.02f, 38, 52, 22, 15),
-            <= 13 => new RowMetrics(2, 4, 0, 1.04f, 40, 56, 24, 16),
-            _ => new RowMetrics(2, 4, 0, 1.06f, 42, 58, 25, 18)
+            <= 9 => new RowMetrics(1, 3, 0, 1.0f, 34, 72, 20, 14),
+            <= 11 => new RowMetrics(1, 3, 0, 1.02f, 38, 88, 22, 15),
+            <= 13 => new RowMetrics(2, 4, 0, 1.04f, 40, 104, 24, 16),
+            _ => new RowMetrics(2, 4, 0, 1.06f, 42, 128, 25, 18)
         };
     }
 
@@ -235,7 +253,13 @@ public sealed partial class ChatMessageRow : PanelContainer
 
     private static bool IsUnlabeledRadioSystemMessage(ChatMessage message)
     {
-        if (message.Channel != ChatChannel.Radio || message.Display is not { } display)
+        if (message.Channel != ChatChannel.Radio)
+            return false;
+
+        if (!message.SenderEntity.Valid || message.Display?.Kind == ChatDisplayKind.System)
+            return true;
+
+        if (message.Display is not { } display)
             return false;
 
         return display.Kind == ChatDisplayKind.Radio
