@@ -184,7 +184,7 @@ public sealed class AuRoundCutoffSelectionTest
             Assert.That(govforCatalog, Is.Not.Null);
             Assert.That(opforCatalog, Is.Not.Null);
 
-            var pouch = new RoundAsrsOfferId("LargeMagazinePouches");
+            var pouch = new RoundAsrsOfferId("Pouches_RMCCrateClothingMagazinePouchesLarge");
             Assert.That(govforCatalog!.TryGetOffer(pouch, out var govforPouch), Is.True);
             Assert.That(opforCatalog!.TryGetOffer(pouch, out var opforPouch), Is.True);
             Assert.Multiple(() =>

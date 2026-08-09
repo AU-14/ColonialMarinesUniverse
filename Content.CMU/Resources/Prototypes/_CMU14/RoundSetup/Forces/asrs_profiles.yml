@@ -5,113 +5,894 @@
   components:
   - type: RoundForceAsrsProfile
     categories:
+    - id: Materials
+      name: Materials
+      offers:
+      - id: Materials_RMCCrateEmptySandbags
+        crate: RMCCrateEmptySandbags
+        cost: 250
+      - id: Materials_RMCCrateSandbagsConstructionKit
+        crate: RMCCrateSandbagsConstructionKit
+        cost: 500
+      - id: Materials_RMCCrateMetalSheets
+        crate: RMCCrateMetalSheets
+        cost: 700
+      - id: Materials_RMCCratePlasteelSheets
+        crate: RMCCratePlasteelSheets
+        cost: 800
+      - id: Materials_RMCCrateGlassSheets
+        crate: RMCCrateGlassSheets
+        cost: 650
+      - id: Materials_RMCCrateWoodenPlanks
+        crate: RMCCrateWoodenPlanks
+        cost: 100
+    - id: Engineering
+      name: Engineering
+      offers:
+      - id: Engineering_AU14CrateFOBTentCrate
+        crate: AU14CrateFOBTentCrate
+        cost: 1000
+      - id: Engineering_RMCCrateElectricalMaintenance
+        crate: RMCCrateElectricalMaintenance
+        cost: 700
+      - id: Engineering_RMCCrateMechanicalMaintenance
+        crate: RMCCrateMechanicalMaintenance
+        cost: 700
+      - id: Engineering_RMCCrateInflatableBarriers
+        crate: RMCCrateInflatableBarriers
+        cost: 150
+      - id: Engineering_RMCCrateReplacementLights
+        crate: RMCCrateReplacementLights
+        cost: 250
+      - id: Engineering_RMCCratePacmanParts
+        crate: RMCCratePacmanParts
+        cost: 1500
+      - id: Engineering_RMCCrateSuperPacmanParts
+        crate: RMCCrateSuperPacmanParts
+        cost: 3000
+      - id: Engineering_RMCCrateFlashlights
+        crate: RMCCrateFlashlights
+        cost: 500
+      - id: Engineering_RMCCrateHighCapacityPowerCell
+        crate: RMCCrateHighCapacityPowerCell
+        cost: 750
+      - id: Engineering_AU14CrateBoxFirefighting
+        crate: AU14CrateBoxFirefighting
+        cost: 1000
+    - id: Explosives
+      name: Explosives
+      offers:
+      - id: Explosives_RMCCrateGrenadesHighExplosive
+        crate: RMCCrateGrenadesHighExplosive
+        cost: 1800
+      - id: Explosives_RMCCrateGrenadesIncendiary
+        crate: RMCCrateGrenadesIncendiary
+        cost: 1500
+      - id: Explosives_RMCCrateGrenadesFrag
+        crate: RMCCrateGrenadesFrag
+        cost: 1700
+      - id: Explosives_RMCCrateGrenadesSmoke
+        crate: RMCCrateGrenadesSmoke
+        cost: 5000
+      - id: Explosives_RMCCrateGrenadesFragOld
+        crate: RMCCrateGrenadesFragOld
+        cost: 1000
+      - id: Explosives_RMCCratePlasticExplosives
+        crate: RMCCratePlasticExplosives
+        cost: 1000
+      - id: Explosives_RMCCrateBreachingCharges
+        crate: RMCCrateBreachingCharges
+        cost: 2000
+      - id: Explosives_RMCCrateGrenadesHighExplosiveBox
+        crate: RMCCrateGrenadesHighExplosiveBox
+        cost: 1000
+      - id: Explosives_RMCCrateGrenadesBoxHEFA
+        crate: RMCCrateGrenadesBoxHEFA
+        cost: 2000
+      - id: Explosives_RMCCrateGrenadesAirburstFragBox
+        crate: RMCCrateGrenadesAirburstFragBox
+        cost: 1800
+      - id: Explosives_RMCCrateBoxAGMI
+        crate: RMCCrateBoxAGMI
+        cost: 2000
+      - id: Explosives_RMCCrateGrenadesAirburstFrag
+        crate: RMCCrateGrenadesAirburstFrag
+        cost: 2000
+      - id: Explosives_RMCCrateGrenadesAirburstIncendiary
+        crate: RMCCrateGrenadesAirburstIncendiary
+        cost: 2000
+      - id: Explosives_RMCCrateGrenadesAirburstSmoke
+        crate: RMCCrateGrenadesAirburstSmoke
+        cost: 1200
+      - id: Explosives_RMCCrateGrenadesAirburstHornet
+        crate: RMCCrateGrenadesAirburstHornet
+        cost: 1900
+      - id: Explosives_RMCCrateGrenadesAirburstStarShell
+        crate: RMCCrateGrenadesAirburstStarShell
+        cost: 1800
+      - id: Explosives_RMCCrateGrenadesBatonSlug
+        crate: RMCCrateGrenadesBatonSlug
+        cost: 1000
+      - id: Explosives_RMCCrateExplosiveClaymoreMine
+        crate: RMCCrateExplosiveClaymoreMine
+        cost: 1600
+      - id: Explosives_RMCCrateM6HBruteRockets
+        crate: RMCCrateM6HBruteRockets
+        cost: 1500
+    - id: Food
+      name: Food
+      offers:
+      - id: Food_RMCCrateFoodMRE
+        crate: RMCCrateFoodMRE
+        cost: 100
+      - id: Food_RMCCrateFoodIngredients
+        crate: RMCCrateFoodIngredients
+        cost: 100
+    - id: Gear
+      name: Gear
+      offers:
+      - id: Gear_AU14CrateTacticalMonocular
+        crate: AU14CrateTacticalMonocular
+        cost: 1200
+      - id: Gear_AU14CrateTacticalMonocularDesignator
+        crate: AU14CrateTacticalMonocularDesignator
+        cost: 1700
+      - id: Gear_RMCCrateGearPackFlare
+        crate: RMCCrateGearPackFlare
+        cost: 400
+      - id: Gear_AU14CrateMotionDetectors
+        crate: AU14CrateMotionDetectors
+        cost: 1000
+      - id: Gear_RMCCrateGearPackFlareCAS
+        crate: RMCCrateGearPackFlareCAS
+        cost: 800
+      - id: Gear_RMCCrateGearFulton
+        crate: RMCCrateGearFulton
+        cost: 1000
+      - id: Gear_RMCCrateGearParachute
+        crate: RMCCrateGearParachute
+        cost: 400
+      - id: Gear_RMCCrateAttachmentSmartScope
+        crate: RMCCrateAttachmentSmartScope
+        cost: 800
     - id: Pouches
       name: Pouches
       offers:
-      - id: LargeMagazinePouches
+      - id: Pouches_RMCCrateClothingMagazinePouchesLarge
         crate: RMCCrateClothingMagazinePouchesLarge
+        cost: 150
+    - id: Medical
+      name: Medical
+      offers:
+      - id: Medical_AU14CrateMedicalVendor
+        crate: AU14CrateMedicalVendor
+        cost: 3000
+      - id: Medical_AU14CrateMedicalBloodVendor
+        crate: AU14CrateMedicalBloodVendor
+        cost: 1500
+      - id: Medical_CMUCrateMedicalFieldTreatments
+        crate: CMUCrateMedicalFieldTreatments
+        cost: 850
+        stock:
+          maximum: 2
+          replenishDelay: 480
+      - id: Medical_RMCCrateMedicalSurgery
+        crate: RMCCrateMedicalSurgery
+        cost: 350
+      - id: Medical_AU14CrateBoxDefibrillator
+        crate: AU14CrateBoxDefibrillator
+        cost: 600
+        stock:
+          maximum: 4
+          replenishDelay: 600
+      - id: Medical_RMCCrateMedicalBodyBag
+        crate: RMCCrateMedicalBodyBag
+        cost: 500
+      - id: Medical_RMCCrateMedicalStasisBag
+        crate: RMCCrateMedicalStasisBag
+        cost: 1000
+      - id: Medical_AU14CrateBoxHospitalBeds
+        crate: AU14CrateBoxHospitalBeds
+        cost: 400
+      - id: Medical_RMCCrateMedicalPill
+        crate: RMCCrateMedicalPill
+        cost: 650
+    - id: Mortar
+      name: Mortar
+      offers:
+      - id: Mortar_RMCCrateMortarKit
+        crate: RMCCrateMortarKit
+        cost: 3000
+      - id: Mortar_RMCCrateMortarShellFlare
+        crate: RMCCrateMortarShellFlare
+        cost: 500
+      - id: Mortar_RMCCrateMortarShellHE
+        crate: RMCCrateMortarShellHE
+        cost: 650
+      - id: Mortar_RMCCrateMortarShellIncendiary
+        crate: RMCCrateMortarShellIncendiary
+        cost: 750
+      - id: Mortar_AU14CrateMortarShellHEATMP
+        crate: AU14CrateMortarShellHEATMP
+        cost: 800
+      - id: Mortar_AU14CrateMortarShellMixed
+        crate: AU14CrateMortarShellMixed
+        cost: 950
+    - id: Supplies
+      name: Supplies
+      offers:
+      - id: Supplies_RMCCrateSupplyInternals
+        crate: RMCCrateSupplyInternals
+        cost: 200
+      - id: Supplies_RMCCrateSupplyEvacuation
+        crate: RMCCrateSupplyEvacuation
+        cost: 250
+      - id: Supplies_RMCCrateSuppliesBoxes
+        crate: RMCCrateSuppliesBoxes
+        cost: 75
+      - id: Supplies_RMCCrateSupplyJanitor
+        crate: RMCCrateSupplyJanitor
         cost: 150
     - id: VehicleAmmo
       name: Vehicle Ammo
       offers:
-      - id: LtbCannonMixed
+      - id: VehicleAmmo_CMUCrateVehicleAmmoLTBCannonMixed
         crate: CMUCrateVehicleAmmoLTBCannonMixed
         cost: 1900
         stock: &vehicleAmmoStock
           maximum: 2
           replenishDelay: 300
-      - id: LtaaAp
+      - id: VehicleAmmo_RMCCrateVehicleAmmoLTAAAP
         crate: RMCCrateVehicleAmmoLTAAAP
         cost: 1800
         stock: *vehicleAmmoStock
-      - id: AceAutocannon
+      - id: VehicleAmmo_RMCCrateVehicleAmmoAceAutocannon
         crate: RMCCrateVehicleAmmoAceAutocannon
         cost: 1800
         stock: *vehicleAmmoStock
-      - id: DragonFlamer
+      - id: VehicleAmmo_RMCCrateVehicleAmmoDragonFlamer
         crate: RMCCrateVehicleAmmoDragonFlamer
         cost: 1700
         stock: *vehicleAmmoStock
-      - id: BoyarsDualCannon
+      - id: VehicleAmmo_RMCCrateVehicleAmmoBoyarsDualCannon
         crate: RMCCrateVehicleAmmoBoyarsDualCannon
         cost: 1800
         stock: *vehicleAmmoStock
-      - id: GrenadeLauncherMixed
+      - id: VehicleAmmo_CMUCrateVehicleAmmoGrenadeLauncherMixed
         crate: CMUCrateVehicleAmmoGrenadeLauncherMixed
         cost: 900
         stock: *vehicleAmmoStock
-      - id: SmokeLauncher
+      - id: VehicleAmmo_RMCCrateVehicleAmmoSmokeLauncher
         crate: RMCCrateVehicleAmmoSmokeLauncher
         cost: 700
         stock: *vehicleAmmoStock
-      - id: TowLauncher
+      - id: VehicleAmmo_RMCCrateVehicleAmmoTowLauncher
         crate: RMCCrateVehicleAmmoTowLauncher
         cost: 2200
         stock: *vehicleAmmoStock
-      - id: CupolaMixed
+      - id: VehicleAmmo_CMUCrateVehicleAmmoCupolaMixed
         crate: CMUCrateVehicleAmmoCupolaMixed
         cost: 1025
         stock: *vehicleAmmoStock
-      - id: CupolaTracer
+      - id: VehicleAmmo_CMUCrateVehicleAmmoCupolaTracer
         crate: CMUCrateVehicleAmmoCupolaTracer
         cost: 1050
         stock: *vehicleAmmoStock
-      - id: LzrnFlamer
+      - id: VehicleAmmo_RMCCrateVehicleAmmoLZRNFlamer
         crate: RMCCrateVehicleAmmoLZRNFlamer
         cost: 1200
         stock: *vehicleAmmoStock
-      - id: FrontalCannon
+      - id: VehicleAmmo_RMCCrateVehicleAmmoFrontalCannon
         crate: RMCCrateVehicleAmmoFrontalCannon
         cost: 1000
         stock: *vehicleAmmoStock
-      - id: FlareLauncher
+      - id: VehicleAmmo_RMCCrateVehicleAmmoFlareLauncher
         crate: RMCCrateVehicleAmmoFlareLauncher
         cost: 700
         stock: *vehicleAmmoStock
-      - id: RotaryCannon
+      - id: VehicleAmmo_RMCCrateVehicleAmmoRotaryCannon
         crate: RMCCrateVehicleAmmoRotaryCannon
         cost: 1800
         stock: *vehicleAmmoStock
+    - id: Weapons
+      name: Weapons
+      offers:
+      - id: Weapons_RMCCrateXM51
+        crate: RMCCrateXM51
+        cost: 850
+      - id: Weapons_RMCCrateMK80
+        crate: RMCCrateMK80
+        cost: 250
+      - id: Weapons_RMCCrateXM88
+        crate: RMCCrateXM88
+        cost: 600
+      - id: Weapons_RMCCrateMOU53
+        crate: RMCCrateMOU53
+        cost: 800
+      - id: Weapons_RMCCrateM85A1
+        crate: RMCCrateM85A1
+        cost: 400
+      - id: Weapons_AU14CrateAssortedKnives
+        crate: AU14CrateAssortedKnives
+        cost: 100
+      - id: Weapons_AU14CrateM5A1SLAW
+        crate: AU14CrateM5A1SLAW
+        cost: 1500
+      - id: Weapons_RMCCrateM34
+        crate: RMCCrateM34
+        cost: 800
+      - id: Weapons_AU14CrateM7SLAW
+        crate: AU14CrateM7SLAW
+        cost: 2200
+      - id: Weapons_RMCCrateML66D
+        crate: RMCCrateML66D
+        cost: 1500
+      - id: Weapons_RMCCrateM2C
+        crate: RMCCrateM2C
+        cost: 1000
+    - id: Ammo
+      name: Ammo
+      offers:
+      - id: Ammo_RMCCrateBoxShellsShotgunBreaching
+        crate: RMCCrateBoxShellsShotgunBreaching
+        cost: 400
+      - id: Ammo_RMCCrateBoxMagazinePistolMK80
+        crate: RMCCrateBoxMagazinePistolMK80
+        cost: 650
+      - id: Ammo_RMCCrateBoxAmmo458
+        crate: RMCCrateBoxAmmo458
+        cost: 800
+      - id: Ammo_RMCCrateBoxMagazineSentry
+        crate: RMCCrateBoxMagazineSentry
+        cost: 600
+      - id: Ammo_RMCCrateBoxMagazineSentryShotgun
+        crate: RMCCrateBoxMagazineSentryShotgun
+        cost: 600
+      - id: Ammo_RMCCrateBoxMagazineSentryFire
+        crate: RMCCrateBoxMagazineSentryFire
+        cost: 600
+      - id: Ammo_RMCCrateBoxShellsShotgunSlugs
+        crate: RMCCrateBoxShellsShotgunSlugs
+        cost: 300
+      - id: Ammo_RMCCrateBoxShellsShotgunFlechette
+        crate: RMCCrateBoxShellsShotgunFlechette
+        cost: 300
+      - id: Ammo_RMCCrateBoxShellsShotgunBuckshot
+        crate: RMCCrateBoxShellsShotgunBuckshot
+        cost: 300
+      - id: Ammo_AU14CrateM7SLAWAPRocket
+        crate: AU14CrateM7SLAWAPRocket
+        cost: 1000
+      - id: Ammo_AU14CrateM7SLAWMixedRocket
+        crate: AU14CrateM7SLAWMixedRocket
+        cost: 1250
+      - id: Ammo_AU14CrateM7SLAWHERocket
+        crate: AU14CrateM7SLAWHERocket
+        cost: 2000
+      - id: Ammo_RMCCrateMagazineML66DDrum
+        crate: RMCCrateMagazineML66DDrum
+        cost: 250
+      - id: Ammo_RMCCrateMagazineM2C
+        crate: RMCCrateMagazineM2C
+        cost: 500
+      - id: Ammo_RMCCrateMagazineNapthalUT
+        crate: RMCCrateMagazineNapthalUT
+        cost: 200
+      - id: Ammo_RMCCrateMagazineFlamerMixed
+        crate: RMCCrateMagazineFlamerMixed
+        cost: 350
+      - id: Ammo_RMCCrateMagazineBGel
+        crate: RMCCrateMagazineBGel
+        cost: 500
+    - id: SpecialistAmmo
+      name: Specialist Ammo
+      offers:
+      - id: SpecialistAmmo_RMCCratePyroTankMixed
+        crate: RMCCratePyroTankMixed
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSniperM96S
+        crate: AU14CrateMagazineSpecSniperM96S
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSniperM96SIncendiary
+        crate: AU14CrateMagazineSpecSniperM96SIncendiary
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSniperM96SFlak
+        crate: AU14CrateMagazineSpecSniperM96SFlak
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSniperM96SMixed
+        crate: AU14CrateMagazineSpecSniperM96SMixed
+        cost: 1500
+      - id: SpecialistAmmo_AU14CrateMagazineSpecAMRXM43E1
+        crate: AU14CrateMagazineSpecAMRXM43E1
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSharpHE
+        crate: AU14CrateMagazineSpecSharpHE
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSharpFLC
+        crate: AU14CrateMagazineSpecSharpFLC
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSharpINCEN
+        crate: AU14CrateMagazineSpecSharpINCEN
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecSharpMixed
+        crate: AU14CrateMagazineSpecSharpMixed
+        cost: 1500
+      - id: SpecialistAmmo_AU14CrateMagazineSpecScoutStandard
+        crate: AU14CrateMagazineSpecScoutStandard
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecScoutINCEN
+        crate: AU14CrateMagazineSpecScoutINCEN
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecScoutFLAK
+        crate: AU14CrateMagazineSpecScoutFLAK
+        cost: 2000
+      - id: SpecialistAmmo_AU14CrateMagazineSpecScoutMixed
+        crate: AU14CrateMagazineSpecScoutMixed
+        cost: 1500
+      - id: SpecialistAmmo_AU14CrateBoxRSH9SL
+        crate: AU14CrateBoxRSH9SL
+        cost: 450
+    - id: APAmmo
+      name: AP Ammo
+      offers: []
+    - id: DropshipParts
+      name: Dropship Parts
+      offers:
+      - id: DropshipParts_RMCDropShipSpotlight
+        crate: RMCDropShipSpotlight
+        cost: 100
+      - id: DropshipParts_RMCDropShipLZDetector
+        crate: RMCDropShipLZDetector
+        cost: 200
+      - id: DropshipParts_RMCDropshipAttachmentCoolingSystem
+        crate: RMCDropshipAttachmentCoolingSystem
+        cost: 500
+      - id: DropshipParts_RMCDropshipAttachmentFuelEnhancer
+        crate: RMCDropshipAttachmentFuelEnhancer
+        cost: 500
+      - id: DropshipParts_RMCDropshipTargetingSystem
+        crate: RMCDropshipTargetingSystem
+        cost: 850
+    - id: DropshipMunitions
+      name: Dropship Munitions
+      offers:
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketHarpoon
+        crate: RMCDropshipAttachmentAmmoRocketHarpoon
+        cost: 400
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketBanshee
+        crate: RMCDropshipAttachmentAmmoRocketBanshee
+        cost: 800
+      - id: DropshipMunitions_AU14DropshipAttachmentAmmoRocketBansheeHorde
+        crate: AU14DropshipAttachmentAmmoRocketBansheeHorde
+        cost: 1600
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketKeeper
+        crate: RMCDropshipAttachmentAmmoRocketKeeper
+        cost: 3000
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketWidowmaker
+        crate: RMCDropshipAttachmentAmmoRocketWidowmaker
+        cost: 4000
+      - id: DropshipMunitions_AU14DropshipAttachmentAmmoRocketThermobaricTwo
+        crate: AU14DropshipAttachmentAmmoRocketThermobaricTwo
+        cost: 1300
+      - id: DropshipMunitions_AU14DropshipAttachmentAmmoRocketWidowmakerDouble
+        crate: AU14DropshipAttachmentAmmoRocketWidowmakerDouble
+        cost: 6500
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketThermobaric
+        crate: RMCDropshipAttachmentAmmoRocketThermobaric
+        cost: 4900
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketNapalm
+        crate: RMCDropshipAttachmentAmmoRocketNapalm
+        cost: 4500
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketMiniMike
+        crate: RMCDropshipAttachmentAmmoRocketMiniMike
+        cost: 3000
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoRocketMiniMikeIncendiary
+        crate: RMCDropshipAttachmentAmmoRocketMiniMikeIncendiary
+        cost: 3500
+      - id: DropshipMunitions_AU14DropshipAttachmentAmmoCBU607
+        crate: AU14DropshipAttachmentAmmoCBU607
+        cost: 3500
+      - id: DropshipMunitions_AU14DropshipAttachmentAmmoCBU250
+        crate: AU14DropshipAttachmentAmmoCBU250
+        cost: 3000
+      - id: DropshipMunitions_AU14DropshipAttachmentAmmoMk102JDAM
+        crate: AU14DropshipAttachmentAmmoMk102JDAM
+        cost: 9000
+      - id: DropshipMunitions_AU14DropshipAttachmentAmmoGBU89I
+        crate: AU14DropshipAttachmentAmmoGBU89I
+        cost: 11000
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoGAU
+        crate: RMCDropshipAttachmentAmmoGAU
+        cost: 2000
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoGAUAP
+        crate: RMCDropshipAttachmentAmmoGAUAP
+        cost: 2500
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoLaserCannon
+        crate: RMCDropshipAttachmentAmmoLaserCannon
+        cost: 2000
+      - id: DropshipMunitions_RMCDropshipAttachmentAmmoLaunchableSentry
+        crate: RMCDropshipAttachmentAmmoLaunchableSentry
+        cost: 600
+    - id: Research
+      name: Research
+      offers:
+      - id: Research_RMCCrateInflatableBarriers
+        crate: RMCCrateInflatableBarriers
+        cost: 1000
+      - id: Research_CMUCrateResearchTerminal
+        crate: CMUCrateResearchTerminal
+        cost: 100
+      - id: Research_CMUCrateSim
+        crate: CMUCrateSim
+        cost: 900
+      - id: Research_CMUMonkeyCubeCrate
+        crate: CMUMonkeyCubeCrate
+        cost: 4000
+        stock: &researchCubeStock
+          maximum: 1
+          replenishDelay: 1800
+      - id: Research_CMUExoticCubeCrate
+        crate: CMUExoticCubeCrate
+        cost: 8000
+        stock: *researchCubeStock
+      - id: Research_CMUCrateChemGlasses
+        crate: CMUCrateChemGlasses
+        cost: 250
+      - id: Research_CMUCrateBiosuitScientist
+        crate: CMUCrateBiosuitScientist
+        cost: 400
+      - id: Research_CMUCratePreciousMetals
+        crate: CMUCratePreciousMetals
+        cost: 4500
+    - id: Botany
+      name: Botany
+      offers:
+      - id: Botany_AU14CrateHydroponicsEquipment
+        crate: AU14CrateHydroponicsEquipment
+        cost: 350
+      - id: Botany_AU14CrateHydroSeeds
+        crate: AU14CrateHydroSeeds
+        cost: 600
+      - id: Botany_hydroponicsTray
+        crate: hydroponicsTray
+        cost: 340
 
 - type: entity
-  parent: CMURoundForceAsrsCommon
+  abstract: true
+  id: CMURoundForceAsrsApM54CMK1
+  components:
+  - type: RoundForceAsrsProfile
+    additions:
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineRifleM54CMK1AP
+        crate: AU14CrateBoxMagazineRifleM54CMK1AP
+        cost: 1000
+
+- type: entity
+  abstract: true
+  id: CMURoundForceAsrsApM54C
+  components:
+  - type: RoundForceAsrsProfile
+    additions:
+    - category: APAmmo
+      offer:
+        id: APAmmo_RMCCrateBoxMagazineRifleM54CAP
+        crate: RMCCrateBoxMagazineRifleM54CAP
+        cost: 1000
+
+- type: entity
+  abstract: true
+  id: CMURoundForceAsrsApM63
+  components:
+  - type: RoundForceAsrsProfile
+    additions:
+    - category: APAmmo
+      offer:
+        id: APAmmo_RMCCrateBoxMagazineSMGM63AP
+        crate: RMCCrateBoxMagazineSMGM63AP
+        cost: 850
+
+- type: entity
+  abstract: true
+  id: CMURoundForceAsrsRmcMortar
+  components:
+  - type: RoundForceAsrsProfile
+    exclusions:
+    - Mortar_RMCCrateMortarKit
+    - Mortar_RMCCrateMortarShellFlare
+    - Mortar_RMCCrateMortarShellHE
+    - Mortar_RMCCrateMortarShellIncendiary
+    - Mortar_AU14CrateMortarShellHEATMP
+    - Mortar_AU14CrateMortarShellMixed
+    additions:
+    - category: Mortar
+      offer:
+        id: Mortar_RMCCrateMortarKit
+        crate: AU14CrateMortarKitRMC
+        cost: 3000
+    - category: Mortar
+      offer:
+        id: Mortar_RMCCrateMortarShellFlare
+        crate: AU14CrateMortarShellFlareRMC
+        cost: 500
+    - category: Mortar
+      offer:
+        id: Mortar_RMCCrateMortarShellHE
+        crate: AU14CrateMortarShellHERMC
+        cost: 650
+    - category: Mortar
+      offer:
+        id: Mortar_RMCCrateMortarShellIncendiary
+        crate: AU14CrateMortarShellIncendiaryRMC
+        cost: 750
+    - category: Mortar
+      offer:
+        id: Mortar_AU14CrateMortarShellHEATMP
+        crate: AU14CrateMortarShellHEATRMC
+        cost: 800
+    - category: Mortar
+      offer:
+        id: Mortar_AU14CrateMortarShellMixed
+        crate: AU14CrateMortarMixed
+        cost: 950
+
+- type: entity
+  parent:
+  - CMURoundForceAsrsCommon
+  - CMURoundForceAsrsApM54CMK1
+  - CMURoundForceAsrsApM54C
+  - CMURoundForceAsrsApM63
   id: CMURoundForceAsrsUSCM
   categories: [ HideSpawnMenu ]
   components:
   - type: RoundForceAsrsProfile
     forceId: USCM
+    additions:
+    - category: Gear
+      offer:
+        id: Gear_ANPRCFillCardResupplyCrateGOVFOR
+        crate: ANPRCFillCardResupplyCrateGOVFOR
+        cost: 300
+      insertBefore: Gear_AU14CrateTacticalMonocular
+    - category: Gear
+      offer:
+        id: Gear_ANPRCRadioResupplyCrateGOVFOR
+        crate: ANPRCRadioResupplyCrateGOVFOR
+        cost: 1500
+      insertBefore: Gear_AU14CrateTacticalMonocular
+    overrides:
+    - offer: Weapons_RMCCrateMK80
+      cost: 800
+    - offer: Ammo_RMCCrateBoxMagazinePistolMK80
+      cost: 250
 
 - type: entity
-  parent: CMURoundForceAsrsCommon
+  parent:
+  - CMURoundForceAsrsCommon
+  - CMURoundForceAsrsApM54CMK1
+  - CMURoundForceAsrsApM54C
+  - CMURoundForceAsrsApM63
   id: CMURoundForceAsrsLACN
   categories: [ HideSpawnMenu ]
   components:
   - type: RoundForceAsrsProfile
     forceId: LACN
+    additions:
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineRifleKramerAP
+        crate: AU14CrateBoxMagazineRifleKramerAP
+        cost: 1250
 
 - type: entity
-  parent: CMURoundForceAsrsCommon
+  parent:
+  - CMURoundForceAsrsCommon
+  - CMURoundForceAsrsRmcMortar
   id: CMURoundForceAsrsUPP
   categories: [ HideSpawnMenu ]
   components:
   - type: RoundForceAsrsProfile
     forceId: UPP
+    exclusions:
+    - Explosives_RMCCrateGrenadesHighExplosive
+    - Explosives_RMCCrateGrenadesIncendiary
+    - Explosives_RMCCrateGrenadesFrag
+    - Explosives_RMCCrateGrenadesSmoke
+    - Explosives_RMCCrateGrenadesFragOld
+    - Explosives_RMCCrateGrenadesHighExplosiveBox
+    - Explosives_RMCCrateGrenadesBoxHEFA
+    - Weapons_RMCCrateMOU53
+    - Weapons_RMCCrateM34
+    - Weapons_AU14CrateM7SLAW
+    - Weapons_RMCCrateML66D
+    - Weapons_RMCCrateM2C
+    - Ammo_AU14CrateM7SLAWAPRocket
+    - Ammo_AU14CrateM7SLAWMixedRocket
+    - Ammo_AU14CrateM7SLAWHERocket
+    - Ammo_RMCCrateMagazineML66DDrum
+    - Ammo_RMCCrateMagazineM2C
+    - SpecialistAmmo_RMCCratePyroTankMixed
+    additions:
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesHighExplosive
+        crate: AU14CrateGrenadesHighExplosiveUPP
+        cost: 900
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesIncendiary
+        crate: AU14CrateGrenadesIncendiaryUPP
+        cost: 700
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesSmoke
+        crate: AU14CrateGrenadesSmokeUPP
+        cost: 5000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesHighExplosiveBox
+        crate: AU14CrateGrenadesHighExplosiveBoxUPP
+        cost: 1500
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesBoxHEFA
+        crate: AU14CrateGrenadesIncendiaryBoxUPP
+        cost: 1300
+    - category: Explosives
+      offer:
+        id: Explosives_AU14CrateGrenadesSmokeBoxUPP
+        crate: AU14CrateGrenadesSmokeBoxUPP
+        cost: 1800
+      insertBefore: Explosives_RMCCrateGrenadesAirburstFragBox
+    - category: Gear
+      offer:
+        id: Gear_ANPRCFillCardResupplyCrateOPFOR
+        crate: ANPRCFillCardResupplyCrateOPFOR
+        cost: 300
+      insertBefore: Gear_AU14CrateTacticalMonocular
+    - category: Gear
+      offer:
+        id: Gear_ANPRCRadioResupplyCrateOPFOR
+        crate: ANPRCRadioResupplyCrateOPFOR
+        cost: 1500
+      insertBefore: Gear_AU14CrateTacticalMonocular
+    - category: Weapons
+      offer:
+        id: Weapons_RMCCrateMOU53
+        crate: CMUCrateOlympiets
+        cost: 800
+    - category: Weapons
+      offer:
+        id: Weapons_RMCCrateM34
+        crate: RMCCrateM34
+        cost: 800
+      insertBefore: Weapons_AU14CrateM5A1SLAW
+    - category: Weapons
+      offer:
+        id: Weapons_AU14CrateM7SLAW
+        crate: AU14CrateHJRA12
+        cost: 2200
+      insertBefore: Weapons_AU14CrateM5A1SLAW
+    - category: Weapons
+      offer:
+        id: Weapons_RMCCrateML66D
+        crate: AU14CrateOG60
+        cost: 1200
+      insertBefore: Weapons_AU14CrateM5A1SLAW
+    - category: Ammo
+      offer:
+        id: Ammo_AU14CrateM7SLAWAPRocket
+        crate: AU14CrateHJRA12ATRocket
+        cost: 200
+      insertBefore: Ammo_RMCCrateMagazineNapthalUT
+    - category: Ammo
+      offer:
+        id: Ammo_AU14CrateM7SLAWMixedRocket
+        crate: AU14CrateHJRA12MixedRocket
+        cost: 350
+      insertBefore: Ammo_RMCCrateMagazineNapthalUT
+    - category: Ammo
+      offer:
+        id: Ammo_AU14CrateM7SLAWHERocket
+        crate: AU14CrateHJRA12HERocket
+        cost: 150
+      insertBefore: Ammo_RMCCrateMagazineNapthalUT
+    - category: Ammo
+      offer:
+        id: Ammo_AU14CrateHJRA12EIIRocket
+        crate: AU14CrateHJRA12EIIRocket
+        cost: 1500
+      insertBefore: Ammo_RMCCrateMagazineNapthalUT
+    - category: Ammo
+      offer:
+        id: Ammo_RMCCrateMagazineML66DDrum
+        crate: AU14CrateMagazineType88
+        cost: 400
+      insertBefore: Ammo_RMCCrateMagazineNapthalUT
+    - category: Ammo
+      offer:
+        id: Ammo_RMCCrateMagazineM2C
+        crate: AU14CrateMagazineType23Mixed
+        cost: 250
+      insertBefore: Ammo_RMCCrateMagazineNapthalUT
+    - category: SpecialistAmmo
+      offer:
+        id: SpecialistAmmo_CMUCrateEMBLRAP
+        crate: CMUCrateEMBLRAP
+        cost: 700
+      insertBefore: SpecialistAmmo_AU14CrateMagazineSpecSniperM96S
+    - category: SpecialistAmmo
+      offer:
+        id: SpecialistAmmo_CMUCrateEMBLRMixed
+        crate: CMUCrateEMBLRMixed
+        cost: 600
+      insertBefore: SpecialistAmmo_AU14CrateMagazineSpecSniperM96S
+    - category: SpecialistAmmo
+      offer:
+        id: SpecialistAmmo_CMUCrateEMBLRHE
+        crate: CMUCrateEMBLRHE
+        cost: 700
+      insertBefore: SpecialistAmmo_AU14CrateMagazineSpecSniperM96S
+    - category: SpecialistAmmo
+      offer:
+        id: SpecialistAmmo_CMUCrateEMBLRWP
+        crate: CMUCrateEMBLRWP
+        cost: 900
+      insertBefore: SpecialistAmmo_AU14CrateMagazineSpecSniperM96S
+    - category: SpecialistAmmo
+      offer:
+        id: SpecialistAmmo_RMCCratePyroTankMixed
+        crate: RMCCratePyroTankMixedUPP
+        cost: 2000
+      insertBefore: SpecialistAmmo_AU14CrateMagazineSpecSniperM96S
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineRifleAG80AP
+        crate: AU14CrateBoxMagazineRifleAG80AP
+        cost: 850
+    overrides:
+    - offer: Explosives_RMCCratePlasticExplosives
+      cost: 4000
+    - offer: Weapons_RMCCrateXM88
+      cost: 400
+    - offer: Weapons_RMCCrateM85A1
+      cost: 600
+    - offer: Weapons_AU14CrateAssortedKnives
+      cost: 200
 
 - type: entity
-  parent: CMURoundForceAsrsCommon
+  parent:
+  - CMURoundForceAsrsCommon
+  - CMURoundForceAsrsApM63
   id: CMURoundForceAsrsWEYU
   categories: [ HideSpawnMenu ]
   components:
   - type: RoundForceAsrsProfile
     forceId: WEYU
     exclusions:
-    - LargeMagazinePouches
+    - Pouches_RMCCrateClothingMagazinePouchesLarge
+    - SpecialistAmmo_RMCCratePyroTankMixed
     additions:
     - category: Pouches
       offer:
-        id: LargeMagazinePouches
+        id: Pouches_RMCCrateClothingMagazinePouchesLarge
         crate: RMCCrateClothingMagazinePouchesLargePMC
         cost: 150
+    - category: Weapons
+      offer:
+        id: Weapons_AU14KitWeaponRXFM
+        crate: AU14KitWeaponRXFM
+        cost: 1200
+      insertBefore: Weapons_AU14CrateAssortedKnives
+    - category: SpecialistAmmo
+      offer:
+        id: SpecialistAmmo_RMCCratePyroTankMixed
+        crate: RMCCratePyroTankMixedWY
+        cost: 2000
+    overrides:
+    - offer: Weapons_RMCCrateMK80
+      cost: 800
 
 - type: entity
   parent: CMURoundForceAsrsCommon
@@ -120,14 +901,38 @@
   components:
   - type: RoundForceAsrsProfile
     forceId: CMBCIU
+    exclusions:
+    - Weapons_RMCCrateXM51
+    additions:
+    - category: Weapons
+      offer:
+        id: Weapons_RMCCrateXM51
+        crate: RMCCrateXM51
+        cost: 850
+      insertBefore: Weapons_RMCCrateMOU53
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineSMGPDW90AP
+        crate: AU14CrateBoxMagazineSMGPDW90AP
+        cost: 1000
 
 - type: entity
-  parent: CMURoundForceAsrsCommon
+  parent:
+  - CMURoundForceAsrsCommon
+  - CMURoundForceAsrsApM54C
   id: CMURoundForceAsrsHAZOPS
   categories: [ HideSpawnMenu ]
   components:
   - type: RoundForceAsrsProfile
     forceId: HAZOPS
+    exclusions:
+    - SpecialistAmmo_RMCCratePyroTankMixed
+    additions:
+    - category: SpecialistAmmo
+      offer:
+        id: SpecialistAmmo_RMCCratePyroTankMixed
+        crate: RMCCratePyroTankMixedHAZOPS
+        cost: 2000
 
 - type: entity
   parent: CMURoundForceAsrsCommon
@@ -136,19 +941,155 @@
   components:
   - type: RoundForceAsrsProfile
     forceId: ProdigySF
+    additions:
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineRifleProdigyAP
+        crate: AU14CrateBoxMagazineRifleProdigyAP
+        cost: 1500
 
 - type: entity
-  parent: CMURoundForceAsrsCommon
+  parent:
+  - CMURoundForceAsrsCommon
+  - CMURoundForceAsrsApM54C
   id: CMURoundForceAsrsVAIPO
   categories: [ HideSpawnMenu ]
   components:
   - type: RoundForceAsrsProfile
     forceId: VAIPO
+    additions:
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineRifleL42AAP
+        crate: AU14CrateBoxMagazineRifleL42AAP
+        cost: 1150
+    overrides:
+    - offer: Weapons_RMCCrateMK80
+      cost: 800
+    - offer: Ammo_RMCCrateBoxMagazinePistolMK80
+      cost: 250
 
 - type: entity
-  parent: CMURoundForceAsrsCommon
+  parent:
+  - CMURoundForceAsrsCommon
+  - CMURoundForceAsrsRmcMortar
   id: CMURoundForceAsrsRMC
   categories: [ HideSpawnMenu ]
   components:
   - type: RoundForceAsrsProfile
     forceId: RMC
+    exclusions:
+    - Explosives_RMCCrateGrenadesHighExplosive
+    - Explosives_RMCCrateGrenadesIncendiary
+    - Explosives_RMCCrateGrenadesSmoke
+    - Explosives_RMCCrateGrenadesHighExplosiveBox
+    - Explosives_RMCCrateGrenadesBoxHEFA
+    - Explosives_RMCCrateGrenadesAirburstFragBox
+    - Explosives_RMCCrateGrenadesAirburstFrag
+    - Explosives_RMCCrateGrenadesAirburstIncendiary
+    - Explosives_RMCCrateGrenadesAirburstSmoke
+    - Explosives_RMCCrateGrenadesAirburstHornet
+    - Explosives_RMCCrateGrenadesBatonSlug
+    - Weapons_RMCCrateMK80
+    - Ammo_RMCCrateBoxMagazinePistolMK80
+    additions:
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesHighExplosive
+        crate: AU14CrateGrenadesHighExplosiveRMC
+        cost: 3000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesIncendiary
+        crate: AU14CrateGrenadesIncendiaryRMC
+        cost: 4000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesSmoke
+        crate: AU14CrateGrenadesSmokeRMC
+        cost: 1000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesHighExplosiveBox
+        crate: AU14CrateGrenadesHighExplosiveBoxRMC
+        cost: 10000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesBoxHEFA
+        crate: AU14CrateGrenadesIncendiaryBoxRMC
+        cost: 10000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesAirburstFragBox
+        crate: AU14Crate20MMGrenadesHESHDoubleRMC
+        cost: 10000
+    - category: Explosives
+      offer:
+        id: Explosives_AU14Crate20MMGrenadesFragDoubleRMC
+        crate: AU14Crate20MMGrenadesFragDoubleRMC
+        cost: 10000
+      insertBefore: Explosives_RMCCrateBoxAGMI
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesAirburstFrag
+        crate: AU14Crate20MMGrenadesFragRMC
+        cost: 4000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesAirburstIncendiary
+        crate: AU14Crate20MMGrenadesIncendiaryRMC
+        cost: 4000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesAirburstSmoke
+        crate: AU14Crate20MMGrenadesHERMC
+        cost: 6000
+    - category: Explosives
+      offer:
+        id: Explosives_RMCCrateGrenadesAirburstHornet
+        crate: AU14Crate20MMGrenadesHoloRMC
+        cost: 4000
+    - category: Weapons
+      offer:
+        id: Weapons_RMCCrateMK80
+        crate: AU14CrateL165A1
+        cost: 250
+    - category: Weapons
+      offer:
+        id: Weapons_AU14KitWeaponRXFM
+        crate: AU14KitWeaponRXFM
+        cost: 1500
+    - category: Ammo
+      offer:
+        id: Ammo_RMCCrateBoxMagazinePistolMK80
+        crate: AU14CrateBoxMagazinePistolL165A1
+        cost: 250
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineRifleL24AP
+        crate: AU14CrateBoxMagazineRifleL24AP
+        cost: 1000
+    - category: APAmmo
+      offer:
+        id: APAmmo_AU14CrateBoxMagazineSMGL90A2AP
+        crate: AU14CrateBoxMagazineSMGL90A2AP
+        cost: 950
+    overrides:
+    - offer: Explosives_RMCCrateGrenadesFrag
+      cost: 3000
+    - offer: Explosives_RMCCrateGrenadesFragOld
+      cost: 4000
+    - offer: Explosives_RMCCratePlasticExplosives
+      cost: 3000
+    - offer: Explosives_RMCCrateBreachingCharges
+      cost: 4000
+    - offer: Explosives_RMCCrateBoxAGMI
+      cost: 10000
+    - offer: Explosives_RMCCrateGrenadesAirburstStarShell
+      cost: 4000
+    - offer: Explosives_RMCCrateExplosiveClaymoreMine
+      cost: 6000
+    - offer: Explosives_RMCCrateM6HBruteRockets
+      cost: 3000
+    - offer: Ammo_RMCCrateBoxAmmo458
+      cost: 4000
