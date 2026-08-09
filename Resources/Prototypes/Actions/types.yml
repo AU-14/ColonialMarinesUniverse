@@ -389,6 +389,7 @@
     sprite: Clothing/Head/Hats/pyjamasyndicatered.rsi
     layers:
     - state: icon
+      map: ["enum.ActionVisuals.Icon"] # CMU14: Required by ActionIconVisualsSystem.
   - type: InstantAction
     event: !type:SleepActionEvent
 
@@ -405,6 +406,7 @@
     sprite: Clothing/Head/Hats/pyjamasyndicatered.rsi
     layers:
     - state: icon
+      map: ["enum.ActionVisuals.Icon"] # CMU14: Required by ActionIconVisualsSystem.
   - type: InstantAction
     event: !type:WakeActionEvent
 
