@@ -1,8 +1,5 @@
 using System.Linq;
-using Content.Server.Administration.Managers;
-using Content.Server.Antag;
 using Content.Server.Station.Components;
-using Content.Server.Station.Events;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.Network;
@@ -15,9 +12,6 @@ namespace Content.Server.Station.Systems;
 // Contains code for round-start spawning.
 public sealed partial class StationJobsSystem
 {
-    [Dependency] private IBanManager _banManager = default!;
-    [Dependency] private AntagSelectionSystem _antag = default!;
-
     private Dictionary<int, HashSet<string>> _jobsByWeight = default!;
     private List<int> _orderedWeights = default!;
 
@@ -69,6 +63,10 @@ public sealed partial class StationJobsSystem
         // CMU14: Reserve threat-vote volunteers before normal weighted job selection.
         AssignCmuForcedJobs(profiles, stations, useRoundStartJobs, assigned);
 
+        // CMU14: Forced assignments can exhaust the mutable profile copy.
+        if (profiles.Count == 0)
+            return assigned;
+
         // The jobs left on the stations. This collection is modified as jobs are assigned to track what's available.
         var stationJobs = new Dictionary<EntityUid, Dictionary<ProtoId<JobPrototype>, int?>>();
         foreach (var station in stations)
@@ -99,6 +97,10 @@ public sealed partial class StationJobsSystem
         // The share of the players each station gets in the current iteration of job selection.
         var stationShares = new Dictionary<EntityUid, int>(stations.Count);
 
+        // CMU14: AssignJobs is a synchronous decision boundary. Capture live eligibility once, then index it by the same
+        // weight/priority order used below.
+        var eligibility = CreateRoundStartJobEligibilitySnapshot(profiles);
+
         // Ok so the general algorithm:
         // We start with the highest weight jobs and work our way down. We filter jobs by weight when selecting as well.
         // Weight > Priority > Station.
@@ -109,7 +111,11 @@ public sealed partial class StationJobsSystem
                 if (profiles.Count == 0)
                     goto endFunc;
 
-                var candidates = GetPlayersJobCandidates(weight, selectedPriority, profiles);
+                if (!eligibility.Candidates.TryGetValue(new JobCandidateBucket(weight, selectedPriority),
+                        out var candidates))
+                {
+                    continue;
+                }
 
                 var optionsRemaining = 0;
 
@@ -138,6 +144,10 @@ public sealed partial class StationJobsSystem
                 // pick from the list of candidates for the job.
                 foreach (var (user, jobs) in candidates)
                 {
+                    // The snapshot also contains players assigned by an earlier weight/priority bucket.
+                    if (!profiles.ContainsKey(user))
+                        continue;
+
                     foreach (var job in jobs)
                     {
                         if (!jobPlayerOptions.ContainsKey(job))
@@ -148,6 +158,11 @@ public sealed partial class StationJobsSystem
 
                     optionsRemaining++;
                 }
+
+                if (optionsRemaining == 0)
+                    continue;
+
+                var candidateCount = optionsRemaining;
 
                 // We reuse this collection, so clear it's children.
                 foreach (var slots in currentlySelectingJobs)
@@ -203,16 +218,16 @@ public sealed partial class StationJobsSystem
                 foreach (var station in stations)
                 {
                     // Calculates the percent share then multiplies.
-                    stationShares[station] = (int)Math.Floor(((float)stationTotalSlots[station] / totalSlots) * candidates.Count);
+                    stationShares[station] = (int)Math.Floor(((float)stationTotalSlots[station] / totalSlots) * candidateCount);
                     distributed += stationShares[station];
                 }
 
                 // Avoids the fair share problem where if there's two stations and one player neither gets one.
                 // We do this by simply selecting a station randomly and giving it the remaining share(s).
-                if (distributed < candidates.Count)
+                if (distributed < candidateCount)
                 {
                     var choice = _random.Pick(stations);
-                    stationShares[choice] += candidates.Count - distributed;
+                    stationShares[choice] += candidateCount - distributed;
                 }
 
                 // Actual meat, goes through each station and shakes the tree until everyone has a job.
@@ -334,64 +349,4 @@ public sealed partial class StationJobsSystem
         }
     }
 
-    /// <summary>
-    /// Gets all jobs that the input players have that match the given weight and priority.
-    /// </summary>
-    /// <param name="weight">Weight to find, if any.</param>
-    /// <param name="selectedPriority">Priority to find, if any.</param>
-    /// <param name="profiles">Profiles to look in.</param>
-    /// <returns>Players and a list of their matching jobs.</returns>
-    private Dictionary<NetUserId, List<string>> GetPlayersJobCandidates(int? weight, JobPriority? selectedPriority, Dictionary<NetUserId, HumanoidCharacterProfile> profiles)
-    {
-        var outputDict = new Dictionary<NetUserId, List<string>>(profiles.Count);
-
-        var antags = _antag.GetAntagJobs();
-
-        foreach (var (player, profile) in profiles)
-        {
-            var roleBans = _banManager.GetJobBans(player);
-            var profileJobs = profile.JobPriorities.Keys.Select(k => new ProtoId<JobPrototype>(k)).ToList();
-            var ev = new StationJobsGetCandidatesEvent(player, profileJobs);
-            RaiseLocalEvent(ref ev);
-
-            // Shouldn't happen but you know :P
-            if (!_player.TryGetSessionById(player, out var session))
-                continue;
-
-            var (whitelist, blacklist) = antags.GetValueOrDefault(session);
-
-            List<string>? availableJobs = null;
-
-            foreach (var jobId in profileJobs)
-            {
-                var priority = profile.JobPriorities[jobId];
-
-                if (!(priority == selectedPriority || selectedPriority is null))
-                    continue;
-
-                if (!ProtoMan.Resolve(jobId, out var job))
-                    continue;
-
-                if (whitelist != null && !whitelist.Contains(jobId))
-                    continue;
-
-                if (blacklist != null && blacklist.Contains(jobId))
-                    continue;
-
-                if (weight is not null && job.Weight != weight.Value)
-                    continue;
-
-                if (!(roleBans == null || !roleBans.Contains(jobId))) //TODO: Replace with IsRoleBanned
-                    continue;
-
-                availableJobs ??= new List<string>(profile.JobPriorities.Count);
-                availableJobs.Add(jobId);
-            }
-
-            if (availableJobs is not null)
-                outputDict.Add(player, availableJobs);
-        }
-
-        return outputDict;
-    }
 }

@@ -1,6 +1,7 @@
 using Content.Server._CMU14.Spawners;
 using Content.Server.GameTicking;
 using Robust.Shared.Profiling;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server._RMC14.Rules.DistressSignal;
 
@@ -10,6 +11,7 @@ public sealed partial class CMDistressSignalRuleSystem
     [Dependency] private CMURoundSpawnPointSnapshotSystem _roundSpawnPoints = default!;
 
     private readonly List<EntityUid> _spawnPointCandidates = [];
+    private readonly List<(EntProtoId SquadId, EntityUid Squad, int Players)> _squadCandidates = [];
 
     private Spawners? _roundStartSpawners;
 

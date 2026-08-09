@@ -19,6 +19,7 @@ public sealed partial class ContainerSpawnPointSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
+        InitializeCmuRoundStartSnapshot(); // CMU14
         SubscribeLocalEvent<PlayerSpawningEvent>(HandlePlayerSpawning, before: new []{ typeof(SpawnPointSystem) });
     }
 
@@ -34,32 +35,28 @@ public sealed partial class ContainerSpawnPointSystem : EntitySystem
             return;
         }
 
-        var query = EntityQueryEnumerator<ContainerSpawnPointComponent, ContainerManagerComponent, TransformComponent>();
         var possibleContainers = new List<Entity<ContainerSpawnPointComponent, ContainerManagerComponent, TransformComponent>>();
 
-        while (query.MoveNext(out var uid, out var spawnPoint, out var container, out var xform))
+        // CMU14: The synchronous round-start batch uses a validated snapshot instead of scanning the component stores
+        // per player.
+        if (!TryCollectCmuRoundStartContainers(args, possibleContainers))
         {
-            if (args.Station != null && _station.GetOwningStation(uid, xform) != args.Station)
-                continue;
-
-            // If it's unset, then we allow it to be used for both roundstart and midround joins
-            if (spawnPoint.SpawnType == SpawnPointType.Unset)
+            var inRound = _gameTicker.RunLevel == GameRunLevel.InRound;
+            var query = EntityQueryEnumerator<ContainerSpawnPointComponent, ContainerManagerComponent, TransformComponent>();
+            while (query.MoveNext(out var uid, out var spawnPoint, out var container, out var xform))
             {
-                // make sure we also check the job here for various reasons.
-                if (spawnPoint.Job == null || spawnPoint.Job == args.Job)
-                    possibleContainers.Add((uid, spawnPoint, container, xform));
-                continue;
-            }
+                var owningStation = args.Station == null
+                    ? null
+                    : _station.GetOwningStation(uid, xform);
+                if (!CMUContainerSpawnPointBatchSnapshot.Matches(
+                        owningStation,
+                        spawnPoint.Job,
+                        spawnPoint.SpawnType,
+                        args.Station,
+                        args.Job,
+                        inRound))
+                    continue;
 
-            if (_gameTicker.RunLevel == GameRunLevel.InRound && spawnPoint.SpawnType == SpawnPointType.LateJoin)
-            {
-                possibleContainers.Add((uid, spawnPoint, container, xform));
-            }
-
-            if (_gameTicker.RunLevel != GameRunLevel.InRound &&
-                spawnPoint.SpawnType == SpawnPointType.Job &&
-                (args.Job == null || spawnPoint.Job == args.Job))
-            {
                 possibleContainers.Add((uid, spawnPoint, container, xform));
             }
         }

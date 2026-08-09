@@ -310,7 +310,8 @@ public sealed partial class CMDistressSignalRuleSystem
         CMDistressSignalRuleComponent rule,
         EntProtoId<SquadTeamComponent>? preferred)
     {
-        var squads = new List<(EntProtoId SquadId, EntityUid Squad, int Players)>();
+        // CMU14: Reuse the spawn-batch scratch list while preserving the original shuffle/sort RNG behavior.
+        _squadCandidates.Clear();
         foreach (var (squadId, squad) in rule.Squads)
         {
             var players = 0;
@@ -329,13 +330,13 @@ public sealed partial class CMDistressSignalRuleSystem
                 }
             }
 
-            squads.Add((squadId, squad, players));
+            _squadCandidates.Add((squadId, squad, players));
         }
 
-        _random.Shuffle(squads);
-        squads.Sort((a, b) => a.Players.CompareTo(b.Players));
+        _random.Shuffle(_squadCandidates);
+        _squadCandidates.Sort((a, b) => a.Players.CompareTo(b.Players));
 
-        var chosen = squads[0];
+        var chosen = _squadCandidates[0];
         return (chosen.SquadId, chosen.Squad);
     }
 

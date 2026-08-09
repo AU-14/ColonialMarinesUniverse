@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.IntegrationTests.Fixtures;
+using Content.Server.AU14.Round;
 using Content.Server.Station.Components;
+using Content.Server.Station.Events;
 using Content.Server.Station.Systems;
 using Content.Shared.Maps;
 using Content.Shared.Preferences;
@@ -20,6 +22,55 @@ namespace Content.IntegrationTests.Tests.Station;
 [TestOf(typeof(StationJobsSystem))]
 public sealed class StationJobsTest : GameTest
 {
+    // CMU14 start
+    public sealed class CandidateEligibilityProbeSystem : EntitySystem
+    {
+        public readonly HashSet<ProtoId<JobPrototype>> BlockedJobs = [];
+        public readonly Dictionary<NetUserId, int> Calls = [];
+        public bool Enabled;
+        public NetUserId? Target;
+
+        public override void Initialize()
+        {
+            base.Initialize();
+            SubscribeLocalEvent<StationJobsGetCandidatesEvent>(OnGetCandidates);
+        }
+
+        public void Configure(NetUserId? target, params ProtoId<JobPrototype>[] blockedJobs)
+        {
+            Calls.Clear();
+            BlockedJobs.Clear();
+            BlockedJobs.UnionWith(blockedJobs);
+            Target = target;
+            Enabled = true;
+        }
+
+        public void Disable()
+        {
+            Enabled = false;
+            Target = null;
+            Calls.Clear();
+            BlockedJobs.Clear();
+        }
+
+        private void OnGetCandidates(ref StationJobsGetCandidatesEvent ev)
+        {
+            if (!Enabled)
+                return;
+
+            Calls[ev.Player] = Calls.GetValueOrDefault(ev.Player) + 1;
+            if (Target is { } target && target != ev.Player)
+                return;
+
+            for (var i = ev.Jobs.Count - 1; i >= 0; i--)
+            {
+                if (BlockedJobs.Contains(ev.Jobs[i]))
+                    ev.Jobs.RemoveAt(i);
+            }
+        }
+    }
+    // CMU14 end
+
     private const string StationMapId = "FooStation";
 
     [TestPrototypes]
@@ -229,6 +280,124 @@ public sealed class StationJobsTest : GameTest
             });
         });
     }
+
+    // CMU14 start
+    [Test]
+    public async Task AssignJobsSnapshotsEligibilityOncePerPlayerTest()
+    {
+        var server = Pair.Server;
+        var prototypeManager = server.ResolveDependency<IPrototypeManager>();
+        var fooStationProto = prototypeManager.Index<GameMapPrototype>(StationMapId);
+        var entSysMan = server.ResolveDependency<IEntityManager>().EntitySysManager;
+        var probe = entSysMan.GetEntitySystem<CandidateEligibilityProbeSystem>();
+        var stationJobs = entSysMan.GetEntitySystem<StationJobsSystem>();
+        var stationSystem = entSysMan.GetEntitySystem<StationSystem>();
+
+        var station = EntityUid.Invalid;
+        await server.WaitPost(() =>
+        {
+            station = stationSystem.InitializeNewStation(fooStationProto.Stations["Station"], null, "Eligibility Station");
+        });
+
+        var dummies = await server.AddDummySessions(1);
+        var player = dummies[0].UserId;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+                {
+                    [player] = HumanoidCharacterProfile.Random().WithJobPriorities(
+                    [
+                        new KeyValuePair<ProtoId<JobPrototype>, JobPriority>("TCaptain", JobPriority.High),
+                        new KeyValuePair<ProtoId<JobPrototype>, JobPriority>("TAssistant", JobPriority.Medium),
+                    ]),
+                };
+
+                probe.Configure(player, "TCaptain");
+                var first = stationJobs.AssignJobs(profiles, [station]);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(first[player].Item1, Is.EqualTo((ProtoId<JobPrototype>?) "TAssistant"));
+                    Assert.That(probe.Calls.GetValueOrDefault(player), Is.EqualTo(1));
+                });
+
+                // A second assignment must capture current eligibility rather than retaining the first call's filter.
+                probe.Configure(player);
+                var second = stationJobs.AssignJobs(profiles, [station]);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(second[player].Item1, Is.EqualTo((ProtoId<JobPrototype>?) "TCaptain"));
+                    Assert.That(probe.Calls.GetValueOrDefault(player), Is.EqualTo(1));
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(probe.Disable);
+        }
+    }
+
+    [Test]
+    public async Task AssignJobsEligibilitySnapshotSkipsForcedPlayersTest()
+    {
+        var server = Pair.Server;
+        var prototypeManager = server.ResolveDependency<IPrototypeManager>();
+        var fooStationProto = prototypeManager.Index<GameMapPrototype>(StationMapId);
+        var entSysMan = server.ResolveDependency<IEntityManager>().EntitySysManager;
+        var forcedJobs = entSysMan.GetEntitySystem<AuJobSelectionSystem>();
+        var probe = entSysMan.GetEntitySystem<CandidateEligibilityProbeSystem>();
+        var stationJobs = entSysMan.GetEntitySystem<StationJobsSystem>();
+        var stationSystem = entSysMan.GetEntitySystem<StationSystem>();
+
+        var station = EntityUid.Invalid;
+        await server.WaitPost(() =>
+        {
+            station = stationSystem.InitializeNewStation(fooStationProto.Stations["Station"], null, "Forced Job Station");
+        });
+
+        var dummies = await server.AddDummySessions(2);
+        var forcedPlayer = dummies[0].UserId;
+        var normalPlayer = dummies[1].UserId;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var profiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+                {
+                    [forcedPlayer] = HumanoidCharacterProfile.Random().WithJobPriority("TAssistant", JobPriority.High),
+                    [normalPlayer] = HumanoidCharacterProfile.Random().WithJobPriority("TAssistant", JobPriority.High),
+                };
+
+                forcedJobs.ForcedJobAssignments.Clear();
+                forcedJobs.ForcedJobAssignments[forcedPlayer] = "TCaptain";
+                probe.Configure(null);
+
+                var assigned = stationJobs.AssignJobs(profiles, [station]);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(assigned[forcedPlayer].Item1, Is.EqualTo((ProtoId<JobPrototype>?) "TCaptain"));
+                    Assert.That(assigned[normalPlayer].Item1, Is.EqualTo((ProtoId<JobPrototype>?) "TAssistant"));
+                    Assert.That(probe.Calls.ContainsKey(forcedPlayer), Is.False);
+                    Assert.That(probe.Calls.GetValueOrDefault(normalPlayer), Is.EqualTo(1));
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                forcedJobs.ForcedJobAssignments.Clear();
+                probe.Disable();
+            });
+        }
+    }
+    // CMU14 end
 
     [Test]
     public async Task AdjustJobsTest()
