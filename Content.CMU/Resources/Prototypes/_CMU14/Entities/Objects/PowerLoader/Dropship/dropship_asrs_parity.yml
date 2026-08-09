@@ -1,0 +1,189 @@
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoRocketThermobaricTwo
+  name: BLU-176 'Overpressure'
+  description: The BLU-176 'Overpressure' is a thermobaric fuel-air bomb and the smaller cousin of the BLU-200 'Dragon’s Breath'.  The aerosolized fuel mixture creates a vacuum when ignited, causing severe damage to anything in its path. It can be loaded into the LAU-444 Guided Missile Launcher.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/dropship_ammo_64.rsi
+    layers:
+    - state: chubby
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    travelTime: 5
+    implosion:
+      pullRange: 4
+      pullDistance: 2.5
+      pullSpeed: 16
+    fire:
+      type: RMCTileFireThermobaric
+      range: 1
+      cardinalRange: 2
+      ordinalRange: 2
+    soundWarning: /Audio/_RMC14/Effects/rocketpod_fire.ogg
+    markerWarning: true
+    impactEffects:
+    - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 450
+
+- type: entity
+  parent: RMCSmokeExplosionProof
+  id: AU14SmokeExplosionProofJDAM
+  components:
+  - type: EvenSmoke
+    spawn: RMCSmoke
+    range: 5
+
+- type: entity
+  id: AU14EffectExplosionParticleJDAM
+  name: explosion
+  components:
+  - type: Transform
+    anchored: true
+  - type: Sprite
+    sprite: _RMC14/Effects/effects.rsi
+    state: explosion_particle
+  - type: TimedDespawn
+    lifetime: 0.5
+  - type: EffectAlphaAnimation
+  - type: PointLight
+    enabled: true
+    radius: 7
+  - type: RMCScorchEffectOnSpawn
+    probability: 0.9
+    tileLimit: 10
+    scatter: true
+    randomRotation: true
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoMk102JDAM
+  name: GBU-89B 'Postman'
+  description: The GBU-89B Joint Direct Attack Munition is an old but reliable large guided munition. It has an excessively long travel time, but can level entire buildings. It can be loaded into the LAU-444 Guided Missile Launcher.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/dropship_ammo_64.rsi
+    layers:
+    - state: jdam
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    travelTime: 12
+    explosion:
+      total: 10000
+      slope: 4.5
+      max: 100000000
+    impactEffects:
+    - AU14EffectExplosionParticleJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 7500
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoGBU89I
+  name: GBU-89C/N 'Burning Postman'
+  description: The GBU-89B/Napalm Joint Direct Attack Munition is an old but reliable large guided munition. It has an excessively long travel time, but can level and set alight entire buildings. It can be loaded into the LAU-444 Guided Missile Launcher.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/dropship_ammo_64.rsi
+    layers:
+    - state: jdami
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    travelTime: 11
+    explosion:
+      total: 10000
+      slope: 4.5
+      max: 100000000
+    fire:
+      type: RMCTileFireNapalm
+      range: 3
+      cardinalRange: 5
+    impactEffects:
+    - AU14EffectExplosionParticleJDAM
+    - AU14SmokeExplosionProofJDAM
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 8000
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoCBU250
+  name: CBU-250 'Dinner Spread'
+  description: The CBU-250 'Dinner Spread' is a cluster munition designed for use against lightly armored vehicles and enemy infantry. Upon deployment, the munition separates into twelve low-yield bomblets, dispersing them unevenly across a wide area. It can be loaded into the LAU-444 Guided Missile Launcher.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/dropship_ammo_64.rsi
+    layers:
+    - state: cluster
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    travelTime: 6
+    rounds: 12
+    maxRounds: 12
+    roundsPerShot: 12
+    bulletSpread: 17
+    explosion:
+      total: 110
+      slope: 4
+      max: 8
+    impactEffects:
+    - RMCEffectExplosionParticle
+    - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 400
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoRocketWidowmakerDouble
+  name: AIM-224A 'Double Widow' Rack
+  description: A two round launch rack of the AIM-224A missile. Earning the nickname of 'Double Widow' due to it being two Widow Makers stacked on top of each other. Both rockets are fired at the same time and are highly unpredictable. Not well suited for ground bombardment but its high velocity makes it reach its target quickly. This one has been modified to be a two round free-fall bomb as a result of dropship ammo shortages. Can be loaded into the LAU-444 Guided Missile Launcher.
+  components:
+  - type: Sprite
+    layers:
+    - state: double
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    rounds: 2
+    maxRounds: 2
+    roundsPerShot: 2
+    bulletSpread: 9
+    travelTime: 3
+    explosion:
+      total: 3000
+      slope: 5.5
+      max: 55
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 900
+
+- type: entity
+  parent: RMCDropshipAttachmentAmmoRocket
+  id: AU14DropshipAttachmentAmmoCBU607
+  name: CBU-607 'Skeet Shooter' Rack
+  description: The CBU-607 'Skeet Shooter' is a four missile cluster munition rack designed for use against medium armored vehicles and enemy infantry. Upon deployment, each munition separates into two mid-yield bomblets, dispersing them tightly across a small area. It can be loaded into the LAU-444 Guided Missile Launcher.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/dropship_ammo_64.rsi
+    layers:
+    - state: sgw
+      map: [ "enum.DropshipAmmoVisuals.Fill" ]
+  - type: DropshipAmmo
+    travelTime: 4
+    rounds: 6
+    maxRounds: 6
+    roundsPerShot: 6
+    bulletSpread: 5
+    explosion:
+      total: 100
+      slope: 12
+      max: 11
+    impactEffects:
+    - RMCEffectExplosionParticle
+    - RMCSmokeExplosionProofSmall
+  - type: DropshipFabricatorPrintable
+    category: Ammo
+    cost: 500
