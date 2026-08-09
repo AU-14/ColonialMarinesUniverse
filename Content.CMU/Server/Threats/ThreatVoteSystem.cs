@@ -24,6 +24,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 {
     [Dependency] private AuJobSelectionSystem _jobSelection = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IPlayerManager _player = default!;
@@ -396,7 +397,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         candidates = [];
         heldBodyCount = default(ThreatVoteBodyCount);
 
-        ScenarioPlanValidationRequest request = _auRound
+        ScenarioPlanValidationRequest request = _roundDirector
             .CaptureRoundPlanSelection(playerCount, presetId, null)
             .ToScenarioPlanRequest();
 
@@ -495,7 +496,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         _auRound.PreselectThirdPartiesForSelectedThreat();
         try
         {
-            ScenarioPlanValidationRequest request = _auRound
+            ScenarioPlanValidationRequest request = _roundDirector
                 .CaptureRoundPlanSelection(
                     Math.Max(_player.PlayerCount, prepared.HeldPlayers.Count),
                     prepared.PresetId,

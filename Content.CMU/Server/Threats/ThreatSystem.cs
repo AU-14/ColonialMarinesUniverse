@@ -41,6 +41,7 @@ namespace Content.Server._CMU14.Threats;
 public sealed partial class ThreatSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private GhostRoleSystem _ghostRole = default!;
     [Dependency] private SharedMindSystem _mindSystem = default!;
@@ -948,7 +949,7 @@ public sealed partial class ThreatSystem : EntitySystem
         if (voteHeldPlayers != null)
             playerCount = Math.Max(playerCount, voteHeldPlayers.Count);
 
-        return _auRound
+        return _roundDirector
             .CaptureRoundPlanSelection(
                 playerCount,
                 _auRound.SelectedPreset?.ID ?? string.Empty,
