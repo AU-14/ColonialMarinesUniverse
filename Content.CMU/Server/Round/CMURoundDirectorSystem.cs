@@ -32,6 +32,21 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
     /// </summary>
     public RoundPlanSelectionSnapshot? Selection => _state.Selection;
 
+    /// <summary>
+    /// Captures the current mutable selection before freeze, then projects runtime-only context from the
+    /// director's committed selection after freeze.
+    /// </summary>
+    public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(
+        int playerCount,
+        string presetId,
+        string? selectedThreatId)
+    {
+        if (_state.Selection is { } committed)
+            return committed.WithRuntimeContext(playerCount, presetId, selectedThreatId);
+
+        return _round.CaptureRoundPlanSelection(playerCount, presetId, selectedThreatId);
+    }
+
     public override void Initialize()
     {
         base.Initialize();
