@@ -225,6 +225,9 @@ public sealed class YautjaMedicompCmss13ParityTest
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingGel", "/Textures/_CMU14/Yautja/medical.rsi", "healing_gel");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaStabilizerGel", "/Textures/_CMU14/Yautja/medical.rsi", "stabilizer_gel");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaWoundClamp", "/Textures/_CMU14/Yautja/medical.rsi", "wound_clamp");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingGun", "/Textures/_CMU14/Yautja/medical.rsi", "healing_gun");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaAutoInjector", "/Textures/_CMU14/Yautja/medical.rsi", "crystal", "thwei_1");
+            AssertPrototypeSprite(prototypes, factory, "CMUYautjaThrallAutoInjector", "/Textures/_CMU14/Yautja/medical.rsi", "crystal", "thwei_1");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaAlienHealthAnalyzer", "/Textures/_CMU14/Yautja/medical.rsi", "scanner");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaHerbalCase", "/Textures/_CMU14/Yautja/medical.rsi", "surgical_case", "surgical_case");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingCapsule", "/Textures/_CMU14/Yautja/medical.rsi", "healing_gel");
@@ -288,7 +291,9 @@ public sealed class YautjaMedicompCmss13ParityTest
             .GroupBy(uid => PrototypeId(entMan, uid))
             .ToDictionary(group => group.Key, group => group.Count());
 
-        Assert.That(actual, Is.EqualTo(expected));
+        Assert.That(actual, Is.EqualTo(expected),
+            $"Unexpected Medicomp contents. Expected: {string.Join(", ", expected.Select(pair => $"{pair.Key}={pair.Value}"))}; " +
+            $"actual: {string.Join(", ", actual.Select(pair => $"{pair.Key}={pair.Value}"))}");
 
         foreach (var capsule in storage.Container.ContainedEntities.Where(uid => PrototypeId(entMan, uid) == "CMUYautjaHealingCapsule"))
         {

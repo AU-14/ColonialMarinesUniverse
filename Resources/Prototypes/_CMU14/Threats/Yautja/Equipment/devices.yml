@@ -776,14 +776,15 @@
   description: A dense alien coagulant that knits together broad trauma.
   components:
   - type: Sprite
-    sprite: Objects/Specific/Medical/medical.rsi
-    state: medicated-suture
+    sprite: _CMU14/Yautja/medical.rsi
+    state: healing_gel
   - type: Item
     size: Small
-    sprite: Objects/Specific/Medical/medical.rsi
-  - type: Stack
-    stackType: CMUYautjaHealingGel
-    count: 2
+    sprite: _CMU14/Yautja/medical.rsi
+  - type: RemoveComponents
+    components:
+    - type: Stack
+      stackType: CMUYautjaHealingGel
   - type: Tag
     tags:
     - Brutepack
@@ -1652,7 +1653,7 @@
 - type: stack
   id: CMUYautjaHealingGel
   name: healing gel
-  icon: { sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: medicated-suture }
+  icon: { sprite: "/Textures/_CMU14/Yautja/medical.rsi", state: healing_gel }
   spawn: CMUYautjaHealingCapsule
   maxCount: 6
 

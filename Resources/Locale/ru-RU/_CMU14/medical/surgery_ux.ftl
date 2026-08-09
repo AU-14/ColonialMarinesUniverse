@@ -69,6 +69,7 @@ cmu-medical-surgery-condition-missing = Ампутировано
 # ---- Заголовки категорий BUI ---------------------------------------------
 
 cmu-medical-surgery-category-fracture = Переломы
+cmu-medical-surgery-category-yautja_medicomp = Медикомп яутжа
 cmu-medical-surgery-category-bleed = Внутреннее кровотечение
 cmu-medical-surgery-category-burn = Ожоги
 cmu-medical-surgery-category-remove_organ = Удаление органа
@@ -149,6 +150,9 @@ cmu-medical-amputation-success = Конечность удалена.
 # ---- Названия категорий инструментов (кнопки BUI + строка активации) -------
 
 cmu-medical-surgery-tool-category-scalpel = Скальпель
+cmu-medical-surgery-tool-category-yautja_medicomp_stabilizer = Стабилизирующий гель
+cmu-medical-surgery-tool-category-yautja_medicomp_healing_gun = Лечебная пушка
+cmu-medical-surgery-tool-category-yautja_medicomp_clamp = Зажим для ран
 cmu-medical-surgery-tool-category-hemostat = Гемостат
 cmu-medical-surgery-tool-category-retractor = Ретрактор
 cmu-medical-surgery-tool-category-cautery = Прижигатель

@@ -150,7 +150,11 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             armed.TargetSymmetry);
         var doAfter = new DoAfterArgs(EntityManager, surgeon, delay, ev, patient, targetPart, tool)
         {
-            AttemptFrequency = AttemptFrequency.EveryTick,
+            // Validate the operation once when it starts and once when it completes. Re-running the
+            // session/pain checks every simulation tick causes the client DoAfter overlay to be cancelled
+            // and re-created while a valid Medicomp stage is in progress, which presents as a blinking bar.
+            // BreakOnDamage/BreakOnMove still interrupt the operation immediately for their dedicated cases.
+            AttemptFrequency = AttemptFrequency.StartAndEnd,
             BreakOnDamage = true,
             BreakOnMove = true,
             MovementThreshold = 0.5f,

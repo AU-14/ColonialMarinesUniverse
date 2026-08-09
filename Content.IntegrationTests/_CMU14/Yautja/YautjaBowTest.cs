@@ -2949,7 +2949,7 @@ public sealed class YautjaBowTest
 
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaAdvancedBruisePack", "_CMU14/Yautja/yautja_items.rsi", "brute_herbs");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaAdvancedOintment", "_CMU14/Yautja/yautja_items.rsi", "burn_herbs");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingGun", "_CMU14/Yautja/healing_gun.rsi", "healing_gun");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingGun", "_CMU14/Yautja/medical.rsi", "healing_gun");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaHerbalCase", "_RMC14/Objects/Storage/surgical_case.rsi", "surgical_case_base");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaMedicomp", "_CMU14/Yautja/yautja_items.rsi", "medicomp");
         });
@@ -3141,7 +3141,7 @@ public sealed class YautjaBowTest
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaBracerIdChip", "_CMU14/HunterShip/obj/items/radio.rsi", "upp_key");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaStabilisingCrystal", "_RMC14/Objects/Medical/emergency_auto_injector.rsi", "autoinjector");
             AssertPrototypeIconState(prototypes, factory, "CMUYautjaHumanStabilisingCrystal", "_RMC14/Objects/Medical/emergency_auto_injector.rsi", "autoinjector");
-            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingCapsule", "Objects/Specific/Medical/medical.rsi", "medicated-suture");
+            AssertPrototypeIconState(prototypes, factory, "CMUYautjaHealingCapsule", "_CMU14/Yautja/medical.rsi", "healing_gel");
         });
 
         await pair.CleanReturnAsync();
