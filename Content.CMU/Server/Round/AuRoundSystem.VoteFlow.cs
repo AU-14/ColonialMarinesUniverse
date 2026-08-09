@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.util;
 using Content.Shared.CCVar;
+using Content.Shared.CMU.Round;
 using Content.Shared.Voting;
 using Robust.Shared.Prototypes;
 
@@ -734,11 +735,14 @@ public sealed partial class AuRoundSystem
 
     private void SetFactionPlatoon(AuRoundVoteBranch faction, PlatoonPrototype? platoon)
     {
-        var platoons = GetPlatoonSpawnRuleSystem();
-        if (faction == AuRoundVoteBranch.Govfor)
-            platoons.SelectedGovforPlatoon = platoon;
-        else
-            platoons.SelectedOpforPlatoon = platoon;
+        var side = faction == AuRoundVoteBranch.Govfor
+            ? RoundSide.Govfor
+            : RoundSide.Opfor;
+        if (GetRoundDirectorSystem().TrySetLegacyForce(side, platoon) !=
+            CMURoundSelectionMutationResult.Applied)
+        {
+            return;
+        }
 
         _intel.SetTeamTechTreeOverride(
             faction == AuRoundVoteBranch.Govfor ? Team.GovFor : Team.OpFor,
@@ -754,10 +758,11 @@ public sealed partial class AuRoundSystem
 
     private void SetFactionShip(AuRoundVoteBranch faction, string? ship)
     {
-        if (faction == AuRoundVoteBranch.Govfor)
-            _selectedGovforShip = ship;
-        else
-            _selectedOpforShip = ship;
+        GetRoundDirectorSystem().TrySetMainShip(
+            faction == AuRoundVoteBranch.Govfor
+                ? RoundSide.Govfor
+                : RoundSide.Opfor,
+            ship);
     }
 
     private static bool FactionIsEnabled(GamePresetPrototype preset, AuRoundVoteBranch faction)
