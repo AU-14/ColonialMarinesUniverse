@@ -1,0 +1,154 @@
+- type: entity
+  abstract: true
+  id: CMURoundForceAsrsCommon
+  name: round force ASRS profile
+  components:
+  - type: RoundForceAsrsProfile
+    categories:
+    - id: Pouches
+      name: Pouches
+      offers:
+      - id: LargeMagazinePouches
+        crate: RMCCrateClothingMagazinePouchesLarge
+        cost: 150
+    - id: VehicleAmmo
+      name: Vehicle Ammo
+      offers:
+      - id: LtbCannonMixed
+        crate: CMUCrateVehicleAmmoLTBCannonMixed
+        cost: 1900
+        stock: &vehicleAmmoStock
+          maximum: 2
+          replenishDelay: 300
+      - id: LtaaAp
+        crate: RMCCrateVehicleAmmoLTAAAP
+        cost: 1800
+        stock: *vehicleAmmoStock
+      - id: AceAutocannon
+        crate: RMCCrateVehicleAmmoAceAutocannon
+        cost: 1800
+        stock: *vehicleAmmoStock
+      - id: DragonFlamer
+        crate: RMCCrateVehicleAmmoDragonFlamer
+        cost: 1700
+        stock: *vehicleAmmoStock
+      - id: BoyarsDualCannon
+        crate: RMCCrateVehicleAmmoBoyarsDualCannon
+        cost: 1800
+        stock: *vehicleAmmoStock
+      - id: GrenadeLauncherMixed
+        crate: CMUCrateVehicleAmmoGrenadeLauncherMixed
+        cost: 900
+        stock: *vehicleAmmoStock
+      - id: SmokeLauncher
+        crate: RMCCrateVehicleAmmoSmokeLauncher
+        cost: 700
+        stock: *vehicleAmmoStock
+      - id: TowLauncher
+        crate: RMCCrateVehicleAmmoTowLauncher
+        cost: 2200
+        stock: *vehicleAmmoStock
+      - id: CupolaMixed
+        crate: CMUCrateVehicleAmmoCupolaMixed
+        cost: 1025
+        stock: *vehicleAmmoStock
+      - id: CupolaTracer
+        crate: CMUCrateVehicleAmmoCupolaTracer
+        cost: 1050
+        stock: *vehicleAmmoStock
+      - id: LzrnFlamer
+        crate: RMCCrateVehicleAmmoLZRNFlamer
+        cost: 1200
+        stock: *vehicleAmmoStock
+      - id: FrontalCannon
+        crate: RMCCrateVehicleAmmoFrontalCannon
+        cost: 1000
+        stock: *vehicleAmmoStock
+      - id: FlareLauncher
+        crate: RMCCrateVehicleAmmoFlareLauncher
+        cost: 700
+        stock: *vehicleAmmoStock
+      - id: RotaryCannon
+        crate: RMCCrateVehicleAmmoRotaryCannon
+        cost: 1800
+        stock: *vehicleAmmoStock
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsUSCM
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: USCM
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsLACN
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: LACN
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsUPP
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: UPP
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsWEYU
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: WEYU
+    exclusions:
+    - LargeMagazinePouches
+    additions:
+    - category: Pouches
+      offer:
+        id: LargeMagazinePouches
+        crate: RMCCrateClothingMagazinePouchesLargePMC
+        cost: 150
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsCMBCIU
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: CMBCIU
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsHAZOPS
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: HAZOPS
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsProdigySF
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: ProdigySF
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsVAIPO
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: VAIPO
+
+- type: entity
+  parent: CMURoundForceAsrsCommon
+  id: CMURoundForceAsrsRMC
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: RoundForceAsrsProfile
+    forceId: RMC
