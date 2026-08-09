@@ -716,19 +716,33 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         if (HasComp<CMUAutodocContainedPatientComponent>(patient))
             return true;
 
-        if (RmcSurgery.IsLyingDown(patient))
-            return true;
-
-        if (patient == surgeon && IsBuckledToStrap(patient))
-            return true;
-
         if (patient == surgeon)
         {
-            SurgeryConditionPopup(surgeon, "cmu-medical-surgery-self-not-secured", popup);
+            if (!IsBuckledToStrap(patient))
+            {
+                SurgeryConditionPopup(surgeon, "cmu-medical-surgery-self-not-secured", popup);
+                return false;
+            }
+
+            if (!HasPainSuppressionForSurgery(patient))
+            {
+                SurgeryConditionPopup(surgeon, "cmu-medical-surgery-self-pain-control", popup);
+                return false;
+            }
+
+            return true;
+        }
+
+        if (!RmcSurgery.IsLyingDown(patient))
+        {
+            SurgeryConditionPopup(surgeon, "cmu-medical-surgery-patient-not-lying", popup);
             return false;
         }
 
-        SurgeryConditionPopup(surgeon, "cmu-medical-surgery-patient-not-lying", popup);
+        if (IsPainControlledForSurgery(patient) || IsBuckledToStrap(patient))
+            return true;
+
+        SurgeryConditionPopup(surgeon, "cmu-medical-surgery-patient-not-controlled", popup);
         return false;
     }
 

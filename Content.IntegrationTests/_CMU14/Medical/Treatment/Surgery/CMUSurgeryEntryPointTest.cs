@@ -6,6 +6,7 @@ using Content.Server._CMU14.Medical.Treatment.Surgery;
 using Content.Server.Mind;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Marines.Skills;
@@ -23,6 +24,41 @@ namespace Content.IntegrationTests._CMU14.Medical.Treatment.Surgery;
 [TestFixture]
 public sealed class CMUSurgeryEntryPointTest
 {
+    [Test]
+    public async Task AwakeUnrestrainedPatientRequiresStrongPainSuppression()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var surgeon = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var patient = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            entities.System<StandingStateSystem>().Down(
+                patient,
+                playSound: false,
+                dropHeldItems: false,
+                force: true);
+
+            var flow = entities.System<CMUSurgeryFlowSystem>();
+            Assert.That(flow.CanOperateOnPatient(patient, surgeon), Is.False,
+                "An awake, unrestrained patient without pain control was accepted for surgery.");
+
+            entities.System<SharedPainShockSystem>().AddPainSuppressionProfile(
+                patient,
+                accumulationSuppression: 0.5f,
+                tierSuppression: 2,
+                decayBonus: 0.75f,
+                duration: TimeSpan.FromMinutes(1));
+
+            Assert.That(flow.CanOperateOnPatient(patient, surgeon), Is.True,
+                "Strong pain suppression did not satisfy the surgery entry check.");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task HandsAndFeetOfferExtremitySurgeries()
     {
@@ -238,6 +274,12 @@ public sealed class CMUSurgeryEntryPointTest
     private static void PreparePatient(IEntityManager entities, EntityUid surgeon, EntityUid patient)
     {
         entities.System<SkillsSystem>().SetSkill(surgeon, "RMCSkillSurgery", 3);
+        entities.System<SharedPainShockSystem>().AddPainSuppressionProfile(
+            patient,
+            accumulationSuppression: 0.5f,
+            tierSuppression: 2,
+            decayBonus: 0.75f,
+            duration: TimeSpan.FromMinutes(1));
         entities.System<StandingStateSystem>().Down(
             patient,
             playSound: false,
