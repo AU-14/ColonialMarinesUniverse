@@ -31,6 +31,7 @@ public sealed class AuRoundCutoffSelectionTest
     private const string FixedFactionPresetId = "CMUTestFixedFactionPreset";
     private const string FixedBothSidesPresetId = "CMUTestFixedBothSidesPreset";
     private const string MissingAsrsPresetId = "CMUTestMissingAsrsPreset";
+    private const string PreservedAccessConsoleId = "CMUTestPreservedAccessRoundAsrsConsole";
     private const string ShepherdsPridePlanetId = "AUPlanetShepherdsPride";
     private static readonly ProtoId<PlatoonPrototype> HazopsPlatoon = "HAZOPS";
     private static readonly ProtoId<GamePresetPrototype> JailbreakPreset = "Jailbreak";
@@ -97,6 +98,19 @@ public sealed class AuRoundCutoffSelectionTest
           id: CMUTestMissingAsrsPlanetPool
           planets:
           - CMUTestMissingAsrsPlanet
+
+        - type: entity
+          parent: CMURoundAsrsConsole
+          id: {PreservedAccessConsoleId}
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundAsrsEndpoint
+            preserveMappedAccess: true
+          - type: AccessReader
+            access:
+            - - AU14AccessGovforCommand
+            - - AU14AccessGovforEngineering
+            - - AU14AccessGovforPilot
 
         - type: gamePreset
           id: {FixedFactionPresetId}
@@ -473,6 +487,7 @@ public sealed class AuRoundCutoffSelectionTest
         EntityUid console = default;
         EntityUid elevator = default;
         EntityUid lateConsole = default;
+        EntityUid preservedAccessConsole = default;
         EntityUid? account = null;
         var consoleRotation = Angle.FromDegrees(90);
         await server.WaitAssertion(() =>
@@ -486,6 +501,7 @@ public sealed class AuRoundCutoffSelectionTest
             shipFaction.Faction = "govfor";
             console = server.EntMan.SpawnEntity("VMarkerShipRequisitionsConsole", map.GridCoords);
             elevator = server.EntMan.SpawnEntity("VMarkerShipRequisitionsLift", map.GridCoords);
+            preservedAccessConsole = server.EntMan.SpawnEntity(PreservedAccessConsoleId, map.GridCoords);
             metadata.SetEntityName(console, "Mapped round ASRS");
             transform.SetLocalRotation(console, consoleRotation);
 
@@ -531,6 +547,17 @@ public sealed class AuRoundCutoffSelectionTest
                     SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(console)),
                     Is.EqualTo(new[] { "AU14AccessGovforCommand", "AU14AccessGovforReq" }));
                 Assert.That(
+                    SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(preservedAccessConsole)),
+                    Is.EqualTo(new[]
+                    {
+                        "AU14AccessGovforCommand",
+                        "AU14AccessGovforEngineering",
+                        "AU14AccessGovforPilot",
+                    }));
+                Assert.That(
+                    server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(preservedAccessConsole).Force,
+                    Is.EqualTo(new RoundForceId("USCM")));
+                Assert.That(
                     server.EntMan.GetComponent<RequisitionsElevatorComponent>(elevator).Faction,
                     Is.EqualTo("govfor"));
                 Assert.That(server.EntMan.HasComponent<RoundSetupEndpointComponent>(console), Is.True);
@@ -554,6 +581,7 @@ public sealed class AuRoundCutoffSelectionTest
             server.EntMan.DeleteEntity(console);
             server.EntMan.DeleteEntity(elevator);
             server.EntMan.DeleteEntity(lateConsole);
+            server.EntMan.DeleteEntity(preservedAccessConsole);
         });
         await pair.CleanReturnAsync();
     }

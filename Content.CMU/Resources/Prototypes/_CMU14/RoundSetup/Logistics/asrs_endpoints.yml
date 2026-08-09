@@ -6,6 +6,7 @@
   components:
   - type: RoundSetupEndpoint
     slot: RequisitionsConsole
+  - type: RoundAsrsEndpoint
 
 - type: entity
   parent: CMCargoElevator

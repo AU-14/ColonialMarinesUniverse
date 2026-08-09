@@ -42,7 +42,8 @@ public sealed partial class RoundAsrsEndpointSystem : EntitySystem
     private void ResolveConsole(EntityUid endpoint, RoundSide side)
     {
         if (!TryComp(endpoint, out RequisitionsComputerComponent? computer) ||
-            !TryComp(endpoint, out AccessReaderComponent? access))
+            !TryComp(endpoint, out AccessReaderComponent? access) ||
+            !TryComp(endpoint, out RoundAsrsEndpointComponent? configuration))
         {
             throw new InvalidOperationException(
                 $"Round setup endpoint {ToPrettyString(endpoint)} is a requisitions console " +
@@ -50,7 +51,8 @@ public sealed partial class RoundAsrsEndpointSystem : EntitySystem
         }
 
         _requisitions.SetRoundSide((endpoint, computer), side);
-        _access.SetAccesses((endpoint, access), GetAccess(side));
+        if (!configuration.PreserveMappedAccess)
+            _access.SetAccesses((endpoint, access), GetAccess(side));
         _catalogs.RegisterResolvedSideConsole((endpoint, computer), side);
     }
 
