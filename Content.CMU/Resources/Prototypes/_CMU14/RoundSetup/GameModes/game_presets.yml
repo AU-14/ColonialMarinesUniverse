@@ -37,6 +37,7 @@
   showInVote: true
   description: Insurgency mode
   minPlayers: 35
+  burrowedLarvaEnabled: false
   threatSelectionMode: Disabled
   requiresGovforVote: true
   thirdPartyAutoSpawn: true
@@ -97,6 +98,7 @@
   showInVote: true
   maxPlayers: 60
   description: Live in an offworld colony as it falls into chaos.
+  burrowedLarvaEnabled: false
   threatSelectionMode: PostRoundstartVote
   usesThreatSpawnDelay: true
   supportedPlanets:

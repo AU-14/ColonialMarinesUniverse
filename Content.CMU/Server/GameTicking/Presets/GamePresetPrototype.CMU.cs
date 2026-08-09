@@ -3,6 +3,12 @@ namespace Content.Server.GameTicking.Presets;
 public sealed partial class GamePresetPrototype
 {
     /// <summary>
+    /// Whether hives can gain or spawn burrowed larva during this preset.
+    /// </summary>
+    [DataField]
+    public bool BurrowedLarvaEnabled = true;
+
+    /// <summary>
     /// Controls whether this preset selects no threat, selects one before round start, or runs a post-start vote.
     /// </summary>
     [DataField]
