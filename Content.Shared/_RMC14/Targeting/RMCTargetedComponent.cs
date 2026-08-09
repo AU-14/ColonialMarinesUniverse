@@ -4,7 +4,7 @@ using Robust.Shared.Utility;
 
 namespace Content.Shared._RMC14.Targeting;
 
-[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(raiseAfterAutoHandleState: true)]
 public sealed partial class RMCTargetedComponent : Component
 {
     /// <summary>
