@@ -77,7 +77,6 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
         if (!_state.TryFreezeSelection(candidate, out var frozen))
             return frozen;
 
-        _round.FreezeRoundPlanSelection(frozen);
         RaisePhaseChanged();
         return frozen;
     }
@@ -108,7 +107,6 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
-        _round.ResetRoundPlanSelection();
         _state.Reset();
         RaisePhaseChanged();
     }

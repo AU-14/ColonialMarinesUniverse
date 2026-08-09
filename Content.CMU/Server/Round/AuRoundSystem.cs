@@ -56,7 +56,6 @@ namespace Content.Server.AU14.Round
         private readonly AuRoundVoteSequenceTracker _voteSequence = new();
         private readonly AuRoundVoteCompletionState _voteCompletion = new();
         private readonly ISawmill _sawmill = Logger.GetSawmill("content");
-        private RoundPlanSelectionSnapshot? _frozenRoundPlanSelection;
         private PlatoonSpawnRuleSystem? _platoonSpawnRule;
         private Action? _voteSequenceFinished;
         private bool _selectionFinalized;
@@ -118,8 +117,8 @@ namespace Content.Server.AU14.Round
         }
 
         /// <summary>
-        /// Captures the current round selections for one planning operation.
-        /// Once preloading freezes the world, later captures retain its planet, platoons, and ships.
+        /// Captures the current mutable selections for pre-freeze planning.
+        /// Committed round consumers must capture through <see cref="CMURoundDirectorSystem"/>.
         /// </summary>
         public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount)
         {
@@ -130,16 +129,13 @@ namespace Content.Server.AU14.Round
         }
 
         /// <summary>
-        /// Captures the current world selections with an explicit runtime preset and threat context.
-        /// Once preloading freezes the world, later captures retain its planet, platoons, and ships.
+        /// Captures the current mutable world selections with an explicit runtime preset and threat context.
+        /// Committed round consumers must capture through <see cref="CMURoundDirectorSystem"/>.
         /// </summary>
         public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount,
             string presetId,
             string? selectedThreatId)
         {
-            if (_frozenRoundPlanSelection is { } frozen)
-                return frozen.WithRuntimeContext(playerCount, presetId, selectedThreatId);
-
             var platoons = _platoonSpawnRule ??=
                 _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
 
@@ -153,29 +149,6 @@ namespace Content.Server.AU14.Round
                 selectedThreatId,
                 _selectedGovforShip,
                 _selectedOpforShip);
-        }
-
-        /// <summary>
-        /// Commits the lobby's world selection for this round generation.
-        /// </summary>
-        internal RoundPlanSelectionSnapshot FreezeRoundPlanSelection(RoundPlanSelectionSnapshot selection)
-        {
-            if (_frozenRoundPlanSelection == null)
-            {
-                _frozenRoundPlanSelection = selection;
-                if (!_selectionFinalized)
-                {
-                    // Keep direct callers safe: invalidate callbacks before cancelling their handles.
-                    _voteSequence.Restart();
-                }
-            }
-
-            return _frozenRoundPlanSelection.Value;
-        }
-
-        internal void ResetRoundPlanSelection()
-        {
-            _frozenRoundPlanSelection = null;
         }
 
         public bool UsesPostRoundstartThreatVote()
@@ -192,7 +165,6 @@ namespace Content.Server.AU14.Round
             SubscribeLocalEvent<AuRoundVoteContinuationEvent>(OnVoteContinuation);
             _voteSequence.Reset();
             _state.Reset();
-            ResetRoundPlanSelection();
             SelectedPlanetMap = null;
         }
 

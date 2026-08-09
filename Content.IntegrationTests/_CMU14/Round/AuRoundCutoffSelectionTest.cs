@@ -92,7 +92,6 @@ public sealed class AuRoundCutoffSelectionTest
         await server.WaitAssertion(() =>
         {
             var round = server.System<AuRoundSystem>();
-            round.ResetRoundPlanSelection();
             round.ResetLobbySelection();
             round.FinalizeVoteSequence(PlayerCount, presetId);
 
@@ -132,7 +131,6 @@ public sealed class AuRoundCutoffSelectionTest
         await server.WaitAssertion(() =>
         {
             var round = server.System<AuRoundSystem>();
-            round.ResetRoundPlanSelection();
             round.ResetLobbySelection();
             round.FinalizeVoteSequence(PlayerCount, FixedFactionPresetId);
 
