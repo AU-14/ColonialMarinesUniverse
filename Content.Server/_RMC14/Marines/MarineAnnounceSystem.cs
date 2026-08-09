@@ -1,9 +1,11 @@
 ﻿using Content.Server._RMC14.Rules.DistressSignal;
+using Content.Server._RMC14.Announce;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
+using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Marines;
@@ -29,6 +31,7 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
     [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
     [Dependency] private SharedDropshipSystem _dropship = default!;
+    [Dependency] private GeneralAnnounceSystem _generalAnnounce = default!;
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
@@ -184,5 +187,26 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
             _chatManager.ChatMessageToOne(ChatChannel.Radio, message, message, default, false, actor.PlayerSession.Channel);
 
         _audio.PlayEntity(sound, receiver, receiver, AudioParams.Default.WithVolume(-2f));
+    }
+
+    protected override void AnnounceSignedUi(EntityUid sender, string message, Filter? filter)
+    {
+        var request = new AnnouncementRequest
+        {
+            Message = message,
+            Preset = "MarineCommand",
+            Target = AnnouncementTarget.Marines,
+            Speaker = sender,
+            ShowSprite = true
+        };
+
+        var uiFilter = filter == null
+            ? Filter.Empty().AddWhereAttachedEntity(e =>
+                HasComp<GhostComponent>(e) ||
+                HasComp<MarineComponent>(e))
+            : Filter.Empty().AddPlayers(filter.Recipients);
+
+        uiFilter.RemoveWhereAttachedEntity(HasComp<IntelRescueSurvivorObjectiveComponent>);
+        _generalAnnounce.AnnounceAdvanced(request, uiFilter);
     }
 }

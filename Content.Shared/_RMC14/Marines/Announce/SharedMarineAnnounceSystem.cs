@@ -266,6 +266,7 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         var wrappedMessage = Loc.GetString("rmc-announcement-message-signed", ("author", author), ("message", message), ("name", name));
 
         AnnounceToMarines(wrappedMessage, sound, filter);
+        AnnounceSignedUi(sender, message, filter);
         _adminLog.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(sender):source} marine announced message: {message}");
 
         if (_idCard.TryFindIdCard(sender, out var idCard) && TryComp(idCard, out ItemIFFComponent? idCardIFF))
@@ -273,6 +274,10 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
             {
                 _core.CreateARESLog(faction, LogCat, (string)$"{Name(sender)} sent an announcement: {message}");
             }
+    }
+
+    protected virtual void AnnounceSignedUi(EntityUid sender, string message, Filter? filter)
+    {
     }
 
     public string FormatHighCommand(string? author, string message)

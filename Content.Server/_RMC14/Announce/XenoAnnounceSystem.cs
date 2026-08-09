@@ -1,6 +1,9 @@
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
+using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.Xenonids.Announce;
+using Content.Shared._RMC14.Xenonids.Evolution;
+using Content.Shared._RMC14.Xenonids.Word;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
@@ -13,9 +16,12 @@ namespace Content.Server._RMC14.Announce;
 
 public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
 {
+    private const string QueenAnnouncementPreset = "XenoQueen";
+
     [Dependency] private IAdminLogManager _adminLogs = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IChatManager _chat = default!;
+    [Dependency] private GeneralAnnounceSystem _generalAnnounce = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Announce(EntityUid source, Filter filter, string message, string wrapped, SoundSpecifier? sound = null, PopupType? popup = null, bool needsQueen = false)
@@ -40,6 +46,21 @@ public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
         if (source.IsValid())
             _adminLogs.Add(LogType.RMCXenoAnnounce, $"{ToPrettyString(source):source} xeno announced message: {message}");
 
+        if (source.IsValid() && IsQueenAnnouncementSource(source))
+        {
+            var request = new AnnouncementRequest
+            {
+                Message = message,
+                Preset = QueenAnnouncementPreset,
+                Target = AnnouncementTarget.Xenos,
+                Speaker = source,
+                Source = source,
+                ShowSprite = false
+            };
+
+            _generalAnnounce.AnnounceAdvanced(request, filter);
+        }
+
         _chat.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrapped, source, false, true, null);
         _audio.PlayGlobal(sound, filter, true);
 
@@ -51,5 +72,11 @@ public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
             if (session.AttachedEntity is { } recipient)
                 _popup.PopupEntity(message, recipient, recipient, popup.Value);
         }
+    }
+
+    private bool IsQueenAnnouncementSource(EntityUid source)
+    {
+        return HasComp<XenoWordQueenComponent>(source) ||
+               HasComp<XenoEvolutionGranterComponent>(source);
     }
 }
