@@ -8,6 +8,7 @@ using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
 using Content.Server.CMU.Round;
 using Content.Server.GameTicking.Presets;
+using Content.Shared._CMU14.RoundSetup.LegacyBush;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Access.Components;
@@ -463,7 +464,7 @@ public sealed class AuRoundCutoffSelectionTest
     }
 
     [Test]
-    public async Task SemanticAsrsEndpointsResolveInPlaceFromOwningShipSide()
+    public async Task LegacyAsrsAliasesResolveInPlaceFromOwningShipSide()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
         var server = pair.Server;
@@ -483,8 +484,8 @@ public sealed class AuRoundCutoffSelectionTest
 
             var shipFaction = server.EntMan.EnsureComponent<ShipFactionComponent>(map.Grid.Owner);
             shipFaction.Faction = "govfor";
-            console = server.EntMan.SpawnEntity("CMURoundAsrsConsole", map.GridCoords);
-            elevator = server.EntMan.SpawnEntity("CMURoundAsrsLift", map.GridCoords);
+            console = server.EntMan.SpawnEntity("VMarkerShipRequisitionsConsole", map.GridCoords);
+            elevator = server.EntMan.SpawnEntity("VMarkerShipRequisitionsLift", map.GridCoords);
             metadata.SetEntityName(console, "Mapped round ASRS");
             transform.SetLocalRotation(console, consoleRotation);
 
@@ -497,6 +498,8 @@ public sealed class AuRoundCutoffSelectionTest
                 Assert.That(
                     server.EntMan.GetComponent<RequisitionsElevatorComponent>(elevator).Faction,
                     Is.EqualTo("none"));
+                Assert.That(server.EntMan.HasComponent<VendorMarkerComponent>(console), Is.False);
+                Assert.That(server.EntMan.HasComponent<VendorMarkerComponent>(elevator), Is.False);
                 Assert.That(server.EntMan.HasComponent<RoundAsrsConsoleCatalogComponent>(console), Is.False);
             });
 
@@ -510,7 +513,10 @@ public sealed class AuRoundCutoffSelectionTest
             {
                 Assert.That(
                     server.EntMan.GetComponent<MetaDataComponent>(console).EntityPrototype?.ID,
-                    Is.EqualTo("CMURoundAsrsConsole"));
+                    Is.EqualTo("VMarkerShipRequisitionsConsole"));
+                Assert.That(
+                    server.EntMan.GetComponent<MetaDataComponent>(elevator).EntityPrototype?.ID,
+                    Is.EqualTo("VMarkerShipRequisitionsLift"));
                 Assert.That(
                     server.EntMan.GetComponent<MetaDataComponent>(console).EntityName,
                     Is.EqualTo("Mapped round ASRS"));

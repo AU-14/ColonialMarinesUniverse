@@ -1231,27 +1231,14 @@
     class: ReturnPointGeneric
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundAsrsConsole
   id: VMarkerShipRequisitionsConsole
-  name: Ship Requisitions Console Marker
-  components:
-  - type: VendorMarker
-    class: RequisitionsConsole
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/asrs_console.rsi
-    state: off
+  categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundAsrsLift
   id: VMarkerShipRequisitionsLift
-  name: Ship Requisitions Lift Marker
-  components:
-  - type: VendorMarker
-    class: RequisitionsLift
-  - type: Sprite
-    sprite: _RMC14/Effects/elevator.rsi
-    state: supply_elevator_lowered
-    drawdepth: LowFloors
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip
