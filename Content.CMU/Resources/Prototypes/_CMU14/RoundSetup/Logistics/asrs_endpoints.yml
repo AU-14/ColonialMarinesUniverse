@@ -1,0 +1,17 @@
+- type: entity
+  parent: CMASRSConsole
+  id: CMURoundAsrsConsole
+  name: round ASRS console
+  suffix: Round Setup
+  components:
+  - type: RoundSetupEndpoint
+    slot: RequisitionsConsole
+
+- type: entity
+  parent: CMCargoElevator
+  id: CMURoundAsrsLift
+  name: round ASRS lift
+  suffix: Round Setup
+  components:
+  - type: RoundSetupEndpoint
+    slot: RequisitionsLift

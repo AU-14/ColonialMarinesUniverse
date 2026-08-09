@@ -11,11 +11,13 @@ using Content.Server.GameTicking.Presets;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Access.Components;
+using Content.Shared.AU14;
 using Content.Shared.AU14.ColonyEconomy;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Maths;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting.Pool;
 
@@ -457,6 +459,96 @@ public sealed class AuRoundCutoffSelectionTest
             server.EntMan.DeleteEntity(opforElevator);
         });
         await pair.RunUntilSynced();
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SemanticAsrsEndpointsResolveInPlaceFromOwningShipSide()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid console = default;
+        EntityUid elevator = default;
+        EntityUid lateConsole = default;
+        EntityUid? account = null;
+        var consoleRotation = Angle.FromDegrees(90);
+        await server.WaitAssertion(() =>
+        {
+            var director = server.System<CMURoundDirectorSystem>();
+            var metadata = server.System<MetaDataSystem>();
+            var transform = server.System<SharedTransformSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            var shipFaction = server.EntMan.EnsureComponent<ShipFactionComponent>(map.Grid.Owner);
+            shipFaction.Faction = "govfor";
+            console = server.EntMan.SpawnEntity("CMURoundAsrsConsole", map.GridCoords);
+            elevator = server.EntMan.SpawnEntity("CMURoundAsrsLift", map.GridCoords);
+            metadata.SetEntityName(console, "Mapped round ASRS");
+            transform.SetLocalRotation(console, consoleRotation);
+
+            var computer = server.EntMan.GetComponent<RequisitionsComputerComponent>(console);
+            account = computer.Account;
+            Assert.Multiple(() =>
+            {
+                Assert.That(account, Is.Not.Null);
+                Assert.That(computer.Faction, Is.EqualTo("none"));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsElevatorComponent>(elevator).Faction,
+                    Is.EqualTo("none"));
+                Assert.That(server.EntMan.HasComponent<RoundAsrsConsoleCatalogComponent>(console), Is.False);
+            });
+
+            director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+            director.MarkMapsLoaded();
+            director.MarkWorldInitialized();
+
+            var resolvedComputer = server.EntMan.GetComponent<RequisitionsComputerComponent>(console);
+            var binding = server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(console);
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    server.EntMan.GetComponent<MetaDataComponent>(console).EntityPrototype?.ID,
+                    Is.EqualTo("CMURoundAsrsConsole"));
+                Assert.That(
+                    server.EntMan.GetComponent<MetaDataComponent>(console).EntityName,
+                    Is.EqualTo("Mapped round ASRS"));
+                Assert.That(
+                    server.EntMan.GetComponent<TransformComponent>(console).LocalRotation,
+                    Is.EqualTo(consoleRotation));
+                Assert.That(resolvedComputer.Account, Is.EqualTo(account));
+                Assert.That(resolvedComputer.Faction, Is.EqualTo("govfor"));
+                Assert.That(binding.Force, Is.EqualTo(new RoundForceId("USCM")));
+                Assert.That(resolvedComputer.Categories, Has.Count.EqualTo(18));
+                Assert.That(
+                    SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(console)),
+                    Is.EqualTo(new[] { "AU14AccessGovforCommand", "AU14AccessGovforReq" }));
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsElevatorComponent>(elevator).Faction,
+                    Is.EqualTo("govfor"));
+                Assert.That(server.EntMan.HasComponent<RoundSetupEndpointComponent>(console), Is.True);
+                Assert.That(server.EntMan.HasComponent<RoundSetupEndpointComponent>(elevator), Is.True);
+            });
+
+            lateConsole = server.EntMan.SpawnEntity("CMURoundAsrsConsole", map.GridCoords);
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    server.EntMan.GetComponent<RequisitionsComputerComponent>(lateConsole).Faction,
+                    Is.EqualTo("govfor"));
+                Assert.That(
+                    server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(lateConsole).Force,
+                    Is.EqualTo(new RoundForceId("USCM")));
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            server.EntMan.DeleteEntity(console);
+            server.EntMan.DeleteEntity(elevator);
+            server.EntMan.DeleteEntity(lateConsole);
+        });
         await pair.CleanReturnAsync();
     }
 

@@ -130,6 +130,24 @@ public sealed partial class RoundAsrsConsoleCatalogSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Registers a neutral console after its semantic endpoint has resolved a side.
+    /// </summary>
+    internal void RegisterResolvedSideConsole(
+        Entity<RequisitionsComputerComponent> computer,
+        RoundSide side)
+    {
+        if (!TryGetSide(computer.Comp.Faction, out var projectedSide) || projectedSide != side)
+        {
+            throw new InvalidOperationException(
+                $"Resolved ASRS console {ToPrettyString(computer)} does not project side '{side}' " +
+                "onto legacy routing.");
+        }
+
+        _sideConsoles.Add(computer);
+        TryBindCommittedCatalog(computer, side);
+    }
+
     private static bool TryGetSide(string faction, out RoundSide side)
     {
         switch (faction)

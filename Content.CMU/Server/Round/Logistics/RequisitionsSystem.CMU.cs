@@ -22,6 +22,19 @@ public sealed partial class RequisitionsSystem
         Dirty(computer);
     }
 
+    /// <summary>
+    /// Projects the resolved round side onto the legacy server-side requisitions routing field.
+    /// </summary>
+    internal void SetRoundSide(Entity<RequisitionsComputerComponent> computer, RoundSide side)
+    {
+        computer.Comp.Faction = side switch
+        {
+            RoundSide.Govfor => "govfor",
+            RoundSide.Opfor => "opfor",
+            _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
+        };
+    }
+
     private bool TryReserveRoundStock(
         Entity<RequisitionsComputerComponent> computer,
         int category,
