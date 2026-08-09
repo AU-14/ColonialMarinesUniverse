@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Content.Server._RMC14.Requisitions;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
 using Content.Server.CMU.Round;
@@ -10,6 +11,7 @@ using Content.Server.GameTicking.Presets;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.Access.Components;
+using Content.Shared.AU14.ColonyEconomy;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
 using Content.Shared.GameTicking;
@@ -42,6 +44,27 @@ public sealed class AuRoundCutoffSelectionTest
           components:
           - type: RoundForceAsrsProfile
             forceId: USCM
+        """;
+
+    private const string ReplenishingAsrsProfile = """
+        - type: entity
+          id: CMUTestReplenishingAsrsProfile
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: CMUTestMissingAsrsPlatoon
+            categories:
+            - id: Test
+              name: Test
+              offers:
+              - id: Test_Limited
+                crate: RMCCrateClothingMagazinePouchesLarge
+                cost: 100
+                stock:
+                  maximum: 2
+                  replenishDelay: 1
+                  startingStock: 1
+                  replenishAmount: 5
         """;
 
     [TestPrototypes]
@@ -438,6 +461,289 @@ public sealed class AuRoundCutoffSelectionTest
     }
 
     [Test]
+    public async Task SideAsrsLimitedOffersStopReservationsAtMaximum()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid console = default;
+        await server.WaitAssertion(() =>
+        {
+            var director = server.System<CMURoundDirectorSystem>();
+            var requisitions = server.System<RequisitionsSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+            director.MarkMapsLoaded();
+            director.MarkWorldInitialized();
+            console = server.EntMan.SpawnEntity("CMASRSConsoleGovfor", map.GridCoords);
+
+            var computer = server.EntMan.GetComponent<RequisitionsComputerComponent>(console);
+            var binding = server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(console);
+            var limitedOffer = new RoundAsrsOfferId("Medical_CMUCrateMedicalFieldTreatments");
+            var categoryIndex = -1;
+            var offerIndex = -1;
+            var offerIdsByCategory = binding.OfferIdsByCategory;
+            for (var category = 0; category < offerIdsByCategory.Length; category++)
+            {
+                var index = offerIdsByCategory[category].IndexOf(limitedOffer);
+                if (index < 0)
+                    continue;
+
+                categoryIndex = category;
+                offerIndex = index;
+                break;
+            }
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(categoryIndex, Is.GreaterThanOrEqualTo(0));
+                Assert.That(offerIndex, Is.GreaterThanOrEqualTo(0));
+                Assert.That(
+                    binding.StockPolicies[limitedOffer],
+                    Is.EqualTo(new RoundAsrsStockPolicy(2, TimeSpan.FromMinutes(8))));
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.True);
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.True);
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.False);
+            });
+        });
+
+        await server.WaitPost(() => server.EntMan.DeleteEntity(console));
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SideAsrsLimitedOffersReplenishWithoutExceedingMaximum()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Destructive = true,
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var changed = new Dictionary<Type, HashSet<string>>();
+        server.ProtoMan.LoadString(ReplenishingAsrsProfile, changed: changed);
+        await server.WaitPost(() => server.ProtoMan.ReloadPrototypes(changed));
+
+        EntityUid console = default;
+        var categoryIndex = -1;
+        var offerIndex = -1;
+        await server.WaitAssertion(() =>
+        {
+            var director = server.System<CMURoundDirectorSystem>();
+            var requisitions = server.System<RequisitionsSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            director.FreezeSelection(PlayerCount, MissingAsrsPresetId);
+            director.MarkMapsLoaded();
+            director.MarkWorldInitialized();
+            console = server.EntMan.SpawnEntity("CMASRSConsoleGovfor", map.GridCoords);
+
+            var computer = server.EntMan.GetComponent<RequisitionsComputerComponent>(console);
+            var binding = server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(console);
+            var offerIds = binding.OfferIdsByCategory;
+            categoryIndex = 0;
+            offerIndex = offerIds[categoryIndex].IndexOf(new RoundAsrsOfferId("Test_Limited"));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(offerIndex, Is.GreaterThanOrEqualTo(0));
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.True);
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.False);
+            });
+        });
+
+        await pair.RunTicksSync(pair.SecondsToTicks(1) + 2);
+
+        await server.WaitAssertion(() =>
+        {
+            var computer = server.EntMan.GetComponent<RequisitionsComputerComponent>(console);
+            var requisitions = server.System<RequisitionsSystem>();
+            Assert.Multiple(() =>
+            {
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.True);
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.True);
+                Assert.That(requisitions.TryReserveStock((console, computer), categoryIndex, offerIndex), Is.False);
+            });
+        });
+
+        await server.WaitPost(() => server.EntMan.DeleteEntity(console));
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SideAsrsDirectAndDepartmentOrdersSharePerConsoleStock()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid console = default;
+        EntityUid elevator = default;
+        EntityUid departmentConsole = default;
+        EntityUid actor = default;
+        await server.WaitAssertion(() =>
+        {
+            var director = server.System<CMURoundDirectorSystem>();
+            var requisitions = server.System<RequisitionsSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+            director.MarkMapsLoaded();
+            director.MarkWorldInitialized();
+            console = server.EntMan.SpawnEntity("CMASRSConsoleGovfor", map.GridCoords);
+            elevator = server.EntMan.SpawnEntity("CMCargoElevatorGovfor", map.GridCoords);
+            departmentConsole = server.EntMan.SpawnEntity("AUDepartmentConsoleMedical", map.GridCoords);
+            actor = server.EntMan.SpawnEntity("MobHuman", map.GridCoords);
+
+            var computer = server.EntMan.GetComponent<RequisitionsComputerComponent>(console);
+            var binding = server.EntMan.GetComponent<RoundAsrsConsoleCatalogComponent>(console);
+            var elevatorComponent = server.EntMan.GetComponent<RequisitionsElevatorComponent>(elevator);
+            var department = server.EntMan.GetComponent<DepartmentConsoleComponent>(departmentConsole);
+            department.AsrsFaction = "govfor";
+            department.DepartmentId = null;
+            department.DepartmentBudget = 20_000;
+            requisitions.ChangeBudget(20_000);
+
+            var accountUid = computer.Account;
+            Assert.That(accountUid, Is.Not.Null);
+            var account = server.EntMan.GetComponent<RequisitionsAccountComponent>(accountUid!.Value);
+            var monkey = FindOffer(binding, new RoundAsrsOfferId("Research_CMUMonkeyCubeCrate"));
+            var exotic = FindOffer(binding, new RoundAsrsOfferId("Research_CMUExoticCubeCrate"));
+            var monkeyCost = computer.Categories[monkey.Category].Entries[monkey.Offer].Cost;
+            var exoticCost = computer.Categories[exotic.Category].Entries[exotic.Offer].Cost;
+            var initialBalance = account.Balance;
+            var initialDepartmentBudget = department.DepartmentBudget;
+
+            var directMonkey = new RequisitionsBuyMsg(monkey.Category, monkey.Offer)
+            {
+                Actor = actor,
+                UiKey = RequisitionsUIKey.Key,
+            };
+            server.EntMan.EventBus.RaiseLocalEvent(console, directMonkey);
+            Assert.Multiple(() =>
+            {
+                Assert.That(account.Balance, Is.EqualTo(initialBalance - monkeyCost));
+                Assert.That(department.DepartmentBudget, Is.EqualTo(initialDepartmentBudget));
+                Assert.That(elevatorComponent.Orders, Has.Count.EqualTo(1));
+            });
+
+            var departmentMonkey = new DepartmentConsoleOrderBuiMsg(
+                monkey.Category,
+                monkey.Offer,
+                "Medical research",
+                "Laboratory")
+            {
+                Actor = actor,
+                UiKey = DepartmentConsoleUi.Key,
+            };
+            server.EntMan.EventBus.RaiseLocalEvent(departmentConsole, departmentMonkey);
+            Assert.Multiple(() =>
+            {
+                Assert.That(account.Balance, Is.EqualTo(initialBalance - monkeyCost));
+                Assert.That(department.DepartmentBudget, Is.EqualTo(initialDepartmentBudget));
+                Assert.That(elevatorComponent.Orders, Has.Count.EqualTo(1));
+            });
+
+            var departmentExotic = new DepartmentConsoleOrderBuiMsg(
+                exotic.Category,
+                exotic.Offer,
+                "Exotic research",
+                "Secure laboratory")
+            {
+                Actor = actor,
+                UiKey = DepartmentConsoleUi.Key,
+            };
+            server.EntMan.EventBus.RaiseLocalEvent(departmentConsole, departmentExotic);
+            Assert.Multiple(() =>
+            {
+                Assert.That(account.Balance, Is.EqualTo(initialBalance - monkeyCost));
+                Assert.That(department.DepartmentBudget, Is.EqualTo(initialDepartmentBudget - exoticCost));
+                Assert.That(elevatorComponent.Orders, Has.Count.EqualTo(2));
+                Assert.That(elevatorComponent.Orders[1].DeptReason, Is.EqualTo("Exotic research"));
+                Assert.That(elevatorComponent.Orders[1].DeptDeliverTo, Is.EqualTo("Secure laboratory"));
+            });
+
+            var directExotic = new RequisitionsBuyMsg(exotic.Category, exotic.Offer)
+            {
+                Actor = actor,
+                UiKey = RequisitionsUIKey.Key,
+            };
+            server.EntMan.EventBus.RaiseLocalEvent(console, directExotic);
+            Assert.Multiple(() =>
+            {
+                Assert.That(account.Balance, Is.EqualTo(initialBalance - monkeyCost));
+                Assert.That(department.DepartmentBudget, Is.EqualTo(initialDepartmentBudget - exoticCost));
+                Assert.That(elevatorComponent.Orders, Has.Count.EqualTo(2));
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            server.EntMan.DeleteEntity(console);
+            server.EntMan.DeleteEntity(elevator);
+            server.EntMan.DeleteEntity(departmentConsole);
+            server.EntMan.DeleteEntity(actor);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task DirectAsrsRejectsNegativeOrderIndexes()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid console = default;
+        EntityUid elevator = default;
+        EntityUid actor = default;
+        await server.WaitAssertion(() =>
+        {
+            console = server.EntMan.SpawnEntity("CMASRSConsole", map.GridCoords);
+            elevator = server.EntMan.SpawnEntity("CMCargoElevator", map.GridCoords);
+            actor = server.EntMan.SpawnEntity("MobHuman", map.GridCoords);
+
+            var computer = server.EntMan.GetComponent<RequisitionsComputerComponent>(console);
+            var accountUid = computer.Account;
+            Assert.That(accountUid, Is.Not.Null);
+            var account = server.EntMan.GetComponent<RequisitionsAccountComponent>(accountUid!.Value);
+            var elevatorComponent = server.EntMan.GetComponent<RequisitionsElevatorComponent>(elevator);
+            var initialBalance = account.Balance;
+
+            var negativeCategory = new RequisitionsBuyMsg(-1, 0)
+            {
+                Actor = actor,
+                UiKey = RequisitionsUIKey.Key,
+            };
+            Assert.DoesNotThrow(() => server.EntMan.EventBus.RaiseLocalEvent(console, negativeCategory));
+
+            var negativeOrder = new RequisitionsBuyMsg(0, -1)
+            {
+                Actor = actor,
+                UiKey = RequisitionsUIKey.Key,
+            };
+            Assert.DoesNotThrow(() => server.EntMan.EventBus.RaiseLocalEvent(console, negativeOrder));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(account.Balance, Is.EqualTo(initialBalance));
+                Assert.That(elevatorComponent.Orders, Is.Empty);
+            });
+        });
+
+        await server.WaitPost(() =>
+        {
+            server.EntMan.DeleteEntity(console);
+            server.EntMan.DeleteEntity(elevator);
+            server.EntMan.DeleteEntity(actor);
+        });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task InvalidAsrsProfilesDoNotLatchSelectionOrCatalogs()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
@@ -473,6 +779,21 @@ public sealed class AuRoundCutoffSelectionTest
             .Select(group => string.Join(",", group.OrderBy(level => level.Id, StringComparer.Ordinal)))
             .OrderBy(group => group, StringComparer.Ordinal)
             .ToArray();
+    }
+
+    private static (int Category, int Offer) FindOffer(
+        RoundAsrsConsoleCatalogComponent catalog,
+        RoundAsrsOfferId offer)
+    {
+        var offersByCategory = catalog.OfferIdsByCategory;
+        for (var category = 0; category < offersByCategory.Length; category++)
+        {
+            var index = offersByCategory[category].IndexOf(offer);
+            if (index >= 0)
+                return (category, index);
+        }
+
+        throw new AssertionException($"Committed ASRS catalog has no offer '{offer}'.");
     }
 
     private static string[] SnapshotCatalog(ResolvedRoundAsrsCatalog catalog)
