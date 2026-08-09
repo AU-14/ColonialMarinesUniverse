@@ -35,7 +35,15 @@ public sealed partial class CMUSurgeryStepMetadataPrototype : IPrototype
     public string? DisplayName;
 
     [DataField]
-    public List<BodyPartType> ValidParts = new() { BodyPartType.Head, BodyPartType.Torso, BodyPartType.Arm, BodyPartType.Leg };
+    public List<BodyPartType> ValidParts = new()
+    {
+        BodyPartType.Head,
+        BodyPartType.Torso,
+        BodyPartType.Arm,
+        BodyPartType.Hand,
+        BodyPartType.Leg,
+        BodyPartType.Foot,
+    };
 
     [DataField]
     public string Category = "general";

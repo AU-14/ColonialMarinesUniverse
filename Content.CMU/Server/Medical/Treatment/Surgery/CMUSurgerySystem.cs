@@ -170,7 +170,7 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         if (limbPart.Body != body)
             return;
 
-        if (limbPart.PartType is not (BodyPartType.Arm or BodyPartType.Leg))
+        if (!CMUBodyPartSlots.IsReportableMissingPart(limbPart.PartType))
             return;
 
         _transform.SetCoordinates(part, Transform(body).Coordinates);

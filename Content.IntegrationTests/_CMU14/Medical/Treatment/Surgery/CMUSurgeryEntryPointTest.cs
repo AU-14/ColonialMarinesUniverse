@@ -5,8 +5,11 @@ using Content.IntegrationTests.Pair;
 using Content.Server._CMU14.Medical.Treatment.Surgery;
 using Content.Server.Mind;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
+using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.Body.Part;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Standing;
@@ -20,6 +23,71 @@ namespace Content.IntegrationTests._CMU14.Medical.Treatment.Surgery;
 [TestFixture]
 public sealed class CMUSurgeryEntryPointTest
 {
+    [Test]
+    public async Task HandsAndFeetOfferExtremitySurgeries()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        EntityUid surgeon = default;
+        EntityUid patient = default;
+
+        await server.WaitPost(() =>
+        {
+            var entities = server.EntMan;
+            surgeon = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            patient = entities.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            PreparePatient(entities, surgeon, patient);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entities = server.EntMan;
+            var index = entities.System<CMUMedicalBodyIndexSystem>();
+            var rulebook = entities.System<CMUSurgeryRulebookSystem>();
+            var transform = entities.System<SharedTransformSystem>();
+
+            foreach (var type in new[] { BodyPartType.Hand, BodyPartType.Foot })
+            {
+                Assert.That(
+                    index.TryGetBodyPart(
+                        patient,
+                        new CMUMedicalBodyPartKey(type, BodyPartSymmetry.Left),
+                        out var part),
+                    Is.True);
+
+                entities.EnsureComponent<InternalBleedingComponent>(part);
+                var attachedEntries = rulebook.BuildEligibleSurgeries(
+                    patient,
+                    type,
+                    BodyPartSymmetry.Left,
+                    surgeon,
+                    part);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(
+                        attachedEntries.Select(entry => entry.SurgeryId),
+                        Does.Contain("CMUSurgeryCauterizeInternalBleeding"));
+                    Assert.That(
+                        attachedEntries.Select(entry => entry.SurgeryId),
+                        Does.Contain("CMUSurgeryRemoveLimb"));
+                });
+
+                transform.DetachEntity(part, entities.GetComponent<TransformComponent>(part));
+
+                var missingEntry = rulebook.BuildPartEntries(patient, surgeon)
+                    .Single(entry => entry.Type == type && entry.Symmetry == BodyPartSymmetry.Left);
+                Assert.That(
+                    missingEntry.EligibleSurgeries.Select(entry => entry.SurgeryId),
+                    Does.Contain("CMUSurgeryReattachLimb"));
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task SurgeryToolOpensCmuSurgeryWindow()
     {
