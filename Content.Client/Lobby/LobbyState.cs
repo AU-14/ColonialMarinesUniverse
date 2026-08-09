@@ -259,13 +259,13 @@ namespace Content.Client.Lobby
         {
             if (_gameTicker.IsGameStarted)
             {
-                Lobby!.ReadyButton.Text = Loc.GetString("lobby-state-ready-button-join-state");
+                Lobby!.ReadyButton.Text = Loc.GetString("rmc-lobby-join-colony");
                 Lobby!.ReadyButton.ToggleMode = false;
                 Lobby!.ReadyButton.Pressed = false;
                 Lobby!.ObserveButton.Disabled = false;
                 Lobby.ReadyButton.AddStyleClass("OpenLeft");
                 _joinGovforButton!.Visible = true;
-                _joinOpforButton!.Visible = true;
+                _joinOpforButton!.Visible = false;
                 _joinOtherButton!.Visible = true;
             }
             else

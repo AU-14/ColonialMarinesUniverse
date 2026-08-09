@@ -137,8 +137,21 @@ namespace Content.Client.LateJoin
             if (!_gameTicker.DisallowedLateJoin && _gameTicker.StationNames.Count == 0)
                 _sawmill.Warning("No stations exist, nothing to display in late-join GUI");
 
+            var departments = _prototypeManager.EnumerateCM<DepartmentPrototype>().ToArray();
+            Array.Sort(departments, DepartmentUIComparer.Instance);
+
             foreach (var (id, name) in _gameTicker.StationNames)
             {
+                if (!_gameTicker.JobsAvailable.TryGetValue(id, out var stationAvailable))
+                    continue;
+
+                if (!string.IsNullOrEmpty(_factionFilter) &&
+                    !departments.Any(department => DepartmentMatchesFilter(department) &&
+                        department.Roles.Any(stationAvailable.ContainsKey)))
+                {
+                    continue;
+                }
+
                 var jobList = new BoxContainer
                 {
                     Orientation = LayoutOrientation.Vertical,
@@ -216,10 +229,9 @@ namespace Content.Client.LateJoin
                 };
 
                 var firstCategory = true;
-                var departments = _prototypeManager.EnumerateCM<DepartmentPrototype>().ToArray();
-                Array.Sort(departments, DepartmentUIComparer.Instance);
 
                 _jobButtons[id] = new Dictionary<string, List<JobButton>>();
+                _jobCategories[id] = new Dictionary<string, BoxContainer>();
 
                 foreach (var department in departments)
                 {
@@ -227,8 +239,6 @@ namespace Content.Client.LateJoin
                         continue;
 
                     var departmentName = Loc.GetString(department.Name);
-                    _jobCategories[id] = new Dictionary<string, BoxContainer>();
-                    var stationAvailable = _gameTicker.JobsAvailable[id];
                     var jobsAvailable = new List<JobPrototype>();
 
                     foreach (var jobId in department.Roles)
