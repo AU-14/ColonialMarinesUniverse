@@ -36,31 +36,9 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("content");
 
-    // Store selected platoons in the system
-    private PlatoonPrototype? _selectedGovforPlatoon;
-    public PlatoonPrototype? SelectedGovforPlatoon
-    {
-        get => _selectedGovforPlatoon;
-        set
-        {
-            _selectedGovforPlatoon = value;
-            // Reapply catalogs to any existing requisitions consoles
-            var reqSys = EntityManager.EntitySysManager.GetEntitySystem<RequisitionsSystem>();
-            reqSys?.ReapplyPlatoonCatalogs();
-        }
-    }
-
-    private PlatoonPrototype? _selectedOpforPlatoon;
-    public PlatoonPrototype? SelectedOpforPlatoon
-    {
-        get => _selectedOpforPlatoon;
-        set
-        {
-            _selectedOpforPlatoon = value;
-            var reqSys = EntityManager.EntitySysManager.GetEntitySystem<RequisitionsSystem>();
-            reqSys?.ReapplyPlatoonCatalogs();
-        }
-    }
+    // Compatibility projections for consumers that have not moved to the committed plan yet.
+    public PlatoonPrototype? SelectedGovforPlatoon { get; internal set; }
+    public PlatoonPrototype? SelectedOpforPlatoon { get; internal set; }
 
     private PlatoonPrototype? ResolveCommittedPlatoon(RoundForceAssignment? assignment)
     {
@@ -1236,12 +1214,4 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         return false;
     }
 
-    protected override void Ended(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleEndedEvent args)
-    {
-        base.Ended(uid, component, gameRule, args);
-
-        // Clear selections on rule end/restart so they don't persist across restarts
-        SelectedGovforPlatoon = null;
-        SelectedOpforPlatoon = null;
-    }
 }

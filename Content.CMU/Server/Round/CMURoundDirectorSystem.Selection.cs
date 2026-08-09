@@ -12,6 +12,16 @@ internal enum CMURoundSelectionMutationResult : byte
     SelectionFrozen,
 }
 
+/// <summary>
+/// Announces an accepted application of one side's candidate force assignment.
+/// Applications remain observable when the force ID is unchanged to preserve the legacy refresh contract.
+/// </summary>
+[ByRefEvent]
+internal readonly record struct RoundForceSelectionAppliedEvent(
+    RoundSide Side,
+    RoundForceId? PreviousForce,
+    RoundForceId? CurrentForce);
+
 public sealed partial class CMURoundDirectorSystem
 {
     /// <summary>
@@ -24,7 +34,13 @@ public sealed partial class CMURoundDirectorSystem
         if (_state.Phase != CMURoundPhase.AwaitingSelection)
             return CMURoundSelectionMutationResult.SelectionFrozen;
 
+        var previous = ToForceId(_round.GetLegacyForceSelection(side));
         _round.ApplyLegacyForceSelection(side, platoon);
+        var applied = new RoundForceSelectionAppliedEvent(
+            side,
+            previous,
+            ToForceId(platoon));
+        RaiseLocalEvent(ref applied);
         return CMURoundSelectionMutationResult.Applied;
     }
 
@@ -40,5 +56,12 @@ public sealed partial class CMURoundDirectorSystem
 
         _round.ApplyMainShipSelection(side, shipId);
         return CMURoundSelectionMutationResult.Applied;
+    }
+
+    private static RoundForceId? ToForceId(PlatoonPrototype? platoon)
+    {
+        return platoon == null
+            ? null
+            : new RoundForceId(platoon.ID);
     }
 }

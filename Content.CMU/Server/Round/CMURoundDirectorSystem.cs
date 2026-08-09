@@ -108,6 +108,7 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _state.Reset();
+        _round.ResetLobbySelection();
         RaisePhaseChanged();
     }
 

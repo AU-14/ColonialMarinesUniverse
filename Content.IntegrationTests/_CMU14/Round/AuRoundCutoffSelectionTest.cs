@@ -5,6 +5,8 @@ using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking.Presets;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
+using Content.Shared.GameTicking;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting.Pool;
 
@@ -62,7 +64,7 @@ public sealed class AuRoundCutoffSelectionTest
         {
             var round = server.System<AuRoundSystem>();
             var director = server.System<CMURoundDirectorSystem>();
-            round.ResetLobbySelection();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
 
             var selection = director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
 
@@ -101,7 +103,7 @@ public sealed class AuRoundCutoffSelectionTest
             var round = server.System<AuRoundSystem>();
             var director = server.System<CMURoundDirectorSystem>();
             var platoons = server.System<PlatoonSpawnRuleSystem>();
-            round.ResetLobbySelection();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
             round.SetPreset(prototypes.Index<GamePresetPrototype>(FixedBothSidesPresetId));
 
             Assert.Multiple(() =>
@@ -224,7 +226,7 @@ public sealed class AuRoundCutoffSelectionTest
         await server.WaitAssertion(() =>
         {
             var round = server.System<AuRoundSystem>();
-            round.ResetLobbySelection();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
             round.FinalizeVoteSequence(PlayerCount, presetId);
 
             var selectedPresetId = round.SelectedPreset?.ID ?? presetId;
@@ -263,7 +265,7 @@ public sealed class AuRoundCutoffSelectionTest
         await server.WaitAssertion(() =>
         {
             var round = server.System<AuRoundSystem>();
-            round.ResetLobbySelection();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
             round.FinalizeVoteSequence(PlayerCount, FixedFactionPresetId);
 
             var selection = round.CaptureRoundPlanSelection(

@@ -12,6 +12,8 @@ using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._CMU14.ZLevels.Vehicles;
 using Content.Shared.AU14;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
+using Content.Shared.GameTicking;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -60,9 +62,13 @@ public sealed class USSBushMultiZTest : GameTest
 
         await server.WaitAssertion(() =>
         {
+            SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
             Assert.That(SEntMan.System<AuRoundSystem>().SetPlanet("AUPlanetLV747"), Is.True);
-            SEntMan.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon =
-                SProtoMan.Index(UsmcPlatoon);
+            Assert.That(
+                SEntMan.System<CMURoundDirectorSystem>().TrySetLegacyForce(
+                    RoundSide.Govfor,
+                    SProtoMan.Index(UsmcPlatoon)),
+                Is.EqualTo(CMURoundSelectionMutationResult.Applied));
 
             var options = DeserializationOptions.Default with { InitializeMaps = true };
             var grids = ticker.LoadGameMap(SProtoMan.Index<GameMapPrototype>(MapPrototype), out var mapId, options);

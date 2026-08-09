@@ -635,9 +635,8 @@ public sealed partial class AuRoundSystem
     {
         _state.Reset();
         SelectedPlanetMap = null;
-        var platoons = GetPlatoonSpawnRuleSystem();
-        platoons.SelectedGovforPlatoon = null;
-        platoons.SelectedOpforPlatoon = null;
+        SetFactionPlatoon(AuRoundVoteBranch.Govfor, null);
+        SetFactionPlatoon(AuRoundVoteBranch.Opfor, null);
     }
 
     private void ClearWorldSelection()
@@ -743,10 +742,6 @@ public sealed partial class AuRoundSystem
         {
             return;
         }
-
-        _intel.SetTeamTechTreeOverride(
-            faction == AuRoundVoteBranch.Govfor ? Team.GovFor : Team.OpFor,
-            platoon?.TechTree);
     }
 
     private string? GetFactionShip(AuRoundVoteBranch faction)

@@ -10,7 +10,6 @@ using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Voting;
-using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._CMU14.Threats;
@@ -41,7 +40,6 @@ namespace Content.Server.AU14.Round
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private IServerPreferencesManager _prefsManager = default!;
         [Dependency] private IVoteManager _voteManager = default!;
-        [Dependency] private IntelSystem _intel = default!;
         [Dependency] private ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
@@ -173,6 +171,17 @@ namespace Content.Server.AU14.Round
                 default:
                     throw new ArgumentOutOfRangeException(nameof(side), side, null);
             }
+        }
+
+        internal PlatoonPrototype? GetLegacyForceSelection(RoundSide side)
+        {
+            var platoons = GetPlatoonSpawnRuleSystem();
+            return side switch
+            {
+                RoundSide.Govfor => platoons.SelectedGovforPlatoon,
+                RoundSide.Opfor => platoons.SelectedOpforPlatoon,
+                _ => throw new ArgumentOutOfRangeException(nameof(side), side, null),
+            };
         }
 
         internal void ApplyMainShipSelection(RoundSide side, string? shipId)
@@ -736,7 +745,7 @@ namespace Content.Server.AU14.Round
             return _voteSequenceRunning;
         }
 
-        public void StartVoteSequence(Action? onFinished = null)
+        internal void StartVoteSequence(Action? onFinished = null)
         {
             _voteSequence.Restart();
             ResetMutableSelection();
