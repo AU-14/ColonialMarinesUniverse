@@ -168,7 +168,8 @@ public sealed partial class AuRoundSystem
                 var selectedMapId = GetVoteWinner<string>(args);
                 var selected = FindPlanetByMapId(candidates, selectedMapId) ?? candidates[0];
                 args.ResolveWinner(selected.Planet.MapId);
-                ApplyPlanetSelection(selected);
+                if (!SetPlanetSelection(selected))
+                    return;
                 QueueVoteContinuation(
                     sequenceId,
                     () => BeginFactionSelections(sequenceId, preset, selected.Planet));
@@ -176,7 +177,8 @@ public sealed partial class AuRoundSystem
             () =>
             {
                 var selected = candidates[0];
-                ApplyPlanetSelection(selected);
+                if (!SetPlanetSelection(selected))
+                    return;
                 QueueVoteContinuation(
                     sequenceId,
                     () => BeginFactionSelections(sequenceId, preset, selected.Planet));
@@ -191,7 +193,8 @@ public sealed partial class AuRoundSystem
         if (!IsCurrentVoteSequence(sequenceId))
             return;
 
-        ApplyPlanetSelection(selected);
+        if (!SetPlanetSelection(selected))
+            return;
         BeginFactionSelections(sequenceId, preset, selected.Planet);
     }
 
@@ -425,7 +428,11 @@ public sealed partial class AuRoundSystem
             return;
         }
 
-        ApplyPlanetSelection(planet.Value);
+        if (!SetPlanetSelection(planet.Value))
+        {
+            CompleteForcedSelection(onFinished);
+            return;
+        }
         ResolveFactionForCutoff(preset, planet.Value.Planet, AuRoundVoteBranch.Govfor);
         ResolveFactionForCutoff(preset, planet.Value.Planet, AuRoundVoteBranch.Opfor);
         FinalizeDerivedSelections();
@@ -662,10 +669,15 @@ public sealed partial class AuRoundSystem
         SetCamoType();
     }
 
+    private bool SetPlanetSelection(PlanetCandidate selected)
+    {
+        return GetRoundDirectorSystem().TrySetLegacyPlanet(selected.Id, selected.Planet) ==
+               CMURoundSelectionMutationResult.Applied;
+    }
+
     private void ClearPlanetAndFactionSelection()
     {
-        _selectedPlanet = null;
-        _selectedPlanetId = null;
+        GetRoundDirectorSystem().TrySetLegacyPlanet(null);
         SetFactionPlatoon(AuRoundVoteBranch.Govfor, null);
         SetFactionPlatoon(AuRoundVoteBranch.Opfor, null);
         SetFactionShip(AuRoundVoteBranch.Govfor, null);

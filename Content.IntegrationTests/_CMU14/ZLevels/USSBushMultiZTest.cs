@@ -63,7 +63,9 @@ public sealed class USSBushMultiZTest : GameTest
         await server.WaitAssertion(() =>
         {
             SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
-            Assert.That(SEntMan.System<AuRoundSystem>().SetPlanet("AUPlanetLV747"), Is.True);
+            Assert.That(
+                SEntMan.System<CMURoundDirectorSystem>().TrySetLegacyPlanet("AUPlanetLV747"),
+                Is.EqualTo(CMURoundSelectionMutationResult.Applied));
             Assert.That(
                 SEntMan.System<CMURoundDirectorSystem>().TrySetLegacyForce(
                     RoundSide.Govfor,

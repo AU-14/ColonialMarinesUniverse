@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
 
@@ -9,6 +10,7 @@ namespace Content.Server.AU14.Round;
 internal enum CMURoundSelectionMutationResult : byte
 {
     Applied,
+    InvalidSelection,
     SelectionFrozen,
 }
 
@@ -55,6 +57,30 @@ public sealed partial class CMURoundDirectorSystem
             return CMURoundSelectionMutationResult.SelectionFrozen;
 
         _round.ApplyMainShipSelection(side, shipId);
+        return CMURoundSelectionMutationResult.Applied;
+    }
+
+    /// <summary>
+    /// Applies a legacy planet projection while the round selection is still mutable.
+    /// </summary>
+    internal CMURoundSelectionMutationResult TrySetLegacyPlanet(string? planetId)
+    {
+        if (_state.Phase != CMURoundPhase.AwaitingSelection)
+            return CMURoundSelectionMutationResult.SelectionFrozen;
+
+        return _round.TryApplyLegacyPlanetSelection(planetId)
+            ? CMURoundSelectionMutationResult.Applied
+            : CMURoundSelectionMutationResult.InvalidSelection;
+    }
+
+    internal CMURoundSelectionMutationResult TrySetLegacyPlanet(
+        string planetId,
+        RMCPlanetMapPrototypeComponent planet)
+    {
+        if (_state.Phase != CMURoundPhase.AwaitingSelection)
+            return CMURoundSelectionMutationResult.SelectionFrozen;
+
+        _round.ApplyLegacyPlanetSelection(planetId, planet);
         return CMURoundSelectionMutationResult.Applied;
     }
 

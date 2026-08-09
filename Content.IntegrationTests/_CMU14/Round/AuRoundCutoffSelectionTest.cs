@@ -18,6 +18,7 @@ public sealed class AuRoundCutoffSelectionTest
     private const int PlayerCount = 40;
     private const string FixedFactionPresetId = "CMUTestFixedFactionPreset";
     private const string FixedBothSidesPresetId = "CMUTestFixedBothSidesPreset";
+    private const string ShepherdsPridePlanetId = "AUPlanetShepherdsPride";
     private static readonly ProtoId<PlatoonPrototype> HazopsPlatoon = "HAZOPS";
     private static readonly ProtoId<GamePresetPrototype> JailbreakPreset = "Jailbreak";
     private static readonly ProtoId<GamePresetPrototype> PrometheusPreset = "Prometheus";
@@ -109,6 +110,13 @@ public sealed class AuRoundCutoffSelectionTest
             Assert.Multiple(() =>
             {
                 Assert.That(
+                    director.TrySetLegacyPlanet(ShepherdsPridePlanetId),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetLegacyPlanet("CMUMissingPlanet"),
+                    Is.EqualTo(CMURoundSelectionMutationResult.InvalidSelection));
+                Assert.That(round.GetSelectedPlanetId(), Is.EqualTo(ShepherdsPridePlanetId));
+                Assert.That(
                     director.TrySetLegacyForce(
                         RoundSide.Govfor,
                         prototypes.Index(RmcPlatoon)),
@@ -147,6 +155,9 @@ public sealed class AuRoundCutoffSelectionTest
                     director.TrySetMainShip(RoundSide.Opfor, "LaterOpforShip"),
                     Is.EqualTo(CMURoundSelectionMutationResult.SelectionFrozen));
                 Assert.That(
+                    director.TrySetLegacyPlanet("AUPlanetLV747"),
+                    Is.EqualTo(CMURoundSelectionMutationResult.SelectionFrozen));
+                Assert.That(
                     committed.GovforAssignment,
                     Is.EqualTo(new RoundForceAssignment(
                         RoundSide.Govfor,
@@ -163,6 +174,8 @@ public sealed class AuRoundCutoffSelectionTest
                 Assert.That(platoons.SelectedOpforPlatoon?.ID, Is.EqualTo("HAZOPS"));
                 Assert.That(round.GetSelectedGovforShip(), Is.EqualTo("USSBushRedux"));
                 Assert.That(round.GetSelectedOpforShip(), Is.EqualTo("USSBushRedux"));
+                Assert.That(committed.PlanetId, Is.EqualTo(ShepherdsPridePlanetId));
+                Assert.That(round.GetSelectedPlanetId(), Is.EqualTo(ShepherdsPridePlanetId));
             });
         });
 

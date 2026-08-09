@@ -199,6 +199,34 @@ namespace Content.Server.AU14.Round
             }
         }
 
+        internal bool TryApplyLegacyPlanetSelection(string? planetId)
+        {
+            if (string.IsNullOrWhiteSpace(planetId))
+            {
+                _selectedPlanet = null;
+                _selectedPlanetId = null;
+                return true;
+            }
+
+            if (!_prototypeManager.TryIndex<EntityPrototype>(planetId, out var prototype) ||
+                !prototype.TryComp(
+                    out RMCPlanetMapPrototypeComponent? planet,
+                    _componentFactory))
+            {
+                return false;
+            }
+
+            ApplyLegacyPlanetSelection(planetId, planet);
+            return true;
+        }
+
+        internal void ApplyLegacyPlanetSelection(
+            string planetId,
+            RMCPlanetMapPrototypeComponent planet)
+        {
+            ApplyPlanetSelection(new PlanetCandidate(planetId, planet));
+        }
+
         private CMURoundDirectorSystem GetRoundDirectorSystem()
         {
             return _entityManager.EntitySysManager.GetEntitySystem<CMURoundDirectorSystem>();
@@ -818,19 +846,6 @@ namespace Content.Server.AU14.Round
         public void SetGovfor(string govfor)
         {
             SetGovforShip(govfor);
-        }
-
-        public bool SetPlanet(string planetId)
-        {
-            if (_prototypeManager.TryIndex<EntityPrototype>(planetId, out var proto) &&
-                proto.TryComp(out RMCPlanetMapPrototypeComponent? planetComp,
-                _componentFactory))
-            {
-                ApplyPlanetSelection(new PlanetCandidate(planetId, planetComp));
-                return true;
-            }
-
-            return false;
         }
 
         public void SetCamoType(CamouflageType? ct = null)

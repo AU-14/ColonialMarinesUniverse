@@ -18,6 +18,7 @@ namespace Content.IntegrationTests._CMU14.Round;
 [TestFixture]
 public sealed class RoundForceSelectionTransitionTest
 {
+    private const string ShepherdsPridePlanetId = "AUPlanetShepherdsPride";
     private static readonly ProtoId<PlatoonPrototype> UppPlatoon = "UPP";
 
     [Test]
@@ -41,6 +42,18 @@ public sealed class RoundForceSelectionTransitionTest
                 intel.ClearTeamTechTreeOverrides();
                 DeleteFactionTree(server.EntMan, intel);
 
+                Assert.Multiple(() =>
+                {
+                    Assert.That(
+                        director.TrySetLegacyPlanet(ShepherdsPridePlanetId),
+                        Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                    Assert.That(
+                        director.TrySetMainShip(RoundSide.Govfor, "USSBushRedux"),
+                        Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                    Assert.That(
+                        director.TrySetMainShip(RoundSide.Opfor, "USSBushRedux"),
+                        Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                });
                 Assert.That(
                     director.TrySetLegacyForce(
                         RoundSide.Opfor,
@@ -63,6 +76,9 @@ public sealed class RoundForceSelectionTransitionTest
                     Assert.That(director.Generation, Is.EqualTo(generation + 1));
                     Assert.That(director.Phase, Is.EqualTo(CMURoundPhase.AwaitingSelection));
                     Assert.That(platoons.SelectedOpforPlatoon, Is.Null);
+                    Assert.That(round.GetSelectedPlanetId(), Is.Null);
+                    Assert.That(round.GetSelectedGovforShip(), Is.Null);
+                    Assert.That(round.GetSelectedOpforShip(), Is.Null);
                 });
 
                 var fallback = intel.EnsureTechTree(Team.OpFor);

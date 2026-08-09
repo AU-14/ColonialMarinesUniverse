@@ -186,11 +186,20 @@ namespace Content.Server.AU14.Round.Commands
                 shell.WriteError("Usage: setplanet <planetPrototypeId>");
                 return;
             }
-            var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
-            if (roundSystem.SetPlanet(args[0]))
-                shell.WriteLine($"Planet set to: {args[0]}");
-            else
-                shell.WriteError($"Planet prototype not found: {args[0]}");
+            var director = IoCManager.Resolve<IEntitySystemManager>()
+                .GetEntitySystem<CMURoundDirectorSystem>();
+            switch (director.TrySetLegacyPlanet(args[0]))
+            {
+                case CMURoundSelectionMutationResult.Applied:
+                    shell.WriteLine($"Planet set to: {args[0]}");
+                    break;
+                case CMURoundSelectionMutationResult.InvalidSelection:
+                    shell.WriteError($"Planet prototype not found: {args[0]}");
+                    break;
+                case CMURoundSelectionMutationResult.SelectionFrozen:
+                    shell.WriteError("The round planet selection is already frozen.");
+                    break;
+            }
         }
 
         public CompletionResult GetCompletion(IConsoleShell _, string[] args)
