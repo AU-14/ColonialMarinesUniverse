@@ -14,6 +14,7 @@ using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.AU14;
+using Content.Shared.CMU.Round;
 using Robust.Shared.Profiling;
 using Robust.Shared.Random;
 
@@ -22,6 +23,7 @@ namespace Content.Server.AU14.Round;
 public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComponent>
 {
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
@@ -31,6 +33,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
+
+    private readonly ISawmill _sawmill = Logger.GetSawmill("content");
 
     // Store selected platoons in the system
     private PlatoonPrototype? _selectedGovforPlatoon;
@@ -58,13 +62,34 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         }
     }
 
+    private PlatoonPrototype? ResolveCommittedPlatoon(RoundForceAssignment? assignment)
+    {
+        if (assignment == null)
+            return null;
+
+        var forceId = assignment.Value.Force.Value;
+        if (!string.IsNullOrWhiteSpace(forceId) &&
+            _prototypeManager.TryIndex<PlatoonPrototype>(forceId, out var platoon))
+        {
+            return platoon;
+        }
+
+        _sawmill.Error(
+            $"[PlatoonSpawnRuleSystem] Committed {assignment.Value.Side} force '{forceId}' has no legacy platoon projection.");
+        return null;
+    }
+
     protected override void Started(EntityUid uid, PlatoonSpawnRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         base.Started(uid, component, gameRule, args);
 
-        // Get selected platoons from the system
-        var govPlatoon = SelectedGovforPlatoon;
-        var opPlatoon = SelectedOpforPlatoon;
+        var committedSelection = _roundDirector.Selection;
+        var govPlatoon = committedSelection is { } committed
+            ? ResolveCommittedPlatoon(committed.GovforAssignment)
+            : SelectedGovforPlatoon;
+        var opPlatoon = committedSelection is { } committedOpfor
+            ? ResolveCommittedPlatoon(committedOpfor.OpforAssignment)
+            : SelectedOpforPlatoon;
 
         // Use the selected planet from AuRoundSystem
         var planetComp = _auRoundSystem.GetSelectedPlanet();
@@ -82,24 +107,26 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 preset.UsesGovforPlatoon,
                 preset.UsesOpforPlatoon);
 
-        // Fallback only for factions enabled by the finalized preset.
-        if ((activeFactions & AuRoundVoteBranch.Govfor) != 0 &&
+        // Legacy and test contexts without a committed plan retain their previous fallback behavior.
+        if (committedSelection == null &&
+            (activeFactions & AuRoundVoteBranch.Govfor) != 0 &&
             govPlatoon == null &&
             !string.IsNullOrEmpty(planetComp.DefaultGovforPlatoon))
         {
             govPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultGovforPlatoon);
         }
 
-        if ((activeFactions & AuRoundVoteBranch.Opfor) != 0 &&
+        if (committedSelection == null &&
+            (activeFactions & AuRoundVoteBranch.Opfor) != 0 &&
             opPlatoon == null &&
             !string.IsNullOrEmpty(planetComp.DefaultOpforPlatoon))
         {
             opPlatoon = _prototypeManager.Index<PlatoonPrototype>(planetComp.DefaultOpforPlatoon);
         }
 
-        // Store the resolved selections back onto the system so other systems can access them
-        SelectedGovforPlatoon = govPlatoon;
-        SelectedOpforPlatoon = opPlatoon;
+        // Preserve the legacy startup refresh without rewriting the director's committed selection.
+        _entityManager.EntitySysManager.GetEntitySystem<RequisitionsSystem>()
+            .ReapplyPlatoonCatalogs();
 
         var includesShipSetup = planetComp.GovforInShip || planetComp.OpforInShip;
         var initialInventory = CaptureInitialSetupInventory(includesShipSetup);
