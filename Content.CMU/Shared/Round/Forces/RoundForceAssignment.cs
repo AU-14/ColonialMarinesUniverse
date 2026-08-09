@@ -14,8 +14,16 @@ public enum RoundSide : byte
 /// <summary>
 /// Stable identity of a selectable military force.
 /// </summary>
-public readonly record struct RoundForceId(string Value)
+public readonly record struct RoundForceId
 {
+    public RoundForceId(string value)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(value);
+        Value = value;
+    }
+
+    public string Value { get; }
+
     public override string ToString()
     {
         return Value ?? string.Empty;

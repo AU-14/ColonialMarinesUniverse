@@ -1,5 +1,6 @@
 #nullable enable
 
+using System;
 using Content.Shared.CMU.Round;
 using NUnit.Framework;
 
@@ -8,6 +9,16 @@ namespace Content.Tests.Shared._CMU14.Round.Forces;
 [TestFixture]
 public sealed class RoundForceAssignmentTest
 {
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase("   ")]
+    public void ForceIdentifiersCannotBeMissing(string? value)
+    {
+        Assert.That(
+            () => new RoundForceId(value!),
+            Throws.InstanceOf<ArgumentException>());
+    }
+
     [Test]
     public void SameForceCanBeAssignedToDifferentRoundSides()
     {
