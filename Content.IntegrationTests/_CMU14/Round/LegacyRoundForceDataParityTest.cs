@@ -13,7 +13,7 @@ namespace Content.IntegrationTests._CMU14.Round;
 [TestFixture]
 public sealed class LegacyRoundForceDataParityTest
 {
-    private static readonly PlatoonMarkerClass[] RequiredVendorSlots =
+    private static readonly HashSet<PlatoonMarkerClass> AutomatedVendorSlots =
     [
         PlatoonMarkerClass.Arifleman,
         PlatoonMarkerClass.Clothing,
@@ -35,6 +35,20 @@ public sealed class LegacyRoundForceDataParityTest
         PlatoonMarkerClass.VehicleCrew,
         PlatoonMarkerClass.Weapons,
     ];
+
+    private static readonly IReadOnlyDictionary<string, int> ExpectedVendorSlotCounts =
+        new Dictionary<string, int>
+        {
+            ["USCM"] = 19,
+            ["LACN"] = 19,
+            ["UPP"] = 19,
+            ["WEYU"] = 19,
+            ["CMBCIU"] = 19,
+            ["HAZOPS"] = 19,
+            ["ProdigySF"] = 21,
+            ["VAIPO"] = 21,
+            ["RMC"] = 21,
+        };
 
     private static readonly IReadOnlyDictionary<string, EntProtoId> ExpectedWeaponsVendors =
         new Dictionary<string, EntProtoId>
@@ -59,9 +73,9 @@ public sealed class LegacyRoundForceDataParityTest
             ["WEYU"] = "CD1A39C4B599DBD780D4F267592595AF51B20C241FEA3C3595D86DFD55A4DD58",
             ["CMBCIU"] = "795B2B6ED8F9543B56E839BF16F762EAF42D1536BE664062A872F9E658D4D927",
             ["HAZOPS"] = "DA08B87682C3A3505B3BB5F6872DBFAD7D94C08B482CA23D70FDF3FB9E7C1C86",
-            ["ProdigySF"] = "F39B1504D17822B9717CB95D63AB4D2C51B6F921166EE0925DC834AFC89BA740",
-            ["VAIPO"] = "A7385699186E31A8AE6A060128FD824C023379C517E046727772E773C9F9CAC3",
-            ["RMC"] = "779007959EB35BFA3EBDE02DFF60687059B58A6F6C7E79DB79DA41244AA2E01A",
+            ["ProdigySF"] = "43CADEB4D8846379EA727F3DD0B454D17F3E2FEEF285083B167F6ED0107F09F1",
+            ["VAIPO"] = "6612A6E29D47E99EB1B59CEAFD5194199223706592EF1A8F56F8864624E63233",
+            ["RMC"] = "0C15E9A829D0B7BDFC25E63EF86D4B326F5020B017C61099C30DD7DCB5AEC579",
         };
 
     [Test]
@@ -91,21 +105,32 @@ public sealed class LegacyRoundForceDataParityTest
                     $"{forceId} must retain its vendor-set compatibility mapping during migration");
 
                 var vendorSet = prototypes.Index(platoon.VendorSet!.Value);
-                var resolvedSlots = new List<string>();
-                foreach (var slot in RequiredVendorSlots)
+                Assert.That(
+                    vendorSet.Vendors,
+                    Has.Count.EqualTo(ExpectedVendorSlotCounts[forceId]),
+                    $"{forceId} changed its resolved legacy vendor-slot count");
+                foreach (var slot in AutomatedVendorSlots)
                 {
                     Assert.That(
-                        vendorSet.Vendors.TryGetValue(slot, out var resolvedVendorId),
+                        vendorSet.Vendors.ContainsKey(slot),
                         Is.True,
                         $"{forceId} does not resolve the semantic {slot} slot");
+                }
+
+                var resolvedSlots = new List<string>(vendorSet.Vendors.Count);
+                foreach (var (slot, resolvedVendorId) in vendorSet.Vendors)
+                {
                     Assert.That(
                         prototypes.TryIndex<EntityPrototype>(resolvedVendorId, out var resolvedVendor),
                         Is.True,
                         $"{forceId} references missing {slot} vendor {resolvedVendorId}");
-                    Assert.That(
-                        resolvedVendor!.TryGetComponent<CMAutomatedVendorComponent>(out _, factory),
-                        Is.True,
-                        $"{forceId} {slot} endpoint {resolvedVendorId} is not an automated vendor");
+                    if (AutomatedVendorSlots.Contains(slot))
+                    {
+                        Assert.That(
+                            resolvedVendor!.TryGetComponent<CMAutomatedVendorComponent>(out _, factory),
+                            Is.True,
+                            $"{forceId} {slot} endpoint {resolvedVendorId} is not an automated vendor");
+                    }
 
                     resolvedSlots.Add($"{slot}\t{resolvedVendorId}");
                 }
