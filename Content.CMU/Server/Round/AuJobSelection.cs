@@ -21,6 +21,7 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
 
     public Dictionary<NetUserId, string> ForcedJobAssignments { get; } = new();
@@ -236,7 +237,7 @@ public sealed partial class AuJobSelectionSystem : EntitySystem
         out ThreatVoteBodyCount bodyCount,
         out string diagnostic)
     {
-        ScenarioPlanValidationRequest request = _auRoundSystem
+        ScenarioPlanValidationRequest request = _roundDirector
             .CaptureRoundPlanSelection(playerCount, selectedPresetId, threat.ID)
             .ToScenarioPlanRequest();
 
