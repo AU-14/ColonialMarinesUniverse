@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from cmss13 at https://github.com/cmss13-devs/cmss13/blob/a83646eaf7fc1b9aec1715e8d055c1acc0a74930/icons/mob/hud/human_glass.dmi",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "oxy1"
+    },
+    {
+      "name": "health0"
+    },
+    {
+      "name": "health1"
+    },
+    {
+      "name": "health2"
+    },
+    {
+      "name": "health3"
+    },
+    {
+      "name": "health4"
+    },
+    {
+      "name": "health5"
+    },
+    {
+      "name": "health6"
+    },
+    {
+      "name": "health7"
+    },
+    {
+      "name": "temp2"
+    },
+    {
+      "name": "temp3"
+    },
+    {
+      "name": "temp4"
+    },
+    {
+      "name": "temp-2"
+    },
+    {
+      "name": "temp-3"
+    },
+    {
+      "name": "temp-4"
+    },
+    {
+      "name": "nutrition1"
+    },
+    {
+      "name": "nutrition2"
+    },
+    {
+      "name": "nutrition3"
+    },
+    {
+      "name": "status_bleed"
+    }
+  ]
+}

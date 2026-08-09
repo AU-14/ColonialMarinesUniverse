@@ -40,8 +40,8 @@
   id: LowOxygen
   category: Breathing
   icons:
-  - sprite: /Textures/Interface/Alerts/breathing.rsi
-    state: not_enough_oxy
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: oxy1
   name: alerts-low-oxygen-name
   description: alerts-low-oxygen-desc
 
@@ -49,8 +49,8 @@
   id: LowNitrogen
   category: Breathing
   icons:
-    - sprite: /Textures/Interface/Alerts/breathing.rsi
-      state: not_enough_nitro
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: oxy1
   name: alerts-low-nitrogen-name
   description: alerts-low-nitrogen-desc
 
@@ -58,8 +58,8 @@
   id: Toxins
   category: Toxins
   icons:
-  - sprite: /Textures/Interface/Alerts/breathing.rsi
-    state: too_much_tox
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: oxy1
   name: alerts-high-toxin-name
   description: alerts-high-toxin-desc
 
@@ -99,12 +99,12 @@
   id: Cold
   category: Temperature
   icons:
-  - sprite: /Textures/Interface/Alerts/temperature.rsi
-    state: cold1
-  - sprite: /Textures/Interface/Alerts/temperature.rsi
-    state: cold2
-  - sprite: /Textures/Interface/Alerts/temperature.rsi
-    state: cold3
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: temp-2
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: temp-3
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: temp-4
   maxSeverity: 3
   name: alerts-too-cold-name
   description: alerts-too-cold-desc
@@ -113,12 +113,12 @@
   id: Hot
   category: Temperature
   icons:
-  - sprite: /Textures/Interface/Alerts/temperature.rsi
-    state: hot1
-  - sprite: /Textures/Interface/Alerts/temperature.rsi
-    state: hot2
-  - sprite: /Textures/Interface/Alerts/temperature.rsi
-    state: hot3
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: temp2
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: temp3
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: temp4
   maxSeverity: 3
   name: alerts-too-hot-name
   description: alerts-too-hot-desc
@@ -183,8 +183,8 @@
   id: HumanCrit
   category: Health
   icons:
-  - sprite: /Textures/Interface/Alerts/human_critical.rsi
-    state: critical
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: health6
   name: alerts-crit-name
   description: alerts-crit-desc
 
@@ -192,8 +192,8 @@
   id: HumanDead
   category: Health
   icons:
-  - sprite: /Textures/Interface/Alerts/human_dead.rsi
-    state: dead
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: health7
   name: alerts-dead-name
   description: alerts-dead-desc
 
@@ -201,16 +201,16 @@
   id: HumanHealth
   category: Health
   icons:
-  - sprite: /Textures/Interface/Alerts/human_alive.rsi
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
     state: health0
-  - sprite: /Textures/Interface/Alerts/human_alive.rsi
-    state: health1
-  - sprite: /Textures/Interface/Alerts/human_alive.rsi
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
     state: health2
-  - sprite: /Textures/Interface/Alerts/human_alive.rsi
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
     state: health3
-  - sprite: /Textures/Interface/Alerts/human_alive.rsi
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
     state: health4
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: health5
   name: alerts-health-name
   description: alerts-health-desc
   minSeverity: 0
@@ -330,8 +330,8 @@
   id: Peckish
   category: Hunger
   icons:
-  - sprite: /Textures/Interface/Alerts/hunger.rsi
-    state: peckish
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: nutrition2
   name: alerts-hunger-name
   description: alerts-hunger-desc
 
@@ -362,8 +362,8 @@
   id: Starving
   category: Hunger
   icons:
-  - sprite: /Textures/Interface/Alerts/hunger.rsi
-    state: starving
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: nutrition3
   name: alerts-starving-name
   description: alerts-starving-desc
 
@@ -422,28 +422,28 @@
 - type: alert
   id: Bleed
   icons:
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed0
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed1
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed2
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed3
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed4
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed5
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed6
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed7
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed8
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed9
-  - sprite: /Textures/Interface/Alerts/bleed.rsi
-    state: bleed10
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
+  - sprite: /Textures/_CMU14/Interface/Alerts/human_vitals.rsi # CMU14
+    state: status_bleed
   name: alerts-bleed-name
   description: alerts-bleed-desc
   minSeverity: 0
