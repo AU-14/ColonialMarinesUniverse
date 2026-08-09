@@ -3,6 +3,7 @@
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking.Presets;
+using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting.Pool;
@@ -15,8 +16,12 @@ public sealed class AuRoundCutoffSelectionTest
     private const int PlayerCount = 40;
     private const string FixedFactionPresetId = "CMUTestFixedFactionPreset";
     private const string FixedBothSidesPresetId = "CMUTestFixedBothSidesPreset";
+    private static readonly ProtoId<PlatoonPrototype> HazopsPlatoon = "HAZOPS";
     private static readonly ProtoId<GamePresetPrototype> JailbreakPreset = "Jailbreak";
     private static readonly ProtoId<GamePresetPrototype> PrometheusPreset = "Prometheus";
+    private static readonly ProtoId<PlatoonPrototype> RmcPlatoon = "RMC";
+    private static readonly ProtoId<PlatoonPrototype> UppPlatoon = "UPP";
+    private static readonly ProtoId<PlatoonPrototype> UscmPlatoon = "USCM";
 
     [TestPrototypes]
     private static readonly string FixedFactionPreset = $"""
@@ -78,6 +83,84 @@ public sealed class AuRoundCutoffSelectionTest
                             new RoundForceId("UPP"),
                             "USSBushRedux")));
                 Assert.That(director.Selection, Is.EqualTo(selection));
+            });
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task PreFreezeOverridesCommitAndPostFreezeOverridesAreRejected()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var round = server.System<AuRoundSystem>();
+            var director = server.System<CMURoundDirectorSystem>();
+            var platoons = server.System<PlatoonSpawnRuleSystem>();
+            round.ResetLobbySelection();
+            round.SetPreset(prototypes.Index<GamePresetPrototype>(FixedBothSidesPresetId));
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    director.TrySetLegacyForce(
+                        RoundSide.Govfor,
+                        prototypes.Index(RmcPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetLegacyForce(
+                        RoundSide.Opfor,
+                        prototypes.Index(HazopsPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetMainShip(RoundSide.Govfor, "USSBushRedux"),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+                Assert.That(
+                    director.TrySetMainShip(RoundSide.Opfor, "USSBushRedux"),
+                    Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+            });
+
+            var committed = director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    director.TrySetLegacyForce(
+                        RoundSide.Govfor,
+                        prototypes.Index(UscmPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.SelectionFrozen));
+                Assert.That(
+                    director.TrySetLegacyForce(
+                        RoundSide.Opfor,
+                        prototypes.Index(UppPlatoon)),
+                    Is.EqualTo(CMURoundSelectionMutationResult.SelectionFrozen));
+                Assert.That(
+                    director.TrySetMainShip(RoundSide.Govfor, "LaterGovforShip"),
+                    Is.EqualTo(CMURoundSelectionMutationResult.SelectionFrozen));
+                Assert.That(
+                    director.TrySetMainShip(RoundSide.Opfor, "LaterOpforShip"),
+                    Is.EqualTo(CMURoundSelectionMutationResult.SelectionFrozen));
+                Assert.That(
+                    committed.GovforAssignment,
+                    Is.EqualTo(new RoundForceAssignment(
+                        RoundSide.Govfor,
+                        new RoundForceId("RMC"),
+                        "USSBushRedux")));
+                Assert.That(
+                    committed.OpforAssignment,
+                    Is.EqualTo(new RoundForceAssignment(
+                        RoundSide.Opfor,
+                        new RoundForceId("HAZOPS"),
+                        "USSBushRedux")));
+                Assert.That(director.Selection, Is.EqualTo(committed));
+                Assert.That(platoons.SelectedGovforPlatoon?.ID, Is.EqualTo("RMC"));
+                Assert.That(platoons.SelectedOpforPlatoon?.ID, Is.EqualTo("HAZOPS"));
+                Assert.That(round.GetSelectedGovforShip(), Is.EqualTo("USSBushRedux"));
+                Assert.That(round.GetSelectedOpforShip(), Is.EqualTo("USSBushRedux"));
             });
         });
 

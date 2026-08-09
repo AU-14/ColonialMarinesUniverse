@@ -15,6 +15,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
 using Robust.Server.Player;
@@ -107,8 +108,15 @@ namespace Content.Server.AU14.Round
             set => _state.SelectedOpforShip = value;
         }
 
-        public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
-        public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
+        public void SetOpforShip(string shipId)
+        {
+            GetRoundDirectorSystem().TrySetMainShip(RoundSide.Opfor, shipId);
+        }
+
+        public void SetGovforShip(string shipId)
+        {
+            GetRoundDirectorSystem().TrySetMainShip(RoundSide.Govfor, shipId);
+        }
         public void SetPreset(GamePresetPrototype? preset) => _selectedPreset = preset;
         public void SetSelectedThreat(ThreatPrototype? threat)
         {
@@ -149,6 +157,42 @@ namespace Content.Server.AU14.Round
                 selectedThreatId,
                 _selectedGovforShip,
                 _selectedOpforShip);
+        }
+
+        internal void ApplyLegacyForceSelection(RoundSide side, PlatoonPrototype? platoon)
+        {
+            var platoons = GetPlatoonSpawnRuleSystem();
+            switch (side)
+            {
+                case RoundSide.Govfor:
+                    platoons.SelectedGovforPlatoon = platoon;
+                    break;
+                case RoundSide.Opfor:
+                    platoons.SelectedOpforPlatoon = platoon;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(side), side, null);
+            }
+        }
+
+        internal void ApplyMainShipSelection(RoundSide side, string? shipId)
+        {
+            switch (side)
+            {
+                case RoundSide.Govfor:
+                    _selectedGovforShip = shipId;
+                    break;
+                case RoundSide.Opfor:
+                    _selectedOpforShip = shipId;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(side), side, null);
+            }
+        }
+
+        private CMURoundDirectorSystem GetRoundDirectorSystem()
+        {
+            return _entityManager.EntitySysManager.GetEntitySystem<CMURoundDirectorSystem>();
         }
 
         public bool UsesPostRoundstartThreatVote()
@@ -759,12 +803,12 @@ namespace Content.Server.AU14.Round
 
         public void SetOpfor(string opfor)
         {
-            _selectedOpforShip = opfor;
+            SetOpforShip(opfor);
         }
 
         public void SetGovfor(string govfor)
         {
-            _selectedGovforShip = govfor;
+            SetGovforShip(govfor);
         }
 
         public bool SetPlanet(string planetId)
