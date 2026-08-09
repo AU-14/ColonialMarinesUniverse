@@ -46,6 +46,12 @@ public sealed class ThreatRoundFlowWiringTest
             .GetMethod("RemoveThreatJobAssignments", BindingFlags.NonPublic | BindingFlags.Static)!;
         var releaseHeldPlayers = typeof(ThreatVoteSystem)
             .GetMethod("ReleaseHeldPlayersToLobby", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var announceSurvivors = typeof(GameTicker)
+            .GetMethod("TryAnnounceDistressSignalSurvivors", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var ensureSurvivors = typeof(GameTicker)
+            .GetMethod("EnsureDistressSignalSurvivorAnnouncement", BindingFlags.NonPublic | BindingFlags.Instance)!;
+        var resetSurvivors = typeof(GameTicker)
+            .GetMethod("ResetDistressSignalSurvivorAnnouncement", BindingFlags.NonPublic | BindingFlags.Instance)!;
         var forcedAssignments = typeof(AuJobSelectionSystem)
             .GetProperty(nameof(AuJobSelectionSystem.ForcedJobAssignments))!
             .GetMethod!;
@@ -68,6 +74,14 @@ public sealed class ThreatRoundFlowWiringTest
                 "Threat vote cleanup must remove held threat assignments.");
             Assert.That(HasReachableCallFrom<ThreatVoteSystem>("AbortThreatVote", releaseHeldPlayers), Is.True,
                 "Threat vote cleanup must release held players.");
+            Assert.That(HasReachableCallFrom<GameTicker>("UpdateRoundFlow", announceSurvivors), Is.True,
+                "The lobby countdown must announce and lock Distress Signal survivors at the configured lead time.");
+            Assert.That(HasReachableCallFrom<GameTicker>("LoadMaps", ensureSurvivors), Is.True,
+                "The map-preload cutoff must lock and announce survivors when the normal lead-time attempt could not.");
+            Assert.That(HasReachableCallFrom<GameTicker>("ResettingCleanup", resetSurvivors), Is.True,
+                "Round cleanup must reset the Distress Signal survivor announcement and lock.");
+            Assert.That(HasReachableCallFrom<GameTicker>("DelayStart", resetSurvivors), Is.True,
+                "Delaying the countdown beyond the survivor lead time must reset the announcement and lock.");
             Assert.That(HasReachableCallFrom<StationJobsSystem>("AssignJobs", forcedAssignments), Is.True,
                 "Station job assignment must consume forced threat-vote jobs.");
         });

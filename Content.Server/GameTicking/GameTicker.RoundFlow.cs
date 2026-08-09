@@ -96,6 +96,7 @@ namespace Content.Server.GameTicking
         {
             // CMU14: Commit lobby choices at the existing map-preload boundary.
             var roundSelection = FreezeCmuRoundSelection();
+            EnsureDistressSignalSurvivorAnnouncement(); // CMU14
             if (_map.MapExists(DefaultMap))
             {
                 _cmuRoundDirector.MarkMapsLoaded();
@@ -738,6 +739,8 @@ namespace Content.Server.GameTicking
         /// </summary>
         private void ResettingCleanup()
         {
+            ResetDistressSignalSurvivorAnnouncement(); // CMU14
+
             // Move everybody currently in the server to lobby.
             foreach (var player in _playerManager.Sessions)
             {
@@ -780,6 +783,9 @@ namespace Content.Server.GameTicking
 
             _roundStartTime += time;
 
+            if (_roundStartTime - _gameTiming.CurTime > DistressSignalSurvivorAnnouncementLeadTime)
+                ResetDistressSignalSurvivorAnnouncement(); // CMU14
+
             RaiseNetworkEvent(new TickerLobbyCountdownEvent(_roundStartTime, Paused));
 
             _chatManager.DispatchServerAnnouncement(Loc.GetString("game-ticker-delay-start", ("seconds", time.TotalSeconds)));
@@ -803,6 +809,8 @@ namespace Content.Server.GameTicking
             {
                 UpdateRoundStatusDiscordMessage(updateKind);
             }
+
+            TryAnnounceDistressSignalSurvivors(); // CMU14
 
             if (_roundStartTime == TimeSpan.Zero ||
                 RunLevel != GameRunLevel.PreRoundLobby ||

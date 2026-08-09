@@ -740,7 +740,7 @@
   name: Albacetrie - Garrison (TEMP)
   components:
   - type: Sprite
-    state: default
+    state: colony_int
   - type: Area
     minimapColor: '#714401CC'
 

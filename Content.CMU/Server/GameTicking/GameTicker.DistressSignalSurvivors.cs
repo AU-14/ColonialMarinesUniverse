@@ -17,7 +17,7 @@ public sealed partial class GameTicker
                 LobbyEnabled,
                 RunLevel,
                 Paused,
-                _distressSignalSurvivorAnnouncementSent,
+                DistressSignalSurvivorAnnouncementIsCurrent,
                 _roundStartTime,
                 _gameTiming.CurTime))
         {
@@ -29,7 +29,7 @@ public sealed partial class GameTicker
 
     private void EnsureDistressSignalSurvivorAnnouncement()
     {
-        if (_distressSignalSurvivorAnnouncementSent)
+        if (DistressSignalSurvivorAnnouncementIsCurrent)
             return;
 
         TryLockAndAnnounceDistressSignalSurvivors();
@@ -53,6 +53,10 @@ public sealed partial class GameTicker
         _distressSignalSurvivorAnnouncementSent = false;
         _auRoundSystem.ResetLockedDistressSignalThirdParties();
     }
+
+    private bool DistressSignalSurvivorAnnouncementIsCurrent =>
+        _distressSignalSurvivorAnnouncementSent &&
+        _auRoundSystem.HasLockedDistressSignalThirdParties;
 
     internal static bool IsDistressSignalSurvivorAnnouncementDue(
         bool lobbyEnabled,

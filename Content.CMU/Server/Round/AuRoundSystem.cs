@@ -64,7 +64,13 @@ namespace Content.Server.AU14.Round
         private GamePresetPrototype? _selectedPreset
         {
             get => _state.SelectedPreset;
-            set => _state.SelectedPreset = value;
+            set
+            {
+                if (!string.Equals(_state.SelectedPreset?.ID, value?.ID, StringComparison.OrdinalIgnoreCase))
+                    _state.ResetDistressSignalThirdPartyLock();
+
+                _state.SelectedPreset = value;
+            }
         }
 
         public GamePresetPrototype? SelectedPreset => _state.SelectedPreset;
@@ -668,6 +674,8 @@ namespace Content.Server.AU14.Round
 
             return true;
         }
+
+        internal bool HasLockedDistressSignalThirdParties => _state.DistressSignalThirdPartiesLocked;
 
         internal static (int MaxThirdParties, int BodyBudget) GetConservativeThirdPartyLimits(
             IReadOnlyCollection<(int MaxThirdParties, int BodyBudget)> threatLimits)

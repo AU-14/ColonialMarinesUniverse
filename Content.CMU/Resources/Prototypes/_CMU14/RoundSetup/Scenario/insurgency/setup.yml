@@ -5,9 +5,8 @@
     - planets:
         - AUPlanetShepherdsPride
         - CMUPlanetLament
+        - AUPlanetStableGarrison
         - CMUPlanetStableGarrisonRedux
-        - AUPlanetSorokyne
-        - AuPlanetChances
         - CMUPlanetHopesRetreat
       groups:
         - InsurgencyClfRoundGroup

@@ -32,6 +32,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
     private const string InsurgencyPreset = "Insurgency";
     private const string DistressSignalPreset = "DistressSignal";
     private const string ColonyFallPreset = "ColonyFall";
+    private const string PlatoonAdapterTestPreset = "ScenarioPlanPlatoonAdapterTestPreset";
     private const string DistressSignalSeededSlicePlanetId = "CMUPlanetHopesRetreat";
     private const string ColonyFallSeededSlicePlanetId = "AUPlanetShepherdsPride";
     private static readonly ProtoId<ThreatPrototype> SelectedThreatAssignmentThreat = "XenoThreat";
@@ -223,6 +224,21 @@ public sealed class ScenarioPlanMarkerCoverageTest
 
     [TestPrototypes]
     private const string ScenarioPlanTestPrototypes = @"
+- type: gamePreset
+  id: ScenarioPlanPlatoonAdapterTestPreset
+  name: Scenario Plan platoon adapter test
+  description: Exercises fixed platoon planning independently of live preset rotations.
+  showInVote: false
+  usesGovforPlatoon: true
+  usesOpforPlatoon: true
+  supportedPlanets:
+    - AUPlanetTrijent
+    - AUPlanetCorsatStation
+    - AuPlanetKutjevo
+    - AUPlanetSorokyne
+    - CMUPlanetHopesRetreat
+  rules: []
+
 - type: partySpawn
   id: ScenarioPlanStandaloneThirdPartySpawn
   leadersToSpawn:
@@ -393,7 +409,6 @@ public sealed class ScenarioPlanMarkerCoverageTest
   id: ScenarioPlanMutableLegacyCivilianMarker
   components:
   - type: SpawnPoint
-    job_id: AU14JobCivilianColonist
 ";
 
     [TestPrototypes]
@@ -465,10 +480,10 @@ public sealed class ScenarioPlanMarkerCoverageTest
         count: 1
         bodies:
           MobHuman: 1
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
@@ -595,7 +610,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
 
     private static IEnumerable<TestCaseData> FixedOpforPlatoonRoundGroupCases()
     {
-        yield return new TestCaseData("AUPlanetSorokyne", "UPP", OpforUppPlatoonRoundGroup.Id)
+        yield return new TestCaseData("AUPlanetTrijent", "UPP", OpforUppPlatoonRoundGroup.Id)
             .SetName("OPFOR UPP platoon Round Group matches adapter");
         yield return new TestCaseData("AUPlanetCorsatStation", "WEYU", OpforWeyuPlatoonRoundGroup.Id)
             .SetName("OPFOR WEYU platoon Round Group matches adapter");
@@ -2195,6 +2210,8 @@ public sealed class ScenarioPlanMarkerCoverageTest
             var spawnPoint = server.EntMan.GetComponent<SpawnPointComponent>(marker);
             var markers = new List<EntityUid>();
 
+            spawnPoint.Job = ColonyCivilianJobId;
+            index.RefreshMarkerFacts(marker);
             index.CopyClfCivilianSpawnMarkers(RoundWorldScope.EveryMap(), markers);
             Assert.That(markers, Is.EqualTo(new[] { marker }));
 
@@ -2374,7 +2391,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(
                     leaderHint.MatchingMarkerSources.Sum(source => source.Count),
                     Is.EqualTo(leaderHint.AvailableMarkers));
-                Assert.That(report.ToString(), Does.Contain("Matching legacy sources:"));
+                Assert.That(report.ToString(), Does.Contain("Matching marker sources:"));
             });
         });
 
@@ -2656,7 +2673,11 @@ public sealed class ScenarioPlanMarkerCoverageTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.ResolveDependency<IComponentFactory>();
             var generator = server.System<ScenarioPlanSystem>();
-            var (planetId, planet) = GetFirstSupportedPlanet(prototypes, componentFactory, "DistressSignal");
+            const string planetId = "AUPlanetLV327";
+            Assert.That(
+                TryGetPlanet(prototypes, componentFactory, planetId, out var planet),
+                Is.True,
+                $"{planetId} did not resolve to a planet map prototype.");
 
             var request = new ScenarioPlanValidationRequest(
                 "DistressSignal",
@@ -2926,7 +2947,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
             {
                 Assert.That(package.Presets, Does.Contain(InsurgencyPreset));
                 Assert.That(package.SupportedPlanets, Is.EquivalentTo(preset.SupportedPlanets));
-                Assert.That(package.Groups.Select(groupId => groupId.Id), Does.Contain(force.ID));
+                Assert.That(
+                    package.PlanetChoices
+                        .Single(choice => choice.SupportsPlanet(planetId))
+                        .Groups
+                        .Select(groupId => groupId.Id),
+                    Does.Contain(force.ID));
                 Assert.That(plan.DeferredForceChoices.Select(choice => choice.ChoiceId), Does.Contain("GovforPlatoon"));
 
                 Assert.That(force.Kind, Is.EqualTo(RoundGroupKind.Clf));
@@ -2968,9 +2994,9 @@ public sealed class ScenarioPlanMarkerCoverageTest
             Assert.Multiple(() =>
             {
                 Assert.That(preset.ThirdPartyAutoSpawn, Is.True);
-                Assert.That(preset.ThirdPartyInterval, Is.EqualTo(1800));
+                Assert.That(preset.ThirdPartyInterval, Is.EqualTo(3600));
                 Assert.That(preset.ThirdPartyRatio, Is.EqualTo(0.15f));
-                Assert.That(preset.MaxThirdParties, Is.EqualTo(2));
+                Assert.That(preset.MaxThirdParties, Is.EqualTo(3));
             });
 
             foreach (string planetId in preset.SupportedPlanets!)
@@ -3318,7 +3344,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
     }
 
     [TestCaseSource(nameof(ExactThreatSliceCases))]
-    public async Task VotingChoicesThreatSlicesApplyToExactAdapterCandidates(
+    public async Task VotingChoicesThreatSlicesMatchActiveAdaptersAndRemainLoadableOffRotation(
         string VotingChoicesId,
         string presetId,
         string planetId,
@@ -3339,12 +3365,11 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Is.True,
                 $"{planetId} did not resolve to a planet map prototype.");
 
-            var adaptedPlan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
+            var adaptedPlans = generator.GeneratePlans(new ScenarioPlanValidationRequest(
                     presetId,
                     playerCount,
                     PlanetId: planetId,
-                    MapId: planet.MapId))
-                .Single();
+                    MapId: planet.MapId));
 
             Assert.That(
                 generator.TryResolveVotingChoicesPrototype(
@@ -3373,8 +3398,6 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 ? package.DeferredForceChoices
                 : package.PlanetChoices.Single(choice => choice.SupportsPlanet(planetId)).DeferredForceChoices;
             var prototypeThreatChoice = prototypePlan!.DeferredForceChoices.Single();
-            var adaptedThreatChoice = adaptedPlan.DeferredForceChoices.Single(choice =>
-                choice.ChoiceId.Equals(prototypeThreatChoice.ChoiceId, StringComparison.OrdinalIgnoreCase));
 
             Assert.Multiple(() =>
             {
@@ -3382,18 +3405,36 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(package.SupportedPlanets, Does.Contain(planetId));
                 Assert.That(package.Groups, Is.Empty);
                 Assert.That(packageDeferredForceChoices, Has.Count.EqualTo(1));
-                Assert.That(prototypePlan.PresetId, Is.EqualTo(adaptedPlan.PresetId));
-                Assert.That(prototypePlan.PlanetId, Is.EqualTo(adaptedPlan.PlanetId));
-                Assert.That(prototypePlan.MapId, Is.EqualTo(adaptedPlan.MapId));
-                Assert.That(prototypePlan.PlayerCount, Is.EqualTo(adaptedPlan.PlayerCount));
+                Assert.That(prototypePlan.PresetId, Is.EqualTo(presetId));
+                Assert.That(prototypePlan.PlanetId, Is.EqualTo(planetId));
+                Assert.That(prototypePlan.MapId, Is.EqualTo(planet.MapId));
+                Assert.That(prototypePlan.PlayerCount, Is.EqualTo(playerCount));
                 Assert.That(prototypePlan.Diagnostics, Is.Empty);
                 Assert.That(prototypePlan.SourceVotingChoicesIds, Is.EqualTo(new[] { VotingChoicesId }));
-                Assert.That(adaptedPlan.SourceVotingChoicesIds, Does.Contain(VotingChoicesId));
                 Assert.That(packageReport.Plans.Single().DeferredForceChoices.Count, Is.EqualTo(prototypePlan.DeferredForceChoices.Count));
                 Assert.That(prototypeThreatChoice.ChoiceId, Is.EqualTo($"DeferredThreat:{presetId}:{planetId}"));
                 Assert.That(
                     prototypeThreatChoice.Candidates.Select(candidate => candidate.SourcePrototypeId),
                     Is.EqualTo(expectedThreatCandidates));
+            });
+
+            AssertReservationPolicyMatchesSmallestThreatCandidate(prototypeThreatChoice);
+
+            if (adaptedPlans.Count == 0)
+            {
+                Assert.That(
+                    preset.SupportedPlanets,
+                    Does.Not.Contain(planetId),
+                    "Only off-rotation package slices may exist without an adapter-generated plan.");
+                return;
+            }
+
+            var adaptedPlan = adaptedPlans.Single();
+            var adaptedThreatChoice = adaptedPlan.DeferredForceChoices.Single(choice =>
+                choice.ChoiceId.Equals(prototypeThreatChoice.ChoiceId, StringComparison.OrdinalIgnoreCase));
+            Assert.Multiple(() =>
+            {
+                Assert.That(adaptedPlan.SourceVotingChoicesIds, Does.Contain(VotingChoicesId));
                 Assert.That(
                     adaptedThreatChoice.Candidates.Select(candidate => candidate.SourcePrototypeId),
                     Is.EqualTo(expectedThreatCandidates));
@@ -3405,8 +3446,6 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     candidate.SourcePrototypeId.Equals(prototypeCandidate.SourcePrototypeId, StringComparison.OrdinalIgnoreCase));
                 AssertPlannedForcesMatch(prototypeCandidate, adaptedCandidate);
             }
-
-            AssertReservationPolicyMatchesSmallestThreatCandidate(prototypeThreatChoice);
         });
 
         await pair.CleanReturnAsync();
@@ -3742,17 +3781,20 @@ public sealed class ScenarioPlanMarkerCoverageTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.ResolveDependency<IComponentFactory>();
             var generator = server.System<ScenarioPlanSystem>();
-            var (planetId, planet) = GetFirstSupportedPlanet(prototypes, componentFactory, "DistressSignal");
+            const string planetId = "AUPlanetSorokyne";
+            Assert.That(
+                TryGetPlanet(prototypes, componentFactory, planetId, out var planet),
+                Is.True,
+                $"{planetId} did not resolve to a planet map prototype.");
             var adaptedPlan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
-                    "DistressSignal",
+                    PlatoonAdapterTestPreset,
                     MarkerValidationPlayerCount,
+                    GovforPlatoonId: "UPP",
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
-            var adaptedForce = adaptedPlan.DeferredForceChoices
-                .Single(choice => choice.ChoiceId == "GovforPlatoon")
-                .Candidates
-                .Single(candidate => candidate.SourcePrototypeId == "UPP");
+            var adaptedForce = adaptedPlan.Forces.Single(candidate =>
+                candidate.ForceId.Equals("GovforPlatoon:UPP", StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3788,15 +3830,14 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 $"{planetId} did not resolve to a planet map prototype.");
 
             var adaptedPlan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
-                    DistressSignalPreset,
+                    PlatoonAdapterTestPreset,
                     MarkerValidationPlayerCount,
+                    GovforPlatoonId: "USCM",
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
-            var adaptedForce = adaptedPlan.DeferredForceChoices
-                .Single(choice => choice.ChoiceId == "GovforPlatoon")
-                .Candidates
-                .Single(candidate => candidate.SourcePrototypeId == "USCM");
+            var adaptedForce = adaptedPlan.Forces.Single(candidate =>
+                candidate.ForceId.Equals("GovforPlatoon:USCM", StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3832,15 +3873,14 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 $"{planetId} did not resolve to a planet map prototype.");
 
             var adaptedPlan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
-                    DistressSignalPreset,
+                    PlatoonAdapterTestPreset,
                     MarkerValidationPlayerCount,
+                    GovforPlatoonId: "RMC",
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
-            var adaptedForce = adaptedPlan.DeferredForceChoices
-                .Single(choice => choice.ChoiceId == "GovforPlatoon")
-                .Candidates
-                .Single(candidate => candidate.SourcePrototypeId == "RMC");
+            var adaptedForce = adaptedPlan.Forces.Single(candidate =>
+                candidate.ForceId.Equals("GovforPlatoon:RMC", StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3878,15 +3918,14 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 $"{planetId} did not resolve to a planet map prototype.");
 
             var adaptedPlan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
-                    DistressSignalPreset,
+                    PlatoonAdapterTestPreset,
                     MarkerValidationPlayerCount,
+                    GovforPlatoonId: platoonId,
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
-            var adaptedForce = adaptedPlan.DeferredForceChoices
-                .Single(choice => choice.ChoiceId == "GovforPlatoon")
-                .Candidates
-                .Single(candidate => candidate.SourcePrototypeId == platoonId);
+            var adaptedForce = adaptedPlan.Forces.Single(candidate =>
+                candidate.ForceId.Equals($"GovforPlatoon:{platoonId}", StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3924,8 +3963,9 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 $"{planetId} did not resolve to a planet map prototype.");
 
             var adaptedPlan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
-                    DistressSignalPreset,
+                    PlatoonAdapterTestPreset,
                     MarkerValidationPlayerCount,
+                    OpforPlatoonId: platoonId,
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
