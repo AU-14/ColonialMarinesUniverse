@@ -21,18 +21,22 @@ public sealed partial class RoundForceAsrsProfileComponent : Component
     public string? ForceId { get; private set; }
 
     [DataField]
+    [AlwaysPushInheritance]
     public List<RoundForceAsrsCategoryPrototypeDefinition> Categories { get; private set; } = new();
 
     [DataField]
+    [AlwaysPushInheritance]
     public List<RoundForceAsrsOfferAdditionPrototypeDefinition> Additions { get; private set; } = new();
 
     [DataField]
+    [AlwaysPushInheritance]
     public List<string> Exclusions { get; private set; } = new();
 
     /// <summary>
     /// Sparse price or stock changes keyed by stable offer identity.
     /// </summary>
     [DataField]
+    [AlwaysPushInheritance]
     public List<RoundForceAsrsOfferOverridePrototypeDefinition> Overrides { get; private set; } = new();
 }
 
@@ -106,12 +110,21 @@ public sealed partial class RoundForceAsrsOfferAdditionPrototypeDefinition
 [DataDefinition]
 public sealed partial class RoundForceAsrsOfferOverridePrototypeDefinition
 {
+    /// <summary>
+    /// Stable identifier of the inherited offer whose terms are changed.
+    /// </summary>
     [DataField(required: true)]
     public string Offer { get; private set; } = string.Empty;
 
+    /// <summary>
+    /// Replacement price, or omitted to preserve the inherited price.
+    /// </summary>
     [DataField]
     public int? Cost { get; private set; }
 
+    /// <summary>
+    /// Stock-policy change, or omitted to preserve the inherited policy.
+    /// </summary>
     [DataField]
     public RoundForceAsrsStockOverridePrototypeDefinition? Stock { get; private set; }
 }
@@ -122,9 +135,15 @@ public sealed partial class RoundForceAsrsOfferOverridePrototypeDefinition
 [DataDefinition]
 public sealed partial class RoundForceAsrsStockOverridePrototypeDefinition
 {
+    /// <summary>
+    /// Operation applied to the inherited stock policy.
+    /// </summary>
     [DataField(required: true)]
     public RoundAsrsStockOverrideKind Kind { get; private set; }
 
+    /// <summary>
+    /// Replacement policy. Required for Replace; forbidden for Clear and Unchanged.
+    /// </summary>
     [DataField]
     public RoundForceAsrsStockPrototypeDefinition? Policy { get; private set; }
 }

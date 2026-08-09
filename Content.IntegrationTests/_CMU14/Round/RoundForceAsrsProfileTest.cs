@@ -18,6 +18,84 @@ public sealed class RoundForceAsrsProfileTest
     private const string StockClearProfileId = "CMURoundForceAsrsStockClearTest";
     private const string StockReplacementProfileId = "CMURoundForceAsrsStockReplacementTest";
 
+    private const string MultiParentProfiles = """
+        - type: entity
+          abstract: true
+          id: CMURoundForceAsrsInheritanceCommonTest
+          components:
+          - type: RoundForceAsrsProfile
+            categories:
+            - id: CommonCategory
+              name: Common Category
+              offers:
+              - id: CommonCategoryOffer
+                crate: RMCCrateClothingMagazinePouchesLarge
+                cost: 100
+            additions:
+            - category: CommonCategory
+              offer:
+                id: CommonAddition
+                crate: RMCCrateClothingMagazinePouchesLarge
+                cost: 101
+            exclusions:
+            - CommonExclusion
+            overrides:
+            - offer: CommonOverride
+              cost: 102
+
+        - type: entity
+          abstract: true
+          id: CMURoundForceAsrsInheritanceFragmentTest
+          components:
+          - type: RoundForceAsrsProfile
+            categories:
+            - id: FragmentCategory
+              name: Fragment Category
+              offers:
+              - id: FragmentCategoryOffer
+                crate: RMCCrateClothingMagazinePouchesLarge
+                cost: 200
+            additions:
+            - category: FragmentCategory
+              offer:
+                id: FragmentAddition
+                crate: RMCCrateClothingMagazinePouchesLarge
+                cost: 201
+            exclusions:
+            - FragmentExclusion
+            overrides:
+            - offer: FragmentOverride
+              cost: 202
+
+        - type: entity
+          parent:
+          - CMURoundForceAsrsInheritanceCommonTest
+          - CMURoundForceAsrsInheritanceFragmentTest
+          id: CMURoundForceAsrsInheritanceChildTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: InheritanceChildTest
+            categories:
+            - id: ChildCategory
+              name: Child Category
+              offers:
+              - id: ChildCategoryOffer
+                crate: RMCCrateClothingMagazinePouchesLarge
+                cost: 300
+            additions:
+            - category: ChildCategory
+              offer:
+                id: ChildAddition
+                crate: RMCCrateClothingMagazinePouchesLarge
+                cost: 301
+            exclusions:
+            - ChildExclusion
+            overrides:
+            - offer: ChildOverride
+              cost: 302
+        """;
+
     private const string CostOverrideProfile = """
         - type: entity
           parent: CMURoundForceAsrsCommon
@@ -333,6 +411,43 @@ public sealed class RoundForceAsrsProfileTest
                 GetProfile(prototypes, factory, "CMURoundForceAsrsMissingReplacementPolicyTest")));
             Assert.Throws<ArgumentException>(() => RoundForceAsrsProfileCompiler.Compile(
                 GetProfile(prototypes, factory, "CMURoundForceAsrsClearPolicyTest")));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task MultiParentListsComposeChildThenDeclaredParents()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        var server = pair.Server;
+
+        var changed = new Dictionary<Type, HashSet<string>>();
+        server.ProtoMan.LoadString(MultiParentProfiles, changed: changed);
+        await server.WaitPost(() => server.ProtoMan.ReloadPrototypes(changed));
+
+        await server.WaitAssertion(() =>
+        {
+            var profile = GetProfile(
+                server.ResolveDependency<IPrototypeManager>(),
+                server.EntMan.ComponentFactory,
+                "CMURoundForceAsrsInheritanceChildTest");
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(
+                    profile.Categories.Select(category => category.Id),
+                    Is.EqualTo(new[] { "ChildCategory", "CommonCategory", "FragmentCategory" }));
+                Assert.That(
+                    profile.Additions.Select(addition => addition.Offer.Id),
+                    Is.EqualTo(new[] { "ChildAddition", "CommonAddition", "FragmentAddition" }));
+                Assert.That(
+                    profile.Exclusions,
+                    Is.EqualTo(new[] { "ChildExclusion", "CommonExclusion", "FragmentExclusion" }));
+                Assert.That(
+                    profile.Overrides.Select(terms => terms.Offer),
+                    Is.EqualTo(new[] { "ChildOverride", "CommonOverride", "FragmentOverride" }));
+            });
         });
 
         await pair.CleanReturnAsync();
