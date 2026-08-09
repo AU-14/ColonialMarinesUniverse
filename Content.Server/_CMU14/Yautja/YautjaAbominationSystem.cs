@@ -134,7 +134,11 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
             args.Tool is { } tool &&
             HasComp<MeleeWeaponComponent>(tool))
         {
-            args.ArmorPiercing += 35;
+            // Clan armour is 35-40 melee armour, and the armour curve still
+            // rounds low residual damage down to zero. Xeno melee is the
+            // CMSS13 exception: claws cut through the clan armour instead of
+            // producing the metal/no-damage impact sound.
+            args.ArmorPiercing += 100;
         }
     }
 

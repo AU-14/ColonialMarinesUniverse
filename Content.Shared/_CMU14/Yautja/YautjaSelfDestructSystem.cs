@@ -503,12 +503,6 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             return false;
         }
 
-        if (_mobState.IsCritical(user))
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-critical"), user, user, PopupType.SmallCaution);
-            return false;
-        }
-
         if (!_mobState.IsAlive(user))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-dead"), user, user, PopupType.SmallCaution);

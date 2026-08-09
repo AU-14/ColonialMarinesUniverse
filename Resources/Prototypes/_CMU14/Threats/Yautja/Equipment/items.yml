@@ -1,8 +1,8 @@
 - type: radioChannel
   id: CMUYautja
   name: chat-radio-cmu-yautja
-  keycode: "r"
-  radioPrefix: "#"
+  keycode: "g"
+  radioPrefix: ":"
   frequency: 1541
   color: "#b85440"
   longRange: true

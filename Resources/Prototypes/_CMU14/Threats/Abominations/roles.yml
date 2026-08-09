@@ -67,7 +67,9 @@
 - type: radioChannel
   id: Abomination
   name: chat-radio-abomination
-  keycode: "g"
+  # Keep the Yautja :g communicator key globally unique; this channel is
+  # faction-gated and uses an unused digit instead.
+  keycode: "9"
   frequency: 428
   color: "#6b8f3a"
   longRange: true

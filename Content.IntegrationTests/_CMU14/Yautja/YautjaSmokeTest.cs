@@ -9846,7 +9846,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
-    public async Task BracerSelfDestructCannotBeArmedWhileCritical()
+    public async Task BracerSelfDestructCanBeArmedWhileCritical()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -9869,8 +9869,8 @@ public sealed class YautjaSmokeTest
                 mobState.ChangeMobState(hunter, MobState.Critical);
 
                 var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
-                Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter), Is.False);
-                Assert.That(bracerComp.SelfDestructArmed, Is.False);
+                Assert.That(selfDestruct.TryArmSelfDestruct((bracer, bracerComp), hunter, TimeSpan.FromSeconds(30)), Is.True);
+                Assert.That(bracerComp.SelfDestructArmed, Is.True);
             }
             finally
             {
