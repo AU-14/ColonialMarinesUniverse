@@ -289,7 +289,7 @@
   abstract: true
   components:
   - type: Item
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
 
 - type: entity
   id: CMUHunterShipYautjaFloorDecoration

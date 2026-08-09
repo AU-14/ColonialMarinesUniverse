@@ -316,7 +316,7 @@ public sealed class HunterShipYautjaMachineryTest
     private static MachineryRow[] MachineryRows()
     {
         var yautjaMachines = new ResPath("/Textures/_CMU14/HunterShip/obj/structures/machinery/yautja_machines.rsi");
-        var cryo = new ResPath("/Textures/_CMU14/HunterShip/obj/structures/machinery/cryogenics2.rsi");
+        var cryo = new ResPath("/Textures/_CMU14/Yautja/Structures/cryogenics2.rsi");
         var transformer = new ResPath("/Textures/_CMU14/HunterShip/obj/structures/props/industrial/power_transformer.rsi");
 
         return

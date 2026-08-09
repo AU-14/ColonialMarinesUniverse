@@ -438,7 +438,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0,0.0313
@@ -458,7 +458,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -517,7 +517,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: -0.0313,-0.0313
@@ -537,7 +537,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -584,7 +584,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0,0.0313
@@ -604,7 +604,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -651,7 +651,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,0.0313
@@ -671,7 +671,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -718,7 +718,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0,0.0313
@@ -738,7 +738,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -786,7 +786,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,0.0313
@@ -806,7 +806,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -854,7 +854,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0625,0.0313
@@ -874,7 +874,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -922,7 +922,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: -0.0313,0.0313
@@ -942,7 +942,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -990,7 +990,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,0.125
@@ -1010,7 +1010,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -1065,7 +1065,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: -0.0313,0.125
@@ -1085,7 +1085,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -1140,7 +1140,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     layers:
@@ -1159,7 +1159,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -1208,7 +1208,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,-0.0313
@@ -1228,7 +1228,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -1341,7 +1341,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: -0.0313,0.1563
@@ -1361,7 +1361,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -1947,7 +1947,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,0.1563
@@ -1967,7 +1967,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -4377,7 +4377,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     enableOverrideDir: true
@@ -4385,7 +4385,7 @@
     layers:
     - state: "ancient_shield_alt"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield_alt"
 
 
@@ -4399,7 +4399,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     enableOverrideDir: true
@@ -4407,7 +4407,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -6369,7 +6369,7 @@
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientsmallstatue.rsi
+    sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
     drawdepth: BelowMobs
     noRot: true
     enableOverrideDir: true
@@ -6378,7 +6378,7 @@
     - state: "small_statue_base_colorable"
       color: "#756e6a"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientsmallstatue.rsi
+    sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
     state: "small_statue_base_colorable"
   - type: Clickable
   - type: InteractionOutline
@@ -6525,7 +6525,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     enableOverrideDir: true
@@ -6533,7 +6533,7 @@
     layers:
     - state: "hunter_armor_prop_4"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_4"
   - type: RemoveComponents
     components:
@@ -6551,7 +6551,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     enableOverrideDir: true
@@ -6559,7 +6559,7 @@
     layers:
     - state: "hunter_armor_prop_3"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_3"
   - type: RemoveComponents
     components:
@@ -6577,7 +6577,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     enableOverrideDir: true
@@ -6585,7 +6585,7 @@
     layers:
     - state: "hunter_armor_prop_2"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_2"
   - type: RemoveComponents
     components:
@@ -6603,7 +6603,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     enableOverrideDir: true
@@ -6611,7 +6611,7 @@
     layers:
     - state: "hunter_armor_prop"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop"
   - type: RemoveComponents
     components:
@@ -7019,7 +7019,7 @@
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     drawdepth: SmallObjects
     noRot: true
     enableOverrideDir: true
@@ -7028,7 +7028,7 @@
     - state: "rampbottom"
       color: "#6b675e"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     state: "rampbottom"
   - type: Clickable
   - type: InteractionOutline
@@ -7046,7 +7046,7 @@
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     drawdepth: SmallObjects
     noRot: true
     enableOverrideDir: true
@@ -7055,7 +7055,7 @@
     - state: "rampbottom"
       color: "#6b675e"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     state: "rampbottom"
   - type: Clickable
   - type: InteractionOutline
@@ -7073,7 +7073,7 @@
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     drawdepth: SmallObjects
     noRot: true
     enableOverrideDir: true
@@ -7082,7 +7082,7 @@
     - state: "rampbottom"
       color: "#6b675e"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     state: "rampbottom"
   - type: Clickable
   - type: InteractionOutline
@@ -7100,7 +7100,7 @@
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     drawdepth: SmallObjects
     noRot: true
     enableOverrideDir: true
@@ -7109,7 +7109,7 @@
     - state: "rampbottom"
       color: "#6b675e"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     state: "rampbottom"
   - type: Clickable
   - type: InteractionOutline
@@ -7150,7 +7150,7 @@
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     drawdepth: FloorObjects
     noRot: true
     enableOverrideDir: true
@@ -7159,7 +7159,7 @@
     - state: "ramptop"
       color: "#6b675e"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/structures.rsi
+    sprite: _RMC14/Structures/Walls/structures.rsi
     state: "ramptop"
   - type: Clickable
   - type: InteractionOutline
@@ -8303,7 +8303,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: Items
     noRot: true
     offset: -0.0938,0.0938
@@ -8312,7 +8312,7 @@
     layers:
     - state: "ancient_shield_temple"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield_temple"
   - type: RemoveComponents
     components:
@@ -8346,7 +8346,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
+    sprite: _RMC14/Objects/Medical/blood_pack.rsi
     drawdepth: Items
     noRot: true
     offset: -0.125,0.0625
@@ -8357,7 +8357,7 @@
     - state: "blank"
       map: ["enum.BloodPackVisuals.Label"]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
+    sprite: _RMC14/Objects/Medical/blood_pack.rsi
     state: "bloodpack"
   - type: RemoveComponents
     components:
@@ -8391,7 +8391,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
+    sprite: _RMC14/Objects/Medical/blood_pack.rsi
     drawdepth: Items
     noRot: true
     offset: -0.125,0.0938
@@ -8402,7 +8402,7 @@
     - state: "blank"
       map: ["enum.BloodPackVisuals.Label"]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
+    sprite: _RMC14/Objects/Medical/blood_pack.rsi
     state: "bloodpack"
   - type: RemoveComponents
     components:
@@ -8436,7 +8436,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
+    sprite: _RMC14/Objects/Medical/blood_pack.rsi
     drawdepth: Items
     noRot: true
     offset: -0.1563,0.125
@@ -8447,7 +8447,7 @@
     - state: "blank"
       map: ["enum.BloodPackVisuals.Label"]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/bloodpack.rsi
+    sprite: _RMC14/Objects/Medical/blood_pack.rsi
     state: "bloodpack"
   - type: RemoveComponents
     components:
@@ -16412,7 +16412,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.5,0.25
@@ -16421,7 +16421,7 @@
     layers:
     - state: "bone_throne"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "bone_throne"
   - type: RemoveComponents
     components:
@@ -16443,7 +16443,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.5,1.25
@@ -16452,7 +16452,7 @@
     layers:
     - state: "bone_throne_top"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "bone_throne_top"
   - type: RemoveComponents
     components:
@@ -17130,7 +17130,7 @@
   suffix: Hunter Ship exact storage
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: SmallObjects
     noRot: true
     layers:
@@ -17149,7 +17149,7 @@
       visible: false
       map: [ "enum.LockVisualLayers.Lock" ]
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "closed"
   - type: RemoveComponents
     components:
@@ -35746,7 +35746,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/machinery/cryogenics2.rsi
+    sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
     drawdepth: Mobs
     noRot: true
     snapCardinals: false
@@ -35763,7 +35763,7 @@
       map: [ "enum.WiresVisualLayers.MaintenancePanel" ]
       visible: false
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/machinery/cryogenics2.rsi
+    sprite: _CMU14/Yautja/Structures/cryogenics2.rsi
     state: "pred_cell"
   - type: CryoPod
     openState: "pred_cell"
@@ -41842,7 +41842,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: Items
     noRot: true
     enableOverrideDir: true
@@ -41850,7 +41850,7 @@
     layers:
     - state: "hydro"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hydro"
   - type: RemoveComponents
     components:
@@ -41858,7 +41858,7 @@
       visuals: {}
     - type: Contraband
   - type: Item
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -41886,7 +41886,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: Items
     noRot: true
     offset: 0.0313,0.2188
@@ -41895,7 +41895,7 @@
     layers:
     - state: "hoe"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hoe"
   - type: RemoveComponents
     components:
@@ -41931,7 +41931,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: Items
     noRot: true
     offset: 0.0625,0.5313
@@ -41940,7 +41940,7 @@
     layers:
     - state: "hoe"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hoe"
   - type: RemoveComponents
     components:
@@ -41976,7 +41976,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: Items
     noRot: true
     offset: -0.125,0
@@ -41985,7 +41985,7 @@
     layers:
     - state: "spade"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "spade"
   - type: RemoveComponents
     components:
@@ -46071,7 +46071,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0,0.9688
@@ -46080,7 +46080,7 @@
     layers:
     - state: "ancient_shield_alt"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield_alt"
 
 
@@ -46094,7 +46094,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0,0.0625
@@ -46103,7 +46103,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46117,7 +46117,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0,0.9688
@@ -46126,7 +46126,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46140,7 +46140,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0,1.0625
@@ -46149,7 +46149,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46163,7 +46163,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.5313,1.0625
@@ -46172,7 +46172,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46186,7 +46186,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,0
@@ -46195,7 +46195,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46209,7 +46209,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,0.0625
@@ -46218,7 +46218,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46232,7 +46232,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,0.9688
@@ -46241,7 +46241,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46255,7 +46255,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,1
@@ -46264,7 +46264,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -46278,7 +46278,7 @@
   - type: Physics
     bodyType: Static
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     drawdepth: SmallObjects
     noRot: true
     offset: 0.0313,1.0625
@@ -46287,7 +46287,7 @@
     layers:
     - state: "ancient_shield"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/items/weapons/melee/shields.rsi
+    sprite: _CMU14/Yautja/Structures/shields.rsi
     state: "ancient_shield"
 
 
@@ -48138,7 +48138,7 @@
   suffix: Hunter Ship exact visual
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientsmallstatue.rsi
+    sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
     drawdepth: BelowMobs
     noRot: true
     offset: 0,0.125
@@ -48148,7 +48148,7 @@
     - state: "small_statue_base_colorable"
       color: "#756e6a"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/ancientsmallstatue.rsi
+    sprite: _CMU14/Yautja/Structures/ancientsmallstatue.rsi
     state: "small_statue_base_colorable"
   - type: Clickable
   - type: InteractionOutline
@@ -48406,7 +48406,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: 0,1.0313
@@ -48415,7 +48415,7 @@
     layers:
     - state: "hunter_armor_prop_4"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_4"
   - type: RemoveComponents
     components:
@@ -48433,7 +48433,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.5,1.0313
@@ -48442,7 +48442,7 @@
     layers:
     - state: "hunter_armor_prop_4"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_4"
   - type: RemoveComponents
     components:
@@ -48460,7 +48460,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: 0,0.9688
@@ -48469,7 +48469,7 @@
     layers:
     - state: "hunter_armor_prop_3"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_3"
   - type: RemoveComponents
     components:
@@ -48487,7 +48487,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.5,1
@@ -48496,7 +48496,7 @@
     layers:
     - state: "hunter_armor_prop_3"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_3"
   - type: RemoveComponents
     components:
@@ -48514,7 +48514,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.0313,1
@@ -48523,7 +48523,7 @@
     layers:
     - state: "hunter_armor_prop_3"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_3"
   - type: RemoveComponents
     components:
@@ -48541,7 +48541,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: 0,1
@@ -48550,7 +48550,7 @@
     layers:
     - state: "hunter_armor_prop_2"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_2"
   - type: RemoveComponents
     components:
@@ -48568,7 +48568,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.5,1
@@ -48577,7 +48577,7 @@
     layers:
     - state: "hunter_armor_prop_2"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_2"
   - type: RemoveComponents
     components:
@@ -48595,7 +48595,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.0313,1
@@ -48604,7 +48604,7 @@
     layers:
     - state: "hunter_armor_prop_2"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop_2"
   - type: RemoveComponents
     components:
@@ -48622,7 +48622,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: 0,1.0938
@@ -48631,7 +48631,7 @@
     layers:
     - state: "hunter_armor_prop"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop"
   - type: RemoveComponents
     components:
@@ -48649,7 +48649,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: 0.5,1.0938
@@ -48658,7 +48658,7 @@
     layers:
     - state: "hunter_armor_prop"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop"
   - type: RemoveComponents
     components:
@@ -48676,7 +48676,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.5,1.0938
@@ -48685,7 +48685,7 @@
     layers:
     - state: "hunter_armor_prop"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop"
   - type: RemoveComponents
     components:
@@ -48703,7 +48703,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.0313,1.0313
@@ -48712,7 +48712,7 @@
     layers:
     - state: "hunter_armor_prop"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop"
   - type: RemoveComponents
     components:
@@ -48730,7 +48730,7 @@
   suffix: Hunter Ship fixed wall decor
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     drawdepth: WallMountedItems
     noRot: true
     offset: -0.0313,1.0938
@@ -48739,7 +48739,7 @@
     layers:
     - state: "hunter_armor_prop"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/hunter/32x32_hunter_props.rsi
+    sprite: _CMU14/Yautja/Structures/32x32_hunter_props.rsi
     state: "hunter_armor_prop"
   - type: RemoveComponents
     components:
@@ -52378,7 +52378,7 @@
   suffix: Hunter Ship CMU exact wrapper
   components:
   - type: Sprite
-    sprite: _CMU14/HunterShip/obj/structures/props/target_dummies.rsi
+    sprite: _RMC14/Structures/objects.rsi
     drawdepth: SmallObjects
     noRot: true
     snapCardinals: false
@@ -52387,7 +52387,7 @@
     layers:
     - state: "target_h"
   - type: Icon
-    sprite: _CMU14/HunterShip/obj/structures/props/target_dummies.rsi
+    sprite: _RMC14/Structures/objects.rsi
     state: "target_h"
   - type: Clickable
   - type: InteractionOutline
