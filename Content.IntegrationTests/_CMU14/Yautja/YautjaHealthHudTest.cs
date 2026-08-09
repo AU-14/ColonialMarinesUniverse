@@ -38,4 +38,35 @@ public sealed class YautjaHealthHudTest
             server.Dispose();
         }
     }
+
+    [Test]
+    public async Task MilitaryHelmetShowsTheSameHealthHudAsTheYautjaMask()
+    {
+        var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var prototypes = server.ResolveDependency<IPrototypeManager>();
+                var factory = server.EntMan.ComponentFactory;
+                var helmet = prototypes.Index<EntityPrototype>("CMUYautjaPoweredHelmet");
+
+                Assert.That(helmet.TryGetComponent<ShowHealthBarsComponent>(out var bars, factory), Is.True);
+                Assert.That(helmet.TryGetComponent<ShowHealthIconsComponent>(out var icons, factory), Is.True);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(bars!.DamageContainers.Select(container => container.Id),
+                        Is.EquivalentTo(new[] { "Biological" }));
+                    Assert.That(icons!.DamageContainers.Select(container => container.Id),
+                        Is.EquivalentTo(new[] { "Biological", "Xeno" }));
+                });
+            });
+        }
+        finally
+        {
+            server.Dispose();
+        }
+    }
 }

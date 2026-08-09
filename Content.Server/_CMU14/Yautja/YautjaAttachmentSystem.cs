@@ -141,9 +141,19 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             args.AddAction(ref ent.Comp.ToggleChainGauntletAction, ent.Comp.ToggleChainGauntletActionId);
     }
 
-    private static bool HasAction(YautjaGearContainerComponent bracer, YautjaGearKind kind)
+    private bool HasAction(YautjaGearContainerComponent bracer, YautjaGearKind kind)
     {
-        return bracer.ActionWhitelist == null || bracer.ActionWhitelist.Contains(kind);
+        if (bracer.ActionWhitelist != null && !bracer.ActionWhitelist.Contains(kind))
+            return false;
+
+        if (bracer.Gear.TryGetValue(kind, out var gear) &&
+            bracer.InstalledGear.Contains(gear) &&
+            !TerminatingOrDeleted(gear))
+            return true;
+
+        return bracer.SecondaryGear.TryGetValue(kind, out var secondary) &&
+               bracer.InstalledGear.Contains(secondary) &&
+               !TerminatingOrDeleted(secondary);
     }
 
     private void OnInteractUsing(Entity<YautjaGearContainerComponent> ent, ref InteractUsingEvent args)
@@ -285,6 +295,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             ent.Comp.GearPrototypes[stored.Kind] = prototype.ID;
 
         Dirty(ent);
+        SyncGearAction(ent, stored.Kind);
         PlayGearSound(ent.Comp.InstallAttachmentSound, user);
         _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-attachment-installed", ("item", gear), ("bracer", ent.Owner)), user, user);
         return true;
@@ -1048,6 +1059,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if (bracer.Comp.SecondaryGear.TryGetValue(stored.Kind, out var secondary) && secondary == gear)
             bracer.Comp.SecondaryGear.Remove(stored.Kind);
 
+        SyncGearAction(bracer, stored.Kind);
+
         stored.Bracer = null;
         stored.Deployed = false;
         stored.Retracting = false;
@@ -1222,7 +1235,12 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
     private EntityUid? EnsureGear(Entity<YautjaGearContainerComponent> bracer, YautjaGearKind kind)
     {
         if (bracer.Comp.Gear.TryGetValue(kind, out var existing) && !TerminatingOrDeleted(existing))
+        {
+            if (bracer.Comp.InstalledGear.Add(existing))
+                Dirty(bracer);
+            SyncGearAction(bracer, kind);
             return existing;
+        }
 
         if (!bracer.Comp.GearPrototypes.TryGetValue(kind, out var prototype))
             return null;
@@ -1240,7 +1258,49 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             return null;
         }
 
+        // Prototype-backed bracer gear is installed at map initialization, so
+        // it must participate in the same installed-attachment action filter
+        // as gear inserted later through the bracer UI.
+        bracer.Comp.InstalledGear.Add(gear);
+        Dirty(bracer);
+        SyncGearAction(bracer, kind);
         return gear;
+    }
+
+    private void SyncGearAction(Entity<YautjaGearContainerComponent> bracer, YautjaGearKind kind)
+    {
+        if (!TryComp(bracer.Owner, out YautjaBracerComponent? power) || power.User is not { } user)
+            return;
+
+        var actionId = GetAction(bracer.Comp, kind);
+        var allowed = HasAction(bracer.Comp, kind) &&
+            (kind is not (YautjaGearKind.Caster or YautjaGearKind.Shield) || !HasComp<YautjaYoungbloodComponent>(user));
+
+        if (!allowed)
+        {
+            if (actionId is { } existing)
+                _actions.RemoveProvidedAction(user, bracer.Owner, existing);
+            return;
+        }
+
+        switch (kind)
+        {
+            case YautjaGearKind.Caster:
+                _actions.AddAction(user, ref bracer.Comp.ToggleCasterAction, bracer.Comp.ToggleCasterActionId, bracer.Owner);
+                break;
+            case YautjaGearKind.WristBlades:
+                _actions.AddAction(user, ref bracer.Comp.ToggleWristBladesAction, bracer.Comp.ToggleWristBladesActionId, bracer.Owner);
+                break;
+            case YautjaGearKind.Scimitar:
+                _actions.AddAction(user, ref bracer.Comp.ToggleScimitarAction, bracer.Comp.ToggleScimitarActionId, bracer.Owner);
+                break;
+            case YautjaGearKind.Shield:
+                _actions.AddAction(user, ref bracer.Comp.ToggleShieldAction, bracer.Comp.ToggleShieldActionId, bracer.Owner);
+                break;
+            case YautjaGearKind.ChainGauntlet:
+                _actions.AddAction(user, ref bracer.Comp.ToggleChainGauntletAction, bracer.Comp.ToggleChainGauntletActionId, bracer.Owner);
+                break;
+        }
     }
 
     private void SetGearState(Entity<YautjaGearContainerComponent> bracer, EntityUid gear, YautjaGearKind kind, bool deployed)
@@ -1367,7 +1427,14 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
             if (TryComp(ent.Owner, out YautjaGearContainerComponent? gear))
             {
-                EnsureGear((ent.Owner, gear), args.Choice);
+                if (EnsureGear((ent.Owner, gear), args.Choice) is { } chosenGear)
+                {
+                    // The bad-blood choice is the attachment operation: the selected
+                    // weapon is already installed in the damaged bay, so it must be
+                    // treated like a physical bracer attachment by action discovery.
+                    gear.InstalledGear.Add(chosenGear);
+                    Dirty(ent.Owner, gear);
+                }
                 GrantChosenGearAction((ent.Owner, gear), args.Choice);
             }
 

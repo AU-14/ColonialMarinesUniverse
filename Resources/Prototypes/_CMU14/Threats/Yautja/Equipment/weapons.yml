@@ -117,6 +117,10 @@
   - type: Item
     heldPrefix: clan_sword
   - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: clansword
     slots:
     - back
   - type: MeleeWeapon
@@ -142,6 +146,11 @@
     state: rending_sword
   - type: Item
     heldPrefix: rending_sword
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_custom_worn.rsi
+        state: rending_sword
 
 - type: entity
   parent: CMUYautjaClanSword
@@ -153,6 +162,11 @@
     state: piercing_sword
   - type: Item
     heldPrefix: piercing_sword
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_custom_worn.rsi
+        state: piercing_sword
 
 - type: entity
   parent: CMUYautjaClanSword
@@ -164,6 +178,11 @@
     state: severing_sword
   - type: Item
     heldPrefix: severing_sword
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: clansword_alt3
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -179,6 +198,10 @@
     heldPrefix: dual_war_scythe
     size: Large
   - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_custom_worn.rsi
+        state: dual_war_scythe
     slots:
     - back
     - belt
@@ -206,6 +229,11 @@
     state: double_war_scythe
   - type: Item
     heldPrefix: double_war_scythe
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_custom_worn.rsi
+        state: double_war_scythe
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -220,6 +248,10 @@
     heldPrefix: cruel_staff
     size: Large
   - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_custom_worn.rsi
+        state: cruel_staff
     slots:
     - back
   - type: MeleeWeapon
@@ -262,6 +294,10 @@
   - type: ItemThrowRange
     range: 4
   - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: combistick
     slots:
     - back
   - type: ItemToggle
@@ -358,6 +394,10 @@
   - type: ItemThrowRange
     range: 4
   - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: war_axe
     slots:
     - back
   - type: MeleeWeapon
@@ -429,6 +469,10 @@
     size: Huge
   - type: Clothing
     sprite: _CMU14/Yautja/weapons.rsi
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: shield
     slots:
     - back
   - type: Blocking
@@ -481,6 +525,11 @@
   - type: YautjaShieldHeldPrefix
     lowered: ancient_shield
     readied: ancient_shield_ready
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: ancient_shield
 
 - type: entity
   parent: CMUYautjaAncientShield
@@ -495,6 +544,11 @@
   - type: YautjaShieldHeldPrefix
     lowered: ancient_shield_alt
     readied: ancient_shield_alt_ready
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: ancient_shield_alt
 
 - type: entity
   parent: CMUYautjaAncientShield
@@ -509,6 +563,11 @@
   - type: YautjaShieldHeldPrefix
     lowered: ancient_shield_temple
     readied: ancient_shield_temple_ready
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_custom_worn.rsi
+        state: ancient_shield_temple
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -523,6 +582,10 @@
     heldPrefix: hunter_spear
     size: Large
   - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: spearhunter
     slots:
     - back
   - type: MeleeWeapon
@@ -577,6 +640,10 @@
     heldPrefix: war_glaive
     size: Large
   - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: glaive
     slots:
     - back
   - type: MeleeWeapon
@@ -614,6 +681,11 @@
     heldPrefix: cleaving_glaive
   - type: Wieldable
     wieldedInhandPrefix: cleaving_glaive
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: glaive_skull
   - type: Appearance
   - type: GenericVisualizer
     visuals:
@@ -633,6 +705,11 @@
   - type: Item
     heldPrefix: war_glaive
     size: Large
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: glaive_alt
   - type: MeleeWeapon
     attackRate: 0.71428573
     damage:
@@ -666,6 +743,11 @@
     heldPrefix: longaxe
   - type: Wieldable
     wieldedInhandPrefix: longaxe
+  - type: Clothing
+    clothingVisuals:
+      back:
+      - sprite: _CMU14/Yautja/pred_gear_worn.rsi
+        state: longaxe
 
 - type: entity
   parent: CMUYautjaWeaponBase
@@ -851,7 +933,8 @@
     heldPrefix: spike_launcher
     size: Normal
   - type: Clothing
-    sprite: _CMU14/Yautja/gun_inhands.rsi
+    sprite: _CMU14/Yautja/pred_guns_back.rsi
+    equippedPrefix: spearlauncher
     slots:
     - belt
     - back
@@ -932,7 +1015,8 @@
     heldPrefix: plasma_rifle
     size: Huge
   - type: Clothing
-    sprite: _CMU14/Yautja/gun_inhands.rsi
+    sprite: _CMU14/Yautja/pred_guns_back.rsi
+    equippedPrefix: plasmarifle
     slots:
     - back
   - type: AmmoCounter
@@ -1528,6 +1612,13 @@
     damageCoefficient: 0
     worn: false
   - type: Clothing
+    clothingVisuals:
+      belt:
+      - sprite: _CMU14/Yautja/quiver.rsi
+        state: equipped-BELT
+      suitStorage:
+      - sprite: _CMU14/Yautja/quiver.rsi
+        state: icon
     slots:
     - Belt
     - suitStorage

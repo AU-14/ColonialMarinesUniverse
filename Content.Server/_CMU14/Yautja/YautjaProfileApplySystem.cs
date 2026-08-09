@@ -107,10 +107,13 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
             bracer = ReplaceEquipped(uid, "gloves", profile.BracerPrototype);
             cape = ReplaceEquipped(uid, "back", profile.CapePrototype);
         }
-        else if (_inventory.TryGetSlotEntity(uid, "gloves", out _))
+        else if (_inventory.TryGetSlotEntity(uid, "gloves", out var equippedBracer)
+                 && MetaData(equippedBracer.Value).EntityPrototype?.ID == "CMUYautjaBracer")
         {
             // Player spawns already have the generic spawn bracer equipped. Replace
             // it with the material selected in the profile before applying settings.
+            // Fixed-role Yautja (notably military-caste jobs) already have a
+            // role-specific bracer and must keep that item and its worn visuals.
             bracer = ReplaceEquipped(uid, "gloves", profile.BracerPrototype);
         }
 
