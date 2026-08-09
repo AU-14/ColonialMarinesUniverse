@@ -28,6 +28,12 @@ public sealed partial class RoundForceAsrsProfileComponent : Component
 
     [DataField]
     public List<string> Exclusions { get; private set; } = new();
+
+    /// <summary>
+    /// Sparse price or stock changes keyed by stable offer identity.
+    /// </summary>
+    [DataField]
+    public List<RoundForceAsrsOfferOverridePrototypeDefinition> Overrides { get; private set; } = new();
 }
 
 [DataDefinition]
@@ -95,6 +101,35 @@ public sealed partial class RoundForceAsrsOfferAdditionPrototypeDefinition
 }
 
 /// <summary>
+/// Authoring data for sparse terms changes to one inherited ASRS offer.
+/// </summary>
+[DataDefinition]
+public sealed partial class RoundForceAsrsOfferOverridePrototypeDefinition
+{
+    [DataField(required: true)]
+    public string Offer { get; private set; } = string.Empty;
+
+    [DataField]
+    public int? Cost { get; private set; }
+
+    [DataField]
+    public RoundForceAsrsStockOverridePrototypeDefinition? Stock { get; private set; }
+}
+
+/// <summary>
+/// Explicit authoring choice to keep, replace, or clear inherited ASRS stock terms.
+/// </summary>
+[DataDefinition]
+public sealed partial class RoundForceAsrsStockOverridePrototypeDefinition
+{
+    [DataField(required: true)]
+    public RoundAsrsStockOverrideKind Kind { get; private set; }
+
+    [DataField]
+    public RoundForceAsrsStockPrototypeDefinition? Policy { get; private set; }
+}
+
+/// <summary>
 /// Copies inherited entity-component profile data into the standalone ASRS resolver.
 /// </summary>
 public static class RoundForceAsrsProfileCompiler
@@ -119,13 +154,19 @@ public static class RoundForceAsrsProfileCompiler
                     ? null
                     : new RoundAsrsOfferId(addition.InsertBefore)));
         var exclusions = profile.Exclusions.Select(id => new RoundAsrsOfferId(id));
+        var overrides = profile.Overrides.Select(terms =>
+            new RoundAsrsOfferTermsOverride(
+                new RoundAsrsOfferId(terms.Offer),
+                terms.Cost,
+                CompileStockOverride(terms.Stock)));
 
         return RoundAsrsCatalogResolver.Resolve(
             new RoundAsrsCatalogDefinition(categories),
             new RoundAsrsForceDelta(
                 new RoundForceId(profile.ForceId ?? string.Empty),
                 additions,
-                exclusions));
+                exclusions,
+                overrides));
     }
 
     private static RoundAsrsOfferDefinition CompileOffer(
@@ -137,10 +178,42 @@ public static class RoundForceAsrsProfileCompiler
             offer.Cost,
             offer.Stock == null
                 ? null
-                : new RoundAsrsStockPolicy(
-                    offer.Stock.Maximum,
-                    TimeSpan.FromSeconds(offer.Stock.ReplenishDelay),
-                    offer.Stock.StartingStock,
-                    offer.Stock.ReplenishAmount));
+                : CompileStock(offer.Stock));
+    }
+
+    private static RoundAsrsStockOverride CompileStockOverride(
+        RoundForceAsrsStockOverridePrototypeDefinition? stock)
+    {
+        return stock switch
+        {
+            null => default,
+            { Kind: RoundAsrsStockOverrideKind.Unchanged, Policy: null } => default,
+            { Kind: RoundAsrsStockOverrideKind.Unchanged } => throw new ArgumentException(
+                "An unchanged ASRS stock override cannot declare a replacement policy.",
+                nameof(stock)),
+            { Kind: RoundAsrsStockOverrideKind.Replace, Policy: { } policy } =>
+                RoundAsrsStockOverride.ReplaceWith(CompileStock(policy)),
+            { Kind: RoundAsrsStockOverrideKind.Replace } => throw new ArgumentException(
+                "A replacement ASRS stock override requires a policy.",
+                nameof(stock)),
+            { Kind: RoundAsrsStockOverrideKind.Clear, Policy: null } => RoundAsrsStockOverride.Clear,
+            { Kind: RoundAsrsStockOverrideKind.Clear } => throw new ArgumentException(
+                "A clearing ASRS stock override cannot declare a replacement policy.",
+                nameof(stock)),
+            _ => throw new ArgumentOutOfRangeException(
+                nameof(stock),
+                stock.Kind,
+                "Unsupported ASRS stock override kind."),
+        };
+    }
+
+    private static RoundAsrsStockPolicy CompileStock(
+        RoundForceAsrsStockPrototypeDefinition stock)
+    {
+        return new RoundAsrsStockPolicy(
+            stock.Maximum,
+            TimeSpan.FromSeconds(stock.ReplenishDelay),
+            stock.StartingStock,
+            stock.ReplenishAmount);
     }
 }

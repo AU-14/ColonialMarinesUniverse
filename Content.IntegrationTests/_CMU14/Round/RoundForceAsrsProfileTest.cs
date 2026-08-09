@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Content.Shared.CMU.Round;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting.Pool;
 
@@ -13,6 +14,109 @@ namespace Content.IntegrationTests._CMU14.Round;
 public sealed class RoundForceAsrsProfileTest
 {
     private const string CommonProfileId = "CMURoundForceAsrsCommon";
+    private const string CostOverrideProfileId = "CMURoundForceAsrsCostOverrideTest";
+    private const string StockClearProfileId = "CMURoundForceAsrsStockClearTest";
+    private const string StockReplacementProfileId = "CMURoundForceAsrsStockReplacementTest";
+
+    private const string CostOverrideProfile = """
+        - type: entity
+          parent: CMURoundForceAsrsCommon
+          id: CMURoundForceAsrsCostOverrideTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: CostOverrideTest
+            overrides:
+            - offer: LtbCannonMixed
+              cost: 1234
+        """;
+
+    private const string StockReplacementProfile = """
+        - type: entity
+          parent: CMURoundForceAsrsCommon
+          id: CMURoundForceAsrsStockReplacementTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: StockReplacementTest
+            overrides:
+            - offer: LtbCannonMixed
+              stock:
+                kind: Replace
+                policy:
+                  maximum: 5
+                  replenishDelay: 45
+                  startingStock: 3
+                  replenishAmount: 2
+        """;
+
+    private const string StockClearProfile = """
+        - type: entity
+          parent: CMURoundForceAsrsCommon
+          id: CMURoundForceAsrsStockClearTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: StockClearTest
+            overrides:
+            - offer: LtbCannonMixed
+              stock:
+                kind: Clear
+        """;
+
+    private const string InvalidOverrideProfiles = """
+        - type: entity
+          parent: CMURoundForceAsrsCommon
+          id: CMURoundForceAsrsEmptyOverrideTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: EmptyOverrideTest
+            overrides:
+            - offer: LtbCannonMixed
+
+        - type: entity
+          parent: CMURoundForceAsrsCommon
+          id: CMURoundForceAsrsUnchangedPolicyTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: UnchangedPolicyTest
+            overrides:
+            - offer: LtbCannonMixed
+              stock:
+                kind: Unchanged
+                policy:
+                  maximum: 2
+                  replenishDelay: 300
+
+        - type: entity
+          parent: CMURoundForceAsrsCommon
+          id: CMURoundForceAsrsMissingReplacementPolicyTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: MissingReplacementPolicyTest
+            overrides:
+            - offer: LtbCannonMixed
+              stock:
+                kind: Replace
+
+        - type: entity
+          parent: CMURoundForceAsrsCommon
+          id: CMURoundForceAsrsClearPolicyTest
+          categories: [ HideSpawnMenu ]
+          components:
+          - type: RoundForceAsrsProfile
+            forceId: ClearPolicyTest
+            overrides:
+            - offer: LtbCannonMixed
+              stock:
+                kind: Clear
+                policy:
+                  maximum: 2
+                  replenishDelay: 300
+        """;
 
     private static readonly string[] ExpectedForceIds =
     [
@@ -145,6 +249,129 @@ public sealed class RoundForceAsrsProfileTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CostOverrideChangesOnlyResolvedCost()
+    {
+        await AssertCompiledProfile(CostOverrideProfile, CostOverrideProfileId, resolved =>
+        {
+            Assert.That(
+                resolved.TryGetOffer(new RoundAsrsOfferId("LtbCannonMixed"), out var offer),
+                Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(offer!.Cost, Is.EqualTo(1234));
+                Assert.That(
+                    offer.Stock,
+                    Is.EqualTo(new RoundAsrsStockPolicy(2, TimeSpan.FromSeconds(300))));
+            });
+        });
+    }
+
+    [Test]
+    public async Task StockReplacementChangesOnlyResolvedStockPolicy()
+    {
+        await AssertCompiledProfile(StockReplacementProfile, StockReplacementProfileId, resolved =>
+        {
+            Assert.That(
+                resolved.TryGetOffer(new RoundAsrsOfferId("LtbCannonMixed"), out var offer),
+                Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(offer!.Cost, Is.EqualTo(1900));
+                Assert.That(
+                    offer.Stock,
+                    Is.EqualTo(new RoundAsrsStockPolicy(
+                        5,
+                        TimeSpan.FromSeconds(45),
+                        3,
+                        2)));
+            });
+        });
+    }
+
+    [Test]
+    public async Task StockClearRemovesOnlyResolvedStockPolicy()
+    {
+        await AssertCompiledProfile(StockClearProfile, StockClearProfileId, resolved =>
+        {
+            Assert.That(
+                resolved.TryGetOffer(new RoundAsrsOfferId("LtbCannonMixed"), out var offer),
+                Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(offer!.Cost, Is.EqualTo(1900));
+                Assert.That(offer.Stock, Is.Null);
+            });
+        });
+    }
+
+    [Test]
+    public async Task InvalidStockOverrideMappingsFailDeterministically()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        var server = pair.Server;
+
+        var changed = new Dictionary<Type, HashSet<string>>();
+        server.ProtoMan.LoadString(InvalidOverrideProfiles, changed: changed);
+        await server.WaitPost(() => server.ProtoMan.ReloadPrototypes(changed));
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+
+            var emptyOverride = GetProfile(prototypes, factory, "CMURoundForceAsrsEmptyOverrideTest");
+            var emptyException = Assert.Throws<RoundAsrsCatalogResolutionException>(() =>
+                RoundForceAsrsProfileCompiler.Compile(emptyOverride));
+            Assert.That(emptyException!.Code, Is.EqualTo(RoundAsrsCatalogError.EmptyTermsOverride));
+
+            Assert.Throws<ArgumentException>(() => RoundForceAsrsProfileCompiler.Compile(
+                GetProfile(prototypes, factory, "CMURoundForceAsrsUnchangedPolicyTest")));
+            Assert.Throws<ArgumentException>(() => RoundForceAsrsProfileCompiler.Compile(
+                GetProfile(prototypes, factory, "CMURoundForceAsrsMissingReplacementPolicyTest")));
+            Assert.Throws<ArgumentException>(() => RoundForceAsrsProfileCompiler.Compile(
+                GetProfile(prototypes, factory, "CMURoundForceAsrsClearPolicyTest")));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static async Task AssertCompiledProfile(
+        string yaml,
+        string profileId,
+        Action<ResolvedRoundAsrsCatalog> assertion)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
+        var server = pair.Server;
+
+        var changed = new Dictionary<Type, HashSet<string>>();
+        server.ProtoMan.LoadString(yaml, changed: changed);
+        await server.WaitPost(() => server.ProtoMan.ReloadPrototypes(changed));
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+            var resolved = RoundForceAsrsProfileCompiler.Compile(
+                GetProfile(prototypes, factory, profileId));
+            assertion(resolved);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static RoundForceAsrsProfileComponent GetProfile(
+        IPrototypeManager prototypes,
+        IComponentFactory factory,
+        string profileId)
+    {
+        var entity = prototypes.Index<EntityPrototype>(profileId);
+        Assert.That(
+            entity.TryGetComponent<RoundForceAsrsProfileComponent>(out var profile, factory),
+            Is.True);
+        return profile!;
     }
 
     private sealed record ExpectedOffer(string Id, string Crate, int Cost);
