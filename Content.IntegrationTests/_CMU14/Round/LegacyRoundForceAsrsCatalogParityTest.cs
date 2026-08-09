@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.Storage.Components;
 using Robust.Shared.Prototypes;
 using Robust.UnitTesting.Pool;
 
@@ -13,6 +14,9 @@ namespace Content.IntegrationTests._CMU14.Round;
 [TestFixture]
 public sealed class LegacyRoundForceAsrsCatalogParityTest
 {
+    private const string CommonPouchCrate = "RMCCrateClothingMagazinePouchesLarge";
+    private const string WeyuPouchCrate = "RMCCrateClothingMagazinePouchesLargePMC";
+
     private static readonly ExpectedCatalog[] ExpectedCatalogs =
     [
         new("USCM", "USCMCargoCatalog", 18, 162, "34582B81F690A54DE8151FB428857CB8DD005D9FB9081DC4DFEAD7FAE1767D71"),
@@ -25,6 +29,21 @@ public sealed class LegacyRoundForceAsrsCatalogParityTest
         new("VAIPO", "VAIPOCargoCatalog", 18, 159, "EAC629256AA34AAE45CDC9A535DD8A0488AFE343A168803D7D18F9FFB2117342"),
         new("RMC", "RMCCargoCatalog", 18, 160, "3D809151C0158CAEDDCC4ACEF966E2CDD6B7CCACD00F5BF43B084D69AD40DAB6"),
     ];
+
+    private static readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>> ExpectedPouchCrates =
+        new Dictionary<string, IReadOnlyDictionary<string, int>>
+        {
+            [CommonPouchCrate] = new Dictionary<string, int>
+            {
+                ["RMCPouchMagazineLarge"] = 2,
+                ["RMCPouchMagazinePistolLarge"] = 2,
+            },
+            [WeyuPouchCrate] = new Dictionary<string, int>
+            {
+                ["RMCPouchMagazineLargePMC"] = 2,
+                ["RMCPouchMagazinePistolLarge"] = 2,
+            },
+        };
 
     [Test]
     public async Task EverySelectableForceKeepsItsIntendedAsrsOffersAndPrices()
@@ -73,6 +92,64 @@ public sealed class LegacyRoundForceAsrsCatalogParityTest
                 mismatches,
                 Is.Empty,
                 $"Resolved ASRS catalog parity changed:{Environment.NewLine}{string.Join(Environment.NewLine, mismatches)}");
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task IntendedPouchOffersKeepDistinctCratesAndContents()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var factory = server.EntMan.ComponentFactory;
+
+            Assert.Multiple(() =>
+            {
+                foreach (var (crateId, expectedContents) in ExpectedPouchCrates)
+                {
+                    Assert.That(
+                        prototypes.TryIndex<EntityPrototype>(crateId, out var crate),
+                        Is.True,
+                        $"Missing intended ASRS pouch crate {crateId}");
+                    Assert.That(
+                        crate!.TryGetComponent<StorageFillComponent>(out var storage, factory),
+                        Is.True,
+                        $"{crateId} has no StorageFill component");
+
+                    var actualContents = storage!.Contents
+                        .Where(entry => entry.PrototypeId != null)
+                        .ToDictionary(entry => entry.PrototypeId!.Value, entry => entry.Amount);
+                    Assert.That(actualContents, Has.Count.EqualTo(expectedContents.Count),
+                        $"{crateId} changed its intended item count");
+                    foreach (var (itemId, amount) in expectedContents)
+                    {
+                        Assert.That(actualContents.TryGetValue(itemId, out var actualAmount), Is.True,
+                            $"{crateId} is missing {itemId}");
+                        Assert.That(actualAmount, Is.EqualTo(amount),
+                            $"{crateId} should contain {amount}x {itemId}");
+                    }
+                }
+
+                foreach (var expected in ExpectedCatalogs)
+                {
+                    var catalog = prototypes.Index<EntityPrototype>(expected.CatalogId);
+                    Assert.That(
+                        catalog.TryGetComponent<RequisitionsComputerComponent>(out var requisitions, factory),
+                        Is.True,
+                        $"{expected.CatalogId} has no RequisitionsComputer component");
+                    var pouches = requisitions!.Categories.Single(category => category.Name == "Pouches");
+                    var expectedCrate = expected.ForceId == "WEYU" ? WeyuPouchCrate : CommonPouchCrate;
+                    Assert.That(
+                        pouches.Entries.Any(entry => entry.Crate == expectedCrate),
+                        Is.True,
+                        $"{expected.ForceId} no longer sells {expectedCrate}");
+                }
+            });
         });
 
         await pair.CleanReturnAsync();

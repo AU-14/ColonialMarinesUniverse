@@ -1,0 +1,23 @@
+- type: entity
+  id: RMCCrateClothingMagazinePouchesLarge
+  parent: RMCCrateBase
+  name: large magazine pouches crate (2x Pistol, Magazine)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCPouchMagazineLarge
+        amount: 2
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
+
+- type: entity
+  id: RMCCrateClothingMagazinePouchesLargePMC
+  parent: RMCCrateBase
+  name: large magazine pouches crate (2x Pistol, Magazine)
+  components:
+  - type: StorageFill
+    contents:
+      - id: RMCPouchMagazineLargePMC
+        amount: 2
+      - id: RMCPouchMagazinePistolLarge
+        amount: 2
