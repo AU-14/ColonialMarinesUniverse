@@ -27,6 +27,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
     [Dependency] private GameTicker _ticker = default!;
@@ -198,18 +199,15 @@ public sealed partial class ClfSpawnSystem : EntitySystem
                 "CLF Spawn System: Scenario Plan CLF civilian markers resolved but no live civilian spawn markers remained.");
         }
 
-        var candidates = new List<EntityCoordinates>();
-        EntityQueryEnumerator<SpawnPointComponent, TransformComponent> spawnPoints
-            = EntityQueryEnumerator<SpawnPointComponent, TransformComponent>();
-        while (spawnPoints.MoveNext(out _, out SpawnPointComponent? sp, out TransformComponent? xform))
-        {
-            if (sp.Job != null &&
-                string.Equals(sp.Job.ToString(), ColonyCivilianJobId,
-                    StringComparison.OrdinalIgnoreCase))
-                candidates.Add(xform.Coordinates);
-        }
+        var indexedMarkers = new List<EntityUid>();
+        // CLF maps can span several Robust maps in one Z-level network. The legacy query included all initialized
+        // maps, so the compatibility fallback must retain those auxiliary-deck spawn points.
+        _roundWorld.CopyClfCivilianSpawnMarkers(RoundWorldScope.EveryMap(), indexedMarkers);
+        List<EntityUid> candidates = FilterCivilianSpawnMarkers(indexedMarkers);
 
-        return candidates.Count > 0 ? _random.Pick(candidates) : null;
+        return candidates.Count > 0
+            ? Transform(_random.Pick(candidates)).Coordinates
+            : null;
     }
 
     private List<EntityUid> GetSafehouseMarkers()
@@ -244,11 +242,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     private List<EntityUid> GetLegacySafehouseMarkers()
     {
         var markers = new List<EntityUid>();
-        EntityQueryEnumerator<SafehouseMarkerComponent> query = EntityQueryEnumerator<SafehouseMarkerComponent>();
-        while (query.MoveNext(out EntityUid uid, out _))
-        {
-            markers.Add(uid);
-        }
+        _roundWorld.CopyClfSafehouseMarkers(RoundWorldScope.EveryMap(), markers);
 
         if (markers.Count > 0)
             Log.Debug($"CLF Spawn System: Falling back to {markers.Count} legacy safehouse marker(s).");

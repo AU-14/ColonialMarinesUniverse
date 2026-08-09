@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Spawners;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Scenario;
+using Content.Shared.AU14.util;
 using Content.Shared.GameTicking;
 using Content.Shared.Roles;
 using Robust.Shared.Map;
@@ -12,9 +13,10 @@ using Robust.Shared.Prototypes;
 namespace Content.Server.AU14.Scenario;
 
 /// <summary>
-/// Maintains a semantic index of initialized round spawn markers.
+/// Maintains the live, factual index used to discover initialized round-world spawn markers.
+/// Gameplay systems retain ownership of selection policy, cooldowns, randomness, and spawning.
 /// </summary>
-public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
+public sealed partial class CMURoundWorldIndexSystem : EntitySystem
 {
     private static readonly ProtoId<JobPrototype> ColonyCivilianJob = "AU14JobCivilianColonist";
 
@@ -24,7 +26,10 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
     private static readonly string GenericMarkerIdTag = ScenarioMarkerTags.MarkerId(string.Empty);
     private static readonly string LeaderBucketTag = ScenarioMarkerTags.Bucket(nameof(ThreatMarkerType.Leader));
     private static readonly string MemberBucketTag = ScenarioMarkerTags.Bucket(nameof(ThreatMarkerType.Member));
+    private static readonly string[] ClfCivilianSpawnTags = [ColonyCivilianSpawnTag];
+    private static readonly string[] ClfSafehouseTags = [ScenarioMarkerTags.ForceClfSafehouse];
 
+    [Dependency] private EntityQuery<AuInsertMarkerComponent> _insertQuery = default!;
     [Dependency] private EntityQuery<XenoLeaderSpawnPointComponent> _leaderQuery = default!;
     [Dependency] private EntityQuery<XenoSpawnPointComponent> _memberQuery = default!;
     [Dependency] private EntityQuery<MetaDataComponent> _metaQuery = default!;
@@ -36,7 +41,7 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
     [Dependency] private EntityQuery<ThreatSpawnMarkerComponent> _threatQuery = default!;
     [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
-    private readonly ScenarioSpawnIndexStore _index = new();
+    private readonly RoundWorldSpawnMarkerStore _index = new();
 
     public override void Initialize()
     {
@@ -44,6 +49,7 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
 
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
 
+        SubscribeLocalEvent<AuInsertMarkerComponent, MapInitEvent>(OnInsertMarkerMapInit);
         SubscribeLocalEvent<ParachuteMarkerComponent, MapInitEvent>(OnParachuteMarkerMapInit);
         SubscribeLocalEvent<SafehouseMarkerComponent, MapInitEvent>(OnSafehouseMarkerMapInit);
         SubscribeLocalEvent<ScenarioSpawnMarkerComponent, MapInitEvent>(OnScenarioMarkerMapInit);
@@ -54,42 +60,123 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
     }
 
     /// <summary>
-    /// Resolves live markers on one map without scanning each marker component store.
+    /// Copies live markers in a world scope without scanning each marker component store.
+    /// The destination is always cleared before results are written.
     /// </summary>
-    public List<EntityUid> Resolve(MapId mapId, IReadOnlyList<string> requiredTags)
+    public void CopySpawnMarkers(
+        in RoundWorldScope scope,
+        IReadOnlyList<string> requiredTags,
+        List<EntityUid> destination)
+    {
+        CopySpawnMarkers(scope, requiredTags, destination, scenarioTagsAreAuthoritative: false);
+    }
+
+    private void CopySpawnMarkers(
+        in RoundWorldScope scope,
+        IReadOnlyList<string> requiredTags,
+        List<EntityUid> destination,
+        bool scenarioTagsAreAuthoritative)
     {
         using var profile = _prof.Group("CMU Round Spawn Index Query");
 
-        var markers = new List<EntityUid>();
-        if (!_index.TryCopyCandidates(requiredTags, markers))
-            return markers;
+        if (!_index.TryCopyCandidates(requiredTags, destination))
+            return;
 
-        var candidateCount = markers.Count;
+        var candidateCount = destination.Count;
         var writeIndex = 0;
-        for (var i = 0; i < markers.Count; i++)
+        for (var i = 0; i < destination.Count; i++)
         {
-            var uid = markers[i];
-            if (!MarkerMatches(uid, mapId, requiredTags))
+            var uid = destination[i];
+            if (!MarkerMatches(uid, scope, requiredTags, scenarioTagsAreAuthoritative))
                 continue;
 
-            markers[writeIndex++] = uid;
+            destination[writeIndex++] = uid;
         }
 
-        if (writeIndex < markers.Count)
-            markers.RemoveRange(writeIndex, markers.Count - writeIndex);
+        if (writeIndex < destination.Count)
+            destination.RemoveRange(writeIndex, destination.Count - writeIndex);
 
         if (_prof.IsEnabled)
         {
             _prof.WriteValue("CMU Round Spawn Index Candidates", candidateCount);
-            _prof.WriteValue("CMU Round Spawn Index Matches", markers.Count);
+            _prof.WriteValue("CMU Round Spawn Index Matches", destination.Count);
         }
+    }
+
+    /// <summary>
+    /// Resolves canonical Scenario Plan markers on one map. Explicit scenario tags take precedence over legacy
+    /// components on hybrid marker entities, preserving Scenario Plan migration semantics.
+    /// </summary>
+    public List<EntityUid> ResolveScenarioSpawnMarkers(MapId mapId, IReadOnlyList<string> requiredTags)
+    {
+        var markers = new List<EntityUid>();
+        CopySpawnMarkers(
+            RoundWorldScope.Map(mapId),
+            requiredTags,
+            markers,
+            scenarioTagsAreAuthoritative: true);
 
         return markers;
+    }
+
+    /// <summary>
+    /// Copies normalized hostile or third-party force markers into a caller-owned result.
+    /// </summary>
+    public void CopyForceSpawnMarkers(
+        in RoundWorldScope scope,
+        bool thirdParty,
+        ThreatMarkerType markerType,
+        string markerId,
+        bool parachute,
+        List<EntityUid> destination)
+    {
+        var forceTag = thirdParty
+            ? ScenarioMarkerTags.ForceThirdParty
+            : ScenarioMarkerTags.ForceHostile;
+        var bucketTag = ScenarioMarkerTags.Bucket(markerType.ToString());
+        var markerIdTag = ScenarioMarkerTags.MarkerId(markerId);
+        string[] tags = parachute
+            ? [forceTag, bucketTag, markerIdTag, ScenarioMarkerTags.EntryParachute]
+            : [forceTag, bucketTag, markerIdTag];
+
+        CopySpawnMarkers(scope, tags, destination);
+    }
+
+    /// <summary>
+    /// Copies normalized CLF safehouse markers into a caller-owned result.
+    /// </summary>
+    public void CopyClfSafehouseMarkers(in RoundWorldScope scope, List<EntityUid> destination)
+    {
+        CopySpawnMarkers(scope, ClfSafehouseTags, destination);
+    }
+
+    /// <summary>
+    /// Copies normalized CLF civilian backup spawn points into a caller-owned result.
+    /// </summary>
+    public void CopyClfCivilianSpawnMarkers(in RoundWorldScope scope, List<EntityUid> destination)
+    {
+        CopySpawnMarkers(scope, ClfCivilianSpawnTags, destination);
+    }
+
+    /// <summary>
+    /// Refreshes the indexed semantic facts for a marker whose mutable marker fields were changed after map init.
+    /// Prototype-authored marker semantics are otherwise treated as immutable for the life of the initialized entity.
+    /// </summary>
+    public void RefreshMarkerFacts(EntityUid uid)
+    {
+        _index.RemoveMarker(uid);
+        if (!TerminatingOrDeleted(uid) && HasIndexedMarkerFact(uid))
+            IndexMarker(uid);
     }
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _index.Clear();
+    }
+
+    private void OnInsertMarkerMapInit(Entity<AuInsertMarkerComponent> ent, ref MapInitEvent args)
+    {
+        IndexMarker(ent.Owner);
     }
 
     private void OnParachuteMarkerMapInit(Entity<ParachuteMarkerComponent> ent, ref MapInitEvent args)
@@ -131,15 +218,18 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
     {
         _index.AddMarker(uid);
 
+        if (_insertQuery.HasComponent(uid))
+            _index.AddTag(uid, ScenarioMarkerTags.EntryGround);
+
+        if (_parachuteQuery.HasComponent(uid))
+            _index.AddTag(uid, ScenarioMarkerTags.EntryParachute);
+
         if (_scenarioQuery.TryGetComponent(uid, out var scenario))
         {
             foreach (var tag in scenario.Tags)
             {
                 _index.AddTag(uid, tag);
             }
-
-            if (_parachuteQuery.HasComponent(uid))
-                _index.AddTag(uid, ScenarioMarkerTags.EntryParachute);
         }
 
         if (_threatQuery.TryGetComponent(uid, out var threat))
@@ -149,8 +239,6 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
                 threat.ThirdParty ? ScenarioMarkerTags.ForceThirdParty : ScenarioMarkerTags.ForceHostile);
             _index.AddTag(uid, BucketTag(threat.ThreatMarkerType));
             _index.AddTag(uid, ScenarioMarkerTags.MarkerId(threat.ID));
-            if (_parachuteQuery.HasComponent(uid))
-                _index.AddTag(uid, ScenarioMarkerTags.EntryParachute);
         }
 
         if (_safehouseQuery.HasComponent(uid))
@@ -169,6 +257,18 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
             IndexLegacyXenoMarker(uid, MemberBucketTag);
     }
 
+    private bool HasIndexedMarkerFact(EntityUid uid)
+    {
+        return _insertQuery.HasComponent(uid) ||
+               _parachuteQuery.HasComponent(uid) ||
+               _safehouseQuery.HasComponent(uid) ||
+               _scenarioQuery.HasComponent(uid) ||
+               _spawnPointQuery.HasComponent(uid) ||
+               _threatQuery.HasComponent(uid) ||
+               _leaderQuery.HasComponent(uid) ||
+               _memberQuery.HasComponent(uid);
+    }
+
     private void IndexLegacyXenoMarker(EntityUid uid, string bucketTag)
     {
         _index.AddTag(uid, ScenarioMarkerTags.ForceHostile);
@@ -176,7 +276,11 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
         _index.AddTag(uid, GenericMarkerIdTag);
     }
 
-    private bool MarkerMatches(EntityUid uid, MapId mapId, IReadOnlyList<string> requiredTags)
+    private bool MarkerMatches(
+        EntityUid uid,
+        in RoundWorldScope scope,
+        IReadOnlyList<string> requiredTags,
+        bool scenarioTagsAreAuthoritative)
     {
         if (TerminatingOrDeleted(uid) ||
             !_metaQuery.TryGetComponent(uid, out var meta) ||
@@ -186,18 +290,34 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
             return false;
         }
 
-        if (meta.EntityPaused || transform.MapID != mapId)
+        if (meta.EntityPaused ||
+            (!scope.IncludesEveryMap && transform.MapID != scope.MapId) ||
+            (scope.GridUid is { } gridUid && !IsOnGrid(transform, gridUid)))
+        {
             return false;
+        }
+
+        if (_insertQuery.HasComponent(uid) && SingleTagMatches(ScenarioMarkerTags.EntryGround, requiredTags))
+            return true;
 
         var parachute = _parachuteQuery.HasComponent(uid);
         if (_scenarioQuery.TryGetComponent(uid, out var scenario))
-            return ScenarioMarkerMatches(scenario, parachute, requiredTags);
+        {
+            if (ScenarioMarkerMatches(scenario, parachute, requiredTags))
+                return true;
+
+            if (scenarioTagsAreAuthoritative)
+                return false;
+        }
 
         if (_threatQuery.TryGetComponent(uid, out var threat) &&
             ThreatMarkerMatches(threat, parachute, requiredTags))
         {
             return true;
         }
+
+        if (parachute && SingleTagMatches(ScenarioMarkerTags.EntryParachute, requiredTags))
+            return true;
 
         if (_safehouseQuery.HasComponent(uid) &&
             SingleTagMatches(ScenarioMarkerTags.ForceClfSafehouse, requiredTags))
@@ -218,8 +338,18 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
             return true;
         }
 
-        return _memberQuery.HasComponent(uid) &&
-               LegacyXenoMarkerMatches(MemberBucketTag, requiredTags);
+        if (_memberQuery.HasComponent(uid) &&
+            LegacyXenoMarkerMatches(MemberBucketTag, requiredTags))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private static bool IsOnGrid(TransformComponent transform, EntityUid gridUid)
+    {
+        return transform.GridUid == gridUid || transform.ParentUid == gridUid;
     }
 
     private static bool ScenarioMarkerMatches(
@@ -227,6 +357,9 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
         bool parachute,
         IReadOnlyList<string> requiredTags)
     {
+        if (!ScenarioMarkerKindMatches(marker.Kind, requiredTags))
+            return false;
+
         foreach (var required in requiredTags)
         {
             if (parachute &&
@@ -247,6 +380,41 @@ public sealed partial class ScenarioSpawnIndexSystem : EntitySystem
 
             if (!found)
                 return false;
+        }
+
+        return true;
+    }
+
+    private static bool ScenarioMarkerKindMatches(
+        SpawnMarkerKind kind,
+        IReadOnlyList<string> requiredTags)
+    {
+        foreach (var required in requiredTags)
+        {
+            if (required.Equals(ScenarioMarkerTags.ForceHostile, StringComparison.OrdinalIgnoreCase) &&
+                kind != SpawnMarkerKind.ThreatMarker)
+            {
+                return false;
+            }
+
+            if (required.Equals(ScenarioMarkerTags.ForceThirdParty, StringComparison.OrdinalIgnoreCase) &&
+                kind != SpawnMarkerKind.ThirdPartyMarker)
+            {
+                return false;
+            }
+
+            if (required.Equals(ScenarioMarkerTags.ForceClfSafehouse, StringComparison.OrdinalIgnoreCase) &&
+                kind != SpawnMarkerKind.ClfSafehouse)
+            {
+                return false;
+            }
+
+            if (required.StartsWith(ScenarioMarkerTags.ForceClfCivilianSpawnPrefix,
+                    StringComparison.OrdinalIgnoreCase) &&
+                kind != SpawnMarkerKind.ClfCivilianSpawn)
+            {
+                return false;
+            }
         }
 
         return true;

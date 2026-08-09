@@ -14,18 +14,22 @@ using Content.Server._RMC14.Requisitions;
 using Content.Shared._RMC14.Telephone;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared.AU14;
+using Robust.Shared.Profiling;
+using Robust.Shared.Random;
 
 namespace Content.Server.AU14.Round;
 
 public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawnRuleComponent>
 {
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
-    [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private ProfManager _prof = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
     // Store selected platoons in the system
@@ -97,18 +101,24 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         SelectedGovforPlatoon = govPlatoon;
         SelectedOpforPlatoon = opPlatoon;
 
+        var includesShipSetup = planetComp.GovforInShip || planetComp.OpforInShip;
+        var initialInventory = CaptureInitialSetupInventory(includesShipSetup);
+
         // --- SHIP VENDOR MARKER LOGIC ---
-        if ((planetComp.GovforInShip || planetComp.OpforInShip))
+        if (includesShipSetup)
         {
             var usedShipMarkers = new HashSet<EntityUid>();
-            var factionShipsQuery = AllEntityQuery<ShipFactionComponent>();
-            while (factionShipsQuery.MoveNext(out var shipUid, out var shipFaction))
+            foreach (var shipUid in initialInventory.Ships)
             {
-                var shipTransform = _entityManager.GetComponent<TransformComponent>(shipUid);
+                if (!TryComp(shipUid, out ShipFactionComponent? shipFaction) ||
+                    !TryComp(shipUid, out TransformComponent? shipTransform))
+                {
+                    continue;
+                }
 
                 // Ensure any existing rotary phones that belong to this ship inherit the ship faction
                 if (!string.IsNullOrEmpty(shipFaction.Faction))
-                    SetPhonesFactionForParent(shipUid, shipFaction.Faction);
+                    SetPhonesFactionForParent(initialInventory, shipUid, shipTransform, shipFaction.Faction);
 
                 PlatoonPrototype? shipPlatoon = null;
                 if (shipFaction.Faction == "govfor" && planetComp.GovforInShip && govPlatoon != null)
@@ -118,11 +128,13 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                 else
                     continue;
 
-                var shipMarkers = AllEntityQuery<VendorMarkerComponent>();
-                while (shipMarkers.MoveNext(out var markerUid, out var markerComp))
+                var shipMarkers = initialInventory.GetShipMarkers(shipUid);
+                for (var i = 0; i < shipMarkers.Count; i++)
                 {
-                    var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
-                    if (!markerComp.Ship ||
+                    var markerUid = shipMarkers[i];
+                    if (!TryComp(markerUid, out VendorMarkerComponent? markerComp) ||
+                        !TryComp(markerUid, out TransformComponent? transform) ||
+                        !markerComp.Ship ||
                         !IsMarkerOnShipOrZLevel(shipUid, shipTransform, transform) ||
                         !usedShipMarkers.Add(markerUid))
                     {
@@ -457,13 +469,15 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             }
         }
 
-        // Find all vendor markers in the map
-        var vendorMarkersQuery = AllEntityQuery<VendorMarkerComponent>();
+        // Process the planet-wide view in the original vendor component-query order.
         var usedMarkers = new HashSet<EntityUid>();
-        // foreach (var marker in query)
-        while (vendorMarkersQuery.MoveNext(out var markerUid, out var markerComp))
+        foreach (var markerUid in initialInventory.VendorMarkers)
         {
-            var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
+            if (!TryComp(markerUid, out VendorMarkerComponent? markerComp) ||
+                !TryComp(markerUid, out TransformComponent? transform))
+            {
+                continue;
+            }
 
             // Skip markers that are both or neither
             if ((markerComp.Govfor && markerComp.Opfor) || (!markerComp.Govfor && !markerComp.Opfor))
@@ -537,15 +551,98 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         HandlePlatoonShuttleSpawns(planetComp, govPlatoon, opPlatoon);
     }
 
+    internal PlatoonInitialSetupInventory CaptureInitialSetupInventory(bool includeShipSetup)
+    {
+        using var profile = _prof.Group("CMU Platoon Initial Setup Inventory");
+        var inventory = new PlatoonInitialSetupInventory();
+        var networkByMap = new Dictionary<EntityUid, EntityUid?>();
+
+        if (includeShipSetup)
+        {
+            var shipQuery = AllEntityQuery<ShipFactionComponent>();
+            while (shipQuery.MoveNext(out var ship, out _))
+            {
+                if (!TryComp(ship, out TransformComponent? transform))
+                    continue;
+
+                inventory.AddShip(
+                    ship,
+                    transform.GridUid,
+                    transform.MapUid,
+                    ResolveZNetworkOwner(transform.MapUid, networkByMap));
+            }
+        }
+
+        var markerQuery = AllEntityQuery<VendorMarkerComponent>();
+        while (markerQuery.MoveNext(out var marker, out _))
+        {
+            if (!TryComp(marker, out TransformComponent? transform))
+                continue;
+
+            inventory.AddVendorMarker(
+                marker,
+                transform.ParentUid,
+                transform.GridUid,
+                transform.MapUid,
+                includeShipSetup
+                    ? ResolveZNetworkOwner(transform.MapUid, networkByMap)
+                    : null);
+        }
+
+        if (includeShipSetup)
+        {
+            var phoneQuery = AllEntityQuery<RotaryPhoneComponent>();
+            while (phoneQuery.MoveNext(out var phone, out _))
+            {
+                if (!TryComp(phone, out TransformComponent? transform))
+                    continue;
+
+                inventory.AddPhone(phone, transform.ParentUid, transform.GridUid);
+            }
+        }
+
+        if (_prof.IsEnabled)
+        {
+            _prof.WriteValue("CMU Platoon Initial Setup Ships", inventory.Ships.Count);
+            _prof.WriteValue("CMU Platoon Initial Setup Vendor Markers", inventory.VendorMarkers.Count);
+            _prof.WriteValue("CMU Platoon Initial Setup Phones", inventory.IndexedPhones);
+            _prof.WriteValue("CMU Platoon Initial Setup Ship Marker Assignments", inventory.ShipMarkerAssignments);
+            _prof.WriteValue("CMU Platoon Initial Setup Ship Phone Assignments", inventory.ShipPhoneAssignments);
+        }
+
+        return inventory;
+    }
+
+    private EntityUid? ResolveZNetworkOwner(
+        EntityUid? map,
+        Dictionary<EntityUid, EntityUid?> networkByMap)
+    {
+        if (map is not { } mapUid)
+            return null;
+
+        if (networkByMap.TryGetValue(mapUid, out var cached))
+            return cached;
+
+        EntityUid? network = null;
+        if (_zLevels.TryGetZNetwork(mapUid, out var resolved))
+            network = resolved.Value.Owner;
+
+        networkByMap.Add(mapUid, network);
+        return network;
+    }
+
     private void HandlePlatoonShuttleSpawns(
         RMCPlanetMapPrototypeComponent planetComp,
         PlatoonPrototype? govPlatoon,
         PlatoonPrototype? opPlatoon)
     {
-        // Track destinations already handed out this round so multiple ships of the same
-        // faction/type don't all pile onto the same LZ.
-        var usedDestinations = new HashSet<EntityUid>();
-        var destinationRandom = new Random();
+        if (govPlatoon == null && opPlatoon == null)
+            return;
+
+        using var profile = _prof.Group("CMU Platoon Shuttle Setup");
+        var destinations = CaptureDestinationPool();
+        var indexedEntities = 0;
+        var indexedGrids = 0;
 
         LoadPlatoonShuttles(
             planetComp,
@@ -553,8 +650,9 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             "govfor",
             planetComp.govfordropships,
             planetComp.govforfighters,
-            usedDestinations,
-            destinationRandom);
+            destinations,
+            ref indexedGrids,
+            ref indexedEntities);
 
         LoadPlatoonShuttles(
             planetComp,
@@ -562,8 +660,16 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
             "opfor",
             planetComp.opfordropships,
             planetComp.opforfighters,
-            usedDestinations,
-            destinationRandom);
+            destinations,
+            ref indexedGrids,
+            ref indexedEntities);
+
+        if (_prof.IsEnabled)
+        {
+            _prof.WriteValue("CMU Platoon Shuttle Setup Destinations", destinations.Count);
+            _prof.WriteValue("CMU Platoon Shuttle Setup Grids", indexedGrids);
+            _prof.WriteValue("CMU Platoon Shuttle Setup Indexed Entities", indexedEntities);
+        }
     }
 
     private void LoadPlatoonShuttles(
@@ -572,122 +678,134 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         string faction,
         int dropshipCount,
         int fighterCount,
-        HashSet<EntityUid> usedDestinations,
-        Random destinationRandom)
+        PlatoonDestinationPool destinations,
+        ref int indexedGrids,
+        ref int indexedEntities)
     {
         if (platoon == null)
             return;
 
-        var mapRandom = new Random();
         var dropships = platoon.CompatibleDropships.ToList();
         for (var i = 0; i < dropshipCount && dropships.Count > 0; i++)
         {
-            var index = mapRandom.Next(dropships.Count);
+            var index = _random.Next(dropships.Count);
             var mapId = dropships[index];
             dropships.RemoveAt(index);
 
-            if (!_mapLoader.TryLoadMap(mapId, out _, out var grids))
+            if (!_mapLoader.TryLoadMap(mapId, out var loadedMap, out var grids))
                 continue;
 
+            var indexedDestinations = false;
             foreach (var grid in grids)
             {
                 var gridMapId = _entityManager.GetComponent<TransformComponent>(grid).MapID;
                 _mapSystem.InitializeMap(gridMapId);
-                PrepareLoadedShuttleGrid(grid, faction, planetComp);
+
+                if (!indexedDestinations)
+                {
+                    AddDestinationsInScope(loadedMap.Value.Owner, destinations);
+                    indexedDestinations = true;
+                }
+
+                var inventory = CaptureGridSetupInventory(grid);
+                indexedGrids++;
+                indexedEntities += inventory.IndexedEntities;
+                PrepareLoadedShuttleGrid(inventory, faction, planetComp);
                 SpawnShuttleConsoleMarkers(
-                    grid,
+                    inventory,
                     faction,
                     DropshipDestinationComponent.DestinationType.Dropship,
                     "dropshipshuttlevmarker");
                 TryFlyShuttleToDestination(
-                    grid,
+                    inventory,
                     faction,
                     DropshipDestinationComponent.DestinationType.Dropship,
                     planetComp,
-                    usedDestinations,
-                    destinationRandom);
+                    destinations);
             }
         }
 
         var fighters = platoon.CompatibleFighters.ToList();
         for (var i = 0; i < fighterCount && fighters.Count > 0; i++)
         {
-            var index = mapRandom.Next(fighters.Count);
+            var index = _random.Next(fighters.Count);
             var fighterMap = fighters[index];
             fighters.RemoveAt(index);
 
-            if (!_mapLoader.TryLoadGrid(fighterMap, out _, out var grid))
+            if (!_mapLoader.TryLoadGrid(fighterMap, out var loadedMap, out var grid))
                 continue;
 
-            PrepareLoadedShuttleGrid(grid.Value, faction, planetComp);
+            AddDestinationsInScope(loadedMap.Value.Owner, destinations);
+            var inventory = CaptureGridSetupInventory(grid.Value);
+            indexedGrids++;
+            indexedEntities += inventory.IndexedEntities;
+            PrepareLoadedShuttleGrid(inventory, faction, planetComp);
             SpawnShuttleConsoleMarkers(
-                grid.Value,
+                inventory,
                 faction,
                 DropshipDestinationComponent.DestinationType.Figher,
                 "dropshipfighterdestmarker");
             TryFlyShuttleToDestination(
-                grid.Value,
+                inventory,
                 faction,
                 DropshipDestinationComponent.DestinationType.Figher,
                 planetComp,
-                usedDestinations,
-                destinationRandom);
+                destinations);
         }
     }
 
     private void PrepareLoadedShuttleGrid(
-        EntityUid grid,
+        PlatoonGridSetupInventory inventory,
         string faction,
         RMCPlanetMapPrototypeComponent planetComp)
     {
-        SetPhonesFactionOnGrid(grid, faction);
+        SetPhonesFactionOnGrid(inventory, faction);
 
         if (faction == "opfor" && planetComp.OpforInShip)
-            OffsetLaddersOnGrid(grid, 100);
+            OffsetLaddersOnGrid(inventory, 100);
     }
 
     private void SpawnShuttleConsoleMarkers(
-        EntityUid grid,
+        PlatoonGridSetupInventory inventory,
         string faction,
         DropshipDestinationComponent.DestinationType type,
         string navigationMarkerProtoId)
     {
-        var navigationMarkers = FindMarkersOnGrid(grid, navigationMarkerProtoId);
+        var navigationMarkers = inventory.GetMarkers(navigationMarkerProtoId);
         if (navigationMarkers.Count > 0)
         {
             var navigationProto = faction == "govfor"
                 ? "CMComputerDropshipNavigationGovfor"
                 : "CMComputerDropshipNavigationOpfor";
-            foreach (var markerUid in navigationMarkers)
-                SpawnWeaponsConsole(navigationProto, markerUid, faction, type);
+            for (var i = 0; i < navigationMarkers.Count; i++)
+                SpawnWeaponsConsole(navigationProto, navigationMarkers[i], faction, type, inventory);
         }
 
-        var weaponsMarkers = FindMarkersOnGrid(grid, "dropshipweaponsvmarker");
+        var weaponsMarkers = inventory.GetMarkers("dropshipweaponsvmarker");
         if (weaponsMarkers.Count == 0)
             return;
 
         var weaponsProto = faction == "govfor"
             ? "CMComputerDropshipWeaponsGovfor"
             : "CMComputerDropshipWeaponsOpfor";
-        foreach (var markerUid in weaponsMarkers)
-            SpawnWeaponsConsole(weaponsProto, markerUid, faction, type);
+        for (var i = 0; i < weaponsMarkers.Count; i++)
+            SpawnWeaponsConsole(weaponsProto, weaponsMarkers[i], faction, type, inventory);
     }
 
     private void TryFlyShuttleToDestination(
-        EntityUid grid,
+        PlatoonGridSetupInventory inventory,
         string faction,
         DropshipDestinationComponent.DestinationType type,
         RMCPlanetMapPrototypeComponent planetComp,
-        HashSet<EntityUid> usedDestinations,
-        Random destinationRandom)
+        PlatoonDestinationPool destinations)
     {
         EntityUid? destination = null;
         if (UsesShipDestination(planetComp, faction))
-            destination = FindDestination(faction, type, usedDestinations, destinationRandom, grid);
+            destination = FindDestination(faction, type, destinations, inventory.Grid);
 
-        destination ??= FindDestination(faction, type, usedDestinations, destinationRandom);
+        destination ??= FindDestination(faction, type, destinations);
 
-        var navComputer = FindNavComputerOnGrid(grid);
+        var navComputer = FindNavComputerOnGrid(inventory);
         if (destination == null || navComputer == null)
             return;
 
@@ -696,65 +814,132 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         _sharedDropshipSystem.FlyTo(navEntity, destination.Value, null);
     }
 
-    private EntityUid? FindDestination(
+    internal PlatoonDestinationPool CaptureDestinationPool()
+    {
+        var destinations = new PlatoonDestinationPool();
+        var query = AllEntityQuery<DropshipDestinationComponent>();
+        while (query.MoveNext(out var destination, out _))
+        {
+            destinations.Add(destination);
+        }
+
+        return destinations;
+    }
+
+    private void AddDestinationsInScope(EntityUid root, PlatoonDestinationPool destinations)
+    {
+        var pending = new List<EntityUid> { root };
+        while (pending.Count > 0)
+        {
+            var index = pending.Count - 1;
+            var current = pending[index];
+            pending.RemoveAt(index);
+
+            if (!TryComp(current, out TransformComponent? transform))
+                continue;
+
+            if (HasComp<DropshipDestinationComponent>(current))
+                destinations.Add(current);
+
+            var children = transform.ChildEnumerator;
+            while (children.MoveNext(out var child))
+            {
+                pending.Add(child);
+            }
+        }
+    }
+
+    internal PlatoonGridSetupInventory CaptureGridSetupInventory(EntityUid grid)
+    {
+        var inventory = new PlatoonGridSetupInventory(grid);
+        var pending = new List<EntityUid> { grid };
+        while (pending.Count > 0)
+        {
+            var index = pending.Count - 1;
+            var current = pending[index];
+            pending.RemoveAt(index);
+
+            if (!TryComp(current, out TransformComponent? transform))
+                continue;
+
+            if (current != grid && transform.GridUid != grid)
+                continue;
+
+            inventory.RecordEntity();
+            if (HasComp<LadderComponent>(current))
+                inventory.Ladders.Add(current);
+            if (HasComp<DropshipNavigationComputerComponent>(current))
+                inventory.NavigationComputers.Add(current);
+            if (HasComp<RotaryPhoneComponent>(current))
+                inventory.Phones.Add(current);
+
+            if (HasComp<VendorMarkerComponent>(current) &&
+                TryComp(current, out MetaDataComponent? metadata) &&
+                metadata.EntityPrototype is { } prototype)
+            {
+                inventory.AddMarker(prototype.ID, current);
+            }
+
+            var children = transform.ChildEnumerator;
+            while (children.MoveNext(out var child))
+            {
+                pending.Add(child);
+            }
+        }
+
+        return inventory;
+    }
+
+    internal EntityUid? FindDestination(
         string faction,
         DropshipDestinationComponent.DestinationType type,
-        HashSet<EntityUid> usedDestinations,
-        Random destinationRandom,
+        PlatoonDestinationPool destinations,
         EntityUid? gridUid = null)
     {
-        var candidates = new List<EntityUid>();
-        var query = AllEntityQuery<DropshipDestinationComponent>();
-        while (query.MoveNext(out var destUid, out var comp))
+        var candidates = destinations.Candidates;
+        candidates.Clear();
+        foreach (var destination in destinations.Destinations)
         {
-            if (usedDestinations.Contains(destUid))
-                continue;
-
-            if (comp.FactionController != faction || comp.Destinationtype != type)
-                continue;
-
-            if (gridUid != null &&
-                _entityManager.GetComponent<TransformComponent>(destUid).GridUid != gridUid)
+            if (destinations.IsUsed(destination) ||
+                !TryComp(destination, out DropshipDestinationComponent? component))
             {
                 continue;
             }
 
-            candidates.Add(destUid);
+            if (component.FactionController != faction || component.Destinationtype != type)
+                continue;
+
+            if (gridUid != null &&
+                (!TryComp(destination, out TransformComponent? transform) || transform.GridUid != gridUid))
+            {
+                continue;
+            }
+
+            candidates.Add(destination);
         }
 
         if (candidates.Count == 0)
             return null;
 
-        var picked = candidates[destinationRandom.Next(candidates.Count)];
-        usedDestinations.Add(picked);
+        // The old System.Random streams were not tied to the round seed, so there is no
+        // round-seed-compatible destination sequence to preserve. Candidate ordering is
+        // intentionally not a contract; both ECS component queries and transform children
+        // have implementation-defined order, while every eligible destination remains uniform.
+        var picked = candidates[_random.Next(candidates.Count)];
+        destinations.MarkUsed(picked);
         return picked;
     }
 
-    private List<EntityUid> FindMarkersOnGrid(EntityUid grid, string markerProtoId)
+    internal EntityUid? FindNavComputerOnGrid(PlatoonGridSetupInventory inventory)
     {
-        var result = new List<EntityUid>();
-        var query = AllEntityQuery<VendorMarkerComponent>();
-        while (query.MoveNext(out var markerUid, out _))
+        foreach (var navigationComputer in inventory.NavigationComputers)
         {
-            if (_entityManager.GetComponent<TransformComponent>(markerUid).GridUid == grid &&
-                _entityManager.TryGetComponent<MetaDataComponent>(markerUid, out var meta) &&
-                meta.EntityPrototype != null &&
-                meta.EntityPrototype.ID == markerProtoId)
+            if (TryComp(navigationComputer, out DropshipNavigationComputerComponent? _) &&
+                TryComp(navigationComputer, out TransformComponent? transform) &&
+                transform.GridUid == inventory.Grid)
             {
-                result.Add(markerUid);
+                return navigationComputer;
             }
-        }
-
-        return result;
-    }
-
-    private EntityUid? FindNavComputerOnGrid(EntityUid grid)
-    {
-        var query = AllEntityQuery<DropshipNavigationComputerComponent>();
-        while (query.MoveNext(out var entityUid, out _))
-        {
-            if (_entityManager.GetComponent<TransformComponent>(entityUid).GridUid == grid)
-                return entityUid;
         }
 
         return null;
@@ -764,9 +949,16 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         string protoId,
         EntityUid markerUid,
         string faction,
-        DropshipDestinationComponent.DestinationType type)
+        DropshipDestinationComponent.DestinationType type,
+        PlatoonGridSetupInventory inventory)
     {
-        var transform = _entityManager.GetComponent<TransformComponent>(markerUid);
+        if (!TryComp(markerUid, out VendorMarkerComponent? _) ||
+            !TryComp(markerUid, out TransformComponent? transform) ||
+            transform.GridUid != inventory.Grid)
+        {
+            return;
+        }
+
         var console = _entityManager.SpawnEntity(protoId, transform.Coordinates);
         if (!_entityManager.HasComponent<WhitelistedShuttleComponent>(console))
             _entityManager.AddComponent<WhitelistedShuttleComponent>(console);
@@ -774,52 +966,65 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         var whitelist = _entityManager.GetComponent<WhitelistedShuttleComponent>(console);
         whitelist.Faction = faction;
         whitelist.ShuttleType = type;
+
+        if (HasComp<DropshipNavigationComputerComponent>(console))
+            inventory.NavigationComputers.Add(console);
     }
 
-    private void SetPhonesFactionOnGrid(EntityUid grid, string faction)
+    private void SetPhonesFactionOnGrid(PlatoonGridSetupInventory inventory, string faction)
     {
-        var query = AllEntityQuery<RotaryPhoneComponent>();
-        while (query.MoveNext(out var phoneUid, out var phoneComp))
+        foreach (var phone in inventory.Phones)
         {
-            if (Transform(phoneUid).GridUid != grid)
-                continue;
-
-            phoneComp.Faction = faction;
-            Dirty(phoneUid, phoneComp);
-        }
-    }
-
-    private void SetPhonesFactionForParent(EntityUid parent, string faction)
-    {
-        if (!_entityManager.TryGetComponent<TransformComponent>(parent, out var parentTransform))
-            return;
-
-        var parentGrid = parentTransform.GridUid;
-        var query = AllEntityQuery<RotaryPhoneComponent>();
-        while (query.MoveNext(out var phoneUid, out var phoneComp))
-        {
-            if (Transform(phoneUid).ParentUid != parent && Transform(phoneUid).GridUid != parentGrid)
-                continue;
-
-            phoneComp.Faction = faction;
-            Dirty(phoneUid, phoneComp);
-        }
-    }
-
-    private void OffsetLaddersOnGrid(EntityUid grid, int offset)
-    {
-        var query = AllEntityQuery<LadderComponent>();
-        while (query.MoveNext(out var ladderUid, out var ladderComp))
-        {
-            if (Transform(ladderUid).GridUid != grid ||
-                ladderComp.Id == null ||
-                !int.TryParse(ladderComp.Id, out var numeric))
+            if (!TryComp(phone, out RotaryPhoneComponent? phoneComponent) ||
+                !TryComp(phone, out TransformComponent? transform) ||
+                transform.GridUid != inventory.Grid)
             {
                 continue;
             }
 
-            ladderComp.Id = (numeric + offset).ToString();
-            Dirty(ladderUid, ladderComp);
+            phoneComponent.Faction = faction;
+            Dirty(phone, phoneComponent);
+        }
+    }
+
+    private void SetPhonesFactionForParent(
+        PlatoonInitialSetupInventory inventory,
+        EntityUid parent,
+        TransformComponent parentTransform,
+        string faction)
+    {
+        var parentGrid = parentTransform.GridUid;
+        var phones = inventory.GetShipPhones(parent);
+        for (var i = 0; i < phones.Count; i++)
+        {
+            var phone = phones[i];
+            if (!TryComp(phone, out RotaryPhoneComponent? phoneComponent) ||
+                !TryComp(phone, out TransformComponent? transform) ||
+                transform.ParentUid != parent && transform.GridUid != parentGrid)
+            {
+                continue;
+            }
+
+            phoneComponent.Faction = faction;
+            Dirty(phone, phoneComponent);
+        }
+    }
+
+    private void OffsetLaddersOnGrid(PlatoonGridSetupInventory inventory, int offset)
+    {
+        foreach (var ladder in inventory.Ladders)
+        {
+            if (!TryComp(ladder, out LadderComponent? ladderComponent) ||
+                !TryComp(ladder, out TransformComponent? transform) ||
+                transform.GridUid != inventory.Grid ||
+                ladderComponent.Id == null ||
+                !int.TryParse(ladderComponent.Id, out var numeric))
+            {
+                continue;
+            }
+
+            ladderComponent.Id = (numeric + offset).ToString();
+            Dirty(ladder, ladderComponent);
         }
     }
 

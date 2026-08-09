@@ -49,6 +49,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private ThreatVoteSystem _threatVote = default!;
     [Dependency] private GameTicker _ticker = default!;
@@ -446,37 +447,30 @@ public sealed partial class ThreatSystem : EntitySystem
                 ? id
                 : string.Empty;
             var legacyMarkers = new List<EntityUid>();
-            EntityQueryEnumerator<ThreatSpawnMarkerComponent> query = _entityManager
-                .EntityQueryEnumerator<ThreatSpawnMarkerComponent>();
-            while (query.MoveNext(out EntityUid uid, out ThreatSpawnMarkerComponent? comp))
+            var indexedMarkers = new List<EntityUid>();
+            _roundWorld.CopyForceSpawnMarkers(
+                RoundWorldScope.Map(mapId),
+                false,
+                markerType,
+                markerId,
+                false,
+                indexedMarkers);
+
+            // Preserve legacy source precedence: ThreatSpawnMarker entries were enumerated before standalone
+            // ScenarioSpawnMarker entries. Pure xeno compatibility markers remain owned by Scenario Plan.
+            foreach (var uid in indexedMarkers)
             {
-                if (comp.ThreatMarkerType == markerType
-                    && !comp.ThirdParty
-                    && (comp.ID == markerId || (comp.ID == string.Empty && markerId == string.Empty)))
-                {
-                    if (_entityManager.GetComponent<TransformComponent>(uid).MapID == mapId)
-                        legacyMarkers.Add(uid);
-                }
+                if (HasComp<ThreatSpawnMarkerComponent>(uid))
+                    legacyMarkers.Add(uid);
             }
 
-            string bucketTag = ScenarioMarkerTags.Bucket(markerType.ToString());
-            string markerIdTag = ScenarioMarkerTags.MarkerId(markerId);
-            EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent> scenarioQuery = _entityManager
-                .EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent>();
-            while (scenarioQuery.MoveNext(out EntityUid uid, out ScenarioSpawnMarkerComponent? comp,
-                       out TransformComponent? transform))
+            foreach (var uid in indexedMarkers)
             {
-                if (transform.MapID != mapId ||
-                    _entityManager.HasComponent<ThreatSpawnMarkerComponent>(uid) ||
-                    comp.Kind != SpawnMarkerKind.ThreatMarker ||
-                    !comp.Tags.Contains(ScenarioMarkerTags.ForceHostile, StringComparer.OrdinalIgnoreCase) ||
-                    !comp.Tags.Contains(bucketTag, StringComparer.OrdinalIgnoreCase) ||
-                    !comp.Tags.Contains(markerIdTag, StringComparer.OrdinalIgnoreCase))
+                if (!HasComp<ThreatSpawnMarkerComponent>(uid) &&
+                    HasComp<ScenarioSpawnMarkerComponent>(uid))
                 {
-                    continue;
+                    legacyMarkers.Add(uid);
                 }
-
-                legacyMarkers.Add(uid);
             }
 
             _sawmill.Debug($"[DEBUG] GetMarkers({markerType}): Found {legacyMarkers.Count} legacy-compatible markers with markerId '{

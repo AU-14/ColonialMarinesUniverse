@@ -62,6 +62,9 @@ public sealed class ScenarioPlanMarkerCoverageTest
     private const string StandaloneThirdPartyCooldownLeaderMarker = "ScenarioPlanStandaloneThirdPartyCooldownLeaderMarker";
     private const string StandaloneThirdPartyCooldownMemberMarker = "ScenarioPlanStandaloneThirdPartyCooldownMemberMarker";
     private const string StandaloneClfCivilianMarker = "ScenarioPlanStandaloneClfCivilianMarker";
+    private const string DivergentHybridHostileMarker = "ScenarioPlanDivergentHybridHostileMarker";
+    private const string MutableLegacyCivilianMarker = "ScenarioPlanMutableLegacyCivilianMarker";
+    private const string WrongKindHostileMarker = "ScenarioPlanWrongKindHostileMarker";
     private static readonly EntProtoId ScenarioClfSafehouseMarker = "scenarioclfsafehousespawnmarker";
     private static readonly EntProtoId CultistCfLeaderMarker = "cultistcfthreatleaderspawnmarker";
     private static readonly EntProtoId CultistCfMemberMarker = "cultistcfthreatmemberspawnmarker";
@@ -248,7 +251,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
     MobHuman: 2
   gruntsToSpawn:
     MobHuman: 3
-  spawnTogether: false
+  spawnTogether: true
   Markers:
     Leader: scenario-plan-cooldown
     Member: scenario-plan-cooldown
@@ -360,6 +363,37 @@ public sealed class ScenarioPlanMarkerCoverageTest
     kind: ClfCivilianSpawn
     tags:
     - force:clf:civilian-spawn:AU14JobCivilianColonist
+
+- type: entity
+  parent: MarkerBase
+  id: ScenarioPlanWrongKindHostileMarker
+  components:
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:hostile
+    - bucket:Leader
+    - marker-id:<generic>
+
+- type: entity
+  parent: MarkerBase
+  id: ScenarioPlanDivergentHybridHostileMarker
+  components:
+  - type: ThreatSpawnMarker
+    threatmarkertype: Leader
+  - type: ScenarioSpawnMarker
+    kind: ThirdPartyMarker
+    tags:
+    - force:third-party
+    - bucket:Member
+    - marker-id:<generic>
+
+- type: entity
+  parent: MarkerBase
+  id: ScenarioPlanMutableLegacyCivilianMarker
+  components:
+  - type: SpawnPoint
+    job_id: AU14JobCivilianColonist
 ";
 
     [TestPrototypes]
@@ -1612,6 +1646,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
         var map = await pair.CreateTestMap();
         var leaderMarker = EntityUid.Invalid;
         var memberMarker = EntityUid.Invalid;
+        var nearbyHostileMarker = EntityUid.Invalid;
 
         await server.WaitPost(() =>
         {
@@ -1619,6 +1654,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
 
             leaderMarker = entities.SpawnEntity(StandaloneThirdPartyCooldownLeaderMarker, map.GridCoords);
             memberMarker = entities.SpawnEntity(StandaloneThirdPartyCooldownMemberMarker, map.GridCoords);
+            nearbyHostileMarker = entities.SpawnEntity(ThreatLeaderMarker, map.GridCoords);
         });
 
         await server.WaitAssertion(() =>
@@ -1664,6 +1700,10 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     Is.True);
                 Assert.That(leaderCooldown!.NextAvailableAt, Is.GreaterThan(TimeSpan.Zero));
                 Assert.That(memberCooldown!.NextAvailableAt, Is.GreaterThan(TimeSpan.Zero));
+                Assert.That(
+                    entities.GetComponent<ThreatSpawnMarkerComponent>(nearbyHostileMarker).NextAvailableAt,
+                    Is.GreaterThan(TimeSpan.Zero),
+                    "Spawn-together third parties should cool nearby hostile markers as the legacy scan did.");
                 Assert.That(entities.HasComponent<ThreatSpawnMarkerComponent>(leaderMarker), Is.False);
                 Assert.That(entities.HasComponent<ThreatSpawnMarkerComponent>(memberMarker), Is.False);
             });
@@ -1776,6 +1816,44 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 partySpawn,
                 markerSet!,
                 ThreatMarkerType.Member);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ThirdPartyParachuteFallbackKeepsMarkersReusableAcrossMaps()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var firstMap = await pair.CreateTestMap();
+        var secondMap = await pair.CreateTestMap();
+
+        await server.WaitPost(() =>
+        {
+            foreach (var coordinates in new[] { firstMap.GridCoords, secondMap.GridCoords })
+            {
+                var leader = server.EntMan.SpawnEntity(ThirdPartyLeaderMarker, coordinates);
+                server.EntMan.EnsureComponent<ParachuteMarkerComponent>(leader);
+                server.EntMan.GetComponent<ThreatSpawnMarkerComponent>(leader).NextAvailableAt = TimeSpan.MaxValue;
+
+                var member = server.EntMan.SpawnEntity(ThirdPartyMemberMarker, coordinates);
+                server.EntMan.EnsureComponent<ParachuteMarkerComponent>(member);
+                server.EntMan.GetComponent<ThreatSpawnMarkerComponent>(member).NextAvailableAt = TimeSpan.MaxValue;
+            }
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var thirdPartySystem = server.System<ThirdPartySystem>();
+            var thirdParty = prototypes.Index<ThirdPartyPrototype>(ParachuteThirdParty);
+            var partySpawn = prototypes.Index<PartySpawnPrototype>(thirdParty.PartySpawn);
+
+            Assert.That(
+                thirdPartySystem.SpawnThirdParty(thirdParty, partySpawn, false),
+                Is.True,
+                "Legacy parachute markers are reusable regardless of map or cooldown state.");
         });
 
         await pair.CleanReturnAsync();
@@ -2022,29 +2100,115 @@ public sealed class ScenarioPlanMarkerCoverageTest
         var firstMap = await pair.CreateTestMap();
         var secondMap = await pair.CreateTestMap();
         var marker = EntityUid.Invalid;
+        var divergentHybridMarker = EntityUid.Invalid;
+        var wrongKindMarker = EntityUid.Invalid;
 
         await server.WaitPost(() =>
         {
             marker = server.EntMan.SpawnEntity(ScenarioClfSafehouseMarker, firstMap.GridCoords);
+            divergentHybridMarker = server.EntMan.SpawnEntity(DivergentHybridHostileMarker, firstMap.GridCoords);
+            wrongKindMarker = server.EntMan.SpawnEntity(WrongKindHostileMarker, firstMap.GridCoords);
         });
 
         await server.WaitAssertion(() =>
         {
-            var index = server.System<ScenarioSpawnIndexSystem>();
+            var index = server.System<CMURoundWorldIndexSystem>();
             var transform = server.System<SharedTransformSystem>();
             var requiredTags = new[] { ScenarioMarkerTags.ForceClfSafehouse };
+            var scopedMarkers = new List<EntityUid>();
+            var markerGrid = server.EntMan.GetComponent<TransformComponent>(marker).GridUid;
 
-            Assert.That(index.Resolve(firstMap.MapId, requiredTags), Is.EqualTo(new[] { marker }));
+            Assert.That(index.ResolveScenarioSpawnMarkers(firstMap.MapId, requiredTags), Is.EqualTo(new[] { marker }));
+            Assert.That(markerGrid, Is.Not.Null);
+            index.CopySpawnMarkers(
+                RoundWorldScope.Grid(firstMap.MapId, markerGrid!.Value),
+                requiredTags,
+                scopedMarkers);
+            Assert.That(scopedMarkers, Is.EqualTo(new[] { marker }));
+
+            index.CopySpawnMarkers(
+                RoundWorldScope.Grid(firstMap.MapId, EntityUid.Invalid),
+                requiredTags,
+                scopedMarkers);
+            Assert.That(scopedMarkers, Is.Empty);
 
             transform.SetCoordinates(marker, secondMap.GridCoords);
             Assert.Multiple(() =>
             {
-                Assert.That(index.Resolve(firstMap.MapId, requiredTags), Is.Empty);
-                Assert.That(index.Resolve(secondMap.MapId, requiredTags), Is.EqualTo(new[] { marker }));
+                Assert.That(index.ResolveScenarioSpawnMarkers(firstMap.MapId, requiredTags), Is.Empty);
+                Assert.That(index.ResolveScenarioSpawnMarkers(secondMap.MapId, requiredTags), Is.EqualTo(new[] { marker }));
             });
 
+            index.CopySpawnMarkers(RoundWorldScope.EveryMap(), requiredTags, scopedMarkers);
+            Assert.That(scopedMarkers, Is.EqualTo(new[] { marker }));
+
+            var clfMarkers = new List<EntityUid>();
+            index.CopyClfSafehouseMarkers(RoundWorldScope.EveryMap(), clfMarkers);
+            Assert.That(clfMarkers, Is.EqualTo(new[] { marker }),
+                "CLF compatibility discovery dropped an initialized marker on an auxiliary map.");
+
+            var hostileTags = new[]
+            {
+                ScenarioMarkerTags.ForceHostile,
+                ScenarioMarkerTags.Bucket(ThreatMarkerType.Leader.ToString()),
+                ScenarioMarkerTags.MarkerId(string.Empty),
+            };
+            Assert.That(index.ResolveScenarioSpawnMarkers(firstMap.MapId, hostileTags), Is.Empty,
+                "A scenario marker with the wrong semantic kind was routed into hostile spawning.");
+
+            var legacyHostileMarkers = new List<EntityUid>();
+            index.CopyForceSpawnMarkers(
+                RoundWorldScope.Map(firstMap.MapId),
+                false,
+                ThreatMarkerType.Leader,
+                string.Empty,
+                false,
+                legacyHostileMarkers);
+            Assert.That(legacyHostileMarkers, Is.EqualTo(new[] { divergentHybridMarker }),
+                "Factual legacy lookup should retain a valid ThreatSpawnMarker on a divergent hybrid marker.");
+
             server.EntMan.DeleteEntity(marker);
-            Assert.That(index.Resolve(secondMap.MapId, requiredTags), Is.Empty);
+            server.EntMan.DeleteEntity(divergentHybridMarker);
+            server.EntMan.DeleteEntity(wrongKindMarker);
+            Assert.That(index.ResolveScenarioSpawnMarkers(secondMap.MapId, requiredTags), Is.Empty);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task RuntimeRoundWorldIndexCanRefreshMutableMarkerFacts()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        var marker = EntityUid.Invalid;
+
+        await server.WaitPost(() =>
+        {
+            marker = server.EntMan.SpawnEntity(MutableLegacyCivilianMarker, map.GridCoords);
+        });
+
+        await server.WaitAssertion(() =>
+        {
+            var index = server.System<CMURoundWorldIndexSystem>();
+            var spawnPoint = server.EntMan.GetComponent<SpawnPointComponent>(marker);
+            var markers = new List<EntityUid>();
+
+            index.CopyClfCivilianSpawnMarkers(RoundWorldScope.EveryMap(), markers);
+            Assert.That(markers, Is.EqualTo(new[] { marker }));
+
+            spawnPoint.Job = "AU14JobCivilianEngineer";
+            index.RefreshMarkerFacts(marker);
+            index.CopyClfCivilianSpawnMarkers(RoundWorldScope.EveryMap(), markers);
+            Assert.That(markers, Is.Empty);
+
+            spawnPoint.Job = ColonyCivilianJobId;
+            index.RefreshMarkerFacts(marker);
+            index.CopyClfCivilianSpawnMarkers(RoundWorldScope.EveryMap(), markers);
+            Assert.That(markers, Is.EqualTo(new[] { marker }));
+
+            server.EntMan.DeleteEntity(marker);
         });
 
         await pair.CleanReturnAsync();

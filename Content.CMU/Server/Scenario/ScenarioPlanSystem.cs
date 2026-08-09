@@ -34,10 +34,10 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
 
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IComponentFactory _componentFactory = default!;
+    [Dependency] private ProfManager _prof = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IResourceManager _resources = default!;
-    [Dependency] private ProfManager _prof = default!;
-    [Dependency] private ScenarioSpawnIndexSystem _spawnIndex = default!;
+    [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
 
     private readonly Dictionary<string, IReadOnlyList<ResolvedSpawnMarker>> _mapMarkerCache = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<string, IReadOnlyList<ResolvedSpawnMarker>> _mapPathMarkerCache = new(StringComparer.OrdinalIgnoreCase);
@@ -2602,7 +2602,7 @@ public sealed partial class ScenarioPlanSystem : EntitySystem, IScenarioPlanGene
         MapId mapId,
         IReadOnlyList<string> requiredTags)
     {
-        return _spawnIndex.Resolve(mapId, requiredTags);
+        return _roundWorld.ResolveScenarioSpawnMarkers(mapId, requiredTags);
     }
 
     private static bool ThirdPartyUsesMarkerValidation(ThirdPartyPrototype thirdParty)

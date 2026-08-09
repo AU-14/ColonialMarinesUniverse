@@ -33,11 +33,11 @@ using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Profiling;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
-using ParachuteMarkerComponent = Content.Shared._CMU14.Threats.ParachuteMarkerComponent;
 
 namespace Content.Server._CMU14.Ops.ThirdParty;
 
@@ -45,23 +45,31 @@ public sealed partial class ThirdPartySystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private ChatSystem _chat = default!;
+    [Dependency] private IEntityManager _entityManager = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IdCardSystem _idCard = default!;
     [Dependency] private IdentitySystem _identity = default!;
-    [Dependency] private IEntityManager _entityManager = default!;
-    [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IServerPreferencesManager _preferences = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
+    [Dependency] private IPlayerManager _playerManager = default!;
+    [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private ProfManager _prof = default!;
+    [Dependency] private IPrototypeManager _prototypeManager = default!;
+    [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
+    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+
     private static readonly ProtoId<JobPrototype> ThirdPartyLeaderJobId = new("AU14JobThirdPartyLeader");
     private static readonly ProtoId<JobPrototype> ThirdPartyMemberJobId = new("AU14JobThirdPartyMember");
     private static readonly ThreatMarkerType[] ThreatMarkerTypes = Enum.GetValues<ThreatMarkerType>();
+    private static readonly string[] GroundEntryTags = [ScenarioMarkerTags.EntryGround];
+    private static readonly string[] HostileForceTags = [ScenarioMarkerTags.ForceHostile];
+    private static readonly string[] ParachuteEntryTags = [ScenarioMarkerTags.EntryParachute];
+    private static readonly string[] ThirdPartyForceTags = [ScenarioMarkerTags.ForceThirdParty];
     private const string ThirdPartyFaction = "thirdparty";
     private readonly ISawmill _sawmill = Logger.GetSawmill("thirdparty");
 
@@ -211,6 +219,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>? assignedJobs = null, bool? overrideDropship = null)
     {
         const float SpawnTogetherRadius = 8f;
+        using var profile = _prof.Group("CMU Round Third Party Spawn");
         _sawmill.Debug($"[ThirdPartySystem] Spawning third party: ({party.ID})");
         if (spawnProto == null)
         {
@@ -233,16 +242,11 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 $"[ThirdPartySystem] Spawn context: party={party.ID}, spawnProto={spawnProto.ID}, roundStart={roundStart}, preset={presetId}, threat={_currentThreat?.ID ?? "null"}, entryMethod={entryMethod}, coveredScenarioForce={coveredScenarioForce}, assignedJobs={assignedJobs?.Count ?? 0}, assignedThirdPartyLeaders={assignmentCounts.Leaders}, assignedThirdPartyMembers={assignmentCounts.Members}.");
         }
 
-        List<EntityUid> markerEntities = new();
-        var markerEntitySet = new HashSet<EntityUid>();
         EntityUid mainGridUid = EntityUid.Invalid;
+        RoundWorldScope spawnScope;
+        var candidateMapIds = new List<MapId>();
+        var entryMarkers = new List<EntityUid>();
         var parachuteMode = false;
-
-        void AddMarkerEntity(EntityUid uid)
-        {
-            if (markerEntitySet.Add(uid))
-                markerEntities.Add(uid);
-        }
 
         // Maintain compatibility with existing code that uses these locals.
         bool useDropship = entryMethod.Equals("shuttle", StringComparison.OrdinalIgnoreCase);
@@ -273,13 +277,19 @@ public sealed partial class ThirdPartySystem : EntitySystem
             _sawmill.Debug($"[ThirdPartySystem] Found valid dropship destination: {destination}");
 
             DeserializationOptions deserializationOpts = DeserializationOptions.Default with { InitializeMaps = true };
-            if (!TryLoadDropshipGrid(party.dropshippath, deserializationOpts, out mainGridUid))
+            if (!TryLoadDropshipGrid(
+                    party.dropshippath,
+                    deserializationOpts,
+                    out mainGridUid,
+                    out var loadedDropship))
                 return false;
 
             _sawmill.Debug($"[ThirdPartySystem] Dropship grid initialized: {mainGridUid}");
 
-            var dropshipMapCoordinates = _transform.ToMapCoordinates(_entityManager
-                .GetComponent<TransformComponent>(mainGridUid).Coordinates);
+            var mainGridTransform = Comp<TransformComponent>(mainGridUid);
+            spawnScope = RoundWorldScope.Grid(mainGridTransform.MapID, mainGridUid);
+            candidateMapIds.Add(mainGridTransform.MapID);
+            var dropshipMapCoordinates = _transform.ToMapCoordinates(mainGridTransform.Coordinates);
             EntityUid returnDestination;
             try
             {
@@ -305,50 +315,17 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             _sawmill.Debug($"[ThirdPartySystem] Third-party dropship {mainGridUid} loaded and waiting for manual launch to destination {destination}.");
 
-            // Collect markers on dropship grid
-            EntityQueryEnumerator<AuInsertMarkerComponent> query = _entityManager
-                .EntityQueryEnumerator<AuInsertMarkerComponent>();
-            while (query.MoveNext(out EntityUid uid, out _))
-            {
-                if (_entityManager.TryGetComponent(uid, out TransformComponent? transform) &&
-                    ThirdPartySystem.IsOnGrid(transform, mainGridUid))
-                    AddMarkerEntity(uid);
-            }
-
-            EntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent> legacyMarkerQuery = _entityManager
-                .EntityQueryEnumerator<ThreatSpawnMarkerComponent, TransformComponent>();
-            while (legacyMarkerQuery.MoveNext(out EntityUid uid, out ThreatSpawnMarkerComponent? marker,
-                out TransformComponent? transform))
-            {
-                if (!marker.ThirdParty ||
-                    !ThirdPartySystem.IsOnGrid(transform, mainGridUid))
-                    continue;
-
-                AddMarkerEntity(uid);
-            }
-
-            EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent> scenarioMarkerQuery = _entityManager
-                .EntityQueryEnumerator<ScenarioSpawnMarkerComponent, TransformComponent>();
-            while (scenarioMarkerQuery.MoveNext(out EntityUid uid, out _, out TransformComponent? transform))
-            {
-                if (!HasStandaloneThirdPartyMarker(uid) ||
-                    !ThirdPartySystem.IsOnGrid(transform, mainGridUid))
-                    continue;
-
-                AddMarkerEntity(uid);
-            }
-
-            _sawmill.Debug($"[ThirdPartySystem] Dropship markers collected: {markerEntities.Count}");
-
-            // Spawn consoles
-            EntityQueryEnumerator<VendorMarkerComponent> vmarkerQuery = _entityManager
-                .EntityQueryEnumerator<VendorMarkerComponent>();
+            // The map loader already gives us the exact loaded entity set, so shuttle setup never needs a global
+            // VendorMarker scan.
             var consoleCount = 0;
-            while (vmarkerQuery.MoveNext(out EntityUid vmarkerUid, out VendorMarkerComponent? vmarkerComp))
+            foreach (var vmarkerUid in loadedDropship.Entities)
             {
+                if (!TryComp(vmarkerUid, out VendorMarkerComponent? vmarkerComp))
+                    continue;
+
                 try
                 {
-                    var markerXform = _entityManager.GetComponent<TransformComponent>(vmarkerUid);
+                    var markerXform = Comp<TransformComponent>(vmarkerUid);
                     if (markerXform.GridUid != mainGridUid)
                         continue;
 
@@ -389,96 +366,96 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
             _sawmill.Debug($"[ThirdPartySystem] Dropship consoles spawned: {consoleCount}");
         }
-        else if (entryMethod.Equals("parachute", StringComparison.OrdinalIgnoreCase))
-        {
-            // Parachute mode: collect parachute markers on the main map
-            parachuteMode = true;
-            EntityQueryEnumerator<ParachuteMarkerComponent, TransformComponent> pQuery = _entityManager
-                .EntityQueryEnumerator<ParachuteMarkerComponent, TransformComponent>();
-            while (pQuery.MoveNext(out EntityUid uid, out ParachuteMarkerComponent? pComp,
-                out TransformComponent? pxform))
-            {
-                // Parachute markers are reusable and do not need to be marked as used; include all of them.
-                AddMarkerEntity(uid);
-            }
-
-            _sawmill.Debug($"[ThirdPartySystem] Parachute markers collected: {markerEntities.Count}");
-        }
         else
         {
-            // Ground spawn: collect all markers on main map (existing behavior)
-            EntityQueryEnumerator<AuInsertMarkerComponent> query = _entityManager
-                .EntityQueryEnumerator<AuInsertMarkerComponent>();
-            while (query.MoveNext(out EntityUid uid, out _))
+            parachuteMode = entryMethod.Equals("parachute", StringComparison.OrdinalIgnoreCase);
+            if (parachuteMode)
             {
-                AddMarkerEntity(uid);
+                _roundWorld.CopySpawnMarkers(
+                    RoundWorldScope.EveryMap(),
+                    ParachuteEntryTags,
+                    entryMarkers);
+            }
+            else
+            {
+                _roundWorld.CopySpawnMarkers(
+                    RoundWorldScope.EveryMap(),
+                    GroundEntryTags,
+                    entryMarkers);
+
+                var forceMarkers = new List<EntityUid>();
+                _roundWorld.CopySpawnMarkers(
+                    RoundWorldScope.EveryMap(),
+                    ThirdPartyForceTags,
+                    forceMarkers);
+                foreach (var marker in forceMarkers)
+                {
+                    if (HasComp<ThreatSpawnMarkerComponent>(marker))
+                        entryMarkers.Add(marker);
+                }
+
+                foreach (var marker in forceMarkers)
+                {
+                    if (!HasComp<ThreatSpawnMarkerComponent>(marker))
+                        entryMarkers.Add(marker);
+                }
             }
 
-            EntityQueryEnumerator<ThreatSpawnMarkerComponent> legacyMarkerQuery = _entityManager
-                .EntityQueryEnumerator<ThreatSpawnMarkerComponent>();
-            while (legacyMarkerQuery.MoveNext(out EntityUid uid, out ThreatSpawnMarkerComponent? marker))
+            var candidateMapSet = new HashSet<MapId>();
+            foreach (var marker in entryMarkers)
             {
-                if (!marker.ThirdParty)
-                    continue;
-
-                AddMarkerEntity(uid);
+                if (TryComp(marker, out TransformComponent? transform) &&
+                    candidateMapSet.Add(transform.MapID))
+                {
+                    candidateMapIds.Add(transform.MapID);
+                }
             }
 
-            EntityQueryEnumerator<ScenarioSpawnMarkerComponent> scenarioMarkerQuery
-                = _entityManager.EntityQueryEnumerator<ScenarioSpawnMarkerComponent>();
-            while (scenarioMarkerQuery.MoveNext(out EntityUid uid, out _))
-            {
-                if (!HasStandaloneThirdPartyMarker(uid))
-                    continue;
+            if (candidateMapIds.Count == 0 && _gameTicker.DefaultMap != MapId.Nullspace)
+                candidateMapIds.Add(_gameTicker.DefaultMap);
 
-                AddMarkerEntity(uid);
+            if (candidateMapIds.Count == 0)
+            {
+                _sawmill.Error("[ThirdPartySystem] Cannot resolve spawn markers without an initialized marker map.");
+                return false;
             }
 
-            _sawmill.Debug($"[ThirdPartySystem] Main map third-party markers collected: {markerEntities.Count}");
+            spawnScope = RoundWorldScope.Map(candidateMapIds[0]);
         }
 
-        var candidateMapIds = new List<MapId>();
-        var candidateMapIdSet = new HashSet<MapId>();
-        foreach (EntityUid marker in markerEntities)
-        {
-            if (!_entityManager.TryGetComponent(marker, out TransformComponent? markerTransform) ||
-                !candidateMapIdSet.Add(markerTransform.MapID))
-                continue;
-
-            candidateMapIds.Add(markerTransform.MapID);
-        }
-
-        MapId? mapId = candidateMapIds.Count > 0
-            ? candidateMapIds[0]
-            : null;
+        MapId mapId = spawnScope.MapId;
         if (_sawmill.Level <= LogLevel.Debug)
         {
             _sawmill.Debug(
-                $"[ThirdPartySystem] Candidate marker maps for third party ({party.ID}): count={candidateMapIds.Count}, maps=[{string.Join(", ", candidateMapIds)}], initialMap={mapId?.ToString() ?? "null"}.");
+                $"[ThirdPartySystem] Marker scope for third party ({party.ID}): map={mapId}, grid={spawnScope.GridUid?.ToString() ?? "none"}.");
         }
 
         ResolvedThirdPartySpawnMarkerSet? scenarioMarkers = null;
-        foreach (MapId spawnMapId in candidateMapIds)
+        foreach (var candidateMapId in candidateMapIds)
         {
             if (!TryResolveScenarioPlanSpawnMarkers(
-                party,
-                spawnMapId,
-                assignedJobs,
-                out scenarioMarkers,
-                false,
-                coveredScenarioForce))
+                    party,
+                    candidateMapId,
+                    assignedJobs,
+                    out scenarioMarkers,
+                    false,
+                    coveredScenarioForce))
+            {
                 continue;
+            }
 
-            mapId = spawnMapId;
+            mapId = candidateMapId;
+            spawnScope = useDropship
+                ? RoundWorldScope.Grid(mapId, mainGridUid)
+                : RoundWorldScope.Map(mapId);
             break;
         }
 
-        if (scenarioMarkers == null &&
-            mapId is { } fallbackMapId)
+        if (scenarioMarkers == null)
         {
             TryResolveScenarioPlanSpawnMarkers(
                 party,
-                fallbackMapId,
+                mapId,
                 assignedJobs,
                 out scenarioMarkers,
                 coveredScenarioForce: coveredScenarioForce);
@@ -533,6 +510,22 @@ public sealed partial class ThirdPartySystem : EntitySystem
         List<EntityUid> ResolveMarkers(ThreatMarkerType markerType)
         {
             TimeSpan time = _timing.CurTime;
+            if (parachuteMode && !coveredScenarioForce)
+            {
+                var reusableParachuteMarkers = new List<EntityUid>();
+                foreach (var uid in entryMarkers)
+                {
+                    if (TryComp(uid, out ThreatSpawnMarkerComponent? marker) &&
+                        marker.ThirdParty &&
+                        marker.ThreatMarkerType == markerType)
+                    {
+                        reusableParachuteMarkers.Add(uid);
+                    }
+                }
+
+                return reusableParachuteMarkers;
+            }
+
             if (scenarioMarkers != null &&
                 scenarioMarkers.TryGetMarkers(markerType.ToString(), out IReadOnlyList<EntityUid> plannedMarkers))
             {
@@ -558,10 +551,13 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     }
                 }
                 _sawmill.Debug($"[ThirdPartySystem] GetMarkers({markerType}): Using {filteredScenarioMarkers.Count} Scenario Plan marker(s) on map {mapId}");
-                if (filteredScenarioMarkers.Count > 0 || !useDropship)
+                if (filteredScenarioMarkers.Count > 0)
                     return filteredScenarioMarkers;
 
                 if (coveredScenarioForce)
+                    return filteredScenarioMarkers;
+
+                if (!useDropship)
                     return filteredScenarioMarkers;
 
                 _sawmill.Warning($"[ThirdPartySystem] Scenario Plan resolved no dropship grid markers for {markerType} on grid {mainGridUid}; falling back to legacy marker lookup.");
@@ -570,35 +566,24 @@ public sealed partial class ThirdPartySystem : EntitySystem
             string markerId = spawnProto.Markers.TryGetValue(markerType, out string? id) ? id : string.Empty;
             var legacyMarkers = new List<EntityUid>();
             var legacyCooldownMarkers = new List<EntityUid>();
-            EntityQueryEnumerator<ThreatSpawnMarkerComponent> query = _entityManager
-                .EntityQueryEnumerator<ThreatSpawnMarkerComponent>();
-            while (query.MoveNext(out EntityUid uid, out ThreatSpawnMarkerComponent? comp))
+            var indexedMarkers = new List<EntityUid>();
+            _roundWorld.CopyForceSpawnMarkers(
+                spawnScope,
+                true,
+                markerType,
+                markerId,
+                parachuteMode,
+                indexedMarkers);
+            foreach (var uid in indexedMarkers)
             {
-                // Only include markers that are of the requested type, match the optional marker ID,
-                // are explicitly marked as ThirdParty, and are unused - and aren't on a Cooldown
-                if (comp.ThreatMarkerType != markerType
-                    || !(comp.ID == markerId || (comp.ID == string.Empty && markerId == string.Empty))
-                    || !comp.ThirdParty)
+                // Scenario Plan owns standalone canonical markers. This compatibility path intentionally retains the
+                // legacy ThreatSpawnMarker-only fallback.
+                if (!TryComp(uid, out ThreatSpawnMarkerComponent? comp))
                     continue;
 
                 if (IsMarkerBlockedByWalls(uid))
                     continue;
 
-                if (useDropship && mainGridUid != EntityUid.Invalid)
-                {
-                    if (!_entityManager.TryGetComponent(uid, out TransformComponent? tcomp)
-                        || !tcomp.GridUid.HasValue || tcomp.GridUid.Value != mainGridUid)
-                        continue;
-                }
-                else
-                {
-                    // Otherwise, ensure we are on the same map (if mapId set).
-                    if (mapId != null && _entityManager.GetComponent<TransformComponent>(uid).MapID != mapId)
-                        continue;
-                }
-
-                // Only include markers that are not already used
-                // if (!comp.Used) // <- now handled by Cooldowns
                 if (comp.NextAvailableAt > time)
                     legacyCooldownMarkers.Add(uid);
                 else
@@ -635,7 +620,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
             if (allMarkers.Count > 0)
             {
                 EntityUid centerMarker = allMarkers[_random.Next(allMarkers.Count)];
-                EntityCoordinates centerCoords = _entityManager.GetComponent<TransformComponent>(centerMarker)
+                EntityCoordinates centerCoords = Comp<TransformComponent>(centerMarker)
                     .Coordinates;
                 foreach (ThreatMarkerType type in ThreatMarkerTypes)
                 {
@@ -643,7 +628,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
                     var filtered = new List<EntityUid>();
                     foreach (EntityUid marker in markers)
                     {
-                        EntityCoordinates coords = _entityManager.GetComponent<TransformComponent>(marker).Coordinates;
+                        EntityCoordinates coords = Comp<TransformComponent>(marker).Coordinates;
                         if (_transform.InRange(coords, centerCoords, 50f))
                             filtered.Add(marker);
                     }
@@ -691,37 +676,12 @@ public sealed partial class ThirdPartySystem : EntitySystem
             _sawmill.Warning($"[ThirdPartySystem] Third party ({party.ID}) requested {entityReq} entity spawn(s) but found no entity markers.");
         }
 
-        List<EntityUid> FilterByType(ThreatMarkerType type)
-        {
-            var filtered = new List<EntityUid>();
-            foreach (EntityUid marker in markerEntities)
-            {
-                if (_entityManager.TryGetComponent(marker,
-                        out ThreatSpawnMarkerComponent? comp) &&
-                    comp.ThirdParty &&
-                    comp.ThreatMarkerType == type)
-                    filtered.Add(marker);
-            }
-
-            return filtered;
-        }
-
-        // If parachute mode, use the parachute marker pool for all types; make local mutable copies so we can pick
-        // without replacement during this spawn
-        if (parachuteMode && scenarioMarkers == null)
-        {
-            // Parachute markers must still have a ThreatSpawnMarkerComponent with ThirdParty==true
-            leaderMarkers = FilterByType(ThreatMarkerType.Leader);
-            gruntMarkers = FilterByType(ThreatMarkerType.Member);
-            entityMarkers = FilterByType(ThreatMarkerType.Entity);
-        }
-
         var unsafeLeaderMarkers = new List<EntityUid>();
         var unsafeGruntMarkers = new List<EntityUid>();
         var unsafeEntityMarkers = new List<EntityUid>();
         if (!useDropship)
         {
-            var alivePlayerPositions = GetAlivePlayerPositions();
+            var alivePlayerPositions = BuildAlivePlayerAvoidanceIndex();
 
             void PreferMarkersAwayFromPlayers(ref List<EntityUid> markers, List<EntityUid> unsafeMarkers)
             {
@@ -838,47 +798,54 @@ public sealed partial class ThirdPartySystem : EntitySystem
                 return;
 
             EntityUid centerMarkerUid = lastUsedMarker.Value;
-            if (!_entityManager.HasComponent<ThreatSpawnMarkerComponent>(centerMarkerUid) &&
-                !_entityManager.HasComponent<ScenarioSpawnMarkerCooldownComponent>(centerMarkerUid))
+            if (!HasComp<ThreatSpawnMarkerComponent>(centerMarkerUid) &&
+                !HasComp<ScenarioSpawnMarkerCooldownComponent>(centerMarkerUid))
                 return;
 
-            var centerXform = _entityManager.GetComponent<TransformComponent>(centerMarkerUid);
+            var centerXform = Comp<TransformComponent>(centerMarkerUid);
             EntityCoordinates centerCoords = centerXform.Coordinates;
             MapId centerMap = centerXform.MapID;
+            var nearbyCandidates = new List<EntityUid>();
+            var nearbyCandidateSet = new HashSet<EntityUid>();
+            _roundWorld.CopySpawnMarkers(
+                RoundWorldScope.Map(centerMap),
+                ThirdPartyForceTags,
+                nearbyCandidates);
+            nearbyCandidateSet.UnionWith(nearbyCandidates);
 
-            EntityQueryEnumerator<ThreatSpawnMarkerComponent> query = _entityManager
-                .EntityQueryEnumerator<ThreatSpawnMarkerComponent>();
-            while (query.MoveNext(out EntityUid otherUid, out _))
+            var hostileCandidates = new List<EntityUid>();
+            _roundWorld.CopySpawnMarkers(
+                RoundWorldScope.Map(centerMap),
+                HostileForceTags,
+                hostileCandidates);
+            foreach (var hostile in hostileCandidates)
+            {
+                if (nearbyCandidateSet.Add(hostile))
+                    nearbyCandidates.Add(hostile);
+            }
+
+            foreach (var otherUid in nearbyCandidates)
             {
                 if (otherUid == centerMarkerUid)
                     continue;
 
-                var otherXform = _entityManager.GetComponent<TransformComponent>(otherUid);
-                if (otherXform.MapID != centerMap)
+                var otherXform = Comp<TransformComponent>(otherUid);
+                if (!_transform.InRange(otherXform.Coordinates, centerCoords, SpawnTogetherRadius))
                     continue;
 
-                if (_transform.InRange(otherXform.Coordinates, centerCoords, SpawnTogetherRadius))
+                if (TryComp(otherUid, out ThreatSpawnMarkerComponent? otherComp))
                 {
-                    if (_entityManager.TryGetComponent(otherUid,
-                        out ThreatSpawnMarkerComponent? otherComp))
-                    {
-                        otherComp.NextAvailableAt = _timing.CurTime + otherComp.Cooldown;
-                        Dirty(otherUid, otherComp);
-                    }
-                }
-            }
+                    otherComp.NextAvailableAt = _timing.CurTime + otherComp.Cooldown;
+                    Dirty(otherUid, otherComp);
 
-            EntityQueryEnumerator<ScenarioSpawnMarkerCooldownComponent, TransformComponent> scenarioQuery
-                = _entityManager.EntityQueryEnumerator<ScenarioSpawnMarkerCooldownComponent, TransformComponent>();
-            while (scenarioQuery.MoveNext(out EntityUid otherUid, out _, out TransformComponent? otherXform))
-            {
-                if (otherUid == centerMarkerUid ||
-                    otherXform.MapID != centerMap ||
-                    !HasStandaloneThirdPartyMarker(otherUid))
                     continue;
+                }
 
-                if (_transform.InRange(otherXform.Coordinates, centerCoords, SpawnTogetherRadius))
+                if (HasComp<ScenarioSpawnMarkerCooldownComponent>(otherUid) &&
+                    HasStandaloneThirdPartyMarker(otherUid))
+                {
                     ApplyScenarioMarkerCooldown(otherUid);
+                }
             }
         }
 
@@ -1000,20 +967,26 @@ public sealed partial class ThirdPartySystem : EntitySystem
         return !_entityManager.HasComponent<ThreatSpawnMarkerComponent>(uid);
     }
 
-    private bool TryLoadDropshipGrid(ResPath path, DeserializationOptions options, out EntityUid gridUid)
+    private bool TryLoadDropshipGrid(
+        ResPath path,
+        DeserializationOptions options,
+        out EntityUid gridUid,
+        out LoadResult result)
     {
         gridUid = EntityUid.Invalid;
+        result = null!;
         var loadOptions = new MapLoadOptions
         {
             DeserializationOptions = options with { LogOrphanedGrids = false }
         };
 
-        if (!_mapLoader.TryLoadGeneric(path, out LoadResult? result, loadOptions))
+        if (!_mapLoader.TryLoadGeneric(path, out LoadResult? loaded, loadOptions))
         {
             _sawmill.Error($"[ThirdPartySystem] Failed to load dropship map or grid: {path}");
             return false;
         }
 
+        result = loaded;
         gridUid = result.Grids.FirstOrDefault();
         if (gridUid != EntityUid.Invalid)
             return true;
@@ -1325,35 +1298,25 @@ public sealed partial class ThirdPartySystem : EntitySystem
     private bool IsMarkerBlockedByWalls(EntityUid marker)
         => _rmcMap.HasAnchoredEntityEnumerator<RMCDropshipBlockedComponent>(Transform(marker).Coordinates);
 
-    private List<(MapId Map, Vector2 WorldPos)> GetAlivePlayerPositions()
+    private ThirdPartyPlayerAvoidanceIndex BuildAlivePlayerAvoidanceIndex()
     {
-        var positions = new List<(MapId, Vector2)>();
+        var positions = new ThirdPartyPlayerAvoidanceIndex();
         var query = EntityQueryEnumerator<ActorComponent, MobStateComponent, TransformComponent>();
         while (query.MoveNext(out _, out _, out var mobState, out var xform))
         {
             if (mobState.CurrentState != MobState.Alive)
                 continue;
 
-            positions.Add((xform.MapID, _transform.GetWorldPosition(xform)));
+            positions.Add(xform.MapID, _transform.GetWorldPosition(xform));
         }
 
         return positions;
     }
 
-    private bool IsMarkerBlockedByPlayers(EntityUid marker, List<(MapId Map, Vector2 WorldPos)> playerPositions)
+    private bool IsMarkerBlockedByPlayers(EntityUid marker, ThirdPartyPlayerAvoidanceIndex playerPositions)
     {
-        const float playerAvoidRadius = 8f;
-        foreach ((MapId playerMap, Vector2 playerPos) in playerPositions)
-        {
-            if (playerMap != Transform(marker).MapID)
-                continue;
-
-            Vector2 diff = _transform.GetWorldPosition(Transform(marker)) - playerPos;
-            if (diff.LengthSquared() <= playerAvoidRadius * playerAvoidRadius)
-                return true;
-        }
-
-        return false;
+        var transform = Transform(marker);
+        return playerPositions.IsBlocked(transform.MapID, _transform.GetWorldPosition(transform));
     }
 
     private EntityUid PickRandomMarker(List<EntityUid> candidates, bool remove)

@@ -4,7 +4,9 @@ public static class ScenarioMarkerTags
 {
     public const string ForceHostile = "force:hostile";
     public const string ForceThirdParty = "force:third-party";
+    public const string EntryGround = "entry:ground";
     public const string EntryParachute = "entry:parachute";
+    public const string ForceClfCivilianSpawnPrefix = "force:clf:civilian-spawn:";
     public const string ForceClfSafehouse = "force:clf:safehouse";
 
     public static string Bucket(string bucket)
@@ -21,6 +23,6 @@ public static class ScenarioMarkerTags
 
     public static string ClfCivilianSpawn(string jobId)
     {
-        return $"force:clf:civilian-spawn:{jobId}";
+        return $"{ForceClfCivilianSpawnPrefix}{jobId}";
     }
 }
