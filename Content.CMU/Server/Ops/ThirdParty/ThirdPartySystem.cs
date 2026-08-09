@@ -57,6 +57,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private SharedDropshipSystem _sharedDropshipSystem = default!;
@@ -1056,7 +1057,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
     {
         int playerCount = Math.Max(_playerManager.PlayerCount, assignedJobs?.Count ?? 0);
 
-        return _auRoundSystem
+        return _roundDirector
             .CaptureRoundPlanSelection(
                 playerCount,
                 _auRoundSystem.SelectedPreset?.ID ?? string.Empty,
