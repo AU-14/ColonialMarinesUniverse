@@ -5,6 +5,7 @@ using Content.Server._RMC14.Nuke;
 using Content.Server._RMC14.Power;
 using Content.Server._RMC14.Stations;
 using Content.Server._RMC14.Xenonids.Hive;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Chat.Managers;
@@ -154,7 +155,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private ScalingSystem _scaling = default!;
     [Dependency] private SharedXenoConstructionSystem _xenoConstruction = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
-    [Dependency] private LarvaQueueSystem _larvaQueue = default!;
+    [Dependency] private LarvaPoolSystem _larvaPool = default!;
 
     private readonly HashSet<string> _operationNames = new();
     private readonly HashSet<string> _operationPrefixes = new();

@@ -240,6 +240,7 @@ public sealed partial class CMDistressSignalRuleSystem
 
             ev.PlayerPool.Remove(player);
             GameTicker.PlayerJoinGame(player);
+            _larvaPool.OptInStaff(playerId);
             var xenoEnt = SpawnXenoEnt(ent, player, doBurst, comp, xenoSpawnPoints, xenoLeaderSpawnPoints);
 
             if (!_mind.TryGetMind(playerId, out var mind))

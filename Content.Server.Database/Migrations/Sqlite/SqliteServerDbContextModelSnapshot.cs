@@ -1764,6 +1764,22 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.ToTable("rmc_discord_accounts", (string)null);
                 });
 
+            modelBuilder.Entity("Content.Server.Database.RMCLarvaPoolOptOut", b =>
+                {
+                    b.Property<Guid>("PlayerId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("player_id");
+
+                    b.Property<string>("HiveId")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("hive_id");
+
+                    b.HasKey("PlayerId", "HiveId")
+                        .HasName("PK_rmc_larva_pool_opt_out");
+
+                    b.ToTable("rmc_larva_pool_opt_out", (string)null);
+                });
+
             modelBuilder.Entity("Content.Server.Database.RMCLinkedAccount", b =>
                 {
                     b.Property<Guid>("PlayerId")
@@ -2999,6 +3015,19 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("Round");
                 });
 
+            modelBuilder.Entity("Content.Server.Database.RMCLarvaPoolOptOut", b =>
+                {
+                    b.HasOne("Content.Server.Database.Player", "Player")
+                        .WithMany("LarvaPoolOptOuts")
+                        .HasForeignKey("PlayerId")
+                        .HasPrincipalKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK_rmc_larva_pool_opt_out_player_player_id");
+
+                    b.Navigation("Player");
+                });
+
             modelBuilder.Entity("Content.Server.Database.RMCLinkedAccount", b =>
                 {
                     b.HasOne("Content.Server.Database.RMCDiscordAccount", "Discord")
@@ -3374,6 +3403,8 @@ namespace Content.Server.Database.Migrations.Sqlite
                     b.Navigation("CommendationsReceived");
 
                     b.Navigation("JobWhitelists");
+
+                    b.Navigation("LarvaPoolOptOuts");
 
                     b.Navigation("LinkedAccount");
 

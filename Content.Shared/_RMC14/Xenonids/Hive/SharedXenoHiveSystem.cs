@@ -540,6 +540,25 @@ public abstract partial class SharedXenoHiveSystem : EntitySystem
         return true;
     }
 
+    public bool HasBurrowedLarvaSpawnPoint(Entity<HiveComponent> hive)
+    {
+        bool HasSpawnAt<T>() where T : Component
+        {
+            var candidates = EntityQueryEnumerator<T, HiveMemberComponent>();
+            while (candidates.MoveNext(out var uid, out _, out var member))
+            {
+                if (member.Hive == hive && !_mobState.IsDead(uid))
+                    return true;
+            }
+
+            return false;
+        }
+
+        return HasSpawnAt<HiveCoreComponent>() ||
+               HasSpawnAt<XenoEvolutionGranterComponent>() ||
+               HasSpawnAt<XenoComponent>();
+    }
+
     private void OnAutoAssignHiveAdded(Entity<AutoAssignHiveComponent> ent, ref ComponentStartup args)
     {
         var hive = GetHiveByName(ent.Comp.Hive);

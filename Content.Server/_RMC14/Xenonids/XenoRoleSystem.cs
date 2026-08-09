@@ -2,6 +2,7 @@ using Content.Server.GameTicking;
 using Content.Server.Mind;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Roles;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -22,6 +23,8 @@ namespace Content.Server._RMC14.Xenonids;
 
 public sealed partial class XenoRoleSystem : EntitySystem
 {
+    private static readonly ProtoId<JobPrototype> LesserDroneRole = "CMXenoLesserDrone";
+
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
@@ -83,6 +86,7 @@ public sealed partial class XenoRoleSystem : EntitySystem
             return;
 
         RemCompDeferred<XenoDisconnectedComponent>(args.Entity);
+        RemCompDeferred<AbandonedXenoPoolAvailableComponent>(args.Entity);
         _toUpdate.Add((args.Entity, comp));
     }
 
@@ -91,8 +95,15 @@ public sealed partial class XenoRoleSystem : EntitySystem
         if(TerminatingOrDeleted(args.Entity) || !HasComp<XenoComponent>(args.Entity))
             return;
 
-        var disconnected = EnsureComp<XenoDisconnectedComponent>(args.Entity);
-        disconnected.At = _timing.CurTime;
+        if (!_mind.TryGetMind(args.Entity, out _, out _))
+        {
+            MarkAbandonedForPool(args.Entity);
+        }
+        else
+        {
+            var disconnected = EnsureComp<XenoDisconnectedComponent>(args.Entity);
+            disconnected.At = _timing.CurTime;
+        }
 
         if (_hive.GetHive(args.Entity) is {} hive)
             _pvsOverride.RemoveForceSend(hive, args.Player);
@@ -224,12 +235,22 @@ public sealed partial class XenoRoleSystem : EntitySystem
 
             if (!_mind.TryGetMind(uid, out var mindId, out var mind))
             {
+                MarkAbandonedForPool(uid);
                 RemCompDeferred<XenoDisconnectedComponent>(uid);
                 continue;
             }
 
+            MarkAbandonedForPool(uid);
             _mind.TransferTo(mindId, null, createGhost: true, mind: mind);
             RemCompDeferred<XenoDisconnectedComponent>(uid);
         }
+    }
+
+    private void MarkAbandonedForPool(EntityUid uid)
+    {
+        if (TryComp(uid, out XenoComponent? xeno) && xeno.Role == LesserDroneRole)
+            return;
+
+        EnsureComp<AbandonedXenoPoolAvailableComponent>(uid);
     }
 }

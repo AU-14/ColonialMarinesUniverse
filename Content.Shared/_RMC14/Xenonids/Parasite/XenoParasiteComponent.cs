@@ -37,4 +37,19 @@ public sealed partial class XenoParasiteComponent : Component
 
     [DataField]
     public NetUserId? PendingInfectorUserId;
+
+    /// <summary>
+    ///     Player who controlled this parasite when it successfully infected a host.
+    /// </summary>
+    public NetUserId? InfectorUser;
+
+    /// <summary>
+    ///     Whether the infector accepted becoming the larva from this infection.
+    /// </summary>
+    public bool InfectorWantsLarva;
+
+    /// <summary>
+    ///     Whether the infector has an unanswered larva claim prompt for this infection.
+    /// </summary>
+    public bool InfectorLarvaClaimPending;
 }

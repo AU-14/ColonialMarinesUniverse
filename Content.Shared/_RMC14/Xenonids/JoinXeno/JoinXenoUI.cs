@@ -9,19 +9,35 @@ public enum JoinXenoUIKey : byte
 }
 
 [Serializable, NetSerializable]
-public enum JoinXenoQueueStatus : byte
+public enum LarvaPoolStatus : byte
 {
-    NotQueued,
-    Queued,
-    Waiting
+    Ineligible,
+    Waiting,
+    Eligible,
+}
+
+[Serializable, NetSerializable]
+public enum LarvaPoolIneligibilityReason : byte
+{
+    None,
+    PreferenceDataLoading,
+    CharacterProfileUnavailable,
+    RoleBanned,
+    RoleRequirements,
+    RevivableBody,
+    StaffProtected,
+    OptedOut,
 }
 
 [Serializable, NetSerializable]
 public readonly record struct JoinXenoHiveEntry(
     NetEntity Hive,
     string HiveName,
-    JoinXenoQueueStatus Status,
-    int Position);
+    LarvaPoolStatus Status,
+    int Position,
+    LarvaPoolIneligibilityReason IneligibilityReason,
+    bool PreferenceLoaded,
+    bool OptedIn);
 
 [Serializable, NetSerializable]
 public sealed class JoinXenoBuiState(List<JoinXenoHiveEntry> entries) : BoundUserInterfaceState
@@ -30,7 +46,8 @@ public sealed class JoinXenoBuiState(List<JoinXenoHiveEntry> entries) : BoundUse
 }
 
 [Serializable, NetSerializable]
-public sealed class JoinXenoHiveChoiceBuiMsg(NetEntity hive) : BoundUserInterfaceMessage
+public sealed class SetLarvaPoolOptInBuiMsg(NetEntity hive, bool optedIn) : BoundUserInterfaceMessage
 {
     public readonly NetEntity Hive = hive;
+    public readonly bool OptedIn = optedIn;
 }

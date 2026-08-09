@@ -286,9 +286,6 @@
   - type: RMCTrackable
   - type: ExcludedFromKingVote
     canVote: true
-  - type: RemoveComponents
-    components:
-    - type: CanBeLarvaQueued
 
 - type: entity
   parent: RMCXenoQueenBase

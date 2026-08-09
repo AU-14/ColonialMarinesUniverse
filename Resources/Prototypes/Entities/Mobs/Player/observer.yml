@@ -109,9 +109,16 @@
     noiseAmount: 0 # In case default values change
     noiseMultiplier: 0 # In case default values change
   # RMC14
+  - type: FindParasite
   - type: JoinXeno
   - type: UserInterface
     interfaces:
+      enum.XenoFindParasiteUI.Key:
+        type: FindParasiteBoundUserInterface
+        requireInputValidation: false
+      enum.JoinXenoUIKey.Key:
+        type: JoinXenoBui
+        requireInputValidation: false
       enum.DialogUiKey.Key:
         type: DialogBui
         requireInputValidation: false

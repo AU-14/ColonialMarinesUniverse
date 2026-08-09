@@ -59,6 +59,8 @@ public partial interface IServerDbManager
     Task IncreaseInfects(Guid player);
     Task<Dictionary<string, List<string>>?> GetAllActionOrders(Guid player);
     Task SetActionOrder(Guid player, string id, List<string> actions);
+    Task<HashSet<string>> GetLarvaPoolOptOuts(Guid player);
+    Task SetLarvaPoolOptIn(Guid player, string hiveId, bool optedIn);
     Task AddChatBan(int? round,
         NetUserId target,
         (IPAddress, int)? addressRange,
@@ -253,6 +255,18 @@ public sealed partial class ServerDbManager
     {
         DbWriteOpsMetric.Inc();
         return RunDbCommand(() => _db.SetActionOrder(player, id, actions));
+    }
+
+    public Task<HashSet<string>> GetLarvaPoolOptOuts(Guid player)
+    {
+        DbReadOpsMetric.Inc();
+        return RunDbCommand(() => _db.GetLarvaPoolOptOuts(player));
+    }
+
+    public Task SetLarvaPoolOptIn(Guid player, string hiveId, bool optedIn)
+    {
+        DbWriteOpsMetric.Inc();
+        return RunDbCommand(() => _db.SetLarvaPoolOptIn(player, hiveId, optedIn));
     }
 
     public Task AddChatBan(int? round,

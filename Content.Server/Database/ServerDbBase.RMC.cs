@@ -351,6 +351,38 @@ public abstract partial class ServerDbBase
         await db.DbContext.SaveChangesAsync();
     }
 
+    public async Task<HashSet<string>> GetLarvaPoolOptOuts(Guid player)
+    {
+        await using var db = await GetDb();
+        return await db.DbContext.RMCLarvaPoolOptOuts
+            .Where(o => o.PlayerId == player)
+            .Select(o => o.HiveId)
+            .ToHashSetAsync();
+    }
+
+    public async Task SetLarvaPoolOptIn(Guid player, string hiveId, bool optedIn)
+    {
+        await using var db = await GetDb();
+        var optOut = await db.DbContext.RMCLarvaPoolOptOuts
+            .FirstOrDefaultAsync(o => o.PlayerId == player && o.HiveId == hiveId);
+
+        if (optedIn)
+        {
+            if (optOut != null)
+                db.DbContext.RMCLarvaPoolOptOuts.Remove(optOut);
+        }
+        else if (optOut == null)
+        {
+            db.DbContext.RMCLarvaPoolOptOuts.Add(new RMCLarvaPoolOptOut
+            {
+                PlayerId = player,
+                HiveId = hiveId,
+            });
+        }
+
+        await db.DbContext.SaveChangesAsync();
+    }
+
     public async Task AddChatBan(int? round,
         NetUserId target,
         (IPAddress, int)? addressRange,

@@ -1,4 +1,5 @@
 using Content.Server.Popups;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Administration;
 using Content.Shared.GameTicking;
 using Content.Shared.Mind;
@@ -50,7 +51,10 @@ namespace Content.Server.Ghost
                 mind = _entities.GetComponent<MindComponent>(mindId);
             }
 
-            if (!_entities.System<GhostSystem>().OnGhostAttempt(mindId, true, true, mind: mind))
+            // Explicitly ghosting from a xeno abandons it so another player can take over the body.
+            var canReturn = player.AttachedEntity is not { } attached ||
+                            !_entities.HasComponent<XenoComponent>(attached);
+            if (!_entities.System<GhostSystem>().OnGhostAttempt(mindId, canReturn, true, mind: mind))
             {
                 shell.WriteLine(Loc.GetString("ghost-command-denied"));
             }

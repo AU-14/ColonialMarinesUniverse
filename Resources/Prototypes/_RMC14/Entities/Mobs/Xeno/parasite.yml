@@ -149,12 +149,6 @@
     ventCrawlIcon: parasite
   - type: Unshieldable
   - type: ExcludedFromKingVote
-  # CMU14 - Parasite players keep their queue spot but parasites are not queue targets.
-  - type: MindTakeoverBehavior
-    ejectFromLarvaQueues: false
-  - type: RemoveComponents
-    components:
-    - type: CanBeLarvaQueued
 
 - type: entity
   parent: CMXenoParasiteBase

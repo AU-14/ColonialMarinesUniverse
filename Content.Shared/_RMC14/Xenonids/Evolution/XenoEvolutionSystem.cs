@@ -664,11 +664,12 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
 
     private EntityUid TransferXeno(EntityUid xeno, EntProtoId proto)
     {
+        EnsureComp<XenoEvolutionTransferComponent>(xeno);
         var coordinates = _transform.GetMoverCoordinates(xeno);
         var newXeno = Spawn(proto, coordinates);
+        EnsureComp<LarvaPoolClaimBlockedComponent>(newXeno);
+        EnsureComp<XenoEvolutionTransferComponent>(newXeno);
         _xenoHive.SetSameHive(xeno, newXeno);
-
-        RemComp<CanBeLarvaQueuedComponent>(xeno);
 
         if (_mind.TryGetMind(xeno, out var mindId, out _))
         {

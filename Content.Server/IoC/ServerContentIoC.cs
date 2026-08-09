@@ -7,6 +7,7 @@ using Content.Server._RMC14.Discord;
 using Content.Server._RMC14.LinkAccount;
 using Content.Server._RMC14.Mentor;
 using Content.Server._RMC14.PlayTimeTracking;
+using Content.Server._RMC14.Xenonids.JoinXeno;
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
@@ -103,6 +104,7 @@ internal static class ServerContentIoC
         deps.Register<CommendationManager>();
         deps.Register<RMCActionsManager>();
         deps.Register<RMCChatBansManager>();
+        deps.Register<LarvaPoolPreferenceManager>();
         deps.Register<WhitelistManager>();
     }
 }

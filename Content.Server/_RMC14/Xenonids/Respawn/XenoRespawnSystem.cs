@@ -31,7 +31,6 @@ public sealed partial class XenoRespawnSystem : EntitySystem
             return;
 
         RemComp<GhostTakeoverAvailableComponent>(xeno);
-        RemComp<CanBeLarvaQueuedComponent>(xeno);
 
         var session = actor.PlayerSession;
 

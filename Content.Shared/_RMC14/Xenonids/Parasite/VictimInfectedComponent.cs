@@ -1,6 +1,5 @@
 using Content.Shared._RMC14.Medical.Autodoc;
 using Content.Shared._RMC14.Medical.Surgery;
-using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
 using Robust.Shared.Audio;
@@ -14,7 +13,7 @@ using static Robust.Shared.Utility.SpriteSpecifier;
 namespace Content.Shared._RMC14.Xenonids.Parasite;
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState, AutoGenerateComponentPause]
-[Access(typeof(SharedXenoParasiteSystem), typeof(LarvaQueueSystem))]
+[Access(typeof(SharedXenoParasiteSystem))]
 public sealed partial class VictimInfectedComponent : Component
 {
     /// <summary>

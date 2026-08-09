@@ -496,7 +496,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             return false;
 
         if (_net.IsServer && TryComp<ActorComponent>(user, out var actor))
+        {
             parasite.Comp.PendingInfectorUserId = actor.PlayerSession.UserId;
+            parasite.Comp.InfectorUser = actor.PlayerSession.UserId;
+            parasite.Comp.InfectorWantsLarva = false;
+            parasite.Comp.InfectorLarvaClaimPending = false;
+        }
 
         var ev = new AttachParasiteDoAfterEvent();
         var delay = parasite.Comp.ManualAttachDelay;
@@ -577,7 +582,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             return false;
 
         if (_net.IsServer && TryComp<ActorComponent>(parasite, out var infector))
+        {
             parasite.Comp.PendingInfectorUserId = infector.PlayerSession.UserId;
+            parasite.Comp.InfectorUser = infector.PlayerSession.UserId;
+            parasite.Comp.InfectorWantsLarva = false;
+            parasite.Comp.InfectorLarvaClaimPending = false;
+        }
 
         if (_net.IsServer)
         {
@@ -715,6 +725,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 SetHive((infectedVictim, victimComp), _hive.GetHive(uid)?.Owner);
 
                 victimComp.InfectorUserId = para.PendingInfectorUserId;
+                victimComp.InfectorUser = para.InfectorUser;
+                victimComp.InfectorWantsLarva = para.InfectorWantsLarva;
+                victimComp.InfectorLarvaClaimPending = para.InfectorLarvaClaimPending;
 
                 if (TryComp<ActorComponent>(infectedVictim, out var victimActor))
                     victimComp.VictimUserId = victimActor.PlayerSession.UserId;
@@ -761,15 +774,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
             // spawn the larva
             if (infected.BurstAt <= time && infected.SpawnedLarva == null)
-            {
-                SpawnLarva((uid, infected), out var spawnedLarva);
-                var priorityEv = new XenoBurstPriorityEvent(
-                    infected.VictimUserId,
-                    infected.InfectorUserId,
-                    GetNetEntity(infected.Hive),
-                    GetNetEntity(spawnedLarva));
-                RaiseLocalEvent(ref priorityEv);
-            }
+                SpawnLarva((uid, infected), out _);
 
             // Stages
             // Percentage of how far along we out to burst time times the number of stages, truncated. You can't go back a stage once you've reached one
@@ -1068,11 +1073,80 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         Dirty(burst);
     }
 
+    protected bool TrySetLarvaClaimChoice(Entity<XenoParasiteComponent> parasite, EntityUid victim, NetUserId userId, bool wantsLarva)
+    {
+        if (parasite.Comp.InfectedVictim != victim ||
+            parasite.Comp.InfectorUser != userId)
+        {
+            return false;
+        }
+
+        parasite.Comp.InfectorWantsLarva = wantsLarva;
+        parasite.Comp.InfectorLarvaClaimPending = false;
+        Dirty(parasite);
+
+        if (TryComp(victim, out VictimInfectedComponent? infected) &&
+            infected.InfectorUser == userId)
+        {
+            infected.InfectorWantsLarva = wantsLarva;
+            infected.InfectorLarvaClaimPending = false;
+            Dirty(victim, infected);
+        }
+
+        return true;
+    }
+
+    protected bool TrySetLarvaClaimPending(Entity<XenoParasiteComponent> parasite, EntityUid victim, NetUserId userId)
+    {
+        if (parasite.Comp.InfectedVictim != victim ||
+            parasite.Comp.InfectorUser != userId)
+        {
+            return false;
+        }
+
+        parasite.Comp.InfectorLarvaClaimPending = true;
+        Dirty(parasite);
+
+        if (TryComp(victim, out VictimInfectedComponent? infected) &&
+            infected.InfectorUser == userId &&
+            !infected.InfectorWantsLarva)
+        {
+            infected.InfectorLarvaClaimPending = true;
+            Dirty(victim, infected);
+        }
+
+        return true;
+    }
+
+    protected bool TryGetLarvaClaimUser(Entity<VictimInfectedComponent> victim, out NetUserId userId)
+    {
+        if (victim.Comp.InfectorWantsLarva &&
+            victim.Comp.InfectorUser is { } infector)
+        {
+            userId = infector;
+            return true;
+        }
+
+        userId = default;
+        return false;
+    }
+
+    protected void ClearInfectorUser(Entity<VictimInfectedComponent> victim)
+    {
+        victim.Comp.InfectorUser = null;
+        victim.Comp.InfectorWantsLarva = false;
+        victim.Comp.InfectorLarvaClaimPending = false;
+        Dirty(victim);
+    }
+
+    protected virtual void LarvaLinked(Entity<VictimInfectedComponent> victim, EntityUid spawned)
+    {
+    }
+
     public void SpawnLarva(Entity<VictimInfectedComponent> victim, out EntityUid spawned)
     {
         var larvaContainer = _container.EnsureContainer<ContainerSlot>(victim.Owner, victim.Comp.LarvaContainerId);
         spawned = SpawnInContainerOrDrop(victim.Comp.BurstSpawn, victim.Owner, larvaContainer.ID);
-        EnsureComp<LarvaQueuedComponent>(spawned);
         LinkLarvaToVictim(victim, spawned);
     }
 
@@ -1080,15 +1154,11 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     {
         var larvaContainer = _container.EnsureContainer<ContainerSlot>(victim.Owner, victim.Comp.LarvaContainerId);
         _container.InsertOrDrop(spawned, larvaContainer);
-        EnsureComp<LarvaQueuedComponent>(spawned);
         LinkLarvaToVictim(victim, spawned);
     }
 
     private void LinkLarvaToVictim(Entity<VictimInfectedComponent> victim, EntityUid spawned)
     {
-        if (HasComp<XenoComponent>(spawned))
-            _hive.SetHive(spawned, victim.Comp.Hive);
-
         victim.Comp.CurrentStage = 6;
         victim.Comp.SpawnedLarva = spawned;
         Dirty(victim);
@@ -1096,6 +1166,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         EnsureComp<BursterComponent>(spawned, out var burster);
         burster.BurstFrom = victim.Owner;
         Dirty(spawned, burster);
+
+        // Let the accepted infector claim this specific larva before hive assignment wakes the general larva pool.
+        LarvaLinked(victim, spawned);
+
+        if (HasComp<XenoComponent>(spawned))
+            _hive.SetHive(spawned, victim.Comp.Hive);
     }
 }
 

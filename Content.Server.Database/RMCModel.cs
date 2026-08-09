@@ -261,6 +261,18 @@ public sealed class RMCPlayerActionOrder
     public List<string> Actions { get; set; } = default!;
 }
 
+[Table("rmc_larva_pool_opt_out")]
+[PrimaryKey(nameof(PlayerId), nameof(HiveId))]
+public sealed class RMCLarvaPoolOptOut
+{
+    [ForeignKey("Player")]
+    public Guid PlayerId { get; set; }
+
+    public Player Player { get; set; } = default!;
+
+    public string HiveId { get; set; } = default!;
+}
+
 [Table("rmc_chat_bans"), Index(nameof(PlayerId)), Index(nameof(Address))]
 public sealed class RMCChatBans
 {
@@ -315,6 +327,7 @@ public abstract partial class ServerDbContext
     public DbSet<RMCCommendation> RMCCommendations { get; set; } = default!;
     public DbSet<RMCPlayerStats> RMCPlayerStats { get; set; } = default!;
     public DbSet<RMCPlayerActionOrder> RMCPlayerActionOrder { get; set; } = default!;
+    public DbSet<RMCLarvaPoolOptOut> RMCLarvaPoolOptOuts { get; set; } = default!;
     public DbSet<RMCChatBans> RMCPlayerChatBans { get; set; } = default!;
 }
 
@@ -341,6 +354,7 @@ public partial class Player
     public List<RMCCommendation> CommendationsDeleted { get; set; } = default!;
     public RMCPlayerStats Stats { get; set; } = default!;
     public List<RMCPlayerActionOrder> ActionOrder { get; set; } = default!;
+    public List<RMCLarvaPoolOptOut> LarvaPoolOptOuts { get; set; } = default!;
     public List<RMCChatBans> ChatBans { get; set; } = default!;
     public List<RMCChatBans> AdminChatBansCreated { get; set; } = default!;
     public List<RMCChatBans> AdminChatBansLastEdited { get; set; } = default!;
@@ -467,6 +481,13 @@ internal static class RMCModelConfiguration
             .HasOne(a => a.Player)
             .WithMany(p => p.ActionOrder)
             .HasForeignKey(a => a.PlayerId)
+            .HasPrincipalKey(p => p.UserId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<RMCLarvaPoolOptOut>()
+            .HasOne(o => o.Player)
+            .WithMany(p => p.LarvaPoolOptOuts)
+            .HasForeignKey(o => o.PlayerId)
             .HasPrincipalKey(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
