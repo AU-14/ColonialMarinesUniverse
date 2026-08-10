@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Content.Server.AU14.Round;
 using Content.Server._AU14.Insurgency.Database;
+using Content.Shared.CMU.Round;
 
 namespace Content.Server._AU14.Insurgency;
 
@@ -15,7 +16,7 @@ namespace Content.Server._AU14.Insurgency;
 /// </summary>
 public sealed partial class InsurgencyFactionSelectionSystem : EntitySystem
 {
-    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private InsurgencyFactionDbSystem _db = default!;
     [Dependency] private InsurgencyFactionApplySystem _apply = default!;
 
@@ -26,7 +27,7 @@ public sealed partial class InsurgencyFactionSelectionSystem : EntitySystem
     /// </summary>
     public async Task<List<InsurgencyFactionDbSystem.StoredFaction>> GetOpposingDefaultFactionsAsync()
     {
-        var govfor = _platoons.SelectedGovforPlatoon?.ID;
+        var govfor = GetGovforId();
         var all = await _db.GetFactionsAsync();
         return all.Where(f => f.IsDefault && OpposesGovfor(f.Definition, govfor)).ToList();
     }
@@ -41,11 +42,18 @@ public sealed partial class InsurgencyFactionSelectionSystem : EntitySystem
         if (def == null)
             return false;
 
-        if (!OpposesGovfor(def, _platoons.SelectedGovforPlatoon?.ID))
+        if (!OpposesGovfor(def, GetGovforId()))
             return false;
 
         _apply.ApplyFaction(def);
         return true;
+    }
+
+    private string? GetGovforId()
+    {
+        return _roundDirector.TryGetLegacyForceProjection(RoundSide.Govfor, out var govfor)
+            ? govfor.ID
+            : null;
     }
 
     private static bool OpposesGovfor(Content.Shared._AU14.Insurgency.FactionDefinition def, string? govforPlatoon)
