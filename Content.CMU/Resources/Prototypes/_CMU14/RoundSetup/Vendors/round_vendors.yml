@@ -94,3 +94,15 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: SquadSergeantVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundCombatTechnicianVendor
+  name: round combat technician rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: CombatTechnicianVendor

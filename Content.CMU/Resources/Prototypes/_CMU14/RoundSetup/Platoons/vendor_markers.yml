@@ -52,12 +52,13 @@
     class: Arifleman
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundCombatTechnicianVendor
   id: VMarkerOpforComtech
-  name: Opfor combat technician marker
+  name: OPFOR combat technician rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: combattech
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -300,12 +301,13 @@
     class: Rifleman
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundCombatTechnicianVendor
   id: VMarkerGovforCombatTech
-  name: Gov combat technician marker
+  name: GOVFOR combat technician rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: combattech
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -563,15 +565,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundCombatTechnicianVendor
   id: VMarkerShipComtech
-  name: Ship combat technician marker
-  components:
-  - type: VendorMarker
-    class: combattech
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
-    state: base
+  name: ship combat technician rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip
