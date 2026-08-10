@@ -652,9 +652,11 @@ namespace Content.Server.AU14.Round
             }
 
             var playerCount = _playerManager.PlayerCount;
-            var platoonSpawnRule = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-            var govforId = platoonSpawnRule.SelectedGovforPlatoon?.ID;
-            var opforId = platoonSpawnRule.SelectedOpforPlatoon?.ID;
+            var director = GetRoundDirectorSystem();
+            director.TryGetLegacyForceProjection(RoundSide.Govfor, out var govfor);
+            director.TryGetLegacyForceProjection(RoundSide.Opfor, out var opfor);
+            var govforId = govfor?.ID;
+            var opforId = opfor?.ID;
             var threatLimits = new List<(int MaxThirdParties, int BodyBudget)>();
             var eligibleThreatIds = new List<string>();
 
@@ -890,10 +892,12 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
             var playerCount = _playerManager.PlayerCount;
-            var govforId = platoonSpawnRuleSystem?.SelectedGovforPlatoon?.ID;
-            var opforId = platoonSpawnRuleSystem?.SelectedOpforPlatoon?.ID;
+            var director = GetRoundDirectorSystem();
+            director.TryGetLegacyForceProjection(RoundSide.Govfor, out var govfor);
+            director.TryGetLegacyForceProjection(RoundSide.Opfor, out var opfor);
+            var govforId = govfor?.ID;
+            var opforId = opfor?.ID;
             var threats = new List<ProtoId<ThreatPrototype>>();
 
             foreach (var threatId in planet.AllowedThreats)
