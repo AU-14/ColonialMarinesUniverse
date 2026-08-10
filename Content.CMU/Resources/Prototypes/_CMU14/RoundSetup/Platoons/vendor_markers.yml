@@ -129,12 +129,13 @@
     class: OperationsOfficer
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundRadioTelephoneOperatorVendor
   id: VMarkerOpforradiotelephoneOperator
-  name: Opfor RTO marker
+  name: OPFOR radio telephone operator rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Rto
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundMilitaryDoctorVendor
@@ -337,12 +338,13 @@
     class: OperationsOfficer
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundRadioTelephoneOperatorVendor
   id: VMarkerGovforradiotelephoneOperator
-  name: Gov RTO marker
+  name: GOVFOR radio telephone operator rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Rto
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -627,15 +629,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundRadioTelephoneOperatorVendor
   id: VMarkerShipRadiotelephoneOperator
-  name: Ship RTO marker
-  components:
-  - type: VendorMarker
-    class: Rto
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
-    state: base
+  name: ship radio telephone operator rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip

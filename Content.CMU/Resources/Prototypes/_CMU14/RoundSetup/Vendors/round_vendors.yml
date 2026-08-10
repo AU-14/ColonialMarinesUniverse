@@ -46,3 +46,15 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: JuniorOfficerVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundRadioTelephoneOperatorVendor
+  name: round radio telephone operator rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: RadioTelephoneOperatorVendor
