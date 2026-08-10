@@ -76,12 +76,13 @@
     class: Dcc
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundWeaponsVendor
   id: VMarkerOpforWeapons
-  name: Opfor Weapons marker
+  name: OPFOR weapons rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Weapons
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -259,12 +260,13 @@
     class: VehicleCrew
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundWeaponsVendor
   id: VMarkerGovforWeapons
-  name: Gov Weapons marker
+  name: GOVFOR weapons rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Weapons
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
