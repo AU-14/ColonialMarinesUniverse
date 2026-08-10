@@ -19,9 +19,6 @@ public sealed class HivelessSystem : EntitySystem
 
     private void RemoveHive(Entity<HivelessComponent> ent)
     {
-        if (!HasComp<HivelessComponent>(ent.Owner))
-            return;
-        RemComp<HivelessComponent>(ent);
         RemComp<HiveMemberComponent>(ent);
         RemComp<XenoEvolutionComponent>(ent);
         RemComp<XenoDevolveComponent>(ent);

@@ -186,6 +186,9 @@ public sealed partial class XenoSystem : EntitySystem
         _eye.RefreshVisibilityMask(xeno.Owner);
         Dirty(xeno);
 
+        var initialized = new XenoMapInitializedEvent(xeno.Owner);
+        RaiseLocalEvent(ref initialized);
+
         if (xeno.Comp.Role == "CMXenoQueen")
         {
             RaiseLocalEvent(new QueenSpawnedEvent(xeno.Owner));

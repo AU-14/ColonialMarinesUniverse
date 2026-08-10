@@ -4,6 +4,7 @@ using Content.IntegrationTests.Pair;
 using Content.Server.Mind;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Ghost;
 using Content.Shared.Ghost.Components;
@@ -73,7 +74,11 @@ public sealed class XenoParasiteLarvaClaimTest
             ghostNet = entMan.GetNetEntity(ghost);
 
             Assert.That(entMan.TryGetComponent<DialogComponent>(ghost, out var dialog), Is.True);
-            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[] { "Yes", "No" }));
+            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[]
+            {
+                "rmc-xeno-parasite-larva-claim-yes",
+                "rmc-xeno-parasite-larva-claim-no",
+            }));
         });
 
         await pair.Client.WaitAssertion(() =>
@@ -167,7 +172,11 @@ public sealed class XenoParasiteLarvaClaimTest
             ghostNet = entMan.GetNetEntity(ghost);
 
             Assert.That(entMan.TryGetComponent<DialogComponent>(ghost, out var dialog), Is.True);
-            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[] { "Yes", "No" }));
+            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[]
+            {
+                "rmc-xeno-parasite-larva-claim-yes",
+                "rmc-xeno-parasite-larva-claim-no",
+            }));
         });
 
         await pair.Client.WaitPost(() =>
@@ -229,6 +238,7 @@ public sealed class XenoParasiteLarvaClaimTest
         var map = await pair.CreateTestMap();
 
         var entMan = server.EntMan;
+        var hiveSystem = entMan.System<SharedXenoHiveSystem>();
         var mind = entMan.System<MindSystem>();
         var parasiteSystem = entMan.System<SharedXenoParasiteSystem>();
         var player = server.PlayerMan.Sessions.Single();
@@ -265,6 +275,8 @@ public sealed class XenoParasiteLarvaClaimTest
             Assert.That(infected.SpawnedLarva, Is.Not.Null);
             Assert.That(player.AttachedEntity, Is.Not.EqualTo(infected.SpawnedLarva));
             Assert.That(entMan.HasComponent<GhostComponent>(player.AttachedEntity), Is.True);
+            Assert.That(hiveSystem.GetHive(infected.SpawnedLarva.Value), Is.Not.Null);
+            Assert.That(entMan.HasComponent<LarvaPoolAvailableComponent>(infected.SpawnedLarva.Value), Is.True);
         });
 
         await CleanReturnDisconnected(pair);

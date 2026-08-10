@@ -56,7 +56,6 @@ public sealed class LarvaPoolTest
         server.CfgMan.SetCVar(RMCCVars.RMCLarvaPoolWaitSeconds, 0);
 
         var entMan = server.EntMan;
-        var hiveSystem = entMan.System<SharedXenoHiveSystem>();
         var mind = entMan.System<MindSystem>();
         var player = server.PlayerMan.Sessions.Single();
         await DeAdmin(pair, player);
@@ -66,9 +65,7 @@ public sealed class LarvaPoolTest
         await server.WaitAssertion(() =>
         {
             ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
-            var hive = entMan.SpawnEntity("CMXenoHive", map.GridCoords.Offset(new Vector2(1, 0)));
-            larva = entMan.SpawnEntity("CMXenoLarva", map.GridCoords.Offset(new Vector2(2, 0)));
-            hiveSystem.SetHive(larva, hive);
+            larva = entMan.SpawnEntity("CMXenoLarva", map.GridCoords.Offset(new Vector2(1, 0)));
 
             var mindId = mind.CreateMind(player.UserId, "Observer");
             mind.TransferTo(mindId, ghost);
@@ -705,6 +702,7 @@ public sealed class LarvaPoolTest
         var player = server.PlayerMan.Sessions.Single();
         await DeAdmin(pair, player);
 
+        await CancelActiveVotes(pair);
         var candidate = await server.AddDummySession();
         await pair.RunTicksSync(5);
         await DeAdmin(pair, candidate);
@@ -712,7 +710,6 @@ public sealed class LarvaPoolTest
         await userDb.WaitLoadComplete(candidate);
         await pair.SetJobPriority(SelectableXenoRole, JobPriority.High, candidate.UserId);
 
-        await CancelActiveVotes(pair);
         var ticker = entMan.System<GameTicker>();
         await server.WaitPost(() => ticker.StartRound());
         await server.WaitPost(() =>
