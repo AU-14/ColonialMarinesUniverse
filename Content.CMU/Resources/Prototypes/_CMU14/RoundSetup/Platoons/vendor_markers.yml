@@ -72,12 +72,13 @@
     side: Opfor
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundDropshipCrewChiefVendor
   id: VMarkerOpforDCC
-  name: Opfor dcc marker
+  name: OPFOR dropship crew chief rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Dcc
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundWeaponsVendor
@@ -319,12 +320,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundDropshipCrewChiefVendor
   id: VMarkerGovforDCC
-  name: Gov dcc marker
+  name: GOVFOR dropship crew chief rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Dcc
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: CMURoundMilitaryDoctorVendor
@@ -573,15 +575,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundDropshipCrewChiefVendor
   id: VMarkerShipDCC
-  name: Ship aircrew clothing marker
-  components:
-  - type: VendorMarker
-    class: Dcc
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
-    state: base
+  name: ship dropship crew chief rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundOperationsOfficerVendor

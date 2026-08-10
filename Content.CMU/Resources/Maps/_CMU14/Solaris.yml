@@ -107995,7 +107995,7 @@ entities:
     - type: Transform
       pos: 80.591156,-120.38352
       parent: 1
-- proto: AU14USCMaircrewvendor
+- proto: VMarkerGovforDCC
   entities:
   - uid: 207
     components:

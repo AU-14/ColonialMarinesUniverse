@@ -14813,7 +14813,7 @@ entities:
     - type: Transform
       pos: -29.68489,0.49834585
       parent: 1
-- proto: AU14USCMaircrewvendor
+- proto: VMarkerShipDCC
   entities:
   - uid: 181
     components:

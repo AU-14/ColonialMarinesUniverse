@@ -24,6 +24,18 @@
 
 - type: entity
   parent: ColMarTechBase
+  id: CMURoundDropshipCrewChiefVendor
+  name: round dropship crew chief rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: DropshipCrewChiefVendor
+
+- type: entity
+  parent: ColMarTechBase
   id: CMURoundWeaponsVendor
   name: round weapons rack
   suffix: Round Setup
