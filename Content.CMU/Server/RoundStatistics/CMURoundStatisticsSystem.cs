@@ -197,7 +197,7 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             outcome.Value.Outcome,
             outcome.Value.Source,
             _auRound.SelectedThreat?.ID,
-            _auRound.GetSelectedPlanetId(),
+            _director.Selection?.PlanetId,
             _director.Selection?.GovforPlatoonId,
             _director.Selection?.OpforPlatoonId,
             ev.PlayerCount,

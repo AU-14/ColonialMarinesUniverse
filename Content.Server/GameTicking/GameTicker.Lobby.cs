@@ -49,7 +49,7 @@ namespace Content.Server.GameTicking
 
         private string GetPlanetMapName()
         {
-            var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
+            _cmuRoundDirector.TryGetLegacyPlanetProjection(out var selectedPlanet);
             if (!string.IsNullOrWhiteSpace(selectedPlanet?.VoteName))
                 return selectedPlanet.VoteName;
 

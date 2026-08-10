@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.Round;
 
@@ -62,6 +63,46 @@ public sealed partial class CMURoundDirectorSystem
 
         platoon = _round.GetLegacyForceSelection(side);
         return platoon != null;
+    }
+
+    /// <summary>
+    /// Resolves the committed planet through the temporary legacy prototype component projection.
+    /// </summary>
+    internal bool TryGetCommittedLegacyPlanet(
+        [NotNullWhen(true)] out RMCPlanetMapPrototypeComponent? planet)
+    {
+        planet = null;
+        if (Selection?.PlanetId is not { } planetId ||
+            string.IsNullOrWhiteSpace(planetId) ||
+            !_prototypes.TryIndex<EntityPrototype>(planetId, out var prototype))
+        {
+            return false;
+        }
+
+        return prototype.TryComp(out planet, _componentFactory);
+    }
+
+    /// <summary>
+    /// Resolves the committed planet after freeze or the director-controlled lobby candidate before freeze.
+    /// </summary>
+    internal bool TryGetLegacyPlanetProjection(
+        [NotNullWhen(true)] out RMCPlanetMapPrototypeComponent? planet)
+    {
+        if (_state.Phase != CMURoundPhase.AwaitingSelection)
+            return TryGetCommittedLegacyPlanet(out planet);
+
+        planet = _round.GetSelectedPlanet();
+        return planet != null;
+    }
+
+    /// <summary>
+    /// Returns the committed planet identifier after freeze or the lobby candidate before freeze.
+    /// </summary>
+    internal string? GetLegacyPlanetIdProjection()
+    {
+        return _state.Phase == CMURoundPhase.AwaitingSelection
+            ? _round.GetSelectedPlanetId()
+            : Selection?.PlanetId;
     }
 
     /// <summary>

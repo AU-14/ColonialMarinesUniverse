@@ -94,8 +94,9 @@ public sealed class ScenarioPlanValidateCommand : IConsoleCommand
 
         var planetId = positionalArgs.Length >= 3
             ? positionalArgs[2]
-            : round.GetSelectedPlanetId();
-        var mapId = round.GetSelectedPlanet()?.MapId;
+            : director.GetLegacyPlanetIdProjection();
+        director.TryGetLegacyPlanetProjection(out var selectedPlanet);
+        var mapId = selectedPlanet?.MapId;
         if (!string.IsNullOrWhiteSpace(planetId))
         {
             if (!TryGetPlanetMapId(prototypes, componentFactory, planetId, out mapId))

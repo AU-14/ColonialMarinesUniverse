@@ -83,7 +83,7 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         if (string.IsNullOrWhiteSpace(presetId))
             return;
 
-        var selectedPlanet = _auRoundSystem.GetSelectedPlanet();
+        _roundDirector.TryGetCommittedLegacyPlanet(out var selectedPlanet);
         if (selectedPlanet == null
             || !gameMap.ID.Equals(selectedPlanet.MapId, StringComparison.OrdinalIgnoreCase))
         {

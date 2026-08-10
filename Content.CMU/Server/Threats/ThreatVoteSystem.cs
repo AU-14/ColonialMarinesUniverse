@@ -101,7 +101,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             return false;
 
         string? presetId = _auRound.SelectedPreset?.ID;
-        RMCPlanetMapPrototypeComponent? planet = _auRound.GetSelectedPlanet();
+        _roundDirector.TryGetCommittedLegacyPlanet(out var planet);
         if (presetId == null || planet == null)
         {
             _jobSelection.ForcedJobAssignments.Clear();

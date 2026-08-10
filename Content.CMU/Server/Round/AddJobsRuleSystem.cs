@@ -31,7 +31,7 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         PlatoonPrototype? platoon = null;
-        var planet = _auRoundSystem.GetSelectedPlanet();
+        _roundDirector.TryGetLegacyPlanetProjection(out var planet);
 
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
         var isDistressPreset = !string.IsNullOrEmpty(presetId) &&
