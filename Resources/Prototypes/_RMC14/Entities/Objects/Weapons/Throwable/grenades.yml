@@ -98,6 +98,8 @@
     intensitySlope: 6
     totalIntensity: 200
     canCreateVacuum: false
+  - type: SeveranceDamageModifier
+    multiplier: 4
   - type: Ammo
   - type: CMExplosionEffect
   - type: CMVocalizeTrigger
@@ -262,6 +264,8 @@
     intensitySlope: 4
     totalIntensity: 110
     deleteAfterExplosion: false
+  - type: SeveranceDamageModifier
+    multiplier: 3
   - type: ProjectileGrenade
     triggerKey: trigger
     fillPrototype: CMProjectileShrapnel
@@ -294,6 +298,8 @@
     intensitySlope: 6
     totalIntensity: 240
     deleteAfterExplosion: false
+  - type: SeveranceDamageModifier
+    multiplier: 3
   - type: ProjectileGrenade
     triggerKey: trigger
     fillPrototype: CMProjectileShrapnel
@@ -323,6 +329,8 @@
     maxIntensity: 35 # max 175 brute, 175 burn
     intensitySlope: 5
     totalIntensity: 280
+  - type: SeveranceDamageModifier
+    multiplier: 6
   - type: Tag
     tags:
     - Grenade

@@ -198,6 +198,8 @@
       types:
         Blunt: 15
     maxFixedRange: 6 # 7 tiles
+  - type: SeveranceDamageModifier
+    multiplier: 8
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/emblr.rsi
     layers:
@@ -271,6 +273,8 @@
       types:
         Blunt: 15
     maxFixedRange: 6 # 7 tiles
+  - type: SeveranceDamageModifier
+    multiplier: 8
   - type: Sprite
     sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Projectiles/m5spec_projectiles.rsi
     layers:

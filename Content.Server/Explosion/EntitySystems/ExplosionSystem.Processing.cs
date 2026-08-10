@@ -473,7 +473,7 @@ public sealed partial class ExplosionSystem
                 }
 
                 // RMC14
-                var ev = new ExplosionReceivedEvent(id, epicenter, damage);
+                var ev = new ExplosionReceivedEvent(id, epicenter, damage, cause);
                 RaiseLocalEvent(entity, ref ev);
 
                 if (_actorQuery.HasComp(entity))

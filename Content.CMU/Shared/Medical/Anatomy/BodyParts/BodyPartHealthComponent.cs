@@ -38,6 +38,20 @@ public sealed partial class BodyPartHealthComponent : Component
     public FixedPoint2 SeveranceDamage;
 
     /// <summary>
+    ///     Portion of each damage type that contributes to structural severance.
+    ///     Ordinary piercing damage is deliberately low so bullets can destroy a
+    ///     limb medically without behaving like a cutting weapon.
+    /// </summary>
+    [DataField]
+    public Dictionary<ProtoId<DamageTypePrototype>, float> SeveranceDamageCoefficients = new()
+    {
+        { "Blunt", 0.15f },
+        { "Caustic", 0.10f },
+        { "Piercing", 0.025f },
+        { "Slash", 1f },
+    };
+
+    /// <summary>
     ///     Per-damage-group multiplier applied before deducting from <see cref="Current"/>.
     /// </summary>
     [DataField]

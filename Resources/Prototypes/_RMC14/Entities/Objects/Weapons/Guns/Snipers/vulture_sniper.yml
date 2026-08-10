@@ -244,6 +244,8 @@
         Structural: 1800
     soundHit:
       path: /Audio/_RMC14/Bullets/bullet_vulture_impact.ogg
+  - type: SeveranceDamageModifier
+    multiplier: 24
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 32

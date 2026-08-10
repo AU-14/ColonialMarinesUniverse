@@ -152,6 +152,8 @@
     damage:
       types:
         Piercing: 80
+  - type: SeveranceDamageModifier
+    multiplier: 10
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 32

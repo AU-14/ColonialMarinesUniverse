@@ -33,6 +33,8 @@
       types:
         Piercing: 25
     deleteOnCollide: true
+  - type: SeveranceDamageModifier
+    multiplier: 3
   - type: CMArmorPiercing
     amount: 20
   - type: RMCProjectileAccuracy

@@ -54,6 +54,8 @@
     intensitySlope: 4
     totalIntensity: 160
     canCreateVacuum: false
+  - type: SeveranceDamageModifier
+    multiplier: 2
   - type: Ammo
   - type: CMExplosionEffect
   - type: CMVocalizeTrigger
@@ -88,6 +90,8 @@
     intensitySlope: 8
     totalIntensity: 200
     canCreateVacuum: false
+  - type: SeveranceDamageModifier
+    multiplier: 4
   - type: Ammo
   - type: CMExplosionEffect
   - type: CMVocalizeTrigger

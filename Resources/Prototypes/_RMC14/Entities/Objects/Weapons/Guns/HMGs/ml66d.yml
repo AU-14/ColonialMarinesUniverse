@@ -256,6 +256,8 @@
     damage:
       types:
         Piercing: 36
+  - type: SeveranceDamageModifier
+    multiplier: 8
   - type: CMArmorPiercing
     amount: 50
   - type: RMCProjectileDamageFalloff

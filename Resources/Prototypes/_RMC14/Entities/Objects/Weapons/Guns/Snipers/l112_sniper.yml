@@ -283,6 +283,8 @@
     damage:
       types:
         Piercing: 40
+  - type: SeveranceDamageModifier
+    multiplier: 3
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 24
@@ -309,6 +311,8 @@
     damage:
       types:
         Piercing: 60
+  - type: SeveranceDamageModifier
+    multiplier: 3
   - type: RMCProjectileDamageFalloff
     thresholds:
     - range: 24

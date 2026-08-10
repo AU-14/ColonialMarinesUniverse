@@ -108,7 +108,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         CMUTraumaMechanism? mechanism = null,
         EntityUid? origin = null,
         DamageImpact impact = default,
-        TargetBodyZone? targetZone = null)
+        TargetBodyZone? targetZone = null,
+        float severanceMultiplier = 1f)
     {
         if (!_medicalEnabled || !_bodyPartEnabled)
             return false;
@@ -123,7 +124,16 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (scale != 1f)
             localizable *= scale;
 
-        return TryApplyPartDamageToPart(body, partUid, localizable, origin, tool, mechanism, impact, targetZone);
+        return TryApplyPartDamageToPart(
+            body,
+            partUid,
+            localizable,
+            origin,
+            tool,
+            mechanism,
+            impact,
+            targetZone,
+            severanceMultiplier);
     }
 
     private bool TryApplyPartDamageToPart(
@@ -134,7 +144,8 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         EntityUid? tool,
         CMUTraumaMechanism? mechanism,
         DamageImpact impact,
-        TargetBodyZone? targetZone)
+        TargetBodyZone? targetZone,
+        float severanceMultiplier)
     {
         if (!TryComp<BodyPartHealthComponent>(partUid, out var health))
             return false;
@@ -145,7 +156,11 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
             return false;
 
         var deduction = FixedPoint2.New(total * _bodyPartDamagePropagation);
-        var severanceDeduction = GetDamageInGroup(modified, BruteGroup) * (FixedPoint2)_bodyPartDamagePropagation;
+        severanceMultiplier = GetSeveranceMultiplier(tool, origin, severanceMultiplier);
+        var severanceDeduction = CalculateSeveranceDamage(
+            modified,
+            health.SeveranceDamageCoefficients,
+            severanceMultiplier * _bodyPartDamagePropagation);
 
         health.Current -= deduction;
         if (severanceDeduction > FixedPoint2.Zero)
@@ -165,6 +180,45 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         }
 
         return true;
+    }
+
+    /// <summary>
+    ///     Calculates structural severance damage independently from ordinary
+    ///     part HP damage.
+    /// </summary>
+    public static FixedPoint2 CalculateSeveranceDamage(
+        DamageSpecifier damage,
+        IReadOnlyDictionary<ProtoId<DamageTypePrototype>, float> coefficients,
+        float multiplier = 1f)
+    {
+        if (multiplier <= 0f)
+            return FixedPoint2.Zero;
+
+        var total = 0f;
+        foreach (var (type, amount) in damage.DamageDict)
+        {
+            if (amount <= FixedPoint2.Zero ||
+                !coefficients.TryGetValue(type, out var coefficient) ||
+                coefficient <= 0f)
+            {
+                continue;
+            }
+
+            total += amount.Float() * coefficient;
+        }
+
+        return FixedPoint2.New(total * multiplier);
+    }
+
+    private float GetSeveranceMultiplier(EntityUid? tool, EntityUid? origin, float fallback)
+    {
+        if (tool is { } toolUid && TryComp<SeveranceDamageModifierComponent>(toolUid, out var toolModifier))
+            return Math.Max(0f, toolModifier.Multiplier);
+
+        if (origin is { } originUid && TryComp<SeveranceDamageModifierComponent>(originUid, out var originModifier))
+            return Math.Max(0f, originModifier.Multiplier);
+
+        return Math.Max(0f, fallback);
     }
 
     private DamageSpecifier ExtractLocalizableDamage(DamageSpecifier damage)

@@ -6,19 +6,22 @@ using Content.Shared._CMU14.Medical.Injuries.Trauma;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Explosion;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 
 public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
 {
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private SharedCMUShrapnelSystem _shrapnel = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
 
     private const float ExposureFalloffTiles = 9f;
     private const float FullExposureDamage = 100f;
@@ -46,6 +49,9 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
             return;
 
         var propagation = 0.35f + exposure * 0.55f;
+        var severanceMultiplier = _prototypes.TryIndex<ExplosionPrototype>(args.Explosion, out var explosion)
+            ? explosion.SeveranceMultiplier
+            : 1f;
         foreach (var weighted in weightedParts)
         {
             var scale = propagation * weighted.Weight;
@@ -57,8 +63,10 @@ public sealed partial class CMUExplosionMedicalTraumaSystem : EntitySystem
                 weighted.Part,
                 args.Damage,
                 scale,
+                tool: args.Source,
                 mechanism: CMUTraumaMechanism.Explosive,
-                impact: DamageImpact.Explosion);
+                impact: DamageImpact.Explosion,
+                severanceMultiplier: severanceMultiplier);
         }
 
         _shrapnel.TryApplyExplosionShrapnel(ent.Owner, args.Explosion, exposure, weightedParts);
