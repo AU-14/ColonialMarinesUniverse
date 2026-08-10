@@ -92,7 +92,7 @@ public static class LegacyRoundSetupSlotAdapter
             PlatoonMarkerClass.DSWeapons or
                 PlatoonMarkerClass.DSPilot or
                 PlatoonMarkerClass.FighterDestination => null,
-            // Numbered escape hatches have no stable semantic purpose.
+            // Historical compatibility values only; no mapper prototypes or setup behavior use them.
             PlatoonMarkerClass.ExtraVendor1 or
                 PlatoonMarkerClass.ExtraVendor2 or
                 PlatoonMarkerClass.ExtraVendor3 or

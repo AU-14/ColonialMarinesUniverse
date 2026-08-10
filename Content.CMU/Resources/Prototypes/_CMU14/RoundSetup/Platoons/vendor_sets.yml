@@ -148,8 +148,6 @@
     OperationsOfficer: AU14prodigycommandequipmentvendor
     SectionSergeant: AU14prodigysectionleaderequipmentvendor
     SquadSergeant: AU14prodigysquadleaderequipmentvendor
-    ExtraVendor1: VMarkerOpforDeco5
-    Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14ProdigyRequisitionVendor
 
@@ -167,8 +165,6 @@
     OperationsOfficer: AU14VAIPOcommandequipmentvendor
     SectionSergeant: AU14VAIPOsectionleaderequipmentvendor
     SquadSergeant: AU14VAIPOsquadleaderequipmentvendor
-    ExtraVendor1: VMarkerOpforDeco5
-    Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14VAIPORequisitionVendor
 
@@ -190,7 +186,5 @@
     SquadSergeant: AU14RMCsquadleaderequipmentvendor
     Pilot: AU14RMCAircrewWeaponsVendor
     combattech: AU14RMCComtechGearVendor
-    ExtraVendor1: VMarkerOpforDeco5
-    Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14RMCRequisitionVendor
