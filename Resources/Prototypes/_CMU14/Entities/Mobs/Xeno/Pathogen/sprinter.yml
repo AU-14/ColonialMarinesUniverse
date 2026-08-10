@@ -1,0 +1,131 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoSprinterBase
+  name: Sprinter
+  description: A small, fast four-legged terror. Weak in sustained combat.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-sprinter
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/sprinter.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      230: Critical
+      330: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenSprinter
+    tier: 1
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenHide
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenBoneChips
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenZoom
+    - CMU14ActionXenoPathogenRegurgitate
+    - CMU14ActionXenoPathogenDevolve
+  - type: XenoZoom
+  - type: XenoBoneChips
+  - type: XenoLeap
+    delay: 0
+    knockdownTime: 2
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.4
+  - type: XenoPlasma
+    plasma: 100
+    maxPlasma: 100
+    plasmaRegenOnWeeds: 3
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 200
+    evolvesTo:
+    - CMU14XenoNeomorph
+    - CMU14XenoBlight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoBloodburster
+    canBeDevolvedByOther: false
+  - type: XenoHide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 85
+        mask:
+        - SmallMobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - SmallMobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 85
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.55
+    baseSprintSpeed: 10.0
+  - type: MeleeWeapon
+    attackRate: 2.0
+    damage:
+      groups:
+        Brute: 25
+  - type: CMArmor
+    explosionArmor: 5
+  - type: Tackle
+    min: 4
+    max: 5
+    chance: 0.4
+    stunMin: 4
+    stunMax: 4
+  - type: XenoDevour
+  - type: RMCSize
+    size: SmallXeno
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: sprinter
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - RMCSynthGrabbable
+  - type: VentCrawler
+    ventCrawlIcon: runner
+  - type: RMCActionOrder
+    id: CMU14XenoSprinter
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-sprinter
+  - type: Speech
+    speechSounds: Pathogen
+ 
+- type: entity
+  parent: CMU14XenoSprinterBase
+  id: CMU14XenoSprinter
+  name: Sprinter
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenSprinter

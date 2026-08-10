@@ -1,0 +1,110 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14JobUNISCEnforcer
+  icon: AU14JobIconMP
+  roundSide: ThirdParty
+  roundForce: UNISC
+  roundRole: AU14JobUNISCEnforcer
+  roundComponents:
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUNISC
+  - type: Skills
+    preset: AU14SkillPresetMilitaryPolice
+  - type: JobPrefix
+    prefix: au14-job-name-unisc-enforcer
+  - type: Language
+    spokenLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: United Nations Interstellar Space Corps Enforcer
+  description: au14-unisc-description
+  playTimeTracker: AU14JobUNISCEnforcer
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UNISC_Specialist:
+      entity: AU14ChevronUSArmySpecialist
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCEnforcer
+        time: 36000
+    UNISC_PFC:
+      entity: AU14ChevronUSArmyPFC
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCEnforcer
+        time: 18000
+    UNISC_PVT:
+      entity: AU14ChevronUSArmyPrivate2
+      requirements: []
+
+  spawnMenuRoleName: UNISC Enforcer
+  startingGear: AU14GearUNISCEnforcer
+  greeting: au14-unisc-greeting
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-unisc-squadleader
+  accessGroups:
+  - AU14GovforSquad
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUNISC
+  id: AU14JobUNISCEnforcer
+  name: UNISC Enforcer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUNISC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: UNISC Enforcer
+    description: A United Nations Interstellar Space Corps Enforcer
+    reregister: false
+    job: AU14JobUNISCEnforcer
+    raffle:
+      settings: short
+    rules: au14-unisc-rules
+
+- type: startingGear
+  id: AU14GearUNISCEnforcer
+  equipment:
+    id: AU14IDCardUNISCEnforcerDetachment
+    outerClothing: AU14ArmorM3UNISC
+    jumpsuit: AU14UNISCFatigues
+    shoes: CMBootsBlackFilled
+    head: AU14UNISCM10Helmet
+    belt: RMCBeltMarineMK1
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    back: AU14MolleSatchel
+    ears: AU14CMBHeadset
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    eyes: CMGlassesSecurity
+    suitstorage: RMCWeaponRifleM54CMK1
+  storage:
+    back:
+    - BedrollFolded
+    - CMMRE
+    - CMStunbaton
+    - RMCGrenadeFlashBang
+    - RMCGrenadeFlashBang
+    - RMCBoxZiptie
+    - CMEncryptionKeyUNISC
+
+- type: playTimeTracker
+  id: AU14JobUNISCEnforcer

@@ -1,0 +1,20 @@
+<Document>
+# Chemistry
+This section of the guide describes the machines you will have to work with during research.
+
+From here on, it is assumed that you are already familiar with the basic chemistry machines (Chemical Dispenser, Chem-Master)
+
+## Overview
+
+There are three machines involved in research.
+
+<GuideEntityEmbed Entity="CMUResearchDataTerminal" Caption="Research Data Terminal"/>
+<Box>[textlink="Guide" link="CMURDT"]</Box>
+<GuideEntityEmbed Entity="CMUXRFScanner" Caption="XRF Scanner"/>
+<Box>[textlink="Guide" link="CMUXRF"]</Box>
+<GuideEntityEmbed Entity="CMUChemSimulator" Caption="Synthesis Simulator"/>
+<Box>[textlink="Guide" link="CMUSIM"]</Box>
+
+All three of them can be obtained at any ASRS elevator.
+
+</Document>

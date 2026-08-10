@@ -21,7 +21,7 @@
     - Burst
     - FullAuto
     soundGunshot:
-      collection: RMCSSG45Shoot
+      collection: AU14L23FireSound
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto

@@ -27,6 +27,35 @@ namespace Content.Shared.Kitchen
     }
 
     [Serializable, NetSerializable]
+    public sealed class ReagentGrinderLinkMessage : BoundUserInterfaceMessage
+    {
+        public ReagentGrinderLinkMessage()
+        {
+        }
+    }
+
+    [Serializable, NetSerializable]
+    public sealed class ReagentGrinderBottleMessage : BoundUserInterfaceMessage
+    {
+        public ReagentQuantity Reagent;
+
+        public ReagentGrinderBottleMessage(ReagentQuantity reagent)
+        {
+            Reagent = reagent;
+        }
+    }
+    [Serializable, NetSerializable]
+    public sealed class ReagentGrinderDisposeMessage : BoundUserInterfaceMessage
+    {
+        public ReagentQuantity Reagent;
+
+        public ReagentGrinderDisposeMessage(ReagentQuantity reagent)
+        {
+            Reagent = reagent;
+        }
+    }
+
+    [Serializable, NetSerializable]
     public sealed class ReagentGrinderEjectChamberAllMessage : BoundUserInterfaceMessage
     {
         public ReagentGrinderEjectChamberAllMessage()
@@ -96,17 +125,21 @@ namespace Content.Shared.Kitchen
         public bool Powered;
         public bool CanJuice;
         public bool CanGrind;
+        public bool CanLink;
+        public bool Linked;
         public NetEntity[] ChamberContents;
         public ReagentQuantity[]? ReagentQuantities;
         public GrinderAutoMode AutoMode;
 
-        public ReagentGrinderInterfaceState(bool isBusy, bool hasBeaker, bool powered, bool canJuice, bool canGrind, GrinderAutoMode autoMode, NetEntity[] chamberContents, ReagentQuantity[]? heldBeakerContents)
+        public ReagentGrinderInterfaceState(bool isBusy, bool hasBeaker, bool powered, bool canJuice, bool canGrind, bool canLink, bool linked, GrinderAutoMode autoMode, NetEntity[] chamberContents, ReagentQuantity[]? heldBeakerContents)
         {
             IsBusy = isBusy;
             HasBeakerIn = hasBeaker;
             Powered = powered;
             CanJuice = canJuice;
             CanGrind = canGrind;
+            CanLink = canLink;
+            Linked = linked;
             AutoMode = autoMode;
             ChamberContents = chamberContents;
             ReagentQuantities = heldBeakerContents;

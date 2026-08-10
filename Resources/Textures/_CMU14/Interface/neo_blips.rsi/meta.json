@@ -1,0 +1,113 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "Taken from cm13 at https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/neo_blips.dmi",
+    "size": {
+        "x": 7,
+        "y": 7
+    },
+    "states": [
+        {
+            "name": "bloodburster"
+        },
+        {
+            "name": "popper"
+        },
+        {
+            "name": "sprinter"
+        },
+        {
+            "name": "neomorph"
+        },
+        {
+            "name": "blight"
+        },
+        {
+            "name": "venator"
+        },
+        {
+            "name": "brute"
+        },
+        {
+            "name": "matriarch"
+        },
+        {
+            "name": "archon"
+        },
+        {
+            "name": "patho_core",
+            "delays": [
+                [
+                    4,
+                    0.125,
+                    0.125,
+                    0.125,
+                    4
+                ]
+            ]
+        },
+        {
+            "name": "patho_cluster",
+            "delays": [
+                [
+                    4,
+                    0.15,
+                    0.15,
+                    0.15,
+                    4
+                ]
+            ]
+        },
+        {
+            "name": "harbinger"
+        },
+        {
+            "name": "neophyte"
+        },
+        {
+            "name": "conditor"
+        },
+        {
+            "name": "aberration"
+        },
+        {
+            "name": "background_pathogen"
+        },
+        {
+            "name": "xenoleader"
+        },
+        {
+            "name": "template"
+        },
+        {
+            "name": "xenotunnel"
+        },
+        {
+            "name": "recovery_node"
+        },
+        {
+            "name": "sporecaster",
+            "delays": [
+                [
+                    4,
+                    0.05,
+                    0.1,
+                    0.2,
+                    0.5
+                ]
+            ]
+        },
+        {
+            "name": "fogger",
+            "delays": [
+                [
+                    4,
+                    0.05,
+                    0.1,
+                    0.2,
+                    0.5
+                ]
+            ]
+        }
+    ]
+}

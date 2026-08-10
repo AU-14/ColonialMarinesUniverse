@@ -1,0 +1,7 @@
+- type: soundCollection
+  id: AU14SLRFireSound
+  files:
+  - /Audio/_AU14/Weapons/slr/slr_1.ogg
+  - /Audio/_AU14/Weapons/slr/slr_2.ogg
+  - /Audio/_AU14/Weapons/slr/slr_3.ogg
+  

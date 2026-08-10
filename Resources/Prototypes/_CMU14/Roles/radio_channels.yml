@@ -262,6 +262,14 @@
   longRange: true
 
 - type: radioChannel
+  id: MyceliumLink
+  name: chat-radio-mycelium-link
+  keycode: "m"
+  frequency: 427
+  color: "#c2c38d"
+  longRange: true
+
+- type: radioChannel
   id: ICSCSOF
   name: chat-radio-icsc
   keycode: "4"
@@ -339,3 +347,12 @@
   frequency: 0
   color: "#5B9BD5"
   longRange: false
+
+- type: radioChannel
+  id: UNISOF
+  name: chat-radio-unisc
+  keycode: 'u'
+  frequency: 1765
+  color: "#3d82b8"
+  longRange: true
+  tower: true

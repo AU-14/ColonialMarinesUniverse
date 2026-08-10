@@ -67,6 +67,11 @@
       sprite: _RMC14/Interface/MousePointer/explosive_mouse.rsi
       state: all
   - type: GunIgnorePrediction
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: CMMagazineRifleBase

@@ -84,6 +84,11 @@
   - type: RMCFocusedShooting
   - type: RMCGunChamber
     enabled: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: CMMagazineSniperM96S

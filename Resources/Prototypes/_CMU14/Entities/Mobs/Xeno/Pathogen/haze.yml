@@ -1,0 +1,169 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoHazeBase
+  name: Haze
+  description: A supportive strain of the Confluence, tending wounds and spreading spores in equal measure.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-haze
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/haze.rsi
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.RMCDamageVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "enum.RMCShieldVisuals.Base" ]
+      sprite: _RMC14/Effects/xeno_shields.rsi
+      visible: false
+  - type: RMCXenoDamageVisuals
+    prefix: haze
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      300: Critical
+      400: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenHaze
+    tier: 1
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenHide
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenPlantWeeds
+    - CMU14ActionXenoPathogenChooseStructure
+    - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenPlaceSporeSac
+    - CMU14ActionXenoPathogenDirectSporeInfect
+    - CMU14ActionXenoPathogenApplySalve
+    - CMU14ActionXenoPathogenHealerDroneTransferPlasma
+    - CMU14ActionXenoPathogenSacrifice
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoDevour
+  - type: XenoHide
+  - type: XenoConstruction
+    buildDelay: 1
+    canBuild:
+    - CMU14XenoMyceliumMembrane
+  - type: XenoRegen
+    healOffWeeds: true
+    critHealMultiplier: 0.3465
+    standHealingMultiplier: 0.42
+    restHealMultiplier: 1.05
+  - type: XenoPlasma
+    plasma: 1000
+    maxPlasma: 1000
+    plasmaRegenOnWeeds: 4.5
+    plasmaTransferDelay: 1.5
+  - type: XenoPheromones
+    pheromonesMultiplier: 3
+    pheroSuffix: strong
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 200
+    evolvesTo:
+    - CMU14XenoNeomorph
+    - CMU14XenoBlight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoBloodburster
+    canBeDevolvedByOther: false
+  - type: CMUXenoSporeSac
+    sacPrototype: CMUPathogenSporeSac
+    maxSacs: 3
+    plasmaCost: 200
+  - type: CMUXenoDirectSporeInfect
+    plasmaCost: 50
+    embryoSpawn: CMU14XenoBloodburster
+  - type: CMUSporeCloudOnDeath
+    cloudPrototype: CMUPathogenSporeCloud
+  - type: XenoEnergy
+    alert: XenoEnergyHealer
+    max: 7500
+    gain: 0
+    gainAttack: 0
+    gainAttackDowned: 0
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 100
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 100
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.0
+    baseSprintSpeed: 4.5
+  - type: MeleeWeapon
+    attackRate: 1.5
+    damage:
+      groups:
+        Brute: 20
+  - type: CMArmor
+    explosionArmor: 10
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.30
+    stunMin: 3
+    stunMax: 4
+  - type: RMCSize
+    size: Small
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: neophyte
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: haze
+  - type: RMCActionOrder
+    id: CMU14XenoHaze
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-haze
+  - type: Speech
+    speechSounds: Pathogen
+
+- type: entity
+  parent: CMU14XenoHazeBase
+  id: CMU14XenoHaze
+  name: Haze
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenHaze

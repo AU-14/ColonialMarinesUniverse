@@ -209,6 +209,7 @@
   parent: CMMagazineRifleBase
   id: RMCMagazineRifleM16
   name: "M16 Magazine (5.56x45mm)"
+  description: "The original 20-round 5.56x45mm magazine for use in the M16 series rifles."
   components:
   - type: Tag
     tags:

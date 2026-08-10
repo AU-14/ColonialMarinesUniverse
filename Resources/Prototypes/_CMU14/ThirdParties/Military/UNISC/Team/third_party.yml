@@ -1,0 +1,23 @@
+﻿- type: partySpawn
+  id: UNISCTeamSpawn
+  leadersToSpawn:
+    AU14JobUNISCPltCo: 1
+    AU14JobUNISCSquadleader: 1
+  gruntsToSpawn:
+    AU14JobUNISCRifleman: 1
+    AU14JobUNISCAutomaticRifleman: 1
+    AU14JobUNISCCorpsman: 1
+    AU14JobUNISCEnforcer: 2
+    AU14JobUNISCEnforcerLeader: 1
+    AU14JobInvestigationCMBRightsObserver: 1
+  scalewithpop: false
+  spawnTogether: true
+
+- type: thirdParty
+  id: UNISCTeamParty
+  partyspawn: UNISCTeamSpawn
+  entrymethod: shuttle
+  dropshippath: /Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml
+  weight: 20
+  minplayers: 0
+  maxplayers: 400

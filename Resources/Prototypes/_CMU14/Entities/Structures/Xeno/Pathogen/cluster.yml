@@ -1,0 +1,82 @@
+- type: entity
+  id: CMU14PathogenCluster
+  parent: BaseHiveStructure
+  name: mycelium cluster
+  description: A large clump of mycelium. It rhythmically pulses, as if its pumping something into the blight below...
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures48x48.rsi
+    layers:
+    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+      state: hive_weed0
+    - state: hive_cluster_idle
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1200
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 300
+  - type: XenoWeeds
+    range: 5
+    spawns: CMU14XenoMyceliumHiveWeeds
+    level: 3
+    blockOtherWeeds: true
+    spreadsOnSemiWeedable: true
+  - type: HiveCluster
+  - type: XenoWeedsSpreading
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionRequiresWeedableSurface
+  - type: HiveConstructionLimited
+    id: CMU14PathogenCluster
+  - type: RepairableXenoStructure
+    plasmaCost: 300
+    repairLength: 4
+  - type: XenoStructureMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: patho_cluster
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+
+- type: entity
+  id: CMU14PathogenClusterConstructionNode
+  parent: BaseHiveStructureNode
+  name: mycelium cluster
+  description: A large clump of mycelium. Looks like a marker for something.
+  suffix: Construction
+  components:
+  - type: Sprite
+    color: '#FFFFFFAA'
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures48x48.rsi
+    layers:
+    - state: hive_cluster_idle
+    - sprite: _RMC14/Interface/xeno_hud.rsi
+      state: xeno_structure_node_indicator
+      scale: 0.8, 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 400
+    plasmaCost: 300
+    spawn: CMU14PathogenCluster
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionRequiresWeedableSurface
+  - type: HiveConstructionLimited
+    id: CMU14PathogenCluster
+  - type: WarpPoint
+    location: mycelium cluster

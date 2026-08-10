@@ -1,0 +1,103 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14JobUNISCCorpsman
+  icon: AU14JobIconCorpsman
+  roundSide: ThirdParty
+  roundForce: UNISC
+  roundRole: AU14JobUNISCCorpsman
+  roundComponents:
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUNISC
+  - type: Skills
+    preset: AU14SkillPresetPlatoonHospitalCorpsman
+  - type: JobPrefix
+    prefix: au14-job-name-unisc-corpsman
+  - type: Language
+    spokenLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: United Nations Interstellar Space Corps Corpsman
+  description: au14-unisc-description
+  playTimeTracker: AU14JobUNISCCorpsman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UNISC_Specialist:
+      entity: AU14ChevronUSArmySpecialist
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCCorpsman
+        time: 36000
+    UNISC_PFC:
+      entity: AU14ChevronUSArmyPFC
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCCorpsman
+        time: 18000
+    UNISC_PVT:
+      entity: AU14ChevronUSArmyPrivate2
+      requirements: []
+
+  spawnMenuRoleName: UNISC Corpsman
+  startingGear: AU14GearUNISCCorpsman
+  greeting: au14-unisc-greeting
+  joinNotifyCrew: false
+  supervisors: UNISC Squad Leader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUNISC
+  id: AU14JobUNISCCorpsman
+  name: UNISC Corpsman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUNISC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: UNISC Corpsman
+    description: A United Nations Interstellar Space Corps Corpsman
+    reregister: false
+    job: AU14JobUNISCCorpsman
+    raffle:
+      settings: short
+    rules: au14-unisc-rules
+
+- type: startingGear
+  id: AU14GearUNISCCorpsman
+  equipment:
+    id: AU14IDCardUNISCCorpsman
+    outerClothing: AU14ArmorM3UNISC
+    jumpsuit: AU14UNISCFatigues
+    shoes: CMBootsBlackFilled
+    head: AU14UNISCM10Helmet
+    belt: CMUBeltMedicBagICRCDoctor
+    pocket1: AU14PouchMedicalFilled
+    pocket2: AU14PouchFirstResponderFilledMilitaryDoctor
+    back: AU14CMDefibrillator
+    ears: AU14CMBHeadset
+    gloves: CMHandsLatex
+    suitstorage: RMCM1984BeltFilled
+  storage:
+    outerClothing:
+    - CMEncryptionKeyUNISC
+
+
+- type: playTimeTracker
+  id: AU14JobUNISCCorpsman

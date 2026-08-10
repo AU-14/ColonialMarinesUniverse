@@ -9,4 +9,7 @@ public sealed partial class RMCSurgeryStepLarvaEffectComponent : Component
 {
     [DataField, AutoNetworkedField]
     public EntProtoId DeadLarvaItem = "RMCXenoEmbryo";
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId DeadBloodburstEmbryoItem = "CMU14XenoEmbryoBloodburster";
 }

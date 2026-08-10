@@ -1,0 +1,104 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14JobUNISCRifleman
+  icon: AU14JobIconGovRifleman
+  roundSide: ThirdParty
+  roundForce: UNISC
+  roundRole: AU14JobUNISCRifleman
+  roundComponents:
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUNISC
+  - type: Skills
+    preset: AU14SkillPresetPlatoonRifleman
+  - type: JobPrefix
+    prefix: au14-job-name-unisc-rifleman
+  - type: Language
+    spokenLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: United Nations Interstellar Space Corps Rifleman
+  description: au14-unisc-description
+  playTimeTracker: AU14JobUNISCRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UNISC_Specialist:
+      entity: AU14ChevronUSArmySpecialist
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCRifleman
+        time: 36000
+    UNISC_PFC:
+      entity: AU14ChevronUSArmyPFC
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCRifleman
+        time: 18000
+    UNISC_PVT:
+      entity: AU14ChevronUSArmyPrivate2
+      requirements: []
+
+  spawnMenuRoleName: UNISC Rifleman
+  startingGear: AU14GearUNISCRifleman
+  greeting: au14-unisc-greeting
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-unisc-squadleader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUNISC
+  id: AU14JobUNISCRifleman
+  name: UNISC Rifleman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUNISC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: UNISC Rifleman.
+    description: A United Nations Interstellar Space Corps Rifleman.
+    reregister: false
+    job: AU14JobUNISCRifleman
+    raffle:
+      settings: short
+    rules: au14-unisc-rules
+
+- type: startingGear
+  id: AU14GearUNISCRifleman
+  equipment:
+    id: AU14IDCardUNISCRifleman
+    outerClothing: AU14ArmorM3UNISC
+    jumpsuit: AU14UNISCFatigues
+    shoes: CMBootsBlackFilled
+    head: AU14UNISCM10Helmet
+    belt: RMCBeltMarineMK1
+    pocket1: AU14PouchToolsFilledComtech
+    pocket2: AU14PouchIFAKFill
+    back: AU14MolleSatchel
+    ears: AU14CMBHeadset
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    suitstorage: RMCWeaponRifleM54CMK1
+  storage:
+    back:
+    - BedrollFolded
+    - CMMRE
+    - CMEncryptionKeyUNISC
+
+- type: playTimeTracker
+  id: AU14JobUNISCRifleman

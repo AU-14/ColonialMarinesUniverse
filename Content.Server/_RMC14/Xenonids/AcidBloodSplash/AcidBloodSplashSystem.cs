@@ -64,6 +64,8 @@ public sealed partial class AcidBloodSplashSystem : EntitySystem
 
     private void ActivateSplash(Entity<AcidBloodSplashComponent> ent, float splashRadius)
     {
+        if (splashRadius <= 0) // so server wont crash when there's no acid blood
+            return;
         // Parent to the grid (mover coordinates), not to ent itself. If ent is mid-gib
         // (e.g. dropship landing on top of the xeno via Smimsh), self-parenting the decal
         // hits a transform-init assert.

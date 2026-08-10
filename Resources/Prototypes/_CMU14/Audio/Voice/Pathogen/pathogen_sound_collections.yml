@@ -1,0 +1,94 @@
+- type: soundCollection
+  id: PathogenAberrationDeath
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/aberration_death1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/aberration_death2.ogg
+
+- type: soundCollection
+  id: PathogenAberrationHiss
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/aberration_hiss1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/aberration_hiss2.ogg
+
+- type: soundCollection
+  id: PathogenMatriarchSpores
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/matriarch_spores1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/matriarch_spores2.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/matriarch_spores3.ogg
+
+- type: soundCollection
+  id: PathogenMatriarchDeath
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_matriarch_death.ogg
+
+- type: soundCollection
+  id: PathogenDeath
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_death1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_death2.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_death3.ogg
+
+- type: soundCollection
+  id: PathogenGrowl
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_growl1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_growl2.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_growl3.ogg
+
+- type: soundCollection
+  id: PathogenHiss
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_hiss1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_hiss2.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_hiss3.ogg
+
+- type: soundCollection
+  id: PathogenPounce
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+
+- type: soundCollection
+  id: PathogenRoar
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_roar1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_roar2.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_roar3.ogg
+
+- type: soundCollection
+  id: PathogenTalk
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_talk1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_talk2.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/pathogen_talk3.ogg
+
+- type: soundCollection
+  id: WalkerDeath
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/walker_death1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/walker_death2.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/walker_death3.ogg
+
+- type: soundCollection
+  id: WalkerGrowl
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/walker_growl1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/walker_growl2.ogg
+
+- type: soundCollection
+  id: WalkerTalk
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/walker_talk1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/walker_talk2.ogg
+
+- type: soundCollection
+  id: BloodbursterRoar
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/bloodburster_roar1.ogg
+  - /Audio/_CMU14/Xeno/Pathogen/bloodburster_roar2.ogg
+
+- type: soundCollection
+  id: PathogenOvermindCommand
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/announce_screech.ogg

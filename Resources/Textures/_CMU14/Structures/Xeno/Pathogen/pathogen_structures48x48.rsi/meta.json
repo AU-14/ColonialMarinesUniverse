@@ -1,0 +1,24 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "taken from cm13 at https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/pathogen/pathogen_structures48x48.dmi",
+    "size": {
+        "x": 48,
+        "y": 48
+    },
+    "states": [
+        {
+            "name": "hive_cluster"
+        },
+        {
+            "name": "hive_cluster_idle",
+            "delays": [
+                [
+                    1,
+                    1,
+                    1
+                ]
+            ]
+        }
+    ]
+}

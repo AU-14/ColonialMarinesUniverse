@@ -270,6 +270,11 @@
         variation: 0.09
   - type: Corrodible
     isCorrodible: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCBackpackScout

@@ -1,0 +1,509 @@
+# CMU14 Pathogen - Neomorph Structures
+# RSI paths:
+#   Resources/Textures/_CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+#   Resources/Textures/_CMU14/Effects/pathogen_effects.rsi
+
+# ── Walls ────────────────────────────────────────────────────────────────────
+
+- type: entity
+  parent: CMBaseWallXeno
+  id: CMU14XenoMyceliumWall
+  name: mycelium wall
+  description: A dense wall of pale, fibrous mycelium secreted by a Neomorph. It pulses faintly with bioluminescent light.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    drawdepth: Walls
+  - type: Icon
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    state: mycelium
+  - type: IconSmooth
+    key: walls
+    base: mycelium
+  - type: Damageable
+    damageContainer: StructuralXeno
+    damageModifierSet: Resin
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 700
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoResinBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: VehicleSmashable
+    deleteOnHit: true
+    damageOnHit: 700
+    selfDamageMultiplier: 0.6
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
+    requiredVehicleTag: VehicleHeavy
+    smashSound:
+      collection: XenoResinBreak
+  - type: XenoConstructionPlasmaCost
+    plasma: 100
+    scalingCost: true
+  - type: XenoStructureUpgradeable
+    to: CMU14XenoThickMyceliumWall
+    cost: 40
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 200
+  - type: AllowWeedSpread
+  - type: XenoNestSurface
+    nest: CMU14XenoMyceliumNest
+
+- type: entity
+  parent: CMU14XenoMyceliumWall
+  id: CMU14XenoThickMyceliumWall
+  name: thick mycelium wall
+  description: A heavily reinforced mycelium wall. The fibrous strands have fused into a dense, almost chitinous mass.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    drawdepth: Walls
+  - type: Icon
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    state: thickmycelium
+  - type: IconSmooth
+    key: walls
+    base: thickmycelium
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 1100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoResinBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: VehicleSmashable
+    deleteOnHit: true
+    damageOnHit: 1100
+    selfDamageMultiplier: 1.2
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
+    requiredVehicleTag: VehicleHeavy
+    smashSound:
+      collection: XenoResinBreak
+  - type: XenoConstructionPlasmaCost
+    plasma: 140
+    scalingCost: true
+  - type: XenoStructureUpgradeable
+    to: null
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 300
+
+# ── Membranes ─────────────────────────────────────────────────────────────────
+
+- type: entity
+  parent: CMBaseWallXeno
+  id: CMU14XenoMyceliumMembrane
+  name: mycelium membrane
+  description: A translucent sheet of mycelium, thin enough to see through but tough enough to slow a marine advance.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    drawdepth: Walls
+  - type: Icon
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    state: membrane
+  - type: IconSmooth
+    key: walls
+    base: membrane
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        mask:
+        - FullTileMask
+        layer:
+        - GlassLayer
+        density: 1000
+  - type: Damageable
+    damageContainer: StructuralXeno
+    damageModifierSet: Resin
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoResinBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: VehicleSmashable
+    deleteOnHit: true
+    damageOnHit: 300
+    selfDamageMultiplier: 0.4
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
+    requiredVehicleTag: VehicleHeavy
+    smashSound:
+      collection: XenoResinBreak
+  - type: Occluder
+    enabled: false
+  - type: XenoConstructionPlasmaCost
+    plasma: 80
+    scalingCost: true
+  - type: XenoStructureUpgradeable
+    to: CMU14XenoThickMyceliumMembrane
+    cost: 25
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 150
+  - type: AllowWeedSpread
+  - type: XenoNestSurface
+    nest: CMU14XenoMyceliumNest
+
+- type: entity
+  parent: CMU14XenoMyceliumMembrane
+  id: CMU14XenoThickMyceliumMembrane
+  name: thick mycelium membrane
+  description: A reinforced mycelium membrane. It remains just translucent enough to make out shapes on the other side.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    drawdepth: Walls
+  - type: Icon
+    sprite: _CMU14/Structures/Xeno/Pathogen/mycelium_wall.rsi
+    state: thickmembrane
+  - type: IconSmooth
+    key: walls
+    base: thickmembrane
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoResinBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: VehicleSmashable
+    deleteOnHit: true
+    damageOnHit: 600
+    selfDamageMultiplier: 0.8
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
+    requiredVehicleTag: VehicleHeavy
+    smashSound:
+      collection: XenoResinBreak
+  - type: XenoConstructionPlasmaCost
+    plasma: 105
+    scalingCost: true
+  - type: XenoStructureUpgradeable
+    to: null
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 300
+
+# ── Doors ─────────────────────────────────────────────────────────────────────
+
+- type: entity
+  parent: CMBaseXenoStructure
+  id: CMU14XenoMyceliumDoor
+  name: mycelium door
+  description: A curtain of living mycelium fibres that parts when an ally approaches. It smells faintly of spores.
+  placement:
+    mode: SnapgridCenter
+  components:
+  - type: InteractionOutline
+  - type: Sprite
+    sprite: _CMU14/Effects/pathogen_effects.rsi
+    layers:
+    - state: mycelium
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+    - state: closed_unlit
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+  - type: AnimationPlayer
+  - type: Physics
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        density: 100
+        mask:
+        - FullTileMask
+        layer:
+        - AirlockLayer
+  - type: Door
+    canPry: false
+    crushDamage:
+      types:
+        Blunt: 15
+    openSpriteState: myceliumopen
+    closedSpriteState: mycelium
+    openingSpriteState: myceliumopening
+    closingSpriteState: myceliumclosing
+    openSound:
+      path: /Audio/_RMC14/Xeno/alien_resin_move1.ogg
+    closeSound:
+      path: /Audio/_RMC14/Xeno/alien_resin_move2.ogg
+  - type: Appearance
+  - type: Airtight
+    fixVacuum: true
+    noAirWhenFullyAirBlocked: false
+  - type: RadiationBlocker
+    resistance: 2
+  - type: RMCMesonsNonviewable
+  - type: Occluder
+  - type: Damageable
+    damageContainer: StructuralXeno
+    damageModifierSet: Resin
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 500
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoResinBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: VehicleSmashable
+    deleteOnHit: true
+    damageOnHit: 500
+    selfDamageMultiplier: 0.1
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
+    requiredVehicleTag: VehicleHeavy
+    smashSound:
+      collection: XenoResinBreak
+  - type: PlacementReplacement
+    key: walls
+  - type: IconSmooth
+    key: walls
+    mode: NoSprite
+  - type: Airlock
+    emergencyAccessLayer: false
+    animatePanel: false
+    powered: true
+    openingSpriteState: closed_unlit
+    closingSpriteState: closed_unlit
+  - type: XenoConstructionPlasmaCost
+    plasma: 100
+    scalingCost: true
+  - type: XenoStructureUpgradeable
+    to: CMU14XenoThickMyceliumDoor
+    cost: 25
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 500
+  - type: XenoConstruct
+  - type: ResinDoor
+  - type: AllowWeedSpread
+  - type: ResinSurgeReinforcable
+  - type: RMCDeleteAnchoredOnInit
+    whitelist: { }
+  - type: XenoRecentlyBuiltPreventCollisions
+
+- type: entity
+  parent: CMU14XenoMyceliumDoor
+  id: CMU14XenoThickMyceliumDoor
+  name: thick mycelium door
+  description: A dense, reinforced curtain of mycelium. The fibres have hardened into something almost solid.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Effects/pathogen_effects.rsi
+    layers:
+    - state: "thick mycelium"
+      map: ["enum.DoorVisualLayers.Base"]
+    - state: closed_unlit
+      map: ["enum.DoorVisualLayers.BaseUnlit"]
+    - state: closed_unlit
+      map: ["enum.DoorVisualLayers.BaseBolted"]
+  - type: Door
+    crushDamage:
+      types:
+        Blunt: 15
+    openSpriteState: "thick myceliumopen"
+    closedSpriteState: "thick mycelium"
+    openingSpriteState: "thick myceliumopening"
+    closingSpriteState: "thick myceliumclosing"
+    openSound:
+      path: /Audio/_RMC14/Xeno/alien_resin_move1.ogg
+    closeSound:
+      path: /Audio/_RMC14/Xeno/alien_resin_move2.ogg
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 800
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoResinBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: VehicleSmashable
+    deleteOnHit: true
+    damageOnHit: 800
+    selfDamageMultiplier: 0.25
+    slowdownMultiplier: 0.2
+    slowdownDuration: 1.5
+    requiredVehicleTag: VehicleHeavy
+    smashSound:
+      collection: XenoResinBreak
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 800
+  - type: XenoConstructionPlasmaCost
+    plasma: 125
+    scalingCost: true
+  - type: XenoStructureUpgradeable
+    to: null
+
+# ── Nest ──────────────────────────────────────────────────────────────────────
+
+- type: entity
+  id: CMU14XenoMyceliumNest
+  name: mycelium nest
+  description: A cradle of pale, sticky mycelium fibres woven into a nest shape. A captured host would be held fast by its adhesive strands.
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Physics
+    bodyType: Static
+  - type: Appearance
+  - type: Sprite
+    sprite: _CMU14/Effects/pathogen_effects.rsi
+    state: nest_overlay
+    drawdepth: OverMobs
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - SlipLayer
+        mask:
+        - ItemMask
+        density: 1000
+        hard: false
+  - type: Clickable
+  - type: Damageable
+    damageContainer: StructuralXeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: XenoResinBreak
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: XenoNest
+  - type: XenoFriendly
+  - type: RMCNightVisionVisible
+    priority: 1
+
+# ── Construction animation effects ────────────────────────────────────────────
+
+- type: entity
+  id: CMU14EffectWallMycelium
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CMU14/Effects/pathogen_effects.rsi
+    layers:
+    - state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: WeakConstruct
+  - type: TimedDespawn
+    lifetime: 5.0
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: XenoConstructionAnimation
+
+- type: entity
+  id: CMU14EffectWallMyceliumThick
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CMU14/Effects/pathogen_effects.rsi
+    layers:
+    - state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: ThickConstruct
+  - type: TimedDespawn
+    lifetime: 5.0
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: XenoConstructionAnimation
+
+- type: entity
+  id: CMU14EffectDoorMycelium
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CMU14/Effects/pathogen_effects.rsi
+    layers:
+    - state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: DoorConstruct
+  - type: TimedDespawn
+    lifetime: 5.0
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: XenoConstructionAnimation
+
+- type: entity
+  id: CMU14EffectDoorMyceliumThick
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Transform
+    anchored: false
+  - type: Sprite
+    drawdepth: Effects
+    sprite: _CMU14/Effects/pathogen_effects.rsi
+    layers:
+    - state: secrete_base
+    - map: ["enum.XenoConstructionVisualLayers.Animation"]
+      state: ThickDoorConstruct
+  - type: TimedDespawn
+    lifetime: 5.0
+  - type: Tag
+    tags:
+    - HideContextMenu
+  - type: XenoConstructionAnimation

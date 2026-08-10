@@ -1,0 +1,83 @@
+- type: entity
+  id: CMU14PathogenPylon
+  parent: BaseHiveStructure
+  name: mycelium pylon
+  description: A towering spike of mycelium. Its base pulsates with large tendrils.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    layers:
+    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+      state: hive_weed0
+    - state: pylon
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: RepairableXenoStructure
+    plasmaCost: 1000
+    repairLength: 4
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 25
+  - type: HivePylon
+  - type: XenoWeedsSpreading
+  - type: RoofingEntity
+    range: 8.463
+    canOrbitalBombard: true
+  - type: XenoWeeds
+    range: 5
+    spawns: CMU14XenoMyceliumHiveWeeds
+    level: 3
+    blockOtherWeeds: true
+  - type: HiveConstructionLimited
+    id: CMU14PathogenPylon
+  - type: WarpPoint
+    location: mycelium pylon
+  - type: XenoStructureMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: patho_cluster
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+
+- type: entity
+  id: CMU14PathogenPylonConstructionNode
+  parent: BaseHiveStructureNode
+  name: mycelium pylon
+  description: A towering spike of mycelium. Looks like a marker for something.
+  suffix: Construction
+  components:
+  - type: Sprite
+    color: '#FFFFFFAA'
+    layers:
+    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+      state: pylon
+    - sprite: _RMC14/Interface/xeno_hud.rsi
+      state: xeno_structure_node_indicator
+      scale: 0.8, 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 400
+    plasmaCost: 1000
+    spawn: CMU14PathogenPylon
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionLimited
+    id: CMU14PathogenPylon
+  - type: WarpPoint
+    location: mycelium pylon

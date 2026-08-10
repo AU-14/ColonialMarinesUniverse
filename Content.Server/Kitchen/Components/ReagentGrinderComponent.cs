@@ -34,7 +34,15 @@ namespace Content.Server.Kitchen.Components
         [DataField]
         public GrinderAutoMode AutoMode = GrinderAutoMode.Off;
 
+        [DataField]
+        public float LinkDistance = 8;
+
+        [DataField]
+        public float LinkLimit = 16;
+
         public EntityUid? AudioStream;
+
+        public EntityUid? SmartFridge;
     }
 
     [Access(typeof(ReagentGrinderSystem)), RegisterComponent]

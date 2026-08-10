@@ -76,24 +76,22 @@ public sealed partial class XenoWordQueenSystem : EntitySystem
         if (text.Length > _characterLimit)
             text = text[.._characterLimit].Trim();
 
+        // Build filter of connected players in the hive.
+        // Note: hive members without an active player session won't appear here,
+        // but the message still reaches all connected members.
         var xenos = Filter
             .Empty()
             .AddWhereAttachedEntity(ent => _hive.IsMember(ent, hive));
-
-        if (xenos.Count <= 1)
-        {
-            _popup.PopupEntity(Loc.GetString("cm-xeno-words-of-the-queen-nobody-hear-you"), queen, queen, PopupType.LargeCaution);
-            return;
-        }
 
         _xenoPlasma.TryRemovePlasma(queen.Owner, queen.Comp.PlasmaCost);
 
         text = NewLineRegex.Replace(text, "\n\n");
         text = _cmChat.SanitizeMessageReplaceWords(queen, text);
-        var headerText = Loc.GetString("rmc-xeno-words-of-the-queen-header");
+        var headerText = Loc.GetString(queen.Comp.Header);
         var wrapped = FormattedMessage.EscapeText(text);
         var header = $"{_xenoAnnounce.WrapHive(headerText)}";
-        var message = $"{header}[color=red][font size=14][bold]{wrapped}[/bold][/font][/color]";
+        var colorHex = queen.Comp.MessageColor.ToHex();
+        var message = $"{header}[color={colorHex}][font size=14][bold]{wrapped}[/bold][/font][/color]";
 
         _xenoAnnounce.Announce(queen, xenos, text, message, queen.Comp.Sound);
 

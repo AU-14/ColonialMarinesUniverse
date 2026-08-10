@@ -22,7 +22,7 @@
   - AU14RoundJobProfileMilitaryBase
   roundComponents:
   - type: Skills
-    preset: AU14SkillPresetPlatoonHospitalCorpsman
+    preset: AU14SkillPresetMilitaryNurse
   - type: JobPrefix
     prefix: au14-job-prefix-govfornurse
   - type: TacticalMapIcon

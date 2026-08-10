@@ -1,0 +1,27 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenEvolve
+  name: Evolve
+  description: Evolve to the next caste of neomorph or choose a strain if one is available.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: evolve
+  - type: InstantAction
+    event: !type:XenoOpenEvolutionsActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenDevolve
+  name: De-evolve
+  description: Devolve to the previous caste of neomorph. [color=red]You won't get your evolution points refunded![/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_deevolve
+  - type: InstantAction
+    event: !type:XenoOpenDevolveActionEvent

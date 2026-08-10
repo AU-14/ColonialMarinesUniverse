@@ -13,6 +13,13 @@
     name: cmu-job-name-xeno-unknown
   - type: Sprite
     sprite: _AU14/Mobs/Xenos/Larva/larva.rsi # AU14-Edit
+    layers:
+    - state: alive
+      map: [ "enum.XenoVisualLayers.Base" ]
+    - sprite: _CMU14/Mobs/Xenonids/bloody_larva.rsi
+      state: alive_bloody
+      map: ["bloody"]
+      visible: false
   - type: FiremanCarriable
     canThrow: true
     carrierWhitelist:
@@ -109,6 +116,9 @@
     ventCrawlIcon: larva
   - type: RMCActionOrder
     id: CMXenoLarva
+  - type: BloodyLarva
+    duration: 15
+  - type: Appearance
 
 # For surgeries/failed incubations
 - type: entity

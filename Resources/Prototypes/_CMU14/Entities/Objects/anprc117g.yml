@@ -190,6 +190,12 @@
   id: ANPRC117GRadioCLFFilled
   suffix: CLF, Filled
   components:
+  - type: ANPRCRadio
+    defaultSlots:
+    - label: CELL
+      channel: radioCLF
+    - label: CMD
+      channel: radioCLFCommand
   - type: ContainerFill
     containers:
       fill_card:

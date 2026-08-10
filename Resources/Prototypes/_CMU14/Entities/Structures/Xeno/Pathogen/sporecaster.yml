@@ -1,0 +1,93 @@
+- type: entity
+  id: CMU14PathogenSporecaster
+  parent: BaseHiveStructure
+  name: sporecaster
+  description: A disgusting biomass generator that reeks of rotting flesh. Capable of producing spore clouds on its own.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    layers:
+    - state: sporecaster
+    - state: sporecaster_underlay
+      shader: unshaded
+  - type: Appearance
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 200
+        mask:
+        - ItemMask
+        layer:
+        - BulletImpassable
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 100
+  - type: CMUPathogenSporecaster
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionRequiresHiveWeeds
+  - type: HiveConstructionRequiresSpace
+  - type: HiveConstructionLimited
+    id: CMU14PathogenSporecaster
+  - type: XenoStructureMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: fogger
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: GhostRole
+    name: cmu-job-name-pathogen-popper
+    description: cmu-job-description-pathogen-popper
+    raffle:
+      settings: short
+  - type: GhostRoleMobSpawner
+    availableTakeovers: 2
+    deleteOnSpawn: false
+    prototype: CMU14XenoPopper
+
+- type: entity
+  id: CMU14PathogenSporecasterConstructionNode
+  parent: BaseHiveStructureNode
+  name: sporecaster
+  description: A disgusting biomass generator. Looks like a marker for something.
+  suffix: Construction
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    layers:
+    - state: sporecaster
+    - state: sporecaster_underlay
+      shader: unshaded
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 400
+    plasmaCost: 400
+    spawn: CMU14PathogenSporecaster
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionRequiresHiveWeeds
+  - type: HiveConstructionRequiresSpace
+  - type: HiveConstructionLimited
+    id: CMU14PathogenSporecaster
+  - type: WarpPoint
+    location: sporecaster

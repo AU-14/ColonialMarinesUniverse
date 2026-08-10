@@ -308,8 +308,17 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
         }
         else
         {
-            SpawnAtPosition(ent.Comp.DeadLarvaItem, coords);
+            var embryoItem = IsBloodburstInfection(infected)
+                ? ent.Comp.DeadBloodburstEmbryoItem
+                : ent.Comp.DeadLarvaItem;
+
+            SpawnAtPosition(embryoItem, coords);
         }
+    }
+
+    private bool IsBloodburstInfection(VictimInfectedComponent infected)
+    {
+        return infected.BurstSpawn == "CMU14XenoBloodburster";
     }
 
     private void OnStepXenoHeartComplete(Entity<RMCSurgeryStepXenoHeartEffectComponent> ent, ref CMSurgeryStepEvent args)

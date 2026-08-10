@@ -1,0 +1,150 @@
+
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoBloodbursterAberrationBase
+  name: Bloodburster
+  description: An aberration upon the honor of us all!
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-bloodburster
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/aberration_bloodburster.rsi
+    layers:
+    - state: alive
+      map: [ "enum.XenoVisualLayers.Base" ]
+    - sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster_bloody.rsi
+      state: alive_bloody
+      map: [ "bloody" ]
+      visible: false
+  - type: Eye
+    pvsScale: 1.5
+  - type: MobState
+    allowedStates:
+    - Alive
+    - Critical
+    - Dead
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      50: Critical
+      100: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMUJobPathogenBloodburster
+    tier: 0
+    hudOffset: -0.1, 0.25
+    unlockAt: 0
+    emoteSounds: PathogenAberrationBloodburster
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenHide
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenTailStab
+  - type: XenoLeap
+    delay: 0
+    knockdownTime: 2
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.2
+  - type: XenoLight
+  - type: XenoPlasma
+    plasma: 0
+    maxPlasma: 0
+    plasmaRegenOnWeeds: 0
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 100 # evolution threshold
+    evolvesTo:
+    - CMU14XenoAberration
+  - type: XenoDevolve
+    devolvesTo: []
+    canBeDevolvedByOther: false
+  - type: XenoHide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 85
+        mask:
+        - SmallMobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - SmallMobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 85
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5 # XENO_SPEED_TIER_10
+    baseSprintSpeed: 8.0
+  - type: MeleeWeapon
+    attackRate: 2.5 # attack_delay = -4 in CM13
+    damage:
+      groups:
+        Brute: 10 # XENO_DAMAGE_TIER_1/2 range
+  - type: CMArmor
+    explosionArmor: 5 # XENO_EXPLOSIVE_ARMOR_TIER_1
+  - type: Tackle
+    min: 4
+    max: 5
+    chance: 0.4
+    stunMin: 4
+    stunMax: 4
+  - type: RMCSize
+    size: Small
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - RMCGibEffectXenoSmall
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: bloodburster
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - RMCSynthGrabbable
+  - type: VentCrawler
+    ventCrawlIcon: larva
+  - type: RMCActionOrder
+    id: CMU14XenoAberrationBloodburster
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-bloodburster
+  - type: Speech
+    speechSounds: Pathogen
+  - type: BloodyLarva
+    duration: 15
+  - type: Appearance
+  - type: SoundOnDeath
+    sound:
+      collection: PathogenAberrationDeath
+      params:
+        volume: -4
+
+- type: entity
+  parent: CMU14XenoBloodbursterAberrationBase
+  id: CMU14XenoAberrationBloodburster
+  name: Bloodburster
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenAberrationBloodburster

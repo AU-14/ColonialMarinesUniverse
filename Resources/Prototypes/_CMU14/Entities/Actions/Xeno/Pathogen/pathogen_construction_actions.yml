@@ -1,0 +1,245 @@
+- type: entity
+  id: CMU14ActionXenoPathogenPlantWeeds
+  parent: ActionXenoBase
+  name: Plant Weeds (75)
+  description: Plant a weed node that will spread more weeds.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: plant_weeds
+    useDelay: 1
+  - type: InstantAction
+    event: !type:XenoPlantWeedsActionEvent
+      prototype: CMU14XenoMyceliumWeedsSource
+  - type: SwappableAction
+    swappedEventTemplate: !type:XenoExpandWeedsActionEvent
+    originalEventTemplate: !type:XenoPlantWeedsActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenChooseStructure
+  parent: ActionXenoBase
+  name: Choose Resin Structure
+  description: "Choose a structure to secrete with the 'Secrete Resin' action."
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE  # no place_resin in pathogen RSI
+  - type: InstantAction
+    event: !type:XenoChooseStructureActionEvent
+  - type: XenoChooseConstructionAction
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenSecreteStructure
+  parent: ActionXenoBase
+  name: Secrete Resin
+  description: "Builds the structure chosen with the 'Choose Resin Structure' action."
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: secrete_resin
+  - type: TargetAction
+    deselectOnMiss: false
+    range: 0
+    repeat: true
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoSecreteStructureActionEvent
+  - type: XenoConstructionAction
+    checkStructureSelected: true
+    checkWeeds: true
+    canUpgrade: true
+  - type: XenoHiveInstantBuildAction
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenCoerceResin
+  parent: ActionXenoBase
+  name: Coerce Resin
+  description: "Builds the structure chosen with the 'Choose Resin Structure' action. You may also build within line of sight if you are on weeds."
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: secrete_resin
+  - type: TargetAction
+    deselectOnMiss: false
+    range: 0
+    repeat: true
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoSecreteStructureActionEvent
+  - type: XenoConstructionAction
+    checkStructureSelected: true
+    checkWeeds: true
+    canUpgrade: false
+  - type: XenoHiveInstantBuildAction
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenOrderConstruction
+  parent: ActionXenoBase
+  name: Order Construction
+  description: Starts construction of an important hive structure.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: morph_resin
+  - type: InstantAction
+    event: !type:XenoOrderConstructionActionEvent
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenResinHole
+  parent: ActionXenoBase
+  name: Plant Resin Hole (200)
+  description: Places a resin hole on weeds. It can be filled with boiler gas, acid, or parasites.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: place_trap
+    useDelay: 1
+  - type: InstantAction
+    event: !type:XenoPlaceResinHoleActionEvent
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenFruitChoose
+  parent: ActionXenoBase
+  name: Change Fruit
+  description: Choose a fruit to be planted with 'Plant Resin Fruit' action.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: gardener_plant
+  - type: InstantAction
+    event: !type:XenoFruitChooseActionEvent
+  - type: XenoFruitChooseAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenFruitPlant
+  parent: ActionXenoBase
+  name: Plant Resin Fruit (100)
+  description: Plant chosen resin fruit on weeds at the cost of health and plasma. Xenos can pick these fruits once they're mature, you can also pick a plant early to get rid of it. Xenos can use them in hand or eat them on the ground to gain their effects. They can also be used on other xenos to feed them. You can only have 6 fruits planted and picked at a time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: gardener_plant
+    useDelay: 5
+  - type: InstantAction
+    event: !type:XenoFruitPlantActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenPlantWeedsHardy
+  parent: ActionXenoBase
+  name: Plant Hardy Weeds (125)
+  description: Plant a weed node that will spread hardier weeds, which grow fruit 25% faster, have slightly more health, and can be spread on some surfaces where normal weeds won't grow.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: plant_gardener_weeds
+    useDelay: 120
+  - type: InstantAction
+    event: !type:XenoPlantWeedsActionEvent
+      plasmaCost: 125
+      prototype: XenoHardyWeedsSource
+
+- type: entity
+  id: CMU14ActionXenoPathogenFruitPlantLesser
+  parent: CMU14ActionXenoPathogenFruitPlant
+  name: Plant Resin Fruit (50)
+  description: Plant resin fruit on weeds at the cost of health and plasma.
+  components:
+  - type: InstantAction
+    event: !type:XenoFruitPlantActionEvent
+      plasmaCost: 50
+
+- type: entity
+  id: CMU14ActionXenoPathogenDigTunnel
+  parent: ActionXenoBase
+  name: Dig Tunnel (200)
+  description: Dig a tunnel for speedy transportation across the hive.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: build_tunnel
+    useDelay: 300
+  - type: InstantAction
+    event: !type:XenoDigTunnelActionEvent
+
+- type: entity
+  parent: CMU14ActionXenoPathogenPlantWeeds
+  id: CMU14ActionLesserDronePathogenPlantWeeds
+  components:
+  - type: InstantAction
+    event: !type:XenoPlantWeedsActionEvent
+      limitDistance: true
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenExpandWeeds
+  name: Expand Weeds (50)
+  description: Expand existing weeds or turn a weed tile into a node.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: plant_weeds
+    useDelay: 0.5
+  - type: TargetAction
+    checkCanAccess: false
+    range: -1
+    deselectOnMiss: false
+  - type: WorldTargetAction
+    event: !type:XenoExpandWeedsActionEvent
+      source: CMU14XenoMyceliumWeedsSource
+      expand: CMU14XenoMyceliumWeeds
+
+- type: entity
+  id: CMU14ActionXenoPathogenDesignerSelectedDesign
+  parent: ActionXenoBase
+  name: Selected Design
+  description: Toggle whether newly placed design nodes are wall or door nodes.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon: { sprite: _CMU14/Actions/actions_pathogen.rsi, state: design_mark_1 }
+    iconOn: { sprite: _CMU14/Actions/actions_pathogen.rsi, state: design_mark_2 }
+    useDelay: 0.2
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Designer.DesignerSelectedDesignToggleActionEvent
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenDesignerGreaterResinSurge
+  parent: ActionXenoBase
+  name: Greater Resin Surge (250)
+  description: Consumes nearby design nodes to create temporary reflective resin walls.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon: { sprite: _CMU14/Actions/actions_pathogen.rsi, state: greater_resin_surge }
+    useDelay: 30
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Designer.DesignerGreaterResinSurgeActionEvent
+  - type: RMCDazeableAction

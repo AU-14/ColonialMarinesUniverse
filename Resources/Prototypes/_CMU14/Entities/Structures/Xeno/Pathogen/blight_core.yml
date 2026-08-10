@@ -1,0 +1,111 @@
+- type: entity
+  id: CMU14PathogenBlightCore
+  name: blight core
+  description: A pulsating organic mass. You feel drawn to it.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: CollisionWake
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.49,-0.49,0.49,0.49"
+        layer:
+        - BulletImpassable
+        density: 200
+      pathogen_core:
+        shape:
+          !type:PhysShapeCircle
+          radius: 1
+        hard: false
+        mask:
+        - SmallMobLayer
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.1
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 300
+  - type: RMCMesonsNonviewable
+    xenoVisible: true
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    layers:
+    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+      state: hive_weed0
+    - state: pathogen_core
+    drawdepth: FloorObjects
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: CMUBlightCore
+  - type: HiveCore
+  - type: HiveMember
+  - type: UserInterface
+    interfaces:
+      enum.BlightCoreUiKey.Accept:
+        type: BlightCoreAcceptBui
+      enum.BlightCoreUiKey.Vote:
+        type: BlightCoreVoteBui
+  - type: XenoWeeds
+    range: 7
+    spawns: CMU14XenoMyceliumHiveWeeds
+    level: 3
+    blockOtherWeeds: true
+    spreadsOnSemiWeedable: true
+  - type: XenoWeedsSpreading
+  - type: XenoStructureMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: patho_core
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+
+- type: entity
+  id: CMU14PathogenBlightCoreConstructionNode
+  parent: BaseHiveStructureNode
+  name: blight core
+  description: A pulsating organic mass. Looks like a marker for something.
+  suffix: Construction
+  components:
+  - type: Sprite
+    color: '#FFFFFFAA'
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    layers:
+    - state: pathogen_core
+    - sprite: _RMC14/Interface/xeno_hud.rsi
+      state: xeno_structure_node_indicator
+      scale: 0.8, 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 500
+    plasmaCost: 400
+    spawn: CMU14PathogenBlightCore
+  - type: HiveConstructionRequiresWeedableSurface
+  - type: HiveConstructionLimited
+    id: CMU14PathogenBlightCore
+  - type: WarpPoint
+    location: blight core

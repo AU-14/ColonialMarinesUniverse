@@ -1,0 +1,72 @@
+- type: entity
+  id: CMU14PathogenRecoveryNode
+  parent: BaseHiveStructure
+  name: recovery node
+  description: A warm, soothing mass that hastily recovers the strength of sisters resting around it.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    state: recovery
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 100
+  - type: RecoveryNode
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionLimited
+    id: CMU14PathogenRecoveryNode
+  - type: HiveConstructionRequiresHiveWeeds
+  - type: HiveConstructionRequiresSpace
+  - type: DoAfter
+  - type: XenoStructureMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: recovery_node
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+
+- type: entity
+  id: CMU14PathogenRecoveryNodeConstructionNode
+  parent: BaseHiveStructureNode
+  name: recovery node
+  description: A warm, soothing mass. Looks like a marker for something.
+  suffix: Construction
+  components:
+  - type: Sprite
+    color: '#FFFFFFAA'
+    layers:
+    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+      state: recovery
+    - sprite: _RMC14/Interface/xeno_hud.rsi
+      state: xeno_structure_node_indicator
+      scale: 0.8, 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 400
+    plasmaCost: 450
+    spawn: CMU14PathogenRecoveryNode
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionLimited
+    id: CMU14PathogenRecoveryNode
+  - type: HiveConstructionRequiresHiveWeeds
+  - type: HiveConstructionRequiresSpace
+  - type: WarpPoint
+    location: recovery node

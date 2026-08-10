@@ -12,7 +12,7 @@
 
   ## Step 1: Work out what you are carrying
 
-  Almost everybody spawns with a [bold]field headset[/bold] in their ears slot. This is your personal radio and it is all most roles ever need.
+  Almost everybody spawns with a [bold]field headset[/bold] in their ears slot. This is your personal radio and it is all most roles ever need. The CLF are the exception: they wear a concealable earpiece clipped into their clothing instead, which works the same way but has no slot to examine. See [textlink="Field Headsets" link="AU14CommsHeadsets"] for the differences.
 
   A small number of roles also spawn with an [bold]AN/PRC-117G[/bold] manpack radio in their back slot. It is large, it is obvious in your inventory, and it is the thing that makes everyone else's headset work.
 
@@ -81,6 +81,8 @@
   ### If you are with the CLF
 
   The CLF has no communications array and never gets one. Your coverage is either something you build, or something the enemy already built that you tap.
+
+  The cell starts with a manpack, a base station, a splice kit and two relay sets, drawn by the Cell Leader or the Radio Operator - whoever is actually there. The issued manpack comes up already tuned to the cell net and cell command, so it works the moment somebody puts it on. Everything past that is built at the sapper's workbench or paid for out of Special Equipment.
 
   <Box>
     <GuideEntityEmbed Entity="AU14CLFNetSpliceKit" Caption="Splice Kit"/>
@@ -237,7 +239,7 @@
 
   Do not assume. Select [bold]RADIO CHECK[/bold] on the panel.
 
-  The radio sends [bold]RADIO CHECK, HOW COPY, OVER[/bold] on the active net, then gives you a private report listing which stations hear you clearly and which hear you degraded.
+  The radio sends [bold]RADIO CHECK, HOW COPY, OVER[/bold] on the active net, then gives you a private report listing which stations hear you clearly and which hear you degraded. That includes everyone on a headset or a clipped earpiece, not only other pack operators, so a CLF cell of earpieces and one manpack still comes back as a full list.
 
   This is the fastest way to answer "is my net working" without bothering anyone, and you should run it before you move somewhere new and after you set up.
 

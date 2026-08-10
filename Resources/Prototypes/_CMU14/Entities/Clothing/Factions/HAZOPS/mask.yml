@@ -18,6 +18,8 @@
     - GasMask
   - type: CMArmor
     bio: 20
+  - type: MycotoxinProtection
+    fullProtection: false
 
 - type: entity
   parent: AU14MaskGasHAZOPSM40
@@ -29,6 +31,8 @@
     sprite: _AU14/Clothing/HAZOPS/M17gasmask.rsi
   - type: Clothing
     sprite: _AU14/Clothing/HAZOPS/M17gasmask.rsi
+  - type: MycotoxinProtection
+    fullProtection: true
 
 - type: entity
   parent: AU14MaskGasHAZOPSM17
@@ -44,6 +48,8 @@
     bio: 25
   - type: FireProtection
     reduction: 0.7
+  - type: MycotoxinProtection
+    fullProtection: true
 
 # Prescription variants
 

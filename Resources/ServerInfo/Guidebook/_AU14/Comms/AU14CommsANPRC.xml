@@ -66,7 +66,7 @@
 
   The handset:
 
-  - Reaches approximately two tiles.
+  - Reaches about two and a half tiles.
   - Disconnects when the user moves out of range.
   - Uses the handset user's own callsign.
   - Can be used by one person at a time.
@@ -543,7 +543,7 @@
 
   [bold]RADIO CHECK, HOW COPY, OVER[/bold]
 
-  The operator receives a private report listing stations in clear or degraded coverage.
+  The operator receives a private report listing stations in clear or degraded coverage. Every station on the net counts: other packs, headsets, and clipped earpieces alike.
 
   When performed inside enemy jamming, the report also includes a bearing to the strongest jammer.
 
@@ -587,6 +587,10 @@
   - [bold]CLF Command[/bold] - carried only on AN/PRC sets, not on any earpiece. The cell leader reaches it through a set's handset or panel.
 
   Both nets are relay-gated. The CLF have no fixed array or command-post mast, so coverage comes from CLF AN/PRC sets: the operator's manpack in the field and the cell's base station at the safehouse.
+
+  The issued CLF manpack is not a bare set. It comes up with both nets already in its slots, labelled [bold]CELL[/bold] and [bold]CMD[/bold], because a militia has no schoolhouse and whoever picks the pack up cannot afford to be learning the panel at H-hour. A captured GOVFOR or OPFOR set comes up empty as usual.
+
+  Both the Cell Leader and the Radio Operator draw the cell's comms kit, and both can stake down the base station and the relays. Most rounds nobody takes the operator slot, and a cell that had its only radios gated behind a man who never spawned is a cell that spends the round shouting.
 
   Losing all coverage does not silence the cell. The [bold]Colony[/bold] channel on every CLF earpiece is not gated, so a cell cut off its own nets drops back to colony chatter - which is unencrypted and can be found and read by anyone sweeping the band.
 

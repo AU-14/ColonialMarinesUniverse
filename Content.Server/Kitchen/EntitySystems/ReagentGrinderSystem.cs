@@ -24,6 +24,10 @@ using Content.Server.Construction.Completions;
 using Content.Server.Jittering;
 using Content.Shared.Jittering;
 using Content.Shared.Power;
+using System.Numerics;
+using Content.Shared._RMC14.Chemistry.SmartFridge;
+using Content.Shared.Chemistry.Reagent;
+using Content.Shared._RMC14.Chemistry.Reagent;
 
 namespace Content.Server.Kitchen.EntitySystems
 {
@@ -42,6 +46,9 @@ namespace Content.Server.Kitchen.EntitySystems
         [Dependency] private SharedDestructibleSystem _destructible = default!;
         [Dependency] private RandomHelperSystem _randomHelper = default!;
         [Dependency] private JitteringSystem _jitter = default!;
+        [Dependency] private TransformSystem _xform = default!;
+        [Dependency] private ServerMetaDataSystem _metadata = default!;
+        [Dependency] private RMCReagentSystem _reagents = default!;
 
         public override void Initialize()
         {
@@ -61,6 +68,9 @@ namespace Content.Server.Kitchen.EntitySystems
             SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderStartMessage>(OnStartMessage);
             SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderEjectChamberAllMessage>(OnEjectChamberAllMessage);
             SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderEjectChamberContentMessage>(OnEjectChamberContentMessage);
+            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderLinkMessage>(OnLinkMessage);
+            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderBottleMessage>(OnBottleMessage);
+            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderDisposeMessage>(OnDispose);
         }
 
         private void OnToggleAutoModeMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderToggleAutoModeMessage message)
@@ -135,6 +145,39 @@ namespace Content.Server.Kitchen.EntitySystems
                     new ReagentGrinderWorkCompleteMessage());
 
                 UpdateUiState(uid);
+            }
+            var linkedQuery = EntityQueryEnumerator<ReagentGrinderComponent>();
+            while (linkedQuery.MoveNext(out var uid, out var comp))
+            {
+                if (comp.SmartFridge is null || comp.SmartFridge == EntityUid.Invalid)
+                    continue;
+                if (TryComp(uid, out TransformComponent? grinderXform))
+                {
+                    if (TryComp(comp.SmartFridge.Value, out TransformComponent? fridgeXform))
+                    {
+                        if (grinderXform.MapID != fridgeXform.MapID)
+                        {
+                            comp.SmartFridge = null;
+                            _popupSystem.PopupEntity(Loc.GetString("grinder-lost-link"), uid, PopupType.SmallCaution);
+                            UpdateUiState(uid);
+                            continue;
+                        }
+                        if (Vector2.Distance
+                            (
+                            _xform.GetWorldPosition(uid),
+                            _xform.GetWorldPosition(comp.SmartFridge.Value)
+                            ) > 16)
+                        {
+                            comp.SmartFridge = null;
+                            UpdateUiState(uid);
+                            _popupSystem.PopupEntity(Loc.GetString("grinder-lost-link"), uid, PopupType.SmallCaution);
+                        }
+                    }
+                    else
+                    {
+                        comp.SmartFridge = null;
+                    }
+                }
             }
         }
 
@@ -213,7 +256,8 @@ namespace Content.Server.Kitchen.EntitySystems
             var isBusy = HasComp<ActiveReagentGrinderComponent>(uid);
             var canJuice = false;
             var canGrind = false;
-
+            var canLink = (grinderComp.SmartFridge is null);
+            var linked = (grinderComp.SmartFridge is not null);
             if (outputContainer is not null
                 && _solutionContainersSystem.TryGetFitsInDispenser(outputContainer.Value, out _, out containerSolution)
                 && inputContainer.ContainedEntities.Count > 0)
@@ -228,6 +272,8 @@ namespace Content.Server.Kitchen.EntitySystems
                 this.IsPowered(uid, EntityManager),
                 canJuice,
                 canGrind,
+                canLink,
+                linked,
                 grinderComp.AutoMode,
                 GetNetEntityArray(inputContainer.ContainedEntities.ToArray()),
                 containerSolution?.Contents.ToArray()
@@ -257,6 +303,105 @@ namespace Content.Server.Kitchen.EntitySystems
                 _randomHelper.RandomOffset(toEject, 0.4f);
             }
             UpdateUiState(entity);
+        }
+
+        private void OnBottleMessage(Entity<ReagentGrinderComponent> ent, ref ReagentGrinderBottleMessage message)
+        {
+            RMCSmartFridgeComponent? fridgecomp = null;
+            if (ent.Comp.SmartFridge is null || HasComp<ActiveReagentGrinderComponent>(ent))
+                return;
+            if (!Resolve(ent.Comp.SmartFridge.Value, ref fridgecomp))
+                return;
+            var outputContainer = _itemSlotsSystem.GetItemOrNull(ent.Owner, SharedReagentGrinder.BeakerSlotId);
+            if (outputContainer is null)
+                return;
+
+            _solutionContainersSystem.TryGetFitsInDispenser(outputContainer.Value, out var solEnt, out _);
+            if (solEnt is null)
+                return;
+            var contents = solEnt.Value.Comp.Solution.Contents;
+            ReagentQuantity? quant = null;
+            foreach (var reagent in contents)
+            {
+                if (reagent.Reagent == message.Reagent.Reagent)
+                {
+                    quant = reagent;
+                    break;
+                }
+            }
+            if (quant is null)
+                return;
+            solEnt.Value.Comp.Solution.RemoveReagent(quant.Value, true);
+            _solutionContainersSystem.UpdateChemicals(solEnt.Value);
+            FixedPoint2 quantity = quant.Value.Quantity;
+            var container = _containerSystem.EnsureContainer<Container>(ent.Comp.SmartFridge.Value, fridgecomp.ContainerId);
+            while (quantity > 0)
+            {
+                var bottle = Spawn("CMBottleEmpty");
+                if (_solutionContainersSystem.EnsureSolutionEntity(bottle, "drink", out var bottleSol))
+                {
+                    _solutionContainersSystem.TryAddReagent(bottleSol.Value,
+                        new ReagentQuantity(quant.Value.Reagent, quantity), out var subq);
+                    quantity -= subq;
+                    _metadata.SetEntityName(bottle, $"{_reagents.Index(quant.Value.Reagent.Prototype).LocalizedName} bottle");
+                    _containerSystem.Insert(bottle, container);
+                }
+            }
+            UpdateUiState(ent);
+        }
+
+        private void OnDispose(Entity<ReagentGrinderComponent> ent, ref ReagentGrinderDisposeMessage message)
+        {
+            if (HasComp<ActiveReagentGrinderComponent>(ent))
+                return;
+            var outputContainer = _itemSlotsSystem.GetItemOrNull(ent.Owner, SharedReagentGrinder.BeakerSlotId);
+            if (outputContainer is null)
+                return;
+
+            _solutionContainersSystem.TryGetFitsInDispenser(outputContainer.Value, out var solEnt, out _);
+            if (solEnt is null)
+                return;
+            var contents = solEnt.Value.Comp.Solution.Contents;
+            ReagentQuantity? quant = null;
+            foreach (var reagent in contents)
+            {
+                if (reagent.Reagent == message.Reagent.Reagent)
+                {
+                    quant = reagent;
+                    break;
+                }
+            }
+            if (quant is null)
+                return;
+            solEnt.Value.Comp.Solution.RemoveReagent(quant.Value, true);
+            _solutionContainersSystem.UpdateChemicals(solEnt.Value);
+            UpdateUiState(ent);
+        }
+
+        private void OnLinkMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderLinkMessage message)
+        {
+            var query = EntityQueryEnumerator<RMCSmartFridgeComponent>();
+            EntityUid closest = EntityUid.Invalid;
+            float closestDist = float.MaxValue;
+            while (query.MoveNext(out var qent, out var comp))
+            {
+                if (!TryComp(qent, out TransformComponent? xform))
+                    continue;
+                if (_xform.GetMapId(entity.Owner) != xform.MapID)
+                    continue;
+                float distance = Vector2.Distance(_xform.GetWorldPosition(entity), _xform.GetWorldPosition(qent));
+                if (distance < closestDist)
+                {
+                    closest = qent;
+                    closestDist = distance;
+                }
+
+            }
+            if (closest != EntityUid.Invalid)
+            {
+                entity.Comp.SmartFridge = closest;
+                UpdateUiState(entity);
+            }
         }
 
         private void OnEjectChamberContentMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderEjectChamberContentMessage message)

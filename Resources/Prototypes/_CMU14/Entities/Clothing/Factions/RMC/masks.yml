@@ -18,6 +18,8 @@
   - type: Tag
     tags:
     - GasMask
+  - type: MycotoxinProtection
+    fullProtection: false
 
 # Prescription variants
 

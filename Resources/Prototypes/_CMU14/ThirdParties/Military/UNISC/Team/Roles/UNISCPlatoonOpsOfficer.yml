@@ -1,0 +1,108 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14JobUNISCPltOpsOff
+  icon: AU14JobIconPlatCo
+  roundSide: ThirdParty
+  roundForce: UNISC
+  roundRole: AU14JobUNISCPltOpsOff
+  roundComponents:
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUNISC
+  - type: Skills
+    preset: AU14SkillPresetPlatoonCommander
+  - type: MarineOrders
+  - type: JobPrefix
+    prefix:  au14-job-name-unisc-platoon-operations-officer
+  - type: RMCTrackable
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: UNISC Platoon Operations Officer
+  description: au14-unisc-description
+  playTimeTracker: AU14JobUNISCPltOpsOff
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UNISC_Captain:
+      entity: AU14ChevronCaptain
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCPltOpsOff
+        time: 36000
+    UNISC_FirstLieutenant:
+      entity: AU14ChevronFirstLT
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCPltOpsOff
+        time: 18000
+    UNISC_SecondLieutenant:
+      entity: AU14ChevronSecondLT
+      requirements: []
+
+  spawnMenuRoleName: UNISC Platoon Operations Officer
+  startingGear: AU14GearUNISCPltOpsOff
+  greeting: au14-unisc-greeting
+  joinNotifyCrew: false
+  supervisors: High Command
+  accessGroups:
+  - AU14GovforSquad
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUNISC
+  id: AU14JobUNISCPltOpsOff
+  name: UNISC Platoon Operations Officer
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUNISC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: UNISC Platoon Operations Officer
+    description: A United Nations Interstellar Space Corps Platoon Operations Officer, since the Platoon Commander didn't want to deploy today.
+    reregister: false
+    job: AU14JobUNISCPltOpsOff
+    raffle:
+      settings: short
+    rules: au14-unisc-rules
+
+- type: startingGear
+  id: AU14GearUNISCPltOpsOff
+  equipment:
+    id: AU14IDCardUNISCPltOpsOffDetachment
+    outerClothing: AU14ArmorM3UNISC
+    jumpsuit: AU14UNISCFatigues
+    shoes: CMBootsBlackFilled
+    head: AU14UNISCBeret
+    belt: RMCBeltMarineMK1
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: AU14MolleSatchel
+    ears: AU14CMBHeadset
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    suitstorage: AU14WeaponRifleM41AMK1Tactical
+  storage:
+    back:
+    - BedrollFolded
+    - CMMRE
+    - CMEncryptionKeyUNISC
+
+- type: playTimeTracker
+  id: AU14JobUNISCPltOpsOff

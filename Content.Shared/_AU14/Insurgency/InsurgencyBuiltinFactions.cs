@@ -108,8 +108,13 @@ public static class InsurgencyBuiltinFactions
 
     private static FactionVendorDefinition ToolVendor() => Vendor("CLF tool cache",
         Section("Field Tools",
+            // keep in step with the Radio Operator Issue section in clfstuff.yml and the
+            // AU14CrateCLFinitalTools crate. the CLF nets are anchorGated, so a cell that
+            // deploys without a manpack, a base station and a splice kit has no comms
             Entry("ANPRC117GRadioCLFFilled", 1),
             Entry("AU14CLFBaseStation", 1),
+            Entry("AU14CLFNetSpliceKit", 1),
+            Entry("AU14CLFClandestineRelay", 2),
             Entry("AU14GunCaseRifleMar30"),
             Entry("RMCGunCasePistolZHNK72", 1),
             Entry("RMCGunCasePistolMK80", 1),

@@ -58,6 +58,11 @@
   - type: Tag
     tags:
     - RMCWeaponLauncherM85A1
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: Tag
   id: RMCWeaponLauncherM85A1

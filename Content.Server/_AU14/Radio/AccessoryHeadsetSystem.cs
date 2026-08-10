@@ -109,23 +109,27 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
     }
 
     /// <summary>
-    ///     Tries to find the entity wearing a uniform item via the inventory system.
+    ///     Tries to find the entity wearing a garment via the inventory system.
     /// </summary>
     private bool TryGetWearer(EntityUid uniform, out EntityUid wearer)
     {
         wearer = default;
 
-        // The uniform's parent in the transform tree is the entity wearing it (if equipped)
-        var parent = Transform(uniform).ParentUid;
-        if (!parent.IsValid())
+        // earpieces clip to anything with an accessory holder, not just jumpsuits - vests,
+        // coats, webbing and armour all take the Utility category. resolve the wearer from
+        // whichever clothing slot the garment is actually in, or clipping the earpiece to
+        // a vest silently leaves the wearer off the net
+        if (!_container.TryGetContainingContainer((uniform, null, null), out var container))
             return false;
 
-        // Verify the uniform is actually equipped in an inventory slot
-        if (!_inventory.TryGetSlotEntity(parent, "jumpsuit", out var jumpsuit) || jumpsuit != uniform)
+        if (!_inventory.TryGetContainingSlot((uniform, null, null), out var slot))
             return false;
 
-        wearer = parent;
-        return true;
+        if ((slot.SlotFlags & (SlotFlags.INNERCLOTHING | SlotFlags.OUTERCLOTHING)) == SlotFlags.NONE)
+            return false;
+
+        wearer = container.Owner;
+        return wearer.IsValid();
     }
 
     /// <summary>

@@ -94,6 +94,11 @@
     offsets:
       rmc-aslot-barrel: 0.80, 0.06
       rmc-aslot-underbarrel: 0.31875, -0.243
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: CMMagazineSniperM96S

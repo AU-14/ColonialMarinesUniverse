@@ -1,0 +1,542 @@
+{
+    "version": 1,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "taken from cm13 at https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/hud/actions_pathogen.dmi",
+    "size": {
+        "x": 32,
+        "y": 32
+    },
+    "states": [
+        {
+            "name": "TEMPLATE"
+        },
+        {
+            "name": "template_active"
+        },
+        {
+            "name": "template_on"
+        },
+        {
+            "name": "blank"
+        },
+        {
+            "name": "border_reference"
+        },
+        {
+            "name": "pathogen_hide"
+        },
+        {
+            "name": "pathogen_show"
+        },
+        {
+            "name": "mark_danger"
+        },
+        {
+            "name": "mark_aide"
+        },
+        {
+            "name": "mark_nest"
+        },
+        {
+            "name": "mark_rally"
+        },
+        {
+            "name": "mark_hold"
+        },
+        {
+            "name": "mark_ambush"
+        },
+        {
+            "name": "mark_defend"
+        },
+        {
+            "name": "mark_attack"
+        },
+        {
+            "name": "mark_weed"
+        },
+        {
+            "name": "mark_fortify"
+        },
+        {
+            "name": "mark_hosts"
+        },
+        {
+            "name": "mark"
+        },
+        {
+            "name": "resting"
+        },
+        {
+            "name": "tunnel"
+        },
+        {
+            "name": "xeno_spit"
+        },
+        {
+            "name": "shift_spit_sticky"
+        },
+        {
+            "name": "shift_spit_neurotoxin"
+        },
+        {
+            "name": "shift_spit_acid_glob"
+        },
+        {
+            "name": "shift_spit_neuro_glob"
+        },
+        {
+            "name": "shift_spit_xeno_acid_weak"
+        },
+        {
+            "name": "shift_spit_xeno_acid_normal"
+        },
+        {
+            "name": "shift_spit_xeno_acid_strong"
+        },
+        {
+            "name": "shift_spit_xeno_acid_lingering"
+        },
+        {
+            "name": "evolve"
+        },
+        {
+            "name": "transmute"
+        },
+        {
+            "name": "screech"
+        },
+        {
+            "name": "pounce"
+        },
+        {
+            "name": "build_tunnel"
+        },
+        {
+            "name": "invisibility"
+        },
+        {
+            "name": "transfer_plasma"
+        },
+        {
+            "name": "secrete_resin"
+        },
+        {
+            "name": "emit_pheromones"
+        },
+        {
+            "name": "xenohide"
+        },
+        {
+            "name": "charge"
+        },
+        {
+            "name": "release_haul"
+        },
+        {
+            "name": "watch_xeno"
+        },
+        {
+            "name": "tail_attack"
+        },
+        {
+            "name": "plant_weeds"
+        },
+        {
+            "name": "headbite"
+        },
+        {
+            "name": "rav_scissor_cut"
+        },
+        {
+            "name": "prae_impale"
+        },
+        {
+            "name": "punch"
+        },
+        {
+            "name": "inject_walker"
+        },
+        {
+            "name": "UI_walker"
+        },
+        {
+            "name": "cyclone"
+        },
+        {
+            "name": "rage"
+        },
+        {
+            "name": "rage_screech"
+        },
+        {
+            "name": "powerful_pounce"
+        },
+        {
+            "name": "butchering"
+        },
+        {
+            "name": "rav_shard_shed"
+        },
+        {
+            "name": "plant_sac"
+        },
+        {
+            "name": "spore_morph"
+        },
+        {
+            "name": "cut_spore"
+        },
+        {
+            "name": "toggle_queen_zoom"
+        },
+        {
+            "name": "xeno_lead"
+        },
+        {
+            "name": "project_xeno"
+        },
+        {
+            "name": "heal_xeno"
+        },
+        {
+            "name": "shield_xeno"
+        },
+        {
+            "name": "queen_give_plasma"
+        },
+        {
+            "name": "queen_give_evo_points"
+        },
+        {
+            "name": "queen_order"
+        },
+        {
+            "name": "queen_word"
+        },
+        {
+            "name": "xeno_deevolve"
+        },
+        {
+            "name": "queen_eye"
+        },
+        {
+            "name": "queen_exit"
+        },
+        {
+            "name": "queen_award"
+        },
+        {
+            "name": "xeno_banish"
+        },
+        {
+            "name": "xeno_readmit"
+        },
+        {
+            "name": "psychic_whisper"
+        },
+        {
+            "name": "psychic_radiance"
+        },
+        {
+            "name": "acid_mine"
+        },
+        {
+            "name": "regurgitate"
+        },
+        {
+            "name": "corrosive_acid"
+        },
+        {
+            "name": "stomp"
+        },
+        {
+            "name": "toggle_speed"
+        },
+        {
+            "name": "gut"
+        },
+        {
+            "name": "acid_shroud"
+        },
+        {
+            "name": "spray_acid"
+        },
+        {
+            "name": "throw_hugger"
+        },
+        {
+            "name": "tumble"
+        },
+        {
+            "name": "bombard"
+        },
+        {
+            "name": "toggle_long_range"
+        },
+        {
+            "name": "place_trap"
+        },
+        {
+            "name": "retrieve_egg"
+        },
+        {
+            "name": "crest_defense"
+        },
+        {
+            "name": "acid_mine_UNUSED_"
+        },
+        {
+            "name": "burrow"
+        },
+        {
+            "name": "unburrow"
+        },
+        {
+            "name": "gas_mine"
+        },
+        {
+            "name": "fortify"
+        },
+        {
+            "name": "headbutt"
+        },
+        {
+            "name": "tail_sweep"
+        },
+        {
+            "name": "fling"
+        },
+        {
+            "name": "agility_on"
+        },
+        {
+            "name": "agility_off"
+        },
+        {
+            "name": "lunge"
+        },
+        {
+            "name": "transfer_health"
+        },
+        {
+            "name": "acid_spray_line"
+        },
+        {
+            "name": "acid_spray_cone"
+        },
+        {
+            "name": "prae_tail_trip"
+        },
+        {
+            "name": "gardener_plant"
+        },
+        {
+            "name": "gardener_resin_surge"
+        },
+        {
+            "name": "prae_dash"
+        },
+        {
+            "name": "prae_pierce"
+        },
+        {
+            "name": "prae_crush"
+        },
+        {
+            "name": "prae_tail_lash"
+        },
+        {
+            "name": "prae_acid_ball"
+        },
+        {
+            "name": "prae_cleave_fling"
+        },
+        {
+            "name": "prae_cleave_action"
+        },
+        {
+            "name": "prae_cleave_root"
+        },
+        {
+            "name": "prae_dodge"
+        },
+        {
+            "name": "prae_abduct_UNUSED_"
+        },
+        {
+            "name": "prae_aid"
+        },
+        {
+            "name": "rav_spike"
+        },
+        {
+            "name": "empower"
+        },
+        {
+            "name": "rav_enrage"
+        },
+        {
+            "name": "rav_clothesline"
+        },
+        {
+            "name": "rav_eviscerate"
+        },
+        {
+            "name": "rav_shard_shield"
+        },
+        {
+            "name": "acid_lance"
+        },
+        {
+            "name": "dump_acid"
+        },
+        {
+            "name": "acid_shotgun"
+        },
+        {
+            "name": "resin_pit"
+        },
+        {
+            "name": "runner_bonespur"
+        },
+        {
+            "name": "charge_spit"
+        },
+        {
+            "name": "lurker_inject_neuro"
+        },
+        {
+            "name": "warden_heal"
+        },
+        {
+            "name": "warden_shield"
+        },
+        {
+            "name": "warden_rejuvenate"
+        },
+        {
+            "name": "reflective_resin_wall_(OLD)"
+        },
+        {
+            "name": "place_queen_beacon"
+        },
+        {
+            "name": "place_blockade"
+        },
+        {
+            "name": "acid_grenade"
+        },
+        {
+            "name": "plant_gardener_weeds"
+        },
+        {
+            "name": "empowered"
+        },
+        {
+            "name": "stack_1"
+        },
+        {
+            "name": "stack_2"
+        },
+        {
+            "name": "stack_3"
+        },
+        {
+            "name": "abduct"
+        },
+        {
+            "name": "retrieve"
+        },
+        {
+            "name": "tail_seize"
+        },
+        {
+            "name": "apply_salve"
+        },
+        {
+            "name": "christmas_festivizer"
+        },
+        {
+            "name": "soak"
+        },
+        {
+            "name": "corrosive_slash"
+        },
+        {
+            "name": "decomposing_enzymes"
+        },
+        {
+            "name": "static_speednode"
+        },
+        {
+            "name": "static_costnode"
+        },
+        {
+            "name": "static_constructnode"
+        },
+        {
+            "name": "greater_resin_surge"
+        },
+        {
+            "name": "upgrade_resin"
+        },
+        {
+            "name": "remove_node"
+        },
+        {
+            "name": "design_mark_1"
+        },
+        {
+            "name": "design_mark_2"
+        },
+        {
+            "name": "open_ui"
+        },
+        {
+            "name": "tail_slam"
+        },
+        {
+            "name": "volley"
+        },
+        {
+            "name": "embrace"
+        },
+        {
+            "name": "oozing_wounds"
+        },
+        {
+            "name": "catalyze"
+        },
+        {
+            "name": "tail_harpoon"
+        },
+        {
+            "name": "fire_cannon"
+        },
+        {
+            "name": "breathe_fire"
+        },
+        {
+            "name": "grow_ovipositor"
+        },
+        {
+            "name": "reflective_resin_wall"
+        },
+        {
+            "name": "ready_charge"
+        },
+        {
+            "name": "ready_charge0"
+        },
+        {
+            "name": "ram"
+        },
+        {
+            "name": "resin_nest"
+        },
+        {
+            "name": "morph_resin"
+        }
+    ]
+}

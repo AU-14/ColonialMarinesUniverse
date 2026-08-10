@@ -44,3 +44,16 @@
     - Arcturian
     currentLanguage: Arcturian
     defaultLanguage: Arcturian
+
+- type: entity
+  id: CMUPathogenLanguagePreset
+  name: Pathogen Language
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Language
+    spokenLanguages:
+    - Pathogen
+    understoodLanguages:
+    - Pathogen
+    currentLanguage: Pathogen
+    defaultLanguage: Pathogen

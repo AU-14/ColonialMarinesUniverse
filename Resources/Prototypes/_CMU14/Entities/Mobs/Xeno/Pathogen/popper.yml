@@ -1,0 +1,118 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoPopperBase
+  name: Popper
+  description: A crawling bag of spores. What nightmare are you living in?
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-popper
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/popper.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      50: Critical
+      75: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenPopper
+    tier: 0
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    countedInSlots: false
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenPlaceSporeSac
+    - CMU14ActionXenoPathogenDirectSporeInfect
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.0
+  - type: XenoPlasma
+    plasma: 400
+    maxPlasma: 400
+    plasmaRegenOnWeeds: 2
+  - type: XenoPheromones
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.2
+        density: 50
+        mask:
+        - SmallMobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - SmallMobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 50
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.0
+    baseSprintSpeed: 7.5
+  - type: MeleeWeapon
+    attackRate: 1.0
+    damage:
+      groups:
+        Brute: 10
+  - type: CMArmor
+    explosionArmor: 10
+  - type: Tackle
+    min: 6
+    max: 6
+    chance: 0.1
+    stunMin: 2
+    stunMax: 2
+  - type: RMCSize
+    size: VerySmallXeno
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: popper
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - RMCSynthGrabbable
+  - type: VentCrawler
+    ventCrawlIcon: larva
+  - type: RMCActionOrder
+    id: CMU14XenoPopper
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-popper
+  - type: Speech
+    speechSounds: Pathogen
+  - type: CMUXenoSporeSac
+    sacPrototype: CMUPathogenSporeSac
+    maxSacs: 3
+    plasmaCost: 200
+  - type: CMUXenoDirectSporeInfect
+    plasmaCost: 50
+    embryoSpawn: CMU14XenoBloodburster
+  - type: CMUSporeCloudOnDeath
+    cloudPrototype: CMUPathogenSporeCloud
+
+- type: entity
+  parent: CMU14XenoPopperBase
+  id: CMU14XenoPopper
+  name: Popper
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenPopper

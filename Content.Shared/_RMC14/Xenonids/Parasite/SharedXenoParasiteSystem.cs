@@ -59,6 +59,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
+using Content.Shared._CMU14.Xenomorphs.Larva;
 
 namespace Content.Shared._RMC14.Xenonids.Parasite;
 
@@ -68,7 +69,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     private static readonly string[] MajorPainSuffixes = ["chest", "breathing", "heart"];
     private static readonly string[] ThroatPainSuffixes = ["sore", "mucous"];
     private static readonly string[] MinorPainSuffixes = ["stomach", "chest"];
-
+    
     [Dependency] private SharedActionsSystem _action = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
@@ -95,6 +96,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly BloodyLarvaSystem _bloodyLarva = default!;
 
     private const CollisionGroup LeapCollisionGroup = CollisionGroup.InteractImpassable;
     private const CollisionGroup ThrownCollisionGroup = CollisionGroup.InteractImpassable | CollisionGroup.BarricadeImpassable;
@@ -516,8 +518,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
     private void OnVictimBurstExamine(Entity<VictimBurstComponent> burst, ref ExaminedEvent args)
     {
+        var locId = burst.Comp.BurstsFromBack
+            ? "cmu-xeno-infected-bursted-back"
+            : "rmc-xeno-infected-bursted";
+
         using (args.PushGroup(nameof(VictimBurstComponent)))
-            args.PushMarkup($"[color=red][bold]{Loc.GetString("rmc-xeno-infected-bursted", ("victim", burst))}[/bold][/color]");
+            args.PushMarkup($"[color=red][bold]{Loc.GetString(locId, ("victim", burst))}[/bold][/color]");
     }
 
     private bool StartInfect(Entity<XenoParasiteComponent> parasite, EntityUid victim, EntityUid user)
@@ -959,7 +965,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 _audio.PlayEntity(sound, filter, victim, true);
             }
 
-            EnsureComp<VictimBurstComponent>(burstFrom);
+            var burstComp = EnsureComp<VictimBurstComponent>(burstFrom);
+            burstComp.BurstsFromBack = comp.BurstsFromBack;
+            Dirty(burstFrom.Owner, burstComp);
             _appearance.SetData(burstFrom.Owner, BurstVisuals.Visuals, VictimBurstState.Bursting);
 
             var shakeFilter = Filter.PvsExcept(victim);
@@ -972,7 +980,11 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
                 _jitter.DoJitter(victim, comp.JitterTime / 1.2, true, 14f, 5f, true); // violent jitter
             }
 
-            var messageLarva = Loc.GetString("rmc-xeno-infection-burst-now-xeno", ("victim", Identity.Entity(victim, EntityManager)));
+            var burstLocId = comp.BurstsFromBack
+                ? "cmu-xeno-infection-burst-now-xeno-back"
+                : "rmc-xeno-infection-burst-now-xeno";
+
+            var messageLarva = Loc.GetString(burstLocId, ("victim", Identity.Entity(victim, EntityManager)));
             _popup.PopupClient(messageLarva, spawnedLarva, spawnedLarva, PopupType.MediumCaution);
         }
     }
@@ -985,7 +997,9 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        EnsureComp<VictimBurstComponent>(ent.Owner);
+        var burstComp = EnsureComp<VictimBurstComponent>(ent.Owner);
+        burstComp.BurstsFromBack = ent.Comp.BurstsFromBack;
+        Dirty(ent.Owner, burstComp);
         _appearance.SetData(ent.Owner, BurstVisuals.Visuals, VictimBurstState.Burst);
 
         if (TryComp(ent.Owner, out MobStateComponent? mobState))
@@ -1002,6 +1016,10 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             foreach (var larva in larvae)
             {
                 RemCompDeferred<BursterComponent>(larva);
+
+                if (!HasComp<BloodyLarvaComponent>(larva))
+                    _bloodyLarva.SetBloody(larva); // inject SharedBloodyLarvaSystem dependency
+
                 var invc = EnsureComp<RMCTemporaryInvincibilityComponent>(larva);
                 invc.ExpiresAt = _timing.CurTime + ent.Comp.LarvaInvincibilityTime;
                 Dirty(larva, invc);
@@ -1271,6 +1289,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
         if (HasComp<XenoComponent>(spawned))
             _hive.SetHive(spawned, victim.Comp.Hive);
+    }
+
+    public void SetBurstsFromBack(Entity<VictimInfectedComponent> victim, bool burstsFromBack)
+    {
+        victim.Comp.BurstsFromBack = burstsFromBack;
+        Dirty(victim);
     }
 }
 

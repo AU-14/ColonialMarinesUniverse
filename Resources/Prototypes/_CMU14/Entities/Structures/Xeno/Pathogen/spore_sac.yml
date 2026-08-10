@@ -1,0 +1,34 @@
+- type: entity
+  id: CMUPathogenSporeSac
+  parent: BaseStructure
+  name: spore sac
+  description: A pulsating, fleshy sac that releases a cloud of toxic spores. Don't touch it.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/spore_sac.rsi
+    layers:
+    - state: closed
+      map: ["enum.SporeSacVisualLayers.Base"]
+  - type: Appearance
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 100
+        hard: false
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: CMUPathogenSporeSac
+  - type: MycotoxinInjector
+    mycotoxinPerSecond: 8
+    timeBetweenInjects: 1
+    affectsDead: false
+    embryoSpawn: CMU14XenoBloodburster
+  - type: TimedDespawn
+    lifetime: 60

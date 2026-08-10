@@ -1,0 +1,2 @@
+cmu-sporecaster-examine = Stored spore clouds: {$current}/{$max}. Next cloud in {$seconds}s.
+cmu14-blight-core-destroyed-overmind-survives = A blight core has been destroyed, but the Overmind endures through its remaining core.

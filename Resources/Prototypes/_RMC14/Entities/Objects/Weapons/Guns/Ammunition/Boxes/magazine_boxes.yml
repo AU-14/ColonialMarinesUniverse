@@ -630,11 +630,11 @@
         tags:
         - CMMagazineRifleM4SPRExt
 
-# L24 REG
+# L23 REG
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24Empty
-  name: magazine box (L24 x 16)
+  name: magazine box (L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -675,11 +675,11 @@
         tags:
         - RMCMagazineRifleL24
 
-# L24 AP
+# L23 AP
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24APEmpty
-  name: magazine box (AP L24 x 16)
+  name: magazine box (AP L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -720,11 +720,11 @@
         tags:
         - RMCMagazineRifleL24AP
 
-# L24 EXT
+# L23 EXT
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24ExtEmpty
-  name: magazine box (Ext L24 x 12)
+  name: magazine box (Ext L23 x 12)
   components:
   - type: Sprite
     layers:
@@ -765,11 +765,11 @@
         tags:
         - RMCMagazineRifleL24Extended
 
-# L24 HEAP
+# L23 HEAP
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24HEAPEmpty
-  name: magazine box (HEAP L24 x 16)
+  name: magazine box (HEAP L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -810,11 +810,11 @@
         tags:
         - RMCMagazineRifleL24HEAP
 
-# L24 Inc
+# L23 Inc
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL24IncendiaryEmpty
-  name: magazine box (Inc L24 x 16)
+  name: magazine box (Inc L23 x 16)
   components:
   - type: Sprite
     layers:
@@ -1566,11 +1566,12 @@
       whitelist:
         tags:
         - RMCMagazineSniperType88
-# L90/91 REG
+
+# SLR REG
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90Empty
-  name: magazine box (L90/91 x 12)
+  name: magazine box (SLR x 12)
   components:
   - type: Sprite
     layers:
@@ -1611,11 +1612,11 @@
         tags:
         - RMCMagazineRifleL90
 
-# L90/91 DRUM
+# SLR DRUM
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90DrumEmpty
-  name: magazine box (Drum L90/91 x 12)
+  name: magazine box (Drum SLR x 12)
   components:
   - type: Sprite
     layers:
@@ -1656,11 +1657,11 @@
         tags:
         - RMCMagazineRifleL90Drum
 
-# L90/91 AP
+# SLR AP
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90APEmpty
-  name: magazine box (AP L90/91 x 12)
+  name: magazine box (AP SLR x 12)
   components:
   - type: Sprite
     layers:
@@ -1701,11 +1702,11 @@
         tags:
         - RMCMagazineRifleL90AP
 
-# L90/91 AP DRUM
+# SLR AP DRUM
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: RMCBoxMagazineRifleL90DrumAPEmpty
-  name: magazine box (AP Drum L90/91 x 12)
+  name: magazine box (AP Drum SLR x 12)
   components:
   - type: Sprite
     layers:
@@ -1800,7 +1801,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGBase
   id: RMCBoxMagazineSMGM63APEmpty
-  name: magazine box (AP M63 x 12)
+  name: magazine box (AP M39 x 12)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -1848,7 +1849,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGBase
   id: RMCBoxMagazineSMGM63ExtEmpty
-  name: magazine box (Ext M63 x 10)
+  name: magazine box (Ext M39 x 10)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -1897,7 +1898,7 @@
 - type: entity
   parent: RMCBoxMagazineSMGBase
   id: RMCBoxMagazineSMGM63HEAPEmpty
-  name: magazine box (HEAP M63 x 12)
+  name: magazine box (HEAP M39 x 12)
   components:
   - type: Sprite
     layers:
@@ -2481,7 +2482,7 @@
 - type: entity
   parent: RMCBoxFlamerTankBase
   id: RMCBoxFlamerTankEmpty
-  name: flamer tank box (UT-Napthal Fuel x 8)
+  name: flamer tank box (Incinerator tank x 8)
   components:
   - type: Construction
     graph: RMCBoxMagazine
@@ -2506,12 +2507,83 @@
         - RMCFlamerTank
 
 - type: entity
-  parent: RMCBoxFlamerTankEmpty
-  id: RMCBoxFlamerTank
+  parent: RMCBoxFlamerTankBase
+  id: RMCBoxFlamerTankUTNapthalEmpty
+  name: flamer tank box (UT-Napthal Fuel x 8)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RMCBoxFlamerTankEmpty
+  - type: Sprite
+    layers:
+    - state: flamer_box
+      color: "#3d3832"
+    - state: flamer_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: flamer_ammo_full_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#c18f1a"
+    - state: rifle_box_marking
+      color: "#D49600"
+    - state: flamer_lid
+      map: [ "lid" ]
+      color: "#3d3832"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        components:
+        - RMCFlamerTank
+
+- type: entity
+  parent: RMCBoxFlamerTankUTNapthalEmpty
+  id: RMCBoxFlamerTankUTNapthal
   suffix: Full
   components:
   - type: CMItemSlots
     startingItem: RMCTankFlamer
+    count: 8
+    slot:
+      whitelist:
+        components:
+        - RMCFlamerTank
+
+- type: entity
+  parent: RMCBoxFlamerTankBase
+  id: RMCBoxFlamerTankBGelEmpty
+  name: flamer tank box (B-Gel Fuel x 8)
+  components:
+  - type: Construction
+    graph: RMCBoxMagazine
+    node: RMCBoxFlamerTankEmpty
+  - type: Sprite
+    layers:
+    - state: flamer_box
+      color: "#3d3832"
+    - state: flamer_ammo_full_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: flamer_ammo_full_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#c18f1a"
+    - state: rifle_box_marking
+      color: "#00BE00"
+    - state: flamer_lid
+      map: [ "lid" ]
+      color: "#3d3832"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        components:
+        - RMCFlamerTank
+
+- type: entity
+  parent: RMCBoxFlamerTankBGelEmpty
+  id: RMCBoxFlamerTankBGel
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCTankFlamerBGel
     count: 8
     slot:
       whitelist:
@@ -3610,7 +3682,7 @@
 - type: entity
   parent: RMCBoxMagazineRifleBase
   id: CMUBoxMagazineRifleMAR40Empty
-  name: magazine box (MAR40 x 10)
+  name: magazine box (MAR30/40 x 10)
   components:
   - type: Sprite
     layers:
@@ -3783,3 +3855,304 @@
       whitelist:
         tags:
         - AU14WeaponRifleprodigyrifleMagazineStandard
+
+# L88 marksmen rifle (TWE/RMC)
+- type: entity
+  parent: RMCBoxMagazineRifleBase
+  id: RMCBoxMagazineRifleL88Empty
+  name: magazine box (L88 x 12)
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#3a3a4b"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#318b11"
+    - state: rifle_box_88
+      color: "#ffcb26"
+    - state: rifle_box_marking
+      color: "#318b11"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#3a3a4b"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#318b11"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleL90DrumAP
+
+- type: entity
+  parent: RMCBoxMagazineRifleL88Empty
+  id: RMCBoxMagazineRifleL88
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineRifleL88
+    count: 8
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleL88
+
+
+# Type 19 (UPP)
+- type: entity
+  parent: RMCBoxMagazineSMGBase
+  id: RMCBoxMagazineSMGType19Empty
+  name: magazine box (Type 19 x 12)
+  components:
+  - type: Sprite
+    layers:
+    - state: smg_box
+      color: "#a64f46"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#727e90"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: smg_box_marking
+      color: "#7c4c1b"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#a64f46"
+    - state: smg_lid_marking
+      map: [ "lid_marking" ]
+      color: "#7c4c1b"
+  - type: CMItemSlots
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGType19
+
+- type: entity
+  parent: RMCBoxMagazineSMGType19Empty
+  id: RMCBoxMagazineSMGType19
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineSMGType19
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGType19
+
+# M20A (Prodigy)
+- type: entity
+  parent: RMCBoxMagazineRifleBase
+  id: CMUBoxMagazineRifleM20AEmpty  
+  name: magazine box (M20A x 10)
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#4f6b5c"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_generic
+      color: "#ffcb26"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#4f6b5c"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#7c4c1b"
+  - type: CMItemSlots
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleM20A
+
+- type: entity
+  parent: CMUBoxMagazineRifleM20AEmpty
+  id: CMUBoxMagazineRifleM20A
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazineRifleM20A
+    count: 10
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleM20A
+
+# Basira-Armstrong
+- type: entity
+  parent: RMCBoxMagazineRifleBase
+  id: RMCBoxMagazineRifleBasiraArmstrongEmpty
+  name: magazine box (Basira Armstrong x 20)
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#7C7350"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#7C7350"
+    - state: rifle_box_generic
+      color: "#C3D4BF"
+  - type: CMItemSlots
+    count: 20
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleHunting
+
+- type: entity
+  parent: RMCBoxMagazineRifleBasiraArmstrongEmpty
+  id: RMCBoxMagazineRifleBasiraArmstrong
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineRifleHunting
+    count: 20
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleHunting
+
+# ABR-40
+- type: entity
+  parent: RMCBoxMagazineRifleBase
+  id: RMCBoxMagazineRifleABREmpty
+  name: magazine box (ABR-40 x 20)
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#262626"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#262626"
+    - state: rifle_box_generic
+      color: "#C3D4BF"
+  - type: CMItemSlots
+    count: 20
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleABR40
+
+- type: entity
+  parent: RMCBoxMagazineRifleABREmpty
+  id: RMCBoxMagazineRifleABR40
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineRifleABR40
+    count: 20
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineRifleABR40
+
+# MAC-15
+- type: entity
+  parent: RMCBoxMagazineSMGBase
+  id: RMCBoxMagazineSMGMAC15Empty
+  name: magazine box (MAC-15 x 12)
+  components:
+  - type: Sprite
+    layers:
+    - state: smg_box
+      color: "#707070"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: smg_box_marking
+      color: "#7c4c1b"
+    - state: rifle_box_generic 
+      color: "#2C2B2B"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#707070"
+    - state: smg_lid_marking
+      map: [ "lid_marking" ]
+      color: "#7c4c1b"
+  - type: CMItemSlots
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGMAC15
+
+- type: entity
+  parent: RMCBoxMagazineSMGMAC15Empty
+  id: RMCBoxMagazineSMGMAC15
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineSMGMAC15
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGMAC15
+
+# UZI
+- type: entity
+  parent: RMCBoxMagazineSMGBase
+  id: RMCBoxMagazineSMGUZIEmpty
+  name: magazine box (UZI x 12)
+  components:
+  - type: Sprite
+    layers:
+    - state: smg_box
+      color: "#707070"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_generic 
+      color: "#2C2B2B"
+    - state: smg_lid
+      map: [ "lid" ]
+      color: "#707070"
+  - type: CMItemSlots
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGUZI
+
+- type: entity
+  parent: RMCBoxMagazineSMGUZIEmpty
+  id: RMCBoxMagazineSMGUZI
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: RMCMagazineSMGUZI
+    count: 12
+    slot:
+      whitelist:
+        tags:
+        - RMCMagazineSMGUZI

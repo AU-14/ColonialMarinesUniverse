@@ -12,6 +12,9 @@
       map: [ "enum.GunVisualLayers.Base" ]
   - type: Clothing
     sprite: _AU14/Weapons/Guns/Civilian/rxfm5.rsi
+    slots:
+    - suitStorage
+    - belt
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -28,7 +31,7 @@
   - type: Item
     size: Normal
   - type: WieldDelay
-    baseDelay: 0.3
+    baseDelay: 0.2
   - type: RMCSelectiveFire
     baseFireModes:
     - SemiAuto
@@ -36,14 +39,7 @@
     recoilUnwielded: 4
     scatterWielded: 1
     scatterUnwielded: 5
-    baseFireRate: 5
-    modifiers:
-      FullAuto:
-        fireDelay: 5
-        maxScatterModifier: 2
-        useBurstScatterMult: true
-        unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 6
+    baseFireRate: 2.3
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 4
   - type: Wieldable
@@ -54,15 +50,15 @@
   - type: Tag
     tags:
     - AU14WeaponPistolRXFM5
+    - Sidearm
   - type: GunIFF
     enabled: false
-
 
 - type: hitscan
   id: AU14RXFM5LaserShot
   damage:
     types:
-      Heat: 20
+      Heat: 25
       Blunt: 3
       Asphyxiation: 5
   muzzleFlash:

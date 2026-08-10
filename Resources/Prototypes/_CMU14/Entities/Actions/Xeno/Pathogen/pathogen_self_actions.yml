@@ -1,0 +1,953 @@
+- type: entity
+  id: CMU14ActionXenoPathogenRest
+  parent: ActionXenoBase
+  name: Rest
+  description: Lie down to regenerate health more quickly while on weeds. [color=red]Your rest keybind will also activate this action, Shift+R by default.[/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: resting
+    useDelay: 1
+  - type: InstantAction
+    event: !type:XenoRestActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenWatch
+  parent: ActionXenoBase
+  name: Watch Neomorph
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: watch_xeno
+  - type: InstantAction
+    event: !type:XenoWatchActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenPheromones
+  parent: ActionXenoBase
+  name: Emit Pheromones (35)
+  description: Gives a buff to nearby neomorph. [color=cyan]Consumes 2.5 plasma per second.[/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: emit_pheromones
+    useDelay: 0.33
+  - type: InstantAction
+    event: !type:XenoPheromonesActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenHide
+  parent: ActionXenoBase
+  name: Hide
+  description: Hide under tables and other objects.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xenohide
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:XenoHideActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenToggleCrest
+  parent: ActionXenoBase
+  name: Toggle Crest Defense
+  description: Increases your resistance to direct damage but slows you down. You count as one size bigger while your crest is lowered.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: crest_defense
+    useDelay: 2
+  - type: InstantAction
+    event: !type:XenoToggleCrestActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenFortify
+  parent: ActionXenoBase
+  name: Fortify
+  description: Become immobile and impassable to mobs, dramatically increasing your resistance to direct damage and explosions. Damage is further reduced from the direction you are facing. You can't be stunned by minor explosions. You count as two sizes bigger while fortified and still can attack structures or use tail slam.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: fortify
+    useDelay: 5
+  - type: InstantAction
+    event: !type:XenoFortifyActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenFortifySteelcrest
+  parent: CMU14ActionXenoPathogenFortify
+  name: Fortify
+  description: Become much slower, increasing your resistance to direct damage and explosions. Damage is greatly reduced from the direction you are facing. You count as two sizes bigger while fortified and still can attack structures or use tail slam, but your slashes do less damage.
+
+- type: entity
+  id: CMU14ActionXenoPathogenResinWalker
+  parent: ActionXenoBase
+  name: Resin Walker (50)
+  description: Run faster on weeds. [color=cyan]Consumes 30 plasma per second.[/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: toggle_speed
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:XenoResinWalkerActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenZoom
+  parent: ActionXenoBase
+  name: Toggle Long-Range Sight
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: toggle_long_range
+    useDelay: 0.2
+  - type: InstantAction
+    event: !type:XenoZoomActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenWordQueen
+  parent: ActionXenoBase
+  name: Word of the Overmind (50)
+  description: Sends a message to all members of your hive.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_word
+    useDelay: 10
+  - type: InstantAction
+    event: !type:XenoWordQueenActionEvent
+  - type: XenoWordQueenAction
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenPsychicWhisper
+  parent: ActionXenoBase
+  name: Psychic Whisper
+  description: Whisper a psychic message to a nearby mind.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: psychic_whisper
+    useDelay: 10
+  - type: TargetAction
+    range: 7
+  - type: EntityTargetAction
+    event: !type:XenoPsychicWhisperActionEvent
+    canTargetSelf: false
+    toggleOutline: false
+    whitelist:
+      components:
+      - MobState
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenPsychicRadiance
+  parent: ActionXenoBase
+  name: Psychic Radiance (100)
+  description: Radiate a psychic message to nearby minds.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: psychic_radiance
+    useDelay: 10
+  - type: InstantAction
+    event: !type:XenoPsychicRadianceActionEvent
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenGiveOrder
+  parent: ActionXenoBase
+  name: Give Order (100)
+  description: Send a psychic order to the neomorph you are watching.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_order
+    useDelay: 10
+  - type: InstantAction
+    event: !type:XenoGiveOrderActionEvent
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenGrowOvipositor
+  parent: ActionXenoBase
+  name: Grow Ovipositor (500)
+  description: Become immobile and start laying eggs which will produce children. Has a 5 minute cooldown. [color=red]You must be in ovipositor mode for other neomorphs to gain evolution points after round-start![/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: grow_ovipositor
+  - type: InstantAction
+    event: !type:XenoGrowOvipositorActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenBanish
+  parent: ActionXenoBase
+  name: Banish Neomorph
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_banish
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:ManageHiveActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenReadmit
+  parent: ActionXenoBase
+  name: Readmit Neomorph
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_readmit
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:ManageHiveActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenDodge
+  parent: ActionXenoBase
+  name: Dodge (200)
+  description: Gain a speed boost for 15 seconds and move through allies and enemies unimpeded. Your speed is doubled near standing enemies.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: prae_dodge
+    useDelay: 19
+  - type: InstantAction
+    event: !type:XenoDodgeActionEvent
+  - type: XenoActionPlasma
+    cost: 200
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenBurrow
+  name: Burrow
+  description: Burrow underground preventing you from getting hit from all sources. Once burrowed click a tile to move to it and resurface after a doafter that depends on distance.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: burrow
+    checkCanInteract: false
+  - type: TargetAction
+    range: 8
+    repeat: true
+    deselectOnMiss: false
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoBurrowActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenSoak
+  name: Soak (20)
+  description: Soak in damage for 6 seconds. If you take 140 damage or higher, you regen 75 health and your tail slam gets refreshed.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: soak
+    useDelay: 17
+  - type: InstantAction
+    event: !type:XenoSoakActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: CMU14ActionXenoPathogenSoak
+  id: CMU14ActionXenoPathogenCrusherSoak
+  name: Soak (20)
+  description: Brace yourself for incoming damage. If you absorb 240 damage within 6 seconds, heal 120 health and reset your tail stab cooldown. [color=red]If the threshold is not reached, the effect expires with no reward.[/color]
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenEmpower
+  name: Empower (50)
+  description: On first activation, gain a small amount of shield. After 6 seconds or using it again, get empowered based on surrounding enemies (max 6), gaining shield from each. If you empowered from at least 3 targets, you become Super-Empowered, gaining additional damage on melee attacks, and changing how some of your other abilities work.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: empower
+  - type: InstantAction
+    event: !type:XenoEmpowerActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenGenerateEggs
+  name: Generate Eggs (50)
+  description: Generate an egg every 30 seconds, which goes into your storage. [color=cyan]Consumes 15 plasma every 2 seconds.[/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+  - type: InstantAction
+    event: !type:XenoGenerateEggsActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenSelfImmolate
+  parent: ActionXenoBase
+  name: Self-Immolate (50)
+  description: Ignite yourself and build heat for Heatshield abilities.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+    useDelay: 24
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoSelfImmolateActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenThermoregulation
+  parent: ActionXenoBase
+  name: Thermoregulation (40)
+  description: Convert active flames into a short burst of speed, then extinguish yourself.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: fortify
+    useDelay: 16
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoThermoregulationActionEvent
+  - type: XenoActionPlasma
+    cost: 40
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenStoreAcid
+  parent: ActionXenoBase
+  name: Store Acid (150)
+  description: Store an acid charge, lowering your armor until the charge is spent to hasten an offensive acid ability.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 5
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoStoreAcidActionEvent
+  - type: XenoActionPlasma
+    cost: 150
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenEncasedPlates
+  parent: ActionXenoBase
+  name: Encased Plates
+  description: Toggle a slower defensive stance with stronger frontal plates.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoEncasedPlatesActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenReflectiveShield
+  parent: ActionXenoBase
+  name: Reflective Shield
+  description: Brace your plates to reflect incoming bullets for a short time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoReflectiveShieldActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenSelectChemical
+  parent: ActionXenoBase
+  name: Select Chemical
+  description: Select the chemical produced by your alchemist glands.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: shift_spit_neurotoxin
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoSelectChemicalActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenProduceChemical
+  parent: ActionXenoBase
+  name: Produce Chemical (50)
+  description: Convert plasma into the selected alchemical stockpile.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: secrete_resin
+    useDelay: 3
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoProduceChemicalActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenRemoveChemical
+  parent: ActionXenoBase
+  name: Purge Chemical
+  description: Purge the selected alchemical stockpile.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: dump_acid
+    useDelay: 1
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoRemoveChemicalActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenCarrionMantle
+  parent: ActionXenoBase
+  name: Carrion Mantle
+  description: Spend flesh resin to mantle yourself or a hivemate in hardened carrion.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 30
+  - type: TargetAction
+    range: 5
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoCarrionMantleActionEvent
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 5
+
+- type: entity
+  id: CMU14ActionXenoPathogenOvermindChangeForm
+  parent: ActionXenoBase
+  name: Change Form
+  description: Shift between incorporeal eye and manifested physical form.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_eye
+    useDelay: 2
+  - type: InstantAction
+    event: !type:CMUXenoOvermindChangeFormActionEvent
+
+# Utility self-actions ported from xeno_utility_actions.yml
+
+- type: entity
+  id: CMU14ActionXenoPathogenTransferPlasma
+  parent: ActionXenoBase
+  name: Transfer Plasma (50)
+  description: Give plasma to a nearby neomorph.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: transfer_plasma
+  - type: TargetAction
+    range: 2
+  - type: EntityTargetAction
+    event: !type:XenoTransferPlasmaActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenHealerDroneTransferPlasma
+  parent: ActionXenoBase
+  name: Transfer Plasma (100)
+  description: Give plasma to a nearby neomorph.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: transfer_plasma
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:XenoTransferPlasmaActionEvent
+      amount: 100
+
+- type: entity
+  id: CMU14ActionXenoPathogenTransferPlasmaHivelord
+  parent: ActionXenoBase
+  name: Transfer Plasma (200)
+  description: Give plasma to a neomorph.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: transfer_plasma
+  - type: TargetAction
+    range: 7
+  - type: EntityTargetAction
+    event: !type:XenoTransferPlasmaActionEvent
+      amount: 200
+
+- type: entity
+  id: CMU14ActionXenoPathogenResinSurge
+  parent: ActionXenoBase
+  name: Resin Surge (75)
+  description: Instantly grows a fruit when used (cooldown will be proportional to growth time), creates temporary walls when used on weeds or use on existing walls to reinforce them with 6000 hp for 15 seconds. Targeting anything else creates a 3x3 patch of weak sticky resin after a small doafter.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: gardener_resin_surge
+    useDelay: 10
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: EntityTargetAction
+    whitelist:
+      components:
+      - XenoConstruct
+      - XenoFruit
+      - XenoWeeds
+  - type: WorldTargetAction
+    event: !type:XenoResinSurgeActionEvent
+  - type: XenoResinSurgeAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenRetrieve
+  name: Retrieve (180 plasma, 100 fury)
+  description: Pulls a neomorph to you if they are still, with a 0.6 second doafter. You can't pull very big neomorphs unless they are downed.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: retrieve
+  - type: TargetAction
+    range: 7
+  - type: EntityTargetAction
+    event: !type:XenoRetrieveActionEvent
+  - type: XenoActionPlasma
+    cost: 180
+  - type: XenoActionEnergy
+    cost: 100
+  - type: ActionCooldown
+    cooldown: 10
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenAidHeal
+  name: Aid Neomorph Healing (100 plasma, 100+ health reserves)
+  description: Heals a nearby ally Xeno. Healing another Xeno will also heal you, and half your remaining health reserves will be consumed for extra healing. [color=red]This can't heal ignited neomorphs![/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: warden_heal
+    useDelay: 10
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:XenoAidActionEvent
+  - type: XenoActionPlasma
+    cost: 100
+  - type: ActionBlockIfResting
+  - type: ActionSharedCooldown
+    id: CMU14ActionXenoPathogenAidHeal
+    ids:
+    - CMU14ActionXenoPathogenAidRejuvenate
+    cooldown: 10
+  - type: RMCDazeableAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenAidRejuvenate
+  name: Aid Neomorph Rejuvenate (100 plasma, 100 health reserves)
+  description: Remove ailments and stuns from a far away ally Xeno.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: warden_rejuvenate
+    useDelay: 10
+  - type: TargetAction
+    range: 8
+  - type: EntityTargetAction
+    event: !type:XenoAidActionEvent
+      aidType: Ailments
+  - type: XenoActionPlasma
+    cost: 100
+  - type: ActionBlockIfResting
+  - type: ActionSharedCooldown
+    id: CMU14ActionXenoPathogenAidRejuvenate
+    ids:
+    - CMU14ActionXenoPathogenAidHeal
+    cooldown: 10
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenLeader
+  name: Choose/Follow Neomorph Leaders
+  description: Promotes and demotes neomorph leaders, or watches them. Promoting a xeno to leader will make them emit your pheromones around themselves.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    backgroundOn: null
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_lead
+    useDelay: 3
+  - type: InstantAction
+    event: !type:HiveLeaderActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenHeal
+  name: Heal Neomorph (600)
+  description: Heals neomorph in a 4 tile range around where you click for 30% of their health over 20 seconds.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    backgroundOn: null
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: heal_xeno
+    useDelay: 8
+  - type: TargetAction
+    checkCanAccess: false
+    range: -1
+  - type: WorldTargetAction
+    event: !type:XenoHealActionEvent
+  - type: XenoActionPlasma
+    cost: 600
+
+- type: entity
+  parent: CMU14ActionXenoPathogenTransferPlasma
+  id: CMU14ActionXenoPathogenTransferPlasmaQueen
+  name: Give Plasma (400)
+  description: Remotely restores 75% of a single neomorph's max plasma.
+  components:
+  - type: Action
+    useDelay: 12
+  - type: TargetAction
+    checkCanAccess: false
+    range: -1
+  - type: EntityTargetAction
+    event: !type:XenoTransferPlasmaActionEvent
+      cost: 400
+      amount: 0
+      targetPercentage: 0.75
+      range: null
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenApplySalve
+  name: Apply Salve (200)
+  description: Apply a salve to use some of your health to heal allied Xenos up to 100 health over 5 seconds. You can stack multiple salves.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: apply_salve
+    useDelay: 0.5
+  - type: TargetAction
+    range: 2
+  - type: EntityTargetAction
+    event: !type:XenoApplySalveActionEvent
+  - type: RMCDazeableAction
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenSacrifice
+  name: Sacrifice
+  description: Sacrifice your life to heal a sister. [color=red]YOU WILL ONLY RESPAWN IF YOU MAXED OUT YOUR TRANSFERRED HEALTH BY HEALING SISTERS.[/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:XenoSacrificeHealActionEvent
+      componentsRemove:
+      - type: RMCSlowdown
+      - type: RMCSuperSlowdown
+      - type: RMCRooted
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenTailFountain
+  name: Tail Fountain
+  description: Extinguishes fire from a nearby ally or foe. Uses up your melee attack.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: prae_tail_lash
+    useDelay: 10
+  - type: TargetAction
+    range: 2
+  - type: EntityTargetAction
+    event: !type:XenoTailFountainActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenTantrum
+  name: Tantrum (100 plasma, 75 fury)
+  description: Give an ally and yourself temporary armor for a few seconds, which lasts longer on you. Crushers and Ravagers get a speed boost instead.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: warden_heal
+    useDelay: 7
+  - type: TargetAction
+    checkCanAccess: false
+    range: 8
+  - type: EntityTargetAction
+    event: !type:XenoTantrumActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenFightOrFlight
+  name: Fight or Flight (300 plasma, 75 fury)
+  description: Remove ailments and stuns from all allies around you. The radius is longer if you have 75+ fury after paying the cost.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+    useDelay: 45
+  - type: InstantAction
+    event: !type:XenoFightOrFlightActionEvent
+  - type: XenoActionEnergy
+    cost: 75
+  - type: XenoActionPlasma
+    cost: 300
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenQueenEye
+  name: Enter Eye Form
+  description: Look around any area with weeds remotely. You can use infinite range abilities while in this form, and build resin from afar.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_eye
+    useDelay: 0.25
+  - type: InstantAction
+    event: !type:QueenEyeActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenSpikeShield
+  name: Spike Shield (150 shards)
+  description: Expend shards to gain a temporary shield that lasts for a short amount of time. Whenever the shield is damaged, spray bone shards around you in a 5x5 AoE centered on yourself. Shield lasts for 2 seconds.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: rav_shard_shield
+    useDelay: 11.5
+  - type: InstantAction
+    event: !type:ActionXenoSpikeShieldEvent
+  - type: ActionBlockIfResting
+  - type: RMCDazeableAction
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenBulwarkOfTheHive
+  name: Bulwark Of The Hive
+  description: Grants all hivemembers around you a temporary shield that blocks 200 damage for 10 seconds. While their shield is up, hivemembers can only take damage up to 10% of their health at a time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: soak
+    useDelay: 60
+  - type: InstantAction
+    event: !type:XenoBulwarkOfTheHiveActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenDoom
+  name: Doom (50)
+  description: Turns off lights around you for 10 seconds, and slows, dazes, and drains hostiles as well.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+    useDelay: 45
+  - type: InstantAction
+    event: !type:XenoDoomActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+
+- type: entity
+  id: CMU14ActionXenoPathogenVomitBile
+  parent: ActionXenoBase
+  name: Vomit Bile (40)
+  description: Extinguishes a nearby hivemate or sprays volatile bile over enemies in the three tiles in front of you.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_spit
+    useDelay: 8
+  - type: TargetAction
+    range: 1.8
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoVomitBileActionEvent
+  - type: XenoActionPlasma
+    cost: 40
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenFleshHarvest
+  parent: ActionXenoBase
+  name: Flesh Harvest
+  description: Rip apart a permanently dead marine for flesh resin.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 5
+  - type: TargetAction
+    range: 1.5
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoFleshHarvestActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 1.5
+
+- type: entity
+  id: CMU14ActionXenoPathogenFleshBloom
+  parent: ActionXenoBase
+  name: Flesh Bloom
+  description: Spend flesh resin to grow a telegraphed bloom that slows and poisons enemies while soothing the hive.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 25
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoFleshBloomActionEvent
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 7
+
+- type: entity
+  id: CMU14ActionXenoPathogenTurnInvisible
+  parent: ActionXenoBase
+  name: Turn Invisible (20)
+  description: Become partially invisible for 30 seconds, or until you either damage or attempt to devour an enemy. Can be toggled off to become visible again, with a refund of 90% remaining cloak time. Increases your movement speed by 15% until the ability expires.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: invisibility
+  - type: InstantAction
+    event: !type:XenoTurnInvisibleActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenDefensiveShield
+  parent: ActionXenoBase
+  name: Defensive Shield (50)
+  description: Encase yourself in a protective shield that absorbs 100 damage for 7 seconds. Reduces incoming damage by 8 per hit. Reflects enemy projectiles while active. [color=red]Grants brief explosion immunity on activation.[/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: soak
+    useDelay: 26
+  - type: InstantAction
+    event: !type:XenoDefensiveShieldActionEvent

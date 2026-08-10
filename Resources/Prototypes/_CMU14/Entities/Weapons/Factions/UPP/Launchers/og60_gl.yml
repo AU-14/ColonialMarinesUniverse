@@ -46,6 +46,11 @@
   - type: Tag
     tags:
     - AU14WeaponLauncherOG60
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: Tag
   id: AU14WeaponLauncherOG60

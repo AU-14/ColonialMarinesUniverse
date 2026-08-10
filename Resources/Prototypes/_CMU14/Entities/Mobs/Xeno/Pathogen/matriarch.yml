@@ -1,0 +1,173 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoMatriarchBase
+  name: Matriarch
+  description: Nothing will survive...
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-matriarch
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/matriarch.rsi
+    layers:
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.RMCDamageVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "enum.RMCShieldVisuals.Base" ]
+      sprite: _RMC14/Effects/xeno_shields.rsi
+      visible: false
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      800: Critical
+      1600: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: XenoHeavy
+  - type: CMUXenoMycotoxinInject
+    plasmaCost: 150
+    range: 3.0
+    canInjectLiving: true
+  - type: Xeno
+    role: CMU14JobPathogenMatriarch
+    tier: 4
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenSpikeShed
+    - CMU14ActionXenoPathogenSpikeShield
+    - CMU14ActionXenoPathogenBoneChips
+    - CMU14ActionXenoPathogenBlightWave
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenMycotoxinInjectMatriarch
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.4
+  - type: CMUXenoBlightWave
+  - type: XenoPlasma
+    plasma: 500
+    maxPlasma: 500
+    plasmaRegenOnWeeds: 9
+  - type: XenoDevour
+  - type: XenoPheromones
+    pheromonesMultiplier: 6
+  - type: XenoEnergy
+    gain: 5
+    gainAttack: 20
+    gainAttackDowned: 20
+    popupGain: rmc-xeno-shards-increase-user
+    popupNotEnough: rmc-xeno-not-enough-shards
+    alert: XenoEnergyShards
+    gainOnProjectiles: false
+    max: 300
+  - type: XenoShard
+  - type: XenoSpikeShed
+  - type: XenoBoneChips
+  - type: XenoSpikeShield
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 200
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.5
+        density: 200
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.0
+    baseSprintSpeed: 4.0
+  - type: MeleeWeapon
+    attackRate: 2.0
+    damage:
+      groups:
+        Brute: 55
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 54
+  - type: CMArmor
+    explosionArmor: 50
+    xenoArmor: 25
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.45
+    stunMin: 4
+    stunMax: 5
+  - type: RMCSize
+    size: Immobile
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: RMCFireArmorDebuffModifier
+    debuffModifier: 1.4
+  - type: RMCImmuneToIgnition
+    bypassWhitelist:
+      components:
+      - RMCFireImmunityBypass  # Only fires with this component can ignite the queen
+  - type: RMCImmuneToFireTileDamage
+    bypassWhitelist:
+      components:
+      - RMCFireImmunityBypass  # Only fires with this component can bypass immunity
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: matriarch
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - FootstepSound
+  - type: VentCrawler
+    ventCrawlIcon: queen
+  - type: RMCActionOrder
+    id: CMU14XenoMatriarch
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-matriarch
+  - type: Speech
+    speechSounds: Pathogen
+  - type: SoundOnDeath
+    sound:
+      collection: PathogenMatriarchDeath
+      params:
+        volume: -4
+  - type: XenoAnnounceDeath
+    message: cmu-xeno-death-matriarch
+    color: "#8a8c50"
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: XenoFootstepLarge
+      params:
+        volume: 0
+
+- type: entity
+  parent: CMU14XenoMatriarchBase
+  id: CMU14XenoMatriarch
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0

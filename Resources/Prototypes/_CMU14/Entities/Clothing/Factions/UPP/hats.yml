@@ -30,6 +30,8 @@
     sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi
   - type: Clothing
     sprite: _AU14/Clothing/UPP/hats/uppushanka.rsi
+  - type: MycotoxinProtection
+    fullProtection: false
 
 - type: entity
   parent: ClothingHeadBase
@@ -47,3 +49,5 @@
     - HeadSide
     - Hair
     - Snout
+  - type: MycotoxinProtection
+    fullProtection: false

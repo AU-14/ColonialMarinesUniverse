@@ -461,6 +461,31 @@
     tags:
     - AU14SquadIASF
 
+- type: entity
+  parent: SquadBase
+  id: AU14SquadUNISC
+  name: UNISC
+  components:
+  - type: SquadTeam
+    color: "#3d82b8"
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: UNISOF
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_ua
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: rmc_lieutenant
+    canSupplyDrop: false
+    group: UNISC
+  - type: Tag
+    tags:
+    - AU14SquadUNISC
+
 - type: Tag
   id: SquadHRT
 
@@ -511,3 +536,6 @@
 
 - type: Tag
   id: AU14SquadIASF
+
+- type: Tag
+  id: AU14SquadUNISC

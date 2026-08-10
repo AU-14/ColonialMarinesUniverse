@@ -1,0 +1,142 @@
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenBloodburster
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
+    state: bloodburster_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenPopper
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/popper.rsi
+    state: popper_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenAberrationBloodburster
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/aberration_bloodburster.rsi
+    state: aberration_bloodburster_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenAberration
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/aberration.rsi
+    state: aberration_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenBlight
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/blight.rsi
+    state: blight_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenBrute
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/brute.rsi
+    state: brute_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenConditor
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/conditor.rsi
+    state: condictor_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenHarbinger
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/harbinger.rsi
+    state: harbinger_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenSprinter
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/sprinter.rsi
+    state: sprinter_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenVenator
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+    state: venator_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenNeomorph
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/neomorph.rsi
+    state: neomorph_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenHaze
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/haze.rsi
+    state: haze_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenRoot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/root.rsi
+    state: root_gib
+  - type: TimedDespawn
+    lifetime: 0.8

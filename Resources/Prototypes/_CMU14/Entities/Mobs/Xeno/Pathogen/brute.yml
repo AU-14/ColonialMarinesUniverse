@@ -1,0 +1,147 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoBruteBase
+  name: Brute
+  description: A lumbering tank on legs.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-brute
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/brute.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: XenoHeavy
+  - type: Xeno
+    role: CMU14JobPathogenBrute
+    tier: 3
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenStomp
+    - CMU14ActionXenoPathogenDefensiveShield
+    - CMU14ActionXenoPathogenDislocate
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoDislocate
+  - type: CrusherShield
+  - type: XenoStomp
+    directional: true
+    directionalRange: 4
+    directionalAngle: 90
+    paralyzeTime: 1
+    slowTime: 2.5
+    knockBackDistance: 2
+    screenShakeStrength: 4
+    directionalTileEffect: RMCEffectXenoTelegraphRed
+    damage:
+      types:
+        Blunt: 80
+    directionalMinDamage:
+      types:
+        Blunt: 65
+    selfEffect: CMEffectSelfStomp
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.2
+  - type: XenoPlasma
+    plasma: 200
+    maxPlasma: 200
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoNeomorph
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 150
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 150
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 4
+  - type: MeleeWeapon
+    attackRate: 1.75 # fast attackrate, no delay
+    damage:
+      groups:
+        Brute: 42
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 54
+  - type: CMArmor
+    explosionArmor: 50
+    xenoArmor: 27
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.35
+    stunMin: 3
+    stunMax: 4
+  - type: RMCSize
+    size: Big
+  - type: XenoDevour
+  - type: XenoPheromones
+    pheromonesMultiplier: 3
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: brute
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: crusher
+  - type: RMCActionOrder
+    id: CMU14XenoBrute
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-brute
+  - type: Speech
+    speechSounds: Pathogen
+ 
+- type: entity
+  parent: CMU14XenoBruteBase
+  id: CMU14XenoBrute
+  name: Brute
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenBrute

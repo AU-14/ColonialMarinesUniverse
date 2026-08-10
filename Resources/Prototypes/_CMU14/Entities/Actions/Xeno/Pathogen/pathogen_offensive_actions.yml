@@ -1,0 +1,987 @@
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenAcidNormal
+  name: Corrosive Acid (100)
+  description: Melts down a structure or item over time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: corrosive_acid
+    checkCanInteract: false
+  - type: TargetAction
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:XenoCorrosiveAcidEvent
+      acidId: XenoAcidNormal
+      strength: Normal
+      plasmaCost: 100
+      time: 50
+      dps: 8
+      expendableLightDps: 2.5
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenAcidNormal
+  id: CMU14ActionXenoPathogenAcidWeak
+  name: Weak Corrosive Acid (75)
+  description: Melts down a structure or item over time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: corrosive_acid
+    checkCanInteract: false
+  - type: TargetAction
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:XenoCorrosiveAcidEvent
+      acidId: XenoAcidWeak
+      strength: Weak
+      plasmaCost: 75
+      time: 125
+      dps: 4
+      expendableLightDps: 0.3
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenAcidNormal
+  id: CMU14ActionXenoPathogenAcidStrong
+  name: Strong Corrosive Acid (125)
+  description: Melts down a structure or item over time.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: corrosive_acid
+    checkCanInteract: false
+  - type: TargetAction
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:XenoCorrosiveAcidEvent
+      acidId: XenoAcidStrong
+      strength: Strong
+      plasmaCost: 125
+      time: 20
+      dps: 20
+      expendableLightDps: 23.4375
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenAcidNormal
+  id: CMU14ActionXenoPathogenAcidAcider
+  name: Strong Corrosive Acid (100 acid)
+  description: Melts down barricades or items over time. You cannot melt structures.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: corrosive_acid
+    checkCanInteract: false
+  - type: TargetAction
+    checkCanAccess: false
+  - type: EntityTargetAction
+    event: !type:XenoCorrosiveAcidEvent
+      acidId: XenoAcidStrong
+      strength: Strong
+      plasmaCost: 0
+      energyCost: 100
+      applyTimeMultiplier: 0.25
+      time: 20
+      dps: 20
+      expendableLightDps: 23.4375
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenRegurgitate
+  parent: ActionXenoBase
+  name: Regurgitate
+  description: Eject any devoured marines.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: regurgitate
+  - type: InstantAction
+    event: !type:XenoRegurgitateActionEvent
+  - type: RMCDazeableAction
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenTailStab
+  parent: ActionXenoBase
+  name: Tail Stab
+  description: Launches an attack towards a given direction. The cooldown is faster if you miss.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: tail_attack
+    useDelay: 10
+  - type: TargetAction
+    range: 2.5
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:XenoTailStabEvent
+  - type: XenoTailStabAction
+  - type: RMCDazeableAction
+  - type: ActionInRangeUnobstructed
+    range: 2.5
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenTailSlam
+  parent: CMU14ActionXenoPathogenTailStab
+  name: Tail Slam
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenTailStab
+  id: CMU14ActionXenoPathogenTailStabCorrosive
+  name: Corrosive Tail Stab
+  description: Launches an attack towards a given direction. The cooldown is faster if you miss. [color=red]It also injects diluted molecular acid into the target, dealing damage over time.[/color]
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: acid_lance
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenTailStabCorrosive
+  id: CMU14ActionXenoPathogenTailStabBoiler
+  name: Corrosive Tail Stab
+  description: Launches an attack towards a given direction. The cooldown is faster if you miss. [color=red]It also injects diluted molecular acid or neurotoxin into the target, dealing damage or stunning over time. Which type depends on current gas type.[/color]
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenLeap
+  parent: ActionXenoBase
+  name: Leap
+  description: Jump towards a given location and knock down the first enemy hit.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: pounce
+    useDelay: 3
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoLeapActionEvent
+  - type: RMCDazeableAction
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenRush
+  parent: CMU14ActionXenoPathogenLeap
+  name: Rush
+  description: Jump towards a given location and slash the enemy you hit, shaking their screen.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    useDelay: 6
+  - type: TargetAction
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoLeapActionEvent
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenLeap
+  id: CMU14ActionXenoPathogenPounce
+  name: Pounce (20)
+  description: Jump towards a given location and knock down the first enemy hit [color=red]if you are invisible.[/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: pounce
+    useDelay: 6
+  - type: TargetAction
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoLeapActionEvent
+  - type: RMCDazeableAction
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenLeap
+  id: CMU14ActionXenoPathogenAssault
+  name: Assault (25)
+  description: Charge towards a location. Destroys some objects in your path. Melee slashes reduce assault's cooldown. If Super-Empowered, stuns and flings back the first enemy hit.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: charge
+    useDelay: 14
+  - type: TargetAction
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoLeapActionEvent
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenLeap
+  id: CMU14ActionXenoPathogenDash
+  name: Dash (40)
+  description: Dash a short distance towards a given location.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: prae_dash
+    useDelay: 10
+  - type: TargetAction
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoLeapActionEvent
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenHeadbutt
+  parent: ActionXenoBase
+  name: Headbutt (10)
+  description: Charge towards the targeted enemy and push back the first enemy hit, piercing armor slightly. Does less damage but has more knockback when crest is lowered.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: headbutt
+    useDelay: 6
+  - type: TargetAction
+    range: 3.5
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoHeadbuttActionEvent
+  - type: XenoOffensiveAction
+  - type: XenoActionPlasma
+    cost: 10
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenTailSweep
+  parent: ActionXenoBase
+  name: Tail Sweep (10)
+  description: Knock down any enemies close to you.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: tail_sweep
+    useDelay: 15
+  - type: InstantAction
+    event: !type:XenoTailSweepActionEvent
+  - type: RMCDazeableAction
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenSlowingSpit
+  parent: ActionXenoBase
+  name: Slowing Spit (20)
+  description: Launches a damageless projectile that will slow the first enemy that it hits, and paralyze them if they have no armor. It'll also drain helpful substances from their body.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_spit
+    useDelay: 2
+  - type: TargetAction
+    repeat: true
+    range: 15
+    checkCanAccess: false
+  - type: EntityTargetAction
+  - type: WorldTargetAction
+    event: !type:XenoSlowingSpitActionEvent
+  - type: ActionBlockIfResting
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenScatteredSpit
+  parent: ActionXenoBase
+  name: Scattered Spit (20)
+  description: Launches multiple damageless projectiles that will briefly paralyze any enemies they hit.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: acid_shotgun
+    useDelay: 7
+  - type: TargetAction
+    repeat: true
+    range: 15
+    checkCanAccess: false
+  - type: EntityTargetAction
+  - type: WorldTargetAction
+    event: !type:XenoScatteredSpitActionEvent
+  - type: ActionBlockIfResting
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenSpit
+  parent: ActionXenoBase
+  name: Xeno Spit (25)
+  description: Launches a projectile that will deal damage to the first enemy that it hits.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_spit
+    useDelay: 2.5
+  - type: TargetAction
+    repeat: true
+    range: 15
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:XenoSpitActionEvent
+  - type: ActionBlockIfResting
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenSpitPraetorian
+  parent: CMU14ActionXenoPathogenSpit
+  components:
+  - type: Action
+    useDelay: 2
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenChargeSpit
+  parent: ActionXenoBase
+  name: Charge Spit (50)
+  description: Charges up your next spit, making it deal more damage and coat the enemy in acid, but have less range. Increases your movement speed until the ability expires.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: charge_spit
+    useDelay: 12
+  - type: InstantAction
+    event: !type:XenoChargeSpitActionEvent
+  - type: XenoActionPlasma
+    cost: 50
+ 
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenSprayAcid
+  name: Spray Acid (40)
+  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will coat barricades in acid and significantly strengthen acid inflicted from Charge Spit![/color]
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: spray_acid
+    useDelay: 8
+  - type: TargetAction
+    range: 15
+  - type: WorldTargetAction
+    event: !type:XenoSprayAcidActionEvent
+  - type: ActionBlockIfResting
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenSprayAcid
+  id: CMU14ActionXenoPathogenSprayAcidBoiler
+  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will coat barricades in acid![/color]
+  components:
+  - type: Action
+    useDelay: 10
+  - type: ActionSharedCooldown
+    id: CMU14ActionXenoPathogenSprayAcidBoiler
+    ids:
+    - ActionXenoAcidShroud
+    activeIds:
+    - ActionXenoBombard
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenSprayAcid
+  id: CMU14ActionXenoPathogenSprayAcidPraetorian
+  name: Spray Acid (80)
+  description: Sprays acid along the ground in a line, covering tiles with it. [color=red]Will coat barricades in acid![/color]
+  components:
+  - type: Action
+    useDelay: 10
+ 
+- type: entity
+  parent: CMU14ActionXenoPathogenSprayAcidPraetorian
+  id: CMU14ActionXenoPathogenSprayAcidWarden
+  name: Spray Acid (130)
+  components:
+  - type: Action
+    useDelay: 13
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenAcidMine
+  parent: ActionXenoBase
+  name: Acid Mine (40)
+  description: Cause an acid explosion at the targeted location.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: acid_mine
+    useDelay: 5.5
+  - type: XenoAcidMine
+    actionIconEmpowered:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+  - type: TargetAction
+    deselectOnMiss: false
+    checkCanAccess: false
+    range: 15
+  - type: WorldTargetAction
+    event: !type:XenoAcidMineActionEvent
+  - type: ActionBlockIfResting
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenAcidShotgun
+  parent: ActionXenoBase
+  name: Acid Shotgun (40)
+  description: Launches multiple acid projectiles that deal increased damage to trapped targets.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: acid_shotgun
+    useDelay: 13
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoAcidShotgunActionEvent
+  - type: ActionBlockIfResting
+  - type: XenoActionPlasma
+    cost: 40
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenDeployTraps
+  parent: ActionXenoBase
+  name: Deploy Traps (60)
+  description: Deploys a line of snaring traps.
+  components:
+  - type: Action
+    useDelay: 20.5
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+  - type: XenoDeployTraps
+    actionIconEmpowered:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+  - type: TargetAction
+    checkCanAccess: false
+    deselectOnMiss: false
+    range: 15
+  - type: WorldTargetAction
+    event: !type:XenoDeployTrapsActionEvent
+  - type: XenoActionPlasma
+    cost: 60
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenTailLance
+  parent: CMU14ActionXenoPathogenTailStab
+  name: Tail Lance
+  description: Launches a fast tail thrust. The cooldown is shorter if you miss.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: acid_lance
+  - type: XenoTailStabAction
+    missCooldown: 0.7
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenVenatorCorrosiveSpit
+  parent: ActionXenoBase
+  name: Corrosive Spit (45)
+  description: Spit concentrated acid that leaves a small corrosive pool.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 11
+  - type: TargetAction
+    repeat: true
+    range: 8
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
+      projectile: XenoVenatorCorrosiveProjectile
+      speed: 24
+  - type: XenoActionPlasma
+    cost: 45
+  - type: ActionSharedCooldown
+    id: CMU14ActionXenoPathogenVenatorCorrosiveSpit
+    ids:
+    - CMU14ActionXenoPathogenVenatorAcidBlob
+    - CMU14ActionXenoPathogenVenatorEnzymaticBreath
+    cooldown: 11
+  - type: ActionBlockIfResting
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenVenatorAcidBlob
+  parent: CMU14ActionXenoPathogenVenatorCorrosiveSpit
+  name: Acid Blob (65)
+  description: Lob a heavier glob of acid that knocks down a direct hit and spreads pools around impact.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
+      projectile: XenoVenatorAcidBlobProjectile
+      speed: 7.5
+      sound:
+        path: /Audio/_RMC14/Xeno/blobattack.ogg
+      stopAtTarget: true
+  - type: XenoActionPlasma
+    cost: 65
+  - type: ActionSharedCooldown
+    id: CMU14ActionXenoPathogenVenatorAcidBlob
+    ids:
+    - CMU14ActionXenoPathogenVenatorCorrosiveSpit
+    - CMU14ActionXenoPathogenVenatorEnzymaticBreath
+    cooldown: 11
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenVenatorEnzymaticBreath
+  parent: CMU14ActionXenoPathogenVenatorCorrosiveSpit
+  name: Enzymatic Breath (55)
+  description: Spit a short spread of acid that marks an area with corrosive pools.
+  components:
+  - type: Action
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
+      projectile: XenoVenatorBreathProjectile
+      shots: 5
+      deviation: 25
+      speed: 22
+  - type: XenoActionPlasma
+    cost: 55
+  - type: ActionSharedCooldown
+    id: CMU14ActionXenoPathogenVenatorEnzymaticBreath
+    ids:
+    - CMU14ActionXenoPathogenVenatorCorrosiveSpit
+    - CMU14ActionXenoPathogenVenatorAcidBlob
+    cooldown: 11
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenPlateBash
+  parent: ActionXenoBase
+  name: Plate Bash
+  description: Bash a nearby enemy with your crest plates.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 8
+  - type: TargetAction
+    range: 3
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoPlateBashActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 3
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenBulwarkTailSwing
+  parent: ActionXenoBase
+  name: Tail Swing
+  description: Sweep nearby enemies with your tail.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: tail_sweep
+    useDelay: 12
+  - type: InstantAction
+    event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoBulwarkTailSwingActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenTailInjection
+  parent: ActionXenoBase
+  name: Tail Injection
+  description: Inject your stored chemical mixture into a nearby target.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: lurker_inject_neuro
+    useDelay: 8
+  - type: TargetAction
+    range: 2
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoTailInjectionActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 2
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenRapture
+  parent: ActionXenoBase
+  name: Rapture
+  description: Rip flesh resin from a nearby enemy.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 15
+  - type: TargetAction
+    range: 3
+  - type: EntityTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoRaptureActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 3
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenReaperRedGas
+  parent: ActionXenoBase
+  name: Red Gas
+  description: Spend flesh resin to send a widening cloud of toxic gas marching toward a target.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+    useDelay: 25
+  - type: TargetAction
+    range: 7
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:Content.Shared._RMC14.Xenonids.Reaper.XenoReaperRedGasActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: ActionInRangeUnobstructed
+    range: 7
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenParalyzingSlash
+  parent: ActionXenoBase
+  name: Blight Slash
+  description: Prime your next strike to slow the target on hit.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: acid_lance
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:CMUXenoParalyzingSlashActionEvent
+  - type: CMUXenoParalyzingSlashPending
+    slowDuration: 3
+    superSlow: false
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenPlaceSporeSac
+  parent: ActionXenoBase
+  name: Place Spore Sac
+  description: Plant a sac that will burst into a cloud of toxic spores.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: plant_sac
+    useDelay: 10
+  - type: InstantAction
+    event: !type:CMUXenoSporeSacActionEvent
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenDirectSporeInfect
+  parent: ActionXenoBase
+  name: Direct Infect
+  description: Press a handful of spores against an adjacent target, directly infecting them.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: cut_spore
+    useDelay: 10
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:CMUXenoDirectSporeInfectActionEvent
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenBlightWave
+  parent: ActionXenoBase
+  name: Blight Wave
+  description: Emit a raspy guttural roar that extinguishes lights and overwhelms nearby enemies.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+    useDelay: 90
+  - type: InstantAction
+    event: !type:CMUXenoBlightWaveActionEvent
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenCyclone
+  parent: ActionXenoBase
+  name: Cyclone
+  description: Channel briefly then spin in a devastating circle. Hit enough targets to trigger additional expanding spin cycles.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: cyclone
+    useDelay: 23
+  - type: InstantAction
+    event: !type:CMUXenoCycloneActionEvent
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenMycotoxinInject
+  parent: ActionXenoBase
+  name: Mycotoxin Injection
+  description: Skewer a dead target with your tail, injecting mycotoxin. They will rise again to serve the Confluence.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: inject_walker
+    useDelay: 300
+  - type: TargetAction
+    range: 2.5
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+    event: !type:CMUXenoMycotoxinInjectActionEvent
+ 
+- type: entity
+  id: CMU14ActionXenoPathogenMycotoxinInjectMatriarch
+  parent: CMU14ActionXenoPathogenMycotoxinInject
+  name: Mycotoxin Injection
+  description: Skewer a critically wounded or dead target with your tail, injecting mycotoxin. They will rise again to serve the Confluence.
+  components:
+  - type: Action
+    useDelay: 180
+  - type: TargetAction
+    range: 3.0
+    checkCanAccess: false
+
+- type: entity
+  parent: ActionXenoStomp
+  id: CMU14ActionXenoPathogenCrush
+  name: Crush (25)
+  description: Slam the ground with a 7x7 AOE, slowing down and disarming all enemies in range. Deals heavy damage to targets you are on top of.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: stomp
+    useDelay: 12
+  - type: InstantAction
+    event: !type:XenoStompActionEvent
+
+- type: entity
+  id: CMU14ActionXenoPathogenDirectionalStomp
+  parent: ActionXenoBase
+  name: Stomp (30)
+  description: Slam the ground in a cone in front of you, dealing heavy damage and knocking back all enemies caught in the blast.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: stomp
+    useDelay: 18
+  - type: TargetAction
+    range: 15
+    checkCanAccess: false
+  - type: WorldTargetAction
+    event: !type:XenoDirectionalStompActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  id: CMU14ActionXenoPathogenStomp
+  parent: ActionXenoBase
+  name: Stomp (30)
+  description: Slam the ground with a 5x5 AOE, slowing down and disarming all enemies in range. Deals heavy damage to targets you are on top of.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: stomp
+    useDelay: 18
+  - type: InstantAction
+    event: !type:XenoStompActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenImpale
+  name: Impale (80)
+  description: Impales an adjacent enemy with your tail. Hits twice on a marked target and removes the mark. Pierces armor.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: prae_impale
+    useDelay: 13
+  - type: TargetAction
+    range: 2
+    deselectOnMiss: false
+  - type: EntityTargetAction
+  - type: WorldTargetAction
+    event: !type:XenoImpaleActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: XenoActionPlasma
+    cost: 80
+  - type: RMCCooldownOnMiss
+    missCooldown: 0.7
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenSpikeShed
+  name: Spike Shed (all shards)
+  description: Shred all of your shards to launch them all in all directions around yourself. Lose the bonus armor in the process while also gaining a speed boost. This will disable you from gaining any shards for 30 seconds. Requires 50 shards minimum
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: rav_shard_shed
+    useDelay: 30
+  - type: InstantAction
+    event: !type:ActionXenoSpikeShedEvent
+  - type: ActionBlockIfResting
+  - type: RMCDazeableAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenBoneChips
+  parent: ActionXenoBase
+  name: Bone Chips
+  description: Launch a projectile that will damage and slow down the first enemy it hits.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: runner_bonespur
+    useDelay: 12
+  - type: TargetAction
+    range: 15
+  - type: EntityTargetAction
+  - type: WorldTargetAction
+    event: !type:XenoBoneChipsActionEvent
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenHeadbite
+  name: Headbite
+  description: Instantly kills unconscious targets and heals you for 150 HP.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: headbite
+    useDelay: 10
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: false
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoHeadbiteActionEvent
+  - type: ActionBlockIfResting
+  - type: XenoOffensiveAction
+
+- type: entity
+  id: CMU14ActionXenoPathogenDislocate
+  parent: ActionXenoBase
+  name: Dislocate (55)
+  description: Punch a targeted enemy, doing some damage and pushing them back. If the target is slowed, stunned, downed, or rooted, instead roots and completely pierces armor. Reduces the cooldown of Abduct and Tail Lash.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: punch
+    useDelay: 10
+  - type: TargetAction
+    range: 1.5
+    deselectOnMiss: false
+  - type: EntityTargetAction
+    event: !type:XenoDislocateActionEvent
+  - type: XenoOffensiveAction
+  - type: ActionBlockIfResting
+  - type: XenoActionPlasma
+    cost: 55
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenAbduct
+  name: Tentacle Grab
+  description: Cast out a line that after a small doafter pulls in enemies towards you, disarming them. Catching 1 target slows them, 2 roots them, and 3 or more stuns them.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: abduct
+    useDelay: 15
+  - type: TargetAction
+    range: 15 # the actual range is in XenoAbductComponent
+    deselectOnMiss: false
+    checkCanAccess: false
+  - type: EntityTargetAction
+  - type: WorldTargetAction
+    event: !type:XenoAbductActionEvent
+  - type: ActionBlockIfResting
+
+- type: entity
+  parent: ActionXenoBase
+  id: CMU14ActionXenoPathogenScissorCut
+  name: Savage (25)
+  description: Cuts enemies and fences in a straight line. If Super-Empowered, slows enemies hit too.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: rav_scissor_cut
+    useDelay: 6
+  - type: TargetAction
+    checkCanAccess: false
+    range: 15
+  - type: WorldTargetAction
+    event: !type:XenoScissorCutActionEvent
+  - type: ActionBlockIfResting
+  - type: XenoActionPlasma
+    cost: 25

@@ -38,6 +38,8 @@
     - HeadTop
     - HeadSide
     - Snout
+  - type: MycotoxinProtection
+    fullProtection: false
 
 - type: entity
   parent: [CMBaseMask, CMUBaseGasMaskFilterSlot]
@@ -59,3 +61,5 @@
     - HeadSide
     - Hair
     - Snout
+  - type: MycotoxinProtection
+    fullProtection: true

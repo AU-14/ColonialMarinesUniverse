@@ -39,6 +39,26 @@
     messageWrapOverrides: {}
 
 - type: language
+  id: Pathogen
+  name: "Pathogen"
+  description: "The common tongue of the Mycelial Confluence - a wet, clicking language carried through spores."
+  typefaceId: null
+  languageIcon:
+    sprite: /Textures/_RMC14/Actions/xeno_actions.rsi
+    state: queen_word
+  randomizeObfuscation: true
+  expectedVocabularySize: 60
+  obfuscationMethod:
+    !type:XenoObfuscation
+    xenoSounds: ["sss", "sSs", "SSS", "Sss", "ssS", "sS", "SS"]
+    garbleChars: ['~', '*', '§', '¿']
+    intensityMultiplier: 1.2
+  speechOverride:
+    speechSoundsOverride: Xenonid
+    chatTypeOverride: null
+    speechVerbOverrides: null
+
+- type: language
   id: Primitive
   name: "Primitive"
   description: "A primitive animal language made up of screeches, hoots, and emphatic gestures."

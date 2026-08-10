@@ -1,3 +1,4 @@
+using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Kitchen;
 using Robust.Client.GameObjects;
@@ -25,8 +26,11 @@ namespace Content.Client.Kitchen.UI
             _menu.OnGrind += StartGrinding;
             _menu.OnJuice += StartJuicing;
             _menu.OnEjectAll += EjectAll;
+            _menu.OnLink += Link;
             _menu.OnEjectBeaker += EjectBeaker;
             _menu.OnEjectChamber += EjectChamberContent;
+            _menu.OnBottle += Bottle;
+            _menu.OnDisposeReagent += DisposeReagent;
         }
 
         protected override void UpdateState(BoundUserInterfaceState state)
@@ -67,6 +71,21 @@ namespace Content.Client.Kitchen.UI
         public void EjectBeaker()
         {
             SendMessage(new ItemSlotButtonPressedEvent(SharedReagentGrinder.BeakerSlotId));
+        }
+
+        public void Bottle(ReagentQuantity reagent)
+        {
+            SendMessage(new ReagentGrinderBottleMessage(reagent));
+        }
+
+        public void DisposeReagent(ReagentQuantity reagent)
+        {
+            SendMessage(new ReagentGrinderDisposeMessage(reagent));
+        }
+
+        public void Link()
+        {
+            SendMessage(new ReagentGrinderLinkMessage());
         }
 
         public void EjectChamberContent(EntityUid uid)

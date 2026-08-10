@@ -140,6 +140,9 @@ language-Yautja-description = An ancient alien language of hunters and warriors.
 language-Arcturian-name = Arcturian
 language-Arcturian-description = An alien language from Arcturus with harmonic tones and unusual speech patterns.
 
+language-Pathogen-name= = Pathogenic
+language-Pathogen-description = The common tongue of the Mycelial Confluence - a wet, clicking language carried through spores.
+
 # First contact descriptions
 language-Xeno-first-contact = The sounds follow an alien hive pattern.
 language-Yautja-first-contact = The sounds follow an alien hunter's pattern.

@@ -1060,9 +1060,12 @@
       choices:  { CMHandheldDefense : 1 }
       entries:
       - id: AU14CaseSentry
-      - id: AU14CaseSentryMini
-      - id: AU14CaseSentrySniper
+      - id: AU14CaseSentryFlamer
       - id: RMCM271A2BruteLauncherRigFilled
+    - name: Sentry Gun Upgrade Kit
+      entries:
+      - id: RMCEngineeringUpgrade
+        points: 10
     - name: Engineer Uniform
       choices: { CMUPlatoonMedicalUniform: 1 }
       entries:

@@ -1,0 +1,90 @@
+- type: entity
+  abstract: true
+  parent:
+  - CMXenoDeveloped
+  - CMXenoTail
+  - CMXenoFlammable
+  - RMCXenoSpeechSounds
+  - RMCXenoCommendationReceiver
+  - RMCXenoVentCrawler
+  id: CMU14XenoPathogenBase
+  name: Pathogen Creature
+  description: A creature of the Mycelial Confluence.
+  components:
+  - type: CMUPathogenHiveMember
+  - type: Language
+    spokenLanguages:
+    - Pathogen
+    understoodLanguages:
+    - Pathogen
+    currentLanguage: Pathogen
+    defaultLanguage: Pathogen
+  # No acid blood
+  - type: AcidBloodSplash
+    closeSplashRadius: 0
+    standardSplashRadius: 0
+    gibSplashRadius: 0
+    damage:
+      types:
+        Heat: 0
+  # Pathogen weeds are their terrain, they still need weeds to regen
+  # Individual castes override plasmaRegenOnWeeds as needed
+  - type: XenoPlasma
+    plasma: 0
+    maxPlasma: 0
+    plasmaRegenOnWeeds: 0
+  - type: UserInterface
+    interfaces:
+      enum.CMSurgeryUIKey.Key:
+        type: CMSurgeryBui
+      enum.XenoEvolutionUIKey.Key:
+        type: XenoEvolutionBui
+      enum.XenoDevolveUIKey.Key:
+        type: XenoDevolveBui
+      enum.XenoWatchUIKey.Key:
+        type: XenoWatchBui
+      enum.XenoChooseStructureUI.Key:
+        type: XenoChooseStructureBui
+      enum.XenoPheromonesUI.Key:
+        type: XenoPheromonesBui
+      enum.XenoAlchemistUI.Key:
+        type: XenoAlchemistBui
+      enum.XenoOrderConstructionUI.Key:
+        type: XenoOrderConstructionBui
+      enum.XenoFruitChooseUI.Key:
+        type: XenoFruitChooseBui
+      enum.XenoWordQueenUI.Key:
+        type: XenoWordQueenBui
+      enum.TacticalMapUserUi.Key:
+        type: TacticalMapUserBui
+      enum.XenoReserveParasiteChangeUI.Key:
+        type: ReserveParasitesBoundUserInterface
+      enum.XenoParasiteGhostUI.Key:
+        type: XenoParasiteGhostBui
+        requireInputValidation: false
+      enum.DialogUiKey.Key:
+        type: DialogBui
+      enum.BlightCoreUiKey.Vote:
+        type: BlightCoreVoteBui
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - MyceliumLink
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - MyceliumLink
+    receiveAllChannels: false
+  - type: SoundOnDeath
+    sound:
+      collection: PathogenDeath
+      params:
+        volume: -4
+
+- type: entity
+  abstract: true
+  parent:
+  - CMU14XenoPathogenBase
+  - RMCXenoMobCollision
+  id: CMU14XenoPathogenMatureBase

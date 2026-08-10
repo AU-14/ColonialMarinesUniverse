@@ -83,6 +83,11 @@
   - type: Corrodible
     isCorrodible: false
   - type: RMCMagneticItem
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: [RMCBaseWeaponLauncher, RMCBaseAttachableHolder]
@@ -115,6 +120,11 @@
   - type: Corrodible
     isCorrodible: false
   - type: RMCMagneticItem
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 # 84mm HE
 - type: entity

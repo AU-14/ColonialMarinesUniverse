@@ -88,6 +88,7 @@
   listed:
   - RMCBoxBulletsRifleEmptyBuild
   - RMCBoxBulletsRifleAPEmptyBuild
+  - RMCBoxBullets458EmptyBuild
   - CMUBoxBulletsRifleSLREmptyBuild
   - CMUBoxBulletsRifleSLRAPEmptyBuild
   - CMUBoxBulletsRifleL23EmptyBuild
@@ -123,6 +124,12 @@
   id: RMCBoxBulletsRifleAPEmptyBuild
   name: rifle ammunition box (10×24mm AP)
   prototype: RMCBoxBulletsRifleAPEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxBullets458EmptyBuild
+  name: .458 SOCOM bullet bundle box
+  prototype: RMCBoxBullets458Empty
   
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
@@ -261,12 +268,15 @@
   id: CMUBoxBulletsPistol50EmptyBuild
   name: pistol ammunition box (.50)
   prototype: CMUBoxBulletsPistol50Empty
-# empty rifle magazine boxes
+
+# empty magazine boxes (UA/LA)
 - type: rmcConstruction
-  id: RMCEmptyRifleMagazineBoxesList
-  name: rifle magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  id: RMCEmptyUALAMagazineBoxesList
+  name: UA/LA magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
   prototype: RMCBoxMagazineRifleBase
   listed:
+  - CMUBoxMagazineRifleM54CMK1EmptyBuild
+  - RMCDividerConstruction
   - RMCBoxMagazineRifleM54CEmptyBuild
   - RMCBoxMagazineRifleM54CAPEmptyBuild
   - RMCBoxMagazineRifleM54CExtEmptyBuild
@@ -275,52 +285,252 @@
   - RMCBoxMagazineRifleM4SPRAPEmptyBuild
   - RMCBoxMagazineRifleM4SPRExtEmptyBuild
   - RMCDividerConstruction
-  - RMCBoxBullets458EmptyBuild
+  - CMUBoxMagazineRifleKramerEmptyBuild
+  - RMCDividerConstruction
+  - CMUBoxMagazineSMGXMP5A6EmptyBuild
+  - RMCBoxMagazineSMGM63EmptyBuild
+  - RMCBoxMagazineSMGM63APEmptyBuild
+  - RMCBoxMagazineSMGM63ExtEmptyBuild
+
+  # empty magazine boxes (TWE)
+- type: rmcConstruction
+  id: RMCEmptyTWEMagazineBoxesList
+  name: TWE magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  prototype: RMCBoxMagazineRifleBase
+  listed:
+  - RMCBoxMagazineRifleL24EmptyBuild
+  - RMCBoxMagazineRifleL24APEmptyBuild
+  - RMCBoxMagazineRifleL24ExtEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineRifleL90EmptyBuild
+  - RMCBoxMagazineRifleL90APEmptyBuild  
+  - RMCBoxMagazineRifleL90DrumEmptyBuild
+  - RMCBoxMagazineRifleL90DrumAPEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineRifleL88EmptyBuild
+  - RMCDividerConstruction
+  - CMUBoxMagazineSMGL90A2EmptyBuild
+
+  # empty magazine boxes (CIU)
+- type: rmcConstruction
+  id: RMCEmptyCIUMagazineBoxesList
+  name: CIU magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  prototype: RMCBoxMagazineRifleBase
+  listed:
   - RMCBoxMagazineRifleM16EmptyBuild
+  - RMCDividerConstruction
+  - CMUBoxMagazineSMGPDW90EmptyBuild
+  - RMCDividerConstruction
+  - CMUBoxMagazineSMGMP5EmptyBuild
+
+  # empty magazine boxes (UPP)
+- type: rmcConstruction
+  id: RMCEmptyUPPMagazineBoxesList
+  name: UPP magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  prototype: RMCBoxMagazineRifleBase
+  listed:
+  - CMUBoxMagazineRifleAG80EmptyBuild
+  - RMCBoxMagazineRifleAK4047EmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineRifleType71EmptyBuild
+  - RMCBoxMagazineRifleType71APEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineSMGType64EmptyBuild
+  - RMCBoxMagazineSMGType19EmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineRifleType88EmptyBuild
+  
+  # empty magazine boxes (VAIPO)
+- type: rmcConstruction
+  id: RMCEmptyVAIPOMagazineBoxesList
+  name: VAIPO magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  prototype: RMCBoxMagazineRifleBase
+  listed:
+  - CMUBoxMagazineRifleMAR40EmptyBuild
+  - RMCDividerConstruction
+  - CMUBoxMagazineRifleM54CMK1EmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineRifleM54CEmptyBuild
+  - RMCBoxMagazineRifleM54CAPEmptyBuild
+  - RMCBoxMagazineRifleM54CExtEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineRifleL42AEmptyBuild
+  - RMCBoxMagazineRifleL42AAPEmptyBuild
+
+  # empty magazine boxes (Prodigy)
+- type: rmcConstruction
+  id: RMCEmptyProdigyMagazineBoxesList
+  name: Prodigy magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  prototype: RMCBoxMagazineRifleBase
+  listed:
+  - CMUBoxMagazineRifleProdigyStandardEmptyBuild
+  - RMCDividerConstruction
+  - CMUBoxMagazineRifleM20AEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineSMGM63EmptyBuild
+  - RMCBoxMagazineSMGM63APEmptyBuild
+  - RMCBoxMagazineSMGM63ExtEmptyBuild
+
+  # empty magazine boxes (WYPMC)
+- type: rmcConstruction
+  id: RMCEmptyWYPMCMagazineBoxesList
+  name: WYPMC magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  prototype: RMCBoxMagazineRifleBase
+  listed:
   - RMCBoxMagazineRifleSSG45EmptyBuild
   - RMCBoxMagazineRifleSSG45APEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineRifleM54CEmptyBuild
+  - RMCBoxMagazineRifleM54CAPEmptyBuild
+  - RMCBoxMagazineRifleM54CExtEmptyBuild
+  - RMCDividerConstruction
+  - CMUBoxMagazineSMGFP9000EmptyBuild
+  - RMCBoxMagazineSMGM63EmptyBuild
+  - RMCBoxMagazineSMGM63APEmptyBuild
+  - RMCBoxMagazineSMGM63ExtEmptyBuild
+
+
+  # empty magazine boxes (Civilian)
+- type: rmcConstruction
+  id: RMCEmptyCivilianMagazineBoxesList
+  name: Civilian magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
+  prototype: RMCBoxMagazineRifleBase
+  listed:
+  - RMCBoxMagazineRifleABREmptyBuild
+  - RMCBoxMagazineRifleBasiraArmstrongEmptyBuild
+  - RMCBoxMagazineRifleL42AEmptyBuild
+  - RMCBoxMagazineRifleL42AAPEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineSMGMAC15EmptyBuild
+  - RMCBoxMagazineSMGUZIEmptyBuild
+  - RMCDividerConstruction
+  - RMCBoxMagazineSMGNailgunEmptyBuild
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleM54CMK1EmptyBuild
+  name: M41A Mk1 magazine box
+  prototype: CMUBoxMagazineRifleM54CMK1Empty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleM54CEmptyBuild
-  name: M54C magazine box
+  name: M41A Mk2 magazine box
   prototype: RMCBoxMagazineRifleM54CEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleM54CAPEmptyBuild
-  name: M54C magazine box (AP)
+  name: M41A Mk2 magazine box (AP)
   prototype: RMCBoxMagazineRifleM54CAPEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleM54CExtEmptyBuild
-  name: M54C magazine box (Ext)
+  name: M41A Mk2 magazine box (Ext)
   prototype: RMCBoxMagazineRifleM54CExtEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleM4SPREmptyBuild
-  name: M4SPR magazine box
+  name: M4RA magazine box
   prototype: RMCBoxMagazineRifleM4SPREmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleM4SPRAPEmptyBuild
-  name: M4SPR magazine box (AP)
+  name: M4RA magazine box (AP)
   prototype: RMCBoxMagazineRifleM4SPRAPEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleM4SPRExtEmptyBuild
-  name: M4SPR magazine box (Ext)
+  name: M4RA magazine box (Ext)
   prototype: RMCBoxMagazineRifleM4SPRExtEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
-  id: RMCBoxBullets458EmptyBuild
-  name: .458 SOCOM bullet bundle box
-  prototype: RMCBoxBullets458Empty
+  id: CMUBoxMagazineRifleKramerEmptyBuild
+  name: Kramer magazine box
+  prototype: CMUBoxMagazineRifleKramerEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineSMGM63EmptyBuild
+  name: M39 magazine box
+  prototype: RMCBoxMagazineSMGM63Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineSMGM63APEmptyBuild
+  name: M39 magazine box (AP)
+  prototype: RMCBoxMagazineSMGM63APEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineSMGM63ExtEmptyBuild
+  name: M39 magazine box (Ext)
+  prototype: RMCBoxMagazineSMGM63ExtEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGXMP5A6EmptyBuild
+  name: XMP5A6 magazine box
+  prototype: CMUBoxMagazineSMGXMP5A6Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL24EmptyBuild
+  name: L23 magazine box
+  prototype: RMCBoxMagazineRifleL24Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL24APEmptyBuild
+  name: L23 magazine box (AP)
+  prototype: RMCBoxMagazineRifleL24APEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL24ExtEmptyBuild
+  name: L23 magazine box (Ext)
+  prototype: RMCBoxMagazineRifleL24ExtEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL90EmptyBuild
+  name: SLR magazine box
+  prototype: RMCBoxMagazineRifleL90Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL90APEmptyBuild
+  name: SLR magazine box (AP)
+  prototype: RMCBoxMagazineRifleL90APEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL90DrumEmptyBuild
+  name: SLR magazine box (Drum)
+  prototype: RMCBoxMagazineRifleL90DrumEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL90DrumAPEmptyBuild
+  name: SLR magazine box (Drum, AP)
+  prototype: RMCBoxMagazineRifleL90DrumAPEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL88EmptyBuild
+  name: L88 magazine box
+  prototype: RMCBoxMagazineRifleL88Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGL90A2EmptyBuild
+  name: L90A2 magazine box
+  prototype: CMUBoxMagazineSMGL90A2Empty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
@@ -330,45 +540,129 @@
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGPDW90EmptyBuild
+  name: P90 magazine box
+  prototype: CMUBoxMagazineSMGPDW90Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGMP5EmptyBuild
+  name: MP5 magazine box
+  prototype: CMUBoxMagazineSMGMP5Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleAG80EmptyBuild
+  name: AG-80 magazine box
+  prototype: CMUBoxMagazineRifleAG80Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleAK4047EmptyBuild
+  name: AK-4047 magazine box
+  prototype: RMCBoxMagazineRifleAK4047Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleType71EmptyBuild
+  name: Type 71 magazine box
+  prototype: RMCBoxMagazineRifleType71Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleType71APEmptyBuild
+  name: Type 71 magazine box (AP)
+  prototype: RMCBoxMagazineRifleType71APEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineSMGType64EmptyBuild
+  name: Type 64 magazine box
+  prototype: RMCBoxMagazineSMGType64Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineSMGType19EmptyBuild
+  name: Type 19 magazine box
+  prototype: RMCBoxMagazineSMGType19Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleType88EmptyBuild
+  name: Type 88 magazine box
+  prototype: RMCBoxMagazineRifleType88Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleMAR40EmptyBuild
+  name: MAR30/40magazine box
+  prototype: CMUBoxMagazineRifleMAR40Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL42AEmptyBuild
+  name: L42A magazine box
+  prototype: RMCBoxMagazineRifleL42AEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineRifleL42AAPEmptyBuild
+  name: L42A magazine box (AP)
+  prototype: RMCBoxMagazineRifleL42AAPEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleProdigyStandardEmptyBuild
+  name: MCS-X magazine box
+  prototype: CMUBoxMagazineRifleProdigyStandardEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleM20AEmptyBuild
+  name: M20A magazine box
+  prototype: CMUBoxMagazineRifleM20AEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleSSG45EmptyBuild
-  name: SSG45 magazine box
+  name: NSG23 magazine box
   prototype: RMCBoxMagazineRifleSSG45Empty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxMagazineRifleSSG45APEmptyBuild
-  name: SSG45 magazine box (AP)
+  name: NSG23 magazine box (AP)
   prototype: RMCBoxMagazineRifleSSG45APEmpty
 
-# empty smg magazine boxes
 - type: rmcConstruction
-  id: RMCEmptySMGMagazineBoxesList
-  name: SMG magazine boxes (1 cardboard) # cost named manually since lists won't name costs otherwise
-  prototype: RMCBoxMagazineSMGBase
-  listed:
-  - RMCBoxMagazineSMGM63EmptyBuild
-  - RMCBoxMagazineSMGM63APEmptyBuild
-  - RMCBoxMagazineSMGM63ExtEmptyBuild
-  - RMCDividerConstruction
-  - RMCBoxMagazineSMGNailgunEmptyBuild
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineSMGFP9000EmptyBuild
+  name: FP9000 magazine box
+  prototype: CMUBoxMagazineSMGFP9000Empty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
-  id: RMCBoxMagazineSMGM63EmptyBuild
-  name: M63 magazine box
-  prototype: RMCBoxMagazineSMGM63Empty
+  id: RMCBoxMagazineRifleABREmptyBuild
+  name: ABR magazine box
+  prototype: RMCBoxMagazineRifleABREmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
-  id: RMCBoxMagazineSMGM63APEmptyBuild
-  name: M63 magazine box (AP)
-  prototype: RMCBoxMagazineSMGM63APEmpty
+  id: RMCBoxMagazineRifleBasiraArmstrongEmptyBuild
+  name: Basira Armstrong magazine box
+  prototype: RMCBoxMagazineRifleBasiraArmstrongEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
-  id: RMCBoxMagazineSMGM63ExtEmptyBuild
-  name: M63 magazine box (Ext)
-  prototype: RMCBoxMagazineSMGM63ExtEmpty
+  id: RMCBoxMagazineSMGMAC15EmptyBuild
+  name: MAC-15 magazine box
+  prototype: RMCBoxMagazineSMGMAC15Empty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxMagazineSMGUZIEmptyBuild
+  name: UZI magazine box
+  prototype: RMCBoxMagazineSMGUZIEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
@@ -554,6 +848,8 @@
   - RMCBoxPackFlareCASEmptyBuild
   - RMCDividerConstruction
   - RMCBoxFlamerTankEmptyBuild
+  - RMCBoxFlamerTankUTNapthalEmptyBuild
+  - RMCBoxFlamerTankBGelEmptyBuild
   - RMCDividerConstruction
   - RMCBoxFlashlightsEmptyBuild
   - RMCBoxMREEmptyBuild
@@ -574,8 +870,20 @@
 - type: rmcConstruction
   parent: RMCCardboardBuildBase
   id: RMCBoxFlamerTankEmptyBuild
-  name: UT-Napthal fuel tanks box
+  name: Incinerator tanks box
   prototype: RMCBoxFlamerTankEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxFlamerTankUTNapthalEmptyBuild
+  name: UT-Napthal fuel tanks box
+  prototype: RMCBoxFlamerTankUTNapthalEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: RMCBoxFlamerTankBGelEmptyBuild
+  name: B-Gel fuel tanks box
+  prototype: RMCBoxFlamerTankBGelEmpty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase

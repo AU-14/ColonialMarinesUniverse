@@ -9099,5 +9099,160 @@
   id: 583
   time: '2026-08-04T11:11:03.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1755
+- author: P-MCT
+  changes:
+  - message: Double plus good news chaps! We trimmed the excess fat off of the  FV150
+      'Hobelar' chassis, and now it can finally fit in those tight enclosed spaces!
+      Give those insurgent devils the what for eh?
+    type: Tweak
+  - message: New weapon sounds for the L23, L54, SLRa1/2
+    type: Tweak
+  id: 584
+  time: '2026-08-05T04:48:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1791
+- author: deepdarkdepths
+  changes:
+  - message: Barricades and some other structures can no longer be built inside vehicles.
+    type: Fix
+  id: 585
+  time: '2026-08-05T04:58:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1792
+- author: HotdogMan52
+  changes:
+  - message: QYJ can now use an S4 2x mini-scope
+    type: Tweak
+  id: 586
+  time: '2026-08-05T10:46:18.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1793
+- author: HotdogMan52
+  changes:
+  - message: Added magazine boxes into cardboard crafting menu, categorized per faction
+    type: Add
+  id: 587
+  time: '2026-08-05T18:07:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1794
+- author: rokudara-sen
+  changes:
+  - message: CLF earpieces now work when clipped to a vest, coat, webbing, or armour,
+      rather than only to a jumpsuit
+    type: Fix
+  - message: Earpiece users are now notified when no relay is in range instead of
+      receiving no feedback
+    type: Fix
+  - message: RADIO CHECK now includes headsets and earpieces, preventing a cell with
+      one manpack from incorrectly reporting NOTHING HEARD
+    type: Fix
+  - message: The CLF Cell Leader can now draw the cell's communications kit alongside
+      the Radio Operator
+    type: Tweak
+  - message: The CLF now receives two clandestine relay sets at round start instead
+      of one
+    type: Tweak
+  - message: The issued CLF manpack now starts tuned to the cell and command nets
+    type: Tweak
+  - message: The CLF Cell Leader now receives a standing orders sheet. Writing the
+      cell's intent and passing the word adds it to every member's character brief,
+      including members recruited later. Orders may be issued three times per round
+      with a ten-minute cooldown
+    type: Add
+  - message: Added the clfcomms command, which disables the new communications system
+      for CLF and INSFOR without affecting GOVFOR or OPFOR
+    type: Admin
+  - message: AU14CommsToggleSystem is now the single source of truth for whether the
+      communications overhaul applies to a channel
+    type: Code
+  id: 588
+  time: '2026-08-06T12:18:48.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1796
+- author: Sniperzero112
+  changes:
+  - message: Turret upgrade kit to get variants on your turrets depending which one
+      you took!
+    type: Add
+  - message: Changed vendors to have flame turrets instead of sniper & mini variant
+      turrets because you got upgrade kits now!
+    type: Tweak
+  id: 589
+  time: '2026-08-06T12:19:30.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1795
+- author: Sniperzero112
+  changes:
+  - message: Removed free turrets from the British!
+    type: Fix
+  id: 590
+  time: '2026-08-06T23:37:13.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1798
+- author: ArturUr1
+  changes:
+  - message: Synthetic surgery has been upgraded to level 4
+    type: Tweak
+  id: 591
+  time: '2026-08-06T23:39:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1797
+- author: MACMAN2003
+  changes:
+  - message: Reagent grinders can now link to a smart chemical storage for the purposes
+      of bottling (and disposing) the reagents they have stored.
+    type: Add
+  - message: Monkey cube crates now have a 30 minute cooldown after being bought before
+      you can buy another.
+    type: Tweak
+  id: 592
+  time: '2026-08-06T23:42:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1799
+- author: HotdogMan52
+  changes:
+  - message: Added a 30-round magazine for M16s that are available in CMB CIU requisition
+      and CLF requisition vendors
+    type: Add
+  - message: Replaced current textures for M16 series rifles with new ones made by
+      *nzzy*
+    type: Tweak
+  id: 593
+  time: '2026-08-07T20:45:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1802
+- author: verentr
+  changes:
+  - message: Updated albuterol description.
+    type: Fix
+  - message: Head Physician now spawns with a colony headset.
+    type: Fix
+  id: 594
+  time: '2026-08-07T20:45:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1801
+- author: MACMAN2003
+  changes:
+  - message: Research now has a section in the guidebook!
+    type: Add
+  id: 595
+  time: '2026-08-07T20:46:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1800
+- author: potatoed6
+  changes:
+  - message: Added neomorph threat
+    type: Add
+  id: 596
+  time: '2026-08-07T20:47:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1562
+- author: P-MCT
+  changes:
+  - message: Good news chaps! The engineers have just sent us a new piece of kit for
+      our Hobelar. The experimental L215A1 Heavy Electrolaser! It's still a work in
+      progress and it hasn't exactly been field tested, but with an attached power
+      bank it's an extremely longlasting weapon. Just be careful where you shoot the
+      blasted thing! It does not have IFF, you are shooting a laser assisted bolt
+      of electricity after all!
+    type: Add
+  - message: Those nurses who paid attention in their medical studies should now have
+      surgery level 2, and medical level 3.
+    type: Tweak
+  - message: XM99a has had it's damage increased from 105 heat to 162 heat. Asphyxiation
+      damage reduced to 20, 3 hits Drones.
+    type: Tweak
+  - message: RXF-M5 increased heat damage from 20 to 25. Firerate reduced.
+    type: Tweak
+  id: 597
+  time: '2026-08-08T03:59:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1803
 Name: CMU
 Order: -1

@@ -56,6 +56,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private ANPRCGarbleSystem _garble = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
     [Dependency] private ANPRCSweepSystem _sweep = default!;
+    [Dependency] private AU14CommsToggleSystem _comms = default!;
     [Dependency] private PaperSystem _paper = default!;
     [Dependency] private PowerCellSystem _powerCell = default!;
     [Dependency] private ItemSlotsSystem _itemSlots = default!;

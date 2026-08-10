@@ -1,0 +1,48 @@
+- type: entity
+  id: CMU14PathogenOvermindCore
+  name: overmind core
+  description: A pulsating organic mass. You feel drawn to it.
+  components:
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: CollisionWake
+    enabled: false
+  - type: Fixtures
+    fixtures:
+      stepTrigger:
+        hard: true
+        shape:
+          !type:PhysShapeCircle
+          radius: 1
+        mask:
+        - MobLayer
+        - SmallMobLayer
+        layer:
+        - MobLayer
+  - type: StepTrigger
+    requiredTriggeredSpeed: 0
+    intersectRatio: 0.1
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    state: pathogen_core
+    drawdepth: FloorObjects
+  - type: Damageable
+    damageContainer: Inorganic
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 600
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+  - type: CMUBlightCore
+  - type: HiveMember
+  - type: UserInterface
+    interfaces:
+      enum.BlightCoreUiKey.Accept:
+        type: BlightCoreAcceptBui
+      enum.BlightCoreUiKey.Vote:
+        type: BlightCoreVoteBui

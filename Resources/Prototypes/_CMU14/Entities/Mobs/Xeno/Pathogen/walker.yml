@@ -1,0 +1,11 @@
+- type: factionIcon
+  id: CMUPathogenWalkerFaction
+  priority: 11
+  showTo:
+    components:
+    - Xeno
+    - CMUPathogenWalker
+    - ShowAntagIcons
+  icon:
+    sprite: /Textures/_AU14/Interface/job_icons.rsi
+    state: threat_member

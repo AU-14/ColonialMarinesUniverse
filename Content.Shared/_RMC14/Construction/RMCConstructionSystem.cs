@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Entrenching;
 using Content.Shared._RMC14.Ladder;
 using Content.Shared._RMC14.Map;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Components;
 using Content.Shared.Coordinates;
@@ -453,6 +454,13 @@ public sealed partial class RMCConstructionSystem : EntitySystem
     public bool CanBuildAt(EntityCoordinates coordinates, EntProtoId prototype, out string? popup, bool anchoring = false, Direction direction = Direction.Invalid, CollisionGroup? collision = null, EntityUid? user = null)
     {
         popup = default;
+
+        if (user != null && HasComp<VehicleInteriorOccupantComponent>(user.Value))
+        {
+            popup = Loc.GetString("construction-system-inside-container");
+            return false;
+        }
+
         if (!_prototype.TryIndex<EntityPrototype>(prototype, out var proto))
             return false;
 

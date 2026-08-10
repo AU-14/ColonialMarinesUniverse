@@ -31,7 +31,7 @@ jobs:
     name: Package ${{ matrix.name }}
     needs: changelog
     if: always() && (needs.changelog.result == 'success' || needs.changelog.result == 'skipped')
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     strategy:
       fail-fast: false
       matrix:
@@ -106,7 +106,7 @@ jobs:
   publish:
     name: Publish version
     if: always() && needs.package.result == 'success'
-    runs-on: ubuntu-latest
+    runs-on: blacksmith-4vcpu-ubuntu-2404
     needs: package
     steps:
       - uses: actions/checkout@v6.0.2

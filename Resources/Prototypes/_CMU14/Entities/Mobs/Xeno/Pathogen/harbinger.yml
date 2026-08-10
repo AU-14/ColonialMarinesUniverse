@@ -1,0 +1,144 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoHarbingerBase
+  name: Harbinger
+  description: Doom is walking.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-harbinger
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/harbinger.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: XenoHeavy
+  - type: CMUXenoCyclone
+    plasmaCost: 75
+    baseRange: 2
+    baseDamage: 30
+  - type: CMUXenoMycotoxinInject
+  - type: Xeno
+    role: CMU14JobPathogenHarbinger
+    tier: 3
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenCyclone
+    - CMU14ActionXenoPathogenMycotoxinInject
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoLeap
+    delay: 0
+    knockdownTime: 0
+    range: 5
+    moveDelayTime: 0
+    plasmaCost: 25
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
+    destroyObjects: true
+  - type: XenoImpale
+    damage:
+      groups:
+        Brute: 60
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.4
+  - type: XenoPlasma
+    plasma: 300
+    maxPlasma: 300
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoBlight
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 120
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 120
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.0
+    baseSprintSpeed: 6.0
+  - type: MeleeWeapon
+    attackRate: 2.0
+    damage:
+      groups:
+        Brute: 45
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 54
+  - type: XenoDevour
+  - type: CMArmor
+    explosionArmor: 20
+    xenoArmor: 20
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.45
+    stunMin: 3
+    stunMax: 4
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: harbinger
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: praetorian
+  - type: RMCActionOrder
+    id: CMU14XenoHarbinger
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-harbinger
+  - type: Speech
+    speechSounds: Pathogen
+  - type: RMCSize
+    size: Big
+
+- type: entity
+  parent: CMU14XenoHarbingerBase
+  id: CMU14XenoHarbinger
+  name: Harbinger
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenHarbinger

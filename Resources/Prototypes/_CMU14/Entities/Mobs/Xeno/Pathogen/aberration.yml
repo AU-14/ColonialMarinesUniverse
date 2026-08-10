@@ -1,0 +1,161 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoAberrationBase
+  name: Aberration
+  description: If you believe in a god, now would be a good time for prayer...
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-aberration
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/aberration.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: XenoHeavy
+  - type: Xeno
+    role: CMU14JobPathogenAberration
+    tier: 1
+    hudOffset: -0.1, 0.25
+    emoteSounds: PathogenAberration
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenRush
+    - CMU14ActionXenoPathogenHeadbutt
+    - CMU14ActionXenoPathogenCrush
+    - CMU14ActionXenoPathogenDirectionalStomp
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoLeap
+    delay: 0
+    range: 4
+    moveDelayTime: 0
+    knockdownTime: 0
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+    hitEffect: RMCEffectExtraSlash
+    targetJitterTime: 1
+    targetCameraShakeStrength: 1
+    damage:
+      groups:
+        Brute: 40
+  - type: XenoHeadbutt
+    damage:
+      types:
+        Blunt: 30
+    crestedDamageReduction:
+      types:
+        Blunt: -10
+  - type: XenoStomp
+    directional: true
+    directionalRange: 4
+    directionalAngle: 90
+    paralyzeTime: 1
+    slowTime: 2.5
+    knockBackDistance: 2
+    screenShakeStrength: 4
+    directionalTileEffect: RMCEffectXenoTelegraphRed
+    damage:
+      types:
+        Blunt: 80
+    directionalMinDamage:
+      types:
+        Blunt: 65
+    selfEffect: CMEffectSelfStomp
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.6
+  - type: XenoPlasma
+    plasma: 300
+    maxPlasma: 300
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo: []
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 140
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 140
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 8.5
+  - type: MeleeWeapon
+    attackRate: 2.5
+    damage:
+      groups:
+        Brute: 55
+  - type: CMArmor
+    explosionArmor: 50
+    xenoArmor: 15
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: XenoDevour
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.45
+    stunMin: 3
+    stunMax: 4
+  - type: RMCSize
+    size: Big
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: aberration
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: crusher
+  - type: RMCActionOrder
+    id: CMU14XenoAberration
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-aberration
+  - type: Speech
+    speechSounds: Pathogen
+  - type: SoundOnDeath
+    sound:
+      collection: PathogenAberrationDeath
+      params:
+        volume: -4
+ 
+- type: entity
+  parent: CMU14XenoAberrationBase
+  id: CMU14XenoAberration
+  name: Aberration
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenAberration

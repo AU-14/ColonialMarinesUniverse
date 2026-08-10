@@ -1,0 +1,18 @@
+<Document>
+# The XRF Scanner
+
+<GuideEntityEmbed Entity="CMUXRFScanner" Caption="Also called an 'X-Ray Fluorescence Spectrometer'"/>
+
+This is your source of credits.
+
+To use this machine, you will [bold]need[/bold] to fill a vial all the way with a single uncontaminated chemical, and then insert the vial into the scanner.
+After 10 seconds, it will spit out a piece of paper detailing what the chemical does and what it is made of.
+
+Without this machine, you will be unable to upgrade your clearance in the [textlink="Research Data Terminal" link="CMURDT"] or perform any
+operation with the [textlink="Synthesis Simulator" link="CMUSIM"].
+
+Some chemicals may require a higher clearance level to see their effects, don't worry, you still get the credits from scanning them!
+
+You can scan any of the special [textlink="Hydroponics" link="CMUBotany"] chemicals for 2 credits each.
+
+</Document>

@@ -410,6 +410,8 @@
   - type: HideLayerClothing
     slots:
     - Snout
+  - type: MycotoxinProtection
+    fullProtection: true
 
 # M45 Sniper Spec
 - type: entity

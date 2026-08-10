@@ -8,5 +8,4 @@
     sprite: _AU14/Clothing/UNISC/uniscjumpsuit.rsi
   - type: UniformAccessoryHolder
     startingAccessories:
-    - AU14PatchUAFlag
-    - AU14PatchUSCM
+    - AU14UNISCArmband

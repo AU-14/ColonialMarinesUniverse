@@ -1049,6 +1049,8 @@
       entries:
       - id: RMCMagazineRifleM16
         amount: 200
+      - id: CMUMagazineRifleM16Extended
+        amount: 20
       - id: CMMagazineSMGMP5
         amount: 200
       - id: RMCMagazineSMGPDW90

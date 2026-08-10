@@ -29,6 +29,11 @@
       params:
         variation: 0.2
     foldedEntity: RMCWeaponLauncherDisposableFolded
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: [BaseItem, RMCBaseMeleeWeapon]

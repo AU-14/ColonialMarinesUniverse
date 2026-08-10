@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Radio;
@@ -201,6 +202,23 @@ public sealed partial class HiveLeaderSystem : EntitySystem
         ent.Comp.Leaders.Clear();
     }
 
+    /// <summary>
+    /// Returns true if the granter counts as "in ovipositor" for pheromone relay purposes.
+    /// The Overmind in eye (incorporeal) form is equivalent to the queen on ovipositor.
+    /// </summary>
+    private bool GranterHasActivePresence(EntityUid uid)
+    {
+        // Standard queen: must have ovipositor attached
+        if (_attachedOvipositorQuery.HasComp(uid))
+            return true;
+
+        // Overmind: eye form (incorporeal) counts as active presence
+        if (TryComp<CMUXenoOvermindAppearanceComponent>(uid, out var appearance) && appearance.Incorporeal)
+            return true;
+
+        return false;
+    }
+
     private void SyncPheromones(Entity<HiveLeaderGranterComponent> ent, bool forceDisable = false)
     {
         if (_timing.ApplyingState)
@@ -210,9 +228,10 @@ public sealed partial class HiveLeaderSystem : EntitySystem
             return;
 
         var hasPheromones = _activePheromonesQuery.TryComp(ent, out var active) &&
-                            _attachedOvipositorQuery.HasComp(ent) &&
+                            GranterHasActivePresence(ent) &&
                             !_mobState.IsDead(ent) &&
                             !forceDisable;
+
         foreach (var leader in ent.Comp.Leaders)
         {
             if (!_hiveLeaderQuery.TryComp(leader, out var leaderComp))

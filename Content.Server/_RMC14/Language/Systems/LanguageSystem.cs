@@ -255,6 +255,23 @@ public sealed partial class LanguageSystem : SharedLanguageSystem
         return ObfuscateMessage(speakerMessage, language);
     }
 
+    public void SetExclusiveLanguage(Entity<LanguageComponent?> ent, ProtoId<LanguagePrototype> language)
+    {
+        if (!Resolve(ent, ref ent.Comp))
+            return;
+
+        ent.Comp.SpokenLanguages.Clear();
+        ent.Comp.UnderstoodLanguages.Clear();
+
+        ent.Comp.SpokenLanguages.Add(language);
+        ent.Comp.UnderstoodLanguages.Add(language);
+
+        ent.Comp.CurrentLanguage = language;
+        ent.Comp.DefaultLanguage = language;
+
+        UpdateEntityLanguages(ent);
+    }
+
     private string ObfuscateMessageSisterLanguageWithLearning(
         string message,
         ProtoId<LanguagePrototype> language,

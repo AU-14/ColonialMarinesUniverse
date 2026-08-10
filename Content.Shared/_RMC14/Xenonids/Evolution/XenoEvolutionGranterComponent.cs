@@ -8,4 +8,7 @@ public sealed partial class XenoEvolutionGranterComponent : Component
 {
     [DataField, AutoNetworkedField]
     public bool GotOvipositorPopup;
+
+    [DataField]
+    public LocId AnnounceMessage = "rmc-new-queen";
 }

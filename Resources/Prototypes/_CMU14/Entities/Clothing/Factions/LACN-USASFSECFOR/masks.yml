@@ -38,3 +38,5 @@
     - HeadTop
     - HeadSide
     - Snout
+  - type: MycotoxinProtection
+    fullProtection: false

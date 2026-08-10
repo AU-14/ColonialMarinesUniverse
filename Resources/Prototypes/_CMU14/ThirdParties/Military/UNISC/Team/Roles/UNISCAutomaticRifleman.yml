@@ -1,0 +1,104 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14JobUNISCAutomaticRifleman
+  icon: AU14JobIconUSArmyHeavyGunner
+  roundSide: ThirdParty
+  roundForce: UNISC
+  roundRole: AU14JobUNISCAutomaticRifleman
+  roundComponents:
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUNISC
+  - type: Skills
+    preset: AU14SkillPresetPlatoonAutomaticRifleman
+  - type: JobPrefix
+    prefix: au14-job-name-unisc-automatic-rifleman
+  - type: Language
+    spokenLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: United Nations Interstellar Space Corps Automatic Rifleman
+  description: au14-unisc-description
+  playTimeTracker: AU14JobUNISCAutomaticRifleman
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UNISC_Specialist:
+      entity: AU14ChevronUSArmySpecialist
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCAutomaticRifleman
+        time: 36000
+    UNISC_PFC:
+      entity: AU14ChevronUSArmyPFC
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCAutomaticRifleman
+        time: 18000
+    UNISC_PVT:
+      entity: AU14ChevronUSArmyPrivate2
+      requirements: []
+
+  spawnMenuRoleName: UNISC Automatic Rifleman
+  startingGear: AU14GearUNISCAutomaticRifleman
+  greeting: au14-unisc-greeting
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-unisc-squadleader
+  accessGroups:
+  - AU14GovforSquad
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUNISC
+  id: AU14JobUNISCAutomaticRifleman
+  name: UNISC Automatic Rifleman
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUNISC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: UNISC Automatic Rifleman
+    description: A United Nations Interstellar Space Corps Automatic Rifleman
+    reregister: false
+    job: AU14JobUNISCAutomaticRifleman
+    raffle:
+      settings: short
+    rules: au14-unisc-rules
+
+- type: startingGear
+  id: AU14GearUNISCAutomaticRifleman
+  equipment:
+    id: AU14IDCardUNISCAutomaticRifleman
+    outerClothing: AU14ArmorSmartGunUNISCCombatHarness
+    jumpsuit: AU14UNISCFatigues
+    shoes: CMBootsBlackFilled
+    head: AU14UNISCM10Helmet
+    belt: AU14BeltSmartGunOperatorPistolForeconFilled
+    pocket1: RMCPouchDrumPMCFilled
+    pocket2: AU14PouchIFAKFill
+    back: RMCScabbardMacheteSGFilled
+    ears: AU14CMBHeadset
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    suitstorage: RMCSmartGun
+  storage:
+    outerClothing:
+    - RMCGlassesSmartGunSight
+    - RMCPowerCellSmartgun
+    - CMEncryptionKeyUNISC
+
+- type: playTimeTracker
+  id: AU14JobUNISCAutomaticRifleman

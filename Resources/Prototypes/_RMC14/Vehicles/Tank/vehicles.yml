@@ -510,7 +510,7 @@
   description: The FV150 ‘Hobelar’ Light Cavalry Tank is a 6m long, 6m wide, 8m tall support vehicle for the RMC. Originally procured for the Special Air Service operations as an Airborne tank, this model has been made into a support vehicle for the Royal Marines thanks to a change of symbol and technological design. Entrance at the back.
   components:
   - type: VehicleEnter
-    interiorPath: /Maps/_RMC14/Vehicles/spp_tank_interior.yml
+    interiorPath: /Maps/_RMC14/Vehicles/tank_interior.yml
     enterDoAfter: 1.0
     exitDoAfter: 1.0
     maxPassengers: 4
@@ -518,7 +518,7 @@
     entryPoints:
     - offset: 0,2
       radius: 1
-      interiorCoords: 0.5,0.5
+      interiorCoords: 0.5,-1
   - type: GridVehicleMover
     maxSpeed: 8
     acceleration: 1.556
@@ -540,6 +540,31 @@
     wallSmashSlowdownMultiplier: 0.2
     wallSmashSlowdownDuration: 1.5
     speedAtZeroIntegrity: 1
+  - type: Fixtures
+    fixtures:
+      world:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.8,-1.2,0.8,1.2
+        density: 1500
+        mask:
+        - Impassable
+        - HighImpassable
+        - LowImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
+      mob:
+        shape:
+          !type:PhysShapeAabb
+          bounds: -0.8,-1.2,0.8,1.2
+        density: 1500
+        mask:
+        - MidImpassable
+        - BarricadeImpassable
+        - LargeMobLayer
+        layer:
+        - LargeMobLayer
   - type: Sprite
     sprite: _CMU14/Structures/Vehicles/fv150/exterior.rsi
     layers:

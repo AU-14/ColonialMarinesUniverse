@@ -52,6 +52,34 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
 
     You are not hostile to the UPP and CCA and neutral to other countries!
 
+au14-unisc-rules = You are a mix of Volunteers from different countries put into a Peacekeeping force, Protect Civilians, Enforce Geneva, Always attempt to be neutral. Remember, nobody is above Geneva.
+
+au14-unisc-greeting = You are a mix of Volunteers from different countries put into a Peacekeeping force.
+
+    You have been dispatched by Platoon Command to investigate a call incoming from a Colony, the one you're currently going towards.
+
+    You've got a full Squad, along with your Platoon Operations Officer and an Enforcer Team.
+
+    Make sure that the Geneva Convention is upheld, Civilians rights are protected, and ensure the safety of your squad mates aswell.
+
+    Your Rules of Engagement are tight, do not fire unless fired upon or in defense of Non-Combatants, always attempt to be neutral, always attempt to avoid acting in anything other than self-defense.
+
+    ROE may always be changed by the Platoon Operations Officer or Platoon Commander.
+
+    You are netrual to all countries, corporations and organizations. You are Allied to the United Nations.
+
+au14-job-name-unisc-automatic-rifleman = UNISC Automatic Rifleman
+au14-job-name-unisc-ammo-bearer = UNISC Ammo Bearer
+au14-job-name-unisc-enforcer = UNISC Enforcer
+au14-job-name-unisc-lead-enforcer = UNISC Lead Enforcer
+au14-job-name-unisc-squad-leader = UNISC Squad Leader
+au14-job-name-unisc-platoon-operations-officer = UNISC Platoon Operations Officer
+au14-job-name-unisc-rifleman = UNISC Rifleman
+au14-job-name-unisc-corpsman = UNISC Corpsman
+au14-job-name-unisc-hospital-corpsman = UNISC Hospital Corpsman
+au14-unisc-description = United Nations Interstellar Space Corps personnel (peacekeepers).
+chat-radio-unisc = UNISOF
+
 rmc-squad-info-GROMCommandingOfficer = GROM Commanding Officer
 
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.

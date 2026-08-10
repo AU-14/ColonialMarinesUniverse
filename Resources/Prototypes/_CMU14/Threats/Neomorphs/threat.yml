@@ -1,0 +1,61 @@
+
+- type: threat
+  id: NeomorphsThreat
+  lorePrimer: AU14PrimerThreatNeomorphs
+  roundstartspawns: NeomorphsThreatSpawns
+  blacklistedgamemodes:
+   - ColonyFall
+  jobScaling: DefaultDistressScale
+
+  winconditions:
+  - KillAllGovforRule
+  - KillAllXenoRule
+
+- type: partySpawn
+  id: NeomorphsThreatSpawns
+  leadersToSpawn:
+    CMU14XenoOvermind: 1
+  gruntsToSpawn:
+    CMU14XenoBloodburster: 5
+  spawnTogether: true
+  scaling:
+    CMU14XenoBloodburster:
+      scale: 0.11
+      whenToBeginScaling: 30
+
+
+- type: threat
+  id: NeomorphsThreatCF
+  lorePrimer: AU14PrimerThreatNeomorphs
+  roundstartspawns: NeomorphsThreatSpawnsCF
+  thirdpartyinterval: 9100
+  whitelistedgamemodes:
+  - ColonyFall
+  blacklistedgamemodes:
+  - DistressSignal
+  winconditions:
+  - KillAllColonistRule
+  - KillAllXenoRule
+
+- type: partySpawn
+  id: NeomorphsThreatSpawnsCF
+  leadersToSpawn:
+    CMU14XenoOvermind: 1
+  gruntsToSpawn:
+    CMU14XenoBloodburster: 1
+  spawnTogether: true
+  scaling:
+    CMU14XenoBloodburster:
+      scale: 0.07
+      whenToBeginScaling: 50
+  Markers:
+    Member: xenocf
+    Leader: xenocf
+
+- type: lorePrimer
+  id: AU14PrimerThreatNeomorphs
+  threattext: You are a member of the Confluence, grow and evolve!"
+  KnowledgeLevelsGovforThreat:
+    "Threat Unknown.": 1
+    "Threat is fungal in nature.": 2
+    "Neomorphs have been identified as the threat.": 3

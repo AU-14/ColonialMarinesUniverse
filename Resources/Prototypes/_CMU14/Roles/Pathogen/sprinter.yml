@@ -1,0 +1,10 @@
+- type: job
+  parent: CMJobXenoBase
+  id: CMU14JobPathogenSprinter
+  name: cmu-job-name-pathogen-sprinter
+  playTimeTracker: CMU14JobPathogenSprinter
+  supervisors: cmu-job-name-pathogen-overmind
+ 
+- type: playTimeTracker
+  id: CMU14JobPathogenSprinter
+  isXeno: true

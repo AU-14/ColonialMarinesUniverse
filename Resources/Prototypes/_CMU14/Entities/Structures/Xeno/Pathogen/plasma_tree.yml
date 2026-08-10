@@ -1,0 +1,72 @@
+- type: entity
+  id: CMU14PathogenPlasmaTree
+  parent: BaseHiveStructure
+  name: plasma node
+  description: A pulsing node that has liquid plasma dripping around it.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    state: recovery_plasma
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 400
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: MeleeReceivedMultiplier
+    xenoDamage:
+      types:
+        Slash: 100
+  - type: PlasmaTree
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionLimited
+    id: CMU14PathogenPlasmaTree
+  - type: HiveConstructionRequiresHiveWeeds
+  - type: HiveConstructionRequiresSpace
+  - type: DoAfter
+  - type: XenoStructureMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: recovery_node
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+
+- type: entity
+  id: CMU14PathogenPlasmaTreeConstructionNode
+  parent: BaseHiveStructureNode
+  name: plasma node
+  description: A pulsing node that has liquid plasma dripping around it. Looks like a marker for something.
+  suffix: Construction
+  components:
+  - type: Sprite
+    color: '#FFFFFFAA'
+    layers:
+    - sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+      state: recovery_plasma
+    - sprite: _RMC14/Interface/xeno_hud.rsi
+      state: xeno_structure_node_indicator
+      scale: 0.8, 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 100
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 400
+    plasmaCost: 450
+    spawn: CMU14PathogenPlasmaTree
+  - type: HiveConstructionRequiresHiveCore
+  - type: HiveConstructionLimited
+    id: CMU14PathogenPlasmaTree
+  - type: HiveConstructionRequiresHiveWeeds
+  - type: HiveConstructionRequiresSpace
+  - type: WarpPoint
+    location: plasma node

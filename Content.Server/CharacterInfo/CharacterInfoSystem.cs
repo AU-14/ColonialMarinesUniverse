@@ -95,6 +95,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
 
         var isThreatRole = mind != null && IsThreatMind(mind);
         PopulateLorePrimerLines(lorePrimerLines, jobId, isThreatRole);
+        AddCLFStandingOrders(lorePrimerLines, entity);
 
         // Check inventory and hands for JobTitleChangerComponent
         if (TryComp(entity, out InventoryComponent? _))

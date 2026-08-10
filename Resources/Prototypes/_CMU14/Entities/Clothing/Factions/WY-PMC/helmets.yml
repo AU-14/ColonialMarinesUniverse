@@ -44,6 +44,8 @@
   - type: PointLight
     color: "#73e6f5"
   - type: IdentityBlocker
+  - type: MycotoxinProtection
+    fullProtection: true
 
 - type: entity
   parent: AU14ArmorHelmetPMCTactical
@@ -55,6 +57,8 @@
     sprite: _AU14/Clothing/WY_PMC/pmchelmet_engi.rsi
   - type: Clothing
     sprite: _AU14/Clothing/WY_PMC/pmchelmet_engi.rsi
+  - type: MycotoxinProtection
+    fullProtection: true
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -67,3 +71,5 @@
     sprite: _AU14/Clothing/WY_PMC/wypmcheavy.rsi
   - type: Clothing
     sprite: _AU14/Clothing/WY_PMC/wypmcheavy.rsi
+  - type: MycotoxinProtection
+    fullProtection: true

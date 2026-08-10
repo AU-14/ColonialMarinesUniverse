@@ -1,0 +1,137 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoBlightBase
+  name: Blight
+  description: A sleek and stealthy hunter, always watching.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-blight
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/blight.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      410: Critical
+      510: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenBlight
+    tier: 2
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenTurnInvisible
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoLeap
+    plasmaCost: 20
+    delay: 0
+    moveDelayTime: 1.5
+    knockdownTime: 5
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+    knockdownRequiresInvisibility: true
+    unrootOnMelee: true
+  - type: XenoTurnInvisible
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.2
+  - type: XenoPlasma
+    plasma: 150
+    maxPlasma: 150
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 400
+    evolvesTo:
+    - CMU14XenoConditor
+    - CMU14XenoBrute
+    - CMU14XenoRoot
+    - CMU14XenoHarbinger
+    - CMU14XenoVenator
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoSprinter
+    - CMU14XenoHaze
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 100
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 100
+        layer:
+        - BulletImpassable
+  - type: XenoDevour
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.8
+    baseSprintSpeed: 9.0
+  - type: MeleeWeapon
+    attackRate: 1.5
+    damage:
+      groups:
+        Brute: 35
+  - type: CMArmor
+    explosionArmor: 10
+    xenoArmor: 10
+  - type: XenoClaws
+    clawType: Sharp
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.35
+    stunMin: 3
+    stunMax: 4
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: blight
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: lurker
+  - type: RMCActionOrder
+    id: CMU14XenoBlight
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-blight
+  - type: Speech
+    speechSounds: Pathogen
+    
+ 
+- type: entity
+  parent: CMU14XenoBlightBase
+  id: CMU14XenoBlight
+  name: Blight
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenBlight

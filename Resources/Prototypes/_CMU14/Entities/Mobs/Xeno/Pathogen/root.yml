@@ -1,0 +1,172 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoRootBase
+  name: Root
+  description: A huge, looming beast of the Confluence, wreathed in writhing tentacles.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-root
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/root.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenRoot
+    tier: 3
+    hudOffset: -0.15, 0.16
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenTantrum
+    - CMU14ActionXenoPathogenTailFountain
+    - CMU14ActionXenoPathogenAidRejuvenate
+    - ActionXenoPierce
+    - ActionXenoBlitz
+    - ActionXenoCleaveRoot
+    - ActionXenoCleaveFling
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoHeavy
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoNeomorph
+    - CMU14XenoBlight
+  - type: XenoPlasma
+    plasma: 800
+    maxPlasma: 800
+    plasmaRegenOnWeeds: 3
+  - type: CMArmor
+    xenoArmor: 25
+    explosionArmor: 40
+  - type: MeleeWeapon
+    damage:
+      groups:
+        Brute: 40
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 48
+  - type: Tackle
+    chance: 0.45
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 185
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 185
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.2
+    baseSprintSpeed: 4.5
+  - type: SlowOnPull
+    slowdowns:
+    - multiplier: 0.64
+      whitelist:
+        components:
+        - Marine
+    - multiplier: 0.7025
+      whitelist:
+        components:
+        - XenoLight
+    - multiplier: 0.475
+      whitelist:
+        components:
+        - XenoHeavy
+  - type: RMCSize
+    size: Big
+  - type: RMCXenoDamageVisuals
+    prefix: root
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: XenoDevour
+  - type: XenoPheromones
+    pheromonesMultiplier: 3
+    pheroSuffix: strong
+  - type: XenoEnergy
+    alert: XenoEnergyValkyrie
+    popupGain: rmc-xeno-fury-increase-user
+    popupNotEnough: rmc-xeno-not-enough-fury
+    max: 200
+    gainAttack: 15
+    gainAttackDowned: 15
+  - type: XenoFury
+  - type: XenoRetrieve
+  - type: XenoTailFountain
+  - type: XenoTantrum
+  - type: XenoFightOrFlight
+    componentsRemove:
+    - type: RMCSlowdown
+    - type: RMCSuperSlowdown
+    - type: RMCRooted
+  - type: XenoHighGallop
+  - type: XenoShield
+  - type: VanguardShield
+  - type: XenoPierce
+    damage:
+      groups:
+        Brute: 45
+  - type: XenoLeap
+    plasmaCost: 50
+    delay: 0
+    knockdownTime: 0
+    range: 6
+    moveDelayTime: 0
+  - type: XenoBlitz
+    damage:
+      groups:
+        Brute: 40
+  - type: XenoCleave
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: harbinger
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: praetorian
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-root
+  - type: Speech
+    speechSounds: Pathogen
+
+- type: entity
+  parent: CMU14XenoRootBase
+  id: CMU14XenoRoot
+  name: Root
+  components:
+  - type: RMCActionOrder
+    id: CMU14XenoRoot
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenRoot

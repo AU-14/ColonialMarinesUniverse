@@ -244,6 +244,7 @@ namespace Content.Server.GameTicking
             bool force)
         {
             _distressSignal.TheHive = _hive.CreateHive("xenonid hive", "CMXenoHive");
+            _hive.CreateHive("Mycelial Confluence", "CMUPathogenHive");
 
             // For presets without CMDistressSignalRule (e.g. AU14 DistressSignal), the planet map
             // has already been loaded by LoadMaps and CMDistressSignalRuleSystem.OnRulePlayerSpawning

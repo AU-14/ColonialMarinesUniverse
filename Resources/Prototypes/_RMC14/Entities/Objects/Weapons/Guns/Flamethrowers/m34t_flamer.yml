@@ -46,6 +46,11 @@
   - type: RMCIgniter
     enabled: true
     locked: true
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCTankFlamer

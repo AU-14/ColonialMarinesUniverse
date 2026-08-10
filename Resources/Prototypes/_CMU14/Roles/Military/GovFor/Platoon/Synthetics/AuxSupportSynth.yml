@@ -70,7 +70,7 @@
         RMCSkillFirearms: 2
         RMCSkillOverwatch: 1
         RMCSkillMedical: 4
-        RMCSkillSurgery: 3
+        RMCSkillSurgery: 4
         RMCSkillResearch: 1
         RMCSkillMeleeWeapons: 2
         RMCSkillPilot: 2
@@ -92,7 +92,7 @@
         RMCSkillFirearms: 2
         RMCSkillOverwatch: 1
         RMCSkillMedical: 4
-        RMCSkillSurgery: 3
+        RMCSkillSurgery: 4
         RMCSkillResearch: 1
         RMCSkillMeleeWeapons: 2
         RMCSkillPilot: 2

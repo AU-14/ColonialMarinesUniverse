@@ -773,6 +773,10 @@
           name: L26A2 45mm Autocannon
           item: VehicleTankAutocannonTWE
           slot: primary::turret-cannon
+        - id: VehicleTankHeavyElectrolaserTWE
+          name: L215A1 Heavy Electrolaser
+          item: VehicleTankHeavyElectrolaserTWE
+          slot: primary::turret-cannon
       - id: secondary
         name: Secondary
         options:

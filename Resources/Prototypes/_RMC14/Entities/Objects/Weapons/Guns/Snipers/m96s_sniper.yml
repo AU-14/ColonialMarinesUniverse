@@ -80,6 +80,11 @@
       Urban: _RMC14/Objects/Weapons/Guns/Snipers/m96s/urban.rsi
   - type: RMCGunChamber
     enabled: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: BaseItem

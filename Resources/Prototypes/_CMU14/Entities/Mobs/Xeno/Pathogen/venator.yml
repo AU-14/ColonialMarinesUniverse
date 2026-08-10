@@ -1,0 +1,131 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoVenatorBase
+  name: Venator
+  description: A wandering ball of death.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-venator
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenVenator
+    tier: 3
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenAbduct
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenScissorCut
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
+  - type: XenoScissorCut
+    damage:
+      types:
+        Slash: 40
+  - type: XenoHook
+  - type: XenoHeavy
+  - type: XenoDevour
+  - type: XenoTailSeize
+  - type: XenoAbduct
+  - type: XenoImpale
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.4
+  - type: XenoPlasma
+    plasma: 300
+    maxPlasma: 300
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoBlight
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 120
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 120
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.0
+    baseSprintSpeed: 6.0
+  - type: RMCSize
+    size: Big
+  - type: MeleeWeapon
+    attackRate: 2.2
+    damage:
+      groups:
+        Brute: 42
+  - type: CMArmor
+    explosionArmor: 20
+    xenoArmor: 30
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.45
+    stunMin: 3
+    stunMax: 4
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: venator
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: praetorian
+  - type: RMCActionOrder
+    id: CMU14XenoVenator
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-venator
+  - type: Speech
+    speechSounds: Pathogen
+ 
+- type: entity
+  parent: CMU14XenoVenatorBase
+  id: CMU14XenoVenator
+  name: Venator
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenVenator

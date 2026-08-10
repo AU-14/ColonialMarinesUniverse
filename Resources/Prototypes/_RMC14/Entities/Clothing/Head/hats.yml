@@ -803,6 +803,8 @@
       HeadTop: HEAD
       HeadSide: HEAD
       Snout: HEAD
+  - type: MycotoxinProtection
+    fullProtection: true
 
 - type: entity
   parent: RMCHeadRadiationHood
@@ -820,6 +822,8 @@
     bullet: 15
     explosionArmor: 10
     #rad: 50
+  - type: MycotoxinProtection
+    fullProtection: true
 
 - type: entity
   parent: CMHeadBeret

@@ -1,0 +1,221 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenMatureBase
+  id: CMU14XenoOvermindBase
+  name: Overmind
+  description: The mind that connects the Confluence. You are everywhere and nowhere.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-overmind
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
+    noRot: true
+    state: overmind_eye
+    layers:
+    - map: [ "enum.OvermindVisualLayers.Base" ]
+      state: overmind_eye
+    - map: [ "enum.OvermindVisualLayers.Transition" ]
+      state: overmind_appear
+      visible: false
+    - map: [ "enum.OvermindVisualLayers.EyeGlow" ]
+      state: overmind_eye
+      visible: false
+      shader: unshaded
+    - map: [ "enum.OvermindVisualLayers.Strengthen" ]
+      state: overmind_manifested
+      visible: false
+      shader: unshaded
+  - type: Appearance
+  - type: CMUXenoOvermindAppearance
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      600: Critical
+      700: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenOvermind
+    tier: 4
+    hudOffset: -0.1, 0.25
+    emoteSounds: Pathogen
+    actionIds:
+    - CMU14ActionXenoPathogenOvermindChangeForm
+    - CMU14ActionXenoPathogenOrderConstruction
+    - CMU14ActionXenoPathogenChooseStructure
+    - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenPlantWeeds
+    - CMU14ActionXenoPathogenLeader
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPsychicWhisper
+    - CMU14ActionXenoPathogenPsychicRadiance
+    - CMU14ActionXenoPathogenGiveOrder
+    - CMU14ActionXenoPathogenPheromones
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 2.0
+  - type: XenoPlasma
+    plasma: 2000
+    maxPlasma: 2000
+    plasmaRegenOnWeeds: 12
+  - type: XenoPheromones
+    pheromonesMultiplier: 4
+  - type: CMUXenoBlightWave
+  - type: CMUXenoOvermind
+    eyeFormActions:
+    - CMU14ActionXenoPathogenHeal
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenExpandWeeds
+    - CMU14ActionXenoPathogenAidRejuvenate
+    - CMU14ActionXenoPathogenTransferPlasmaQueen
+    physicalFormActions:
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenBlightWave
+    - CMU14ActionXenoPathogenWordQueen
+  # Needed for heal action logic
+  - type: XenoHeal
+  # Needed for leader granting
+  - type: XenoHeavy
+  # Tactical map drawing
+  - type: TacticalMapUser
+    xenos: true
+    canDraw: true
+    liveUpdate: true
+  # Needed for eye-form construction range (same as queen eye)
+  - type: QueenEyeAction
+    spawn: CMU14XenoOvermindEye
+  - type: XenoWordQueen
+    sound: !type:SoundCollectionSpecifier
+      collection: PathogenOvermindCommand
+      params:
+        volume: -6
+    header: cmu-pathogen-words-of-the-overmind-header
+    messageColor: "#8a8c50"
+  - type: XenoPsychicCommunication
+  - type: ManageHive
+  - type: HiveLeaderGranter
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 150
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 150
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 6.5
+  - type: MeleeWeapon
+    attackRate: 1.5
+    damage:
+      groups:
+        Brute: 30
+  - type: CMArmor
+    explosionArmor: 25
+    xenoArmor: 15
+  - type: XenoConstruction
+    buildDelay: 1
+    canBuild:
+    - CMU14XenoMyceliumWall
+    - CMU14XenoThickMyceliumWall
+    - CMU14XenoMyceliumMembrane
+    - CMU14XenoThickMyceliumMembrane
+    - CMU14XenoMyceliumDoor
+    - CMU14XenoThickMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.35
+    stunMin: 3
+    stunMax: 4
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: archon
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: queen
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-overmind
+  - type: Speech
+    speechSounds: Pathogen
+  - type: Physics
+    canCollide: false
+  - type: XenoEvolutionGranter
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - MyceliumLink
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - MyceliumLink
+    receiveAllChannels: false
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/_CMU14/Xeno/Pathogen/announce_screech.ogg
+      params:
+        volume: -8
+  - type: XenoAnnounceDeath
+    message: cmu-xeno-death-overmind
+    color: "#8a8c50"
+  - type: DropshipHijacker
+
+- type: entity
+  parent: CMU14XenoOvermindBase
+  id: CMU14XenoOvermind
+  name: Overmind
+
+- type: entity
+  id: CMU14XenoOvermindEyeOrder
+  parent: CMU14XenoOvermindBase
+  name: Overmind
+  categories: [ HideSpawnMenu, DoNotMap ]
+
+- type: entity
+  id: CMU14XenoOvermindPhysicalOrder
+  parent: CMU14XenoOvermindBase
+  name: Overmind
+  categories: [ HideSpawnMenu, DoNotMap ]
+
+- type: entity
+  parent: StationAiHolo
+  id: CMU14XenoOvermindEye
+  name: overmind eye
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
+    layers:
+    - state: overmind_eye
+  - type: Eye
+    drawFov: false
+  - type: Visibility
+    layer: 32770

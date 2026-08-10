@@ -1,0 +1,28 @@
+- type: entity
+  id: CMUPathogenHive
+  name: Pathogen Confluence
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveUIColor: "#8a8c50"
+    canMakeAlliances: false
+    corrupted: false
+    burrowedLarvaId: CMU14XenoBloodburster
+    tierLimits:
+      2: 0.5
+      3: 0.4
+    freeSlots:
+      CMU14XenoConditor: 2
+    announceSound:
+      path: /Audio/_CMU14/Xeno/Pathogen/pathogen_distant_roar.ogg
+      params:
+        volume: -6
+    marineAnnounceSound:
+      collection: PathogenRoar
+    hiveStructureSlots:
+      CMU14PathogenBlightCore: 1
+      CMU14PathogenCluster: 8
+      CMU14PathogenPlasmaTree: 3
+      CMU14PathogenRecoveryNode: 6
+      CMU14PathogenSporecaster: 6

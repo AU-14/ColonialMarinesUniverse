@@ -85,6 +85,11 @@
     - AU14WeaponFlamerM240A2HAZOPS
   - type: RMCNameItemOnVend
     item: PrimaryGun
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: Tag
   id: AU14WeaponFlamerM240A2HAZOPS

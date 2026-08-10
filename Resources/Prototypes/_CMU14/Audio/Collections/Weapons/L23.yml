@@ -1,0 +1,9 @@
+- type: soundCollection
+  id: AU14L23FireSound
+  files:
+  - /Audio/_AU14/Weapons/l23/l23_1.ogg
+  - /Audio/_AU14/Weapons/l23/l23_2.ogg
+  - /Audio/_AU14/Weapons/l23/l23_3.ogg
+  - /Audio/_AU14/Weapons/l23/l23_4.ogg
+  - /Audio/_AU14/Weapons/l23/l23_5.ogg
+  

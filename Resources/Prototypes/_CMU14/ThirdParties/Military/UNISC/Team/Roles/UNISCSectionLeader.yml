@@ -1,0 +1,111 @@
+﻿- type: job
+  parent: CMJobBase
+  id: AU14JobUNISCSquadleader
+  icon: AU14JobIconSquadSgt
+  roundSide: ThirdParty
+  roundForce: UNISC
+  roundRole: AU14JobUNISCSquadleader
+  roundComponents:
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - AU14SquadUNISC
+  - type: Skills
+    preset: AU14SkillPresetPlatoonSeniorSergeant
+  - type: JobPrefix
+    prefix: au14-job-name-unisc-squad-leader
+  - type: MarineOrders
+  - type: RMCTrackable
+  - type: SquadLeader
+  - type: RMCPointing
+  - type: Language
+    spokenLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    understoodLanguages:
+    - English
+    - Russian
+    - Spanish
+    - TacticalSignLanguage
+    currentLanguage: English
+    defaultLanguage: English
+
+  name: United Nations Interstellar Space Corps Squad Leader
+  description: au14-unisc-description
+  playTimeTracker: AU14JobUNISCSquadleader
+  ranks:
+    RMCRankCivilian: []
+  chevrons:
+    UN_GunnerySergeant:
+      entity: AU14ChevronUSCMGunnerySergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCSquadleader
+        time: 36000 # 10 hours
+    UN_StaffSergeant:
+      entity: AU14ChevronUSArmyStaffSergeant
+      requirements:
+      - !type:RoleTimeRequirement
+        role: AU14JobUNISCSquadleader
+        time: 18000 # 5 hours
+    UN_Sergeant:
+      entity: AU14ChevronUSArmySergeant
+      requirements: []
+
+  spawnMenuRoleName: UNISC Squad Leader
+  startingGear: AU14GearUNISCSquadleader
+  greeting: au14-unisc-greeting
+  joinNotifyCrew: false
+  supervisors: au-14-job-name-unisc-commander
+  accessGroups:
+  - AU14GovforSquad
+  - AU14GovforCommand
+  hidden: false
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicUNISC
+  id: AU14JobUNISCSquadleader
+  name: UNISC SquadLeader
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: AU14SquadUNISC
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: UNISC Squad Leader
+    description: A United Nations Interstellar Space Corps Non-Comissioned Officer in charge of leading a Squad of 4 men.
+    reregister: false
+    job: AU14JobUNISCSquadleader
+    raffle:
+      settings: short
+    rules: au14-unisc-rules
+
+- type: startingGear
+  id: AU14GearUNISCSquadleader
+  equipment:
+    id: AU14IDCardUNISCSquadleader
+    outerClothing: AU14ArmorM3UNISC
+    jumpsuit: AU14UNISCFatigues
+    shoes: CMBootsBlackFilled
+    head: AU14UNISCM11Helmet
+    belt: RMCBeltMarineMK1
+    pocket1: AU14PouchSlingBinocs
+    pocket2: AU14PouchIFAKFill
+    back: AU14MolleSatchel
+    ears: AU14CMBHeadset
+    gloves: AU14PVEHandsInsulatedBlackMarine
+    suitstorage: AU14WeaponRifleM41AMK1Tactical
+  storage:
+    back:
+    - BedrollFolded
+    - CMMRE
+    - RMCBoxZiptie
+    - CMEncryptionKeyUNISC
+
+- type: playTimeTracker
+  id: AU14JobUNISCSquadleader
+

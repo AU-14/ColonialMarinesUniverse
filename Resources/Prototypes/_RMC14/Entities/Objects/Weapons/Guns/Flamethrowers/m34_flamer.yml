@@ -98,6 +98,11 @@
     - RMCWeaponIncineratorM34
   - type: RMCNameItemOnVend
     item: PrimaryGun
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCWeaponFlamer

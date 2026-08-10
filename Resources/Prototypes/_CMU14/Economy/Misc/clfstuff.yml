@@ -164,6 +164,9 @@
       - id: RMCMagazineRifleM16
         amount: 95
         points: 1
+      - id: CMUMagazineRifleM16Extended
+        amount: 8
+        points: 2
       - id: RMCMagazineRifleL42A
         amount: 45
         points: 1
@@ -356,14 +359,10 @@
       - id: CMUGasMaskFilterHAZOPS
         amount: 3
         points: 5
-    # the cell's starting comms: one manpack, one base station, one splice kit and one
-    # relay on the house, so a round-start cell has its net and one attempt at somebody
-    # else's mast without waiting on a sapper's bench. everything past that is crafted at
-    # the workbench or paid for under Special Equipment. gated to the radio operator, who
-    # is the only one trained to use any of it
     - name: Radio Operator Issue
       jobs:
       - AU14JobCLFRadioOperator
+      - AU14JobCLFCellLeader
       entries:
       - id: ANPRC117GRadioCLFFilled
         amount: 1
@@ -375,7 +374,7 @@
         amount: 1
         points: 0
       - id: AU14CLFClandestineRelay
-        amount: 1
+        amount: 2
         points: 0
     - name: Special Equipment
       entries:
@@ -548,7 +547,7 @@
     - id: AU14CLFNetSpliceKit
       amount: 1
     - id: AU14CLFClandestineRelay
-      amount: 1
+      amount: 2
     - id:  AU14GunCaseRifleMar30
       amount: 2
     - id: RMCGunCasePistolZHNK72
@@ -588,6 +587,19 @@
       amount: 6
     - id: AU14TattooGun
       amount: 1
+
+- type: entity
+  parent: CMPaper
+  id: AU14CLFStandingOrdersPad
+  name: cell standing orders
+  description: >-
+    Cheap colony notepaper. Write down what the cell is for, pass the word, then get rid of
+    it. Nobody can search a body for something everyone already knows.
+  suffix: CLF
+  components:
+  - type: Paper
+    contentSize: 2000
+  - type: CLFStandingOrders
 
 - type: entity
   parent: CMFax
