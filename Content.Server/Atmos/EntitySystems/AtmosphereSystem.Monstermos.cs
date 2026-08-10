@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Numerics;
 using Content.Server.Atmos.Components;
 using Content.Server.Doors.Systems;
@@ -153,7 +152,13 @@ namespace Content.Server.Atmos.EntitySystems
                     {
                         var direction = (AtmosDirection) (1 << j);
                         if (!otherTile.AdjacentBits.IsFlagSet(direction)) continue;
-                        var tile2 = otherTile.AdjacentTiles[j]!;
+                        var tile2 = otherTile.AdjacentTiles[j];
+                        if (tile2 == null)
+                        {
+                            otherTile.AdjacentBits &= ~direction;
+                            continue;
+                        }
+
                         DebugTools.Assert(tile2.AdjacentBits.IsFlagSet(direction.GetOpposite()));
 
                         // skip anything that isn't part of our current processing block.
@@ -173,9 +178,12 @@ namespace Content.Server.Atmos.EntitySystems
                         var direction = (AtmosDirection) (1 << j);
                         if (!eligibleDirections.IsFlagSet(direction)) continue;
 
-                        AdjustEqMovement(otherTile, direction, molesToMove);
+                        var adjacent = AdjustEqMovement(otherTile, direction, molesToMove);
+                        if (adjacent == null)
+                            continue;
+
                         otherTile.MonstermosInfo.MoleDelta -= molesToMove;
-                        otherTile.AdjacentTiles[j]!.MonstermosInfo.MoleDelta += molesToMove;
+                        adjacent.MonstermosInfo.MoleDelta += molesToMove;
                     }
                 }
 
@@ -257,13 +265,16 @@ namespace Content.Server.Atmos.EntitySystems
                     for (var i = queueLength - 1; i >= 0; i--)
                     {
                         var otherTile = _equalizeQueue[i];
-                        if (otherTile.MonstermosInfo.CurrentTransferAmount != 0 && otherTile.MonstermosInfo.CurrentTransferDirection != AtmosDirection.Invalid)
-                        {
-                            AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, otherTile.MonstermosInfo.CurrentTransferAmount);
-                            otherTile.AdjacentTiles[otherTile.MonstermosInfo.CurrentTransferDirection.ToIndex()]!
-                                .MonstermosInfo.CurrentTransferAmount += otherTile.MonstermosInfo.CurrentTransferAmount;
-                            otherTile.MonstermosInfo.CurrentTransferAmount = 0;
-                        }
+                        if (otherTile.MonstermosInfo.CurrentTransferAmount == 0 || otherTile.MonstermosInfo.CurrentTransferDirection == AtmosDirection.Invalid)
+                            continue;
+
+                        var transferAmount = otherTile.MonstermosInfo.CurrentTransferAmount;
+                        var adjacent = AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, transferAmount);
+                        otherTile.MonstermosInfo.CurrentTransferAmount = 0;
+                        if (adjacent == null)
+                            continue;
+
+                        adjacent.MonstermosInfo.CurrentTransferAmount += transferAmount;
                     }
                 }
             }
@@ -326,11 +337,13 @@ namespace Content.Server.Atmos.EntitySystems
                         if (otherTile.MonstermosInfo.CurrentTransferAmount == 0 || otherTile.MonstermosInfo.CurrentTransferDirection == AtmosDirection.Invalid)
                             continue;
 
-                        AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, otherTile.MonstermosInfo.CurrentTransferAmount);
-
-                        otherTile.AdjacentTiles[otherTile.MonstermosInfo.CurrentTransferDirection.ToIndex()]!
-                            .MonstermosInfo.CurrentTransferAmount += otherTile.MonstermosInfo.CurrentTransferAmount;
+                        var transferAmount = otherTile.MonstermosInfo.CurrentTransferAmount;
+                        var adjacent = AdjustEqMovement(otherTile, otherTile.MonstermosInfo.CurrentTransferDirection, transferAmount);
                         otherTile.MonstermosInfo.CurrentTransferAmount = 0;
+                        if (adjacent == null)
+                            continue;
+
+                        adjacent.MonstermosInfo.CurrentTransferAmount += transferAmount;
                     }
                 }
             }
@@ -350,7 +363,13 @@ namespace Content.Server.Atmos.EntitySystems
                     if (!otherTile.AdjacentBits.IsFlagSet(direction))
                         continue;
 
-                    var otherTile2 = otherTile.AdjacentTiles[j]!;
+                    var otherTile2 = otherTile.AdjacentTiles[j];
+                    if (otherTile2 == null)
+                    {
+                        otherTile.AdjacentBits &= ~direction;
+                        continue;
+                    }
+
                     if (otherTile2.AdjacentBits == 0)
                         continue;
 
@@ -664,31 +683,24 @@ namespace Content.Server.Atmos.EntitySystems
             }
         }
 
-        private void AdjustEqMovement(TileAtmosphere tile, AtmosDirection direction, float amount)
+        private TileAtmosphere? AdjustEqMovement(TileAtmosphere tile, AtmosDirection direction, float amount)
         {
             DebugTools.AssertNotNull(tile);
             DebugTools.Assert(tile.AdjacentBits.IsFlagSet(direction));
-            DebugTools.Assert(tile.AdjacentTiles[direction.ToIndex()] != null);
-            // Every call to this method already ensures that the adjacent tile won't be null.
-
-            // Turns out: no they don't. Temporary debug checks to figure out which caller is causing problems:
-            if (tile == null)
-            {
-                Log.Error($"Encountered null-tile in {nameof(AdjustEqMovement)}. Trace: {Environment.StackTrace}");
-                return;
-            }
 
             var idx = direction.ToIndex();
             var adj = tile.AdjacentTiles[idx];
             if (adj == null)
             {
-                var nonNull = tile.AdjacentTiles.Where(x => x != null).Count();
-                Log.Error($"Encountered null adjacent tile in {nameof(AdjustEqMovement)}. Dir: {direction}, Tile: ({tile.GridIndex}, {tile.GridIndices}), non-null adj count: {nonNull}, Trace: {Environment.StackTrace}");
-                return;
+                // CMU14 - Map-edge atmosphere tiles can retain a stale adjacency bit after trimming.
+                tile.AdjacentBits &= ~direction;
+                tile.MonstermosInfo.CurrentTransferDirection = AtmosDirection.Invalid;
+                return null;
             }
 
             tile.MonstermosInfo[direction] += amount;
             adj.MonstermosInfo[idx.ToOppositeDir()] -= amount;
+            return adj;
         }
 
         private void HandleDecompressionFloorRip(Entity<MapGridComponent> mapGrid, TileAtmosphere tile, float sum)
