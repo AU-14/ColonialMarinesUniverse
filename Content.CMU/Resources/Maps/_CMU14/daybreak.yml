@@ -24503,7 +24503,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: -30.5,-4.5
       parent: 1
-- proto: VMarkerShipIntelComputer
+- proto: CMURoundIntelligenceComputer
   entities:
   - uid: 2917
     components:

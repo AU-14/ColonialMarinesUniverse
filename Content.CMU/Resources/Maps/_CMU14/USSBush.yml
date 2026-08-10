@@ -29710,7 +29710,7 @@ entities:
     - type: Transform
       pos: -2.6959476,-67.40946
       parent: 1
-- proto: RMCComputerIntelGovfor
+- proto: CMURoundIntelligenceComputer
   entities:
   - uid: 4081
     components:

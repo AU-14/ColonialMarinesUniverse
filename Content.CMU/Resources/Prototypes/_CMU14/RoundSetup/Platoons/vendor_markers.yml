@@ -973,15 +973,9 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundIntelligenceComputer
   id: VMarkerShipIntelComputer
-  name: Ship Intel Computer Marker
-  components:
-  - type: VendorMarker
-    class: IntelComputer
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/computer.rsi
-    state: terminal1_old
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundTechnologyTreeConsole
