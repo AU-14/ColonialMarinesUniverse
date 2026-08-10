@@ -453,7 +453,7 @@ namespace Content.Server.Ghost
                     isYautja: isYautja,
                     isCorruptedHive: isCorruptedHive,
                     xenoTier: xeno?.Tier,
-                    realDisplayWeight: job?.RealDisplayWeight ?? 0,
+                    realDisplayWeight: GetDisplayWeight(job),
                     isYautjaThrall: isYautjaThrall,
                     isYautjaAbomination: isYautjaAbomination,
                     isCursedSummoner: isCursedSummoner);
@@ -470,7 +470,7 @@ namespace Content.Server.Ghost
                     job?.Icon.ToString(),
                     job?.JobPreviewEntity?.ToString() ?? metadata.EntityPrototype?.ID,
                     job?.ID,
-                    job?.RealDisplayWeight ?? 0,
+                    GetDisplayWeight(job),
                     xeno?.Tier,
                     xeno != null ||
                     job?.ID.StartsWith("CMXeno", StringComparison.OrdinalIgnoreCase) == true);
@@ -487,6 +487,17 @@ namespace Content.Server.Ghost
                 .Where(department => department.Roles.Contains(jobId))
                 .OrderBy(department => department, DepartmentUIComparer.Instance)
                 .FirstOrDefault();
+        }
+
+        private int GetDisplayWeight(JobPrototype? job)
+        {
+            if (job == null ||
+                !JobUIComparer.TryCreate(_prototypeManager, null, out var comparer))
+            {
+                return 0;
+            }
+
+            return comparer.GetWeight(job) ?? 0;
         }
 
         #endregion
@@ -638,6 +649,15 @@ namespace Content.Server.Ghost
                     _adminLog.Add(LogType.Mind, $"{ToPrettyString(playerEntity.Value):player} was forced to ghost via command");
                 else
                     _adminLog.Add(LogType.Mind, $"{ToPrettyString(playerEntity.Value):player} is attempting to ghost via command");
+            }
+
+            if (playerEntity != null && !forced)
+            {
+                var entityCancelEv = new GhostAttemptEvent(mindId);
+                RaiseLocalEvent(playerEntity.Value, ref entityCancelEv);
+
+                if (entityCancelEv.Cancelled)
+                    return false;
             }
 
             var handleEv = new GhostAttemptHandleEvent(mind, canReturnGlobal);

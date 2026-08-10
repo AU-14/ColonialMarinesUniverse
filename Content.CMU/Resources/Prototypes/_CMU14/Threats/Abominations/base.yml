@@ -201,7 +201,7 @@
 - type: nameIdentifierGroup
   id: Abomination
   maxValue: 999
-  prefix: Abomination
+  format: name-identifier-format-abomination
 
 # Heat x3.5 = burns down 3.5x as fast. Fire is the hard counter to the
 # threat's area denial; flamers should melt them in seconds.

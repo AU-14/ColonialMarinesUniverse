@@ -9,6 +9,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Fluids;
 using Content.Shared.Forensics;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
@@ -26,16 +27,17 @@ namespace Content.Shared._RMC14.Chemistry;
 public sealed partial class RMCVomitSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     //[Dependency] private readonly SharedForensicsSystem _forensics = default!;
-    [Dependency] private HungerSystem _hunger = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private SharedPuddleSystem _puddle = default!;
+    [Dependency] private SharedForensicsSystem _forensics = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
     [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -121,19 +123,16 @@ public sealed partial class RMCVomitSystem : EntitySystem
                 vomitAmount -= (float) vomitChemstreamAmount.Volume;
             }
 
-            solution.AddReagent(new ReagentId(vomitComp.VomitPrototype, _bloodstream.GetEntityBloodData(uid)), vomitAmount);
+            solution.AddReagent(new ReagentId(vomitComp.VomitPrototype, _bloodstream.GetEntityBloodData((uid, bloodStream))), vomitAmount);
         }
 
         if (_puddle.TrySpillAt(uid, solution, out var puddle, false))
         {
-            // TODO RMC14 use SharedForensicsSystem. TransferDnaEvent will eventually be deleted upstream.
-            // _forensics.TransferDna(puddle, uid, false);
-            var ev = new TransferDnaEvent { Donor = uid, Recipient = puddle, CanDnaBeCleaned = false };
-            RaiseLocalEvent(uid, ref ev);
+            _forensics.TransferDna(puddle, uid, false);
         }
 
-        if (TryComp<HungerComponent>(uid, out var hunger))
-            _hunger.ModifyHunger(uid, vomitComp.HungerLoss, hunger);
+        if (TryComp<SatiationComponent>(uid, out var satiation))
+            _satiation.ModifyValue((uid, satiation), SatiationSystem.Hunger, vomitComp.HungerLoss);
 
         if (vomitComp.ToxinHeal > 0)
         {

@@ -81,7 +81,7 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
         {
             if (proto.Frequency > 0)
-                taken.Add(proto.Frequency);
+                taken.Add(ToRawFrequency(proto.Frequency));
         }
 
         var added = _prototype.EnumeratePrototypes<RadioChannelPrototype>()
@@ -130,11 +130,11 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
     public int GetFrequency(RadioChannelPrototype channel)
     {
         if (!_commsEnabled || channel.Frequency <= 0 || string.IsNullOrEmpty(channel.Faction))
-            return channel.Frequency;
+            return ToRawFrequency(channel.Frequency);
 
         return GetPlan().TryGetValue(channel.ID, out var frequency)
             ? frequency
-            : channel.Frequency;
+            : ToRawFrequency(channel.Frequency);
     }
 
     // a frequency the operator already holds: an unfactioned net, or one belonging to
@@ -184,7 +184,7 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
         {
             if (proto.Frequency > 0)
-                taken.Add(proto.Frequency);
+                taken.Add(ToRawFrequency(proto.Frequency));
         }
 
         // deterministic enumeration order so the roll count is stable
@@ -206,6 +206,11 @@ public sealed partial class ANPRCFrequencyPlanSystem : EntitySystem
         }
 
         return _plan;
+    }
+
+    private static int ToRawFrequency(Content.Shared.FixedPoint.FixedPoint2 frequency)
+    {
+        return (int) MathF.Round(frequency.Float() * 1000f);
     }
 
     private void OnFreqCardMapInit(Entity<ANPRCFreqCardComponent> ent, ref MapInitEvent args)

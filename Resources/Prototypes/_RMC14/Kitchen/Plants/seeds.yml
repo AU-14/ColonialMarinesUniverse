@@ -1,11 +1,10 @@
-
 - type: entity
   parent: SeedBase
   name: packet of plump spores
   id: PlumpSeeds
   components:
   - type: Seed
-    seedId: plump
+    plantId: PlumpPlants
   - type: Sprite
     sprite: _RMC14/Objects/Kitchen/Plants/plump.rsi
 
@@ -15,7 +14,7 @@
   id: GrassSeeds
   components:
   - type: Seed
-    seedId: grass
+    plantId: GrassPlants
   - type: Sprite
     sprite: _RMC14/Objects/Kitchen/Plants/grass.rsi
 
@@ -25,7 +24,7 @@
   id: WhiteBeetSeeds
   components:
   - type: Seed
-    seedId: whitebeet
+    plantId: WhiteBeetPlants
   - type: Sprite
     sprite: _RMC14/Objects/Kitchen/Plants/whitebeet.rsi
 
@@ -35,7 +34,7 @@
   id: PeanutSeeds
   components:
   - type: Seed
-    seedId: peanut
+    plantId: PeanutPlants
   - type: Sprite
     sprite: _RMC14/Objects/Kitchen/Plants/peanut.rsi
 
@@ -45,168 +44,166 @@
   id: SunflowerSeeds
   components:
   - type: Seed
-    seedId: sunflower
+    plantId: SunflowerPlants
   - type: Sprite
     sprite: _RMC14/Objects/Kitchen/Plants/sunflower.rsi
-
-- type: seed
-  id: plump
-  name: seeds-plump-name
-  noun: seeds-noun-spores
-  displayName: seeds-plump-display-name
-  plantRsi: _RMC14/Objects/Kitchen/Plants/plump.rsi
-  packetPrototype: PlumpSeeds
-  productPrototypes:
-  - FoodMushroomPlump
-  lifespan: 25
-  maturation: 8
-  production: 7
-  yield: 4
-  potency: 1
-  growthStages: 3
-  lightTolerance: 6
-  waterConsumption: 0.60
-  nutrientConsumption: 0.50
-  idealHeat: 288
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 25
-      PotencyDivisor: 25
-
-- type: seed
-  id: peanut
-  name: seeds-peanut-name
-  noun: seeds-noun-seeds
-  displayName: seeds-peanut-display-name
-  plantRsi: _RMC14/Objects/Kitchen/Plants/peanut.rsi
-  packetPrototype: PeanutSeeds
-  harvestRepeat: Repeat
-  productPrototypes:
-  - FoodPeanut
-  lifespan: 55
-  maturation: 6
-  production: 6
-  yield: 6
-  potency: 10
-  growthStages: 6
-  lightTolerance: 6
-  waterConsumption: 0.60
-  nutrientConsumption: 0.50
-  idealHeat: 288
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 25
-      PotencyDivisor: 25
-
-- type: seed
-  id: sunflower
-  name: seeds-sunflower-name
-  noun: seeds-noun-seeds
-  displayName: seeds-sunflower-display-name
-  plantRsi: _RMC14/Objects/Kitchen/Plants/sunflower.rsi
-  packetPrototype: SunflowerSeeds
-  productPrototypes:
-  - FoodSunflower
-  lifespan: 25
-  maturation: 6
-  production: 7
-  yield: 5
-  potency: 1
-  growthStages: 3
-  lightTolerance: 6
-  waterConsumption: 0.60
-  nutrientConsumption: 0.50
-  idealHeat: 288
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 25
-      PotencyDivisor: 25
-
-- type: seed
-  id: whitebeet
-  name: seeds-whitebeet-name
-  noun: seeds-noun-seeds
-  displayName: seeds-whitebeet-display-name
-  plantRsi: _RMC14/Objects/Kitchen/Plants/whitebeet.rsi
-  packetPrototype: WhiteBeetSeeds
-  productPrototypes:
-  - FoodWhiteBeet
-  lifespan: 60
-  maturation: 6
-  production: 6
-  yield: 6
-  potency: 10
-  growthStages: 6
-  lightTolerance: 6
-  waterConsumption: 0.60
-  nutrientConsumption: 0.50
-  idealHeat: 288
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 25
-      PotencyDivisor: 25
-
-- type: seed
-  id: grass
-  name: seeds-grass-name
-  noun: seeds-noun-seeds
-  displayName: seeds-grass-display-name
-  plantRsi: _RMC14/Objects/Kitchen/Plants/grass.rsi
-  packetPrototype: GrassSeeds
-  productPrototypes:
-  - FoodGrass
-  lifespan: 60
-  maturation: 6
-  production: 6
-  yield: 6
-  potency: 10
-  growthStages: 2
-  lightTolerance: 6
-  waterConsumption: 0.60
-  nutrientConsumption: 0.50
-  idealHeat: 288
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 25
-      PotencyDivisor: 25
 
 - type: entity
   parent: SeedBase
   name: packet of mango seeds
   id: RMCMangoSeeds
   components:
-    - type: Seed
-      seedId: rmcmango
-    - type: Sprite
-      sprite: _RMC14/Objects/Kitchen/Plants/mango.rsi
+  - type: Seed
+    plantId: RMCMangoPlants
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/mango.rsi
 
-- type: seed
-  id: rmcmango
-  name: seeds-mango-name
-  noun: seeds-noun-seeds
-  displayName: seeds-mango-display-name
-  plantRsi: _RMC14/Objects/Kitchen/Plants/mango.rsi
-  packetPrototype: RMCMangoSeeds
-  productPrototypes:
-    - RMCFoodMango
-  harvestRepeat: Repeat
-  lifespan: 55
-  maturation: 6
-  production: 6
-  yield: 3
-  potency: 10
-  idealLight: 8
-  chemicals:
-    Nutriment:
-      Min: 1
-      Max: 5
-      PotencyDivisor: 20
-    Vitamin:
-      Min: 1
-      Max: 4
-      PotencyDivisor: 25
+- type: entity
+  parent: BasePlant
+  id: PlumpPlants
+  name: plump helmet mushroom
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/plump.rsi
+  - type: PlantData
+    noun: seeds-noun-spores
+    name: seeds-plump-display-name
+    packetPrototype: PlumpSeeds
+    productPrototypes: [ FoodMushroomPlump ]
+  - type: Plant
+    lifespan: 25
+    maturation: 8
+    production: 7
+    yield: 4
+    potency: 1
+    growthStages: 3
+  - type: PlantGrowth
+    waterConsumption: 0.6
+    nutrientConsumption: 0.5
+  - type: PlantChemicals
+    chemicals:
+      Nutriment: { min: 1, max: 25, potencyDivisor: 25 }
+
+- type: entity
+  parent: BasePlant
+  id: PeanutPlants
+  name: peanut plant
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/peanut.rsi
+  - type: PlantData
+    name: seeds-peanut-display-name
+    packetPrototype: PeanutSeeds
+    productPrototypes: [ FoodPeanut ]
+  - type: Plant
+    lifespan: 55
+    maturation: 6
+    production: 6
+    yield: 6
+    potency: 10
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantGrowth
+    waterConsumption: 0.6
+    nutrientConsumption: 0.5
+  - type: PlantChemicals
+    chemicals:
+      Nutriment: { min: 1, max: 25, potencyDivisor: 25 }
+
+- type: entity
+  parent: BasePlant
+  id: SunflowerPlants
+  name: sunflower
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/sunflower.rsi
+  - type: PlantData
+    name: seeds-sunflower-display-name
+    packetPrototype: SunflowerSeeds
+    productPrototypes: [ FoodSunflower ]
+  - type: Plant
+    lifespan: 25
+    maturation: 6
+    production: 7
+    yield: 5
+    potency: 1
+    growthStages: 3
+  - type: PlantGrowth
+    waterConsumption: 0.6
+    nutrientConsumption: 0.5
+  - type: PlantChemicals
+    chemicals:
+      Nutriment: { min: 1, max: 25, potencyDivisor: 25 }
+
+- type: entity
+  parent: BasePlant
+  id: WhiteBeetPlants
+  name: white beet
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/whitebeet.rsi
+  - type: PlantData
+    name: seeds-whitebeet-display-name
+    packetPrototype: WhiteBeetSeeds
+    productPrototypes: [ FoodWhiteBeet ]
+  - type: Plant
+    lifespan: 60
+    maturation: 6
+    production: 6
+    yield: 6
+    potency: 10
+  - type: PlantGrowth
+    waterConsumption: 0.6
+    nutrientConsumption: 0.5
+  - type: PlantChemicals
+    chemicals:
+      Nutriment: { min: 1, max: 25, potencyDivisor: 25 }
+
+- type: entity
+  parent: BasePlant
+  id: GrassPlants
+  name: grass
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/grass.rsi
+  - type: PlantData
+    name: seeds-grass-display-name
+    packetPrototype: GrassSeeds
+    productPrototypes: [ FoodGrass ]
+  - type: Plant
+    lifespan: 60
+    maturation: 6
+    production: 6
+    yield: 6
+    potency: 10
+    growthStages: 2
+  - type: PlantGrowth
+    waterConsumption: 0.6
+    nutrientConsumption: 0.5
+  - type: PlantChemicals
+    chemicals:
+      Nutriment: { min: 1, max: 25, potencyDivisor: 25 }
+
+- type: entity
+  parent: BasePlant
+  id: RMCMangoPlants
+  name: mango tree
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Kitchen/Plants/mango.rsi
+  - type: PlantData
+    name: seeds-mango-display-name
+    packetPrototype: RMCMangoSeeds
+    productPrototypes: [ RMCFoodMango ]
+  - type: Plant
+    lifespan: 55
+    maturation: 6
+    production: 6
+    yield: 3
+    potency: 10
+  - type: PlantHarvest
+    harvestRepeat: Repeat
+  - type: PlantChemicals
+    chemicals:
+      Nutriment: { min: 1, max: 5, potencyDivisor: 20 }
+      Vitamin: { min: 1, max: 4, potencyDivisor: 25 }

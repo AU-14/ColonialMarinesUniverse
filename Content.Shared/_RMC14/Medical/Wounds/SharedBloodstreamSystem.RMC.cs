@@ -4,7 +4,7 @@ using Content.Shared.Damage;
 
 namespace Content.Shared.Body.Systems;
 
-public abstract partial class SharedBloodstreamSystem
+public sealed partial class BloodstreamSystem
 {
     private bool CanApplyRMCGenericBleeding(Entity<BloodstreamComponent> entity, DamageChangedEvent damage)
     {

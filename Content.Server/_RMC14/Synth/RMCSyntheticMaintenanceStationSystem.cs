@@ -25,7 +25,7 @@ namespace Content.Server._RMC14.Synth;
 public sealed partial class RMCSyntheticMaintenanceStationSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private ClimbSystem _climb = default!;
     [Dependency] private ContainerSystem _container = default!;
     [Dependency] private DamageableSystem _damageable = default!;

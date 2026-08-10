@@ -9,7 +9,9 @@
     Digestion:
       metabolismRate: 0.2
       effects:
-      - !type:SatiateHunger
+      - !type:Satiate
+        satiationType: Hunger
         factor: 0.125
-      - !type:SatiateThirst #Unparity but as long as we have thirst might as well - half as effective as water
+      - !type:Satiate # Unparity but as long as we have thirst might as well - half as effective as water
+        satiationType: Thirst
         factor: 0.4

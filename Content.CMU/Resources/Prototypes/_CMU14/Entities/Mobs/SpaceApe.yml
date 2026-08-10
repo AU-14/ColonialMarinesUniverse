@@ -135,11 +135,12 @@
     - type: Cuffable
     - type: CanHostGuardian
     - type: IdExaminable
-    - type: Thirst
     - type: MonkeyAccent
     - type: Internals
-  - type: Hunger
-    baseDecayRate: 0.08
+  - type: Satiation
+    satiations:
+      Hunger:
+        prototype: CMUApeHunger
   - type: Prying
     pryPowered: true
     speedModifier: 2.7

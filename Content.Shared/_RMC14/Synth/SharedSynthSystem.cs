@@ -52,7 +52,7 @@ public abstract partial class SharedSynthSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<SynthComponent, MapInitEvent>(OnMapInit, after: [typeof(SharedBloodstreamSystem)]);
+        SubscribeLocalEvent<SynthComponent, MapInitEvent>(OnMapInit, after: [typeof(BloodstreamSystem)]);
         SubscribeLocalEvent<SynthComponent, AttackAttemptEvent>(OnMeleeAttempted);
         SubscribeLocalEvent<SynthComponent, ShotAttemptedEvent>(OnShotAttempted);
         SubscribeLocalEvent<SynthComponent, TryingToSleepEvent>(OnSleepAttempt);

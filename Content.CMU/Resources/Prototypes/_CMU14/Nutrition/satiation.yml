@@ -1,0 +1,53 @@
+- type: satiation
+  id: RMCMarineHunger
+  parent: NormalSatiationHunger
+  baseDecayRate: 0.1
+  maximumValue: 480
+  thresholds:
+    Overfed: 480
+    Okay: 380
+    Peckish: 110
+    Starving: 50
+    Dead: 0
+  decayModifiers:
+    Overfed: 1
+    Okay: 1
+    Peckish: 1
+    Starving: 1
+
+- type: satiation
+  id: RMCMarineThirst
+  parent: NormalSatiationThirst
+  baseDecayRate: 0.1
+  maximumValue: 378
+  thresholds:
+    Overhydrated: 378
+    Okay: 278
+    Thirsty: 98
+    Parched: 50
+    Dead: 0
+  decayModifiers:
+    Overhydrated: 1
+    Okay: 1
+    Thirsty: 0.8
+    Parched: 0.8
+
+- type: satiation
+  id: RMCSimpleMobHunger
+  parent: SimpleMobBaseHunger
+  baseDecayRate: 0.05
+
+- type: satiation
+  id: RMCSimpleMobThirst
+  parent: SimpleMobBaseThirst
+  thresholds:
+    Overhydrated: 200
+    Okay: 150
+    Thirsty: 100
+    Parched: 10
+    Dead: 0
+
+- type: satiation
+  id: CMUApeHunger
+  parent: SimpleMobBaseHunger
+  baseDecayRate: 0.08

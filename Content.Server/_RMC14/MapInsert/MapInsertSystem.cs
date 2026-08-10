@@ -1,4 +1,5 @@
 using System.Numerics;
+using System.Linq;
 using Content.Server._RMC14.Rules.DistressSignal;
 using Content.Server.Decals;
 using Content.Shared._RMC14.Areas;
@@ -130,15 +131,10 @@ public sealed partial class MapInsertSystem : EntitySystem
         MapInsertSmimsh(insertGrid, (EntityUid)mainGrid, ent.Comp.ClearEntities, ent.Comp.ClearDecals);
 
         //Decals not handled in Merge(), so do it here
-        if (!TryComp(insertGrid, out DecalGridComponent? insertDecalGrid))
-            return;
-
-        foreach (var chunk in insertDecalGrid.ChunkCollection.ChunkCollection.Values)
+        var insertGridComp = Comp<MapGridComponent>(insertGrid);
+        foreach (var (decalUid, decal) in _decals.GetDecalsIntersecting(insertGrid, insertGridComp.LocalAABB).ToArray())
         {
-            foreach (var (decalUid, decal) in chunk.Decals)
-            {
-                _decals.SetDecalPosition(insertGrid, decalUid, new EntityCoordinates(mainGrid.Value, decal.Coordinates + coordinatesi));
-            }
+            _decals.SetDecalPosition(insertGrid, decalUid, new EntityCoordinates(mainGrid.Value, decal.Coordinates + coordinatesi));
         }
 
         // Need delay to allow physics to settle, otherwise entities get pushed around

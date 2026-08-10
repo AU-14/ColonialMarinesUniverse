@@ -6,7 +6,6 @@
   components:
   - type: Transform
     anchored: false
-    noRot: true
   - type: Physics
     bodyType: Dynamic
   - type: InteractionOutline

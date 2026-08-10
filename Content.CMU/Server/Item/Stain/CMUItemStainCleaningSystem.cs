@@ -1,6 +1,6 @@
-using Content.Server.Forensics;
 using Content.Shared._CMU14.Item.Stain;
 using Content.Shared.Forensics;
+using Content.Shared.Forensics.Components;
 
 namespace Content.Server._CMU14.Item.Stain;
 

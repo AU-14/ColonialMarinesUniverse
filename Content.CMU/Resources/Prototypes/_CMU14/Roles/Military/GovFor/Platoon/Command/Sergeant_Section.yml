@@ -167,11 +167,6 @@
   # hidden: false # plt. sgt. is disabled
   # setPreference: true # don't show in loadout menu
   basePlaytimeTracker: true
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: RMCSpeechBubbleSpecificStyle
-      speechStyleClass: commanderSpeech
 
 - type: roleLoadout
   id: JobAU14JobGOVFORSectionSergeant

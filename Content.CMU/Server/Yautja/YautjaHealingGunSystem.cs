@@ -22,7 +22,7 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private SharedBoneSystem _bone = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;

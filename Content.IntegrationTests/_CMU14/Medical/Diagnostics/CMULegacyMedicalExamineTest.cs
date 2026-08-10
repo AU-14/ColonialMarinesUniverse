@@ -37,7 +37,7 @@ public sealed class CMULegacyMedicalExamineTest
             damage.DamageDict["Piercing"] = FixedPoint2.New(101);
             server.EntMan.System<DamageableSystem>().SetDamage((patient, null), damage);
 
-            var bloodstream = server.EntMan.System<SharedBloodstreamSystem>();
+            var bloodstream = server.EntMan.System<BloodstreamSystem>();
             Assert.That(bloodstream.TryModifyBleedAmount((patient, null), 1), Is.True);
 
             var examine = server.EntMan.System<Content.Server.Examine.ExamineSystem>();

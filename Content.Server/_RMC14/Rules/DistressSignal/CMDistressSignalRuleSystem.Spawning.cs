@@ -468,8 +468,8 @@ public sealed partial class CMDistressSignalRuleSystem
                 EnsureComp<AlmayerComponent>(xform.GridUid.Value);
             }
 
-            if (comp.SetHunger && TryComp(ev.SpawnResult, out HungerComponent? hunger))
-                _hunger.SetHunger(ev.SpawnResult.Value, 50.0f, hunger);
+            if (comp.SetHunger && TryComp(ev.SpawnResult, out SatiationComponent? satiation))
+                _satiation.SetValue((ev.SpawnResult.Value, satiation), Content.Shared.Nutrition.EntitySystems.SatiationSystem.Hunger, 50.0f);
         }
     }
 

@@ -5,6 +5,7 @@ using Content.Server.Decals;
 using Content.Shared.Administration;
 using Content.Shared.Decals;
 using Robust.Shared.Console;
+using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Util.Admin.Console;
@@ -32,34 +33,32 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
 
         var idArray = idArgs.ToArray();
         var idFilter = idArray.Length > 0 ? new HashSet<string>(idArray) : null;
-        int totalRemoved = 0, totalSkipped = 0, gridCount = 0;
-        var query = EntityManager.EntityQueryEnumerator<DecalGridComponent>();
-        while (query.MoveNext(out var gridUid, out var decalGrid))
+        int totalRemoved = 0, totalSkipped = 0;
+        var grids = new HashSet<EntityUid>();
+        var query = EntityManager.EntityQueryEnumerator<ChunkEntityComponent, DecalChunkComponent>();
+        while (query.MoveNext(out _, out var chunk, out var decals))
         {
-            foreach (var chunk in decalGrid.ChunkCollection.ChunkCollection.Values)
+            grids.Add(chunk.Root);
+            foreach (var (id, decal) in decals.Decals.ToArray())
             {
-                foreach (var (id, decal) in chunk.Decals.ToArray())
+                if (idFilter != null && !idFilter.Contains(decal.Id))
+                    continue;
+
+                if (cleanableOnly &&
+                    (!_protoMan.TryIndex<DecalPrototype>(decal.Id, out var prototype) || !prototype.DefaultCleanable))
                 {
-                    if (idFilter != null && !idFilter.Contains(decal.Id))
-                        continue;
-
-                    if (cleanableOnly &&
-                        (!_protoMan.TryIndex<DecalPrototype>(decal.Id, out var prototype) || !prototype.DefaultCleanable))
-                    {
-                        totalSkipped++;
-                        continue;
-                    }
-
-                    if (_decalSys.RemoveDecal(gridUid, id, decalGrid))
-                        totalRemoved++;
+                    totalSkipped++;
+                    continue;
                 }
+
+                if (_decalSys.RemoveDecal(chunk.Root, new DecalIndex(chunk.Chunk, id)))
+                    totalRemoved++;
             }
-            gridCount++;
         }
 
         var filterMsg = idFilter != null ? $" matching {idFilter.Count} ids" : "";
         var cleanMsg = cleanableOnly ? " (cleanable only)" : " (all decals)";
-        shell.WriteLine($"Removed {totalRemoved} decals{filterMsg}{cleanMsg} from {gridCount} grids.");
+        shell.WriteLine($"Removed {totalRemoved} decals{filterMsg}{cleanMsg} from {grids.Count} grids.");
 
         if (totalSkipped > 0)
         {

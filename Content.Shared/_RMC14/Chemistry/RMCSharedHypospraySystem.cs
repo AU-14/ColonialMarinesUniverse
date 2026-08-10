@@ -11,6 +11,7 @@ using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Forensics;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -34,6 +35,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
     [Dependency] protected SharedContainerSystem _container = default!;
     [Dependency] protected SharedDoAfterSystem _doAfter = default!;
     [Dependency] protected SharedInteractionSystem _interaction = default!;
+    [Dependency] protected SharedForensicsSystem _forensics = default!;
     [Dependency] protected HypospraySystem _hypospray = default!;
     [Dependency] protected IPrototypeManager _prototype = default!;
     [Dependency] protected ReactiveSystem _reactive = default!;
@@ -354,8 +356,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         _reactive.DoEntityReaction(target, removedSolution, ReactionMethod.Injection);
         _solution.TryAddSolution(targetSoln.Value, removedSolution);
 
-        var ev = new TransferDnaEvent { Donor = target, Recipient = ent };
-        RaiseLocalEvent(target, ref ev);
+        _forensics.TransferDna(ent, target);
 
         // same LogType as syringes...
         _adminLog.Add(LogType.ForceFeed, $"{ToPrettyString(args.User):user} injected {ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {ToPrettyString(ent):using}");

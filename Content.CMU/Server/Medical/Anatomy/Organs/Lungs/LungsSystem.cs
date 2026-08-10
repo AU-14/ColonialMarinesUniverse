@@ -14,7 +14,7 @@ namespace Content.Server._CMU14.Medical.Anatomy.Organs.Lungs;
 
 public sealed partial class LungsSystem : SharedLungsSystem
 {
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _proto = default!;

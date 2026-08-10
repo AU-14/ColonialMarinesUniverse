@@ -13,7 +13,7 @@
     removeComponents:
     - type: CanEnterCryostorage
     - type: CommendationReceiver
-    - type: Hunger
+    - type: Satiation
     - type: Infectable
     - type: Marine
     - type: MarineMapTracked
@@ -23,7 +23,6 @@
     - type: RMCRevivable
     - type: SSDIndicator
     - type: TacticalMapTracked
-    - type: Thirst
     - type: Vocal
 
 - type: startingGear

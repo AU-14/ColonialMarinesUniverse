@@ -106,11 +106,6 @@
   hidden: false
   setPreference: true
   basePlaytimeTracker: true
-  special:
-  - !type:AddComponentSpecial
-    components:
-    - type: RMCSpeechBubbleSpecificStyle
-      speechStyleClass: commanderSpeech
 
 - type: job
   parent: AU14JobadvisorBase

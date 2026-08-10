@@ -35,7 +35,7 @@ public sealed partial class Hemolytic : RMCChemicalEffect
 
         if (entman.TryGetComponent<BloodstreamComponent>(targ, out var blood))
         {
-            var bloodsys = entman.System<SharedBloodstreamSystem>();
+            var bloodsys = entman.System<BloodstreamSystem>();
             bloodsys.TryModifyBloodLevel((targ, blood), -(5.0 * potency));
         }
     }
@@ -47,7 +47,7 @@ public sealed partial class Hemolytic : RMCChemicalEffect
 
         if (entman.TryGetComponent<BloodstreamComponent>(targ, out var blood))
         {
-            var bloodsys = entman.System<SharedBloodstreamSystem>();
+            var bloodsys = entman.System<BloodstreamSystem>();
             bloodsys.TryModifyBloodLevel((targ, blood), -(4.0 * potency));
             //TODO M.drowsiness
 

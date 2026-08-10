@@ -26,7 +26,7 @@ public sealed partial class YautjaHealthShardSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;

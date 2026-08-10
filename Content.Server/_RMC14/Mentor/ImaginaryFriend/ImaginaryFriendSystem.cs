@@ -13,6 +13,7 @@ using Content.Shared.Eye;
 using Content.Shared.Humanoid;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
+using Content.Shared.Radio;
 using Content.Shared.Roles;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;

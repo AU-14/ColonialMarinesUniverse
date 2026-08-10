@@ -2,7 +2,7 @@ using Content.Shared._RMC14.Medical.Stasis;
 
 namespace Content.Shared.Body.Systems;
 
-public abstract partial class SharedBloodstreamSystem
+public sealed partial class BloodstreamSystem
 {
     [Dependency] private CMStasisBagSystem _rmcBloodstreamStasis = default!;
 

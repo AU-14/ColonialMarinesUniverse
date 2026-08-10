@@ -677,7 +677,7 @@ public sealed partial class ANPRCRadioWindow : DefaultWindow
     {
         return _lastState != null && _lastState.ChannelFrequencies.TryGetValue(proto.ID, out var freq)
             ? freq
-            : proto.Frequency;
+            : (int) MathF.Round(proto.Frequency.Float() * 1000f);
     }
 
     private void RebuildNetList(ANPRCRadioState state)

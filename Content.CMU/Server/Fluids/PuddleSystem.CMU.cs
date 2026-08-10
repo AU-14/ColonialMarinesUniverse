@@ -1,6 +1,7 @@
 // ReSharper disable CheckNamespace
 
 using System.Numerics;
+using System.Linq;
 using Content.Server.Decals;
 using Content.Server.Fluids.Components;
 using Content.Shared.Chemistry.Components;
@@ -76,15 +77,15 @@ public sealed partial class PuddleSystem
 
     public override bool CleanDecalsAt(TileRef tileRef)
     {
-        if (!TryGetDecalsAt(tileRef, out var grid, out var decalGrid, out var decals))
+        if (!TryGetDecalsAt(tileRef, out var grid, out var decals))
             return false;
 
         var removedAny = false;
-        ClearMissingPuddleDecalReferences(tileRef, grid, decalGrid);
+        ClearMissingPuddleDecalReferences(tileRef, grid, decals);
 
         foreach (var (index, decal) in decals)
         {
-            if (!decal.Cleanable || !_cmuDecals.RemoveDecal(tileRef.GridUid, index, decalGrid))
+            if (!decal.Cleanable || !_cmuDecals.RemoveDecal(tileRef.GridUid, index))
                 continue;
 
             ClearPuddleDecalReference(tileRef, grid, index);
@@ -96,7 +97,7 @@ public sealed partial class PuddleSystem
 
     public override bool HasCleanableDecalsAt(TileRef tileRef)
     {
-        if (!TryGetDecalsAt(tileRef, out _, out _, out var decals))
+        if (!TryGetDecalsAt(tileRef, out _, out var decals))
             return false;
 
         foreach (var (_, decal) in decals)
@@ -111,42 +112,38 @@ public sealed partial class PuddleSystem
     private bool TryGetDecalsAt(
         TileRef tileRef,
         out MapGridComponent grid,
-        out DecalGridComponent decalGrid,
-        out HashSet<(uint Index, Decal Decal)> decals)
+        out HashSet<(DecalIndex Index, Decal Decal)> decals)
     {
         grid = default!;
-        decalGrid = default!;
         decals = default!;
 
-        if (!TryComp(tileRef.GridUid, out MapGridComponent? gridComp) ||
-            !TryComp(tileRef.GridUid, out DecalGridComponent? decalGridComp))
-        {
+        if (!TryComp(tileRef.GridUid, out MapGridComponent? gridComp))
             return false;
-        }
 
         grid = gridComp;
-        decalGrid = decalGridComp;
 
         var bounds = _lookup.GetLocalBounds(tileRef, grid.TileSize)
             .Enlarged(0.5f)
             .Translated(new Vector2(-0.5f, -0.5f));
-        decals = _cmuDecals.GetDecalsIntersecting(tileRef.GridUid, bounds, decalGrid);
+        decals = _cmuDecals.GetDecalsIntersecting(tileRef.GridUid, bounds);
         return true;
     }
 
     private void ClearMissingPuddleDecalReferences(
         TileRef tileRef,
         MapGridComponent grid,
-        DecalGridComponent decalGrid)
+        HashSet<(DecalIndex Index, Decal Decal)> decals)
     {
         var anchored = _map.GetAnchoredEntitiesEnumerator(tileRef.GridUid, grid, tileRef.GridIndices);
 
         while (anchored.MoveNext(out var ent))
         {
-            if (!TryComp<PuddleDecalVisualsComponent>(ent.Value, out var decalVisuals) ||
-                decalVisuals.GridUid != tileRef.GridUid ||
+            if (!TryComp<PuddleDecalVisualsComponent>(ent.Value, out var decalVisuals))
+                continue;
+
+            if (decalVisuals.GridUid != tileRef.GridUid ||
                 decalVisuals.DecalId is not { } decalId ||
-                PuddleDecalExists(decalGrid, decalId))
+                decals.Any(entry => entry.Index == decalId))
             {
                 continue;
             }
@@ -156,18 +153,7 @@ public sealed partial class PuddleSystem
         }
     }
 
-    private static bool PuddleDecalExists(DecalGridComponent decalGrid, uint decalId)
-    {
-        foreach (var chunk in decalGrid.ChunkCollection.ChunkCollection.Values)
-        {
-            if (chunk.Decals.ContainsKey(decalId))
-                return true;
-        }
-
-        return false;
-    }
-
-    private void ClearPuddleDecalReference(TileRef tileRef, MapGridComponent grid, uint decalId)
+    private void ClearPuddleDecalReference(TileRef tileRef, MapGridComponent grid, DecalIndex decalId)
     {
         var anchored = _map.GetAnchoredEntitiesEnumerator(tileRef.GridUid, grid, tileRef.GridIndices);
 

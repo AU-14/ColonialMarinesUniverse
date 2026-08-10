@@ -5,10 +5,12 @@ using Content.Server.AU14.Round;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
 using Content.Server.Station.Systems;
+using Content.Shared.CCVar;
 using Content.Shared.Maps;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Configuration;
 using Robust.Shared.Log;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -72,6 +74,7 @@ public sealed class StationJobsTest : GameTest
     // CMU14 end
 
     private const string StationMapId = "FooStation";
+    private const string SecondStationMapId = "BarStation";
 
     [TestPrototypes]
     private const string Prototypes = $@"
@@ -90,11 +93,21 @@ public sealed class StationJobsTest : GameTest
 - type: playTimeTracker
   id: PlayTimeDummyChaplain
 
+- type: jobWeight
+  id: StationJobsTest
+  weights:
+    TCaptain: 10
+    TChaplain: 0
+    TMime: 20
+    TAssistant: 0
+    TClown: -10
+
 - type: gameMap
   id: {StationMapId}
   minPlayers: 0
   mapName: {StationMapId}
   mapPath: /Maps/Test/empty.yml
+  jobWeights: StationJobsTest
   stations:
     Station:
       mapNameTemplate: {StationMapId}
@@ -114,23 +127,54 @@ public sealed class StationJobsTest : GameTest
           availableJobs:
             TCaptain: [5, 5]
 
+- type: jobWeight
+  id: StationJobsBarTest
+  weights:
+    TCaptain: 30
+    TChaplain: 20
+    TMime: 100
+    TAssistant: 0
+    TClown: 0
+
+- type: gameMap
+  id: {SecondStationMapId}
+  minPlayers: 0
+  mapName: {SecondStationMapId}
+  mapPath: /Maps/Test/empty.yml
+  jobWeights: StationJobsBarTest
+  stations:
+    First:
+      mapNameTemplate: First
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationJobs
+          availableJobs:
+            TCaptain: [1, 1]
+            TChaplain: [1, 1]
+            TAssistant: [0, 1]
+            TClown: [-1, -1]
+    Second:
+      mapNameTemplate: Second
+      stationProto: StandardNanotrasenStation
+      components:
+        - type: StationJobs
+          availableJobs:
+            TMime: [1, 1]
+
 - type: job
   id: TAssistant
   playTimeTracker: PlayTimeDummyAssistant
 
 - type: job
   id: TMime
-  weight: 20
   playTimeTracker: PlayTimeDummyMime
 
 - type: job
   id: TClown
-  weight: -10
   playTimeTracker: PlayTimeDummyClown
 
 - type: job
   id: TCaptain
-  weight: 10
   playTimeTracker: PlayTimeDummyCaptain
 
 - type: job
@@ -398,6 +442,73 @@ public sealed class StationJobsTest : GameTest
         }
     }
     // CMU14 end
+
+    [Test]
+    public async Task MinimumJobsUseConfiguredFallback()
+    {
+        var pair = Pair;
+        var server = pair.Server;
+        var configuration = server.ResolveDependency<IConfigurationManager>();
+        var prototypeManager = server.ResolveDependency<IPrototypeManager>();
+        var barStationProto = prototypeManager.Index<GameMapPrototype>(SecondStationMapId);
+        var entSysMan = server.ResolveDependency<IEntityManager>().EntitySysManager;
+        var stationJobs = entSysMan.GetEntitySystem<StationJobsSystem>();
+        var stationSystem = entSysMan.GetEntitySystem<StationSystem>();
+        var station = EntityUid.Invalid;
+
+        await server.WaitPost(() =>
+        {
+            station = stationSystem.InitializeNewStation(
+                barStationProto.Stations["First"], null, "First", barStationProto);
+        });
+
+        var dummies = await server.AddDummySessions(2);
+        var sameDepartmentDummy = dummies[0];
+        var noPreferenceDummy = dummies[1];
+        var sameDepartmentProfiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+        {
+            [sameDepartmentDummy.UserId] = new HumanoidCharacterProfile()
+                .WithJobPriority("TChaplain", JobPriority.Low),
+        };
+        var noPreferenceProfiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+        {
+            [noPreferenceDummy.UserId] = new HumanoidCharacterProfile()
+                .WithJobPriorities(Array.Empty<KeyValuePair<ProtoId<JobPrototype>, JobPriority>>()),
+        };
+        var anyEligibleProfiles = new Dictionary<NetUserId, HumanoidCharacterProfile>
+        {
+            [sameDepartmentDummy.UserId] = sameDepartmentProfiles[sameDepartmentDummy.UserId],
+            [noPreferenceDummy.UserId] = noPreferenceProfiles[noPreferenceDummy.UserId],
+        };
+
+        var originalValue = configuration.GetCVar(CCVars.GameMinimumJobFallback);
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                configuration.SetCVar(CCVars.GameMinimumJobFallback, MinimumJobFallback.SameDepartment);
+                var sameDepartmentAssignments = stationJobs.AssignJobs(sameDepartmentProfiles, [station]);
+                Assert.That(sameDepartmentAssignments[sameDepartmentDummy.UserId].Item1,
+                    Is.EqualTo((ProtoId<JobPrototype>?) "TCaptain"));
+
+                configuration.SetCVar(CCVars.GameMinimumJobFallback, MinimumJobFallback.AnyEligiblePlayer);
+                var anyEligibleAssignments = stationJobs.AssignJobs(anyEligibleProfiles, [station]);
+                Assert.That(anyEligibleAssignments[sameDepartmentDummy.UserId].Item1,
+                    Is.EqualTo((ProtoId<JobPrototype>?) "TCaptain"));
+                Assert.That(anyEligibleAssignments[noPreferenceDummy.UserId].Item1,
+                    Is.EqualTo((ProtoId<JobPrototype>?) "TChaplain"));
+
+                configuration.SetCVar(CCVars.GameMinimumJobFallback, MinimumJobFallback.None);
+                var noFallbackAssignments = stationJobs.AssignJobs(noPreferenceProfiles, [station]);
+                Assert.That(noFallbackAssignments, Is.Empty);
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+                configuration.SetCVar(CCVars.GameMinimumJobFallback, originalValue));
+        }
+    }
 
     [Test]
     public async Task AdjustJobsTest()

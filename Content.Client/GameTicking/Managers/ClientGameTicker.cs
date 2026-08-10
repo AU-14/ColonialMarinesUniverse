@@ -27,6 +27,7 @@ namespace Content.Client.GameTicking.Managers
 
         private Dictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>>  _jobsAvailable = new();
         private Dictionary<NetEntity, string> _stationNames = new();
+        private Dictionary<NetEntity, ProtoId<JobWeightPrototype>?> _jobWeightsByStation = new();
 
         [ViewVariables] public bool AreWeReady { get; private set; }
         [ViewVariables] public bool IsGameStarted { get; private set; }
@@ -47,6 +48,7 @@ namespace Content.Client.GameTicking.Managers
 
         [ViewVariables] public IReadOnlyDictionary<NetEntity, Dictionary<ProtoId<JobPrototype>, int?>> JobsAvailable => _jobsAvailable;
         [ViewVariables] public IReadOnlyDictionary<NetEntity, string> StationNames => _stationNames;
+        [ViewVariables] public IReadOnlyDictionary<NetEntity, ProtoId<JobWeightPrototype>?> JobWeightsByStation => _jobWeightsByStation;
 
         public event Action? InfoBlobUpdated;
         public event Action? RoundStatusUpdated;
@@ -114,6 +116,12 @@ namespace Content.Client.GameTicking.Managers
             foreach (var weh in message.StationNames)
             {
                 _stationNames[weh.Key] = weh.Value;
+            }
+
+            _jobWeightsByStation.Clear();
+            foreach (var (station, jobWeights) in message.JobWeightsByStation)
+            {
+                _jobWeightsByStation[station] = jobWeights;
             }
 
             LobbyJobsAvailableUpdated?.Invoke(JobsAvailable);

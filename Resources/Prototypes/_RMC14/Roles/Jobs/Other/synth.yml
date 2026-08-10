@@ -134,8 +134,7 @@
   components:
   - type: CMSurgeryTarget
   - type: Infectable
-  - type: Hunger
-  - type: Thirst
+  - type: Satiation
   - type: Perishable
   - type: ThermalRegulator
   - type: Stamina

@@ -116,8 +116,10 @@ public sealed partial class HumanoidProfileEditor
             var jobs = department.Roles
                 .Select(id => _prototypeManager.Index(id))
                 .Where(job => job.SetPreference && !job.Hidden)
-                .OrderBy(job => GetJobSortGroup(department, job))
-                .ThenBy(job => job, JobUIComparer.Instance);
+                .OrderBy(job => GetJobSortGroup(department, job));
+
+            if (JobUIComparer.TryCreate(_prototypeManager, null, out var comparer))
+                jobs = jobs.ThenBy(job => job, comparer);
 
             foreach (var job in jobs)
             {

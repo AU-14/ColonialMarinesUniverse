@@ -1,65 +1,33 @@
-using Content.Server.Botany;
-using Content.Server.Botany.Components;
-using Content.Server.Botany.Systems;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Chemistry.Effects.Negative;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Text;
+using Content.Shared.Botany.Components;
+using Content.Shared.Botany.Systems;
 
 namespace Content.Server._CMU14.Chemistry.HydroTrayEffects;
 
 public sealed partial class HydroTrayEffectSystem : EntitySystem
 {
     [Dependency] private PlantHolderSystem _plantHolder = default!;
-    [Dependency] private MutationSystem _mutation = default!;
-
+    [Dependency] private PlantTraySystem _plantTray = default!;
 
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<HydroTickEvent<Carcinogenic>>(Carcinogenic);
+        SubscribeLocalEvent<HydroTickEvent<Carcinogenic>>(OnCarcinogenic);
     }
 
-
-
-
-    private void Carcinogenic(ref HydroTickEvent<Carcinogenic> args)
+    private void OnCarcinogenic(ref HydroTickEvent<Carcinogenic> args)
     {
-        if (!CanMetabolizePlant(args.Args.TargetEntity, out var pcomp, mustHaveMutableSeed: true))
+        var target = args.Args.TargetEntity;
+        var quantity = (float) args.Args.Quantity;
+        var potency = (float) args.Potency;
+
+        if (TryComp<PlantTrayComponent>(target, out var tray))
+            _plantTray.AdjustToxin((target, tray), 1.5f * potency * 2f * quantity);
+
+        if (!TryComp<PlantHolderComponent>(target, out var plant) || plant.Dead)
             return;
 
-        pcomp.Toxins += 1.5f * ((float)args.Potency * 2f) * (float)args.Args.Quantity;
-        pcomp.MutationLevel += 10 * ((float)args.Potency * 2) * ((float)args.Args.Quantity + pcomp.MutationMod);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-    private bool CanMetabolizePlant(EntityUid plantHolder, [NotNullWhen(true)] out PlantHolderComponent? plantHolderComponent,
-        bool mustHaveAlivePlant = true, bool mustHaveMutableSeed = false)
-    {
-        plantHolderComponent = null;
-
-        if (!TryComp(plantHolder, out plantHolderComponent))
-            return false;
-
-        if (mustHaveAlivePlant && (plantHolderComponent.Seed == null || plantHolderComponent.Dead))
-            return false;
-
-        if (mustHaveMutableSeed && (plantHolderComponent.Seed == null || plantHolderComponent.Seed.Immutable))
-            return false;
-
-        return true;
+        _plantHolder.AdjustsMutationLevel((target, plant), 10f * potency * 2f * quantity);
     }
 }

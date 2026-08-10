@@ -19,7 +19,7 @@ namespace Content.Server._CMU14.Threats.Mobs.Ape;
 public sealed partial class ApeHungerRegenSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
@@ -41,19 +41,17 @@ public sealed partial class ApeHungerRegenSystem : EntitySystem
 
         _nextUpdate = _timing.CurTime + UpdateInterval;
 
-        EntityQueryEnumerator<ApeDestroyComponent, HungerComponent> query
-            = EntityQueryEnumerator<ApeDestroyComponent, HungerComponent>();
-        while (query.MoveNext(out EntityUid uid, out _, out HungerComponent? hungerComp))
+        var query = EntityQueryEnumerator<ApeDestroyComponent, SatiationComponent>();
+        while (query.MoveNext(out var uid, out _, out var satiation))
         {
             // Only run on alive mobs
             if (_mob.IsDead(uid))
                 continue;
 
             // Check hunger value as fraction of maximum hunger (Overfed threshold)
-            float currentHunger = _hunger.GetHunger(hungerComp);
-            float maxHunger = hungerComp.Thresholds[HungerThreshold.Overfed];
-
-            if (maxHunger <= 0)
+            if (_satiation.GetValueOrNull((uid, satiation), SatiationSystem.Hunger) is not { } currentHunger ||
+                _satiation.GetMaximumValue((uid, satiation), SatiationSystem.Hunger) is not { } maxHunger ||
+                maxHunger <= 0)
                 continue;
 
             float hungerFraction = currentHunger / maxHunger;

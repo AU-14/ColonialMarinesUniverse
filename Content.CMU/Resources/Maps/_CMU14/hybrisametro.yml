@@ -70991,7 +70991,7 @@ entities:
     - type: Transform
       pos: -55.5,-75.5
       parent: 1
-    - type: AuFetchItem
+    - type: FetchItem
 - proto: AU14ObjectiveItemBlackboxRecorder
   entities:
   - uid: 203
@@ -70999,7 +70999,7 @@ entities:
     - type: Transform
       pos: -19.5,-106.5
       parent: 1
-    - type: AuFetchItem
+    - type: FetchItem
 - proto: AU14ObjectiveItemPortableRadioTransceiver
   entities:
   - uid: 204
@@ -71007,7 +71007,7 @@ entities:
     - type: Transform
       pos: -86.5,-22.5
       parent: 1
-    - type: AuFetchItem
+    - type: FetchItem
 - proto: AU14Patch1stCav
   entities:
   - uid: 32

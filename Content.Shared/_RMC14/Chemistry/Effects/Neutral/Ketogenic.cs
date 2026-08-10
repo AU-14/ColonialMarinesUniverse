@@ -6,6 +6,7 @@ using Content.Shared.Drunk;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared.Nutrition.Components;
 using Content.Shared.StatusEffect;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -29,9 +30,9 @@ public sealed partial class Ketogenic : RMCChemicalEffect
     {
         var entityManager = args.EntityManager;
         var target = args.TargetEntity;
-        var hungerSystem = entityManager.System<HungerSystem>();
-
-        hungerSystem.ModifyHunger(target, PotencyPerSecond * -5);
+        if (entityManager.TryGetComponent<SatiationComponent>(target, out var satiation))
+            entityManager.System<SatiationSystem>()
+                .ModifyValue((target, satiation), SatiationSystem.Hunger, PotencyPerSecond * -5);
         // TODO RMC14 M.overeatduration = 0
 
         var bloodstream = args.EntityManager.System<SharedRMCBloodstreamSystem>();
@@ -47,8 +48,9 @@ public sealed partial class Ketogenic : RMCChemicalEffect
     {
         var entityManager = args.EntityManager;
         var target = args.TargetEntity;
-        var hungerSystem = entityManager.System<HungerSystem>();
-        hungerSystem.ModifyHunger(target, PotencyPerSecond * -5);
+        if (entityManager.TryGetComponent<SatiationComponent>(target, out var satiation))
+            entityManager.System<SatiationSystem>()
+                .ModifyValue((target, satiation), SatiationSystem.Hunger, PotencyPerSecond * -5);
 
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = potency;

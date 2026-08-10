@@ -33,17 +33,17 @@ public sealed partial class Hemogenic : RMCChemicalEffect
     {
         var entityManager = args.EntityManager;
         var target = args.TargetEntity;
-        var hungerSystem = entityManager.System<HungerSystem>();
+        var satiationSystem = entityManager.System<SatiationSystem>();
 
-        if (!entityManager.TryGetComponent<HungerComponent>(target, out var hungerComponent) ||
-            hungerSystem.GetHunger(hungerComponent) < 200)
+        if (!entityManager.TryGetComponent<SatiationComponent>(target, out var satiation) ||
+            satiationSystem.GetValueOrNull((target, satiation), SatiationSystem.Hunger) < 200)
             return;
 
-        hungerSystem.ModifyHunger(target, -PotencyPerSecond); // TODO RMC14 Yuatja get no hunger drain.
+        satiationSystem.ModifyValue((target, satiation), SatiationSystem.Hunger, -PotencyPerSecond); // TODO RMC14 Yuatja get no hunger drain.
 
         if (entityManager.TryGetComponent<BloodstreamComponent>(target, out var bloodstream))
         {
-            var bloodstreamSystem = entityManager.System<SharedBloodstreamSystem>();
+            var bloodstreamSystem = entityManager.System<BloodstreamSystem>();
             bloodstreamSystem.TryModifyBloodLevel((target, bloodstream), potency);
         }
 
@@ -71,8 +71,8 @@ public sealed partial class Hemogenic : RMCChemicalEffect
     {
         var entityManager = args.EntityManager;
         var target = args.TargetEntity;
-        var hungerSystem = entityManager.System<HungerSystem>();
-
-        hungerSystem.ModifyHunger(target, PotencyPerSecond * -5);
+        if (entityManager.TryGetComponent<SatiationComponent>(target, out var satiation))
+            entityManager.System<SatiationSystem>()
+                .ModifyValue((target, satiation), SatiationSystem.Hunger, PotencyPerSecond * -5);
     }
 }

@@ -64,6 +64,7 @@ using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Roles;
 using Robust.Server.Audio;
@@ -151,7 +152,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private SquadSystem _squad = default!;
     [Dependency] private StationJobsSystem _stationJobs = default!;
     [Dependency] private DropshipSystem _dropship = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private SatiationSystem _satiation = default!;
     [Dependency] private ScalingSystem _scaling = default!;
     [Dependency] private SharedXenoConstructionSystem _xenoConstruction = default!;
     [Dependency] private SharedRoleSystem _roles = default!;

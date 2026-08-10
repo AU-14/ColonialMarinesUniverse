@@ -3,6 +3,7 @@ using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.EntitySystems;
+using Content.Shared.Nutrition.Components;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._RMC14.Chemistry.Effects.Neutral;
@@ -21,8 +22,11 @@ public sealed partial class Nutritious : RMCChemicalEffect
         if (mobState.IsDead(args.TargetEntity))
             return;
 
-        var hungerSys = args.EntityManager.System<HungerSystem>();
         var updatedFactor = NutrimentFactor + Potency;
-        hungerSys.ModifyHunger(args.TargetEntity, updatedFactor * ActualPotency); // Half because chemicals tick every second
+        if (args.EntityManager.TryGetComponent<SatiationComponent>(args.TargetEntity, out var satiation))
+        {
+            args.EntityManager.System<SatiationSystem>()
+                .ModifyValue((args.TargetEntity, satiation), SatiationSystem.Hunger, updatedFactor * ActualPotency);
+        }
     }
 }

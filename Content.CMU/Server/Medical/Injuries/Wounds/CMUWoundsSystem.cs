@@ -17,7 +17,7 @@ public sealed partial class CMUWoundsSystem : SharedCMUWoundsSystem
 {
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private SharedSolutionContainerSystem _solutions = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
 
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
