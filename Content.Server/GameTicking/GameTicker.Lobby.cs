@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.Maps;
+using Content.Shared.CMU.Round;
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -11,7 +12,6 @@ namespace Content.Server.GameTicking
 {
     public sealed partial class GameTicker
     {
-        [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
 
         [ViewVariables]
@@ -110,8 +110,16 @@ namespace Content.Server.GameTicking
 
             var govforShip = _auRoundSystem.GetSelectedGovforShip();
             var opforShip = _auRoundSystem.GetSelectedOpforShip();
-            var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name;
-            var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name;
+            var govforPlatoon = _cmuRoundDirector.TryGetLegacyForceProjection(
+                RoundSide.Govfor,
+                out var govforForce)
+                ? govforForce.Name
+                : null;
+            var opforPlatoon = _cmuRoundDirector.TryGetLegacyForceProjection(
+                RoundSide.Opfor,
+                out var opforForce)
+                ? opforForce.Name
+                : null;
             var gmTitle = LocalizeOrRaw((Decoy ?? preset).ModeTitle);
             var desc = LocalizeOrRaw((Decoy ?? preset).Description);
             return Loc.GetString(

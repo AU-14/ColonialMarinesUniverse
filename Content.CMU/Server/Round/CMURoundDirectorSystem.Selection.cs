@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
@@ -26,6 +27,43 @@ internal readonly record struct RoundForceSelectionAppliedEvent(
 
 public sealed partial class CMURoundDirectorSystem
 {
+    /// <summary>
+    /// Resolves a committed typed assignment through the temporary legacy platoon projection.
+    /// </summary>
+    internal bool TryGetCommittedLegacyForce(
+        RoundSide side,
+        [NotNullWhen(true)] out PlatoonPrototype? platoon)
+    {
+        var assignment = side switch
+        {
+            RoundSide.Govfor => Selection?.GovforAssignment,
+            RoundSide.Opfor => Selection?.OpforAssignment,
+            _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
+        };
+
+        if (assignment is not { } committed)
+        {
+            platoon = null;
+            return false;
+        }
+
+        return _prototypes.TryIndex(committed.Force.Value, out platoon);
+    }
+
+    /// <summary>
+    /// Resolves the committed force after freeze or the director-controlled lobby candidate before freeze.
+    /// </summary>
+    internal bool TryGetLegacyForceProjection(
+        RoundSide side,
+        [NotNullWhen(true)] out PlatoonPrototype? platoon)
+    {
+        if (_state.Phase != CMURoundPhase.AwaitingSelection)
+            return TryGetCommittedLegacyForce(side, out platoon);
+
+        platoon = _round.GetLegacyForceSelection(side);
+        return platoon != null;
+    }
+
     /// <summary>
     /// Applies a legacy platoon projection to a side while the round selection is still mutable.
     /// </summary>

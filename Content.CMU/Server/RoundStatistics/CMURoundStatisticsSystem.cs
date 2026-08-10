@@ -17,9 +17,9 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
     private const string NoPendingOutcomeSource = "NoPendingOutcome";
 
     [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private CMURoundDirectorSystem _director = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IServerDbManager _db = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("cmu.round_statistics");
 
@@ -198,8 +198,8 @@ public sealed partial class CMURoundStatisticsSystem : EntitySystem
             outcome.Value.Source,
             _auRound.SelectedThreat?.ID,
             _auRound.GetSelectedPlanetId(),
-            _platoons.SelectedGovforPlatoon?.ID,
-            _platoons.SelectedOpforPlatoon?.ID,
+            _director.Selection?.GovforPlatoonId,
+            _director.Selection?.OpforPlatoonId,
             ev.PlayerCount,
             (int) ev.RoundDuration.TotalSeconds,
             DateTime.UtcNow);

@@ -1,6 +1,7 @@
 using System.Net;
 using System.Threading.Tasks;
 using Content.Server.Discord;
+using Content.Shared.CMU.Round;
 using Robust.Shared.ContentPack;
 using Robust.Shared.Utility;
 
@@ -140,7 +141,11 @@ namespace Content.Server.GameTicking
                 : Preset != null
                     ? Loc.GetString(Preset.ModeTitle)
                     : string.Empty;
-            var govfor = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name ?? string.Empty;
+            var govfor = _cmuRoundDirector.TryGetLegacyForceProjection(
+                RoundSide.Govfor,
+                out var govforForce)
+                ? govforForce.Name
+                : string.Empty;
 
             return new RoundStatusWebhookData(
                 RoundId,
