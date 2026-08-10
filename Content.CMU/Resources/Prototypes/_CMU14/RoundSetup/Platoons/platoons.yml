@@ -50,7 +50,6 @@
   possibleships:
       - USSBushRedux
   # jobClassOverride:
-  #   SquadRifleman: AU14JobGOVFORSquadRiflemanUPP
   #   PlatCo: AU14JobGOVFORPlatCoUPP
   #   PlatOp: AU14JobGOVFORPlatOpUPP
   #   # SectionSergeant: AU14JobGOVFORSectionSergeantUPP # unused
@@ -77,7 +76,6 @@
     - English
     - Japanese
   # jobClassOverride:
-  #   SquadRifleman: AU14JobGOVFORSquadRiflemanWYPMC
   #   PlatCo: AU14JobGOVFORPlatCoWYPMC
   #   PlatOp: AU14JobGOVFORPlatOpWYPMC
   #   # SectionSergeant: AU14JobGOVFORSectionSergeantWYPMC # unused
@@ -109,7 +107,6 @@
   reqlist: CMBCIUCargoCatalog
   vendorSet: CMBCIU
   # jobClassOverride:
-  #   SquadRifleman: AU14JobGOVFORSquadRiflemanCMBCIU
   #   PlatCo: AU14JobGOVFORPlatCoCMBCIU
   #   # SectionSergeant: AU14JobGOVFORSectionSergeantCMBCIU # unused
   #   SquadSergeant: AU14JobGOVFORSectionSergeantCMBCIU
@@ -199,7 +196,6 @@
   reqlist: RMCCargoCatalog
   vendorSet: RMC
   # jobClassOverride:
-  #   SquadRifleman: AU14JobGOVFORSquadRiflemanRMC
   #   PlatCo: AU14JobGOVFORPlatCoRMC
   #   PlatOp: AU14JobGOVFORPlatOpRMC
   #   SectionSergeant: AU14JobGOVFORSectionSergeantRMC
