@@ -20,12 +20,21 @@ public sealed class ResolvedRoundVendorEntry
     public EntProtoId Product { get; }
     public string? Name { get; }
     public int? Amount { get; }
+    public int? Points { get; }
+    public bool Recommended { get; }
 
-    internal ResolvedRoundVendorEntry(EntProtoId product, string? name, int? amount)
+    internal ResolvedRoundVendorEntry(
+        EntProtoId product,
+        string? name,
+        int? amount,
+        int? points,
+        bool recommended)
     {
         Product = product;
         Name = name;
         Amount = amount;
+        Points = points;
+        Recommended = recommended;
     }
 }
 

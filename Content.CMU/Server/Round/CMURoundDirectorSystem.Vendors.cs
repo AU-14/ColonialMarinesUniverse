@@ -21,6 +21,7 @@ public sealed partial class CMURoundDirectorSystem
         (RoundSetupSlot.RadioTelephoneOperatorVendor, PlatoonMarkerClass.Rto),
         (RoundSetupSlot.MilitaryPoliceVendor, PlatoonMarkerClass.MilitaryPolice),
         (RoundSetupSlot.SectionSergeantVendor, PlatoonMarkerClass.SectionSergeant),
+        (RoundSetupSlot.SquadSergeantVendor, PlatoonMarkerClass.SquadSergeant),
     ];
 
     private CommittedRoundVendorProfiles? _committedVendorProfiles;

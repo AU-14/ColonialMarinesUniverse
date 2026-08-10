@@ -27,6 +27,8 @@ public abstract partial class SharedCMAutomatedVendorSystem
                     Id = resolvedEntry.Product,
                     Name = resolvedEntry.Name,
                     Amount = resolvedEntry.Amount,
+                    Points = resolvedEntry.Points,
+                    Recommended = resolvedEntry.Recommended,
                 });
             }
 
