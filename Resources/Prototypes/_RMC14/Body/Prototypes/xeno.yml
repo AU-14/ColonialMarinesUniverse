@@ -1,9 +1,0 @@
-- type: body
-  id: Xenonid
-  name: "xenonid"
-  root: head
-  slots:
-    head:
-      part: RMCHeadXeno
-      organs:
-        heart: RMCOrganXenoHeart

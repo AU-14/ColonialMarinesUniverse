@@ -188,7 +188,10 @@
     - RMCDecalSpawnerGibsDrone # TODO one for every caste
     - RMCGibEffectXenoSmall # TODO larger gib effect for larger xenos
   - type: Body
-    prototype: Xenonid
+  - type: InitialBody
+    organs:
+      Head: RMCHeadXeno
+      Heart: RMCOrganXenoHeart
   - type: Xeno
   - type: VehicleDamageMultiplier
   - type: XenoRegen
