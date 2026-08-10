@@ -591408,13 +591408,15 @@ entities:
     - type: Transform
       pos: 58.5,-10.5
       parent: 1
-- proto: RMCTechTreeConsoleGovfor
+- proto: CMURoundTechnologyTreeConsole
   entities:
   - uid: 87621
     components:
     - type: Transform
       pos: -149.5,-42.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: RMCTelecomHub
   entities:
   - uid: 87622

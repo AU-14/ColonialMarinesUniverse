@@ -249950,13 +249950,15 @@ entities:
     - type: Transform
       pos: -14.5,-99.5
       parent: 1
-- proto: RMCTechTreeConsoleGovfor
+- proto: CMURoundTechnologyTreeConsole
   entities:
   - uid: 31154
     components:
     - type: Transform
       pos: 76.5,-234.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: RMCTelecomBlackBox
   entities:
   - uid: 31155

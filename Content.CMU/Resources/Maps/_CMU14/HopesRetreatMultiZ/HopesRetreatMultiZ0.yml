@@ -200213,13 +200213,15 @@ entities:
     - type: Transform
       pos: -57.5,-30.5
       parent: 1
-- proto: RMCTechTreeConsoleGovfor
+- proto: CMURoundTechnologyTreeConsole
   entities:
   - uid: 72414
     components:
     - type: Transform
       pos: -71.5,89.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: RMCTelecomBroadcaster
   entities:
   - uid: 50843
