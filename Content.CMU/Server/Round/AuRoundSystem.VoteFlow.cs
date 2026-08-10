@@ -721,12 +721,13 @@ public sealed partial class AuRoundSystem
         if (!listed)
             return false;
 
-        var platoons = GetPlatoonSpawnRuleSystem();
+        var govfor = GetFactionPlatoon(AuRoundVoteBranch.Govfor);
+        var opfor = GetFactionPlatoon(AuRoundVoteBranch.Opfor);
         return ThreatVoteSelection.IsThreatAllowed(
             selected,
             _selectedPreset.ID,
-            platoons.SelectedGovforPlatoon?.ID,
-            platoons.SelectedOpforPlatoon?.ID,
+            govfor?.ID,
+            opfor?.ID,
             _playerManager.PlayerCount);
     }
 
@@ -738,10 +739,12 @@ public sealed partial class AuRoundSystem
 
     private PlatoonPrototype? GetFactionPlatoon(AuRoundVoteBranch faction)
     {
-        var platoons = GetPlatoonSpawnRuleSystem();
-        return faction == AuRoundVoteBranch.Govfor
-            ? platoons.SelectedGovforPlatoon
-            : platoons.SelectedOpforPlatoon;
+        var side = faction == AuRoundVoteBranch.Govfor
+            ? RoundSide.Govfor
+            : RoundSide.Opfor;
+        return GetRoundDirectorSystem().TryGetLegacyForceProjection(side, out var platoon)
+            ? platoon
+            : null;
     }
 
     private void SetFactionPlatoon(AuRoundVoteBranch faction, PlatoonPrototype? platoon)
@@ -758,9 +761,10 @@ public sealed partial class AuRoundSystem
 
     private string? GetFactionShip(AuRoundVoteBranch faction)
     {
-        return faction == AuRoundVoteBranch.Govfor
-            ? _selectedGovforShip
-            : _selectedOpforShip;
+        return GetRoundDirectorSystem().GetMainShipProjection(
+            faction == AuRoundVoteBranch.Govfor
+                ? RoundSide.Govfor
+                : RoundSide.Opfor);
     }
 
     private void SetFactionShip(AuRoundVoteBranch faction, string? ship)
