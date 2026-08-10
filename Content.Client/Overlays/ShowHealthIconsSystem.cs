@@ -1,10 +1,12 @@
+using Content.Client._RMC14.Medical.HUD;
+using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared.Atmos.Rotting;
+using Content.Shared.Damage.Components;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Overlays;
 using Content.Shared.StatusIcon;
 using Content.Shared.StatusIcon.Components;
-using Content.Shared.Damage.Components;
 
 namespace Content.Client.Overlays;
 
@@ -13,6 +15,9 @@ namespace Content.Client.Overlays;
 /// </summary>
 public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealthIconsComponent>
 {
+    // RMC14
+    [Dependency] private CMHealthIconsSystem _healthIcons = default!;
+
     [ViewVariables]
     public HashSet<string> DamageContainers = new();
 
@@ -54,6 +59,14 @@ public sealed partial class ShowHealthIconsSystem : EquipmentHudSystem<ShowHealt
     {
         if (!IsActive)
             return;
+
+        // RMC14: RMC mobs use the dedicated medical HUD sprites and death states.
+        if (HasComp<RMCHealthIconsComponent>(entity) &&
+            TryComp<DamageableComponent>(entity, out var damageable))
+        {
+            args.StatusIcons.AddRange(_healthIcons.GetIcons((entity.Owner, damageable)));
+            return;
+        }
 
         var healthIcons = DecideHealthIcons(entity);
 
