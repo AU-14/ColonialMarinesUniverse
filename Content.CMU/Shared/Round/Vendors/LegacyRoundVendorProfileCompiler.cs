@@ -8,6 +8,7 @@ using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Vendors;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.CMU.Round;
 
@@ -24,7 +25,8 @@ public static class LegacyRoundVendorProfileCompiler
         RoundForceId force,
         RoundSetupSlot slot,
         EntityPrototype prototype,
-        IComponentFactory componentFactory)
+        IComponentFactory componentFactory,
+        ResPath? baseRsi = null)
     {
         ArgumentNullException.ThrowIfNull(prototype);
         ArgumentNullException.ThrowIfNull(componentFactory);
@@ -41,8 +43,18 @@ public static class LegacyRoundVendorProfileCompiler
             RoundSetupSlot.SquadSergeantVendor or
             RoundSetupSlot.CombatTechnicianVendor or
             RoundSetupSlot.RiflemanVendor or
-            RoundSetupSlot.SpecialWeaponsVendor))
+            RoundSetupSlot.SpecialWeaponsVendor or
+            RoundSetupSlot.ShipsideUniformVendor or
+            RoundSetupSlot.AutomaticRiflemanVendor or
+            RoundSetupSlot.OperationsOfficerVendor))
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
+        if (baseRsi == null &&
+            slot is (RoundSetupSlot.ShipsideUniformVendor or
+                RoundSetupSlot.AutomaticRiflemanVendor or
+                RoundSetupSlot.OperationsOfficerVendor))
+        {
+            throw Invalid(prototype, $"has no resolved presentation for setup slot '{slot}'");
+        }
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");
 
@@ -117,6 +129,7 @@ public static class LegacyRoundVendorProfileCompiler
             slot,
             prototype.Name,
             prototype.Description,
+            baseRsi,
             access,
             vendor.PointsType,
             vendor.Jobs.ToImmutableArray(),

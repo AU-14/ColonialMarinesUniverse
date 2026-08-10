@@ -18,6 +18,7 @@ namespace Content.Server.CMU.Round;
 public sealed partial class RoundVendorEndpointSystem : EntitySystem
 {
     [Dependency] private AccessReaderSystem _access = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private CMURoundDirectorSystem _director = default!;
     [Dependency] private MetaDataSystem _metadata = default!;
     [Dependency] private CMAutomatedVendorSystem _vendors = default!;
@@ -41,7 +42,10 @@ public sealed partial class RoundVendorEndpointSystem : EntitySystem
             RoundSetupSlot.SquadSergeantVendor or
             RoundSetupSlot.CombatTechnicianVendor or
             RoundSetupSlot.RiflemanVendor or
-            RoundSetupSlot.SpecialWeaponsVendor))
+            RoundSetupSlot.SpecialWeaponsVendor or
+            RoundSetupSlot.ShipsideUniformVendor or
+            RoundSetupSlot.AutomaticRiflemanVendor or
+            RoundSetupSlot.OperationsOfficerVendor))
             return;
 
         if (!TryComp(args.Endpoint, out CMAutomatedVendorComponent? vendor))
@@ -59,6 +63,8 @@ public sealed partial class RoundVendorEndpointSystem : EntitySystem
         _vendors.ApplyRoundVendorProfile((args.Endpoint, vendor), profile);
         _metadata.SetEntityName(args.Endpoint, profile.Name);
         _metadata.SetEntityDescription(args.Endpoint, profile.Description);
+        if (profile.BaseRsi is { } baseRsi)
+            _appearance.SetData(args.Endpoint, RoundVendorVisuals.BaseRsi, baseRsi.ToString());
         ApplyAccess(args.Endpoint, profile.Access);
     }
 

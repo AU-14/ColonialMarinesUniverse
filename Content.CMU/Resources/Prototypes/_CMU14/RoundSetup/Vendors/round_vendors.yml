@@ -131,3 +131,39 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: SpecialWeaponsVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundShipsideUniformVendor
+  name: round shipside uniform rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: ShipsideUniformVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundAutomaticRiflemanVendor
+  name: round automatic rifleman equipment rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: AutomaticRiflemanVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundOperationsOfficerVendor
+  name: round operations officer rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: OperationsOfficerVendor

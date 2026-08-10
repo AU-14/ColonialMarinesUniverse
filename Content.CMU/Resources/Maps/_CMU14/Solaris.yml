@@ -108039,13 +108039,15 @@ entities:
     - type: Transform
       pos: 34.5,75.5
       parent: 1
-- proto: AU14USCMcommandequipmentvendor
+- proto: CMURoundOperationsOfficerVendor
   entities:
   - uid: 215
     components:
     - type: Transform
       pos: 27.5,67.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14USCMcorpsmanvendor
   entities:
   - uid: 216
@@ -108092,18 +108094,22 @@ entities:
       parent: 1
     - type: RoundSetupEndpoint
       side: Govfor
-- proto: AU14USCMSGequipmentvendor
+- proto: CMURoundAutomaticRiflemanVendor
   entities:
   - uid: 222
     components:
     - type: Transform
       pos: 27.5,71.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 223
     components:
     - type: Transform
       pos: 27.5,69.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14USCMSpecialWeaponsVendor
   entities:
   - uid: 224

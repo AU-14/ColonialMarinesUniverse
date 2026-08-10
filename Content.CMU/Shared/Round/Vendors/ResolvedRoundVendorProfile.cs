@@ -107,6 +107,11 @@ public sealed class ResolvedRoundVendorProfile
     public RoundSetupSlot Slot { get; }
     public string Name { get; }
     public string Description { get; }
+
+    /// <summary>
+    /// Final base RSI selected for a presentation-aware semantic endpoint.
+    /// </summary>
+    public ResPath? BaseRsi { get; }
     public ResolvedRoundVendorAccess Access { get; }
     public string? PointsType { get; }
     public ImmutableArray<ProtoId<JobPrototype>> Jobs { get; }
@@ -117,6 +122,7 @@ public sealed class ResolvedRoundVendorProfile
         RoundSetupSlot slot,
         string name,
         string description,
+        ResPath? baseRsi,
         ResolvedRoundVendorAccess access,
         string? pointsType,
         ImmutableArray<ProtoId<JobPrototype>> jobs,
@@ -126,6 +132,7 @@ public sealed class ResolvedRoundVendorProfile
         Slot = slot;
         Name = name;
         Description = description;
+        BaseRsi = baseRsi;
         Access = access;
         PointsType = pointsType;
         Jobs = jobs;

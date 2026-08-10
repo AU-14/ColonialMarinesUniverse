@@ -14820,18 +14820,22 @@ entities:
     - type: Transform
       pos: -30.5,-24.5
       parent: 1
-- proto: AU14USCMcommandequipmentvendor
+- proto: CMURoundOperationsOfficerVendor
   entities:
   - uid: 184
     components:
     - type: Transform
       pos: -21.5,-12.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 185
     components:
     - type: Transform
       pos: -23.5,-2.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14USCMDeskFlag
   entities:
   - uid: 187

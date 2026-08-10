@@ -7,6 +7,7 @@ using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
 using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Server.AU14.Round;
 
@@ -25,6 +26,9 @@ public sealed partial class CMURoundDirectorSystem
         (RoundSetupSlot.CombatTechnicianVendor, PlatoonMarkerClass.combattech),
         (RoundSetupSlot.RiflemanVendor, PlatoonMarkerClass.Rifleman),
         (RoundSetupSlot.SpecialWeaponsVendor, PlatoonMarkerClass.SWeapons),
+        (RoundSetupSlot.ShipsideUniformVendor, PlatoonMarkerClass.ShipsideUniform),
+        (RoundSetupSlot.AutomaticRiflemanVendor, PlatoonMarkerClass.Arifleman),
+        (RoundSetupSlot.OperationsOfficerVendor, PlatoonMarkerClass.OperationsOfficer),
     ];
 
     private CommittedRoundVendorProfiles? _committedVendorProfiles;
@@ -91,11 +95,25 @@ public sealed partial class CMURoundDirectorSystem
                     $"Round force '{assigned.Force}' vendor slot '{slot}' references missing entity '{vendorId}'.");
             }
 
+            ResPath? baseRsi = null;
+            if (TryResolveLegacyVendorPresentation(platoon, slot, out var resolvedBaseRsi))
+            {
+                baseRsi = resolvedBaseRsi;
+            }
+            else if (slot is RoundSetupSlot.ShipsideUniformVendor or
+                RoundSetupSlot.AutomaticRiflemanVendor or
+                RoundSetupSlot.OperationsOfficerVendor)
+            {
+                throw new InvalidOperationException(
+                    $"Round force '{assigned.Force}' does not resolve vendor presentation for slot '{slot}'.");
+            }
+
             var profile = LegacyRoundVendorProfileCompiler.Compile(
                 assigned.Force,
                 slot,
                 vendor,
-                _componentFactory);
+                _componentFactory,
+                baseRsi);
             ValidateVendorProductPrototypes(profile, vendor.ID);
             profiles.Add(slot, profile);
         }
@@ -128,6 +146,26 @@ public sealed partial class CMURoundDirectorSystem
 
         vendorId = default;
         return false;
+    }
+
+    private bool TryResolveLegacyVendorPresentation(
+        PlatoonPrototype platoon,
+        RoundSetupSlot slot,
+        out ResPath baseRsi)
+    {
+        if (platoon.VendorSet is not { } vendorSetId)
+        {
+            baseRsi = default;
+            return false;
+        }
+
+        if (!_prototypes.TryIndex<PlatoonVendorSetPrototype>(vendorSetId, out var vendorSet))
+        {
+            throw new InvalidOperationException(
+                $"Round force '{platoon.ID}' references missing vendor set '{vendorSetId}'.");
+        }
+
+        return vendorSet.Presentations.TryGetValue(slot, out baseRsi);
     }
 
     private void ValidateVendorProductPrototypes(

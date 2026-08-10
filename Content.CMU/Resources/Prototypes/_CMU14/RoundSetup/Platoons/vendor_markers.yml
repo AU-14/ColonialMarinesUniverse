@@ -44,12 +44,13 @@
     class: Corpsman
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundAutomaticRiflemanVendor
   id: VMarkerOpforAutomaticRifleman
-  name: Opfor Arifleman marker
+  name: OPFOR automatic rifleman equipment rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Arifleman
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundCombatTechnicianVendor
@@ -95,12 +96,13 @@
     class: Clothing
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundShipsideUniformVendor
   id: VMarkerOpforShipsideUniform
-  name: Opfor Shipside Uniform marker
+  name: OPFOR shipside uniform rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: ShipsideUniform
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -123,12 +125,13 @@
     side: Opfor
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundOperationsOfficerVendor
   id: VMarkerOpforoperationsOfficer
-  name: Opfor command marker
+  name: OPFOR operations officer rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: OperationsOfficer
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundRadioTelephoneOperatorVendor
@@ -242,12 +245,13 @@
     class: Clothing
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundShipsideUniformVendor
   id: VMarkerGovforShipsideUniform
-  name: Gov Shipside Uniform marker
+  name: GOVFOR shipside uniform rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: ShipsideUniform
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -288,12 +292,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundAutomaticRiflemanVendor
   id: VMarkerGovforAutomaticRifleman
-  name: Gov Arifleman marker
+  name: GOVFOR automatic rifleman equipment rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Arifleman
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: CMURoundRiflemanVendor
@@ -340,12 +345,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundOperationsOfficerVendor
   id: VMarkerGovforoperationsOfficer
-  name: Gov command marker
+  name: GOVFOR operations officer rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: OperationsOfficer
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: CMURoundRadioTelephoneOperatorVendor
@@ -524,15 +530,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundShipsideUniformVendor
   id: VMarkershipShipsideUniform
-  name: Ship Shipside Uniform marker
-  components:
-  - type: VendorMarker
-    class: ShipsideUniform
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
-    state: base
+  name: ship shipside uniform rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip
@@ -575,15 +576,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundAutomaticRiflemanVendor
   id: VMarkerShipAutomaticRifleman
-  name: Ship Arifleman marker
-  components:
-  - type: VendorMarker
-    class: Arifleman
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
-    state: base
+  name: ship automatic rifleman equipment rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundRiflemanVendor
@@ -603,15 +599,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundOperationsOfficerVendor
   id: VMarkerShipOperationsOfficer
-  name: Ship command marker
-  components:
-  - type: VendorMarker
-    class: OperationsOfficer
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
-    state: base
+  name: ship operations officer rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundJuniorOfficerVendor
