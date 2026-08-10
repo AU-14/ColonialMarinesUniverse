@@ -118,3 +118,16 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: RiflemanVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundSpecialWeaponsVendor
+  name: round weapons specialist rack
+  suffix: Round Setup
+  components:
+  - type: RMCVendorSpecialist
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/specialist_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: SpecialWeaponsVendor

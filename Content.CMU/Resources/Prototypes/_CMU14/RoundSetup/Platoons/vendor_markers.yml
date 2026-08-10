@@ -184,12 +184,13 @@
     class: Pilot
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundSpecialWeaponsVendor
   id: VMarkerOpforSWeapons
-  name: Opfor special weapons marker
+  name: OPFOR weapons specialist rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: SWeapons
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -278,12 +279,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundSpecialWeaponsVendor
   id: VMarkerGovforSWeapons
-  name: Gov special weapons marker
+  name: GOVFOR weapons specialist rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: SWeapons
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -659,15 +661,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundSpecialWeaponsVendor
   id: VMarkerShipSweapons
-  name: Ship Sweapons marker
-  components:
-  - type: VendorMarker
-    class: SWeapons
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/genericweaponrack.rsi
-    state: base
+  name: ship weapons specialist rack
+  categories: [ HideSpawnMenu ]
 
 # Ship door markers
 - type: entity

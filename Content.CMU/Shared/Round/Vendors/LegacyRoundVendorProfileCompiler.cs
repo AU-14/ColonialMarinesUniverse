@@ -40,7 +40,8 @@ public static class LegacyRoundVendorProfileCompiler
             RoundSetupSlot.SectionSergeantVendor or
             RoundSetupSlot.SquadSergeantVendor or
             RoundSetupSlot.CombatTechnicianVendor or
-            RoundSetupSlot.RiflemanVendor))
+            RoundSetupSlot.RiflemanVendor or
+            RoundSetupSlot.SpecialWeaponsVendor))
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");
@@ -82,19 +83,31 @@ public static class LegacyRoundVendorProfileCompiler
                     entry.Name,
                     entry.Amount,
                     entry.Points,
-                    entry.Recommended));
+                    entry.Recommended,
+                    entry.GiveSquadRoleName,
+                    entry.IsAppendSquadRoleName,
+                    entry.GivePrefix,
+                    entry.IsAppendPrefix));
             }
 
             if (section.TakeAll is { } takeAll && string.IsNullOrWhiteSpace(takeAll))
                 throw Invalid(prototype, $"section '{section.Name}' has an invalid take-all allowance");
+            if (section.TakeOne is { } takeOne && string.IsNullOrWhiteSpace(takeOne))
+                throw Invalid(prototype, $"section '{section.Name}' has an invalid take-one allowance");
+            if (section.SharedSpecLimit is <= 0)
+                throw Invalid(prototype, $"section '{section.Name}' has an invalid shared specialist limit");
 
             sections.Add(new ResolvedRoundVendorSection(
                 section.Name,
                 choice,
                 section.TakeAll,
+                section.TakeOne,
+                section.SharedSpecLimit,
                 entries.MoveToImmutable()));
         }
 
+        if (vendor.PointsType is { } pointsType && string.IsNullOrWhiteSpace(pointsType))
+            throw Invalid(prototype, "contains an invalid points type");
         if (vendor.Jobs.Any(job => string.IsNullOrWhiteSpace(job.Id)))
             throw Invalid(prototype, "contains an invalid job restriction");
 
@@ -105,6 +118,7 @@ public static class LegacyRoundVendorProfileCompiler
             prototype.Name,
             prototype.Description,
             access,
+            vendor.PointsType,
             vendor.Jobs.ToImmutableArray(),
             sections.MoveToImmutable());
     }
@@ -155,8 +169,7 @@ public static class LegacyRoundVendorProfileCompiler
         EntityPrototype prototype,
         CMAutomatedVendorComponent vendor)
     {
-        if (vendor.PointsType != null ||
-            vendor.Ranks.Count != 0 ||
+        if (vendor.Ranks.Count != 0 ||
             vendor.MinOffset != new Vector2(-0.2f, -0.2f) ||
             vendor.MaxOffset != new Vector2(0.2f, 0.2f) ||
             vendor.Hackable ||
@@ -189,9 +202,7 @@ public static class LegacyRoundVendorProfileCompiler
         EntityPrototype prototype,
         CMVendorSection section)
     {
-        if (section.TakeOne != null ||
-            section.SharedSpecLimit != null ||
-            section.SharedJOLimit != null ||
+        if (section.SharedJOLimit != null ||
             section.Jobs.Count != 0 ||
             section.Ranks.Count != 0 ||
             section.Holidays.Count != 0 ||
@@ -206,6 +217,11 @@ public static class LegacyRoundVendorProfileCompiler
         CMVendorSection section,
         CMVendorEntry entry)
     {
+        if (entry.GiveSquadRoleName == null && entry.IsAppendSquadRoleName)
+            throw Invalid(prototype, $"section '{section.Name}' product '{entry.Id}' appends a missing role name");
+        if (entry.GivePrefix == null && entry.IsAppendPrefix)
+            throw Invalid(prototype, $"section '{section.Name}' product '{entry.Id}' appends a missing prefix");
+
         if (entry.Spawn != 1 ||
             entry.Multiplier != null ||
             entry.Max != null ||
@@ -213,10 +229,6 @@ public static class LegacyRoundVendorProfileCompiler
             entry.Box != null ||
             entry.BoxAmount != null ||
             entry.BoxSlots != null ||
-            entry.GiveSquadRoleName != null ||
-            entry.IsAppendSquadRoleName ||
-            entry.GivePrefix != null ||
-            entry.IsAppendPrefix ||
             entry.GiveIcon != null ||
             entry.GiveMapBlip != null ||
             entry.ReplaceSlot != null)

@@ -24,6 +24,7 @@ public sealed partial class CMURoundDirectorSystem
         (RoundSetupSlot.SquadSergeantVendor, PlatoonMarkerClass.SquadSergeant),
         (RoundSetupSlot.CombatTechnicianVendor, PlatoonMarkerClass.combattech),
         (RoundSetupSlot.RiflemanVendor, PlatoonMarkerClass.Rifleman),
+        (RoundSetupSlot.SpecialWeaponsVendor, PlatoonMarkerClass.SWeapons),
     ];
 
     private CommittedRoundVendorProfiles? _committedVendorProfiles;

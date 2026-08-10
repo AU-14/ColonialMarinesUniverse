@@ -29,6 +29,10 @@ public abstract partial class SharedCMAutomatedVendorSystem
                     Amount = resolvedEntry.Amount,
                     Points = resolvedEntry.Points,
                     Recommended = resolvedEntry.Recommended,
+                    GiveSquadRoleName = resolvedEntry.GiveSquadRoleName,
+                    IsAppendSquadRoleName = resolvedEntry.IsAppendSquadRoleName,
+                    GivePrefix = resolvedEntry.GivePrefix,
+                    IsAppendPrefix = resolvedEntry.IsAppendPrefix,
                 });
             }
 
@@ -39,10 +43,13 @@ public abstract partial class SharedCMAutomatedVendorSystem
                     ? (choice.Id, choice.Amount)
                     : null,
                 TakeAll = resolvedSection.TakeAll,
+                TakeOne = resolvedSection.TakeOne,
+                SharedSpecLimit = resolvedSection.SharedSpecLimit,
                 Entries = entries,
             });
         }
 
+        vendor.Comp.PointsType = profile.PointsType;
         vendor.Comp.Jobs = profile.Jobs.ToList();
         vendor.Comp.Sections = sections;
         RebuildVendorInventory(vendor);
