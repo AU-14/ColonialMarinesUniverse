@@ -64,21 +64,33 @@ public sealed partial class DialogSystem : EntitySystem
         RemComp<DialogComponent>(ent);
     }
 
-    public void OpenOptions(EntityUid target, EntityUid actor, string title, List<DialogOption> options, string message = "")
+    public void OpenOptions(
+        EntityUid target,
+        EntityUid actor,
+        string title,
+        List<DialogOption> options,
+        string message = "",
+        TimeSpan? expiresAt = null)
     {
         var dialog = EnsureComp<DialogComponent>(target);
         dialog.Title = title;
         dialog.Message = new DialogOption(message);
         dialog.DialogType = DialogType.Options;
         dialog.Options = options;
+        dialog.ExpiresAt = expiresAt;
         Dirty(target, dialog);
 
         _ui.TryOpenUi(target, DialogUiKey.Key, actor);
     }
 
-    public void OpenOptions(EntityUid actor, string title, List<DialogOption> options, string message = "")
+    public void OpenOptions(
+        EntityUid actor,
+        string title,
+        List<DialogOption> options,
+        string message = "",
+        TimeSpan? expiresAt = null)
     {
-        OpenOptions(actor, actor, title, options, message);
+        OpenOptions(actor, actor, title, options, message, expiresAt);
     }
 
     public void OpenInput(EntityUid target, EntityUid actor, string message, DialogInputEvent? ev, bool largeInput = false, int characterLimit = 200, int minCharacterLimit = 0, bool smartCheck = false, bool autoFocus = true)
@@ -87,6 +99,7 @@ public sealed partial class DialogSystem : EntitySystem
         dialog.DialogType = DialogType.Input;
         dialog.Message = new DialogOption(message, ev);
         dialog.InputEvent = ev;
+        dialog.ExpiresAt = null;
         dialog.LargeInput = largeInput;
         dialog.CharacterLimit = characterLimit;
         dialog.MinCharacterLimit = minCharacterLimit;
@@ -110,6 +123,7 @@ public sealed partial class DialogSystem : EntitySystem
         dialog.Title = title;
         dialog.Message = new DialogOption(message, ev);
         dialog.ConfirmEvent = ev;
+        dialog.ExpiresAt = null;
         Dirty(target, dialog);
 
         _ui.TryOpenUi(target, DialogUiKey.Key, actor);

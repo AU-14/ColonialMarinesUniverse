@@ -19,6 +19,9 @@ public sealed partial class DialogComponent : Component
     public List<DialogOption> Options = new();
 
     [DataField, AutoNetworkedField]
+    public TimeSpan? ExpiresAt;
+
+    [DataField, AutoNetworkedField]
     public object? Event;
 
     [DataField, AutoNetworkedField]

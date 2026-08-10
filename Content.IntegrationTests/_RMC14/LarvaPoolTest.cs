@@ -84,10 +84,59 @@ public sealed class LarvaPoolTest
             Assert.That(pool.PreferenceLoaded, Is.True);
             Assert.That(pool.OptedIn, Is.True);
             AssertLarvaPoolOffer(entMan, ghost, entMan.GetComponent<MetaDataComponent>(larva).EntityName);
+            Assert.That(entMan.HasComponent<LarvaPoolOfferComponent>(larva), Is.True);
         });
 
         await AcceptLarvaPoolOffer(pair, ghost);
-        await server.WaitAssertion(() => Assert.That(player.AttachedEntity, Is.EqualTo(larva)));
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(player.AttachedEntity, Is.EqualTo(larva));
+            Assert.That(entMan.HasComponent<LarvaPoolOfferComponent>(larva), Is.False);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task EligibleGhostWithoutQueenHoursIsNotOfferedQueen()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+
+        await pair.SetJobPriority(SelectableXenoRole, JobPriority.High);
+
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+        server.CfgMan.SetCVar(RMCCVars.RMCLarvaPoolWaitSeconds, 0);
+        server.CfgMan.SetCVar(CCVars.GameRoleTimers, true);
+
+        var entMan = server.EntMan;
+        var mind = entMan.System<MindSystem>();
+        var player = server.PlayerMan.Sessions.Single();
+        await DeAdmin(pair, player);
+
+        EntityUid ghost = default;
+        await server.WaitAssertion(() =>
+        {
+            ghost = entMan.SpawnEntity(GameTicker.ObserverPrototypeName, map.GridCoords);
+            entMan.SpawnEntity("CMXenoQueen", map.GridCoords.Offset(new Vector2(1, 0)));
+
+            var mindId = mind.CreateMind(player.UserId, "Observer");
+            mind.TransferTo(mindId, ghost);
+            mind.SetUserId(mindId, player.UserId);
+        });
+
+        await pair.RunTicksSync(5);
+
+        await server.WaitAssertion(() =>
+        {
+            Assert.That(player.AttachedEntity, Is.EqualTo(ghost));
+            Assert.That(entMan.HasComponent<DialogComponent>(ghost), Is.False);
+        });
 
         await pair.CleanReturnAsync();
     }
@@ -1437,6 +1486,7 @@ public sealed class LarvaPoolTest
     {
         Assert.That(entMan.TryGetComponent<DialogComponent>(offerEntity, out var dialog), Is.True);
         Assert.That(dialog!.Message.Text, Does.Contain(xenoName));
+        Assert.That(dialog.ExpiresAt, Is.Not.Null);
         Assert.That(dialog.Options.Any(option => option.Event is LarvaPoolClaimConfirmEvent), Is.True);
         Assert.That(dialog.Options.Any(option => option.Event is LarvaPoolClaimDeclineEvent), Is.True);
     }

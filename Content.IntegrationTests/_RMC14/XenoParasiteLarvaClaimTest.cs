@@ -74,11 +74,7 @@ public sealed class XenoParasiteLarvaClaimTest
             ghostNet = entMan.GetNetEntity(ghost);
 
             Assert.That(entMan.TryGetComponent<DialogComponent>(ghost, out var dialog), Is.True);
-            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[]
-            {
-                "rmc-xeno-parasite-larva-claim-yes",
-                "rmc-xeno-parasite-larva-claim-no",
-            }));
+            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[] { "Yes", "No" }));
         });
 
         await pair.Client.WaitAssertion(() =>
@@ -172,11 +168,7 @@ public sealed class XenoParasiteLarvaClaimTest
             ghostNet = entMan.GetNetEntity(ghost);
 
             Assert.That(entMan.TryGetComponent<DialogComponent>(ghost, out var dialog), Is.True);
-            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[]
-            {
-                "rmc-xeno-parasite-larva-claim-yes",
-                "rmc-xeno-parasite-larva-claim-no",
-            }));
+            Assert.That(dialog!.Options.Select(o => o.Text), Is.EquivalentTo(new[] { "Yes", "No" }));
         });
 
         await pair.Client.WaitPost(() =>

@@ -5,6 +5,7 @@ using Content.Server.GameTicking.Events;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Preferences.Managers;
+using Content.Server.Players.PlayTimeTracking;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.GameTicking;
@@ -47,6 +48,7 @@ public sealed partial class LarvaPoolSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private ISharedPlayerManager _player = default!;
     [Dependency] private IServerPreferencesManager _preferences = default!;
+    [Dependency] private PlayTimeTrackingSystem _playTime = default!;
     [Dependency] private LarvaPoolPreferenceManager _larvaPoolPreferences = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private TagSystem _tag = default!;

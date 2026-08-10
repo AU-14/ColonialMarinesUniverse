@@ -1,5 +1,6 @@
 using System.Linq;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared.Ghost;
@@ -70,7 +71,8 @@ public sealed partial class LarvaPoolSystem
             var userId = candidate.Session.UserId;
             if (_pendingOffers.ContainsKey(userId) ||
                 HasComp<DialogComponent>(candidate.OfferEntity) ||
-                IsOfferOnCooldown(hive.Owner, userId))
+                IsOfferOnCooldown(hive.Owner, userId) ||
+                !MeetsTargetRoleRequirements(candidate.Session, target))
             {
                 continue;
             }
@@ -126,7 +128,12 @@ public sealed partial class LarvaPoolSystem
         _pendingOffers[userId] = pending;
         _pendingOfferHives[hive] = userId;
         if (target is { } targetId)
+        {
             _pendingOfferTargets[targetId] = userId;
+            var offer = EnsureComp<LarvaPoolOfferComponent>(targetId);
+            offer.ExpiresAt = pending.ExpiresAt;
+            Dirty(targetId, offer);
+        }
 
         var options = new List<DialogOption>
         {
@@ -145,8 +152,8 @@ public sealed partial class LarvaPoolSystem
             options,
             Loc.GetString(
                 "rmc-xeno-larva-pool-offer-message",
-                ("xeno", xenoName),
-                ("seconds", (int) OfferDuration.TotalSeconds)));
+                ("xeno", xenoName)),
+            pending.ExpiresAt);
     }
 
     private void OnLarvaPoolClaimConfirm(LarvaPoolClaimConfirmEvent ev)
@@ -212,7 +219,8 @@ public sealed partial class LarvaPoolSystem
 
     private bool TryClaimPendingOffer(PendingLarvaPoolOffer pending, ICommonSession session)
     {
-        if (!_hiveQuery.TryComp(pending.Hive, out var hive))
+        if (!_hiveQuery.TryComp(pending.Hive, out var hive) ||
+            !MeetsTargetRoleRequirements(session, pending.Target))
             return false;
 
         if (pending.Target is { } target)
@@ -230,6 +238,14 @@ public sealed partial class LarvaPoolSystem
         return hive.BurrowedLarva > 0 &&
                _hive.HasBurrowedLarvaSpawnPoint((pending.Hive, hive)) &&
                _hive.JoinBurrowedLarva((pending.Hive, hive), session);
+    }
+
+    private bool MeetsTargetRoleRequirements(ICommonSession session, EntityUid? target)
+    {
+        return target is not { } targetId ||
+               !TryComp(targetId, out XenoComponent? xeno) ||
+               xeno.Role != QueenRole ||
+               _playTime.IsAllowed(session, QueenRole);
     }
 
     private void CancelPendingOffer(
@@ -280,7 +296,10 @@ public sealed partial class LarvaPoolSystem
         _pendingOffers.Remove(userId);
         _pendingOfferHives.Remove(pending.Hive);
         if (pending.Target is { } target)
+        {
             _pendingOfferTargets.Remove(target);
+            RemComp<LarvaPoolOfferComponent>(target);
+        }
     }
 
     private void ClosePendingOfferDialog(PendingLarvaPoolOffer pending)

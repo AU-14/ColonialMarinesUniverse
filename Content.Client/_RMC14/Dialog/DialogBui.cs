@@ -1,5 +1,6 @@
 ﻿using Content.Shared._RMC14.Dialog;
 using JetBrains.Annotations;
+using System.Numerics;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
@@ -75,6 +76,7 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
         _window.Title = s.Title;
         container.Message.Text = s.Message.Text;
         container.Message.Visible = container.Message.Text?.Length > 0;
+        container.SetCountdown(s.ExpiresAt);
 
         container.Options.DisposeAllChildren();
         var spriteSystem = EntMan.System<SpriteSystem>();
@@ -126,6 +128,14 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
 
             container.Options.AddChild(button);
         }
+
+        var compact = s.Options.Count <= 4;
+        container.Search.Visible = !compact;
+        container.OptionsScroll.SetHeight = Math.Clamp(s.Options.Count * 44, 44, 352);
+        _window.SetSize = compact
+            ? new Vector2(500, 220)
+            : new Vector2(620, 500);
+        _window.RefreshCrtTheme();
     }
 
     private void UpdateInput(DialogComponent s)

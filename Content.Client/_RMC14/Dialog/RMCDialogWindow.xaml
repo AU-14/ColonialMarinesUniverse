@@ -1,6 +1,7 @@
 ﻿<controls:RMCDialogWindow
     xmlns="https://spacestation14.io"
     xmlns:controls="clr-namespace:Content.Client._RMC14.Dialog"
-    MinSize="300 135"
+    MinSize="360 160"
+    SetSize="500 220"
     Resizable="False">
 </controls:RMCDialogWindow>

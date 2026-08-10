@@ -41,13 +41,19 @@ rmc-xeno-larva-pool-reason-staff-protected = Staff observers must deliberately o
 rmc-xeno-larva-pool-reason-opted-out = You are opted out of this hive.
 rmc-xeno-larva-pool-reason-unknown = Your current state is not eligible for this pool.
 rmc-xeno-larva-pool-offer-title = Become a Xeno?
-rmc-xeno-larva-pool-offer-message = Do you want to become {$xeno}? You have {$seconds} seconds to respond.
+rmc-xeno-larva-pool-offer-message = Do you want to become {$xeno}?
 rmc-xeno-larva-pool-offer-accept = Yes
 rmc-xeno-larva-pool-offer-decline = No
 rmc-xeno-larva-pool-offer-timeout = You did not respond in time. The offer was passed to the next player.
 rmc-xeno-larva-pool-offer-declined = You declined. The offer was passed to the next player.
 rmc-xeno-larva-pool-offer-invalid = That xeno is no longer available.
 rmc-xeno-larva-pool-offer-burrowed-larva = a burrowed larva
+rmc-xeno-larva-pool-offer-counter = OFFER: {$seconds}s
+
+rmc-xeno-parasite-larva-claim-title = Claim the Larva?
+rmc-xeno-parasite-larva-claim-message = Do you want to take control of the larva when it bursts from the host?
+rmc-xeno-parasite-larva-claim-yes = Yes
+rmc-xeno-parasite-larva-claim-no = No
 
 rmc-xeno-tracker-target-Queen = Queen
 rmc-xeno-tracker-target-HiveLeader = Hive Leader
