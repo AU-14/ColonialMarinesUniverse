@@ -41243,7 +41243,7 @@ entities:
     - type: Transform
       pos: 5.5,-9.5
       parent: 1
-- proto: VMarkerShipTechTree
+- proto: CMURoundTechnologyTreeConsole
   entities:
   - uid: 5959
     components:

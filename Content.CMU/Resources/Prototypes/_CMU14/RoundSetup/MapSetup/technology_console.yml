@@ -1,0 +1,7 @@
+- type: entity
+  parent: RMCTechTreeConsole
+  id: CMURoundTechnologyTreeConsole
+  suffix: Round Setup
+  components:
+  - type: RoundSetupEndpoint
+    slot: TechnologyTreeConsole

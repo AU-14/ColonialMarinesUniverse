@@ -4,6 +4,7 @@ using Content.Shared._CMU14.Round.Objectives;
 using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared._RMC14.Intel.Tech;
 using Content.Shared._RMC14.Marines;
+using Content.Shared.CMU.Round;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
 
@@ -15,6 +16,15 @@ public sealed partial class IntelSystem
 
     private const string DefaultTechTreePrototype = "RMCIntelTechTree";
     private readonly Dictionary<string, string> _cmuTeamTechTreeOverrides = new();
+
+    /// <summary>
+    /// Projects a typed round side onto a technology console through its owning system.
+    /// </summary>
+    public void SetTechnologyConsoleRoundSide(Entity<TechControlConsoleComponent> console, RoundSide side)
+    {
+        console.Comp.Team = GetRoundSideTeam(side);
+        Dirty(console);
+    }
 
     public Entity<IntelTechTreeComponent> EnsureTechTree(string team)
     {
@@ -241,6 +251,16 @@ public sealed partial class IntelSystem
                     tier[i] = option with { CurrentCost = option.Cost };
             }
         }
+    }
+
+    private static string GetRoundSideTeam(RoundSide side)
+    {
+        return side switch
+        {
+            RoundSide.Govfor => Team.GovFor,
+            RoundSide.Opfor => Team.OpFor,
+            _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
+        };
     }
 
     private bool TryGetFactionWinPoints(string faction, out int points)

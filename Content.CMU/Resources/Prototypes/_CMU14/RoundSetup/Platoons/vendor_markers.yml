@@ -984,15 +984,9 @@
     state: terminal1_old
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundTechnologyTreeConsole
   id: VMarkerShipTechTree
-  name: Ship Tech Tree Console Marker
-  components:
-  - type: VendorMarker
-    class: TechTree
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/computer.rsi
-    state: techweb
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip
