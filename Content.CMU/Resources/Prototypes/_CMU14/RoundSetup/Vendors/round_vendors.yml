@@ -70,3 +70,15 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: MilitaryPoliceVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundSectionSergeantVendor
+  name: round section sergeant rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: SectionSergeantVendor

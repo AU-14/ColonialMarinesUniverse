@@ -25,6 +25,7 @@ public abstract partial class SharedCMAutomatedVendorSystem
                 entries.Add(new CMVendorEntry
                 {
                     Id = resolvedEntry.Product,
+                    Name = resolvedEntry.Name,
                     Amount = resolvedEntry.Amount,
                 });
             }

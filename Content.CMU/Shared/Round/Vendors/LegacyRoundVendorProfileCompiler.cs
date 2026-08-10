@@ -36,7 +36,8 @@ public static class LegacyRoundVendorProfileCompiler
             RoundSetupSlot.MilitaryDoctorVendor or
             RoundSetupSlot.JuniorOfficerVendor or
             RoundSetupSlot.RadioTelephoneOperatorVendor or
-            RoundSetupSlot.MilitaryPoliceVendor))
+            RoundSetupSlot.MilitaryPoliceVendor or
+            RoundSetupSlot.SectionSergeantVendor))
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");
@@ -68,10 +69,12 @@ public static class LegacyRoundVendorProfileCompiler
                 ValidateEntryDefaults(prototype, section, entry);
                 if (string.IsNullOrWhiteSpace(entry.Id.Id))
                     throw Invalid(prototype, $"section '{section.Name}' contains an entry without a product");
+                if (entry.Name is { } entryName && string.IsNullOrWhiteSpace(entryName))
+                    throw Invalid(prototype, $"section '{section.Name}' product '{entry.Id}' has an invalid display name");
                 if (entry.Amount is <= 0)
                     throw Invalid(prototype, $"section '{section.Name}' product '{entry.Id}' has an invalid amount");
 
-                entries.Add(new ResolvedRoundVendorEntry(entry.Id, entry.Amount));
+                entries.Add(new ResolvedRoundVendorEntry(entry.Id, entry.Name, entry.Amount));
             }
 
             if (section.TakeAll is { } takeAll && string.IsNullOrWhiteSpace(takeAll))
@@ -195,8 +198,7 @@ public static class LegacyRoundVendorProfileCompiler
         CMVendorSection section,
         CMVendorEntry entry)
     {
-        if (entry.Name != null ||
-            entry.Points != null ||
+        if (entry.Points != null ||
             entry.Spawn != 1 ||
             entry.Recommended ||
             entry.Multiplier != null ||

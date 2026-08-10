@@ -108075,13 +108075,15 @@ entities:
     - type: Transform
       pos: 34.5,74.5
       parent: 1
-- proto: AU14USCMsectionleaderequipmentvendor
+- proto: CMURoundSectionSergeantVendor
   entities:
   - uid: 221
     components:
     - type: Transform
       pos: 33.5,63.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14USCMSGequipmentvendor
   entities:
   - uid: 222

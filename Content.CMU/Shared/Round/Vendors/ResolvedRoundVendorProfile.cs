@@ -18,11 +18,13 @@ public readonly record struct RoundVendorChoice(string Id, int Amount);
 public sealed class ResolvedRoundVendorEntry
 {
     public EntProtoId Product { get; }
+    public string? Name { get; }
     public int? Amount { get; }
 
-    internal ResolvedRoundVendorEntry(EntProtoId product, int? amount)
+    internal ResolvedRoundVendorEntry(EntProtoId product, string? name, int? amount)
     {
         Product = product;
+        Name = name;
         Amount = amount;
     }
 }

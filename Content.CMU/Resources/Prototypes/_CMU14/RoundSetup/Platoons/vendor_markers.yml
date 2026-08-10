@@ -156,12 +156,13 @@
     side: Opfor
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundSectionSergeantVendor
   id: VMarkerOpforsectionSergeant
-  name: Opfor senior sergeant marker
+  name: OPFOR section sergeant rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: SectionSergeant
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -349,12 +350,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundSectionSergeantVendor
   id: VMarkerGovforsectionSergeant
-  name: Gov senior sergeant marker
+  name: GOVFOR section sergeant rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: SectionSergeant
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -632,15 +634,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundSectionSergeantVendor
   id: VMarkerShipSectionSergeant
-  name: Ship senior sergeant marker
-  components:
-  - type: VendorMarker
-    class: SectionSergeant
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
-    state: base
+  name: ship section sergeant rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip
