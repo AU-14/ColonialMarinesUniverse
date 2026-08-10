@@ -290,14 +290,17 @@ namespace Content.Server.AU14.Round
             if (_selectedPreset == null)
                 return true;
 
-            var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            var selection = GetRoundDirectorSystem().CaptureRoundPlanSelection(
+                _playerManager.PlayerCount,
+                _selectedPreset.ID,
+                SelectedThreat?.ID);
             return IsThirdPartyAllowed(
                 proto,
-                _selectedPreset.ID,
-                SelectedThreat?.ID,
-                platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
-                platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
-                _playerManager.PlayerCount);
+                selection.PresetId,
+                selection.SelectedThreatId,
+                selection.GovforAssignment?.Force.Value,
+                selection.OpforAssignment?.Force.Value,
+                selection.PlayerCount);
         }
 
         private static bool IsThirdPartyAllowed(
