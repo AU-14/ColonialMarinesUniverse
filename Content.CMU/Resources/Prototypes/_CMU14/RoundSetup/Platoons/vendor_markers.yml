@@ -963,26 +963,14 @@
     state: overwatch
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundShipCommunicationsArray
   id: VMarkerShipCommsArray
-  name: Ship Comms Array Marker
-  components:
-  - type: VendorMarker
-    class: CommsArrayShip
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/AIStuff/telecommunication.rsi
-    state: relay_off
+  categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundCallsignLaptop
   id: VMarkerShipLaptopCallsign
-  name: Ship Callsign Laptop Marker
-  components:
-  - type: VendorMarker
-    class: LaptopCallsign
-  - type: Sprite
-    sprite: _CMU14/Items/laptop.rsi
-    state: laptop_off
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip

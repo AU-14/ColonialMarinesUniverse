@@ -5092,7 +5092,7 @@ entities:
     - type: Transform
       pos: 17.5,14.5
       parent: 1
-- proto: VMarkerShipCommsArray
+- proto: CMURoundShipCommunicationsArray
   entities:
   - uid: 68
     components:

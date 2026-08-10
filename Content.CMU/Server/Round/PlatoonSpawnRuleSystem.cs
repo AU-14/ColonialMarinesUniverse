@@ -139,6 +139,7 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
                     var markerUid = shipMarkers[i];
                     if (!TryComp(markerUid, out VendorMarkerComponent? markerComp) ||
                         !TryComp(markerUid, out TransformComponent? transform) ||
+                        HasComp<RoundSetupEndpointComponent>(markerUid) ||
                         !markerComp.Ship ||
                         !IsMarkerOnShipOrZLevel(shipUid, shipTransform, transform) ||
                         !usedShipMarkers.Add(markerUid))
@@ -479,7 +480,8 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         foreach (var markerUid in initialInventory.VendorMarkers)
         {
             if (!TryComp(markerUid, out VendorMarkerComponent? markerComp) ||
-                !TryComp(markerUid, out TransformComponent? transform))
+                !TryComp(markerUid, out TransformComponent? transform) ||
+                HasComp<RoundSetupEndpointComponent>(markerUid))
             {
                 continue;
             }
