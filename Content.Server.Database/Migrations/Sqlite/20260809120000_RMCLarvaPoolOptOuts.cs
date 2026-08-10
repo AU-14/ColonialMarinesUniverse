@@ -1,4 +1,3 @@
-using System;
 using Content.Server.Database;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
@@ -13,23 +12,17 @@ public sealed class RMCLarvaPoolOptOuts : Migration
 {
     protected override void Up(MigrationBuilder migrationBuilder)
     {
-        migrationBuilder.CreateTable(
-            name: "rmc_larva_pool_opt_out",
-            columns: table => new
-            {
-                player_id = table.Column<Guid>(type: "TEXT", nullable: false),
-                hive_id = table.Column<string>(type: "TEXT", nullable: false),
-            },
-            constraints: table =>
-            {
-                table.PrimaryKey("PK_rmc_larva_pool_opt_out", x => new { x.player_id, x.hive_id });
-                table.ForeignKey(
-                    name: "FK_rmc_larva_pool_opt_out_player_player_id",
-                    column: x => x.player_id,
-                    principalTable: "player",
-                    principalColumn: "user_id",
-                    onDelete: ReferentialAction.Cascade);
-            });
+        // This table was previously applied under the 20260718212504_RMCLarvaPoolOptOuts migration ID.
+        // Keep the replacement migration compatible with both those databases and fresh installs.
+        migrationBuilder.Sql(
+            """
+            CREATE TABLE IF NOT EXISTS rmc_larva_pool_opt_out (
+                player_id TEXT NOT NULL,
+                hive_id TEXT NOT NULL,
+                CONSTRAINT "PK_rmc_larva_pool_opt_out" PRIMARY KEY (player_id, hive_id),
+                CONSTRAINT "FK_rmc_larva_pool_opt_out_player_player_id" FOREIGN KEY (player_id) REFERENCES player (user_id) ON DELETE CASCADE
+            );
+            """);
     }
 
     protected override void Down(MigrationBuilder migrationBuilder)
