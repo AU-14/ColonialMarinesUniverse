@@ -112,12 +112,13 @@
     state: base
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundVehicleCrewVendor
   id: VMarkerOpforVehicleCrewVendor
-  name: OPFOR vehicle crew vendor marker
+  name: OPFOR vehicle crew rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: VehicleCrew
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -252,12 +253,13 @@
     state: base
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundVehicleCrewVendor
   id: VMarkerGovforVehicleCrewVendor
-  name: Govfor vehicle crew vendor marker
+  name: GOVFOR vehicle crew rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: VehicleCrew
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: CMURoundWeaponsVendor
@@ -528,12 +530,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundVehicleCrewVendor
   id: VMarkerShipVehicleCrew
-  name: Ship vehicle crew vendor marker
-  components:
-  - type: VendorMarker
-    class: VehicleCrew
+  name: ship vehicle crew rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip

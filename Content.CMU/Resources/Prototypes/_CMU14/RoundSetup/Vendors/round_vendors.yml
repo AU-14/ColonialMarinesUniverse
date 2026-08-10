@@ -9,3 +9,15 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: WeaponsVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundVehicleCrewVendor
+  name: round vehicle crew rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: VehicleCrewVendor

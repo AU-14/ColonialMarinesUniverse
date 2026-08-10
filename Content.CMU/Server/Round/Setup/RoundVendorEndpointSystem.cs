@@ -31,13 +31,13 @@ public sealed partial class RoundVendorEndpointSystem : EntitySystem
 
     private void OnEndpointResolved(ref RoundSetupEndpointResolvedEvent args)
     {
-        if (args.Slot != RoundSetupSlot.WeaponsVendor)
+        if (args.Slot is not (RoundSetupSlot.WeaponsVendor or RoundSetupSlot.VehicleCrewVendor))
             return;
 
         if (!TryComp(args.Endpoint, out CMAutomatedVendorComponent? vendor))
         {
             throw new InvalidOperationException(
-                $"Round setup endpoint {ToPrettyString(args.Endpoint)} is a Weapons vendor without its chassis.");
+                $"Round setup endpoint {ToPrettyString(args.Endpoint)} is a vendor without its chassis.");
         }
 
         if (!_director.TryGetCommittedVendorProfile(args.Side, args.Slot, out var profile))

@@ -17,7 +17,7 @@ namespace Content.Shared.CMU.Round;
 public static class LegacyRoundVendorProfileCompiler
 {
     /// <summary>
-    /// Compiles one legacy Weapons vendor into immutable round-plan data.
+    /// Compiles one supported legacy vendor into immutable round-plan data.
     /// Unsupported authoring fails closed so it cannot be silently lost during migration.
     /// </summary>
     public static ResolvedRoundVendorProfile Compile(
@@ -31,7 +31,7 @@ public static class LegacyRoundVendorProfileCompiler
 
         if (!force.IsValid)
             throw Invalid(prototype, "has no valid round force identity");
-        if (slot != RoundSetupSlot.WeaponsVendor)
+        if (slot is not (RoundSetupSlot.WeaponsVendor or RoundSetupSlot.VehicleCrewVendor))
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");

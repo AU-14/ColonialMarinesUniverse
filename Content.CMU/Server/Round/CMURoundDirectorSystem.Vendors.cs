@@ -1,5 +1,6 @@
 #nullable enable
 
+using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using Content.Server.AU14.Scenario;
 using Content.Shared.AU14.util;
@@ -10,6 +11,12 @@ namespace Content.Server.AU14.Round;
 
 public sealed partial class CMURoundDirectorSystem
 {
+    private static readonly ImmutableArray<(RoundSetupSlot Slot, PlatoonMarkerClass MarkerClass)> SupportedVendorSlots =
+    [
+        (RoundSetupSlot.WeaponsVendor, PlatoonMarkerClass.Weapons),
+        (RoundSetupSlot.VehicleCrewVendor, PlatoonMarkerClass.VehicleCrew),
+    ];
+
     private CommittedRoundVendorProfiles? _committedVendorProfiles;
 
     /// <summary>
@@ -20,39 +27,38 @@ public sealed partial class CMURoundDirectorSystem
         RoundSetupSlot slot,
         [NotNullWhen(true)] out ResolvedRoundVendorProfile? profile)
     {
-        if (slot != RoundSetupSlot.WeaponsVendor)
-        {
-            if (!Enum.IsDefined(slot))
-                throw new ArgumentOutOfRangeException(nameof(slot), slot, "Unknown round setup slot.");
+        if (!Enum.IsDefined(slot))
+            throw new ArgumentOutOfRangeException(nameof(slot), slot, "Unknown round setup slot.");
 
+        var profiles = side switch
+        {
+            RoundSide.Govfor => _committedVendorProfiles?.Govfor,
+            RoundSide.Opfor => _committedVendorProfiles?.Opfor,
+            _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
+        };
+
+        if (profiles == null)
+        {
             profile = null;
             return false;
         }
 
-        profile = side switch
-        {
-            RoundSide.Govfor => _committedVendorProfiles?.GovforWeapons,
-            RoundSide.Opfor => _committedVendorProfiles?.OpforWeapons,
-            _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
-        };
-
-        return profile != null;
+        return profiles.TryGetValue(slot, out profile);
     }
 
     private CommittedRoundVendorProfiles ResolveCommittedVendorProfiles(
         RoundPlanSelectionSnapshot selection)
     {
         return new CommittedRoundVendorProfiles(
-            ResolveCommittedVendorProfile(selection.GovforAssignment, RoundSetupSlot.WeaponsVendor),
-            ResolveCommittedVendorProfile(selection.OpforAssignment, RoundSetupSlot.WeaponsVendor));
+            ResolveCommittedVendorProfiles(selection.GovforAssignment),
+            ResolveCommittedVendorProfiles(selection.OpforAssignment));
     }
 
-    private ResolvedRoundVendorProfile? ResolveCommittedVendorProfile(
-        RoundForceAssignment? assignment,
-        RoundSetupSlot slot)
+    private ImmutableDictionary<RoundSetupSlot, ResolvedRoundVendorProfile> ResolveCommittedVendorProfiles(
+        RoundForceAssignment? assignment)
     {
         if (assignment is not { } assigned)
-            return null;
+            return ImmutableDictionary<RoundSetupSlot, ResolvedRoundVendorProfile>.Empty;
 
         if (!_prototypes.TryIndex<PlatoonPrototype>(assigned.Force.Value, out var platoon))
         {
@@ -60,31 +66,31 @@ public sealed partial class CMURoundDirectorSystem
                 $"Round force '{assigned.Force}' has no legacy platoon compatibility prototype.");
         }
 
-        var markerClass = slot switch
+        var profiles = ImmutableDictionary.CreateBuilder<RoundSetupSlot, ResolvedRoundVendorProfile>();
+        foreach (var (slot, markerClass) in SupportedVendorSlots)
         {
-            RoundSetupSlot.WeaponsVendor => PlatoonMarkerClass.Weapons,
-            _ => throw new ArgumentOutOfRangeException(nameof(slot), slot, "Unsupported round vendor slot."),
-        };
+            if (!TryResolveLegacyVendor(platoon, markerClass, out var vendorId))
+            {
+                throw new InvalidOperationException(
+                    $"Round force '{assigned.Force}' does not resolve vendor slot '{slot}'.");
+            }
 
-        if (!TryResolveLegacyVendor(platoon, markerClass, out var vendorId))
-        {
-            throw new InvalidOperationException(
-                $"Round force '{assigned.Force}' does not resolve vendor slot '{slot}'.");
+            if (!_prototypes.TryIndex<EntityPrototype>(vendorId, out var vendor))
+            {
+                throw new InvalidOperationException(
+                    $"Round force '{assigned.Force}' vendor slot '{slot}' references missing entity '{vendorId}'.");
+            }
+
+            var profile = LegacyRoundVendorProfileCompiler.Compile(
+                assigned.Force,
+                slot,
+                vendor,
+                _componentFactory);
+            ValidateVendorProductPrototypes(profile, vendor.ID);
+            profiles.Add(slot, profile);
         }
 
-        if (!_prototypes.TryIndex<EntityPrototype>(vendorId, out var vendor))
-        {
-            throw new InvalidOperationException(
-                $"Round force '{assigned.Force}' vendor slot '{slot}' references missing entity '{vendorId}'.");
-        }
-
-        var profile = LegacyRoundVendorProfileCompiler.Compile(
-            assigned.Force,
-            slot,
-            vendor,
-            _componentFactory);
-        ValidateVendorProductPrototypes(profile, vendor.ID);
-        return profile;
+        return profiles.ToImmutable();
     }
 
     private bool TryResolveLegacyVendor(
@@ -132,6 +138,6 @@ public sealed partial class CMURoundDirectorSystem
     }
 
     private readonly record struct CommittedRoundVendorProfiles(
-        ResolvedRoundVendorProfile? GovforWeapons,
-        ResolvedRoundVendorProfile? OpforWeapons);
+        ImmutableDictionary<RoundSetupSlot, ResolvedRoundVendorProfile> Govfor,
+        ImmutableDictionary<RoundSetupSlot, ResolvedRoundVendorProfile> Opfor);
 }
