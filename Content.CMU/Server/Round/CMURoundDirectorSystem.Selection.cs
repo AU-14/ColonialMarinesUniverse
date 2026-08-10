@@ -106,6 +106,29 @@ public sealed partial class CMURoundDirectorSystem
     }
 
     /// <summary>
+    /// Returns a side's committed main ship after freeze or its lobby candidate before freeze.
+    /// </summary>
+    internal string? GetMainShipProjection(RoundSide side)
+    {
+        if (_state.Phase == CMURoundPhase.AwaitingSelection)
+        {
+            return side switch
+            {
+                RoundSide.Govfor => _round.GetSelectedGovforShip(),
+                RoundSide.Opfor => _round.GetSelectedOpforShip(),
+                _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
+            };
+        }
+
+        return side switch
+        {
+            RoundSide.Govfor => Selection?.GovforShipId,
+            RoundSide.Opfor => Selection?.OpforShipId,
+            _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
+        };
+    }
+
+    /// <summary>
     /// Applies a legacy platoon projection to a side while the round selection is still mutable.
     /// </summary>
     internal CMURoundSelectionMutationResult TrySetLegacyForce(

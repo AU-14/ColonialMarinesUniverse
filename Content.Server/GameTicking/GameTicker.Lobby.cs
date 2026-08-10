@@ -66,8 +66,8 @@ namespace Content.Server.GameTicking
         private string GetShipMapName()
         {
             var shipNames = new List<string>();
-            AddShipMapName(_auRoundSystem.GetSelectedGovforShip(), shipNames);
-            AddShipMapName(_auRoundSystem.GetSelectedOpforShip(), shipNames);
+            AddShipMapName(_cmuRoundDirector.GetMainShipProjection(RoundSide.Govfor), shipNames);
+            AddShipMapName(_cmuRoundDirector.GetMainShipProjection(RoundSide.Opfor), shipNames);
 
             if (shipNames.Count > 0)
                 return string.Join(" / ", shipNames.Distinct());
@@ -108,8 +108,8 @@ namespace Content.Server.GameTicking
             var playerCount = $"{_playerManager.PlayerCount}";
             var readyCount = _playerGameStatuses.Values.Count(x => x == PlayerGameStatus.ReadyToPlay);
 
-            var govforShip = _auRoundSystem.GetSelectedGovforShip();
-            var opforShip = _auRoundSystem.GetSelectedOpforShip();
+            var govforShip = _cmuRoundDirector.GetMainShipProjection(RoundSide.Govfor);
+            var opforShip = _cmuRoundDirector.GetMainShipProjection(RoundSide.Opfor);
             var govforPlatoon = _cmuRoundDirector.TryGetLegacyForceProjection(
                 RoundSide.Govfor,
                 out var govforForce)

@@ -126,8 +126,8 @@ public sealed class ScenarioPlanValidateCommand : IConsoleCommand
                 planetId,
                 mapId,
                 selectedThreatId,
-                round.GetSelectedGovforShip(),
-                round.GetSelectedOpforShip());
+                director.GetMainShipProjection(RoundSide.Govfor),
+                director.GetMainShipProjection(RoundSide.Opfor));
 
             var report = generator.ValidateMarkerCoverage(request);
             shell.WriteLine(
