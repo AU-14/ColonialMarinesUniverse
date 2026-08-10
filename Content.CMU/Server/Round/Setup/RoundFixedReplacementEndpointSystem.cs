@@ -39,7 +39,7 @@ public sealed partial class RoundFixedReplacementEndpointSystem : EntitySystem
                 $"Round setup endpoint {ToPrettyString(args.Endpoint)} has no transform for fixed replacement.");
         }
 
-        EntityManager.SpawnAttachedTo(
+        SpawnAttachedTo(
             replacement.Value,
             transform.Coordinates,
             rotation: transform.LocalRotation);
