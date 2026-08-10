@@ -12,7 +12,10 @@ public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionCom
         if (args.Sprite == null)
             return;
 
-        if (AppearanceSystem.TryGetData<SpriteSpecifier>(uid, ActionState.DynamicIcon, out var icon, args.Component))
+        if (!AppearanceSystem.TryGetData<SpriteSpecifier>(uid, ActionState.DynamicIcon, out var icon, args.Component))
+            icon = comp.Icon;
+
+        if (icon != null)
         {
             if (icon is SpriteSpecifier.EntityPrototype)
                 SpriteSystem.LayerSetTexture((uid, args.Sprite), ActionVisuals.Icon, SpriteSystem.Frame0(icon));
@@ -20,12 +23,31 @@ public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionCom
                 SpriteSystem.LayerSetSprite((uid, args.Sprite), ActionVisuals.Icon, icon);
         }
 
-        if (AppearanceSystem.TryGetData<Color>(uid, ActionState.Color, out var color, args.Component))
-        {
-            SpriteSystem.LayerSetColor((uid, args.Sprite), ActionVisuals.Icon, color);
+        if (!AppearanceSystem.TryGetData<SpriteSpecifier>(uid, ActionState.DynamicIconToggled, out var toggledIcon, args.Component))
+            toggledIcon = comp.IconOn;
 
-            if (SpriteSystem.LayerExists((uid, args.Sprite), ActionVisuals.IconToggled))
-                SpriteSystem.LayerSetColor((uid, args.Sprite), ActionVisuals.IconToggled, color);
+        if (toggledIcon != null)
+        {
+            SpriteSystem.LayerMapReserve((uid, args.Sprite), ActionVisuals.IconToggled);
+
+            if (toggledIcon is SpriteSpecifier.EntityPrototype)
+                SpriteSystem.LayerSetTexture((uid, args.Sprite), ActionVisuals.IconToggled, SpriteSystem.Frame0(toggledIcon));
+            else
+                SpriteSystem.LayerSetSprite((uid, args.Sprite), ActionVisuals.IconToggled, toggledIcon);
+
+            if (!AppearanceSystem.TryGetData<bool>(uid, ActionState.Toggled, out var toggled, args.Component))
+                toggled = comp.Toggled;
+
+            SpriteSystem.LayerSetVisible((uid, args.Sprite), ActionVisuals.Icon, !toggled);
+            SpriteSystem.LayerSetVisible((uid, args.Sprite), ActionVisuals.IconToggled, toggled);
         }
+
+        if (!AppearanceSystem.TryGetData<Color>(uid, ActionState.Color, out var color, args.Component))
+            color = comp.IconColor;
+
+        SpriteSystem.LayerSetColor((uid, args.Sprite), ActionVisuals.Icon, color);
+
+        if (SpriteSystem.LayerExists((uid, args.Sprite), ActionVisuals.IconToggled))
+            SpriteSystem.LayerSetColor((uid, args.Sprite), ActionVisuals.IconToggled, color);
     }
 }

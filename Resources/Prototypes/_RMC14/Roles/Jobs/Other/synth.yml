@@ -135,6 +135,7 @@
   - type: CMSurgeryTarget
   - type: Infectable
   - type: Satiation
+    satiations: { }
   - type: Perishable
   - type: ThermalRegulator
   - type: Stamina
