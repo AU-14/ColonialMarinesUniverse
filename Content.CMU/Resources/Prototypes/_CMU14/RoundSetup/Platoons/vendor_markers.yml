@@ -105,15 +105,13 @@
     side: Opfor
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundRequisitionsVendor
   id: VMarkeropforrequisitionsvendor
-  name: OPFOR requisitions vendor marker
+  name: OPFOR requisitions vendor
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: ReqVend
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
-    state: base
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundVehicleCrewVendor
@@ -254,15 +252,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundRequisitionsVendor
   id: VMarkergovforrequisitionsvendor
-  name: Govfor requisitions vendor marker
+  name: Govfor requisitions vendor
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: ReqVend
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
-    state: base
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: CMURoundVehicleCrewVendor
@@ -536,15 +532,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundRequisitionsVendor
   id: VMarkershiprequisitionsvendor
-  name: Ship requisitions vendor marker
-  components:
-  - type: VendorMarker
-    class: ReqVend
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
-    state: base
+  name: ship requisitions vendor
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundVehicleCrewVendor

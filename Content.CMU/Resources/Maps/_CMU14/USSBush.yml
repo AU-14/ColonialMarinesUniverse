@@ -41155,7 +41155,7 @@ entities:
     - type: Transform
       pos: 29.5,16.5
       parent: 1
-- proto: VMarkershiprequisitionsvendor
+- proto: CMURoundRequisitionsVendor
   entities:
   - uid: 5943
     components:

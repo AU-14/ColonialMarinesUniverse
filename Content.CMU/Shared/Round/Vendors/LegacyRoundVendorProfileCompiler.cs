@@ -7,6 +7,7 @@ using Content.Shared.Access;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Vendors;
+using Robust.Shared.Audio;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -17,6 +18,16 @@ namespace Content.Shared.CMU.Round;
 /// </summary>
 public static class LegacyRoundVendorProfileCompiler
 {
+    private const string RequisitionsVendorAnimationState = "vend";
+    private const string RequisitionsVendorBaseState = "base";
+    private const float RequisitionsVendorSoundMaxDistance = 2f;
+    private const float RequisitionsVendorSoundVolume = -4f;
+
+    private static readonly ResPath RequisitionsVendorRsi =
+        new("_RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi");
+    private static readonly ResPath RequisitionsVendorSound =
+        new("/Audio/_RMC14/Machines/vending_drop.ogg");
+
     /// <summary>
     /// Compiles one supported legacy vendor into immutable round-plan data.
     /// Unsupported authoring fails closed so it cannot be silently lost during migration.
@@ -34,6 +45,7 @@ public static class LegacyRoundVendorProfileCompiler
         if (!force.IsValid)
             throw Invalid(prototype, "has no valid round force identity");
         if (slot is not (RoundSetupSlot.WeaponsVendor or
+            RoundSetupSlot.RequisitionsVendor or
             RoundSetupSlot.VehicleCrewVendor or
             RoundSetupSlot.MilitaryDoctorVendor or
             RoundSetupSlot.JuniorOfficerVendor or
@@ -58,7 +70,7 @@ public static class LegacyRoundVendorProfileCompiler
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");
 
-        ValidateVendorDefaults(prototype, vendor);
+        ValidateVendorDefaults(prototype, slot, vendor);
 
         var sections = ImmutableArray.CreateBuilder<ResolvedRoundVendorSection>(vendor.Sections.Count);
         foreach (var section in vendor.Sections)
@@ -180,6 +192,7 @@ public static class LegacyRoundVendorProfileCompiler
 
     private static void ValidateVendorDefaults(
         EntityPrototype prototype,
+        RoundSetupSlot slot,
         CMAutomatedVendorComponent vendor)
     {
         if (vendor.Ranks.Count != 0 ||
@@ -194,14 +207,10 @@ public static class LegacyRoundVendorProfileCompiler
             !vendor.Scaling ||
             vendor.RandomUnstockAmount != null ||
             vendor.RandomEmptyChance != null ||
-            vendor.Sound != null ||
-            vendor.BaseSprite != null ||
-            vendor.AnimationSprite != null ||
             vendor.EjectContentsOnDestruction ||
             vendor.UseObjectivePoints ||
             !string.IsNullOrEmpty(vendor.Faction) ||
             vendor.CachedFactionWinPoints != 0 ||
-            vendor.CanManualRestock ||
             vendor.IgnoreBulkRestockById.Count != 0 ||
             vendor.PartialProductStacks.Count != 0 ||
             vendor.RestockEntries.Count != 0 ||
@@ -209,6 +218,54 @@ public static class LegacyRoundVendorProfileCompiler
         {
             throw Invalid(prototype, "uses unsupported automated-vendor authoring");
         }
+
+        if (slot == RoundSetupSlot.RequisitionsVendor)
+        {
+            ValidateRequisitionsVendorChassis(prototype, vendor);
+            return;
+        }
+
+        if (vendor.Sound != null ||
+            vendor.BaseSprite != null ||
+            vendor.AnimationSprite != null ||
+            vendor.CanManualRestock)
+        {
+            throw Invalid(prototype, "uses unsupported automated-vendor chassis authoring");
+        }
+    }
+
+    private static void ValidateRequisitionsVendorChassis(
+        EntityPrototype prototype,
+        CMAutomatedVendorComponent vendor)
+    {
+        var expectedAudio = AudioParams.Default
+            .WithMaxDistance(RequisitionsVendorSoundMaxDistance)
+            .WithVolume(RequisitionsVendorSoundVolume);
+        if (!vendor.CanManualRestock ||
+            vendor.Sound is not SoundPathSpecifier sound ||
+            sound.Path != RequisitionsVendorSound ||
+            !AudioParametersEqual(sound.Params, expectedAudio) ||
+            vendor.BaseSprite is not { } baseSprite ||
+            baseSprite.RsiPath != RequisitionsVendorRsi ||
+            baseSprite.RsiState != RequisitionsVendorBaseState ||
+            vendor.AnimationSprite is not { } animationSprite ||
+            animationSprite.RsiPath != baseSprite.RsiPath ||
+            animationSprite.RsiState != RequisitionsVendorAnimationState)
+        {
+            throw Invalid(prototype, "does not match the supported requisitions-vendor chassis");
+        }
+    }
+
+    private static bool AudioParametersEqual(AudioParams left, AudioParams right)
+    {
+        return left.Volume == right.Volume &&
+            left.Pitch == right.Pitch &&
+            left.MaxDistance == right.MaxDistance &&
+            left.RolloffFactor == right.RolloffFactor &&
+            left.ReferenceDistance == right.ReferenceDistance &&
+            left.Loop == right.Loop &&
+            left.PlayOffsetSeconds == right.PlayOffsetSeconds &&
+            left.Variation == right.Variation;
     }
 
     private static void ValidateSectionDefaults(

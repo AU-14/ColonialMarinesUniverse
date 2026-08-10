@@ -341658,13 +341658,15 @@ entities:
     - type: Transform
       pos: 26.5,-16.5
       parent: 1
-- proto: VMarkergovforrequisitionsvendor
+- proto: CMURoundRequisitionsVendor
   entities:
   - uid: 49156
     components:
     - type: Transform
       pos: 97.5,0.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: VMarkerGovforRifleman
   entities:
   - uid: 49157

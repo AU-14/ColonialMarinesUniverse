@@ -11,6 +11,24 @@
     slot: WeaponsVendor
 
 - type: entity
+  parent: ColMarTechCargo
+  id: CMURoundRequisitionsVendor
+  name: round requisitions vendor
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+  - type: CMAutomatedVendor
+    baseSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: base
+    animationSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: vend
+  - type: RoundSetupEndpoint
+    slot: RequisitionsVendor
+
+- type: entity
   parent: ColMarTechBase
   id: CMURoundVehicleCrewVendor
   name: round vehicle crew rack

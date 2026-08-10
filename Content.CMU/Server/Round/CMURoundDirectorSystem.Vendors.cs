@@ -16,6 +16,7 @@ public sealed partial class CMURoundDirectorSystem
     private static readonly ImmutableArray<(RoundSetupSlot Slot, PlatoonMarkerClass MarkerClass)> SupportedVendorSlots =
     [
         (RoundSetupSlot.WeaponsVendor, PlatoonMarkerClass.Weapons),
+        (RoundSetupSlot.RequisitionsVendor, PlatoonMarkerClass.ReqVend),
         (RoundSetupSlot.VehicleCrewVendor, PlatoonMarkerClass.VehicleCrew),
         (RoundSetupSlot.MilitaryDoctorVendor, PlatoonMarkerClass.MilitaryDoctor),
         (RoundSetupSlot.JuniorOfficerVendor, PlatoonMarkerClass.JuniorOfficer),
