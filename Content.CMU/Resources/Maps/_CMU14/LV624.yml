@@ -232081,13 +232081,15 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -139.5,7.5
       parent: 1
-- proto: RMCComputerIntelGovfor
+- proto: CMURoundIntelligenceComputer
   entities:
   - uid: 28252
     components:
     - type: Transform
       pos: 74.5,-237.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: RMCContainerBlueLeft
   entities:
   - uid: 28253

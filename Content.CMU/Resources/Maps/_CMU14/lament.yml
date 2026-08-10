@@ -566163,7 +566163,7 @@ entities:
     - type: Transform
       pos: 46.5,-100.5
       parent: 1
-- proto: RMCComputerIntelGovfor
+- proto: CMURoundIntelligenceComputer
   entities:
   - uid: 83477
     components:
@@ -566171,6 +566171,8 @@ entities:
       rot: 4.71238898038469 rad
       pos: -146.5,-41.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: RMCCondimentEnzyme
   entities:
   - uid: 83478

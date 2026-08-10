@@ -18,6 +18,15 @@ public sealed partial class IntelSystem
     private readonly Dictionary<string, string> _cmuTeamTechTreeOverrides = new();
 
     /// <summary>
+    /// Projects a typed round side onto an intelligence console through its owning system.
+    /// </summary>
+    public void SetIntelConsoleRoundSide(Entity<IntelConsoleComponent> console, RoundSide side)
+    {
+        console.Comp.Team = GetRoundSideTeam(side);
+        Dirty(console);
+    }
+
+    /// <summary>
     /// Projects a typed round side onto a technology console through its owning system.
     /// </summary>
     public void SetTechnologyConsoleRoundSide(Entity<TechControlConsoleComponent> console, RoundSide side)

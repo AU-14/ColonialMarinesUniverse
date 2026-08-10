@@ -180481,7 +180481,7 @@ entities:
     - type: Transform
       pos: -60.5,84.5
       parent: 1
-- proto: RMCComputerIntelGovfor
+- proto: CMURoundIntelligenceComputer
   entities:
   - uid: 70436
     components:
@@ -180489,6 +180489,8 @@ entities:
       rot: 4.71238898038469 rad
       pos: -72.5,82.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: RMCContainerGreenLeft
   entities:
   - uid: 13

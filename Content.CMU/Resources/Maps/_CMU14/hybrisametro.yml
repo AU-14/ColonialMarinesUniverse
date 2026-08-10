@@ -132372,7 +132372,7 @@ entities:
     - type: Transform
       pos: -216.5,-18.5
       parent: 1
-- proto: RMCComputerIntelGovfor
+- proto: CMURoundIntelligenceComputer
   entities:
   - uid: 8337
     components:
@@ -132380,6 +132380,8 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -188.5,-25.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: RMCCondimentHotsauceCholula
   entities:
   - uid: 8207
