@@ -74,7 +74,7 @@
         amount: 40
       - id: AU14BackpackMarineBlack
         amount: 30
-      - id: RMCBackpackWelderPMC
+      - id: RMCSatchelWelderPMC
         amount: 5
       - id: RMCScabbardShotgun
         amount: 3
@@ -1072,8 +1072,6 @@
         amount: 3
       - id: RMCBoxClaymoreMineFilled
         amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
       - id: AU14PacketGrenadeTearGasFilled
         amount: 2
       - id: AU14PacketGrenadeTearGasFilledAirburst

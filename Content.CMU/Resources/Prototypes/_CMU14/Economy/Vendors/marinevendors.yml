@@ -579,8 +579,6 @@
         amount: 10
     - name: Jackets
       entries:
-      - id: RMCCoatAllWeather
-        amount: 10
       - id: RMCCoatService
         amount: 10
     - name: Footwear
@@ -1220,8 +1218,6 @@
         points: 2
       - id: AU14MaintenanceJack
         points: 2
-      - id: RMCES11MobileFuelCanister
-        points: 4
       - id: RMCMagazineSMGNailgun
         points: 2
       - id: RMCEngineerKit
@@ -1537,8 +1533,6 @@
         amount: 200
       - id: CMMagazineRifleM54CMK1AP
         amount: 15
-      - id: CMMagazineRifleM54CMK1Tracer
-        amount: 5
       - id: CMMagazineSMGM63
         amount: 200
       - id: CMMagazineSMGM63AP
@@ -1623,8 +1617,6 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
       - id: AU14PacketGrenadeTearGasFilled
         amount: 2
       - id: AU14PacketGrenadeTearGasFilledAirburst

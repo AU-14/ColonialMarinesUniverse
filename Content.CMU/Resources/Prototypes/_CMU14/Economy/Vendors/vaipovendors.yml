@@ -1051,8 +1051,6 @@
         amount: 70
       - id: CMMagazineRifleM54CMK1AP
         amount: 10
-      - id: CMMagazineRifleM54CMK1Tracer
-        amount: 10
       - id: RMCBoxShotgunBuckshot
         amount: 20
       - id: RMCBoxShotgunFlechette
@@ -1113,8 +1111,6 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
       - id: AU14PacketGrenadeTearGasFilled
         amount: 2
       - id: AU14PacketGrenadeTearGasFilledAirburst

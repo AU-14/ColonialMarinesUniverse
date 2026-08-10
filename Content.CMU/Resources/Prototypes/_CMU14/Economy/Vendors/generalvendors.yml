@@ -240,7 +240,7 @@
   - type: Sprite
     sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
   - type: CMAutomatedVendor
-    jobs: [ AU14JobOPFORPlatOp, AU14JobGOVFORPlatOp, AU14JobPlatOpBase ]
+    jobs: [ AU14JobOPFORPlatOp, AU14JobGOVFORPlatOp ]
     sections:
     # - name: Senior Officer
     #   choices: { CMUJOLoadoutVendorKit: 1 }

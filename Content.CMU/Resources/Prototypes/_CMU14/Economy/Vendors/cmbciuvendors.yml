@@ -1115,8 +1115,6 @@
         amount: 2
       - id: RMCBoxClaymoreMineFilled
         amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
       - id: AU14PacketGrenadeTearGasFilled
         amount: 3 #police get extra teargas
       - id: AU14PacketGrenadeTearGasFilledAirburst

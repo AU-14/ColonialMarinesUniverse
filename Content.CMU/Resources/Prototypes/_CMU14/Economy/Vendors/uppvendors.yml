@@ -1119,8 +1119,6 @@
         points: 2
       - id: AU14MaintenanceJack
         points: 2
-      - id: RMCES11MobileFuelCanister
-        points: 4
       - id: RMCMagazineSMGNailgun
         points: 2
       - id: RMCEngineerKit
@@ -1354,8 +1352,6 @@
         amount: 3
       - id: RMCBoxClaymoreMineFilled
         amount: 3
-      - id: AU14BoxClaymoreMineIncendiaryFilled
-        amount: 1
       - id: RMCExplosiveBreachingCharge
         amount: 6
       - id: RMCExplosivePlastic
