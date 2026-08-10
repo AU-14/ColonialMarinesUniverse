@@ -131435,7 +131435,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 205.5,-67.5
       parent: 1
-- proto: CMUGovforRosterConsole
+- proto: CMURoundRosterConsole
   entities:
   - uid: 12261
     components:
@@ -131443,6 +131443,8 @@ entities:
       rot: 3.141592653589793 rad
       pos: 55.03948,0.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: CMULimbPrinter
   entities:
   - uid: 6626

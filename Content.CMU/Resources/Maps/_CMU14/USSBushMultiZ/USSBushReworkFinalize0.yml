@@ -42007,7 +42007,7 @@ entities:
     - type: Transform
       pos: 0.5,-9.5
       parent: 1
-- proto: VMarkerShipRosterConsole
+- proto: CMURoundRosterConsole
   entities:
   - uid: 721
     components:

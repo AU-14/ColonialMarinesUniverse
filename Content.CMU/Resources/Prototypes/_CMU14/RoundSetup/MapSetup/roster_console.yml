@@ -1,0 +1,8 @@
+- type: entity
+  parent: CMUFactionRosterConsoleBase
+  id: CMURoundRosterConsole
+  name: personnel roster console
+  suffix: Round Setup
+  components:
+  - type: RoundSetupEndpoint
+    slot: RosterConsole

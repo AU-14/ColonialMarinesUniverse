@@ -1050,15 +1050,9 @@
     state: terminal1_old
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundRosterConsole
   id: VMarkerShipRosterConsole
-  name: Ship Personnel Roster Console Marker
-  components:
-  - type: VendorMarker
-    class: RosterConsole
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/computer.rsi
-    state: terminal1_old
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip
