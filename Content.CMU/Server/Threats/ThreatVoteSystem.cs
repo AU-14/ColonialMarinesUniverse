@@ -31,7 +31,6 @@ public sealed partial class ThreatVoteSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IVoteManager _voteManager = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private ThreatSystem _threat = default!;
@@ -444,8 +443,8 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         string presetId,
         int playerCount)
     {
-        string? govforId = _platoonSpawnRule.SelectedGovforPlatoon?.ID;
-        string? opforId = _platoonSpawnRule.SelectedOpforPlatoon?.ID;
+        string? govforId = _roundDirector.Selection?.GovforPlatoonId;
+        string? opforId = _roundDirector.Selection?.OpforPlatoonId;
         var candidates = new List<ThreatVoteCandidate>();
 
         foreach (ProtoId<ThreatPrototype> threatId in planet.AllowedThreats)
