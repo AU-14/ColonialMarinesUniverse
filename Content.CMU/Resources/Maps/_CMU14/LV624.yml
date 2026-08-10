@@ -262923,13 +262923,15 @@ entities:
     - type: Transform
       pos: 9.5,-239.5
       parent: 1
-- proto: VMarkerGovforcorpsman
+- proto: CMURoundCorpsmanVendor
   entities:
   - uid: 33578
     components:
     - type: Transform
       pos: 11.5,-239.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: VMarkerGovforDCC
   entities:
   - uid: 33579

@@ -211475,18 +211475,22 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -183.5,-11.5
       parent: 1
-- proto: VMarkerGovforcorpsman
+- proto: CMURoundCorpsmanVendor
   entities:
   - uid: 24454
     components:
     - type: Transform
       pos: -190.5,-11.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 24455
     components:
     - type: Transform
       pos: -190.5,-12.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: VMarkerGovforDCC
   entities:
   - uid: 24456

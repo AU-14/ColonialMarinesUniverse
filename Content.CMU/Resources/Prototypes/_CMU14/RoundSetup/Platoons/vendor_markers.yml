@@ -36,12 +36,13 @@
 
 # Groundside opfor markers
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundCorpsmanVendor
   id: VMarkerOpforplatcorp
-  name: Opfor corpsman marker
+  name: OPFOR corpsman medical rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Corpsman
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundAutomaticRiflemanVendor
@@ -227,12 +228,13 @@
 
 # Groundside govfor markers
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundCorpsmanVendor
   id: VMarkerGovforcorpsman
-  name: Gov corpsman marker
+  name: GOVFOR corpsman medical rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Corpsman
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -544,15 +546,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundCorpsmanVendor
   id: VMarkerShipCorpsman
-  name: Ship corpsman marker
-  components:
-  - type: VendorMarker
-    class: Corpsman
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
-    state: base
+  name: ship corpsman medical rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundMilitaryDoctorVendor

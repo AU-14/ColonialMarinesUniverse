@@ -32,7 +32,8 @@ public sealed partial class RoundVendorEndpointSystem : EntitySystem
 
     private void OnEndpointResolved(ref RoundSetupEndpointResolvedEvent args)
     {
-        if (args.Slot is not (RoundSetupSlot.WeaponsVendor or
+        if (args.Slot is not (RoundSetupSlot.CorpsmanVendor or
+            RoundSetupSlot.WeaponsVendor or
             RoundSetupSlot.RequisitionsVendor or
             RoundSetupSlot.VehicleCrewVendor or
             RoundSetupSlot.MilitaryDoctorVendor or

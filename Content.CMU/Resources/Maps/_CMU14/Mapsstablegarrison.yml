@@ -105004,18 +105004,22 @@ entities:
     - type: Transform
       pos: -1.5,-25.5
       parent: 1
-- proto: VMarkerGovforcorpsman
+- proto: CMURoundCorpsmanVendor
   entities:
   - uid: 16966
     components:
     - type: Transform
       pos: -1.5,-28.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 16972
     components:
     - type: Transform
       pos: -0.5,-28.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: VMarkerGovforDCC
   entities:
   - uid: 16973

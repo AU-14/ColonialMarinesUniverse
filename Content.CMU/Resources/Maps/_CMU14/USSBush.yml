@@ -40845,7 +40845,7 @@ entities:
     - type: Transform
       pos: 8.5,-3.5
       parent: 1
-- proto: VMarkerShipCorpsman
+- proto: CMURoundCorpsmanVendor
   entities:
   - uid: 5892
     components:

@@ -1,5 +1,17 @@
 - type: entity
   parent: ColMarTechBase
+  id: CMURoundCorpsmanVendor
+  name: round corpsman medical rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: CorpsmanVendor
+
+- type: entity
+  parent: ColMarTechBase
   id: CMURoundWeaponsVendor
   name: round weapons rack
   suffix: Round Setup

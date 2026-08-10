@@ -108048,13 +108048,15 @@ entities:
       parent: 1
     - type: RoundSetupEndpoint
       side: Govfor
-- proto: AU14USCMcorpsmanvendor
+- proto: CMURoundCorpsmanVendor
   entities:
   - uid: 216
     components:
     - type: Transform
       pos: 33.5,67.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: CMURoundRiflemanVendor
   entities:
   - uid: 217

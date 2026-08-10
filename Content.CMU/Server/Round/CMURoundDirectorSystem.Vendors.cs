@@ -15,6 +15,7 @@ public sealed partial class CMURoundDirectorSystem
 {
     private static readonly ImmutableArray<(RoundSetupSlot Slot, PlatoonMarkerClass MarkerClass)> SupportedVendorSlots =
     [
+        (RoundSetupSlot.CorpsmanVendor, PlatoonMarkerClass.Corpsman),
         (RoundSetupSlot.WeaponsVendor, PlatoonMarkerClass.Weapons),
         (RoundSetupSlot.RequisitionsVendor, PlatoonMarkerClass.ReqVend),
         (RoundSetupSlot.VehicleCrewVendor, PlatoonMarkerClass.VehicleCrew),
@@ -101,7 +102,8 @@ public sealed partial class CMURoundDirectorSystem
             {
                 baseRsi = resolvedBaseRsi;
             }
-            else if (slot is RoundSetupSlot.ShipsideUniformVendor or
+            else if (slot is RoundSetupSlot.CorpsmanVendor or
+                RoundSetupSlot.ShipsideUniformVendor or
                 RoundSetupSlot.AutomaticRiflemanVendor or
                 RoundSetupSlot.OperationsOfficerVendor)
             {
