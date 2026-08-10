@@ -1,6 +1,3 @@
-﻿[accessibility]
-screen_shake_intensity = 1
-
 [admin]
 deadmin_on_join = true
 see_own_notes = true
@@ -39,9 +36,6 @@ round_end_pvs_overrides = false
 round_restart_time = 180
 lobbyduration = 180
 new_character_jobs = "AU14JobGOVFORSquadRifleman"
-
-[gateway]
-generator_enabled = false
 
 [ghost]
 kill_crit = false
