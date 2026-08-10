@@ -7,6 +7,7 @@ using Content.Server.Station.Components;
 using Content.Shared.AU14;
 using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Roles;
 using Robust.Server.Player;
@@ -23,15 +24,14 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private StationJobsSystem _stationJobs = default!;
     [Dependency] private StationSystem _stationSystem = default!;
 
     protected override void Started(EntityUid uid, AddJobsRuleComponent component, GameRuleComponent gameRule, GameRuleStartedEvent args)
     {
         PlatoonPrototype? platoon = null;
-        var planet = _auRoundSystem.GetSelectedPlanet();
-        var platoonSpawnRule = _platoonSpawnRule;
+        _roundDirector.TryGetLegacyPlanetProjection(out var planet);
 
         var presetId = _gameTicker.CurrentPreset?.ID ?? _gameTicker.Preset?.ID;
         var isDistressPreset = !string.IsNullOrEmpty(presetId) &&
@@ -41,11 +41,11 @@ public sealed partial class AddJobsRuleSystem : GameRuleSystem<AddJobsRuleCompon
 
         if (string.Equals(component.ShipFaction, "opfor", StringComparison.OrdinalIgnoreCase))
         {
-            platoon = platoonSpawnRule.SelectedOpforPlatoon;
+            _roundDirector.TryGetLegacyForceProjection(RoundSide.Opfor, out platoon);
         }
         else
         {
-            platoon = platoonSpawnRule.SelectedGovforPlatoon;
+            _roundDirector.TryGetLegacyForceProjection(RoundSide.Govfor, out platoon);
             if (platoon == null && planet != null && planet.PlatoonsGovfor.Count > 0)
             {
                 if (_prototypeManager.TryIndex<PlatoonPrototype>(planet.PlatoonsGovfor[0], out var foundPlatoon))

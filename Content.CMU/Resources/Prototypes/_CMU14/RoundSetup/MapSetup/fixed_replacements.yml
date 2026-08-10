@@ -1,0 +1,23 @@
+- type: entity
+  parent: MarkerBase
+  id: CMURoundCallsignLaptop
+  name: callsign directory laptop
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Items/laptop.rsi
+    state: laptop_off
+  - type: RoundSetupEndpoint
+    slot: CallsignLaptop
+
+- type: entity
+  parent: MarkerBase
+  id: CMURoundShipCommunicationsArray
+  name: ship communications array
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/AIStuff/telecommunication.rsi
+    state: relay_off
+  - type: RoundSetupEndpoint
+    slot: ShipCommunicationsArray

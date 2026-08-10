@@ -1,0 +1,235 @@
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundCorpsmanVendor
+  name: round corpsman medical rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: CorpsmanVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundClothingVendor
+  name: round apparel rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: ClothingVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundDropshipCrewChiefVendor
+  name: round dropship crew chief rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: DropshipCrewChiefVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundPilotVendor
+  name: round pilot weapons rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: PilotVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundWeaponsVendor
+  name: round weapons rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: WeaponsVendor
+
+- type: entity
+  parent: ColMarTechCargo
+  id: CMURoundRequisitionsVendor
+  name: round requisitions vendor
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+  - type: CMAutomatedVendor
+    baseSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: base
+    animationSprite:
+      sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
+      state: vend
+  - type: RoundSetupEndpoint
+    slot: RequisitionsVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundVehicleCrewVendor
+  name: round vehicle crew rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: VehicleCrewVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundMilitaryDoctorVendor
+  name: round military doctor rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: MilitaryDoctorVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundJuniorOfficerVendor
+  name: round staff officer rack
+  suffix: Round Setup
+  components:
+  - type: AU14VendorJO
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: JuniorOfficerVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundRadioTelephoneOperatorVendor
+  name: round radio telephone operator rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: RadioTelephoneOperatorVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundMilitaryPoliceVendor
+  name: round military police rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: MilitaryPoliceVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundSectionSergeantVendor
+  name: round section sergeant rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: SectionSergeantVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundSquadSergeantVendor
+  name: round squad sergeant rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: SquadSergeantVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundCombatTechnicianVendor
+  name: round combat technician rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/combat_technician_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: CombatTechnicianVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundRiflemanVendor
+  name: round rifleman equipment rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: RiflemanVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundSpecialWeaponsVendor
+  name: round weapons specialist rack
+  suffix: Round Setup
+  components:
+  - type: RMCVendorSpecialist
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/specialist_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: SpecialWeaponsVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundShipsideUniformVendor
+  name: round shipside uniform rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: ShipsideUniformVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundAutomaticRiflemanVendor
+  name: round automatic rifleman equipment rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: AutomaticRiflemanVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundOperationsOfficerVendor
+  name: round operations officer rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: OperationsOfficerVendor

@@ -22,7 +22,9 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<RoundRestartCleanupEvent>(
+            OnRoundRestartCleanup,
+            after: [typeof(CMURoundDirectorSystem)]);
         SubscribeLocalEvent<AuVotePlayerCountChangedEvent>(OnPlayerCountChanged);
         _playerManager.PlayerStatusChanged += PlayerStatusChanged;
     }
@@ -36,7 +38,6 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
-        _entityManager.System<AuRoundSystem>().ResetLobbySelection();
         TryStartVoteSequence(roundRestart: true);
     }
 

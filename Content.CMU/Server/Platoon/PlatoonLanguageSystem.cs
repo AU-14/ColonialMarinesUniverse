@@ -3,6 +3,7 @@ using Content.Server.AU14.Round;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
 using Content.Shared.GameTicking;
 using Content.Shared._RMC14.Language;
 
@@ -11,7 +12,7 @@ namespace Content.Server._CMU14.Platoon;
 public sealed partial class PlatoonLanguageSystem : EntitySystem
 {
     [Dependency] private LanguageLearningSystem _learning = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
 
     public override void Initialize()
     {
@@ -22,11 +23,17 @@ public sealed partial class PlatoonLanguageSystem : EntitySystem
 
     private PlatoonPrototype? GetPlatoonForMarine(MarineComponent marine)
     {
-        if (marine.Faction == "govfor")
-            return _platoonSpawnRule.SelectedGovforPlatoon;
-        if (marine.Faction == "opfor")
-            return _platoonSpawnRule.SelectedOpforPlatoon;
-        return null;
+        var side = marine.Faction switch
+        {
+            "govfor" => RoundSide.Govfor,
+            "opfor" => RoundSide.Opfor,
+            _ => (RoundSide?) null,
+        };
+
+        return side is { } resolved &&
+               _roundDirector.TryGetCommittedLegacyForce(resolved, out var platoon)
+            ? platoon
+            : null;
     }
 
     private void OnDetermineLanguages(Entity<MarineComponent> ent, ref DetermineEntityLanguagesEvent args)

@@ -7,6 +7,7 @@ using Content.Server.EUI;
 using Content.Server._AU14.Insurgency.Database;
 using Content.Shared._AU14.Insurgency;
 using Content.Shared._AU14.Insurgency.Editor;
+using Content.Shared.CMU.Round;
 using Content.Shared.Eui;
 using Robust.Shared.Prototypes;
 
@@ -25,7 +26,7 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
     private readonly IAdminManager _admin;
     private readonly InsurgencyFactionDbSystem _db;
     private readonly InsurgencyFactionApplySystem _apply;
-    private readonly PlatoonSpawnRuleSystem _platoons;
+    private readonly CMURoundDirectorSystem _roundDirector;
     private readonly IPrototypeManager _prototypes;
     private readonly InsurgencyEditorScope _scope;
 
@@ -35,21 +36,24 @@ public sealed class InsurgencyFactionEditorEui : BaseEui
         IAdminManager admin,
         InsurgencyFactionDbSystem db,
         InsurgencyFactionApplySystem apply,
-        PlatoonSpawnRuleSystem platoons,
+        CMURoundDirectorSystem roundDirector,
         IPrototypeManager prototypes,
         InsurgencyEditorScope scope = InsurgencyEditorScope.Default)
     {
         _admin = admin;
         _db = db;
         _apply = apply;
-        _platoons = platoons;
+        _roundDirector = roundDirector;
         _prototypes = prototypes;
         _scope = scope;
     }
 
     public override EuiStateBase GetNewState()
     {
-        return new InsurgencyFactionEditorEuiState(_factions, _platoons.SelectedGovforPlatoon?.ID, _scope);
+        var govfor = _roundDirector.TryGetLegacyForceProjection(RoundSide.Govfor, out var force)
+            ? force.ID
+            : null;
+        return new InsurgencyFactionEditorEuiState(_factions, govfor, _scope);
     }
 
     public override void Opened()

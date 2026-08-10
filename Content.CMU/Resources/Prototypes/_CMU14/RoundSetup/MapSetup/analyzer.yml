@@ -1,0 +1,10 @@
+- type: entity
+  parent: AU14AnalyzerMachine
+  id: CMURoundAnalyzerMachine
+  name: Analyzer Machine
+  suffix: Round Setup
+  components:
+  - type: FetchAnalyzer
+    faction: ""
+  - type: RoundSetupEndpoint
+    slot: Analyzer

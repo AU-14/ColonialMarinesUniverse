@@ -4,6 +4,7 @@ using Content.Server.Administration;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
 using Robust.Shared.Console;
 using Robust.Shared.Prototypes;
 
@@ -20,8 +21,15 @@ namespace Content.Server.AU14.Round.Commands
         {
             if (args.Length == 2 && args[0].Equals("ship", StringComparison.OrdinalIgnoreCase))
             {
-                var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
-                roundSystem.SetOpforShip(args[1]);
+                var roundDirector = IoCManager.Resolve<IEntitySystemManager>()
+                    .GetEntitySystem<CMURoundDirectorSystem>();
+                if (roundDirector.TrySetMainShip(RoundSide.Opfor, args[1]) ==
+                    CMURoundSelectionMutationResult.SelectionFrozen)
+                {
+                    shell.WriteError("The round force selection is already frozen.");
+                    return;
+                }
+
                 shell.WriteLine($"Opfor ship set to: {args[1]}");
                 return;
             }
@@ -33,13 +41,19 @@ namespace Content.Server.AU14.Round.Commands
             }
             var sysMan = IoCManager.Resolve<IEntitySystemManager>();
             var protoMan = IoCManager.Resolve<IPrototypeManager>();
-            var platoonSys = sysMan.GetEntitySystem<PlatoonSpawnRuleSystem>();
             if (!protoMan.TryIndex<PlatoonPrototype>(args[0], out var platoon))
             {
                 shell.WriteError($"Platoon prototype not found: {args[0]}");
                 return;
             }
-            platoonSys.SelectedOpforPlatoon = platoon;
+            var director = sysMan.GetEntitySystem<CMURoundDirectorSystem>();
+            if (director.TrySetLegacyForce(RoundSide.Opfor, platoon) ==
+                CMURoundSelectionMutationResult.SelectionFrozen)
+            {
+                shell.WriteError("The round force selection is already frozen.");
+                return;
+            }
+
             shell.WriteLine($"Opfor platoon set to: {platoon.Name} ({platoon.ID})");
         }
 
@@ -58,8 +72,15 @@ namespace Content.Server.AU14.Round.Commands
         {
             if (args.Length == 2 && args[0].Equals("ship", StringComparison.OrdinalIgnoreCase))
             {
-                var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
-                roundSystem.SetGovforShip(args[1]);
+                var roundDirector = IoCManager.Resolve<IEntitySystemManager>()
+                    .GetEntitySystem<CMURoundDirectorSystem>();
+                if (roundDirector.TrySetMainShip(RoundSide.Govfor, args[1]) ==
+                    CMURoundSelectionMutationResult.SelectionFrozen)
+                {
+                    shell.WriteError("The round force selection is already frozen.");
+                    return;
+                }
+
                 shell.WriteLine($"Govfor ship set to: {args[1]}");
                 return;
             }
@@ -71,13 +92,19 @@ namespace Content.Server.AU14.Round.Commands
             }
             var sysMan = IoCManager.Resolve<IEntitySystemManager>();
             var protoMan = IoCManager.Resolve<IPrototypeManager>();
-            var platoonSys = sysMan.GetEntitySystem<PlatoonSpawnRuleSystem>();
             if (!protoMan.TryIndex<PlatoonPrototype>(args[0], out var platoon))
             {
                 shell.WriteError($"Platoon prototype not found: {args[0]}");
                 return;
             }
-            platoonSys.SelectedGovforPlatoon = platoon;
+            var director = sysMan.GetEntitySystem<CMURoundDirectorSystem>();
+            if (director.TrySetLegacyForce(RoundSide.Govfor, platoon) ==
+                CMURoundSelectionMutationResult.SelectionFrozen)
+            {
+                shell.WriteError("The round force selection is already frozen.");
+                return;
+            }
+
             shell.WriteLine($"Govfor platoon set to: {platoon.Name} ({platoon.ID})");
         }
 
@@ -99,8 +126,15 @@ namespace Content.Server.AU14.Round.Commands
                 shell.WriteError("Usage: setopforship <shipId>");
                 return;
             }
-            var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
-            roundSystem.SetOpforShip(args[0]);
+            var director = IoCManager.Resolve<IEntitySystemManager>()
+                .GetEntitySystem<CMURoundDirectorSystem>();
+            if (director.TrySetMainShip(RoundSide.Opfor, args[0]) ==
+                CMURoundSelectionMutationResult.SelectionFrozen)
+            {
+                shell.WriteError("The round force selection is already frozen.");
+                return;
+            }
+
             shell.WriteLine($"Opfor ship set to: {args[0]}");
         }
 
@@ -122,8 +156,15 @@ namespace Content.Server.AU14.Round.Commands
                 shell.WriteError("Usage: setgovforship <shipId>");
                 return;
             }
-            var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
-            roundSystem.SetGovforShip(args[0]);
+            var director = IoCManager.Resolve<IEntitySystemManager>()
+                .GetEntitySystem<CMURoundDirectorSystem>();
+            if (director.TrySetMainShip(RoundSide.Govfor, args[0]) ==
+                CMURoundSelectionMutationResult.SelectionFrozen)
+            {
+                shell.WriteError("The round force selection is already frozen.");
+                return;
+            }
+
             shell.WriteLine($"Govfor ship set to: {args[0]}");
         }
 
@@ -145,11 +186,20 @@ namespace Content.Server.AU14.Round.Commands
                 shell.WriteError("Usage: setplanet <planetPrototypeId>");
                 return;
             }
-            var roundSystem = IoCManager.Resolve<IEntitySystemManager>().GetEntitySystem<AuRoundSystem>();
-            if (roundSystem.SetPlanet(args[0]))
-                shell.WriteLine($"Planet set to: {args[0]}");
-            else
-                shell.WriteError($"Planet prototype not found: {args[0]}");
+            var director = IoCManager.Resolve<IEntitySystemManager>()
+                .GetEntitySystem<CMURoundDirectorSystem>();
+            switch (director.TrySetLegacyPlanet(args[0]))
+            {
+                case CMURoundSelectionMutationResult.Applied:
+                    shell.WriteLine($"Planet set to: {args[0]}");
+                    break;
+                case CMURoundSelectionMutationResult.InvalidSelection:
+                    shell.WriteError($"Planet prototype not found: {args[0]}");
+                    break;
+                case CMURoundSelectionMutationResult.SelectionFrozen:
+                    shell.WriteError("The round planet selection is already frozen.");
+                    break;
+            }
         }
 
         public CompletionResult GetCompletion(IConsoleShell _, string[] args)

@@ -165,7 +165,6 @@ au14-job-prefix-govfordspilotRMC = PO
 au14-job-name-govforSSGRMC = Senior Sergeant
 au14-job-prefix-govforSSGRMC = PS
 au14-job-name-radiotelephoneoperatorRMC = Signal Operator
-au14-job-name-govforsquadriflemanRMC = Rifleman
 au14-job-name-govforsquadcombattechRMC = Sapper
 au14-job-prefix-govforsquadcombattechRMC = SPR
 au14-job-name-govforspecialist-marksmanRMC = Marksman

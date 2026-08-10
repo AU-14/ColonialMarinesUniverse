@@ -1,4 +1,6 @@
+using Content.Server.AU14.Round;
 using Content.Shared._CMU14.Round.Roles;
+using Content.Shared.CMU.Round;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -12,6 +14,7 @@ public readonly record struct ResolvedRoundJobProfileComponents(
 
 public sealed partial class RoundJobProfileSystem : EntitySystem
 {
+    [Dependency] private CMURoundDirectorSystem _director = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("au14.round_job_profiles");
@@ -76,14 +79,12 @@ public sealed partial class RoundJobProfileSystem : EntitySystem
                 profile.RemoveExisting));
         }
 
-        if (!string.IsNullOrWhiteSpace(job.RoundForce) &&
-            TryGetComponents(profile.ForceComponents, job.RoundForce, out var forceComponents))
-        {
-            results.Add(new ResolvedRoundJobProfileComponents(
-                $"{profile.ID}:{job.RoundForce}",
-                forceComponents,
-                profile.RemoveExisting));
-        }
+        AddForceComponents(
+            results,
+            job,
+            profile.ID,
+            profile.ForceComponents,
+            profile.RemoveExisting);
     }
 
     private void AddInlineJobComponents(
@@ -108,14 +109,91 @@ public sealed partial class RoundJobProfileSystem : EntitySystem
                 job.RoundComponentsRemoveExisting));
         }
 
-        if (!string.IsNullOrWhiteSpace(job.RoundForce) &&
-            TryGetComponents(job.RoundForceComponents, job.RoundForce, out var forceComponents))
+        AddForceComponents(
+            results,
+            job,
+            job.ID,
+            job.RoundForceComponents,
+            job.RoundComponentsRemoveExisting);
+    }
+
+    private void AddForceComponents(
+        List<ResolvedRoundJobProfileComponents> results,
+        JobPrototype job,
+        string source,
+        Dictionary<string, ComponentRegistry> registries,
+        bool removeExisting)
+    {
+        if (TryGetCommittedForce(job, out var side, out var force))
         {
-            results.Add(new ResolvedRoundJobProfileComponents(
-                $"{job.ID}:{job.RoundForce}",
-                forceComponents,
-                job.RoundComponentsRemoveExisting));
+            AddComponentsForKey(results, registries, source, side.ToString(), removeExisting);
+
+            var forceKey = force.Value;
+            if (TryAddComponentsForKey(results, registries, source, forceKey, removeExisting))
+                return;
+
+            var legacyForceKey = forceKey.Equals("WEYU", StringComparison.OrdinalIgnoreCase)
+                ? "WYPMC"
+                : forceKey;
+            if (!legacyForceKey.Equals(forceKey, StringComparison.OrdinalIgnoreCase))
+                AddComponentsForKey(results, registries, source, legacyForceKey, removeExisting);
+
+            return;
         }
+
+        if (!string.IsNullOrWhiteSpace(job.RoundForce))
+            AddComponentsForKey(results, registries, source, job.RoundForce, removeExisting);
+    }
+
+    private bool TryGetCommittedForce(
+        JobPrototype job,
+        out RoundSide side,
+        out RoundForceId force)
+    {
+        var assignment = GetRoundSide(job) switch
+        {
+            RoundJobSide.Govfor => _director.Selection?.GovforAssignment,
+            RoundJobSide.Opfor => _director.Selection?.OpforAssignment,
+            _ => null,
+        };
+
+        if (assignment is { } committed)
+        {
+            side = committed.Side;
+            force = committed.Force;
+            return true;
+        }
+
+        side = default;
+        force = default;
+        return false;
+    }
+
+    private static void AddComponentsForKey(
+        List<ResolvedRoundJobProfileComponents> results,
+        Dictionary<string, ComponentRegistry> registries,
+        string source,
+        string key,
+        bool removeExisting)
+    {
+        TryAddComponentsForKey(results, registries, source, key, removeExisting);
+    }
+
+    private static bool TryAddComponentsForKey(
+        List<ResolvedRoundJobProfileComponents> results,
+        Dictionary<string, ComponentRegistry> registries,
+        string source,
+        string key,
+        bool removeExisting)
+    {
+        if (!TryGetComponents(registries, key, out var components))
+            return false;
+
+        results.Add(new ResolvedRoundJobProfileComponents(
+            $"{source}:{key}",
+            components,
+            removeExisting));
+        return true;
     }
 
     public bool ApplyJobProfile(EntityUid target, JobPrototype job)

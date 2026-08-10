@@ -12,6 +12,8 @@ using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._CMU14.ZLevels.Vehicles;
 using Content.Shared.AU14;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
+using Content.Shared.GameTicking;
 using Content.Shared.Light.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
@@ -57,12 +59,19 @@ public sealed class USSBushMultiZTest : GameTest
         Dictionary<int, NetEntity> loadedMapNets = [];
         var uscmEquipmentVendorsBefore = 0;
         var uscmWeaponsVendorsBefore = 0;
+        var semanticWeaponsVendors = 0;
 
         await server.WaitAssertion(() =>
         {
-            Assert.That(SEntMan.System<AuRoundSystem>().SetPlanet("AUPlanetLV747"), Is.True);
-            SEntMan.System<PlatoonSpawnRuleSystem>().SelectedGovforPlatoon =
-                SProtoMan.Index(UsmcPlatoon);
+            SEntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+            Assert.That(
+                SEntMan.System<CMURoundDirectorSystem>().TrySetLegacyPlanet("AUPlanetLV747"),
+                Is.EqualTo(CMURoundSelectionMutationResult.Applied));
+            Assert.That(
+                SEntMan.System<CMURoundDirectorSystem>().TrySetLegacyForce(
+                    RoundSide.Govfor,
+                    SProtoMan.Index(UsmcPlatoon)),
+                Is.EqualTo(CMURoundSelectionMutationResult.Applied));
 
             var options = DeserializationOptions.Default with { InitializeMaps = true };
             var grids = ticker.LoadGameMap(SProtoMan.Index<GameMapPrototype>(MapPrototype), out var mapId, options);
@@ -74,6 +83,8 @@ public sealed class USSBushMultiZTest : GameTest
 
             uscmEquipmentVendorsBefore = CountPrototype("AU14USCMequipmentvendor");
             uscmWeaponsVendorsBefore = CountPrototype("AU14USCMWeaponsVendor");
+            semanticWeaponsVendors = CountPrototype("VMarkerShipWeapons");
+            Assert.That(semanticWeaponsVendors, Is.GreaterThan(0));
 
             var mainMap = mapSystem.GetMap(mapId);
             Assert.That(zLevels.TryGetZNetwork(mainMap, out var matchingNetwork), Is.True);
@@ -119,8 +130,10 @@ public sealed class USSBushMultiZTest : GameTest
                 "Dynamic Bush markers should remain available for the selected platoon rule.");
             Assert.That(CountPrototype("AU14USCMequipmentvendor"), Is.GreaterThan(uscmEquipmentVendorsBefore),
                 "The selected USCM platoon did not resolve Bush's rifleman vendor markers.");
-            Assert.That(CountPrototype("AU14USCMWeaponsVendor"), Is.GreaterThan(uscmWeaponsVendorsBefore),
-                "The selected USCM platoon did not resolve Bush's weapons vendor markers.");
+            Assert.That(CountPrototype("AU14USCMWeaponsVendor"), Is.EqualTo(uscmWeaponsVendorsBefore),
+                "The semantic weapons endpoints also spawned legacy force-specific vendors.");
+            Assert.That(CountPrototype("VMarkerShipWeapons"), Is.EqualTo(semanticWeaponsVendors),
+                "The semantic weapons endpoints were replaced instead of configured in place.");
             AssertPrototypeCountAtLeast("RMCOverwatchConsoleGovforRotating", 1);
         });
 

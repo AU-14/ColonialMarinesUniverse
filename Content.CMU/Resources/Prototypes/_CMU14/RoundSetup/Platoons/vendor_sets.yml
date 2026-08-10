@@ -9,6 +9,14 @@
     JuniorOfficer: AU14JOGenericVendor
     MilitaryDoctor: AU14MilitaryDoctorGenericVendor
     VehicleCrew: AU14USCMVehicleCrewmanVendor
+  presentations:
+    CorpsmanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+    ClothingVendor: _CMU14/Structures/Vendors/uscmgearrack.rsi
+    DropshipCrewChiefVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+    PilotVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    ShipsideUniformVendor: _CMU14/Structures/Vendors/uscmgearrack.rsi
+    AutomaticRiflemanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
+    OperationsOfficerVendor: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
 
 - type: platoonVendorSet
   id: USCM
@@ -43,6 +51,12 @@
     SquadSergeant: AU14LACNsquadleaderequipmentvendor
     MilitaryPolice: AU14MilitaryPolicemanVendorLACN
     ReqVend: AU14LACNRequisitionVendor
+  presentations:
+    CorpsmanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_equipment.rsi
+    ClothingVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+    ShipsideUniformVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+    AutomaticRiflemanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
+    OperationsOfficerVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
 
 - type: platoonVendorSet
   id: UPP
@@ -62,6 +76,8 @@
     Pilot: AU14UPPAirCrewWeaponsVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUPP
     ReqVend: AU14UPPRequisitionVendor
+  presentations:
+    PilotVendor: _CMU14/Structures/Vendors/genericweaponrack.rsi
 
 - type: platoonVendorSet
   id: WEYU
@@ -97,6 +113,9 @@
     Pilot: AU14CMBCIUPilotVendor
     MilitaryPolice: AU14MilitaryPolicemanGenericVendorCIU
     ReqVend: AU14CMBCIURequisitionVendor
+  presentations:
+    DropshipCrewChiefVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    PilotVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
 
 - type: platoonVendorSet
   id: HAZOPS
@@ -129,8 +148,6 @@
     OperationsOfficer: AU14prodigycommandequipmentvendor
     SectionSergeant: AU14prodigysectionleaderequipmentvendor
     SquadSergeant: AU14prodigysquadleaderequipmentvendor
-    ExtraVendor1: VMarkerOpforDeco5
-    Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14ProdigyRequisitionVendor
 
@@ -148,8 +165,6 @@
     OperationsOfficer: AU14VAIPOcommandequipmentvendor
     SectionSergeant: AU14VAIPOsectionleaderequipmentvendor
     SquadSergeant: AU14VAIPOsquadleaderequipmentvendor
-    ExtraVendor1: VMarkerOpforDeco5
-    Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14VAIPORequisitionVendor
 
@@ -171,7 +186,5 @@
     SquadSergeant: AU14RMCsquadleaderequipmentvendor
     Pilot: AU14RMCAircrewWeaponsVendor
     combattech: AU14RMCComtechGearVendor
-    ExtraVendor1: VMarkerOpforDeco5
-    Deco1: VMarkerOpforDeco5
     MilitaryPolice: AU14MilitaryPolicemanGenericVendor
     ReqVend: AU14RMCRequisitionVendor

@@ -7,6 +7,7 @@ using Content.Server.EUI;
 using Content.Server._AU14.Insurgency.Database;
 using Content.Shared._AU14.Insurgency;
 using Content.Shared._AU14.Insurgency.Selection;
+using Content.Shared.CMU.Round;
 using Content.Shared.Eui;
 using Robust.Shared.Prototypes;
 
@@ -27,7 +28,7 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
     private readonly InsurgencyFactionDbSystem _db;
     private readonly InsurgencyFactionSelectionSystem _selection;
     private readonly InsurgencyFactionApplySystem _apply;
-    private readonly PlatoonSpawnRuleSystem _platoons;
+    private readonly CMURoundDirectorSystem _roundDirector;
 
     private List<DefaultFactionOption> _defaults = new();
 
@@ -37,19 +38,22 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
         InsurgencyFactionDbSystem db,
         InsurgencyFactionSelectionSystem selection,
         InsurgencyFactionApplySystem apply,
-        PlatoonSpawnRuleSystem platoons)
+        CMURoundDirectorSystem roundDirector)
     {
         _admin = admin;
         _prototypes = prototypes;
         _db = db;
         _selection = selection;
         _apply = apply;
-        _platoons = platoons;
+        _roundDirector = roundDirector;
     }
 
     public override EuiStateBase GetNewState()
     {
-        return new InsurgencyFactionSelectEuiState(_defaults, CanUseCustom(), _platoons.SelectedGovforPlatoon?.Name);
+        var govfor = _roundDirector.TryGetLegacyForceProjection(RoundSide.Govfor, out var force)
+            ? force.Name
+            : null;
+        return new InsurgencyFactionSelectEuiState(_defaults, CanUseCustom(), govfor);
     }
 
     public override void Opened()
@@ -62,7 +66,9 @@ public sealed class InsurgencyFactionSelectEui : BaseEui
     // once the query returns.
     private async void Refresh()
     {
-        var govfor = _platoons.SelectedGovforPlatoon?.ID;
+        var govfor = _roundDirector.TryGetLegacyForceProjection(RoundSide.Govfor, out var force)
+            ? force.ID
+            : null;
         var stored = await _db.GetFactionsAsync();
 
         var options = new List<DefaultFactionOption>();

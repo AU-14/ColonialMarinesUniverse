@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration;
 using Content.Shared.AU14.Scenario;
 using Content.Shared._CMU14.Threats;
+using Content.Shared.CMU.Round;
 using Robust.Server.Player;
 using Robust.Shared.Console;
 using Robust.Shared.GameObjects;
@@ -68,7 +69,7 @@ public sealed class ScenarioPlanValidateCommand : IConsoleCommand
         var playerManager = IoCManager.Resolve<IPlayerManager>();
         var systems = IoCManager.Resolve<IEntitySystemManager>();
         var round = systems.GetEntitySystem<AuRoundSystem>();
-        var platoons = systems.GetEntitySystem<PlatoonSpawnRuleSystem>();
+        var director = systems.GetEntitySystem<CMURoundDirectorSystem>();
         var generator = systems.GetEntitySystem<ScenarioPlanSystem>();
 
         var presetIds = ResolvePresetIds(positionalArgs);
@@ -93,8 +94,9 @@ public sealed class ScenarioPlanValidateCommand : IConsoleCommand
 
         var planetId = positionalArgs.Length >= 3
             ? positionalArgs[2]
-            : round.GetSelectedPlanetId();
-        var mapId = round.GetSelectedPlanet()?.MapId;
+            : director.GetLegacyPlanetIdProjection();
+        director.TryGetLegacyPlanetProjection(out var selectedPlanet);
+        var mapId = selectedPlanet?.MapId;
         if (!string.IsNullOrWhiteSpace(planetId))
         {
             if (!TryGetPlanetMapId(prototypes, componentFactory, planetId, out mapId))
@@ -107,19 +109,25 @@ public sealed class ScenarioPlanValidateCommand : IConsoleCommand
         var selectedThreatId = positionalArgs.Length >= 4
             ? positionalArgs[3]
             : round.SelectedThreat?.ID;
+        var govforId = director.TryGetLegacyForceProjection(RoundSide.Govfor, out var govfor)
+            ? govfor.ID
+            : null;
+        var opforId = director.TryGetLegacyForceProjection(RoundSide.Opfor, out var opfor)
+            ? opfor.ID
+            : null;
 
         foreach (var presetId in presetIds)
         {
             var request = new ScenarioPlanValidationRequest(
                 presetId,
                 playerCount,
-                platoons.SelectedGovforPlatoon?.ID,
-                platoons.SelectedOpforPlatoon?.ID,
+                govforId,
+                opforId,
                 planetId,
                 mapId,
                 selectedThreatId,
-                round.GetSelectedGovforShip(),
-                round.GetSelectedOpforShip());
+                director.GetMainShipProjection(RoundSide.Govfor),
+                director.GetMainShipProjection(RoundSide.Opfor));
 
             var report = generator.ValidateMarkerCoverage(request);
             shell.WriteLine(

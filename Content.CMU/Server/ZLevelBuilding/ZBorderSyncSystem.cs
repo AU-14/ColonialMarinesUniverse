@@ -33,7 +33,7 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     [Dependency] private CustomConstructionMenuSystem _menu = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
 
     private static readonly ResPath SaveFile = new("/au14_zborder_sync.txt");
 
@@ -78,8 +78,9 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     /// the selected planet's MapId and its planet prototype id are both accepted so either keying works.</summary>
     public bool ShouldReflect(string protoId)
     {
-        var currentGameMap = _auRound.GetSelectedPlanet()?.MapId;
-        var currentPlanet = _auRound.GetSelectedPlanetId();
+        _roundDirector.TryGetLegacyPlanetProjection(out var planet);
+        var currentGameMap = planet?.MapId;
+        var currentPlanet = _roundDirector.GetLegacyPlanetIdProjection();
 
         foreach (var (scope, lists) in _scopes)
         {

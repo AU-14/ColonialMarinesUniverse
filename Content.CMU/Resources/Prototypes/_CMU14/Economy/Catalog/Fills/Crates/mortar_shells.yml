@@ -1,0 +1,25 @@
+- type: entity
+  parent: RMCCrateMortarAmmo
+  id: AU14CrateMortarShellHEATMP
+  name: M402 mortar shells crate (x12 HEAT-MP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MortarShellHEATMP
+      amount: 12
+
+- type: entity
+  parent: RMCCrateMortarAmmo
+  id: AU14CrateMortarShellMixed
+  name: M402 mortar mixed shells crate (x3 HE, 3x HE-INC, 3x ILLUM-OBS, 3x HEAT-MP)
+  components:
+  - type: StorageFill
+    contents:
+    - id: RMCMortarShellHE
+      amount: 3
+    - id: RMCMortarShellIncendiary
+      amount: 3
+    - id: RMCMortarShellFlare
+      amount: 3
+    - id: AU14MortarShellHEATMP
+      amount: 3

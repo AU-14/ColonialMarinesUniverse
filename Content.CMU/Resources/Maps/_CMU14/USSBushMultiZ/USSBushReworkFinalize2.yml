@@ -5092,7 +5092,7 @@ entities:
     - type: Transform
       pos: 17.5,14.5
       parent: 1
-- proto: VMarkerShipCommsArray
+- proto: CMURoundShipCommunicationsArray
   entities:
   - uid: 68
     components:
@@ -5112,7 +5112,7 @@ entities:
       rot: 3.141592653589793 rad
       pos: 29.5,10.5
       parent: 1
-- proto: VMarkerShipRosterConsole
+- proto: CMURoundRosterConsole
   entities:
   - uid: 139
     components:

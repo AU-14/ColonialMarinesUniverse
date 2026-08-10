@@ -50,7 +50,7 @@ public sealed class InsurgencyEditorCommand : IConsoleCommand
             admin,
             entMan.System<InsurgencyFactionDbSystem>(),
             entMan.System<InsurgencyFactionApplySystem>(),
-            entMan.System<PlatoonSpawnRuleSystem>(),
+            entMan.System<CMURoundDirectorSystem>(),
             IoCManager.Resolve<IPrototypeManager>());
 
         eui.OpenEui(editor, player);

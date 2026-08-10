@@ -24,13 +24,13 @@ public sealed partial class ThreatVoteSystem : EntitySystem
 {
     [Dependency] private AuJobSelectionSystem _jobSelection = default!;
     [Dependency] private AuRoundSystem _auRound = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private GameTicker _ticker = default!;
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IVoteManager _voteManager = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
     [Dependency] private ThreatSystem _threat = default!;
@@ -101,7 +101,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
             return false;
 
         string? presetId = _auRound.SelectedPreset?.ID;
-        RMCPlanetMapPrototypeComponent? planet = _auRound.GetSelectedPlanet();
+        _roundDirector.TryGetCommittedLegacyPlanet(out var planet);
         if (presetId == null || planet == null)
         {
             _jobSelection.ForcedJobAssignments.Clear();
@@ -396,7 +396,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         candidates = [];
         heldBodyCount = default(ThreatVoteBodyCount);
 
-        ScenarioPlanValidationRequest request = _auRound
+        ScenarioPlanValidationRequest request = _roundDirector
             .CaptureRoundPlanSelection(playerCount, presetId, null)
             .ToScenarioPlanRequest();
 
@@ -443,8 +443,8 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         string presetId,
         int playerCount)
     {
-        string? govforId = _platoonSpawnRule.SelectedGovforPlatoon?.ID;
-        string? opforId = _platoonSpawnRule.SelectedOpforPlatoon?.ID;
+        string? govforId = _roundDirector.Selection?.GovforPlatoonId;
+        string? opforId = _roundDirector.Selection?.OpforPlatoonId;
         var candidates = new List<ThreatVoteCandidate>();
 
         foreach (ProtoId<ThreatPrototype> threatId in planet.AllowedThreats)
@@ -495,7 +495,7 @@ public sealed partial class ThreatVoteSystem : EntitySystem
         _auRound.PreselectThirdPartiesForSelectedThreat();
         try
         {
-            ScenarioPlanValidationRequest request = _auRound
+            ScenarioPlanValidationRequest request = _roundDirector
                 .CaptureRoundPlanSelection(
                     Math.Max(_player.PlayerCount, prepared.HeldPlayers.Count),
                     prepared.PresetId,

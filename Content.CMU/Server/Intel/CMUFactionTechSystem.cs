@@ -1,15 +1,12 @@
 using Content.Server._CMU14.Ops.ThirdParty;
 using Content.Shared._CMU14.Threats;
-using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Intel.Tech;
-using Content.Shared.GameTicking;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server._CMU14.Intel;
 
 public sealed partial class CMUFactionTechSystem : EntitySystem
 {
-    [Dependency] private IntelSystem _intel = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
 
@@ -17,7 +14,6 @@ public sealed partial class CMUFactionTechSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => _intel.ClearTeamTechTreeOverrides());
         SubscribeLocalEvent<TechPartySpawnEvent>(OnTechPartySpawn);
     }
 

@@ -1,5 +1,7 @@
+using Content.Shared.CMU.Round;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.AU14.util;
 
@@ -19,4 +21,11 @@ public sealed partial class PlatoonVendorSetPrototype : IPrototype, IInheritingP
     [DataField]
     [AlwaysPushInheritance]
     public Dictionary<PlatoonMarkerClass, EntProtoId> Vendors { get; private set; } = new();
+
+    /// <summary>
+    /// Final presentation defaults and sparse force overrides keyed by semantic purpose.
+    /// </summary>
+    [DataField]
+    [AlwaysPushInheritance]
+    public Dictionary<RoundSetupSlot, ResPath> Presentations { get; private set; } = new();
 }

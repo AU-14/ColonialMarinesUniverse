@@ -24,7 +24,7 @@ public sealed partial class InsurgencyLeaderSpawnSystem : EntitySystem
     [Dependency] private InsurgencyFactionDbSystem _db = default!;
     [Dependency] private InsurgencyFactionSelectionSystem _selection = default!;
     [Dependency] private InsurgencyFactionApplySystem _apply = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoons = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
 
     // ---------------------------------------------------------------------
     // Tunable. The job that gets to pick the round's faction. Change here if the picking role moves.
@@ -72,7 +72,13 @@ public sealed partial class InsurgencyLeaderSpawnSystem : EntitySystem
 
     private void OpenSelector(Robust.Shared.Player.ICommonSession session)
     {
-        var editor = new InsurgencyFactionSelectEui(_admin, _prototypes, _db, _selection, _apply, _platoons);
+        var editor = new InsurgencyFactionSelectEui(
+            _admin,
+            _prototypes,
+            _db,
+            _selection,
+            _apply,
+            _roundDirector);
         _eui.OpenEui(editor, session);
     }
 }

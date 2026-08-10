@@ -18,7 +18,7 @@ namespace Content.Server._CMU14.Spawners;
 /// </summary>
 public sealed partial class CMUFactionSpawnPointSystem : EntitySystem
 {
-    [Dependency] private AuRoundSystem _round = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RoundJobProfileSystem _roundJobProfiles = default!;
@@ -52,7 +52,7 @@ public sealed partial class CMUFactionSpawnPointSystem : EntitySystem
 
         var govfor = side == RoundJobSide.Govfor;
         var faction = govfor ? "govfor" : "opfor";
-        var planet = _round.GetSelectedPlanet();
+        _roundDirector.TryGetCommittedLegacyPlanet(out var planet);
         var factionInShip = govfor
             ? planet?.GovforInShip ?? false
             : planet?.OpforInShip ?? false;

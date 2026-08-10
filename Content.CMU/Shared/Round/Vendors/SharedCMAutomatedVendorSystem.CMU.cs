@@ -1,0 +1,57 @@
+#nullable enable
+
+using System.Linq;
+using Content.Shared.CMU.Round;
+
+namespace Content.Shared._RMC14.Vendors;
+
+public abstract partial class SharedCMAutomatedVendorSystem
+{
+    /// <summary>
+    /// Replaces one live vendor's inventory from detached round-plan data and rebuilds all runtime indexes.
+    /// </summary>
+    public void ApplyRoundVendorProfile(
+        Entity<CMAutomatedVendorComponent> vendor,
+        ResolvedRoundVendorProfile profile)
+    {
+        ArgumentNullException.ThrowIfNull(profile);
+
+        var sections = new List<CMVendorSection>(profile.Sections.Length);
+        foreach (var resolvedSection in profile.Sections)
+        {
+            var entries = new List<CMVendorEntry>(resolvedSection.Entries.Length);
+            foreach (var resolvedEntry in resolvedSection.Entries)
+            {
+                entries.Add(new CMVendorEntry
+                {
+                    Id = resolvedEntry.Product,
+                    Name = resolvedEntry.Name,
+                    Amount = resolvedEntry.Amount,
+                    Points = resolvedEntry.Points,
+                    Recommended = resolvedEntry.Recommended,
+                    GiveSquadRoleName = resolvedEntry.GiveSquadRoleName,
+                    IsAppendSquadRoleName = resolvedEntry.IsAppendSquadRoleName,
+                    GivePrefix = resolvedEntry.GivePrefix,
+                    IsAppendPrefix = resolvedEntry.IsAppendPrefix,
+                });
+            }
+
+            sections.Add(new CMVendorSection
+            {
+                Name = resolvedSection.Name,
+                Choices = resolvedSection.Choice is { } choice
+                    ? (choice.Id, choice.Amount)
+                    : null,
+                TakeAll = resolvedSection.TakeAll,
+                TakeOne = resolvedSection.TakeOne,
+                SharedSpecLimit = resolvedSection.SharedSpecLimit,
+                Entries = entries,
+            });
+        }
+
+        vendor.Comp.PointsType = profile.PointsType;
+        vendor.Comp.Jobs = profile.Jobs.ToList();
+        vendor.Comp.Sections = sections;
+        RebuildVendorInventory(vendor);
+    }
+}

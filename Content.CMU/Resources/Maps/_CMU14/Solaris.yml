@@ -106743,7 +106743,7 @@ entities:
     - type: Transform
       pos: 245.01741,22.429544
       parent: 1
-- proto: AU14AircrewWeaponsVendor
+- proto: VMarkerGovforpilot
   entities:
   - uid: 4
     components:
@@ -107995,14 +107995,14 @@ entities:
     - type: Transform
       pos: 80.591156,-120.38352
       parent: 1
-- proto: AU14USCMaircrewvendor
+- proto: VMarkerGovforDCC
   entities:
   - uid: 207
     components:
     - type: Transform
       pos: 27.5,63.5
       parent: 1
-- proto: AU14USCMclothingequipmentvendor
+- proto: VMarkerGovforClothing
   entities:
   - uid: 208
     components:
@@ -108039,61 +108039,79 @@ entities:
     - type: Transform
       pos: 34.5,75.5
       parent: 1
-- proto: AU14USCMcommandequipmentvendor
+- proto: CMURoundOperationsOfficerVendor
   entities:
   - uid: 215
     components:
     - type: Transform
       pos: 27.5,67.5
       parent: 1
-- proto: AU14USCMcorpsmanvendor
+    - type: RoundSetupEndpoint
+      side: Govfor
+- proto: CMURoundCorpsmanVendor
   entities:
   - uid: 216
     components:
     - type: Transform
       pos: 33.5,67.5
       parent: 1
-- proto: AU14USCMequipmentvendor
+    - type: RoundSetupEndpoint
+      side: Govfor
+- proto: CMURoundRiflemanVendor
   entities:
   - uid: 217
     components:
     - type: Transform
       pos: 27.5,74.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 218
     components:
     - type: Transform
       pos: 27.5,76.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 219
     components:
     - type: Transform
       pos: 34.5,76.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 220
     components:
     - type: Transform
       pos: 34.5,74.5
       parent: 1
-- proto: AU14USCMsectionleaderequipmentvendor
+    - type: RoundSetupEndpoint
+      side: Govfor
+- proto: CMURoundSectionSergeantVendor
   entities:
   - uid: 221
     components:
     - type: Transform
       pos: 33.5,63.5
       parent: 1
-- proto: AU14USCMSGequipmentvendor
+    - type: RoundSetupEndpoint
+      side: Govfor
+- proto: CMURoundAutomaticRiflemanVendor
   entities:
   - uid: 222
     components:
     - type: Transform
       pos: 27.5,71.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 223
     components:
     - type: Transform
       pos: 27.5,69.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14USCMSpecialWeaponsVendor
   entities:
   - uid: 224

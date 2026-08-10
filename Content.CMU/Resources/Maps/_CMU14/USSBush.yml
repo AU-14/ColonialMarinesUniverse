@@ -7408,7 +7408,7 @@ entities:
     - type: Transform
       pos: -26.257448,17.45147
       parent: 1
-- proto: AU14JOGenericVendor
+- proto: CMURoundJuniorOfficerVendor
   entities:
   - uid: 67
     components:
@@ -29710,7 +29710,7 @@ entities:
     - type: Transform
       pos: -2.6959476,-67.40946
       parent: 1
-- proto: RMCComputerIntelGovfor
+- proto: CMURoundIntelligenceComputer
   entities:
   - uid: 4081
     components:
@@ -40687,7 +40687,7 @@ entities:
     - type: Transform
       pos: -33.429752,19.73656
       parent: 1
-- proto: VMarkerShipAnalyzer
+- proto: CMURoundAnalyzerMachine
   entities:
   - uid: 5862
     components:
@@ -40845,7 +40845,7 @@ entities:
     - type: Transform
       pos: 8.5,-3.5
       parent: 1
-- proto: VMarkerShipCorpsman
+- proto: CMURoundCorpsmanVendor
   entities:
   - uid: 5892
     components:
@@ -41155,7 +41155,7 @@ entities:
     - type: Transform
       pos: 29.5,16.5
       parent: 1
-- proto: VMarkershiprequisitionsvendor
+- proto: CMURoundRequisitionsVendor
   entities:
   - uid: 5943
     components:
@@ -41243,7 +41243,7 @@ entities:
     - type: Transform
       pos: 5.5,-9.5
       parent: 1
-- proto: VMarkerShipTechTree
+- proto: CMURoundTechnologyTreeConsole
   entities:
   - uid: 5959
     components:

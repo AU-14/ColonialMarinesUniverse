@@ -30,12 +30,13 @@
     icon:
       sprite: /Textures/_CMU14/Interface/au14govforjobicons.rsi
       state: rifleman
-  roundForceComponents:
-    OPFOR:
+  roundSideComponents:
+    Opfor:
     - type: TacticalMapIcon
       icon:
         sprite: /Textures/_CMU14/Interface/au14opforjobicons.rsi
         state: rifleman
+  roundForceComponents:
     RMC:
     - type: Skills
       skills:
@@ -70,7 +71,7 @@
         RMCSkillPolice: 2
     - type: JobPrefix
       prefix: au14-job-prefix-AU14JobGOVFORSquadRiflemanCMBCIU
-    WYPMC:
+    WEYU:
     - type: Skills
       skills:
         RMCSkillEndurance: 1
@@ -196,69 +197,3 @@
     head: AU14JungleM10Helmet
     jumpsuit: AU14JungleFatigues
     ears: AU14HeadsetOpforMarine
-
-- type: job
-  parent: AU14JobSquadRiflemanBase
-  id: AU14JobGOVFORSquadRiflemanCMBCIU
-  roundForce: CMBCIU
-  name: Tactical Officer
-  ranks:
-    AU14RankCMBSrDeputy:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRifleman
-      time: 108000 # 30 hours
-    AU14RankCMBDeputy:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRifleman
-      time: 1200 # 2 hours
-    AU14RankCMBProbDeputy: []
-  spawnMenuRoleName: Operations Officer (CMBCIU)
-
-- type: job
-  parent: AU14JobSquadRiflemanBase
-  id: AU14JobGOVFORSquadRiflemanRMC
-  roundForce: RMC
-  name: au14-job-name-govforsquadriflemanRMC
-  spawnMenuRoleName: Rifleman (TWE RMC)
-  ranks:
-    RMCRankCivilian: []
-  chevrons:
-    RMC_LanceCorporal:
-      entity: AU14ChevronRMCLanceCorporal
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORSquadRifleman
-        time: 54000 # 15 hours
-    RMC_Marine:
-      entity: AU14ChevronRMCMarine
-      requirements: []
-
-- type: job
-  parent: AU14JobSquadRiflemanBase
-  id: AU14JobGOVFORSquadRiflemanUPP
-  roundForce: UPP
-  name: Rifleman
-  spawnMenuRoleName: Rifleman (UPP)
-  ranks:
-    UPP_Gefreiter:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRifleman
-      time: 108000 # 30 hours
-    UPP_Private: []
-
-- type: job
-  parent: AU14JobSquadRiflemanBase
-  id: AU14JobGOVFORSquadRiflemanWYPMC
-  roundForce: WYPMC
-  name: PMC Contractor
-  spawnMenuRoleName: Rifleman (WYPMC)
-  ranks:
-    AU14RankWeYuSeniorOperator:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRifleman
-      time: 108000 # 30 hours
-    AU14RankWeYuOperator:
-    - !type:RoleTimeRequirement
-      role: AU14JobGOVFORSquadRifleman
-      time: 1200 # 2 hours
-    AU14RankWeYuRecruit: []

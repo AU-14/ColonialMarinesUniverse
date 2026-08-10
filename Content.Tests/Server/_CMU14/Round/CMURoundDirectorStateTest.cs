@@ -27,6 +27,39 @@ public sealed class CMURoundDirectorStateTest
     }
 
     [Test]
+    public void FrozenForceAssignmentsCannotBeReplacedWithinAGeneration()
+    {
+        var state = new CMURoundDirectorState();
+        var first = Selection(
+            "DistressSignal",
+            "LV624",
+            "LV624Map",
+            "USCM",
+            "UPP",
+            "USSBushRedux",
+            "USSBushRedux");
+        var later = Selection(
+            "Insurgency",
+            "Solaris",
+            "SolarisMap",
+            "RMC",
+            "WEYU",
+            "LaterGovforShip",
+            "LaterOpforShip");
+
+        state.TryFreezeSelection(first, out _);
+        state.TryFreezeSelection(later, out var frozen);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(frozen.GovforAssignment, Is.EqualTo(first.GovforAssignment));
+            Assert.That(frozen.OpforAssignment, Is.EqualTo(first.OpforAssignment));
+            Assert.That(frozen.GovforAssignment, Is.Not.EqualTo(later.GovforAssignment));
+            Assert.That(frozen.OpforAssignment, Is.Not.EqualTo(later.OpforAssignment));
+        });
+    }
+
+    [Test]
     public void WorldStagesOnlyAdvanceWhenTheirPrerequisitesAreReady()
     {
         var state = new CMURoundDirectorState();
@@ -80,17 +113,24 @@ public sealed class CMURoundDirectorStateTest
         });
     }
 
-    private static RoundPlanSelectionSnapshot Selection(string preset, string planet, string map)
+    private static RoundPlanSelectionSnapshot Selection(
+        string preset,
+        string planet,
+        string map,
+        string govforPlatoon = "GovforPlatoon",
+        string opforPlatoon = "OpforPlatoon",
+        string govforShip = "GovforShip",
+        string opforShip = "OpforShip")
     {
         return new RoundPlanSelectionSnapshot(
             preset,
             80,
-            "GovforPlatoon",
-            "OpforPlatoon",
+            govforPlatoon,
+            opforPlatoon,
             planet,
             map,
             null,
-            "GovforShip",
-            "OpforShip");
+            govforShip,
+            opforShip);
     }
 }

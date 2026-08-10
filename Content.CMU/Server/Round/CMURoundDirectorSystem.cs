@@ -2,6 +2,7 @@ using Content.Server.AU14.Scenario;
 using Content.Server.GameTicking;
 using Content.Shared.GameTicking;
 using Robust.Shared.Profiling;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.Round;
 
@@ -10,7 +11,9 @@ namespace Content.Server.AU14.Round;
 /// </summary>
 public sealed partial class CMURoundDirectorSystem : EntitySystem
 {
+    [Dependency] private IComponentFactory _componentFactory = default!;
     [Dependency] private ProfManager _prof = default!;
+    [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private AuRoundSystem _round = default!;
 
     private readonly CMURoundDirectorState _state = new();
@@ -31,6 +34,21 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
     /// The immutable lobby selection consumed by map loading and live scenario planning.
     /// </summary>
     public RoundPlanSelectionSnapshot? Selection => _state.Selection;
+
+    /// <summary>
+    /// Captures the current mutable selection before freeze, then projects runtime-only context from the
+    /// director's committed selection after freeze.
+    /// </summary>
+    public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(
+        int playerCount,
+        string presetId,
+        string? selectedThreatId)
+    {
+        if (_state.Selection is { } committed)
+            return committed.WithRuntimeContext(playerCount, presetId, selectedThreatId);
+
+        return _round.CaptureRoundPlanSelection(playerCount, presetId, selectedThreatId);
+    }
 
     public override void Initialize()
     {
@@ -58,11 +76,14 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
             playerCount,
             presetId,
             _round.SelectedThreat?.ID);
+        var asrsCatalogs = ResolveCommittedAsrsCatalogs(candidate);
+        var vendorProfiles = ResolveCommittedVendorProfiles(candidate);
 
         if (!_state.TryFreezeSelection(candidate, out var frozen))
             return frozen;
 
-        _round.FreezeRoundPlanSelection(frozen);
+        _committedAsrsCatalogs = asrsCatalogs;
+        _committedVendorProfiles = vendorProfiles;
         RaisePhaseChanged();
         return frozen;
     }
@@ -93,8 +114,10 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
 
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
-        _round.ResetRoundPlanSelection();
+        _committedAsrsCatalogs = null;
+        _committedVendorProfiles = null;
         _state.Reset();
+        _round.ResetLobbySelection();
         RaisePhaseChanged();
     }
 

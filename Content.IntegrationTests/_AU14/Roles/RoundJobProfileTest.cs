@@ -23,7 +23,6 @@ public sealed class RoundJobProfileTest
 
     private static readonly ProtoId<JobPrototype> GovforSquadRifleman = "AU14JobGOVFORSquadRifleman";
     private static readonly ProtoId<JobPrototype> OpforSquadRifleman = "AU14JobOPFORSquadRifleman";
-    private static readonly ProtoId<JobPrototype> WypmcSquadRifleman = "AU14JobGOVFORSquadRiflemanWYPMC";
     private static readonly ProtoId<JobPrototype> GovforLogisticsTechnician = "AU14JobGOVFORAuxTech";
     private static readonly ProtoId<JobPrototype> OpforLogisticsTechnician = "AU14JobOPFORAuxTech";
     private static readonly ProtoId<JobPrototype> GovforNurse = "AU14JobGOVFORNurse";
@@ -113,24 +112,17 @@ public sealed class RoundJobProfileTest
 
             var govfor = prototypes.Index(GovforSquadRifleman);
             var opfor = prototypes.Index(OpforSquadRifleman);
-            var wypmc = prototypes.Index(WypmcSquadRifleman);
 
             Assert.That(govfor.RoundProfiles.Select(id => id.ToString()), Does.Contain("AU14RoundJobProfileSquadRifleman"));
-            Assert.That(wypmc.RoundProfiles.Select(id => id.ToString()), Is.EquivalentTo(govfor.RoundProfiles.Select(id => id.ToString())));
-            Assert.That(wypmc.RoundForce, Is.EqualTo("WYPMC"));
 
             Assert.That(profiles.GetRoundSide(govfor), Is.EqualTo(RoundJobSide.Govfor));
             Assert.That(profiles.GetRoundSide(opfor), Is.EqualTo(RoundJobSide.Opfor));
-            Assert.That(profiles.GetRoundSide(wypmc), Is.EqualTo(RoundJobSide.Govfor));
 
             Assert.That(HasResolvedComponent(profiles, govfor, "MarineOrders"), Is.True);
             Assert.That(HasResolvedComponent(profiles, govfor, "Skills"), Is.True);
             Assert.That(HasResolvedComponent(profiles, govfor, "Marine"), Is.True);
             Assert.That(HasResolvedComponent(profiles, opfor, "UserIFF"), Is.True);
             Assert.That(HasResolvedComponent(profiles, opfor, "TacticalMapIcon"), Is.True);
-            Assert.That(HasResolvedComponent(profiles, wypmc, "UserIFF"), Is.True);
-            Assert.That(HasResolvedComponent(profiles, wypmc, "JobPrefix"), Is.True);
-            Assert.That(HasResolvedComponent(profiles, wypmc, "Skills"), Is.True);
         });
 
         await pair.CleanReturnAsync();

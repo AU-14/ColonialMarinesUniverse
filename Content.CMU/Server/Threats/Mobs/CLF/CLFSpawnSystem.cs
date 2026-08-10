@@ -27,6 +27,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private StationSpawningSystem _stationSpawning = default!;
@@ -274,7 +275,7 @@ public sealed partial class ClfSpawnSystem : EntitySystem
         return false;
     }
 
-    private ScenarioPlanValidationRequest BuildClfScenarioPlanRequest() => _auRound
+    private ScenarioPlanValidationRequest BuildClfScenarioPlanRequest() => _roundDirector
         .CaptureRoundPlanSelection(
             0,
             _ticker.CurrentPreset?.ID ?? _ticker.Preset?.ID ?? _auRound.SelectedPreset?.ID ?? string.Empty,

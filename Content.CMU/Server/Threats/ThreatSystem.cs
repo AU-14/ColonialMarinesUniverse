@@ -49,6 +49,7 @@ public sealed partial class ThreatSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedRoleSystem _roles = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
     [Dependency] private CMURoundWorldIndexSystem _roundWorld = default!;
     [Dependency] private ScenarioPlanSystem _scenarioPlan = default!;
     [Dependency] private ThreatVoteSystem _threatVote = default!;
@@ -948,7 +949,7 @@ public sealed partial class ThreatSystem : EntitySystem
         if (voteHeldPlayers != null)
             playerCount = Math.Max(playerCount, voteHeldPlayers.Count);
 
-        return _auRound
+        return _roundDirector
             .CaptureRoundPlanSelection(
                 playerCount,
                 _auRound.SelectedPreset?.ID ?? string.Empty,

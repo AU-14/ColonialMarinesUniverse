@@ -189,6 +189,11 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
 
     private void OnMapInit(Entity<CMAutomatedVendorComponent> ent, ref MapInitEvent args)
     {
+        RebuildVendorInventory(ent);
+    }
+
+    private void RebuildVendorInventory(Entity<CMAutomatedVendorComponent> ent)
+    {
         var transform = Transform(ent.Owner);
         _entries.Clear();
         _boxEntries.Clear();

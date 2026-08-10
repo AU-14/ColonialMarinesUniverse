@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.util;
 using Content.Shared.CCVar;
+using Content.Shared.CMU.Round;
 using Content.Shared.Voting;
 using Robust.Shared.Prototypes;
 
@@ -167,7 +168,8 @@ public sealed partial class AuRoundSystem
                 var selectedMapId = GetVoteWinner<string>(args);
                 var selected = FindPlanetByMapId(candidates, selectedMapId) ?? candidates[0];
                 args.ResolveWinner(selected.Planet.MapId);
-                ApplyPlanetSelection(selected);
+                if (!SetPlanetSelection(selected))
+                    return;
                 QueueVoteContinuation(
                     sequenceId,
                     () => BeginFactionSelections(sequenceId, preset, selected.Planet));
@@ -175,7 +177,8 @@ public sealed partial class AuRoundSystem
             () =>
             {
                 var selected = candidates[0];
-                ApplyPlanetSelection(selected);
+                if (!SetPlanetSelection(selected))
+                    return;
                 QueueVoteContinuation(
                     sequenceId,
                     () => BeginFactionSelections(sequenceId, preset, selected.Planet));
@@ -190,7 +193,8 @@ public sealed partial class AuRoundSystem
         if (!IsCurrentVoteSequence(sequenceId))
             return;
 
-        ApplyPlanetSelection(selected);
+        if (!SetPlanetSelection(selected))
+            return;
         BeginFactionSelections(sequenceId, preset, selected.Planet);
     }
 
@@ -424,7 +428,11 @@ public sealed partial class AuRoundSystem
             return;
         }
 
-        ApplyPlanetSelection(planet.Value);
+        if (!SetPlanetSelection(planet.Value))
+        {
+            CompleteForcedSelection(onFinished);
+            return;
+        }
         ResolveFactionForCutoff(preset, planet.Value.Planet, AuRoundVoteBranch.Govfor);
         ResolveFactionForCutoff(preset, planet.Value.Planet, AuRoundVoteBranch.Opfor);
         FinalizeDerivedSelections();
@@ -634,9 +642,8 @@ public sealed partial class AuRoundSystem
     {
         _state.Reset();
         SelectedPlanetMap = null;
-        var platoons = GetPlatoonSpawnRuleSystem();
-        platoons.SelectedGovforPlatoon = null;
-        platoons.SelectedOpforPlatoon = null;
+        SetFactionPlatoon(AuRoundVoteBranch.Govfor, null);
+        SetFactionPlatoon(AuRoundVoteBranch.Opfor, null);
     }
 
     private void ClearWorldSelection()
@@ -662,10 +669,15 @@ public sealed partial class AuRoundSystem
         SetCamoType();
     }
 
+    private bool SetPlanetSelection(PlanetCandidate selected)
+    {
+        return GetRoundDirectorSystem().TrySetLegacyPlanet(selected.Id, selected.Planet) ==
+               CMURoundSelectionMutationResult.Applied;
+    }
+
     private void ClearPlanetAndFactionSelection()
     {
-        _selectedPlanet = null;
-        _selectedPlanetId = null;
+        GetRoundDirectorSystem().TrySetLegacyPlanet(null);
         SetFactionPlatoon(AuRoundVoteBranch.Govfor, null);
         SetFactionPlatoon(AuRoundVoteBranch.Opfor, null);
         SetFactionShip(AuRoundVoteBranch.Govfor, null);
@@ -709,55 +721,53 @@ public sealed partial class AuRoundSystem
         if (!listed)
             return false;
 
-        var platoons = GetPlatoonSpawnRuleSystem();
+        var govfor = GetFactionPlatoon(AuRoundVoteBranch.Govfor);
+        var opfor = GetFactionPlatoon(AuRoundVoteBranch.Opfor);
         return ThreatVoteSelection.IsThreatAllowed(
             selected,
             _selectedPreset.ID,
-            platoons.SelectedGovforPlatoon?.ID,
-            platoons.SelectedOpforPlatoon?.ID,
+            govfor?.ID,
+            opfor?.ID,
             _playerManager.PlayerCount);
-    }
-
-    private PlatoonSpawnRuleSystem GetPlatoonSpawnRuleSystem()
-    {
-        return _platoonSpawnRule ??=
-            _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
     }
 
     private PlatoonPrototype? GetFactionPlatoon(AuRoundVoteBranch faction)
     {
-        var platoons = GetPlatoonSpawnRuleSystem();
-        return faction == AuRoundVoteBranch.Govfor
-            ? platoons.SelectedGovforPlatoon
-            : platoons.SelectedOpforPlatoon;
+        var side = faction == AuRoundVoteBranch.Govfor
+            ? RoundSide.Govfor
+            : RoundSide.Opfor;
+        return GetRoundDirectorSystem().TryGetLegacyForceProjection(side, out var platoon)
+            ? platoon
+            : null;
     }
 
     private void SetFactionPlatoon(AuRoundVoteBranch faction, PlatoonPrototype? platoon)
     {
-        var platoons = GetPlatoonSpawnRuleSystem();
-        if (faction == AuRoundVoteBranch.Govfor)
-            platoons.SelectedGovforPlatoon = platoon;
-        else
-            platoons.SelectedOpforPlatoon = platoon;
-
-        _intel.SetTeamTechTreeOverride(
-            faction == AuRoundVoteBranch.Govfor ? Team.GovFor : Team.OpFor,
-            platoon?.TechTree);
+        var side = faction == AuRoundVoteBranch.Govfor
+            ? RoundSide.Govfor
+            : RoundSide.Opfor;
+        if (GetRoundDirectorSystem().TrySetLegacyForce(side, platoon) !=
+            CMURoundSelectionMutationResult.Applied)
+        {
+            return;
+        }
     }
 
     private string? GetFactionShip(AuRoundVoteBranch faction)
     {
-        return faction == AuRoundVoteBranch.Govfor
-            ? _selectedGovforShip
-            : _selectedOpforShip;
+        return GetRoundDirectorSystem().GetMainShipProjection(
+            faction == AuRoundVoteBranch.Govfor
+                ? RoundSide.Govfor
+                : RoundSide.Opfor);
     }
 
     private void SetFactionShip(AuRoundVoteBranch faction, string? ship)
     {
-        if (faction == AuRoundVoteBranch.Govfor)
-            _selectedGovforShip = ship;
-        else
-            _selectedOpforShip = ship;
+        GetRoundDirectorSystem().TrySetMainShip(
+            faction == AuRoundVoteBranch.Govfor
+                ? RoundSide.Govfor
+                : RoundSide.Opfor,
+            ship);
     }
 
     private static bool FactionIsEnabled(GamePresetPrototype preset, AuRoundVoteBranch faction)

@@ -1,6 +1,7 @@
 #nullable enable
 
 using Content.Server.AU14.Scenario;
+using Content.Shared.CMU.Round;
 using NUnit.Framework;
 
 namespace Content.Tests.Server._CMU14.Scenario;
@@ -8,6 +9,101 @@ namespace Content.Tests.Server._CMU14.Scenario;
 [TestFixture]
 public sealed class RoundPlanSelectionSnapshotTest
 {
+    [TestCase(RoundSide.Opfor, true, "govforAssignment")]
+    [TestCase(RoundSide.Govfor, false, "opforAssignment")]
+    public void TypedAssignmentMustMatchItsSnapshotSide(
+        RoundSide assignmentSide,
+        bool useGovforSlot,
+        string expectedParameter)
+    {
+        var assignment = new RoundForceAssignment(
+            assignmentSide,
+            new RoundForceId("UPP"),
+            "USSBushRedux");
+
+        Assert.That(
+            () => RoundPlanSelectionSnapshot.FromAssignments(
+                "DistressSignal",
+                80,
+                useGovforSlot ? assignment : null,
+                useGovforSlot ? null : assignment,
+                "LV624",
+                "LV624Map",
+                null),
+            Throws.ArgumentException.With.Property("ParamName").EqualTo(expectedParameter));
+    }
+
+    [Test]
+    public void TypedAssignmentsProjectTheLegacySelectionContract()
+    {
+        var govfor = new RoundForceAssignment(
+            RoundSide.Govfor,
+            new RoundForceId("USCM"),
+            "GovforShip");
+        var opfor = new RoundForceAssignment(
+            RoundSide.Opfor,
+            new RoundForceId("UPP"),
+            "OpforShip");
+
+        var snapshot = RoundPlanSelectionSnapshot.FromAssignments(
+            "DistressSignal",
+            80,
+            govfor,
+            opfor,
+            "LV624",
+            "LV624Map",
+            "XenoThreat");
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(snapshot.GovforAssignment, Is.EqualTo(govfor));
+            Assert.That(snapshot.OpforAssignment, Is.EqualTo(opfor));
+            Assert.That(snapshot.GovforPlatoonId, Is.EqualTo("USCM"));
+            Assert.That(snapshot.OpforPlatoonId, Is.EqualTo("UPP"));
+            Assert.That(snapshot.GovforShipId, Is.EqualTo("GovforShip"));
+            Assert.That(snapshot.OpforShipId, Is.EqualTo("OpforShip"));
+        });
+    }
+
+    [Test]
+    public void SnapshotCopyRejectsAssignmentOnWrongSide()
+    {
+        var snapshot = RoundPlanSelectionSnapshot.FromAssignments(
+            "DistressSignal",
+            80,
+            new RoundForceAssignment(
+                RoundSide.Govfor,
+                new RoundForceId("USCM"),
+                "GovforShip"),
+            null,
+            "LV624",
+            "LV624Map",
+            null);
+        var wrongSide = new RoundForceAssignment(
+            RoundSide.Opfor,
+            new RoundForceId("UPP"),
+            "OpforShip");
+
+        Assert.That(
+            () => snapshot with { GovforAssignment = wrongSide },
+            Throws.ArgumentException.With.Property("ParamName").EqualTo("value"));
+    }
+
+    [Test]
+    public void SnapshotRejectsDefaultForceAssignment()
+    {
+        Assert.That(
+            () => RoundPlanSelectionSnapshot.FromAssignments(
+                "DistressSignal",
+                80,
+                default(RoundForceAssignment),
+                null,
+                "LV624",
+                "LV624Map",
+                null),
+            Throws.ArgumentException.With.Property("ParamName").EqualTo("govforAssignment"));
+    }
+
     [Test]
     public void ConvertsFrozenSelectionWithoutDroppingContext()
     {

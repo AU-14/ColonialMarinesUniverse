@@ -34,10 +34,12 @@ namespace Content.Server._RMC14.Requisitions;
 
 public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
 {
+    /// <summary>
+    /// Atomically reserves one unit of stock for a requisitions catalog entry when that entry is limited.
+    /// </summary>
     public bool TryReserveStock(Entity<RequisitionsComputerComponent> computer, int category, int order)
     {
-        return category >= 0 && category < computer.Comp.Categories.Count &&
-               order >= 0 && order < computer.Comp.Categories[category].Entries.Count;
+        return TryReserveRoundStock(computer, category, order); // CMU
     }
 
     public void ReapplyPlatoonCatalogs()
@@ -109,16 +111,16 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     private void OnBuy(Entity<RequisitionsComputerComponent> computer, ref RequisitionsBuyMsg args)
     {
         var actor = args.Actor;
-        if (args.Category >= computer.Comp.Categories.Count)
+        if (args.Category < 0 || args.Category >= computer.Comp.Categories.Count) // CMU
         {
-            Log.Error($"Player {ToPrettyString(actor)} tried to buy out of bounds requisitions order: category {args.Category}");
+            Log.Warning($"Player {ToPrettyString(actor)} tried to buy out of bounds requisitions order: category {args.Category}");
             return;
         }
 
         var category = computer.Comp.Categories[args.Category];
-        if (args.Order >= category.Entries.Count)
+        if (args.Order < 0 || args.Order >= category.Entries.Count) // CMU
         {
-            Log.Error($"Player {ToPrettyString(actor)} tried to buy out of bounds requisitions order: category {args.Category}");
+            Log.Warning($"Player {ToPrettyString(actor)} tried to buy out of bounds requisitions order: order {args.Order} in category {args.Category}");
             return;
         }
 
@@ -133,6 +135,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             return;
 
         if (IsFull(elevator))
+            return;
+
+        if (!TryReserveStock(computer, args.Category, args.Order)) // CMU
             return;
 
         account.Balance -= order.Cost;
@@ -456,6 +461,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         base.Update(frameTime);
 
         var time = _timing.CurTime;
+        ProcessRoundStock(time); // CMU
         var updateUI = false;
         var accounts = EntityQueryEnumerator<RequisitionsAccountComponent>();
         while (accounts.MoveNext(out var uid, out var account))

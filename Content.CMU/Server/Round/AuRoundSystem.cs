@@ -10,11 +10,11 @@ using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking.Presets;
 using Content.Server.Maps;
 using Content.Server.Voting;
-using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.TacticalMap;
 using Content.Shared._CMU14.Threats;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
 using Content.Shared.CCVar;
 using Content.Shared.Preferences;
 using Robust.Server.Player;
@@ -40,7 +40,6 @@ namespace Content.Server.AU14.Round
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private IServerPreferencesManager _prefsManager = default!;
         [Dependency] private IVoteManager _voteManager = default!;
-        [Dependency] private IntelSystem _intel = default!;
         [Dependency] private ItemCamouflageSystem _camo = default!;
 
         [ViewVariables]
@@ -56,8 +55,8 @@ namespace Content.Server.AU14.Round
         private readonly AuRoundVoteSequenceTracker _voteSequence = new();
         private readonly AuRoundVoteCompletionState _voteCompletion = new();
         private readonly ISawmill _sawmill = Logger.GetSawmill("content");
-        private RoundPlanSelectionSnapshot? _frozenRoundPlanSelection;
-        private PlatoonSpawnRuleSystem? _platoonSpawnRule;
+        private PlatoonPrototype? _selectedGovforPlatoon;
+        private PlatoonPrototype? _selectedOpforPlatoon;
         private Action? _voteSequenceFinished;
         private bool _selectionFinalized;
 
@@ -108,8 +107,15 @@ namespace Content.Server.AU14.Round
             set => _state.SelectedOpforShip = value;
         }
 
-        public void SetOpforShip(string shipId) => _selectedOpforShip = shipId;
-        public void SetGovforShip(string shipId) => _selectedGovforShip = shipId;
+        public void SetOpforShip(string shipId)
+        {
+            GetRoundDirectorSystem().TrySetMainShip(RoundSide.Opfor, shipId);
+        }
+
+        public void SetGovforShip(string shipId)
+        {
+            GetRoundDirectorSystem().TrySetMainShip(RoundSide.Govfor, shipId);
+        }
         public void SetPreset(GamePresetPrototype? preset) => _selectedPreset = preset;
         public void SetSelectedThreat(ThreatPrototype? threat)
         {
@@ -118,8 +124,8 @@ namespace Content.Server.AU14.Round
         }
 
         /// <summary>
-        /// Captures the current round selections for one planning operation.
-        /// Once preloading freezes the world, later captures retain its planet, platoons, and ships.
+        /// Captures the current mutable selections for pre-freeze planning.
+        /// Committed round consumers must capture through <see cref="CMURoundDirectorSystem"/>.
         /// </summary>
         public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount)
         {
@@ -130,24 +136,18 @@ namespace Content.Server.AU14.Round
         }
 
         /// <summary>
-        /// Captures the current world selections with an explicit runtime preset and threat context.
-        /// Once preloading freezes the world, later captures retain its planet, platoons, and ships.
+        /// Captures the current mutable world selections with an explicit runtime preset and threat context.
+        /// Committed round consumers must capture through <see cref="CMURoundDirectorSystem"/>.
         /// </summary>
         public RoundPlanSelectionSnapshot CaptureRoundPlanSelection(int playerCount,
             string presetId,
             string? selectedThreatId)
         {
-            if (_frozenRoundPlanSelection is { } frozen)
-                return frozen.WithRuntimeContext(playerCount, presetId, selectedThreatId);
-
-            var platoons = _platoonSpawnRule ??=
-                _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-
             return new(
                 presetId,
                 playerCount,
-                platoons.SelectedGovforPlatoon?.ID,
-                platoons.SelectedOpforPlatoon?.ID,
+                _selectedGovforPlatoon?.ID,
+                _selectedOpforPlatoon?.ID,
                 _selectedPlanetId,
                 _selectedPlanet?.MapId,
                 selectedThreatId,
@@ -155,27 +155,77 @@ namespace Content.Server.AU14.Round
                 _selectedOpforShip);
         }
 
-        /// <summary>
-        /// Commits the lobby's world selection for this round generation.
-        /// </summary>
-        internal RoundPlanSelectionSnapshot FreezeRoundPlanSelection(RoundPlanSelectionSnapshot selection)
+        internal void ApplyLegacyForceSelection(RoundSide side, PlatoonPrototype? platoon)
         {
-            if (_frozenRoundPlanSelection == null)
+            switch (side)
             {
-                _frozenRoundPlanSelection = selection;
-                if (!_selectionFinalized)
-                {
-                    // Keep direct callers safe: invalidate callbacks before cancelling their handles.
-                    _voteSequence.Restart();
-                }
+                case RoundSide.Govfor:
+                    _selectedGovforPlatoon = platoon;
+                    break;
+                case RoundSide.Opfor:
+                    _selectedOpforPlatoon = platoon;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(side), side, null);
             }
-
-            return _frozenRoundPlanSelection.Value;
         }
 
-        internal void ResetRoundPlanSelection()
+        internal PlatoonPrototype? GetLegacyForceSelection(RoundSide side)
         {
-            _frozenRoundPlanSelection = null;
+            return side switch
+            {
+                RoundSide.Govfor => _selectedGovforPlatoon,
+                RoundSide.Opfor => _selectedOpforPlatoon,
+                _ => throw new ArgumentOutOfRangeException(nameof(side), side, null),
+            };
+        }
+
+        internal void ApplyMainShipSelection(RoundSide side, string? shipId)
+        {
+            switch (side)
+            {
+                case RoundSide.Govfor:
+                    _selectedGovforShip = shipId;
+                    break;
+                case RoundSide.Opfor:
+                    _selectedOpforShip = shipId;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(side), side, null);
+            }
+        }
+
+        internal bool TryApplyLegacyPlanetSelection(string? planetId)
+        {
+            if (string.IsNullOrWhiteSpace(planetId))
+            {
+                _selectedPlanet = null;
+                _selectedPlanetId = null;
+                return true;
+            }
+
+            if (!_prototypeManager.TryIndex<EntityPrototype>(planetId, out var prototype) ||
+                !prototype.TryComp(
+                    out RMCPlanetMapPrototypeComponent? planet,
+                    _componentFactory))
+            {
+                return false;
+            }
+
+            ApplyLegacyPlanetSelection(planetId, planet);
+            return true;
+        }
+
+        internal void ApplyLegacyPlanetSelection(
+            string planetId,
+            RMCPlanetMapPrototypeComponent planet)
+        {
+            ApplyPlanetSelection(new PlanetCandidate(planetId, planet));
+        }
+
+        private CMURoundDirectorSystem GetRoundDirectorSystem()
+        {
+            return _entityManager.EntitySysManager.GetEntitySystem<CMURoundDirectorSystem>();
         }
 
         public bool UsesPostRoundstartThreatVote()
@@ -192,7 +242,6 @@ namespace Content.Server.AU14.Round
             SubscribeLocalEvent<AuRoundVoteContinuationEvent>(OnVoteContinuation);
             _voteSequence.Reset();
             _state.Reset();
-            ResetRoundPlanSelection();
             SelectedPlanetMap = null;
         }
 
@@ -237,14 +286,17 @@ namespace Content.Server.AU14.Round
             if (_selectedPreset == null)
                 return true;
 
-            var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
+            var selection = GetRoundDirectorSystem().CaptureRoundPlanSelection(
+                _playerManager.PlayerCount,
+                _selectedPreset.ID,
+                SelectedThreat?.ID);
             return IsThirdPartyAllowed(
                 proto,
-                _selectedPreset.ID,
-                SelectedThreat?.ID,
-                platoonSpawnRuleSystem.SelectedGovforPlatoon?.ID,
-                platoonSpawnRuleSystem.SelectedOpforPlatoon?.ID,
-                _playerManager.PlayerCount);
+                selection.PresetId,
+                selection.SelectedThreatId,
+                selection.GovforAssignment?.Force.Value,
+                selection.OpforAssignment?.Force.Value,
+                selection.PlayerCount);
         }
 
         private static bool IsThirdPartyAllowed(
@@ -596,9 +648,11 @@ namespace Content.Server.AU14.Round
             }
 
             var playerCount = _playerManager.PlayerCount;
-            var platoonSpawnRule = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-            var govforId = platoonSpawnRule.SelectedGovforPlatoon?.ID;
-            var opforId = platoonSpawnRule.SelectedOpforPlatoon?.ID;
+            var director = GetRoundDirectorSystem();
+            director.TryGetLegacyForceProjection(RoundSide.Govfor, out var govfor);
+            director.TryGetLegacyForceProjection(RoundSide.Opfor, out var opfor);
+            var govforId = govfor?.ID;
+            var opforId = opfor?.ID;
             var threatLimits = new List<(int MaxThirdParties, int BodyBudget)>();
             var eligibleThreatIds = new List<string>();
 
@@ -720,7 +774,7 @@ namespace Content.Server.AU14.Round
             return _voteSequenceRunning;
         }
 
-        public void StartVoteSequence(Action? onFinished = null)
+        internal void StartVoteSequence(Action? onFinished = null)
         {
             _voteSequence.Restart();
             ResetMutableSelection();
@@ -787,25 +841,12 @@ namespace Content.Server.AU14.Round
 
         public void SetOpfor(string opfor)
         {
-            _selectedOpforShip = opfor;
+            SetOpforShip(opfor);
         }
 
         public void SetGovfor(string govfor)
         {
-            _selectedGovforShip = govfor;
-        }
-
-        public bool SetPlanet(string planetId)
-        {
-            if (_prototypeManager.TryIndex<EntityPrototype>(planetId, out var proto) &&
-                proto.TryComp(out RMCPlanetMapPrototypeComponent? planetComp,
-                _componentFactory))
-            {
-                ApplyPlanetSelection(new PlanetCandidate(planetId, planetComp));
-                return true;
-            }
-
-            return false;
+            SetGovforShip(govfor);
         }
 
         public void SetCamoType(CamouflageType? ct = null)
@@ -847,10 +888,12 @@ namespace Content.Server.AU14.Round
                 return;
             }
 
-            var platoonSpawnRuleSystem = _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
             var playerCount = _playerManager.PlayerCount;
-            var govforId = platoonSpawnRuleSystem?.SelectedGovforPlatoon?.ID;
-            var opforId = platoonSpawnRuleSystem?.SelectedOpforPlatoon?.ID;
+            var director = GetRoundDirectorSystem();
+            director.TryGetLegacyForceProjection(RoundSide.Govfor, out var govfor);
+            director.TryGetLegacyForceProjection(RoundSide.Opfor, out var opfor);
+            var govforId = govfor?.ID;
+            var opforId = opfor?.ID;
             var threats = new List<ProtoId<ThreatPrototype>>();
 
             foreach (var threatId in planet.AllowedThreats)
