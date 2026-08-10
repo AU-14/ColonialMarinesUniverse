@@ -76,7 +76,14 @@ public sealed partial class RoundSetupEndpointSystem : EntitySystem
         var owningSide = TryGetOwningSide(endpoint, out var resolvedOwner)
             ? (RoundSide?) resolvedOwner
             : null;
+
+        if (endpoint.Comp.Side == null && owningSide == null)
+            return;
+
         var side = RoundSetupEndpointResolver.ResolveSide(endpoint.Comp.Side, owningSide);
+        if (!HasCommittedAssignment(side))
+            return;
+
         var resolved = new RoundSetupEndpointResolvedEvent(
             endpoint,
             _director.Generation,
@@ -105,6 +112,16 @@ public sealed partial class RoundSetupEndpointSystem : EntitySystem
                 $"Owning grid {ToPrettyString(grid)} has unsupported round side faction '{shipFaction.Faction}'."),
         };
         return true;
+    }
+
+    private bool HasCommittedAssignment(RoundSide side)
+    {
+        return side switch
+        {
+            RoundSide.Govfor => _director.Selection?.GovforAssignment != null,
+            RoundSide.Opfor => _director.Selection?.OpforAssignment != null,
+            _ => throw new ArgumentOutOfRangeException(nameof(side), side, "Unknown round side."),
+        };
     }
 
     private static bool WorldIsInitialized(CMURoundPhase phase)

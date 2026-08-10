@@ -1,5 +1,13 @@
 - type: entity
+  abstract: true
   parent: ColMarTechBase
+  id: CMURoundVendorBase
+  components:
+  - type: Transform
+    noRot: false
+
+- type: entity
+  parent: CMURoundVendorBase
   id: CMURoundCorpsmanVendor
   name: round corpsman medical rack
   suffix: Round Setup
@@ -11,7 +19,7 @@
     slot: CorpsmanVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundClothingVendor
   name: round apparel rack
   suffix: Round Setup
@@ -23,7 +31,7 @@
     slot: ClothingVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundDropshipCrewChiefVendor
   name: round dropship crew chief rack
   suffix: Round Setup
@@ -35,7 +43,7 @@
     slot: DropshipCrewChiefVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundPilotVendor
   name: round pilot weapons rack
   suffix: Round Setup
@@ -47,7 +55,7 @@
     slot: PilotVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundWeaponsVendor
   name: round weapons rack
   suffix: Round Setup
@@ -64,6 +72,8 @@
   name: round requisitions vendor
   suffix: Round Setup
   components:
+  - type: Transform
+    noRot: false
   - type: Sprite
     sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_wall/guns.rsi
   - type: CMAutomatedVendor
@@ -77,7 +87,7 @@
     slot: RequisitionsVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundVehicleCrewVendor
   name: round vehicle crew rack
   suffix: Round Setup
@@ -89,7 +99,7 @@
     slot: VehicleCrewVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundMilitaryDoctorVendor
   name: round military doctor rack
   suffix: Round Setup
@@ -101,7 +111,7 @@
     slot: MilitaryDoctorVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundJuniorOfficerVendor
   name: round staff officer rack
   suffix: Round Setup
@@ -114,7 +124,7 @@
     slot: JuniorOfficerVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundRadioTelephoneOperatorVendor
   name: round radio telephone operator rack
   suffix: Round Setup
@@ -126,7 +136,7 @@
     slot: RadioTelephoneOperatorVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundMilitaryPoliceVendor
   name: round military police rack
   suffix: Round Setup
@@ -138,7 +148,7 @@
     slot: MilitaryPoliceVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundSectionSergeantVendor
   name: round section sergeant rack
   suffix: Round Setup
@@ -150,7 +160,7 @@
     slot: SectionSergeantVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundSquadSergeantVendor
   name: round squad sergeant rack
   suffix: Round Setup
@@ -162,7 +172,7 @@
     slot: SquadSergeantVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundCombatTechnicianVendor
   name: round combat technician rack
   suffix: Round Setup
@@ -174,7 +184,7 @@
     slot: CombatTechnicianVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundRiflemanVendor
   name: round rifleman equipment rack
   suffix: Round Setup
@@ -186,7 +196,7 @@
     slot: RiflemanVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundSpecialWeaponsVendor
   name: round weapons specialist rack
   suffix: Round Setup
@@ -199,7 +209,7 @@
     slot: SpecialWeaponsVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundShipsideUniformVendor
   name: round shipside uniform rack
   suffix: Round Setup
@@ -211,7 +221,7 @@
     slot: ShipsideUniformVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundAutomaticRiflemanVendor
   name: round automatic rifleman equipment rack
   suffix: Round Setup
@@ -223,7 +233,7 @@
     slot: AutomaticRiflemanVendor
 
 - type: entity
-  parent: ColMarTechBase
+  parent: CMURoundVendorBase
   id: CMURoundOperationsOfficerVendor
   name: round operations officer rack
   suffix: Round Setup
