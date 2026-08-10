@@ -14,7 +14,8 @@ public abstract partial class SharedCMAutomatedVendorSystem
         Entity<CMAutomatedVendorComponent> vendor,
         ResolvedRoundVendorProfile profile)
     {
-        ArgumentNullException.ThrowIfNull(profile);
+        if (profile == null)
+            throw new ArgumentException("The resolved vendor profile cannot be null.", nameof(profile));
 
         var sections = new List<CMVendorSection>(profile.Sections.Length);
         foreach (var resolvedSection in profile.Sections)

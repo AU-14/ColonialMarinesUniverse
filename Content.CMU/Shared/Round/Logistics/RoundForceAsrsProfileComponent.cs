@@ -158,7 +158,8 @@ public static class RoundForceAsrsProfileCompiler
     /// </summary>
     public static ResolvedRoundAsrsCatalog Compile(RoundForceAsrsProfileComponent profile)
     {
-        ArgumentNullException.ThrowIfNull(profile);
+        if (profile == null)
+            throw new ArgumentException("The ASRS force profile cannot be null.", nameof(profile));
 
         var categories = profile.Categories.Select(category =>
             new RoundAsrsCategoryDefinition(

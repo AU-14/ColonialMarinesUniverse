@@ -99,7 +99,8 @@ public sealed class RoundAsrsCategoryDefinition
         string name,
         IEnumerable<RoundAsrsOfferDefinition> offers)
     {
-        ArgumentNullException.ThrowIfNull(offers);
+        if (offers == null)
+            throw new ArgumentException("ASRS category offers cannot be null.", nameof(offers));
 
         Id = id;
         Name = name;
@@ -118,7 +119,8 @@ public sealed class RoundAsrsCatalogDefinition
 
     public RoundAsrsCatalogDefinition(IEnumerable<RoundAsrsCategoryDefinition> categories)
     {
-        ArgumentNullException.ThrowIfNull(categories);
+        if (categories == null)
+            throw new ArgumentException("ASRS catalog categories cannot be null.", nameof(categories));
         Categories = categories.ToImmutableArray();
         if (Categories.Any(category => category == null))
             throw new ArgumentException("An ASRS catalog cannot contain a null category.", nameof(categories));
@@ -140,7 +142,8 @@ public sealed class RoundAsrsOfferAddition
         RoundAsrsOfferDefinition offer,
         RoundAsrsOfferId? insertBefore = null)
     {
-        ArgumentNullException.ThrowIfNull(offer);
+        if (offer == null)
+            throw new ArgumentException("An ASRS addition offer cannot be null.", nameof(offer));
 
         Category = category;
         Offer = offer;

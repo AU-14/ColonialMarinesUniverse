@@ -39,8 +39,10 @@ public static class LegacyRoundVendorProfileCompiler
         IComponentFactory componentFactory,
         ResPath? baseRsi = null)
     {
-        ArgumentNullException.ThrowIfNull(prototype);
-        ArgumentNullException.ThrowIfNull(componentFactory);
+        if (prototype == null)
+            throw new ArgumentException("The legacy vendor prototype cannot be null.", nameof(prototype));
+        if (componentFactory == null)
+            throw new ArgumentException("The component factory cannot be null.", nameof(componentFactory));
 
         if (!force.IsValid)
             throw Invalid(prototype, "has no valid round force identity");

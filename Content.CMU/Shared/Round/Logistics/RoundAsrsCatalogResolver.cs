@@ -21,8 +21,10 @@ public static class RoundAsrsCatalogResolver
         RoundAsrsCatalogDefinition common,
         RoundAsrsForceDelta delta)
     {
-        ArgumentNullException.ThrowIfNull(common);
-        ArgumentNullException.ThrowIfNull(delta);
+        if (common == null)
+            throw new ArgumentException("The common ASRS catalog cannot be null.", nameof(common));
+        if (delta == null)
+            throw new ArgumentException("The ASRS force delta cannot be null.", nameof(delta));
 
         if (!delta.Force.IsValid)
             Throw(RoundAsrsCatalogError.InvalidForceId, "The ASRS force identifier is missing.");
