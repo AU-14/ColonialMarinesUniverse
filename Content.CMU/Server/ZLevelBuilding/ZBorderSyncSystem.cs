@@ -43,6 +43,11 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     // The abstract roots whose descendants are border walls by default (seeded into the whitelist).
     private static readonly string[] DefaultBorderParents = { "CMBaseWallInvincible", "RMCBaseWallInvincibleNoIcon" };
 
+    /// <summary>
+    /// Global switch for automatically mirroring border walls between z-levels.
+    /// </summary>
+    public bool GloballyEnabled = false;
+
     private sealed class ScopeLists
     {
         public readonly HashSet<string> Whitelist = new(StringComparer.Ordinal);
@@ -78,6 +83,9 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     /// the selected planet's MapId and its planet prototype id are both accepted so either keying works.</summary>
     public bool ShouldReflect(string protoId)
     {
+        if (!GloballyEnabled)
+            return false;
+
         _roundDirector.TryGetLegacyPlanetProjection(out var planet);
         var currentGameMap = planet?.MapId;
         var currentPlanet = _roundDirector.GetLegacyPlanetIdProjection();
