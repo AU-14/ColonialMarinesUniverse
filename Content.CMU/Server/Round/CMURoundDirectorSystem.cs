@@ -77,11 +77,13 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
             presetId,
             _round.SelectedThreat?.ID);
         var asrsCatalogs = ResolveCommittedAsrsCatalogs(candidate);
+        var vendorProfiles = ResolveCommittedVendorProfiles(candidate);
 
         if (!_state.TryFreezeSelection(candidate, out var frozen))
             return frozen;
 
         _committedAsrsCatalogs = asrsCatalogs;
+        _committedVendorProfiles = vendorProfiles;
         RaisePhaseChanged();
         return frozen;
     }
@@ -113,6 +115,7 @@ public sealed partial class CMURoundDirectorSystem : EntitySystem
     private void OnRoundRestartCleanup(RoundRestartCleanupEvent ev)
     {
         _committedAsrsCatalogs = null;
+        _committedVendorProfiles = null;
         _state.Reset();
         _round.ResetLobbySelection();
         RaisePhaseChanged();

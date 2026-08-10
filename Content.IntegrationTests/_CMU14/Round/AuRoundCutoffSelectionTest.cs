@@ -151,11 +151,19 @@ public sealed class AuRoundCutoffSelectionTest
 
         await server.WaitAssertion(() =>
         {
-            var round = server.System<AuRoundSystem>();
             var director = server.System<CMURoundDirectorSystem>();
+            const RoundSetupSlot slot = RoundSetupSlot.WeaponsVendor;
             server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
 
+            Assert.Multiple(() =>
+            {
+                Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Govfor, slot, out _), Is.False);
+                Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Opfor, slot, out _), Is.False);
+            });
+
             var selection = director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+            Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Govfor, slot, out var govfor), Is.True);
+            Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Opfor, slot, out var opfor), Is.True);
 
             Assert.Multiple(() =>
             {
@@ -174,6 +182,25 @@ public sealed class AuRoundCutoffSelectionTest
                             new RoundForceId("UPP"),
                             "USSBushRedux")));
                 Assert.That(director.Selection, Is.EqualTo(selection));
+                Assert.That(govfor!.Force, Is.EqualTo(new RoundForceId("USCM")));
+                Assert.That(govfor.Slot, Is.EqualTo(slot));
+                Assert.That(opfor!.Force, Is.EqualTo(new RoundForceId("UPP")));
+                Assert.That(opfor.Slot, Is.EqualTo(slot));
+            });
+
+            Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Govfor, slot, out var repeatedGovfor), Is.True);
+            Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Opfor, slot, out var repeatedOpfor), Is.True);
+            Assert.Multiple(() =>
+            {
+                Assert.That(repeatedGovfor, Is.SameAs(govfor));
+                Assert.That(repeatedOpfor, Is.SameAs(opfor));
+            });
+
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+            Assert.Multiple(() =>
+            {
+                Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Govfor, slot, out _), Is.False);
+                Assert.That(director.TryGetCommittedVendorProfile(RoundSide.Opfor, slot, out _), Is.False);
             });
         });
 

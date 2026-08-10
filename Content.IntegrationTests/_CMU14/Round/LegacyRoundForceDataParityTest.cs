@@ -5,6 +5,7 @@ using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using Content.Shared.AU14.util;
+using Content.Shared.CMU.Round;
 using Content.Shared._RMC14.Vendors;
 using Robust.Shared.Prototypes;
 
@@ -89,6 +90,7 @@ public sealed class LegacyRoundForceDataParityTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
             var actualForceIds = prototypes.EnumeratePrototypes<PlatoonPrototype>()
+                .Where(platoon => platoon.VendorSet != null)
                 .Select(platoon => platoon.ID)
                 .ToArray();
             var mismatches = new List<string>();
@@ -151,8 +153,34 @@ public sealed class LegacyRoundForceDataParityTest
 
                 Assert.That(prototypes.TryIndex<EntityPrototype>(actualVendorId, out var vendor), Is.True,
                     $"{forceId} references missing vendor {actualVendorId}");
-                Assert.That(vendor!.TryGetComponent<CMAutomatedVendorComponent>(out _, factory), Is.True,
+                Assert.That(vendor!.TryGetComponent<CMAutomatedVendorComponent>(out var vendorComponent, factory), Is.True,
                     $"{actualVendorId} is not an automated vendor");
+                var expectedSections = RoundVendorProfileTestData.SnapshotLegacySections(vendorComponent!);
+
+                var profile = LegacyRoundVendorProfileCompiler.Compile(
+                    new RoundForceId(forceId),
+                    RoundSetupSlot.WeaponsVendor,
+                    vendor!,
+                    factory);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(profile.Force, Is.EqualTo(new RoundForceId(forceId)));
+                    Assert.That(profile.Slot, Is.EqualTo(RoundSetupSlot.WeaponsVendor));
+                    Assert.That(profile.Name, Is.EqualTo(vendor.Name));
+                    Assert.That(profile.Description, Is.EqualTo(vendor.Description));
+                    Assert.That(
+                        RoundVendorProfileTestData.SnapshotSections(profile),
+                        Is.EqualTo(expectedSections));
+                    Assert.That(
+                        RoundVendorProfileTestData.SnapshotLegacySections(vendorComponent!),
+                        Is.EqualTo(expectedSections),
+                        $"Compiling {forceId} mutated its legacy Weapons inventory source.");
+                    Assert.That(profile.Access.IsOpen, Is.EqualTo(forceId == "HAZOPS"));
+                    Assert.That(
+                        RoundVendorProfileTestData.SnapshotAccess(profile.Access),
+                        Is.EqualTo(RoundVendorProfileTestData.ExpectedAccess(forceId)));
+                });
             }
 
             Assert.That(
@@ -163,5 +191,44 @@ public sealed class LegacyRoundForceDataParityTest
         });
 
         await pair.CleanReturnAsync();
+    }
+}
+
+internal static class RoundVendorProfileTestData
+{
+    public static string[] ExpectedAccess(string forceId)
+    {
+        return forceId == "HAZOPS"
+            ? []
+            : ["AU14AccessGovforSquad", "AU14AccessOpforSquad"];
+    }
+
+    public static string[] SnapshotAccess(ResolvedRoundVendorAccess access)
+    {
+        return access.AccessLists
+            .Select(list => string.Join(',', list.Select(level => level.Id)))
+            .ToArray();
+    }
+
+    public static string[] SnapshotLegacySections(CMAutomatedVendorComponent vendor)
+    {
+        return vendor.Sections
+            .Select(section =>
+                $"{section.Name}|" +
+                $"{(section.Choices is { } choice ? $"{choice.Id}:{choice.Amount}" : "-")}|" +
+                string.Join(',', section.Entries.Select(entry =>
+                    $"{entry.Id.Id}:{entry.Amount?.ToString() ?? "-"}")))
+            .ToArray();
+    }
+
+    public static string[] SnapshotSections(ResolvedRoundVendorProfile profile)
+    {
+        return profile.Sections
+            .Select(section =>
+                $"{section.Name}|" +
+                $"{(section.Choice is { } choice ? $"{choice.Id}:{choice.Amount}" : "-")}|" +
+                string.Join(',', section.Entries.Select(entry =>
+                    $"{entry.Product.Id}:{entry.Amount?.ToString() ?? "-"}")))
+            .ToArray();
     }
 }
