@@ -107502,13 +107502,15 @@ entities:
       rot: 3.141592653589793 rad
       pos: 290.5,-155.5
       parent: 1
-- proto: AU14AnalyzerMachine
+- proto: CMURoundAnalyzerMachine
   entities:
   - uid: 64
     components:
     - type: Transform
       pos: 66.5,-0.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14BlackBoxRecorder
   entities:
   - uid: 65

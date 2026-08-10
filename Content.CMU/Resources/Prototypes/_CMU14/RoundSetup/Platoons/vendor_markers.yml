@@ -1167,12 +1167,9 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundAnalyzerMachine
   id: VMarkerShipAnalyzer
-  name: Ship Analyzer Marker
-  components:
-  - type: VendorMarker
-    class: Analyzer
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip

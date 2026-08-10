@@ -40687,7 +40687,7 @@ entities:
     - type: Transform
       pos: -33.429752,19.73656
       parent: 1
-- proto: VMarkerShipAnalyzer
+- proto: CMURoundAnalyzerMachine
   entities:
   - uid: 5862
     components:

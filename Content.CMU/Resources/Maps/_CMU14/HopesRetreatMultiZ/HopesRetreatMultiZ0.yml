@@ -125943,7 +125943,7 @@ entities:
       rot: 1.5707963267948966 rad
       pos: 13.566581,-45.450256
       parent: 1
-- proto: AU14AnalyzerMachine
+- proto: CMURoundAnalyzerMachine
   entities:
   - uid: 71452
     components:
@@ -125952,6 +125952,8 @@ entities:
       parent: 1
     - type: PointLight
       enabled: True
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14BeltHolsterPistolCMBHG45
   entities:
   - uid: 81

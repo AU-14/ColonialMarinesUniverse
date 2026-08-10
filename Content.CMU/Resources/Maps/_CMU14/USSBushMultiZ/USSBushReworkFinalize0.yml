@@ -41492,7 +41492,7 @@ entities:
     - type: Transform
       pos: -0.5,64.5
       parent: 1
-- proto: VMarkerShipAnalyzer
+- proto: CMURoundAnalyzerMachine
   entities:
   - uid: 6156
     components:

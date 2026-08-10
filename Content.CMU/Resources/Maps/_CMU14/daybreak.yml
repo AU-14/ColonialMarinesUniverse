@@ -24442,7 +24442,7 @@ entities:
     - type: Transform
       pos: -41.5,-9.5
       parent: 1
-- proto: VMarkerShipAnalyzer
+- proto: CMURoundAnalyzerMachine
   entities:
   - uid: 2916
     components:
