@@ -115,6 +115,9 @@ namespace Content.Server.Voting.Managers
             if (!IsValidOption(v, option))
                 throw new ArgumentOutOfRangeException(nameof(option), "Invalid vote option ID");
 
+            if (option != null && !IsEligibleVoter(v, player))
+                return;
+
             if (v.CastVotes.TryGetValue(player, out var existingOption))
             {
                 v.Entries[existingOption].Votes -= 1;
@@ -231,7 +234,8 @@ namespace Content.Server.Voting.Managers
                 options.TargetEntity,
                 carryoverKey,
                 optionKeys,
-                carryoverVotes);
+                carryoverVotes,
+                options.AllowedVoters?.ToHashSet());
 
             var handle = new VoteHandle(this, reg);
 
@@ -267,7 +271,7 @@ namespace Content.Server.Voting.Managers
             msg.VoteId = v.Id;
             msg.VoteActive = !v.Finished;
 
-            if (!CheckVoterEligibility(player, v.VoterEligibility))
+            if (!IsEligibleVoter(v, player))
             {
                 msg.VoteActive = false;
                 player.Channel.SendMessage(msg);
@@ -370,9 +374,9 @@ namespace Content.Server.Voting.Managers
             }
 
             // Remove ineligible votes that somehow slipped through
-            foreach (var playerVote in v.CastVotes)
+            foreach (var playerVote in v.CastVotes.ToArray())
             {
-                if (!CheckVoterEligibility(playerVote.Key, v.VoterEligibility))
+                if (!IsEligibleVoter(v, playerVote.Key))
                 {
                     v.Entries[playerVote.Value].Votes -= 1;
                     v.CastVotes.Remove(playerVote.Key);
@@ -466,6 +470,12 @@ namespace Content.Server.Voting.Managers
             }
 
             return effectiveVotes;
+        }
+
+        private bool IsEligibleVoter(VoteReg vote, ICommonSession player)
+        {
+            return CheckVoterEligibility(player, vote.VoterEligibility)
+                && (vote.AllowedVoters == null || vote.AllowedVoters.Contains(player.UserId));
         }
 
         private static string GetOptionCarryoverKey(string text, object data)
@@ -574,6 +584,7 @@ namespace Content.Server.Voting.Managers
             public readonly string? CarryoverKey;
             public readonly string[] OptionKeys;
             public readonly int[] CarryoverVotes;
+            public readonly HashSet<NetUserId>? AllowedVoters;
 
             public bool Cancelled;
             public bool Finished;
@@ -592,7 +603,8 @@ namespace Content.Server.Voting.Managers
                 NetEntity? targetEntity,
                 string? carryoverKey,
                 string[] optionKeys,
-                int[] carryoverVotes)
+                int[] carryoverVotes,
+                HashSet<NetUserId>? allowedVoters)
             {
                 Id = id;
                 Entries = entries;
@@ -607,6 +619,7 @@ namespace Content.Server.Voting.Managers
                 CarryoverKey = carryoverKey;
                 OptionKeys = optionKeys;
                 CarryoverVotes = carryoverVotes;
+                AllowedVoters = allowedVoters;
             }
         }
 

@@ -1,4 +1,5 @@
 using Content.IntegrationTests.Fixtures;
+using Content.Server.Voting;
 using Content.Server.Voting.Managers;
 using Content.Shared.CCVar;
 using Content.Shared.Voting;
@@ -9,6 +10,47 @@ namespace Content.IntegrationTests.Tests.Voting;
 [TestFixture]
 public sealed class PlayerVoteCreationTest : GameTest
 {
+    [Test]
+    public async Task RestrictedVoteAcceptsOnlyAllowedVoters()
+    {
+        await Server.WaitAssertion(() =>
+        {
+            var voteManager = Server.ResolveDependency<IVoteManager>();
+            var vote = voteManager.CreateVote(new VoteOptions
+            {
+                Title = "Restricted test vote",
+                Options =
+                [
+                    ("First", "first"),
+                    ("Second", "second"),
+                ],
+                AllowedVoters = [],
+            });
+
+            Assert.That(ServerSession, Is.Not.Null);
+            vote.CastVote(ServerSession!, 0);
+
+            Assert.That(vote.CastVotes, Is.Empty,
+                "Players outside AllowedVoters must not be able to participate in a restricted vote.");
+
+            var allowedVote = voteManager.CreateVote(new VoteOptions
+            {
+                Title = "Allowed restricted test vote",
+                Options =
+                [
+                    ("First", "first"),
+                    ("Second", "second"),
+                ],
+                AllowedVoters = [ServerSession!.UserId],
+            });
+
+            allowedVote.CastVote(ServerSession, 0);
+
+            Assert.That(allowedVote.CastVotes, Has.Count.EqualTo(1),
+                "Players inside AllowedVoters must still be able to participate.");
+        });
+    }
+
     [Test]
     public async Task PlayersCannotCallStandardVotes()
     {
