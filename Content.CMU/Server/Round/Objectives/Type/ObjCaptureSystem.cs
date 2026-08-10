@@ -5,6 +5,7 @@ using Content.Shared._CMU14.Round.Objectives;
 using Content.Shared._CMU14.Round.Objectives.Type;
 using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared.Damage;
+using Content.Shared.CMU.Round;
 using Content.Shared.NPC.Components;
 using Content.Shared.Popups;
 
@@ -13,7 +14,7 @@ namespace Content.Server._CMU14.Round.Objectives.Type;
 public sealed partial class ObjCaptureSystem : ObjectiveSystem
 {
     [Dependency] private PopupSystem _popup = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSpawnRuleSystem = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
 
     private readonly Dictionary<EntityUid, float> _timeSinceLastIncrement = new();
     private readonly Dictionary<EntityUid, float> _lastSlashDamage = new();
@@ -48,12 +49,17 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
 
     private string? GetPlatoonNameForFaction(string faction)
     {
-        return faction.ToLowerInvariant() switch
+        var side = faction.ToLowerInvariant() switch
         {
-            "govfor" => _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name,
-            "opfor" => _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name,
-            _ => null
+            "govfor" => RoundSide.Govfor,
+            "opfor" => RoundSide.Opfor,
+            _ => (RoundSide?) null,
         };
+
+        return side is { } resolved &&
+               _roundDirector.TryGetCommittedLegacyForce(resolved, out var platoon)
+            ? platoon.Name
+            : null;
     }
 
     private void OnFlagHoistStarted(EntityUid uid, CaptureObjectiveComponent comp, CaptureHoistFlagStartedEvent args)
@@ -134,8 +140,8 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
 
     public override void Update(float frameTime)
     {
-        var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon;
-        var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon;
+        _roundDirector.TryGetCommittedLegacyForce(RoundSide.Govfor, out var govforPlatoon);
+        _roundDirector.TryGetCommittedLegacyForce(RoundSide.Opfor, out var opforPlatoon);
         var govforFlag = govforPlatoon?.PlatoonFlag ?? "uaflag";
         var opforFlag = opforPlatoon?.PlatoonFlag ?? "uaflagworn";
         if (!string.IsNullOrEmpty(govforFlag) && govforFlag == opforFlag)

@@ -25,7 +25,7 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
-    [Dependency] private PlatoonSpawnRuleSystem _platoonSystem = default!;
+    [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
 
     private readonly List<(EntityUid Uid, CMUObjectiveComponent Comp)> _allObjectives = new();
     private EntityUid _objectiveMasterUid = EntityUid.Invalid;

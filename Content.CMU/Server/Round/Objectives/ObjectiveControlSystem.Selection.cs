@@ -60,15 +60,12 @@ public sealed partial class ObjectiveControlSystem
         string? selectedPlatoonId = null;
         ThreatPrototype? currentThreat = _auRoundSystem.SelectedThreat;
 
-        switch (factionLower)
+        selectedPlatoonId = factionLower switch
         {
-            case "govfor":
-                selectedPlatoonId = _platoonSystem.SelectedGovforPlatoon?.ID;
-                break;
-            case "opfor":
-                selectedPlatoonId = _platoonSystem.SelectedOpforPlatoon?.ID;
-                break;
-        }
+            "govfor" => _roundDirector.Selection?.GovforPlatoonId,
+            "opfor" => _roundDirector.Selection?.OpforPlatoonId,
+            _ => null,
+        };
 
         foreach (var (objUid, objective) in allObjectives)
         {
