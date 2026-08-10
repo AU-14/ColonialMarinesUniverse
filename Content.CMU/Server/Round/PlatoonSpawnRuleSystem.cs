@@ -36,9 +36,16 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
 
     private readonly ISawmill _sawmill = Logger.GetSawmill("content");
 
-    // Compatibility projections for consumers that have not moved to the committed plan yet.
-    public PlatoonPrototype? SelectedGovforPlatoon { get; internal set; }
-    public PlatoonPrototype? SelectedOpforPlatoon { get; internal set; }
+    // Read-only compatibility projections for callers that have not moved to the director yet.
+    public PlatoonPrototype? SelectedGovforPlatoon =>
+        _roundDirector.TryGetLegacyForceProjection(RoundSide.Govfor, out var platoon)
+            ? platoon
+            : null;
+
+    public PlatoonPrototype? SelectedOpforPlatoon =>
+        _roundDirector.TryGetLegacyForceProjection(RoundSide.Opfor, out var platoon)
+            ? platoon
+            : null;
 
     private PlatoonPrototype? ResolveCommittedPlatoon(RoundForceAssignment? assignment)
     {
@@ -62,12 +69,18 @@ public sealed partial class PlatoonSpawnRuleSystem : GameRuleSystem<PlatoonSpawn
         base.Started(uid, component, gameRule, args);
 
         var committedSelection = _roundDirector.Selection;
-        var govPlatoon = committedSelection is { } committed
-            ? ResolveCommittedPlatoon(committed.GovforAssignment)
-            : SelectedGovforPlatoon;
-        var opPlatoon = committedSelection is { } committedOpfor
-            ? ResolveCommittedPlatoon(committedOpfor.OpforAssignment)
-            : SelectedOpforPlatoon;
+        PlatoonPrototype? govPlatoon;
+        PlatoonPrototype? opPlatoon;
+        if (committedSelection is { } committed)
+        {
+            govPlatoon = ResolveCommittedPlatoon(committed.GovforAssignment);
+            opPlatoon = ResolveCommittedPlatoon(committed.OpforAssignment);
+        }
+        else
+        {
+            _roundDirector.TryGetLegacyForceProjection(RoundSide.Govfor, out govPlatoon);
+            _roundDirector.TryGetLegacyForceProjection(RoundSide.Opfor, out opPlatoon);
+        }
 
         // Use the selected planet from AuRoundSystem
         var planetComp = _auRoundSystem.GetSelectedPlanet();

@@ -55,7 +55,8 @@ namespace Content.Server.AU14.Round
         private readonly AuRoundVoteSequenceTracker _voteSequence = new();
         private readonly AuRoundVoteCompletionState _voteCompletion = new();
         private readonly ISawmill _sawmill = Logger.GetSawmill("content");
-        private PlatoonSpawnRuleSystem? _platoonSpawnRule;
+        private PlatoonPrototype? _selectedGovforPlatoon;
+        private PlatoonPrototype? _selectedOpforPlatoon;
         private Action? _voteSequenceFinished;
         private bool _selectionFinalized;
 
@@ -142,14 +143,11 @@ namespace Content.Server.AU14.Round
             string presetId,
             string? selectedThreatId)
         {
-            var platoons = _platoonSpawnRule ??=
-                _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-
             return new(
                 presetId,
                 playerCount,
-                platoons.SelectedGovforPlatoon?.ID,
-                platoons.SelectedOpforPlatoon?.ID,
+                _selectedGovforPlatoon?.ID,
+                _selectedOpforPlatoon?.ID,
                 _selectedPlanetId,
                 _selectedPlanet?.MapId,
                 selectedThreatId,
@@ -159,14 +157,13 @@ namespace Content.Server.AU14.Round
 
         internal void ApplyLegacyForceSelection(RoundSide side, PlatoonPrototype? platoon)
         {
-            var platoons = GetPlatoonSpawnRuleSystem();
             switch (side)
             {
                 case RoundSide.Govfor:
-                    platoons.SelectedGovforPlatoon = platoon;
+                    _selectedGovforPlatoon = platoon;
                     break;
                 case RoundSide.Opfor:
-                    platoons.SelectedOpforPlatoon = platoon;
+                    _selectedOpforPlatoon = platoon;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException(nameof(side), side, null);
@@ -175,11 +172,10 @@ namespace Content.Server.AU14.Round
 
         internal PlatoonPrototype? GetLegacyForceSelection(RoundSide side)
         {
-            var platoons = GetPlatoonSpawnRuleSystem();
             return side switch
             {
-                RoundSide.Govfor => platoons.SelectedGovforPlatoon,
-                RoundSide.Opfor => platoons.SelectedOpforPlatoon,
+                RoundSide.Govfor => _selectedGovforPlatoon,
+                RoundSide.Opfor => _selectedOpforPlatoon,
                 _ => throw new ArgumentOutOfRangeException(nameof(side), side, null),
             };
         }

@@ -731,12 +731,6 @@ public sealed partial class AuRoundSystem
             _playerManager.PlayerCount);
     }
 
-    private PlatoonSpawnRuleSystem GetPlatoonSpawnRuleSystem()
-    {
-        return _platoonSpawnRule ??=
-            _entityManager.EntitySysManager.GetEntitySystem<PlatoonSpawnRuleSystem>();
-    }
-
     private PlatoonPrototype? GetFactionPlatoon(AuRoundVoteBranch faction)
     {
         var side = faction == AuRoundVoteBranch.Govfor
