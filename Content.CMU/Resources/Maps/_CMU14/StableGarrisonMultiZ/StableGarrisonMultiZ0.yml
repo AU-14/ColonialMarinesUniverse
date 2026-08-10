@@ -110110,18 +110110,22 @@ entities:
       parent: 1
     - type: RoundSetupEndpoint
       side: Govfor
-- proto: AU14MilitaryPolicemanGenericVendor
+- proto: CMURoundMilitaryPoliceVendor
   entities:
   - uid: 499
     components:
     - type: Transform
       pos: 8.5,12.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 500
     components:
     - type: Transform
       pos: 12.5,12.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14Patch32ndAB
   entities:
   - uid: 73

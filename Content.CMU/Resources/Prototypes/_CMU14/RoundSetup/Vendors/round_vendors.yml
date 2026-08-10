@@ -58,3 +58,15 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: RadioTelephoneOperatorVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundMilitaryPoliceVendor
+  name: round military police rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: MilitaryPoliceVendor
