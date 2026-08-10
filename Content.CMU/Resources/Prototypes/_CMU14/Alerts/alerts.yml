@@ -1,0 +1,55 @@
+- type: alertCategory
+  id: RespiratoryStrain
+
+- type: alertCategory
+  id: Panic
+
+- type: alertCategory
+  id: DrugAllergy
+
+- type: alertCategory
+  id: NicotineCraving
+
+- type: alert
+  id: CMUPanic
+  category: Panic
+  icons:
+  - sprite: /Textures/Interface/Alerts/stamina.rsi
+    state: stamina0
+  - sprite: /Textures/Interface/Alerts/stamina.rsi
+    state: stamina6
+  name: au14-alert-panic-name
+  description: au14-alert-panic-desc
+  minSeverity: 0
+  maxSeverity: 1
+
+- type: alert
+  id: CMUAllergicReaction
+  category: DrugAllergy
+  icons:
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: too_much_tox
+  name: au14-alert-allergicreaction-name
+  description: au14-alert-allergicreaction-desc
+
+- type: alert
+  id: CMUNicotineCraving
+  category: NicotineCraving
+  icons:
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: not_enough_co2
+  name: au14-alert-nicotinecraving-name
+  description: au14-alert-nicotinecraving-desc
+
+- type: alert
+  id: CMURespiratoryStrain
+  category: RespiratoryStrain
+  icons:
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: not_enough_oxy
+  - sprite: /Textures/Interface/Alerts/breathing.rsi
+    state: too_much_tox
+  name: au14-alert-respiratory-strain-name
+  description: au14-alert-respiratory-strain-desc
+  minSeverity: 0
+  maxSeverity: 1

@@ -1,4 +1,14 @@
 # Pouches
+- type: entity
+  parent: RMCPouchMagazinePistol
+  id: RMCPouchMagazinePistolFilledM88Rubber
+  suffix: Filled, M88 Rubber
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazinePistolM88Rubber
+      amount: 4
+
 - type: loadout
   id: WYGuardPouchM88RubberAU14
   equipment:

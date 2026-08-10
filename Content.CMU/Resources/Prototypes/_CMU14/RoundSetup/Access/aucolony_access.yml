@@ -23,6 +23,10 @@
   name: au14-job-name-civilianheadofservice
 
 - type: accessLevel
+  id: AU14AccessCorporateWEYU
+  name: cm-job-name-liaison
+
+- type: accessLevel
   id: AU14AccessCorporateWEYULiaison
   name: au14-job-name-civiliancorporateliaison
 
