@@ -13903,7 +13903,7 @@ entities:
         -16,27: RMCAreaSavannahMaintsStarboardBeam
         -16,26: RMCAreaSavannahMaintsStarboardBeam
         -4,25: RMCAreaSavannahMaintsStarboardBeam
-- proto: AU14AircrewWeaponsVendor
+- proto: VMarkerShipPilot
   entities:
   - uid: 2
     components:

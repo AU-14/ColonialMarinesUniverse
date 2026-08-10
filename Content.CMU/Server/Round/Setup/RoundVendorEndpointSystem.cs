@@ -35,6 +35,7 @@ public sealed partial class RoundVendorEndpointSystem : EntitySystem
         if (args.Slot is not (RoundSetupSlot.CorpsmanVendor or
             RoundSetupSlot.ClothingVendor or
             RoundSetupSlot.DropshipCrewChiefVendor or
+            RoundSetupSlot.PilotVendor or
             RoundSetupSlot.WeaponsVendor or
             RoundSetupSlot.RequisitionsVendor or
             RoundSetupSlot.VehicleCrewVendor or

@@ -13,6 +13,7 @@
     CorpsmanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
     ClothingVendor: _CMU14/Structures/Vendors/uscmgearrack.rsi
     DropshipCrewChiefVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
+    PilotVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
     ShipsideUniformVendor: _CMU14/Structures/Vendors/uscmgearrack.rsi
     AutomaticRiflemanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
     OperationsOfficerVendor: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
@@ -75,6 +76,8 @@
     Pilot: AU14UPPAirCrewWeaponsVendor
     MilitaryPolice: AU14MilitaryPolicemanVendorUPP
     ReqVend: AU14UPPRequisitionVendor
+  presentations:
+    PilotVendor: _CMU14/Structures/Vendors/genericweaponrack.rsi
 
 - type: platoonVendorSet
   id: WEYU
@@ -112,6 +115,7 @@
     ReqVend: AU14CMBCIURequisitionVendor
   presentations:
     DropshipCrewChiefVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+    PilotVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
 
 - type: platoonVendorSet
   id: HAZOPS

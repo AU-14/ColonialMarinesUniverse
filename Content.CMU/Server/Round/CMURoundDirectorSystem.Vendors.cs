@@ -18,6 +18,7 @@ public sealed partial class CMURoundDirectorSystem
         (RoundSetupSlot.CorpsmanVendor, PlatoonMarkerClass.Corpsman),
         (RoundSetupSlot.ClothingVendor, PlatoonMarkerClass.Clothing),
         (RoundSetupSlot.DropshipCrewChiefVendor, PlatoonMarkerClass.Dcc),
+        (RoundSetupSlot.PilotVendor, PlatoonMarkerClass.Pilot),
         (RoundSetupSlot.WeaponsVendor, PlatoonMarkerClass.Weapons),
         (RoundSetupSlot.RequisitionsVendor, PlatoonMarkerClass.ReqVend),
         (RoundSetupSlot.VehicleCrewVendor, PlatoonMarkerClass.VehicleCrew),
@@ -107,6 +108,7 @@ public sealed partial class CMURoundDirectorSystem
             else if (slot is RoundSetupSlot.CorpsmanVendor or
                 RoundSetupSlot.ClothingVendor or
                 RoundSetupSlot.DropshipCrewChiefVendor or
+                RoundSetupSlot.PilotVendor or
                 RoundSetupSlot.ShipsideUniformVendor or
                 RoundSetupSlot.AutomaticRiflemanVendor or
                 RoundSetupSlot.OperationsOfficerVendor)

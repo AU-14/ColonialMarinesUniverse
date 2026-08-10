@@ -47,6 +47,7 @@ public static class LegacyRoundVendorProfileCompiler
         if (slot is not (RoundSetupSlot.CorpsmanVendor or
             RoundSetupSlot.ClothingVendor or
             RoundSetupSlot.DropshipCrewChiefVendor or
+            RoundSetupSlot.PilotVendor or
             RoundSetupSlot.WeaponsVendor or
             RoundSetupSlot.RequisitionsVendor or
             RoundSetupSlot.VehicleCrewVendor or
@@ -67,6 +68,7 @@ public static class LegacyRoundVendorProfileCompiler
             slot is (RoundSetupSlot.CorpsmanVendor or
                 RoundSetupSlot.ClothingVendor or
                 RoundSetupSlot.DropshipCrewChiefVendor or
+                RoundSetupSlot.PilotVendor or
                 RoundSetupSlot.ShipsideUniformVendor or
                 RoundSetupSlot.AutomaticRiflemanVendor or
                 RoundSetupSlot.OperationsOfficerVendor))

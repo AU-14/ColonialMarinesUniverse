@@ -180,12 +180,13 @@
     side: Opfor
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundPilotVendor
   id: VMarkerOpforpilot
-  name: Opfor pilot marker
+  name: OPFOR pilot weapons rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Pilot
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundSpecialWeaponsVendor
@@ -383,12 +384,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundPilotVendor
   id: VMarkerGovforpilot
-  name: Gov pilot marker
+  name: GOVFOR pilot weapons rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Pilot
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -617,15 +619,10 @@
   categories: [ HideSpawnMenu ]
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundPilotVendor
   id: VMarkerShipPilot
-  name: Ship aircrew weapons marker
-  components:
-  - type: VendorMarker
-    class: Pilot
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
-    state: base
+  name: ship pilot weapons rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundWeaponsVendor

@@ -106743,7 +106743,7 @@ entities:
     - type: Transform
       pos: 245.01741,22.429544
       parent: 1
-- proto: AU14AircrewWeaponsVendor
+- proto: VMarkerGovforpilot
   entities:
   - uid: 4
     components:
