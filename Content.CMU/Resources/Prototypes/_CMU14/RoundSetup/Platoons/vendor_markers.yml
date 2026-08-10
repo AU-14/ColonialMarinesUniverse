@@ -89,12 +89,13 @@
     side: Opfor
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundClothingVendor
   id: VMarkerOpforClothing
-  name: Opfor Clothing marker
+  name: OPFOR apparel rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Clothing
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: CMURoundShipsideUniformVendor
@@ -237,12 +238,13 @@
     side: Govfor
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundClothingVendor
   id: VMarkerGovforClothing
-  name: Gov Clothing marker
+  name: GOVFOR apparel rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Clothing
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: CMURoundShipsideUniformVendor
@@ -517,15 +519,10 @@
 
 # Ship vendor markers
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundClothingVendor
   id: VMarkershipClothing
-  name: Ship Clothing marker
-  components:
-  - type: VendorMarker
-    class: Clothing
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
-    state: base
+  name: ship apparel rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: CMURoundShipsideUniformVendor

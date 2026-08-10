@@ -12,6 +12,18 @@
 
 - type: entity
   parent: ColMarTechBase
+  id: CMURoundClothingVendor
+  name: round apparel rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/uscmgearrack.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: ClothingVendor
+
+- type: entity
+  parent: ColMarTechBase
   id: CMURoundWeaponsVendor
   name: round weapons rack
   suffix: Round Setup

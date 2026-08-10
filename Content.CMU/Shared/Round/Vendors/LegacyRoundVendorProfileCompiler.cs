@@ -45,6 +45,7 @@ public static class LegacyRoundVendorProfileCompiler
         if (!force.IsValid)
             throw Invalid(prototype, "has no valid round force identity");
         if (slot is not (RoundSetupSlot.CorpsmanVendor or
+            RoundSetupSlot.ClothingVendor or
             RoundSetupSlot.WeaponsVendor or
             RoundSetupSlot.RequisitionsVendor or
             RoundSetupSlot.VehicleCrewVendor or
@@ -63,6 +64,7 @@ public static class LegacyRoundVendorProfileCompiler
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
         if (baseRsi == null &&
             slot is (RoundSetupSlot.CorpsmanVendor or
+                RoundSetupSlot.ClothingVendor or
                 RoundSetupSlot.ShipsideUniformVendor or
                 RoundSetupSlot.AutomaticRiflemanVendor or
                 RoundSetupSlot.OperationsOfficerVendor))

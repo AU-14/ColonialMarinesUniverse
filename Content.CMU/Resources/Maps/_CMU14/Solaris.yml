@@ -108002,7 +108002,7 @@ entities:
     - type: Transform
       pos: 27.5,63.5
       parent: 1
-- proto: AU14USCMclothingequipmentvendor
+- proto: VMarkerGovforClothing
   entities:
   - uid: 208
     components:

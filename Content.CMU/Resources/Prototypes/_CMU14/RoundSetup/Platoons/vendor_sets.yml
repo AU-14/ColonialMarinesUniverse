@@ -11,6 +11,7 @@
     VehicleCrew: AU14USCMVehicleCrewmanVendor
   presentations:
     CorpsmanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
+    ClothingVendor: _CMU14/Structures/Vendors/uscmgearrack.rsi
     ShipsideUniformVendor: _CMU14/Structures/Vendors/uscmgearrack.rsi
     AutomaticRiflemanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/smart_gun_operator_gear.rsi
     OperationsOfficerVendor: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
@@ -50,6 +51,7 @@
     ReqVend: AU14LACNRequisitionVendor
   presentations:
     CorpsmanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_equipment.rsi
+    ClothingVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
     ShipsideUniformVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
     AutomaticRiflemanVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/requisitions_ammo.rsi
     OperationsOfficerVendor: _RMC14/Structures/Machines/VendingMachines/ColMarTech/clothing.rsi
