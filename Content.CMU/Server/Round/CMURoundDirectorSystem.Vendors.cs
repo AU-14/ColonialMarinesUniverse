@@ -17,6 +17,7 @@ public sealed partial class CMURoundDirectorSystem
         (RoundSetupSlot.WeaponsVendor, PlatoonMarkerClass.Weapons),
         (RoundSetupSlot.VehicleCrewVendor, PlatoonMarkerClass.VehicleCrew),
         (RoundSetupSlot.MilitaryDoctorVendor, PlatoonMarkerClass.MilitaryDoctor),
+        (RoundSetupSlot.JuniorOfficerVendor, PlatoonMarkerClass.JuniorOfficer),
     ];
 
     private CommittedRoundVendorProfiles? _committedVendorProfiles;

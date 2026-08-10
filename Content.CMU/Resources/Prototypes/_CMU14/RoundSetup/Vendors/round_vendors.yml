@@ -33,3 +33,16 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: MilitaryDoctorVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundJuniorOfficerVendor
+  name: round staff officer rack
+  suffix: Round Setup
+  components:
+  - type: AU14VendorJO
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: JuniorOfficerVendor

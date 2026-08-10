@@ -33,7 +33,8 @@ public static class LegacyRoundVendorProfileCompiler
             throw Invalid(prototype, "has no valid round force identity");
         if (slot is not (RoundSetupSlot.WeaponsVendor or
             RoundSetupSlot.VehicleCrewVendor or
-            RoundSetupSlot.MilitaryDoctorVendor))
+            RoundSetupSlot.MilitaryDoctorVendor or
+            RoundSetupSlot.JuniorOfficerVendor))
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");

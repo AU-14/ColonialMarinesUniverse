@@ -610,15 +610,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundJuniorOfficerVendor
   id: VMarkerShipJuniorOfficer
-  name: staff officer marker
-  components:
-  - type: VendorMarker
-    class: JuniorOfficer
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/uscmcommandclothes.rsi
-    state: base
+  name: ship staff officer rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip

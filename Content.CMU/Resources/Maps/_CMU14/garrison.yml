@@ -74446,13 +74446,15 @@ entities:
           showEnts: False
           occludes: True
           ent: 392
-- proto: AU14JOGenericVendor
+- proto: CMURoundJuniorOfficerVendor
   entities:
   - uid: 393
     components:
     - type: Transform
       pos: 67.5,5.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14L4D2cardboardcutoutjohnnywayne
   entities:
   - uid: 394

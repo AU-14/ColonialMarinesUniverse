@@ -7408,7 +7408,7 @@ entities:
     - type: Transform
       pos: -26.257448,17.45147
       parent: 1
-- proto: AU14JOGenericVendor
+- proto: CMURoundJuniorOfficerVendor
   entities:
   - uid: 67
     components:

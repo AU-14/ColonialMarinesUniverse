@@ -126287,13 +126287,15 @@ entities:
     - type: Transform
       pos: -106.5,53.5
       parent: 1
-- proto: AU14JOGenericVendor
+- proto: CMURoundJuniorOfficerVendor
   entities:
   - uid: 70526
     components:
     - type: Transform
       pos: -55.5,84.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: AU14MaintenanceJack
   entities:
   - uid: 1251

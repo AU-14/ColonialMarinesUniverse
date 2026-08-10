@@ -33,7 +33,8 @@ public sealed partial class RoundVendorEndpointSystem : EntitySystem
     {
         if (args.Slot is not (RoundSetupSlot.WeaponsVendor or
             RoundSetupSlot.VehicleCrewVendor or
-            RoundSetupSlot.MilitaryDoctorVendor))
+            RoundSetupSlot.MilitaryDoctorVendor or
+            RoundSetupSlot.JuniorOfficerVendor))
             return;
 
         if (!TryComp(args.Endpoint, out CMAutomatedVendorComponent? vendor))
