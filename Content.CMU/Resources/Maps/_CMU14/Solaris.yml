@@ -108053,28 +108053,36 @@ entities:
     - type: Transform
       pos: 33.5,67.5
       parent: 1
-- proto: AU14USCMequipmentvendor
+- proto: CMURoundRiflemanVendor
   entities:
   - uid: 217
     components:
     - type: Transform
       pos: 27.5,74.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 218
     components:
     - type: Transform
       pos: 27.5,76.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 219
     components:
     - type: Transform
       pos: 34.5,76.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
   - uid: 220
     components:
     - type: Transform
       pos: 34.5,74.5
       parent: 1
+    - type: RoundSetupEndpoint
+      side: Govfor
 - proto: CMURoundSectionSergeantVendor
   entities:
   - uid: 221

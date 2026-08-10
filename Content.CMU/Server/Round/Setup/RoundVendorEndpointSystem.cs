@@ -39,7 +39,8 @@ public sealed partial class RoundVendorEndpointSystem : EntitySystem
             RoundSetupSlot.MilitaryPoliceVendor or
             RoundSetupSlot.SectionSergeantVendor or
             RoundSetupSlot.SquadSergeantVendor or
-            RoundSetupSlot.CombatTechnicianVendor))
+            RoundSetupSlot.CombatTechnicianVendor or
+            RoundSetupSlot.RiflemanVendor))
             return;
 
         if (!TryComp(args.Endpoint, out CMAutomatedVendorComponent? vendor))

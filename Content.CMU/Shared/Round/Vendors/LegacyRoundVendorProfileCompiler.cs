@@ -39,7 +39,8 @@ public static class LegacyRoundVendorProfileCompiler
             RoundSetupSlot.MilitaryPoliceVendor or
             RoundSetupSlot.SectionSergeantVendor or
             RoundSetupSlot.SquadSergeantVendor or
-            RoundSetupSlot.CombatTechnicianVendor))
+            RoundSetupSlot.CombatTechnicianVendor or
+            RoundSetupSlot.RiflemanVendor))
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");

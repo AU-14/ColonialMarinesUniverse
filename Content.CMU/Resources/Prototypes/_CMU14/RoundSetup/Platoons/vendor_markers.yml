@@ -61,12 +61,13 @@
     side: Opfor
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundRiflemanVendor
   id: VMarkerOpforRifleman
-  name: Opfor equipment marker
+  name: OPFOR rifleman equipment rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Rifleman
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -293,12 +294,13 @@
     class: Arifleman
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundRiflemanVendor
   id: VMarkerGovforRifleman
-  name: Gov equipment marker
+  name: GOVFOR rifleman equipment rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: Rifleman
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: CMURoundCombatTechnicianVendor
@@ -582,15 +584,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundRiflemanVendor
   id: VMarkerShipRifleman
-  name: Ship equipment marker
-  components:
-  - type: VendorMarker
-    class: Rifleman
-  - type: Sprite
-    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
-    state: base
+  name: ship rifleman equipment rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip
