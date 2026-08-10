@@ -59,6 +59,7 @@ public sealed class USSBushMultiZTest : GameTest
         Dictionary<int, NetEntity> loadedMapNets = [];
         var uscmEquipmentVendorsBefore = 0;
         var uscmWeaponsVendorsBefore = 0;
+        var semanticWeaponsVendors = 0;
 
         await server.WaitAssertion(() =>
         {
@@ -82,6 +83,8 @@ public sealed class USSBushMultiZTest : GameTest
 
             uscmEquipmentVendorsBefore = CountPrototype("AU14USCMequipmentvendor");
             uscmWeaponsVendorsBefore = CountPrototype("AU14USCMWeaponsVendor");
+            semanticWeaponsVendors = CountPrototype("VMarkerShipWeapons");
+            Assert.That(semanticWeaponsVendors, Is.GreaterThan(0));
 
             var mainMap = mapSystem.GetMap(mapId);
             Assert.That(zLevels.TryGetZNetwork(mainMap, out var matchingNetwork), Is.True);
@@ -127,8 +130,10 @@ public sealed class USSBushMultiZTest : GameTest
                 "Dynamic Bush markers should remain available for the selected platoon rule.");
             Assert.That(CountPrototype("AU14USCMequipmentvendor"), Is.GreaterThan(uscmEquipmentVendorsBefore),
                 "The selected USCM platoon did not resolve Bush's rifleman vendor markers.");
-            Assert.That(CountPrototype("AU14USCMWeaponsVendor"), Is.GreaterThan(uscmWeaponsVendorsBefore),
-                "The selected USCM platoon did not resolve Bush's weapons vendor markers.");
+            Assert.That(CountPrototype("AU14USCMWeaponsVendor"), Is.EqualTo(uscmWeaponsVendorsBefore),
+                "The semantic weapons endpoints also spawned legacy force-specific vendors.");
+            Assert.That(CountPrototype("VMarkerShipWeapons"), Is.EqualTo(semanticWeaponsVendors),
+                "The semantic weapons endpoints were replaced instead of configured in place.");
             AssertPrototypeCountAtLeast("RMCOverwatchConsoleGovforRotating", 1);
         });
 

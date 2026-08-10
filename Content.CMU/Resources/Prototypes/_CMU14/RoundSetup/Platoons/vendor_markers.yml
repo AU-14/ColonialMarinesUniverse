@@ -677,15 +677,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundWeaponsVendor
   id: VMarkerShipWeapons
-  name: Ship Weapons marker
-  components:
-  - type: VendorMarker
-    class: Weapons
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
-    state: base
+  name: ship weapons rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip

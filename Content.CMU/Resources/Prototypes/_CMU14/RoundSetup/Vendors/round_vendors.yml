@@ -1,0 +1,11 @@
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundWeaponsVendor
+  name: round weapons rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/guns.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: WeaponsVendor

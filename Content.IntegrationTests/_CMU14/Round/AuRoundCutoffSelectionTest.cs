@@ -11,6 +11,7 @@ using Content.Server.GameTicking.Presets;
 using Content.Shared._CMU14.RoundSetup.LegacyBush;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared._RMC14.Vendors;
 using Content.Shared.Access.Components;
 using Content.Shared.AU14;
 using Content.Shared.AU14.ColonyEconomy;
@@ -610,6 +611,80 @@ public sealed class AuRoundCutoffSelectionTest
             server.EntMan.DeleteEntity(lateConsole);
             server.EntMan.DeleteEntity(preservedAccessConsole);
         });
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LegacyShipWeaponsAliasResolvesCommittedVendorInPlace()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Dirty = true });
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid vendorUid = default;
+        await server.WaitAssertion(() =>
+        {
+            var director = server.System<CMURoundDirectorSystem>();
+            server.EntMan.EventBus.RaiseEvent(EventSource.Local, new RoundRestartCleanupEvent());
+
+            var shipFaction = server.EntMan.EnsureComponent<ShipFactionComponent>(map.Grid.Owner);
+            shipFaction.Faction = "govfor";
+            vendorUid = server.EntMan.SpawnEntity("VMarkerShipWeapons", map.GridCoords);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(server.EntMan.HasComponent<VendorMarkerComponent>(vendorUid), Is.False);
+                Assert.That(
+                    server.EntMan.GetComponent<RoundSetupEndpointComponent>(vendorUid).Slot,
+                    Is.EqualTo(RoundSetupSlot.WeaponsVendor));
+                Assert.That(
+                    server.EntMan.GetComponent<CMAutomatedVendorComponent>(vendorUid).Sections,
+                    Is.Empty);
+            });
+
+            director.FreezeSelection(PlayerCount, FixedBothSidesPresetId);
+            director.MarkMapsLoaded();
+            director.MarkWorldInitialized();
+
+            Assert.That(
+                director.TryGetCommittedVendorProfile(
+                    RoundSide.Govfor,
+                    RoundSetupSlot.WeaponsVendor,
+                    out var profile),
+                Is.True);
+            var runtime = server.EntMan.GetComponent<CMAutomatedVendorComponent>(vendorUid);
+            var metadata = server.EntMan.GetComponent<MetaDataComponent>(vendorUid);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(metadata.EntityPrototype?.ID, Is.EqualTo("VMarkerShipWeapons"));
+                Assert.That(metadata.EntityName, Is.EqualTo(profile!.Name));
+                Assert.That(metadata.EntityDescription, Is.EqualTo(profile.Description));
+                Assert.That(
+                    RoundVendorProfileTestData.SnapshotLegacySections(runtime),
+                    Is.EqualTo(RoundVendorProfileTestData.SnapshotSections(profile)));
+                Assert.That(runtime.RestockEntries, Has.Count.EqualTo(
+                    profile.Sections.Sum(section => section.Entries.Length)));
+                Assert.That(
+                    SnapshotAccess(server.EntMan.GetComponent<AccessReaderComponent>(vendorUid)),
+                    Is.EqualTo(new[] { "AU14AccessGovforSquad", "AU14AccessOpforSquad" }));
+            });
+
+            foreach (var section in runtime.Sections)
+            {
+                foreach (var entry in section.Entries)
+                {
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(entry.Multiplier, Is.EqualTo(entry.Amount));
+                        Assert.That(entry.Max, Is.EqualTo(entry.Amount));
+                        Assert.That(runtime.RestockEntries[entry.Id], Is.SameAs(entry));
+                    });
+                }
+            }
+        });
+
+        await server.WaitPost(() => server.EntMan.DeleteEntity(vendorUid));
         await pair.CleanReturnAsync();
     }
 
