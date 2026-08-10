@@ -2,6 +2,7 @@
 
 using System.Collections.Immutable;
 using Content.Shared.Access;
+using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared.CMU.Round;
@@ -33,15 +34,18 @@ public sealed class ResolvedRoundVendorSection
 {
     public string Name { get; }
     public RoundVendorChoice? Choice { get; }
+    public string? TakeAll { get; }
     public ImmutableArray<ResolvedRoundVendorEntry> Entries { get; }
 
     internal ResolvedRoundVendorSection(
         string name,
         RoundVendorChoice? choice,
+        string? takeAll,
         ImmutableArray<ResolvedRoundVendorEntry> entries)
     {
         Name = name;
         Choice = choice;
+        TakeAll = takeAll;
         Entries = entries;
     }
 }
@@ -74,6 +78,7 @@ public sealed class ResolvedRoundVendorProfile
     public string Name { get; }
     public string Description { get; }
     public ResolvedRoundVendorAccess Access { get; }
+    public ImmutableArray<ProtoId<JobPrototype>> Jobs { get; }
     public ImmutableArray<ResolvedRoundVendorSection> Sections { get; }
 
     internal ResolvedRoundVendorProfile(
@@ -82,6 +87,7 @@ public sealed class ResolvedRoundVendorProfile
         string name,
         string description,
         ResolvedRoundVendorAccess access,
+        ImmutableArray<ProtoId<JobPrototype>> jobs,
         ImmutableArray<ResolvedRoundVendorSection> sections)
     {
         Force = force;
@@ -89,6 +95,7 @@ public sealed class ResolvedRoundVendorProfile
         Name = name;
         Description = description;
         Access = access;
+        Jobs = jobs;
         Sections = sections;
     }
 }

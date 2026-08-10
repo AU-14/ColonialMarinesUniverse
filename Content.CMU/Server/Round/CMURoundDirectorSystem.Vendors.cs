@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Server.AU14.Scenario;
 using Content.Shared.AU14.util;
 using Content.Shared.CMU.Round;
+using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.Round;
@@ -15,6 +16,7 @@ public sealed partial class CMURoundDirectorSystem
     [
         (RoundSetupSlot.WeaponsVendor, PlatoonMarkerClass.Weapons),
         (RoundSetupSlot.VehicleCrewVendor, PlatoonMarkerClass.VehicleCrew),
+        (RoundSetupSlot.MilitaryDoctorVendor, PlatoonMarkerClass.MilitaryDoctor),
     ];
 
     private CommittedRoundVendorProfiles? _committedVendorProfiles;
@@ -124,6 +126,15 @@ public sealed partial class CMURoundDirectorSystem
         ResolvedRoundVendorProfile profile,
         string sourcePrototypeId)
     {
+        foreach (var job in profile.Jobs)
+        {
+            if (_prototypes.TryIndex<JobPrototype>(job, out _))
+                continue;
+
+            throw new InvalidOperationException(
+                $"Legacy vendor '{sourcePrototypeId}' job restriction '{job}' does not exist.");
+        }
+
         foreach (var section in profile.Sections)
         {
             foreach (var entry in section.Entries)

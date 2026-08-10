@@ -137,12 +137,13 @@
     class: Rto
 
 - type: entity
-  parent: VMarkerOpfor
+  parent: CMURoundMilitaryDoctorVendor
   id: VMarkerOpfordoctor
-  name: Opfor Doctor marker
+  name: OPFOR military doctor rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: MilitaryDoctor
+  - type: RoundSetupEndpoint
+    side: Opfor
 
 - type: entity
   parent: VMarkerOpfor
@@ -311,12 +312,13 @@
     class: Dcc
 
 - type: entity
-  parent: VMarkerGovfor
+  parent: CMURoundMilitaryDoctorVendor
   id: VMarkerGovforDoctor
-  name: Gov doctor marker
+  name: GOVFOR military doctor rack
+  categories: [ HideSpawnMenu ]
   components:
-  - type: VendorMarker
-    class: MilitaryDoctor
+  - type: RoundSetupEndpoint
+    side: Govfor
 
 - type: entity
   parent: VMarkerGovfor
@@ -547,15 +549,10 @@
     state: base
 
 - type: entity
-  parent: VmarkerShip
+  parent: CMURoundMilitaryDoctorVendor
   id: VMarkerShipDoctor
-  name: Ship doctor marker
-  components:
-  - type: VendorMarker
-    class: MilitaryDoctor
-  - type: Sprite
-    sprite: _RMC14/Structures/Machines/VendingMachines/ColMarTech/medical_gear.rsi
-    state: base
+  name: ship military doctor rack
+  categories: [ HideSpawnMenu ]
 
 - type: entity
   parent: VmarkerShip

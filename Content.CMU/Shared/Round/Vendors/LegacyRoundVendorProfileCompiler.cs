@@ -31,7 +31,9 @@ public static class LegacyRoundVendorProfileCompiler
 
         if (!force.IsValid)
             throw Invalid(prototype, "has no valid round force identity");
-        if (slot is not (RoundSetupSlot.WeaponsVendor or RoundSetupSlot.VehicleCrewVendor))
+        if (slot is not (RoundSetupSlot.WeaponsVendor or
+            RoundSetupSlot.VehicleCrewVendor or
+            RoundSetupSlot.MilitaryDoctorVendor))
             throw Invalid(prototype, $"cannot be compiled for unsupported setup slot '{slot}'");
         if (!prototype.TryGetComponent<CMAutomatedVendorComponent>(out var vendor, componentFactory))
             throw Invalid(prototype, "has no automated-vendor component");
@@ -69,8 +71,18 @@ public static class LegacyRoundVendorProfileCompiler
                 entries.Add(new ResolvedRoundVendorEntry(entry.Id, entry.Amount));
             }
 
-            sections.Add(new ResolvedRoundVendorSection(section.Name, choice, entries.MoveToImmutable()));
+            if (section.TakeAll is { } takeAll && string.IsNullOrWhiteSpace(takeAll))
+                throw Invalid(prototype, $"section '{section.Name}' has an invalid take-all allowance");
+
+            sections.Add(new ResolvedRoundVendorSection(
+                section.Name,
+                choice,
+                section.TakeAll,
+                entries.MoveToImmutable()));
         }
+
+        if (vendor.Jobs.Any(job => string.IsNullOrWhiteSpace(job.Id)))
+            throw Invalid(prototype, "contains an invalid job restriction");
 
         var access = CompileAccess(prototype, componentFactory);
         return new ResolvedRoundVendorProfile(
@@ -79,6 +91,7 @@ public static class LegacyRoundVendorProfileCompiler
             prototype.Name,
             prototype.Description,
             access,
+            vendor.Jobs.ToImmutableArray(),
             sections.MoveToImmutable());
     }
 
@@ -129,7 +142,6 @@ public static class LegacyRoundVendorProfileCompiler
         CMAutomatedVendorComponent vendor)
     {
         if (vendor.PointsType != null ||
-            vendor.Jobs.Count != 0 ||
             vendor.Ranks.Count != 0 ||
             vendor.MinOffset != new Vector2(-0.2f, -0.2f) ||
             vendor.MaxOffset != new Vector2(0.2f, 0.2f) ||
@@ -163,8 +175,7 @@ public static class LegacyRoundVendorProfileCompiler
         EntityPrototype prototype,
         CMVendorSection section)
     {
-        if (section.TakeAll != null ||
-            section.TakeOne != null ||
+        if (section.TakeOne != null ||
             section.SharedSpecLimit != null ||
             section.SharedJOLimit != null ||
             section.Jobs.Count != 0 ||

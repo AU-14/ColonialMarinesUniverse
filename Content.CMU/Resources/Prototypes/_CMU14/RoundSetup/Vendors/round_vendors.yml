@@ -21,3 +21,15 @@
   - type: CMAutomatedVendor
   - type: RoundSetupEndpoint
     slot: VehicleCrewVendor
+
+- type: entity
+  parent: ColMarTechBase
+  id: CMURoundMilitaryDoctorVendor
+  name: round military doctor rack
+  suffix: Round Setup
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vendors/assortedequipment.rsi
+  - type: CMAutomatedVendor
+  - type: RoundSetupEndpoint
+    slot: MilitaryDoctorVendor
