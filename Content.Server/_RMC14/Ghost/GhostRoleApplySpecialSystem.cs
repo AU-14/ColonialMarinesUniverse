@@ -2,6 +2,7 @@ using Content.Server._RMC14.Marines;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Server.AU14.Roles;
 using Content.Server.Ghost.Roles.Components;
+using Content.Server.Humanoid.Systems;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.Roles;
@@ -27,12 +28,13 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
     {
         base.Initialize();
         SubscribeLocalEvent<GhostRoleApplySpecialComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<GhostRoleApplySpecialComponent, MapInitEvent>(OnMapInit,
+            after: [typeof(RandomHumanoidAppearanceSystem)]);
     }
 
     private void OnStartup(Entity<GhostRoleApplySpecialComponent> ent, ref ComponentStartup args)
     {
-        if (!TryComp<GhostRoleComponent>(ent, out var ghostRole) ||
-            !TryComp(ent, out MetaDataComponent? metaData))
+        if (!TryComp<GhostRoleComponent>(ent, out var ghostRole))
             return;
 
         if (ghostRole.JobProto is not { } jobProto)
@@ -43,19 +45,6 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
 
         if (job.StartingGear is { } gear)
             _loadout.Equip(ent, [gear], null);
-
-        if (_inventory.TryGetSlotContainer(ent, "id", out var container, out _))
-        {
-            foreach (var item in container.ContainedEntities)
-            {
-                if (TryComp<IdCardComponent>(item, out var card))
-                {
-                    card.FullName = metaData.EntityName;
-                    card.OriginalOwner = ent.Owner;
-                    _meta.SetEntityName(item, $"{metaData.EntityName} ({job.LocalizedName})");
-                }
-            }
-        }
 
         AddComp(ent, new OriginalRoleComponent() { Job = jobProto });
         foreach (var special in job.Special)
@@ -86,6 +75,28 @@ public sealed partial class GhostRoleApplySpecialSystem : EntitySystem
             job.Icon != "CMJobIconEmpty" &&
             _prototype.TryIndex(job.Icon, out var icon))
             _marine.SetMarineIcon(ent, icon.Icon);
+    }
+
+    private void OnMapInit(Entity<GhostRoleApplySpecialComponent> ent, ref MapInitEvent args)
+    {
+        if (!TryComp<GhostRoleComponent>(ent, out var ghostRole) ||
+            ghostRole.JobProto is not { } jobProto ||
+            !_prototype.TryIndex(jobProto, out var job))
+            return;
+
+        var entityName = MetaData(ent).EntityName;
+        if (_inventory.TryGetSlotContainer(ent, "id", out var container, out _))
+        {
+            foreach (var item in container.ContainedEntities)
+            {
+                if (!TryComp<IdCardComponent>(item, out var card))
+                    continue;
+
+                card.FullName = entityName;
+                card.OriginalOwner = ent.Owner;
+                _meta.SetEntityName(item, $"{entityName} ({job.LocalizedName})");
+            }
+        }
 
         RemComp<GhostRoleApplySpecialComponent>(ent);
     }
