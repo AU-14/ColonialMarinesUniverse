@@ -17,6 +17,7 @@ namespace Content.Server._RMC14.Announce;
 public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
 {
     private const string QueenAnnouncementPreset = "XenoQueen";
+    private static readonly ChatDisplayMetadata AnnouncementChatDisplay = new(ChatDisplayKind.System);
 
     [Dependency] private IAdminLogManager _adminLogs = default!;
     [Dependency] private AudioSystem _audio = default!;
@@ -61,7 +62,16 @@ public sealed partial class XenoAnnounceSystem : SharedXenoAnnounceSystem
             _generalAnnounce.AnnounceAdvanced(request, filter);
         }
 
-        _chat.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, wrapped, source, false, true, null);
+        _chat.ChatMessageToManyFiltered(
+            filter,
+            ChatChannel.Radio,
+            message,
+            wrapped,
+            source,
+            false,
+            true,
+            null,
+            display: AnnouncementChatDisplay);
         _audio.PlayGlobal(sound, filter, true);
 
         if (popup == null)

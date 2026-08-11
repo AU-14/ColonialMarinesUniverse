@@ -25,6 +25,8 @@ namespace Content.Server._RMC14.Marines;
 
 public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
 {
+    private static readonly ChatDisplayMetadata AnnouncementChatDisplay = new(ChatDisplayKind.System);
+
     [Dependency] private IAdminLogManager _adminLogs = default!;
     [Dependency] private AudioSystem _audio = default!;
     [Dependency] private IChatManager _chatManager = default!;
@@ -121,7 +123,16 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         if (excludeSurvivors)
             filter.RemoveWhereAttachedEntity(HasComp<IntelRescueSurvivorObjectiveComponent>);
 
-        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, message, default, false, true, null);
+        _chatManager.ChatMessageToManyFiltered(
+            filter,
+            ChatChannel.Radio,
+            message,
+            message,
+            default,
+            false,
+            true,
+            null,
+            display: AnnouncementChatDisplay);
         _audio.PlayGlobal(sound ?? DefaultAnnouncementSound, filter, true, AudioParams.Default.WithVolume(-2f));
     }
 
@@ -165,7 +176,16 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
 
         var filter = Filter.Empty().AddWhereAttachedEntity(e => _squad.IsInSquad(e, squad));
 
-        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, message, default, false, true, null);
+        _chatManager.ChatMessageToManyFiltered(
+            filter,
+            ChatChannel.Radio,
+            message,
+            message,
+            default,
+            false,
+            true,
+            null,
+            display: AnnouncementChatDisplay);
         _audio.PlayGlobal(sound ?? DefaultSquadSound, filter, true, AudioParams.Default.WithVolume(-2f));
     }
 
@@ -175,7 +195,16 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
 
         var filter = Filter.Empty().AddWhereAttachedEntity(e => _squad.IsInSquad(e, squad));
 
-        _chatManager.ChatMessageToManyFiltered(filter, ChatChannel.Radio, message, message, default, false, true, null);
+        _chatManager.ChatMessageToManyFiltered(
+            filter,
+            ChatChannel.Radio,
+            message,
+            message,
+            default,
+            false,
+            true,
+            null,
+            display: AnnouncementChatDisplay);
         _audio.PlayGlobal(sound ?? DefaultSquadSound, filter, true, AudioParams.Default.WithVolume(-2f));
     }
 
@@ -184,7 +213,14 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         base.AnnounceSingle(message, receiver, sound);
 
         if (TryComp(receiver, out ActorComponent? actor))
-            _chatManager.ChatMessageToOne(ChatChannel.Radio, message, message, default, false, actor.PlayerSession.Channel);
+            _chatManager.ChatMessageToOne(
+                ChatChannel.Radio,
+                message,
+                message,
+                default,
+                false,
+                actor.PlayerSession.Channel,
+                display: AnnouncementChatDisplay);
 
         _audio.PlayEntity(sound, receiver, receiver, AudioParams.Default.WithVolume(-2f));
     }

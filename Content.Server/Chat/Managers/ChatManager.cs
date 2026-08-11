@@ -426,10 +426,10 @@ internal sealed partial class ChatManager : IChatManager
         }
     }
 
-    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
-        => ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients.ToList(), colorOverride, audioPath, audioVolume, author);
+    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, IEnumerable<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatDisplayMetadata? display = null)
+        => ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients.ToList(), colorOverride, audioPath, audioVolume, author, display);
 
-    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, List<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
+    public void ChatMessageToMany(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, List<INetChannel> clients, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, ChatDisplayMetadata? display = null)
     {
         var user = author == null ? null : EnsurePlayer(author);
         var netSource = _entityManager.GetNetEntity(source);
@@ -463,6 +463,7 @@ internal sealed partial class ChatManager : IChatManager
                 colorOverride,
                 audioPath,
                 audioVolume,
+                display: display,
                 ghostFollowEntity: ghostFollowEntity,
                 xenoWatchEntity: xenoWatchEntity);
             _netManager.ServerSendMessage(new MsgChatMessage { Message = msg }, client);
@@ -474,13 +475,13 @@ internal sealed partial class ChatManager : IChatManager
         if ((channel & ChatChannel.AdminRelated) == 0 ||
             _configurationManager.GetCVar(CCVars.ReplayRecordAdminChat))
         {
-            var msg = new ChatMessage(channel, message, wrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume);
+            var msg = new ChatMessage(channel, message, wrappedMessage, netSource, user?.Key, hideChat, colorOverride, audioPath, audioVolume, display: display);
             _replay.RecordServerMessage(msg);
         }
     }
 
     public void ChatMessageToManyFiltered(Filter filter, ChatChannel channel, string message, string wrappedMessage, EntityUid source,
-        bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0)
+        bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, ChatDisplayMetadata? display = null)
     {
         if (!recordReplay && !filter.Recipients.Any())
             return;
@@ -491,7 +492,7 @@ internal sealed partial class ChatManager : IChatManager
             clients.Add(recipient.Channel);
         }
 
-        ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients, colorOverride, audioPath, audioVolume);
+        ChatMessageToMany(channel, message, wrappedMessage, source, hideChat, recordReplay, clients, colorOverride, audioPath, audioVolume, display: display);
     }
 
     public void ChatMessageToAll(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, bool recordReplay, Color? colorOverride = null, string? audioPath = null, float audioVolume = 0, NetUserId? author = null)
