@@ -492,6 +492,14 @@ public sealed class AdminAHelpUIHandler : IAHelpUIHandler
 
 public sealed class UserAHelpUIHandler : IAHelpUIHandler
 {
+    private sealed class UserAHelpWindow : DefaultWindow
+    {
+        public UserAHelpWindow()
+        {
+            CloseButton.OnPressed += _ => Close();
+        }
+    }
+
     private readonly NetUserId _ownerId;
     public UserAHelpUIHandler(NetUserId owner)
     {
@@ -566,7 +574,7 @@ public sealed class UserAHelpUIHandler : IAHelpUIHandler
         _chatPanel = new BwoinkPanel(text => SendMessageAction?.Invoke(_ownerId, text, true, false));
         _chatPanel.InputTextChanged += text => InputTextChanged?.Invoke(_ownerId, text);
         _chatPanel.RelayedToDiscordLabel.Visible = relayActive;
-        _window = new DefaultWindow()
+        _window = new UserAHelpWindow()
         {
             TitleClass="windowTitleAlert",
             HeaderClass="windowHeaderAlert",
