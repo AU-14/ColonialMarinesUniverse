@@ -218,6 +218,7 @@
       sprite: _CMU14/Weapons/Guns/Attachments/under.rsi
       state: masterkey-on
   - type: AttachableVisuals
+    suffix: ""
   - type: WieldedCrosshair
     rsi:
       sprite: _RMC14/Interface/MousePointer/shotgun_mouse.rsi

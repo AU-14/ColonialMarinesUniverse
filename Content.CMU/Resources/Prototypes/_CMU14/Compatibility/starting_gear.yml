@@ -88,6 +88,20 @@
       visible: false
 
 - type: entity
+  parent: RMCSynthResetKey
+  id: RMCSynthResetKeyHyperdyne
+  name: Hyperdyne synthetic reset key
+  description: An independent Hyperdyne-pattern reset key for rebooting synthetic units after critical failure. It must be recharged after use.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Devices/synth_reset_key.rsi
+    layers:
+    - state: hyper_reset_key
+    - state: hyper_reset_key_on
+      map: [ "enum.ToggleableVisuals.Layer" ]
+      visible: false
+
+- type: entity
   parent: CMSatchel
   id: RMCSatchelFilledFaxResponderHighComm
   suffix: Fax Responder, HComm
