@@ -23,7 +23,8 @@ namespace Content.Shared.Damage
         /// <summary>
         ///     Main DamageSpecifier dictionary. Most DamageSpecifier functions exist to somehow modifying this.
         /// </summary>
-        [DataField("types")]
+        // RMC14 - Keep supporting group-based damage used throughout the RMC prototype corpus.
+        [IncludeDataField(customTypeSerializer: typeof(DamageSpecifierDictionarySerializer), readOnly: true)]
         public Dictionary<ProtoId<DamageTypePrototype>, FixedPoint2> DamageDict { get; set; } = new();
 
         /// <summary>

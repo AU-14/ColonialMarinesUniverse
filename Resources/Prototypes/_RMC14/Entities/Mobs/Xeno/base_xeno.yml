@@ -44,6 +44,7 @@
       - EntityStorage
   - type: Damageable
     damageContainer: Xeno
+  - type: Injurable
   - type: Destructible
     thresholds: []
   - type: RMCMedicalExamine
