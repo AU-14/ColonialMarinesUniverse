@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Evasion;
 using Content.Shared._RMC14.Xenonids.Charge;
 using Content.Shared._RMC14.Xenonids.Construction.Events;
 using Content.Shared._RMC14.Xenonids.Crest;
+using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared._RMC14.Xenonids.Fling;
 using Content.Shared._RMC14.Xenonids.Fortify;
 using Content.Shared._RMC14.Xenonids.Gut;
@@ -75,6 +76,9 @@ public sealed partial class XenoRestSystem : EntitySystem
 
     private void OnXenoRestingCanMove(Entity<XenoRestingComponent> xeno, ref UpdateCanMoveEvent args)
     {
+        if (TryComp(xeno, out QueenEyeActionComponent? queenEye) && queenEye.Eye != null)
+            return;
+
         args.Cancel();
     }
 
