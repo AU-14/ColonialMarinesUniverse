@@ -92,14 +92,6 @@ public sealed partial class RadioSystem : SharedRadioSystem
     /// <summary>
     /// Send radio message to all active radio listeners
     /// </summary>
-    public new void SendRadioMessage(EntityUid messageSource, string message, ProtoId<RadioChannelPrototype> channel, EntityUid radioSource, bool escapeMarkup = true)
-    {
-        SendRadioMessage(messageSource, message, ProtoMan.Index(channel), radioSource, escapeMarkup: escapeMarkup);
-    }
-
-    /// <summary>
-    /// Send radio message to all active radio listeners
-    /// </summary>
     /// <param name="messageSource">Entity that spoke the message</param>
     /// <param name="radioSource">Entity that picked up the message and will send it, e.g. headset</param>
     /// <inheritdoc/>
