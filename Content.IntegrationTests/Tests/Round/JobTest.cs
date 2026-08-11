@@ -161,6 +161,31 @@ public sealed class JobTest : GameTest
     }
 
     /// <summary>
+    /// Required jobs must not assign a player to a role they did not select.
+    /// </summary>
+    [Test]
+    public async Task MinimumJobsRespectPlayerPreferencesTest()
+    {
+        var pair = Pair;
+        var cfg = pair.Server.CfgMan;
+        var oldFallback = cfg.GetCVar(CCVars.GameMinimumJobFallback);
+        var ticker = pair.Server.System<GameTicker>();
+
+        cfg.SetCVar(CCVars.GameMap, _map);
+        cfg.SetCVar(CCVars.GameMinimumJobFallback, MinimumJobFallback.AnyEligiblePlayer);
+
+        await pair.SetJobPriorities((Passenger, JobPriority.Never), (Engineer, JobPriority.High));
+        ticker.ToggleReadyAll(true);
+        await pair.Server.WaitPost(() => ticker.StartRound());
+        await pair.RunTicksSync(10);
+
+        AssertJob(pair, Engineer);
+
+        cfg.SetCVar(CCVars.GameMinimumJobFallback, oldFallback);
+        await pair.Server.WaitPost(() => ticker.RestartRound());
+    }
+
+    /// <summary>
     /// Check high priority jobs (e.g., captain) are selected before other roles, even if it means a player does not
     /// get their preferred job.
     /// </summary>

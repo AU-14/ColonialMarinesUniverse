@@ -66,9 +66,10 @@ public sealed partial class ProfilePreviewSpriteView
 
             GiveDummyJobClothes(humanoid, job);
 
-            if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID)))
+            var jobLoadout = LoadoutSystem.GetJobPrototype(job);
+            if (_prototypeManager.HasIndex<RoleLoadoutPrototype>(jobLoadout))
             {
-                var loadout = humanoid.GetLoadoutOrDefault(LoadoutSystem.GetJobPrototype(job.ID), _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
+                var loadout = humanoid.GetLoadoutOrDefault(jobLoadout, _playerManager.LocalSession, humanoid.Species, EntMan, _prototypeManager);
                 GiveDummyLoadout(loadout);
             }
         }

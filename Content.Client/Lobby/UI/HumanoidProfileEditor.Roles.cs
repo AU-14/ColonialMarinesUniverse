@@ -213,7 +213,8 @@ public sealed partial class HumanoidProfileEditor
             Margin = new Thickness(3, 3, 0, 0),
             MinWidth = 110,
         };
-        if (!_prototypeManager.TryIndex<RoleLoadoutPrototype>(LoadoutSystem.GetJobPrototype(job.ID), out var loadoutProto))
+        var jobLoadout = LoadoutSystem.GetJobPrototype(job);
+        if (!_prototypeManager.TryIndex<RoleLoadoutPrototype>(jobLoadout, out var loadoutProto))
         {
             loadoutButton.Disabled = true;
         }
@@ -222,7 +223,7 @@ public sealed partial class HumanoidProfileEditor
             loadoutButton.OnPressed += _ =>
             {
                 RoleLoadout? existing = null;
-                Profile?.Loadouts.TryGetValue(LoadoutSystem.GetJobPrototype(job.ID), out existing);
+                Profile?.Loadouts.TryGetValue(jobLoadout, out existing);
                 var loadout = existing?.Clone() ?? new RoleLoadout(loadoutProto.ID);
                 if (existing == null)
                     loadout.SetDefault(Profile, _playerManager.LocalSession, _prototypeManager);

@@ -3,10 +3,8 @@ using Content.Server.Administration.Managers;
 using Content.Server.Antag;
 using Content.Server.Station.Components;
 using Content.Server.Station.Events;
-using Content.Shared.CCVar;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
-using Content.Shared.Roles.Jobs;
 using Content.Shared.Station.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
@@ -18,9 +16,8 @@ namespace Content.Server.Station.Systems;
 // Contains code for round-start spawning.
 public sealed partial class StationJobsSystem
 {
-    [Dependency] private IBanManager _banManager = default!;
-    [Dependency] private SharedJobSystem _jobs = default!;
     [Dependency] private AntagSelectionSystem _antag = default!;
+    [Dependency] private IBanManager _banManager = default!;
 
     private int GetJobWeight(EntityUid station, JobPrototype job)
     {
@@ -77,7 +74,7 @@ public sealed partial class StationJobsSystem
     /// You probably shouldn't use useRoundStartJobs mid-round if the station has been available to join,
     /// as there may end up being more round-start slots than available slots, which can cause weird behavior.
     /// Round-start allocation attempts each station's minimum roles first, ordered by the station's job weights.
-    /// Unpreferred minimum roles can use an eligible random player when configured to do so.
+    /// Minimum roles are only assigned to players who selected them.
     /// It then considers remaining players in random order and gives each their highest available preference.
     /// </remarks>
     public Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> AssignJobs(
@@ -117,14 +114,12 @@ public sealed partial class StationJobsSystem
         }
 
         // Jobs assigned after this point must satisfy bans, antag restrictions, and any other candidate filter.
-        // The minimum phase selects players for a job*, and the maximum phase selects jobs for a player.
+        // The minimum phase selects players for a job, and the maximum phase selects jobs for a player.
         var jobCandidates = GetJobCandidates(profiles);
         var playerCandidates = GetPlayerCandidates(jobCandidates);
 
         // Phase one: complete every required role on a station before considering the next station.
         // Within a station, job priority win over player preference; player preference breaks ties between candidates.
-        var jobFallback = _configurationManager.GetCVar(CCVars.GameMinimumJobFallback);
-
         foreach (var station in stations)
         {
             var requiredJobs = stationMinimumJobs[station]
@@ -140,12 +135,8 @@ public sealed partial class StationJobsSystem
                     if (stationJobs[station][job] is <= 0)
                         break;
 
-                    if (!TryPickCandidate(job, jobCandidates, out var player) &&
-                        !TryPickMinimumJobFallbackCandidate(
-                            job, profiles, jobFallback, out player))
-                    {
+                    if (!TryPickCandidate(job, jobCandidates, out var player))
                         break;
-                    }
 
                     AssignPlayer(player, job, station, stationJobs, jobCandidates, playerCandidates, profiles, assigned);
                 }
@@ -383,108 +374,6 @@ public sealed partial class StationJobsSystem
         }
 
         return outputDict;
-    }
-
-    /// <summary>
-    /// Tries the configured fallback for a required role that has no direct preference candidates.
-    /// </summary>
-    private bool TryPickMinimumJobFallbackCandidate(
-        ProtoId<JobPrototype> job,
-        IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles,
-        MinimumJobFallback fallback,
-        out NetUserId player)
-    {
-        switch (fallback)
-        {
-            case MinimumJobFallback.SameDepartment:
-                return TryPickSameDepartmentCandidate(job, profiles, out player);
-
-            case MinimumJobFallback.AnyEligiblePlayer:
-                if (TryPickSameDepartmentCandidate(job, profiles, out player))
-                    return true;
-
-                return TryPickCandidateIgnoringPreferences(job, profiles, out player);
-
-            default:
-                player = default;
-                return false;
-        }
-    }
-
-    /// <summary>
-    /// Gets a random eligible player who prefers a role in the target job's primary department.
-    /// </summary>
-    private bool TryPickSameDepartmentCandidate(
-        ProtoId<JobPrototype> job,
-        IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles,
-        out NetUserId player)
-    {
-        if (!_jobs.TryGetPrimaryDepartment(job.Id, out var department))
-        {
-            player = default;
-            return false;
-        }
-
-        var matchingProfiles = profiles
-            .Where(pair => pair.Value.JobPriorities.Any(preference =>
-                preference.Value != JobPriority.Never && department.Roles.Contains(preference.Key)))
-            .ToDictionary();
-        return TryPickCandidateIgnoringPreferences(job, matchingProfiles, out player);
-    }
-
-    /// <summary>
-    /// Gets a random eligible player for a required role without requiring a preference for that role.
-    /// </summary>
-    /// <remarks>
-    /// This deliberately uses the same candidate-filter event as normal assignment so role timers and whitelists
-    /// still apply. The only criterion omitted is the player's job preference.
-    /// </remarks>
-    private bool TryPickCandidateIgnoringPreferences(
-        ProtoId<JobPrototype> job,
-        IReadOnlyDictionary<NetUserId, HumanoidCharacterProfile> profiles,
-        out NetUserId player)
-    {
-        if (!ProtoMan.HasIndex(job))
-        {
-            player = default;
-            return false;
-        }
-
-        var candidates = new HashSet<NetUserId>();
-        var antags = _antag.GetAntagJobs();
-
-        foreach (var (userId, _) in profiles)
-        {
-            if (!_player.TryGetSessionById(userId, out var session))
-                continue;
-
-            var jobs = new List<ProtoId<JobPrototype>> { job };
-            var ev = new StationJobsGetCandidatesEvent(userId, jobs);
-            RaiseLocalEvent(ref ev);
-
-            if (!jobs.Contains(job))
-                continue;
-
-            var roleBans = _banManager.GetJobBans(userId);
-            var (whitelist, blacklist) = antags.GetValueOrDefault(session);
-            if ((whitelist != null && !whitelist.Contains(job)) ||
-                (blacklist != null && blacklist.Contains(job)) ||
-                (roleBans != null && roleBans.Contains(job)))
-            {
-                continue;
-            }
-
-            candidates.Add(userId);
-        }
-
-        if (candidates.Count > 0)
-        {
-            player = _random.Pick(candidates);
-            return true;
-        }
-
-        player = default;
-        return false;
     }
 
     /// <summary>

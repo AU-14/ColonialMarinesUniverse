@@ -156,12 +156,12 @@ public sealed partial class CCVars
         GameRoleWhitelist = CVarDef.Create("game.role_whitelist", true, CVar.SERVER | CVar.REPLICATED);
 
     /// <summary>
-    ///     Determines how unfilled round-start minimum job slots fall back when no player prefers the job.
-    ///     Role bans, whitelists, playtime requirements, and antag restrictions always apply.
+    ///     Legacy minimum-job fallback setting retained for configuration compatibility.
+    ///     Job assignment always respects player preferences.
     /// </summary>
     public static readonly CVarDef<MinimumJobFallback>
         GameMinimumJobFallback = CVarDef.Create("game.minimum_job_fallback", MinimumJobFallback.None,
-            CVar.ARCHIVE | CVar.SERVERONLY);
+            CVar.SERVERONLY);
 
     /// <summary>
     ///     Whether or not disconnecting inside of a cryopod should remove the character or just store them until they reconnect.
