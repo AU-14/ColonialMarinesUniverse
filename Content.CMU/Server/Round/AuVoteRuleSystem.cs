@@ -16,6 +16,7 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
 
+    private bool _pausedForMinimumPlayers;
     private bool _waitingForMinimumPlayers;
 
     // Only keep the persistent system trigger and dependency injection
@@ -78,12 +79,33 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
             _waitingForMinimumPlayers = GameTicker.LobbyEnabled &&
                                         GameTicker.RunLevel == GameRunLevel.PreRoundLobby &&
                                         acceptingSelections;
+            if (_waitingForMinimumPlayers)
+                PauseForMinimumPlayers();
             return;
         }
 
         _waitingForMinimumPlayers = false;
         var voteManagerSystem = _entityManager.System<AuRoundSystem>();
         voteManagerSystem.StartVoteSequence();
+        RestartCountdownAfterMinimumPlayers();
+    }
+
+    private void PauseForMinimumPlayers()
+    {
+        if (_pausedForMinimumPlayers || GameTicker.Paused)
+            return;
+
+        GameTicker.PauseStart();
+        _pausedForMinimumPlayers = !_cfg.GetCVar(RMCCVars.RMCLobbyStartPaused);
+    }
+
+    private void RestartCountdownAfterMinimumPlayers()
+    {
+        if (!_pausedForMinimumPlayers)
+            return;
+
+        _pausedForMinimumPlayers = false;
+        GameTicker.RestartLobbyCountdown();
     }
 }
 
