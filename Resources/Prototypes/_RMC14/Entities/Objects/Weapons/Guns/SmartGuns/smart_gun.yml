@@ -188,7 +188,7 @@
     - UNMC
 
 - type: entity
-  parent: RMCSmartGun
+  parent: RMCSmartGunNoCamo
   id: RMCSmartGunPMC
   name: M56T smart gun
   description: The actual firearm in the 4-piece M56T Smartgun System. If you have this, you're about to bring some serious pain to anyone in your way. You may toggle firing restrictions by using a special action.
