@@ -2,6 +2,7 @@ using System.Collections.Immutable;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Numerics;
+using Content.Shared._RMC14.Tackle;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Actions.Events;
 using Content.Shared.Administration.Components;
@@ -896,6 +897,12 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         {
             return false;
         }
+
+        // RMC14
+        var cmDisarmEvent = new CMDisarmEvent(user);
+        RaiseLocalEvent(target.Value, ref cmDisarmEvent);
+        if (cmDisarmEvent.Handled)
+            return true;
 
         EntityUid? inTargetHand = null;
 
