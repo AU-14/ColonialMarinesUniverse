@@ -25,10 +25,20 @@ public sealed partial class CMUXenoLanguageSystem : EntitySystem
 
     public override void Initialize()
     {
+        SubscribeLocalEvent<XenoComponent, CanUnderstandLanguageEvent>(OnXenoCanUnderstandLanguage);
         SubscribeLocalEvent<XenoComponent, DetermineEntityLanguagesEvent>(OnXenoDetermineEntityLanguages);
         SubscribeLocalEvent<XenoComponent, DetermineLanguageEvent>(OnXenoDetermineLanguage);
         SubscribeLocalEvent<LanguageComponent, DetermineEntityLanguagesEvent>(OnDetermineCorruptedHiveLanguages);
         SubscribeLocalEvent<LanguageComponent, HiveChangedEvent>(OnLanguageHiveChanged);
+    }
+
+    private void OnXenoCanUnderstandLanguage(Entity<XenoComponent> ent, ref CanUnderstandLanguageEvent args)
+    {
+        if (args.Language == SharedLanguageSystem.CommonLanguage &&
+            !ShouldUseEnglish(ent.Owner))
+        {
+            args.CanUnderstand = false;
+        }
     }
 
     private void OnDetermineCorruptedHiveLanguages(Entity<LanguageComponent> ent, ref DetermineEntityLanguagesEvent args)

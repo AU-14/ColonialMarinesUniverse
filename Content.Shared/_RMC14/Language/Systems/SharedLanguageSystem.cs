@@ -63,13 +63,18 @@ public abstract partial class SharedLanguageSystem : EntitySystem
 
     public bool CanUnderstand(Entity<LanguageComponent?> ent, ProtoId<LanguagePrototype> language)
     {
+        bool canUnderstand;
         if (HasComp<GhostComponent>(ent))
-            return true;
+            canUnderstand = true;
+        else if (!Resolve(ent, ref ent.Comp, false))
+            canUnderstand = language == CommonLanguage;
+        else
+            canUnderstand = ent.Comp.UnderstoodLanguages.Contains(language);
 
-        if (!Resolve(ent, ref ent.Comp, false))
-            return language == CommonLanguage;
+        var ev = new CanUnderstandLanguageEvent(ent.Owner, language, canUnderstand);
+        RaiseLocalEvent(ent.Owner, ref ev);
 
-        return ent.Comp.UnderstoodLanguages.Contains(language);
+        return ev.CanUnderstand;
     }
 
     public IReadOnlySet<ProtoId<LanguagePrototype>> GetSpokenLanguages(EntityUid entity)
