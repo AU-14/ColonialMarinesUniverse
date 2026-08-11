@@ -9,6 +9,9 @@
     state: cleaner
   - type: Item
     sprite: _CMU14/Objects/Tools/cleaner_spray.rsi
+  - type: SolutionContainerVisuals
+    maxFillLevels: 1
+    inHandsFillBaseName: null
 
 - type: entity
   parent: AU14SprayCleaner
