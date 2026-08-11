@@ -28,10 +28,6 @@
     id: pen
     solution:
       maxVol: 45
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
   - type: ExaminableSolution
     solution: pen
   - type: SolutionContainerVisuals
@@ -83,15 +79,15 @@
   - type: Hypospray
     transferAmount: 58 # TODO RMC14 77
     injectSound: /Audio/_RMC14/Medical/air_release.ogg
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 58 # TODO RMC14 77
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 29
-        - ReagentId: CMKelotane
-          Quantity: 29
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 58 # TODO RMC14 77
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 29
+      - ReagentId: CMKelotane
+        Quantity: 29
 #        - ReagentId: CMOxycodone # TODO RMC14 oxycodone
 #          Quantity: 19
   - type: SolutionContainerVisuals
@@ -109,13 +105,13 @@
   name: tricordrazine autoinjector
   description: An autoinjector loaded with 3 uses of Tricordrazine, a weak general use medicine for treating damage.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
-        reagents:
-        - ReagentId: CMTricordrazine
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMTricordrazine: 45
@@ -135,13 +131,13 @@
       map: ["enum.SolutionContainerLayers.Fill"]
   - type: MedicallyUnskilledDoAfter
     min: 0
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 15
-        reagents:
-        - ReagentId: CMTricordrazine
-          Quantity: 15
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 15
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     emptySpriteName: tricord0
@@ -159,13 +155,13 @@
   name: kelotane autoinjector
   description: An autoinjector loaded with 3 uses of Kelotane, a common burn medicine.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMKelotane: 45
@@ -180,13 +176,13 @@
   components:
   - type: Hypospray
     transferAmount: 1
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 3
-        reagents:
-        - ReagentId: CMDexalinPlus
-          Quantity: 3
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 3
+      reagents:
+      - ReagentId: CMDexalinPlus
+        Quantity: 3
   - type: CMRefillableSolution
     reagents:
       CMDexalinPlus: 3
@@ -199,13 +195,13 @@
   name: dylovene autoinjector
   description: An autoinjector loaded with 3 doses of 15u of Dylovene, a common toxin damage medicine. You can refill it at Weya-Med vending machines.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
-        reagents:
-        - ReagentId: CMDylovene
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
+      reagents:
+      - ReagentId: CMDylovene
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMDylovene: 45
@@ -220,13 +216,13 @@
   name: bicaridine autoinjector
   description: An autoinjector loaded with 3 uses of Bicaridine, a common brute and circulatory damage medicine.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMBicaridine: 45
@@ -241,13 +237,13 @@
   components:
   - type: Hypospray
     transferAmount: 30
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMInaprovaline
-          Quantity: 90
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMInaprovaline
+        Quantity: 90
   - type: CMRefillableSolution
     reagents:
       CMInaprovaline: 90
@@ -264,13 +260,13 @@
   components:
   - type: Hypospray
     transferAmount: 5.25
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 15.75
-        reagents:
-        - ReagentId: CMEpinephrine
-          Quantity: 15.75
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 15.75
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 15.75
   - type: CMRefillableSolution
     reagents:
       CMEpinephrine: 15.75
@@ -283,13 +279,13 @@
   name: iron autoinjector
   description: An autoinjector loaded with 3 uses of iron, a chemical commonly used to treat blood loss.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
-        reagents:
-        - ReagentId: RMCIron
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
+      reagents:
+      - ReagentId: RMCIron
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       RMCIron: 45
@@ -302,13 +298,13 @@
   name: dermaline autoinjector
   description: An autoinjector loaded with 3 uses of Dermaline, an advanced burn treatment chemical.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
-        reagents:
-        - ReagentId: CMDermaline
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
+      reagents:
+      - ReagentId: CMDermaline
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMDermaline: 45
@@ -330,10 +326,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#FF9F00"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
   - type: SolutionContainerVisuals
     maxFillLevels: 6
   - type: RequiresSkill
@@ -355,10 +351,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#FF0000"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 180
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 180
   - type: Hypospray
     transferAmount: 30
 
@@ -377,10 +373,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#FFFFFF"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 1
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 1
   - type: SolutionContainerVisuals
     maxFillLevels: 1
   - type: Hypospray
@@ -399,10 +395,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#DD95FF"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 5
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 5
   - type: Hypospray
     transferAmount: 5
 
@@ -419,10 +415,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#1EF6FF"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 10
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 10
   - type: Hypospray
     transferAmount: 10
 
@@ -439,10 +435,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#21A0FF"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 15
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 15
   - type: Hypospray
     transferAmount: 15
 
@@ -459,10 +455,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#171DFF"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 30
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 30
   - type: Hypospray
     transferAmount: 30
 
@@ -479,10 +475,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#00FF07"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
   - type: Hypospray
     transferAmount: 45
 
@@ -499,10 +495,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#E8FF00"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 60
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 60
   - type: Hypospray
     transferAmount: 60
 
@@ -511,86 +507,86 @@
   id: RMCMedicAutoInjectorBicaridine15
   suffix: Bicaridine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 90
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 90
 
 - type: entity
   parent: RMCMedicAutoInjector15
   id: RMCMedicAutoInjectorKelotane15
   suffix: Kelotane
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 90
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 90
 
 - type: entity
   parent: RMCMedicAutoInjector15
   id: RMCMedicAutoInjectorTricordrazineRevival15
   suffix: Tricordrazine - Revival
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMEpinephrine
-          Quantity: 30
-        - ReagentId: CMInaprovaline
-          Quantity: 30
-        - ReagentId: CMTricordrazine
-          Quantity: 30
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 30
+      - ReagentId: CMInaprovaline
+        Quantity: 30
+      - ReagentId: CMTricordrazine
+        Quantity: 30
 
 - type: entity
   parent: RMCMedicAutoInjector15
   id: RMCMedicAutoInjectorTricordrazine15
   suffix: Tricordrazine
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMTricordrazine
-          Quantity: 90
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 90
 
 - type: entity
   parent: RMCMedicAutoInjector15
   id: RMCMedicAutoInjectorMeraBic15
   suffix: MeraBic
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMMeralyne
-          Quantity: 45
-        - ReagentId: CMBicaridine
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMMeralyne
+        Quantity: 45
+      - ReagentId: CMBicaridine
+        Quantity: 45
 
 - type: entity
   parent: RMCMedicAutoInjector15
   id: RMCMedicAutoInjectorKeloDerm15
   suffix: KeloDerm
   components:
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 45
-        - ReagentId: CMDermaline
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 45
+      - ReagentId: CMDermaline
+        Quantity: 45
 
 - type: entity
   parent: CMAutoInjectorBase
@@ -619,10 +615,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#21A0FF"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 15
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 15
   - type: Hypospray
     transferAmount: 5
   - type: MedicallyUnskilledDoAfter
@@ -640,10 +636,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#00FF07"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
   - type: Hypospray
     transferAmount: 15
 
@@ -660,10 +656,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#FF9F00"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
   - type: Hypospray
     transferAmount: 30
 
@@ -680,10 +676,10 @@
       visible: false
     - state: autoinjector_tag
       color: "#FF0000"
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 180
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 180
   - type: Hypospray
     transferAmount: 60
 

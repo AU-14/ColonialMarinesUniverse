@@ -811,13 +811,13 @@
   - type: Hypospray
     transferAmount: 3
     injectSound: /Audio/_RMC14/Medical/air_release.ogg
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 3
-        reagents:
-        - ReagentId: AU14Naloxone
-          Quantity: 3
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 3
+      reagents:
+      - ReagentId: AU14Naloxone
+        Quantity: 3
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     changeColor: false
@@ -845,13 +845,13 @@
   - type: Hypospray
     transferAmount: 3
     injectSound: /Audio/_RMC14/Medical/air_release.ogg
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 3
-        reagents:
-        - ReagentId: CMEpinephrine
-          Quantity: 3
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 3
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 3
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     changeColor: false
@@ -872,13 +872,13 @@
   - type: Hypospray
     transferAmount: 20
     injectSound: /Audio/_RMC14/Medical/air_release.ogg
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 20
-        reagents:
-        - ReagentId: AU14Albuterol
-          Quantity: 20
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: AU14Albuterol
+        Quantity: 20
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     changeColor: false
@@ -901,15 +901,15 @@
       map: ["enum.SolutionContainerLayers.Fill"]
   - type: MedicallyUnskilledDoAfter
     min: 0
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 20
-        reagents:
-        - ReagentId: CMTricordrazine
-          Quantity: 15
-        - ReagentId: CMDexalin
-          Quantity: 5
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 20
+      reagents:
+      - ReagentId: CMTricordrazine
+        Quantity: 15
+      - ReagentId: CMDexalin
+        Quantity: 5
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     emptySpriteName: tricord0
@@ -930,15 +930,15 @@
   components:
   - type: Hypospray
     transferAmount: 30
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMMeralyne
-          Quantity: 45
-        - ReagentId: CMBicaridine
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMMeralyne
+        Quantity: 45
+      - ReagentId: CMBicaridine
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMMeralyne: 90
@@ -954,15 +954,15 @@
   components:
   - type: Hypospray
     transferAmount: 30
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMKelotane
-          Quantity: 45
-        - ReagentId: CMDermaline
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMKelotane
+        Quantity: 45
+      - ReagentId: CMDermaline
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMKelotane: 90
@@ -978,17 +978,17 @@
   components:
   - type: Hypospray
     transferAmount: 30
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 90
-        reagents:
-        - ReagentId: CMEpinephrine
-          Quantity: 30
-        - ReagentId: CMInaprovaline
-          Quantity: 30
-        - ReagentId: CMTricordrazine
-          Quantity: 30
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 90
+      reagents:
+      - ReagentId: CMEpinephrine
+        Quantity: 30
+      - ReagentId: CMInaprovaline
+        Quantity: 30
+      - ReagentId: CMTricordrazine
+        Quantity: 30
   - type: CMRefillableSolution
     reagents:
       CMEpinephrine: 30
@@ -1005,17 +1005,17 @@
   components:
   - type: Hypospray
     transferAmount: 30
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 93
-        reagents:
-        - ReagentId: CMDexalin
-          Quantity: 45
-        - ReagentId: AU14Albuterol
-          Quantity: 45
-        - ReagentId: CMDexalinPlus
-          Quantity: 3
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 93
+      reagents:
+      - ReagentId: CMDexalin
+        Quantity: 45
+      - ReagentId: AU14Albuterol
+        Quantity: 45
+      - ReagentId: CMDexalinPlus
+        Quantity: 3
   - type: CMRefillableSolution
     reagents:
       CMDexalin: 45
@@ -1032,13 +1032,13 @@
   components:
   - type: Hypospray
     transferAmount: 20
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 60
-        reagents:
-        - ReagentId: CMUOxycodone
-          Quantity: 60
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: CMUOxycodone
+        Quantity: 60
   - type: CMRefillableSolution
     reagents:
       CMUOxycodone: 60
@@ -1053,13 +1053,13 @@
   components:
   - type: Hypospray
     transferAmount: 20
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 60
-        reagents:
-        - ReagentId: CMUTramadol
-          Quantity: 60
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: CMUTramadol
+        Quantity: 60
   - type: CMRefillableSolution
     reagents:
       CMUTramadol: 20
@@ -1074,13 +1074,13 @@
   components:
   - type: Hypospray
     transferAmount: 20
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 60
-        reagents:
-        - ReagentId: CMUParacetamol
-          Quantity: 60
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 60
+      reagents:
+      - ReagentId: CMUParacetamol
+        Quantity: 60
   - type: CMRefillableSolution
     reagents:
       CMUParacetamol: 60
@@ -1095,13 +1095,13 @@
   components:
   - type: Hypospray
     transferAmount: 10
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 30
-        reagents:
-        - ReagentId: CMUFentanyl
-          Quantity: 30
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: CMUFentanyl
+        Quantity: 30
   - type: CMRefillableSolution
     reagents:
       CMUFentanyl: 30
@@ -1116,13 +1116,13 @@
   components:
   - type: Hypospray
     transferAmount: 15
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 45
-        reagents:
-        - ReagentId: CMUMethamphetamine
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
+      reagents:
+      - ReagentId: CMUMethamphetamine
+        Quantity: 45
   - type: CMRefillableSolution
     reagents:
       CMUMethamphetamine: 45
