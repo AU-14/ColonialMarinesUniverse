@@ -372,23 +372,32 @@ namespace Content.Server.Preferences.Managers
                 return;
             }
 
-            if (slot < 0 || slot >= MaxCharacterSlots)
-                return;
-
-            var curPrefs = prefsData.Prefs!;
-            var session = _playerManager.GetSessionById(userId);
-
-            profile.EnsureValid(session, _dependencies);
-
-            var profiles = new Dictionary<int, HumanoidCharacterProfile>(curPrefs.Characters)
+            await prefsData.UpdateLock.Run(async () =>
             {
-                [slot] = profile
-            };
+                if (!_cachedPlayerPrefs.TryGetValue(userId, out var currentPrefsData) ||
+                    !ReferenceEquals(currentPrefsData, prefsData) ||
+                    !currentPrefsData.PrefsLoaded ||
+                    slot < 0 ||
+                    slot >= MaxCharacterSlots)
+                {
+                    return;
+                }
 
-            prefsData.Prefs = new PlayerPreferences(profiles, slot, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+                var curPrefs = currentPrefsData.Prefs!;
+                var session = _playerManager.GetSessionById(userId);
 
-            if (ShouldStorePrefs(session.Channel.AuthType))
-                await _db.SaveCharacterSlotAsync(userId, profile, slot);
+                profile.EnsureValid(session, _dependencies);
+
+                var profiles = new Dictionary<int, HumanoidCharacterProfile>(curPrefs.Characters)
+                {
+                    [slot] = profile
+                };
+
+                currentPrefsData.Prefs = new PlayerPreferences(profiles, slot, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+
+                if (ShouldStorePrefs(session.Channel.AuthType))
+                    await _db.SaveCharacterSlotAsync(userId, profile, slot);
+            });
         }
 
         public async Task SetConstructionFavorites(NetUserId userId, List<ProtoId<ConstructionPrototype>> favorites)
@@ -659,6 +668,7 @@ namespace Content.Server.Preferences.Managers
         {
             public bool PrefsLoaded;
             public PlayerPreferences? Prefs;
+            public readonly PreferenceUpdateLock UpdateLock = new();
         }
 
         void IPostInjectInit.PostInject()
