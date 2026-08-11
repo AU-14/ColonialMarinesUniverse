@@ -1,9 +1,9 @@
 - type: guideEntry
   parent: RMC
-  id: RMCOverview
+  id: CMURulesOverview
   name: cmu-guide-rules-overview
   priority: 0
-  text: "/ServerInfo/Guidebook/_RMC14/Rules/RMCOverview.xml"
+  text: "/ServerInfo/_CMU14/Guidebook/Rules/CMURulesOverview.xml"
   children:
   - AU14RulesZeroTolerance
   - AU14RulesGeneral
