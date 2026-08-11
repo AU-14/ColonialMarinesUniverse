@@ -37,6 +37,7 @@ using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Nutrition.EntitySystems;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffectNew;
 using Content.Shared.Stacks;
@@ -77,6 +78,39 @@ public sealed class RMCHumanPrototypeRegressionTest
             }
             finally
             {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CMMobHumanCanEatAndDrink()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var ingestion = entMan.System<IngestionSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var food = entMan.SpawnEntity("FoodCakeVanillaSlice", MapCoordinates.Nullspace);
+            var drink = entMan.SpawnEntity("DrinkLemonadeGlass", MapCoordinates.Nullspace);
+
+            try
+            {
+                Assert.Multiple(() =>
+                {
+                    Assert.That(ingestion.CanIngest(human, food), Is.True, "CMU human could not eat food");
+                    Assert.That(ingestion.CanIngest(human, drink), Is.True, "CMU human could not drink");
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(drink);
+                entMan.DeleteEntity(food);
                 entMan.DeleteEntity(human);
             }
         });

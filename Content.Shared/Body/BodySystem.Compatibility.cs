@@ -20,9 +20,20 @@ public sealed partial class BodySystem
         if (!_bodyQuery.Resolve(ent, ref ent.Comp))
             return false;
 
+        var found = new HashSet<EntityUid>();
         foreach (var organ in ent.Comp.Organs?.ContainedEntities ?? [])
         {
             if (TryComp<TComp>(organ, out var comp))
+            {
+                organs.Add((organ, comp));
+                found.Add(organ);
+            }
+        }
+
+        // CMU14: CMU bodies still store organs in legacy body-part containers.
+        foreach (var (organ, _) in _legacyBody.GetBodyOrgans(ent.Owner, ent.Comp))
+        {
+            if (found.Add(organ) && TryComp<TComp>(organ, out var comp))
                 organs.Add((organ, comp));
         }
 
