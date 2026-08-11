@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: SimpleMobBase
+  parent: [SimpleMobBase, BaseMobBloodsucker]
   id: CMUBaseMobCarp
   name: genetic ancestor
   description: The genetic bipedal ancestor of... Uh... Something. Yeah, there's definitely something on the planet that descended from whatever this is.
@@ -17,9 +17,6 @@
         - MobMask
         layer:
         - MobLayer
-  - type: Body
-    prototype: Bloodsucker
-    requiredLegs: 0
   - type: MobState
     allowedStates:
     - Alive

@@ -243,6 +243,7 @@
 - type: job
   parent: AU14JobAuxSupportSynthBase
   id: AU14JobGOVFORAuxSupportSynthRMC
+  useLoadoutOfJob: AU14JobGOVFORAuxSupportSynth
   roundForce: RMC
   name: au14-job-name-govforauxsupportsynthRMC
   spawnMenuRoleName: Support Synth (TWE RMC)
@@ -276,6 +277,7 @@
 - type: job
   parent: AU14JobAuxSupportSynthBase
   id: AU14JobGOVFORAuxSupportSynthUPP
+  useLoadoutOfJob: AU14JobGOVFORAuxSupportSynth
   roundForce: UPP
   spawnMenuRoleName: Support Synth (UPP)
   requirements:
