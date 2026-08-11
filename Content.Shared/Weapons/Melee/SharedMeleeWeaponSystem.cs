@@ -18,7 +18,6 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
-using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;
@@ -33,15 +32,11 @@ using Content.Shared.Weapons.Melee.Events;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Network;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
-using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using ItemToggleMeleeWeaponComponent = Content.Shared.Item.ItemToggle.Components.ItemToggleMeleeWeaponComponent;
 
@@ -50,8 +45,6 @@ namespace Content.Shared.Weapons.Melee;
 public abstract partial class SharedMeleeWeaponSystem : EntitySystem
 {
     [Dependency] protected IGameTiming Timing = default!;
-    [Dependency] private INetManager _netMan = default!;
-    [Dependency] private IRobustRandom _random = default!;
     [Dependency] protected ISharedAdminLogManager AdminLogger = default!;
     [Dependency] protected ActionBlockerSystem Blocker = default!;
     [Dependency] protected DamageableSystem Damageable = default!;
@@ -59,7 +52,6 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MeleeSoundSystem _meleeSound = default!;
     [Dependency] protected MobStateSystem MobState = default!;
-    [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] protected SharedCombatModeSystem CombatMode = default!;
     [Dependency] protected SharedMapSystem Maps = default!;
     [Dependency] protected SharedInteractionSystem Interaction = default!;
@@ -469,7 +461,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
                     animation = weapon.Animation;
                     break;
                 case DisarmAttackEvent disarm:
-                    if (!DoDisarm(user, disarm, weaponUid, weapon, session))
+                    if (!DoDisarm(user, disarm, weapon, session))
                         return false;
 
                     animation = weapon.Animation;
@@ -839,25 +831,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         return highestDamageType;
     }
 
-    private float CalculateDisarmChance(EntityUid disarmer, EntityUid disarmed, EntityUid? inTargetHand, CombatModeComponent disarmerComp)
-    {
-        if (HasComp<DisarmProneComponent>(disarmer))
-            return 1.0f;
-
-        if (HasComp<DisarmProneComponent>(disarmed))
-            return 0.0f;
-
-        var chance = disarmerComp.BaseDisarmFailChance;
-
-        if (inTargetHand != null && TryComp<DisarmMalusComponent>(inTargetHand, out var malus))
-        {
-            chance += malus.Malus;
-        }
-
-        return Math.Clamp(chance, 0f, 1f);
-    }
-
-    private bool DoDisarm(EntityUid user, DisarmAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
+    private bool DoDisarm(EntityUid user, DisarmAttackEvent ev, MeleeWeaponComponent component, ICommonSession? session)
     {
         var target = GetEntity(ev.Target);
 
@@ -901,83 +875,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         // RMC14
         var cmDisarmEvent = new CMDisarmEvent(user);
         RaiseLocalEvent(target.Value, ref cmDisarmEvent);
-        if (cmDisarmEvent.Handled)
-            return true;
-
-        EntityUid? inTargetHand = null;
-
-        if (_hands.TryGetActiveItem(target.Value, out var activeHeldEntity))
-        {
-            inTargetHand = activeHeldEntity.Value;
-        }
-
-        var attemptEvent = new DisarmAttemptEvent(target.Value, user, inTargetHand);
-
-        if (inTargetHand != null)
-        {
-            RaiseLocalEvent(inTargetHand.Value, ref attemptEvent);
-        }
-
-        RaiseLocalEvent(target.Value, ref attemptEvent);
-
-        if (attemptEvent.Cancelled)
-            return false;
-
-        var chance = CalculateDisarmChance(user, target.Value, inTargetHand, combatMode);
-
-        // At this point we diverge
-        if (_netMan.IsClient)
-        {
-            // Play a sound to give instant feedback; same with playing the animations
-            _meleeSound.PlaySwingSound(user, meleeUid, component);
-            return true;
-        }
-
-        if (_random.Prob(chance))
-        {
-            return false;
-        }
-
-        var eventArgs = new DisarmedEvent(target.Value, user, 1 - chance);
-        RaiseLocalEvent(target.Value, ref eventArgs);
-
-        // Nothing handled it so abort.
-        if (!eventArgs.Handled)
-        {
-            return false;
-        }
-
-        Interaction.DoContactInteraction(user, target);
-        AdminLogger.Add(LogType.DisarmedAction, $"{ToPrettyString(user):user} used disarm on {ToPrettyString(target):target}");
-
-        AdminLogger.Add(LogType.DisarmedAction, $"{ToPrettyString(user):user} used disarm on {ToPrettyString(target):target}");
-
-        _audio.PlayPvs(combatMode.DisarmSuccessSound, target.Value, AudioParams.Default.WithVariation(0.025f).WithVolume(5f));
-        var targetEnt = Identity.Entity(target.Value, EntityManager);
-        var userEnt = Identity.Entity(user, EntityManager);
-
-        var msgOther = Loc.GetString(
-            eventArgs.PopupPrefix + "popup-message-other-clients",
-            ("performerName", userEnt),
-            ("targetName", targetEnt));
-
-        var msgUser = Loc.GetString(eventArgs.PopupPrefix + "popup-message-cursor", ("targetName", targetEnt));
-
-        var filterOther = Filter.PvsExcept(user, entityManager: EntityManager);
-
-        PopupSystem.PopupEntity(msgOther, user, filterOther, true);
-        PopupSystem.PopupEntity(msgUser, target.Value, user);
-
-        if (eventArgs.IsStunned)
-        {
-
-            PopupSystem.PopupEntity(Loc.GetString("stunned-component-disarm-success-others", ("source", userEnt), ("target", targetEnt)), targetEnt, Filter.PvsExcept(user), true, PopupType.LargeCaution);
-            PopupSystem.PopupCursor(Loc.GetString("stunned-component-disarm-success", ("target", targetEnt)), user, PopupType.Large);
-
-            AdminLogger.Add(LogType.DisarmedKnockdown, LogImpact.Medium, $"{ToPrettyString(user):user} knocked down {ToPrettyString(target):target}");
-        }
-
-        return true;
+        return cmDisarmEvent.Handled;
     }
 
     private void DoLungeAnimation(EntityUid user, EntityUid weapon, Angle angle, MapCoordinates coordinates, float length, string? animation)
