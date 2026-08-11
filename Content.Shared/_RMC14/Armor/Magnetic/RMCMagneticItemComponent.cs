@@ -9,4 +9,7 @@ public sealed partial class RMCMagneticItemComponent : Component
 {
     [DataField, AutoNetworkedField]
     public SlotFlags MagnetizeToSlots = SlotFlags.SUITSTORAGE;
+
+    [DataField, AutoNetworkedField]
+    public bool ReturnOnThrow = true;
 }

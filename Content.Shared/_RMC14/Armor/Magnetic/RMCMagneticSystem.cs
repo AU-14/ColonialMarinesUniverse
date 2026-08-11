@@ -52,6 +52,9 @@ public sealed partial class RMCMagneticSystem : EntitySystem
 
     private void OnMagneticItemThrown(Entity<RMCMagneticItemComponent> ent, ref ThrownEvent args)
     {
+        if (!ent.Comp.ReturnOnThrow)
+            return;
+
         if (args.User is not { } user)
             return;
 
@@ -139,6 +142,12 @@ public sealed partial class RMCMagneticSystem : EntitySystem
     public void SetMagnetizeToSlots(Entity<RMCMagneticItemComponent> ent, SlotFlags slots)
     {
         ent.Comp.MagnetizeToSlots = slots;
+        Dirty(ent);
+    }
+
+    public void SetReturnOnThrow(Entity<RMCMagneticItemComponent> ent, bool returnOnThrow)
+    {
+        ent.Comp.ReturnOnThrow = returnOnThrow;
         Dirty(ent);
     }
 
