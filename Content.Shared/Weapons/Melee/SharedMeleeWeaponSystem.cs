@@ -65,6 +65,7 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
     [Dependency] private EntityQuery<DamageableComponent> _damageQuery = default!;
 
     private const int AttackMask = (int) (CollisionGroup.MobMask | CollisionGroup.Opaque);
+    private static readonly EntProtoId DisarmEffect = "RMCWeaponArcDisarm"; // RMC14
 
     /// <summary>
     /// Maximum amount of targets allowed for a wide-attack.
@@ -461,10 +462,10 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
                     animation = weapon.Animation;
                     break;
                 case DisarmAttackEvent disarm:
-                    if (!DoDisarm(user, disarm, weapon, session))
+                    if (!DoDisarm(user, disarm, weaponUid, weapon, session))
                         return false;
 
-                    animation = weapon.Animation;
+                    animation = DisarmEffect;
                     break;
                 case HeavyAttackEvent heavy:
                     if (!DoHeavyAttack(user, heavy, weaponUid, weapon, session))
@@ -831,8 +832,10 @@ public abstract partial class SharedMeleeWeaponSystem : EntitySystem
         return highestDamageType;
     }
 
-    private bool DoDisarm(EntityUid user, DisarmAttackEvent ev, MeleeWeaponComponent component, ICommonSession? session)
+    private bool DoDisarm(EntityUid user, DisarmAttackEvent ev, EntityUid meleeUid, MeleeWeaponComponent component, ICommonSession? session)
     {
+        _meleeSound.PlaySwingSound(user, meleeUid, component);
+
         var target = GetEntity(ev.Target);
 
         if (Deleted(target) ||

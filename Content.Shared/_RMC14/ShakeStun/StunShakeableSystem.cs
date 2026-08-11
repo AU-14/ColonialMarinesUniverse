@@ -7,11 +7,13 @@ using Content.Shared.Interaction;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
+using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.ShakeStun;
 
@@ -20,9 +22,11 @@ public sealed partial class StunShakeableSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLogs = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private INetManager _net = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private RMCStandingSystem _rmcStanding = default!;
     [Dependency] private StatusEffectsSystem _statusEffects = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private static readonly ProtoId<StatusEffectPrototype> Stun = "Stun";
@@ -49,7 +53,9 @@ public sealed partial class StunShakeableSystem : EntitySystem
 
         var target = args.Target;
         var rest = CompOrNull<RMCRestComponent>(target);
-        if (!_statusEffects.HasStatusEffect(target, Stun) &&
+        if (!_newStatusEffects.TryGetStatusEffect(target, SharedStunSystem.StunId, out _) &&
+            !HasComp<KnockedDownComponent>(target) &&
+            !_statusEffects.HasStatusEffect(target, Stun) &&
             !_statusEffects.HasStatusEffect(target, KnockedDown) &&
             !_statusEffects.HasStatusEffect(target, Unconscious) &&
             !HasComp<TackledRecentlyByComponent>(target) &&
@@ -76,6 +82,8 @@ public sealed partial class StunShakeableSystem : EntitySystem
 
         _rmcStanding.SetRest(target, false);
 
+        _newStatusEffects.TryRemoveTime(target, SharedStunSystem.StunId, ent.Comp.DurationRemoved);
+        _stun.AddKnockdownTime(target, -ent.Comp.DurationRemoved);
         _statusEffects.TryRemoveTime(target, Stun, ent.Comp.DurationRemoved);
         _statusEffects.TryRemoveTime(target, KnockedDown, ent.Comp.DurationRemoved);
         _statusEffects.TryRemoveTime(target, Unconscious, ent.Comp.DurationRemoved);
