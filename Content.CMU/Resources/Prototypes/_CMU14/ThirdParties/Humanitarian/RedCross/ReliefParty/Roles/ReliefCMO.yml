@@ -24,7 +24,7 @@
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
       state: synth
 
-  name: ICRC Medical Staff CMO
+  name: au14-job-name-icrc-medical-cmo
   description: You are a member of the medical staff assigned to an International Committee of the Red Cross relief mission, traveling from colony to colony to provide vaccines, medical aid and humanitarian assistance. Provide care to those you encounter and help the people of the Neroid Sector.
   setPreference: true
   canBeAntag: false

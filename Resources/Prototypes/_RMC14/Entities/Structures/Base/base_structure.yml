@@ -143,8 +143,9 @@
   description: A huge chunk of metal used to separate rooms.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -200,8 +201,9 @@
     mode: SnapgridCenter
   components:
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Appearance
   - type: RadiationBlocker
     resistance: 5

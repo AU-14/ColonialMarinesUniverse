@@ -217,7 +217,8 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         foreach (var projectile in args.FiredProjectiles)
         {
             var comp = EnsureComp<DamageMultipliersComponent>(projectile);
-            comp.Multipliers = ent.Comp.Multipliers;
+            comp.Multipliers = new Dictionary<DamageMultiplierFlag, float>(ent.Comp.Multipliers);
+            Dirty(projectile, comp);
         }
     }
 
