@@ -24,15 +24,22 @@
     injectOnly: true
     onlyAffectsMobs: true
     canContainerDraw: false
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 45
   - type: SolutionContainerManager
     solutions:
       pen:
         maxVol: 45
+  - type: ExaminableSolution
+    solution: pen
   - type: SolutionContainerVisuals
     maxFillLevels: 3
     fillBaseName: autoinjector
     emptySpriteName: autoinjector
     changeColor: true
+    solutionName: pen
   - type: Tag
     tags:
     - CMAutoInjector
@@ -45,6 +52,8 @@
   - type: PhysicalComposition
     materialComposition:
       RMCPlastic: 300
+  - type: TrashOnSolutionEmpty
+    solution: pen
 
 - type: entity
   parent: CMAutoInjectorBase
