@@ -433,8 +433,15 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
 
     private void OnGameRunLevelChanged(GameRunLevelChangedEvent ev)
     {
-        if (!_randomEnabled || ev.New != GameRunLevel.InRound || GameTicker.RoundId <= 0)
+        // Integration tests intentionally start rounds without a selected game preset.
+        // Do not inject a random Yautja rule into those dummy rounds.
+        if (!_randomEnabled ||
+            ev.New != GameRunLevel.InRound ||
+            GameTicker.RoundId <= 0 ||
+            (GameTicker.CurrentPreset == null && GameTicker.Preset == null))
+        {
             return;
+        }
 
         if (!_randomSchedule.CountRound(GameTicker.RoundId) ||
             _lastRandomAttemptRoundId == GameTicker.RoundId)
