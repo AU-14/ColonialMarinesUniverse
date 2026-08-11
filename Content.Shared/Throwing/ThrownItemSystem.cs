@@ -167,14 +167,9 @@ namespace Content.Shared.Throwing
 
         public void StopThrow(EntityUid uid, ThrownItemComponent thrownItemComponent)
         {
-            if (TryComp<PhysicsComponent>(uid, out var physics))
-            {
-                _physics.SetBodyStatus(uid, physics, BodyStatus.OnGround);
-
-                if (physics.Awake)
-                    _broadphase.RegenerateContacts((uid, physics));
-            }
-
+            // Remove the temporary throwing fixture before rebuilding contacts. Rebuilding
+            // with the fixture still attached can destroy a live contact and trip the
+            // physics awake-body assertion when a thrown entity goes to sleep.
             if (TryComp(uid, out FixturesComponent? manager))
             {
                 var fixture = _fixtures.GetFixtureOrNull(uid, ThrowingFixture, manager: manager);
@@ -183,6 +178,14 @@ namespace Content.Shared.Throwing
                 {
                     _fixtures.DestroyFixture(uid, ThrowingFixture, fixture, manager: manager);
                 }
+            }
+
+            if (TryComp<PhysicsComponent>(uid, out var physics))
+            {
+                _physics.SetBodyStatus(uid, physics, BodyStatus.OnGround);
+
+                if (physics.Awake)
+                    _broadphase.RegenerateContacts((uid, physics));
             }
 
             var ev = new StopThrowEvent(thrownItemComponent.Thrower);
