@@ -468,7 +468,9 @@ namespace Content.Server.Ghost
                     grouping.Tab,
                     grouping.Section,
                     job?.Icon.ToString(),
-                    job?.JobPreviewEntity?.ToString() ?? metadata.EntityPrototype?.ID,
+                    xeno != null
+                        ? metadata.EntityPrototype?.ID
+                        : job?.JobPreviewEntity?.ToString() ?? metadata.EntityPrototype?.ID,
                     job?.ID,
                     GetDisplayWeight(job),
                     xeno?.Tier,

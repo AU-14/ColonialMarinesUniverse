@@ -241,7 +241,7 @@
     mustBeDead: true
   - type: WhitelistPickup
   - type: DropHeldOnIncapacitate
-  - type: NightVision
+  - type: RMCNightVision
     alert: XenoNightVision
     overlay: true
   - type: ParalyzeOnPullAttemptImmune
