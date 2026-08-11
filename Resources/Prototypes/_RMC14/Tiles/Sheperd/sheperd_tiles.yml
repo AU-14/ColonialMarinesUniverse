@@ -1,7 +1,7 @@
 - type: tile
   parent: CMPlanetBase
   id: AUSheperdsDirt0
-  name: shep dirt 0
+  name: tiles-rmc-legacy-sheperd-dirt
   sprite: /Textures/_RMC14/Tiles/sheperd/shepdirt0.png
   variants: 4
   placementVariants:

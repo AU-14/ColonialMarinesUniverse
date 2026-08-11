@@ -454,7 +454,7 @@
   description: A van used by the Colonial Marshal Bureau to transport both prisoners and officers alike.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/marshalpaddywagon.rsi
+    sprite: _CMU14/Structures/vehicles/marshalpaddywagon.rsi
     offset: "0,0.5"
     layers:
     - map: [ base ]

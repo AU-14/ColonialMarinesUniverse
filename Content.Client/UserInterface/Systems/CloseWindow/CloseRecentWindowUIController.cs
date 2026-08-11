@@ -2,6 +2,7 @@ using Content.Client.Gameplay;
 using Content.Client.Info;
 using Robust.Client.Input;
 using Robust.Client.UserInterface;
+using Robust.Client.UserInterface.Controls;
 using Robust.Client.UserInterface.Controllers;
 using Robust.Client.UserInterface.CustomControls;
 using Robust.Shared.Input;
@@ -11,8 +12,12 @@ namespace Content.Client.UserInterface.Systems.Info;
 
 public sealed partial class CloseRecentWindowUIController : UIController
 {
+    private static readonly object CloseFallbackMarker = new();
+
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private IUserInterfaceManager _uiManager = default!;
+
+    private readonly System.Runtime.CompilerServices.ConditionalWeakTable<DefaultWindow, object> _windowsWithCloseFallback = new();
 
     /// <summary>
     /// A list of windows that have been interacted with recently.  Windows should only
@@ -115,11 +120,22 @@ public sealed partial class CloseRecentWindowUIController : UIController
 
     private void OnRootChildAdded(Control control)
     {
-        if (control is BaseWindow)
+        if (control is not BaseWindow window)
+            return;
+
+        // On new window open, add to tracking
+        SetMostRecentlyInteractedWindow(window);
+
+        if (window is not DefaultWindow defaultWindow ||
+            _windowsWithCloseFallback.TryGetValue(defaultWindow, out _))
         {
-            // On new window open, add to tracking
-            SetMostRecentlyInteractedWindow((BaseWindow) control);
+            return;
         }
+
+        // DefaultWindow removes its own handler when it exits the tree, so reused windows otherwise lose their X button.
+        var closeButton = defaultWindow.FindControl<BaseButton>("CloseButton");
+        closeButton.OnPressed += _ => defaultWindow.Close();
+        _windowsWithCloseFallback.Add(defaultWindow, CloseFallbackMarker);
     }
 
     /// <summary>

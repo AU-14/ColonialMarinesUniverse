@@ -88,6 +88,7 @@ tiles-rmc-legacy-red-stripe = red stripe
 tiles-rmc-legacy-runed-sandstone = runed sandstone
 tiles-rmc-legacy-sand = sand
 tiles-rmc-legacy-shale = shale
+tiles-rmc-legacy-sheperd-dirt = shep dirt 0
 tiles-rmc-legacy-sidewalk = sidewalk
 tiles-rmc-legacy-solar-panel = solar panel
 tiles-rmc-legacy-strange-metal-floor = strange metal floor
