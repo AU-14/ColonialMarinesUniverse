@@ -52,9 +52,16 @@ public sealed partial class CMUXenoHiveAssignmentSystem : EntitySystem
             if (hive == null)
             {
                 var hives = EntityQueryEnumerator<HiveComponent>();
-                hive = hives.MoveNext(out var hiveId, out _)
-                    ? hiveId
-                    : _hive.CreateHive(DefaultHiveName);
+                while (hives.MoveNext(out var hiveId, out var hiveComponent))
+                {
+                    if (!hiveComponent.Corrupted)
+                    {
+                        hive = hiveId;
+                        break;
+                    }
+                }
+
+                hive ??= _hive.CreateHive(DefaultHiveName);
             }
 
             _hive.SetHive(xeno, hive);

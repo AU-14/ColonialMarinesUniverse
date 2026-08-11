@@ -5,12 +5,14 @@ using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
 using Content.Server.Mind.Commands;
+using Content.Shared._CMU14.Hiveless;
 using Content.Shared._CMU14.Threats;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
+using Content.Shared._RMC14.Xenonids.JoinXeno;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
 using Content.Shared.Ghost;
@@ -1059,6 +1061,10 @@ public sealed partial class ThreatSystem : EntitySystem
     private void MakeThreatGhostRole(EntityUid entity, ProtoId<JobPrototype> jobId)
     {
         AddThreatFaction(entity);
+
+        if (HasComp<LarvaPoolAvailableComponent>(entity) &&
+            !HasComp<HivelessComponent>(entity))
+            return;
 
         var ghostRole = EnsureComp<GhostRoleComponent>(entity);
         ghostRole.RoleName = jobId == ThreatLeaderJobId

@@ -333,6 +333,9 @@ public sealed partial class LarvaPoolSystem : EntitySystem
             member.Hive is { } hiveId &&
             _hiveQuery.HasComp(hiveId))
         {
+            if (TryComp(uid, out GhostRoleComponent? ghostRole))
+                _ghostRole.UnregisterGhostRole((uid, ghostRole));
+
             _refreshRequested = true;
         }
     }
