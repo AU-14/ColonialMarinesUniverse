@@ -84,13 +84,14 @@ public sealed partial class SharedSynthGenerationSystem : EntitySystem
     private void OnGenerationMapInit(Entity<SynthGenerationComponent> ent, ref MapInitEvent args)
     {
         if (ent.Comp.Generation is not { } generation ||
-            !_prototype.TryIndex(generation, out var proto))
+            !_prototype.TryIndex(generation, out var proto) ||
+            !proto.TryGetComponent(out SynthGenerationComponent? generationComp, _compFactory))
         {
             return;
         }
 
         var repOverride = EnsureComp<RMCHumanoidRepresentationOverrideComponent>(ent);
-        repOverride.Age = proto.Name;
+        repOverride.Age = generationComp.AgeRepresentation;
         Dirty(ent.Owner, repOverride);
     }
 

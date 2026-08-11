@@ -10,6 +10,7 @@
     noRot: true
   - type: Item
     size: Normal
+    heldPrefix: paper
   - type: ItemMapper
     sprite: _RMC14/Objects/Misc/paper.rsi
     mapLayers:

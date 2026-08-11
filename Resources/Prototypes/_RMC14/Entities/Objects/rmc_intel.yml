@@ -35,6 +35,7 @@
     state: paper_words
   - type: Item
     size: Tiny
+    heldPrefix: paper
   - type: IntelReadObjective
     state: Active
   - type: IntelClues
@@ -51,6 +52,7 @@
     state: paper_p_words
   - type: Item
     size: Tiny
+    heldPrefix: paper
   - type: IntelReadObjective
     value: 0.2
     delay: 6
@@ -71,6 +73,7 @@
       map: ["base" ]
   - type: Item
     size: Tiny
+    heldPrefix: paper
   - type: IntelReadObjective
     value: 0.2
     delay: 4

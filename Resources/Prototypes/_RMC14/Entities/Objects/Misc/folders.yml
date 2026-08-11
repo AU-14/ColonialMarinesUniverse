@@ -13,6 +13,7 @@
     sprite: _RMC14/Objects/Misc/paper.rsi
     size: Small
     shape: null
+    heldPrefix: paper
   - type: Storage
     maxItemSize: Small
     grid:

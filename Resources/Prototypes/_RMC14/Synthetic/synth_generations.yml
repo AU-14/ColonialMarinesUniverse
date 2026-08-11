@@ -3,6 +3,7 @@
   name: Generation One
   components:
   - type: SynthGeneration
+    ageRepresentation: rmc-synth-generation-one
     generation: RMCSynthGenOne
     damageModifier: RMCSynthGenOne
     priority: 1
@@ -47,6 +48,7 @@
   name: Generation Two
   components:
   - type: SynthGeneration
+    ageRepresentation: rmc-synth-generation-two
     generation: RMCSynthGenTwo
     damageModifier: RMCSynthGenTwo
     priority: 2
@@ -85,6 +87,7 @@
   name: Generation Three
   components:
   - type: SynthGeneration
+    ageRepresentation: rmc-synth-generation-three
     generation: RMCSynthGenThree
     priority: 3
   - type: Skills
