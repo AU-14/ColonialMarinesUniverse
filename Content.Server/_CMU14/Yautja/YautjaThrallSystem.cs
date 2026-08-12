@@ -12,6 +12,8 @@ using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Server._CMU14.Language;
+using Content.Server._RMC14.Language.Systems;
+using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared.Actions;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
@@ -54,6 +56,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     private static readonly ProtoId<NpcFactionPrototype> BadBloodHiveFaction = "CMUYautjaBadBlood";
     private static readonly ProtoId<NpcFactionPrototype> BloodedThrallNpcFaction = "CMUYautja";
     private static readonly EntProtoId<IFFFactionComponent> BloodedThrallIffFaction = "FactionYautja";
+    private static readonly ProtoId<LanguagePrototype> YautjaLanguage = "Yautja";
     private static readonly TimeSpan ThrallSelfDestructDialogTimeout = TimeSpan.FromSeconds(20);
     private static readonly TimeSpan WarningEvery = TimeSpan.FromSeconds(2);
     private static readonly TimeSpan ThrallStunTime = TimeSpan.FromSeconds(10);
@@ -79,6 +82,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private GunIFFSystem _iff = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private LanguageSystem _language = default!;
     [Dependency] private CMUXenoLanguageSystem _xenoLanguage = default!;
     [Dependency] private SharedXenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private InventorySystem _inventory = default!;
@@ -724,6 +728,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         thrall.BloodingReason = string.Empty;
         thrall.TechAuthorized = false;
         Dirty(target, thrall);
+
+        _language.AddLanguage(target, YautjaLanguage);
 
         RemCompDeferred<YautjaTechAuthorizedComponent>(target);
 
