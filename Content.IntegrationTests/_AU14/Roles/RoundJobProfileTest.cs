@@ -10,6 +10,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Inventory;
 using Content.Shared.NPC.Components;
 using Content.Shared.Preferences;
+using Content.Shared.Radio.Components;
 using Content.Shared.Roles;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
@@ -298,6 +299,77 @@ public sealed class RoundJobProfileTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task SquadRiflemenSpawnWithFactionSquadRadio()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var testMap = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var stationSpawning = server.System<StationSpawningSystem>();
+            var inventory = server.System<InventorySystem>();
+            var profile = new HumanoidCharacterProfile();
+            var members = new[]
+            {
+                (Entity: stationSpawning.SpawnPlayerMob(
+                    testMap.GridCoords,
+                    GovforSquadRifleman,
+                    profile,
+                    station: null),
+                    Group: "GOVFOR"),
+                (Entity: stationSpawning.SpawnPlayerMob(
+                    testMap.GridCoords,
+                    OpforSquadRifleman,
+                    profile,
+                    station: null),
+                    Group: "OPFOR"),
+            };
+
+            try
+            {
+                Assert.Multiple(() =>
+                {
+                    foreach (var member in members)
+                        AssertSquadRadio(server.EntMan, inventory, member.Entity, member.Group);
+                });
+            }
+            finally
+            {
+                foreach (var member in members)
+                    server.EntMan.DeleteEntity(member.Entity);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    private static void AssertSquadRadio(
+        IEntityManager entityManager,
+        InventorySystem inventory,
+        EntityUid member,
+        string expectedGroup)
+    {
+        var squadMember = entityManager.GetComponent<SquadMemberComponent>(member);
+        Assert.That(squadMember.Squad, Is.Not.Null, expectedGroup);
+        if (squadMember.Squad is not { } squad)
+            return;
+
+        var squadTeam = entityManager.GetComponent<SquadTeamComponent>(squad);
+        Assert.That(squadTeam.Group, Is.EqualTo(expectedGroup));
+        Assert.That(squadTeam.Radio, Is.Not.Null, expectedGroup);
+
+        var found = inventory.TryGetSlotEntity(member, EarsSlot, out var headset);
+        Assert.That(found, Is.True, $"{expectedGroup} headset");
+        Assert.That(headset, Is.Not.Null, $"{expectedGroup} headset");
+        if (!found || headset is null || squadTeam.Radio is not { } radio)
+            return;
+
+        var holder = entityManager.GetComponent<EncryptionKeyHolderComponent>(headset.Value);
+        Assert.That(holder.Channels, Does.Contain(radio), expectedGroup);
     }
 
     private static bool HasResolvedComponent(RoundJobProfileSystem profiles, JobPrototype job, string componentName)

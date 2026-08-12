@@ -137,6 +137,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
             }
 
             DoJobSpecials(job, jobEntity);
+            AssignRoundStartSquad(jobEntity, job, prototype);
             _identity.QueueIdentityUpdate(jobEntity);
             return jobEntity;
         }
@@ -190,6 +191,7 @@ public sealed partial class StationSpawningSystem : SharedStationSpawningSystem
         }
 
         DoJobSpecials(job, entity.Value);
+        AssignRoundStartSquad(entity.Value, job, prototype);
         _identity.QueueIdentityUpdate(entity.Value);
         return entity.Value;
     }

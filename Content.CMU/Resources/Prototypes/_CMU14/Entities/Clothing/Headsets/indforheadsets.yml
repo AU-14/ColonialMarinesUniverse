@@ -4,6 +4,8 @@
   parent: RMCHeadsetShip
   id: AU14HeadsetMilitaryBase
   suffix: CMU
+  components:
+  - type: HeadsetAutoSquad
 
 # ├──[ ENCRYPTIONKEYS ]──────────────────────────────────────────────┤
 - type: entity
