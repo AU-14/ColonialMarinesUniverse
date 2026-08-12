@@ -7,7 +7,7 @@
   suffix: RMC14
   components:
   - type: Butcherable
-    butcheringType: Knife
+    butcheringType: Spike
     waitForRot: true
     spawned:
     - id: FoodMeatHuman
