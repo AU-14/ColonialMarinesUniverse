@@ -134,7 +134,7 @@ public sealed class DialogBui(EntityUid owner, Enum uiKey) : BoundUserInterface(
         container.OptionsScroll.SetHeight = Math.Clamp(s.Options.Count * 44, 44, 352);
         _window.SetSize = compact
             ? new Vector2(500, 220)
-            : new Vector2(620, 500);
+            : new Vector2(620, 420);
         _window.RefreshCrtTheme();
     }
 
