@@ -8,10 +8,10 @@
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 9
+        Quantity: 90
   - type: Item
     size: Small
     sprite: _RMC14/Objects/Consumable/Food/prepared.rsi
@@ -31,14 +31,14 @@
   - type: Sprite
     state: cornbread
   - type: Edible
-    transferAmount: 3
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 9
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -49,14 +49,14 @@
   - type: Sprite
     state: chicken
   - type: Edible
-    transferAmount: 3
+    transferAmount: 22.5
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 10
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -67,14 +67,14 @@
   - type: Sprite
     state: pasta
   - type: Edible
-    transferAmount: 3
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 9
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -85,14 +85,14 @@
   - type: Sprite
     state: pizza
   - type: Edible
-    transferAmount: 8
+    transferAmount: 90
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 8
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -103,14 +103,14 @@
   - type: Sprite
     state: pork
   - type: Edible
-    transferAmount: 4.5
+    transferAmount: 45
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 9
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -121,14 +121,14 @@
   - type: Sprite
     state: tofu
   - type: Edible
-    transferAmount: 1
+    transferAmount: 45
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 2
+        Quantity: 90
 
 # SPP Tray Meals
 
@@ -141,14 +141,14 @@
   - type: Sprite
     state: spp_banush
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -159,14 +159,14 @@
   - type: Sprite
     state: spp_chowmein
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -177,14 +177,14 @@
   - type: Sprite
     state: spp_cuban
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -195,14 +195,14 @@
   - type: Sprite
     state: spp_frankfurter
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -213,14 +213,14 @@
   - type: Sprite
     state: spp_jiaozi
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -231,14 +231,14 @@
   - type: Sprite
     state: spp_luncheon
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -249,14 +249,14 @@
   - type: Sprite
     state: spp_meatballs
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -267,14 +267,14 @@
   - type: Sprite
     state: spp_meatballs
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -285,14 +285,14 @@
   - type: Sprite
     state: spp_wursts
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: RMCTrayEmpty
@@ -312,14 +312,14 @@
   - type: Sprite
     state: pmc_ikanbakar
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: RMCMarinePreparedMealPMCIkanBakar
@@ -395,14 +395,14 @@
   - type: Sprite
     state: cookies
   - type: Edible
-    transferAmount: 8
+    transferAmount: 33
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
       - ReagentId: RMCSugar
         Quantity: 9
 
@@ -415,14 +415,14 @@
   - type: Sprite
     state: gingerbread
   - type: Edible
-    transferAmount: 8
+    transferAmount: 33
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
       - ReagentId: RMCSugar
         Quantity: 9
 
@@ -435,14 +435,14 @@
   - type: Sprite
     state: fruit_cake
   - type: Edible
-    transferAmount: 8
+    transferAmount: 33
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
       - ReagentId: RMCSugar
         Quantity: 9
 
@@ -476,14 +476,14 @@
   - type: Sprite
     state: rmc_fish
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -494,14 +494,14 @@
   - type: Sprite
     state: rmc_katsu
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -512,14 +512,14 @@
   - type: Sprite
     state: rmc_sausage
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -530,14 +530,14 @@
   - type: Sprite
     state: rmc_meat
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: CMMarinePreparedMealBase
@@ -548,14 +548,14 @@
   - type: Sprite
     state: rmc_tikka
   - type: Edible
-    transferAmount: 5
+    transferAmount: 30
   - type: Solution
     id: food
     solution:
-      maxVol: 50
+      maxVol: 100
       reagents:
       - ReagentId: Nutriment
-        Quantity: 15
+        Quantity: 90
 
 - type: entity
   parent: RMCTrayEmpty
