@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Input;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Xenonids.Devour;
@@ -87,6 +88,7 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
         SubscribeLocalEvent<CMItemSlotsComponent, MapInitEvent>(OnSlotsFillMapInit);
         SubscribeLocalEvent<CMItemSlotsComponent, AfterAutoHandleStateEvent>(OnSlotsComponentHandleState);
         SubscribeLocalEvent<CMItemSlotsComponent, ActivateInWorldEvent>(OnSlotsActivateInWorld);
+        SubscribeLocalEvent<CMItemSlotsComponent, RMCStorageEjectHandItemEvent>(OnSlotsStorageEjectHand);
         SubscribeLocalEvent<CMItemSlotsComponent, ItemSlotEjectAttemptEvent>(OnSlotsEjectAttempt);
         SubscribeLocalEvent<CMItemSlotsComponent, EntInsertedIntoContainerMessage>(OnSlotsEntInsertedIntoContainer);
         SubscribeLocalEvent<CMItemSlotsComponent, EntRemovedFromContainerMessage>(OnSlotsEntRemovedFromContainer);
@@ -232,6 +234,14 @@ public abstract partial class SharedCMInventorySystem : EntitySystem
             return;
 
         PickupSlot(args.User, ent);
+    }
+
+    private void OnSlotsStorageEjectHand(Entity<CMItemSlotsComponent> ent, ref RMCStorageEjectHandItemEvent args)
+    {
+        if (args.Handled || HasComp<StorageComponent>(ent))
+            return;
+
+        args.Handled = PickupSlot(args.User, ent);
     }
 
     private void OnSlotsEjectAttempt(Entity<CMItemSlotsComponent> ent, ref ItemSlotEjectAttemptEvent args)
