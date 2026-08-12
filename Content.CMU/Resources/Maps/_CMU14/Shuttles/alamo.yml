@@ -31,7 +31,7 @@ entities:
   - uid: 1
     components:
     - type: MetaData
-      name: Alamo Dropship
+      name: Fallujah Dropship
     - type: Transform
     - type: Map
       mapPaused: True
@@ -41,7 +41,7 @@ entities:
   - uid: 2
     components:
     - type: MetaData
-      name: grid
+      name: Fallujah
     - type: Transform
       parent: 1
     - type: MapGrid
@@ -1297,7 +1297,7 @@ entities:
   - uid: 191
     components:
     - type: MetaData
-      name: Alamo
+      name: Fallujah
     - type: Transform
       pos: 1.5,8.875
       parent: 2

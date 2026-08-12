@@ -38,7 +38,7 @@ entities:
   - uid: 2
     components:
     - type: MetaData
-      name: Normandy
+      name: Lexington
     - type: Transform
       parent: 1
     - type: MapGrid
@@ -909,12 +909,12 @@ entities:
   - uid: 120
     components:
     - type: MetaData
-      name: Normandy
+      name: Lexington
     - type: Transform
       pos: 0.5,-0.5
       parent: 2
     - type: WarpPoint
-      location: Normandy
+      location: Lexington
 - proto: AU14VehicleRadioSet
   entities:
   - uid: 200

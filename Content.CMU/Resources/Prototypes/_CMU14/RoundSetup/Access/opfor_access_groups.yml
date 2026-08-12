@@ -12,6 +12,7 @@
   - AU14AccessOpforPilot
   - AU14AccessOpforReq
   - AU14AccessOpforVehicleCrew
+  - RMCAccessCommand
 
 - type: accessGroup
   parent: AU14OpforCommand
@@ -54,6 +55,9 @@
   tags:
   - AU14AccessOpfor
   - AU14AccessOpforPilot
+  - CMAccessDropship
+  - CMAccessPilot
+  - CMAccessCrewman
 
 - type: accessGroup
   id: AU14OpforVehicleCrew
