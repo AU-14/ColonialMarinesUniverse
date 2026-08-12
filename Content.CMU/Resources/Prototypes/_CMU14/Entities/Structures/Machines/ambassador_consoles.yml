@@ -12,6 +12,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+    layers: []
   - type: InteractionOutline
   - type: ApcPowerReceiver
     powerLoad: 0
@@ -52,6 +53,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+    layers: []
   - type: AmbassadorConsole
     factionName: UPP
     budget: 500
@@ -73,6 +75,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+    layers: []
   - type: AmbassadorConsole
     factionName: United Americas
     budget: 500
@@ -94,6 +97,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+    layers: []
   - type: AmbassadorConsole
     factionName: Three World Empire
     budget: 500
@@ -114,6 +118,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+    layers: []
   - type: AmbassadorConsole
     factionName: Independent Core System Colonies
     budget: 500

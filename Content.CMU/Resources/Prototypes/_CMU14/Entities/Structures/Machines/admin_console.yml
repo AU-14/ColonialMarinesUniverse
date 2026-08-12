@@ -14,6 +14,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+    layers: []
   - type: InteractionOutline
   - type: ApcPowerReceiver
     powerLoad: 0
@@ -42,6 +43,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/Machines/computer.rsi
     state: terminal1_old
+    layers: []
   - type: AdminConsole
     callableParties:
       CMBInvestigationPartyAlt: 4500
