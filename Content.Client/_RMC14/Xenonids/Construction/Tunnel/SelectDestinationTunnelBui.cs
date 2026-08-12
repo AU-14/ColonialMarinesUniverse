@@ -57,6 +57,7 @@ public sealed partial class SelectDestinationTunnelBui : BoundUserInterface
     private readonly List<TacticalMapBlip> _reusableBlipsList = new();
 
     private bool _cacheValid;
+    private bool _mapLoaded;
     private Vector2i? _cachedCurrentPos;
     private Vector2i? _cachedSelectedPos;
 
@@ -116,10 +117,11 @@ public sealed partial class SelectDestinationTunnelBui : BoundUserInterface
 
         _currentTunnelNetEntityKey = null;
         string? currentTunnelName = null;
+        var currentTunnel = EntMan.GetNetEntity(Owner);
 
         foreach (var tunnel in newState.HiveTunnels)
         {
-            if (EntMan.GetEntity(tunnel.Value) == Owner)
+            if (tunnel.Value == currentTunnel)
             {
                 currentTunnelName = tunnel.Key;
                 _currentTunnelNetEntityKey = (int)tunnel.Value;
@@ -175,7 +177,7 @@ public sealed partial class SelectDestinationTunnelBui : BoundUserInterface
 
     private void UpdateTacticalMapDisplay()
     {
-        if (_window == null)
+        if (_window == null || _mapLoaded)
             return;
 
         if (_player.LocalEntity is { } player &&
@@ -183,6 +185,7 @@ public sealed partial class SelectDestinationTunnelBui : BoundUserInterface
             EntMan.TryGetComponent(user.Map, out AreaGridComponent? areaGrid))
         {
             _window.TacticalMapWrapper.UpdateTexture((user.Map.Value, areaGrid));
+            _mapLoaded = true;
         }
     }
 
@@ -595,9 +598,14 @@ public sealed partial class SelectDestinationTunnelBui : BoundUserInterface
 
         _window = this.CreateWindow<SelectDestinationTunnelWindow>();
         _window.SelectButton.Disabled = true;
-        _window.SetBlipUpdateCallback(() => UpdateBlips());
+        _window.SetBlipUpdateCallback(() =>
+        {
+            UpdateTacticalMapDisplay();
+            UpdateBlips();
+        });
 
         var wrapper = _window.TacticalMapWrapper;
+        TabContainer.SetTabTitle(wrapper.MapTab, Loc.GetString("ui-tactical-map-tab-map"));
         TabContainer.SetTabVisible(wrapper.CanvasTab, false);
         wrapper.Tabs.CurrentTab = 0;
 
