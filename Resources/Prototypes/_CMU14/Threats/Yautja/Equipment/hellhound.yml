@@ -9,6 +9,10 @@
   suffix: Yautja
   components:
   - type: YautjaHellhound
+  - type: Language
+    spokenLanguages: []
+    understoodLanguages:
+    - Yautja
   - type: RMCCamera
     id: CMUMobYautjaHellhound
     rename: false
