@@ -66,6 +66,7 @@ public sealed partial class VehicleSupplySystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
+        SubscribeLocalEvent<VehicleSupplyConsoleComponent, MapInitEvent>(OnConsoleMapInit);
         SubscribeLocalEvent<VehicleSupplyConsoleComponent, BeforeActivatableUIOpenEvent>(OnConsoleBeforeUiOpen);
         SubscribeLocalEvent<VehicleHardpointVendorComponent, MapInitEvent>(OnVendorMapInit);
         SubscribeLocalEvent<VehicleHardpointVendorComponent, BeforeActivatableUIOpenEvent>(OnVendorBeforeUiOpen);
@@ -296,7 +297,14 @@ public sealed partial class VehicleSupplySystem : EntitySystem
 
     private void OnConsoleBeforeUiOpen(Entity<VehicleSupplyConsoleComponent> ent, ref BeforeActivatableUIOpenEvent args)
     {
+        BackfillLiftFromConsole(ent);
         SendConsoleState(ent.Owner, ent.Comp);
+    }
+
+    private void OnConsoleMapInit(Entity<VehicleSupplyConsoleComponent> ent, ref MapInitEvent args)
+    {
+        if (BackfillLiftFromConsole(ent))
+            UpdateVendorSectionsAll();
     }
 
     private void OnLiftMapInit(Entity<VehicleSupplyLiftComponent> ent, ref MapInitEvent args)
@@ -1230,6 +1238,16 @@ public sealed partial class VehicleSupplySystem : EntitySystem
             DebugEnsureVehicleInConsoles(lift.Owner, vehicleId);
 
         return result;
+    }
+
+    private bool BackfillLiftFromConsole(Entity<VehicleSupplyConsoleComponent> console)
+    {
+        if (!TryGetLift(console.Owner, console.Comp, out var lift))
+            return false;
+
+        SeedStoredFromConsoles(lift);
+        Dirty(lift);
+        return true;
     }
 
     public bool DebugEnsureVehicleInStorage(EntityUid liftUid, string vehicleId, out string? reason)
