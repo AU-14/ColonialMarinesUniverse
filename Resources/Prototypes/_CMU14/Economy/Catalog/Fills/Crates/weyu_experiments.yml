@@ -36,7 +36,6 @@
     contents:
       - id: RMCBottleMindbreaker
         amount: 7
-      - id: CMUYautjaHivebreaker
       - id: RMCTentUNMCStandardMedicalFolded
       - id: AU14TentBigFoldedSurgical
       - id: AU14DrugDealerDrugBottle
@@ -95,8 +94,6 @@
       children:
       - id: XenoEgg
       - id: XenoEgg
-      - id: CMUYautjaHivebreaker
-        prob: 0.1
       weight: 1
     - !type:AllSelector
       children:
