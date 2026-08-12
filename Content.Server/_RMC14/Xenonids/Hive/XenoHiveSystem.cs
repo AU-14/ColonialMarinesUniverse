@@ -68,6 +68,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
         SubscribeLocalEvent<HijackBurrowedSurgeComponent, ComponentShutdown>(OnBurrowedSurgeShutdown);
 
         SubscribeLocalEvent<InvincibleHiveStructureComponent, MapInitEvent>(OnInvincibleMapInit);
+        SubscribeLocalEvent<InvincibleHiveStructureComponent, BeforeDamageChangedEvent>(OnInvincibleBeforeDamageChanged);
         SubscribeLocalEvent<CMUPathogenHiveMemberComponent, MapInitEvent>(OnPathogenSpawn);
 
         Subs.CVar(_config,
@@ -128,8 +129,6 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
         ent.Comp.ReplaceAt = _timing.CurTime + ent.Comp.Duration;
         Dirty(ent);
 
-        RemComp<DamageableComponent>(ent);
-        RemComp<DestructibleComponent>(ent);
         RemComp<RMCWallExplosionDeletableComponent>(ent);
         RemComp<XenoConstructionRequiresSupportComponent>(ent);
 
@@ -137,6 +136,12 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
             ent.Comp.Blocker = Spawn(ent.Comp.BlockerId, ent.Owner.ToCoordinates());
 
         _rmcSprite.SetColor(ent.Owner, ent.Comp.Color);
+    }
+
+    private void OnInvincibleBeforeDamageChanged(Entity<InvincibleHiveStructureComponent> ent, ref BeforeDamageChangedEvent args)
+    {
+        if (!HasComp<XenoComponent>(args.Origin) && !HasComp<XenoComponent>(args.Source))
+            args.Cancelled = true;
     }
 
     private void UpdateInvincible()
