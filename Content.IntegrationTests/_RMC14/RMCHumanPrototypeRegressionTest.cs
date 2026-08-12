@@ -9,6 +9,10 @@ using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Server._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
@@ -1557,6 +1561,43 @@ public sealed class RMCHumanPrototypeRegressionTest
                 entMan.DeleteEntity(patient);
                 entMan.DeleteEntity(surgeon);
             }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task CmuSynthOrganRemovalDoesNotCauseOrganicOrganFailure()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        EntityUid synth = default;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            synth = entMan.SpawnEntity("AU14MobWorkingJoeColony", MapCoordinates.Nullspace);
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(entMan.HasComponent<SynthComponent>(synth), Is.True);
+                Assert.That(entMan.HasComponent<MissingHeartComponent>(synth), Is.False);
+                Assert.That(entMan.HasComponent<MissingKidneysComponent>(synth), Is.False);
+                Assert.That(entMan.HasComponent<MissingLiverComponent>(synth), Is.False);
+                Assert.That(entMan.HasComponent<MissingLungsComponent>(synth), Is.False);
+                Assert.That(entMan.HasComponent<MissingStomachComponent>(synth), Is.False);
+            });
+        });
+
+        await server.WaitRunTicks(120);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var damage = entMan.GetComponent<DamageableComponent>(synth);
+
+            Assert.That(damage.TotalDamage, Is.EqualTo(FixedPoint2.Zero));
+            entMan.DeleteEntity(synth);
         });
 
         await pair.CleanReturnAsync();

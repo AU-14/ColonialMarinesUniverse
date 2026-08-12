@@ -2,6 +2,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart.Events;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Events;
 using Content.Shared.Body;
 using Content.Shared.FixedPoint;
@@ -61,7 +62,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
 
     private void OnHeartRemovedFromBody(Entity<HeartComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (!_medicalEnabled || !_organEnabled)
+        if (!_medicalEnabled || !_organEnabled || HasComp<SynthComponent>(args.OldBody))
             return;
         if (TerminatingOrDeleted(args.OldBody))
             return;

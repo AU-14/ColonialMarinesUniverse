@@ -2,6 +2,7 @@ using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs.Events;
 using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Events;
 using Content.Shared.Body;
 using Content.Shared.Damage;
@@ -57,7 +58,7 @@ public abstract partial class SharedLungsSystem : EntitySystem
 
     private void OnLungsRemovedFromBody(Entity<LungsComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (!_medicalEnabled || !_organEnabled)
+        if (!_medicalEnabled || !_organEnabled || HasComp<SynthComponent>(args.OldBody))
             return;
         if (TerminatingOrDeleted(args.OldBody))
             return;

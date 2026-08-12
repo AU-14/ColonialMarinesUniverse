@@ -1,6 +1,7 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Events;
 using Content.Shared.Body;
 using Content.Shared.FixedPoint;
@@ -49,7 +50,10 @@ public abstract partial class SharedKidneysSystem : EntitySystem
 
     private void OnKidneysRemovedFromBody(Entity<KidneysComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (!_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
+        if (!_medicalEnabled ||
+            !_organEnabled ||
+            HasComp<SynthComponent>(args.OldBody) ||
+            TerminatingOrDeleted(args.OldBody))
             return;
 
         var missing = EnsureComp<MissingKidneysComponent>(args.OldBody);
