@@ -474,7 +474,8 @@ public abstract partial class CMUSharedZLevelsSystem
             Direction.SouthWest => new Vector2i(-1, -1),
             _ => Vector2i.Zero,
         };
-      
+    }
+
     /// <summary>
     /// Collects the bounded cardinal wall group directly beneath a downward shooter. The bound matches the
     /// opening search radius, preventing a shot from flood-filling an arbitrarily large mapped wall network.
