@@ -347,3 +347,12 @@
   frequency: 0
   color: "#5B9BD5"
   longRange: false
+
+- type: radioChannel
+  id: UNISOF
+  name: chat-radio-unisc
+  keycode: 'u'
+  frequency: 1765
+  color: "#3d82b8"
+  longRange: true
+  tower: true

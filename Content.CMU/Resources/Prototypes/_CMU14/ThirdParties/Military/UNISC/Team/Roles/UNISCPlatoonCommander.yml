@@ -14,7 +14,7 @@
     preset: AU14SkillPresetPlatoonCommander
   - type: MarineOrders
   - type: JobPrefix
-    prefix: UNISC Platoon Operations Officer
+    prefix:  au14-job-name-unisc-platoon-operations-officer
   - type: RMCTrackable
   - type: RMCPointing
   - type: Language
@@ -44,7 +44,7 @@
         role: AU14JobUNISCPltOpsOff
         time: 36000
     UNISC_FirstLieutenant:
-      entity: AU14ChevronUSArmyFirstLT
+      entity: AU14ChevronFirstLT
       requirements:
       - !type:RoleTimeRequirement
         role: AU14JobUNISCPltOpsOff
@@ -86,7 +86,7 @@
 - type: startingGear
   id: AU14GearUNISCPltOpsOff
   equipment:
-    idcard: AU14IDCardUNISCPltOpsOffDetachment
+    id: AU14IDCardUNISCPltOpsOffDetachment
     outerClothing: AU14ArmorM3UNISC
     jumpsuit: AU14UNISCFatigues
     shoes: CMBootsBlackFilled
@@ -102,6 +102,7 @@
     back:
     - BedrollFolded
     - CMMRE
+    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCPltOpsOff

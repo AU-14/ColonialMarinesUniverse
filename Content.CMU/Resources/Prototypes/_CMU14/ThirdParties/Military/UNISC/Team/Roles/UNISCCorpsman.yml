@@ -13,7 +13,7 @@
   - type: Skills
     preset: AU14SkillPresetPlatoonHospitalCorpsman
   - type: JobPrefix
-    prefix: UNISC Hospital Corpsman
+    prefix: au14-job-name-unisc-corpsman
   - type: Language
     spokenLanguages:
     - English
@@ -94,6 +94,9 @@
     ears: AU14CMBHeadset
     gloves: CMHandsLatex
     suitstorage: RMCM1984BeltFilled
+  storage:
+    outerClothing:
+    - CMEncryptionKeyUNISC
 
 
 - type: playTimeTracker

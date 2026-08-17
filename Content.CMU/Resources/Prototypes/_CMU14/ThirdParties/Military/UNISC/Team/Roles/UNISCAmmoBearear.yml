@@ -13,7 +13,7 @@
   - type: Skills
     preset: AU14SkillPresetPlatoonRifleman
   - type: JobPrefix
-    prefix: UNISC Ammo Bearer
+    prefix: au14-job-name-unisc-ammo-bearer
   - type: Language
     spokenLanguages:
     - English
@@ -99,6 +99,8 @@
     - CMUBoxMagazineRifleM54CMK1
     - CMUBoxMagazineRifleM54CMK1
     - CMUBoxMagazineRifleM54CMK1
+    outerClothing:
+    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCAmmoBearer

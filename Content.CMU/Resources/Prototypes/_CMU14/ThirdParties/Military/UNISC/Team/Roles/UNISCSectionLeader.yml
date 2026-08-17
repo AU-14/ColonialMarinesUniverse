@@ -13,7 +13,7 @@
   - type: Skills
     preset: AU14SkillPresetPlatoonSeniorSergeant
   - type: JobPrefix
-    prefix: au-14-job-prefix-unisc-squadleader
+    prefix: au14-job-name-unisc-squad-leader
   - type: MarineOrders
   - type: RMCTrackable
   - type: SquadLeader
@@ -104,18 +104,8 @@
     - BedrollFolded
     - CMMRE
     - RMCBoxZiptie
+    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCSquadleader
 
-- type: entity
-  parent: CMIDCardBase
-  id: AU14IDCardUNISCSquadleader
-  categories: [ HideSpawnMenu ]
-  name: UNISC Section Leader ID card
-  components:
-  - type: PresetIdCard
-    job: AU14JobUNISCSquadleader
-  - type: ItemIFF
-    factions:
-    - GOVFOR

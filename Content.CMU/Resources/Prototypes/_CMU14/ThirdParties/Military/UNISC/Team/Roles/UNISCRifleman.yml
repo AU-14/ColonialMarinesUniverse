@@ -13,7 +13,7 @@
   - type: Skills
     preset: AU14SkillPresetPlatoonRifleman
   - type: JobPrefix
-    prefix: UNISC Rifleman
+    prefix: au14-job-name-unisc-rifleman
   - type: Language
     spokenLanguages:
     - English
@@ -98,6 +98,7 @@
     back:
     - BedrollFolded
     - CMMRE
+    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCRifleman

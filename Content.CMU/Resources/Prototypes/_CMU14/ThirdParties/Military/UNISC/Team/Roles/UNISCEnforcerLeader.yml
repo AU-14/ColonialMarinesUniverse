@@ -13,7 +13,7 @@
   - type: Skills
     preset: AU14SkillPresetOfficerMP
   - type: JobPrefix
-    prefix: UNISC Lead Enforcer
+    prefix: au14-job-name-unisc-lead-enforcer
   - type: Language
     spokenLanguages:
     - English
@@ -104,6 +104,7 @@
     - RMCGrenadeFlashBang
     - RMCGrenadeFlashBang
     - RMCBoxZiptie
+    - CMEncryptionKeyUNISC
 
 - type: playTimeTracker
   id: AU14JobUNISCEnforcerLeader
