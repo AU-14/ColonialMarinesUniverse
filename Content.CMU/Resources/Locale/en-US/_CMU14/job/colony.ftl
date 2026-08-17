@@ -254,3 +254,7 @@ au14-job-prefix-civiliannspainspector = NSPAINS
 au14-job-name-civilianiccliaison = Interstellar Commerce Commission Liaison
 au14-job-description-civilianiccliaison = You are an Interstellar Commerce Commission Corporate Liaison, a well experienced ICC Agent that has been attached to an NSPA team. You work with the NSPA specifically to observe proper trade practices and investigate any possibilities of smuggling or black market activity.
 au14-job-prefix-civilianiccliaison = ICCL
+
+cmu14-job-name-civilian-supervisor = Supervisor
+cmu14-job-description-civilian-supervisor = You are here to ensure maximum level of followed procedures.
+cmu14-job-prefix-civilian-supervisor = Sprvsr

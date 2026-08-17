@@ -33,6 +33,18 @@
 
 - type: entity
   parent: AU14EncryptionKey
+  id: AU14EncryptionKeyProdigy
+  name: prodigy colonial encryption key
+  description: An encryption key used to communicate on colony and prodigy radio channels.
+  components:
+  - type: EncryptionKey
+    channels:
+    - Colony
+    - PART
+    defaultChannel: Colony
+
+- type: entity
+  parent: AU14EncryptionKey
   id: AU14EncryptionKeyCMB
   name: CMB encryption key
   suffix: Colony, CMB
@@ -98,6 +110,18 @@
     containers:
       key_slots:
       - AU14EncryptionKeyWEYU
+
+- type: entity
+  parent: RMCHeadsetLiaison
+  id: CMU14ColonyProdigyHeadset
+  name: colony prodigy headset
+  description: A headset used by prodigy to communicate.
+  suffix: Colony, Prodigy
+  components:
+  - type: ContainerFill
+    containers:
+      key_slots:
+      - AU14EncryptionKeyProdigy
 
 - type: entity
   parent: AU14HeadsetGovforMarine

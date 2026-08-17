@@ -25,6 +25,7 @@ stamp-component-stamped-name-au14-sea = Senior Enlisted Advisor
 stamp-component-stamped-name-au14-cl = Corporation Liaison
 stamp-component-stamped-name-au14-cs = Corporation Scientist
 
+stamp-component-stamped-name-cmu14-prodigy-liaison = Prodigy Liaison
 stamp-component-stamped-name-au14-ll = Laselle Liaison
 stamp-component-stamped-name-au14-uaa = UA Ambassador
 stamp-component-stamped-name-au14-uppa = UPP Ambassador

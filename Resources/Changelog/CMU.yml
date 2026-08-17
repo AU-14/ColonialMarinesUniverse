@@ -9307,5 +9307,38 @@
   id: 602
   time: '2026-08-10T03:19:52.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1812
+- author: JaSeNeSaJ
+  changes:
+  - message: 'DS: M68 thermal cloak (unnerfed)'
+    type: Add
+  id: 603
+  time: '2026-08-12T01:54:36.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1813
+- author: DarkFNC
+  changes:
+  - message: New Lambda floor tile for use by mappers. Made by @Nzzy - Thanks for
+      making this!
+    type: Add
+  - message: Recoloured MP flat style berets in two variants (one for officers and
+      one for the CMP). These appear as a hat pick in MP and CMP vendors for most
+      factions.
+    type: Add
+  id: 604
+  time: '2026-08-12T01:55:08.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1810
+- author: IMGXKILLER
+  changes:
+  - message: Ghille Suit to Sniper Kit
+    type: Add
+  id: 605
+  time: '2026-08-12T01:55:31.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1814
+- author: Michellechkya
+  changes:
+  - message: Added UPP chevrons sprites
+    type: Add
+  id: 606
+  time: '2026-08-12T01:57:00.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1815
 Name: CMU
 Order: -1

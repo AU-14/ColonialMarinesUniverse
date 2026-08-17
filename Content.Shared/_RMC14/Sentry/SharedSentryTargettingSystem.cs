@@ -33,7 +33,8 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         { "Civilian", "FactionSurvivor" },
         { "RoyalMarines", "FactionRoyalMarines" },
         { "Bureau", "FactionBureau" },
-        { "TSE", "FactionTSE" }
+        { "TSE", "FactionTSE" },
+        { "Prodigy", "FactionProdigy" } // CMU14
     };
 
     public static readonly HashSet<string> SentryAllowedFactions = SentryFactionToIff.Keys.ToHashSet();

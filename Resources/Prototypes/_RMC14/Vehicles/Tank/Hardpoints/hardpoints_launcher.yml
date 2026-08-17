@@ -274,7 +274,7 @@
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankRERE700
-  name: RE-RE700 cupola
+  name: RE700 cupola # CMU14
   description: A dual-barrel cupola-mounted weapon hardpoint. The integrated IFF component seems to be missing.
   components:
   - type: Sprite
@@ -301,7 +301,7 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: Gun
-    fireRate: 7.4
+    fireRate: 6.45 # CMU14
     selectedMode: FullAuto
     availableModes:
     - FullAuto
@@ -334,4 +334,73 @@
     vehicleState: re700cupola_0
     damagedVehicleState: m56cupola_1
 
+- type: entity # CMU14 entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankCupolaTWE
+  name: Improper L98 10x28mm Hull General Purpose Machine Gun
+  description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    state: mounted_cupola
+  - type: HardpointItem
+    hardpointType: Secondary
+    vehicleFamily: Tank
+    slotType: Launcher
+    damageMultiplier: 0.0
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+  - type: VehicleTurretAttachment
+  - type: VehicleTurret
+    offsetRotatesWithTurret: false
+    useDirectionalOffsets: false
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
+    showOverlay: true
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: mounted_cupola_0
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: Gun
+    fireRate: 3.5
+    minAngle: 3
+    maxAngle: 3
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot:
+      collection: L98FireSound
+    cameraRecoilScalar: 0
+  - type: GunIFF
+    enabled: true
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 5
+    accuracyMultiplierUnwielded: 5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: VehicleCartridgeSentry10x50mm
+    capacity: 500
+  - type: VehicleHardpointAmmo
+    magazineSize: 500
+    maxStoredMagazines: 1
+  - type: GunFireArc
+    arc: 180
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxCupola
+  - type: GunMuzzleOffset
+    offset: "0,0"
+    useDirectionalOffsets: true
+    offsetWest: "0,1"
+    offsetEast: "0,-0.37"
+    offsetNorth: "0.68,0"
+    offsetSouth: "-0.68,0"
+    muzzleOffset: "0.3,-1.1"
+    useAimDirection: false
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: mounted_cupola_0
+    damagedVehicleState: mounted_cupola_1
 

@@ -419,6 +419,34 @@
 
 - type: entity
   parent: SquadBase
+  id: CMU14SquadProdigy
+  name: Prodigy
+  components:
+  - type: SquadTeam
+    color: "#92969A"
+    background:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: empty
+    blacklistedSquadArmor:
+    - Helmet
+    - Goggles
+    - Armor
+    - Gloves
+    radio: PART
+    minimapBackground:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: background_pmc
+    canSupplyDrop: false
+    group: PSC
+    leaderIcon:
+      sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_lead
+  - type: Tag
+    tags:
+    - CMU14SquadProdigy
+
+- type: entity
+  parent: SquadBase
   id: AU14SquadMSG
   name: Marine Guard
   components:
@@ -538,3 +566,5 @@
   id: AU14SquadIASF
 - type: Tag
   id: AU14SquadUNISC
+- type: Tag
+  id: CMU14SquadProdigy

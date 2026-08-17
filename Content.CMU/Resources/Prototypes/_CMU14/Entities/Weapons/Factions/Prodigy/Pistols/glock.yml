@@ -228,7 +228,7 @@
 - type: entity
   parent: CMBaseMagazinePistol
   id: CMU14MagazinePistolGlock75Rubber
-  name: Glock 75 magazine (9mm)
+  name: Glock 75 rubber magazine (9mm)
   components:
   - type: Tag
     tags:
