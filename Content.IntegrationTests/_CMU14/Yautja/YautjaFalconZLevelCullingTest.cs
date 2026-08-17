@@ -210,7 +210,6 @@ public sealed class YautjaFalconZLevelCullingTest
                 var entMan = client.EntMan;
                 var config = client.ResolveDependency<IConfigurationManager>();
                 var eyeManager = client.ResolveDependency<IEyeManager>();
-                var mapManager = client.ResolveDependency<IMapManager>();
                 var tileDefinitions = client.ResolveDependency<ITileDefinitionManager>();
                 var map = entMan.System<SharedMapSystem>();
                 var transform = entMan.System<SharedTransformSystem>();
@@ -243,7 +242,7 @@ public sealed class YautjaFalconZLevelCullingTest
                     $"The synchronized upper tile {openingTileRef.Tile} must classify as an opening.");
 
                 var intersectingGrids = new List<Entity<MapGridComponent>>();
-                mapManager.FindGridsIntersecting(
+                map.FindGridsIntersecting(
                     upperMap.MapId,
                     viewBounds,
                     ref intersectingGrids,
@@ -273,7 +272,6 @@ public sealed class YautjaFalconZLevelCullingTest
                     int.MaxValue,
                     true,
                     openingGrids,
-                    mapManager,
                     map,
                     transform,
                     tileDefinitions), Is.True);

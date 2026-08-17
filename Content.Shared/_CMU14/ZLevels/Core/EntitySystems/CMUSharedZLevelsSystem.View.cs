@@ -261,7 +261,7 @@ public abstract partial class CMUSharedZLevelsSystem
         if (!_gridQuery.TryComp(openingGridUid, out var grid))
         {
             if (!_mapQuery.TryComp(openingMap, out var mapComp) ||
-                !_mapManager.TryFindGridAt(mapComp.MapId, from, out openingGridUid, out grid))
+                !_map.TryFindGridAt(mapComp.MapId, from, out openingGridUid, out grid))
             {
                 return false;
             }

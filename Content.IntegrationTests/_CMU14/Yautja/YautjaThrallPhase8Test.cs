@@ -1452,7 +1452,7 @@ public sealed class YautjaThrallPhase8Test
                 loc.SetCulture(CultureInfo.GetCultureInfo("en-US"));
 
                 preserveMap = mapSystem.CreateMap(out var preserveMapId);
-                preserveGrid = server.MapMan.CreateGridEntity(preserveMapId).Owner;
+                preserveGrid = mapSystem.CreateGridEntity(preserveMapId).Owner;
                 entMan.EnsureComponent<YautjaHuntingGroundComponent>(preserveGrid);
 
                 SpawnLinkedThrall(entMan, map.GridCoords, out master, out masterBracer, out thrall, out thrallBracer);
