@@ -17,7 +17,7 @@
       main:
         shape:
           !type:PhysShapeAabb
-          bounds: -1.5,-0.5,1.5,1.5
+          bounds: -0.9,-0.6,0.9,0.9
         density: 1000
         mask:
         - MidImpassable
@@ -29,7 +29,7 @@
       cockpit:
         shape:
           !type:PhysShapeAabb
-          bounds: -0.5,-1.5,0.5,-0.5
+          bounds: -0.35,-1.5,0.35,-0.5
         density: 1000
         mask:
         - MidImpassable

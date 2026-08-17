@@ -94,9 +94,9 @@
   - type: HitscanBasicDamage
     damage:
       types:
-        Heat: 105
+        Heat: 162
         Blunt: 5
-        Asphyxiation: 25
+        Asphyxiation: 20
   - type: HitscanBasicVisuals
     muzzleFlash:
       sprite: Objects/Weapons/Guns/Projectiles/projectiles.rsi

@@ -35,6 +35,19 @@
 
 - type: entity
   parent: CMBaseCartridgeRifle
+  id: VehicleCartridgeElectrolaser
+  name: Power Bank (Electrolaser)
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Ammunition/Casings/large_casing.rsi
+    layers:
+    - state: base
+      map: ["enum.AmmoVisualLayers.Base"]
+  - type: CartridgeAmmo
+    proto: RMCProjectileElectrolaser
+    muzzleFlash: MuzzleFlashEffectVehicleOver
+- type: entity
+  parent: CMBaseCartridgeRifle
   id: VehicleCartridgeDragonFlame
   name: cartridge (DRGN flame)
   components:
@@ -138,6 +151,47 @@
     amount: 30
   - type: IgnorePredictionHide
 
+- type: entity
+  parent: RMCBaseBullet
+  id: RMCProjectileElectrolaser
+  name: Electrolaser power bank
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: Structures/Power/Generation/Tesla/energy_miniball.rsi
+    layers:
+    - state: tesla_projectile
+      shader: unshaded
+  - type: Electrified
+    requirePower: false
+  - type: StaminaDamageOnCollide
+    damage: 15
+  - type: Projectile
+    impactEffect: BulletImpactEffect
+    maxFixedRange: 32
+    damage:
+      types:
+        Piercing: 10
+        Heat: 160
+        Asphyxiation: 15
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/bullet_hit.ogg
+  - type: RMCProjectileAccuracy
+    accuracy: 130
+    thresholds:
+    - range: 32
+      falloff: 5
+  - type: RMCProjectileDamageFalloff
+    thresholds:
+    - range: 32
+      falloff: 9999
+      ignoreModifiers: true
+  - type: RMCAreaDamage
+    damageArea: 0.65
+    falloffDistance: 1.0
+  - type: CMArmorPiercing
+    amount: 15
+  - type: IgnorePredictionHide
 - type: entity
   parent: RMCBaseBullet
   id: VehicleProjectileDragonFlame

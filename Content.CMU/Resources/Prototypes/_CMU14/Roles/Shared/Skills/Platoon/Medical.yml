@@ -56,3 +56,17 @@
       RMCSkillMedical: 2
       RMCSkillSurgery: 1
       RMCSkillJtac: 1
+      
+- type: entity
+  id: AU14SkillPresetMilitaryNurse
+  name: Nurse
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: SkillPreset
+    skills:
+      RMCSkillFirearms: 1
+      RMCSkillFireman: 2
+      RMCSkillVehicles: 1
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+      RMCSkillEndurance: 1

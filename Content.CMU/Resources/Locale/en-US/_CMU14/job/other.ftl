@@ -56,6 +56,22 @@ au14-uppgrom-greeting = You are a member of UPP's elite GROM special forces unit
 
     You are not hostile to the UPP and CCA and neutral to other countries!
 
+au14-unisc-rules = You are a mix of Volunteers from different countries put into a Peacekeeping force, Protect Civilians, Enforce Geneva, Always attempt to be neutral.
+
+au14-unisc-greeting = You are a mix of Volunteers from different countries put into a Peacekeeping force.
+
+    You have been dispatched by Platoon Command to investigate a call incoming from a Colony, the one you're currently going towards.
+
+    You've got a full Squad, along with your Platoon Operations Officer and an Enforcer Team.
+
+    Make sure that the Geneva Convention is upheld, Civilians rights are protected, and ensure the safety of your squad mates aswell.
+
+    Your Rules of Engagement are tight, do not fire unless fired upon or in defense of Non-Combatants, always attempt to be neutral, always attempt to avoid acting in anything other than self-defense.
+
+    ROE may always be changed by the Platoon Operations Officer or Platoon Commander.
+
+    You are netrual to all countries, corporations and organizations.
+
 rmc-squad-info-GROMCommandingOfficer = GROM Commanding Officer
 
 au14-uppgrom-description = You are a member of UPP's elite GROM special forces unit. Survive with your squad and contact any friendly Command.
