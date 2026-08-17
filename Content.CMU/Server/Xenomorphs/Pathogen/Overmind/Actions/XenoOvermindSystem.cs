@@ -105,8 +105,8 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
         var eyeComp = EnsureComp<EyeComponent>(ent.Owner);
 
         _eye.SetDrawFov(ent.Owner, false, eyeComp);
-        _eye.SetDrawLight(ent.Owner, false, eyeComp);
-        _eye.SetPvsScale(ent.Owner, 1.5f, eyeComp);
+        _eye.SetDrawLight(ent.Owner, false);
+        _eye.SetPvsScale(ent.Owner, 1.5f);
         _eye.SetTarget(ent.Owner, eye, eyeComp);
         _eye.RefreshVisibilityMask(ent.Owner);
 
@@ -121,8 +121,8 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
         if (TryComp(ent.Owner, out EyeComponent? eyeComp))
         {
             _eye.SetDrawFov(ent.Owner, true, eyeComp);
-            _eye.SetDrawLight(ent.Owner, true, eyeComp);
-            _eye.SetPvsScale(ent.Owner, 1f, eyeComp);
+            _eye.SetDrawLight(ent.Owner, true);
+            _eye.SetPvsScale(ent.Owner, 1f);
             _eye.SetTarget(ent.Owner, null, eyeComp);
             _eye.RefreshVisibilityMask(ent.Owner);
         }

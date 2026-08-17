@@ -118,3 +118,25 @@
     state: neomorph_gib
   - type: TimedDespawn
     lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenHaze
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/haze.rsi
+    state: haze_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenRoot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/root.rsi
+    state: root_gib
+  - type: TimedDespawn
+    lifetime: 0.8

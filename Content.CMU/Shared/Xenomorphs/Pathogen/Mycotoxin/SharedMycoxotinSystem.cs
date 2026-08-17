@@ -13,7 +13,7 @@ using Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
 using Content.Shared.Mobs;
 using Robust.Shared.GameObjects;
 using Content.Shared.Popups;
-using Content.Shared._CMU14.Medical.Wounds;
+using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Systems;
 
 namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
@@ -29,6 +29,7 @@ public sealed class SharedMycotoxinSystem : EntitySystem
     [Dependency] private readonly SharedXenoParasiteSystem _parasite = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly SharedBodySystem _body = default!;
+    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
 
     public override void Initialize()
     {
@@ -112,14 +113,8 @@ public sealed class SharedMycotoxinSystem : EntitySystem
     {
         foreach (var (partUid, _) in _body.GetBodyChildren(target))
         {
-            if (!TryComp<BodyPartWoundComponent>(partUid, out var wounds))
-                continue;
-
-            foreach (var wound in wounds.Wounds)
-            {
-                if (!wound.Treated)
-                    return true;
-            }
+            if (_wounds.HasOpenWound(partUid))
+                return true;
         }
 
         return false;
