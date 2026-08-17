@@ -180,7 +180,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 - type: entity
   parent: CMBaseStructure
@@ -228,7 +228,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 # TODO RMC14 alamo and normandy specific names for each
 - type: entity
@@ -345,7 +345,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 - type: entity
   parent: CMComputerDropship
@@ -552,7 +552,7 @@
     energy: 1
     offset: "0,0"
     color: "#FFEFD2"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
   - type: WhitelistedShuttle
     faction: govfor
     ShuttleType: Dropship

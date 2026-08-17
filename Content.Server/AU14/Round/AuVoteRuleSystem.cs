@@ -6,6 +6,7 @@ using Content.Shared._RMC14.CCVar;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
 using Robust.Shared.Player;
+using Robust.Shared.Timing;
 
 namespace Content.Server.AU14.Round;
 
@@ -15,6 +16,7 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
     [Dependency] private IEntityManager _entityManager = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
 
+    private bool _pausedForMinimumPlayers;
     private bool _waitingForMinimumPlayers;
 
     // Only keep the persistent system trigger and dependency injection
@@ -42,7 +44,8 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
         if (!_waitingForMinimumPlayers)
             return;
 
-        TryStartVoteSequence();
+        // PlayerStatusChanged can be raised before PlayerCount includes the newly connected session.
+        Timer.Spawn(0, TryStartVoteSequence);
     }
 
     private void TryStartVoteSequence()
@@ -55,11 +58,32 @@ public sealed partial class AuVoteRuleSystem : GameRuleSystem<AuVoteRuleComponen
         {
             _waitingForMinimumPlayers = GameTicker.LobbyEnabled &&
                                         GameTicker.RunLevel == GameRunLevel.PreRoundLobby;
+            if (_waitingForMinimumPlayers)
+                PauseForMinimumPlayers();
             return;
         }
 
         _waitingForMinimumPlayers = false;
         var voteManagerSystem = _entityManager.System<AuRoundSystem>();
         voteManagerSystem.StartVoteSequence(() => { });
+        RestartCountdownAfterMinimumPlayers();
+    }
+
+    private void PauseForMinimumPlayers()
+    {
+        if (_pausedForMinimumPlayers || GameTicker.Paused)
+            return;
+
+        GameTicker.PauseStart();
+        _pausedForMinimumPlayers = !_cfg.GetCVar(RMCCVars.RMCLobbyStartPaused);
+    }
+
+    private void RestartCountdownAfterMinimumPlayers()
+    {
+        if (!_pausedForMinimumPlayers)
+            return;
+
+        _pausedForMinimumPlayers = false;
+        GameTicker.RestartLobbyCountdown();
     }
 }

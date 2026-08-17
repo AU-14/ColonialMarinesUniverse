@@ -201,6 +201,7 @@
 - type: entity
   parent: RMCTileFire
   id: RMCTileFireOBAegis
+  suffix: RMC
   components:
   - type: Sprite
     color: "#ffffff"

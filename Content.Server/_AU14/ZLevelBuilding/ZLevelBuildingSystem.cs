@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
 using Content.Server._CMU14.ZLevels.Core;
+using Content.Server.Station.Components;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage;
@@ -35,7 +36,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
 {
     [Dependency] private readonly CMUZLevelsSystem _zLevels = default!;
     [Dependency] private readonly MapSystem _map = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
     [Dependency] private readonly DamageableSystem _damage = default!;
@@ -111,6 +112,43 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     }
 
     /// <summary>
+    /// Resolves the grid for an authored station level, even when the requested position is currently void.
+    /// Authored multi-z station maps must never be converted into generated cave maps merely because one x/y
+    /// position lacks a tile; doing that enabled cave-in processing across the whole authored level.
+    /// </summary>
+    private bool TryGetAuthoredStationGrid(EntityUid mapUid, Vector2 worldPos, out EntityUid gridUid)
+    {
+        gridUid = default;
+        if (!TryComp<MapComponent>(mapUid, out var mapComp))
+            return false;
+
+        var coords = new MapCoordinates(worldPos, mapComp.MapId);
+        if (_mapManager.TryFindGridAt(coords, out var foundGrid, out _) && HasComp<BecomesStationComponent>(foundGrid))
+        {
+            gridUid = foundGrid;
+            return true;
+        }
+
+        if (HasComp<BecomesStationComponent>(mapUid) && _gridQuery.HasComponent(mapUid))
+        {
+            gridUid = mapUid;
+            return true;
+        }
+
+        var query = EntityQueryEnumerator<BecomesStationComponent, MapGridComponent, TransformComponent>();
+        while (query.MoveNext(out var candidate, out _, out _, out var xform))
+        {
+            if (xform.MapUid != mapUid)
+                continue;
+
+            gridUid = candidate;
+            return true;
+        }
+
+        return false;
+    }
+
+    /// <summary>
     /// Creates a brand-new underground stone map directly below <paramref name="mapUid"/>, bootstrapping a
     /// z-network for single-z maps on the fly. Only used when there is nothing below at all.
     /// </summary>
@@ -171,7 +209,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
 
         if (TryComp<CMUZLevelMapComponent>(mapUid, out var zMapComp) && zMapComp.MapBelow is { } belowMap)
         {
-            if (!HasComp<ZGeneratedStoneComponent>(belowMap) && HasWalkableFloorAt(belowMap, worldPos))
+            if ((!TryComp<ZGeneratedStoneComponent>(belowMap, out var stoneMarker) || stoneMarker.LocalizedToAuthoredLevel) &&
+                HasWalkableFloorAt(belowMap, worldPos))
             {
                 // Real authored walkable floor below (not underground) - return its grid for companion placement.
                 if (TryComp<MapComponent>(belowMap, out var floorMapC) &&
@@ -293,10 +332,15 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         if (!TryComp<MapComponent>(belowMap, out var belowMapComp))
             return false;
 
-        // Prefer a grid already under the player's x/y on that level; otherwise make the level a map-grid
-        // (the CMU z-movement code only sees tiles on the map entity's own grid - see CreateStoneBelow).
+        // Prefer an authored station grid even when this x/y is void. Stone generated there is localized to
+        // empty tiles and cannot turn mapped colony terrain into part of the cave-in graph.
         EntityUid stoneGrid;
-        if (_mapManager.TryFindGridAt(new MapCoordinates(worldPos, belowMapComp.MapId), out var foundGrid, out _))
+        var localized = TryGetAuthoredStationGrid(belowMap, worldPos, out var authoredGrid);
+        if (localized)
+        {
+            stoneGrid = authoredGrid;
+        }
+        else if (_mapManager.TryFindGridAt(new MapCoordinates(worldPos, belowMapComp.MapId), out var foundGrid, out _))
         {
             stoneGrid = foundGrid;
         }
@@ -308,6 +352,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
 
         var stone = EnsureComp<ZGeneratedStoneComponent>(belowMap);
         stone.StoneGrid = stoneGrid;
+        stone.LocalizedToAuthoredLevel = localized;
+        Dirty(belowMap, stone);
         below = (belowMap, stone);
         return true;
     }
@@ -354,6 +400,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
                     continue;
 
                 _map.SetTile(below.Comp.StoneGrid, grid, index, new Tile(floorDef.TileId));
+                if (below.Comp.LocalizedToAuthoredLevel)
+                    below.Comp.GeneratedTiles.Add(index);
 
                 var coords = _map.GridTileToLocal(below.Comp.StoneGrid, grid, index);
 
@@ -397,7 +445,8 @@ public sealed class ZLevelBuildingSystem : EntitySystem
         if (TryComp<CMUZLevelMapComponent>(mapUid, out var zMap) && zMap.MapBelow is { } belowMap)
         {
             // A real, walkable authored floor below (a building floor) -> just step down onto it.
-            if (!HasComp<ZGeneratedStoneComponent>(belowMap) && HasWalkableFloorAt(belowMap, worldPos))
+            if ((!TryComp<ZGeneratedStoneComponent>(belowMap, out var stoneMarker) || stoneMarker.LocalizedToAuthoredLevel) &&
+                HasWalkableFloorAt(belowMap, worldPos))
                 return DescendToFloor(digger, gridUid, xform.Coordinates, belowMap);
 
             // Our stone, or an empty/void level -> turn it into diggable stone and dig in.
@@ -752,6 +801,11 @@ public sealed class ZLevelBuildingSystem : EntitySystem
             var size = Math.Max(2, settings.ChunkSize);
             var tile = _map.TileIndicesFor(stone.StoneGrid, grid, xform.Coordinates);
 
+            // An authored level may contain unrelated colony areas and voids. Only stream more cave when the
+            // player is currently in, or directly beside, a cave chunk already generated on that same level.
+            if (stone.LocalizedToAuthoredLevel && !IsNearGeneratedChunk(stone, tile, size))
+                continue;
+
             for (var cx = -StreamRadiusChunks; cx <= StreamRadiusChunks; cx++)
             {
                 for (var cy = -StreamRadiusChunks; cy <= StreamRadiusChunks; cy++)
@@ -760,6 +814,21 @@ public sealed class ZLevelBuildingSystem : EntitySystem
                 }
             }
         }
+    }
+
+    private static bool IsNearGeneratedChunk(ZGeneratedStoneComponent stone, Vector2i tile, int chunkSize)
+    {
+        var chunk = new Vector2i(FloorDiv(tile.X, chunkSize), FloorDiv(tile.Y, chunkSize));
+        for (var x = -1; x <= 1; x++)
+        {
+            for (var y = -1; y <= 1; y++)
+            {
+                if (stone.GeneratedChunks.Contains(chunk + new Vector2i(x, y)))
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     private static int FloorDiv(int a, int b) => (int) Math.Floor((double) a / b);

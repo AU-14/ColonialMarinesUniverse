@@ -1,0 +1,505 @@
+- type: entity
+  parent: CMWeaponPistolM1984
+  id: CMU14WeaponPistolGlock75
+  name: Glock 75 pistol
+  description: Austrian legend, designed in XX century, Glock quickly became a major player on the pistol market. This version was produced on a license for Prodigy CORP for security and police forces, features an underbarrel rail for a taser.
+  components:
+  - type: Tag
+    tags:
+    - Sidearm
+    - CMU14WeaponPistolGlock
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    scatterWielded: 12
+    scatterUnwielded: 14
+    baseFireRate: 10
+    burstScatterMult: 5
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock.rsi
+  - type: Clothing
+    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock.rsi
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 1.2
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMU14MagazinePistolGlock75
+          - CMU14MagazinePistolGlock77
+        startingItem: CMU14MagazinePistolGlock75
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentSuppressor
+          - RMCAttachmentSuppressorCompact
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBurstFireAssembly
+          - RMCAttachmentLaserSight
+          - CMU14AttachmentUnderbarrelTaser
+  - type: AttachableHolderVisuals
+    offsets:
+      rmc-aslot-barrel: 0.62, 0.095
+      rmc-aslot-rail: -0.065, 0.125
+      rmc-aslot-underbarrel: 0, 0
+
+- type: entity
+  parent: CMU14WeaponPistolGlock75
+  id: CMU14WeaponPistolGlock75Taser
+  suffix: Taser
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentSuppressor
+          - RMCAttachmentSuppressorCompact
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: CMU14AttachmentUnderbarrelTaser
+        whitelist:
+          tags:
+          - CMU14AttachmentUnderbarrelTaser
+
+- type: entity
+  parent: CMU14WeaponPistolGlock75
+  id: CMU14WeaponPistolGlock77
+  name: Glock 77 pistol
+  description: Austrian legend, designed in XX century, Glock quickly became a major player on the pistol market. This version was produced on a license for Prodigy CORP for security and police forces, features an underbarrel rail for a taser and fully automatic mode.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
+  - type: Clothing
+    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
+  - type: Gun
+    selectedMode: SemiAuto
+    availableModes:
+    - SemiAuto
+    - FullAuto
+    soundGunshot:
+      collection: CMM1984Shoot
+  - type: Tag
+    tags:
+    - Sidearm
+    - CMU14WeaponPistolGlock
+  - type: RMCSelectiveFire
+    baseFireModes:
+    - SemiAuto
+    - FullAuto
+    scatterWielded: 12
+    scatterUnwielded: 14
+    baseFireRate: 10
+    burstScatterMult: 5
+    modifiers:
+      FullAuto:
+        maxScatterModifier: 15
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMU14MagazinePistolGlock75
+          - CMU14MagazinePistolGlock77
+        startingItem: CMU14MagazinePistolGlock77
+
+- type: entity
+  parent: CMU14WeaponPistolGlock77
+  id: CMU14WeaponPistolGlock77Taser
+  suffix: Taser
+  components:
+  - type: AttachableHolder
+    slots:
+      rmc-aslot-barrel:
+        whitelist:
+          tags:
+          - RMCAttachmentBarrelCharger
+          - RMCAttachmentExtendedBarrel
+          - RMCAttachmentRecoilCompensator
+          - RMCAttachmentSuppressor
+          - RMCAttachmentSuppressorCompact
+      rmc-aslot-rail:
+        whitelist:
+          tags:
+          - RMCAttachmentRailFlashlight
+          - RMCAttachmentS5RedDotSight
+          - RMCAttachmentS5MicroRedDotSight
+          - RMCAttachmentS6ReflexSight
+      rmc-aslot-underbarrel:
+        startingAttachable: CMU14AttachmentUnderbarrelTaser
+        whitelist:
+          tags:
+          - CMU14AttachmentUnderbarrelTaser
+
+- type: Tag
+  id: CMU14WeaponPistolGlock
+
+- type: entity
+  parent: CMU14WeaponPistolGlock75
+  id: CMU14WeaponPistolGlock75Empty
+  suffix: Empty
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMU14MagazinePistolGlock75
+          - CMU14MagazinePistolGlock77
+
+
+- type: entity
+  parent: CMU14WeaponPistolGlock77
+  id: CMU14WeaponPistolGlock77Empty
+  suffix: Empty
+  components:
+  - type: ItemSlots
+    slots:
+      gun_magazine:
+        name: Magazine
+        insertSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_mk80_reload.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/Reload/gun_88m4_unload.ogg
+        priority: 2
+        whitelist:
+          tags:
+          - CMU14MagazinePistolGlock75
+          - CMU14MagazinePistolGlock77
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock75
+  name: Glock 75 magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock75
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mm
+    proto: CMCartridgePistol9mm
+    capacity: 17
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+  - type: MagazineVisuals
+    magState: mag
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock75AP
+  name: Glock 75 armour piercing magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock75
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mmAP
+    proto: CMCartridgePistolM77AP
+    capacity: 17
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock75HP
+  name: Glock 75 hollowpoint magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock75
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmHP
+    proto: RMCCartridgePistol9mmHP
+    capacity: 17
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#BA5D00"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock75Rubber
+  name: Glock 75 rubber magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock75
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmRubber
+    proto: RMCCartridgePistol9mmRubber
+    capacity: 17
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#3b35ab"
+  - type: MagazineVisuals
+    magState: mag
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock77
+  name: Glock 77 magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock77
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mm
+    proto: CMCartridgePistol9mm
+    capacity: 33
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#9c6c19"
+  - type: MagazineVisuals
+    magState: mag
+  - type: RefillableByBulletBox
+    bulletType: CMUBoxBulletsPistol9MM
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock77Rubber
+  name: Glock 77 rubber magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock77
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmRubber
+    proto: RMCCartridgePistol9mmRubber
+    capacity: 33
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#3b35ab"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock77AP
+  name: Glock 77 armour piercing magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock77
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mmAP
+    proto: CMCartridgePistolM77AP
+    capacity: 33
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock77HP
+  name: Glock 77 hollowpoint magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock77
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmHP
+    proto: RMCCartridgePistol9mmHP
+    capacity: 33
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#BA5D00"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
+  id: CMU14AttachmentUnderbarrelTaser
+  name: underbarrel taser
+  description: Prodigy CORP underbarrel taser for Glock 70-series.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
+    state: underbarreltaser
+  - type: Tag
+    tags:
+    - Taser
+    - RMCAttachmentUnderbarrel
+    - CMU14AttachmentUnderbarrelTaser
+  - type: Item
+    size: Normal
+  - type: Gun
+    soundGunshot:
+      path: /Audio/Weapons/Guns/Gunshots/taser.ogg
+  - type: Battery
+    maxCharge: 800
+    startingCharge: 800
+  - type: ProjectileBatteryAmmoProvider
+    proto: RMCProjectileTaser
+    fireCost: 100
+  - type: GunPointBlank
+  - type: GunDualWielding
+    weaponGroup: Handgun
+  - type: GunRequiresSkills
+    skills:
+      RMCSkillPolice: 1
+  - type: Wieldable
+  - type: MeleeWeapon
+    attackRate: 1
+    damage:
+      types:
+        Blunt: 5
+    soundHit:
+      path: /Audio/Weapons/Guns/Hits/energy_metal2.ogg
+  - type: RMCStaminaDamageOnHit
+    damage: 15
+  - type: AttachableToggleable
+    userOnly: true
+    attachedOnly: true
+    supercedeHolder: true
+    wieldedUseOnly: true
+    activatePopupText: attachable-popup-switch-to-generic
+    deactivatePopupText: attachable-popup-switch-from-generic
+    activateSound:
+      path: /Audio/Weapons/flash.ogg
+      params:
+        volume: -2
+    actionName: Switch to the underbarrel taser.
+    actionDesc: Switch to using the underbarrel taser.
+    icon:
+      sprite: _CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
+      state: underbarreltaser
+    iconActive:
+      sprite: _CMU14/Objects/Weapons/Attachments/underbarreltaser.rsi
+      state: underbarreltaser-on
+  - type: AttachableVisuals
+  - type: WieldedCrosshair
+    rsi:
+      sprite: _RMC14/Interface/MousePointer/shotgun_mouse.rsi
+      state: all
+
+- type: Tag
+  id: CMU14MagazinePistolGlock75
+
+- type: Tag
+  id: CMU14MagazinePistolGlock77
+
+- type: Tag
+  id: CMU14AttachmentUnderbarrelTaser

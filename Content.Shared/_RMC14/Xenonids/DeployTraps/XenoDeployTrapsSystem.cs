@@ -22,7 +22,6 @@ namespace Content.Shared._RMC14.Xenonids.DeployTraps;
 
 public sealed partial class XenoDeployTrapsSystem : EntitySystem
 {
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -51,7 +50,7 @@ public sealed partial class XenoDeployTrapsSystem : EntitySystem
             !TryComp(gridId, out MapGridComponent? grid))
             return;
 
-        var coords = args.Target.SnapToGrid(EntityManager, _map);
+        var coords = args.Target.SnapToGrid(EntityManager);
 
         if (!_examine.InRangeUnOccluded(xeno.Owner, coords, xeno.Comp.Range))
         {

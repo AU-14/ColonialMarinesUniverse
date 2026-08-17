@@ -1894,7 +1894,6 @@ public sealed class RMCHumanPrototypeRegressionTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var mapManager = server.ResolveDependency<IMapManager>();
 
         await server.WaitAssertion(() =>
         {
@@ -1970,7 +1969,6 @@ public sealed class RMCHumanPrototypeRegressionTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var mapManager = server.ResolveDependency<IMapManager>();
         var tileDefinitionManager = server.ResolveDependency<ITileDefinitionManager>();
 
         await server.WaitAssertion(() =>

@@ -35,7 +35,7 @@
   components:
   - type: Sprite
     drawdepth: WallMountedItems
-    noRot: true
+    noRot: false
     sprite: _CMU14/Structures/stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
@@ -53,7 +53,7 @@
     anchored: true
   - type: Clickable
   - type: Sprite
-    noRot: true
+    noRot: false
     sprite: _CMU14/Structures/stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
@@ -84,7 +84,7 @@
   components:
   - type: Sprite
     drawdepth: WallMountedItems
-    noRot: true
+    noRot: false
     sprite: _CMU14/Structures/stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5
@@ -107,7 +107,7 @@
   # the descent shaft), so the tint is the at-a-glance cue for "this staircase leads DOWN".
   # 🔧 TUNABLE: darkness of the down-stair sprite (white = no tint).
   - type: Sprite
-    noRot: true
+    noRot: false
     sprite: _CMU14/Structures/stairs.rsi
     state: p_stair_solo_cap
     offset: 0,0.5

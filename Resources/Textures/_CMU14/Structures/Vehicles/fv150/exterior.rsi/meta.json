@@ -63,6 +63,22 @@
             "name": "slauncher_2",
             "directions": 4
         },
+		{
+            "name": "twesnowplow_0",
+            "directions": 4
+        },
+	    {
+            "name": "twesnowplow_1",
+            "directions": 4
+        },
+		{
+            "name": "tweartillerymod_0",
+            "directions": 4
+        },
+        {
+            "name": "tweartillerymod_1",
+            "directions": 4
+        },
         {
             "name": "wheels_0",
             "directions": 4,

@@ -52,7 +52,7 @@
       path: /Audio/_RMC14/Vehicle/tank_engine_loop.wav
       params:
         volume: -6
-    runningSoundCooldown: 3.2
+    runningSoundCooldown: 3.38
     hornSound: /Audio/_RMC14/Vehicle/honk_2_truck.ogg
     hornCooldown: 1
     collisionSound:

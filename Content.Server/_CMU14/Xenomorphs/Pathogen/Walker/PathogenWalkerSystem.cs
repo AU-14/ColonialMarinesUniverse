@@ -54,13 +54,10 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protoMgr = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
     [Dependency] private readonly LanguageSystem _language = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
     [Dependency] private readonly BlindableSystem _blindable = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";

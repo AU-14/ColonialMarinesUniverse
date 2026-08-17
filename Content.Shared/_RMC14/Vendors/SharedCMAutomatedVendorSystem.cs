@@ -230,6 +230,13 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (vendor.Comp.Hacked)
             return;
 
+        if (!_skills.HasAllSkills(args.User, vendor.Comp.RequiredSkills))
+        {
+            _popup.PopupClient(Loc.GetString("rmc-skills-no-training", ("target", vendor)), vendor, args.User);
+            args.Cancel();
+            return;
+        }
+
         if (TryComp(vendor, out AccessReaderComponent? reader) &&
             reader.Enabled &&
             reader.AccessLists.Count > 0)

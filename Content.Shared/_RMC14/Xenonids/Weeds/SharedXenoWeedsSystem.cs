@@ -55,7 +55,6 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedGameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private INetManager _net = default!;
@@ -625,7 +624,7 @@ public abstract partial class SharedXenoWeedsSystem : EntitySystem
             return false;
         }
 
-        var entities = _mapSystem.GetAnchoredEntities(grid, coordinates.ToVector2i(EntityManager, _map, _transform));
+        var entities = _mapSystem.GetAnchoredEntities(grid, coordinates.ToVector2i(EntityManager, _transform));
         {
             foreach (var entity in entities)
             {

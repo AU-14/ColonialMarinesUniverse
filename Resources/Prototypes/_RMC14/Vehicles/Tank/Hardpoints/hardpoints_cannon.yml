@@ -273,10 +273,10 @@
     applyToMuzzleFlash: true
     useDirectionalOffsets: true
     rotateDirectionalOffsets: true
-    offsetEast: "0.45,-0.7"
-    offsetWest: "-0.45, -0.7"
-    offsetSouth: "0, -0.55"
-    offsetNorth: "0, -1.1"
+    offsetEast: "0.45,-1.2"
+    offsetWest: "-0.5,-1.2"
+    offsetSouth: "0,-1.0"
+    offsetNorth: "0, -1.4"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -298,7 +298,7 @@
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
-    maxIntegrity: 460
+    maxIntegrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -313,7 +313,7 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: Gun
-    fireRate: 0.15
+    fireRate: 0.3
     projectileSpeed: 60
     selectedMode: FullAuto
     availableModes:
@@ -339,10 +339,10 @@
     applyToMuzzleFlash: true
     useDirectionalOffsets: true
     rotateDirectionalOffsets: true
-    offsetEast: "0.45,-0.7"
-    offsetWest: "-0.45, -0.7"
-    offsetSouth: "0, -0.55"
-    offsetNorth: "0, -1.1"
+    offsetEast: "0.45,-1.35"
+    offsetWest: "-0.5,-1.35"
+    offsetSouth: "0,-1.1"
+    offsetNorth: "0, -1.4"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.IO;
 using Content.Shared.Maps;
 using Robust.Shared.EntitySerialization;
@@ -82,7 +83,7 @@ public sealed class RMCUpstreamTileAndPlatingCheck
 
                             foreach (var grid in grids)
                             {
-                                var allTiles = sMapSystem.GetAllTiles(grid, grid.Comp);
+                                var allTiles = sMapSystem.GetAllTiles(grid, grid.Comp).ToList();
                                 foreach (var tile in allTiles)
                                 {
                                     if (tile.Tile.TypeId == tileDefinition.TileId)

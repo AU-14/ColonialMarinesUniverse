@@ -77,6 +77,7 @@ rmc-xeno-evolution-failed-marines-dropped = The sky talls have already landed, w
 rmc-xeno-evolution-failed-queen-exists = The hive already has a Queen!
 rmc-xeno-evolution-start-self = We begin to twist and contort.
 rmc-xeno-evolution-start-others = {$xeno} begins to twist and contort.
+rmc-xeno-corruptedevolution-failed-insufficient-hours = You do not have enough playtime to evolve into a Corrupted Queen.
 
 # Insight
 rmc-xeno-insight-empower = We have gained sufficient insight in our prey to empower our next Deploy Traps!

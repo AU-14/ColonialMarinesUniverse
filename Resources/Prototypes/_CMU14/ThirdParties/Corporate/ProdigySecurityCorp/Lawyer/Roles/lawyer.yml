@@ -1,0 +1,103 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: CMU14JobCivilianProdigyLawyerBase
+  name: cmu14-job-name-lawyer
+  description: cmu14-job-description-lawyer
+  playTimeTracker: CMU14JobCivilianProdigyLawyer
+  basePlaytimeTracker: true
+
+- type: job
+  parent: CMU14JobCivilianProdigyLawyerBase
+  id: CMU14JobCivilianProdigyLawyer
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigyLawyer
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: CMU14JobCivilianProdigyLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: cmu14-job-prefix-lawyer
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+
+  name: cmu14-job-name-lawyer
+  description: cmu14-job-description-lawyer
+  setPreference: true
+  ranks:
+    CMU14RankProdigyLegalSpecialist: []
+  startingGear: CMU14GearCivilianProdigyLawyer
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Prodigy Lawyer (CMU)
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auprodigy
+  access:
+  - CMU14AccessCorporateProdigyLiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMU14GearCivilianProdigyLawyer
+  equipment:
+    jumpsuit: CMU14ProdigySuitBlack
+    shoes: RMCShoesLaceup
+    id: CMU14IDCardColonyProdigyLiaison
+    ears: CMU14ColonyProdigyHeadset
+    ears2: RMCM5CameraGear
+    pocket1: CMU14StampProdigyLawyer
+    back: CMSatchel
+  inhand:
+  - CMU14PortableVendorProdigy
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMU14JobProdigyLawyer
+  name: Prodigy Lawyer (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Lawyer
+    description: cmu14-job-name-lawyer
+    reregister: false
+    job: CMU14JobCivilianProdigyLawyer
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMU14SpawnPointCivilianProdigyLawyer
+  name: Spawn Point Civilian Prodigy Lawyer
+  components:
+  - type: SpawnPoint
+    job_id: CMU14JobCivilianProdigyLawyer
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMU14JobCivilianProdigyLawyer
+  isHumanoid: true

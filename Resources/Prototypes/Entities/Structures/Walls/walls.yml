@@ -21,6 +21,7 @@
   - type: Tag
     tags:
     - Wall
+  - type: ZLevelWallSupport
   - type: IsRoof
   - type: Sprite
     drawdepth: Walls

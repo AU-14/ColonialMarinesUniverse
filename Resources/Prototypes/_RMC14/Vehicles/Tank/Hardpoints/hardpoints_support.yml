@@ -116,7 +116,7 @@
     damageMultiplier: 0.075
     repairRate: 0.0125
   - type: HardpointIntegrity
-    maxIntegrity: 100
+    maxIntegrity: 250
   - type: VehicleTurret
     useDirectionalOffsets: true
     pixelOffsetNorth: "0,0"
@@ -245,4 +245,127 @@
   - type: HardpointVisual
     vehicleState: artillerymod_0
     damagedVehicleState: artillerymod_1
+    
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankSnowplow
+  name: tank snowplow
+  description: A reinforced snowplow attachment for a tank.
+  components:
+  - type: Sprite
+    state: snowplow
+  - type: HardpointItem
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.5
+    repairRate: 0.007
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+  - type: HardpointVisual
+    vehicleState: snowplow_0
+    damagedVehicleState: snowplow_1
+  - type: Tag
+    tags:
+    - VehiclePlow
+    
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankMountedFlag
+  name: Mounted UA Flag
+  description: A United Americas flag on a mounting support for the M34A2-A Multipurpose Turret. You feel a burst of energy by its mere sight.
+  components:
+  - type: Sprite
+    state: mounted_flag
+  - type: HardpointItem
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.0
+    repairRate: 0.0125
+  - type: DropshipTarget 
+    abbreviation: TANK
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+  - type: VehicleTurretAttachment
+  - type: VehicleTurret
+    offsetRotatesWithTurret: true
+    useDirectionalOffsets: true
+    pixelOffsetNorth: "8,-51"
+    pixelOffsetEast: "-56,5"
+    pixelOffsetSouth: "7,46"
+    pixelOffsetWest: "42,5"
+    showOverlay: true
+    overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
+    overlayState: mountedflag_0
+  - type: HardpointVisual
+    vehicleState: mountedflag_0
+    damagedVehicleState: mountedflag_2
+    
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: TWEVehicleTankArtilleryModule
+  name: Improper artillery module
+  description: An artillery support module for a tank.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    state: tweartillery
+  - type: HardpointItem
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.075
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 250
+  - type: VehicleTurret
+    useDirectionalOffsets: false
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
+    showOverlay: true
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: tweartillerymod_0
+  - type: VehicleGunnerViewAttachment
+    pvsScale: 0.5
+    cursorMaxOffset: 2.8
+    cursorPvsIncrease: 0.5
+  - type: HardpointVisual
+    vehicleState: tweartillerymod_0
+    damagedVehicleState: tweartillerymod_1
 
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankSnowplowTWE
+  name: Improper tank snowplow
+  description: A reinforced snowplow attachment for a tank.
+  components:
+  - type: Sprite
+    state: snowplow
+  - type: HardpointItem
+    hardpointType: Support
+    vehicleFamily: Tank
+    slotType: SupportAttachment
+    damageMultiplier: 0.5
+    repairRate: 0.007
+  - type: HardpointIntegrity
+    maxIntegrity: 250
+  - type: VehicleSpeedModifierAttachment
+    speedMultiplier: 0.7
+  - type: VehicleTurret
+    useDirectionalOffsets: false
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
+    showOverlay: true
+    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayState: twesnowplow_0
+  - type: HardpointVisual
+    vehicleState: twesnowplow_0
+    damagedVehicleState: twesnowplow_1
+  - type: Tag
+    tags:
+    - VehiclePlow

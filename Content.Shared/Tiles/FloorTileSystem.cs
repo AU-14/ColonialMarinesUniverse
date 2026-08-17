@@ -25,7 +25,6 @@ namespace Content.Shared.Tiles;
 public sealed partial class FloorTileSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private INetManager _netManager = default!;
     [Dependency] private ITileDefinitionManager _tileDefinitionManager = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;

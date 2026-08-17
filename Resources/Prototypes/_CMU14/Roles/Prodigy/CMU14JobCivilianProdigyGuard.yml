@@ -1,0 +1,134 @@
+- type: job
+  parent: CMJobBase
+  abstract: true
+  id: CMU14JobCivilianProdigyGuardBase
+  name: au14-job-name-wyguard
+  description: au14-job-description-wyguard
+  playTimeTracker: CMU14JobCivilianProdigyGuard
+  basePlaytimeTracker: true
+
+- type: job
+  parent: CMU14JobCivilianProdigyGuardBase
+  id: CMU14JobCivilianProdigyGuard
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigyGuard
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CMUProdigy
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-wyguard
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+
+  name: au14-job-name-wyguard
+  description: au14-job-description-wyguard
+  setPreference: true
+  ranks:
+    AU14RankPrDEnforcerSenior:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 360000 # 100 hours
+    AU14RankPrDEnforcer:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 180000 # 50 hours
+    AU14RankPrDSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 86400 # 24 hours
+    AU14RankPrDOperator:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 36000 # 10 hours
+    AU14RankPrDAssociate: []
+  startingGear: AU14GearCivilianProdigyGuard
+  icon: "RMCJobIconPMCGoonStandard"
+  requireAdminNotify: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Prodigy Corporate Goon (CMU)
+  accessGroups:
+  - auprodigy
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianProdigyGuard
+  equipment:
+    id: CMU14IDCardColonyProdigyLiaison
+    outerClothing: CMUArmorProdigyFlakVestAlt
+    jumpsuit: CMU14ProdigyJumpsuitGrey
+    shoes: RMCBootsSPPBlackFilled
+    head: CMU14ProdigyCapGrey
+    belt: RMCBeltSecurityWeYaFilled
+    back: CMSatchelMarine
+    ears: CMU14ColonyProdigyHeadset
+    ears2: RMCM5CameraGear
+    suitstorage: AU14BeltHolsterPistolBlack
+  storage:
+    suitstorage:
+    - CMU14WeaponPistolGlock75Taser
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    back:
+    #- CMU14MREProdigy todo, needs sprites
+    - CMU14MagazinePistolGlock75Rubber
+    - CMU14MagazinePistolGlock75Rubber
+    - CMU14MagazinePistolGlock75Rubber
+    - CMCanteen
+    - CMU14TearGasGrenade
+    - RMCGrenadeFlashBang
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: AU14SpawnPointCivilianProdigyGuard
+  name: Spawn Point Prodigy guard
+  components:
+  - type: SpawnPoint
+    job_id: CMU14JobCivilianProdigyGuard
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMU14JobCivilianProdigyGuard
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMU14JobCivilianProdigyGuard
+  points: 7
+  groups:
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC

@@ -113013,7 +113013,7 @@ entities:
     - type: Transform
       pos: 149.5,-141.5
       parent: 1
-- proto: RMCAegisCorpseSpawner
+- proto: CMUAegisCorpseSpawner
   entities:
   - uid: 8711
     components:
@@ -113040,7 +113040,7 @@ entities:
     - type: Transform
       pos: 143.5,-80.5
       parent: 1
-- proto: RMCAegisSpawner
+- proto: CMUAegisSpawner
   entities:
   - uid: 8716
     components:

@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.Fluids.EntitySystems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Coordinates;
@@ -53,7 +54,7 @@ namespace Content.IntegrationTests.Tests.Fluids
             // Remove all tiles
             await server.WaitPost(() =>
             {
-                var tiles = mapSystem.GetAllTiles(grid.Owner, grid.Comp);
+                var tiles = mapSystem.GetAllTiles(grid.Owner, grid.Comp).ToList();
                 foreach (var tile in tiles)
                 {
                     mapSystem.SetTile(grid, tile.GridIndices, Tile.Empty);

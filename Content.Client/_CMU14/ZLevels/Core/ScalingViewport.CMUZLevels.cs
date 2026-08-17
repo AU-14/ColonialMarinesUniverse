@@ -25,7 +25,6 @@ namespace Content.Client.Viewport;
 
 public sealed partial class ScalingViewport
 {
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ProfManager _prof = default!;
@@ -142,7 +141,6 @@ public sealed partial class ScalingViewport
             maxOpeningBounds,
             exactOpeningBounds,
             _zLevelGrids,
-            _mapManager,
             _mapSystem,
             _transform,
             _tile);
@@ -1198,7 +1196,7 @@ public sealed partial class ScalingViewport
         // Ceiling check: any non-empty tile on the upper map straight above the viewer means we're indoors.
         var viewerPos = _transform.GetWorldPosition(viewXform);
         var aboveCoords = new MapCoordinates(viewerPos, upperMapComp.MapId);
-        if (_mapManager.TryFindGridAt(aboveCoords, out var upperGridUid, out var upperGridComp))
+        if (_mapSystem.TryFindGridAt(aboveCoords, out var upperGridUid, out var upperGridComp))
         {
             var tileRef = _mapSystem.GetTileRef(upperGridUid, upperGridComp, aboveCoords);
             if (!tileRef.Tile.IsEmpty)

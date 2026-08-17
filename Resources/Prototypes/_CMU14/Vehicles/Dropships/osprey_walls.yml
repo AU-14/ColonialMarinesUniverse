@@ -70,7 +70,11 @@
     sprite: _AU14/Structures/Dropships/osprey_rear.rsi
     state: "1"
   - type: Occluder
-    boundingBox: "-1.625,-0.5,1.625,0.5"
+    polygon:
+    - -1.625,-0.5
+    - 1.625,-0.5
+    - 1.625,0.5
+    - -1.625,0.5
   - type: Fixtures
     fixtures:
       fix1:

@@ -1,7 +1,8 @@
 - type: entity
   parent: MarkerBase
   id: RMCAegisCorpseSpawner
-  name: AEGIS corpse spawner - Scientist
+  name: AEGIS corpse spawn - Scientist
+  suffix: RMC
   components:
   - type: Sprite
     sprite: _RMC14/Markers/landmarks.rsi
@@ -9,5 +10,5 @@
     - state: x
     - sprite: _RMC14/Markers/landmarks.rsi
       state: corpse_spawner
-  - type: AegisCorpseSpawner  
+  - type: AegisCorpseSpawner
     spawn: RMCCorpseScientistAegis

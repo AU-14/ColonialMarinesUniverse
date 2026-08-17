@@ -37,9 +37,6 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
     [Dependency] private readonly SharedXenoWatchSystem _xenoWatch = default!;
     [Dependency] private readonly QueenEyeSystem _queenEye = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly Robust.Server.Player.IPlayerManager _player = default!;
     [Dependency] private readonly XenoAnnounceSystem _xenoAnnounce = default!;
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
 

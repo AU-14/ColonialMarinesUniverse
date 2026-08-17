@@ -1,0 +1,175 @@
+name: Fast Publish
+
+concurrency:
+  group: publish
+  cancel-in-progress: true
+
+on:
+  workflow_dispatch:
+  # schedule:
+  # - cron: '0 10 * * *'
+    inputs:
+      use_changelog:
+        description: Update changelog using default settings? (don't overdo)
+        type: boolean
+        default: false
+
+env:
+  DOTNET_VERSION: 10.0.x
+  CONFIGURATION: Release
+  AUDIO_REPO_TOKEN: ${{ secrets.AUDIO_REPO_TOKEN }}
+
+jobs:
+  changelog:
+    uses: ./.github/workflows/update-changelog.yml
+    if: inputs.use_changelog == true
+    secrets: inherit
+    permissions:
+      contents: write
+
+  publish_start:
+    name: Start publish
+    needs: changelog
+    if: always() && (needs.changelog.result == 'success' || needs.changelog.result == 'skipped')
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    outputs:
+      already-published: ${{ steps.start.outputs.already-published }}
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+          sparse-checkout: |
+            RobustToolbox
+            Tools
+
+      - name: Checkout RobustToolbox
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --depth=1 RobustToolbox
+          cd RobustToolbox
+          git fetch --unshallow --tags origin
+
+      - name: Start publish
+        id: start
+        run: python3 Tools/publish_multi_request.py start
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+
+  package:
+    name: Package ${{ matrix.name }}
+    needs: [changelog, publish_start]
+    if: >-
+      always() &&
+      (needs.changelog.result == 'success' || needs.changelog.result == 'skipped') &&
+      needs.publish_start.result == 'success' &&
+      needs.publish_start.outputs.already-published != 'true'
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: client
+            command: client
+            restore: |
+              dotnet restore Content.Packaging/Content.Packaging.csproj
+              dotnet restore Content.Client/Content.Client.csproj
+            runner: blacksmith-8vcpu-ubuntu-2404
+          - name: server-win-x64
+            command: server --platform win-x64
+            restore: dotnet restore Content.Server/Content.Server.csproj --runtime win-x64 /p:TargetOs=Windows
+            runner: blacksmith-4vcpu-ubuntu-2404
+          - name: server-linux-x64
+            command: server --platform linux-x64
+            restore: dotnet restore Content.Server/Content.Server.csproj --runtime linux-x64 /p:TargetOs=Linux
+            runner: blacksmith-4vcpu-ubuntu-2404
+
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - name: Checkout ColonialMarinesAudio
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
+        uses: actions/checkout@v6.0.2
+        with:
+          repository: AU-14/ColonialMarinesAudio
+          token: ${{ env.AUDIO_REPO_TOKEN }}
+          path: __audio-overlay
+
+      - name: Rsync CMAudio into Resources
+        if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
+        run: |
+          mkdir -p Resources/Audio/_CMU14/Private/
+          rsync -a --delete \
+            __audio-overlay/Resources/Audio/_CMU14/Private/ \
+            Resources/Audio/_CMU14/Private/
+          du -sh Resources/Audio/_CMU14/Private/
+          rm -rf __audio-overlay
+
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/*.props
+            **/*.targets
+            **/packages.lock.json
+
+      - name: Restore dependencies
+        run: ${{ matrix.restore }}
+
+      - name: Build Packaging
+        run: dotnet build Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-restore /m
+
+      - name: Package ${{ matrix.name }}
+        run: dotnet run --project Content.Packaging --configuration ${{ env.CONFIGURATION }} --no-build --no-restore -- ${{ matrix.command }} --no-restore
+
+      - name: Upload ${{ matrix.name }} package
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: release-${{ matrix.name }}
+          path: release/*.zip
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+      - name: Upload ${{ matrix.name }} to Robust.Cdn
+        run: python3 Tools/publish_multi_request.py upload release/*.zip
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+
+  publish_finish:
+    name: Finish publish
+    if: >-
+      always() &&
+      needs.publish_start.result == 'success' &&
+      needs.publish_start.outputs.already-published != 'true'
+    runs-on: blacksmith-2vcpu-ubuntu-2404
+    needs: [publish_start, package]
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+          sparse-checkout: Tools
+
+      - name: Publish version
+        if: needs.package.result == 'success'
+        run: python3 Tools/publish_multi_request.py finish
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+
+      - name: Abort incomplete publish
+        if: needs.package.result != 'success'
+        continue-on-error: true
+        run: python3 Tools/publish_multi_request.py finish
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}

@@ -18,7 +18,7 @@ public sealed partial class XenoChargeComponent : Component
     public DamageSpecifier Damage = new();
 
     [DataField, AutoNetworkedField]
-    public float Range = 9;
+    public float Range = 5;
 
     [DataField, AutoNetworkedField]
     public float SlowRange = 1.5f;
@@ -30,7 +30,7 @@ public sealed partial class XenoChargeComponent : Component
     public TimeSpan StunTime = TimeSpan.FromSeconds(2);
 
     [DataField, AutoNetworkedField]
-    public TimeSpan ChargeDelay = TimeSpan.FromSeconds(0.6);
+    public TimeSpan ChargeDelay = TimeSpan.FromSeconds(1.2);
 
     [DataField, AutoNetworkedField]
     public SoundSpecifier? ChargeWindupSound;

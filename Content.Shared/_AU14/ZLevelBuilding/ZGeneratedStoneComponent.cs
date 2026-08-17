@@ -11,11 +11,18 @@ namespace Content.Shared._AU14.ZLevelBuilding;
 /// dug map). Tracks which chunks have already had their dirt/stone generated so generation is per-chunk
 /// and idempotent - each chunk is filled exactly once, on demand, as a digger or nearby player reaches it.
 /// </summary>
-// NetworkedComponent (presence only): the client uses it to know a map is an underground stone level so the
-// structural scanner overlay only draws there. The collection fields stay server-side and are not networked.
-[RegisterComponent, NetworkedComponent]
+// Only the localized/authored distinction is networked for scanner behavior. Runtime generation collections
+// remain server-side.
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class ZGeneratedStoneComponent : Component
 {
+    /// <summary>
+    /// True when stone is being generated into empty tiles of an authored z-level. In this mode mapped terrain
+    /// is an immutable cave boundary and player streaming only expands from an existing generated cave.
+    /// </summary>
+    [DataField, AutoNetworkedField, ViewVariables]
+    public bool LocalizedToAuthoredLevel;
+
     /// <summary>The grid (on this map) that holds the generated stone.</summary>
     [ViewVariables]
     public EntityUid StoneGrid;
@@ -23,6 +30,13 @@ public sealed partial class ZGeneratedStoneComponent : Component
     /// <summary>Chunk coordinates (tile-index / chunk size) that have already been generated.</summary>
     [ViewVariables]
     public readonly HashSet<Vector2i> GeneratedChunks = new();
+
+    /// <summary>
+    /// Exact tiles created by localized generation. Cave-in traversal treats every other tile on an authored
+    /// level as solid, preventing a generated pocket from propagating through mapped colony terrain.
+    /// </summary>
+    [ViewVariables]
+    public readonly HashSet<Vector2i> GeneratedTiles = new();
 
     /// <summary>
     /// Event-driven cave-in: tiles whose roof stability may have changed and need re-evaluating. Populated when
@@ -49,6 +63,13 @@ public sealed partial class ZGeneratedStoneComponent : Component
     [ViewVariables]
     public readonly List<Vector2i> CollapseQueue = new();
 
+    /// <summary>
+    /// Index of the next tile to bury in <see cref="CollapseQueue"/>. Advancing a cursor avoids shifting every
+    /// remaining tile toward index zero after each collapse batch.
+    /// </summary>
+    [ViewVariables]
+    public int CollapseQueueIndex;
+
     /// <summary>When the next batch of <see cref="CollapseQueue"/> tiles should be buried.</summary>
     [ViewVariables]
     public TimeSpan CollapseNextStep;
@@ -63,4 +84,11 @@ public sealed partial class ZGeneratedStoneComponent : Component
     /// </summary>
     [ViewVariables]
     public readonly List<Vector2i> LastCollapseRegion = new();
+
+    /// <summary>
+    /// Exact Chebyshev distance from the active collapse region to nearby tiles. Built once when a collapse
+    /// starts and used for constant-time player feedback range checks throughout the collapse.
+    /// </summary>
+    [ViewVariables]
+    public readonly Dictionary<Vector2i, int> CollapseFeedbackDistances = new();
 }

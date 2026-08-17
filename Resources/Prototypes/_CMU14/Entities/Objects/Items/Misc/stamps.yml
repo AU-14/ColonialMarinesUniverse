@@ -176,6 +176,44 @@
   - type: Stamp
     stampedName: stamp-component-stamped-name-au14-cs
 
+# Prodigy
+
+- type: entity
+  parent: AU14StampBase
+  id: CMU14StampProdigyLiaison
+  name: prodigy liaison's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-rd
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-cmu14-prodigy-liaison
+    stampedColor: "#92969A"
+    stampState: "paper_stamp-wizard"
+
+- type: entity
+  parent: AU14StampBase
+  id: CMU14StampProdigySupervisor
+  name: prodigy supervisor's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-rd
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-cmu14-prodigy-supervisor
+    stampedColor: "#92969A"
+    stampState: "paper_stamp-wizard"
+
+- type: entity
+  parent: AU14StampBase
+  id: CMU14StampProdigyLawyer
+  name: prodigy lawyer's rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-rd
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-cmu14-prodigy-lawyer
+    stampedColor: "#92969A"
+    stampState: "paper_stamp-wizard"
+
 # Laselle Liaison and Ambassadors
 
 - type: entity
@@ -417,7 +455,7 @@
 
 - type: entity
   parent: AU14StampBase
-  id: AU14StampProvostInspector
+  id: CMUStampProvostInspector
   name: provost inspector rubber stamp
   components:
   - type: Sprite
@@ -519,16 +557,27 @@
 
 - type: entity
   parent: AU14StampBase
-  id: AU14StampProvost
+  id: CMUStampProvost
   name: provost rubber stamp
-  suffix: Admin, Provost
   components:
   - type: Sprite
     state: stamp-provost # RMC14 Todo: update sprite
   - type: Stamp
     stampedName: stamp-component-stamped-name-au14-provost
     stampedColor: "#cb0000"
-    stampState: "paper_stamp-provost"
+    stampState: "paper_stamp-provost-inspector"
+
+- type: entity
+  parent: AU14StampBase
+  id: CMUStampAegis
+  name: AEGIS armaments rubber stamp
+  components:
+  - type: Sprite
+    state: stamp-marine
+  - type: Stamp
+    stampedName: stamp-component-stamped-name-au14-aegis
+    stampedColor: "#134975"
+    stampState: "paper_stamp-aegis"
 
 - type: entity
   parent: AU14StampBase

@@ -17,7 +17,6 @@ public sealed partial class RoofOverlay : Overlay
 {
     private readonly IEntityManager _entManager;
     [Dependency] private IPlayerManager _player = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IOverlayManager _overlay = default!;
 
     private readonly EntityLookupSystem _lookup;

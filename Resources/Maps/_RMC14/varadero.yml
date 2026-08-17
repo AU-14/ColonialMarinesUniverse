@@ -152850,7 +152850,7 @@ entities:
     - type: Transform
       pos: 5.5313225,176.13785
       parent: 1
-- proto: RMCAegisCorpseSpawner
+- proto: CMUAegisCorpseSpawner
   entities:
   - uid: 20691
     components:
@@ -152877,7 +152877,7 @@ entities:
     - type: Transform
       pos: 33.5,77.5
       parent: 1
-- proto: RMCAegisSpawner
+- proto: CMUAegisSpawner
   entities:
   - uid: 20696
     components:

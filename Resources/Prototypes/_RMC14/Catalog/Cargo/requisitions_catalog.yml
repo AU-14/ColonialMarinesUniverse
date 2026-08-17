@@ -193,6 +193,22 @@
         crate: CMUCrateVehicleAmmoLTBCannonMixed
         maxStock: 2
         stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonAPFSDS
+        maxStock: 2
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonHEAT
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonHE
+        maxStock: 2
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonCanister
+        maxStock: 2
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonNapalm
+        maxStock: 2
       - cost: 1800
         crate: RMCCrateVehicleAmmoLTAAAP
         maxStock: 2

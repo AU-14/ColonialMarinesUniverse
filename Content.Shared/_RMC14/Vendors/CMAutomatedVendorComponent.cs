@@ -22,6 +22,9 @@ public sealed partial class CMAutomatedVendorComponent : Component
     public List<ProtoId<JobPrototype>> Jobs = new();
 
     [DataField, AutoNetworkedField]
+    public Dictionary<EntProtoId<SkillDefinitionComponent>, int> RequiredSkills = new();
+
+    [DataField, AutoNetworkedField]
     public List<ProtoId<RankPrototype>> Ranks = new();
 
     [DataField, AutoNetworkedField]

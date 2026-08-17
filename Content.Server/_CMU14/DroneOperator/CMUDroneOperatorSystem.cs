@@ -2463,6 +2463,9 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (coords.MapId == MapId.Nullspace)
             return;
 
+        if (TerminatingOrDeleted(Transform(drone.Owner).ParentUid))
+            return;
+
         Spawn(drone.Comp.RuinedCorePrototype, coords);
 
         if (drone.Comp.Operator is { } operatorUid &&

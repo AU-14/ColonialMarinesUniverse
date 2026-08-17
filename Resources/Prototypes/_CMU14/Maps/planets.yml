@@ -545,6 +545,9 @@
 #    - badBloodClanThreat
 
     thirdparties:
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
     - WEYUSurvLarge
     - WEYUSurvMedium
     - WEYUSurvSmall
@@ -723,6 +726,9 @@
     daycycleenabled: true
     faction: ua
     thirdparties:
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
     - ICRCReliefParty
     - cultistThirdParty
     - UPPGROM
@@ -786,6 +792,9 @@
     daycycleenabled: true
     faction: ua
     thirdparties:
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
     - IASFSurvLarge
     - IASFSurvMedium
     - IASFSurvSmall
@@ -845,6 +854,9 @@
     opforinship: true
     daycycleenabled: true
     thirdparties:
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
     - USArmy
     - USArmyAlt
     - USArmyAlt2
@@ -905,6 +917,9 @@
     opforinship: true
     daycycleenabled: true
     thirdparties:
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
     - USArmy
     - USArmyAlt
     - USArmyAlt2
@@ -962,6 +977,9 @@
     opforinship: true
     daycycleenabled: false
     thirdparties:
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
     - USArmy
     - USArmyAlt
     - USArmyAlt2
@@ -1025,6 +1043,9 @@
     opforinship: true
     daycycleenabled: false
     thirdparties:
+    - ProdigySurvLarge
+    - ProdigySurvMedium
+    - ProdigySurvSmall
     - USArmy
     - USArmyAlt
     - USArmyAlt2

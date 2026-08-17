@@ -96,6 +96,16 @@ public sealed partial class AreaSystem : EntitySystem
         EnsureAreaEntityExists(areaGrid, area);
     }
 
+    public bool RemoveArea(AreaGridComponent areaGrid, Vector2i position)
+    {
+        if (!areaGrid.Areas.Remove(position))
+            return false;
+
+        areaGrid.Colors.Remove(position);
+        areaGrid.Labels.Remove(position);
+        return true;
+    }
+
     public bool SetAlwaysPowered(Entity<AreaComponent> area, bool alwaysPowered)
     {
         if (area.Comp.AlwaysPowered == alwaysPowered)

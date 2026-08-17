@@ -278,19 +278,22 @@
       tags:
       - Bottle
   - type: CMAutomatedVendor # TODO RMC14 different ui style
+    scaling: false
+    randomUnstockAmount: null
+    randomEmptyChance: null
     sections:
     - name: Liquid bottles
       entries:
       - id: CMBottleBicaridine
-        amount: 16
+        amount: 10
       - id: CMBottleDylovene
-        amount: 12
+        amount: 10
       - id: CMBottleDexalin
-        amount: 8
+        amount: 10
       - id: CMBottleInaprovaline
-        amount: 8
+        amount: 10
       - id: CMBottleKelotane
-        amount: 14
+        amount: 10
 #      - id: CMBottleOxycodone # TODO RMC14
 #        amount: 6
 #      - id: CMBottlePeridaxon # TODO RMC14
@@ -304,9 +307,9 @@
         amount: 10
       - id: CMBeakerLarge
         name: Beaker, Large (120 units)
-        amount: 6
+        amount: 10
       - id: RMCBoxPillCanister
-        amount: 5
+        amount: 10
       - id: RMCDropper
         amount: 5
       - id: CMSyringe

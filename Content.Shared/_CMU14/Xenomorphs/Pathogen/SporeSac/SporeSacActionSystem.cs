@@ -1,6 +1,5 @@
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Popups;
-using Robust.Shared.Network;
 using Content.Shared._RMC14.Actions;
 using Content.Shared.DoAfter;
 
@@ -13,7 +12,6 @@ namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeSac;
 /// </summary>
 public sealed partial class CMUXenoSporeSacSystem : EntitySystem
 {
-    [Dependency] private readonly INetManager _net = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;

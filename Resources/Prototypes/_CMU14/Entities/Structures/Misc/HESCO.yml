@@ -70,7 +70,11 @@
     range: 0.4
     spread: 0.2
   - type: Occluder
-    boundingBox: "-0.49,-0.45,0.49,-0.15"
+    polygon:
+    - -0.49,-0.45
+    - 0.49,-0.45
+    - 0.49,-0.15
+    - -0.49,-0.15
   - type: Fixtures
     fixtures:
       fix1:

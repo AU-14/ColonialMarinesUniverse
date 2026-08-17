@@ -11,6 +11,7 @@ namespace Content.Client.Stealth;
 public sealed partial class StealthSystem : SharedStealthSystem
 {
     private static readonly ProtoId<ShaderPrototype> Shader = "Stealth";
+    private const string ShaderId = "Stealth";
 
     [Dependency] private IPrototypeManager _protoMan = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
@@ -44,9 +45,19 @@ public sealed partial class StealthSystem : SharedStealthSystem
             return;
 
         _sprite.SetColor((uid, sprite), Color.White);
-        sprite.PostShader = enabled ? _shader : null;
-        sprite.GetScreenTexture = enabled;
-        sprite.RaiseShaderEvent = enabled;
+
+        if (enabled)
+        {
+            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, _shader)
+            {
+                GetScreenTexture = true,
+                RaiseShaderEvent = true,
+            });
+        }
+        else
+        {
+            _sprite.RemovePostShader(sprite, ShaderId);
+        }
 
         if (!enabled)
         {

@@ -383,7 +383,7 @@ public sealed partial class RunechatSpeechBubble : SpeechBubble
 {
     value = value.Trim('"', '\'');
 
-    if (Color.TryFromHex(value) is { } hexColor)
+    if (Color.TryFromHex(value, out var hexColor))
     {
         color = hexColor;
         return true;

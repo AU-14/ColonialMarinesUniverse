@@ -32,6 +32,7 @@ public abstract partial class SharedSentryTargetingSystem : EntitySystem
         { "UPP", "AUUpp" },
         { "AUWeYu", "FactionWEYU" },
         { "WeYa", "FactionWEYU" },
+        { "Prodigy", "FactionProdigy" },
     };
 
     public static readonly HashSet<string> SentryAllowedFactions = SentryFactionToIff.Keys.ToHashSet();

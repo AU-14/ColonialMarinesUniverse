@@ -279,7 +279,7 @@ jobs:
           git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --depth=1 RobustToolbox
           cd RobustToolbox
-          git fetch --depth=1
+          git fetch --unshallow --tags origin
 
       - uses: actions/download-artifact@v8.0.1
         with:

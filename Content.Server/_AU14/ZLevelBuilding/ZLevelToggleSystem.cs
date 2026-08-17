@@ -35,7 +35,7 @@ public sealed class ZLevelToggleSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
     [Dependency] private readonly IResourceManager _resource = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly CustomConstructionMenuSystem _menu = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
@@ -69,7 +69,7 @@ public sealed class ZLevelToggleSystem : EntitySystem
         if (!_mapManager.MapExists(ev.Map))
             return;
 
-        var mapUid = _mapManager.GetMapEntityId(ev.Map);
+        var mapUid = _mapManager.GetMapOrInvalid(ev.Map);
         if (!mapUid.IsValid())
             return;
 

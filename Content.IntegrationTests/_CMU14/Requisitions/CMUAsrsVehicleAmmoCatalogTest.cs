@@ -14,6 +14,11 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
     private static readonly EntProtoId[] VehicleAmmoCrates =
     [
         "CMUCrateVehicleAmmoLTBCannonMixed",
+        "CMUCrateVehicleAmmoLTBCannonAPFSDS",
+        "CMUCrateVehicleAmmoLTBCannonHEAT",
+        "CMUCrateVehicleAmmoLTBCannonHE",
+        "CMUCrateVehicleAmmoLTBCannonCanister",
+        "CMUCrateVehicleAmmoLTBCannonNapalm",
         "RMCCrateVehicleAmmoLTAAAP",
         "RMCCrateVehicleAmmoAceAutocannon",
         "RMCCrateVehicleAmmoDragonFlamer",

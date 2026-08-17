@@ -27,6 +27,14 @@
   name: au14-job-name-civiliancorporateliaison
 
 - type: accessLevel
+  id: CMU14AccessCorporateProdigy
+  name: au14-job-name-civiliancorporateliaison
+
+- type: accessLevel
+  id: CMU14AccessCorporateProdigyLiaison
+  name: au14-job-name-civiliancorporateliaison
+
+- type: accessLevel
   id: AU14AccessColonyAmbassador
   name: au14-job-name-civilianambassador
 

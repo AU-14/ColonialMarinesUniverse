@@ -21,8 +21,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
 {
     [Dependency] private readonly IPlayerManager _player = default!;
     [Dependency] private readonly IOverlayManager _overlays = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
 
     public const int MaxRadius = 5; // 11x11
@@ -133,7 +132,7 @@ public sealed class BuildSaveModeSystem : EntitySystem
             return;
 
         Active = true;
-        _overlay ??= new BuildSaveOverlay(this, _player, _mapManager, _mapSystem, _transform, EntityManager);
+        _overlay ??= new BuildSaveOverlay(this, _player, _mapManager, _transform, EntityManager);
         _overlays.AddOverlay(_overlay);
         RequestRefresh();
     }

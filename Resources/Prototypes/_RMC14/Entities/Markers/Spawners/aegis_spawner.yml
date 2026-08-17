@@ -1,7 +1,8 @@
 - type: entity
   parent: MarkerBase
   id: RMCAegisSpawner
-  name: AEGIS crate spawner
+  name: AEGIS abomb spawn
+  suffix: RMC
   components:
   - type: Sprite
     sprite: _RMC14/Markers/aegis-spawner.rsi

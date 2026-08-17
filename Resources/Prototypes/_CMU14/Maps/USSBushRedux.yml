@@ -2,13 +2,13 @@
   id: USSBushRedux
   mapName: USS George Bush
   allegiance: Neutral
-  mapPath: /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize0.yml
+  mapPath: /Maps/_AU14/USSBushMultiZ/USSBushMultiZ0.yml
   mapsBelow:
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize-1.yml
+  - /Maps/_AU14/USSBushMultiZ/USSBushMultiZ-1.yml
   mapsAbove:
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize1.yml
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize2.yml
-  - /Maps/_AU14/USSBushMultiZ/USSBushReworkFinalize3.yml
+  - /Maps/_AU14/USSBushMultiZ/USSBushMultiZ1.yml
+  - /Maps/_AU14/USSBushMultiZ/USSBushMultiZ2.yml
+  - /Maps/_AU14/USSBushMultiZ/USSBushMultiZ3.yml
   minPlayers: 0
   maxPlayers: 75
   maxRandomOffset: 0

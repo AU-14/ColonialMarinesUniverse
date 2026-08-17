@@ -1,6 +1,8 @@
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Vehicles;
+using Robust.Shared.Physics;
+using Robust.Shared.Physics.Components;
 using Robust.Shared.Timing;
 using DiagnosticStopwatch = System.Diagnostics.Stopwatch;
 
@@ -82,6 +84,30 @@ public sealed partial class CMUZLevelsSystem
                 ent.Comp.Velocity,
                 HasComp<CMUVehicleZTraversalComponent>(ent.Owner)))
         {
+            // A virtual surface (notably the top of a wall on the level below) has no floor fixture on this map
+            // for ordinary physics to land on. DistanceToGround can correctly decide that we are supported while
+            // the body is still marked InAir, which makes horizontal movement use frictionless airborne movement
+            // even though z-physics refuses to let the entity fall. Fully settle sticky virtual-ground contacts
+            // before putting z-physics back to sleep.
+            if (stickyGround)
+            {
+                var oldLocalPosition = ent.Comp.LocalPosition;
+                var oldVelocity = ent.Comp.Velocity;
+                ent.Comp.LocalPosition -= distance;
+                ent.Comp.Velocity = 0f;
+
+                if (MathF.Abs(oldLocalPosition - ent.Comp.LocalPosition) > 0.01f)
+                    DirtyField(ent.Owner, ent.Comp, nameof(CMUZPhysicsComponent.LocalPosition));
+                if (MathF.Abs(oldVelocity) > 0.01f)
+                    DirtyField(ent.Owner, ent.Comp, nameof(CMUZPhysicsComponent.Velocity));
+
+                if (TryComp<PhysicsComponent>(ent.Owner, out var physics) &&
+                    physics.BodyStatus != BodyStatus.OnGround)
+                {
+                    _physics.SetBodyStatus(ent.Owner, physics, BodyStatus.OnGround);
+                }
+            }
+
             RemCompDeferred<CMUZFallingComponent>(ent.Owner);
             return;
         }

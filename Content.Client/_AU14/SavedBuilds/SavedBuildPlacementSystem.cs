@@ -35,12 +35,11 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     [Dependency] private readonly IOverlayManager _overlays = default!;
     [Dependency] private readonly IEyeManager _eye = default!;
     [Dependency] private readonly IInputManager _input = default!;
-    [Dependency] private readonly IMapManager _mapManager = default!;
+    [Dependency] private readonly SharedMapSystem _mapManager = default!;
     [Dependency] private readonly IPrototypeManager _proto = default!;
     [Dependency] private readonly IClientAdminManager _admin = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedMapSystem _mapSystem = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly CMUClientZLevelsSystem _zLevels = default!;
@@ -169,8 +168,8 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         var cursor = _eye.PixelToMap(_input.MouseScreenPosition);
         if (GridAligned && _mapManager.TryFindGridAt(cursor, out var gridUid, out var grid))
         {
-            var tile = _mapSystem.CoordinatesToTile(gridUid, grid, cursor);
-            return _mapSystem.GridTileToWorld(gridUid, grid, tile);
+            var tile = _mapManager.CoordinatesToTile(gridUid, grid, cursor);
+            return _mapManager.GridTileToWorld(gridUid, grid, tile);
         }
 
         return cursor;
@@ -183,7 +182,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         if (zOffset == 0)
             return true;
 
-        var mapUid = _mapManager.GetMapEntityId(target.MapId);
+        var mapUid = _mapManager.GetMapOrInvalid(target.MapId);
         if (!mapUid.Valid || !_zLevels.TryMapOffset(mapUid, zOffset, out _, out var mapComp))
             return false;
 
@@ -299,7 +298,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
         if (_mapManager.TryFindGridAt(coords, out gridUid, out _))
             return true;
 
-        var mapUid = _mapManager.GetMapEntityId(coords.MapId);
+        var mapUid = _mapManager.GetMapOrInvalid(coords.MapId);
         if (mapUid.Valid && HasComp<MapGridComponent>(mapUid))
         {
             gridUid = mapUid;

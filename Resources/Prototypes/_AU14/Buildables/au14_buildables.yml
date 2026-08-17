@@ -55,7 +55,8 @@
     graph: AU14BuildWallMetalGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallMetalRecipe
@@ -109,7 +110,8 @@
     graph: AU14BuildWallWoodGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallWoodRecipe
@@ -183,7 +185,8 @@
     graph: AU14BuildWallReinforcedGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallReinforcedRecipe
@@ -240,7 +243,43 @@
         doAfter: 5
 
 - type: entity
+  abstract: true
   parent: CMWallReinforcedHeavy
+  id: AU14BuildWallHeavyBase
+  components:
+  - type: Damageable
+    damageContainer: StructuralMarine
+    damageModifierSet: CMU14StructuralMarine
+  - type: ExaminableDamage
+    messages: RMCWallMessages
+  - type: RMCIntegrityExamine
+  - type: RMCRepairable
+    heal: 1000
+    delay: 1
+  - type: NailgunRepairable
+    wallRepairFractions:
+      RMCWood: 0.075
+      CMSteel: 0.15
+      CMPlasteel: 0.3
+  - type: RMCGenericExamine
+    message: rmc-structure-wall-repair-examine-tip
+    whitelist:
+      components:
+      - Marine
+  - type: ReceiverXenoClaws
+    maxHealth: 12000
+    minimumClawStrength: VerySharp
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 12000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: AU14BuildWallHeavyBase
   id: AU14BuildWallHeavyMid
   suffix: AU14 buildable (in progress)
   components:
@@ -249,7 +288,7 @@
     node: mid
 
 - type: entity
-  parent: CMWallReinforcedHeavy
+  parent: AU14BuildWallHeavyBase
   id: AU14BuildWallHeavy
   suffix: AU14 buildable
   components:
@@ -257,7 +296,8 @@
     graph: AU14BuildWallHeavyGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallHeavyRecipe

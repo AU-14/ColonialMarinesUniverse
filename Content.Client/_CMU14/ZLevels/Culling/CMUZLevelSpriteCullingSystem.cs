@@ -22,7 +22,6 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEyeManager _eyeManager = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private SharedMapSystem _map = default!;
@@ -166,7 +165,6 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
             maxOpeningBounds,
             true,
             _openingGrids,
-            _mapManager,
             _map,
             _transform,
             _tile);

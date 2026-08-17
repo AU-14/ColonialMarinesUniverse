@@ -146,3 +146,12 @@
   id: THREAT
   hostile:
    - GOVFOR
+
+- type: npcFaction
+  id: CMU14PathogenWalker
+  hostile:
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR

@@ -2,7 +2,7 @@ using System.Linq;
 using Content.Server.Popups;
 using Content.Shared._CMU14.Round.Objectives;
 using Content.Shared._CMU14.Round.Objectives.Type;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared.Popups;
 
 namespace Content.Server._CMU14.Round.Objectives.Type;

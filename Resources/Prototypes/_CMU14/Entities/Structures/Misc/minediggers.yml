@@ -18,7 +18,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-1.734375,-3.171875,-2.734375,3.171875"
+          bounds: "-2.734375,-3.171875,-1.734375,3.171875"
         mask:
         - FullTileMask
         layer:
@@ -45,7 +45,7 @@
       fix1:
         shape:
           !type:PhysShapeAabb
-          bounds: "-1.734375,-3.171875,-2.734375,3.171875"
+          bounds: "-2.734375,-3.171875,-1.734375,3.171875"
         mask:
         - FullTileMask
         layer:

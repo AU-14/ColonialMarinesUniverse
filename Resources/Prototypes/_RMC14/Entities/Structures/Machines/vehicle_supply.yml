@@ -477,6 +477,10 @@
           name: M56 cupola
           item: VehicleTankM56Cupola
           slot: primary::turret-launcher
+        - id: VehicleTankRERE700
+          name: RE-RE700 cupola
+          item: VehicleTankRERE700
+          slot: primary::turret-launcher
       - id: standardtreads
         name: Treads
         options:
@@ -506,10 +510,6 @@
       - id: auxiliary
         name: Auxiliary
         options:
-        - id: VehicleTankSnowplow
-          name: snowplow
-          item: VehicleTankSnowplow
-          slot: armor
         - id: VehicleTankReinforcedTreads
           name: reinforced treads
           item: VehicleTankReinforcedTreads
@@ -536,6 +536,14 @@
         - id: VehicleTankArtilleryModule
           name: artillery module
           item: VehicleTankArtilleryModule
+          slot: support
+        - id: VehicleTankSnowplow
+          name: snowplow
+          item: VehicleTankSnowplow
+          slot: support
+        - id: VehicleTankMountedFlag
+          name: Mounted UA Flag
+          item: VehicleTankMountedFlag
           slot: support
       hardpoints:
       - VehicleTankTurret
@@ -601,6 +609,10 @@
           name: M56 cupola
           item: VehicleTankM56Cupola
           slot: primary::turret-launcher
+        - id: VehicleTankRERE700
+          name: RE-RE700 cupola
+          item: VehicleTankRERE700
+          slot: primary::turret-launcher
       - id: standardtreads
         name: Treads
         options:
@@ -630,10 +642,6 @@
       - id: auxiliary
         name: Auxiliary
         options:
-        - id: VehicleTankSnowplow
-          name: snowplow
-          item: VehicleTankSnowplow
-          slot: armor
         - id: VehicleTankReinforcedTreads
           name: reinforced treads
           item: VehicleTankReinforcedTreads
@@ -660,6 +668,10 @@
         - id: VehicleTankArtilleryModule
           name: artillery module
           item: VehicleTankArtilleryModule
+          slot: support
+        - id: VehicleTankSnowplow
+          name: snowplow
+          item: VehicleTankSnowplow
           slot: support
       hardpoints:
       - VehicleTankTurret
@@ -780,22 +792,10 @@
       - id: secondary
         name: Secondary
         options:
-        - id: VehicleTankFlamer
-          name: flamer
-          item: VehicleTankFlamer
-          slot: primary::turret-launcher
-        - id: VehicleTankGrenadeLauncher
-          name: grenade launcher
-          item: VehicleTankGrenadeLauncher
-          slot: primary::turret-launcher
-        - id: VehicleTankTowLauncher
-          name: TOW launcher
-          item: VehicleTankTowLauncher
-          slot: primary::turret-launcher
-        - id: VehicleTankM56Cupola
-          name: M56 cupola
-          item: VehicleTankM56Cupola
-          slot: primary::turret-launcher
+        - id: VehicleTankCupolaTWE
+          name: L98 General Purpose Machine Gun
+          item: VehicleTankCupolaTWE
+          slot: secondary
       - id: standardtreads
         name: Treads
         options:
@@ -809,6 +809,14 @@
         - id: VehicleTankRocketLauncherTWE
           name: L-39T Smoke Discharger
           item: VehicleTankRocketLauncherTWE
+          slot: support
+        - id: TWEVehicleTankArtilleryModule
+          name: Artillery Module
+          item: TWEVehicleTankArtilleryModule
+          slot: support
+        - id: VehicleTankSnowplowTWE
+          name: Snowplow 
+          item: VehicleTankSnowplowTWE
           slot: support
       hardpoints:
       - VehicleTankTurretTWE

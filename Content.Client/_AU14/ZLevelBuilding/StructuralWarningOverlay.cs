@@ -7,6 +7,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Maths;
 using Robust.Shared.Timing;
@@ -22,11 +23,21 @@ public sealed class StructuralWarningOverlay : Overlay
 {
     public override OverlaySpace Space => OverlaySpace.ScreenSpace;
 
+    /// <summary>Largest configured beam span. Bounds the below-grid spatial lookup around the player.</summary>
+    private const int MaximumSupportSpan = 8;
+    private static readonly TimeSpan SupportRefreshInterval = TimeSpan.FromSeconds(0.2);
+
     private readonly IEntityManager _entMan;
     private readonly IPlayerManager _player;
     private readonly IGameTiming _timing;
     private readonly SharedMapSystem _map;
     private readonly SharedTransformSystem _transform;
+    private EntityUid? _cachedPlayer;
+    private EntityUid? _cachedMap;
+    private EntityUid? _cachedGrid;
+    private Vector2i _cachedTile;
+    private TimeSpan _nextSupportRefresh;
+    private bool _cachedUnsupported;
 
     public StructuralWarningOverlay()
     {
@@ -40,7 +51,36 @@ public sealed class StructuralWarningOverlay : Overlay
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
     {
-        return _player.LocalEntity is { } player && OnUnsupportedGround(player);
+        return _player.LocalEntity is { } player && OnUnsupportedGroundCached(player);
+    }
+
+    private bool OnUnsupportedGroundCached(EntityUid player)
+    {
+        if (!_entMan.TryGetComponent<TransformComponent>(player, out var xform) ||
+            xform.MapUid is not { } mapUid ||
+            xform.GridUid is not { } gridUid ||
+            !_entMan.TryGetComponent<MapGridComponent>(gridUid, out var grid))
+        {
+            return false;
+        }
+
+        var tile = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
+        if (_cachedPlayer == player &&
+            _cachedMap == mapUid &&
+            _cachedGrid == gridUid &&
+            _cachedTile == tile &&
+            _timing.CurTime < _nextSupportRefresh)
+        {
+            return _cachedUnsupported;
+        }
+
+        _cachedPlayer = player;
+        _cachedMap = mapUid;
+        _cachedGrid = gridUid;
+        _cachedTile = tile;
+        _nextSupportRefresh = _timing.CurTime + SupportRefreshInterval;
+        _cachedUnsupported = OnUnsupportedGround(player);
+        return _cachedUnsupported;
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -104,7 +144,8 @@ public sealed class StructuralWarningOverlay : Overlay
         // Mapper-authored upper floors (e.g. the second storey of a pre-built building) have no such marker and
         // are permanent, so they must never trigger the cave-in vignette.
         var builtHere = false;
-        foreach (var anchored in _map.GetAnchoredEntities(gridUid, grid, playerTile))
+        var builtEntities = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, playerTile);
+        while (builtEntities.MoveNext(out var anchored))
         {
             if (_entMan.HasComponent<StructuralSupportComponent>(anchored))
             {
@@ -116,15 +157,43 @@ public sealed class StructuralWarningOverlay : Overlay
         if (!builtHere)
             return false;
 
-        var query = _entMan.EntityQueryEnumerator<StructuralSupportComponent, TransformComponent>();
-        while (query.MoveNext(out var beamUid, out var support, out var beamXform))
-        {
-            if (beamXform.MapUid != below || (!support.IsVerticalSupport && !support.IsAnchor))
-                continue;
+        if (!_entMan.TryGetComponent<MapComponent>(below, out var belowMap))
+            return true;
 
-            var beamTile = _map.WorldToTile(gridUid, grid, _transform.GetWorldPosition(beamUid));
-            if (Math.Abs(playerTile.X - beamTile.X) + Math.Abs(playerTile.Y - beamTile.Y) <= support.CantileverSpan)
-                return false; // within a beam's coverage - supported
+        var belowCoords = new MapCoordinates(_transform.GetWorldPosition(player), belowMap.MapId);
+        if (!_map.TryFindGridAt(belowCoords, out var belowGridUid, out var belowGrid))
+            return true;
+
+        var belowTile = _map.TileIndicesFor(belowGridUid, belowGrid, belowCoords);
+        for (var dx = -MaximumSupportSpan; dx <= MaximumSupportSpan; dx++)
+        {
+            for (var dy = -MaximumSupportSpan; dy <= MaximumSupportSpan; dy++)
+            {
+                var distance = Math.Abs(dx) + Math.Abs(dy);
+                if (distance > MaximumSupportSpan)
+                    continue;
+
+                var supports = _map.GetAnchoredEntitiesEnumerator(
+                    belowGridUid,
+                    belowGrid,
+                    belowTile + new Vector2i(dx, dy));
+
+                while (supports.MoveNext(out var supportUid))
+                {
+                    var span = _entMan.HasComponent<ZLevelWallSupportComponent>(supportUid)
+                        ? ZLevelWallSupportComponent.CantileverSpan
+                        : -1;
+
+                    if (_entMan.TryGetComponent<StructuralSupportComponent>(supportUid, out var support) &&
+                        (support.IsVerticalSupport || support.IsAnchor))
+                    {
+                        span = Math.Max(span, support.CantileverSpan);
+                    }
+
+                    if (distance <= span)
+                        return false;
+                }
+            }
         }
 
         return true;

@@ -1,0 +1,110 @@
+- type: job
+  parent: CMU14JobCivilianProdigyGuardBase
+  id: CMU14JobCivilianProdigyGuardSurv
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigyGuardSurv
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CMUProdigy
+  - type: EquipEntityPreset
+    preset: CMU14ProdigySurvBasePreset
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-wyguard
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+
+  name: au14-job-name-wyguard
+  description: au14-job-description-wyguard
+  setPreference: true
+  ranks:
+    AU14RankPrDEnforcerSenior:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 360000 # 100 hours
+    AU14RankPrDEnforcer:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 180000 # 50 hours
+    AU14RankPrDSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 86400 # 24 hours
+    AU14RankPrDOperator:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 36000 # 10 hours
+    AU14RankPrDAssociate: []
+  startingGear: AU14GearCivilianProdigyGuardSurv
+  icon: "RMCJobIconPMCGoonStandard"
+  requireAdminNotify: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Prodigy Corporate Goon (CMU, Surv)
+  accessGroups:
+  - auprodigy
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianProdigyGuardSurv
+  equipment:
+    id: CMU14IDCardColonyProdigyLiaison
+    shoes: RMCBootsSPPBlackFilled
+    back: RMCSatchelLightpackBlack
+    ears: CMU14ColonyProdigyHeadset
+    pocket1: AU14PouchIFAKProdigyFill
+    ears2: RMCM5CameraGear
+    outerClothing: CMUArmorProdigyFlakVest
+    jumpsuit: CMU14ProdigyJumpsuitGrey
+  storage:
+    back:
+    - CMMRE #TODO prodigy one
+    - CMCanteen
+    - RMCRadioHandheldColony
+    - CMSheetMetal30
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMU14JobProdigySurvGoon
+  name: Prodigy Goon (surv)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Goon (survivor)
+    description: au14-job-description-wyguard
+    reregister: false
+    job: CMU14JobCivilianProdigyGuardSurv
+    raffle:
+      settings: short

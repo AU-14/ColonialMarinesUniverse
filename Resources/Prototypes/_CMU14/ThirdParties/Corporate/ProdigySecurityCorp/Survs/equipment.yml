@@ -1,0 +1,94 @@
+
+- type: entity
+  parent: AU14BeltHolsterPistolBlack
+  id: CMU14BeltHolsterPistolBlackGlock75Fill
+  suffix: Filled, Glock 75
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMU14WeaponPistolGlock75Taser
+    - id: CMU14MagazinePistolGlock75
+      amount: 6
+
+- type: entity
+  parent: AU14BeltHolsterPistolBlack
+  id: CMU14BeltHolsterPistolBlackGlock77Fill
+  suffix: Filled, Glock 77
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMU14WeaponPistolGlock77Taser
+    - id: CMU14MagazinePistolGlock77
+      amount: 6
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: CMU14PouchMagazineLargeMCSX
+  suffix: Filled, MCS-x
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14WeaponRifleprodigyrifleMagazineStandard
+      amount: 3
+    - id: AU14WeaponRifleprodigyrifleMagazineAP
+      amount: 1
+
+- type: entity
+  parent: RMCPouchMagazineLarge
+  id: CMU14PouchMagazineLargeM39
+  suffix: Filled, M39
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMMagazineSMGM63Ext
+      amount: 4
+
+- type: entity
+  parent: RMCStandardAidKitPVE
+  id: CMU14StandardAidKitFilledBurn
+  suffix: Filled, Burn
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMBurnKit10
+      amount: 7
+
+- type: entity
+  parent: RMCStandardAidKitPVE
+  id: CMU14StandardAidKitFilledBrute
+  suffix: Filled, Brute
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMTraumaKit10
+      amount: 7
+
+- type: entity
+  id: CMU14ProdigySurvBasePreset
+  name: prodigy surv base preset
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: EntityPreset
+    randomGearOther:
+    - 
+      - [ CMU14BeltHolsterPistolBlackGlock77Fill ]
+      - [ CMU14BeltHolsterPistolBlackGlock75Fill ]
+    -
+      - [ AU14ProdigyBallisticHelmet ] # hats
+      - [ AU14HeadCommandoBeanie, RMCFlashlight ]
+      - [ CMU14ProdigyCapGrey, RMCFlashlight ]
+      - [ AU14ProdigyCap, RMCFlashlight ]
+    #-
+    #  - [ CMU14ProdigyJumpsuitGrey ] # fatigues
+    #  - [ AU14ProdigyFatigues ]
+    - 
+      - [ AU14PVEHandsFingerlessBlackGloves ] # gloves
+      - [ AU14PVEHandsInsulatedBlackMarine ]
+    -
+      - [ CMUArmorProdigyFlakVest ] # armor
+      - [ CMUArmorProdigyFlakVestAlt ]
+    randomWeapon:
+    - [ RMCWeaponShotgunHG3712, RMCPouchShotgunLargeBuckshot ]
+    - [ AU14WeaponRifleprodigyrifleAR, CMU14PouchMagazineLargeMCSX ]
+    - [ RMCHolsterSMGPouchFilledExtended, CMU14PouchMagazineLargeM39 ]
+    tryEquipRandomWeapon: true

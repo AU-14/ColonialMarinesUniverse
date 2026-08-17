@@ -14,7 +14,6 @@
   - "RMCAdminFax"
   - "AdminPDA"
   - "AdminHypo"
-  - "RMCPlushie.*"
 
 - id: "AllowAllOnAdminMaps"
   type: "Whitelist"
@@ -118,3 +117,14 @@
 #   type: "Blacklist"
 #   entityMatchers:
 #   - "ColMarTech.*"
+
+# Unused Upstream Prototypes (Use the CMU variants)
+- id: "DeprecatedUpstreamPrototypes"
+  type: "Blacklist"
+  entityMatchers:
+  - "RMCPlushie.*"
+  - "RMCPickaxe"
+  - "RMCAegisCorpseSpawner"
+  - "RMCAegisSpawner"
+  - "RMCIDCardAegis"
+  - "RMCIDCardAegisIntel"

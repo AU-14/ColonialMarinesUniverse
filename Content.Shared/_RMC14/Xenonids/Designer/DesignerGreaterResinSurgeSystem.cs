@@ -18,9 +18,6 @@ namespace Content.Shared._RMC14.Xenonids.Designer;
 
 public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
 {
-    private const float EffectSearchPaddingMultiplier = 2f;
-
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -31,6 +28,8 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
     [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _prototype = default!;
+
+    private const float EffectSearchPaddingMultiplier = 2f;
 
     public override void Initialize()
     {
@@ -219,7 +218,7 @@ public sealed partial class DesignerGreaterResinSurgeSystem : EntitySystem
                 continue;
 
             // Spawn after the enumerator is disposed to avoid modifying anchored entity collections mid-iteration.
-            var spawned = Spawn(pending.WallPrototype, tileCenter.SnapToGrid(EntityManager, _map));
+            var spawned = Spawn(pending.WallPrototype, tileCenter.SnapToGrid(EntityManager));
             _hive.SetSameHive(user, spawned);
 
             foreach (var nodeUid in nodesToConvert)

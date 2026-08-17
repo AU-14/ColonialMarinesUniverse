@@ -1,0 +1,91 @@
+# powertripper's job
+
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: CMU14JobCivilianProdigySupervisorBase
+  name: cmu14-job-name-civilian-supervisor
+  description: cmu14-job-description-civilian-supervisor
+  playTimeTracker: CMU14JobCivilianProdigySupervisor
+  basePlaytimeTracker: true
+
+- type: job
+  parent: CMU14JobCivilianProdigySupervisorBase
+  id: CMU14JobCivilianProdigySupervisor
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigySupervisor
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CMUProdigy
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: CMU14JobCivilianProdigyLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: cmu14-job-prefix-civilian-supervisor
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+
+  name: cmu14-job-name-civilian-supervisor
+  description: cmu14-job-description-civilian-supervisor
+  setPreference: true
+  ranks:
+    CMU14RankProdigySupervisor: []
+  startingGear: CMU14GearCivilianProdigySupervisor
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: nobody
+  spawnMenuRoleName: Prodigy Supervisor (CMU)
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auprodigy
+  access:
+  - CMU14AccessCorporateProdigyLiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMU14GearCivilianProdigySupervisor
+  equipment:
+    jumpsuit: CMU14ProdigySuitBlack
+    shoes: RMCShoesLaceup
+    id: CMU14IDCardColonyProdigyLiaison
+    ears: CMU14ColonyProdigyHeadset
+    ears2: RMCM5CameraGear
+    pocket1: CMU14StampProdigySupervisor
+  inhand:
+  - CMU14PortableVendorProdigy
+
+- type: playTimeTracker
+  id: CMU14JobCivilianProdigySupervisor
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMU14JobCivilianProdigySupervisor
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

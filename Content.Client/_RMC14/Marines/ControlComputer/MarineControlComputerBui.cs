@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Marines.ControlComputer;
+using Content.Shared._RMC14.Marines.ControlComputer;
 using JetBrains.Annotations;
 using Robust.Client.UserInterface;
 
@@ -29,7 +29,7 @@ public sealed class MarineControlComputerBui(EntityUid owner, Enum uiKey) : Boun
         {
             if (_confirmingEvacuation)
             {
-                SendPredictedMessage(new MarineControlComputerToggleEvacuationMsg());
+                SendMessage(new MarineControlComputerToggleEvacuationMsg());
                 _confirmingEvacuation = false;
             }
             else

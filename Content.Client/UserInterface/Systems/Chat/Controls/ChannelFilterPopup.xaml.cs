@@ -253,7 +253,7 @@ public sealed partial class ChannelFilterPopup : Popup
                 Text = radio.Name,
                 Pressed = allRadios || activeLabels.Any(label => string.Equals(label, radio.Label, StringComparison.OrdinalIgnoreCase)),
                 Disabled = !radioEnabled,
-                Modulate = Color.TryFromHex(radio.Color) ?? Color.White
+                Modulate = Color.TryFromHex(radio.Color, out var radioColor) ? radioColor : Color.White
             };
 
             var capturedLabel = radio.Label;
@@ -280,7 +280,7 @@ public sealed partial class ChannelFilterPopup : Popup
             var style = styles.FirstOrDefault(entry => string.Equals(entry.Target, target.Key, StringComparison.OrdinalIgnoreCase));
             var color = style?.Color ?? target.DefaultColor;
             var fontSize = style?.FontSize?.ToString() ?? target.DefaultFontSize?.ToString() ?? string.Empty;
-            var accent = Color.TryFromHex(color) ?? Color.FromHex("#737987");
+            var accent = Color.TryFromHex(color, out var accentColor) ? accentColor : Color.FromHex("#737987");
 
             var rowPanel = new PanelContainer
             {

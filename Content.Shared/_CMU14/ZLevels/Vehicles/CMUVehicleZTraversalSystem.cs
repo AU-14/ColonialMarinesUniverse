@@ -3,6 +3,7 @@ using System.Numerics;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Vehicle;
+using Content.Shared.Buckle.Components; // RuMC edit
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Robust.Shared.Audio;
@@ -195,6 +196,11 @@ public sealed partial class CMUVehicleZTraversalSystem : EntitySystem
         {
             if (TerminatingOrDeleted(target))
                 continue;
+
+            // RuMC edit start
+            if (TryComp<BuckleComponent>(target, out var buckle) && buckle.BuckledTo == ent.Owner)
+                continue;
+            // RuMC edit end
 
             _damage.TryChangeDamage(target, new DamageSpecifier(damageType, damageAmount), origin: ent.Owner);
         }

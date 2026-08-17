@@ -25,7 +25,6 @@ public sealed partial class EntityStorageSystem : SharedEntityStorageSystem
 {
     [Dependency] private ConstructionSystem _construction = default!;
     [Dependency] private AtmosphereSystem _atmos = default!;
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private MapSystem _mapSystem = default!;
 
     public override void Initialize()

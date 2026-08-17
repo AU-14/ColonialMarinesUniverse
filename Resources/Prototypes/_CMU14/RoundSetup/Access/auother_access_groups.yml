@@ -16,6 +16,12 @@
   - AU14AccessCorporateWEYU
 
 - type: accessGroup
+  id: auprodigy
+  tags:
+  - CMAccessColonyPublic
+  - CMU14AccessCorporateProdigy
+
+- type: accessGroup
   id: AUPrisonStaff
   tags:
   - AUAccessPrison

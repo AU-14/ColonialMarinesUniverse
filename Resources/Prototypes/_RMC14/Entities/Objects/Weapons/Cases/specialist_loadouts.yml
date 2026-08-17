@@ -20,6 +20,8 @@
     - id: CMBackpackSniper
     - id: CMM96SSniperRifle
     - id: AU14KitSpotter
+    - id: AU14ArmorGhillie
+    - id: AU14HelmetGhillie
 #    - id: CMFacepaintSniper
   - type: CMChangeUserOnVend
     addComponents:
@@ -238,6 +240,7 @@
     - id: RMCMagazineRifleM4SPRA19Impact
       amount: 4
     - id: RMCBackpackScout
+    - id: RMCBackpackScoutDS
     - id: WeaponRifleM4SPRCustom
     - id: RMCThermalTarpFolded
       amount: 2
@@ -279,6 +282,7 @@
     - id: RMCAttachmentFlashlightGrip
     - id: RMCAttachmentS5RedDotSight
     - id: RMCBackpackScout
+    - id: RMCBackpackScoutDS
     - id: WeaponRifleM5SPR2
     - id: RMCThermalTarpFolded
       amount: 2

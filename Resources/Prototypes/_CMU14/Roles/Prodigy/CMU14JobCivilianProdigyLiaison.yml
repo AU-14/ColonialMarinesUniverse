@@ -1,0 +1,119 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: CMU14JobCivilianProdigyLiaisonBase
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  playTimeTracker: CMU14JobCivilianProdigyLiaison
+  basePlaytimeTracker: true
+
+- type: job
+  parent: CMU14JobCivilianProdigyLiaisonBase
+  id: CMU14JobCivilianProdigyLiaison
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigyLiaison
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CMUProdigy
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: CMVendorUser
+    id: CMU14JobCivilianProdigyLiaison
+    points: 70
+  - type: JobPrefix
+    prefix: au14-job-prefix-corporateliaison
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+
+  name: au14-job-name-civiliancorporateliaison
+  description: au14-job-description-civiliancorporateliaison
+  setPreference: true
+  ranks:
+    CMU14RankProdigyAssistantManager:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyLiaison
+      time: 360000 # 100 hours
+    CMU14RankProdigyExecutiveSupervisor:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyLiaison
+      time: 270000 # 75 hours
+    CMU14RankProdigyExecutiveSpecialist:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyLiaison
+      time: 180000 # 50 hours
+    CMU14RankProdigySeniorExecutive:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyLiaison
+      time: 90000 # 25 hours
+    CMU14RankProdigyExecutive:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyLiaison
+      time: 36000 # 10 hours
+    CMU14RankProdigyJuniorExecutive: []
+  startingGear: CMU14GearCivilianProdigyLiaison
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-colonycivilian
+  spawnMenuRoleName: Prodigy Liaison (CMU)
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auprodigy
+  access:
+  - CMU14AccessCorporateProdigyLiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMU14GearCivilianProdigyLiaison
+  equipment:
+    jumpsuit: CMU14ProdigySuitBlack
+    shoes: RMCShoesLaceup
+    id: CMU14IDCardColonyProdigyLiaison
+    ears: CMU14ColonyProdigyHeadset
+    ears2: RMCM5CameraGear
+    pocket1: CMU14StampProdigyLiaison
+  inhand:
+  - CMU14PortableVendorProdigy
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMU14SpawnPointCivilianProdigyLiaison
+  name: Spawn Point Civilian Prodigy Liaison
+  components:
+  - type: SpawnPoint
+    job_id: CMU14JobCivilianProdigyLiaison
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMU14JobCivilianProdigyLiaison
+  isHumanoid: true
+
+- type: roleLoadout
+  id: JobCMU14JobCivilianProdigyLiaison
+  points: 7
+  groups:
+  - CivSatchelAU14
+  - PaperworkRMC
+  - RecreationalRMC
+  - CannedDrinksAU14
+  - SmokablesRMC
+  - EyewearRMC
+  - MasksRMC
+  - HeadwearCLFAU14

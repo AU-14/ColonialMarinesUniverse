@@ -1,9 +1,0 @@
-# Pathogen Walker NPC faction - hostile to marines, friendly to xenos
-- type: npcFaction
-  id: CMU14PathogenWalker
-  hostile:
-  - UNMC
-  - NanoTrasen
-  - SPP
-  - GOVFOR
-  - OPFOR

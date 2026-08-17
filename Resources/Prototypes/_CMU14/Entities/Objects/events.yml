@@ -1,0 +1,98 @@
+# ├──[ Aegis | Warhead ]─────────────────────────────────────────────┤
+- type: entity
+  parent: RMCCrateSupply
+  id: CMUCrateAegisLobby
+  name: AEGIS tracking equipment crate (x3 pinpointers, x1 pamphlet)
+  description: A supply crate containing AEGIS ID tracking equipment and documentation.
+  components:
+  - type: StorageFill
+    contents:
+    - id: CMUPinpointerAegisID
+      amount: 3
+    - id: CMPamphletPowerloader
+      amount: 1
+
+- type: entity
+  parent: RMCPinpointerBase
+  id: CMUPinpointerAegisID
+  suffix: AEGIS
+  components:
+  - type: Pinpointer
+    component: AegisTrackable
+    targetName: AEGIS ID card
+
+# Spawners
+- type: entity
+  parent: RMCAegisSpawner
+  id: CMUAegisSpawner
+  name: AEGIS abomb spawn
+  suffix: CMU, Add to Warship/Planet
+
+- type: entity
+  parent: RMCAegisCorpseSpawner
+  id: CMUAegisCorpseSpawner
+  name: AEGIS corpse spawn - Scientist
+  suffix: CMU, Id Unlocks AEGIS
+
+# Warhead
+- type: entity
+  parent: RMCOrbitalCannonWarheadAegis
+  id: CMUOrbitalCannonWarheadAegis
+  description: "AEG-538-KRA, or KRAKEN, an experimental phoron-based orbital warhead, straight from the R&D Division of AEGIS. Designed to be used against targets where a single orbital warhead is simply not enough."
+  name:  AEG-538-KRA
+  suffix: CMU
+  components:
+  - type: OrbitalCannonWarhead
+    explosion: CMUOrbitalCannonExplosionAegis
+    isAegis: true
+    firstWarningRange: 60
+    secondWarningRange: 55
+    thirdWarningRange: 45
+    intelPointsAwarded: 5
+
+# Warhead Explosion
+- type: entity
+  parent: MarkerBase
+  id: CMUOrbitalCannonExplosionAegis
+  name: insane explosive Aegis OB explosion
+  suffix: CMU, FIRES AN OB!!!
+  components:
+  - type: OrbitalCannonExplosion
+    steps:
+    - type: RMCOBXenoTunnel
+      total: 120000
+      slope: 6000
+      max: 600
+      delay: 0.5
+    - type: RMCOBXenoTunnel
+      total: 600000
+      slope: 60
+      max: 450
+      delay: 0.3
+    - type: RMCOBXenoTunnel
+      total: 280000
+      slope: 40
+      max: 350
+      delay: 0.4
+    - fire: CMUTileFireOBAegis
+      fireRange: 55
+  - type: WarpPoint
+    location: 1 orbital bombardment
+
+# Warhead Tile Fire
+- type: entity
+  parent: RMCTileFireOBAegis
+  id: CMUTileFireOBAegis
+  suffix: CMU
+  components:
+  - type: RMCIgniteOnCollide
+    intensity: 240
+    duration: 200
+    maxStacks: 40
+    burnColor: "#ffd700"
+    tileDamage:
+      types:
+        Heat: 3
+  - type: TileFire
+    id: CMUTileFireOBAegis
+    extinguishInstantly: false

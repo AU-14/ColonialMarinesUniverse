@@ -9,7 +9,6 @@ namespace Content.Server._CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
 public sealed class ServerMycotoxinSystem : SharedMycotoxinSystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly StatusEffectQuerySystem _status = default!;
     [Dependency] private readonly RMCSlowSystem _slow = default!;
     [Dependency] private readonly ChatSystem _chat = default!;

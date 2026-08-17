@@ -8,11 +8,27 @@
   },
   "states": [
     {
+      "name": "equipped-HELMET",
+      "directions": 4
+    },
+    {
+      "name": "on-equipped-HELMET",
+      "directions": 4,
+      "delays": [
+        [0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2],
+        [0.2, 0.2, 0.2, 0.2]
+      ]
+    },
+    {
       "name": "icon"
     },
     {
-      "name": "equipped-HELMET",
-      "directions": 4
+      "name": "icon-flash",
+      "delays": [
+        [0.2, 0.2, 0.2, 0.2]
+      ]
     }
   ]
 }

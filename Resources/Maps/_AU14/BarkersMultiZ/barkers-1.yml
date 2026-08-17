@@ -2290,6 +2290,8 @@ entities:
         path: /Audio/Effects/alert.ogg
       inherent: True
       enabled: True
+    - type: BecomesStation
+      id: LV-376
     - type: DecalGrid
       chunkCollection:
         version: 2

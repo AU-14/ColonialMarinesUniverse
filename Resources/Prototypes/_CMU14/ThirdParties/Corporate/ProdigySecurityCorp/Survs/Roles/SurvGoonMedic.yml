@@ -1,0 +1,128 @@
+- type: job
+  parent: CMU14JobCivilianProdigyGuardBase
+  id: CMU14JobCivilianProdigyGuardMedicSurv
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigyGuardMedicSurv
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CMUProdigy
+  - type: EquipEntityPreset
+    preset: CMU14ProdigySurvBasePreset
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 2
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 2
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+      RMCSkillMedical: 3
+      RMCSkillSurgery: 2
+  - type: JobPrefix
+    prefix: au14-job-prefix-wyguard
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+
+  name: Combat Medic
+  description: au14-job-description-wyguard
+  setPreference: true
+  ranks:
+    AU14RankPrDEnforcerSenior:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 360000 # 100 hours
+    AU14RankPrDEnforcer:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 180000 # 50 hours
+    AU14RankPrDSeniorOperator:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 86400 # 24 hours
+    AU14RankPrDOperator:
+    - !type:RoleTimeRequirement
+      role: CMU14JobCivilianProdigyGuard
+      time: 36000 # 10 hours
+    AU14RankPrDAssociate: []
+  startingGear: AU14GearCivilianProdigyGuardMedicSurv
+  icon: "RMCJobIconPMCGoonStandard"
+  requireAdminNotify: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Prodigy Corporate Combat Medic (CMU, Surv)
+  accessGroups:
+  - auprodigy
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianProdigyGuardMedicSurv
+  equipment:
+    id: CMU14IDCardColonyProdigyLiaison
+    shoes: RMCBootsSPPBlackFilled
+    back: RMCSatchelLightpackBlack
+    ears: CMU14ColonyProdigyHeadset
+    pocket1: RMCPouchMedical
+    ears2: RMCM5CameraGear
+    outerClothing: CMUArmorProdigyFlakVestMedical
+    jumpsuit: CMU14ProdigyJumpsuitGrey
+    eyes: RMCGlassesMedicalHUDGlasses
+  storage:
+    pocket1:
+    - AU14PillCanisterDermaline
+    - AU14PillCanisterTramadol
+    - AU14PillCanisterMeralyne
+    - CMPillCanisterDylovene
+    - CMSurgicalLine
+    - CMSynthGraft
+    - CMPillCanisterDexalin
+    jumpsuit:
+    - CMPortableSurgicalBedSpawnFolded
+    - CMU14StandardAidKitFilledBurn
+    - CMU14StandardAidKitFilledBrute
+    back:
+    - CMMRE #TODO prodigy one
+    - CMCanteen
+    - RMCRadioHandheldColony
+    - CMSurgicalCaseFilled
+    - AU14CMDefibrillator
+    - CMHealthAnalyzer
+    - CMUSplintItem
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMU14JobProdigySurvMedic
+  name: Prodigy Combat Medic (surv)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Combat Medic (survivor)
+    description: au14-job-description-wyguard
+    reregister: false
+    job: CMU14JobCivilianProdigyGuardMedicSurv
+    raffle:
+      settings: short

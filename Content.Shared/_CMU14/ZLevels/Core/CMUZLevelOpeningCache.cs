@@ -107,7 +107,6 @@ public sealed class CMUZLevelOpeningCache
         int maxOpeningBounds,
         bool exactOpeningBounds,
         List<Entity<MapGridComponent>> gridScratch,
-        IMapManager mapManager,
         SharedMapSystem map,
         SharedTransformSystem transform,
         ITileDefinitionManager tileDefinition)
@@ -206,7 +205,6 @@ public sealed class CMUZLevelOpeningCache
         float searchRadius,
         List<(Vector2 Center, float Distance)> openings,
         List<Entity<MapGridComponent>> gridScratch,
-        IMapManager mapManager,
         SharedMapSystem map,
         SharedTransformSystem transform,
         ITileDefinitionManager tileDefinition,
@@ -293,7 +291,6 @@ public sealed class CMUZLevelOpeningCache
         float searchRadius,
         out Vector2 openingCenter,
         List<Entity<MapGridComponent>> gridScratch,
-        IMapManager mapManager,
         SharedMapSystem map,
         SharedTransformSystem transform,
         ITileDefinitionManager tileDefinition,

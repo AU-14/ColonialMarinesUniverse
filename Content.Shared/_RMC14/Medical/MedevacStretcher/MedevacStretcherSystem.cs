@@ -26,7 +26,6 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private AreaSystem _areas = default!;
     [Dependency] private SharedDropshipWeaponSystem _dropshipWeapon = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -173,7 +172,7 @@ public sealed partial class MedevacStretcherSystem : EntitySystem
             return;
 
         var stretcherCoords = stretcher.ToCoordinates();
-        var snappedCoords = stretcher.ToCoordinates().SnapToGrid(EntityManager, _mapManager);
+        var snappedCoords = stretcher.ToCoordinates().SnapToGrid(EntityManager);
         if (!_dropshipWeapon.CasDebug &&
             (!_areas.TryGetArea(snappedCoords, out var stretcherArea, out _) ||
             !stretcherArea.Value.Comp.Medevac))

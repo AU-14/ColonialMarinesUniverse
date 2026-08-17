@@ -18,7 +18,6 @@ public sealed partial class ProjectileAnomalySystem : EntitySystem
     [Dependency] private TransformSystem _xform = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private GunSystem _gunSystem = default!;
     [Dependency] private SharedMapSystem _map = default!;
 

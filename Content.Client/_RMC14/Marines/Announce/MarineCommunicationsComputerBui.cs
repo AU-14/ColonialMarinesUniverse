@@ -1,4 +1,4 @@
-﻿using Content.Client.UserInterface.Controls;
+using Content.Client.UserInterface.Controls;
 using Content.Shared._RMC14.Marines.Announce;
 using Content.Shared._RMC14.Marines.ControlComputer;
 using Content.Shared._RMC14.Overwatch;
@@ -56,7 +56,7 @@ public sealed class MarineCommunicationsComputerBui(EntityUid owner, Enum uiKey)
             {
                 if (_confirmingEvacuation)
                 {
-                    SendPredictedMessage(new MarineControlComputerToggleEvacuationMsg());
+                    SendMessage(new MarineControlComputerToggleEvacuationMsg());
                     _confirmingEvacuation = false;
                 }
                 else

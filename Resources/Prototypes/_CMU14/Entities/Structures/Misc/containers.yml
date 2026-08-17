@@ -24,7 +24,11 @@
     offset: 0, 0.5
   - type: Clickable
   - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
+    polygon:
+    - -0.5,-0.5
+    - 0.5,-0.5
+    - 0.5,1.5
+    - -0.5,1.5
   - type: DeleteOnExplosion
   - type: XenoToggleChargingDamage
     stageLoss: 4
@@ -391,7 +395,11 @@
   - type: Sprite
     state: grant_l
   - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,0.8"
+    polygon:
+    - -0.5,-0.5
+    - 0.5,-0.5
+    - 0.5,0.8
+    - -0.5,0.8
   - type: Fixtures
     fixtures:
       fix1:

@@ -59,10 +59,10 @@
     directionalTileEffect: RMCEffectXenoTelegraphRed
     damage:
       types:
-        Blunt: 80
+        Blunt: 65
     directionalMinDamage:
       types:
-        Blunt: 65
+        Blunt: 40
     selfEffect: CMEffectSelfStomp
   - type: XenoAnimateMovement
   - type: XenoPlasma
@@ -130,7 +130,7 @@
     damage:
       types:
         Blunt: 15
-    armorPiercing: 5
+    armorPiercing: 2
   - type: RMCSize
     size: Immobile
   - type: XenoChargerJockey
@@ -179,7 +179,7 @@
       path: /Audio/_RMC14/Xeno/crusher_windup_sound.ogg
     damage:
       types:
-        Blunt: 80
+        Blunt: 65
         Structural: 750
   - type: XenoShield
   - type: XenoEvolution

@@ -23,6 +23,18 @@
         - FullTileLayer
 
 - type: entity
+  abstract: true
+  parent: RMCDoubleDoorBase
+  id: RMCDoubleDoorSolidBase
+  components:
+  - type: Occluder
+    polygon:
+    - -0.5,-0.5
+    - 0.5,-0.5
+    - 0.5,1.5
+    - -0.5,1.5
+
+- type: entity
   parent: RMCDoubleDoorBase
   id: RMCDoubleDoorAlmayerGlass
   suffix: Almayer, Glass
@@ -31,12 +43,10 @@
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/almayer_glass.rsi
 
 - type: entity
-  parent: RMCDoubleDoorBase
+  parent: RMCDoubleDoorSolidBase
   id: RMCDoubleDoorAlmayerSolid
   suffix: Almayer, Solid
   components:
-  - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/almayer_solid.rsi
 
@@ -49,14 +59,12 @@
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/command_glass.rsi
 
 - type: entity
-  parent: RMCDoubleDoorBase
+  parent: RMCDoubleDoorSolidBase
   id: RMCDoubleDoorCommandSolid
   suffix: Command, Solid
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/command_solid.rsi
-  - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
 
 - type: entity
   parent: RMCDoubleDoorBase
@@ -67,14 +75,12 @@
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/engineer_glass.rsi
 
 - type: entity
-  parent: RMCDoubleDoorBase
+  parent: RMCDoubleDoorSolidBase
   id: RMCDoubleDoorEngineerSolid
   suffix: Engineer, Solid
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/engineer_solid.rsi
-  - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
 
 - type: entity
   parent: RMCDoubleDoorBase
@@ -85,14 +91,12 @@
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/generic_glass.rsi
 
 - type: entity
-  parent: RMCDoubleDoorBase
+  parent: RMCDoubleDoorSolidBase
   id: RMCDoubleDoorGenericSolid
   suffix: Generic, Solid
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/generic_solid.rsi
-  - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
 
 - type: entity
   parent: RMCDoubleDoorBase
@@ -103,14 +107,12 @@
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/medical_glass.rsi
 
 - type: entity
-  parent: RMCDoubleDoorBase
+  parent: RMCDoubleDoorSolidBase
   id: RMCDoubleDoorMedicalSolid
   suffix: Medical, Solid
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/medical_solid.rsi
-  - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
 
 - type: entity
   parent: RMCDoubleDoorBase
@@ -121,14 +123,12 @@
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/personal_glass.rsi
 
 - type: entity
-  parent: RMCDoubleDoorBase
+  parent: RMCDoubleDoorSolidBase
   id: RMCDoubleDoorPersonalSolid
   suffix: Personal, Solid
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/personal_solid.rsi
-  - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"
 
 - type: entity
   parent: RMCDoubleDoorBase
@@ -179,11 +179,9 @@
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/security_glass.rsi
 
 - type: entity
-  parent: RMCDoubleDoorBase
+  parent: RMCDoubleDoorSolidBase
   id: RMCDoubleDoorSecuritySolid
   suffix: Security, Solid
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Doors/Airlocks/DoubleDoor/security_solid.rsi
-  - type: Occluder
-    boundingBox: "-0.5,-0.5,0.5,1.5"

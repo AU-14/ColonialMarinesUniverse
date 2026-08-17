@@ -149,6 +149,7 @@
   parent: CMPaper
   id: RMCPaperAegisInfoFax
   name: High Command Transmission
+  suffix: RMC
   components:
     - type: Paper
       stampState: paper_stamp-marine
@@ -242,7 +243,7 @@
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     contentMargin: 16.0, 16.0, 16.0, 16.0
     headerImagePath: "/Textures/_RMC14/Interface/Paper/paper_heading_requisition_invoice.svg.96dpi.png"
-    headerMargin: 0.0, 12.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 12.0
   - type: RequisitionsInvoice
     reward: 25
 
@@ -253,7 +254,7 @@
   components:
   - type: PaperVisuals
     headerImagePath: "/Textures/_RMC14/Interface/Paper/paper_heading_weya.svg.96dpi.png"
-    headerMargin: 0.0, 1.0, 0.0, 0.0
+    headerMargin: 0.0, 0.0, 0.0, 1.0
 
 - type: entity
   parent: RMCPaperWeYa

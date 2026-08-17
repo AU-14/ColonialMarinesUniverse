@@ -18,7 +18,6 @@ public sealed partial class RMCMapSystem : EntitySystem
 {
     [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
     [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private SharedTransformSystem _transform = default!;

@@ -1,6 +1,6 @@
 using System.Linq;
 using Content.Server._CMU14.RoundStatistics;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared._CMU14.Round.Objectives.Type;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Vendors;

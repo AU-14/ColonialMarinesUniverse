@@ -42,7 +42,6 @@ public sealed class FootPrintsSystemTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
-        var mapManager = server.ResolveDependency<IMapManager>();
         var tileDefinitionManager = server.ResolveDependency<ITileDefinitionManager>();
 
         await server.WaitAssertion(() =>

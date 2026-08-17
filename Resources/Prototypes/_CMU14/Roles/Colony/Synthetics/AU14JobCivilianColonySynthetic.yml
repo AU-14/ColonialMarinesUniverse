@@ -110,7 +110,7 @@
 
 - type: roleLoadout
   id: JobAU14JobCivilianColonySynthetic
-  points: 7
+  points: 30 # while normally they would get 45, other things in the loadout arn't properly balanced with points right now, so we'll just steal 15 from them.
   groups:
   - ColonySynthSpecializationAU14
   - SynthBackpackAU14

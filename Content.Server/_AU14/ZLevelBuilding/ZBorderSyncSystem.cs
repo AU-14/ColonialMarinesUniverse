@@ -8,6 +8,7 @@ using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Popups;
 using Robust.Shared.ContentPack;
@@ -29,12 +30,12 @@ namespace Content.Server._AU14.ZLevelBuilding;
 public sealed class ZBorderSyncSystem : EntitySystem
 {
     [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly IResourceManager _resource = default!;
     [Dependency] private readonly CustomConstructionMenuSystem _menu = default!;
     [Dependency] private readonly SharedPopupSystem _popup = default!;
     [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
     [Dependency] private readonly AuRoundSystem _auRound = default!;
-    [Dependency] private readonly RMCPlanetSystem _planets = default!;
 
     private static readonly ResPath SaveFile = new("/au14_zborder_sync.txt");
 
@@ -79,6 +80,16 @@ public sealed class ZBorderSyncSystem : EntitySystem
     /// the selected planet's MapId and its planet prototype id are both accepted so either keying works.</summary>
     public bool ShouldReflect(string protoId)
     {
+        // The RMC wall hierarchy puts ordinary, destructible walls beneath its historical "invincible" wall
+        // roots. Inheritance alone therefore cannot distinguish a real map boundary from a wall a player just
+        // built. Never mirror a damageable wall: doing so will duplicate player construction onto the levels above
+        // and below as those levels are visited.
+        if (_prototype.TryIndex<EntityPrototype>(protoId, out var prototype) &&
+            prototype.TryComp<DamageableComponent>(out _, _componentFactory))
+        {
+            return false;
+        }
+
         var currentGameMap = _auRound.GetSelectedPlanet()?.MapId;
         var currentPlanet = _auRound.GetSelectedPlanetId();
 
@@ -419,7 +430,13 @@ public sealed class ZBorderSyncSystem : EntitySystem
                 continue;
 
             foreach (var id in descendants)
-                global.Whitelist.Add(id);
+            {
+                if (_prototype.TryIndex<EntityPrototype>(id, out var prototype) &&
+                    !prototype.TryComp<DamageableComponent>(out _, _componentFactory))
+                {
+                    global.Whitelist.Add(id);
+                }
+            }
         }
 
         Log.Info($"Seeded z-border sync whitelist with {global.Whitelist.Count} invincible border-wall prototypes.");

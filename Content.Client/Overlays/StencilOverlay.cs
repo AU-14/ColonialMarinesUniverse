@@ -29,7 +29,6 @@ public sealed partial class StencilOverlay : Overlay
     [Dependency] private IClyde _clyde = default!;
     [Dependency] private IEntityManager _entManager = default!;
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IConfigurationManager _config = default!;
 

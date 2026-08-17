@@ -799,7 +799,9 @@ public sealed partial class SquadSystem : EntitySystem
             {
                 newLeader.Headset = contained;
                 Dirty(toPromote, newLeader);
-                EnsureComp<SquadLeaderHeadsetComponent>(contained);
+                var leaderHeadset = EnsureComp<SquadLeaderHeadsetComponent>(contained);
+                leaderHeadset.Leader = toPromote;
+                Dirty(contained, leaderHeadset);
                 UpdateSquadLeaderHeadsetChannels(contained, squad.Value);
                 _encryptionKey.UpdateChannels(contained, holder);
                 break;

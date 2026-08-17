@@ -25,7 +25,6 @@ public sealed partial class MortarSystem : SharedMortarSystem
     [Dependency] private ContainerSystem _container = default!;
     [Dependency] private DropshipSystem _dropship = default!;
     [Dependency] private SharedMapSystem _map = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private PopupSystem _popup = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RMCMapSystem _rmcMap = default!;

@@ -6,6 +6,7 @@ using Content.Server.Administration;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Administration;
 using Robust.Shared.Console;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 
@@ -72,7 +73,7 @@ public sealed class AU14MultiZCommand : IConsoleCommand
             return;
         }
 
-        var mapManager = IoCManager.Resolve<IMapManager>();
+        var mapManager = IoCManager.Resolve<SharedMapSystem>();
         var mapId = new MapId(mapIdInt);
         if (!mapManager.MapExists(mapId))
         {
@@ -80,7 +81,7 @@ public sealed class AU14MultiZCommand : IConsoleCommand
             return;
         }
 
-        var mapUid = mapManager.GetMapEntityId(mapId);
+        var mapUid = mapManager.GetMapOrInvalid(mapId);
         var comp = entMan.EnsureComponent<ZBuildableMapComponent>(mapUid);
         comp.Enabled = on;
         entMan.Dirty(mapUid, comp);

@@ -136626,7 +136626,7 @@ entities:
     - type: FaxMachine
       name: Hope's Retreat Administration Office
       groups:
-      - military-command
+      - colony-command
       - marshal-bureau
   - uid: 51054
     components:
@@ -192698,7 +192698,7 @@ entities:
     - type: Transform
       pos: -63.5,79.5
       parent: 1
-- proto: RMCPickaxe
+- proto: AU14ToolPickaxe
   entities:
   - uid: 52706
     components:

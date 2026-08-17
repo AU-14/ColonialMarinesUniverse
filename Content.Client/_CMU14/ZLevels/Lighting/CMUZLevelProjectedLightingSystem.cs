@@ -41,7 +41,6 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
 
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IEyeManager _eyeManager = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private ITileDefinitionManager _tile = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -74,7 +73,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     private readonly List<(Vector2 Center, float Distance)> _tempOpenings = new();
     private readonly List<Box2> _currentViewOpeningBounds = new();
     private readonly List<int> _checkedOpeningIndices = new(MaxOpeningLosChecks);
-    private readonly List<Entity<PointLightComponent, TransformComponent>> _lightTreeResults = new();
+    private readonly HashSet<Entity<SharedPointLightComponent, TransformComponent>> _lightTreeResults = new();
     private readonly HashSet<EntityUid> _sourceLightSeen = new();
     private readonly List<Box2> _portalLightQueryBounds = new();
     private readonly List<Box2> _portalOpeningCandidateBounds = new();
@@ -376,7 +375,6 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             openingLimit,
             true,
             _openingGrids,
-            _mapManager,
             _map,
             _transform,
             _tile);
@@ -574,7 +572,6 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             1,
             false,
             _openingGrids,
-            _mapManager,
             _map,
             _transform,
             _tile);
@@ -817,7 +814,7 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
     }
 
     private bool TryBuildSourceLight(
-        Entity<PointLightComponent, TransformComponent> lightEnt,
+        Entity<SharedPointLightComponent, TransformComponent> lightEnt,
         MapId mapId,
         float minEnergy,
         out SourceLight sourceLight)
@@ -1609,7 +1606,6 @@ public sealed partial class CMUZLevelProjectedLightingSystem : EntitySystem
             searchRadius,
             openings,
             _openingGrids,
-            _mapManager,
             _map,
             _transform,
             _tile);

@@ -1,5 +1,6 @@
 - type: loadout
   id: AU14CMScalpelManager
+  cost: 15
   inhand:
   - CMScalpelManager
 # Civilian Synth Specializations

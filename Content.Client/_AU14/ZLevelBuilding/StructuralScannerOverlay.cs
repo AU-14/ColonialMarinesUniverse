@@ -8,7 +8,9 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Robust.Client.Graphics;
 using Robust.Client.Player;
 using Robust.Shared.Enums;
+using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Timing;
 
 namespace Content.Client._AU14.ZLevelBuilding;
 
@@ -34,10 +36,21 @@ public sealed class StructuralScannerOverlay : Overlay
     /// <summary>How many tiles around the player to evaluate; bounds the per-frame cost.</summary>
     private const int DrawRadius = 14;
 
+    /// <summary>Largest configured beam span. Bounds the below-grid spatial lookup around the visible region.</summary>
+    private const int MaximumSupportSpan = 8;
+    private static readonly TimeSpan SupportRefreshInterval = TimeSpan.FromSeconds(0.2);
+
     private readonly IEntityManager _entMan;
     private readonly IPlayerManager _player;
     private readonly SharedMapSystem _map;
     private readonly SharedTransformSystem _transform;
+    private readonly IGameTiming _timing;
+    private readonly HashSet<Vector2i> _stableTiles = new();
+    private readonly Dictionary<Vector2i, bool> _solidTiles = new();
+    private EntityUid? _cachedUpperGrid;
+    private EntityUid? _cachedBelowMap;
+    private Vector2i _cachedUpperCenter;
+    private TimeSpan _nextSupportRefresh;
 
     private static readonly Color UnstableColor = new(0.85f, 0.1f, 0.1f, 0.35f);
     private static readonly Color MarginalColor = new(0.9f, 0.75f, 0.1f, 0.3f);
@@ -50,6 +63,7 @@ public sealed class StructuralScannerOverlay : Overlay
         _player = IoCManager.Resolve<IPlayerManager>();
         _map = _entMan.System<SharedMapSystem>();
         _transform = _entMan.System<SharedTransformSystem>();
+        _timing = IoCManager.Resolve<IGameTiming>();
     }
 
     protected override bool BeforeDraw(in OverlayDrawArgs args)
@@ -72,9 +86,12 @@ public sealed class StructuralScannerOverlay : Overlay
         var center = _map.TileIndicesFor(gridUid, grid, xform.Coordinates);
         var handle = args.WorldHandle;
 
-        if (_entMan.HasComponent<ZGeneratedStoneComponent>(mapUid))
+        if (_entMan.TryGetComponent<ZGeneratedStoneComponent>(mapUid, out var stone))
         {
-            DrawUndergroundInstability(handle, gridUid, grid, center, GetRoofSpan(mapUid));
+            // Localized caves share an authored station map. Without exact generated-tile state on the client,
+            // treating the whole map as underground would paint ordinary colony floors as unstable cavern.
+            if (!stone.LocalizedToAuthoredLevel)
+                DrawUndergroundInstability(handle, gridUid, grid, center, GetRoofSpan(mapUid));
             return;
         }
 
@@ -107,6 +124,7 @@ public sealed class StructuralScannerOverlay : Overlay
     /// <summary>Underground: shade open tiles whose roof is unsupported (red) or marginal (yellow).</summary>
     private void DrawUndergroundInstability(DrawingHandleWorld handle, EntityUid gridUid, MapGridComponent grid, Vector2i center, int roofSpan)
     {
+        _solidTiles.Clear();
         for (var dx = -DrawRadius; dx <= DrawRadius; dx++)
         {
             for (var dy = -DrawRadius; dy <= DrawRadius; dy++)
@@ -132,45 +150,85 @@ public sealed class StructuralScannerOverlay : Overlay
     /// <summary>Upper z-level: shade every tile within a below-level beam's span green (stable build ground).</summary>
     private void DrawUpperStable(DrawingHandleWorld handle, EntityUid gridUid, MapGridComponent grid, Vector2i center, EntityUid below)
     {
-        // Collect the support beams on the level below, projected into this grid's tile frame (the levels are
-        // world-aligned, so a below-level beam covers the tile directly above it out to its cantilever span).
-        var beams = new List<(Vector2i Tile, int Span)>();
-        var query = _entMan.EntityQueryEnumerator<StructuralSupportComponent, TransformComponent>();
-        while (query.MoveNext(out var beamUid, out var support, out var beamXform))
+        if (_cachedUpperGrid != gridUid ||
+            _cachedBelowMap != below ||
+            _cachedUpperCenter != center ||
+            _timing.CurTime >= _nextSupportRefresh)
         {
-            if (beamXform.MapUid != below || (!support.IsVerticalSupport && !support.IsAnchor))
-                continue;
+            _cachedUpperGrid = gridUid;
+            _cachedBelowMap = below;
+            _cachedUpperCenter = center;
+            _nextSupportRefresh = _timing.CurTime + SupportRefreshInterval;
+            _stableTiles.Clear();
 
-            // A staircase's own support beam only holds up the stair tiles, not general build ground;
-            // shading its span green would confuse players into thinking those tiles are buildable.
-            if (support.HideFromScanner)
-                continue;
+            if (!_entMan.TryGetComponent<MapComponent>(below, out var belowMap))
+                return;
 
-            var beamTile = _map.WorldToTile(gridUid, grid, _transform.GetWorldPosition(beamUid));
-            beams.Add((beamTile, support.CantileverSpan));
-        }
+            var centerWorld = _transform.ToMapCoordinates(_map.GridTileToLocal(gridUid, grid, center)).Position;
+            var belowCoords = new MapCoordinates(centerWorld, belowMap.MapId);
+            if (!_map.TryFindGridAt(belowCoords, out var belowGridUid, out var belowGrid))
+                return;
 
-        if (beams.Count == 0)
-            return;
-
-        for (var dx = -DrawRadius; dx <= DrawRadius; dx++)
-        {
-            for (var dy = -DrawRadius; dy <= DrawRadius; dy++)
+            // Use the map's anchored-entity tile index. Only supports close enough to affect the visible square
+            // are visited; each support expands its coverage once into a HashSet, avoiding the old visible-tiles
+            // times every support comparison and avoiding a global entity query entirely.
+            var belowCenter = _map.TileIndicesFor(belowGridUid, belowGrid, belowCoords);
+            var searchRadius = DrawRadius + MaximumSupportSpan;
+            for (var dx = -searchRadius; dx <= searchRadius; dx++)
             {
-                var tile = center + new Vector2i(dx, dy);
-
-                var stable = false;
-                foreach (var beam in beams)
+                for (var dy = -searchRadius; dy <= searchRadius; dy++)
                 {
-                    if (Math.Abs(tile.X - beam.Tile.X) + Math.Abs(tile.Y - beam.Tile.Y) <= beam.Span)
+                    var anchored = _map.GetAnchoredEntitiesEnumerator(
+                        belowGridUid,
+                        belowGrid,
+                        belowCenter + new Vector2i(dx, dy));
+
+                    while (anchored.MoveNext(out var supportUid))
                     {
-                        stable = true;
-                        break;
+                        var uid = supportUid.Value;
+                        var span = GetScannerSupportSpan(uid);
+                        if (span < 0)
+                            continue;
+
+                        var supportTile = _map.WorldToTile(gridUid, grid, _transform.GetWorldPosition(uid));
+                        AddStableDiamond(center, supportTile, span);
                     }
                 }
+            }
+        }
 
-                if (stable)
-                    DrawTile(handle, gridUid, grid, tile, StableColor);
+        foreach (var tile in _stableTiles)
+            DrawTile(handle, gridUid, grid, tile, StableColor);
+    }
+
+    private int GetScannerSupportSpan(EntityUid uid)
+    {
+        var span = _entMan.HasComponent<ZLevelWallSupportComponent>(uid)
+            ? ZLevelWallSupportComponent.CantileverSpan
+            : -1;
+
+        if (_entMan.TryGetComponent<StructuralSupportComponent>(uid, out var support) &&
+            (support.IsVerticalSupport || support.IsAnchor) &&
+            !support.HideFromScanner)
+        {
+            span = Math.Max(span, support.CantileverSpan);
+        }
+
+        return span;
+    }
+
+    private void AddStableDiamond(Vector2i center, Vector2i supportTile, int span)
+    {
+        for (var dx = -span; dx <= span; dx++)
+        {
+            for (var dy = -span; dy <= span; dy++)
+            {
+                if (Math.Abs(dx) + Math.Abs(dy) > span)
+                    continue;
+
+                var tile = supportTile + new Vector2i(dx, dy);
+                if (Math.Abs(tile.X - center.X) <= DrawRadius && Math.Abs(tile.Y - center.Y) <= DrawRadius)
+                    _stableTiles.Add(tile);
             }
         }
     }
@@ -183,10 +241,10 @@ public sealed class StructuralScannerOverlay : Overlay
 
     private bool HoldingEnabledScanner(EntityUid player)
     {
-        var query = _entMan.EntityQueryEnumerator<StructuralScannerComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var scanner, out var xform))
+        var children = _entMan.GetComponent<TransformComponent>(player).ChildEnumerator;
+        while (children.MoveNext(out var child))
         {
-            if (scanner.Enabled && xform.ParentUid == player)
+            if (_entMan.TryGetComponent<StructuralScannerComponent>(child, out var scanner) && scanner.Enabled)
                 return true;
         }
 
@@ -196,13 +254,18 @@ public sealed class StructuralScannerOverlay : Overlay
     /// <summary>Client-side roof support: an empty/ungenerated tile, or any anchored entity (rock/wall/pillar).</summary>
     private bool IsSolid(EntityUid gridUid, MapGridComponent grid, Vector2i tile)
     {
-        if (!_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty)
-            return true;
+        if (_solidTiles.TryGetValue(tile, out var cached))
+            return cached;
 
-        foreach (var _ in _map.GetAnchoredEntities(gridUid, grid, tile))
-            return true;
+        var solid = !_map.TryGetTileRef(gridUid, grid, tile, out var tileRef) || tileRef.Tile.IsEmpty;
+        if (!solid)
+        {
+            var anchored = _map.GetAnchoredEntitiesEnumerator(gridUid, grid, tile);
+            solid = anchored.MoveNext(out _);
+        }
 
-        return false;
+        _solidTiles[tile] = solid;
+        return solid;
     }
 
     /// <summary>Manhattan distance to the nearest solid tile, capped at roofSpan + 1.</summary>

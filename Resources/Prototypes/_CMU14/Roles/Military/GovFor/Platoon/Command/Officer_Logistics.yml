@@ -115,6 +115,7 @@
     jumpsuit: CMJumpsuitOrdnanceTech
     back: CMSatchelMarine
     pocket1: AU14StampLO
+    pocket2: CMStampApproved
 
 - type: startingGear
   id: AU14GearOPFOROfficerLogistics
@@ -127,6 +128,7 @@
     jumpsuit: CMJumpsuitOrdnanceTech
     back: CMSatchelMarine
     pocket1: AU14StampLO
+    pocket2: CMStampApproved
 
 - type: roleLoadout
   id: JobAU14JobGOVFOROfficerLogistics

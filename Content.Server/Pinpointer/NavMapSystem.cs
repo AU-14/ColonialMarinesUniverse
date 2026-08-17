@@ -26,7 +26,6 @@ public sealed partial class NavMapSystem : SharedNavMapSystem
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private TurfSystem _turfSystem = default!;
 

@@ -1,0 +1,5 @@
+- type: loadout
+  id: AU14CompactNailgunKit
+  cost: 15
+  inhand:
+  - RMCVendorBundleCompactNailgunKit

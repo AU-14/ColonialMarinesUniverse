@@ -35,7 +35,7 @@ public sealed partial class RequisitionsEntry
     /// How long it takes for a limited entry to restock.
     /// </summary>
     [DataField]
-    public TimeSpan StockReplenishDelay = TimeSpan.FromMinutes(10);
+    public TimeSpan StockReplenishDelay = TimeSpan.FromMinutes(5);
 
     /// <summary>
     /// How many units are restored each restock tick.

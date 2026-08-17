@@ -1,0 +1,4 @@
+- type: tile
+  parent: CMFloorPlate
+  id: CMUCorsatFloorSymbolLambda
+  sprite: /Textures/_CMU14/Tiles/planet/unit732_usedtiles/lambda.png

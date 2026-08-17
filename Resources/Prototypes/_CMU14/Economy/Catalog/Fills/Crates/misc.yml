@@ -214,6 +214,50 @@
 
 - type: entity
   parent: RMCCrateWeapons
+  id: CMUCrateMk86
+  name: Mk86 Automatic Grenade Launcher crate (x1)
+  description: A crate containing one Mk86 case, a deployable mag-fed emplacement capable of firing airburst grenades.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14Mk86Case
+      amount: 1
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateMk86MagazineHornet
+  name: Mk86 AGM-H Magazine crate (x2)
+  description: A crate containing two magazines for the Mk86, loaded with AGM-H 40mm hornet airburst grenades.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineMk86Hornet
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateMk86MagazineFrag
+  name: Mk86 AGM-F Magazine crate (x2)
+  description: A crate containing two magazines for the Mk86, loaded with AGM-F 40mm frag airburst grenades.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineMk86Frag
+      amount: 2
+
+- type: entity
+  parent: RMCCrateAmmo
+  id: CMUCrateMk86MagazineSmoke
+  name: Mk86 AGM-S Magazine crate (x2)
+  description: A crate containing two magazines for the Mk86, loaded with AGM-S 40mm smoke airburst grenades.
+  components:
+  - type: StorageFill
+    contents:
+    - id: AU14MagazineMk86Smoke
+      amount: 2
+
+- type: entity
+  parent: RMCCrateWeapons
   id: AU14CrateM7SLAW
   name: M7-SMAW anti-tank launcher crate (x1 M7-SMAW, x2 84mm AP rocket, x2 84mm HE rocket)
   components:

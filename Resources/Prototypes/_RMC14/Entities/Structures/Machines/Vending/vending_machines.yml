@@ -852,7 +852,7 @@
     - name: Products
       entries:
       - id: FoodContainerEgg
-        amount: 18
+        amount: 12
       - id: FoodMeatChicken
         amount: 36
       - id: FoodMeatFish

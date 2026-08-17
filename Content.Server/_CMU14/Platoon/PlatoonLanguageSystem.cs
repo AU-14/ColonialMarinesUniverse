@@ -11,8 +11,6 @@ namespace Content.Server._CMU14.Platoon;
 
 public sealed class PlatoonLanguageSystem : EntitySystem
 {
-    [Dependency] private readonly IPrototypeManager _proto = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
     [Dependency] private readonly LanguageLearningSystem _learning = default!;
     [Dependency] private readonly PlatoonSpawnRuleSystem _platoonSpawnRule = default!;
 

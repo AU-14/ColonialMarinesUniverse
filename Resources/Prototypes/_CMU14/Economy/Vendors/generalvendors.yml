@@ -319,6 +319,7 @@
       entries:
       - id: CMHeadCapMP
       - id: CMHeadBeretRed
+      - id: CMMPFlatBeret
     - name: Backpack
       choices: { CMBackpack: 1 }
       entries:

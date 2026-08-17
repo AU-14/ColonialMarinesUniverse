@@ -1,0 +1,6 @@
+- type: soundCollection
+  id: L98FireSound
+  files:
+  - /Audio/_AU14/Weapons/l98/L98_1.ogg
+  - /Audio/_AU14/Weapons/l98/L98_2.ogg
+  - /Audio/_AU14/Weapons/l98/L98_3.ogg

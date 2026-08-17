@@ -1,0 +1,119 @@
+- type: job
+  abstract: true
+  parent: CMJobBase
+  id: CMU14JobCivilianProdigyPPOBase
+  name: cmu14-job-name-ppo
+  description: cmu14-job-description-ppo
+  playTimeTracker: CMU14JobCivilianProdigyPPO
+  basePlaytimeTracker: true
+
+- type: job
+  parent: CMU14JobCivilianProdigyPPOBase
+  id: CMU14JobCivilianProdigyPPO
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigyPPO
+  roundComponents:
+  - type: Skills
+    skills:
+      RMCSkillFireman: 1
+      RMCSkillVehicles: 1
+      RMCSkillDomestics: 1
+      RMCSkillFirearms: 1
+      RMCSkillIntel: 1
+      RMCSkillOverwatch: 1
+  - type: JobPrefix
+    prefix: cmu14-job-prefix-ppo
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_liaison
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+
+  name: cmu14-job-name-ppo
+  description: cmu14-job-description-ppo
+  setPreference: true
+  ranks:
+    AU14RankPrDSeniorOperator: []
+  startingGear: CMU14GearCivilianProdigyPPO
+  icon: "CMJobIconLiaison"
+  requireAdminNotify: false
+  joinNotifyCrew: false
+  supervisors: cmu14-job-name-lawyer
+  spawnMenuRoleName: Prodigy PPO (CMU)
+  accessGroups:
+  - Colonist
+  - auadmin
+  - AUPrisonStaff
+  - auprodigy
+  access:
+  - CMU14AccessCorporateProdigyLiaison
+  roleWeight: 0.25
+
+- type: startingGear
+  id: CMU14GearCivilianProdigyPPO
+  equipment:
+    jumpsuit: CMU14ProdigySuitBlack
+    shoes: RMCShoesLaceup
+    id: CMU14IDCardColonyProdigyLiaison
+    ears: CMU14ColonyProdigyHeadset
+    ears2: RMCM5CameraGear
+    outerClothing: CMUArmorProdigyFlakVestAlt
+    pocket1: AU14PouchPoliceEquipmentSupportSynth
+    pocket2: AU14PouchIFAKFill
+    belt: AU14BeltHolsterPistolBlack
+    back: CMSatchel
+    head: CMU14ProdigyCapGrey
+  storage:
+    belt:
+    - CMU14WeaponPistolGlock75Taser
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    - CMU14MagazinePistolGlock75
+    back:
+    #- CMU14MREProdigy todo, needs sprites
+    - CMU14MagazinePistolGlock75Rubber
+    - CMU14MagazinePistolGlock75Rubber
+    - CMU14MagazinePistolGlock75Rubber
+    - CMCanteen
+    - CMU14TearGasGrenade
+    - RMCGrenadeFlashBang
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMU14JobProdigyPPO
+  name: Prodigy Personal Protection Officer (3rd party)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Personal Protection Officer
+    description: cmu14-job-name-ppo
+    reregister: false
+    job: CMU14JobCivilianProdigyPPO
+    raffle:
+      settings: short
+
+- type: entity
+  parent: CMSpawnPointJobBase
+  id: CMU14SpawnPointCivilianProdigyPPO
+  name: Spawn Point Civilian Prodigy PPO
+  components:
+  - type: SpawnPoint
+    job_id: CMU14JobCivilianProdigyPPO
+  - type: Sprite
+    state: syn_spawn
+
+- type: playTimeTracker
+  id: CMU14JobCivilianProdigyPPO
+  isHumanoid: true

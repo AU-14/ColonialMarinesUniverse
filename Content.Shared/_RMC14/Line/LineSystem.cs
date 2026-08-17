@@ -18,7 +18,6 @@ namespace Content.Shared._RMC14.Line;
 
 public sealed partial class LineSystem : EntitySystem
 {
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -75,7 +74,7 @@ public sealed partial class LineSystem : EntitySystem
         {
             x += xOffset;
             y += yOffset;
-            var center = new EntityCoordinates(start.EntityId, x, y).SnapToGrid(EntityManager, _mapManager);
+            var center = new EntityCoordinates(start.EntityId, x, y).SnapToGrid(EntityManager);
             if (center == lastCoords)
                 continue;
 
@@ -90,7 +89,7 @@ public sealed partial class LineSystem : EntitySystem
                         if (xo == 0 && yo == 0)
                             continue;
 
-                        var point = new EntityCoordinates(start.EntityId, x + xo, y + yo).SnapToGrid(EntityManager, _mapManager);
+                        var point = new EntityCoordinates(start.EntityId, x + xo, y + yo).SnapToGrid(EntityManager);
                         coords.Add(point);
                     }
                 }

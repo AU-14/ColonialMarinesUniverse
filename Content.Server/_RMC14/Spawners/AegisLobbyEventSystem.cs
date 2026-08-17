@@ -1,3 +1,4 @@
+using System.Linq;
 using Content.Server.GameTicking.Events;
 using Content.Shared._RMC14.AegisEvent;
 using Content.Server.Fax;
@@ -30,6 +31,12 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
     private TimeSpan? _scheduledEventTime = null;
     private string _scheduledMessage = string.Empty;
     private bool _eventExecuted = false;
+
+    public static readonly string[] AegisFaxGroups =
+    {
+        "military-command",
+        "warship-command"
+    };
 
     public override void Initialize()
     {
@@ -128,51 +135,46 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
         Log.Info("Executing scheduled AEGIS lobby event");
 
         var systemManager = EntityManager.EntitySysManager;
-        var entityManager = EntityManager;
 
         // Send announcements to both marines and xenos
         AegisSharedAnnouncement.AnnounceToBoth(systemManager, _scheduledMessage);
 
-        // Send fax to Marine High Command
-        if (!SendCICFax(systemManager, entityManager, _scheduledMessage, "RMCPaperAegisLobbyInfoFax", "UNS Oberon"))
+        // Send operational briefing to command level fax machines
+        if (!SendCommandFax(EntityManager, "CMUPaperAegisLobbyInfoFax", AegisFaxGroups, "High Command"))
             Log.Info("AEGIS event failed to send any faxes!");
 
-        _req.CreateSpecialDelivery("RMCCrateAegisLobby");
+        _req.CreateSpecialDelivery("CMUCrateAegisLobby");
         Log.Info("AEGIS delivery created and should be sent shortly.");
         //Unschedule after execution
         _aegisScheduled = false;
     }
 
-    public bool SendCICFax(IEntitySystemManager systemManager, IEntityManager entityManager, string message, EntProtoId faxProto, string? sender = null)
+    public bool SendCommandFax(IEntityManager entityManager, EntProtoId faxProto, IEnumerable<string> groups, string? sender = null, string? customMsg = null)
     {
-        if (!_proto.TryIndex(faxProto, out var faxPaper) ||
-            !faxPaper.TryComp<PaperComponent>(out var paper, EntityManager.ComponentFactory))
+        if (!_proto.TryIndex(faxProto, out var faxPaper)
+                || !faxPaper.TryComp<PaperComponent>(out var paper, EntityManager.ComponentFactory))
             return false;
 
-        var label = string.Empty;
+        var label = faxPaper.TryComp<LabelComponent>(out var labelComp, EntityManager.ComponentFactory)
+            ? labelComp.CurrentLabel
+            : string.Empty;
 
-        if (faxPaper.TryComp<LabelComponent>(out var labelComp, EntityManager.ComponentFactory))
-            label = labelComp.CurrentLabel;
+        var content = paper.Content;
+        if (!string.IsNullOrEmpty(customMsg))
+            content += "\n\n[color=#134975]▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬[/color]\n" +
+                       "[bold][color=#134975]COMMAND NOTE[/color][/bold]\n\n" + customMsg;
 
-        var printout = new FaxPrintout(
-            paper.Content,
-            faxPaper.Name,
-            label,
-            faxProto,
-            paper.StampState,
-            paper.StampedBy
-        );
-
+        var printout = new FaxPrintout(content, faxPaper.Name, label, faxProto, paper.StampState, paper.StampedBy);
+        var sentFax = false;
         var faxQuery = entityManager.EntityQueryEnumerator<FaxMachineComponent>();
-        bool sentFax = false;
 
         while (faxQuery.MoveNext(out var faxEnt, out var faxComp))
         {
-            if (faxComp.FaxName == "CIC")
-            {
-                _fax.Receive(faxEnt, printout, sender, faxComp);
-                sentFax = true;
-            }
+            if (faxComp.FaxName != "CIC" && !groups.Any(faxComp.Groups.Contains))
+                continue;
+
+            _fax.Receive(faxEnt, printout, sender, faxComp);
+            sentFax = true;
         }
 
         return sentFax;

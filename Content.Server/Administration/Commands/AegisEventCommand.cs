@@ -19,15 +19,15 @@ public sealed class AegisEventCommand : IConsoleCommand
         var entityManager = IoCManager.Resolve<IEntityManager>();
         var reqSystem = systemManager.GetEntitySystem<SharedRequisitionsSystem>();
         var aegisSystem = systemManager.GetEntitySystem<AegisLobbyEventSystem>();
-        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS event has been initiated.";
+        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS protocol is now in effect.";
 
         // Announce to both marines and xenos
         AegisSharedAnnouncement.AnnounceToBoth(systemManager, message);
         // Send fax to CIC
-        aegisSystem.SendCICFax(systemManager, entityManager, message, "RMCPaperAegisInfoFax", "UNS Oberon");
+        aegisSystem.SendCommandFax(entityManager, "CMUPaperAegisInfoFax", AegisLobbyEventSystem.AegisFaxGroups, "High Command", message);
 
         // Spawn and send the Aegis ID card
-        reqSystem.CreateSpecialDelivery("RMCIDCardAegis");
+        reqSystem.CreateSpecialDelivery("CMUIDCardAegis");
 
         // Spawn and send the Powerloader pamphlet
         reqSystem.CreateSpecialDelivery("CMPamphletPowerloader");
@@ -57,7 +57,7 @@ public sealed class AegisSpawnCommand : IConsoleCommand
             return;
         }
 
-        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS event has been scheduled for this round.";
+        var message = args.Length > 0 ? string.Join(" ", args) : "AEGIS protocol is in effect at this time.";
 
         // Set spawner flags to trigger at round start
         aegisSystem.SetAegisSpawnersForThisRound();

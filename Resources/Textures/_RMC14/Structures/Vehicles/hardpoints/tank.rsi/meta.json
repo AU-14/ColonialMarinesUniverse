@@ -37,6 +37,9 @@
     {
       "name": "m56_cupola"
     },
+	{
+      "name": "re700_cupola"
+    },
     {
       "name": "ltb_cannon"
     },
@@ -60,6 +63,9 @@
     },
     {
       "name": "ace_autocannon"
+    },
+	{
+      "name": "mounted_flag"
     },
     {
       "name": "drgn_flamer"

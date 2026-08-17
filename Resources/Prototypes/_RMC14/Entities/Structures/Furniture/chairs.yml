@@ -9,6 +9,7 @@
   name: abstract chair
   suffix: RMC
   components:
+  - type: CMUZPhysics # RuMC edit
   - type: Corrodible
     timeToApply: 4
     structure: true

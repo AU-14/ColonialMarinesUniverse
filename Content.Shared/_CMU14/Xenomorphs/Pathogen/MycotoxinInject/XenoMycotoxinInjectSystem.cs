@@ -19,7 +19,6 @@ public sealed partial class CMUXenoMycotoxinInjectSystem : EntitySystem
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
     [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
 
     public override void Initialize()
     {

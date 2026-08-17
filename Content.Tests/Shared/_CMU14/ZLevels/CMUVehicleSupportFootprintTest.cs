@@ -27,22 +27,6 @@ public sealed class CMUVehicleSupportFootprintTest
     }
 
     [Test]
-    public void NormalizesInvertedBounds()
-    {
-        var samples = new List<Vector2>();
-
-        CMUVehicleSupportFootprint.GenerateLocalSamples(
-            new Box2(-0.5f, 1.5f, 0.5f, -0.5f),
-            1f,
-            0f,
-            samples);
-
-        Assert.That(samples, Has.Count.EqualTo(6));
-        Assert.That(samples, Does.Contain(new Vector2(-0.5f, -0.5f)));
-        Assert.That(samples, Does.Contain(new Vector2(0.5f, 1.5f)));
-    }
-
-    [Test]
     public void WorldSamplesRotateAroundOrigin()
     {
         var samples = new List<Vector2>();

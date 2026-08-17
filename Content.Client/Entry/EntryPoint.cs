@@ -98,6 +98,7 @@ namespace Content.Client.Entry
             _configManager.OverrideDefault(CVars.DisplayVSync, false);
 
             _contentLoc.Initialize();
+            MarkupFontFallback.Register();
             _componentFactory.DoAutoRegistrations();
             _componentFactory.IgnoreMissingComponents();
 

@@ -42,7 +42,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
@@ -164,7 +163,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (args.Handled || !HasFleshResinPopup(xeno, xeno.Comp.FleshBloomCost))
             return;
 
-        var coordinates = args.Target.SnapToGrid(EntityManager, _map);
+        var coordinates = args.Target.SnapToGrid(EntityManager);
         if (!coordinates.IsValid(EntityManager))
             return;
 
@@ -212,8 +211,8 @@ public sealed partial class XenoReaperSystem : EntitySystem
         if (args.Handled || !HasFleshResinPopup(xeno, xeno.Comp.RedGasCost))
             return;
 
-        var start = Transform(xeno).Coordinates.SnapToGrid(EntityManager, _map);
-        var target = args.Target.SnapToGrid(EntityManager, _map);
+        var start = Transform(xeno).Coordinates.SnapToGrid(EntityManager);
+        var target = args.Target.SnapToGrid(EntityManager);
         if (!start.IsValid(EntityManager) || !target.IsValid(EntityManager))
             return;
 
@@ -433,7 +432,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         for (var i = 0; i <= steps; i++)
         {
             var position = start.Position + direction * i;
-            var coordinates = new EntityCoordinates(start.EntityId, position).SnapToGrid(EntityManager, _map);
+            var coordinates = new EntityCoordinates(start.EntityId, position).SnapToGrid(EntityManager);
             if (path.Count == 0 || path[^1].Position != coordinates.Position)
                 path.Add(coordinates);
         }
@@ -493,7 +492,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
 
         foreach (var offset in GetRedGasOffsets(width, perpendicular))
         {
-            var coordinates = center.Offset(offset).SnapToGrid(EntityManager, _map);
+            var coordinates = center.Offset(offset).SnapToGrid(EntityManager);
             if (!coordinates.IsValid(EntityManager))
                 continue;
 

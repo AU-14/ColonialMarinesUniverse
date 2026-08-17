@@ -53,7 +53,7 @@
   category: construction-category-structures
   objectType: Structure
   placementMode: SnapgridCenter
-  canRotate: false
+  canRotate: true
   isCM: true
   spawnlist: ZLevel
   conditions:
@@ -71,7 +71,7 @@
   category: construction-category-structures
   objectType: Structure
   placementMode: SnapgridCenter
-  canRotate: false
+  canRotate: true
   isCM: true
   spawnlist: ZLevel
   conditions:

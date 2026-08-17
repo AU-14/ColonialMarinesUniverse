@@ -73,6 +73,9 @@ public sealed partial class RequisitionsElevatorComponent : Component
 
     [DataField("faction")]
     public string Faction = "none";
+
+    [DataField, AutoNetworkedField]
+    public bool RoundStartFreeCrateGiven;
 }
 
 [Serializable, NetSerializable]

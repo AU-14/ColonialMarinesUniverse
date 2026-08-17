@@ -52,7 +52,6 @@ public sealed partial class PowerLoaderSystem : EntitySystem
     [Dependency] private SharedDropshipSystem _dropship = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private SharedMoverController _mover = default!;
@@ -1429,7 +1428,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         var source = loader.Owner.ToCoordinates();
         var coords = _transform.GetMoverCoordinates(clickLocation);
-        coords = coords.SnapToGrid(EntityManager, _mapManager);
+        coords = coords.SnapToGrid(EntityManager);
         if (!source.TryDistance(EntityManager, coords, out var distance))
             return false;
 

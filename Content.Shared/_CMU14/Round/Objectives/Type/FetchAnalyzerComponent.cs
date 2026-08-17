@@ -1,5 +1,5 @@
 using Robust.Shared.Prototypes;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 
 namespace Content.Shared._CMU14.Round.Objectives.Type;
 

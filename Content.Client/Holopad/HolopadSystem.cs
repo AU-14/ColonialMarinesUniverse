@@ -12,6 +12,8 @@ namespace Content.Client.Holopad;
 
 public sealed partial class HolopadSystem : SharedHolopadSystem
 {
+    private const string HologramShaderId = "Hologram";
+
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SpriteSystem _sprite = default!;
@@ -32,7 +34,7 @@ public sealed partial class HolopadSystem : SharedHolopadSystem
 
     private void OnShaderRender(Entity<HolopadHologramComponent> entity, ref BeforePostShaderRenderEvent ev)
     {
-        if (ev.Sprite.PostShader == null)
+        if (ev.Id != HologramShaderId)
             return;
 
         UpdateHologramSprite(entity, entity.Comp.LinkedEntity);
@@ -128,7 +130,9 @@ public sealed partial class HolopadSystem : SharedHolopadSystem
         instance.SetParameter("texHeight", texHeight);
         instance.SetParameter("t", (float)_timing.CurTime.TotalSeconds * holopadHologram.ScrollRate);
 
-        sprite.PostShader = instance;
-        sprite.RaiseShaderEvent = true;
+        _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(HologramShaderId, instance)
+        {
+            RaiseShaderEvent = true,
+        });
     }
 }

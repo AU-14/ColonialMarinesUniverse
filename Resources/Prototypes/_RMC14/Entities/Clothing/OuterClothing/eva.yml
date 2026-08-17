@@ -71,7 +71,7 @@
     autoRot: true
     netsync: false
     color: "#FFFFFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/wide_ellipsis.png
+    lightMask: EllipseWide
   - type: RemoveComponents
     components:
     - type: Storage

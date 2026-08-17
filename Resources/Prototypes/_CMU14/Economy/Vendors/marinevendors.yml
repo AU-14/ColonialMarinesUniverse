@@ -1451,6 +1451,7 @@
       entries:
       - id: CMHeadCapMP
       - id: CMHeadBeretRed
+      - id: CMMPFlatBeret
     - name: Helmet
       choices: { AU14Helmet: 1 }
       entries:

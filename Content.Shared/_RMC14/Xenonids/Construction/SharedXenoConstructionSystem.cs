@@ -72,7 +72,6 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
     [Dependency] private SharedGameTicker _gameTicker = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
-    [Dependency] private IMapManager _map = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -291,7 +290,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
     private void OnXenoPlantWeedsAction(Entity<XenoConstructionComponent> xeno, ref XenoPlantWeedsActionEvent args)
     {
-        var coordinates = _transform.GetMoverCoordinates(xeno).SnapToGrid(EntityManager, _map);
+        var coordinates = _transform.GetMoverCoordinates(xeno).SnapToGrid(EntityManager);
         if (_transform.GetGrid(coordinates) is not { } gridUid ||
             !TryComp(gridUid, out MapGridComponent? gridComp))
         {
@@ -475,7 +474,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
 
     private void HandleSecreteResinPlacement(Entity<XenoConstructionComponent> xeno, ref XenoSecreteStructureActionEvent args)
     {
-        var snapped = args.Target.SnapToGrid(EntityManager, _map);
+        var snapped = args.Target.SnapToGrid(EntityManager);
         var hasBoost = _queenBoostQuery.HasComp(xeno.Owner);
 
         if ((xeno.Comp.CanUpgrade || hasBoost) &&
@@ -967,7 +966,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var coordinates = target.SnapToGrid(EntityManager, _map);
+        var coordinates = target.SnapToGrid(EntityManager);
         var structure = Spawn(args.StructureId, coordinates);
 
         _hive.SetSameHive(xeno.Owner, structure);
@@ -1122,7 +1121,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         if (GetCoordinates(args.Input.EntityCoordinatesTarget) is not { } target)
             return;
 
-        var snapped = target.SnapToGrid(EntityManager, _map);
+        var snapped = target.SnapToGrid(EntityManager);
 
         var adjustEv = new XenoSecreteStructureAdjustFields(snapped);
         RaiseLocalEvent(args.User, ref adjustEv);
@@ -1495,7 +1494,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
     private bool InRangePopup(EntityUid xeno, EntityCoordinates target, float range, float minRange = 0, bool popup = true)
     {
         var origin = _transform.GetMoverCoordinates(xeno);
-        target = target.SnapToGrid(EntityManager, _map);
+        target = target.SnapToGrid(EntityManager);
         if (!_transform.InRange(origin, target, range))
         {
             if (popup)
@@ -1534,7 +1533,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
             return false;
         }
 
-        target = target.SnapToGrid(EntityManager, _map);
+        target = target.SnapToGrid(EntityManager);
         var hasBoost = _queenBoostQuery.HasComp(xeno.Owner);
 
         if (IsNearVehiclePopup(xeno, target, popup))
@@ -2229,7 +2228,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
         if (_prototype.TryIndex(buildChoice, out var proto) && proto.HasComponent<DesignNodeComponent>())
             return 1f;
 
-        var snapped = target.SnapToGrid(EntityManager, _map);
+        var snapped = target.SnapToGrid(EntityManager);
         using var anchoredNodes = _rmcMap.GetAnchoredEntitiesEnumerator<DesignNodeComponent>(snapped);
         while (anchoredNodes.MoveNext(out var nodeUid))
         {
@@ -2264,7 +2263,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                 return 1f;
         }
 
-        var snapped = target.SnapToGrid(EntityManager, _map);
+        var snapped = target.SnapToGrid(EntityManager);
         using var anchoredNodes = _rmcMap.GetAnchoredEntitiesEnumerator<DesignNodeComponent>(snapped);
         while (anchoredNodes.MoveNext(out var nodeUid))
         {
@@ -2309,7 +2308,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                 return true;
         }
 
-        var snapped = target.SnapToGrid(EntityManager, _map);
+        var snapped = target.SnapToGrid(EntityManager);
         EntityUid? nodeUid = null;
         DesignNodeComponent? nodeComp = null;
 
@@ -2365,7 +2364,7 @@ public sealed partial class SharedXenoConstructionSystem : EntitySystem
                 return true;
         }
 
-        var snapped = target.SnapToGrid(EntityManager, _map);
+        var snapped = target.SnapToGrid(EntityManager);
         if (!_rmcMap.HasAnchoredEntityEnumerator<XenoStructureUpgradeableComponent>(snapped, out var upgradeable) ||
             upgradeable.Comp.To is not { } to ||
             !_prototype.HasIndex(to))

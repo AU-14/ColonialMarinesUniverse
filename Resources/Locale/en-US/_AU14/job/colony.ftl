@@ -254,3 +254,15 @@ au14-job-prefix-civiliannspainspector = NSPAINS
 au14-job-name-civilianiccliaison = Interstellar Commerce Commission Liaison
 au14-job-description-civilianiccliaison = You are an Interstellar Commerce Commission Corporate Liaison, a well experienced ICC Agent that has been attached to an NSPA team. You work with the NSPA specifically to observe proper trade practices and investigate any possibilities of smuggling or black market activity.
 au14-job-prefix-civilianiccliaison = ICCL
+
+cmu14-job-name-civilian-supervisor = Supervisor
+cmu14-job-description-civilian-supervisor = You are here to ensure maximum level of followed procedures.
+cmu14-job-prefix-civilian-supervisor = SPRVSR
+
+cmu14-job-name-lawyer = Lawyer
+cmu14-job-description-lawyer = You are a lawyer. Some claim you have no soul but you just like money and have superiority complex. What earns money best than making your clients happy?
+cmu14-job-prefix-lawyer = LAWR
+
+cmu14-job-name-ppo = PPO
+cmu14-job-description-ppo = Personal Protection Officer, you are here to protect the VIP.
+cmu14-job-prefix-ppo = PPO

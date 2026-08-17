@@ -149,7 +149,7 @@
     energy: 3
     offset: "0,0"
     color: "#00AAFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 # Broken Phone Box
 

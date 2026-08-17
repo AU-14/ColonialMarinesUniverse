@@ -1,0 +1,92 @@
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14ProdigyFatigues
+  name: prodigy fatigues
+  description: Standard-issue Prodigy Security Forces fatigues.
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/fatigues.rsi
+
+- type: entity
+  parent: [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: AU14ProdigyFatiguesRU
+  name: Prodigy Armed Repair Team specialized fatigues
+  description: Standard-issue Prodigy Armed Repair Team fatigues. The PART-SF is a specialized uniform designed for Prodigy Security Corp's Armed Repair Teams, who are responsible for maintaining and repairing equipment in high-risk environments. The uniform features reinforced padding on the knees and elbows, as well as multiple pockets for carrying tools and supplies. It also includes a built-in harness system for attaching additional gear and equipment.
+  components:
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,7,1   # up to 4 small or 8 tiny items
+  - type: Sprite
+    sprite: _AU14/Clothing/ProdigySecurityForces/ArmedRepairTeam/partfatigues.rsi
+  - type: Tag
+    tags:
+    - ProdigyUniform
+
+- type: entity
+  parent: AU14ProdigyFatiguesRU
+  id: AU14ProdigyFatiguesRUSynth
+  name: Prodigy Armed Repair Team Synthetic fatigues
+  description: Standard-issue Prodigy Armed Repair Team fatigues for Synthetics. The PART-SF is a specialized uniform designed for Prodigy Security Corp's Armed Repair Teams, who are responsible for maintaining and repairing equipment in high-risk environments. The uniform features reinforced padding on the knees and elbows, as well as multiple pockets for carrying tools and supplies. It also includes a built-in harness system for attaching additional gear and equipment.
+  components:
+  - type: Tag
+    tags:
+    - ProdigyUniformSynth
+
+- type: entity
+  parent:  [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14ProdigySuitBlackSkirt
+  name: black skirt suit
+  description: An elegant black suit with a skirt and a white shirt. Made with high-class fabric, it is perfect for careerists or girl bossing. Its size fits everyone with enough confidence. The label says "PRODIGY CORP. 100% WOOL. DRY CLEAN ONLY. DO NOT WASH. DESIGNED IN NEW SIAM". Weirdly enough, there's no information on where it was produced.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Clothing/Prodigy/blackskirt.rsi
+
+- type: entity
+  parent:  [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14ProdigySuitGreySkirt
+  name: grey skirt suit
+  description: An elegant grey suit with a skirt and a white shirt. Made with high-class fabric, it is perfect for careerists or girl bossing. Its size fits everyone with enough confidence. The label says "PRODIGY CORP. 100% WOOL. DRY CLEAN ONLY. DO NOT WASH. DESIGNED IN NEW SIAM". Weirdly enough, there's no information on where it was produced.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Clothing/Prodigy/greyskirt.rsi
+
+- type: entity
+  parent:  [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14ProdigySuitBlack
+  name: black suit
+  description: An elegant black suit and white shirt. Made with high-class fabric, it is perfect for careerists or being arrogant douchebag. Its size fits everyone with enough confidence. The label says "PRODIGY CORP. 100% WOOL. DRY CLEAN ONLY. DO NOT WASH. DESIGNED IN NEW SIAM". Weirdly enough, there's no information on where it was produced.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Clothing/Prodigy/blacksuit.rsi
+
+- type: entity
+  parent:  [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14ProdigySuitGrey
+  name: grey suit
+  description: An elegant grey suit and white shirt. Made with high-class fabric, it is perfect for careerists or being arrogant douchebag. Its size fits everyone with enough confidence. The label says "PRODIGY CORP. 100% WOOL. DRY CLEAN ONLY. DO NOT WASH. DESIGNED IN NEW SIAM". Weirdly enough, there's no information on where it was produced.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Clothing/Prodigy/greysuit.rsi
+
+- type: entity
+  parent:  [RMCMarineUniformBase, RMCAlternateFoldableUniformBase]
+  id: CMU14ProdigyJumpsuitGrey
+  name: grey jumpsuit
+  description: Grey working one-piece boilersuit. Looks like a solid piece of gear, made out of ripstop fabric. The label says "PRODIGY CORP. RIPSTOP. FR. IS. AS. DO NOT BLEACH.". Has quite a few pockets, though some of them are for design purposes only.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Clothing/Prodigy/greyjumpsuit.rsi
+  - type: Storage
+    maxItemSize: Normal
+    grid:
+    - 0,0,5,1 # 3 slots
+  - type: FixedItemSizeStorage
+
+# TAGS
+
+- type: Tag
+  id: ProdigyUniformSynth
+
+- type: Tag
+  id: ProdigyUniform

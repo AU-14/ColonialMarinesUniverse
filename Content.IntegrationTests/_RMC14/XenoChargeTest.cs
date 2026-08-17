@@ -49,7 +49,7 @@ public sealed class XenoChargeTest
                 transform.SetCoordinates(crusher, map.GridCoords.Offset(new Vector2(1, 0.5f)));
             });
 
-            await pair.RunSeconds(0.65f);
+            await pair.RunSeconds(1.3f);
 
             await server.WaitAssertion(() =>
             {

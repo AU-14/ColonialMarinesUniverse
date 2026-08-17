@@ -18,8 +18,8 @@ public sealed partial class InsurgencyCellKitComponent : Component
     ///     Whether the kit's deployable list has been populated from the active faction yet. Filled
     ///     lazily the first time the UI is opened, since the faction is chosen after spawn.
     /// </summary>
-    [DataField]
-    public bool Initialized;
+    [DataField("initialized")]
+    public bool Populated;
 
     /// <summary>
     ///     Deployables still available in this kit. Consumed one at a time as they are placed.

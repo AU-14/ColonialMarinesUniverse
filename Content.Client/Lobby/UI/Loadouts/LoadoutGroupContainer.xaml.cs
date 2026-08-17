@@ -73,8 +73,13 @@ public sealed partial class LoadoutGroupContainer : BoxContainer
 
         LoadoutsContainer.DisposeAllChildren();
 
-        // Get all loadout prototypes for this group.
-        var validProtos = _groupProto.Loadouts.Select(id => protoMan.Index(id));
+        // Get all loadout prototypes for this group. Invalid content should not crash the menu.
+        var validProtos = new List<LoadoutPrototype>();
+        foreach (var id in _groupProto.Loadouts)
+        {
+            if (protoMan.TryIndex(id, out var proto))
+                validProtos.Add(proto);
+        }
 
         /*
          * Group the prototypes based on their GroupBy field.

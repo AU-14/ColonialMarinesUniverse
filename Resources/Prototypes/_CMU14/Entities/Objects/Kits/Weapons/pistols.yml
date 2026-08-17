@@ -86,6 +86,106 @@
         amount: 7
 
 - type: entity
+  parent: RMCKitBase
+  id: CMU14KitWeaponGlock75
+  name: Glock 75 handgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMU14WeaponPistolGlock75
+        amount: 1
+      - id: CMU14MagazinePistolGlock75AP
+        amount: 1
+      - id: CMU14MagazinePistolGlock75HP
+        amount: 1
+      - id: CMU14MagazinePistolGlock75
+        amount: 7
+
+- type: entity
+  parent: RMCKitBase
+  id: CMU14KitWeaponGlock75Rubber
+  name: Glock 75 less-than-lethal handgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMU14WeaponPistolGlock75Empty
+        amount: 1
+      - id: CMU14AttachmentUnderbarrelTaser
+        amount: 1
+      - id: CMU14MagazinePistolGlock75Rubber
+        amount: 10
+  
+- type: entity
+  parent: RMCKitBase
+  id: CMU14KitWeaponGlock77
+  name: Glock 77 handgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMU14WeaponPistolGlock77
+        amount: 1
+      - id: CMU14MagazinePistolGlock77AP
+        amount: 1
+      - id: CMU14MagazinePistolGlock77HP
+        amount: 1
+      - id: CMU14MagazinePistolGlock77
+        amount: 7
+
+- type: entity
+  parent: RMCKitBase
+  id: CMU14KitWeaponGlock77Rubber
+  name: Glock 77 less-than-lethal handgun case
+  components:
+  - type: Item
+    size: Ginormous
+  - type: Storage
+    maxItemSize: Ginormous
+    grid:
+    - 0,0,9,3
+  - type: Sprite
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: Icon
+    sprite: _RMC14/Objects/Storage/procase_mini.rsi
+  - type: StorageFill
+    contents:
+      - id: CMU14WeaponPistolGlock77Empty
+        amount: 1
+      - id: CMU14AttachmentUnderbarrelTaser
+        amount: 1
+      - id: CMU14MagazinePistolGlock77Rubber
+        amount: 10
+
+- type: entity
   parent: RMCGunCaseBase
   id: AU14GunCasePistolT73
   name: Type 73 service pistol case

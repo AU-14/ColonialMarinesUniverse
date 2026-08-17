@@ -34,7 +34,7 @@
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
   - type: VehicleSound
     runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
-    runningSoundCooldown: 2
+    runningSoundCooldown: 2.6
     hornSound: /Audio/Effects/Vehicle/carhorn.ogg
     hornCooldown: 1
     collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg

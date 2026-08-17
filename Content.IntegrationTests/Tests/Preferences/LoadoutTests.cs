@@ -21,16 +21,39 @@ public sealed class LoadoutTests
   equipment:
     jumpsuit: ClothingUniformJumpsuitColorGrey
 
+- type: loadout
+  id: TestPointLoadoutThree
+  cost: 3
+
+- type: loadout
+  id: TestPointLoadoutFour
+  cost: 4
+
 - type: loadoutGroup
   id: LoadoutTesterJumpsuit
   name: generic-unknown
   loadouts:
   - TestJumpsuit
 
+- type: loadoutGroup
+  id: LoadoutTesterPoints
+  name: generic-unknown
+  minLimit: 0
+  maxLimit: 1
+  loadouts:
+  - TestPointLoadoutThree
+  - TestPointLoadoutFour
+
 - type: roleLoadout
   id: JobLoadoutTester
   groups:
   - LoadoutTesterJumpsuit
+
+- type: roleLoadout
+  id: JobLoadoutPointTester
+  points: 5
+  groups:
+  - LoadoutTesterPoints
 
 - type: job
   id: LoadoutTester
@@ -86,6 +109,77 @@ public sealed class LoadoutTests
             Assert.That(checkedCount, Is.EqualTo(_expectedEquipment.Count), "Number of items does not match expected!");
 
             entManager.DeleteEntity(tester);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Checks that changing a selection immediately updates its remaining points.
+    /// </summary>
+    [Test]
+    public async Task TestSelectionUpdatesPoints()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var protoManager = server.ResolveDependency<IPrototypeManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            var loadout = new RoleLoadout("JobLoadoutPointTester")
+            {
+                Points = 5,
+                SelectedLoadouts =
+                {
+                    ["LoadoutTesterPoints"] = new List<Loadout>(),
+                },
+            };
+
+            Assert.That(loadout.AddLoadout("LoadoutTesterPoints", "TestPointLoadoutThree", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(2));
+
+            // Replacing an item at the group limit must refund the old item as well.
+            Assert.That(loadout.AddLoadout("LoadoutTesterPoints", "TestPointLoadoutFour", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(1));
+
+            Assert.That(loadout.RemoveLoadout("LoadoutTesterPoints", "TestPointLoadoutFour", protoManager), Is.True);
+            Assert.That(loadout.Points, Is.EqualTo(5));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    /// <summary>
+    /// Checks that every loadout referenced by a group exists.
+    /// </summary>
+    [Test]
+    public async Task TestLoadoutGroupReferences()
+    {
+        var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Dirty = true,
+        });
+        var server = pair.Server;
+        var protoManager = server.ResolveDependency<IPrototypeManager>();
+
+        await server.WaitAssertion(() =>
+        {
+            var missing = new List<string>();
+
+            foreach (var group in protoManager.EnumeratePrototypes<LoadoutGroupPrototype>())
+            {
+                foreach (var loadout in group.Loadouts)
+                {
+                    if (!protoManager.HasIndex<LoadoutPrototype>(loadout))
+                        missing.Add($"{group.ID}: {loadout}");
+                }
+            }
+
+            Assert.That(missing, Is.Empty,
+                $"Loadout groups reference unknown loadouts:\n{string.Join('\n', missing)}");
         });
 
         await pair.CleanReturnAsync();

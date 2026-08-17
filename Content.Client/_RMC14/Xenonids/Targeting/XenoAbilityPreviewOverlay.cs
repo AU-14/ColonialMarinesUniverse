@@ -74,7 +74,6 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
     private readonly IPlayerManager _player;
     private readonly IUserInterfaceManager _ui;
     private readonly IConfigurationManager _config;
-    private readonly IMapManager _mapManager;
     private readonly IPrototypeManager _prototypes;
     private readonly IComponentFactory _componentFactory;
     private readonly IStateManager _stateManager;
@@ -112,7 +111,6 @@ public sealed class XenoAbilityPreviewOverlay : Overlay
         _player = IoCManager.Resolve<IPlayerManager>();
         _ui = IoCManager.Resolve<IUserInterfaceManager>();
         _config = IoCManager.Resolve<IConfigurationManager>();
-        _mapManager = IoCManager.Resolve<IMapManager>();
         _prototypes = IoCManager.Resolve<IPrototypeManager>();
         _componentFactory = IoCManager.Resolve<IComponentFactory>();
         _stateManager = IoCManager.Resolve<IStateManager>();

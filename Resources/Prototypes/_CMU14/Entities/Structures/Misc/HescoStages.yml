@@ -215,6 +215,16 @@
     - state: sand_wall_short_complete
     - map: [ "acided" ]
     drawdepth: WallTops
+  - type: GenericVisualizer
+    visuals:
+      enum.BarbedWireVisualLayers.Wire:
+        barbWired:
+          UnWired: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: sandbag_wire, visible: false }
+          WiredClosed: { sprite: _RMC14/Structures/Walls/Barricades/barricade.rsi, state: sandbag_wire, visible: true }
+  - type: Barbed
+    thornsDamage:
+      types:
+        Slash: 10
   - type: Physics
     bodyType: Static
   - type: Fixtures

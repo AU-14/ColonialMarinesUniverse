@@ -63,7 +63,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -133,7 +136,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -160,10 +166,10 @@
   - type: VehicleTurret
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
-    pixelOffsetNorth: "0,-10"
-    pixelOffsetEast: "-10,0"
-    pixelOffsetSouth: "0,10"
-    pixelOffsetWest: "10,0"
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
     overlayState: towlauncher_0
@@ -199,7 +205,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -264,23 +273,24 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
     vehicleState: m56cupola_0
     damagedVehicleState: m56cupola_1
 
-
 - type: entity
   parent: VehicleTankHardpointBase
-  id: VehicleTankCupolaTWE
-  name: Improper L98 10x28mm Hull General Purpose Machine Gun
-  description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
+  id: VehicleTankRERE700
+  name: RE700 cupola
+  description: A dual-barrel cupola-mounted weapon hardpoint. The integrated IFF component seems to be missing.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
-    state: mounted_cupola
+    state: re700_cupola
   - type: HardpointItem
     hardpointType: Launcher
     vehicleFamily: Tank
@@ -293,6 +303,73 @@
   - type: VehicleTurret
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
+    pixelOffsetNorth: "0,-10"
+    pixelOffsetEast: "-10,0"
+    pixelOffsetSouth: "0,10"
+    pixelOffsetWest: "10,0"
+    showOverlay: true
+    overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
+    overlayState: re700cupola_0
+  - type: GunUseGunOrigin
+  - type: GunIgnoreContainerOwnerCollision
+  - type: Gun
+    fireRate: 6.45
+    selectedMode: FullAuto
+    availableModes:
+    - FullAuto
+    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
+    cameraRecoilScalar: 0
+  - type: GunIFF
+    enabled: false
+  - type: RMCWeaponAccuracy
+    accuracyMultiplier: 5
+    accuracyMultiplierUnwielded: 5
+  - type: BallisticAmmoProvider
+    cycleable: false
+    proto: VehicleCartridgeSentry10x50mm
+    capacity: 500
+  - type: VehicleHardpointAmmo
+    magazineSize: 500
+    maxStoredMagazines: 2
+  - type: GunFireArc
+    arc: 180
+  - type: RefillableByBulletBox
+    bulletType: VehicleAmmoBoxCupola
+  - type: GunMuzzleOffset
+    offset: "0,0"
+    useDirectionalOffsets: true
+    offsetEast: "0,0.2"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
+    useAimDirection: true
+    useContainerOwner: false
+  - type: HardpointVisual
+    vehicleState: re700cupola_0
+    damagedVehicleState: m56cupola_1
+
+- type: entity
+  parent: VehicleTankHardpointBase
+  id: VehicleTankCupolaTWE
+  name: Improper L98 10x28mm Hull General Purpose Machine Gun
+  description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    state: mounted_cupola
+  - type: HardpointItem
+    hardpointType: Secondary
+    vehicleFamily: Tank
+    slotType: Launcher
+    damageMultiplier: 0.0
+    repairRate: 0.0125
+  - type: HardpointIntegrity
+    maxIntegrity: 350
+  - type: VehicleTurretAttachment
+  - type: VehicleTurret
+    offsetRotatesWithTurret: false
+    useDirectionalOffsets: false
     pixelOffsetNorth: "0,0"
     pixelOffsetEast: "0,0"
     pixelOffsetSouth: "0,0"
@@ -303,13 +380,14 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: Gun
-    fireRate: 6
-    minAngle: 3
-    maxAngle: 3
+    fireRate: 3.5
+    minAngle: 2.3
+    maxAngle: 2.3
     selectedMode: FullAuto
     availableModes:
     - FullAuto
-    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
+    soundGunshot:
+      collection: L98FireSound
     cameraRecoilScalar: 0
   - type: GunIFF
     enabled: true
@@ -330,74 +408,14 @@
   - type: GunMuzzleOffset
     offset: "0,0"
     useDirectionalOffsets: true
-    offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
-    useAimDirection: true
+    offsetWest: "0,1"
+    offsetEast: "0,-0.37"
+    offsetNorth: "0.68,0"
+    offsetSouth: "-0.68,0"
+    muzzleOffset: "0.3,-1.1"
+    useAimDirection: false
     useContainerOwner: false
   - type: HardpointVisual
     vehicleState: mounted_cupola_0
     damagedVehicleState: mounted_cupola_1
-
-- type: entity
-  parent: VehicleTankHardpointBase
-  id: VehicleTankRERE700
-  name: RE-RE700 cupola
-  description: A dual-barrel cupola-mounted weapon hardpoint with integrated IFF.
-  components:
-  - type: Sprite
-    state: m56_cupola
-  - type: HardpointItem
-    hardpointType: Launcher
-    vehicleFamily: Tank
-    slotType: Launcher
-    damageMultiplier: 0.0
-    repairRate: 0.0125
-  - type: HardpointIntegrity
-    maxIntegrity: 350
-  - type: VehicleTurretAttachment
-  - type: VehicleTurret
-    offsetRotatesWithTurret: true
-    useDirectionalOffsets: true
-    pixelOffsetNorth: "0,-10"
-    pixelOffsetEast: "-10,0"
-    pixelOffsetSouth: "0,10"
-    pixelOffsetWest: "10,0"
-    showOverlay: true
-    overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
-    overlayState: m56cupola_0
-  - type: GunUseGunOrigin
-  - type: GunIgnoreContainerOwnerCollision
-  - type: Gun
-    fireRate: 9
-    selectedMode: FullAuto
-    availableModes:
-    - FullAuto
-    soundGunshot: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_ml66a_2.ogg
-    cameraRecoilScalar: 0
-  - type: GunIFF
-    enabled: true
-  - type: RMCWeaponAccuracy
-    accuracyMultiplier: 5
-    accuracyMultiplierUnwielded: 5
-  - type: BallisticAmmoProvider
-    cycleable: false
-    proto: VehicleCartridgeSentry10x50mm
-    capacity: 500
-  - type: VehicleHardpointAmmo
-    magazineSize: 500
-    maxStoredMagazines: 2
-  - type: GunFireArc
-    arc: 180
-  - type: RefillableByBulletBox
-    bulletType: VehicleAmmoBoxCupola
-  - type: GunMuzzleOffset
-    offset: "0,0"
-    useDirectionalOffsets: true
-    offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
-    useAimDirection: true
-    useContainerOwner: false
-  - type: HardpointVisual
-    vehicleState: m56cupola_0
-    damagedVehicleState: m56cupola_1
-
+    

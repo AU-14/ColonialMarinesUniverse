@@ -26,6 +26,15 @@
     channels:
     - radioWEYU
 
+- type: entity
+  id: FactionProdigy
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: IFFFaction
+  - type: FactionFrequencies
+    channels:
+    - PART
+
 # ├──[ THIRD PARTIES ]───────────────────────────────────────────────┤
 - type: entity
   id: FactionVAI

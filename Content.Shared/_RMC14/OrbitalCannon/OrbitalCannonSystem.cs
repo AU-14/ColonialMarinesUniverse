@@ -67,6 +67,8 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
     [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ARESCoreSystem _core = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
 
     private static readonly EntProtoId OrbitalTargetMarker = "RMCLaserDropshipTarget";
     private static readonly EntProtoId<ARESLogTypeComponent> LogCat = "ARESTabOrbitalCannonLogs";
@@ -310,7 +312,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             }
         }
 
-        Spawn(ent.Comp.Explosion, coordinates);
+        SpawnExplosion(ent.Comp.Explosion, coordinates);
     }
 
     private void OnFuelPowerLoaderInteract(Entity<OrbitalCannonFuelComponent> ent, ref PowerLoaderInteractEvent args)
@@ -500,7 +502,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             {
                 _core.CreateARESLog(cannon,
                     LogCat,
-                    (string) $"{Name(args.Actor)} chambered a {Name(element)}");
+                    (string)$"{Name(args.Actor)} chambered a {Name(element)}");
             }
         }
 
@@ -717,7 +719,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
 
         var logMessage = $"{ToPrettyString(user)} launched orbital bombardment at {fireCoordinates} for squad {ToPrettyString(squad)}, misfuel: {misfuel}, final coords: {adjustedCoords}";
         _adminLog.Add(LogType.RMCOrbitalBombardment, $"{logMessage}");
-        _core.CreateARESLog(cannon, LogCat, (string) $"{Name(user)} fired the orbital cannon at {adjustedCoords.X}, {adjustedCoords.Y}");
+        _core.CreateARESLog(cannon, LogCat, (string)$"{Name(user)} fired the orbital cannon at {adjustedCoords.X}, {adjustedCoords.Y}");
 
         var ev = new OrbitalCannonLaunchEvent(cannon.Comp.FireCooldown + firing.ImpactDelay, cannon.Comp.Faction);
         RaiseLocalEvent(ref ev);
@@ -991,5 +993,31 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
                 }
             }
         }
+    }
+
+    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates)
+    {
+        if (_net.IsClient)
+            return;
+
+        var proto = _protoMan.Index(prototype);
+        if (!proto.TryComp(out OrbitalCannonExplosionComponent? explosion, _compFactory)
+            || !explosion.MultiZ)
+        {
+            Spawn(prototype, coordinates);
+            return;
+        }
+
+        if (!_topDownOrdnance.TryResolveImpactColumn(
+                _transform.ToMapCoordinates(coordinates),
+                CMUTopDownOrdnanceKind.OrbitalBombardment,
+                out var layers))
+        {
+            Spawn(prototype, coordinates);
+            return;
+        }
+
+        foreach (var surface in layers.Surfaces)
+            Spawn(prototype, _transform.ToCoordinates(surface.Coordinates));
     }
 }

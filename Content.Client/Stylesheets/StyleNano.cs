@@ -487,8 +487,8 @@ namespace Content.Client.Stylesheets
                 CCVars.CrtUiColorOrange => CrtPalette.Orange,
                 CCVars.CrtUiColorRed => CrtPalette.Red,
                 CCVars.CrtUiColorPurple => CrtPalette.Purple,
-                _ => Color.TryFromHex(palette) is { } color
-                    ? CrtPalette.FromAccent(color)
+                _ => Color.TryFromHex(palette, out var hex)
+                    ? CrtPalette.FromAccent(hex)
                     : CrtPalette.Green,
             };
         }

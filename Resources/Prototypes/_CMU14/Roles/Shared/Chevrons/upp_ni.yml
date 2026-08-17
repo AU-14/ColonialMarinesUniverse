@@ -13,12 +13,12 @@
   name: private chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_enlisted
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s1
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_enlisted
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_Private
     override: true
@@ -29,12 +29,12 @@
   name: gefreiter chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_enlisted
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s1
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_enlisted
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_Gefreiter
     override: true
@@ -45,12 +45,12 @@
   name: senior gefreiter chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_enlisted
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s2
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_enlisted
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_SeniorGefreiter
     override: true
@@ -61,12 +61,12 @@
   name: corporal chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_nco
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s3
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_nco
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_Corporal
     override: true
@@ -77,12 +77,12 @@
   name: plutonowy chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_nco
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s4
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_nco
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_Plutonowy
     override: true
@@ -93,12 +93,12 @@
   name: sergeant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_snco
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s5
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_snco
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_Sergeant
     override: true
@@ -109,12 +109,12 @@
   name: senior sergeant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_snco
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s6
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_snco
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_SeniorSergeant
     override: true
@@ -125,12 +125,12 @@
   name: first sergeant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_snco
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s6
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_snco
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_FirstSergeant
     override: true
@@ -141,12 +141,12 @@
   name: sergeant major chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_snco
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_s6
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_snco
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_s
   - type: RankChanger
     rank: UPP_SergeantMajor
     override: true
@@ -159,12 +159,12 @@
   name: warrant officer chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_warrant
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_p7
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_warrant
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_p
   - type: RankChanger
     rank: UPP_WarrantOfficer
     override: true
@@ -175,12 +175,12 @@
   name: senior warrant officer chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_chiefwarrant
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_p8
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_warrant
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_p
   - type: RankChanger
     rank: UPP_SeniorWarrantOfficer
     override: true
@@ -227,12 +227,12 @@
   name: junior lieutenant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_officer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o9
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_officer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
   - type: RankChanger
     rank: UPP_JuniorLieutenant
     override: true
@@ -243,12 +243,12 @@
   name: lieutenant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_officer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o10
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_officer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
   - type: RankChanger
     rank: UPP_Lieutenant
     override: true
@@ -259,12 +259,12 @@
   name: senior lieutenant chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_officer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o11
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_officer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
   - type: RankChanger
     rank: UPP_SeniorLieutenant
     override: true
@@ -275,12 +275,12 @@
   name: captain chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_seniorofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_o12
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_officer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_o
   - type: RankChanger
     rank: UPP_Captain
     override: true
@@ -293,12 +293,12 @@
   name: major chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_seniorofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_go13
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_officer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_go
   - type: RankChanger
     rank: UPP_Major
     override: true
@@ -309,12 +309,12 @@
   name: junior colonel chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_go14
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_go
   - type: RankChanger
     rank: UPP_JuniorColonel
     override: true
@@ -325,12 +325,12 @@
   name: colonel chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_go15
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_go
   - type: RankChanger
     rank: UPP_Colonel
     override: true
@@ -343,12 +343,12 @@
   name: brigadier general chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g16
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
   - type: RankChanger
     rank: UPP_BrigadierGeneral
     override: true
@@ -359,12 +359,12 @@
   name: divisional general chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g17
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
   - type: RankChanger
     rank: UPP_DivisionalGeneral
     override: true
@@ -375,12 +375,12 @@
   name: general of the branch chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g18
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
   - type: RankChanger
     rank: UPP_GeneralOfTheBranch
     override: true
@@ -391,12 +391,12 @@
   name: marshal chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_g19
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_g
   - type: RankChanger
     rank: UPP_Marshal
     override: true
@@ -407,12 +407,12 @@
   name: chairman of the military council chevron
   components:
   - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
+    sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+    state: ranks_WorldGeneral
   - type: UniformAccessory
     playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
+      sprite: _AU14/Clothing/Accessory/Chevrons/UPParmy.rsi
+      state: equipped-ranks_WorldGeneral
   - type: RankChanger
     rank: UPP_ChairmanMilitaryCouncil
     override: true

@@ -207,6 +207,29 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
     }
 
     /// <summary>
+    /// Recalculates the remaining points after the selected loadouts are changed.
+    /// </summary>
+    private void RecalculatePoints(IPrototypeManager protoManager)
+    {
+        if (!protoManager.TryIndex(Role, out var roleProto))
+        {
+            Points = null;
+            return;
+        }
+
+        Points = roleProto.Points;
+
+        foreach (var groupLoadouts in SelectedLoadouts.Values)
+        {
+            foreach (var loadout in groupLoadouts)
+            {
+                if (protoManager.TryIndex(loadout.Prototype, out var loadoutProto))
+                    Apply(loadoutProto);
+            }
+        }
+    }
+
+    /// <summary>
     /// Resets the selected loadouts to default if no data is present.
     /// </summary>
     public void SetDefault(HumanoidCharacterProfile? profile, ICommonSession? session, IPrototypeManager protoManager, bool force = false)
@@ -340,6 +363,8 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
             Prototype = selectedLoadout,
         });
 
+        RecalculatePoints(protoManager);
+
         return true;
     }
 
@@ -360,6 +385,7 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
                 continue;
 
             groupLoadouts.RemoveAt(i);
+            RecalculatePoints(protoManager);
             return true;
         }
 

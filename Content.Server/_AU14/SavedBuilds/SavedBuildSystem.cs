@@ -60,7 +60,6 @@ public sealed partial class SavedBuildSystem : EntitySystem
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private BuildPartnerSystem _partners = default!;
     [Dependency] private PlayerBuiltSystem _playerBuilt = default!;
     [Dependency] private IAdminManager _adminManager = default!;
@@ -190,7 +189,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             return;
 
         var targetMap = _transform.ToMapCoordinates(target);
-        if (!_mapManager.TryFindGridAt(targetMap, out var gridUid, out _))
+        if (!_map.TryFindGridAt(targetMap, out var gridUid, out _))
         {
             _popup.PopupEntity(Loc.GetString("saved-build-error-nogrid"), user, user);
             return;
@@ -1046,7 +1045,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 // above/below - a build whose support beams or upper platforms cross levels saves as one.
                 // Opt-in, because scanning other levels unconditionally swept in structures directly above
                 // or below the selection that the builder never intended to capture.
-                if (includeMultiZ && _mapManager.GetMapEntityId(map.MapId) is { Valid: true } boxMapUid)
+                if (includeMultiZ && _map.GetMapOrInvalid(map.MapId) is { Valid: true } boxMapUid)
                 {
                     for (var dz = -MaxZRange; dz <= MaxZRange; dz++)
                     {
@@ -1092,7 +1091,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
 
     private void AddGridChildrenInBox(MapId mapId, Box2 box, HashSet<EntityUid> found)
     {
-        foreach (var grid in _mapManager.GetAllGrids(mapId))
+        foreach (var grid in _map.GetAllGrids(mapId))
         {
             var children = Transform(grid).ChildEnumerator;
             while (children.MoveNext(out var child))
@@ -1126,7 +1125,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
                 continue;
 
             var map = _transform.ToMapCoordinates(coords);
-            if (!_mapManager.TryFindGridAt(map, out var gridUid, out var grid))
+            if (!_map.TryFindGridAt(map, out var gridUid, out var grid))
                 continue;
 
             AddTilesInBox(gridUid, grid, map, radius, allowed, seen, result);
@@ -1135,7 +1134,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
             if (!includeMultiZ)
                 continue;
 
-            if (_mapManager.GetMapEntityId(map.MapId) is not { Valid: true } boxMapUid)
+            if (_map.GetMapOrInvalid(map.MapId) is not { Valid: true } boxMapUid)
                 continue;
 
             for (var dz = -MaxZRange; dz <= MaxZRange; dz++)
@@ -1144,7 +1143,7 @@ public sealed partial class SavedBuildSystem : EntitySystem
                     continue;
 
                 var otherMap = new MapCoordinates(map.Position, otherMapComp.MapId);
-                if (_mapManager.TryFindGridAt(otherMap, out var otherGridUid, out var otherGrid))
+                if (_map.TryFindGridAt(otherMap, out var otherGridUid, out var otherGrid))
                     AddTilesInBox(otherGridUid, otherGrid, otherMap, radius, allowed, seen, result);
             }
         }

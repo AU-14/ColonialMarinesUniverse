@@ -122,6 +122,20 @@
   - type: PowerCellDraw
     useRate: 350
 
+- type: entity
+  id: CMUDefibrillatorCompactSynth
+  parent: RMCDefibrillatorCompact
+  name: advanced automated external defibrillator
+  description: A modificatied version of a normal automated external defibrillator, it uses a experimental battery to retain its compact size, while still holding considerably more charge then traditional compact defibrillator. Unfortunately, due to technology still being in the early stages, the metals within are so dense and heavy that only a synthetic can reasonably carry and use the device.
+  components:
+  - type: PowerCellDraw
+    useRate: 132
+  - type: WhitelistPickupBy
+    whitelist:
+      components:
+        - Synth
+  - type: RMCSynthItemRestriction
+
 # TODO RMC14: synth reset key sprites currently all use a makeshift_key placeholder.
 # Replace them with original art that does not include Alien media logos.
 - type: entity

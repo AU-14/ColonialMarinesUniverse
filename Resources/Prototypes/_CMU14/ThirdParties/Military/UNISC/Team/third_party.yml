@@ -1,7 +1,7 @@
 ﻿- type: partySpawn
   id: UNISCTeamSpawn
   leadersToSpawn:
-    AU14JobUNISCPltCo: 1
+    AU14JobUNISCPltOpsOff: 1
     AU14JobUNISCSquadleader: 1
   gruntsToSpawn:
     AU14JobUNISCRifleman: 1

@@ -9,6 +9,7 @@ using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Physics.Systems;
 
 namespace Content.Server._CMU14.ZLevels.Core;
 
@@ -20,6 +21,7 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private StationSystem _station = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private ShuttleSystem _shuttle = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     public CMUZLevelOpeningCache OpeningCache => _zOpeningCache;
 

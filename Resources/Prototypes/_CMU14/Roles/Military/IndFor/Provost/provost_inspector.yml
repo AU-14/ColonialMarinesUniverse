@@ -103,5 +103,5 @@
     pocket2: RMCPouchGeneralLarge
   storage:
     back:
-    - AU14StampProvostInspector
+    - CMUStampProvostInspector
     - AU14RadioJammer

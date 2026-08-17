@@ -1,0 +1,104 @@
+- type: job
+  parent: CMU14JobCivilianProdigyGuardBase
+  id: CMU14JobCivilianProdigyGuardLeaderSurv
+  roundSide: Civilian
+  roundForce: PSC
+  roundRole: CivilianProdigyGuardLeaderSurv
+  roundComponents:
+  - type: NpcFactionMember
+    factions:
+    - CMUProdigy
+  - type: EquipEntityPreset
+    preset: CMU14ProdigySurvBasePreset
+  - type: Skills
+    skills:
+      RMCSkillOverwatch: 1
+      RMCSkillFirearms: 2
+      RMCSkillCqc: 2
+      RMCSkillEndurance: 3
+      RMCSkillFireman: 2
+      RMCSkillEngineer: 3
+      RMCSkillIntel: 1
+      RMCSkillVehicles: 1
+      RMCSkillPolice: 2
+      RMCSkillConstruction: 2
+      RMCSkillMedical: 2
+      RMCSkillSurgery: 1
+      RMCSkillJtac: 2
+      RMCSkillLeadership: 1
+  - type: JobPrefix
+    prefix: au14-job-prefix-wyguard
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/cm_job_icons.rsi
+      state: weya_goon_standard
+  - type: AssignSquad
+    whitelist:
+      tags:
+      - CMU14SquadProdigy
+  - type: MarineOrders
+
+  name: Team Leader
+  description: au14-job-description-wyguard
+  setPreference: true
+  ranks:
+    AU14RankPrDEnforcerLead: []
+  startingGear: AU14GearCivilianProdigyGuardLeaderSurv
+  icon: "RMCJobIconPMCGoonStandard"
+  requireAdminNotify: false
+  requirements:
+  - !type:AgeRequirement
+    requiredAge: 21
+  - !type:TraitsRequirement
+    inverted: true
+    traits:
+    - Epilepsy
+  joinNotifyCrew: false
+  supervisors: au14-job-supervisors-wy
+  spawnMenuRoleName: Prodigy Team Leader (CMU, Surv)
+  accessGroups:
+  - auprodigy
+  - AUPrisonStaff
+  roleWeight: 0.25
+
+- type: startingGear
+  id: AU14GearCivilianProdigyGuardLeaderSurv
+  equipment:
+    id: CMU14IDCardColonyProdigyLiaison
+    shoes: RMCBootsSPPBlackFilled
+    back: RMCSatchelLightpackWelder
+    ears: CMU14ColonyProdigyHeadset
+    pocket1: AU14PouchIFAKProdigyFill
+    ears2: RMCM5CameraGear
+    mask: CMScrewdriver
+    outerClothing: CMUArmorProdigyFlakVest
+    jumpsuit: CMU14ProdigyJumpsuitGrey
+    eyes: AU14ProdigyWeldingGoggles
+  storage:
+    back:
+    - CMMRE #TODO prodigy one
+    - CMCanteen
+    - RMCRadioHandheldColony
+    - CMSheetPlasteel40
+    - CMCrowbar
+    - CMWrench
+    - RMCWelderPVE
+
+- type: entity
+  parent: AU14BaseMobSpeciesOrganicProdigy
+  id: CMU14JobProdigySurvGoonLeader
+  name: Prodigy Team Leader (surv)
+  components:
+  - type: GhostTakeoverAvailable
+  - type: GhostRoleApplySpecial
+    squad: CMU14SquadProdigy
+  - type: GhostRole
+    makeSentient: true
+    allowSpeech: true
+    allowMovement: true
+    name: Prodigy Team Leader (survivor)
+    description: au14-job-description-wyguard
+    reregister: false
+    job: CMU14JobCivilianProdigyGuardLeaderSurv
+    raffle:
+      settings: short

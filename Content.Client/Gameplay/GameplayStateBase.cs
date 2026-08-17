@@ -36,7 +36,6 @@ namespace Content.Client.Gameplay
         [Dependency] private IPlayerManager _playerManager = default!;
         [Dependency] private IEntitySystemManager _entitySystemManager = default!;
         [Dependency] private IGameTiming _timing = default!;
-        [Dependency] private IMapManager _mapManager = default!;
         [Dependency] protected IUserInterfaceManager UserInterfaceManager = default!;
         [Dependency] private IEntityManager _entityManager = default!;
         [Dependency] private IViewVariablesManager _vvm = default!;

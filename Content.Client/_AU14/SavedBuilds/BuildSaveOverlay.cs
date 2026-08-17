@@ -28,23 +28,20 @@ public sealed class BuildSaveOverlay : Overlay
 
     private readonly BuildSaveModeSystem _mode;
     private readonly IPlayerManager _player;
-    private readonly IMapManager _mapManager;
-    private readonly SharedMapSystem _mapSystem;
+    private readonly SharedMapSystem _mapManager;
     private readonly SharedTransformSystem _transform;
     private readonly IEntityManager _entMan;
 
     public BuildSaveOverlay(
         BuildSaveModeSystem mode,
         IPlayerManager player,
-        IMapManager mapManager,
-        SharedMapSystem mapSystem,
+        SharedMapSystem mapManager,
         SharedTransformSystem transform,
         IEntityManager entMan)
     {
         _mode = mode;
         _player = player;
         _mapManager = mapManager;
-        _mapSystem = mapSystem;
         _transform = transform;
         _entMan = entMan;
     }
@@ -116,7 +113,7 @@ public sealed class BuildSaveOverlay : Overlay
             if (cachedGridUid is not { } gridUid || cachedGrid is not { } grid)
                 continue;
 
-            var center = _mapSystem.GridTileToWorld(gridUid, grid, new Vector2i(tile.X, tile.Y));
+            var center = _mapManager.GridTileToWorld(gridUid, grid, new Vector2i(tile.X, tile.Y));
             if (center.MapId != args.MapId || !bounds.Contains(center.Position))
                 continue;
 
@@ -141,7 +138,7 @@ public sealed class BuildSaveOverlay : Overlay
             return;
         }
 
-        var centerTile = _mapSystem.CoordinatesToTile(gridUid, grid, center);
+        var centerTile = _mapManager.CoordinatesToTile(gridUid, grid, center);
         var ts = grid.TileSize;
         var minLocal = new Vector2((centerTile.X - radius) * ts, (centerTile.Y - radius) * ts);
         var maxLocal = new Vector2((centerTile.X + radius + 1) * ts, (centerTile.Y + radius + 1) * ts);

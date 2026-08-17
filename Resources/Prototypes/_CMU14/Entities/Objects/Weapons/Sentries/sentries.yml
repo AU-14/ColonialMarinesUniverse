@@ -11,3 +11,23 @@
     lockedFriendlyFactions:
     - AUWeYu
     - WeYa
+
+- type: entity
+  parent: RMCTurretAlmayer
+  id: AU14TurretAlmayerWeYu
+  name: WY UA-635C static gauss turret
+  description: A Weyland-Yutani-configured static gauss turret with a locked corporate IFF.
+  components:
+  - type: SentryTargeting
+    lockedFriendlyFactions:
+    - AUWeYu
+    - WeYa
+
+- type: entity
+  parent: RMCDeployerSentry
+  id: AU14DeployerSentryWeYu
+  name: WY sentry deployment system
+  description: A Weyland-Yutani-configured deployment system containing a corporate-IFF static gauss turret.
+  components:
+  - type: RMCEquipmentDeployer
+    deployPrototype: AU14TurretAlmayerWeYu

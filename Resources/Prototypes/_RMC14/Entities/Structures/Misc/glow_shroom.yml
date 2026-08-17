@@ -24,4 +24,4 @@
     energy: 1
     offset: "0,0"
     color: "#cff593"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad

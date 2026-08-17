@@ -3,7 +3,7 @@ using System.Numerics;
 using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.Maps;
-using Content.Shared._CMU14.Round.Objectives.Component;
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared._CMU14.Round.Objectives.Type;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.Rules;

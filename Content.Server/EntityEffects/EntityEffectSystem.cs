@@ -56,7 +56,6 @@ public sealed partial class EntityEffectSystem : EntitySystem
     [Dependency] private ExplosionSystem _explosion = default!;
     [Dependency] private FlammableSystem _flammable = default!;
     [Dependency] private SharedFlashSystem _flash = default!;
-    [Dependency] private IMapManager _mapManager = default!;
     [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedMapSystem _map = default!;

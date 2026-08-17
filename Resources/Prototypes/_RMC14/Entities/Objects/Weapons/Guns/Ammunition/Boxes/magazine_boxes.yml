@@ -3545,6 +3545,51 @@
         tags:
         - AU14MagazineXMP5A6
 
+#
+- type: entity
+  parent: RMCBoxMagazineRifleBase
+  id: CMUBoxMagazineRifleXM20A2Empty
+  name: magazine box (XM20A2 x 8)
+  components:
+  - type: Sprite
+    layers:
+    - state: rifle_box
+      color: "#5c4a2e"
+    - state: rifle_ammo_full_mags_base
+      map: [ "enum.CMItemSlotsLayers.Fill" ]
+    - state: rifle_ammo_full_mags_color
+      map: [ "enum.CMItemSlotsLayers2.Fill" ]
+      color: "#ffc000"
+    - state: rifle_box_generic
+      color: "#5c4a2e"
+    - state: rifle_box_marking
+      color: "#7c4c1b"
+    - state: rifle_lid
+      map: [ "lid" ]
+      color: "#5c4a2e"
+    - state: rifle_lid_marking
+      map: [ "lid_marking" ]
+      color: "#7c4c1b"
+  - type: CMItemSlots
+    count: 8
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleXM20A2
+
+- type: entity
+  parent: CMUBoxMagazineRifleXM20A2Empty
+  id: CMUBoxMagazineRifleXM20A2
+  suffix: Full
+  components:
+  - type: CMItemSlots
+    startingItem: AU14MagazineRifleXM20A2
+    count: 8
+    slot:
+      whitelist:
+        tags:
+        - AU14MagazineRifleXM20A2
+
 # L90A2 SMG (RMC/TWE)
 - type: entity
   parent: RMCBoxMagazineRifleBase

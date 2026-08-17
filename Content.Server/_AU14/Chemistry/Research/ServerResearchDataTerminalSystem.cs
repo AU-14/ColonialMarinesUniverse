@@ -46,7 +46,6 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private bool Picked = false;
 
-    private bool DDISecured = false;
     private bool ready = false;
     [ViewVariables(VVAccess.ReadOnly)]
     public int ResearchChemAmount = 6; // for sanity
@@ -124,7 +123,6 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         Credits = 0;
         DDIDiscovered = false;
         _upgrading = false;
-        DDISecured = false;
         NextReroll = TimeSpan.Zero;
         LastTime = TimeSpan.Zero;
         ResearchData.Clear();

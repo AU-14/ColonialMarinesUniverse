@@ -293,9 +293,13 @@ public abstract partial class SharedMoverController : VirtualController
         }
         else
         {
+            var virtualGroundEvent = new IsVirtualGroundForMovementEvent();
+            RaiseLocalEvent(uid, ref virtualGroundEvent);
+
             if (MapGridQuery.TryComp(xform.GridUid, out var gridComp)
                 && _mapSystem.TryGetTileRef(xform.GridUid.Value, gridComp, xform.Coordinates, out var tile)
-                && physicsComponent.BodyStatus == BodyStatus.OnGround)
+                && physicsComponent.BodyStatus == BodyStatus.OnGround
+                && !(tile.Tile.IsEmpty && virtualGroundEvent.Grounded))
                 tileDef = (ContentTileDefinition)_tileDefinitionManager[tile.Tile.TypeId];
 
             var walkSpeed = moveSpeedComponent?.CurrentWalkSpeed ?? MovementSpeedModifierComponent.DefaultBaseWalkSpeed;
