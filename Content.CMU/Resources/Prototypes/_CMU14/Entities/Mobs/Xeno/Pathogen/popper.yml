@@ -24,7 +24,6 @@
     tier: 0
     hudOffset: -0.1, 0.25
     emoteSounds: Pathogen
-    countsForSlots: false
     actionIds:
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
@@ -35,7 +34,6 @@
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
-    needsWeeds: true
   - type: XenoPlasma
     plasma: 400
     maxPlasma: 400
@@ -45,7 +43,6 @@
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: XenoPheromones
@@ -89,8 +86,11 @@
     size: VerySmallXeno
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: larva
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: popper
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener

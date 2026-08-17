@@ -28,6 +28,9 @@
       "name": "crit"
     },
     {
+      "name": "aberration_bloodburster_corpse"
+    },
+    {
       "name": "aberration_bloodburster_gib",
       "delays": [
         [

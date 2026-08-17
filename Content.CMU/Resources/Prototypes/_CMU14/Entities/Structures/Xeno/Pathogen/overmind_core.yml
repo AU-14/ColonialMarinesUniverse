@@ -22,7 +22,6 @@
         layer:
         - MobLayer
   - type: StepTrigger
-    requiredTrips: 1
     requiredTriggeredSpeed: 0
     intersectRatio: 0.1
   - type: Sprite

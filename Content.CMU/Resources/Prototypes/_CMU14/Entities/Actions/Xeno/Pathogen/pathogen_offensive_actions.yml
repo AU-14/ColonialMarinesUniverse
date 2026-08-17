@@ -391,9 +391,9 @@
   - type: ActionSharedCooldown
     id: CMU14ActionXenoPathogenSprayAcidBoiler
     ids:
-    - CMU14ActionXenoPathogenAcidShroud
+    - ActionXenoAcidShroud
     activeIds:
-    - CMU14ActionXenoPathogenBombard
+    - ActionXenoBombard
  
 - type: entity
   parent: CMU14ActionXenoPathogenSprayAcid

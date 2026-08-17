@@ -44,8 +44,20 @@
   - type: TacticalMapTracked
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: cluster
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: fogger
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
+  - type: GhostRole
+    name: cmu-job-name-pathogen-popper
+    description: cmu-job-description-pathogen-popper
+    raffle:
+      settings: short
+  - type: GhostRoleMobSpawner
+    availableTakeovers: 2
+    deleteOnSpawn: false
+    prototype: CMU14XenoPopper
 
 - type: entity
   id: CMU14PathogenSporecasterConstructionNode
@@ -79,12 +91,3 @@
     id: CMU14PathogenSporecaster
   - type: WarpPoint
     location: sporecaster
-  - type: GhostRole
-    name: cmu-job-name-pathogen-popper
-    description: cmu-job-description-pathogen-popper
-    raffle:
-      settings: short
-  - type: GhostRoleMobSpawner
-    availableTakeovers: 2
-    deleteOnSpawn: false
-    prototype: CMU14XenoPopper

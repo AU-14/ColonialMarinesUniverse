@@ -55,7 +55,6 @@
     - CMU14XenoNeomorph
     - CMU14XenoBlight
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoBloodburster
     canBeDevolvedByOther: false
@@ -100,8 +99,11 @@
     size: SmallXeno
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: runner
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: sprinter
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -119,3 +121,9 @@
   parent: CMU14XenoSprinterBase
   id: CMU14XenoSprinter
   name: Sprinter
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenSprinter

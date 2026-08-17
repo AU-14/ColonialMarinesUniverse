@@ -45,7 +45,7 @@
     color: "#73e6f5"
   - type: IdentityBlocker
   - type: MycotoxinProtection
-    fullprotection: true
+    fullProtection: true
 
 - type: entity
   parent: AU14ArmorHelmetPMCTactical
@@ -58,7 +58,7 @@
   - type: Clothing
     sprite: _CMU14/Clothing/WY_PMC/pmchelmet_engi.rsi
   - type: MycotoxinProtection
-    fullprotection: true
+    fullProtection: true
 
 - type: entity
   parent: RMCMarineHelmetBase
@@ -72,4 +72,4 @@
   - type: Clothing
     sprite: _CMU14/Clothing/WY_PMC/wypmcheavy.rsi
   - type: MycotoxinProtection
-    fullprotection: true
+    fullProtection: true

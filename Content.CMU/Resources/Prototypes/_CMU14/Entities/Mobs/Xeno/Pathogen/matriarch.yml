@@ -40,7 +40,6 @@
     tier: 4
     hudOffset: -0.1, 0.25
     emoteSounds: Pathogen
-    countsForSlots: false
     actionIds:
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
@@ -65,7 +64,6 @@
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: XenoPheromones
@@ -123,8 +121,11 @@
     size: Immobile
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: queen
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: matriarch
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener

@@ -1,7 +1,7 @@
 {
     "version": 1,
-    "license": null,
-    "copyright": null,
+    "license": "CC-BY-SA-3.0",
+    "copyright": "taken from cm13 at https://github.com/realforest2001/forest-cm13/blob/ecb68c1e25fd4f02d19a9e940cd08e3d8fba7bd1/icons/mob/hud/actions_pathogen.dmi",
     "size": {
         "x": 32,
         "y": 32
@@ -293,7 +293,7 @@
             "name": "unburrow"
         },
         {
-            "name": "gas mine"
+            "name": "gas_mine"
         },
         {
             "name": "fortify"
@@ -362,7 +362,7 @@
             "name": "prae_dodge"
         },
         {
-            "name": "prae_abduct _UNUSED_"
+            "name": "prae_abduct_UNUSED_"
         },
         {
             "name": "prae_aid"
@@ -425,7 +425,7 @@
             "name": "place_blockade"
         },
         {
-            "name": "acid grenade"
+            "name": "acid_grenade"
         },
         {
             "name": "plant_gardener_weeds"
@@ -533,7 +533,7 @@
             "name": "ram"
         },
         {
-            "name": "resin nest"
+            "name": "resin_nest"
         },
         {
             "name": "morph_resin"

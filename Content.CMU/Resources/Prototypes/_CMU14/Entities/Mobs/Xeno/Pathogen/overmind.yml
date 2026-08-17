@@ -48,7 +48,6 @@
     tier: 3
     hudOffset: -0.1, 0.25
     emoteSounds: Pathogen
-    countsForSlots: false
     actionIds:
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
@@ -74,7 +73,6 @@
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: XenoPheromones
@@ -137,8 +135,11 @@
     stunMax: 4
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: queen
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: archon
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -181,11 +182,6 @@
     gibChance: 0.1
   - type: RMCSpawnEntitiesOnGib
     entities:
-<<<<<<< HEAD
-    - CMU14GibEffectPathogenOvermind
-||||||| parent of 5d3f027dd5 (✨ port pathogen systems (mycelium link, actions, walker, mycotoxin) from master)
-    - CMU14GibEffectPathogenOvermind
-=======
     - CMU14GibEffectPathogenOvermind
 
 - type: entity
@@ -202,4 +198,3 @@
     drawFov: false
   - type: Visibility
     layer: 32770
->>>>>>> 5d3f027dd5 (✨ port pathogen systems (mycelium link, actions, walker, mycotoxin) from master)

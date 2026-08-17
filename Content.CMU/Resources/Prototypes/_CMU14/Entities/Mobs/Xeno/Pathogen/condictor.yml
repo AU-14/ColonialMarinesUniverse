@@ -67,7 +67,6 @@
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoNeomorph
     canBeDevolvedByOther: false
@@ -112,8 +111,11 @@
     stunMax: 4
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: hivelord
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: conditor
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener

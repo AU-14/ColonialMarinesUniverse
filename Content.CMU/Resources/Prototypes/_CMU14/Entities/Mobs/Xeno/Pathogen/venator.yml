@@ -53,7 +53,6 @@
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoBlight
     canBeDevolvedByOther: false
@@ -96,8 +95,11 @@
     stunMax: 4
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: praetorian
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: venator
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -114,3 +116,9 @@
   parent: CMU14XenoVenatorBase
   id: CMU14XenoVenator
   name: Venator
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenVenator

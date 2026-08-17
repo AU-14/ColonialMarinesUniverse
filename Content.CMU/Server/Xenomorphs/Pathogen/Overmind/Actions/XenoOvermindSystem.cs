@@ -14,6 +14,7 @@ using Content.Shared._CMU14.Xenomorphs;
 using Content.Shared.Actions;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Robust.Shared.GameObjects;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Overmind;
 
@@ -101,10 +102,12 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
         ent.Comp.Eye = eye;
         Dirty(ent);
 
-        _eye.SetDrawFov(ent.Owner, false);
-        _eye.SetDrawLight(ent.Owner, false);
-        _eye.SetPvsScale(ent.Owner, 1.5f);
-        _eye.SetTarget(ent.Owner, eye);
+        var eyeComp = EnsureComp<EyeComponent>(ent.Owner);
+
+        _eye.SetDrawFov(ent.Owner, false, eyeComp);
+        _eye.SetDrawLight(ent.Owner, false, eyeComp);
+        _eye.SetPvsScale(ent.Owner, 1.5f, eyeComp);
+        _eye.SetTarget(ent.Owner, eye, eyeComp);
         _eye.RefreshVisibilityMask(ent.Owner);
 
         _mover.SetRelay(ent.Owner, eye);
@@ -115,11 +118,14 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
         RemoveEye(ent);
         SetIncorporealPhysics(ent.Owner, false);
 
-        _eye.SetDrawFov(ent.Owner, true);
-        _eye.SetDrawLight(ent.Owner, true);
-        _eye.SetPvsScale(ent.Owner, 1f);
-        _eye.SetTarget(ent.Owner, null);
-        _eye.RefreshVisibilityMask(ent.Owner);
+        if (TryComp(ent.Owner, out EyeComponent? eyeComp))
+        {
+            _eye.SetDrawFov(ent.Owner, true, eyeComp);
+            _eye.SetDrawLight(ent.Owner, true, eyeComp);
+            _eye.SetPvsScale(ent.Owner, 1f, eyeComp);
+            _eye.SetTarget(ent.Owner, null, eyeComp);
+            _eye.RefreshVisibilityMask(ent.Owner);
+        }
 
         RemComp<RelayInputMoverComponent>(ent.Owner);
     }

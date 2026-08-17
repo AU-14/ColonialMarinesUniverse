@@ -31,5 +31,5 @@ public sealed partial class CMUPathogenSporecasterComponent : Component
     public EntProtoId SporeCloudProto = "CMU14PathogenSporeCloud";
 
     [DataField, AutoNetworkedField]
-    public EntProtoId ParasiteProto = "CMU14XenoParasite";
+    public EntProtoId ParasiteProto = "CMU14XenoPopper";
 }

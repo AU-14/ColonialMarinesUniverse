@@ -24,7 +24,6 @@
     tier: 1
     hudOffset: -0.1, 0.25
     emoteSounds: PathogenAberration
-    countsForSlots: false
     actionIds:
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
@@ -80,7 +79,6 @@
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: Fixtures
@@ -124,8 +122,11 @@
     size: Big
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: crusher
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: aberration
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -147,3 +148,9 @@
   parent: CMU14XenoAberrationBase
   id: CMU14XenoAberration
   name: Aberration
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenAberration

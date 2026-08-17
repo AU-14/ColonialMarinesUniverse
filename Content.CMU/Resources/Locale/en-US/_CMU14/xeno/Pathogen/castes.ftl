@@ -35,3 +35,9 @@ cmu-xeno-death-matriarch = Matriarch has fallen! Vengeance!
 cmu-job-name-pathogen-overmind = Overmind
 cmu-job-description-pathogen-overmind = The mind of the Confluence. Step onto a Blight Core to merge with it and guide your sisters to victory.
 cmu-xeno-death-overmind = Our Overmind has died! Vengeance!
+
+cmu-job-name-pathogen-haze = Haze
+cmu-job-description-pathogen-haze = A supportive strain of the Confluence, tending wounds and spreading spores in equal measure.
+
+cmu-job-name-pathogen-root = root
+cmu-job-description-pathogen-root = A huge, looming beast of the Confluence, wreathed in writhing tentacles.

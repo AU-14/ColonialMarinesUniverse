@@ -22,7 +22,6 @@
         layer:
         - MobLayer
   - type: StepTrigger
-    requiredTrips: 1
     requiredTriggeredSpeed: 0
     intersectRatio: 0.1
   - type: Sprite
@@ -55,6 +54,15 @@
     blockOtherWeeds: true
     spreadsOnSemiWeedable: true
   - type: XenoWeedsSpreading
+  - type: XenoStructureMapTracked
+  - type: TacticalMapTracked
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: patho_core
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
 
 - type: entity
   id: CMU14PathogenBlightCoreConstructionNode

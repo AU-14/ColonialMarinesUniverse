@@ -66,7 +66,6 @@
     evolvesTo:
     - CMU14XenoSprinter
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: XenoHide
@@ -113,8 +112,11 @@
     - RMCGibEffectXenoSmall
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: runner
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: bloodburster
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
   - type: Tag
     tags:
     - DoorBumpOpener
@@ -122,7 +124,7 @@
   - type: VentCrawler
     ventCrawlIcon: larva
   - type: RMCActionOrder
-    id: CMUXenoBloodburster
+    id: CMU14XenoBloodburster
   - type: FixedIdentity
     name: cmu-job-name-pathogen-bloodburster
   - type: Speech

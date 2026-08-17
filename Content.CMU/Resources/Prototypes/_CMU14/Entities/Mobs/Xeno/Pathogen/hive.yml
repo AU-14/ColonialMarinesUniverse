@@ -8,6 +8,15 @@
     hiveUIColor: "#8a8c50"
     canMakeAlliances: false
     corrupted: false
+    burrowedLarvaId: CMU14XenoBloodburster
+    freeSlots:
+      CMU14XenoConditor: 1
+    announceSound:
+      path: /Audio/_CMU14/Xeno/Pathogen/pathogen_distant_roar.ogg
+      params:
+        volume: -6
+    marineAnnounceSound:
+      collection: PathogenRoar
     hiveStructureSlots:
       CMU14PathogenBlightCore: 1
       CMU14PathogenCluster: 8

@@ -43,8 +43,11 @@
   - type: TacticalMapTracked
   - type: TacticalMapIcon
     icon:
-      sprite: /Textures/_RMC14/Interface/map_blips.rsi
-      state: pylon
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: patho_cluster
+    background:
+      sprite: /Textures/_CMU14/Interface/neo_blips.rsi
+      state: background_pathogen
 
 - type: entity
   id: CMU14PathogenPylonConstructionNode
