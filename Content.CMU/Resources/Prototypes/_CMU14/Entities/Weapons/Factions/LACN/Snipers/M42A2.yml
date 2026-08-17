@@ -67,3 +67,8 @@
       rmc-aslot-rail: -0.37, 0.1
   - type: RMCGunChamber
     enabled: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker

@@ -67,7 +67,7 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
             new CMUXenoCycloneDoAfterEvent(), xeno)
         {
             BreakOnMove = false,
-            BreakOnDamage = true,
+            BreakOnDamage = false,
             BlockDuplicate = true,
         };
 

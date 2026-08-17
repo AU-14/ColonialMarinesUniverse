@@ -772,7 +772,7 @@
     icon:
       sprite: _CMU14/Actions/actions_pathogen.rsi
       state: inject_walker
-    useDelay: 180
+    useDelay: 300
   - type: TargetAction
     range: 2.5
     checkCanAccess: false
@@ -787,7 +787,7 @@
   description: Skewer a critically wounded or dead target with your tail, injecting mycotoxin. They will rise again to serve the Confluence.
   components:
   - type: Action
-    useDelay: 300
+    useDelay: 180
   - type: TargetAction
     range: 3.0
     checkCanAccess: false

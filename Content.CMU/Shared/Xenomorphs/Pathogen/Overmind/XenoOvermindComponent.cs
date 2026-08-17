@@ -60,4 +60,10 @@ public sealed partial class CMUXenoOvermindComponent : Component
     /// <summary>Tracks spawned action entities for physical form so we can remove them.</summary>
     [DataField, AutoNetworkedField]
     public Dictionary<EntProtoId, EntityUid> PhysicalFormActionEntities = new();
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId EyeFormActionOrderId = "CMU14XenoOvermindEyeOrder";
+
+    [DataField, AutoNetworkedField]
+    public EntProtoId PhysicalFormActionOrderId = "CMU14XenoOvermindPhysicalOrder";
 }

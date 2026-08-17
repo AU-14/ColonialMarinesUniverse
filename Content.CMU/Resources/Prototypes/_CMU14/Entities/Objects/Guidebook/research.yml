@@ -1,0 +1,48 @@
+- type: guideEntry
+  parent: RMC
+  id: CMUResearchIndex
+  name: Research
+  text: "/ServerInfo/Guidebook/_CMU14/research/CMURBIndex.xml"
+  priority: 3
+  children:
+  - CMUResearch
+  - CMUBotany
+  
+- type: guideEntry
+  parent: RMC
+  id: CMUResearch
+  name: Chemistry
+  priority: 1
+  text: "/ServerInfo/Guidebook/_CMU14/research/CMUResearch.xml"
+  children:
+  - CMURDT
+  - CMUXRF
+  - CMUSIM
+
+- type: guideEntry
+  parent: RMC
+  id: CMURDT
+  name: The Research Data Terminal
+  priority: 1
+  text: "/ServerInfo/Guidebook/_CMU14/research/CMURDT.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUXRF
+  name: The XRF Scanner
+  priority: 2
+  text: "/ServerInfo/Guidebook/_CMU14/research/CMUXRF.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUSIM
+  name: The Synthesis Simulator
+  priority: 3
+  text: "/ServerInfo/Guidebook/_CMU14/research/CMUSIM.xml"
+
+- type: guideEntry
+  parent: RMC
+  id: CMUBotany
+  name: Hydroponics
+  priority: 2
+  text: "/ServerInfo/Guidebook/_CMU14/research/CMUBotany.xml"

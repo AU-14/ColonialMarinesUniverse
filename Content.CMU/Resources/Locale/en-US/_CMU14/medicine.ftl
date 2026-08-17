@@ -33,7 +33,7 @@ rmc-pulmovine-container-label-text = PE
 rmc-hepatocytin-container-label-text = HN
 
 reagent-name-albuterol = Albuterol
-reagent-desc-albuterol = Repairs 4 oxygen damage. OD of 35u.
+reagent-desc-albuterol = Repairs 4 oxygen damage. OD of 20u.
 
 reagent-name-cmnaloxone = Naloxone
 reagent-desc-cmnaloxone = Instantly counteracts toxin damage. Primarily used to treat overdoses.

@@ -118,6 +118,11 @@
           state: sniper_toggle_laser_off
   - type: RMCGunChamber
     enabled: false
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCWeaponSniperM707Vulture

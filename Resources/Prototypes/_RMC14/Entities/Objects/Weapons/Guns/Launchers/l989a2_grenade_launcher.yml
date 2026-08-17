@@ -47,3 +47,8 @@
         whitelist:
           tags:
           - RMCAttachmentMGLIntegratedScope
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker

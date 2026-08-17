@@ -53,14 +53,13 @@
     - CMU14ActionXenoPathogenHealerDroneTransferPlasma
     - CMU14ActionXenoPathogenSacrifice
     - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoDevour
   - type: XenoHide
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
-    - CMU14XenoMyceliumWall
     - CMU14XenoMyceliumMembrane
-    - CMU14XenoMyceliumDoor
   - type: XenoRegen
     healOffWeeds: true
     critHealMultiplier: 0.3465
@@ -78,9 +77,10 @@
     actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: true
     requiresGranter: false
-    max: 300
+    max: 200
     evolvesTo:
-    - CMU14XenoConditor
+    - CMU14XenoNeomorph
+    - CMU14XenoBlight
   - type: XenoDevolve
     devolvesTo:
     - CMU14XenoBloodburster
@@ -122,12 +122,12 @@
         - BulletImpassable
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.0
-    baseSprintSpeed: 7.5
+    baseSprintSpeed: 4.5
   - type: MeleeWeapon
     attackRate: 1.5
     damage:
       groups:
-        Brute: 15
+        Brute: 20
   - type: CMArmor
     explosionArmor: 10
   - type: Tackle

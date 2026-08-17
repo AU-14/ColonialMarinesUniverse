@@ -25,7 +25,7 @@ public sealed partial class CMUXenoCycloneComponent : Component
     public float BaseRange = 2f;
 
     [DataField, AutoNetworkedField]
-    public float BaseDamage = 25f;
+    public float BaseDamage = 30;
 
     /// <summary>
     /// Number of rapid hit-ticks per cycle.

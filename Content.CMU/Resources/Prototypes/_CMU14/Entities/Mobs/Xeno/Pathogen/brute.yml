@@ -19,6 +19,7 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: XenoHeavy
   - type: Xeno
     role: CMU14JobPathogenBrute
     tier: 3
@@ -33,6 +34,7 @@
     - CMU14ActionXenoPathogenDefensiveShield
     - CMU14ActionXenoPathogenDislocate
     - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoDislocate
   - type: CrusherShield
   - type: XenoStomp
@@ -88,15 +90,19 @@
         - BulletImpassable
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.5
-    baseSprintSpeed: 5.0
+    baseSprintSpeed: 4
   - type: MeleeWeapon
-    attackRate: 2.0 # fast attackrate, no delay
+    attackRate: 1.75 # fast attackrate, no delay
     damage:
       groups:
-        Brute: 40
+        Brute: 42
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 54
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 45
+    xenoArmor: 27
   - type: XenoClaws
     clawType: VerySharp
   - type: Tackle

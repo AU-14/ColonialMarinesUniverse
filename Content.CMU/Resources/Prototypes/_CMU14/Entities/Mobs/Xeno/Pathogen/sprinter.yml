@@ -33,6 +33,8 @@
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenTailStab
     - CMU14ActionXenoPathogenZoom
+    - CMU14ActionXenoPathogenRegurgitate
+    - CMU14ActionXenoPathogenDevolve
   - type: XenoZoom
   - type: XenoBoneChips
   - type: XenoLeap
@@ -86,7 +88,7 @@
     attackRate: 2.0
     damage:
       groups:
-        Brute: 18
+        Brute: 25
   - type: CMArmor
     explosionArmor: 5
   - type: Tackle
@@ -107,7 +109,6 @@
       state: background_pathogen
   - type: Tag
     tags:
-    - DoorBumpOpener
     - RMCSynthGrabbable
   - type: VentCrawler
     ventCrawlIcon: runner

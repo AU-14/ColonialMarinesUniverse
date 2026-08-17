@@ -62,6 +62,8 @@
   - type: MycotoxinInjector
     mycotoxinPerSecond: 10
     timeBetweenInjects: 0.5
+    filterDrainPerTick: 25
+    strongExposureEffects: true
     embryoSpawn: CMU14XenoBloodburster
   - type: DeleteOnExplosion
   - type: Tag

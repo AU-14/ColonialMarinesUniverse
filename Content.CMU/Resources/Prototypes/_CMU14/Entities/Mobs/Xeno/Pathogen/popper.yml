@@ -24,12 +24,14 @@
     tier: 0
     hudOffset: -0.1, 0.25
     emoteSounds: Pathogen
+    countedInSlots: false
     actionIds:
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -85,7 +87,6 @@
       state: background_pathogen
   - type: Tag
     tags:
-    - DoorBumpOpener
     - RMCSynthGrabbable
   - type: VentCrawler
     ventCrawlIcon: larva

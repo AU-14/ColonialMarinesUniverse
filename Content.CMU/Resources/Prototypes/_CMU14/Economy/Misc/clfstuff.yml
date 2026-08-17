@@ -164,6 +164,9 @@
       - id: RMCMagazineRifleM16
         amount: 95
         points: 1
+      - id: CMUMagazineRifleM16Extended
+        amount: 8
+        points: 2
       - id: RMCMagazineRifleL42A
         amount: 45
         points: 1

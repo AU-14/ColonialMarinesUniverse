@@ -39,6 +39,7 @@
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenOrderConstruction
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoSlowingSpit
   - type: XenoSpit
   - type: XenoConstruction
@@ -101,10 +102,12 @@
     attackRate: 1.2
     damage:
       groups:
-        Brute: 20
+        Brute: 35
+  - type: RMCSize
+    size: Big
   - type: CMArmor
     explosionArmor: 10
-    xenoArmor: 10
+    xenoArmor: 15
   - type: Tackle
     min: 2
     max: 6

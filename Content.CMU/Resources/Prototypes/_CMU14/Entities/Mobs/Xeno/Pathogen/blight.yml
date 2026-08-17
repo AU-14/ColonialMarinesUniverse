@@ -32,6 +32,7 @@
     - CMU14ActionXenoPathogenTurnInvisible
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoLeap
     plasmaCost: 20
     delay: 0
@@ -54,9 +55,11 @@
     requiresGranter: false
     max: 400
     evolvesTo:
-    - CMU14XenoVenator
-    - CMU14XenoHarbinger
+    - CMU14XenoConditor
+    - CMU14XenoBrute
     - CMU14XenoRoot
+    - CMU14XenoHarbinger
+    - CMU14XenoVenator
   - type: XenoDevolve
     devolvesTo:
     - CMU14XenoSprinter
@@ -90,10 +93,10 @@
     attackRate: 1.5
     damage:
       groups:
-        Brute: 28
+        Brute: 35
   - type: CMArmor
     explosionArmor: 10
-    xenoArmor: 15
+    xenoArmor: 10
   - type: XenoClaws
     clawType: Sharp
   - type: Tackle

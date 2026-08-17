@@ -7,6 +7,9 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.DoAfter;
 using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
+using Content.Shared._RMC14.Xenonids.Hive;
+using Content.Shared.Inventory;
+using Robust.Shared.Random;
 
 namespace Content.Shared._CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
 
@@ -20,6 +23,9 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
     [Dependency] private readonly XenoSystem _xeno = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!;
+    [Dependency] private readonly IRobustRandom _random = default!;
 
     public override void Initialize()
     {
@@ -139,7 +145,39 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
         if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
             return;
 
-        _mycotoxin.ForceInfect(target, xeno.Comp.EmbryoSpawn);
+        var sourceHive = _hive.GetHive(xeno.Owner)?.Owner;
+
+        EntityUid? protItem = null;
+        foreach (var slot in new[] { "mask", "head" })
+        {
+            if (!_inventory.TryGetSlotEntity(target, slot, out var item))
+                continue;
+            if (!TryComp(item, out MycotoxinProtectionComponent? _))
+                continue;
+            protItem = item;
+            break;
+        }
+
+        if (protItem != null && !_random.Prob(0.1f))
+        {
+            _popup.PopupClient(
+                Loc.GetString("cmu-xeno-direct-spore-infect-blocked"),
+                xeno, xeno, PopupType.SmallCaution);
+            return;
+        }
+
+        // Strip the protective item on success
+        if (protItem != null)
+        {
+            foreach (var slot in new[] { "mask", "head" })
+            {
+                if (_inventory.TryGetSlotEntity(target, slot, out var slotItem) && slotItem == protItem)
+                {
+                    _inventory.TryUnequip(target, slot, force: true);
+                    break;
+                }
+            }
+        }
 
         _popup.PopupPredicted(
             Loc.GetString("cmu-xeno-direct-spore-infect-hit", ("target", target)),

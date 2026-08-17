@@ -264,7 +264,7 @@
 - type: radioChannel
   id: MyceliumLink
   name: chat-radio-mycelium-link
-  keycode: "q"
+  keycode: "m"
   frequency: 427
   color: "#c2c38d"
   longRange: true

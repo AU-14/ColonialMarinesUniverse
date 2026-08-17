@@ -1,0 +1,37 @@
+<Document>
+	# Research
+	
+	This section covers everything involving research.
+	
+	## Guides
+	- [textlink="Chemistry" link="CMUResearch"]
+	- [textlink="Research Data Terminal" link="CMURDT"]
+	- [textlink="XRF Scanner" link="CMUXRF"]
+	- [textlink="Synthesis Simulator" link="CMUSIM"]
+	- [textlink="Hydroponics" link="CMUBotany"]
+	
+	## Quick Reference
+	- [textlink="Chemicals" link="RMCChemicals"]
+	
+	### Hydroponics Chemical Sources
+	
+	<Table Columns="2" MinForcedColumnWidth="64">
+		<ColorBox Color="#202028">
+			<Box Margin="4">[bold]Chemical[/bold]</Box>
+		</ColorBox>
+		<ColorBox Color="#202028">
+			<Box Margin="4">[bold]Source(s)[/bold]</Box>
+		</ColorBox>
+		<ColorBox><Box>Amatoxin</Box></ColorBox><ColorBox><Box>Lingzhi/Reishi, Fly Amanita</Box></ColorBox>
+		<ColorBox><Box>Atropine</Box></ColorBox><ColorBox><Box>Mutated Poppies; Poppy Seeds, Potato Seeds</Box></ColorBox>
+		<ColorBox><Box>Coniine</Box></ColorBox><ColorBox><Box>Mutated Carrots; Carrot seeds</Box></ColorBox>
+		<ColorBox><Box>Cyanide</Box></ColorBox><ColorBox><Box>Mutated Poison Apples; Apple Seeds, Cherry Seeds</Box></ColorBox>
+		<ColorBox><Box>Digoxin</Box></ColorBox><ColorBox><Box>Mutated Messa's Tears; Sunflower Seeds</Box></ColorBox>
+		<ColorBox><Box>Phenol</Box></ColorBox><ColorBox><Box>Mutated Carrots; Carrot Seeds</Box></ColorBox>
+		<ColorBox><Box>Psoralen</Box></ColorBox><ColorBox><Box>Mutated Cabbages; Cabbage Seeds, Citrus Seeds</Box></ColorBox>
+		<ColorBox><Box>Thymol</Box></ColorBox><ColorBox><Box>Mutated Death Berries, Mutated Poison Berries; Berry Seeds</Box></ColorBox>
+		<ColorBox><Box>Urishiol</Box></ColorBox><ColorBox><Box>Mutated Death Nettles; Mango Seeds</Box></ColorBox>
+		<ColorBox><Box>Zygacine</Box></ColorBox><ColorBox><Box>Mutated Lingzhi/Reishi; Lingzhi/Reishi Spores</Box></ColorBox>
+	</Table>
+
+</Document>

@@ -21,9 +21,6 @@ public sealed partial class CMUPathogenSporecasterComponent : Component
     [DataField, AutoNetworkedField]
     public float DetectionRange = 2f;
 
-    /// <summary>
-    /// Chance per stored cloud to release a parasite on destruction.
-    /// </summary>
     [DataField, AutoNetworkedField]
     public float DestructionReleaseChance = 0.6f;
 
@@ -32,4 +29,10 @@ public sealed partial class CMUPathogenSporecasterComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntProtoId ParasiteProto = "CMU14XenoPopper";
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan AutoReleaseInterval = TimeSpan.FromSeconds(3);
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan NextAutoReleaseAt;
 }

@@ -19,6 +19,7 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: XenoHeavy
   - type: Xeno
     role: CMU14JobPathogenAberration
     tier: 1
@@ -32,6 +33,7 @@
     - CMU14ActionXenoPathogenHeadbutt
     - CMU14ActionXenoPathogenCrush
     - CMU14ActionXenoPathogenDirectionalStomp
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoLeap
     delay: 0
     range: 4
@@ -108,10 +110,10 @@
     attackRate: 2.5
     damage:
       groups:
-        Brute: 38
+        Brute: 55
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 30
+    xenoArmor: 15
   - type: XenoClaws
     clawType: VerySharp
   - type: XenoDevour

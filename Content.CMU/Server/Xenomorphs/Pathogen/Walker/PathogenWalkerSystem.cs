@@ -30,6 +30,15 @@ using Content.Shared._RMC14.TacticalMap;
 using Content.Shared.Examine;
 using Content.Shared.IdentityManagement;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Mind;
+using Content.Shared.Whitelist;
+using Content.Shared._RMC14.Pulling;
+using Robust.Shared.GameObjects;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
+using Content.Shared.Body.Part;
+using Content.Shared._CMU14.Medical.Anatomy.Organs.Eyes;
+using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Eye.Blinding.Systems;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Walker;
 
@@ -51,6 +60,8 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private readonly LanguageSystem _language = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly MindSystem _mind = default!;
+    [Dependency] private readonly MetaDataSystem _metaData = default!;
+    [Dependency] private readonly BlindableSystem _blindable = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -70,6 +81,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         SubscribeLocalEvent<CMUPathogenWalkerComponent, ExaminedEvent>(OnWalkerExamined);
         SubscribeNetworkEvent<CMUPathogenWalkerAcceptNetEvent>(OnAcceptNet);
         SubscribeNetworkEvent<CMUPathogenWalkerDeclineNetEvent>(OnDeclineNet);
+        SubscribeLocalEvent<CMUPathogenWalkerComponent, BodyPartSeveredEvent>(OnWalkerSevered);
     }
 
     private void OnReanimate(CMUMycotoxinInjectDoReanimateEvent ev)
@@ -85,25 +97,47 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         var walker = EnsureComp<CMUPathogenWalkerComponent>(target);
 
-        if (_hive.GetHive(injector) is { } hive)
+        var hives = EntityQueryEnumerator<HiveComponent, MetaDataComponent>();
+        while (hives.MoveNext(out var hiveUid, out _, out var meta))
         {
-            _hive.SetSameHive(injector, target);
-            walker.Hive = hive.Owner;
+            if (meta.EntityPrototype?.ID != "CMUPathogenHive")
+                continue;
+
+            _hive.SetHive(target, hiveUid);
+            walker.Hive = hiveUid;
+            break;
+        }
+
+        RemComp<CMUOrganBlindnessComponent>(target);
+        if (TryComp<CMUEyeDamageContributionComponent>(target, out var eyeTracker))
+        {
+            if (TryComp<BlindableComponent>(target, out var blindable))
+                _blindable.AdjustEyeDamage((target, blindable), -eyeTracker.Applied);
+            eyeTracker.Applied = 0;
         }
 
         _faction.AddFaction(target, WalkerFaction);
         _language.SetExclusiveLanguage(target, "Pathogen");
 
         EnsureComp<IntrinsicRadioReceiverComponent>(target);
+        var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(target);
+        transmitter.Channels = new HashSet<string>() { "Hivemind" };
         var radio = EnsureComp<ActiveRadioComponent>(target);
-        radio.Channels = new HashSet<string>() { "MycelumLink" };
+        radio.Channels = new HashSet<string>() { "Hivemind" };
         var tacIcon = EnsureComp<TacticalMapIconComponent>(target);
+
+        EnsureComp<PullWhitelistComponent>(target);
+        var whitelistEv = new SetPullWhitelistEvent(new EntityWhitelist
+        {
+            Components = new[] { "Xeno", "Infectable", "Synth", "Yautja" }
+        });
+        RaiseLocalEvent(target, ref whitelistEv);
 
         EquipMarker(target, walker);
 
         // If the victim has a connected player, show the offer popup.
         // Otherwise skip straight to ghost role.
-        if (_player.TryGetSessionByEntity(target, out var session))
+        if (TryGetWalkerSession(target, out var session))
         {
             walker.OfferExpiresAt = _timing.CurTime + walker.OfferTimeout;
             walker.OfferResolved = false;
@@ -119,6 +153,19 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         }
 
         Dirty(target, walker);
+    }
+
+    private void OnWalkerSevered(Entity<CMUPathogenWalkerComponent> walker, ref BodyPartSeveredEvent args)
+    {
+        if (args.Type != BodyPartType.Head)
+            return;
+
+        // Cancel any pending revive and mark as exhausted
+        walker.Comp.ReviveAt = null;
+        walker.Comp.RevivesUsed = walker.Comp.MaxRevives;
+        Dirty(walker);
+
+        _popup.PopupEntity(Loc.GetString("cmu14-walker-permanent-death"), walker, PopupType.Medium);
     }
 
     private void OnAcceptNet(CMUPathogenWalkerAcceptNetEvent ev, EntitySessionEventArgs args)
@@ -249,6 +296,12 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
                 walker.PreReviveJitterPlayed = true;
                 Dirty(uid, walker);
                 _jitter.DoJitter(uid, jitterWarning, true, 14f, 5f, true);
+
+                if (TryGetWalkerSession(uid, out var warnSession))
+                {
+                    RaiseNetworkEvent(new CMUPathogenWalkerReviveWarningEvent(
+                        GetNetEntity(uid), jitterWarning.TotalSeconds), warnSession);
+                }
             }
 
             if (time < walker.ReviveAt)
@@ -260,7 +313,10 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
             if (mobState.CurrentState != MobState.Dead)
                 continue;
 
-            Revive(uid, walker);
+            if (TryGetWalkerSession(uid, out _))
+                Revive(uid, walker);
+            else
+                MakeGhostRole(uid, walker); // nobody home — hand it off as a ghost role instead
         }
     }
 
@@ -289,6 +345,9 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         // Full CMU heal: parts, organs, bones, wounds, status effects - not just DamageableComponent.
         RaiseLocalEvent(uid, new RejuvenateEvent());
 
+        if (walker.Hive is { } hiveUid && hiveUid.IsValid())
+            _hive.SetHive(uid, hiveUid);
+
         _mobState.ChangeMobState(uid, MobState.Alive, null);
 
         if (TryComp<HumanoidAppearanceComponent>(uid, out var humanoid))
@@ -299,5 +358,19 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         }
 
         _popup.PopupEntity(Loc.GetString("cmu14-walker-rise"), uid, PopupType.LargeCaution);
+    }
+
+    private bool TryGetWalkerSession(EntityUid uid, out ICommonSession session)
+    {
+        session = default!;
+        if (_mind.TryGetMind(uid, out _, out var mind) &&
+            mind.UserId != null &&
+            _player.TryGetSessionById(mind.UserId.Value, out var found))
+        {
+            session = found;
+            return true;
+        }
+
+        return false;
     }
 }

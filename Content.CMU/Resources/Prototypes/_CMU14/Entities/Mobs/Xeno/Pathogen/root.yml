@@ -28,28 +28,27 @@
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
     - CMU14ActionXenoPathogenTailStab
-    - CMU14ActionXenoPathogenAcidNormal
     - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenTantrum
-    - ActionXenoHighGallop
-    - CMU14ActionXenoPathogenFightOrFlight
-    - CMU14ActionXenoPathogenRetrieve
+    - CMU14ActionXenoPathogenTailFountain
+    - CMU14ActionXenoPathogenAidRejuvenate
     - ActionXenoPierce
     - ActionXenoBlitz
     - ActionXenoCleaveRoot
     - ActionXenoCleaveFling
     - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoHeavy
   - type: XenoDevolve
     devolvesTo:
     - CMU14XenoNeomorph
-    - CMU14XenoConditor
+    - CMU14XenoBlight
   - type: XenoPlasma
     plasma: 800
     maxPlasma: 800
     plasmaRegenOnWeeds: 3
   - type: CMArmor
-    xenoArmor: 35
+    xenoArmor: 25
     explosionArmor: 40
   - type: MeleeWeapon
     damage:
@@ -83,7 +82,7 @@
         - BulletImpassable
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.2
-    baseSprintSpeed: 3.5
+    baseSprintSpeed: 4.5
   - type: SlowOnPull
     slowdowns:
     - multiplier: 0.64

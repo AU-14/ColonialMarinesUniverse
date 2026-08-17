@@ -47,6 +47,11 @@
   - type: Tag
     tags:
     - AU14WeaponLauncherL164A3
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: Tag
   id: AU14WeaponLauncherL164A3

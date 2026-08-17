@@ -10,6 +10,4 @@ public sealed partial class CMUXenoParalyzingSlashActionEvent : InstantActionEve
     [DataField]
     public bool SuperSlow;
 
-    [DataField]
-    public TimeSpan ParalyzeDuration = TimeSpan.FromSeconds(2);
 }

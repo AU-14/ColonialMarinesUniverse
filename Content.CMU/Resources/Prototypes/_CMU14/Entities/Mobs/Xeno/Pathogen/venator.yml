@@ -33,11 +33,13 @@
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenScissorCut
     - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoScissorCut
     damage:
       types:
         Slash: 40
   - type: XenoHook
+  - type: XenoHeavy
   - type: XenoDevour
   - type: XenoTailSeize
   - type: XenoAbduct
@@ -80,6 +82,8 @@
   - type: MovementSpeedModifier
     baseWalkSpeed: 3.0
     baseSprintSpeed: 6.0
+  - type: RMCSize
+    size: Big
   - type: MeleeWeapon
     attackRate: 2.2
     damage:

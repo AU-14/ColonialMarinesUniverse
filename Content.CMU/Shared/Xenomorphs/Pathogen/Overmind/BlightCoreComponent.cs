@@ -22,4 +22,6 @@ public sealed partial class CMUBlightCoreComponent : Component
     /// <summary>HP of the core structure itself.</summary>
     [DataField, AutoNetworkedField]
     public int MaxHealth = 600;
+
+    public TimeSpan LastDamageAnnounceAt = TimeSpan.Zero;
 }

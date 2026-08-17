@@ -38,4 +38,7 @@ public sealed partial class MycotoxinExposureComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public EntityUid? SourceHive;
+
+    [DataField, AutoNetworkedField]
+    public bool StrongEffects = false;
 }

@@ -1,23 +1,20 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Nzzy",
+  "copyright": "nzzy",
   "size": {
-    "x": 64,
+    "x": 48,
     "y": 32
   },
   "states": [
     {
-      "name": "icon"
-    },
-    {
       "name": "base"
     },
     {
-      "name": "mag-0"
+      "name": "icon"
     },
     {
-      "name": "mag-2"
+      "name": "mag-0"
     }
   ]
 }

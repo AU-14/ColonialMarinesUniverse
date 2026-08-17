@@ -16,6 +16,10 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Eye;
 using Content.Shared._RMC14.Xenonids.Watch;
+using Content.Shared.Popups;
+using Content.Shared._RMC14.Xenonids;
+using Content.Server._RMC14.Announce;
+using Content.Shared._RMC14.Actions;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Overmind;
 
@@ -33,6 +37,11 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
     [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
     [Dependency] private readonly SharedXenoWatchSystem _xenoWatch = default!;
     [Dependency] private readonly QueenEyeSystem _queenEye = default!;
+    [Dependency] private readonly IEntityManager _entMan = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly Robust.Server.Player.IPlayerManager _player = default!;
+    [Dependency] private readonly XenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
 
     private static readonly ProtoId<TagPrototype> DoorBumpOpenerTag = "DoorBumpOpener";
     private static readonly EntProtoId EyeProto = "CMU14XenoOvermindEye";
@@ -57,10 +66,6 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
     private void OnOvermindInit(Entity<CMUXenoOvermindComponent> ent, ref ComponentStartup args)
     {
         EnterEyeForm(ent);
-
-        // Grant unlimited construction range (same mechanism the Queen gets from an attached ovipositor).
-        // This must be granted here too, not just in OnFormChanged, since the Overmind spawns already
-        // in eye form and OnFormChanged is only raised on subsequent form toggles.
         EnsureComp<XenoAttachedOvipositorComponent>(ent.Owner);
 
         Timer.Spawn(0, () =>
@@ -68,12 +73,39 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
             if (TerminatingOrDeleted(ent))
                 return;
 
-            // Grant eye-form actions (starts in eye form)
             GrantFormActions(ent.Owner, ent.Comp.EyeFormActions, ent.Comp.EyeFormActionEntities);
             Dirty(ent);
-
             EnsurePathogenHive(ent.Owner);
+
+            if (_net.IsClient)
+                return;
+
+            var hasCoreNow = false;
+            var overmindHive = _hive.GetHive(ent.Owner);
+            var coreQuery = EntityQueryEnumerator<CMUBlightCoreComponent, HiveMemberComponent>();
+            while (coreQuery.MoveNext(out _, out _, out var member))
+            {
+                if (overmindHive is { } h && member.Hive == h.Owner)
+                {
+                    hasCoreNow = true;
+                    break;
+                }
+            }
+
+            if (!hasCoreNow)
+            {
+                if (overmindHive is { } hive)
+                    PopupToHive(hive, Loc.GetString("cmu14-overmind-no-core-initial"), ent.Owner);
+
+                var deadline = _timing.CurTime + TimeSpan.FromMinutes(5);
+                Timer.Spawn(TimeSpan.FromSeconds(5), () => CheckBlightCoreWarnings(ent.Owner, deadline));
+            }
         });
+    }
+
+    private void PopupToHive(Entity<HiveComponent> hive, string message, EntityUid? source = null)
+    {
+        _xenoAnnounce.AnnounceToHive(source ?? EntityUid.Invalid, hive.Owner, message, hive.Comp.AnnounceSound, PopupType.LargeCaution);
     }
 
     private void OnOvermindShutdown(Entity<CMUXenoOvermindComponent> ent, ref ComponentShutdown args)
@@ -191,6 +223,7 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
     private void EnterEyeForm(Entity<CMUXenoOvermindComponent> ent)
     {
         SetIncorporealPhysics(ent.Owner, true);
+        SetActionOrder(ent, ent.Comp.EyeFormActionOrderId);
 
         if (_net.IsClient)
             return;
@@ -217,6 +250,7 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
     {
         RemoveEye(ent);
         SetIncorporealPhysics(ent.Owner, false);
+        SetActionOrder(ent, ent.Comp.PhysicalFormActionOrderId);
 
         if (TryComp(ent.Owner, out EyeComponent? eyeComp))
         {
@@ -228,6 +262,11 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
         }
 
         RemComp<RelayInputMoverComponent>(ent.Owner);
+    }
+
+    private void SetActionOrder(Entity<CMUXenoOvermindComponent> ent, EntProtoId id)
+    {
+        _rmcActions.SetOrderId(ent.Owner, id);
     }
 
     private void OnWatch(Entity<CMUXenoOvermindComponent> ent, ref XenoWatchEvent args)
@@ -267,8 +306,8 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
 
     private void SetIncorporealPhysics(EntityUid uid, bool incorporeal)
     {
-        if (!TryComp(uid, out PhysicsComponent? physics)
-                || !TryComp(uid, out FixturesComponent? fixtures))
+        if (!TryComp(uid, out PhysicsComponent? physics) ||
+            !TryComp(uid, out FixturesComponent? fixtures))
             return;
 
         var hard = !incorporeal;
@@ -301,5 +340,48 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
             _tag.RemoveTag(uid, DoorBumpOpenerTag);
         else
             _tag.AddTag(uid, DoorBumpOpenerTag);
+    }
+
+    private void CheckBlightCoreWarnings(EntityUid overmind, TimeSpan deadline)
+    {
+        if (_net.IsClient)
+            return;
+
+        if (TerminatingOrDeleted(overmind))
+            return;
+
+        // If a blight core now exists in the hive, cancel warnings
+        var coreQuery = EntityQueryEnumerator<CMUBlightCoreComponent, HiveMemberComponent>();
+        while (coreQuery.MoveNext(out _, out _, out var member))
+        {
+            if (_hive.GetHive(overmind) is { } oHive && member.Hive == oHive.Owner)
+                return; // core exists, no need to warn or kill
+        }
+
+        var remaining = deadline - _timing.CurTime;
+
+        if (remaining <= TimeSpan.Zero)
+        {
+            // Time's up — kill overmind
+            if (_hive.GetHive(overmind) is { } hive)
+                PopupToHive(hive, Loc.GetString("cmu14-overmind-no-core-died"), overmind);
+
+            QueueDel(overmind);
+            return;
+        }
+
+        // Announce at 2 min and 1 min remaining
+        if (remaining <= TimeSpan.FromMinutes(2) && remaining > TimeSpan.FromMinutes(2) - TimeSpan.FromSeconds(5))
+        {
+            if (_hive.GetHive(overmind) is { } hive)
+                PopupToHive(hive, Loc.GetString("cmu14-overmind-no-core-warning-2min"), overmind);
+        }
+        else if (remaining <= TimeSpan.FromMinutes(1) && remaining > TimeSpan.FromMinutes(1) - TimeSpan.FromSeconds(5))
+        {
+            if (_hive.GetHive(overmind) is { } hive)
+                PopupToHive(hive, Loc.GetString("cmu14-overmind-no-core-warning-1min"), overmind);
+        }
+
+        Timer.Spawn(TimeSpan.FromSeconds(5), () => CheckBlightCoreWarnings(overmind, deadline));
     }
 }

@@ -19,10 +19,11 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: XenoHeavy
   - type: CMUXenoCyclone
     plasmaCost: 75
     baseRange: 2
-    baseDamage: 25
+    baseDamage: 30
   - type: CMUXenoMycotoxinInject
   - type: Xeno
     role: CMU14JobPathogenHarbinger
@@ -38,6 +39,7 @@
     - CMU14ActionXenoPathogenCyclone
     - CMU14ActionXenoPathogenMycotoxinInject
     - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoLeap
     delay: 0
     knockdownTime: 0
@@ -92,11 +94,15 @@
     attackRate: 2.0
     damage:
       groups:
-        Brute: 42
+        Brute: 45
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 54
   - type: XenoDevour
   - type: CMArmor
     explosionArmor: 20
-    xenoArmor: 30
+    xenoArmor: 20
   - type: XenoClaws
     clawType: VerySharp
   - type: Tackle
@@ -123,6 +129,8 @@
     name: cmu-job-name-pathogen-harbinger
   - type: Speech
     speechSounds: Pathogen
+  - type: RMCSize
+    size: Big
 
 - type: entity
   parent: CMU14XenoHarbingerBase

@@ -54,6 +54,11 @@
   - type: Tag
     tags:
     - RMCWeaponIncineratorFL3
+  - type: InteractedBlacklist
+    blacklist:
+      components:
+      - Xeno
+      - CMUPathogenWalker
 
 - type: entity
   parent: RMCWeaponFL3Flamer

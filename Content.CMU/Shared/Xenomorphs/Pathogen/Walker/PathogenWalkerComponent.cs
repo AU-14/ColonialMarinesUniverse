@@ -8,7 +8,7 @@ namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
 public sealed partial class CMUPathogenWalkerComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public int MaxRevives = 2;
+    public int MaxRevives = 1; // 2, 1 is for testing.
 
     [DataField, AutoNetworkedField]
     public int RevivesUsed;

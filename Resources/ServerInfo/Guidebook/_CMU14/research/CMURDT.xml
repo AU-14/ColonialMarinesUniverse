@@ -1,0 +1,31 @@
+<Document>
+# The Research Data Terminal
+This section of the guide details the research data terminal.
+<GuideEntityEmbed Entity="CMUResearchDataTerminal" Caption="Research Data Terminal"/>
+
+This is one half of obtaining credits.
+Here you can see how many credits you have available, alongside the ability to upgrade your clearance level.
+Your clearance level dictates whether or not you are able to see what a chem you've scanned does.
+Clearance level 3 is enough to be able to see every property on hard chemicals.
+
+There are two tabs, "Manage Research" and "View Chemicals".
+
+## Manage Research
+This tab shows you a list of chemicals you could potentially make, alongside their difficulty.
+
+[bold]Easy[/bold] chemicals are relatively fast to make, but they only give you 3 credits.
+
+[bold]Intermediate[/bold] chemicals may take some time, and involve rarer ingredients, and give you 5 credits.
+
+[bold]Hard chemicals[/bold] require special ingredients only obtained through [textlink="Hydroponics" link="CMUBotany"], and give you 7 credits.
+
+You can only pick one chemical every six minutes.
+
+## View Chemicals
+This tab shows you every chemical you have scanned in the [textlink="XRF Scanner" link="CMUXRF"], ordered from earliest scan to latest scan.
+You can print any of the chemicals and use them in the [textlink="Synthesis Simulator" link="CMUSIM"]
+However, if you scan a chemical twice, it will show up twice in this list.
+If you re-scan a chemical at a higher clearance, you will likely be able to get new information out of it. It is best to print the latest scan of a chemical, as it
+contains up to date information.
+
+</Document>

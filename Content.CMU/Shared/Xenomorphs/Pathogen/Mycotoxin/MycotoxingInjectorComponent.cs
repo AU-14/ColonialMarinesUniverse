@@ -26,9 +26,17 @@ public sealed partial class MycotoxinInjectorComponent : Component
     [DataField, AutoNetworkedField]
     public bool AffectsDead;
 
+    /// <summary>How much GasMaskFilterComponent integrity to drain per tick when target has full protection.</summary>
+    [DataField, AutoNetworkedField]
+    public float FilterDrainPerTick = 0.3f;
+
     /// <summary>
     /// The prototype spawned once a victim's Mycotoxin exposure crosses InfectThreshold.
     /// </summary>
     [DataField(required: true), AutoNetworkedField]
     public EntProtoId EmbryoSpawn = "CMU14XenoBloodburster";
+
+    /// <summary>Slows and blurs on exposure - used by sporecaster clouds.</summary>
+    [DataField, AutoNetworkedField]
+    public bool StrongExposureEffects = false;
 }

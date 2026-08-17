@@ -31,6 +31,7 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: XenoHeavy
   - type: CMUXenoMycotoxinInject
     plasmaCost: 150
     range: 3.0
@@ -51,6 +52,7 @@
     - CMU14ActionXenoPathogenBlightWave
     - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenMycotoxinInjectMatriarch
+    - CMU14ActionXenoPathogenRegurgitate
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
@@ -102,10 +104,14 @@
     attackRate: 2.0
     damage:
       groups:
-        Brute: 48
+        Brute: 55
+  - type: XenoTailStab
+    tailDamage:
+      groups:
+        Brute: 54
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 40
+    xenoArmor: 25
   - type: Tackle
     min: 2
     max: 5

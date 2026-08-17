@@ -1,13 +1,11 @@
 
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenMatureBase
+  parent: CMU14XenoPathogenBase
   id: CMU14XenoBloodbursterBase
   name: Bloodburster
   description: A tiny sharp-clawed terror that just tore its way out of a living host.
   components:
-  - type: GhostRole
-    name: cmu-job-name-pathogen-bloodburster
   - type: Sprite
     sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
     layers:
@@ -27,8 +25,8 @@
   - type: MobThresholds
     thresholds:
       0: Alive
-      50: Critical
-      100: Dead
+      100: Critical
+      150: Dead
     stateAlertDict:
       Alive: XenoHealth
       Critical: XenoCrit
@@ -46,6 +44,7 @@
     - CMU14ActionXenoPathogenHide
     - CMU14ActionXenoPathogenLeap
     - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenWatch
   - type: XenoLeap
     delay: 0
     knockdownTime: 2
@@ -62,7 +61,7 @@
     actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: true
     requiresGranter: false
-    max: 100 # evolution threshold
+    max: 60 # evolution threshold
     evolvesTo:
     - CMU14XenoSprinter
     - CMU14XenoHaze
@@ -106,6 +105,7 @@
     chance: 0.4
     stunMin: 4
     stunMax: 4
+  - type: LarvaQueueable
   - type: RMCSize
     size: Small
   - type: RMCSpawnEntitiesOnGib
@@ -120,7 +120,6 @@
       state: background_pathogen
   - type: Tag
     tags:
-    - DoorBumpOpener
     - RMCSynthGrabbable
   - type: VentCrawler
     ventCrawlIcon: larva
@@ -144,3 +143,14 @@
   - type: RMCSpawnEntitiesOnGib
     entities:
     - CMU14GibEffectPathogenBloodburster
+
+- type: entity
+  id: CMU14XenoEmbryoBloodburster
+  parent: BaseItem
+  name: alien embryo
+  description: All slimy and yucky.
+  components:
+    - type: Sprite
+      sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
+      noRot: true
+      state: embryo
