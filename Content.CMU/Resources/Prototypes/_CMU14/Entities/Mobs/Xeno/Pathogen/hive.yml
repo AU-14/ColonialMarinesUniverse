@@ -5,7 +5,12 @@
   components:
   - type: Hive
     lateJoinGainLarva: false
-#   hiveColor: "#c2c38d"
     hiveUIColor: "#8a8c50"
     canMakeAlliances: false
     corrupted: false
+    hiveStructureSlots:
+      CMU14PathogenBlightCore: 1
+      CMU14PathogenCluster: 8
+      CMU14PathogenPlasmaTree: 3
+      CMU14PathogenRecoveryNode: 6
+      CMU14PathogenSporecaster: 6

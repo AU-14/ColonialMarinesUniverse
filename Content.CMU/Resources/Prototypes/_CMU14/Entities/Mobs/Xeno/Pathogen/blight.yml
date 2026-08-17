@@ -23,13 +23,24 @@
     role: CMU14JobPathogenBlight
     tier: 2
     hudOffset: -0.1, 0.25
-    emoteSounds: Warrior
+    emoteSounds: Pathogen
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoLeap
-    - ActionXenoTailStab
-    - ActionXenoTurnInvisible
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenTurnInvisible
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenDevolve
+  - type: XenoLeap
+    plasmaCost: 20
+    delay: 0
+    moveDelayTime: 1.5
+    knockdownTime: 5
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+    knockdownRequiresInvisibility: true
+    unrootOnMelee: true
+  - type: XenoTurnInvisible
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.2
@@ -38,6 +49,7 @@
     maxPlasma: 150
     plasmaRegenOnWeeds: 8
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: true
     requiresGranter: false
     max: 400
@@ -45,6 +57,7 @@
     - CMU14XenoVenator
     - CMU14XenoHarbinger
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoSprinter
     canBeDevolvedByOther: false
@@ -78,7 +91,7 @@
         Brute: 28
   - type: CMArmor
     explosionArmor: 10
-    armor: 5
+    xenoArmor: 5
   - type: Tackle
     min: 2
     max: 6
@@ -99,8 +112,7 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-blight
   - type: Speech
-    speechSounds: Xenonid
-
+    speechSounds: Pathogen
 
 - type: entity
   parent: CMU14XenoBlightBase

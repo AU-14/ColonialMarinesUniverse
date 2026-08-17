@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared._RMC14.Xenonids.Parasite;
 using Robust.Client.GameObjects;
 
 namespace Content.Client._RMC14.Xenonids.Infected;
@@ -15,12 +15,12 @@ public sealed class VictimBurstVisualizerSystem : VisualizerSystem<VictimBurstCo
         if (args.Sprite == null)
             return;
 
-        var rsiPath = component.RsiPath;
+        var rsiPath = component.BurstsFromBack ? component.BackRsiPath : component.RsiPath; // CMU14
 
-        var spriteState = state switch
+        string? spriteState = state switch
         {
-            VictimBurstState.Bursting => component.BurstingState,
-            VictimBurstState.Burst => component.BurstState,
+            VictimBurstState.Bursting => component.BurstsFromBack ? component.BackBurstingState : component.BurstingState, // CMU14
+            VictimBurstState.Burst => component.BurstsFromBack ? component.BackBurstState : component.BurstState, // CMU14
             _ => null
         };
 

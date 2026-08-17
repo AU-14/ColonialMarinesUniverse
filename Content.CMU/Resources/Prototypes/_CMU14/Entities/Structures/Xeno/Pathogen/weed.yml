@@ -1,0 +1,328 @@
+# CMU14 Pathogen - Mycelium Weeds
+# RSI: Resources/Textures/_CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+
+# ── Base mycelium weed tile ───────────────────────────────────────────────────
+
+- type: entity
+  parent: XenoWeeds
+  id: CMU14XenoMyceliumWeeds
+  name: mycelium weeds
+  description: Pale fibrous mycelium threads spreading across the floor. They feel spongy underfoot.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: weed0
+  - type: IconSmooth
+    key: cm_xeno_weeds
+    base: weed_dir
+    mode: CardinalFlags
+  - type: IconSmoothRandom
+    overrides:
+    - weed_dir0
+    - weed_dir15
+  - type: RandomSprite
+    available:
+    - 0:
+        weed0: ""
+    - 0:
+        weed1: ""
+    - 0:
+        weed2: ""
+    - 0:
+        weed3: ""
+    - 0:
+        weed4: ""
+    - 0:
+        weed5: ""
+    - 0:
+        weed6: ""
+    - 0:
+        weed7: ""
+    - 0:
+        weed8: ""
+    - 0:
+        weed9: ""
+    - 0:
+        weed10: ""
+    - 0:
+        weed11: ""
+    - 0:
+        weed12: ""
+    - 0:
+        weed13: ""
+    - 0:
+        weed14: ""
+    - 0:
+        weed15: ""
+  - type: XenoWeeds
+    level: 1
+    spawns: CMU14XenoMyceliumWeeds
+
+# ── Weed node (weed source) ───────────────────────────────────────────────────
+
+- type: entity
+  parent: CMU14XenoMyceliumWeeds
+  id: CMU14XenoMyceliumWeedsSource
+  name: mycelium node
+  description: A pulsating knot of mycelium threads. It slowly spreads spores across the floor.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: weed0
+    - state: constructionnode
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 11
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: XenoConstructionPlasmaCost
+    plasma: 200
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: Damageable
+    damage:
+      groups:
+        Brute: 6
+  - type: XenoWeeds
+    spawns: CMU14XenoMyceliumWeeds
+    healOnStopSpreading:
+      groups:
+        Brute: -6
+  - type: Tag
+    tags:
+    - XenoWeedNode
+
+- type: entity
+  parent: CMU14XenoMyceliumWeeds
+  id: CMU14XenoMyceliumWeedsSourceHidden
+  suffix: Hidden Node
+  components:
+  - type: Sprite
+    layers:
+    - state: weed0
+    - sprite: _RMC14/Markers/landmarks.rsi
+      state: weednode
+      map: ["enum.RMCGhostVisibleOnlyVisualLayers.Base"]
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: Tag
+    tags:
+    - XenoWeedNode
+    - XenoWeedTile
+  - type: RMCVisibleToGhostsOnly
+
+# ── Hive-tier mycelium weeds (denser, spread by Overmind-tier) ───────────────
+
+- type: entity
+  parent: CMU14XenoMyceliumWeeds
+  id: CMU14XenoMyceliumHiveWeeds
+  name: dense mycelium weeds
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: hive_weed0
+  - type: IconSmooth
+    key: cm_xeno_weeds
+    base: hive_weed
+    mode: CardinalFlags
+  - type: IconSmoothRandom
+    overrides:
+    - hive_weed0
+    - hive_weed15
+  - type: RandomSprite
+    available:
+    - 0:
+        hive_weed0: ""
+    - 0:
+        hive_weed1: ""
+    - 0:
+        hive_weed2: ""
+    - 0:
+        hive_weed3: ""
+    - 0:
+        hive_weed4: ""
+    - 0:
+        hive_weed5: ""
+    - 0:
+        hive_weed6: ""
+    - 0:
+        hive_weed7: ""
+    - 0:
+        hive_weed8: ""
+    - 0:
+        hive_weed9: ""
+    - 0:
+        hive_weed10: ""
+    - 0:
+        hive_weed11: ""
+    - 0:
+        hive_weed12: ""
+    - 0:
+        hive_weed13: ""
+    - 0:
+        hive_weed14: ""
+    - 0:
+        hive_weed15: ""
+  - type: XenoWeeds
+    range: 7
+    spawns: CMU14XenoMyceliumHiveWeeds
+    level: 3
+    speedMultiplierOutsider: 0.338
+    speedMultiplierOutsiderArmor: 0.4856
+    blockOtherWeeds: true
+    spreadsOnSemiWeedable: true
+  - type: HiveWeeds
+  - type: XenoWeedsSpreading
+    spreadDelay: 1.25
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 15
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Flamability
+    chance: 0.3
+    rate: 1.0
+    spread: 0.5
+    range: 0.8
+    scatterFireChance: 0.005
+    destroyAnyway: true
+    burnDurationMin: 4
+    burnDurationMax: 8
+
+- type: entity
+  parent: CMU14XenoMyceliumHiveWeeds
+  id: CMU14XenoMyceliumHiveWeedsSource
+  name: dense mycelium node
+  description: A large, pulsating knot of dense mycelium. It floods the surrounding area with spores.
+  components:
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    drawdepth: FloorTiles
+    layers:
+    - state: hive_weed0
+    - state: constructionnode
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 11
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: XenoWeeds
+    spawns: CMU14XenoMyceliumHiveWeeds
+    healOnStopSpreading:
+      groups:
+        Brute: -6
+  - type: XenoConstructionPlasmaCost
+    plasma: 75
+  - type: Tag
+    tags:
+    - XenoWeedNode
+
+- type: entity
+  parent: CMU14XenoMyceliumHiveWeeds
+  id: CMU14XenoMyceliumHiveWeedsSourceHidden
+  suffix: Hidden Node
+  components:
+  - type: Sprite
+    layers:
+    - state: hive_weed0
+    - sprite: _RMC14/Markers/landmarks.rsi
+      state: weednode
+      map: ["enum.RMCGhostVisibleOnlyVisualLayers.Base"]
+  - type: RMCDeleteAnchoredOnInit
+    enabled: true
+    whitelist:
+      tags:
+      - XenoWeedNode
+      - XenoWeedTile
+  - type: QueenEyeVision
+  - type: Tag
+    tags:
+    - XenoWeedNode
+    - XenoWeedTile
+  - type: RMCVisibleToGhostsOnly
+
+# ── Wall-surface weed overlay ─────────────────────────────────────────────────
+
+- type: entity
+  id: CMU14XenoMyceliumWeedsWall
+  name: mycelium weeds
+  placement:
+    mode: SnapgridCenter
+    snap:
+    - Wall
+  components:
+  - type: Appearance
+  - type: Transform
+    anchored: true
+  - type: Physics
+    bodyType: Static
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.5,0.5,0.5"
+        layer:
+        - WallLayer
+        density: 1000
+        hard: false
+  - type: Clickable
+  - type: Sprite
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_weeds.rsi
+    drawdepth: Objects
+  - type: IconSmooth
+    key: cm_xeno_weeds_walls
+    base: weedwall
+    mode: Corners
+  - type: XenoNestSurface
+    nest: CMU14XenoMyceliumNest
+  - type: HiveMember
+  - type: XenoFriendly
+  - type: Damageable
+    damageContainer: StructuralXeno
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: ImmuneToUnarmed
+  - type: WallMount
+    arc: 360
+  - type: RMCNightVisionVisible
+    priority: -1
+    transparency: 0.2

@@ -23,14 +23,34 @@
     role: CMU14JobPathogenBrute
     tier: 3
     hudOffset: -0.1, 0.25
-    emoteSounds: Crusher
+    emoteSounds: Pathogen
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoPheromones
-    - ActionXenoTailStab
-    - ActionXenoStomp
-    - ActionXenoDefensiveShield
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenStomp
+    - CMU14ActionXenoPathogenDefensiveShield
+    - CMU14ActionXenoPathogenDislocate
+    - CMU14ActionXenoPathogenDevolve
+  - type: XenoDislocate
+  - type: CrusherShield
+  - type: XenoStomp
+    directional: true
+    directionalRange: 4
+    directionalAngle: 90
+    paralyzeTime: 1
+    slowTime: 2.5
+    knockBackDistance: 2
+    screenShakeStrength: 4
+    directionalTileEffect: RMCEffectXenoTelegraphRed
+    damage:
+      types:
+        Blunt: 80
+    directionalMinDamage:
+      types:
+        Blunt: 65
+    selfEffect: CMEffectSelfStomp
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.2
@@ -39,9 +59,11 @@
     maxPlasma: 200
     plasmaRegenOnWeeds: 8
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoNeomorph
     canBeDevolvedByOther: false
@@ -75,7 +97,7 @@
         Brute: 40
   - type: CMArmor
     explosionArmor: 50
-    armor: 20
+    xenoArmor: 20
   - type: Tackle
     min: 2
     max: 6
@@ -99,7 +121,7 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-brute
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
 
 - type: entity
   parent: CMU14XenoBruteBase

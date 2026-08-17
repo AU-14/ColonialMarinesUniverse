@@ -22,4 +22,7 @@ public sealed partial class CMUXenoOvermindComponent : Component
 
     [DataField, AutoNetworkedField]
     public bool Strengthened;
+
+    [DataField, AutoNetworkedField]
+    public EntityUid? Eye;
 }

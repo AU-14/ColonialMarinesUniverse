@@ -30,6 +30,8 @@ cmu-job-description-pathogen-aberration = A Yautja-Pathogen hybrid. You are an a
 
 cmu-job-name-pathogen-matriarch = Matriarch
 cmu-job-description-pathogen-matriarch = Nothing will survive. Lead the Confluence to victory.
+cmu-xeno-death-matriarch = Matriarch has fallen! Vengeance!
 
 cmu-job-name-pathogen-overmind = Overmind
 cmu-job-description-pathogen-overmind = The mind of the Confluence. Step onto a Blight Core to merge with it and guide your sisters to victory.
+cmu-xeno-death-overmind = Our Overmind has died! Vengeance!

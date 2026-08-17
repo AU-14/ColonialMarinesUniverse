@@ -37,7 +37,7 @@ public abstract partial class SharedBlightWaveSystem : EntitySystem
         if (args.Handled)
             return;
 
-        if (!_xenoPlasma.TryRemovePlasmaPopup((xeno.Owner, null), xeno.Comp.PlasmaCost))
+        if (!_xenoPlasma.TryRemovePlasmaPopup(xeno.Owner, xeno.Comp.PlasmaCost))
             return;
 
         args.Handled = true;

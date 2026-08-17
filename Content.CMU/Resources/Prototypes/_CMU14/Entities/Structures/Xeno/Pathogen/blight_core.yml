@@ -40,6 +40,7 @@
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
   - type: CMUBlightCore
+  - type: HiveCore
   - type: HiveMember
   - type: UserInterface
     interfaces:
@@ -47,3 +48,43 @@
         type: BlightCoreAcceptBui
       enum.BlightCoreUiKey.Vote:
         type: BlightCoreVoteBui
+  - type: XenoWeeds
+    range: 7
+    spawns: CMU14XenoMyceliumHiveWeeds
+    level: 3
+    blockOtherWeeds: true
+    spreadsOnSemiWeedable: true
+  - type: XenoWeedsSpreading
+
+- type: entity
+  id: CMU14PathogenBlightCoreConstructionNode
+  parent: BaseHiveStructureNode
+  name: blight core
+  description: A pulsating organic mass. Looks like a marker for something.
+  suffix: Construction
+  components:
+  - type: Sprite
+    color: '#FFFFFFAA'
+    sprite: _CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
+    layers:
+    - state: pathogen_core
+    - sprite: _RMC14/Interface/xeno_hud.rsi
+      state: xeno_structure_node_indicator
+      scale: 0.8, 0.8
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 300
+      behaviors:
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: HiveConstructionNode
+    initialPlasmaCost: 500
+    plasmaCost: 400
+    spawn: CMU14PathogenBlightCore
+  - type: HiveConstructionRequiresWeedableSurface
+  - type: HiveConstructionLimited
+    id: CMU14PathogenBlightCore
+  - type: WarpPoint
+    location: blight core

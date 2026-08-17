@@ -23,14 +23,15 @@
     role: CMU14JobPathogenPopper
     tier: 0
     hudOffset: -0.1, 0.25
-    emoteSounds: Larva
+    emoteSounds: Pathogen
     countsForSlots: false
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoPheromones
-    - CMU14ActionXenoPlaceSporeSac
-    - CMU14ActionXenoDirectSporeInfect
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenPlaceSporeSac
+    - CMU14ActionXenoPathogenDirectSporeInfect
+    - CMU14ActionXenoPathogenDevolve
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -40,9 +41,11 @@
     maxPlasma: 400
     plasmaRegenOnWeeds: 2
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: XenoPheromones
@@ -99,7 +102,7 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-popper
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
   - type: CMUXenoSporeSac
     sacPrototype: CMUPathogenSporeSac
     maxSacs: 3

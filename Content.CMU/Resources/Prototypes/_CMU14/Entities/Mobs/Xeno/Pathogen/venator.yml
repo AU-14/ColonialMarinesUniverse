@@ -23,13 +23,24 @@
     role: CMU14JobPathogenVenator
     tier: 3
     hudOffset: -0.1, 0.25
-    emoteSounds: Warrior
+    emoteSounds: Pathogen
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoTailStab
-    - ActionXenoImpale
-    - ActionXenoTailSweep
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenAbduct
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenScissorCut
+    - CMU14ActionXenoPathogenDevolve
+  - type: XenoScissorCut
+    damage:
+      types:
+        Slash: 40
+  - type: XenoHook
+  - type: XenoTailSeize
+  - type: XenoAbduct
+  - type: XenoImpale
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
@@ -38,9 +49,11 @@
     maxPlasma: 300
     plasmaRegenOnWeeds: 8
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoBlight
     canBeDevolvedByOther: false
@@ -74,7 +87,7 @@
         Brute: 42
   - type: CMArmor
     explosionArmor: 20
-    armor: 15
+    xenoArmor: 15
   - type: Tackle
     min: 2
     max: 5
@@ -95,7 +108,7 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-venator
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
 
 - type: entity
   parent: CMU14XenoVenatorBase

@@ -53,7 +53,7 @@
 - type: language
   id: Pathogen
   name: "Pathogen"
-  description: "The common tongue of the Mycelial Confluence — a wet, clicking language carried through spores."
+  description: "The common tongue of the Mycelial Confluence - a wet, clicking language carried through spores."
   typefaceId: null
   languageIcon:
     sprite: /Textures/_RMC14/Actions/xeno_actions.rsi

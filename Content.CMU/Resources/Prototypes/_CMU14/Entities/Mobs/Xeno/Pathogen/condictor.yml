@@ -1,14 +1,14 @@
 - type: entity
   abstract: true
   parent: CMU14XenoPathogenBase
-  id: CMU14XenoConditorBase
+  id: CMU14XenoConditorBase # conductor hehe
   name: Conditor
   description: A masterful cultivator of mycelium and death.
   components:
   - type: GhostRole
     name: cmu-job-name-pathogen-conditor
   - type: Sprite
-    sprite: _CMU14/Mobs/Xenonids/Pathogen/condictor.rsi
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/conditor.rsi
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -23,16 +23,38 @@
     role: CMU14JobPathogenConditor
     tier: 3
     hudOffset: -0.1, 0.25
-    emoteSounds: Warrior
+    emoteSounds: Pathogen
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoHide
-    - ActionXenoPheromones
-    - ActionXenoTailStab
-    - ActionXenoLeap
-    - ActionXenoSpit
-    - ActionXenoSlowingSpit
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenHide
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenPlantWeeds
+    - CMU14ActionXenoPathogenSpit
+    - CMU14ActionXenoPathogenChooseStructure
+    - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenSlowingSpit
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenOrderConstruction
+  - type: XenoSlowingSpit
+  - type: XenoSpit
+  - type: XenoConstruction
+    buildDelay: 1
+    canBuild:
+    - CMU14XenoMyceliumWall
+    - CMU14XenoThickMyceliumWall
+    - CMU14XenoMyceliumMembrane
+    - CMU14XenoThickMyceliumMembrane
+    - CMU14XenoMyceliumDoor
+    - CMU14XenoThickMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -41,13 +63,16 @@
     maxPlasma: 500
     plasmaRegenOnWeeds: 10
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoNeomorph
     canBeDevolvedByOther: false
   - type: XenoHide
+  - type: XenoPheromones
   - type: Fixtures
     fixtures:
       fix1:
@@ -78,14 +103,13 @@
         Brute: 20
   - type: CMArmor
     explosionArmor: 10
-    armor: 10
+    xenoArmor: 10
   - type: Tackle
     min: 2
     max: 6
     chance: 0.3
     stunMin: 3
     stunMax: 4
-  - type: XenoPheromones
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
@@ -100,10 +124,15 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-conditor
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
 
 - type: entity
   parent: CMU14XenoConditorBase
   id: CMU14XenoConditor
   name: Conditor
-
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenConditor

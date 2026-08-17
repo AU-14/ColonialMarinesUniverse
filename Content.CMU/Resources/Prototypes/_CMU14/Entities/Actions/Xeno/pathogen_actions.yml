@@ -95,3 +95,34 @@
     useDelay: 2
   - type: InstantAction
     event: !type:CMUXenoOvermindChangeFormActionEvent
+
+- type: entity
+  id: CMU14ActionXenoMycotoxinInject
+  parent: ActionXenoBase
+  name: Mycotoxin Injection
+  description: Skewer a dead target with your tail, injecting mycotoxin. They will rise again to serve the Confluence.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tailstab
+    useDelay: 180
+  - type: TargetAction
+    range: 2.5
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+    event: !type:CMUXenoMycotoxinInjectActionEvent
+
+- type: entity
+  id: CMU14ActionXenoMycotoxinInjectMatriarch
+  parent: CMU14ActionXenoMycotoxinInject
+  name: Mycotoxin Injection
+  description: Skewer a critically wounded or dead target with your tail, injecting mycotoxin. They will rise again to serve the Confluence.
+  components:
+  - type: Action
+    useDelay: 300
+  - type: TargetAction
+    range: 3.0
+    checkCanAccess: false

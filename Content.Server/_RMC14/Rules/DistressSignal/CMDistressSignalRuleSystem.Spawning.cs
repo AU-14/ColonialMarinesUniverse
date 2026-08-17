@@ -75,6 +75,7 @@ public sealed partial class CMDistressSignalRuleSystem
     {
         // TODO: come up with random name like operation name, in a function that can be reused for hive v hive
         comp.Hive = _hive.CreateHive("xenonid hive", comp.HiveId);
+        _hive.CreateHive("Mycelial Confluence", "CMUPathogenHive");
         if (comp.SpawnPlanet && !SpawnXenoMap((rule.Owner, comp)))
         {
             Log.Error("Failed to load xeno map");

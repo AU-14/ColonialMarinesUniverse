@@ -23,13 +23,22 @@
     role: CMU14JobPathogenSprinter
     tier: 1
     hudOffset: -0.1, 0.25
-    emoteSounds: Larva
+    emoteSounds: Pathogen
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoHide
-    - ActionXenoLeap
-    - ActionXenoTailStab
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenHide
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenBoneChips
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenZoom
+  - type: XenoZoom
+  - type: XenoBoneChips
+  - type: XenoLeap
+    delay: 0
+    knockdownTime: 2
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
@@ -38,6 +47,7 @@
     maxPlasma: 100
     plasmaRegenOnWeeds: 3
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: true
     requiresGranter: false
     max: 200
@@ -45,6 +55,7 @@
     - CMU14XenoNeomorph
     - CMU14XenoBlight
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoBloodburster
     canBeDevolvedByOther: false
@@ -102,7 +113,7 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-sprinter
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
 
 - type: entity
   parent: CMU14XenoSprinterBase

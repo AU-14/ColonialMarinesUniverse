@@ -10,7 +10,17 @@
   - type: Sprite
     sprite: _CMU14/Mobs/Xenonids/Pathogen/matriarch.rsi
     layers:
-    - state: alive
+    - map: [ "enum.XenoVisualLayers.Base" ]
+      state: alive
+    - map: [ "enum.RMCDamageVisualLayers.Base" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Left" ]
+      visible: false
+    - map: [ "enum.XenoInhandVisualLayers.Right" ]
+      visible: false
+    - map: [ "enum.RMCShieldVisuals.Base" ]
+      sprite: _RMC14/Effects/xeno_shields.rsi
+      visible: false
   - type: MobThresholds
     thresholds:
       0: Alive
@@ -21,40 +31,47 @@
       Critical: XenoCrit
       Dead: XenoDead
     displayDamageInAlert: true
+  - type: CMUXenoMycotoxinInject
+    plasmaCost: 150
+    range: 3.0
+    canInjectLiving: true
   - type: Xeno
     role: CMU14JobPathogenMatriarch
     tier: 4
     hudOffset: -0.1, 0.25
-    emoteSounds: Queen
+    emoteSounds: Pathogen
     countsForSlots: false
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoPheromones
-    - ActionXenoTailStab
-    - ActionXenoSpikeShed
-    - ActionXenoSpikeShield
-    - ActionXenoBoneChips
-    - CMU14ActionXenoBlightWave
-    - CMU14ActionXenoParalyzingSlash
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenSpikeShed
+    - CMU14ActionXenoPathogenSpikeShield
+    - CMU14ActionXenoPathogenBoneChips
+    - CMU14ActionXenoPathogenBlightWave
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenMycotoxinInjectMatriarch
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
+  - type: CMUXenoBlightWave
   - type: XenoPlasma
     plasma: 500
     maxPlasma: 500
     plasmaRegenOnWeeds: 9
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: XenoPheromones
-  # Bone Shard counter system - reuses Hedgehog Ravager XenoEnergy/XenoShard
   - type: XenoEnergy
     gain: 5
-    gainAttack: 20 # more aggressive than hedgehog
+    gainAttack: 20
     gainAttackDowned: 20
     popupGain: rmc-xeno-shards-increase-user
     popupNotEnough: rmc-xeno-not-enough-shards
@@ -95,7 +112,7 @@
         Brute: 48
   - type: CMArmor
     explosionArmor: 50
-    armor: 25
+    xenoArmor: 25
   - type: Tackle
     min: 2
     max: 5
@@ -111,6 +128,7 @@
   - type: Tag
     tags:
     - DoorBumpOpener
+    - FootstepSound
   - type: VentCrawler
     ventCrawlIcon: queen
   - type: RMCActionOrder
@@ -118,12 +136,24 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-matriarch
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
+  - type: SoundOnDeath
+    sound:
+      collection: PathogenMatriarchDeath
+      params:
+        volume: -4
+  - type: XenoAnnounceDeath
+    message: cmu-xeno-death-matriarch
+    color: "#8a8c50"
+  - type: FootstepModifier
+    footstepSoundCollection:
+      collection: XenoFootstepLarge
+      params:
+        volume: 0
 
 - type: entity
   parent: CMU14XenoMatriarchBase
   id: CMU14XenoMatriarch
-  name: Matriarch
   components:
   - type: RMCGibOnDeath
     gibChance: 0

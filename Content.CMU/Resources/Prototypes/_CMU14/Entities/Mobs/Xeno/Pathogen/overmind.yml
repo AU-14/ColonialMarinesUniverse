@@ -47,32 +47,42 @@
     role: CMU14JobPathogenOvermind
     tier: 3
     hudOffset: -0.1, 0.25
-    emoteSounds: Queen
+    emoteSounds: Pathogen
     countsForSlots: false
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoPheromones
-    - ActionXenoHeal
-    - ActionXenoWordQueen
-    - CMU14ActionXenoParalyzingSlash
-    - CMU14ActionXenoBlightWave
-    - CMU14ActionXenoOvermindChangeForm
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPheromones
+    - CMU14ActionXenoPathogenHeal
+    - CMU14ActionXenoPathogenWordQueen
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenOvermindChangeForm
+    - CMU14ActionXenoPathogenOrderConstruction
+    - CMU14ActionXenoPathogenChooseStructure
+    - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenPlantWeeds
+    - CMU14ActionXenoPathogenExpandWeeds
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
   - type: XenoPlasma
-    plasma: 500
-    maxPlasma: 500
+    plasma: 2000
+    maxPlasma: 2000
     plasmaRegenOnWeeds: 12
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo: []
     canBeDevolvedByOther: false
   - type: XenoPheromones
   - type: CMUXenoOvermind
+  - type: XenoWordQueen
+  - type: XenoPsychicCommunication
+  - type: ManageHive
+  - type: HiveLeaderGranter
   - type: Fixtures
     fixtures:
       fix1:
@@ -103,7 +113,22 @@
         Brute: 30
   - type: CMArmor
     explosionArmor: 25
-    armor: 15
+    xenoArmor: 15
+  - type: XenoConstruction
+    buildDelay: 1
+    canBuild:
+    - CMU14XenoMyceliumWall
+    - CMU14XenoThickMyceliumWall
+    - CMU14XenoMyceliumMembrane
+    - CMU14XenoThickMyceliumMembrane
+    - CMU14XenoMyceliumDoor
+    - CMU14XenoThickMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
   - type: Tackle
     min: 2
     max: 5
@@ -124,9 +149,28 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-overmind
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
   - type: Physics
     canCollide: false
+  - type: XenoEvolutionGranter
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - MyceliumLink
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - MyceliumLink
+    receiveAllChannels: false
+  - type: EmitSoundOnSpawn
+    sound:
+      path: /Audio/_CMU14/Xeno/Pathogen/announce_screech.ogg
+      params:
+        volume: -8
+  - type: XenoAnnounceDeath
+    message: cmu-xeno-death-overmind
+    color: "#8a8c50"
 
 - type: entity
   parent: CMU14XenoOvermindBase
@@ -137,4 +181,25 @@
     gibChance: 0.1
   - type: RMCSpawnEntitiesOnGib
     entities:
+<<<<<<< HEAD
     - CMU14GibEffectPathogenOvermind
+||||||| parent of 5d3f027dd5 (✨ port pathogen systems (mycelium link, actions, walker, mycotoxin) from master)
+    - CMU14GibEffectPathogenOvermind
+=======
+    - CMU14GibEffectPathogenOvermind
+
+- type: entity
+  parent: StationAiHolo
+  id: CMU14XenoOvermindEye
+  name: overmind eye
+  categories: [ HideSpawnMenu, DoNotMap ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
+    layers:
+    - state: overmind_eye
+  - type: Eye
+    drawFov: false
+  - type: Visibility
+    layer: 32770
+>>>>>>> 5d3f027dd5 (✨ port pathogen systems (mycelium link, actions, walker, mycotoxin) from master)

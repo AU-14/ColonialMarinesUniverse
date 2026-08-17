@@ -23,14 +23,54 @@
     role: CMU14JobPathogenNeomorph
     tier: 2
     hudOffset: -0.1, 0.25
-    emoteSounds: Warrior
+    emoteSounds: Pathogen
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoHide
-    - ActionXenoLeap
-    - ActionXenoTailStab
-    - ActionXenoHeadbite
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenHide
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenHeadbite
+    - CMU14ActionXenoPathogenPlantWeeds
+    - CMU14ActionXenoPathogenChooseStructure
+    - CMU14ActionXenoPathogenSecreteStructure
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenDigTunnel
+    - CMU14ActionXenoPathogenDevolve
+    - CMU14ActionXenoPathogenOrderConstruction
+  - type: TunnelRenamer
+  - type: XenoBurrow
+  - type: XenoConstruction
+    buildDelay: 1
+    canBuild:
+    - CMU14XenoMyceliumWall
+    - CMU14XenoThickMyceliumWall
+    - CMU14XenoMyceliumMembrane
+    - CMU14XenoThickMyceliumMembrane
+    - CMU14XenoMyceliumDoor
+    - CMU14XenoThickMyceliumDoor
+    canOrderConstruction:
+    - CMU14PathogenBlightCoreConstructionNode
+    - CMU14PathogenClusterConstructionNode
+    - CMU14PathogenPlasmaTreeConstructionNode
+    - CMU14PathogenRecoveryNodeConstructionNode
+    - CMU14PathogenSporecasterConstructionNode
+  - type: XenoHeadbite
+    damage:
+      groups:
+        Brute: 60
+  - type: XenoLeap
+    delay: 0
+    range: 4
+    moveDelayTime: 0
+    knockdownTime: 0
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce2.ogg
+    hitEffect: RMCEffectExtraSlash
+    targetJitterTime: 1
+    targetCameraShakeStrength: 1
+    damage:
+      groups:
+        Brute: 40
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -39,6 +79,7 @@
     maxPlasma: 300
     plasmaRegenOnWeeds: 8
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: true
     requiresGranter: false
     max: 400
@@ -46,6 +87,7 @@
     - CMU14XenoConditor
     - CMU14XenoBrute
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoSprinter
     canBeDevolvedByOther: false
@@ -100,7 +142,7 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-neomorph
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
 
 - type: entity
   parent: CMU14XenoNeomorphBase

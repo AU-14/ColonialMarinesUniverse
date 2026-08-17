@@ -23,19 +23,33 @@
     plasmaCost: 75
     baseRange: 2
     baseDamage: 25
+  - type: CMUXenoMycotoxinInject
   - type: Xeno
     role: CMU14JobPathogenHarbinger
     tier: 3
     hudOffset: -0.1, 0.25
-    emoteSounds: Warrior
+    emoteSounds: Pathogen
     actionIds:
-    - ActionXenoRest
-    - ActionXenoWatch
-    - ActionXenoTailStab
-    - ActionXenoLeap
-    - ActionXenoImpale
-    - CMU14ActionXenoCyclone
-    # Macro 4 — Mycotoxin: needs custom C# action (TODO: CMUActionXenoMycotoxin)
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenTailStab
+    - CMU14ActionXenoPathogenLeap
+    - CMU14ActionXenoPathogenImpale
+    - CMU14ActionXenoPathogenCyclone
+    - CMU14ActionXenoPathogenMycotoxinInject
+    - CMU14ActionXenoPathogenDevolve
+  - type: XenoLeap
+    delay: 0
+    knockdownTime: 0
+    range: 5
+    moveDelayTime: 0
+    plasmaCost: 25
+    leapSound: /Audio/_CMU14/Xeno/Pathogen/pathogen_pounce1.ogg
+    destroyObjects: true
+  - type: XenoImpale
+    damage:
+      groups:
+        Brute: 60
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.4
@@ -44,9 +58,11 @@
     maxPlasma: 300
     plasmaRegenOnWeeds: 8
   - type: XenoEvolution
+    actionId: CMU14ActionXenoPathogenEvolve
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
+    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoBlight
     canBeDevolvedByOther: false
@@ -80,7 +96,7 @@
         Brute: 42
   - type: CMArmor
     explosionArmor: 20
-    armor: 15
+    xenoArmor: 15
   - type: Tackle
     min: 2
     max: 5
@@ -101,7 +117,7 @@
   - type: FixedIdentity
     name: cmu-job-name-pathogen-harbinger
   - type: Speech
-    speechSounds: Xenonid
+    speechSounds: Pathogen
 
 - type: entity
   parent: CMU14XenoHarbingerBase

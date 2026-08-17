@@ -28,6 +28,7 @@ using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
 using Robust.Shared.Serialization.Manager;
 using IConfigurationManager = Robust.Shared.Configuration.IConfigurationManager;
+using Content.Shared._CMU14.Xenomorphs.Pathogen;
 
 namespace Content.Server._RMC14.Xenonids.Hive;
 
@@ -65,6 +66,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
         SubscribeLocalEvent<HijackBurrowedSurgeComponent, ComponentShutdown>(OnBurrowedSurgeShutdown);
 
         SubscribeLocalEvent<InvincibleHiveStructureComponent, MapInitEvent>(OnInvincibleMapInit);
+        SubscribeLocalEvent<CMUPathogenHiveMemberComponent, MapInitEvent>(OnPathogenSpawn);
 
         Subs.CVar(_config,
             RMCCVars.RMCLateJoinsPerBurrowedLarvaEarlyThresholdMinutes,
@@ -335,5 +337,18 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
         UpdateHives();
         UpdateBurrowedSurge();
         UpdateInvincible();
+    }
+
+    private void OnPathogenSpawn(Entity<CMUPathogenHiveMemberComponent> ent, ref MapInitEvent args)
+    {
+        var hives = EntityQueryEnumerator<HiveComponent, MetaDataComponent>();
+        while (hives.MoveNext(out var hiveUid, out _, out var meta))
+        {
+            if (meta.EntityPrototype?.ID != "CMUPathogenHive")
+                continue;
+
+            SetHive(ent.Owner, hiveUid);
+            break;
+        }
     }
 }

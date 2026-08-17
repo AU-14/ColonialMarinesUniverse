@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Utility;
 
@@ -13,9 +13,19 @@ public sealed partial class VictimBurstComponent : Component
 
     [DataField, AutoNetworkedField]
     public string BurstState = "bursted_stand";
-
     [DataField, AutoNetworkedField]
     public string BurstingState = "burst_stand";
+
+    // Neomorph back-burst variants - CMU14
+    [DataField, AutoNetworkedField]
+    public string BackBurstState = "bursted_stand";
+    [DataField, AutoNetworkedField]
+    public string BackBurstingState = "burst_stand";
+    [DataField, AutoNetworkedField]
+    public bool BurstsFromBack;
+    /// <summary>RSI used for the Neomorph back-burst variant. Separate file from the standard chest-burst RSI.</summary>
+    [DataField, AutoNetworkedField]
+    public ResPath BackRsiPath = new("/Textures/_CMU14/Effects/back_burst.rsi");;
 }
 
 [Serializable, NetSerializable]

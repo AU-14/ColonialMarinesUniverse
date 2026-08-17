@@ -12,6 +12,7 @@
   name: Pathogen Creature
   description: A creature of the Mycelial Confluence.
   components:
+  - type: CMUPathogenHiveMember
   - type: Language
     spokenLanguages:
     - Pathogen
@@ -66,3 +67,18 @@
         type: DialogBui
       enum.BlightCoreUiKey.Vote:
         type: BlightCoreVoteBui
+  - type: IntrinsicRadioReceiver
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Hivemind
+    - MyceliumLink
+  - type: ActiveRadio
+    channels:
+    - Hivemind
+    - MyceliumLink
+    receiveAllChannels: false
+  - type: SoundOnDeath
+    sound:
+      collection: PathogenDeath
+      params:
+        volume: -4

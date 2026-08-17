@@ -25,8 +25,8 @@ public sealed partial class CMUXenoBlightWaveComponent : Component
     public TimeSpan LightOffDuration = TimeSpan.FromSeconds(20);
 
     [DataField, AutoNetworkedField]
-    public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_RMC14/Xeno/alien_queen_screech.ogg",
-        AudioParams.Default.WithVolume(-5));
+    public SoundSpecifier Sound = new SoundPathSpecifier("/Audio/_CMU14/Xeno/Pathogen/pathogen_matriarch_screech.ogg",
+        AudioParams.Default.WithVolume(-2));
 
     [DataField, AutoNetworkedField]
     public EntProtoId? Effect = "CMEffectScreech";
