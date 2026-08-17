@@ -1,0 +1,103 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoVenatorBase
+  name: Venator
+  description: A wandering ball of death.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-venator
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/venator.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenVenator
+    tier: 3
+    hudOffset: -0.1, 0.25
+    emoteSounds: Warrior
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoImpale
+    - ActionXenoTailSweep
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.4
+  - type: XenoPlasma
+    plasma: 300
+    maxPlasma: 300
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoBlight
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 120
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 120
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.0
+    baseSprintSpeed: 6.0
+  - type: MeleeWeapon
+    attackRate: 2.2
+    damage:
+      groups:
+        Brute: 42
+  - type: CMArmor
+    explosionArmor: 20
+    armor: 15
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.45
+    stunMin: 3
+    stunMax: 4
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: praetorian
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: praetorian
+  - type: RMCActionOrder
+    id: CMU14XenoVenator
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-venator
+  - type: Speech
+    speechSounds: Xenonid
+
+- type: entity
+  parent: CMU14XenoVenatorBase
+  id: CMU14XenoVenator
+  name: Venator

@@ -859,4 +859,30 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
             }
         }
     }
+
+    /// <summary>
+    /// Instantly transfers a xeno into a new prototype, bypassing the evolution
+    /// do-after/BUI flow entirely. Intended for special-case transformations
+    /// (e.g. Pathogen Overmind merging with the Blight Core) rather than the
+    /// normal player-driven evolution path.
+    /// </summary> EvolveTo - CMU14
+    public EntityUid EvolveTo(EntityUid xeno, EntProtoId proto)
+    {
+        var newXeno = TransferXeno(xeno, proto);
+
+        if (TryComp(xeno, out XenoEvolutionComponent? evolutionComp))
+        {
+            var ev = new NewXenoEvolvedEvent((xeno, evolutionComp), newXeno, false);
+            RaiseLocalEvent(newXeno, ref ev, true);
+        }
+
+        _adminLog.Add(LogType.RMCEvolve, $"{ToPrettyString(xeno)} evolved into {ToPrettyString(newXeno)} (forced)");
+
+        QueueDel(xeno);
+
+        var afterEv = new AfterNewXenoEvolvedEvent();
+        RaiseLocalEvent(newXeno, ref afterEv);
+
+        return newXeno;
+    }
 }

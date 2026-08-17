@@ -1,0 +1,9 @@
+- type: job
+  parent: CMJobXenoBase
+  id: CMU14JobPathogenPopper
+  name: cmu-job-name-pathogen-popper
+  playTimeTracker: CMU14JobPathogenPopper
+
+- type: playTimeTracker
+  id: CMU14JobPathogenPopper
+  isXeno: true

@@ -1,0 +1,108 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoNeomorphBase
+  name: Neomorph
+  description: A sleek, fast alien with sharp claws.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-neomorph
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/neomorph.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      375: Critical
+      475: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenNeomorph
+    tier: 2
+    hudOffset: -0.1, 0.25
+    emoteSounds: Warrior
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoHide
+    - ActionXenoLeap
+    - ActionXenoTailStab
+    - ActionXenoHeadbite
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.0
+  - type: XenoPlasma
+    plasma: 300
+    maxPlasma: 300
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 400
+    evolvesTo:
+    - CMU14XenoConditor
+    - CMU14XenoBrute
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoSprinter
+    canBeDevolvedByOther: false
+  - type: XenoHide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 100
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 100
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 8.5
+  - type: MeleeWeapon
+    attackRate: 1.5
+    damage:
+      groups:
+        Brute: 25
+  - type: CMArmor
+    explosionArmor: 10
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.35
+    stunMin: 3
+    stunMax: 4
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: warrior
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: warrior
+  - type: RMCActionOrder
+    id: CMU14XenoNeomorph
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-neomorph
+  - type: Speech
+    speechSounds: Xenonid
+
+- type: entity
+  parent: CMU14XenoNeomorphBase
+  id: CMU14XenoNeomorph
+  name: Neomorph

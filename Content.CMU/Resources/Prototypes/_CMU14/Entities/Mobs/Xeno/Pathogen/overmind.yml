@@ -1,0 +1,140 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoOvermindBase
+  name: Overmind
+  description: The mind that connects the Confluence. You are everywhere and nowhere.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-overmind
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
+    noRot: true
+    # Layer 0 - base body (incorporeal eye or manifested form)
+    state: overmind_eye
+    layers:
+    - map: [ "enum.OvermindVisualLayers.Base" ]
+      state: overmind_eye
+    # Layer 1 - one-shot transition animation (appear / disappear)
+    - map: [ "enum.OvermindVisualLayers.Transition" ]
+      state: overmind_appear
+      visible: false
+    # Layer 2 - eye glow overlay (shown only in incorporeal mode)
+    - map: [ "enum.OvermindVisualLayers.EyeGlow" ]
+      state: overmind_eye
+      visible: false
+      shader: unshaded # keeps the glow bright regardless of lighting
+    # Layer 3 - strengthened aura (shown only when manifested + strengthened)
+    - map: [ "enum.OvermindVisualLayers.Strengthen" ]
+      state: overmind_manifested
+      visible: false
+      shader: unshaded
+  # Appearance component needed for the visualizer pipeline
+  - type: Appearance
+  # The new appearance-state tracker
+  - type: CMUXenoOvermindAppearance
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      600: Critical
+      700: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenOvermind
+    tier: 3
+    hudOffset: -0.1, 0.25
+    emoteSounds: Queen
+    countsForSlots: false
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoPheromones
+    - ActionXenoHeal
+    - ActionXenoWordQueen
+    - CMU14ActionXenoParalyzingSlash
+    - CMU14ActionXenoBlightWave
+    - CMU14ActionXenoOvermindChangeForm
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 2.0
+  - type: XenoPlasma
+    plasma: 500
+    maxPlasma: 500
+    plasmaRegenOnWeeds: 12
+  - type: XenoEvolution
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo: []
+    canBeDevolvedByOther: false
+  - type: XenoPheromones
+  - type: CMUXenoOvermind
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 150
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 150
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 6.5
+  - type: MeleeWeapon
+    attackRate: 1.5
+    damage:
+      groups:
+        Brute: 30
+  - type: CMArmor
+    explosionArmor: 25
+    armor: 15
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.35
+    stunMin: 3
+    stunMax: 4
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: queen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: queen
+  - type: RMCActionOrder
+    id: CMU14XenoOvermind
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-overmind
+  - type: Speech
+    speechSounds: Xenonid
+  - type: Physics
+    canCollide: false
+
+- type: entity
+  parent: CMU14XenoOvermindBase
+  id: CMU14XenoOvermind
+  name: Overmind
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0.1
+  - type: RMCSpawnEntitiesOnGib
+    entities:
+    - CMU14GibEffectPathogenOvermind

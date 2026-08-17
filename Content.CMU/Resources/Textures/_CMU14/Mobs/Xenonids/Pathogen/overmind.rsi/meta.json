@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Sprites from cm13 https://github.com/realforest2001/forest-cm13/blob/8624d4b3e3e7339c6a9928ad1af33edb830452f8/icons/mob/pathogen/overmind.dmi",
+  "size": {
+    "x": 48,
+    "y": 48
+  },
+  "states": [
+    {
+      "name": "overmind_manifested",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "overmind_appear",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1, 
+
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+                   
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "overmind_disappear",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1, 
+
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+                   
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "overmind_eye",
+      "delays": [
+        [
+          0.7,
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "overmind_manifested_strengthened",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

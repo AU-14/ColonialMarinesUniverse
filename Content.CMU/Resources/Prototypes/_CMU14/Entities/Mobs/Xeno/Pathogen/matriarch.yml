@@ -1,0 +1,129 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoMatriarchBase
+  name: Matriarch
+  description: Nothing will survive...
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-matriarch
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/matriarch.rsi
+    layers:
+    - state: alive
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      800: Critical
+      1600: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenMatriarch
+    tier: 4
+    hudOffset: -0.1, 0.25
+    emoteSounds: Queen
+    countsForSlots: false
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoPheromones
+    - ActionXenoTailStab
+    - ActionXenoSpikeShed
+    - ActionXenoSpikeShield
+    - ActionXenoBoneChips
+    - CMU14ActionXenoBlightWave
+    - CMU14ActionXenoParalyzingSlash
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.4
+  - type: XenoPlasma
+    plasma: 500
+    maxPlasma: 500
+    plasmaRegenOnWeeds: 9
+  - type: XenoEvolution
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo: []
+    canBeDevolvedByOther: false
+  - type: XenoPheromones
+  # Bone Shard counter system - reuses Hedgehog Ravager XenoEnergy/XenoShard
+  - type: XenoEnergy
+    gain: 5
+    gainAttack: 20 # more aggressive than hedgehog
+    gainAttackDowned: 20
+    popupGain: rmc-xeno-shards-increase-user
+    popupNotEnough: rmc-xeno-not-enough-shards
+    alert: XenoEnergyShards
+    gainOnProjectiles: false
+    max: 300
+  - type: XenoShard
+  - type: XenoSpikeShed
+  - type: XenoBoneChips
+  - type: XenoSpikeShield
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.45
+        density: 200
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.5
+        density: 200
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.0
+    baseSprintSpeed: 4.0
+  - type: MeleeWeapon
+    attackRate: 2.0
+    damage:
+      groups:
+        Brute: 48
+  - type: CMArmor
+    explosionArmor: 50
+    armor: 25
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.45
+    stunMin: 4
+    stunMax: 5
+  - type: RMCSize
+    size: Immobile
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: queen
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: queen
+  - type: RMCActionOrder
+    id: CMU14XenoMatriarch
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-matriarch
+  - type: Speech
+    speechSounds: Xenonid
+
+- type: entity
+  parent: CMU14XenoMatriarchBase
+  id: CMU14XenoMatriarch
+  name: Matriarch
+  components:
+  - type: RMCGibOnDeath
+    gibChance: 0

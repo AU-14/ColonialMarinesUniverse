@@ -1,0 +1,107 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoAberrationBase
+  name: Aberration
+  description: If you believe in a god, now would be a good time for prayer...
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-aberration
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/aberration.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenAberration
+    tier: 1
+    hudOffset: -0.1, 0.25
+    emoteSounds: Crusher
+    countsForSlots: false
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoTailStab
+    - ActionXenoRush
+    - ActionXenoHeadbutt
+    - ActionXenoCrush
+    - ActionXenoDirectionalStomp
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.6
+  - type: XenoPlasma
+    plasma: 300
+    maxPlasma: 300
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo: []
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 140
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 140
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 4.5
+    baseSprintSpeed: 8.5
+  - type: MeleeWeapon
+    attackRate: 2.5
+    damage:
+      groups:
+        Brute: 38
+  - type: CMArmor
+    explosionArmor: 50
+    armor: 15
+  - type: Tackle
+    min: 2
+    max: 5
+    chance: 0.45
+    stunMin: 3
+    stunMax: 4
+  - type: RMCSize
+    size: Big
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: crusher
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: crusher
+  - type: RMCActionOrder
+    id: CMU14XenoAberration
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-aberration
+  - type: Speech
+    speechSounds: Xenonid
+
+- type: entity
+  parent: CMU14XenoAberrationBase
+  id: CMU14XenoAberration
+  name: Aberration

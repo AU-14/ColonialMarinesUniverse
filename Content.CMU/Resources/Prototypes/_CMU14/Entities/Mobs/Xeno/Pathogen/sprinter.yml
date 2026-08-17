@@ -1,0 +1,110 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoSprinterBase
+  name: Sprinter
+  description: A small, fast four-legged terror. Weak in sustained combat.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-sprinter
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/sprinter.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      230: Critical
+      330: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenSprinter
+    tier: 1
+    hudOffset: -0.1, 0.25
+    emoteSounds: Larva
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoHide
+    - ActionXenoLeap
+    - ActionXenoTailStab
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.4
+  - type: XenoPlasma
+    plasma: 100
+    maxPlasma: 100
+    plasmaRegenOnWeeds: 3
+  - type: XenoEvolution
+    canEvolveWithoutGranter: true
+    requiresGranter: false
+    max: 200
+    evolvesTo:
+    - CMU14XenoNeomorph
+    - CMU14XenoBlight
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoBloodburster
+    canBeDevolvedByOther: false
+  - type: XenoHide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.25
+        density: 85
+        mask:
+        - SmallMobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - SmallMobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 85
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 5.55
+    baseSprintSpeed: 10.0
+  - type: MeleeWeapon
+    attackRate: 2.0
+    damage:
+      groups:
+        Brute: 18
+  - type: CMArmor
+    explosionArmor: 5
+  - type: Tackle
+    min: 4
+    max: 5
+    chance: 0.4
+    stunMin: 4
+    stunMax: 4
+  - type: RMCSize
+    size: SmallXeno
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: runner
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - RMCSynthGrabbable
+  - type: VentCrawler
+    ventCrawlIcon: runner
+  - type: RMCActionOrder
+    id: CMU14XenoSprinter
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-sprinter
+  - type: Speech
+    speechSounds: Xenonid
+
+- type: entity
+  parent: CMU14XenoSprinterBase
+  id: CMU14XenoSprinter
+  name: Sprinter

@@ -1,0 +1,107 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoBruteBase
+  name: Brute
+  description: A lumbering tank on legs.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-brute
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/brute.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      650: Critical
+      750: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenBrute
+    tier: 3
+    hudOffset: -0.1, 0.25
+    emoteSounds: Crusher
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoPheromones
+    - ActionXenoTailStab
+    - ActionXenoStomp
+    - ActionXenoDefensiveShield
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.2
+  - type: XenoPlasma
+    plasma: 200
+    maxPlasma: 200
+    plasmaRegenOnWeeds: 8
+  - type: XenoEvolution
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoNeomorph
+    canBeDevolvedByOther: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 150
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.4
+        density: 150
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.5
+    baseSprintSpeed: 5.0
+  - type: MeleeWeapon
+    attackRate: 2.0 # fast attackrate, no delay
+    damage:
+      groups:
+        Brute: 40
+  - type: CMArmor
+    explosionArmor: 50
+    armor: 20
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.35
+    stunMin: 3
+    stunMax: 4
+  - type: RMCSize
+    size: Big
+  - type: XenoPheromones
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: crusher
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: crusher
+  - type: RMCActionOrder
+    id: CMU14XenoBrute
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-brute
+  - type: Speech
+    speechSounds: Xenonid
+
+- type: entity
+  parent: CMU14XenoBruteBase
+  id: CMU14XenoBrute
+  name: Brute

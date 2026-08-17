@@ -56,6 +56,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Serialization;
 using Robust.Shared.Timing;
+using Content.Shared._CMU14.Xenomorphs.Larva;
 
 namespace Content.Shared._RMC14.Xenonids.Parasite;
 
@@ -88,6 +89,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private readonly BloodyLarvaSystem _bloodyLarva = default!; // CMU14
 
     private const CollisionGroup LeapCollisionGroup = CollisionGroup.InteractImpassable;
     private const CollisionGroup ThrownCollisionGroup = CollisionGroup.InteractImpassable | CollisionGroup.BarricadeImpassable;
@@ -981,6 +983,12 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
             foreach (var larva in container.ContainedEntities)
             {
                 RemCompDeferred<BursterComponent>(larva);
+
+                // CMU14
+                if (!HasComp<BloodyLarvaComponent>(larva))
+                    _bloodyLarva.SetBloody(larva); // inject SharedBloodyLarvaSystem dependency
+                // CMU14
+
                 var invc = EnsureComp<RMCTemporaryInvincibilityComponent>(larva);
                 invc.ExpiresAt = _timing.CurTime + ent.Comp.LarvaInvincibilityTime;
                 Dirty(larva, invc);
@@ -1176,9 +1184,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 }
 
 [Serializable, NetSerializable]
-public sealed partial class LarvaBurstDoAfterEvent : SimpleDoAfterEvent
-{
-}
+public sealed partial class LarvaBurstDoAfterEvent : SimpleDoAfterEvent;
 
 /// <summary>
 /// Event that is raised whenever a parasite infects a mob.

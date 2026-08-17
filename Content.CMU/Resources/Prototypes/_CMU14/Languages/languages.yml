@@ -51,6 +51,26 @@
     messageWrapOverrides: {}
 
 - type: language
+  id: Pathogen
+  name: "Pathogen"
+  description: "The common tongue of the Mycelial Confluence — a wet, clicking language carried through spores."
+  typefaceId: null
+  languageIcon:
+    sprite: /Textures/_RMC14/Actions/xeno_actions.rsi
+    state: queen_word
+  randomizeObfuscation: true
+  expectedVocabularySize: 60
+  obfuscationMethod:
+    !type:XenoObfuscation
+    xenoSounds: ["sss", "sSs", "SSS", "Sss", "ssS", "sS", "SS"]
+    garbleChars: ['~', '*', '§', '¿']
+    intensityMultiplier: 1.2
+  speechOverride:
+    speechSoundsOverride: Xenonid
+    chatTypeOverride: null
+    speechVerbOverrides: null
+
+- type: language
   id: Primitive
   name: "Primitive"
   description: "A primitive animal language made up of screeches, hoots, and emphatic gestures."
@@ -388,7 +408,7 @@
     Russian: 0.45
     Serbian: 0.35
     Czech: 0.38
-    Slovak: 0.35  
+    Slovak: 0.35
 
 - type: language
   id: Korean
@@ -547,7 +567,7 @@
   obfuscationMethod:
     !type:SyllableObfuscation
     replacement: ["ба", "ва", "га", "да", "ђа", "жа", "за", "ка", "ља", "на", "ња", "па", "ра", "са", "та", "ћа", "ча", "џа", "ша", "би", "ли", "ђи", "жи", "ки", "љи", "ми", "ни", "њи", "ри", "ћи", "бра", "дра", "гра", "вра", "здр", "шта", "чар", "жар", "њег", "љуб", "ћир"]
-    
+
 - type: language
   id: Lithuanian
   name: "Lithuanian"
@@ -601,7 +621,7 @@
     replacement: ["a", "aa", "ba", "bha", "cha", "da", "dha", "ga", "ha", "ja", "ka", "kha", "la", "ma", "na", "pa", "pha", "ra", "sa", "sha", "ta", "tha", "va", "ya", "raj", "dev", "ram", "krish", "sur", "prem", "dhar", "kar", "nagar", "mandir", "shakti", "ganga", "chandra", "akash"]
   sisterLanguages:
     Urdu: 0.85
-  
+
 - type: language
   id: Vietnamese
   name: "Vietnamese"

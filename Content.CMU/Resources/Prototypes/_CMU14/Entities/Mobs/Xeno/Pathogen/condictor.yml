@@ -1,0 +1,109 @@
+- type: entity
+  abstract: true
+  parent: CMU14XenoPathogenBase
+  id: CMU14XenoConditorBase
+  name: Conditor
+  description: A masterful cultivator of mycelium and death.
+  components:
+  - type: GhostRole
+    name: cmu-job-name-pathogen-conditor
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/condictor.rsi
+  - type: MobThresholds
+    thresholds:
+      0: Alive
+      560: Critical
+      660: Dead
+    stateAlertDict:
+      Alive: XenoHealth
+      Critical: XenoCrit
+      Dead: XenoDead
+    displayDamageInAlert: true
+  - type: Xeno
+    role: CMU14JobPathogenConditor
+    tier: 3
+    hudOffset: -0.1, 0.25
+    emoteSounds: Warrior
+    actionIds:
+    - ActionXenoRest
+    - ActionXenoWatch
+    - ActionXenoHide
+    - ActionXenoPheromones
+    - ActionXenoTailStab
+    - ActionXenoLeap
+    - ActionXenoSpit
+    - ActionXenoSlowingSpit
+  - type: XenoRegen
+    healOffWeeds: true
+    restHealMultiplier: 1.0
+  - type: XenoPlasma
+    plasma: 500
+    maxPlasma: 500
+    plasmaRegenOnWeeds: 10
+  - type: XenoEvolution
+    canEvolveWithoutGranter: false
+    evolvesTo: []
+  - type: XenoDevolve
+    devolvesTo:
+    - CMU14XenoNeomorph
+    canBeDevolvedByOther: false
+  - type: XenoHide
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.3
+        density: 110
+        mask:
+        - MobMask
+        - BarbedBarricade
+        - BarricadeImpassable
+        layer:
+        - MobLayer
+      fix2:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 110
+        layer:
+        - BulletImpassable
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 3.5
+    baseSprintSpeed: 6.5
+  - type: MeleeWeapon
+    attackRate: 1.2
+    damage:
+      groups:
+        Brute: 20
+  - type: CMArmor
+    explosionArmor: 10
+    armor: 10
+  - type: Tackle
+    min: 2
+    max: 6
+    chance: 0.3
+    stunMin: 3
+    stunMax: 4
+  - type: XenoPheromones
+  - type: TacticalMapIcon
+    icon:
+      sprite: /Textures/_RMC14/Interface/map_blips.rsi
+      state: hivelord
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+  - type: VentCrawler
+    ventCrawlIcon: hivelord
+  - type: RMCActionOrder
+    id: CMU14XenoConditor
+  - type: FixedIdentity
+    name: cmu-job-name-pathogen-conditor
+  - type: Speech
+    speechSounds: Xenonid
+
+- type: entity
+  parent: CMU14XenoConditorBase
+  id: CMU14XenoConditor
+  name: Conditor
+

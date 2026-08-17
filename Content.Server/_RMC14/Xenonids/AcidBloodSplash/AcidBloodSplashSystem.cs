@@ -62,9 +62,12 @@ public sealed partial class AcidBloodSplashSystem : EntitySystem
 
     private void ActivateSplash(Entity<AcidBloodSplashComponent> ent, float splashRadius)
     {
-        if (!_prototypes.TryIndex(ent.Comp.BloodDecalSpawnerPrototype, out var prototype) ||
-            !prototype.TryComp(out RandomDecalSpawnerComponent? spawner, _compFactory) ||
-            _rmcDecal.GetDecalsInTile(ent, spawner.Decals) < spawner.MaxDecalsPerTile)
+        if (splashRadius <= 0) // CMU14: so server wont crash when there's no acid blood
+            return;
+
+        if (!_prototypes.TryIndex(ent.Comp.BloodDecalSpawnerPrototype, out var prototype)
+                || !prototype.TryComp(out RandomDecalSpawnerComponent? spawner, _compFactory)
+                || _rmcDecal.GetDecalsInTile(ent, spawner.Decals) < spawner.MaxDecalsPerTile)
         {
             // create decal, probability inside prototype
             Spawn(ent.Comp.BloodDecalSpawnerPrototype, ent.Owner.ToCoordinates());

@@ -1,0 +1,21 @@
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenBloodburster
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/bloodburster.rsi
+    state: bloodburster_gib
+  - type: TimedDespawn
+    lifetime: 0.8
+
+- type: entity
+  parent: RMCBaseGibEffect
+  id: CMU14GibEffectPathogenPopper
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _CMU14/Mobs/Xenonids/Pathogen/popper.rsi
+    state: popper_gib
+  - type: TimedDespawn
+    lifetime: 0.8

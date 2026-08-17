@@ -1,0 +1,97 @@
+- type: entity
+  id: CMU14ActionXenoParalyzingSlash
+  parent: ActionXenoBase
+  name: Paralyzing Slash
+  description: Prime your next strike to slow the target on hit.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xenohide # TODO: placeholder
+    useDelay: 0.5
+  - type: InstantAction
+    event: !type:CMUXenoParalyzingSlashActionEvent
+  - type: CMUXenoParalyzingSlashPending
+    slowDuration: 3
+    superSlow: false
+
+- type: entity
+  id: CMU14ActionXenoPlaceSporeSac
+  parent: ActionXenoBase
+  name: Place Spore Sac
+  description: Plant a sac that will burst into a cloud of toxic spores.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xenohide # TODO: placeholder
+    useDelay: 10
+  - type: InstantAction
+    event: !type:CMUXenoSporeSacActionEvent
+
+- type: entity
+  id: CMU14ActionXenoDirectSporeInfect
+  parent: ActionXenoBase
+  name: Direct Infect
+  description: Press a handful of spores against an adjacent target, directly infecting them.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xenohide
+    useDelay: 10
+  - type: TargetAction
+    range: 1.5
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:CMUXenoDirectSporeInfectActionEvent
+
+- type: entity
+  id: CMU14ActionXenoBlightWave
+  parent: ActionXenoBase
+  name: Blight Wave
+  description: Emit a raspy guttural roar that extinguishes lights and overwhelms nearby enemies.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: queen_word # TODO: placeholder
+    useDelay: 90
+  - type: InstantAction
+    event: !type:CMUXenoBlightWaveActionEvent
+
+- type: entity
+  id: CMU14ActionXenoCyclone
+  parent: ActionXenoBase
+  name: Cyclone
+  description: Channel briefly then spin in a devastating circle. Hit enough targets to trigger additional expanding spin cycles.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce # TODO: placeholder
+    useDelay: 23
+  - type: InstantAction
+    event: !type:CMUXenoCycloneActionEvent
+
+- type: entity
+  id: CMU14ActionXenoOvermindChangeForm
+  parent: ActionXenoBase
+  name: Change Form
+  description: Shift between incorporeal eye and manifested physical form.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+    useDelay: 2
+  - type: InstantAction
+    event: !type:CMUXenoOvermindChangeFormActionEvent

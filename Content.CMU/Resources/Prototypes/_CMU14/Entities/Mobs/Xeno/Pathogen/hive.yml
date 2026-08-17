@@ -1,0 +1,11 @@
+- type: entity
+  id: CMUPathogenHive
+  name: Pathogen Confluence
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+#   hiveColor: "#c2c38d"
+    hiveUIColor: "#8a8c50"
+    canMakeAlliances: false
+    corrupted: false
