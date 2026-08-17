@@ -1,20 +1,35 @@
 - type: soundCollection
   id: CMMaleScreams
   files:
-  #  - /Audio/_RMC14/Voice/Human/male_scream_1.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_2.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_3.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_4.ogg
-    - /Audio/_RMC14/Voice/Human/male_scream_5.ogg
+    - /Audio/_CMU14/Voice/Screams/male_scream_6.ogg
+    - /Audio/_CMU14/Voice/Screams/male_scream_2.ogg
+    - /Audio/_CMU14/Voice/Screams/male_scream_3.ogg
+    - /Audio/_CMU14/Voice/Screams/male_scream_4.ogg
+    - /Audio/_CMU14/Voice/Screams/male_scream_5.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream1.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream2.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream3.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream4.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream5.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream6.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream7.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream8.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream9.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream10.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream11.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream12.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Ryan/Scream/Scream13.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Koala/ScreamWarcry/ScreamWarcry1.ogg
+    - /Audio/_CMU14/Voice/UpdatedVoice/Male/Koala/ScreamWarcry/ScreamWarcry2.ogg
 
 - type: soundCollection
   id: CMFemaleScreams
   files:
-    - /Audio/_RMC14/Voice/Human/female_scream_1.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_2.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_3.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_4.ogg
-    - /Audio/_RMC14/Voice/Human/female_scream_5.ogg
+    - /Audio/_CMU14/Voice/Screams/female_scream_1.ogg
+    - /Audio/_CMU14/Voice/Screams/female_scream_2.ogg
+    - /Audio/_CMU14/Voice/Screams/female_scream_3.ogg
+    - /Audio/_CMU14/Voice/Screams/female_scream_4.ogg
+    - /Audio/_CMU14/Voice/Screams/female_scream_5.ogg
 
 
 # TODO add this
