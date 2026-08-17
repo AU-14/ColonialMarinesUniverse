@@ -1,4 +1,4 @@
-﻿using Content.Shared.FixedPoint;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 
@@ -10,7 +10,12 @@ public sealed partial class XenoWordQueenComponent : Component
 {
     [DataField, AutoNetworkedField]
     public FixedPoint2 PlasmaCost = 50;
-
     [DataField, AutoNetworkedField]
     public SoundSpecifier Sound = new SoundCollectionSpecifier("XenoQueenCommand", AudioParams.Default.WithVolume(-6));
+
+    // CMU14
+    [DataField, AutoNetworkedField]
+    public string Header = "rmc-xeno-words-of-the-queen-header";
+    [DataField, AutoNetworkedField]
+    public Color MessageColor = Color.Red;
 }

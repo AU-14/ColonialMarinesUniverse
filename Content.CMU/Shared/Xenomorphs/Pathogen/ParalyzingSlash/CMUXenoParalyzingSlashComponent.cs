@@ -20,4 +20,7 @@ public sealed partial class CMUXenoParalyzingSlashPendingComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool SuperSlow;
+
+    [DataField, AutoNetworkedField]
+    public TimeSpan ParalyzeDuration = TimeSpan.FromSeconds(2);
 }

@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoRootBase
   name: Root
   description: A huge, looming beast of the Confluence, wreathed in writhing tentacles.
@@ -104,6 +104,7 @@
     prefix: root
   - type: XenoClaws
     clawType: VerySharp
+  - type: XenoDevour
   - type: XenoPheromones
     pheromonesMultiplier: 3
     pheroSuffix: strong

@@ -3,6 +3,7 @@
   id: CMU14JobPathogenConditor
   name: cmu-job-name-pathogen-conditor
   playTimeTracker: CMU14JobPathogenConditor
+  supervisors: cmu-job-name-pathogen-overmind
 
 - type: playTimeTracker
   id: CMU14JobPathogenConditor

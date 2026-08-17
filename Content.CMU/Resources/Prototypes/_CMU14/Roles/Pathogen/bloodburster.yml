@@ -3,6 +3,7 @@
   id: CMUJobPathogenBloodburster
   name: cmu-job-name-pathogen-bloodburster
   playTimeTracker: CMUJobPathogenBloodburster
+  supervisors: cmu-job-name-pathogen-overmind
 
 - type: playTimeTracker
   id: CMUJobPathogenBloodburster

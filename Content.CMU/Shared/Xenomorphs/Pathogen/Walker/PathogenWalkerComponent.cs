@@ -48,4 +48,16 @@ public sealed partial class CMUPathogenWalkerComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityUid? MarkerItem;
+
+    /// <summary>Seconds the infected player has to accept before it becomes a ghost role.</summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan OfferTimeout = TimeSpan.FromSeconds(30);
+
+    /// <summary>When the offer expires (set server-side on reanimate).</summary>
+    [DataField, AutoNetworkedField]
+    public TimeSpan? OfferExpiresAt;
+
+    /// <summary>Whether the offer was already resolved (accepted/declined/timed out).</summary>
+    [DataField, AutoNetworkedField]
+    public bool OfferResolved;
 }

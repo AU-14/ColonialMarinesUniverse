@@ -3,6 +3,7 @@
   id: CMU14JobPathogenOvermind
   name: cmu-job-name-pathogen-overmind
   playTimeTracker: CMU14JobPathogenOvermind
+  supervisors: nobody
 
 - type: playTimeTracker
   id: CMU14JobPathogenOvermind

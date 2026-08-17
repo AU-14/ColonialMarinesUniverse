@@ -6,7 +6,6 @@
   - CMXenoFlammable
   - RMCXenoSpeechSounds
   - RMCXenoCommendationReceiver
-  - RMCXenoMobCollision
   - RMCXenoVentCrawler
   id: CMU14XenoPathogenBase
   name: Pathogen Creature
@@ -82,3 +81,10 @@
       collection: PathogenDeath
       params:
         volume: -4
+
+- type: entity
+  abstract: true
+  parent:
+  - CMU14XenoPathogenBase
+  - RMCXenoMobCollision
+  id: CMU14XenoPathogenMatureBase

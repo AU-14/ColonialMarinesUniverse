@@ -16,7 +16,7 @@
 - type: entity
   id: CMU14ActionXenoPathogenWatch
   parent: ActionXenoBase
-  name: Watch Xenonid
+  name: Watch Neomorph
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -30,7 +30,7 @@
   id: CMU14ActionXenoPathogenPheromones
   parent: ActionXenoBase
   name: Emit Pheromones (35)
-  description: Gives a buff to nearby xenonids. [color=cyan]Consumes 2.5 plasma per second.[/color]
+  description: Gives a buff to nearby neomorph. [color=cyan]Consumes 2.5 plasma per second.[/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -124,7 +124,7 @@
 - type: entity
   id: CMU14ActionXenoPathogenWordQueen
   parent: ActionXenoBase
-  name: Word of the Queen (50)
+  name: Word of the Overmind (50)
   description: Sends a message to all members of your hive.
   components:
   - type: Action
@@ -181,7 +181,7 @@
   id: CMU14ActionXenoPathogenGiveOrder
   parent: ActionXenoBase
   name: Give Order (100)
-  description: Send a psychic order to the xenonid you are watching.
+  description: Send a psychic order to the neomorph you are watching.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -197,7 +197,7 @@
   id: CMU14ActionXenoPathogenGrowOvipositor
   parent: ActionXenoBase
   name: Grow Ovipositor (500)
-  description: Become immobile and start laying eggs which will produce children. Has a 5 minute cooldown. [color=red]You must be in ovipositor mode for other xenonids to gain evolution points after round-start![/color]
+  description: Become immobile and start laying eggs which will produce children. Has a 5 minute cooldown. [color=red]You must be in ovipositor mode for other neomorphs to gain evolution points after round-start![/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -210,7 +210,7 @@
 - type: entity
   id: CMU14ActionXenoPathogenBanish
   parent: ActionXenoBase
-  name: Banish Xenonid
+  name: Banish Neomorph
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -224,7 +224,7 @@
 - type: entity
   id: CMU14ActionXenoPathogenReadmit
   parent: ActionXenoBase
-  name: Readmit Xenonid
+  name: Readmit Neomorph
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -499,7 +499,7 @@
   id: CMU14ActionXenoPathogenTransferPlasma
   parent: ActionXenoBase
   name: Transfer Plasma (50)
-  description: Give plasma to a nearby xenonid.
+  description: Give plasma to a nearby neomorph.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -515,7 +515,7 @@
   id: CMU14ActionXenoPathogenHealerDroneTransferPlasma
   parent: ActionXenoBase
   name: Transfer Plasma (100)
-  description: Give plasma to a nearby xenonid.
+  description: Give plasma to a nearby neomorph.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -532,7 +532,7 @@
   id: CMU14ActionXenoPathogenTransferPlasmaHivelord
   parent: ActionXenoBase
   name: Transfer Plasma (200)
-  description: Give plasma to a xenonid.
+  description: Give plasma to a neomorph.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -574,7 +574,7 @@
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenRetrieve
   name: Retrieve (180 plasma, 100 fury)
-  description: Pulls a xenonid to you if they are still, with a 0.6 second doafter. You can't pull very big xenonids unless they are downed.
+  description: Pulls a neomorph to you if they are still, with a 0.6 second doafter. You can't pull very big neomorphs unless they are downed.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -596,8 +596,8 @@
 - type: entity
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenAidHeal
-  name: Aid Xenonid Healing (100 plasma, 100+ health reserves)
-  description: Heals a nearby ally Xeno. Healing another Xeno will also heal you, and half your remaining health reserves will be consumed for extra healing. [color=red]This can't heal ignited xenonids![/color]
+  name: Aid Neomorph Healing (100 plasma, 100+ health reserves)
+  description: Heals a nearby ally Xeno. Healing another Xeno will also heal you, and half your remaining health reserves will be consumed for extra healing. [color=red]This can't heal ignited neomorphs![/color]
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -622,7 +622,7 @@
 - type: entity
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenAidRejuvenate
-  name: Aid Xenonid Rejuvenate (100 plasma, 100 health reserves)
+  name: Aid Neomorph Rejuvenate (100 plasma, 100 health reserves)
   description: Remove ailments and stuns from a far away ally Xeno.
   components:
   - type: Action
@@ -648,8 +648,8 @@
 - type: entity
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenLeader
-  name: Choose/Follow Xenonid Leaders
-  description: Promotes and demotes xenonid leaders, or watches them. Promoting a xeno to leader will make them emit your pheromones around themselves.
+  name: Choose/Follow Neomorph Leaders
+  description: Promotes and demotes neomorph leaders, or watches them. Promoting a xeno to leader will make them emit your pheromones around themselves.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -664,8 +664,8 @@
 - type: entity
   parent: ActionXenoBase
   id: CMU14ActionXenoPathogenHeal
-  name: Heal Xenonid (600)
-  description: Heals xenonids in a 4 tile range around where you click for 30% of their health over 20 seconds.
+  name: Heal Neomorph (600)
+  description: Heals neomorph in a 4 tile range around where you click for 30% of their health over 20 seconds.
   components:
   - type: Action
     itemIconStyle: NoItem
@@ -686,7 +686,7 @@
   parent: CMU14ActionXenoPathogenTransferPlasma
   id: CMU14ActionXenoPathogenTransferPlasmaQueen
   name: Give Plasma (400)
-  description: Remotely restores 75% of a single xenonid's max plasma.
+  description: Remotely restores 75% of a single neomorph's max plasma.
   components:
   - type: Action
     useDelay: 12

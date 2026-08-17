@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 
 namespace Content.Shared._RMC14.Xenonids.Evolution;
 
@@ -8,4 +8,7 @@ public sealed partial class XenoEvolutionGranterComponent : Component
 {
     [DataField, AutoNetworkedField]
     public bool GotOvipositorPopup;
+
+    [DataField] // CMU14
+    public LocId AnnounceMessage = "rmc-new-queen";
 }

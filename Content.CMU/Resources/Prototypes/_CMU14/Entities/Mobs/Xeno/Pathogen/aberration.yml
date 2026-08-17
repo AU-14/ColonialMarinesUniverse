@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoAberrationBase
   name: Aberration
   description: If you believe in a god, now would be a good time for prayer...
@@ -111,7 +111,10 @@
         Brute: 38
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 15
+    xenoArmor: 30
+  - type: XenoClaws
+    clawType: VerySharp
+  - type: XenoDevour
   - type: Tackle
     min: 2
     max: 5

@@ -3,6 +3,7 @@
   id: CMU14JobPathogenNeomorph
   name: cmu-job-name-pathogen-neomorph
   playTimeTracker: CMU14JobPathogenNeomorph
+  supervisors: cmu-job-name-pathogen-overmind
 
 - type: playTimeTracker
   id: CMU14JobPathogenNeomorph

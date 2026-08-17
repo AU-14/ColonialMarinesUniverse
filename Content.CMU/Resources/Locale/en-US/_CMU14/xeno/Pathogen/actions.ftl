@@ -46,7 +46,11 @@ cmu14-mycotoxin-inject-start-self = You skewer { $target } with your tail and be
 cmu14-mycotoxin-inject-start-target = { $xeno } skewers the body with its tail...
 cmu14-mycotoxin-inject-already-infected = Person is already infected.
 
-# Walker
-cmu14-walker-rise = The body lurches upright, animated by mycelial spores!
-cmu14-walker-death-reviving = The body falls... but the spores begin knitting it back together.
-cmu14-walker-permanent-death = The mycotoxin burns out. The body will not rise again.
+cmu-pathogen-ui-overmind-needed-label = [bold][color=red]There must be an Overmind for you to gain points![/color][/bold]
+
+cmu-xeno-infected-bursted-back = {CAPITALIZE(SUBJECT($victim))} {CONJUGATE-HAVE($victim)} {POSS-ADJ($victim)} spine ripped out through {POSS-ADJ($victim)} back!
+cmu-xeno-infection-burst-now-xeno-back = We rip {POSS-ADJ($victim)} spine out through {THE($victim)}'s back!
+
+# Queen word
+
+cmu-pathogen-words-of-the-overmind-header = The thoughts of the Overmind echo through the Confluence...

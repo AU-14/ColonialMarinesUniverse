@@ -302,9 +302,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     }
 
     private void OnGranterEvolved(Entity<XenoEvolutionGranterComponent> ent, ref NewXenoEvolvedEvent args)
-    {
-        _xenoAnnounce.AnnounceSameHive(ent.Owner, Loc.GetString("rmc-new-queen"));
-    }
+        => _xenoAnnounce.AnnounceSameHive(ent.Owner, Loc.GetString(ent.Comp.AnnounceMessage)); // CMU14
 
     private void OnOvipositorChanged(ref XenoOvipositorChangedEvent ev)
     {

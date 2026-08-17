@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoOvermindBase
   name: Overmind
   description: The mind that connects the Confluence. You are everywhere and nowhere.
@@ -10,28 +10,22 @@
   - type: Sprite
     sprite: _CMU14/Mobs/Xenonids/Pathogen/overmind.rsi
     noRot: true
-    # Layer 0 - base body (incorporeal eye or manifested form)
     state: overmind_eye
     layers:
     - map: [ "enum.OvermindVisualLayers.Base" ]
       state: overmind_eye
-    # Layer 1 - one-shot transition animation (appear / disappear)
     - map: [ "enum.OvermindVisualLayers.Transition" ]
       state: overmind_appear
       visible: false
-    # Layer 2 - eye glow overlay (shown only in incorporeal mode)
     - map: [ "enum.OvermindVisualLayers.EyeGlow" ]
       state: overmind_eye
       visible: false
-      shader: unshaded # keeps the glow bright regardless of lighting
-    # Layer 3 - strengthened aura (shown only when manifested + strengthened)
+      shader: unshaded
     - map: [ "enum.OvermindVisualLayers.Strengthen" ]
       state: overmind_manifested
       visible: false
       shader: unshaded
-  # Appearance component needed for the visualizer pipeline
   - type: Appearance
-  # The new appearance-state tracker
   - type: CMUXenoOvermindAppearance
   - type: MobThresholds
     thresholds:
@@ -45,22 +39,21 @@
     displayDamageInAlert: true
   - type: Xeno
     role: CMU14JobPathogenOvermind
-    tier: 3
+    tier: 4
     hudOffset: -0.1, 0.25
     emoteSounds: Pathogen
     actionIds:
-    - CMU14ActionXenoPathogenRest
-    - CMU14ActionXenoPathogenWatch
-    - CMU14ActionXenoPathogenPheromones
-    - CMU14ActionXenoPathogenHeal
-    - CMU14ActionXenoPathogenWordQueen
-    - CMU14ActionXenoPathogenParalyzingSlash
     - CMU14ActionXenoPathogenOvermindChangeForm
     - CMU14ActionXenoPathogenOrderConstruction
     - CMU14ActionXenoPathogenChooseStructure
     - CMU14ActionXenoPathogenSecreteStructure
     - CMU14ActionXenoPathogenPlantWeeds
-    - CMU14ActionXenoPathogenExpandWeeds
+    - CMU14ActionXenoPathogenLeader
+    - CMU14ActionXenoPathogenWatch
+    - CMU14ActionXenoPathogenPsychicWhisper
+    - CMU14ActionXenoPathogenPsychicRadiance
+    - CMU14ActionXenoPathogenGiveOrder
+    - CMU14ActionXenoPathogenPheromones
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 2.0
@@ -68,16 +61,39 @@
     plasma: 2000
     maxPlasma: 2000
     plasmaRegenOnWeeds: 12
-  - type: XenoEvolution
-    actionId: CMU14ActionXenoPathogenEvolve
-    canEvolveWithoutGranter: false
-    evolvesTo: []
-  - type: XenoDevolve
-    devolvesTo: []
-    canBeDevolvedByOther: false
   - type: XenoPheromones
+    pheromonesMultiplier: 4
+  - type: CMUXenoBlightWave
   - type: CMUXenoOvermind
+    eyeFormActions:
+    - CMU14ActionXenoPathogenHeal
+    - CMU14ActionXenoPathogenRest
+    - CMU14ActionXenoPathogenExpandWeeds
+    - CMU14ActionXenoPathogenAidRejuvenate
+    - CMU14ActionXenoPathogenTransferPlasmaQueen
+    physicalFormActions:
+    - CMU14ActionXenoPathogenParalyzingSlash
+    - CMU14ActionXenoPathogenBlightWave
+    - CMU14ActionXenoPathogenWordQueen
+  # Needed for heal action logic
+  - type: XenoHeal
+  # Needed for leader granting
+  - type: XenoHeavy
+  # Tactical map drawing
+  - type: TacticalMapUser
+    xenos: true
+    canDraw: true
+    liveUpdate: true
+  # Needed for eye-form construction range (same as queen eye)
+  - type: QueenEyeAction
+    spawn: CMU14XenoOvermindEye
   - type: XenoWordQueen
+    sound: !type:SoundCollectionSpecifier
+      collection: PathogenOvermindCommand
+      params:
+        volume: -6
+    header: cmu-pathogen-words-of-the-overmind-header
+    messageColor: "#8a8c50"
   - type: XenoPsychicCommunication
   - type: ManageHive
   - type: HiveLeaderGranter
@@ -172,6 +188,7 @@
   - type: XenoAnnounceDeath
     message: cmu-xeno-death-overmind
     color: "#8a8c50"
+  - type: DropshipHijacker
 
 - type: entity
   parent: CMU14XenoOvermindBase

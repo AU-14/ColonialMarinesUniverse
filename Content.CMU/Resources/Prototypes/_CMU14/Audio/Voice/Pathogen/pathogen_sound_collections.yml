@@ -87,3 +87,8 @@
   files:
   - /Audio/_CMU14/Xeno/Pathogen/bloodburster_roar1.ogg
   - /Audio/_CMU14/Xeno/Pathogen/bloodburster_roar2.ogg
+
+- type: soundCollection
+  id: PathogenOvermindCommand
+  files:
+  - /Audio/_CMU14/Xeno/Pathogen/announce_screech.ogg

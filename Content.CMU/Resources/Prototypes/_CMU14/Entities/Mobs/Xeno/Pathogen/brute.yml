@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoBruteBase
   name: Brute
   description: A lumbering tank on legs.
@@ -96,7 +96,9 @@
         Brute: 40
   - type: CMArmor
     explosionArmor: 50
-    xenoArmor: 20
+    xenoArmor: 45
+  - type: XenoClaws
+    clawType: VerySharp
   - type: Tackle
     min: 2
     max: 6
@@ -105,7 +107,9 @@
     stunMax: 4
   - type: RMCSize
     size: Big
+  - type: XenoDevour
   - type: XenoPheromones
+    pheromonesMultiplier: 3
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_CMU14/Interface/neo_blips.rsi

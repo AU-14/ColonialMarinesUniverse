@@ -456,4 +456,16 @@ public sealed partial class QueenEyeSystem : EntitySystem
             }
         }
     }
+
+    /// <summary>
+    /// Assigns the controlling queen/body for a manually-spawned queen eye entity
+    /// (e.g. the Overmind's eye), so shared systems like <see cref="SharedXenoWatchSystem"/>
+    /// can resolve the owning actor via <see cref="QueenEyeComponent.Queen"/>.
+    /// </summary> SetQueen() - CMU14
+    public void SetQueen(Entity<QueenEyeComponent?> eye, EntityUid queen)
+    {
+        eye.Comp = EnsureComp<QueenEyeComponent>(eye);
+        eye.Comp.Queen = queen;
+        Dirty(eye);
+    }
 }

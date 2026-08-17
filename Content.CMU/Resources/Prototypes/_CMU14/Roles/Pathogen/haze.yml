@@ -3,6 +3,7 @@
   id: CMU14JobPathogenHaze
   name: cmu-job-name-pathogen-haze
   playTimeTracker: CMU14JobPathogenHaze
+  supervisors: cmu-job-name-pathogen-overmind
  
 - type: playTimeTracker
   id: CMU14JobPathogenHaze

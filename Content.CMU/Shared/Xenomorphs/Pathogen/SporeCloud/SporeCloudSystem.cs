@@ -9,6 +9,7 @@ using Robust.Shared.Network;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
 
 namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
 
@@ -45,6 +46,9 @@ public sealed partial class CMUPathogenSporeCloudSystem : EntitySystem
             return false;
 
         if (HasComp<SynthComponent>(target))
+            return false;
+
+        if (HasComp<CMUPathogenWalkerComponent>(target))
             return false;
 
         if (!HasComp<MobStateComponent>(target))

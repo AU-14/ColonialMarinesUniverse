@@ -1,4 +1,5 @@
 using Robust.Shared.GameStates;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
 
@@ -25,4 +26,38 @@ public sealed partial class CMUXenoOvermindComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityUid? Eye;
+
+    /// <summary>
+    /// Actions granted only in eye (incorporeal) form.
+    /// Granted on eye entry, removed on exit.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<EntProtoId> EyeFormActions = new()
+    {
+        "CMU14ActionXenoPathogenHeal",
+        "CMU14ActionXenoPathogenPheromones",
+        "CMU14ActionXenoPathogenWatch",
+        "CMU14ActionXenoPathogenRest",
+        "CMU14ActionXenoPathogenExpandWeeds",
+    };
+
+    /// <summary>Tracks spawned action entities for eye form so we can remove them.</summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<EntProtoId, EntityUid> EyeFormActionEntities = new();
+
+    /// <summary>
+    /// Actions granted only in physical form.
+    /// Granted on physical entry, removed on exit.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public List<EntProtoId> PhysicalFormActions = new()
+    {
+        "CMU14ActionXenoPathogenParalyzingSlash",
+        "CMU14ActionXenoPathogenBlightWave",
+        "CMU14ActionXenoPathogenWordQueen",
+    };
+
+    /// <summary>Tracks spawned action entities for physical form so we can remove them.</summary>
+    [DataField, AutoNetworkedField]
+    public Dictionary<EntProtoId, EntityUid> PhysicalFormActionEntities = new();
 }

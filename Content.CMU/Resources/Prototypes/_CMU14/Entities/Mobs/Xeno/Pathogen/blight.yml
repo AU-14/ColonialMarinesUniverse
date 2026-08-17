@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoBlightBase
   name: Blight
   description: A sleek and stealthy hunter, always watching.
@@ -56,9 +56,11 @@
     evolvesTo:
     - CMU14XenoVenator
     - CMU14XenoHarbinger
+    - CMU14XenoRoot
   - type: XenoDevolve
     devolvesTo:
     - CMU14XenoSprinter
+    - CMU14XenoHaze
     canBeDevolvedByOther: false
   - type: Fixtures
     fixtures:
@@ -80,6 +82,7 @@
         density: 100
         layer:
         - BulletImpassable
+  - type: XenoDevour
   - type: MovementSpeedModifier
     baseWalkSpeed: 4.8
     baseSprintSpeed: 9.0
@@ -90,7 +93,9 @@
         Brute: 28
   - type: CMArmor
     explosionArmor: 10
-    xenoArmor: 5
+    xenoArmor: 15
+  - type: XenoClaws
+    clawType: Sharp
   - type: Tackle
     min: 2
     max: 6

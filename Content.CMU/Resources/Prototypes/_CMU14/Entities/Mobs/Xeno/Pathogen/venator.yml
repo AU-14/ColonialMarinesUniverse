@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoVenatorBase
   name: Venator
   description: A wandering ball of death.
@@ -38,6 +38,7 @@
       types:
         Slash: 40
   - type: XenoHook
+  - type: XenoDevour
   - type: XenoTailSeize
   - type: XenoAbduct
   - type: XenoImpale
@@ -86,7 +87,9 @@
         Brute: 42
   - type: CMArmor
     explosionArmor: 20
-    xenoArmor: 15
+    xenoArmor: 30
+  - type: XenoClaws
+    clawType: VerySharp
   - type: Tackle
     min: 2
     max: 5

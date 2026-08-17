@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoNeomorphBase
   name: Neomorph
   description: A sleek, fast alien with sharp claws.
@@ -44,17 +44,15 @@
     buildDelay: 1
     canBuild:
     - CMU14XenoMyceliumWall
-    - CMU14XenoThickMyceliumWall
     - CMU14XenoMyceliumMembrane
-    - CMU14XenoThickMyceliumMembrane
     - CMU14XenoMyceliumDoor
-    - CMU14XenoThickMyceliumDoor
     canOrderConstruction:
     - CMU14PathogenBlightCoreConstructionNode
     - CMU14PathogenClusterConstructionNode
     - CMU14PathogenPlasmaTreeConstructionNode
     - CMU14PathogenRecoveryNodeConstructionNode
     - CMU14PathogenSporecasterConstructionNode
+  - type: XenoDevour
   - type: XenoHeadbite
     damage:
       groups:
@@ -86,9 +84,11 @@
     evolvesTo:
     - CMU14XenoConditor
     - CMU14XenoBrute
+    - CMU14XenoRoot
   - type: XenoDevolve
     devolvesTo:
     - CMU14XenoSprinter
+    - CMU14XenoHaze
     canBeDevolvedByOther: false
   - type: XenoHide
   - type: Fixtures
@@ -121,6 +121,9 @@
         Brute: 25
   - type: CMArmor
     explosionArmor: 10
+    xenoArmor: 10
+  - type: XenoClaws
+    clawType: Sharp
   - type: Tackle
     min: 2
     max: 6

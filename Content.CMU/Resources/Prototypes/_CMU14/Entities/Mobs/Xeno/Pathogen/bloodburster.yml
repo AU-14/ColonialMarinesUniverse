@@ -1,7 +1,7 @@
 
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoBloodbursterBase
   name: Bloodburster
   description: A tiny sharp-clawed terror that just tore its way out of a living host.
@@ -65,6 +65,7 @@
     max: 100 # evolution threshold
     evolvesTo:
     - CMU14XenoSprinter
+    - CMU14XenoHaze
   - type: XenoDevolve
     devolvesTo: []
     canBeDevolvedByOther: false

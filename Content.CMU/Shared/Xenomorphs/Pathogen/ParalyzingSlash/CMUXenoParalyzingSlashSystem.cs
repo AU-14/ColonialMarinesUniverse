@@ -6,6 +6,7 @@ using Content.Shared.Actions;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Network;
+using Content.Shared.Stunnable;
 
 namespace Content.Shared._CMU14.Xenonids.ParalyzingSlash;
 
@@ -17,6 +18,7 @@ public sealed partial class CMUXenoParalyzingSlashSystem : EntitySystem
     [Dependency] private readonly XenoSystem _xeno = default!;
     [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private readonly SharedActionsSystem _actions = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
 
     public override void Initialize()
     {
@@ -48,6 +50,7 @@ public sealed partial class CMUXenoParalyzingSlashSystem : EntitySystem
 
         var pending = EnsureComp<CMUXenoParalyzingSlashPendingComponent>(performer);
         pending.SlowDuration = args.SlowDuration;
+        pending.ParalyzeDuration = args.ParalyzeDuration;
         pending.SuperSlow = args.SuperSlow;
         Dirty(performer, pending);
 
@@ -92,6 +95,8 @@ public sealed partial class CMUXenoParalyzingSlashSystem : EntitySystem
                 _slow.TrySuperSlowdown(target, duration);
             else
                 _slow.TrySlowdown(target, duration);
+
+            _stun.TryParalyze(target, xeno.Comp.ParalyzeDuration, true);
 
             hitAnyone = true;
 

@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoHazeBase
   name: Haze
   description: A supportive strain of the Confluence, tending wounds and spreading spores in equal measure.
@@ -53,16 +53,14 @@
     - CMU14ActionXenoPathogenHealerDroneTransferPlasma
     - CMU14ActionXenoPathogenSacrifice
     - CMU14ActionXenoPathogenDevolve
+  - type: XenoDevour
   - type: XenoHide
   - type: XenoConstruction
     buildDelay: 1
     canBuild:
     - CMU14XenoMyceliumWall
-    - CMU14XenoThickMyceliumWall
     - CMU14XenoMyceliumMembrane
-    - CMU14XenoThickMyceliumMembrane
     - CMU14XenoMyceliumDoor
-    - CMU14XenoThickMyceliumDoor
   - type: XenoRegen
     healOffWeeds: true
     critHealMultiplier: 0.3465

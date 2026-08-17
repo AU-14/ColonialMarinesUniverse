@@ -137,137 +137,6 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
         _rmcSprite.SetColor(ent.Owner, ent.Comp.Color);
     }
 
-    /// <summary>
-    /// Create a new hive with a name.
-    /// </summary>
-    public EntityUid CreateHive(string name, EntProtoId? proto = null)
-    {
-        var ent = Spawn(proto ?? _defaultHive);
-        _metaData.SetEntityName(ent, name);
-        return ent;
-    }
-
-    public void EvoScreech(HiveComponent hive)
-    {
-        if (hive.CurrentQueen is not { } queen)
-            return;
-
-        // Get the map that the queen is on
-        var map = _transform.GetMapId(queen);
-        var mapFilter = Filter.BroadcastMap(map);
-
-        foreach (var session in mapFilter.Recipients)
-        {
-            if (session.AttachedEntity is not { } recipient)
-                continue;
-
-            if (HasComp<XenoComponent>(recipient))
-                continue;
-
-            var popupText = Loc.GetString(HasComp<SynthComponent>(recipient)
-                ? "rmc-hive-supports-castes-synth"
-                : "rmc-hive-supports-castes-human");
-
-            popupText = $"[bold][font size=24][color=red]\n{popupText}\n[/color][/font][/bold]";
-
-            _audio.PlayEntity(hive.MarineAnnounceSound, recipient, recipient);
-            _rmcChat.ChatMessageToOne(ChatChannel.Radio, popupText, popupText, default, false, session.Channel);
-        }
-    }
-
-    private void UpdateHives()
-    {
-        var roundTime = _gameTicker.RoundDuration();
-        var hives = EntityQueryEnumerator<HiveComponent>();
-        while (hives.MoveNext(out var hiveId, out var hive))
-        {
-            _announce.Clear();
-
-            for (var i = 0; i < hive.AnnouncementsLeft.Count; i++)
-            {
-                var left = hive.AnnouncementsLeft[i];
-                if (roundTime < left)
-                    continue;
-
-                if (hive.Unlocks.TryGetValue(left, out var unlocks))
-                {
-                    foreach (var unlock in unlocks)
-                    {
-                        hive.AnnouncedUnlocks.Add(unlock);
-
-                        if (_prototypes.TryIndex(unlock, out var prototype))
-                            _announce.Add(prototype.Name);
-                    }
-                }
-
-                hive.AnnouncementsLeft.RemoveAt(i);
-                i--;
-                Dirty(hiveId, hive);
-            }
-
-            if (_announce.Count > 0)
-            {
-                var popup = Loc.GetString("rmc-hive-supports-castes", ("castes", string.Join(", ", _announce)));
-                _xenoAnnounce.AnnounceToHive(EntityUid.Invalid, hiveId, popup, hive.AnnounceSound, PopupType.Large);
-                EvoScreech(hive);
-            }
-
-            if (!hive.AnnouncedQueenDeathCooldownOver && hive.CurrentQueen == null && hive.NewQueenAt.HasValue && _timing.CurTime >= hive.NewQueenAt.Value)
-            {
-                var queenPopup = Loc.GetString("rmc-queen-death-cooldown-over");
-                _xenoAnnounce.AnnounceToHive(EntityUid.Invalid, hiveId, queenPopup, hive.AnnounceSound);
-                hive.AnnouncedQueenDeathCooldownOver = true;
-                Dirty(hiveId, hive);
-            }
-
-            //No queen has been picked they have 1 minutes to pick a queeen before hive goes feral
-            if (!hive.AnnouncedNoQueenCooldownOver && hive.CurrentQueen == null && hive.NewQueenAt.HasValue && _timing.CurTime >= hive.NewQueenAt.Value + hive.NoQueenAlertTime)
-            {
-                var noQueenPopup = Loc.GetString("rmc-no-queen-warning");
-                _xenoAnnounce.AnnounceToHive(EntityUid.Invalid, hiveId, noQueenPopup, hive.AnnounceSound);
-                hive.AnnouncedNoQueenCooldownOver = true;
-                Dirty(hiveId, hive);
-            }
-
-            if (!hive.AnnouncedHiveCoreCooldownOver && hive.NewCoreAt.HasValue && _timing.CurTime >= hive.NewCoreAt)
-            {
-                var corePopup = Loc.GetString("rmc-hive-core-cooldown-over");
-                _xenoAnnounce.AnnounceToHive(EntityUid.Invalid, hiveId, corePopup, hive.AnnounceSound);
-                hive.AnnouncedHiveCoreCooldownOver = true;
-                Dirty(hiveId, hive);
-            }
-        }
-    }
-
-    private void UpdateBurrowedSurge()
-    {
-        var time = _timing.CurTime;
-        var surge = EntityQueryEnumerator<HijackBurrowedSurgeComponent, HiveComponent>();
-        while (surge.MoveNext(out var id, out var burrowed, out var hive))
-        {
-            if (time < burrowed.NextSurgeAt)
-                continue;
-
-            if (GetHiveCore((id, hive)) == null)
-            {
-                //Reset time between if no core
-                if (burrowed.SurgeEvery != burrowed.ResetSurgeTime)
-                    burrowed.SurgeEvery = burrowed.ResetSurgeTime;
-                continue;
-            }
-
-            ChangeBurrowedLarva((id, hive), 1);
-            burrowed.PooledLarva--;
-            if (burrowed.PooledLarva < 1)
-                RemCompDeferred<HijackBurrowedSurgeComponent>(id);
-
-            if (burrowed.SurgeEvery > burrowed.MinSurgeTime)
-                burrowed.SurgeEvery -= burrowed.ReduceSurgeBy;
-
-            burrowed.NextSurgeAt = time + burrowed.SurgeEvery;
-        }
-    }
-
     private void UpdateInvincible()
     {
         if (_invincibles.Count == 0)
@@ -339,16 +208,73 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
         UpdateInvincible();
     }
 
-    private void OnPathogenSpawn(Entity<CMUPathogenHiveMemberComponent> ent, ref MapInitEvent args)
+    /// <summary>
+    /// Create a new hive with a name.
+    /// </summary> CreateHive() - CMU14
+    public EntityUid CreateHive(string name, EntProtoId? proto = null)
     {
+        var ent = Spawn(proto ?? _defaultHive);
+        _metaData.SetEntityName(ent, name);
+        return ent;
+    }
+
+    public void EvoScreech(HiveComponent hive) // CMU14 method
+    {
+        if (hive.CurrentQueen is not { } queen)
+            return;
+
+        var map = _transform.GetMapId(queen);
+        var mapFilter = Filter.BroadcastMap(map);
+
+        foreach (var session in mapFilter.Recipients)
+        {
+            if (session.AttachedEntity is not { } recipient)
+                continue;
+
+            if (HasComp<XenoComponent>(recipient))
+                continue;
+
+            if (_auRoundSystem.SelectedThreat?.hiveevolution == true)
+            {
+                var popupText = Loc.GetString(HasComp<SynthComponent>(recipient)
+                    ? "rmc-hive-supports-castes-synth"
+                    : "rmc-hive-supports-castes-human");
+
+                popupText = $"[bold][font size=24][color=red]{popupText}[/color][/font][/bold]";
+
+                _audio.PlayEntity(hive.MarineAnnounceSound, recipient, recipient);
+                _rmcChat.ChatMessageToOne(ChatChannel.Radio, popupText, popupText, default, false, session.Channel);
+            }
+        }
+    }
+
+    // private void UpdateHives() { } CMU14
+    // private void UpdateBurrowedSurge() { } CMU14
+
+    /// <summary>
+    /// When CMUPathogenHive itself finishes MapInit, retroactively assign any Pathogen members
+    /// that spawned before the hive entity existed (e.g. map-placed entities).
+    /// </summary> OnPathogenSpawn() - CMU14
+    private void OnPathogenSpawn(Entity<CMUPathogenHiveMemberComponent> ent, ref MapInitEvent args)
+        => TryAssignPathogenHive(ent.Owner);
+
+    private void TryAssignPathogenHive(EntityUid uid) // CMU14 method
+    {
+        if (TerminatingOrDeleted(uid))
+            return;
+
         var hives = EntityQueryEnumerator<HiveComponent, MetaDataComponent>();
         while (hives.MoveNext(out var hiveUid, out _, out var meta))
         {
             if (meta.EntityPrototype?.ID != "CMUPathogenHive")
                 continue;
 
-            SetHive(ent.Owner, hiveUid);
-            break;
+            Log.Debug($"TryAssignPathogenHive: assigning {ToPrettyString(uid)} to Pathogen hive {ToPrettyString(hiveUid)}");
+            SetHive(uid, hiveUid);
+            return;
         }
+
+        Log.Debug($"TryAssignPathogenHive: CMUPathogenHive not found for {ToPrettyString(uid)}, retrying next tick");
+        Timer.Spawn(0, () => TryAssignPathogenHive(uid)); // TODO: fix this race condition proper
     }
 }

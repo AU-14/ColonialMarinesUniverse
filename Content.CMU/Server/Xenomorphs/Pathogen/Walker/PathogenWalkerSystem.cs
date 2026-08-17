@@ -23,6 +23,13 @@ using Content.Shared.Body.Systems;
 using Content.Shared.StatusEffectNew;
 using Content.Server._RMC14.Language.Systems;
 using Content.Server.Radio.Components;
+using Content.Server.Ghost.Roles.Components;
+using Robust.Shared.Player;
+using Content.Server.Mind;
+using Content.Shared._RMC14.TacticalMap;
+using Content.Shared.Examine;
+using Content.Shared.IdentityManagement;
+using Content.Shared._RMC14.Synth;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Walker;
 
@@ -42,6 +49,8 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private readonly SharedBodySystem _body = default!;
     [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
     [Dependency] private readonly LanguageSystem _language = default!;
+    [Dependency] private readonly ISharedPlayerManager _player = default!;
+    [Dependency] private readonly MindSystem _mind = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -58,6 +67,9 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     {
         SubscribeLocalEvent<CMUMycotoxinInjectDoReanimateEvent>(OnReanimate);
         SubscribeLocalEvent<CMUPathogenWalkerComponent, MobStateChangedEvent>(OnWalkerDeath);
+        SubscribeLocalEvent<CMUPathogenWalkerComponent, ExaminedEvent>(OnWalkerExamined);
+        SubscribeNetworkEvent<CMUPathogenWalkerAcceptNetEvent>(OnAcceptNet);
+        SubscribeNetworkEvent<CMUPathogenWalkerDeclineNetEvent>(OnDeclineNet);
     }
 
     private void OnReanimate(CMUMycotoxinInjectDoReanimateEvent ev)
@@ -66,6 +78,9 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         var injector = ev.Injector;
 
         if (HasComp<CMUPathogenWalkerComponent>(target))
+            return;
+
+        if (HasComp<SynthComponent>(target))
             return;
 
         var walker = EnsureComp<CMUPathogenWalkerComponent>(target);
@@ -77,21 +92,87 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         }
 
         _faction.AddFaction(target, WalkerFaction);
-
         _language.SetExclusiveLanguage(target, "Pathogen");
 
         EnsureComp<IntrinsicRadioReceiverComponent>(target);
-
         var radio = EnsureComp<ActiveRadioComponent>(target);
         radio.Channels = new HashSet<string>() { "MycelumLink" };
-
-        EnsureComp<ActiveRadioComponent>(target);
+        var tacIcon = EnsureComp<TacticalMapIconComponent>(target);
 
         EquipMarker(target, walker);
 
-        Dirty(target, walker);
+        // If the victim has a connected player, show the offer popup.
+        // Otherwise skip straight to ghost role.
+        if (_player.TryGetSessionByEntity(target, out var session))
+        {
+            walker.OfferExpiresAt = _timing.CurTime + walker.OfferTimeout;
+            walker.OfferResolved = false;
+            Dirty(target, walker);
 
-        Revive(target, walker);
+            RaiseNetworkEvent(new CMUPathogenWalkerOfferEvent(
+                GetNetEntity(target),
+                walker.OfferTimeout.TotalSeconds), session);
+        }
+        else
+        {
+            MakeGhostRole(target, walker);
+        }
+
+        Dirty(target, walker);
+    }
+
+    private void OnAcceptNet(CMUPathogenWalkerAcceptNetEvent ev, EntitySessionEventArgs args)
+    {
+        var uid = GetEntity(ev.Target);
+        if (!TryComp<CMUPathogenWalkerComponent>(uid, out var walker) || walker.OfferResolved)
+            return;
+
+        walker.OfferResolved = true;
+        walker.OfferExpiresAt = null;
+        Dirty(uid, walker);
+        ActivateWalker(uid, walker);
+    }
+
+    private void OnDeclineNet(CMUPathogenWalkerDeclineNetEvent ev, EntitySessionEventArgs args)
+    {
+        var uid = GetEntity(ev.Target);
+        if (!TryComp<CMUPathogenWalkerComponent>(uid, out var walker) || walker.OfferResolved)
+            return;
+
+        walker.OfferResolved = true;
+        walker.OfferExpiresAt = null;
+        Dirty(uid, walker);
+        MakeGhostRole(uid, walker);
+    }
+
+    private void ActivateWalker(EntityUid uid, CMUPathogenWalkerComponent walker)
+    {
+        Revive(uid, walker);
+    }
+
+    private void MakeGhostRole(EntityUid uid, CMUPathogenWalkerComponent walker)
+    {
+        // Eject current mind so the ghost role system can hand out a fresh one.
+        if (_mind.TryGetMind(uid, out var mindId, out _))
+            _mind.TransferTo(mindId, null);
+
+        var ghostRole = EnsureComp<GhostRoleComponent>(uid);
+        ghostRole.RoleName = Loc.GetString("cmu14-walker-ghost-role-name");
+        ghostRole.RoleDescription = Loc.GetString("cmu14-walker-ghost-role-desc");
+
+        EnsureComp<GhostTakeoverAvailableComponent>(uid);
+
+        Revive(uid, walker); // body is still alive/animated even before someone takes it
+    }
+
+    private void OnWalkerExamined(Entity<CMUPathogenWalkerComponent> walker, ref ExaminedEvent args)
+    {
+        if (!args.IsInDetailsRange)
+            return;
+
+        var locUser = ("user", Identity.Entity(walker, EntityManager));
+
+        args.PushMarkup($"[color=red][bold]{Loc.GetString("cmu14-walker-examine-fungal-growth", locUser)}[/bold][/color]");
     }
 
     private void EquipMarker(EntityUid target, CMUPathogenWalkerComponent walker)
@@ -139,6 +220,18 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUPathogenWalkerComponent, MobStateComponent>();
         while (query.MoveNext(out var uid, out var walker, out var mobState))
         {
+            // Offer timeout — independent of revive logic
+            if (!walker.OfferResolved &&
+                walker.OfferExpiresAt != null &&
+                time >= walker.OfferExpiresAt)
+            {
+                walker.OfferResolved = true;
+                walker.OfferExpiresAt = null;
+                Dirty(uid, walker);
+
+                MakeGhostRole(uid, walker);
+            }
+
             if (mobState.CurrentState == MobState.Alive && time >= walker.NextHeal)
             {
                 walker.NextHeal = time + walker.HealInterval;
@@ -149,7 +242,6 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
             if (walker.ReviveAt == null)
                 continue;
 
-            // Jiggle the corpse 5 seconds before it gets back up, so nearby marines get a tell.
             if (!walker.PreReviveJitterPlayed &&
                 mobState.CurrentState == MobState.Dead &&
                 time >= walker.ReviveAt - jitterWarning)

@@ -225,8 +225,8 @@ public sealed partial class LanguageSystem : SharedLanguageSystem
         if (!Resolve(ent, ref ent.Comp))
             return;
 
-        var spoken = ent.Comp.SpokenLanguages.Contains(language);
-        var understood = ent.Comp.UnderstoodLanguages.Contains(language);
+        // var spoken = ent.Comp.SpokenLanguages.Contains(language); CMU14
+        // var understood = ent.Comp.UnderstoodLanguages.Contains(language); CMU14
 
         ent.Comp.SpokenLanguages.Clear();
         ent.Comp.UnderstoodLanguages.Clear();

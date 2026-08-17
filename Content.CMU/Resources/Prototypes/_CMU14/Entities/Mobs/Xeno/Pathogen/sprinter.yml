@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoSprinterBase
   name: Sprinter
   description: A small, fast four-legged terror. Weak in sustained combat.
@@ -95,6 +95,7 @@
     chance: 0.4
     stunMin: 4
     stunMax: 4
+  - type: XenoDevour
   - type: RMCSize
     size: SmallXeno
   - type: TacticalMapIcon

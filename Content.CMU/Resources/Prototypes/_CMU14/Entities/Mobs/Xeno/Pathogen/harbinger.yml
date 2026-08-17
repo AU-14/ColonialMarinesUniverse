@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: CMU14XenoPathogenBase
+  parent: CMU14XenoPathogenMatureBase
   id: CMU14XenoHarbingerBase
   name: Harbinger
   description: Doom is walking.
@@ -93,9 +93,12 @@
     damage:
       groups:
         Brute: 42
+  - type: XenoDevour
   - type: CMArmor
     explosionArmor: 20
-    xenoArmor: 15
+    xenoArmor: 30
+  - type: XenoClaws
+    clawType: VerySharp
   - type: Tackle
     min: 2
     max: 5

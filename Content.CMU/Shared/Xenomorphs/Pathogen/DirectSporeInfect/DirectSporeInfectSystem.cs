@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.DoAfter;
+using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
 
 namespace Content.Shared._CMU14.Xenomorphs.Pathogen.DirectSporeInfect;
 
@@ -56,6 +57,15 @@ public sealed partial class CMUXenoDirectSporeInfectSystem : EntitySystem
         {
             _popup.PopupClient(
                 Loc.GetString("cmu-xeno-direct-spore-infect-dead"),
+                xeno,
+                xeno);
+            return;
+        }
+
+        if (HasComp<CMUPathogenWalkerComponent>(target.Value))
+        {
+            _popup.PopupClient(
+                Loc.GetString("cmu-xeno-direct-spore-infect-invalid"),
                 xeno,
                 xeno);
             return;

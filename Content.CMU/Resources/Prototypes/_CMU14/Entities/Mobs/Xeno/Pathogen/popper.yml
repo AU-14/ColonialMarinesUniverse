@@ -30,7 +30,6 @@
     - CMU14ActionXenoPathogenPheromones
     - CMU14ActionXenoPathogenPlaceSporeSac
     - CMU14ActionXenoPathogenDirectSporeInfect
-    - CMU14ActionXenoPathogenDevolve
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -38,13 +37,6 @@
     plasma: 400
     maxPlasma: 400
     plasmaRegenOnWeeds: 2
-  - type: XenoEvolution
-    actionId: CMU14ActionXenoPathogenEvolve
-    canEvolveWithoutGranter: false
-    evolvesTo: []
-  - type: XenoDevolve
-    devolvesTo: []
-    canBeDevolvedByOther: false
   - type: XenoPheromones
   - type: Fixtures
     fixtures:
