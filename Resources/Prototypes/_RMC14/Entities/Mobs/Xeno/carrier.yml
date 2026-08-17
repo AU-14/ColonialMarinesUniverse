@@ -152,6 +152,9 @@
     - ActionXenoDevolve
   - type: XenoParasiteThrower
   - type: XenoEvolution
+    max: 500        # CMU14
+    evolvesTo:      # CMU14
+    - CMXenoReaper  # CMU14
     strains:
     - RMCXenoCarrierEggsac
   - type: RMCActionOrder
