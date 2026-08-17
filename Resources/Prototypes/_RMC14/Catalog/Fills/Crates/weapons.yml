@@ -13,7 +13,7 @@
 - type: entity
   parent: RMCCrateWeapons
   id: RMCCrateM54CE2
-  name: M54CE2 HAR crate (HAR x2, HAR ammo box x2)
+  name: M41AE2 HPR crate (x2) #M54CE2 HAR crate (HAR x2, HAR ammo box x2): CMU change, figured I'd just rename it the proper inline name, commented out to play it safe.
   components:
   - type: StorageFill
     contents:

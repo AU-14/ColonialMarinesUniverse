@@ -298,7 +298,7 @@
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
-    maxIntegrity: 460
+    maxIntegrity: 500
   - type: VehicleTurretAttachment
   - type: VehicleTurret
     offsetRotatesWithTurret: true
@@ -313,7 +313,7 @@
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: Gun
-    fireRate: 0.15
+    fireRate: 0.3
     projectileSpeed: 60
     selectedMode: FullAuto
     availableModes:

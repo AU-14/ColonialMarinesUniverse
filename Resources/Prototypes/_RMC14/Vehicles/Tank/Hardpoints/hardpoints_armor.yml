@@ -92,23 +92,3 @@
     vehicleState: paladin_armor_0
     damagedVehicleState: paladin_armor_1
 
-- type: entity
-  parent: VehicleTankHardpointBase
-  id: VehicleTankSnowplow
-  name: tank snowplow
-  description: A reinforced snowplow attachment for a tank.
-  components:
-  - type: Sprite
-    state: snowplow
-  - type: HardpointItem
-    hardpointType: HardpointTypeArmor
-    vehicleFamily: HardpointVehicleFamilyTank
-    slotType: HardpointSlotTypeArmor
-    damageMultiplier: 0.5
-    repairRate: 0.007
-  - type: HardpointIntegrity
-    maxIntegrity: 150
-  - type: HardpointVisual
-    vehicleState: snowplow_0
-    damagedVehicleState: snowplow_1
-

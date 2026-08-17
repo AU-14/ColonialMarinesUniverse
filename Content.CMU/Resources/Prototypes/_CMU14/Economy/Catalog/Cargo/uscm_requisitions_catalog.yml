@@ -173,6 +173,22 @@
         crate: CMUCrateVehicleAmmoLTBCannonMixed
         maxStock: 2
         stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonAPFSDS
+        maxStock: 2
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonHEAT
+        maxStock: 2
+        stockReplenishDelay: 300
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonHE
+        maxStock: 2
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonCanister
+        maxStock: 2
+      - cost: 1900
+        crate: CMUCrateVehicleAmmoLTBCannonNapalm
+        maxStock: 2
       - cost: 1800
         crate: RMCCrateVehicleAmmoLTAAAP
         maxStock: 2
@@ -235,6 +251,8 @@
         crate: RMCCrateXM88
       - cost: 800
         crate: RMCCrateMOU53
+      - cost: 800
+        crate: RMCCrateM54CE2
       - cost: 400
         crate: RMCCrateM85A1
       - cost: 100
@@ -257,6 +275,10 @@
         crate: RMCCrateBoxMagazinePistolMK80
       - cost: 800
         crate: RMCCrateBoxAmmo458
+      - cost: 300
+        crate: RMCCrateMagazineRifleM54CE2
+      - cost: 300
+        crate: RMCCrateMagazineRifleM54CE2HT
       - cost: 600
         crate: RMCCrateBoxMagazineSentry
       - cost: 600

@@ -922,6 +922,7 @@
       choices: { CMHat: 1 }
       entries:
       - id: CMHeadBeretCMP
+      - id: CMCMPFlatBeret
     - name: Handgun Case
       jobs:
       - CMChiefMP

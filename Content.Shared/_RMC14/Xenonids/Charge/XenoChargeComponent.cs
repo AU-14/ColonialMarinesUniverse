@@ -19,7 +19,7 @@ public sealed partial class XenoChargeComponent : Component
     public DamageSpecifier Damage = new();
 
     [DataField, AutoNetworkedField]
-    public float Range = RMCMathExtensions.CircleAreaFromSquareAbilityRange(7);
+    public float Range = RMCMathExtensions.CircleAreaFromSquareAbilityRange(4); // CMU14
 
     [DataField, AutoNetworkedField]
     public float SlowRange = 1.5f;

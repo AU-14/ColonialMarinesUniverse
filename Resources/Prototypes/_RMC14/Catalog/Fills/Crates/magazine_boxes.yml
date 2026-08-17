@@ -30,7 +30,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateMagazineRifleM54CE2
-  name: M54CE2 HAR Magazines crate (HAR ammo box x2)
+  name: M41AE2 HPR Magazines crate (HPR ammo box x2) #M54CE2 HAR Magazines crate (HAR ammo box x2) CMU change, inline with CM13.
   components:
   - type: StorageFill
     contents:
@@ -40,7 +40,7 @@
 - type: entity
   parent: RMCCrateAmmo
   id: RMCCrateMagazineRifleM54CE2HT
-  name: M54CE2 HAR Magazines crate (HAR HT ammo box x2)
+  name: M41AE2 HPR Holo-Target Magazines crate #M54CE2 HAR Magazines crate (HAR HT ammo box x2): same as above,
   components:
   - type: StorageFill
     contents:

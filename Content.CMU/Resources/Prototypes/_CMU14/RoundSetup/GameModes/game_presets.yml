@@ -58,6 +58,7 @@
   - AuVoteRule
   - PlatoonSpawn
   - AddGovfor
+  - AddGovforCorrespondent
   - AddClf
   - ColonyAntags
   - InsWinConditionsRule

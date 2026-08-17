@@ -1383,7 +1383,7 @@
       entries:
       - id: RMCBoxBulletsRifleL24
         amount: 5
-      - id: RMCBoxBulletsRifleL90
+      - id: CMUBoxBulletsRifleSLR
         amount: 5
       - id: RMCBoxBulletsSMG
         amount: 5

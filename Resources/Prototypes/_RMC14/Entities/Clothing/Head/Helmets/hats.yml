@@ -42,6 +42,26 @@
 
 - type: entity
   parent: CMHeadBeret
+  id: CMMPFlatBeret
+  name: MP Flat Beret
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/beret_red_flat.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/beret_red_flat.rsi
+
+- type: entity
+  parent: CMHeadBeret
+  id: CMCMPFlatBeret
+  name: CMP Flat Beret
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Clothing/Head/Hats/beret_red_flatcmp.rsi
+  - type: Clothing
+    sprite: _RMC14/Objects/Clothing/Head/Hats/beret_red_flatcmp.rsi
+
+- type: entity
+  parent: CMHeadBeret
   id: CMHeadBeretTan
   name: tan beret
   components:

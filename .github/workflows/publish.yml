@@ -27,10 +27,43 @@ jobs:
     permissions:
       contents: write
 
-  package:
-    name: Package ${{ matrix.name }}
+  publish_start:
+    name: Start publish
     needs: changelog
     if: always() && (needs.changelog.result == 'success' || needs.changelog.result == 'skipped')
+    runs-on: ubuntu-latest
+    outputs:
+      already-published: ${{ steps.start.outputs.already-published }}
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+          sparse-checkout: |
+            RobustToolbox
+            Tools
+
+      - name: Checkout RobustToolbox
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --depth=1 RobustToolbox
+          cd RobustToolbox
+          git fetch --depth=1
+
+      - name: Start publish
+        id: start
+        run: python3 Tools/publish_multi_request.py start
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+
+  package:
+    name: Package ${{ matrix.name }}
+    needs: [changelog, publish_start]
+    if: >-
+      always() &&
+      (needs.changelog.result == 'success' || needs.changelog.result == 'skipped') &&
+      needs.publish_start.result == 'success' &&
+      needs.publish_start.outputs.already-published != 'true'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -38,13 +71,15 @@ jobs:
         include:
           - name: client
             command: client
-            restore: dotnet restore
+            restore: |
+              dotnet restore Content.Packaging/Content.Packaging.csproj
+              dotnet restore Content.Client/Content.Client.csproj
           - name: server-win-x64
             command: server --platform win-x64
-            restore: dotnet restore --runtime win-x64 /p:TargetOs=Windows
+            restore: dotnet restore Content.Server/Content.Server.csproj --runtime win-x64 /p:TargetOs=Windows
           - name: server-linux-x64
             command: server --platform linux-x64
-            restore: dotnet restore --runtime linux-x64 /p:TargetOs=Linux
+            restore: dotnet restore Content.Server/Content.Server.csproj --runtime linux-x64 /p:TargetOs=Linux
 
     steps:
       - uses: actions/checkout@v6.0.2
@@ -103,35 +138,35 @@ jobs:
           retention-days: 1
           compression-level: 0
 
-  publish:
-    name: Publish version
-    if: always() && needs.package.result == 'success'
+      - name: Upload ${{ matrix.name }} to Robust.Cdn
+        run: python3 Tools/publish_multi_request.py upload release/*.zip
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
+
+  publish_finish:
+    name: Finish publish
+    if: >-
+      always() &&
+      needs.publish_start.result == 'success' &&
+      needs.publish_start.outputs.already-published != 'true'
     runs-on: ubuntu-latest
-    needs: package
+    needs: [publish_start, package]
     steps:
       - uses: actions/checkout@v6.0.2
         with:
           persist-credentials: true
           submodules: false
-
-      - name: Checkout RobustToolbox
-        run: |
-          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
-          git submodule update --init --depth=1 RobustToolbox
-          cd RobustToolbox
-          git fetch --depth=1
-
-      - uses: actions/download-artifact@v8.0.1
-        with:
-          pattern: release-*
-          path: release
-          merge-multiple: true
-
-      - name: Show package sizes
-        run: ls -lh release/
+          sparse-checkout: Tools
 
       - name: Publish version
-        run: Tools/publish_multi_request.py
+        if: needs.package.result == 'success'
+        run: python3 Tools/publish_multi_request.py finish
         env:
           PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}
-          GITHUB_REPOSITORY: ${{ github.repository }}
+
+      - name: Abort incomplete publish
+        if: needs.package.result != 'success'
+        continue-on-error: true
+        run: python3 Tools/publish_multi_request.py finish
+        env:
+          PUBLISH_TOKEN: ${{ secrets.PUBLISH_TOKEN }}

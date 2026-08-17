@@ -46,6 +46,7 @@
   - type: CartridgeAmmo
     proto: RMCProjectileElectrolaser
     muzzleFlash: MuzzleFlashEffectVehicleOver
+
 - type: entity
   parent: CMBaseCartridgeRifle
   id: VehicleCartridgeDragonFlame
@@ -154,7 +155,7 @@
 - type: entity
   parent: RMCBaseBullet
   id: RMCProjectileElectrolaser
-  name: Electrolaser power bank
+  name: Electrolaser Projectile
   categories: [ HideSpawnMenu ]
   components:
   - type: Sprite

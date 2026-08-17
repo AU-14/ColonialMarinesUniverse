@@ -970,6 +970,8 @@
       choices: { CMHat: 1 }
       entries:
       - id: RMCHeadCapBureau
+      - id: CMMPFlatBeret
+      - id: CMHeadBeretRed
     - name: Outerwear
       choices: { AU14Outerwear: 1 }
       entries:

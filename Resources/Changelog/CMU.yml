@@ -9254,5 +9254,58 @@
   id: 597
   time: '2026-08-08T03:59:59.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1803
+- author: HotdogMan52
+  changes:
+  - message: Swapped the 7x43mm ammo box in requisitions to the right one so it can
+      actually be used to refill SLR magazines
+    type: Tweak
+  id: 598
+  time: '2026-08-09T13:16:22.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1805
+- author: IMGXKILLER
+  changes:
+  - message: UNISC Squad Third Party call for Colony Admin.
+    type: Add
+  id: 599
+  time: '2026-08-09T13:37:09.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1804
+- author: deepdarkdepths
+  changes:
+  - message: Crusher's charge has had its windup delay doubled. Range reduced to 5
+      tiles. Damage reduced.
+    type: Tweak
+  - message: Soak duration lasts for 4 seconds instead of 3.
+    type: Tweak
+  - message: Directional stomp's damage reduced.
+    type: Tweak
+  - message: Brutalize's AP damage reduced.
+    type: Tweak
+  id: 600
+  time: '2026-08-10T03:17:21.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1811
+- author: P-MCT
+  changes:
+  - message: Combat correspondents have now been authorised to deploy in operations
+      being conducted against insurgencies.
+    type: Tweak
+  - message: Shotguns have been properly lubricated. You can now pump and fire faster.
+    type: Tweak
+  - message: Requisitions ASRS have now been properly issued all variants of tank
+      shell crates.
+    type: Tweak
+  id: 601
+  time: '2026-08-10T03:17:35.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1807
+- author: OverusedMeme
+  changes:
+  - message: USCM and HAZOP's will now find the M41AE2 HPR and its magazines orderable
+      through their ASRS console!
+    type: Add
+  - message: Both GOVFOR and OPFOR Logistics Officers will have their missing approval
+      stamp.
+    type: Fix
+  id: 602
+  time: '2026-08-10T03:19:52.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1812
 Name: CMU
 Order: -1

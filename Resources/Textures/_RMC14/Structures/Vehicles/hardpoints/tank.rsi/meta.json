@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from CMSS13 https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/hardpoints/tank.dmi",
+  "copyright": "Taken from CMSS13 https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/hardpoints/tank.dmi", "https://github.com/cmss13-devs/cmss13/pull/12586",
   "size": {
     "x": 32,
     "y": 32
@@ -37,6 +37,9 @@
     {
       "name": "m56_cupola"
     },
+	{
+      "name": "re700_cupola"
+    },
     {
       "name": "ltb_cannon"
     },
@@ -60,6 +63,9 @@
     },
     {
       "name": "ace_autocannon"
+    },
+	{
+      "name": "mounted_flag"
     },
     {
       "name": "drgn_flamer"
