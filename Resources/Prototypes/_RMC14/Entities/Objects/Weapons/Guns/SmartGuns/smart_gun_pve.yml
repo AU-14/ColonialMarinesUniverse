@@ -48,7 +48,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 20
+        Blunt: 15
   - type: Gun
     selectedMode: FullAuto
     availableModes:
@@ -69,7 +69,7 @@
         maxScatterModifier: 4
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 80
+        shotsToMaxScatter: 60
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.05
   - type: GunIFF
@@ -105,7 +105,7 @@
     settings:
     - damage:
         types:
-          Piercing: 30
+          Piercing: 20
       armorPiercing: 0
       name: rmc-toggleable-ammo-highly-precise
       icon:
@@ -113,8 +113,8 @@
         state: ammo_swap_normal
     - damage:
         types:
-          Piercing: 20
-      armorPiercing: 40
+          Piercing: 15
+      armorPiercing: 45
       name: rmc-toggleable-ammo-armor-shredding
       icon:
         sprite: _RMC14/Actions/marine_smart_gun_actions.rsi

@@ -50,7 +50,7 @@
   - type: MeleeWeapon
     damage:
       types:
-        Blunt: 20
+        Blunt: 15
   - type: Gun
     selectedMode: FullAuto
     availableModes:
@@ -113,7 +113,7 @@
     - damage:
         types:
           Piercing: 15
-      armorPiercing: 40
+      armorPiercing: 45
       name: rmc-toggleable-ammo-armor-shredding
       icon:
         sprite: _RMC14/Actions/marine_smart_gun_actions.rsi
@@ -214,7 +214,7 @@
     settings:
     - damage:
         types:
-          Piercing: 32
+          Piercing: 20
       armorPiercing: 0
       name: rmc-toggleable-ammo-highly-precise
       icon:
@@ -222,7 +222,7 @@
         state: ammo_swap_normal
     - damage:
         types:
-          Piercing: 25
+          Piercing: 15
       armorPiercing: 35
       name: rmc-toggleable-ammo-armor-shredding
       icon:
