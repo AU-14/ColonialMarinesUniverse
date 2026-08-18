@@ -64,14 +64,14 @@
     - FullAuto
     recoilWielded: 3
     scatterWielded: 10
-    baseFireRate: 9.6
+    baseFireRate: 6
     burstScatterMult: 4
     modifiers:
       FullAuto:
         maxScatterModifier: 4
         useBurstScatterMult: true
         unwieldedScatterMultiplier: 2
-        shotsToMaxScatter: 80
+        shotsToMaxScatter: 60
   - type: RMCWeaponAccuracy
     accuracyMultiplier: 1.05
   - type: ContainerContainer
@@ -104,7 +104,7 @@
     settings:
     - damage:
         types:
-          Piercing: 30
+          Piercing: 20
       armorPiercing: 0
       name: rmc-toggleable-ammo-highly-precise
       icon:
@@ -112,7 +112,7 @@
         state: ammo_swap_normal
     - damage:
         types:
-          Piercing: 20
+          Piercing: 15
       armorPiercing: 40
       name: rmc-toggleable-ammo-armor-shredding
       icon:
@@ -214,7 +214,7 @@
     settings:
     - damage:
         types:
-          Piercing: 40
+          Piercing: 32
       armorPiercing: 0
       name: rmc-toggleable-ammo-highly-precise
       icon:
@@ -222,7 +222,7 @@
         state: ammo_swap_normal
     - damage:
         types:
-          Piercing: 30
+          Piercing: 25
       armorPiercing: 35
       name: rmc-toggleable-ammo-armor-shredding
       icon:
@@ -452,15 +452,15 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 30
+        Piercing: 20
   - type: CMArmorPiercing
     amount: 0
   - type: RMCProjectileDamageFalloff
     thresholds:
-    - range: 12
+    - range: 11
       falloff: 9999
       ignoreModifiers: true
-    - range: 10
+    - range: 9
       falloff: 4
   - type: RMCProjectileAccuracy
     accuracy: 105
@@ -477,7 +477,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 40
+        Piercing: 30
 
 - type: entity
   parent: CMBulletSmartGun10x30mm
@@ -488,7 +488,7 @@
   - type: Projectile
     damage:
       types:
-        Piercing: 30
+        Piercing: 20
   - type: HoloTargeting
     stacks: 15
 
