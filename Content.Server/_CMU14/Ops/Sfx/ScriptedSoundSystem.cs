@@ -6,7 +6,7 @@ using Content.Server._RMC14.Announce;
 using Content.Shared._RMC14.Announce;
 using Content.Shared.GameTicking;
 using Robust.Shared.Audio.Systems;
-using Robust.Shared.Audio.Components;
+using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -36,6 +36,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         SubscribeLocalEvent<StartScriptedSequenceEvent>(OnStart);
         SubscribeLocalEvent<StopScriptedSequenceEvent>(OnStop);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeNetworkEvent<RequestScriptedSoundResyncNetEvent>(OnResyncRequest);
         SubscribeLocalEvent<PrototypesReloadedEventArgs>(OnPrototypesReloaded);
         SubscribeLocalEvent<MapCreatedEvent>(OnMapCreated);
         SubscribeLocalEvent<MapRemovedEvent>(OnMapRemoved);
@@ -43,7 +44,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
 
         foreach (var proto in _proto.EnumeratePrototypes<ScriptedSoundSequencePrototype>())
         {
-            ValidateSequenceOrder(proto.ID, proto);
+            ValidateSequence(proto.ID, proto);
             Logger.GetSawmill("cmu-sfx").Debug($"[SFX] Loaded sequence prototype '{proto.ID}' with {proto.Entries.Count} entries");
         }
     }
@@ -71,7 +72,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         if (!ev.WasModified<ScriptedSoundSequencePrototype>()) return;
         foreach (var proto in _proto.EnumeratePrototypes<ScriptedSoundSequencePrototype>())
         {
-            ValidateSequenceOrder(proto.ID, proto);
+            ValidateSequence(proto.ID, proto);
             Logger.GetSawmill("cmu-sfx").Debug($"[SFX] Reloaded prototype '{proto.ID}'");
         }
     }
@@ -90,24 +91,12 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         {
             if (!_activeSequences.TryGetValue(uid, out var active))
                 continue;
-            List<string>? deadKeys = null;
-            foreach (var kv in active.ActiveLoops)
+
+            if (active.AnchorEntity is { } anchor && TerminatingOrDeleted(anchor))
             {
-                if (!TerminatingOrDeleted(kv.Value))
-                    continue;
-
-                deadKeys ??= new List<string>();
-                deadKeys.Add(kv.Key);
-            }
-
-            if (deadKeys != null)
-                foreach (var key in deadKeys)
-                    active.ActiveLoops.Remove(key);
-
-            if (!active.WarnedEmptyFilter && active.AnchorEntity is { } anchor && TerminatingOrDeleted(anchor))
-            {
-                active.WarnedEmptyFilter = true;
-                Logger.GetSawmill("cmu-sfx").Warning($"[SFX] Sequence '{active.SequenceId}' anchor entity was deleted. Remaining audio/announcements and markers will not reach any players!");
+                Logger.GetSawmill("cmu-sfx").Warning($"[SFX] Sequence '{active.SequenceId}' anchor entity was deleted; stopping sequence {uid}.");
+                StopSequence(uid);
+                continue;
             }
 
             if (!_proto.TryIndex<ScriptedSoundSequencePrototype>(active.SequenceId, out var seq))
@@ -127,7 +116,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
                 if (elapsed < effectiveDelay)
                     break;
 
-                PlayEntry(uid, active, seq, entry);
+                PlayEntry(uid, active, seq, entry, i);
                 if (entry.RepeatSeconds is { } rep)
                     active.RepeatingEntries.Add((i, effectiveDelay + TimeSpan.FromSeconds(rep)));
                 active.NextEntryIndex = i + 1;
@@ -146,44 +135,17 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
                 if (elapsed < nextFire)
                     continue;
 
-                PlayEntry(uid, active, seq, entry);
+                PlayEntry(uid, active, seq, entry, index);
                 var seconds = interval;
                 if (entry.DelayJitterSeconds is { } jitter and > 0)
                     seconds += _random.NextFloat(-jitter, jitter);
                 active.RepeatingEntries[i] = (index, nextFire + TimeSpan.FromSeconds(MathF.Max(seconds, 0.1f)));
             }
 
-            for (var i = active.ScheduledLoopStops.Count - 1; i >= 0; i--)
-            {
-                var (stopAt, loopEnt) = active.ScheduledLoopStops[i];
-                if (_timing.CurTime < stopAt) continue;
-                _audio.Stop(loopEnt);
-                RemoveLoopByEntity(active, loopEnt);
-                active.ScheduledLoopStops.RemoveAt(i);
-            }
-
             if (active.NextEntryIndex >= seq.Entries.Count
-                    && active.ActiveLoops.Count == 0
-                    && active.ScheduledLoopStops.Count == 0
-                    && active.RepeatingEntries.Count == 0)
+                && active.RepeatingEntries.Count == 0)
                 StopSequence(uid);
         }
-    }
-
-    private static void RemoveLoopByEntity(ActiveScriptedSound active, EntityUid entity)
-    {
-        string? key = null;
-        foreach (var (k, v) in active.ActiveLoops)
-        {
-            if (v != entity)
-                continue;
-
-            key = k;
-            break;
-        }
-
-        if (key != null)
-            active.ActiveLoops.Remove(key);
     }
 
     public bool TryGetActiveSequence(int handle, out ActiveScriptedSound active)
@@ -217,15 +179,53 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         if (anchor is { } a && !TerminatingOrDeleted(a))
             netCoords = GetNetCoordinates(Transform(a).Coordinates);
 
-        StopLoops(active);
-        var filter = GetMapFilter(anchor);
+        StopLoops(handle, active);
         RaiseNetworkEvent(new ScriptedSequenceMarkerNetEvent(
                 active.SequenceId,
                 ScriptedSoundMarkers.SequenceStopped,
                 netCoords),
-            filter);
+            Filter.Broadcast());
         active.JitteredDelays.Clear();
         active.RepeatingEntries.Clear();
+        active.Loops.Clear();
+    }
+
+    private void OnResyncRequest(RequestScriptedSoundResyncNetEvent ev, EntitySessionEventArgs args)
+    {
+        var session = args.SenderSession;
+        if (session.AttachedEntity is not { } player)
+            return;
+
+        var playerMapId = Transform(player).MapID;
+        var filter = Filter.SinglePlayer(session);
+
+        foreach (var (handle, active) in _activeSequences)
+        {
+            if (active.AnchorEntity is not { } anchor || TerminatingOrDeleted(anchor))
+                continue;
+
+            if (Transform(anchor).MapUid is not { } anchorMap || !GetConnectedMaps(anchorMap).Contains(playerMapId))
+                continue;
+
+            foreach (var (layer, loop) in active.Loops)
+            {
+                if (loop.Duration is { } dur && _timing.CurTime > loop.FiredAt + TimeSpan.FromSeconds(dur))
+                    continue;
+
+                NetCoordinates? coords = null;
+                if (!loop.Global)
+                    coords = GetNetCoordinates(Transform(anchor).Coordinates);
+
+                RaiseNetworkEvent(new PlayScriptedSoundNetEvent(
+                    handle,
+                    _audio.ResolveSound(loop.Sound),
+                    loop.Params,
+                    loop.Global,
+                    layer,
+                    loop.Duration,
+                    coords), filter);
+            }
+        }
     }
 
     public int? StartSequence(ProtoId<ScriptedSoundSequencePrototype> id, EntityUid? anchor = null)
@@ -243,7 +243,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
             Logger.GetSawmill("cmu-sfx").Error($"[SFX] Tried to start unknown scripted sound sequence '{id}'");
             return null;
         }
-        if (!ValidateSequenceOrder(id, seq))
+        if (!ValidateSequence(id, seq))
         {
             Logger.GetSawmill("cmu-sfx").Error($"[SFX] Sequence Prototype Order is invalid '{id}'");
             return null;
@@ -268,64 +268,55 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         return handle;
     }
 
-    private void PlayEntry(int handle, ActiveScriptedSound active, ScriptedSoundSequencePrototype seq, ScriptedSoundEntry entry)
+    private void PlayEntry(int handle, ActiveScriptedSound active, ScriptedSoundSequencePrototype seq, ScriptedSoundEntry entry, int index)
     {
-        if (entry.StopAllLoops)
-            StopLoops(active);
-        else if (entry.StopLoops is { } stopLayers)
-            foreach (var layer in stopLayers)
-                StopLoop(active, layer);
+        if (entry.StopAllLoops || entry.StopLoops is { })
+        {
+            if (entry.StopAllLoops)
+                active.Loops.Clear();
+            else
+                foreach (var stopped in entry.StopLoops!)
+                    active.Loops.Remove(stopped);
+
+            RaiseNetworkEvent(new StopScriptedSoundLayersNetEvent(
+                handle,
+                entry.StopAllLoops ? null : entry.StopLoops!.ToArray()),
+                Filter.Broadcast());
+        }
 
         if (entry.Sound != null)
         {
-            var audioParams = entry.AudioParams ?? entry.Sound.Params;
-            if (entry.VolumeJitter is { } vj and > 0)
-                audioParams = audioParams.AddVolume(_random.NextFloat(-vj, vj));
-            if (entry.Loop)
-                audioParams = audioParams.WithLoop(true);
-            (EntityUid Entity, AudioComponent Component)? played;
-
-            if (entry.GlobalAudio)
+            var skip = false;
+            NetCoordinates? netCoords = null;
+            if (!entry.GlobalAudio)
             {
-                var filter = GetMapFilter(active.AnchorEntity);
-                if (filter.Count == 0)
+                if (active.AnchorEntity is { Valid: true } anchor && !TerminatingOrDeleted(anchor))
+                    netCoords = GetNetCoordinates(Transform(anchor).Coordinates);
+                else
                 {
-                    Logger.GetSawmill("cmu-sfx").Warning($"[SFX] Sequence '{active.SequenceId}' has no valid anchor; skipping global audio.");
-                    return;
+                    skip = true;
+                    Logger.GetSawmill("cmu-sfx").Warning($"[SFX] Sequence '{active.SequenceId}' anchor entity is invalid for local audio. Skipping sound.");
                 }
-
-                var resolved = _audio.ResolveSound(entry.Sound);
-                played = _audio.PlayGlobal(resolved, filter, false, audioParams);
-            }
-            else
-            {
-                if (active.AnchorEntity == null || TerminatingOrDeleted(active.AnchorEntity.Value))
-                {
-                    Logger.GetSawmill("cmu-sfx").Warning($"[SFX] Sequence '{active.SequenceId}' anchor entity is invalid for non-global audio. Skipping sound.");
-                    return;
-                }
-                played = _audio.PlayPvs(entry.Sound, active.AnchorEntity.Value, audioParams);
             }
 
-            if (played != null)
+            if (!skip)
             {
+                var audioParams = entry.AudioParams ?? entry.Sound.Params;
+                if (entry.VolumeJitter is { } vj and > 0)
+                    audioParams = audioParams.AddVolume(_random.NextFloat(-vj, vj));
                 if (entry.Loop)
-                {
-                    var layer = entry.Layer ?? $"__anon_{active.NextEntryIndex}";
-                    if (active.ActiveLoops.Remove(layer, out var old))
-                    {
-                        _audio.Stop(old);
-                        for (var i = active.ScheduledLoopStops.Count - 1; i >= 0; i--)
-                        {
-                            if (active.ScheduledLoopStops[i].Entity == old)
-                                active.ScheduledLoopStops.RemoveAt(i);
-                        }
-                    }
-                    active.ActiveLoops[layer] = played.Value.Entity;
-                }
+                    audioParams = audioParams.WithLoop(true);
+                if (entry.Loop && entry.Layer is { } tracked)
+                    active.Loops[tracked] = new TrackedLoop(entry.Sound, audioParams, entry.GlobalAudio, _timing.CurTime, entry.DurationSeconds);
 
-                if (entry.DurationSeconds is { } dur)
-                    active.ScheduledLoopStops.Add((_timing.CurTime + TimeSpan.FromSeconds(dur), played.Value.Entity));
+                RaiseNetworkEvent(new PlayScriptedSoundNetEvent(
+                    handle,
+                    _audio.ResolveSound(entry.Sound),
+                    audioParams,
+                    entry.GlobalAudio,
+                    entry.Loop ? entry.Layer ?? $"__anon_{index}" : null,
+                    entry.DurationSeconds,
+                    netCoords), GetMapFilter(active.AnchorEntity));
             }
         }
 
@@ -334,7 +325,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
             var filter = GetMapFilter(active.AnchorEntity);
             _generalAnnounce.AnnounceAdvanced(new AnnouncementRequest
             {
-                Preset = announcement.Preset ?? seq.DefaultAnnouncementPreset ?? "SelfDestructAnnouncement",
+                Preset = announcement.Preset ?? seq.DefaultAnnouncementPreset,
                 Message = announcement.Message,
                 Target = AnnouncementTarget.All,
                 Speaker = active.AnchorEntity,
@@ -370,27 +361,8 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         Logger.GetSawmill("cmu-sfx").Debug($"[SFX] Sequence {active.SequenceId} fired marker '{entry.Marker}' at {_timing.CurTime}");
     }
 
-    private void StopLoops(ActiveScriptedSound active)
-    {
-        foreach (var (_, entity) in active.ActiveLoops)
-            _audio.Stop(entity);
-
-        active.ActiveLoops.Clear();
-        active.ScheduledLoopStops.Clear();
-    }
-
-    private void StopLoop(ActiveScriptedSound active, string layer)
-    {
-        if (!active.ActiveLoops.Remove(layer, out var entity))
-            return;
-
-        _audio.Stop(entity);
-        for (var i = active.ScheduledLoopStops.Count - 1; i >= 0; i--)
-        {
-            if (active.ScheduledLoopStops[i].Entity == entity)
-                active.ScheduledLoopStops.RemoveAt(i);
-        }
-    }
+    private void StopLoops(int handle, ActiveScriptedSound active)
+        => RaiseNetworkEvent(new StopScriptedSoundLayersNetEvent(handle, null), Filter.Broadcast());
 
     private Filter GetMapFilter(EntityUid? reference)
     {
@@ -468,7 +440,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         }
     }
 
-    private static bool ValidateSequenceOrder(string id, ScriptedSoundSequencePrototype seq)
+    private static bool ValidateSequence(string id, ScriptedSoundSequencePrototype seq)
     {
         for (var i = 0; i < seq.Entries.Count; i++)
         {
@@ -487,6 +459,28 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
                 $"[SFX] Sequence '{id}' entry={i} has delay {seq.Entries[i].DelaySeconds}s < prev entry delay {seq.Entries[i - 1].DelaySeconds}s." +
                 " Entries must be sorted by ascending delay!");
             return false;
+        }
+
+        HashSet<string>? stopped = null;
+        var stopAll = false;
+        foreach (var entry in seq.Entries)
+        {
+            if (entry.StopAllLoops)
+                stopAll = true;
+            if (entry.StopLoops is { } layers)
+                (stopped ??= new HashSet<string>()).UnionWith(layers);
+        }
+
+        for (var i = 0; i < seq.Entries.Count; i++)
+        {
+            var entry = seq.Entries[i];
+            if (entry.Layer != null && !entry.Loop)
+                Logger.GetSawmill("cmu-sfx").Warning($"[SFX] Sequence '{id}' entry={i} sets layer '{entry.Layer}' but not loop; the layer is ignored.");
+            if (!entry.Loop || entry.DurationSeconds != null || stopAll)
+                continue;
+            if (entry.Layer != null && stopped?.Contains(entry.Layer) == true)
+                continue;
+            Logger.GetSawmill("cmu-sfx").Warning($"[SFX] Sequence '{id}' entry={i} loop '{entry.Layer ?? "anonymous"}' has no stopLoop/stopAllLoops/duration; it plays until the sequence stops.");
         }
         return true;
     }

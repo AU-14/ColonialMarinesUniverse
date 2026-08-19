@@ -31,3 +31,29 @@
       delay: 15
     - fire: CMUTileFireOBAegis
       fireRange: 75
+
+- type: entity
+  parent: CMUSelfDestructWarheadExplosion
+  id: CMUSelfDestructScatterExplosion
+  name: explosive Warship Scuttle Fragment
+  suffix: CMU, WARSHIP SCUTTLE SCATTER! MULTIZ
+  components:
+  - type: OrbitalCannonExplosion
+    multiZ: true
+    steps:
+    # Stage 1 - t=0s, initial breach
+    - type: RMCOBXenoTunnel
+      total: 80000
+      slope: 4000
+      max: 400
+      delay: 0
+    - fire: CMUTileFireOBAegis
+      fireRange: 30
+    # Stage 2 - t=15s, the hull gives
+    - type: RMCOBXenoTunnel
+      total: 120000
+      slope: 40
+      max: 500
+      delay: 15
+    - fire: CMUTileFireOBAegis
+      fireRange: 45

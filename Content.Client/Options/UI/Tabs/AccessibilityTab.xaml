@@ -18,6 +18,7 @@
                 <CheckBox Name="ExplosionScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-enabled'}" />
                 <CheckBox Name="ExplosionScreenShakeIgnoreFarCheckBox" Text="{Loc 'ui-options-explosion-screen-shake-ignore-far'}" />
                 <CheckBox Name="FirearmScreenShakeEnabledCheckBox" Text="{Loc 'ui-options-firearm-screen-shake-enabled'}" />
+                <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
                 <Label Text="{Loc 'ui-options-accessability-header-visuals'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="ReducedMotionCheckBox" Text="{Loc 'ui-options-reduced-motion'}" />

@@ -22,18 +22,29 @@ public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
 
     private readonly List<(ExplosionFlashOverlay Overlay, TimeSpan Expires)> _flashes = new();
     private AlarmOverlay? _alarm;
+    private EntityUid? _alarmMap;
     private const float DefaultAlarmFrequency = 2f;
 
     public override void Initialize()
     {
         SubscribeNetworkEvent<ScriptedSequenceMarkerNetEvent>(OnMarker);
-        SubscribeLocalEvent<RoundRestartCleanupEvent>(_ => Cleanup());
+        SubscribeNetworkEvent<RoundRestartCleanupEvent>(_ => Cleanup());
         SubscribeLocalEvent<EvacuationProgressComponent, AfterAutoHandleStateEvent>(OnEvacuationHandleState);
     }
 
     private void OnEvacuationHandleState(EntityUid uid, EvacuationProgressComponent comp, ref AfterAutoHandleStateEvent args)
     {
-        if (!comp.Enabled || comp.SelfDestructed || _alarm != null)
+        if (comp.SelfDestructAt == null || comp.SelfDestructed || !comp.Enabled)
+        {
+            if (_alarmMap == uid)
+            {
+                _alarmMap = null;
+                DisableAlarm();
+            }
+            return;
+        }
+
+        if (_alarm != null)
             return;
 
         var player = _plyMan.LocalEntity;
@@ -47,6 +58,7 @@ public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
         if (!PlayerShouldReceiveMarker(uid, playerMap.Value))
             return;
 
+        _alarmMap = uid;
         EnableAlarm(DefaultAlarmFrequency);
     }
 
@@ -129,6 +141,8 @@ public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
 
     private void Cleanup()
     {
+        _alarmMap = null;
+
         if (_alarm != null)
         {
             _overlay.RemoveOverlay(_alarm);

@@ -147,6 +147,26 @@
     marker: "Explode"
     markerData: { shakeIntensity: 12, duration: 5, color: "#FFFFFF" }
 
+  # T+0:32 - total failure
+  - delay: 932
+    announcement: { message: "WARNING. Multiple catastrophic structural failures detected throughout the vessel." }
+  # T+0:37 / +0:52 / +1:05 - scattered warhead volleys
+  - delay: 937
+    marker: "Explode"
+    markerData: { shakeIntensity: 10, duration: 3 }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_explosions.ogg
+    audioParams: { volume: -3 }
+  - delay: 952
+    marker: "Explode"
+    markerData: { shakeIntensity: 11, duration: 3, color: "#FFF3C4" }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_explosions2.ogg
+    audioParams: { volume: -3 }
+  - delay: 965
+    marker: "Explode"
+    markerData: { shakeIntensity: 14, duration: 6, color: "#FFFFFF" }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_explosions3_distant.ogg
+    audioParams: { volume: -2 }
+
 #
 # ├──[ ENGINE SEQUENCE ]─────────────────────────────────────────────┤
 #
@@ -154,13 +174,16 @@
   id: SelfDestructEngineSequence
   entries:
   - delay: 20
+    layer: engineBreath
     loop: true
     sound: /Audio/_CMU14/Private/Ambience/engine/engine_ambience_breathing.ogg
     audioParams: { volume: -7 }
 
     # T-05:00 - engine goes critical & abort disabled
   - delay: 600
+    layer: engineHeart
     loop: true
+    stopLoop: [engineBreath]
     sound: /Audio/_CMU14/Private/Ambience/engine/engine_soft_heartbeat_rumble_intense.ogg
     audioParams: { volume: -4 }
 
@@ -169,9 +192,11 @@
 
   # T-02:00 - engine overloading
   - delay: 780
+    layer: engineGrind
     loop: true
+    stopLoop: [engineHeart]
     sound: /Audio/_CMU14/Private/Ambience/engine/engine_ominous_grind_long.ogg
-    audioParams: { volume: -2 }
+    audioParams: { volume: -6 }
   - delay: 790
     sound: /Audio/_CMU14/Private/Ambience/engine/engine_kick_rumble3.ogg
     jitterInterval: true
@@ -191,9 +216,11 @@
 
   # T-0:30 - very intense
   - delay: 870
+    layer: engineCrit
     loop: true
+    stopLoop: [engineGrind]
     sound: /Audio/_CMU14/Private/Ambience/engine/engine_crit_woosh2_long.ogg
-    audioParams: { volume: 0 }
+    audioParams: { volume: -2 }
 
   # T+0:00 - explosions every 15s like in the movie
   - delay: 900
@@ -203,3 +230,10 @@
     sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion2.ogg
   - delay: 930
     sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion7_loud_kick.ogg
+  # T+0:37 / +0:52 / +1:05 - match the scattered warhead volleys
+  - delay: 937
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion5_afterkick_distant.ogg
+  - delay: 952
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion6_deep_rumble.ogg
+  - delay: 965
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion8_spaced.ogg

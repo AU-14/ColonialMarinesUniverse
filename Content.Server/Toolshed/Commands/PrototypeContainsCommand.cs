@@ -1,6 +1,7 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Server.Administration;
 using Content.Shared.Administration;
+using Robust.Shared.GameObjects;
 using Robust.Shared.Toolshed;
 
 namespace Content.Server.Toolshed.Commands;
@@ -14,7 +15,5 @@ public sealed class PrototypeContainsCommand : ToolshedCommand
         [CommandArgument] string prototype,
         [CommandInverted] bool inverted
     )
-    {
-        return input.Where(x => (MetaData(x).EntityPrototype?.ID.Contains(prototype) ?? false) ^ inverted);
-    }
+        => input.Where(x => !Deleted(x) && ((MetaData(x).EntityPrototype?.ID.Contains(prototype) ?? false) ^ inverted));
 }

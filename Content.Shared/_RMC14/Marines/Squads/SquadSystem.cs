@@ -270,7 +270,7 @@ public sealed partial class SquadSystem : EntitySystem
 
     private void OnSquadLeaderHeadsetChannelsChanged(Entity<SquadLeaderHeadsetComponent> ent, ref EncryptionChannelsChangedEvent args)
     {
-        if (TerminatingOrDeleted(ent) || args.Component == null || ent.Comp.Channels == null)
+        if (TerminatingOrDeleted(ent) || args.Component == null)
             return;
 
         foreach (var channel in ent.Comp.Channels)

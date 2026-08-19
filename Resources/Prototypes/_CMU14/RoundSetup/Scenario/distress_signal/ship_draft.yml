@@ -1,0 +1,114 @@
+# ├──[ Ship Ambience | Draft Playground ]────────────────────────────┤
+#
+# test: `scriptedsound start ShipAmbienceDraft <mapUid>` (sounds are silent without an anchor)
+# stop: `scriptedsound list` then `scriptedsound stop <handle>` (you can use the auto-completions too)
+#
+# This sound sequence is more of an example, read the comments about certain parts and how it works.
+#
+- type: scriptedSoundSequence
+  id: ShipAmbienceDraft
+  defaultSender: "APOLLO"
+  defaultAnnouncementColor: "#9EE8FF"
+  defaultAnnouncementPreset: MarineCommand
+  entries:
+  # main engine bed, a named layer so that it can be stopped by a later entry
+  - delay: 0
+    layer: engineBed
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_ambience_long_engine.ogg
+    audioParams: { volume: -8 }
+  # second bed that kills itself -> duration = auto stop a loop after X passed in sec
+  - delay: 0
+    layer: engineDistant
+    loop: true
+    duration: 600
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_engine_rumble_distant.ogg
+    audioParams: { volume: -11 }
+  # creaks on repeat, delayJitter wiggles every interval so it never sounds metronomic (randoms)
+  - delay: 20
+    repeat: 45
+    delayJitter: 15
+    volumeJitter: 2
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_move_creaky_noise.ogg
+    audioParams: { volume: -9, variation: 0.15 }  # variation = random pitch per fire
+  # jitterInterval: delay counts from the `previous` entry instead of sequence start
+  - delay: 60
+    jitterInterval: true
+    delayJitter: 10
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_move_hiss_echo.ogg
+    audioParams: { volume: -10 }
+  # collection pick, grabs a random rumble out of the pool
+  - delay: 90
+    repeat: 55
+    delayJitter: 25
+    sound: !type:SoundCollectionSpecifier
+      collection: CMUShipEngineRumbles
+    audioParams: { volume: -10 }
+  # globalAudio false = positional at the `anchor coords`, only players near it hear it -> PVS
+  - delay: 120
+    globalAudio: false
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_door_noise_ominous.ogg
+    audioParams: { volume: -4 }
+  # pitch stretches a too familiar clip, common way to make 1 sound feel unique everytime
+  - delay: 150
+    repeat: 120
+    delayJitter: 40
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_move_crane1.ogg
+    audioParams: { volume: -10, pitch: 0.85 }
+  - delay: 210
+    repeat: 120
+    delayJitter: 40
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_move_crane2.ogg
+    audioParams: { volume: -10, pitch: 1.15 }
+  # heavy kick, volumeJitter adds +/- 3db per kick
+  - delay: 240
+    repeat: 80
+    delayJitter: 30
+    volumeJitter: 3
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_engine_kick_heavy.ogg
+    audioParams: { volume: -6 }
+  # announcement, the three fields here override the defaults at the top of the file
+  - delay: 300
+    announcement:
+      message: "Atmospheric processors back to nominal. Hull integrity reading is at 94 percent."
+      sender: "Executive Officer"
+      color: "#FFD27F"
+      preset: SelfDestructAnnouncement
+  - delay: 360
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_pumps_engaged.ogg
+    audioParams: { volume: -7 }
+  # red vignette on, frequency = pulses per second
+  - delay: 420
+    marker: "RedAlarmOn"
+    markerData: { frequency: 1.5 }
+  - delay: 425
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_horn_loud.ogg
+    audioParams: { volume: -3, pitch: 0.9 }
+  # explode marker with no sound, flash and shake only
+  - delay: 480
+    marker: "Explode"
+    markerData: { shakeIntensity: 4, duration: 1.5, flashDuration: 0.4, color: "#BFD8FF" }
+  - delay: 520
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_lights_flicker_into_distance.ogg
+    audioParams: { volume: -6 }
+  # red vignette off
+  - delay: 560
+    marker: "RedAlarmOff"
+  - delay: 600
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_orbital_bombardment_shot.ogg
+    audioParams: { volume: -4 }
+  # stopLoop kills just the named beds, repeats above keep going
+  - delay: 620
+    stopLoop: [engineBed, engineDistant]
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_explosion_space.ogg
+    audioParams: { volume: -4 }
+  # big finish, stopAllLoops nukes every layer of this sequence
+  - delay: 660
+    stopAllLoops: true
+    marker: "Explode"
+    markerData: { shakeIntensity: 10, duration: 3, flashDuration: 0.6, color: "#FFFFFF" }
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_explosion_space_ominous.ogg
+    audioParams: { volume: -2 }
+  - delay: 690
+    sound: /Audio/_CMU14/Private/Ambience/ship/ship_engine_shutoff.ogg
+    audioParams: { volume: -4 }

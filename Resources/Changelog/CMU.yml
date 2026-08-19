@@ -9699,5 +9699,25 @@
   id: 636
   time: '2026-08-17T03:11:41.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1846
+- author: CatoChristopherMrow
+  changes:
+  - message: Fixed barker -1 and stable +1
+    type: Fix
+  id: 637
+  time: '2026-08-17T15:18:10.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1847
+- author: maertayn
+  changes:
+  - message: SquadLeaderHeadsetComponent causing DoS because of an empty/null channels
+      list (NRE)
+    type: Fix
+  - message: Mute the scripted sound event(s) under Accessibility settings
+    type: Tweak
+  - message: ship_draft.yml (ShipAmbienceDraft) is an example sound sequence with
+      explanatory comments
+    type: Code
+  id: 638
+  time: '2026-08-17T19:57:53.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1848
 Name: CMU
 Order: -1
