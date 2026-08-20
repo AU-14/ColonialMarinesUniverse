@@ -7,5 +7,5 @@
     - CMUPathogenWalker
     - ShowAntagIcons
   icon:
-    sprite: /Textures/_AU14/Interface/job_icons.rsi
+    sprite: /Textures/_CMU14/Interface/job_icons.rsi
     state: threat_member

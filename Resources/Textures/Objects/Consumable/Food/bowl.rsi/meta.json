@@ -67,7 +67,7 @@
         ]
       ]
     },
-	{
+    {
       "name": "escargot"
     },
     {
@@ -185,6 +185,9 @@
     },
     {
       "name": "kimchi"
+    },
+    {
+      "name": "mango-rice"
     }
   ]
 }
