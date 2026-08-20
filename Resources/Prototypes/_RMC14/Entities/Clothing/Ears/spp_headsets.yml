@@ -1,4 +1,4 @@
-﻿- type: radioChannel
+- type: radioChannel
   id: SPP
   name: chat-radio-spp
   keycode: "y"
@@ -33,7 +33,7 @@
 - type: radioChannel
   id: SPPCCT
   name: chat-radio-spp-cct
-  keycode: "x"
+  keycode: "-" # CMU14
   frequency: 1255
   color: "#9b0612"
   longRange: true

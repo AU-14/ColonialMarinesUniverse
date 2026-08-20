@@ -13,10 +13,10 @@ public sealed class BloodyLarvaVisualsSystem : EntitySystem
 
     public override void Initialize()
     {
-        SubscribeLocalEvent<AppearanceComponent, AppearanceChangeEvent>(OnAppearance);
+        SubscribeLocalEvent<BloodyLarvaComponent, AppearanceChangeEvent>(OnAppearance);
     }
 
-    private void OnAppearance(Entity<AppearanceComponent> ent, ref AppearanceChangeEvent args)
+    private void OnAppearance(Entity<BloodyLarvaComponent> ent, ref AppearanceChangeEvent args)
     {
         if (!args.AppearanceData.TryGetValue(BloodyLarvaVisuals.Bloody, out var value) || value is not bool bloody)
             return;

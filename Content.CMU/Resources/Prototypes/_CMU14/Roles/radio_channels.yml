@@ -343,7 +343,7 @@
 - type: radioChannel
   id: TunableFrequencyChannel
   name: chat-radio-tunable-sentinel
-  keycode: "m"
+  keycode: "x"
   frequency: 0
   color: "#5B9BD5"
   longRange: false
@@ -351,7 +351,7 @@
 - type: radioChannel
   id: UNISOF
   name: chat-radio-unisc
-  keycode: 'u'
+  keycode: '~'
   frequency: 1765
   color: "#3d82b8"
   longRange: true

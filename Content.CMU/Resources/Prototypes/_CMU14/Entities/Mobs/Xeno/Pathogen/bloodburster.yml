@@ -31,7 +31,6 @@
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
-    displayDamageInAlert: true
   - type: Xeno
     role: CMUJobPathogenBloodburster
     tier: 0
@@ -105,7 +104,7 @@
     chance: 0.4
     stunMin: 4
     stunMax: 4
-  - type: LarvaQueueable
+  - type: LarvaPoolAvailable
   - type: RMCSize
     size: Small
   - type: RMCSpawnEntitiesOnGib
