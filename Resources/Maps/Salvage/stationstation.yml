@@ -2614,7 +2614,7 @@ entities:
     - type: Transform
       pos: -12.5,-7.5
       parent: 179
-- proto: VehicleJanicartDestroyed
+- proto: VehicleJanicart # CMU14: VehicleJanicartDestroyed removed upstream
   entities:
   - uid: 660
     components:

@@ -1669,7 +1669,7 @@ entities:
     - type: Transform
       pos: -3.557321,-5.3945236
       parent: 16
-- proto: ClothingNeckCloakMiner
+- proto: ClothingNeckCloakCe # CMU14: ClothingNeckCloakMiner removed upstream
   entities:
   - uid: 287
     components:

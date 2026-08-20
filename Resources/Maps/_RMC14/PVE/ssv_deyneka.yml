@@ -19392,7 +19392,7 @@ entities:
     - type: Transform
       pos: -26.416683,35.438606
       parent: 1
-- proto: GhostWarpPoint
+- proto: WarpPoint # CMU14: GhostWarpPoint removed upstream
   entities:
   - uid: 1371
     components:

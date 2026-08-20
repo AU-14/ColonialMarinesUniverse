@@ -3995,7 +3995,7 @@ entities:
     - type: Transform
       pos: -1.5,-11.5
       parent: 1
-- proto: GhostWarpPoint
+- proto: WarpPoint # CMU14: GhostWarpPoint removed upstream
   entities:
   - uid: 426
     components:

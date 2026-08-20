@@ -484,14 +484,19 @@
   components:
   - type: StorageFill
     contents:
+      # CMU14: orGroup rolls exactly one pizza; independent probs overflowed the one-pizza box
       - id: RMCFoodPizzaMargheritaFull
         prob: 0.25
+        orGroup: pizza
       - id: RMCFoodPizzaVegetableFull
         prob: 0.25
+        orGroup: pizza
       - id: RMCFoodPizzaMushroomFull
         prob: 0.25
+        orGroup: pizza
       - id: RMCFoodPizzaVegetableFull
         prob: 0.25
+        orGroup: pizza
 
 - type: entity
   parent: RMCBoxPizzaGalaxy
@@ -500,11 +505,16 @@
   components:
   - type: StorageFill
     contents:
+      # CMU14: orGroup rolls exactly one pizza; independent probs overflowed the one-pizza box
       - id: RMCFoodPizzaMargheritaFull
         prob: 0.25
+        orGroup: pizza
       - id: RMCFoodPizzaVegetableFull
         prob: 0.25
+        orGroup: pizza
       - id: RMCFoodPizzaMushroomFull
         prob: 0.25
+        orGroup: pizza
       - id: RMCFoodPizzaVegetableFull
         prob: 0.25
+        orGroup: pizza

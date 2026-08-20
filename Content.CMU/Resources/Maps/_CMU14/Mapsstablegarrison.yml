@@ -104898,7 +104898,7 @@ entities:
     - type: Transform
       pos: 177.63268,-101.71812
       parent: 1
-- proto: TowelColorDarkBlue
+- proto: TowelColorWhite
   entities:
   - uid: 16953
     components:
@@ -104910,7 +104910,7 @@ entities:
     - type: Transform
       pos: 177.6431,-94.852104
       parent: 1
-- proto: TowelColorDarkGreen
+- proto: TowelColorWhite
   entities:
   - uid: 16955
     components:

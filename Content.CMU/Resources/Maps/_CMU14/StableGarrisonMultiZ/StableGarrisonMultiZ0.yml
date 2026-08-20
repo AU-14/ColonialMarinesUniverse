@@ -149903,7 +149903,7 @@ entities:
     - type: Transform
       pos: 179.5,-71.5
       parent: 1
-- proto: GhostWarpPoint
+- proto: WarpPoint
   entities:
   - uid: 12964
     components:
@@ -426873,7 +426873,7 @@ entities:
     - type: Transform
       pos: 17.322952,-36.244286
       parent: 1
-- proto: TowelColorDarkBlue
+- proto: TowelColorWhite
   entities:
   - uid: 84574
     components:
@@ -426885,7 +426885,7 @@ entities:
     - type: Transform
       pos: 177.6431,-94.852104
       parent: 1
-- proto: TowelColorDarkGreen
+- proto: TowelColorWhite
   entities:
   - uid: 84576
     components:
