@@ -1,0 +1,84 @@
+name: Map checker
+
+permissions:
+  contents: read
+
+concurrency:
+  group: map-checker-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+    branches: ["master"]
+    paths:
+      # Run if maps are changed.
+      - "Resources/Maps/_RMC14/**/*.yml"
+      - "Content.CMU/Resources/Maps/_CMU14/**/*.yml"
+      # Also run if the mapchecker itself or its config is changed.
+      - ".github/map_checker/**"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  RUST_LOG: Info # Avoid spamming the console.
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - name: Setup Rust
+        run: rustup update stable && rustup default stable
+
+      - name: Cache Cargo registry
+        uses: actions/cache@v5.0.5
+        with:
+          path: ~/.cargo/registry
+          key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-registry-
+
+      - name: Cache Cargo build
+        uses: actions/cache@v5.0.5
+        with:
+          path: .github/map_checker/target
+          key: ${{ runner.os }}-cargo-build-${{ hashFiles('**/Cargo.toml') }}
+          restore-keys: |
+            ${{ runner.os }}-cargo-build-
+
+      - name: Build
+        run: cd .github/map_checker && cargo b --release
+
+      - name: Check map trees
+        shell: bash
+        run: |
+          set +e
+
+          names=("_RMC14" "_CMU14")
+          paths=("Resources/Maps/_RMC14" "Content.CMU/Resources/Maps/_CMU14")
+          pids=()
+          status=0
+
+          mkdir -p /tmp/map-checker
+
+          for i in "${!names[@]}"; do
+            ./.github/map_checker/target/release/map_checker \
+              -c .github/map_checker/matchers.yml \
+              -m "${paths[$i]}" \
+              > "/tmp/map-checker/${names[$i]}.log" 2>&1 &
+            pids+=("$!")
+          done
+
+          for i in "${!names[@]}"; do
+            name="${names[$i]}"
+            if ! wait "${pids[$i]}"; then
+              echo "::error title=Map checker failed::$name"
+              status=1
+            fi
+
+            echo "===== $name ====="
+            cat "/tmp/map-checker/$name.log"
+          done
+
+          exit "$status"

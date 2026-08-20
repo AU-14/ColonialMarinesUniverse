@@ -1,0 +1,56 @@
+name: Check PR Template
+
+on:
+  pull_request_target:
+    types: [opened]
+
+permissions:
+  contents: read
+  pull-requests: write
+  issues: write
+
+jobs:
+  check-template:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR description for template changelog
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const body = context.payload.pull_request.body || '';
+            if (body.trim() === '') return; // skip empty PR description
+            const message = [];
+
+            const defaults = [
+              'add: Added fun!',
+              'remove: Removed fun!',
+              'tweak: Changed fun!',
+              'fix: Fixed fun!',
+              'map: Mapped fun!',
+              'admin: Admin related change!',
+              'code: Code related change for contributors!'
+            ];
+
+            const found = defaults.filter(line => body.includes(line));
+            if (found.length > 0) {
+              message.push(`It looks like your PR description contains the default changelog entries from the template:\n\n` +
+                `${found.map(l => `- \`${l}\``).join('\n')}\n\n` +
+                `Please replace it with your actual changelog entries, or remove them entirely.`);
+            }
+
+            if (!body.includes(':cl:')) {
+              message.push(`You are missing the required \`:cl:\` emoji-tag for the changelog bot.\n\n` +
+                `Please add a changelog section in your PR description detailing major changes, like:\n\n` +
+                `\`\`\`\n:cl:\n- add: New feature added\n- fix: Resolved a bug\n\`\`\`\n\n` +
+                `If your change does not need a changelog, you can add an empty one:\n\n` +
+                `\`\`\`\n:cl:\n\`\`\``);
+            }
+
+            if (message.length == 0) return;
+            const commentBody = message.join('\n\n'); // unlikely to happen (missing :cl: + default logs)
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.pull_request.number,
+              body: commentBody
+            });

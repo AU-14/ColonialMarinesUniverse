@@ -1,0 +1,662 @@
+name: CI
+
+on:
+  push:
+    branches: [master, staging, stable]
+  merge_group:
+  pull_request:
+    types: [opened, reopened, synchronize, ready_for_review]
+    branches: [master, staging, stable]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_VERSION: 10.0.x
+  CONFIGURATION: DebugOpt
+
+jobs:
+  source-guards:
+    name: Source Guards
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+
+      - uses: actions/setup-python@v6.2.0
+        with:
+          python-version: "3.13"
+
+      - name: Check CRLF
+        run: python3 Tools/check_crlf.py
+
+      - name: Reject RobustToolbox submodule updates in PRs
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+
+            if (files.some(file => file.filename === 'RobustToolbox')) {
+              core.setFailed('Do not update the RobustToolbox submodule in pull requests.');
+            }
+
+  build:
+    name: Build
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+          cache: true
+          cache-dependency-path: |
+            **/*.csproj
+            **/*.props
+            **/*.targets
+            **/packages.lock.json
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build once
+        run: dotnet build --configuration ${{ env.CONFIGURATION }} --no-restore --property:WarningLevel=0 /m
+
+      - name: Upload Content.Tests build
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: build-content-tests
+          path: bin/Content.Tests/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+      - name: Upload YAML linter build
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: build-yaml-linter
+          path: bin/Content.YAMLLinter/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+      - name: Upload integration test build
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: build-integration-tests
+          path: bin/Content.IntegrationTests/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+      - name: Upload client runtime build
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: build-content-client
+          path: bin/Content.Client/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+      - name: Upload server runtime build
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: build-content-server
+          path: bin/Content.Server/
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  content-tests:
+    name: Content.Tests
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-content-tests
+          path: bin/Content.Tests/
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-content-client
+          path: bin/Content.Client/
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-content-server
+          path: bin/Content.Server/
+
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run Content.Tests
+        run: dotnet test bin/Content.Tests/Content.Tests.dll --verbosity normal -- NUnit.ConsoleOut=0
+
+  yaml-linter:
+    name: YAML Linter
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: build
+    # AU-14 base debt: ~900 errors exist on bare upstream/Rebase. The ratchet fails only on
+    # errors not in Tools/ci_baselines/yaml_linter.txt; shrink that file as debt is fixed.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-yaml-linter
+          path: bin/Content.YAMLLinter/
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-content-client
+          path: bin/Content.Client/
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-content-server
+          path: bin/Content.Server/
+
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Run YAML Linter
+        shell: bash
+        run: |
+          set +e
+          dotnet bin/Content.YAMLLinter/Content.YAMLLinter.dll 2>&1 | tee /tmp/lint.log
+          lint_rc=${PIPESTATUS[0]}
+          grep '^::error in ' /tmp/lint.log | sort -u > /tmp/lint_errors.txt
+          if [ -s /tmp/lint_errors.txt ]; then
+            python3 Tools/ci_ratchet.py lint /tmp/lint_errors.txt Tools/ci_baselines/yaml_linter.txt
+          elif [ "$lint_rc" -ne 0 ]; then
+            echo "::error::YAML linter exited $lint_rc with no error lines (crashed)"
+            exit 1
+          fi
+
+  schema-validators:
+    name: Schema Validators
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if schema validation is needed
+        id: schema_changes
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            if (context.eventName !== 'pull_request') {
+              core.setOutput('run_rga', 'true');
+              core.setOutput('run_map', 'true');
+              return;
+            }
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+            const changed = files.map(file => file.filename);
+
+            const runRga = changed.some(file =>
+              /attributions\.ya?ml$/.test(file) ||
+              file === '.github/Schemas/rga.yml' ||
+              file === '.github/Schemas/rga_validators.py' ||
+              file === '.github/Schemas/rga_requirements.txt' ||
+              file === '.github/scripts/validate_yamale.py');
+
+            const runMap = changed.some(file =>
+              file.startsWith('Resources/Maps/') ||
+              file === 'RobustToolbox' ||
+              file === '.github/Schemas/mapfile_requirements.txt' ||
+              file === '.github/scripts/validate_yamale.py');
+
+            core.setOutput('run_rga', runRga ? 'true' : 'false');
+            core.setOutput('run_map', runMap ? 'true' : 'false');
+
+      - uses: actions/checkout@v6.0.2
+        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - uses: actions/setup-python@v6.2.0
+        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
+        with:
+          python-version: "3.13"
+          cache: pip
+          cache-dependency-path: |
+            .github/Schemas/rga_requirements.txt
+            .github/Schemas/mapfile_requirements.txt
+
+      - name: Install schema validator dependencies
+        if: steps.schema_changes.outputs.run_rga == 'true' || steps.schema_changes.outputs.run_map == 'true'
+        run: |
+          python3 -m pip install yamale -r .github/Schemas/rga_requirements.txt -r .github/Schemas/mapfile_requirements.txt
+
+      - name: Validate RGA schemas
+        if: steps.schema_changes.outputs.run_rga == 'true'
+        run: |
+          python3 .github/scripts/validate_yamale.py \
+            --schema .github/Schemas/rga.yml \
+            --path-pattern '.*attributions.ya?ml$' \
+            --validators .github/Schemas/rga_validators.py
+
+      - name: Validate map schemas
+        if: steps.schema_changes.outputs.run_map == 'true'
+        run: |
+          python3 .github/scripts/validate_yamale.py \
+            --schema RobustToolbox/Schemas/mapfile.yml \
+            --path-pattern '.*Resources/Maps/.*' \
+            --validators RobustToolbox/Schemas/mapfile_validators.py
+
+      - name: Skip schema validation
+        if: steps.schema_changes.outputs.run_rga != 'true' && steps.schema_changes.outputs.run_map != 'true'
+        run: echo "No schema-validated files changed."
+
+  rsi-validator:
+    name: RSI Validator
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if RSI validation is needed
+        id: rsi_changes
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            if (context.eventName !== 'pull_request') {
+              core.setOutput('run', 'true');
+              return;
+            }
+
+            const files = await github.paginate(github.rest.pulls.listFiles, {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pull_number: context.payload.pull_request.number,
+              per_page: 100,
+            });
+
+            core.setOutput('run', files.some(file => file.filename.includes('.rsi/')) ? 'true' : 'false');
+
+      - uses: actions/checkout@v6.0.2
+        if: steps.rsi_changes.outputs.run == 'true'
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        if: steps.rsi_changes.outputs.run == 'true'
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - uses: actions/setup-python@v6.2.0
+        if: steps.rsi_changes.outputs.run == 'true'
+        with:
+          python-version: "3.13"
+
+      - name: Install RSI validator dependencies
+        if: steps.rsi_changes.outputs.run == 'true'
+        run: python3 -m pip install pillow jsonschema
+
+      - name: Validate RSIs
+        if: steps.rsi_changes.outputs.run == 'true'
+        run: python3 RobustToolbox/Schemas/validate_rsis.py Resources/
+
+      - name: Skip RSI validation
+        if: steps.rsi_changes.outputs.run != 'true'
+        run: echo "No RSI files changed."
+
+  test-ratchet:
+    name: Test Ratchet
+    if: >-
+      !cancelled() && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+    needs: [build, integration-tests]
+    # AU-14 base debt: many tests fail on bare upstream/Rebase. The ratchet fails only on
+    # failures not in Tools/ci_baselines/integration_tests.txt; shrink that file as debt is fixed.
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          pattern: test-results-*
+          path: trx
+          merge-multiple: true
+
+      - name: Ratchet failed tests against baseline
+        shell: bash
+        run: |
+          count=$(ls trx/*.trx 2>/dev/null | wc -l)
+          echo "Shard TRX files collected: $count"
+          python3 Tools/ci_ratchet.py trx trx Tools/ci_baselines/integration_tests.txt
+
+  required-checks:
+    name: Required Checks
+    if: (failure() || success()) && (github.event_name != 'pull_request' || github.event.pull_request.draft == false)
+    needs:
+      - source-guards
+      - build
+      - content-tests
+      - yaml-linter
+      - schema-validators
+      - rsi-validator
+      - test-ratchet
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check required job results
+        uses: actions/github-script@v9.0.0
+        with:
+          script: |
+            const results = {
+              'Source Guards': '${{ needs.source-guards.result }}',
+              'Build': '${{ needs.build.result }}',
+              'Content.Tests': '${{ needs.content-tests.result }}',
+              'YAML Linter': '${{ needs.yaml-linter.result }}',
+              'Schema Validators': '${{ needs.schema-validators.result }}',
+              'RSI Validator': '${{ needs.rsi-validator.result }}',
+              'Test Ratchet': '${{ needs.test-ratchet.result }}',
+            };
+
+            const failed = Object.entries(results)
+              .filter(([, result]) => result !== 'success')
+              .map(([name, result]) => `${name}: ${result}`);
+
+            if (failed.length > 0) {
+              core.setFailed(`Required checks failed: ${failed.join(', ')}`);
+            }
+
+  integration-tests:
+    name: Testcases / ${{ matrix.shard.name }}
+    if: github.event_name != 'pull_request' || github.event.pull_request.draft == false
+    needs: build
+    # AU-14 base debt: several shards fail on bare upstream/Rebase, not port-scoped. Revert when upstream fixes it.
+    continue-on-error: true
+    timeout-minutes: 30
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        shard:
+          - name: root_1
+            root_group: 0
+            root_groups: 4
+          - name: root_2
+            root_group: 1
+            root_groups: 4
+          - name: root_3
+            root_group: 2
+            root_groups: 4
+          - name: root_4
+            root_group: 3
+            root_groups: 4
+          - name: entity_spawn_delete_maps
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesOnDifferentMaps
+          - name: entity_spawn_dirty
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDirtyAllEntities
+          - name: entity_counts
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.AllComponentsOneToOneDeleteTest
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteAllEntitiesInTheSameSpot
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTest.SpawnAndDeleteEntityCountTest
+          - name: admin_access_ui
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Administration
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Access
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Commands
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EncryptionKeys
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Lobby
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Roles
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed
+              | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface
+          - name: atmos_fluids_physics
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Atmos
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Explosion
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Physics
+          - name: mapping_gamerules
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.GameRules&FullyQualifiedName!~TestAntagGhostRoles
+          - name: mapping_antag_ghost_roles
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.GameRules.AntagGhostRoleTest.TestAntagGhostRoles
+          - name: mapping_station_shuttle_round
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Mapping
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Procedural
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Replays
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Round
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Station
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles
+          - name: cleanup_entities_world
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Damageable
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Destructible
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Power
+          - name: cleanup_entities_world_2
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Disposal
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Doors
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Embedding
+              | FullyQualifiedName~Content.IntegrationTests.Tests.GameObjects.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Payload
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Wires
+          - name: cleanup_devicelink_network
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.DeviceLinking
+              | FullyQualifiedName~Content.IntegrationTests.Tests.DeviceNetwork
+          - name: gameplay_core
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Actions
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Body
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Buckle
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Chameleon
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning
+              | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter
+          - name: gameplay_runtime_minds
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Minds
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Networking
+          - name: gameplay_runtime
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Interaction
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Internals
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Movement
+              | FullyQualifiedName~Content.IntegrationTests.Tests.NPC
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Puller
+          - name: items_storage_crafting
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry
+          - name: items_storage_crafting_2
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Hands
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Materials
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite
+          - name: storage_crafting_misc
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Storage
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Strip
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Tag
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Utility
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Vending
+          - name: construction
+            filter: FullyQualifiedName~Content.IntegrationTests.Tests.Construction
+          - name: proto_lint_locale_serial
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Linter
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Localization
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences
+              | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization
+          - name: rmc_larva
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._RMC14.LarvaPoolTest
+              | FullyQualifiedName~Content.IntegrationTests._RMC14.XenoParasiteLarvaClaimTest
+              | FullyQualifiedName~Content.IntegrationTests._RMC14.FindParasiteTest
+          - name: rmc
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._RMC14&FullyQualifiedName!~LarvaPoolTest&FullyQualifiedName!~Parasite&FullyQualifiedName!~Content.IntegrationTests._RMC14.Weapons
+          - name: rmc_weapons
+            filter: FullyQualifiedName~Content.IntegrationTests._RMC14.Weapons
+          - name: cmu_round
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14.Round
+              | FullyQualifiedName~Content.IntegrationTests._CMU14.Requisitions
+          - name: cmu
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._CMU14&FullyQualifiedName!~Content.IntegrationTests._CMU14.Round&FullyQualifiedName!~Content.IntegrationTests._CMU14.Requisitions
+    steps:
+      - uses: actions/checkout@v6.0.2
+        with:
+          persist-credentials: true
+          submodules: false
+
+      - name: Checkout submodules
+        run: |
+          git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
+          git submodule update --init --recursive --depth=1
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-integration-tests
+          path: bin/Content.IntegrationTests/
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-content-client
+          path: bin/Content.Client/
+
+      - uses: actions/download-artifact@v8.0.1
+        with:
+          name: build-content-server
+          path: bin/Content.Server/
+
+      - uses: actions/setup-dotnet@v5.2.0
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: Prepare runtime content
+        run: |
+          mkdir -p bin/Resources bin/RobustToolbox/Resources
+          cp -r Resources/* bin/Resources/
+          cp -r RobustToolbox/Resources/* bin/RobustToolbox/Resources/
+
+      - name: Runtime diagnostics
+        if: matrix.shard.name == 'root_1'
+        shell: bash
+        run: |
+          set -euo pipefail
+          pwd
+          realpath .
+          realpath ./Resources || true
+          realpath ./bin/Content.IntegrationTests || true
+          find . -name "Content.IntegrationTests.dll"
+          dotnet test bin/Content.IntegrationTests/Content.IntegrationTests.dll --list-tests
+
+      - name: Run ${{ matrix.shard.name }}
+        shell: bash
+        run: |
+          export DOTNET_gcServer=1
+          shard="${{ matrix.shard.name }}"
+
+          if [[ "$shard" == root_* ]]; then
+            root_group='${{ matrix.shard.root_group }}'
+            root_groups='${{ matrix.shard.root_groups }}'
+            shopt -s nullglob
+            files=(Content.IntegrationTests/Tests/*.cs)
+            if [ ${#files[@]} -eq 0 ]; then
+              echo "::error::$shard shard: no test files found in Content.IntegrationTests/Tests!"
+              exit 1
+            fi
+            FILTER=""
+            for i in "${!files[@]}"; do
+              f="${files[$i]}"
+              base=$(basename "$f" .cs)
+              if [[ "$base" == "EntityTest" ]] || (( i % root_groups != root_group )); then
+                continue
+              fi
+              FILTER="${FILTER:+$FILTER | }FullyQualifiedName~Content.IntegrationTests.Tests.$base"
+            done
+            if [ -z "$FILTER" ]; then
+              echo "::error::$shard shard: no test files assigned!"
+              exit 1
+            fi
+          else
+            FILTER='${{ matrix.shard.filter }}'
+          fi
+
+          echo "--- $shard shard filter ---"
+          echo "$FILTER"
+          cd bin/Content.IntegrationTests || exit 1
+          dotnet test Content.IntegrationTests.dll \
+            --verbosity normal --filter "$FILTER" \
+            --logger "trx;LogFileName=$shard.trx" --results-directory . \
+            -- NUnit.ConsoleOut=0 NUnit.MapWarningTo=Failed 2>&1 | tee /tmp/shard_out.log
+          grep -qE 'Passed! |Failed! |Skipped |Passed |Failed ' /tmp/shard_out.log \
+            || { echo "::error::$shard shard: filter matched no tests"; exit 1; }
+
+      - name: Upload shard results
+        if: always()
+        uses: actions/upload-artifact@v7.0.1
+        with:
+          name: test-results-${{ matrix.shard.name }}
+          path: bin/Content.IntegrationTests/*.trx
+          retention-days: 1
+          compression-level: 0

@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-
 import subprocess
 from typing import Iterable
+
+SKIP_WIN_EXT = { ".bat", ".cmd", ".ps1" }
 
 def main() -> int:
     any_failed = False
@@ -12,7 +13,6 @@ def main() -> int:
 
     return 1 if any_failed else 0
 
-
 def get_text_files() -> Iterable[str]:
     # https://stackoverflow.com/a/24350112/4678631
     process = subprocess.run(
@@ -22,7 +22,9 @@ def get_text_files() -> Iterable[str]:
         stdout=subprocess.PIPE)
 
     for x in process.stdout.splitlines():
-        yield x.strip()
+        path = x.strip()
+        if not any(path.endswith(ext) for ext in SKIP_WIN_EXT):
+            yield path
 
 def is_file_crlf(path: str) -> bool:
     # https://stackoverflow.com/a/29697732/4678631

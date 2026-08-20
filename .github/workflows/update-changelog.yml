@@ -40,9 +40,6 @@ jobs:
     steps:
       - uses: actions/checkout@v6.0.2
 
-      - name: Install changelog dependencies
-        run: python -m pip install requests pyyaml
-
       - name: Parse PRs into Parts
         run: Tools/update_changelog_parts.py Resources/Changelog/Parts --category ${{inputs.category || 'CMU' }}
         env:

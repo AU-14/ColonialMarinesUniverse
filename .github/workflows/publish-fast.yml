@@ -48,7 +48,7 @@ jobs:
           git config --global url."https://x-access-token:${{ github.token }}@github.com/".insteadOf "https://github.com/"
           git submodule update --init --depth=1 RobustToolbox
           cd RobustToolbox
-          git fetch --depth=1
+          git fetch --unshallow --tags origin
 
       - name: Start publish
         id: start
@@ -106,11 +106,11 @@ jobs:
       - name: Rsync CMAudio into Resources
         if: ${{ matrix.name == 'client' && env.AUDIO_REPO_TOKEN != '' }}
         run: |
-          mkdir -p Resources/Audio/_CMU14/Private/
-          rsync -a --delete \
-            __audio-overlay/Resources/Audio/_CMU14/Private/ \
-            Resources/Audio/_CMU14/Private/
-          du -sh Resources/Audio/_CMU14/Private/
+          DEST="Resources/Audio/_CMU14/Private/"
+          [ -d Content.CMU ] && DEST="Content.CMU/$DEST"
+          mkdir -p "$DEST"
+          rsync -a --delete __audio-overlay/Resources/Audio/_CMU14/Private/ "$DEST"
+          du -sh "$DEST"
           rm -rf __audio-overlay
 
       - uses: actions/setup-dotnet@v5.2.0
