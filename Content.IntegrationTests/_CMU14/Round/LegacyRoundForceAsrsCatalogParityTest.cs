@@ -26,15 +26,15 @@ public sealed class LegacyRoundForceAsrsCatalogParityTest
 
     private static readonly ExpectedCatalog[] ExpectedCatalogs =
     [
-        new("USCM", "USCMCargoCatalog", "uscm_requisitions_catalog.yml", 18, 162, "0D66108DC346DF36F40370669ACA2C6BBC285FD10A3F40FF37F65281B6CACAE0"),
-        new("LACN", "LACNCargoCatalog", "lacn_requisitions_catalog.yml", 18, 161, "3ECE5637CF002596D71E904AE8355C2DCF6F2651C16EDE0A60E1CBA053D6A5AF"),
-        new("UPP", "UPPCargoCatalog", "upp_requisitions_catalog.yml", 18, 163, "899372798402AD8858699D4AB68D46B006CB454E7A3BD92A2BB5B7E453A95150"),
-        new("WEYU", "WEYUCargoCatalog", "weyu_requisitions_catalog.yml", 18, 159, "E6A4CC2CB0A2D261DE81B4CEE3C4831AB2C4BF73ABDC4DDEEDE4305421E5661D"),
-        new("CMBCIU", "CMBCIUCargoCatalog", "cmbciu_requisitions_catalog.yml", 18, 158, "329171CABBE4B21057B9434D0566E6E690F74B41FC5B6C5F118B79019C65E927"),
-        new("HAZOPS", "HAZOPSCargoCatalog", "hazops_requisitions_catalog.yml", 18, 158, "3773DEB3F8A087C406B0F4D5B6871DC3D2B220B8576343B98F052854FD2F651E"),
-        new("ProdigySF", "ProdigyCargoCatalog", "prodigy_requisitions_catalog.yml", 18, 158, "1D2CB39C41F5B0B1E8A7C0A7743FDF27341529E6CB1CDEED0D44EC75EF9F862A"),
-        new("VAIPO", "VAIPOCargoCatalog", "vaipo_requisitions_catalog.yml", 18, 159, "BC337693C906CE4444D87AF062D7299CA7E30F8C3748C170BA7EA8DB8857EBE7"),
-        new("RMC", "RMCCargoCatalog", "rmc_requisitions_catalog.yml", 18, 160, "9A8090FBFC97334D08863705A09DD05B87411C2C97AABBE4F3607A462DE6CE6E"),
+        new("USCM", "USCMCargoCatalog", "uscm_requisitions_catalog.yml", 18, 174, "F6C03319100109768007312412B2DDF9E1BE0D9A97D6843198968CF11482BBAD"),
+        new("LACN", "LACNCargoCatalog", "lacn_requisitions_catalog.yml", 18, 170, "F63A2D69BDA533819C92A0BFDF1B1F23A6D1BD855AED9D029AD4AD350FF643E0"),
+        new("UPP", "UPPCargoCatalog", "upp_requisitions_catalog.yml", 18, 168, "7B031F28A68D014DFDBD176063828E5003449582E1CE4DA8BC8150EEC77D9660"),
+        new("WEYU", "WEYUCargoCatalog", "weyu_requisitions_catalog.yml", 18, 168, "B09200120C91B988C58D3985D0207350F44E23A8CFBFAC2DE8C162AD1FEA60B4"),
+        new("CMBCIU", "CMBCIUCargoCatalog", "cmbciu_requisitions_catalog.yml", 18, 167, "4F865047EC268C4F4227689A4965454138037820BB6F5A9CECEDEF417FD1C09D"),
+        new("HAZOPS", "HAZOPSCargoCatalog", "hazops_requisitions_catalog.yml", 18, 170, "4DB7730BE6272502492F06663B0FCF03ECB8D8A0BAC9FEDE1C981C47DF5E08E7"),
+        new("ProdigySF", "ProdigyCargoCatalog", "prodigy_requisitions_catalog.yml", 18, 167, "438AA654D6A4C46959C36501ED2AE29B8DA1269BAACF07E3CD5A9AC8FDE61B02"),
+        new("VAIPO", "VAIPOCargoCatalog", "vaipo_requisitions_catalog.yml", 18, 168, "412A18CD42030E973420666B173FA697E2F38F8656D115F6380B520043EB158E"),
+        new("RMC", "RMCCargoCatalog", "rmc_requisitions_catalog.yml", 18, 169, "1CED4F8AFD9004115534D51C9FC0C60D7D86874E9A9FA64591BF1A7CC0FC901E"),
     ];
 
     private static readonly IReadOnlyDictionary<string, IReadOnlyDictionary<string, int>> ExpectedPouchCrates =

@@ -1,0 +1,18 @@
+- type: cmuRequisitionsRoundStartFreeCrate
+  id: CMURequisitionsRoundStartFreeCrateGovfor
+  faction: govfor
+  gamemodes:
+  - ForceOnForce
+  - DistressSignal
+  crates:
+  - AU14CrateFOBTentCrate
+  - RMCCrateMortarKit
+
+- type: cmuRequisitionsRoundStartFreeCrate
+  id: CMURequisitionsRoundStartFreeCrateOpfor
+  faction: opfor
+  gamemodes:
+  - ForceOnForce
+  crates:
+  - AU14CrateFOBTentCrate
+  - AU14CrateMortarKitRMC

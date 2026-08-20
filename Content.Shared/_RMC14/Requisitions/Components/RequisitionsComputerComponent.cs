@@ -1,4 +1,4 @@
-﻿using Robust.Shared.GameStates;
+using Robust.Shared.GameStates;
 using Robust.Shared.Audio;
 
 namespace Content.Shared._RMC14.Requisitions.Components;
@@ -19,9 +19,19 @@ public sealed partial class RequisitionsComputerComponent : Component
     [DataField(required: true), AutoNetworkedField, AlwaysPushInheritance]
     public List<RequisitionsCategory> Categories = new();
 
+    public readonly Dictionary<(int Category, int Order), RequisitionsStockStatus> Stock = new(); // CMU14
+    public TimeSpan NextStockUiUpdate; // CMU14
+
     [DataField]
     public bool IsLastInteracted = false;
 
     [DataField]
     public string Faction = "none";
+}
+
+public sealed class RequisitionsStockStatus // CMU14 class
+{
+    public int Current;
+
+    public TimeSpan NextReplenish;
 }

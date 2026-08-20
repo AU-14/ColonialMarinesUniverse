@@ -242,6 +242,26 @@
         stock: &vehicleAmmoStock
           maximum: 2
           replenishDelay: 300
+      - id: VehicleAmmo_CMUCrateVehicleAmmoLTBCannonAPFSDS
+        crate: CMUCrateVehicleAmmoLTBCannonAPFSDS
+        cost: 1900
+        stock: *vehicleAmmoStock
+      - id: VehicleAmmo_CMUCrateVehicleAmmoLTBCannonHEAT
+        crate: CMUCrateVehicleAmmoLTBCannonHEAT
+        cost: 1900
+        stock: *vehicleAmmoStock
+      - id: VehicleAmmo_CMUCrateVehicleAmmoLTBCannonHE
+        crate: CMUCrateVehicleAmmoLTBCannonHE
+        cost: 1900
+        stock: *vehicleAmmoStock
+      - id: VehicleAmmo_CMUCrateVehicleAmmoLTBCannonCanister
+        crate: CMUCrateVehicleAmmoLTBCannonCanister
+        cost: 1900
+        stock: *vehicleAmmoStock
+      - id: VehicleAmmo_CMUCrateVehicleAmmoLTBCannonNapalm
+        crate: CMUCrateVehicleAmmoLTBCannonNapalm
+        cost: 1900
+        stock: *vehicleAmmoStock
       - id: VehicleAmmo_RMCCrateVehicleAmmoLTAAAP
         crate: RMCCrateVehicleAmmoLTAAAP
         cost: 1800
@@ -330,6 +350,9 @@
       - id: Weapons_RMCCrateM2C
         crate: RMCCrateM2C
         cost: 1000
+      - id: Weapons_CMUCrateMk86
+        crate: CMUCrateMk86
+        cost: 1700
     - id: Ammo
       name: Ammo
       offers:
@@ -375,6 +398,15 @@
       - id: Ammo_RMCCrateMagazineM2C
         crate: RMCCrateMagazineM2C
         cost: 500
+      - id: Ammo_CMUCrateMk86MagazineHornet
+        crate: CMUCrateMk86MagazineHornet
+        cost: 700
+      - id: Ammo_CMUCrateMk86MagazineFrag
+        crate: CMUCrateMk86MagazineFrag
+        cost: 400
+      - id: Ammo_CMUCrateMk86MagazineSmoke
+        crate: CMUCrateMk86MagazineSmoke
+        cost: 200
       - id: Ammo_RMCCrateMagazineNapthalUT
         crate: RMCCrateMagazineNapthalUT
         cost: 200
@@ -649,6 +681,24 @@
   - type: RoundForceAsrsProfile
     forceId: USCM
     additions:
+    - category: Weapons
+      offer:
+        id: Weapons_RMCCrateM54CE2
+        crate: RMCCrateM54CE2
+        cost: 800
+      insertBefore: Weapons_RMCCrateM85A1
+    - category: Ammo
+      offer:
+        id: Ammo_RMCCrateMagazineRifleM54CE2
+        crate: RMCCrateMagazineRifleM54CE2
+        cost: 300
+      insertBefore: Ammo_RMCCrateBoxMagazineSentry
+    - category: Ammo
+      offer:
+        id: Ammo_RMCCrateMagazineRifleM54CE2HT
+        crate: RMCCrateMagazineRifleM54CE2HT
+        cost: 300
+      insertBefore: Ammo_RMCCrateBoxMagazineSentry
     - category: Gear
       offer:
         id: Gear_ANPRCFillCardResupplyCrateGOVFOR
@@ -707,11 +757,15 @@
     - Weapons_AU14CrateM7SLAW
     - Weapons_RMCCrateML66D
     - Weapons_RMCCrateM2C
+    - Weapons_CMUCrateMk86
     - Ammo_AU14CrateM7SLAWAPRocket
     - Ammo_AU14CrateM7SLAWMixedRocket
     - Ammo_AU14CrateM7SLAWHERocket
     - Ammo_RMCCrateMagazineML66DDrum
     - Ammo_RMCCrateMagazineM2C
+    - Ammo_CMUCrateMk86MagazineHornet
+    - Ammo_CMUCrateMk86MagazineFrag
+    - Ammo_CMUCrateMk86MagazineSmoke
     - SpecialistAmmo_RMCCratePyroTankMixed
     additions:
     - category: Explosives
@@ -928,6 +982,24 @@
     exclusions:
     - SpecialistAmmo_RMCCratePyroTankMixed
     additions:
+    - category: Weapons
+      offer:
+        id: Weapons_RMCCrateM54CE2
+        crate: RMCCrateM54CE2
+        cost: 800
+      insertBefore: Weapons_RMCCrateM85A1
+    - category: Ammo
+      offer:
+        id: Ammo_RMCCrateMagazineRifleM54CE2
+        crate: RMCCrateMagazineRifleM54CE2
+        cost: 300
+      insertBefore: Ammo_RMCCrateBoxMagazineSentry
+    - category: Ammo
+      offer:
+        id: Ammo_RMCCrateMagazineRifleM54CE2HT
+        crate: RMCCrateMagazineRifleM54CE2HT
+        cost: 300
+      insertBefore: Ammo_RMCCrateBoxMagazineSentry
     - category: SpecialistAmmo
       offer:
         id: SpecialistAmmo_RMCCratePyroTankMixed

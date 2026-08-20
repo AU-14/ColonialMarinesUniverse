@@ -1,5 +1,5 @@
 using System.Linq;
-using Content.Shared._RMC14.Requisitions.Components;
+using Content.Shared.CMU.Round;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -40,18 +40,7 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
         "CMASRSConsoleColony",
     ];
 
-    private static readonly EntProtoId[] PlatoonAsrsCatalogs =
-    [
-        "USCMCargoCatalog",
-        "RMCCargoCatalog",
-        "UPPCargoCatalog",
-        "WEYUCargoCatalog",
-        "VAIPOCargoCatalog",
-        "ProdigyCargoCatalog",
-        "LACNCargoCatalog",
-        "HAZOPSCargoCatalog",
-        "CMBCIUCargoCatalog",
-    ];
+    private const string AsrsProfile = "CMURoundForceAsrsUSCM";
 
     [Test]
     public async Task VehicleAmmoCratesAreSoldByAsrsCatalogsWithLimitedStock()
@@ -73,40 +62,44 @@ public sealed class CMUAsrsVehicleAmmoCatalogTest
                 }
 
                 foreach (var consoleId in BaseAsrsConsoles)
-                    AssertCatalogHasVehicleAmmo(prototypes, factory, consoleId);
+                {
+                    Assert.That(prototypes.TryIndex<EntityPrototype>(consoleId, out _), Is.True,
+                        $"{consoleId} prototype does not exist");
+                }
 
-                foreach (var catalogId in PlatoonAsrsCatalogs)
-                    AssertCatalogHasVehicleAmmo(prototypes, factory, catalogId);
+                AssertProfileHasVehicleAmmo(prototypes, factory, AsrsProfile);
             });
         });
 
         await pair.CleanReturnAsync();
     }
 
-    private static void AssertCatalogHasVehicleAmmo(
+    private static void AssertProfileHasVehicleAmmo(
         IPrototypeManager prototypes,
         IComponentFactory factory,
-        EntProtoId catalogId)
+        string profileId)
     {
-        Assert.That(prototypes.TryIndex<EntityPrototype>(catalogId, out var catalog), Is.True,
-            $"{catalogId} prototype does not exist");
-        Assert.That(catalog!.TryComp<RequisitionsComputerComponent>(out var req, factory), Is.True,
-            $"{catalogId} has no RequisitionsComputer component");
+        Assert.That(prototypes.TryIndex<EntityPrototype>(profileId, out var profile), Is.True,
+            $"{profileId} prototype does not exist");
+        Assert.That(profile!.TryComp<RoundForceAsrsProfileComponent>(out var req, factory), Is.True,
+            $"{profileId} has no RoundForceAsrsProfile component");
 
         var vehicleAmmo = req!.Categories.FirstOrDefault(category => category.Name == VehicleAmmoCategory);
-        Assert.That(vehicleAmmo, Is.Not.Null, $"{catalogId} has no {VehicleAmmoCategory} category");
+        Assert.That(vehicleAmmo, Is.Not.Null, $"{profileId} has no {VehicleAmmoCategory} category");
 
-        var entries = vehicleAmmo!.Entries.ToDictionary(entry => entry.Crate);
-        Assert.That(entries.Keys, Is.EquivalentTo(VehicleAmmoCrates),
-            $"{catalogId} {VehicleAmmoCategory} category does not contain the expected vehicle ammo crates");
+        var offers = vehicleAmmo!.Offers.ToDictionary(offer => offer.Crate);
+        Assert.That(offers.Keys, Is.EquivalentTo(VehicleAmmoCrates),
+            $"{profileId} {VehicleAmmoCategory} category does not contain the expected vehicle ammo crates");
 
         foreach (var crateId in VehicleAmmoCrates)
         {
-            var entry = entries[crateId];
-            Assert.That(entry.MaxStock, Is.EqualTo(2),
-                $"{catalogId} {crateId} should have a stock limit of 2");
-            Assert.That(entry.StockReplenishDelay, Is.EqualTo(VehicleAmmoReplenishDelay),
-                $"{catalogId} {crateId} should replenish every 5 minutes");
+            var offer = offers[crateId];
+            Assert.That(offer.Stock, Is.Not.Null,
+                $"{profileId} {crateId} has no stock limit");
+            Assert.That(offer.Stock!.Maximum, Is.EqualTo(2),
+                $"{profileId} {crateId} should have a stock limit of 2");
+            Assert.That(offer.Stock.ReplenishDelay, Is.EqualTo((int) VehicleAmmoReplenishDelay.TotalSeconds),
+                $"{profileId} {crateId} should replenish every 5 minutes");
         }
     }
 }
