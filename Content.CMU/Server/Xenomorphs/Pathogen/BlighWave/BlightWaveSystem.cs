@@ -7,7 +7,7 @@ namespace Content.Server._CMU14.Xenomorphs.Pathogen.BlightWave;
 
 public sealed partial class BlightWaveSystem : SharedBlightWaveSystem
 {
-    [Dependency] private readonly SharedPointLightSystem _pointLight = default!;
+    [Dependency] private SharedPointLightSystem _pointLight = default!;
 
     private readonly HashSet<Entity<PointLightComponent>> _lights = new();
 

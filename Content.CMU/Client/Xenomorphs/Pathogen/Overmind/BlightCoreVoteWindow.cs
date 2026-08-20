@@ -8,9 +8,9 @@ using Robust.Client.UserInterface.XAML;
 
 namespace Content.Client._CMU14.Xenomorphs.Pathogen.Overmind;
 
-public sealed class BlightCoreVoteWindow : DefaultWindow
+public sealed partial class BlightCoreVoteWindow : DefaultWindow
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private IGameTiming _timing = default!;
 
     private readonly Label _timerLabel;
     private readonly BoxContainer _candidateList;
