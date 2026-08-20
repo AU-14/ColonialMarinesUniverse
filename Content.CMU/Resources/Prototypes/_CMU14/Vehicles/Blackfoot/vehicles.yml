@@ -92,8 +92,9 @@
     sound:
       path: /Audio/_CMU14/Blackfoot/engineidle.ogg
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: DoAfter
   - type: UserInterface
     interfaces:
@@ -171,26 +172,26 @@
           components:
           - HardpointItem
   - type: HardpointSlots
-    vehicleFamily: Blackfoot
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
     slots:
     - id: thrusters
       disableEject: true
-      hardpointType: Thruster
-      slotType: Thruster
+      hardpointType: HardpointTypeThruster
+      slotType: HardpointSlotTypeThruster
       visualLayer: thrusters
       insertDelay: 2
       required: true
     - id: launchers
       disableEject: true
-      hardpointType: Launcher
-      slotType: Launcher
+      hardpointType: HardpointTypeLauncher
+      slotType: HardpointSlotTypeLauncher
       visualLayer: launchers
       insertDelay: 2
       required: false
     - id: support
       disableEject: true
-      hardpointType: SupportAttachment
-      slotType: SupportAttachment
+      hardpointType: HardpointTypeSupportAttachment
+      slotType: HardpointSlotTypeSupportAttachment
       visualLayer: support
       insertDelay: 2
       required: false
@@ -245,33 +246,33 @@
           components:
           - HardpointItem
   - type: HardpointSlots
-    vehicleFamily: Blackfoot
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
     slots:
     - id: thrusters
       disableEject: true
-      hardpointType: Thruster
-      slotType: Thruster
+      hardpointType: HardpointTypeThruster
+      slotType: HardpointSlotTypeThruster
       visualLayer: thrusters
       insertDelay: 2
       required: true
     - id: launchers
       disableEject: true
-      hardpointType: Launcher
-      slotType: Launcher
+      hardpointType: HardpointTypeLauncher
+      slotType: HardpointSlotTypeLauncher
       visualLayer: launchers
       insertDelay: 2
       required: false
     - id: door-gun
       disableEject: true
-      hardpointType: DoorGun
-      slotType: DoorGun
+      hardpointType: HardpointTypeDoorGun
+      slotType: HardpointSlotTypeDoorGun
       visualLayer: door-gun
       insertDelay: 2
       required: false
     - id: support
       disableEject: true
-      hardpointType: SupportAttachment
-      slotType: SupportAttachment
+      hardpointType: HardpointTypeSupportAttachment
+      slotType: HardpointSlotTypeSupportAttachment
       visualLayer: support
       insertDelay: 2
       required: false
@@ -316,40 +317,40 @@
           components:
           - HardpointItem
   - type: HardpointSlots
-    vehicleFamily: Blackfoot
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
     slots:
     - id: thrusters
       disableEject: true
-      hardpointType: Thruster
-      slotType: Thruster
+      hardpointType: HardpointTypeThruster
+      slotType: HardpointSlotTypeThruster
       visualLayer: thrusters
       insertDelay: 2
       required: true
     - id: launchers
       disableEject: true
-      hardpointType: Launcher
-      slotType: Launcher
+      hardpointType: HardpointTypeLauncher
+      slotType: HardpointSlotTypeLauncher
       visualLayer: launchers
       insertDelay: 2
       required: false
     - id: door-gun
       disableEject: true
-      hardpointType: DoorGun
-      slotType: DoorGun
+      hardpointType: HardpointTypeDoorGun
+      slotType: HardpointSlotTypeDoorGun
       visualLayer: door-gun
       insertDelay: 2
       required: false
     - id: recon
       disableEject: true
-      hardpointType: SupportAttachment
-      slotType: SupportAttachment
+      hardpointType: HardpointTypeSupportAttachment
+      slotType: HardpointSlotTypeSupportAttachment
       visualLayer: support
       insertDelay: 2
       required: false
     - id: sensors
       disableEject: true
-      hardpointType: SensorArray
-      slotType: SensorArray
+      hardpointType: HardpointTypeSensorArray
+      slotType: HardpointSlotTypeSensorArray
       visualLayer: sensors
       insertDelay: 2
       required: false

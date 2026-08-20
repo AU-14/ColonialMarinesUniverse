@@ -149,6 +149,11 @@
   - type: InstantAction
     event: !type:RMCTelephoneActionEvent
 
+- type: entity
+  parent: RMCActionTelephone
+  id: RMCActionTelephoneScout # CMU14 entity
+  name: Use Phone
+
 - type: Tag
   id: RMCActionCycleZoomLevel
 

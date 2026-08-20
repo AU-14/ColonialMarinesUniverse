@@ -27,14 +27,11 @@
   name: clotted syringe
   description: A syringe filled with a viscous, dark fluid that smells like rotted flesh.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      injector:
-        maxVol: 15
-        reagents:
-        - ReagentId: AbominationVenom
-          Quantity: 15
+  - type: Solution
+    id: injector
+    solution:
+      maxVol: 15
+      reagents:
+      - ReagentId: AbominationVenom
+        Quantity: 15
   - type: Injector
-    minTransferAmount: 5
-    maxTransferAmount: 15
-    transferAmount: 5

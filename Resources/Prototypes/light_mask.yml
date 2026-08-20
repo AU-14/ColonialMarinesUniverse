@@ -22,3 +22,27 @@
   - direction: 180
     innerWidth: 30
     outerWidth: 60
+
+# CMU14
+- type: lightMask
+  id: ConeQuad # CMU14 type
+  maskPath: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+  lightCones:
+  - direction: 0
+    innerWidth: 30
+    outerWidth: 60
+  - direction: 90
+    innerWidth: 30
+    outerWidth: 60
+  - direction: 180
+    innerWidth: 30
+    outerWidth: 60
+  - direction: 270
+    innerWidth: 30
+    outerWidth: 60
+
+# CMU14
+- type: lightMask
+  id: EllipseWide # CMU14 type
+  maskPath: /Textures/_RMC14/Effects/LightMasks/wide_ellipsis.png
+  lightCones: []

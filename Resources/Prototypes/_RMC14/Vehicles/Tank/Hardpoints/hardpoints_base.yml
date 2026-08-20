@@ -22,9 +22,9 @@
     sprite: _RMC14/Structures/Vehicles/tank.rsi
     state: tank_turret_0
   - type: HardpointItem
-    hardpointType: Turret
-    vehicleFamily: Tank
-    slotType: Turret
+    hardpointType: HardpointTypeTurret # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeTurret # CMU14
     damageMultiplier: 0.05
     repairRate: 0.008
   - type: HardpointIntegrity
@@ -55,16 +55,16 @@
           components:
           - HardpointItem
   - type: HardpointSlots
-    vehicleFamily: Tank
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
     slots:
     - id: turret-cannon
-      hardpointType: Cannon
-      slotType: Cannon
+      hardpointType: HardpointTypeCannon # CMU14
+      slotType: HardpointSlotTypeCannon # CMU14
       required: false
       insertDelay: 2.0
     - id: turret-launcher
-      hardpointType: Launcher
-      slotType: Launcher
+      hardpointType: HardpointTypeLauncher # CMU14
+      slotType: HardpointSlotTypeLauncher # CMU14
       required: false
       insertDelay: 2.0
 
@@ -78,9 +78,9 @@
     sprite: _CMU14/Structures/vehicles/fv150/exterior.rsi
     state: tank_turret_0
   - type: HardpointItem
-    hardpointType: Turret
-    vehicleFamily: Tank
-    slotType: Turret
+    hardpointType: HardpointTypeTurret # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeTurret # CMU14
     damageMultiplier: 0.05
     repairRate: 0.008
   - type: HardpointIntegrity
@@ -111,16 +111,16 @@
           components:
           - HardpointItem
   - type: HardpointSlots
-    vehicleFamily: Tank
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
     slots:
     - id: turret-cannon
-      hardpointType: Cannon
-      slotType: Cannon
+      hardpointType: HardpointTypeCannon # CMU14
+      slotType: HardpointSlotTypeCannon # CMU14
       required: false
       insertDelay: 2.0
     - id: turret-launcher
-      hardpointType: Launcher
-      slotType: Launcher
+      hardpointType: HardpointTypeLauncher # CMU14
+      slotType: HardpointSlotTypeLauncher # CMU14
       required: false
       insertDelay: 2.0
 
@@ -134,9 +134,9 @@
     sprite: _RMC14/Structures/Vehicles/wytank.rsi
     state: tank_turret_0
   - type: HardpointItem
-    hardpointType: Turret
-    vehicleFamily: Tank
-    slotType: Turret
+    hardpointType: HardpointTypeTurret # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeTurret # CMU14
     damageMultiplier: 0.05
     repairRate: 0.008
   - type: HardpointIntegrity
@@ -167,16 +167,16 @@
           components:
           - HardpointItem
   - type: HardpointSlots
-    vehicleFamily: Tank
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
     slots:
     - id: turret-cannon
-      hardpointType: Cannon
-      slotType: Cannon
+      hardpointType: HardpointTypeCannon # CMU14
+      slotType: HardpointSlotTypeCannon # CMU14
       required: false
       insertDelay: 2.0
     - id: turret-launcher
-      hardpointType: Launcher
-      slotType: Launcher
+      hardpointType: HardpointTypeLauncher # CMU14
+      slotType: HardpointSlotTypeLauncher # CMU14
       required: false
       insertDelay: 2.0
 
@@ -189,9 +189,9 @@
   - type: Sprite
     state: treads
   - type: HardpointItem
-    hardpointType: Wheel
-    vehicleFamily: Tank
-    slotType: Treads
+    hardpointType: HardpointTypeWheel # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeTreads # CMU14
     damageMultiplier: 0.15
     repairRate: 0.0165
   - type: HardpointIntegrity
@@ -211,9 +211,9 @@
     sprite: _CMU14/Structures/vehicles/fv150/icons.rsi
     state: treads
   - type: HardpointItem
-    hardpointType: Wheel
-    vehicleFamily: Tank
-    slotType: Treads
+    hardpointType: HardpointTypeWheel # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeTreads # CMU14
     damageMultiplier: 0.15
     repairRate: 0.0165
   - type: HardpointIntegrity
@@ -232,9 +232,9 @@
   - type: Sprite
     state: treads
   - type: HardpointItem
-    hardpointType: Wheel
-    vehicleFamily: Tank
-    slotType: Treads
+    hardpointType: HardpointTypeWheel # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeTreads # CMU14
     damageMultiplier: 0.15
     repairRate: 0.0165
   - type: VehicleWheelItem

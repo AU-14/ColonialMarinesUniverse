@@ -1,0 +1,45 @@
+# Blackfoot VTOL hardpoint vocabulary, mirrors _RMC14 vehicle_hardpoint_types.yml
+- type: entity
+  id: HardpointVehicleFamilyBlackfoot
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointVehicleFamily
+
+- type: entity
+  id: HardpointTypeThruster
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointType
+
+- type: entity
+  id: HardpointTypeDoorGun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointType
+
+- type: entity
+  id: HardpointTypeSensorArray
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointType
+
+- type: entity
+  id: HardpointSlotTypeThruster
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointSlotType
+    repairRate: 0.025
+
+- type: entity
+  id: HardpointSlotTypeDoorGun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointSlotType
+    repairRate: 0.025
+
+- type: entity
+  id: HardpointSlotTypeSensorArray
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointSlotType
+    repairRate: 0.025

@@ -14,9 +14,9 @@
   abstract: true
   components:
   - type: HardpointItem
-    hardpointType: Thruster
-    vehicleFamily: Blackfoot
-    slotType: Thruster
+    hardpointType: HardpointTypeThruster
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
+    slotType: HardpointSlotTypeThruster
     damageMultiplier: 0.15
     disabledIntegrityFraction: 0.15
     minimumPerformanceMultiplier: 0.35
@@ -40,9 +40,9 @@
   abstract: true
   components:
   - type: HardpointItem
-    hardpointType: Launcher
-    vehicleFamily: Blackfoot
-    slotType: Launcher
+    hardpointType: HardpointTypeLauncher
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
+    slotType: HardpointSlotTypeLauncher
     damageMultiplier: 0.6
     disabledIntegrityFraction: 0.15
     minimumPerformanceMultiplier: 0.35
@@ -103,9 +103,9 @@
   abstract: true
   components:
   - type: HardpointItem
-    hardpointType: DoorGun
-    vehicleFamily: Blackfoot
-    slotType: DoorGun
+    hardpointType: HardpointTypeDoorGun
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
+    slotType: HardpointSlotTypeDoorGun
     damageMultiplier: 0.6
     disabledIntegrityFraction: 0.15
     minimumPerformanceMultiplier: 0.35
@@ -178,9 +178,9 @@
   abstract: true
   components:
   - type: HardpointItem
-    hardpointType: SupportAttachment
-    vehicleFamily: Blackfoot
-    slotType: SupportAttachment
+    hardpointType: HardpointTypeSupportAttachment
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
+    slotType: HardpointSlotTypeSupportAttachment
     compatibilityId: BlackfootRecon
     damageMultiplier: 0.6
     disabledIntegrityFraction: 0.15
@@ -205,9 +205,9 @@
   abstract: true
   components:
   - type: HardpointItem
-    hardpointType: SensorArray
-    vehicleFamily: Blackfoot
-    slotType: SensorArray
+    hardpointType: HardpointTypeSensorArray
+    vehicleFamily: HardpointVehicleFamilyBlackfoot
+    slotType: HardpointSlotTypeSensorArray
     damageMultiplier: 0.6
     disabledIntegrityFraction: 0.15
     minimumPerformanceMultiplier: 0.35

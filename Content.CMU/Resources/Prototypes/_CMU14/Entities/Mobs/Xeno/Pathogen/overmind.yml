@@ -36,7 +36,6 @@
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
-    displayDamageInAlert: true
   - type: Xeno
     role: CMU14JobPathogenOvermind
     tier: 4
@@ -195,9 +194,6 @@
   components:
   - type: RMCGibOnDeath
     gibChance: 0.1
-  - type: RMCSpawnEntitiesOnGib
-    entities:
-    - CMU14GibEffectPathogenOvermind
 
 - type: entity
   id: CMU14XenoOvermindEyeOrder
