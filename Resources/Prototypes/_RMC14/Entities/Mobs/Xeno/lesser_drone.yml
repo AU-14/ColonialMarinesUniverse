@@ -107,8 +107,8 @@
   - type: XenoHiveCoreRole
   - type: RMCSize
     size: VerySmallXeno
-  - type: RMCXenoDamageVisuals
-    prefix: lesser
+#  - type: RMCXenoDamageVisuals # CMU14: CMU reskin ships no damage-tier states, requesting them logs sprite errors
+#    prefix: lesser
   - type: TacticalMapIcon
     icon:
       sprite: /Textures/_RMC14/Interface/map_blips.rsi
