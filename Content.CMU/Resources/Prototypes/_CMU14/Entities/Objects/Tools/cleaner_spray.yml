@@ -47,7 +47,6 @@
         - ReagentId: SpaceCleaner
           Quantity: 300
   - type: SolutionRegeneration
-    solution: spray
     generated:
       reagents:
       - ReagentId: SpaceCleaner

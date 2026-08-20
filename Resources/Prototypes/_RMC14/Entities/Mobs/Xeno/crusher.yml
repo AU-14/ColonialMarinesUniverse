@@ -78,7 +78,7 @@
     clawType: VerySharp
   - type: MeleeWeapon
     angle: 60
-    maxTargets: 2
+    # maxTargets: 2 # CMU14
     damage:
       groups:
         Brute: 40
@@ -94,7 +94,6 @@
         - ReagentId: CMUXenoPlasmaChitin
           Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -171,8 +170,8 @@
     - ActionXenoDefensiveShield
     - ActionXenoDevolve
   - type: XenoSoak
-    damageGoal: 240
-    heal: 120
+    # damageGoal: 240 # CMU14
+    # heal: 120 # CMU14
   - type: CrusherShield
   - type: XenoCharge
     chargeWindupSound:
@@ -233,7 +232,7 @@
   - type: CombatMode
     toggleMouseRotator: false
   - type: XenoFling
-    hasAltFling: true
+    # hasAltFling: true # CMU14
     paralyzeTime: 1
     slowTime: 8
   - type: XenoStomp

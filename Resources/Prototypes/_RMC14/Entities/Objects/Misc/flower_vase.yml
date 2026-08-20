@@ -8,7 +8,6 @@
       sprite: _RMC14/Objects/Misc/flower_vase.rsi
       state: redwhiteflowers
     - type: Damageable
-      damageContainer: Inorganic
       damageModifierSet: Glass
     - type: Destructible
       thresholds:

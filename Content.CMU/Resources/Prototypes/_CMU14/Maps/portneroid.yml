@@ -1,7 +1,6 @@
 - type: gameMap
   id: portneroid
   mapName: LV-327 Port Nereid
-  allegiance: UA
   mapPath: /Maps/_CMU14/PortNeroidMultiZ/portneroidmultiz0.yml
   mapsBelow:
   - /Maps/_CMU14/PortNeroidMultiZ/portneroidmultiz-1.yml

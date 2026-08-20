@@ -39,7 +39,6 @@
   overwatchShowName: true
   overwatchRoleName: Squad Leader
   roleWeight: 1
-  displayWeight: 6
   special:
   - !type:AddComponentSpecial
     components:
@@ -164,11 +163,6 @@
     raffle:
       settings: default
     job: CMSquadLeader
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
-      time: 1
-
 # Guidebook
 - type: entity
   parent: CMGuidebookRole

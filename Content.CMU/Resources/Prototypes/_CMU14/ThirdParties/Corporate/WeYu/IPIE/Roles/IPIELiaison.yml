@@ -76,11 +76,7 @@
   name: WY IPIE Lawyer (3rd party, synth)
   components:
   - type: Synth
-    changeBrain: false
     canUseGuns: true
-    hideGeneration: true
-    useHumanHealthIcons: true
-    hideXenoSynthIcon: true
   - type: GhostTakeoverAvailable
   - type: GhostRoleApplySpecial
     squad: SquadPMC
@@ -94,11 +90,6 @@
     job: AU14JobIPIELawyer
     raffle:
       settings: short
-    requirements:
-    - !type:OverallPlaytimeRequirement
-      time: 18000 # 5 hours
-    rules: au14-lpie-lawyer-description
-
 - type: startingGear
   id: AU14GearIPIELawyer
   equipment:

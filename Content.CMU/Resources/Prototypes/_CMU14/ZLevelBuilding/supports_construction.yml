@@ -26,8 +26,8 @@
 
 - type: construction
   id: AU14SupportBeamWood
-  name: wooden support beam
-  description: A wooden support beam. Place it below an upper-level floor to hold it up - cheap, but only spans a short distance.
+  name: con-a-u14-support-beam-wood
+  description: con-a-u14-support-beam-wood-desc
   graph: AU14SupportBeamWoodGraph
   startNode: start
   targetNode: beam
@@ -64,8 +64,8 @@
 
 - type: construction
   id: AU14SupportBeamMetal
-  name: metal support beam
-  description: A steel support beam. Place it below an upper-level floor to hold it up - a solid, all-round span.
+  name: con-a-u14-support-beam-metal
+  description: con-a-u14-support-beam-metal-desc
   graph: AU14SupportBeamMetalGraph
   startNode: start
   targetNode: beam
@@ -100,8 +100,8 @@
 
 - type: construction
   id: AU14SupportBeamPlasteel
-  name: plasteel support beam
-  description: A plasteel support beam. Place it below an upper-level floor to hold it up - expensive, but spans the widest platform.
+  name: con-a-u14-support-beam-plasteel
+  description: con-a-u14-support-beam-plasteel-desc
   graph: AU14SupportBeamPlasteelGraph
   startNode: start
   targetNode: beam

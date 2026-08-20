@@ -116,7 +116,7 @@
 - type: construction
   id: AU14TilePlating
   name: plating
-  description: Lay down metal plating. Can be placed over open space to build floors in the air.
+  description: con-a-u14-tile-plating-desc
   graph: AU14TilePlatingGraph
   startNode: start
   targetNode: tile
@@ -133,8 +133,8 @@
 
 - type: construction
   id: AU14TileSteel
-  name: steel floor
-  description: Lay down a steel floor tile. Can be placed over open space to build floors in the air.
+  name: con-a-u14-tile-steel
+  description: con-a-u14-tile-steel-desc
   graph: AU14TileSteelGraph
   startNode: start
   targetNode: tile
@@ -152,7 +152,7 @@
 - type: construction
   id: AU14TileDirt
   name: dirt
-  description: Lay down a patch of dirt. Can be placed over open space to build floors in the air.
+  description: con-a-u14-tile-dirt-desc
   graph: AU14TileDirtGraph
   startNode: start
   targetNode: tile

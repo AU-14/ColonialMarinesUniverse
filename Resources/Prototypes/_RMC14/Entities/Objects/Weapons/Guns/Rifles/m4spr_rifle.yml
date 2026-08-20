@@ -514,7 +514,6 @@
   - type: RMCStunOnHit
     stuns:
     - whitelist:
-        minMobSize: VerySmallXeno
       maxRange: 32
       losesEffectWithRange: true
       stunTime: 1

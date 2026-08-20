@@ -1,7 +1,6 @@
 - type: gameMap
   id: Flight
   mapName: Flight
-  allegiance: Neutral
   mapPath: /Maps/_CMU14/flight.yml
   minPlayers: 0
   maxPlayers: 75

@@ -30,7 +30,6 @@
   overwatchShowName: true
   overwatchRoleName: Specialist
   roleWeight: 1
-  displayWeight: 4
   special:
   - !type:AddComponentSpecial
     components:
@@ -144,7 +143,3 @@
     raffle:
       settings: default
     job: CMWeaponsSpecialist
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobWeaponsSpecialist
-      time: 1

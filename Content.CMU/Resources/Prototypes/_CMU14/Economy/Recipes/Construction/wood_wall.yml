@@ -1,12 +1,12 @@
 - type: construction
   parent: RMC
-  name: Wooden Wall
+  name: con-a-u14-wood-wall
   id: AU14WoodWall
   graph: AU14WoodWallGraph
   startNode: start
   targetNode: woodWall
   category: construction-category-cm-structures
-  description: A wall built from wooden planks. Effective but flammable.
+  description: con-a-u14-wood-wall-desc
   objectType: Structure
   placementMode: SnapgridCenter
   canBuildInImpassable: false

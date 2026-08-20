@@ -30,7 +30,6 @@
       bodyType: Static
       canCollide: false
     - type: Damageable
-      damageContainer: StructuralXeno
     - type: Destructible
       thresholds:
         - trigger:

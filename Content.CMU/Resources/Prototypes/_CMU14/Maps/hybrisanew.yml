@@ -1,7 +1,6 @@
 - type: gameMap
   id: hybrisanew
   mapName: LV-759
-  allegiance: IndependentSystems # ICSC
   mapPath: /Maps/_CMU14/HybrisaMultiZ/hybrisa0.yml
   mapsBelow:
   - /Maps/_CMU14/HybrisaMultiZ/hybrisa-2.yml

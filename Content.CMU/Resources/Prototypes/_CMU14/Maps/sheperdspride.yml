@@ -1,7 +1,6 @@
 - type: gameMap
   id: Sheperds
   mapName: LV-112 Sheperds Pride
-  allegiance: Neutral
   mapPath: /Maps/_CMU14/sheperds.yml
   mapsBelow:
   - /Maps/_CMU14/sheperds_below.yml

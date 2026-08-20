@@ -32,7 +32,6 @@
   overwatchSortPriority: -2
   overwatchRoleName: Hospital Corpsmen
   roleWeight: 1
-  displayWeight: 2
   special:
   - !type:AddComponentSpecial
     components:
@@ -145,11 +144,6 @@
     raffle:
       settings: default
     job: CMHospitalCorpsman
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobHospitalCorpsman
-      time: 1
-
 # Guidebook
 - type: entity
   parent: CMGuidebookRole

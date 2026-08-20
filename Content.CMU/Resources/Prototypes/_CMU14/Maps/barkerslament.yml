@@ -1,7 +1,6 @@
 - type: gameMap
   id: CMULV376BarkersLament
   mapName: LV-376 Ulixes
-  allegiance: UA
   mapPath: /Maps/_CMU14/BarkersMultiZ/barkers0.yml
   mapsBelow:
   - /Maps/_CMU14/BarkersMultiZ/barkers-1.yml

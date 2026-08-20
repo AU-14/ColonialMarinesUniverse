@@ -22,11 +22,6 @@
   - type: GhostRole
     name: rmc-ghost-name-hefa-hostile-shrapnelsworn
     job: CMHEFAShrapnelswornMelee
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobRifleman
-      time: 18000 # 5 Hours
-
 - type: randomHumanoidSettings
   parent: RMCHEFAShrapnelswornFriendly
   id: RMCHEFAShrapnelswornMeleeFriendly
@@ -34,11 +29,6 @@
   - type: GhostRole
     name: rmc-ghost-name-hefa-friendly-shrapnelsworn
     job: CMHEFAShrapnelswornMelee
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobRifleman
-      time: 18000 # 5 Hours
-
 - type: entity
   parent: RMCRandomHumanoidHEFAShrapnelswornHostile
   id: RMCRandomHumanoidHEFAShrapnelswornMeleeHostile

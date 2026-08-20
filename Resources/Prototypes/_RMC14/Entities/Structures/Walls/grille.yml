@@ -28,7 +28,6 @@
       node: Grille
       deconstructionTarget: start
     - type: Damageable
-      damageContainer: StructuralInorganic
       damageModifierSet: PerforatedMetallic
     - type: PowerConsumer
       showInMonitor: false
@@ -119,7 +118,7 @@
       bodyType: Static
       canCollide: false
     - type: Damageable
-      damageContainer: Inorganic
+      # damageContainer: Inorganic # CMU14
       damageModifierSet: FlimsyMetallic
     - type: Destructible
       thresholds:

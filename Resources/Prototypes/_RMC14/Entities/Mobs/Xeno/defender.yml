@@ -80,7 +80,6 @@
         - ReagentId: CMUXenoPlasmaChitin
           Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood

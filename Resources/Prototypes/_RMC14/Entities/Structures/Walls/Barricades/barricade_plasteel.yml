@@ -73,7 +73,6 @@
     targetLayers:
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
     damageGroup: "Brute"
-    hideIfZero: false
   - type: Barbed
     thornsDamage:
       types:
@@ -111,7 +110,6 @@
       - "enum.RMCDamageOverlayVisuals.DamageOverlay"
       - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
     - type: Damageable
-      damageContainer: Inorganic
       damageModifierSet: CMBurnBarricade
     - type: RMCConstructionUpgradeTarget
       upgrades: null
@@ -141,7 +139,7 @@
       - "enum.RMCDamageOverlayVisuals.DamageOverlay"
       - "enum.RMCDamageOverlayVisuals.AdditionalDamageOverlay"
     - type: Damageable
-      damageContainer: Inorganic
+      # damageContainer: Inorganic # CMU14
       damageModifierSet: CMBruteBarricade
     - type: RMCConstructionUpgradeTarget
       upgrades: null
@@ -213,7 +211,6 @@
     targetLayers:
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
     damageGroup: "Brute"
-    hideIfZero: false
   - type: RMCFoldingBarricadeLinking
     linkable: true
     connectionStates:

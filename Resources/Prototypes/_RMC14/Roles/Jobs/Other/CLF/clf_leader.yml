@@ -73,10 +73,6 @@
     job: RMCCLFCellLeader
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
-      time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadCLF
 

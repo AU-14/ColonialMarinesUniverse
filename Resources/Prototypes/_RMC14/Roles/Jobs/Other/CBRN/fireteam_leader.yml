@@ -16,7 +16,6 @@
   spawnMenuRoleName: CBRN Fireteam Leader
   overwatchRoleName: Fire Team Leaders
   roleWeight: 1
-  displayWeight: 5
   special:
   - !type:AddComponentSpecial
     components:
@@ -80,10 +79,6 @@
     job: RMCCBRNFireteamLeader
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
-      time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadCBRN
 

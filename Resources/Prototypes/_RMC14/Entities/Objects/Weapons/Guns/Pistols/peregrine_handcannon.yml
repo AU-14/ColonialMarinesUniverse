@@ -287,7 +287,6 @@
   - type: RMCStunOnHit
     stuns:
     - whitelist:
-        minMobSize: VerySmallXeno
       maxRange: 4.5
       stunTime: 1
   - type: RMCProjectileAccuracy

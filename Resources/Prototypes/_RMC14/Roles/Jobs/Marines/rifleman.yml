@@ -25,7 +25,6 @@
   - Rifleman
   hasIcon: false
   roleWeight: 1
-  displayWeight: 0
   special:
   - !type:AddComponentSpecial
     components:
@@ -140,11 +139,6 @@
     raffle:
       settings: default
     job: CMRifleman
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobRifleman
-      time: 1
-
 ## Guidebook downed marine
 - type: entity
   id: RMCGuidebookCorpseMarine

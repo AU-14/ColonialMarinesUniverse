@@ -16,7 +16,6 @@
   overwatchRoleName: Combat Technicians
   spawnMenuRoleName: CBRN Combat Techician
   roleWeight: 1
-  displayWeight: 1
   special:
   - !type:AddComponentSpecial
     components:
@@ -76,10 +75,6 @@
     job: RMCCBRNCombatTech
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobCombatTech
-      time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadCBRN
 

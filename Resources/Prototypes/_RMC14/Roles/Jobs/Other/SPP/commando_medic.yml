@@ -76,12 +76,6 @@
     rules: rmc-ghost-role-information-spp-rules
     reregister: false
     job: RMCSPPCommandoMedic
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobHospitalCorpsman
-      time: 18000 # 5 Hours
-    raffle:
-      settings: short
   - type: GhostRoleApplySpecial
     squad: SquadSPP
 

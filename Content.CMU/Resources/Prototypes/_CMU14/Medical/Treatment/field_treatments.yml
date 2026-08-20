@@ -44,7 +44,7 @@
 
 - type: stack
   id: CMUCoagulantPowder
-  name: coagulant powder
+  name: stack-c-m-u-coagulant-powder
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: coagulant_powder }
   spawn: CMUCoagulantPowder1
   maxCount: 50
@@ -108,7 +108,7 @@
 
 - type: stack
   id: CMUBurnGel
-  name: burn gel
+  name: stack-c-m-u-burn-gel
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: burn_gel }
   spawn: CMUBurnGel1
   maxCount: 50
@@ -140,7 +140,7 @@
 
 - type: stack
   id: CMUTissueSealant
-  name: tissue sealant
+  name: stack-c-m-u-tissue-sealant
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: tissue_sealant }
   spawn: CMUTissueSealant1
   maxCount: 50
@@ -172,7 +172,7 @@
 
 - type: stack
   id: CMUTraumaFoam
-  name: trauma foam
+  name: stack-c-m-u-trauma-foam
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: trauma_foam }
   spawn: CMUTraumaFoam1
   maxCount: 50
@@ -222,7 +222,7 @@
 
 - type: stack
   id: CMUPlainGauze
-  name: packed gauze
+  name: stack-c-m-u-plain-gauze
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: packed_gauze }
   spawn: CMUPlainGauze1
   maxCount: 50
@@ -274,7 +274,7 @@
 
 - type: stack
   id: CMUPlainTraumaDressing
-  name: packed trauma kit
+  name: stack-c-m-u-plain-trauma-dressing
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: packed_trauma_kit }
   spawn: CMUPlainTraumaDressing1
   maxCount: 50
@@ -347,7 +347,7 @@
 
 - type: stack
   id: CMUHemostaticGauze
-  name: hemostatic gauze
+  name: stack-c-m-u-hemostatic-gauze
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: hemostatic_gauze }
   spawn: CMUHemostaticGauze1
   maxCount: 10
@@ -377,7 +377,7 @@
 
 - type: stack
   id: CMUAntisepticGauze
-  name: antiseptic gauze
+  name: stack-c-m-u-antiseptic-gauze
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: antiseptic_gauze }
   spawn: CMUAntisepticGauze1
   maxCount: 10
@@ -409,7 +409,7 @@
 
 - type: stack
   id: CMUBurnGelGauze
-  name: burn gel gauze
+  name: stack-c-m-u-burn-gel-gauze
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: burn_gel_gauze }
   spawn: CMUBurnGelGauze1
   maxCount: 10
@@ -439,7 +439,7 @@
 
 - type: stack
   id: CMUSealingGauze
-  name: sealing gauze
+  name: stack-c-m-u-sealing-gauze
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: sealing_gauze }
   spawn: CMUSealingGauze1
   maxCount: 10
@@ -469,7 +469,7 @@
 
 - type: stack
   id: CMUCompressionGauze
-  name: compression gauze
+  name: stack-c-m-u-compression-gauze
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: compression_gauze }
   spawn: CMUCompressionGauze1
   maxCount: 10
@@ -523,7 +523,7 @@
 
 - type: stack
   id: CMUHemostaticTraumaDressing
-  name: hemostatic trauma dressing
+  name: stack-c-m-u-hemostatic-trauma-dressing
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: hemostatic_trauma_kit }
   spawn: CMUHemostaticTraumaDressing1
   maxCount: 6
@@ -553,7 +553,7 @@
 
 - type: stack
   id: CMUAntisepticTraumaDressing
-  name: antiseptic trauma dressing
+  name: stack-c-m-u-antiseptic-trauma-dressing
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: antiseptic_trauma_kit }
   spawn: CMUAntisepticTraumaDressing1
   maxCount: 6
@@ -585,7 +585,7 @@
 
 - type: stack
   id: CMUBurnTraumaDressing
-  name: burn trauma dressing
+  name: stack-c-m-u-burn-trauma-dressing
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: burn_gel_trauma_kit }
   spawn: CMUBurnTraumaDressing1
   maxCount: 6
@@ -615,7 +615,7 @@
 
 - type: stack
   id: CMUSealingTraumaDressing
-  name: sealing trauma dressing
+  name: stack-c-m-u-sealing-trauma-dressing
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: sealing_trauma_kit }
   spawn: CMUSealingTraumaDressing1
   maxCount: 6
@@ -645,7 +645,7 @@
 
 - type: stack
   id: CMUCompressionTraumaDressing
-  name: compression trauma dressing
+  name: stack-c-m-u-compression-trauma-dressing
   icon: { sprite: "/Textures/_CMU14/Objects/Medical/field_treatments.rsi", state: compression_trauma_kit }
   spawn: CMUCompressionTraumaDressing1
   maxCount: 6

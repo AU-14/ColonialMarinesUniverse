@@ -18,7 +18,6 @@
   overwatchShowName: true
   overwatchRoleName: Squad Leader
   roleWeight: 1
-  displayWeight: 6
   special:
   - !type:AddComponentSpecial
     components:
@@ -90,13 +89,6 @@
     job: RMCCBRNSquadLeader
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobSquadLeader
-      time: 36000 # 10 Hours
-    - !type:RoleTimeRequirement
-      role: CMJobWeaponsSpecialist
-      time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadCBRN
 

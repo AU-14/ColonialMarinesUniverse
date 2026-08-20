@@ -54,7 +54,6 @@
     - type: StaticPrice
       price: 60
     - type: Damageable
-      damageContainer: Inorganic
     - type: Destructible
       thresholds:
       - trigger:

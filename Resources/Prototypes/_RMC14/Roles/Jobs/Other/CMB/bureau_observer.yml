@@ -70,10 +70,6 @@
     job: CMBureauObserver
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobMilitaryPolice
-      time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
 
 - type: startingGear

@@ -119,7 +119,7 @@
   components:
   - type: RandomHumanoidAppearance
     randomizeName: false
-    hair: HairBald # TODO RMC14 - This should probably make the species human too, and make them have no facial hair.
+    # hair: HairBald # TODO RMC14 - This should probably make the species human too, and make them have no facial hair. # CMU14
   - type: GhostRole
     name: rmc-ghost-name-pmc-whiteout
     description: rmc-ghost-role-information-deathsquad-description
@@ -128,10 +128,6 @@
     job: RMCPMCWhiteout
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobRifleman
-      time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadPMC
 

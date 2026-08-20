@@ -83,7 +83,6 @@
       tags:
         - Wringer
     - type: Damageable
-      damageContainer: Inorganic
     - type: Destructible
       thresholds:
         - trigger:
@@ -188,7 +187,7 @@
           mask:
           - MobMask
     - type: Damageable
-      damageContainer: Inorganic
+      # damageContainer: Inorganic # CMU14
     - type: Destructible
       thresholds:
         - trigger:

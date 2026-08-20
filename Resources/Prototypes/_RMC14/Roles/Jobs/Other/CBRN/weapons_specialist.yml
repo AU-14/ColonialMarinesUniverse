@@ -18,7 +18,6 @@
   overwatchShowName: true
   overwatchRoleName: Specialist
   roleWeight: 1
-  displayWeight: 4
   special:
   - !type:AddComponentSpecial
     components:
@@ -84,10 +83,6 @@
     job: RMCCBRNWS
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobWeaponsSpecialist
-      time: 18000 # 5 Hours
   - type: GhostRoleApplySpecial
     squad: SquadCBRN
 

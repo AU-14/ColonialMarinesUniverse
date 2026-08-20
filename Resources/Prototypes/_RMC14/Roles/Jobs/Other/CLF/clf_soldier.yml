@@ -64,10 +64,6 @@
     job: RMCCLFSoldier
     raffle:
       settings: short
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobRifleman
-      time: 36000 # 10 Hours
   - type: GhostRoleApplySpecial
     squad: SquadCLF
 

@@ -1,7 +1,6 @@
 - type: gameMap
   id: stablegarrison
   mapName: Stable Garrison
-  allegiance: UA
   mapPath: /Maps/_CMU14/garrison.yml
   mapsBelow:
   - /Maps/_CMU14/garrison_below.yml

@@ -100,7 +100,6 @@
         - ReagentId: CMUXenoPlasmaPhero
           Quantity: 200
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood

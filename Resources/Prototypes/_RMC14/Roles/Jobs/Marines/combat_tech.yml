@@ -30,7 +30,6 @@
   overwatchSortPriority: -1
   overwatchRoleName: Combat Technicians
   roleWeight: 1
-  displayWeight: 1
   special:
   - !type:AddComponentSpecial
     components:
@@ -142,11 +141,6 @@
     raffle:
       settings: default
     job: CMCombatTech
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobCombatTech
-      time: 1
-
 # Guidebook
 - type: entity
   parent: CMGuidebookRole

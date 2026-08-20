@@ -15,13 +15,13 @@
 # ├──[ CONSTRUCTION MENU ]───────────────────────────────────────────┤
 - type: construction
   parent: RMC
-  name: Mines Sign
+  name: con-a-u14-construction-sign-mines
   id: AU14ConstructionSignMines
   graph: AU14SignGraph
   startNode: start
   targetNode: sign_mines
   category: construction-category-cm-furniture
-  description: A sign warning about mines.
+  description: con-a-u14-construction-sign-mines-desc
   objectType: Structure
   canBuildInImpassable: false
   conditions:
@@ -29,13 +29,13 @@
 
 - type: construction
   parent: RMC
-  name: Traffic Director (Empty)
+  name: con-a-u14-construction-sign-empty
   id: AU14ConstructionSignEmpty
   graph: AU14SignGraph
   startNode: start
   targetNode: sign_empty
   category: construction-category-cm-furniture
-  description: A blank traffic director sign.
+  description: con-a-u14-construction-sign-empty-desc
   objectType: Structure
   canBuildInImpassable: false
   conditions:
@@ -43,38 +43,38 @@
 
 - type: construction
   parent: AU14ConstructionSignEmpty
-  name: Traffic Director (Evac Center)
+  name: con-a-u14-construction-sign-evac-center
   id: AU14ConstructionSignEvacCenter
   targetNode: sign_evaccenter
-  description: Directs to the evacuation center.
+  description: con-a-u14-construction-sign-evac-center-desc
 
 - type: construction
   parent: AU14ConstructionSignEmpty
-  name: Traffic Director (Checkpoint Ahead)
+  name: con-a-u14-construction-sign-checkpoint
   id: AU14ConstructionSignCheckpoint
   targetNode: sign_cpahead
-  description: Warns of a checkpoint ahead.
+  description: con-a-u14-construction-sign-checkpoint-desc
 
 - type: construction
   parent: AU14ConstructionSignEmpty
-  name: Traffic Director (Follow Army Orders)
+  name: con-a-u14-construction-sign-follow-orders
   id: AU14ConstructionSignFollowOrders
   targetNode: sign_armyorders
-  description: Reminder to follow army orders.
+  description: con-a-u14-construction-sign-follow-orders-desc
 
 - type: construction
   parent: AU14ConstructionSignEmpty
-  name: Traffic Director (Tune Freq)
+  name: con-a-u14-construction-sign-tune-freq
   id: AU14ConstructionSignTuneFreq
   targetNode: sign_freqtune
-  description: Tells people to tune to 91.7 AM.
+  description: con-a-u14-construction-sign-tune-freq-desc
 
 - type: construction
   parent: AU14ConstructionSignEmpty
-  name: Traffic Director (Slow Down)
+  name: con-a-u14-construction-sign-slow-down
   id: AU14ConstructionSignSlowDown
   targetNode: sign_slowdown
-  description: Instructs to slow down.
+  description: con-a-u14-construction-sign-slow-down-desc
 
 # ├──[ CONSTRUCTION GRAPH ]──────────────────────────────────────────┤
 - type: constructionGraph

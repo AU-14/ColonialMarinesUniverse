@@ -45,7 +45,6 @@
         - ReagentId: CMUXenoPlasmaPurple
           Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -90,7 +89,7 @@
     selfEffect: CMEffectSelfStomp
     shortRange: 0
     range: 4
-    stompsThroughBarricades: true
+    # stompsThroughBarricades: true # CMU14
     plasmaCost: 100
     paralyzeTime: 2
     slowBigInsteadOfStun: true

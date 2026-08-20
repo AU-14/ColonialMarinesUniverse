@@ -85,8 +85,8 @@
 
 - type: construction
   id: AU14BarricadeMetalRecipe
-  name: metal barricade
-  description: A military-grade metal barricade.
+  name: con-a-u14-barricade-metal-recipe
+  description: con-a-u14-barricade-metal-recipe-desc
   graph: AU14BarricadeMetalGraph
   startNode: start
   targetNode: built
@@ -179,8 +179,8 @@
 
 - type: construction
   id: AU14BarricadeMetalDoorRecipe
-  name: folding metal barricade
-  description: A barricade that can be folded or opened to allow marines through.
+  name: con-a-u14-barricade-metal-door-recipe
+  description: con-a-u14-barricade-metal-door-recipe-desc
   graph: AU14BarricadeMetalDoorGraph
   startNode: start
   targetNode: built
@@ -273,8 +273,8 @@
 
 - type: construction
   id: AU14BarricadePlasteelRecipe
-  name: plasteel barricade
-  description: A military-grade hardened plasteel barricade.
+  name: con-a-u14-barricade-plasteel-recipe
+  description: con-a-u14-barricade-plasteel-recipe-desc
   graph: AU14BarricadePlasteelGraph
   startNode: start
   targetNode: built
@@ -367,8 +367,8 @@
 
 - type: construction
   id: AU14BarricadePlasteelDoorRecipe
-  name: folding plasteel barricade
-  description: A barricade that can be folded or opened to allow marines through. Made from hardened plasteel.
+  name: con-a-u14-barricade-plasteel-door-recipe
+  description: con-a-u14-barricade-plasteel-door-recipe-desc
   graph: AU14BarricadePlasteelDoorGraph
   startNode: start
   targetNode: built
@@ -461,8 +461,8 @@
 
 - type: construction
   id: AU14BarricadeWoodRecipe
-  name: wooden barricade
-  description: A makeshift wooden barricade.
+  name: con-a-u14-barricade-wood-recipe
+  description: con-a-u14-barricade-wood-recipe-desc
   graph: AU14BarricadeWoodGraph
   startNode: start
   targetNode: built

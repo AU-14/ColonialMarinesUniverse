@@ -1,7 +1,6 @@
 - type: gameMap
   id: StableGarrisonRedux
   mapName: Stable Garrison
-  allegiance: UA
   mapPath: /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ0.yml
   mapsBelow:
   - /Maps/_CMU14/StableGarrisonMultiZ/StableGarrisonMultiZ-1.yml

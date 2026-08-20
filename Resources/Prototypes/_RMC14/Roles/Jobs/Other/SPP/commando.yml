@@ -76,12 +76,6 @@
     rules: rmc-ghost-role-information-spp-rules
     reregister: false
     job: RMCSPPCommando
-    requirements:
-    - !type:RoleTimeRequirement
-      role: CMJobRifleman
-      time: 18000 # 5 Hours
-    raffle:
-      settings: short
   - type: GhostRoleApplySpecial
     squad: SquadSPP
 

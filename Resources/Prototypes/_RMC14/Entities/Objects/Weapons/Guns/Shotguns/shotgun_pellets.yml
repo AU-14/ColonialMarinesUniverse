@@ -45,7 +45,6 @@
   - type: RMCStunOnHit
     stuns:
     - whitelist:
-        minMobSize: VerySmallXeno
       maxRange: 2.5 # TODO RMC14 1.5 if shot from underbarrel shotgun
       stunTime: 1.4
       slowTime: 2
@@ -81,7 +80,6 @@
   - type: RMCStunOnHit
     stuns:
     - whitelist:
-        minMobSize: VerySmallXeno
       maxRange: 6.5
       stunTime: 1
       slowTime: 3
