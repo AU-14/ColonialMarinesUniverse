@@ -1,5 +1,6 @@
 ﻿#nullable enable
 using System.Collections.Generic;
+using System.Linq;
 using Content.IntegrationTests.Fixtures.Attributes;
 using Content.IntegrationTests.Utility;
 using Content.Server.Antag;
@@ -30,7 +31,39 @@ public sealed partial class AntagGhostRoleTest : AntagTest
     [SidedDependency(Side.Server)] private IRobustRandom _random = default!;
     [SidedDependency(Side.Server)] private GhostRoleSystem _ghostRole = default!;
 
-    private static readonly string[] AntagGameRules = GameDataScrounger.EntitiesWithComponent("AntagSelection");
+    private static readonly HashSet<string> IgnoredRules = [ // CMU14 fork never runs these wizden antag rules; CMU rules stay covered
+        "BaseRoundstartAntagRule",
+        "BaseNukeopsRule",
+        "Nukeops",
+        "BaseTraitorRule",
+        "Traitor",
+        "TraitorReinforcement",
+        "Changeling",
+        "Revolutionary",
+        "BaseWizardRule",
+        "Zombie",
+        "BaseXenoborgsRule",
+        "DummyNonAntag",
+        "Thief",
+        "BaseAntagGhostRoleRule",
+        "DragonSpawn",
+        "NinjaSpawn",
+        "ParadoxCloneSpawn",
+        "ZombieOutbreak",
+        "LoneOpsSpawn",
+        "SleeperAgents",
+        "DerelictEngineerCyborgSpawn",
+        "DerelictGenericCyborgSpawn",
+        "DerelictJanitorCyborgSpawn",
+        "DerelictMedicalCyborgSpawn",
+        "DerelictMiningCyborgSpawn",
+        "DerelictSyndicateAssaultCyborgSpawn",
+    ];
+
+    private static readonly string[] AntagGameRules = GameDataScrounger
+        .EntitiesWithComponent("AntagSelection")
+        .Where(r => !IgnoredRules.Contains(r))
+        .ToArray();
 
     [Test]
     [TestOf(typeof(GameTicker)), TestOf(typeof(AntagSelectionSystem)), TestOf(typeof(AntagSelectionComponent)), TestOf(typeof(GhostRoleSystem))]

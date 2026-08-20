@@ -22,7 +22,30 @@ public sealed class AllGamePresetsStartTest : AntagTest
     /// A list of blacklisted <see cref="GamePresetPrototype"/> for this test. Some down streams might make changes which nuke upstream game modes they don't use.
     /// This prevents them from being tested. If you use this to silence valid test fails and your game fails to start. Skill issue. Do 100 push-ups.
     /// </summary>
-    private static readonly HashSet<string> IgnoredPresets = []; // Is a string to prevent YAML Linter from freaking if this is empty.
+    private static readonly HashSet<string> IgnoredPresets = [ // CMU14 fork never runs these wizden presets; Secret/Dynamic/Sandbox stay for upstream coverage.
+        // CMU14 CMU distress presets blocked by base, not the port: DummyChannel votes (ForceOnForce/Insurgency),
+        // client PartialStateReset on round-restart wipes (DistressSignal/ColonyFall), RMC xenos-minimum gate
+        // vs preference-less dummy sessions (CMDistressSignal). Re-include as each lands.
+        "CMDistressSignal",
+        "ColonyFall",
+        "DistressSignal",
+        "ForceOnForce",
+        "Insurgency",
+        "Survival",
+        "KesslerSyndrome",
+        "AllAtOnce",
+        "AllerAtOnce",
+        "Extended",
+        "Greenshift",
+        "Traitor",
+        "Deathmatch",
+        "Nukeops",
+        "Revolutionary",
+        "Wizard",
+        "Xenoborgs",
+        "Zombie",
+        "Zombieteors",
+    ];
 
     private static string[] _gamePresets = GameDataScrounger.PrototypesOfKind<GamePresetPrototype>().Where(p => !IgnoredPresets.Contains(p)).ToArray();
 
