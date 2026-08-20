@@ -1,51 +1,51 @@
 - type: accessLevel
   id: AU14AccessGovfor
-  name: Govfor
+  name: au14-access-govfor
 
 - type: accessLevel
   id: AU14AccessGovforSquad
-  name: Govfor Squad
+  name: au14-access-govfor-squad
 
 - type: accessLevel
   id: AU14AccessGovforSquadWeaponsSpecialist
-  name: Govfor Squad WS
+  name: au14-access-govfor-squad-weapons-specialist
 
 - type: accessLevel
   id: AU14AccessGovforCommand
-  name: Govfor Command
+  name: au14-access-govfor-command
 
 - type: accessLevel
   id: AU14AccessGovforSecurity
-  name: Govfor Security
+  name: au14-access-govfor-security
 
 - type: accessLevel
   id: AU14AccessGovforMedical
-  name: Govfor Medical
+  name: au14-access-govfor-medical
 
 - type: accessLevel
   id: AU14AccessGovforEngineering
-  name: Govfor Engineering
+  name: au14-access-govfor-engineering
 
 - type: accessLevel
   id: AU14AccessGovforFTL
-  name: Govfor Squad Leader
+  name: au14-access-govfor-ftl
 
 - type: accessLevel
   id: AU14AccessGovforGunner
-  name: Govfor Smart Gun Operator
+  name: au14-access-govfor-gunner
 
 - type: accessLevel
   id: AU14AccessGovforPilot
-  name: Govfor Pilot
+  name: au14-access-govfor-pilot
 
 - type: accessLevel
   id: AU14AccessGovforJuniorOfficer
-  name: Staff Officer
+  name: au14-access-govfor-junior-officer
 
 - type: accessLevel
   id: AU14AccessGovforReq
-  name: Govfor Requisitions
+  name: au14-access-govfor-req
 
 - type: accessLevel
   id: AU14AccessGovforVehicleCrew
-  name: Govfor Vehicle Crew
+  name: au14-access-govfor-vehicle-crew

@@ -1,47 +1,47 @@
 - type: accessLevel
   id: AU14AccessOpfor
-  name: Opfor
+  name: au14-access-opfor
 
 - type: accessLevel
   id: AU14AccessOpforSquad
-  name: Opfor Squad
+  name: au14-access-opfor-squad
 
 - type: accessLevel
   id: AU14AccessOpforCommand
-  name: Opfor Command
+  name: au14-access-opfor-command
 
 - type: accessLevel
   id: AU14AccessOpforSecurity
-  name: Opfor Security
+  name: au14-access-opfor-security
 
 - type: accessLevel
   id: AU14AccessOpforMedical
-  name: Opfor Medical
+  name: au14-access-opfor-medical
 
 - type: accessLevel
   id: AU14AccessOpforEngineering
-  name: Opfor Engineering
+  name: au14-access-opfor-engineering
 
 - type: accessLevel
   id: AU14AccessOpforFTL
-  name: Opfor Squad Leader
+  name: au14-access-opfor-ftl
 
 - type: accessLevel
   id: AU14AccessOpforGunner
-  name: Opfor Smart Gun Operator
+  name: au14-access-opfor-gunner
 
 - type: accessLevel
   id: AU14AccessOpforPilot
-  name: Opfor Pilot
+  name: au14-access-opfor-pilot
 
 - type: accessLevel
   id: AU14AccessOpforJuniorOfficer
-  name: Staff Officer
+  name: au14-access-opfor-junior-officer
 
 - type: accessLevel
   id: AU14AccessOpforReq
-  name: Opfor Requisitions
+  name: au14-access-opfor-req
 
 - type: accessLevel
   id: AU14AccessOpforVehicleCrew
-  name: Opfor Vehicle Crew
+  name: au14-access-opfor-vehicle-crew
