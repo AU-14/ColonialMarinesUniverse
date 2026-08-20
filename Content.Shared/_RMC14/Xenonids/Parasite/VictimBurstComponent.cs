@@ -25,7 +25,7 @@ public sealed partial class VictimBurstComponent : Component
     public bool BurstsFromBack;
     /// <summary>RSI used for the Neomorph back-burst variant. Separate file from the standard chest-burst RSI.</summary>
     [DataField, AutoNetworkedField]
-    public ResPath BackRsiPath = new("/Textures/_CMU14/Effects/back_burst.rsi");;
+    public ResPath BackRsiPath = new("/Textures/_CMU14/Effects/back_burst.rsi");
 }
 
 [Serializable, NetSerializable]
