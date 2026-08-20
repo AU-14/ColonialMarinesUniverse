@@ -13,4 +13,8 @@ public sealed partial class ModifyTargetOnHitComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityWhitelist? Whitelist;
+
+    // CMU14 restored from master: drop the added components again on a later hit
+    [DataField, AutoNetworkedField]
+    public bool RemoveExisting = true;
 }

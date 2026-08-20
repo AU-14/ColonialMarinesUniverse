@@ -19,4 +19,8 @@ public sealed partial class ApplyAcidStacksComponent : Component
 
     [DataField, AutoNetworkedField]
     public EntityWhitelist? Whitelist = new() { Components = ["Marine"] };
+
+    // CMU14 restored from master: only stack acid on targets that already have it
+    [DataField, AutoNetworkedField]
+    public bool RequireExisting;
 }

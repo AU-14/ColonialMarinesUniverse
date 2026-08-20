@@ -232,5 +232,11 @@
 - type: Tag
   id: Shovel
 
+- type: Tag # CMU14 tag
+  id: VehicleHeavy
+
+- type: Tag # CMU14 tag
+  id: VehiclePlow
+
 - type: Tag
   id: Wringer

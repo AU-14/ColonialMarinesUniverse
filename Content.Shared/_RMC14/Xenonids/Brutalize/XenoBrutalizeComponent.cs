@@ -26,4 +26,8 @@ public sealed partial class XenoBrutalizeComponent : Component
 
     [DataField, AutoNetworkedField]
     public TimeSpan AddtionalCooldownReductions = TimeSpan.FromSeconds(0.5);
+
+    // CMU14 restored from master: armor piercing for extra-splash hits
+    [DataField, AutoNetworkedField]
+    public int ArmorPiercing;
 }

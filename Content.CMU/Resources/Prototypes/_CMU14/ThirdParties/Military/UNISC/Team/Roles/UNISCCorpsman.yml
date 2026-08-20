@@ -54,7 +54,7 @@
   startingGear: AU14GearUNISCCorpsman
   greeting: au14-unisc-greeting
   joinNotifyCrew: false
-  supervisors: UNISC Squad Leader
+  supervisors: cmu-supervisors-unisc-squad-leader
   accessGroups:
   - AU14GovforSquad
   hidden: false

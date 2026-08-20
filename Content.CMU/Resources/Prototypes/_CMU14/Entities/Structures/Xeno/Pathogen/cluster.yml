@@ -79,4 +79,4 @@
   - type: HiveConstructionLimited
     id: CMU14PathogenCluster
   - type: WarpPoint
-    location: mycelium cluster
+    location: cmu-warp-mycelium-cluster

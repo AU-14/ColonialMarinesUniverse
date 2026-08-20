@@ -1,0 +1,11 @@
+cmu-vehicle-van = Van
+cmu-warp-orbital-bombardment = 1 orbital bombardment
+cmu-warp-blight-core = blight core
+cmu-warp-mycelium-cluster = mycelium cluster
+cmu-warp-plasma-node = plasma node
+cmu-warp-mycelium-pylon = mycelium pylon
+cmu-warp-recovery-node = recovery node
+cmu-warp-sporecaster = sporecaster
+cmu-supervisors-none = nobody
+cmu-supervisors-unisc-squad-leader = UNISC Squad Leader
+cmu-supervisors-high-command = High Command
