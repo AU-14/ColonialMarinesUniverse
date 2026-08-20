@@ -58,6 +58,7 @@ public sealed class USSBushMultiZTest : GameTest
         Dictionary<int, EntityUid> loadedMaps = [];
         Dictionary<int, NetEntity> loadedMapNets = [];
         var uscmEquipmentVendorsBefore = 0;
+        var uscmRiflemanVendorsBefore = 0;
         var uscmWeaponsVendorsBefore = 0;
         var semanticWeaponsVendors = 0;
 
@@ -82,9 +83,11 @@ public sealed class USSBushMultiZTest : GameTest
             }
 
             uscmEquipmentVendorsBefore = CountPrototype("AU14USCMequipmentvendor");
+            uscmRiflemanVendorsBefore = CountPrototype("VMarkerShipRifleman");
             uscmWeaponsVendorsBefore = CountPrototype("AU14USCMWeaponsVendor");
             semanticWeaponsVendors = CountPrototype("VMarkerShipWeapons");
             Assert.That(semanticWeaponsVendors, Is.GreaterThan(0));
+            Assert.That(uscmRiflemanVendorsBefore, Is.GreaterThan(0));
 
             var mainMap = mapSystem.GetMap(mapId);
             Assert.That(zLevels.TryGetZNetwork(mainMap, out var matchingNetwork), Is.True);
@@ -128,8 +131,10 @@ public sealed class USSBushMultiZTest : GameTest
 
             Assert.That(unresolvedMarkers, Is.GreaterThan(0),
                 "Dynamic Bush markers should remain available for the selected platoon rule.");
-            Assert.That(CountPrototype("AU14USCMequipmentvendor"), Is.GreaterThan(uscmEquipmentVendorsBefore),
-                "The selected USCM platoon did not resolve Bush's rifleman vendor markers.");
+            Assert.That(CountPrototype("AU14USCMequipmentvendor"), Is.EqualTo(uscmEquipmentVendorsBefore),
+                "The rifleman endpoints also spawned legacy force-specific vendors.");
+            Assert.That(CountPrototype("VMarkerShipRifleman"), Is.EqualTo(uscmRiflemanVendorsBefore),
+                "The rifleman endpoints were replaced instead of configured in place.");
             Assert.That(CountPrototype("AU14USCMWeaponsVendor"), Is.EqualTo(uscmWeaponsVendorsBefore),
                 "The semantic weapons endpoints also spawned legacy force-specific vendors.");
             Assert.That(CountPrototype("VMarkerShipWeapons"), Is.EqualTo(semanticWeaponsVendors),

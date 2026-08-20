@@ -1,7 +1,7 @@
 {
   "version": 1,
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from CMSS13 https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/tank.dmi, tank_base, tank_turret_0 and wheels_0/1 by github noctyrnal",
+  "copyright": "Taken from CMSS13 https://github.com/cmss13-devs/cmss13/blob/master/icons/obj/vehicles/tank.dmi, tank_base, tank_turret_0 and wheels_0/1 by github noctyrnal. aev_base taken from CMSS13-PvE https://github.com/cmss13-devs/cmss13-pve/pull/256 by github AndroBetel",
   "size": {
     "x": 128,
     "y": 128
@@ -9,6 +9,10 @@
   "states": [
     {
       "name": "tank_base",
+      "directions": 4
+    },
+    {
+      "name": "aev_base",
       "directions": 4
     },
     {

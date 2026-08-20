@@ -594,9 +594,8 @@ public sealed partial class GhostRoleSystem : EntitySystem
     /// <returns>True if takeover was successful, otherwise false.</returns>
     public bool Takeover(ICommonSession player, uint identifier)
     {
-        if (!CanRequestGhostRole(player))
-            return false;
-
+        // CMU14: no gate on the raw API; UI paths (Request/JoinRaffle/TryTakeover) already enforce ghost/lobby,
+        // and gating here breaks consecutive takeovers (AntagGhostRoleTest multi-spawner rules).
         if (!_ghostRoles.TryGetValue(identifier, out var role))
             return false;
 
