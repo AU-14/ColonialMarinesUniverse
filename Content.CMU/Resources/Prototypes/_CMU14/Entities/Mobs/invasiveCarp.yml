@@ -70,7 +70,7 @@
     - RMCSynthGrabbable
   - type: BodyZoneTargeting
     meleeAccuracy: 0.55
-  - type: NightVision
+  - type: RMCNightVision
     innate: true
   - type: CMArmor
     bullet: 10
@@ -158,6 +158,7 @@
   - type: Respirator
     minSaturation: 5.0
   - type: Temperature
+  - type: TemperatureDamage
     damageCap: 0
     heatDamageThreshold: 423
     coldDamageThreshold: 0

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   id: CMVinesBase
   name: vines
@@ -51,7 +51,8 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-  - type: Temperature
+  - type: Temperature # CMU14
+  - type: TemperatureDamage # CMU14
     heatDamage:
       types:
         Heat: 5
@@ -70,7 +71,6 @@
       methods: [Touch]
       effects:
       - !type:HealthChange
-        scaleByQuantity: true
         damage:
           types:
             Heat: 10

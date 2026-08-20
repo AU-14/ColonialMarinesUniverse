@@ -62,6 +62,7 @@
       Flammable: [ Touch ]
       Extinguish: [ Touch ]
   - type: Temperature
+  - type: TemperatureDamage
     heatDamageThreshold: 320
     heatDamage:
       types:
@@ -69,10 +70,11 @@
   # Slashes/pierces anyone standing on it - except abominations.
   - type: DamageContacts
     damage:
+      groups:
+        Toxin: 1
       types:
         Slash: 1.5
         Piercing: 1.5
-        Toxin: 1
     ignoreWhitelist:
       components:
       - Abomination

@@ -182,7 +182,8 @@
   - type: StandingState
   - type: Dna
   - type: MindContainer
-    showExamineInfo: true
+#   showExamineInfo: true # CMU14
+  - type: MindExaminable # CMU14
   - type: CanEnterCryostorage
   - type: InteractionPopup
     successChance: 1
@@ -255,10 +256,13 @@
   - type: Blindable
   # Other
   - type: Temperature
+    temperature: 310.15 # CMU14
+    specificHeat: 42 # CMU14
+  - type: TemperatureDamage # CMU14
     heatDamageThreshold: 325
     coldDamageThreshold: 260
-    currentTemperature: 310.15
-    specificHeat: 42
+#   currentTemperature: 310.15 # CMU14
+#   specificHeat: 42 # CMU14
     coldDamage:
       types:
         Cold: 0.1 #per second, scales with temperature & other constants
