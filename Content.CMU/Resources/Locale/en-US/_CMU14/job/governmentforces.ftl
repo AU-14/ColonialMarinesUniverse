@@ -53,6 +53,7 @@ au14-job-description-govforsquadsergeant = Lead a Squad. Follow orders from the 
 au14-job-prefix-govforsquadsergeant = SL
 
 au14-job-name-govforsquadrifleman = Rifleman
+au14-job-name-govforsquadriflemanRMC = Rifleman
 au14-job-description-govforsquadrifleman = The backbone of the unit. Follow orders, pull security, and shoot straight.
 au14-job-prefix-govforsquadrifleman = RFN
 

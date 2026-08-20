@@ -1085,3 +1085,12 @@
   components:
   - type: VendorMarker
     class: FighterDestination
+
+- type: entity
+  parent: VMarkerOpfor
+  id: VMarkerOpforDeco5
+  name: Opfor deco marker 5
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: VendorMarker
+    class: Deco5
