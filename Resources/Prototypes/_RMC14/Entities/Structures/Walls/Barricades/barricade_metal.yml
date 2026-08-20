@@ -184,7 +184,7 @@
       - state: turnstile
       - map: [ "acided" ]
     - type: Damageable
-      damageContainer: Inorganic
+      # damageContainer: Inorganic # CMU14
     - type: Destructible
       thresholds:
       - trigger:
@@ -237,7 +237,7 @@
       delay: 10
       fuelUsed: 2
     - type: Damageable
-      damageContainer: StructuralMarine
+      # damageContainer: StructuralMarine # CMU14
       damageModifierSet: StructuralMarine
     - type: Destructible
       thresholds:

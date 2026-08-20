@@ -45,7 +45,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: peanut
+    # seedId: peanut # CMU14
   - type: Tag
     tags:
     - Vegetable
@@ -69,7 +69,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: whitebeet
+    # seedId: whitebeet # CMU14
   - type: Tag
     tags:
     - Vegetable
@@ -91,7 +91,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: sunflower
+    # seedId: sunflower # CMU14
   - type: Tag
     tags:
     - Vegetable
@@ -107,7 +107,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: grass
+    # seedId: grass # CMU14
   - type: Tag
     tags:
     - Vegetable
@@ -136,7 +136,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: rmcmango
+    # seedId: rmcmango # CMU14
   - type: Extractable
     juiceSolution:
       reagents:

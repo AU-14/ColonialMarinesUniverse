@@ -53,7 +53,7 @@
         effectProto: StatusEffectSeeingRainbow
         type: Add
         time: 15 #0.75/s is too slow
-        refresh: true #15s cap
+        # refresh: true #15s cap # CMU14
       - !type:Jitter
         conditions:
         - !type:ReagentThreshold #TODO Hallucinations +5 no max at 30 OD
@@ -66,4 +66,4 @@
         component: RMCUnconscious
         type: Add
         time: 40
-        refresh: true
+        # refresh: true # CMU14

@@ -471,10 +471,10 @@
     - MarineRequisition
     - MarineJTAC
     - MarineIntel
-    readOnlyChannels:
-    - MarineCommand
-    - MarineJTAC
-    - MarineIntel
+    # readOnlyChannels: # CMU14
+    # - MarineCommand
+    # - MarineJTAC
+    # - MarineIntel
     defaultChannel: MarineCommon
   - type: Sprite
     state: cap_key

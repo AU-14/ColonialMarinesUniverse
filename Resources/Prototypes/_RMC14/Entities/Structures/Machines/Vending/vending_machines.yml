@@ -515,7 +515,7 @@
   - type: VendingMachine
     pack: CMVendorSec
     # denyState: deny-unshaded # CMU14
-    ejectState: eject-unshaded
+    # ejectState: eject-unshaded # CMU14
   - type: AccessReader
     access: [["CMAccessBrig"]]
 
@@ -561,8 +561,8 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: RMCVendorRiot
-    denyState: deny-unshaded
-    ejectState: eject-unshaded
+    # denyState: deny-unshaded # CMU14
+    # ejectState: eject-unshaded # CMU14
   - type: AccessReader
     access: [["CMAccessBrig"]]
 
@@ -595,8 +595,8 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: CMVendorSEA
-    denyState: deny-unshaded
-    ejectState: eject-unshaded
+    # denyState: deny-unshaded # CMU14
+    # ejectState: eject-unshaded # CMU14
   - type: AccessReader
     access: [["CMAccessSEA"]]
 
@@ -627,8 +627,8 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/nutri.rsi
   - type: VendingMachine
     pack: CMVendorNutri
-    denyState: deny-unshaded
-    ejectState: eject-unshaded
+    # denyState: deny-unshaded # CMU14
+    # ejectState: eject-unshaded # CMU14
 
 - type: vendingMachineInventory
   id: CMVendorNutri
@@ -659,8 +659,8 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/seeds.rsi
   - type: VendingMachine
     pack: CMVendorSeeds
-    denyState: deny-unshaded
-    ejectState: eject-unshaded
+    # denyState: deny-unshaded # CMU14
+    # ejectState: eject-unshaded # CMU14
 
 - type: vendingMachineInventory
   id: CMVendorSeeds

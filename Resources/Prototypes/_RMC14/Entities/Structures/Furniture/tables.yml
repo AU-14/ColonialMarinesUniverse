@@ -162,7 +162,7 @@
   - type: Sprite
     color: "#ffb84d"
   - type: Icon
-    color: "#ffb84d"
+    # color: "#ffb84d" # CMU14
 
 - type: entity
   parent: RMCTableReinforcedRequisitionBrown
@@ -281,7 +281,7 @@
   - type: Sprite
     color: "#98A3AB"
   - type: Icon
-    color: "#98A3AB"
+    # color: "#98A3AB" # CMU14
 
 - type: entity
   parent: RMCTablePrison
@@ -291,7 +291,7 @@
   - type: Sprite
     color: "#ffe6e6"
   - type: Icon
-    color: "#ffe6e6"
+    # color: "#ffe6e6" # CMU14
 
 - type: entity
   parent: RMCTablePrison
@@ -301,7 +301,7 @@
   - type: Sprite
     color: "#8B7B5B"
   - type: Icon
-    color: "#8B7B5B"
+    # color: "#8B7B5B" # CMU14
 
 # Hunter
 - type: entity

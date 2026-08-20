@@ -930,7 +930,7 @@
     layers:
     - state: cleanade
   - type: ActiveTimerTrigger
-    timeRemaining: 0.3
+    # timeRemaining: 0.3 # CMU14
   - type: SmokeOnTrigger
     duration: 3.5
     spreadAmount: 30

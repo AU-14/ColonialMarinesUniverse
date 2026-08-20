@@ -54,7 +54,7 @@
   - type: RMCStunOnTrigger
     filters:
     - paralyze: 2.5
-      whitelist:
+      # whitelist: # CMU14
 #        skills: # CMU14
 #          RMCSkillPolice: 2
   - type: EmitSoundOnTrigger

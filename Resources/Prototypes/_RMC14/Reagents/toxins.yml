@@ -141,7 +141,7 @@
         component: RMCUnconscious
         type: Add
         time: 3
-        refresh: true
+        # refresh: true # CMU14
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -169,4 +169,4 @@
         component: Drowsiness
         time: 4
         type: Add
-        refresh: false
+        # refresh: false # CMU14

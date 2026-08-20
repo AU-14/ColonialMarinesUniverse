@@ -354,7 +354,7 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    # mapCoords: true # CMU14
   - type: TileFireOnTrigger
     range: 0
     spawn: RMCTileFireHCNapalm

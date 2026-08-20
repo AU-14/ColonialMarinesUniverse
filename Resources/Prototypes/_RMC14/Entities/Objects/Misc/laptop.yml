@@ -42,7 +42,7 @@
         enum.ToggleableVisuals.Enabled:
           True: { state: hangar_comp }
           False: { state: hangar_comp_open }
-    sprite: _RMC14/Objects/Devices/dropship_maint_comp.rsi
+    # sprite: _RMC14/Objects/Devices/dropship_maint_comp.rsi # CMU14
   - type: Item
     size: Large
     sprite: _RMC14/Objects/Devices/dropship_maint_comp.rsi
@@ -78,7 +78,7 @@
         enum.ToggleableVisuals.Layer:
           True: { state: laptop_on }
           False: { state: laptop_off }
-    sprite: _RMC14/Objects/Misc/laptop.rsi
+    # sprite: _RMC14/Objects/Misc/laptop.rsi # CMU14
   - type: Item
     size: Normal
     sprite: _RMC14/Objects/Misc/laptop.rsi
