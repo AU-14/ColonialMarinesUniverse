@@ -53,5 +53,5 @@ public sealed partial class RMCStunOnTriggerFilter
     public float? Probability;
 
     [DataField]
-    public EntityWhitelist Whitelist;
+    public EntityWhitelist? Whitelist; // CMU14: nullable like RMCStunOnHit, else proto spawn copies null and throws
 }
