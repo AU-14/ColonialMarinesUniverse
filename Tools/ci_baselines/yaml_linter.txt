@@ -5,31 +5,6 @@
 ::error in /Prototypes/_CMU14/Buildables/au14_buildables.yml(363,9)  No localization message found with id table
 ::error in /Prototypes/_CMU14/Buildables/au14_buildables.yml(545,9)  No localization message found with id rack
 ::error in /Prototypes/_CMU14/Economy/Catalog/Fills/Clothing/belt.yml(1973,14)  No localization message found with id rmc-storage-limit-two-guns
-::error in /Prototypes/_CMU14/Economy/Vendors/medicalvendor.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_CMU14/Entities/Clothing/Civilian/wysecarmor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Civilian/wysecarmor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/CCAF/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/CCAF/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/CMB/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/CMB/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/HAZOPS/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/HAZOPS/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/Prodigy/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/Prodigy/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/Prodigy/helmets.yml(203,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/Prodigy/helmets.yml(204,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/RMC/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/RMC/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/UNISC/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/UNISC/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/UPP/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/UPP/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/USCM-USARMY/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/USCM-USARMY/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/WY-PMC/armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/WY-PMC/armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/WY-PMC/helmets.yml(203,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/Entities/Clothing/Factions/WY-PMC/helmets.yml(204,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
 ::error in /Prototypes/_CMU14/Entities/Markers/wildernessspawners.yml(30,15)  No EntityPrototype found with id RMCFloraTreeTyrargoBald01
 ::error in /Prototypes/_CMU14/Entities/Markers/wildernessspawners.yml(69,15)  No EntityPrototype found with id RMCFloraTyrargoTreeStump01
 ::error in /Prototypes/_CMU14/Entities/Mobs/SpaceApe.yml(-1,-1)  No localization message found with id humanoid-profile-editor-voice-none
@@ -49,7 +24,6 @@
 ::error in /Prototypes/_CMU14/Entities/Mobs/Xeno/hiveless.yml(53,11)  No localization message found with id rmc-xeno-venator-name
 ::error in /Prototypes/_CMU14/Entities/Mobs/Xeno/hiveless.yml(54,18)  No localization message found with id rmc-xeno-venator-description
 ::error in /Prototypes/_CMU14/Entities/Mobs/Xeno/hiveless.yml(55,12)  No localization message found with id rmc-xeno-venator-popup
-::error in /Prototypes/_CMU14/Entities/Mobs/Xeno/hiveless.yml(92,5)  Field "stompsThroughBarricades" not found in "Content.Shared._RMC14.Xenonids.Stomp.XenoStompComponent".
 ::error in /Prototypes/_CMU14/Entities/Objects/Tools/maintenance_jack.yml(-1,-1)  No localization message found with id rmc-synth-item-restricted
 ::error in /Prototypes/_CMU14/Entities/Objects/Tools/new_scissors.yml(38,7)  No Content.Shared.Tools.ToolQualityPrototype found with id Shearing
 ::error in /Prototypes/_CMU14/Entities/Structures/Machines/corporate_asrs.yml(249,15)  No localization message found with id the pit
@@ -57,10 +31,6 @@
 ::error in /Prototypes/_CMU14/Medical/Treatment/field_treatments.yml(79,9)  No localization message found with id antiseptic
 ::error in /Prototypes/_CMU14/RoundSetup/Logistics/asrs_endpoints.yml(249,15)  No localization message found with id the pit
 ::error in /Prototypes/_CMU14/RoundSetup/Platoons/vendor_markers.yml(249,15)  No localization message found with id the pit
-::error in /Prototypes/_CMU14/ThirdParties/Civilian/OneOffs/ProfessorVonBandolier/package.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/ThirdParties/Civilian/OneOffs/ProfessorVonBandolier/package.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/ThirdParties/Military/FORECON/Base/base.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_CMU14/ThirdParties/Military/FORECON/Base/base.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
 ::error in /Prototypes/_CMU14/Threats/Yautja/Audio/audio.yml(-1,-1)  No localization message found with id humanoid-profile-editor-voice-none
 ::error in /Prototypes/_CMU14/Threats/Yautja/Equipment/items.yml(30,9)  No Content.Shared.Tools.ToolQualityPrototype found with id Shearing
 ::error in /Prototypes/_CMU14/Vehicles/Blackfoot/hardpoints.yml(184,22)  No EntityPrototype found with id BlackfootRecon
@@ -68,9 +38,6 @@
 ::error in /Prototypes/_CMU14/ZLevelBuilding/tiles.yml(154,9)  No localization message found with id dirt
 ::error in /Prototypes/Entities/Mobs/NPCs/animals.yml(1220,18)  No Content.Shared.Tools.ToolQualityPrototype found with id Shearing
 ::error in /Prototypes/Entities/Mobs/NPCs/space.yml(452,18)  No Content.Shared.Tools.ToolQualityPrototype found with id Shearing
-::error in /Prototypes/Entities/Mobs/Player/admin_ghost.yml(138,5)  Field "opfor" not found in "Content.Shared._RMC14.TacticalMap.TacticalMapUserComponent".
-::error in /Prototypes/Entities/Mobs/Player/admin_ghost.yml(139,5)  Field "govfor" not found in "Content.Shared._RMC14.TacticalMap.TacticalMapUserComponent".
-::error in /Prototypes/Entities/Mobs/Player/admin_ghost.yml(140,5)  Field "clf" not found in "Content.Shared._RMC14.TacticalMap.TacticalMapUserComponent".
 ::error in /Prototypes/Entities/Objects/Fun/weapons.yml(153,12)  No Robust.Shared.Prototypes.EntityPrototype found with id StickyHandPalm
 ::error in /Prototypes/Entities/Objects/Specific/Hydroponics/tools.yml(52,7)  No Content.Shared.Tools.ToolQualityPrototype found with id Shearing
 ::error in /Prototypes/Entities/Objects/Specific/Service/barber.yml(38,7)  No Content.Shared.Tools.ToolQualityPrototype found with id Shearing
@@ -80,7 +47,6 @@
 ::error in /Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml(663,12)  No EntityPrototype found with id BulletTaserSuper
 ::error in /Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml(919,12)  No EntityPrototype found with id BulletLaserMagnum
 ::error in /Prototypes/Entities/Objects/Weapons/Guns/Battery/battery_guns.yml(925,14)  No EntityPrototype found with id BulletLaserWindowPiercingMagnum
-::error in /Prototypes/Entities/Objects/Weapons/Guns/Projectiles/projectiles.yml(901,5)  Field "timeRemaining" not found in "Content.Shared.Trigger.Components.ActiveTimerTriggerComponent".
 ::error in /Prototypes/_RMC14/Actions/wheelchair_actions.yml(11,7)  Invalid RSI state
 ::error in /Prototypes/_RMC14/Actions/wheelchair_actions.yml(-1,-1)  File not found. (/Textures/Objects/Misc/desk_bell.rsi/normal.png)
 ::error in /Prototypes/_RMC14/Actions/Xeno/despoiler_actions.yml(113,18)  No EntityPrototype found with id RMCEffectDespoilerCatalyze
@@ -90,54 +56,14 @@
 ::error in /Prototypes/_RMC14/Actions/Xeno/despoiler_actions.yml(88,21)  No EntityPrototype found with id RMCEffectDespoilerOozingTelegraph
 ::error in /Prototypes/_RMC14/Actions/Xeno/despoiler_actions.yml(89,21)  No EntityPrototype found with id RMCEffectDespoilerAcidSpray
 ::error in /Prototypes/_RMC14/Actions/Xeno/despoiler_actions.yml(90,30)  No EntityPrototype found with id RMCEffectDespoilerAcidSprayEmpowered
-::error in /Prototypes/_RMC14/Alerts/alerts.yml(28,3)  Field "altClickEvent" not found in "Content.Shared.Alert.AlertPrototype".
-::error in /Prototypes/_RMC14/Catalog/Fills/Boxes/medical.yml(39,5)  Field "whitelist" not found in "Robust.Client.GameObjects.SpriteComponent".
-::error in /Prototypes/_RMC14/Catalog/Fills/Clothing/outer.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Catalog/Fills/Clothing/outer.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Areas/areas_portnereid.yml(65,5)  Field "weatherEnabled" not found in "Robust.Client.GameObjects.SpriteComponent".
 ::error in /Prototypes/_RMC14/Entities/Clothing/Belt/belts.yml(1973,14)  No localization message found with id rmc-storage-limit-two-guns
 ::error in /Prototypes/_RMC14/Entities/Clothing/Ears/distress_headsets.yml(245,7)  No Content.Shared.Radio.RadioChannelPrototype found with id MarineSOF
 ::error in /Prototypes/_RMC14/Entities/Clothing/Ears/distress_headsets.yml(293,11)  No Content.Shared.Radio.RadioChannelPrototype found with id RoyalMarine
 ::error in /Prototypes/_RMC14/Entities/Clothing/Ears/royal_headsets.yml(20,7)  No Content.Shared.Radio.RadioChannelPrototype found with id RoyalMarine
 ::error in /Prototypes/_RMC14/Entities/Clothing/Ears/ship_headsets.yml(495,7)  No Content.Shared.Radio.RadioChannelPrototype found with id MarineSOF
 ::error in /Prototypes/_RMC14/Entities/Clothing/Eyes/glasses.yml(-1,-1)  No localization message found with id rmc-synth-item-restricted
-::error in /Prototypes/_RMC14/Entities/Clothing/Eyes/glasses.yml(152,5)  Field "experimentalMesonFov" not found in "Content.Shared._RMC14.NightVision.NightVisionItemComponent".
 ::error in /Prototypes/_RMC14/Entities/Clothing/Head/boonie.yml(12,21)  No localization message found with id fold-strap-verb
 ::error in /Prototypes/_RMC14/Entities/Clothing/Head/boonie.yml(13,19)  No localization message found with id fold-unstrap-verb
-::error in /Prototypes/_RMC14/Entities/Clothing/Head/Helmets/freelancer.yml(203,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/Head/Helmets/freelancer.yml(204,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/Head/pmc.yml(203,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/Head/pmc.yml(204,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/biosuits.yml(91,5)  Field "heatingCoefficient" not found in "Content.Server.Temperature.Components.TemperatureProtectionComponent".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/biosuits.yml(92,5)  Field "coolingCoefficient" not found in "Content.Server.Temperature.Components.TemperatureProtectionComponent".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/cmb.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/cmb.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/faction_armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/faction_armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/freelancer.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/freelancer.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/marine_armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/marine_armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/marine_armor.yml(804,5)  Field "heatingCoefficient" not found in "Content.Server.Temperature.Components.TemperatureProtectionComponent".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/marine_armor.yml(805,5)  Field "coolingCoefficient" not found in "Content.Server.Temperature.Components.TemperatureProtectionComponent".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/misc_armor.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/misc_armor.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pmc.yml(254,5)  Field "heatingCoefficient" not found in "Content.Server.Temperature.Components.TemperatureProtectionComponent".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pmc.yml(255,5)  Field "coolingCoefficient" not found in "Content.Server.Temperature.Components.TemperatureProtectionComponent".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pmc.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pmc.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/provost.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/provost.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pve_marine_armor.yml(350,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pve_marine_armor.yml(351,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pve_royal_armor.yml(350,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/pve_royal_armor.yml(351,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/royal.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/royal.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/spp.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/spp.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/tse.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Clothing/OuterClothing/tse.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
 ::error in /Prototypes/_RMC14/Entities/iff_factions.yml(22,7)  No Content.Shared.Radio.RadioChannelPrototype found with id MarineSOF
 ::error in /Prototypes/_RMC14/Entities/iff_factions.yml(23,7)  No Content.Shared.Radio.RadioChannelPrototype found with id WEYA
 ::error in /Prototypes/_RMC14/Entities/Markers/gm_map_markers.yml(112,15)  No localization message found with id GM marker (Sword)
@@ -156,11 +82,6 @@
 ::error in /Prototypes/_RMC14/Entities/Mobs/NPCs/animals.yml(398,15)  No localization message found with id Garry
 ::error in /Prototypes/_RMC14/Entities/Mobs/NPCs/animals.yml(408,15)  No localization message found with id Bernard
 ::error in /Prototypes/_RMC14/Entities/Mobs/NPCs/animals.yml(422,15)  No localization message found with id Buttons
-::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/burrower.yml(92,5)  Field "stompsThroughBarricades" not found in "Content.Shared._RMC14.Xenonids.Stomp.XenoStompComponent".
-::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/crusher.yml(173,5)  Field "damageGoal" not found in "Content.Shared._RMC14.Xenonids.Soak.XenoSoakComponent".
-::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/crusher.yml(174,5)  Field "heal" not found in "Content.Shared._RMC14.Xenonids.Soak.XenoSoakComponent".
-::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/crusher.yml(235,5)  Field "hasAltFling" not found in "Content.Shared._RMC14.Xenonids.Fling.XenoFlingComponent".
-::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/crusher.yml(81,5)  Field "maxTargets" not found in "Content.Shared.Weapons.Melee.MeleeWeaponComponent".
 ::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/sentinel.yml(175,11)  No localization message found with id rmc-xeno-toxic-name
 ::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/sentinel.yml(176,18)  No localization message found with id rmc-xeno-toxic-description
 ::error in /Prototypes/_RMC14/Entities/Mobs/Xeno/sentinel.yml(177,12)  No localization message found with id rmc-xeno-toxic-popup
@@ -183,11 +104,8 @@
 ::error in /Prototypes/_RMC14/Entities/Objects/Consumables/Food/food.yml(180,7)  No Content.Shared.Nutrition.FlavorPrototype found with id mango
 ::error in /Prototypes/_RMC14/Entities/Objects/Devices/EncryptionKeys/distress.yml(9,7)  No Content.Shared.Radio.RadioChannelPrototype found with id CMB
 ::error in /Prototypes/_RMC14/Entities/Objects/Devices/EncryptionKeys/marine.yml(132,21)  No Content.Shared.Radio.RadioChannelPrototype found with id MarineSOF
-::error in /Prototypes/_RMC14/Entities/Objects/Devices/EncryptionKeys/ship.yml(430,5)  Field "readOnlyChannels" not found in "Content.Shared.Radio.Components.EncryptionKeyComponent".
 ::error in /Prototypes/_RMC14/Entities/Objects/Devices/EncryptionKeys/ship.yml(59,7)  No Content.Shared.Radio.RadioChannelPrototype found with id WEYA
 ::error in /Prototypes/_RMC14/Entities/Objects/Devices/EncryptionKeys/ship.yml(84,7)  No Content.Shared.Radio.RadioChannelPrototype found with id CMB
-::error in /Prototypes/_RMC14/Entities/Objects/Devices/pda.yml(17,5)  Field "preinstalled" not found in "Content.Shared.CartridgeLoader.CartridgeLoaderComponent".
-::error in /Prototypes/_RMC14/Entities/Objects/GuidebookSpecial/RMCRequisitions.yml(34,5)  Field "map" not found in "Robust.Client.GameObjects.SpriteComponent".
 ::error in /Prototypes/_RMC14/Entities/Objects/IdCards/rmc_id_royal.yml(8,7)  No Content.Shared.Radio.RadioChannelPrototype found with id RoyalMarine
 ::error in /Prototypes/_RMC14/Entities/Objects/Materials/Sheets/glass.yml(13,9)  No localization message found with id glass
 ::error in /Prototypes/_RMC14/Entities/Objects/Materials/Sheets/glass.yml(165,9)  No localization message found with id reinforced glass
@@ -199,8 +117,6 @@
 ::error in /Prototypes/_RMC14/Entities/Objects/Materials/Sheets/other.yml(216,9)  No localization message found with id aluminum
 ::error in /Prototypes/_RMC14/Entities/Objects/Materials/Sheets/other.yml(99,9)  No localization message found with id wooden plank
 ::error in /Prototypes/_RMC14/Entities/Objects/Materials/Sheets/plastic.yml(12,9)  No localization message found with id plastic
-::error in /Prototypes/_RMC14/Entities/Objects/Medical/bodybags.yml(107,5)  Field "fitIntoEntityStorage" not found in "Content.Shared.Foldable.FoldableComponent".
-::error in /Prototypes/_RMC14/Entities/Objects/Medical/bodybags.yml(172,5)  Field "enabled" not found in "Content.Shared.Morgue.Components.EntityStorageLayingDownOverrideComponent".
 ::error in /Prototypes/_RMC14/Entities/Objects/Medical/defib.yml(-1,-1)  No localization message found with id rmc-synth-item-restricted
 ::error in /Prototypes/_RMC14/Entities/Objects/Medical/healing.yml(138,9)  No localization message found with id gauze
 ::error in /Prototypes/_RMC14/Entities/Objects/Medical/healing.yml(310,9)  No localization message found with id advanced burn kit
@@ -209,13 +125,10 @@
 ::error in /Prototypes/_RMC14/Entities/Objects/Medical/healing.yml(477,9)  No localization message found with id upgraded trauma kit
 ::error in /Prototypes/_RMC14/Entities/Objects/Medical/healing.yml(70,9)  No localization message found with id ointment
 ::error in /Prototypes/_RMC14/Entities/Objects/Medical/pills.yml(175,20)  No Content.Shared.Chemistry.Reagent.ReagentPrototype found with id RMCUltrazine
-::error in /Prototypes/_RMC14/Entities/Objects/Misc/laptop.yml(19,5)  Field "sprite" not found in "Robust.Client.GameObjects.GenericVisualizerComponent".
 ::error in /Prototypes/_RMC14/Entities/Objects/Misc/spacecash.yml(55,9)  No localization message found with id 1 dollar bill
 ::error in /Prototypes/_RMC14/Entities/Objects/Misc/tiles.yml(53,9)  No localization message found with id steel tile
 ::error in /Prototypes/_RMC14/Entities/Objects/Misc/tiles.yml(59,9)  No localization message found with id wooden floor tile
-::error in /Prototypes/_RMC14/Entities/Objects/patron_figurines.yml(2045,5)  Field "cooldown" not found in "Content.Shared.Sound.Components.EmitSoundOnThrowComponent".
 ::error in /Prototypes/_RMC14/Entities/Objects/Power/coil.yml(3,9)  No localization message found with id cable coil
-::error in /Prototypes/_RMC14/Entities/Objects/Tools/bucket.yml(61,5)  Field "fillBaseName" not found in "Content.Client.Chemistry.Components.SolutionItemStatusComponent".
 ::error in /Prototypes/_RMC14/Entities/Objects/Tools/folding_barricade.yml(3,9)  No localization message found with id MB-6 folding barricade
 ::error in /Prototypes/_RMC14/Entities/Objects/Tools/inflatable_wall.yml(3,9)  No localization message found with id inflatable wall
 ::error in /Prototypes/_RMC14/Entities/Objects/Tools/inflatable_wall.yml(45,9)  No localization message found with id inflatable door
@@ -223,12 +136,7 @@
 ::error in /Prototypes/_RMC14/Entities/Objects/Tools/tools.yml(-1,-1)  No localization message found with id rmc-synth-item-restricted
 ::error in /Prototypes/_RMC14/Entities/Objects/Tools/tools.yml(30,9)  No Content.Shared.Tools.ToolQualityPrototype found with id Shearing
 ::error in /Prototypes/_RMC14/Entities/Objects/Tools/welders.yml(-1,-1)  No localization message found with id rmc-synth-item-restricted
-::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Cases/specialist_loadouts.yml(482,5)  Field "layers" not found in "Robust.Client.GameObjects.IconComponent".
-::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Ammunition/Cartridges/vehicle_tank.yml(228,5)  Field "projectileAdjust" not found in "Content.Shared._RMC14.Projectiles.SpawnOnTerminateComponent".
-::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Ammunition/Cartridges/vehicle_tank.yml(263,5)  Field "mapCoords" not found in "Content.Shared.Trigger.Components.Effects.SpawnOnTriggerComponent".
-::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/HMGs/weapon_mounts.yml(171,9)  Field "deleteChance" not found in "Content.Server.Destructible.Thresholds.Behaviors.EmptyContainersBehaviour".
 ::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Rifles/rifle_handfuls.yml(36,9)  No localization message found with id handful of .458 SOCOM bullets
-::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Rifles/sharp_rifle.yml(474,5)  Field "triggerOnAnyProjectile" not found in "Content.Shared._RMC14.Explosion.RMCLandmineComponent".
 ::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Shotguns/mk481_shotgun.yml(95,9)  No localization message found with id handful of high-dispersive shock grenades
 ::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Shotguns/shotgun_handfuls.yml(120,9)  No localization message found with id handful of shotgun slugs
 ::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Shotguns/shotgun_handfuls.yml(157,9)  No localization message found with id handful of incendiary slugs
@@ -242,20 +150,10 @@
 ::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Shotguns/shotgun_heavy_handfuls.yml(68,9)  No localization message found with id handful of heavy slug shells
 ::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Guns/Snipers/vulture_sniper.yml(500,29)  No localization message found with id rmc-vulture-spotter-scope-only
 ::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Projectiles/xeno_spike.yml(30,9)  No Content.Shared.Damage.Prototypes.DamageTypePrototype found with id Brute
-::error in /Prototypes/_RMC14/Entities/Objects/Weapons/Throwable/grenades.yml(58,9)  Field "skills" not found in "Content.Shared.Whitelist.EntityWhitelist".
-::error in /Prototypes/_RMC14/Entities/Objects/Xeno/xeno_projectiles.yml(476,5)  Field "drawDepth" not found in "Robust.Client.GameObjects.SpriteComponent".
 ::error in /Prototypes/_RMC14/Entities/rmc_hive_boons.yml(88,15)  No localization message found with id alien cocoon
 ::error in /Prototypes/_RMC14/Entities/Structures/communications_tower.yml(122,7)  No Content.Shared.Radio.RadioChannelPrototype found with id WEYA
 ::error in /Prototypes/_RMC14/Entities/Structures/communications_tower.yml(123,7)  No Content.Shared.Radio.RadioChannelPrototype found with id CMB
-::error in /Prototypes/_RMC14/Entities/Structures/Furniture/rollerbeds.yml(86,5)  Field "fitIntoEntityStorage" not found in "Content.Shared.Foldable.FoldableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Furniture/tables.yml(53,5)  Field "color" not found in "Robust.Client.GameObjects.IconComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/GunRacks/misc.yml(40,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/GunRacks/rifles.yml(40,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/GunRacks/shotguns.yml(40,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/requisitions.yml(249,15)  No localization message found with id the pit
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/vehicle_supply.yml(40,7)  Field "group" not found in "Content.Shared._RMC14.Vehicle.Supply.VehicleSupplyEntry".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/vehicle_supply.yml(41,7)  Field "loadoutCategories" not found in "Content.Shared._RMC14.Vehicle.Supply.VehicleSupplyEntry".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/vehicle_supply.yml(890,7)  Field "bundle" not found in "Content.Shared._RMC14.Vehicle.Supply.VehicleSupplyEntry".
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Crew/synthetic.yml(17,13)  No EntityPrototype found with id RMCSynthExperimentalToolsToken
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Crew/synthetic.yml(193,13)  No EntityPrototype found with id RMCK9SerialIdTags
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Crew/synthetic.yml(194,13)  No EntityPrototype found with id RMCK9NameImplanter
@@ -269,47 +167,19 @@
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Crew/synthetic.yml(391,13)  No EntityPrototype found with id RMCToolDropPouchFilled
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Crew/synthetic.yml(69,13)  No EntityPrototype found with id CMArmorM3VLSynthGray
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Crew/synthetic.yml(70,13)  No EntityPrototype found with id CMArmorM3VLSynthDarkGray
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/engineering.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/food.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/general.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/lifeboat.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/medical.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/PVE/royal.yml(396,13)  No EntityPrototype found with id RMCGogglesBallisticRCM
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/PVE/royal.yml(399,13)  No EntityPrototype found with id RMCGogglesPrescriptionBallisticRCM
 ::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/PVE/royal.yml(402,13)  No EntityPrototype found with id RMCGogglesTintedBallisticRCM
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Squad/leader.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/Squad/leader.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(176,5)  Field "ejectState" not found in "Content.Shared.VendingMachines.Components.VendingMachineComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(517,5)  Field "denyState" not found in "Content.Shared.VendingMachines.Components.VendingMachineComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(86,5)  Field "dispenseOnHitChance" not found in "Content.Shared.VendingMachines.Components.VendingMachineComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(87,5)  Field "dispenseOnHitThreshold" not found in "Content.Shared.VendingMachines.Components.VendingMachineComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(88,5)  Field "offState" not found in "Content.Shared.VendingMachines.Components.VendingMachineComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(89,5)  Field "brokenState" not found in "Content.Shared.VendingMachines.Components.VendingMachineComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(90,5)  Field "normalState" not found in "Content.Shared.VendingMachines.Components.VendingMachineComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Machines/Vending/vending_machines.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Misc/janitor.yml(190,7)  Field "damageContainer" not found in "Content.Shared.Damage.Components.DamageableComponent".
 ::error in /Prototypes/_RMC14/Entities/Structures/orbital_cannon.yml(203,15)  No localization message found with id 1 orbital bombardment
-::error in /Prototypes/_RMC14/Entities/Structures/Wallmounts/surveillance_camera.yml(143,5)  Field "cycle" not found in "Robust.Client.GameObjects.SpriteComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Walls/Barricades/barricade_metal.yml(137,7)  Field "damageContainer" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Walls/Barricades/barricade_plasteel.yml(142,7)  Field "damageContainer" not found in "Content.Shared.Damage.Components.DamageableComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Walls/grille.yml(121,7)  Field "damageContainer" not found in "Content.Shared.Damage.Components.DamageableComponent".
 ::error in /Prototypes/_RMC14/Entities/Structures/Walls/sandbags.yml(173,9)  No localization message found with id empty sandbags
-::error in /Prototypes/_RMC14/Entities/Structures/Windows/frames.yml(196,5)  Field "color" not found in "Robust.Client.GameObjects.IconComponent".
-::error in /Prototypes/_RMC14/Entities/Structures/Windows/windows.yml(433,5)  Field "color" not found in "Robust.Client.GameObjects.IconComponent".
 ::error in /Prototypes/_RMC14/Entities/Structures/Xeno/Hive/xeno_egg_morpher.yml(111,15)  No localization message found with id egg morpher
 ::error in /Prototypes/_RMC14/Entities/Structures/Xeno/Hive/xeno_hive_cluster.yml(82,15)  No localization message found with id hive cluster
 ::error in /Prototypes/_RMC14/Entities/Structures/Xeno/Hive/xeno_hive_core.yml(177,15)  No localization message found with id hive pylon
 ::error in /Prototypes/_RMC14/Entities/Structures/Xeno/Hive/xeno_hive_core.yml(76,15)  No localization message found with id hive core
 ::error in /Prototypes/_RMC14/Entities/Structures/Xeno/Hive/xeno_hive_plasma.yml(69,15)  No localization message found with id plasma tree
 ::error in /Prototypes/_RMC14/Entities/Structures/Xeno/Hive/xeno_hive_recovery.yml(69,15)  No localization message found with id recovery node
-::error in /Prototypes/_RMC14/Kitchen/Plants/produce.yml(19,5)  Field "seedId" not found in "Content.Shared.Botany.Items.Components.ProduceComponent".
 ::error in /Prototypes/_RMC14/Maps/cm_dev.yml(52,11)  No Content.Shared.Roles.JobPrototype found with id CMProvostInspector
 ::error in /Prototypes/_RMC14/Maps/savannah.yml(27,13)  No Content.Shared.Roles.JobPrototype found with id CMProvostInspector
-::error in /Prototypes/_RMC14/Reagents/medicine.yml(411,9)  Field "refresh" not found in "Content.Shared.EntityEffects.Effects.StatusEffects.ModifyStatusEffect".
-::error in /Prototypes/_RMC14/Reagents/narcotics.yml(23,9)  Field "refresh" not found in "Content.Shared.EntityEffects.Effects.StatusEffects.ModifyStatusEffect".
-::error in /Prototypes/_RMC14/Reagents/narcotics.yml(36,9)  Field "refresh" not found in "Content.Shared.EntityEffects.Effects.StatusEffects.GenericStatusEffect".
-::error in /Prototypes/_RMC14/Reagents/toxins.yml(78,9)  Field "refresh" not found in "Content.Shared.EntityEffects.Effects.StatusEffects.ModifyStatusEffect".
-::error in /Prototypes/_RMC14/Reagents/toxins.yml(94,9)  Field "refresh" not found in "Content.Shared.EntityEffects.Effects.StatusEffects.GenericStatusEffect".
 ::error in /Prototypes/_RMC14/Recipes/Construction/furniture.yml(10,16)  No localization message found with id A basic chair for sitting.
 ::error in /Prototypes/_RMC14/Recipes/Construction/furniture.yml(113,9)  No localization message found with id poor wooden table
 ::error in /Prototypes/_RMC14/Recipes/Construction/furniture.yml(114,16)  No localization message found with id A semi-poorly constructed wood surface resting on four legs. Useful to put stuff on.
@@ -461,19 +331,12 @@
 ::error in /Prototypes/_RMC14/Recipes/Construction/structures.yml(89,16)  No localization message found with id It opens, it closes, and you can see through it! This one looks tough.
 ::error in /Prototypes/_RMC14/Recipes/Construction/utilities.yml(3,9)  No localization message found with id APC
 ::error in /Prototypes/_RMC14/Recipes/Construction/utilities.yml(9,16)  No localization message found with id Area Power Controller (APC). Controls power. In an area.
-::error in /Prototypes/_RMC14/Roles/Jobs/Fun/rmc_admin_ghost.yml(138,5)  Field "opfor" not found in "Content.Shared._RMC14.TacticalMap.TacticalMapUserComponent".
-::error in /Prototypes/_RMC14/Roles/Jobs/Fun/rmc_admin_ghost.yml(139,5)  Field "govfor" not found in "Content.Shared._RMC14.TacticalMap.TacticalMapUserComponent".
-::error in /Prototypes/_RMC14/Roles/Jobs/Fun/rmc_admin_ghost.yml(140,5)  Field "clf" not found in "Content.Shared._RMC14.TacticalMap.TacticalMapUserComponent".
-::error in /Prototypes/_RMC14/Roles/Jobs/Other/WeYa/whiteout_gunner.yml(122,5)  Field "hair" not found in "Content.Server.Humanoid.Components.RandomHumanoidAppearanceComponent".
-::error in /Prototypes/_RMC14/Roles/Jobs/Other/WeYa/whiteout.yml(122,5)  Field "hair" not found in "Content.Server.Humanoid.Components.RandomHumanoidAppearanceComponent".
 ::error in /Prototypes/_RMC14/Roles/Jobs/squads.yml(220,12)  No Content.Shared.Radio.RadioChannelPrototype found with id WEYA
 ::error in /Prototypes/_RMC14/Roles/Jobs/squads.yml(391,12)  No Content.Shared.Radio.RadioChannelPrototype found with id MarineSOF
 ::error in /Prototypes/_RMC14/Roles/Jobs/Survivor/Base_Survs/civilian_survivor.yml(191,9)  No EntityPrototype found with id RMCSatchelHydro
 ::error in /Prototypes/_RMC14/Roles/Jobs/Survivor/Hybrisa_Prospera/Paramarines/Para_Base.yml(44,40)  No EntityPrototype found with id RMCSatchelLightpackFilledParaHelmet
 ::error in /Prototypes/_RMC14/Roles/Jobs/Survivor/Misc/civilian_survivor_unique.yml(38,42)  No EntityPrototype found with id RMCSatchelHydro
 ::error in /Prototypes/_RMC14/Roles/Jobs/Survivor/Misc/civilian_survivor_unique.yml(60,49)  No EntityPrototype found with id RMCHelmetWeldingPainted
-::error in /Prototypes/_RMC14/Roles/Jobs/Survivor/Shivas/Panic_Room/shivas_panic_room_weya_commando.yml(443,7)  Field "minValue" not found in "Content.Client.Light.Components.PulseBehaviour".
-::error in /Prototypes/_RMC14/Roles/Jobs/Survivor/Shivas/Panic_Room/shivas_panic_room_weya_commando.yml(444,7)  Field "maxValue" not found in "Content.Client.Light.Components.PulseBehaviour".
 ::error in /Prototypes/_RMC14/Roles/Loadouts/Items/weapons.yml(38,7)  No EntityPrototype found with id RMCGunCasePistolL54
 ::error in /Prototypes/_RMC14/Roles/Loadouts/Items/weapons.yml(45,7)  No EntityPrototype found with id RMCGunCasePistolL14Custom
 ::error in /Prototypes/_RMC14/Roles/Loadouts/Items/weapons.yml(52,7)  No EntityPrototype found with id RMCGunCaseRevolverWarwickMkVIISnub
@@ -482,10 +345,7 @@
 ::error in /Prototypes/_RMC14/Stacks/Materials/ore.yml(3,9)  No localization message found with id platinum ore
 ::error in /Prototypes/_RMC14/Stacks/Materials/parts.yml(10,9)  No localization message found with id plasteel rods
 ::error in /Prototypes/_RMC14/Stacks/Materials/parts.yml(3,9)  No localization message found with id rods
-::error in /Prototypes/_RMC14/Traits/accents.yml(18,7)  Field "prefixChance" not found in "Content.Shared.Speech.Components.MobsterAccentComponent".
-::error in /Prototypes/_RMC14/Traits/accents.yml(19,7)  Field "suffixChance" not found in "Content.Shared.Speech.Components.MobsterAccentComponent".
 ::error in /Prototypes/_RMC14/Vehicles/APC/vehicles.yml(10,15)  No localization message found with id APC
-::error in /Prototypes/_RMC14/Vehicles/Common/general_interiors.yml(90,5)  Field "thresholds" not found in "Content.Shared.Damage.Components.DamageableComponent".
 ::error in /Prototypes/_RMC14/Vehicles/Humvee/vehicles.yml(10,15)  No localization message found with id Humvee
 ::error in /Prototypes/_RMC14/Vehicles/Tank/vehicles.yml(10,15)  No localization message found with id Tank
 ::error in /Prototypes/_RMC14/Voice/Arachnid/arachnid_emote_sounds.yml(289,22)  No localization message found with id humanoid-profile-editor-voice-neutral
