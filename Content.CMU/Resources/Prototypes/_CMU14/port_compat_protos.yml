@@ -1,0 +1,224 @@
+# Prototypes restored from master that the rebase dropped; scalar definitions only.
+
+- type: accessLevel
+  id: AU14AccessShopkeep
+  name: au14-access-shopkeep
+
+# PVE Hybrisa Exclusive
+
+- type: accessLevel
+  id: AUAccessPrison
+  name: au-access-prison
+
+# this is used to allow colony doctors into their chem but not marine chem
+
+- type: alertCategory
+  id: AreaInfo
+
+- type: alertCategory
+  id: Armor
+
+- type: alertCategory
+  id: Energy
+
+- type: alertCategory
+  id: Plasma
+
+- type: alertCategory
+  id: Sight
+
+- type: alertCategory
+  id: Tacmap
+
+- type: explosion
+  id: CMUBangalore
+  damagePerIntensity:
+    types:
+      Blunt: 3
+      Heat: 3
+      Structural: 90
+  tileBreakChance: [0, 0.5, 1]
+  tileBreakIntensity: [0, 10, 30]
+  tileBreakRerollReduction: 20
+  lightColor: Orange
+  texturePath: /Textures/Effects/fire.rsi
+  fireColor: Transparent
+  sound:
+    collection: CMExplosion
+    params:
+      volume: 385
+  smallSound:
+    collection: CMExplosion
+    params:
+      volume: 0
+
+- type: npcFaction
+  id: CMUAPE
+  hostile:
+  - UNMC
+  - NanoTrasen
+  - SPP
+  - GOVFOR
+  - OPFOR
+  - Halcyon
+  - WeYa
+  - Civilian
+  - CLF
+  - TSE
+  - AUColonist
+
+- type: sinkPort
+  id: SentryControl
+  name: port-sentry-control
+  description: port-sentry-control
+
+- type: sourcePort
+  id: SentryControl
+  name: port-sentry-control
+  description: port-sentry-control
+  defaultLinks: [ SentryControl ]
+
+- type: statusEffect
+  id: KnockedDown
+  alert: Stun
+
+- type: trackerMode
+  id: BattleBuddy
+  alert: SquadTracker
+
+- type: body
+  id: Human
+  name: "human"
+  root: torso
+  slots:
+    head:
+      part: HeadHuman
+      connections:
+      - torso
+      organs:
+        brain: OrganHumanBrain
+        eyes: OrganHumanEyes
+    torso:
+      part: TorsoHuman
+      connections:
+      - right_arm
+      - left_arm
+      - right_leg
+      - left_leg
+      organs:
+        heart: OrganHumanHeart
+        lungs: OrganHumanLungs
+        stomach: OrganHumanStomach
+        liver: OrganHumanLiver
+        kidneys: OrganHumanKidneys
+    right_arm:
+      part: RightArmHuman
+      connections:
+      - right_hand
+    left_arm:
+      part: LeftArmHuman
+      connections:
+      - left_hand
+    right_hand:
+      part: RightHandHuman
+    left_hand:
+      part: LeftHandHuman
+    right_leg:
+      part: RightLegHuman
+      connections:
+      - right_foot
+    left_leg:
+      part: LeftLegHuman
+      connections:
+      - left_foot
+    right_foot:
+      part: RightFootHuman
+    left_foot:
+      part: LeftFootHuman
+
+- type: body
+  id: Vox
+  name: "vox"
+  root: torso
+  slots:
+    head:
+      part: HeadVox
+      connections:
+      - torso
+      organs:
+        brain: OrganHumanBrain
+        eyes: OrganHumanEyes
+    torso:
+      part: TorsoVox
+      connections:
+      - right arm
+      - left arm
+      - right leg
+      - left leg
+      organs:
+        heart: OrganVoxHeart
+        lungs: OrganVoxLungs
+        stomach: OrganVoxStomach
+        liver: OrganVoxLiver
+        kidneys: OrganHumanKidneys
+    right arm:
+      part: RightArmVox
+      connections:
+      - right hand
+    left arm:
+      part: LeftArmVox
+      connections:
+      - left hand
+    right hand:
+      part: RightHandVox
+    left hand:
+      part: LeftHandVox
+    right leg:
+      part: RightLegVox
+      connections:
+      - right foot
+    left leg:
+      part: LeftLegVox
+      connections:
+      - left foot
+    right foot:
+      part: RightFootVox
+    left foot:
+      part: LeftFootVox
+
+- type: body
+  id: Primate
+  name: "primate"
+  root: torso
+  slots:
+    torso:
+      part: TorsoAnimal
+      connections:
+      - hands
+      - legs
+      organs:
+        lungs: OrganAnimalLungs
+        stomach: OrganAnimalStomach
+        liver: OrganAnimalLiver
+        heart: OrganAnimalHeart
+        kidneys: OrganAnimalKidneys
+    hands:
+      part: HandsAnimal
+    legs:
+      part: LegsAnimal
+      connections:
+      - feet
+    feet:
+      part: FeetAnimal
+
+- type: Tag
+  id: Currency
+
+- type: Tag
+  id: SteelOre
+
+- type: Tag
+  id: RMCGrenadeAGMH
+
+- type: Tag
+  id: RMCGrenadeAGMS
