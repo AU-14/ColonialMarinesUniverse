@@ -33,3 +33,13 @@
   id: ProvostSecuritySatchel
   equipment:
     back: CMSatchelSecurityFilledProvost
+
+- type: loadout
+  id: ExecutiveSecurityGuardSatchel # CMU14 loadout: group ref pointed at a proto that never existed
+  equipment:
+    back: CMSatchelLiaisonSecure
+
+- type: loadout
+  id: SatchelRoyalMOLS # CMU14 loadout: group ref pointed at a proto that never existed
+  equipment:
+    back: RMCSatchelLightpackFilledRoyal

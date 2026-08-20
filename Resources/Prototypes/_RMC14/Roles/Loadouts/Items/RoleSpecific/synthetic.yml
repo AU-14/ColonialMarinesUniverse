@@ -43,6 +43,11 @@
     jumpsuit: RMCScrubsOlive
 
 - type: loadout
+  id: GOVFORAuxTechClothingAU14Fatigues
+  equipment:
+    jumpsuit: CMJumpsuitMaintTech
+
+- type: loadout
   id: ScrubsGreyRMC
   equipment:
     jumpsuit: RMCScrubsGrey
@@ -371,6 +376,24 @@
   storage:
     back:
     - RMCLabcoat
+
+- type: loadout
+  id: LabcoatRMCShort
+  storage:
+    back:
+    - RMCLabcoatShort
+
+- type: loadout
+  id: LabcoatRMCLong
+  storage:
+    back:
+    - RMCLabcoatLong
+
+- type: loadout
+  id: LabcoatRMCBrown
+  storage:
+    back:
+    - RMCLabcoatBrown
 
 - type: loadout
   id: QuartermasterJacketRMC

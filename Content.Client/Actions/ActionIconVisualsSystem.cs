@@ -45,6 +45,7 @@ public sealed partial class ActionIconVisualsSystem : VisualizerSystem<ActionCom
         if (!AppearanceSystem.TryGetData<Color>(uid, ActionState.Color, out var color, args.Component))
             color = comp.IconColor;
 
+        SpriteSystem.LayerMapReserve((uid, args.Sprite), ActionVisuals.Icon); // CMU14: unmapped action sprites make this ERRO and fail pooled pairs
         SpriteSystem.LayerSetColor((uid, args.Sprite), ActionVisuals.Icon, color);
 
         if (SpriteSystem.LayerExists((uid, args.Sprite), ActionVisuals.IconToggled))
