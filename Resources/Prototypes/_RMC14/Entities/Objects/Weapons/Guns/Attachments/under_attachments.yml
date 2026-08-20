@@ -755,8 +755,8 @@
       id: blinking
       interpolate: Nearest
       maxDuration: 1.0
-      minValue: 0.1
-      maxValue: 2.0
+      startValue: 0.1
+      endValue: 2.0
       isLooped: true
       property: Radius
       enabled: false
@@ -764,7 +764,6 @@
     maxCharge: 10
     startingCharge: 10
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 3
   - type: Sprite
     layers:

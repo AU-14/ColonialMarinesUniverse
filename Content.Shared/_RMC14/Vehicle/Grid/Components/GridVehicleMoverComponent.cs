@@ -78,6 +78,13 @@ public sealed partial class GridVehicleMoverComponent : Component
     public float MaxReverseSpeed = 4f;
 
     /// <summary>
+    /// CMU14 restored from master: vehicle speed scales linearly toward this value as integrity decreases.
+    /// 1 = no penalty. 0.1 = 90% speed loss at death.
+    /// </summary>
+    [DataField]
+    public float SpeedAtZeroIntegrity = 1f;
+
+    /// <summary>
     /// reverse acceleration in grid units / second squared
     /// </summary>
     [DataField, AutoNetworkedField]
@@ -274,4 +281,44 @@ public sealed partial class GridVehicleMoverComponent : Component
     /// </summary>
     [AutoNetworkedField]
     public TimeSpan SmashSlowdownUntil;
+
+    // CMU14 restored from master: wall smash and crash immobility params, yaml data only
+    [DataField]
+    public bool CanSmashWalls;
+
+    [DataField]
+    public float WallSmashMinSpeed;
+
+    [DataField]
+    public float WallSmashWheelDamage = 0.25f;
+
+    [DataField]
+    public float WallSmashHullDamage = 5f;
+
+    [DataField]
+    public float WallSmashSlowdownMultiplier = 0.45f;
+
+    [DataField]
+    public float WallSmashSlowdownDuration = 0.4f;
+
+    [DataField]
+    public float MobCollisionHullDamage;
+
+    [DataField]
+    public float CrashImmobileDuration;
+
+    [DataField]
+    public float CrashImmobileMinSpeed;
+
+    [DataField]
+    public float MobCrashImmobileDuration;
+
+    [DataField]
+    public float MobCrashImmobileMinSpeed;
+
+    [DataField]
+    public float XenoMobCrashImmobileDuration;
+
+    [DataField]
+    public float XenoMobCrashImmobileMinSpeed;
 }

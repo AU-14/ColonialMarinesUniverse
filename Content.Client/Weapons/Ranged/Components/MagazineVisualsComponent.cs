@@ -25,6 +25,10 @@ public sealed partial class MagazineVisualsComponent : Component
     /// </summary>
     [DataField]
     public bool ZeroVisible;
+
+    // CMU14 keep mag sprite on the last step until fully empty, restored from master
+    [DataField]
+    public bool ZeroOnlyOnEmpty;
 }
 
 public enum GunVisualLayers : byte

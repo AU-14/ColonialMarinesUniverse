@@ -39,6 +39,10 @@ public sealed partial class EntityTargetActionComponent : Component
     [DataField, AutoNetworkedField]
     public EntityWhitelist? Blacklist;
 
+    // CMU14 gate restored from master RMC14: skip the CanInteract(user, target) validation for xeno abilities
+    [DataField, AutoNetworkedField]
+    public bool TargetCheckCanInteract = true;
+
     /// <summary>
     /// Whether this action considers the user as a valid target entity when using this action.
     /// </summary>
@@ -50,4 +54,7 @@ public sealed partial class EntityTargetActionComponent : Component
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool RotateOnUse = true;
+
+    [DataField, AutoNetworkedField] // CMU14: restored from master (target outline)
+    public bool ToggleOutline = true;
 }

@@ -54,6 +54,9 @@ public sealed partial class GunSystem
             }
 
             var step = ContentHelpers.RoundToLevels((int)current, (int)capacity, ent.Comp.MagSteps);
+            // CMU14 keep mag sprite on the last step until fully empty, restored from master
+            if (ent.Comp.ZeroOnlyOnEmpty && step == 0 && (int) current > 0)
+                step = 1;
 
             if (step == 0 && !ent.Comp.ZeroVisible)
             {

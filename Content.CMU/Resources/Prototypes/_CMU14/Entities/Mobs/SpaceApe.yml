@@ -6,7 +6,7 @@
   suffix: CMU
   components:
   - type: DropshipHijacker
-  - type: NightVision
+  - type: RMCNightVision
     innate: true
   - type: Fixtures
     fixtures:
@@ -51,7 +51,12 @@
       3000: Critical
       3300: Dead
   - type: Bloodstream
-    bloodMaxVolume: 1000
+    # CMU14 bloodMaxVolume migrated to bloodReferenceSolution + modifier
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 1000
+    maxVolumeModifier: 1
   - type: SlowOnDamage
     speedModifierThresholds:
       1000: 0.9
@@ -93,7 +98,7 @@
     baseWalkSpeed: 4.0
     baseSprintSpeed: 4.5
   - type: Stamina
-    critThreshold: 3000
+    baseCritThreshold: 3000
   - type: DamageStateVisuals
     states:
       Alive:

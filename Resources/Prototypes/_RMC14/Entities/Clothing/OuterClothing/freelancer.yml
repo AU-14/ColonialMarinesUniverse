@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: RMCArmorSPP
   id: CMArmorFreelancer
   name: freelancer cuirass
@@ -118,8 +118,8 @@
       id: blinking
       interpolate: Nearest
       maxDuration: 1.0
-      minValue: 0.1
-      maxValue: 2.0
+      startValue: 0.1
+      endValue: 2.0
       isLooped: true
       property: Radius
       enabled: false
@@ -127,7 +127,6 @@
     maxCharge: 600
     startingCharge: 600
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 2
 
 - type: entity

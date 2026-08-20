@@ -101,6 +101,10 @@ public sealed partial class HandsComponent : Component
     /// </summary>
     [DataField]
     public bool CanBeStripped = true;
+
+    // CMU14 gate for empty-hands examine line, restored from master
+    [DataField]
+    public bool ExamineShowEmpty = true;
 }
 
 [DataDefinition]

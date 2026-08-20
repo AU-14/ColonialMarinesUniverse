@@ -18,7 +18,6 @@
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
-    displayDamageInAlert: true
   - type: Xeno
     role: CMU14JobPathogenNeomorph
     tier: 2

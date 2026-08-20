@@ -18,12 +18,10 @@
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
-    displayDamageInAlert: true
   - type: Xeno
     role: CMU14JobPathogenConditor
     tier: 3
     hudOffset: -0.1, 0.25
-    emoteSounds: Warrior
     actionIds:
     - CMU14ActionXenoPathogenRest
     - CMU14ActionXenoPathogenWatch
@@ -58,7 +56,6 @@
     canEvolveWithoutGranter: false
     evolvesTo: []
   - type: XenoDevolve
-    actionId: CMU14ActionXenoPathogenDevolve
     devolvesTo:
     - CMU14XenoNeomorph
     canBeDevolvedByOther: false

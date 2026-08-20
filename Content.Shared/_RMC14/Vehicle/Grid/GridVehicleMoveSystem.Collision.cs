@@ -817,6 +817,14 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
         if (_net.IsClient)
             return;
 
+        // CMU14 restored from master: don't play the collision sound below this speed
+        if (sound.CollisionSoundMinSpeed > 0f &&
+            TryComp<GridVehicleMoverComponent>(uid, out var movers) &&
+            MathF.Abs(movers.CurrentSpeed) < sound.CollisionSoundMinSpeed)
+        {
+            return;
+        }
+
         var now = _timing.CurTime;
         if (sound.NextCollisionSound > now)
             return;

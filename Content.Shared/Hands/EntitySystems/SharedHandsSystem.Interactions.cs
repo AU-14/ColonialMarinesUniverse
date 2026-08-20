@@ -199,6 +199,10 @@ public abstract partial class SharedHandsSystem : EntitySystem
     //TODO: Actually shows all items/clothing/etc.
     private void HandleExamined(EntityUid examinedUid, HandsComponent handsComp, ExaminedEvent args)
     {
+        // CMU14 skip the examine line entirely when empty and disabled
+        if (!handsComp.ExamineShowEmpty && EnumerateHeld((examinedUid, handsComp)).All(e => HasComp<VirtualItemComponent>(e)))
+            return;
+
         var heldItemNames = EnumerateHeld((examinedUid, handsComp))
             .Where(entity => !HasComp<VirtualItemComponent>(entity))
             .Select(item => FormattedMessage.EscapeText(Identity.Name(item, EntityManager)))

@@ -33,7 +33,6 @@
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
-    displayDamageInAlert: true
   - type: Xeno
     role: CMUJobPathogenBloodburster
     tier: 0

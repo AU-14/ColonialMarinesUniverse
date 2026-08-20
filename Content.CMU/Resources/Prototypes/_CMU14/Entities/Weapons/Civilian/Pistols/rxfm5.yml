@@ -25,7 +25,6 @@
     proto: AU14RXFM5LaserShot
     fireCost: 200
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 65
   - type: Appearance
   - type: Item

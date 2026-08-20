@@ -429,7 +429,8 @@ public abstract partial class SharedActionsSystem : EntitySystem
         if (_whitelist.IsWhitelistPass(comp.Blacklist, target))
             return false;
 
-        if (_actionQuery.Comp(uid).CheckCanInteract && !_actionBlocker.CanInteract(user, target))
+        // CMU14 gate restored from master RMC14: allow actions that skip target interact validation
+        if (_actionQuery.Comp(uid).CheckCanInteract && !_actionBlocker.CanInteract(user, target) && comp.TargetCheckCanInteract)
             return false;
 
         if (user == target)

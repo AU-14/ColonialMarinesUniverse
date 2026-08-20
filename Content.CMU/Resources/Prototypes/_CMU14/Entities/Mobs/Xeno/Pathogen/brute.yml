@@ -18,7 +18,6 @@
       Alive: XenoHealth
       Critical: XenoCrit
       Dead: XenoDead
-    displayDamageInAlert: true
   - type: XenoHeavy
   - type: Xeno
     role: CMU14JobPathogenBrute

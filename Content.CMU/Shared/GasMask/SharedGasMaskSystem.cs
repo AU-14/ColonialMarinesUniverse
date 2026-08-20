@@ -10,7 +10,7 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
 {
     private readonly float _epsilon = 0.001f;
 
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
 
     public override void Initialize()
     {

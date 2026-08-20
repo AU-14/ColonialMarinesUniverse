@@ -7,6 +7,7 @@ using Content.Shared.Gibbing;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Kitchen.Components;
+using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
@@ -32,6 +33,8 @@ public sealed partial class SharpSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IRobustRandom _robustRandom = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
+    // CMU14 butchering gate restored from master
+    [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
 
     // RMC14
     [Dependency] private INetManager _net = default!;
@@ -64,6 +67,10 @@ public sealed partial class SharpSystem : EntitySystem
             return false;
 
         if (TryComp<MobStateComponent>(target, out var mobState) && !_mobStateSystem.IsDead(target, mobState))
+            return false;
+
+        // CMU14 butchering gate restored from master: cannot butcher while still revivable
+        if (butcher.WaitForRot && !_unrevivable.IsUnrevivable(target))
             return false;
 
         if (butcher.Type != ButcheringType.Knife && target != user)

@@ -27,7 +27,6 @@
     proto: AU14PlasmaShot
     fireCost: 1000
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 150
   - type: Appearance
   - type: Item

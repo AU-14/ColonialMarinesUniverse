@@ -1054,12 +1054,28 @@ public sealed partial class GridVehicleMoverSystem : EntitySystem
     {
         var speed = baseSpeed * GetSmashSlowdownMultiplier(mover);
 
+        // CMU14 restored from master: integrity-scaled top speed
+        speed *= GetIntegritySpeedMultiplier(uid, mover);
+
         if (TryComp<VehicleOverchargeComponent>(uid, out var overcharge) && _timing.CurTime < overcharge.ActiveUntil)
             speed *= overcharge.SpeedMultiplier;
         if (TryComp<VehicleSpeedModifierComponent>(uid, out var speedMod))
             speed *= speedMod.SpeedMultiplier;
 
         return speed;
+    }
+
+    // CMU14 restored from master: integrity-scaled top speed
+    private float GetIntegritySpeedMultiplier(EntityUid uid, GridVehicleMoverComponent mover)
+    {
+        if (mover.SpeedAtZeroIntegrity >= 1f)
+            return 1f;
+
+        if (!TryComp(uid, out HardpointIntegrityComponent? integrity) || integrity.MaxIntegrity <= 0f)
+            return 1f;
+
+        var ratio = Math.Clamp(integrity.Integrity / integrity.MaxIntegrity, 0f, 1f);
+        return mover.SpeedAtZeroIntegrity + (1f - mover.SpeedAtZeroIntegrity) * ratio;
     }
 
     private float GetAccelerationModifier(EntityUid uid)

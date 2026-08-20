@@ -25,6 +25,10 @@ public sealed partial class EmoteOnDamageSystem : EntitySystem
         if (!args.DamageIncreased)
             return;
 
+        // CMU14 minimum damage delta to trigger the emote, restored from master
+        if (args.DamageDelta == null || args.DamageDelta.GetTotal() < emoteOnDamage.DamageThreshold)
+            return;
+
         if (emoteOnDamage.LastEmoteTime + emoteOnDamage.EmoteCooldown > _gameTiming.CurTime)
             return;
 

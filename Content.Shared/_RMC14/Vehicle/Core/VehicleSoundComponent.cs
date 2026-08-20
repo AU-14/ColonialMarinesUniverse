@@ -19,6 +19,10 @@ public sealed partial class VehicleSoundComponent : Component
     [DataField]
     public float CollisionSoundCooldown = 0.5f;
 
+    // CMU14 restored from master: don't play the collision sound below this speed
+    [DataField]
+    public float CollisionSoundMinSpeed;
+
     [DataField]
     public SoundSpecifier? MobCollisionSound;
 
