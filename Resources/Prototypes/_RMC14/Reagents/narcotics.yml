@@ -20,7 +20,7 @@
         effectProto: StatusEffectSeeingRainbow
         type: Add
         time: 10 #0.5/s is too slow
-        refresh: true #10s cap
+        # refresh: true #10s cap # CMU14
       - !type:Jitter
         conditions:
         - !type:ReagentThreshold #TODO Hallucinations +5 no max at 30 OD
@@ -33,7 +33,7 @@
         component: RMCUnconscious
         type: Add
         time: 40
-        refresh: true
+        # refresh: true # CMU14
 
 - type: reagent
   parent: RMCSpaceDrugs

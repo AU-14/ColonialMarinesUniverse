@@ -25,7 +25,7 @@
   name: Xenonid Tracker
   description: Tracks the Queen.
   clickEvent: !type:HiveTrackerClickedAlertEvent
-  altClickEvent: !type:HiveTrackerAltClickedAlertEvent
+  # altClickEvent: !type:HiveTrackerAltClickedAlertEvent # CMU14
   minSeverity: 0
   maxSeverity: 9
 

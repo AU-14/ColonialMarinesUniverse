@@ -37,8 +37,8 @@
     vehicles:
     - name: M2420 JTMV Armed
       vehicle: VehicleHumvee
-      group: vehicle-support
-      loadoutCategories:
+      # group: vehicle-support # CMU14
+#      loadoutCategories: # CMU14
       - id: primary
         name: Primary
         options:
@@ -887,7 +887,7 @@
     - name: AE-71E VTOL (Recon)
       vehicle: VehicleBlackfootRecon
       group: vehicle-support
-      bundle:
+#      bundle: # CMU14
       - CMUBlackfootLandingPadFoldedProp
       - CMUBlackfootFuelPumpCrate
       - CMUBlackfootFlightComputerCrate

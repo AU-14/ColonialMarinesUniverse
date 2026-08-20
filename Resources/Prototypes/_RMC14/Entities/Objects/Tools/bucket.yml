@@ -58,7 +58,7 @@
     solution: bucket
   - type: SolutionItemStatus
     solution: bucket
-    fillBaseName: bucket-
+    # fillBaseName: bucket- # CMU14
   - type: MixableSolution
     solution: bucket
   - type: FitsInDispenser

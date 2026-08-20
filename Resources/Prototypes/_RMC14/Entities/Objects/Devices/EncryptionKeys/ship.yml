@@ -427,7 +427,7 @@
     - MarineJTAC
     - MarineIntel
     - WEYA
-    readOnlyChannels:
+#    readOnlyChannels: # CMU14
     - MarineCommand
     - MarineJTAC
     - MarineIntel

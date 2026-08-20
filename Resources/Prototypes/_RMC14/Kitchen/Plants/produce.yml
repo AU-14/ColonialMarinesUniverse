@@ -16,7 +16,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: plump
+    # seedId: plump # CMU14
   - type: Tag
     tags:
     - Vegetable

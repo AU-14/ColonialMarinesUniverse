@@ -1,4 +1,4 @@
-﻿- type: reagent
+- type: reagent
   parent: CMReagent
   id: RMCGenericToxin
   name: reagent-name-rmcgenerictoxin
@@ -75,7 +75,7 @@
         effectProto: StatusEffectSeeingRainbow
         type: Add
         time: 2 #TODO max 40
-        refresh: false
+        # refresh: false # CMU14
       - !type:Emote
         emote: Laugh #TODO twitches, drools, moans.
         showInChat: true
@@ -91,7 +91,7 @@
         component: RMCUnconscious
         type: Add
         time: 40
-        refresh: true
+        # refresh: true # CMU14
 
 - type: reagent
   parent: [ CMReagent, Romerol ]

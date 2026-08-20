@@ -225,7 +225,7 @@
   - type: SpawnOnTerminate
     spawn: VehicleDragonFlameImpact
     spawnOffset: 0.5
-    projectileAdjust: false
+    # projectileAdjust: false # CMU14
   - type: IgnoreArc
   - type: IgnorePredictionHide
   - type: Fixtures
@@ -260,7 +260,7 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    # mapCoords: true # CMU14
   - type: TileFireOnTrigger
     range: 1
     spawn: RMCTileFireHCNapalm

@@ -408,7 +408,7 @@
         effectProto: StatusEffectSeeingRainbow
         type: Add
         time: 1.5 #TODO max 30
-        refresh: false
+        # refresh: false # CMU14
       - !type:Jitter
       - !type:Emote
         emote: Laugh #TODO twitches, drools, moans.

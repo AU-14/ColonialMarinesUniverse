@@ -149,7 +149,7 @@
   - type: NightVisionItem
     actionId: RMCActionToggleExperimentalMesons
     mesons: true
-    experimentalMesonFov: true
+    # experimentalMesonFov: true # CMU14
     defaultState: Full
     ignoreUserOnlyHalf: true
   - type: RMCSynthItemRestriction

@@ -15,8 +15,8 @@
   cost: 1
   components:
     - type: MobsterAccent
-      prefixChance: 0.1
-      suffixChance: 0.2
+      # prefixChance: 0.1 # CMU14
+      # suffixChance: 0.2 # CMU14
 
 - type: trait
   id: ItalianAccent

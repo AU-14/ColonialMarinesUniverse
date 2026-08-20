@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: BaseFigurine
   id: RMCBaseFigurinePatron
@@ -2042,7 +2042,7 @@
     id: 14400651-5f3b-4bfb-b2b6-f6e3fe60452a
   - type: EmitSoundOnThrow
     sound: /Audio/Animals/fox_squeak.ogg
-    cooldown: 30
+    # cooldown: 30 # CMU14
 
 - type: entity
   parent: RMCBaseFigurinePatron

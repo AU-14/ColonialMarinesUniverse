@@ -135,9 +135,9 @@
     actionId: RMCActionOpenTacticalMapMarine
     marines: true
     xenos: true
-    opfor: true
-    govfor: true
-    clf: true
+    # opfor: true # CMU14
+    # govfor: true # CMU14
+    # clf: true # CMU14
     liveUpdate: true
   - type: ExplosionResistance
     damageCoefficient: 0

@@ -479,11 +479,11 @@
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
   - type: Icon
     sprite: _RMC14/Objects/Storage/procase_mini.rsi
-    layers:
-    - state: closed
-      map: [ base ]
-    - state: loader
-      map: [ label ]
+#    layers: # CMU14
+#    - state: closed
+#      map: [ base ]
+#    - state: loader
+#      map: [ label ]
   - type: StorageFill
     contents:
     - id: RMCArmorM3TDemo

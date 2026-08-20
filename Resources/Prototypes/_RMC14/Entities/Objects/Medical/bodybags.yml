@@ -104,7 +104,7 @@
       tags:
       - CMRollerItem
   - type: Foldable
-    fitIntoEntityStorage: true
+    # fitIntoEntityStorage: true # CMU14
   - type: CrashLandable
   - type: AnimationPlayer
   - type: RMCContainerEmptyOnDestruction
@@ -169,7 +169,7 @@
   - type: EntityStorageVisuals
     stateDoorOpen: bodybag_open
   - type: EntityStorageLayingDownOverride
-    enabled: false
+    # enabled: false # CMU14
   - type: CMStasisBag
   - type: Buckle
     buckleDelay: 0

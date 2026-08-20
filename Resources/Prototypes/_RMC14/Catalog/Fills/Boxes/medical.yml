@@ -36,9 +36,9 @@
         amount: 7
   - type: Sprite
     state: bodybags
-    whitelist:
-      tags:
-        - BodyBag
+#    whitelist: # CMU14
+#      tags:
+#        - BodyBag
 
 - type: entity
   name: box of pill bottles

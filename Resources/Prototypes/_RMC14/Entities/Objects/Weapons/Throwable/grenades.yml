@@ -55,8 +55,8 @@
     filters:
     - paralyze: 2.5
       whitelist:
-        skills:
-          RMCSkillPolice: 2
+#        skills: # CMU14
+#          RMCSkillPolice: 2
   - type: EmitSoundOnTrigger
     keysIn:
     - trigger

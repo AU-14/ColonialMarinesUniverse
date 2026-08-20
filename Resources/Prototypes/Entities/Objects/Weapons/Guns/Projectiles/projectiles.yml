@@ -898,7 +898,7 @@
   - type: SpawnOnTrigger
     proto: GrenadeFlashEffect
   - type: ActiveTimerTrigger
-    timeRemaining: 0.3
+    # timeRemaining: 0.3 # CMU14
   - type: DeleteOnTrigger
 
 # This is supposed to spawn shrapnel and stuff so uhh... TODO?
