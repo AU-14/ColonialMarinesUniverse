@@ -26,7 +26,9 @@ public sealed partial class ThrowInsertContainerSystem : EntitySystem
 
     private void OnThrowCollide(Entity<ThrowInsertContainerComponent> ent, ref ThrowHitByEvent args)
     {
-        var container = _containerSystem.GetContainer(ent, ent.Comp.ContainerId);
+        // CMU14: container may already be culled when the throw lands mid-destruction; GetContainer would throw
+        if (!_containerSystem.TryGetContainer(ent, ent.Comp.ContainerId, out var container))
+            return;
 
         if (!_containerSystem.CanInsert(args.Thrown, container))
             return;

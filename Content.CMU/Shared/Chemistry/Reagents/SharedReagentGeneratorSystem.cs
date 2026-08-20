@@ -214,7 +214,9 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"  id: {args.ID}\n" +
             $"  abstract: false\n" +
             $"  priority: {prio.Value + 1}\n" +
-            $"  reactants:\n{recipstr}" +
+            // recipe-less chems (TAU line) must omit reactants entirely: a present-but-null key
+            // fails deserialization into the non-nullable Reactants dictionary
+            (string.IsNullOrEmpty(recipstr) ? string.Empty : $"  reactants:\n{recipstr}") +
             $"  products:\n" +
             $"    {args.ID}: {args.RecipeYield}\n";
         //_sawmill.Info(yamlstr);
