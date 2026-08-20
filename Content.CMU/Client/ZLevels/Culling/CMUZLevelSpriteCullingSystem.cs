@@ -81,6 +81,14 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
             0,
             CMUSharedZLevelsSystem.MaxZLevelsBelowRendering);
 
+        // The eye sits on nullspace until the client finishes setup; mapping its screen
+        // bounds then trips Box2's Bottom>Top DebugAssert during test SetUp/teardown.
+        if (_eyeManager.CurrentEye.Position.MapId == MapId.Nullspace)
+        {
+            RestoreAllHiddenSprites();
+            return;
+        }
+
         var viewBounds = _eyeManager.GetWorldViewbounds().CalcBoundingBox();
         var openingLimit = maxOpeningRects == 0 ? int.MaxValue : maxOpeningRects + 1;
         if (!TryFindOpeningBounds(playerMapComp.MapId, viewBounds, openingLimit) ||

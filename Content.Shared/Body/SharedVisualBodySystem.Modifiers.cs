@@ -146,7 +146,8 @@ public abstract partial class SharedVisualBodySystem
 
     private void ApplyAppearanceTo(Entity<VisualBodyComponent?> ent, HumanoidCharacterAppearance appearance, Sex sex)
     {
-        if (!Resolve(ent, ref ent.Comp))
+        // CMU14: antag profile rules routinely target mobs without visual bodies (CMMobHuman); not an error
+        if (!Resolve(ent, ref ent.Comp, logMissing: false))
             return;
 
         ApplyProfile(ent,

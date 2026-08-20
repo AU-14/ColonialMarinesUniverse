@@ -254,7 +254,9 @@ public abstract partial class SharedRMCCameraSystem : EntitySystem
                 if (index >= 0)
                 {
                     comp.CameraIds.RemoveAt(index);
-                    comp.CameraNames.RemoveAt(index);
+                    // CMU14: serialized maps can carry ids without names; keep lists from throwing on delete
+                    if (index < comp.CameraNames.Count)
+                        comp.CameraNames.RemoveAt(index);
                 }
 
                 if (comp.CurrentCamera == camera)
