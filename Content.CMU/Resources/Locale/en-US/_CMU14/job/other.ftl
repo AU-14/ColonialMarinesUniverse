@@ -76,6 +76,7 @@ au14-job-name-unisc-automatic-rifleman = UNISC Automatic Rifleman
 au14-job-name-unisc-ammo-bearer = UNISC Ammo Bearer
 au14-job-name-unisc-enforcer = UNISC Enforcer
 au14-job-name-unisc-lead-enforcer = UNISC Lead Enforcer
+au14-job-name-unisc-commander = UNISC Commander
 au14-job-name-unisc-squad-leader = UNISC Squad Leader
 au14-job-name-unisc-platoon-operations-officer = UNISC Platoon Operations Officer
 au14-job-name-unisc-rifleman = UNISC Rifleman

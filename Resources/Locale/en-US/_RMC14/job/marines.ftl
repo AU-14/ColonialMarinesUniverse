@@ -49,6 +49,15 @@ rmc-job-prefix-weapons-specialist-demo = DEMO
 rmc-job-name-weapons-specialist-grenadier = Grenadier Specialist
 rmc-job-prefix-weapons-specialist-grenadier = GRND
 
+
+# CMU14
+rmc-job-name-weapons-specialist-shotgunner = Heavy Shotgunner
+rmc-job-prefix-weapons-specialist-shotgunner = SGNR
+
+rmc-job-name-weapons-specialist-plasmagunner = Plasma Gunner
+rmc-job-prefix-weapons-specialist-plasmagunner = PGNR
+# CMU14
+
 rmc-job-name-weapons-specialist-sniper = Sniper Specialist
 rmc-job-prefix-weapons-specialist-sniper = SNPR
 
