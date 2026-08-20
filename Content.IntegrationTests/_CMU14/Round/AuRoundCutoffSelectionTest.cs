@@ -82,6 +82,7 @@ public sealed class AuRoundCutoffSelectionTest
         - type: platoon
           id: CMUTestMissingAsrsPlatoon
           name: CMU missing ASRS profile test
+          vendorSet: USCM
           possibleships:
           - USSBushRedux
 
