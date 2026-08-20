@@ -22,6 +22,12 @@ public sealed partial class NightVisionItemComponent : Component
     [DataField, AutoNetworkedField]
     public bool Toggleable = true;
 
+    [DataField, AutoNetworkedField] // CMU14: restored from master (apply vision on equip)
+    public bool EnableOnEquip = true;
+
+    [DataField, AutoNetworkedField] // CMU14: restored from master (full state for half-vision users)
+    public bool IgnoreUserOnlyHalf;
+
     // Only allows for a single slotflag right now because some code uses strings and some code uses enums to determine slots :(
     [DataField, AutoNetworkedField]
     public SlotFlags SlotFlags { get; set; } = SlotFlags.EYES;

@@ -36,7 +36,10 @@ public sealed partial class RandomHumanoidSystem : EntitySystem
         if (!_prototypeManager.TryIndex<RandomHumanoidSettingsPrototype>(prototypeId, out var prototype))
             throw new ArgumentException("Could not get random humanoid settings");
 
-        var profile = HumanoidCharacterProfile.Random(prototype.SpeciesBlacklist);
+        // CMU14 restored from master: honor a forced species over the random pool
+        var profile = prototype.Species is { } species
+            ? HumanoidCharacterProfile.RandomWithSpecies(species)
+            : HumanoidCharacterProfile.Random(prototype.SpeciesBlacklist);
         var speciesProto = _prototypeManager.Index<SpeciesPrototype>(profile.Species);
         var humanoid = EntityManager.CreateEntityUninitialized(speciesProto.Prototype, coordinates);
 

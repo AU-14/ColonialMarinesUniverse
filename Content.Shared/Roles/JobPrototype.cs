@@ -102,6 +102,9 @@ public sealed partial class JobPrototype : IPrototype
     [DataField]
     public int AntagAdvantage;
 
+    [DataField] // CMU14: restored from master (antag gating)
+    public bool CanBeAntag { get; private set; } = true;
+
     [DataField]
     public ProtoId<StartingGearPrototype>? StartingGear { get; private set; }
 

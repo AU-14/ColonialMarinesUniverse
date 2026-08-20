@@ -24,6 +24,9 @@ public sealed partial class RandomHumanoidSettingsPrototype : IPrototype, IInher
     [DataField]
     public bool RandomizeName { get; private set; } = true;
 
+    [DataField] // CMU14: restored from master (forced species over random pool)
+    public ProtoId<SpeciesPrototype>? Species { get; private set; }
+
     /// <summary>
     ///     Species that will be ignored by the randomizer.
     /// </summary>

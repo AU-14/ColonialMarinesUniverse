@@ -114,6 +114,9 @@ public sealed partial class PaperVisualsComponent : Component
     [DataField]
     public Color? DefaultTextColor = null;
 
+    [DataField("fontAccentColor")] // CMU14: restored from master (accent tint)
+    public Color FontAccentColor = new Color(223, 223, 213);
+
     /// <summary>
     ///     This can enforce that your paper has a limited area to write in.
     ///     If you wish to constrain only one direction, the other direction

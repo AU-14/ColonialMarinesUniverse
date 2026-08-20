@@ -39,6 +39,15 @@ public sealed partial class LanguagePrototype : IPrototype
     [DataField]
     public int? TextSize;
 
+    [DataField] // CMU14: restored from master (inter-language comprehension)
+    public Dictionary<ProtoId<LanguagePrototype>, float> SisterLanguages = new();
+
+    [DataField] // CMU14
+    public bool HideLanguageName;
+
+    [DataField] // CMU14
+    public bool HideLanguageIcon;
+
     [DataField]
     public bool ShowLanguageName;
 

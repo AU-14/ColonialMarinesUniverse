@@ -34,6 +34,12 @@ public sealed partial class HardpointItemComponent : Component
     [DataField]
     public float DamageMultiplier = 1f;
 
+    [DataField] // CMU14: restored from master (degraded performance below integrity fraction)
+    public float DisabledIntegrityFraction = 0.15f;
+
+    [DataField] // CMU14: restored from master (performance floor when degraded)
+    public float MinimumPerformanceMultiplier = 0.35f;
+
     [DataField]
     public float RepairRate = 0.01f;
 }
@@ -102,6 +108,9 @@ public sealed partial class HardpointSlot
 
     [DataField]
     public float RemoveDelay { get; set; } = -1f;
+
+    [DataField] // CMU14: restored from master (block ejecting items from this slot)
+    public bool DisableEject { get; set; }
 
     [DataField]
     public EntityWhitelist? Whitelist { get; set; }
