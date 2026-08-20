@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
 using System.Text;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
@@ -41,6 +41,8 @@ namespace Content.Shared._RMC14.Evacuation;
 
 public abstract partial class SharedEvacuationSystem : EntitySystem
 {
+    protected override string SawmillName => "evacuation"; // CMU14
+
     [Dependency] private SharedAmbientSoundSystem _ambientSound = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private AreaSystem _area = default!;
@@ -111,6 +113,8 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     {
         var evacuationProgress = EnsureComp<EvacuationProgressComponent>(ev.Map);
         evacuationProgress.DropShipCrashed = true;
+        evacuationProgress.VictimFaction = ev.VictimFaction; // CMU14
+        Dirty(ev.Map, evacuationProgress); // CMU14
 
         var doors = EntityQueryEnumerator<EvacuationDoorComponent>();
         while (doors.MoveNext(out var uid, out var door))
@@ -196,9 +200,15 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         var offset = new Vector2(_index * 50, _index * 50);
         _index++;
 
-        if (!_mapSystem.MapExists(_map) ||
-            !_mapLoader.TryLoadGrid(_map.Value, spawn, out var result, offset: offset))
+        if (!_mapSystem.MapExists(_map)) // CMU14
         {
+            Log.Warning($"Grid spawner {ToPrettyString(ent)} skipped: holding map {_map.Value} no longer exists. Spawn: {spawn}");
+            return;
+        }
+
+        if (!_mapLoader.TryLoadGrid(_map.Value, spawn, out var result, offset: offset)) // CMU14
+        {
+            Log.Warning($"Grid spawner {ToPrettyString(ent)} failed to load grid '{spawn}'");
             return;
         }
 
@@ -514,13 +524,27 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         return _rmcPower.IsAreaPowered(area, RMCPowerChannel.Equipment);
     }
 
-    public void ToggleEvacuation(SoundSpecifier? startSound, SoundSpecifier? cancelSound, EntityUid? map)
+    public void ToggleEvacuation(SoundSpecifier? startSound, SoundSpecifier? cancelSound, EntityUid? map) // CMU14 method
     {
+        if (_net.IsClient) return;
         DebugTools.Assert(map != null);
-
         var progress = EnsureComp<EvacuationProgressComponent>(map.Value);
 
+        if (progress.Enabled && progress.EnabledAt is { } enabledAt)
+        {
+            if (_timing.CurTime >= enabledAt + progress.AbortCutoff)
+            {
+                _marineAnnounce.AnnounceARESStaging(null,
+                    "ALL STATIONS. Engine is at critical mass, scuttling cannot be aborted. Abandon ship.",
+                    cancelSound, faction: progress.VictimFaction);
+                return;
+            }
+        }
+
         progress.Enabled = !progress.Enabled;
+        progress.EnabledAt = progress.Enabled ? _timing.CurTime : null;
+        progress.SelfDestructAt = progress.Enabled ? _timing.CurTime + progress.SelfDestructDelay : null;
+        progress.SelfDestructed = false;
         Dirty(map.Value, progress);
 
         if (progress.Enabled)
@@ -528,15 +552,15 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
             _marineAnnounce.AnnounceARESStaging(
                 null,
                 Loc.GetString("rmc-evacuation-started"),
-                startSound
-            );
-            var ev = new EvacuationEnabledEvent();
+                startSound,
+                faction: progress.VictimFaction);
+            var ev = new EvacuationEnabledEvent(map.Value);
             RaiseLocalEvent(map.Value, ref ev, true);
         }
         else
         {
-            _marineAnnounce.AnnounceARESStaging(null, Loc.GetString("rmc-evacuation-cancelled"), cancelSound);
-            var ev = new EvacuationDisabledEvent();
+            _marineAnnounce.AnnounceARESStaging(null, Loc.GetString("rmc-evacuation-cancelled"), cancelSound, faction: progress.VictimFaction);
+            var ev = new EvacuationDisabledEvent(map.Value);
             RaiseLocalEvent(map.Value, ref ev, true);
         }
     }
@@ -560,7 +584,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
         progress.Enabled = true;
         Dirty(map, progress);
-        var ev = new EvacuationEnabledEvent();
+        var ev = new EvacuationEnabledEvent(map); // CMU14
         RaiseLocalEvent(map, ref ev, true);
     }
 
@@ -631,7 +655,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
                 }
 
                 areas.Append(Loc.GetString("rmc-evacuation-fuel-start"));
-                _marineAnnounce.AnnounceARESStaging(null, areas.ToString());
+                _marineAnnounce.AnnounceARESStaging(null, areas.ToString(), faction: progress.VictimFaction); // CMU14
             }
 
             if (progress.NextUpdate > time)
@@ -654,7 +678,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
                 if (progress.LastPower.TryGetValue(areaId, out var lastPower) &&
                     lastPower != powered)
                 {
-                    _marineAnnounce.AnnounceARESStaging(null, EvacuationAreaStatus(areaId, powered));
+                    _marineAnnounce.AnnounceARESStaging(null, EvacuationAreaStatus(areaId, powered), faction: progress.VictimFaction); // CMU14
                 }
 
                 progress.LastPower[areaId] = powered;
@@ -711,7 +735,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
 
                 if (progress.Progress >= progress.Required)
                 {
-                    _marineAnnounce.AnnounceARESStaging(null, Loc.GetString("rmc-evacuation-fuel-progress-complete"));
+                    _marineAnnounce.AnnounceARESStaging(null, Loc.GetString("rmc-evacuation-fuel-progress-complete"), faction: progress.VictimFaction); // CMU14
                     _xenoAnnounce.AnnounceAll(default, Loc.GetString("rmc-evacuation-xeno-progress-complete"));
                     SetPumpAppearance(EvacuationPumpVisuals.Full);
                     var ev = new EvacuationProgressEvent(100);
@@ -719,7 +743,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
                 }
                 else if (progress.Progress >= progress.Required * 0.75)
                 {
-                    _marineAnnounce.AnnounceARESStaging(null, MarinePercentageString(75));
+                    _marineAnnounce.AnnounceARESStaging(null, MarinePercentageString(75), faction: progress.VictimFaction); // CMU14
                     _xenoAnnounce.AnnounceAll(default, XenoProgressString("rmc-evacuation-xeno-progress-75"));
                     SetPumpAppearance(EvacuationPumpVisuals.SeventyFive);
 
@@ -728,7 +752,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
                 }
                 else if (progress.Progress >= progress.Required * 0.5)
                 {
-                    _marineAnnounce.AnnounceARESStaging(null, MarinePercentageString(50));
+                    _marineAnnounce.AnnounceARESStaging(null, MarinePercentageString(50), faction: progress.VictimFaction); // CMU14
                     _xenoAnnounce.AnnounceAll(default, XenoProgressString("rmc-evacuation-xeno-progress-50"));
                     SetPumpAppearance(EvacuationPumpVisuals.Fifty);
                     var ev = new EvacuationProgressEvent(50);
@@ -740,7 +764,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
                         ? Loc.GetString("rmc-evacuation-fuel-progress-25-operational")
                         : Loc.GetString("rmc-evacuation-fuel-progress-25-restore", ("areas", offAreas));
 
-                    _marineAnnounce.AnnounceARESStaging(null, marineAnnounce);
+                    _marineAnnounce.AnnounceARESStaging(null, marineAnnounce, faction: progress.VictimFaction); // CMU14
                     _xenoAnnounce.AnnounceAll(default, XenoProgressString("rmc-evacuation-xeno-progress-25"));
 
                     SetPumpAppearance(EvacuationPumpVisuals.TwentyFive);
@@ -809,5 +833,29 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
     {
         ProcessEvacuation();
         ProcessExplodingPods();
+        ProcessSelfDestruct(); // CMU14
+    }
+
+    private void ProcessSelfDestruct() // CMU14 method
+    {
+        if (_net.IsClient)
+            return;
+
+        var time = _timing.CurTime;
+        var query = EntityQueryEnumerator<EvacuationProgressComponent>();
+        while (query.MoveNext(out var uid, out var progress))
+        {
+            if (progress.SelfDestructed || progress.SelfDestructAt is not { } at)
+                continue;
+
+            if (time < at)
+                continue;
+
+            progress.SelfDestructed = true;
+            Dirty(uid, progress);
+
+            var ev = new ShipSelfDestructEvent(uid);
+            RaiseLocalEvent(uid, ref ev, true);
+        }
     }
 }

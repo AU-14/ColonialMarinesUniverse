@@ -1,4 +1,4 @@
-﻿namespace Content.Shared._RMC14.Evacuation;
+namespace Content.Shared._RMC14.Evacuation;
 
-[ByRefEvent]
-public readonly record struct EvacuationEnabledEvent;
+[ByRefEvent] // CMU14 struct
+public readonly record struct EvacuationEnabledEvent(EntityUid Map);

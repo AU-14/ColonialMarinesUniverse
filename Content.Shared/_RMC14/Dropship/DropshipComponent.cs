@@ -51,6 +51,10 @@ public sealed partial class DropshipComponent : Component
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan? HijackLandAt;
 
+    /// CMU14 <summary>The faction that owns this dropship. Scopes hijack and evacuation announcements to it.</summary>
+    [DataField, AutoNetworkedField]
+    public string? VictimFaction;
+
     [DataField, AutoNetworkedField]
     public EntProtoId FireId = "RMCTileFire";
 

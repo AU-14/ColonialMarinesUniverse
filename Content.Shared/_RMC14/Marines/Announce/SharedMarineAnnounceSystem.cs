@@ -1,4 +1,4 @@
-﻿using Content.Shared._RMC14.ARES;
+using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
 using Content.Shared._RMC14.Dialog;
 using Content.Shared._RMC14.Marines.ControlComputer;
@@ -180,7 +180,8 @@ public abstract partial class SharedMarineAnnounceSystem : EntitySystem
         EntityUid? source,
         string message,
         SoundSpecifier? sound = null,
-        LocId? announcement = null)
+        LocId? announcement = null,
+        string? faction = null) // CMU14
     {
     }
 

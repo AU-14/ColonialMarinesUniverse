@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using System.Numerics;
 using Content.Server._RMC14.GameStates;
 using Content.Server._RMC14.Marines;
@@ -39,6 +39,7 @@ using Robust.Shared.Containers;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
+using Content.Shared.AU14.Round;
 
 namespace Content.Server._RMC14.Dropship;
 
@@ -146,11 +147,26 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
 
             if (xenoCount > 0)
             {
+                // CMU14: Scope the announcement to the faction that owns this dropship
+                string? victimFaction = null;
+                var navComputers = EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
+                while (navComputers.MoveNext(out var navUid, out _, out var navXform))
+                {
+                    if (navXform.GridUid == _dropshipId &&
+                        TryComp<WhitelistedShuttleComponent>(navUid, out var ws) &&
+                        !string.IsNullOrEmpty(ws.Faction))
+                    {
+                        victimFaction = ws.Faction;
+                        break;
+                    }
+                }
+
                 _alertLevelSystem.Set(RMCAlertLevels.Red, _dropshipId, false, false);
                 _marineAnnounce.AnnounceToMarines(Loc.GetString("rmc-announcement-unidentified-lifesigns",
                     ("name", dropshipName),
                     ("count", xenoCount)),
-                    dropship.UnidentifledlifesignsSound);
+                    dropship.UnidentifledlifesignsSound,
+                    faction: victimFaction); // CMU14
             }
         }
     }
@@ -169,9 +185,9 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
             RaiseLocalEvent(ref ev);
         }
 
-        if (HasComp<AlmayerComponent>(map) && ent.Comp.Crashed)
+        if (ent.Comp.HijackLandAt != null && ent.Comp.Crashed) // CMU14
         {
-            var ev = new DropshipHijackLandedEvent(map);
+            var ev = new DropshipHijackLandedEvent(map, VictimFaction: ent.Comp.VictimFaction);
             RaiseLocalEvent(ref ev);
         }
 
@@ -505,18 +521,34 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         {
             if (user != null)
             {
+                // CMU14: Victim faction: whoever owns this dropship, from its nav computer whitelist
+                string? victimFaction = null;
+                var navComputers = EntityQueryEnumerator<DropshipNavigationComputerComponent, TransformComponent>();
+                while (navComputers.MoveNext(out var navUid, out _, out var navXform))
+                {
+                    if (navXform.GridUid == dropshipId.Value &&
+                        TryComp<WhitelistedShuttleComponent>(navUid, out var ws) &&
+                        !string.IsNullOrEmpty(ws.Faction))
+                    {
+                        victimFaction = ws.Faction;
+                        break;
+                    }
+                }
+
+                dropship.VictimFaction = victimFaction; // CMU14
+
                 var xenoText = Loc.GetString("rmc-announcement-dropship-hijack-hive");
                 _xenoAnnounce.AnnounceSameHive(user.Value, xenoText);
                 Audio.PlayPvs(dropship.LocalHijackSound, dropshipId.Value);
 
                 var marineText = Loc.GetString("rmc-announcement-dropship-hijack");
-                _marineAnnounce.AnnounceARESStaging(dropshipId.Value, marineText, dropship.MarineHijackSound, new LocId("rmc-announcement-dropship-message"));
+                _marineAnnounce.AnnounceARESStaging(dropshipId.Value, marineText, dropship.MarineHijackSound, new LocId("rmc-announcement-dropship-message"), victimFaction); // CMU14
 
                 var generalQuartersText = Loc.GetString("rmc-announcement-general-quarters");
                 Timer.Spawn(TimeSpan.FromSeconds(10), () =>
                 {
                     _alertLevelSystem.Set(RMCAlertLevels.Red, dropshipId.Value, false, false);
-                    _marineAnnounce.AnnounceARESStaging(dropshipId.Value, generalQuartersText, dropship.GeneralQuartersSound, null);
+                    _marineAnnounce.AnnounceARESStaging(dropshipId.Value, generalQuartersText, dropship.GeneralQuartersSound, null, victimFaction); // CMU14
                 });
             }
 

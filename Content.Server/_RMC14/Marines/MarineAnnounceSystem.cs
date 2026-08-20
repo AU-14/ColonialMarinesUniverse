@@ -1,4 +1,4 @@
-﻿using Content.Server._RMC14.Rules.DistressSignal;
+using Content.Server._RMC14.Rules.DistressSignal;
 using Content.Server._RMC14.Announce;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
@@ -112,7 +112,7 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         SoundSpecifier? sound = null,
         Filter? filter = null,
         bool excludeSurvivors = true,
-        string? faction = null)
+        string? faction = null) // CMU14
     {
         filter ??= Filter.Empty().AddWhereAttachedEntity(e =>
             HasComp<GhostComponent>(e) ||
@@ -160,13 +160,14 @@ public sealed partial class MarineAnnounceSystem : SharedMarineAnnounceSystem
         EntityUid? source,
         string message,
         SoundSpecifier? sound = null,
-        LocId? announcement = null)
+        LocId? announcement = null,
+        string? faction = null)
     {
-        base.AnnounceARESStaging(source, message, sound, announcement);
+        base.AnnounceARESStaging(source, message, sound, announcement, faction); // CMU14
 
         message = FormatARESStaging(announcement, message);
 
-        AnnounceToMarines(message, sound);
+        AnnounceToMarines(message, sound, faction: faction); // CMU14
         _adminLogs.Add(LogType.RMCMarineAnnounce, $"{ToPrettyString(source):player} ARES announced message: {message}");
     }
 
