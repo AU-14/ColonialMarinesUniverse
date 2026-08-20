@@ -417,6 +417,7 @@
         Piercing: 2
         Heat: 2
   - type: Damageable
+  - type: Injurable
     damageContainer: Shield
   - type: Destructible
     thresholds:
@@ -841,7 +842,6 @@
     maxCharge: 1000
     startingCharge: 1000
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 35
   - type: Wieldable
     wieldedInhandPrefix: plasma_rifle
@@ -894,6 +894,5 @@
     maxCharge: 500
     startingCharge: 500
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 25
   - type: Appearance

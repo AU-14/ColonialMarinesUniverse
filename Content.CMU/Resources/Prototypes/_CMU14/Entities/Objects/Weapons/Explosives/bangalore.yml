@@ -11,6 +11,7 @@
     size: Large
     sprite: _CMU14/Weapons/Throwable/bangalore.rsi
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

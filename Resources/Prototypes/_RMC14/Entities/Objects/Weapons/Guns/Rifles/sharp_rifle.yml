@@ -457,6 +457,8 @@
           Active4: { state: sharp_explosive_mine_active_4 }
           Disarmed: { state: sharp_mine_disarmed }
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -469,7 +471,7 @@
     placementDelay: 3
     disarmDelay: 3
     shotStackLimit: 1
-    triggerOnAnyProjectile: true
+    # triggerOnAnyProjectile: true # CMU14
     deploySound:
       path: /Audio/_RMC14/Weapons/Guns/Gunshots/gun_sharp_explode.ogg
   - type: SharpMine

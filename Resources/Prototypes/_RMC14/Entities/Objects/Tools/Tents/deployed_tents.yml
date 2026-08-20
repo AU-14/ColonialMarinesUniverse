@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: BaseStructure
   id: RMCTentBase
@@ -86,8 +86,10 @@
   - type: CollisionWake
     enabled: false
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: StructuralMarine # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

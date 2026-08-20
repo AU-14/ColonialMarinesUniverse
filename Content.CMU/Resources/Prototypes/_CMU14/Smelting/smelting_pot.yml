@@ -67,6 +67,7 @@
     sound:
       path: /Audio/Effects/Chemistry/bubbles.ogg
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

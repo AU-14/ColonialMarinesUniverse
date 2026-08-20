@@ -65,6 +65,8 @@
           Off: { state: normal_tesla_coil }
           On: { state: normal_tesla_coil_on }
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

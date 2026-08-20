@@ -32,8 +32,10 @@
   - type: AccessReader
     access: [ [ "CMAccessCMO" ], [ "CMAccessChemistry" ], [ "CMAccessMedPrep" ] ]
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: null
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

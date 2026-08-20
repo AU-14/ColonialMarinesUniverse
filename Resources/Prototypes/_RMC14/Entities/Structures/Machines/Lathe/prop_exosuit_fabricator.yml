@@ -5,8 +5,10 @@
   suffix: Prop, RMC
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: null
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:
@@ -19,7 +21,7 @@
       - !type:ChangeConstructionNodeBehavior
         node: machineFrame
       - !type:DoActsBehavior
-        acts: ["Destruction"] 
+        acts: ["Destruction"]
   - type: Sprite
     sprite: Structures/Machines/exosuit_fabricator.rsi
     state: fab-idle

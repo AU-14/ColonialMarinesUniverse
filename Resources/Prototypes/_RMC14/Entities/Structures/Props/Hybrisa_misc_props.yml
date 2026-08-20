@@ -167,8 +167,10 @@
   - type: Transform
     anchored: false
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:

@@ -40,9 +40,11 @@
   - type: CrashLandable
   - type: Woundable
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: null
-    healthBarThreshold: 2 # some of these mobs literally only have 10 hit points
+#   healthBarThreshold: 2 # CMU14
+#   damageContainer: Biological # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Biological
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.7
     baseSprintSpeed: 5

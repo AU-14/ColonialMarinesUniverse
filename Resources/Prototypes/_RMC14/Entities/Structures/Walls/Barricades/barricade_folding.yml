@@ -22,8 +22,10 @@
   - type: DirectionalAttackBlocker
     maxHealth: 350
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMFoldingBarricade
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: RMCRepairable
     heal: 200
     skill: RMCSkillConstruction
@@ -52,5 +54,4 @@
     targetLayers:
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
     damageGroup: "Brute"
-    hideIfZero: false
   - type: RMCFoldingBarricade

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   abstract: true
   parent: BaseMaterialDoor
   id: RMCBaseMaterialDoor
@@ -23,6 +23,8 @@
           "/Audio/Weapons/smash.ogg"
   - type: AirlockReceiverXenoClaws
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

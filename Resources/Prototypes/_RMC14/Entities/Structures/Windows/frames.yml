@@ -16,8 +16,10 @@
   - type: PlacementReplacement
     key: walls
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: StructuralMetallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: StaticPrice
     price: 75
   - type: Physics
@@ -191,7 +193,7 @@
   - type: Icon
     sprite: _RMC14/Structures/Windows/Frames/colony_rframe.rsi
     state: col_rframe0
-    color: "#aba9a9"
+    # color: "#aba9a9" # CMU14
   - type: IconSmooth
     key: windows
     additionalKeys:

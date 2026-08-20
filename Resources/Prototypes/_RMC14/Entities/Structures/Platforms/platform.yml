@@ -37,6 +37,7 @@
   id: CMPlatformBaseDestructible
   components:
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -146,6 +147,7 @@
   components:
   - type: Physics
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -190,6 +192,8 @@
   components:
   - type: Physics
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

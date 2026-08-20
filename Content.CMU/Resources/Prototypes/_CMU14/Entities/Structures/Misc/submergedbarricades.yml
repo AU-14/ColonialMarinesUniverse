@@ -9,6 +9,7 @@
     anchored: true
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Construction
     graph: AU14HESCOGraph

@@ -13,8 +13,10 @@
     - map: [ "acided" ]
   - type: Appearance
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: NailgunRepairable
     # cm13 max_health%: 1
     repairValues:

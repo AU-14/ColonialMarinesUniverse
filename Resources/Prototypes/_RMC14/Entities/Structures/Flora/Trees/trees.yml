@@ -22,8 +22,10 @@
         layer:
         - WallLayer
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: MeleeSound
     soundGroups:
       Brute:

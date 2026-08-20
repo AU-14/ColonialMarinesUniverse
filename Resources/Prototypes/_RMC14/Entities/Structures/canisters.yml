@@ -20,8 +20,10 @@
         layer:
         - MachineLayer
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: InteractionOutline
   - type: Destructible
     thresholds:
@@ -48,7 +50,7 @@
   description: A gas canister.
   components:
   - type: Sprite
-    state: grey 
+    state: grey
 
 - type: entity
   parent: RMCCanisterBase
@@ -57,8 +59,8 @@
   description: A gas canister.
   components:
   - type: Sprite
-    state: black 
-    
+    state: black
+
 - type: entity
   parent: RMCCanisterBase
   id: RMCCanisterBlue
@@ -67,7 +69,7 @@
   components:
   - type: Sprite
     state: blue
-    
+
 - type: entity
   parent: RMCCanisterBase
   id: RMCCanisterRed
@@ -84,8 +86,8 @@
   description: A gas canister.
   components:
   - type: Sprite
-    state: orange 
-    
+    state: orange
+
 - type: entity
   parent: RMCCanisterBase
   id: RMCCanisterRedWhite
@@ -94,14 +96,14 @@
   components:
   - type: Sprite
     state: redws
-    
+
 # Broken
 - type: entity
   parent: RMCCanisterBase
   id: RMCCanisterBrokenBase
   name: broken canister
   description: A broken gas canister. Completely useless.
-  components:  
+  components:
   - type: Sprite
     sprite: _RMC14/Structures/atmos.rsi
     state: yellow-1

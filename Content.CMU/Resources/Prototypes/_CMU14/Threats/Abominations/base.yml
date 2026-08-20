@@ -54,7 +54,7 @@
     - Dead
   # Half-strength innate night vision (synth-equivalent) on every
   # caste — the flesh sees in the dark, but not perfectly.
-  - type: NightVision
+  - type: RMCNightVision
     innate: true
     state: half
     onlyHalf: true
@@ -66,13 +66,19 @@
   # Weak to fire (Heat x2). Tendons + flesh forms catch and burn fast — fire
   # is the intended counter to abomination area denial.
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: AbominationFireWeak
   # Bloodstream is inherited from MobBloodstream so it can be examined as a
   # mob, but we kill bleed entirely — abominations don't have circulating
   # blood, they ARE the blood. No bleed-out, no bleed damage.
+  - type: Injurable
+    damageContainer: Biological
   - type: Bloodstream
-    bloodMaxVolume: 0
+    # CMU14 bloodMaxVolume migrated to bloodReferenceSolution + modifier
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 0
+    maxVolumeModifier: 1
     maxBleedAmount: 0
     bleedReductionAmount: 0
     bloodRefreshAmount: 0

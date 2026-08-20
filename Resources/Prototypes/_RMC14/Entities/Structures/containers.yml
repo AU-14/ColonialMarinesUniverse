@@ -33,8 +33,10 @@
     stageLoss: 4
     destroy: true
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:
@@ -501,7 +503,7 @@
 
 - type: entity
   parent: RMCContainerGraf2Left
-  id: RMCContainerGraf2Right      
+  id: RMCContainerGraf2Right
   suffix: Graffiti, Right
   components:
   - type: Sprite

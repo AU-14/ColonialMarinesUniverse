@@ -77,8 +77,10 @@
           params:
             volume: -6
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Appearance
   - type: InteractionOutline
   - type: Anchorable

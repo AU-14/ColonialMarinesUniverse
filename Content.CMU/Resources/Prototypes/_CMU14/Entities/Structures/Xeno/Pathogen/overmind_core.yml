@@ -29,6 +29,7 @@
     state: pathogen_core
     drawdepth: FloorObjects
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

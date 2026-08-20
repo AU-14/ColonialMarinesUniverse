@@ -37,6 +37,7 @@
   - type: InteractionOutline
   - type: Barricade
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Construction
     graph: AU14HESCOGraph

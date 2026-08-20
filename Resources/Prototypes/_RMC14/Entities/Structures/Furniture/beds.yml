@@ -21,8 +21,10 @@
     node: bed
   - type: RMCMesonsNonviewable
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: StructuralMarine # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:
@@ -167,7 +169,7 @@
     sprite: _RMC14/Structures/Furniture/bed.rsi
     state: bunk_brown
   - type: Construction
-  
+
 # Bedroll
 
 - type: entity

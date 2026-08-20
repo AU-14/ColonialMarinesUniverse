@@ -50,6 +50,8 @@
     containers:
       rmc-vehicle-pilot: !type:ContainerSlot
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Strap
     blacklist:

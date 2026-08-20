@@ -43,8 +43,10 @@
         volume: -5
         maxDistance: 5
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -150,8 +152,10 @@
     channel: Equipment
   - type: InteractionOutline
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -203,8 +207,10 @@
           False: { state: sheater0 }
   - type: InteractionOutline
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:

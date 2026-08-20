@@ -49,6 +49,8 @@
   - type: Item
     size: Large
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

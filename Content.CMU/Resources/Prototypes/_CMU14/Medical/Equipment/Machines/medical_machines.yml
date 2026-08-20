@@ -64,8 +64,9 @@
     containers:
     - cmu-autodoc-bodyContainer
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: StrongMetallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: RMCMesonsNonviewable
 
 - type: entity
@@ -110,8 +111,9 @@
         type: CMUAutodocBui
   - type: CMUAutodocConsole
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Electronic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: RMCMesonsNonviewable
 
 - type: entity
@@ -161,8 +163,9 @@
       cmu-body-scanner-bodyContainer: !type:ContainerSlot
   - type: Appearance
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: StrongMetallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: EmptyOnMachineDeconstruct
     containers:
     - cmu-body-scanner-bodyContainer
@@ -210,8 +213,9 @@
         type: CMUBodyScannerBui
   - type: CMUBodyScannerConsole
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Electronic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: RMCMesonsNonviewable
 
 - type: entity
@@ -299,8 +303,9 @@
     - cmu-limb-printer-syringeSlot
     - cmu-limb-printer-materialSlot
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Electronic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: RMCMesonsNonviewable
 
 - type: entity

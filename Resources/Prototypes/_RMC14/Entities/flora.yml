@@ -43,7 +43,8 @@
       behaviors:
       - !type:DoActsBehavior
         acts: [ "Destruction" ]
-  - type: Temperature
+  - type: Temperature # CMU14
+  - type: TemperatureDamage # CMU14
     heatDamage:
       types:
         Heat: 5
@@ -62,7 +63,6 @@
       methods: [Touch]
       effects:
       - !type:HealthChange
-        scaleByQuantity: true
         damage:
           types:
             Heat: 10
@@ -95,8 +95,10 @@
   abstract: true
   components:
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
       - trigger:

@@ -14,8 +14,10 @@
     state: table_cards1
     offset: 0.5, 0.5
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+#   damageContainer: StructuralInorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: Destructible
     thresholds:
     - trigger:

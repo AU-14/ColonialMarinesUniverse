@@ -82,8 +82,10 @@
         weed15: ""
   - type: XenoFriendly
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Weed
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -126,7 +128,6 @@
       methods: [Touch]
       effects:
       - !type:HealthChange
-        scaleByQuantity: true
         damage:
           types:
             Heat: 4
@@ -395,6 +396,8 @@
   - type: XenoNestSurface
   - type: XenoFriendly
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

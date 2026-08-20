@@ -823,6 +823,7 @@
         Piercing: 1
         Heat: 1
   - type: Damageable
+  - type: Injurable
     damageContainer: Shield
   - type: Destructible
     thresholds:
@@ -915,7 +916,7 @@
 
 - type: stack
   id: CMUYautjaHealingGel
-  name: healing gel
+  name: stack-c-m-u-yautja-healing-gel
   icon: { sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: medicated-suture }
   spawn: CMUYautjaHealingGel
   maxCount: 6
@@ -955,7 +956,7 @@
 
 - type: stack
   id: CMUYautjaStabilizerGel
-  name: stabilizer gel
+  name: stack-c-m-u-yautja-stabilizer-gel
   icon: { sprite: "/Textures/Objects/Specific/Medical/medical.rsi", state: regenerative-mesh }
   spawn: CMUYautjaStabilizerGel
   maxCount: 6
@@ -1027,17 +1028,17 @@
     injectOnly: true
     onlyAffectsMobs: true
     canContainerDraw: false
-  - type: SolutionContainerManager
-    solutions:
-      pen:
-        maxVol: 135
-        reagents:
-        - ReagentId: CMBicaridine
-          Quantity: 45
-        - ReagentId: CMKelotane
-          Quantity: 45
-        - ReagentId: CMTricordrazine
-          Quantity: 45
+  - type: Solution
+    id: pen
+    solution:
+      maxVol: 135
+      reagents:
+      - ReagentId: CMBicaridine
+        Quantity: 45
+      - ReagentId: CMKelotane
+        Quantity: 45
+      - ReagentId: CMTricordrazine
+        Quantity: 45
   - type: CMRefillableSolution
     solution: pen
     reagents:

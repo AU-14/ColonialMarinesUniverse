@@ -75,6 +75,8 @@
     messageID: rmc-xeno-construction-resin-hole-destroyed
     structureName: empty
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

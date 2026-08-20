@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   save: false
   parent: BaseMobSpecies
   id: RMCBaseMobSpeciesOrganic
@@ -43,7 +43,12 @@
   - type: RMCStamina
   - type: Bloodstream
     bloodReagent: Blood
-    bloodMaxVolume: 560
+    # CMU14 bloodMaxVolume migrated to bloodReferenceSolution + modifier
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: Blood
+        Quantity: 560
+    maxVolumeModifier: 1
     maxBleedAmount: 50
     bleedReductionAmount: 0
     bloodRefreshAmount: 0.15
@@ -128,9 +133,11 @@
   - type: PainShock
   - type: CMUPainFeedback
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: null
-    healthBarThreshold: 5
+#   damageContainer: Biological # CMU14
+#   healthBarThreshold: 5 # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Biological
   - type: Vocal
     emoteSounds: MaleHuman
   - type: Flammable
@@ -206,10 +213,13 @@
     max: 719 # TODO RMC14 this should be per part and smaller
   - type: AtmosExposed
   - type: Temperature
+    temperature: 310.15 # CMU14
+    specificHeat: 42 # CMU14
+  - type: TemperatureDamage # CMU14
     heatDamageThreshold: 325
     coldDamageThreshold: 260
-    currentTemperature: 310.15
-    specificHeat: 42
+#   currentTemperature: 310.15 # CMU14
+#   specificHeat: 42 # CMU14
   - type: TemperatureSpeed
     thresholds:
       273: 1

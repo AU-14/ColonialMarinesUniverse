@@ -249,8 +249,9 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -552,8 +553,9 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -607,8 +609,9 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -686,8 +689,9 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -765,8 +769,9 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -902,8 +907,10 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

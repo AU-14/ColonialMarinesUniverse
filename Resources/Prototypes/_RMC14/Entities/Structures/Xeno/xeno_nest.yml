@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: XenoNest
   name: alien nest
   description: It's a gruesome pile of thick, sticky resin shaped like a nest.
@@ -33,6 +33,8 @@
         hard: false
   - type: Clickable
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

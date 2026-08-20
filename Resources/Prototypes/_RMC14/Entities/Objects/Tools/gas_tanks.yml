@@ -25,7 +25,6 @@
     size: Normal
     sprite: _RMC14/Objects/Tanks/anesthetic.rsi
   - type: GasTank
-    outputPressure: 30.4
   - type: Clothing
     sprite: _RMC14/Objects/Tanks/anesthetic.rsi
 
@@ -206,8 +205,10 @@
       types:
         Blunt: 5
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+#   damageContainer: Metallic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: DamageOnHighSpeedImpact
     minimumSpeed: 2
     damage: {}

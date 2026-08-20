@@ -67,12 +67,17 @@
         Blunt: 12
         Structural: 3
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: CMUYautja
-    healthBarThreshold: 5
+  - type: Injurable
+    damageContainer: Biological
   - type: Bloodstream
     bloodReagent: CMUYautjaBlood
-    bloodMaxVolume: 650
+    # CMU14 bloodMaxVolume migrated to bloodReferenceSolution + modifier
+    bloodReferenceSolution:
+      reagents:
+      - ReagentId: CMUYautjaBlood
+        Quantity: 650
+    maxVolumeModifier: 1
     maxBleedAmount: 35
     bleedReductionAmount: 0
     bloodRefreshAmount: 0.2

@@ -45,6 +45,8 @@
           True: {state: active}
           False: {state: icon}
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -109,7 +111,6 @@
   - type: RMCStunOnHit
     stuns:
     - whitelist:
-        minMobSize: VerySmallXeno
       maxRange: 3
       stunTime: 1.5
       slowTime: 5

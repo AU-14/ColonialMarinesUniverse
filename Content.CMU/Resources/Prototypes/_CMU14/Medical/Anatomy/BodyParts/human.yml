@@ -5,6 +5,7 @@
   abstract: true
   components:
   - type: Damageable
+  - type: Injurable
     damageContainer: Biological
   - type: BodyPart
   - type: Gibbable

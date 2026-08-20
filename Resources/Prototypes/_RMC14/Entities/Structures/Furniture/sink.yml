@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: CMSinkEmpty
   name: sink
   suffix: Empty
@@ -31,6 +31,8 @@
   - type: DumpableSolution
     solution: drainBuffer
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

@@ -87,16 +87,18 @@
   - type: Physics
     bodyType: Static
   - type: Damageable
+#   thresholds: # CMU14
+#     - trigger:
+#         !type:DamageTrigger
+#         damage: 100
+#       behaviors:
+#       - !type:PlaySoundBehavior
+#         sound:
+#           collection: MetalBreak
+#       - !type:DoActsBehavior
+#         acts: [ "Destruction" ]
+# - type: XenoCrusherChargable # RMC: TODO knock over by crusher
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: StructuralMarine
   - type: Destructible # TODO RMC14 some of these should just be knocked over with a do after by xenos
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 100
-      behaviors:
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalBreak
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-  # - type: XenoCrusherChargable TODO knock over by crusher

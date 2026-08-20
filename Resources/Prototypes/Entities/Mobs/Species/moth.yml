@@ -16,8 +16,9 @@
     prototype: Moth
     requiredLegs: 2
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: Moth
+  - type: Injurable
+    damageContainer: Biological
   - type: ZombieAccentOverride
     accent: zombieMoth
   - type: Speech

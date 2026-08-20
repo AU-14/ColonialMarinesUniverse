@@ -59,6 +59,7 @@
     maxTileBreak: 0
     canCreateVacuum: false
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -222,6 +223,7 @@
   # No built-in charge: ONLY the attached explosives fire (each with its own real effect). The bare
   # firing box going off on its own was double-exploding alongside the payload.
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -351,6 +353,7 @@
       path: /Audio/Effects/snap.ogg
   - type: DeleteOnTrigger
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -533,6 +536,7 @@
   - type: SapperTripwire
   - type: SapperAudioTrap
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

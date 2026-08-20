@@ -311,6 +311,7 @@
   - type: HiveMember
   - type: XenoFriendly
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

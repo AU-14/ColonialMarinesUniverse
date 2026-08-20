@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [ BaseMachinePowered, RMCConstructibleMachine ]
   id: RMCSmartFridge
   name: smart chemical storage
@@ -35,8 +35,10 @@
     timeToApply: 4
     structure: true
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: null
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

@@ -49,8 +49,9 @@
         mask:
         - None
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

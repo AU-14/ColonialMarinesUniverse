@@ -39,8 +39,10 @@
       Brute:
         collection: GlassSmack
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: InteractionOutline
 
 - type: entity

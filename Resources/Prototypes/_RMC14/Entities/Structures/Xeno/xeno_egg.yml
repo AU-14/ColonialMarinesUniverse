@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: BaseItem
   id: XenoEgg
   name: egg
@@ -51,6 +51,8 @@
       map: [ "enum.XenoEggLayers.Base" ]
   - type: XenoEgg
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: StructuralXeno
   - type: RMCMesonsNonviewable
     xenoVisible: true
@@ -139,6 +141,8 @@
     - map: [ "egg" ]
       state: egg_exploded
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

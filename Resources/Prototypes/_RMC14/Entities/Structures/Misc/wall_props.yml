@@ -12,8 +12,10 @@
     drawdepth: WallTops
     sprite: _RMC14/Structures/hybrisa_props_decals.rsi
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:

@@ -34,8 +34,10 @@
           False:
             visible: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -54,7 +56,6 @@
     overlay: false
     targetLayers:
     - "enum.RMCDamageOverlayVisuals.DamageOverlay"
-    hideIfZero: false
     damageGroup: "Brute"
   - type: Barbed
     thornsDamage:

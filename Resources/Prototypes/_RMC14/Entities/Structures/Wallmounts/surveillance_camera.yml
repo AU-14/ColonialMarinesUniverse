@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: RMCSurveillanceCameraAlmayer
   name: ship-grade camera
   description: It's used to monitor rooms.
@@ -28,6 +28,8 @@
     zoom: 0.5, 0.5
   - type: RMCStaticZoomLevel
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Sprite
     drawdepth: WallMountedItems
@@ -138,7 +140,7 @@
       state: camera
       cycle: true
     state: camera
-    cycle: true
+    # cycle: true # CMU14
   - type: RMCCamera
     id: RMCMonitorCameraLandingZone
   - type: RMCStaticZoomLevel

@@ -285,8 +285,10 @@
       - !type:DoActsBehavior
         acts: ["Destruction"]
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: ReflectiveResin
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: XenoConstructionPlasmaCost
     plasma: 145
     scalingCost: true

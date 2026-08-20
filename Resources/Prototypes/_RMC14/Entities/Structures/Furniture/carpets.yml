@@ -18,6 +18,7 @@
     canCollide: false
   - type: Fixtures
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -45,6 +46,7 @@
     canCollide: false
   - type: Fixtures
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -507,6 +509,8 @@
     canCollide: false
   - type: Fixtures
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

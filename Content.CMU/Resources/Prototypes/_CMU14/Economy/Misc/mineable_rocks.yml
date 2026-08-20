@@ -16,8 +16,9 @@
     tags:
     - Pickaxe
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: StructuralInorganic
   - type: ReceiverXenoClaws
     maxHealth: 168
     hitsToDestroy: 3

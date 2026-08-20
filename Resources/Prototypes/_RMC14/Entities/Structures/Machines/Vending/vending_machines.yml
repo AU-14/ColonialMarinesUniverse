@@ -83,44 +83,24 @@
       map: ["enum.WiresVisualLayers.MaintenancePanel"]
   - type: VendingMachine
     pack: CMVendomat
-    dispenseOnHitChance: 0.25
-    dispenseOnHitThreshold: 2
-    offState: off
-    brokenState: broken
-    normalState: normal-unshaded
+    # dispenseOnHitChance: 0.25 # CMU14
+    # dispenseOnHitThreshold: 2 # CMU14
+    # offState: off # CMU14
+    # brokenState: broken # CMU14
+    # normalState: normal-unshaded # CMU14
   - type: Corrodible
     timeToApply: 4
     structure: true
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: null
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: ActivatableUIBlacklist
     blacklist:
       components:
       - Xeno
   - type: Destructible
-    thresholds:
-    - trigger:
-        !type:DamageTrigger
-        damage: 50
-      behaviors:
-      - !type:DoActsBehavior
-        acts: ["Breakage"]
-      - !type:EjectVendorItems
-    - trigger:
-        !type:DamageTrigger
-        damage: 100
-      behaviors:
-      - !type:SpawnEntitiesBehavior
-        spawn:
-          CMSheetMetal1:
-            min: 1
-            max: 1
-      - !type:DoActsBehavior
-        acts: [ "Destruction" ]
-      - !type:PlaySoundBehavior
-        sound:
-          collection: MetalGlassBreak
   - type: XenoCrusherChargable #TODO RMC14 tip over
 
 - type: vendingMachineInventory
@@ -193,7 +173,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/coffee.rsi
   - type: VendingMachine
     pack: CMVendorCoffee
-    ejectState: eject-unshaded
+    # ejectState: eject-unshaded # CMU14
 
 - type: entity
   parent: CMVendorCoffee
@@ -534,7 +514,7 @@
     sprite: _RMC14/Structures/Machines/VendingMachines/sec.rsi
   - type: VendingMachine
     pack: CMVendorSec
-    denyState: deny-unshaded
+    # denyState: deny-unshaded # CMU14
     ejectState: eject-unshaded
   - type: AccessReader
     access: [["CMAccessBrig"]]

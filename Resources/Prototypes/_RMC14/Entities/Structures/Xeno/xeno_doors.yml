@@ -51,8 +51,10 @@
   - type: RMCMesonsNonviewable
   - type: Occluder
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:

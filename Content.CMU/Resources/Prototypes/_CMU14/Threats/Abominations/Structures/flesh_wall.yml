@@ -17,6 +17,7 @@
     key: walls
     base: resin
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

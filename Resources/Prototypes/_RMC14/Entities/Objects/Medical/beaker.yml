@@ -272,8 +272,10 @@
         type: TransferAmountBoundUserInterface
   - type: Appearance
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Glass
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: DnaSubstanceTrace
 
 # Minitank /obj/item/reagent_container/glass/minitank

@@ -431,9 +431,9 @@
     baseWalkSpeed: 4.4
     baseSprintSpeed: 8.4
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: CMUYautja
-    healthBarThreshold: 5
+  - type: Injurable
+    damageContainer: Biological
   - type: MeleeWeapon
     soundHit:
       collection: Punch

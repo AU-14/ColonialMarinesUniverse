@@ -50,7 +50,7 @@
   - type: Sprite
     color: "#8B7B5B"
   - type: Icon
-    color: "#8B7B5B"
+    # color: "#8B7B5B" # CMU14
 
 - type: entity
   parent: BaseStructure
@@ -89,8 +89,10 @@
     destroy: true
   - type: Animateable
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: PlaceableSurface
   - type: Fixtures
     fixtures:
@@ -338,8 +340,10 @@
   - type: Physics
     bodyType: Static
   - type: Damageable
-    damageContainer: StructuralInorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralInorganic
   - type: PlaceableSurface
   - type: Fixtures
     fixtures:

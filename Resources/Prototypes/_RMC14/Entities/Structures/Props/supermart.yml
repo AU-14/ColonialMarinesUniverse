@@ -10,7 +10,7 @@
   - type: Sprite
     sprite: _RMC14/Structures/supermart.rsi
     state: supermarketbasketempty
-    drawdepth: Overdoors 
+    drawdepth: Overdoors
 
 - type: entity
   parent: RMCPropSupermartBasketEmpty
@@ -89,8 +89,9 @@
             min: 1
             max: 2
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Physics
     bodyType: Static
   - type: Fixtures
@@ -185,8 +186,10 @@
             min: 2
             max: 4
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: PlaceableSurface
 
 - type: entity

@@ -18,6 +18,8 @@
     lightRadius: 6
     lightSoftness: 1.1
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: DamageOnLand
     damage:

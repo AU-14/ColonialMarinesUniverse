@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: BaseStructure
   id: RMCCommunicationsTower
   name: TC-3T static telecommunications tower
@@ -32,8 +32,10 @@
       map: [ "resin" ]
       visible: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

@@ -14,8 +14,10 @@
     bodyType: Static
     canCollide: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Wood
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -861,7 +863,7 @@
   - type: PointLight
     castShadows: false
     radius: 2
-    
+
 # Stumps
 - type: entity
   parent: RMCBaseBush
@@ -874,7 +876,7 @@
     sprite: Objects/Decoration/Flora/flora_treessnow.rsi
     state: treestump
     offset: 0,0.7
-    
+
 - type: entity
   parent: RMCStump1
   id: RMCStump2

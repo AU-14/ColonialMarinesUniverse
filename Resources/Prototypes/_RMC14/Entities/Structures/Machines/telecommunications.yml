@@ -180,8 +180,9 @@
     idleLoad: 10
     activeLoad: 100
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -214,8 +215,9 @@
     - state: sensor_comp1
       map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -246,8 +248,9 @@
     - state: sensor_comp2
       map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -278,8 +281,9 @@
     - state: sensor_comp3
       map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -308,8 +312,9 @@
     layers:
     - state: techweb
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -340,8 +345,9 @@
     - state: mps
       map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -370,8 +376,9 @@
     layers:
     - state: rackframe
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -407,8 +414,10 @@
     - state: blackmapping_comp
       map: ["enum.PowerDeviceVisualLayers.Powered"]
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Metallic
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

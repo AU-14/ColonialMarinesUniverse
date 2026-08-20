@@ -92,8 +92,10 @@
   - type: InjectableSolution
     solution: pack
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Glass
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: Inorganic
   - type: DamageOnHighSpeedImpact
     minimumSpeed: 2
     damage:

@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: RMCArcadeBroken
   description: A broken arcade cabinet. You won't be playing much computer with this thing.
   name: broken arcade cabinet
@@ -31,8 +31,10 @@
         layer:
         - MachineLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: null
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Corrodible
     isCorrodible: true
   - type: Destructible

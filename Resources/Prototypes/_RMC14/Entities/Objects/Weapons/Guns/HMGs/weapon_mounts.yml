@@ -42,6 +42,8 @@
     skill: RMCSkillConstruction
     delay: 8
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -166,7 +168,7 @@
       - !type:EmptyContainersBehaviour
         containers:
         - weapon
-        deleteChance: 0.5
+        # deleteChance: 0.5 # CMU14
   - type: CollisionWake
   - type: Tag
     tags:

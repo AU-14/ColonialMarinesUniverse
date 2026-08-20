@@ -45,8 +45,9 @@
     isVerticalSupport: true
     cantileverSpan: 2
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -93,8 +94,9 @@
     isVerticalSupport: true
     cantileverSpan: 3
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -144,8 +146,9 @@
     isVerticalSupport: true
     cantileverSpan: 5
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine
@@ -195,8 +198,9 @@
     isVerticalSupport: true
     cantileverSpan: 8
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine

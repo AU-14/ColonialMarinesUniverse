@@ -21,8 +21,9 @@
     key: walls
     base: mycelium
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -131,8 +132,9 @@
         - GlassLayer
         density: 1000
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -269,8 +271,9 @@
   - type: RMCMesonsNonviewable
   - type: Occluder
   - type: Damageable
-    damageContainer: StructuralXeno
     damageModifierSet: Resin
+  - type: Injurable
+    damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
     - trigger:
@@ -409,6 +412,7 @@
         hard: false
   - type: Clickable
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:
