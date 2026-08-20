@@ -1,4 +1,4 @@
-﻿namespace Content.Shared._RMC14.Xenonids.Egg;
+namespace Content.Shared._RMC14.Xenonids.Egg;
 
-[ByRefEvent]
-public readonly record struct XenoOvipositorChangedEvent(bool Attached);
+[ByRefEvent] // CMU14 struct
+public readonly record struct XenoOvipositorChangedEvent(bool Attached, EntityUid? Queen = null, EntityUid? Hive = null);

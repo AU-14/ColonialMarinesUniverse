@@ -1,4 +1,5 @@
 using Content.Server._RMC14.Announce;
+using Content.Server.AU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Admin;
@@ -46,6 +47,7 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
     [Dependency] private ISerializationManager _serialization = default!;
     [Dependency] private TransformSystem _transform = default!;
     [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private AuRoundSystem _auRoundSystem = default!;
 
     private readonly List<string> _announce = [];
     private readonly EntProtoId _defaultHive = "CMXenoHive";
@@ -203,8 +205,6 @@ public sealed partial class XenoHiveSystem : SharedXenoHiveSystem
         if (_gameTicker.RunLevel != GameRunLevel.InRound)
             return;
 
-        UpdateHives();
-        UpdateBurrowedSurge();
         UpdateInvincible();
     }
 

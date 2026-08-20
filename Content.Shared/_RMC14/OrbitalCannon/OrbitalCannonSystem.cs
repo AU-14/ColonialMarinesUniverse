@@ -1,4 +1,4 @@
-﻿using System.Linq;
+using System.Linq;
 using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Animations;
 using Content.Shared._RMC14.Areas;
@@ -318,6 +318,14 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         }
 
         Spawn(ent.Comp.Explosion, coordinates);
+    }
+
+    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates) // CMU14 method
+    {
+        if (_net.IsClient)
+            return;
+
+        Spawn(prototype, coordinates);
     }
 
     private void OnFuelPowerLoaderInteract(Entity<OrbitalCannonFuelComponent> ent, ref PowerLoaderInteractEvent args)

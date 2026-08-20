@@ -56,6 +56,7 @@ public sealed partial class LarvaPoolSystem : EntitySystem
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
 
     private static readonly ProtoId<JobPrototype> LarvaRole = "CMXenoLarva";
+    private static readonly ProtoId<JobPrototype> BloodbursterRole = "CMUJobPathogenBloodburster";
     private static readonly ProtoId<TagPrototype> LarvaTag = "RMCXenoLarva";
     private static readonly ProtoId<JobPrototype> LesserDroneRole = "CMXenoLesserDrone";
     private static readonly ProtoId<JobPrototype> QueenRole = "CMXenoQueen";
@@ -426,12 +427,16 @@ public sealed partial class LarvaPoolSystem : EntitySystem
         return false;
     }
 
-    private bool CanAssignLarva(EntityUid uid, HiveMemberComponent member, Entity<HiveComponent> hive)
+    private bool CanAssignLarva(EntityUid uid, HiveMemberComponent member, Entity<HiveComponent> hive) // CMU14 method
     {
         if (!CanAssignBody(uid, member, hive, out var xeno) || IsReservedForParasiteClaim(uid))
             return false;
 
-        return _tag.HasTag(uid, LarvaTag) && xeno.Role == LarvaRole;
+        if (xeno.Role == LarvaRole)
+            return _tag.HasTag(uid, LarvaTag);
+
+        // Pathogen bloodbursters are always claimable from the pool
+        return xeno.Role == BloodbursterRole;
     }
 
     private bool IsReservedForParasiteClaim(EntityUid uid)

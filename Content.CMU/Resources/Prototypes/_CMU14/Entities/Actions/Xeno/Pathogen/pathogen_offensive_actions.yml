@@ -857,7 +857,6 @@
     range: 2
     deselectOnMiss: false
   - type: EntityTargetAction
-  - type: WorldTargetAction
     event: !type:XenoImpaleActionEvent
   - type: XenoOffensiveAction
   - type: ActionBlockIfResting
