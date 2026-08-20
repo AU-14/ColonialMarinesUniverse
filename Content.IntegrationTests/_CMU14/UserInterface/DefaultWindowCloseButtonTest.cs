@@ -34,7 +34,7 @@ public sealed class DefaultWindowCloseButtonTest : GameTest
     private static void Press(BaseButton button)
     {
         var handlers = (Action<BaseButton.ButtonEventArgs>?) OnPressedField.GetValue(button);
-        handlers?.Invoke(null!);
+        handlers?.Invoke(new BaseButton.ButtonEventArgs(button, null!));
     }
 
     private sealed class TestWindow : DefaultWindow
