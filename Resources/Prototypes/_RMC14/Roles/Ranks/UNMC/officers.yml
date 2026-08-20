@@ -46,14 +46,35 @@
   prefix: 2ndLt.
   paygrade: O1
 
+# CMU14 CMU warrant officer ladder dropped by the rebase
 - type: rank
   id: RMCRankChiefWarrantOfficer
-  name: Chief Warrant Officer
-  prefix: CWarOff.
-  paygrade: O0-2
+  name: Chief Warrant Officer 2
+  prefix: CWarOff2.
+  paygrade: W2
 
+# CMU14 CMU warrant officer ladder dropped by the rebase
+- type: rank
+  id: RMCRankChiefWarrantOfficer5
+  name: Chief Warrant Officer 5
+  prefix: CWarOff5.
+  paygrade: W5
+
+- type: rank
+  id: RMCRankChiefWarrantOfficer4
+  name: Chief Warrant Officer 4
+  prefix: CWarOff4.
+  paygrade: W4
+
+- type: rank
+  id: RMCRankChiefWarrantOfficer3
+  name: Chief Warrant Officer 3
+  prefix: CWarOff3.
+  paygrade: W3
+
+# CMU14 CMU warrant officer ladder dropped by the rebase
 - type: rank
   id: RMCRankWarrantOfficer
   name: Warrant Officer
   prefix: WarOff.
-  paygrade: O0-1
+  paygrade: W1

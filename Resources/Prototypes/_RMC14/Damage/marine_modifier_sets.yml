@@ -44,6 +44,15 @@
     Cold: 1.15
     Caustic: 1.15
 
+# CMU14 used in HESCO barricades
+- type: damageModifierSet
+  id: CMHescoBarricade
+  coefficients:
+    Heat: 1.5
+    Shock: 1.15
+    Cold: 1.15
+    Caustic: 1.15
+
 - type: damageModifierSet
   id: CMBloodlossHuman
   coefficients:
@@ -62,6 +71,12 @@
 
 - type: damageModifierSet
   id: StructuralMarine
+
+# CMU14 structural variant with flat blunt reduction
+- type: damageModifierSet
+  id: CMU14StructuralMarine
+  flatReductions:
+    Blunt: 10
 
 - type: damageModifierSet
   id: RMCMetalFoamWall
@@ -149,3 +164,13 @@
     Piercing: 0.8
     Structural: 0.8
     Heat: 1
+
+# CMU14 humvee frame
+- type: damageModifierSet
+  id: VehicleFrameHumvee
+  coefficients:
+    Blunt: 2
+    Slash: 1
+    Piercing: 2
+    Heat: 2
+    Structural: 1
