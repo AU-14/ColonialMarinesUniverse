@@ -473,7 +473,7 @@
   - type: Sprite
     sprite: _RMC14/Effects/beam.rsi
     state: oppressor_tail_hook
-    drawDepth: Effects # Draws above mobs
+    # drawDepth: Effects # Draws above mobs # CMU14
   - type: ProjectileMaxRange
     max: 3.5
   - type: PreventCollideWithDead
@@ -501,3 +501,93 @@
         - XenoProjectileImpassable
         - BarricadeImpassable
 
+- type: entity # CMU14 entity
+  parent: XenoSpitProjectile
+  id: XenoVenatorCorrosiveProjectile
+  name: corrosive spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
+    layers:
+    - state: xeno_acid_strong
+      shader: unshaded
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 35
+  - type: ModifyTargetOnHit
+    removeExisting: false
+    add:
+    - type: UserAcided
+      armorPiercing: 30
+      damage:
+        types:
+          Heat: 1
+      duration: 12
+    whitelist:
+      components:
+      - Marine
+  - type: XenoVenatorPoolOnHit
+    pool: XenoAcidSprayWeak
+  - type: ProjectileMaxRange
+    max: 8
+
+- type: entity # CMU14 entity
+  parent: XenoVenatorCorrosiveProjectile
+  id: XenoVenatorAcidBlobProjectile
+  name: acid blob
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
+    layers:
+    - state: acid_glob
+      shader: unshaded
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 25
+  - type: XenoVenatorPoolOnHit
+    pool: XenoVenatorAcidBlobPool
+    rings: 1
+    upgradeDirectHit: true
+    randomCrossPattern: true
+  - type: DeleteOnFixedDistanceStop
+
+- type: entity # CMU14 entity
+  parent: XenoVenatorCorrosiveProjectile
+  id: XenoVenatorBreathProjectile
+  name: enzymatic breath
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Projectile
+    impactEffect: null
+    damage:
+      types:
+        Heat: 12
+
+# CMU14 entity: sentinel toxic spit, dropped by the rebase; referenced by _CMU14 hiveless xeno
+- type: entity
+  parent: [ XenoSpitImpactSounds, XenoBaseProjectile ]
+  id: XenoToxicSpitProjectile
+  name: toxic spit
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Sprite
+    sprite: _RMC14/Objects/Xeno/xeno_projectiles.rsi
+    layers:
+    - state: neurotoxin
+      shader: unshaded
+  - type: Projectile
+    damage:
+      types:
+        Heat: 16
+  - type: XenoToxicSpitProjectile
+  - type: RMCProjectileSkipXenos
+  - type: XenoProjectile
+    deleteOnFriendlyXeno: true
+  - type: ProjectileMaxRange
+    max: 7

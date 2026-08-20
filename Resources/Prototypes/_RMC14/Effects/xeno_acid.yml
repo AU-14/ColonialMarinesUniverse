@@ -119,6 +119,18 @@
   - type: SprayExtinguishTileFire
     extinguishAmount: 13
 
+- type: entity # CMU14 entity
+  parent: XenoAcidSprayAcidStacks
+  id: XenoVenatorAcidBlobPool
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ApplyAcidStacks
+    amount: 2
+    damage:
+      types:
+        Heat: 30
+    requireExisting: true
+
 - type: entity
   parent: XenoAcidSprayWeak
   id: XenoAcidSprayTrap
