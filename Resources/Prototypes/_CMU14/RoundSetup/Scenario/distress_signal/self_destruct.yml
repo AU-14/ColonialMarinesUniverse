@@ -10,19 +10,19 @@
   entries:
   # T-15:00 - claxon starts & MU/TH/UR announces 10/15 mins
   - delay: 0
-    announcement: { message: "DANGER! The Emergency Destruct System is now Activated..." }
+    announcement: { loc: 'cmu-ops-sfx-activated' }
   - delay: 5
     layer: alarm1
     loop: true
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren1_f_iconic.ogg
     audioParams: { volume: -5 }
-    announcement: { message: "The ship will detonate in T Minus... Fifteen Minutes... The option to override automatic detonation expires in T Minus... Ten Minutes." }
+    announcement: { loc: 'cmu-ops-sfx-destruct-with-override', locArgs: { detonation: 'Fifteen Minutes', override: 'Ten Minutes' } }
     marker: "RedAlarmOn"
     markerData: { frequency: 2.0 }  # Slow ominous pulse (~3s cycle)
 
   # T-10:00 - start sequence build up
   - delay: 300
-    announcement: { message: "The ship will detonate in T Minus... Ten Minutes... The option to override automatic detonation expires in T Minus... Five Minutes..." }
+    announcement: { loc: 'cmu-ops-sfx-destruct-with-override', locArgs: { detonation: 'Ten Minutes', override: 'Five Minutes' } }
   - delay: 325
     layer: alarm2
     loop: true
@@ -31,7 +31,7 @@
 
   # T-08:00
   - delay: 420
-    announcement: { message: "The option to override automatic detonation expires in T Minus... Three Minutes..." }
+    announcement: { loc: 'cmu-ops-sfx-override-expires', locArgs: { time: 'Three Minutes', punct: '...' } }
   - delay: 425
     layer: alarm3
     loop: true
@@ -40,7 +40,7 @@
 
   # T-06:00 - swap alarm3 with fastpace alt for 1min
   - delay: 540
-    announcement: { message: "The option to override automatic detonation expires in T Minus... One Minute." }
+    announcement: { loc: 'cmu-ops-sfx-override-expires', locArgs: { time: 'One Minute', punct: '.' } }
   - delay: 545
     layer: alarm3
     loop: true
@@ -66,7 +66,7 @@
 
   # T-05:00 - cancel the cancel & start crescendo
   - delay: 600
-    announcement: { message: "The option to override detonation procedure has now expired." }
+    announcement: { loc: 'cmu-ops-sfx-override-expired', preset: SelfDestructAnnouncementCritical }
     stopLoop: [countdown]
     layer: alarm4
     loop: true
@@ -75,7 +75,7 @@
     marker: "RedAlarmOn"
     markerData: { frequency: 3.5 }  # Steady emergency pulse (~1.8s cycle)
   - delay: 605
-    announcement: { message: "The ship will automatically destruct in T Minus... 5 Minutes..." }
+    announcement: { loc: 'cmu-ops-sfx-destruct-countdown', locArgs: { time: '5 Minutes' }, preset: SelfDestructAnnouncementCritical }
     layer: alarm5
     loop: true
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren7_very_quick.ogg
@@ -83,7 +83,7 @@
 
   # T-03:00
   - delay: 720
-    announcement: { message: "The ship will automatically destruct in T Minus... 3 Minutes..." }
+    announcement: { loc: 'cmu-ops-sfx-destruct-countdown', locArgs: { time: '3 Minutes' }, preset: SelfDestructAnnouncementCritical }
     layer: alarm6
     loop: true
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren8_f_static.ogg
@@ -91,23 +91,23 @@
 
   # T-02:00
   - delay: 780
-    announcement: { message: "The ship will automatically destruct in T Minus... 2 Minutes..." }
+    announcement: { loc: 'cmu-ops-sfx-destruct-countdown', locArgs: { time: '2 Minutes' }, preset: SelfDestructAnnouncementCritical }
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_triple.ogg
     audioParams: { volume: -4 }
 
   # T-01:00
   - delay: 840
-    announcement: { message: "You now have 1 Minute to Abandon Ship." }
+    announcement: { loc: 'cmu-ops-sfx-abandon-1', preset: SelfDestructAnnouncementCritical }
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren3_alt.ogg
     audioParams: { volume: -4 }
   - delay: 845
-    announcement: { message: "The ship will automatically destruct in T Minus... 1 Minute..." }
+    announcement: { loc: 'cmu-ops-sfx-destruct-countdown', locArgs: { time: '1 Minute' }, preset: SelfDestructAnnouncementCritical }
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_triple_siren.ogg
     audioParams: { volume: -3 }
 
   # T-0:30 - final countdown (escalate alarm to urgent)
   - delay: 870
-    announcement: { message: "T Minus 30 Seconds." }
+    announcement: { loc: 'cmu-ops-sfx-t-30', preset: SelfDestructAnnouncementTerminal }
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren7_very_quick.ogg
     marker: "RedAlarmOn"
     markerData: { frequency: 5.0 }  # Urgent pulse (~1.3s cycle)
@@ -142,6 +142,13 @@
   - delay: 915
     marker: "Explode"
     markerData: { shakeIntensity: 12, duration: 2.5, color: "#FFFFFF" }
+  # T+0:18 - hull is open + atmosphere venting - lives until round end
+  - delay: 918
+    layer: hullVent
+    loop: true
+    duration: 3600
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_wind_howl.ogg
+    audioParams: { volume: -6 }
   # T+0:30 - explosion 3
   - delay: 930
     marker: "Explode"
@@ -149,7 +156,7 @@
 
   # T+0:32 - total failure
   - delay: 932
-    announcement: { message: "WARNING. Multiple catastrophic structural failures detected throughout the vessel." }
+    announcement: { loc: 'cmu-ops-sfx-structural-failures', preset: SelfDestructAnnouncementTerminal }
   # T+0:37 / +0:52 / +1:05 - scattered warhead volleys
   - delay: 937
     marker: "Explode"
@@ -166,6 +173,18 @@
     markerData: { shakeIntensity: 14, duration: 6, color: "#FFFFFF" }
     sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_explosions3_distant.ogg
     audioParams: { volume: -2 }
+  # T+1:08 - the tombstone
+  - delay: 968
+    marker: "Explode"
+    markerData: { shakeIntensity: 15, duration: 6, color: "#FFFFFF" }
+    announcement: { loc: 'cmu-ops-sfx-total-collapse', preset: SelfDestructAnnouncementTerminal }
+  # keeper: repeats forever, so the sequence (and hullVent) never self-stops - the wreck keeps cooking
+  - delay: 1030
+    repeat: 90
+    delayJitter: 35
+    volumeJitter: 3
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion6_deep_rumble.ogg
+    audioParams: { volume: -11 }
 
 #
 # ├──[ ENGINE SEQUENCE ]─────────────────────────────────────────────┤

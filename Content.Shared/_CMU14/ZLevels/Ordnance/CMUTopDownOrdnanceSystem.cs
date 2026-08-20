@@ -249,6 +249,11 @@ public sealed partial class CMUTopDownOrdnanceSystem : EntitySystem
                     : CMUTopDownOrdnanceBlockReason.AreaBlocked;
                 return false;
 
+            // ship scuttle (ob): no area permission applies
+            case CMUTopDownOrdnanceKind.Scuttle:
+                blockReason = CMUTopDownOrdnanceBlockReason.None;
+                return true;
+
             default:
                 blockReason = CMUTopDownOrdnanceBlockReason.AreaBlocked;
                 return false;
@@ -272,6 +277,7 @@ public enum CMUTopDownOrdnanceKind
 {
     Mortar,
     OrbitalBombardment,
+    Scuttle,
 }
 
 public enum CMUTopDownOrdnanceBlockReason

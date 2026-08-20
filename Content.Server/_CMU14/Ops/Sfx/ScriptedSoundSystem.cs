@@ -1,4 +1,5 @@
 using Content.Shared._CMU14.Ops.Sfx;
+using System.Linq;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._RMC14.CameraShake;
 using Content.Server._CMU14.ZLevels.Core;
@@ -8,6 +9,7 @@ using Content.Shared.GameTicking;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Map;
+using Robust.Shared.Localization;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -323,10 +325,18 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         if (entry.Announcement is { } announcement)
         {
             var filter = GetMapFilter(active.AnchorEntity);
+            var message = announcement.Message;
+            if (announcement.Loc is { } loc)
+            {
+                message = announcement.LocArgs is { } args
+                    ? Loc.GetString(loc, args.Select(a => (a.Key, (object) a.Value)).ToArray())
+                    : Loc.GetString(loc);
+            }
+
             _generalAnnounce.AnnounceAdvanced(new AnnouncementRequest
             {
                 Preset = announcement.Preset ?? seq.DefaultAnnouncementPreset,
-                Message = announcement.Message,
+                Message = message,
                 Target = AnnouncementTarget.All,
                 Speaker = active.AnchorEntity,
                 Source = active.AnchorEntity,

@@ -28,7 +28,7 @@
       total: 600000
       slope: 25
       max: 700
-      delay: 15
+      delay: 30
     - fire: CMUTileFireOBAegis
       fireRange: 75
 

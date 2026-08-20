@@ -995,7 +995,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
         }
     }
 
-    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates)
+    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates, CMUTopDownOrdnanceKind kind = CMUTopDownOrdnanceKind.OrbitalBombardment)
     {
         if (_net.IsClient)
             return;
@@ -1010,7 +1010,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
 
         if (!_topDownOrdnance.TryResolveImpactColumn(
                 _transform.ToMapCoordinates(coordinates),
-                CMUTopDownOrdnanceKind.OrbitalBombardment,
+                kind, // CMU14: kind selects permission gate, Scuttle bypasses OB area checks (shipside)
                 out var layers))
         {
             Spawn(prototype, coordinates);
