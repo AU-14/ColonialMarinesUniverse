@@ -36,6 +36,13 @@
 
 - type: rank
   id: CMU14RankProdigySupervisor
-  name: Supervisor
-  prefix: Spvsr.
+  name: Regional Supervisor
+  prefix: Reg. Spvsr.
   paygrade: PRS7
+
+# Lawyers
+- type: rank
+  id: CMU14RankProdigyLegalSpecialist
+  name: Legal Specialist
+  prefix: Legal Spc.
+  paygrade: PRS5

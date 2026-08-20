@@ -25,13 +25,11 @@
         points: 5
       - id: RMCShioRoyalsCase
         points: 5
-      - id: RMCZippoExec
-        points: 5
       - id: RMCZippoGold
-        points: 10
+        points: 5
     - name: Drinkables
       entries:
-      - id: RMCDrinkAlcoholSake
+      - id: RMCDrinkAlcoholPurpleWine
         points: 5
       - id: RMCDrinkCanSequoiaBeer
         points: 5
@@ -43,7 +41,7 @@
         points: 1
     - name: Stationary
       entries:
-      - id: CMPenClicky
+      - id: CMPenFountain
         points: 1
       - id: CMPaper
         points: 1
@@ -54,6 +52,8 @@
       - id: RMCHollowCane
         name: hollow cane
         points: 10
+      - id: CMU14ProdigyLawyerBeacon
+        points: 5
     - name: Clothing
       entries:
       - id: CMU14ProdigySuitBlackSkirt

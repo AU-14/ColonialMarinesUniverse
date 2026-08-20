@@ -9,6 +9,7 @@
   name: abstract chair
   suffix: RMC
   components:
+  - type: CMUZPhysics # RuMC edit
   - type: Corrodible
     timeToApply: 4
     structure: true
@@ -20,8 +21,10 @@
     - RMCSeat
   - type: RMCMesonsNonviewable
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: StructuralMarine # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoDamage:
       types:

@@ -2471,6 +2471,8 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
         if (coords.MapId == MapId.Nullspace)
             return;
 
+        if (TerminatingOrDeleted(Transform(drone.Owner).ParentUid))
+            return;
         var map = _transform.GetMap(drone.Owner.ToCoordinates());
         if (map is { } mapUid && TerminatingOrDeleted(mapUid))
             return;

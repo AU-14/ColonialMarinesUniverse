@@ -96,6 +96,10 @@
   name: Glock 77 pistol
   description: Austrian legend, designed in XX century, Glock quickly became a major player on the pistol market. This version was produced on a license for Prodigy CORP for security and police forces, features an underbarrel rail for a taser and fully automatic mode.
   components:
+  - type: Sprite
+    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
+  - type: Clothing
+    sprite: _CMU14/Objects/Weapons/Guns/Pistols/glock77.rsi
   - type: Gun
     selectedMode: SemiAuto
     availableModes:
@@ -227,6 +231,62 @@
 
 - type: entity
   parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock75AP
+  name: Glock 75 armour piercing magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock75
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mmAP
+    proto: CMCartridgePistolM77AP
+    capacity: 17
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock75HP
+  name: Glock 75 hollowpoint magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock75
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmHP
+    proto: RMCCartridgePistol9mmHP
+    capacity: 17
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#BA5D00"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: CMBaseMagazinePistol
   id: CMU14MagazinePistolGlock75Rubber
   name: Glock 75 rubber magazine (9mm)
   components:
@@ -314,6 +374,62 @@
     magState: mag
 
 - type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock77AP
+  name: Glock 77 armour piercing magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock77
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - CMCartridgePistol9mmAP
+    proto: CMCartridgePistolM77AP
+    capacity: 33
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#1F951F"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
+  parent: CMBaseMagazinePistol
+  id: CMU14MagazinePistolGlock77HP
+  name: Glock 77 hollowpoint magazine (9mm)
+  components:
+  - type: Tag
+    tags:
+    - CMMagazinePistol
+    - CMU14MagazinePistolGlock77
+  - type: BallisticAmmoProvider
+    mayTransfer: True
+    whitelist:
+      tags:
+      - RMCCartridgePistol9mmHP
+    proto: RMCCartridgePistol9mmHP
+    capacity: 33
+  - type: Sprite
+    sprite: _RMC14/Objects/Weapons/Guns/Ammunition/Magazines/m1984.rsi
+    layers:
+    - state: base
+      map: ["enum.GunVisualLayers.Base"]
+    - state: mag-1
+      map: ["enum.GunVisualLayers.Mag"]
+    - state: ammo_band
+      color: "#BA5D00"
+  - type: MagazineVisuals
+    magState: mag
+
+- type: entity
   parent: [ RMCUnderAttachmentBase, RMCAttachableToggleableBase ]
   id: CMU14AttachmentUnderbarrelTaser
   name: underbarrel taser
@@ -335,7 +451,7 @@
   - type: Battery
     maxCharge: 800
     startingCharge: 800
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: RMCProjectileTaser
     fireCost: 100
   - type: GunPointBlank

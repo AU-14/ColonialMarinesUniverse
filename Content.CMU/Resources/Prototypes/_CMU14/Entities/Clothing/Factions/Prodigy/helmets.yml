@@ -1,5 +1,5 @@
 - type: entity
-  parent: RMCMarineHelmetBase
+  parent: [ RMCMarineHelmetBase, RMCMarineHelmetWithLightBase]
   id: AU14ProdigyBallisticHelmet
   name: ballistic helmet
   description: A cheaply produced ballistic helmet used by the Prodigy Corporation.
@@ -8,7 +8,8 @@
     sprite: _CMU14/Clothing/ProdigySecurityForces/helmet.rsi
   - type: Clothing
     sprite: _CMU14/Clothing/ProdigySecurityForces/helmet.rsi
-
+  - type: PointLight
+    color: "#FFFFFF"
 - type: entity
   parent: RMCMarineHelmetBase
   id: AU14ProdigyBallisticHelmetPART

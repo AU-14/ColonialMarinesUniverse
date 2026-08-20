@@ -7,12 +7,11 @@ using Content.Shared.StatusEffect;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
-public sealed class ServerMycotoxinSystem : SharedMycotoxinSystem
+public sealed partial class ServerMycotoxinSystem : SharedMycotoxinSystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly StatusEffectQuerySystem _status = default!;
-    [Dependency] private readonly RMCSlowSystem _slow = default!;
-    [Dependency] private readonly ChatSystem _chat = default!;
+    [Dependency] private StatusEffectQuerySystem _status = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] private ChatSystem _chat = default!;
 
     public override void Initialize()
     {

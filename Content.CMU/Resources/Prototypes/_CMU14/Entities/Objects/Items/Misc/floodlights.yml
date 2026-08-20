@@ -31,6 +31,7 @@
     node: completed
   - type: InteractionOutline
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: PointLight
     enabled: true
@@ -38,7 +39,7 @@
     netsync: false
     offset: "0,0.5"
     color: "#ECFFFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
   - type: Destructible
     thresholds:
     - trigger:

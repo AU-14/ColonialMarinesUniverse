@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using Content.Shared._RMC14.Admin;
@@ -769,14 +769,18 @@ public sealed partial class SquadSystem : EntitySystem
             if (slot.ContainedEntity is not { } contained)
                 continue;
 
+            // CMU14
             if (TryComp(contained, out EncryptionKeyHolderComponent? holder))
             {
                 newLeader.Headset = contained;
                 Dirty(toPromote, newLeader);
-                EnsureComp<SquadLeaderHeadsetComponent>(contained);
+                var leaderHeadset = EnsureComp<SquadLeaderHeadsetComponent>(contained);
+                leaderHeadset.Leader = toPromote;
+                Dirty(contained, leaderHeadset);
                 _encryptionKey.UpdateChannels(contained, holder);
                 break;
             }
+            // CMU14
         }
 
         var squad = toPromote.Comp?.Squad;

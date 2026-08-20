@@ -1,4 +1,4 @@
-﻿using Robust.Shared.Audio;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
@@ -74,6 +74,9 @@ public sealed partial class RequisitionsElevatorComponent : Component
 
     [DataField("faction")]
     public string Faction = "none";
+
+    [DataField, AutoNetworkedField] // CMU14
+    public bool RoundStartFreeCrateGiven;
 }
 
 [Serializable, NetSerializable]

@@ -1,4 +1,4 @@
-﻿# Base
+# Base
 - type: entity
   abstract: true
   id: RMCMechBase
@@ -36,6 +36,8 @@
   - type: Physics
     bodyType: KinematicController
   - type: Clickable
+  - type: CMUZPhysics # RuMC edit
+  - type: CMUVehicleZTraversal # RuMC edit
   - type: Fixtures
     fixtures:
       fix1:
@@ -52,6 +54,8 @@
     containers:
       rmc-mech-pilot: !type:ContainerSlot
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: FootstepModifier
     footstepSoundCollection:
@@ -114,6 +118,8 @@
   - type: InputMover
   - type: InteractionOutline
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: FootstepModifier
     footstepSoundCollection:

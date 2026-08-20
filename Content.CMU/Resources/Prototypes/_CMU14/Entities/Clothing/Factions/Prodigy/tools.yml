@@ -36,7 +36,6 @@
           Closed: { state: sentrycomp_cl }
           Open: { state: sentrycomp_op }
           Active: { state: sentrycomp_on }
-    inHandsOnly: false
   - type: UseDelay
     delay: 0.5
   - type: RequiresSkill
@@ -50,10 +49,14 @@
   description: A disposable uplink used to call the Prodigy extraction team. It's useless after activation. What do you mean its just an expensive laser pointer? (OOC Note, if this fails to work please ahelp and ask them to spawn ProdigyExtractionParty)
   components:
   - type: Sprite
-    sprite: _RMC14/Objects/Medical/Surgery/scalpel.rsi
-    state: scalpel_laser
+    sprite: _RMC14/Objects/Devices/communication.rsi
+    layers:
+    - state: walkietalkie
+    - state: walkietalkie-on
+    state: walkietalkie
   - type: Item
-    size: Small
+    sprite: _RMC14/Objects/Devices/communication.rsi
+    heldPrefix: walkietalkie
   - type: Clickable
   - type: InteractionOutline
   - type: Physics
@@ -75,3 +78,13 @@
     dropship: true
   - type: UseDelay
     delay: 0.5
+
+- type: entity
+  parent: AU14ExtractionTeamBeacon
+  id: CMU14ProdigyLawyerBeacon
+  name: prodigy lawyer beacon
+  description: A disposable uplink used to call the Prodigy lawyer. It's useless after activation. What do you mean its just an expensive laser pointer? (OOC Note, if this fails to work please ahelp and ask them to spawn ProdigyLawyer)
+  components:
+  - type: SpawnThirdPartyTool
+    party: ProdigyLawyer
+    dropship: true

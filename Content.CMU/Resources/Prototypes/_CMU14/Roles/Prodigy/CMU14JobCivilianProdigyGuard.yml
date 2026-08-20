@@ -88,12 +88,11 @@
     back: CMSatchelMarine
     ears: CMU14ColonyProdigyHeadset
     ears2: RMCM5CameraGear
-    suitstorage: CMUBeltCombatSidearmRig
-  inhand:
-    - CMWebbingBlack
+    suitstorage: AU14BeltHolsterPistolBlack
   storage:
     suitstorage:
     - CMU14WeaponPistolGlock75Taser
+    - CMU14MagazinePistolGlock75
     - CMU14MagazinePistolGlock75
     - CMU14MagazinePistolGlock75
     - CMU14MagazinePistolGlock75

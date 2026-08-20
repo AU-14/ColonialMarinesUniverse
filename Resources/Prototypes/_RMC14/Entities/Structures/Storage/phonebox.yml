@@ -55,8 +55,9 @@
     placeCentered: true
     isPlaceable: false
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:
@@ -109,8 +110,10 @@
     placeCentered: true
     isPlaceable: false
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Destructible
     thresholds:
     - trigger:
@@ -149,7 +152,7 @@
     energy: 3
     offset: "0,0"
     color: "#00AAFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
 
 # Broken Phone Box
 

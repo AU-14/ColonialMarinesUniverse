@@ -1,4 +1,5 @@
 - type: loadout
   id: SynthBreachingHammerAU14
+  cost: 15
   inhand:
   - RMCSynthBreachingHammer

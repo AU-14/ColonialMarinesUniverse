@@ -166,6 +166,7 @@
   - RMCBoxMagazineRifleM54CEmptyBuild
   - RMCBoxMagazineRifleM54CAPEmptyBuild
   - RMCBoxMagazineRifleM54CExtEmptyBuild
+  - CMUBoxMagazineRifleXM20A2EmptyBuild
   - RMCDividerConstruction
   - RMCBoxMagazineRifleM4SPREmptyBuild
   - RMCBoxMagazineRifleM4SPRAPEmptyBuild
@@ -345,6 +346,12 @@
   id: RMCBoxMagazineSMGM63ExtEmptyBuild
   name: M39 magazine box (Ext)
   prototype: RMCBoxMagazineSMGM63ExtEmpty
+
+- type: rmcConstruction
+  parent: RMCCardboardBuildBase
+  id: CMUBoxMagazineRifleXM20A2EmptyBuild
+  name: XM20A2 magazine box
+  prototype: CMUBoxMagazineRifleXM20A2Empty
 
 - type: rmcConstruction
   parent: RMCCardboardBuildBase

@@ -1,0 +1,7 @@
+- type: soundCollection
+  id: CMUShipEngineRumbles
+  files:
+    - /Audio/_CMU14/Private/Ambience/ship/ship_engine_rumble1.ogg
+    - /Audio/_CMU14/Private/Ambience/ship/ship_engine_rumble2.ogg
+    - /Audio/_CMU14/Private/Ambience/ship/ship_engine_rumble4.ogg
+    - /Audio/_CMU14/Private/Ambience/ship/ship_engine_rumble5.ogg

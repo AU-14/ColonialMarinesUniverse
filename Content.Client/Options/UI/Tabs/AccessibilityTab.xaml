@@ -35,6 +35,7 @@
                         Text="{Loc 'ui-options-disable-singulo-warp'}"
                         ToolTip="{Loc 'ui-options-disable-singulo-warp-tooltip'}" />
                 </GridContainer>
+                <CheckBox Name="MuteScriptedSoundsCheckBox" Text="{Loc 'ui-options-mute-scripted-sounds'}" />
                 <Label Text="{Loc 'ui-options-accessibility-header-visuals'}"
                        StyleClasses="LabelKeyText"/>
                 <CheckBox Name="EnableColorNameCheckBox" Text="{Loc 'ui-options-enable-color-name'}" />

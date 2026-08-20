@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   id: RMCOrbitalCannonDerelict
   name: derelict orbital cannon
   description: "The UNMC Orbital Cannon System. Used for shooting large targets on the planet that is orbited. This one appears inoperable."
@@ -45,6 +45,7 @@
     - RMCOrbitalCannonWarheadCluster
     - RMCOrbitalCannonWarheadIncendiary
     - RMCOrbitalCannonWarheadAegis
+    - CMUOrbitalCannonWarheadAegis
 
 - type: entity
   id: RMCOrbitalCannonFuel
@@ -131,6 +132,7 @@
   id: RMCOrbitalCannonWarheadAegis
   description: "AEG-328-KRA, or KRAKEN, an experimental phoron-based orbital warhead, straight from the R&D Division of AEGIS. Designed to be used against targets where a single orbital warhead is simply not enough."
   name:  AEG-328-KRA
+  suffix: RMC
   components:
   - type: WarpPoint
   - type: TacticalMapIcon
@@ -204,7 +206,7 @@
   parent: MarkerBase
   id: RMCOrbitalCannonExplosionAegis
   name: explosive Aegis OB explosion
-  suffix: FIRES AN OB!!!
+  suffix: RMC, FIRES AN OB!!!
   placement:
     mode: SnapgridCenter
   components:
@@ -451,6 +453,7 @@
           RMCOrbitalCannonWarheadIncendiary: { visible: true, state: cannon_tray_incendiary }
           RMCOrbitalCannonWarheadCluster: { visible: true, state: cannon_tray_cluster }
           RMCOrbitalCannonWarheadAegis: { visible: true, state: cannon_tray_explosive } # We don't have aegis tray sprite
+          CMUOrbitalCannonWarheadAegis: { visible: true, state: cannon_tray_explosive }
       enum.OrbitalCannonTrayVisuals.Fuel:
         fuel:
           0: { visible: false }

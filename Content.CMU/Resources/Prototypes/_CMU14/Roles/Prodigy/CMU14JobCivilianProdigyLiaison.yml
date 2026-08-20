@@ -1,14 +1,14 @@
 - type: job
   abstract: true
   parent: CMJobBase
-  id: AU14JobCivilianProdigyLiaisonBase
+  id: CMU14JobCivilianProdigyLiaisonBase
   name: au14-job-name-civiliancorporateliaison
   description: au14-job-description-civiliancorporateliaison
   playTimeTracker: CMU14JobCivilianProdigyLiaison
   basePlaytimeTracker: true
 
 - type: job
-  parent: AU14JobCivilianProdigyLiaisonBase
+  parent: CMU14JobCivilianProdigyLiaisonBase
   id: CMU14JobCivilianProdigyLiaison
   roundSide: Civilian
   roundForce: PSC
@@ -60,7 +60,7 @@
     - !type:RoleTimeRequirement
       role: CMU14JobCivilianProdigyLiaison
       time: 36000 # 10 hours
-    RMCRankWeYaJuniorExecutive: []
+    CMU14RankProdigyJuniorExecutive: []
   startingGear: CMU14GearCivilianProdigyLiaison
   icon: "CMJobIconLiaison"
   requireAdminNotify: false
@@ -79,7 +79,7 @@
 - type: startingGear
   id: CMU14GearCivilianProdigyLiaison
   equipment:
-    jumpsuit: CMU14ProdigySuitBlackSkirt
+    jumpsuit: CMU14ProdigySuitBlack
     shoes: RMCShoesLaceup
     id: CMU14IDCardColonyProdigyLiaison
     ears: CMU14ColonyProdigyHeadset

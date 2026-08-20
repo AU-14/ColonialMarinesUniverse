@@ -2,8 +2,10 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
+using Robust.Shared.Prototypes;
 using Content.Server.Chat.Managers;
 using Content.Shared._AU14.ZLevelBuilding;
+using Content.Shared._AU14.SavedBuilds;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
@@ -19,7 +21,6 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -83,12 +84,18 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     private readonly HashSet<EntityUid> _dirtyGrids = new();
     private readonly List<EntityUid> _processing = new();
 
+    // Event-maintained support index. Recomputing one grid must never enumerate every support entity in the
+    // world, and propagating upward only needs the grids that actually contain supports on the map above.
+    private readonly Dictionary<EntityUid, HashSet<EntityUid>> _supportsByGrid = new();
+    private readonly Dictionary<EntityUid, EntityUid> _supportGrid = new();
+    private readonly Dictionary<EntityUid, HashSet<EntityUid>> _supportGridsByMap = new();
+    private readonly Dictionary<EntityUid, EntityUid> _indexedGridMap = new();
+    private readonly List<EntityUid> _staleIndexedSupports = new();
+
     // Structural entities that have lost support: maps entity uid -> time at which it will collapse.
     // Cleared if the entity regains support before the deadline (counterplay via building more pillars/anchors).
     private readonly Dictionary<EntityUid, TimeSpan> _pendingUnsupported = new();
-
-    // Support entities whose collapse should be executed this tick (populated transiently during Update).
-    private readonly List<EntityUid> _toCollapse = new();
+    private readonly PriorityQueue<EntityUid, TimeSpan> _unsupportedDeadlines = new();
 
     /// <summary>Seconds a structure remains standing after losing its last support before collapsing.</summary>
     private const float CollapseWarningSeconds = 5f;
@@ -100,10 +107,16 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         _gridQuery = GetEntityQuery<MapGridComponent>();
         _zMapQuery = GetEntityQuery<CMUZLevelMapComponent>();
 
+        SubscribeLocalEvent<StructuralSupportComponent, ComponentStartup>(OnSupportStartup);
         SubscribeLocalEvent<StructuralSupportComponent, MapInitEvent>(OnSupportMapInit);
         SubscribeLocalEvent<StructuralSupportComponent, ComponentShutdown>(OnSupportShutdown);
         SubscribeLocalEvent<StructuralSupportComponent, AnchorStateChangedEvent>(OnSupportAnchorChanged);
+        SubscribeLocalEvent<StructuralSupportComponent, EntParentChangedMessage>(OnSupportParentChanged);
         SubscribeLocalEvent<StructuralSupportComponent, DamageChangedEvent>(OnSupportDamaged);
+        SubscribeLocalEvent<ZLevelWallSupportComponent, MapInitEvent>(OnWallSupportMapInit);
+        SubscribeLocalEvent<ZLevelWallSupportComponent, ComponentShutdown>(OnWallSupportShutdown);
+        SubscribeLocalEvent<ZLevelWallSupportComponent, AnchorStateChangedEvent>(OnWallSupportAnchorChanged);
+        SubscribeLocalEvent<PlayerBuiltComponent, ComponentStartup>(OnPlayerBuiltStartup);
 
         // All of these are keyed by round-scoped uids; drop them with the round so stale entries never accumulate.
         SubscribeLocalEvent<Content.Shared.GameTicking.RoundRestartCleanupEvent>(_ =>
@@ -111,7 +124,12 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             _lastSupportDamager.Clear();
             _nextCollapseAlert.Clear();
             _pendingUnsupported.Clear();
+            _unsupportedDeadlines.Clear();
             _dirtyGrids.Clear();
+            _supportsByGrid.Clear();
+            _supportGrid.Clear();
+            _supportGridsByMap.Clear();
+            _indexedGridMap.Clear();
         });
     }
 
@@ -123,16 +141,183 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 
         if (Transform(ent).MapUid is { } mapUid)
             _lastSupportDamager[mapUid] = (origin, _timing.CurTime);
+
+        // Cave-in attribution shares this component event. Robust permits only one directed subscription for a
+        // component/event pair, so relay structural-only supports rather than making ZCaveInSystem subscribe too.
+        // Walls carry their own marker and are handled by the cave system's wall-scoped damage subscription.
+        if (!HasComp<ZLevelWallSupportComponent>(ent))
+        {
+            var caveEvent = new ZCaveSupportDamagedEvent(ent.Owner, origin);
+            RaiseLocalEvent(ref caveEvent);
+        }
+    }
+
+    private void OnSupportStartup(Entity<StructuralSupportComponent> ent, ref ComponentStartup args)
+    {
+        ReindexSupport(ent);
+        MarkGridDirty(ent);
     }
 
     private void OnSupportMapInit(Entity<StructuralSupportComponent> ent, ref MapInitEvent args)
-        => MarkGridDirty(ent);
+    {
+        // Startup can precede final map/grid parenting during map load. Reindex at MapInit to capture the final
+        // grid; HashSet membership keeps the common already-correct case idempotent.
+        ReindexSupport(ent);
+        MarkGridDirty(ent);
+    }
 
     private void OnSupportShutdown(Entity<StructuralSupportComponent> ent, ref ComponentShutdown args)
-        => MarkGridDirty(ent);
+    {
+        _pendingUnsupported.Remove(ent.Owner);
+
+        if (RemoveIndexedSupport(ent, out var oldGrid))
+            _dirtyGrids.Add(oldGrid);
+        else
+            MarkGridDirty(ent);
+    }
 
     private void OnSupportAnchorChanged(Entity<StructuralSupportComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        ReindexSupport(ent);
+        MarkGridDirty(ent);
+
+        // Player-built walls carry both markers; the wall handler below relays them once.
+        if (!args.Anchored && !HasComp<ZLevelWallSupportComponent>(ent))
+        {
+            var caveEvent = new ZCaveSupportRemovedEvent(ent.Owner);
+            RaiseLocalEvent(ref caveEvent);
+        }
+    }
+
+    private void OnSupportParentChanged(Entity<StructuralSupportComponent> ent, ref EntParentChangedMessage args)
+    {
+        ReindexSupport(ent);
+        MarkGridDirty(ent);
+    }
+
+    // Walls only project support upward. Queueing their own grid is intentional: the debounced recompute then
+    // calls MarkAboveDirty once, even when a mapped level initializes tens of thousands of walls in one tick.
+    private void OnWallSupportMapInit(Entity<ZLevelWallSupportComponent> ent, ref MapInitEvent args)
         => MarkGridDirty(ent);
+
+    private void OnWallSupportShutdown(Entity<ZLevelWallSupportComponent> ent, ref ComponentShutdown args)
+        => MarkGridDirty(ent);
+
+    private void OnWallSupportAnchorChanged(Entity<ZLevelWallSupportComponent> ent, ref AnchorStateChangedEvent args)
+    {
+        MarkGridDirty(ent);
+        if (!args.Anchored)
+        {
+            var caveEvent = new ZCaveSupportRemovedEvent(ent.Owner);
+            RaiseLocalEvent(ref caveEvent);
+        }
+    }
+
+    /// <summary>
+    /// Mapper walls carry only the lightweight upward-support marker. Once a wall is actually constructed by a
+    /// player (including saved-build placement), enroll that particular instance in the collapsible graph.
+    /// </summary>
+    private void OnPlayerBuiltStartup(Entity<PlayerBuiltComponent> ent, ref ComponentStartup args)
+    {
+        if (!HasComp<ZLevelWallSupportComponent>(ent))
+            return;
+
+        var support = EnsureComp<StructuralSupportComponent>(ent);
+        support.IsVerticalSupport = true;
+        support.CantileverSpan = ZLevelWallSupportComponent.CantileverSpan;
+        ReindexSupport(ent);
+        MarkGridDirty(ent);
+    }
+
+    /// <summary>Moves a support's index entry to its current grid and dirties both sides of a grid change.</summary>
+    private void ReindexSupport(EntityUid uid)
+    {
+        var newGrid = !Deleted(uid) && TryComp(uid, out TransformComponent? xform) ? xform.GridUid : null;
+        _supportGrid.TryGetValue(uid, out var oldGrid);
+        var hadOldGrid = _supportGrid.ContainsKey(uid);
+
+        if (hadOldGrid && newGrid == oldGrid)
+        {
+            EnsureGridMapIndexed(oldGrid);
+            return;
+        }
+
+        if (hadOldGrid)
+        {
+            RemoveIndexedSupport(uid, out _);
+            _dirtyGrids.Add(oldGrid);
+        }
+
+        if (newGrid is not { } grid)
+            return;
+
+        if (!_supportsByGrid.TryGetValue(grid, out var supports))
+        {
+            supports = new HashSet<EntityUid>();
+            _supportsByGrid.Add(grid, supports);
+        }
+
+        supports.Add(uid);
+        _supportGrid[uid] = grid;
+        EnsureGridMapIndexed(grid);
+        _dirtyGrids.Add(grid);
+    }
+
+    private bool RemoveIndexedSupport(EntityUid uid, out EntityUid oldGrid)
+    {
+        if (!_supportGrid.Remove(uid, out oldGrid))
+            return false;
+
+        if (!_supportsByGrid.TryGetValue(oldGrid, out var supports))
+            return true;
+
+        supports.Remove(uid);
+        if (supports.Count > 0)
+            return true;
+
+        _supportsByGrid.Remove(oldGrid);
+        if (_indexedGridMap.Remove(oldGrid, out var mapUid) &&
+            _supportGridsByMap.TryGetValue(mapUid, out var grids))
+        {
+            grids.Remove(oldGrid);
+            if (grids.Count == 0)
+                _supportGridsByMap.Remove(mapUid);
+        }
+
+        return true;
+    }
+
+    private void EnsureGridMapIndexed(EntityUid grid)
+    {
+        var mapUid = !Deleted(grid) && TryComp(grid, out TransformComponent? gridXform)
+            ? gridXform.MapUid
+            : null;
+
+        if (mapUid is not { } currentMap)
+            return;
+
+        if (_indexedGridMap.TryGetValue(grid, out var indexedMap))
+        {
+            if (indexedMap == currentMap)
+                return;
+
+            if (_supportGridsByMap.TryGetValue(indexedMap, out var oldGrids))
+            {
+                oldGrids.Remove(grid);
+                if (oldGrids.Count == 0)
+                    _supportGridsByMap.Remove(indexedMap);
+            }
+        }
+
+        _indexedGridMap[grid] = currentMap;
+        if (!_supportGridsByMap.TryGetValue(currentMap, out var currentGrids))
+        {
+            currentGrids = new HashSet<EntityUid>();
+            _supportGridsByMap.Add(currentMap, currentGrids);
+        }
+
+        currentGrids.Add(grid);
+    }
 
     /// <summary>Queues the grid the entity currently sits on for a recompute next update.</summary>
     public void MarkGridDirty(EntityUid uid)
@@ -158,21 +343,20 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             }
         }
 
-        // Collapse structures that have been unsupported long enough.
-        if (_pendingUnsupported.Count > 0)
+        // Collapse only expired structures. The dictionary is authoritative (support recovery removes from it);
+        // stale priority-queue entries are discarded when their old deadline reaches the head.
+        if (_unsupportedDeadlines.Count > 0)
         {
             var now = _timing.CurTime;
-            _toCollapse.Clear();
-
-            foreach (var (uid, collapseAt) in _pendingUnsupported)
+            while (_unsupportedDeadlines.TryPeek(out var uid, out var collapseAt) && now >= collapseAt)
             {
-                if (now >= collapseAt)
-                    _toCollapse.Add(uid);
-            }
+                _unsupportedDeadlines.Dequeue();
 
-            foreach (var uid in _toCollapse)
-            {
+                if (!_pendingUnsupported.TryGetValue(uid, out var currentDeadline) || currentDeadline != collapseAt)
+                    continue;
+
                 _pendingUnsupported.Remove(uid);
+
                 if (Deleted(uid))
                     continue;
                 // Skip if it lost its support component (already collapsed as part of another tile's drop), or if
@@ -187,8 +371,8 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 
     /// <summary>
     /// Multi-source cantilever BFS from every anchor on the grid. Each tile carries a remaining "budget";
-    /// stepping onto a plain floor costs 1, stepping onto a vertical support / anchor refreshes the budget to
-    /// that support's span. Any support entity the flood never reaches is unsupported.
+    /// stepping onto another support costs 1. Vertical girders participate in the graph so they can themselves
+    /// be supported, but never refresh or extend support on their own level; their span projects upward only.
     /// </summary>
     public void RecomputeGrid(Entity<MapGridComponent> grid)
     {
@@ -196,22 +380,39 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         var byTile = new Dictionary<Vector2i, List<Entity<StructuralSupportComponent>>>();
         var previous = new Dictionary<EntityUid, bool>();
 
-        var query = EntityQueryEnumerator<StructuralSupportComponent, TransformComponent>();
-        while (query.MoveNext(out var uid, out var comp, out var xform))
+        _staleIndexedSupports.Clear();
+        if (_supportsByGrid.TryGetValue(grid.Owner, out var indexedSupports))
         {
-            if (xform.GridUid != grid.Owner)
-                continue;
-
-            var tile = _map.TileIndicesFor(grid.Owner, grid.Comp, xform.Coordinates);
-            if (!byTile.TryGetValue(tile, out var supports))
+            foreach (var uid in indexedSupports)
             {
-                supports = new List<Entity<StructuralSupportComponent>>();
-                byTile.Add(tile, supports);
-            }
+                if (!TryComp<StructuralSupportComponent>(uid, out var comp) ||
+                    !TryComp(uid, out TransformComponent? xform) ||
+                    xform.GridUid != grid.Owner)
+                {
+                    _staleIndexedSupports.Add(uid);
+                    continue;
+                }
 
-            supports.Add((uid, comp));
-            previous[uid] = comp.Supported;
-            comp.Supported = false;
+                var tile = _map.TileIndicesFor(grid.Owner, grid.Comp, xform.Coordinates);
+                if (!byTile.TryGetValue(tile, out var supports))
+                {
+                    supports = new List<Entity<StructuralSupportComponent>>();
+                    byTile.Add(tile, supports);
+                }
+
+                supports.Add((uid, comp));
+                previous[uid] = comp.Supported;
+                comp.Supported = false;
+            }
+        }
+
+        // Lifecycle/parent events normally keep the index exact. Repair any stale entries discovered here so an
+        // unusual deletion/reparent sequence cannot leave permanent garbage or omit the destination grid.
+        foreach (var uid in _staleIndexedSupports)
+        {
+            RemoveIndexedSupport(uid, out _);
+            if (!Deleted(uid) && HasComp<StructuralSupportComponent>(uid))
+                ReindexSupport(uid);
         }
 
         if (byTile.Count == 0)
@@ -260,12 +461,13 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
                 if (!byTile.TryGetValue(next, out var nextSupports))
                     continue;
 
-                // Every colocated support participates. The strongest vertical support refreshes the relay;
-                // otherwise crossing the tile consumes one unit of cantilever budget.
+                // Every colocated support participates, but crossing the tile always consumes one unit.
+                // Girders project their span to the level above in TryGetSupportSpanBelow; they deliberately
+                // do not relay support horizontally on this level.
                 var nextBudget = node.Budget - 1;
                 foreach (var nextSupport in nextSupports)
                 {
-                    if (nextSupport.Comp.IsAnchor || nextSupport.Comp.IsVerticalSupport)
+                    if (nextSupport.Comp.IsAnchor && !nextSupport.Comp.IsVerticalSupport)
                         nextBudget = Math.Max(nextBudget, nextSupport.Comp.CantileverSpan);
                 }
 
@@ -303,7 +505,9 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
                 // Upper-z and currently unsupported: schedule a collapse if not already counting down.
                 if (!_pendingUnsupported.ContainsKey(ent.Owner))
                 {
-                    _pendingUnsupported[ent.Owner] = now + TimeSpan.FromSeconds(CollapseWarningSeconds);
+                    var collapseAt = now + TimeSpan.FromSeconds(CollapseWarningSeconds);
+                    _pendingUnsupported[ent.Owner] = collapseAt;
+                    _unsupportedDeadlines.Enqueue(ent.Owner, collapseAt);
 
                     // Popup only on the supported -> unsupported transition, to avoid spamming every recompute.
                     if (previous[ent.Owner])
@@ -335,12 +539,11 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         if (mapUid == null || !_zMapQuery.TryComp(mapUid.Value, out var z) || z.MapAbove is not { } above)
             return;
 
-        var query = EntityQueryEnumerator<StructuralSupportComponent, TransformComponent>();
-        while (query.MoveNext(out _, out _, out var xform))
-        {
-            if (xform.MapUid == above && xform.GridUid is { } g)
-                _dirtyGrids.Add(g);
-        }
+        if (!_supportGridsByMap.TryGetValue(above, out var grids))
+            return;
+
+        foreach (var supportGrid in grids)
+            _dirtyGrids.Add(supportGrid);
     }
 
     /// <summary>
@@ -562,11 +765,10 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     ///    everything under it sit on real ground, so they are stable on a solid tile (this also keeps the
     ///    underground itself from collapsing through the support graph; cave-ins are handled separately). Seed =
     ///    own span;
-    ///  - the UPPER-Z rule: any support that has a vertical support beam directly beneath it on the level below
-    ///    is held up by that beam, and the seed budget is the BEAM's span (its quality). This is the whole
-    ///    "build a beam below to hold up the floor above" mechanic - and because a beam on an upper level is
-    ///    itself only a root if there is another beam below IT, removing a lower beam unroots everything above
-    ///    and the collapse cascades upward (propagated each tick via <see cref="MarkAboveDirty"/>).
+    ///  - the UPPER-Z rule: any other support that has a vertical support beam or wall directly beneath it on
+    ///    the level below is held up by that structure, and the seed budget is that structure's span.
+    /// Vertical girders receive a zero budget when rooted: this keeps the girder itself stable without allowing
+    /// it to support adjacent tiles on its own level. Its full span is consumed only by the level above.
     /// Lower/underground levels never collapse from "missing" support because they root on solid ground.
     /// </summary>
     private bool TryGetSeedBudget(Entity<StructuralSupportComponent> ent, Entity<MapGridComponent> grid, Vector2i tile, out int budget)
@@ -576,14 +778,14 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
 
         if (ent.Comp.IsAnchor)
         {
-            budget = ent.Comp.CantileverSpan;
+            budget = OwnLevelSeedBudget(ent.Comp.IsVerticalSupport, ent.Comp.CantileverSpan);
             return true;
         }
 
         var onSolid = _map.TryGetTileRef(grid.Owner, grid.Comp, tile, out var tileRef) && !tileRef.Tile.IsEmpty;
         if (onSolid && IsGroundOrBelow(mapUid))
         {
-            budget = ent.Comp.CantileverSpan;
+            budget = OwnLevelSeedBudget(ent.Comp.IsVerticalSupport, ent.Comp.CantileverSpan);
             return true;
         }
 
@@ -593,7 +795,7 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         // TileFloorSupport marker) need a beam below.
         if (onSolid && !IsGroundOrBelow(mapUid) && !HasPlayerFloorMarker(grid, tile))
         {
-            budget = ent.Comp.CantileverSpan;
+            budget = OwnLevelSeedBudget(ent.Comp.IsVerticalSupport, ent.Comp.CantileverSpan);
             return true;
         }
 
@@ -603,12 +805,15 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
             zMap.MapBelow is { } below &&
             TryGetSupportSpanBelow(below, _transform.GetWorldPosition(ent.Owner), out var belowSpan))
         {
-            budget = belowSpan;
+            budget = OwnLevelSeedBudget(ent.Comp.IsVerticalSupport, belowSpan);
             return true;
         }
 
         return false;
     }
+
+    private static int OwnLevelSeedBudget(bool isVerticalSupport, int sourceBudget)
+        => isVerticalSupport ? 0 : sourceBudget;
 
     /// <summary>
     /// True if the level is the ground/surface (depth 0) or underground (depth &lt; 0), i.e. NOT an upper z-level.
@@ -667,8 +872,8 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
     }
 
     /// <summary>
-    /// Returns the largest cantilever span of any vertical support / anchor at the same world position on the
-    /// level below, or false if there is none. That span becomes the seed budget for the tile above.
+    /// Returns the largest cantilever span of any vertical support, anchor, or wall at the same world position
+    /// on the level below, or false if there is none. That span becomes the seed budget for the tile above.
     /// </summary>
     private bool TryGetSupportSpanBelow(EntityUid belowMap, Vector2 worldPos, out int span)
     {
@@ -686,6 +891,9 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         {
             if (TryComp<StructuralSupportComponent>(anchored, out var sup) && (sup.IsVerticalSupport || sup.IsAnchor))
                 best = Math.Max(best, sup.CantileverSpan);
+
+            if (HasComp<ZLevelWallSupportComponent>(anchored))
+                best = Math.Max(best, ZLevelWallSupportComponent.CantileverSpan);
         }
 
         if (best < 0)
@@ -695,3 +903,14 @@ public sealed partial class ZLevelSupportSystem : EntitySystem
         return true;
     }
 }
+
+/// <summary>
+/// Relays a load-bearing support's removal to the cave-in system. Robust only permits one directed subscription
+/// for each component/event pair, which is owned by <see cref="ZLevelSupportSystem"/>.
+/// </summary>
+[ByRefEvent]
+public readonly record struct ZCaveSupportRemovedEvent(EntityUid Support);
+
+/// <summary>Relays player damage to a structural-only cave support for cave-in attribution.</summary>
+[ByRefEvent]
+public readonly record struct ZCaveSupportDamagedEvent(EntityUid Support, EntityUid Origin);

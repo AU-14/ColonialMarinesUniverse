@@ -20,6 +20,15 @@
     duration: 3
     cooldown: 15
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
+  - type: VehicleSound
+    runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
+    runningSoundCooldown: 2.6
+    hornSound: /Audio/Effects/Vehicle/carhorn.ogg
+    hornCooldown: 1
+    collisionSound: /Audio/_RMC14/Effects/metal_crash.ogg
+    collisionSoundCooldown: 1.5
+    collisionSoundMinSpeed: 5
+    mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
   - type: VehicleSpotlight
     radius: 7
     energy: 3
@@ -52,8 +61,10 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameAPC # APC damage modifier
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Sprite
     drawdepth: Mobs
     sprite: _RMC14/Structures/Vehicles/apc.rsi

@@ -62,10 +62,10 @@ public sealed partial class InsurgencyCellKitSystem : EntitySystem
     // come first, then vendors, matching the old deploy order.
     private void EnsureInitialized(Entity<InsurgencyCellKitComponent> ent)
     {
-        if (ent.Comp.Initialized)
+        if (ent.Comp.Populated)
             return;
 
-        ent.Comp.Initialized = true;
+        ent.Comp.Populated = true;
 
         var faction = _apply.GetActiveFaction();
         if (faction == null)

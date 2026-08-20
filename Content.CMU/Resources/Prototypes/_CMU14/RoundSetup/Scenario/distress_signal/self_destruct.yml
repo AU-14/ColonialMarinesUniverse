@@ -1,0 +1,239 @@
+# ├──[ TimeCode SFX | Evacuation Self Destruct Sequence ]────────────┤
+#
+# ├──[ SIRENS ]──────────────────────────────────────────────────────┤
+#
+- type: scriptedSoundSequence
+  id: SelfDestructSequence
+  defaultSender: "Apollo MK.II"
+  defaultAnnouncementColor: "#FF3838"
+  defaultAnnouncementPreset: SelfDestructAnnouncement
+  entries:
+  # T-15:00 - claxon starts & MU/TH/UR announces 10/15 mins
+  - delay: 0
+    announcement: { message: "DANGER! The Emergency Destruct System is now Activated..." }
+  - delay: 5
+    layer: alarm1
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren1_f_iconic.ogg
+    audioParams: { volume: -5 }
+    announcement: { message: "The ship will detonate in T Minus... Fifteen Minutes... The option to override automatic detonation expires in T Minus... Ten Minutes." }
+    marker: "RedAlarmOn"
+    markerData: { frequency: 2.0 }  # Slow ominous pulse (~3s cycle)
+
+  # T-10:00 - start sequence build up
+  - delay: 300
+    announcement: { message: "The ship will detonate in T Minus... Ten Minutes... The option to override automatic detonation expires in T Minus... Five Minutes..." }
+  - delay: 325
+    layer: alarm2
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren4.ogg
+    audioParams: { volume: -6 }
+
+  # T-08:00
+  - delay: 420
+    announcement: { message: "The option to override automatic detonation expires in T Minus... Three Minutes..." }
+  - delay: 425
+    layer: alarm3
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren3.ogg
+    audioParams: { volume: -5 }
+
+  # T-06:00 - swap alarm3 with fastpace alt for 1min
+  - delay: 540
+    announcement: { message: "The option to override automatic detonation expires in T Minus... One Minute." }
+  - delay: 545
+    layer: alarm3
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren3_alt.ogg
+    audioParams: { volume: -4 }
+
+  # T-05:30 - countdown until scuttle abort lockout (placeholder)
+  - delay: 570
+    layer: countdown
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_slow_short.ogg
+    audioParams: { volume: -3 }
+  - delay: 580
+    layer: countdown
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_slow.ogg
+    audioParams: { volume: -3 }
+  - delay: 590
+    layer: countdown
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_triple.ogg
+    audioParams: { volume: -3 }
+
+  # T-05:00 - cancel the cancel & start crescendo
+  - delay: 600
+    announcement: { message: "The option to override detonation procedure has now expired." }
+    stopLoop: [countdown]
+    layer: alarm4
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren2_f_iconic.ogg
+    audioParams: { volume: -7 }
+    marker: "RedAlarmOn"
+    markerData: { frequency: 3.5 }  # Steady emergency pulse (~1.8s cycle)
+  - delay: 605
+    announcement: { message: "The ship will automatically destruct in T Minus... 5 Minutes..." }
+    layer: alarm5
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren7_very_quick.ogg
+    audioParams: { volume: -4 }
+
+  # T-03:00
+  - delay: 720
+    announcement: { message: "The ship will automatically destruct in T Minus... 3 Minutes..." }
+    layer: alarm6
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren8_f_static.ogg
+    audioParams: { volume: -5 }
+
+  # T-02:00
+  - delay: 780
+    announcement: { message: "The ship will automatically destruct in T Minus... 2 Minutes..." }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_triple.ogg
+    audioParams: { volume: -4 }
+
+  # T-01:00
+  - delay: 840
+    announcement: { message: "You now have 1 Minute to Abandon Ship." }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren3_alt.ogg
+    audioParams: { volume: -4 }
+  - delay: 845
+    announcement: { message: "The ship will automatically destruct in T Minus... 1 Minute..." }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_triple_siren.ogg
+    audioParams: { volume: -3 }
+
+  # T-0:30 - final countdown (escalate alarm to urgent)
+  - delay: 870
+    announcement: { message: "T Minus 30 Seconds." }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_siren7_very_quick.ogg
+    marker: "RedAlarmOn"
+    markerData: { frequency: 5.0 }  # Urgent pulse (~1.3s cycle)
+
+  - delay: 870
+    layer: countdown
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_slow_short.ogg
+    audioParams: { volume: -3 }
+  - delay: 880
+    layer: countdown
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_slow.ogg
+    audioParams: { volume: -3 }
+  - delay: 890
+    layer: countdown
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_buzz_triple.ogg
+    audioParams: { volume: -3 }
+
+  # T-0:05 - mute all but one/two faint sirens
+  - delay: 895
+    stopLoop: [alarm1, alarm3, alarm5, alarm6]
+    marker: "RedAlarmOff"
+
+  # T+0:00 - explosion 1
+  - delay: 900
+    marker: "Explode"
+    stopAllLoops: true
+    markerData: { shakeIntensity: 12, duration: 2.5, color: "#FFFFFF" }
+  # T+0:15 - explosion 2
+  - delay: 915
+    marker: "Explode"
+    markerData: { shakeIntensity: 12, duration: 2.5, color: "#FFFFFF" }
+  # T+0:30 - explosion 3
+  - delay: 930
+    marker: "Explode"
+    markerData: { shakeIntensity: 12, duration: 5, color: "#FFFFFF" }
+
+  # T+0:32 - total failure
+  - delay: 932
+    announcement: { message: "WARNING. Multiple catastrophic structural failures detected throughout the vessel." }
+  # T+0:37 / +0:52 / +1:05 - scattered warhead volleys
+  - delay: 937
+    marker: "Explode"
+    markerData: { shakeIntensity: 10, duration: 3 }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_explosions.ogg
+    audioParams: { volume: -3 }
+  - delay: 952
+    marker: "Explode"
+    markerData: { shakeIntensity: 11, duration: 3, color: "#FFF3C4" }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_explosions2.ogg
+    audioParams: { volume: -3 }
+  - delay: 965
+    marker: "Explode"
+    markerData: { shakeIntensity: 14, duration: 6, color: "#FFFFFF" }
+    sound: /Audio/_CMU14/Private/Ambience/claxon/claxon_ambience_explosions3_distant.ogg
+    audioParams: { volume: -2 }
+
+#
+# ├──[ ENGINE SEQUENCE ]─────────────────────────────────────────────┤
+#
+- type: scriptedSoundSequence
+  id: SelfDestructEngineSequence
+  entries:
+  - delay: 20
+    layer: engineBreath
+    loop: true
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_ambience_breathing.ogg
+    audioParams: { volume: -7 }
+
+    # T-05:00 - engine goes critical & abort disabled
+  - delay: 600
+    layer: engineHeart
+    loop: true
+    stopLoop: [engineBreath]
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_soft_heartbeat_rumble_intense.ogg
+    audioParams: { volume: -4 }
+
+  - delay: 605
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_crit_engage2_cutoff.ogg
+
+  # T-02:00 - engine overloading
+  - delay: 780
+    layer: engineGrind
+    loop: true
+    stopLoop: [engineHeart]
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_ominous_grind_long.ogg
+    audioParams: { volume: -6 }
+  - delay: 790
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_kick_rumble3.ogg
+    jitterInterval: true
+    delayJitter: 5
+  - delay: 800
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion4_afterkick_soft.ogg
+    jitterInterval: true
+    delayJitter: 5
+  - delay: 810
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_kick_electric2.ogg
+    jitterInterval: true
+    delayJitter: 5
+  - delay: 820
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_kick_rumble5.ogg
+    jitterInterval: true
+    delayJitter: 5
+
+  # T-0:30 - very intense
+  - delay: 870
+    layer: engineCrit
+    loop: true
+    stopLoop: [engineGrind]
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_crit_woosh2_long.ogg
+    audioParams: { volume: -2 }
+
+  # T+0:00 - explosions every 15s like in the movie
+  - delay: 900
+    stopAllLoops: true
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion1.ogg
+  - delay: 915
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion2.ogg
+  - delay: 930
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion7_loud_kick.ogg
+  # T+0:37 / +0:52 / +1:05 - match the scattered warhead volleys
+  - delay: 937
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion5_afterkick_distant.ogg
+  - delay: 952
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion6_deep_rumble.ogg
+  - delay: 965
+    sound: /Audio/_CMU14/Private/Ambience/engine/engine_explosion8_spaced.ogg

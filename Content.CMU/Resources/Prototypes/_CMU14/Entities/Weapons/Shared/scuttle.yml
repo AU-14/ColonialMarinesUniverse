@@ -1,0 +1,59 @@
+- type: entity
+  parent: MarkerBase
+  id: CMUSelfDestructWarheadExplosion
+  name: explosive Warship Scuttle
+  suffix: CMU, WARSHIP SCUTTLE!!! MULTIZ
+  components:
+  - type: OrbitalCannonExplosion
+    multiZ: true
+    steps:
+    # Stage 1 - t=0s, initial breach
+    - type: RMCOBXenoTunnel
+      total: 80000
+      slope: 4000
+      max: 400
+      delay: 0
+    - fire: CMUTileFireOBAegis
+      fireRange: 45
+    # Stage 2 - t=15s, the hull gives
+    - type: RMCOBXenoTunnel
+      total: 220000
+      slope: 40
+      max: 500
+      delay: 15
+    - fire: CMUTileFireOBAegis
+      fireRange: 60
+    # Stage 3 - t=30s, the kill shot
+    - type: RMCOBXenoTunnel
+      total: 600000
+      slope: 25
+      max: 700
+      delay: 15
+    - fire: CMUTileFireOBAegis
+      fireRange: 75
+
+- type: entity
+  parent: CMUSelfDestructWarheadExplosion
+  id: CMUSelfDestructScatterExplosion
+  name: explosive Warship Scuttle Fragment
+  suffix: CMU, WARSHIP SCUTTLE SCATTER! MULTIZ
+  components:
+  - type: OrbitalCannonExplosion
+    multiZ: true
+    steps:
+    # Stage 1 - t=0s, initial breach
+    - type: RMCOBXenoTunnel
+      total: 80000
+      slope: 4000
+      max: 400
+      delay: 0
+    - fire: CMUTileFireOBAegis
+      fireRange: 30
+    # Stage 2 - t=15s, the hull gives
+    - type: RMCOBXenoTunnel
+      total: 120000
+      slope: 40
+      max: 500
+      delay: 15
+    - fire: CMUTileFireOBAegis
+      fireRange: 45

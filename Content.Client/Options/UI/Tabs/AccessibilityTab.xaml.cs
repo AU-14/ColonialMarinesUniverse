@@ -34,6 +34,7 @@ public sealed partial class AccessibilityTab : Control
         Control.AddOptionColorSlider(CCVars.ChatHighlightsColor, HighlightsColorSlider);
 
         Control.AddOptionCheckBox(CCVars.AccessibilityClientCensorNudity, CensorNudityCheckBox);
+        Control.AddOptionCheckBox(CCVars.MuteScriptedSounds, MuteScriptedSoundsCheckBox); // CMU14
 
         Control.Initialize();
     }

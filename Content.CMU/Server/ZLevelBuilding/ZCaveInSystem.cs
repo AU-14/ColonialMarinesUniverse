@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 // Copyright (c) 2026 wray-git
 using System.Numerics;
+using Robust.Shared.Prototypes;
 using Content.Server.Chat.Managers;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._AU14.ZLevelBuilding;
@@ -22,7 +23,6 @@ using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;
 using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 
@@ -56,7 +56,6 @@ public sealed partial class ZCaveInSystem : EntitySystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private TagSystem _tag = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
-    [Dependency] private IPrototypeManager _protoManager = default!;
 
     private static readonly ProtoId<TagPrototype> WallTag = "Wall";
     private static readonly TimeSpan WarningTime = TimeSpan.FromSeconds(8);
@@ -97,11 +96,15 @@ public sealed partial class ZCaveInSystem : EntitySystem
         _gridQuery = GetEntityQuery<MapGridComponent>();
         _stoneQuery = GetEntityQuery<ZGeneratedStoneComponent>();
 
-        // Event-driven instead of polling: the ONLY thing that changes a cavern roof's stability is an anchored
-        // solid (mined rock / built or destroyed pillar) appearing or disappearing. Hook that and flag a small
-        // region dirty, rather than re-scanning every dug tile every second forever (the old TPS sink).
-        SubscribeLocalEvent<TransformComponent, AnchorStateChangedEvent>(OnAnchorChanged);
-        SubscribeLocalEvent<DamageableComponent, DamageChangedEvent>(OnDamaged);
+        // Event-driven instead of polling: the ONLY thing that changes a cavern roof's stability is a wall/rock
+        // or structural support disappearing. Scope both high-frequency events to those two marker components;
+        // subscribing through Transform/Damageable would invoke this system for nearly every anchored entity and
+        // every damaged entity in the game just to reject them by map afterwards.
+        SubscribeLocalEvent<ZLevelWallSupportComponent, EntityTerminatingEvent>(OnWallTerminating);
+        SubscribeLocalEvent<StructuralSupportComponent, EntityTerminatingEvent>(OnStructuralTerminating);
+        SubscribeLocalEvent<ZLevelWallSupportComponent, DamageChangedEvent>(OnWallDamaged);
+        SubscribeLocalEvent<ZCaveSupportRemovedEvent>(OnSupportRemoved);
+        SubscribeLocalEvent<ZCaveSupportDamagedEvent>(OnSupportDamaged);
         SubscribeLocalEvent<ShuttleFTLSafetyEvent>(OnShuttleFTLSafety);
 
         // Load-bearing TERRAIN is indexed by position rather than read from the anchored lookup, because the
@@ -128,12 +131,27 @@ public sealed partial class ZCaveInSystem : EntitySystem
     }
 
     /// <summary>Records the last player to deal damage on an underground level (the likely over-miner), for attribution.</summary>
-    private void OnDamaged(Entity<DamageableComponent> ent, ref DamageChangedEvent args)
+    private void OnWallDamaged(Entity<ZLevelWallSupportComponent> ent, ref DamageChangedEvent args)
+    {
+        RecordDigger(ent.Owner, ref args);
+    }
+
+    private void OnSupportDamaged(ref ZCaveSupportDamagedEvent args)
+    {
+        RecordDigger(args.Support, args.Origin);
+    }
+
+    private void RecordDigger(EntityUid uid, ref DamageChangedEvent args)
     {
         if (!args.DamageIncreased || args.Origin is not { } origin || !HasComp<ActorComponent>(origin))
             return;
 
-        if (Transform(ent).MapUid is { } mapUid && _stoneQuery.HasComponent(mapUid))
+        RecordDigger(uid, origin);
+    }
+
+    private void RecordDigger(EntityUid uid, EntityUid origin)
+    {
+        if (Transform(uid).MapUid is { } mapUid && _stoneQuery.HasComponent(mapUid))
             _lastDigger[mapUid] = (origin, _timing.CurTime);
     }
 
@@ -142,18 +160,38 @@ public sealed partial class ZCaveInSystem : EntitySystem
     /// destroyed). Removing a solid can unstable nearby open tiles; adding one can stabilise them. Flag the tiles
     /// within a roof span of it dirty so the next evaluation pass re-checks just those, not the whole level.
     /// </summary>
-    private void OnAnchorChanged(EntityUid uid, TransformComponent xform, ref AnchorStateChangedEvent args)
+    private void OnSupportRemoved(ref ZCaveSupportRemovedEvent args)
     {
-        // Only a solid being REMOVED (rock mined, pillar destroyed) can destabilise a roof. A solid being ADDED
-        // (a pillar built, rocks spawned by generation or during a burial) only ever stabilises, and that case is
-        // already handled by the periodic re-check of pending tiles - so ignore anchor-adds and avoid the churn.
-        if (args.Anchored)
+        if (!TerminatingOrDeleted(args.Support))
+            DirtyAroundRemovedSupport(Transform(args.Support));
+    }
+
+    private void OnWallTerminating(Entity<ZLevelWallSupportComponent> ent, ref EntityTerminatingEvent args)
+    {
+        var xform = Transform(ent);
+        if (xform.Anchored)
+            DirtyAroundRemovedSupport(xform);
+    }
+
+    private void OnStructuralTerminating(Entity<StructuralSupportComponent> ent, ref EntityTerminatingEvent args)
+    {
+        // Player-built walls carry both markers and already passed through the wall-scoped subscription.
+        var xform = Transform(ent);
+        if (xform.Anchored && !HasComp<ZLevelWallSupportComponent>(ent))
+            DirtyAroundRemovedSupport(xform);
+    }
+
+    private void DirtyAroundRemovedSupport(TransformComponent xform)
+    {
+        if (xform.MapUid is not { } mapUid ||
+            TerminatingOrDeleted(mapUid) ||
+            !_stoneQuery.TryComp(mapUid, out var stone))
             return;
 
-        if (xform.MapUid is not { } mapUid || !_stoneQuery.TryComp(mapUid, out var stone))
-            return;
-
-        if (xform.GridUid is not { } gridUid || gridUid != stone.StoneGrid || !_gridQuery.TryComp(gridUid, out var grid))
+        if (xform.GridUid is not { } gridUid ||
+            TerminatingOrDeleted(gridUid) ||
+            gridUid != stone.StoneGrid ||
+            !_gridQuery.TryComp(gridUid, out var grid))
             return;
 
         // Don't accumulate dirty tiles while the level is mid-collapse; that region is already being handled.
@@ -252,13 +290,13 @@ public sealed partial class ZCaveInSystem : EntitySystem
         var pending = stoneMap.Comp.PendingCollapse;
 
         // Solid (or not-yet-dug) tiles can't cave in; clear any stale pending state.
-        if (IsSolid(grid, tile, stoneMap.Comp.GeneratedChunks, chunkSize))
+        if (IsSolid(grid, tile, stoneMap.Comp, chunkSize))
         {
             pending.Remove(tile);
             return false;
         }
 
-        var stable = HasSupportWithin(grid, tile, span, stoneMap.Comp.GeneratedChunks, chunkSize);
+        var stable = HasSupportWithin(grid, tile, span, stoneMap.Comp, chunkSize);
 
         if (stable)
         {
@@ -305,7 +343,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
         while (frontier.TryDequeue(out var t) && region.Count < CollapseTileCap)
         {
-            if (IsSolid(grid, t, stoneMap.Comp.GeneratedChunks, chunkSize))
+            if (IsSolid(grid, t, stoneMap.Comp, chunkSize))
                 continue;
 
             // Built support beams shut off a spreading collapse like a valve: every open tile within a beam's
@@ -345,6 +383,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
             stoneMap.Comp.PendingCollapse.Remove(t);
 
         // BFS order buries from the centre outward for a nice spreading cave-in.
+        stoneMap.Comp.CollapseQueueIndex = 0;
         stoneMap.Comp.CollapseQueue.AddRange(region);
         stoneMap.Comp.CollapseNextStep = _timing.CurTime;
         stoneMap.Comp.CollapseNextRumble = TimeSpan.Zero;
@@ -352,6 +391,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // Save the region so we can trigger surface effects when this collapse finishes.
         stoneMap.Comp.LastCollapseRegion.Clear();
         stoneMap.Comp.LastCollapseRegion.AddRange(region);
+        BuildCollapseFeedbackDistances(stoneMap.Comp, region);
     }
 
     /// <summary>Spawns a handful of loose rocks across the doomed cavern and flings them 1-2 tiles in random directions.</summary>
@@ -385,17 +425,21 @@ public sealed partial class ZCaveInSystem : EntitySystem
         if (!_gridQuery.TryComp(stoneMap.Comp.StoneGrid, out var grid))
         {
             stoneMap.Comp.CollapseQueue.Clear();
+            stoneMap.Comp.CollapseQueueIndex = 0;
+            stoneMap.Comp.LastCollapseRegion.Clear();
+            stoneMap.Comp.CollapseFeedbackDistances.Clear();
             return;
         }
 
         var settings = GetSettings(stoneMap.Owner);
         var queue = stoneMap.Comp.CollapseQueue;
-        var count = Math.Min(TilesPerStep, queue.Count);
+        var start = stoneMap.Comp.CollapseQueueIndex;
+        var count = Math.Min(TilesPerStep, queue.Count - start);
 
         for (var i = 0; i < count; i++)
-            BuryTile(stoneMap, (stoneMap.Comp.StoneGrid, grid), queue[i], settings);
+            BuryTile(stoneMap, (stoneMap.Comp.StoneGrid, grid), queue[start + i], settings);
 
-        queue.RemoveRange(0, count);
+        stoneMap.Comp.CollapseQueueIndex += count;
 
         RumbleAndVignette(stoneMap, now, settings);
 
@@ -404,8 +448,14 @@ public sealed partial class ZCaveInSystem : EntitySystem
         // When the collapse finishes, propagate surface effects to the level above.
         // This only triggers at the END of a cave-in, not continuously, so the ground level scan does not
         // instantly destabilise all maps that happen to have no underground generated yet.
-        if (queue.Count == 0 && count > 0)
+        if (stoneMap.Comp.CollapseQueueIndex >= queue.Count && count > 0)
+        {
+            queue.Clear();
+            stoneMap.Comp.CollapseQueueIndex = 0;
             TriggerSurfaceEffects(stoneMap, settings);
+            stoneMap.Comp.LastCollapseRegion.Clear();
+            stoneMap.Comp.CollapseFeedbackDistances.Clear();
+        }
     }
 
     private void BuryTile(Entity<ZGeneratedStoneComponent> stoneMap, Entity<MapGridComponent> grid, Vector2i tile, ZBuildableMapComponent settings)
@@ -533,21 +583,42 @@ public sealed partial class ZCaveInSystem : EntitySystem
     // Players further away feel nothing.
     private const int CollapseEffectRange = 33;
 
-    /// <summary>Minimum Chebyshev tile distance from <paramref name="tile"/> to any tile in the region
-    /// (0 = standing in it). Returns int.MaxValue for an empty region.</summary>
-    private static int DistanceToRegion(Vector2i tile, HashSet<Vector2i> region)
+    /// <summary>
+    /// Builds the exact feedback range once per collapse. Expanding all region tiles together through eight-way
+    /// neighbours produces Chebyshev distance, matching the old per-player linear distance calculation.
+    /// </summary>
+    private static void BuildCollapseFeedbackDistances(ZGeneratedStoneComponent stone, List<Vector2i> region)
     {
-        if (region.Contains(tile))
-            return 0;
+        var distances = stone.CollapseFeedbackDistances;
+        distances.Clear();
+        var frontier = new Queue<Vector2i>();
 
-        var best = int.MaxValue;
-        foreach (var t in region)
+        foreach (var tile in region)
         {
-            var d = Math.Max(Math.Abs(t.X - tile.X), Math.Abs(t.Y - tile.Y));
-            if (d < best)
-                best = d;
+            if (!distances.TryAdd(tile, 0))
+                continue;
+
+            frontier.Enqueue(tile);
         }
-        return best;
+
+        while (frontier.TryDequeue(out var tile))
+        {
+            var nextDistance = distances[tile] + 1;
+            if (nextDistance > CollapseEffectRange)
+                continue;
+
+            for (var dx = -1; dx <= 1; dx++)
+            {
+                for (var dy = -1; dy <= 1; dy++)
+                {
+                    var next = tile + new Vector2i(dx, dy);
+                    if ((dx == 0 && dy == 0) || !distances.TryAdd(next, nextDistance))
+                        continue;
+
+                    frontier.Enqueue(next);
+                }
+            }
+        }
     }
 
     /// <summary>World-space AABB of the collapsed region's tiles (used to range-limit surface effects).</summary>
@@ -591,11 +662,16 @@ public sealed partial class ZCaveInSystem : EntitySystem
     }
 
     /// <summary>A tile holds up the roof if it is untouched rock, mined rock, or a built vertical pillar/anchor.</summary>
-    private bool IsSolid(Entity<MapGridComponent> grid, Vector2i tile, HashSet<Vector2i> generatedChunks, int chunkSize)
+    private bool IsSolid(Entity<MapGridComponent> grid, Vector2i tile, ZGeneratedStoneComponent stone, int chunkSize)
     {
+        // Localized caves share a grid with authored colony terrain. Only tiles explicitly created as cave
+        // terrain may participate in cave-ins; mapped tiles and untouched void remain hard boundaries.
+        if (stone.LocalizedToAuthoredLevel && !stone.GeneratedTiles.Contains(tile))
+            return true;
+
         // Tiles in chunks we haven't generated yet are still solid bedrock.
         var chunk = new Vector2i(FloorDiv(tile.X, chunkSize), FloorDiv(tile.Y, chunkSize));
-        if (!generatedChunks.Contains(chunk))
+        if (!stone.GeneratedChunks.Contains(chunk))
             return true;
 
         // Mapper-authored load-bearing terrain (see ZLoadBearingTerrainComponent). Checked from the position
@@ -657,41 +733,10 @@ public sealed partial class ZCaveInSystem : EntitySystem
             _loadBearingTerrain.Remove(at.Grid);
     }
 
-    /// <summary>True if an anchored entity genuinely holds up a cave roof: a built structural support/pillar, or
-    /// an actual WALL - anything whose prototype inherits the vanilla BaseWall (covers mined rock, which loses
-    /// the Wall tag by overriding its Tag list) or the RMC invincible-wall root (covers every CM wall family).</summary>
+    /// <summary>True if an anchored entity genuinely holds up a cave roof: a built support/pillar or a wall.</summary>
     private bool IsLoadBearing(EntityUid uid)
     {
-        if (HasComp<StructuralSupportComponent>(uid))
-            return true;
-
-        return MetaData(uid).EntityPrototype is { } proto && IsWallPrototype(proto.ID);
-    }
-
-    // Prototype id -> "inherits a wall base" verdict, cached because the parent walk runs for every anchored
-    // entity a stability check touches.
-    private readonly Dictionary<string, bool> _wallProtoCache = new();
-
-    private bool IsWallPrototype(string id)
-    {
-        if (_wallProtoCache.TryGetValue(id, out var cached))
-            return cached;
-
-        // EnumerateALLParents, not EnumerateParents: the wall roots (BaseWall, RMCBaseWallInvincibleNoIcon) are
-        // ABSTRACT prototypes, and the plain variant silently skips abstract ancestors - which made mined rock
-        // (mineablesolarisrock -> BaseWall) read as "not a wall" and let whole caves collapse on generation.
-        var isWall = false;
-        foreach (var (parentId, _) in _protoManager.EnumerateAllParents<EntityPrototype>(id, includeSelf: true))
-        {
-            if (parentId is "BaseWall" or "RMCBaseWallInvincibleNoIcon")
-            {
-                isWall = true;
-                break;
-            }
-        }
-
-        _wallProtoCache[id] = isWall;
-        return isWall;
+        return HasComp<StructuralSupportComponent>(uid) || HasComp<ZLevelWallSupportComponent>(uid);
     }
 
     /// <summary>True if a built vertical support / anchor stands within <paramref name="span"/> tiles (Manhattan)
@@ -717,7 +762,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
     }
 
     /// <summary>True if a solid support tile exists within <paramref name="span"/> tiles (BFS, Chebyshev-ish).</summary>
-    private bool HasSupportWithin(Entity<MapGridComponent> grid, Vector2i tile, int span, HashSet<Vector2i> generatedChunks, int chunkSize)
+    private bool HasSupportWithin(Entity<MapGridComponent> grid, Vector2i tile, int span, ZGeneratedStoneComponent stone, int chunkSize)
     {
         for (var dx = -span; dx <= span; dx++)
         {
@@ -729,7 +774,7 @@ public sealed partial class ZCaveInSystem : EntitySystem
                 if (Math.Abs(dx) + Math.Abs(dy) > span)
                     continue;
 
-                if (IsSolid(grid, tile + new Vector2i(dx, dy), generatedChunks, chunkSize))
+                if (IsSolid(grid, tile + new Vector2i(dx, dy), stone, chunkSize))
                     return true;
             }
         }
@@ -742,33 +787,33 @@ public sealed partial class ZCaveInSystem : EntitySystem
     /// </summary>
     private void RumbleAndVignette(Entity<ZGeneratedStoneComponent> stoneMap, TimeSpan now, ZBuildableMapComponent settings)
     {
-        var playRumble = now >= stoneMap.Comp.CollapseNextRumble;
-        if (playRumble)
-            stoneMap.Comp.CollapseNextRumble = now + RumbleInterval;
+        // Every effect below is rumble-paced. Skip the actor query entirely on intervening collapse steps.
+        if (now < stoneMap.Comp.CollapseNextRumble)
+            return;
+
+        stoneMap.Comp.CollapseNextRumble = now + RumbleInterval;
 
         // Effects are local: only players near the collapsing region get feedback. Engulfed players (their own
         // tile is in the doomed region) additionally get the rapid black vignette, re-sent each rumble so it
         // lasts the collapse.
-        _gridQuery.TryComp(stoneMap.Comp.StoneGrid, out var stoneGridComp);
-        var regionTiles = new HashSet<Vector2i>(stoneMap.Comp.LastCollapseRegion);
+        if (!_gridQuery.TryComp(stoneMap.Comp.StoneGrid, out var stoneGridComp))
+            return;
 
         var query = EntityQueryEnumerator<ActorComponent, TransformComponent>();
         var played = false;
         while (query.MoveNext(out var uid, out var actor, out var xform))
         {
-            if (xform.MapUid != stoneMap.Owner || stoneGridComp == null)
+            if (xform.MapUid != stoneMap.Owner)
                 continue;
 
             var actorCoords = _transform.GetMapCoordinates(uid, xform);
             var actorTile = _map.TileIndicesFor(stoneMap.Comp.StoneGrid, stoneGridComp, actorCoords);
-            var dist = DistanceToRegion(actorTile, regionTiles);
-            if (dist > CollapseEffectRange)
+            if (!stoneMap.Comp.CollapseFeedbackDistances.TryGetValue(actorTile, out var dist))
                 continue;
 
-            if (playRumble)
-                RaiseNetworkEvent(new ZCollapseVignetteEvent { Engulfed = dist <= 1 }, actor.PlayerSession);
+            RaiseNetworkEvent(new ZCollapseVignetteEvent { Engulfed = dist <= 1 }, actor.PlayerSession);
 
-            if (playRumble && !played)
+            if (!played)
             {
                 // Guarded: a missing/misconfigured RumbleSound path must never crash the tick (GetAudioLength throws).
                 try
@@ -859,8 +904,6 @@ public sealed partial class ZCaveInSystem : EntitySystem
 
             RaiseNetworkEvent(new ZCollapseVignetteEvent(), actor.PlayerSession);
         }
-
-        stoneMap.Comp.LastCollapseRegion.Clear();
     }
 
     /// <summary>

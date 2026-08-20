@@ -45,15 +45,15 @@
 
 - type: construction
   id: AU14ZStairUp
-  name: z-level stairs (up)
-  description: A staircase leading up one z-level, with a standing platform laid on the level above and a support beam here.
+  name: con-a-u14-z-stair-up
+  description: con-a-u14-z-stair-up-desc
   graph: AU14ZStairUpGraph
   startNode: start
   targetNode: stair
   category: construction-category-structures
   objectType: Structure
   placementMode: SnapgridCenter
-  canRotate: false
+  canRotate: true
   isCM: true
   spawnlist: ZLevel
   conditions:
@@ -63,15 +63,15 @@
 
 - type: construction
   id: AU14ZStairDown
-  name: z-level stairs (down)
-  description: A staircase leading down one z-level, with a support beam reflected on the level below.
+  name: con-a-u14-z-stair-down
+  description: con-a-u14-z-stair-down-desc
   graph: AU14ZStairDownGraph
   startNode: start
   targetNode: stair
   category: construction-category-structures
   objectType: Structure
   placementMode: SnapgridCenter
-  canRotate: false
+  canRotate: true
   isCM: true
   spawnlist: ZLevel
   conditions:

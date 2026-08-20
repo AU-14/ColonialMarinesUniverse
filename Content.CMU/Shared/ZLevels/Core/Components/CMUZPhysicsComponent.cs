@@ -24,6 +24,14 @@ public sealed partial class CMUZPhysicsComponent : Component
     [DataField, AutoNetworkedField]
     public float LocalPosition;
 
+    /// <summary>
+    /// The entity is resting on a z-physics surface that has no ordinary fixture on its current map, such as
+    /// the top of a wall on the level below. Networked so client movement prediction does not depend on the
+    /// lower-level wall being present in its PVS when deciding whether to use grounded friction.
+    /// </summary>
+    [DataField, AutoNetworkedField]
+    public bool VirtualGrounded;
+
     // Physics
 
     /// <summary>

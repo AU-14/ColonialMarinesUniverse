@@ -21,10 +21,10 @@ public static class CMUVehicleSupportFootprint
     {
         samples.Clear();
 
-        var left = MathF.Min(localBounds.Left, localBounds.Right);
-        var right = MathF.Max(localBounds.Left, localBounds.Right);
-        var bottom = MathF.Min(localBounds.Bottom, localBounds.Top);
-        var top = MathF.Max(localBounds.Bottom, localBounds.Top);
+        var left = localBounds.Left;
+        var right = localBounds.Right;
+        var bottom = localBounds.Bottom;
+        var top = localBounds.Top;
 
         var width = right - left;
         var height = top - bottom;

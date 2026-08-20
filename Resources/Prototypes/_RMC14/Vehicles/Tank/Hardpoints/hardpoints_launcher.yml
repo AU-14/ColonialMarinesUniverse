@@ -7,9 +7,9 @@
   - type: Sprite
     state: flamer
   - type: HardpointItem
-    hardpointType: Launcher
-    vehicleFamily: Tank
-    slotType: Launcher
+    hardpointType: HardpointTypeLauncher # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeLauncher # CMU14
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -63,7 +63,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -79,9 +82,9 @@
   - type: Sprite
     state: glauncher
   - type: HardpointItem
-    hardpointType: Launcher
-    vehicleFamily: Tank
-    slotType: Launcher
+    hardpointType: HardpointTypeLauncher # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeLauncher # CMU14
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -133,7 +136,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -149,9 +155,9 @@
   - type: Sprite
     state: tow_launcher
   - type: HardpointItem
-    hardpointType: Launcher
-    vehicleFamily: Tank
-    slotType: Launcher
+    hardpointType: HardpointTypeLauncher # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeLauncher # CMU14
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -160,10 +166,10 @@
   - type: VehicleTurret
     offsetRotatesWithTurret: true
     useDirectionalOffsets: true
-    pixelOffsetNorth: "0,-10"
-    pixelOffsetEast: "-10,0"
-    pixelOffsetSouth: "0,10"
-    pixelOffsetWest: "10,0"
+    pixelOffsetNorth: "0,0"
+    pixelOffsetEast: "0,0"
+    pixelOffsetSouth: "0,0"
+    pixelOffsetWest: "0,0"
     showOverlay: true
     overlayRsi: _RMC14/Structures/Vehicles/tank.rsi
     overlayState: towlauncher_0
@@ -199,7 +205,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -215,9 +224,9 @@
   - type: Sprite
     state: m56_cupola
   - type: HardpointItem
-    hardpointType: Launcher
-    vehicleFamily: Tank
-    slotType: Launcher
+    hardpointType: HardpointTypeLauncher # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeLauncher # CMU14
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -264,7 +273,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -280,9 +292,9 @@
   - type: Sprite
     state: re700_cupola
   - type: HardpointItem
-    hardpointType: Launcher
-    vehicleFamily: Tank
-    slotType: Launcher
+    hardpointType: HardpointTypeLauncher # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeLauncher # CMU14
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -327,7 +339,10 @@
     offset: "0,0"
     useDirectionalOffsets: true
     offsetEast: "0,0.2"
-    muzzleOffset: "0,-1"
+    offsetSouth: "-0.45,0.3"
+    offsetWest: "0.1,0.9"
+    offsetNorth: "0.45,0.2"
+    muzzleOffset: "0,-0.5"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -341,12 +356,12 @@
   description: Imperial implementation of a hull machine gun in a powered cupola. Compact with integrated liquid cooling, and armored hull proofed to small arms. However, its angle of horizontal traverse is limited to the front arc, and its vertical no more than 23 degrees. The mounted weapon is a heavy barreled variant of the regular 10x28mm pulse-action general purpose machine gun. It is built under license from Armat by Weyland Yutani.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/icons.rsi # CMU14: casing matches CMU texture root
     state: mounted_cupola
   - type: HardpointItem
-    hardpointType: Secondary
-    vehicleFamily: Tank
-    slotType: Launcher
+    hardpointType: HardpointTypeSecondary # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeLauncher # CMU14
     damageMultiplier: 0.0
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -360,14 +375,14 @@
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
     showOverlay: true
-    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: _CMU14/Structures/vehicles/fv150/exterior.rsi # CMU14: casing matches CMU texture root
     overlayState: mounted_cupola_0
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
   - type: Gun
     fireRate: 3.5
-    minAngle: 3
-    maxAngle: 3
+    minAngle: 2.3
+    maxAngle: 2.3
     selectedMode: FullAuto
     availableModes:
     - FullAuto

@@ -9,6 +9,10 @@
   - DropSurgicalGreenCMU14
   - DropSurgicalBlueCMU14
   - DropSurgicalBlackCMU14
+  - ToolWebbingFilledAU14
+  - WebbingDropPouchAU14
+  - WebbingBlackAU14
+  - WebbingBrownAU14
   # - AU14GOVFORIOHeadset # I dont see OPFOR loadouts so use AU14OPFORIOHeadset for OPFOR
 
 # Doctor

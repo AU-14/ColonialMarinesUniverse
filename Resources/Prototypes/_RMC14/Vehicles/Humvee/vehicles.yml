@@ -22,9 +22,9 @@
     cooldown: 15
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
   - type: VehicleSound
-    runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
-    runningSoundCooldown: 2
-    hornSound: /Audio/_RMC14/Vehicle/sound_vehicles_humvee_horn.ogg # This uses a unique horn
+    runningSound: /Audio/_RMC14/Vehicle/box_van_driving.ogg
+    runningSoundCooldown: 2.3
+    hornSound: /Audio/_RMC14/Vehicle/sound_vehicles_humvee_horn.ogg
     hornCooldown: 1
 #    collisionSound: /Audio/_RMC14/Structures/metalhit.ogg
     mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
@@ -299,8 +299,10 @@
           components:
           - HardpointItem
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameARC # ARC damage modifier
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 800
     bypassEntryOnZero: true

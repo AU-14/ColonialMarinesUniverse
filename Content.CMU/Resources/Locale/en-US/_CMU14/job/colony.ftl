@@ -257,4 +257,12 @@ au14-job-prefix-civilianiccliaison = ICCL
 
 cmu14-job-name-civilian-supervisor = Supervisor
 cmu14-job-description-civilian-supervisor = You are here to ensure maximum level of followed procedures.
-cmu14-job-prefix-civilian-supervisor = Sprvsr
+cmu14-job-prefix-civilian-supervisor = SPRVSR
+
+cmu14-job-name-lawyer = Lawyer
+cmu14-job-description-lawyer = You are a lawyer. Some claim you have no soul but you just like money and have superiority complex. What earns money best than making your clients happy?
+cmu14-job-prefix-lawyer = LAWR
+
+cmu14-job-name-ppo = PPO
+cmu14-job-description-ppo = Personal Protection Officer, you are here to protect the VIP.
+cmu14-job-prefix-ppo = PPO

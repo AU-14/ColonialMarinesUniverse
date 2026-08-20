@@ -200,6 +200,32 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
         {
             effect.Apply(this);
         }
+
+        if (loadoutProto.Cost != null && Points != null) // CMU14
+            Points -= loadoutProto.Cost;
+    }
+
+    /// <summary>
+    /// Recalculates the remaining points after the selected loadouts are changed.
+    /// </summary> CMU14 method
+    private void RecalculatePoints(IPrototypeManager protoManager)
+    {
+        if (!protoManager.TryIndex(Role, out var roleProto))
+        {
+            Points = null;
+            return;
+        }
+
+        Points = roleProto.Points;
+
+        foreach (var groupLoadouts in SelectedLoadouts.Values)
+        {
+            foreach (var loadout in groupLoadouts)
+            {
+                if (protoManager.TryIndex(loadout.Prototype, out var loadoutProto))
+                    Apply(loadoutProto);
+            }
+        }
     }
 
     /// <summary>
@@ -279,6 +305,15 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
             return false;
         }
 
+        if (loadoutProto.Cost != null && Points != null) // CMU14
+        {
+            if (Points < loadoutProto.Cost)
+            {
+                reason = FormattedMessage.FromUnformatted(Loc.GetString("loadout-group-points-insufficient"));
+                return false;
+            }
+        }
+
         var valid = true;
 
         foreach (var effect in loadoutProto.Effects)
@@ -326,6 +361,8 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
             Prototype = selectedLoadout,
         });
 
+        RecalculatePoints(protoManager); // CMU14
+
         return true;
     }
 
@@ -346,6 +383,7 @@ public sealed partial class RoleLoadout : IEquatable<RoleLoadout>
                 continue;
 
             groupLoadouts.RemoveAt(i);
+            RecalculatePoints(protoManager); // CMU14
             return true;
         }
 

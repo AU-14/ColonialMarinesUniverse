@@ -1,0 +1,71 @@
+# ├──[ Event Badges ]────────────────────────────────────────────────┤
+- type: entity
+  id: CMUIDCardAegis
+  name: AEGIS Access Badge
+  suffix: CMU
+  description: High-Level AEGIS Access Badge, granting access to many of their restricted areas and equipment. Required to unlock AEGIS crates.
+  components:
+  - type: WarpPoint
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/aegis.rsi
+    state: keycard
+    drawdepth: SmallObjects
+  - type: Item
+    size: Tiny
+  - type: Clothing
+    slots:
+      - idcard
+  - type: Clickable
+  - type: InteractionOutline
+  - type: Access
+    groups:
+      - CMAccessAegis
+  - type: AegisTrackable
+  - type: Corrodible
+    isCorrodible: false
+
+- type: entity
+  parent: CMUIDCardAegis
+  id: CMUIDCardAegisIntel
+  name: AEGIS Access Badge
+  suffix: CMU, Intel-Bonus
+  description: High-Level AEGIS Access Badge, granting access to many of their restricted areas and equipment. Required to unlock AEGIS crates. It has some blood on it.
+  components:
+  - type: IntelRescueSurvivorObjective # unused
+    value: 2
+  - type: Sprite
+    sprite: _RMC14/Objects/CMIDs/aegis.rsi
+    state: bloody
+
+# ├──[ Staff Badges ]────────────────────────────────────────────────┤
+- type: entity
+  abstract: true
+  parent: CMUIDCardAegis
+  id: CMUIDCardAegisStaff
+  name: AEGIS access badge
+  components:
+  - type: IdCard
+
+- type: entity
+  parent: CMUIDCardAegisStaff
+  id: CMUIDCardAegisResearcher
+  name: AEGIS researcher access badge
+  components:
+  - type: PresetIdCard
+    job: CMUJobAegisResearcher
+
+- type: entity
+  parent: CMUIDCardAegisStaff
+  id: CMUIDCardAegisLeadResearcher
+  name: AEGIS lead researcher access badge
+  components:
+  - type: PresetIdCard
+    job: CMUJobAegisLeadResearcher
+
+- type: entity
+  parent: CMUIDCardAegisStaff
+  id: CMUIDCardAegisObserver
+  name: AEGIS observer access badge
+  components:
+  - type: PresetIdCard
+    job: CMUJobAegisObserver

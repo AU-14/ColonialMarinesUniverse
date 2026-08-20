@@ -7,6 +7,7 @@ using Content.Server.AU14.Round;
 using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Damage;
 using Content.Shared.Database;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
@@ -34,6 +35,7 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private CMURoundDirectorSystem _roundDirector = default!;
+    [Dependency] private IComponentFactory _componentFactory = default!;
 
     private static readonly ResPath SaveFile = new("/au14_zborder_sync.txt");
 
@@ -89,6 +91,15 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
         _roundDirector.TryGetLegacyPlanetProjection(out var planet);
         var currentGameMap = planet?.MapId;
         var currentPlanet = _roundDirector.GetLegacyPlanetIdProjection();
+        // The RMC wall hierarchy puts ordinary, destructible walls beneath its historical "invincible" wall
+        // roots. Inheritance alone therefore cannot distinguish a real map boundary from a wall a player just
+        // built. Never mirror a damageable wall: doing so will duplicate player construction onto the levels above
+        // and below as those levels are visited.
+        if (_prototype.TryIndex<EntityPrototype>(protoId, out var prototype) &&
+            prototype.TryComp<DamageableComponent>(out _, _componentFactory))
+        {
+            return false;
+        }
 
         foreach (var (scope, lists) in _scopes)
         {
@@ -427,7 +438,13 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
                 continue;
 
             foreach (var id in descendants)
-                global.Whitelist.Add(id);
+            {
+                if (_prototype.TryIndex<EntityPrototype>(id, out var prototype) &&
+                    !prototype.TryComp<DamageableComponent>(out _, _componentFactory))
+                {
+                    global.Whitelist.Add(id);
+                }
+            }
         }
 
         Log.Info($"Seeded z-border sync whitelist with {global.Whitelist.Count} invincible border-wall prototypes.");

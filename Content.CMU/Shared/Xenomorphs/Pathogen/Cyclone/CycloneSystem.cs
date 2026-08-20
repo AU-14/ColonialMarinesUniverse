@@ -14,29 +14,33 @@ using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.Coordinates;
+using Content.Shared.Damage.Prototypes;
 
 namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Cyclone;
 
 public sealed partial class CMUXenoCycloneSystem : EntitySystem
 {
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly RMCCameraShakeSystem _cameraShake = default!;
-    [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RMCSizeStunSystem _size = default!;
-    [Dependency] private readonly SharedStunSystem _stun = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
-    [Dependency] private readonly XenoRotateSystem _rotate = default!;
+    private static readonly ProtoId<DamageTypePrototype> BluntType = "Blunt";
+
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private RMCSizeStunSystem _size = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private XenoSystem _xeno = default!;
+    [Dependency] private XenoRotateSystem _rotate = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _hits = new();
 
@@ -172,13 +176,8 @@ public sealed partial class CMUXenoCycloneSystem : EntitySystem
             if (!_net.IsServer)
                 continue;
 
-            _damageable.TryChangeDamage(target, new DamageSpecifier
-            {
-                DamageDict = new Dictionary<string, FixedPoint2>
-                {
-                    { "Blunt", damage }
-                }
-            }, origin: xeno);
+            _damageable.TryChangeDamage(target, new DamageSpecifier(
+                _protoMan.Index(BluntType), damage), origin: xeno);
 
             if (knockdown && (!_size.TryGetSize(target, out var size) || size < RMCSizes.Big))
                 _stun.TryParalyze(target, xeno.Comp.KnockdownTime, true);

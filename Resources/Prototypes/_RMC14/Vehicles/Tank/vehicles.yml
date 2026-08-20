@@ -33,9 +33,12 @@
     cooldown: 20
     overchargeSound: /Audio/_RMC14/Vehicle/overdrive_activate.ogg
   - type: VehicleSound
-    runningSound: /Audio/Effects/Vehicle/vehicleengineidle.ogg
-    runningSoundCooldown: 2
-    hornSound: /Audio/Effects/Vehicle/carhorn.ogg # todo rmc14 add unique tank horn
+    runningSound:
+      path: /Audio/_RMC14/Vehicle/tank_engine_loop.wav
+      params:
+        volume: -6
+    runningSoundCooldown: 3.38
+    hornSound: /Audio/_RMC14/Vehicle/honk_2_truck.ogg
     hornCooldown: 1
     mobCollisionSound: /Audio/_RMC14/Xeno/alien_claw_block.ogg
   - type: VehicleSpotlight
@@ -70,8 +73,10 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameTank # tank damage modifier
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
+    damageContainer: StructuralMarine
   - type: Sprite
     drawdepth: Mobs
     sprite: _RMC14/Structures/Vehicles/tank.rsi
@@ -205,6 +210,159 @@
       sprite: /Textures/_RMC14/Interface/map_blips_large.rsi
       state: tank
 
+# CMU14
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleTankPMC # CMU14 entity
+  name: M34A2 Longstreet 'Yutani'
+  description: A light tank used by the Yutani Corporation for security and military operations, often seen in colonial sectors where Yutani has a presence.
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Vehicles/wytank.rsi
+    layers:
+    - map: [ base ]
+      state: tank_base
+    - map: [ armor ]
+      state: ARMOR
+      visible: false
+    - map: [ primary ]
+      state: tank_turret_0
+    - map: [ secondary ]
+      state: SECONDARY
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      armor:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      primary:
+        startingItem: VehicleTankTurretPMC
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      secondary:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreads
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+
+# CMU14
+- type: entity
+  parent: VehicleTankBase
+  id: VehicleAev # CMU14 entity
+  name: M34E1 Armored Engineering Vehicle
+  description: An unarmed engineering vehicle built on the chassis of a Longstreet Tank, fitted with a reinforced plow, built for hauling personnel/cargo and clearing enemy defenses without interrupting the flow of combat.
+  components:
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _RMC14/Structures/Vehicles/tank.rsi
+    layers:
+    - map: [ base ]
+      state: aev_base
+    - map: [ armor ]
+      state: ARMOR
+      visible: false
+    - map: [ support ]
+      state: SUPPORT
+      visible: false
+    - map: [ rmc-wheels ]
+      state: wheels_1
+  - type: ItemSlots
+    slots:
+      armor:
+        startingItem: VehicleTankSnowplow
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      support:
+        startingItem: VehicleTankOverdriveEnhancer
+        disableEject: true
+        whitelist:
+          components:
+          - HardpointItem
+      wheel-1:
+        startingItem: VehicleTankTreads
+        disableEject: true
+        whitelist:
+          components:
+          - VehicleWheelItem
+  - type: HardpointSlots
+    vehicleFamily: HardpointVehicleFamilyTank
+    slots:
+    - id: armor
+      hardpointType: HardpointTypeArmor
+      slotType: HardpointSlotTypeArmor
+      visualLayer: armor
+      insertDelay: 2.5
+      required: false
+    - id: support
+      hardpointType: HardpointTypeSupport
+      slotType: HardpointSlotTypeSupportAttachment
+      visualLayer: support
+      insertDelay: 2.0
+      required: false
+    - id: wheel-1
+      hardpointType: HardpointTypeWheel
+      slotType: HardpointSlotTypeTreads
+      insertDelay: 2.0
+  - type: HardpointIntegrity
+    maxIntegrity: 1500
+    bypassEntryOnZero: true
+  - type: GridVehicleMover
+    maxSpeed: 1.8
+    acceleration: 0.9
+    deceleration: 9
+    maxReverseSpeed: 0.5
+    reverseAcceleration: 0.7
+    turnDelay: 1
+    turnInPlace: true
+    turnInPlaceMaxSpeed: 0.4
+    pushCooldown: 2
+    canPushVehicles: true
+    blockingMobBypassNudgeLimit: 2
+    xenoBlockMinimumSize: Immobile
+    canXenosPush: false
+    canSmashWalls: true
+    wallSmashMinSpeed: 0.1
+    wallSmashWheelDamage: 0.1
+    wallSmashHullDamage: 0.1
+    wallSmashSlowdownMultiplier: 0.1
+    wallSmashSlowdownDuration: 0.2
+    speedAtZeroIntegrity: 0.7
+  - type: VehicleEnter
+    interiorPath: /Maps/_CMU14/Vehicles/arv.yml
+    enterDoAfter: 1.0
+    exitDoAfter: 1.0
+    maxPassengers: 8
+    maxXenos: 0
+    entryPoints:
+    - offset: 0,2
+      radius: 1
+      interiorCoords: -1.3,-1
+  - type: RemoveComponents
+    components:
+    - type: VehicleWeapons
+
 ## SPP
 
 - type: entity
@@ -273,38 +431,38 @@
           components:
           - VehicleWheelItem
   - type: HardpointSlots
-    vehicleFamily: HardpointVehicleFamilyTank
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
     slots:
     - id: armor
-      hardpointType: HardpointTypeArmor
-      slotType: HardpointSlotTypeArmor
+      hardpointType: HardpointTypeArmor # CMU14
+      slotType: HardpointSlotTypeArmor # CMU14
       compatibilityId: HardpointCompatibilitySPPTank
       visualLayer: armor
       insertDelay: 2.5
       required: false
     - id: primary
-      hardpointType: HardpointTypeTurret
-      slotType: HardpointSlotTypeTurret
+      hardpointType: HardpointTypeTurret # CMU14
+      slotType: HardpointSlotTypeTurret # CMU14
       compatibilityId: HardpointCompatibilitySPPTank
       visualLayer: primary
       insertDelay: 3.0
       required: false
     - id: secondary
-      hardpointType: HardpointTypeSecondary
+      hardpointType: HardpointTypeSecondary # CMU14
       compatibilityId: HardpointCompatibilitySPPTank
       visualLayer: secondary
       insertDelay: 2.5
       required: false
     - id: support
-      hardpointType: HardpointTypeSupport
-      slotType: HardpointSlotTypeSupportAttachment
+      hardpointType: HardpointTypeSupport # CMU14
+      slotType: HardpointSlotTypeSupportAttachment # CMU14
       compatibilityId: HardpointCompatibilitySPPTank
       visualLayer: support
       insertDelay: 2.0
       required: false
     - id: wheel-1
-      hardpointType: HardpointTypeWheel
-      slotType: HardpointSlotTypeTreads
+      hardpointType: HardpointTypeWheel # CMU14
+      slotType: HardpointSlotTypeTreads # CMU14
       insertDelay: 2.0
 
 - type: entity
@@ -429,36 +587,32 @@
           components:
           - VehicleWheelItem
   - type: HardpointSlots
-    vehicleFamily: Tank
+    vehicleFamily: HardpointVehicleFamilyTank
     slots:
     - id: armor
-      hardpointType: Armor
-      slotType: Armor
-
+      hardpointType: HardpointTypeArmor
+      slotType: HardpointSlotTypeArmor
       visualLayer: armor
       insertDelay: 2.5
       required: false
     - id: primary
-      hardpointType: Turret
-      slotType: Turret
-
+      hardpointType: HardpointTypeTurret
+      slotType: HardpointSlotTypeTurret
       visualLayer: primary
       insertDelay: 3.0
       required: false
     - id: secondary
-      hardpointType: Secondary
-
+      hardpointType: HardpointTypeSecondary
       visualLayer: secondary
       insertDelay: 2.5
       required: false
     - id: support
-      hardpointType: Support
-      slotType: SupportAttachment
-
+      hardpointType: HardpointTypeSupport
+      slotType: HardpointSlotTypeSupportAttachment
       visualLayer: support
       insertDelay: 2.0
       required: false
     - id: wheel-1
-      hardpointType: Wheel
-      slotType: Treads
+      hardpointType: HardpointTypeWheel
+      slotType: HardpointSlotTypeTreads
       insertDelay: 2.0

@@ -1,8 +1,12 @@
-﻿using System.Numerics;
+using System.Numerics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using Content.Server.Administration.Logs;
 using Content.Server.Cargo.Components;
+
+using Content.Shared._CMU14.Requisitions;
 using Content.Server.Chat.Systems;
+using Content.Server.GameTicking;
 using Content.Server.Storage.EntitySystems;
 using Content.Shared._RMC14.ARES;
 using Content.Shared._RMC14.ARES.Logs;
@@ -56,6 +60,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
     [Dependency] private ARESCoreSystem _core = default!;
     [Dependency] private EntityStorageSystem _entityStorage = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private PhysicsSystem _physics = default!;
@@ -331,6 +336,43 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
             UpdateRailings(elevator, railingMode.Value);
 
         SendUIStateAll();
+    }
+
+    private void TryGiveRoundStartFreeCrate(Entity<RequisitionsElevatorComponent> elevator) // CMU14 method
+    {
+        var comp = elevator.Comp;
+        if (comp.RoundStartFreeCrateGiven)
+            return;
+
+        comp.RoundStartFreeCrateGiven = true;
+
+        var presetId = _gameTicker.CurrentPreset?.ID;
+        var granted = false;
+
+        foreach (var bonus in _prototype.EnumeratePrototypes<CMURequisitionsRoundStartFreeCratePrototype>())
+        {
+            if (!string.Equals(bonus.Faction, comp.Faction, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            if (bonus.Gamemodes.Count > 0 &&
+                (presetId == null || !bonus.Gamemodes.Any(g => string.Equals(g, presetId, StringComparison.OrdinalIgnoreCase))))
+            {
+                continue;
+            }
+
+            foreach (var crate in bonus.Crates)
+            {
+                comp.Orders.Add(new RequisitionsEntry { Crate = crate });
+                granted = true;
+            }
+
+            _core.CreateARESLog(elevator.Owner,
+                LogCat,
+                (string)$"Round start free crate '{bonus.ID}' granted to {comp.Faction}");
+        }
+
+        if (granted)
+            Dirty(elevator);
     }
 
     private void SpawnOrders(Entity<RequisitionsElevatorComponent> elevator)
@@ -620,6 +662,9 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                 _ => elevator.Mode,
             };
             SetMode(ent, mode, elevator.NextMode);
+
+            if (mode == Raised) // CMU14
+                TryGiveRoundStartFreeCrate(ent);
 
             SpawnOrders(ent);
 

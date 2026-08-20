@@ -17,6 +17,16 @@ public abstract partial class CMUSharedZLevelsSystem
     private readonly List<(Vector2 Center, float Distance)> _distanceOpeningCandidates = new();
     private readonly List<Entity<MapGridComponent>> _openingGridScratch = new();
     private readonly CMUZLevelOpeningCache _sharedOpeningCache = new();
+    private readonly HashSet<Vector2i> _zShotSupportingWallTiles = new();
+    private readonly Queue<Vector2i> _zShotSupportingWallQueue = new();
+
+    private static readonly Vector2i[] ZShotWallNeighbors =
+    {
+        new(1, 0),
+        new(-1, 0),
+        new(0, 1),
+        new(0, -1),
+    };
 
     public CMUZLevelOpeningCache OpeningCache => _sharedOpeningCache;
 
@@ -311,6 +321,13 @@ public abstract partial class CMUSharedZLevelsSystem
         var maxSourceDistanceSquared = maxSourceDistanceFromOpeningCenter * maxSourceDistanceFromOpeningCenter;
         var selectedOpening = Vector2.Zero;
 
+        CollectSupportingWallGroup(
+            targetMap,
+            offset,
+            from,
+            maxSourceDistanceFromOpeningCenter,
+            out var supportingWallGrid);
+
         bool TryUseOpeningTile(Vector2i tile)
         {
             if (_map.TryGetTileRef(openingMap, grid, tile, out var tileRef) &&
@@ -322,6 +339,16 @@ public abstract partial class CMUSharedZLevelsSystem
             var openingCenter = _map.ToCenterCoordinates(openingMap, tile, grid).Position;
             if (Vector2.DistanceSquared(from, openingCenter) > maxSourceDistanceSquared)
                 return false;
+
+            // A wall directly below the shooter is acting as the surface they are standing on. Keep the
+            // projectile on the upper level until it clears that connected wall-top footprint; otherwise the
+            // cross-z projectile is created on the lower map inside its own supporting wall and immediately hits
+            // it. Unconnected walls are deliberately not skipped and remain valid targets/obstructions.
+            if (supportingWallGrid is { } targetGrid &&
+                _zShotSupportingWallTiles.Contains(_map.WorldToTile(targetGrid.Owner, targetGrid.Comp, openingCenter)))
+            {
+                return false;
+            }
 
             if (preferOpeningAwayFromSource &&
                 tile == sourceTile)
@@ -390,6 +417,58 @@ public abstract partial class CMUSharedZLevelsSystem
         }
 
         return false;
+    }
+
+    /// <summary>
+    /// Collects the bounded cardinal wall group directly beneath a downward shooter. The bound matches the
+    /// opening search radius, preventing a shot from flood-filling an arbitrarily large mapped wall network.
+    /// </summary>
+    private void CollectSupportingWallGroup(
+        EntityUid targetMap,
+        int offset,
+        Vector2 source,
+        float searchRadius,
+        out Entity<MapGridComponent>? supportingWallGrid)
+    {
+        supportingWallGrid = null;
+        _zShotSupportingWallTiles.Clear();
+        _zShotSupportingWallQueue.Clear();
+
+        if (offset >= 0 ||
+            !float.IsFinite(searchRadius) ||
+            !_map.TryFindGridAt(targetMap, source, out var targetGridUid, out var targetGrid))
+        {
+            return;
+        }
+
+        var sourceTile = _map.WorldToTile(targetGridUid, targetGrid, source);
+        if (!HasWallAt(targetGridUid, targetGrid, sourceTile))
+            return;
+
+        supportingWallGrid = (targetGridUid, targetGrid);
+        var searchRadiusSquared = searchRadius * searchRadius;
+        _zShotSupportingWallTiles.Add(sourceTile);
+        _zShotSupportingWallQueue.Enqueue(sourceTile);
+
+        while (_zShotSupportingWallQueue.TryDequeue(out var tile))
+        {
+            foreach (var direction in ZShotWallNeighbors)
+            {
+                var neighbor = tile + direction;
+                if (_zShotSupportingWallTiles.Contains(neighbor))
+                    continue;
+
+                var center = _map.ToCenterCoordinates(targetGridUid, neighbor, targetGrid).Position;
+                if (Vector2.DistanceSquared(source, center) > searchRadiusSquared ||
+                    !HasWallAt(targetGridUid, targetGrid, neighbor))
+                {
+                    continue;
+                }
+
+                _zShotSupportingWallTiles.Add(neighbor);
+                _zShotSupportingWallQueue.Enqueue(neighbor);
+            }
+        }
     }
 }
 

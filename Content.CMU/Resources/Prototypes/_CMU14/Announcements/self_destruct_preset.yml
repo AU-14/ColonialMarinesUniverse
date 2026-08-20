@@ -1,0 +1,42 @@
+- type: announcementPreset
+  id: SelfDestructAnnouncement
+  name: "Emergency Destruct System"
+  description: "Clinical machine voice for the self-destruct countdown"
+  target: All
+  visibleInSettings: false
+  showSprite: false
+  style:
+    animation:
+      animation: Fade
+      printSpeed: 0.018
+      holdDuration: 9
+      flickerChance: 0.01
+      glitchChance: 0
+      animationEnhancements:
+        enableCRT: false
+    layout:
+      position: TopLeft
+      spritePosition: Left
+      spriteDisplayMode: FullSprite
+      uIScale: 2
+      titlePosition: Above
+    background:
+      showBackground: true
+      backgroundAlpha: 0.6
+      backgroundColor: "#1a0606"
+    text:
+      primaryColor: "#ff3838"
+      fontSize: 24
+      lineHeight: 46
+      showSpeakerName: false
+    sprite:
+      showSpriteBox: false
+      spriteScale: 1
+    title:
+      title: "EMERGENCY DESTRUCT SYSTEM"
+      titleColor: "#ff3838"
+      titleFontSize: 28
+      titleFont: "DefaultBold"
+  priority: 9
+  canInterrupt: true
+  canBeInterrupted: true

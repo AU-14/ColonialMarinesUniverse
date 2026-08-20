@@ -55,12 +55,13 @@
     graph: AU14BuildWallMetalGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallMetalRecipe
-  name: metal wall
-  description: A metal wall to separate rooms. Cheap, made from metal.
+  name: con-a-u14-build-wall-metal-recipe
+  description: con-a-u14-build-wall-metal-recipe-desc
   graph: AU14BuildWallMetalGraph
   startNode: start
   targetNode: built
@@ -109,12 +110,13 @@
     graph: AU14BuildWallWoodGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallWoodRecipe
-  name: wood wall
-  description: A wooden wall. The cheapest and weakest wall.
+  name: con-a-u14-build-wall-wood-recipe
+  description: con-a-u14-build-wall-wood-recipe-desc
   graph: AU14BuildWallWoodGraph
   startNode: start
   targetNode: built
@@ -183,12 +185,13 @@
     graph: AU14BuildWallReinforcedGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallReinforcedRecipe
-  name: reinforced wall
-  description: A reinforced wall built from plasteel and metal. Strong.
+  name: con-a-u14-build-wall-reinforced-recipe
+  description: con-a-u14-build-wall-reinforced-recipe-desc
   graph: AU14BuildWallReinforcedGraph
   startNode: start
   targetNode: built
@@ -240,7 +243,44 @@
         doAfter: 5
 
 - type: entity
+  abstract: true
   parent: CMWallReinforcedHeavy
+  id: AU14BuildWallHeavyBase
+  components:
+  - type: Damageable
+    damageModifierSet: CMU14StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
+  - type: ExaminableDamage
+    messages: RMCWallMessages
+  - type: RMCIntegrityExamine
+  - type: RMCRepairable
+    heal: 1000
+    delay: 1
+  - type: NailgunRepairable
+    wallRepairFractions:
+      RMCWood: 0.075
+      CMSteel: 0.15
+      CMPlasteel: 0.3
+  - type: RMCGenericExamine
+    message: rmc-structure-wall-repair-examine-tip
+    whitelist:
+      components:
+      - Marine
+  - type: ReceiverXenoClaws
+    maxHealth: 12000
+    minimumClawStrength: VerySharp
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 12000
+      behaviors:
+      - !type:DoActsBehavior
+        acts: [ "Destruction" ]
+
+- type: entity
+  parent: AU14BuildWallHeavyBase
   id: AU14BuildWallHeavyMid
   suffix: AU14 buildable (in progress)
   components:
@@ -249,7 +289,7 @@
     node: mid
 
 - type: entity
-  parent: CMWallReinforcedHeavy
+  parent: AU14BuildWallHeavyBase
   id: AU14BuildWallHeavy
   suffix: AU14 buildable
   components:
@@ -257,12 +297,13 @@
     graph: AU14BuildWallHeavyGraph
     node: built
   - type: StructuralSupport
-    cantileverSpan: 2
+    isVerticalSupport: true
+    cantileverSpan: 3
 
 - type: construction
   id: AU14BuildWallHeavyRecipe
-  name: heavy reinforced wall
-  description: An ultra-reinforced wall. The toughest wall, built from a lot of plasteel and metal.
+  name: con-a-u14-build-wall-heavy-recipe
+  description: con-a-u14-build-wall-heavy-recipe-desc
   graph: AU14BuildWallHeavyGraph
   startNode: start
   targetNode: built
@@ -320,7 +361,7 @@
 - type: construction
   id: AU14BuildTableRecipe
   name: table
-  description: A metal table to put things on.
+  description: con-a-u14-build-table-recipe-desc
   graph: AU14BuildTableGraph
   startNode: start
   targetNode: built
@@ -373,8 +414,8 @@
 
 - type: construction
   id: AU14BuildTableWoodRecipe
-  name: wooden table
-  description: A wooden table to put things on.
+  name: con-a-u14-build-table-wood-recipe
+  description: con-a-u14-build-table-wood-recipe-desc
   graph: AU14BuildTableWoodGraph
   startNode: start
   targetNode: built
@@ -447,8 +488,8 @@
 
 - type: construction
   id: AU14BuildTableReinforcedRecipe
-  name: reinforced table
-  description: A reinforced desk built from plasteel and metal.
+  name: con-a-u14-build-table-reinforced-recipe
+  description: con-a-u14-build-table-reinforced-recipe-desc
   graph: AU14BuildTableReinforcedGraph
   startNode: start
   targetNode: built
@@ -502,7 +543,7 @@
 - type: construction
   id: AU14BuildRackRecipe
   name: rack
-  description: A metal storage rack.
+  description: con-a-u14-build-rack-recipe-desc
   graph: AU14BuildRackGraph
   startNode: start
   targetNode: built
@@ -559,8 +600,8 @@
 
 - type: construction
   id: AU14BuildBarrelRedRecipe
-  name: red barrel
-  description: A red storage barrel.
+  name: con-a-u14-build-barrel-red-recipe
+  description: con-a-u14-build-barrel-red-recipe-desc
   graph: AU14BuildBarrelRedGraph
   startNode: start
   targetNode: built
@@ -613,8 +654,8 @@
 
 - type: construction
   id: AU14BuildBarrelBlueRecipe
-  name: blue barrel
-  description: A blue storage barrel.
+  name: con-a-u14-build-barrel-blue-recipe
+  description: con-a-u14-build-barrel-blue-recipe-desc
   graph: AU14BuildBarrelBlueGraph
   startNode: start
   targetNode: built
@@ -667,8 +708,8 @@
 
 - type: construction
   id: AU14BuildBarrelGreenRecipe
-  name: green barrel
-  description: A green storage barrel.
+  name: con-a-u14-build-barrel-green-recipe
+  description: con-a-u14-build-barrel-green-recipe-desc
   graph: AU14BuildBarrelGreenGraph
   startNode: start
   targetNode: built
@@ -721,8 +762,8 @@
 
 - type: construction
   id: AU14BuildBarrelYellowRecipe
-  name: yellow barrel
-  description: A yellow storage barrel.
+  name: con-a-u14-build-barrel-yellow-recipe
+  description: con-a-u14-build-barrel-yellow-recipe-desc
   graph: AU14BuildBarrelYellowGraph
   startNode: start
   targetNode: built
@@ -775,8 +816,8 @@
 
 - type: construction
   id: AU14BuildBarrelWhiteRecipe
-  name: white barrel
-  description: A white storage barrel.
+  name: con-a-u14-build-barrel-white-recipe
+  description: con-a-u14-build-barrel-white-recipe-desc
   graph: AU14BuildBarrelWhiteGraph
   startNode: start
   targetNode: built
@@ -829,8 +870,8 @@
 
 - type: construction
   id: AU14BuildPottedPlantRecipe
-  name: potted plant
-  description: A leafy potted plant. Decoration.
+  name: con-a-u14-build-potted-plant-recipe
+  description: con-a-u14-build-potted-plant-recipe-desc
   graph: AU14BuildPottedPlantGraph
   startNode: start
   targetNode: built
@@ -887,8 +928,8 @@
 
 - type: construction
   id: AU14BuildClosetRecipe
-  name: emergency closet
-  description: A metal storage closet.
+  name: con-a-u14-build-closet-recipe
+  description: con-a-u14-build-closet-recipe-desc
   graph: AU14BuildClosetGraph
   startNode: start
   targetNode: built

@@ -22,18 +22,17 @@ using Content.Shared.Examine;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Sporecaster;
 
-public sealed class CMUPathogenSporecasterSystem : EntitySystem
+public sealed partial class CMUPathogenSporecasterSystem : EntitySystem
 {
-    [Dependency] private readonly EntityLookupSystem _lookup = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly Content.Shared._CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private EntityLookupSystem _lookup = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private Content.Shared._CMU14.Medical.Injuries.Wounds.SharedCMUWoundsSystem _wounds = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _nearby = new();
 

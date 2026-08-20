@@ -23,25 +23,22 @@ using Content.Shared._RMC14.Actions;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Overmind;
 
-public sealed class CMUXenoOvermindSystem : EntitySystem
+public sealed partial class CMUXenoOvermindSystem : EntitySystem
 {
-    [Dependency] private readonly CMUXenoOvermindAppearanceSystem _appearance = default!;
-    [Dependency] private readonly FixtureSystem _fixtures = default!;
-    [Dependency] private readonly SharedPhysicsSystem _physics = default!;
-    [Dependency] private readonly SharedEyeSystem _eye = default!;
-    [Dependency] private readonly TagSystem _tag = default!;
-    [Dependency] private readonly SharedActionsSystem _actions = default!;
-    [Dependency] private readonly SharedMoverController _mover = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly SharedXenoWatchSystem _xenoWatch = default!;
-    [Dependency] private readonly QueenEyeSystem _queenEye = default!;
-    [Dependency] private readonly IEntityManager _entMan = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly Robust.Server.Player.IPlayerManager _player = default!;
-    [Dependency] private readonly XenoAnnounceSystem _xenoAnnounce = default!;
-    [Dependency] private readonly SharedRMCActionsSystem _rmcActions = default!;
+    [Dependency] private CMUXenoOvermindAppearanceSystem _appearance = default!;
+    [Dependency] private FixtureSystem _fixtures = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
+    [Dependency] private SharedEyeSystem _eye = default!;
+    [Dependency] private TagSystem _tag = default!;
+    [Dependency] private SharedActionsSystem _actions = default!;
+    [Dependency] private SharedMoverController _mover = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedXenoWatchSystem _xenoWatch = default!;
+    [Dependency] private QueenEyeSystem _queenEye = default!;
+    [Dependency] private XenoAnnounceSystem _xenoAnnounce = default!;
+    [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
 
     private static readonly ProtoId<TagPrototype> DoorBumpOpenerTag = "DoorBumpOpener";
     private static readonly EntProtoId EyeProto = "CMU14XenoOvermindEye";

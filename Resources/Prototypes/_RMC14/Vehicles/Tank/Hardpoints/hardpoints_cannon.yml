@@ -7,9 +7,9 @@
   - type: Sprite
     state: ltb_cannon
   - type: HardpointItem
-    hardpointType: Cannon
-    vehicleFamily: Tank
-    slotType: Cannon
+    hardpointType: HardpointTypeCannon # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeCannon # CMU14
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
@@ -70,9 +70,9 @@
   - type: Sprite
     state: ltaaap_minigun
   - type: HardpointItem
-    hardpointType: Cannon
-    vehicleFamily: Tank
-    slotType: Cannon
+    hardpointType: HardpointTypeCannon # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeCannon # CMU14
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
@@ -154,9 +154,9 @@
   - type: Sprite
     state: ace_autocannon
   - type: HardpointItem
-    hardpointType: Cannon
-    vehicleFamily: Tank
-    slotType: Cannon
+    hardpointType: HardpointTypeCannon # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeCannon # CMU14
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
@@ -224,9 +224,9 @@
     sprite: _CMU14/Structures/vehicles/fv150/icons.rsi
     state: heavy_autocannon
   - type: HardpointItem
-    hardpointType: Cannon
-    vehicleFamily: Tank
-    slotType: Cannon
+    hardpointType: HardpointTypeCannon # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeCannon # CMU14
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
@@ -273,10 +273,10 @@
     applyToMuzzleFlash: true
     useDirectionalOffsets: true
     rotateDirectionalOffsets: true
-    offsetEast: "0.45,-0.7"
-    offsetWest: "-0.45, -0.7"
-    offsetSouth: "0, -0.55"
-    offsetNorth: "0, -1.1"
+    offsetEast: "0.45,-1.2"
+    offsetWest: "-0.5,-1.2"
+    offsetSouth: "0,-1.0"
+    offsetNorth: "0, -1.4"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -289,12 +289,12 @@
   description: An experimental prototype made by Tosubishi Heavy Industrial Manufacturing. An arcing electroshock laser assisted cannon, currently going through field testing. Theoretically it has limitless firing potential, as long as it is powered.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/icons.rsi # CMU14: casing matches CMU texture root
     state: heavy_electrolaser
   - type: HardpointItem
-    hardpointType: Cannon
-    vehicleFamily: Tank
-    slotType: Cannon
+    hardpointType: HardpointTypeCannon # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeCannon # CMU14
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity
@@ -308,7 +308,7 @@
     pixelOffsetEast: "0,0"
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
-    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: _CMU14/Structures/vehicles/fv150/exterior.rsi # CMU14: casing matches CMU texture root
     overlayState: heavy_electrolaser_0
   - type: GunUseGunOrigin
   - type: GunIgnoreContainerOwnerCollision
@@ -339,10 +339,10 @@
     applyToMuzzleFlash: true
     useDirectionalOffsets: true
     rotateDirectionalOffsets: true
-    offsetEast: "0.45,-0.7"
-    offsetWest: "-0.45, -0.7"
-    offsetSouth: "0, -0.55"
-    offsetNorth: "0, -1.1"
+    offsetEast: "0.45,-1.35"
+    offsetWest: "-0.5,-1.35"
+    offsetSouth: "0,-1.1"
+    offsetNorth: "0, -1.4"
     useAimDirection: true
     useContainerOwner: false
   - type: HardpointVisual
@@ -358,9 +358,9 @@
   - type: Sprite
     state: drgn_flamer
   - type: HardpointItem
-    hardpointType: Cannon
-    vehicleFamily: Tank
-    slotType: Cannon
+    hardpointType: HardpointTypeCannon # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeCannon # CMU14
     damageMultiplier: 0.125
     repairRate: 0.01
   - type: HardpointIntegrity

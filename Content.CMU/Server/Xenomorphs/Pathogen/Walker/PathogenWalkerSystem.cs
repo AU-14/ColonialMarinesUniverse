@@ -1,4 +1,5 @@
 using Content.Server.NPC.Systems;
+using Content.Shared.Radio;
 using Content.Shared._CMU14.Xenomorphs.Pathogen.MycotoxinInject;
 using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -8,6 +9,7 @@ using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
+using Content.Shared.StatusEffectNew;
 using Content.Shared.Popups;
 using Content.Shared.Rejuvenate;
 using Robust.Shared.Network;
@@ -20,9 +22,8 @@ using Content.Shared.Inventory;
 using Content.Shared.Jittering;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Systems;
-using Content.Shared.StatusEffectNew;
 using Content.Server._RMC14.Language.Systems;
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Server.Ghost.Roles.Components;
 using Robust.Shared.Player;
 using Content.Server.Mind;
@@ -44,24 +45,21 @@ namespace Content.Server._CMU14.Xenomorphs.Pathogen.Walker;
 
 public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly NpcFactionSystem _faction = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly DamageableSystem _damageable = default!;
-    [Dependency] private readonly IPrototypeManager _protoMgr = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
-    [Dependency] private readonly LanguageSystem _language = default!;
-    [Dependency] private readonly ISharedPlayerManager _player = default!;
-    [Dependency] private readonly MindSystem _mind = default!;
-    [Dependency] private readonly MetaDataSystem _metaData = default!;
-    [Dependency] private readonly BlindableSystem _blindable = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private NpcFactionSystem _faction = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
+    [Dependency] private IPrototypeManager _protoMgr = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private SharedJitteringSystem _jitter = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
+    [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private ISharedPlayerManager _player = default!;
+    [Dependency] private MindSystem _mind = default!;
+    [Dependency] private BlindableSystem _blindable = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -121,9 +119,9 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         EnsureComp<IntrinsicRadioReceiverComponent>(target);
         var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(target);
-        transmitter.Channels = new HashSet<string>() { "Hivemind" };
+        transmitter.Channels = [new ProtoId<RadioChannelPrototype>("Hivemind")];
         var radio = EnsureComp<ActiveRadioComponent>(target);
-        radio.Channels = new HashSet<string>() { "Hivemind" };
+        radio.Channels = [new ProtoId<RadioChannelPrototype>("Hivemind")];
         var tacIcon = EnsureComp<TacticalMapIconComponent>(target);
 
         EnsureComp<PullWhitelistComponent>(target);

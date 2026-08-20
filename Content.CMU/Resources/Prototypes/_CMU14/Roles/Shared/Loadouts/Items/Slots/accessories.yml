@@ -22,3 +22,18 @@
   id: DropSurgicalBlackCMU14
   inhand:
   - CMU14DropSurgicalBlack
+
+- type: loadout
+  id: ToolWebbingFilledAU14
+  inhand:
+  - RMCToolWebbingFilled
+
+- type: loadout
+  id: WebbingBlackAU14
+  inhand:
+  - CMWebbingBlack
+
+- type: loadout
+  id: WebbingBrownAU14
+  inhand:
+  - CMWebbingBrown

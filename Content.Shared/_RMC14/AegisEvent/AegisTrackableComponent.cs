@@ -6,6 +6,4 @@ namespace Content.Shared._RMC14.AegisEvent;
 /// Component that marks an entity as trackable by AEGIS pinpointers.
 /// </summary>
 [RegisterComponent, NetworkedComponent]
-public sealed partial class AegisTrackableComponent : Component
-{
-}
+public sealed partial class AegisTrackableComponent : Component;

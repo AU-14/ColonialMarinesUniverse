@@ -1,4 +1,4 @@
-<Control xmlns="https://spacestation14.io" xmlns:system="clr-namespace:System;assembly=System.Runtime">
+<Control xmlns="https://spacestation14.io">
     <BoxContainer Name="MainContainer"
                   Orientation="Horizontal"
                   SetWidth="250">

@@ -31,10 +31,8 @@ public sealed partial class StructuralSupportComponent : Component
     public bool IsAnchor;
 
     /// <summary>
-    /// If true this acts as a vertical support (a beam/column): when the graph reaches it, it relays its
-    /// FULL <see cref="CantileverSpan"/> onward instead of decrementing the incoming budget. This lets a
-    /// chain of beams extend buildable reach, and is what an upper-z floor will eventually "reflect" off of.
-    /// Anchors implicitly behave as vertical supports.
+    /// If true this acts as a vertical support (a beam/column). Its <see cref="CantileverSpan"/> is projected
+    /// onto the level above only; it does not provide or relay horizontal support on its own level.
     /// </summary>
     [DataField, AutoNetworkedField]
     public bool IsVerticalSupport;

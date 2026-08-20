@@ -23,6 +23,7 @@
         collection:
           MetalLaserImpact
   - type: Wall
+  - type: ZLevelWallSupport
   - type: IsRoof
   - type: Sprite
     drawdepth: Walls

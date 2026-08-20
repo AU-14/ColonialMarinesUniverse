@@ -109,9 +109,9 @@
     sprite: _CMU14/Structures/vehicles/fv150/icons.rsi
     state: slauncher_0
   - type: HardpointItem
-    hardpointType: Support
-    vehicleFamily: Tank
-    slotType: SupportAttachment
+    hardpointType: HardpointTypeSupport # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeSupportAttachment # CMU14
     damageMultiplier: 0.075
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -243,7 +243,7 @@
   - type: HardpointVisual
     vehicleState: artillerymod_0
     damagedVehicleState: artillerymod_1
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankSnowplow
@@ -253,9 +253,9 @@
   - type: Sprite
     state: snowplow
   - type: HardpointItem
-    hardpointType: Support
-    vehicleFamily: Tank
-    slotType: RoofAttachment
+    hardpointType: HardpointTypeSupport # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeSupportAttachment # CMU14
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
@@ -266,7 +266,7 @@
   - type: Tag
     tags:
     - VehiclePlow
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: VehicleTankMountedFlag
@@ -276,12 +276,12 @@
   - type: Sprite
     state: mounted_flag
   - type: HardpointItem
-    hardpointType: Support
-    vehicleFamily: Tank
-    slotType: SupportAttachment
+    hardpointType: HardpointTypeSupport # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeSupportAttachment # CMU14
     damageMultiplier: 0.0
     repairRate: 0.0125
-  - type: DropshipTarget 
+  - type: DropshipTarget
     abbreviation: TANK
   - type: HardpointIntegrity
     maxIntegrity: 350
@@ -299,7 +299,7 @@
   - type: HardpointVisual
     vehicleState: mountedflag_0
     damagedVehicleState: mountedflag_2
-    
+
 - type: entity
   parent: VehicleTankHardpointBase
   id: TWEVehicleTankArtilleryModule
@@ -307,12 +307,12 @@
   description: An artillery support module for a tank.
   components:
   - type: Sprite
-    sprite: _CMU14/Structures/Vehicles/fv150/icons.rsi
+    sprite: _CMU14/Structures/vehicles/fv150/icons.rsi # CMU14: casing matches CMU texture root
     state: tweartillery
   - type: HardpointItem
-    hardpointType: Support
-    vehicleFamily: Tank
-    slotType: SupportAttachment
+    hardpointType: HardpointTypeSupport # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeSupportAttachment # CMU14
     damageMultiplier: 0.075
     repairRate: 0.0125
   - type: HardpointIntegrity
@@ -324,11 +324,11 @@
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
     showOverlay: true
-    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: _CMU14/Structures/vehicles/fv150/exterior.rsi # CMU14: casing matches CMU texture root
     overlayState: tweartillerymod_0
   - type: VehicleGunnerViewAttachment
-    pvsScale: 0.35
-    cursorMaxOffset: 5
+    pvsScale: 0.5
+    cursorMaxOffset: 2.8
     cursorPvsIncrease: 0.5
   - type: HardpointVisual
     vehicleState: tweartillerymod_0
@@ -343,13 +343,15 @@
   - type: Sprite
     state: snowplow
   - type: HardpointItem
-    hardpointType: Support
-    vehicleFamily: Tank
-    slotType: SupportAttachment
+    hardpointType: HardpointTypeSupport # CMU14
+    vehicleFamily: HardpointVehicleFamilyTank # CMU14
+    slotType: HardpointSlotTypeSupportAttachment # CMU14
     damageMultiplier: 0.5
     repairRate: 0.007
   - type: HardpointIntegrity
     maxIntegrity: 250
+  - type: VehicleSpeedModifierAttachment
+    speedMultiplier: 0.7
   - type: VehicleTurret
     useDirectionalOffsets: false
     pixelOffsetNorth: "0,0"
@@ -357,7 +359,7 @@
     pixelOffsetSouth: "0,0"
     pixelOffsetWest: "0,0"
     showOverlay: true
-    overlayRsi: _CMU14/Structures/Vehicles/fv150/exterior.rsi
+    overlayRsi: _CMU14/Structures/vehicles/fv150/exterior.rsi # CMU14: casing matches CMU texture root
     overlayState: twesnowplow_0
   - type: HardpointVisual
     vehicleState: twesnowplow_0

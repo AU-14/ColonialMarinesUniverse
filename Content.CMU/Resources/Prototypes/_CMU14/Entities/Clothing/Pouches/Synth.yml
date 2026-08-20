@@ -51,7 +51,6 @@
   - type: StorageFill
     contents:
     - id: CMFlash
-    - id: AU14TeleBaton
     - id: RMCHandcuffs
     - id: RMCHandcuffs
     - id: RMCHandcuffs

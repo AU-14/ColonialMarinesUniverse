@@ -414,6 +414,7 @@ ui-options-screen-shake-intensity = Screen shake intensity
 ui-options-explosion-screen-shake-enabled = Screen shake from nearby explosions
 ui-options-explosion-screen-shake-ignore-far = Ignore explosions more than 25 tiles away
 ui-options-firearm-screen-shake-enabled = Screen shake from firing weapons
+ui-options-mute-scripted-sounds = Mute scripted sounds from events
 
 ui-options-chat-window-opacity = Chat window opacity
 ui-options-speech-bubble-text-opacity = Speech bubble text opacity

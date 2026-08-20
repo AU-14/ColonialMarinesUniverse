@@ -1,0 +1,5 @@
+- type: loadout
+  id: CMUDefibrillatorCompactSynthLoadout
+  cost: 15
+  inhand:
+  - CMUDefibrillatorCompactSynth

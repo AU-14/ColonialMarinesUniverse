@@ -24,7 +24,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/NoteSlip.png"
     backgroundModulate: "#eaedde"
     maxWritableArea: 300, 300
-    contentMargin: 20, 30, 60, 40
+    contentMargin: 20, 40, 60, 30
 
 - type: entity
   parent: CMPaper
@@ -87,7 +87,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/MedicalSlip.png" #"/Textures/Interface/CMUPaper/MedicalSlip.png"
     backgroundModulate: "#dbbce3"
     maxWritableArea: 300, 300
-    contentMargin: 20, 10, 10, 25
+    contentMargin: 20, 25, 10, 10
 
 - type: entity
   id: CMUPaperSlipMedicationGreen
@@ -170,7 +170,7 @@
   - type: PaperVisuals
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/photo_bkg.png"
     maxWritableArea: 650, 680
-    contentMargin: -20, 40, -25, 25
+    contentMargin: -20, 25, -25, 40
     backgroundPatchMargin: 0, 0, 0, 0
     backgroundScale: 1.0, 1.0
 
@@ -193,7 +193,7 @@
   - type: PaperVisuals
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/parking_ticket_bkg.png"
     maxWritableArea: 600, 400
-    contentMargin: 10, 10, 10, 90
+    contentMargin: 10, 90, 10, 10
     backgroundPatchMargin: 0, 0, 0, 0
     backgroundScale: 1.0, 1.0
   - type: Paper
@@ -273,7 +273,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/ICSCFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 # USCM
 - type: entity
@@ -299,7 +299,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/USCMFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 # UA
 - type: entity
@@ -325,7 +325,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/UAFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 # UPP
 - type: entity
@@ -351,7 +351,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 - type: entity
   parent: CMPaper
@@ -376,7 +376,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/UPPFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 # HYPERDYNE
 - type: entity
@@ -403,7 +403,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 - type: entity
   parent: CMPaper
@@ -429,7 +429,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/HYPERDYNEFooter_alt.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 # WEYLAND
 - type: entity
@@ -456,7 +456,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDBlackFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 - type: entity
   parent: CMUPaperBlackWEYLAND
@@ -470,7 +470,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 - type: entity
   parent: CMUPaperBlackWEYLAND
@@ -484,7 +484,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDInvertedFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 - type: entity
   parent: CMUPaperBlackWEYLAND
@@ -498,7 +498,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDResearchFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 - type: entity
   parent: CMUPaperBlackWEYLAND
@@ -512,7 +512,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/WEYLANDPMCFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 #TWE
 - type: entity
@@ -538,7 +538,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/TWEFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 
 #TYRELL [NOT INGAME YET]
@@ -554,7 +554,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 - type: entity
   parent: CMPaper
@@ -568,7 +568,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/TYRELLCORPFooter_alt.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 #SEEGSON
 - type: entity
@@ -594,7 +594,21 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/SEEGSONFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
+
+#AEGIS
+- type: entity
+  parent: CMPaper
+  id: CMUPaperAEGIS
+  name: AEGIS paper
+  description: A sheet of paper bearing the AEGIS Armaments letterhead.
+  components:
+  - type: PaperVisuals
+    headerImagePath: "/Textures/_CMU14/Interface/Paper/AEGISHeader.png"
+    backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    footerImagePath: "/Textures/_CMU14/Interface/Paper/AEGISFooter.png"
+    footerMargin: 0, 40, 0, 0
 
 #LASELLE BIONATIONAL
 - type: entity
@@ -668,7 +682,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/CMBFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 #VAI // Logo is me opening the CM13 page of their seeing mentions of USCM then just making it similar to it + PMCs as troy suggested MAKE A NEW ONE THATS GOOD
 - type: entity
@@ -694,7 +708,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/VANGUARDARROWFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 #CCAF // Logo is from a ingame patch. It's ass
 - type: entity
@@ -720,7 +734,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
     footerImagePath: "/Textures/_CMU14/Interface/Paper/CCAFFooter.png"
-    footerMargin: 0, 0, 0, 40
+    footerMargin: 0, 40, 0, 0
 
 #CLF / Insurgent factions.
 - type: entity

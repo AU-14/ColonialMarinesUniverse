@@ -21,6 +21,8 @@
   - type: InteractionOutline
   - type: Repairable
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: PointLight
     enabled: true
@@ -29,7 +31,7 @@
     energy: 2
     offset: "0, 0"
     color: "#ECFFFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
   - type: Destructible
     thresholds:
     - trigger:
@@ -104,6 +106,8 @@
     node: completed
   - type: InteractionOutline
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: PointLight
     enabled: true
@@ -111,7 +115,7 @@
     netsync: false
     offset: "0,0.5"
     color: "#ECFFFF"
-    mask: /Textures/_RMC14/Effects/LightMasks/quad_cone.png
+    lightMask: ConeQuad
   - type: Destructible
     thresholds:
     - trigger:
@@ -439,6 +443,8 @@
     node: completed
   - type: InteractionOutline
   - type: Damageable
+#   damageContainer: Inorganic # CMU14
+  - type: Injurable # CMU14
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
