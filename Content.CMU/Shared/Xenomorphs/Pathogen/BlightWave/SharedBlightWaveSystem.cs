@@ -13,17 +13,17 @@ namespace Content.Shared._CMU14.Xenomorphs.Pathogen.BlightWave;
 
 public abstract partial class SharedBlightWaveSystem : EntitySystem
 {
-    [Dependency] protected readonly EntityLookupSystem _lookup = default!;
-    [Dependency] protected readonly IGameTiming _timing = default!;
-    [Dependency] protected readonly INetManager _net = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedAudioSystem _audio = default!;
-    [Dependency] private readonly SharedDeafnessSystem _deaf = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly RMCSlowSystem _slow = default!;
-    [Dependency] protected readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] protected EntityLookupSystem _lookup = default!;
+    [Dependency] protected IGameTiming _timing = default!;
+    [Dependency] protected INetManager _net = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private SharedDeafnessSystem _deaf = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
+    [Dependency] protected SharedTransformSystem _transform = default!;
+    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private XenoSystem _xeno = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 

@@ -4,11 +4,11 @@ using Robust.Shared.Timing;
 
 namespace Content.Shared._CMU14.Xenomorphs.Larva;
 
-public sealed class BloodyLarvaSystem : EntitySystem
+public sealed partial class BloodyLarvaSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly SharedAppearanceSystem _appearance = default!;
-    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private INetManager _net = default!;
 
     public void SetBloody(EntityUid larva)
     {

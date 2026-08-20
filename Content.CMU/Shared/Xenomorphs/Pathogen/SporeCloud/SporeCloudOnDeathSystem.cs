@@ -5,7 +5,7 @@ namespace Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
 
 public sealed partial class CMUSporeCloudOnDeathSystem : EntitySystem
 {
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
 
     public override void Initialize()
     {

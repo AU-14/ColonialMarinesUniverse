@@ -19,20 +19,20 @@ using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
 
 namespace Content.Shared._CMU14.Xenomorphs.Pathogen.Mycotoxin;
 
-public abstract class SharedMycotoxinSystem : EntitySystem
+public abstract partial class SharedMycotoxinSystem : EntitySystem
 {
-    [Dependency] private readonly IGameTiming _timing = default!;
-    [Dependency] private readonly INetManager _net = default!;
-    [Dependency] private readonly IRobustRandom _random = default!;
-    [Dependency] private readonly InventorySystem _inventory = default!;
-    [Dependency] private readonly MobStateSystem _mobState = default!;
-    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
-    [Dependency] private readonly SharedXenoParasiteSystem _parasite = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
-    [Dependency] private readonly SharedBodySystem _body = default!;
-    [Dependency] private readonly SharedCMUWoundsSystem _wounds = default!;
-    [Dependency] private readonly SharedGasMaskSystem _gasMask = default!;
-    [Dependency] private readonly ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private INetManager _net = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private InventorySystem _inventory = default!;
+    [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private SharedXenoHiveSystem _hive = default!;
+    [Dependency] private SharedXenoParasiteSystem _parasite = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private SharedCMUWoundsSystem _wounds = default!;
+    [Dependency] private SharedGasMaskSystem _gasMask = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
 
     private enum ProtectionResult { None, Partial, FilterFull, FilterPartial }
 
