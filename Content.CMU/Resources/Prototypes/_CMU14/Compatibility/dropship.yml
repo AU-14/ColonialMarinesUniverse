@@ -75,7 +75,6 @@
     faction: govfor
     ShuttleType: Dropship
   - type: TacticalMapComputer
-    faction: govfor
   - type: RequiresSkill
     skills:
       RMCSkillPilot: 1

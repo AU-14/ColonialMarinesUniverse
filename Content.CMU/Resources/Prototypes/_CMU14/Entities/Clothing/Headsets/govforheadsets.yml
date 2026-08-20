@@ -14,7 +14,6 @@
   - type: EncryptionKey
     channels:
     - radioGovforBravo
-    defaultChannel: radioGovforBravo
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -25,7 +24,6 @@
   - type: EncryptionKey
     channels:
     - radioGovforCharlie
-    defaultChannel: radioGovforCharlie
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -42,7 +40,6 @@
     - radioGovforIntel
     - radioGovforJTAC
     - radioGovforMILP
-    defaultChannel: radioGovforCommand
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -53,7 +50,6 @@
   - type: EncryptionKey
     channels:
     - radioGovforCommand
-    defaultChannel: radioGovforCommand
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -64,7 +60,6 @@
   - type: EncryptionKey
     channels:
     - radioGovforIntel
-    defaultChannel: radioGovforIntel
 
 - type: entity
   parent: AU14EncryptionKeyGovfor
@@ -128,7 +123,6 @@
       - AU14EncryptionKeyGovforMILP
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
-    defaultChannel: radioGovforCommand
 
 - type: entity
   parent: AU14HeadsetGovforMarine
@@ -168,7 +162,6 @@
       - AU14EncryptionKeyGovforIntel
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
-    defaultChannel: radioGovforCommand
 
 - type: entity
   parent: AU14HeadsetGovforMarine
@@ -185,7 +178,6 @@
       - AU14EncryptionKeyGovforMILP
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
-    defaultChannel: radioGovforCommand
 
 - type: entity
   parent: RMCBaseUniformAccessory

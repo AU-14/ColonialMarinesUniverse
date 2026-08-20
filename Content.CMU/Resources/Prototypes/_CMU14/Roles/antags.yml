@@ -109,10 +109,7 @@
   components:
   - type: RunawaySynth
   - type: Synth
-    changeBrain: false
     canUseGuns: true
-    hideGeneration: true
-    useHumanHealthIcons: true
   - type: Skills
     skills:
       RMCSkillCqc: 4
@@ -162,7 +159,6 @@
   id: RunawaySynthRole
   name: roles-antag-runaway-synth-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-synth-objective
   isCM: true
@@ -355,7 +351,6 @@
   id: FugitiveRole
   name: roles-antag-fugitive-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-fugitive-objective
   isCM: true
@@ -364,7 +359,6 @@
   id: ExpedTrailerRole
   name: roles-antag-exped-traitor-name
   antagonist: true
-  category: roles-antag-category-prometheus
   setPreference: false
   objective: roles-antag-exped-traitor-objective
   isCM: true
@@ -373,7 +367,6 @@
   id: MonsterRole
   name: monster-traitor-name
   antagonist: true
-  category: roles-antag-category-prometheus
   setPreference: false
   objective: monster-traitor-objective
   isCM: true
@@ -421,7 +414,6 @@
   id: DrugDealerRole
   name: roles-antag-dealer-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-dealer-objective
   isCM: true
@@ -492,7 +484,6 @@
   id: CorporateSpyRole
   name: roles-antag-spy-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-spy-objective
   isCM: True
@@ -564,7 +555,6 @@
   id: CLFVeteranRole
   name: roles-antag-clfveteran-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-clfveteran-objective
   isCM: true
@@ -617,7 +607,6 @@
   id: StrikeOrganizerRole
   name: roles-antag-strikeorganizer-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-strikeorganizer-objective
   isCM: true
@@ -683,7 +672,6 @@
   id: CannibalRole
   name: roles-antag-cannibal-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-cannibal-objective
   isCM: true
@@ -730,7 +718,6 @@
   id: SerialKillerRole
   name: roles-antag-serialkiller-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-serialkiller-objective
   isCM: true
@@ -782,7 +769,6 @@
   id: CLFSleeperAgentRole
   name: roles-antag-clf-sleeper-agent-name
   antagonist: true
-  category: roles-antag-category-colony
   setPreference: true
   objective: roles-antag-clf-sleeper-agent-objective
   isCM: true

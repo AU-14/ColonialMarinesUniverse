@@ -14,7 +14,6 @@
   - type: EncryptionKey
     channels:
     - radioOpforBravo
-    defaultChannel: radioOpforBravo
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -25,7 +24,6 @@
   - type: EncryptionKey
     channels:
     - radioOpforCharlie
-    defaultChannel: radioOpforCharlie
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -42,7 +40,6 @@
     - radioOpforIntel
     - radioOpforJTAC
     - radioOpforMILP
-    defaultChannel: radioOpforCommand
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -53,7 +50,6 @@
   - type: EncryptionKey
     channels:
     - radioOpforCommand
-    defaultChannel: radioOpforCommand
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -64,7 +60,6 @@
   - type: EncryptionKey
     channels:
     - radioOpforIntel
-    defaultChannel: radioOpforIntel
 
 - type: entity
   parent: AU14EncryptionKeyOpfor
@@ -127,7 +122,6 @@
       - AU14EncryptionKeyOpforMILP
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
-    defaultChannel: radioOpforCommand
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -167,7 +161,6 @@
       - AU14EncryptionKeyOpforIntel
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
-    defaultChannel: radioOpforCommand
 
 - type: entity
   parent: AU14HeadsetOpforMarine
@@ -184,7 +177,6 @@
       - AU14EncryptionKeyOpforMILP
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
-    defaultChannel: radioOpforCommand
 
 - type: entity
   parent: RMCBaseUniformAccessory

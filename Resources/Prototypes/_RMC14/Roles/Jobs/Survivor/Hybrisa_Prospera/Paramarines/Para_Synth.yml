@@ -62,8 +62,7 @@
             types:
               Blunt: 35
         - type: Synth
-          generation: rmc-species-synth-generation-second
-  useLoadoutOfJob: RMCJobSyntheticColony # for inheritance
+  useLoadoutOfJob: RMCSyntheticColony # for inheritance # CMU14: job renamed in tree, repointed
   hidden: true
 
 - type: startingGear

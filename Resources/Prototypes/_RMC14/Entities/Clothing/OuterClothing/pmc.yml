@@ -251,8 +251,8 @@
     explosionArmor: 20 # CLOTHING_ARMOR_MEDIUM
     # TODO 20 internal damage protection
   - type: TemperatureProtection
-    heatingCoefficient: 0.001
-    coolingCoefficient: 0.3
+    coefficient: 0.001
+    # coolingCoefficient: 0.3 # CMU14
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
 

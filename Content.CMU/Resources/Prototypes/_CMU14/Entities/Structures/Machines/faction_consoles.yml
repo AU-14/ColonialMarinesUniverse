@@ -66,7 +66,6 @@
   suffix: Govfor
   components:
   - type: TacticalMapComputer
-    faction: govfor
 
 - type: entity
   parent: RMCTacticalMapTableLarge
@@ -74,4 +73,3 @@
   suffix: Govfor, Large
   components:
   - type: TacticalMapComputer
-    faction: govfor

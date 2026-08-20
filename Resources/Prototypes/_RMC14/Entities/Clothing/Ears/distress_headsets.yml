@@ -245,7 +245,6 @@
     - MarineSOF
   - type: RMCStaticDefaultChannel
   - type: EncryptionKeyHolder
-    defaultChannel: MarineSOF
   - type: GrantSquadLeaderTracker
     defaultMode: SquadLeader
     trackerModes:

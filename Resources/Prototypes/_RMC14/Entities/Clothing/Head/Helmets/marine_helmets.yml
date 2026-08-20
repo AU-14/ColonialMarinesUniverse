@@ -435,7 +435,7 @@
       Classic: _RMC14/Objects/Clothing/Head/Helmets/m35/classic.rsi
       Urban: _RMC14/Objects/Clothing/Head/Helmets/m35/urban.rsi
   - type: TemperatureProtection
-    heatingCoefficient: 0.001
+    coefficient: 0.001
   - type: FoldableClothing
     foldedHideLayers:
     - Hair

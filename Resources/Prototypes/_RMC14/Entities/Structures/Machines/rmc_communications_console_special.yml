@@ -46,7 +46,6 @@
     canOrbitalBombardment: false
     group: WeYa
   - type: TacticalMapComputer
-    faction: MARINES
 
 - type: entity
   parent: RMCOverwatchConsoleWeYa
@@ -64,7 +63,6 @@
   suffix: Govfor
   components:
   - type: TacticalMapComputer
-    faction: govfor
   - type: OverwatchConsole
     canOrbitalBombardment: true
     group: GOVFOR
@@ -92,7 +90,6 @@
     overrideDir: South
     enableOverrideDir: false
   - type: TacticalMapComputer
-    faction: govfor
 # Opfor
 - type: entity
   parent: RMCOverwatchConsole
@@ -103,7 +100,6 @@
     canOrbitalBombardment: false
     group: OPFOR
   - type: TacticalMapComputer
-    faction: opfor
   - type: AU14CallsignConsole
     faction: opfor
   - type: UserInterface
@@ -125,7 +121,6 @@
     overrideDir: South
     enableOverrideDir: false
   - type: TacticalMapComputer
-    faction: opfor
 # RCM
 - type: entity
   parent: RMCOverwatchConsole

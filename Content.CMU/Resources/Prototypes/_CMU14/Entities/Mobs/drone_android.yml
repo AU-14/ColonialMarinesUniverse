@@ -28,14 +28,9 @@
   - type: Synth
     canUseGuns: true
     removeComponents: CMUDroneAndroidRemoveComponents
-    generation: cmu-species-drone-android-generation
     critThreshold: 74
-    deadThreshold: 80
     repairTime: 5
     selfRepairTime: 9999
-    hideGeneration: true
-    useHumanHealthIcons: true
-    hideXenoSynthIcon: true
   - type: MeleeWeapon
     damage:
       types:

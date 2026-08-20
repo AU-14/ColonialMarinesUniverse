@@ -107,9 +107,7 @@
   - type: Bloodstream
     bloodReagent: RMCSynthBlood
   - type: Synth
-    generation: "rmc-species-synth-generation-first"
     critThreshold: 299
-    deadThreshold: 300
     newDamageModifier: AU14WorkingJoe
   - type: Skills
     preset: AU14SkillPresetPlatoonWorkingJoe

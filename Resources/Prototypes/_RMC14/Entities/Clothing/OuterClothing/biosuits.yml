@@ -88,8 +88,8 @@
     walkModifier: 0.62
     sprintModifier: 0.62
   - type: TemperatureProtection
-    heatingCoefficient: 0.001
-    coolingCoefficient: 0.3
+    coefficient: 0.001
+    # coolingCoefficient: 0.3 # CMU14
   - type: RMCImmuneToIgnition
     immuneToDirectHits: false
    # TODO gas_transfer_coefficient = 0.90
