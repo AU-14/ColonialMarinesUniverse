@@ -2731,3 +2731,70 @@
     state: wydropship
   - type: Area
     minimapColor: '#6C6767D8'
+- type: entity # CMU14
+  abstract: true
+  parent: RMCAreaLv759Indoors
+  id: RMCAreaLv759IndoorsMeridian
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsSpaceport
+  id: RMCAreaLv759IndoorsSpaceportCuppajoes
+  name: Weyland-Yutani Celestia Gateway Space-Port - Cuppa Joe's
+  components:
+  - type: Sprite
+    state: cuppajoes
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianFoyer
+  name: Meridian - Foyer
+  components:
+  - type: Sprite
+    state: meridian
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianShowroom
+  name: Meridian - Showroom
+  components:
+  - type: Sprite
+    state: meridian
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianOffice
+  name: Meridian - Offices
+  components:
+  - type: Sprite
+    state: meridian
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianManagersoffice
+  name: Meridian - Manager's Office
+  components:
+  - type: Sprite
+    state: meridian
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianFactory
+  name: Meridian - Factory Floor
+  components:
+  - type: Sprite
+    state: meridian_factory
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianRestroom
+  name: Meridian - Restroom
+  components:
+  - type: Sprite
+    state: meridian
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianMaintenance
+  name: Meridian - Maintenance
+  components:
+  - type: Sprite
+    state: meridian
+- type: entity # CMU14
+  parent: RMCAreaLv759IndoorsMeridian
+  id: RMCAreaLv759IndoorsMeridianMeridianMaintenanceEast
+  name: Meridian - Factory Floor - Maintenance
+  components:
+  - type: Sprite
+    state: meridian

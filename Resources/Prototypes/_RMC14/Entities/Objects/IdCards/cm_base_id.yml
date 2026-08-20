@@ -136,6 +136,12 @@
     slots:
     - neck
 
+- type: entity # CMU14
+  parent: RMCInformationDogtag
+  id: CMUAllergyDogtag
+  name: medical alert tag
+  description: A tag listing a medical condition its wearer needs treated carefully.
+
 - type: entity
   id: RMCDogtagProp
   name: dog tag
