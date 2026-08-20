@@ -676,6 +676,9 @@
   - type: Icon
     sprite: _RMC14/Structures/Walls/wood.rsi
     state: wood0
+  - type: Construction # CMU14
+    graph: AU14WoodWallGraph
+    node: woodWall
   - type: Tag
     tags:
     - Wall
