@@ -70,7 +70,8 @@ public sealed class LegacyRoundForceAsrsCatalogParityTest
             Assert.That(
                 ExpectedCatalogs.Select(expected => expected.ForceId),
                 Is.EquivalentTo(prototypes.EnumeratePrototypes<PlatoonPrototype>()
-                    .Where(platoon => platoon.VendorSet != null)
+                    .Where(platoon => platoon.VendorSet != null // CMU14: skip test fixtures leaked by recycled pairs
+                        && !pair.IsTestPrototype(platoon))
                     .Select(platoon => platoon.ID)),
                 "Ordered ASRS parity sources must cover every legacy production force");
 

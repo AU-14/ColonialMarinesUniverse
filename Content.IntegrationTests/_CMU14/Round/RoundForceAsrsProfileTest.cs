@@ -210,7 +210,8 @@ public sealed class RoundForceAsrsProfileTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var factory = server.EntMan.ComponentFactory;
             var productionForceIds = prototypes.EnumeratePrototypes<PlatoonPrototype>()
-                .Where(platoon => platoon.VendorSet != null)
+                .Where(platoon => platoon.VendorSet != null // CMU14: skip test fixtures leaked by recycled pairs
+                    && !pair.IsTestPrototype(platoon))
                 .Select(platoon => platoon.ID)
                 .Order(StringComparer.Ordinal)
                 .ToArray();
@@ -218,6 +219,7 @@ public sealed class RoundForceAsrsProfileTest
             foreach (var entity in prototypes.EnumeratePrototypes<EntityPrototype>())
             {
                 if (entity.Abstract ||
+                    pair.IsTestEntityPrototype(entity.ID) || // CMU14: skip leaked test fixtures
                     !entity.TryComp<RoundForceAsrsProfileComponent>(out var profile, factory))
                     continue;
 
