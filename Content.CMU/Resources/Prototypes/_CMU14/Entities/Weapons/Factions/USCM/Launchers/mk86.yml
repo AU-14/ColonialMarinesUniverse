@@ -196,7 +196,6 @@
       - RMCGrenadeAGMF
     proto: RMC40MMGrenadeM74AGMF
     capacity: 15
-    deleteWhenEmpty: false
   - type: Sprite
     sprite: _CMU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
     layers:
@@ -223,7 +222,6 @@
       - RMCGrenadeAGMH
     proto: RMCHornetShellM74AGMS
     capacity: 15
-    deleteWhenEmpty: false
   - type: Sprite
     sprite: _CMU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
     layers:
@@ -250,7 +248,6 @@
       - RMCGrenadeAGMS
     proto: RMC40MMGrenadeM74AGMS
     capacity: 15
-    deleteWhenEmpty: false
   - type: Sprite
     sprite: _CMU14/Weapons/Guns/Ammo/Magazines/mk86.rsi
     layers:

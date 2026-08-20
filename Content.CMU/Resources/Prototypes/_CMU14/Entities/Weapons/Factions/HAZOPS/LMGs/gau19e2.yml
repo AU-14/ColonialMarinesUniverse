@@ -37,7 +37,6 @@
     enabled: false
     preventFriendlyFire: false
   - type: IFFToggle
-    showToggleAction: false
 
 
 - type: entity

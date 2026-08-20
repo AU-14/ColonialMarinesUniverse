@@ -70,7 +70,6 @@
         effectProto: StatusEffectCMUTachycardia
         time: 6
         type: Add
-        refresh: true
       - !type:Vomit
         conditions:
         - !type:ReagentThreshold

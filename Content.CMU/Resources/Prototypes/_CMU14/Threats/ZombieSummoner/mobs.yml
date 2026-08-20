@@ -84,8 +84,6 @@
     factions:
     - Zombie
   - type: NightVision
-    alert: XenoNightVision
-    overlay: true
   - type: Skills
     skills:
       RMCSkillFirearms: 3

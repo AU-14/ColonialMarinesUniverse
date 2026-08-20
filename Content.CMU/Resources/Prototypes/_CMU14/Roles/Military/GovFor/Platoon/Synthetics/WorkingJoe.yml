@@ -10,7 +10,6 @@
   icon: "AU14JobIconGovWorkingJoe"
   spawnMenuRoleName: Working Joe (GOVFOR)
   supervisors: au14-job-supervisors-workingjoe-military
-  usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeGOVFOR
   displayWeight: -1
   accessGroups:
@@ -33,7 +32,6 @@
   icon: "AU14JobIconOPFORWorkingJoe"
   spawnMenuRoleName: Working Joe (OPFOR)
   supervisors: au14-job-supervisors-workingjoe-military
-  usePlayerProfile: false
   jobEntity: AU14MobWorkingJoeOPFOR
   displayWeight: -1
   accessGroups:

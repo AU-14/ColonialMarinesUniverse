@@ -24,7 +24,6 @@
       slots:
       - suitStorage
       - Back
-      flipDirOffset: true
       clothingVisuals:
         back:
         - sprite: _CMU14/Weapons/Melee/RMC/ballistic_shield.rsi

@@ -7,7 +7,6 @@
   - type: EncryptionKey
     channels:
     - radioMobFamily
-    defaultChannel: radioMobFamily
 
 - type: entity
   parent: AU14HeadsetColonist

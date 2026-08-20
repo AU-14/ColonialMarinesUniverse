@@ -6,5 +6,4 @@
     sprite: _RMC14/Mobs/Effects/on_fire_xeno.rsi
     state: simple_onfire
     drawdepth: Effects
-    shader: unshaded
     color: "#FFA500"

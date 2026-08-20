@@ -161,7 +161,6 @@
     scale: 1.15, 1.15
     layers:
     - state: ion
-      shader: unshaded
   - type: Ammo
     muzzleFlash: CMUYautjaPlasmaMuzzleFlash
   - type: Projectile
@@ -274,15 +273,14 @@
   - type: Sprite
     layers:
     - state: bluespace
-      shader: unshaded
   - type: StaminaDamageOnCollide
     damage: 142.5
   - type: StunOnCollide
     stunAmount: 4
     knockdownAmount: 4
     slowdownAmount: 3
-    walkSpeedMultiplier: 0.45
-    runSpeedMultiplier: 0.45
+    walkSpeedModifier: 0.45
+    sprintSpeedModifier: 0.45
   - type: Projectile
     impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
     damage:
@@ -302,7 +300,6 @@
   - type: Sprite
     layers:
     - state: pulse1
-      shader: unshaded
   - type: Projectile
     impactEffect: CMUYautjaPlasmaHeavyImpactEffect
     damage:
@@ -342,7 +339,6 @@
   - type: Sprite
     layers:
     - state: bluespace
-      shader: unshaded
   - type: Projectile
     impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
     damage:

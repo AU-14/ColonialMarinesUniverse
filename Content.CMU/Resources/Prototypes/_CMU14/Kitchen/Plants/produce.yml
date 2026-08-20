@@ -15,7 +15,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: mtear
+    plantId: MTearPlants
   - type: Tag
     tags:
     - Vegetable
@@ -37,7 +37,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: deathberry
+    plantId: DeathberryPlants
   - type: Tag
     tags:
     - Fruit
@@ -59,7 +59,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: poisonberry
+    plantId: PoisonberryPlants
   - type: Tag
     tags:
     - Fruit
@@ -81,7 +81,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: poisonApple
+    plantId: PoisonApplePlants
   - type: Tag
     tags:
     - Fruit

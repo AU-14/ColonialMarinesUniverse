@@ -32,7 +32,6 @@
   - type: EncryptionKey
     channels:
     - CMUYautja
-    defaultChannel: CMUYautja
   - type: Sprite
     layers:
     - state: crypt_rusted
@@ -49,7 +48,6 @@
     channels:
     - CMUYautja
     - CMUYautjaOverseer
-    defaultChannel: CMUYautjaOverseer
   - type: Sprite
     layers:
     - state: crypt_gold
@@ -65,7 +63,6 @@
   - type: EncryptionKey
     channels:
     - CMUYautjaBadBlood
-    defaultChannel: CMUYautjaBadBlood
   - type: Sprite
     layers:
     - state: crypt_red

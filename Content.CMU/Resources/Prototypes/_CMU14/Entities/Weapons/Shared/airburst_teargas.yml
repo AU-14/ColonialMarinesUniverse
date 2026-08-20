@@ -35,7 +35,7 @@
     - state: grenade_teargas_active
   - type: SpawnOnTerminate
     spawn: CMU14InstantTearGas
-    projectileAdjust: false
+    adjustSpawn: false
   - type: SoundOnTrigger
     sound: /Audio/Effects/smoke.ogg
   - type: DeleteOnTrigger

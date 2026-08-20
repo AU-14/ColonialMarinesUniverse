@@ -1,6 +1,5 @@
 - type: npcFaction
   id: GOVFOR
-  name: Government Forces
   hostile:
   - RMCXeno
   #- CLF
@@ -10,7 +9,6 @@
 
 - type: npcFaction
   id: AUGoo
-  name: Goo
   hostile:
   - GOVFOR
   - AUUpp
@@ -22,7 +20,6 @@
 
 - type: npcFaction
   id: CMUProdigy
-  name: Prodigy Corporation
   hostile:
   - RMCXeno
   - AUGoo
@@ -31,7 +28,6 @@
 
 - type: npcFaction
   id: CMUVAI
-  name: Vanguard's Arrow Incorporated
   hostile:
   - RMCXeno
   - AUGoo
@@ -39,7 +35,6 @@
 
 - type: npcFaction
   id: AUUpp
-  name: Union of Progressive Peoples
   hostile:
   - RMCXeno
   - AUGoo
@@ -48,7 +43,6 @@
 
 - type: npcFaction
   id: CLF
-  name: Colony Liberation Front
   hostile:
   - GOVFOR
   - RMCXeno
@@ -56,7 +50,6 @@
 #hostile to govofr but not vice versa so turrets cant detect
 - type: npcFaction
   id: AUWeYu
-  name: Weyland-Yutani Corporation
   hostile:
   - RMCXeno
   - AUGoo
@@ -65,11 +58,9 @@
 
 - type: npcFaction
   id: ColonySynth
-  name: Colony Synthetics
 
 - type: npcFaction
   id: AUColonist
-  name: Colonists
   hostile:
   - RMCXeno
   - AUGoo
@@ -78,7 +69,6 @@
 
 - type: npcFaction
   id: CMUTWE
-  name: Third World Empire
   hostile:
   - RMCXeno
   - AUGoo
@@ -87,7 +77,6 @@
 
 - type: npcFaction
   id: CMUUSCMC
-  name: United States Colonial Marines Corps
   hostile:
   - RMCXeno
   - AUGoo
@@ -96,11 +85,9 @@
 
 - type: npcFaction
   id: CMUCorruptedHive
-  name: Corrupted Hive
 
 - type: npcFaction
   id: AUBureau
-  name: Colonial Marshals
   hostile:
   - RMCXeno
   - AUGoo
@@ -108,7 +95,6 @@
 
 - type: npcFaction
   id: OPFOR
-  name: Opposing Forces
   hostile:
   - RMCXeno
   - CLF
@@ -118,7 +104,6 @@
 
 - type: npcFaction
   id: NSPA
-  name: Neroid Sector Policing Authority
   hostile:
   - RMCXeno
   - CLF
@@ -127,7 +112,6 @@
 
 - type: npcFaction
   id: USAF
-  name: United States Armed Forces
   hostile:
   - RMCXeno
   - CLF
@@ -136,7 +120,6 @@
 
 - type: npcFaction
   id: AUUnitedAmericas
-  name: United Americas
   hostile:
   - RMCXeno
   - CLF

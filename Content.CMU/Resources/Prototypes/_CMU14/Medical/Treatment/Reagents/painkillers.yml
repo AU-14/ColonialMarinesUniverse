@@ -25,7 +25,6 @@
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -68,7 +67,6 @@
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -116,7 +114,6 @@
         effectProto: StatusEffectCMUOxycodoneHaze
         time: 4
         type: Add
-        refresh: true
       - !type:ModifyStatusEffect
         conditions:
         - !type:ReagentThreshold
@@ -124,7 +121,6 @@
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -188,7 +184,6 @@
         effectProto: StatusEffectCMUFentanylHaze
         time: 4
         type: Add
-        refresh: true
       - !type:ModifyStatusEffect
         conditions:
         - !type:ReagentThreshold
@@ -196,7 +191,6 @@
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -244,7 +238,6 @@
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
@@ -286,7 +279,6 @@
           min: 8
         time: 15
         type: Add
-        refresh: true
       - !type:ModifyStatusEffect
         conditions:
         - !type:ReagentThreshold
@@ -301,7 +293,6 @@
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
         - !type:ReagentThreshold
