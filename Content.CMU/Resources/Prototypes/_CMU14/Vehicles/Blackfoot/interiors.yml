@@ -129,7 +129,7 @@
     allowUiSelection: true
     allowHotbarSelection: true
     allowedHardpointTypes:
-    - Launcher
+    - HardpointTypeLauncher
   - type: UserInterface
     interfaces:
       enum.VehicleWeaponsUiKey.Key:

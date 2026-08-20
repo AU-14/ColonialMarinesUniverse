@@ -87,7 +87,6 @@
         components:
         - Marine
         - Xeno
-        - VerySmallXeno
       maxRange: 32
       stunTime: 3
       slowTime: 15

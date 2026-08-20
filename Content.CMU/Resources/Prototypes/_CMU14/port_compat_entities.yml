@@ -1,0 +1,16 @@
+# Entities restored from master that the rebase dropped; validated sprites and component kinds.
+
+- type: entity
+  id: DoorGun
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: HardpointType
+
+- type: entity
+  parent: CMBaseMachineCircuitboard
+  id: CMUCircuitboardRecharger
+  name: circuit board (recharger)
+  description: A machine printed circuit board for a recharger.
+  components:
+  - type: MachineBoard
+    prototype: RMCRecharger
