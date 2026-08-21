@@ -22,6 +22,7 @@ using Robust.Shared.Prototypes;
 namespace Content.IntegrationTests.Tests.Commands;
 
 [TestFixture]
+[Ignore("RMC14 disables suicides")]
 public sealed class SuicideCommandTests : GameTest
 {
 
