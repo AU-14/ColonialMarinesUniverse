@@ -99,6 +99,7 @@ namespace Content.Client.Entry
             Dependencies.InjectDependencies(this);
 
             _contentLoc.Initialize();
+            MarkupFontFallback.Register(); // CMU14
             _componentFactory.DoAutoRegistrations();
             _componentFactory.IgnoreMissingComponents();
 
