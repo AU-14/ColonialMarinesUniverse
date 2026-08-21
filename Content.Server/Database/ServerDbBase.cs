@@ -274,15 +274,14 @@ namespace Content.Server.Database
             );
 
             profile.Ranks.Clear();
-            profile.Ranks.AddRange(
-                humanoid.RankPreferences
-                    .Where(rank => rank.Value != null)
-                    .Select(rank => new Rank
-                    {
-                        JobName = rank.Key,
-                        RankName = rank.Value!.Value.Id,
-                    })
-            );
+
+            profile.RankPreferences = humanoid.RankPreferences.Count == 0 // CMU14: platoon rank prefs replace per-job Ranks rows
+                ? null
+                : JsonSerializer.Serialize(
+                    humanoid.RankPreferences.ToDictionary(
+                        kvp => kvp.Key,
+                        kvp => kvp.Value.Where(p => p.Value != null)
+                                        .ToDictionary(p => p.Key, p.Value)));
 
             profile.Loadouts.Clear();
 

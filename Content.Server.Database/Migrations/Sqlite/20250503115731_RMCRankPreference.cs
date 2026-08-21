@@ -10,9 +10,8 @@ namespace Content.Server.Database.Migrations.Sqlite
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropColumn(
-                name: "rank_preference",
-                table: "profile");
+            // CMU14: rank_preference drop removed - no migration in either chain ever created that
+            // column, so the drop crashed any fresh or master-first database this migration applied on.
 
             migrationBuilder.CreateTable(
                 name: "rank",

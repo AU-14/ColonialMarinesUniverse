@@ -35,10 +35,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     {
         var entity = GetEntity(msg.NetEntity);
 
-        // The entity this info refers to may no longer exist client-side by the time this
-        // (possibly delayed) event arrives, e.g. if it was deleted or the client reconnected
-        // in the meantime. Just drop the stale update rather than crashing.
-        if (!Exists(entity))
+        if (!Exists(entity)) // CMU14
             return;
 
         var data = new CharacterData(entity, msg.Objectives, msg.Briefing, msg.Job, Name(entity));

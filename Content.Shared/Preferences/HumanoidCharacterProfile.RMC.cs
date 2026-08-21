@@ -1,9 +1,6 @@
-using System.Linq;
-using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared._RMC14.Xenonids.Name;
-using Content.Shared.Roles;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 
@@ -12,12 +9,7 @@ namespace Content.Shared.Preferences;
 public sealed partial class HumanoidCharacterProfile
 {
     [DataField]
-    private Dictionary<ProtoId<JobPrototype>, ProtoId<RankPrototype>?> _rankPreferences = new();
-
-    [DataField]
     public ArmorPreference ArmorPreference { get; private set; }
-
-    public IReadOnlyDictionary<ProtoId<JobPrototype>, ProtoId<RankPrototype>?> RankPreferences => _rankPreferences;
 
     [DataField]
     public EntProtoId<SquadTeamComponent>? SquadPreference { get; private set; }
@@ -37,7 +29,6 @@ public sealed partial class HumanoidCharacterProfile
     private void CopyRmcFrom(HumanoidCharacterProfile other)
     {
         ArmorPreference = other.ArmorPreference;
-        _rankPreferences = new Dictionary<ProtoId<JobPrototype>, ProtoId<RankPrototype>?>(other._rankPreferences);
         SquadPreference = other.SquadPreference;
         NamedItems = other.NamedItems;
         PlaytimePerks = other.PlaytimePerks;
@@ -50,7 +41,6 @@ public sealed partial class HumanoidCharacterProfile
     {
         return ArmorPreference == other.ArmorPreference &&
                SquadPreference == other.SquadPreference &&
-               _rankPreferences.SequenceEqual(other._rankPreferences) &&
                NamedItems == other.NamedItems &&
                PlaytimePerks == other.PlaytimePerks &&
                XenoPrefix == other.XenoPrefix &&
@@ -62,7 +52,6 @@ public sealed partial class HumanoidCharacterProfile
     private void AddRmcHash(ref HashCode hashCode)
     {
         hashCode.Add((int) ArmorPreference);
-        hashCode.Add(_rankPreferences);
         hashCode.Add(SquadPreference);
         hashCode.Add(NamedItems);
         hashCode.Add(PlaytimePerks);
@@ -85,18 +74,6 @@ public sealed partial class HumanoidCharacterProfile
             ArmorPreference.Smooth => ArmorPreference.Smooth,
             _ => ArmorPreference.Random,
         };
-
-        var ranks = RankPreferences
-            .Where(pair => prototypeManager.TryIndex<JobPrototype>(pair.Key, out var job) &&
-                           job.SetRankPreference &&
-                           pair.Value != null &&
-                           prototypeManager.HasIndex<RankPrototype>(pair.Value.Value))
-            .ToDictionary();
-        _rankPreferences.Clear();
-        foreach (var (job, rank) in ranks)
-        {
-            _rankPreferences.Add(job, rank);
-        }
 
         var componentFactory = collection.Resolve<IComponentFactory>();
         if (!prototypeManager.TryIndex(SquadPreference, out var squad) ||
@@ -159,26 +136,6 @@ public sealed partial class HumanoidCharacterProfile
     public HumanoidCharacterProfile WithArmorPreference(ArmorPreference armorPreference)
     {
         return new HumanoidCharacterProfile(this) { ArmorPreference = armorPreference };
-    }
-
-    public HumanoidCharacterProfile WithRankPreference(ProtoId<JobPrototype> jobId, ProtoId<RankPrototype>? rankId)
-    {
-        var profile = new HumanoidCharacterProfile(this);
-        if (rankId == null)
-            profile._rankPreferences.Remove(jobId);
-        else
-            profile._rankPreferences[jobId] = rankId;
-        return profile;
-    }
-
-    public HumanoidCharacterProfile WithRankPreferences(
-        IReadOnlyDictionary<ProtoId<JobPrototype>, ProtoId<RankPrototype>?> rankPreferences)
-    {
-        var profile = new HumanoidCharacterProfile(this)
-        {
-            _rankPreferences = new Dictionary<ProtoId<JobPrototype>, ProtoId<RankPrototype>?>(rankPreferences),
-        };
-        return profile;
     }
 
     public HumanoidCharacterProfile WithSquadPreference(EntProtoId<SquadTeamComponent>? squadPreference)

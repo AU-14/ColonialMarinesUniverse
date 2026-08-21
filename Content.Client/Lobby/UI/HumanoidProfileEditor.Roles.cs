@@ -3,6 +3,11 @@ using System.Numerics;
 using Content.Client.Lobby.UI.Loadouts;
 using Content.Client.Lobby.UI.Roles;
 using Content.Client.Stylesheets;
+using Content.Client._CMU14.Roles.Ranks; // CMU14
+using Content.Shared._CMU14.Roles.Ranks; // CMU14
+using Content.Shared._RMC14.Marines.Roles.Ranks; // CMU14
+using Content.Shared.AU14.util; // CMU14
+using Content.Shared._AU14.Marines.Roles.Chevrons; // CMU14
 using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Clothing;
@@ -12,6 +17,7 @@ using Content.Shared.Roles;
 using Robust.Client.Graphics;
 using Robust.Client.UserInterface;
 using Robust.Client.UserInterface.Controls;
+using Robust.Shared.Configuration; // CMU14
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 
@@ -27,6 +33,7 @@ public sealed partial class HumanoidProfileEditor
     public JobPrototype? JobOverride;
 
     private LoadoutWindow? _loadoutWindow;
+    [ViewVariables] private PlatoonRankPreferenceWindow? _rankPreferenceWindow; // CMU14
     private readonly List<(string Gamemode, string JobId, RequirementsSelector Selector)> _jobPriorities = [];
     private readonly List<(string Gamemode, string AntagId, RequirementsSelector Selector)> _antagPreferences = [];
     private readonly List<(string Gamemode, string ThreatId, Button Yes, Button No)> _threatPreferenceButtons = [];
@@ -232,8 +239,24 @@ public sealed partial class HumanoidProfileEditor
         }
 
         _jobPriorities.Add((gamemode, job.ID, selector));
+        var rankEntry = BuildRankPreferenceJobEntry(job); // CMU14: platoon rank prefs window (upstream 438a10891c)
+
+        var rankButton = new Button
+        {
+            Text = Loc.GetString("cmu14-rank-preference-button"),
+            HorizontalAlignment = HAlignment.Right,
+            VerticalAlignment = VAlignment.Center,
+            Margin = new Thickness(3, 3, 0, 0),
+            MinWidth = 90,
+            StyleClasses = { StyleNano.StyleClassCrtButton },
+            Disabled = rankEntry == null,
+        };
+
+        rankButton.OnPressed += _ => OpenRankPreferenceWindowForJob(job, rankEntry);
+
         row.AddChild(selector);
         row.AddChild(loadoutButton);
+        row.AddChild(rankButton);
         category.AddChild(row);
     }
 
@@ -526,5 +549,158 @@ public sealed partial class HumanoidProfileEditor
             builder.Append(current);
         }
         return builder.ToString().Trim();
+    }
+
+    // CMU14 method: opens the platoon rank preference window for one job
+    private void OpenRankPreferenceWindowForJob(JobPrototype job, PlatoonRankPreferenceJobEntry? entry)
+    {
+        if (Profile == null || entry == null)
+            return;
+
+        _rankPreferenceWindow?.Close();
+        _rankPreferenceWindow = new PlatoonRankPreferenceWindow();
+
+        var currentPreferences = Profile.RankPreferences.TryGetValue(job.ID, out var platoonRanks)
+            ? new Dictionary<string, string?>(platoonRanks)
+            : new Dictionary<string, string?>();
+
+        _rankPreferenceWindow.PopulateSingleJob(entry, currentPreferences);
+
+        _rankPreferenceWindow.OnSave += prefs =>
+        {
+            foreach (var (platoonId, rankId) in prefs)
+                Profile = Profile?.WithRankPreference(job.ID, platoonId, rankId);
+
+            SetDirty();
+            _rankPreferenceWindow?.Close();
+        };
+
+        _rankPreferenceWindow.OpenCentered();
+    }
+
+    // CMU14 method: builds per-platoon rank options for a job from platoon chevron overrides
+    private PlatoonRankPreferenceJobEntry? BuildRankPreferenceJobEntry(JobPrototype job)
+    {
+        var platoonOptions = new List<PlatoonRankOptions>();
+
+        foreach (var platoon in _prototypeManager.EnumeratePrototypes<PlatoonPrototype>())
+        {
+            var chevronMap = ResolveChevronMapForPlatoon(job, platoon);
+            if (chevronMap == null || chevronMap.Count == 0)
+                continue;
+
+            var ranks = new List<RankOption>();
+            foreach (var (rankId, chevronDef) in chevronMap)
+            {
+                if (!_prototypeManager.TryIndex<RankPrototype>(rankId, out var rankProto))
+                    continue;
+
+                var (unlocked, requirementsText) = EvaluateChevronRequirements(chevronDef.Requirements);
+
+                ranks.Add(new RankOption(
+                    rankId,
+                    rankProto.Name,
+                    rankProto.Paygrade,
+                    unlocked,
+                    requirementsText,
+                    chevronDef.Entity));
+            }
+
+            if (ranks.Count == 0)
+                continue;
+
+            platoonOptions.Add(new PlatoonRankOptions(
+                platoon.ID,
+                platoon.Name,
+                platoon.PlatoonPatch,
+                ranks));
+        }
+
+        return platoonOptions.Count > 0
+            ? new PlatoonRankPreferenceJobEntry(job.ID, LobbyHighJobPreview.GetDisplayJobName(job), platoonOptions)
+            : null;
+    }
+
+    // CMU14 method: platoon override chevron map for a job, else the job's base chevrons
+    private Dictionary<string, ChevronDefinition>? ResolveChevronMapForPlatoon(JobPrototype job, PlatoonPrototype platoon)
+    {
+        if (platoon.ChevronOverrides != null)
+        {
+            foreach (var (overrideJob, overrideChevrons) in platoon.ChevronOverrides)
+            {
+                if (JobInheritsFrom(job.ID, overrideJob.Id))
+                {
+                    return overrideChevrons.ToDictionary(
+                        kvp => kvp.Key.Id,
+                        kvp => kvp.Value);
+                }
+            }
+        }
+
+        return job.Chevrons;
+    }
+
+    // CMU14 method: walks the job inheritance chain
+    private bool JobInheritsFrom(string jobId, string ancestorId)
+    {
+        if (jobId == ancestorId)
+            return true;
+
+        if (!_prototypeManager.TryIndex<JobPrototype>(jobId, out var job) || job.Parents == null)
+            return false;
+
+        foreach (var parent in job.Parents)
+        {
+            if (JobInheritsFrom(parent, ancestorId))
+                return true;
+        }
+
+        return false;
+    }
+
+    // CMU14 method: chevron requirement evaluation for the rank window
+    private (bool Unlocked, string? RequirementsText) EvaluateChevronRequirements(HashSet<JobRequirement>? requirements)
+    {
+        if (requirements == null || requirements.Count == 0)
+            return (true, null);
+
+        if (!_cfgManager.GetCVar(CCVars.GameRoleTimers))
+            return (true, null);
+
+        var playTimes = _requirements.GetPlayTimes(_playerManager.LocalSession!);
+        var lines = new List<string>();
+        var unlocked = true;
+
+        foreach (var requirement in requirements)
+        {
+            if (requirement is RoleTimeRequirement roleTime)
+            {
+                playTimes.TryGetValue(roleTime.Role, out var have);
+                var remaining = roleTime.Time - have;
+                var remainingMinutes = (int) Math.Ceiling(remaining.TotalMinutes);
+
+                if (!roleTime.Inverted)
+                {
+                    if (remainingMinutes > 0)
+                    {
+                        unlocked = false;
+                        lines.Add($"Requires {remainingMinutes} more min");
+                    }
+                }
+                else if (remainingMinutes <= 0)
+                {
+                    unlocked = false;
+                    lines.Add($"Requires under {-remainingMinutes} min");
+                }
+            }
+            else if (!requirement.Check(_entManager, _prototypeManager, Profile, playTimes, out var reason))
+            {
+                unlocked = false;
+                if (reason != null)
+                    lines.Add(reason.ToMarkup());
+            }
+        }
+
+        return (unlocked, lines.Count > 0 ? string.Join("\n", lines) : null);
     }
 }

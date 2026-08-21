@@ -9,8 +9,8 @@ using Content.Shared.Roles;
 using Robust.Shared.Prototypes;
 using Content.Shared._RMC14.ARES;
 using Content.Shared.Radio;
-using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Squads;
+using Content.Server._AU14.Marines.Roles.Chevrons; // CMU14
 using Content.Shared.Bed.Cryostorage;
 using Content.Shared.StationRecords;
 using Content.Shared.StationRecords.Components;
@@ -24,7 +24,7 @@ namespace Content.Server._RMC14.Announce
         [Dependency] private IChatManager _chatManager = default!;
         [Dependency] private CMDistressSignalRuleSystem _distressSignal = default!;
         [Dependency] private MarineAnnounceSystem _marineAnnounce = default!;
-        [Dependency] private SharedRankSystem _rankSystem = default!;
+        [Dependency] private ChevronSystem _chevron = default!; // CMU14
         [Dependency] private SquadSystem _squad = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private StationRecordsSystem _stationRecords = default!;
@@ -60,8 +60,8 @@ namespace Content.Server._RMC14.Announce
         public void AnnounceLateJoin(bool lateJoin, bool silent, EntityUid mob, string jobId, string jobName, JobPrototype jobPrototype)
         {
             var ares = _aresCore.EnsureMarineARES();
-            var fullRankName = _rankSystem.GetSpeakerFullRankName(mob) ?? Name(mob);
-            var rankName = _rankSystem.GetSpeakerRankName(mob) ?? Name(mob);
+            var fullRankName = _chevron.GetAnnouncementFullName(mob, jobId); // CMU14
+            var rankName = _chevron.GetAnnouncementShortName(mob, jobId); // CMU14
 
             if (lateJoin && !silent)
             {
@@ -134,18 +134,16 @@ namespace Content.Server._RMC14.Announce
         public void AnnounceEarlyLeave(Entity<CryostorageContainedComponent> ent, uint? recordId, EntityUid? station, string jobName)
         {
             var ares = _aresCore.EnsureMarineARES();
-            var rankName = _rankSystem.GetSpeakerRankName(ent.Owner) ?? Name(ent.Owner);
             JobPrototype? jobProto = null;
 
-            if (!TryComp<StationRecordsComponent>(station, out var stationRecords))
-                return;
-
-            if (recordId != null && station != null)
+            if (TryComp<StationRecordsComponent>(station, out var stationRecords) && recordId != null && station != null) // CMU14: chevron announce needs the resolved job
             {
                 var key = new StationRecordKey(recordId.Value, station.Value);
                 if (_stationRecords.TryGetRecord<GeneralStationRecord>(key, out var entry, stationRecords) && !string.IsNullOrWhiteSpace(entry.JobPrototype))
                     _prototypeManager.TryIndex(entry.JobPrototype, out jobProto);
             }
+
+            var rankName = _chevron.GetAnnouncementShortName(ent.Owner, jobProto?.ID); // CMU14
 
             // Getting all department prototypes
             var departmentPrototypes = _prototypeManager.EnumeratePrototypes<DepartmentPrototype>().ToList();

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Content.Server.Afk;
 using Content.Server.Database;
 using Content.Shared._CMU14.Threats;
-using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Marines.Squads;
 using Content.Shared._RMC14.NamedItems;
 using Content.Shared.Body;
@@ -102,9 +101,6 @@ namespace Content.Server.Preferences.Managers
             var jobs = profile.Jobs.ToDictionary(j => new ProtoId<JobPrototype>(j.JobName), j => (JobPriority) j.Priority);
             var antags = profile.Antags.Select(a => new ProtoId<AntagPrototype>(a.AntagName));
             var traits = profile.Traits.Select(t => new ProtoId<TraitPrototype>(t.TraitName));
-            var ranks = profile.Ranks.ToDictionary(
-                rank => new ProtoId<JobPrototype>(rank.JobName),
-                rank => (ProtoId<RankPrototype>?) new ProtoId<RankPrototype>(rank.RankName));
 
             var sex = Sex.Male;
             if (Enum.TryParse<Sex>(profile.Sex, true, out var sexVal))
@@ -222,7 +218,6 @@ namespace Content.Server.Preferences.Managers
                 loadouts
             )
                 .WithArmorPreference(armorPreference)
-                .WithRankPreferences(ranks)
                 .WithSquadPreference(squadPreference)
                 .WithNamedItems(new SharedRMCNamedItems(
                     profile.NamedItems?.PrimaryGunName,
@@ -257,6 +252,33 @@ namespace Content.Server.Preferences.Managers
             humanoid = RestoreGamemodeSetPreferences(humanoid, profile.GamemodeThreatPreferences,
                 static (value, gamemode, id) => value.WithGamemodeThreatPreference(
                     gamemode, new ProtoId<ThreatPrototype>(id), true));
+            humanoid = RestoreRankPreferences(humanoid, profile.RankPreferences); // CMU14: platoon rank prefs column
+            return humanoid;
+        }
+
+        // CMU14 method: platoon rank prefs from JSON column (upstream 438a10891c)
+        private static HumanoidCharacterProfile RestoreRankPreferences(HumanoidCharacterProfile humanoid, string? raw)
+        {
+            if (string.IsNullOrWhiteSpace(raw))
+                return humanoid;
+
+            try
+            {
+                var preferences = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string?>>>(raw);
+                if (preferences == null)
+                    return humanoid;
+                foreach (var (job, platoons) in preferences)
+                {
+                    if (string.IsNullOrWhiteSpace(job) || platoons == null)
+                        continue;
+                    foreach (var (platoon, rank) in platoons)
+                        humanoid = humanoid.WithRankPreference(job, platoon, rank);
+                }
+            }
+            catch (JsonException)
+            {
+                // Invalid legacy data is ignored and replaced when the profile is next saved.
+            }
             return humanoid;
         }
 

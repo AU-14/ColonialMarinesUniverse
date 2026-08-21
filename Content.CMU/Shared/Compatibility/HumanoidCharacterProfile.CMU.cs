@@ -18,6 +18,9 @@ public sealed partial class HumanoidCharacterProfile
     public const int MaxWeight = 300;
 
     [DataField]
+    public Dictionary<string, Dictionary<string, string?>> RankPreferences { get; private set; } = new();
+
+    [DataField]
     public ProtoId<AllegiancePrototype>? Allegiance { get; private set; }
 
     [DataField]
@@ -132,6 +135,49 @@ public sealed partial class HumanoidCharacterProfile
         return new HumanoidCharacterProfile(this) { Origin = origin };
     }
 
+    public HumanoidCharacterProfile WithRankPreferences(Dictionary<string, Dictionary<string, string?>> rankPreferences)
+    {
+        return new(this)
+        {
+            RankPreferences = rankPreferences.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new Dictionary<string, string?>(kvp.Value))
+        };
+    }
+
+    public HumanoidCharacterProfile WithRankPreference(string jobId, string platoonId, string? rankId)
+    {
+        var dict = RankPreferences.ToDictionary(
+            kvp => kvp.Key,
+            kvp => new Dictionary<string, string?>(kvp.Value));
+
+        if (!dict.TryGetValue(jobId, out var platoonRanks))
+        {
+            platoonRanks = new Dictionary<string, string?>();
+            dict[jobId] = platoonRanks;
+        }
+
+        if (rankId == null)
+            platoonRanks.Remove(platoonId);
+        else
+            platoonRanks[platoonId] = rankId;
+
+        if (platoonRanks.Count == 0)
+            dict.Remove(jobId);
+
+        return new(this) { RankPreferences = dict };
+    }
+
+    /// <summary>
+    /// Convenience lookup for spawn-time resolution: what rank did the player pick
+    /// for this job, given they land in this specific platoon.
+    /// </summary>
+    public string? GetRankPreference(string jobId, string platoonId) =>
+        RankPreferences.TryGetValue(jobId, out var platoonRanks) &&
+        platoonRanks.TryGetValue(platoonId, out var rankId)
+            ? rankId
+            : null;
+
     public HumanoidCharacterProfile WithShortExamine(string value) => new(this) { ShortExamine = value };
     public HumanoidCharacterProfile WithFullDescription(string value) => new(this) { FullDescription = value };
     public HumanoidCharacterProfile WithMedicalRecord(string value) => new(this) { MedicalRecord = value };
@@ -221,6 +267,9 @@ public sealed partial class HumanoidCharacterProfile
     {
         Allegiance = other.Allegiance;
         Origin = other.Origin;
+        RankPreferences = other.RankPreferences.ToDictionary(
+            kvp => kvp.Key,
+            kvp => new Dictionary<string, string?>(kvp.Value));
         Synthetic = other.Synthetic;
         ShortExamine = other.ShortExamine;
         FullDescription = other.FullDescription;
@@ -260,7 +309,32 @@ public sealed partial class HumanoidCharacterProfile
                GamemodeJobPrioritiesEqual(_gamemodeJobPriorities, other._gamemodeJobPriorities) &&
                _threatPreferences.SetEquals(other._threatPreferences) &&
                GamemodeSetPreferencesEqual(_gamemodeThreatPreferences, other._gamemodeThreatPreferences) &&
-               GamemodeSetPreferencesEqual(_gamemodeAntagPreferences, other._gamemodeAntagPreferences);
+               GamemodeSetPreferencesEqual(_gamemodeAntagPreferences, other._gamemodeAntagPreferences) &&
+               RankPreferencesEqual(RankPreferences, other.RankPreferences);
+    }
+
+    private static bool RankPreferencesEqual(
+        Dictionary<string, Dictionary<string, string?>> left,
+        Dictionary<string, Dictionary<string, string?>> right)
+    {
+        if (left.Count != right.Count)
+            return false;
+
+        foreach (var (jobId, leftPlatoons) in left)
+        {
+            if (!right.TryGetValue(jobId, out var rightPlatoons) ||
+                leftPlatoons.Count != rightPlatoons.Count)
+                return false;
+
+            foreach (var (platoonId, leftRank) in leftPlatoons)
+            {
+                if (!rightPlatoons.TryGetValue(platoonId, out var rightRank) ||
+                    leftRank != rightRank)
+                    return false;
+            }
+        }
+
+        return true;
     }
 
     private static bool GamemodeJobPrioritiesEqual(

@@ -59,35 +59,7 @@ public sealed partial class RankSystem : SharedRankSystem
         if (profile == null)
             return;
 
-        profile.RankPreferences.TryGetValue(ev.JobId, out var preferredRankId);
-
-        // First pass: try to honour the player's explicit rank preference.
-        if (preferredRankId != null)
-        {
-            if (jobPrototype.Ranks.TryGetValue(preferredRankId.Value, out var preferredRequirements))
-            {
-                var requirementsMet = true;
-                if (preferredRequirements != null)
-                {
-                    foreach (var req in preferredRequirements)
-                    {
-                        if (!req.Check(EntityManager, _prototypes, ev.Profile, playTimes, out _))
-                        {
-                            requirementsMet = false;
-                            break;
-                        }
-                    }
-                }
-
-                if (requirementsMet && _prototypes.TryIndex(preferredRankId.Value, out RankPrototype? preferred))
-                {
-                    SetRank(ev.Mob, preferred);
-                    return;
-                }
-            }
-        }
-
-        // Fallback / auto: iterate ranks in definition order & take the first one whose
+        // Fallback / auto: iterate ranks in definition order & take the first one whose // CMU14: per-job rank prefs removed, platoon chevrons replace them (upstream 438a10891c)
         // playtime requirements pass. Ranks are defined highest-to-lowest in YAML so this
         // naturally gives the highest rank the player has earned.
         foreach (var (rankProtoId, jobRequirements) in jobPrototype.Ranks)

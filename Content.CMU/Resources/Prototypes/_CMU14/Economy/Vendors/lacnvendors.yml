@@ -689,7 +689,7 @@
         amount: 6
     - name: Chevrons
       entries:
-      - id: AU14ChevronLACNSeamanRecruit
+      - id: CMU14ChevronLACNSailor
         amount: 2
       - id: AU14PortableVendorSEALACN
         amount: 1
