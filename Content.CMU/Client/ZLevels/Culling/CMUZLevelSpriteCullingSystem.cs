@@ -89,6 +89,16 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
             return;
         }
 
+        // GetWorldViewbounds() builds an axis-aligned box from view corners rotated by the
+        // eye rotation; once the diagonal passes 90 degrees the corners invert and Box2's
+        // Left>Right DebugAssert fires (grid-following eyes, teardown windows). Skipping
+        // one cull pass is invisible; the assert kills the client pair.
+        if (Math.Cos(_eyeManager.CurrentEye.Rotation.Theta) < 0.01)
+        {
+            RestoreAllHiddenSprites();
+            return;
+        }
+
         var viewBounds = _eyeManager.GetWorldViewbounds().CalcBoundingBox();
         var openingLimit = maxOpeningRects == 0 ? int.MaxValue : maxOpeningRects + 1;
         if (!TryFindOpeningBounds(playerMapComp.MapId, viewBounds, openingLimit) ||

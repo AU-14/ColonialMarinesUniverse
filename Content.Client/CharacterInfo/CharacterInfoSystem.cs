@@ -34,6 +34,10 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     private void OnCharacterInfoEvent(CharacterInfoEvent msg, EntitySessionEventArgs args)
     {
         var entity = GetEntity(msg.NetEntity);
+        // CMU14: response can outlive its entity (larva offers, job transfers delete mid-request); Name() throws on the dangling uid
+        if (!TryComp<MetaDataComponent>(entity, out _))
+            return;
+
         var data = new CharacterData(entity, msg.Objectives, msg.Briefing, msg.Job, Name(entity));
 
         OnCharacterUpdate?.Invoke(data);

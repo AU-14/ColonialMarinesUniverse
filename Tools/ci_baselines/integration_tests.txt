@@ -6,8 +6,6 @@ AllGameMapsLoad
 AllItemsHaveSpritesTest
 AssembleAndDetonateGrenade
 AssertApcPowerMatchesPowerState
-# CMU14: Entity-0 KeyNotFound in client CharacterInfoSystem across pair recycle; flaky, not port-scoped
-AvailableLarvaTakesPriorityOverAbandonedAdult
 AssignJobsTest
 BuckledDyingDropItemsTest
 BuckleInteractBuckleUnbuckleSelf
