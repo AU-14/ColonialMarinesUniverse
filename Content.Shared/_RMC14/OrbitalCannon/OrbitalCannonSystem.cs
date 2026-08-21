@@ -68,6 +68,8 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
     [Dependency] private CMUTopDownOrdnanceSystem _topDownOrdnance = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private ARESCoreSystem _core = default!;
+    [Dependency] private IPrototypeManager _protoMan = default!;
+    [Dependency] private IComponentFactory _compFactory = default!;
 
     private static readonly EntProtoId OrbitalTargetMarker = "RMCLaserDropshipTarget";
 
@@ -317,15 +319,33 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             }
         }
 
-        Spawn(ent.Comp.Explosion, coordinates);
+        SpawnExplosion(ent.Comp.Explosion, coordinates);
     }
 
-    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates) // CMU14 method
+    public void SpawnExplosion(EntProtoId prototype, EntityCoordinates coordinates, CMUTopDownOrdnanceKind kind = CMUTopDownOrdnanceKind.OrbitalBombardment)
     {
         if (_net.IsClient)
             return;
 
-        Spawn(prototype, coordinates);
+        var proto = _protoMan.Index(prototype);
+        if (!proto.TryComp(out OrbitalCannonExplosionComponent? explosion, _compFactory)
+            || !explosion.MultiZ)
+        {
+            Spawn(prototype, coordinates);
+            return;
+        }
+
+        if (!_topDownOrdnance.TryResolveImpactColumn(
+                _transform.ToMapCoordinates(coordinates),
+                kind, // CMU14: kind selects permission gate, Scuttle bypasses OB area checks (shipside)
+                out var layers))
+        {
+            Spawn(prototype, coordinates);
+            return;
+        }
+
+        foreach (var surface in layers.Surfaces)
+            Spawn(prototype, _transform.ToCoordinates(surface.Coordinates));
     }
 
     private void OnFuelPowerLoaderInteract(Entity<OrbitalCannonFuelComponent> ent, ref PowerLoaderInteractEvent args)
