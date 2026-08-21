@@ -17,7 +17,11 @@ public sealed partial class ScriptedSoundSequencePrototype : IPrototype
 [DataDefinition]
 public sealed partial class ScriptedAnnouncement
 {
-    [DataField(required: true)] public string Message = string.Empty;
+    /// <summary>Fluent LocId: takes priority over Message so announcements can be translated</summary>
+    [DataField] public string? Loc;
+    /// <summary>Arguments passed to the Fluent message, e.g. time: 5 Minutes</summary>
+    [DataField] public Dictionary<string, string>? LocArgs;
+    [DataField] public string Message = string.Empty;
     [DataField] public string? Sender;
     [DataField] public Color? Color;
     [DataField] public ChatChannel Channel = ChatChannel.Radio;
