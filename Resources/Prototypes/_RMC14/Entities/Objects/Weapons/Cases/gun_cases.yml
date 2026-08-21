@@ -753,7 +753,7 @@
     contents:
     - id: CMUWeaponShotgunType23Tactical
     - id: RMCBoxShotgunHDSG
-      amount: 6
+      amount: 5
     - id: RMCBoxShotgunHeavySlugs
       amount: 4
     - id: RMCBoxShotgunHeavyBuckshot
@@ -761,7 +761,7 @@
     - id: RMCBoxShotgunHeavyFlechette
       amount: 4
     - id: RMCBoxShotgunHeavyDragonbreath
-      amount: 3
+      amount: 2
     - id: AU14Altyn
 
 - type: entity
