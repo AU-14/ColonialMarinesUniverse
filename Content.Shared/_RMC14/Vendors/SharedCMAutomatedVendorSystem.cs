@@ -45,7 +45,9 @@ using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Storage;
 using Content.Shared._RMC14.Cryostorage;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._AU14.Vendors;
+using Robust.Shared.Containers;
 
 namespace Content.Shared._RMC14.Vendors;
 
@@ -55,6 +57,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedCMInventorySystem _cmInventory = default!;
+    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -830,8 +833,33 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (!vended)
         {
             var grabbed = Grab(player, spawn, replaceSlot);
-            if (!grabbed && TryComp(spawn, out TransformComponent? xform))
-                _transform.SetLocalPosition(spawn, xform.LocalPosition + offset, xform);
+            if (!grabbed)
+            {
+                // A vendor can itself be inside a container, so detach failed output before placing it nearby.
+                _container.TryRemoveFromContainer(spawn, force: true);
+
+                // Yautja racks are solid fixtures rather than ordinary vending-machine walls. A failed auto-equip
+                // must become a normal portable item and be placed outside the rack's collision footprint.
+                if (HasComp<YautjaGearRackComponent>(vendor))
+                {
+                    RemCompDeferred<WallMountComponent>(spawn);
+
+                    if (offset.LengthSquared() < 0.36f)
+                    {
+                        // Use a cardinal direction so both possible axes clear the rack's 0.45 half-size
+                        // (a diagonal 0.6 vector would only move 0.42 on each axis).
+                        if (MathF.Abs(offset.X) >= MathF.Abs(offset.Y) && MathF.Abs(offset.X) > 0.0001f)
+                            offset = new Vector2(MathF.CopySign(0.6f, offset.X), 0);
+                        else if (MathF.Abs(offset.Y) > 0.0001f)
+                            offset = new Vector2(0, MathF.CopySign(0.6f, offset.Y));
+                        else
+                            offset = Vector2.UnitY * 0.6f;
+                    }
+                }
+
+                if (TryComp(spawn, out TransformComponent? xform))
+                    _transform.SetLocalPosition(spawn, xform.LocalPosition + offset, xform);
+            }
         }
 
         var ev = new RMCAutomatedVendedUserEvent(spawn);

@@ -528,7 +528,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public bool NotificationSound = true;
 
     [DataField]
-    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaHealthShard";
+    public EntProtoId StabilisingCrystalPrototype = "CMUYautjaStabilisingCrystal";
 
     [DataField]
     public EntProtoId HumanStabilisingCrystalPrototype = "CMUYautjaHumanStabilisingCrystal";

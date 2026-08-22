@@ -1,6 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Vendors;
+using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Inventory;
+using Content.Shared.Wall;
 using Robust.Client.GameObjects;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -115,6 +119,109 @@ public sealed class YautjaRackBundleStaticFactsTest
         });
 
         await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task AdultHuntingBundleItemsAreNotLeftMountedInTheRack()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        EntityUid rack = default;
+        EntityUid hunter = default;
+        var bundleIds = new[]
+        {
+            "CMUYautjaHuntingPouch",
+            "CMUYautjaRelayBeacon",
+            "CMUYautjaCleanserGelVial",
+        };
+        var existing = new Dictionary<string, HashSet<EntityUid>>();
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                rack = entMan.SpawnEntity("CMUYautjaLoadoutVendor", MapCoordinates.Nullspace);
+                hunter = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+
+                // Force the delivery path to exercise the failed auto-grab branch. The regression is about
+                // portable output after no slot/hand is available, not about normal auto-equipping.
+                var inventory = entMan.System<InventorySystem>();
+                var hands = entMan.System<SharedHandsSystem>();
+                var beltFiller = entMan.SpawnEntity("CMUYautjaHuntingPouch", MapCoordinates.Nullspace);
+                Assert.That(inventory.TryEquip(hunter, beltFiller, "belt", silent: true, force: true), Is.True);
+                var leftHandFiller = entMan.SpawnEntity("CMUYautjaRelayBeacon", MapCoordinates.Nullspace);
+                var rightHandFiller = entMan.SpawnEntity("CMUYautjaCleanserGelVial", MapCoordinates.Nullspace);
+                Assert.That(hands.TryPickupAnyHand(hunter, leftHandFiller), Is.True);
+                Assert.That(hands.TryPickupAnyHand(hunter, rightHandFiller), Is.True);
+
+                foreach (var id in bundleIds)
+                    existing[id] = EntitiesByPrototype(entMan, id).ToHashSet();
+
+                var vendor = entMan.GetComponent<CMAutomatedVendorComponent>(rack);
+                var sectionIndex = vendor.Sections.FindIndex(section => section.Name == "Essential Hunting Supplies");
+                Assert.That(sectionIndex, Is.GreaterThanOrEqualTo(0));
+
+                var entryIndex = vendor.Sections[sectionIndex].Entries.FindIndex(entry => entry.Id.Id == "CMUYautjaHuntingEquipmentBundle");
+                Assert.That(entryIndex, Is.GreaterThanOrEqualTo(0));
+
+                entMan.EventBus.RaiseLocalEvent(rack, new CMVendorVendBuiMsg(sectionIndex, entryIndex, new())
+                {
+                    Actor = hunter,
+                    UiKey = CMAutomatedVendorUI.Key,
+                });
+            });
+
+            await server.WaitRunTicks(3);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+
+                foreach (var id in bundleIds)
+                {
+                    var items = EntitiesByPrototype(entMan, id)
+                        .Where(uid => !existing[id].Contains(uid))
+                        .ToArray();
+
+                    Assert.That(items, Has.Length.EqualTo(1), $"{id} should be spawned exactly once by the bundle.");
+                    var item = items[0];
+                    Assert.That(entMan.HasComponent<WallMountComponent>(item), Is.False,
+                        $"{id} should remain portable after vending instead of staying mounted in the rack.");
+                    var itemXform = entMan.GetComponent<TransformComponent>(item);
+                    Assert.That(itemXform.ParentUid, Is.Not.EqualTo(rack),
+                        $"{id} should not remain parented to the rack after vending.");
+                    var clearAxis = Math.Max(MathF.Abs(itemXform.LocalPosition.X), MathF.Abs(itemXform.LocalPosition.Y));
+                    Assert.That(clearAxis, Is.GreaterThan(0.45f),
+                        $"{id} should clear the rack fixture on at least one axis after auto-grab fails.");
+                }
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                foreach (var uid in new[] { rack, hunter })
+                {
+                    if (uid.IsValid() && !entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+
+            await pair.CleanReturnAsync();
+        }
+    }
+
+    private static IEnumerable<EntityUid> EntitiesByPrototype(IEntityManager entMan, string id)
+    {
+        var query = entMan.EntityQueryEnumerator<MetaDataComponent>();
+        while (query.MoveNext(out var uid, out var meta))
+        {
+            if (meta.EntityPrototype?.ID == id)
+                yield return uid;
+        }
     }
 
     private static IEnumerable<BundleWrapperRow> BundleWrapperRows()
