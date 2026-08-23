@@ -1,6 +1,5 @@
 using Content.IntegrationTests.Tests.Interaction;
 using Content.Shared.Damage.Components;
-using Content.Shared.Physics;
 using Content.Shared.Throwing;
 using Robust.Server.GameObjects;
 using Robust.Shared.Physics;
@@ -12,7 +11,7 @@ public sealed class ItemThrowingTest : InteractionTest
 {
     [Test]
     [TestOf(typeof(ThrownItemComponent))]
-    public async Task TestThrownItemsUseHardCollisionOnHunterShipWalls()
+    public async Task TestThrownItemsDoNotUseHardCollision()
     {
         await SpawnTarget("CMUHunterShipWallTurfClosedWallHuntershipHunterBase");
         var pen = await PlaceInHands("Pen");
@@ -22,10 +21,10 @@ public sealed class ItemThrowingTest : InteractionTest
 
         var fixtures = Comp<FixturesComponent>(pen);
         Assert.That(fixtures.Fixtures.TryGetValue("throw-fixture", out var thrownFixture), Is.True);
-        Assert.That(thrownFixture!.Hard, Is.True,
-            "The active throw fixture must participate in physical collision resolution.");
-        Assert.That(thrownFixture.CollisionLayer & (int) CollisionGroup.ThrownItem, Is.Not.EqualTo(0),
-            "The active throw fixture must advertise the thrown-item collision layer to ship walls.");
+        Assert.That(thrownFixture!.Hard, Is.False,
+            "Thrown items may report hits, but must not physically push players or other colliders.");
+        Assert.That(thrownFixture.CollisionLayer, Is.EqualTo(0),
+            "Thrown items must not advertise a physical collision layer.");
     }
 
     /// <summary>
