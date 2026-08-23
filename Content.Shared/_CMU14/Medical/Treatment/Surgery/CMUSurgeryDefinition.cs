@@ -23,6 +23,8 @@ public sealed class CMUSurgeryDefinition
     public string Category { get; }
     public int MinSkill { get; }
     public bool AllowSelfSurgery { get; }
+    public bool AllowStanding { get; }
+    public bool RequiresYautjaTech { get; }
     public FrozenSet<BodyPartType> ValidParts { get; }
     public FrozenSet<BodyPartType> SelfSurgeryValidParts { get; }
     public ImmutableArray<CMUSurgeryStepDefinition> Steps { get; }
@@ -38,6 +40,8 @@ public sealed class CMUSurgeryDefinition
         string category,
         int minSkill,
         bool allowSelfSurgery,
+        bool allowStanding,
+        bool requiresYautjaTech,
         FrozenSet<BodyPartType> validParts,
         FrozenSet<BodyPartType> selfSurgeryValidParts,
         ImmutableArray<CMUSurgeryStepDefinition> steps,
@@ -52,6 +56,8 @@ public sealed class CMUSurgeryDefinition
         Category = category;
         MinSkill = minSkill;
         AllowSelfSurgery = allowSelfSurgery;
+        AllowStanding = allowStanding;
+        RequiresYautjaTech = requiresYautjaTech;
         ValidParts = validParts;
         SelfSurgeryValidParts = selfSurgeryValidParts;
         Steps = steps;
@@ -91,7 +97,8 @@ public sealed record CMUSurgeryStepDefinition(
     string Label,
     string? ToolCategory,
     CMUSurgeryOrganCondition? OrganCondition,
-    string? ReinsertOrganSlot);
+    string? ReinsertOrganSlot,
+    float? DoAfterSeconds);
 
 public readonly record struct CMUSurgeryOrganCondition(string OrganSlot, OrganDamageStage MinStage);
 

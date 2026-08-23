@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Client._CMU14.Yautja;
 using Content.Shared._RMC14.Holiday;
 using Content.Shared._RMC14.Marines.Roles.Ranks;
 using Content.Shared._RMC14.Medical.Refill;
@@ -48,7 +49,10 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
         _window.ReagentsBar.ForegroundStyleBoxOverride = new StyleBoxFlat(Color.FromHex("#AF7F38"));
 
         if (EntMan.TryGetComponent(Owner, out CMAutomatedVendorComponent? vendor))
+        {
+            ApplyWindowStyle(vendor);
             RebuildSections(vendor, EntMan.GetComponentOrNull<CMVendorUserComponent>(_player.LocalEntity));
+        }
 
         _window.Search.OnTextChanged += OnSearchChanged;
         Refresh();
@@ -87,6 +91,7 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
             var uiSection = new CMAutomatedVendorSection { Section = section };
             uiSection.Label.SetMessage(GetSectionName(user, section));
             uiSection.Visible = IsSectionValid(section);
+            ApplySectionStyle(vendor, uiSection);
 
             for (var entryIndex = 0; entryIndex < section.Entries.Count; entryIndex++)
             {
@@ -110,20 +115,27 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                     var color = CMAutomatedVendorPanel.DefaultColor;
                     var borderColor = CMAutomatedVendorPanel.DefaultBorderColor;
                     var hoverColor = CMAutomatedVendorPanel.DefaultBorderColor;
-                    if (section.TakeAll != null || section.TakeOne != null)
+                    if (vendor.UiStyle == CMVendorUiStyle.Yautja)
+                    {
+                        color = YautjaBracerUiStyle.DeepCard;
+                        borderColor = YautjaBracerUiStyle.MutedBorder;
+                        hoverColor = YautjaBracerUiStyle.Row;
+                    }
+
+                    if (section.TakeAll != null || section.TakeOne != null || entry.Mandatory)
                     {
                         name = $"Mandatory: {name}";
-                        color = Color.FromHex("#251A0C");
-                        borderColor = Color.FromHex("#805300");
-                        hoverColor = Color.FromHex("#805300");
+                        color = vendor.UiStyle == CMVendorUiStyle.Yautja ? Color.FromHex("#240909") : Color.FromHex("#251A0C");
+                        borderColor = vendor.UiStyle == CMVendorUiStyle.Yautja ? YautjaBracerUiStyle.HotRed : Color.FromHex("#805300");
+                        hoverColor = borderColor;
                     }
                     else if (entry.Recommended)
                     {
                         uiEntry.Panel.Button.TextLabel.Text = $"★ {uiEntry.Panel.Button.TextLabel.Text}";
                         name = $"Recommended: {name}";
-                        color = Color.FromHex("#102919");
-                        borderColor = Color.FromHex("#3A9B52");
-                        hoverColor = Color.FromHex("#3A9B52");
+                        color = vendor.UiStyle == CMVendorUiStyle.Yautja ? Color.FromHex("#200606") : Color.FromHex("#102919");
+                        borderColor = vendor.UiStyle == CMVendorUiStyle.Yautja ? YautjaBracerUiStyle.Red : Color.FromHex("#3A9B52");
+                        hoverColor = borderColor;
                     }
 
                     uiEntry.Panel.Color = color;
@@ -168,6 +180,23 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
 
             _window.Sections.AddChild(uiSection);
         }
+    }
+
+    private void ApplyWindowStyle(CMAutomatedVendorComponent vendor)
+    {
+        if (_window == null || vendor.UiStyle != CMVendorUiStyle.Yautja)
+            return;
+
+        _window.ReagentsBar.ForegroundStyleBoxOverride = YautjaBracerUiStyle.Flat(YautjaBracerUiStyle.Red, YautjaBracerUiStyle.HotRed);
+        _window.PointsLabel.FontColorOverride = YautjaBracerUiStyle.HotRed;
+    }
+
+    private static void ApplySectionStyle(CMAutomatedVendorComponent vendor, CMAutomatedVendorSection section)
+    {
+        if (vendor.UiStyle != CMVendorUiStyle.Yautja)
+            return;
+
+        section.Label.Modulate = YautjaBracerUiStyle.HotRed;
     }
 
     private bool IsSectionValid(CMVendorSection section)
@@ -305,7 +334,10 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
             {
                 var entry = section.Entries[entryIndex];
                 var uiEntry = (CMAutomatedVendorEntry) uiSection.Entries.GetChild(entryIndex);
-                var disabled = sectionDisabled || entry.Amount <= 0;
+                var personalRemaining = entry.MaxPerUser is { } maxPerUser
+                    ? maxPerUser - (user?.PurchaseCounts.GetValueOrDefault(entry.Id.Id) ?? 0)
+                    : (int?) null;
+                var disabled = sectionDisabled || entry.Amount <= 0 || personalRemaining <= 0;
                 if (section.TakeAll is { } takeAllId)
                 {
                     var takeAll = user?.TakeAll;
@@ -346,14 +378,19 @@ public sealed partial class CMAutomatedVendorBui : BoundUserInterface
                 // column above, so our "x5" would just repeat the number next to itself. Hide it in that
                 // case - Visible (not an empty string) so the label surrenders its MinWidth instead of
                 // leaving a blank gap in the row.
-                var amountAlreadyShowsStock = entry.Points == null && entry.Amount != null;
+                var amountAlreadyShowsStock = entry.Points == null && entry.Amount != null &&
+                                              personalRemaining == null;
                 uiEntry.Stock.Visible = !amountAlreadyShowsStock;
 
                 if (!amountAlreadyShowsStock)
                 {
-                    uiEntry.Stock.Text = entry.Amount is { } stockLeft
+                    var stockText = entry.Amount is { } stockLeft
                         ? Loc.GetString("rmc-vending-stock-remaining", ("count", stockLeft))
                         : Loc.GetString("rmc-vending-stock-infinite");
+                    uiEntry.Stock.Text = personalRemaining is { } remaining
+                        ? Loc.GetString("rmc-vending-stock-personal", ("count", Math.Max(0, remaining)),
+                            ("stock", stockText))
+                        : stockText;
                     uiEntry.Stock.Modulate = disabled ? Color.Red : Color.White;
                 }
 

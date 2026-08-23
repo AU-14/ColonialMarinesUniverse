@@ -110,3 +110,423 @@
   chatTriggers:
   - yautjadeathlaugh
   - preddeathlaugh
+
+- type: emote
+  id: CMUYautjaAudioClick
+  name: cmu-yautja-audio-panel-emote-click
+  category: Vocal
+  icon: Interface/Emotes/click.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-click"]
+  chatTriggers:
+  - yautjaaudioclick
+
+- type: emote
+  id: CMUYautjaAudioClick2
+  name: cmu-yautja-audio-panel-emote-click2
+  category: Vocal
+  icon: Interface/Emotes/click.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-click"]
+  chatTriggers:
+  - yautjaaudioclick2
+
+- type: emote
+  id: CMUYautjaAudioGrowl
+  name: cmu-yautja-audio-panel-emote-growl
+  category: Vocal
+  icon: Interface/Emotes/chitter.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-growl"]
+  chatTriggers:
+  - yautjaaudiogrowl
+
+- type: emote
+  id: CMUYautjaAudioLaugh1
+  name: cmu-yautja-audio-panel-emote-laugh1
+  category: Vocal
+  icon: Interface/Emotes/laugh.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-laugh"]
+  chatTriggers:
+  - yautjaaudiolaugh1
+
+- type: emote
+  id: CMUYautjaAudioLaugh2
+  name: cmu-yautja-audio-panel-emote-laugh2
+  category: Vocal
+  icon: Interface/Emotes/laugh.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-laugh"]
+  chatTriggers:
+  - yautjaaudiolaugh2
+
+- type: emote
+  id: CMUYautjaAudioLaugh3
+  name: cmu-yautja-audio-panel-emote-laugh3
+  category: Vocal
+  icon: Interface/Emotes/laugh.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-laugh"]
+  chatTriggers:
+  - yautjaaudiolaugh3
+
+- type: emote
+  id: CMUYautjaAudioLaugh4
+  name: cmu-yautja-audio-panel-emote-laugh4
+  category: Vocal
+  icon: Interface/Emotes/laugh.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-laugh"]
+  chatTriggers:
+  - yautjaaudiolaugh4
+
+- type: emote
+  id: CMUYautjaAudioLaugh5
+  name: cmu-yautja-audio-panel-emote-laugh5
+  category: Vocal
+  icon: Interface/Emotes/laugh.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-laugh"]
+  chatTriggers:
+  - yautjaaudiolaugh5
+
+- type: emote
+  id: CMUYautjaAudioLaugh6
+  name: cmu-yautja-audio-panel-emote-laugh6
+  category: Vocal
+  icon: Interface/Emotes/laugh.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-laugh"]
+  chatTriggers:
+  - yautjaaudiolaugh6
+
+- type: emote
+  id: CMUYautjaAudioRoar
+  name: cmu-yautja-audio-panel-emote-roar
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-roar"]
+  chatTriggers:
+  - yautjaaudioroar
+
+- type: emote
+  id: CMUYautjaAudioRoar2
+  name: cmu-yautja-audio-panel-emote-roar2
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-roar"]
+  chatTriggers:
+  - yautjaaudioroar2
+
+- type: emote
+  id: CMUYautjaVoiceSynthAnytime
+  name: cmu-yautja-audio-panel-emote-anytime
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-anytime"]
+  chatTriggers:
+  - yautjavoiceanytime
+
+- type: emote
+  id: CMUYautjaVoiceSynthHelpMe
+  name: cmu-yautja-audio-panel-emote-helpme
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-helpme"]
+  chatTriggers:
+  - yautjavoicehelpme
+
+- type: emote
+  id: CMUYautjaVoiceSynthISeeYou
+  name: cmu-yautja-audio-panel-emote-iseeyou
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-iseeyou"]
+  chatTriggers:
+  - yautjavoiceiseeyou
+
+- type: emote
+  id: CMUYautjaVoiceSynthItsATrap
+  name: cmu-yautja-audio-panel-emote-itsatrap
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-itsatrap"]
+  chatTriggers:
+  - yautjavoiceitsatrap
+
+- type: emote
+  id: CMUYautjaVoiceSynthOverHere
+  name: cmu-yautja-audio-panel-emote-overhere
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-overhere"]
+  chatTriggers:
+  - yautjavoiceoverhere
+
+- type: emote
+  id: CMUYautjaVoiceSynthTurnAround
+  name: cmu-yautja-audio-panel-emote-turnaround
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-turnaround"]
+  chatTriggers:
+  - yautjavoiceturnaround
+
+- type: emote
+  id: CMUYautjaVoiceSynthComeOnOut
+  name: cmu-yautja-audio-panel-emote-comeonout
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-comeonout"]
+  chatTriggers:
+  - yautjavoicecomeonout
+
+- type: emote
+  id: CMUYautjaVoiceSynthOverThere
+  name: cmu-yautja-audio-panel-emote-overthere
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-overthere"]
+  chatTriggers:
+  - yautjavoiceoverthere
+
+- type: emote
+  id: CMUYautjaVoiceSynthUglyFreak
+  name: cmu-yautja-audio-panel-emote-uglyfreak
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-uglyfreak"]
+  chatTriggers:
+  - yautjavoiceuglyfreak
+
+- type: emote
+  id: CMUYautjaVoiceSynthLuckyYou
+  name: cmu-yautja-audio-panel-emote-luckyyou
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-luckyyou"]
+  chatTriggers:
+  - yautjavoiceluckyyou
+
+- type: emote
+  id: CMUYautjaVoiceSynthJustYou
+  name: cmu-yautja-audio-panel-emote-justyou
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-justyou"]
+  chatTriggers:
+  - yautjavoicejustyou
+
+- type: emote
+  id: CMUYautjaVoiceSynthTellMe
+  name: cmu-yautja-audio-panel-emote-tellme
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-tellme"]
+  chatTriggers:
+  - yautjavoicetellme
+
+- type: emote
+  id: CMUYautjaVoiceSynthDoItRookie
+  name: cmu-yautja-audio-panel-emote-doitrookie
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-doitrookie"]
+  chatTriggers:
+  - yautjavoicedoitrookie
+
+- type: emote
+  id: CMUYautjaVoiceSynthForwardMarine
+  name: cmu-yautja-audio-panel-emote-forwardmarine
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-forwardmarine"]
+  chatTriggers:
+  - yautjavoiceforwardmarine
+
+- type: emote
+  id: CMUYautjaVoiceSynthBurnYouFucker
+  name: cmu-yautja-audio-panel-emote-burnyoufucker
+  category: Vocal
+  icon: Interface/Emotes/vocal.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-voice-burnyoufucker"]
+  chatTriggers:
+  - yautjavoiceburnyoufucker
+
+- type: emote
+  id: CMUYautjaFakeAlienGrowl
+  name: cmu-yautja-audio-panel-emote-aliengrowl
+  category: Vocal
+  icon: Interface/Emotes/chitter.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-fake-aliengrowl"]
+  chatTriggers:
+  - yautjafakealiengrowl
+
+- type: emote
+  id: CMUYautjaFakeAlienHelp
+  name: cmu-yautja-audio-panel-emote-alienhelp
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-fake-alienhelp"]
+  chatTriggers:
+  - yautjafakealienhelp
+
+- type: emote
+  id: CMUYautjaFakeMaleScream
+  name: cmu-yautja-audio-panel-emote-malescream
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-fake-malescream"]
+  chatTriggers:
+  - yautjafakemalescream
+
+- type: emote
+  id: CMUYautjaFakeFemaleScream
+  name: cmu-yautja-audio-panel-emote-femalescream
+  category: Vocal
+  icon: Interface/Actions/scream.png
+  available: false
+  whitelist:
+    components:
+    - Yautja
+  chatMessages: ["cmu-yautja-emote-msg-fake-femalescream"]
+  chatTriggers:
+  - yautjafakefemalescream
+
+- type: emote
+  id: CMUYautjaHellhoundRoar
+  name: rmc-emote-name-xeno-roar
+  category: Vocal
+  available: false
+  icon:
+    sprite: _RMC14/Actions/xeno_emotes.rsi
+    state: roar
+  chatMessages: ["rmc-emote-xeno-roar"]
+
+- type: emote
+  id: CMUYautjaHellhoundGrowl
+  name: rmc-emote-name-growl
+  category: Vocal
+  available: false
+  icon:
+    sprite: _RMC14/Actions/xeno_emotes.rsi
+    state: growl
+  chatMessages: ["cmu-yautja-hellhound-emote-growl"]
+
+- type: emote
+  id: CMUYautjaHellhoundHiss
+  name: rmc-emote-name-hiss
+  category: Vocal
+  available: false
+  icon:
+    sprite: _RMC14/Actions/xeno_emotes.rsi
+    state: hiss
+  chatMessages: ["rmc-emote-hiss"]

@@ -18,6 +18,7 @@ using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.Stasis;
+using Content.Shared.Body.Events;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
@@ -26,6 +27,7 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
+using Robust.Client.Timing;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
@@ -35,6 +37,56 @@ namespace Content.IntegrationTests._CMU14.Medical.Injuries;
 [TestFixture]
 public sealed class OrganDamageEffectsTest
 {
+    [Test]
+    public async Task DamagedOrganAddedCallbacksDoNotCreateStatusEffectsDuringStateApplication()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true, Dirty = true });
+        var client = pair.Client;
+
+        await client.WaitAssertion(() =>
+        {
+            var entMan = client.EntMan;
+            var index = entMan.System<CMUMedicalBodyIndexSystem>();
+            var status = entMan.System<SharedStatusEffectsSystem>();
+            var timing = client.ResolveDependency<IClientGameTiming>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            try
+            {
+                var torso = GetPart(index, human, BodyPartType.Torso, BodyPartSymmetry.None);
+                var liver = GetOrgan<LiverComponent>(index, human);
+                var kidneys = GetOrgan<KidneysComponent>(index, human);
+                var stomach = GetOrgan<CMUStomachComponent>(index, human);
+                SetField(entMan.GetComponent<OrganHealthComponent>(liver), nameof(OrganHealthComponent.Stage), OrganDamageStage.Damaged);
+                SetField(entMan.GetComponent<OrganHealthComponent>(kidneys), nameof(OrganHealthComponent.Stage), OrganDamageStage.Damaged);
+                SetField(entMan.GetComponent<OrganHealthComponent>(stomach), nameof(OrganHealthComponent.Stage), OrganDamageStage.Damaged);
+
+                using (timing.StartStateApplicationArea())
+                {
+                    Assert.That(timing.ApplyingState, Is.True);
+                    var liverAdded = new OrganAddedToBodyEvent(human, torso);
+                    entMan.EventBus.RaiseLocalEvent(liver, ref liverAdded);
+                    var kidneysAdded = new OrganAddedToBodyEvent(human, torso);
+                    entMan.EventBus.RaiseLocalEvent(kidneys, ref kidneysAdded);
+                    var stomachAdded = new OrganAddedToBodyEvent(human, torso);
+                    entMan.EventBus.RaiseLocalEvent(stomach, ref stomachAdded);
+                }
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUHepaticFailure"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMURenalFailure"), Is.False);
+                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.False);
+                });
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task FractureMovementCanSeedInternalBleedingAndDamageRegionalOrgans()
     {

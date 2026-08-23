@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared._RMC14.Water;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Projectile.Spit;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Alert;
 using Content.Shared.Atmos;
@@ -581,7 +582,10 @@ namespace Content.Server.Atmos.EntitySystems
                             _damageableSystem.TryChangeDamage(uid, damage, true, false, origin: uid);
                     }
 
-                    AdjustFireStacks(uid, flammable.Resisting ? flammable.ResistStacks : -0.25f, flammable, flammable.OnFire);
+                    var fireStackDecay = HasComp<YautjaComponent>(uid)
+                        ? -2f
+                        : flammable.Resisting ? flammable.ResistStacks : -0.25f;
+                    AdjustFireStacks(uid, fireStackDecay, flammable, flammable.OnFire);
                 }
                 else
                 {

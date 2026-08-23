@@ -126,7 +126,9 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     public override bool IsPowered(EntityUid ent)
     {
-        return TryComp(ent, out ApcPowerReceiverComponent? receiver) && receiver.Powered;
+        return TryComp(ent, out ApcPowerReceiverComponent? receiver) &&
+               !receiver.PowerDisabled &&
+               (!receiver.NeedsPower || receiver.Powered);
     }
 
     private void UpdatePortableGenerators()

@@ -1,0 +1,1134 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/weapons/grenade.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "ir_beacon"
+    },
+    {
+      "name": "ir_beacon_active",
+      "delays": [
+        [
+          0.5,
+          0.1,
+          1,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "flashbang"
+    },
+    {
+      "name": "flashbang_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "delivery"
+    },
+    {
+      "name": "delivery_active",
+      "delays": [
+        [
+          0.1,
+          0.2,
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "emp"
+    },
+    {
+      "name": "emp_active",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "chemg"
+    },
+    {
+      "name": "m20"
+    },
+    {
+      "name": "m20p"
+    },
+    {
+      "name": "m20_active",
+      "directions": 4,
+      "delays": [
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ],
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ],
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ],
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "m20p_active",
+      "directions": 4,
+      "delays": [
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ],
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ],
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ],
+        [
+          4,
+          0.2,
+          0.1,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "danger",
+      "delays": [
+        [
+          0.3,
+          0.3
+        ]
+      ]
+    },
+    {
+      "name": "grenade_ex"
+    },
+    {
+      "name": "grenade_ex_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade"
+    },
+    {
+      "name": "grenade_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_activeOLD",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenadeOLD"
+    },
+    {
+      "name": "grenade_fire"
+    },
+    {
+      "name": "grenade_fire_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_smoke"
+    },
+    {
+      "name": "grenade_smoke_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_phos"
+    },
+    {
+      "name": "grenade_phos_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_chem"
+    },
+    {
+      "name": "grenade_chem_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_metal_foam"
+    },
+    {
+      "name": "grenade_metal_foam_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_stick"
+    },
+    {
+      "name": "grenade_stick_active"
+    },
+    {
+      "name": "grenade_phos_clf"
+    },
+    {
+      "name": "grenade_phos_clf_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "rmc_grenade"
+    },
+    {
+      "name": "rmc_grenade_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "rmc_grenade_fire"
+    },
+    {
+      "name": "rmc_grenade_fire_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "rmc_grenade_gas"
+    },
+    {
+      "name": "rmc_grenade_gas_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_upp"
+    },
+    {
+      "name": "grenade_upp_active"
+    },
+    {
+      "name": "grenade_upp_wp"
+    },
+    {
+      "name": "grenade_upp_wp_active"
+    },
+    {
+      "name": "molotov"
+    },
+    {
+      "name": "molotov_active",
+      "delays": [
+        [
+          0.07,
+          0.1,
+          0.07,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "grenade_pmc"
+    },
+    {
+      "name": "grenade_pmc_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "training_grenade"
+    },
+    {
+      "name": "training_grenade_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "flashbang2"
+    },
+    {
+      "name": "flashbang2_active",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "grenade_hefa"
+    },
+    {
+      "name": "grenade_hefa_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "neuro_nade"
+    },
+    {
+      "name": "neuro_nade_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "neuro_nade_greyscale"
+    },
+    {
+      "name": "\u002Bneuro_nade_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_antioch"
+    },
+    {
+      "name": "grenade_antioch_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_custom"
+    },
+    {
+      "name": "grenade_custom_ass"
+    },
+    {
+      "name": "grenade_custom_locked"
+    },
+    {
+      "name": "grenade_custom_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "large_grenade_custom"
+    },
+    {
+      "name": "large_grenade_custom_ass"
+    },
+    {
+      "name": "large_grenade_custom_locked"
+    },
+    {
+      "name": "large_grenade_custom_active",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "m20_custom"
+    },
+    {
+      "name": "m20_custom_ass"
+    },
+    {
+      "name": "m20_custom_locked"
+    },
+    {
+      "name": "m20_custom_active",
+      "directions": 4,
+      "delays": [
+        [
+          3,
+          0.2
+        ],
+        [
+          3,
+          0.2
+        ],
+        [
+          3,
+          0.2
+        ],
+        [
+          3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "warhead_rocket"
+    },
+    {
+      "name": "warhead_rocket_ass"
+    },
+    {
+      "name": "warhead_rocket_locked"
+    },
+    {
+      "name": "warhead_mortar"
+    },
+    {
+      "name": "warhead_mortar_ass"
+    },
+    {
+      "name": "warhead_mortar_locked"
+    },
+    {
+      "name": "grenade_m74_airburst_f"
+    },
+    {
+      "name": "grenade_m74_airburst_f_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_m74_airburst_i"
+    },
+    {
+      "name": "grenade_m74_airburst_i_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_m74_airburst_s"
+    },
+    {
+      "name": "grenade_m74_airburst_s_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_40mm_buckshot"
+    },
+    {
+      "name": "grenade_40mm_buckshot_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_40mm_phos"
+    },
+    {
+      "name": "grenade_40mm_phos_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_40mm_inc"
+    },
+    {
+      "name": "grenade_40mm_inc_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_40mm_he"
+    },
+    {
+      "name": "grenade_40mm_he_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_40mm_hedp"
+    },
+    {
+      "name": "grenade_40mm_hedp_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "grenade_sebb"
+    },
+    {
+      "name": "grenade_sebb_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "grenade_sebb_planted"
+    },
+    {
+      "name": "grenade_sebb_planted_active"
+    },
+    {
+      "name": "rubber_grenade"
+    },
+    {
+      "name": "rubber_grenade_active",
+      "delays": [
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "cluster"
+    },
+    {
+      "name": "cluster_segment_active",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "m40_2"
+    },
+    {
+      "name": "m40_2_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "cluster_segment"
+    },
+    {
+      "name": "flashbang_noskill"
+    },
+    {
+      "name": "cluster_active",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "flashbang_noskill_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ],
+        [
+          0.1,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "baton_slug",
+      "directions": 4
+    },
+    {
+      "name": "baton_slug_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "grenade_hornet"
+    },
+    {
+      "name": "grenade_hornet_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "grenade_starshell"
+    },
+    {
+      "name": "grenade_starshell_active",
+      "directions": 4,
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ],
+        [
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "sonicharpoon_g_disarmed"
+    },
+    {
+      "name": "sonicharpoon_g",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sonicharpoon_g_active",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_incendiary_mine",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_explosive_mine",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_incendiary_mine_active",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_explosive_mine_active",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_incendiary_mine_active_2",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_explosive_mine_active_2",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_incendiary_mine_active_3",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_explosive_mine_active_3",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_incendiary_mine_active_4",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_explosive_mine_active_4",
+      "delays": [
+        [
+          0.3,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "sharp_mine_disarmed"
+    }
+  ]
+}

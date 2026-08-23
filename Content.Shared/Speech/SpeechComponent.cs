@@ -35,6 +35,13 @@ namespace Content.Shared.Speech
         public List<ProtoId<EmotePrototype>> AllowedEmotes = new();
 
         /// <summary>
+        /// Per-entity replacement for a globally parsed emote trigger.
+        /// </summary>
+        [ViewVariables(VVAccess.ReadWrite)]
+        [DataField]
+        public Dictionary<ProtoId<EmotePrototype>, ProtoId<EmotePrototype>> EmoteOverrides = new();
+
+        /// <summary>
         ///     A mapping from chat suffixes loc strings to speech verb prototypes that should be conditionally used.
         ///     For things like '?' changing to 'asks' or '!!' making text bold and changing to 'yells'. Can be overridden if necessary.
         /// </summary>

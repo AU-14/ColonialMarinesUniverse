@@ -35,8 +35,7 @@ public sealed partial class CMUZPhysicsComponent : Component
 
     /// <summary>
     /// Used only by the client.
-    /// Blocks the rotation of an object if it has <see cref="LocalPosition"/> > 0,
-    /// and saves the original NoRot value in SpriteComponent here so that it can be restored in the future.
+    /// Saves the original NoRot value in SpriteComponent here so that it can be restored in the future.
     /// </summary>
     [DataField]
     public bool NoRotDefault;

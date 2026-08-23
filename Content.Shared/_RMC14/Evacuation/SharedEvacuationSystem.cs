@@ -82,6 +82,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         SubscribeLocalEvent<EvacuationDisabledEvent>(OnEvacuationDisabled);
         SubscribeLocalEvent<EvacuationProgressEvent>(OnEvacuationProgress);
         SubscribeLocalEvent<RoundRestartCleanupEvent>(OnRoundRestartCleanup);
+        SubscribeLocalEvent<MapRemovedEvent>(OnMapRemoved);
 
         SubscribeLocalEvent<GridSpawnerComponent, MapInitEvent>(OnGridSpawnerMapInit);
 
@@ -195,6 +196,15 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         _index = 0;
     }
 
+    private void OnMapRemoved(MapRemovedEvent ev)
+    {
+        if (_map != ev.MapId)
+            return;
+
+        _map = null;
+        _index = 0;
+    }
+
     private void OnGridSpawnerMapInit(Entity<GridSpawnerComponent> ent, ref MapInitEvent args)
     {
         if (ent.Comp.Spawn is not { } spawn)
@@ -203,7 +213,7 @@ public abstract partial class SharedEvacuationSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        if (!_config.GetCVar(CCVars.GridFill))
+        if (!_config.GetCVar(CCVars.GridFill) && !ent.Comp.IgnoreGridFill)
             return;
 
         if (_map == null)

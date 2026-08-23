@@ -60,6 +60,21 @@ public sealed partial class CryoPodComponent : Component
     [ViewVariables]
     public ContainerSlot BodyContainer = default!;
 
+    [DataField]
+    public string OpenState = "pod-open";
+
+    [DataField]
+    public string OnState = "pod-on";
+
+    [DataField]
+    public string OffState = "pod-off";
+
+    [DataField]
+    public string CoverOnState = "cover-on";
+
+    [DataField]
+    public string CoverOffState = "cover-off";
+
     /// <summary>
     /// If true, the eject verb will not work on the pod and the user must use a crowbar to pry the pod open.
     /// </summary>

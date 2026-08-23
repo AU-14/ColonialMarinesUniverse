@@ -14,7 +14,10 @@ public sealed class PlayerBeforeSpawnEvent : HandledEntityEventArgs
 {
     public ICommonSession Player { get; }
     public HumanoidCharacterProfile Profile { get; }
-    public string? JobId { get; }
+    /// <summary>
+    /// Requested job. A system may clear this to let the normal job picker apply its restrictions.
+    /// </summary>
+    public string? JobId { get; set; }
     public bool LateJoin { get; }
     public EntityUid Station { get; }
 

@@ -19,3 +19,5 @@ crew-monitoring-user-interface-no-department = Unknown
 
 crew-monitoring-user-interface-flavor-left = In case of an emergency, contact station medical staff immediately
 crew-monitoring-user-interface-flavor-right = v1.7
+
+cmu-yautja-crew-monitor-tooltip = Area: {$area}; O₂: {$oxygen}; Toxins: {$toxin}; Burn: {$burn}; Brute: {$brute}

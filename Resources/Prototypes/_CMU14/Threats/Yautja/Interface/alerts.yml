@@ -2,45 +2,36 @@
   id: CMUYautjaPower
   category: Plasma
   icons:
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_full
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_16
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_15
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_14
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_13
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_12
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_11
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_10
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_9
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_8
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_7
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_6
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_5
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_4
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_3
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_2
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_1
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_0
-  - sprite: /Textures/_RMC14/Interface/Alerts/xeno_plasma.rsi
-    state: power_display_empty
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar100
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar90
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar80
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar70
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar60
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar50
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar40
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar30
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar20
+  - sprite: /Textures/_CMU14/Yautja/hud_yautja.rsi
+    state: powerbar10
   name: cmu-yautja-alert-power-name
   description: cmu-yautja-alert-power-desc
   minSeverity: 0
-  maxSeverity: 18
+  maxSeverity: 9
+
+- type: alert
+  id: CMUYautjaTrapBreakFree
+  clickEvent: !type:YautjaTrapBreakFreeAlertEvent
+  icons:
+  - sprite: /Textures/Interface/Alerts/ensnared.rsi
+    state: ensnared
+  name: cmu-yautja-trap-break-free-alert-name
+  description: cmu-yautja-trap-break-free-alert-desc

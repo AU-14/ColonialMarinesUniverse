@@ -213348,4 +213348,17 @@ entities:
       icon:
         sprite: _RMC14/Interface/map_blips.rsi
         state: xenotunnel
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000005
+    components:
+    - type: MetaData
+      name: Hybrisa Metropolitan ground relay
+    - type: Transform
+      pos: -204.5,-37.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: hybrisa-metropolitan.ground.relay
+      displayName: Hybrisa Metropolitan Ground Relay
 ...

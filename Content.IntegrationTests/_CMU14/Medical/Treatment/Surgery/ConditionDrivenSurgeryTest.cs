@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Content.Server._CMU14.Medical.Injuries.Wounds;
 using Content.Server._CMU14.Medical.Treatment.Surgery;
@@ -32,9 +33,11 @@ using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Standing;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Localization;
 using Robust.Shared.Map;
 using Robust.Shared.Utility;
 
@@ -2124,6 +2127,45 @@ public sealed class ConditionDrivenSurgeryTest
                 Assert.That(
                     handEntry!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
                     Does.Contain("CMUAutodocRepairWounds"));
+            }
+            finally
+            {
+                entMan.DeleteEntity(human);
+                entMan.DeleteEntity(surgeon);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task ManualSurgeryEntriesShowBodyPartWounds()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var dispatch = entMan.System<CMUSurgeryDispatchSystem>();
+            var skills = entMan.System<SkillsSystem>();
+            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+
+            try
+            {
+                skills.SetSkill(surgeon, "RMCSkillSurgery", 3);
+                entMan.System<StandingStateSystem>().Down(human, playSound: false, dropHeldItems: false, force: true);
+
+                var hand = GetBodyPart(entMan, human, BodyPartType.Hand, BodyPartSymmetry.Right);
+                AddBodyPartWound(entMan, hand, WoundType.Brute);
+
+                var handEntry = dispatch.BuildPartEntries(human, surgeon)
+                    .Single(entry => entry.Type == BodyPartType.Hand && entry.Symmetry == BodyPartSymmetry.Right);
+
+                Assert.That(
+                    handEntry.ConditionSummary,
+                    Is.EqualTo(Loc.GetString("cmu-medical-surgery-condition-wounds")));
             }
             finally
             {

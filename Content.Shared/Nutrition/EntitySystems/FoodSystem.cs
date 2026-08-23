@@ -27,6 +27,8 @@ using Content.Shared.Verbs;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Network;
+using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.Nutrition.EntitySystems;
@@ -45,6 +47,8 @@ public sealed partial class FoodSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private ReactiveSystem _reaction = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private INetManager _netManager = default!;
+    [Dependency] private IGameTiming _gameTiming = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
@@ -298,7 +302,19 @@ public sealed partial class FoodSystem : EntitySystem
             _adminLogger.Add(LogType.Ingestion, LogImpact.Low, $"{ToPrettyString(args.User):target} ate {ToPrettyString(entity.Owner):food}");
         }
 
-        _audio.PlayPredicted(entity.Comp.UseSound, args.Target.Value, args.User, AudioParams.Default.WithVolume(-1f).WithVariation(0.20f));
+        var audioParams = AudioParams.Default.WithVolume(-1f).WithVariation(0.20f);
+        if (_netManager.IsClient && !_gameTiming.IsFirstTimePredicted)
+        {
+            // Food eaten through an alternative verb or from a map-placed item can
+            // complete outside the prediction window. Play locally in that case so
+            // the eater still hears the bite instead of relying on a suppressed
+            // server-side predicted sound.
+            _audio.PlayPvs(entity.Comp.UseSound, args.Target.Value, audioParams);
+        }
+        else
+        {
+            _audio.PlayPredicted(entity.Comp.UseSound, args.Target.Value, args.User, audioParams);
+        }
 
         // Try to break all used utensils
         foreach (var utensil in utensils)

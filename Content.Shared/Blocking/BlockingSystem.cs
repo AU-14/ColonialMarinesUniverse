@@ -1,11 +1,13 @@
 using System.Linq;
 using Content.Shared.Actions;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Damage;
 using Content.Shared.Examine;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.IdentityManagement;
+using Content.Shared.Item;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
@@ -27,6 +29,7 @@ public sealed partial class BlockingSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transformSystem = default!;
     [Dependency] private FixtureSystem _fixtureSystem = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
+    [Dependency] private SharedItemSystem _itemSystem = default!;
     [Dependency] private SharedPopupSystem _popupSystem = default!;
     [Dependency] private EntityLookupSystem _lookup = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
@@ -203,6 +206,7 @@ public sealed partial class BlockingSystem : EntitySystem
 
         component.IsBlocking = true;
         Dirty(item, component);
+        SetYautjaShieldHeldPrefix(item, readied: true);
 
         return true;
     }
@@ -255,8 +259,20 @@ public sealed partial class BlockingSystem : EntitySystem
 
         component.IsBlocking = false;
         Dirty(item, component);
+        SetYautjaShieldHeldPrefix(item, readied: false);
 
         return true;
+    }
+
+    private void SetYautjaShieldHeldPrefix(EntityUid item, bool readied)
+    {
+        if (!TryComp(item, out YautjaShieldHeldPrefixComponent? shield) ||
+            !TryComp(item, out ItemComponent? heldItem))
+        {
+            return;
+        }
+
+        _itemSystem.SetHeldPrefix(item, readied ? shield.Readied : shield.Lowered, component: heldItem);
     }
 
     /// <summary>

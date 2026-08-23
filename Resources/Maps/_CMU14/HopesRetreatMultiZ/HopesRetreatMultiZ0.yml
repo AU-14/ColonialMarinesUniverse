@@ -332934,4 +332934,17 @@ entities:
       rot: -1.5707963267948966 rad
       pos: -100.5,-122.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000001
+    components:
+    - type: MetaData
+      name: Hope's Retreat ground relay
+    - type: Transform
+      pos: 36.5,-65.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: hopes-retreat.ground.relay
+      displayName: Hope's Retreat Ground Relay
 ...

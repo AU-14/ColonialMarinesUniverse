@@ -13,6 +13,36 @@
   - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click10.wav
 
 - type: soundCollection
+  id: CMUYautjaAudioClick
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click01.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click02.wav
+
+- type: soundCollection
+  id: CMUYautjaAudioClick2
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click03.wav
+  - /Audio/_CMU14/Yautja/Voice/Clicks/pred_click04.wav
+
+- type: soundCollection
+  id: CMUYautjaAudioRoar
+  files:
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar1.wav
+  - /Audio/_CMU14/Yautja/Voice/Roars/pred_roar2.wav
+
+- type: soundCollection
+  id: CMUYautjaFakeAlienGrowl
+  files:
+  - /Audio/_RMC14/Xeno/alien_growl1.ogg
+  - /Audio/_RMC14/Xeno/alien_growl2.ogg
+
+- type: soundCollection
+  id: CMUYautjaFakeAlienHelp
+  files:
+  - /Audio/_RMC14/Xeno/alien_help1.ogg
+  - /Audio/_RMC14/Xeno/alien_help2.ogg
+
+- type: soundCollection
   id: CMUYautjaCloakWarning
   files:
   - /Audio/_CMU14/Yautja/Equipment/predator_cloak_warning_01.wav
@@ -205,6 +235,66 @@
 - type: emoteSounds
   id: CMUBaseYautja
   sounds:
+    CMUYautjaAudioClick:
+      collection: CMUYautjaAudioClick
+    CMUYautjaAudioClick2:
+      collection: CMUYautjaAudioClick2
+    CMUYautjaAudioGrowl:
+      path: /Audio/_CMU14/Yautja/Voice/Roars/predgrowl.wav
+    CMUYautjaAudioLaugh1:
+      path: /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh1.wav
+    CMUYautjaAudioLaugh2:
+      path: /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh2.wav
+    CMUYautjaAudioLaugh3:
+      path: /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh3.wav
+    CMUYautjaAudioLaugh4:
+      path: /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh4.wav
+    CMUYautjaAudioLaugh5:
+      path: /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh5.wav
+    CMUYautjaAudioLaugh6:
+      path: /Audio/_CMU14/Yautja/Voice/Laughs/pred_laugh6.wav
+    CMUYautjaAudioRoar:
+      collection: CMUYautjaAudioRoar
+    CMUYautjaAudioRoar2:
+      path: /Audio/_CMU14/Yautja/Voice/Roars/pred_roar3.wav
+    CMUYautjaVoiceSynthAnytime:
+      path: /Audio/_CMU14/Yautja/pred_anytime.ogg
+    CMUYautjaVoiceSynthHelpMe:
+      path: /Audio/_CMU14/Yautja/pred_helpme.ogg
+    CMUYautjaVoiceSynthISeeYou:
+      path: /Audio/_CMU14/Yautja/i_see_you2.ogg
+    CMUYautjaVoiceSynthItsATrap:
+      path: /Audio/_CMU14/Yautja/pred_itsatrap.ogg
+    CMUYautjaVoiceSynthOverHere:
+      path: /Audio/_CMU14/Yautja/pred_overhere.ogg
+    CMUYautjaVoiceSynthTurnAround:
+      path: /Audio/_CMU14/Yautja/pred_turnaround.ogg
+    CMUYautjaVoiceSynthComeOnOut:
+      path: /Audio/_CMU14/Yautja/pred_come_on_out.ogg
+    CMUYautjaVoiceSynthOverThere:
+      path: /Audio/_CMU14/Yautja/pred_over_there.ogg
+    CMUYautjaVoiceSynthUglyFreak:
+      path: /Audio/_CMU14/Yautja/pred_ugly_freak.ogg
+    CMUYautjaVoiceSynthLuckyYou:
+      path: /Audio/_CMU14/Yautja/lucky_you.ogg
+    CMUYautjaVoiceSynthJustYou:
+      path: /Audio/_CMU14/Yautja/just_you.ogg
+    CMUYautjaVoiceSynthTellMe:
+      path: /Audio/_CMU14/Yautja/tell_me.ogg
+    CMUYautjaVoiceSynthDoItRookie:
+      path: /Audio/_CMU14/Yautja/just_do_it_rookie.ogg
+    CMUYautjaVoiceSynthForwardMarine:
+      path: /Audio/_CMU14/Yautja/forward_marine.ogg
+    CMUYautjaVoiceSynthBurnYouFucker:
+      path: /Audio/_CMU14/Yautja/burn_you.ogg
+    CMUYautjaFakeAlienGrowl:
+      collection: CMUYautjaFakeAlienGrowl
+    CMUYautjaFakeAlienHelp:
+      collection: CMUYautjaFakeAlienHelp
+    CMUYautjaFakeMaleScream:
+      collection: CMMaleScreams
+    CMUYautjaFakeFemaleScream:
+      collection: CMFemaleScreams
     CMUYautjaClick:
       collection: CMUYautjaSpeechClicks
     CMUYautjaRoar:

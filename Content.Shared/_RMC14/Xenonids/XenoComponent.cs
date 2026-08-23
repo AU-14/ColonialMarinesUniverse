@@ -39,6 +39,9 @@ public sealed partial class XenoComponent : Component
     public bool CountedInSlots = true;
 
     [DataField, AutoNetworkedField]
+    public bool AutoAssignHive = true;
+
+    [DataField, AutoNetworkedField]
     public bool BypassTierCount;
 
     [DataField, AutoNetworkedField]

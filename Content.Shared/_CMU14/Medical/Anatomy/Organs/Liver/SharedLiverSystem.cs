@@ -52,7 +52,7 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnLiverRemovedFromBody(Entity<LiverComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (!_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
+        if (Timing.ApplyingState || !_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
             return;
 
         var missing = EnsureComp<MissingLiverComponent>(args.OldBody);
@@ -62,6 +62,9 @@ public abstract partial class SharedLiverSystem : EntitySystem
 
     private void OnLiverAddedToBody(Entity<LiverComponent> ent, ref OrganAddedToBodyEvent args)
     {
+        if (Timing.ApplyingState)
+            return;
+
         RemCompDeferred<MissingLiverComponent>(args.Body);
         if (TryComp<OrganHealthComponent>(ent, out var health) &&
             health.Stage.IsAtLeast(OrganDamageStage.Damaged))

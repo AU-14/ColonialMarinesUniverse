@@ -32,6 +32,8 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         SubscribeLocalEvent<GunComponent, ItemUnwieldedEvent>(OnGunUnwielded);
         SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelLookUpEnabledEvent>(OnLookUpEnabled);
+        SubscribeLocalEvent<CMUZLevelViewerComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
+        SubscribeLocalEvent<CMUZLevelShooterComponent, CMUZLevelAdjustShotEvent>(OnAdjustShot);
 
         CommandBinds.Builder
             .Bind(CMUKeyFunctions.CMUToggleShootDownZLevel,
@@ -63,6 +65,28 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             PopupSelf(args.User, "cmu-zlevel-shoot-down-disabled-unwield");
         }
 
+    }
+
+    private void OnAdjustShot<T>(Entity<T> ent, ref CMUZLevelAdjustShotEvent args)
+        where T : IComponent
+    {
+        if (args.Handled)
+            return;
+
+        args.Handled = true;
+        if (!TryAdjustShotCoordinates(
+                args.User,
+                args.FromCoordinates,
+                args.ToCoordinates,
+                out var adjustedFrom,
+                out var adjustedTo))
+        {
+            args.Cancel();
+            return;
+        }
+
+        args.FromCoordinates = adjustedFrom;
+        args.ToCoordinates = adjustedTo;
     }
 
     private void ToggleShootDown(EntityUid user)
@@ -392,10 +416,10 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
         out Vector2 projectileFrom,
         out Vector2 projectileTo)
     {
-        projectileFrom = NudgeOpeningTowardSource(opening, from);
-        var direction = to - from;
+        projectileFrom = opening;
+        var direction = to - opening;
         if (direction.LengthSquared() <= 0.001f)
-            direction = clampedTo - projectileFrom;
+            direction = clampedTo - opening;
 
         if (direction.LengthSquared() <= 0.001f)
         {
@@ -403,7 +427,7 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
             return;
         }
 
-        var distance = Math.Max(1f, Vector2.Distance(projectileFrom, clampedTo));
+        var distance = Math.Max(1f, direction.Length());
         projectileTo = projectileFrom + Vector2.Normalize(direction) * distance;
     }
 
@@ -454,4 +478,16 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
         return 0;
     }
+}
+
+[ByRefEvent]
+public sealed class CMUZLevelAdjustShotEvent(
+    EntityUid user,
+    EntityCoordinates fromCoordinates,
+    EntityCoordinates toCoordinates) : CancellableEntityEventArgs
+{
+    public EntityUid User = user;
+    public EntityCoordinates FromCoordinates = fromCoordinates;
+    public EntityCoordinates ToCoordinates = toCoordinates;
+    public bool Handled;
 }

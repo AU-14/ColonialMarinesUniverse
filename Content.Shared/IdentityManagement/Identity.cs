@@ -28,10 +28,13 @@ public static class Identity
         var uidName = meta.EntityName;
 
         if (viewer != null &&
-            ent.HasComponent<YautjaComponent>(uid) &&
+            ent.TryGetComponent(uid, out YautjaComponent? yautja) &&
             ent.HasComponent<YautjaComponent>(viewer.Value))
         {
-            return new IdentityEntity(uid, uidName);
+            var yautjaName = yautja.BracerNameActive
+                ? uidName
+                : Loc.GetString(yautja.IdentityName);
+            return new IdentityEntity(uid, yautjaName);
         }
 
         var whitelistSystem = ent.System<EntityWhitelistSystem>();

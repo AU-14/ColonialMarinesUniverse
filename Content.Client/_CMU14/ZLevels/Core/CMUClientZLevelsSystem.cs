@@ -23,6 +23,7 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
     [Dependency] private IEyeManager _eye = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private IConfigurationManager _config = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
 
     public static float ZLevelOffset = CMUSharedZLevelsSystem.ZLevelVisualOffset;
@@ -222,6 +223,24 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         return true;
     }
 
+    public bool TryGetEyeMapInViewerZNetwork(EntityUid viewerMap, MapId eyeMapId, out EntityUid eyeMap)
+    {
+        eyeMap = default;
+
+        if (eyeMapId == MapId.Nullspace ||
+            !_map.TryGetMap(eyeMapId, out var eyeMapUid) ||
+            !TryComp<CMUZLevelMapComponent>(viewerMap, out var viewerMapComp) ||
+            !TryComp<CMUZLevelMapComponent>(eyeMapUid.Value, out var eyeMapComp) ||
+            !viewerMapComp.NetworkUid.IsValid() ||
+            viewerMapComp.NetworkUid != eyeMapComp.NetworkUid)
+        {
+            return false;
+        }
+
+        eyeMap = eyeMapUid.Value;
+        return true;
+    }
+
     public override void Update(float frameTime)
     {
         base.Update(frameTime);
@@ -232,7 +251,17 @@ public sealed partial class CMUClientZLevelsSystem : CMUSharedZLevelsSystem
         var query = EntityQueryEnumerator<CMUZPhysicsComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out var zPhys, out var sprite))
         {
-            ApplyZPhysicsVisuals(uid, zPhys, sprite);
+            var targetNoRotation = zPhys.NoRotDefault;
+            if (sprite.NoRotation != targetNoRotation)
+                sprite.NoRotation = targetNoRotation;
+
+            var targetOffset = zPhys.SpriteOffsetDefault + new Vector2(0, zPhys.LocalPosition * ZLevelOffset);
+            if (sprite.Offset != targetOffset)
+                _sprite.SetOffset((uid, sprite), targetOffset);
+
+            var targetDrawDepth = zPhys.LocalPosition > 0 ? (int)Shared.DrawDepth.DrawDepth.OverMobs : zPhys.DrawDepthDefault;
+            if (sprite.DrawDepth != targetDrawDepth)
+                _sprite.SetDrawDepth((uid, sprite), targetDrawDepth);
         }
 
         var projectileQuery = EntityQueryEnumerator<CMUZLevelProjectileVisualOffsetComponent, SpriteComponent, TransformComponent>();

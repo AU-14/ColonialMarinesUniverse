@@ -1,4 +1,5 @@
 using Content.Shared.DoAfter;
+using Content.Shared._CMU14.Yautja;
 using Robust.Shared.Map;
 using Robust.Shared.Serialization;
 
@@ -29,6 +30,13 @@ public sealed class SuitSensorStatus
     public int? TotalDamageThreshold;
     public float? DamagePercentage => TotalDamageThreshold == null || TotalDamage == null ? null : TotalDamage / (float) TotalDamageThreshold;
     public NetCoordinates? Coordinates;
+    public int? OxygenDamage;
+    public int? ToxinDamage;
+    public int? BurnDamage;
+    public int? BruteDamage;
+    public string? Area;
+    public YautjaCrewMonitoringLocationKind LocationKind;
+    public bool CanTrack;
 }
 
 [Serializable, NetSerializable]

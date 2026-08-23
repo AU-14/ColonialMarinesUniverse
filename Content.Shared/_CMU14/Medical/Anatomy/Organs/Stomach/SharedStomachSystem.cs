@@ -55,7 +55,7 @@ public abstract partial class SharedStomachSystem : EntitySystem
 
     private void OnStomachRemovedFromBody(Entity<CMUStomachComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (!_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
+        if (Timing.ApplyingState || !_medicalEnabled || !_organEnabled || TerminatingOrDeleted(args.OldBody))
             return;
 
         EnsureComp<MissingStomachComponent>(args.OldBody);
@@ -64,6 +64,9 @@ public abstract partial class SharedStomachSystem : EntitySystem
 
     private void OnStomachAddedToBody(Entity<CMUStomachComponent> ent, ref OrganAddedToBodyEvent args)
     {
+        if (Timing.ApplyingState)
+            return;
+
         RemComp<MissingStomachComponent>(args.Body);
 
         if (TryComp<OrganHealthComponent>(ent, out var health) &&

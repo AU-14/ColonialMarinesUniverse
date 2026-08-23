@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Content.Shared.Body.Part;
+using Content.Shared.FixedPoint;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._CMU14.Medical.Treatment.Surgery;
@@ -61,6 +62,8 @@ public sealed class CMUAutodocBuiState : BoundUserInterfaceState
     public TimeSpan? NextStepAt;
     public List<CMUSurgeryPartEntry> Parts;
     public List<CMUAutodocQueueEntry> Queue;
+    public List<CMUAutodocChemicalEntry> Chemicals;
+    public bool Filtering;
 
     public CMUAutodocBuiState(
         NetEntity? pod,
@@ -73,7 +76,9 @@ public sealed class CMUAutodocBuiState : BoundUserInterfaceState
         string? currentStep,
         TimeSpan? nextStepAt,
         List<CMUSurgeryPartEntry> parts,
-        List<CMUAutodocQueueEntry> queue)
+        List<CMUAutodocQueueEntry> queue,
+        List<CMUAutodocChemicalEntry> chemicals,
+        bool filtering)
     {
         Pod = pod;
         Patient = patient;
@@ -86,6 +91,8 @@ public sealed class CMUAutodocBuiState : BoundUserInterfaceState
         NextStepAt = nextStepAt;
         Parts = parts;
         Queue = queue;
+        Chemicals = chemicals;
+        Filtering = filtering;
     }
 }
 
@@ -108,6 +115,14 @@ public sealed record CMUAutodocQueueEntry(
     int StepIndex,
     string StepLabel,
     float DurationSeconds);
+
+[Serializable, NetSerializable]
+public sealed record CMUAutodocChemicalEntry(
+    string ReagentId,
+    string DisplayName,
+    FixedPoint2 Amount,
+    bool CanInject,
+    bool EmergencyOnly);
 
 [Serializable, NetSerializable]
 public sealed class CMUAutodocQueueStepMessage : BoundUserInterfaceMessage
@@ -156,6 +171,24 @@ public sealed class CMUAutodocStopMessage : BoundUserInterfaceMessage
 
 [Serializable, NetSerializable]
 public sealed class CMUAutodocEjectPatientMessage : BoundUserInterfaceMessage
+{
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUAutodocInjectChemicalMessage : BoundUserInterfaceMessage
+{
+    public string ReagentId;
+    public FixedPoint2 Amount;
+
+    public CMUAutodocInjectChemicalMessage(string reagentId, FixedPoint2 amount)
+    {
+        ReagentId = reagentId;
+        Amount = amount;
+    }
+}
+
+[Serializable, NetSerializable]
+public sealed class CMUAutodocToggleDialysisMessage : BoundUserInterfaceMessage
 {
 }
 

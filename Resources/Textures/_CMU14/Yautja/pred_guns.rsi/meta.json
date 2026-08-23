@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/weapons/guns/guns_by_faction/pred.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 64,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "plasmarifle",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.6
+        ]
+      ]
+    },
+    {
+      "name": "plasmarifle_e"
+    },
+    {
+      "name": "spikelauncher",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "spikelauncher_e"
+    },
+    {
+      "name": "spikelauncher1"
+    },
+    {
+      "name": "spikelauncher2"
+    },
+    {
+      "name": "spikelauncher3"
+    },
+    {
+      "name": "plasmapistol",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1,
+          0.1
+        ]
+      ]
+    },
+    {
+      "name": "plasmapistol_e"
+    },
+    {
+      "name": "defoliator"
+    },
+    {
+      "name": "defoliator_e"
+    },
+    {
+      "name": "\u002Blit",
+      "delays": [
+        [
+          0.4,
+          0.15,
+          0.15,
+          0.15,
+          0.15,
+          0.15
+        ]
+      ]
+    },
+    {
+      "name": "plasmacarbine",
+      "delays": [
+        [
+          0.1,
+          0.1,
+          0.1,
+          0.6
+        ]
+      ]
+    },
+    {
+      "name": "plasmacarbine_e",
+      "delays": [
+        [
+          0.1,
+          0.1
+        ]
+      ]
+    }
+  ]
+}

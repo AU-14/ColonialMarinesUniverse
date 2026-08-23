@@ -19,7 +19,7 @@
             </PanelContainer>
             <Button Name="RequestButton"
                     Text="{Loc 'ghost-roles-window-request-role-button'}"
-                    Disabled="True"
+                    Disabled="False"
                     TextAlign="Center"
                     ClipText="True"
                     HorizontalAlignment="Center"

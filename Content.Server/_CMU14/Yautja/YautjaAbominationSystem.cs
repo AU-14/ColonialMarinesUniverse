@@ -19,6 +19,7 @@ using Content.Shared.Popups;
 using Content.Shared.StatusIcon.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Weapons.Melee.Events;
+using Content.Shared.Weapons.Melee;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Maths;
 using Robust.Shared.Player;
@@ -119,13 +120,26 @@ public sealed partial class YautjaAbominationSystem : EntitySystem
 
     private void OnYautjaDamageModify(Entity<YautjaComponent> ent, ref DamageModifyEvent args)
     {
-        if (args.Origin is not { } origin ||
-            !TryComp(origin, out YautjaAbominationComponent? abomination))
+        if (args.Origin is { } origin &&
+            TryComp(origin, out YautjaAbominationComponent? abomination))
         {
-            return;
+            args.Damage *= abomination.YautjaDamageMultiplier;
         }
 
-        args.Damage *= abomination.YautjaDamageMultiplier;
+        // CMSS13 applies xeno melee after the hunter's species modifier. In the
+        // CMU armor model ordinary claw damage otherwise rounds to zero against
+        // clan armor, so give only xeno melee the equivalent penetration.
+        if (args.Origin is { } xeno &&
+            HasComp<XenoComponent>(xeno) &&
+            args.Tool is { } tool &&
+            HasComp<MeleeWeaponComponent>(tool))
+        {
+            // Clan armour is 35-40 melee armour, and the armour curve still
+            // rounds low residual damage down to zero. Xeno melee is the
+            // CMSS13 exception: claws cut through the clan armour instead of
+            // producing the metal/no-damage impact sound.
+            args.ArmorPiercing += 100;
+        }
     }
 
     private void OnAnyMobStateChanged(MobStateChangedEvent args)

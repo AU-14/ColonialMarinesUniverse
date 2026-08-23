@@ -1,9 +1,10 @@
+using Content.Server._CMU14.Yautja;
 using Content.Shared.Medical.SuitSensor;
 
 namespace Content.Server.Medical.CrewMonitoring;
 
 [RegisterComponent]
-[Access(typeof(CrewMonitoringConsoleSystem))]
+[Access(typeof(CrewMonitoringConsoleSystem), typeof(YautjaCrewMonitoringConsoleSystem))]
 public sealed partial class CrewMonitoringConsoleComponent : Component
 {
     /// <summary>

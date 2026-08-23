@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.StatusEffect;
@@ -24,6 +25,9 @@ public sealed partial class RMCStatusEffectSystem : EntitySystem
 
     private void OnSkillsStatusEffectTime(Entity<SkillsComponent> ent, ref RMCStatusEffectTimeEvent args)
     {
+        if (HasComp<YautjaComponent>(ent.Owner))
+            return;
+
         if (args.Key != Knockdown && args.Key != Stun && args.Key != Unconscious)
             return;
 
@@ -47,6 +51,9 @@ public sealed partial class RMCStatusEffectSystem : EntitySystem
     private void OnStunResistanceStatusEffectTime(Entity<RMCStunResistanceComponent> ent, ref RMCStatusEffectTimeEvent args)
     {
         if (args.Key != Knockdown && args.Key != Stun && args.Key != Unconscious)
+            return;
+
+        if (args.Key == Unconscious && HasComp<YautjaComponent>(ent.Owner))
             return;
 
         args.Duration /= ent.Comp.Resistance;

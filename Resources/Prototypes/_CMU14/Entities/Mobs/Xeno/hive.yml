@@ -21,6 +21,28 @@
     hiveUIColor: "#992626"
 
 - type: entity
+  id: CMUHunterShipAlphaHive
+  name: Hunter Ship Alpha Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#ff4040"
+    hiveUIColor: "#992626"
+    npcFaction: CMUXenoAlpha
+
+- type: entity
+  id: CMUHunterShipForsakenHive
+  name: Hunter Ship Forsaken Hive
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: Hive
+    lateJoinGainLarva: false
+    hiveColor: "#cc8ec4"
+    hiveUIColor: "#80587a"
+    npcFaction: CMUXenoForsaken
+
+- type: entity
   id: CMUBravoHive
   name: Bravo Hive
   categories: [ HideSpawnMenu ]

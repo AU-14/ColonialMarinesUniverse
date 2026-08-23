@@ -1,0 +1,74 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/pipes/manifold.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "map",
+      "directions": 4
+    },
+    {
+      "name": "core",
+      "directions": 4
+    },
+    {
+      "name": "4way"
+    },
+    {
+      "name": "map_4way"
+    },
+    {
+      "name": "clamps",
+      "directions": 4
+    },
+    {
+      "name": "clamps_4way"
+    },
+    {
+      "name": "map-supply",
+      "directions": 4
+    },
+    {
+      "name": "core-supply",
+      "directions": 4
+    },
+    {
+      "name": "4way-supply"
+    },
+    {
+      "name": "map_4way-supply"
+    },
+    {
+      "name": "clamps-supply",
+      "directions": 4
+    },
+    {
+      "name": "clamps_4way-supply"
+    },
+    {
+      "name": "map-scrubbers",
+      "directions": 4
+    },
+    {
+      "name": "core-scrubbers",
+      "directions": 4
+    },
+    {
+      "name": "4way-scrubbers"
+    },
+    {
+      "name": "map_4way-scrubbers"
+    },
+    {
+      "name": "clamps-scrubbers",
+      "directions": 4
+    },
+    {
+      "name": "clamps_4way-scrubbers"
+    }
+  ]
+}

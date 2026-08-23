@@ -6,6 +6,7 @@ using Content.Shared._RMC14.Xenonids.Name;
 using Content.Shared.AU14.Allegiance;
 using Content.Shared.AU14.Origin;
 using Content.Shared._CMU14.Threats;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.CCVar;
 using Content.Shared.Clothing;
 using Content.Shared.GameTicking;
@@ -224,6 +225,8 @@ namespace Content.Shared.Preferences
         [DataField]
         public ProtoId<PlatoonPrototype>? Platoon { get; private set; } = null;
 
+        [DataField]
+        public YautjaCharacterProfile YautjaProfile { get; private set; } = YautjaCharacterProfile.Default;
         /// <summary>
         /// Whether this character is a synthetic. Requires the synthetic job whitelist to
         /// set to true; if true, the character will only be resolved into synthetic jobs.
@@ -298,7 +301,8 @@ namespace Content.Shared.Preferences
             string height = "",
             int weight = 160,
             BuildType build = BuildType.Average,
-            bool hideMetaInformation = false)
+            bool hideMetaInformation = false,
+            YautjaCharacterProfile? yautjaProfile = null)
         {
             Name = name;
             FlavorText = flavortext;
@@ -328,6 +332,7 @@ namespace Content.Shared.Preferences
             _gamemodeJobPriorities = NormalizeGamemodeJobPriorities(gamemodeJobPriorities);
             _gamemodeAntagPreferences = NormalizeGamemodeSetPreferences(gamemodeAntagPreferences);
             _gamemodeThreatPreferences = NormalizeGamemodeSetPreferences(gamemodeThreatPreferences);
+            YautjaProfile = yautjaProfile?.Clone() ?? YautjaCharacterProfile.Default;
             ShortExamine = shortExamine;
             FullDescription = fullDescription;
             MedicalRecord = medicalRecord;
@@ -476,7 +481,8 @@ namespace Content.Shared.Preferences
                 other.Height,
                 other.Weight,
                 other.Build,
-                other.HideMetaInformation)
+                other.HideMetaInformation,
+                other.YautjaProfile)
         {
         }
 
@@ -691,6 +697,11 @@ namespace Content.Shared.Preferences
             {
                 Platoon = platoon
             };
+        }
+
+        public HumanoidCharacterProfile WithYautjaProfile(YautjaCharacterProfile profile)
+        {
+            return new(this) { YautjaProfile = profile.Clone() };
         }
 
         public HumanoidCharacterProfile WithSynthetic(bool synthetic)
@@ -1057,6 +1068,28 @@ namespace Content.Shared.Preferences
             if (Allegiance != other.Allegiance) return false;
             if (Origin != other.Origin) return false;
             if (Platoon != other.Platoon) return false;
+            if (!YautjaProfile.Appearance.MemberwiseEquals(other.YautjaProfile.Appearance) ||
+                YautjaProfile.Name != other.YautjaProfile.Name ||
+                YautjaProfile.Age != other.YautjaProfile.Age ||
+                YautjaProfile.Sex != other.YautjaProfile.Sex ||
+                YautjaProfile.Gender != other.YautjaProfile.Gender ||
+                YautjaProfile.ArmorPrototype != other.YautjaProfile.ArmorPrototype ||
+                YautjaProfile.MaskPrototype != other.YautjaProfile.MaskPrototype ||
+                YautjaProfile.MaskAccessoryPrototype != other.YautjaProfile.MaskAccessoryPrototype ||
+                YautjaProfile.GreavesPrototype != other.YautjaProfile.GreavesPrototype ||
+                YautjaProfile.BracerPrototype != other.YautjaProfile.BracerPrototype ||
+                YautjaProfile.CasterPrototype != other.YautjaProfile.CasterPrototype ||
+                YautjaProfile.ClanRank != other.YautjaProfile.ClanRank ||
+                YautjaProfile.OwnerRank != other.YautjaProfile.OwnerRank ||
+                YautjaProfile.Status != other.YautjaProfile.Status ||
+                YautjaProfile.CapePrototype != other.YautjaProfile.CapePrototype ||
+                YautjaProfile.CapeColor != other.YautjaProfile.CapeColor ||
+                YautjaProfile.TranslatorType != other.YautjaProfile.TranslatorType ||
+                YautjaProfile.InvisibilitySound != other.YautjaProfile.InvisibilitySound ||
+                YautjaProfile.Legacy != other.YautjaProfile.Legacy ||
+                YautjaProfile.Unique != other.YautjaProfile.Unique ||
+                YautjaProfile.FlavorText != other.YautjaProfile.FlavorText)
+                return false;
             if (Synthetic != other.Synthetic) return false;
             if (ShortExamine != other.ShortExamine) return false;
             if (FullDescription != other.FullDescription) return false;

@@ -1,0 +1,290 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/structures/machinery/power.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "rsic": false,
+  "states": [
+    {
+      "name": "base"
+    },
+    {
+      "name": "light1"
+    },
+    {
+      "name": "light0"
+    },
+    {
+      "name": "light-p"
+    },
+    {
+      "name": "mini-cell"
+    },
+    {
+      "name": "cell"
+    },
+    {
+      "name": "hcell"
+    },
+    {
+      "name": "scell"
+    },
+    {
+      "name": "hpcell"
+    },
+    {
+      "name": "icell"
+    },
+    {
+      "name": "cell-o1"
+    },
+    {
+      "name": "cell-o2"
+    },
+    {
+      "name": "term",
+      "directions": 4
+    },
+    {
+      "name": "term-f",
+      "directions": 4
+    },
+    {
+      "name": "coil"
+    },
+    {
+      "name": "coil2"
+    },
+    {
+      "name": "coil1"
+    },
+    {
+      "name": "wire"
+    },
+    {
+      "name": "wire2"
+    },
+    {
+      "name": "wire1"
+    },
+    {
+      "name": "ccharger0"
+    },
+    {
+      "name": "ccharger1"
+    },
+    {
+      "name": "ccharger-o0",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "ccharger-o1"
+    },
+    {
+      "name": "ccharge-o2"
+    },
+    {
+      "name": "ccharger-o3"
+    },
+    {
+      "name": "ccharger-o4"
+    },
+    {
+      "name": "portgen0"
+    },
+    {
+      "name": "portgen1"
+    },
+    {
+      "name": "portgen2"
+    },
+    {
+      "name": "smes-og1"
+    },
+    {
+      "name": "smes-og2"
+    },
+    {
+      "name": "smes-og3"
+    },
+    {
+      "name": "smes-og4"
+    },
+    {
+      "name": "smes-og5"
+    },
+    {
+      "name": "smes-op0"
+    },
+    {
+      "name": "smes-op1"
+    },
+    {
+      "name": "smes-oc2",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "smes-oc1",
+      "delays": [
+        [
+          0.5,
+          0.5
+        ]
+      ]
+    },
+    {
+      "name": "smes-oc0"
+    },
+    {
+      "name": "potato_cell"
+    },
+    {
+      "name": "gsmes"
+    },
+    {
+      "name": "gsmes_og1"
+    },
+    {
+      "name": "gsmes_og2"
+    },
+    {
+      "name": "gsmes_og3"
+    },
+    {
+      "name": "gsmes_og4"
+    },
+    {
+      "name": "gsmes_overcharge",
+      "delays": [
+        [
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4,
+          0.4
+        ]
+      ]
+    },
+    {
+      "name": "gsmes_charging"
+    },
+    {
+      "name": "gsmes_outputting"
+    },
+    {
+      "name": "bbox_off"
+    },
+    {
+      "name": "bbox_on"
+    },
+    {
+      "name": "bbox_fault"
+    },
+    {
+      "name": "smes-crit",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "smes_op1"
+    },
+    {
+      "name": "smes_og1"
+    },
+    {
+      "name": "smes_og2"
+    },
+    {
+      "name": "smes_og3"
+    },
+    {
+      "name": "smes_og4"
+    },
+    {
+      "name": "smes_og5"
+    },
+    {
+      "name": "smes_op0"
+    },
+    {
+      "name": "smes_oc2"
+    },
+    {
+      "name": "smes_oc1"
+    },
+    {
+      "name": "smes_oc0"
+    },
+    {
+      "name": "smes"
+    },
+    {
+      "name": "smes_crit",
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "apc_mapicon",
+      "directions": 4
+    },
+    {
+      "name": "apcewires_mapicon",
+      "directions": 4
+    },
+    {
+      "name": "apc2_mapicon",
+      "directions": 4
+    },
+    {
+      "name": "apc1_mapicon",
+      "directions": 4
+    },
+    {
+      "name": "panelnopower"
+    },
+    {
+      "name": "paneloff"
+    },
+    {
+      "name": "panelon"
+    },
+    {
+      "name": "panelbnopower"
+    },
+    {
+      "name": "panelboff"
+    },
+    {
+      "name": "panelbon"
+    },
+    {
+      "name": "smartguncell"
+    }
+  ]
+}

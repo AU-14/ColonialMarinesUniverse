@@ -1,0 +1,12 @@
+- type: entity
+  parent: BaseGameRule
+  id: CMUYautjaPredatorRound
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: GameRule
+    minPlayers: 0
+    cancelPresetOnTooFewPlayers: false
+  - type: YautjaPredatorRound
+    modePredator: true
+    minSlots: 2
+    maxSlots: 4

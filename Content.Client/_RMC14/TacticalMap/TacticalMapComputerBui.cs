@@ -38,6 +38,7 @@ public sealed partial class TacticalMapComputerBui(EntityUid owner, Enum uiKey) 
         TabContainer.SetTabVisible(Window.Wrapper.SquadTab, false);
 
         if (computer != null &&
+            computer.AllowCanvas &&
             _player.LocalEntity is { } player &&
             EntMan.System<SkillsSystem>().HasSkill(player, computer.Skill, computer.SkillLevel))
         {

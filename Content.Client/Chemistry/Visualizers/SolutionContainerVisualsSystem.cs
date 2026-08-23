@@ -55,7 +55,7 @@ public sealed partial class SolutionContainerVisualsSystem : VisualizerSystem<So
         var maxFillLevels = component.MaxFillLevels;
         var fillBaseName = component.FillBaseName;
         var changeColor = component.ChangeColor;
-        var fillSprite = component.MetamorphicDefaultSprite;
+        var fillSprite = component.FillSprite ?? component.MetamorphicDefaultSprite;
 
         // Currently some solution methods such as overflowing will try to update appearance with a
         // volume greater than the max volume. We'll clamp it so players don't see

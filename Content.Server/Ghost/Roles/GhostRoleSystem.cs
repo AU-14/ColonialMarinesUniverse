@@ -232,7 +232,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
             if (raffle.CurrentMembers.RemoveWhere(session =>
                     !TryComp(entityUid, out GhostRoleComponent? role) ||
-                    !CanRequestGhostRole(session, role)) > 0)
+                    !CanRequestGhostRole(session, (entityUid, role))) > 0)
                 UpdateAllEui();
 
             // if all participants leave/were removed from the raffle, the raffle is canceled.
@@ -304,21 +304,29 @@ public sealed partial class GhostRoleSystem : EntitySystem
         return player.AttachedEntity is not { } entity || HasComp<GhostComponent>(entity);
     }
 
-    private bool CanRequestGhostRole(ICommonSession player, GhostRoleComponent role)
+    private bool CanRequestGhostRole(ICommonSession player, Entity<GhostRoleComponent> role)
     {
         if (!CanRequestGhostRole(player))
             return false;
 
-        if (role.JobProto is not { } job)
-            return true;
+        if (role.Comp.JobProto is { } job)
+        {
+            var jobBans = _banManager.GetJobBans(player.UserId);
+            if (jobBans == null || jobBans.Contains(job))
+                return false;
 
-        var jobBans = _banManager.GetJobBans(player.UserId);
-        if (jobBans == null || jobBans.Contains(job))
-            return false;
+            if (!_jobWhitelist.IsAllowed(player, job))
+                return false;
 
-        var ev = new IsJobAllowedEvent(player, job);
-        RaiseLocalEvent(ref ev);
-        return !ev.Cancelled;
+            var ev = new IsJobAllowedEvent(player, job);
+            RaiseLocalEvent(ref ev);
+            if (ev.Cancelled)
+                return false;
+        }
+
+        var attempt = new GhostRoleRequestAttemptEvent(player, role.Owner, role.Comp);
+        RaiseLocalEvent(role.Owner, ref attempt);
+        return !attempt.Cancelled;
     }
 
     private bool TryTakeover(ICommonSession player, uint identifier)
@@ -465,7 +473,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
-        if (!CanRequestGhostRole(player, roleEnt.Comp))
+        if (!CanRequestGhostRole(player, roleEnt))
             return;
 
         // get raffle or create a new one if it doesn't exist
@@ -547,7 +555,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!_ghostRoles.TryGetValue(identifier, out var roleEnt))
             return;
 
-        if (!CanRequestGhostRole(player, roleEnt.Comp))
+        if (!CanRequestGhostRole(player, roleEnt))
             return;
 
         if (roleEnt.Comp.RaffleConfig is not null)
@@ -572,7 +580,7 @@ public sealed partial class GhostRoleSystem : EntitySystem
         if (!_ghostRoles.TryGetValue(identifier, out var role))
             return false;
 
-        if (!CanRequestGhostRole(player, role.Comp))
+        if (!CanRequestGhostRole(player, role))
             return false;
 
         var playerNotInGame = _gameTicker.PlayerGameStatuses.TryGetValue(player.UserId, out var status)

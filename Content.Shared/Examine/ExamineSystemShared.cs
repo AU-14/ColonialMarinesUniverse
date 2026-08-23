@@ -381,6 +381,7 @@ namespace Content.Shared.Examine
         public EntityUid Examined { get; }
 
         private bool _hasDescription;
+        private bool _descriptionReplaced;
 
         private ExamineMessagePart? _currentGroupPart;
 
@@ -394,10 +395,33 @@ namespace Content.Shared.Examine
         }
 
         /// <summary>
+        /// Removes the prototype description when a specialized examine handler provides the complete text.
+        /// </summary>
+        public void SuppressDescription()
+        {
+            Message.Clear();
+            Parts.Clear();
+            _hasDescription = false;
+            _descriptionReplaced = true;
+        }
+
+        /// <summary>
+        /// Replaces the complete examine result with plain text supplied by a specialized handler.
+        /// </summary>
+        public void ReplaceDescription(string text)
+        {
+            SuppressDescription();
+            Message.AddText(text);
+        }
+
+        /// <summary>
         ///     Returns <see cref="Message"/> with all <see cref="Parts"/> appended according to their priority.
         /// </summary>
         public FormattedMessage GetTotalMessage()
         {
+            if (_descriptionReplaced)
+                return new FormattedMessage(Message);
+
             int Comparison(ExamineMessagePart a, ExamineMessagePart b)
             {
                 // Try sort by priority, then group, then by string contents

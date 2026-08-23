@@ -189,7 +189,17 @@ public sealed partial class RadioSystem : EntitySystem
             ("name", name),
             ("message", content));
 
-        var sendAttemptEv = new RadioSendAttemptEvent(channel, radioSource);
+        var sendAttemptChat = new ChatMessage(
+            ChatChannel.Radio,
+            message,
+            wrappedMessage,
+            GetNetEntity(messageSource),
+            _chatManager.EnsurePlayer(CompOrNull<ActorComponent>(messageSource)?.PlayerSession.UserId)?.Key,
+            languageIcon: languageIcon,
+            repeatCheckSender: !HasComp<ChatRepeatIgnoreSenderComponent>(radioSource),
+            display: CreateRadioDisplay(channel, name, verb));
+        var sendAttemptChatMsg = new MsgChatMessage { Message = sendAttemptChat };
+        var sendAttemptEv = new RadioSendAttemptEvent(channel, radioSource, messageSource, message, sendAttemptChatMsg);
         RaiseLocalEvent(ref sendAttemptEv);
         RaiseLocalEvent(radioSource, ref sendAttemptEv);
         var canSend = !sendAttemptEv.Cancelled;

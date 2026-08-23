@@ -11,6 +11,9 @@ public sealed class SmesVisualizerSystem : VisualizerSystem<SmesComponent>
         if (args.Sprite == null)
             return;
 
+        if (comp.StaticOverlayStates)
+            return;
+
         if (!AppearanceSystem.TryGetData<int>(uid, SmesVisuals.LastChargeLevel, out var level, args.Component) || level == 0)
         {
             SpriteSystem.LayerSetVisible((uid, args.Sprite), SmesVisualLayers.Charge, false);

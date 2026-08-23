@@ -613252,4 +613252,17 @@ entities:
       rot: 1.5707963267948966 rad
       pos: -165.5,-32.5
       parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000003
+    components:
+    - type: MetaData
+      name: Barkers Lament ground relay
+    - type: Transform
+      pos: 23.5,-25.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: barkers-lament.ground.relay
+      displayName: Barker's Lament Ground Relay
 ...

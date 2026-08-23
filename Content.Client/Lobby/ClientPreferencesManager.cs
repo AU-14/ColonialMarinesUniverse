@@ -1,4 +1,5 @@
 using System.Linq;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Construction.Prototypes;
 using Content.Shared.Preferences;
 using Robust.Client;
@@ -24,6 +25,12 @@ namespace Content.Client.Lobby
 
         public GameSettings Settings { get; private set; } = default!;
         public PlayerPreferences Preferences { get; private set; } = default!;
+        public YautjaProfileCapabilities YautjaCapabilities { get; private set; } = YautjaProfileCapabilities.Default;
+
+        public void UpdateYautjaCapabilities(YautjaProfileCapabilities capabilities)
+        {
+            YautjaCapabilities = capabilities;
+        }
 
         public void Initialize()
         {
@@ -41,6 +48,7 @@ namespace Content.Client.Lobby
             {
                 Settings = default!;
                 Preferences = default!;
+                YautjaCapabilities = YautjaProfileCapabilities.Default;
             }
         }
 
@@ -122,6 +130,7 @@ namespace Content.Client.Lobby
         {
             Preferences = message.Preferences;
             Settings = message.Settings;
+            YautjaCapabilities = message.YautjaCapabilities;
 
             OnServerDataLoaded?.Invoke();
         }

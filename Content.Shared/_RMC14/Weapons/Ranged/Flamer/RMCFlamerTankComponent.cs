@@ -25,6 +25,9 @@ public sealed partial class RMCFlamerTankComponent : Component
     public int MaxRange = 5;
 
     [DataField, AutoNetworkedField]
+    public bool IgnoreReagentRange;
+
+    [DataField, AutoNetworkedField]
     public string ExamineIcon = "/Textures/_RMC14/Structures/Storage/reagent_tank.rsi/weldtank.png";
 
     [DataField, AutoNetworkedField]

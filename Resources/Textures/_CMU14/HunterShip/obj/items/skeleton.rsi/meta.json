@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/skeleton.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "r_arm"
+    },
+    {
+      "name": "l_arm"
+    },
+    {
+      "name": "r_hand"
+    },
+    {
+      "name": "l_hand"
+    },
+    {
+      "name": "r_leg"
+    },
+    {
+      "name": "l_leg"
+    },
+    {
+      "name": "r_foot"
+    },
+    {
+      "name": "l_foot"
+    },
+    {
+      "name": "torso"
+    },
+    {
+      "name": "skull1"
+    },
+    {
+      "name": "skull2"
+    },
+    {
+      "name": "spine"
+    }
+  ]
+}

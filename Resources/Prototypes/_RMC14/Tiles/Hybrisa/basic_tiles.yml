@@ -76,6 +76,12 @@
 
 - type: tile
   parent: RMCFloorHybrisaBasicBase
+  id: RMCFloorHybrisaCarpetColorable
+  name: colorable carpet
+  sprite: /Textures/_CMU14/HunterShip/turf/floors/hybrisafloors.rsi/carpet_colorable.png
+
+- type: tile
+  parent: RMCFloorHybrisaBasicBase
   id: RMCFloorHybrisaRampNorth
   name: ramp
   sprite: /Textures/_RMC14/Tiles/hybrisa/rampsmaller_north.png

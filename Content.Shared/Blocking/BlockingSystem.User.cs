@@ -1,8 +1,12 @@
+using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
+using Content.Shared._CMU14.Yautja;
+using Content.Shared.Projectiles;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Shared.Blocking;
 
@@ -10,6 +14,7 @@ public sealed partial class BlockingSystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private void InitializeUser()
     {
@@ -47,6 +52,24 @@ public sealed partial class BlockingSystem
             if (args.Damage.GetTotal() <= 0)
                 return;
 
+            if (TryComp<YautjaSourceShieldBlockComponent>(component.BlockingItem, out var sourceBlock) &&
+                sourceBlock.ShieldType is YautjaSourceShieldType.Directional or YautjaSourceShieldType.DirectionalTwoHands &&
+                args.Origin is { } attacker &&
+                !IsShieldFacingAttacker(uid, attacker))
+            {
+                return;
+            }
+
+            if (sourceBlock != null)
+            {
+                var blockChance = (float) (blocking.IsBlocking ? sourceBlock.ReadiedBlock : sourceBlock.PassiveBlock) / 100f;
+                if (args.Tool is { } tool && HasComp<ProjectileComponent>(tool))
+                    blockChance *= sourceBlock.ProjectileBlockFraction;
+
+                if (blockChance <= 0f || (blockChance < 1f && !_random.Prob(blockChance)))
+                    return;
+            }
+
             // A shield should only block damage it can itself absorb. To determine that we need the Damageable component on it.
             if (!TryComp<DamageableComponent>(component.BlockingItem, out var dmgComp))
                 return;
@@ -68,6 +91,16 @@ public sealed partial class BlockingSystem
                 _audio.PlayPvs(blocking.BlockSound, uid);
             }
         }
+    }
+
+    private bool IsShieldFacingAttacker(EntityUid user, EntityUid attacker)
+    {
+        var delta = _transformSystem.GetWorldPosition(attacker) - _transformSystem.GetWorldPosition(user);
+        if (delta.LengthSquared() <= 0.0001f)
+            return true;
+
+        var forward = _transformSystem.GetWorldRotation(user).ToWorldVec();
+        return Vector2.Dot(forward, delta) >= 0;
     }
 
     private void OnDamageModified(EntityUid uid, BlockingComponent component, DamageModifyEvent args)

@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "Taken from CMSS13 at https://github.com/cmss13-devs/cmss13/blob/52be8a8ceeb165c6a0becc77ecc3c9a644b88fd2/icons/obj/items/stacks.dmi. License and authorship per CMSS13 README: assets are CC BY-SA 3.0 unless otherwise indicated; authorship defined as the active CMSS13 development team unless stated by commit/file metadata.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    {
+      "name": "SHEETS WITH STACK SPRITES"
+    },
+    {
+      "name": "sheet-sandstone-4"
+    },
+    {
+      "name": "sheet-sandstone-3"
+    },
+    {
+      "name": "sheet-sandstone-2"
+    },
+    {
+      "name": "sheet-sandstone"
+    },
+    {
+      "name": "sheet-wood"
+    },
+    {
+      "name": "sheet-wood-2"
+    },
+    {
+      "name": "sheet-wood-3"
+    },
+    {
+      "name": "sheet-wood-4"
+    },
+    {
+      "name": "sheet-metal"
+    },
+    {
+      "name": "sheet-metal-2"
+    },
+    {
+      "name": "sheet-metal-3"
+    },
+    {
+      "name": "sheet-metal-4"
+    },
+    {
+      "name": "sheet-plasteel-3"
+    },
+    {
+      "name": "sheet-plasteel-4"
+    },
+    {
+      "name": "sheet-plasteel-2"
+    },
+    {
+      "name": "sheet-plasteel"
+    },
+    {
+      "name": "sheet-plastic"
+    },
+    {
+      "name": "sheet-plastic-2"
+    },
+    {
+      "name": "sheet-plastic-3"
+    },
+    {
+      "name": "sheet-plastic-4"
+    },
+    {
+      "name": "SHEETS WITHOUT STACK SPRITES"
+    },
+    {
+      "name": "rods"
+    },
+    {
+      "name": "rods_plasteel"
+    },
+    {
+      "name": "sheet-card"
+    },
+    {
+      "name": "sheet-aluminum"
+    },
+    {
+      "name": "sheet-copper"
+    },
+    {
+      "name": "sheet-glass"
+    },
+    {
+      "name": "sheet-rglass"
+    },
+    {
+      "name": "sheet-phoronglass"
+    },
+    {
+      "name": "sheet-phoronrglass"
+    },
+    {
+      "name": "sheet-runedsandstone-4"
+    },
+    {
+      "name": "sheet-runedsandstone-3"
+    },
+    {
+      "name": "sheet-runedsandstone-2"
+    },
+    {
+      "name": "sheet-runedsandstone"
+    },
+    {
+      "name": "sheet-diamond"
+    },
+    {
+      "name": "sheet-gold"
+    },
+    {
+      "name": "sheet-enruranium"
+    },
+    {
+      "name": "sheet-uranium"
+    },
+    {
+      "name": "sheet-phoron"
+    },
+    {
+      "name": "sheet-silver"
+    },
+    {
+      "name": "sheet-platinum"
+    },
+    {
+      "name": "sheet-lead"
+    },
+    {
+      "name": "sheet-chitin"
+    },
+    {
+      "name": "legacy_bay"
+    },
+    {
+      "name": "sheet-clown"
+    },
+    {
+      "name": "sheet-mythril"
+    },
+    {
+      "name": "sheet-cloth"
+    },
+    {
+      "name": "sheet-leather"
+    },
+    {
+      "name": "sheet-wetleather"
+    },
+    {
+      "name": "sheet-hairlesshide"
+    },
+    {
+      "name": "sheet-hide"
+    },
+    {
+      "name": "sheet-cat"
+    },
+    {
+      "name": "sheet-xeno"
+    },
+    {
+      "name": "sheet-corgi"
+    },
+    {
+      "name": "sheet-lizard"
+    },
+    {
+      "name": "sheet-monkey"
+    },
+    {
+      "name": "sheet-bear"
+    }
+  ]
+}

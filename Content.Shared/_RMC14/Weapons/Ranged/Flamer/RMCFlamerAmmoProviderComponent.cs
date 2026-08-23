@@ -1,5 +1,6 @@
 ﻿using Content.Shared.FixedPoint;
 using Content.Shared.Weapons.Ranged;
+using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom;
 
@@ -17,6 +18,9 @@ public sealed partial class RMCFlamerAmmoProviderComponent : Component, IShootab
 
     [DataField, AutoNetworkedField]
     public FixedPoint2 CostPer = FixedPoint2.New(1);
+
+    [DataField, AutoNetworkedField]
+    public SoundSpecifier? DryFireSound;
 
     [DataField(customTypeSerializer: typeof(TimeOffsetSerializer)), AutoNetworkedField, AutoPausedField]
     public TimeSpan CantShootPopupLast;

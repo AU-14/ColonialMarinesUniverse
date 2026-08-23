@@ -97,7 +97,21 @@ namespace Content.Server.Power.EntitySystems
                         continue;
                 }
 
-                SetCharge(uid, batt.CurrentCharge + comp.AutoRechargeRate * frameTime, batt);
+                var elapsed = frameTime;
+                if (comp.AutoRechargeInterval > TimeSpan.Zero)
+                {
+                    var intervalSeconds = (decimal) comp.AutoRechargeInterval.TotalSeconds;
+                    comp.AutoRechargeAccumulatorSeconds += (decimal) frameTime;
+                    var intervals = decimal.Floor(comp.AutoRechargeAccumulatorSeconds / intervalSeconds);
+                    if (intervals == 0)
+                        continue;
+
+                    var intervalElapsed = intervals * intervalSeconds;
+                    elapsed = (float) intervalElapsed;
+                    comp.AutoRechargeAccumulatorSeconds -= intervalElapsed;
+                }
+
+                SetCharge(uid, batt.CurrentCharge + comp.AutoRechargeRate * elapsed, batt);
             }
         }
 

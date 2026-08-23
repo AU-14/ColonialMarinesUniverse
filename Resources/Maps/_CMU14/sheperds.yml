@@ -310155,4 +310155,24 @@ entities:
       rot: 4.71238898038469 rad
       pos: -31.5,-35.5
       parent: 1
+- proto: XenoEgg
+  entities:
+  - uid: 1000000002
+    components:
+    - type: Transform
+      pos: 46.5,-113.5
+      parent: 1
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 43363
+    components:
+    - type: MetaData
+      name: Shepherds Pride ground relay
+    - type: Transform
+      pos: 2.5,60.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: shepherds.ground.relay
+      displayName: Shepherds' Pride Ground Relay
 ...

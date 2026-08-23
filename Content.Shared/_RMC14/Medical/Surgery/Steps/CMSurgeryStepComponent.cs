@@ -26,4 +26,11 @@ public sealed partial class CMSurgeryStepComponent : Component
 
     [DataField]
     public ComponentRegistry? BodyRemove;
+
+    /// <summary>
+    ///     Optional source-specific duration. Null preserves the existing
+    ///     two-second CMU surgery timing.
+    /// </summary>
+    [DataField]
+    public float? DoAfterSeconds;
 }

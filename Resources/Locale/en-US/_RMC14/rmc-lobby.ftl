@@ -3,6 +3,7 @@ rmc-lobby-join-colonists = Join Colonists
 rmc-lobby-join-other = Join Other
 rmc-lobby-join-opfor = Join Opfor
 rmc-lobby-join-govfor = Join Govfor
+rmc-lobby-join-hunt = Join Hunt
 rmc-lobby-no-burrowed-larva = No burrowed larva are available.
 rmc-lobby-burrowed-larva-available = The hive has burrowed larva available.
 rmc-lobby-join-as-larva = Join as Larva

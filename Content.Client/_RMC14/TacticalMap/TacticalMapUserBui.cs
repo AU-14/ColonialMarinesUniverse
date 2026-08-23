@@ -168,7 +168,7 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
             return;
         }
 
-        var totalCount = user.MarineBlips.Count + user.XenoBlips.Count + user.XenoStructureBlips.Count + user.OpforBlips.Count + user.GovforBlips.Count + user.ClfBlips.Count;
+        var totalCount = user.MarineBlips.Count + user.XenoBlips.Count + user.XenoStructureBlips.Count + user.OpforBlips.Count + user.GovforBlips.Count + user.ClfBlips.Count + user.YautjaBlips.Count;
         var blips = new TacticalMapBlip[totalCount];
         var entityIds = new int[totalCount];
         var i = 0;
@@ -209,6 +209,13 @@ public sealed partial class TacticalMapUserBui(EntityUid owner, Enum uiKey) : RM
         }
 
         foreach (var (entityId, blip) in user.ClfBlips)
+        {
+            blips[i] = blip;
+            entityIds[i] = entityId;
+            i++;
+        }
+
+        foreach (var (entityId, blip) in user.YautjaBlips)
         {
             blips[i] = blip;
             entityIds[i] = entityId;

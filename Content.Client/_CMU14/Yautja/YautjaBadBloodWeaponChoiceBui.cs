@@ -4,6 +4,7 @@ using JetBrains.Annotations;
 using Robust.Client.GameObjects;
 using Robust.Client.UserInterface;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Client._CMU14.Yautja;
 
@@ -30,9 +31,9 @@ public sealed partial class YautjaBadBloodWeaponChoiceBui : BoundUserInterface
 
     private static readonly Dictionary<YautjaGearKind, string> GearDisplayNames = new()
     {
-        { YautjaGearKind.WristBlades, "Wrist Blades" },
-        { YautjaGearKind.Scimitar, "Combi Scimitar" },
-        { YautjaGearKind.ChainGauntlet, "Chain Gauntlet" },
+        { YautjaGearKind.WristBlades, "cmu-yautja-choice-wrist-blades" },
+        { YautjaGearKind.Scimitar, "cmu-yautja-choice-scimitar" },
+        { YautjaGearKind.ChainGauntlet, "cmu-yautja-choice-chain-gauntlet" },
     };
 
     public YautjaBadBloodWeaponChoiceBui(EntityUid owner, Enum uiKey) : base(owner, uiKey)
@@ -60,7 +61,9 @@ public sealed partial class YautjaBadBloodWeaponChoiceBui : BoundUserInterface
             if (!_prototype.TryIndex(protoId, out var proto))
                 continue;
 
-            var displayName = GearDisplayNames.GetValueOrDefault(kind, proto.Name);
+            var displayName = GearDisplayNames.TryGetValue(kind, out var displayNameKey)
+                ? Loc.GetString(displayNameKey)
+                : Loc.GetString(proto.Name);
 
             var control = new XenoChoiceControl();
             control.Button.ToggleMode = true;

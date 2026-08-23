@@ -6,3 +6,75 @@
   sprites:
   - sprite: _CMU14/Yautja/hair.rsi
     state: standard
+
+- type: marking
+  id: CMUYautjaDreadlocksShortThick
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: short_thick
+
+- type: marking
+  id: CMUYautjaDreadlocksStraightThin
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: straight_thin
+
+- type: marking
+  id: CMUYautjaDreadlocksLongTied
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: long_tied
+
+- type: marking
+  id: CMUYautjaDreadlocksShortThin
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: short_thin
+
+- type: marking
+  id: CMUYautjaDreadlocksLongCurved
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: long_curved
+
+- type: marking
+  id: CMUYautjaDreadlocksLongStraight
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: long_straight
+
+- type: marking
+  id: CMUYautjaDreadlocksLongWide
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: long_wide
+
+- type: marking
+  id: CMUYautjaDreadlocksShortWide
+  bodyPart: Hair
+  markingCategory: Hair
+  speciesRestriction: [ Yautja ]
+  sprites:
+  - sprite: _CMU14/Yautja/hair.rsi
+    state: short_wide

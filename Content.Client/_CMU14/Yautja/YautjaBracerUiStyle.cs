@@ -7,21 +7,21 @@ namespace Content.Client._CMU14.Yautja;
 
 internal static class YautjaBracerUiStyle
 {
-    public static readonly Color WindowBg = Color.FromHex("#0B0506");
-    public static readonly Color Surface = Color.FromHex("#120708");
-    public static readonly Color Card = Color.FromHex("#1A0B0D");
-    public static readonly Color DeepCard = Color.FromHex("#100405");
-    public static readonly Color Row = Color.FromHex("#201012");
-    public static readonly Color Border = Color.FromHex("#4A2022");
-    public static readonly Color MutedBorder = Color.FromHex("#321618");
-    public static readonly Color Text = Color.FromHex("#F5E8DF");
-    public static readonly Color Muted = Color.FromHex("#B99B92");
-    public static readonly Color Dim = Color.FromHex("#7E5955");
-    public static readonly Color Red = Color.FromHex("#D84A45");
-    public static readonly Color HotRed = Color.FromHex("#FF6A5F");
-    public static readonly Color Amber = Color.FromHex("#D4A056");
-    public static readonly Color Green = Color.FromHex("#62B68A");
-    public static readonly Color Purple = Color.FromHex("#8D6AA8");
+    public static readonly Color WindowBg = Color.FromHex("#070101");
+    public static readonly Color Surface = Color.FromHex("#100303");
+    public static readonly Color Card = Color.FromHex("#180505");
+    public static readonly Color DeepCard = Color.FromHex("#090101");
+    public static readonly Color Row = Color.FromHex("#220707");
+    public static readonly Color Border = Color.FromHex("#6B1616");
+    public static readonly Color MutedBorder = Color.FromHex("#3C0B0B");
+    public static readonly Color Text = Color.FromHex("#F8E5E1");
+    public static readonly Color Muted = Color.FromHex("#C6948E");
+    public static readonly Color Dim = Color.FromHex("#8C5752");
+    public static readonly Color Red = Color.FromHex("#C62D2D");
+    public static readonly Color HotRed = Color.FromHex("#FF4B3F");
+    public static readonly Color Amber = Color.FromHex("#D14A34");
+    public static readonly Color Green = Color.FromHex("#B73131");
+    public static readonly Color Purple = Color.FromHex("#8E2424");
 
     public static StyleBoxFlat Flat(Color background, Color border, Thickness? borderThickness = null)
     {

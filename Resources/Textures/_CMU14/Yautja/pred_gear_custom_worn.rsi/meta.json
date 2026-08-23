@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "license": "CC-BY-SA-3.0",
+  "copyright": "CMU directional worn variants derived from the CMSS13 Yautja item sprites. Original asset attribution is documented in weapons.rsi/meta.json.",
+  "size": {
+    "x": 32,
+    "y": 32
+  },
+  "states": [
+    { "name": "rending_sword", "directions": 4 },
+    { "name": "piercing_sword", "directions": 4 },
+    { "name": "dual_war_scythe", "directions": 4 },
+    { "name": "double_war_scythe", "directions": 4 },
+    { "name": "cruel_staff", "directions": 4 },
+    { "name": "ancient_shield_temple", "directions": 4 }
+  ]
+}

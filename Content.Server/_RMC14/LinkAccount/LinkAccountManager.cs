@@ -45,7 +45,8 @@ public sealed partial class LinkAccountManager : IPostInjectInit
                 tier.Figurines,
                 tier.LobbyMessage,
                 tier.RoundEndShoutout,
-                tier.Name
+                tier.Name,
+                tier.Priority
             );
 
         SharedRMCLobbyMessage? lobbyMessage = null;
@@ -65,7 +66,9 @@ public sealed partial class LinkAccountManager : IPostInjectInit
             ghostColor = new Robust.Shared.Maths.Color(sysColor.R, sysColor.G, sysColor.B, sysColor.A);
         }
 
-        _connected[player.UserId] = new SharedRMCPatronFull(sharedTier, linked, ghostColor, lobbyMessage, shoutouts);
+        var connected = new SharedRMCPatronFull(sharedTier, linked, ghostColor, lobbyMessage, shoutouts);
+        _connected[player.UserId] = connected;
+        PatronUpdated?.Invoke((player.UserId, connected));
     }
 
     private void FinishLoad(ICommonSession player)
@@ -201,13 +204,34 @@ public sealed partial class LinkAccountManager : IPostInjectInit
         _figurines.Clear();
         foreach (var patron in patrons)
         {
-            _allPatrons[new NetUserId(patron.PlayerId)] = new SharedRMCPatron(patron.Player.LastSeenUserName, patron.Tier.Name);
+            _allPatrons[new NetUserId(patron.PlayerId)] = new SharedRMCPatron(
+                patron.Player.LastSeenUserName,
+                patron.Tier.Name,
+                patron.Tier.Priority);
 
             if (patron.Tier.Figurines)
                 _figurines.Add(patron.PlayerId);
         }
 
         PatronsReloaded?.Invoke();
+    }
+
+    public async Task RefreshPatron(NetUserId userId, CancellationToken cancel = default)
+    {
+        if (!_player.TryGetSessionById(userId, out var session))
+            return;
+
+        await LoadData(session, cancel);
+        SendPatronStatus(session);
+    }
+
+    public async Task RefreshConnectedPatrons(CancellationToken cancel = default)
+    {
+        foreach (var userId in _connected.Keys.ToArray())
+        {
+            cancel.ThrowIfCancellationRequested();
+            await RefreshPatron(userId, cancel);
+        }
     }
 
     public void SendPatronsToAll()

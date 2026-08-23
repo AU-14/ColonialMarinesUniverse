@@ -50,8 +50,13 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
             if (marker.Patient != patient)
                 continue;
 
-            var parts = BuildPartEntries(patient, medic);
             var armed = CompOrNull<CMUSurgeryArmedStepComponent>(patient);
+            var parts = armed is null
+                ? BuildPartEntries(patient, medic)
+                : BuildPartEntriesForSurgerySelection(
+                    patient,
+                    medic,
+                    string.IsNullOrEmpty(armed.LeafSurgeryId) ? armed.SurgeryId : armed.LeafSurgeryId);
             var state = BuildBuiStateForViewer(patient, medic, marker, parts, armed);
             _ui.SetUiState(medic, CMUSurgeryUIKey.Key, state);
         }
@@ -68,10 +73,11 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (tool is { } usedTool && IsUiLessSurgeryEnabled(surgeon))
             return TryDispatchUiLess(surgeon, patient, usedTool);
 
-        if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true))
+        var allowStanding = tool is { } dispatchTool && IsYautjaMedicompTool(dispatchTool);
+        if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true, allowStanding: allowStanding))
             return true;
 
-        var parts = BuildPartEntries(patient, surgeon);
+        var parts = BuildPartEntries(patient, surgeon, allowStanding: allowStanding);
         if (parts.Count == 0)
             return false;
 
@@ -114,7 +120,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         if (!IsLayerEnabled() || !IsCmuOrganicSurgeryPatient(patient))
             return false;
 
-        if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true))
+        if (!_flowSurgery.CanOperateOnPatient(patient, surgeon, popup: true, allowStanding: IsYautjaMedicompTool(tool)))
             return true;
 
         if (!TryGetSelectedPart(surgeon, out var selectedType, out var selectedSymmetry))
@@ -406,13 +412,32 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
         EntityUid patient,
         EntityUid surgeon,
         bool ignoreSkillRequirements = false,
-        bool allowOptionalHemostasis = false)
+        bool allowOptionalHemostasis = false,
+        bool allowStanding = false)
     {
         return _rulebook.BuildPartEntries(
             patient,
             surgeon,
             ignoreSkillRequirements,
-            allowOptionalHemostasis);
+            allowOptionalHemostasis,
+            allowStanding);
+    }
+
+    public List<CMUSurgeryPartEntry> BuildPartEntriesForSurgerySelection(
+        EntityUid patient,
+        EntityUid surgeon,
+        string surgeryId)
+    {
+        var allowStanding = _flowSurgery.TryGetDefinition(surgeryId, out var surgery)
+            && surgery.AllowStanding;
+        return BuildPartEntries(patient, surgeon, allowStanding: allowStanding);
+    }
+
+    private bool IsYautjaMedicompTool(EntityUid tool)
+    {
+        return HasComp<CMUYautjaMedicompStabilizerToolComponent>(tool)
+            || HasComp<CMUYautjaMedicompHealingGunToolComponent>(tool)
+            || HasComp<CMUYautjaMedicompClampToolComponent>(tool);
     }
 
     public List<CMUSurgeryEntry> BuildEligibleSurgeries(
@@ -834,7 +859,7 @@ public sealed partial class CMUSurgeryDispatchSystem : EntitySystem
 
         CMUSurgeryPartEntry? selectedPart = null;
         CMUSurgeryEntry? selectedSurgery = null;
-        foreach (var part in BuildPartEntries(marker.Patient, medic))
+        foreach (var part in BuildPartEntriesForSurgerySelection(marker.Patient, medic, args.SurgeryId))
         {
             if (part.Part != args.Part
                 || part.Type != args.TargetPartType

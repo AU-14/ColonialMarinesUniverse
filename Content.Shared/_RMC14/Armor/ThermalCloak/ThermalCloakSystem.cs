@@ -15,6 +15,7 @@ using Content.Shared.Inventory.Events;
 using Content.Shared.Mobs;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
 using Content.Shared.Whitelist;
@@ -245,7 +246,9 @@ public sealed partial class ThermalCloakSystem : EntitySystem
         if (args.Cancelled || !TryComp<EntityTurnInvisibleComponent>(args.User, out var comp))
             return;
 
-        if (comp.RestrictWeapons && comp.Enabled || comp.UncloakTime + comp.UncloakWeaponLock > _timing.CurTime)
+        var isYautjaCaster = HasComp<YautjaComponent>(args.User) && HasComp<YautjaCasterComponent>(ent.Owner);
+        if ((!isYautjaCaster && comp.RestrictWeapons && comp.Enabled) ||
+            comp.UncloakTime + comp.UncloakWeaponLock > _timing.CurTime)
         {
             args.Cancelled = true;
 
