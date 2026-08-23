@@ -213355,7 +213355,7 @@ entities:
     - type: MetaData
       name: Hybrisa Metropolitan ground relay
     - type: Transform
-      pos: -148.5,-50.5
+      pos: -204.5,-37.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

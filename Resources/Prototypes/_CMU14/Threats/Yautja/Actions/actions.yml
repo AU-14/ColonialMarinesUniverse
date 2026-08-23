@@ -790,7 +790,6 @@
   components:
   - type: Action
     icon: Interface/Emotes/click.png
-    useDelay: 5
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDistractActionEvent
 

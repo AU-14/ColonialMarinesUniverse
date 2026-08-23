@@ -61,7 +61,7 @@ public abstract partial class SharedHeartSystem : EntitySystem
 
     private void OnHeartRemovedFromBody(Entity<HeartComponent> ent, ref OrganRemovedFromBodyEvent args)
     {
-        if (!_medicalEnabled || !_organEnabled)
+        if (Timing.ApplyingState || !_medicalEnabled || !_organEnabled)
             return;
         if (TerminatingOrDeleted(args.OldBody))
             return;

@@ -947,6 +947,7 @@
           - CMWeaponPistolM1984
           - RMCb92fs
           - CMUYautjaDuellingKnife
+          - RMCStraightRazor
   - type: CMItemSlots
     startingItem: CMUYautjaDuellingKnife
   - type: Appearance

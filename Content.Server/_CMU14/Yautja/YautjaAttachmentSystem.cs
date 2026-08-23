@@ -10,6 +10,7 @@ using Content.Shared.CombatMode;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
 using Content.Shared.Doors.Systems;
+using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction.Events;
@@ -71,14 +72,14 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
             subs.Event<YautjaBadBloodWeaponChoiceMsg>(OnBadBloodWeaponChoice);
         });
 
-        SubscribeLocalEvent<YautjaStoredGearComponent, RMCItemDropAttemptEvent>(OnStoredGearDropAttempt);
         SubscribeLocalEvent<YautjaStoredGearComponent, UseInHandEvent>(OnStoredGearUseInHand);
         SubscribeLocalEvent<YautjaStoredGearComponent, ThrowItemAttemptEvent>(OnStoredGearThrowAttempt);
         SubscribeLocalEvent<YautjaStoredGearComponent, FellDownThrowAttemptEvent>(OnStoredGearFellDownThrowAttempt);
-        SubscribeLocalEvent<YautjaStoredGearComponent, ContainerGettingRemovedAttemptEvent>(OnStoredGearRemoveAttempt);
         SubscribeLocalEvent<YautjaStoredGearComponent, ComponentShutdown>(OnStoredGearShutdown);
+        SubscribeLocalEvent<YautjaStoredGearComponent, GotUnequippedHandEvent>(OnStoredGearUnequippedHand);
         SubscribeLocalEvent<YautjaStoredGearComponent, DroppedEvent>(OnStoredGearDropped);
         SubscribeLocalEvent<YautjaStoredGearComponent, RMCDroppedEvent>(OnStoredGearRMCDropped);
+        SubscribeLocalEvent<YautjaStoredGearHandRemovalCompletedEvent>(OnStoredGearHandRemovalCompleted);
         SubscribeLocalEvent<DoorComponent, YautjaBracerAttachmentForceDoorDoAfterEvent>(OnBracerAttachmentForceDoorDoAfter);
         SubscribeLocalEvent<AirlockComponent, InteractUsingEvent>(OnForceAirlockWithBracerAttachment);
         SubscribeLocalEvent<ResinDoorComponent, InteractUsingEvent>(OnForceResinDoorWithBracerAttachment);
@@ -103,13 +104,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OnShutdown(Entity<YautjaGearContainerComponent> ent, ref ComponentShutdown args)
     {
-        foreach (var gear in ent.Comp.Gear.Values)
-        {
-            if (!TerminatingOrDeleted(gear))
-                QueueDel(gear);
-        }
-
-        foreach (var gear in ent.Comp.SecondaryGear.Values)
+        foreach (var gear in ent.Comp.InstalledGear)
         {
             if (!TerminatingOrDeleted(gear))
                 QueueDel(gear);
@@ -248,8 +243,11 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
                 if (TryComp(oldSecondary, out YautjaStoredGearComponent? oldStored) && oldStored.Deployed)
                     return false;
 
-                ent.Comp.InstalledGear.Remove(oldSecondary);
-                QueueDel(oldSecondary);
+                if (oldStored == null || oldStored.DeployedPrototype != null)
+                {
+                    ent.Comp.InstalledGear.Remove(oldSecondary);
+                    QueueDel(oldSecondary);
+                }
             }
 
             ent.Comp.SecondaryGear[stored.Kind] = gear;
@@ -263,8 +261,11 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
                 if (TryComp(oldGear, out YautjaStoredGearComponent? oldStored) && oldStored.Deployed)
                     return false;
 
-                ent.Comp.InstalledGear.Remove(oldGear);
-                QueueDel(oldGear);
+                if (oldStored == null || oldStored.DeployedPrototype != null)
+                {
+                    ent.Comp.InstalledGear.Remove(oldGear);
+                    QueueDel(oldGear);
+                }
             }
 
             ent.Comp.Gear[stored.Kind] = gear;
@@ -303,6 +304,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
     private void OpenBracerAttachmentSlotDialog(Entity<YautjaGearContainerComponent> bracer, EntityUid user, EntityUid gear, YautjaGearKind kind)
     {
+        EnsureComp<DialogComponent>(bracer.Owner);
+
         var userNet = GetNetEntity(user);
         var gearNet = GetNetEntity(gear);
         var options = new List<DialogOption>
@@ -377,7 +380,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         return bracer.InstalledGear.Contains(gear) &&
                !TerminatingOrDeleted(gear) &&
                TryComp(gear, out YautjaStoredGearComponent? stored) &&
-               CanUseSecondaryAttachmentSlot(stored.Kind);
+               CanUseSecondaryAttachmentSlot(stored.Kind) &&
+               stored.DeployedPrototype != null;
     }
 
     private static bool CanUseSecondaryAttachmentSlot(YautjaGearKind kind)
@@ -438,17 +442,6 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         }
 
         TryRemoveBracerAttachments(ent, user);
-    }
-
-    private void OnStoredGearDropAttempt(Entity<YautjaStoredGearComponent> ent, ref RMCItemDropAttemptEvent args)
-    {
-        if (!ent.Comp.Deployed)
-            return;
-
-        if (TryGetCurrentHolder(ent.Owner, out var user))
-            TryRetractStoredGear(ent, user);
-
-        args.Cancelled = true;
     }
 
     private void OnStoredGearUseInHand(Entity<YautjaStoredGearComponent> ent, ref UseInHandEvent args)
@@ -626,18 +619,6 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         args.Cancelled = true;
     }
 
-    private void OnStoredGearRemoveAttempt(EntityUid uid, YautjaStoredGearComponent comp, ContainerGettingRemovedAttemptEvent args)
-    {
-        if (!comp.Deployed || comp.Retracting || !HasComp<HandsComponent>(args.Container.Owner))
-            return;
-
-        var ent = (uid, comp);
-        if (!TryRetractStoredGear(ent, args.Container.Owner))
-            return;
-
-        args.Cancel();
-    }
-
     private void OnStoredGearShutdown(Entity<YautjaStoredGearComponent> ent, ref ComponentShutdown args)
     {
         if (!TerminatingOrDeleted(ent.Owner) ||
@@ -649,6 +630,28 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
 
         QueueDel(attached);
         ent.Comp.AttachedWeapon = null;
+    }
+
+    private void OnStoredGearUnequippedHand(Entity<YautjaStoredGearComponent> ent, ref GotUnequippedHandEvent args)
+    {
+        if (!ent.Comp.Deployed || ent.Comp.Retracting)
+            return;
+
+        // This event is raised from inside container removal. Wait until the transfer has completed before
+        // moving the gear again, otherwise hand -> hand/container operations are re-entered mid-insertion.
+        QueueLocalEvent(new YautjaStoredGearHandRemovalCompletedEvent(ent.Owner, args.User));
+    }
+
+    private void OnStoredGearHandRemovalCompleted(YautjaStoredGearHandRemovalCompletedEvent args)
+    {
+        if (!TryComp(args.Gear, out YautjaStoredGearComponent? stored) ||
+            !stored.Deployed ||
+            stored.Retracting)
+        {
+            return;
+        }
+
+        TryRetractStoredGear((args.Gear, stored), args.User);
     }
 
     private void OnStoredGearDropped(Entity<YautjaStoredGearComponent> ent, ref DroppedEvent args)
@@ -777,7 +780,8 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
                 continue;
             }
 
-            if (!CanUseSecondaryAttachmentSlot(stored.Kind))
+            if (!CanUseSecondaryAttachmentSlot(stored.Kind) ||
+                stored.DeployedPrototype == null)
             {
                 continue;
             }
@@ -1054,6 +1058,22 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         {
             bracer.Comp.Gear.Remove(stored.Kind);
             bracer.Comp.GearPrototypes.Remove(stored.Kind);
+
+            foreach (var installed in bracer.Comp.InstalledGear)
+            {
+                if (TerminatingOrDeleted(installed) ||
+                    !TryComp(installed, out YautjaStoredGearComponent? installedStored) ||
+                    installedStored.Kind != stored.Kind ||
+                    installedStored.DeployedPrototype != null)
+                {
+                    continue;
+                }
+
+                bracer.Comp.Gear[stored.Kind] = installed;
+                if (MetaData(installed).EntityPrototype is { } prototype)
+                    bracer.Comp.GearPrototypes[stored.Kind] = prototype.ID;
+                break;
+            }
         }
 
         if (bracer.Comp.SecondaryGear.TryGetValue(stored.Kind, out var secondary) && secondary == gear)
@@ -1478,4 +1498,13 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         return HasComp<YautjaComponent>(user) ||
                (TryComp(user, out YautjaThrallComponent? thrall) && thrall.Blooded && thrall.TechAuthorized);
     }
+}
+
+/// <summary>
+/// Defers stored-gear lifecycle correction until the hand removal operation has completed.
+/// </summary>
+public sealed class YautjaStoredGearHandRemovalCompletedEvent(EntityUid gear, EntityUid user) : EntityEventArgs
+{
+    public EntityUid Gear { get; } = gear;
+    public EntityUid User { get; } = user;
 }

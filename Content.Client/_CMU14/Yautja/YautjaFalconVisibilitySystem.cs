@@ -1,4 +1,3 @@
-using Content.Client.Administration.Managers;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared.Ghost;
 using Robust.Client.GameObjects;
@@ -8,7 +7,6 @@ namespace Content.Client._CMU14.Yautja;
 
 public sealed partial class YautjaFalconVisibilitySystem : EntitySystem
 {
-    [Dependency] private IClientAdminManager _admin = default!;
     [Dependency] private IPlayerManager _player = default!;
     [Dependency] private SpriteSystem _sprite = default!;
 
@@ -17,8 +15,7 @@ public sealed partial class YautjaFalconVisibilitySystem : EntitySystem
         var local = _player.LocalEntity;
         var visible = local is { } viewer &&
                       (HasComp<YautjaComponent>(viewer) ||
-                       HasComp<GhostComponent>(viewer) ||
-                       _admin.IsAdmin());
+                       HasComp<GhostComponent>(viewer));
 
         var query = EntityQueryEnumerator<YautjaFalconDroneDeployedComponent, SpriteComponent>();
         while (query.MoveNext(out var uid, out _, out var sprite))

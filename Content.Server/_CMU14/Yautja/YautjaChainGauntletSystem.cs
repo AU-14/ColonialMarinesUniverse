@@ -597,7 +597,7 @@ public sealed partial class YautjaChainGauntletSystem : EntitySystem
         {
             _chat.TrySendInGameICMessage(
                 user,
-                gauntlet.ChainMessage,
+                Loc.GetString(gauntlet.ChainMessage),
                 InGameICChatType.Speak,
                 ChatTransmitRange.Normal,
                 hideLog: true,

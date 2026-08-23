@@ -56,6 +56,7 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
         base.Initialize();
 
         SubscribeLocalEvent<ImaginaryFriendComponent, ChatMessageAfterGetRecipients>(OnImaginaryFriendGetRecipients);
+        SubscribeLocalEvent<XenoComponent, ChatMessageAfterGetRecipients>(OnXenoAfterGetRecipients);
     }
 
     private void OnImaginaryFriendGetRecipients(Entity<ImaginaryFriendComponent> ent, ref ChatMessageAfterGetRecipients args)
@@ -77,6 +78,9 @@ public sealed partial class CMChatSystem : SharedCMChatSystem
 
     private void OnXenoAfterGetRecipients(Entity<XenoComponent> ent, ref ChatMessageAfterGetRecipients args)
     {
+        if (args.Purpose != ChatRecipientPurpose.Speech)
+            return;
+
         _toRemove.Clear();
         var hive = _hive.GetHive(ent.Owner);
         var hivebroken = IsHivebrokenXeno(ent.Owner);

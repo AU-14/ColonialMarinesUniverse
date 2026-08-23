@@ -272329,7 +272329,7 @@ entities:
     - type: MetaData
       name: Port Nereid ground relay
     - type: Transform
-      pos: -4.5,49.5
+      pos: -4.5,39.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

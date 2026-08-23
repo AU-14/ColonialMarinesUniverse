@@ -19,6 +19,14 @@ namespace Content.Server.Power.Components
         [DataField] public float AutoRechargeRate;
 
         /// <summary>
+        /// If positive, recharge is applied in whole intervals instead of continuously.
+        /// </summary>
+        [DataField] public TimeSpan AutoRechargeInterval;
+
+        [ViewVariables]
+        public decimal AutoRechargeAccumulatorSeconds;
+
+        /// <summary>
         /// Should this entity stop automatically recharging if a charge is used?
         /// </summary>
         [DataField] public bool AutoRechargePause = false;

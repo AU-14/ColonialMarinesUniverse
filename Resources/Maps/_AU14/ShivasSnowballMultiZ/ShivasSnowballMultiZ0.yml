@@ -131965,7 +131965,7 @@ entities:
     - type: MetaData
       name: Shivas Snowball ground relay
     - type: Transform
-      pos: 68.5,46.5
+      pos: 84.5,33.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

@@ -140,6 +140,9 @@
   id: RMCScrewdriver
 
 - type: Tag
+  id: RMCStraightRazor
+
+- type: Tag
   id: LightReplacer
 
 - type: Tag

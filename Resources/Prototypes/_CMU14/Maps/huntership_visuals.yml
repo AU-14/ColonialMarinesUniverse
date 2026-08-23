@@ -5103,7 +5103,6 @@
     access:
     - [ "CMUAccessYautjaAncient" ]
     - [ "CMUAccessYautjaElder" ]
-    - [ "CMUAccessYautjaElite" ]
     - [ "CMUAccessYautjaLeader" ]
   - type: Clickable
   - type: InteractionOutline
@@ -5162,7 +5161,6 @@
     access:
     - [ "CMUAccessYautjaAncient" ]
     - [ "CMUAccessYautjaElder" ]
-    - [ "CMUAccessYautjaElite" ]
     - [ "CMUAccessYautjaLeader" ]
   - type: Clickable
   - type: InteractionOutline
@@ -29992,6 +29990,10 @@
   description: "A device covered in sacred text. It whirrs and beeps every couple of seconds."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: YautjaRelayBeacon
+    allowedDestinations:
+    - YautjaShip
+    - HumanShip
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: Items
@@ -30037,6 +30039,10 @@
   description: "A device covered in sacred text. It whirrs and beeps every couple of seconds."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: YautjaRelayBeacon
+    allowedDestinations:
+    - YautjaShip
+    - HumanShip
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: Items
@@ -30082,6 +30088,10 @@
   description: "A device covered in sacred text. It whirrs and beeps every couple of seconds."
   suffix: Hunter Ship CMU exact wrapper
   components:
+  - type: YautjaRelayBeacon
+    allowedDestinations:
+    - YautjaShip
+    - HumanShip
   - type: Sprite
     sprite: _CMU14/HunterShip/obj/items/hunter/pred_gear.rsi
     drawdepth: Items
@@ -51071,6 +51081,13 @@
 
 - type: entity
   parent: CMUYautjaLantern
+  id: CMUHunterShipPlacedLitYautjaLanternBase
+  abstract: true
+  components:
+  - type: CMUStartHandheldLightOn
+
+- type: entity
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouth
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51123,7 +51140,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset2x14
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51177,7 +51194,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset2x9
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51231,7 +51248,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset3x15
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51285,7 +51302,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset5xNeg5
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51339,7 +51356,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset6x10
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51393,7 +51410,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset6x4
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51447,7 +51464,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset8xNeg3
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51501,7 +51518,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffset8xNeg3YoungbloodRoomOn
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51535,7 +51552,6 @@
     energy: 1
     color: "#f03939"
     enabled: true
-  - type: CMUStartHandheldLightOn
   - type: Physics
     bodyType: Dynamic
     fixedRotation: false
@@ -51556,7 +51572,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffsetNeg3xNeg2
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51610,7 +51626,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffsetNeg6x10
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51664,7 +51680,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffsetNeg6x6
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51718,7 +51734,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffsetNeg6xNeg1
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."
@@ -51772,7 +51788,7 @@
 
 
 - type: entity
-  parent: CMUYautjaLantern
+  parent: CMUHunterShipPlacedLitYautjaLanternBase
   id: CMUHunterShipPlacedRMCFlashlightLanternYautjaSouthOffsetNeg7x4
   name: "Lantern"
   description: "A rugged alien lantern with a metallic frame, emitting a steady red glow. Its light has an unsettling, otherworldly aura."

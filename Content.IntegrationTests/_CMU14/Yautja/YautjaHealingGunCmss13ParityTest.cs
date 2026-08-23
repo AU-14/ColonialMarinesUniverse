@@ -55,7 +55,7 @@ public sealed class YautjaHealingGunCmss13ParityTest
                 });
 
                 entMan.GetComponent<YautjaHealingGunComponent>(gun).Loaded = false;
-                var capsule = entMan.SpawnEntity("CMUYautjaHealingCapsule", MapCoordinates.Nullspace);
+                var capsule = entMan.SpawnEntity("CMUYautjaHealingGel", MapCoordinates.Nullspace);
                 try
                 {
                     Assert.That(entMan.HasComponent<YautjaHealingCapsuleComponent>(capsule), Is.True,
@@ -103,8 +103,8 @@ public sealed class YautjaHealingGunCmss13ParityTest
             var entMan = server.EntMan;
             var gun = entMan.SpawnEntity("CMUYautjaHealingGun", MapCoordinates.Nullspace);
             var user = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var firstCapsule = entMan.SpawnEntity("CMUYautjaHealingCapsule", MapCoordinates.Nullspace);
-            var secondCapsule = entMan.SpawnEntity("CMUYautjaHealingCapsule", MapCoordinates.Nullspace);
+            var firstCapsule = entMan.SpawnEntity("CMUYautjaHealingGel", MapCoordinates.Nullspace);
+            var secondCapsule = entMan.SpawnEntity("CMUYautjaHealingGel", MapCoordinates.Nullspace);
 
             try
             {

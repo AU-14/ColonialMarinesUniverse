@@ -621,3 +621,18 @@ ent-CMUActionYautjaAbominationFrenzy = Дикое безумие
 
 ent-CMUActionYautjaAbominationToggleFrenzy = Переключить режим безумия
     .desc = Переключайте Feral Frenzy между ударами по одной цели и по области.
+
+cmu-yautja-hunt-call-mixed-small = Смешанные фракции (малый)
+cmu-yautja-hunt-call-mixed-group = Смешанные фракции (группа)
+cmu-yautja-hunt-call-mixed-large = Смешанные фракции (большой)
+cmu-yautja-hunt-call-mixed-larger = Смешанные фракции (увеличенный)
+cmu-yautja-hunt-call-serpents-small = Змеи (малый)
+cmu-yautja-hunt-call-serpents-group = Змеи (группа)
+cmu-yautja-hunt-call-serpents-large = Змеи (большой)
+cmu-yautja-hunt-call-elite-mixed-small = Элитные смешанные фракции (малый)
+cmu-yautja-hunt-call-elite-mixed-group = Элитные смешанные фракции (группа)
+cmu-yautja-hunt-call-elite-mixed-large = Элитные смешанные фракции (большой)
+cmu-yautja-hunt-call-elite-mixed-larger = Элитные смешанные фракции (увеличенный)
+cmu-yautja-power-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].
+cmu-yautja-spike-launcher-examine-spikes = Текущий боезапас: [bold]{$count}/{$capacity}[/bold] шипов.
+cmu-yautja-plasma-weapon-examine-charge = Текущий заряд: [bold]{$charge}/{$max}[/bold].

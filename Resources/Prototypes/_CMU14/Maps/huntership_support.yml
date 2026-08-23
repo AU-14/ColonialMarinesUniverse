@@ -140,6 +140,7 @@
   components:
   - type: SpawnPoint
     job_id: CMUYautjaHunter
+    spawn_type: LateJoin
   - type: YautjaPredatorSpawnPoint
     kind: HunterShipClan
   - type: YautjaRelayDestination

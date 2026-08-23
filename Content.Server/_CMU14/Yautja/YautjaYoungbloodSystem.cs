@@ -11,6 +11,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.Inventory;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
@@ -78,6 +79,7 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
     [Dependency] private IChatManager _chat = default!;
     [Dependency] private JobWhitelistManager _jobWhitelist = default!;
     [Dependency] private DialogSystem _dialog = default!;
+    [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private PlayTimeTrackingManager _playtime = default!;
@@ -167,6 +169,10 @@ public sealed partial class YautjaYoungbloodSystem : EntitySystem
 
         if (_prototype.TryIndex<JobPrototype>(YoungbloodJob, out var job))
             _stationSpawning.EquipStartingGear(ent.Owner, job.StartingGear, raiseEvent: false);
+
+        var mask = Spawn("CMUYautjaMask", Transform(ent).Coordinates);
+        if (!_inventory.TryEquip(ent.Owner, mask, "mask", silent: true, force: true))
+            QueueDel(mask);
 
         var yautja = EnsureComp<YautjaComponent>(ent.Owner);
         yautja.ClanRank = YautjaRank.YoungBlood;

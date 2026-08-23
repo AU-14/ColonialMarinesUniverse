@@ -5,6 +5,7 @@ using Content.Server.Station.Systems;
 using Content.Server.Shuttles.Components;
 using Content.Server.Shuttles.Systems;
 using Content.Shared._CMU14.ZLevels.Core;
+using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Robust.Server.GameObjects;
 using Robust.Shared.EntitySerialization.Systems;
@@ -34,6 +35,23 @@ public sealed partial class CMUZLevelsSystem : CMUSharedZLevelsSystem
         InitializeActivation();
 
         SubscribeLocalEvent<PostGameMapLoad>(OnGameMapLoad, after: [typeof(StationSystem)]);
+        SubscribeLocalEvent<CMUZLevelsNetworkComponent, EntityTerminatingEvent>(OnZNetworkTerminating);
+    }
+
+    private void OnZNetworkTerminating(Entity<CMUZLevelsNetworkComponent> ent, ref EntityTerminatingEvent args)
+    {
+        foreach (var mapUid in ent.Comp.ZLevels.Values)
+        {
+            if (mapUid is not { } map ||
+                TerminatingOrDeleted(map) ||
+                !TryComp(map, out CMUZLevelMapComponent? levelMap) ||
+                levelMap.NetworkUid != ent.Owner)
+            {
+                continue;
+            }
+
+            RemComp<CMUZLevelMapComponent>(map);
+        }
     }
 
     public override void Update(float frameTime)

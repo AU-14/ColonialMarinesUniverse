@@ -12,6 +12,7 @@ using Content.Shared._CMU14.Medical.Treatment.Surgery.Effects;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Markers;
 using Content.Shared._CMU14.Medical.Treatment.Surgery.Traits;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
+using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
@@ -105,6 +106,7 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUSurgeryStepDoAfterEvent>(OnStepDoAfter);
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUSurgeryAttemptActorLostEvent>(OnAttemptActorLost);
         SubscribeLocalEvent<CMUSurgeryArmedStepComponent, CMUMedicalWorkDueEvent>(OnArmedStepExpiryDue);
+        SubscribeLocalEvent<PainTierChangedEvent>(OnPainTierChanged);
         SubscribeLocalEvent<BodyComponent, BodyPartRemovedEvent>(OnSessionBodyPartRemoved);
         SubscribeLocalEvent<BodyComponent, CMUMedicalWorkDueEvent>(OnSessionTargetValidationDue);
     }
@@ -1116,6 +1118,39 @@ public abstract partial class SharedCMUSurgeryFlowSystem : EntitySystem
             || ShouldRejectSurgeryStepForPain(patient))
         {
             args.Cancel();
+        }
+    }
+
+    private void OnPainTierChanged(ref PainTierChangedEvent args)
+    {
+        if (!Net.IsServer
+            || !ShouldRejectSurgeryStepForPain(args.Body)
+            || !TryComp<CMUSurgeryArmedStepComponent>(args.Body, out var armed)
+            || !SurgerySessions.TryGetSession(args.Body, out var session)
+            || session.ActiveAttempt is not { } attempt
+            || session.ActiveSurgeon is not { } surgeon
+            || !SurgerySessions.CancelActiveAttempt(args.Body))
+        {
+            return;
+        }
+
+        CancelSurgeryDoAfter(surgeon, attempt);
+        ShowSurgeryPainFailure(args.Body, surgeon, applyReaction: true);
+        ReturnToAwaitingAction(args.Body, armed);
+    }
+
+    private void CancelSurgeryDoAfter(EntityUid surgeon, CMUSurgeryAttemptToken attempt)
+    {
+        if (!TryComp<DoAfterComponent>(surgeon, out var doAfters))
+            return;
+
+        foreach (var (id, doAfter) in doAfters.DoAfters)
+        {
+            if (doAfter.Args.Event is not CMUSurgeryStepDoAfterEvent ev || ev.Attempt != attempt)
+                continue;
+
+            DoAfter.Cancel(surgeon, id, doAfters);
+            return;
         }
     }
 

@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 08/15/2026 23:28:41
-  entityCount: 61733
+  entityCount: 61734
 maps:
 - 1
 grids:
@@ -429880,4 +429880,17 @@ entities:
       containers:
         rmc_xeno_tunnel_mob_container: !type:Container
           ents: []
+- proto: CMUYautjaGroundRelayDestination
+  entities:
+  - uid: 1000000010
+    components:
+    - type: MetaData
+      name: Stable Garrison Redux ground relay
+    - type: Transform
+      pos: 201.5,-110.5
+      parent: 1
+    - type: YautjaRelayDestination
+      kind: Ground
+      id: stable-garrison-redux.ground.relay
+      displayName: Stable Garrison Redux Ground Relay
 ...

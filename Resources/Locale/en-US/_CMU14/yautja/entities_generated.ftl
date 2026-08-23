@@ -240,7 +240,7 @@ ent-CMUYautjaAdvancedOintment = predator advanced ointment
     .desc = A cool alien salve for sealing burns and caustic injuries.
 
 ent-CMUYautjaHealingGel = healing gel capsule
-    .desc = A single-use capsule for reloading the Yautja healing gun.
+    .desc = Used for reloading the healing gun.
 
 ent-CMUYautjaStabilizerGel = stabilizer gel
     .desc = A fast-setting alien gel for buying time through shock and blood loss.

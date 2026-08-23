@@ -310391,7 +310391,7 @@ entities:
     - type: MetaData
       name: Flight ground relay
     - type: Transform
-      pos: 17.5,334.5
+      pos: -15.5,440.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

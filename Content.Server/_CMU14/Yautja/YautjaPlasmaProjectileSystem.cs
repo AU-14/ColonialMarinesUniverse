@@ -97,30 +97,32 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         if (!_vehicleTopology.TryGetVehicle(args.Target, out var vehicle))
             return;
 
-        ApplyCasterEradicatorVehicleImpact((vehicle, ent.Comp));
+        ApplyCasterEradicatorVehicleImpact(ent, vehicle);
     }
 
-    private void ApplyCasterEradicatorVehicleImpact(Entity<YautjaCasterEradicatorProjectileComponent> ent)
+    private void ApplyCasterEradicatorVehicleImpact(
+        Entity<YautjaCasterEradicatorProjectileComponent> projectile,
+        EntityUid vehicle)
     {
-        if (TryComp(ent.Owner, out GridVehicleMoverComponent? mover))
+        if (TryComp(vehicle, out GridVehicleMoverComponent? mover))
         {
             var speed = mover.CurrentSpeed;
-            var until = _timing.CurTime + ent.Comp.VehicleSlowdownTime;
+            var until = _timing.CurTime + projectile.Comp.VehicleSlowdownTime;
             mover.ImmobileUntil = TimeSpan.FromTicks(Math.Max(mover.ImmobileUntil.Ticks, until.Ticks));
             mover.CurrentSpeed = 0f;
             mover.IsCommittedToMove = false;
             mover.IsPushMove = false;
             mover.PushDirection = Vector2i.Zero;
-            Dirty(ent.Owner, mover);
+            Dirty(vehicle, mover);
 
             if (MathF.Abs(speed) > 1f)
-                ApplyCasterEradicatorInteriorCrash(ent.Owner, speed, mover.MaxSpeed, ent.Comp);
+                ApplyCasterEradicatorInteriorCrash(vehicle, speed, mover.MaxSpeed, projectile.Comp);
         }
 
-        _audio.PlayPvs(ent.Comp.VehicleImpactSound, ent.Owner);
-        _hardpoints.DamageVehicleHull(ent.Owner, ent.Comp.VehicleHullDamage);
+        _audio.PlayPvs(projectile.Comp.VehicleImpactSound, vehicle);
+        _hardpoints.DamageVehicleHull(vehicle, projectile.Comp.VehicleHullDamage);
 
-        if (!TryComp(ent.Owner, out VehicleInteriorComponent? interior) ||
+        if (!TryComp(vehicle, out VehicleInteriorComponent? interior) ||
             interior.EntryParent == EntityUid.Invalid ||
             !Exists(interior.EntryParent))
         {
@@ -131,10 +133,10 @@ public sealed partial class YautjaPlasmaProjectileSystem : EntitySystem
         _explosions.QueueExplosion(
             interiorCoordinates,
             "RMC",
-            ent.Comp.InteriorExplosionIntensity,
-            ent.Comp.InteriorExplosionSlope,
-            ent.Comp.InteriorExplosionMaxTileIntensity,
-            ent.Owner,
+            projectile.Comp.InteriorExplosionIntensity,
+            projectile.Comp.InteriorExplosionSlope,
+            projectile.Comp.InteriorExplosionMaxTileIntensity,
+            vehicle,
             addLog: false);
     }
 

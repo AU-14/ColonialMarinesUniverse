@@ -18,7 +18,7 @@
     regen: 60
     stabilisingCrystalPrototype: CMUYautjaStabilisingCrystal
     humanStabilisingCrystalPrototype: CMUYautjaHumanStabilisingCrystal
-    healingCapsulePrototype: CMUYautjaHealingCapsule
+    healingCapsulePrototype: CMUYautjaHealingGel
     stabilisingCrystalCost: 400
     humanStabilisingCrystalCost: 400
     healingCapsuleCost: 600
@@ -769,28 +769,6 @@
     - CMUYautjaMedicompItem
 
 - type: entity
-  parent: CMUYautjaHealingGel
-  id: CMUYautjaHealingCapsule
-  suffix: Yautja, Bracer Fabricated
-  name: healing gel
-  description: A dense alien coagulant that knits together broad trauma.
-  components:
-  - type: Sprite
-    sprite: _CMU14/Yautja/medical.rsi
-    state: healing_gel
-  - type: Item
-    size: Small
-    sprite: _CMU14/Yautja/medical.rsi
-  - type: RemoveComponents
-    components:
-    - type: Stack
-      stackType: CMUYautjaHealingGel
-  - type: Tag
-    tags:
-    - Brutepack
-    - CMUYautjaMedicompItem
-
-- type: entity
   parent: BaseItem
   id: CMUYautjaMaskOrnament
   name: Mask Ornament
@@ -1010,6 +988,7 @@
       path: /Audio/Machines/button.ogg
   - type: YautjaSmartDisc
     searchRange: 7
+    boomerangSearchRange: 4
     throwSpeed: 13
     spinVelocity: 24
     maxHits: 8
@@ -1566,6 +1545,7 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     state: brute_herbs
   - type: Item
+    size: Small
     sprite: _CMU14/Yautja/yautja_items.rsi
   - type: MedicallyUnskilledDoAfter
     min: 0
@@ -1594,6 +1574,7 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     state: burn_herbs
   - type: Item
+    size: Small
     sprite: _CMU14/Yautja/yautja_items.rsi
   - type: MedicallyUnskilledDoAfter
     min: 0
@@ -1613,7 +1594,7 @@
   parent: BaseItem
   id: CMUYautjaHealingGel
   name: healing gel capsule
-  description: A single-use capsule for reloading the Yautja healing gun.
+  description: Used for reloading the healing gun.
   suffix: Yautja
   components:
   - type: Sprite
@@ -1626,6 +1607,7 @@
   - type: YautjaHealingCapsule
   - type: Tag
     tags:
+    - Brutepack
     - CMUYautjaMedicompItem
 
 - type: entity
@@ -1649,13 +1631,6 @@
     - CMUYautjaMedicompItem
   - type: CMSurgeryTool
   - type: CMUYautjaMedicompStabilizerTool
-
-- type: stack
-  id: CMUYautjaHealingGel
-  name: healing gel
-  icon: { sprite: "/Textures/_CMU14/Yautja/medical.rsi", state: healing_gel }
-  spawn: CMUYautjaHealingCapsule
-  maxCount: 6
 
 - type: stack
   id: CMUYautjaStabilizerGel
@@ -1697,7 +1672,7 @@
     sprite: _CMU14/Yautja/medical.rsi
   - type: YautjaHealingGun
     loaded: true
-    repairsFractures: false
+    repairsFractures: true
     damageContainers:
     - Biological
     damage:
@@ -1765,11 +1740,10 @@
         reagents:
         - ReagentId: thwei
           Quantity: 30
-  - type: RemoveComponents
-    components:
-    - type: CMRefillableSolution
-      solution: pen
-      reagents: {}
+  - type: CMRefillableSolution
+    solution: pen
+    reagents:
+      thwei: 30
   - type: SolutionContainerVisuals
     maxFillLevels: 1
     fillBaseName: thwei_
@@ -1807,6 +1781,10 @@
         reagents:
         - ReagentId: dathwei
           Quantity: 30
+  - type: CMRefillableSolution
+    solution: pen
+    reagents:
+      dathwei: 30
 
 - type: entity
   parent: BaseStorageItem
@@ -1817,6 +1795,7 @@
   components:
   - type: Sprite
     sprite: _CMU14/Yautja/medical.rsi
+    state: surgical_case
     layers:
     - state: surgical_case
     - state: surgical_case
@@ -1925,7 +1904,7 @@
     - id: CMUYautjaAlienHealthAnalyzer
     - id: CMUYautjaAutoInjector
       amount: 3
-    - id: CMUYautjaHealingCapsule
+    - id: CMUYautjaHealingGel
       amount: 3
 
 - type: entity
@@ -1941,7 +1920,7 @@
     - id: CMUYautjaAlienHealthAnalyzer
     - id: CMUYautjaAutoInjector
       amount: 3
-    - id: CMUYautjaHealingCapsule
+    - id: CMUYautjaHealingGel
       amount: 3
     - id: CMUYautjaHerbalCase
 
@@ -1958,7 +1937,7 @@
     - id: CMUYautjaAlienHealthAnalyzer
     - id: CMUYautjaThrallAutoInjector
       amount: 3
-    - id: CMUYautjaHealingCapsule
+    - id: CMUYautjaHealingGel
       amount: 3
 
 - type: entity

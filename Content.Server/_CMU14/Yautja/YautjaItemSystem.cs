@@ -456,9 +456,9 @@ public sealed partial class YautjaItemSystem : EntitySystem
         _dialog.OpenOptions(
             target,
             target,
-            hivebreaker.Comp.ConsentTitle,
+            Loc.GetString(hivebreaker.Comp.ConsentTitle),
             options,
-            hivebreaker.Comp.ConsentMessage,
+            Loc.GetString(hivebreaker.Comp.ConsentMessage),
             rejectedEvent,
             timeout: hivebreaker.Comp.ConsentTimeout);
     }

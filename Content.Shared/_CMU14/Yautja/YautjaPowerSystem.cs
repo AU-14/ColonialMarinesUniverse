@@ -133,6 +133,8 @@ public sealed partial class YautjaPowerSystem : EntitySystem
         AddAction(ent.Comp, ref args, ref ent.Comp.ToggleCloakAction, ent.Comp.ToggleCloakActionId);
         AddAction(ent.Comp, ref args, ref ent.Comp.RecallAction, ent.Comp.RecallActionId);
 
+        if (HasComp<YautjaYoungbloodComponent>(args.User))
+            AddAction(ent.Comp, ref args, ref ent.Comp.TranslatorAction, ent.Comp.TranslatorActionId);
     }
 
     private static void AddAction(

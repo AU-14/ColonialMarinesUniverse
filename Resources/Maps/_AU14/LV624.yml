@@ -263605,7 +263605,7 @@ entities:
     - type: MetaData
       name: LV624 ground relay
     - type: Transform
-      pos: 14.5,-83.5
+      pos: 39.5,-109.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

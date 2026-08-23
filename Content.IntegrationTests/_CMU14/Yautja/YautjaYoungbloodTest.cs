@@ -43,20 +43,21 @@ namespace Content.IntegrationTests._CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaYoungbloodTest
 {
-    [TestCase("mixed_small", "Multi Faction (small)", 4, 1.25f)]
-    [TestCase("mixed_group", "Multi Faction (group)", 6, 1.4f)]
-    [TestCase("mixed_large", "Multi Faction (large)", 8, 1.6f)]
-    [TestCase("mixed_larger", "Multi Faction (larger)", 12, 1.8f)]
-    [TestCase("serpents_small", "Serpents (small)", 4, 1f)]
-    [TestCase("serpents_group", "Serpents (group)", 6, 1.2f)]
-    [TestCase("serpents_large", "Serpents (large)", 8, 1.4f)]
-    [TestCase("elite_mixed_small", "Elite Multi Faction (small)", 4, 1.5f)]
-    [TestCase("elite_mixed_group", "Elite Multi Faction (group)", 6, 2f)]
-    [TestCase("elite_mixed_large", "Elite Multi Faction (large)", 8, 2.5f)]
-    [TestCase("elite_mixed_larger", "Elite Multi Faction (larger)", 12, 3f)]
+    [TestCase("mixed_small", "cmu-yautja-hunt-call-mixed-small", "Multi Faction (small)", 4, 1.25f)]
+    [TestCase("mixed_group", "cmu-yautja-hunt-call-mixed-group", "Multi Faction (group)", 6, 1.4f)]
+    [TestCase("mixed_large", "cmu-yautja-hunt-call-mixed-large", "Multi Faction (large)", 8, 1.6f)]
+    [TestCase("mixed_larger", "cmu-yautja-hunt-call-mixed-larger", "Multi Faction (larger)", 12, 1.8f)]
+    [TestCase("serpents_small", "cmu-yautja-hunt-call-serpents-small", "Serpents (small)", 4, 1f)]
+    [TestCase("serpents_group", "cmu-yautja-hunt-call-serpents-group", "Serpents (group)", 6, 1.2f)]
+    [TestCase("serpents_large", "cmu-yautja-hunt-call-serpents-large", "Serpents (large)", 8, 1.4f)]
+    [TestCase("elite_mixed_small", "cmu-yautja-hunt-call-elite-mixed-small", "Elite Multi Faction (small)", 4, 1.5f)]
+    [TestCase("elite_mixed_group", "cmu-yautja-hunt-call-elite-mixed-group", "Elite Multi Faction (group)", 6, 2f)]
+    [TestCase("elite_mixed_large", "cmu-yautja-hunt-call-elite-mixed-large", "Elite Multi Faction (large)", 8, 2.5f)]
+    [TestCase("elite_mixed_larger", "cmu-yautja-hunt-call-elite-mixed-larger", "Elite Multi Faction (larger)", 12, 3f)]
     public async Task HuntsmasterCompatibilityRowsMatchPhase3Matrix(
         string id,
-        string displayName,
+        string displayNameId,
+        string localizedName,
         int count,
         float cooldownMultiplier)
     {
@@ -72,7 +73,8 @@ public sealed class YautjaYoungbloodTest
             Assert.That(console.TryGetComponent<YautjaHuntConsoleComponent>(out var comp, factory), Is.True);
             var option = comp!.HuntCallOptions.Single(option => option.Id == id);
 
-            Assert.That(option.DisplayName, Is.EqualTo(displayName));
+            Assert.That(option.DisplayName, Is.EqualTo(displayNameId));
+            Assert.That(Loc.GetString(option.DisplayName), Is.EqualTo(localizedName));
             Assert.That(option.SpawnCount, Is.EqualTo(count));
             Assert.That(option.CooldownMultiplier, Is.EqualTo(cooldownMultiplier).Within(0.001f));
             Assert.That(option.Spawns, Is.Not.Empty);
@@ -1110,8 +1112,8 @@ public sealed class YautjaYoungbloodTest
                 Assert.That(helmetMask.User, Is.EqualTo(wearer));
                 Assert.That(helmetMask.ZoomLevel, Is.EqualTo(expectedZoom).Within(0.001f),
                     "The powered helmet shares the normal upstream mask zoom scale.");
-                Assert.That(helmetMask.ZoomOffset, Is.EqualTo(14f).Within(0.001f),
-                    "The powered helmet shares the normal upstream mask zoom offset.");
+                Assert.That(helmetMask.ZoomOffset, Is.EqualTo(12f).Within(0.001f),
+                    "CMSS13 powered helmet toggle_zoom() calls zoom(usr, 11, 12).");
 
                 var getHeadActions = new GetItemActionsEvent(actions, wearer, helmet, SlotFlags.HEAD);
                 entMan.EventBus.RaiseLocalEvent(helmet, getHeadActions);

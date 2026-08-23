@@ -8,6 +8,7 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
+using Robust.Shared.Map.Components;
 
 namespace Content.Server._CMU14.ZLevels.Core;
 
@@ -16,13 +17,22 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedEyeSystem _eye = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
+    [Dependency] private SharedMapSystem _map = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUZLevelsSystem _zLevels = default!;
 
+    private EntityQuery<CMUZLevelLadderComponent> _ladderQuery;
+    private EntityQuery<MapGridComponent> _gridQuery;
+    private readonly HashSet<EntityUid> _moving = new();
+
     public override void Initialize()
     {
         base.Initialize();
+
+        _ladderQuery = GetEntityQuery<CMUZLevelLadderComponent>();
+        _gridQuery = GetEntityQuery<MapGridComponent>();
+        _transform.OnGlobalMoveEvent += OnGlobalMove;
 
         SubscribeLocalEvent<CMUZLevelLadderComponent, ActivateInWorldEvent>(OnActivate);
         SubscribeLocalEvent<CMUZLevelLadderComponent, DoAfterAttemptEvent<CMUZLevelLadderDoAfterEvent>>(OnDoAfterAttempt);
@@ -34,6 +44,50 @@ public sealed partial class CMUZLevelLadderSystem : EntitySystem
         SubscribeLocalEvent<CMUZLevelLadderWatchingComponent, MoveInputEvent>(OnWatchingMoveInput);
         SubscribeLocalEvent<CMUZLevelLadderWatchingComponent, ComponentRemove>(OnWatchingRemove);
         SubscribeLocalEvent<CMUZLevelLadderWatchingComponent, EntityTerminatingEvent>(OnWatchingRemove);
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _transform.OnGlobalMoveEvent -= OnGlobalMove;
+    }
+
+    private void OnGlobalMove(ref MoveEvent ev)
+    {
+        if (_moving.Contains(ev.Sender) ||
+            !HasComp<CMUZLevelAutoTransitionComponent>(ev.Sender) ||
+            ev.OldPosition.EntityId != ev.NewPosition.EntityId ||
+            !_gridQuery.TryGetComponent(ev.NewPosition.EntityId, out var grid))
+        {
+            return;
+        }
+
+        var oldTile = _map.LocalToTile(ev.OldPosition.EntityId, grid, ev.OldPosition);
+        var newTile = _map.LocalToTile(ev.NewPosition.EntityId, grid, ev.NewPosition);
+        if (oldTile == newTile)
+            return;
+
+        var anchored = _map.GetAnchoredEntitiesEnumerator(ev.NewPosition.EntityId, grid, newTile);
+        while (anchored.MoveNext(out var anchoredUid))
+        {
+            if (!_ladderQuery.TryComp(anchoredUid, out var ladder) ||
+                !TryGetDefaultMovementOffset(ladder, out var offset))
+            {
+                continue;
+            }
+
+            _moving.Add(ev.Sender);
+            try
+            {
+                Climb((anchoredUid.Value, ladder), ev.Sender, offset);
+            }
+            finally
+            {
+                _moving.Remove(ev.Sender);
+            }
+
+            return;
+        }
     }
 
     private void OnActivate(Entity<CMUZLevelLadderComponent> ent, ref ActivateInWorldEvent args)

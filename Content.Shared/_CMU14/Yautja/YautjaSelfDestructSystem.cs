@@ -182,7 +182,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             user,
             Loc.GetString("cmu-yautja-self-destruct-dialog-title"),
             options,
-            message);
+            message,
+            timeout: SelfDestructDialogTimeout);
         return true;
     }
 
@@ -212,7 +213,8 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             user,
             Loc.GetString("cmu-yautja-self-destruct-dialog-title"),
             options,
-            message);
+            message,
+            timeout: SelfDestructDialogTimeout);
         return true;
     }
 
@@ -242,7 +244,7 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
 
         if (notifyYautja)
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-armed", ("seconds", (int) delay.TotalSeconds)), victim, victim, PopupType.LargeCaution);
+            _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-armed"), victim, victim, PopupType.LargeCaution);
             BroadcastToYautja(Loc.GetString("cmu-yautja-self-destruct-broadcast-armed", ("hunter", Name(victim))));
         }
 
@@ -503,7 +505,7 @@ public sealed partial class YautjaSelfDestructSystem : EntitySystem
             return false;
         }
 
-        if (!_mobState.IsAlive(user))
+        if (_mobState.IsDead(user))
         {
             _popup.PopupEntity(Loc.GetString("cmu-yautja-self-destruct-dead"), user, user, PopupType.SmallCaution);
             return false;

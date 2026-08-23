@@ -433,15 +433,11 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
 
     private void OnGameRunLevelChanged(GameRunLevelChangedEvent ev)
     {
-        // Integration tests intentionally start rounds without a selected game preset.
-        // Do not inject a random Yautja rule into those dummy rounds.
         if (!_randomEnabled ||
+            GameTicker.DummyTicker ||
             ev.New != GameRunLevel.InRound ||
-            GameTicker.RoundId <= 0 ||
-            (GameTicker.CurrentPreset == null && GameTicker.Preset == null))
-        {
+            GameTicker.RoundId <= 0)
             return;
-        }
 
         if (!_randomSchedule.CountRound(GameTicker.RoundId) ||
             _lastRandomAttemptRoundId == GameTicker.RoundId)
@@ -614,11 +610,14 @@ public sealed partial class YautjaPredatorRoundSystem : GameRuleSystem<YautjaPre
     private EntityCoordinates? GetRandomPredatorSpawn(ProtoId<JobPrototype> job, YautjaSpawnKind kind)
     {
         var candidates = new List<EntityCoordinates>();
+        var spawnType = kind == YautjaSpawnKind.HunterShipClan
+            ? SpawnPointType.LateJoin
+            : SpawnPointType.Job;
         var query = EntityQueryEnumerator<YautjaPredatorSpawnPointComponent, SpawnPointComponent, TransformComponent>();
         while (query.MoveNext(out _, out var predatorSpawn, out var spawn, out var xform))
         {
             if (predatorSpawn.Kind != kind ||
-                spawn.SpawnType != SpawnPointType.Job ||
+                spawn.SpawnType != spawnType ||
                 spawn.Job != job)
                 continue;
 

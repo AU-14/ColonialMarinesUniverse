@@ -167764,7 +167764,7 @@ entities:
     - type: MetaData
       name: Corsat ground relay
     - type: Transform
-      pos: 4.5,-51.5
+      pos: 45.5,-148.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

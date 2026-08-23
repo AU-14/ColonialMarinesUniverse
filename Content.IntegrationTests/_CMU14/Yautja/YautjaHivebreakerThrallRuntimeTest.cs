@@ -5,6 +5,7 @@ using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server._RMC14.Chat.Chat;
 using Content.Client.Popups;
+using Content.Client.UserInterface.Systems.Chat;
 using Content.Server._CMU14.Yautja;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Dialog;
@@ -12,11 +13,13 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Weeds;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
+using Content.Shared.Chat;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
+using Content.Shared.Mind;
 using Content.Shared.Movement.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.Roles;
@@ -27,6 +30,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Localization;
 using Robust.Shared.Player;
+using Robust.Client.UserInterface;
 
 namespace Content.IntegrationTests._CMU14.Yautja;
 
@@ -232,6 +236,120 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
                 var session = server.PlayerMan.Sessions.Single();
                 server.PlayerMan.SetAttachedEntity(session, previousAttached);
                 DeleteAll(server.EntMan, hunter, hivebreaker, target, ordinaryXeno, yautja, human);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task HivebrokenXenoFiltersSpeechButKeepsEmoteAndLoocRecipients()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings
+        {
+            Connected = true,
+            Dirty = true,
+            DummyTicker = false,
+        });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        var speakerSession = await server.AddDummySession("hivebreaker_channel_speaker");
+
+        EntityUid source = default;
+        EntityUid human = default;
+        EntityUid? previousAttached = null;
+        const string speechToken = "hivebreaker-speech-must-be-filtered";
+        const string whisperToken = "hivebreaker-whisper-must-be-filtered";
+        const string emoteToken = "hivebreaker-emote-must-remain-visible";
+        const string loocToken = "hivebreaker-looc-must-remain-visible";
+
+        try
+        {
+            await client.WaitPost(() =>
+            {
+                client.ResolveDependency<IUserInterfaceManager>()
+                    .GetUIController<ChatUIController>()
+                    .History
+                    .Clear();
+            });
+
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var playerSession = server.PlayerMan.Sessions.Single(session => session != speakerSession);
+                previousAttached = playerSession.AttachedEntity;
+
+                source = entMan.SpawnEntity("CMXenoRunner", map.GridCoords);
+                human = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+                entMan.EnsureComponent<YautjaHivebrokenXenoComponent>(source);
+                var mind = entMan.System<SharedMindSystem>();
+                var speakerMind = mind.CreateMind(speakerSession.UserId, "Hivebroken Xeno");
+                mind.TransferTo(speakerMind, source);
+                server.PlayerMan.SetAttachedEntity(playerSession, human);
+
+                var chat = entMan.System<ChatSystem>();
+                chat.TrySendInGameICMessage(
+                    source,
+                    speechToken,
+                    InGameICChatType.Speak,
+                    ChatTransmitRange.Normal,
+                    ignoreActionBlocker: true);
+                chat.TrySendInGameICMessage(
+                    source,
+                    whisperToken,
+                    InGameICChatType.Whisper,
+                    ChatTransmitRange.Normal,
+                    ignoreActionBlocker: true);
+                chat.TrySendInGameICMessage(
+                    source,
+                    emoteToken,
+                    InGameICChatType.Emote,
+                    ChatTransmitRange.Normal,
+                    ignoreActionBlocker: true);
+                chat.TrySendInGameOOCMessage(
+                    source,
+                    loocToken,
+                    InGameOOCChatType.Looc,
+                    hideChat: false,
+                    player: speakerSession);
+            });
+
+            await pair.ReallyBeIdle(10);
+
+            await client.WaitAssertion(() =>
+            {
+                var history = client.ResolveDependency<IUserInterfaceManager>()
+                    .GetUIController<ChatUIController>()
+                    .History
+                    .Select(entry => entry.Msg)
+                    .ToList();
+                var actual = string.Join("\n", history.Select(message => $"{message.Channel}: {message.Message}"));
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(history.Any(message => message.Message.Contains(speechToken, StringComparison.Ordinal)), Is.False,
+                        $"Ordinary humans must not receive Hivebroken-Xeno spoken language.\nActual chat history:\n{actual}");
+                    Assert.That(history.Any(message => message.Message.Contains(whisperToken, StringComparison.Ordinal)), Is.False,
+                        $"Ordinary humans must not receive Hivebroken-Xeno whispers.\nActual chat history:\n{actual}");
+                    Assert.That(history.Any(message =>
+                            message.Channel == ChatChannel.Emotes &&
+                            message.Message.Contains(emoteToken, StringComparison.Ordinal)), Is.True,
+                        $"Entity emotes are visible actions, not Xeno spoken language.\nActual chat history:\n{actual}");
+                    Assert.That(history.Any(message =>
+                            message.Channel == ChatChannel.LOOC &&
+                            message.Message.Contains(loocToken, StringComparison.Ordinal)), Is.True,
+                        $"LOOC is out-of-character and must not use the Xeno speech allowlist.\nActual chat history:\n{actual}");
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var playerSession = server.PlayerMan.Sessions.Single(session => session != speakerSession);
+                server.PlayerMan.SetAttachedEntity(playerSession, previousAttached);
+                DeleteAll(server.EntMan, source, human);
             });
         }
 
@@ -956,7 +1074,7 @@ public sealed class YautjaHivebreakerThrallRuntimeTest
         {
             [session] = new(1, false)
         };
-        var ev = new ChatMessageAfterGetRecipients(recipients);
+        var ev = new ChatMessageAfterGetRecipients(recipients, ChatRecipientPurpose.Speech);
         entMan.EventBus.RaiseLocalEvent(source, ref ev);
         return recipients.ContainsKey(session);
     }

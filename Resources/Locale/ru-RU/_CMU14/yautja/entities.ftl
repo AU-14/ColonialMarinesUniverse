@@ -22,9 +22,6 @@ ent-CMUYautjaStabilisingCrystal-desc = Кристалл, выращенный н
 ent-CMUYautjaHumanStabilisingCrystal-name = человеческий стабилизирующий кристалл
 ent-CMUYautjaHumanStabilisingCrystal-desc = Кристалл, выращенный наручем и настроенный на людей и рабов.
 
-ent-CMUYautjaHealingCapsule-name = лечебная капсула
-ent-CMUYautjaHealingCapsule-desc = Одноразовая капсула экстренной медицины хищников, изготовленная наручем.
-
 ent-CMUYautjaMaskOrnament-name = украшение маски
 ent-CMUYautjaMaskOrnament-desc = Небольшое церемониальное украшение, крепящееся к биомаске яутжа.
 
@@ -55,8 +52,8 @@ ent-CMUYautjaAdvancedBruisePack-desc = Компактная чужая прип�
 ent-CMUYautjaAdvancedOintment-name = продвинутая мазь хищника
 ent-CMUYautjaAdvancedOintment-desc = Прохладная чужая мазь для закрытия ожогов и едких повреждений.
 
-ent-CMUYautjaHealingGel-name = лечебная капсула
-ent-CMUYautjaHealingGel-desc = Одноразовая капсула для перезарядки лечебного оружия яутжа.
+ent-CMUYautjaHealingGel-name = капсула лечебного геля
+ent-CMUYautjaHealingGel-desc = Используется для перезарядки лечебного пистолета.
 
 ent-CMUYautjaStabilizerGel-name = стабилизирующий гель
 ent-CMUYautjaStabilizerGel-desc = Быстро схватывающийся чужой гель, выигрывающий время при шоке и кровопотере.

@@ -48,7 +48,8 @@ public sealed partial class CMUZLevelStairsSystem : EntitySystem
         }
 
         if (!HasComp<MobStateComponent>(ev.Sender) &&
-            !HasComp<GhostComponent>(ev.Sender))
+            !HasComp<GhostComponent>(ev.Sender) &&
+            !HasComp<CMUZLevelAutoTransitionComponent>(ev.Sender))
             return;
 
         var oldTile = _map.LocalToTile(ev.OldPosition.EntityId, oldGrid, ev.OldPosition);

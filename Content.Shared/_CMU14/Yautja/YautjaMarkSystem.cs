@@ -118,7 +118,11 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         if (_net.IsClient || !TryGetEntity(args.Target, out var target))
             return;
 
-        if (!TryMark(ent, args.Actor, target.Value, args.Kind, args.Reason))
+        var reason = args.Reason?.Trim();
+        if (RequiresReason(args.Kind) && string.IsNullOrEmpty(reason))
+            return;
+
+        if (!TryMark(ent, args.Actor, target.Value, args.Kind, reason))
             return;
 
         UpdateUi(ent, args.Actor);
@@ -176,7 +180,9 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         if (trimmed is { Length: > MaxReasonLength })
             trimmed = trimmed[..MaxReasonLength];
 
-        if (RequiresReason(kind) && string.IsNullOrWhiteSpace(trimmed))
+        // Null is used by direct/programmatic mark paths. Explicit player input
+        // must still reject empty or whitespace-only Thrall/Blooded reasons.
+        if (reason != null && RequiresReason(kind) && string.IsNullOrWhiteSpace(trimmed))
         {
             if (mark.Marks.Count == 0)
                 RemCompDeferred<YautjaMarkComponent>(target);

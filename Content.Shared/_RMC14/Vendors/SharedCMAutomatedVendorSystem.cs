@@ -448,6 +448,12 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         }
 
         var user = CompOrNull<CMVendorUserComponent>(actor);
+        if (entry.Points != null && !vendor.Comp.UseObjectivePoints && user == null)
+        {
+            _popup.PopupEntity(Loc.GetString("cm-vending-machine-not-enough-points"), vendor, actor);
+            return;
+        }
+
         if (entry.MaxPerUser is { } maxPerUser)
         {
             user ??= EnsureComp<CMVendorUserComponent>(actor);

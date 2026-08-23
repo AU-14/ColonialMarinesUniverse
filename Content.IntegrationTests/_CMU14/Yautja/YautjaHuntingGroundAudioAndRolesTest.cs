@@ -26,14 +26,16 @@ public sealed class YautjaHuntingGroundAudioAndRolesTest
             new ResPath("/Maps/_CMU14/HuntingGrounds/jungle_moon.yml"),
             "CMUYautjaHuntingGroundJungle",
             ["alien_creature1.ogg", "alien_creature2.ogg", "alien_creature3.ogg"]),
+        // The CMSS13 desert_moon.dmm z-level names are historical: z1 is the cave
+        // output and z2 is the surface output stored in the _caves file.
         (
             new ResPath("/Maps/_CMU14/HuntingGrounds/desert_moon.yml"),
-            "CMUYautjaHuntingGroundDesert",
-            ["wind1.ogg", "wind2.ogg"]),
-        (
-            new ResPath("/Maps/_CMU14/HuntingGrounds/desert_moon_caves.yml"),
             "CMUYautjaHuntingGroundCaves",
             ["rocksfalling1.ogg", "rocksfalling2.ogg"]),
+        (
+            new ResPath("/Maps/_CMU14/HuntingGrounds/desert_moon_caves.yml"),
+            "CMUYautjaHuntingGroundDesert",
+            ["wind1.ogg", "wind2.ogg"]),
     ];
 
     [Test]

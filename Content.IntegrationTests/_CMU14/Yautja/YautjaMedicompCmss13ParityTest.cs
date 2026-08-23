@@ -161,7 +161,7 @@ public sealed class YautjaMedicompCmss13ParityTest
                         ["CMUYautjaWoundClamp"] = 1,
                         ["CMUYautjaAlienHealthAnalyzer"] = 1,
                         ["CMUYautjaAutoInjector"] = 3,
-                        ["CMUYautjaHealingCapsule"] = 3,
+                        ["CMUYautjaHealingGel"] = 3,
                     });
 
                 AssertDiscreteMedicompContents(entMan, entMan.GetComponent<StorageComponent>(thrall),
@@ -172,7 +172,7 @@ public sealed class YautjaMedicompCmss13ParityTest
                         ["CMUYautjaWoundClamp"] = 1,
                         ["CMUYautjaAlienHealthAnalyzer"] = 1,
                         ["CMUYautjaThrallAutoInjector"] = 3,
-                        ["CMUYautjaHealingCapsule"] = 3,
+                        ["CMUYautjaHealingGel"] = 3,
                     });
 
                 AssertDiscreteMedicompContents(entMan, entMan.GetComponent<StorageComponent>(survivor),
@@ -183,7 +183,7 @@ public sealed class YautjaMedicompCmss13ParityTest
                         ["CMUYautjaWoundClamp"] = 1,
                         ["CMUYautjaAlienHealthAnalyzer"] = 1,
                         ["CMUYautjaAutoInjector"] = 3,
-                        ["CMUYautjaHealingCapsule"] = 3,
+                        ["CMUYautjaHealingGel"] = 3,
                         ["CMUYautjaHerbalCase"] = 1,
                     });
             }
@@ -230,7 +230,6 @@ public sealed class YautjaMedicompCmss13ParityTest
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaThrallAutoInjector", "/Textures/_CMU14/Yautja/medical.rsi", "crystal", "thwei_1");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaAlienHealthAnalyzer", "/Textures/_CMU14/Yautja/medical.rsi", "scanner");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaHerbalCase", "/Textures/_CMU14/Yautja/medical.rsi", "surgical_case", "surgical_case");
-            AssertPrototypeSprite(prototypes, factory, "CMUYautjaHealingCapsule", "/Textures/_CMU14/Yautja/medical.rsi", "healing_gel");
             AssertPrototypeSprite(prototypes, factory, "CMUYautjaMedicomp", "/Textures/_CMU14/Yautja/yautja_items.rsi", "medicomp", "medicomp", "medicomp_open");
         });
 
@@ -295,7 +294,7 @@ public sealed class YautjaMedicompCmss13ParityTest
             $"Unexpected Medicomp contents. Expected: {string.Join(", ", expected.Select(pair => $"{pair.Key}={pair.Value}"))}; " +
             $"actual: {string.Join(", ", actual.Select(pair => $"{pair.Key}={pair.Value}"))}");
 
-        foreach (var capsule in storage.Container.ContainedEntities.Where(uid => PrototypeId(entMan, uid) == "CMUYautjaHealingCapsule"))
+        foreach (var capsule in storage.Container.ContainedEntities.Where(uid => PrototypeId(entMan, uid) == "CMUYautjaHealingGel"))
         {
             Assert.That(entMan.HasComponent<StackComponent>(capsule), Is.False,
                 "CMSS13 healing-gel capsules are discrete items, not stack-count multipliers.");

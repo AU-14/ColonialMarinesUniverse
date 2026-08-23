@@ -206,7 +206,7 @@
     drain: 3
     drainEvery: 2
     zoomLevel: 1.6
-    zoomOffset: 14
+    zoomOffset: 12
     slots: HEAD
   - type: ShowHealthBars
     damageContainers:

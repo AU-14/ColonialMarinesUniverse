@@ -110,11 +110,8 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         else if (_inventory.TryGetSlotEntity(uid, "gloves", out var equippedBracer)
                  && MetaData(equippedBracer.Value).EntityPrototype?.ID == "CMUYautjaBracer")
         {
-            // Player spawns already have the generic spawn bracer equipped. Replace
-            // it with the material selected in the profile before applying settings.
-            // Fixed-role Yautja (notably military-caste jobs) already have a
-            // role-specific bracer and must keep that item and its worn visuals.
-            bracer = ReplaceEquipped(uid, "gloves", profile.BracerPrototype);
+            bracer = equippedBracer;
+            ApplyBracerProfileVisual(bracer.Value, profile.BracerPrototype);
         }
 
         if (mask != null)
@@ -265,6 +262,13 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         Dirty(cape, capeComp);
     }
 
+    private void ApplyBracerProfileVisual(EntityUid bracer, EntProtoId visualPrototype)
+    {
+        var visual = EnsureComp<YautjaBracerProfileVisualComponent>(bracer);
+        visual.VisualPrototype = visualPrototype;
+        Dirty(bracer, visual);
+    }
+
     private void CopyProfileVisuals(EntityUid uid, EntityPrototype visualPrototype)
     {
         if (TryComp(uid, out ItemComponent? item) &&
@@ -274,7 +278,7 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
         }
 
         if (TryComp(uid, out ClothingComponent? clothing) &&
-            visualPrototype.TryGetComponent("Clothing", out ClothingComponent? visualClothing))
+            visualPrototype.TryGetComponent(out ClothingComponent? visualClothing, EntityManager.ComponentFactory))
         {
             _clothing.CopyVisuals(uid, visualClothing, clothing);
         }

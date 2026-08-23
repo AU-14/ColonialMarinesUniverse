@@ -45,7 +45,6 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     public override void Initialize()
     {
         SubscribeLocalEvent<YautjaMeleeXenoInterferenceComponent, MeleeHitEvent>(OnMeleeHit);
-        SubscribeLocalEvent<YautjaScytheBonusStrikeComponent, MeleeHitEvent>(OnScytheMeleeHit);
         SubscribeLocalEvent<YautjaHunterSpearFishingComponent, AfterInteractEvent>(OnHunterSpearAfterInteract);
         SubscribeLocalEvent<YautjaHunterSpearFishingComponent, YautjaHunterSpearFishingDoAfterEvent>(OnHunterSpearFishingDoAfter);
         SubscribeLocalEvent<YautjaCeremonialDaggerComponent, MeleeHitEvent>(OnCeremonialDaggerMeleeHit);
@@ -76,26 +75,6 @@ public sealed partial class YautjaMeleeWeaponSystem : EntitySystem
     private bool CanApplyInterference(EntityUid user)
     {
         return HasComp<YautjaComponent>(user);
-    }
-
-    private void OnScytheMeleeHit(Entity<YautjaScytheBonusStrikeComponent> ent, ref MeleeHitEvent args)
-    {
-        if (!args.IsHit ||
-            args.HitEntities.Count == 0 ||
-            ent.Comp.Chance <= 0f ||
-            !_random.Prob(ent.Comp.Chance))
-        {
-            return;
-        }
-
-        args.BonusDamage += args.BaseDamage;
-        _popup.PopupEntity(
-            Loc.GetString("cmu-yautja-scythe-bonus-strike-others"),
-            args.User,
-            Filter.PvsExcept(args.User),
-            true,
-            PopupType.MediumCaution);
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-scythe-bonus-strike-self"), args.User, args.User, PopupType.MediumCaution);
     }
 
     private void OnHunterSpearAfterInteract(Entity<YautjaHunterSpearFishingComponent> spear, ref AfterInteractEvent args)

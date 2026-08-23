@@ -58,7 +58,11 @@ public sealed partial class YautjaRankManager : IPostInjectInit
         var rank = youngbloodRole
             ? YautjaRank.YoungBlood
             : CanonicalHunterSpawnRank(resolution.Rank);
-        var externalCouncil = resolution.ClanId == null && rank == YautjaRank.Ancient;
+        // A persisted clanless Ancient keeps its legacy entitlement. Leader also canonicalizes to Ancient,
+        // but its current whitelist must not implicitly grant Council status.
+        var externalCouncil = resolution.ClanId == null &&
+                              rank == YautjaRank.Ancient &&
+                              !resolution.WhitelistFlags.HasFlag(YautjaWhitelistFlags.Leader);
         var externalLeader = resolution.ClanId == null && rank == YautjaRank.Leader;
 
         return new(

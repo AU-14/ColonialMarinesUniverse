@@ -280,7 +280,6 @@
     toggleAction: CMUActionYautjaToggleLantern
     blinkingBehaviourId: blinking
     radiatingBehaviourId: radiating
-  - type: CMUStartHandheldLightOn
   - type: YautjaTechItem
     damageMultiplier: 1
     blockPickup: false
@@ -501,6 +500,7 @@
     sprite: _CMU14/Yautja/yautja_items.rsi
     heldPrefix: scalp
   - type: YautjaScalp
+    trueDescription: This is the scalp of an irrelevant human.
   - type: YautjaTrophy
 
 - type: entity
@@ -783,6 +783,7 @@
     size: Tiny
     sprite: _CMU14/Yautja/yautja_items.rsi
   - type: YautjaHivebreaker
+    requireCritical: true
   - type: YautjaTechItem
     damageMultiplier: 1
   - type: Corrodible

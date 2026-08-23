@@ -254080,7 +254080,7 @@ entities:
     - type: MetaData
       name: Trijent ground relay
     - type: Transform
-      pos: 216.5,-2.5
+      pos: 235.5,-22.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

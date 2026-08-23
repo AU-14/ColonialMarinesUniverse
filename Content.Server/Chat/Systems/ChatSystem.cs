@@ -673,7 +673,7 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// </summary>
     private void SendInVoiceRange(ChatChannel channel, string message, string wrappedMessage, EntityUid source, ChatTransmitRange range, NetUserId? author = null, string? speechStyleClass = null)
     {
-        foreach (var (session, data) in GetRecipients(source, VoiceRange))
+        foreach (var (session, data) in GetRecipients(source, VoiceRange, ChatRecipientPurpose.NonSpeech))
         {
             if ((channel == ChatChannel.Local || channel == ChatChannel.Emotes) &&
                 !CanHearYautjaLocalSpeech(source, session, data))
@@ -872,7 +872,11 @@ public sealed partial class ChatSystem : SharedChatSystem
     /// <summary>
     ///     Returns list of players and ranges for all players withing some range. Also returns observers with a range of -1.
     /// </summary>
-    private Dictionary<ICommonSession, ICChatRecipientData> GetRecipients(EntityUid source, float voiceGetRange, bool ignoreXenos = false)
+    private Dictionary<ICommonSession, ICChatRecipientData> GetRecipients(
+        EntityUid source,
+        float voiceGetRange,
+        ChatRecipientPurpose purpose,
+        bool ignoreXenos = false)
     {
         // TODO proper speech occlusion
 
@@ -917,7 +921,7 @@ public sealed partial class ChatSystem : SharedChatSystem
 
         RaiseLocalEvent(new ExpandICChatRecipientsEvent(source, voiceGetRange, recipients));
 
-        var ev = new ChatMessageAfterGetRecipients(recipients);
+        var ev = new ChatMessageAfterGetRecipients(recipients, purpose);
         RaiseLocalEvent(source, ref ev);
 
         if (ignoreXenos)

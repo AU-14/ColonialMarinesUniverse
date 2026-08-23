@@ -1325,8 +1325,15 @@ public sealed partial class YautjaTrophySystem : EntitySystem
         if (args.Examiner != ent.Owner && !HasComp<YautjaComponent>(args.Examiner))
             return;
 
+        // Trophy score is historical progress, whereas ClanRank is the effective
+        // rank granted by the persisted Yautja whitelist for this character.
+        // Shift+LMB character information must expose the latter.
+        var rankName = TryComp<YautjaComponent>(ent, out var yautja)
+            ? YautjaRankMetadata.For(yautja.ClanRank).LocalizedName
+            : ent.Comp.RankName;
+
         args.PushMarkup(Loc.GetString("cmu-yautja-trophy-record-examine",
-            ("rank", Loc.GetString(ent.Comp.RankName)),
+            ("rank", Loc.GetString(rankName)),
             ("score", ent.Comp.Score),
             ("human", ent.Comp.HumanSkulls),
             ("bones", ent.Comp.HumanBones),

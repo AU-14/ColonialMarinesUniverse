@@ -53,7 +53,7 @@ public sealed class YautjaGearContextMenuTest
     [
         new("direct caster", YautjaGearKind.Caster, null, "CMUActionYautjaToggleCaster", () => new YautjaToggleCasterActionEvent()),
         new("direct scimitar", YautjaGearKind.Scimitar, null, "CMUActionYautjaToggleScimitar", () => new YautjaToggleScimitarActionEvent()),
-        new("direct shield", YautjaGearKind.Shield, null, "CMUActionYautjaToggleShield", () => new YautjaToggleShieldActionEvent()),
+        new("attachment shield", YautjaGearKind.Shield, "CMUYautjaBracerShieldAttachment", "CMUActionYautjaToggleShield", () => new YautjaToggleShieldActionEvent()),
         new("direct chain gauntlet", YautjaGearKind.ChainGauntlet, null, "CMUActionYautjaToggleChainGauntlet", () => new YautjaToggleChainGauntletActionEvent()),
         new("attachment wrist blades", YautjaGearKind.WristBlades, "CMUYautjaWristBladesAttachment", "CMUActionYautjaToggleWristBlades", () => new YautjaToggleWristBladesActionEvent()),
         new("attachment scimitar", YautjaGearKind.Scimitar, "CMUYautjaScimitarAttachment", "CMUActionYautjaToggleScimitar", () => new YautjaToggleScimitarActionEvent()),

@@ -450,6 +450,98 @@ public sealed class YautjaThrallPhase8Test
     }
 
     [Test]
+    public async Task MarkPanelRejectsNullRequiredReasonsButTrustedNullMarksStillApply()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var marks = entMan.System<YautjaMarkSystem>();
+            var ui = entMan.System<SharedUserInterfaceSystem>();
+
+            var hunter = SpawnHunterWithBracer(entMan, map.GridCoords, out var bracer);
+            var trustedHunter = SpawnHunterWithBracer(
+                entMan,
+                map.GridCoords.Offset(new Vector2(-1, 0)),
+                out var trustedBracer);
+            var networkThrall = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(1, 0)));
+            var networkBlooded = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2, 0)));
+            var trustedTarget = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(3, 0)));
+            var preyTarget = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(4, 0)));
+            var bracerComp = entMan.GetComponent<YautjaBracerComponent>(bracer);
+            var trustedBracerComp = entMan.GetComponent<YautjaBracerComponent>(trustedBracer);
+
+            try
+            {
+                Assert.That(marks.TryOpenMarkPanel((bracer, bracerComp), hunter), Is.True);
+                void SendPanelMark(EntityUid target, YautjaMarkKind kind)
+                {
+                    ui.RaiseUiMessage(
+                        bracer,
+                        YautjaMarkUIKey.Key,
+                        new YautjaMarkPanelMarkMsg(entMan.GetNetEntity(target), kind, null)
+                        {
+                            Actor = hunter,
+                        });
+                }
+
+                SendPanelMark(networkThrall, YautjaMarkKind.Thrall);
+                Assert.That(marks.IsMarkedBy(networkThrall, YautjaMarkKind.Thrall, hunter), Is.False);
+
+                Assert.That(
+                    marks.TryMark((bracer, bracerComp), hunter, networkBlooded, YautjaMarkKind.Thrall, "setup"),
+                    Is.True);
+                SendPanelMark(networkBlooded, YautjaMarkKind.Blooded);
+
+                Assert.That(
+                    marks.TryMark(
+                        (trustedBracer, trustedBracerComp),
+                        trustedHunter,
+                        trustedTarget,
+                        YautjaMarkKind.Thrall,
+                        null),
+                    Is.True);
+                Assert.That(
+                    marks.TryMark(
+                        (trustedBracer, trustedBracerComp),
+                        trustedHunter,
+                        trustedTarget,
+                        YautjaMarkKind.Blooded,
+                        null),
+                    Is.True);
+
+                SendPanelMark(preyTarget, YautjaMarkKind.Prey);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(marks.IsMarkedBy(networkThrall, YautjaMarkKind.Thrall, hunter), Is.False);
+                    Assert.That(marks.IsMarkedBy(networkBlooded, YautjaMarkKind.Blooded, hunter), Is.False);
+                    Assert.That(marks.IsMarkedBy(trustedTarget, YautjaMarkKind.Blooded, trustedHunter), Is.True);
+                    Assert.That(marks.IsMarkedBy(preyTarget, YautjaMarkKind.Prey, hunter), Is.True);
+                });
+            }
+            finally
+            {
+                DeleteAll(
+                    entMan,
+                    hunter,
+                    bracer,
+                    trustedHunter,
+                    trustedBracer,
+                    networkThrall,
+                    networkBlooded,
+                    trustedTarget,
+                    preyTarget);
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task BloodedThrallRepeatDenialAndGuidanceUseCmss13Text()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });

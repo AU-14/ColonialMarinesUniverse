@@ -16,6 +16,7 @@ using Content.Shared._RMC14.Weapons.Ranged;
 using Content.Shared.Damage;
 using Content.Shared.Explosion.Components.OnTrigger;
 using Content.Shared.FixedPoint;
+using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.CombatMode;
@@ -31,6 +32,7 @@ using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
 using Robust.Client.Input;
 using Robust.Shared.GameObjects;
+using Robust.Shared.Containers;
 using Robust.Shared.Input;
 using Robust.Shared.Localization;
 using Robust.Shared.Map;
@@ -43,6 +45,13 @@ namespace Content.IntegrationTests._CMU14.Yautja;
 public sealed class YautjaPlasmaWeaponTest
 {
     private static readonly string[] CasterStunStatuses = ["Stun", "KnockedDown"];
+
+    public enum CasterHandRemovalOperation
+    {
+        EquipSuitStorage,
+        MoveToOtherHand,
+        InsertIntoContainer,
+    }
 
     [Test]
     public async Task PlasmaPistolIsHotIgnitionSourceLikeCmss13()
@@ -525,6 +534,66 @@ public sealed class YautjaPlasmaWeaponTest
     }
 
     [Test]
+    public async Task PlasmaRechargeIntervalBoundariesDoNotDriftAcrossSubdividedFrames()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var batterySystem = entMan.System<BatterySystem>();
+            var rifle = entMan.SpawnEntity("CMUYautjaPlasmaRifle", MapCoordinates.Nullspace);
+            var continuousCell = entMan.SpawnEntity("PowerCellMicroreactor", MapCoordinates.Nullspace);
+
+            try
+            {
+                var rifleBattery = entMan.GetComponent<BatteryComponent>(rifle);
+                var rifleRecharger = entMan.GetComponent<BatterySelfRechargerComponent>(rifle);
+                batterySystem.SetCharge(rifle, 50, rifleBattery);
+
+                for (var i = 0; i < 60; i++)
+                    batterySystem.Update(1f / 60f);
+
+                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(51),
+                    "Exactly sixty 1/60-second frames must reach the first one-second recharge boundary.");
+
+                for (var i = 60; i < 300; i++)
+                    batterySystem.Update(1f / 60f);
+
+                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(55),
+                    "Five seconds split into 300 frames must produce all five whole recharge intervals.");
+
+                batterySystem.SetCharge(rifle, 50, rifleBattery);
+                rifleRecharger.AutoRechargeAccumulatorSeconds = default;
+
+                for (var i = 0; i < 100; i++)
+                    batterySystem.Update(0.01f);
+
+                Assert.That(rifleBattery.CurrentCharge, Is.EqualTo(51),
+                    "One hundred 0.01-second frames must reach the same one-second boundary without float drift.");
+
+                var continuousBattery = entMan.GetComponent<BatteryComponent>(continuousCell);
+                batterySystem.SetCharge(continuousCell, 50, continuousBattery);
+                batterySystem.Update(0.25f);
+
+                Assert.That(continuousBattery.CurrentCharge, Is.EqualTo(53),
+                    "BatterySelfRecharger entities without an interval must retain continuous recharge behavior.");
+            }
+            finally
+            {
+                foreach (var uid in new[] { rifle, continuousCell })
+                {
+                    if (!entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task PlasmaRiflePistolAndCasterNonYautjaFireDenialMatchesCmss13AbleToFire()
     {
         await using var pair = await PoolManager.GetServerClient();
@@ -883,12 +952,26 @@ public sealed class YautjaPlasmaWeaponTest
                         Assert.That(stored.Deployed, Is.True);
                     });
 
+                    var canDrop = hands.CanDrop(hunter, caster);
+
+                    Assert.Multiple(() =>
+                    {
+                        Assert.That(canDrop, Is.True,
+                            "A drop capability query must report feasibility without performing the drop.");
+                        Assert.That(hands.IsHolding(hunter, caster), Is.True,
+                            "A drop capability query must not remove the caster from the hunter's hand.");
+                        Assert.That(gearComp.Container!.Contains(caster), Is.False,
+                            "A drop capability query must not move the caster back into the bracer.");
+                        Assert.That(stored.Deployed, Is.True,
+                            "A drop capability query must not change deployed lifecycle state.");
+                    });
+
                     var dropped = hands.TryDrop(hunter, caster);
 
                     Assert.Multiple(() =>
                     {
-                        Assert.That(dropped, Is.False,
-                            "The local RMC drop-attempt hook cancels the ordinary floor drop after doing the CMSS13 plasma_caster/dropped() deactivation equivalent.");
+                        Assert.That(dropped, Is.True,
+                            "The real floor-drop action should complete before its DroppedEvent performs the CMSS13 plasma_caster/dropped() deactivation equivalent.");
                         Assert.That(hands.IsHolding(hunter, caster), Is.False,
                             "CMSS13 plasma_caster/dropped() forceMoves the caster back to its source instead of leaving it in hand.");
                         Assert.That(gearComp.Container!.Contains(caster), Is.True,
@@ -923,6 +1006,112 @@ public sealed class YautjaPlasmaWeaponTest
                 server.PlayerMan.SetAttachedEntity(session, previousAttached);
 
                 foreach (var uid in new[] { hunter, bracer, caster })
+                {
+                    if (uid != default && !entMan.Deleted(uid))
+                        entMan.DeleteEntity(uid);
+                }
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    [TestCase(CasterHandRemovalOperation.EquipSuitStorage)]
+    [TestCase(CasterHandRemovalOperation.MoveToOtherHand)]
+    [TestCase(CasterHandRemovalOperation.InsertIntoContainer)]
+    public async Task PlasmaCasterActualNonFloorHandRemovalReturnsToSourceBracer(
+        CasterHandRemovalOperation operation)
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid hunter = default;
+        EntityUid bracer = default;
+        EntityUid caster = default;
+        EntityUid containerOwner = default;
+        EntityUid outerClothing = default;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var attachments = entMan.System<YautjaAttachmentSystem>();
+                var containers = entMan.System<SharedContainerSystem>();
+                var hands = entMan.System<SharedHandsSystem>();
+                var inventory = entMan.System<InventorySystem>();
+
+                hunter = entMan.SpawnEntity("CMMobHuman", map.GridCoords);
+                bracer = entMan.SpawnEntity("CMUYautjaBracer", map.GridCoords);
+                entMan.EnsureComponent<YautjaComponent>(hunter);
+
+                Assert.That(inventory.TryEquip(hunter, bracer, "gloves", silent: true, force: true), Is.True);
+
+                var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
+                Assert.That(gearComp.Gear.TryGetValue(YautjaGearKind.Caster, out caster), Is.True);
+                Assert.That(attachments.TryToggleCaster((bracer, gearComp), hunter), Is.True);
+                Assert.That(hands.IsHolding(hunter, caster, out var casterHand), Is.True);
+
+                var completed = operation switch
+                {
+                    CasterHandRemovalOperation.EquipSuitStorage => EquipCasterInSuitStorage(
+                        entMan,
+                        inventory,
+                        hunter,
+                        caster,
+                        map.GridCoords,
+                        out outerClothing),
+                    CasterHandRemovalOperation.MoveToOtherHand => MoveCasterToOtherHand(
+                        entMan,
+                        hands,
+                        hunter,
+                        casterHand!),
+                    CasterHandRemovalOperation.InsertIntoContainer => InsertCasterIntoContainer(
+                        entMan,
+                        containers,
+                        hands,
+                        hunter,
+                        caster,
+                        map.GridCoords.Offset(new Vector2(1, 0)),
+                        out containerOwner),
+                    _ => throw new ArgumentOutOfRangeException(nameof(operation), operation, null),
+                };
+
+                Assert.That(completed, Is.True,
+                    $"The {operation} operation must actually remove the caster from its original hand before lifecycle correction runs.");
+            });
+
+            await server.WaitRunTicks(2);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                var hands = entMan.System<SharedHandsSystem>();
+                var containers = entMan.System<SharedContainerSystem>();
+                var gearComp = entMan.GetComponent<YautjaGearContainerComponent>(bracer);
+                var stored = entMan.GetComponent<YautjaStoredGearComponent>(caster);
+
+                Assert.Multiple(() =>
+                {
+                    Assert.That(hands.IsHolding(hunter, caster), Is.False,
+                        $"A completed {operation} must not leave a deployed caster in either hand.");
+                    Assert.That(gearComp.Container!.Contains(caster), Is.True,
+                        $"A completed {operation} must return the caster to its source bracer.");
+                    Assert.That(stored.Deployed, Is.False,
+                        $"A completed {operation} must clear deployed lifecycle state.");
+                    Assert.That(containers.TryGetContainingContainer(caster, out var containing), Is.True);
+                    Assert.That(containing!.Owner, Is.EqualTo(bracer),
+                        $"A completed {operation} must not leave the caster in an inventory or arbitrary container.");
+                });
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                foreach (var uid in new[] { hunter, bracer, caster, containerOwner, outerClothing })
                 {
                     if (uid != default && !entMan.Deleted(uid))
                         entMan.DeleteEntity(uid);
@@ -1260,6 +1449,46 @@ public sealed class YautjaPlasmaWeaponTest
         var damage = new DamageSpecifier(projectileComp.Damage);
         var hit = new ProjectileHitEvent(damage, target, shooter);
         entMan.EventBus.RaiseLocalEvent(projectile, ref hit);
+    }
+
+    private static bool MoveCasterToOtherHand(
+        IEntityManager entMan,
+        SharedHandsSystem hands,
+        EntityUid hunter,
+        string casterHand)
+    {
+        var handsComp = entMan.GetComponent<HandsComponent>(hunter);
+        var otherHand = handsComp.Hands.Keys.Single(hand => hand != casterHand);
+        hands.TrySetActiveHand(hunter, otherHand);
+        return hands.TryMoveHeldEntityToActiveHand(hunter, casterHand);
+    }
+
+    private static bool EquipCasterInSuitStorage(
+        IEntityManager entMan,
+        InventorySystem inventory,
+        EntityUid hunter,
+        EntityUid caster,
+        EntityCoordinates coordinates,
+        out EntityUid outerClothing)
+    {
+        outerClothing = entMan.SpawnEntity("CMArmorM3Medium", coordinates);
+        Assert.That(inventory.TryEquip(hunter, outerClothing, "outerClothing", silent: true, force: true), Is.True,
+            "Suit-storage transfer setup must equip supporting outer clothing.");
+        return inventory.TryEquip(hunter, caster, "suitstorage", silent: true, force: true);
+    }
+
+    private static bool InsertCasterIntoContainer(
+        IEntityManager entMan,
+        SharedContainerSystem containers,
+        SharedHandsSystem hands,
+        EntityUid hunter,
+        EntityUid caster,
+        EntityCoordinates coordinates,
+        out EntityUid containerOwner)
+    {
+        containerOwner = entMan.SpawnEntity("CMCrowbar", coordinates);
+        var container = containers.EnsureContainer<Container>(containerOwner, "cmu-yautja-plasma-caster-test");
+        return hands.TryDropIntoContainer(hunter, caster, container);
     }
 
     private static void AssertCasterStun(

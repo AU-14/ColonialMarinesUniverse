@@ -185,12 +185,6 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
             args.Cancelled = true;
             return;
         }
-
-        if (!ent.Comp.ActivatingFromThrow && !TryFindNearestTarget(ent, out _))
-        {
-            args.Popup = Loc.GetString("cmu-yautja-disc-no-target");
-            args.Cancelled = true;
-        }
     }
 
     private void OnToggled(Entity<YautjaSmartDiscComponent> ent, ref ItemToggledEvent args)
@@ -382,12 +376,6 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
         if (!TryFindNearestTarget(ent, out var target))
         {
-            if (!ent.Comp.ReturningToOwner)
-            {
-                _toggle.TrySetActive((ent.Owner, null), false, owner, false);
-                _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-no-target"), ent.Owner, owner, PopupType.SmallCaution);
-            }
-
             return;
         }
 
@@ -486,11 +474,8 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
                 if (!TryFindNearestTarget(ent, out var newTarget))
                 {
-                    if (!disc.ReturningToOwner)
-                    {
-                        _toggle.TrySetActive((uid, null), false, owner, false);
-                        _popup.PopupEntity(Loc.GetString("cmu-yautja-disc-no-target"), uid, owner, PopupType.SmallCaution);
-                    }
+                    disc.CurrentTarget = null;
+                    disc.NextRetarget = _timing.CurTime + disc.RetargetDelay;
                     continue;
                 }
 
@@ -551,7 +536,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
         _appearance.SetData(ent.Owner, ToggleableVisuals.Enabled, true);
 
-        var target = TryFindNearestTarget(ent, out var foundTarget)
+        var target = TryFindNearestTarget(ent, ent.Comp.BoomerangSearchRange, out var foundTarget)
             ? foundTarget
             : owner;
 
@@ -794,18 +779,23 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private bool TryFindNearestTarget(Entity<YautjaSmartDiscComponent> ent, out EntityUid target)
     {
+        return TryFindNearestTarget(ent, ent.Comp.SearchRange, out target);
+    }
+
+    private bool TryFindNearestTarget(Entity<YautjaSmartDiscComponent> ent, float searchRange, out EntityUid target)
+    {
         target = default;
-        if (TryGetRogueTarget(ent, out target))
+        if (TryGetRogueTarget(ent, searchRange, out target))
             return true;
 
         var discCoords = _transform.GetMapCoordinates(ent.Owner);
         EntityUid? closest = null;
-        var closestDistance = ent.Comp.SearchRange * ent.Comp.SearchRange;
+        var closestDistance = searchRange * searchRange;
 
-        foreach (var uid in _lookup.GetEntitiesInRange(discCoords, ent.Comp.SearchRange))
+        foreach (var uid in _lookup.GetEntitiesInRange(discCoords, searchRange))
         {
             if (!TryResolveTarget(uid, out var candidate) ||
-                !IsValidTarget(ent, candidate))
+                !IsValidTarget(ent, candidate, searchRange))
                 continue;
 
             var targetCoords = _transform.GetMapCoordinates(candidate);
@@ -832,6 +822,11 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private bool IsValidTarget(Entity<YautjaSmartDiscComponent> ent, EntityUid? target)
     {
+        return IsValidTarget(ent, target, ent.Comp.SearchRange);
+    }
+
+    private bool IsValidTarget(Entity<YautjaSmartDiscComponent> ent, EntityUid? target, float searchRange)
+    {
         if (!TryResolveTarget(target, out var resolved) ||
             resolved == ent.Owner ||
             resolved == ent.Comp.YautjaOwner ||
@@ -850,7 +845,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
         if (IsFriendlyToDisc((ent.Owner, ent.Comp), resolved))
             return false;
 
-        return (targetCoords.Position - discCoords.Position).LengthSquared() <= ent.Comp.SearchRange * ent.Comp.SearchRange;
+        return (targetCoords.Position - discCoords.Position).LengthSquared() <= searchRange * searchRange;
     }
 
     private bool IsFriendlyToDisc(Entity<YautjaSmartDiscComponent> ent, EntityUid target)
@@ -883,13 +878,23 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private bool TryGetRogueTarget(Entity<YautjaSmartDiscComponent> ent, out EntityUid target)
     {
+        return TryGetRogueTarget(ent, ent.Comp.SearchRange, out target);
+    }
+
+    private bool TryGetRogueTarget(Entity<YautjaSmartDiscComponent> ent, float searchRange, out EntityUid target)
+    {
         target = ent.Comp.RogueTarget ?? default;
-        return target.IsValid() && IsValidRogueTarget(ent, target);
+        return target.IsValid() && IsValidRogueTarget(ent, target, searchRange);
     }
 
     private bool IsValidRogueTarget(Entity<YautjaSmartDiscComponent> ent, EntityUid target)
     {
-        return !HasComp<YautjaComponent>(target) && IsValidTarget(ent, target);
+        return IsValidRogueTarget(ent, target, ent.Comp.SearchRange);
+    }
+
+    private bool IsValidRogueTarget(Entity<YautjaSmartDiscComponent> ent, EntityUid target, float searchRange)
+    {
+        return !HasComp<YautjaComponent>(target) && IsValidTarget(ent, target, searchRange);
     }
 
     private void StartRogueDisc(Entity<YautjaSmartDiscComponent> ent, EntityUid? user, EntityUid target)

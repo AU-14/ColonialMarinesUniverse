@@ -73,7 +73,7 @@ public sealed partial class YautjaComponent : Component
     [DataField]
     public LocId IdentityName = "cmu-yautja-identity-unknown";
 
-    [DataField]
+    [DataField, AutoNetworkedField]
     public bool BracerNameActive = true;
 
     [DataField]
@@ -271,6 +271,13 @@ public sealed partial class YautjaCapeComponent : Component
 {
     [DataField, AutoNetworkedField]
     public Color Color = YautjaCharacterProfile.Default.CapeColor;
+}
+
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState(true)]
+public sealed partial class YautjaBracerProfileVisualComponent : Component
+{
+    [DataField, AutoNetworkedField]
+    public EntProtoId? VisualPrototype;
 }
 
 [RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
@@ -546,7 +553,7 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public FixedPoint2 HealingCapsuleCost = 600;
 
     [DataField]
-    public EntProtoId HealingCapsulePrototype = "CMUYautjaHealingCapsule";
+    public EntProtoId HealingCapsulePrototype = "CMUYautjaHealingGel";
 
     [DataField]
     public TimeSpan HealingCapsuleCooldown = TimeSpan.FromMinutes(4);
@@ -816,7 +823,7 @@ public sealed partial class YautjaMaskComponent : Component, IClothingSlots
     public float ZoomLevel = 0.45f;
 
     [DataField]
-    public float ZoomOffset = 14f;
+    public float ZoomOffset = 12f;
 
     [DataField]
     public EntityUid? User;
@@ -1292,6 +1299,9 @@ public sealed partial class YautjaSmartDiscComponent : Component
 {
     [DataField]
     public float SearchRange = 8f;
+
+    [DataField]
+    public float BoomerangSearchRange = 4f;
 
     [DataField]
     public float ThrowSpeed = 13f;
@@ -2816,7 +2826,7 @@ public sealed partial class YautjaSourceShieldBlockComponent : Component
     public YautjaSourceShieldChance PassiveBlock = YautjaSourceShieldChance.Medium;
 
     [DataField]
-    public float ProjectileBlockFraction;
+    public float ProjectileBlockFraction = 0.2f;
 
     [DataField]
     public bool BlocksOnBack;

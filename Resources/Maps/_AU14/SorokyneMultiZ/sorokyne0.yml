@@ -210615,7 +210615,7 @@ entities:
     - type: MetaData
       name: Sorokyne Strata ground relay
     - type: Transform
-      pos: 183.5,110.5
+      pos: 197.5,99.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

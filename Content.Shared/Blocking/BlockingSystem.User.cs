@@ -2,9 +2,11 @@ using System.Numerics;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared._CMU14.Yautja;
+using Content.Shared.Projectiles;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
+using Robust.Shared.Random;
 
 namespace Content.Shared.Blocking;
 
@@ -12,6 +14,7 @@ public sealed partial class BlockingSystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
+    [Dependency] private IRobustRandom _random = default!;
 
     private void InitializeUser()
     {
@@ -55,6 +58,16 @@ public sealed partial class BlockingSystem
                 !IsShieldFacingAttacker(uid, attacker))
             {
                 return;
+            }
+
+            if (sourceBlock != null)
+            {
+                var blockChance = (float) (blocking.IsBlocking ? sourceBlock.ReadiedBlock : sourceBlock.PassiveBlock) / 100f;
+                if (args.Tool is { } tool && HasComp<ProjectileComponent>(tool))
+                    blockChance *= sourceBlock.ProjectileBlockFraction;
+
+                if (blockChance <= 0f || (blockChance < 1f && !_random.Prob(blockChance)))
+                    return;
             }
 
             // A shield should only block damage it can itself absorb. To determine that we need the Damageable component on it.

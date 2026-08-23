@@ -149,18 +149,6 @@ public sealed class YautjaHuntingGroundMapTest
         await using var pair = await PoolManager.GetServerClient(new PoolSettings { Destructive = true });
         var server = pair.Server;
 
-        await pair.LoadPrototypes(new List<string>
-        {
-            """
-            - type: entity
-              id: CMFlash
-              name: test-only missing map prototype shim
-            - type: entity
-              id: RMCGrenadeFlashBang
-              name: test-only missing map prototype shim
-            """,
-        });
-
         var errors = new List<string>();
 
         await server.WaitPost(() =>
@@ -177,8 +165,8 @@ public sealed class YautjaHuntingGroundMapTest
             try
             {
                 var mapPaths = GetInRotationPlanetMapPaths(prototypes, componentFactory);
-                Assert.That(mapPaths, Has.Count.EqualTo(17),
-                    "Expected the 17 InRotation primary planet map paths to be checked.");
+                Assert.That(mapPaths, Has.Count.EqualTo(18),
+                    "Expected the 18 InRotation primary planet map paths to be checked.");
 
                 foreach (var mapPath in mapPaths)
                 {
@@ -193,6 +181,7 @@ public sealed class YautjaHuntingGroundMapTest
 
                     loadedMaps.Add(map.Value.Owner);
                     var gridIds = grids.Select(grid => grid.Owner).ToHashSet();
+                    var dangerousTriggers = new List<LoadedDangerousTrigger>();
                     var humanStructures = new List<LoadedHumanStructure>();
                     var relayMarkers = new List<LoadedGroundRelayMarker>();
 
@@ -218,6 +207,15 @@ public sealed class YautjaHuntingGroundMapTest
                             continue;
                         }
 
+                        if (TryGetDangerousTriggerComponents(entMan, componentFactory, uid, out var triggerComponents))
+                        {
+                            dangerousTriggers.Add(new LoadedDangerousTrigger(
+                                gridUid,
+                                transform.GetWorldPosition(xform),
+                                prototype.ID,
+                                triggerComponents));
+                        }
+
                         if (!IsHumanInfrastructure(entMan, uid, meta, xform))
                             continue;
 
@@ -231,12 +229,14 @@ public sealed class YautjaHuntingGroundMapTest
                     if (relayMarkers.Count == 0)
                     {
                         errors.Add($"{mapPath}: no CMUYautjaGroundRelayDestination markers were loaded.");
+                        entMan.DeleteEntity(map.Value.Owner);
                         continue;
                     }
 
                     if (humanStructures.Count == 0)
                     {
                         errors.Add($"{mapPath}: no classified human infrastructure was found.");
+                        entMan.DeleteEntity(map.Value.Owner);
                         continue;
                     }
 
@@ -249,6 +249,15 @@ public sealed class YautjaHuntingGroundMapTest
                         {
                             errors.Add($"{mapPath}: relay {marker.Label} at {marker.Position} is not on a valid grid tile.");
                             continue;
+                        }
+
+                        foreach (var trigger in dangerousTriggers.Where(trigger =>
+                                     trigger.GridUid == marker.GridUid &&
+                                     trigger.Position == marker.Position))
+                        {
+                            errors.Add(
+                                $"{mapPath}: relay {marker.Label} at {marker.Position} overlaps dangerous trigger " +
+                                $"{trigger.Prototype} ({trigger.Components}).");
                         }
 
                         if (tileRef.Tile.IsEmpty ||
@@ -280,6 +289,8 @@ public sealed class YautjaHuntingGroundMapTest
                                 $"{nearest.Structure.Prototype} at {nearest.Structure.Position}; expected at least 8.");
                         }
                     }
+
+                    entMan.DeleteEntity(map.Value.Owner);
                 }
             }
             finally
@@ -293,7 +304,7 @@ public sealed class YautjaHuntingGroundMapTest
         });
 
         Assert.That(errors, Is.Empty,
-            "In-rotation ground relay markers must be open and at least 8 tiles from human infrastructure:\n" +
+            "In-rotation ground relay markers must be open, free of dangerous triggers, and at least 8 tiles from human infrastructure:\n" +
             string.Join('\n', errors));
 
         await pair.CleanReturnAsync();
@@ -1356,6 +1367,26 @@ public sealed class YautjaHuntingGroundMapTest
         return false;
     }
 
+    private static bool TryGetDangerousTriggerComponents(
+        IEntityManager entMan,
+        IComponentFactory componentFactory,
+        EntityUid uid,
+        out string dangerousComponents)
+    {
+        var components = entMan.GetComponents(uid)
+            .Select(component => componentFactory.GetComponentName(component.GetType()))
+            .Where(componentName =>
+                componentName.Equals("CMUFalling", StringComparison.Ordinal) ||
+                componentName.Contains("Teleport", StringComparison.OrdinalIgnoreCase) ||
+                componentName.Contains("Damage", StringComparison.OrdinalIgnoreCase) &&
+                componentName.Contains("Trigger", StringComparison.OrdinalIgnoreCase))
+            .OrderBy(componentName => componentName, StringComparer.Ordinal)
+            .ToArray();
+
+        dangerousComponents = string.Join(", ", components);
+        return components.Length > 0;
+    }
+
     private static readonly string[] HumanInfrastructureTerms =
     [
         "airlock",
@@ -1425,6 +1456,12 @@ public sealed class YautjaHuntingGroundMapTest
         EntityUid GridUid,
         Vector2 Position,
         string Label);
+
+    private readonly record struct LoadedDangerousTrigger(
+        EntityUid GridUid,
+        Vector2 Position,
+        string Prototype,
+        string Components);
 
     private readonly record struct LoadedHuntingGroundLandmark(
         EntityUid Uid,

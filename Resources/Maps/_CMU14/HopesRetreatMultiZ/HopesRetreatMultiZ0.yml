@@ -332944,7 +332944,7 @@ entities:
     - type: MetaData
       name: Hope's Retreat ground relay
     - type: Transform
-      pos: 18.5,-48.5
+      pos: 36.5,-65.5
       parent: 1
     - type: YautjaRelayDestination
       kind: Ground

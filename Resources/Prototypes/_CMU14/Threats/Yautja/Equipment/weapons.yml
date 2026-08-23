@@ -1048,6 +1048,7 @@
   - type: BatterySelfRecharger
     autoRecharge: true
     autoRechargeRate: 1
+    autoRechargeInterval: 1
   - type: Wieldable
     wieldedInhandPrefix: plasma_rifle
   - type: WieldDelay
@@ -1138,6 +1139,7 @@
   - type: BatterySelfRecharger
     autoRecharge: true
     autoRechargeRate: 1
+    autoRechargeInterval: 1
   - type: UniqueAction
   - type: Wieldable
     wieldedInhandPrefix: plasmacarbine
@@ -1357,6 +1359,7 @@
   - type: BatterySelfRecharger
     autoRecharge: true
     autoRechargeRate: 1
+    autoRechargeInterval: 1
   - type: UniqueAction
   - type: Wieldable
     wieldedInhandPrefix: plasma_pistol

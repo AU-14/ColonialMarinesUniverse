@@ -59,7 +59,7 @@
   name: cmu-yautja-job-name-badblood
   description: cmu-yautja-job-description-badblood
   playTimeTracker: CMUYautjaBadBlood
-  icon: CMJobIconEmpty
+  icon: CMUYautjaJobIcon
   supervisors: cm-job-supervisors-nobody
   joinNotifyCrew: false
   hidden: true
@@ -170,7 +170,6 @@
   id: CMUYautjaYoungbloodGear
   equipment:
     ears: CMUYautjaCommunicator
-    mask: CMUYautjaMask
     gloves: CMUYautjaBracer
 
 - type: startingGear

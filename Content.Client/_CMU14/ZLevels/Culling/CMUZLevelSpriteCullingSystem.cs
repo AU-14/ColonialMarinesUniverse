@@ -75,6 +75,18 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
             return;
         }
 
+        var viewMapUid = playerMapUid;
+        var viewMapComp = playerMapComp;
+        if (_zLevels.TryGetEyeMapInViewerZNetwork(
+                playerMapUid,
+                _eyeManager.CurrentEye.Position.MapId,
+                out var eyeMapUid) &&
+            _mapQuery.TryComp(eyeMapUid, out var eyeMapComp))
+        {
+            viewMapUid = eyeMapUid;
+            viewMapComp = eyeMapComp;
+        }
+
         var maxOpeningRects = Math.Max(0, _config.GetCVar(CMUZLevelsCVars.MaxOpeningRectsPerPass));
         var maxDepth = Math.Clamp(
             _config.GetCVar(CMUZLevelsCVars.MaxRenderDepth),
@@ -83,7 +95,7 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
 
         var viewBounds = _eyeManager.GetWorldViewbounds().CalcBoundingBox();
         var openingLimit = maxOpeningRects == 0 ? int.MaxValue : maxOpeningRects + 1;
-        if (!TryFindOpeningBounds(playerMapComp.MapId, viewBounds, openingLimit) ||
+        if (!TryFindOpeningBounds(viewMapComp.MapId, viewBounds, openingLimit) ||
             _openingBounds.Count == 0 ||
             maxOpeningRects > 0 && _openingBounds.Count > maxOpeningRects)
         {
@@ -95,7 +107,7 @@ public sealed partial class CMUZLevelSpriteCullingSystem : EntitySystem
 
         for (var depthOffset = -1; depthOffset >= -maxDepth; depthOffset--)
         {
-            if (!_zLevels.TryMapOffset(playerMapUid, depthOffset, out _, out var lowerMapComp) ||
+            if (!_zLevels.TryMapOffset(viewMapUid, depthOffset, out _, out var lowerMapComp) ||
                 lowerMapComp.MapId == MapId.Nullspace)
             {
                 continue;

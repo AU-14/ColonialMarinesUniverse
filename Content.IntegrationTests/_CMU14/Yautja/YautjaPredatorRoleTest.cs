@@ -42,12 +42,14 @@ using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.CharacterInfo;
+using Content.Shared.Clothing.Components;
 using Content.Shared.DoAfter;
 using Content.Shared.GameTicking;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
+using Content.Shared.Item;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Pulling.Components;
@@ -74,6 +76,7 @@ using Robust.Shared.Audio.Components;
 using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.GameObjects;
+using Robust.Shared.IoC;
 using Robust.Shared.Containers;
 using Robust.Shared.Localization;
 using Robust.Shared.Log;
@@ -134,7 +137,12 @@ public sealed class YautjaPredatorRoleTest
                 .WithName("John Human")
                 .WithYautjaProfile(yautja);
 
-            var hunter = stationSpawning.SpawnPlayerMob(map.GridCoords, "CMUYautjaHunter", normalProfile, station: null);
+            var hunter = stationSpawning.SpawnPlayerMob(
+                map.GridCoords,
+                "CMUYautjaHunter",
+                normalProfile,
+                station: null,
+                authoritativeYautjaRank: YautjaRank.Elder);
             var meta = entMan.GetComponent<MetaDataComponent>(hunter);
             var humanoid = entMan.GetComponent<HumanoidAppearanceComponent>(hunter);
 
@@ -149,7 +157,8 @@ public sealed class YautjaPredatorRoleTest
                     Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Gold)));
                 Assert.That(humanoid.MarkingSet.Markings.Values.SelectMany(markings => markings),
                     Has.Exactly(1).Matches<Marking>(marking => marking.MarkingId == "CMUYautjaDreadlocksLongCurved"));
-                AssertEquippedPrototype(entMan, inventory, hunter, "gloves", "CMUYautjaBracerCrimson");
+                AssertEquippedPrototype(entMan, inventory, hunter, "gloves", "CMUYautjaBracer");
+                AssertEquippedBracerVisualProfile(entMan, inventory, hunter, "gloves", "CMUYautjaBracerCrimson");
                 AssertEquippedPrototype(entMan, inventory, hunter, "ears", "CMUYautjaCommunicator");
                 foreach (var slot in new[] { "ears2", "mask", "outerClothing", "shoes", "back", "jumpsuit", "belt", "pocket1", "pocket2" })
                     Assert.That(inventory.TryGetSlotEntity(hunter, slot, out _), Is.False, slot);
@@ -4998,6 +5007,18 @@ public sealed class YautjaPredatorRoleTest
         Assert.That(inventory.TryGetSlotEntity(wearer, slot, out var equipped), Is.True, slot);
         var meta = entMan.GetComponent<MetaDataComponent>(equipped.Value);
         Assert.That(meta.EntityPrototype?.ID, Is.EqualTo(expectedPrototype), slot);
+    }
+
+    private static void AssertEquippedBracerVisualProfile(
+        IEntityManager entMan,
+        InventorySystem inventory,
+        EntityUid wearer,
+        string slot,
+        string visualPrototype)
+    {
+        Assert.That(inventory.TryGetSlotEntity(wearer, slot, out var equipped), Is.True, slot);
+        Assert.That(entMan.GetComponent<YautjaBracerProfileVisualComponent>(equipped.Value).VisualPrototype?.Id,
+            Is.EqualTo(visualPrototype), $"{slot} selected visual profile");
     }
 
     private static void SetNpcFaction(IEntityManager entMan, EntityUid uid, ProtoId<NpcFactionPrototype> faction)

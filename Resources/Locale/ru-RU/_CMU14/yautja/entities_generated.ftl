@@ -269,8 +269,8 @@ ent-CMUYautjaAdvancedBruisePack = хищник продвинутый травм
 ent-CMUYautjaAdvancedOintment = хищник продвинутый мазь
     .desc = cool инопланетный мазь для sealing burns и caustic injuries.
 
-ent-CMUYautjaHealingGel = лечебная капсула
-    .desc = Одноразовая капсула для перезарядки лечебного оружия яутжа.
+ent-CMUYautjaHealingGel = капсула лечебного геля
+    .desc = Используется для перезарядки лечебного пистолета.
 
 ent-CMUYautjaStabilizerGel = stabilizer гель
     .desc = fast-setting инопланетный гель для buying time через shock и кровь loss.
