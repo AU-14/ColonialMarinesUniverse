@@ -193,13 +193,23 @@ public abstract partial class SharedGunSystem
         Appearance.SetData(uid, AmmoVisuals.AmmoMax, capacity, appearance);
     }
 
-    private void EjectMagazine(EntityUid uid, MagazineAmmoProviderComponent component, EntityUid? user) //RMC14
+    private void EjectMagazine(EntityUid uid, MagazineAmmoProviderComponent component, EntityUid? user) // CMU14 Method
     {
         var ent = GetMagazineEntity(uid);
 
         if (ent == null)
             return;
 
-        _slots.TryEject(uid, MagazineSlot, user, out var a, excludeUserAudio: true); //RMC14
+        _slots.TryEject(uid, MagazineSlot, user, out var mag, excludeUserAudio: true);
+
+        if (mag == null)
+            return;
+
+        if (user != null && _hands.TryPickupAnyHand(user.Value, mag.Value))
+            return;
+
+        var xform = Transform(mag.Value);
+        TransformSystem.SetLocalRotation(mag.Value, Random.NextAngle(), xform);
+        TransformSystem.SetCoordinates(mag.Value, xform, xform.Coordinates.Offset(Random.NextVector2(EjectOffset)));
     }
 }

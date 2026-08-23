@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Round.Objectives.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Robust.Shared.Map;
 
@@ -11,7 +12,6 @@ public sealed class ObjectiveWatchedEntityStartupEvent(EntityUid uid) : EntityEv
 public sealed class ObjectiveInterestSystem : EntitySystem
 {
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
-    [Dependency] private SharedMapSystem _mapSystem = default!;
 
     private readonly Dictionary<string, List<EntityUid>> _interestByKey = new(StringComparer.OrdinalIgnoreCase);
     private readonly Dictionary<EntityUid, MapId> _objectiveMap = new();
@@ -24,9 +24,7 @@ public sealed class ObjectiveInterestSystem : EntitySystem
     }
 
     private void OnEntityStartup(EntityUid uid, MetaDataComponent meta, ref ComponentStartup args)
-    {
-        RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(uid));
-    }
+        => RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(uid));
 
     public override void Shutdown()
     {
@@ -89,28 +87,14 @@ public sealed class ObjectiveInterestSystem : EntitySystem
                 continue;
 
             foreach (var objUid in list)
-                if (_objectiveMap.TryGetValue(objUid, out var map) && IsSameZNetwork(map, entityMap) && seen.Add(objUid))
+                if (_objectiveMap.TryGetValue(objUid, out var map) && _zLevels.IsSameZNetwork(map, entityMap) && seen.Add(objUid))
                     yield return objUid;
         }
 
         foreach (var objUid in _wildcardObjectives)
         {
-            if (_objectiveMap.TryGetValue(objUid, out var map) && IsSameZNetwork(map, entityMap) && seen.Add(objUid))
+            if (_objectiveMap.TryGetValue(objUid, out var map) && _zLevels.IsSameZNetwork(map, entityMap) && seen.Add(objUid))
                 yield return objUid;
         }
-    }
-
-    private bool IsSameZNetwork(MapId a, MapId b)
-    {
-        if (a == b)
-            return true;
-
-        if (!_mapSystem.TryGetMap(a, out var mapUidA) || !_mapSystem.TryGetMap(b, out var mapUidB))
-            return false;
-
-        if (!_zLevels.TryGetZNetwork(mapUidA.Value, out var network))
-            return false;
-
-        return _zLevels.IsMapInNetwork(network.Value, mapUidB.Value);
     }
 }

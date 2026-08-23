@@ -24,3 +24,4 @@ tunable-radio-verb-clear = Clear Tuned Frequency
 
 tunable-radio-cleared = Headset frequency cleared.
 
+tunable-radio-language-no-radio = { $language } does not carry over a radio net.

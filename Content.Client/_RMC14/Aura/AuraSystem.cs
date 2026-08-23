@@ -10,9 +10,11 @@ namespace Content.Client._RMC14.Aura;
 public sealed partial class AuraSystem : SharedAuraSystem
 {
     private static readonly ProtoId<ShaderPrototype> AuraOutlineShader = "RMCAuraOutline";
+    private const string ShaderId = "RMCAuraOutline"; // CMU14: keyed id required by the v288 multi post-shader API
 
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IGameTiming _timing = default!;
+    [Dependency] private SpriteSystem _sprite = default!; // CMU14
 
     public override void Initialize()
     {
@@ -27,7 +29,8 @@ public sealed partial class AuraSystem : SharedAuraSystem
         if (!TryComp(ent, out SpriteComponent? sprite))
             return;
 
-        sprite.PostShader = _prototypes.Index(AuraOutlineShader).InstanceUnique();
+        // CMU14: legacy PostShader setter would clear every other post-shader on the sprite
+        _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, _prototypes.Index(AuraOutlineShader).InstanceUnique()));
     }
 
     private void OnShutdown(Entity<AuraComponent> ent, ref ComponentShutdown args)
@@ -35,13 +38,14 @@ public sealed partial class AuraSystem : SharedAuraSystem
         if (TerminatingOrDeleted(ent))
             return;
 
-        if (HasComp<EntityActiveInvisibleComponent>(ent))
-            return;
+        // CMU14: keyed removal can no longer clobber the cloak's shader entry, guard below is obsolete
+        // if (HasComp<EntityActiveInvisibleComponent>(ent))
+        //     return;
 
         if (!TryComp(ent, out SpriteComponent? sprite))
             return;
 
-        sprite.PostShader = null;
+        _sprite.RemovePostShader(sprite, ShaderId); // CMU14
     }
 
     public override void Update(float frameTime)
@@ -60,8 +64,12 @@ public sealed partial class AuraSystem : SharedAuraSystem
                 color = color.WithAlpha(color.A * alpha);
             }
 
-            sprite.PostShader?.SetParameter("outline_color", color);
-            sprite.PostShader?.SetParameter("outline_width", aura.OutlineWidth);
+            // CMU14: keyed lookup so we only touch our own shader instance
+            if (_sprite.TryGetPostShader(sprite, ShaderId, out var entry))
+            {
+                entry.Shader.SetParameter("outline_color", color);
+                entry.Shader.SetParameter("outline_width", aura.OutlineWidth);
+            }
         }
     }
 }

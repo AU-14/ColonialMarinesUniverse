@@ -76,7 +76,8 @@ public sealed class ANPRCNetLogEntry(
     string senderName,
     string channelDisplay,
     string message,
-    bool intercepted = false)
+    bool intercepted = false,
+    string language = "English")
 {
     public readonly float Timestamp = timestamp;
     public readonly string SenderName = senderName;
@@ -86,6 +87,11 @@ public sealed class ANPRCNetLogEntry(
     // traffic on a net belonging to somebody else's faction. worth writing down,
     // worth carrying to whoever can act on it
     public readonly bool Intercepted = intercepted;
+
+    // the set writes down sounds, not sense. the stored line is what came over the
+    // air and this is the language it came in, so the server can render it for
+    // whoever is actually reading the panel rather than for nobody in particular
+    public readonly string Language = language;
 }
 
 // a contact the search receiver has built up but not necessarily fixed. Resolved

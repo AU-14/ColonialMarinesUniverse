@@ -163,7 +163,7 @@ public abstract partial class SharedBodyPartHealthSystem : EntitySystem
         if (health.SeveranceDamage >= health.Max + health.SeveranceThreshold && !IsSeveranceLocked(partType))
         {
             var severed = new BodyPartSeveredEvent(body, partUid, partType);
-            RaiseLocalEvent(partUid, ref severed);
+            RaiseLocalEvent(partUid, ref severed, broadcast: true);
         }
 
         return true;

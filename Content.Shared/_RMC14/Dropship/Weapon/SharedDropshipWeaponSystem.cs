@@ -394,9 +394,13 @@ public abstract partial class SharedDropshipWeaponSystem : EntitySystem
 
         var prototype = metaData.EntityPrototype.ID;
 
-        var camera = EnsureComp<RMCCameraComponent>(ent);
-        _rmcCamera.SetCameraName(ent, $"{Name(ent)} [{ent.Comp.Abbreviation}]", camera);
-        _rmcCamera.SetCameraId(ent, prototype, camera);
+        AddComp(ent, new RMCCameraComponent
+        {
+            Id = prototype,
+            Rename = false,
+            NameOverride = $"{Name(ent)} [{ent.Comp.Abbreviation}]",
+        }, true);
+
         _rmcCamera.RefreshCameras(prototype);
     }
 

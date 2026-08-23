@@ -251,6 +251,54 @@ public sealed partial class SharedCMUShrapnelSystem : EntitySystem
         return true;
     }
 
+    /// <summary>
+    /// Removes up to <paramref name="count"/> embedded fragments from the body, starting with
+    /// the part carrying the greatest shrapnel severity. Used by fluxing research chemicals.
+    /// </summary>
+    public int TryRemoveShrapnel(EntityUid body, int count)
+    {
+        var removed = 0;
+        while (removed < count)
+        {
+            EntityUid? selected = null;
+            var selectedSeverity = -1f;
+            foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
+            {
+                if (!TryComp<CMUShrapnelComponent>(partUid, out var shrapnel) || shrapnel.Fragments <= 0)
+                    continue;
+                if (shrapnel.Severity <= selectedSeverity)
+                    continue;
+
+                selected = partUid;
+                selectedSeverity = shrapnel.Severity;
+            }
+
+            if (selected is not { } part || !TryComp<CMUShrapnelComponent>(part, out var selectedShrapnel))
+                break;
+
+            var previous = selectedShrapnel.Fragments;
+            selectedShrapnel.Fragments--;
+            removed++;
+            if (selectedShrapnel.Fragments <= 0)
+            {
+                RemComp<CMUShrapnelComponent>(part);
+                _wounds.ClearRetainedFragmentCleanup(part);
+            }
+            else
+            {
+                selectedShrapnel.Severity *= (float)selectedShrapnel.Fragments / previous;
+                Dirty(part, selectedShrapnel);
+                _wounds.MarkRetainedFragmentCleanup(part,
+                    selectedShrapnel.Fragments,
+                    selectedShrapnel.Severity);
+            }
+
+            RaiseShrapnelChanged(part, removed: true);
+        }
+
+        return removed;
+    }
+
     public float ComputeMovementPainPulse(EntityUid body)
     {
         if (!_painEnabled)

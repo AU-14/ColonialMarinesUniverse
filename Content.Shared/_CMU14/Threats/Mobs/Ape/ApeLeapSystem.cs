@@ -132,8 +132,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
             if (!HasComp<ApeLeapComponent>(ent) || !leaping.Running)
                 return;
 
-            _rmcLagCompensation.SetLastRealTick(args.SenderSession.UserId, msg.LastRealTick);
-            if (!_rmcLagCompensation.Collides(target, ent, args.SenderSession))
+            if (!_rmcLagCompensation.ValidatePredictedHit(target, ent, args.SenderSession, msg.LastRealTick, msg.Substep))
                 return;
         }
 
@@ -416,7 +415,8 @@ public sealed partial class ApeLeapSystem : EntitySystem
         if (_net.IsClient)
         {
             var predictedEv = new ApeLeapPredictedHitEvent(GetNetEntity(target),
-                _rmcLagCompensation.GetLastRealTick(null));
+                _rmcLagCompensation.GetLastRealTick(null),
+                _rmcLagCompensation.GetClientSubstep());
             RaiseNetworkEvent(predictedEv);
             if (_timing.InPrediction && _timing.IsFirstTimePredicted) RaisePredictiveEvent(predictedEv);
         }

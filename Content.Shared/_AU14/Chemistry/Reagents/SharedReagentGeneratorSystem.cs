@@ -98,6 +98,10 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         reagent.Add("physicalDesc", "reagent-physical-desc-unidentifiable");
         reagent.Add("flavor", "flavor-base-horrible");
         reagent.Add("genTier", args.GenTier.ToString());
+        var worksOnTheDead = args.Effects.ContainsKey("Defibrillating") ||
+                             args.Effects.ContainsKey("Neurocryogenic");
+        if (worksOnTheDead)
+            reagent.Add("worksOnTheDead", "true");
 
         SequenceDataNode effects = [];
         string effectyml = string.Empty;
@@ -156,6 +160,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"  flavor: flavor-base-horrible\n" +
             $"  genTier: {args.GenTier}\n" +
             $"  reward: {args.ScanPointYield}\n" +
+            (worksOnTheDead ? "  worksOnTheDead: true\n" : string.Empty) +
             $"  metabolisms:\n" +
             $"    Medicine:\n" +
             $"      metabolismRate: {metabRate.ToString()}\n" +

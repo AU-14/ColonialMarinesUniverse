@@ -1,4 +1,5 @@
 using Content.Shared.Interaction;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems; // CMU14
 using Content.Shared.Pinpointer;
 using System.Linq;
 using System.Numerics;
@@ -12,6 +13,7 @@ public sealed partial class PinpointerSystem : SharedPinpointerSystem
 {
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
+    [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; // CMU14
 
     private EntityQuery<TransformComponent> _xformQuery;
 
@@ -124,6 +126,9 @@ public sealed partial class PinpointerSystem : SharedPinpointerSystem
             if (!_xformQuery.TryGetComponent(otherUid, out var compXform) || compXform.MapID != mapId)
                 continue;
 
+            if (compXform.MapID != mapId && !_zLevels.IsSameZNetwork(compXform.MapID, mapId)) // CMU14: accept targets on z-networked maps
+                continue;
+
             var dist = (_transform.GetWorldPosition(compXform) - worldPos).LengthSquared();
             l.TryAdd(dist, otherUid);
         }
@@ -182,7 +187,7 @@ public sealed partial class PinpointerSystem : SharedPinpointerSystem
             return null;
 
         // check if they are on same map
-        if (pin.MapID != trg.MapID)
+        if (pin.MapID != trg.MapID && !_zLevels.IsSameZNetwork(pin.MapID, trg.MapID)) // CMU14: z-networked maps share world XY
             return null;
 
         // get world direction vector

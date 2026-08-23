@@ -8,6 +8,7 @@
   - type: Skills
     skills:
       RMCSkillEndurance: 1
+      RMCSkillConstruction: 2
       RMCSkillFirearms: 1
       RMCSkillIntel: 2
       RMCSkillMedical: 3

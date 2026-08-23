@@ -17,6 +17,7 @@ public sealed partial class CMClusterGrenadeSystem : EntitySystem
         _userLimits = GetEntityQuery<UserLimitHitsComponent>();
 
         SubscribeLocalEvent<ClusterLimitHitsComponent, CMClusterSpawnedEvent>(OnClusterLimitHitsSpawned);
+        // CMU14: holder absorption moved to CMClusterGrenadeHolderSystem (needs ProjectileGrenadeComp)
         SubscribeLocalEvent<ProjectileLimitHitsComponent, ProjectileHitEvent>(OnProjectileLimitHitsHit);
         SubscribeLocalEvent<ProjectileLimitHitsComponent, PreventCollideEvent>(OnProjectileLimitHitsPreventCollide);
     }

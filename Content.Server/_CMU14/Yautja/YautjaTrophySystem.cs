@@ -1080,7 +1080,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
             return;
 
         var ev = new BodyPartSeveredEvent(target, part, type);
-        RaiseLocalEvent(part, ref ev);
+        RaiseLocalEvent(part, ref ev, broadcast: true);
     }
 
     private static bool TryGetPartForTrophy(YautjaTrophyKind kind, out BodyPartType type, out BodyPartSymmetry symmetry)

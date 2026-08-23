@@ -34,6 +34,8 @@ using Robust.Shared.Audio.Systems;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
+using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
 using Robust.Shared.Player;
 using Robust.Shared.Timing;
 
@@ -67,6 +69,7 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
     [Dependency] private TurfSystem _turf = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
     [Dependency] protected IGameTiming _timing = default!;
+    [Dependency] private SharedPhysicsSystem _physics = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _mobs = new();
 
@@ -109,17 +112,11 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
                 continue;
             }
 
-            if (leaping.LeapMoveAt != null && time > leaping.LeapMoveAt)
-            {
-                if (leaping.Target != null)
-                    _transform.SetCoordinates(uid, leaping.Target.Value);
-
-                leaping.LeapMoveAt = null;
-                Dirty(uid, leaping);
-            }
-
             if (leaping.LeapEndAt == null || time < leaping.LeapEndAt)
                 continue;
+
+            if (leaping.Target != null)
+                _transform.SetCoordinates(uid, leaping.Target.Value);
 
             CrashDown((uid, destroy));
         }
@@ -182,9 +179,10 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
         {
             var leaping = EnsureComp<ApeDestroyLeapingComponent>(ape);
             leaping.Target = coords;
-            leaping.LeapMoveAt = _timing.CurTime + ape.Comp.CrashTime / 2;
             leaping.LeapEndAt = _timing.CurTime + ape.Comp.CrashTime;
             Dirty(ape.Owner, leaping);
+
+            _physics.SetCanCollide(ape, false);
 
             Filter filter = Filter.Pvs(ape);
             Vector2 offset = _transform.ToMapCoordinates(coords).Position - _transform.GetMapCoordinates(ape).Position;
@@ -322,6 +320,9 @@ public abstract partial class SharedApeDestroySystem : EntitySystem
 
     protected virtual void OnLeapingRemove(Entity<ApeDestroyLeapingComponent> ape, ref ComponentRemove args)
     {
+        if (_net.IsServer && HasComp<PhysicsComponent>(ape))
+            _physics.SetCanCollide(ape, true);
+
         IEnumerable<Entity<ActionComponent>> actions = _actions.GetActions(ape);
         foreach (Entity<ActionComponent> action in actions)
         {

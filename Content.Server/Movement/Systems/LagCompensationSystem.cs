@@ -78,6 +78,10 @@ public sealed partial class LagCompensationSystem : EntitySystem
         // Use 1.5 due to the trip buffer.
         var offset = _timing.CurTick - _rmcLagCompensation.GetLastRealTick(pSession.UserId).Value;
         var offsetTime = offset.Value * _timing.TickPeriod;
+        // CMU14: substep-aware rewind (client mid-physics when it saw the hit)
+        var substep = _rmcLagCompensation.GetLastRealSubstep(pSession.UserId);
+        if (substep != 0)
+            offsetTime -= _rmcLagCompensation.SubstepPeriod * substep;
         if (offsetTime > BufferTime)
             offsetTime = TimeSpan.Zero;
 

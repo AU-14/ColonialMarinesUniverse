@@ -243,7 +243,7 @@ namespace Content.Server.GameTicking
             Dictionary<NetUserId, HumanoidCharacterProfile> profiles,
             bool force)
         {
-            _distressSignal.TheHive = _hive.CreateHive("xenonid hive", "CMXenoHive");
+            _distressSignal.TheHive = _hive.CreateHive("Xenomorph Prime", "CMXenoHive");
             _hive.CreateHive("Mycelial Confluence", "CMUPathogenHive");
 
             // For presets without CMDistressSignalRule (e.g. AU14 DistressSignal), the planet map

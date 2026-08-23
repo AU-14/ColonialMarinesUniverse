@@ -120,6 +120,9 @@ public sealed partial class HiveComponent : Component
     public int BurrowedLarva;
 
     [DataField, AutoNetworkedField]
+    public bool BurrowedLarvaEnabled = true; // CMU14
+
+    [DataField, AutoNetworkedField]
     public int BurrowedLarvaSlotFactor = 4;
 
     [DataField, AutoNetworkedField]

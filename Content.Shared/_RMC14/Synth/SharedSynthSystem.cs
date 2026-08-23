@@ -1,3 +1,4 @@
+using Content.Shared._RMC14.Damage; // CMU14
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Medical.Stasis;
@@ -34,6 +35,8 @@ namespace Content.Shared._RMC14.Synth;
 public abstract partial class SharedSynthSystem : EntitySystem
 {
     private static readonly TimeSpan UnableUsePopupCooldown = TimeSpan.FromSeconds(1);
+    private static readonly ProtoId<DamageGroupPrototype>[] SynthImmuneGroups = ["Toxin", "Airloss"]; // CMU14
+    private readonly HashSet<ProtoId<DamageTypePrototype>> _synthImmuneTypes = new(); // CMU14
 
     [Dependency] private RMCRepairableSystem _repairable = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
@@ -63,8 +66,20 @@ public abstract partial class SharedSynthSystem : EntitySystem
         SubscribeLocalEvent<SynthComponent, CMBleedEvent>(OnBleed);
         SubscribeLocalEvent<SynthComponent, InteractUsingEvent>(OnSynthInteractUsing);
         SubscribeLocalEvent<SynthComponent, RMCSynthRepairEvent>(OnSynthRepairDoAfter);
+        SubscribeLocalEvent<SynthComponent, DamageModifyAfterResistEvent>(OnSynthDamageAfterResist); // CMU14
 
         SubscribeLocalEvent<UseOnSynthBlockedComponent, BeforeRangedInteractEvent>(OnSynthBlockedBeforeRangedInteract);
+
+        // CMU14: cache the immune groups' damage types once
+        _synthImmuneTypes.Clear();
+        foreach (var groupId in SynthImmuneGroups)
+        {
+            if (!_prototypes.TryIndex(groupId, out var group))
+                continue;
+
+            foreach (var type in group.DamageTypes)
+                _synthImmuneTypes.Add(type);
+        }
     }
 
     // Change any mob to a synth, even after it has already been map-initialized
@@ -229,6 +244,15 @@ public abstract partial class SharedSynthSystem : EntitySystem
     private void OnBleed(Entity<SynthComponent> ent, ref CMBleedEvent args)
     {
         args.Handled = true;
+    }
+
+    private void OnSynthDamageAfterResist(Entity<SynthComponent> ent, ref DamageModifyAfterResistEvent args) // CMU14 Method
+    {
+        foreach (var (type, amount) in args.Damage.DamageDict)
+        {
+            if (amount > FixedPoint2.Zero && _synthImmuneTypes.Contains(type))
+                args.Damage.DamageDict[type] = FixedPoint2.Zero;
+        }
     }
 
     private void OnSynthInteractUsing(Entity<SynthComponent> synth, ref InteractUsingEvent args)

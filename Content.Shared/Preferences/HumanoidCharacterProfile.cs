@@ -244,6 +244,9 @@ namespace Content.Shared.Preferences
         public string MedicalRecord { get; private set; } = string.Empty;
 
         [DataField]
+        public Dictionary<string, Dictionary<string, string?>> RankPreferences { get; private set; } = new();
+
+        [DataField]
         public string CriminalRecord { get; private set; } = string.Empty;
 
         [DataField]
@@ -292,6 +295,7 @@ namespace Content.Shared.Preferences
             string shortExamine = "",
             string fullDescription = "",
             string medicalRecord = "",
+            Dictionary<string, Dictionary<string, string?>>? rankPreferences = null,
             string criminalRecord = "",
             string generalRecord = "",
             string height = "",
@@ -332,6 +336,7 @@ namespace Content.Shared.Preferences
             ShortExamine = shortExamine;
             FullDescription = fullDescription;
             MedicalRecord = medicalRecord;
+            RankPreferences = rankPreferences ?? new Dictionary<string, Dictionary<string, string?>>();
             CriminalRecord = criminalRecord;
             GeneralRecord = generalRecord;
             Height = height;
@@ -468,6 +473,9 @@ namespace Content.Shared.Preferences
                 other.ShortExamine,
                 other.FullDescription,
                 other.MedicalRecord,
+                other.RankPreferences.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => new Dictionary<string, string?>(kvp.Value)),
                 other.CriminalRecord,
                 other.GeneralRecord,
                 other.Height,
@@ -611,6 +619,51 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile WithSquadPreference(EntProtoId<SquadTeamComponent>? squadPreference)
         {
             return new(this) { SquadPreference = squadPreference };
+        }
+
+        public HumanoidCharacterProfile WithRankPreferences(Dictionary<string, Dictionary<string, string?>> rankPreferences)
+        {
+            return new(this)
+            {
+                RankPreferences = rankPreferences.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => new Dictionary<string, string?>(kvp.Value))
+            };
+        }
+
+        public HumanoidCharacterProfile WithRankPreference(string jobId, string platoonId, string? rankId)
+        {
+            var dict = RankPreferences.ToDictionary(
+                kvp => kvp.Key,
+                kvp => new Dictionary<string, string?>(kvp.Value));
+
+            if (!dict.TryGetValue(jobId, out var platoonRanks))
+            {
+                platoonRanks = new Dictionary<string, string?>();
+                dict[jobId] = platoonRanks;
+            }
+
+            if (rankId == null)
+                platoonRanks.Remove(platoonId);
+            else
+                platoonRanks[platoonId] = rankId;
+
+            if (platoonRanks.Count == 0)
+                dict.Remove(jobId);
+
+            return new(this) { RankPreferences = dict };
+        }
+
+        /// <summary>
+        /// Convenience lookup for spawn-time resolution: what rank did the player pick
+        /// for this job, given they land in this specific platoon.
+        /// </summary>
+        public string? GetRankPreference(string jobId, string platoonId)
+        {
+            return RankPreferences.TryGetValue(jobId, out var platoonRanks) &&
+                platoonRanks.TryGetValue(platoonId, out var rankId)
+                ? rankId
+                : null;
         }
 
         public HumanoidCharacterProfile WithPlaytimePerks(bool playtimePerks)
@@ -1049,6 +1102,7 @@ namespace Content.Shared.Preferences
             if (HideMetaInformation != other.HideMetaInformation) return false;
             if (!_threatPreferences.SetEquals(other._threatPreferences)) return false;
             if (!GamemodeSetPreferencesEqual(_gamemodeThreatPreferences, other._gamemodeThreatPreferences)) return false;
+            if (!RankPreferencesEqual(RankPreferences, other.RankPreferences)) return false;
             return Appearance.MemberwiseEquals(other.Appearance);
         }
 
@@ -1593,6 +1647,30 @@ namespace Content.Shared.Preferences
         public HumanoidCharacterProfile Clone()
         {
             return new HumanoidCharacterProfile(this);
+        }
+
+        private static bool RankPreferencesEqual(
+            Dictionary<string, Dictionary<string, string?>> left,
+            Dictionary<string, Dictionary<string, string?>> right)
+        {
+            if (left.Count != right.Count)
+                return false;
+
+            foreach (var (jobId, leftPlatoons) in left)
+            {
+                if (!right.TryGetValue(jobId, out var rightPlatoons) ||
+                    leftPlatoons.Count != rightPlatoons.Count)
+                    return false;
+
+                foreach (var (platoonId, leftRank) in leftPlatoons)
+                {
+                    if (!rightPlatoons.TryGetValue(platoonId, out var rightRank) ||
+                        leftRank != rightRank)
+                        return false;
+                }
+            }
+
+            return true;
         }
     }
 }

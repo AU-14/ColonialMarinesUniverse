@@ -7,6 +7,7 @@ using Content.Shared.Popups;
 using Content.Shared.Verbs;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Systems;
+using Robust.Shared.Prototypes; // CMU14
 
 namespace Content.Shared._RMC14.Weapons.Ranged.Ammo.BulletBox;
 
@@ -14,6 +15,8 @@ public sealed partial class BulletBoxSystem : EntitySystem
 {
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private IComponentFactory _compFactory = default!; // CMU14
+    [Dependency] private IPrototypeManager _prototypes = default!; // CMU14
     [Dependency] private SharedGunSystem _gun = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
@@ -123,6 +126,9 @@ public sealed partial class BulletBoxSystem : EntitySystem
                 return;
 
             transfer = Math.Min(transfer, ent.Comp.Amount);
+            // CMU14: chamber the box's shell variant when filling an empty gun, so LTB AP/HE/etc shells fire as loaded
+            if (used.Comp2.Count == 0 && ent.Comp.AmmoProto is { } ammoProto)
+                _gun.SetBallisticProto((used, used.Comp2), ammoProto);
             _gun.SetBallisticUnspawned((used, used.Comp2), used.Comp2.UnspawnedCount + transfer);
             ent.Comp.Amount -= transfer;
         }
@@ -227,5 +233,30 @@ public sealed partial class BulletBoxSystem : EntitySystem
         Dirty(ent);
         UpdateAppearance(ent);
         return true;
+    }
+
+    // CMU14 Method
+    /// <summary>
+    ///     Finds the ammo box prototype that chambers <paramref name="ammoProto"/>, so unloading a
+    ///     vehicle chamber hands back the same shell variant that was loaded.
+    /// </summary>
+    public EntProtoId? GetBoxForAmmo(EntProtoId? ammoProto)
+    {
+        if (ammoProto is not { } proto)
+            return null;
+
+        foreach (var prototype in _prototypes.EnumeratePrototypes<EntityPrototype>())
+        {
+            if (prototype.Abstract)
+                continue;
+
+            if (!prototype.TryComp(out BulletBoxComponent? box, _compFactory))
+                continue;
+
+            if (box.AmmoProto == proto)
+                return prototype.ID;
+        }
+
+        return null;
     }
 }

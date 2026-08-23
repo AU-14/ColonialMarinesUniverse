@@ -102,3 +102,8 @@ anprc-sweep-unknown-net = UNIDENTIFIED NET
 # net log to paper
 anprc-log-print-empty = Nothing in the log worth writing down.
 anprc-log-printed = You transcribe { $count } log entries onto paper.
+
+anprc-log-frequency-unknown = FREQ UNK
+
+# languages that do not carry over the air
+anprc-language-no-radio = { $language } does not carry over a radio net.

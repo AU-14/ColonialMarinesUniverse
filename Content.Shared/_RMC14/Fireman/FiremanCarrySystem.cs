@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Sprite;
 using Content.Shared._RMC14.Xenonids;
+using Content.Shared._CMU14.Chemistry.Effects;
 using Content.Shared.ActionBlocker;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
@@ -193,7 +194,9 @@ public sealed partial class FiremanCarrySystem : EntitySystem
         if (!ValidateCarrierWhitelist(user, target, carriable))
             return false;
 
-        if (carriable.CarrierWhitelist == null && !_skills.HasSkill(user, carriable.Skill, 1))
+        if (carriable.CarrierWhitelist == null &&
+            !HasComp<ChemicalMuscleStimulationComponent>(user) &&
+            !_skills.HasSkill(user, carriable.Skill, 1))
         {
             _popup.PopupClient(Loc.GetString("rmc-fireman-carry-not-trained"), target, user, PopupType.MediumCaution);
             return false;

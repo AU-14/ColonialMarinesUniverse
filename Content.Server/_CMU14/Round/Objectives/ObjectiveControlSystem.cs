@@ -20,12 +20,12 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 {
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private SharedMapSystem _mapSystem = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IPlayerManager _playerManager = default!;
     [Dependency] private PlatoonSpawnRuleSystem _platoonSystem = default!;
+    [Dependency] private ObjectiveInterestSystem _interest = default!;
 
     private readonly List<(EntityUid Uid, CMUObjectiveComponent Comp)> _allObjectives = new();
     private EntityUid _objectiveMasterUid = EntityUid.Invalid;
@@ -34,6 +34,9 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
     /// <summary>True once a winning final objective has been activated.</summary>
     public bool IsWinActive { get; set; }
+
+    /// <summary>True once Main() has rolled this round's objectives.</summary>
+    public bool SelectionComplete => GetOrReselectObjMaster()?.SelectionComplete ?? false;
     public MapId? GetPlanetMapId() => _planetMapId;
 
     public override void Initialize()
@@ -52,10 +55,14 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         _planetMapId = MapId.Nullspace;
         _objectiveMasterUid = EntityUid.Invalid;
         _allObjectives.Clear();
+        _fetchObjectiveByItem = null;
     }
 
     private void OnObjectiveShutdown(EntityUid uid, CMUObjectiveComponent component, ref ComponentShutdown args)
-        => _allObjectives.RemoveAll(o => o.Uid == uid);
+    {
+        _allObjectives.RemoveAll(o => o.Uid == uid);
+        _interest.UnregisterInterest(uid);
+    }
 
     private void OnObjectiveStartup(EntityUid uid, CMUObjectiveComponent component, ref ComponentStartup args)
     {
@@ -220,6 +227,61 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         return (data.CurrentWinPoints, data.RequiredWinPoints);
     }
 
+    private Dictionary<string, string>? _fetchObjectiveByItem;
+
+    public bool TryGetFetchObjectiveForItem(string itemProto, out string objectiveProto)
+    {
+        if (_fetchObjectiveByItem == null)
+        {
+            _fetchObjectiveByItem = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var compFactory = EntityManager.ComponentFactory;
+            foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
+            {
+                if (!proto.TryComp<FetchObjectiveComponent>(out var fetch, compFactory)
+                        || string.IsNullOrEmpty(fetch.TargetPrototype)
+                        || !proto.TryComp<CMUObjectiveComponent>(out _, compFactory))
+                    continue;
+
+                _fetchObjectiveByItem.TryAdd(fetch.TargetPrototype, proto.ID);
+            }
+        }
+
+        if (_fetchObjectiveByItem.TryGetValue(itemProto, out var found))
+        {
+            objectiveProto = found;
+            return true;
+        }
+
+        objectiveProto = string.Empty;
+        return false;
+    }
+
+    public void LateSpawnFetchObjectiveForItem(EntityUid itemUid, string objectiveProto)
+    {
+        var itemProto = Comp<MetaDataComponent>(itemUid).EntityPrototype?.ID ?? string.Empty;
+
+        foreach (var (uid, comp) in _allObjectives)
+        {
+            if (!Exists(uid) || comp.Active || Transform(uid).MapID != _planetMapId)
+                continue;
+
+            if (!TryComp(uid, out FetchObjectiveComponent? fetch)
+                    || !string.Equals(fetch.TargetPrototype, itemProto, StringComparison.OrdinalIgnoreCase))
+                continue;
+
+            EnsureComp<FetchItemComponent>(itemUid).ObjectiveUid = uid;
+            ActivateObjective(uid, comp,
+                comp.FactionNeutral || comp.Factions.Count == 0 ? null : comp.Factions[0],
+                lateActivation: true);
+            _logs.Info($"[OBJ-LATE] Item '{itemProto}' activated existing objective '{comp.ObjectiveDescription}'.");
+            return;
+        }
+
+        var tracker = Spawn(objectiveProto, Transform(itemUid).Coordinates);
+        EnsureComp<FetchItemComponent>(itemUid).ObjectiveUid = tracker;
+        _logs.Info($"[OBJ-LATE] Item '{itemProto}' spawned its objective '{objectiveProto}' beside it ({ToPrettyString(tracker)}).");
+    }
+
     private void Main()
     {
         if (GetOrReselectObjMaster() is not { } master)
@@ -285,27 +347,9 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         master.SelectionComplete = true;
     }
 
-    private HashSet<MapId> GetZNetworkMapIds(MapId primaryMap)
-    {
-        var maps = new HashSet<MapId> { primaryMap };
-        var mapUid = _mapSystem.GetMap(primaryMap);
-
-        if (_zLevels.TryGetZNetwork(mapUid, out var network) &&
-            _zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
-        {
-            for (var depth = minDepth; depth <= maxDepth; depth++)
-            {
-                if (_zLevels.TryGetMapAtDepth(network.Value, depth, out var connectedMapUid))
-                    maps.Add(_transform.GetMapId(connectedMapUid));
-            }
-        }
-
-        return maps;
-    }
-
     private void SpawnMissingCatalogObjectives(EntityUid bestPlanetGrid, MapId primaryMapId, string presetId)
     {
-        var planetMaps = GetZNetworkMapIds(primaryMapId);
+        var planetMaps = _zLevels.GetAllNetworkMapIds(primaryMapId);
         var compFactory = EntityManager.ComponentFactory;
 
         foreach (var proto in _proto.EnumeratePrototypes<EntityPrototype>())
@@ -348,14 +392,20 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         if (!isFeasible())
             return;
 
-        Spawn(proto.ID, new EntityCoordinates(bestPlanetGrid, Vector2.Zero));
+        var coords = new EntityCoordinates(bestPlanetGrid, Vector2.Zero);
+        if (proto.TryComp<FetchObjectiveComponent>(out var fetchComp, compFactory)
+            && !string.IsNullOrEmpty(fetchComp.TargetPrototype)
+            && TryGetCatalogTarget(fetchComp.TargetPrototype, planetMaps, out var target))
+            coords = Transform(target).Coordinates;
+
+        Spawn(proto.ID, coords);
         _logs.Debug($"[OBJ-CATALOG] Spawned catalog objective '{proto.ID}' ('{objComp.Id}') for preset '{presetId}'.");
     }
 
     private bool IsFetchCatalogFeasible(FetchObjectiveComponent fetchComp, HashSet<MapId> planetMaps)
     {
         if (fetchComp.UseAnyEntity && !string.IsNullOrEmpty(fetchComp.TargetPrototype) &&
-            CatalogTargetExists(fetchComp.TargetPrototype, planetMaps))
+            TryGetCatalogTarget(fetchComp.TargetPrototype, planetMaps, out _))
         {
             return true;
         }
@@ -371,23 +421,30 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
         return CatalogMarkerExists(killComp.SpawnMarkerId, planetMaps);
     }
 
-    private bool CatalogTargetExists(string targetPrototype, HashSet<MapId> planetMaps)
+    private bool TryGetCatalogTarget(string targetPrototype, HashSet<MapId> planetMaps, out EntityUid target)
     {
         var query = EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var meta, out var xform))
+        while (query.MoveNext(out var uid, out var meta, out var xform))
         {
             if (planetMaps.Contains(xform.MapID) && meta.EntityPrototype?.ID == targetPrototype)
+            {
+                target = uid;
                 return true;
+            }
         }
 
+        target = EntityUid.Invalid;
         return false;
     }
 
     private bool CatalogMarkerExists(string? spawnMarkerId, HashSet<MapId> planetMaps)
     {
         var query = EntityQueryEnumerator<CMUObjectiveMarkerComponent, TransformComponent>();
-        while (query.MoveNext(out _, out var markerComp, out var xform))
+        while (query.MoveNext(out var markerUid, out var markerComp, out var xform))
         {
+            if (HasComp<CMUObjectiveComponent>(markerUid))
+                continue;
+
             if (!planetMaps.Contains(xform.MapID))
                 continue;
 

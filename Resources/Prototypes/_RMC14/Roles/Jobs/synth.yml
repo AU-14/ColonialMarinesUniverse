@@ -148,3 +148,6 @@
   - type: Wounded
   - type: RMCSuicide
     damage: { }
+  - type: Respirator # CMU14: stops crit/underwater gasp loop (synths don't breathe)
+    damage: { }
+    damageRecovery: { }

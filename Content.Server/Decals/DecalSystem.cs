@@ -712,8 +712,10 @@ namespace Content.Server.Decals
 
         #endregion
 
-        private readonly List<Vector2i> _emptyChunks = new();
-        private readonly List<uint> _toRemove = new();
+        private readonly List<Vector2i> _emptyChunks = new(); // CMU14
+        private readonly List<uint> _toRemove = new(); // CMU14
+
+        // CMU14 method
         public (int Removed, int Skipped) RemoveDecals(EntityUid gridId, IReadOnlySet<string>? ids = null, bool cleanableOnly = true, DecalGridComponent? comp = null)
         {
             if (!Resolve(gridId, ref comp)) return (0, 0);

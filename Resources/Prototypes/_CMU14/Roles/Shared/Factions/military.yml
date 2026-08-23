@@ -1,0 +1,90 @@
+- type: npcFaction
+  id: GOVFOR
+  name: Government Forces
+  hostile:
+  - RMCXeno
+  - OPFOR
+  #- CLF
+  - AUGoo
+  - CMUAPE
+
+- type: npcFaction
+  id: OPFOR
+  name: Opposing Forces
+  hostile:
+  - RMCXeno
+  - GOVFOR
+  - CLF
+  - AUGoo
+  - CMUAPE
+
+- type: npcFaction
+  id: UNMC # legacy
+  hostile:
+  - RMCXeno
+  - CLF
+  - AUColonist
+  - Civilian
+  - CMUAPE
+
+- type: npcFaction
+  id: CMUUSCMC
+  name: United States Colonial Marines Corps
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+  - Abomination
+
+- type: npcFaction
+  id: USAF
+  name: United States Armed Forces
+  hostile:
+  - RMCXeno
+  - CLF
+  - AUGoo
+  - Abomination
+
+- type: npcFaction
+  id: CMUTWE
+  name: Third World Empire
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+  - Abomination
+
+- type: npcFaction
+  id: CMUProdigy
+  name: Prodigy Corporation
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+  - Abomination
+
+- type: npcFaction
+  id: CMUVAI
+  name: Vanguard's Arrow Incorporated
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+
+- type: npcFaction
+  id: AUUnitedAmericas
+  name: United Americas
+  hostile:
+  - RMCXeno
+  - CLF
+  - AUGoo
+  - Abomination
+
+- type: npcFaction
+  id: AUUpp
+  name: Union of Progressive Peoples
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+  - Abomination

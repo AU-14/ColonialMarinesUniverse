@@ -1,4 +1,17 @@
 # Command
+
+- type: rank
+  id: CMU14RankWeYuRegionalPMCDirector
+  name: Regional PMC Director
+  prefix: Reg. Dir.
+  paygrade: PMC-C13
+
+- type: rank
+  id: CMU14RankWeYuBranchManager
+  name: PMC Branch Manager
+  prefix: Br.Man.
+  paygrade: PMC-C12
+
 - type: rank
   id: AU14RankWeYuSiteDirector
   name: PMC Site Director

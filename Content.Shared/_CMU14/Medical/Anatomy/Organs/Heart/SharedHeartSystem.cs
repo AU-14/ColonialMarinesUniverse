@@ -14,6 +14,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Chemistry.Effects;
 
 namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 
@@ -250,6 +251,17 @@ public abstract partial class SharedHeartSystem : EntitySystem
 
     private void StopHeart(Entity<HeartComponent> ent, EntityUid body)
     {
+        if (HasComp<ChemicalCardiacPacingComponent>(body))
+        {
+            ent.Comp.Stopped = false;
+            ent.Comp.BeatsPerMinute = Math.Max(60, ent.Comp.BeatsPerMinute);
+            ent.Comp.BelowThresholdSince = null;
+            ent.Comp.NoPulseSince = null;
+            Dirty(ent);
+            Status.TryRemoveStatusEffect(body, CardiacArrest);
+            return;
+        }
+
         ent.Comp.Stopped = true;
         ent.Comp.BeatsPerMinute = 0;
         ent.Comp.NoPulseSince ??= Timing.CurTime;

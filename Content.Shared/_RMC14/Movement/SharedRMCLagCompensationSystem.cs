@@ -28,7 +28,7 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
     private float _substepTime;
     private bool _logPrediction = false;
 
-    private readonly Dictionary<NetUserId, GameTick> _lastRealTicks = new();
+    private readonly Dictionary<NetUserId, (GameTick Tick, int Substep)> _lastRealTicks = new(); // CMU14: substep stored with the tick
 
     public override void Initialize()
     {
@@ -46,7 +46,7 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
 
     private void OnSetLastRealTick(RMCSetLastRealTickEvent msg, EntitySessionEventArgs args)
     {
-        SetLastRealTick(args.SenderSession.UserId, msg.Tick - 1);
+        SetLastRealTick(args.SenderSession.UserId, msg.Tick - 1, msg.Substep); // CMU14
     }
 
     private void UpdateSubsteps(int _)
@@ -118,15 +118,27 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
 
     public virtual GameTick GetLastRealTick(NetUserId? session)
     {
-        return session == null ? _timing.CurTick : _lastRealTicks.GetValueOrDefault(session.Value, _timing.CurTick);
+        if (session == null || !_lastRealTicks.TryGetValue(session.Value, out var last)) // CMU14
+            return _timing.CurTick;
+
+        return last.Tick;
     }
 
-    public void SetLastRealTick(NetUserId session, GameTick tick)
+    // CMU14 method: physics substep the client was on when it reported its last real tick
+    public int GetLastRealSubstep(NetUserId? session)
+    {
+        if (session == null || !_lastRealTicks.TryGetValue(session.Value, out var last)) // CMU14
+            return 0;
+
+        return last.Substep;
+    }
+
+    public void SetLastRealTick(NetUserId session, GameTick tick, int substep = 0) // CMU14
     {
         if (_net.IsClient)
             return;
 
-        _lastRealTicks[session] = tick;
+        _lastRealTicks[session] = (tick, substep); // CMU14
     }
 
     public void SendLastRealTick()
@@ -134,7 +146,7 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
         if (_net.IsServer)
             return;
 
-        RaiseNetworkEvent(new RMCSetLastRealTickEvent(GetLastRealTick(null)));
+        RaiseNetworkEvent(new RMCSetLastRealTickEvent(GetLastRealTick(null), GetClientSubstep())); // CMU14
     }
 
     public bool Collides(Entity<FixturesComponent?> target, Entity<PhysicsComponent?> projectile, ICommonSession? perspectiveSession, int substep = 0)
@@ -214,6 +226,16 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
         return false;
     }
 
+    // CMU14 method: single validation point for predicted-hit messages so every leaper
+    // and shooter rewinds the session identically before testing collision
+    public bool ValidatePredictedHit(Entity<FixturesComponent?> target, Entity<PhysicsComponent?> projectile, ICommonSession? session, GameTick lastRealTick, int substep)
+    {
+        if (session != null)
+            SetLastRealTick(session.UserId, lastRealTick, substep);
+
+        return Collides(target, projectile, session, substep);
+    }
+
     public int? GetCurrentSubstep()
     {
         if (_physics.EffectiveCurTime is not { } physicsTime)
@@ -227,6 +249,9 @@ public abstract partial class SharedRMCLagCompensationSystem : EntitySystem
     {
         return _substeps;
     }
+
+    // CMU14: duration of a single physics substep, for fractional tick rewinds
+    public TimeSpan SubstepPeriod => TimeSpan.FromSeconds(_substepTime);
 
     public int GetClientSubstep()
     {

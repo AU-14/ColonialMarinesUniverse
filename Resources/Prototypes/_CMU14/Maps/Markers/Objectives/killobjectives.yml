@@ -238,6 +238,7 @@
     objectiveDescription: "Eliminate the threat's leader."
     roundEndMessage: "By Killing the threat leader."
   - type: KillObjective
+    factionToKill: THREAT
     killCount: 1
     specificJob: AU14JobThreatLeader
 
@@ -261,6 +262,7 @@
     objectiveDescription: "Eliminate the threat."
     roundEndMessage: "By killing the threat."
   - type: KillObjective
+    factionToKill: THREAT
     killCount: 1
     specificJob: AU14JobThreatMember
 
@@ -283,5 +285,5 @@
     customPoints: 5
     objectiveDescription: "Kill the Carp"
   - type: KillObjective
-    targetPrototype: CMUMobCarp
-    factionToKill: SimpleNeutral
+    targetPrototype: CMUMobSmallHostCarp
+    factionToKill: Passive

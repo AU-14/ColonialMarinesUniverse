@@ -12,8 +12,10 @@ namespace Content.Client.Interactable.Components
 
         [Dependency] private IPrototypeManager _prototypeManager = default!;
         [Dependency] private IEntityManager _entMan = default!;
+        private SpriteSystem Sprite => _entMan.System<SpriteSystem>(); // CMU14: systems live in the ESM collection, not root IoC
 
         private const float DefaultWidth = 1;
+        private const string ShaderId = "InteractionOutline"; // CMU14: keyed id required by the v288 multi post-shader API
 
         private bool _inRange;
         private ShaderInstance? _inRangeShader;
@@ -24,9 +26,10 @@ namespace Content.Client.Interactable.Components
         {
             _lastRenderScale = renderScale;
             _inRange = inInteractionRange;
-            if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite) && sprite.PostShader == null)
+            if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite))
             {
-                sprite.PostShader = GetShader(inInteractionRange, renderScale);
+                // CMU14: keyed set coexists with other post-shaders; the PostShader == null guard only fed the single-slot API
+                Sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, GetShader(inInteractionRange, renderScale)));
             }
         }
 
@@ -34,8 +37,10 @@ namespace Content.Client.Interactable.Components
         {
             if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite))
             {
-                if (IsOutlineShader(sprite.PostShader))
-                    sprite.PostShader = null;
+                // CMU14: keyed removal only drops our own entry
+                // if (IsOutlineShader(sprite.PostShader))
+                //     sprite.PostShader = null;
+                Sprite.RemovePostShader(sprite, ShaderId);
                 sprite.RenderOrder = 0;
             }
         }
@@ -43,13 +48,13 @@ namespace Content.Client.Interactable.Components
         public void UpdateInRange(EntityUid uid, bool inInteractionRange, int renderScale)
         {
             if (_entMan.TryGetComponent(uid, out SpriteComponent? sprite)
-                && IsOutlineShader(sprite.PostShader)
+                && Sprite.HasPostShader(sprite, ShaderId) // CMU14: keyed lookup replaces IsOutlineShader
                 && (inInteractionRange != _inRange || _lastRenderScale != renderScale))
             {
                 _inRange = inInteractionRange;
                 _lastRenderScale = renderScale;
 
-                sprite.PostShader = GetShader(_inRange, _lastRenderScale);
+                Sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, GetShader(_inRange, _lastRenderScale))); // CMU14
             }
         }
 
@@ -62,12 +67,13 @@ namespace Content.Client.Interactable.Components
             _outOfRangeShader = null;
         }
 
-        private bool IsOutlineShader(ShaderInstance? shader)
-        {
-            return shader != null &&
-                   (ReferenceEquals(shader, _inRangeShader) ||
-                    ReferenceEquals(shader, _outOfRangeShader));
-        }
+        // CMU14: obsolete with keyed post-shader ids
+        // private bool IsOutlineShader(ShaderInstance? shader)
+        // {
+        //     return shader != null &&
+        //            (ReferenceEquals(shader, _inRangeShader) ||
+        //             ReferenceEquals(shader, _outOfRangeShader));
+        // }
 
         private ShaderInstance GetShader(bool inRange, int renderScale)
         {

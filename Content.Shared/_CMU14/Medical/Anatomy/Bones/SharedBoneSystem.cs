@@ -21,6 +21,7 @@ using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Chemistry.Effects;
 
 namespace Content.Shared._CMU14.Medical.Anatomy.Bones;
 
@@ -32,6 +33,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
     [Dependency] protected SharedFractureSystem Fracture = default!;
     [Dependency] protected SharedStatusEffectsSystem Status = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
+    [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
 
     private const string BoneRegenBoostStatus = "StatusEffectCMUBoneRegenBoost";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -119,6 +121,11 @@ public abstract partial class SharedBoneSystem : EntitySystem
                 ? brute * _projectileBruteMultiplier
                 : brute;
             var absorbed = effectiveBrute * (FixedPoint2)ent.Comp.BruteAbsorbFraction;
+            if (HasComp<ChemicalHyperdensityComponent>(args.Body) &&
+                TryComp<ChemicalHyperdensityComponent>(args.Body, out var density))
+            {
+                absorbed *= (FixedPoint2)Math.Clamp(1f - density.Protection, 0f, 1f);
+            }
             ent.Comp.Integrity = FixedPoint2.Max(FixedPoint2.Zero, ent.Comp.Integrity - absorbed);
         }
 
@@ -299,5 +306,87 @@ public abstract partial class SharedBoneSystem : EntitySystem
             return;
         part.Comp.Integrity = FixedPoint2.Min(part.Comp.IntegrityMax, newIntegrity);
         Dirty(part.Owner, part.Comp);
+    }
+
+    public int ChemicallyMendFractures(EntityUid body, FixedPoint2 amount)
+    {
+        if (amount <= FixedPoint2.Zero)
+            return 0;
+
+        var treated = 0;
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (!TryComp<BoneComponent>(part, out var bone) ||
+                !TryComp<FractureComponent>(part, out var fracture) ||
+                fracture.Severity is FractureSeverity.None or FractureSeverity.Shattered ||
+                !HasComp<CMUSplintedComponent>(part) && !HasComp<CMUCastComponent>(part))
+            {
+                continue;
+            }
+
+            RestoreIntegrity((part, bone), bone.Integrity + amount);
+            treated++;
+            var healedSeverity = SeverityFromIntegrity(bone);
+            if (healedSeverity < fracture.Severity)
+                Fracture.SetSeverity((part, fracture), healedSeverity, forceUpgrade: false);
+        }
+
+        return treated;
+    }
+
+    public bool ApplyChemicalMalunion(EntityUid body)
+    {
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (!TryComp<FractureComponent>(part, out var fracture) || fracture.Severity == FractureSeverity.None)
+                continue;
+            EnsureComp<CMUMalunionComponent>(part);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool WorsenChemicalFracture(EntityUid body)
+    {
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (!TryComp<FractureComponent>(part, out var fracture) ||
+                fracture.Severity is FractureSeverity.None or FractureSeverity.Shattered)
+                continue;
+            var next = (FractureSeverity)((byte)fracture.Severity + 1);
+            Fracture.SetSeverity((part, fracture), next);
+            return true;
+        }
+
+        return false;
+    }
+
+    public bool DamageWeakestBone(EntityUid body, FixedPoint2 amount, bool fracture)
+    {
+        EntityUid? selected = null;
+        BoneComponent? selectedBone = null;
+        foreach (var (part, _) in _medicalIndex.GetBodyParts(body))
+        {
+            if (!TryComp<BoneComponent>(part, out var bone))
+                continue;
+            if (selectedBone != null && bone.Integrity >= selectedBone.Integrity)
+                continue;
+            selected = part;
+            selectedBone = bone;
+        }
+
+        if (selected is not { } selectedPart || selectedBone == null)
+            return false;
+
+        selectedBone.Integrity = FixedPoint2.Max(FixedPoint2.Zero, selectedBone.Integrity - amount);
+        Dirty(selectedPart, selectedBone);
+        if (fracture)
+        {
+            var severity = SeverityFromIntegrity(selectedBone);
+            var fractureComp = EnsureComp<FractureComponent>(selectedPart);
+            Fracture.SetSeverity((selectedPart, fractureComp), severity);
+        }
+        return true;
     }
 }

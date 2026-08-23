@@ -37,6 +37,22 @@ public sealed partial class ObjDestroySystem : ObjectiveSystem
                 RemComp<DestroyMarkedForComponent>(ent);
         });
 
+        var searchMaps = _zLevels.GetAllNetworkMapIds(Transform(uid).MapID);
+        var markerQuery = AllEntityQuery<CMUObjectiveMarkerComponent, TransformComponent>();
+        while (markerQuery.MoveNext(out _, out var markerComp, out var markerXform))
+        {
+            if (!searchMaps.Contains(markerXform.MapID))
+                continue;
+
+            if (!string.IsNullOrEmpty(comp.SpawnMarkerId))
+            {
+                if (markerComp.FetchId == comp.SpawnMarkerId)
+                    markerComp.Used = false;
+            }
+            else if (markerComp.Generic)
+                markerComp.Used = false;
+        }
+
         comp.AmountDestroyedPerFaction.Clear();
         comp.HasSpawned = false;
     }
@@ -44,16 +60,17 @@ public sealed partial class ObjDestroySystem : ObjectiveSystem
     private void ActivateDestroyObjective(EntityUid uid, CMUObjectiveComponent comp)
     {
         var destroyComp = Comp<DestroyObjectiveComponent>(uid);
-        if (destroyComp.HasSpawned)
-            return;
-
         var objMap = Transform(uid).MapID;
-        var markers = ResolveMarkers(objMap, destroyComp.SpawnMarkerId);
-        var spawned = SpawnEntitiesAtMarkers(destroyComp.TargetPrototype, destroyComp.SpawnCount, markers);
-        destroyComp.HasSpawned = true;
 
-        foreach (var ent in spawned)
-            EnsureComp<ObjSpawnedByComponent>(ent).ObjectiveUid = uid;
+        if (!destroyComp.HasSpawned)
+        {
+            var markers = ResolveMarkers(objMap, destroyComp.SpawnMarkerId);
+            var spawned = SpawnEntitiesAtMarkers(destroyComp.TargetPrototype, destroyComp.SpawnCount, markers);
+            destroyComp.HasSpawned = true;
+
+            foreach (var ent in spawned)
+                EnsureComp<ObjSpawnedByComponent>(ent).ObjectiveUid = uid;
+        }
 
         ObjInt.RegisterInterest(uid, objMap,
             keys: string.IsNullOrEmpty(destroyComp.TargetPrototype) ? null : new[] { destroyComp.TargetPrototype },
@@ -64,10 +81,11 @@ public sealed partial class ObjDestroySystem : ObjectiveSystem
 
     private void MarkExistingEntities(EntityUid uid, DestroyObjectiveComponent comp, CMUObjectiveComponent auComp, MapId objMap)
     {
+        var searchMaps = _zLevels.GetAllNetworkMapIds(objMap);
         var query = AllEntityQuery<MetaDataComponent, TransformComponent>();
         while (query.MoveNext(out var ent, out var meta, out var xform))
         {
-            if (ent == uid || xform.MapID != objMap)
+            if (ent == uid || !searchMaps.Contains(xform.MapID))
                 continue;
 
             var proto = meta.EntityPrototype?.ID ?? string.Empty;

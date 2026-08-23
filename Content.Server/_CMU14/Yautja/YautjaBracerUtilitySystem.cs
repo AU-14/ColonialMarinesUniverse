@@ -855,7 +855,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
             return false;
 
         var ev = new BodyPartSeveredEvent(body, part, type);
-        RaiseLocalEvent(part, ref ev);
+        RaiseLocalEvent(part, ref ev, broadcast: true);
         return true;
     }
 
@@ -1438,7 +1438,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
                 break;
             case 8:
                 if (TryComp(bracer.Owner, out YautjaGearContainerComponent? removableGearContainer))
-                    EntityManager.System<YautjaAttachmentSystem>().TryRemoveBracerAttachments((bracer.Owner, removableGearContainer), user);
+                    EntityManager.System<YautjaAttachmentSystem>().TryRemoveBracerAttachments((bracer.Owner, removableGearContainer), user, force: true);
                 break;
             default:
                 TrySeverBothArms(user, "cmu-yautja-tech-random-delimbs", bracer.Comp.TechDelimbSound);

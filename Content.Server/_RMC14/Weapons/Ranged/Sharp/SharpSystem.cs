@@ -185,6 +185,15 @@ public sealed partial class SharpSystem : EntitySystem
         if (args.Handled || ent.Comp.Disarmed)
             return;
 
+        // CMU14: every shrapnel hit would previously triggers a fresh detonation
+        ent.Comp.Disarmed = true;
+        ent.Comp.Armed = false;
+        if (_landmineQuery.TryComp(ent, out var landmine))
+        {
+            landmine.Armed = false;
+            Dirty(ent, landmine);
+        }
+
         var effect = GetMineEffect(ent.Comp);
         if (effect != null)
             SpawnAndTrigger(effect.Value, Transform(ent).Coordinates, args.User);

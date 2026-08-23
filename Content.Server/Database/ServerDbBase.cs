@@ -347,6 +347,7 @@ namespace Content.Server.Database
                 profile.ShortExamine,
                 profile.FullDescription,
                 profile.MedicalRecord,
+                ConvertRankPreferences(profile.RankPreferences),
                 profile.CriminalRecord,
                 profile.GeneralRecord,
                 profile.Height,
@@ -800,6 +801,13 @@ namespace Content.Server.Database
             profile.GamemodeAntagPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeAntagPreferences);
             profile.GamemodeThreatPreferences = SerializeGamemodeSetPreferences(humanoid.GamemodeThreatPreferences);
             profile.YautjaProfile = SerializeYautjaProfile(humanoid.YautjaProfile);
+            profile.RankPreferences = humanoid.RankPreferences.Count == 0
+                ? null
+                : JsonSerializer.Serialize(
+                    humanoid.RankPreferences.ToDictionary(
+                         kvp => kvp.Key,
+                         kvp => kvp.Value.Where(p => p.Value != null)
+                                         .ToDictionary(p => p.Key, p => p.Value)));
 
             return profile;
         }
@@ -3492,6 +3500,33 @@ INSERT INTO player_round (players_id, rounds_id) VALUES ({players[player]}, {id}
         public virtual void Shutdown()
         {
 
+        }
+
+        private static Dictionary<string, Dictionary<string, string?>> ConvertRankPreferences(string? raw)
+        {
+            var result = new Dictionary<string, Dictionary<string, string?>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return result;
+
+            try
+            {
+                var parsed = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string?>>>(raw);
+                if (parsed != null)
+                {
+                    foreach (var (jobId, platoonRanks) in parsed)
+                    {
+                        if (string.IsNullOrWhiteSpace(jobId) || platoonRanks == null)
+                            continue;
+                        result[jobId] = platoonRanks;
+                    }
+                }
+            }
+            catch (JsonException)
+            {
+                // Malformed data; return empty, player just loses their rank prefs.
+            }
+
+            return result;
         }
     }
 }

@@ -18,6 +18,7 @@ using Robust.Shared.Configuration;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Network;
 using Robust.Shared.Timing;
+using Content.Shared._CMU14.Chemistry.Effects;
 
 namespace Content.Shared._CMU14.Medical.Injuries.Pain.Penalties;
 
@@ -211,6 +212,9 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
             };
         }
 
+        if (TryComp<ChemicalNerveStimulationComponent>(body, out var nerve))
+            mult *= MathF.Max(0.7f, 1f - nerve.Strength * 0.1f);
+
         return MathF.Min(mult, 2.5f);
     }
 
@@ -226,6 +230,9 @@ public abstract partial class SharedCMUMedicalSpeedSystem : EntitySystem
 
         if (TryComp<PainShockComponent>(body, out var pain))
             mult *= CMUPainTierPenaltyMultipliers.GetActionSpeedMultiplier(Pain.GetEffectiveTier(body, pain));
+
+        if (TryComp<ChemicalNerveStimulationComponent>(body, out var nerve))
+            mult *= MathF.Max(0.7f, 1f - nerve.Strength * 0.1f);
 
         return MathF.Min(mult, 3.0f);
     }

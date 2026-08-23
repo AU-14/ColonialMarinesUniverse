@@ -5,6 +5,7 @@ using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Shared._AU14.Chemistry.Reagents;
 using Content.Shared._AU14.Chemistry.Research;
+using Content.Shared._CMU14.Chemistry.Reagent;
 using Content.Shared._RMC14.Requisitions;
 using Content.Shared._RMC14.Requisitions.Components;
 using Content.Shared.CCVar;
@@ -19,6 +20,7 @@ using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace Content.Server._AU14.Chemistry.Research;
@@ -258,6 +260,15 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
         _generator.ProceduralReagentData.Add(chem.ID, chem);
     }
 
+    /// <summary>
+    /// Registers an exact admin-authored chemical and prints a materializable contract for it.
+    /// </summary>
+    public EntityUid? IssueAdminContract(EntityUid source, GeneratedReagentData chem)
+    {
+        LegalizeChem(chem);
+        return PrintContract(source, chem.ID, true);
+    }
+
     public void CompleteChemical(ReagentPrototype proto, string faction, EntityUid? scanner)
     {
         _generator.IdentifiedChemicals.Add(proto.ID, proto.Reward);
@@ -413,6 +424,11 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
 
     private void PrintContract(Entity<ResearchDataTerminalComponent> ent, string id)
     {
+        PrintContract(ent.Owner, id, false);
+    }
+
+    private EntityUid? PrintContract(EntityUid source, string id, bool materializable)
+    {
         var dat = _generator.ProceduralReagentData[id];
         var reagents = _protoman.GetInstances<ReagentPrototype>();
         string name = Loc.GetString("research-data-contract-name", ("NAME", dat.Name));
@@ -453,12 +469,34 @@ public sealed partial class ServerResearchDataTerminalSystem : SharedResearchDat
                 text += str;
             }
         }
+        if (materializable)
+        {
+            text += Loc.GetString("admin-chemical-contract-properties-header") + '\n';
+            var properties = _protoman.GetInstances<ReagentPropertyPrototype>();
+            foreach (var property in dat.Effects.OrderBy(effect => properties[effect.Key].LocalizedName))
+            {
+                text += Loc.GetString(
+                    "admin-chemical-contract-property-entry",
+                    ("name", properties[property.Key].LocalizedName),
+                    ("level", property.Value)) + '\n';
+            }
+        }
+
         text += Loc.GetString("cmu-paper-contract-footer") + '\n';
-        var paper = SpawnNextToOrDrop("CMUResearchContract", ent.Owner);
+        var paperPrototype = materializable ? "CMUAdminChemicalContract" : "CMUResearchContract";
+        var paper = SpawnNextToOrDrop(paperPrototype, source);
         _mets.SetEntityName(paper, name);
         _paper.SetContent(paper, text);
+        if (materializable && TryComp<ResearchReportComponent>(paper, out var report))
+        {
+            report.Data = dat;
+            report.Valid = true;
+            report.Completed = true;
+            DirtyEntity(paper);
+        }
         LastPickName = dat.Name;
         LastPick = text;
+        return paper;
     }
     private void PrintData(Entity<ResearchDataTerminalComponent> ent, int idx)
     {

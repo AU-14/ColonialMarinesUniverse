@@ -1188,6 +1188,10 @@ namespace Content.Server.Database.Migrations.Sqlite
                         .HasColumnType("INTEGER")
                         .HasColumnName("pref_unavailable");
 
+                    b.Property<string>("RankPreferences")
+                        .HasColumnType("TEXT")
+                        .HasColumnName("rank_preferences");
+
                     b.Property<string>("RegulationFacialHairColor")
                         .HasColumnType("TEXT")
                         .HasColumnName("regulation_facial_hair_color");

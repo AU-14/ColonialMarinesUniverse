@@ -80,6 +80,8 @@ public sealed partial class CMUZLevelsSystem
         return true;
     }
 
+    // A map may belong to at most 1 z-network: this is what IsSameZNetwork's membership check and
+    // GetAllNetworkMaps' no-dup guarantee rely on. Overlapping networks would silently change both.
     private bool CanAddMapsIntoZNetwork(Entity<CMUZLevelsNetworkComponent> network, Dictionary<EntityUid, int> maps)
     {
         var seenMaps = new HashSet<EntityUid>();

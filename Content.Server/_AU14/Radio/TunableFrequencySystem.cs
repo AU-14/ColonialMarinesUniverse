@@ -1,11 +1,14 @@
 using System.Numerics;
 using Content.Server.Administration.Logs;
 using Content.Server.Chat.Managers;
+using Content.Server._RMC14.Language.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._AU14.CCVar;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Language.Prototypes;
+using Content.Shared._RMC14.Language.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
@@ -36,6 +39,8 @@ public sealed partial class TunableFrequencySystem : EntitySystem
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
     [Dependency] private ANPRCSweepSystem _sweep = default!;
+    [Dependency] private IPrototypeManager _prototype = default!;
+    [Dependency] private LanguageSystem _language = default!;
 
     // direct frequencies reach one z-level up or down, same as a worn manpack
     private const int DirectFreqLevelReach = 1;
@@ -121,16 +126,33 @@ public sealed partial class TunableFrequencySystem : EntitySystem
             return;
         }
 
-        BroadcastOnFrequency(ent.Owner, ent.Comp.Frequency, args.Message);
+        // sign language and the like do not go over the air on a net either
+        if (_prototype.TryIndex(args.Language, out LanguagePrototype? spoken) && !spoken.CanUseRadio)
+        {
+            _cmChat.ChatMessageToOne(
+                Loc.GetString("tunable-radio-language-no-radio", ("language", spoken.Name)),
+                ent.Owner);
+
+            return;
+        }
+
+        BroadcastOnFrequency(ent.Owner, ent.Comp.Frequency, args.Message, language: args.Language);
     }
 
-    public void BroadcastOnFrequency(EntityUid sender, int frequency, string message, string? senderName = null)
+    public void BroadcastOnFrequency(
+        EntityUid sender,
+        int frequency,
+        string message,
+        string? senderName = null,
+        ProtoId<LanguagePrototype>? language = null)
     {
         if (!_commsEnabled)
             return;
 
         if (frequency <= 0 || string.IsNullOrWhiteSpace(message))
             return;
+
+        var spokenLanguage = language ?? SharedLanguageSystem.CommonLanguage;
 
         var senderPos = _transform.GetWorldPosition(sender);
         var senderMap = Transform(sender).MapID;
@@ -167,7 +189,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
                 continue;
             }
 
-            DeliverGarbled(sender, receiver, receiver, message, frequency, senderJam, intensity, senderName);
+            DeliverGarbled(sender, receiver, receiver, message, frequency, senderJam, intensity, senderName, spokenLanguage);
         }
 
         var anprcQuery = EntityQueryEnumerator<ANPRCRadioComponent, TransformComponent>();
@@ -242,6 +264,9 @@ public sealed partial class TunableFrequencySystem : EntitySystem
             var jam = MaxIntensity(senderJam, _garble.GetJamIntensity(anprc));
             var totalIntensity = MaxIntensity(intensity, jam);
 
+            // the log gets what came over the air, language and all - the set is read
+            // by whoever opens its panel, so that pass happens there. the wearer's own
+            // speaker line below is the one that has a listener to render for
             var heard = totalIntensity != RadioJamIntensity.None
                 ? _garble.GarbleMessage(message, totalIntensity)
                 : message;
@@ -250,7 +275,8 @@ public sealed partial class TunableFrequencySystem : EntitySystem
                 sender,
                 senderName ?? Name(sender),
                 frequency,
-                heard);
+                heard,
+                spokenLanguage);
 
             RaiseLocalEvent(anprc, ref logEv);
 
@@ -262,17 +288,17 @@ public sealed partial class TunableFrequencySystem : EntitySystem
                 continue;
             }
 
-            SendToEntity(sender, wearer, heard, frequency, senderName);
+            SendToEntity(sender, wearer, heard, frequency, senderName, spokenLanguage);
         }
 
-        SendToEntity(sender, sender, message, frequency, senderName);
+        SendToEntity(sender, sender, message, frequency, senderName, spokenLanguage, alreadyObfuscated: true);
 
         _adminLogger.Add(
             LogType.Chat,
             LogImpact.Low,
             $"Tunable frequency message from {ToPrettyString(sender):user} on {FormatFreq(frequency)} MHz: {message}");
 
-        var chat = BuildChatMessage(sender, message, frequency, senderName);
+        var chat = BuildChatMessage(sender, message, frequency, senderName, spokenLanguage);
         _replay.RecordServerMessage(chat);
 
         foreach (var session in Filter.Empty().AddWhereAttachedEntity(HasComp<GhostHearingComponent>).Recipients)
@@ -337,16 +363,24 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         int frequency,
         RadioJamIntensity senderJam,
         RadioJamIntensity rangeIntensity,
-        string? senderName = null)
+        string? senderName = null,
+        ProtoId<LanguagePrototype>? language = null)
     {
         var jam = MaxIntensity(senderJam, _garble.GetJamIntensity(jamProbe));
         var intensity = MaxIntensity(rangeIntensity, jam);
 
-        var finalMessage = intensity != RadioJamIntensity.None
-            ? _garble.GarbleMessage(message, intensity)
-            : message;
+        var spokenLanguage = language ?? SharedLanguageSystem.CommonLanguage;
 
-        SendToEntity(sender, recipient, finalMessage, frequency, senderName);
+        // a net carries sound, not meaning: the language pass runs before the radio
+        // gets to chew on it, so a listener without the language hears mangled syllables
+        // mangled further rather than clean words behind a little static
+        var understood = _language.ObfuscateMessageForListener(recipient, message, spokenLanguage, sender);
+
+        var finalMessage = intensity != RadioJamIntensity.None
+            ? _garble.GarbleMessage(understood, intensity)
+            : understood;
+
+        SendToEntity(sender, recipient, finalMessage, frequency, senderName, spokenLanguage, alreadyObfuscated: true);
     }
 
     private EntityUid? FindANPRCRelay(
@@ -389,16 +423,33 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         return null;
     }
 
-    private void SendToEntity(EntityUid sender, EntityUid receiver, string message, int frequency, string? senderName = null)
+    private void SendToEntity(
+        EntityUid sender,
+        EntityUid receiver,
+        string message,
+        int frequency,
+        string? senderName = null,
+        ProtoId<LanguagePrototype>? language = null,
+        bool alreadyObfuscated = false)
     {
         if (!TryComp(receiver, out ActorComponent? actor))
             return;
 
-        var chat = BuildChatMessage(sender, message, frequency, senderName);
+        var spokenLanguage = language ?? SharedLanguageSystem.CommonLanguage;
+
+        if (!alreadyObfuscated)
+            message = _language.ObfuscateMessageForListener(receiver, message, spokenLanguage, sender);
+
+        var chat = BuildChatMessage(sender, message, frequency, senderName, spokenLanguage);
         _netManager.ServerSendMessage(new MsgChatMessage { Message = chat }, actor.PlayerSession.Channel);
     }
 
-    private ChatMessage BuildChatMessage(EntityUid sender, string message, int frequency, string? senderNameOverride = null)
+    private ChatMessage BuildChatMessage(
+        EntityUid sender,
+        string message,
+        int frequency,
+        string? senderNameOverride = null,
+        ProtoId<LanguagePrototype>? language = null)
     {
         var frequencyText = FormatFreq(frequency);
         var senderName = FormattedMessage.EscapeText(senderNameOverride ?? Name(sender));
@@ -408,12 +459,19 @@ public sealed partial class TunableFrequencySystem : EntitySystem
                       $"[color=#C8D2E8]{senderName}[/color] " +
                       $"says, \"{messageText}\"";
 
+        // same marker the channel radio puts on a foreign-language line, so a direct
+        // frequency does not quietly read as plain speech
+        var languageIcon = language != null && _prototype.TryIndex(language.Value, out LanguagePrototype? proto)
+            ? proto.HideLanguageName ? null : proto.DisplayedLanguageIcon
+            : null;
+
         return new ChatMessage(
             ChatChannel.Radio,
             message,
             wrapped,
             GetNetEntity(sender),
             _chatManager.EnsurePlayer(CompOrNull<ActorComponent>(sender)?.PlayerSession.UserId)?.Key,
+            languageIcon: languageIcon,
             display: new ChatDisplayMetadata(
                 ChatDisplayKind.Radio,
                 senderName: senderName,
@@ -559,4 +617,5 @@ public readonly record struct ANPRCDirectTrafficReceivedEvent(
     EntityUid Sender,
     string SenderName,
     int Frequency,
-    string Message);
+    string Message,
+    ProtoId<LanguagePrototype> Language);

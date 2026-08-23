@@ -66,6 +66,7 @@
         layer:
         - SmallMobLayer
   - type: XenoAnimateMovement
+  - type: RMCMobCollision # CMU14: contact-only so leaps can touch standing mobs
   - type: XenoLeap
     knockdownTime: 1
   - type: AcidBloodSplash
@@ -116,6 +117,7 @@
   - type: HTN
     rootTask:
       task: RMCParasiteActiveCompound
+    planCooldown: 0.1 # CMU14: replan fast enough to act inside the trap's wake window
     blackboard:
       VisionRadius: !type:Single
         3.0

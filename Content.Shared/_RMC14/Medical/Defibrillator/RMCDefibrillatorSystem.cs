@@ -53,8 +53,19 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
             }
         }
 
-        if (!_rmcBloodstream.TryGetChemicalSolution(args.Target, out var solutionEnt, out _))
-            return;
+        var electrogeneticHeal = args.Heal;
+        TryApplyElectrogenetic(args.Target, ref electrogeneticHeal);
+        args.Heal = electrogeneticHeal;
+    }
+
+    /// <summary>
+    /// Triggers the strongest electrogenetic reagent in a bloodstream and consumes one unit.
+    /// Shared by physical defibrillators and the generated Defibrillating property.
+    /// </summary>
+    public bool TryApplyElectrogenetic(EntityUid target, ref DamageSpecifier heal)
+    {
+        if (!_rmcBloodstream.TryGetChemicalSolution(target, out var solutionEnt, out _))
+            return false;
 
         (Reagent Reagent, FixedPoint2 Heal, Electrogenetic Electrogenetic)? highest = null;
         foreach (var quantity in solutionEnt.Comp.Solution.Contents)
@@ -62,27 +73,28 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
             if (!_rmcReagent.TryIndex(quantity.Reagent.Prototype, out var reagent))
                 continue;
 
-            if (reagent.Metabolisms == null ||
-                !reagent.Metabolisms.TryGetValue(ent.Comp.MetabolismId, out var effects))
-            {
+            if (reagent.Metabolisms == null)
                 continue;
-            }
 
-            foreach (var effect in effects.Effects)
+            foreach (var effects in reagent.Metabolisms.Values)
             {
-                if (effect is not Electrogenetic electrogenetic)
-                    continue;
+                foreach (var effect in effects.Effects)
+                {
+                    if (effect is not Electrogenetic electrogenetic)
+                        continue;
 
-                if (highest == null || electrogenetic.HealAmount > highest.Value.Heal)
-                    highest = (reagent, electrogenetic.HealAmount, electrogenetic);
+                    if (highest == null || electrogenetic.HealAmount > highest.Value.Heal)
+                        highest = (reagent, electrogenetic.HealAmount, electrogenetic);
+                }
             }
         }
 
         if (highest == null)
-            return;
+            return false;
 
-        args.Heal += highest.Value.Electrogenetic.CalculateHeal(_damageable, args.Target, EntityManager);
+        heal += highest.Value.Electrogenetic.CalculateHeal(_damageable, target, EntityManager);
         _solutionContainer.RemoveReagent(solutionEnt, highest.Value.Reagent.ID, 1);
+        return true;
     }
 
     private void OnNoDefibExamine(Entity<RMCDefibrillatorBlockedComponent> ent, ref ExaminedEvent args)

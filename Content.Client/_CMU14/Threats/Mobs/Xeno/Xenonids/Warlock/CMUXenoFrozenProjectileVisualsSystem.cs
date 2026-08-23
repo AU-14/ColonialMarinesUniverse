@@ -11,7 +11,7 @@ namespace Content.Client._CMU14.Threats.Mobs.Xeno.Xenonids.Warlock;
 /// Draws a pulsing outline on any projectile currently frozen by the psychic shield so the
 /// player can spot the caught rounds at a glance. Mirrors the Ravager Empower outline pattern
 /// from <see cref="Content.Client._RMC14.Aura.AuraSystem"/> — same <c>outline.swsl</c> shader
-/// used via <see cref="SpriteComponent.PostShader"/>, params updated each frame in <c>Update</c>.
+/// applied via a keyed <see cref="SpriteSystem"/> post-shader, params updated each frame in <c>Update</c>.
 /// The only extension over Ravager is the two-endpoint colour lerp so the outline reads as
 /// "still holding" rather than a static tint.
 /// While frozen the projectile's sprite draw depth is raised above the shield sprite's
@@ -27,6 +27,8 @@ public sealed partial class CMUXenoFrozenProjectileVisualsSystem : EntitySystem
     // Reuse the existing RMCAuraOutline shader prototype so we behave exactly like Ravager's
     // outline path - only the colour endpoints and pulse rate are ours.
     private static readonly ProtoId<ShaderPrototype> OutlineShader = "RMCAuraOutline";
+
+    private const string ShaderId = "RMCAuraOutline";
 
     // Purple matches the shield tint (#4C1D95); white is peak visibility.
     private static readonly Color Purple = Color.FromHex("#4C1D95");
@@ -63,7 +65,7 @@ public sealed partial class CMUXenoFrozenProjectileVisualsSystem : EntitySystem
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
-        sprite.PostShader = _prototypes.Index(OutlineShader).InstanceUnique();
+        _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, _prototypes.Index(OutlineShader).InstanceUnique()));
 
         // Only capture the original depth once. If the same entity somehow re-enters this
         // path without a shutdown in between (should not happen, but guarded anyway) we
@@ -86,7 +88,7 @@ public sealed partial class CMUXenoFrozenProjectileVisualsSystem : EntitySystem
         if (!TryComp<SpriteComponent>(ent, out var sprite))
             return;
 
-        sprite.PostShader = null;
+        _sprite.RemovePostShader(sprite, ShaderId);
 
         if (hadOriginal)
             _sprite.SetDrawDepth((ent.Owner, sprite), originalDepth);
@@ -105,8 +107,11 @@ public sealed partial class CMUXenoFrozenProjectileVisualsSystem : EntitySystem
         var query = EntityQueryEnumerator<CMUXenoFrozenProjectileComponent, SpriteComponent>();
         while (query.MoveNext(out _, out _, out var sprite))
         {
-            sprite.PostShader?.SetParameter("outline_color", color);
-            sprite.PostShader?.SetParameter("outline_width", OutlineWidthPx);
+            if (_sprite.TryGetPostShader(sprite, ShaderId, out var entry))
+            {
+                entry.Shader.SetParameter("outline_color", color);
+                entry.Shader.SetParameter("outline_width", OutlineWidthPx);
+            }
         }
     }
 }

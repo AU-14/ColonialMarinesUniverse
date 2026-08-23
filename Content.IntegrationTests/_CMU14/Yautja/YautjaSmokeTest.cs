@@ -2148,6 +2148,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotsNineAndTenDelimbLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2261,6 +2262,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotTwoOpensTrackerLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2353,6 +2355,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotOneDeploysAttachmentsLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2462,6 +2465,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotThreeTogglesCloakLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2561,6 +2565,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotFourDeploysCasterLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2657,6 +2662,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotSevenOpensTranslatorLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2740,6 +2746,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotEightRemovesAttachmentsLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2870,6 +2877,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotFiveCreatesStabilisingCrystalLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
@@ -2952,6 +2960,7 @@ public sealed class YautjaSmokeTest
     }
 
     [Test]
+    [NonParallelizable]
     public async Task NonTechRandomBracerFunctionSlotSixCallsSmartDiscLikeCmss13()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings

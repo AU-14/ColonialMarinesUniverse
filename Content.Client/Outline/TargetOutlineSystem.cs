@@ -17,6 +17,7 @@ public sealed partial class TargetOutlineSystem : EntitySystem
 {
     private static readonly ProtoId<ShaderPrototype> ShaderTargetValid = "SelectionOutlineInrange";
     private static readonly ProtoId<ShaderPrototype> ShaderTargetInvalid = "SelectionOutline";
+    private const string ShaderId = "TargetOutline"; // CMU14: keyed id required by the v288 multi post-shader API
 
     [Dependency] private IEyeManager _eyeManager = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -27,6 +28,7 @@ public sealed partial class TargetOutlineSystem : EntitySystem
     [Dependency] private SharedInteractionSystem _interactionSystem = default!;
     [Dependency] private EntityWhitelistSystem _whitelistSystem = default!;
     [Dependency] private SharedTransformSystem _transformSystem = default!;
+    [Dependency] private SpriteSystem _sprite = default!; // CMU14
 
     private bool _enabled = false;
 
@@ -73,8 +75,8 @@ public sealed partial class TargetOutlineSystem : EntitySystem
 
     private Vector2 LookupVector => new(LookupSize, LookupSize);
 
-    private ShaderInstance? _shaderTargetValid;
-    private ShaderInstance? _shaderTargetInvalid;
+    private ShaderInstance _shaderTargetValid = default!; // CMU14: non-nullable, assigned in Initialize
+    private ShaderInstance _shaderTargetInvalid = default!; // CMU14
 
     private readonly HashSet<SpriteComponent> _highlightedSprites = new();
     private readonly HashSet<EntityUid> _targetCandidates = new();
@@ -156,10 +158,11 @@ public sealed partial class TargetOutlineSystem : EntitySystem
 
             if (!valid)
             {
-                // was this previously valid?
-                if (_highlightedSprites.Remove(sprite) && (sprite.PostShader == _shaderTargetValid || sprite.PostShader == _shaderTargetInvalid))
+                // CMU14: keyed removal only drops our own entry
+                // if (_highlightedSprites.Remove(sprite) && (sprite.PostShader == _shaderTargetValid || sprite.PostShader == _shaderTargetInvalid))
+                if (_highlightedSprites.Remove(sprite))
                 {
-                    sprite.PostShader = null;
+                    _sprite.RemovePostShader(sprite, ShaderId); // CMU14
                     sprite.RenderOrder = 0;
                 }
 
@@ -176,13 +179,14 @@ public sealed partial class TargetOutlineSystem : EntitySystem
                 valid = (origin - target).LengthSquared() <= Range;
             }
 
-            if (sprite.PostShader != null &&
-                sprite.PostShader != _shaderTargetValid &&
-                sprite.PostShader != _shaderTargetInvalid)
-                return;
+            // CMU14: obsolete PostShader property clears every keyed entry on the sprite, guard only fed the single-slot API
+            // if (sprite.PostShader != null &&
+            //     sprite.PostShader != _shaderTargetValid &&
+            //     sprite.PostShader != _shaderTargetInvalid)
+            //     return;
 
             // highlight depending on whether its in or out of range
-            sprite.PostShader = valid ? _shaderTargetValid : _shaderTargetInvalid;
+            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, valid ? _shaderTargetValid : _shaderTargetInvalid)); // CMU14
             sprite.RenderOrder = EntityManager.CurrentTick.Value;
             _highlightedSprites.Add(sprite);
         }
@@ -192,10 +196,11 @@ public sealed partial class TargetOutlineSystem : EntitySystem
     {
         foreach (var sprite in _highlightedSprites)
         {
-            if (sprite.PostShader != _shaderTargetValid && sprite.PostShader != _shaderTargetInvalid)
-                continue;
+            // CMU14: keyed removal, other entries (cloaks, holograms) are no longer clobbered
+            // if (sprite.PostShader != _shaderTargetValid && sprite.PostShader != _shaderTargetInvalid)
+            //     continue;
 
-            sprite.PostShader = null;
+            _sprite.RemovePostShader(sprite, ShaderId); // CMU14
             sprite.RenderOrder = 0;
         }
 

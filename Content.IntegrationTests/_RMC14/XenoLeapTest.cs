@@ -1,7 +1,9 @@
 using System.Numerics;
 using Content.Shared._RMC14.Xenonids.Leap;
+using Content.Shared._RMC14.Xenonids.Lunge; // CMU14
 using Content.Shared._RMC14.Xenonids.Plasma;
 using Content.Shared.DoAfter;
+using Content.Shared.Movement.Pulling.Components; // CMU14
 using Robust.Shared.GameObjects;
 
 namespace Content.IntegrationTests._RMC14;
@@ -96,6 +98,103 @@ public sealed class XenoLeapTest
                 entMan.DeleteEntity(xeno);
             }
         });
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14 method
+    [Test]
+    public async Task LeapKnocksDownStandingMarine()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid parasite = default;
+        EntityUid marine = default;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                parasite = entMan.SpawnEntity("CMXenoParasite", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+                marine = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+
+                var target = map.GridCoords.Offset(new Vector2(2.5f, 0.5f));
+                var leap = new XenoLeapDoAfterEvent(entMan.GetNetCoordinates(target));
+                leap.DoAfter = new DoAfter(
+                    0,
+                    new DoAfterArgs(entMan, parasite, TimeSpan.Zero, leap, parasite),
+                    TimeSpan.Zero);
+
+                entMan.EventBus.RaiseLocalEvent(parasite, leap);
+
+                Assert.That(entMan.HasComponent<XenoLeapingComponent>(parasite), Is.True);
+            });
+
+            await pair.RunSeconds(0.5f);
+
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(server.EntMan.HasComponent<LeapIncapacitatedComponent>(marine), Is.True);
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                if (server.EntMan.EntityExists(parasite))
+                    server.EntMan.DeleteEntity(parasite);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
+    // CMU14 method
+    [Test]
+    public async Task LungeGrabsTargetAndPullsIt()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        var map = await pair.CreateTestMap();
+
+        EntityUid warrior = default;
+        EntityUid marine = default;
+
+        try
+        {
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                warrior = entMan.SpawnEntity("CMXenoWarrior", map.GridCoords.Offset(new Vector2(0.5f, 0.5f)));
+                marine = entMan.SpawnEntity("CMMobHuman", map.GridCoords.Offset(new Vector2(2.5f, 0.5f)));
+
+                var lunge = new XenoLungeActionEvent
+                {
+                    Entity = marine,
+                    Target = map.GridCoords.Offset(new Vector2(2.5f, 0.5f)),
+                };
+                entMan.EventBus.RaiseLocalEvent(warrior, lunge);
+            });
+
+            await pair.RunSeconds(0.5f);
+
+            await server.WaitAssertion(() =>
+            {
+                Assert.That(server.EntMan.TryGetComponent<PullerComponent>(warrior, out var puller), Is.True);
+                Assert.That(puller!.Pulling, Is.EqualTo(marine));
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                if (server.EntMan.EntityExists(warrior))
+                    server.EntMan.DeleteEntity(warrior);
+            });
+        }
 
         await pair.CleanReturnAsync();
     }

@@ -13,7 +13,6 @@ namespace Content.Shared._RMC14.Camera;
 public abstract partial class SharedRMCCameraSystem : EntitySystem
 {
     [Dependency] private AreaSystem _area = default!;
-    [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private NameModifierSystem _nameModifier = default!;
@@ -62,8 +61,12 @@ public abstract partial class SharedRMCCameraSystem : EntitySystem
                 return;
 
             var areaName = areaProto.Name;
-            var count = _cameraNames.GetValueOrDefault(areaName);
-            _metaData.SetEntityName(ent, $"{areaName} #{++count}");
+            var count = _cameraNames.GetValueOrDefault(areaName) + 1;
+
+            ent.Comp.Rename = false; // Do not run again.
+            ent.Comp.NameOverride = $"{areaName} #{count}";
+            Dirty(ent);
+
             _cameraNames[areaName] = count;
         }
         else
@@ -72,7 +75,7 @@ public abstract partial class SharedRMCCameraSystem : EntitySystem
             if (ent.Comp.NameOverride != null)
                 name = ent.Comp.NameOverride;
 
-            var count = _cameraNames.GetValueOrDefault(name);
+            var count = _cameraNames.GetValueOrDefault(name) + 1;
             _cameraNames[name] = count;
         }
     }
@@ -283,7 +286,6 @@ public abstract partial class SharedRMCCameraSystem : EntitySystem
     {
         _refresh.Add(protoId);
     }
-
     public void RebuildComputerCameras(EntityUid computerUid, RMCCameraComputerComponent? computer = null)
     {
         if (!Resolve(computerUid, ref computer, false))

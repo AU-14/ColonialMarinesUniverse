@@ -76,11 +76,11 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         SubscribeLocalEvent<DropshipComponent, MapInitEvent>(OnDropshipMapInit);
 
         SubscribeLocalEvent<DropshipNavigationComputerComponent, MapInitEvent>(OnMapInit);
-        
+
         //fix queenxeno ignore AccessReaderComponent
         SubscribeLocalEvent<DropshipNavigationComputerComponent, ActivateInWorldEvent>(OnNavigationActivateInWorld, before: [typeof(ActivatableUISystem), typeof(ActivatableUIRequiresAccessSystem)]);
         //
-        
+
         SubscribeLocalEvent<DropshipNavigationComputerComponent, ActivatableUIOpenAttemptEvent>(OnUIOpenAttempt);
         SubscribeLocalEvent<DropshipNavigationComputerComponent, AfterActivatableUIOpenEvent>(OnNavigationOpen);
         SubscribeLocalEvent<DropshipNavigationComputerComponent, DropshipLockoutOverrideDoAfterEvent>(OnNavigationLockoutOverride);
@@ -271,7 +271,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         // Xeno hijacker: open destination menu immediately
         OpenHijackDestinationMenu(ent, args.User);
     }
-    
+
     // Fix to queenxeno ignore AccessReaderComponent
     private void OnNavigationActivateInWorld(Entity<DropshipNavigationComputerComponent> ent,
         ref ActivateInWorldEvent args)
@@ -279,13 +279,13 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         var user = args.User;
         var isXeno = HasComp<XenoComponent>(user);
         var isHijacker = HasComp<DropshipHijackerComponent>(user);
-        
+
         //for non xeno pass normal AccessReader and skill checks still apply.
         if (!isXeno && !isHijacker)
         {
             return;
         }
-        
+
         args.Handled = true;
         if (_net.IsClient)
         {
@@ -293,7 +293,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         }
 
         var ev = new ActivatableUIOpenAttemptEvent(user);
-        
+
         OnUIOpenAttempt(ent, ref ev);
     }
 
@@ -385,34 +385,7 @@ public abstract partial class SharedDropshipSystem : EntitySystem
         if (mapUid is not { } map)
             return;
 
-        if (_zLevels.TryGetZNetwork(map, out var network) &&
-            _zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
-        {
-            var connectedMaps = new List<EntityUid>();
-            for (var depth = minDepth; depth <= maxDepth; depth++)
-            {
-                if (_zLevels.TryGetMapAtDepth(network.Value, depth, out var connectedMap))
-                    connectedMaps.Add(connectedMap);
-            }
-
-            AddShipMapAndConnectedZLevels(shipMaps, map, connectedMaps);
-            return;
-        }
-
-        AddShipMapAndConnectedZLevels(shipMaps, map, null);
-    }
-
-    private static void AddShipMapAndConnectedZLevels(
-        HashSet<EntityUid> shipMaps,
-        EntityUid mapUid,
-        IEnumerable<EntityUid>? connectedMaps)
-    {
-        shipMaps.Add(mapUid);
-
-        if (connectedMaps == null)
-            return;
-
-        foreach (var connectedMap in connectedMaps)
+        foreach (var connectedMap in _zLevels.GetAllNetworkMaps(map)) // CMU14
             shipMaps.Add(connectedMap);
     }
 

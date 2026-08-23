@@ -1,4 +1,5 @@
 using Content.Shared.ActionBlocker;
+using Content.Shared._CMU14.Chemistry.Effects;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Bed.Sleep;
 using Content.Shared.Database;
@@ -168,6 +169,7 @@ public abstract partial class SharedStunSystem : EntitySystem
     public bool TryStun(EntityUid uid, TimeSpan time, bool refresh,
         StatusEffectsComponent? status = null, bool force = false)
     {
+        time = ApplyChemicalDurationModifier(uid, time);
         if (time <= TimeSpan.Zero)
             return false;
 
@@ -190,6 +192,7 @@ public abstract partial class SharedStunSystem : EntitySystem
     public bool TryKnockdown(EntityUid uid, TimeSpan time, bool refresh,
         StatusEffectsComponent? status = null, bool force = false)
     {
+        time = ApplyChemicalDurationModifier(uid, time);
         if (time <= TimeSpan.Zero)
             return false;
 
@@ -224,6 +227,7 @@ public abstract partial class SharedStunSystem : EntitySystem
         float walkSpeedMultiplier = 1f, float runSpeedMultiplier = 1f,
         StatusEffectsComponent? status = null)
     {
+        time = ApplyChemicalDurationModifier(uid, time);
         if (!Resolve(uid, ref status, false))
             return false;
 
@@ -245,6 +249,13 @@ public abstract partial class SharedStunSystem : EntitySystem
         }
 
         return false;
+    }
+
+    private TimeSpan ApplyChemicalDurationModifier(EntityUid uid, TimeSpan time)
+    {
+        var ev = new GetChemicalStunTimeMultiplierEvent();
+        RaiseLocalEvent(uid, ref ev);
+        return time * MathF.Max(0f, ev.Multiplier);
     }
 
     /// <summary>

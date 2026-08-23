@@ -84,14 +84,14 @@
   ranks:
     RMCRankCivilian: []
   chevrons:
-    RMCRankLieutenantColonel:
-      entity: AU14ChevronLieutenantColonel
-      requirements:
-      - !type:RoleTimeRequirement
-        role: AU14JobGOVFORPlatCo
-        time: 180000 # 50 hours
     RMCRankMajor:
       entity: AU14ChevronMajor
+      requirements: []
+    RMCRankLieutenantColonel:
+      entity: AU14ChevronLieutenantColonel
+      requirements: []
+    RMCRankColonel:
+      entity: AU14ChevronColonel
       requirements: []
 
 - type: playTimeTracker

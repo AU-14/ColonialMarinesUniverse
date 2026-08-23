@@ -760,12 +760,21 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         return TryToggleGear(bracer, user, YautjaGearKind.Caster);
     }
 
-    public bool TryRemoveBracerAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user)
+    public bool TryRemoveBracerAttachments(Entity<YautjaGearContainerComponent> bracer, EntityUid user, bool force = false)
     {
         if (AnyInstalledGearDeployed(bracer.Comp))
         {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-attachments-retract-first"), user, user, PopupType.SmallCaution);
-            return false;
+            if (force)
+            {
+                RetractDeployedInstalledAttachments(bracer, user);
+                _actions.SetToggled(bracer.Comp.ToggleWristBladesAction, AnyInstalledGearDeployed(bracer.Comp));
+            }
+
+            if (AnyInstalledGearDeployed(bracer.Comp))
+            {
+                _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-attachments-retract-first"), user, user, PopupType.SmallCaution);
+                return false;
+            }
         }
 
         var installed = new EntityUid[bracer.Comp.InstalledGear.Count];

@@ -9719,5 +9719,277 @@
   id: 638
   time: '2026-08-17T19:57:53.0000000+00:00'
   url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1848
+- author: potatoed6
+  changes:
+  - message: chevron preference for govfor, also platoon specific chevrons
+    type: Add
+  - message: Added more patches from CM13
+    type: Add
+  - message: Chevrons now spawn on equipped uniform. You dont spawn with chevrons
+      inhand or in a bag, they always will start on a first uniform you wear.
+    type: Tweak
+  - message: COs now get ranks o4-o6 and dont have time reqs
+    type: Tweak
+  - message: COs now can access SEA rank briefcase
+    type: Tweak
+  - message: Messages about marines waking up or going to cryo now use chevron logic
+      to determine rank, so you wont have "Civilian John Marine woke up", instead
+      it will be "Major John Marine woke up"
+    type: Fix
+  id: 639
+  time: '2026-08-21T15:23:29.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1851
+- author: rokudara-sen
+  changes:
+  - message: The AN/PRC-117G net log no longer records frequencies for nets you do
+      not have access to. Typing a radio prefix you cannot actually transmit on will
+      no longer create a log entry
+    type: Fix
+  - message: AN/PRC-117G net logs now preserve the language traffic was received in
+      and render it for whoever is reading. A planted station no longer exposes foreign-language
+      traffic in clear, and printed intercepts reflect what the operator actually
+      understood
+    type: Fix
+  - message: AN/PRC-117G transmissions now use the language that was actually spoken.
+      Languages that cannot be carried over radio, such as sign language, no longer
+      work through a manpack or direct frequency
+    type: Fix
+  - message: Direct-frequency (`:x`) traffic is now obfuscated for listeners who do
+      not understand the spoken language, matching normal radio nets
+    type: Fix
+  - message: Fixed an error when deleting an AN/PRC-117G with an antenna fitted
+    type: Fix
+  id: 640
+  time: '2026-08-22T15:27:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1856
+- author: rokudara-sen
+  changes:
+  - message: The AN/PRC-117G net log no longer records frequencies for nets you do
+      not have access to. Typing a radio prefix you cannot actually transmit on will
+      no longer create a log entry
+    type: Fix
+  - message: AN/PRC-117G net logs now preserve the language traffic was received in
+      and render it for whoever is reading. A planted station no longer exposes foreign-language
+      traffic in clear, and printed intercepts reflect what the operator actually
+      understood
+    type: Fix
+  - message: AN/PRC-117G transmissions now use the language that was actually spoken.
+      Languages that cannot be carried over radio, such as sign language, no longer
+      work through a manpack or direct frequency
+    type: Fix
+  - message: Direct-frequency (`:x`) traffic is now obfuscated for listeners who do
+      not understand the spoken language, matching normal radio nets
+    type: Fix
+  - message: Fixed an error when deleting an AN/PRC-117G with an antenna fitted
+    type: Fix
+  id: 641
+  time: '2026-08-22T15:27:45.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1856
+- author: deepdarkdepths
+  changes:
+  - message: Smartgun damage and firerate values reduced. These values are still stronger
+      than what we had before.
+    type: Tweak
+  id: 642
+  time: '2026-08-22T15:27:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1855
+- author: deepdarkdepths
+  changes:
+  - message: Smartgun damage and firerate values reduced. These values are still stronger
+      than what we had before.
+    type: Tweak
+  id: 643
+  time: '2026-08-22T15:27:59.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1855
+- author: Vencallium
+  changes:
+  - message: Added hospital emergency shuttle incidents for medical staff.
+    type: Add
+  - message: Added an emergency computer for approving hospital shuttle landings,
+      requesting pickup, and receiving treatment payouts.
+    type: Add
+  - message: Added evacuation patients with incident-themed clothing and randomized
+      trauma.
+    type: Add
+  - message: Added a hospital dropship landing zone marker.
+    type: Add
+  - message: Added a hospital incident timer admin command.
+    type: Admin
+  - message: Cleaned up duplicate doors on the third-party shuttle.
+    type: Tweak
+  id: 644
+  time: '2026-08-22T15:28:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1827
+- author: Vencallium
+  changes:
+  - message: Added hospital emergency shuttle incidents for medical staff.
+    type: Add
+  - message: Added an emergency computer for approving hospital shuttle landings,
+      requesting pickup, and receiving treatment payouts.
+    type: Add
+  - message: Added evacuation patients with incident-themed clothing and randomized
+      trauma.
+    type: Add
+  - message: Added a hospital dropship landing zone marker.
+    type: Add
+  - message: Added a hospital incident timer admin command.
+    type: Admin
+  - message: Cleaned up duplicate doors on the third-party shuttle.
+    type: Tweak
+  id: 645
+  time: '2026-08-22T15:28:41.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1827
+- author: maertayn
+  changes:
+  - message: Xeno tackle stuns now land again. The queen's (and king) stun no longer
+      resets her own tackle progress, and predicted hits (leaps, lunges, projectiles)
+      now account for physics substeps so client and server agree on what connected
+    type: Fix
+  - message: Warrior lunge grabs hold properly instead of instantly releasing
+    type: Fix
+  - message: Facehugger leaps no longer pass through standing mobs
+    type: Fix
+  - message: Grenades fragmenting while held or worn no longer have their entire blast
+      absorbed by the holder
+    type: Fix
+  - message: Armored gloves for Govfor
+    type: Tweak
+  - message: Larva claim priority now works for infectors
+    type: Fix
+  - message: Spent cartridges drop when fired, magazines drop with an offset near
+      you (admins use nuke:cartridges or nuke:magazines to clean)
+    type: Add
+  - message: Tank not being damaged due to client/server mismatch
+    type: Fix
+  - message: Burrowed larva grows based on player (marine) count
+    type: Add
+  - message: Camera system no longer renames entities to area names
+    type: Fix
+  - message: Parasite resin traps now match the HTN duration
+    type: Fix
+  - message: x1 AEGIS Researcher slot opens up for Govfor when the event is enabled
+      (RP as a classified weapons-testing observer)
+    type: Add
+  - message: Pinpointers now scan across all maps in the Z Network (if you can't find
+      what you're looking for, it's probably above/below you)
+    type: Tweak
+  - message: Scout cloak migration to new engine (v288.1) shader system & high-impact
+      range fix
+    type: Fix
+  id: 646
+  time: '2026-08-22T17:32:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1857
+- author: maertayn
+  changes:
+  - message: Xeno tackle stuns now land again. The queen's (and king) stun no longer
+      resets her own tackle progress, and predicted hits (leaps, lunges, projectiles)
+      now account for physics substeps so client and server agree on what connected
+    type: Fix
+  - message: Warrior lunge grabs hold properly instead of instantly releasing
+    type: Fix
+  - message: Facehugger leaps no longer pass through standing mobs
+    type: Fix
+  - message: Grenades fragmenting while held or worn no longer have their entire blast
+      absorbed by the holder
+    type: Fix
+  - message: Armored gloves for Govfor
+    type: Tweak
+  - message: Larva claim priority now works for infectors
+    type: Fix
+  - message: Spent cartridges drop when fired, magazines drop with an offset near
+      you (admins use nuke:cartridges or nuke:magazines to clean)
+    type: Add
+  - message: Tank not being damaged due to client/server mismatch
+    type: Fix
+  - message: Burrowed larva grows based on player (marine) count
+    type: Add
+  - message: Camera system no longer renames entities to area names
+    type: Fix
+  - message: Parasite resin traps now match the HTN duration
+    type: Fix
+  - message: x1 AEGIS Researcher slot opens up for Govfor when the event is enabled
+      (RP as a classified weapons-testing observer)
+    type: Add
+  - message: Pinpointers now scan across all maps in the Z Network (if you can't find
+      what you're looking for, it's probably above/below you)
+    type: Tweak
+  - message: Scout cloak migration to new engine (v288.1) shader system & high-impact
+      range fix
+    type: Fix
+  id: 647
+  time: '2026-08-22T17:32:15.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1857
+- author: maertayn
+  changes:
+  - message: Runechat speech bubbles now also show the language flag
+    type: Fix
+  - message: Synths no longer take toxin/airloss damage and no longer gasp
+    type: Fix
+  - message: Ghosted bodies become ghost roles again!!
+    type: Fix
+  - message: Decapitated pathogen walkers no longer resurrect the head back to life
+    type: Fix
+  - message: Scout cloak is no longer undone by outlines and other FX
+    type: Fix
+  - message: Welder eye damage now applies correctly if you're not wearing protection
+    type: Fix
+  - message: LTB cannon rounds no longer turn into always HESH
+    type: Fix
+  - message: SHARP mines are no longer nuclear explosives
+    type: Fix
+  - message: Fixed Suoto/Bobda can names on the cash vendor
+    type: Fix
+  - message: M4SPR and M5RA (/2) are no longer meltable
+    type: Tweak
+  - message: Basic medical gauze no longer stops when moving
+    type: Tweak
+  - message: Spent cartridges now despawn after a set time (5 minutes) and removes
+      physics after seconds
+    type: Tweak
+  - message: More lesser drone spawns (and 1 extra popper spawn)
+    type: Tweak
+  - message: Renamed Xenonid to Xenomorph Hive
+    type: Tweak
+  - message: Renamed SPP interiors to UPP interiors
+    type: Tweak
+  - message: Burrowed larva preset no longer appears on Insurgency and Colony Fall
+    type: Tweak
+  - message: nuke:trash no longer deletes paper marked with the Trash tag
+    type: Admin
+  - message: Hope's Retreat SecTech vendor access + deputized Security (recruited
+      constables) get the new access also
+    type: Fix
+  id: 648
+  time: '2026-08-23T01:54:25.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1858
+- author: JaSeNeSaJ
+  changes:
+  - message: Carp & Invasive Carp refactor
+    type: Tweak
+  - message: New/Old sprites for Both
+    type: Add
+  - message: Variant colors for Both
+    type: Add
+  - message: Removed monkey sounds
+    type: Fix
+  - message: Xenos can now pull Invasive Carp
+    type: Fix
+  - message: Tumble from Invasive Carp
+    type: Remove
+  - message: Logs can be put into crop submission point at 25% penalty
+    type: Tweak
+  - message: Increased hiveless odds in experiment subject crate
+    type: Tweak
+  id: 649
+  time: '2026-08-23T01:54:47.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1859
+- author: deepdarkdepths
+  changes:
+  - message: The Queen can now buy the Minor and Major Boons of Evolution, the Minor
+      and Major Boons of Aggression, and the Boon of Adaptability with royal resin.
+    type: Add
+  id: 650
+  time: '2026-08-23T07:25:04.0000000+00:00'
+  url: https://github.com/AU-14/ColonialMarinesUniverse/pull/1860
 Name: CMU
 Order: -1

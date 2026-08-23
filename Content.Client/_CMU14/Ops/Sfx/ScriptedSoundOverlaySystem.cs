@@ -55,7 +55,7 @@ public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
         if (playerMap == null)
             return;
 
-        if (!PlayerShouldReceiveMarker(uid, playerMap.Value))
+        if (!_zLevels.IsSameZNetwork(playerMap, uid))
             return;
 
         _alarmMap = uid;
@@ -93,7 +93,7 @@ public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
         if (anchorMapEntity == null || playerMapUid == null)
             return;
 
-        if (!PlayerShouldReceiveMarker(anchorMapEntity.Value, playerMapUid.Value))
+        if (!_zLevels.IsSameZNetwork(playerMapUid, anchorMapEntity.Value))
             return;
 
         switch (ev.Marker)
@@ -128,15 +128,6 @@ public sealed partial class ScriptedSoundOverlaySystem : EntitySystem
         if (_alarm == null) return;
         _overlay.RemoveOverlay(_alarm);
         _alarm = null;
-    }
-
-    private bool PlayerShouldReceiveMarker(EntityUid anchorMap, EntityUid playerMap)
-    {
-        if (anchorMap == playerMap)
-            return true;
-
-        return _zLevels.TryGetZNetwork(anchorMap, out var network) &&
-               _zLevels.IsMapInNetwork(network.Value, playerMap);
     }
 
     private void Cleanup()

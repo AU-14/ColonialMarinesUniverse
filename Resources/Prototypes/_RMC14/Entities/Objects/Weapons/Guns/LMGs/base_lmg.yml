@@ -97,7 +97,7 @@
   abstract: true
   components:
   - type: CartridgeAmmo
-    deleteOnSpawn: true
+    deleteOnSpawn: false # CMU14: spent casings eject instead of despawning
 
 - type: Tag
   id: RMCMagazineLMG

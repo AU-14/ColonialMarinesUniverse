@@ -8,6 +8,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORadvisor
+    - AU14JobGOVFORPlatCo
     sections:
     - name: Enlisted
       entries:
@@ -66,6 +67,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORadvisor
+    - AU14JobGOVFORPlatCo
     sections:
     - name: Enlisted
       entries:
@@ -112,6 +114,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORadvisor
+    - AU14JobGOVFORPlatCo
     sections:
     - name: Enlisted
       entries:
@@ -164,6 +167,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORadvisor
+    - AU14JobGOVFORPlatCo
     sections:
     - name: Operators
       entries:
@@ -210,6 +214,7 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORadvisor
+    - AU14JobGOVFORPlatCo
     sections:
     - name: Response Units
       entries:
@@ -272,46 +277,47 @@
   - type: CMAutomatedVendor
     jobs:
     - AU14JobGOVFORadvisor
+    - AU14JobGOVFORPlatCo
     sections:
     - name: Enlisted
       entries:
-      - id: AU14ChevronLACNSeamanRecruit
+      - id: CMU14ChevronLACNSailor
         amount: 5
-      - id: AU14ChevronLACNSeamanApprentice
+      - id: CMU14ChevronLACNSailorFirstClass
         amount: 5
-      - id: AU14ChevronLACNSeaman
+      - id: CMU14ChevronLACNThirdClassCorporal
         amount: 5
-    - name: Petty Officers
+    - name: NCOs
       entries:
-      - id: AU14ChevronLACNPettyOfficerThirdClass
+      - id: CMU14ChevronLACNSecondClassCorporal
         amount: 5
-      - id: AU14ChevronLACNPettyOfficerSecondClass
+      - id: CMU14ChevronLACNFirstClassCorporal
         amount: 5
-      - id: AU14ChevronLACNPettyOfficerFirstClass
+      - id: CMU14ChevronLACNThirdClassSergeant
         amount: 5
-      - id: AU14ChevronLACNChiefPettyOfficer
+      - id: CMU14ChevronLACNSecondClassSergeant
         amount: 5
-      - id: AU14ChevronLACNSeniorChief
+      - id: CMU14ChevronLACNFirstClassSergeant
         amount: 5
-      - id: AU14ChevronLACNMasterChief
+      - id: CMU14ChevronLACNMasterSergeant
         amount: 5
     - name: Officers
       entries:
-      - id: AU14ChevronLACNSubEnsign
+      - id: CMU14ChevronLACNEnsign
         amount: 5
-      - id: AU14ChevronLACNEnsign
+      - id: CMU14ChevronLACNShipLineLieutenant
         amount: 5
-      - id: AU14ChevronLACNLieutenantJuniorGrade
+      - id: CMU14ChevronLACNCorvetteCaptain
         amount: 5
-      - id: AU14ChevronLACNLieutenant
+      - id: CMU14ChevronLACNFrigateCaptain
         amount: 5
-      - id: AU14ChevronLACNLieutenantCommander
+      - id: CMU14ChevronLACNCaptain
         amount: 5
-      - id: AU14ChevronLACNCommander
+      - id: CMU14ChevronLACNCounterAdmiral
         amount: 5
-      - id: AU14ChevronLACNCaptain
+      - id: CMU14ChevronLACNViceAdmiral
         amount: 5
     - name: Flag Officers
       entries:
-      - id: AU14ChevronLACNRearAdmiral
+      - id: CMU14ChevronLACNAdmiral
         amount: 5

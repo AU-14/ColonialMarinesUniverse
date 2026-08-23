@@ -12,6 +12,7 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared._CMU14.Chemistry.Effects;
 
 namespace Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
 
@@ -156,6 +157,8 @@ public abstract partial class SharedBrainSystem : EntitySystem
         var body = GetBody(ent);
         if (body is null)
             return;
+        if (HasComp<ChemicalNeurocryogenicComponent>(body.Value))
+            return;
         if (Unrevivable.IsUnrevivable(body.Value))
             return;
         ApplyDisorientation(body.Value, ent.Comp, stage);
@@ -169,6 +172,8 @@ public abstract partial class SharedBrainSystem : EntitySystem
 
         var body = GetBody(ent);
         if (body is null)
+            return;
+        if (HasComp<ChemicalNeurocryogenicComponent>(body.Value))
             return;
         if (Unrevivable.IsUnrevivable(body.Value))
             return;

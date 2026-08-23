@@ -98,6 +98,8 @@ cmu-reagent-property-name-repairing = Repairing
 cmu-reagent-property-desc-repairing = Repairs inorganic materials such as barricades and synthetics by the use of REDACTED property of REDACTED element.
 cmu-reagent-property-name-hemogenic = Hemogenic
 cmu-reagent-property-desc-hemogenic = Increases the production of erythrocytes (red blood cells) in the bonemarrow, leading to polycythemia, an elevated volume of erythrocytes in the blood.
+cmu-reagent-property-name-yautjahemogenic = Yautja-hemogenic
+cmu-reagent-property-desc-yautjahemogenic = Restores Yautja blood at an accelerated rate without consuming nutrition. It has no effect on other species.
 cmu-reagent-property-name-hemostatic = Hemostatic
 cmu-reagent-property-desc-hemostatic = Vastly improves the blood's natural ability to coagulate and stop bleeding by heightening platelet production and effectiveness. Overdosing will cause extreme blood clotting, resulting in severe tissue damage.
 cmu-reagent-property-name-nervestimulating = Nerve-stimulating
@@ -203,4 +205,3 @@ cmu-reagent-property-name-duration = Duration
 cmu-reagent-property-desc-duration = Controls the duration of a fire, using unknown means.
 cmu-reagent-property-name-encephaloprasive = Encephaloprasive
 cmu-reagent-property-desc-encephaloprasive = Drastically increases the amplitude of Gamma and Beta brain waves, allowing the host to broadcast their mind.
-

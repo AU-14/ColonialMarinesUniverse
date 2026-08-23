@@ -1,4 +1,5 @@
 using System.Diagnostics.CodeAnalysis;
+using Content.Server._RMC14.Language.Systems;
 using Content.Server._RMC14.Marines.Roles.Ranks;
 using Content.Server._RMC14.TacticalMap;
 using Content.Server.Chat.Managers;
@@ -12,6 +13,8 @@ using Content.Server.Radio.Components;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Language.Prototypes;
+using Content.Shared._RMC14.Language.Systems;
 using Content.Shared._RMC14.PropCalling;
 using Content.Shared.Chat;
 using Content.Shared.Containers.ItemSlots;
@@ -54,6 +57,7 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
     [Dependency] private ANPRCCryptoSystem _crypto = default!;
     [Dependency] private ANPRCFrequencyPlanSystem _freqPlan = default!;
     [Dependency] private ANPRCGarbleSystem _garble = default!;
+    [Dependency] private LanguageSystem _language = default!;
     [Dependency] private ANPRCRangeSystem _range = default!;
     [Dependency] private ANPRCSweepSystem _sweep = default!;
     [Dependency] private AU14CommsToggleSystem _comms = default!;
@@ -205,6 +209,10 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         }
         else
         {
+            // the log stores what came over the air. the set is not a translator, but
+            // it is not one listener either - a planted station is read by whoever
+            // walks up to it - so the language pass runs when the log is read, not
+            // when it is written
             var heard = _garble.ApplyComsecGarble(args.MessageSource, ent.Owner, args.Channel, args.Message);
 
             // traffic on somebody else's faction net is an intercept: flagged in the
@@ -219,14 +227,23 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
                 radio,
                 _timing.CurTime.TotalSeconds,
                 GetSenderDisplayName(args.MessageSource),
-                $"{args.Channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(args.Channel))} MHz)",
+                FormatLogChannel(radio, args.Channel),
                 heard,
-                intercepted);
+                intercepted,
+                args.Language);
 
             UpdateBuiState(ent);
 
             if (!covered && TryComp(wearer, out ActorComponent? actor))
             {
+                // out of the speaker it is one person's ear, so this one does get the
+                // language pass, against them
+                heard = _language.ObfuscateMessageForListener(
+                    wearer,
+                    heard,
+                    args.Language,
+                    args.MessageSource);
+
                 var senderName = FormattedMessage.EscapeText(GetSenderDisplayName(args.MessageSource));
                 var message = FormattedMessage.EscapeText(heard);
                 var wrapped = $"[color=#FF6B6B]{senderName}: {message}[/color]";
@@ -400,6 +417,11 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
 
     private void UpdateRelayAnchor(Entity<ANPRCRadioComponent> ent)
     {
+        // deleting a pack empties its containers, and the antenna coming out lands here
+        // on an entity that is already on its way out. re-adding the anchor to it throws
+        if (TerminatingOrDeleted(ent.Owner))
+            return;
+
         if ((!ent.Comp.IsEquipped && !ent.Comp.Planted) || !ent.Comp.Enabled)
         {
             RemComp<ANPRCRelayAnchorComponent>(ent.Owner);
@@ -680,7 +702,8 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
             args.SenderName,
             $"{TunableFrequencySystem.FormatFreq(args.Frequency)} MHz",
             args.Message,
-            intercepted);
+            intercepted,
+            args.Language);
 
         UpdateBuiState(ent);
     }
@@ -763,15 +786,51 @@ public sealed partial class ANPRCRadioSystem : EntitySystem
         return false;
     }
 
+    // one gate for every frequency that reaches the net log. the log is readable by
+    // anyone who opens the panel and printable to paper, so a number that lands in it
+    // has left COMSEC entirely. a set only writes down what it is entitled to know:
+    // unfactioned nets, its own faction's nets, and whatever the sweep has fixed
+    public bool KnowsFrequency(ANPRCRadioComponent radio, RadioChannelPrototype channel)
+    {
+        if (string.IsNullOrEmpty(channel.Faction) ||
+            string.IsNullOrEmpty(radio.OperatorFaction) ||
+            string.Equals(channel.Faction, radio.OperatorFaction, StringComparison.OrdinalIgnoreCase))
+        {
+            return true;
+        }
+
+        // a number already dialled into a slot - off a captured card, off a contact the
+        // sweep fixed, or shipped with the set - is one the operator holds, whoever the
+        // net belongs to. slots cannot be filled with a net the set is not entitled to
+        return radio.DiscoveredFrequencies.Contains(_freqPlan.GetFrequency(channel)) ||
+               HasPreset(radio, channel.ID);
+    }
+
+    // the log line for a net. the name is always safe - it is what the set heard itself
+    // called - but the number only goes down when the operator is entitled to it
+    private string FormatLogChannel(ANPRCRadioComponent radio, RadioChannelPrototype channel)
+    {
+        return KnowsFrequency(radio, channel)
+            ? $"{channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(channel))} MHz)"
+            : $"{channel.LocalizedName} ({Loc.GetString("anprc-log-frequency-unknown")})";
+    }
+
     private static void AppendNetLog(
         ANPRCRadioComponent radio,
         double timestamp,
         string sender,
         string channel,
         string message,
-        bool intercepted = false)
+        bool intercepted = false,
+        ProtoId<LanguagePrototype>? language = null)
     {
-        radio.NetLog.Enqueue(new ANPRCNetLogEntry((float) timestamp, sender, channel, message, intercepted));
+        radio.NetLog.Enqueue(new ANPRCNetLogEntry(
+            (float) timestamp,
+            sender,
+            channel,
+            message,
+            intercepted,
+            language?.Id ?? SharedLanguageSystem.CommonLanguage.Id));
 
         while (radio.NetLog.Count > ANPRCRadioComponent.MaxNetLogEntries)
         {

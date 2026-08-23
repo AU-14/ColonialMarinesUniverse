@@ -1,120 +1,225 @@
 - type: entity
+  id: CMUMobCarpBase
+  parent:
+  - BaseMob
+  - MobAtmosExposed
+  - MobCombat
+  - MobBloodstream
+  - MobFlammable
   abstract: true
-  parent: SimpleMobBase
-  id: CMUBaseMobCarp
-  name: genetic ancestor
-  description: The genetic bipedal ancestor of... Uh... Something. Yeah, there's definitely something on the planet that descended from whatever this is.
+  suffix: CMU
   components:
-  - type: CombatMode
-  - type: Fixtures
-    fixtures:
-      fix1:
-        shape:
-          !type:PhysShapeCircle
-          radius: 0.4
-        density: 80
-        mask:
-        - MobMask
-        layer:
-        - MobLayer
-  - type: Body
-    prototype: Bloodsucker
-    requiredLegs: 0
   - type: MobState
-    allowedStates:
-    - Alive
-    - Critical
-    - Dead
+  - type: Pullable
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+      Acidic: [Touch, Ingestion]
+  - type: NameIdentifier
+    group: GenericNumber
+  - type: ShortExamine
   - type: MobThresholds
     thresholds:
       0: Alive
-      100: Critical
-      200: Dead
-  - type: DamageStateVisuals
-    states:
-      Alive:
-        Base: alive
-      Critical:
-        Base: crit
-      Dead:
-        Base: dead
+      120: Critical
+      130: Dead
   - type: MeleeWeapon
+    altDisarm: false
     soundHit:
       path: /Audio/Effects/bite.ogg
     angle: 0
     animation: WeaponArcBite
     damage:
       types:
-        Blunt: 3
-        Piercing: 3
-  - type: TypingIndicator
-    proto: alien
-  - type: ReplacementAccent
-    accent: genericAggressive
-  - type: Speech
-    speechVerb: LargeMob
-  - type: Butcherable
-    butcheringType: Knife # Spike
-    spawned:
-    - id: FoodMeatFish
-      amount: 2
-  - type: Reactive
-    groups:
-      Flammable: [ Touch ]
-      Extinguish: [ Touch ]
+        Blunt: 2
+        Slash: 3
+        Bloodloss: 2.5
+  - type: GenericVisualizer
+    visuals:
+      enum.CreamPiedVisuals.Creamed:
+        clownedon:
+          True: {visible: true}
+          False: {visible: false}
+      enum.UserAcidedVisuals.Acided:
+        acided:
+          None:
+            visible: false
+          Normal:
+            sprite: _RMC14/Effects/xeno_spray_acid.rsi
+            state: human_acid
+            visible: true
+          Enhanced:
+            sprite: _RMC14/Effects/xeno_spray_acid.rsi
+            state: human_acid_enhanced
+            visible: true
+  - type: Body
+    prototype: Bloodsucker
+    requiredLegs: 0
+  - type: Climbing
+  - type: RMCRevivable
+  - type: RMCMedicalExamine
+    simple: true
+    deadText: rmc-medical-examine-dead-simple-mob
+  - type: RMCHealthIcons
+  - type: CrashLandable
+  - type: Woundable
+  - type: Damageable
+    damageContainer: Biological
+    damageModifierSet: null
+    healthBarThreshold: 2 # some of these mobs literally only have 10 hit points
+  - type: MovementSpeedModifier
+    baseWalkSpeed: 2.7
+    baseSprintSpeed: 5
+  - type: Bloodstream
+    bloodMaxVolume: 150
+  - type: StatusEffects
+    allowed:
+    - Stun
+    - KnockedDown
+    - SlowedDown
+    - Stutter
+    - Electrocution
+    - ForcedSleep
+    - TemporaryBlindness
+    - Drunk
+    - SlurredSpeech
+    - RatvarianLanguage
+    - PressureImmunity
+    - Muted
+    - Pacified
+    - StaminaModifier
+    - Flashed
+    - Dazed
+    - Blinded
+    - Deaf
+    - Unconscious
+  - type: Buckle
+  - type: StandingState
+  - type: Deathgasp
+    prototype: DefaultDeathgasp
+  - type: RandomSound
+    sound:
+      collection: BodyFall
+      #params:
+        #volume: -10
+    min: 45
+    max: 60
+  - type: ComplexInteraction
+  - type: CanBeFirePatted
   - type: NPCRetaliation
     attackMemoryLength: 10
   - type: FactionException
   - type: NpcFactionMember
     factions:
-    - Passive
-  - type: Tag
-    tags:
-    - Carp
-    - DoorBumpOpener
-  - type: RemoveComponents
-    components:
-    - type: Internals
-  - type: NoSlip
-
-- type: entity
-  parent: [RMCSimpleMob, CMUBaseMobCarp, RMCSmallHost]
-  id: CMUMobCarp
-  name: carp
-  description: It's a carp. Adapted to migrate up hill both ways.
-  suffix: CMU
-  components:
-  - type: RotationVisuals
-    defaultRotation: 90
-    horizontalRotation: 90
-  - type: Inventory
-    templateId: carp
-    speciesId: carp
-  - type: GhostRole
-    name: Carp
-    description: An endangered species of fish. They are adapted to migrate up hill both ways
-    prob: 0
+      - Dragon
+  - type: HTN
+    rootTask:
+      task: SimpleHostileCompound
+  - type: Speech
+    speechVerb: LargeMob
+    speechSounds: Bass
+    #allowedEmotes:
+  - type: ReplacementAccent
+    accent: genericAggressive
+  #- type: Vocal
+    #sounds:
+      #Male:
+      #Unsexed:
+      #Female:
+  #- type: BodyEmotes
+    #soundsId:
+  - type: TypingIndicator
+    proto: alien
   - type: Sprite
     drawdepth: Mobs
     layers:
     - map: ["enum.DamageStateVisualLayers.Base"]
-      state: alive
       sprite: _AU14/Mobs/Animals/carp.rsi
-    - map: [ "enum.HumanoidVisualLayers.Handcuffs" ]
-      color: "#ffffff"
-      sprite: Objects/Misc/handcuffs.rsi
-      state: body-overlay-2
-      visible: false
+      state: alive
+    - map: [ "enum.DamageStateVisualLayers.BaseUnshaded" ]
+      sprite: _AU14/Mobs/Animals/carp.rsi
+      state: mouth
+      #shader: unshaded
     - map: [ "mask" ]
-  - type: InteractionPopup
-    interactSuccessString: petting-success-carp
-    interactFailureString: petting-failure-carp
-    interactFailureSound:
-      path: /Audio/Effects/bite.ogg
+    - map: [ "clownedon" ]
+      sprite: "Effects/creampie.rsi"
+      state: "creampie_human"
+      visible: false
+    - map: [ "acided" ]
+    - map: [ "hooked" ]
+      sprite: "_RMC14/Effects/xeno_spray_acid.rsi"
+      state: hooked
+      visible: false
+  - type: RandomSprite
+    available:
+    - enum.DamageStateVisualLayers.Base:
+        alive: CMUCarpColors
+      enum.DamageStateVisualLayers.BaseUnshaded:
+        mouth: ""
+  - type: DamageStateVisuals
+    states:
+      Alive:
+        Base: alive
+        BaseUnshaded: mouth
+      Critical:
+        Base: crit
+        BaseUnshaded: crit_mouth
+      Dead:
+        Base: dead
+        BaseUnshaded: dead_mouth
+  - type: Butcherable
+    butcheringType: Knife
+    spawned:
+    - id: FoodMeatFish
+      amount: 2
+  - type: Puller
+    needsHands: false
   - type: Tag
     tags:
     - Carp
     - DoorBumpOpener
+
+- type: entity
+  parent:
+  - CMUMobCarpBase
+  - StripableInventoryBase
+  id: CMUMobSmallHostCarp
+  name: carp
+  suffix: CMU, Small Host
+  components:
+  - type: Internals
+  - type: Inventory
+    templateId: carp
+    speciesId: carp
+  - type: RotationVisuals
+    defaultRotation: 90
+    horizontalRotation: 90
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeCircle
+          radius: 0.35
+        density: 80
+        mask:
+        - MobMask
+        layer:
+        - MobLayer
+  - type: CreamPied
+  - type: Infectable
+  - type: Tackleable
+  - type: Devourable
+  - type: XenoNestable
+  - type: FixedIdentity
+    name: cm-chatsan-replacement-monkey
+    whitelist:
+      components:
+      - Xeno
+  - type: NpcFactionMember
+    factions:
+    - Passive
+    - Dragon
 
 - type: inventoryTemplate
   id: carp
@@ -125,11 +230,14 @@
     uiWindowPos: 0,1
     strippingWindowPos: 1,1
     displayName: Mask
+    whitelist:
+      tags:
+        - RMCSynthGrabbable
 
 - type: entity
-  name: Carp Spawner
+  parent: CMSpawnMobMonkey
   id: CMUSpawnMobCarp
-  parent: MarkerBase
+  name: Small host spawner
   suffix: CMU
   components:
   - type: Sprite
@@ -140,4 +248,18 @@
     id: CMUSpawnMobCarp
     ratio: 16
     prototypes:
-    - CMUMobCarp
+    - CMUMobSmallHostCarp
+
+- type: palette
+  id: CMUCarpColors
+  name: CarpColors
+  colors:
+    CopperA: "#645437"
+    CopperB: "#786843"
+    CopperC: "#8a794c"
+    BronzeA: "#4b3921"
+    BronzeB: "#5b4624"
+    BronzeC: "#6b562a"
+    GoldA: "#615520"
+    GoldB: "#776725"
+    GoldC: "#8d7b2a"

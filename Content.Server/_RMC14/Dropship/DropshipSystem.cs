@@ -1466,14 +1466,14 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         var almayerQuery = EntityQueryEnumerator<AlmayerComponent, TransformComponent>();
         while (almayerQuery.MoveNext(out _, out _, out var xform))
         {
-            if (IsSameMapOrConnectedZLevel(mapUid, xform.MapUid))
+            if (_zLevels.IsSameZNetwork(xform.MapUid, mapUid)) // CMU14
                 return true;
         }
 
         var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
         while (shipQuery.MoveNext(out _, out _, out var xform2))
         {
-            if (IsSameMapOrConnectedZLevel(mapUid, xform2.MapUid))
+            if (_zLevels.IsSameZNetwork(xform2.MapUid, mapUid)) // CMU14
                 return true;
         }
 
@@ -1529,31 +1529,18 @@ public sealed partial class DropshipSystem : SharedDropshipSystem
         var shipFactions = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
         while (shipFactions.MoveNext(out _, out var shipFaction, out var sfXform))
         {
-            if (IsSameMapOrConnectedZLevel(map, sfXform.MapUid) && !string.IsNullOrEmpty(shipFaction.Faction))
+            if (_zLevels.IsSameZNetwork(sfXform.MapUid, map) && !string.IsNullOrEmpty(shipFaction.Faction)) // CMU14
                 return shipFaction.Faction;
         }
 
         var controlComputers = EntityQueryEnumerator<MarineControlComputerComponent, TransformComponent>();
         while (controlComputers.MoveNext(out _, out var cc, out var ccXform))
         {
-            if (IsSameMapOrConnectedZLevel(map, ccXform.MapUid) && !string.IsNullOrEmpty(cc.Faction))
+            if (_zLevels.IsSameZNetwork(ccXform.MapUid, map) && !string.IsNullOrEmpty(cc.Faction)) // CMU14
                 return cc.Faction;
         }
 
         return null;
-    }
-
-    private bool IsSameMapOrConnectedZLevel(EntityUid mapUid, EntityUid? otherMapUid)
-    {
-        if (otherMapUid is not { } otherMap)
-            return false;
-
-        if (otherMap == mapUid)
-            return true;
-
-        return _zLevels.TryGetZNetwork(mapUid, out var network) &&
-               _zLevels.TryGetZNetwork(otherMap, out var otherNetwork) &&
-               otherNetwork.Value.Owner == network.Value.Owner;
     }
 
     private void OnWithdrawHijackLock(ref WithdrawFactionHijackLockEvent ev)

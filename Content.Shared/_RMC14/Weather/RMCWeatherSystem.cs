@@ -151,20 +151,12 @@ public sealed partial class RMCWeatherSystem : EntitySystem
             return;
         }
 
-        if (!_zLevels.TryGetZNetwork(mapUid, out var network) ||
-            !_zLevels.TryGetDepthBounds(network.Value, out var minDepth, out var maxDepth))
+        // CMU14: was a network/depth walk with a separate no-network fallback; GetAllNetworkMaps
+        // returns just this map when no network exists, which covers the fallback case
+        foreach (var zMap in _zLevels.GetAllNetworkMaps(mapUid))
         {
-            _weather.SetWeather(xform.MapID, weatherProto, endTime);
-            return;
-        }
-
-        for (var depth = minDepth; depth <= maxDepth; depth++)
-        {
-            if (!_zLevels.TryGetMapAtDepth(network.Value, depth, out var zMap) ||
-                !TryComp<MapComponent>(zMap, out var mapComp))
-            {
+            if (!TryComp<MapComponent>(zMap, out var mapComp))
                 continue;
-            }
 
             _weather.SetWeather(mapComp.MapId, weatherProto, endTime);
         }

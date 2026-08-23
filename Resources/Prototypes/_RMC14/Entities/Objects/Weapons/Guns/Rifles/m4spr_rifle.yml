@@ -1,4 +1,4 @@
-﻿- type: entity
+- type: entity
   parent: [ CMBaseWeaponRifle, RMCBaseWeaponMagazineVisuals ]
   name: M4RA battle rifle
   id: WeaponRifleM4SPR
@@ -106,6 +106,8 @@
   - type: Tag
     tags:
     - RMCWeaponRifleM4SPR
+  - type: Corrodible
+    isCorrodible: false
 
 - type: entity
   parent: WeaponRifleM4SPR

@@ -157,10 +157,10 @@
           amount: 3
         - id: RMCMobSmallHostYiren
           amount: 3
-        - id: CMUMobCarp
+        - id: CMUMobSmallHostCarp
           amount: 3
       - !type:GroupSelector
-        weight: 0.25
+        weight: 0.5
         children:
         - id: XenoEgg
           weight: 2

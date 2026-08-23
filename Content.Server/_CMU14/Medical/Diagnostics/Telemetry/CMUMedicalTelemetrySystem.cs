@@ -47,7 +47,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         SubscribeLocalEvent<CMSurgeryTargetComponent, CMSurgeryCompleteEvent>(OnSurgeryDone);
         SubscribeLocalEvent<DamageableComponent, RMCDefibrillatorAttemptEvent>(OnDefibAttempt);
         SubscribeLocalEvent<CMUPainShockStatusComponent, ComponentStartup>(OnPainShockEntered);
-        SubscribeLocalEvent<BodyPartComponent, BodyPartSeveredEvent>(OnBodyPartSevered);
+        SubscribeLocalEvent<BodyPartSeveredEvent>(OnBodyPartSevered);
         SubscribeLocalEvent<InternalBleedingChangedEvent>(OnInternalBleedingChanged);
         SubscribeLocalEvent<Content.Shared._CMU14.Medical.Anatomy.BodyParts.BodyPartHealthComponent, CMUShrapnelChangedEvent>(OnShrapnelChanged);
         SubscribeLocalEvent<RoundEndSummaryStatsEvent>(OnRoundEndStats);
@@ -95,7 +95,7 @@ public sealed partial class CMUMedicalTelemetrySystem : EntitySystem
         _painShockEntries[ent.Owner] = prior + 1;
     }
 
-    private void OnBodyPartSevered(Entity<BodyPartComponent> ent, ref BodyPartSeveredEvent args)
+    private void OnBodyPartSevered(ref BodyPartSeveredEvent args)
     {
         if (args.Type is BodyPartType.Arm or BodyPartType.Leg)
             _severedLimbs++;

@@ -47,6 +47,11 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
 using Direction = Robust.Shared.Maths.Direction;
+using Content.Client._CMU14.Roles.Ranks;
+using Content.Shared._CMU14.Roles.Ranks;
+using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared.AU14.util;
+using Content.Shared._AU14.Marines.Roles.Chevrons;
 
 namespace Content.Client.Lobby.UI
 {
@@ -80,6 +85,7 @@ namespace Content.Client.Lobby.UI
         private LoadoutWindow? _loadoutWindow;
 
         private YautjaProfileEditor? _yautjaTab;
+        [ViewVariables] private PlatoonRankPreferenceWindow? _rankPreferenceWindow;
 
         private bool _exporting;
         private bool _imaging;
@@ -1654,9 +1660,25 @@ namespace Content.Client.Lobby.UI
                };
             }
 
+            var rankEntry = BuildRankPreferenceJobEntry(job);
+
+            var rankButton = new Button()
+            {
+                Text = Loc.GetString("cmu14-rank-preference-button"),
+                HorizontalAlignment = HAlignment.Right,
+                VerticalAlignment = VAlignment.Center,
+                Margin = new Thickness(3f, 3f, 0f, 0f),
+                MinWidth = 90,
+                StyleClasses = { StyleNano.StyleClassCrtButton },
+                Disabled = rankEntry == null,
+            };
+
+            rankButton.OnPressed += args => OpenRankPreferenceWindowForJob(job, rankEntry);
+
             _jobPriorities.Add((gamemode, job.ID, selector));
             jobContainer.AddChild(selector);
             jobContainer.AddChild(loadoutWindowBtn);
+            jobContainer.AddChild(rankButton);
             CrtLobbyTheme.Apply(jobContainer);
             category.AddChild(jobContainer);
         }
@@ -3076,6 +3098,159 @@ namespace Content.Client.Lobby.UI
             _exporting = false;
             ImportButton.Disabled = false;
             ExportButton.Disabled = false;
+        }
+
+        private void OpenRankPreferenceWindowForJob(JobPrototype job, PlatoonRankPreferenceJobEntry? entry)
+        {
+            if (Profile == null || entry == null)
+                return;
+
+            _rankPreferenceWindow?.Close();
+            _rankPreferenceWindow = new PlatoonRankPreferenceWindow();
+
+            var currentPreferences = Profile.RankPreferences.TryGetValue(job.ID, out var platoonRanks)
+                ? new Dictionary<string, string?>(platoonRanks)
+                : new Dictionary<string, string?>();
+
+            _rankPreferenceWindow.PopulateSingleJob(entry, currentPreferences);
+
+            _rankPreferenceWindow.OnSave += prefs =>
+            {
+                foreach (var (platoonId, rankId) in prefs)
+                    Profile = Profile?.WithRankPreference(job.ID, platoonId, rankId);
+
+                SetDirty();
+                _rankPreferenceWindow?.Close();
+            };
+
+            _rankPreferenceWindow.OpenCentered();
+        }
+
+        private PlatoonRankPreferenceJobEntry? BuildRankPreferenceJobEntry(JobPrototype job)
+        {
+            var platoonOptions = new List<PlatoonRankOptions>();
+        
+            foreach (var platoon in _prototypeManager.EnumeratePrototypes<PlatoonPrototype>())
+            {
+                var chevronMap = ResolveChevronMapForPlatoon(job, platoon);
+                if (chevronMap == null || chevronMap.Count == 0)
+                    continue;
+        
+                var ranks = new List<RankOption>();
+                foreach (var (rankId, chevronDef) in chevronMap)
+                {
+                    if (!_prototypeManager.TryIndex<RankPrototype>(rankId, out var rankProto))
+                        continue;
+        
+                    var (unlocked, requirementsText) = EvaluateChevronRequirements(chevronDef.Requirements);
+        
+                    ranks.Add(new RankOption(
+                        rankId,
+                        rankProto.Name,
+                        rankProto.Paygrade,
+                        unlocked,
+                        requirementsText,
+                        chevronDef.Entity));
+                }
+        
+                if (ranks.Count == 0)
+                    continue;
+    
+        
+                platoonOptions.Add(new PlatoonRankOptions(
+                    platoon.ID,
+                    platoon.Name,
+                    platoon.PlatoonPatch,
+                    ranks));
+            }
+        
+            return platoonOptions.Count > 0
+                ? new PlatoonRankPreferenceJobEntry(job.ID, GetJobDisplayName(job), platoonOptions)
+                : null;
+        }
+
+        /// <summary>
+        /// Resolves the chevron map a specific platoon uses for a job: that platoon's override
+        /// if it has one (checked up the job's inheritance chain), otherwise the job's base chevrons.
+        /// </summary>
+        private Dictionary<string, ChevronDefinition>? ResolveChevronMapForPlatoon(JobPrototype job, PlatoonPrototype platoon)
+        {
+            if (platoon.ChevronOverrides != null)
+            {
+                foreach (var (overrideJob, overrideChevrons) in platoon.ChevronOverrides)
+                {
+                    if (JobInheritsFrom(job.ID, overrideJob.Id))
+                    {
+                        return overrideChevrons.ToDictionary(
+                            kvp => kvp.Key.Id,
+                            kvp => kvp.Value);
+                    }
+                }
+            }
+
+            return job.Chevrons;
+        }
+
+        private bool JobInheritsFrom(string jobId, string ancestorId)
+        {
+            if (jobId == ancestorId)
+                return true;
+
+            if (!_prototypeManager.TryIndex<JobPrototype>(jobId, out var job) || job.Parents == null)
+                return false;
+
+            foreach (var parent in job.Parents)
+            {
+                if (JobInheritsFrom(parent, ancestorId))
+                    return true;
+            }
+
+            return false;
+        }
+
+        private (bool Unlocked, string? RequirementsText) EvaluateChevronRequirements(HashSet<JobRequirement>? requirements)
+        {
+            if (requirements == null || requirements.Count == 0)
+                return (true, null);
+
+            if (!_cfgManager.GetCVar(CCVars.GameRoleTimers))
+                return (true, null);
+
+            var playTimes = _requirements.GetPlayTimes(_playerManager.LocalSession!);
+            var lines = new List<string>();
+            var unlocked = true;
+
+            foreach (var requirement in requirements)
+            {
+                if (requirement is RoleTimeRequirement roleTime)
+                {
+                    playTimes.TryGetValue(roleTime.Role, out var have);
+                    var remaining = roleTime.Time - have;
+                    var remainingMinutes = (int)Math.Ceiling(remaining.TotalMinutes);
+
+                    if (!roleTime.Inverted)
+                    {
+                        if (remainingMinutes > 0)
+                        {
+                            unlocked = false;
+                            lines.Add($"Requires {remainingMinutes} more min");
+                        }
+                    }
+                    else if (remainingMinutes <= 0)
+                    {
+                        unlocked = false;
+                        lines.Add($"Requires under {-remainingMinutes} min");
+                    }
+                }
+                else if (!requirement.Check(_entManager, _prototypeManager, Profile, playTimes, out var reason))
+                {
+                    unlocked = false;
+                    if (reason != null)
+                        lines.Add(reason.ToMarkup());
+                }
+            }
+
+            return (unlocked, lines.Count > 0 ? string.Join("\n", lines) : null);
         }
     }
 }

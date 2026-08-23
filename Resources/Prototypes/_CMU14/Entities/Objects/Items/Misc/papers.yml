@@ -90,6 +90,16 @@
       visible: false
 
 - type: entity
+  parent: CMUResearchContract
+  id: CMUAdminChemicalContract
+  name: materializable chemical contract
+  description: An admin-issued chemical contract carrying authenticated synthesis data.
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ResearchReport
+  - type: AdminChemicalContractPaper
+
+- type: entity
   parent: CMUWYPaper
   id: CMUCipherHintPaper
   categories: [ HideSpawnMenu ]
@@ -112,7 +122,6 @@
   components:
   - type: CipherHintPaper
     informDelivery: true
-
 
 
 

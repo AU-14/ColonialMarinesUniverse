@@ -55,7 +55,7 @@
     raffle:
       settings: short
   - type: GhostRoleMobSpawner
-    availableTakeovers: 2
+    availableTakeovers: 3
     deleteOnSpawn: false
     prototype: CMU14XenoPopper
 

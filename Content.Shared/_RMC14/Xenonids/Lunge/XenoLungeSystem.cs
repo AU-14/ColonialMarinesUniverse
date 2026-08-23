@@ -79,10 +79,13 @@ public sealed partial class XenoLungeSystem : EntitySystem
         if (!lunging.Running)
             return;
 
-        if (lunging.Target != target)
+        // CMU14
+        // if (lunging.Target != target)
+        //     return;
+
+        if (!_rmcLagCompensation.ValidatePredictedHit(target, ent, args.SenderSession, msg.LastRealTick, msg.Substep)) // CMU14
             return;
 
-        _rmcLagCompensation.SetLastRealTick(args.SenderSession.UserId, msg.LastRealTick);
         ApplyLungeHitEffects((ent, lunging), target, true, false);
     }
 
@@ -223,7 +226,7 @@ public sealed partial class XenoLungeSystem : EntitySystem
 
         if (_net.IsClient && predicted)
         {
-            var predictedEv = new XenoLungePredictedHitEvent(GetNetEntity(targetId), _rmcLagCompensation.GetLastRealTick(null));
+            var predictedEv = new XenoLungePredictedHitEvent(GetNetEntity(targetId), _rmcLagCompensation.GetLastRealTick(null), _rmcLagCompensation.GetClientSubstep()); // CMU14
             RaiseNetworkEvent(predictedEv);
             if (_timing.InPrediction && _timing.IsFirstTimePredicted)
             {

@@ -133,47 +133,54 @@
   - type: AU14CashVendor
     allowDepartmentBudget: true
     items:
+    # BASIC
     - id: CMDrinkCanBobdaClassic
-      name: Bobda Classic
       price: 2
     - id: CMDrinkCanBobdaCherry
-      name: Bobda Cherry
       price: 2
     - id: CMDrinkCanBobdaLime
-      name: Bobda Lime
       price: 2
     - id: CMDrinkCanBobdaGrape
-      name: Bobda Grape
       price: 2
     - id: CMDrinkCanBobdaBlue
-      name: Bobda Blue
       price: 2
     - id: CMDrinkCanBobdaPeach
-      name: Bobda Peach
       price: 2
     - id: CMDrinkCanBobdaCranberry
-      name: Bobda Cranberry
       price: 2
     - id: CMDrinkCanBobdaVanilla
-      name: Bobda Vanilla
       price: 2
     - id: CMDrinkCanBobdaPineapple
-      name: Bobda Pineapple
+      price: 2
+    # DIET
+    - id: CMDrinkCanBobdaDiet
       price: 2
     - id: CMDrinkCanBobdaClassicDiet
-      name: Diet Bobda Classic
       price: 2
+    - id: CMDrinkCanBobdaCherryDiet
+      price: 2
+    - id: CMDrinkCanBobdaLimeDiet
+      price: 2
+    - id: CMDrinkCanBobdaGrapeDiet
+      price: 2
+    - id: CMDrinkCanBobdaBlueDiet
+      price: 2
+    - id: CMDrinkCanBobdaPeachDiet
+      price: 2
+    - id: CMDrinkCanBobdaCranberryDiet
+      price: 2
+    - id: CMDrinkCanBobdaVanillaDiet
+      price: 2
+    - id: CMDrinkCanBobdaPineappleDiet
+      price: 2
+    # NON BOBDA
     - id: CMDrinkCanCola
-      name: Space Cola
       price: 2
     - id: CMDrinkCanSoda
-      name: Soda
       price: 2
     - id: CMDrinkCanTonic
-      name: Tonic Water
       price: 2
     - id: CMDrinkCanFruitBeer
-      name: Fruit Beer (NA)
       price: 2
 
 # Snack machine — mirrors CMVendorSnack
@@ -586,7 +593,7 @@
 #     - id: RMCArcadeCircuitboard
 #       amount: 2
 #     - id: RMCAtmosphericConsoleCircuitboard
-#       amount: 2    
+#       amount: 2
 
 # General medical supplies — mirrors AU14GeneralMedicalVendor field supplies + autoinjectors
 - type: entity

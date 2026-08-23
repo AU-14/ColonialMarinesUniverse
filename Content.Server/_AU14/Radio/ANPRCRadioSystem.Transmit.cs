@@ -4,6 +4,7 @@ using Content.Server.Radio.Components;
 using Content.Shared._AU14.Callsigns;
 using Content.Shared._AU14.Radio;
 using Content.Shared._RMC14.Chat;
+using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Marines;
 using Content.Shared.AU14.Radio;
 using Content.Shared.Chat;
@@ -162,29 +163,7 @@ public sealed partial class ANPRCRadioSystem
 
         if (!wearing.PendingANPRCTransmit)
         {
-            if (args.Channel != null &&
-                args.Channel.Frequency > 0 &&
-                TryComp(wearing.Radio, out ANPRCRadioComponent? logRadio) &&
-                logRadio.Enabled)
-            {
-                // log headset traffic under what actually went on air: the callsign
-                // on a callsign-faction net, the plain name on an open channel
-                var logName = AU14Callsigns.IsCallsignChannel(args.Channel) &&
-                              TryComp(ent.Owner, out AU14CallsignComponent? ownCallsign) &&
-                              !string.IsNullOrEmpty(ownCallsign.Callsign)
-                    ? ownCallsign.Callsign
-                    : Name(ent.Owner);
-
-                AppendNetLog(
-                    logRadio,
-                    _timing.CurTime.TotalSeconds,
-                    logName,
-                    $"{args.Channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(args.Channel))} MHz)",
-                    args.Message);
-
-                UpdateBuiState(new Entity<ANPRCRadioComponent>(wearing.Radio, logRadio));
-            }
-
+            LogHeadsetTraffic(ent, ref args);
             return;
         }
 
@@ -204,6 +183,57 @@ public sealed partial class ANPRCRadioSystem
         TransmitThroughPack(ent.Owner, pack, GetOnAirName(pack), ref args);
     }
 
+    // the pack keeps a book on what its wearer put out over their own headset. this
+    // runs before HeadsetSystem has had its say, so args.Channel is still whatever
+    // prefix was typed - key or no key - and the log has to satisfy itself the message
+    // is really going on air before writing anything down. without that check, cycling
+    // every radio prefix in the game reads the whole frequency plan back off the panel
+    private void LogHeadsetTraffic(Entity<WearingANPRCComponent> ent, ref EntitySpokeEvent args)
+    {
+        if (args.Channel == null || args.Channel.Frequency <= 0)
+            return;
+
+        if (!TryComp(ent.Comp.Radio, out ANPRCRadioComponent? logRadio) || !logRadio.Enabled)
+            return;
+
+        if (!SpeakerTransmitsOn(ent.Owner, args.Channel))
+            return;
+
+        // log headset traffic under what actually went on air: the callsign
+        // on a callsign-faction net, the plain name on an open channel
+        var logName = AU14Callsigns.IsCallsignChannel(args.Channel) &&
+                      TryComp(ent.Owner, out AU14CallsignComponent? ownCallsign) &&
+                      !string.IsNullOrEmpty(ownCallsign.Callsign)
+            ? ownCallsign.Callsign
+            : Name(ent.Owner);
+
+        AppendNetLog(
+            logRadio,
+            _timing.CurTime.TotalSeconds,
+            logName,
+            FormatLogChannel(logRadio, args.Channel),
+            args.Message);
+
+        UpdateBuiState(new Entity<ANPRCRadioComponent>(ent.Comp.Radio, logRadio));
+    }
+
+    // whether this message is genuinely leaving the speaker on this net: a worn headset
+    // holding the key and not read-only on it, or an intrinsic transmitter that carries
+    // it. mirrors what HeadsetSystem and RadioSystem check a moment later
+    private bool SpeakerTransmitsOn(EntityUid speaker, RadioChannelPrototype channel)
+    {
+        if (TryComp(speaker, out WearingHeadsetComponent? wearingHeadset) &&
+            TryComp(wearingHeadset.Headset, out EncryptionKeyHolderComponent? keys) &&
+            keys.Channels.Contains(channel.ID) &&
+            !keys.ReadOnlyChannels.Contains(channel.ID))
+        {
+            return true;
+        }
+
+        return TryComp(speaker, out IntrinsicRadioTransmitterComponent? intrinsic) &&
+               intrinsic.Channels.Contains(channel.ID);
+    }
+
     // sends one spoken message out through the pack (raw frequency or the active preset
     // net), handles battery cost, COMSEC warning, name masking, DF exposure and logging.
     // speaker is the wearer or a handset user at the pack
@@ -214,6 +244,19 @@ public sealed partial class ANPRCRadioSystem
         ref EntitySpokeEvent args)
     {
         var radio = pack.Comp;
+
+        // sign language and the like never go over the air. the headsets already refuse
+        // to carry them; without the same check here the pack is the way around that
+        if (_prototype.TryIndex(args.Language, out LanguagePrototype? spokenLanguage) &&
+            !spokenLanguage.CanUseRadio)
+        {
+            args.Channel = null;
+            _cmChat.ChatMessageToOne(
+                Loc.GetString("anprc-language-no-radio", ("language", spokenLanguage.Name)),
+                speaker);
+
+            return;
+        }
 
         // the set cannot search and talk at once. stay silent or stop sweeping
         if (radio.SweepEnabled)
@@ -231,7 +274,7 @@ public sealed partial class ANPRCRadioSystem
             args.Channel = null;
 
             _powerCell.TryUseCharge(pack.Owner, GetTransmitCost(radio));
-            _tunable.BroadcastOnFrequency(speaker, frequency, outMessage, senderName);
+            _tunable.BroadcastOnFrequency(speaker, frequency, outMessage, senderName, args.Language);
 
             AppendNetLog(
                 radio,
@@ -299,7 +342,7 @@ public sealed partial class ANPRCRadioSystem
 
         try
         {
-            _radio.SendRadioMessage(speaker, outMessage, channel, pack.Owner);
+            _radio.SendRadioMessage(speaker, outMessage, channel, pack.Owner, args.Language);
         }
         finally
         {
@@ -326,7 +369,7 @@ public sealed partial class ANPRCRadioSystem
             radio,
             _timing.CurTime.TotalSeconds,
             senderName,
-            $"{channel.LocalizedName} ({TunableFrequencySystem.FormatFreq(_freqPlan.GetFrequency(channel))} MHz)",
+            FormatLogChannel(radio, channel),
             outMessage);
 
         UpdateBuiState(pack);

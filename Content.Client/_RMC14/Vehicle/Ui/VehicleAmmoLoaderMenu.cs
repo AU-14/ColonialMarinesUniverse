@@ -242,7 +242,7 @@ public sealed partial class VehicleAmmoLoaderMenu : FancyWindow
                 MouseFilter = Control.MouseFilterMode.Ignore
             };
 
-            var slotAmmoPrototype = hardpoint.AmmoPrototype ?? ammoPrototype;
+            var slotAmmoPrototype = ammoSlot.DisplayPrototype ?? hardpoint.AmmoPrototype ?? ammoPrototype; // CMU14
             if (slotAmmoPrototype is { } prototype)
             {
                 icon.SetPrototype(prototype);

@@ -1,0 +1,13 @@
+- type: npcFaction
+  id: AUWeYu
+  name: Weyland-Yutani Corporation
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+  - Abomination
+
+- type: npcFaction
+  id: WeYa
+  hostile:
+  - RMCXeno

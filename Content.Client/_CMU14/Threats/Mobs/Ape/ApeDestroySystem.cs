@@ -24,11 +24,10 @@ public sealed partial class ApeDestroySystem : SharedApeDestroySystem
 
     public Animation LeapAnimation(ApeDestroyComponent destroy, Vector2 leapOffset)
     {
+        // the entity stays at the origin until landing, so the arc is keyed from it:
+        // rise to the midpoint, then descend onto the full offset the landing teleport replaces
         Vector2 midpoint = leapOffset / 2;
-        Vector2 opposite = -midpoint;
-
         midpoint += new Vector2(0, JumpHeight);
-        opposite += new Vector2(0, JumpHeight);
 
         var midtime = (float)(destroy.CrashTime.TotalSeconds / 2f);
 
@@ -46,8 +45,7 @@ public sealed partial class ApeDestroySystem : SharedApeDestroySystem
                     {
                         new(Vector2.Zero, 0f),
                         new(midpoint, midtime),
-                        new(opposite, 0f),
-                        new(Vector2.Zero, midtime)
+                        new(leapOffset, midtime)
                     }
                 }
             }

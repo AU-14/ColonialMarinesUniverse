@@ -277,13 +277,15 @@ public sealed class YautjaPredatorRoleTest
                 using var stream = resources.ContentFileRead(new ResPath($"/Locale/{locale}/_CMU14/yautja/{fileName}"));
                 using var reader = new StreamReader(stream);
                 var text = reader.ReadToEnd();
+                var popup = text.Split('\n')
+                    .Single(line => line.StartsWith("cmu-yautja-drain-power-failed = "));
 
-                Assert.That(text, Does.Contain("{$charge}/{$max}"), locale);
-                Assert.That(text, Does.Contain("{$amount}"), locale);
-                Assert.That(text, Does.Not.Contain("[bold]"), locale);
-                Assert.That(text, Does.Not.Contain("[/bold]"), locale);
-                Assert.That(text, Does.Not.Contain("<bold>"), locale);
-                Assert.That(text, Does.Not.Contain("</bold>"), locale);
+                Assert.That(popup, Does.Contain("{$charge}/{$max}"), locale);
+                Assert.That(popup, Does.Contain("{$amount}"), locale);
+                Assert.That(popup, Does.Not.Contain("[bold]"), locale);
+                Assert.That(popup, Does.Not.Contain("[/bold]"), locale);
+                Assert.That(popup, Does.Not.Contain("<bold>"), locale);
+                Assert.That(popup, Does.Not.Contain("</bold>"), locale);
             }
         });
 

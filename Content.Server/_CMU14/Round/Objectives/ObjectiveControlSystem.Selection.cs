@@ -75,6 +75,9 @@ public sealed partial class ObjectiveControlSystem
             if (objective.FactionNeutral)
                 continue;
 
+            if (objective.Active)
+                continue;
+
             if (objective is { ObjectiveLevel: 3, RollAnyway: false })
                 continue;
 

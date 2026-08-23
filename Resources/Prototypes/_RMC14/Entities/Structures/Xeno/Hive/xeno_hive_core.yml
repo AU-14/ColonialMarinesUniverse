@@ -64,7 +64,7 @@
     raffle:
       settings: short
   - type: GhostRoleMobSpawner
-    availableTakeovers: 2
+    availableTakeovers: 4
     deleteOnSpawn: false
     prototype: CMXenoLesserDrone
   - type: HiveConstructionLimited
@@ -168,7 +168,7 @@
     raffle:
       settings: short
   - type: GhostRoleMobSpawner
-    availableTakeovers: 2
+    availableTakeovers: 3
     deleteOnSpawn: false
     prototype: CMXenoLesserDrone
   - type: HiveConstructionLimited

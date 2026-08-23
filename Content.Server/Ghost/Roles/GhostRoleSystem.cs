@@ -376,7 +376,16 @@ public sealed partial class GhostRoleSystem : EntitySystem
 
     public void RegisterGhostRole(Entity<GhostRoleComponent> role)
     {
-        if (!CanTakeGhost(role.Owner, role.Comp))
+        // CMU14: registration must not check actor/mind - MindRemovedMessage fires before the
+        // session detaches, so CanTakeGhost here unregistered every ghosted body's role.
+        // if (!CanTakeGhost(role.Owner, role.Comp))
+        // {
+        //     UnregisterGhostRole(role);
+        //     return;
+        // }
+        if (role.Comp.Taken
+            || MetaData(role.Owner).EntityPaused
+            || IsBlockedXenoGhostRole(role.Owner))
         {
             UnregisterGhostRole(role);
             return;

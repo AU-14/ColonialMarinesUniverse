@@ -1,6 +1,8 @@
 using Content.Shared.Damage;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 
 namespace Content.Shared._RMC14.Chemistry.Effects;
 
@@ -17,6 +19,12 @@ public abstract partial class RMCChemicalEffect : EntityEffect
     /// </summary>
     public float ActualPotency => (_moddedPotency != 0 ? _moddedPotency : Potency) * 0.5f;
 
+    /// <summary>
+    ///     Boost-aware property level. Numeric benefits should normally be based on this value so
+    ///     level N remains exactly N times the level-one value before a safety cap is applied.
+    /// </summary>
+    public float LinearLevel => ActualPotency * 2f;
+
     // Halved again since chemicals tick every second in SS14, not every 2
     public float PotencyPerSecond => ActualPotency * 0.5f;
 
@@ -31,6 +39,13 @@ public abstract partial class RMCChemicalEffect : EntityEffect
     {
         if (args is EntityEffectReagentArgs { Reagent: { } reagent } reagentArgs && args is not EntityEffectHydroArgs)
         {
+            if (args.EntityManager.TryGetComponent<MobStateComponent>(args.TargetEntity, out var mobState))
+            {
+                var dead = mobState.CurrentState == MobState.Dead;
+                if ((dead && !ProcessOnDead) || (!dead && !ProcessOnLiving))
+                    return;
+            }
+
             var damageable = args.EntityManager.System<DamageableSystem>();
             var scale = reagentArgs.Scale;
             var boost = CalculateReagentBoost(reagentArgs);
@@ -85,6 +100,14 @@ public abstract partial class RMCChemicalEffect : EntityEffect
     {
     }
 
+    /// <summary>
+    ///     Generated reagents that contain a corpse-active property are metabolized as a whole on
+    ///     dead mobs. This per-effect guard prevents their unrelated co-properties from also firing.
+    /// </summary>
+    protected virtual bool ProcessOnDead => false;
+
+    protected virtual bool ProcessOnLiving => true;
+
     protected virtual void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
     }
@@ -112,5 +135,4 @@ public struct HydroTickEvent<T> where T : RMCChemicalEffect
         Args = args;
     }
 }
-
 

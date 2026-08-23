@@ -2,6 +2,7 @@ using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Hands;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Xenonids.Collision;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Buckle.Components;
@@ -340,6 +341,10 @@ public sealed partial class TackleSystem : EntitySystem
             return;
 
         if (ent == args.DownedBy)
+            return;
+
+        if (TryComp<RecentlyStunnedByHostileXenoComponent>(ent, out var stepped) // CMU14
+            && _timing.CurTime - stepped.At < TimeSpan.FromSeconds(1))
             return;
 
         RemCompDeferred<TackledRecentlyByComponent>(ent);

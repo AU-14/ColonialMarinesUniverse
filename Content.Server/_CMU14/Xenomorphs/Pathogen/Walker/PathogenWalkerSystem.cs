@@ -78,7 +78,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         SubscribeLocalEvent<CMUPathogenWalkerComponent, ExaminedEvent>(OnWalkerExamined);
         SubscribeNetworkEvent<CMUPathogenWalkerAcceptNetEvent>(OnAcceptNet);
         SubscribeNetworkEvent<CMUPathogenWalkerDeclineNetEvent>(OnDeclineNet);
-        SubscribeLocalEvent<CMUPathogenWalkerComponent, BodyPartSeveredEvent>(OnWalkerSevered);
+        SubscribeLocalEvent<BodyPartComponent, BodyPartSeveredEvent>(OnWalkerSevered);
     }
 
     private void OnReanimate(CMUMycotoxinInjectDoReanimateEvent ev)
@@ -152,17 +152,25 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
         Dirty(target, walker);
     }
 
-    private void OnWalkerSevered(Entity<CMUPathogenWalkerComponent> walker, ref BodyPartSeveredEvent args)
+    private void OnWalkerSevered(Entity<BodyPartComponent> part, ref BodyPartSeveredEvent args)
     {
         if (args.Type != BodyPartType.Head)
             return;
 
-        // Cancel any pending revive and mark as exhausted
-        walker.Comp.ReviveAt = null;
-        walker.Comp.RevivesUsed = walker.Comp.MaxRevives;
-        Dirty(walker);
+        if (!TryComp<CMUPathogenWalkerComponent>(args.Body, out var walker))
+            return;
 
-        _popup.PopupEntity(Loc.GetString("cmu14-walker-permanent-death"), walker, PopupType.Medium);
+        // Decap is permanent death
+        walker.ReviveAt = null;
+        walker.RevivesUsed = walker.MaxRevives;
+        walker.OfferResolved = true;
+        walker.OfferExpiresAt = null;
+        Dirty(args.Body, walker);
+
+        RemComp<GhostTakeoverAvailableComponent>(args.Body);
+        RemComp<GhostRoleComponent>(args.Body);
+
+        _popup.PopupEntity(Loc.GetString("cmu14-walker-permanent-death"), args.Body, PopupType.Medium);
     }
 
     private void OnAcceptNet(CMUPathogenWalkerAcceptNetEvent ev, EntitySessionEventArgs args)

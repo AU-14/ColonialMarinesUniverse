@@ -180,6 +180,7 @@
   name: ME3 hand welder
   description: A compact, handheld welding torch used by the Marines for cutting and welding jobs on the field. Due to the small size and slow strength, its function is limited compared to a full-sized technician's blowtorch.
   components:
+  - type: RequiresEyeProtection # CMU14
   - type: Sprite
     sprite: _RMC14/Objects/Tools/welder_hand.rsi
   - type: Item

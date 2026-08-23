@@ -1,5 +1,8 @@
 cmu-job-supervisors-aegis = AEGIS Armaments Strategic Operations Division
 
+cmu-department-aegis = AEGIS Armaments
+cmu-department-aegis-description = Contracted AEGIS Armaments personnel attached to the operation for the field evaluation of the AEG-538-KRA platform.
+
 cmu-ghost-role-information-aegis-rules = You are a member of [color=red][bold]AEGIS Armaments[/bold][/color]. You are not hostile to any faction.
     You don't remember any of your previous life, and you don't remember anything you learned as a ghost.
     You are allowed to remember knowledge about the game in general, such as how to cook, how to use objects, etc.

@@ -5,13 +5,45 @@
     "y": 32
   },
   "license": "CC-BY-SA-3.0",
-  "copyright": "Taken (and Edited) from https://github.com/tgstation/tgstation/commit/d3d351dea8d9420cee47514843a02158d0a7266f#diff-8dd94e19fdb2ff341b57e31bce101298",
+  "copyright": "Taken from https://github.com/tgstation/tgstation/blob/master/icons/mob/animal.dmi",
   "states": [
     {
       "name": "icon"
     },
     {
       "name": "carp_spawn"
+    },
+    {
+      "name": "mouth",
+      "directions": 4,
+      "delays": [
+        [
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2
+        ],
+        [
+          0.2,
+          0.2,
+          0.2
+        ]
+      ]
+    },
+    {
+      "name": "crit_mouth"
+    },
+    {
+      "name": "dead_mouth"
     },
     {
       "name": "dead"
@@ -25,22 +57,22 @@
       "delays": [
         [
           0.2,
-          0.3,
+          0.2,
           0.2
         ],
         [
           0.2,
-          0.3,
+          0.2,
           0.2
         ],
         [
           0.2,
-          0.3,
+          0.2,
           0.2
         ],
         [
           0.2,
-          0.3,
+          0.2,
           0.2
         ]
       ]

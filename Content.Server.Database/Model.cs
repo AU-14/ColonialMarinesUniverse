@@ -724,6 +724,7 @@ namespace Content.Server.Database
         public string? Allegiance { get; set; }
         public string? Origin { get; set; }
         public string? Platoon { get; set; }
+        public string? RankPreferences { get; set; }
         public bool Synthetic { get; set; }
         public string? ThreatPreference { get; set; }
         public string? GamemodeJobPriorities { get; set; }

@@ -1,9 +1,9 @@
 # ├──[ Event Badges ]────────────────────────────────────────────────┤
 - type: entity
-  id: CMUIDCardAegis
-  name: AEGIS Access Badge
-  suffix: CMU
-  description: High-Level AEGIS Access Badge, granting access to many of their restricted areas and equipment. Required to unlock AEGIS crates.
+  abstract: true
+  id: CMUIDCardAegisBase
+  name: AEGIS access badge
+  description: A laminated AEGIS Armaments contractor credential. It opens the doors AEGIS rents aboard the ship, not the equipment they ship.
   components:
   - type: WarpPoint
   - type: Sprite
@@ -17,19 +17,25 @@
       - idcard
   - type: Clickable
   - type: InteractionOutline
-  - type: Access
-    groups:
-      - CMAccessAegis
-  - type: AegisTrackable
   - type: Corrodible
     isCorrodible: false
 
 - type: entity
-  parent: CMUIDCardAegis
+  abstract: true
+  parent: CMUIDCardAegisBase
+  id: CMUIDCardAegisUnlockBase
+  description: A ruggedized R&D credential stamped for the AEG-538-KRAKEN field evaluation. The only key that releases the platform's secure container.
+  components:
+  - type: Access
+    groups:
+      - CMAccessAegis
+  - type: AegisTrackable
+
+- type: entity
+  parent: CMUIDCardAegisUnlockBase
   id: CMUIDCardAegisIntel
-  name: AEGIS Access Badge
   suffix: CMU, Intel-Bonus
-  description: High-Level AEGIS Access Badge, granting access to many of their restricted areas and equipment. Required to unlock AEGIS crates. It has some blood on it.
+  description: A ruggedized R&D credential stamped for the AEG-538-KRAKEN field evaluation. The only key that releases the platform's secure container. It has some blood on it.
   components:
   - type: IntelRescueSurvivorObjective # unused
     value: 2
@@ -40,11 +46,11 @@
 # ├──[ Staff Badges ]────────────────────────────────────────────────┤
 - type: entity
   abstract: true
-  parent: CMUIDCardAegis
+  parent: CMUIDCardAegisBase
   id: CMUIDCardAegisStaff
-  name: AEGIS access badge
   components:
   - type: IdCard
+  - type: Access
 
 - type: entity
   parent: CMUIDCardAegisStaff
@@ -69,3 +75,4 @@
   components:
   - type: PresetIdCard
     job: CMUJobAegisObserver
+  - type: AegisTrackable

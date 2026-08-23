@@ -1,9 +1,7 @@
 using Content.Server.Maps;
-using Content.Server.Station.Systems;
-using Content.Shared._CMU14.Yautja;
+using Content.Shared.Clothing.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Item;
-using Content.Shared.Preferences;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 
@@ -21,7 +19,7 @@ public sealed class YautjaMedicompPocketTest
     ];
 
     [Test]
-    public async Task MedicompVariantsFitYautjaPocket()
+    public async Task MedicompVariantsUseCmss13SizeAndEquipSlot()
     {
         var (server, _) = await PoolManager.GenerateServer(new PoolSettings(), TestContext.Out);
         EntityCoordinates gridCoords = default;
@@ -43,27 +41,15 @@ public sealed class YautjaMedicompPocketTest
             await server.WaitAssertion(() =>
             {
                 var entMan = server.EntMan;
-                var inventory = entMan.System<InventorySystem>();
-                var profile = HumanoidCharacterProfile.DefaultWithSpecies("Human")
-                    .WithName("Medicomp Pocket Test")
-                    .WithYautjaProfile(YautjaCharacterProfile.Default.WithName("Medicomp Pocket Test"));
-                var yautja = entMan.System<StationSpawningSystem>().SpawnPlayerMob(
-                    gridCoords,
-                    "CMUYautjaHunter",
-                    profile,
-                    station: null);
-
-                if (inventory.TryGetSlotEntity(yautja, "pocket2", out var existing))
-                    entMan.DeleteEntity(existing.Value);
 
                 foreach (var prototype in MedicompVariants)
                 {
-                    var medicomp = entMan.SpawnEntity(prototype, MapCoordinates.Nullspace);
+                    var medicomp = entMan.SpawnEntity(prototype, gridCoords);
 
                     Assert.That(entMan.GetComponent<ItemComponent>(medicomp).Size.Id, Is.EqualTo("Small"), prototype);
-                    Assert.That(inventory.TryEquip(yautja, medicomp, "pocket2", silent: true), Is.True, prototype);
-                    Assert.That(inventory.TryGetSlotEntity(yautja, "pocket2", out var equipped), Is.True, prototype);
-                    Assert.That(equipped, Is.EqualTo(medicomp), prototype);
+                    Assert.That(entMan.GetComponent<ClothingComponent>(medicomp).Slots,
+                        Is.EqualTo(SlotFlags.SUITSTORAGE),
+                        prototype);
                     entMan.DeleteEntity(medicomp);
                 }
             });

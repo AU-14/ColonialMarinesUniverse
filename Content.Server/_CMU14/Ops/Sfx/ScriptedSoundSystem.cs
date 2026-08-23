@@ -206,7 +206,8 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
             if (active.AnchorEntity is not { } anchor || TerminatingOrDeleted(anchor))
                 continue;
 
-            if (Transform(anchor).MapUid is not { } anchorMap || !GetConnectedMaps(anchorMap).Contains(playerMapId))
+            if (Transform(anchor).MapUid is not { } ||
+                !_zLevels.GetAllNetworkMapIds(Transform(anchor).MapID).Contains(playerMapId))
                 continue;
 
             foreach (var (layer, loop) in active.Loops)
@@ -386,7 +387,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         var mapId = Transform(mapUid.Value).MapID;
         if (!_connectedMapsCache.TryGetValue(mapId, out var maps))
         {
-            maps = GetConnectedMaps(mapUid.Value);
+            maps = _zLevels.GetAllNetworkMapIds(mapId);
             _connectedMapsCache[mapId] = maps;
         }
 
@@ -398,23 +399,6 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
             filter.AddPlayers(Filter.BroadcastMap(connectedMap).Recipients);
 
         return filter;
-    }
-
-    private HashSet<MapId> GetConnectedMaps(EntityUid mapUid)
-    {
-        if (!_zLevels.TryGetZNetwork(mapUid, out var network))
-            return new HashSet<MapId> { Transform(mapUid).MapID };
-
-        var maps = new HashSet<MapId>();
-        foreach (var mapEntity in network.Value.Comp.ZLevels.Values)
-        {
-            if (mapEntity is not { } resolved)
-                continue;
-
-            maps.Add(Transform(resolved).MapID);
-        }
-
-        return maps;
     }
 
     private void InitializeJitteredDelays(ActiveScriptedSound active, ScriptedSoundSequencePrototype seq)

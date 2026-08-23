@@ -1,5 +1,7 @@
 using System.Linq;
+using System.Numerics;
 using Content.Shared._CMU14.Ops.Sfx;
+using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared._CMU14.ZLevels.Ordnance;
 using Content.Shared._RMC14.Evacuation;
 using Content.Shared._RMC14.OrbitalCannon;
@@ -21,6 +23,7 @@ public sealed partial class EvacuationSequenceSystem : EntitySystem
     [Dependency] private IConfigurationManager _cfg = default!;
     [Dependency] private readonly SharedMapSystem _map = default!;
     [Dependency] private readonly IRobustRandom _random = default!;
+    [Dependency] private readonly CMUSharedZLevelsSystem _zLevels = default!;
 
     private static readonly ProtoId<ScriptedSoundSequencePrototype> SelfDestructSequence = "SelfDestructSequence";
     private static readonly ProtoId<ScriptedSoundSequencePrototype> SelfDestructEngineSequence = "SelfDestructEngineSequence";
@@ -66,10 +69,10 @@ public sealed partial class EvacuationSequenceSystem : EntitySystem
 
     private void OnSelfDestruct(ref ShipSelfDestructEvent ev)
     {
-        if (TryGetShipTiles(ev.Map, out var tiles))
+        if (TryGetShipWorldTiles(ev.Map, out var tiles))
         {
-            foreach (var tile in PickSpread(tiles, MainWarheadSplits))
-                _orbitalCannon.SpawnExplosion(SelfDestructWarhead, tile, CMUTopDownOrdnanceKind.Scuttle);
+            foreach (var pos in PickSpread(tiles, MainWarheadSplits))
+                _orbitalCannon.SpawnExplosion(SelfDestructWarhead, new EntityCoordinates(ev.Map, pos), CMUTopDownOrdnanceKind.Scuttle);
         }
 
         for (var i = 0; i < VolleyDelays.Length; i++)
@@ -80,38 +83,48 @@ public sealed partial class EvacuationSequenceSystem : EntitySystem
         }
     }
 
-    private bool TryGetShipTiles(EntityUid map, out List<EntityCoordinates> tiles)
+    private bool TryGetShipWorldTiles(EntityUid map, out List<Vector2> tiles)
     {
-        tiles = new List<EntityCoordinates>();
+        tiles = new List<Vector2>();
         if (TerminatingOrDeleted(map))
             return false;
 
-        var mapId = Transform(map).MapID;
-        Entity<MapGridComponent>? ship = null;
-        var bestArea = 0f;
-        foreach (var grid in _map.GetAllGrids(mapId))
+        var seen = new HashSet<Vector2i>();
+        foreach (var networkMap in _zLevels.GetAllNetworkMaps(map))
         {
-            var aabb = grid.Comp.LocalAABB;
-            var area = aabb.Width * aabb.Height;
-            if (area <= bestArea)
+            if (TerminatingOrDeleted(networkMap))
                 continue;
 
-            bestArea = area;
-            ship = grid;
+            Entity<MapGridComponent>? ship = null;
+            var bestArea = 0f;
+            foreach (var grid in _map.GetAllGrids(Transform(networkMap).MapID))
+            {
+                var aabb = grid.Comp.LocalAABB;
+                var area = aabb.Width * aabb.Height;
+                if (area <= bestArea)
+                    continue;
+
+                bestArea = area;
+                ship = grid;
+            }
+
+            if (ship is not { } target)
+                continue;
+
+            foreach (var tile in _map.GetAllTiles(target, target.Comp))
+            {
+                var world = _map.GridTileToWorldPos(target, target.Comp, tile.GridIndices);
+                if (seen.Add(new Vector2i((int) world.X, (int) world.Y)))
+                    tiles.Add(world);
+            }
         }
-
-        if (ship is not { } target)
-            return false;
-
-        foreach (var tile in _map.GetAllTiles(target, target.Comp))
-            tiles.Add(new EntityCoordinates(target, tile.GridIndices));
 
         return tiles.Count > 0;
     }
 
-    private List<EntityCoordinates> PickSpread(List<EntityCoordinates> tiles, int count)
+    private List<Vector2> PickSpread(List<Vector2> tiles, int count)
     {
-        var picked = new List<EntityCoordinates>(count);
+        var picked = new List<Vector2>(count);
         for (var i = 0; i < count && tiles.Count > 0; i++)
         {
             if (picked.Count == 0)
@@ -127,7 +140,7 @@ public sealed partial class EvacuationSequenceSystem : EntitySystem
                 var score = float.MaxValue;
                 foreach (var p in picked)
                 {
-                    var d = (tile.Position - p.Position).LengthSquared();
+                    var d = (tile - p).LengthSquared();
                     if (d < score)
                         score = d;
                 }
@@ -147,11 +160,11 @@ public sealed partial class EvacuationSequenceSystem : EntitySystem
 
     private void ScatterVolley(EntityUid map)
     {
-        if (!TryGetShipTiles(map, out var tiles))
+        if (!TryGetShipWorldTiles(map, out var tiles))
             return;
 
-        foreach (var tile in PickSpread(tiles, WarheadsPerVolley))
-            _orbitalCannon.SpawnExplosion(ScatterWarhead, tile, CMUTopDownOrdnanceKind.Scuttle);
+        foreach (var pos in PickSpread(tiles, WarheadsPerVolley))
+            _orbitalCannon.SpawnExplosion(ScatterWarhead, new EntityCoordinates(map, pos), CMUTopDownOrdnanceKind.Scuttle);
     }
 
     private void OnCVarChanged(bool enabled)

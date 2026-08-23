@@ -304,6 +304,9 @@ public sealed partial class RMCRepairableSystem : EntitySystem
             return false;
         }
 
+        if (attempt) // CMU14: flows bypass SharedToolSystem.UseTool, raise its attempt event so unprotected welding damages eyes
+            RaiseLocalEvent(tool, new ToolUseAttemptEvent(user, fuelUsed.Float()));
+
         if (!attempt && _net.IsServer)
         {
             _solution.RemoveReagent(solutionComp.Value, ReagentWelder, fuelUsed);

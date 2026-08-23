@@ -16,11 +16,9 @@ public sealed partial class Anticorrosive : RMCChemicalEffect
 
     protected override string ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
     {
-        var healing = PotencyPerSecond;
-        if (ActualPotency > 2)
-            healing += PotencyPerSecond * 0.5f;
+        var healing = PotencyPerSecond * 1.5f;
 
-        return $"Heals [color=green]{healing}[/color] burn damage.\n" +
+        return $"Heals [color=green]{healing}[/color] burn damage and restores damaged plant health.\n" +
                $"Overdoses cause [color=red]{PotencyPerSecond}[/color] brute and [color=red]{PotencyPerSecond}[/color] toxin damage.\n" +
                $"Critical overdoses cause [color=red]{PotencyPerSecond * 5}[/color] brute and [color=red]{PotencyPerSecond * 5}[/color] toxin damage";
     }
@@ -28,14 +26,8 @@ public sealed partial class Anticorrosive : RMCChemicalEffect
     protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
     {
         var rmcDamageable = args.EntityManager.System<SharedRMCDamageableSystem>();
-        var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BurnGroup, potency);
-
+        var healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BurnGroup, potency * 1.5f);
         damageable.TryChangeDamage(args.TargetEntity, healing, true, interruptsDoAfters: false);
-        if (ActualPotency > 2)
-        {
-            healing = rmcDamageable.DistributeHealingCached(args.TargetEntity, BurnGroup, potency * 0.5f);
-            damageable.TryChangeDamage(args.TargetEntity, healing, true, interruptsDoAfters: false);
-        }
     }
 
     protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
@@ -52,5 +44,11 @@ public sealed partial class Anticorrosive : RMCChemicalEffect
         damage.DamageDict[BluntType] = potency * 5;
         damage.DamageDict[PoisonType] = potency * 5;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
+    }
+
+    protected override void TickHydroTray(DamageableSystem damageable, FixedPoint2 potency, EntityEffectHydroArgs args)
+    {
+        var ev = new HydroTickEvent<Anticorrosive>(potency, args);
+        args.EntityManager.EventBus.RaiseEvent(EventSource.Local, ev);
     }
 }

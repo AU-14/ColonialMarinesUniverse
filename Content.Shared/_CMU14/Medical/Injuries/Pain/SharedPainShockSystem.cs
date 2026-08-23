@@ -1,3 +1,4 @@
+using Content.Shared._CMU14.Chemistry.Effects;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
@@ -589,7 +590,12 @@ public abstract partial class SharedPainShockSystem : EntitySystem
     }
 
     public float GetAccumulationMultiplier(EntityUid body)
-        => Math.Clamp(1f - GetAccumulationSuppression(body), 0f, 1f);
+    {
+        var multiplier = Math.Clamp(1f - GetAccumulationSuppression(body), 0f, 1f);
+        if (TryComp<ChemicalPainSensitivityComponent>(body, out var sensitivity))
+            multiplier *= MathF.Max(1f, sensitivity.Multiplier);
+        return multiplier;
+    }
 
     public float GetSuppressionMultiplier(EntityUid body)
         => GetAccumulationMultiplier(body);

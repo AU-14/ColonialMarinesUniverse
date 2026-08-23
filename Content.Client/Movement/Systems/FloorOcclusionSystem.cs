@@ -9,8 +9,10 @@ namespace Content.Client.Movement.Systems;
 public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
 {
     private static readonly ProtoId<ShaderPrototype> HorizontalCut = "HorizontalCut";
+    private const string ShaderId = "HorizontalCut"; // CMU14: keyed id required by the v288 multi post-shader API
 
     [Dependency] private IPrototypeManager _proto = default!;
+    [Dependency] private SpriteSystem _sprite = default!; // CMU14
 
     private EntityQuery<SpriteComponent> _spriteQuery;
 
@@ -50,18 +52,19 @@ public sealed partial class FloorOcclusionSystem : SharedFloorOcclusionSystem
         if (!_spriteQuery.Resolve(sprite.Owner, ref sprite.Comp, false))
             return;
 
-        var shader = _proto.Index(HorizontalCut).Instance();
-
-        if (sprite.Comp.PostShader is not null && sprite.Comp.PostShader != shader)
-            return;
+        // CMU14: obsolete PostShader property clears every keyed entry on the sprite (thermal cloaks, holograms);
+        // the guard below only made sense for the single-slot API it was protecting
+        // var shader = _proto.Index(HorizontalCut).Instance();
+        // if (sprite.Comp.PostShader is not null && sprite.Comp.PostShader != shader)
+        //     return;
 
         if (enabled)
         {
-            sprite.Comp.PostShader = shader;
+            _sprite.SetPostShader(sprite, new SpriteComponent.PostShaderArgs(ShaderId, _proto.Index(HorizontalCut).InstanceUnique())); // CMU14
         }
         else
         {
-            sprite.Comp.PostShader = null;
+            _sprite.RemovePostShader(sprite, ShaderId); // CMU14
         }
     }
 }

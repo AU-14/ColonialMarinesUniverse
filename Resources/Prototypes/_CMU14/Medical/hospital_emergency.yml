@@ -1,0 +1,154 @@
+- type: entity
+  parent: RMCCommunicationsConsoleBase
+  id: AU14HospitalEmergencyComputer
+  name: emergency computer
+  description: Coordinates hospital evacuation shuttles, casualty releases, and treatment payouts.
+  suffix: Hospital
+  components:
+  - type: Sprite
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: terminal
+  - type: InteractionOutline
+  - type: ActivatableUI
+    key: enum.HospitalEmergencyComputerUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.HospitalEmergencyComputerUi.Key:
+        type: HospitalEmergencyComputerBui
+  - type: ActivatableUIBlacklist
+    blacklist:
+      components:
+      - Xeno
+  - type: HospitalEmergencyComputer
+  - type: ActivatableUIRequiresAccess
+  - type: AccessReader
+    access: [["CMAccessColonyMedbay"], ["AU14AccessColonyHeadPhysician"], ["CMAccessColonyCommand"]]
+
+- type: entity
+  parent: CMDropshipDestinationThirdPartyWhitelist
+  id: AU14HospitalDropshipLandingZone
+  name: hospital dropship landing zone
+  description: Designates a hospital landing point for emergency casualty shuttles.
+  suffix: Hospital
+  components:
+  - type: HospitalDropshipLandingZone
+
+- type: entity
+  save: false
+  parent: CMMobHuman
+  id: AU14HospitalPatient
+  name: evacuation patient
+  suffix: Hospital, Patient
+  components:
+  - type: RandomHumanoidAppearance
+  - type: RandomHumanoidAppearanceWhitelisted
+    allowedMaleHairStyles:
+    - RMCHumanHairCrew
+    - RMCHumanHairAviator
+    - RMCHumanHairJensen
+    - RMCHumanHairAverageJoe
+    - AU14HumanHairCIA5
+    - RMCHumanHairCombover
+    - RMCHumanHairCombover2
+    - RMCHumanHairCplDietrich
+    - RMCHumanHairCut
+    - RMCHumanHairHeadStubble
+    - RMCHumanHairHighAndTight
+    - RMCHumanHairHighfade
+    - RMCHumanHairHighlight
+    - AU14HumanHairIRS
+    - RMCHumanHairLtRasczak
+    - RMCHumanHairMarineFade
+    - RMCHumanHairMarineFlatTop
+    - RMCHumanHairMedfade
+    - RMCHumanHairNofade
+    - RMCHumanHairShavedpart
+    - RMCHumanHairShavedHead
+    - RMCHumanHairShort
+    - RMCHumanHairSideUndercutHang
+    - RMCHumanHairSkinhead
+    - RMCHumanHairTaper
+    - RMCHumanHairWardaddy
+    - RMCHumanHairUndercut
+    - RMCHumanHairUndercutTop
+    - RMCHumanHairBowlcut2
+    - RMCHumanHairCIA
+    - AU14HumanHairCIA2
+    - AU14HumanHairCIA3
+    - RMCHumanHairFlowingHair
+    - RMCHumanHairCleancut
+    - RMCHumanHairIceman
+    - RMCHumanHairMulder
+    allowedFemaleHairStyles:
+    - RMCHumanHairShortbangs
+    - RMCHumanHairBobcurl
+    - RMCHumanHairMarineBun
+    - RMCHumanHairBun
+    - RMCHumanHairFringetail
+    - AU14HumanHairLowBun
+    - AU14HumanHairLowPonyTail
+    - AU14HumanHairLowPonyTailAlt
+    - RMCHumanHairPonytail1
+    - RMCHumanHairPonytail7
+    - RMCHumanHairPvtRedding
+    - RMCHumanHairPvtVasquez
+    - RMCHumanHairLong
+    - RMCHumanHairPixieCutLeft
+    - RMCHumanHairPixieCutRight
+    - RMCHumanHairBob
+    - RMCHumanHairCurls
+    - AU14HumanHairElegant
+    - RMCHumanHairFlair
+    - RMCHumanHairFlair2
+    - RMCHumanHairGentle
+    - RMCHumanHairGentle2
+    - RMCHumanHairGentlebraid
+    - RMCHumanHairLongEmo
+    - RMCHumanHairLongFringe
+    - RMCHumanHairLonger
+    - RMCHumanHairLongerAlt
+    - RMCHumanHairShortOvereye
+    - RMCHumanHairLongOvereye
+    - RMCHumanHairPonytail6
+    - RMCHumanHairPonytail3
+    - RMCHumanHairPonytail2
+    - RMCHumanHairScully
+    - RMCHumanHairScully2
+    - RMCHumanHairScully2Alt
+    - RMCHumanHairShavedbun
+    - RMCHumanHairLongAlt
+    - RMCHumanHairLongest
+    allowedHairColorsHex:
+    - "#0B0B0B"
+    - "#1A1A1A"
+    - "#222222"
+    - "#2B1B0F"
+    - "#3B2314"
+    - "#4A2E1A"
+    - "#5A3A22"
+    - "#6B4A2F"
+    - "#9C8651"
+    - "#B79A5A"
+    - "#4A1F12"
+    - "#7A5E42"
+    allowedBeardStyles:
+    - HumanFacialHairFullbeard
+    - HumanFacialHairCroppedfullbeard
+    - HumanFacialHairFiveoclock
+    - HumanFacialHair7oclock
+    - HumanFacialHairMoustache
+    - HumanFacialHairSmallstache
+    - HumanFacialHairVandyke
+    - RMCHumanFacialHairSoulfulSelleck
+    allowedEyeColorsHex:
+    - "#1F130A"
+    - "#3A2415"
+    - "#5C3A21"
+    - "#6B4E2E"
+    - "#5A6B3F"
+    - "#3F5F4A"
+    - "#4B6F8C"
+    - "#6A8195"
+    - "#7A7D7D"
+    beardChance: 0.15
+  - type: HospitalPatient

@@ -65,10 +65,11 @@ public sealed partial class ObjInteractSystem : ObjectiveSystem
         comp.CompletionsPerFaction.Clear();
         comp.HasSpawned = false;
 
+        var searchMaps = _zLevels.GetAllNetworkMapIds(Transform(uid).MapID);
         var query = EntityQueryEnumerator<InteractTrackerComponent, TransformComponent>();
         while (query.MoveNext(out _, out var tracker, out var xform))
         {
-            if (tracker.ObjectiveUid != uid || xform.MapID != Transform(uid).MapID)
+            if (tracker.ObjectiveUid != uid || !searchMaps.Contains(xform.MapID))
                 continue;
 
             tracker.CompletionsPerFaction.Clear();
@@ -80,12 +81,12 @@ public sealed partial class ObjInteractSystem : ObjectiveSystem
     {
         var interactableSet = comp.Interactables.ToHashSet(StringComparer.OrdinalIgnoreCase);
         int registered = 0;
-        var objMap = Transform(objectiveUid).MapID;
+        var searchMaps = _zLevels.GetAllNetworkMapIds(Transform(objectiveUid).MapID);
 
         var query = AllEntityQuery<MetaDataComponent, TransformComponent>();
         while (query.MoveNext(out var ent, out var meta, out var xform))
         {
-            if (xform.MapID != objMap || ent == objectiveUid || HasComp<InteractTrackerComponent>(ent))
+            if (!searchMaps.Contains(xform.MapID) || ent == objectiveUid || HasComp<InteractTrackerComponent>(ent))
                 continue;
             if (meta.EntityPrototype?.ID is not { } proto || !interactableSet.Contains(proto))
                 continue;

@@ -3,6 +3,9 @@ using Robust.Shared.Prototypes;
 using Content.Shared.NPC.Prototypes;
 using Robust.Shared.Utility;
 using Content.Shared._RMC14.Language.Prototypes;
+using Content.Shared._AU14.Marines.Roles.Chevrons;
+using Content.Shared._RMC14.Marines.Roles.Ranks;
+using Content.Shared.Roles;
 
 namespace Content.Shared.AU14.util;
 
@@ -78,4 +81,10 @@ public sealed partial class PlatoonPrototype : IPrototype
 
     [DataField("techTree", required: false)]
     public string TechTree { get; private set; } = string.Empty;
+
+    [DataField]
+    public Dictionary<ProtoId<JobPrototype>, Dictionary<ProtoId<RankPrototype>, ChevronDefinition>>? ChevronOverrides;
+
+    [DataField("platoonPatch")]
+    public ResPath? PlatoonPatch { get; private set; }
 }

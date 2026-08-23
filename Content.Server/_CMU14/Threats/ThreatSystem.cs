@@ -1,6 +1,7 @@
 using System.Linq;
 using Content.Server.AU14.Round;
 using Content.Server.AU14.Scenario;
+using Content.Server._CMU14.Round.Objectives;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
@@ -1091,6 +1092,7 @@ public sealed partial class ThreatSystem : EntitySystem
     {
         EnsureComp<NpcFactionMemberComponent>(entity);
         _npcFaction.AddFaction((entity, CompOrNull<NpcFactionMemberComponent>(entity)), threatNPCFaction);
+        RaiseLocalEvent(new ObjectiveWatchedEntityStartupEvent(entity));
     }
 
     internal bool HasCrashedDropship()

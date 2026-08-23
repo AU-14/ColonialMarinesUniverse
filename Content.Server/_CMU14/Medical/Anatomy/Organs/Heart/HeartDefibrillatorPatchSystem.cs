@@ -42,7 +42,7 @@ public sealed partial class HeartDefibrillatorPatchSystem : EntitySystem
             return;
         }
 
-        if (!heart.Stopped)
+        if (!heart.Stopped && !args.AllowBeatingHeart)
         {
             args.Cancel("cmu-medical-defib-heart-beating");
             return;

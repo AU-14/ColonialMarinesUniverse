@@ -1,8 +1,8 @@
 - type: entity
   abstract: true
   id: VehicleSPPAPCInteriorBase
-  name: SPP APC interior piece
-  description: A decorative interior piece for an SPP APC.
+  name: UPP APC interior piece
+  description: A decorative interior piece for an UPP APC.
   placement:
     mode: PlaceFree
   components:
@@ -14,7 +14,7 @@
 - type: entity
   abstract: true
   id: VehicleSPPAPCRoofBase
-  name: SPP APC Side Door
+  name: UPP APC Side Door
   placement:
     mode: PlaceFree
   components:
@@ -38,8 +38,8 @@
 - type: entity
   abstract: true
   id: VehicleSPPAPCChassisBase
-  name: SPP APC interior chassis
-  description: A chassis segment for an SPP APC interior.
+  name: UPP APC interior chassis
+  description: A chassis segment for an UPP APC interior.
   placement:
     mode: PlaceFree
   components:
@@ -162,7 +162,7 @@
 - type: entity
   parent: VehicleSPPAPCConsoleBase
   id: VehicleSPPAPCDriverConsole
-  name: SPP APC driver console
+  name: UPP APC driver console
   components:
   - type: Sprite
     state: Driveconsole
@@ -170,7 +170,7 @@
 - type: entity
   parent: VehicleSPPAPCConsoleBase
   id: VehicleSPPAPCDriverConsoleOff
-  name: SPP APC driver console (off)
+  name: UPP APC driver console (off)
   components:
   - type: Sprite
     state: Driveconsole0
@@ -178,7 +178,7 @@
 - type: entity
   parent: VehicleSPPAPCConsoleBase
   id: VehicleSPPAPCDriverConsoleBroken
-  name: SPP APC driver console (broken)
+  name: UPP APC driver console (broken)
   components:
   - type: Sprite
     state: Driveconsoleb
@@ -186,7 +186,7 @@
 - type: entity
   parent: VehicleSPPAPCConsoleBase
   id: VehicleSPPAPCWeaponConsole
-  name: SPP APC weapon console
+  name: UPP APC weapon console
   components:
   - type: Sprite
     state: Weaponconsole
@@ -194,7 +194,7 @@
 - type: entity
   parent: VehicleSPPAPCConsoleBase
   id: VehicleSPPAPCWeaponConsoleOff
-  name: SPP APC weapon console (off)
+  name: UPP APC weapon console (off)
   components:
   - type: Sprite
     state: Weaponconsole0
@@ -202,7 +202,7 @@
 - type: entity
   parent: VehicleSPPAPCConsoleBase
   id: VehicleSPPAPCWeaponConsoleBroken
-  name: SPP APC weapon console (broken)
+  name: UPP APC weapon console (broken)
   components:
   - type: Sprite
     state: Weaponconsoleb
@@ -211,8 +211,8 @@
   abstract: true
   parent: CMClosetBase
   id: VehicleSPPAPCLockerBase
-  name: SPP APC locker
-  description: A storage locker for SPP APC interiors.
+  name: UPP APC locker
+  description: A storage locker for UPP APC interiors.
   placement:
     mode: PlaceFree
   components:
@@ -239,13 +239,13 @@
 - type: entity
   parent: VehicleSPPAPCLockerBase
   id: VehicleSPPAPCLocker
-  name: SPP APC locker
+  name: UPP APC locker
 
 - type: entity
   parent: VehicleInteriorWallMountedBase
   id: VehicleSPPAPCAmmoLoader
-  name: SPP APC ammo loader
-  description: A loader for SPP APC hardpoint ammunition.
+  name: UPP APC ammo loader
+  description: A loader for UPP APC hardpoint ammunition.
   components:
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/Interiors/sppapc.rsi

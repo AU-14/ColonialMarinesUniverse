@@ -368,6 +368,7 @@ namespace Content.Client.LateJoin
 
                 if (!stationHasDepartments)
                 {
+                    jobListScroll.VerticalExpand = false; // CMU14: empty factions hug one line instead of splitting the window
                     jobList.AddChild(new Label { Text = Loc.GetString("late-join-gui-no-departments-available") });
                 }
             }

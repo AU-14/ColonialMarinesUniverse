@@ -10,6 +10,7 @@ using Content.Shared.Effects;
 using Content.Shared.Hands.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffect;
+using Content.Shared.Vehicle.Components; // CMU14
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Components;
 using Content.Shared.Weapons.Melee.Events;
@@ -167,6 +168,10 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 
     protected override bool InRange(EntityUid user, EntityUid target, float range, ICommonSession? session)
     {
+        if (TryComp<VehicleComponent>(target, out var vehicle) // CMU14: vehicle lerp between ticks, client diverged from server
+            && vehicle.MovementKind == VehicleMovementKind.Grid)
+            return true;
+
         var xform = Transform(target);
         var targetCoordinates = xform.Coordinates;
         var targetLocalAngle = xform.LocalRotation;

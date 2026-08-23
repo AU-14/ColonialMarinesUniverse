@@ -214,6 +214,11 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
                 killComp.AmountKilledPerFaction.TryGetValue(consoleFaction.ToLowerInvariant(), out int killed);
                 fetchProgress = $"{killed}/{toKill} kills";
             }
+            if (TryComp(objUid, out ArrestObjectiveComponent? arrestComp))
+            {
+                arrestComp.AmountArrestedPerFaction.TryGetValue(consoleFaction.ToLowerInvariant(), out int arrested);
+                fetchProgress = $"{arrested}/{arrestComp.ArrestCount} arrests";
+            }
 
             var displayDesc2 = objComp.ObjectiveDescription;
             if (objComp.IntelTiersProtos.Count > 0)

@@ -43,6 +43,46 @@
 
 - type: entity
   parent: CMBaseStructure
+  id: CMUAdminChemicalContractConsole
+  name: chemical contract materializer
+  description: An admin-only Weyland-Yutani console that issues exact generated-chemical contracts and materializes them into vials.
+  suffix: ADMIN ONLY
+  components:
+  - type: Transform
+    anchored: false
+  - type: Anchorable
+  - type: Physics
+    bodyType: Static
+    canCollide: false
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.25,-0.25,0.25,0.25"
+        density: 25
+        mask:
+        - TabletopMachineMask
+        layer:
+        - TabletopMachineLayer
+  - type: Sprite
+    drawdepth: SmallObjects
+    sprite: _RMC14/Structures/Machines/computer.rsi
+    state: research
+  - type: Clickable
+  - type: Corrodible
+    isCorrodible: false
+  - type: InteractionOutline
+  - type: AdminChemicalContractConsole
+  - type: ActivatableUI
+    key: enum.AdminChemicalContractConsoleUi.Key
+  - type: UserInterface
+    interfaces:
+      enum.AdminChemicalContractConsoleUi.Key:
+        type: AdminChemicalContractConsoleBui
+
+- type: entity
+  parent: CMBaseStructure
   id: CMUXRFScanner
   name: XRF scanner
   description: A spectrometer that bombards a sample in high energy radiation to detect emitted fluorescent x-ray patterns. By using the emission spectrum of the sample it can identify its chemical composition.

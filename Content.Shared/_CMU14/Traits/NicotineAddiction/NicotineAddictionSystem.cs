@@ -4,6 +4,7 @@ using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using Content.Shared._CMU14.Chemistry.Effects;
 
 namespace Content.Shared._CMU14.Traits.NicotineAddiction;
 
@@ -21,6 +22,13 @@ public sealed partial class NicotineAddictionSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<NicotineAddictionComponent, ComponentStartup>(OnStartup);
+        SubscribeLocalEvent<NicotineAddictionComponent, CureChemicalAddictionEvent>(OnCure);
+    }
+
+    private void OnCure(Entity<NicotineAddictionComponent> ent, ref CureChemicalAddictionEvent args)
+    {
+        _alerts.ClearAlert(ent.Owner, ent.Comp.CravingAlert);
+        RemCompDeferred<NicotineAddictionComponent>(ent);
     }
 
     private void OnStartup(Entity<NicotineAddictionComponent> ent, ref ComponentStartup args)

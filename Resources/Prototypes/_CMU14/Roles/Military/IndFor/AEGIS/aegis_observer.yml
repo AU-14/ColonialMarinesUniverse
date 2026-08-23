@@ -4,14 +4,22 @@
   name: cmu-job-name-aegis-observer
   description: cmu-job-description-aegis-observer
   startingGear: CMUGearAegisObserver
+  accessGroups:
+  - ShipMasterAccess
+  - aulegacygroupcommand
+  - AU14GovforCommand
+  - CMAccessAegis
   roundComponents:
   - type: Skills
     skills:
-      RMCSkillEndurance: 1
-      RMCSkillFirearms: 1
+      RMCSkillEndurance: 2
+      RMCSkillConstruction: 2
+      RMCSkillFirearms: 2
       RMCSkillIntel: 3
-      RMCSkillLeadership: 2
-      RMCSkillResearch: 1
+      RMCSkillLeadership: 3
+      RMCSkillResearch: 2
+      RMCSkillSurgery: 1
+      RMCSkillMedical: 2
   - type: JobPrefix
     prefix: cmu-job-prefix-aegis-observer
 

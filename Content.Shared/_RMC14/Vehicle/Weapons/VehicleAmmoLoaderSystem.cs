@@ -675,7 +675,8 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
                 slot.Capacity,
                 CanLoadSlot(heldBox, ammoPrototype, ammo, hardpointAmmo, slot.SlotIndex),
                 _hardpointAmmo.HasUnloadRounds(hardpointAmmo, ammo, slot.SlotIndex),
-                slot.IsReadySlot));
+                slot.IsReadySlot,
+                slot.IsReadySlot ? _bulletBox.GetBoxForAmmo(ammo.Proto) : null)); // CMU14
         }
 
         return entries;
@@ -754,7 +755,7 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
         if (transferAmount <= 0)
             return;
 
-        var unloadedAmount = SpawnUnloadedAmmo(user, refill, transferAmount);
+        var unloadedAmount = SpawnUnloadedAmmo(user, refill, transferAmount, ammoSlot == 0 ? ammo.Proto : null); // CMU14
         if (unloadedAmount <= 0)
             return;
 
@@ -763,9 +764,10 @@ public sealed partial class VehicleAmmoLoaderSystem : EntitySystem
         _popup.PopupClient(Loc.GetString("rmc-vehicle-ammo-loader-unloaded", ("amount", unloadedAmount), ("target", ammoUid)), loader, user);
     }
 
-    private int SpawnUnloadedAmmo(EntityUid user, RefillableByBulletBoxComponent refill, int amount)
+    private int SpawnUnloadedAmmo(EntityUid user, RefillableByBulletBoxComponent refill, int amount, EntProtoId? chamberedProto) // CMU14 Method
     {
-        if (amount <= 0 || refill.BulletType is not { } prototype)
+        // CMU14: chambered variant rounds unload as the shell box that loaded them, not the generic bullet type box
+        if (amount <= 0 || (_bulletBox.GetBoxForAmmo(chamberedProto) ?? refill.BulletType) is not { } prototype)
             return 0;
 
         var remaining = amount;

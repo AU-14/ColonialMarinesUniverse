@@ -382,7 +382,7 @@ public sealed partial class ZombieSummonerSystem : EntitySystem
 
         var (severedPartUid, severedPart) = _random.Pick(chosen);
         var ev = new BodyPartSeveredEvent(body, severedPartUid, severedPart.PartType);
-        RaiseLocalEvent(severedPartUid, ref ev);
+        RaiseLocalEvent(severedPartUid, ref ev, broadcast: true);
     }
 
     private void OnMinionShutdown(Entity<ZombieSummonerMinionComponent> ent, ref ComponentShutdown args)

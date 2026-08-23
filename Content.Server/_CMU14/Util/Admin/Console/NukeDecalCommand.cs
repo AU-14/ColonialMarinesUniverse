@@ -15,18 +15,20 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
     [Dependency] private DecalSystem _decalSys = default!;
     [Dependency] private IPrototypeManager _protoMan = default!;
 
-    public override string Command => "nukedecals";
-    public override string Help => "nukedecals [cleanableOnly (true/false, default: true)] [decalId...] - Deletes decals from every loaded grid.\n" +
+    public override string Command => "nuke:decals";
+    public override string Description => "Deletes decals from every loaded grid.";
+    public override string Help =>
+        "nuke:decals [all (true/false, default: false)] [decalId...] - Deletes decals from every loaded grid.\n" +
         " By default this will only delete cleanable decals (like blood/dirt etc.) to spare map details.\n" +
-        " To delete all decals (including mapper placed details), you should pass 'false' as the first argument.";
+        " To delete all decals (including mapper placed details), you should pass 'true' as the first argument.";
 
     public override void Execute(IConsoleShell shell, string argStr, string[] args)
     {
-        var cleanableOnly = true;
+        var all = false;
         var idArgs = args.AsEnumerable();
         if (args.Length > 0 && bool.TryParse(args[0], out var parsedBool))
         {
-            cleanableOnly = parsedBool;
+            all = parsedBool;
             idArgs = args.Skip(1);
         }
 
@@ -36,20 +38,20 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
         var query = EntityManager.EntityQueryEnumerator<DecalGridComponent>();
         while (query.MoveNext(out var gridUid, out var decalGrid))
         {
-            var (removed, skipped) = _decalSys.RemoveDecals(gridUid, idFilter, cleanableOnly, decalGrid);
+            var (removed, skipped) = _decalSys.RemoveDecals(gridUid, idFilter, !all, decalGrid);
             totalRemoved += removed;
             totalSkipped += skipped;
             gridCount++;
         }
 
         var filterMsg = idFilter != null ? $" matching {idFilter.Count} ids" : "";
-        var cleanMsg = cleanableOnly ? " (cleanable only)" : " (all decals)";
+        var cleanMsg = all ? " (all decals)" : " (cleanable only)";
         shell.WriteLine($"Removed {totalRemoved} decals{filterMsg}{cleanMsg} from {gridCount} grids.");
 
         if (totalSkipped > 0)
         {
-            shell.WriteLine($"[nukedecals] {totalSkipped} matching decals were found but skipped because they have disabled defaultCleanable (janitor clean).");
-            shell.WriteLine($"To delete them, run the command again starting with 'false' ('nukedecals false {string.Join(" ", idArray)}').");
+            shell.WriteLine($"[nuke:decals] {totalSkipped} matching decals were found but skipped because they have disabled defaultCleanable (janitor clean).");
+            shell.WriteLine($"To delete them, run the command again starting with 'true' ('nuke:decals true {string.Join(" ", idArray)}').");
         }
     }
 
@@ -65,7 +67,7 @@ public sealed partial class NukeDecalsCommand : LocalizedEntityCommands
         {
             var options = new List<string> { "true", "false" };
             options.AddRange(decalOptions);
-            return CompletionResult.FromHintOptions(options, "[cleanableOnly (default: true)] or [decalId]");
+            return CompletionResult.FromHintOptions(options, "[all (default: false)] or [decalId]");
         }
 
         return CompletionResult.FromHintOptions(decalOptions, "[decalId...]");

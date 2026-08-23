@@ -27,7 +27,7 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
 
     private void OnActivated(EntityUid uid, FetchObjectiveComponent fetchComp, ref ObjectiveActivatedEvent args)
     {
-        if (!TryComp(uid, out CMUObjectiveComponent? comp) || !comp.Active || fetchComp.HasSpawned)
+        if (!TryComp(uid, out CMUObjectiveComponent? comp) || !comp.Active)
             return;
 
         if (args.LateActivation)
@@ -37,6 +37,9 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
         ObjInt.RegisterInterest(uid, objMap,
             keys: string.IsNullOrEmpty(fetchComp.TargetPrototype) ? null : new[] { fetchComp.TargetPrototype },
             wildcard: fetchComp.UseAnyEntity);
+
+        if (fetchComp.HasSpawned)
+            return;
 
         var claimed = string.IsNullOrEmpty(fetchComp.TargetPrototype)
             ? 0 : fetchComp.Catalog
@@ -58,6 +61,10 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             ObjCtrl.MarkObjectiveFailed(uid, comp);
             return;
         }
+
+        if (claimed < fetchComp.FetchCount)
+            _logs.Warning($"[OBJ-FETCH] '{comp.ObjectiveDescription}' ('{comp.Id}') claimed only {claimed} of" +
+                          $" {fetchComp.SpawnCount} sources; needs {fetchComp.FetchCount} fetched to complete - not enough targets exist on the map!");
 
         fetchComp.HasSpawned = true;
     }
@@ -83,7 +90,7 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
         }
 
         var objMap = Transform(uid).MapID;
-        var searchMaps = GetZNetworkMapIds(objMap);
+        var searchMaps = _zLevels.GetAllNetworkMapIds(objMap);
         var markerQuery = AllEntityQuery<CMUObjectiveMarkerComponent, TransformComponent>();
         while (markerQuery.MoveNext(out _, out var markerComp, out var markerXform))
         {
@@ -143,10 +150,18 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             (pool[n], pool[k]) = (pool[k], pool[n]);
         }
 
-        var toClaim = Math.Min(comp.SpawnCount, pool.Count);
-        for (var i = 0; i < toClaim; i++)
+        var claimed = Math.Min(comp.SpawnCount, pool.Count);
+        for (var i = 0; i < pool.Count; i++)
         {
             var (isPreplaced, srcUid) = pool[i];
+
+            if (i >= claimed)
+            {
+                if (isPreplaced)
+                    QueueDel(srcUid);
+                continue;
+            }
+
             if (isPreplaced)
             {
                 EnsureComp<FetchItemComponent>(srcUid).ObjectiveUid = objectiveUid;
@@ -161,13 +176,13 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
             MarkMarkerUsed(srcUid);
         }
 
-        return toClaim;
+        return claimed;
     }
 
     private List<EntityUid> FindPreplacedFetchEntities(MapId objMap, string targetPrototype)
     {
         var found = new List<EntityUid>();
-        var searchMaps = GetZNetworkMapIds(objMap);
+        var searchMaps = _zLevels.GetAllNetworkMapIds(objMap);
         var query = EntityQueryEnumerator<MetaDataComponent, TransformComponent>();
         while (query.MoveNext(out var ent, out var meta, out var entXform))
         {
@@ -194,6 +209,7 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
 
         var map = Transform(uid).MapID;
         var interested = ObjInt.GetInterestedObjectives(map, [proto]);
+        var claimed = HasComp<FetchItemComponent>(uid);
         foreach (var objUid in interested)
         {
             if (!TryComp(objUid, out CMUObjectiveComponent? auComp) || !auComp.Active)
@@ -208,7 +224,11 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
                 continue;
 
             EnsureComp<FetchItemComponent>(uid).ObjectiveUid = objUid;
+            claimed = true;
         }
+
+        if (!claimed && ObjCtrl.SelectionComplete && ObjCtrl.TryGetFetchObjectiveForItem(proto, out var objectiveProto))
+            ObjCtrl.LateSpawnFetchObjectiveForItem(uid, objectiveProto);
     }
 
     private void OnDropped(EntityUid uid, FetchItemComponent item, ref DroppedEvent _) => TryCompleteFetch(uid, item);
@@ -329,9 +349,9 @@ public sealed partial class ObjFetchSystem : ObjectiveSystem
 
         int unfetched = 0;
         var q = EntityQueryEnumerator<FetchItemComponent>();
-        while (q.MoveNext(out var _, out var other))
+        while (q.MoveNext(out var ent, out var other))
         {
-            if (other.ObjectiveUid == comp.ObjectiveUid && !other.Fetched)
+            if (ent != uid && other.ObjectiveUid == comp.ObjectiveUid && !other.Fetched)
                 unfetched++;
         }
 

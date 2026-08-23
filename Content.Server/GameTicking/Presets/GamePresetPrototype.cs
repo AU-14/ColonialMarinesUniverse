@@ -42,6 +42,10 @@ namespace Content.Server.GameTicking.Presets
         [DataField("maxPlayers")]
         public int? MaxPlayers;
 
+        /// <summary>Whether hives can gain or spawn burrowed larva during this preset.</summary>
+        [DataField("burrowedLarvaEnabled")]
+        public bool BurrowedLarvaEnabled = true; // CMU14
+
         /// <summary>
         /// Whether this preset starts the automatic third-party queue without requiring a selected threat.
         /// </summary>

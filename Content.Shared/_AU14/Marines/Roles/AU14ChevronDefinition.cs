@@ -10,5 +10,5 @@ public sealed partial class ChevronDefinition
     public EntProtoId Entity { get; set; }
 
     [DataField]
-    public List<JobRequirement>? Requirements { get; set; }
+    public HashSet<JobRequirement>? Requirements { get; set; }
 }

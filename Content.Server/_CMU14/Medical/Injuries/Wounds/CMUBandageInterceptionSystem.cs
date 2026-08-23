@@ -152,13 +152,13 @@ public sealed partial class CMUBandageInterceptionSystem : EntitySystem
         var doAfter = new DoAfterArgs(EntityManager, args.User, delay, doAfterEv,
             args.User, target: patient, used: used)
         {
-            BreakOnMove = true,
+            // BreakOnMove = true, // CMU14: bandage keeps applying while moving
             BreakOnHandChange = true,
             NeedHand = true,
             BlockDuplicate = true,
             CancelDuplicate = false,
             DuplicateCondition = DuplicateConditions.SameTool | DuplicateConditions.SameTarget,
-            MovementThreshold = 0.5f,
+            // MovementThreshold = 0.5f, // CMU14: only read with BreakOnMove
             TargetEffect = "RMCEffectHealBusy",
         };
         args.Handled = true;

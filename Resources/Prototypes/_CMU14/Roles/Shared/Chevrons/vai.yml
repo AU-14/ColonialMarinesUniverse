@@ -103,3 +103,83 @@
   - type: RankChanger
     rank: VAI_Synthetic
     override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: CMU14ChevronVASCGroupCommander
+  name: vasc group commander chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: VAI_VASCGroupCommander
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: CMU14ChevronVASCGroupAdvisor
+  name: vasc group advisor chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: VAI_VASCGroupAdvisor
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: CMU14ChevronVASCGroupCommanderAssistant
+  name: vasc group commander assistant chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: VAI_VASCGroupCommanderAssistant
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: CMU14ChevronVASCDepartamentLeader
+  name: vasc departament leader chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: VAI_VASCDepartamentLeader
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: CMU14ChevronVASCSpecialist
+  name: vasc specialist chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_snco
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_snco
+  - type: RankChanger
+    rank: VAI_VASCSpecialist
+    override: true

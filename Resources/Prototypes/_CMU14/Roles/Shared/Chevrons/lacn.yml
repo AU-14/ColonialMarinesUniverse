@@ -1,7 +1,7 @@
 # base
 - type: entity
   parent: RMCArmbandBase
-  id: AU14ChevronLACNBase
+  id: CMU14ChevronLACNBase
   abstract: true
   suffix: LACN Chevron
   description: LACN naval rank insignia. The pin leaves a green stain against your lapel, but it matches the Latin Commando uniform so they've yet to revise it.
@@ -9,9 +9,9 @@
 # ├──[ Enlisted ]────────────────────────────────────────────────────┤
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNSeamanRecruit
-  name: seaman recruit chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNSailor
+  name: sailor chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -21,13 +21,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
-    rank: AU14RankLACNSeamanRecruit
+    rank: CMU14RankLACNSailor
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNSeamanApprentice
-  name: seaman apprentice chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNSailorFirstClass
+  name: first class sailor chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -37,13 +37,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
-    rank: AU14RankLACNSeamanApprentice
+    rank: CMU14RankLACNSailorFirstClass
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNSeaman
-  name: seaman chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNThirdClassCorporal
+  name: third class corporal chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -53,13 +53,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_enlisted
   - type: RankChanger
-    rank: AU14RankLACNSeaman
+    rank: CMU14RankLACNThirdClassCorporal
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNPettyOfficerThirdClass
-  name: petty officer third class chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNSecondClassCorporal
+  name: second class corporal chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -69,13 +69,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
-    rank: AU14RankLACNPettyOfficerThirdClass
+    rank: CMU14RankLACNSecondClassCorporal
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNPettyOfficerSecondClass
-  name: petty officer second class chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNFirstClassCorporal
+  name: first class corporal chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -85,13 +85,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
-    rank: AU14RankLACNPettyOfficerSecondClass
+    rank: CMU14RankLACNFirstClassCorporal
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNPettyOfficerFirstClass
-  name: petty officer first class chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNThirdClassSergeant
+  name: third class sergeant chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -101,13 +101,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_nco
   - type: RankChanger
-    rank: AU14RankLACNPettyOfficerFirstClass
+    rank: CMU14RankLACNThirdClassSergeant
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNChiefPettyOfficer
-  name: chief petty officer chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNSecondClassSergeant
+  name: second class sergeant chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -117,13 +117,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
-    rank: AU14RankLACNChiefPettyOfficer
+    rank: CMU14RankLACNSecondClassSergeant
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNSeniorChief
-  name: senior chief chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNFirstClassSergeant
+  name: first class sergeant chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -133,13 +133,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
-    rank: AU14RankLACNSeniorChief
+    rank: CMU14RankLACNFirstClassSergeant
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNMasterChief
-  name: master chief chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNMasterSergeant
+  name: master sergeant chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -149,30 +149,14 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_snco
   - type: RankChanger
-    rank: AU14RankLACNMasterChief
+    rank: CMU14RankLACNMasterSergeant
     override: true
 
 # ├──[ Officers ]────────────────────────────────────────────────────┤
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNSubEnsign
-  name: sub-ensign chevron
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_officer
-  - type: UniformAccessory
-    playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_officer
-  - type: RankChanger
-    rank: AU14RankLACNSubEnsign
-    override: true
-
-- type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNEnsign
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNEnsign
   name: ensign chevron
   components:
   - type: Sprite
@@ -183,13 +167,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
-    rank: AU14RankLACNEnsign
+    rank: CMU14RankLACNEnsign
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNLieutenantJuniorGrade
-  name: lieutenant junior grade chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNShipLineLieutenant
+  name: ship of the line lieutenant chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -199,13 +183,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
-    rank: AU14RankLACNLieutenantJuniorGrade
+    rank: CMU14RankLACNShipLineLieutenant
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNLieutenant
-  name: lieutenant chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNCorvetteCaptain
+  name: corvette captain chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -215,13 +199,13 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
-    rank: AU14RankLACNLieutenant
+    rank: CMU14RankLACNCorvetteCaptain
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNLieutenantCommander
-  name: lieutenant commander chevron
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNFrigateCaptain
+  name: frigate captain chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -231,29 +215,45 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
-    rank: AU14RankLACNLieutenantCommander
+    rank: CMU14RankLACNFrigateCaptain
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNCommander
-  name: commander chevron
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_officer
-  - type: UniformAccessory
-    playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_officer
-  - type: RankChanger
-    rank: AU14RankLACNCommander
-    override: true
-
-- type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNCaptain
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNCaptain
   name: captain chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: CMU14RankLACNCaptain
+    override: true
+
+- type: entity
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNCounterAdmiral
+  name: counter admiral chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_officer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_officer
+  - type: RankChanger
+    rank: CMU14RankLACNCounterAdmiral
+    override: true
+
+- type: entity
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNViceAdmiral
+  name: vice admiral chevron
   components:
   - type: Sprite
     sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
@@ -263,44 +263,12 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_officer
   - type: RankChanger
-    rank: AU14RankLACNCaptain
+    rank: CMU14RankLACNViceAdmiral
     override: true
 
 - type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNRearAdmiral
-  name: rear admiral chevron
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
-  - type: UniformAccessory
-    playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
-  - type: RankChanger
-    rank: AU14RankLACNRearAdmiral
-    override: true
-
-- type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNViceAdmiral
-  name: vice admiral chevron
-  components:
-  - type: Sprite
-    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-    state: ranks_flagofficer
-  - type: UniformAccessory
-    playerSprite:
-      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
-      state: equipped-ranks_flagofficer
-  - type: RankChanger
-    rank: AU14RankLACNViceAdmiral
-    override: true
-
-- type: entity
-  parent: AU14ChevronLACNBase
-  id: AU14ChevronLACNAdmiral
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNAdmiral
   name: admiral chevron
   components:
   - type: Sprite
@@ -311,5 +279,37 @@
       sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
       state: equipped-ranks_flagofficer
   - type: RankChanger
-    rank: AU14RankLACNAdmiral
+    rank: CMU14RankLACNAdmiral
+    override: true
+
+- type: entity
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNAdmiralGeneral
+  name: admiral general chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: CMU14RankLACNAdmiralGeneral
+    override: true
+
+- type: entity
+  parent: CMU14ChevronLACNBase
+  id: CMU14ChevronLACNCaptainGeneral
+  name: captain general of the navy chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: CMU14RankLACNCaptainGeneral
     override: true

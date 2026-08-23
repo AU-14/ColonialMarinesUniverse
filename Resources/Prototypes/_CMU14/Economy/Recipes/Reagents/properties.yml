@@ -560,6 +560,8 @@
 - type: reagentProperty
   parent: Hemogenic
   id: Yautjahemogenic
+  name: cmu-reagent-property-name-yautjahemogenic
+  description: cmu-reagent-property-desc-yautjahemogenic
   code: YHM
   rarity: disabled
   effectName: Yautjahemogenic

@@ -156,7 +156,13 @@ public sealed partial class ANPRCRadioSystem
         if (!ent.Comp.SlotLabels.ContainsKey(args.Slot))
             return;
 
-        if (!_prototype.HasIndex(args.Channel))
+        if (!_prototype.TryIndex(args.Channel, out var channelProto))
+            return;
+
+        // the picker only ever offers nets this set is entitled to, but the message is
+        // client-sent: without the same check here a hand-rolled one tunes the pack
+        // straight onto an enemy net nobody ever fixed
+        if (!KnowsFrequency(ent.Comp, channelProto))
             return;
 
         ent.Comp.FrequencyOverrides.Remove(args.Slot);
@@ -367,6 +373,50 @@ public sealed partial class ANPRCRadioSystem
 
     // the log lives in the set and rolls over at 50 entries. printing is how an
     // intercept becomes something the cell can act on after the operator moves on
+    // the log is a machine transcript, not a translation. who reads it is whoever has
+    // the panel open - the wearer, or anyone standing at a planted station - so the
+    // language pass belongs here, against the people actually looking. a line reads in
+    // clear only when every one of them speaks it, and with more than one reader it is
+    // rendered for nobody in particular so one reader's ear cannot lend another theirs
+    private List<ANPRCNetLogEntry> BuildNetLog(Entity<ANPRCRadioComponent> ent)
+    {
+        return BuildNetLog(ent, _ui.GetActors(ent.Owner, ANPRCRadioUI.Key));
+    }
+
+    public List<ANPRCNetLogEntry> BuildNetLog(Entity<ANPRCRadioComponent> ent, IEnumerable<EntityUid> readers)
+    {
+        var reading = readers.ToList();
+        var reader = reading.Count == 1 ? reading[0] : EntityUid.Invalid;
+        var entries = new List<ANPRCNetLogEntry>(ent.Comp.NetLog.Count);
+
+        foreach (var entry in ent.Comp.NetLog)
+        {
+            entries.Add(RenderLogEntry(entry, reading, reader));
+        }
+
+        return entries;
+    }
+
+    private ANPRCNetLogEntry RenderLogEntry(ANPRCNetLogEntry entry, List<EntityUid> readers, EntityUid reader)
+    {
+        // no reader on record falls back to Invalid, which understands the common
+        // tongue and nothing else - the safe way to be wrong
+        var clear = readers.Count > 0
+            ? readers.TrueForAll(r => _language.CanUnderstand(r, entry.Language))
+            : _language.CanUnderstand(EntityUid.Invalid, entry.Language);
+
+        if (clear)
+            return entry;
+
+        return new ANPRCNetLogEntry(
+            entry.Timestamp,
+            entry.SenderName,
+            entry.ChannelDisplay,
+            _language.ObfuscateMessageForListener(reader, entry.Message, entry.Language, EntityUid.Invalid),
+            entry.Intercepted,
+            entry.Language);
+    }
+
     private void OnPrintLog(Entity<ANPRCRadioComponent> ent, ref ANPRCPrintLogMsg args)
     {
         if (!ent.Comp.Enabled || (!ent.Comp.IsEquipped && !ent.Comp.Planted))
@@ -377,8 +427,15 @@ public sealed partial class ANPRCRadioSystem
 
         var interceptsOnly = args.InterceptsOnly;
 
+        var scribe = args.Actor;
+        var readers = new List<EntityUid> { scribe };
+
+        // you can only write down what you understood. a captured intercept copied off
+        // a set in a language the operator does not have goes onto the paper as the
+        // syllables they heard, for somebody who does speak it to read later
         var entries = ent.Comp.NetLog
             .Where(entry => !interceptsOnly || entry.Intercepted)
+            .Select(entry => RenderLogEntry(entry, readers, scribe))
             .ToList();
 
         if (entries.Count == 0)
@@ -506,7 +563,7 @@ public sealed partial class ANPRCRadioSystem
                 _crypto.GetFillFaction(ent.Owner),
                 _crypto.IsFillStale(ent.Owner),
                 ent.Comp.OperatorFaction,
-                new List<ANPRCNetLogEntry>(ent.Comp.NetLog),
+                BuildNetLog(ent),
                 batteryFraction,
                 hasBattery,
                 antennaLabel,

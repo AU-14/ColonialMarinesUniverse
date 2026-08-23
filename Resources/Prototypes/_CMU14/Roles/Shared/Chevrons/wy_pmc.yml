@@ -251,3 +251,35 @@
   - type: RankChanger
     rank: AU14RankWeYuSiteDirector
     override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: CMU14ChevronWeYuBranchManager
+  name: branch manager chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: CMU14RankWeYuBranchManager
+    override: true
+
+- type: entity
+  parent: AU14ChevronWeYuBase
+  id: CMU14ChevronWeYuRegionalPMCDirector
+  name: regional pmc director chevron
+  components:
+  - type: Sprite
+    sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+    state: ranks_flagofficer
+  - type: UniformAccessory
+    playerSprite:
+      sprite: _AU14/Clothing/Accessory/Chevrons/universal.rsi
+      state: equipped-ranks_flagofficer
+  - type: RankChanger
+    rank: CMU14RankWeYuRegionalPMCDirector
+    override: true

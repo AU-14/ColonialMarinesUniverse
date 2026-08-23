@@ -9,6 +9,8 @@ using Content.Shared.Cuffs;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.NPC.Components;
 using Content.Shared.Mind.Components;
+using Content.Shared.Mobs;
+using Content.Shared.Mobs.Components;
 using Robust.Shared.Map;
 
 namespace Content.Server._CMU14.Round.Objectives.Type;
@@ -39,10 +41,10 @@ public sealed partial class ObjArrestSystem : ObjectiveSystem
 
     private void OnActivated(EntityUid uid, ArrestObjectiveComponent arrestComp, ref ObjectiveActivatedEvent _)
     {
-        if (!TryComp(uid, out CMUObjectiveComponent? comp) || !comp.Active || arrestComp.HasSpawned)
+        if (!TryComp(uid, out CMUObjectiveComponent? comp) || !comp.Active)
             return;
 
-        if (arrestComp.SpawnMob && !string.IsNullOrEmpty(arrestComp.TargetPrototype))
+        if (!arrestComp.HasSpawned && arrestComp.SpawnMob && !string.IsNullOrEmpty(arrestComp.TargetPrototype))
             ActivateArrestObjective(uid, arrestComp);
 
         var objMap = Transform(uid).MapID;
@@ -130,10 +132,11 @@ public sealed partial class ObjArrestSystem : ObjectiveSystem
 
     private void MarkExistingEntities(EntityUid uid, ArrestObjectiveComponent comp, CMUObjectiveComponent auComp, MapId objMap)
     {
+        var searchMaps = _zLevels.GetAllNetworkMapIds(objMap);
         var query = AllEntityQuery<MetaDataComponent, TransformComponent, NpcFactionMemberComponent>();
         while (query.MoveNext(out var ent, out var meta, out var xform, out var factionComp))
         {
-            if (ent == uid || xform.MapID != objMap)
+            if (ent == uid || !searchMaps.Contains(xform.MapID))
                 continue;
 
             var factions = factionComp.Factions.Select(f => f.ToString().ToLowerInvariant()).ToList();
@@ -167,6 +170,9 @@ public sealed partial class ObjArrestSystem : ObjectiveSystem
 
     private void OnCuffStateChanged(EntityUid uid, ArrestMarkedForComponent comp, ref CuffedStateChangeEvent args)
     {
+        if (TryComp<MobStateComponent>(uid, out var mobState) && mobState.CurrentState == MobState.Dead)
+            return;
+
         if (!TryComp<CuffableComponent>(uid, out var cuffable) || !_cuffableSystem.IsCuffed((uid, cuffable), requireFullyCuffed: false))
             return;
 

@@ -127974,8 +127974,8 @@ entities:
   - uid: 9734
     components:
     - type: Transform
-      rot: 1.5707963267948966 rad
-      pos: 66.5,-12.5
+      rot: 4.71238898038469 rad
+      pos: 123.5,-17.5
       parent: 1
 - proto: AUDepartmentConsoleServices
   entities:
@@ -159590,9 +159590,6 @@ entities:
     - type: Transform
       pos: 122.5,-16.5
       parent: 1
-    - type: AccessReader
-      access:
-      - - CMAccessColonyBrig
 - proto: CMVendorSeeds
   entities:
   - uid: 72077

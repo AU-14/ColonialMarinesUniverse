@@ -33,6 +33,8 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
 
     private static readonly ProtoId<ShaderPrototype> ShaderDropTargetOutOfRange = "SelectionOutline";
 
+    private const string DropTargetShaderId = "DragDropOutline"; // CMU14: keyed id required by the v288 multi post-shader API
+
     [Dependency] private IStateManager _stateManager = default!;
     [Dependency] private IInputManager _inputManager = default!;
     [Dependency] private IEyeManager _eyeManager = default!;
@@ -98,8 +100,8 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
     /// </summary>
     private ScreenCoordinates? _mouseDownScreenPos;
 
-    private ShaderInstance? _dropTargetInRangeShader;
-    private ShaderInstance? _dropTargetOutOfRangeShader;
+    private ShaderInstance _dropTargetInRangeShader = default!; // CMU14: non-nullable, assigned in Initialize
+    private ShaderInstance _dropTargetOutOfRangeShader = default!; // CMU14
 
     private readonly List<SpriteComponent> _highlightedSprites = new();
     private readonly HashSet<EntityUid> _dropTargetCandidates = new();
@@ -462,15 +464,16 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
                         && _interactionSystem.InRangeUnobstructed(user.Value, entity);
             }
 
-            if (inRangeSprite.PostShader != null &&
-                inRangeSprite.PostShader != _dropTargetInRangeShader &&
-                inRangeSprite.PostShader != _dropTargetOutOfRangeShader)
-            {
-                continue;
-            }
+            // CMU14: obsolete PostShader property clears every keyed entry on the sprite, guard only fed the single-slot API
+            // if (inRangeSprite.PostShader != null &&
+            //     inRangeSprite.PostShader != _dropTargetInRangeShader &&
+            //     inRangeSprite.PostShader != _dropTargetOutOfRangeShader)
+            // {
+            //     continue;
+            // }
 
             // highlight depending on whether its in or out of range
-            inRangeSprite.PostShader = valid.Value ? _dropTargetInRangeShader : _dropTargetOutOfRangeShader;
+            _sprite.SetPostShader(inRangeSprite, new SpriteComponent.PostShaderArgs(DropTargetShaderId, valid.Value ? _dropTargetInRangeShader : _dropTargetOutOfRangeShader)); // CMU14
             inRangeSprite.RenderOrder = EntityManager.CurrentTick.Value;
             _highlightedSprites.Add(inRangeSprite);
         }
@@ -480,10 +483,11 @@ public sealed partial class DragDropSystem : SharedDragDropSystem
     {
         foreach (var highlightedSprite in _highlightedSprites)
         {
-            if (highlightedSprite.PostShader != _dropTargetInRangeShader && highlightedSprite.PostShader != _dropTargetOutOfRangeShader)
-                continue;
+            // CMU14: keyed removal, other entries (cloaks, holograms) are no longer clobbered
+            // if (highlightedSprite.PostShader != _dropTargetInRangeShader && highlightedSprite.PostShader != _dropTargetOutOfRangeShader)
+            //     continue;
 
-            highlightedSprite.PostShader = null;
+            _sprite.RemovePostShader(highlightedSprite, DropTargetShaderId); // CMU14
             highlightedSprite.RenderOrder = 0;
         }
 

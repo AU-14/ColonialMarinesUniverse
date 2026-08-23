@@ -9,8 +9,9 @@ public sealed partial class XenoDestroyLeapingComponent : Component
     [DataField, AutoNetworkedField]
     public EntityCoordinates? Target;
 
-    [DataField, AutoNetworkedField]
-    public TimeSpan? LeapMoveAt;
+    // CMU14: no mid-flight teleport; the move happens on landing (see SharedXenoDestroySystem)
+    //[DataField, AutoNetworkedField]
+    //public TimeSpan? LeapMoveAt;
 
     [DataField, AutoNetworkedField]
     public TimeSpan? LeapEndAt;

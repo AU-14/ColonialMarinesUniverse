@@ -123,7 +123,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
             if (_entityWhitelist.IsWhitelistFail(stun.Whitelist, args.Target))
                 continue;
 
-            var distance = (_transform.GetMoverCoordinates(args.Target).Position - bullet.Comp.ShotFrom.Value.Position).Length();
+            var distance = (_transform.GetMapCoordinates(args.Target).Position - bullet.Comp.ShotFrom.Value.Position).Length(); // CMU14: ShotFrom is map-space, compare map position to map position
             if (distance > stun.MaxRange || _stand.IsDown(args.Target))
                 return;
 
@@ -195,7 +195,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
         if (knockedBackFrom == null)
             return false;
 
-        var vec = _transform.GetMoverCoordinates(target).Position - knockedBackFrom.Value.Position;
+        var vec = _transform.GetMapCoordinates(target).Position - knockedBackFrom.Value.Position; // CMU14: knockedBackFrom is map-space, keep the direction vector in one space
         if (vec.Length() == 0)
             return false;
 

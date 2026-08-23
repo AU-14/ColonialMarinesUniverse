@@ -1,4 +1,5 @@
 using Content.Shared._RMC14.Movement;
+using Content.Shared._CMU14.Chemistry.Effects;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Rejuvenate;
@@ -54,7 +55,9 @@ public sealed partial class RMCSlowSystem : EntitySystem
         if (!TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow))
             return false;
 
-        var expire = _timing.CurTime + duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier);
+        var chemical = new GetChemicalStunTimeMultiplierEvent();
+        RaiseLocalEvent(ent, ref chemical);
+        var expire = _timing.CurTime + duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * chemical.Multiplier;
 
         var slowdown = EnsureComp<RMCSlowdownComponent>(ent);
 
@@ -74,7 +77,9 @@ public sealed partial class RMCSlowSystem : EntitySystem
         if (!TryComp<RMCSpeciesSlowdownModifierComponent>(ent, out var slow))
             return false;
 
-        var expire = _timing.CurTime + duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier);
+        var chemical = new GetChemicalStunTimeMultiplierEvent();
+        RaiseLocalEvent(ent, ref chemical);
+        var expire = _timing.CurTime + duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * chemical.Multiplier;
 
         var slowdown = EnsureComp<RMCSuperSlowdownComponent>(ent);
 

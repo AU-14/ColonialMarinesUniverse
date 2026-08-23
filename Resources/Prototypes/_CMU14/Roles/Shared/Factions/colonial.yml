@@ -1,0 +1,41 @@
+- type: npcFaction
+  id: Civilian
+  hostile:
+  - RMCXeno
+
+- type: npcFaction
+  id: AUColonist
+  name: Colonists
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+  - Abomination
+
+- type: npcFaction
+  id: ColonySynth
+  name: Colony Synthetics
+
+- type: npcFaction
+  id: CLF
+  name: Colony Liberation Front
+  hostile:
+  - GOVFOR
+  - RMCXeno
+
+- type: npcFaction
+  id: AUBureau
+  name: Colonial Marshals
+  hostile:
+  - RMCXeno
+  - AUGoo
+  - CMUAPE
+
+- type: npcFaction
+  id: NSPA
+  name: Neroid Sector Policing Authority
+  hostile:
+  - RMCXeno
+  - CLF
+  - AUGoo
+  - Abomination

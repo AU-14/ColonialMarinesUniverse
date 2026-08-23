@@ -11,12 +11,16 @@ using Robust.Shared.Random;
 using Robust.Shared.Prototypes;
 using Content.Shared.Labels.Components;
 using Content.Shared._RMC14.Requisitions;
+using Content.Shared.AU14;
+using Content.Server.Station;
+using Content.Server.Station.Components;
+using Content.Server.Station.Systems;
 
 namespace Content.Server._RMC14.Spawners;
 
 /// <summary>
 /// System to handle delayed AEGIS event execution when scheduled from lobby
-/// </summary>
+/// </summary> CMU14 Class
 public sealed partial class AegisLobbyEventSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
@@ -26,6 +30,8 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private FaxSystem _fax = default!;
     [Dependency] private SharedRequisitionsSystem _req = default!;
+    [Dependency] private StationJobsSystem _stationJobs = default!;
+    [Dependency] private StationSystem _station = default!;
 
     private bool _aegisScheduled = false;
     private TimeSpan? _scheduledEventTime = null;
@@ -50,7 +56,7 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
         {
             _scheduledEventTime = _timing.CurTime + TimeSpan.FromMinutes(1);
             _eventExecuted = false;
-            Log.Info($"AEGIS lobby event scheduled to execute at {_scheduledEventTime} (1 minute after round start)");
+            Log.Info($"[AEGIS] Lobby event scheduled to execute at {_scheduledEventTime} (1 minute after round start)");
         }
     }
 
@@ -89,7 +95,7 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
         if (_gameTicker.RunLevel == GameRunLevel.InRound)
         {
             // We're already in a round, don't schedule anything - this should not happen with proper usage
-            Log.Warning("AEGIS lobby event called during active round - this should only be used in lobby");
+            Log.Warning("[AEGIS] Lobby event called during active round - this should only be used in lobby");
             _aegisScheduled = false;
             _scheduledEventTime = null; // Cancel scheduling
             return;
@@ -107,7 +113,7 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
         _scheduledEventTime = null;
         _scheduledMessage = string.Empty;
         _eventExecuted = false;
-        Log.Info("AEGIS lobby event schedule has been reset");
+        Log.Info("[AEGIS] Lobby event schedule has been reset");
     }
 
     /// <summary>
@@ -132,7 +138,7 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
     /// </summary>
     private void ExecuteScheduledAegisEvent()
     {
-        Log.Info("Executing scheduled AEGIS lobby event");
+        Log.Info("[AEGIS] Executing scheduled AEGIS lobby event");
 
         var systemManager = EntityManager.EntitySysManager;
 
@@ -141,12 +147,54 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
 
         // Send operational briefing to command level fax machines
         if (!SendCommandFax(EntityManager, "CMUPaperAegisLobbyInfoFax", AegisFaxGroups, "High Command"))
-            Log.Info("AEGIS event failed to send any faxes!");
+            Log.Info("[AEGIS] Event failed to send any faxes!");
 
         _req.CreateSpecialDelivery("CMUCrateAegisLobby");
-        Log.Info("AEGIS delivery created and should be sent shortly.");
+        Log.Info("[AEGIS] Delivery created and should be sent shortly.");
+        OpenAegisJobSlot();
         //Unschedule after execution
         _aegisScheduled = false;
+    }
+
+    public bool OpenAegisJobSlot()
+    {
+        if (TryGetGovforStation() is not { } station)
+        {
+            Log.Warning("[AEGIS] Failed to open an AEGIS job slot: no GOVFOR ship station found");
+            return false;
+        }
+
+        if (_stationJobs.TryAdjustJobSlot(station, "CMUJobAegisResearcher", 1, true, false))
+        {
+            Log.Info($"[AEGIS] Opened an AEGIS researcher job slot on station {station}");
+            return true;
+        }
+
+        return false;
+    }
+
+    public int? GetAegisJobSlots()
+    {
+        if (TryGetGovforStation() is not { } station ||
+            !TryComp<StationJobsComponent>(station, out var jobs))
+            return null;
+
+        return jobs.JobList.TryGetValue("CMUJobAegisResearcher", out var slots) ? slots : 0;
+    }
+
+    private EntityUid? TryGetGovforStation()
+    {
+        var shipQuery = EntityQueryEnumerator<ShipFactionComponent>();
+        while (shipQuery.MoveNext(out var shipUid, out var shipFaction))
+        {
+            if (shipFaction.Faction is not { } faction || faction.ToLower() != "govfor")
+                continue;
+
+            if (_station.GetOwningStation(shipUid) is { } station)
+                return station;
+        }
+
+        return null;
     }
 
     public bool SendCommandFax(IEntityManager entityManager, EntProtoId faxProto, IEnumerable<string> groups, string? sender = null, string? customMsg = null)

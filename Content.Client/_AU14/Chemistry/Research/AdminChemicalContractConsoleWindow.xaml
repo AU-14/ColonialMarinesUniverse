@@ -1,0 +1,20 @@
+<controls:AdminChemicalContractConsoleWindow
+    xmlns="https://spacestation14.io"
+    xmlns:controls="clr-namespace:Content.Client._AU14.Chemistry.Research"
+    Title="{Loc admin-chemical-contract-window-title}"
+    MinSize="680 600">
+    <PanelContainer Margin="8">
+        <BoxContainer Orientation="Vertical" HorizontalExpand="True" VerticalExpand="True">
+            <Label Text="{Loc admin-chemical-contract-window-instructions}" Margin="4,4,4,8" />
+            <BoxContainer Orientation="Horizontal" Margin="4,0,4,8">
+                <Button Name="SelectAll" Access="Public" Text="{Loc admin-chemical-contract-select-all}" />
+                <Button Name="ClearAll" Access="Public" Text="{Loc admin-chemical-contract-clear-all}" Margin="8,0,0,0" />
+            </BoxContainer>
+            <ScrollContainer HScrollEnabled="False" VScrollEnabled="True" VerticalExpand="True">
+                <BoxContainer Name="PropertyContainer" Access="Public" Orientation="Vertical" HorizontalExpand="True" />
+            </ScrollContainer>
+            <RichTextLabel Name="Status" Access="Public" Margin="4,8,4,4" />
+            <Button Name="IssueContract" Access="Public" Text="{Loc admin-chemical-contract-issue}" Margin="4" />
+        </BoxContainer>
+    </PanelContainer>
+</controls:AdminChemicalContractConsoleWindow>

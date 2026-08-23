@@ -221,8 +221,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
                   Adjust Substep: {substep}
                 """);
 
-        _rmcLagCompensation.SetLastRealTick(args.SenderSession.UserId, msg.LastRealTick);
-        var hitConfirmed = _rmcLagCompensation.Collides(target, (shot.Value, physics), args.SenderSession, substep);
+        var hitConfirmed = _rmcLagCompensation.ValidatePredictedHit(target, (shot.Value, physics), args.SenderSession, msg.LastRealTick, substep); // CMU14
 
         if (hitConfirmed)
         {

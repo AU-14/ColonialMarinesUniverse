@@ -5,13 +5,13 @@ using Robust.Shared.Random;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Content.Server._CMU14.Chemistry.HydroTrayEffects;
 
 namespace Content.Server.Botany;
 
 public sealed partial class MutationSystem : EntitySystem
 {
     [Dependency] private ServerReagentGeneratorSystem _gen = default!;
-
 
     public void MutateSeed(Entity<PlantHolderComponent> plantHolder, ref SeedData seed, float severity)
     {
@@ -129,6 +129,8 @@ public sealed partial class MutationSystem : EntitySystem
                     // TODO: flowers
                     break;
                 default:
+                    if (HasComp<CMUChemicalMutationSuppressionComponent>(plantHolder))
+                        break;
                     string c1pick = _robustRandom.Pick(_gen.ChemicalGenClassesList["C1"]);
                     string c2pick = _robustRandom.Pick(_gen.ChemicalGenClassesList["C2"]);
                     string c3pick = _robustRandom.Pick(_gen.ChemicalGenClassesList["C3"]);

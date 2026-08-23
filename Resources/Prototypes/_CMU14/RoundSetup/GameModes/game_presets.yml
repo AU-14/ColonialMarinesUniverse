@@ -36,6 +36,7 @@
   showInVote: true
   description: Insurgency mode
   minPlayers: 35
+  burrowedLarvaEnabled: false
   requiresGovforVote: true
   thirdPartyAutoSpawn: true
   thirdPartyInterval: 3600
@@ -95,6 +96,7 @@
   showInVote: true
   maxPlayers: 60
   description: Live in an offworld colony as it falls into chaos.
+  burrowedLarvaEnabled: false
   supportedPlanets:
     - AUPlanetShepherdsPride
 #    - AUPlanetLV327
