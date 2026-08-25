@@ -3,6 +3,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Server._CMU14.Yautja;
 using Content.Client._CMU14.Yautja;
+using Content.Client.Humanoid;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
 using Robust.Client.ResourceManagement;
@@ -248,6 +249,63 @@ public sealed class YautjaCharacterProfileTest
             Assert.That(profile.Appearance.HairColor, Is.EqualTo(expected));
             Assert.That(quills.MarkingColors.Single(), Is.EqualTo(expected));
         });
+    }
+
+    [Test]
+    public async Task AchromaticSkinPresetsDesaturateWarmBodySprites()
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var client = pair.Client;
+
+        await client.WaitPost(() =>
+        {
+            var entMan = client.EntMan;
+            foreach (var skinColor in new[] { YautjaSkinColor.Gray, YautjaSkinColor.White })
+            {
+                var dummy = entMan.Spawn("CMUMobYautjaDummy");
+                try
+                {
+                    var profile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja");
+                    profile.Appearance = profile.Appearance.WithSkinColor(
+                        YautjaCharacterProfile.GetSkinColorColor(skinColor));
+                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(dummy, profile);
+
+                    var sprite = entMan.GetComponent<SpriteComponent>(dummy);
+                    Assert.That(sprite.LayerMapTryGet(HumanoidVisualLayers.Chest, out var chestLayer), Is.True);
+                    var chest = (SpriteComponent.Layer) sprite[chestLayer];
+                    Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"),
+                        $"{skinColor} must neutralize the warm source texture instead of inheriting its yellow cast.");
+
+                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(
+                        dummy,
+                        HumanoidCharacterProfile.DefaultWithSpecies("Human"));
+
+                    Assert.That(chest.ShaderPrototype, Is.Null,
+                        "The Yautja skin shader must not leak when a preview dummy is reused for another species.");
+
+                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(
+                        dummy,
+                        HumanoidCharacterProfile.DefaultWithSpecies("Yautja"));
+                    entMan.System<HumanoidAppearanceSystem>().SetSkinColor(
+                        dummy,
+                        YautjaCharacterProfile.GetSkinColorColor(skinColor));
+                    Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
+
+                    entMan.System<HumanoidAppearanceSystem>().LoadProfile(
+                        dummy,
+                        HumanoidCharacterProfile.DefaultWithSpecies("WorkingJoe"));
+
+                    Assert.That(chest.ShaderPrototype, Is.Null,
+                        "The Yautja skin shader must also be cleared for species whose body sprites do not match skin color.");
+                }
+                finally
+                {
+                    entMan.DeleteEntity(dummy);
+                }
+            }
+        });
+
+        await pair.CleanReturnAsync();
     }
 
     [Test]

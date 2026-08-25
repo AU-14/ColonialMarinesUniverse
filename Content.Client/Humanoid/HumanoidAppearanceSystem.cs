@@ -1,5 +1,6 @@
 using Content.Client.DisplacementMap;
 using Content.Client.Items.Systems;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared.CCVar;
 using Content.Shared.Humanoid;
@@ -17,6 +18,9 @@ namespace Content.Client.Humanoid;
 
 public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceSystem
 {
+    private const string YautjaSpecies = "Yautja";
+    private const string GreyscaleShader = "Greyscale";
+
     [Dependency] private IPrototypeManager _prototypeManager = default!;
     [Dependency] private MarkingManager _markingManager = default!;
     [Dependency] private IConfigurationManager _configurationManager = default!;
@@ -145,8 +149,16 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
         var proto = _prototypeManager.Index<HumanoidSpeciesSpriteLayer>(protoId);
         component.BaseLayers[key] = proto;
 
+        // Preview entities are reused between species. Clear the shader we own even when the
+        // incoming species uses a fixed-color body sprite and never enters the MatchSkin branch.
+        if (component.Species != YautjaSpecies)
+            SetYautjaSkinShader(sprite, layerIndex, component, layer.Color);
+
         if (proto.MatchSkin)
+        {
             layer.Color = component.SkinColor.WithAlpha(proto.LayerAlpha);
+            SetYautjaSkinShader(sprite, layerIndex, component, component.SkinColor);
+        }
 
         if (proto.BaseSprite != null)
             _sprite.LayerSetSprite((entity, sprite), layerIndex, proto.BaseSprite);
@@ -404,10 +416,14 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
             if (colors != null && j < colors.Count)
             {
                 _sprite.LayerSetColor((entity, sprite), layerId, colors[j]);
+                if (_sprite.LayerMapTryGet((entity, sprite), layerId, out var markingLayer, false))
+                    SetYautjaSkinShader(sprite, markingLayer, humanoid, colors[j], markingPrototype.BodyPart);
             }
             else
             {
                 _sprite.LayerSetColor((entity, sprite), layerId, Color.White);
+                if (_sprite.LayerMapTryGet((entity, sprite), layerId, out var markingLayer, false))
+                    SetYautjaSkinShader(sprite, markingLayer, humanoid, Color.White, markingPrototype.BodyPart);
             }
 
             if (humanoid.MarkingsDisplacement.TryGetValue(markingPrototype.BodyPart, out var displacementData) && markingPrototype.CanBeDisplaced)
@@ -434,7 +450,36 @@ public sealed partial class HumanoidAppearanceSystem : SharedHumanoidAppearanceS
 
             var index = _sprite.LayerMapReserve((uid, sprite), layer);
             sprite[index].Color = skinColor.WithAlpha(spriteInfo.LayerAlpha);
+            SetYautjaSkinShader(sprite, index, humanoid, skinColor);
         }
+    }
+
+    private static void SetYautjaSkinShader(
+        SpriteComponent sprite,
+        int layer,
+        IRMCHumanoidAppearance humanoid,
+        Color layerColor,
+        HumanoidVisualLayers? markingLayer = null)
+    {
+        var spriteLayer = (SpriteComponent.Layer) sprite[layer];
+        var hasGreyscaleShader = spriteLayer.ShaderPrototype?.Id == GreyscaleShader;
+
+        if (humanoid.Species != YautjaSpecies)
+        {
+            if (hasGreyscaleShader)
+                sprite.LayerSetShader(layer, null, null);
+            return;
+        }
+
+        var matchesSkin = markingLayer == null ||
+                          markingLayer == HumanoidVisualLayers.Hair && layerColor == humanoid.SkinColor;
+        var achromaticSkin = humanoid.SkinColor == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.Gray) ||
+                             humanoid.SkinColor == YautjaCharacterProfile.GetSkinColorColor(YautjaSkinColor.White);
+
+        if (matchesSkin && achromaticSkin)
+            sprite.LayerSetShader(layer, GreyscaleShader);
+        else if (hasGreyscaleShader)
+            sprite.LayerSetShader(layer, null, null);
     }
 
     public override void SetLayerVisibility(
