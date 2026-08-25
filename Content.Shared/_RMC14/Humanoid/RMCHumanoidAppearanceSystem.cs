@@ -53,6 +53,12 @@ public sealed partial class RMCHumanoidAppearanceSystem : EntitySystem
 
         var coords = new EntityCoordinates(_spawnMap.Value, Vector2.Zero);
         var profile = HumanoidCharacterProfile.RandomWithSpecies(appearance.Species);
+        if (appearance.Species == "Yautja")
+        {
+            profile = profile.WithCharacterAppearance(
+                profile.Appearance.WithSkinColor(appearance.SkinColor));
+        }
+
         var random = _rmcStationSpawning.SpawnPlayerMob(coords, null, profile, null);
         if (!TryComp(random, out HumanoidAppearanceComponent? fakeLook))
             return;

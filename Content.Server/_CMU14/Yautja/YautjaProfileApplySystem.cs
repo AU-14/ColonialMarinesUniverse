@@ -79,6 +79,7 @@ public sealed partial class YautjaProfileApplySystem : EntitySystem
 
         var yautja = EnsureComp<YautjaComponent>(uid);
         yautja.ClanRank = rank;
+        yautja.SkinColorRandomized = true;
         Dirty(uid, yautja);
 
         var humanoidProfile = HumanoidCharacterProfile.DefaultWithSpecies("Yautja")

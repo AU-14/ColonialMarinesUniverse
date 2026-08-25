@@ -32,6 +32,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Access.Components;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Dialog;
+using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Stealth;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
@@ -94,6 +95,100 @@ namespace Content.IntegrationTests._CMU14.Yautja;
 [TestFixture]
 public sealed class YautjaPredatorRoleTest
 {
+    [TestCase(YautjaSkinColor.Gray)]
+    [TestCase(YautjaSkinColor.White)]
+    public async Task YautjaSpawnPreservesSelectedAchromaticSkinColor(YautjaSkinColor skinColor)
+    {
+        await using var pair = await PoolManager.GetServerClient(new PoolSettings { Connected = true });
+        var server = pair.Server;
+        var client = pair.Client;
+        var map = await pair.CreateTestMap();
+        var expected = YautjaCharacterProfile.GetSkinColorColor(skinColor);
+        EntityUid hunter = default;
+        EntityUid? previousAttached = null;
+
+        try
+        {
+            await server.WaitPost(() =>
+            {
+                var entMan = server.EntMan;
+                var session = server.PlayerMan.Sessions.Single();
+                var yautja = YautjaCharacterProfile.Default.WithSkinColor(skinColor);
+                var lobbyProfile = HumanoidCharacterProfile.DefaultWithSpecies("Human")
+                    .WithYautjaProfile(yautja);
+
+                hunter = entMan.System<StationSpawningSystem>().SpawnPlayerMob(
+                    map.GridCoords,
+                    "CMUYautjaHunter",
+                    lobbyProfile,
+                    station: null);
+                previousAttached = session.AttachedEntity;
+                server.PlayerMan.SetAttachedEntity(session, hunter);
+
+                var spawned = new PlayerSpawnCompleteEvent(
+                    hunter,
+                    session,
+                    "CMUYautjaHunter",
+                    lateJoin: false,
+                    silent: true,
+                    joinOrder: 1,
+                    station: map.MapUid,
+                    profile: lobbyProfile);
+                entMan.EventBus.RaiseLocalEvent(hunter, spawned, broadcast: true);
+
+                var humanoid = entMan.GetComponent<HumanoidAppearanceComponent>(hunter);
+                Assert.That(humanoid.SkinColor, Is.EqualTo(expected));
+
+                var hidden = entMan.GetComponent<HiddenAppearanceComponent>(hunter);
+                Assert.That(hidden.Appearance?.SkinColor, Is.EqualTo(expected),
+                    "The hidden identity must retain the selected Yautja skin color.");
+            });
+
+            await pair.ReallyBeIdle(10);
+
+            await server.WaitAssertion(() =>
+            {
+                var entMan = server.EntMan;
+                Assert.That(entMan.GetComponent<HumanoidAppearanceComponent>(hunter).SkinColor,
+                    Is.EqualTo(expected),
+                    "The authoritative appearance must remain selected after the spawn event settles.");
+                var hidden = entMan.GetComponent<HiddenAppearanceComponent>(hunter);
+                Assert.That(hidden.Appearance?.SkinColor, Is.EqualTo(expected));
+            });
+
+            await client.WaitAssertion(() =>
+            {
+                var entMan = client.EntMan;
+                var clientHunter = entMan.GetEntity(server.EntMan.GetNetEntity(hunter));
+                var humanoid = entMan.GetComponent<HumanoidAppearanceComponent>(clientHunter);
+                var sprite = entMan.GetComponent<SpriteComponent>(clientHunter);
+
+                var hidden = entMan.GetComponent<HiddenAppearanceComponent>(clientHunter);
+                Assert.That(hidden.Appearance?.SkinColor, Is.EqualTo(expected));
+                Assert.That(sprite.LayerMapTryGet(HumanoidVisualLayers.Chest, out var chestLayer), Is.True);
+                var chest = (SpriteComponent.Layer) sprite[chestLayer];
+                Assert.That(chest.Color, Is.EqualTo(expected));
+                Assert.That(chest.ShaderPrototype?.Id, Is.EqualTo("Greyscale"));
+                Assert.That(humanoid.SkinColor, Is.EqualTo(expected),
+                    "The replicated authoritative appearance must retain the selected skin color.");
+            });
+        }
+        finally
+        {
+            await server.WaitPost(() =>
+            {
+                var session = server.PlayerMan.Sessions.SingleOrDefault();
+                if (session != null)
+                    server.PlayerMan.SetAttachedEntity(session, previousAttached);
+
+                if (hunter != default && !server.EntMan.Deleted(hunter))
+                    server.EntMan.DeleteEntity(hunter);
+            });
+        }
+
+        await pair.CleanReturnAsync();
+    }
+
     [Test]
     public async Task PredatorSpawnAppliesYautjaProfileInsteadOfNormalHumanProfile()
     {
