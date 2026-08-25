@@ -11,6 +11,7 @@ using Content.Shared._AU14.Marines.Roles.Chevrons; // CMU14
 using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Prototypes;
 using Content.Shared.Clothing;
+using Content.Shared.CCVar;
 using Content.Shared.Preferences;
 using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;

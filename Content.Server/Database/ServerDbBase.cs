@@ -281,7 +281,7 @@ namespace Content.Server.Database
                     humanoid.RankPreferences.ToDictionary(
                         kvp => kvp.Key,
                         kvp => kvp.Value.Where(p => p.Value != null)
-                                        .ToDictionary(p => p.Key, p.Value)));
+                                        .ToDictionary(p => p.Key, p => p.Value)));
 
             profile.Loadouts.Clear();
 
