@@ -213,7 +213,6 @@
         - ReagentId: CMUXenoPlasmaNeuro
           Quantity: 120
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoRoyalBlood
