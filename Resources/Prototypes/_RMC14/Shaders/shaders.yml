@@ -29,6 +29,11 @@
     nv_color: 0.5, 0.5, 0.5
 
 - type: shader
+  id: RMCScreechBlind
+  kind: source
+  path: "/Textures/_RMC14/Shaders/screech_blind.swsl"
+
+- type: shader
   id: RMCBlurryVisionX
   kind: source
   path: "/Textures/_RMC14/Shaders/blurryx.swsl"

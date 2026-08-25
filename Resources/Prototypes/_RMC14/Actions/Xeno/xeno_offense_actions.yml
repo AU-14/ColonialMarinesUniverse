@@ -1138,6 +1138,30 @@
   description: Launches a projectile that will either paralyze the first enemy it hits or damage them and cover them in acid.
 
 - type: entity
+  id: ActionXenoQueenSpit
+  parent: ActionXenoBase
+  name: Acid Volley (40)
+  description: Launches three acid projectiles in a narrow cone. Each target can only be hit once.
+  components:
+  - type: Action
+    itemIconStyle: NoItem
+    icon:
+      sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+    useDelay: 5
+  - type: TargetAction
+    repeat: true
+    range: 30
+    checkCanAccess: false
+  - type: EntityTargetAction
+    targetCheckCanInteract: false
+  - type: WorldTargetAction
+    event: !type:XenoQueenSpitActionEvent
+  - type: ActionBlockIfResting
+  - type: XenoActionPlasma
+    cost: 40
+
+- type: entity
   parent: ActionXenoBase
   id: ActionXenoToggleSpitType
   name: Toggle Spit Type

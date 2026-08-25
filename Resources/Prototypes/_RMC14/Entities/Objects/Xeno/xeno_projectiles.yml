@@ -92,6 +92,14 @@
     max: 5
 
 - type: entity
+  parent: XenoChargedSpitProjectile
+  id: XenoQueenSpitProjectile
+  categories: [ HideSpawnMenu ]
+  components:
+  - type: ProjectileMaxRange
+    max: 10
+
+- type: entity
   id: XenoSlowingSpitProjectile
   parent: XenoBaseProjectile
   name: slowing spit
