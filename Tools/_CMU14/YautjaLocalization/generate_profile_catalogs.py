@@ -121,7 +121,7 @@ def _pairs() -> list[tuple[str, str, str]]:
             pairs.append((f"cmu-yautja-profile-{category}-{suffix}", en_value, ru_value))
 
     for category, values in (
-        ("skin-color", {"green": ("green", "зелёный"), "tan": ("tan", "смуглый"), "purple": ("purple", "фиолетовый"), "blue": ("blue", "синий"), "red": ("red", "красный"), "black": ("black", "чёрный")}),
+        ("skin-color", {"green": ("green", "зелёный"), "tan": ("tan", "смуглый"), "purple": ("purple", "фиолетовый"), "blue": ("blue", "синий"), "red": ("red", "красный"), "black": ("black", "чёрный"), "gray": ("gray", "серый"), "white": ("white", "белый")}),
         ("eye-color", {"black": ("black", "чёрный"), "gold": ("gold", "золотой"), "amber": ("amber", "янтарный"), "copper": ("copper", "медный"), "red": ("red", "красный"), "jade": ("jade", "нефритовый"), "slate": ("slate", "сланцевый")}),
         ("dread-color", {"match-skin": ("match skin", "как кожа"), "black": ("black", "чёрный"), "dark-brown": ("dark brown", "тёмно-коричневый"), "brown": ("brown", "коричневый"), "auburn": ("auburn", "каштановый"), "ash": ("ash", "пепельный"), "bone": ("bone", "костяной")}),
         ("quill", {"standard": ("Standard", "Стандартный"), "short-thick": ("Short Thick", "Короткие толстые"), "straight-thin": ("Straight Thin", "Прямые тонкие"), "long-tied": ("Long Tied", "Длинные связанные"), "short-thin": ("Short Thin", "Короткие тонкие"), "long-curved": ("Long Curved", "Длинные изогнутые"), "long-straight": ("Long Straight", "Длинные прямые"), "long-wide": ("Long Wide", "Длинные широкие"), "short-wide": ("Short Wide", "Короткие широкие")}),
