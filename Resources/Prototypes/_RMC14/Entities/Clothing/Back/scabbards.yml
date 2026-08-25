@@ -67,10 +67,18 @@
   id: RMCScabbardMacheteFilled
   suffix: Filled
   components:
-  - type: ContainerFill
-    containers:
+  - type: ItemSlots
+    slots:
       item:
-      - CMM2132Machete
+        name: Machete
+        startingItem: CMM2132Machete
+        insertVerbText: sheath-insert-verb
+        ejectVerbText: sheath-eject-verb
+        insertSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        whitelist:
+          tags:
+          - Machete
 
 - type: entity
   parent: RMCScabbardBase
@@ -116,10 +124,18 @@
   id: RMCScabbardMacheteM2100Filled
   suffix: Filled
   components:
-  - type: ContainerFill
-    containers:
+  - type: ItemSlots
+    slots:
       item:
-      - RMCM2100Machete
+        name: M2100
+        startingItem: RMCM2100Machete
+        insertVerbText: sheath-insert-verb
+        ejectVerbText: sheath-eject-verb
+        insertSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        whitelist:
+          tags:
+          - RMCM2100Machete
 
 - type: entity
   parent: RMCScabbardBase
@@ -165,10 +181,18 @@
   id: RMCScabbardRoyalMacheteFilled
   suffix: Filled
   components:
-  - type: ContainerFill
-    containers:
+  - type: ItemSlots
+    slots:
       item:
-      - RMCRoyalMachete
+        name: Kukri
+        startingItem: RMCRoyalMachete
+        insertVerbText: sheath-insert-verb
+        ejectVerbText: sheath-eject-verb
+        insertSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        whitelist:
+          tags:
+          - RMCRoyalMachete
 
 - type: entity
   parent: RMCScabbardBase
@@ -195,10 +219,18 @@
   id: RMCScabbardMacheteSGFilled
   suffix: Filled
   components:
-  - type: ContainerFill
-    containers:
+  - type: ItemSlots
+    slots:
       item:
-      - CMM2132Machete
+        name: Machete
+        startingItem: CMM2132Machete
+        insertVerbText: sheath-insert-verb
+        ejectVerbText: sheath-eject-verb
+        insertSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        ejectSound: /Audio/_RMC14/Weapons/Guns/gun_rifle_draw.ogg
+        whitelist:
+          tags:
+          - Machete
 
 - type: entity
   parent: RMCScabbardBase
