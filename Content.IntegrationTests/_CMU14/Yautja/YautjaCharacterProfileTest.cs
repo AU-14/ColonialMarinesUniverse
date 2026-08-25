@@ -200,6 +200,8 @@ public sealed class YautjaCharacterProfileTest
                     YautjaSkinColor.Blue,
                     YautjaSkinColor.Red,
                     YautjaSkinColor.Black,
+                    Enum.Parse<YautjaSkinColor>("Gray"),
+                    Enum.Parse<YautjaSkinColor>("White"),
                 }));
             Assert.That(YautjaCharacterProfile.EyeColorOrder,
                 Is.EqualTo(new[]
@@ -219,6 +221,32 @@ public sealed class YautjaCharacterProfileTest
                 Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Copper)));
             Assert.That(YautjaCharacterProfile.Default.WithEyeColor(YautjaEyeColor.Black).Appearance.EyeColor,
                 Is.EqualTo(YautjaCharacterProfile.GetEyeColorColor(YautjaEyeColor.Black)));
+        });
+    }
+
+    [TestCase("Gray", 128, 128, 128, "cmu-yautja-profile-skin-color-gray")]
+    [TestCase("White", 255, 255, 255, "cmu-yautja-profile-skin-color-white")]
+    public void NewSkinPresetRoundTripsThroughAppearance(
+        string enumName,
+        byte red,
+        byte green,
+        byte blue,
+        string displayName)
+    {
+        var skinColor = Enum.Parse<YautjaSkinColor>(enumName);
+        var expected = new Color(red, green, blue);
+        var profile = YautjaCharacterProfile.Default.WithSkinColor(skinColor);
+        var quills = profile.Appearance.Markings.Single(marking => marking.MarkingId == profile.QuillMarkingId);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(YautjaCharacterProfile.SkinColorOrder, Does.Contain(skinColor));
+            Assert.That(YautjaCharacterProfile.GetSkinColorDisplayName(skinColor), Is.EqualTo(displayName));
+            Assert.That(YautjaCharacterProfile.GetSkinColorColor(skinColor), Is.EqualTo(expected));
+            Assert.That(profile.SkinColor, Is.EqualTo(skinColor));
+            Assert.That(profile.Appearance.SkinColor, Is.EqualTo(expected));
+            Assert.That(profile.Appearance.HairColor, Is.EqualTo(expected));
+            Assert.That(quills.MarkingColors.Single(), Is.EqualTo(expected));
         });
     }
 
