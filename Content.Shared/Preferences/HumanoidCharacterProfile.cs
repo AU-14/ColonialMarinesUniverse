@@ -200,7 +200,7 @@ namespace Content.Shared.Preferences
         /// </summary>
         [DataField]
         public PreferenceUnavailableMode PreferenceUnavailable { get; private set; } =
-            PreferenceUnavailableMode.SpawnAsOverflow;
+            PreferenceUnavailableMode.StayInLobby;
 
         [DataField]
         public SharedRMCNamedItems NamedItems { get; private set; } = new();
