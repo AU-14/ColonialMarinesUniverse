@@ -32,20 +32,20 @@ anprc-frequency-set-unknown = [{ $slot }] tuned to { $freq } MHz — unidentifie
 anprc-frequency-set-dynamic = [{ $slot }] set to { $freq } MHz (direct frequency) — no net assigned here. Transmit with :r.
 
 anprc-frequency-card-fallback =
-    {"["}head=2]SIGNAL OPERATING INSTRUCTIONS[/head]
-    {"["}head=3]AN/PRC-117G NET FREQUENCY ASSIGNMENTS[/head]
+    [head=2]SIGNAL OPERATING INSTRUCTIONS[/head]
+    [head=3]AN/PRC-117G NET FREQUENCY ASSIGNMENTS[/head]
 
-    {"["}bold]GOVFOR Command[/bold] - 2.592 MHz
-    {"["}bold]GOVFOR Alpha[/bold]   - 2.502 MHz
-    {"["}bold]GOVFOR Bravo[/bold]   - 1.606 MHz
-    {"["}bold]GOVFOR Charlie[/bold] - 1.607 MHz
-    {"["}bold]GOVFOR Intel[/bold]   - 1.605 MHz
-    {"["}bold]GOVFOR JTAC[/bold]    - 2.598 MHz
-    {"["}bold]GOVFOR MILP[/bold]    - 2.595 MHz
+    [bold]GOVFOR Command[/bold] - 2.592 MHz
+    [bold]GOVFOR Alpha[/bold]   - 2.502 MHz
+    [bold]GOVFOR Bravo[/bold]   - 1.606 MHz
+    [bold]GOVFOR Charlie[/bold] - 1.607 MHz
+    [bold]GOVFOR Intel[/bold]   - 1.605 MHz
+    [bold]GOVFOR JTAC[/bold]    - 2.598 MHz
+    [bold]GOVFOR MILP[/bold]    - 2.595 MHz
 
     Enter a frequency in the radio panel's FREQ tab (with or without the dot, 2592 and 2.592 are the same) to assign the matching net to a preset slot.
 
-    {"["}italic]COMSEC NOTICE: This card is a controlled document. Destroy before capture. Frequencies are theatre-wide, assume the enemy holds a copy of their own.[/italic]
+    [italic]COMSEC NOTICE: This card is a controlled document. Destroy before capture. Frequencies are theatre-wide, assume the enemy holds a copy of their own.[/italic]
 
 anprc-slot-max-reached = Maximum preset slots reached (4). Delete a slot first.
 
