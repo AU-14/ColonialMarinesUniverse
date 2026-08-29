@@ -64,6 +64,6 @@
   - type: Item
     size: Small
   - type: Sprite
-    sprite: _AU14/Items/laptop.rsi
+    sprite: CMU14/Items/laptop.rsi
     state: laptop_off_objective
   - type: CorporateDataLink
