@@ -1,3 +1,29 @@
+- type: antagSpecifier
+  id: CorporateSpy
+  prefRoles: [ CorporateSpyRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: spy-role-greeting
+    color: DarkSlateGray
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearCorporateSpy
+  components:
+  - type: CorporateAgent
+    corporation: Laselle Bionational
+    paperPrototype: CMUPaperLASELLE
+    requiredItems: 2
+    wyCounterIntel: true
+  - type: ColonyBounty
+    bounty: 1625
+    reason: Corporate espionage - theft of Weyland-Yutani research
+    recordName: Laselle Operative (Unknown)
+    includePrints: true
+    capturedFaxPaper: CMUPaperColonyAntagCaptured
+  mindRoles:
+  - MindRoleCorporateSpy
+
 - type: entity
   id: CorporateSpy
   parent: BaseGameRule
@@ -5,32 +31,9 @@
   - type: GameRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ CorporateSpyRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: spy-role-greeting
-        color: DarkSlateGray
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: AU14GearCorporateSpy
-      components:
-      - type: CorporateAgent
-        corporation: Laselle Bionational
-        paperPrototype: CMUPaperLASELLE
-        requiredItems: 2
-        wyCounterIntel: true
-      - type: ColonyBounty
-        bounty: 1625
-        reason: Corporate espionage - theft of Weyland-Yutani research
-        recordName: Laselle Operative (Unknown)
-        includePrints: true
-        capturedFaxPaper: CMUPaperColonyAntagCaptured
-      mindRoles:
-      - MindRoleCorporateSpy
+    antags:
+    - !type:FixedAntagCount
+      proto: CorporateSpy
 
 - type: entity
   parent: BaseMindRoleAntag

@@ -1,3 +1,24 @@
+- type: antagSpecifier
+  id: SerialKiller
+  prefRoles: [ SerialKillerRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: serialkiller-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  components:
+  - type: SerialKiller
+  - type: ColonyBounty
+    bounty: 2250
+    reason: Wanted for multiple homicides - suspect at large
+    recordName: Serial Killer (Unknown)
+    includePrints: true
+    capturedFaxPaper: AUPaperSerialKillerCaptured
+  mindRoles:
+  - MindRoleSerialKiller
+
 - type: entity
   id: SerialKiller
   parent: BaseGameRule
@@ -6,27 +27,9 @@
   - type: SerialKillerRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ SerialKillerRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: serialkiller-role-greeting
-        color: DarkRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      components:
-      - type: SerialKiller
-      - type: ColonyBounty
-        bounty: 2250
-        reason: Wanted for multiple homicides - suspect at large
-        recordName: Serial Killer (Unknown)
-        includePrints: true
-        capturedFaxPaper: AUPaperSerialKillerCaptured
-      mindRoles:
-      - MindRoleSerialKiller
+    antags:
+    - !type:FixedAntagCount
+      proto: SerialKiller
 
 - type: entity
   parent: BaseMindRoleAntag

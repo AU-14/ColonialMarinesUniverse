@@ -1,3 +1,19 @@
+- type: antagSpecifier
+  id: Vigilante
+  prefRoles: [ VigilanteRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: cmu-antag-vigilante-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearVigilante
+  components:
+  - type: Vigilante
+  mindRoles:
+  - MindRoleVigilante
+
 - type: entity
   id: Vigilante
   parent: BaseGameRule
@@ -5,22 +21,9 @@
   - type: GameRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ VigilanteRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: cmu-antag-vigilante-greeting
-        color: DarkRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: CMUGearVigilante
-      components:
-      - type: Vigilante
-      mindRoles:
-      - MindRoleVigilante
+    antags:
+    - !type:FixedAntagCount
+      proto: Vigilante
 
 - type: entity
   parent: BaseMindRoleAntag

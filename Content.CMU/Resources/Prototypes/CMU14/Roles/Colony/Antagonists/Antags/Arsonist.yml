@@ -1,3 +1,21 @@
+- type: antagSpecifier
+  id: Arsonist
+  prefRoles: [ ArsonistRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: cmu-antag-arsonist-greeting
+    color: DarkOrange
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearArsonist
+  components:
+  - type: Arsonist
+    alertThreshold: 1
+    wantedThreshold: 8
+  mindRoles:
+  - MindRoleArsonist
+
 - type: entity
   id: Arsonist
   parent: BaseGameRule
@@ -5,24 +23,9 @@
   - type: GameRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ ArsonistRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: cmu-antag-arsonist-greeting
-        color: DarkOrange
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: CMUGearArsonist
-      components:
-      - type: Arsonist
-        alertThreshold: 1
-        wantedThreshold: 8
-      mindRoles:
-      - MindRoleArsonist
+    antags:
+    - !type:FixedAntagCount
+      proto: Arsonist
 
 - type: entity
   parent: BaseMindRoleAntag

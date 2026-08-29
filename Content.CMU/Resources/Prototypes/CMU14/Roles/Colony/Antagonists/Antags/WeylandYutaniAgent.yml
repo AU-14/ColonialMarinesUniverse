@@ -1,3 +1,27 @@
+- type: antagSpecifier
+  id: WeylandYutaniAgent
+  prefRoles: [ WeylandYutaniAgentRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: cmu-antag-wy-agent-greeting
+    color: DarkSlateGray
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearWeylandYutaniAgent
+  components:
+  - type: CorporateAgent
+    corporation: Weyland-Yutani
+    requiredItems: 2
+  - type: ColonyBounty
+    bounty: 1675
+    reason: Weyland-Yutani black operations - asset recovery
+    recordName: WY Field Operative (Unknown)
+    includePrints: true
+    capturedFaxPaper: CMUPaperColonyAntagCaptured
+  mindRoles:
+  - MindRoleWeylandYutaniAgent
+
 - type: entity
   id: WeylandYutaniAgent
   parent: BaseGameRule
@@ -5,30 +29,9 @@
   - type: GameRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ WeylandYutaniAgentRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: cmu-antag-wy-agent-greeting
-        color: DarkSlateGray
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: CMUGearWeylandYutaniAgent
-      components:
-      - type: CorporateAgent
-        corporation: Weyland-Yutani
-        requiredItems: 2
-      - type: ColonyBounty
-        bounty: 1675
-        reason: Weyland-Yutani black operations - asset recovery
-        recordName: WY Field Operative (Unknown)
-        includePrints: true
-        capturedFaxPaper: CMUPaperColonyAntagCaptured
-      mindRoles:
-      - MindRoleWeylandYutaniAgent
+    antags:
+    - !type:FixedAntagCount
+      proto: WeylandYutaniAgent
 
 - type: entity
   parent: BaseMindRoleAntag

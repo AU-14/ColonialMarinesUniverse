@@ -1,3 +1,18 @@
+- type: antagSpecifier
+  id: Cannibal
+  prefRoles: [ CannibalRole ]
+  jobWhitelist:
+  - AU14JobCivilianFoodServiceWorker
+  briefing:
+    text: cannibal-role-greeting
+    color: DarkRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearCannibal
+  components:
+  - type: Cannibal
+  mindRoles:
+  - MindRoleCannibal
+
 - type: entity
   id: Cannibal
   parent: BaseGameRule
@@ -5,22 +20,10 @@
   - type: GameRule
   - type: CannibalRule
   - type: AntagSelection
-    selectionTime: PostPlayerSpawn
-    definitions:
-    - prefRoles: [ CannibalRole ]
-      max: 1
-      playerRatio: 15
-      jobWhitelist:
-      - AU14JobCivilianFoodServiceWorker
-      briefing:
-        text: cannibal-role-greeting
-        color: DarkRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: AU14GearCannibal
-      components:
-      - type: Cannibal
-      mindRoles:
-      - MindRoleCannibal
+    selectionTime: JobsAssigned
+    antags:
+    - !type:FixedAntagCount
+      proto: Cannibal
 
 - type: entity
   parent: BaseMindRoleAntag

@@ -1,3 +1,26 @@
+- type: antagSpecifier
+  id: DrugDealer
+  prefRoles: [ DrugDealerRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: dealer-role-greeting
+    color: MediumVioletRed
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: AU14GearDrugDealer
+  components:
+  - type: DrugDealer
+  - type: ColonyBounty
+    bounty: 1225
+    reason: Distribution of controlled substances - wanted alive for prosecution
+    recordName: Narcotics Dealer (Unknown)
+    includePrints: true
+    deadCounts: false
+    capturedFaxPaper: CMUPaperColonyAntagCaptured
+  mindRoles:
+  - MindRoleDrugDealer
+
 - type: entity
   id: DrugDealer
   parent: BaseGameRule
@@ -6,29 +29,9 @@
   - type: DrugDealerRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ DrugDealerRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: dealer-role-greeting
-        color: MediumVioletRed
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: AU14GearDrugDealer
-      components:
-      - type: DrugDealer
-      - type: ColonyBounty
-        bounty: 1225
-        reason: Distribution of controlled substances - wanted alive for prosecution
-        recordName: Narcotics Dealer (Unknown)
-        includePrints: true
-        deadCounts: false
-        capturedFaxPaper: CMUPaperColonyAntagCaptured
-      mindRoles:
-      - MindRoleDrugDealer
+    antags:
+    - !type:FixedAntagCount
+      proto: DrugDealer
 
 - type: entity
   parent: BaseMindRoleAntag

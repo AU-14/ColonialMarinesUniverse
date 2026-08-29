@@ -1,3 +1,19 @@
+- type: antagSpecifier
+  id: BountyHunter
+  prefRoles: [ BountyHunterRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: cmu-antag-bounty-hunter-greeting
+    color: Goldenrod
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearBountyHunter
+  components:
+  - type: BountyHunter
+  mindRoles:
+  - MindRoleBountyHunter
+
 - type: entity
   id: BountyHunter
   parent: BaseGameRule
@@ -5,22 +21,9 @@
   - type: GameRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ BountyHunterRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: cmu-antag-bounty-hunter-greeting
-        color: Goldenrod
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: CMUGearBountyHunter
-      components:
-      - type: BountyHunter
-      mindRoles:
-      - MindRoleBountyHunter
+    antags:
+    - !type:FixedAntagCount
+      proto: BountyHunter
 
 - type: entity
   parent: BaseMindRoleAntag

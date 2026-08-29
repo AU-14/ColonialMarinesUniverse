@@ -1,3 +1,20 @@
+- type: antagSpecifier
+  id: CLFSaboteur
+  prefRoles: [ CLFSaboteurRole ]
+  jobBlacklistGroup:
+  - AllGovforJobs
+  - AllOpforJobs
+  briefing:
+    text: cmu-antag-clf-saboteur-greeting
+    color: OliveDrab
+    sound: "/Audio/Ambience/Antag/headrev_start.ogg"
+  startingGear: CMUGearCLFSaboteur
+  components:
+  - type: CLFSaboteur
+    sabotageGoal: 12
+  mindRoles:
+  - MindRoleCLFSaboteur
+
 - type: entity
   id: CLFSaboteur
   parent: BaseGameRule
@@ -5,23 +22,9 @@
   - type: GameRule
   - type: AntagSelection
     selectionTime: JobsAssigned
-    definitions:
-    - prefRoles: [ CLFSaboteurRole ]
-      max: 1
-      playerRatio: 15
-      jobBlacklistGroup:
-      - AllGovforJobs
-      - AllOpforJobs
-      briefing:
-        text: cmu-antag-clf-saboteur-greeting
-        color: OliveDrab
-        sound: "/Audio/Ambience/Antag/headrev_start.ogg"
-      startingGear: CMUGearCLFSaboteur
-      components:
-      - type: CLFSaboteur
-        sabotageGoal: 12
-      mindRoles:
-      - MindRoleCLFSaboteur
+    antags:
+    - !type:FixedAntagCount
+      proto: CLFSaboteur
 
 - type: entity
   parent: BaseMindRoleAntag
