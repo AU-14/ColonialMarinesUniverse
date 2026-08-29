@@ -125,6 +125,45 @@ public sealed class AuRoundMigrationValidationTest
     }
 
     [Test]
+    public async Task PlanetPlatoonReferencesResolve()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+
+        await server.WaitAssertion(() =>
+        {
+            var prototypes = server.ResolveDependency<IPrototypeManager>();
+            var componentFactory = server.ResolveDependency<IComponentFactory>();
+            var errors = new List<string>();
+
+            foreach (var planetProto in prototypes.EnumeratePrototypes<EntityPrototype>())
+            {
+                if (!planetProto.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory))
+                    continue;
+
+                foreach (var platoonId in planet.PlatoonsGovfor.Concat(planet.PlatoonsOpfor))
+                {
+                    if (!prototypes.HasIndex<PlatoonPrototype>(platoonId))
+                        errors.Add($"{planetProto.ID} references missing platoon {platoonId}");
+                }
+
+                foreach (var platoonId in new[] { planet.DefaultGovforPlatoon, planet.DefaultOpforPlatoon })
+                {
+                    if (!string.IsNullOrWhiteSpace(platoonId) &&
+                        !prototypes.HasIndex<PlatoonPrototype>(platoonId))
+                    {
+                        errors.Add($"{planetProto.ID} references missing default platoon {platoonId}");
+                    }
+                }
+            }
+
+            Assert.That(errors, Is.Empty, string.Join("\n", errors));
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
     public async Task PrometheusAntagsAreHiddenFromPreferences()
     {
         await using var pair = await PoolManager.GetServerClient();

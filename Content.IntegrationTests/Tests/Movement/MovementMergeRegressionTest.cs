@@ -439,6 +439,46 @@ public sealed class MovementMergeRegressionTest : MovementTest
     }
 
     [Test]
+    public async Task AnchoredRelaySourceForwardsMovementToMovableTarget()
+    {
+        var source = SPlayer;
+        EntityUid target = default;
+
+        try
+        {
+            await Server.WaitAssertion(() =>
+            {
+                var transform = Server.System<SharedTransformSystem>();
+                target = SEntMan.SpawnEntity(
+                    "MovementMergeRelayTarget",
+                    SEntMan.GetComponent<TransformComponent>(source).Coordinates);
+
+                transform.AnchorEntity(source);
+                Server.System<MoverController>().SetRelay(source, target);
+            });
+
+            await SetKey(EngineKeyFunctions.MoveRight, BoundKeyState.Down);
+            await Pair.RunTicksSync(2);
+            await Server.WaitAssertion(() =>
+            {
+                Assert.That(SEntMan.GetComponent<InputMoverComponent>(target).HeldMoveButtons,
+                    Is.EqualTo(MoveButtons.Right),
+                    "an anchored controller must still forward movement to its movable relay target");
+            });
+        }
+        finally
+        {
+            await SetKey(EngineKeyFunctions.MoveRight, BoundKeyState.Up);
+            await Server.WaitPost(() =>
+            {
+                Server.System<SharedTransformSystem>().Unanchor(source);
+                if (SEntMan.EntityExists(target))
+                    SEntMan.DeleteEntity(target);
+            });
+        }
+    }
+
+    [Test]
     public async Task TileMovementUsesVirtualGroundClampsSpeedAndAccumulatesSubticks()
     {
         var source = SPlayer;
