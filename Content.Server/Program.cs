@@ -9,7 +9,7 @@ namespace Content.Server
         {
             ContentStart.StartLibrary(args, new ServerOptions
             {
-                MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources/CMU14"], zipMounts: []),
+                MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
             });
         }
     }

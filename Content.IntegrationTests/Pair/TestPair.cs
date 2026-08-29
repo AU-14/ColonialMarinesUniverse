@@ -92,7 +92,7 @@ public sealed partial class TestPair : RobustIntegrationTest.TestPair
         opts.Options = new()
         {
             LoadConfigAndUserData = false,
-            MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources/CMU14"], zipMounts: []),
+            MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
         };
 
         opts.BeforeStart += () =>
@@ -114,7 +114,7 @@ public sealed partial class TestPair : RobustIntegrationTest.TestPair
         opts.Options = new()
         {
             LoadConfigAndUserData = false,
-            MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources/CMU14"], zipMounts: []),
+            MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
         };
 
         opts.BeforeStart += () =>

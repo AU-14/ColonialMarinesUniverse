@@ -13,7 +13,7 @@ on:
     paths:
       # Run if maps are changed.
       - "Resources/Maps/_RMC14/**/*.yml"
-      - "Content.CMU/Resources/CMU14/Maps/CMU14/**/*.yml"
+      - "Content.CMU/Resources/Maps/CMU14/**/*.yml"
       # Also run if the mapchecker itself or its config is changed.
       - ".github/map_checker/**"
   workflow_dispatch:
@@ -56,7 +56,7 @@ jobs:
           set +e
 
           names=("_RMC14" "CMU14")
-          paths=("Resources/Maps/_RMC14" "Content.CMU/Resources/CMU14/Maps/CMU14")
+          paths=("Resources/Maps/_RMC14" "Content.CMU/Resources/Maps/CMU14")
           pids=()
           status=0
 

@@ -10,7 +10,7 @@ namespace Content.Client
         {
             ContentStart.StartLibrary(args, new GameControllerOptions
             {
-                MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources/CMU14"], zipMounts: []),
+                MountOptions = new MountOptions(dirMounts: ["../../Content.CMU/Resources"], zipMounts: []),
             });
         }
     }
