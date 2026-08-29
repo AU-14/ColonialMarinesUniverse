@@ -11,6 +11,7 @@ using Content.Server.Administration.Logs;
 using Content.Server.Administration.Managers;
 using Content.Server.Administration.Systems;
 using Content.Server.Discord.DiscordLink;
+using Content.Server.Ghost;
 using Content.Server.Players.RateLimiting;
 using Content.Server.Preferences.Managers;
 using Content.Shared._RMC14.CCVar;
@@ -22,6 +23,7 @@ using Content.Shared.Database;
 using Content.Shared.Mind;
 using Content.Shared.Players.RateLimiting;
 using Robust.Shared.Configuration;
+using Robust.Shared.Map;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Replays;
@@ -60,6 +62,10 @@ internal sealed partial class ChatManager : IChatManager
     [Dependency] private RMCDiscordManager _discord = default!;
     [Dependency] private MentorManager _mentor = default!;
     [Dependency] private RMCChatBansManager _rmcChatBans = default!;
+    [Dependency] private ILogManager _logManager = default!;
+    [Dependency] private ILocalizationManager _localizationManager = default!;
+
+    private ISawmill? _sawmill = default!;
 
     /// <summary>
     /// The maximum length a player-sent message can be sent
@@ -78,6 +84,8 @@ internal sealed partial class ChatManager : IChatManager
 
         _configurationManager.OnValueChanged(CCVars.OocEnabled, OnOocEnabledChanged, true);
         _configurationManager.OnValueChanged(CCVars.AdminOocEnabled, OnAdminOocEnabledChanged, true);
+
+        _sawmill = _logManager.GetSawmill("SERVER");
 
         RegisterRateLimits();
     }
@@ -126,7 +134,10 @@ internal sealed partial class ChatManager : IChatManager
     {
         var wrappedMessage = Loc.GetString("chat-manager-server-wrap-message", ("message", FormattedMessage.EscapeText(message)));
         ChatMessageToAll(ChatChannel.Server, message, wrappedMessage, EntityUid.Invalid, hideChat: false, recordReplay: true, colorOverride: colorOverride);
-        Logger.GetSawmill("SERVER").Info( message);
+
+        // _sawmill might have not been initialized when DispatchServerAnnouncement is called
+        // during server setup when some cvars are changed
+        _sawmill?.Info(message);
 
         _adminLogger.Add(LogType.Chat, LogImpact.Low, $"Server announcement: {message}");
     }
@@ -178,12 +189,19 @@ internal sealed partial class ChatManager : IChatManager
         var clients = _adminManager.ActiveAdmins
             .Where(p => _adminManager.HasAdminFlag(p, AdminFlags.EditNotes)) // RMC14
             .Select(p => p.Channel);
-
         var wrappedMessage = Loc.GetString("chat-manager-send-admin-announcement-wrap-message",
             ("adminChannelName", Loc.GetString("chat-manager-admin-channel-name")), ("message", FormattedMessage.EscapeText(message)));
 
         ChatMessageToMany(ChatChannel.AdminAlert, message, wrappedMessage, default, false, true, clients);
     }
+
+    public void SendAdminAlertNoFormatOrEscape(string message)
+    {
+        var clients = _adminManager.ActiveAdmins.Select(p => p.Channel);
+
+        ChatMessageToMany(ChatChannel.AdminAlert, message, message, default, false, true, clients);
+    }
+
 
     public void SendAdminAlert(EntityUid player, string message)
     {
@@ -389,6 +407,28 @@ internal sealed partial class ChatManager : IChatManager
 
     #region Utility
 
+    private bool IsValidWarpDestination(EntityUid source)
+    {
+        if (!source.Valid)
+            return false;
+
+        if (!_entityManager.TryGetComponent(source, out TransformComponent? transform))
+            return false;
+
+        return transform.MapID != MapId.Nullspace;
+    }
+
+    public string PrependFollowButtonIfAppropriate(string wrappedMessage, EntityUid source, INetChannel recipient)
+    {
+        if (IsValidWarpDestination(source) && ShouldShowFollowButton(recipient))
+        {
+            var btnText = _localizationManager.GetString("chat-manager-follow-button");
+            return $"[cmdlink=\"{btnText}\" command=\"{GhostFollowEntityCommand.CommandName} {_entityManager.GetNetEntity(source)}\" /] " + wrappedMessage;
+        }
+
+        return wrappedMessage;
+    }
+
     // RMC14
     public void ChatMessageToOne(ChatChannel channel, string message, string wrappedMessage, EntityUid source, bool hideChat, INetChannel client, Color? colorOverride = null, bool recordReplay = false, string? audioPath = null, float audioVolume = 0, NetUserId? author = null, bool hidePopup = false,
         bool useEmoteSpeechBubble = false,
@@ -403,15 +443,11 @@ internal sealed partial class ChatManager : IChatManager
 
         speechStyleClass ??= _entityManager.GetComponentOrNull<RMCSpeechBubbleSpecificStyleComponent>(source)?.SpeechStyleClass;
         var repeatCheckSender = !_entityManager.HasComponent<ChatRepeatIgnoreSenderComponent>(source);
+        wrappedMessage = PrependFollowButtonIfAppropriate(wrappedMessage, source, client);
+
         // CMU14
-        var ghostFollowEntity = NetEntity.Invalid;
         var xenoWatchEntity = NetEntity.Invalid;
         var customWrappedMessage = wrappedMessage;
-        if (TryCreateGhostFollowButton(wrappedMessage, source, client, out var wrappedWithFollowButton, out var followEntity))
-        {
-            customWrappedMessage = wrappedWithFollowButton;
-            ghostFollowEntity = followEntity;
-        }
         if (TryCreateXenoWatchButton(customWrappedMessage, source, client, out var wrappedWithWatchButton, out var watchEntity))
         {
             customWrappedMessage = wrappedWithWatchButton;
@@ -434,10 +470,8 @@ internal sealed partial class ChatManager : IChatManager
             repeatCheckSender: repeatCheckSender,
             display: display,
             languageIcon: languageIcon,
-            ghostFollowEntity: ghostFollowEntity,
             xenoWatchEntity: xenoWatchEntity
         );
-
         _netManager.ServerSendMessage(new MsgChatMessage() { Message = msg }, client);
 
         if (!recordReplay)
@@ -480,14 +514,8 @@ internal sealed partial class ChatManager : IChatManager
         var repeatCheckSender = !_entityManager.HasComponent<ChatRepeatIgnoreSenderComponent>(source);
         foreach (var client in clients)
         {
-            var ghostFollowEntity = NetEntity.Invalid;
             var xenoWatchEntity = NetEntity.Invalid;
-            var customWrappedMessage = wrappedMessage;
-            if (TryCreateGhostFollowButton(wrappedMessage, source, client, out var wrappedWithFollowButton, out var followEntity))
-            {
-                customWrappedMessage = wrappedWithFollowButton;
-                ghostFollowEntity = followEntity;
-            }
+            var customWrappedMessage = PrependFollowButtonIfAppropriate(wrappedMessage, source, client);
             if (TryCreateXenoWatchButton(customWrappedMessage, source, client, out var wrappedWithWatchButton, out var watchEntity))
             {
                 customWrappedMessage = wrappedWithWatchButton;
@@ -507,7 +535,6 @@ internal sealed partial class ChatManager : IChatManager
                 hidePopup,
                 speechStyleClass: speechStyleClass,
                 repeatCheckSender: repeatCheckSender,
-                ghostFollowEntity: ghostFollowEntity,
                 xenoWatchEntity: xenoWatchEntity);
             _netManager.ServerSendMessage(new MsgChatMessage { Message = msg }, client);
         }
@@ -568,6 +595,22 @@ internal sealed partial class ChatManager : IChatManager
     }
 
     #endregion
+
+    private bool ShouldShowFollowButton(INetChannel recipient)
+    {
+        if (!_player.TryGetSessionByChannel(recipient, out var session))
+            return false;
+
+        if (_entityManager.TrySystem(out GhostSystem? ghost))
+        {
+            if (!ghost.CanGhostWarp(session, out _))
+            {
+                return false;
+            }
+        }
+
+        return _netConfigManager.GetClientCVar(recipient, CCVars.InterfaceChatFollowButton);
+    }
 }
 
 public enum OOCChatType : byte

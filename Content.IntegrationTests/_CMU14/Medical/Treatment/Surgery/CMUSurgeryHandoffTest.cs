@@ -9,13 +9,13 @@ using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Standing;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Timing;
@@ -390,14 +390,12 @@ public sealed class CMUSurgeryHandoffTest
         {
             var entMan = server.EntMan;
             var fixture = StartAttempt(entMan);
+            EntityUid? detachedCarrier = null;
 
             try
             {
-                var containers = entMan.System<SharedContainerSystem>();
-                Assert.That(
-                    containers.TryGetContainingContainer((fixture.TargetPart, null, null), out var container),
-                    Is.True);
-                Assert.That(containers.Remove(fixture.TargetPart, container), Is.True);
+                detachedCarrier = entMan.System<DetachableOrganSystem>().Detach(fixture.TargetPart);
+                Assert.That(detachedCarrier, Is.Not.Null);
 
                 var armed = entMan.GetComponent<CMUSurgeryArmedStepComponent>(fixture.Patient);
                 Assert.That(
@@ -439,7 +437,9 @@ public sealed class CMUSurgeryHandoffTest
             finally
             {
                 DeleteFixture(entMan, fixture);
-                if (entMan.EntityExists(fixture.TargetPart))
+                if (detachedCarrier is { } carrier && entMan.EntityExists(carrier))
+                    entMan.DeleteEntity(carrier);
+                else if (entMan.EntityExists(fixture.TargetPart))
                     entMan.DeleteEntity(fixture.TargetPart);
             }
         });
@@ -782,6 +782,8 @@ public sealed class CMUSurgeryHandoffTest
         EntityUid tool = default;
         EntityUid detachedLeftArm = default;
         EntityUid detachedRightLeg = default;
+        EntityUid? detachedLeftCarrier = null;
+        EntityUid? detachedRightCarrier = null;
 
         await server.WaitPost(() =>
         {
@@ -793,11 +795,8 @@ public sealed class CMUSurgeryHandoffTest
             entMan.System<StandingStateSystem>().Down(patient, playSound: false, dropHeldItems: false, force: true);
 
             detachedLeftArm = FindPart(entMan, patient, BodyPartType.Arm, BodyPartSymmetry.Left);
-            var containers = entMan.System<SharedContainerSystem>();
-            Assert.That(
-                containers.TryGetContainingContainer((detachedLeftArm, null, null), out var leftContainer),
-                Is.True);
-            Assert.That(containers.Remove(detachedLeftArm, leftContainer), Is.True);
+            detachedLeftCarrier = entMan.System<DetachableOrganSystem>().Detach(detachedLeftArm);
+            Assert.That(detachedLeftCarrier, Is.Not.Null);
 
             var flow = entMan.System<CMUSurgeryFlowSystem>();
             var armed = flow.TryArmStep(
@@ -838,11 +837,8 @@ public sealed class CMUSurgeryHandoffTest
             Assert.That(session.Phase, Is.EqualTo(CMUSurgerySessionPhase.AwaitingAction));
 
             detachedRightLeg = FindPart(entMan, patient, BodyPartType.Leg, BodyPartSymmetry.Right);
-            var containers = entMan.System<SharedContainerSystem>();
-            Assert.That(
-                containers.TryGetContainingContainer((detachedRightLeg, null, null), out var rightContainer),
-                Is.True);
-            Assert.That(containers.Remove(detachedRightLeg, rightContainer), Is.True);
+            detachedRightCarrier = entMan.System<DetachableOrganSystem>().Detach(detachedRightLeg);
+            Assert.That(detachedRightCarrier, Is.Not.Null);
         });
 
         await pair.RunTicksSync(1);
@@ -863,7 +859,13 @@ public sealed class CMUSurgeryHandoffTest
         await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
-            foreach (var entity in new[] { detachedRightLeg, detachedLeftArm, tool, surgeon, patient })
+            foreach (var carrier in new[] { detachedRightCarrier, detachedLeftCarrier })
+            {
+                if (carrier is { } uid && entMan.EntityExists(uid))
+                    entMan.DeleteEntity(uid);
+            }
+
+            foreach (var entity in new[] { tool, surgeon, patient })
             {
                 if (entMan.EntityExists(entity))
                     entMan.DeleteEntity(entity);

@@ -5,9 +5,11 @@
   components:
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _CMU14/ZLevels/Actions/misc.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: up
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUZLevelActionUp
 
@@ -18,9 +20,11 @@
   components:
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _CMU14/ZLevels/Actions/misc.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: down
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUZLevelActionDown
 
@@ -31,8 +35,10 @@
   components:
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _CMU14/ZLevels/Actions/misc.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/ZLevels/Actions/misc.rsi
       state: eye
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUToggleZLevelLookUpAction

@@ -2,6 +2,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
 using Content.Shared.Weather;
 using Robust.Shared.Map.Components;
+using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.ZLevels.Weather;
 
@@ -13,15 +14,17 @@ public sealed partial class CMUWeatherSystem : EntitySystem
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
     [Dependency] private SharedWeatherSystem _weather = default!;
 
-    public void SetWeather(Entity<CMUZLevelsNetworkComponent?> network, WeatherPrototype? proto, TimeSpan? endTime)
+    public bool TrySetWeather(Entity<CMUZLevelsNetworkComponent?> network, EntProtoId? proto, TimeSpan? duration)
     {
         if (!Resolve(network, ref network.Comp))
-            return;
+            return false;
 
         var resolvedNetwork = (network.Owner, network.Comp);
 
         if (!_zLevels.TryGetDepthBounds(resolvedNetwork, out var minDepth, out var maxDepth))
-            return;
+            return false;
+
+        var success = false;
 
         for (var depth = minDepth; depth <= maxDepth; depth++)
         {
@@ -31,7 +34,9 @@ public sealed partial class CMUWeatherSystem : EntitySystem
             if (!TryComp<MapComponent>(map, out var mapComp))
                 continue;
 
-            _weather.SetWeather(mapComp.MapId, proto, endTime);
+            success |= _weather.TrySetWeather(mapComp.MapId, proto, out _, duration);
         }
+
+        return success;
     }
 }

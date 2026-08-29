@@ -915,7 +915,7 @@ public sealed partial class GmodConstructionMenu : DefaultWindow, IConstructionM
         }
 
         return raw
-            .Select(c => (Raw: c, Display: Loc.GetString(c)))
+            .Select(c => (Raw: c, Display: ConstructionLocalization.LocalizeOrRaw(c)))
             .OrderBy(c => c.Display, StringComparer.InvariantCulture)
             .ToList();
     }

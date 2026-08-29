@@ -5,6 +5,7 @@ using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;

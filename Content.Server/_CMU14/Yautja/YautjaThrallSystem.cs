@@ -16,6 +16,7 @@ using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
@@ -140,7 +141,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             return;
         }
 
-        if (!HasComp<HumanoidAppearanceComponent>(args.Target) ||
+        if (!HasComp<HumanoidProfileComponent>(args.Target) ||
             HasComp<YautjaComponent>(args.Target) ||
             _mob.IsDead(args.Target))
         {
@@ -383,7 +384,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if ((args.SlotFlags & ent.Comp.Slots) == 0)
             return;
 
-        ent.Comp.User = args.Equipee;
+        ent.Comp.User = args.EquipTarget;
         _audio.PlayPvs(ent.Comp.EquipSound, ent.Owner);
     }
 
@@ -402,7 +403,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
         args.Cancel();
         args.Reason = "cmu-yautja-thrall-bracer-locked";
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-bracer-locked"), args.Unequipee, args.Unequipee, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-bracer-locked"), args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnToggleThrallBracerLock(Entity<YautjaThrallBracerComponent> ent, ref YautjaToggleThrallBracerLockActionEvent args)
@@ -503,7 +504,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         if (hivebreaker.HealOnConversion)
         {
             if (TryComp(target, out DamageableComponent? damageable))
-                _damage.SetAllDamage(target, damageable, 0);
+                _damage.SetAllDamage((target, damageable), 0);
 
             _mob.ChangeMobState(target, MobState.Alive, origin: master);
         }
@@ -858,7 +859,7 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
             if (Deleted(uid) ||
                 _mob.IsDead(uid) ||
-                !HasComp<HumanoidAppearanceComponent>(uid) ||
+                !HasComp<HumanoidProfileComponent>(uid) ||
                 HasComp<YautjaComponent>(uid) ||
                 !_marks.IsMarkedBy(uid, YautjaMarkKind.Thrall, master))
             {

@@ -6,10 +6,12 @@
     event: !type:Content.Shared._CMU14.DroneOperator.CMUDroneEndControlActionEvent
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _RMC14/Objects/Devices/command_tablet.rsi
-      state: cotablet
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Devices/command_tablet.rsi
+      state: cotablet
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   parent: BaseAction
@@ -19,10 +21,12 @@
     event: !type:Content.Shared._CMU14.DroneOperator.CMUDroneFollowActionEvent
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _RMC14/Objects/Devices/command_tablet.rsi
-      state: cotablet
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Devices/command_tablet.rsi
+      state: cotablet
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   parent: BaseAction
@@ -32,7 +36,9 @@
     event: !type:Content.Shared._CMU14.DroneOperator.CMUDroneStopFollowActionEvent
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _RMC14/Objects/Devices/command_tablet.rsi
-      state: cotablet
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Devices/command_tablet.rsi
+      state: cotablet
+      map: ["enum.ActionVisuals.Icon"]

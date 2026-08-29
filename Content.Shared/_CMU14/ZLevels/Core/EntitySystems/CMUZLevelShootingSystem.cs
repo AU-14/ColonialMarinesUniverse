@@ -107,7 +107,14 @@ public sealed partial class CMUZLevelShootingSystem : EntitySystem
 
     private bool TryGetGun(EntityUid user, out EntityUid gunUid)
     {
-        return _gun.TryGetGun(user, out gunUid, out _);
+        if (_gun.TryGetGun(user, out var gun))
+        {
+            gunUid = gun.Owner;
+            return true;
+        }
+
+        gunUid = default;
+        return false;
     }
 
     private bool IsReadyGun(EntityUid gunUid)

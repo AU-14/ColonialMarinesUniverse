@@ -5,11 +5,11 @@
   components:
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Food/bar.rsi
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 50
-        reagents:
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 50
+      reagents:
         - ReagentId: Nutriment
           Quantity: 8
   - type: Item

@@ -6,10 +6,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: resting
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: resting
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoRestActionEvent
 
@@ -20,9 +22,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: watch_xeno
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoWatchActionEvent
 
@@ -34,10 +38,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: emit_pheromones
     useDelay: 0.33
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: emit_pheromones
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoPheromonesActionEvent
 
@@ -49,10 +55,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: xenohide
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xenohide
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoHideActionEvent
 
@@ -64,10 +72,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: crest_defense
     useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: crest_defense
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoToggleCrestActionEvent
 
@@ -79,10 +89,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: fortify
     useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: fortify
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoFortifyActionEvent
 
@@ -100,10 +112,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: toggle_speed
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: toggle_speed
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoResinWalkerActionEvent
 
@@ -114,10 +128,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: toggle_long_range
     useDelay: 0.2
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: toggle_long_range
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoZoomActionEvent
 
@@ -129,10 +145,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: queen_word
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_word
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoWordQueenActionEvent
   - type: XenoWordQueenAction
@@ -146,10 +164,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: psychic_whisper
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: psychic_whisper
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
   - type: EntityTargetAction
@@ -169,10 +189,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: psychic_radiance
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: psychic_radiance
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoPsychicRadianceActionEvent
   - type: RMCDazeableAction
@@ -185,10 +207,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: queen_order
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_order
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoGiveOrderActionEvent
   - type: RMCDazeableAction
@@ -201,9 +225,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: grow_ovipositor
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoGrowOvipositorActionEvent
 
@@ -214,10 +240,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: xeno_banish
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_banish
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ManageHiveActionEvent
 
@@ -228,10 +256,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: xeno_readmit
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_readmit
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ManageHiveActionEvent
 
@@ -243,10 +273,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: prae_dodge
     useDelay: 19
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: prae_dodge
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDodgeActionEvent
   - type: XenoActionPlasma
@@ -260,10 +292,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: burrow
     checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: burrow
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 8
     repeat: true
@@ -281,10 +315,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: soak
     useDelay: 17
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: soak
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoSoakActionEvent
   - type: ActionBlockIfResting
@@ -303,9 +339,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: empower
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoEmpowerActionEvent
   - type: ActionBlockIfResting
@@ -318,9 +356,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: TEMPLATE
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoGenerateEggsActionEvent
 
@@ -332,10 +372,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: screech
     useDelay: 24
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoSelfImmolateActionEvent
   - type: XenoActionPlasma
@@ -350,10 +392,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: fortify
     useDelay: 16
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: fortify
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Heatshield.XenoThermoregulationActionEvent
   - type: XenoActionPlasma
@@ -368,10 +412,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: TEMPLATE
     useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoStoreAcidActionEvent
   - type: XenoActionPlasma
@@ -386,10 +432,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: TEMPLATE
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoEncasedPlatesActionEvent
   - type: ActionBlockIfResting
@@ -402,10 +450,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: TEMPLATE
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoReflectiveShieldActionEvent
   - type: ActionBlockIfResting
@@ -418,10 +468,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: shift_spit_neurotoxin
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: shift_spit_neurotoxin
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoSelectChemicalActionEvent
 
@@ -433,10 +485,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: secrete_resin
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: secrete_resin
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoProduceChemicalActionEvent
   - type: XenoActionPlasma
@@ -451,10 +505,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: dump_acid
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: dump_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Alchemist.XenoRemoveChemicalActionEvent
 
@@ -466,10 +522,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: TEMPLATE
     useDelay: 30
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 5
   - type: EntityTargetAction
@@ -486,10 +544,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: queen_eye
     useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_eye
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:CMUXenoOvermindChangeFormActionEvent
 
@@ -503,9 +563,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: transfer_plasma
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -519,9 +581,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: transfer_plasma
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -536,9 +600,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: transfer_plasma
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
   - type: EntityTargetAction
@@ -553,10 +619,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: gardener_resin_surge
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: gardener_resin_surge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     checkCanAccess: false
@@ -578,9 +646,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: retrieve
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
   - type: EntityTargetAction
@@ -601,10 +671,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: warden_heal
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: warden_heal
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -627,10 +699,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: warden_rejuvenate
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: warden_rejuvenate
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 8
   - type: EntityTargetAction
@@ -653,11 +727,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: xeno_lead
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_lead
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:HiveLeaderActionEvent
 
@@ -669,11 +744,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: heal_xeno
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: heal_xeno
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
     range: -1
@@ -708,10 +784,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: apply_salve
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: apply_salve
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -727,9 +805,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -747,10 +827,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: prae_tail_lash
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: prae_tail_lash
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -764,10 +846,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: warden_heal
     useDelay: 7
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: warden_heal
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
     range: 8
@@ -782,10 +866,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: screech
     useDelay: 45
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoFightOrFlightActionEvent
   - type: XenoActionEnergy
@@ -801,10 +887,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: queen_eye
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: queen_eye
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:QueenEyeActionEvent
 
@@ -816,10 +904,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: rav_shard_shield
     useDelay: 11.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: rav_shard_shield
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ActionXenoSpikeShieldEvent
   - type: ActionBlockIfResting
@@ -833,10 +923,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: soak
     useDelay: 60
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: soak
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoBulwarkOfTheHiveActionEvent
 
@@ -848,10 +940,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: screech
     useDelay: 45
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDoomActionEvent
   - type: XenoActionPlasma
@@ -865,10 +959,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: xeno_spit
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.8
     checkCanAccess: false
@@ -888,10 +984,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: TEMPLATE
     useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -910,10 +1008,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: TEMPLATE
     useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: TEMPLATE
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     checkCanAccess: false
@@ -931,9 +1031,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
       state: invisibility
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoTurnInvisibleActionEvent
 
@@ -945,9 +1047,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/actions_pathogen.rsi
-      state: soak
     useDelay: 26
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/actions_pathogen.rsi
+      state: soak
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoDefensiveShieldActionEvent

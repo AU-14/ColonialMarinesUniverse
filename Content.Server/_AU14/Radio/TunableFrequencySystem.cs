@@ -11,7 +11,7 @@ using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared._RMC14.Language.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Radio;
@@ -89,7 +89,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         if ((args.SlotFlags & ent.Comp.RequiredSlots) == SlotFlags.NONE)
             return;
 
-        var wearer = EnsureComp<TunedFrequencyComponent>(args.Equipee);
+        var wearer = EnsureComp<TunedFrequencyComponent>(args.EquipTarget);
         wearer.Source = ent.Owner;
         wearer.Frequency = ent.Comp.TunedFrequency;
 
@@ -98,8 +98,8 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
     private void OnUnequipped(Entity<TunableHeadsetComponent> ent, ref GotUnequippedEvent args)
     {
-        if (TryComp(args.Equipee, out TunedFrequencyComponent? wearer) && wearer.Source == ent.Owner)
-            RemComp<TunedFrequencyComponent>(args.Equipee);
+        if (TryComp(args.EquipTarget, out TunedFrequencyComponent? wearer) && wearer.Source == ent.Owner)
+            RemComp<TunedFrequencyComponent>(args.EquipTarget);
     }
 
     private void OnSpoke(Entity<TunedFrequencyComponent> ent, ref EntitySpokeEvent args)
@@ -120,7 +120,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
             return;
         }
 
-        if (ent.Comp.Frequency <= 0)
+        if (ent.Comp.Frequency == RadioFrequency.Off)
         {
             _cmChat.ChatMessageToOne(Loc.GetString("tunable-radio-off"), ent.Owner);
             return;
@@ -141,7 +141,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
     public void BroadcastOnFrequency(
         EntityUid sender,
-        int frequency,
+        RadioFrequency frequency,
         string message,
         string? senderName = null,
         ProtoId<LanguagePrototype>? language = null)
@@ -149,7 +149,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         if (!_commsEnabled)
             return;
 
-        if (frequency <= 0 || string.IsNullOrWhiteSpace(message))
+        if (frequency == RadioFrequency.Off || string.IsNullOrWhiteSpace(message))
             return;
 
         var spokenLanguage = language ?? SharedLanguageSystem.CommonLanguage;
@@ -303,14 +303,13 @@ public sealed partial class TunableFrequencySystem : EntitySystem
 
         foreach (var session in Filter.Empty().AddWhereAttachedEntity(HasComp<GhostHearingComponent>).Recipients)
         {
-            var wrapped = _chatManager.AddGhostFollowButton(chat.WrappedMessage, sender, session.Channel);
+            var wrapped = _chatManager.PrependFollowButtonIfAppropriate(chat.WrappedMessage, sender, session.Channel);
 
             var ghostChat = wrapped == chat.WrappedMessage
                 ? chat
                 : new ChatMessage(chat)
                 {
-                    WrappedMessage = wrapped,
-                    GhostFollowEntity = GetNetEntity(sender)
+                    WrappedMessage = wrapped
                 };
 
             _netManager.ServerSendMessage(new MsgChatMessage { Message = ghostChat }, session.Channel);
@@ -322,7 +321,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         Vector2 senderPos,
         EntityUid receiver,
         Vector2 receiverPos,
-        int frequency,
+        RadioFrequency frequency,
         EntityUid excludeRelay,
         out RadioJamIntensity intensity)
     {
@@ -360,7 +359,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         EntityUid jamProbe,
         EntityUid recipient,
         string message,
-        int frequency,
+        RadioFrequency frequency,
         RadioJamIntensity senderJam,
         RadioJamIntensity rangeIntensity,
         string? senderName = null,
@@ -386,7 +385,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
     private EntityUid? FindANPRCRelay(
         EntityUid sender,
         EntityUid receiver,
-        int frequency,
+        RadioFrequency frequency,
         EntityUid excludeAnprc = default)
     {
         var senderPos = _transform.GetWorldPosition(sender);
@@ -427,7 +426,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         EntityUid sender,
         EntityUid receiver,
         string message,
-        int frequency,
+        RadioFrequency frequency,
         string? senderName = null,
         ProtoId<LanguagePrototype>? language = null,
         bool alreadyObfuscated = false)
@@ -447,7 +446,7 @@ public sealed partial class TunableFrequencySystem : EntitySystem
     private ChatMessage BuildChatMessage(
         EntityUid sender,
         string message,
-        int frequency,
+        RadioFrequency frequency,
         string? senderNameOverride = null,
         ProtoId<LanguagePrototype>? language = null)
     {
@@ -486,15 +485,15 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         if (!_commsEnabled || !args.CanAccess || !args.CanInteract)
             return;
 
-        if (ent.Comp.TunedFrequency <= 0)
+        if (ent.Comp.TunedFrequency == RadioFrequency.Off)
             return;
 
-        var targetFrequency = ent.Comp.DefaultFrequency > 0
+        var targetFrequency = ent.Comp.DefaultFrequency != RadioFrequency.Off
             ? ent.Comp.DefaultFrequency
-            : 0;
+            : RadioFrequency.Off;
 
         var alreadyAtTarget = ent.Comp.TunedFrequency == targetFrequency;
-        var hasDefault = ent.Comp.DefaultFrequency > 0;
+        var hasDefault = ent.Comp.DefaultFrequency != RadioFrequency.Off;
         var user = args.User;
 
         args.Verbs.Add(new AlternativeVerb
@@ -549,18 +548,13 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         if (!_commsEnabled)
             return;
 
-        var text = args.FrequencyText
-            .Trim()
-            .Replace(".", "")
-            .Replace(",", "");
-
-        if (!int.TryParse(text, out var frequency))
+        if (!RadioFrequencyInput.TryParseTunableScreenInput(args.FrequencyText, out var frequency))
         {
             _cmChat.ChatMessageToOne(Loc.GetString("tunable-radio-invalid-freq"), args.Actor);
             return;
         }
 
-        frequency = Math.Clamp(frequency, ent.Comp.MinFrequency, ent.Comp.MaxFrequency);
+        frequency = ClampFrequency(frequency, ent.Comp.MinFrequency, ent.Comp.MaxFrequency);
 
         ent.Comp.TunedFrequency = frequency;
         Dirty(ent);
@@ -602,9 +596,20 @@ public sealed partial class TunableFrequencySystem : EntitySystem
         return a > b ? a : b;
     }
 
-    public static string FormatFreq(int raw)
+    private static RadioFrequency ClampFrequency(
+        RadioFrequency frequency,
+        RadioFrequency minimum,
+        RadioFrequency maximum)
     {
-        return TunableFrequencyHelpers.FormatFreq(raw);
+        if (frequency < minimum)
+            return minimum;
+
+        return frequency > maximum ? maximum : frequency;
+    }
+
+    public static string FormatFreq(RadioFrequency frequency)
+    {
+        return TunableFrequencyHelpers.FormatFreq(frequency);
     }
 }
 
@@ -616,6 +621,6 @@ public record struct ANPRCDirectScanSwitchedEvent;
 public readonly record struct ANPRCDirectTrafficReceivedEvent(
     EntityUid Sender,
     string SenderName,
-    int Frequency,
+    RadioFrequency Frequency,
     string Message,
     ProtoId<LanguagePrototype> Language);

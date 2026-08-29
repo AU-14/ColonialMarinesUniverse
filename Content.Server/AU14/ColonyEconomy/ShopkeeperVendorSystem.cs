@@ -18,6 +18,8 @@ namespace Content.Server.AU14.ColonyEconomy;
 
 public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
 {
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private AdminConsoleSystem _adminConsole = default!;
     [Dependency] private ColonyBudgetSystem _colonyBudget = default!;
@@ -160,7 +162,7 @@ public sealed partial class AU14ShopkeeperVendorSystem : EntitySystem
     {
         if (comp.InsertedCash <= 0)
             return;
-        _stack.SpawnMultiple("RMCSpaceCash", (int)comp.InsertedCash, uid);
+        _stack.SpawnMultipleNextToOrDrop(CashPrototype, (int) comp.InsertedCash, uid);
         comp.InsertedCash = 0;
         UpdateShopUi(uid, comp);
     }

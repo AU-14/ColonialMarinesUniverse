@@ -3,6 +3,7 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Client._AU14.Administration;
 using Content.Client.Construction;
+using Content.Client.Popups;
 using Content.Shared._AU14.Administration;
 using Content.Shared._AU14.Construction.CustomConstruction;
 using Content.Client._AU14.ZLevelBuilding;
@@ -22,7 +23,7 @@ namespace Content.Client._AU14.Construction.CustomConstruction;
 /// </summary>
 public sealed class CustomConstructionEditorClientSystem : EntitySystem
 {
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly ToolPermissionClientSystem _toolPerms = default!;
     [Dependency] private readonly IPrototypeManager _prototypes = default!;
 

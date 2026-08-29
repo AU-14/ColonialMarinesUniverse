@@ -188,7 +188,7 @@ public sealed partial class AllegianceSystem : EntitySystem
     /// matches a platoon. Returns null if no match found.
     /// </summary>
     public HumanoidCharacterProfile? FindApplicableCharacterForPlatoon(
-        IReadOnlyDictionary<int, ICharacterProfile> characters,
+        IReadOnlyDictionary<int, HumanoidCharacterProfile> characters,
         int selectedIndex,
         PlatoonPrototype platoon,
         JobPrototype? job,
@@ -197,26 +197,22 @@ public sealed partial class AllegianceSystem : EntitySystem
         // If the platoon has no allegiance, the selected character is fine
         if (platoon.Allegiance == null)
         {
-            if (characters.TryGetValue(selectedIndex, out var sel) && sel is HumanoidCharacterProfile selH)
-                return selH;
+            if (characters.TryGetValue(selectedIndex, out var selected))
+                return selected;
         }
 
         // First check the selected character
-        if (characters.TryGetValue(selectedIndex, out var selectedProfile) &&
-            selectedProfile is HumanoidCharacterProfile selectedHumanoid)
+        if (characters.TryGetValue(selectedIndex, out var selectedProfile))
         {
-            if (IsAllegianceApplicableForPlatoon(selectedHumanoid, platoon, job, userId))
-                return selectedHumanoid;
+            if (IsAllegianceApplicableForPlatoon(selectedProfile, platoon, job, userId))
+                return selectedProfile;
         }
 
         // Then check all other characters
         foreach (var (_, profile) in characters)
         {
-            if (profile is not HumanoidCharacterProfile humanoid)
-                continue;
-
-            if (IsAllegianceApplicableForPlatoon(humanoid, platoon, job, userId))
-                return humanoid;
+            if (IsAllegianceApplicableForPlatoon(profile, platoon, job, userId))
+                return profile;
         }
 
         return null;
@@ -227,7 +223,7 @@ public sealed partial class AllegianceSystem : EntitySystem
     /// matches a colony. Returns null if no match found.
     /// </summary>
     public HumanoidCharacterProfile? FindApplicableCharacterForColony(
-        IReadOnlyDictionary<int, ICharacterProfile> characters,
+        IReadOnlyDictionary<int, HumanoidCharacterProfile> characters,
         int selectedIndex,
         RMCPlanetMapPrototypeComponent colony,
         JobPrototype? job,
@@ -236,26 +232,22 @@ public sealed partial class AllegianceSystem : EntitySystem
         // If the colony has no allegiance, the selected character is fine
         if (colony.Allegiance == null)
         {
-            if (characters.TryGetValue(selectedIndex, out var sel) && sel is HumanoidCharacterProfile selH)
-                return selH;
+            if (characters.TryGetValue(selectedIndex, out var selected))
+                return selected;
         }
 
         // First check the selected character
-        if (characters.TryGetValue(selectedIndex, out var selectedProfile) &&
-            selectedProfile is HumanoidCharacterProfile selectedHumanoid)
+        if (characters.TryGetValue(selectedIndex, out var selectedProfile))
         {
-            if (IsAllegianceApplicableForColony(selectedHumanoid, colony, job, userId))
-                return selectedHumanoid;
+            if (IsAllegianceApplicableForColony(selectedProfile, colony, job, userId))
+                return selectedProfile;
         }
 
         // Then check all other characters
         foreach (var (_, profile) in characters)
         {
-            if (profile is not HumanoidCharacterProfile humanoid)
-                continue;
-
-            if (IsAllegianceApplicableForColony(humanoid, colony, job, userId))
-                return humanoid;
+            if (IsAllegianceApplicableForColony(profile, colony, job, userId))
+                return profile;
         }
 
         return null;
@@ -269,4 +261,3 @@ public sealed partial class AllegianceSystem : EntitySystem
         _ignoreAllegiance.Remove(userId);
     }
 }
-

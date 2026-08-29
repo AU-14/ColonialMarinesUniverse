@@ -17,10 +17,10 @@ public sealed partial class RMCBulkyArmorSystem : EntitySystem
         if (!armor.Comp.IsBulky || !HasComp<RMCUserBulkyArmorIncapableComponent>(args.EquipTarget))
             return;
 
-        if (args.EquipTarget == args.Equipee)
-            _popup.PopupClient(Loc.GetString("rmc-bulky-armor-user-unable", ("armor", armor)), args.Equipee, args.Equipee, PopupType.MediumCaution);
+        if (args.User == args.EquipTarget)
+            _popup.PopupClient(Loc.GetString("rmc-bulky-armor-user-unable", ("armor", armor)), args.User, args.User, PopupType.MediumCaution);
         else
-            _popup.PopupEntity(Loc.GetString("rmc-bulky-armor-target-unable", ("target", args.EquipTarget), ("armor", armor)), args.Equipee, args.Equipee, PopupType.MediumCaution);
+            _popup.PopupEntity(Loc.GetString("rmc-bulky-armor-target-unable", ("target", args.EquipTarget), ("armor", armor)), args.User, args.User, PopupType.MediumCaution);
 
         args.Cancel();
     }

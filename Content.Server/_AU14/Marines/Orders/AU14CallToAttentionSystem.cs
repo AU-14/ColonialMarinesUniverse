@@ -5,6 +5,7 @@ using Content.Shared._CMU14.Round.Roles;
 using Content.Shared._RMC14.Roles;
 using Content.Shared.Buckle;
 using Content.Shared.Buckle.Components;
+using Content.Shared.Chat;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Examine;
 using Content.Shared.Humanoid;
@@ -33,7 +34,7 @@ public sealed partial class AU14CallToAttentionSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private IPrototypeManager _proto = default!;
 
-    private readonly HashSet<Entity<HumanoidAppearanceComponent>> _receivers = new();
+    private readonly HashSet<Entity<HumanoidProfileComponent>> _receivers = new();
     private readonly List<EntityUid> _visibleTargets = new();
 
     public override void Initialize()

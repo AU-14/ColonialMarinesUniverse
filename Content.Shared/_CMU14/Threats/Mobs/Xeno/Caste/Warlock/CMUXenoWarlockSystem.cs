@@ -14,6 +14,8 @@ using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
@@ -324,12 +326,12 @@ public sealed partial class CMUXenoFrozenProjectileComponent : Component
     public bool HadProjectileFixedDistanceComponent;
 
     [DataField, AutoNetworkedField]
-    public bool IgnoreShooter;
+    public TimeSpan? ShooterIgnoreRemaining;
 
     [DataField, AutoNetworkedField]
     public bool ProjectileSpent;
 
-    // When true, BeforeTriggerEvent is NOT cancelled while the entity is frozen. Used for
+    // When true, AttemptTriggerEvent is NOT cancelled while the entity is frozen. Used for
     // thrown grenades so their fuse timer still expires normally (if the warlock does not
     // reflect in time, the grenade detonates at the shield face). Rockets/other collision-
     // triggered projectiles keep this false so they cannot self-detonate on shield contact.
@@ -1038,7 +1040,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         var channeling = EnsureComp<CMUXenoWarlockChannelingComponent>(warlock);
         channeling.SpeedMultiplier = 0f;
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
 
         var ev = new CMUXenoPsychicCrushDoAfterEvent(GetNetCoordinates(target));
         var doAfter = new DoAfterArgs(EntityManager, warlock, warlock.Comp.PsychicCrushWindupDuration, ev, warlock,
@@ -1335,7 +1337,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         var channeling = EnsureComp<CMUXenoWarlockChannelingComponent>(warlock);
         channeling.SpeedMultiplier = warlock.Comp.PsychicCrushChannelSpeedMultiplier;
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
 
         var ev = new CMUXenoPsychicCrushChannelDoAfterEvent();
         var doAfter = new DoAfterArgs(EntityManager,
@@ -1764,7 +1766,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         StartWarlockChannelEffect(warlock, CMUXenoWarlockChannelKind.PsychicShield);
         // Icon toggle is handled inside SetPsychicShieldActionMode below, alongside the swap.
         EnsureComp<CMUXenoPsychicShieldRootComponent>(warlock);
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
         if (TryComp(warlock, out PhysicsComponent? physics))
             _physics.SetLinearVelocity(warlock, Vector2.Zero, body: physics);
 
@@ -1827,7 +1829,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         SetPsychicShieldActionMode(warlock, shieldUp: false);
         SetActionCooldown<CMUXenoPsychicShieldActionEvent>(warlock, warlock.Comp.PsychicShieldCooldown);
         if (RemComp<CMUXenoPsychicShieldRootComponent>(warlock))
-            _movement.RefreshMovementSpeedModifiers(warlock);
+            _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
 
         if (stunOwner)
             _stun.TryParalyze(warlock, warlock.Comp.PsychicShieldOwnerStun, true);
@@ -1909,7 +1911,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
             {
                 projectileComp.Shooter = warlock;
                 projectileComp.Weapon = warlock;
-                projectileComp.IgnoreShooter = false;
+                projectileComp.WhenToStopIgnoringShooter = _timing.CurTime;
                 projectileComp.DeleteOnCollide = frozen.DeleteOnCollide;
                 projectileComp.ProjectileSpent = false;
                 Dirty(frozenEnt, projectileComp);
@@ -2096,7 +2098,12 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         bool canCollide = physics.CanCollide;
         EntityUid? shooter = projectileComp.Shooter;
         EntityUid? weapon = projectileComp.Weapon;
-        bool ignoreShooter = projectileComp.IgnoreShooter;
+        TimeSpan? shooterIgnoreRemaining = null;
+        if (projectileComp.WhenToStopIgnoringShooter is { } ignoreUntil)
+        {
+            var remaining = ignoreUntil - _timing.CurTime;
+            shooterIgnoreRemaining = remaining > TimeSpan.Zero ? remaining : TimeSpan.Zero;
+        }
         bool deleteOnCollide = projectileComp.DeleteOnCollide;
         bool projectileSpent = projectileComp.ProjectileSpent;
 
@@ -2109,7 +2116,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
         frozen.BodyType = bodyType;
         frozen.Shooter = shooter;
         frozen.Weapon = weapon;
-        frozen.IgnoreShooter = ignoreShooter;
+        frozen.ShooterIgnoreRemaining = shooterIgnoreRemaining;
         frozen.DeleteOnCollide = deleteOnCollide;
         frozen.ProjectileSpent = projectileSpent;
         frozen.HadDeleteOnCollideComponent = RemComp<DeleteOnCollideComponent>(projectile);
@@ -2162,7 +2169,9 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
 
         projectileComp.Shooter = frozen.Shooter;
         projectileComp.Weapon = frozen.Weapon;
-        projectileComp.IgnoreShooter = frozen.IgnoreShooter;
+        projectileComp.WhenToStopIgnoringShooter = frozen.ShooterIgnoreRemaining is { } remaining
+            ? _timing.CurTime + remaining
+            : null;
         projectileComp.DeleteOnCollide = frozen.DeleteOnCollide;
         projectileComp.ProjectileSpent = false;
         Dirty(projectile, projectileComp);
@@ -2355,7 +2364,7 @@ public sealed partial class CMUXenoWarlockSystem : EntitySystem
     private void RemovePsychicCrushMovementModifier(Entity<CMUXenoWarlockComponent> warlock)
     {
         RemCompDeferred<CMUXenoWarlockChannelingComponent>(warlock);
-        _movement.RefreshMovementSpeedModifiers(warlock);
+        _movement.RefreshMovementSpeedModifiers((warlock.Owner, null));
     }
 
     private void StartWarlockChannelEffect(Entity<CMUXenoWarlockComponent> warlock, CMUXenoWarlockChannelKind kind)

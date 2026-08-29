@@ -1,551 +1,242 @@
-using Content.Server.Kitchen.Components;
+using System.Linq;
 using Content.Server._CMU14.Botany;
-using Content.Server.Botany.Components;
-using Content.Server.Power.Components;
-using Content.Server.Power.EntitySystems;
-using Content.Server.Stack;
+using Content.Shared._RMC14.Chemistry.Reagent;
+using Content.Shared._RMC14.Chemistry.SmartFridge;
 using Content.Shared.Chemistry.EntitySystems;
-using Content.Shared.Chemistry.Components;
 using Content.Shared.Containers.ItemSlots;
-using Content.Shared.Destructible;
-using Content.Shared.FixedPoint;
 using Content.Shared.Interaction;
 using Content.Shared.Kitchen;
 using Content.Shared.Kitchen.Components;
+using Content.Shared.Kitchen.EntitySystems;
 using Content.Shared.Popups;
-using Content.Shared.Random;
+using Content.Shared.Power.EntitySystems;
 using Content.Shared.Storage;
-using Content.Shared.Stacks;
-using JetBrains.Annotations;
 using Robust.Server.GameObjects;
-using Robust.Shared.Audio;
-using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Timing;
-using System.Linq;
-using Content.Server.Construction.Completions;
-using Content.Server.Jittering;
-using Content.Shared.Jittering;
-using Content.Shared.Power;
-using System.Numerics;
-using Content.Shared._RMC14.Chemistry.SmartFridge;
-using Content.Shared.Chemistry.Reagent;
-using Content.Shared._RMC14.Chemistry.Reagent;
 
-namespace Content.Server.Kitchen.EntitySystems
+namespace Content.Server.Kitchen.EntitySystems;
+
+/// <inheritdoc />
+public sealed partial class ReagentGrinderSystem : SharedReagentGrinderSystem
 {
-    [UsedImplicitly]
-    internal sealed partial class ReagentGrinderSystem : EntitySystem
+    private const string BottlePrototype = "CMBottleEmpty";
+    private const string BottleSolution = "drink";
+
+    [Dependency] private SharedContainerSystem _container = default!;
+    [Dependency] private ItemSlotsSystem _itemSlots = default!;
+    [Dependency] private ServerMetaDataSystem _metaData = default!;
+    [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private SharedPowerReceiverSystem _power = default!;
+    [Dependency] private RMCReagentSystem _reagents = default!;
+    [Dependency] private SharedSolutionContainerSystem _solution = default!;
+    [Dependency] private SharedTransformSystem _transform = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private IGameTiming _timing = default!;
-        [Dependency] private SharedSolutionContainerSystem _solutionContainersSystem = default!;
-        [Dependency] private ItemSlotsSystem _itemSlotsSystem = default!;
-        [Dependency] private SharedPopupSystem _popupSystem = default!;
-        [Dependency] private UserInterfaceSystem _userInterfaceSystem = default!;
-        [Dependency] private StackSystem _stackSystem = default!;
-        [Dependency] private SharedAudioSystem _audioSystem = default!;
-        [Dependency] private SharedAppearanceSystem _appearanceSystem = default!;
-        [Dependency] private SharedContainerSystem _containerSystem = default!;
-        [Dependency] private SharedDestructibleSystem _destructible = default!;
-        [Dependency] private RandomHelperSystem _randomHelper = default!;
-        [Dependency] private JitteringSystem _jitter = default!;
-        [Dependency] private TransformSystem _xform = default!;
-        [Dependency] private ServerMetaDataSystem _metadata = default!;
-        [Dependency] private RMCReagentSystem _reagents = default!;
+        base.Initialize();
 
-        public override void Initialize()
+        SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderLinkMessage>(OnLink);
+        SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderBottleMessage>(OnBottle);
+        SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderDisposeMessage>(OnDispose);
+    }
+
+    public override void Update(float frameTime)
+    {
+        base.Update(frameTime);
+
+        var query = EntityQueryEnumerator<ReagentGrinderComponent>();
+        while (query.MoveNext(out var uid, out var grinder))
         {
-            base.Initialize();
+            if (grinder.SmartFridge is not { } fridge)
+                continue;
 
-            SubscribeLocalEvent<ActiveReagentGrinderComponent, ComponentStartup>(OnActiveGrinderStart);
-            SubscribeLocalEvent<ActiveReagentGrinderComponent, ComponentRemove>(OnActiveGrinderRemove);
-            SubscribeLocalEvent<ReagentGrinderComponent, ComponentStartup>((uid, _, _) => UpdateUiState(uid));
-            SubscribeLocalEvent((EntityUid uid, ReagentGrinderComponent _, ref PowerChangedEvent _) => UpdateUiState(uid));
-            SubscribeLocalEvent<ReagentGrinderComponent, InteractUsingEvent>(OnInteractUsing);
-
-            SubscribeLocalEvent<ReagentGrinderComponent, EntInsertedIntoContainerMessage>(OnContainerModified);
-            SubscribeLocalEvent<ReagentGrinderComponent, EntRemovedFromContainerMessage>(OnContainerModified);
-            SubscribeLocalEvent<ReagentGrinderComponent, ContainerIsRemovingAttemptEvent>(OnEntRemoveAttempt);
-
-            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderToggleAutoModeMessage>(OnToggleAutoModeMessage);
-            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderStartMessage>(OnStartMessage);
-            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderEjectChamberAllMessage>(OnEjectChamberAllMessage);
-            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderEjectChamberContentMessage>(OnEjectChamberContentMessage);
-            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderLinkMessage>(OnLinkMessage);
-            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderBottleMessage>(OnBottleMessage);
-            SubscribeLocalEvent<ReagentGrinderComponent, ReagentGrinderDisposeMessage>(OnDispose);
-        }
-
-        private void OnToggleAutoModeMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderToggleAutoModeMessage message)
-        {
-            entity.Comp.AutoMode = (GrinderAutoMode) (((byte) entity.Comp.AutoMode + 1) % Enum.GetValues(typeof(GrinderAutoMode)).Length);
-
-            UpdateUiState(entity);
-        }
-
-        public override void Update(float frameTime)
-        {
-            base.Update(frameTime);
-
-            var query = EntityQueryEnumerator<ActiveReagentGrinderComponent, ReagentGrinderComponent>();
-            while (query.MoveNext(out var uid, out var active, out var reagentGrinder))
+            if (TryComp(fridge, out RMCSmartFridgeComponent? _) &&
+                _transform.GetMapCoordinates(uid).InRange(_transform.GetMapCoordinates(fridge), grinder.LinkLimit))
             {
-                if (active.EndTime > _timing.CurTime)
-                    continue;
-
-                reagentGrinder.AudioStream = _audioSystem.Stop(reagentGrinder.AudioStream);
-                RemCompDeferred<ActiveReagentGrinderComponent>(uid);
-
-                var inputContainer = _containerSystem.EnsureContainer<Container>(uid, SharedReagentGrinder.InputContainerId);
-                var outputContainer = _itemSlotsSystem.GetItemOrNull(uid, SharedReagentGrinder.BeakerSlotId);
-                if (outputContainer is null || !_solutionContainersSystem.TryGetFitsInDispenser(outputContainer.Value, out var containerSoln, out var containerSolution))
-                    continue;
-
-                foreach (var item in inputContainer.ContainedEntities.ToList())
-                {
-                    var solution = active.Program switch
-                    {
-                        GrinderProgram.Grind => GetGrindSolution(item),
-                        GrinderProgram.Juice => CompOrNull<ExtractableComponent>(item)?.JuiceSolution,
-                        _ => null,
-                    };
-
-                    if (solution is null)
-                        continue;
-
-                    if (TryComp<StackComponent>(item, out var stack))
-                    {
-                        var totalVolume = solution.Volume * stack.Count;
-                        if (totalVolume <= 0)
-                            continue;
-
-                        // Maximum number of items we can process in the stack without going over AvailableVolume
-                        // We add a small tolerance, because floats are inaccurate.
-                        var fitsCount = (int) (stack.Count * FixedPoint2.Min(containerSolution.AvailableVolume / totalVolume + 0.01, 1));
-                        if (fitsCount <= 0)
-                            continue;
-
-                        // Make a copy of the solution to scale
-                        // Otherwise we'll actually change the volume of the remaining stack too
-                        var scaledSolution = new Solution(solution);
-                        scaledSolution.ScaleSolution(fitsCount);
-                        solution = scaledSolution;
-
-                        _stackSystem.SetCount(item, stack.Count - fitsCount); // Setting to 0 will QueueDel
-                    }
-                    else
-                    {
-                        if (solution.Volume > containerSolution.AvailableVolume)
-                            continue;
-
-                        _destructible.DestroyEntity(item);
-                    }
-
-                    _solutionContainersSystem.TryAddSolution(containerSoln.Value, solution);
-                }
-
-                _userInterfaceSystem.ServerSendUiMessage(uid, ReagentGrinderUiKey.Key,
-                    new ReagentGrinderWorkCompleteMessage());
-
-                UpdateUiState(uid);
-            }
-            var linkedQuery = EntityQueryEnumerator<ReagentGrinderComponent>();
-            while (linkedQuery.MoveNext(out var uid, out var comp))
-            {
-                if (comp.SmartFridge is null || comp.SmartFridge == EntityUid.Invalid)
-                    continue;
-                if (TryComp(uid, out TransformComponent? grinderXform))
-                {
-                    if (TryComp(comp.SmartFridge.Value, out TransformComponent? fridgeXform))
-                    {
-                        if (grinderXform.MapID != fridgeXform.MapID)
-                        {
-                            comp.SmartFridge = null;
-                            _popupSystem.PopupEntity(Loc.GetString("grinder-lost-link"), uid, PopupType.SmallCaution);
-                            UpdateUiState(uid);
-                            continue;
-                        }
-                        if (Vector2.Distance
-                            (
-                            _xform.GetWorldPosition(uid),
-                            _xform.GetWorldPosition(comp.SmartFridge.Value)
-                            ) > 16)
-                        {
-                            comp.SmartFridge = null;
-                            UpdateUiState(uid);
-                            _popupSystem.PopupEntity(Loc.GetString("grinder-lost-link"), uid, PopupType.SmallCaution);
-                        }
-                    }
-                    else
-                    {
-                        comp.SmartFridge = null;
-                    }
-                }
-            }
-        }
-
-        private void OnActiveGrinderStart(Entity<ActiveReagentGrinderComponent> ent, ref ComponentStartup args)
-        {
-            _jitter.AddJitter(ent, -10, 100);
-        }
-
-        private void OnActiveGrinderRemove(Entity<ActiveReagentGrinderComponent> ent, ref ComponentRemove args)
-        {
-            RemComp<JitteringComponent>(ent);
-        }
-
-        private void OnEntRemoveAttempt(Entity<ReagentGrinderComponent> entity, ref ContainerIsRemovingAttemptEvent args)
-        {
-            if (HasComp<ActiveReagentGrinderComponent>(entity))
-                args.Cancel();
-        }
-
-        private void OnContainerModified(EntityUid uid, ReagentGrinderComponent reagentGrinder, ContainerModifiedMessage args)
-        {
-            UpdateUiState(uid);
-
-            var outputContainer = _itemSlotsSystem.GetItemOrNull(uid, SharedReagentGrinder.BeakerSlotId);
-            _appearanceSystem.SetData(uid, ReagentGrinderVisualState.BeakerAttached, outputContainer.HasValue);
-
-            if (reagentGrinder.AutoMode != GrinderAutoMode.Off && !HasComp<ActiveReagentGrinderComponent>(uid) && this.IsPowered(uid, EntityManager))
-            {
-                var program = reagentGrinder.AutoMode == GrinderAutoMode.Grind ? GrinderProgram.Grind : GrinderProgram.Juice;
-                DoWork(uid, reagentGrinder, program);
-            }
-        }
-
-        private void OnInteractUsing(Entity<ReagentGrinderComponent> entity, ref InteractUsingEvent args)
-        {
-            var heldEnt = args.Used;
-            var inputContainer = _containerSystem.EnsureContainer<Container>(entity.Owner, SharedReagentGrinder.InputContainerId);
-
-            if (HasComp<CMUPlantBagComponent>(heldEnt) && TryComp(heldEnt, out StorageComponent? plantBag))
-            {
-                args.Handled = true;
-                TransferPlantBag(entity, heldEnt, plantBag, inputContainer, args.User);
-                return;
+                continue;
             }
 
-            if (!HasComp<ExtractableComponent>(heldEnt))
-            {
-                if (!HasComp<FitsInDispenserComponent>(heldEnt))
-                {
-                    // This is ugly but we can't use whitelistFailPopup because there are 2 containers with different whitelists.
-                    _popupSystem.PopupEntity(Loc.GetString("reagent-grinder-component-cannot-put-entity-message"), entity.Owner, args.User);
-                }
+            grinder.SmartFridge = null;
+            Dirty(uid, grinder);
+            UpdateUi(uid);
+            _popup.PopupEntity(Loc.GetString("grinder-lost-link"), uid, PopupType.SmallCaution);
+        }
+    }
 
-                // Entity did NOT pass the whitelist for grind/juice.
-                // Wouldn't want the clown grinding up the Captain's ID card now would you?
-                // Why am I asking you? You're biased.
-                return;
-            }
-
-            if (args.Handled)
-                return;
-
-            // Cap the chamber. Don't want someone putting in 500 entities and ejecting them all at once.
-            // Maybe I should have done that for the microwave too?
-            if (inputContainer.ContainedEntities.Count >= entity.Comp.StorageMaxEntities)
-                return;
-
-            if (!_containerSystem.Insert(heldEnt, inputContainer))
-                return;
-
+    protected override void OnInteractUsing(Entity<ReagentGrinderComponent> ent, ref InteractUsingEvent args)
+    {
+        if (HasComp<CMUPlantBagComponent>(args.Used) &&
+            TryComp(args.Used, out StorageComponent? plantBag))
+        {
             args.Handled = true;
+            TransferPlantBag(ent, args.Used, plantBag, args.User);
+            return;
         }
 
-        private void TransferPlantBag(
-            Entity<ReagentGrinderComponent> grinder,
-            EntityUid plantBagUid,
-            StorageComponent plantBag,
-            BaseContainer inputContainer,
-            EntityUid user)
+        base.OnInteractUsing(ent, ref args);
+    }
+
+    private void TransferPlantBag(
+        Entity<ReagentGrinderComponent> grinder,
+        EntityUid plantBagUid,
+        StorageComponent plantBag,
+        EntityUid user)
+    {
+        if (IsActive(grinder.AsNullable()))
+            return;
+
+        var availableSpace = grinder.Comp.StorageMaxEntities - grinder.Comp.InputContainer.ContainedEntities.Count;
+        if (availableSpace <= 0)
         {
-            var availableSpace = grinder.Comp.StorageMaxEntities - inputContainer.ContainedEntities.Count;
-            if (availableSpace <= 0)
+            _popup.PopupEntity(Loc.GetString("reagent-grinder-component-chamber-full"), grinder, user);
+            return;
+        }
+
+        var transferred = 0;
+        foreach (var item in plantBag.Container.ContainedEntities.ToList())
+        {
+            if (transferred >= availableSpace)
+                break;
+
+            if (!HasComp<ExtractableComponent>(item) ||
+                !_container.Remove(item, plantBag.Container))
             {
-                _popupSystem.PopupEntity(Loc.GetString("reagent-grinder-component-chamber-full"), grinder, user);
-                return;
+                continue;
             }
 
-            var transferred = 0;
-            foreach (var item in plantBag.Container.ContainedEntities.ToList())
+            if (_container.Insert(item, grinder.Comp.InputContainer))
             {
-                if (transferred >= availableSpace)
-                    break;
-
-                if (!HasComp<ExtractableComponent>(item) ||
-                    !_containerSystem.Remove(item, plantBag.Container))
-                {
-                    continue;
-                }
-
-                if (_containerSystem.Insert(item, inputContainer))
-                {
-                    transferred++;
-                    continue;
-                }
-
-                _containerSystem.Insert(item, plantBag.Container);
+                transferred++;
+                continue;
             }
 
-            if (transferred == 0)
-            {
-                _popupSystem.PopupEntity(
-                    Loc.GetString("reagent-grinder-component-plant-bag-empty", ("bag", plantBagUid)),
-                    grinder,
-                    user);
-                return;
-            }
+            _container.Insert(item, plantBag.Container);
+        }
 
-            _popupSystem.PopupEntity(
-                Loc.GetString("reagent-grinder-component-plant-bag-loaded", ("count", transferred)),
+        if (transferred == 0)
+        {
+            _popup.PopupEntity(
+                Loc.GetString("reagent-grinder-component-plant-bag-empty", ("bag", plantBagUid)),
                 grinder,
                 user);
-            UpdateUiState(grinder);
+            return;
         }
 
-        private void UpdateUiState(EntityUid uid)
-        {
-            ReagentGrinderComponent? grinderComp = null;
-            if (!Resolve(uid, ref grinderComp))
-                return;
+        _popup.PopupEntity(
+            Loc.GetString("reagent-grinder-component-plant-bag-loaded", ("count", transferred)),
+            grinder,
+            user);
+        UpdateUi(grinder);
+    }
 
-            var inputContainer = _containerSystem.EnsureContainer<Container>(uid, SharedReagentGrinder.InputContainerId);
-            var outputContainer = _itemSlotsSystem.GetItemOrNull(uid, SharedReagentGrinder.BeakerSlotId);
-            Solution? containerSolution = null;
-            var isBusy = HasComp<ActiveReagentGrinderComponent>(uid);
-            var canJuice = false;
-            var canGrind = false;
-            var canLink = (grinderComp.SmartFridge is null);
-            var linked = (grinderComp.SmartFridge is not null);
-            if (outputContainer is not null
-                && _solutionContainersSystem.TryGetFitsInDispenser(outputContainer.Value, out _, out containerSolution)
-                && inputContainer.ContainedEntities.Count > 0)
+    private void OnLink(Entity<ReagentGrinderComponent> ent, ref ReagentGrinderLinkMessage args)
+    {
+        if (ent.Comp.SmartFridge != null ||
+            IsActive(ent.AsNullable()) ||
+            !_power.IsPowered(ent.Owner))
+        {
+            return;
+        }
+
+        var grinderCoordinates = _transform.GetMapCoordinates(ent.Owner);
+        EntityUid? closest = null;
+        var closestDistance = float.MaxValue;
+        var query = EntityQueryEnumerator<RMCSmartFridgeComponent>();
+        while (query.MoveNext(out var fridge, out _))
+        {
+            var fridgeCoordinates = _transform.GetMapCoordinates(fridge);
+            if (fridgeCoordinates.MapId != grinderCoordinates.MapId)
+                continue;
+
+            var distance = (fridgeCoordinates.Position - grinderCoordinates.Position).Length();
+            if (distance > ent.Comp.LinkDistance || distance >= closestDistance)
+                continue;
+
+            closest = fridge;
+            closestDistance = distance;
+        }
+
+        if (closest == null)
+            return;
+
+        ent.Comp.SmartFridge = closest;
+        Dirty(ent);
+        UpdateUi(ent);
+    }
+
+    private void OnBottle(Entity<ReagentGrinderComponent> ent, ref ReagentGrinderBottleMessage args)
+    {
+        if (!TryGetValidFridge(ent, out var fridge) ||
+            IsActive(ent.AsNullable()) ||
+            _itemSlots.GetItemOrNull(ent.Owner, ReagentGrinderComponent.BeakerSlotId) is not { } beaker ||
+            !_solution.TryGetFitsInDispenser(beaker, out var beakerSolution, out var contents))
+        {
+            return;
+        }
+
+        var quantity = contents.GetReagentQuantity(args.Reagent.Reagent);
+        if (quantity <= 0)
+            return;
+
+        var fridgeContainer = _container.EnsureContainer<Container>(fridge.Owner, fridge.Comp.ContainerId);
+        while (quantity > 0)
+        {
+            var bottle = Spawn(BottlePrototype);
+            _solution.EnsureSolution(bottle, BottleSolution, out var bottleSolution);
+            if (!_solution.TryAddReagent(
+                    bottleSolution,
+                    args.Reagent.Reagent,
+                    quantity,
+                    out var accepted) ||
+                accepted <= 0 ||
+                !_container.Insert(bottle, fridgeContainer))
             {
-                canGrind = inputContainer.ContainedEntities.All(CanGrind);
-                canJuice = inputContainer.ContainedEntities.All(CanJuice);
+                QueueDel(bottle);
+                break;
             }
 
-            var state = new ReagentGrinderInterfaceState(
-                isBusy,
-                outputContainer.HasValue,
-                this.IsPowered(uid, EntityManager),
-                canJuice,
-                canGrind,
-                canLink,
-                linked,
-                grinderComp.AutoMode,
-                GetNetEntityArray(inputContainer.ContainedEntities.ToArray()),
-                containerSolution?.Contents.ToArray()
-            );
-            _userInterfaceSystem.SetUiState(uid, ReagentGrinderUiKey.Key, state);
+            _solution.RemoveReagent(beakerSolution.Value, args.Reagent.Reagent, accepted);
+            quantity -= accepted;
+
+            if (_reagents.TryIndex(args.Reagent.Reagent, out var reagent))
+                _metaData.SetEntityName(bottle, $"{reagent.LocalizedName} bottle");
         }
 
-        private void OnStartMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderStartMessage message)
+        UpdateUi(ent);
+    }
+
+    private void OnDispose(Entity<ReagentGrinderComponent> ent, ref ReagentGrinderDisposeMessage args)
+    {
+        if (!TryGetValidFridge(ent, out _) ||
+            IsActive(ent.AsNullable()) ||
+            _itemSlots.GetItemOrNull(ent.Owner, ReagentGrinderComponent.BeakerSlotId) is not { } beaker ||
+            !_solution.TryGetFitsInDispenser(beaker, out var beakerSolution, out var contents))
         {
-            if (!this.IsPowered(entity.Owner, EntityManager) || HasComp<ActiveReagentGrinderComponent>(entity))
-                return;
-
-            DoWork(entity.Owner, entity.Comp, message.Program);
+            return;
         }
 
-        private void OnEjectChamberAllMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderEjectChamberAllMessage message)
+        var quantity = contents.GetReagentQuantity(args.Reagent.Reagent);
+        if (quantity <= 0)
+            return;
+
+        _solution.RemoveReagent(beakerSolution.Value, args.Reagent.Reagent, quantity);
+        UpdateUi(ent);
+    }
+
+    private bool TryGetValidFridge(
+        Entity<ReagentGrinderComponent> grinder,
+        out Entity<RMCSmartFridgeComponent> fridge)
+    {
+        fridge = default;
+        if (grinder.Comp.SmartFridge is not { } fridgeUid ||
+            !TryComp(fridgeUid, out RMCSmartFridgeComponent? fridgeComp) ||
+            !_transform.GetMapCoordinates(grinder.Owner)
+                .InRange(_transform.GetMapCoordinates(fridgeUid), grinder.Comp.LinkLimit))
         {
-            var inputContainer = _containerSystem.EnsureContainer<Container>(entity.Owner, SharedReagentGrinder.InputContainerId);
-
-            if (HasComp<ActiveReagentGrinderComponent>(entity) || inputContainer.ContainedEntities.Count <= 0)
-                return;
-
-            ClickSound(entity);
-            foreach (var toEject in inputContainer.ContainedEntities.ToList())
-            {
-                _containerSystem.Remove(toEject, inputContainer);
-                _randomHelper.RandomOffset(toEject, 0.4f);
-            }
-            UpdateUiState(entity);
+            return false;
         }
 
-        private void OnBottleMessage(Entity<ReagentGrinderComponent> ent, ref ReagentGrinderBottleMessage message)
-        {
-            RMCSmartFridgeComponent? fridgecomp = null;
-            if (ent.Comp.SmartFridge is null || HasComp<ActiveReagentGrinderComponent>(ent))
-                return;
-            if (!Resolve(ent.Comp.SmartFridge.Value, ref fridgecomp))
-                return;
-            var outputContainer = _itemSlotsSystem.GetItemOrNull(ent.Owner, SharedReagentGrinder.BeakerSlotId);
-            if (outputContainer is null)
-                return;
-
-            _solutionContainersSystem.TryGetFitsInDispenser(outputContainer.Value, out var solEnt, out _);
-            if (solEnt is null)
-                return;
-            var contents = solEnt.Value.Comp.Solution.Contents;
-            ReagentQuantity? quant = null;
-            foreach (var reagent in contents)
-            {
-                if (reagent.Reagent == message.Reagent.Reagent)
-                {
-                    quant = reagent;
-                    break;
-                }
-            }
-            if (quant is null)
-                return;
-            solEnt.Value.Comp.Solution.RemoveReagent(quant.Value, true);
-            _solutionContainersSystem.UpdateChemicals(solEnt.Value);
-            FixedPoint2 quantity = quant.Value.Quantity;
-            var container = _containerSystem.EnsureContainer<Container>(ent.Comp.SmartFridge.Value, fridgecomp.ContainerId);
-            while (quantity > 0)
-            {
-                var bottle = Spawn("CMBottleEmpty");
-                if (_solutionContainersSystem.EnsureSolutionEntity(bottle, "drink", out var bottleSol))
-                {
-                    _solutionContainersSystem.TryAddReagent(bottleSol.Value,
-                        new ReagentQuantity(quant.Value.Reagent, quantity), out var subq);
-                    quantity -= subq;
-                    _metadata.SetEntityName(bottle, $"{_reagents.Index(quant.Value.Reagent.Prototype).LocalizedName} bottle");
-                    _containerSystem.Insert(bottle, container);
-                }
-            }
-            UpdateUiState(ent);
-        }
-
-        private void OnDispose(Entity<ReagentGrinderComponent> ent, ref ReagentGrinderDisposeMessage message)
-        {
-            if (HasComp<ActiveReagentGrinderComponent>(ent))
-                return;
-            var outputContainer = _itemSlotsSystem.GetItemOrNull(ent.Owner, SharedReagentGrinder.BeakerSlotId);
-            if (outputContainer is null)
-                return;
-
-            _solutionContainersSystem.TryGetFitsInDispenser(outputContainer.Value, out var solEnt, out _);
-            if (solEnt is null)
-                return;
-            var contents = solEnt.Value.Comp.Solution.Contents;
-            ReagentQuantity? quant = null;
-            foreach (var reagent in contents)
-            {
-                if (reagent.Reagent == message.Reagent.Reagent)
-                {
-                    quant = reagent;
-                    break;
-                }
-            }
-            if (quant is null)
-                return;
-            solEnt.Value.Comp.Solution.RemoveReagent(quant.Value, true);
-            _solutionContainersSystem.UpdateChemicals(solEnt.Value);
-            UpdateUiState(ent);
-        }
-
-        private void OnLinkMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderLinkMessage message)
-        {
-            var query = EntityQueryEnumerator<RMCSmartFridgeComponent>();
-            EntityUid closest = EntityUid.Invalid;
-            float closestDist = float.MaxValue;
-            while (query.MoveNext(out var qent, out var comp))
-            {
-                if (!TryComp(qent, out TransformComponent? xform))
-                    continue;
-                if (_xform.GetMapId(entity.Owner) != xform.MapID)
-                    continue;
-                float distance = Vector2.Distance(_xform.GetWorldPosition(entity), _xform.GetWorldPosition(qent));
-                if (distance < closestDist)
-                {
-                    closest = qent;
-                    closestDist = distance;
-                }
-
-            }
-            if (closest != EntityUid.Invalid)
-            {
-                entity.Comp.SmartFridge = closest;
-                UpdateUiState(entity);
-            }
-        }
-
-        private void OnEjectChamberContentMessage(Entity<ReagentGrinderComponent> entity, ref ReagentGrinderEjectChamberContentMessage message)
-        {
-            if (HasComp<ActiveReagentGrinderComponent>(entity))
-                return;
-
-            var inputContainer = _containerSystem.EnsureContainer<Container>(entity.Owner, SharedReagentGrinder.InputContainerId);
-            var ent = GetEntity(message.EntityId);
-
-            if (_containerSystem.Remove(ent, inputContainer))
-            {
-                _randomHelper.RandomOffset(ent, 0.4f);
-                ClickSound(entity);
-                UpdateUiState(entity);
-            }
-        }
-
-        /// <summary>
-        /// The wzhzhzh of the grinder. Processes the contents of the grinder and puts the output in the beaker.
-        /// </summary>
-        /// <param name="uid">The grinder itself</param>
-        /// <param name="reagentGrinder"></param>
-        /// <param name="program">Which program, such as grind or juice</param>
-        private void DoWork(EntityUid uid, ReagentGrinderComponent reagentGrinder, GrinderProgram program)
-        {
-            var inputContainer = _containerSystem.EnsureContainer<Container>(uid, SharedReagentGrinder.InputContainerId);
-            var outputContainer = _itemSlotsSystem.GetItemOrNull(uid, SharedReagentGrinder.BeakerSlotId);
-
-            // Do we have anything to grind/juice and a container to put the reagents in?
-            if (inputContainer.ContainedEntities.Count <= 0 || !HasComp<FitsInDispenserComponent>(outputContainer))
-                return;
-
-            SoundSpecifier? sound;
-            switch (program)
-            {
-                case GrinderProgram.Grind when inputContainer.ContainedEntities.All(CanGrind):
-                    sound = reagentGrinder.GrindSound;
-                    break;
-                case GrinderProgram.Juice when inputContainer.ContainedEntities.All(CanJuice):
-                    sound = reagentGrinder.JuiceSound;
-                    break;
-                default:
-                    return;
-            }
-
-            var active = AddComp<ActiveReagentGrinderComponent>(uid);
-            active.EndTime = _timing.CurTime + reagentGrinder.WorkTime * reagentGrinder.WorkTimeMultiplier;
-            active.Program = program;
-
-            reagentGrinder.AudioStream = _audioSystem.PlayPvs(sound, uid,
-                AudioParams.Default.WithPitchScale(1 / reagentGrinder.WorkTimeMultiplier))?.Entity; //slightly higher pitched
-            _userInterfaceSystem.ServerSendUiMessage(uid, ReagentGrinderUiKey.Key,
-                new ReagentGrinderWorkStartedMessage(program));
-        }
-
-        private void ClickSound(Entity<ReagentGrinderComponent> reagentGrinder)
-        {
-            _audioSystem.PlayPvs(reagentGrinder.Comp.ClickSound, reagentGrinder.Owner, AudioParams.Default.WithVolume(-2f));
-        }
-
-        private Solution? GetGrindSolution(EntityUid uid)
-        {
-            if (TryComp<ExtractableComponent>(uid, out var extractable)
-                && extractable.GrindableSolution is not null
-                && _solutionContainersSystem.TryGetSolution(uid, extractable.GrindableSolution, out _, out var solution))
-            {
-                return solution;
-            }
-            else
-                return null;
-        }
-
-        private bool CanGrind(EntityUid uid)
-        {
-            var solutionName = CompOrNull<ExtractableComponent>(uid)?.GrindableSolution;
-
-            return solutionName is not null && _solutionContainersSystem.TryGetSolution(uid, solutionName, out _, out _);
-        }
-
-        private bool CanJuice(EntityUid uid)
-        {
-            return CompOrNull<ExtractableComponent>(uid)?.JuiceSolution is not null;
-        }
+        fridge = (fridgeUid, fridgeComp);
+        return true;
     }
 }

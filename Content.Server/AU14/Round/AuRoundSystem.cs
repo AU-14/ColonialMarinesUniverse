@@ -7,7 +7,7 @@ using Robust.Shared.Configuration;
 using System.Linq;
 using Content.Server._CMU14.Threats;
 using Content.Server.GameTicking.Presets;
-using Content.Server.Maps;
+using Content.Shared.Maps;
 using Content.Server.Voting;
 using Content.Shared._RMC14.Intel;
 using Content.Shared._RMC14.Rules;

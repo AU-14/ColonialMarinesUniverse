@@ -8,6 +8,7 @@ using Content.Shared.Actions.Components;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;

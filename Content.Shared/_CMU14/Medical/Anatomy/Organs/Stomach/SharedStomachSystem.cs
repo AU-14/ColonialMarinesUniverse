@@ -1,7 +1,7 @@
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Events;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.StatusEffectNew;
@@ -18,7 +18,7 @@ public abstract partial class SharedStomachSystem : EntitySystem
     [Dependency] protected IConfigurationManager Cfg = default!;
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IRobustRandom Random = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
 
     private static readonly EntProtoId Nausea = "StatusEffectCMUNausea";
     private const float StomachScanInterval = 1f;

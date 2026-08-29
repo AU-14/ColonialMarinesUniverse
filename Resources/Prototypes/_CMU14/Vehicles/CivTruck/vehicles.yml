@@ -5,8 +5,9 @@
   description: An old military van. This one seems to be working for civilians
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Sprite
     sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
     layers:
@@ -43,8 +44,9 @@
   description: An old military truck. This one seems to be working for civilians
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Sprite
     sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
     layers:
@@ -81,8 +83,9 @@
   description: An old military truck. This one seems to be working for civilians. It has been modernized for military purposes
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Sprite
     sprite: _AU14/Structures/vehicles/hybrisavehicles/van.rsi
     layers:

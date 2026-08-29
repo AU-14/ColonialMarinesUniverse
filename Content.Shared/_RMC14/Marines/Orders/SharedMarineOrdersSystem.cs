@@ -5,6 +5,7 @@ using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -58,9 +59,9 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
         SubscribeLocalEvent<HoldOrderComponent, DamageModifyEvent>(OnDamageModify);
     }
 
-    private void OnMoveOrderDidEquip(Entity<MoveOrderComponent> ent, ref DidEquipEvent args) => _movementSpeed.RefreshMovementSpeedModifiers(ent);
+    private void OnMoveOrderDidEquip(Entity<MoveOrderComponent> ent, ref DidEquipEvent args) => _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
-    private void OnMoveOrderDidUnequip(Entity<MoveOrderComponent> ent, ref DidUnequipEvent args) => _movementSpeed.RefreshMovementSpeedModifiers(ent);
+    private void OnMoveOrderDidUnequip(Entity<MoveOrderComponent> ent, ref DidUnequipEvent args) => _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
     protected virtual void OnAction(Entity<MarineOrdersComponent> orders, ref FocusActionEvent args) => OnAction<FocusOrderComponent>(orders, args);
 
@@ -132,7 +133,7 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
     private void OnMoveShutdown(Entity<MoveOrderComponent> uid, ref ComponentShutdown ev)
     {
-        _movementSpeed.RefreshMovementSpeedModifiers(uid);
+        _movementSpeed.RefreshMovementSpeedModifiers((uid.Owner, null));
         _evasionSystem.RefreshEvasionModifiers(uid.Owner);
     }
 
@@ -270,9 +271,9 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
     private SoundSpecifier? GetMoveSound(Entity<MarineOrdersComponent> orders)
     {
-        if (TryComp<HumanoidAppearanceComponent>(orders.Owner, out var appearance))
+        if (TryComp<HumanoidProfileComponent>(orders.Owner, out var profile))
         {
-            if (appearance.Sex == Sex.Female && orders.Comp.MoveOrderSoundFemale != null)
+            if (profile.Sex == Sex.Female && orders.Comp.MoveOrderSoundFemale != null)
                 return orders.Comp.MoveOrderSoundFemale;
         }
 
@@ -281,9 +282,9 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
     private SoundSpecifier? GetFocusSound(Entity<MarineOrdersComponent> orders)
     {
-        if (TryComp<HumanoidAppearanceComponent>(orders.Owner, out var appearance))
+        if (TryComp<HumanoidProfileComponent>(orders.Owner, out var profile))
         {
-            if (appearance.Sex == Sex.Female && orders.Comp.FocusOrderSoundFemale != null)
+            if (profile.Sex == Sex.Female && orders.Comp.FocusOrderSoundFemale != null)
                 return orders.Comp.FocusOrderSoundFemale;
         }
 
@@ -292,9 +293,9 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
 
     private SoundSpecifier? GetHoldSound(Entity<MarineOrdersComponent> orders)
     {
-        if (TryComp<HumanoidAppearanceComponent>(orders.Owner, out var appearance))
+        if (TryComp<HumanoidProfileComponent>(orders.Owner, out var profile))
         {
-            if (appearance.Sex == Sex.Female && orders.Comp.HoldOrderSoundFemale != null)
+            if (profile.Sex == Sex.Female && orders.Comp.HoldOrderSoundFemale != null)
                 return orders.Comp.HoldOrderSoundFemale;
         }
 
@@ -315,7 +316,7 @@ public abstract partial class SharedMarineOrdersSystem : EntitySystem
         if (_net.IsServer && comp is HoldOrderComponent hold)
             ApplyHoldPainSuppression(receiver.Owner, hold, multiplier, duration);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(receiver);
+        _movementSpeed.RefreshMovementSpeedModifiers((receiver.Owner, null));
         _evasionSystem.RefreshEvasionModifiers(receiver);
     }
 

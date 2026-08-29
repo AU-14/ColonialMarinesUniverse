@@ -31,7 +31,7 @@ using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;

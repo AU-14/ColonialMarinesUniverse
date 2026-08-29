@@ -18,6 +18,9 @@ namespace Content.Client.UserInterface.Screens;
 [GenerateTypedNameReferences]
 public sealed partial class SeparatedChatGameScreen : InGameScreen
 {
+    public const string StyleClassChatContainer = "ChatContainer";
+    public const string StyleClassChatOutput = "ChatOutput";
+
     private const float DefaultChatSplitFraction = 0.6f;
     private const float MinChatSplitFraction = 0.35f;
     private const float MaxChatSplitFraction = 0.94f;

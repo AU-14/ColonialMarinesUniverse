@@ -2,7 +2,7 @@
   id: TSE
   name: chat-radio-tse
   keycode: "'" # I hate this
-  frequency: 1551
+  frequency: 155.1
   color: "#9a1228"
   longRange: true
   tower: true

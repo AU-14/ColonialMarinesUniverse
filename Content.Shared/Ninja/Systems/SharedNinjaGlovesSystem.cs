@@ -1,10 +1,8 @@
 using Content.Shared.Clothing.Components;
 using Content.Shared.CombatMode;
 using Content.Shared.Examine;
-using Content.Shared.Hands.Components;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
-using Content.Shared.Inventory.Events;
 using Content.Shared.Item.ItemToggle;
 using Content.Shared.Item.ItemToggle.Components;
 using Content.Shared.Ninja.Components;
@@ -18,7 +16,6 @@ namespace Content.Shared.Ninja.Systems;
 /// </summary>
 public abstract partial class SharedNinjaGlovesSystem : EntitySystem
 {
-    [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedCombatModeSystem _combatMode = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedInteractionSystem _interaction = default!;
@@ -96,7 +93,7 @@ public abstract partial class SharedNinjaGlovesSystem : EntitySystem
             return;
 
         var message = Loc.GetString(args.Activated ? "ninja-gloves-on" : "ninja-gloves-off");
-        _popup.PopupClient(message, user, user);
+        _popup.PopupEntity(message, user, user);
 
         if (args.Activated && _ninja.NinjaQuery.TryComp(user, out var ninja))
             EnableGloves(ent, (user, ninja));
@@ -128,8 +125,7 @@ public abstract partial class SharedNinjaGlovesSystem : EntitySystem
     public bool AbilityCheck(EntityUid uid, BeforeInteractHandEvent args, out EntityUid target)
     {
         target = args.Target;
-        return _timing.IsFirstTimePredicted
-            && !_combatMode.IsInCombatMode(uid)
+        return !_combatMode.IsInCombatMode(uid)
             && _hands.GetActiveItem(uid) == null
             && _interaction.InRangeUnobstructed(uid, target);
     }

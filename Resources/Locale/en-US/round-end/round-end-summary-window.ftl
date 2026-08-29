@@ -56,3 +56,20 @@ round-end-summary-window-stat-shrapnel-embedded = Shrapnel embedded
 round-end-summary-window-stat-shrapnel-embedded-detail = Foreign bodies lodged in patients.
 round-end-summary-window-stat-bleeds-stopped = Bleeds stopped
 round-end-summary-window-stat-bleeds-stopped-detail = Internal bleeding cases cleared.
+
+
+round-end-summary-window-player-manifest-tab-search-placeholder = Search players, roles, types...
+
+round-end-summary-window-player-manifest-tab-sort-character = Character
+
+round-end-summary-window-player-manifest-tab-sort-role = Role
+
+round-end-summary-window-player-manifest-tab-sort-player-type = Type
+
+round-end-summary-window-player-manifest-tab-sort-player = Player
+
+round-end-summary-window-player-manifest-tab-sort-player-type-antag = Antagonist
+
+round-end-summary-window-player-manifest-tab-sort-player-type-crew = Crew
+
+round-end-summary-window-player-manifest-tab-sort-player-type-observer = Observer

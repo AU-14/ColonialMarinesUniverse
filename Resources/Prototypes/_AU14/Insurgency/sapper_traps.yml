@@ -59,6 +59,7 @@
     maxTileBreak: 0
     canCreateVacuum: false
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -161,8 +162,8 @@
     # Less overlap needed than the default 0.3, so a fast pass still trips it.
     intersectRatio: 0.15
   # The point-blank shotgun blast, played the instant it fires.
-  - type: SoundOnTrigger
-    removeOnTrigger: true
+  - type: EmitSoundOnTrigger
+    positional: true
     sound:
       path: /Audio/Weapons/Guns/Gunshots/shotgun.ogg
   # Drop the tripwire's explosion; fire shrapnel/buckshot in a forward cone instead.
@@ -222,6 +223,7 @@
   # No built-in charge: ONLY the attached explosives fire (each with its own real effect). The bare
   # firing box going off on its own was double-exploding alongside the payload.
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -345,12 +347,13 @@
     requiredTriggeredSpeed: 0
   - type: TriggerOnStepTrigger
   # The wire snapping tight, played the instant someone is caught.
-  - type: SoundOnTrigger
-    removeOnTrigger: true
+  - type: EmitSoundOnTrigger
+    positional: true
     sound:
       path: /Audio/Effects/snap.ogg
   - type: DeleteOnTrigger
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -533,6 +536,7 @@
   - type: SapperTripwire
   - type: SapperAudioTrap
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

@@ -32,14 +32,16 @@
     layers:
     - state: icon
       map: ["base"]
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
+    keysIn:
+    - trigger
+    - stuck
     delay: 3
     delayOptions: [3, 4]
     initialBeepDelay: 2
     beepSound: /Audio/_AU14/IED/detonate.ogg
-    startOnStick: true
-    canToggleStartOnStick: true
-  - type: TimerStartOnSignal
+  - type: TriggerOnSignal
+    port: Timer
   - type: DeviceLinkSink
     ports:
     - Timer
@@ -52,7 +54,6 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 25
-  - type: ExplodeOnTrigger
 
 - type: entity
   name: huge improvised explosive device
@@ -68,15 +69,17 @@
     layers:
     - state: icon
       map: ["base"]
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
+    keysIn:
+    - trigger
+    - stuck
     delay: 9
     delayOptions: [3, 4]
     initialBeepDelay: 2
     beepSound: /Audio/_AU14/IED/detonate.ogg
-    startOnStick: true
-    canToggleStartOnStick: true
   - type: PreventThrowWhenArmed
-  - type: TimerStartOnSignal
+  - type: TriggerOnSignal
+    port: Timer
   - type: DeviceLinkSink
     ports:
     - Timer
@@ -89,7 +92,6 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 35
-  - type: ExplodeOnTrigger
 
 - type: entity
   name: improvised explosive vest
@@ -114,17 +116,22 @@
     containers:
       storagebase: !type:Container
       cluster-payload: !type:Container
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
+    keysIn:
+    - trigger
+    - stuck
     delay: 0.1
     delayOptions: [3, 4]
     initialBeepDelay: 0
     beepSound: /Audio/_AU14/IED/vestbeep.ogg
-    requiredWornSlots: OUTERCLOTHING
-    startOnStick: true
-    canToggleStartOnStick: true
+  - type: WornSlotTriggerCondition
+    requiredSlots: OUTERCLOTHING
+    keys:
+    - trigger
+    - stuck
   - type: PreventThrowWhenArmed
-  - type: TimerStartOnSignal
-    requiredWornSlots: OUTERCLOTHING
+  - type: TriggerOnSignal
+    port: Timer
   - type: DeviceLinkSink
     ports:
     - Timer
@@ -137,8 +144,9 @@
   - type: ProjectileGrenade
     fillPrototype: CMProjectileShrapnel
     capacity: 40
-  - type: ExplodeOnTrigger
   - type: GibOnTrigger
+    keysIn:
+    - timer
     deleteItems: false
 
 - type: entity

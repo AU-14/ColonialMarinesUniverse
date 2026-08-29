@@ -99,8 +99,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameTank
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ReceiverXenoClaws
     minimumClawStrength: Sharp
   - type: InteractionOutline

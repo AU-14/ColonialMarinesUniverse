@@ -94,12 +94,12 @@
   - type: MultipleTool
     statusShowBehavior: true
     entries:
-      - behavior: Prying
+      - behavior: [ Prying ]
         sprite:
           sprite: _AU14/Objects/Tools/maintenance_jack.rsi
           state: icon
         useSound: /Audio/Items/crowbar.ogg
-      - behavior: Anchoring
+      - behavior: [ Anchoring ]
         sprite:
           sprite: _AU14/Objects/Tools/maintenance_jack.rsi
           state: wrench

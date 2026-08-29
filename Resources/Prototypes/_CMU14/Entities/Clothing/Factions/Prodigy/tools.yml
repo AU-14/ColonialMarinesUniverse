@@ -36,7 +36,6 @@
           Closed: { state: sentrycomp_cl }
           Open: { state: sentrycomp_op }
           Active: { state: sentrycomp_on }
-    inHandsOnly: false
   - type: UseDelay
     delay: 0.5
   - type: RequiresSkill

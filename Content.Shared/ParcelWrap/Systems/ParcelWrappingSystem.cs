@@ -6,7 +6,6 @@ using Content.Shared.Popups;
 using Content.Shared.Whitelist;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Containers;
-using Robust.Shared.Network;
 
 namespace Content.Shared.ParcelWrap.Systems;
 
@@ -24,7 +23,6 @@ public sealed partial class ParcelWrappingSystem : EntitySystem
     [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedItemSystem _item = default!;
-    [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private EntityWhitelistSystem _whitelist = default!;
@@ -51,7 +49,6 @@ public sealed partial class ParcelWrappingSystem : EntitySystem
             wrapper.Owner != target &&
             // Wrapper should never be empty, but may as well make sure.
             !_charges.IsEmpty(wrapper.Owner) &&
-            _whitelist.IsWhitelistPass(wrapper.Comp.Whitelist, target) &&
-            _whitelist.IsBlacklistFail(wrapper.Comp.Blacklist, target);
+            _whitelist.CheckBoth(target, wrapper.Comp.Blacklist, wrapper.Comp.Whitelist);
     }
 }

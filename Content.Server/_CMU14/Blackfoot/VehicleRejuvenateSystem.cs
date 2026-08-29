@@ -3,6 +3,8 @@ using Content.Shared._CMU14.Blackfoot;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Rejuvenate;
 using Content.Shared.Vehicle.Components;
 using Content.Shared.Weapons.Ranged.Components;
@@ -29,7 +31,7 @@ public sealed partial class VehicleRejuvenateSystem : EntitySystem
     private void OnRejuvenateVehicle(EntityUid uid, VehicleComponent component, RejuvenateEvent args)
     {
         if (TryComp<DamageableComponent>(uid, out var damageable))
-            _damageable.SetDamage(uid, damageable, new DamageSpecifier());
+            _damageable.SetDamage((uid, damageable), new DamageSpecifier());
 
         _hardpoint.ResetAllHardpointsToFullHealth(uid); // heal hardpoints & recalc integrity
         _hardpoint.ClearAllFailures(uid); // bulk resets failures, repair/progress + refresh UI

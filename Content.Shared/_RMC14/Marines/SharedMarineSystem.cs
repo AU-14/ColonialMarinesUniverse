@@ -47,7 +47,7 @@ public abstract partial class SharedMarineSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        GiveMarineHud(args.Equipee, ent.Comp.Factions, ent.Comp.BypassFactionIcons);
+        GiveMarineHud(args.EquipTarget, ent.Comp.Factions, ent.Comp.BypassFactionIcons);
     }
 
     private void OnGotUnequipped(Entity<GrantMarineIconsComponent> ent, ref GotUnequippedEvent args)
@@ -58,8 +58,8 @@ public abstract partial class SharedMarineSystem : EntitySystem
         if ((ent.Comp.Slots & args.SlotFlags) == 0)
             return;
 
-        if (!_inventory.TryGetInventoryEntity<GrantMarineIconsComponent>(args.Equipee, out _))
-            RemCompDeferred<ShowMarineIconsComponent>(args.Equipee);
+        if (!_inventory.TryGetInventoryEntity<GrantMarineIconsComponent>(args.EquipTarget, out _))
+            RemCompDeferred<ShowMarineIconsComponent>(args.EquipTarget);
     }
 
     private void OnMarineGetIcon(Entity<MarineComponent> marine, ref GetMarineIconEvent args)

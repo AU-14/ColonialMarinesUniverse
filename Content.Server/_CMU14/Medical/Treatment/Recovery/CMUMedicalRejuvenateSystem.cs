@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Content.Server._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
@@ -9,10 +8,8 @@ using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._CMU14.Medical.Treatment.FirstAid;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
-using Content.Shared.Body.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
-using Content.Shared.Body.Prototypes;
-using Content.Shared.Body.Systems;
 using Content.Shared.Rejuvenate;
 using Content.Shared.StatusEffectNew;
 using Robust.Shared.Containers;
@@ -23,17 +20,15 @@ namespace Content.Server._CMU14.Medical.Treatment.Recovery;
 
 public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
 {
-    [Dependency] private SharedBodySystem _body = default!;
     [Dependency] private SharedBoneSystem _bone = default!;
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
-    [Dependency] private CMUHandRestorationSystem _handRestoration = default!;
     [Dependency] private SharedHeartSystem _heart = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedOrganHealthSystem _organHealth = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
-    [Dependency] private IPrototypeManager _protoMgr = default!;
-    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private OrganRelationSystem _organRelations = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private SharedCMUSurgeryFlowSystem _surgery = default!;
     [Dependency] private SharedCMUWoundsSystem _wounds = default!;
 
@@ -85,7 +80,6 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
         _surgery.ClearSurgeryInFlight(body);
 
         RestoreMissingParts(body);
-        _handRestoration.RestoreUsableHands(body);
 
         foreach (var (partId, _) in _medicalIndex.GetBodyParts(body))
         {
@@ -100,73 +94,56 @@ public sealed partial class CMUMedicalRejuvenateSystem : EntitySystem
 
     private void RestoreMissingParts(EntityUid body)
     {
-        if (!TryComp<BodyComponent>(body, out var bodyComp) || bodyComp.Prototype is null)
-            return;
-        if (!_protoMgr.TryIndex(bodyComp.Prototype.Value, out var proto))
-            return;
-        if (!_medicalIndex.TryGetRootPart(body, out var root))
+        if (!TryComp<BodyComponent>(body, out var bodyComp) ||
+            bodyComp.Organs is not { } container ||
+            !TryComp<InitialBodyComponent>(body, out var initialBody))
             return;
 
-        var rootSlotId = proto.Root;
-        var slotEntities = new Dictionary<string, EntityUid> { [rootSlotId] = root.Owner };
-        var visited = new HashSet<string> { rootSlotId };
-        var frontier = new Queue<string>();
-        frontier.Enqueue(rootSlotId);
-
-        while (frontier.TryDequeue(out var slotId))
+        var organsByCategory = new Dictionary<ProtoId<OrganCategoryPrototype>, EntityUid>();
+        foreach (var organUid in container.ContainedEntities)
         {
-            if (!proto.Slots.TryGetValue(slotId, out var protoSlot))
-                continue;
-            if (!slotEntities.TryGetValue(slotId, out var parentPart))
+            if (!TryComp<OrganComponent>(organUid, out var organ) || organ.Category is not { } category)
                 continue;
 
-            foreach (var connection in protoSlot.Connections)
+            organsByCategory.TryAdd(category, organUid);
+        }
+
+        foreach (var (category, prototype) in initialBody.Organs)
+        {
+            if (organsByCategory.ContainsKey(category))
+                continue;
+
+            var organUid = Spawn(prototype, new EntityCoordinates(body, default));
+            if (!_containers.Insert(organUid, container))
             {
-                if (!visited.Add(connection))
-                    continue;
-                if (!proto.Slots.TryGetValue(connection, out var connSlot) || connSlot.Part is null)
-                    continue;
+                QueueDel(organUid);
+                continue;
+            }
 
-                var containerId = SharedBodySystem.GetPartSlotContainerId(connection);
-                EntityUid childPart;
-                if (_containers.TryGetContainer(parentPart, containerId, out var container) &&
-                    container.ContainedEntities.Count > 0)
+            organsByCategory[category] = organUid;
+        }
+
+        if (initialBody.Relationships is null)
+            return;
+
+        foreach (var (parentCategory, childCategories) in initialBody.Relationships)
+        {
+            if (!organsByCategory.TryGetValue(parentCategory, out var parentUid))
+                continue;
+
+            foreach (var childCategory in childCategories)
+            {
+                if (!organsByCategory.TryGetValue(childCategory, out var childUid) ||
+                    !TryComp<ChildOrganComponent>(childUid, out var child) ||
+                    child.Parent == parentUid)
                 {
-                    childPart = container.ContainedEntities[0];
-                }
-                else
-                {
-                    childPart = Spawn(connSlot.Part, new EntityCoordinates(parentPart, default));
-                    if (!TryComp(parentPart, out BodyPartComponent? parentPartComp) ||
-                        !TryComp(childPart, out BodyPartComponent? childPartComp))
-                    {
-                        QueueDel(childPart);
-                        continue;
-                    }
-
-                    if (!_body.AttachPart(parentPart, connection, childPart, parentPartComp, childPartComp) &&
-                        (!_body.TryCreatePartSlot(parentPart, connection, childPartComp.PartType, out _, parentPartComp) ||
-                         !_body.AttachPart(parentPart, connection, childPart, parentPartComp, childPartComp)))
-                    {
-                        QueueDel(childPart);
-                        continue;
-                    }
-
-                    foreach (var (organSlotId, organProto) in connSlot.Organs)
-                    {
-                        var organContainerId = SharedBodySystem.GetOrganContainerId(organSlotId);
-                        if (!_containers.TryGetContainer(childPart, organContainerId, out var organContainer))
-                            continue;
-                        if (organContainer.ContainedEntities.Count > 0)
-                            continue;
-                        var organEnt = Spawn(organProto, new EntityCoordinates(childPart, default));
-                        if (!_containers.Insert(organEnt, organContainer))
-                            QueueDel(organEnt);
-                    }
+                    continue;
                 }
 
-                slotEntities[connection] = childPart;
-                frontier.Enqueue(connection);
+                if (child.Parent is not null)
+                    _organRelations.Orphan((childUid, child));
+
+                _organRelations.Relate(parentUid, childUid);
             }
         }
     }

@@ -1,7 +1,8 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using System.Numerics;
 using System.Collections.Generic;
 using Content.Shared._RMC14.Actions;
-using Content.Server.Body.Systems;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared._RMC14.Shields;
 using Content.Shared._RMC14.Xenonids;
@@ -13,9 +14,10 @@ using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._RMC14.Xenonids.Reaper;
 using Content.Shared.Alert;
 using Content.Shared.Actions.Components;
-using Content.Shared.Body.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
@@ -753,16 +755,14 @@ public sealed class XenoReaperTest
 
     private static int CountLimbs(IEntityManager entMan, EntityUid body)
     {
-        var bodySystem = entMan.System<BodySystem>();
         var bodyComp = entMan.GetComponent<BodyComponent>(body);
         var count = 0;
 
-        foreach (var type in new[] { BodyPartType.Arm, BodyPartType.Hand, BodyPartType.Leg, BodyPartType.Foot })
+        foreach (var organ in bodyComp.Organs?.ContainedEntities ?? [])
         {
-            foreach (var _ in bodySystem.GetBodyChildrenOfType(body, type, bodyComp))
-            {
+            if (entMan.TryGetComponent<BodyPartComponent>(organ, out var part) &&
+                part.PartType is BodyPartType.Arm or BodyPartType.Hand or BodyPartType.Leg or BodyPartType.Foot)
                 count++;
-            }
         }
 
         return count;
@@ -846,3 +846,5 @@ public sealed class XenoReaperTest
         return count;
     }
 }
+
+#pragma warning restore RA0002

@@ -1,4 +1,5 @@
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Events;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Interaction.Components;

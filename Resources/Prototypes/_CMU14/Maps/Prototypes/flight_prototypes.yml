@@ -359,19 +359,11 @@
     sprite: Structures/Piping/disposal.rsi
     layers:
     - map: [ "pipe" ]
-      state: conpipe-s
+      state: pipe-s
   - type: DisposalTube
-    containerId: DisposalTransit
-  - type: DisposalTransit
-  - type: ContainerContainer
-    containers:
-      DisposalTransit: !type:Container
-  - type: GenericVisualizer
-    visuals:
-      enum.DisposalTubeVisuals.VisualState:
-        pipe:
-          Free: { state: conpipe-s }
-          Anchored: { state: pipe-s }
+    exits:
+    - South
+    - North
 
 - type: entity
   parent: MarkerBase
@@ -382,16 +374,8 @@
     sprite: Structures/Piping/disposal.rsi
     layers:
     - map: [ "pipe" ]
-      state: conpipe-c
+      state: pipe-c
   - type: DisposalTube
-    containerId: DisposalBend
-  - type: DisposalBend
-  - type: ContainerContainer
-    containers:
-      DisposalBend: !type:Container
-  - type: GenericVisualizer
-    visuals:
-      enum.DisposalTubeVisuals.VisualState:
-        pipe:
-          Free: { state: conpipe-c }
-          Anchored: { state: pipe-c }
+    exits:
+    - South
+    - West

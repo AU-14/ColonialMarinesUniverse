@@ -352,6 +352,7 @@ jobs:
       - yaml-linter
       - schema-validators
       - rsi-validator
+      - integration-tests
     runs-on: ubuntu-latest
     steps:
       - name: Check required job results
@@ -365,6 +366,7 @@ jobs:
               'YAML Linter': '${{ needs.yaml-linter.result }}',
               'Schema Validators': '${{ needs.schema-validators.result }}',
               'RSI Validator': '${{ needs.rsi-validator.result }}',
+              'Content.IntegrationTests': '${{ needs.integration-tests.result }}',
             };
 
             const failed = Object.entries(results)
@@ -409,6 +411,11 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Roles
               | FullyQualifiedName~Content.IntegrationTests.Tests.Toolshed
               | FullyQualifiedName~Content.IntegrationTests.Tests.UserInterface
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Afk.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Alerts.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.ClientSession.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.GameTestTests.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Helpers.
           - name: atmos_fluids_physics
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Atmos
@@ -416,6 +423,9 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Fluids
               | FullyQualifiedName~Content.IntegrationTests.Tests.Gravity
               | FullyQualifiedName~Content.IntegrationTests.Tests.Physics
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Decals.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.FootPrint.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Weather.
           - name: mapping_station_shuttle_round
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.GameRules
@@ -426,6 +436,9 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Shuttle
               | FullyQualifiedName~Content.IntegrationTests.Tests.Station
               | FullyQualifiedName~Content.IntegrationTests.Tests.Tiles
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Chasm.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.EntityTable.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.WizdenContentFreeze.
           - name: cleanup_entities_world
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Cleanup
@@ -441,6 +454,9 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Power
               | FullyQualifiedName~Content.IntegrationTests.Tests.Weldable
               | FullyQualifiedName~Content.IntegrationTests.Tests.Wires
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Containers.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Forensics.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Mobs.
           - name: gameplay_core
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Actions
@@ -450,6 +466,22 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Climbing
               | FullyQualifiedName~Content.IntegrationTests.Tests.Cloning
               | FullyQualifiedName~Content.IntegrationTests.Tests.DoAfter
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Changeling.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Chat.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Clumsy.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Examine.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Eye.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Gibbing.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Humanoid.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Identity.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Medical.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Nutrition.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Paper.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Respirator.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Security.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Speech.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Stunnable.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Zombie.
           - name: gameplay_runtime
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Interaction
@@ -459,6 +491,8 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Networking
               | FullyQualifiedName~Content.IntegrationTests.Tests.NPC
               | FullyQualifiedName~Content.IntegrationTests.Tests.Puller
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Follower.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Vehicle.
           - name: items_storage_crafting
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Chemistry
@@ -467,6 +501,19 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Lathe
               | FullyQualifiedName~Content.IntegrationTests.Tests.Materials
               | FullyQualifiedName~Content.IntegrationTests.Tests.Sprite
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Engineering.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Holosign.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Inventory.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Items.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Kitchen.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Labels.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Light.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Markings.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Mousetrap.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.SmartFridge.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Stacks.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Tools.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Weapons.
           - name: storage_crafting_misc
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Storage
@@ -474,6 +521,7 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Tag
               | FullyQualifiedName~Content.IntegrationTests.Tests.Utility
               | FullyQualifiedName~Content.IntegrationTests.Tests.Vending
+              | FullyQualifiedName~Content.IntegrationTests.Tests.IconSmoothing.
           - name: proto_lint_locale_serial
             filter: >-
               FullyQualifiedName~Content.IntegrationTests.Tests.Guidebook
@@ -482,10 +530,17 @@ jobs:
               | FullyQualifiedName~Content.IntegrationTests.Tests.Preferences
               | FullyQualifiedName~Content.IntegrationTests.Tests.PrototypeTests
               | FullyQualifiedName~Content.IntegrationTests.Tests.Serialization
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Audio.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.NameIdentifier.
+              | FullyQualifiedName~Content.IntegrationTests.Tests.Research.
           - name: rmc
-            filter: FullyQualifiedName~Content.IntegrationTests._RMC14
+            filter: >-
+              FullyQualifiedName~Content.IntegrationTests._RMC14
+              | FullyQualifiedName~Content.IntegrationTests.Tests._RMC14.
           - name: cmu
             filter: FullyQualifiedName~Content.IntegrationTests._CMU14
+          - name: au14
+            filter: FullyQualifiedName~Content.IntegrationTests._AU14
     steps:
       - uses: actions/checkout@v6.0.2
         with:

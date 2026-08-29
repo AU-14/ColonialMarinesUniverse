@@ -278,7 +278,7 @@ public sealed class ChemicalPropertyStatusSystem : EntitySystem
 
     private void OnMovementStatusChanged(Entity<ChemicalNerveStimulationComponent> ent, ref ComponentStartup args)
     {
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 
@@ -287,13 +287,13 @@ public sealed class ChemicalPropertyStatusSystem : EntitySystem
         if (TerminatingOrDeleted(ent))
             return;
 
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 
     private void OnMuscleStatusChanged(Entity<ChemicalMuscleStimulationComponent> ent, ref ComponentStartup args)
     {
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 
@@ -302,7 +302,7 @@ public sealed class ChemicalPropertyStatusSystem : EntitySystem
         if (TerminatingOrDeleted(ent))
             return;
 
-        _movement.RefreshMovementSpeedModifiers(ent);
+        _movement.RefreshMovementSpeedModifiers((ent.Owner, null));
         _medicalSpeed.RefreshAggregatedPenalties(ent);
     }
 

@@ -100,7 +100,7 @@
   - type: Tool
     useSound:
       collection: Welder
-    qualities: Welding
+    qualities: [ Welding ]
   - type: Welder
     fuelConsumption: 0.06 # TODO RMC14 change this when welders are fixed
     fuelLitCost: 0

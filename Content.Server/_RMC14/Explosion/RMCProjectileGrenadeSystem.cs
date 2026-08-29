@@ -1,13 +1,14 @@
 using Content.Server.Explosion.Components;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Armor;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.Damage;
-using Content.Shared.Explosion.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Projectiles;
+using Content.Shared.Trigger.Components;
+using Content.Shared.Trigger.Systems;
 using Robust.Server.GameObjects;
 using Robust.Shared.Physics.Components;
 using Robust.Shared.Random;
@@ -25,6 +26,7 @@ public sealed partial class RMCProjectileGrenadeSystem : EntitySystem
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private DamageableSystem _damage = default!;
+    [Dependency] private TriggerSystem _trigger = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     public override void Initialize()
@@ -43,11 +45,12 @@ public sealed partial class RMCProjectileGrenadeSystem : EntitySystem
         if (!ent.Comp.Rebounds)
             return;
 
-        var reboundTimer = EnsureComp<ActiveTimerTriggerComponent>(ent);
-        reboundTimer.TimeRemaining = ent.Comp.ReboundTimer;
-
-        var ev = new ActiveTimerTriggerEvent(ent, args.Shooter);
-        RaiseLocalEvent(ent, ref ev);
+        var timer = EnsureComp<TimerTriggerComponent>(ent);
+        var configuredDelay = timer.Delay;
+        timer.Delay = TimeSpan.FromSeconds(ent.Comp.ReboundTimer);
+        _trigger.ActivateTimerTrigger((ent.Owner, timer), args.Shooter);
+        timer.Delay = configuredDelay;
+        Dirty(ent.Owner, timer);
     }
 
     /// <summary>

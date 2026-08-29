@@ -15,6 +15,7 @@ using Content.Shared.Objectives;
 using Content.Shared.Objectives.Components;
 using Content.Shared.Objectives.Systems;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
@@ -51,10 +52,11 @@ public sealed partial class CharacterInfoSystem : EntitySystem
         var entity = args.SenderSession.AttachedEntity.Value;
 
         var objectives = new Dictionary<string, List<ObjectiveInfo>>();
-        var jobTitle = Loc.GetString("character-info-no-profession");
+        var jobTitle = string.Empty;
         var lorePrimerLines = new List<string>();
         string? jobId = null;
         string? briefing = null;
+        ProtoId<JobPrototype>? job = null;
         if (_minds.TryGetMind(entity, out var mindId, out var mind))
         {
             // Get objectives
@@ -64,15 +66,21 @@ public sealed partial class CharacterInfoSystem : EntitySystem
                 if (info == null)
                     continue;
 
+                if (!ProtoMan.TryIndex(Comp<ObjectiveComponent>(objective).Issuer, out var issuerProto))
+                {
+                    Log.Error($"Found incorrect objective issuer {issuerProto} when generating character info for objective {MetaData(objective).EntityPrototype}.");
+                    continue;
+                }
+
                 // group objectives by their issuer
-                var issuer = Comp<ObjectiveComponent>(objective).LocIssuer;
+                var issuer = issuerProto.LocalizedName;
                 if (!objectives.ContainsKey(issuer))
                     objectives[issuer] = new List<ObjectiveInfo>();
                 objectives[issuer].Add(info.Value);
             }
 
-            if (_jobs.MindTryGetJobName(mindId, out var jobName))
-                jobTitle = jobName;
+            if (_jobs.MindTryGetJob(mindId, out var j))
+                job = j;
 
             if (_jobs.MindTryGetJobId(mindId, out var protoId))
                 jobId = protoId?.Id;
@@ -116,7 +124,15 @@ public sealed partial class CharacterInfoSystem : EntitySystem
             }
         }
 
-        RaiseNetworkEvent(new CharacterInfoEvent(GetNetEntity(entity), jobTitle, objectives, briefing, lorePrimerLines), args.SenderSession);
+        RaiseNetworkEvent(
+            new CharacterInfoEvent(
+                GetNetEntity(entity),
+                objectives,
+                briefing,
+                job,
+                jobTitle,
+                lorePrimerLines),
+            args.SenderSession);
     }
 
     private void PopulateLorePrimerLines(List<string> lines, string? jobId, bool isThreatRole)
@@ -286,7 +302,7 @@ public sealed partial class CharacterInfoSystem : EntitySystem
     private bool IsThreatMind(MindComponent mind)
     {
         // Threat players may keep a previous job role; check all job role entries on the mind.
-        foreach (var roleUid in mind.MindRoles)
+        foreach (var roleUid in mind.MindRoleContainer.ContainedEntities)
         {
             if (!TryComp<MindRoleComponent>(roleUid, out var roleComp))
                 continue;

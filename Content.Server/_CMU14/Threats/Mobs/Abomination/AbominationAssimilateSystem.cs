@@ -1,4 +1,5 @@
 using Content.Server.Polymorph.Systems;
+using Content.Server.Humanoid;
 using Content.Shared._RMC14.Language.Components;
 using Content.Server._RMC14.Language.Systems;
 using Content.Shared._RMC14.Language.Prototypes;
@@ -6,7 +7,9 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared.DoAfter;
 using Content.Shared.GameTicking;
+using Content.Shared.Body;
 using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Prototypes;
@@ -35,6 +38,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private LanguageSystem _language = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
 
     /// <summary>Polymorph used when a humanoid victim turns.</summary>
     public static readonly ProtoId<PolymorphPrototype> HumanoidTurnPolymorph = "AbominationAssimilationToMimic";
@@ -132,7 +136,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
 
         args.Handled = true;
 
-        bool isHumanoid = HasComp<HumanoidAppearanceComponent>(target);
+        bool isHumanoid = HasComp<HumanoidProfileComponent>(target);
         AbominationAssimilationProfile profile = BuildProfile(target);
         AddProfileToAllMimics(profile);
         _popup.PopupEntity(Loc.GetString("abomination-assimilate-complete", ("target", Name(target))),
@@ -163,7 +167,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         }
 
         // Humanoid OR a tagged-infectable animal — both are valid prey.
-        if (!HasComp<HumanoidAppearanceComponent>(target) && !HasComp<AbominationInfectableComponent>(target))
+        if (!HasComp<HumanoidProfileComponent>(target) && !HasComp<AbominationInfectableComponent>(target))
         {
             reason = Loc.GetString("abomination-assimilate-not-humanoid");
             return false;
@@ -191,7 +195,7 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
 
     public AbominationAssimilationProfile BuildProfile(EntityUid target)
     {
-        bool isHumanoid = HasComp<HumanoidAppearanceComponent>(target);
+        bool isHumanoid = HasComp<HumanoidProfileComponent>(target);
 
         // Animals key off the entity prototype id so all rats group as one
         // "rat" entry; humanoids stay per-victim by display name.
@@ -226,8 +230,11 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
             }
         }
 
-        if (TryComp(target, out HumanoidAppearanceComponent? humanoid))
-            profile.Appearance = AbominationAssimilateSystem.SnapshotAppearance(humanoid);
+        if (TryComp(target, out HumanoidProfileComponent? humanoid) &&
+            _humanoidAppearance.TryGetAppearance(target, out var skinColor, out var eyeColor, out var markings))
+        {
+            profile.Appearance = SnapshotAppearance(humanoid, skinColor, eyeColor, markings);
+        }
 
         if (!TryComp<LanguageComponent>(target, out var langComp)) return profile;
         profile.SpokenLanguages.UnionWith(langComp.SpokenLanguages);
@@ -236,16 +243,20 @@ public sealed partial class AbominationAssimilateSystem : EntitySystem
         return profile;
     }
 
-    private static AbominationAppearanceSnapshot SnapshotAppearance(HumanoidAppearanceComponent humanoid) => new()
+    private static AbominationAppearanceSnapshot SnapshotAppearance(
+        HumanoidProfileComponent humanoid,
+        Color skinColor,
+        Color eyeColor,
+        Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> markings) => new()
     {
         Species = humanoid.Species,
-        SkinColor = humanoid.SkinColor,
-        EyeColor = humanoid.EyeColor,
+        SkinColor = skinColor,
+        EyeColor = eyeColor,
         Sex = humanoid.Sex,
         Gender = humanoid.Gender,
         Age = humanoid.Age,
-        MarkingSet = new(humanoid.MarkingSet),
-        CustomBaseLayers = new(humanoid.CustomBaseLayers)
+        Voice = humanoid.Voice,
+        OrganMarkings = markings,
     };
 
     /// <summary>

@@ -42,6 +42,7 @@
     - state: pathogen_core
     drawdepth: FloorObjects
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -108,4 +109,4 @@
   - type: HiveConstructionLimited
     id: CMU14PathogenBlightCore
   - type: WarpPoint
-    location: blight core
+    location: cmu-warp-location-blight-core

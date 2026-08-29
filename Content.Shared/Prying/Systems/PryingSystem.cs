@@ -2,6 +2,7 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared._RMC14.Prying;
 using Content.Shared._RMC14.Doors;
 using Content.Shared.Administration.Logs;
+using Content.Shared.Alert;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
@@ -24,15 +25,35 @@ public sealed partial class PryingSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
     [Dependency] private SharedAudioSystem _audioSystem = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
+    [Dependency] private AlertsSystem _alerts = default!;
 
     public override void Initialize()
     {
         base.Initialize();
 
+        SubscribeLocalEvent<PryingComponent, ComponentStartup>(OnPryingStartup);
+        SubscribeLocalEvent<PryingComponent, ComponentShutdown>(OnPryingShutdown);
+
         // Mob prying doors
         SubscribeLocalEvent<DoorComponent, GetVerbsEvent<AlternativeVerb>>(OnDoorAltVerb);
         SubscribeLocalEvent<DoorComponent, DoorPryDoAfterEvent>(OnDoAfter);
         SubscribeLocalEvent<DoorComponent, InteractUsingEvent>(TryPryDoor);
+    }
+
+    private void OnPryingStartup(Entity<PryingComponent> ent, ref ComponentStartup args)
+    {
+        if (ent.Comp.PryingAlertProtoId == null)
+            return;
+
+        _alerts.ShowAlert(ent.Owner, ent.Comp.PryingAlertProtoId.Value);
+    }
+
+    private void OnPryingShutdown(Entity<PryingComponent> ent, ref ComponentShutdown args)
+    {
+        if (ent.Comp.PryingAlertProtoId == null)
+            return;
+
+        _alerts.ClearAlert(ent.Owner, ent.Comp.PryingAlertProtoId.Value);
     }
 
     private void TryPryDoor(EntityUid uid, DoorComponent comp, InteractUsingEvent args)
@@ -80,7 +101,7 @@ public sealed partial class PryingSystem : EntitySystem
         if (!CanPry(target, user, out var message, comp))
         {
             if (!string.IsNullOrWhiteSpace(message))
-                _popup.PopupClient(Loc.GetString(message), target, user);
+                _popup.PopupEntity(Loc.GetString(message), target, user);
             // If we have reached this point we want the event that caused this
             // to be marked as handled.
             return true;
@@ -137,7 +158,6 @@ public sealed partial class PryingSystem : EntitySystem
             canev = new BeforePryEvent(user, false, false, false);
         }
 
-
         RaiseLocalEvent(target, ref canev);
 
         message = canev.Message;
@@ -150,13 +170,16 @@ public sealed partial class PryingSystem : EntitySystem
         var modEv = new GetPryTimeModifierEvent(user);
 
         RaiseLocalEvent(target, ref modEv);
-        var doAfterArgs = new DoAfterArgs(EntityManager, user, TimeSpan.FromSeconds(modEv.BaseTime * modEv.PryTimeModifier / toolModifier), new DoorPryDoAfterEvent(), target, target, tool)
+        var doAfterArgs = new DoAfterArgs(EntityManager, user, modEv.BaseTime * modEv.PryTimeModifier / toolModifier, new DoorPryDoAfterEvent(), target, target, tool)
         {
             BreakOnDamage = false,
             BreakOnMove = true,
             NeedHand = tool != user,
             ForceVisible = tool == null,
         };
+
+        if (!_doAfterSystem.TryStartDoAfter(doAfterArgs, out id))
+            return false;
 
         if (tool != user && tool != null)
         {
@@ -167,25 +190,44 @@ public sealed partial class PryingSystem : EntitySystem
             _adminLog.Add(LogType.Action, LogImpact.Low, $"{ToPrettyString(user)} is prying {ToPrettyString(target)}");
         }
 
-        var doorpry = new RMCDoorPryEvent(user); // RMC14
-        RaiseLocalEvent(target, ref doorpry); // RMC14
-
-        return _doAfterSystem.TryStartDoAfter(doAfterArgs, out id);
+        var doorPry = new RMCDoorPryEvent(user); // RMC14
+        RaiseLocalEvent(target, ref doorPry); // RMC14
+        return true;
     }
 
     private void OnDoAfter(EntityUid uid, DoorComponent door, DoorPryDoAfterEvent args)
     {
         if (args.Cancelled)
+        {
+            CancelDoorPry(uid, args.User);
             return;
-        if (args.Target is null)
-            return;
+        }
 
-        TryComp<PryingComponent>(args.Used, out var comp);
+        if (args.Target is null)
+        {
+            CancelDoorPry(uid, args.User);
+            return;
+        }
+
+        PryingComponent? comp = null;
+        if (args.Used is { } used)
+        {
+            TryComp(used, out comp);
+
+            // MultipleTool can switch away from prying while this DoAfter is running.
+            if (used != args.User && (comp == null || !comp.Enabled))
+            {
+                CancelDoorPry(uid, args.User);
+                return;
+            }
+        }
 
         if (!CanPry(uid, args.User, out var message, comp))
         {
             if (!string.IsNullOrWhiteSpace(message))
-                _popup.PopupClient(Loc.GetString(message), uid, args.User);
+                _popup.PopupEntity(Loc.GetString(message), uid, args.User);
+
+            CancelDoorPry(uid, args.User);
             return;
         }
 
@@ -196,6 +238,15 @@ public sealed partial class PryingSystem : EntitySystem
 
         var ev = new PriedEvent(args.User);
         RaiseLocalEvent(uid, ref ev);
+    }
+
+    private void CancelDoorPry(EntityUid target, EntityUid user)
+    {
+        var doorPry = new RMCDoorPryEvent(user)
+        {
+            Cancelled = true,
+        };
+        RaiseLocalEvent(target, ref doorPry);
     }
 }
 

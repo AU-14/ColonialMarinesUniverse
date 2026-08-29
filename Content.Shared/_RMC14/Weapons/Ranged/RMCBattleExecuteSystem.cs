@@ -10,6 +10,7 @@ using Content.Shared.Camera;
 using Content.Shared.Chat;
 using Content.Shared.CombatMode;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;

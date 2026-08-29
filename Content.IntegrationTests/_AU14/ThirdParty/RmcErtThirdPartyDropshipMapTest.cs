@@ -22,7 +22,7 @@ public sealed class RmcErtThirdPartyDropshipMapTest
     {
         (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml"), 4, 8, 3),
         (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_cmb_shuttle.yml"), 4, 8, 3),
-        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml"), 4, 8, 3),
+        (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_pmc_shuttle.yml"), 1, 10, 3),
         (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_response_shuttle.yml"), 4, 8, 3),
         (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_spp_shuttle.yml"), 4, 8, 3),
         (new("/Maps/_AU14/ShuttlesDropships/rmc_ert_tse_shuttle.yml"), 4, 8, 3),
@@ -112,13 +112,14 @@ public sealed class RmcErtThirdPartyDropshipMapTest
         {
             var entities = server.EntMan;
             var mapLoader = server.System<MapLoaderSystem>();
-            var options = DeserializationOptions.Default with { InitializeMaps = true };
+            var mapSystem = server.System<SharedMapSystem>();
 
+            mapSystem.CreateMap(out var mapId);
             Assert.That(
-                mapLoader.TryLoadMap(new ResPath("/Maps/_RMC14/alamo.yml"), out _, out var grids, options),
+                mapLoader.TryLoadGrid(mapId, new ResPath("/Maps/_RMC14/alamo.yml"), out var grid),
                 Is.True);
-            Assert.That(grids, Is.Not.Empty);
-            var gridUids = grids.Select(grid => grid.Owner).ToArray();
+            Assert.That(grid, Is.Not.Null);
+            var gridUids = new[] { grid!.Value.Owner };
 
             var scenarioLeaderMarkers = 0;
             var legacyLeaderMarkers = 0;

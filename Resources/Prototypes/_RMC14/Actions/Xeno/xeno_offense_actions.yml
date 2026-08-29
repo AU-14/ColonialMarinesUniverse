@@ -6,10 +6,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: corrosive_acid
     checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: corrosive_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
   - type: EntityTargetAction
@@ -37,10 +39,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: corrosive_acid
     checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: corrosive_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
   - type: EntityTargetAction
@@ -60,10 +64,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: corrosive_acid
     checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: corrosive_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
   - type: EntityTargetAction
@@ -83,10 +89,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: corrosive_acid
     checkCanInteract: false
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: corrosive_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
   - type: EntityTargetAction
@@ -108,9 +116,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: regurgitate
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoRegurgitateActionEvent
   - type: RMCDazeableAction
@@ -123,10 +133,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: tail_attack
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_attack
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2.5
     checkCanAccess: false
@@ -151,9 +163,11 @@
   description: Launches an attack towards a given direction. The cooldown is faster if you miss. [color=red]It also injects diluted molecular acid into the target, dealing damage over time.[/color]
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: tail_attack_acid
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   parent: ActionXenoTailStabCorrosive
@@ -169,10 +183,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: pounce
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -202,10 +218,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: pounce
     useDelay: 6
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
   - type: WorldTargetAction
@@ -228,10 +246,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: charge
     useDelay: 14
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
   - type: WorldTargetAction
@@ -253,10 +273,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_dash
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_dash
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
   - type: WorldTargetAction
@@ -278,10 +300,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: headbutt
     useDelay: 6
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbutt
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 3.5
     deselectOnMiss: false
@@ -307,10 +331,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: tail_sweep
     useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_sweep
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoTailSweepActionEvent
   - type: RMCDazeableAction
@@ -331,10 +357,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_spit
     useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     repeat: true
     range: 15
@@ -352,10 +380,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: acid_shotgun
     useDelay: 7
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: acid_shotgun
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     repeat: true
     range: 15
@@ -381,10 +411,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_spit
     useDelay: 2.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     repeat: true
     range: 15
@@ -410,10 +442,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_spit
     useDelay: 2
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     repeat: true
     range: 15
@@ -432,13 +466,16 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: neuroclaws_off
-    iconOn:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: neuroclaws_on
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: neuroclaws_off
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: neuroclaws_on
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:XenoToxicSlashActionEvent
   - type: XenoActionPlasma
@@ -452,10 +489,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: neuro_sting
     useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: neuro_sting
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
   - type: EntityTargetAction
@@ -505,10 +544,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: charge_spit
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: charge_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoChargeSpitActionEvent
   - type: XenoActionPlasma
@@ -530,10 +571,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: spray_acid
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: spray_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
   - type: WorldTargetAction
@@ -587,10 +630,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_acid_ball
     useDelay: 18
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_acid_ball
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -614,10 +659,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: lurker_inject_neuro
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: lurker_inject_neuro
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoParalyzingSlashActionEvent
   - type: XenoActionPlasma
@@ -631,10 +678,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: lurker_inject_neuro
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: lurker_inject_neuro
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoCripplingStrikeActionEvent
   - type: XenoActionPlasma
@@ -656,10 +705,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: runner_bonespur
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: runner_bonespur
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
   - type: EntityTargetAction
@@ -682,10 +733,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: punch
     useDelay: 4.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: punch
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     deselectOnMiss: false
@@ -710,10 +763,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: fling
     useDelay: 7
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: fling
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     deselectOnMiss: false
@@ -739,10 +794,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: lunge
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: lunge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 5
     deselectOnMiss: false
@@ -769,10 +826,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: screech
     useDelay: 50
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoScreechActionEvent
   - type: RMCDazeableAction
@@ -785,9 +844,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: gut
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -801,10 +862,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: stomp
     useDelay: 18
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoStompActionEvent
 
@@ -816,10 +879,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: stomp
     useDelay: 18
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -843,10 +908,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: stomp
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoStompActionEvent
 
@@ -858,10 +925,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: ready_charge
     useDelay: 14
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15 # actual range is in XenoChargeComponent, this allows max-range clamp cast
     checkCanAccess: false
@@ -884,10 +953,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: ready_charge
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoCursorChargingActionEvent
 
@@ -899,10 +970,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: ready_charge
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoToggleChargingActionEvent
 
@@ -912,10 +985,12 @@
   name: Ram (10)
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: fling # TODO RMC14 ram
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: fling # TODO RMC14 ram
+      map: ["enum.ActionVisuals.Icon"]
   - type: XenoActionPlasma
     cost: 10
 
@@ -927,10 +1002,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: bombard
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: bombard
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15 # the actual range is in XenoBombardComponent
     checkCanAccess: false
@@ -960,14 +1037,16 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: shift_spit_acid_glob
-    iconOn:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: shift_spit_neuro_glob
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: shift_spit_acid_glob
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: shift_spit_neuro_glob
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:XenoGasToggleActionEvent
 
@@ -987,9 +1066,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: acid_shroud
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoAcidShroudActionEvent
   - type: ActionSharedCooldown
@@ -1017,10 +1098,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: tremor
     useDelay: 30
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tremor
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoStompActionEvent
 
@@ -1040,9 +1123,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoForTheHiveActionEvent
 
@@ -1054,10 +1139,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: dancer_impale
     useDelay: 13
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: dancer_impale
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
     deselectOnMiss: false
@@ -1077,10 +1164,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: dancer_tail_trip
     useDelay: 13
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: dancer_tail_trip
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
     deselectOnMiss: false
@@ -1099,10 +1188,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_pierce
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_pierce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -1138,10 +1229,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_cleave_root
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_cleave_root
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     deselectOnMiss: false
@@ -1170,10 +1263,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_cleave_fling
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_cleave_fling
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     deselectOnMiss: false
@@ -1227,10 +1322,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: xeno_spit
     useDelay: 5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: xeno_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     repeat: true
     range: 30
@@ -1251,13 +1348,15 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    backgroundOn: null
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: shift_spit_neurotoxin
-    iconOn:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: shift_spit_xeno_acid
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:XenoSpitToggleActionEvent
 
@@ -1269,10 +1368,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: stomp
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -1296,10 +1397,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_scissor_cut
     useDelay: 6
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_scissor_cut
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
     range: 15
@@ -1325,10 +1428,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: tail_seize
     useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_seize
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     deselectOnMiss: false
@@ -1354,10 +1459,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: abduct
     useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: abduct
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15 # the actual range is in XenoAbductComponent
     deselectOnMiss: false
@@ -1383,10 +1490,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_tail_lash
     useDelay: 13
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_tail_lash
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     deselectOnMiss: false
@@ -1411,10 +1520,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: dislocate
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: dislocate
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     deselectOnMiss: false
@@ -1441,10 +1552,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_pierce
     useDelay: 7
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_pierce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2.5
     checkCanAccess: false
@@ -1464,10 +1577,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_spike
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_spike
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     checkCanAccess: false
     range: 15
@@ -1491,10 +1606,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: headbite
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     checkCanAccess: false
@@ -1520,10 +1637,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_enrage
     useDelay: 18
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_enrage
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoCripplingStrikeActionEvent
   - type: ActionBlockIfResting
@@ -1536,10 +1655,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_eviscerate
     useDelay: 23
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_eviscerate
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoEviscerateActionEvent
   - type: ActionBlockIfResting
@@ -1553,10 +1674,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: prae_cleave_fling
     useDelay: 16
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: prae_cleave_fling
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     deselectOnMiss: false
@@ -1573,9 +1696,11 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: tumble
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoChargerLungeActionEvent
   - type: ActionBlockIfResting
@@ -1588,10 +1713,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: tumble
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tumble
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 20
     deselectOnMiss: false
@@ -1611,10 +1738,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_spike
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_spike
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -1632,10 +1761,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_shard_shed
     useDelay: 30
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_shard_shed
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:ActionXenoSpikeShedEvent
   - type: ActionBlockIfResting
@@ -1649,10 +1780,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_eviscerate
     useDelay: 2.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_eviscerate
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:XenoRendActionEvent
   - type: ActionBlockIfResting
@@ -1667,10 +1800,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: charge
     useDelay: 60
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     deselectOnMiss: false
@@ -1686,10 +1821,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: acid_mine
     useDelay: 5.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: acid_mine
+      map: ["enum.ActionVisuals.Icon"]
   - type: XenoAcidMine
     actionIconEmpowered:
       sprite: _RMC14/Actions/xeno_actions.rsi
@@ -1718,10 +1855,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: acid_shotgun
     useDelay: 13
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: acid_shotgun
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -1740,9 +1879,11 @@
   - type: Action
     useDelay: 20.5
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
       state: gas_mine
+      map: ["enum.ActionVisuals.Icon"]
   - type: XenoDeployTraps
     actionIconEmpowered:
       sprite: _RMC14/Actions/xeno_actions.rsi
@@ -1771,9 +1912,11 @@
   description: Launches a fast tail thrust. The cooldown is shorter if you miss.
   components:
   - type: Action
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
       state: dancer_tail_lance
+      map: ["enum.ActionVisuals.Icon"]
   - type: XenoTailStabAction
     missCooldown: 0.7
 
@@ -1785,10 +1928,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: venator_corrosive_spit
     useDelay: 11
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: venator_corrosive_spit
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     repeat: true
     range: 8
@@ -1814,9 +1959,11 @@
   description: Lob a heavier glob of acid that knocks down a direct hit and spreads pools around impact.
   components:
   - type: Action
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
       state: venator_acid_blob
+      map: ["enum.ActionVisuals.Icon"]
   - type: WorldTargetAction
     event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
       projectile: XenoVenatorAcidBlobProjectile
@@ -1840,9 +1987,11 @@
   description: Spit a short spread of acid that marks an area with corrosive pools.
   components:
   - type: Action
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
       state: venator_enzymatic_breath
+      map: ["enum.ActionVisuals.Icon"]
   - type: WorldTargetAction
     event: !type:Content.Shared._RMC14.Xenonids.Venator.XenoVenatorSpitActionEvent
       projectile: XenoVenatorBreathProjectile
@@ -1866,10 +2015,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: bulwark_plate_bash
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: bulwark_plate_bash
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 3
   - type: EntityTargetAction
@@ -1887,10 +2038,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: bulwark_tail_swing
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: bulwark_tail_swing
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._RMC14.Xenonids.Bulwark.XenoBulwarkTailSwingActionEvent
   - type: XenoOffensiveAction
@@ -1904,10 +2057,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: tail_attack_acid
     useDelay: 8
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: tail_attack_acid
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
   - type: EntityTargetAction
@@ -1925,10 +2080,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CM13/Actions/xeno_strain_actions.rsi
-      state: reaper_rapture
     useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _CM13/Actions/xeno_strain_actions.rsi
+      state: reaper_rapture
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 3
   - type: EntityTargetAction
@@ -1946,10 +2103,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: gas_mine
     useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gas_mine
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     checkCanAccess: false

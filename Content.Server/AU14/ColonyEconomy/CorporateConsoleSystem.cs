@@ -17,6 +17,8 @@ namespace Content.Server.AU14.ColonyEconomy;
 
 public sealed partial class CorporateConsoleSystem : EntitySystem
 {
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private ThirdPartySystem _thirdParty = default!;
@@ -169,7 +171,7 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
         var netAmount = (int) msg.Amount - taxAmount;
 
         if (netAmount > 0)
-            _stack.SpawnMultiple("RMCSpaceCash", netAmount, uid);
+            _stack.SpawnMultipleNextToOrDrop(CashPrototype, netAmount, uid);
         if (taxAmount > 0)
             _colonyBudget.AddToBudget(taxAmount);
 
@@ -242,4 +244,3 @@ public sealed partial class CorporateConsoleSystem : EntitySystem
             UpdateUiState(uid, comp);
     }
 }
-

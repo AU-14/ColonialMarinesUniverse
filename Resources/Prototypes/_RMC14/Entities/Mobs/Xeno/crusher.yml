@@ -80,21 +80,22 @@
     angle: 60
     maxTargets: 2
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaChitin
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -103,8 +104,10 @@
         Quantity: 1
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 48
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: XenoMeleeSlow
     slowTime: 2
   - type: Tackle
@@ -217,12 +220,16 @@
     sideArmor: 15
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 36
+      types:
+        Blunt: 12
+        Slash: 12
+        Piercing: 12
   - type: MovementSpeedModifier
     baseWalkSpeed: 1.9
     baseSprintSpeed: 3.4

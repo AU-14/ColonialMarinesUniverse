@@ -9,7 +9,8 @@
   flavor: bitter
   color: "#56213a"
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       effects:
       - !type:CauseAbominationInfection
         probability: 1.0
@@ -27,14 +28,10 @@
   name: clotted syringe
   description: A syringe filled with a viscous, dark fluid that smells like rotted flesh.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      injector:
+  - type: Solution
+    solution:
         maxVol: 15
         reagents:
         - ReagentId: AbominationVenom
           Quantity: 15
   - type: Injector
-    minTransferAmount: 5
-    maxTransferAmount: 15
-    transferAmount: 5

@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Stunnable;
 using JetBrains.Annotations;

@@ -11,7 +11,7 @@ namespace Content.IntegrationTests.Tests._RMC14.Cassette;
 public sealed class CassetteAudioTest
 {
     [Test]
-    public async Task PlaybackFollowsCassettePlayerAndRestartLeavesOneTrack()
+    public async Task PlaybackIsGlobalAndRestartLeavesOneTrack()
     {
         await using var pair = await PoolManager.GetServerClient(new PoolSettings
         {
@@ -48,7 +48,7 @@ public sealed class CassetteAudioTest
             Assert.Multiple(() =>
             {
                 Assert.That(entMan.HasComponent<AudioComponent>(audio), Is.True);
-                Assert.That(server.Transform(audio).ParentUid, Is.EqualTo(cassettePlayer));
+                Assert.That(server.Transform(audio).ParentUid, Is.EqualTo(EntityUid.Invalid));
             });
         });
 
@@ -93,7 +93,9 @@ public sealed class CassetteAudioTest
             {
                 Assert.That(tracks, Has.Length.EqualTo(1));
                 Assert.That(playerComp.AudioStream, Is.Not.Null);
-                Assert.That(client.Transform(playerComp.AudioStream!.Value).ParentUid, Is.EqualTo(clientCassettePlayer));
+                Assert.That(
+                    client.Transform(playerComp.AudioStream!.Value).ParentUid,
+                    Is.EqualTo(EntityUid.Invalid));
             });
         });
 

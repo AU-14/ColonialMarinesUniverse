@@ -1,9 +1,10 @@
 using Content.Server.Chat.Systems;
-using Content.Server.Medical;
+using Content.Shared.Medical;
 using Content.Server.Polymorph.Systems;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Drunk;
 using Content.Shared.EntityEffects;
 using Content.Shared.Humanoid;
@@ -11,7 +12,6 @@ using Content.Shared.Jittering;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Polymorph;
-using Content.Shared.StatusEffect;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -43,7 +43,6 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private PolymorphSystem _polymorph = default!;
     [Dependency] private IRobustRandom _random = default!;
-    [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private VomitSystem _vomit = default!;
@@ -59,7 +58,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
     {
         SubscribeLocalEvent<AbominationComponent, MeleeHitEvent>(OnAbominationMeleeHit);
         SubscribeLocalEvent<AbominationInfectionComponent, MobStateChangedEvent>(OnInfectedMobStateChanged);
-        SubscribeLocalEvent<ExecuteEntityEffectEvent<CauseAbominationInfection>>(OnExecuteCauseInfection);
+        SubscribeLocalEvent<MetaDataComponent, EntityEffectEvent<CauseAbominationInfection>>(OnExecuteCauseInfection);
     }
 
     public override void Update(float frameTime)
@@ -97,8 +96,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
             {
                 infection.NextTickAt = now + infection.TickInterval;
                 _damageable.TryChangeDamage(uid, infection.TickDamage, true);
-                _statusEffects.TryAddStatusEffect<DrunkComponent>(uid, SharedDrunkSystem.DrunkKey,
-                    infection.DrunkPerTick * severity, true);
+                _drunk.TryApplyDrunkenness(uid, infection.DrunkPerTick * severity);
             }
 
             // Coughing — interval shrinks as severity rises.
@@ -130,10 +128,10 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
         }
     }
 
-    private void OnExecuteCauseInfection(ref ExecuteEntityEffectEvent<CauseAbominationInfection> args)
+    private void OnExecuteCauseInfection(
+        Entity<MetaDataComponent> target,
+        ref EntityEffectEvent<CauseAbominationInfection> args)
     {
-        EntityUid target = args.Args.TargetEntity;
-
         if (!IsValidInfectionTarget(target))
             return;
 
@@ -174,7 +172,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
             return false;
 
         // Humanoids OR tagged-infectable animals are valid.
-        return HasComp<HumanoidAppearanceComponent>(target) || HasComp<AbominationInfectableComponent>(target);
+        return HasComp<HumanoidProfileComponent>(target) || HasComp<AbominationInfectableComponent>(target);
     }
 
     public bool TryInfect(EntityUid target)
@@ -231,7 +229,7 @@ public sealed partial class AbominationInfectionSystem : EntitySystem
         _assimilate.AddProfileToAllMimics(profile);
 
         ProtoId<PolymorphPrototype> polymorphId;
-        if (HasComp<HumanoidAppearanceComponent>(ent.Owner))
+        if (HasComp<HumanoidProfileComponent>(ent.Owner))
         {
             // 50/50 — sometimes the host body collapses into a builder caste
             // (skitter) instead of yet another mimic. Keeps the threat from

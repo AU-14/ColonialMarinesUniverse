@@ -40,8 +40,8 @@ public sealed partial class KillAllGovforRuleSystem : GameRuleSystem<KillAllGovf
         SubscribeLocalEvent<GotUnequippedEvent>(OnGotUnequipped);
     }
 
-    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
-    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.Equipee, ev.Slot, ev.Equipment);
+    private void OnGotEquipped(GotEquippedEvent ev) => OnJumpsuitChanged(ev.EquipTarget, ev.Slot, ev.Equipment);
+    private void OnGotUnequipped(GotUnequippedEvent ev) => OnJumpsuitChanged(ev.EquipTarget, ev.Slot, ev.Equipment);
     public void OnHandcuffEvent(EntityUid _) => CheckVictoryCondition();
 
     private void OnEvacuationLaunched(ref EvacuationLaunchedEvent ev)

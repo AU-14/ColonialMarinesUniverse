@@ -25,20 +25,15 @@
     govforinship: true
     opforinship: true
     daycycleenabled: false
-    threats:
-    - XenoThreat
-    - NeomorphsThreat
-    # - abominationsThreatDistress # no xenocf markers
-    - apethreat
-    # - badBloodClanThreat
-    # - XenoThreatCF # no xenocf markers
-    # - NeomorphsThreatCF # no xenocf markers
-    - cultistThreat
-    # - cultistThreatOnMarker # no cultcf markers
-    - wendigoThreat
-    # - abominationsThreat # no xenocf markers
-    - TribalsThreat
-    - apethreatcf
+    # All threat entries are disabled until this map has generic threat markers.
+    # threats:
+    # - XenoThreat
+    # - NeomorphsThreat
+    # - apethreat
+    # - cultistThreat
+    # - wendigoThreat
+    # - TribalsThreat
+    # - apethreatcf
     jobScalingFof: DefaultGovforOpforScale
     jobScalingIns: DefaultInsurgencyScale
 

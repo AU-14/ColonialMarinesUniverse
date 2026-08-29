@@ -77,9 +77,9 @@ public sealed partial class YautjaRecallSystem : EntitySystem
 
     private void OnRecallableEquipped(Entity<YautjaRecallableComponent> ent, ref GotEquippedEvent args)
     {
-        if (ent.Comp.YautjaOwner == null && CanUseYautjaRecall(args.Equipee))
+        if (ent.Comp.YautjaOwner == null && CanUseYautjaRecall(args.EquipTarget))
         {
-            ent.Comp.YautjaOwner = args.Equipee;
+            ent.Comp.YautjaOwner = args.EquipTarget;
             Dirty(ent);
         }
     }

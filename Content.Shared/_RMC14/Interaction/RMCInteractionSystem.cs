@@ -92,10 +92,11 @@ public sealed partial class RMCInteractionSystem : EntitySystem
 
         var set = max.Comp1.Set;
         var deviation = max.Comp1.Deviation;
-        if (Angle.ShortestDistance(angle, set) > deviation)
+        var difference = Angle.ShortestDistance(set, angle);
+        if (difference > deviation)
             angle = set + deviation;
 
-        if (Angle.ShortestDistance(angle, set) < -deviation)
+        if (difference < -deviation)
             angle = set - deviation;
     }
 
@@ -106,8 +107,8 @@ public sealed partial class RMCInteractionSystem : EntitySystem
 
         var set = max.Comp1.Set;
         var deviation = max.Comp1.Deviation;
-        if (Angle.ShortestDistance(angle, set) > deviation ||
-            Angle.ShortestDistance(angle, set) < -deviation)
+        var difference = Angle.ShortestDistance(set, angle);
+        if (difference > deviation || difference < -deviation)
         {
             return false;
         }

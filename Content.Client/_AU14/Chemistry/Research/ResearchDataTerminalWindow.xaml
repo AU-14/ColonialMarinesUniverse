@@ -116,7 +116,7 @@
                                 </BoxContainer>
                                 <BoxContainer HorizontalExpand="True" Orientation="Vertical" Name="ViewChemicals" Access="Public">
                                     <uiControls:HLine Thickness="3" Color="#FFBF00" Margin="0, 5"></uiControls:HLine>
-                                    <uiControls:TableContainer Name="DataTable" Access="Public" Columns="4" Margin="5,0">
+                                    <TableContainer Name="DataTable" Access="Public" Columns="4" Margin="5,0">
                                         <PanelContainer>
                                             <PanelContainer.PanelOverride>
                                                 <graphics:StyleBoxFlat
@@ -157,7 +157,7 @@
                                             </PanelContainer.PanelOverride>
                                             <RichTextLabel Text="{Loc research-data-ui-actions}"/>
                                         </PanelContainer>
-                                    </uiControls:TableContainer>
+                                    </TableContainer>
                                 </BoxContainer>
                             </TabContainer>
                         </BoxContainer>

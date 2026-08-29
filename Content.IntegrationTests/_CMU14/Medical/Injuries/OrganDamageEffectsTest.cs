@@ -1,3 +1,5 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using System.Collections.Generic;
 using System.Reflection;
 using Content.Server._CMU14.Medical.Anatomy.Bones;
@@ -21,6 +23,7 @@ using Content.Shared._RMC14.Medical.Stasis;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
@@ -181,8 +184,8 @@ public sealed class OrganDamageEffectsTest
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
             Assert.Multiple(() =>
             {
-                Assert.That(damage["Asphyxiation"], Is.GreaterThan(FixedPoint2.Zero));
-                Assert.That(damage["Poison"], Is.GreaterThan(FixedPoint2.Zero));
+                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.GreaterThan(FixedPoint2.Zero));
+                Assert.That(damage.GetValueOrDefault("Poison"), Is.GreaterThan(FixedPoint2.Zero));
             });
             entMan.DeleteEntity(human);
         });
@@ -262,7 +265,7 @@ public sealed class OrganDamageEffectsTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict["Poison"];
+            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Poison");
             Assert.That(poison, Is.GreaterThan(FixedPoint2.Zero));
             entMan.DeleteEntity(human);
         });
@@ -304,7 +307,7 @@ public sealed class OrganDamageEffectsTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict["Poison"];
+            var poison = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict.GetValueOrDefault("Poison");
             Assert.That(poison, Is.GreaterThan(FixedPoint2.Zero));
             entMan.DeleteEntity(liver);
             entMan.DeleteEntity(kidneys);
@@ -361,39 +364,46 @@ public sealed class OrganDamageEffectsTest
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
+        EntityUid human = default;
+        EntityUid stomach = default;
+        EntityUid torso = default;
 
-        await server.WaitAssertion(() =>
+        await server.WaitPost(() =>
         {
             var entMan = server.EntMan;
             var index = entMan.System<CMUMedicalBodyIndexSystem>();
             var body = entMan.System<SharedBodySystem>();
-            var status = entMan.System<SharedStatusEffectsSystem>();
-            var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            var stomach = GetOrgan<CMUStomachComponent>(index, human);
-            var torso = GetPart(index, human, BodyPartType.Torso, BodyPartSymmetry.None);
+            var status = entMan.System<StatusEffectsSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            stomach = GetOrgan<CMUStomachComponent>(index, human);
+            torso = GetPart(index, human, BodyPartType.Torso, BodyPartSymmetry.None);
 
-            try
+            Assert.That(body.RemoveOrgan(stomach), Is.True);
+            Assert.Multiple(() =>
             {
-                Assert.That(body.RemoveOrgan(stomach), Is.True);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.True);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.True);
-                });
+                Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.True);
+                Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.True);
+            });
+        });
 
-                Assert.That(body.InsertOrgan(torso, stomach, "stomach"), Is.True);
-                Assert.Multiple(() =>
-                {
-                    Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.False);
-                    Assert.That(status.HasStatusEffect(human, "StatusEffectCMUNausea"), Is.False);
-                });
-            }
-            finally
-            {
-                entMan.DeleteEntity(human);
-                if (entMan.EntityExists(stomach))
-                    entMan.DeleteEntity(stomach);
-            }
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.That(entMan.System<SharedBodySystem>().InsertOrgan(torso, stomach, "stomach"), Is.True);
+            Assert.That(entMan.HasComponent<MissingStomachComponent>(human), Is.False);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            Assert.That(
+                entMan.System<StatusEffectsSystem>().HasStatusEffect(human, "StatusEffectCMUNausea"),
+                Is.False);
+            entMan.DeleteEntity(human);
+            if (entMan.EntityExists(stomach))
+                entMan.DeleteEntity(stomach);
         });
 
         await pair.CleanReturnAsync();
@@ -423,8 +433,8 @@ public sealed class OrganDamageEffectsTest
             liver = GetOrgan<LiverComponent>(index, human);
             kidneys = GetOrgan<KidneysComponent>(index, human);
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
-            asphyxBefore = damage["Asphyxiation"];
-            poisonBefore = damage["Poison"];
+            asphyxBefore = damage.GetValueOrDefault("Asphyxiation");
+            poisonBefore = damage.GetValueOrDefault("Poison");
 
             entMan.EnsureComponent<CMInStasisComponent>(human);
             Assert.That(body.RemoveOrgan(heart), Is.True);
@@ -439,11 +449,11 @@ public sealed class OrganDamageEffectsTest
         {
             var entMan = server.EntMan;
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             Assert.Multiple(() =>
             {
-                Assert.That(damage["Asphyxiation"], Is.EqualTo(asphyxBefore));
-                Assert.That(damage["Poison"], Is.EqualTo(poisonBefore));
+                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.EqualTo(asphyxBefore));
+                Assert.That(damage.GetValueOrDefault("Poison"), Is.EqualTo(poisonBefore));
                 Assert.That(status.HasStatusEffect(human, "StatusEffectCMUUnconscious"), Is.False);
             });
             entMan.RemoveComponent<CMInStasisComponent>(human);
@@ -455,11 +465,11 @@ public sealed class OrganDamageEffectsTest
         {
             var entMan = server.EntMan;
             var damage = entMan.GetComponent<DamageableComponent>(human).Damage.DamageDict;
-            var status = entMan.System<SharedStatusEffectsSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             Assert.Multiple(() =>
             {
-                Assert.That(damage["Asphyxiation"], Is.GreaterThan(asphyxBefore));
-                Assert.That(damage["Poison"], Is.GreaterThan(poisonBefore));
+                Assert.That(damage.GetValueOrDefault("Asphyxiation"), Is.GreaterThan(asphyxBefore));
+                Assert.That(damage.GetValueOrDefault("Poison"), Is.GreaterThan(poisonBefore));
                 Assert.That(status.HasStatusEffect(human, "StatusEffectCMUUnconscious"), Is.False);
             });
             entMan.DeleteEntity(human);
@@ -616,3 +626,5 @@ public sealed class OrganDamageEffectsTest
         field!.SetValue(instance, value);
     }
 }
+
+#pragma warning restore RA0002

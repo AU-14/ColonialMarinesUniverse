@@ -1,9 +1,9 @@
-using Content.Server.Radio.Components;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared.AU14.Radio;
 using Content.Shared.Clothing;
 using Content.Shared.Inventory;
 using Content.Shared.Radio;
+using Content.Shared.Radio.Components;
 using Robust.Shared.Containers;
 using Content.Server._AU14.Marines.Roles.Ranks;
 using Content.Shared._AU14.Marines.Roles.Ranks;
@@ -238,4 +238,3 @@ public sealed partial class AccessoryHeadsetSystem : EntitySystem
         Dirty(ent);
     }
 }
-

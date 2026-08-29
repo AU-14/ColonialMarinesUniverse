@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Content.Client.Damage;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Presentation.Visuals;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Humanoid;
 using Robust.Client.GameObjects;
@@ -94,9 +95,9 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
         base.Initialize();
 
         SubscribeLocalEvent<CMUHumanMedicalComponent, ComponentStartup>(OnMedicalBodyStartup);
-        SubscribeLocalEvent<HumanoidAppearanceComponent, ComponentStartup>(OnHumanoidChanged);
-        SubscribeLocalEvent<HumanoidAppearanceComponent, BodyPartAddedEvent>(OnHumanoidChanged);
-        SubscribeLocalEvent<HumanoidAppearanceComponent, BodyPartRemovedEvent>(OnHumanoidChanged);
+        SubscribeLocalEvent<VisualBodyComponent, ComponentStartup>(OnHumanoidChanged);
+        SubscribeLocalEvent<VisualBodyComponent, BodyPartAddedEvent>(OnHumanoidChanged);
+        SubscribeLocalEvent<VisualBodyComponent, BodyPartRemovedEvent>(OnHumanoidChanged);
 
         SubscribeLocalEvent<CMUMedicalOverlayVisualsComponent, ComponentStartup>(OnMedicalVisualsChanged);
         SubscribeLocalEvent<CMUMedicalOverlayVisualsComponent, ComponentRemove>(OnMedicalVisualsChanged);
@@ -123,7 +124,7 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
         QueueBody(ent.Owner);
     }
 
-    private void OnHumanoidChanged<TEvent>(Entity<HumanoidAppearanceComponent> ent, ref TEvent args)
+    private void OnHumanoidChanged<TEvent>(Entity<VisualBodyComponent> ent, ref TEvent args)
     {
         QueueBody(ent.Owner);
     }
@@ -141,7 +142,7 @@ public sealed partial class CMUMedicalOverlayVisualsSystem : EntitySystem
         if (!TryComp<SpriteComponent>(body, out var sprite))
             return;
 
-        if (!HasComp<HumanoidAppearanceComponent>(body))
+        if (!HasComp<VisualBodyComponent>(body))
             return;
 
         Entity<SpriteComponent> bodySprite = (body, sprite);

@@ -66,7 +66,7 @@ public sealed partial class EvilTricordGeneratorSystem : EntitySystem
         medicine.Add("metabolismRate", new ValueDataNode("0.1"));
         medicine.Add("effects", effects);
         MappingDataNode metabs = [];
-        metabs.Add("Medicine", medicine);
+        metabs.Add("Bloodstream", medicine);
         pr.Add("metabolisms", metabs);
         pr.Add("parent", parents);
         if (_protoMan.TryLoadDynamic(pr))

@@ -10,6 +10,7 @@ using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Actions;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;

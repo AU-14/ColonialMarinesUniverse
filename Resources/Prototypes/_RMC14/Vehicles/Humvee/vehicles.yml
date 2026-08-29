@@ -209,8 +209,9 @@
           components:
           - HardpointItem
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
@@ -222,8 +223,9 @@
   description: A medical-configured humvee outfitted for field triage.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
@@ -292,8 +294,9 @@
   description: A transport humvee configured for passenger movement.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 1000
     bypassEntryOnZero: true
@@ -370,8 +373,9 @@
           components:
           - HardpointItem
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameARC
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: HardpointIntegrity
     maxIntegrity: 800
     bypassEntryOnZero: true

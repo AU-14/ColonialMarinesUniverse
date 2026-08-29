@@ -51,7 +51,7 @@
   - type: PowerCellDraw
     enabled: false
     drawRate: 1
-    useRate: 0
+    useCharge: 0
   - type: ContainerContainer
     containers:
       fill_card: !type:ContainerSlot
@@ -295,7 +295,7 @@
   - type: PowerCellDraw
     enabled: false
     drawRate: 1
-    useRate: 0
+    useCharge: 0
   - type: ContainerContainer
     containers:
       fill_card: !type:ContainerSlot

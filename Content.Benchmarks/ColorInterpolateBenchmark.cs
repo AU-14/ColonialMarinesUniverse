@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using BenchmarkDotNet.Attributes;
 using Robust.Shared.Analyzers;
 using Robust.Shared.Maths;
+using Robust.Shared.Random;
 using SysVector4 = System.Numerics.Vector4;
 
 namespace Content.Benchmarks
@@ -26,30 +27,26 @@ namespace Content.Benchmarks
 
         [Params(100)] public int N { get; set; }
 
-        private static float NextFloat(Random random)
-        {
-            return (float) random.NextDouble();
-        }
-
         [GlobalSetup]
         public void Setup()
         {
-            var random = new Random(3005);
+            var random = new RobustRandom();
+            random.SetSeed(3005);
 
             _colors = new (Color, Color)[N];
             _output = new Color[N];
 
             for (var i = 0; i < N; i++)
             {
-                var r1 = NextFloat(random);
-                var g1 = NextFloat(random);
-                var b1 = NextFloat(random);
-                var a1 = NextFloat(random);
+                var r1 = random.NextFloat();
+                var g1 = random.NextFloat();
+                var b1 = random.NextFloat();
+                var a1 = random.NextFloat();
 
-                var r2 = NextFloat(random);
-                var g2 = NextFloat(random);
-                var b2 = NextFloat(random);
-                var a2 = NextFloat(random);
+                var r2 = random.NextFloat();
+                var g2 = random.NextFloat();
+                var b2 = random.NextFloat();
+                var a2 = random.NextFloat();
 
                 _colors[i] = (new Color(r1, g1, b1, a1), new Color(r2, g2, b2, a2));
             }

@@ -6,6 +6,7 @@ using Content.Shared.Actions;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Configuration;
 using Robust.Shared.Network;
@@ -175,7 +176,7 @@ public sealed partial class JoinXenoSystem : EntitySystem
         // If the game has been going on longer than the death ignore time, then check how long since the ghost has died
         if (_gameTicker.RoundDuration() > _burrowedLarvaDeathIgnoreTime)
         {
-            var timeSinceDeath = _timing.CurTime.Subtract(ghostComp.TimeOfDeath);
+            var timeSinceDeath = _timing.RealTime.Subtract(ghostComp.TimeOfDeath);
 
             if (timeSinceDeath < _burrowedLarvaDeathTime)
             {

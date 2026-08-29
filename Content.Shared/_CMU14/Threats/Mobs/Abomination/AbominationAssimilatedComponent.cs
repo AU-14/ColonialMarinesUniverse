@@ -1,7 +1,10 @@
+using Content.Shared.Body;
+using Content.Shared.Chat.Prototypes;
 using Content.Shared._RMC14.Language.Prototypes;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
 using Content.Shared.Humanoid.Prototypes;
+using Content.Shared.Preferences;
 using Robust.Shared.Enums;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -79,9 +82,8 @@ public sealed partial class AbominationAssimilationProfile
 }
 
 /// <summary>
-///     Snapshot of every HumanoidAppearanceComponent field the mimic disguise system
-///     touches when applying / restoring a form. Built at assimilation time so the
-///     disguise survives the source entity being deleted.
+///     Snapshot of the humanoid profile and organ appearance used by the mimic disguise system.
+///     Built at assimilation time so the disguise survives the source entity being deleted.
 /// </summary>
 [Serializable, NetSerializable, DataDefinition]
 public sealed partial class AbominationAppearanceSnapshot
@@ -90,16 +92,14 @@ public sealed partial class AbominationAppearanceSnapshot
     public int Age = 18;
 
     [DataField]
-    public Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo> CustomBaseLayers = new();
-
-    [DataField]
     public Color EyeColor = Color.Brown;
 
     [DataField]
     public Gender Gender;
 
     [DataField]
-    public MarkingSet MarkingSet = new();
+    public Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>
+        OrganMarkings = new();
 
     [DataField]
     public Sex Sex = Sex.Male;
@@ -109,4 +109,7 @@ public sealed partial class AbominationAppearanceSnapshot
 
     [DataField]
     public ProtoId<SpeciesPrototype> Species;
+
+    [DataField]
+    public ProtoId<EmoteSoundsPrototype> Voice = HumanoidCharacterProfile.DefaultVoice;
 }

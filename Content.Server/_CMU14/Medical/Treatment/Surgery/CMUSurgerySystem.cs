@@ -1,5 +1,4 @@
 using System;
-using Content.Server._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.DroneOperator;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
@@ -8,8 +7,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Synth;
-using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.FixedPoint;
 using Content.Shared.Hands.EntitySystems;
@@ -25,13 +23,15 @@ namespace Content.Server._CMU14.Medical.Treatment.Surgery;
 public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private CMUHandRestorationSystem _handRestoration = default!;
+    [Dependency] private DetachableOrganSystem _detachableOrgan = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
+
+    private static readonly EntProtoId DetachedBodyPrototype = "DetachedBody";
 
     protected override void ApplyOrganRemovalSideEffects(EntityUid user, EntityUid body, EntityUid organ, string slot)
     {
@@ -75,7 +75,7 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         if (!HasComp<CMUHumanMedicalComponent>(body))
             return;
 
-        if (!TryGetHeldLimb(user, out var limb, out var limbPart))
+        if (!TryGetHeldLimb(user, out var held, out var limb, out var limbPart))
         {
             _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-no-limb"), user, user, PopupType.SmallCaution);
             return;
@@ -95,17 +95,22 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
 
         // checkActionBlocker false so a downed surgeon can still complete
         // the step (skill gate is upstream).
-        _hands.TryDrop(user, limb, targetDropLocation: null, checkActionBlocker: false);
-
-        if (!Body.AttachPart(rootPart, slotId, limb))
+        if (!_hands.TryDrop(user, held, targetDropLocation: null, checkActionBlocker: false))
         {
-            // Roll back so the limb isn't lost on the floor.
-            _hands.TryPickupAnyHand(user, limb, checkActionBlocker: false);
             _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-attach-failed"), user, user, PopupType.MediumCaution);
             return;
         }
 
-        _handRestoration.RestoreUsableHands(body);
+        if (!Body.AttachPart(rootPart, slotId, limb))
+        {
+            // Roll back so the limb isn't lost on the floor.
+            _hands.TryPickupAnyHand(user, held, checkActionBlocker: false);
+            _popup.PopupEntity(Loc.GetString("cmu-medical-reattach-attach-failed"), user, user, PopupType.MediumCaution);
+            return;
+        }
+
+        if (held != limb)
+            QueueDel(held);
 
         var hpFraction = (float)_cfg.GetCVar(CMUMedicalCCVars.SurgeryLimbReattachStartingHpFraction);
         if (TryComp<BodyPartHealthComponent>(limb, out var bph))
@@ -173,30 +178,54 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
         if (limbPart.PartType is not (BodyPartType.Arm or BodyPartType.Leg))
             return;
 
-        _transform.SetCoordinates(part, Transform(body).Coordinates);
+        if (_detachableOrgan.Detach(part) is not { } detachedBody)
+            return;
 
-        _transform.AttachToGridOrMap(part);
+        _transform.SetCoordinates(detachedBody, Transform(body).Coordinates);
+
+        _transform.AttachToGridOrMap(detachedBody);
 
         if (StatusForPart(limbPart.PartType, limbPart.Symmetry) is { } statusProto)
             _status.TrySetStatusEffectDuration(body, statusProto, duration: null);
 
-        _hands.TryPickupAnyHand(user, part, checkActionBlocker: false);
+        _hands.TryPickupAnyHand(user, detachedBody, checkActionBlocker: false);
         _popup.PopupEntity(Loc.GetString("cmu-medical-amputation-success"), body, user, PopupType.Medium);
     }
 
-    private bool TryGetHeldLimb(EntityUid surgeon, out EntityUid limb, out BodyPartComponent limbPart)
+    private bool TryGetHeldLimb(
+        EntityUid surgeon,
+        out EntityUid heldItem,
+        out EntityUid limb,
+        out BodyPartComponent limbPart)
     {
+        heldItem = default;
         limb = default;
         limbPart = default!;
 
         foreach (var held in _hands.EnumerateHeld(surgeon))
         {
-            if (!TryComp<BodyPartComponent>(held, out var bp))
+            var candidate = held;
+            BodyPartComponent? bp;
+            if (!TryComp(candidate, out bp))
+            {
+                if (MetaData(held).EntityPrototype?.ID != DetachedBodyPrototype ||
+                    !TryComp<BodyComponent>(held, out var carrierBody) ||
+                    Body.GetRootPartOrNull(held, carrierBody) is not { } root)
+                {
+                    continue;
+                }
+
+                candidate = root.Entity;
+                bp = root.BodyPart;
+            }
+
+            if (bp is null)
                 continue;
             if (!CMUBodyPartSlots.IsReportableMissingPart(bp.PartType))
                 continue;
 
-            limb = held;
+            heldItem = held;
+            limb = candidate;
             limbPart = bp;
             return true;
         }

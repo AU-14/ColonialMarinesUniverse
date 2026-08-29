@@ -79,11 +79,11 @@ public sealed partial class TribalItemRestrictSystem : EntitySystem
 			return;
 
 		// If the equipee has TribalComponent, allow equip
-		if (HasComp<TribalComponent>(args.Equipee))
+		if (HasComp<TribalComponent>(args.User))
 			return;
 
 		// Block non-tribals from equipping tribe-tagged items
 		args.Cancel();
-		_popupSystem.PopupClient("You cannot equip this.", item, args.Equipee);
+		_popupSystem.PopupClient("You cannot equip this.", item, args.User);
 	}
 }

@@ -1,3 +1,4 @@
+using Content.Shared.Radio;
 using Robust.Shared.Serialization;
 
 namespace Content.Shared._AU14.Radio;
@@ -16,18 +17,17 @@ public sealed class TunableFrequencySetMsg(string frequencyText) : BoundUserInte
 
 [Serializable, NetSerializable]
 public sealed class TunableFrequencyState(
-    int tunedFrequency,
-    int minFrequency,
-    int maxFrequency)
+    RadioFrequency tunedFrequency,
+    RadioFrequency minFrequency,
+    RadioFrequency maxFrequency)
     : BoundUserInterfaceState
 {
-    public readonly int TunedFrequency = tunedFrequency;
-    public readonly int MinFrequency = minFrequency;
-    public readonly int MaxFrequency = maxFrequency;
+    public readonly RadioFrequency TunedFrequency = tunedFrequency;
+    public readonly RadioFrequency MinFrequency = minFrequency;
+    public readonly RadioFrequency MaxFrequency = maxFrequency;
 }
 
 public static class TunableFrequencyHelpers
 {
-    public static string FormatFreq(int raw)
-        => raw >= 1000 ? $"{raw / 1000}.{raw % 1000:D3}" : $"00.{raw:D3}";
+    public static string FormatFreq(RadioFrequency frequency) => frequency.FormatMegahertz();
 }

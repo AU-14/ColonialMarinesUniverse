@@ -1,7 +1,8 @@
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._RMC14.Dropship;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
+using Content.Shared.Trigger;
+using Content.Shared.Trigger.Components;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Prototypes;
 
@@ -21,17 +22,20 @@ public sealed partial class USSBushGrenadeRestrictionSystem : EntitySystem
     {
         base.Initialize();
 
-        SubscribeLocalEvent<BeforeUseTimerTriggerEvent>(OnBeforeUseTimer);
+        SubscribeLocalEvent<TimerTriggerComponent, AttemptTriggerEvent>(OnAttemptTimerTrigger);
         SubscribeLocalEvent<DropshipHijackStartEvent>(OnDropshipHijackStart);
     }
 
-    private void OnBeforeUseTimer(ref BeforeUseTimerTriggerEvent args)
+    private void OnAttemptTimerTrigger(Entity<TimerTriggerComponent> ent, ref AttemptTriggerEvent args)
     {
-        if (!IsGrenade(args.Timer) || !IsOnLockedUSSBush(args.User))
+        if (args.Key != null && !ent.Comp.KeysIn.Contains(args.Key))
+            return;
+
+        if (args.User is not { } user || !IsGrenade(ent) || !IsOnLockedUSSBush(user))
             return;
 
         args.Cancelled = true;
-        _popup.PopupEntity(Loc.GetString("rmc-grenade-blocked-before-hijack"), args.User, args.User, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("rmc-grenade-blocked-before-hijack"), user, user, PopupType.SmallCaution);
     }
 
     private void OnDropshipHijackStart(ref DropshipHijackStartEvent ev)

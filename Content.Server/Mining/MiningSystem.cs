@@ -5,7 +5,6 @@ using Content.Shared.Mining;
 using Content.Shared.Mining.Components;
 using Content.Shared.Random;
 using Content.Shared.Random.Helpers;
-using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 
 namespace Content.Server.Mining;
@@ -15,7 +14,6 @@ namespace Content.Server.Mining;
 /// </summary>
 public sealed partial class MiningSystem : EntitySystem
 {
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private IRobustRandom _random = default!;
 
     /// <inheritdoc/>
@@ -36,7 +34,7 @@ public sealed partial class MiningSystem : EntitySystem
         if (TryComp<FlammableComponent>(uid, out var flammable) && flammable.OnFire)
             return;
 
-        var proto = _proto.Index<OrePrototype>(component.CurrentOre);
+        var proto = ProtoMan.Index<OrePrototype>(component.CurrentOre);
 
         if (proto.OreEntity == null)
             return;
@@ -54,6 +52,6 @@ public sealed partial class MiningSystem : EntitySystem
         if (component.CurrentOre != null || component.OreRarityPrototypeId == null || !_random.Prob(component.OreChance))
             return;
 
-        component.CurrentOre = _proto.Index<WeightedRandomOrePrototype>(component.OreRarityPrototypeId).Pick(_random);
+        component.CurrentOre = ProtoMan.Index<WeightedRandomOrePrototype>(component.OreRarityPrototypeId).Pick(_random);
     }
 }

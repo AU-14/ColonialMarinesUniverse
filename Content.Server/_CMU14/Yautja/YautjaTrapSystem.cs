@@ -1,6 +1,7 @@
 using Content.Server.Administration.Logs;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;

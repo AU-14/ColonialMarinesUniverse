@@ -1,3 +1,4 @@
+using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 
 namespace Content.Shared._CMU14.Blackfoot;

@@ -1,7 +1,5 @@
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared.FixedPoint;
-using Content.Shared.Humanoid;
-using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Tools;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
@@ -13,9 +11,6 @@ public sealed partial class CMURoboticLimbComponent : Component
 {
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public LocId MaterialName = "cmu-robotic-limb-material-synthetic";
-
-    [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
-    public Dictionary<HumanoidVisualLayers, ProtoId<HumanoidSpeciesSpriteLayer>> BaseLayers = new();
 
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public FixedPoint2 BruteDamage;
@@ -43,12 +38,4 @@ public sealed partial class CMURoboticLimbComponent : Component
 
     [DataField, AutoNetworkedField, ViewVariables(VVAccess.ReadWrite)]
     public TimeSpan SelfRepairTime = TimeSpan.FromSeconds(30);
-}
-
-[RegisterComponent]
-[Access(typeof(SharedCMURoboticLimbSystem))]
-public sealed partial class CMURoboticLimbOverlayComponent : Component
-{
-    [ViewVariables(VVAccess.ReadOnly)]
-    public readonly Dictionary<HumanoidVisualLayers, CustomBaseLayerInfo?> OriginalLayers = new();
 }

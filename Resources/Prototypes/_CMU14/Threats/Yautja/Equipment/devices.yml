@@ -346,15 +346,15 @@
   description: A bracer-grown crystal that rapidly stabilises alien biology.
   suffix: Yautja
   components:
+  - type: Item
+    size: Small
   - type: Healing
     damageContainers:
     - Biological
     damage:
-      groups:
-        Airloss: -45
       types:
-        Bloodloss: -55
-        Asphyxiation: -30
+        Asphyxiation: -52.5
+        Bloodloss: -77.5
     bloodlossModifier: -35
     delay: 0.75
     selfHealPenaltyMultiplier: 1.25
@@ -375,17 +375,22 @@
   description: A bracer-grown crystal tuned for humans and thralls.
   suffix: Yautja
   components:
+  - type: Item
+    size: Small
   - type: Healing
     damageContainers:
     - Biological
     damage:
-      groups:
-        Airloss: -35
-        Brute: -15
-        Burn: -15
       types:
-        Bloodloss: -40
-        Asphyxiation: -25
+        Asphyxiation: -42.5
+        Bloodloss: -57.5
+        Blunt: -5
+        Slash: -5
+        Piercing: -5
+        Heat: -3.75
+        Shock: -3.75
+        Cold: -3.75
+        Caustic: -3.75
     bloodlossModifier: -30
     delay: 0.75
     selfHealPenaltyMultiplier: 1.25
@@ -585,7 +590,7 @@
     availableModes:
     - SemiAuto
     soundGunshot: null
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: CMUYautjaCasterStunBolt
     fireCost: 1
   - type: Battery
@@ -648,7 +653,9 @@
   name: wrist blades
   description: Retractable twin blades keyed to a hunting bracer.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     sprite: _CMU14/Yautja/wrist_blades.rsi
     state: icon
@@ -700,7 +707,9 @@
   name: combi scimitar
   description: A long alien hunting blade with a brutal monomolecular edge.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     sprite: _CMU14/Yautja/scimitar.rsi
     state: icon
@@ -823,6 +832,7 @@
         Piercing: 1
         Heat: 1
   - type: Damageable
+  - type: Injurable
     damageContainer: Shield
   - type: Destructible
     thresholds:
@@ -891,11 +901,15 @@
     damageContainers:
     - Biological
     damage:
-      groups:
-        Brute: -45
-        Burn: -35
       types:
         Bloodloss: -15
+        Blunt: -15
+        Slash: -15
+        Piercing: -15
+        Heat: -8.75
+        Shock: -8.75
+        Cold: -8.75
+        Caustic: -8.75
     bloodlossModifier: -20
     delay: 0.75
     selfHealPenaltyMultiplier: 1.25
@@ -931,11 +945,9 @@
     damageContainers:
     - Biological
     damage:
-      groups:
-        Airloss: -30
       types:
-        Bloodloss: -30
-        Asphyxiation: -20
+        Asphyxiation: -35
+        Bloodloss: -45
     bloodlossModifier: -30
     delay: 0.75
     selfHealPenaltyMultiplier: 1.25
@@ -984,13 +996,16 @@
     damageContainers:
     - Biological
     damage:
-      groups:
-        Airloss: -35
-        Brute: -15
-        Burn: -15
       types:
-        Bloodloss: -40
-        Asphyxiation: -25
+        Asphyxiation: -42.5
+        Bloodloss: -57.5
+        Blunt: -5
+        Slash: -5
+        Piercing: -5
+        Heat: -3.75
+        Shock: -3.75
+        Cold: -3.75
+        Caustic: -3.75
     bloodlossModifier: -30
     healSound:
       path: "/Audio/Items/Medical/ointment_end.ogg"

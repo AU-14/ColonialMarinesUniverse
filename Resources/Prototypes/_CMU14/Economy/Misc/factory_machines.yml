@@ -33,8 +33,9 @@
     processSound: !type:SoundPathSpecifier
       path: /Audio/Machines/reclaimer_startup.ogg
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:
@@ -85,8 +86,9 @@
     processSound: !type:SoundPathSpecifier
       path: /Audio/Machines/circuitprinter.ogg
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: null
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

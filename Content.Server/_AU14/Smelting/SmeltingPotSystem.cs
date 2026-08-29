@@ -7,6 +7,7 @@ using Content.Shared._RMC14.Emote;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Construction.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Destructible;
 using Content.Shared.Doors.Electronics;
 using Content.Shared.Examine;
@@ -140,11 +141,12 @@ public sealed class SmeltingPotSystem : EntitySystem
             return;
         }
 
-        var taken = Math.Min(space, _stack.GetCount(args.Used, stack));
+        var available = _stack.GetCount((args.Used, stack));
+        var taken = Math.Min(space, available);
         if (taken <= 0)
             return;
 
-        _stack.SetCount(args.Used, _stack.GetCount(args.Used, stack) - taken, stack);
+        _stack.SetCount((args.Used, stack), available - taken);
         pot.Comp.Material = stack.StackTypeId;
         pot.Comp.Amount += taken;
         Dirty(pot);

@@ -1,58 +1,79 @@
-using Content.Shared._CMU14.Yautja;
 using Content.Server.Stunnable.Components;
-using Content.Shared.Standing;
-using Content.Shared.StatusEffect;
+using Content.Shared._CMU14.Yautja;
+using Content.Shared.Movement.Systems;
 using Content.Shared.Tag;
-using JetBrains.Annotations;
-using Robust.Shared.Physics.Dynamics;
 using Content.Shared.Throwing;
+using Content.Shared.Whitelist;
+using JetBrains.Annotations;
 using Robust.Shared.Physics.Events;
 using Robust.Shared.Prototypes;
 
-namespace Content.Server.Stunnable
+namespace Content.Server.Stunnable.Systems;
+
+[UsedImplicitly]
+internal sealed partial class StunOnCollideSystem : EntitySystem
 {
-    [UsedImplicitly]
-    internal sealed partial class StunOnCollideSystem : EntitySystem
+    private static readonly ProtoId<TagPrototype> TaserTag = "Taser";
+
+    [Dependency] private StunSystem _stunSystem = default!;
+    [Dependency] private MovementModStatusSystem _movementMod = default!;
+    [Dependency] private EntityWhitelistSystem _entityWhitelist = default!;
+    [Dependency] private TagSystem _tag = default!;
+
+    public override void Initialize()
     {
-        private static readonly ProtoId<TagPrototype> TaserTag = "Taser";
+        base.Initialize();
 
-        [Dependency] private StunSystem _stunSystem = default!;
-        [Dependency] private TagSystem _tag = default!;
+        SubscribeLocalEvent<StunOnCollideComponent, StartCollideEvent>(HandleCollide);
+        SubscribeLocalEvent<StunOnCollideComponent, ThrowDoHitEvent>(HandleThrow);
+    }
 
-        public override void Initialize()
+    private void TryDoCollideStun(Entity<StunOnCollideComponent> ent, EntityUid target)
+    {
+        if (_entityWhitelist.IsWhitelistPass(ent.Comp.Blacklist, target))
+            return;
+
+        // CMU14 - Yautja are immune to taser projectiles.
+        if (HasComp<YautjaComponent>(target) && _tag.HasTag(ent.Owner, TaserTag))
+            return;
+
+        _stunSystem.TryKnockdown(target, ent.Comp.KnockdownAmount, ent.Comp.Refresh, ent.Comp.AutoStand, ent.Comp.Drop, true);
+
+        if (ent.Comp.Refresh)
         {
-            base.Initialize();
-            SubscribeLocalEvent<StunOnCollideComponent, StartCollideEvent>(HandleCollide);
-            SubscribeLocalEvent<StunOnCollideComponent, ThrowDoHitEvent>(HandleThrow);
-        }
+            _stunSystem.TryUpdateStunDuration(target, ent.Comp.StunAmount);
 
-        private void TryDoCollideStun(EntityUid uid, StunOnCollideComponent component, EntityUid target)
+            _movementMod.TryUpdateMovementSpeedModDuration(
+                target,
+                MovementModStatusSystem.TaserSlowdown,
+                ent.Comp.SlowdownAmount,
+                ent.Comp.WalkSpeedModifier,
+                ent.Comp.SprintSpeedModifier
+            );
+        }
+        else
         {
-            if (HasComp<YautjaComponent>(target) && _tag.HasTag(uid, TaserTag))
-                return;
-
-            if (TryComp<StatusEffectsComponent>(target, out var status))
-            {
-                _stunSystem.TryStun(target, TimeSpan.FromSeconds(component.StunAmount), true, status);
-
-                _stunSystem.TryKnockdown(target, TimeSpan.FromSeconds(component.KnockdownAmount), true,
-                    status);
-
-                _stunSystem.TrySlowdown(target, TimeSpan.FromSeconds(component.SlowdownAmount), true,
-                    component.WalkSpeedMultiplier, component.RunSpeedMultiplier, status);
-            }
+            _stunSystem.TryAddStunDuration(target, ent.Comp.StunAmount);
+            _movementMod.TryAddMovementSpeedModDuration(
+                target,
+                MovementModStatusSystem.TaserSlowdown,
+                ent.Comp.SlowdownAmount,
+                ent.Comp.WalkSpeedModifier,
+                ent.Comp.SprintSpeedModifier
+            );
         }
-        private void HandleCollide(EntityUid uid, StunOnCollideComponent component, ref StartCollideEvent args)
-        {
-            if (args.OurFixtureId != component.FixtureID)
-                return;
+    }
 
-            TryDoCollideStun(uid, component, args.OtherEntity);
-        }
+    private void HandleCollide(Entity<StunOnCollideComponent> ent, ref StartCollideEvent args)
+    {
+        if (args.OurFixtureId != ent.Comp.FixtureID)
+            return;
 
-        private void HandleThrow(EntityUid uid, StunOnCollideComponent component, ThrowDoHitEvent args)
-        {
-            TryDoCollideStun(uid, component, args.Target);
-        }
+        TryDoCollideStun(ent, args.OtherEntity);
+    }
+
+    private void HandleThrow(Entity<StunOnCollideComponent> ent, ref ThrowDoHitEvent args)
+    {
+        TryDoCollideStun(ent, args.Target);
     }
 }

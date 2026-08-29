@@ -3,14 +3,15 @@ using Content.Server._CMU14.ZLevels.Core;
 using Content.Server.Explosion.EntitySystems;
 using Content.Server.Power.Components;
 using Content.Server.Power.EntitySystems;
-using Content.Server.PowerCell;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.CCVar;
 using Content.Shared._RMC14.Power;
 using Content.Shared.Audio;
 using Content.Shared.Examine;
 using Content.Shared.Power;
+using Content.Shared.Power.Components;
 using Content.Shared.PowerCell;
+using Content.Shared.PowerCell.Components;
 using Robust.Shared.Configuration;
 using Robust.Shared.Containers;
 using Robust.Shared.Random;
@@ -75,11 +76,12 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
 
     private void OnUsageDisplayEvent(Entity<RMCPowerUsageDisplayComponent> ent, ref ExaminedEvent args)
     {
-        if (!_cell.TryGetBatteryFromSlot(ent, out var battery) || !TryComp<PowerCellDrawComponent>(ent, out var draw))
+        if (!_cell.TryGetBatteryFromSlot(ent.Owner, out var battery) ||
+            !TryComp<PowerCellDrawComponent>(ent.Owner, out var draw))
             return;
 
-        var maxUses = (int)(battery.MaxCharge / draw.UseRate);
-        var uses = (int)(battery.CurrentCharge / draw.UseRate);
+        var maxUses = _battery.GetMaxUses(battery.Value.AsNullable(), draw.UseCharge);
+        var uses = _battery.GetRemainingUses(battery.Value.AsNullable(), draw.UseCharge);
 
         args.PushMarkup(Loc.GetString(ent.Comp.PowerText, ("uses", uses), ("maxuses", maxUses)));
     }
@@ -380,24 +382,25 @@ public sealed partial class RMCPowerSystem : SharedRMCPowerSystem
                 }
                 else
                 {
-                    var battery = new Entity<BatteryComponent>(cell.Value, cell.Value.Comp);
+                    var battery = cell.Value.AsNullable();
                     var drawn = effectiveWattsPer;
                     drawn -= totalLoad;
                     if (drawn <= 0)
                     {
                         apcComp.ChargeStatus = RMCApcChargeStatus.NotCharging;
-                        _battery.UseCharge(battery, -drawn, battery);
+                        _battery.UseCharge(battery, -drawn);
                     }
                     else
                     {
-                        _battery.SetCharge(battery, battery.Comp.CurrentCharge + drawn, battery);
+                        var charge = _battery.GetCharge(battery);
+                        _battery.SetCharge(battery, charge + drawn);
 
-                        apcComp.ChargeStatus = _battery.IsFull(battery, battery)
+                        apcComp.ChargeStatus = _battery.IsFull(battery)
                             ? RMCApcChargeStatus.FullCharge
                             : RMCApcChargeStatus.Charging;
                     }
 
-                    apcComp.ChargePercentage = battery.Comp.CurrentCharge / battery.Comp.MaxCharge;
+                    apcComp.ChargePercentage = _battery.GetChargeLevel(battery);
                 }
 
                 switch (apcComp.ChargePercentage)

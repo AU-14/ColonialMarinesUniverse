@@ -90,4 +90,4 @@
   - type: HiveConstructionLimited
     id: CMU14PathogenSporecaster
   - type: WarpPoint
-    location: sporecaster
+    location: cmu-warp-location-sporecaster

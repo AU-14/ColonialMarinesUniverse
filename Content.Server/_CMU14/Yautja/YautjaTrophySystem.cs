@@ -981,7 +981,7 @@ public sealed partial class YautjaTrophySystem : EntitySystem
 
     private bool IsHumanTrophyTarget(EntityUid target)
     {
-        return HasComp<HumanoidAppearanceComponent>(target) &&
+        return HasComp<HumanoidProfileComponent>(target) &&
                !HasComp<XenoComponent>(target) &&
                !HasComp<YautjaComponent>(target);
     }

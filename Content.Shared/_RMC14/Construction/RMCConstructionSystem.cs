@@ -257,7 +257,7 @@ public sealed partial class RMCConstructionSystem : EntitySystem
             var costEv = new RMCConstructionCostEvent(args.User, stack.StackTypeId, baseCost, baseCost);
             RaiseLocalEvent(args.User, ref costEv, true);
             var paidCost = Math.Max(1, costEv.Cost);
-            if (!_stack.Use(ent.Owner, paidCost, stack))
+            if (!_stack.TryUse((ent.Owner, stack), paidCost))
             {
                 var message = Loc.GetString("rmc-construction-more-material", ("material", ent.Owner), ("object", entry.Name));
                 _popup.PopupEntity(message, args.User, args.User, PopupType.SmallCaution);

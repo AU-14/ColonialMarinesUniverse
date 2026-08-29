@@ -4,9 +4,11 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Brain;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
+using Content.Shared.Speech.EntitySystems;
 using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
 using Content.Shared._RMC14.Stun;
@@ -29,35 +31,34 @@ public sealed partial class Nervestimulating : RMCChemicalEffect
            $"Critical overdoses cause [color=red]{PotencyPerSecond * 4}[/color] brain damage, " +
            $"[color=red]{PotencyPerSecond}[/color] brute and burn damage, and [color=red]{PotencyPerSecond * 3}[/color] toxin damage.";
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<ChemicalPropertyStatusSystem>()
-            .ApplyNerveStimulation(args.TargetEntity, ActualPotency, args.Reagent!.ID);
+        system.ChemicalPropertyStatus
+            .ApplyNerveStimulation(args.TargetEntity, args.ActualPotency, args.Reagent.ID);
 
-        var reduction = TimeSpan.FromSeconds(ActualPotency * (float)args.Scale);
-        var oldStatuses = args.EntityManager.System<StatusEffectQuerySystem>();
-        oldStatuses.TryRemoveTime(args.TargetEntity, "Stun", reduction);
-        oldStatuses.TryRemoveTime(args.TargetEntity, "KnockedDown", reduction);
+        var reduction = TimeSpan.FromSeconds(args.ActualPotency * args.Scale);
+        var oldStatuses = system.StatusEffectQuery;
+        var statuses = system.StatusEffects;
+        system.Stun.TryRemoveStunAndKnockdownTime(args.TargetEntity, reduction);
         oldStatuses.TryRemoveTime(args.TargetEntity, "Jitter", reduction);
-        oldStatuses.TryRemoveTime(args.TargetEntity, "Stutter", reduction);
+        statuses.TryRemoveTime(args.TargetEntity, StutteringSystem.StutterEffect, reduction);
 
-        var statuses = args.EntityManager.System<SharedStatusEffectsSystem>();
         statuses.TryAddTime(args.TargetEntity, RMCDazedSystem.StatusEffectDazed, -reduction);
         statuses.TryAddTime(args.TargetEntity, "StatusEffectDrowsiness", -reduction);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<ChemicalPropertyStatusSystem>()
+        system.ChemicalPropertyStatus
             .ApplyPainSensitivity(args.TargetEntity,
-                1f + MathF.Min(0.75f, ActualPotency * 0.1f),
+                1f + MathF.Min(0.75f, args.ActualPotency * 0.1f),
                 args.Reagent!.ID);
-        args.EntityManager.System<SharedPainShockSystem>().AddPainPulse(args.TargetEntity, potency * 2f);
+        system.PainShock.AddPainPulse(args.TargetEntity, potency * 2f);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<CMUChemicalMedicalSystem>()
+        system.ChemicalMedical
             .DamageOrgan<CMUBrainComponent>(args.TargetEntity, potency * 4f, ShockType);
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency;

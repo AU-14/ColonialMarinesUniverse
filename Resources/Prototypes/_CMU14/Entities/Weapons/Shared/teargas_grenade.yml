@@ -10,7 +10,7 @@
     sprite: _CMU14/Objects/Weapons/Grenades/M19TearGas.rsi
   - type: SpawnOnTrigger
     proto: CMU14TearGas
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 4.5
   - type: Tag
     tags:

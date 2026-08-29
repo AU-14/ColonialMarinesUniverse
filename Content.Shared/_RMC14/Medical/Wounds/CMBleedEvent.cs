@@ -1,4 +1,5 @@
 ﻿using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 
 namespace Content.Shared._RMC14.Medical.Wounds;
 

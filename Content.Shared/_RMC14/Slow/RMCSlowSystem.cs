@@ -6,16 +6,13 @@ using Content.Shared.Rejuvenate;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
 using Content.Shared.Stunnable;
-using Robust.Shared.Network;
 using Robust.Shared.Timing;
-using System.Linq;
 
 namespace Content.Shared._RMC14.Slow;
 
 public sealed partial class RMCSlowSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
-    [Dependency] private INetManager _net = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private TemporarySpeedModifiersSystem _temporarySpeed = default!;
@@ -57,14 +54,17 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
-        var expire = _timing.CurTime + duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * chemical.Multiplier;
+        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * MathF.Max(0f, chemical.Multiplier);
+        var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSlowdownComponent>(ent);
 
         if (refresh && expire > slowdown.ExpiresAt)
             slowdown.ExpiresAt = expire;
         else if (!refresh) // Stacks
-            slowdown.ExpiresAt += duration;
+            slowdown.ExpiresAt = TimeSpan.FromTicks(Math.Max(slowdown.ExpiresAt.Ticks, _timing.CurTime.Ticks)) + adjustedDuration;
+
+        Dirty(ent, slowdown);
 
         return true;
     }
@@ -79,35 +79,51 @@ public sealed partial class RMCSlowSystem : EntitySystem
 
         var chemical = new GetChemicalStunTimeMultiplierEvent();
         RaiseLocalEvent(ent, ref chemical);
-        var expire = _timing.CurTime + duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * chemical.Multiplier;
+        var adjustedDuration = duration * (ignoreDurationModifier ? 1 : slow.DurationMultiplier) * MathF.Max(0f, chemical.Multiplier);
+        var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCSuperSlowdownComponent>(ent);
 
         if (refresh && expire > slowdown.ExpiresAt)
             slowdown.ExpiresAt = expire;
         else if (!refresh) // Stacks
-            slowdown.ExpiresAt += duration;
+            slowdown.ExpiresAt = TimeSpan.FromTicks(Math.Max(slowdown.ExpiresAt.Ticks, _timing.CurTime.Ticks)) + adjustedDuration;
+
+        Dirty(ent, slowdown);
 
         return true;
     }
 
-    public bool TryRoot(EntityUid ent, TimeSpan duration, bool refresh = true)
+    public bool TryRoot(EntityUid ent, TimeSpan duration, bool refresh = true, bool applyChemical = false)
     {
-        var expire = _timing.CurTime + duration;
+        var adjustedDuration = duration;
+        if (applyChemical)
+        {
+            var chemical = new GetChemicalStunTimeMultiplierEvent();
+            RaiseLocalEvent(ent, ref chemical);
+            adjustedDuration *= MathF.Max(0f, chemical.Multiplier);
+
+            if (adjustedDuration <= TimeSpan.Zero)
+                return false;
+        }
+
+        var expire = _timing.CurTime + adjustedDuration;
 
         var slowdown = EnsureComp<RMCRootedComponent>(ent);
 
         if (refresh && expire > slowdown.ExpiresAt)
             slowdown.ExpiresAt = expire;
         else if (!refresh) // Stacks
-            slowdown.ExpiresAt += duration;
+            slowdown.ExpiresAt = TimeSpan.FromTicks(Math.Max(slowdown.ExpiresAt.Ticks, _timing.CurTime.Ticks)) + adjustedDuration;
+
+        Dirty(ent, slowdown);
 
         return true;
     }
 
     private void OnAdded<T>(Entity<T> ent, ref ComponentStartup args) where T : IComponent
     {
-        _speed.RefreshMovementSpeedModifiers(ent);
+        _speed.RefreshMovementSpeedModifiers((ent.Owner, null));
 
         if (HasComp<XenoComponent>(ent))
             return;
@@ -134,7 +150,7 @@ public sealed partial class RMCSlowSystem : EntitySystem
     private void OnRemove<T>(Entity<T> ent, ref ComponentRemove args) where T : Component
     {
         if (!TerminatingOrDeleted(ent))
-            _speed.RefreshMovementSpeedModifiers(ent);
+            _speed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnRejuvenate<T>(Entity<T> ent, ref RejuvenateEvent args) where T : IComponent

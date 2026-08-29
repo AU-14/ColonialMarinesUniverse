@@ -55,21 +55,22 @@
     - CMXenoQueen
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaNeuro
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -78,8 +79,10 @@
         Quantity: 1
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: Tackle
     min: 4
     max: 4
@@ -135,8 +138,10 @@
   - type: XenoScatteredSpit
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: RMCActionOrder
     id: CMXenoSentinel
 
@@ -170,8 +175,10 @@
   - type: XenoDrainSting
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 25
+      types:
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
   - type: XenoStrain
     name: rmc-xeno-toxic-name
     description: rmc-xeno-toxic-description

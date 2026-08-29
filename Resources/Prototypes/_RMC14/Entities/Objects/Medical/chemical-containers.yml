@@ -4,15 +4,15 @@
   id: RMCJug
   description: Used to contain a very large amount of chemicals or solutions. Chugging is extremely ill-advised.
   components:
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          maxVol: 200
+    - type: Solution
+      id: beaker
+      solution:
+        maxVol: 200
     - type: Sprite
       sprite: Objects/Specific/Chemistry/jug.rsi
       layers:
-        - state: jug
-        - state: jug1
+        - state: icon_empty
+        - state: fill-1
           map: [ "enum.SolutionContainerLayers.Fill" ]
           visible: false
     - type: Item
@@ -38,19 +38,23 @@
       interfaces:
         enum.TransferAmountUiKey.Key:
           type: TransferAmountBoundUserInterface
-    - type: Drink
+    - type: Edible
+      edible: Drink
       solution: beaker
+      destroyOnEmpty: false
+      utensil: None
     - type: Spillable
       solution: beaker
     - type: Appearance
     - type: SolutionContainerVisuals
       maxFillLevels: 6
-      fillBaseName: jug
+      fillBaseName: fill-
       inHandsMaxFillLevels: 5
       inHandsFillBaseName: -fill-
     - type: StaticPrice
       price: 60
     - type: Damageable
+    - type: Injurable
       damageContainer: Inorganic
     - type: Destructible
       thresholds:
@@ -96,12 +100,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-carbon
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCCarbon
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCCarbon
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -112,12 +116,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-fluorine
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCFluorine
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCFluorine
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -128,12 +132,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-chlorine
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCChlorine
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCChlorine
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -144,12 +148,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-rmc-aluminum
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCAluminum
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCAluminum
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -160,12 +164,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-phosphorus
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCPhosphorus
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCPhosphorus
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -176,12 +180,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-sulfur
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCSulfur
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCSulfur
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -192,12 +196,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-silicon
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCSilicon
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCSilicon
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -208,12 +212,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-hydrogen
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCHydrogen
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCHydrogen
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -224,12 +228,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-lithium
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCLithium
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCLithium
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -240,12 +244,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-sodium
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCSodium
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCSodium
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -256,12 +260,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-potassium
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCPotassium
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCPotassium
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -272,12 +276,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-radium
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCRadium
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCRadium
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -288,12 +292,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-iron
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCIron
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCIron
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -304,12 +308,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-copper
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCCopper
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCCopper
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -320,12 +324,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-gold
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCGold
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCGold
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -336,12 +340,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-uranium
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCUranium
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCUranium
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -352,12 +356,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-platinum
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCPlatinum
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCPlatinum
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -368,12 +372,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-mercury
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCMercury
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCMercury
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -384,12 +388,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-silver
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCSilver
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCSilver
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -400,12 +404,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-ethanol
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCEthanol
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCEthanol
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -416,12 +420,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-sugar
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCSugar
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCSugar
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -432,12 +436,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-nitrogen
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCNitrogen
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCNitrogen
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -448,12 +452,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-oxygen
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCOxygen
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCOxygen
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -464,12 +468,12 @@
   components:
     - type: Label
       currentLabel: reagent-name-water
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: Water
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: Water
+            Quantity: 200
 
 - type: entity
   parent: RMCJug
@@ -480,9 +484,9 @@
   components:
     - type: Label
       currentLabel: reagent-name-rmc-sulphuric-acid
-    - type: SolutionContainerManager
-      solutions:
-        beaker:
-          reagents:
-            - ReagentId: RMCSulphuricAcid
-              Quantity: 200
+    - type: Solution
+      id: beaker
+      solution:
+        reagents:
+          - ReagentId: RMCSulphuricAcid
+            Quantity: 200

@@ -45,17 +45,16 @@
     unlockAt: 540 # 9 minutes
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaCatecholamine
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaCatecholamine
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -87,8 +86,10 @@
   - type: MeleeWeapon
     attackRate: 0.75
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: Tackle
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.7
@@ -146,8 +147,10 @@
     resetMeleeCooldown: true
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 42
+      types:
+        Blunt: 14
+        Slash: 14
+        Piercing: 14
   - type: XenoEvolution
     strains:
     - RMCXenoLurkerVampire
@@ -192,26 +195,36 @@
     targetJitterTime: 1
     targetCameraShakeStrength: 1
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoTailJab
     attackEffect: RMCEffectTailHit
     damage:
-      groups:
-        Brute: 50
+      types:
+        Blunt: 16.66
+        Slash: 16.67
+        Piercing: 16.67
   - type: XenoFlurry
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: XenoHeadbite
     damage:
-      groups:
-        Brute: 60
+      types:
+        Blunt: 20
+        Slash: 20
+        Piercing: 20
   - type: MeleeWeapon
     attackRate: 0.93
     damage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: MovementSpeedModifier
     baseWalkSpeed: 3
     baseSprintSpeed: 6

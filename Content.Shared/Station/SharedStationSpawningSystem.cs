@@ -8,16 +8,13 @@ using Content.Shared.Preferences.Loadouts;
 using Content.Shared.Roles;
 using Content.Shared.Storage;
 using Content.Shared.Storage.EntitySystems;
-using Robust.Shared.Collections;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
-using Robust.Shared.Utility;
 
 namespace Content.Shared.Station;
 
 public abstract partial class SharedStationSpawningSystem : EntitySystem
 {
-    [Dependency] protected IPrototypeManager PrototypeManager = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] protected InventorySystem InventorySystem = default!;
     [Dependency] private SharedHandsSystem _handsSystem = default!;
@@ -25,19 +22,10 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     [Dependency] private SharedStorageSystem _storage = default!;
     [Dependency] private SharedTransformSystem _xformSystem = default!;
 
-    private EntityQuery<HandsComponent> _handsQuery;
-    private EntityQuery<InventoryComponent> _inventoryQuery;
-    private EntityQuery<StorageComponent> _storageQuery;
-    private EntityQuery<TransformComponent> _xformQuery;
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        _handsQuery = GetEntityQuery<HandsComponent>();
-        _inventoryQuery = GetEntityQuery<InventoryComponent>();
-        _storageQuery = GetEntityQuery<StorageComponent>();
-        _xformQuery = GetEntityQuery<TransformComponent>();
-    }
+    [Dependency] private EntityQuery<HandsComponent> _handsQuery = default!;
+    [Dependency] private EntityQuery<InventoryComponent> _inventoryQuery = default!;
+    [Dependency] private EntityQuery<StorageComponent> _storageQuery = default!;
+    [Dependency] private EntityQuery<TransformComponent> _xformQuery = default!;
 
     /// <summary>
     ///     Equips the data from a `RoleLoadout` onto an entity.
@@ -49,7 +37,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
         {
             foreach (var items in group.Value)
             {
-                if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutProto))
+                if (!ProtoMan.TryIndex(items.Prototype, out var loadoutProto))
                 {
                     Log.Error($"Unable to find loadout prototype for {items.Prototype}");
                     continue;
@@ -74,7 +62,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
             name = loadout.EntityName;
         }
 
-        if (string.IsNullOrEmpty(name) && PrototypeManager.TryIndex(roleProto.NameDataset, out var nameData))
+        if (string.IsNullOrEmpty(name) && ProtoMan.Resolve(roleProto.NameDataset, out var nameData))
         {
             name = Loc.GetString(_random.Pick(nameData.Values));
         }
@@ -96,7 +84,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
     /// </summary>
     public void EquipStartingGear(EntityUid entity, ProtoId<StartingGearPrototype>? startingGear, bool raiseEvent = true)
     {
-        PrototypeManager.TryIndex(startingGear, out var gearProto);
+        ProtoMan.Resolve(startingGear, out var gearProto);
         EquipStartingGear(entity, gearProto, raiseEvent);
     }
 
@@ -204,7 +192,7 @@ public abstract partial class SharedStationSpawningSystem : EntitySystem
         {
             foreach (var items in group.Value)
             {
-                if (!PrototypeManager.TryIndex(items.Prototype, out var loadoutPrototype))
+                if (!ProtoMan.Resolve(items.Prototype, out var loadoutPrototype))
                     return null;
 
                 var gear = ((IEquipmentLoadout) loadoutPrototype).GetGear(slot);

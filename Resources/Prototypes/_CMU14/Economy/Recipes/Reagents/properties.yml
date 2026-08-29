@@ -959,14 +959,14 @@
 
 - type: reagentProperty
   parent: Special
-  id: Optimized
+  id: Optimizing
   name: cmu-reagent-property-name-optimized
   description: cmu-reagent-property-desc-optimized
   code: OPM
   rarity: legendary
   value: 3
   category: metabolite
-  effectName: Optimized
+  effectName: Optimizing
 
 - type: reagentProperty
   parent: Special
@@ -1078,14 +1078,14 @@
 
 - type: reagentProperty
   parent: Special
-  id: Ravenous
+  id: Ravening
   name: cmu-reagent-property-name-ravenous
   description: cmu-reagent-property-desc-ravenous
   code: RAV
   rarity: admin
   value: 666
   category: anomalous
-  effectName: Ravenous
+  effectName: Ravening
 
 - type: reagentProperty
   parent: Special

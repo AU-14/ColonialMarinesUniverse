@@ -9,7 +9,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Body;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Timing;
 
@@ -411,14 +411,14 @@ public sealed partial class CMUBodyScannerCalibrationSystem : EntitySystem
             }
         }
 
-        if (_bloodstream.TryGetBloodSolution(patient, out var blood))
+        if (_bloodstream.TryGetBloodReadout(patient, out var blood, out var normalBlood))
         {
-            if (blood.MaxVolume > FixedPoint2.Zero && blood.Volume < blood.MaxVolume * (FixedPoint2) 0.75f)
+            if (normalBlood > FixedPoint2.Zero && blood < normalBlood * (FixedPoint2) 0.75f)
             {
                 AddPuzzleSignal(
                     signals,
                     "blood:low",
-                    Loc.GetString("cmu-body-scanner-signal-low-blood", ("blood", blood.Volume), ("max", blood.MaxVolume)),
+                    Loc.GetString("cmu-body-scanner-signal-low-blood", ("blood", blood), ("max", normalBlood)),
                     Loc.GetString("cmu-body-scanner-slice-detail-blood"),
                     SliceVitals,
                     2);

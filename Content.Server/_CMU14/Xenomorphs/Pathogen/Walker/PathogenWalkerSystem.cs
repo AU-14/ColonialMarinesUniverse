@@ -1,4 +1,5 @@
 using Content.Server.NPC.Systems;
+using Content.Server.Humanoid;
 using Content.Shared._CMU14.Xenomorphs.Pathogen.MycotoxinInject;
 using Content.Shared._CMU14.Xenomorphs.Pathogen.Walker;
 using Content.Shared._RMC14.Xenonids.Hive;
@@ -14,15 +15,18 @@ using Robust.Shared.Network;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
 using Content.Shared.Jittering;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Systems;
+using Content.Shared.Chat;
 using Content.Shared.StatusEffectNew;
 using Content.Server._RMC14.Language.Systems;
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Server.Ghost.Roles.Components;
 using Robust.Shared.Player;
 using Content.Server.Mind;
@@ -54,11 +58,12 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
     [Dependency] private readonly IPrototypeManager _protoMgr = default!;
     [Dependency] private readonly InventorySystem _inventory = default!;
     [Dependency] private readonly SharedJitteringSystem _jitter = default!;
-    [Dependency] private readonly SharedStatusEffectsSystem _status = default!;
+    [Dependency] private readonly StatusEffectsSystem _status = default!;
     [Dependency] private readonly LanguageSystem _language = default!;
     [Dependency] private readonly ISharedPlayerManager _player = default!;
     [Dependency] private readonly MindSystem _mind = default!;
     [Dependency] private readonly BlindableSystem _blindable = default!;
+    [Dependency] private readonly HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
 
     private static readonly ProtoId<NpcFactionPrototype> WalkerFaction = "CMU14PathogenWalker";
     private static readonly ProtoId<DamageGroupPrototype> BruteGroup = "Brute";
@@ -118,9 +123,9 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         EnsureComp<IntrinsicRadioReceiverComponent>(target);
         var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(target);
-        transmitter.Channels = new HashSet<string>() { "Hivemind" };
+        transmitter.Channels = [SharedChatSystem.HivemindChannel];
         var radio = EnsureComp<ActiveRadioComponent>(target);
-        radio.Channels = new HashSet<string>() { "Hivemind" };
+        radio.Channels = [SharedChatSystem.HivemindChannel];
         var tacIcon = EnsureComp<TacticalMapIconComponent>(target);
 
         EnsureComp<PullWhitelistComponent>(target);
@@ -355,12 +360,7 @@ public sealed partial class CMUPathogenWalkerSystem : EntitySystem
 
         _mobState.ChangeMobState(uid, MobState.Alive, null);
 
-        if (TryComp<HumanoidAppearanceComponent>(uid, out var humanoid))
-        {
-            humanoid.SkinColor = walker.WalkerSkinColor;
-            humanoid.EyeColor = walker.WalkerEyeColor;
-            Dirty(uid, humanoid);
-        }
+        _humanoidAppearance.TrySetColors(uid, walker.WalkerSkinColor, walker.WalkerEyeColor);
 
         _popup.PopupEntity(Loc.GetString("cmu14-walker-rise"), uid, PopupType.LargeCaution);
     }

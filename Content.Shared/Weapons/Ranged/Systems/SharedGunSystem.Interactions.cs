@@ -74,7 +74,7 @@ public abstract partial class SharedGunSystem
         if (component.SelectedMode == fire)
             return;
 
-        DebugTools.Assert((component.AvailableModes  & fire) != 0x0);
+        DebugTools.Assert((component.AvailableModes & fire) != 0x0);
         component.SelectedMode = fire;
 
         if (!Paused(uid))
@@ -89,11 +89,10 @@ public abstract partial class SharedGunSystem
         }
 
         Audio.PlayPredicted(component.SoundMode, uid, user);
-        Popup(Loc.GetString("gun-selected-mode", ("mode", GetLocSelector(fire))), uid, user);
+        PopupSystem.PopupEntity(Loc.GetString("gun-selected-mode", ("mode", GetLocSelector(fire))), uid, user);
 
         var ev = new RMCFireModeChangedEvent();
         RaiseLocalEvent(uid, ref ev);
-
         Dirty(uid, component);
     }
 
@@ -125,7 +124,7 @@ public abstract partial class SharedGunSystem
     private void OnGunSelected(EntityUid uid, GunComponent component, HandSelectedEvent args)
     {
         if (Timing.ApplyingState)
-             return;
+            return;
 
         if (component.FireRateModified <= 0)
             return;

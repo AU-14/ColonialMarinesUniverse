@@ -46,7 +46,9 @@
   name: large harpoon
   description: A weighted Yautja harpoon designed for brutal throws and close finishing work.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: harpoon
   - type: Item
@@ -86,7 +88,9 @@
   name: chainwhip
   description: A barbed chain weapon for pulling blood and keeping prey at a dangerous distance.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: chainwhip
   - type: Item
@@ -121,7 +125,9 @@
   name: clan sword
   description: A heavy Yautja clan blade with a broad cutting edge.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: clan_sword
   - type: Item
@@ -201,7 +207,9 @@
   name: dual war scythe
   description: A paired Yautja scythe weapon for ritual close combat.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: dual_war_scythe
   - type: Item
@@ -279,7 +287,9 @@
   name: combi-stick
   description: A collapsible Yautja spear with a chained haft for retrieval.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: combistick
   - type: Item
@@ -319,7 +329,9 @@
   name: war axe
   description: A swift Yautja axe designed to gouge and gore prey, with a chain fixed to the hilt.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: war_axe
   - type: Item
@@ -355,7 +367,9 @@
   name: ceremonial dagger
   description: A compact Yautja knife used for rites, trophies, and close kills.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: ceremonial_dagger
   - type: Item
@@ -417,6 +431,7 @@
         Piercing: 2
         Heat: 2
   - type: Damageable
+  - type: Injurable
     damageContainer: Shield
   - type: Destructible
     thresholds:
@@ -472,7 +487,9 @@
   name: hunter spear
   description: A spear of exquisite Yautja design, suited for two-handed thrusts.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: hunter_spear
   - type: Item
@@ -519,7 +536,9 @@
   name: war glaive
   description: Two huge blades on a metallic pole, carved with mysterious writing.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: war_glaive
   - type: Item
@@ -607,7 +626,9 @@
   name: duelling blade
   description: A primitive but deadly Yautja blade for ritual combat.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: duelling_blade
   - type: Item
@@ -671,7 +692,9 @@
   name: duelling hatchet
   description: A short ceremonial hatchet with a keen edge for ritual combat.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: duelling_hatchet
   - type: Item
@@ -704,7 +727,9 @@
   name: duelling knife
   description: A crude ritual knife studded with razor-sharp teeth.
   components:
-  - type: Sharp
+  - type: Tool
+    qualities:
+    - Slicing
   - type: Sprite
     state: duelling_knife
   - type: Item
@@ -834,14 +859,13 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_CMU14/Yautja/Weapons/Plasma/pred_plasma_shot.wav
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: CMUYautjaPlasmaRifleBolt
     fireCost: 175
   - type: Battery
     maxCharge: 1000
     startingCharge: 1000
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 35
   - type: Wieldable
     wieldedInhandPrefix: plasma_rifle
@@ -887,13 +911,12 @@
     - SemiAuto
     soundGunshot:
       path: /Audio/_CMU14/Yautja/Weapons/Plasma/pulse3.wav
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: CMUYautjaPlasmaPistolBolt
     fireCost: 125
   - type: Battery
     maxCharge: 500
     startingCharge: 500
   - type: BatterySelfRecharger
-    autoRecharge: true
     autoRechargeRate: 25
   - type: Appearance

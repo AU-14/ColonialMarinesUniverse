@@ -7,7 +7,7 @@ using Robust.Shared.Prototypes;
 namespace Content.Shared._CMU14.Medical.Treatment.Effects;
 
 [UsedImplicitly]
-public sealed partial class CMUBoneRegenBoostEffect : EntityEffect
+public sealed partial class CMUBoneRegenBoostEffect : EntityEffectBase<CMUBoneRegenBoostEffect>
 {
     [DataField]
     public float Multiplier = 1.5f;
@@ -15,28 +15,34 @@ public sealed partial class CMUBoneRegenBoostEffect : EntityEffect
     [DataField]
     public float DurationSeconds = 15f;
 
-    public override void Effect(EntityEffectBaseArgs args)
-    {
-        if (args is not EntityEffectReagentArgs reagent)
-            return;
-        var entMan = args.EntityManager;
-        var status = entMan.System<SharedStatusEffectsSystem>();
-
-        if (!status.TryAddStatusEffectDuration(reagent.TargetEntity,
-                "StatusEffectCMUBoneRegenBoost", out var effect,
-                TimeSpan.FromSeconds(DurationSeconds)))
-        {
-            return;
-        }
-
-        var boost = entMan.EnsureComponent<BoneRegenBoostComponent>(effect.Value);
-        if (Multiplier > boost.Multiplier)
-        {
-            boost.Multiplier = Multiplier;
-            entMan.Dirty(effect.Value, boost);
-        }
-    }
-
-    protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => Loc.GetString("cmu-medical-bone-regen-boost-guidebook", ("multiplier", Multiplier));
+}
+
+public sealed partial class CMUBoneRegenBoostEntityEffectSystem
+    : EntityEffectSystem<MetaDataComponent, CMUBoneRegenBoostEffect>
+{
+    [Dependency] private readonly StatusEffectsSystem _status = default!;
+
+    protected override void Effect(
+        Entity<MetaDataComponent> entity,
+        ref EntityEffectEvent<CMUBoneRegenBoostEffect> args)
+    {
+        if (args.ReagentContext == null ||
+            !_status.TryAddStatusEffectDuration(
+                entity,
+                "StatusEffectCMUBoneRegenBoost",
+                out var status,
+                TimeSpan.FromSeconds(args.Effect.DurationSeconds)))
+        {
+            return;
+        }
+
+        var boost = EnsureComp<BoneRegenBoostComponent>(status.Value);
+        if (args.Effect.Multiplier <= boost.Multiplier)
+            return;
+
+        boost.Multiplier = args.Effect.Multiplier;
+        Dirty(status.Value, boost);
+    }
 }

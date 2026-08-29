@@ -4,6 +4,7 @@ using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
 using Content.Shared.Medical;
@@ -64,11 +65,11 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
     /// </summary>
     public bool TryApplyElectrogenetic(EntityUid target, ref DamageSpecifier heal)
     {
-        if (!_rmcBloodstream.TryGetChemicalSolution(target, out var solutionEnt, out _))
+        if (!_rmcBloodstream.TryGetChemicalSolution(target, out var solutionEnt, out var chemicals))
             return false;
 
         (Reagent Reagent, FixedPoint2 Heal, Electrogenetic Electrogenetic)? highest = null;
-        foreach (var quantity in solutionEnt.Comp.Solution.Contents)
+        foreach (var quantity in chemicals.Contents)
         {
             if (!_rmcReagent.TryIndex(quantity.Reagent.Prototype, out var reagent))
                 continue;
@@ -76,7 +77,7 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
             if (reagent.Metabolisms == null)
                 continue;
 
-            foreach (var effects in reagent.Metabolisms.Values)
+            foreach (var effects in reagent.Metabolisms.Metabolisms.Values)
             {
                 foreach (var effect in effects.Effects)
                 {
@@ -92,7 +93,7 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
         if (highest == null)
             return false;
 
-        heal += highest.Value.Electrogenetic.CalculateHeal(_damageable, target, EntityManager);
+        heal += highest.Value.Electrogenetic.CalculateHeal(_rmcDamageable, target);
         _solutionContainer.RemoveReagent(solutionEnt, highest.Value.Reagent.ID, 1);
         return true;
     }
@@ -107,14 +108,29 @@ public sealed partial class RMCDefibrillatorSystem : EntitySystem
 
     private void OnDefibrillatorAudioTerminating(Entity<RMCDefibrillatorAudioComponent> ent, ref EntityTerminatingEvent args)
     {
-        if (TryComp(ent.Comp.Defibrillator, out DefibrillatorComponent? defibrillator))
+        if (TryComp(ent.Comp.Defibrillator, out DefibrillatorComponent? defibrillator) &&
+            defibrillator.ChargeSoundEntity == ent.Owner)
             defibrillator.ChargeSoundEntity = null;
+    }
+
+    public void StartChargingAudio(Entity<DefibrillatorComponent> defib, EntityUid user)
+    {
+        StopChargingAudio(defib);
+
+        defib.Comp.ChargeSoundEntity = _audio.PlayPredicted(defib.Comp.ChargeSound, defib.Owner, user)?.Entity;
+        if (defib.Comp.ChargeSoundEntity is not { } sound)
+            return;
+
+        var audio = EnsureComp<RMCDefibrillatorAudioComponent>(sound);
+        audio.Defibrillator = defib.Owner;
+        Dirty(sound, audio);
     }
 
     public void StopChargingAudio(Entity<DefibrillatorComponent> defib)
     {
-        _audio.Stop(defib.Comp.ChargeSoundEntity);
-        QueueDel(defib.Comp.ChargeSoundEntity);
+        var sound = defib.Comp.ChargeSoundEntity;
         defib.Comp.ChargeSoundEntity = null;
+        _audio.Stop(sound);
+        QueueDel(sound);
     }
 }

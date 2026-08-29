@@ -7,6 +7,7 @@ using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Unrevivable;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Configuration;

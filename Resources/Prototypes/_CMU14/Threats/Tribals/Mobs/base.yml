@@ -3,7 +3,9 @@
 - type: entity
   save: false
   abstract: true
-  parent: RMCBaseMobSpeciesOrganic
+  parent:
+  - AppearanceHuman
+  - RMCBaseMobSpeciesOrganic
   id: CMUMobTribal
   name: Tribal
   suffix: CMU14

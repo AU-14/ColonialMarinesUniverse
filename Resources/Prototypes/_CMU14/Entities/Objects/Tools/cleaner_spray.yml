@@ -6,9 +6,15 @@
   components:
   - type: Sprite
     sprite: _AU14/Objects/Tools/cleaner_spray.rsi
-    state: cleaner
+    layers:
+    - state: cleaner
   - type: Item
     sprite: _AU14/Objects/Tools/cleaner_spray.rsi
+  - type: SolutionContainerVisuals
+    maxFillLevels: 0
+    fillBaseName: null
+    inHandsMaxFillLevels: 0
+    inHandsFillBaseName: null
 
 - type: entity
   parent: AU14SprayCleaner
@@ -18,10 +24,10 @@
   components:
   - type: Sprite
     sprite: _AU14/Objects/Tools/cleaner_spray.rsi
-    state: cleaner_large
-  - type: SolutionContainerManager
-    solutions:
-      spray:
+    layers:
+    - state: cleaner_large
+  - type: Solution
+    solution:
         maxVol: 300
         reagents:
         - ReagentId: SpaceCleaner
@@ -35,16 +41,16 @@
   components:
   - type: Sprite
     sprite: _AU14/Objects/Tools/cleaner_spray.rsi
-    state: cleaner_special
-  - type: SolutionContainerManager
-    solutions:
-      spray:
-        maxVol: 300
-        reagents:
-        - ReagentId: SpaceCleaner
-          Quantity: 300
+    layers:
+    - state: cleaner_special
+  - type: Solution
+    id: spray
+    solution:
+      maxVol: 300
+      reagents:
+      - ReagentId: SpaceCleaner
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: spray
     generated:
       reagents:
       - ReagentId: SpaceCleaner

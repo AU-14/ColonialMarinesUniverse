@@ -15,10 +15,12 @@ using Content.Shared.AU14.Hospital;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.Atmos.Rotting;
 using Content.Shared.Bed.Sleep;
-using Content.Shared.Body.Organ;
+using Content.Shared.Body;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Inventory;
 using Content.Shared.Mobs;
@@ -61,7 +63,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPainShockSystem _pain = default!;
     [Dependency] private StackSystem _stack = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
 
     private static readonly ProtoId<DamageTypePrototype> Blunt = "Blunt";
     private static readonly ProtoId<DamageTypePrototype> Slash = "Slash";
@@ -1047,7 +1049,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
     private bool HasPatientPainSuppression(EntityUid patient)
     {
-        return HasComp<PainNumbnessComponent>(patient) ||
+        return _statusEffects.HasEffectComp<PainNumbnessStatusEffectComponent>(patient) ||
             _pain.GetAccumulationSuppression(patient) >= 0.5f ||
             _pain.GetTierSuppression(patient) >= 2;
     }
@@ -1119,7 +1121,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
         if (ent.Comp.LastPayout > 0)
         {
-            _stack.SpawnMultiple(ent.Comp.CashPrototype, ent.Comp.LastPayout, ent);
+            _stack.SpawnMultipleNextToOrDrop(ent.Comp.CashPrototype, ent.Comp.LastPayout, ent.Owner);
             _audio.PlayPvs(ent.Comp.RewardSound, ent);
         }
 
@@ -1223,7 +1225,7 @@ public sealed partial class HospitalEmergencySystem : EntitySystem
 
         if (TryComp<DamageableComponent>(patient, out var damageable))
         {
-            foreach (var damage in damageable.Damage.DamageDict.Values)
+            foreach (var damage in _damage.GetAllDamage((patient, damageable)).DamageDict.Values)
             {
                 if (damage > 0)
                 {

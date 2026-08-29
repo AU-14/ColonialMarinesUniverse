@@ -44,8 +44,10 @@
     targetJitterTime: 1
     targetCameraShakeStrength: 1
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoHeadbutt
     damage:
       types:
@@ -109,8 +111,10 @@
   - type: MeleeWeapon
     attackRate: 2.5
     damage:
-      groups:
-        Brute: 55
+      types:
+        Blunt: 18.33
+        Slash: 18.33
+        Piercing: 18.34
   - type: CMArmor
     explosionArmor: 50
     xenoArmor: 15

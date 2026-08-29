@@ -7,7 +7,6 @@ using Content.Server._CMU14.Threats;
 using Content.Server.RoundEnd;
 using Content.Server.Discord;
 using Content.Server.GameTicking.Events;
-using Content.Server.Ghost;
 using Content.Server.Maps;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Power;
@@ -19,9 +18,11 @@ using Content.Shared.AU14.util; // CMU14
 using Content.Shared.CCVar;
 using Content.Shared.Database;
 using Content.Shared.GameTicking;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Players;
 using Content.Shared.Preferences;
+using Content.Shared.Roles.Components;
 using JetBrains.Annotations;
 using Prometheus;
 using Robust.Shared.Asynchronous;
@@ -30,7 +31,6 @@ using Robust.Shared.ContentPack;
 using Robust.Shared.EntitySerialization;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.Map;
-using Robust.Shared.Map.Components;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Random;
@@ -153,8 +153,9 @@ namespace Content.Server.GameTicking
             }
 
             if (CurrentPreset?.MapPool != null &&
-                _prototypeManager.TryIndex<GameMapPoolPrototype>(CurrentPreset.MapPool, out var pool) &&
-                maps.Count > 0 && !pool.Maps.Contains(maps[0].ID))
+                maps.Count > 0 &&
+                ProtoMan.TryIndex<GameMapPoolPrototype>(CurrentPreset.MapPool, out var pool) &&
+                !pool.Maps.Contains(maps[0].ID))
             {
                 var msg = Loc.GetString("game-ticker-start-round-invalid-map",
                     ("map", maps[0].MapName),
@@ -209,9 +210,9 @@ namespace Content.Server.GameTicking
                             var comp = AddComp<ShipFactionComponent>(grid);
                             comp.Faction = "govfor";
                         }
-                        if (!HasComp<Content.Server.Station.Components.BecomesStationComponent>(grid))
+                        if (!HasComp<Content.Shared.Station.Components.BecomesStationComponent>(grid))
                         {
-                            AddComp<Content.Server.Station.Components.BecomesStationComponent>(grid);
+                            AddComp<Content.Shared.Station.Components.BecomesStationComponent>(grid);
                         }
                     }
                 }
@@ -226,9 +227,9 @@ namespace Content.Server.GameTicking
                             var comp = AddComp<ShipFactionComponent>(grid);
                             comp.Faction = "opfor";
                         }
-                        if (!HasComp<Content.Server.Station.Components.BecomesStationComponent>(grid))
+                        if (!HasComp<Content.Shared.Station.Components.BecomesStationComponent>(grid))
                         {
-                            AddComp<Content.Server.Station.Components.BecomesStationComponent>(grid);
+                            AddComp<Content.Shared.Station.Components.BecomesStationComponent>(grid);
                         }
                     }
                 }
@@ -498,7 +499,11 @@ namespace Content.Server.GameTicking
                 if (_prefsManager.TryGetCachedPreferences(userId, out var preferences))
                     profile = (HumanoidCharacterProfile)preferences.SelectedCharacter;
                 else
-                    profile = HumanoidCharacterProfile.Random();
+                {
+                    var speciesToBlacklist =
+                        new HashSet<string>(_cfg.GetCVar(CCVars.ICNewAccountSpeciesBlacklist).Split(","));
+                    profile = HumanoidCharacterProfile.Random(speciesToBlacklist);
+                }
                 readyPlayerProfiles.Add(userId, profile);
             }
 

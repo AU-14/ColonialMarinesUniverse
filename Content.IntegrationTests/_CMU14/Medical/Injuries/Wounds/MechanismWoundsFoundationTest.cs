@@ -1,3 +1,5 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.Bones;
 using Content.Shared._CMU14.Medical.Diagnostics.Examine;
@@ -9,6 +11,7 @@ using Content.Server._CMU14.Medical.Injuries.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -1355,3 +1358,5 @@ public sealed class MechanismWoundsFoundationTest
         }
     }
 }
+
+#pragma warning restore RA0002

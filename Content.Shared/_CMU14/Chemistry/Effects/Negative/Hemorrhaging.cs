@@ -12,6 +12,7 @@ using Content.Shared.Atmos.Components;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -32,18 +33,17 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
                $"Critical overdoses have a [color=red]{PotencyPerSecond * 10}%[/color] chance to cause internal bleeding in all limbs.";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entman = args.EntityManager;
-        var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
-        var woundSys = entman.System<SharedCMUWoundsSystem>();
+        var medicalIndex = system.MedicalBodyIndex;
+        var woundSys = system.Wounds;
         var targ = args.TargetEntity;
         List<EntityUid> bparts = [];
         foreach (var item in medicalIndex.GetBodyParts(targ))
             bparts.Add(item.Owner);
         if (bparts.Count == 0)
             return;
-        var random = IoCManager.Resolve<IRobustRandom>();
+        var random = system.Random;
         var part = random.Pick(bparts);
         //TODO if (entman.TryComp<LimbComponent>(part, out var limb) && (limb.Robot | limb.Synth)) return;
         if (random.Prob(((float)potency * 5f) / 100f))
@@ -53,34 +53,29 @@ public sealed partial class Hemorrhaging : RMCChemicalEffect
         //TODO: coughing up blood
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entman = args.EntityManager;
-
-        var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
-        var orgSys = entman.System<SharedOrganHealthSystem>();
+        var medicalIndex = system.MedicalBodyIndex;
         var targ = args.TargetEntity;
         List<EntityUid> orgs = [];
         foreach (var item in medicalIndex.GetOrgans(targ))
             orgs.Add(item.Owner);
         if (orgs.Count == 0)
             return;
-        var random = IoCManager.Resolve<IRobustRandom>();
+        var random = system.Random;
         var org = random.Pick(orgs);
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency * 0.5;
         var ev = new OrganDamagedEvent(targ, org, damage, OrganDamageSource.Reagent);
-        entman.EventBus.RaiseLocalEvent(org, ref ev);
+        system.RaiseOrganDamaged(org, ref ev);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var entman = args.EntityManager;
-
-        var medicalIndex = entman.System<CMUMedicalBodyIndexSystem>();
-        var woundSys = entman.System<SharedCMUWoundsSystem>();
+        var medicalIndex = system.MedicalBodyIndex;
+        var woundSys = system.Wounds;
         var targ = args.TargetEntity;
-        var random = IoCManager.Resolve<IRobustRandom>();
+        var random = system.Random;
         if (random.Prob((10f * (float)potency) / 100f))
         {
             foreach (var item in medicalIndex.GetBodyParts(targ))

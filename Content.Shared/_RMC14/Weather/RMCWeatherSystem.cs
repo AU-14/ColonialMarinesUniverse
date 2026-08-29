@@ -24,7 +24,6 @@ public sealed partial class RMCWeatherSystem : EntitySystem
     [Dependency] private SharedWeatherSystem _weather = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private INetManager _net = default!;
-    [Dependency] private IPrototypeManager _proto = default!;
     [Dependency] private RMCAmbientLightSystem _rmcLight = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
@@ -111,12 +110,9 @@ public sealed partial class RMCWeatherSystem : EntitySystem
             if(cycle.LastEventCooldown <= TimeSpan.Zero)
             {
                 var weatherPick = _random.Pick(cycle.WeatherEvents);
-                _proto.TryIndex(weatherPick.WeatherType, out var weatherProto);
-                var endTime = _timing.CurTime + weatherPick.Duration;
-
                 cycle.CurrentEvent = weatherPick;
                 cycle.CurrentEvent.DurationRemaining = weatherPick.Duration;
-                SetWeatherForMapOrZNetwork(uid, weatherProto, endTime);
+                SetWeatherForMapOrZNetwork(uid, weatherPick.WeatherType, weatherPick.Duration);
 
                 var minTimeVariance = (-cycle.MinTimeVariance * 0.5) + _random.Next(cycle.MinTimeVariance);
                 cycle.LastEventCooldown = weatherPick.Duration + cycle.MinTimeBetweenEvents + minTimeVariance;
@@ -142,12 +138,12 @@ public sealed partial class RMCWeatherSystem : EntitySystem
         }
     }
 
-    private void SetWeatherForMapOrZNetwork(EntityUid uid, WeatherPrototype? weatherProto, TimeSpan? endTime)
+    private void SetWeatherForMapOrZNetwork(EntityUid uid, EntProtoId? weatherProto, TimeSpan? duration)
     {
         var xform = Transform(uid);
         if (xform.MapUid is not { } mapUid)
         {
-            _weather.SetWeather(xform.MapID, weatherProto, endTime);
+            _weather.TrySetWeather(xform.MapID, weatherProto, out _, duration);
             return;
         }
 
@@ -158,7 +154,7 @@ public sealed partial class RMCWeatherSystem : EntitySystem
             if (!TryComp<MapComponent>(zMap, out var mapComp))
                 continue;
 
-            _weather.SetWeather(mapComp.MapId, weatherProto, endTime);
+            _weather.TrySetWeather(mapComp.MapId, weatherProto, out _, duration);
         }
     }
 }

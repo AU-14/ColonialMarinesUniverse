@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.NightVision;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Humanoid;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.Events;
@@ -25,7 +26,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
 {
     [Dependency] private SharedActionsSystem _actions = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _humanoidLayers = default!;
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -310,7 +311,7 @@ public sealed partial class YautjaCloakSystem : EntitySystem
     {
         foreach (var layer in layers)
         {
-            _humanoid.SetLayerVisibility(user, layer, showLayers);
+            _humanoidLayers.SetPermanentLayerOcclusion(user, layer, !showLayers);
         }
     }
 

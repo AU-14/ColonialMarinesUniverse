@@ -19,15 +19,16 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
     public sealed partial class GhostRolesWindow : DefaultWindow
     {
         [Dependency] private IConfigurationManager _cfg = default!;
+        [Dependency] private IEntityManager _entityManager = default!;
         [Dependency] private IStylesheetManager _stylesheetManager = default!;
 
         public event Action<GhostRoleInfo>? OnRoleRequestButtonClicked;
         public event Action<GhostRoleInfo>? OnRoleFollow;
 
         private readonly List<EntryState> _entries = new();
+        private readonly List<EntityUid> _previewDummies = new();
         private string _searchText = string.Empty;
         private int _availableRoleCount;
-        private int _previousAvailableRoleCount;
         private bool _updatingEntries;
         private Vector2 _entryUpdateScrollValue;
 
@@ -48,6 +49,7 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
 
             _cfg.UnsubValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.UnsubValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);
+            ClearPreviewDummies();
         }
 
         private void OnCrtUiEnabledChanged(bool _)
@@ -68,9 +70,10 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
 
         public void ClearEntries()
         {
+            ClearPreviewDummies();
             _availableRoleCount = 0;
             _entries.Clear();
-            EntryContainer.DisposeAllChildren();
+            EntryContainer.RemoveAllChildren();
             if (!_updatingEntries)
                 UpdateVisibleEntries();
         }
@@ -95,7 +98,8 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
                 description,
                 ghostRoleInfos[0].Entity,
                 ghostRoleInfos[0].EntityPrototype,
-                ghostRoleInfos[0].JobPrototype);
+                ghostRoleInfos[0].JobPrototype,
+                _previewDummies.Add);
             var buttons = new GhostRoleButtonsBox(hasAccess, reason, ghostRoleInfos, spriteSystem);
             buttons.OnRoleSelected += OnRoleRequestButtonClicked;
             buttons.OnRoleFollow += OnRoleFollow;
@@ -111,7 +115,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
 
         public void BeginEntryUpdate()
         {
-            _previousAvailableRoleCount = _availableRoleCount;
             _entryUpdateScrollValue = RoleScroll.GetScrollValue(ignoreVisible: true);
             _updatingEntries = true;
             ClearEntries();
@@ -151,6 +154,16 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls.Roles
         {
             _searchText = args.Text;
             UpdateVisibleEntries();
+        }
+
+        private void ClearPreviewDummies()
+        {
+            foreach (var dummy in _previewDummies)
+            {
+                _entityManager.DeleteEntity(dummy);
+            }
+
+            _previewDummies.Clear();
         }
 
         private readonly record struct EntryState(Control Control, string SearchText);

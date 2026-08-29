@@ -1,13 +1,14 @@
+using Content.Server.Nutrition.EntitySystems;
 using Content.Shared._RMC14.Damage;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Nutrition.Components;
 using Content.Shared.Nutrition.EntitySystems;
 using Robust.Shared.Timing;
 using ApeDestroyComponent = Content.Shared._CMU14.Threats.Mobs.Ape.ApeDestroyComponent;
-
-// using Content.Shared.Damage.Components; // unused
 
 namespace Content.Server._CMU14.Threats.Mobs.Ape;
 
@@ -19,7 +20,7 @@ namespace Content.Server._CMU14.Threats.Mobs.Ape;
 public sealed partial class ApeHungerRegenSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private ServerSatiationSystem _satiation = default!;
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MobThresholdSystem _mobThreshold = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
@@ -41,22 +42,23 @@ public sealed partial class ApeHungerRegenSystem : EntitySystem
 
         _nextUpdate = _timing.CurTime + UpdateInterval;
 
-        EntityQueryEnumerator<ApeDestroyComponent, HungerComponent> query
-            = EntityQueryEnumerator<ApeDestroyComponent, HungerComponent>();
-        while (query.MoveNext(out EntityUid uid, out _, out HungerComponent? hungerComp))
+        var query = EntityQueryEnumerator<ApeDestroyComponent, SatiationComponent>();
+        while (query.MoveNext(out EntityUid uid, out _, out SatiationComponent? satiation))
         {
             // Only run on alive mobs
             if (_mob.IsDead(uid))
                 continue;
 
-            // Check hunger value as fraction of maximum hunger (Overfed threshold)
-            float currentHunger = _hunger.GetHunger(hungerComp);
-            float maxHunger = hungerComp.Thresholds[HungerThreshold.Overfed];
-
-            if (maxHunger <= 0)
+            // Preserve the old hunger-only 50% gate using the current hunger satiation's maximum.
+            var entity = new Entity<SatiationComponent>(uid, satiation);
+            if (_satiation.GetValueOrNull(entity, SatiationSystem.Hunger) is not { } currentHunger ||
+                _satiation.GetMaximumValue(entity, SatiationSystem.Hunger) is not { } maxHunger ||
+                maxHunger <= 0)
+            {
                 continue;
+            }
 
-            float hungerFraction = currentHunger / maxHunger;
+            var hungerFraction = currentHunger / maxHunger;
 
             if (hungerFraction < MinimumHungerFraction)
                 continue;

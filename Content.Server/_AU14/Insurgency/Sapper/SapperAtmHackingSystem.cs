@@ -14,6 +14,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
+using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 
 namespace Content.Server._AU14.Insurgency.Sapper;
@@ -296,7 +297,7 @@ public sealed class SapperAtmHackingSystem : EntitySystem
 
     private bool TryCommitSiphon(
         string sourceKind,
-        string cashPrototype,
+        EntProtoId cashPrototype,
         EntityUid source,
         EntityUid recipient,
         List<SiphonDebit> debits,
@@ -306,7 +307,9 @@ public sealed class SapperAtmHackingSystem : EntitySystem
         List<EntityUid> payout;
         try
         {
-            payout = amount > 0 ? _stack.SpawnMultiple(cashPrototype, amount, source) : new List<EntityUid>();
+            payout = amount > 0
+                ? _stack.SpawnMultipleNextToOrDrop(cashPrototype, amount, source)
+                : new List<EntityUid>();
         }
         catch (Exception e)
         {

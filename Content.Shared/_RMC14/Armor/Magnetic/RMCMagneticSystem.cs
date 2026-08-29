@@ -85,10 +85,10 @@ public sealed partial class RMCMagneticSystem : EntitySystem
 
             foreach (var slotContainer in _container.GetAllContainers(slotItem))
             {
-                if (!_slots.TryGetSlot(slotItem, slotContainer.ID, out var itemSlot, itemSlotsComp))
+                if (!_slots.TryGetSlot((slotItem, itemSlotsComp), slotContainer.ID, out var itemSlot))
                     continue;
 
-                if (!_slots.CanInsert(ent, args.Args.Item, args.Args.User, itemSlot, false))
+                if (!_slots.CanInsert(ent.Owner, itemSlot, args.Args.Item, args.Args.User, false))
                     continue;
 
                 args.Args.Magnetizer = ent;

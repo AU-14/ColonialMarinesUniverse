@@ -45,6 +45,7 @@
   - type: PlaceableSurface
     isPlaceable: false
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralInorganic
   - type: Corrodible
     timeToApply: 4

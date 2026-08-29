@@ -1,4 +1,5 @@
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Content.Shared._RMC14.Chemistry.Effects;
@@ -20,13 +21,13 @@ public sealed partial class ReduceChemicalIrritant : RMCChemicalEffect
     }
 
     protected override void Tick(
+        RMCChemicalEffectSystem system,
         DamageableSystem damageable,
         FixedPoint2 potency,
-        EntityEffectReagentArgs args)
+        RMCReagentEffectArgs args)
     {
-        var irritantSystem = args.EntityManager.System<SharedChemicalIrritantSystem>();
         float reduction = Amount * potency.Float();
 
-        irritantSystem.ReduceIrritant(args.TargetEntity, reduction);
+        system.ReduceChemicalIrritant(args.TargetEntity, reduction);
     }
 }

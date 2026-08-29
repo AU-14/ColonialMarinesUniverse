@@ -168,7 +168,7 @@ public sealed partial class GunToggleableAutoFireSystem : EntitySystem
                 }
 
                 if (_net.IsServer)
-                    _gun.AttemptShoot(container.Owner, uid, gun, target.Owner.ToCoordinates());
+                    _gun.AttemptShoot(container.Owner, (uid, gun), target.Owner.ToCoordinates());
 
                 active.NextFire = time + active.Cooldown;
                 break;

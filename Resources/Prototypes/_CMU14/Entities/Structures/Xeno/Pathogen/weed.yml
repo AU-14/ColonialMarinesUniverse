@@ -93,13 +93,17 @@
   - type: QueenEyeVision
   - type: Damageable
     damage:
-      groups:
-        Brute: 6
+      types:
+        Blunt: 2
+        Slash: 2
+        Piercing: 2
   - type: XenoWeeds
     spawns: CMU14XenoMyceliumWeeds
     healOnStopSpreading:
-      groups:
-        Brute: -6
+      types:
+        Blunt: -2
+        Slash: -2
+        Piercing: -2
   - type: Tag
     tags:
     - XenoWeedNode
@@ -241,8 +245,10 @@
   - type: XenoWeeds
     spawns: CMU14XenoMyceliumHiveWeeds
     healOnStopSpreading:
-      groups:
-        Brute: -6
+      types:
+        Blunt: -2
+        Slash: -2
+        Piercing: -2
   - type: XenoConstructionPlasmaCost
     plasma: 75
   - type: Tag
@@ -311,6 +317,7 @@
   - type: HiveMember
   - type: XenoFriendly
   - type: Damageable
+  - type: Injurable
     damageContainer: StructuralXeno
   - type: Destructible
     thresholds:

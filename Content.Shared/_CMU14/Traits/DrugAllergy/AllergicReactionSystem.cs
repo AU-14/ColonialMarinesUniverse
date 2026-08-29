@@ -2,6 +2,7 @@ using Content.Shared._RMC14.Body;
 using Content.Shared._RMC14.Xenonids.Screech;
 using Content.Shared.Alert;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Jittering;

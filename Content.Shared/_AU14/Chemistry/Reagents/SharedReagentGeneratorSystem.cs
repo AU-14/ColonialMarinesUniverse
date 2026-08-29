@@ -138,7 +138,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         medicine.Add("metabolismRate", metabRate.ToString());
         medicine.Add("effects", effects);
         MappingDataNode metabolisms = [];
-        metabolisms.Add("Medicine", medicine);
+        metabolisms.Add("Bloodstream", medicine);
         reagent.Add("metabolisms", metabolisms);
         //string yamlstr = reagent.ToString();
         string yamlstr =
@@ -162,7 +162,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
             $"  reward: {args.ScanPointYield}\n" +
             (worksOnTheDead ? "  worksOnTheDead: true\n" : string.Empty) +
             $"  metabolisms:\n" +
-            $"    Medicine:\n" +
+            $"    Bloodstream:\n" +
             $"      metabolismRate: {metabRate.ToString()}\n" +
             $"      effects:\n{effectyml}";
         //_sawmill.Info(yamlstr);
@@ -248,7 +248,7 @@ public abstract partial class SharedReagentGeneratorSystem : EntitySystem
         List<FixedPoint2> metabs = [];
         if (proto.Metabolisms is not null)
         {
-            foreach (var metab in proto.Metabolisms.Values)
+            foreach (var metab in proto.Metabolisms.Metabolisms.Values)
             {
                 metabs.Add(metab.MetabolismRate);
                 foreach (var effect in metab.Effects)

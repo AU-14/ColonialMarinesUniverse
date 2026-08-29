@@ -34,8 +34,8 @@
     - KillAllColonistRule
     - KillAllXenoRule
   timing:
-    delayMinSeconds: 1200
-    delayMaxSeconds: 2400
+    delayMinSeconds: 900
+    delayMaxSeconds: 1800
 
 - type: roundGroup
   id: ColonyFallCultistMarkerRoundGroup
@@ -78,8 +78,8 @@
     - KillAllColonistRule
     - KillAllXenoRule
   timing:
-    delayMinSeconds: 1200
-    delayMaxSeconds: 2400
+    delayMinSeconds: 900
+    delayMaxSeconds: 1800
 
 - type: roundGroup
   id: ColonyFallXenoRoundGroup
@@ -121,8 +121,8 @@
     - KillAllColonistRule
     - KillAllXenoRule
   timing:
-    delayMinSeconds: 1200
-    delayMaxSeconds: 2400
+    delayMinSeconds: 900
+    delayMaxSeconds: 1800
 
 - type: roundGroup
   id: ColonyFallAbominationRoundGroup
@@ -181,8 +181,8 @@
     - KillAllColonistRule
     - KillAllAbominationsRule
   timing:
-    delayMinSeconds: 1200
-    delayMaxSeconds: 2400
+    delayMinSeconds: 900
+    delayMaxSeconds: 1800
 
 - type: roundGroup
   id: ColonyFallWendigoRoundGroup
@@ -211,5 +211,5 @@
     - KillAllColonistRule
     - KillAllXenoRule
   timing:
-    delayMinSeconds: 1200
-    delayMaxSeconds: 2400
+    delayMinSeconds: 900
+    delayMaxSeconds: 1800

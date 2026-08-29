@@ -1,6 +1,7 @@
 using Content.Shared._CMU14.Ops.Sfx;
 using Content.Shared.CCVar;
 using Content.Shared.GameTicking;
+using Robust.Client.GameStates;
 using Robust.Client.Player;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
@@ -14,10 +15,12 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
 {
     [Dependency] private readonly SharedAudioSystem _audio = default!;
     [Dependency] private readonly IConfigurationManager _cfg = default!;
-    [Dependency] private readonly IGameTiming _timing = default!;
+    [Dependency] private readonly IClientGameStateManager _gameStates = default!;
     [Dependency] private readonly IPlayerManager _plyMan = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private bool _muted;
+    private bool _resyncPending;
     private EntityUid? _lastResyncMap;
     private readonly Dictionary<(int Handle, string Layer), EntityUid> _loops = new();
     private readonly List<(EntityUid Entity, TimeSpan StopAt)> _scheduledStops = new();
@@ -28,6 +31,13 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         SubscribeNetworkEvent<StopScriptedSoundLayersNetEvent>(OnStopLayers);
         SubscribeNetworkEvent<RoundRestartCleanupEvent>(_ => StopAll());
         Subs.CVar(_cfg, CCVars.MuteScriptedSounds, OnMuteChanged, true);
+        _gameStates.GameStateApplied += OnGameStateApplied;
+    }
+
+    public override void Shutdown()
+    {
+        base.Shutdown();
+        _gameStates.GameStateApplied -= OnGameStateApplied;
     }
 
     public override void Update(float frameTime)
@@ -37,7 +47,7 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         {
             _lastResyncMap = map;
             if (map != null)
-                RaiseNetworkEvent(new RequestScriptedSoundResyncNetEvent());
+                _resyncPending = true;
         }
 
         for (var i = _scheduledStops.Count - 1; i >= 0; i--)
@@ -62,7 +72,16 @@ public sealed partial class ScriptedSoundSystem : EntitySystem
         }
 
         if (wasMuted)
-            RaiseNetworkEvent(new RequestScriptedSoundResyncNetEvent());
+            _resyncPending = true;
+    }
+
+    private void OnGameStateApplied(GameStateAppliedArgs args)
+    {
+        if (!_resyncPending)
+            return;
+
+        _resyncPending = false;
+        RaiseNetworkEvent(new RequestScriptedSoundResyncNetEvent());
     }
 
     private void OnPlaySound(PlayScriptedSoundNetEvent ev)

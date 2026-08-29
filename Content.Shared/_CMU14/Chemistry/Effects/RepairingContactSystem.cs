@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Xenonids.Construction;
 using Content.Shared.Chemistry;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
@@ -19,7 +20,6 @@ public sealed class RepairingContactSystem : EntitySystem
 
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
-    [Dependency] private IPrototypeManager _prototypes = default!;
 
     public override void Initialize()
     {
@@ -34,9 +34,9 @@ public sealed class RepairingContactSystem : EntitySystem
 
         var synth = HasComp<SynthComponent>(ent);
         if (!synth &&
-            (ent.Comp.DamageContainerID is not { } containerId ||
-             !_prototypes.TryIndex(containerId, out var container) ||
-             !container.SupportedTypes.Contains(StructuralType.Id)))
+            (!TryComp<InjurableComponent>(ent, out var injurable) ||
+             injurable.DamageContainer is null ||
+             !_damageable.CanBeDamagedBy((ent.Owner, injurable), StructuralType)))
         {
             return;
         }
@@ -44,7 +44,7 @@ public sealed class RepairingContactSystem : EntitySystem
             return;
 
         Repairing? repairing = null;
-        foreach (var metabolism in args.Reagent.Metabolisms.Values)
+        foreach (var metabolism in args.Reagent.Metabolisms.Metabolisms.Values)
         {
             foreach (var effect in metabolism.Effects)
             {

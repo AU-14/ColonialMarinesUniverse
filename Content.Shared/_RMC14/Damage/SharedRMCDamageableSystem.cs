@@ -15,6 +15,8 @@ using Content.Shared.Armor;
 using Content.Shared.Blocking;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -235,8 +237,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             return;
         }
 
-        if (damageable.TotalDamage >= ent.Comp.Max && args.Damage.GetTotal() > FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((ent.Owner, damageable)) >= ent.Comp.Max &&
+            args.Damage.GetTotal() > FixedPoint2.Zero)
+        {
             args.Cancelled = true;
+        }
     }
 
     private void OnMaxDamageModify(Entity<MaxDamageComponent> ent, ref DamageModifyEvent args)
@@ -245,10 +250,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             return;
 
         var modifyTotal = args.Damage.GetTotal();
-        if (modifyTotal <= FixedPoint2.Zero || damageable.TotalDamage + modifyTotal <= ent.Comp.Max)
+        var totalDamage = _damageable.GetTotalDamage((ent.Owner, damageable));
+        if (modifyTotal <= FixedPoint2.Zero || totalDamage + modifyTotal <= ent.Comp.Max)
             return;
 
-        var remaining = ent.Comp.Max - damageable.TotalDamage;
+        var remaining = ent.Comp.Max - totalDamage;
         if (ent.Comp.Max <= FixedPoint2.Zero)
         {
             args.Damage *= 0;
@@ -339,7 +345,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
     {
         if (_mobThresholds.TryGetDeadThreshold(ent.Owner, out var mobThreshold) && TryComp<DamageableComponent>(ent, out var damageable))
         {
-            var lethalAmountOfDamage = mobThreshold.Value - damageable.TotalDamage;
+            var lethalAmountOfDamage = mobThreshold.Value - _damageable.GetTotalDamage((ent.Owner, damageable));
             var type = _prototypes.Index<DamageTypePrototype>(LethalDamageType);
             var damage = new DamageSpecifier(type, lethalAmountOfDamage);
             _damageable.TryChangeDamage(ent.Owner, damage, true);
@@ -373,10 +379,11 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_prototypes.TryIndex(groupId, out var group))
             return equal;
 
+        var currentDamage = _damageable.GetAllDamage(damageable);
         _types.Clear();
         foreach (var type in group.DamageTypes)
         {
-            if (damageable.Comp.Damage.DamageDict.TryGetValue(type, out var current) &&
+            if (currentDamage.DamageDict.TryGetValue(type, out var current) &&
                 current > FixedPoint2.Zero)
             {
                 _types.Add(type);
@@ -392,7 +399,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
             for (var i = _types.Count - 1; i >= 0; i--)
             {
                 var type = _types[i];
-                var current = damageable.Comp.Damage.DamageDict[type];
+                var current = currentDamage.DamageDict[type];
 
                 var existingHeal = add ? -damage.GetValueOrDefault(type) : damage.GetValueOrDefault(type);
                 left += existingHeal;
@@ -524,9 +531,10 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
         if (!_damageableQuery.Resolve(damageable, ref damageable.Comp, false))
             return false;
 
+        var currentDamage = _damageable.GetAllDamage(damageable);
         foreach (var (type, _) in damage.DamageDict)
         {
-            if (damageable.Comp.Damage.DamageDict.TryGetValue(type, out var healValue) &&
+            if (currentDamage.DamageDict.TryGetValue(type, out var healValue) &&
                 healValue > FixedPoint2.Zero)
             {
                 return true;
@@ -706,7 +714,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                             foreach (var item in mask.ContainedEntities)
                             {
                                 if (TryComp<ItemSlotsComponent>(item, out var islot) &&
-                                    _itemSlot.TryGetSlot(item, "filter", out var slot, islot) &&
+                                    _itemSlot.TryGetSlot((item, islot), "filter", out var slot) &&
                                     slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
                                     TryComp<GasMaskFilterComponent>(slot.ContainerSlot.ContainedEntity.Value, out var filt))
                                 {
@@ -734,7 +742,7 @@ public abstract partial class SharedRMCDamageableSystem : EntitySystem
                                     foreach (var aitem in hslot.Container.ContainedEntities)
                                     {
                                         if (TryComp<ItemSlotsComponent>(aitem, out var islot) &&
-                                            _itemSlot.TryGetSlot(aitem, "filter", out var slot, islot) &&
+                                            _itemSlot.TryGetSlot((aitem, islot), "filter", out var slot) &&
                                             slot.ContainerSlot is not null && slot.ContainerSlot.ContainedEntity is not null &&
                                             TryComp<GasMaskFilterComponent>
                                             (slot.ContainerSlot.ContainedEntity.Value, out var filt))

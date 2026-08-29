@@ -13,7 +13,6 @@ using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Surgery.Conditions;
 using Content.Shared._RMC14.Medical.Surgery.Steps.Parts;
 using Content.Shared._RMC14.Synth;
-using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Prototypes;
 using Robust.Shared.Prototypes;

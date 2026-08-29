@@ -429185,28 +429185,6 @@ entities:
     - type: Transform
       pos: 205.5,-100.5
       parent: 1
-- proto: TowelColorBlack
-  entities:
-  - uid: 84570
-    components:
-    - type: Transform
-      pos: 111.375175,-126.568
-      parent: 1
-  - uid: 84571
-    components:
-    - type: Transform
-      pos: 17.515724,-37.41785
-      parent: 1
-  - uid: 84572
-    components:
-    - type: Transform
-      pos: 17.60431,-35.322456
-      parent: 1
-  - uid: 84573
-    components:
-    - type: Transform
-      pos: 17.322952,-36.244286
-      parent: 1
 - proto: TowelColorDarkBlue
   entities:
   - uid: 84574

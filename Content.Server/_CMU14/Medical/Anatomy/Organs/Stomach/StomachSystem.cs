@@ -1,4 +1,4 @@
-using Content.Server.Medical;
+using Content.Shared.Medical;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Stomach;
 using Robust.Shared.GameObjects;
 

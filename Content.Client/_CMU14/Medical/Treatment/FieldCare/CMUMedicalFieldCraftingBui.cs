@@ -95,7 +95,7 @@ public sealed partial class CMUMedicalFieldCraftingBui : BoundUserInterface
         };
         icon.SetPrototype(option.Product.Id);
 
-        var button = new RadialMenuTextureButton
+        var button = new RadialMenuButton
         {
             EnableAllKeybinds = false,
             StyleClasses = { "RadialMenuButton" },

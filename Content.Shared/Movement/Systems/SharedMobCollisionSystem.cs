@@ -20,13 +20,13 @@ namespace Content.Shared.Movement.Systems;
 public abstract partial class SharedMobCollisionSystem : EntitySystem
 {
     [Dependency] protected IConfigurationManager CfgManager = default!;
-    [Dependency] private   IRobustRandom _random = default!;
-    [Dependency] private   MovementSpeedModifierSystem _moveMod = default!;
+    [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private MovementSpeedModifierSystem _moveMod = default!;
     [Dependency] protected SharedPhysicsSystem Physics = default!;
-    [Dependency] private   SharedTransformSystem _xformSystem = default!;
+    [Dependency] private SharedTransformSystem _xformSystem = default!;
 
-    protected EntityQuery<MobCollisionComponent> MobQuery;
-    protected EntityQuery<PhysicsComponent> PhysicsQuery;
+    [Dependency] protected EntityQuery<MobCollisionComponent> MobQuery = default!;
+    [Dependency] protected EntityQuery<PhysicsComponent> PhysicsQuery = default!;
 
     /// <summary>
     /// <see cref="CCVars.MovementPushingCap"/>
@@ -78,8 +78,6 @@ public abstract partial class SharedMobCollisionSystem : EntitySystem
             }, true);
         Subs.CVar(CfgManager, CCVars.MovementPushMassCap, val => _massDiffCap = val, true);
 
-        MobQuery = GetEntityQuery<MobCollisionComponent>();
-        PhysicsQuery = GetEntityQuery<PhysicsComponent>();
         SubscribeAllEvent<MobCollisionMessage>(OnCollision);
         SubscribeLocalEvent<MobCollisionComponent, RefreshMovementSpeedModifiersEvent>(OnMoveModifier);
 

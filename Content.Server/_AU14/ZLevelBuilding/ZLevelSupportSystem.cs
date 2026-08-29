@@ -8,6 +8,8 @@ using Content.Shared._AU14.SavedBuilds;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;

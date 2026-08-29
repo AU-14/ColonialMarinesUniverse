@@ -51,6 +51,7 @@ public sealed class DistressSignalSurvivorPrototypeTest
         "ProdigySurvLarge",
         "ProdigySurvMedium",
         "ProdigySurvSmall",
+        "ProdigyLawyer",
         "WYHT",
         "WYPMCParty",
         "WYPMCPartyAlt",

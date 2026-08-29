@@ -1,11 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Rejuvenate;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 
@@ -14,8 +15,9 @@ namespace Content.Server._CMU14.Medical.Anatomy.BodyParts;
 public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
 {
     [Dependency] private SharedBodySystem _body = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private DetachableOrganSystem _detachableOrgan = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
+    [Dependency] private OrganRelationSystem _organRelations = default!;
 
     private static readonly EntProtoId LeftArmPrototype = "CMUPartRoboticLeftArm";
     private static readonly EntProtoId RightArmPrototype = "CMUPartRoboticRightArm";
@@ -172,9 +174,6 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
         if (_body.GetParentPartAndSlotOrNull(currentPart) is not { } parentSlot)
             return;
 
-        if (!_containers.TryGetContainingContainer((currentPart, null, null), out var container))
-            return;
-
         var replacement = Spawn(replacementPrototype, Transform(currentPart).Coordinates);
         if (!TryComp<BodyPartComponent>(replacement, out var replacementPart) ||
             replacementPart.PartType != type ||
@@ -196,16 +195,33 @@ public sealed partial class CMUProstheticLimbTraitSystem : EntitySystem
             return;
         }
 
-        if (!_containers.Remove(currentPart, container, reparent: false, force: true))
+        if (_detachableOrgan.Detach(currentPart) is not { } detachedBody)
         {
-            QueueDel(replacement);
+            QueueDeleteLimb(replacement);
             return;
         }
 
-        QueueDel(currentPart);
+        if (_body.AttachPart(parentSlot.Parent, parentSlot.Slot, replacement))
+        {
+            QueueDeleteLimb(currentPart);
+            QueueDel(detachedBody);
+            return;
+        }
 
-        if (!_body.AttachPart(parentSlot.Parent, parentSlot.Slot, replacement))
-            QueueDel(replacement);
+        QueueDeleteLimb(replacement);
+
+        // Keep the old biological subtree recoverable if attaching the
+        // replacement failed. A successful rollback empties the carrier.
+        if (_body.AttachPart(parentSlot.Parent, parentSlot.Slot, currentPart))
+            QueueDel(detachedBody);
+    }
+
+    private void QueueDeleteLimb(EntityUid root)
+    {
+        foreach (var child in _organRelations.AllChildren(root).Select(child => child.Owner).ToArray())
+            QueueDel(child);
+
+        QueueDel(root);
     }
 
     private bool TryAttachExtremity(

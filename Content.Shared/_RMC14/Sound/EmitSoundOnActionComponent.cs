@@ -6,7 +6,7 @@ namespace Content.Shared._RMC14.Sound;
 /// <summary>
 /// Simple sound emitter that emits sound on InstantAction
 /// </summary>
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class EmitSoundOnActionComponent : BaseEmitSoundComponent
 {
     /// <summary>

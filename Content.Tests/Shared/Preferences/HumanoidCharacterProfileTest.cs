@@ -1,13 +1,47 @@
+using Content.Shared.Body;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using NUnit.Framework;
+using Robust.Shared.IoC;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 
 namespace Content.Tests.Shared.Preferences;
 
 [TestFixture]
-public sealed class HumanoidCharacterProfileTest
+[NonParallelizable]
+public sealed class HumanoidCharacterProfileTest : ContentUnitTest
 {
+    protected override System.Type[] ExtraComponents => [typeof(InitialBodyComponent)];
+
+    private const string ProfilePrototypes = """
+        - type: entity
+          id: TestHuman
+
+        - type: skinColoration
+          id: HumanToned
+          strategy: !type:HumanTonedSkinColoration {}
+
+        - type: species
+          id: Human
+          name: test-species-human
+          roundStart: true
+          prototype: TestHuman
+          dollPrototype: TestHuman
+          skinColoration: HumanToned
+        """;
+
+    [OneTimeSetUp]
+    public void InitializeProfilePrototypes()
+    {
+        IoCManager.Resolve<ISerializationManager>().Initialize();
+
+        var prototypeManager = IoCManager.Resolve<IPrototypeManager>();
+        prototypeManager.Initialize();
+        prototypeManager.LoadString(ProfilePrototypes);
+        prototypeManager.ResolveResults();
+    }
+
     [Test]
     public void GamemodeJobPrioritiesFallbackToGlobalWhenNoGamemodeOverridesExist()
     {

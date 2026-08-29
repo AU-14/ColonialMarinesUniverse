@@ -1,4 +1,4 @@
-using Content.Shared.Body.Systems;
+using Content.Shared.Gibbing;
 using Content.Shared.Mobs;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -12,7 +12,7 @@ namespace Content.Server._CMU14.Threats.Mobs.Abomination;
 /// </summary>
 public sealed partial class AbominationDeathSystem : EntitySystem
 {
-    [Dependency] private SharedBodySystem _body = default!;
+    [Dependency] private GibbingSystem _gibbing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     public static readonly EntProtoId FleshKudzuSource = "AU14AbominationFleshKudzuSource";
 
@@ -31,7 +31,7 @@ public sealed partial class AbominationDeathSystem : EntitySystem
         TransformComponent xform = Transform(ent.Owner);
         MapCoordinates coords = _transform.GetMapCoordinates(ent.Owner, xform);
 
-        _body.GibBody(ent.Owner);
+        _gibbing.Gib(ent.Owner);
 
         if (coords.MapId == default(MapId))
             return;

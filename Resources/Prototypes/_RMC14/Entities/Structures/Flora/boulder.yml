@@ -10,6 +10,7 @@
     sprite: _RMC14/Structures/Flora/large_boulder.rsi
     state: boulder_large1
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

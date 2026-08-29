@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration;
 using Content.Shared.AU14;
 using Content.Shared.AU14.Scenario;
+using Content.Shared.AU14.util;
 using Robust.Shared.EntitySerialization.Systems;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
@@ -428,10 +429,10 @@ public sealed class ScenarioPlanMarkerCoverageTest
         count: 1
         bodies:
           MobHuman: 1
-    MarkerRequirements:
+    markerRequirements:
       - bucket: Leader
         requiredBodyCount: 1
-        RequiredMarkerCount: 1
+        requiredMarkerCount: 1
         requiredTags:
           - force:hostile
           - bucket:Leader
@@ -466,7 +467,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
 
     private static IEnumerable<TestCaseData> RemainingGovforPlatoonRoundGroupCases()
     {
-        yield return new TestCaseData("AUPlanetCorsatStation", "LACN", GovforLacnPlatoonRoundGroup.Id)
+        yield return new TestCaseData("AUPlanetLV327", "LACN", GovforLacnPlatoonRoundGroup.Id)
             .SetName("GOVFOR LACN platoon Round Group matches adapter");
         yield return new TestCaseData("AUPlanetCorsatStation", "CMBCIU", GovforCmbciuPlatoonRoundGroup.Id)
             .SetName("GOVFOR CMBCIU platoon Round Group matches adapter");
@@ -482,9 +483,9 @@ public sealed class ScenarioPlanMarkerCoverageTest
 
     private static IEnumerable<TestCaseData> FixedOpforPlatoonRoundGroupCases()
     {
-        yield return new TestCaseData("AUPlanetSorokyne", "UPP", OpforUppPlatoonRoundGroup.Id)
+        yield return new TestCaseData("AuPlanetChances", "UPP", OpforUppPlatoonRoundGroup.Id)
             .SetName("OPFOR UPP platoon Round Group matches adapter");
-        yield return new TestCaseData("AUPlanetCorsatStation", "WEYU", OpforWeyuPlatoonRoundGroup.Id)
+        yield return new TestCaseData("AUPlanetLV327", "WEYU", OpforWeyuPlatoonRoundGroup.Id)
             .SetName("OPFOR WEYU platoon Round Group matches adapter");
         yield return new TestCaseData("AUPlanetTrijent", "VAIPO", OpforVaipoPlatoonRoundGroup.Id)
             .SetName("OPFOR VAIPO platoon Round Group matches adapter");
@@ -914,7 +915,10 @@ public sealed class ScenarioPlanMarkerCoverageTest
             var playerCount = GetPresetValidPlayerCount(preset);
             var checkedCandidatePlanets = 0;
 
-            foreach (var planetId in preset.SupportedPlanets)
+            foreach (var planetId in GamePlanetPoolPrototype.ExpandPlanetIds(
+                         prototypes,
+                         preset.PlanetPool,
+                         preset.SupportedPlanets))
             {
                 if (!TryGetPlanet(prototypes, componentFactory, planetId, out var planet))
                     continue;
@@ -2048,7 +2052,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(
                     leaderHint.MatchingMarkerSources.Sum(source => source.Count),
                     Is.EqualTo(leaderHint.AvailableMarkers));
-                Assert.That(report.ToString(), Does.Contain("Matching legacy sources:"));
+                Assert.That(report.ToString(), Does.Contain("Matching marker sources:"));
             });
         });
 
@@ -2346,7 +2350,11 @@ public sealed class ScenarioPlanMarkerCoverageTest
             Assert.That(abominationLeaderHint, Is.Not.Null, report.ToString());
             Assert.That(
                 abominationLeaderHint!.MatchingMarkerSources.Any(source =>
-                    source.SourcePrototypeId.Equals("scenarioxenocfthreatleaderSpawnMarker", StringComparison.OrdinalIgnoreCase) &&
+                    (source.SourcePrototypeId.Equals("scenarioxenocfthreatleaderSpawnMarker", StringComparison.OrdinalIgnoreCase) ||
+                     source.SourcePrototypeId.Equals(XenoCfLeaderMarker.Id, StringComparison.OrdinalIgnoreCase)) &&
+                    source.MarkerKind == ScenarioMarkerKind.ThreatMarker &&
+                    source.Tags.Contains(ScenarioMarkerTags.ForceHostile, StringComparer.OrdinalIgnoreCase) &&
+                    source.Tags.Contains(ScenarioMarkerTags.Bucket(ThreatMarkerType.Leader.ToString()), StringComparer.OrdinalIgnoreCase) &&
                     source.Tags.Contains(ScenarioMarkerTags.MarkerId("xenocf"), StringComparer.OrdinalIgnoreCase)),
                 Is.True,
                 report.ToString());
@@ -2578,7 +2586,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
             var force = prototypes.Index(InsurgencyClfRoundGroup);
             var spawnPlan = force.Spawn;
             var preset = prototypes.Index<GamePresetPrototype>(InsurgencyPreset);
+            var presetPlanets = GamePlanetPoolPrototype.ExpandPlanetIds(
+                prototypes,
+                preset.PlanetPool,
+                preset.SupportedPlanets);
             var (planetId, planet) = GetFirstSupportedPlanet(prototypes, componentFactory, InsurgencyPreset);
+            var planetChoice = package.PlanetChoices.Single(choice => choice.SupportsPlanet(planetId));
             var plan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
                     InsurgencyPreset,
                     MarkerValidationPlayerCount,
@@ -2599,8 +2612,9 @@ public sealed class ScenarioPlanMarkerCoverageTest
             Assert.Multiple(() =>
             {
                 Assert.That(package.Presets, Does.Contain(InsurgencyPreset));
-                Assert.That(package.SupportedPlanets, Is.EquivalentTo(preset.SupportedPlanets));
-                Assert.That(package.Groups.Select(groupId => groupId.Id), Does.Contain(force.ID));
+                Assert.That(package.SupportedPlanets, Is.SubsetOf(presetPlanets));
+                Assert.That(package.SupportedPlanets, Does.Contain(planetId));
+                Assert.That(planetChoice.Groups.Select(groupId => groupId.Id), Does.Contain(force.ID));
                 Assert.That(plan.DeferredForceChoices.Select(choice => choice.ChoiceId), Does.Contain("GovforPlatoon"));
 
                 Assert.That(force.Kind, Is.EqualTo(RoundGroupKind.Clf));
@@ -2642,12 +2656,15 @@ public sealed class ScenarioPlanMarkerCoverageTest
             Assert.Multiple(() =>
             {
                 Assert.That(preset.ThirdPartyAutoSpawn, Is.True);
-                Assert.That(preset.ThirdPartyInterval, Is.EqualTo(1800));
+                Assert.That(preset.ThirdPartyInterval, Is.EqualTo(3600));
                 Assert.That(preset.ThirdPartyRatio, Is.EqualTo(0.15f));
-                Assert.That(preset.MaxThirdParties, Is.EqualTo(2));
+                Assert.That(preset.MaxThirdParties, Is.EqualTo(3));
             });
 
-            foreach (string planetId in preset.SupportedPlanets!)
+            foreach (var planetId in GamePlanetPoolPrototype.ExpandPlanetIds(
+                         prototypes,
+                         preset.PlanetPool,
+                         preset.SupportedPlanets))
             {
                 Assert.That(
                     TryGetPlanet(prototypes, componentFactory, planetId, out var planet),
@@ -2882,7 +2899,9 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(force.Kind, Is.EqualTo(RoundGroupKind.Hostile));
                 Assert.That(force.SourcePrototypeId, Is.EqualTo(threat.ID));
                 Assert.That(force.Spawn.HasData, Is.True);
-                Assert.That(force.WinConditionRuleIds, Is.EquivalentTo(threat.WinConditions));
+                Assert.That(
+                    force.WinConditionRuleIds,
+                    Is.EquivalentTo(threat.WinConditions.Append("HiveCollapseRule")));
                 Assert.That(force.Timing.DelayMinSeconds, Is.Null);
                 Assert.That(force.Timing.DelayMaxSeconds, Is.Null);
 
@@ -3086,7 +3105,11 @@ public sealed class ScenarioPlanMarkerCoverageTest
             var prototypes = server.ResolveDependency<IPrototypeManager>();
             var componentFactory = server.ResolveDependency<IComponentFactory>();
             var generator = server.System<ScenarioPlanSystem>();
-            var (planetId, planet) = GetFirstSupportedPlanet(prototypes, componentFactory, "DistressSignal");
+            const string planetId = "AUPlanetSorokyne";
+            Assert.That(
+                TryGetPlanet(prototypes, componentFactory, planetId, out var planet),
+                Is.True,
+                $"{planetId} did not resolve to a planet map prototype.");
             var adaptedPlan = generator.GeneratePlans(new ScenarioPlanValidationRequest(
                     "DistressSignal",
                     MarkerValidationPlayerCount,
@@ -3680,10 +3703,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
+            var expectedForceId = $"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{GroundThirdParty.Id}";
             var generatedThirdPartyForce = generatedPlan.Forces
                 .Single(plannedForce =>
                     plannedForce.ForceKind == ScenarioForceKind.ThirdParty &&
-                    plannedForce.SourcePrototypeId.Equals(GroundThirdParty.Id, StringComparison.OrdinalIgnoreCase));
+                    plannedForce.SourcePrototypeId.Equals(GroundThirdParty.Id, StringComparison.OrdinalIgnoreCase) &&
+                    plannedForce.ForceId.Equals(expectedForceId, StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3701,7 +3726,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(force.SourcePrototypeId, Is.EqualTo(thirdParty.ID));
                 Assert.That(force.Spawn.HasData, Is.True);
                 Assert.That(spawnPlan.AllowsUnderfill, Is.False);
-                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo($"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{GroundThirdParty.Id}"));
+                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo(expectedForceId));
                 Assert.That(generatedThirdPartyForce.ForceId, Does.Not.Contain("Prototype"));
                 Assert.That(generatedThirdPartyForce.ForceKind, Is.EqualTo(prototypeForce!.ForceKind));
                 Assert.That(generatedThirdPartyForce.SourcePrototypeId, Is.EqualTo(prototypeForce.SourcePrototypeId));
@@ -3750,10 +3775,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
+            var expectedForceId = $"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}";
             var generatedThirdPartyForce = generatedPlan.Forces
                 .Single(plannedForce =>
                     plannedForce.ForceKind == ScenarioForceKind.ThirdParty &&
-                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase));
+                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase) &&
+                    plannedForce.ForceId.Equals(expectedForceId, StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3771,7 +3798,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(force.SourcePrototypeId, Is.EqualTo(thirdParty.ID));
                 Assert.That(force.Spawn.HasData, Is.True);
                 Assert.That(spawnPlan.AllowsUnderfill, Is.False);
-                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo($"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}"));
+                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo(expectedForceId));
                 Assert.That(generatedThirdPartyForce.ForceId, Does.Not.Contain("Prototype"));
                 Assert.That(generatedThirdPartyForce.ForceKind, Is.EqualTo(prototypeForce!.ForceKind));
                 Assert.That(generatedThirdPartyForce.SourcePrototypeId, Is.EqualTo(prototypeForce.SourcePrototypeId));
@@ -3820,10 +3847,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
+            var expectedForceId = $"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}";
             var generatedThirdPartyForce = generatedPlan.Forces
                 .Single(plannedForce =>
                     plannedForce.ForceKind == ScenarioForceKind.ThirdParty &&
-                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase));
+                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase) &&
+                    plannedForce.ForceId.Equals(expectedForceId, StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3841,7 +3870,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(force.SourcePrototypeId, Is.EqualTo(thirdParty.ID));
                 Assert.That(force.Spawn.HasData, Is.True);
                 Assert.That(spawnPlan.AllowsUnderfill, Is.False);
-                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo($"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}"));
+                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo(expectedForceId));
                 Assert.That(generatedThirdPartyForce.ForceId, Does.Not.Contain("Prototype"));
                 Assert.That(generatedThirdPartyForce.ForceKind, Is.EqualTo(prototypeForce!.ForceKind));
                 Assert.That(generatedThirdPartyForce.SourcePrototypeId, Is.EqualTo(prototypeForce.SourcePrototypeId));
@@ -3890,10 +3919,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
+            var expectedForceId = $"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}";
             var generatedThirdPartyForce = generatedPlan.Forces
                 .Single(plannedForce =>
                     plannedForce.ForceKind == ScenarioForceKind.ThirdParty &&
-                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase));
+                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase) &&
+                    plannedForce.ForceId.Equals(expectedForceId, StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3911,7 +3942,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(force.SourcePrototypeId, Is.EqualTo(thirdParty.ID));
                 Assert.That(force.Spawn.HasData, Is.True);
                 Assert.That(spawnPlan.AllowsUnderfill, Is.False);
-                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo($"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}"));
+                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo(expectedForceId));
                 Assert.That(generatedThirdPartyForce.ForceId, Does.Not.Contain("Prototype"));
                 Assert.That(generatedThirdPartyForce.ForceKind, Is.EqualTo(prototypeForce!.ForceKind));
                 Assert.That(generatedThirdPartyForce.SourcePrototypeId, Is.EqualTo(prototypeForce.SourcePrototypeId));
@@ -3960,10 +3991,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
+            var expectedForceId = $"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}";
             var generatedThirdPartyForce = generatedPlan.Forces
                 .Single(plannedForce =>
                     plannedForce.ForceKind == ScenarioForceKind.ThirdParty &&
-                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase));
+                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase) &&
+                    plannedForce.ForceId.Equals(expectedForceId, StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -3981,7 +4014,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(force.SourcePrototypeId, Is.EqualTo(thirdParty.ID));
                 Assert.That(force.Spawn.HasData, Is.True);
                 Assert.That(spawnPlan.AllowsUnderfill, Is.False);
-                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo($"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}"));
+                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo(expectedForceId));
                 Assert.That(generatedThirdPartyForce.ForceId, Does.Not.Contain("Prototype"));
                 Assert.That(generatedThirdPartyForce.ForceKind, Is.EqualTo(prototypeForce!.ForceKind));
                 Assert.That(generatedThirdPartyForce.SourcePrototypeId, Is.EqualTo(prototypeForce.SourcePrototypeId));
@@ -4030,10 +4063,12 @@ public sealed class ScenarioPlanMarkerCoverageTest
                     PlanetId: planetId,
                     MapId: planet.MapId))
                 .Single();
+            var expectedForceId = $"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}";
             var generatedThirdPartyForce = generatedPlan.Forces
                 .Single(plannedForce =>
                     plannedForce.ForceKind == ScenarioForceKind.ThirdParty &&
-                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase));
+                    plannedForce.SourcePrototypeId.Equals(thirdPartyId, StringComparison.OrdinalIgnoreCase) &&
+                    plannedForce.ForceId.Equals(expectedForceId, StringComparison.OrdinalIgnoreCase));
 
             Assert.That(
                 generator.TryResolveRoundGroupPrototype(
@@ -4051,7 +4086,7 @@ public sealed class ScenarioPlanMarkerCoverageTest
                 Assert.That(force.SourcePrototypeId, Is.EqualTo(thirdParty.ID));
                 Assert.That(force.Spawn.HasData, Is.True);
                 Assert.That(spawnPlan.AllowsUnderfill, Is.False);
-                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo($"ThirdParty:{SelectedThreatAssignmentThreat.Id}:{thirdPartyId}"));
+                Assert.That(generatedThirdPartyForce.ForceId, Is.EqualTo(expectedForceId));
                 Assert.That(generatedThirdPartyForce.ForceId, Does.Not.Contain("Prototype"));
                 Assert.That(generatedThirdPartyForce.ForceKind, Is.EqualTo(prototypeForce!.ForceKind));
                 Assert.That(generatedThirdPartyForce.SourcePrototypeId, Is.EqualTo(prototypeForce.SourcePrototypeId));
@@ -4178,7 +4213,10 @@ public sealed class ScenarioPlanMarkerCoverageTest
         string presetId)
     {
         var preset = prototypes.Index<GamePresetPrototype>(presetId);
-        foreach (var planetId in preset.SupportedPlanets)
+        foreach (var planetId in GamePlanetPoolPrototype.ExpandPlanetIds(
+                     prototypes,
+                     preset.PlanetPool,
+                     preset.SupportedPlanets))
         {
             if (!prototypes.TryIndex<EntityPrototype>(planetId, out var entity) ||
                 !entity.TryComp<RMCPlanetMapPrototypeComponent>(out var planet, componentFactory))

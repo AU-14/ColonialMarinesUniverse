@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Hands;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
@@ -26,7 +27,7 @@ public sealed partial class YautjaHealthShardSystem : EntitySystem
 {
     [Dependency] private IAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
     [Dependency] private DamageableSystem _damage = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
@@ -166,7 +167,7 @@ public sealed partial class YautjaHealthShardSystem : EntitySystem
             solution.AddReagent(reagent, amount);
         }
 
-        _bloodstream.TryAddToChemicals((target, null), solution);
+        _bloodstream.TryAddToBloodstream((target, null), solution);
 
         if (ent.Comp.CompleteSound != null)
             _audio.PlayPvs(ent.Comp.CompleteSound, target);

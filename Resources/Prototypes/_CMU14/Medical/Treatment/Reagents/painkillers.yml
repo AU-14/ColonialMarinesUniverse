@@ -9,7 +9,7 @@
   overdose: 60
   criticalOverdose: 100
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Allergenic
@@ -20,22 +20,21 @@
         durationPerUnit: 30
       - !type:ModifyStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 60
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 60
         damage:
           types:
             Poison: 2
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 100
         damage:
           types:
@@ -52,7 +51,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.05
       effects:
       - !type:Allergenic
@@ -63,29 +62,28 @@
         durationPerUnit: 60
       - !type:ModifyStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
           types:
             Poison: 2.5
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 50
         damage:
           types:
             Asphyxiation: 3
       - !type:Drunk
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         boozePower: 5
 
@@ -100,7 +98,7 @@
   overdose: 20
   criticalOverdose: 30
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:Allergenic
@@ -115,33 +113,31 @@
       - !type:ModifyStatusEffect
         effectProto: StatusEffectCMUOxycodoneHaze
         time: 4
-        type: Add
-        refresh: true
+        type: Update
       - !type:ModifyStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 20
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 20
         damage:
           types:
             Poison: 4
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
           types:
             Asphyxiation: 3
       - !type:Drunk
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 20
         boozePower: 8
 
@@ -154,7 +150,8 @@
   physicalDesc: reagent-physical-desc-volatile
   color: "#b8c2cc"
   metabolisms:
-    Poison:
+    Bloodstream:
+      cmuToxicity: [ Poison ]
       effects:
       - !type:HealthChange
         damage:
@@ -172,7 +169,7 @@
   overdose: 10
   criticalOverdose: 15
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.15
       effects:
       - !type:Allergenic
@@ -187,19 +184,17 @@
       - !type:ModifyStatusEffect
         effectProto: StatusEffectCMUFentanylHaze
         time: 4
-        type: Add
-        refresh: true
+        type: Update
       - !type:ModifyStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 10
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 10
         damage:
           types:
@@ -207,14 +202,14 @@
             Asphyxiation: 3
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 15
         damage:
           types:
             Asphyxiation: 6
       - !type:Drunk
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 10
         boozePower: 10
 
@@ -229,7 +224,7 @@
   overdose: 20
   criticalOverdose: 30
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.2
       effects:
       - !type:CMUApplyPainSuppressionEffect
@@ -239,22 +234,21 @@
         durationPerUnit: 75
       - !type:ModifyStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 20
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 20
         damage:
           types:
             Poison: 3
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
           types:
@@ -271,7 +265,7 @@
   overdose: 30
   criticalOverdose: 50
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:CMUApplyPainSuppressionEffect
@@ -282,36 +276,34 @@
       - !type:ModifyStatusEffect
         effectProto: StatusEffectDrowsiness
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 8
         time: 15
-        type: Add
-        refresh: true
+        type: Update
       - !type:ModifyStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 8
         effectProto: StatusEffectForcedSleeping
         time: 3
         type: Add
       - !type:ModifyStatusEffect
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         effectProto: StatusEffectSeeingRainbow
         time: 1.5
         type: Add
-        refresh: false
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
           types:
             Poison: 5
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 50
         damage:
           types:

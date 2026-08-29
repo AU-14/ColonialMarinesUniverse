@@ -34,12 +34,12 @@ public sealed partial class RankChangerSystem : EntitySystem
 
     private void OnEquipped(Entity<RankChangerComponent> ent, ref GotEquippedEvent args)
     {
-        ApplyRank(args.Equipee, ent.Comp);
+        ApplyRank(args.EquipTarget, ent.Comp);
     }
 
     private void OnUnequipped(Entity<RankChangerComponent> ent, ref GotUnequippedEvent args)
     {
-        RevertRank(args.Equipee, ent.Comp);
+        RevertRank(args.EquipTarget, ent.Comp);
     }
 
     private void OnShutdown(Entity<RankChangerComponent> ent, ref ComponentShutdown args)

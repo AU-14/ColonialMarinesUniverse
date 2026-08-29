@@ -94,12 +94,16 @@
   - type: MeleeWeapon
     attackRate: 1.75 # fast attackrate, no delay
     damage:
-      groups:
-        Brute: 42
+      types:
+        Blunt: 14
+        Slash: 14
+        Piercing: 14
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 54
+      types:
+        Blunt: 18
+        Slash: 18
+        Piercing: 18
   - type: CMArmor
     explosionArmor: 50
     xenoArmor: 27

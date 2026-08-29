@@ -4,6 +4,7 @@
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._CMU14.Traits.DrugAllergy;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Prototypes;
@@ -17,17 +18,15 @@ public sealed partial class Allergenic : RMCChemicalEffect
         return "Triggers an ongoing allergic reaction in entities allergic to this reagent, until treated with naloxone.";
     }
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        if (args.Reagent is not { } reagent)
-            return;
-
-        if (!args.EntityManager.TryGetComponent(args.TargetEntity, out DrugAllergyComponent? allergy) ||
+        var reagent = args.Reagent;
+        if (!system.TryGetAllergy(args.TargetEntity, out var allergy) ||
             allergy.Allergen != reagent.ID)
         {
             return;
         }
 
-        args.EntityManager.System<AllergicReactionSystem>().TriggerReaction(args.TargetEntity);
+        system.AllergicReaction.TriggerReaction(args.TargetEntity);
     }
 }

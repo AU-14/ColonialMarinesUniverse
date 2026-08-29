@@ -40633,38 +40633,6 @@ entities:
     - type: Transform
       pos: -8.5,-24.5
       parent: 1
-- proto: TowelColorBlack
-  entities:
-  - uid: 5852
-    components:
-    - type: Transform
-      pos: 6.578745,-51.58696
-      parent: 1
-  - uid: 5853
-    components:
-    - type: Transform
-      pos: 6.359995,-51.68071
-      parent: 1
-  - uid: 5854
-    components:
-    - type: Transform
-      pos: 6.43812,-51.30571
-      parent: 1
-  - uid: 5855
-    components:
-    - type: Transform
-      pos: -17.730303,-12.577909
-      parent: 1
-  - uid: 5856
-    components:
-    - type: Transform
-      pos: -17.49072,-12.629993
-      parent: 1
-  - uid: 5857
-    components:
-    - type: Transform
-      pos: -17.230303,-12.609159
-      parent: 1
 - proto: TowelColorWhite
   entities:
   - uid: 5858

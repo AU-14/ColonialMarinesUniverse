@@ -6,6 +6,7 @@ using Content.Shared._CMU14.Medical.Injuries.Trauma;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;

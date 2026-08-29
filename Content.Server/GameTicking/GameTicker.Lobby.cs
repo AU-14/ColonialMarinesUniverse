@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Content.Server.Maps;
+using Content.Shared.Maps;
 using Content.Shared.GameTicking;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -117,8 +117,9 @@ namespace Content.Server.GameTicking
             var govforShipDisplay = !string.IsNullOrWhiteSpace(govforShip) ? govforShip : "None";
             var opforShipDisplay = !string.IsNullOrWhiteSpace(opforShip) ? opforShip : "None";
 
-            var gmTitle = LocalizeOrRaw(preset.ModeTitle);
-            var desc = LocalizeOrRaw(preset.Description);
+            var displayPreset = Decoy ?? preset;
+            var gmTitle = LocalizeOrRaw(displayPreset.ModeTitle);
+            var desc = LocalizeOrRaw(displayPreset.Description);
             var govforPlatoon = _platoonSpawnRuleSystem.SelectedGovforPlatoon?.Name;
             var opforPlatoon = _platoonSpawnRuleSystem.SelectedOpforPlatoon?.Name;
             var govforPlatoonDisplay = !string.IsNullOrWhiteSpace(govforPlatoon) ? govforPlatoon : "None";
@@ -161,7 +162,7 @@ namespace Content.Server.GameTicking
 
         private TickerLobbyInfoEvent GetInfoMsg()
         {
-            return new (GetInfoText());
+            return new(GetInfoText());
         }
 
         private TickerRoundStatusEvent GetRoundStatusMsg()
@@ -291,7 +292,6 @@ namespace Content.Server.GameTicking
                 return;
             }
 
-            var status = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;
             _playerGameStatuses[player.UserId] = ready ? PlayerGameStatus.ReadyToPlay : PlayerGameStatus.NotReadyToPlay;
             RaiseNetworkEvent(GetStatusMsg(player), player.Channel);
             // update server info to reflect new ready count

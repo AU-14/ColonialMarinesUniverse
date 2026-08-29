@@ -6,10 +6,12 @@
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootEngineToggleActionEvent
   - type: Action
-    icon:
-      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
-      state: integrity
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: integrity
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootTakeoff
@@ -19,10 +21,12 @@
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootTakeoffActionEvent
   - type: Action
-    icon:
-      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
-      state: fuel
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: fuel
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootLand
@@ -32,10 +36,12 @@
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootLandActionEvent
   - type: Action
-    icon:
-      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
-      state: targeting-reticle
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: targeting-reticle
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootFlightModeToggle
@@ -45,10 +51,12 @@
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootFlightModeToggleActionEvent
   - type: Action
-    icon:
-      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
-      state: battery
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hud.rsi
+      state: battery
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootRearDoorToggle
@@ -58,10 +66,12 @@
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootRearDoorToggleActionEvent
   - type: Action
-    icon:
-      sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
-      state: rear-door-open
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Structures/Vehicles/Blackfoot/interiors/blackfoot.rsi
+      state: rear-door-open
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootStowToggle
@@ -71,10 +81,12 @@
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootStowToggleActionEvent
   - type: Action
-    icon:
-      sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hardpoints.rsi
-      state: engines
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Structures/Vehicles/Blackfoot/blackfoot_hardpoints.rsi
+      state: engines
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootAscendZLevel
@@ -85,10 +97,12 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootAscendZLevelActionEvent
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _CMU14/ZLevels/Actions/misc.rsi
-      state: up
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: up
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootDescendZLevel
@@ -99,10 +113,12 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootDescendZLevelActionEvent
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _CMU14/ZLevels/Actions/misc.rsi
-      state: down
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: down
+      map: ["enum.ActionVisuals.Icon"]
 
 - type: entity
   id: ActionBlackfootDoorGunZModeToggle
@@ -113,7 +129,9 @@
     event: !type:Content.Shared._CMU14.Blackfoot.BlackfootDoorGunZModeToggleActionEvent
   - type: Action
     checkCanInteract: false
-    icon:
-      sprite: _CMU14/ZLevels/Actions/misc.rsi
-      state: down
     itemIconStyle: BigItem
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/ZLevels/Actions/misc.rsi
+      state: down
+      map: ["enum.ActionVisuals.Icon"]

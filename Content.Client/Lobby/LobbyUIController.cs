@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Client._RMC14.LinkAccount;
+using Content.Client.Body;
 using Content.Client.Guidebook;
-using Content.Client.Humanoid;
 using Content.Client.Inventory;
 using Content.Client.Lobby.UI;
 using Content.Client.Players.PlayTimeTracking;
@@ -48,7 +48,8 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     [Dependency] private JobRequirementsManager _requirements = default!;
     [Dependency] private MarkingManager _markings = default!;
     [Dependency] private LinkAccountManager _linkAccount = default!;
-    [UISystemDependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [UISystemDependency] private VisualBodySystem _visualBody = default!;
+    [UISystemDependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [UISystemDependency] private ClientInventorySystem _inventory = default!;
     [UISystemDependency] private GuidebookSystem _guide = default!;
     [UISystemDependency] private CMArmorSystem _armorSystem = default!;
@@ -88,6 +89,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         });
 
         _configurationManager.OnValueChanged(CCVars.GameRoleTimers, _ => RefreshProfileEditor());
+        _configurationManager.OnValueChanged(CCVars.GameRoleLoadoutTimers, _ => RefreshProfileEditor());
 
         _configurationManager.OnValueChanged(CCVars.GameRoleWhitelist, _ => RefreshProfileEditor());
 
@@ -183,6 +185,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
     public void OnStateExited(LobbyState state)
     {
         PreviewPanel?.SetLoaded(false);
+        _characterSetup?.Shutdown();
         _profileEditor?.Orphan();
         _characterSetup?.Orphan();
 
@@ -228,7 +231,7 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
 
         if (character is not HumanoidCharacterProfile humanoid)
         {
-            PreviewPanel.SetSprite(EntityUid.Invalid);
+            PreviewPanel.ProfilePreviewSpriteView.ClearPreview();
             PreviewPanel.SetSummaryText(string.Empty);
             PreviewPanel.SetJobText(string.Empty);
             _lobbyPreviewJobIndex = 0;
@@ -656,11 +659,15 @@ public sealed partial class LobbyUIController : UIController, IOnStateEntered<Lo
         }
         else
         {
-            dummyEnt = EntityManager.SpawnEntity(_prototypeManager.Index<SpeciesPrototype>(SharedHumanoidAppearanceSystem.DefaultSpecies).DollPrototype, MapCoordinates.Nullspace);
+            dummyEnt = EntityManager.SpawnEntity(_prototypeManager.Index<SpeciesPrototype>(HumanoidCharacterProfile.DefaultSpecies).DollPrototype, MapCoordinates.Nullspace);
             MarkPreviewEntity(dummyEnt);
         }
 
-        _humanoid.LoadProfile(dummyEnt, humanoid);
+        if (humanoid is not null)
+        {
+            _visualBody.ApplyProfileTo(dummyEnt, humanoid);
+            _humanoidProfile.ApplyProfileTo(dummyEnt, humanoid);
+        }
 
         if (humanoid != null && jobClothes)
         {

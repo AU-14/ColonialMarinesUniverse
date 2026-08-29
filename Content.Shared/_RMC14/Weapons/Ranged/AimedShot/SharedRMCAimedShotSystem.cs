@@ -215,9 +215,8 @@ public abstract partial class SharedRMCAimedShotSystem : EntitySystem
                     _audio.PlayEntity(gun.SoundEmpty, args.User, ent);
             }
         }
-        // Update ammo visualiser because client doesn't know about the shot.
-        var ev = new UpdateClientAmmoEvent();
-        RaiseLocalEvent(ent, ref ev);
+        // Update the ammo visualizer because the client doesn't know about the shot.
+        _gunSystem.UpdateAmmoCount(ent);
     }
 
     /// <summary>
@@ -324,4 +323,3 @@ public record struct AimedShotEvent(EntityUid Target);
 /// <param name="Target">The target of the aimed shot.</param>
 [ByRefEvent]
 public record struct ShotByAimedShotEvent(EntityUid Gun, EntityUid Target);
-

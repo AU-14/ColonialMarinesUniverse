@@ -1,7 +1,6 @@
 using System;
 using System.Linq;
 using System.Numerics;
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._AU14.Insurgency.Sapper;
 using Content.Shared._CMU14.Threats.Mobs.CLF;
 using Content.Shared.Examine;
@@ -12,6 +11,7 @@ using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Popups;
 using Content.Shared.StepTrigger.Systems;
+using Content.Shared.Trigger.Systems;
 using Content.Shared.Verbs;
 using Robust.Shared.Containers;
 using Robust.Shared.Map;

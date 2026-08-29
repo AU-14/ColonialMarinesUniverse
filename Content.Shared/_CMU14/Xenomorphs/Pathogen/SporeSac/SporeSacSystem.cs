@@ -1,6 +1,7 @@
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared._CMU14.Xenomorphs.Pathogen.SporeCloud;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Popups;
 using Robust.Shared.Physics.Events;

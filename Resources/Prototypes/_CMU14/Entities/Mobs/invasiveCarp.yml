@@ -63,6 +63,13 @@
     spawned:
     - id: FoodMeatFish
       amount: 8
+  - type: ToolRefinable
+    qualityNeeded: Slicing
+    refineTime: 8
+    popupType: LargeCaution
+    refineResult:
+    - id: FoodMeatFish
+      amount: 8
   - type: Tag
     tags:
     - Carp
@@ -95,9 +102,10 @@
   - type: XenoDevour
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
       types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
         Bloodloss: 15
   - type: Tackle
     min: 4
@@ -112,9 +120,10 @@
     cost: 0
   - type: XenoHeadbite
     damage:
-      groups:
-        Brute: 60
       types:
+        Blunt: 20
+        Slash: 20
+        Piercing: 20
         Bloodloss: 30
   - type: SlowOnPull
     slowdowns:
@@ -141,8 +150,10 @@
     maxLightRadius: 2
     maxLightEnergy: 8
   - type: RMCFireColor
-  - type: PressureImmunity
-  - type: Temperature
+  - type: PermanentStatusEffects
+    statusEffects:
+    - StatusEffectPressureImmunity
+  - type: TemperatureDamage
     damageCap: 0
     heatDamageThreshold: 423
     coldDamageThreshold: 0

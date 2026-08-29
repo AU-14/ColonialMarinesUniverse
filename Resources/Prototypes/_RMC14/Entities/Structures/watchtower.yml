@@ -25,6 +25,7 @@
     offset: -0.5, 1
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

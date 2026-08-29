@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.ManageHive.Boons;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Destructible;
 using Content.Shared.DoAfter;
@@ -29,6 +30,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAppearanceSystem _appearance = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private DialogSystem _dialog = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private HiveBoonSystem _hiveBoon = default!;
@@ -64,7 +66,7 @@ public sealed partial class CommunicationsTowerSystem : EntitySystem
 
     private void OnTowerDamageChanged(Entity<CommunicationsTowerComponent> ent, ref DamageChangedEvent args)
     {
-        if (args.Damageable.TotalDamage > FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((ent, args.Damageable)) > FixedPoint2.Zero)
             return;
 
         if (ent.Comp.State != CommunicationsTowerState.Broken)

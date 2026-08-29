@@ -179,7 +179,7 @@ public sealed partial class AegisLobbyEventSystem : EntitySystem
             !TryComp<StationJobsComponent>(station, out var jobs))
             return null;
 
-        return jobs.JobList.TryGetValue("CMUJobAegisResearcher", out var slots) ? slots : 0;
+        return _stationJobs.TryGetJobSlot(station, "CMUJobAegisResearcher", out var slots, jobs) ? slots : 0;
     }
 
     private EntityUid? TryGetGovforStation()

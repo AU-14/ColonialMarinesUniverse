@@ -7,7 +7,6 @@ using Content.Server.AU14.VendorMarker;
 using Content.Server.Chat.Systems;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Presets;
-using Content.Server.IdentityManagement;
 using Content.Server.Preferences.Managers;
 using Content.Shared._CMU14.Threats;
 using Content.Shared._RMC14.Construction;
@@ -17,8 +16,9 @@ using Content.Shared._RMC14.Map;
 using Content.Shared.Access.Components;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -1087,7 +1087,7 @@ public sealed partial class ThirdPartySystem : EntitySystem
 
     private void ApplyPlayerCharacterName(EntityUid mob, string characterName)
     {
-        if (!HasComp<HumanoidAppearanceComponent>(mob))
+        if (!HasComp<HumanoidProfileComponent>(mob))
             return;
 
         if (string.IsNullOrWhiteSpace(characterName))

@@ -260,7 +260,7 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    useMapCoords: true
   - type: TileFireOnTrigger
     range: 1
     spawn: RMCTileFireHCNapalm
@@ -354,7 +354,7 @@
   - type: TriggerOnSpawn
   - type: SpawnOnTrigger
     proto: RMCSmokeFireSentry
-    mapCoords: true
+    useMapCoords: true
   - type: TileFireOnTrigger
     range: 0
     spawn: RMCTileFireHCNapalm

@@ -8,8 +8,9 @@
   components:
     - type: InteractionOutline
     - type: Damageable
-      damageContainer: StructuralInorganic
       damageModifierSet: StrongMetallic
+    - type: Injurable
+      damageContainer: StructuralInorganic
     - type: RMCMesonsNonviewable
 
 - type: entity

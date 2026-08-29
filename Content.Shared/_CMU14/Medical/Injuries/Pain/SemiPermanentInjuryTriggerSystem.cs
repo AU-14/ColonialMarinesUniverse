@@ -14,7 +14,7 @@ namespace Content.Shared._CMU14.Medical.Injuries.Pain;
 public sealed partial class SemiPermanentInjuryTriggerSystem : EntitySystem
 {
     [Dependency] private IConfigurationManager _cfg = default!;
-    [Dependency] private SharedStatusEffectsSystem _status = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
 
     private static readonly TimeSpan NerveDamageDuration = TimeSpan.FromMinutes(30);
     private static readonly EntProtoId NerveDamageArm = "StatusEffectCMUNerveDamageArm";

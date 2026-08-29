@@ -1,5 +1,5 @@
 using Content.Shared._CMU14.ZLevels.Core.Components;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Map;
 using Robust.Shared.Map.Components;
 using Robust.Shared.Physics;

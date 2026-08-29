@@ -13,6 +13,7 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.GameTicking;
 using Content.Shared.Maps;
 using Content.Shared.ParaDrop;
@@ -237,8 +238,7 @@ public abstract partial class SharedSupplyDropSystem : EntitySystem
             return false;
         }
 
-        SharedEntityStorageComponent? storage = null;
-        if (_entityStorage.ResolveStorage(crate, ref storage) &&
+        if (TryComp<EntityStorageComponent>(crate, out var storage) &&
             storage.Open)
         {
             _popup.PopupCursor(Loc.GetString("rmc-supply-drop-crate-open"), user, PopupType.MediumCaution);

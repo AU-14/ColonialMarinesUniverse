@@ -3,6 +3,7 @@ using Content.Shared.Alert;
 using Content.Shared.Armor;
 using Content.Shared.Body.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Inventory;
@@ -28,7 +29,7 @@ public sealed partial class RespiratoryStrainSystem : EntitySystem
     [Dependency] private InventorySystem _inventory = default!;
     [Dependency] private MovementSpeedModifierSystem _speed = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
 
     public override void Initialize()

@@ -8,6 +8,8 @@ using Content.Shared.Body.Components;
 using Content.Shared.Body.Systems;
 using Content.Shared.Database;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
@@ -22,7 +24,7 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 {
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private ISharedAdminLogManager _adminLogger = default!;
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private SharedBoneSystem _bone = default!;
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
@@ -59,11 +61,12 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
 
     private bool TryHeal(Entity<YautjaHealingGunComponent> gun, EntityUid target, EntityUid user, bool resetDelay)
     {
-        if (!TryComp(target, out DamageableComponent? damageable))
+        if (!TryComp(target, out DamageableComponent? damageable) ||
+            !TryComp(target, out InjurableComponent? injurable))
             return false;
 
         if (gun.Comp.DamageContainers is not null &&
-            damageable.DamageContainerID is { } container &&
+            injurable.DamageContainer is { } container &&
             !gun.Comp.DamageContainers.Contains(container))
         {
             return false;
@@ -139,10 +142,11 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
         if (gun.Comp.RepairsFractures && HasFractures(target.Owner))
             return true;
 
+        var damage = _damageable.GetAllDamage(target);
         foreach (var (type, amount) in gun.Comp.Damage.DamageDict)
         {
             if (amount < 0 &&
-                target.Comp.Damage.DamageDict.TryGetValue(type, out var current) &&
+                damage.DamageDict.TryGetValue(type, out var current) &&
                 current > 0)
             {
                 return true;

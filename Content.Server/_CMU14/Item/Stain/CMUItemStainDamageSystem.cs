@@ -5,6 +5,7 @@ using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
 using Content.Shared._RMC14.Chemistry.Reagent;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Item;
@@ -23,6 +24,7 @@ public sealed partial class CMUItemStainDamageSystem : EntitySystem
 
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private RMCReagentSystem _reagents = default!;
     [Dependency] private CMUItemStainSystem _stains = default!;
 
@@ -51,7 +53,8 @@ public sealed partial class CMUItemStainDamageSystem : EntitySystem
         else
         {
             if (!TryComp<BloodstreamComponent>(args.Body, out var bloodstream) ||
-                !_reagents.TryIndex(bloodstream.BloodReagent, out var blood))
+                !_bloodstream.TryGetPrimaryReferenceReagent((args.Body, bloodstream), out var bloodReagent) ||
+                !_reagents.TryIndex(bloodReagent, out var blood))
             {
                 return;
             }

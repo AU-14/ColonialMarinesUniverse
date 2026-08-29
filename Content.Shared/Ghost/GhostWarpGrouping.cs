@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace Content.Shared.Ghost;
+namespace Content.Shared.Ghost.Systems;
 
 public readonly record struct GhostWarpGroupingResult(string Tab, string Section);
 

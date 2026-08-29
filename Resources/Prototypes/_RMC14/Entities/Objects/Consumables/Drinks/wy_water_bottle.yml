@@ -4,14 +4,12 @@
   name: We-Yu bottled spring water
   description: Overpriced 'Spring' water. Bottled by the We-Yu Corporation.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 50
         reagents:
         - ReagentId: Water
           Quantity: 30
-  - type: Drink
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/WEYADrinks/weya_water_bottle.rsi
     layers:
@@ -48,9 +46,8 @@
   name: Weyland-Yutani Bug Juice Protein Drink
   description: We-Ya brand plastic bottle full of toxic looking green goo, tastes like kiwi, but you are more than sure that there is none of it here.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: RMCJuiceBug
@@ -69,9 +66,8 @@
   name: Weyland-Yutani Bottled Coconut Milk
   description: Rich in vitamins and (artificial) flavor, quenches thirst in a few sips. Bottled by the Weyland-Yutani Corporation.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: RMCCocoMilk
@@ -88,9 +84,8 @@
   name: Weyland-Yutani Premium Choco Soylent
   description: A plastic bottle full of gooey goodness, choco flavor. One bottle has enough calories for a lunch - don't drink it all in one sitting, better not risk getting a stomachache.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 30
         reagents:
         - ReagentId: Nutriment

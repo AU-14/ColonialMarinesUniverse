@@ -1,329 +1,91 @@
-using System.Linq;
-using System.Text;
-using Content.Server.Popups;
-using Content.Shared.UserInterface;
-using Content.Shared.DoAfter;
-using Content.Shared.Forensics;
-using Content.Shared.Hands.EntitySystems;
-using Content.Shared.Interaction;
-using Content.Shared.Paper;
-using Content.Shared.Verbs;
-using Content.Shared.Tag;
-using Robust.Shared.Audio.Systems;
-using Robust.Server.GameObjects;
-using Robust.Shared.Audio;
-using Robust.Shared.Timing;
 using Content.Server.CriminalRecords.Systems;
 using Content.Server.Station.Systems;
-using Content.Server.StationRecords.Systems;
 using Content.Shared.CriminalRecords;
+using Content.Shared.Forensics;
+using Content.Shared.Forensics.Components;
 using Content.Shared.Humanoid;
+using Content.Shared.Security;
 using Content.Shared.StationRecords;
-using Robust.Shared.Prototypes;
+using Content.Shared.StationRecords.Systems;
 
-// todo: remove this stinky LINQy
+namespace Content.Server.Forensics.Systems;
 
-namespace Content.Server.Forensics.Systems
+/// <summary>
+/// Adds successfully scanned humanoids to the station criminal-records console.
+/// The scanner interaction and evidence collection remain owned by the shared scanner system.
+/// </summary>
+public sealed partial class ForensicScannerCriminalRecordsSystem : EntitySystem
 {
-    public sealed partial class ForensicScannerSystem : EntitySystem
+    [Dependency] private CriminalRecordsConsoleSystem _criminalRecords = default!;
+    [Dependency] private StationRecordsSystem _records = default!;
+    [Dependency] private StationSystem _station = default!;
+
+    public override void Initialize()
     {
-        [Dependency] private IGameTiming _gameTiming = default!;
-        [Dependency] private SharedDoAfterSystem _doAfterSystem = default!;
-        [Dependency] private UserInterfaceSystem _uiSystem = default!;
-        [Dependency] private PopupSystem _popupSystem = default!;
-        [Dependency] private PaperSystem _paperSystem = default!;
-        [Dependency] private SharedHandsSystem _handsSystem = default!;
-        [Dependency] private SharedAudioSystem _audioSystem = default!;
-        [Dependency] private MetaDataSystem _metaData = default!;
-        [Dependency] private ForensicsSystem _forensicsSystem = default!;
-        [Dependency] private TagSystem _tag = default!;
-        [Dependency] private CriminalRecordsConsoleSystem _criminalRecordsConsole = default!;
-        [Dependency] private StationSystem _stationSystem = default!;
-        [Dependency] private StationRecordsSystem _stationRecords = default!;
+        base.Initialize();
 
-        private static readonly ProtoId<TagPrototype> DnaSolutionScannableTag = "DNASolutionScannable";
+        SubscribeLocalEvent<ForensicScannerComponent, ForensicScannerScannedEvent>(OnScanCompleted);
+    }
 
-        public override void Initialize()
+    private void OnScanCompleted(
+        Entity<ForensicScannerComponent> scanner,
+        ref ForensicScannerScannedEvent args)
+    {
+        var target = args.Target;
+
+        if (!HasComp<HumanoidProfileComponent>(target))
+            return;
+
+        var station = _station.GetOwningStation(scanner);
+        if (station == null)
+            return;
+
+        var name = MetaData(target).EntityName;
+        var dna = CompOrNull<DnaComponent>(target)?.DNA;
+        var fingerprint = CompOrNull<FingerprintComponent>(target)?.Fingerprint;
+
+        if (string.IsNullOrEmpty(dna))
+            dna = scanner.Comp.DNAs.Count > 0 ? string.Join(", ", scanner.Comp.DNAs) : "N/A";
+
+        if (string.IsNullOrEmpty(fingerprint))
+            fingerprint = scanner.Comp.Fingerprints.Count > 0
+                ? string.Join(", ", scanner.Comp.Fingerprints)
+                : "N/A";
+
+        StationRecordKey key;
+        if (_records.GetRecordByName(station.Value, name) is { } recordId)
         {
-            base.Initialize();
-
-            SubscribeLocalEvent<ForensicScannerComponent, AfterInteractEvent>(OnAfterInteract);
-            SubscribeLocalEvent<ForensicScannerComponent, AfterInteractUsingEvent>(OnAfterInteractUsing);
-            SubscribeLocalEvent<ForensicScannerComponent, BeforeActivatableUIOpenEvent>(OnBeforeActivatableUIOpen);
-            SubscribeLocalEvent<ForensicScannerComponent, GetVerbsEvent<UtilityVerb>>(OnUtilityVerb);
-            SubscribeLocalEvent<ForensicScannerComponent, ForensicScannerPrintMessage>(OnPrint);
-            SubscribeLocalEvent<ForensicScannerComponent, ForensicScannerClearMessage>(OnClear);
-            SubscribeLocalEvent<ForensicScannerComponent, ForensicScannerDoAfterEvent>(OnDoAfter);
-        }
-
-        private void UpdateUserInterface(EntityUid uid, ForensicScannerComponent component)
-        {
-            var state = new ForensicScannerBoundUserInterfaceState(
-                component.Fingerprints,
-                component.Fibers,
-                component.TouchDNAs,
-                component.SolutionDNAs,
-                component.Residues,
-                component.LastScannedName,
-                component.PrintCooldown,
-                component.PrintReadyAt);
-
-            _uiSystem.SetUiState(uid, ForensicScannerUiKey.Key, state);
-        }
-
-        private void OnDoAfter(EntityUid uid, ForensicScannerComponent component, DoAfterEvent args)
-        {
-            if (args.Handled || args.Cancelled)
-                return;
-
-            if (!TryComp(uid, out ForensicScannerComponent? scanner))
-                return;
-
-            if (args.Args.Target != null)
+            key = new StationRecordKey(recordId, station.Value);
+            if (_records.TryGetRecord<GeneralStationRecord>(key, out var general))
             {
-                if (!TryComp<ForensicsComponent>(args.Args.Target, out var forensics))
-                {
-                    scanner.Fingerprints = new();
-                    scanner.Fibers = new();
-                    scanner.TouchDNAs = new();
-                    scanner.Residues = new();
-                }
-                else
-                {
-                    scanner.Fingerprints = forensics.Fingerprints.ToList();
-                    scanner.Fibers = forensics.Fibers.ToList();
-                    scanner.TouchDNAs = forensics.DNAs.ToList();
-                    scanner.Residues = forensics.Residues.ToList();
-                }
-
-                if (_tag.HasTag(args.Args.Target.Value, DnaSolutionScannableTag))
-                {
-                    scanner.SolutionDNAs = _forensicsSystem.GetSolutionsDNA(args.Args.Target.Value);
-                }
-                else
-                {
-                    scanner.SolutionDNAs = new();
-                }
-
-                scanner.LastScannedName = MetaData(args.Args.Target.Value).EntityName;
-
-                // Only add a record if the last thing scanned was a humanoid
-                if (!TryComp(args.Args.Target.Value, out HumanoidAppearanceComponent? _))
-                    return;
-
-                // Try to get DNA and fingerprint directly from components if present
-                string? dnaValue = null;
-                string? fingerprintValue = null;
-                if (TryComp<Content.Shared.Forensics.Components.DnaComponent>(args.Args.Target.Value, out var dnaComp) && !string.IsNullOrEmpty(dnaComp.DNA))
-                {
-                    dnaValue = dnaComp.DNA;
-                }
-                if (TryComp<Content.Shared.Forensics.Components.FingerprintComponent>(args.Args.Target.Value, out var fpComp) && !string.IsNullOrEmpty(fpComp.Fingerprint))
-                {
-                    fingerprintValue = fpComp.Fingerprint;
-                }
-
-                // Add a general record if not present (required for criminal record)
-                var station = _stationSystem.GetOwningStation(uid);
-                if (station == null)
-                    return;
-                var generalKey = _stationRecords.GetRecordByName(station.Value, scanner.LastScannedName);
-                StationRecordKey key;
-                if (generalKey is not uint id)
-                {
-                    key = _stationRecords.AddRecordEntry(station.Value, new GeneralStationRecord
-                    {
-                        Name = scanner.LastScannedName,
-                        // Prefer component DNA/fingerprint, fallback to scanned evidence, then N/A
-                        DNA = dnaValue ?? (scanner.TouchDNAs.Count > 0 ? string.Join(", ", scanner.TouchDNAs) : "N/A"),
-                        Fingerprint = fingerprintValue ?? (scanner.Fingerprints.Count > 0 ? string.Join(", ", scanner.Fingerprints) : "N/A")
-                    });
-                }
-                else
-                {
-                    key = new StationRecordKey(id, station.Value);
-                    // Update existing record with DNA and fingerprint info
-                    if (_stationRecords.TryGetRecord<GeneralStationRecord>(key, out var record))
-                    {
-                        record.DNA = dnaValue ?? (scanner.TouchDNAs.Count > 0 ? string.Join(", ", scanner.TouchDNAs) : "N/A");
-                        record.Fingerprint = fingerprintValue ?? (scanner.Fingerprints.Count > 0 ? string.Join(", ", scanner.Fingerprints) : "N/A");
-                    }
-                }
-
-                // Add the criminal record with bounty 2500, all else null/default
-                _stationRecords.AddRecordEntry<CriminalRecord>(key, new CriminalRecord
-                {
-
-                    Status = Content.Shared.Security.SecurityStatus.None,
-                    Reason = "Scanned by forensic scanner",
-                    InitiatorName = "Forensic Scanner",
-                    History = new System.Collections.Generic.List<CrimeHistory>()
-                }, null);
-
-                // Add to scanned records so it appears on the console
-                _criminalRecordsConsole.AddScannedRecord(key);
+                general.DNA = dna;
+                general.Fingerprint = fingerprint;
             }
+        }
+        else
+        {
+            key = _records.AddRecordEntry(station.Value, new GeneralStationRecord
+            {
+                Name = name,
+                DNA = dna,
+                Fingerprint = fingerprint,
+            });
 
-            OpenUserInterface(args.Args.User, (uid, scanner));
+            if (!key.IsValid())
+                return;
         }
 
-        /// <remarks>
-        /// Hosts logic common between OnUtilityVerb and OnAfterInteract.
-        /// </remarks>
-        private void StartScan(EntityUid uid, ForensicScannerComponent component, EntityUid user, EntityUid target)
+        if (!_records.TryGetRecord<CriminalRecord>(key, out _))
         {
-            _doAfterSystem.TryStartDoAfter(new DoAfterArgs(EntityManager, user, component.ScanDelay, new ForensicScannerDoAfterEvent(), uid, target: target, used: uid)
+            _records.AddRecordEntry(key, new CriminalRecord
             {
-                BreakOnMove = true,
-                NeedHand = true
+                Status = SecurityStatus.None,
+                Reason = "Scanned by forensic scanner",
+                InitiatorName = "Forensic Scanner",
             });
         }
 
-        private void OnUtilityVerb(EntityUid uid, ForensicScannerComponent component, GetVerbsEvent<UtilityVerb> args)
-        {
-            if (!args.CanInteract || !args.CanAccess || component.CancelToken != null)
-                return;
-
-            var verb = new UtilityVerb()
-            {
-                Act = () => StartScan(uid, component, args.User, args.Target),
-                IconEntity = GetNetEntity(uid),
-                Text = Loc.GetString("forensic-scanner-verb-text"),
-                Message = Loc.GetString("forensic-scanner-verb-message")
-            };
-
-            args.Verbs.Add(verb);
-        }
-
-        private void OnAfterInteract(EntityUid uid, ForensicScannerComponent component, AfterInteractEvent args)
-        {
-            if (component.CancelToken != null || args.Target == null || !args.CanReach)
-                return;
-
-            StartScan(uid, component, args.User, args.Target.Value);
-        }
-
-        private void OnAfterInteractUsing(EntityUid uid, ForensicScannerComponent component, AfterInteractUsingEvent args)
-        {
-            if (args.Handled || !args.CanReach)
-                return;
-
-            if (!TryComp<ForensicPadComponent>(args.Used, out var pad))
-                return;
-
-            foreach (var fiber in component.Fibers)
-            {
-                if (fiber == pad.Sample)
-                {
-                    _audioSystem.PlayPvs(component.SoundMatch, uid);
-                    _popupSystem.PopupEntity(Loc.GetString("forensic-scanner-match-fiber"), uid, args.User);
-                    return;
-                }
-            }
-
-            foreach (var fingerprint in component.Fingerprints)
-            {
-                if (fingerprint == pad.Sample)
-                {
-                    _audioSystem.PlayPvs(component.SoundMatch, uid);
-                    _popupSystem.PopupEntity(Loc.GetString("forensic-scanner-match-fingerprint"), uid, args.User);
-                    return;
-                }
-            }
-
-            _audioSystem.PlayPvs(component.SoundNoMatch, uid);
-            _popupSystem.PopupEntity(Loc.GetString("forensic-scanner-match-none"), uid, args.User);
-        }
-
-        private void OnBeforeActivatableUIOpen(EntityUid uid, ForensicScannerComponent component, BeforeActivatableUIOpenEvent args)
-        {
-            UpdateUserInterface(uid, component);
-        }
-
-        private void OpenUserInterface(EntityUid user, Entity<ForensicScannerComponent> scanner)
-        {
-            UpdateUserInterface(scanner, scanner.Comp);
-
-            _uiSystem.OpenUi(scanner.Owner, ForensicScannerUiKey.Key, user);
-        }
-
-        private void OnPrint(EntityUid uid, ForensicScannerComponent component, ForensicScannerPrintMessage args)
-        {
-            var user = args.Actor;
-
-            if (_gameTiming.CurTime < component.PrintReadyAt)
-            {
-                // This shouldn't occur due to the UI guarding against it, but
-                // if it does, tell the user why nothing happened.
-                _popupSystem.PopupEntity(Loc.GetString("forensic-scanner-printer-not-ready"), uid, user);
-                return;
-            }
-
-            // Spawn a piece of paper.
-            var printed = Spawn(component.MachineOutput, Transform(uid).Coordinates);
-            _handsSystem.PickupOrDrop(args.Actor, printed, checkActionBlocker: false);
-
-            if (!TryComp<PaperComponent>(printed, out var paperComp))
-            {
-                Log.Error("Printed paper did not have PaperComponent.");
-                return;
-            }
-
-            _metaData.SetEntityName(printed, Loc.GetString("forensic-scanner-report-title", ("entity", component.LastScannedName)));
-
-            var text = new StringBuilder();
-
-            text.AppendLine(Loc.GetString("forensic-scanner-interface-fingerprints"));
-            foreach (var fingerprint in component.Fingerprints)
-            {
-                text.AppendLine(fingerprint);
-            }
-            text.AppendLine();
-            text.AppendLine(Loc.GetString("forensic-scanner-interface-fibers"));
-            foreach (var fiber in component.Fibers)
-            {
-                text.AppendLine(fiber);
-            }
-            text.AppendLine();
-            text.AppendLine(Loc.GetString("forensic-scanner-interface-dnas"));
-            foreach (var dna in component.TouchDNAs)
-            {
-                text.AppendLine(dna);
-            }
-            foreach (var dna in component.SolutionDNAs)
-            {
-                Log.Debug(dna);
-                if (component.TouchDNAs.Contains(dna))
-                    continue;
-                text.AppendLine(dna);
-            }
-            text.AppendLine();
-            text.AppendLine(Loc.GetString("forensic-scanner-interface-residues"));
-            foreach (var residue in component.Residues)
-            {
-                text.AppendLine(residue);
-            }
-
-            _paperSystem.SetContent((printed, paperComp), text.ToString());
-            _audioSystem.PlayPvs(component.SoundPrint, uid,
-                AudioParams.Default
-                .WithVariation(0.25f)
-                .WithVolume(3f)
-                .WithRolloffFactor(2.8f)
-                .WithMaxDistance(4.5f));
-
-            component.PrintReadyAt = _gameTiming.CurTime + component.PrintCooldown;
-        }
-
-        private void OnClear(EntityUid uid, ForensicScannerComponent component, ForensicScannerClearMessage args)
-        {
-            component.Fingerprints = new();
-            component.Fibers = new();
-            component.TouchDNAs = new();
-            component.SolutionDNAs = new();
-            component.LastScannedName = string.Empty;
-
-            UpdateUserInterface(uid, component);
-        }
+        _records.Synchronize(key);
+        _criminalRecords.AddScannedRecord(key);
     }
 }

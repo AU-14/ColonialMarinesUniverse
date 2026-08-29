@@ -17,6 +17,7 @@
   abstract: true
   save: false
   parent:
+  - BaseMobAnimal
   - BaseMob
   - MobDamageable
   - MobCombat
@@ -43,21 +44,24 @@
     innate: true
     state: half
     onlyHalf: true
-  # Abominations have no hands (skitter overrides this with real ones), but
-  # they still need to drag downed prey back to nests. NeedsHands: false
+  # Abominations have no hands, but they still need to drag downed prey back
+  # to nests. NeedsHands: false
   # lets them pull/drag bodies in their mouth/limbs without an inventory.
   - type: Puller
     needsHands: false
   # Weak to fire (Heat x2). Tendons + flesh forms catch and burn fast — fire
   # is the intended counter to abomination area denial.
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: AbominationFireWeak
   # Bloodstream is inherited from MobBloodstream so it can be examined as a
   # mob, but we kill bleed entirely — abominations don't have circulating
   # blood, they ARE the blood. No bleed-out, no bleed damage.
+  - type: Injurable
+    damageContainer: Biological
   - type: Bloodstream
-    bloodMaxVolume: 0
+    bloodReferenceSolution:
+      reagents: []
+    bloodlossThreshold: 0
     maxBleedAmount: 0
     bleedReductionAmount: 0
     bloodRefreshAmount: 0
@@ -87,11 +91,6 @@
     - Unconscious
     - TemporaryBlindness
     - Deaf
-  # Only the skitter has hands (added in skitter.yml). Spider, grunt and the
-  # combat-form mimic intentionally have no fingers.
-  - type: Body
-    prototype: Primate
-    requiredLegs: 1
   - type: NpcFactionMember
     factions:
     - Abomination
@@ -186,7 +185,7 @@
 - type: nameIdentifierGroup
   id: Abomination
   maxValue: 999
-  prefix: Abomination
+  format: name-identifier-format-abomination
 
 # Heat x3.5 = burns down 3.5x as fast. Fire is the hard counter to the
 # threat's area denial; flamers should melt them in seconds.

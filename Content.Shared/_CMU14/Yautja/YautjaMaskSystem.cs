@@ -100,10 +100,10 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        ent.Comp.User = args.Equipee;
+        ent.Comp.User = args.EquipTarget;
 
-        if (HasComp<YautjaComponent>(args.Equipee))
-            EnableVisor(ent, args.Equipee, false);
+        if (HasComp<YautjaComponent>(args.EquipTarget))
+            EnableVisor(ent, args.EquipTarget, false);
     }
 
     private void OnUnequipped(Entity<YautjaMaskComponent> ent, ref GotUnequippedEvent args)
@@ -114,8 +114,8 @@ public sealed partial class YautjaMaskSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        DisableVisor(ent, args.Equipee, false);
-        SetZoom(ent, args.Equipee, false, false);
+        DisableVisor(ent, args.EquipTarget, false);
+        SetZoom(ent, args.EquipTarget, false, false);
         ent.Comp.User = null;
     }
 

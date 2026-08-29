@@ -77,12 +77,16 @@
     clawType: Sharp
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 45
+      types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: XenoHeadbite
     damage:
-      groups:
-        Brute: 60
+      types:
+        Blunt: 20
+        Slash: 20
+        Piercing: 20
     emoteCooldown: 99999
   - type: WendigoHeadbiteAudio
     closeSound:
@@ -166,6 +170,9 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon: /Textures/Interface/Actions/scream.png
+  - type: Sprite
+    layers:
+    - texture: /Textures/Interface/Actions/scream.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:WendigoVoiceActionEvent {}

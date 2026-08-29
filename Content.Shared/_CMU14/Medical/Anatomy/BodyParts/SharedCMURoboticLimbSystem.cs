@@ -8,11 +8,11 @@ using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;
-using Content.Shared.Humanoid;
-using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Content.Shared.Stacks;
@@ -50,7 +50,6 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
     [Dependency] private SharedBodyPartHealthSystem _partHealth = default!;
     [Dependency] private SharedBodyZoneTargetingSystem _zoneTargeting = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
@@ -59,9 +58,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
     [Dependency] private SharedToolSystem _tool = default!;
 
     private readonly Dictionary<EntityUid, EntityUid> _pendingRoboticHits = new();
-    private readonly Dictionary<HumanoidVisualLayers, ProtoId<HumanoidSpeciesSpriteLayer>> _desiredVisualLayers = new();
     private readonly HashSet<string> _repairableDamageTypes = new();
-    private readonly List<HumanoidVisualLayers> _staleVisualLayers = new();
 
     private bool _medicalEnabled;
     private bool _bodyPartEnabled;
@@ -101,28 +98,6 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
     private void OnRoboticLimbShutdown(Entity<CMURoboticLimbComponent> ent, ref ComponentShutdown args)
     {
         RemovePendingRoboticHitPart(ent.Owner);
-
-        if (_net.IsClient)
-            return;
-
-        if (TryComp<BodyPartComponent>(ent, out var part) && part.Body is { } body)
-            RefreshBodyVisuals(body);
-    }
-
-    public void BodyPartAdded(EntityUid body, Entity<BodyPartComponent> part)
-    {
-        if (_net.IsClient)
-            return;
-
-        RefreshBodyVisuals(body);
-    }
-
-    public void BodyPartRemoved(EntityUid body)
-    {
-        if (_net.IsClient)
-            return;
-
-        RefreshBodyVisuals(body);
     }
 
     private void OnHumanShutdown(Entity<CMUHumanMedicalComponent> ent, ref ComponentShutdown args)
@@ -278,7 +253,7 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
             }
         }
         else if (!HasComp<RMCCableCoilComponent>(used) ||
-                 !_stack.Use(used, 1))
+                 !_stack.TryUse(used, 1))
         {
             return;
         }
@@ -457,78 +432,6 @@ public sealed partial class SharedCMURoboticLimbSystem : EntitySystem
         var missing = health.Max - health.Current;
         var untracked = missing - robotic.BruteDamage - robotic.BurnDamage;
         return tracked + FixedPoint2.Max(FixedPoint2.Zero, untracked);
-    }
-
-    private void RefreshBodyVisuals(EntityUid body)
-    {
-        if (!TryComp<HumanoidAppearanceComponent>(body, out var humanoid))
-            return;
-
-        var desired = _desiredVisualLayers;
-        desired.Clear();
-        foreach (var (partUid, _) in _medicalIndex.GetBodyParts(body))
-        {
-            if (!TryComp<CMURoboticLimbComponent>(partUid, out var robotic))
-                continue;
-
-            foreach (var (layer, layerId) in robotic.BaseLayers)
-            {
-                desired[layer] = layerId;
-            }
-        }
-
-        if (desired.Count == 0 && !HasComp<CMURoboticLimbOverlayComponent>(body))
-            return;
-
-        var tracker = EnsureComp<CMURoboticLimbOverlayComponent>(body);
-        var dirty = false;
-
-        foreach (var (layer, layerId) in desired)
-        {
-            if (!tracker.OriginalLayers.ContainsKey(layer))
-            {
-                tracker.OriginalLayers[layer] = humanoid.CustomBaseLayers.TryGetValue(layer, out var original)
-                    ? original
-                    : null;
-            }
-
-            var next = new CustomBaseLayerInfo(layerId);
-            if (!humanoid.CustomBaseLayers.TryGetValue(layer, out var current) ||
-                current.Id != next.Id ||
-                current.Color != next.Color)
-            {
-                humanoid.CustomBaseLayers[layer] = next;
-                dirty = true;
-            }
-        }
-
-        _staleVisualLayers.Clear();
-        foreach (var (layer, _) in tracker.OriginalLayers)
-        {
-            if (desired.ContainsKey(layer))
-                continue;
-
-            _staleVisualLayers.Add(layer);
-        }
-
-        foreach (var layer in _staleVisualLayers)
-        {
-            var original = tracker.OriginalLayers[layer];
-            if (original is { } restore)
-                humanoid.CustomBaseLayers[layer] = restore;
-            else
-                humanoid.CustomBaseLayers.Remove(layer);
-
-            tracker.OriginalLayers.Remove(layer);
-            dirty = true;
-        }
-        _staleVisualLayers.Clear();
-
-        if (dirty)
-            Dirty(body, humanoid);
-
-        if (tracker.OriginalLayers.Count == 0)
-            RemComp<CMURoboticLimbOverlayComponent>(body);
     }
 
     private bool HasRoboticLimb(EntityUid body)

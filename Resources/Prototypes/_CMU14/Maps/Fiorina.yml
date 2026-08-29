@@ -7,7 +7,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    fiorina:
+    Almayer:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

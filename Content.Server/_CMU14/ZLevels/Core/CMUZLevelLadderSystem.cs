@@ -1,7 +1,7 @@
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._CMU14.ZLevels.Core;
 using Content.Shared.DoAfter;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Movement.Events;
 using Content.Shared.Popups;

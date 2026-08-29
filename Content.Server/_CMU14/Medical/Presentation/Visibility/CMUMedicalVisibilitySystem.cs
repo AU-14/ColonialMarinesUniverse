@@ -1,6 +1,6 @@
 using Content.Shared._CMU14.Medical.Core;
+using Content.Shared.Body;
 using Content.Shared.Body.Events;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Eye;
 using Robust.Server.GameObjects;
@@ -54,7 +54,11 @@ public sealed partial class CMUMedicalVisibilitySystem : EntitySystem
 
     private void OnOrganAddedToBody(Entity<OrganComponent> ent, ref OrganAddedToBodyEvent args)
     {
-        RefreshEntity(ent.Owner);
+        // Relation events are raised after the body is assigned, while container insertion can raise this before it.
+        if (ent.Comp.Body == args.Body)
+            RefreshEntity(ent.Owner);
+        else
+            QueueRefresh(ent.Owner);
     }
 
     private void OnOrganRemovedFromBody(Entity<OrganComponent> ent, ref OrganRemovedFromBodyEvent args)

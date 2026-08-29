@@ -6,8 +6,10 @@ using Content.Shared.Jittering;
 using Content.Shared.Popups;
 using Content.Shared.StatusEffect;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Network;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Xenonids.FightOrFlight;
 
@@ -18,8 +20,9 @@ public sealed partial class XenoFightOrFlightSystem : EntitySystem
     [Dependency] private XenoEnergySystem _energy = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedXenoHiveSystem _hive = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffect = default!;
+    [Dependency] private NewStatusEffectsSystem _statusEffect = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
+    [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -58,10 +61,20 @@ public sealed partial class XenoFightOrFlightSystem : EntitySystem
             if (!_hive.FromSameHive(xeno.Owner, otherXeno.Owner))
                 continue;
 
+            var clearParalysis = false;
             foreach (var status in xeno.Comp.AilmentsRemove)
             {
+                if (status.Id is "Stun" or "KnockedDown")
+                {
+                    clearParalysis = true;
+                    continue;
+                }
+
                 _status.TryRemoveStatusEffect(otherXeno, status);
             }
+
+            if (clearParalysis)
+                _stun.TryClearStunAndKnockdown(otherXeno);
 
             foreach (var status in xeno.Comp.AilmentsRemoveNew)
             {

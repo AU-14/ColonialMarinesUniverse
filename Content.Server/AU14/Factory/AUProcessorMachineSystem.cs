@@ -1,5 +1,7 @@
 using Content.Shared.AU14.Factory;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;
@@ -126,7 +128,7 @@ public sealed partial class AUProcessorMachineSystem : EntitySystem
         if (!comp.IsBroken)
             return;
 
-        if (args.Damageable.TotalDamage > FixedPoint2.Zero)
+        if (_damageable.GetTotalDamage((uid, args.Damageable)) > FixedPoint2.Zero)
             return;
 
         comp.IsBroken = false;

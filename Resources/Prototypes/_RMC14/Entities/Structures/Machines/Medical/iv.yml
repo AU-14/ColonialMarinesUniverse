@@ -89,8 +89,9 @@
   - type: InjectableSolution
     solution: pack
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: Glass
+  - type: Injurable
+    damageContainer: Inorganic
   - type: DamageOnHighSpeedImpact
     minimumSpeed: 2
     damage:

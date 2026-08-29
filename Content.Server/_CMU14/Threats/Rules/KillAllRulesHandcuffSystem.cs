@@ -27,7 +27,7 @@ public sealed partial class KillAllRulesHandcuffSystem : EntitySystem
 
     private void OnTargetHandcuffed(EntityUid uid, CuffableComponent component, ref TargetHandcuffedEvent args)
     {
-        if (_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>() && HasComp<HumanoidAppearanceComponent>(uid))
+        if (_gameTicker.IsGameRuleActive<KillAllHumanRuleComponent>() && HasComp<HumanoidProfileComponent>(uid))
             EntityManager.System<KillAllHumanRuleSystem>().OnHandcuffEvent(uid);
 
         if (!TryComp(uid, out NpcFactionMemberComponent? faction))

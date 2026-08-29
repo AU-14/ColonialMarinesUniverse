@@ -180,12 +180,8 @@ public sealed partial class ANPRCRadioSystem
         if (!ent.Comp.SlotLabels.ContainsKey(args.Slot))
             return;
 
-        var text = args.FrequencyText
-            .Trim()
-            .Replace(".", "")
-            .Replace(",", "");
-
-        if (!int.TryParse(text, out var frequency) || frequency <= 0)
+        if (!RadioFrequencyInput.TryParseAnprcScreenInput(args.FrequencyText, out var frequency) ||
+            frequency == RadioFrequency.Off)
         {
             _cmChat.ChatMessageToOne(Loc.GetString("anprc-frequency-invalid"), args.Actor);
             return;
@@ -240,11 +236,12 @@ public sealed partial class ANPRCRadioSystem
     // military band the search receiver walks, or the softwave band the colony's
     // handhelds and tunable headsets live in. anything else would be a private net
     // nothing on the planet could ever find
-    private static bool InDirectBand(int frequency)
+    private static bool InDirectBand(RadioFrequency frequency)
     {
-        return frequency
-            is >= ANPRCRadioComponent.SweepBandMin and <= ANPRCRadioComponent.SweepBandMax
-            or >= ANPRCRadioComponent.SoftwaveBandMin and <= ANPRCRadioComponent.SoftwaveBandMax;
+        return frequency >= ANPRCRadioComponent.SweepBandMin &&
+               frequency <= ANPRCRadioComponent.SweepBandMax ||
+               frequency >= ANPRCRadioComponent.SoftwaveBandMin &&
+               frequency <= ANPRCRadioComponent.SoftwaveBandMax;
     }
 
     private void OnTogglePower(Entity<ANPRCRadioComponent> ent, ref ANPRCTogglePowerMsg args)
@@ -528,8 +525,8 @@ public sealed partial class ANPRCRadioSystem
             return;
 
         var hasBattery = _powerCell.TryGetBatteryFromSlot(ent.Owner, out var battery);
-        var batteryFraction = hasBattery && battery!.MaxCharge > 0f
-            ? battery.CurrentCharge / battery.MaxCharge
+        var batteryFraction = hasBattery
+            ? _battery.GetChargeLevel(battery!.Value.AsNullable())
             : 0f;
 
         var antennaLabel = "NONE";
@@ -545,7 +542,7 @@ public sealed partial class ANPRCRadioSystem
             ANPRCRadioUI.Key,
             new ANPRCRadioState(
                 new Dictionary<int, ProtoId<RadioChannelPrototype>>(ent.Comp.Presets),
-                new Dictionary<int, int>(ent.Comp.FrequencyOverrides),
+                new Dictionary<int, RadioFrequency>(ent.Comp.FrequencyOverrides),
                 new Dictionary<int, string>(ent.Comp.SlotLabels),
                 ent.Comp.ActiveSlot,
                 ent.Comp.Enabled,
@@ -576,13 +573,13 @@ public sealed partial class ANPRCRadioSystem
     // the client only ever learns the operator's own nets, the unfactioned ones, and
     // whatever the search receiver has actually fixed. sending the whole plan would
     // hand every enemy frequency to anyone willing to read the state off the wire
-    private Dictionary<string, int> BuildChannelFrequencies(ANPRCRadioComponent radio)
+    private Dictionary<string, RadioFrequency> BuildChannelFrequencies(ANPRCRadioComponent radio)
     {
-        var frequencies = new Dictionary<string, int>();
+        var frequencies = new Dictionary<string, RadioFrequency>();
 
         foreach (var proto in _prototype.EnumeratePrototypes<RadioChannelPrototype>())
         {
-            if (proto.Frequency <= 0)
+            if (proto.Frequency == RadioFrequency.Off)
                 continue;
 
             var frequency = _freqPlan.GetFrequency(proto);

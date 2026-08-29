@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Mobs;
 using Content.Shared._RMC14.PropCalling;
 using Content.Shared.Actions;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Overlays;
 using Robust.Shared.Configuration;
 

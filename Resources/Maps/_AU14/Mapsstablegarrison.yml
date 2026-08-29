@@ -104854,43 +104854,6 @@ entities:
       rot: -1.5707963267948966 rad
       pos: 132.5,-153.5
       parent: 1
-- proto: TowelColorBlack
-  entities:
-  - uid: 16945
-    components:
-    - type: Transform
-      pos: 171.65129,-101.59446
-      parent: 1
-  - uid: 16946
-    components:
-    - type: Transform
-      pos: 186.58221,-115.600136
-      parent: 1
-  - uid: 16947
-    components:
-    - type: Transform
-      pos: 179.50578,-113.29645
-      parent: 1
-  - uid: 16948
-    components:
-    - type: Transform
-      pos: 166.37146,-121.25
-      parent: 1
-  - uid: 16949
-    components:
-    - type: Transform
-      pos: 250.55452,-105.28759
-      parent: 1
-  - uid: 16950
-    components:
-    - type: Transform
-      pos: 250.50764,-105.428215
-      parent: 1
-  - uid: 16951
-    components:
-    - type: Transform
-      pos: 250.46077,-105.584465
-      parent: 1
 - proto: TowelColorBrown
   entities:
   - uid: 16952

@@ -1,6 +1,5 @@
 using Content.Server.Administration;
 using Content.Server.Administration.Logs;
-using Content.Server.Bible.Components;
 using Content.Server.Chat.Managers;
 using Content.Server.Popups;
 using Content.Shared._RMC14.Xenonids;
@@ -11,6 +10,7 @@ using Content.Shared.Prayer;
 using Content.Shared.Verbs;
 using Robust.Server.GameObjects;
 using Robust.Shared.Player;
+using Content.Shared.Bible.Components;
 
 namespace Content.Server.Prayer;
 /// <summary>
@@ -53,7 +53,7 @@ public sealed partial class PrayerSystem : EntitySystem
             Icon = comp.VerbImage,
             Act = () =>
             {
-                if (comp.BibleUserOnly && !TryComp<BibleUserComponent>(args.User, out var bibleUser))
+                if (comp.BibleUserOnly && !HasComp<BibleUserComponent>(args.User))
                 {
                     _popupSystem.PopupEntity(Loc.GetString("prayer-popup-notify-pray-locked"), uid, actor.PlayerSession, PopupType.Large);
                     return;
@@ -80,9 +80,9 @@ public sealed partial class PrayerSystem : EntitySystem
     /// <param name="source">The IPlayerSession that sent the message</param>
     /// <param name="messageString">The main message sent to the player via the chatbox</param>
     /// <param name="popupMessage">The popup to notify the player, also prepended to the messageString</param>
-    public void SendSubtleMessage(ICommonSession target, ICommonSession source, string messageString, string popupMessage)
+    public void SendSubtleMessage(ICommonSession target, ICommonSession? source, string messageString, string popupMessage)
     {
-        SendSubtleMessage(target, source.Name, messageString, popupMessage);
+        SendSubtleMessage(target, source?.Name ?? "unknown source", messageString, popupMessage);
     }
 
     /// <summary>

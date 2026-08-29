@@ -1,6 +1,7 @@
 #nullable enable
 using System.Collections.Generic;
 using System.Linq;
+using Content.IntegrationTests.Fixtures;
 using Content.Shared._RMC14.Components;
 using Content.Shared.Coordinates;
 using Robust.Shared.GameObjects;
@@ -28,12 +29,12 @@ namespace Content.IntegrationTests.Tests;
 ///     spawn it into a new empty map and seeing what the map yml looks like.
 /// </remarks>
 [TestFixture]
-public sealed class PrototypeSaveTest
+public sealed class PrototypeSaveTest : GameTest
 {
     [Test]
     public async Task UninitializedSaveTest()
     {
-        await using var pair = await PoolManager.GetServerClient();
+        var pair = Pair;
         var server = pair.Server;
 
         var entityMan = server.ResolveDependency<IEntityManager>();
@@ -146,25 +147,21 @@ public sealed class PrototypeSaveTest
                         }
                     }
 
-                    // An entity may also remove components on init -> check no components are missing.
-
-                    // RMC14
-                    var componentsToRemove = new List<string>();
-                    if (entityMan.TryGetComponent<RemoveComponentsComponent>(uid, out var remComp) || remComp != null)
+                    // RMC14: Some prototypes intentionally remove inherited components on startup.
+                    var componentsToRemove = new HashSet<string>();
+                    if (entityMan.TryGetComponent<RemoveComponentsComponent>(uid, out var removeComponents))
                     {
-                        foreach (var compToRemove  in remComp.Components)
+                        foreach (var component in removeComponents.Components)
                         {
-                            componentsToRemove.Add(compToRemove.Key);
+                            componentsToRemove.Add(component.Key);
                         }
                     }
-                    // RMC14
 
+                    // An entity may also remove components on init -> check no unexpected components are missing.
                     foreach (var (compType, comp) in prototype.Components)
                     {
-                        // RMC14
                         if (componentsToRemove.Contains(compType))
-                            return;
-                        // RMC14
+                            continue;
 
                         Assert.That(compNames, Does.Contain(compType), $"Prototype {prototype.ID} removes component {compType} on spawn.");
                     }
@@ -174,7 +171,6 @@ public sealed class PrototypeSaveTest
                 }
             });
         });
-        await pair.CleanReturnAsync();
     }
 
     public sealed class TestEntityUidContext : ISerializationContext,

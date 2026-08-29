@@ -1,5 +1,6 @@
 - type: entity
   id: ActionXenoBase
+  parent: BaseAction
   categories: [ HideSpawnMenu ]
   components:
   - type: Action

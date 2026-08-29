@@ -3,6 +3,7 @@ using Content.Server.Explosion.Components;
 using Content.Server.Weapons.Ranged.Systems;
 using Content.Shared._RMC14.Explosion;
 using Content.Shared.Projectiles;
+using Content.Shared.Trigger;
 using Content.Shared.Weapons.Ranged.Events;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
@@ -51,6 +52,9 @@ public sealed partial class ProjectileGrenadeSystem : EntitySystem
     /// </summary>
     private void OnFragTrigger(Entity<ProjectileGrenadeComponent> entity, ref TriggerEvent args)
     {
+        if (args.Key != entity.Comp.TriggerKey)
+            return;
+
         FragmentIntoProjectiles(entity.Owner, entity.Comp);
         args.Handled = true;
     }

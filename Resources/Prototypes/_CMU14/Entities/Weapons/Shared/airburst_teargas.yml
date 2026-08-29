@@ -36,6 +36,7 @@
   - type: SpawnOnTerminate
     spawn: CMU14InstantTearGas
     projectileAdjust: false
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound: /Audio/Effects/smoke.ogg
+    positional: true
   - type: DeleteOnTrigger

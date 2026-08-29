@@ -17,7 +17,7 @@
   maxRandomOffset: 0
   randomRotation: false
   stations:
-    hybrisanew:
+    Hybrisa:
       stationProto: StandardUNMCWarship
       components:
         - type: StationNameSetup

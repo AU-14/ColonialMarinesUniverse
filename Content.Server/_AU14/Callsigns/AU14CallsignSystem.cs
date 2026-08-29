@@ -12,6 +12,7 @@ using Content.Shared._RMC14.Tracker.SquadLeader;
 using Content.Shared.Chat;
 using Content.Shared.Examine;
 using Content.Shared.GameTicking;
+using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.Roles;
 using Robust.Shared.Configuration;
@@ -413,7 +414,7 @@ public sealed partial class AU14CallsignSystem : EntitySystem
         // and rank like anyone else. frequency 0 is a sentinel channel (ANPRC or
         // tunable raw-frequency path), which stays masked: the real audience there
         // is whoever tuned in, not the public
-        if (args.Channel.Frequency > 0 && !AU14Callsigns.IsCallsignChannel(args.Channel))
+        if (args.Channel.Frequency != RadioFrequency.Off && !AU14Callsigns.IsCallsignChannel(args.Channel))
             return;
 
         ent.Comp.RadioMaskTick = _timing.CurTick;

@@ -4,6 +4,7 @@ using Content.Shared._CMU14.Yautja;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.Hands;
 using Content.Shared.Hands.Components;
@@ -496,7 +497,7 @@ public sealed partial class YautjaSmartDiscSystem : EntitySystem
 
     private bool IsHumanDiscTarget(EntityUid target)
     {
-        return HasComp<HumanoidAppearanceComponent>(target) && !HasComp<YautjaComponent>(target);
+        return HasComp<HumanoidProfileComponent>(target) && !HasComp<YautjaComponent>(target);
     }
 
     private bool TryFindHitTarget(Entity<YautjaSmartDiscComponent> ent, out EntityUid target)

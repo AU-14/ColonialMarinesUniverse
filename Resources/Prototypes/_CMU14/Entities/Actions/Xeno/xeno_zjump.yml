@@ -6,10 +6,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: pounce
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     checkCanAccess: false

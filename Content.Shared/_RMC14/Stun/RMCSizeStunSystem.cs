@@ -6,14 +6,14 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stamina;
 using Content.Shared.Coordinates;
-using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Flash;
 using Content.Shared.Interaction;
+using Content.Shared.Mobs.Components;
 using Content.Shared.Popups;
 using Content.Shared.Projectiles;
-using Content.Shared.Speech.Muting;
 using Content.Shared.Standing;
 using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Whitelist;
@@ -26,6 +26,7 @@ using Robust.Shared.Physics.Systems;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._RMC14.Stun;
 
@@ -34,6 +35,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
     private const double DazedMultiplierSmallXeno = 0.7;
     private const double DazedMultiplierBigXeno = 1.2;
     private static readonly ProtoId<StatusEffectPrototype> KnockedOut = "Unconscious";
+    private static readonly EntProtoId<StatusEffectComponent> KnockoutMute = "StatusEffectRMCUnconsciousMuted";
 
     [Dependency] private RMCDazedSystem _dazed = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
@@ -52,6 +54,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
     [Dependency] private StatusEffectQuerySystem _status = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatus = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private readonly HashSet<Entity<MarineComponent>> _marines = new();
@@ -68,6 +71,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
 
         SubscribeLocalEvent<RMCUnconsciousComponent, ComponentStartup>(OnUnconsciousStart);
         SubscribeLocalEvent<RMCUnconsciousComponent, ComponentShutdown>(OnUnconsciousEnd);
+        SubscribeLocalEvent<RMCUnconsciousComponent, StatusEffectAddedEvent>(OnUnconsciousAdded);
         SubscribeLocalEvent<RMCUnconsciousComponent, StatusEffectEndedEvent>(OnUnconsciousUpdate);
         SubscribeLocalEvent<RMCUnconsciousComponent, PointAttemptEvent>(OnUnconsciousPointAttempt);
 
@@ -222,7 +226,7 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
         var moverCoordinates = _transform.GetMoverCoordinates(ent, Transform(ent));
         foreach (var stun in ent.Comp.Stuns)
         {
-            var location = _entityLookup.GetEntitiesInRange<StatusEffectsComponent>(moverCoordinates, stun.StunArea);
+            var location = _entityLookup.GetEntitiesInRange<MobStateComponent>(moverCoordinates, stun.StunArea);
             foreach (var target in location)
             {
                 if (_entityWhitelist.IsWhitelistFail(stun.Whitelist, target))
@@ -319,33 +323,32 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
         if (!_status.TryAddStatusEffect<RMCUnconsciousComponent>(uid, KnockedOut, duration, refresh))
             return false;
 
+        TrySyncUnconsciousEffects(uid);
         return true;
     }
 
     private void OnUnconsciousStart(Entity<RMCUnconsciousComponent> ent, ref ComponentStartup args)
     {
-        //Applies stun, knockdown, blind, deafen, and mute
-        //Note applies comps directly to not mess with other status effect timers
-        EnsureComp<StunnedComponent>(ent);
-        EnsureComp<KnockedDownComponent>(ent);
-        EnsureComp<TemporaryBlindnessComponent>(ent);
-        EnsureComp<MutedComponent>(ent);
+        TrySyncUnconsciousEffects(ent);
         EnsureComp<DeafComponent>(ent);
     }
 
     private void OnUnconsciousEnd(Entity<RMCUnconsciousComponent> ent, ref ComponentShutdown args)
     {
         var time = _timing.CurTime;
-        if (!_status.TryGetTime(ent, "Stun", out var statusTime) || statusTime.Value.Item2 < time)
-            RemCompDeferred<StunnedComponent>(ent);
-        if (!_status.TryGetTime(ent, "KnockedDown", out statusTime) || statusTime.Value.Item2 < time)
-            RemCompDeferred<KnockedDownComponent>(ent);
-        if (!_status.TryGetTime(ent, "TemporaryBlindness", out statusTime) || statusTime.Value.Item2 < time)
-            RemCompDeferred<TemporaryBlindnessComponent>(ent);
-        if (!_status.TryGetTime(ent, "Muted", out statusTime) || statusTime.Value.Item2 < time)
-            RemCompDeferred<MutedComponent>(ent);
-        if (!_status.TryGetTime(ent, "Deaf", out statusTime) || statusTime.Value.Item2 < time)
+        _newStatus.TryRemoveStatusEffect(ent, SharedStunSystem.RMCUnconsciousId);
+        _newStatus.TryRemoveStatusEffect(ent, KnockoutMute);
+        if (!_status.TryGetTime(ent, "Deaf", out var statusTime) || statusTime.Value.Item2 < time)
             RemCompDeferred<DeafComponent>(ent);
+
+    }
+
+    private void OnUnconsciousAdded(Entity<RMCUnconsciousComponent> ent, ref StatusEffectAddedEvent args)
+    {
+        if (args.Key != KnockedOut.Id)
+            return;
+
+        TrySyncUnconsciousEffects(ent);
     }
 
     private void OnUnconsciousUpdate(Entity<RMCUnconsciousComponent> ent, ref StatusEffectEndedEvent args)
@@ -353,12 +356,29 @@ public sealed partial class RMCSizeStunSystem : EntitySystem
         if (!IsKnockedOut(ent))
             return;
 
-        //Readd comps just in case they were removed by a status
-        EnsureComp<StunnedComponent>(ent);
-        EnsureComp<KnockedDownComponent>(ent);
-        EnsureComp<TemporaryBlindnessComponent>(ent);
-        EnsureComp<MutedComponent>(ent);
         EnsureComp<DeafComponent>(ent);
+    }
+
+    public bool TrySyncUnconsciousEffects(EntityUid uid)
+    {
+        if (!_status.TryGetTime(uid, KnockedOut, out var statusTime))
+            return TryClearUnconsciousEffects(uid);
+
+        var remaining = statusTime.Value.Item2 - _timing.CurTime;
+        if (remaining <= TimeSpan.Zero)
+            return TryClearUnconsciousEffects(uid);
+
+        if (!_newStatus.TrySetStatusEffectDuration(uid, SharedStunSystem.RMCUnconsciousId, remaining, force: true))
+            return false;
+
+        return _newStatus.TrySetStatusEffectDuration(uid, KnockoutMute, remaining);
+    }
+
+    private bool TryClearUnconsciousEffects(EntityUid uid)
+    {
+        var removed = _newStatus.TryRemoveStatusEffect(uid, SharedStunSystem.RMCUnconsciousId);
+        removed |= _newStatus.TryRemoveStatusEffect(uid, KnockoutMute);
+        return removed;
     }
 
     private void OnUnconsciousPointAttempt(Entity<RMCUnconsciousComponent> ent, ref PointAttemptEvent args)

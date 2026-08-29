@@ -12,6 +12,8 @@ using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DragDrop;
 using Content.Shared.FixedPoint;
@@ -525,7 +527,7 @@ public sealed partial class CMUAutodocSystem : EntitySystem
         if (!TryComp<DamageableComponent>(patient, out var damageable))
             return FixedPoint2.Zero;
 
-        return damageable.DamagePerGroup.GetValueOrDefault(group.Id);
+        return _damageable.GetDamagePerGroup((patient, damageable)).GetValueOrDefault(group);
     }
 
     private void HealDamageGroup(EntityUid patient, EntityUid origin, ProtoId<DamageGroupPrototype> group, FixedPoint2 amount)

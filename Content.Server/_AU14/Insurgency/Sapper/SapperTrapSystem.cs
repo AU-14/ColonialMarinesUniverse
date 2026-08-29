@@ -1,5 +1,5 @@
-using Content.Server.Explosion.EntitySystems;
 using Content.Shared._AU14.Insurgency.Sapper;
+using Content.Shared.Trigger;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Timing;
 

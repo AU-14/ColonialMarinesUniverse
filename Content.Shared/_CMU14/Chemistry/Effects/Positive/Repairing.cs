@@ -3,6 +3,7 @@ using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -22,24 +23,24 @@ public sealed partial class Repairing : RMCChemicalEffect
            $"Overdoses cause [color=red]{PotencyPerSecond}[/color] toxin damage.\n" +
            $"Critical overdoses cause [color=red]{PotencyPerSecond * 5}[/color] additional toxin damage.";
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        if (!args.EntityManager.HasComponent<SynthComponent>(args.TargetEntity))
+        if (!system.HasSynth(args.TargetEntity))
             return;
 
-        var rmcDamage = args.EntityManager.System<SharedRMCDamageableSystem>();
+        var rmcDamage = system.RMCDamageable;
         var heal = rmcDamage.DistributeHealingCached(args.TargetEntity, BruteGroup, potency * 2f);
         heal = rmcDamage.DistributeHealingCached(args.TargetEntity, BurnGroup, potency * 2f, heal);
         damageable.TryChangeDamage(args.TargetEntity, heal, true, interruptsDoAfters: false);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
         => ApplyToxin(damageable, potency, args);
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
         => ApplyToxin(damageable, potency * 5f, args);
 
-    private static void ApplyToxin(DamageableSystem damageable, FixedPoint2 amount, EntityEffectReagentArgs args)
+    private static void ApplyToxin(DamageableSystem damageable, FixedPoint2 amount, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[PoisonType] = amount;

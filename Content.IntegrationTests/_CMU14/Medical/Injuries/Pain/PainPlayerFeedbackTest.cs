@@ -1,11 +1,17 @@
+#pragma warning disable RA0002 // Integration regression intentionally inspects restricted component state.
+
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Vision;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Drunk;
 using Content.Shared.Eye.Blinding.Components;
 using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.FixedPoint;
-using Content.Shared.StatusEffect;
+using Content.Shared.Speech.Components;
+using Content.Shared.Speech.EntitySystems;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
@@ -16,6 +22,9 @@ namespace Content.IntegrationTests._CMU14.Medical.Injuries.Pain;
 [TestFixture]
 public sealed class PainPlayerFeedbackTest
 {
+    private static readonly EntProtoId PainShockStatus = "StatusEffectCMUPainShock";
+    private static readonly EntProtoId PainSuppressionStatus = "StatusEffectCMUPainSuppression";
+
     [Test]
     public async Task ShockFeedbackWaitsForDeadlineAndStopsWhenPainDrops()
     {
@@ -40,7 +49,7 @@ public sealed class PainPlayerFeedbackTest
         await server.WaitAssertion(() =>
         {
             var damageable = server.EntMan.GetComponent<DamageableComponent>(human);
-            Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
+            Assert.That(damageable.Damage.DamageDict.GetValueOrDefault("Asphyxiation"), Is.EqualTo(FixedPoint2.Zero));
         });
 
         await pair.RunTicksSync(pair.SecondsToTicks(0.3f));
@@ -48,7 +57,7 @@ public sealed class PainPlayerFeedbackTest
         await server.WaitAssertion(() =>
         {
             var damageable = server.EntMan.GetComponent<DamageableComponent>(human);
-            damageAfterDue = damageable.Damage.DamageDict["Asphyxiation"];
+            damageAfterDue = damageable.Damage.DamageDict.GetValueOrDefault("Asphyxiation");
             Assert.That(damageAfterDue, Is.GreaterThan(FixedPoint2.Zero));
         });
 
@@ -60,7 +69,7 @@ public sealed class PainPlayerFeedbackTest
             var entMan = server.EntMan;
             var damageable = entMan.GetComponent<DamageableComponent>(human);
             Assert.That(
-                damageable.Damage.DamageDict["Asphyxiation"],
+                damageable.Damage.DamageDict.GetValueOrDefault("Asphyxiation"),
                 Is.LessThan(damageAfterDue),
                 "Natural respiration should reduce asphyxiation when no new shock feedback is scheduled.");
             entMan.DeleteEntity(human);
@@ -88,20 +97,20 @@ public sealed class PainPlayerFeedbackTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var oldStatus = entMan.System<StatusEffectQuerySystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var feedback = entMan.GetComponent<CMUPainFeedbackComponent>(human);
             var damageable = entMan.GetComponent<DamageableComponent>(human);
 
             Assert.Multiple(() =>
             {
-                Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.False);
-                Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.False);
-                Assert.That(oldStatus.HasStatusEffect(human, "SlurredSpeech"), Is.False);
+                Assert.That(status.HasStatusEffect(human, StutteringSystem.StutterEffect), Is.False);
+                Assert.That(status.HasStatusEffect(human, SharedDrunkSystem.Drunk), Is.False);
+                Assert.That(status.HasEffectComp<SlurredAccentComponent>(human), Is.False);
                 Assert.That(entMan.HasComponent<BlurryVisionComponent>(human), Is.True);
                 Assert.That(entMan.GetComponent<BlurryVisionComponent>(human).Magnitude,
                     Is.EqualTo(feedback.SevereBlurStartAmount));
                 Assert.That(feedback.SevereBlurStartAmount, Is.LessThan(0.5f));
-                Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(damageable.Damage.DamageDict.GetValueOrDefault("Asphyxiation"), Is.EqualTo(FixedPoint2.Zero));
             });
 
             entMan.DeleteEntity(human);
@@ -191,16 +200,16 @@ public sealed class PainPlayerFeedbackTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var oldStatus = entMan.System<StatusEffectQuerySystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var damageable = entMan.GetComponent<DamageableComponent>(human);
 
             Assert.Multiple(() =>
             {
-                Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.False);
-                Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.False);
-                Assert.That(oldStatus.HasStatusEffect(human, "SlurredSpeech"), Is.False);
+                Assert.That(status.HasStatusEffect(human, StutteringSystem.StutterEffect), Is.False);
+                Assert.That(status.HasStatusEffect(human, SharedDrunkSystem.Drunk), Is.False);
+                Assert.That(status.HasEffectComp<SlurredAccentComponent>(human), Is.False);
                 Assert.That(entMan.HasComponent<BlurryVisionComponent>(human), Is.False);
-                Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(damageable.Damage.DamageDict.GetValueOrDefault("Asphyxiation"), Is.EqualTo(FixedPoint2.Zero));
             });
 
             entMan.DeleteEntity(human);
@@ -324,16 +333,85 @@ public sealed class PainPlayerFeedbackTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var oldStatus = entMan.System<StatusEffectQuerySystem>();
+            var status = entMan.System<StatusEffectsSystem>();
             var damageable = entMan.GetComponent<DamageableComponent>(human);
 
             Assert.Multiple(() =>
             {
-                Assert.That(oldStatus.HasStatusEffect(human, "Stutter"), Is.False);
-                Assert.That(oldStatus.HasStatusEffect(human, "Drunk"), Is.False);
-                Assert.That(oldStatus.HasStatusEffect(human, "SlurredSpeech"), Is.False);
+                Assert.That(status.HasStatusEffect(human, StutteringSystem.StutterEffect), Is.False);
+                Assert.That(status.HasStatusEffect(human, SharedDrunkSystem.Drunk), Is.False);
+                Assert.That(status.HasEffectComp<SlurredAccentComponent>(human), Is.False);
                 Assert.That(entMan.HasComponent<BlurryVisionComponent>(human), Is.False);
-                Assert.That(damageable.Damage.DamageDict["Asphyxiation"], Is.EqualTo(FixedPoint2.Zero));
+                Assert.That(damageable.Damage.DamageDict.GetValueOrDefault("Asphyxiation"), Is.EqualTo(FixedPoint2.Zero));
+            });
+
+            entMan.DeleteEntity(human);
+        });
+
+        await pair.CleanReturnAsync();
+    }
+
+    [Test]
+    public async Task LivingPainSuppressionRemovalRestoresShockState()
+    {
+        await using var pair = await PoolManager.GetServerClient();
+        var server = pair.Server;
+        EntityUid human = default;
+        PainSuppressionComponent suppression = default!;
+
+        await server.WaitPost(() =>
+        {
+            var entMan = server.EntMan;
+            var painSystem = entMan.System<SharedPainShockSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
+            human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
+            var pain = entMan.GetComponent<PainShockComponent>(human);
+            SetPainState(entMan, human, pain, PainTier.Shock);
+            painSystem.AddPainSuppressionProfile(human, 0f, 4, 0f, TimeSpan.FromSeconds(10));
+
+            Assert.That(status.TryGetStatusEffect(human, PainSuppressionStatus, out var effect), Is.True);
+            suppression = entMan.GetComponent<PainSuppressionComponent>(effect!.Value);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var pain = entMan.GetComponent<PainShockComponent>(human);
+            var painSystem = entMan.System<SharedPainShockSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(suppression.ActiveProfiles, Is.Not.Empty);
+                Assert.That(suppression.TierSuppression, Is.EqualTo(4));
+                Assert.That(painSystem.GetEffectiveTier(human, pain), Is.EqualTo(PainTier.None));
+                Assert.That(status.HasStatusEffect(human, PainShockStatus), Is.False);
+            });
+
+            Assert.That(status.TryRemoveStatusEffect(human, PainSuppressionStatus), Is.True);
+        });
+
+        await pair.RunTicksSync(1);
+
+        await server.WaitAssertion(() =>
+        {
+            var entMan = server.EntMan;
+            var pain = entMan.GetComponent<PainShockComponent>(human);
+            var painSystem = entMan.System<SharedPainShockSystem>();
+            var status = entMan.System<StatusEffectsSystem>();
+
+            Assert.Multiple(() =>
+            {
+                Assert.That(suppression.ActiveProfiles, Is.Empty);
+                Assert.That(suppression.AccumulationSuppression, Is.Zero);
+                Assert.That(suppression.TierSuppression, Is.Zero);
+                Assert.That(suppression.DecayBonus, Is.Zero);
+                Assert.That(painSystem.GetEffectiveTier(human, pain), Is.EqualTo(PainTier.Shock));
+                Assert.That(pain.Tier, Is.EqualTo(PainTier.Shock));
+                Assert.That(pain.InShock, Is.True);
+                Assert.That(status.HasStatusEffect(human, PainShockStatus), Is.True);
             });
 
             entMan.DeleteEntity(human);
@@ -364,20 +442,20 @@ public sealed class PainPlayerFeedbackTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            var oldStatus = entMan.System<StatusEffectQuerySystem>();
-            var severeDamage = entMan.GetComponent<DamageableComponent>(severe).Damage.DamageDict["Asphyxiation"];
-            var shockDamage = entMan.GetComponent<DamageableComponent>(shock).Damage.DamageDict["Asphyxiation"];
+            var status = entMan.System<StatusEffectsSystem>();
+            var severeDamage = entMan.GetComponent<DamageableComponent>(severe).Damage.DamageDict.GetValueOrDefault("Asphyxiation");
+            var shockDamage = entMan.GetComponent<DamageableComponent>(shock).Damage.DamageDict.GetValueOrDefault("Asphyxiation");
             var severeBlur = entMan.GetComponent<BlurryVisionComponent>(severe).Magnitude;
             var shockBlur = entMan.GetComponent<BlurryVisionComponent>(shock).Magnitude;
 
             Assert.Multiple(() =>
             {
                 Assert.That(shockDamage, Is.GreaterThan(severeDamage));
-                Assert.That(oldStatus.TryGetTime(severe, "Drunk", out _), Is.False);
-                Assert.That(oldStatus.TryGetTime(shock, "Drunk", out var shockDrunkTime), Is.True);
-                Assert.That(shockDrunkTime!.Value.Item2, Is.GreaterThan(TimeSpan.Zero));
-                Assert.That(oldStatus.HasStatusEffect(shock, "SlurredSpeech"), Is.True);
-                Assert.That(oldStatus.HasStatusEffect(shock, "Stutter"), Is.True);
+                Assert.That(status.HasStatusEffect(severe, SharedDrunkSystem.Drunk), Is.False);
+                Assert.That(status.TryGetTime(shock, SharedDrunkSystem.Drunk, out var shockDrunkTime), Is.True);
+                Assert.That(shockDrunkTime.EndEffectTime, Is.GreaterThan(TimeSpan.Zero));
+                Assert.That(status.HasEffectComp<SlurredAccentComponent>(shock), Is.True);
+                Assert.That(status.HasStatusEffect(shock, StutteringSystem.StutterEffect), Is.True);
                 Assert.That(shockBlur, Is.GreaterThan(severeBlur));
                 Assert.That(shockBlur, Is.LessThan(BlurryVisionComponent.MaxMagnitude),
                     "Pain shock should get bad without snapping to the full cataracts/off-white screen effect.");
@@ -434,3 +512,5 @@ public sealed class PainPlayerFeedbackTest
             Assert.That(prototypes.HasIndex<EmotePrototype>(emote), Is.True, $"{emote} must exist");
     }
 }
+
+#pragma warning restore RA0002

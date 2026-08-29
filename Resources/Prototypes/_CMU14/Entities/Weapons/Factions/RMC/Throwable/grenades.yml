@@ -45,7 +45,7 @@
     sprite: _AU14/Weapons/Grenades/RMC/HSDP.rsi
   - type: SpawnOnTrigger
     proto: AU14GrenadeNeuroGas
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 3.5
   - type: Tag
     tags:

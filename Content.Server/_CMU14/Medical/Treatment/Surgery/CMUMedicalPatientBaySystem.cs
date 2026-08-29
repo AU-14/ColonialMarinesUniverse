@@ -1,6 +1,6 @@
 using System.Numerics;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
-using Content.Shared.Body.Components;
+using Content.Shared.Body;
 using Content.Shared.DoAfter;
 using Content.Shared.Maps;
 using Content.Shared.Physics;

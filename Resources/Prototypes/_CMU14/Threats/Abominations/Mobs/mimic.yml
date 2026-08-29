@@ -28,6 +28,14 @@
     transformDuration: 960
   - type: AbominationAssimilate
     doAfter: 8
+  - type: IntrinsicRadioTransmitter
+    channels:
+    - Abomination
+    - AbominationMimic
+  - type: ActiveRadio
+    channels:
+    - Abomination
+    - AbominationMimic
   - type: UserInterface
     interfaces:
       enum.AbominationMimicUiKey.Key:

@@ -223,7 +223,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
         }
     }
 
-    public bool TryGetStorageFillableSolution(Entity<SolutionStorageFillableComponent?, SolutionContainerManagerComponent?> entity, [NotNullWhen(true)] out Entity<SolutionComponent>? soln, [NotNullWhen(true)] out Solution? solution)
+    public bool TryGetStorageFillableSolution(Entity<SolutionStorageFillableComponent?, SolutionManagerComponent?> entity, [NotNullWhen(true)] out Entity<SolutionComponent>? soln, [NotNullWhen(true)] out Solution? solution)
     {
         if (!Resolve(entity, ref entity.Comp1, logMissing: false))
         {
@@ -234,7 +234,7 @@ public sealed partial class CMRefillableSolutionSystem : EntitySystem
         return _solution.TryGetSolution((entity.Owner, entity.Comp2), entity.Comp1.Solution, out soln, out solution);
     }
 
-    public bool TryGetPressurizedSolution(Entity<RMCPressurizedSolutionComponent?, SolutionContainerManagerComponent?> entity, [NotNullWhen(true)] out Entity<SolutionComponent>? soln, [NotNullWhen(true)] out Solution? solution)
+    public bool TryGetPressurizedSolution(Entity<RMCPressurizedSolutionComponent?, SolutionManagerComponent?> entity, [NotNullWhen(true)] out Entity<SolutionComponent>? soln, [NotNullWhen(true)] out Solution? solution)
     {
         if (!Resolve(entity, ref entity.Comp1, logMissing: false))
         {

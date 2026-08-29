@@ -1,10 +1,17 @@
-using Content.Shared.Body.Prototypes;
+using Content.Shared.Metabolism;
 using Robust.Shared.Prototypes;
 
 namespace Content.Shared._CMU14.Medical.Anatomy.Metabolism.Events;
 
 [ByRefEvent]
-public record struct MetabolismGroupRateModifyEvent(
+public record struct MetabolismRateModifyEvent(
     EntityUid Body,
-    ProtoId<MetabolismGroupPrototype> Group,
+    ProtoId<MetabolismStagePrototype> Stage,
+    IReadOnlySet<CMUMetabolismClass> ToxicityClasses,
     float Multiplier);
+
+public enum CMUMetabolismClass : byte
+{
+    Poison,
+    Alcohol,
+}

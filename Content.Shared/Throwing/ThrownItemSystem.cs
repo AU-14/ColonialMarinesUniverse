@@ -31,8 +31,9 @@ namespace Content.Shared.Throwing
         [Dependency] private SharedGravitySystem _gravity = default!;
         [Dependency] private IRobustRandom _random = default!;
         [Dependency] private CMUSharedZLevelsSystem _zLevels = default!; //CMU
-        [Dependency] private SharedTransformSystem _transform = default!; private const string ThrowingFixture = "throw-fixture";
+        [Dependency] private SharedTransformSystem _transform = default!;
 
+        private const string ThrowingFixture = "throw-fixture";
 
         public override void Initialize()
         {
@@ -47,6 +48,9 @@ namespace Content.Shared.Throwing
         }
         private void PreventCollision(EntityUid uid, ThrownItemComponent component, ref PreventCollideEvent args)
         {
+            if (HasComp<ThrownHitUserComponent>(uid))
+                return;
+
             if (args.OtherEntity == component.Thrower)
             {
                 args.Cancelled = true;
@@ -221,8 +225,10 @@ namespace Content.Shared.Throwing
                 _adminLogger.Add(LogType.ThrowHit, LogImpact.Low,
                     $"{ToPrettyString(thrown):thrown} thrown by {ToPrettyString(component.Thrower.Value):thrower} hit {ToPrettyString(target):target}.");
 
-            RaiseLocalEvent(target, new ThrowHitByEvent(thrown, target, component), true);
-            RaiseLocalEvent(thrown, new ThrowDoHitEvent(thrown, target, component), true);
+            var hitByEv = new ThrowHitByEvent(thrown, target, component);
+            var doHitEv = new ThrowDoHitEvent(thrown, target, component);
+            RaiseLocalEvent(target, ref hitByEv, true);
+            RaiseLocalEvent(thrown, ref doHitEv, true);
         }
 
         public override void Update(float frameTime)

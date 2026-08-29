@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Content.Client.Administration.Managers;
 using Content.Client.Construction;
+using Content.Client.Popups;
 using Content.Client._CMU14.ZLevels.Core;
 using Content.Shared._AU14.SavedBuilds;
 using Content.Shared._AU14.ZLevelBuilding;
@@ -40,7 +41,7 @@ public sealed class SavedBuildPlacementSystem : EntitySystem
     [Dependency] private readonly IClientAdminManager _admin = default!;
     [Dependency] private readonly IResourceCache _cache = default!;
     [Dependency] private readonly SharedTransformSystem _transform = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
     [Dependency] private readonly IComponentFactory _componentFactory = default!;
     [Dependency] private readonly CMUClientZLevelsSystem _zLevels = default!;
 

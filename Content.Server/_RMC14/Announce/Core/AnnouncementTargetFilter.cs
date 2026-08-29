@@ -3,7 +3,7 @@ using Content.Server._RMC14.Marines;
 using Content.Shared._RMC14.Announce;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Xenonids;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Robust.Shared.Player;
 
 namespace Content.Server._RMC14.Announce.Core;

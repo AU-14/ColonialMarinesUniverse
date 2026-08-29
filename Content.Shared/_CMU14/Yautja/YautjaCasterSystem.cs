@@ -116,7 +116,7 @@ public sealed partial class YautjaCasterSystem : EntitySystem
         if (mode == null)
             return;
 
-        if (!TryComp(ent, out ProjectileBatteryAmmoProviderComponent? ammo) ||
+        if (!TryComp(ent, out BatteryAmmoProviderComponent? ammo) ||
             ammo.Prototype == mode.Projectile)
         {
             return;

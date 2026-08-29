@@ -14,6 +14,7 @@ using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared._RMC14.Medical.Surgery;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.GameTicking;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Timing;

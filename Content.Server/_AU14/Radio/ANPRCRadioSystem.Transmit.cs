@@ -190,7 +190,7 @@ public sealed partial class ANPRCRadioSystem
     // every radio prefix in the game reads the whole frequency plan back off the panel
     private void LogHeadsetTraffic(Entity<WearingANPRCComponent> ent, ref EntitySpokeEvent args)
     {
-        if (args.Channel == null || args.Channel.Frequency <= 0)
+        if (args.Channel == null || args.Channel.Frequency == RadioFrequency.Off)
             return;
 
         if (!TryComp(ent.Comp.Radio, out ANPRCRadioComponent? logRadio) || !logRadio.Enabled)

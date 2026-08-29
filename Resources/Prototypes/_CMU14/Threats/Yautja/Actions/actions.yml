@@ -12,10 +12,12 @@
   id: CMUActionYautjaToggleVisor
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/mask.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/mask.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleVisorActionEvent
   - type: YautjaPowerAction
@@ -26,10 +28,12 @@
   id: CMUActionYautjaToggleMaskZoom
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/mask.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/mask.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleMaskZoomActionEvent
   - type: YautjaPowerAction
@@ -41,10 +45,12 @@
   id: CMUActionYautjaToggleCloak
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/cape_full.rsi
-      state: icon
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/cape_full.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleCloakActionEvent
   - type: YautjaPowerAction
@@ -55,10 +61,12 @@
   id: CMUActionYautjaOpenBracerMenu
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaOpenBracerMenuActionEvent
   - type: YautjaPowerAction
@@ -69,10 +77,12 @@
   id: CMUActionYautjaToggleBracerLock
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerLockActionEvent
   - type: YautjaPowerAction
@@ -83,10 +93,12 @@
   id: CMUActionYautjaToggleBracerIdChip
   components:
   - type: Action
-    icon:
-      sprite: Objects/Misc/id_cards.rsi
-      state: default
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: Objects/Misc/id_cards.rsi
+      state: default
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerIdChipActionEvent
   - type: YautjaPowerAction
@@ -97,10 +109,12 @@
   id: CMUActionYautjaTranslator
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaTranslatorActionEvent
   - type: YautjaPowerAction
@@ -111,10 +125,12 @@
   id: CMUActionYautjaCreateStabilisingCrystal
   components:
   - type: Action
-    icon:
-      sprite: Objects/Materials/Shards/crystal.rsi
-      state: shard1
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: Objects/Materials/Shards/crystal-shard.rsi
+      state: shard1
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaCreateStabilisingCrystalActionEvent
   - type: YautjaPowerAction
@@ -125,10 +141,12 @@
   id: CMUActionYautjaCreateHumanStabilisingCrystal
   components:
   - type: Action
-    icon:
-      sprite: Objects/Materials/Shards/crystal.rsi
-      state: shard1
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: Objects/Materials/Shards/crystal-shard.rsi
+      state: shard1
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHumanStabilisingCrystalActionEvent
   - type: YautjaPowerAction
@@ -139,10 +157,12 @@
   id: CMUActionYautjaCreateHuntingTrap
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
-      state: autoinjector
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Objects/Medical/emergency_auto_injector.rsi
+      state: autoinjector
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHuntingTrapActionEvent
   - type: YautjaPowerAction
@@ -153,10 +173,12 @@
   id: CMUActionYautjaOpenMarkPanel
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Interface/cm_job_icons.rsi
-      state: hudsquad_pve
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Interface/cm_job_icons.rsi
+      state: hudsquad_pve
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaOpenMarkPanelActionEvent
   - type: YautjaPowerAction
@@ -168,10 +190,12 @@
   id: CMUActionYautjaLinkThrallBracer
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaLinkThrallBracerActionEvent
   - type: YautjaPowerAction
@@ -182,10 +206,12 @@
   id: CMUActionYautjaTransmitThrallMessage
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaTransmitThrallMessageActionEvent
   - type: YautjaPowerAction
@@ -197,10 +223,12 @@
   id: CMUActionYautjaToggleThrallBracerLock
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleThrallBracerLockActionEvent
   - type: YautjaPowerAction
@@ -212,10 +240,12 @@
   id: CMUActionYautjaStunThrall
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaStunThrallActionEvent
   - type: YautjaPowerAction
@@ -226,10 +256,12 @@
   id: CMUActionYautjaSelfDestructThrall
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 1
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaSelfDestructThrallActionEvent
   - type: YautjaPowerAction
@@ -240,10 +272,12 @@
   id: CMUActionYautjaRecall
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/smart_disc.rsi
-      state: icon
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/smart_disc.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaRecallActionEvent
   - type: YautjaPowerAction
@@ -254,12 +288,14 @@
   id: CMUActionYautjaSelfDestruct
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer.rsi
-      state: icon
     useDelay: 1
     checkCanInteract: false
     checkConsciousness: false
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaSelfDestructActionEvent
   - type: YautjaPowerAction
@@ -270,10 +306,12 @@
   id: CMUActionYautjaToggleCaster
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/plasma_caster.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/plasma_caster.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleCasterActionEvent
   - type: YautjaPowerAction
@@ -284,10 +322,12 @@
   id: CMUActionYautjaToggleWristBlades
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/wrist_blades.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/wrist_blades.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleWristBladesActionEvent
   - type: YautjaPowerAction
@@ -298,10 +338,12 @@
   id: CMUActionYautjaToggleScimitar
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/scimitar.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/scimitar.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleScimitarActionEvent
   - type: YautjaPowerAction
@@ -312,10 +354,12 @@
   id: CMUActionYautjaToggleShield
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/bracer_shield.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/bracer_shield.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleShieldActionEvent
   - type: YautjaPowerAction
@@ -326,10 +370,12 @@
   id: CMUActionYautjaToggleChainGauntlet
   components:
   - type: Action
-    icon:
-      sprite: _CMU14/Yautja/chain_gauntlet.rsi
-      state: icon
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Yautja/chain_gauntlet.rsi
+      state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaToggleChainGauntletActionEvent
   - type: YautjaPowerAction
@@ -340,8 +386,11 @@
   id: CMUActionYautjaVoiceClick
   components:
   - type: Action
-    icon: Interface/Emotes/click.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Emotes/click.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceClickActionEvent
 
@@ -350,8 +399,11 @@
   id: CMUActionYautjaVoiceRoar
   components:
   - type: Action
-    icon: Interface/Actions/scream.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Actions/scream.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceRoarActionEvent
 
@@ -360,8 +412,11 @@
   id: CMUActionYautjaVoiceLaugh
   components:
   - type: Action
-    icon: Interface/Emotes/laugh.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Emotes/laugh.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceLaughActionEvent
 
@@ -370,8 +425,11 @@
   id: CMUActionYautjaVoiceGrowl
   components:
   - type: Action
-    icon: Interface/Emotes/chitter.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Emotes/chitter.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceGrowlActionEvent
 
@@ -380,8 +438,11 @@
   id: CMUActionYautjaVoicePain
   components:
   - type: Action
-    icon: Interface/Emotes/cry.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Emotes/cry.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoicePainActionEvent
 
@@ -390,8 +451,11 @@
   id: CMUActionYautjaVoiceDistract
   components:
   - type: Action
-    icon: Interface/Emotes/click.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Emotes/click.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDistractActionEvent
 
@@ -400,8 +464,11 @@
   id: CMUActionYautjaVoiceDeathCry
   components:
   - type: Action
-    icon: Interface/Emotes/deathgasp.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Emotes/deathgasp.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDeathCryActionEvent
 
@@ -410,7 +477,10 @@
   id: CMUActionYautjaVoiceDeathLaugh
   components:
   - type: Action
-    icon: Interface/Emotes/deathgasp.png
     useDelay: 5
+  - type: Sprite
+    layers:
+    - texture: Interface/Emotes/deathgasp.png
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDeathLaughActionEvent

@@ -3,6 +3,7 @@ using Content.Server._RMC14.Medical.Wounds;
 using Content.Server.Body.Systems;
 using Content.Server.Chat.Systems;
 using Content.Server.Popups;
+using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Treatment.Surgery;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
@@ -16,11 +17,13 @@ using Content.Shared._RMC14.Repairable;
 using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.Xenonids.Organs;
 using Content.Shared._RMC14.Xenonids.Parasite;
+using Content.Shared.Body;
+using Content.Shared.Body.Part;
+using Content.Shared.Body.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Prototypes;
 using Content.Shared.Tools.Components;
 using Content.Shared.Tools.Systems;
-using Content.Shared.Body.Part;
 using Robust.Server.GameObjects;
 using Robust.Shared.Containers;
 using Robust.Shared.Network;
@@ -32,6 +35,7 @@ namespace Content.Server._RMC14.Medical.Surgery;
 public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 {
     private const string SynthSurgeryOpenQuality = "Screwing";
+    private static readonly EntProtoId DetachedBodyPrototype = "DetachedBody";
 
     [Dependency] private ChatSystem _chat = default!;
     [Dependency] private SharedContainerSystem _container = default!;
@@ -47,6 +51,7 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
     [Dependency] private CMUSurgeryDispatchSystem _cmuDispatch = default!;
     [Dependency] private CMUSurgeryFlowSystem _cmuFlow = default!;
     [Dependency] private SharedPainShockSystem _cmuPain = default!;
+    [Dependency] private SharedBodySystem _body = default!;
 
     private readonly List<EntProtoId> _surgeries = new();
 
@@ -167,7 +172,16 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
     {
         return HasComp<BlowtorchComponent>(used) ||
                HasComp<RMCCableCoilComponent>(used) ||
-               HasComp<BodyPartComponent>(used);
+               HasComp<BodyPartComponent>(used) ||
+               IsDetachedLimbCarrier(used);
+    }
+
+    private bool IsDetachedLimbCarrier(EntityUid used)
+    {
+        return MetaData(used).EntityPrototype?.ID == DetachedBodyPrototype &&
+               TryComp<BodyComponent>(used, out var body) &&
+               _body.GetRootPartOrNull(used, body) is { } root &&
+               CMUBodyPartSlots.IsReportableMissingPart(root.BodyPart.PartType);
     }
 
     private bool IsSynthRepairToolForCurrentDamage(Entity<SynthComponent> synth, EntityUid user, EntityUid used)

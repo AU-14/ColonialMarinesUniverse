@@ -1,5 +1,5 @@
 using System.Numerics;
-using Content.Server.StatusEffectNew;
+using Content.Shared.StatusEffectNew;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts.Events;
@@ -7,8 +7,11 @@ using Content.Shared._CMU14.Medical.Presentation.Visuals;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
@@ -16,7 +19,6 @@ using Content.Shared.Throwing;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
 using Robust.Shared.Configuration;
-using Robust.Shared.Containers;
 using Robust.Shared.GameObjects;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
@@ -38,9 +40,9 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
     [Dependency] private SharedRMCDamageableSystem _rmcDamageable = default!;
     [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private SharedContainerSystem _containers = default!;
+    [Dependency] private DetachableOrganSystem _detachableOrgan = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private SharedHideableHumanoidLayersSystem _hideableLayers = default!;
     [Dependency] private ThrowingSystem _throwing = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private CMUWoundLedgerSystem _woundLedger = default!;
@@ -78,44 +80,44 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
             ? partComp.Symmetry
             : BodyPartSymmetry.None;
 
-        if (!DetachPart(args.Part))
+        if (_detachableOrgan.Detach(args.Part) is not { } detachedBody)
         {
             return;
         }
 
         RemoveSeveredPartWoundDamage(args.Body, args.Part);
-        FlingPartFromBody(args.Body, args.Part);
+        FlingPartFromBody(args.Body, detachedBody);
         HideHumanoidLimbLayer(args.Body, args.Type, symmetry);
         ApplyStumpBleed(args.Body);
         ApplyMissingLimbStatus(args.Body, args.Part, args.Type);
         _audio.PlayPvs(SeveranceSound, args.Body);
     }
 
-    private void FlingPartFromBody(EntityUid body, EntityUid part)
+    private void FlingPartFromBody(EntityUid body, EntityUid detachedBody)
     {
         // compensateFriction:true so the part lands at the target instead
         // of sliding indefinitely off-grid (prior speed-8 fling was
         // overshooting the visible map).
-        _transform.SetCoordinates(part, Transform(body).Coordinates);
-        _transform.AttachToGridOrMap(part);
+        _transform.SetCoordinates(detachedBody, Transform(body).Coordinates);
+        _transform.AttachToGridOrMap(detachedBody);
 
         var angle = _random.NextFloat(0f, MathF.Tau);
         var distance = _random.NextFloat(1.0f, 2.0f);
         var direction = new Vector2(MathF.Cos(angle), MathF.Sin(angle)) * distance;
-        _throwing.TryThrow(part, direction, baseThrowSpeed: 4f, doSpin: true, compensateFriction: true);
+        _throwing.TryThrow(detachedBody, direction, baseThrowSpeed: 4f, doSpin: true, compensateFriction: true);
     }
 
     private void HideHumanoidLimbLayer(EntityUid body, BodyPartType type, BodyPartSymmetry symmetry)
     {
-        // SS14's body-part graph and HumanoidAppearance are independent — the
+        // SS14's body-part graph and visual body layers are independent — the
         // marine sprite still draws the limb layer until we explicitly hide it.
-        if (!HasComp<HumanoidAppearanceComponent>(body))
+        if (!HasComp<HideableHumanoidLayersComponent>(body))
             return;
 
         if (CMUMedicalVisualLayers.ForBodyPart(type, symmetry) is not { } layer)
             return;
 
-        _humanoid.SetLayerVisibility(body, layer, visible: false);
+        _hideableLayers.SetPermanentLayerOcclusion(body, layer, hidden: true);
     }
 
     private bool IsLocked(BodyPartType type) => type switch
@@ -124,14 +126,6 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
         BodyPartType.Torso => _cfg.GetCVar(CMUMedicalCCVars.SeveranceTorsoDisabled),
         _ => false,
     };
-
-    private bool DetachPart(EntityUid part)
-    {
-        if (!_containers.TryGetContainingContainer((part, null, null), out var container))
-            return false;
-
-        return _containers.Remove(part, container);
-    }
 
     private void RemoveSeveredPartWoundDamage(EntityUid body, EntityUid part)
     {
@@ -174,9 +168,9 @@ public sealed partial class BodyPartSeveranceSystem : EntitySystem
         if (spec.Empty)
             return;
 
-        var adjusted = damageable.Damage + spec;
+        var adjusted = _damageable.GetAllDamage((body, damageable)) + spec;
         adjusted.ClampMin(FixedPoint2.Zero);
-        _damageable.SetDamage(body, damageable, adjusted);
+        _damageable.SetDamage((body, damageable), adjusted);
     }
 
     private void ApplyStumpBleed(EntityUid body)

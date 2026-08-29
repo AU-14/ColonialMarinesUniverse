@@ -1,5 +1,6 @@
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Kidneys;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Robust.Shared.GameObjects;

@@ -281,8 +281,8 @@
     stunAmount: 4
     knockdownAmount: 4
     slowdownAmount: 3
-    walkSpeedMultiplier: 0.45
-    runSpeedMultiplier: 0.45
+    walkSpeedModifier: 0.45
+    sprintSpeedModifier: 0.45
   - type: Projectile
     impactEffect: CMUYautjaPlasmaEradicatorImpactEffect
     damage:

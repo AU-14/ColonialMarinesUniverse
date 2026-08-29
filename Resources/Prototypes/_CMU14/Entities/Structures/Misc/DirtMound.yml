@@ -29,8 +29,9 @@
           False:
             visible: false
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: Destructible
     thresholds:
     - trigger:

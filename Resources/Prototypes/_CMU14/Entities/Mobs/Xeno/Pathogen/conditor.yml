@@ -101,8 +101,10 @@
   - type: MeleeWeapon
     attackRate: 1.2
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: RMCSize
     size: Big
   - type: CMArmor

@@ -1,16 +1,33 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Content.Server.Afk;
 using Content.Server.Database;
+using Content.Shared._CMU14.Threats;
+using Content.Shared._RMC14.NamedItems;
+using Content.Shared.AU14.Allegiance;
+using Content.Shared.AU14.Origin;
+using Content.Shared.AU14.util;
+using Content.Shared.Body;
 using Content.Shared.CCVar;
+using Content.Shared.Chat.Prototypes;
 using Content.Shared.Construction.Prototypes;
+using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
+using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
+using Content.Shared.Preferences.Loadouts;
+using Content.Shared.Roles;
+using Content.Shared.Traits;
 using Robust.Server.Player;
 using Robust.Shared.Configuration;
+using Robust.Shared.Enums;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
+using Robust.Shared.Serialization.Manager;
 using Robust.Shared.Utility;
 
 namespace Content.Server.Preferences.Managers
@@ -25,10 +42,13 @@ namespace Content.Server.Preferences.Managers
         [Dependency] private IConfigurationManager _cfg = default!;
         [Dependency] private IServerDbManager _db = default!;
         [Dependency] private IPlayerManager _playerManager = default!;
+        [Dependency] private IAfkManager _afkManager = default!;
         [Dependency] private IDependencyCollection _dependencies = default!;
         [Dependency] private ILogManager _log = default!;
         [Dependency] private UserDbDataManager _userDb = default!;
         [Dependency] private IPrototypeManager _prototypeManager = default!;
+        [Dependency] private MarkingManager _marking = default!;
+        [Dependency] private ISerializationManager _serialization = default!;
 
         // Cache player prefs on the server so we don't need as much async hell related to them.
         private readonly Dictionary<NetUserId, PlayerPrefData> _cachedPlayerPrefs =
@@ -46,6 +66,373 @@ namespace Content.Server.Preferences.Managers
             _netManager.RegisterNetMessage<MsgDeleteCharacter>(HandleDeleteCharacterMessage);
             _netManager.RegisterNetMessage<MsgUpdateConstructionFavorites>(HandleUpdateConstructionFavoritesMessage);
             _sawmill = _log.GetSawmill("prefs");
+        }
+
+        private static TValue? TryDeserialize<TValue>(JsonDocument document) where TValue : class
+        {
+            try
+            {
+                return document.Deserialize<TValue>();
+            }
+            catch (JsonException)
+            {
+                return null;
+            }
+        }
+
+        internal PlayerPreferences ConvertPreferences(Preference prefs)
+        {
+            var maxSlot = prefs.Profiles.Max(p => p.Slot) + 1;
+            var profiles = new Dictionary<int, HumanoidCharacterProfile>(maxSlot);
+            foreach (var profile in prefs.Profiles)
+            {
+                profiles[profile.Slot] = ConvertProfiles(profile);
+            }
+
+            var constructionFavorites = new List<ProtoId<ConstructionPrototype>>(prefs.ConstructionFavorites.Count);
+            foreach (var favorite in prefs.ConstructionFavorites)
+                constructionFavorites.Add(new ProtoId<ConstructionPrototype>(favorite));
+
+            return new PlayerPreferences(profiles, prefs.SelectedCharacterSlot, Color.FromHex(prefs.AdminOOCColor), constructionFavorites);
+        }
+
+        internal HumanoidCharacterProfile ConvertProfiles(Profile profile)
+        {
+
+            var jobs = profile.Jobs.ToDictionary(j => new ProtoId<JobPrototype>(j.JobName), j => (JobPriority) j.Priority);
+            var antags = profile.Antags.Select(a => new ProtoId<AntagPrototype>(a.AntagName));
+            var traits = profile.Traits.Select(t => new ProtoId<TraitPrototype>(t.TraitName));
+
+            var sex = Sex.Male;
+            if (Enum.TryParse<Sex>(profile.Sex, true, out var sexVal))
+                sex = sexVal;
+
+            var spawnPriority = (SpawnPriorityPreference) profile.SpawnPriority;
+            var squadPreference = profile.SquadPreference?.Squad;
+
+            var armorPreference = ArmorPreference.Random;
+            if (Enum.TryParse<ArmorPreference>(profile.ArmorPreference, true, out var armorVal))
+                armorPreference = armorVal;
+
+            ProtoId<AllegiancePrototype>? allegiance = profile.Allegiance is { } allegianceId
+                ? new ProtoId<AllegiancePrototype>(allegianceId)
+                : (ProtoId<AllegiancePrototype>?) null;
+            ProtoId<OriginPrototype>? origin = profile.Origin is { } originId
+                ? new ProtoId<OriginPrototype>(originId)
+                : (ProtoId<OriginPrototype>?) null;
+            ProtoId<PlatoonPrototype>? platoon = profile.Platoon is { } platoonId
+                ? new ProtoId<PlatoonPrototype>(platoonId)
+                : (ProtoId<PlatoonPrototype>?) null;
+            var threatPreferences = ConvertThreatPreferences(profile.ThreatPreference);
+            var gamemodeJobPriorities = ConvertGamemodeJobPriorities(profile.GamemodeJobPriorities);
+            var gamemodeAntagPreferences = ConvertGamemodeAntagPreferences(profile.GamemodeAntagPreferences);
+            var gamemodeThreatPreferences = ConvertGamemodeThreatPreferences(profile.GamemodeThreatPreferences);
+
+            var gender = sex == Sex.Male ? Gender.Male : Gender.Female;
+            if (Enum.TryParse<Gender>(profile.Gender, true, out var genderVal))
+                gender = genderVal;
+
+
+            var markings =
+                new Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>();
+
+            var species = profile.Species;
+            if (!_prototypeManager.TryIndex<SpeciesPrototype>(species, out var speciesPrototype))
+            {
+                species = HumanoidCharacterProfile.DefaultSpecies;
+                speciesPrototype = _prototypeManager.Index<SpeciesPrototype>(species);
+            }
+
+            var voice = profile.Voice ?? speciesPrototype.DefaultSoundsBySex[(int)sex];
+            if (!_prototypeManager.HasIndex<EmoteSoundsPrototype>(voice))
+                voice = speciesPrototype.DefaultSoundsBySex[(int)sex];
+
+            if (profile.OrganMarkings?.RootElement is { } element)
+            {
+                var data = element.ToDataNode();
+                markings = _serialization
+                    .Read<Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>>(
+                        data,
+                        notNullableOverride: true);
+            }
+            else if (profile.Markings is { } profileMarkings && TryDeserialize<List<string>>(profileMarkings) is { } markingsRaw)
+            {
+                List<Marking> markingsList = new();
+
+                foreach (var marking in markingsRaw)
+                {
+                    var parsed = Marking.ParseFromDbString(marking);
+
+                    if (parsed is null) continue;
+
+                    markingsList.Add(parsed.Value);
+                }
+
+                if (Marking.ParseFromDbString($"{profile.FacialHairName}@{profile.FacialHairColor}") is { } facialMarking)
+                    markingsList.Add(facialMarking);
+
+                if (Marking.ParseFromDbString($"{profile.HairName}@{profile.HairColor}") is { } hairMarking)
+                    markingsList.Add(hairMarking);
+
+                markings = _marking.ConvertMarkings(markingsList, species);
+            }
+
+            var loadouts = new Dictionary<string, RoleLoadout>();
+
+            foreach (var role in profile.Loadouts)
+            {
+                var loadout = new RoleLoadout(role.RoleName)
+                {
+                    EntityName = role.EntityName,
+                };
+
+                foreach (var group in role.Groups)
+                {
+                    var groupLoadouts = loadout.SelectedLoadouts.GetOrNew(group.GroupName);
+                    foreach (var profLoadout in group.Loadouts)
+                    {
+                        groupLoadouts.Add(new Loadout()
+                        {
+                            Prototype = profLoadout.LoadoutName,
+                        });
+                    }
+                }
+
+                loadouts[role.RoleName] = loadout;
+            }
+
+            return new HumanoidCharacterProfile(
+                profile.CharacterName,
+                profile.FlavorText,
+                species,
+                profile.Age,
+                sex,
+                voice,
+                gender,
+                new HumanoidCharacterAppearance
+                (
+                    Color.FromHex(profile.EyeColor),
+                    Color.FromHex(profile.SkinColor),
+                    markings,
+                    profile.RegulationHairName ?? HairStyles.DefaultHairStyle,
+                    profile.RegulationHairColor is { } regulationHairColor
+                        ? Color.FromHex(regulationHairColor)
+                        : Color.Black,
+                    profile.RegulationFacialHairName ?? HairStyles.DefaultFacialHairStyle,
+                    profile.RegulationFacialHairColor is { } regulationFacialHairColor
+                        ? Color.FromHex(regulationFacialHairColor)
+                        : Color.Black
+                ),
+                spawnPriority,
+                armorPreference,
+                squadPreference,
+                jobs,
+                (PreferenceUnavailableMode) profile.PreferenceUnavailable,
+                antags.ToHashSet(),
+                traits.ToHashSet(),
+                loadouts,
+                new SharedRMCNamedItems
+                {
+                    PrimaryGunName = profile.NamedItems?.PrimaryGunName,
+                    SidearmName = profile.NamedItems?.SidearmName,
+                    HelmetName = profile.NamedItems?.HelmetName,
+                    ArmorName = profile.NamedItems?.ArmorName,
+                    SentryName = profile.NamedItems?.SentryName,
+                },
+                profile.PlaytimePerks,
+                profile.XenoPrefix,
+                profile.XenoPostfix,
+                allegiance,
+                origin,
+                platoon,
+                profile.Synthetic,
+                threatPreferences,
+                gamemodeJobPriorities,
+                gamemodeAntagPreferences,
+                gamemodeThreatPreferences,
+                profile.ShortExamine,
+                profile.FullDescription,
+                profile.MedicalRecord,
+                ConvertRankPreferences(profile.RankPreferences),
+                profile.CriminalRecord,
+                profile.GeneralRecord,
+                profile.Height,
+                profile.Weight,
+                Enum.TryParse<BuildType>(profile.Build, out var build) ? build : BuildType.Average,
+                profile.HideMetaInformation
+            );
+        }
+
+        private static HashSet<ProtoId<ThreatPrototype>> ConvertThreatPreferences(string? raw)
+        {
+            var preferences = new HashSet<ProtoId<ThreatPrototype>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return preferences;
+
+            try
+            {
+                var values = JsonSerializer.Deserialize<List<string>>(raw);
+                if (values != null)
+                {
+                    foreach (var value in values)
+                    {
+                        if (!string.IsNullOrWhiteSpace(value))
+                            preferences.Add(new ProtoId<ThreatPrototype>(value));
+                    }
+
+                    return preferences;
+                }
+            }
+            catch (JsonException)
+            {
+                try
+                {
+                    var value = JsonSerializer.Deserialize<string>(raw);
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        preferences.Add(new ProtoId<ThreatPrototype>(value));
+                        return preferences;
+                    }
+                }
+                catch (JsonException)
+                {
+                    // Older development builds stored a single prototype ID in this column.
+                }
+            }
+
+            foreach (var value in raw.Split(new[] { ',', ';', '|' },
+                         StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries))
+            {
+                preferences.Add(new ProtoId<ThreatPrototype>(value));
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>> ConvertGamemodeJobPriorities(
+            string? raw)
+        {
+            var preferences = new Dictionary<string, Dictionary<ProtoId<JobPrototype>, JobPriority>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return preferences;
+
+            try
+            {
+                var values = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, int>>>(raw);
+                if (values == null)
+                    return preferences;
+
+                foreach (var (gamemode, jobs) in values)
+                {
+                    if (string.IsNullOrWhiteSpace(gamemode))
+                        continue;
+
+                    var mappedJobs = new Dictionary<ProtoId<JobPrototype>, JobPriority>();
+                    foreach (var (job, priority) in jobs)
+                    {
+                        if (string.IsNullOrWhiteSpace(job) ||
+                            !Enum.IsDefined(typeof(JobPriority), priority))
+                        {
+                            continue;
+                        }
+
+                        mappedJobs[new ProtoId<JobPrototype>(job)] = (JobPriority) priority;
+                    }
+
+                    preferences[gamemode] = mappedJobs;
+                }
+            }
+            catch (JsonException)
+            {
+                // Ignore malformed development data.
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, HashSet<ProtoId<AntagPrototype>>> ConvertGamemodeAntagPreferences(string? raw)
+        {
+            var preferences = new Dictionary<string, HashSet<ProtoId<AntagPrototype>>>();
+            foreach (var (gamemode, antags) in ConvertGamemodePrototypeSetPreferences(raw))
+            {
+                preferences[gamemode] = antags
+                    .Select(antag => new ProtoId<AntagPrototype>(antag))
+                    .ToHashSet();
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, HashSet<ProtoId<ThreatPrototype>>> ConvertGamemodeThreatPreferences(string? raw)
+        {
+            var preferences = new Dictionary<string, HashSet<ProtoId<ThreatPrototype>>>();
+            foreach (var (gamemode, threats) in ConvertGamemodePrototypeSetPreferences(raw))
+            {
+                preferences[gamemode] = threats
+                    .Select(threat => new ProtoId<ThreatPrototype>(threat))
+                    .ToHashSet();
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, List<string>> ConvertGamemodePrototypeSetPreferences(string? raw)
+        {
+            var preferences = new Dictionary<string, List<string>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return preferences;
+
+            try
+            {
+                var values = JsonSerializer.Deserialize<Dictionary<string, List<string>>>(raw);
+                if (values == null)
+                    return preferences;
+
+                foreach (var (gamemode, prototypes) in values)
+                {
+                    if (string.IsNullOrWhiteSpace(gamemode))
+                        continue;
+
+                    preferences[gamemode] = prototypes
+                        .Where(prototype => !string.IsNullOrWhiteSpace(prototype))
+                        .Distinct(StringComparer.Ordinal)
+                        .ToList();
+                }
+            }
+            catch (JsonException)
+            {
+                // Ignore malformed development data.
+            }
+
+            return preferences;
+        }
+
+        private static Dictionary<string, Dictionary<string, string?>> ConvertRankPreferences(string? raw)
+        {
+            var result = new Dictionary<string, Dictionary<string, string?>>();
+            if (string.IsNullOrWhiteSpace(raw))
+                return result;
+
+            try
+            {
+                var parsed = JsonSerializer.Deserialize<Dictionary<string, Dictionary<string, string?>>>(raw);
+                if (parsed != null)
+                {
+                    foreach (var (jobId, platoonRanks) in parsed)
+                    {
+                        if (string.IsNullOrWhiteSpace(jobId) || platoonRanks == null)
+                            continue;
+
+                        result[jobId] = platoonRanks;
+                    }
+                }
+            }
+            catch (JsonException)
+            {
+                // Malformed data; return empty, player just loses their rank preferences.
+            }
+
+            return result;
         }
 
         private async void HandleSelectCharacterMessage(MsgSelectCharacter message)
@@ -73,6 +460,7 @@ namespace Content.Server.Preferences.Managers
             }
 
             prefsData.Prefs = new PlayerPreferences(curPrefs.Characters, index, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            _afkManager.PlayerDidAction(message.MsgChannel);
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
             {
@@ -88,10 +476,13 @@ namespace Content.Server.Preferences.Managers
             if (message.Profile == null)
                 _sawmill.Error($"User {userId} sent a {nameof(MsgUpdateCharacter)} with a null profile in slot {message.Slot}.");
             else
+            {
                 await SetProfile(userId, message.Slot, message.Profile);
+                _afkManager.PlayerDidAction(message.MsgChannel);
+            }
         }
 
-        public async Task SetProfile(NetUserId userId, int slot, ICharacterProfile profile)
+        public async Task SetProfile(NetUserId userId, int slot, HumanoidCharacterProfile profile)
         {
             if (!_cachedPlayerPrefs.TryGetValue(userId, out var prefsData) || !prefsData.PrefsLoaded)
             {
@@ -107,7 +498,7 @@ namespace Content.Server.Preferences.Managers
 
             profile.EnsureValid(session, _dependencies);
 
-            var profiles = new Dictionary<int, ICharacterProfile>(curPrefs.Characters)
+            var profiles = new Dictionary<int, HumanoidCharacterProfile>(curPrefs.Characters)
             {
                 [slot] = profile
             };
@@ -145,12 +536,18 @@ namespace Content.Server.Preferences.Managers
                 return;
             }
 
-            if (slot < 0 || slot >= MaxCharacterSlots)
+
+            if (slot < 0)
             {
                 return;
             }
 
             var curPrefs = prefsData.Prefs!;
+
+            if (!curPrefs.Characters.ContainsKey(slot))
+            {
+                return;
+            }
 
             // If they try to delete the slot they have selected then we switch to another one.
             // Of course, that's only if they HAVE another slot.
@@ -168,10 +565,11 @@ namespace Content.Server.Preferences.Managers
                 nextSlot = ns;
             }
 
-            var arr = new Dictionary<int, ICharacterProfile>(curPrefs.Characters);
+            var arr = new Dictionary<int, HumanoidCharacterProfile>(curPrefs.Characters);
             arr.Remove(slot);
 
             prefsData.Prefs = new PlayerPreferences(arr, nextSlot ?? curPrefs.SelectedCharacterIndex, curPrefs.AdminOOCColor, curPrefs.ConstructionFavorites);
+            _afkManager.PlayerDidAction(message.MsgChannel);
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
             {
@@ -213,6 +611,7 @@ namespace Content.Server.Preferences.Managers
 
             var curPrefs = prefsData.Prefs!;
             prefsData.Prefs = new PlayerPreferences(curPrefs.Characters, curPrefs.SelectedCharacterIndex, curPrefs.AdminOOCColor, validatedList);
+            _afkManager.PlayerDidAction(message.MsgChannel);
 
             if (ShouldStorePrefs(message.MsgChannel.AuthType))
             {
@@ -230,7 +629,7 @@ namespace Content.Server.Preferences.Managers
                 {
                     PrefsLoaded = true,
                     Prefs = new PlayerPreferences(
-                        new[] { new KeyValuePair<int, ICharacterProfile>(0, HumanoidCharacterProfile.Random()) },
+                        new[] { new KeyValuePair<int, HumanoidCharacterProfile>(0, HumanoidCharacterProfile.Random()) },
                         0, Color.Transparent, [])
                 };
 
@@ -247,7 +646,7 @@ namespace Content.Server.Preferences.Managers
                 async Task LoadPrefs()
                 {
                     var prefs = await GetOrCreatePreferencesAsync(session.UserId, cancel);
-                    prefsData.Prefs = prefs;
+                    prefsData.Prefs = ConvertPreferences(prefs);
                 }
             }
         }
@@ -329,12 +728,21 @@ namespace Content.Server.Preferences.Managers
             return null;
         }
 
-        private async Task<PlayerPreferences> GetOrCreatePreferencesAsync(NetUserId userId, CancellationToken cancel)
+        private async Task<Preference> GetOrCreatePreferencesAsync(NetUserId userId, CancellationToken cancel)
         {
             var prefs = await _db.GetPlayerPreferencesAsync(userId, cancel);
             if (prefs is null)
             {
-                return await _db.InitPrefsAsync(userId, HumanoidCharacterProfile.Random(), cancel);
+                // The player has no characters, so the Company assigns them one
+
+                var speciesToBlacklist =
+                    new HashSet<string>(_cfg.GetCVar(CCVars.ICNewAccountSpeciesBlacklist).Split(","));
+
+                //Randomize species and set job priorities from cvar
+                var profile = HumanoidCharacterProfile.Random(speciesToBlacklist);
+                profile = profile.WithJobFromCvar(_cfg);
+
+                return await _db.InitPrefsAsync(userId, profile, cancel);
             }
 
             return prefs;
@@ -347,17 +755,17 @@ namespace Content.Server.Preferences.Managers
 
             return new PlayerPreferences(prefs.Characters.Select(p =>
             {
-                return new KeyValuePair<int, ICharacterProfile>(p.Key, p.Value.Validated(session, collection));
+                return new KeyValuePair<int, HumanoidCharacterProfile>(p.Key, p.Value.Validated(session, collection));
             }), prefs.SelectedCharacterIndex, prefs.AdminOOCColor, prefs.ConstructionFavorites);
         }
 
-        public IEnumerable<KeyValuePair<NetUserId, ICharacterProfile>> GetSelectedProfilesForPlayers(
+        public IEnumerable<KeyValuePair<NetUserId, HumanoidCharacterProfile>> GetSelectedProfilesForPlayers(
             List<NetUserId> usernames)
         {
             return usernames
                 .Select(p => (_cachedPlayerPrefs[p].Prefs, p))
                 .Where(p => p.Prefs != null)
-                .Select(p => new KeyValuePair<NetUserId, ICharacterProfile>(p.p, p.Prefs!.SelectedCharacter));
+                .Select(p => new KeyValuePair<NetUserId, HumanoidCharacterProfile>(p.p, p.Prefs!.SelectedCharacter));
         }
 
         internal static bool ShouldStorePrefs(LoginType loginType)
@@ -365,7 +773,7 @@ namespace Content.Server.Preferences.Managers
             return loginType.HasStaticUserId();
         }
 
-        private sealed partial class PlayerPrefData
+        private sealed class PlayerPrefData
         {
             public bool PrefsLoaded;
             public PlayerPreferences? Prefs;

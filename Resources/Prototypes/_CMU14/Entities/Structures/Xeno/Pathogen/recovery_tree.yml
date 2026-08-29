@@ -69,4 +69,4 @@
   - type: HiveConstructionRequiresHiveWeeds
   - type: HiveConstructionRequiresSpace
   - type: WarpPoint
-    location: recovery node
+    location: cmu-warp-location-recovery-node

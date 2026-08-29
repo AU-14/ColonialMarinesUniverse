@@ -6,6 +6,7 @@ using Content.Shared._CMU14.Medical.Diagnostics.Examine;
 using Content.Shared._CMU14.Medical.Injuries.Shrapnel;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Medical.Wounds;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;
@@ -90,6 +91,7 @@ public sealed class CMUMedicalChangeTest
         var server = pair.Server;
         EntityUid patient = default;
         EntityUid detachedArm = default;
+        EntityUid? detachedBody = null;
         uint revisionAfterStructure = 0;
 
         await server.WaitPost(() =>
@@ -106,8 +108,8 @@ public sealed class CMUMedicalChangeTest
         {
             var entMan = server.EntMan;
             var changes = entMan.System<CMUMedicalChangeSystem>();
+            var detachable = entMan.System<DetachableOrganSystem>();
             var index = entMan.System<CMUMedicalBodyIndexSystem>();
-            var transform = entMan.System<SharedTransformSystem>();
             entMan.AddComponent<CMUMedicalChangeProbeComponent>(patient);
 
             Assert.That(index.TryGetBodyPart(
@@ -117,7 +119,8 @@ public sealed class CMUMedicalChangeTest
 
             if (structureFirst)
             {
-                transform.DetachEntity(detachedArm, entMan.GetComponent<TransformComponent>(detachedArm));
+                detachedBody = detachable.Detach(detachedArm);
+                Assert.That(detachedBody, Is.Not.Null);
                 revisionAfterStructure = changes.GetRevision(patient);
                 Assert.That(changes.MarkChanged(patient, CMUMedicalChangeFlags.Pain), Is.True);
             }
@@ -125,7 +128,8 @@ public sealed class CMUMedicalChangeTest
             {
                 Assert.That(changes.MarkChanged(patient, CMUMedicalChangeFlags.Pain), Is.True);
                 revisionAfterStructure = changes.GetRevision(patient);
-                transform.DetachEntity(detachedArm, entMan.GetComponent<TransformComponent>(detachedArm));
+                detachedBody = detachable.Detach(detachedArm);
+                Assert.That(detachedBody, Is.Not.Null);
             }
 
             Assert.That(changes.GetRevision(patient), Is.EqualTo(revisionAfterStructure));
@@ -146,7 +150,9 @@ public sealed class CMUMedicalChangeTest
                     Is.EqualTo(CMUMedicalChangeFlags.Anatomy | CMUMedicalChangeFlags.Pain));
             });
 
-            if (entMan.EntityExists(detachedArm))
+            if (detachedBody is { } carrier && entMan.EntityExists(carrier))
+                entMan.DeleteEntity(carrier);
+            else if (entMan.EntityExists(detachedArm))
                 entMan.DeleteEntity(detachedArm);
             entMan.DeleteEntity(patient);
         });

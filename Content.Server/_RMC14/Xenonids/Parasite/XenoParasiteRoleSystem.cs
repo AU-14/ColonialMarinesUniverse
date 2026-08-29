@@ -3,7 +3,7 @@ using Content.Shared._RMC14.Xenonids.Construction.EggMorpher;
 using Content.Shared._RMC14.Xenonids.Egg;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared._RMC14.Xenonids.Projectile.Parasite;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Shared.Network;
 using Robust.Shared.Player;
@@ -127,7 +127,7 @@ public sealed partial class XenoEggRoleSystem : EntitySystem
         if (HasComp<InfectionSuccessComponent>(user))
             return true;
 
-        var timeSinceDeath = _timing.CurTime - ghost.TimeOfDeath;
+        var timeSinceDeath = _timing.RealTime - ghost.TimeOfDeath;
         var requiredTime = TimeSpan.FromMinutes(3);
         if (timeSinceDeath < requiredTime)
         {

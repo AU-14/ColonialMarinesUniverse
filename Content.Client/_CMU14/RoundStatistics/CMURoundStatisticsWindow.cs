@@ -72,7 +72,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             Text = "Operational Outcomes",
             FontColorOverride = Text,
-            StyleClasses = { StyleBase.StyleClassLabelHeading },
+            StyleClasses = { StyleClass.LabelHeading },
             ClipText = true,
             HorizontalExpand = true,
         });
@@ -190,7 +190,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             Text = mode.Title,
             FontColorOverride = Text,
-            StyleClasses = { StyleBase.StyleClassLabelHeading },
+            StyleClasses = { StyleClass.LabelHeading },
             ClipText = true,
             HorizontalExpand = true,
         });
@@ -784,7 +784,7 @@ public sealed class CMURoundStatisticsWindow : DefaultWindow
         {
             Text = text,
             FontColorOverride = Text,
-            StyleClasses = { StyleBase.StyleClassLabelSubText },
+            StyleClasses = { StyleClass.LabelSubText },
             ClipText = true,
             HorizontalExpand = true,
         };

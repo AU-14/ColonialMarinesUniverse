@@ -10,9 +10,11 @@ using Content.Shared.Actions;
 using Content.Shared.Audio;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
 using Content.Shared.Popups;
+using Content.Shared.Vehicle;
 using Content.Shared.Vehicle.Components;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -1145,7 +1147,7 @@ public sealed partial class BlackfootFlightSystem : EntitySystem
                 continue;
             }
 
-            if (!_itemSlots.TryGetSlot(vehicle, slot.Id, out var itemSlot, itemSlots) ||
+            if (!_itemSlots.TryGetSlot((vehicle, itemSlots), slot.Id, out var itemSlot) ||
                 itemSlot.Item is not { } thrusters)
             {
                 return false;

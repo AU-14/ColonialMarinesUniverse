@@ -97,7 +97,7 @@ public sealed partial class DocumentParsingManager
                     }
 
                     msg.Pop();
-                    rt.SetMessage(msg, GuidebookRichTextTags);
+                    rt.SetMessage(msg, tagsAllowed: GuidebookRichTextTags);
                     return rt;
                 },
                 TextParser)

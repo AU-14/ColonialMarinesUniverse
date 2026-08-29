@@ -476,7 +476,7 @@ public sealed partial class XenoProjectileSystem : EntitySystem
             _gun.ShootProjectile(projectile, diff, Vector2.Zero, xeno, xeno, speed);
             _zLevelShooting.ApplyProjectileVisualOffset(projectile, projectileVisualOffset);
 
-            var ev = new ProjectileShotEvent(xeno, predicted);
+            var ev = new Content.Shared._RMC14.Projectiles.ProjectileShotEvent(xeno, predicted);
             RaiseLocalEvent(projectile, ref ev);
 
             ammoShotEvent.FiredProjectiles.Add(projectile);

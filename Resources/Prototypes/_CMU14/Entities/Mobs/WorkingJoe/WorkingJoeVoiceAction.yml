@@ -3,8 +3,10 @@
   name: Voice Synthesizer
   components:
   - type: Action
-    icon:
-      sprite: Interface/Actions/voice-mask.rsi
+  - type: Sprite
+    layers:
+    - sprite: Interface/Actions/voice-mask.rsi
       state: icon
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:WorkingJoeVoiceActionEvent {}

@@ -19,8 +19,10 @@ using Content.Shared._RMC14.Rules;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Database;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Maps;
 using Content.Shared.Popups;
 using Content.Shared.Tag;
@@ -681,7 +683,7 @@ public sealed partial class OrbitalCannonSystem : EntitySystem
             return false;
         }
 
-        _popup.PopupCursor("Orbital bombardment request accepted. Orbital cannons are now calibrating.", PopupType.Large);
+        _popup.PopupCursor("Orbital bombardment request accepted. Orbital cannons are now calibrating.", user, PopupType.Large);
 
         var warhead = warheadContainer.ContainedEntities[0];
         var misfuel = 0;

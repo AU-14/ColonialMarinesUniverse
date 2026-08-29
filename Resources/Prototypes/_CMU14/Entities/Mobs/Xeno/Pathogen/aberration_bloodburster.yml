@@ -95,8 +95,10 @@
   - type: MeleeWeapon
     attackRate: 2.5 # attack_delay = -4 in CM13
     damage:
-      groups:
-        Brute: 10 # XENO_DAMAGE_TIER_1/2 range
+      types:
+        Blunt: 3.33 # XENO_DAMAGE_TIER_1/2 range
+        Slash: 3.33
+        Piercing: 3.34
   - type: CMArmor
     explosionArmor: 5 # XENO_EXPLOSIVE_ARMOR_TIER_1
   - type: Tackle

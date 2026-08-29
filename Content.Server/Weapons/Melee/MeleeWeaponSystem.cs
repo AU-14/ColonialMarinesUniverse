@@ -3,26 +3,19 @@ using System.Numerics;
 using Content.Server.Chat.Systems;
 using Content.Server.Movement.Systems;
 using Content.Shared._CMU14.ZLevels.Core.EntitySystems;
-using Content.Shared._RMC14.Tackle;
-using Content.Shared.Actions.Events;
-using Content.Shared.Administration.Components;
-using Content.Shared.CombatMode;
-using Content.Shared.Damage.Events;
-using Content.Shared.Damage.Systems;
+using Content.Shared.Chat;
 using Content.Shared.Effects;
 using Content.Shared.Speech.Components;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
-using Robust.Shared.Random;
 
 namespace Content.Server.Weapons.Melee;
 
 public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
 {
     [Dependency] private ChatSystem _chat = default!;
-    [Dependency] private DamageExamineSystem _damageExamine = default!;
     [Dependency] private LagCompensationSystem _lag = default!;
     [Dependency] private SharedColorFlashEffectSystem _color = default!;
     [Dependency] private CMUSharedZLevelsSystem _zLevels = default!;
@@ -30,21 +23,8 @@ public sealed partial class MeleeWeaponSystem : SharedMeleeWeaponSystem
     public override void Initialize()
     {
         base.Initialize();
+
         SubscribeLocalEvent<MeleeSpeechComponent, MeleeHitEvent>(OnSpeechHit);
-        SubscribeLocalEvent<MeleeWeaponComponent, DamageExamineEvent>(OnMeleeExamineDamage);
-    }
-
-    private void OnMeleeExamineDamage(EntityUid uid, MeleeWeaponComponent component, ref DamageExamineEvent args)
-    {
-        if (component.Hidden)
-            return;
-
-        var damageSpec = GetDamage(uid, args.User, component);
-
-        if (damageSpec.Empty)
-            return;
-
-        _damageExamine.AddDamageExamine(args.Message, Damageable.ApplyUniversalAllModifiers(damageSpec), Loc.GetString("damage-melee"));
     }
 
     protected override bool ArcRaySuccessful(EntityUid targetUid,

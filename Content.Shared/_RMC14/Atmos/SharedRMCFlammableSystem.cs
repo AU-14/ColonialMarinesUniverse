@@ -15,6 +15,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Damage.Systems;
 using Content.Shared.Directions;
@@ -153,20 +154,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (_net.IsClient)
             return;
 
-        var water = false;
-        foreach (var container in args.Solution.Comp.Containers)
-        {
-            if (!_solutionContainer.TryGetSolution(args.Solution.Owner, container, out _, out var solution))
-                continue;
-
-            if (solution.ContainsPrototype(WaterReagent))
-            {
-                water = true;
-                break;
-            }
-        }
-
-        if (!water)
+        if (!args.Solution.Comp.Solution.ContainsPrototype(WaterReagent))
             return;
 
         if (ent.Comp.ExtinguishInstantly)
@@ -340,7 +328,7 @@ public abstract partial class SharedRMCFlammableSystem : EntitySystem
         if (args.Target != ent.Owner ||
             user == args.Target ||
             !TryComp(user, out FirePatterComponent? patter) ||
-            _entityWhitelist.IsBlacklistPass(patter.Blacklist, ent) ||
+            _entityWhitelist.IsWhitelistPass(patter.Blacklist, ent) ||
             !TryComp(ent, out FlammableComponent? flammable) ||
             !flammable.OnFire)
         {

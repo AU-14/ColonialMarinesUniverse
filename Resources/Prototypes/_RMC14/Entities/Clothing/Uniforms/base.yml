@@ -9,6 +9,9 @@
       path: /Audio/_RMC14/Handling/clothing_on.ogg
     unequipSound:
       path: /Audio/_RMC14/Handling/clothing_off.ogg
+  - type: HideLayerClothing
+    layers:
+      UndergarmentTop: INNERCLOTHING
   - type: WebbingClothing
   - type: UserInterface
     interfaces:
@@ -25,15 +28,15 @@
     tags:
     - ClothMade
     - WhitelistChameleon
-  - type: Food
+  - type: Edible
     requiresSpecialDigestion: true
-  - type: SolutionContainerManager
-    solutions:
-      food:
-        maxVol: 30
-        reagents:
-        - ReagentId: Fiber
-          Quantity: 30
+  - type: Solution
+    id: food
+    solution:
+      maxVol: 30
+      reagents:
+      - ReagentId: Fiber
+        Quantity: 30
 
 - type: entity
   abstract: true

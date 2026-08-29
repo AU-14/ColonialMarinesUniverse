@@ -93278,9 +93278,7 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
-          - invalid
+          ents: []
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -93313,9 +93311,7 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
-          - invalid
+          ents: []
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -153294,13 +153290,8 @@ entities:
     components:
     - type: Transform
       parent: 14577
-    - type: UserInterface
-      actors:
-        enum.StorageUiKey.Key:
-        - invalid
     - type: Physics
       canCollide: False
-    - type: ActiveUserInterface
     - type: InsideEntityStorage
   - uid: 14580
     components:
@@ -219890,7 +219881,6 @@ entities:
           - 152
           - 154
           - 153
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -219924,7 +219914,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - invalid
           - 255
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -219959,7 +219948,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - invalid
           - 285
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -219995,7 +219983,6 @@ entities:
           occludes: True
           ents:
           - 289
-          - invalid
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True
@@ -220029,7 +220016,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - invalid
           - 505
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -220064,7 +220050,6 @@ entities:
           showEnts: False
           occludes: True
           ents:
-          - invalid
           - 517
         paper_label: !type:ContainerSlot
           showEnts: False
@@ -220229,11 +220214,7 @@ entities:
         entity_storage: !type:Container
           showEnts: False
           occludes: True
-          ents:
-          - invalid
-          - invalid
-          - invalid
-          - invalid
+          ents: []
         paper_label: !type:ContainerSlot
           showEnts: False
           occludes: True

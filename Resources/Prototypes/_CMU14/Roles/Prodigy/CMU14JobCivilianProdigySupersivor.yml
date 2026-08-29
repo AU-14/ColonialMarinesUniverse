@@ -50,7 +50,7 @@
   icon: "CMJobIconLiaison"
   requireAdminNotify: false
   joinNotifyCrew: false
-  supervisors: nobody
+  supervisors: cm-job-supervisors-nobody
   spawnMenuRoleName: Prodigy Supervisor (CMU)
   accessGroups:
   - Colonist

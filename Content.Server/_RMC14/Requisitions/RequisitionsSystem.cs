@@ -30,6 +30,7 @@ using Content.Shared.AU14.ColonyEconomy;
 using Content.Shared.AU14.util;
 using Content.Shared.Cargo.Components;
 using Content.Shared.Chasm;
+using Content.Shared.Chat;
 using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.Mobs.Components;
@@ -754,7 +755,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
                     if (_chasmFallingQuery.HasComp(toPit))
                         continue;
 
-                    _chasm.StartFalling(uid, chasm, toPit);
+                    _chasm.StartFalling((uid, chasm), toPit, playEmote: false);
                     _audio.PlayEntity(chasm.FallingSound, toPit, uid);
                 }
             }
@@ -1143,7 +1144,7 @@ public sealed partial class RequisitionsSystem : SharedRequisitionsSystem
         if (!string.IsNullOrEmpty(order.DeptAccessLevel))
         {
             var accessReader = EnsureComp<AccessReaderComponent>(crate);
-            accessSys.SetAccesses((crate, accessReader),
+            accessSys.TrySetAccesses((crate, accessReader),
                 new List<HashSet<ProtoId<AccessLevelPrototype>>>
                 {
                     new() { order.DeptAccessLevel }

@@ -1,5 +1,6 @@
 using Content.Server.Chat.Systems;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Audio;

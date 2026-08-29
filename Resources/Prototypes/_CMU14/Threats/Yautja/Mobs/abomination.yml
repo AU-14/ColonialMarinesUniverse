@@ -4,10 +4,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: charge
     useDelay: 12
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:YautjaAbominationRushActionEvent
 
@@ -17,10 +19,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: screech
     useDelay: 25
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: screech
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:YautjaAbominationRoarActionEvent
 
@@ -30,10 +34,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: stomp
     useDelay: 20
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: stomp
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 4
     checkCanAccess: false
@@ -49,10 +55,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: rav_eviscerate
     useDelay: 15
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: rav_eviscerate
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 2
     checkCanAccess: false
@@ -68,10 +76,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: gut
     useDelay: 0.5
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: gut
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:YautjaAbominationToggleFrenzyModeActionEvent
 
@@ -243,12 +253,16 @@
   - type: MeleeWeapon
     attackRate: 1.15
     damage:
-      groups:
-        Brute: 38
+      types:
+        Blunt: 12.66
+        Slash: 12.67
+        Piercing: 12.67
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 48
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: Tackle
     max: 5
     chance: 0.35

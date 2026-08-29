@@ -45,7 +45,7 @@
     backgroundImagePath: "/Textures/_CMU14/Interface/Paper/paper_bkg.png"
     backgroundModulate: "#eaedde"
     backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
-    fontAccentColor: "#ffffff"
+    defaultTextColor: "#ffffff"
 
 # DEDICATED PAPER SLIPS /*//////////////////////////////////////////////////
 

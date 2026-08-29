@@ -66,8 +66,10 @@
   - type: MeleeWeapon
     attackRate: 1.0
     damage:
-      groups:
-        Brute: 10
+      types:
+        Blunt: 3.33
+        Slash: 3.33
+        Piercing: 3.34
   - type: CMArmor
     explosionArmor: 10
   - type: Tackle

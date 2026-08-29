@@ -1,48 +1,50 @@
-- type: entityList
+- type: entityTable
   id: CMUBalanceRatingWeapons
-  entities:
-  - WeaponLauncherM83
-  - RMCWeaponLauncherM5ATL
-  - RMCWeaponRifleSharp
-  - WeaponRifleM4SPRCustom
-  - CMM96SSniperRifle
-  - RMCXM43E1AntiMaterielRifle
-  - RMCWeaponSniperM707Vulture
-  - RMCWeaponShotgunMK481
-  - RMCWeaponFlamerSpec
-  - AU14WeaponXM99A
-  - WeaponRifleM5SPR2
-  - RMCWeaponFL3Flamer
-  - AU14WeaponShotgunSPAS12HAZOPS
-  - AU14WeaponFlamerM240A2HAZOPS
-  - AU14L64A3SniperRifle
-  - RMCWeaponRifleL24B
-  - AU14WeaponLauncherL164A3
-  - RMCWeaponShotgunType23
-  - RMCWeaponLauncherHJRA12
-  - RMCType88SniperRifle
-  - RMCWeaponFlamerSpecUPP
+  table: !type:AllSelector
+    children:
+    - id: WeaponLauncherM83
+    - id: RMCWeaponLauncherM5ATL
+    - id: RMCWeaponRifleSharp
+    - id: WeaponRifleM4SPRCustom
+    - id: CMM96SSniperRifle
+    - id: RMCXM43E1AntiMaterielRifle
+    - id: RMCWeaponSniperM707Vulture
+    - id: RMCWeaponShotgunMK481
+    - id: RMCWeaponFlamerSpec
+    - id: AU14WeaponXM99A
+    - id: WeaponRifleM5SPR2
+    - id: RMCWeaponFL3Flamer
+    - id: AU14WeaponShotgunSPAS12HAZOPS
+    - id: AU14WeaponFlamerM240A2HAZOPS
+    - id: AU14L64A3SniperRifle
+    - id: RMCWeaponRifleL24B
+    - id: AU14WeaponLauncherL164A3
+    - id: RMCWeaponShotgunType23
+    - id: RMCWeaponLauncherHJRA12
+    - id: RMCType88SniperRifle
+    - id: RMCWeaponFlamerSpecUPP
 
-- type: entityList
+- type: entityTable
   id: CMUBalanceRatingXenos
-  entities:
-  - CMXenoDrone
-  - CMXenoRunner
-  - CMXenoSentinel
-  - CMXenoDefender
-  - CMXenoWarrior
-  - CMXenoSpitter
-  - CMXenoLurker
-  - CMXenoCarrier
-  - CMXenoReaper
-  - CMXenoBurrower
-  - CMXenoHivelord
-  - RMCXenoBoiler
-  - RMCXenoCrusher
-  - CMXenoPraetorian
-  - CMXenoRavager
-  - CMXenoQueen
-  - RMCXenoKing
-  - RMCXenoDespoiler
-  - CMXenoBull
-  - CMXenoWarlock
+  table: !type:AllSelector
+    children:
+    - id: CMXenoDrone
+    - id: CMXenoRunner
+    - id: CMXenoSentinel
+    - id: CMXenoDefender
+    - id: CMXenoWarrior
+    - id: CMXenoSpitter
+    - id: CMXenoLurker
+    - id: CMXenoCarrier
+    - id: CMXenoReaper
+    - id: CMXenoBurrower
+    - id: CMXenoHivelord
+    - id: RMCXenoBoiler
+    - id: RMCXenoCrusher
+    - id: CMXenoPraetorian
+    - id: CMXenoRavager
+    - id: CMXenoQueen
+    - id: RMCXenoKing
+    - id: RMCXenoDespoiler
+    - id: CMXenoBull
+    - id: CMXenoWarlock

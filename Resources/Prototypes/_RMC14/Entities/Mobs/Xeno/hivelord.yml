@@ -41,12 +41,16 @@
   - type: XenoResinWalker
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: Tackle
     max: 4
     chance: 0.45
@@ -88,19 +92,18 @@
     prefix: hivelord
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 200
-        - ReagentId: CMUXenoPlasmaPurple
-          Quantity: 200
-        - ReagentId: CMUXenoPlasmaPhero
-          Quantity: 200
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 200
+      - ReagentId: CMUXenoPlasmaPurple
+        Quantity: 200
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 200
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood

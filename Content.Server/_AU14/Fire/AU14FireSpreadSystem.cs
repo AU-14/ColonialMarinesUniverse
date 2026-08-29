@@ -5,6 +5,7 @@ using Content.Shared._RMC14.Atmos;
 using Content.Shared.Atmos;
 using Content.Shared.Atmos.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;

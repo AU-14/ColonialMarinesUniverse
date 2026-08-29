@@ -248,8 +248,9 @@
   id: AU14BuildWallHeavyBase
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: CMU14StructuralMarine
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: ExaminableDamage
     messages: RMCWallMessages
   - type: RMCIntegrityExamine

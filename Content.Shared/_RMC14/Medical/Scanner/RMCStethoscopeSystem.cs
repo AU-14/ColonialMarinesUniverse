@@ -4,6 +4,8 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared._RMC14.UniformAccessories;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Examine;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Interaction;
@@ -27,6 +29,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
     [Dependency] private InventorySystem _inventorySystem = default!;
     [Dependency] private SharedContainerSystem _containerSystem = default!;
     [Dependency] private MobStateSystem _mobState = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
 
     private static readonly EntProtoId<SkillDefinitionComponent> MedicalSkill = "RMCSkillMedical";
     private static readonly string[] AccessorySlots = ["jumpsuit", "outerClothing"];
@@ -149,7 +152,7 @@ public sealed partial class RMCStethoscopeSystem : EntitySystem
             return null;
         }
 
-        var totalDamage = damageable.Damage.GetTotal().Float();
+        var totalDamage = _damageable.GetAllDamage((target, damageable)).GetTotal().Float();
         var maxHealthThreshold = thresholds.Thresholds.Count > 0
             ? (float)thresholds.Thresholds.Keys.Max()
             : 100f;

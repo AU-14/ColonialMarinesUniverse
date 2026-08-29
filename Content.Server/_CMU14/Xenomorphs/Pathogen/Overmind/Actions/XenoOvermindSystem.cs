@@ -1,5 +1,7 @@
 using Content.Shared._CMU14.Xenomorphs.Pathogen.Overmind;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Eye;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
@@ -26,6 +28,7 @@ namespace Content.Server._CMU14.Xenomorphs.Pathogen.Overmind;
 public sealed class CMUXenoOvermindSystem : EntitySystem
 {
     [Dependency] private readonly CMUXenoOvermindAppearanceSystem _appearance = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
     [Dependency] private readonly FixtureSystem _fixtures = default!;
     [Dependency] private readonly SharedPhysicsSystem _physics = default!;
     [Dependency] private readonly SharedEyeSystem _eye = default!;
@@ -207,7 +210,8 @@ public sealed class CMUXenoOvermindSystem : EntitySystem
 
         if (appearance.Incorporeal)
         {
-            if (TryComp(ent, out DamageableComponent? dmg) && dmg.TotalDamage > 0)
+            if (TryComp(ent, out DamageableComponent? dmg) &&
+                _damageable.GetTotalDamage((ent.Owner, dmg)) > 0)
                 return;
         }
 

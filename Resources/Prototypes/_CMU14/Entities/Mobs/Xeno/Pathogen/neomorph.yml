@@ -55,8 +55,10 @@
   - type: XenoDevour
   - type: XenoHeadbite
     damage:
-      groups:
-        Brute: 60
+      types:
+        Blunt: 20
+        Slash: 20
+        Piercing: 20
   - type: XenoLeap
     delay: 0
     range: 4
@@ -67,8 +69,10 @@
     targetJitterTime: 1
     targetCameraShakeStrength: 1
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoRegen
     healOffWeeds: true
     restHealMultiplier: 1.0
@@ -119,12 +123,16 @@
   - type: MeleeWeapon
     attackRate: 1.5
     damage:
-      groups:
-        Brute: 35
+      types:
+        Blunt: 11.66
+        Slash: 11.67
+        Piercing: 11.67
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 54
+      types:
+        Blunt: 18
+        Slash: 18
+        Piercing: 18
   - type: CMArmor
     explosionArmor: 10
     xenoArmor: 10

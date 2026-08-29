@@ -3,14 +3,16 @@
 // SPDX-License-Identifier: AGPL-3.0-only
 using System.Numerics;
 using Content.Server._CMU14.ZLevels.Core;
-using Content.Server.Station.Components;
 using Content.Shared._AU14.ZLevelBuilding;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Maps;
 using Content.Shared.Physics;
+using Content.Shared.Station.Components;
 using Content.Shared.Tag;
 using Robust.Server.GameObjects;
 using Robust.Shared.Random;
@@ -628,7 +630,7 @@ public sealed class ZLevelBuildingSystem : EntitySystem
     /// CMBaseWallInvincible family). These mark the playfield boundary.</summary>
     private bool IsIndestructibleWall(EntityUid uid)
     {
-        return _tag.HasTag(uid, "Wall") && !HasComp<Content.Shared.Damage.DamageableComponent>(uid);
+        return _tag.HasTag(uid, "Wall") && !HasComp<Content.Shared.Damage.Components.DamageableComponent>(uid);
     }
 
     /// <summary>If an indestructible border wall stands at <paramref name="worldPos"/> on the level directly

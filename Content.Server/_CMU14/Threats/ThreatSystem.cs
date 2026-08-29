@@ -5,7 +5,6 @@ using Content.Server._CMU14.Round.Objectives;
 using Content.Server.GameTicking;
 using Content.Server.Ghost.Roles;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Mind.Commands;
 using Content.Shared._CMU14.Threats;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Dropship;
@@ -14,7 +13,7 @@ using Content.Shared._RMC14.Xenonids;
 using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared.AU14.Scenario;
 using Content.Shared.AU14.util;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mind;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -23,6 +22,7 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Players;
 using Content.Shared.Roles;
+using Content.Shared.Roles.Components;
 using Content.Shared.SSDIndicator;
 using Robust.Server.Player;
 using Robust.Shared.Enums;
@@ -1029,7 +1029,7 @@ public sealed partial class ThreatSystem : EntitySystem
 
         GhostRoleComponent? ghostRole = null;
         if (TryComp(entity, out ghostRole) && ghostRole.MakeSentient)
-            MakeSentientCommand.MakeSentient(entity, EntityManager, ghostRole.AllowMovement, ghostRole.AllowSpeech);
+            _mindSystem.MakeSentient(entity, ghostRole.AllowMovement, ghostRole.AllowSpeech);
 
         ContentPlayerData? data = session.ContentData();
         EntityUid? mind = _mindSystem.GetMind(playerNetId);

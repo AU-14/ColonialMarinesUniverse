@@ -52,12 +52,16 @@
     explosionArmor: 40
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 48
+      types:
+        Blunt: 16
+        Slash: 16
+        Piercing: 16
   - type: Tackle
     chance: 0.45
   - type: Fixtures
@@ -128,8 +132,10 @@
   - type: VanguardShield
   - type: XenoPierce
     damage:
-      groups:
-        Brute: 45
+      types:
+        Blunt: 15
+        Slash: 15
+        Piercing: 15
   - type: XenoLeap
     plasmaCost: 50
     delay: 0
@@ -138,8 +144,10 @@
     moveDelayTime: 0
   - type: XenoBlitz
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoCleave
   - type: TacticalMapIcon
     icon:

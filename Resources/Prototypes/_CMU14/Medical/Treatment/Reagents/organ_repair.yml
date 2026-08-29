@@ -8,7 +8,7 @@
   color: "#a87830"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -18,7 +18,7 @@
         potency: 2
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 25
         damage:
           types:
@@ -34,7 +34,7 @@
   color: "#80c0ff"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -44,7 +44,7 @@
         potency: 2
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 25
         damage:
           types:
@@ -60,7 +60,7 @@
   color: "#a0e070"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -70,7 +70,7 @@
         potency: 2
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 25
         damage:
           types:
@@ -86,7 +86,7 @@
   color: "#c02020"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -98,7 +98,7 @@
         chancePerTick: 0.05
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 25
         damage:
           types:
@@ -114,7 +114,7 @@
   color: "#e0e0c0"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:CMUBoneRegenBoostEffect
@@ -124,7 +124,7 @@
         potency: 2
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 25
         damage:
           types:
@@ -140,7 +140,7 @@
   color: "#e9d191"
   overdose: 25
   metabolisms:
-    Medicine:
+    Bloodstream:
       metabolismRate: 0.1
       effects:
       - !type:HealOrganEffect
@@ -150,7 +150,7 @@
         potency: 2
       - !type:HealthChange
         conditions:
-        - !type:ReagentThreshold
+        - !type:ReagentCondition
           min: 30
         damage:
           types:

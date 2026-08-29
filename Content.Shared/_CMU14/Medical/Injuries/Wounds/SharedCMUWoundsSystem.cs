@@ -15,6 +15,7 @@ using Content.Shared._RMC14.Medical.Wounds;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;

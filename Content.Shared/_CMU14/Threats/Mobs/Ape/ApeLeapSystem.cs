@@ -5,6 +5,7 @@ using Content.Shared._RMC14.CameraShake;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared._RMC14.Movement;
 using Content.Shared._RMC14.Pulling;
+using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Invisibility;
@@ -13,6 +14,7 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Eye.Blinding.Systems;
@@ -52,13 +54,13 @@ public sealed partial class ApeLeapSystem : EntitySystem
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private MovementSpeedModifierSystem _movementSpeed = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private RMCObstacleSlammingSystem _obstacleSlamming = default!;
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private SharedRMCLagCompensationSystem _rmcLagCompensation = default!;
     [Dependency] private RMCPullingSystem _rmcPulling = default!;
+    [Dependency] private RMCSlowSystem _slow = default!;
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private StandingStateSystem _standing = default!;
     [Dependency] private SharedStunSystem _stun = default!;
@@ -243,11 +245,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
 
         foreach (EntityUid entity in args.HitEntities)
         {
-            if (TryComp(ape, out SlowedDownComponent? root) && root.SprintSpeedModifier == 0f)
-            {
-                RemComp<SlowedDownComponent>(ape);
-                _movementSpeed.RefreshMovementSpeedModifiers(ape);
-            }
+            RemComp<RMCRootedComponent>(ape);
 
             ape.Comp.LastHit = null;
             ape.Comp.LastHitAt = null;
@@ -380,7 +378,7 @@ public sealed partial class ApeLeapSystem : EntitySystem
             victim.RecoverAt = _timing.CurTime + xeno.Comp.ParalyzeTime;
             Dirty(target, victim);
 
-            _stun.TrySlowdown(xeno, xeno.Comp.MoveDelayTime, true, 0f, 0f);
+            _slow.TryRoot(xeno, xeno.Comp.MoveDelayTime, applyChemical: true);
 
             if (_net.IsServer)
                 _stun.TryParalyze(target, xeno.Comp.ParalyzeTime, true);

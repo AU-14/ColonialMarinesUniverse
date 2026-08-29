@@ -9,6 +9,8 @@
         - AUPlanetSorokyne
         - AuPlanetChances
         - CMUPlanetHopesRetreat
+        - AUPlanetStableGarrison
+        - AUPlanetLV624
       groups:
         - InsurgencyClfRoundGroup
       backupGroups:

@@ -4,11 +4,14 @@ using Content.Shared.AU14.ColonyEconomy;
 using Content.Shared.Interaction;
 using Content.Shared.Popups;
 using Robust.Server.GameObjects;
+using Robust.Shared.Prototypes;
 
 namespace Content.Server.AU14.ColonyEconomy;
 
 public sealed partial class ColonyAtmSystem : EntitySystem
 {
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
+
     [Dependency] private UserInterfaceSystem _ui = default!;
     [Dependency] private StackSystem _stack = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
@@ -82,7 +85,7 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         var netAmount = msg.Amount - taxAmount;
 
         if (netAmount > 0)
-            _stack.SpawnMultiple("RMCSpaceCash", netAmount, uid);
+            _stack.SpawnMultipleNextToOrDrop(CashPrototype, netAmount, uid);
         if (taxAmount > 0)
             _colonyBudget.AddToBudget(taxAmount);
 
@@ -91,5 +94,4 @@ public sealed partial class ColonyAtmSystem : EntitySystem
         _ui.SetUiState(uid, ColonyAtmUi.Key, state);
     }
 }
-
 

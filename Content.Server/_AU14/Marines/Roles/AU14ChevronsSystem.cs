@@ -97,7 +97,7 @@ public sealed partial class ChevronSystem : EntitySystem
         if (!HasComp<UniformAccessoryHolderComponent>(args.Equipment))
             return;
 
-        var mob = args.Equipee;
+        var mob = args.EquipTarget;
 
         if (HasComp<ChevronSpawnedComponent>(mob))
             return;

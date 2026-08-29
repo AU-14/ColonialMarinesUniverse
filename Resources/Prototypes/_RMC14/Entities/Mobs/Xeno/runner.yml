@@ -63,17 +63,16 @@
         - BulletImpassable
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaCatecholamine
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaCatecholamine
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -107,12 +106,16 @@
   - type: MeleeWeapon
     attackRate: 1.4
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: Tackle
     min: 4
     max: 5

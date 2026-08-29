@@ -6,13 +6,16 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/Xeno/bull.rsi
-      state: bull_charge
-    iconOn:
-      sprite: _CMU14/Actions/Xeno/bull.rsi
-      state: bull_ready_charge
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_charge
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_ready_charge
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:CMUXenoBullChargeActionEvent { mode: Plow }
 
@@ -24,13 +27,16 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/Xeno/bull.rsi
-      state: bull_headbutt
-    iconOn:
-      sprite: _CMU14/Actions/Xeno/bull.rsi
-      state: bull_headbutt
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_headbutt
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_headbutt
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:CMUXenoBullChargeActionEvent { mode: Headbutt }
 
@@ -42,12 +48,15 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/Xeno/bull.rsi
-      state: bull_gore
-    iconOn:
-      sprite: _CMU14/Actions/Xeno/bull.rsi
-      state: bull_gore
     useDelay: 0.25
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_gore
+      map: ["enum.ActionVisuals.Icon"]
+    - sprite: _CMU14/Actions/Xeno/bull.rsi
+      state: bull_gore
+      map: ["enum.ActionVisuals.IconToggled"]
+      visible: false
   - type: InstantAction
     event: !type:CMUXenoBullChargeActionEvent { mode: Gore }

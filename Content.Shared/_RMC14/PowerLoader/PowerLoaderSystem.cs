@@ -222,7 +222,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
 
         _mover.SetRelay(buckle, ent);
         _interaction.SetRelay(buckle, ent, relay);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
         SyncHands(ent);
     }
 
@@ -233,7 +233,7 @@ public sealed partial class PowerLoaderSystem : EntitySystem
         RemCompDeferred<RelayInputMoverComponent>(buckle);
         RemCompDeferred<InteractionRelayComponent>(buckle);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
         DeleteVirtuals(ent, buckle);
 
         if (ent.Comp.DoAfter != null && _doAfter.IsRunning(ent.Comp.DoAfter.Id))

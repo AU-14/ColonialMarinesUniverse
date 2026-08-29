@@ -6,7 +6,7 @@ using Content.Shared._RMC14.Xenonids.Announce;
 using Content.Shared._RMC14.Xenonids.Word;
 using Content.Shared.Chat;
 using Content.Shared.Database;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Popups;
 using Robust.Server.Audio;
 using Robust.Shared.Audio;

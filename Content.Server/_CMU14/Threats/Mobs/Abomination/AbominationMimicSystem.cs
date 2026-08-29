@@ -2,7 +2,6 @@ using System.Linq;
 using Content.Server.Chat.Systems;
 using Content.Server.Polymorph.Components;
 using Content.Server.Polymorph.Systems;
-using Content.Server.Radio.Components;
 using Content.Shared._CMU14.Threats.Mobs.Abomination;
 using Content.Shared._RMC14.Marines.Skills;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
@@ -10,9 +9,14 @@ using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Actions;
 using Content.Shared.Actions.Components;
 using Content.Shared.Chat.Prototypes;
+using Content.Shared.Body;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.FixedPoint;
 using Content.Shared.Humanoid;
+using Content.Shared.Humanoid.Markings;
+using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs;
 using Content.Shared.NPC.Components;
@@ -20,7 +24,10 @@ using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.Polymorph;
 using Content.Shared.Popups;
+using Content.Shared.Preferences;
+using Content.Shared.Radio.Components;
 using Content.Shared.Stunnable;
+using Robust.Shared.Map;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using AbominationAppearanceSnapshot = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationAppearanceSnapshot;
@@ -60,7 +67,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private NpcFactionSystem _faction = default!;
     [Dependency] private GunIFFSystem _gunIff = default!;
-    [Dependency] private SharedHumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private PolymorphSystem _polymorph = default!;
@@ -70,10 +77,12 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedUserInterfaceSystem _ui = default!;
+    [Dependency] private SharedVisualBodySystem _visualBody = default!;
     public static readonly ProtoId<PolymorphPrototype> DisguisePolymorph = "AbominationMimicDisguise";
     public static readonly EntProtoId RevertAction = "ActionAbominationMimicRevert";
     public static readonly ProtoId<EmotePrototype> ScreamEmote = "Scream";
     public const string AbominationRadioChannel = "Abomination";
+    public const string AbominationMimicRadioChannel = "AbominationMimic";
 
     public override void Initialize()
     {
@@ -249,14 +258,15 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // the flesh underneath isn't compatible host material.
         RemComp<InfectableComponent>(disguisedUid);
 
-        // Grant the disguise the abomination radio channel — the disguised
-        // mimic still hears + speaks to the flesh-hivemind even while
-        // wearing a face.
+        // Grant both the common abomination band and the private Mimicnet — the
+        // disguised mimic still hears its threat and other mimics while wearing a face.
         var receiver = EnsureComp<IntrinsicRadioReceiverComponent>(disguisedUid);
         var transmitter = EnsureComp<IntrinsicRadioTransmitterComponent>(disguisedUid);
         var activeRadio = EnsureComp<ActiveRadioComponent>(disguisedUid);
         transmitter.Channels.Add(AbominationRadioChannel);
+        transmitter.Channels.Add(AbominationMimicRadioChannel);
         activeRadio.Channels.Add(AbominationRadioChannel);
+        activeRadio.Channels.Add(AbominationMimicRadioChannel);
 
         // Every transform resets damage on the new body — mimics spawn
         // fresh into the disguise no matter how chewed-up they were.
@@ -270,7 +280,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
     private void HealToFull(EntityUid uid)
     {
         if (TryComp(uid, out DamageableComponent? damageable))
-            _damageable.SetAllDamage(uid, damageable, FixedPoint2.Zero);
+            _damageable.SetAllDamage((uid, damageable), FixedPoint2.Zero);
     }
 
     private void OnRevertAction(Entity<AbominationMimicTransformedComponent> ent,
@@ -350,19 +360,22 @@ public sealed partial class AbominationMimicSystem : EntitySystem
 
     private void FinishRevert(EntityUid disguisedUid, PolymorphedEntityComponent polymorphed)
     {
+        if (polymorphed.Parent is not { } parent)
+            return;
+
         // Carry pool changes back, then stamp the cooldown on the original
         // mimic's transform action entity. SetCooldown grays out only THAT
         // action; other mimics' action entities are untouched.
         if (TryComp(disguisedUid, out AbominationMimicComponent? disguisedMimic)
-            && TryComp(polymorphed.Parent, out AbominationMimicComponent? originalMimic))
+            && TryComp(parent, out AbominationMimicComponent? originalMimic))
         {
             originalMimic.AssimilatedPool = new(disguisedMimic.AssimilatedPool);
-            Dirty(polymorphed.Parent, originalMimic);
+            Dirty(parent, originalMimic);
 
             // Resolve the action entity at revert time — scan the original mimic's
             // action container for the transform action. Stored UIDs could go
             // stale if MobStateActions re-grants the action mid-disguise.
-            EntityUid? foundAction = FindTransformAction(polymorphed.Parent);
+            EntityUid? foundAction = FindTransformAction(parent);
             if (foundAction is { } actionEnt)
                 _actions.SetCooldown(actionEnt, disguisedMimic.TransformCooldown);
         }
@@ -370,7 +383,7 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         // Heal the restored mimic back to full — every transform (in or out)
         // resets the body. Done before Revert so polymorph's transferDamage
         // doesn't pull the disguise's accumulated damage back onto it.
-        HealToFull(polymorphed.Parent);
+        HealToFull(parent);
 
         _polymorph.Revert((disguisedUid, null));
     }
@@ -442,17 +455,50 @@ public sealed partial class AbominationMimicSystem : EntitySystem
         if (snapshot is null || string.IsNullOrEmpty(snapshot.Species.Id))
             return;
 
-        if (!TryComp(disguised, out HumanoidAppearanceComponent? humanoid))
-            return;
+        var speciesId = snapshot.Species;
+        if (!_proto.TryIndex(speciesId, out SpeciesPrototype? species) ||
+            !_proto.HasIndex<EntityPrototype>(species.DollPrototype))
+        {
+            speciesId = HumanoidCharacterProfile.DefaultSpecies;
+            species = _proto.Index<SpeciesPrototype>(speciesId);
+        }
 
-        _humanoid.SetSpecies(disguised, snapshot.Species, false, humanoid);
-        _humanoid.SetSex(disguised, snapshot.Sex, false, humanoid);
-        humanoid.SkinColor = snapshot.SkinColor;
-        humanoid.EyeColor = snapshot.EyeColor;
-        humanoid.Age = snapshot.Age;
-        humanoid.Gender = snapshot.Gender;
-        humanoid.MarkingSet = new(snapshot.MarkingSet);
-        humanoid.CustomBaseLayers = new(snapshot.CustomBaseLayers);
-        Dirty(disguised, humanoid);
+        var appearance = new HumanoidCharacterAppearance(
+            snapshot.EyeColor,
+            snapshot.SkinColor,
+            CloneMarkings(snapshot.OrganMarkings));
+        var humanoidProfile = HumanoidCharacterProfile.DefaultWithSpecies(speciesId)
+            .WithAge(snapshot.Age)
+            .WithSex(snapshot.Sex)
+            .WithGender(snapshot.Gender)
+            .WithVoice(snapshot.Voice)
+            .WithCharacterAppearance(appearance);
+
+        var donor = Spawn(species.DollPrototype, MapCoordinates.Nullspace);
+        try
+        {
+            _visualBody.ApplyProfileTo(donor, humanoidProfile);
+            _visualBody.CopyAppearanceFrom(donor, disguised);
+        }
+        finally
+        {
+            EntityManager.DeleteEntity(donor);
+        }
+
+        _visualBody.ApplyProfileTo(disguised, humanoidProfile);
+        _humanoidProfile.ApplyProfileTo(disguised, humanoidProfile);
+    }
+
+    private static Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>>
+        CloneMarkings(Dictionary<ProtoId<OrganCategoryPrototype>, Dictionary<HumanoidVisualLayers, List<Marking>>> markings)
+    {
+        return markings.ToDictionary(
+            pair => pair.Key,
+            pair => pair.Value.ToDictionary(
+                inner => inner.Key,
+                inner => inner.Value.Select(marking => new Marking(marking.MarkingId, marking.MarkingColors)
+                {
+                    Forced = marking.Forced,
+                }).ToList()));
     }
 }

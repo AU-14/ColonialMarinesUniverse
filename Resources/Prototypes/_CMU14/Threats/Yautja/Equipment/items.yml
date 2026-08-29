@@ -2,7 +2,7 @@
   id: CMUYautja
   name: chat-radio-cmu-yautja
   keycode: "ŷ"
-  frequency: 1541
+  frequency: 154.1
   color: "#b85440"
   longRange: true
 
@@ -10,7 +10,7 @@
   id: CMUYautjaOverseer
   name: chat-radio-cmu-yautja-overseer
   keycode: "Ŷ"
-  frequency: 1542
+  frequency: 154.2
   color: "#d4a85b"
   longRange: true
 
@@ -18,7 +18,7 @@
   id: CMUYautjaBadBlood
   name: chat-radio-cmu-yautja-badblood
   keycode: "ƀ"
-  frequency: 1543
+  frequency: 154.3
   color: "#c44343"
   longRange: true
 

@@ -9,7 +9,8 @@ using Content.Shared._RMC14.Xenonids.Construction.Nest;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Damage;
-using Content.Shared.Eye.Blinding.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Eye.Blinding.Systems;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -26,6 +27,7 @@ using Robust.Shared.Physics.Events;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
 using AbominationComponent = Content.Shared._CMU14.Threats.Mobs.Abomination.AbominationComponent;
+using NewStatusEffectsSystem = Content.Shared.StatusEffectNew.StatusEffectsSystem;
 
 namespace Content.Shared._CMU14.ChemicalIrritants;
 
@@ -36,7 +38,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
     [Dependency] private SharedStunSystem _stun = default!;
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedStutteringSystem _stutter = default!;
+    [Dependency] private StutteringSystem _stutter = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private DamageableSystem _damage = default!;
@@ -44,6 +46,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
     [Dependency] private ItemSlotsSystem _itemSlot = default!;
     [Dependency] private SharedGasMaskSystem _mask = default!;
     [Dependency] private StatusEffectQuerySystem _statusEffects = default!;
+    [Dependency] private NewStatusEffectsSystem _newStatusEffects = default!;
     [Dependency] private RMCDazedSystem _daze = default!;
     [Dependency] private RMCSlowSystem _slow = default!;
 
@@ -217,11 +220,10 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         // Heavy exposure: actual blindness
         if (chem.IrritantAmount >= profile.BlindThreshold)
         {
-            _statusEffects.TryAddStatusEffect<TemporaryBlindnessComponent>(
+            _newStatusEffects.TryUpdateStatusEffectDuration(
                 victim,
-                "TemporaryBlindness",
-                profile.BlindTime,
-                true);
+                BlindnessSystem.BlindingStatusEffect,
+                profile.BlindTime);
         }
 
         // Severe exposure
@@ -329,7 +331,7 @@ public abstract partial class SharedChemicalIrritantSystem : EntitySystem
         if (!TryComp<ItemSlotsComponent>(item, out var slots))
             return false;
 
-        if (!_itemSlot.TryGetSlot(item, "filter", out var slot, slots))
+        if (!_itemSlot.TryGetSlot((item, slots), "filter", out var slot))
             return false;
 
         if (slot.ContainerSlot?.ContainedEntity is not EntityUid filterUid)

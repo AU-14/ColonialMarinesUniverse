@@ -68,7 +68,7 @@
   id: Abomination
   name: chat-radio-abomination
   keycode: "g"
-  frequency: 428
+  frequency: 42.8
   color: "#6b8f3a"
   longRange: true
 
@@ -79,6 +79,6 @@
   id: AbominationMimic
   name: chat-radio-abomination-mimic
   keycode: "e"
-  frequency: 427
+  frequency: 42.7
   color: "#a63636"
   longRange: true

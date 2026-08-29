@@ -1,16 +1,17 @@
 using Content.Server.Administration.Managers;
 using Content.Server.Antag;
 using Content.Server.Mind;
-using Content.Server.Radio.Components;
 using Content.Server.Roles;
 using Content.Shared._RMC14.Marines;
 using Content.Shared._RMC14.Weapons.Ranged.IFF;
 using Content.Shared._RMC14.Xenonids.Parasite;
 using Content.Shared.Administration;
+using Content.Shared.Chat;
 using Content.Shared.Database;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.NPC.Systems;
+using Content.Shared.Radio.Components;
 using Content.Shared.Verbs;
 using Robust.Shared.Player;
 using Robust.Shared.Utility;
@@ -76,9 +77,9 @@ public sealed partial class CultistSystem : EntitySystem
         RemCompDeferred<InfectableComponent>(Target);
         EnsureComp<IntrinsicRadioReceiverComponent>(Target);
         EnsureComp(Target, out IntrinsicRadioTransmitterComponent radio);
-        radio.Channels.Add("Hivemind");
+        radio.Channels.Add(SharedChatSystem.HivemindChannel);
         EnsureComp(Target, out ActiveRadioComponent actrad);
-        actrad.Channels.Add("Hivemind");
+        actrad.Channels.Add(SharedChatSystem.HivemindChannel);
         var s = "Xeno";
         _npcFaction.AddFaction(Target, s);
 

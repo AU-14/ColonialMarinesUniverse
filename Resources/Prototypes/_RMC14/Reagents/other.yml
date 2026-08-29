@@ -7,7 +7,7 @@
   class: Rare
   color: "#899613"
   metabolisms:
-    Food:
+    Digestion:
       metabolismRate: 0.1
       effects:
       - !type:Nutritious

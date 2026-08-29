@@ -6,10 +6,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: pounce
     useDelay: 3
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: pounce
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 15
     checkCanAccess: false
@@ -25,10 +27,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: charge
     useDelay: 60
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 7
     deselectOnMiss: false
@@ -43,10 +47,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: ready_charge
     useDelay: 14
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: ready_charge
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 9
     checkCanAccess: false
@@ -61,10 +67,12 @@
   description: Ape-specific ram. Target an enemy to ram them, costing a small amount of plasma.
   components:
   - type: Action
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: fling
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: fling
+      map: ["enum.ActionVisuals.Icon"]
   - type: EntityTargetAction
     # Use ape-specific ram event
     event: !type:Content.Shared._CMU14.Threats.Mobs.Ape.ApeRamActionEvent
@@ -79,10 +87,12 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _RMC14/Actions/xeno_actions.rsi
-      state: headbite
     useDelay: 10
+  - type: Sprite
+    layers:
+    - sprite: _RMC14/Actions/xeno_actions.rsi
+      state: headbite
+      map: ["enum.ActionVisuals.Icon"]
   - type: TargetAction
     range: 1.5
     checkCanAccess: false
@@ -91,4 +101,3 @@
     event: !type:Content.Shared._CMU14.Threats.Mobs.Ape.ApeXenoHeadbiteActionEvent
   - type: ActionBlockIfResting
   - type: XenoOffensiveAction
-

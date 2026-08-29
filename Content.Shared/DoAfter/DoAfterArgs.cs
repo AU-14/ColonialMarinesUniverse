@@ -58,6 +58,12 @@ public sealed partial class DoAfterArgs
     [DataField]
     public bool ForceVisible;
 
+    /// <summary>
+    ///     String that will be added to the examine window of the entity.
+    /// </summary>
+    [DataField]
+    public string? ExamineText;
+
     #region Event options
     /// <summary>
     ///     The event that will get raised when the DoAfter has finished. If null, this will simply raise a <see cref="SimpleDoAfterEvent"/>
@@ -103,6 +109,12 @@ public sealed partial class DoAfterArgs
     public bool NeedHand;
 
     /// <summary>
+    /// Whether or not this do after requires your active hand to be empty,
+    /// </summary>
+    [DataField]
+    public bool NeedFreeHand;
+
+    /// <summary>
     ///     Whether we need to keep our active hand as is (i.e. can't change hand or change item). This also covers
     ///     requiring the hand to be free (if applicable). This does nothing if <see cref="NeedHand"/> is false.
     /// </summary>
@@ -140,7 +152,7 @@ public sealed partial class DoAfterArgs
     ///     Threshold for distance user from the used OR target entities.
     /// </summary>
     [DataField]
-    public float? DistanceThreshold;
+    public float? DistanceThreshold = 1.5f;
 
     /// <summary>
     ///     Whether damage will cancel the DoAfter. See also <see cref="DamageThreshold"/>.
@@ -285,9 +297,11 @@ public sealed partial class DoAfterArgs
         Target = other.Target;
         Used = other.Used;
         Hidden = other.Hidden;
+        ExamineText = other.ExamineText;
         EventTarget = other.EventTarget;
         Broadcast = other.Broadcast;
         NeedHand = other.NeedHand;
+        NeedFreeHand = other.NeedFreeHand;
         BreakOnHandChange = other.BreakOnHandChange;
         BreakOnDropItem = other.BreakOnDropItem;
         BreakOnMove = other.BreakOnMove;
@@ -304,6 +318,8 @@ public sealed partial class DoAfterArgs
         ForceVisible = other.ForceVisible;
         BreakOnRest = other.BreakOnRest;
         LagCompensated = other.LagCompensated;
+        RangeCheck = other.RangeCheck;
+        TargetEffect = other.TargetEffect;
 
         //RMC
         RootEntity = other.RootEntity;
@@ -362,6 +378,7 @@ public enum DuplicateConditions : byte
     All = SameTool | SameTarget | SameEvent,
 }
 
+[Serializable, NetSerializable]
 public enum AttemptFrequency : byte
 {
     /// <summary>

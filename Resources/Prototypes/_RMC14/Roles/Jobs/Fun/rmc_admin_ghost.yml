@@ -18,7 +18,7 @@
   storage:
     back:
     - RMCAdminAccessConfigurator
-    - HandheldHealthAnalyzerUnpowered
+    - HandheldHealthAnalyzer
     - CMHealthAnalyzer
     - DoorRemoteAll
     - AdminHypo

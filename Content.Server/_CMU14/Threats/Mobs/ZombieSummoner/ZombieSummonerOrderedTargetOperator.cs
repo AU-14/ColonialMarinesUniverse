@@ -6,6 +6,7 @@ using Content.Server.NPC.HTN;
 using Content.Server.NPC.HTN.PrimitiveTasks;
 using Content.Shared._CMU14.Threats.Mobs.ZombieSummoner;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
 using Content.Shared.Zombies;
 using Robust.Shared.Map;
 

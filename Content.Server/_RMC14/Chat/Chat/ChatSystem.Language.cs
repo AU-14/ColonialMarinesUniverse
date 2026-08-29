@@ -1,6 +1,7 @@
 using Content.Server.Chat.Managers;
 using Content.Server.Players;
 using Content.Server._RMC14.Chat.Chat;
+using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Language;
@@ -35,6 +36,9 @@ public sealed partial class ChatSystem
     {
         if (listener == null)
             return transformedName;
+
+        if (HasComp<YautjaComponent>(source) && HasComp<YautjaComponent>(listener.Value))
+            return MetaData(source).EntityName;
 
         if (TryComp<FixedIdentityComponent>(source, out var fixedIdentity) &&
             fixedIdentity.Name != null &&
@@ -470,6 +474,12 @@ public sealed partial class ChatSystem
     {
         foreach (var (session, data) in GetRecipients(source, VoiceRange))
         {
+            if ((channel == ChatChannel.Local || channel == ChatChannel.Emotes) &&
+                !CanHearYautjaLocalSpeech(source, session, data))
+            {
+                continue;
+            }
+
             var entRange = MessageRangeCheck(session, data, range);
             if (entRange == MessageRangeCheckResult.Disallowed)
                 continue;

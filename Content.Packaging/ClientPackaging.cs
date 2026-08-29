@@ -13,7 +13,12 @@ public static class ClientPackaging
     /// <summary>
     /// Be advised this can be called from server packaging during a HybridACZ build.
     /// </summary>
-    public static async Task PackageClient(bool skipBuild, bool noRestore, string configuration, IPackageLogger logger)
+    public static async Task PackageClient(
+        bool skipBuild,
+        bool noRestore,
+        bool logBuild,
+        string configuration,
+        IPackageLogger logger)
     {
         logger.Info("Building client...");
 
@@ -36,6 +41,12 @@ public static class ClientPackaging
 
             if (noRestore)
                 startInfo.ArgumentList.Add("--no-restore");
+
+            if (logBuild)
+            {
+                startInfo.ArgumentList.Add($"/bl:{Path.Combine("release", "client.binlog")}");
+                startInfo.ArgumentList.Add("/p:ReportAnalyzer=true");
+            }
 
             await ProcessHelpers.RunCheck(startInfo);
         }
@@ -82,7 +93,11 @@ public static class ClientPackaging
             new[] { "Content.Client", "Content.Shared", "Content.Shared.Database" },
             cancel: cancel);
 
-        await RobustClientPackaging.WriteClientResources(contentDir, inputPass, cancel);
+        await RobustClientPackaging.WriteClientResources(
+            contentDir,
+            inputPass,
+            SharedPackaging.AdditionalIgnoredResources,
+            cancel);
 
         inputPass.InjectFinished();
     }

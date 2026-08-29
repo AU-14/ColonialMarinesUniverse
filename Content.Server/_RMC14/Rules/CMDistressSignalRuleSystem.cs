@@ -18,8 +18,8 @@ using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Server.Ghost;
 using Content.Server.Ghost.Roles.Components;
-using Content.Server.Maps;
 using Content.Server.Mind;
+using Content.Server.Nutrition.EntitySystems;
 using Content.Server.Players.PlayTimeTracking;
 using Content.Server.Popups;
 using Content.Server.Power.Components;
@@ -79,6 +79,7 @@ using Content.Shared.Destructible;
 using Content.Shared.Fax.Components;
 using Content.Shared.GameTicking;
 using Content.Shared.GameTicking.Components;
+using Content.Shared.Maps;
 using Content.Shared.Mind;
 using Content.Shared.Mind.Components;
 using Content.Shared.Mobs;
@@ -90,7 +91,8 @@ using Content.Shared.Popups;
 using Content.Shared.Preferences;
 using Content.Shared.Random.Helpers;
 using Content.Shared.Roles;
-using Content.Shared.StatusEffect;
+using Content.Shared.Roles.Components;
+using Content.Shared.Station.Components;
 using Robust.Server.Audio;
 using Robust.Server.Containers;
 using Robust.Server.GameObjects;
@@ -125,7 +127,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [Dependency] private FaxSystem _fax = default!;
     [Dependency] private GunIFFSystem _gunIFF = default!;
     [Dependency] private XenoHiveSystem _hive = default!;
-    [Dependency] private HungerSystem _hunger = default!;
+    [Dependency] private ServerSatiationSystem _satiation = default!;
     [Dependency] private ItemCamouflageSystem _camo = default!;
     [Dependency] private LarvaQueueSystem _larvaQueue = default!;
     [Dependency] private MapLoaderSystem _mapLoader = default!;
@@ -778,8 +780,13 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     EnsureComp<AlmayerComponent>(xform.GridUid.Value);
                 }
 
-                if (comp.SetHunger && TryComp(ev.SpawnResult, out HungerComponent? hunger))
-                    _hunger.SetHunger(ev.SpawnResult.Value, 50.0f, hunger);
+                if (comp.SetHunger && TryComp(ev.SpawnResult, out SatiationComponent? satiation))
+                {
+                    _satiation.SetValue(
+                        (ev.SpawnResult.Value, satiation),
+                        SatiationSystem.Hunger,
+                        50.0f);
+                }
             }
 
             return;
@@ -977,7 +984,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
                     !TryComp<MindComponent>(mindContainer.Mind, out var mind))
                     continue;
 
-                foreach (var roleId in mind.MindRoles)
+                foreach (var roleId in mind.MindRoleContainer.ContainedEntities)
                 {
                     if (!TryComp<MindRoleComponent>(roleId, out var mindRole))
                         continue;
@@ -2110,10 +2117,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
 
         foreach (var child in toKnock)
         {
-            if (!TryComp<StatusEffectsComponent>(child, out var status))
-                continue;
-
-            _stuns.TryParalyze(child, _hijackStunTime, true, status);
+            _stuns.TryParalyze(child, _hijackStunTime, true);
         }
     }
 

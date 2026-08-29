@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 08/23/2025 01:33:55
-  entityCount: 7773
+  entityCount: 7774
 maps:
 - 2
 grids:
@@ -1474,7 +1474,11 @@ entities:
     - type: Transform
       pos: 15.514484,200.5232
       parent: 2
-    - type: OnUseTimerTrigger
+    - type: TimerTrigger
+      keysIn:
+      - trigger
+      - stuck
+      keyOut: timer
       delay: 4
 - proto: AU14LargeTruckArmoredWYBlack
   entities:
@@ -44813,5 +44817,12 @@ entities:
     - type: Transform
       rot: 1.5707963267948966 rad
       pos: 12.5,168.5
+      parent: 2
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 7774
+    components:
+    - type: Transform
+      pos: 7.5,29.5
       parent: 2
 ...

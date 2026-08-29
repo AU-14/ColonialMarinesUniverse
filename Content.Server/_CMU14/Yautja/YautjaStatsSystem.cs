@@ -1,4 +1,5 @@
 using System.Numerics;
+using Content.Server.Humanoid;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.IdentityManagement;
 using Content.Shared._RMC14.Marines;
@@ -7,12 +8,12 @@ using Content.Shared._RMC14.Pulling;
 using Content.Shared._RMC14.StatusEffect;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Body;
 using Content.Shared.Humanoid;
 using Content.Shared.IdentityManagement;
 using Content.Shared.IdentityManagement.Components;
-using Content.Server.Humanoid;
 using Content.Server.Humanoid.Systems;
-using Content.Server.Speech.Components;
 using Content.Shared.Movement.Components;
 using Content.Shared.Movement.Systems;
 using Content.Shared.Speech;
@@ -30,7 +31,8 @@ namespace Content.Server._CMU14.Yautja;
 public sealed partial class YautjaStatsSystem : EntitySystem
 {
     [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private HumanoidAppearanceSystem _humanoid = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
+    [Dependency] private HumanoidProfileSystem _humanoidProfile = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NamingSystem _naming = default!;
@@ -97,7 +99,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         Dirty(ent, slowOnDamage);
 
         var damageable = EnsureComp<DamageableComponent>(ent);
-        _damageable.SetDamageModifierSetId(ent, ent.Comp.DamageModifierSet?.Id, damageable);
+        _damageable.SetDamageModifierSetId((ent.Owner, damageable), ent.Comp.DamageModifierSet?.Id);
 
         var melee = EnsureComp<MeleeWeaponComponent>(ent);
         melee.AttackRate = ent.Comp.UnarmedAttackRate;
@@ -117,9 +119,12 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         speech.AllowedEmotes.AddRange(ent.Comp.AllowedEmotes);
         Dirty(ent, speech);
 
-        var vocal = EnsureComp<VocalComponent>(ent);
-        vocal.Sounds = new(ent.Comp.VocalSounds);
-        Dirty(ent, vocal);
+        EnsureComp<VocalComponent>(ent);
+        if (TryComp<HumanoidProfileComponent>(ent, out var humanoid) &&
+            ent.Comp.VocalSounds.TryGetValue(humanoid.Sex, out var voice))
+        {
+            _humanoidProfile.SetVoice((ent.Owner, humanoid), voice);
+        }
 
         GrantAllSkills(ent);
         ClearMarineHudIcon(ent);
@@ -137,7 +142,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         foreach (var uid in _pendingSkinRandomization)
         {
             if (TryComp<YautjaComponent>(uid, out var yautja) &&
-                TryComp<HumanoidAppearanceComponent>(uid, out var humanoid))
+                TryComp<HumanoidProfileComponent>(uid, out var humanoid))
             {
                 RandomizeSkinColor((uid, yautja), humanoid);
             }
@@ -148,7 +153,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
 
     private void SetYautjaName(Entity<YautjaComponent> ent)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(ent, out var humanoid) ||
+        if (!TryComp<HumanoidProfileComponent>(ent, out var humanoid) ||
             humanoid.Species.Id != YautjaSpecies)
         {
             return;
@@ -172,15 +177,22 @@ public sealed partial class YautjaStatsSystem : EntitySystem
 
     private void NormalizeAppearance(Entity<YautjaComponent> ent)
     {
-        if (!TryComp<HumanoidAppearanceComponent>(ent, out var humanoid))
+        if (!_humanoidAppearance.TryGetMarkings(
+                ent,
+                HumanoidVisualLayers.Hair,
+                out var organ,
+                out _,
+                out _) ||
+            !ProtoMan.TryIndex<MarkingPrototype>(DreadlocksMarking, out var dreadlocksPrototype))
+        {
             return;
+        }
 
-        humanoid.MarkingSet.RemoveCategory(MarkingCategories.Hair);
-        _humanoid.AddMarking(ent, DreadlocksMarking, DreadlocksColor, false, forced: true, humanoid);
-        Dirty(ent, humanoid);
+        var dreadlocks = dreadlocksPrototype.AsMarking().WithColor(DreadlocksColor) with { Forced = true };
+        _humanoidAppearance.SetMarkings(ent, organ, HumanoidVisualLayers.Hair, [dreadlocks]);
     }
 
-    private void RandomizeSkinColor(Entity<YautjaComponent> ent, HumanoidAppearanceComponent humanoid)
+    private void RandomizeSkinColor(Entity<YautjaComponent> ent, HumanoidProfileComponent humanoid)
     {
         if (ent.Comp.SkinColorRandomized ||
             humanoid.Species.Id != YautjaSpecies)
@@ -196,7 +208,7 @@ public sealed partial class YautjaStatsSystem : EntitySystem
         var sat = _random.NextFloat(ent.Comp.SkinSaturationMin, ent.Comp.SkinSaturationMax);
         var val = _random.NextFloat(ent.Comp.SkinValueMin, ent.Comp.SkinValueMax);
         var skinColor = Color.FromHsv(new Vector4(hue, sat, val, 1f));
-        _humanoid.SetSkinColor(ent, skinColor, humanoid: humanoid);
+        _humanoidAppearance.TrySetSkinColor(ent, skinColor);
     }
 
     private void GrantAllSkills(Entity<YautjaComponent> ent)

@@ -100,7 +100,7 @@ public sealed partial class YautjaBracerUtilitySystem : EntitySystem
 
         args.Cancel();
         args.Reason = "cmu-yautja-bracer-locked";
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-locked"), args.Unequipee, args.Unequipee, PopupType.SmallCaution);
+        _popup.PopupEntity(Loc.GetString("cmu-yautja-bracer-locked"), args.User, args.User, PopupType.SmallCaution);
     }
 
     private void OnGetEquipmentVerbs(Entity<YautjaBracerComponent> ent, ref InventoryRelayedEvent<GetVerbsEvent<EquipmentVerb>> args)

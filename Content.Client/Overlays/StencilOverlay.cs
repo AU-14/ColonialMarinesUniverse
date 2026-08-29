@@ -1,10 +1,14 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Numerics;
 using Content.Client.Graphics;
+using Content.Client.Light.EntitySystems;
 using Content.Client.Parallax;
 using Content.Client.Viewport;
 using Content.Client.Weather;
 using Content.Shared._CMU14.ZLevels;
 using Content.Shared.Salvage;
+using Content.Shared.StatusEffectNew;
+using Content.Shared.StatusEffectNew.Components;
 using Content.Shared.Weather;
 using Robust.Client.GameObjects;
 using Robust.Client.Graphics;
@@ -31,18 +35,16 @@ public sealed partial class StencilOverlay : Overlay
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPrototypeManager _protoManager = default!;
     [Dependency] private IConfigurationManager _config = default!;
-
-    //RMC14
     [Dependency] private IPlayerManager _playerManager = default!;
-
+    private readonly EntityLookupSystem _entLookup;
     private readonly ParallaxSystem _parallax;
     private readonly SharedTransformSystem _transform;
     private readonly SharedMapSystem _map;
     private readonly SpriteSystem _sprite;
     private readonly WeatherSystem _weather;
-
-    //RMC14
-    private readonly EntityLookupSystem _entLookup;
+    private readonly StatusEffectsSystem _statusEffects;
+    private GridStencilSystem _gridStencil = default!;
+    private HashSet<Entity<WeatherStatusEffectComponent, StatusEffectComponent>>? _weatherSet = new();
 
     public override OverlaySpace Space => OverlaySpace.WorldSpaceBelowFOV;
 
@@ -50,7 +52,7 @@ public sealed partial class StencilOverlay : Overlay
 
     private readonly ShaderInstance _shader;
 
-    public StencilOverlay(ParallaxSystem parallax, SharedTransformSystem transform, SharedMapSystem map, SpriteSystem sprite, WeatherSystem weather, EntityLookupSystem entLookup)
+    public StencilOverlay(ParallaxSystem parallax, SharedTransformSystem transform, SharedMapSystem map, SpriteSystem sprite, WeatherSystem weather, EntityLookupSystem entLookup, StatusEffectsSystem statusEffects)
     {
         ZIndex = ParallaxSystem.ParallaxZIndex + 1;
         _parallax = parallax;
@@ -58,11 +60,11 @@ public sealed partial class StencilOverlay : Overlay
         _map = map;
         _sprite = sprite;
         _weather = weather;
-        IoCManager.InjectDependencies(this);
-        _shader = _protoManager.Index(CircleShader).InstanceUnique();
-
-        //RMC14
         _entLookup = entLookup;
+        _statusEffects = statusEffects;
+        IoCManager.InjectDependencies(this);
+        _gridStencil = _entManager.System<GridStencilSystem>();
+        _shader = _protoManager.Index(CircleShader).InstanceUnique();
     }
 
     protected override void Draw(in OverlayDrawArgs args)
@@ -81,22 +83,11 @@ public sealed partial class StencilOverlay : Overlay
         var drawWeather = args.Viewport.Eye is not ScalingViewport.ZEye { Depth: < 0 } ||
                           _config.GetCVar(CMUZLevelsCVars.WeatherLowerLayers);
 
-        if (drawWeather && TryGetWeatherComponentForPass(args, mapUid, out var weatherMapUid, out var comp))
-        {
-            foreach (var (proto, weather) in comp.Weather)
-            {
-                if (!_protoManager.TryIndex<WeatherPrototype>(proto, out var weatherProto))
-                    continue;
-
-                var alpha = _weather.GetPercent(weather, weatherMapUid);
-                DrawWeather(args, res, weatherProto, alpha, invMatrix);
-            }
-        }
+        if (drawWeather && TryGetWeatherEffectsForPass(args, mapUid, out _weatherSet))
+            DrawWeather(args, _weatherSet);
 
         if (_entManager.TryGetComponent<RestrictedRangeComponent>(mapUid, out var restrictedRangeComponent))
-        {
             DrawRestrictedRange(args, res, restrictedRangeComponent, invMatrix);
-        }
 
         args.WorldHandle.UseShader(null);
         args.WorldHandle.SetTransform(Matrix3x2.Identity);
@@ -119,40 +110,29 @@ public sealed partial class StencilOverlay : Overlay
         }
     }
 
-    private bool TryGetWeatherComponentForPass(
+    private bool TryGetWeatherEffectsForPass(
         in OverlayDrawArgs args,
         EntityUid mapUid,
-        out EntityUid weatherMapUid,
-        out WeatherComponent comp)
+        [NotNullWhen(true)] out HashSet<Entity<WeatherStatusEffectComponent, StatusEffectComponent>>? weathers)
     {
-        if (_entManager.TryGetComponent<WeatherComponent>(mapUid, out var mapWeather) &&
-            mapWeather.Weather.Count > 0)
-        {
-            weatherMapUid = mapUid;
-            comp = mapWeather;
+        if (_statusEffects.TryEffectsWithComp(mapUid, out weathers))
             return true;
-        }
 
         if (args.Viewport.Eye is not ScalingViewport.ZEye zEye ||
             zEye.WeatherSourceMapId == MapId.Nullspace ||
             zEye.WeatherSourceMapId == args.MapId)
         {
-            weatherMapUid = default;
-            comp = default!;
+            weathers = null;
             return false;
         }
 
-        weatherMapUid = _map.GetMapOrInvalid(zEye.WeatherSourceMapId);
-        if (weatherMapUid == EntityUid.Invalid ||
-            !_entManager.TryGetComponent<WeatherComponent>(weatherMapUid, out var sourceWeather) ||
-            sourceWeather.Weather.Count == 0)
+        var weatherMapUid = _map.GetMapOrInvalid(zEye.WeatherSourceMapId);
+        if (weatherMapUid == EntityUid.Invalid)
         {
-            weatherMapUid = default;
-            comp = default!;
+            weathers = null;
             return false;
         }
 
-        comp = sourceWeather;
-        return true;
+        return _statusEffects.TryEffectsWithComp(weatherMapUid, out weathers);
     }
 }

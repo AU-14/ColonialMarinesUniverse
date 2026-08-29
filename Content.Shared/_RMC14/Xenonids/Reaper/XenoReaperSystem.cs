@@ -8,12 +8,14 @@ using Content.Shared._RMC14.Slow;
 using Content.Shared._RMC14.Weapons.Melee;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Alert;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
 using Content.Shared.Coordinates;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Systems;
@@ -21,6 +23,7 @@ using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Rounding;
 using Content.Shared.StatusEffectNew;
+using Content.Shared.Stunnable;
 using Content.Shared.Throwing;
 using Content.Shared.Weapons.Melee.Events;
 using Robust.Shared.Audio.Systems;
@@ -75,6 +78,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
         SubscribeLocalEvent<XenoCarrionMantleComponent, CMGetArmorEvent>(OnCarrionMantleGetArmor);
         SubscribeLocalEvent<XenoCarrionMantleComponent, RefreshMovementSpeedModifiersEvent>(OnCarrionMantleRefreshSpeed);
         SubscribeLocalEvent<XenoCarrionMantleComponent, BeforeStatusEffectAddedEvent>(OnCarrionMantleBeforeStatus);
+        SubscribeLocalEvent<XenoCarrionMantleComponent, KnockDownAttemptEvent>(OnCarrionMantleKnockdownAttempt);
     }
 
     private void OnReaperMapInit(Entity<XenoReaperComponent> xeno, ref MapInitEvent args)
@@ -86,7 +90,7 @@ public sealed partial class XenoReaperSystem : EntitySystem
 
     private void OnReaperRemove(Entity<XenoReaperComponent> xeno, ref ComponentRemove args)
     {
-        _alerts.ClearAlert(xeno, xeno.Comp.Alert);
+        _alerts.ClearAlert((xeno.Owner, null), xeno.Comp.Alert);
     }
 
     private void OnMeleeHit(Entity<XenoReaperComponent> xeno, ref MeleeHitEvent args)
@@ -290,6 +294,11 @@ public sealed partial class XenoReaperSystem : EntitySystem
     {
         if (ent.Comp.ImmuneToStatuses.Contains(args.Effect.Id))
             args.Cancelled = true;
+    }
+
+    private void OnCarrionMantleKnockdownAttempt(Entity<XenoCarrionMantleComponent> ent, ref KnockDownAttemptEvent args)
+    {
+        args.Cancelled = true;
     }
 
     public override void Update(float frameTime)
@@ -688,6 +697,6 @@ public sealed partial class XenoReaperSystem : EntitySystem
         var max = _alerts.GetMaxSeverity(reaper.Comp.Alert);
         var severity = max - ContentHelpers.RoundToLevels(level, reaper.Comp.MaxFleshResin, max + 1);
         var message = $"{reaper.Comp.FleshResin} / {reaper.Comp.MaxFleshResin}";
-        _alerts.ShowAlert(reaper, reaper.Comp.Alert, (short) severity, dynamicMessage: message);
+        _alerts.ShowAlert((reaper.Owner, null), reaper.Comp.Alert, (short) severity, dynamicMessage: message);
     }
 }

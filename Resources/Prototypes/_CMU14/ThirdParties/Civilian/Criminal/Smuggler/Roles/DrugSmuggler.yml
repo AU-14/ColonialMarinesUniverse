@@ -28,7 +28,7 @@
   hasIcon: false
   requireAdminNotify: false
   joinNotifyCrew: false
-  supervisors: au14-job-supervisors-loners
+  supervisors: au14-job-supervisors-loner
   accessGroups:
   - Colonist
   roleWeight: 0.25

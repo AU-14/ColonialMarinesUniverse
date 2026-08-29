@@ -10,6 +10,7 @@ using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Body.Systems;
 using Content.Shared.Chat;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Interaction;
 using Content.Shared.Maps;
 using Content.Shared.Mobs.Components;
@@ -116,7 +117,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
         var ev = new ForTheHiveActivatedEvent();
         RaiseLocalEvent(xeno, ref ev);
         _pointLight.SetEnabled(xeno, true);
-        _movement.RefreshMovementSpeedModifiers(xeno);
+        _movement.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnForTheHiveRemoved(Entity<ActiveForTheHiveComponent> xeno, ref ComponentShutdown args)
@@ -128,7 +129,7 @@ public abstract partial class SharedXenoForTheHiveSystem : EntitySystem
 
     private void OnForTheHiveGone(Entity<ActiveForTheHiveComponent> xeno, ref ComponentRemove args)
     {
-        _movement.RefreshMovementSpeedModifiers(xeno);
+        _movement.RefreshMovementSpeedModifiers((xeno.Owner, null));
     }
 
     private void OnRefreshSpeed(Entity<ActiveForTheHiveComponent> xeno, ref RefreshMovementSpeedModifiersEvent args)

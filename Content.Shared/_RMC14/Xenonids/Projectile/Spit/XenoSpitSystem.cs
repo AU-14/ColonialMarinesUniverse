@@ -27,6 +27,7 @@ using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Coordinates;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Effects;
 using Content.Shared.Inventory;
@@ -125,7 +126,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
     {
         if (!TerminatingOrDeleted(ent))
         {
-            _movementSpeed.RefreshMovementSpeedModifiers(ent);
+            _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
             _armor.UpdateArmorValue((ent, null));
         }
     }
@@ -309,7 +310,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
         charging.Speed = xeno.Comp.Speed;
         Dirty(xeno, charging);
 
-        _movementSpeed.RefreshMovementSpeedModifiers(xeno);
+        _movementSpeed.RefreshMovementSpeedModifiers((xeno.Owner, null));
 
         _popup.PopupClient(Loc.GetString("cm-xeno-charge-spit"), xeno, xeno);
         if(_net.IsServer)
@@ -460,7 +461,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
         Dirty(ent);
         UpdateAppearance(ent);
 
-        _alerts.ShowAlert(ent, FireAlert);
+        _alerts.ShowAlert((ent.Owner, null), FireAlert);
     }
 
     private void OnUserAcidedRemove(Entity<UserAcidedComponent> ent, ref ComponentRemove args)
@@ -473,7 +474,7 @@ public sealed partial class XenoSpitSystem : EntitySystem
             return;
         }
 
-        _alerts.ClearAlert(ent, FireAlert);
+        _alerts.ClearAlert((ent.Owner, null), FireAlert);
     }
 
     private void OnUserAcidedShowFireAlert(Entity<UserAcidedComponent> ent, ref ShowFireAlertEvent args)
@@ -486,23 +487,17 @@ public sealed partial class XenoSpitSystem : EntitySystem
         if (ent.Comp.AllowVaporHitAfter > _timing.CurTime)
             return;
 
-        var solEnt = args.Solution;
-        foreach (var (_, solution) in _solution.EnumerateSolutions((solEnt, solEnt)))
+        if (!args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
+            return;
+
+        if (--ent.Comp.ResistsNeeded <= 0)
         {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
-            if (--ent.Comp.ResistsNeeded <= 0)
-            {
-                RemCompDeferred<UserAcidedComponent>(ent);
-            }
-            else
-            {
-                ent.Comp.AllowVaporHitAfter = _timing.CurTime + ent.Comp.ExtinguishGracePeriod;
-                Dirty(ent);
-            }
-
-            break;
+            RemCompDeferred<UserAcidedComponent>(ent);
+        }
+        else
+        {
+            ent.Comp.AllowVaporHitAfter = _timing.CurTime + ent.Comp.ExtinguishGracePeriod;
+            Dirty(ent);
         }
     }
 
@@ -548,12 +543,12 @@ public sealed partial class XenoSpitSystem : EntitySystem
         _appearance.SetData(acided, UserAcidedVisuals.Acided, effect);
     }
 
-    public void Resist(Entity<UserAcidedComponent?> player)
+    public void Resist(Entity<UserAcidedComponent?> player, bool interactionAlreadyValidated = false)
     {
         if (!Resolve(player, ref player.Comp, false))
             return;
 
-        if (!_actionBlocker.CanInteract(player, null))
+        if (!interactionAlreadyValidated && !_actionBlocker.CanInteract(player, null))
             return;
 
         _stun.TryParalyze(player.Owner, player.Comp.ResistDuration, true);

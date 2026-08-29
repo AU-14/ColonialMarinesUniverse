@@ -6,7 +6,7 @@ using Content.Server.GameTicking.Presets;
 using Content.Shared._CMU14.BalanceRating;
 using Content.Shared._RMC14.Rules;
 using Content.Shared.AU14.util;
-using Content.Shared.EntityList;
+using Content.Shared.EntityTable;
 using Content.Shared.GameTicking;
 using Robust.Server.Player;
 using Robust.Shared.Asynchronous;
@@ -23,8 +23,8 @@ namespace Content.Server._CMU14.BalanceRating;
 
 public sealed partial class CMUBalanceRatingSystem : EntitySystem
 {
-    public static readonly ProtoId<EntityListPrototype> WeaponTargets = "CMUBalanceRatingWeapons";
-    public static readonly ProtoId<EntityListPrototype> XenoTargets = "CMUBalanceRatingXenos";
+    public static readonly ProtoId<EntityTablePrototype> WeaponTargets = "CMUBalanceRatingWeapons";
+    public static readonly ProtoId<EntityTablePrototype> XenoTargets = "CMUBalanceRatingXenos";
 
     public static readonly TimeSpan DefaultDuration = TimeSpan.FromSeconds(30);
     public static readonly TimeSpan MinimumDuration = TimeSpan.FromSeconds(5);
@@ -37,6 +37,7 @@ public sealed partial class CMUBalanceRatingSystem : EntitySystem
     [Dependency] private GameTicker _gameTicker = default!;
     [Dependency] private IComponentFactory _components = default!;
     [Dependency] private IConfigurationManager _configuration = default!;
+    [Dependency] private EntityTableSystem _entityTable = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private IPrototypeManager _prototypes = default!;
@@ -311,12 +312,13 @@ public sealed partial class CMUBalanceRatingSystem : EntitySystem
 
     private IEnumerable<CMUBalanceRatingTargetOption> GetEntityTargets(
         CMUBalanceRatingTarget target,
-        ProtoId<EntityListPrototype> listId)
+        ProtoId<EntityTablePrototype> listId)
     {
         if (!_prototypes.TryIndex(listId, out var list))
             yield break;
 
-        foreach (var prototype in list.Entities(_prototypes)
+        foreach (var prototype in _entityTable.ListSpawns(list)
+                     .Select(entry => _prototypes.Index<EntityPrototype>(entry.spawn))
                      .Where(prototype => !prototype.Abstract)
                      .DistinctBy(prototype => prototype.ID))
         {

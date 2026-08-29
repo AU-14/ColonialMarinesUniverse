@@ -90,8 +90,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoMultiplier: 5
     otherMultiplier: 1
@@ -188,8 +189,9 @@
   description: A rugged transport van painted in CLF colors.
   components:
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameCLFVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: Sprite
     sprite: _RMC14/Structures/Vehicles/CLF_van.rsi
     layers:
@@ -309,8 +311,9 @@
         layer:
         - LargeMobLayer
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameVan
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: MeleeReceivedMultiplier
     xenoMultiplier: 5
     otherMultiplier: 1

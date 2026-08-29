@@ -295,6 +295,10 @@ ehthumbs.db
 # Merge driver stuff
 Content.Tools/test/out.yml
 
+# Local changelog Discord debug files.
+Resources/Changelog/Old.yml
+Resources/Changelog/DiscordDebug.md
+
 # Windows
 desktop.ini
 
@@ -311,6 +315,9 @@ Resources/Prototypes/_AU14/CustomConstruction/Generated/
 
 *.bak
 
+# Shader error output
+error.glsl
+
 # Direnv stuff
 .direnv/
 
@@ -321,3 +328,6 @@ yaml-linter-stdout.txt
 pr1600_inline.json
 pr1600_issue.json
 pr1600_reviews.json
+
+# C# Dev Kit cache file
+*.lscache

@@ -19,6 +19,7 @@ using Content.Shared.Database;
 using Content.Shared.Dataset;
 using Content.Shared.GameTicking;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.IdentityManagement.Components;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;

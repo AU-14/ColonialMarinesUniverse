@@ -15,7 +15,7 @@ public sealed partial class ANPRCRadioComponent : Component
     public Dictionary<int, ProtoId<RadioChannelPrototype>> Presets = new();
 
     [DataField, AutoNetworkedField]
-    public Dictionary<int, int> FrequencyOverrides = new();
+    public Dictionary<int, RadioFrequency> FrequencyOverrides = new();
 
     public const int MaxSlots = 4;
 
@@ -134,31 +134,30 @@ public sealed partial class ANPRCRadioComponent : Component
     [DataField, AutoNetworkedField]
     public bool SweepEnabled;
 
-    // where the sweep head currently sits, in raw frequency units
+    // where the sweep head currently sits
     [DataField, AutoNetworkedField]
-    public int SweepPosition = SweepBandMin;
+    public RadioFrequency SweepPosition = SweepBandMin;
 
-    public const int SweepBandMin = 1000;
-    public const int SweepBandMax = 2999;
+    public static readonly RadioFrequency SweepBandMin = RadioFrequency.FromKilohertz(100_000);
+    public static readonly RadioFrequency SweepBandMax = RadioFrequency.FromKilohertz(299_900);
 
     // the colonist softwave band, where handhelds and tunable headsets live. FREQ
     // accepts it so a set can bridge a headset direct net, but the search receiver
     // does not cover it
-    public const int SoftwaveBandMin = 30000;
-    public const int SoftwaveBandMax = 87999;
+    public static readonly RadioFrequency SoftwaveBandMin = RadioFrequency.FromKilohertz(30_000);
+    public static readonly RadioFrequency SoftwaveBandMax = RadioFrequency.FromKilohertz(87_999);
 
     // frequency -> how much of a fix the operator has built on it. what that buys is
     // set by SweepTierThresholds: the number falls in one digit at a time
-    public Dictionary<int, float> SweepContacts = new();
+    public Dictionary<RadioFrequency, float> SweepContacts = new();
 
     // frequencies the operator has fixed exactly. these become tunable by name
     [DataField]
-    public HashSet<int> DiscoveredFrequencies = new();
+    public HashSet<RadioFrequency> DiscoveredFrequencies = new();
 
-    // band units the head advances per second. the full band takes
-    // (SweepBandMax - SweepBandMin) / this seconds to cover once
-    [DataField("sweepStepPerSecond")]
-    public float SweepStepPerSecond = 100f;
+    // kHz the head advances per second. the full 100-299.9 MHz band takes about 20 seconds to cover
+    [DataField]
+    public int SweepKilohertzPerSecond = 10_000;
 
     // how recently a frequency must have carried traffic for the passing head to
     // catch it. short window plus a slow head means most passes come up empty

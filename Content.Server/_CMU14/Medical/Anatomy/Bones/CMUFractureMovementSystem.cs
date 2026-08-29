@@ -10,7 +10,7 @@ using Content.Shared._CMU14.Medical.Anatomy.Organs.Liver;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Lungs;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
-using Content.Shared.Body.Components;
+using Content.Shared.Body;
 using Content.Shared.Body.Part;
 using Content.Shared.Damage;
 using Content.Shared.FixedPoint;

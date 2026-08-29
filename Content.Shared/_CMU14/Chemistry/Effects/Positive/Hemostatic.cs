@@ -5,6 +5,7 @@ using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._CMU14.Medical.Injuries.Wounds;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -24,10 +25,10 @@ public sealed partial class Hemostatic : RMCChemicalEffect
            $"Critical overdoses cause [color=red]{PotencyPerSecond * 4}[/color] heart damage and " +
            $"[color=red]{PotencyPerSecond * 9}[/color] each of brute, burn, and toxin damage.";
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        var index = args.EntityManager.System<CMUMedicalBodyIndexSystem>();
-        var wounds = args.EntityManager.System<SharedCMUWoundsSystem>();
+        var index = system.MedicalBodyIndex;
+        var wounds = system.Wounds;
         foreach (var (part, _) in index.GetBodyParts(args.TargetEntity))
         {
             wounds.StopSurfaceBleedingOnPart(part);
@@ -35,16 +36,16 @@ public sealed partial class Hemostatic : RMCChemicalEffect
         }
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency * 2f;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<CMUChemicalMedicalSystem>()
+        system.ChemicalMedical
             .DamageOrgan<HeartComponent>(args.TargetEntity, potency * 4f, BluntType);
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency * 9f;

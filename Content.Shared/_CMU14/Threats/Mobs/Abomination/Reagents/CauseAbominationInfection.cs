@@ -7,8 +7,8 @@ namespace Content.Shared._CMU14.Threats.Mobs.Abomination.Reagents;
 ///     Reagent effect that applies <see cref="AbominationInfectionComponent" /> to
 ///     the target on metabolism. Used by the AbominationVenom chemical.
 /// </summary>
-public sealed partial class CauseAbominationInfection : EventEntityEffect<CauseAbominationInfection>
+public sealed partial class CauseAbominationInfection : EntityEffectBase<CauseAbominationInfection>
 {
-    protected override string? ReagentEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
+    public override string? EntityEffectGuidebookText(IPrototypeManager prototype, IEntitySystemManager entSys)
         => Loc.GetString("reagent-effect-guidebook-cause-abomination-infection", ("chance", Probability));
 }

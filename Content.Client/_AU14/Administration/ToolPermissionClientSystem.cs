@@ -2,9 +2,11 @@
 // Copyright (c) 2026 wray-git
 // SPDX-License-Identifier: AGPL-3.0-only
 using Content.Client.Administration.Managers;
+using Content.Client.Popups;
 using Content.Shared._AU14.Administration;
 using Content.Shared.Administration;
 using Content.Shared.Popups;
+using Robust.Client.GameStates;
 using Robust.Client.Player;
 using Robust.Shared.Player;
 
@@ -19,9 +21,11 @@ namespace Content.Client._AU14.Administration;
 public sealed class ToolPermissionClientSystem : EntitySystem
 {
     [Dependency] private readonly IClientAdminManager _admin = default!;
-    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly IClientGameStateManager _gameStates = default!;
+    [Dependency] private readonly PopupSystem _popup = default!;
 
     private readonly HashSet<string> _myTools = new();
+    private bool _requestPending;
     private ToolPermissionsWindow? _window;
 
     public override void Initialize()
@@ -30,6 +34,7 @@ public sealed class ToolPermissionClientSystem : EntitySystem
         SubscribeNetworkEvent<MyToolPermissionsEvent>(OnMine);
         SubscribeNetworkEvent<OpenToolPermissionsEvent>(OnOpen);
         SubscribeLocalEvent<LocalPlayerAttachedEvent>(OnPlayerAttached);
+        _gameStates.GameStateApplied += OnGameStateApplied;
 
         // Re-fetch grants whenever admin status flips (admin/deadmin/readmin), so a deadmined host or a
         // freshly granted player has working tool buttons without rejoining.
@@ -40,6 +45,7 @@ public sealed class ToolPermissionClientSystem : EntitySystem
     {
         base.Shutdown();
         _admin.AdminStatusUpdated -= RequestMyGrants;
+        _gameStates.GameStateApplied -= OnGameStateApplied;
     }
 
     private void OnPlayerAttached(LocalPlayerAttachedEvent ev)
@@ -49,6 +55,15 @@ public sealed class ToolPermissionClientSystem : EntitySystem
 
     private void RequestMyGrants()
     {
+        _requestPending = true;
+    }
+
+    private void OnGameStateApplied(GameStateAppliedArgs args)
+    {
+        if (!_requestPending)
+            return;
+
+        _requestPending = false;
         RaiseNetworkEvent(new RequestMyToolPermissionsEvent());
     }
 

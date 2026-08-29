@@ -1,6 +1,6 @@
 - type: entity
   abstract: true
-  parent: ChemicalMedipen
+  parent: BaseItem
   id: CMAutoInjectorBase
   name: autoinjector
   description: An autoinjector.
@@ -28,11 +28,14 @@
     solutions:
       pen:
         maxVol: 45
+  - type: ExaminableSolution
+    solution: pen
   - type: SolutionContainerVisuals
     maxFillLevels: 3
     fillBaseName: autoinjector
     emptySpriteName: autoinjector
     changeColor: true
+  - type: Appearance
   - type: Tag
     tags:
     - CMAutoInjector
@@ -45,6 +48,11 @@
   - type: PhysicalComposition
     materialComposition:
       RMCPlastic: 300
+  - type: SpaceGarbage
+  - type: StaticPrice
+    price: 75
+  - type: TrashOnSolutionEmpty
+    solution: pen
 
 - type: entity
   parent: CMAutoInjectorBase

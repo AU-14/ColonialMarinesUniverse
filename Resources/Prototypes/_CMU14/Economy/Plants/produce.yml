@@ -4,9 +4,8 @@
   id: FoodMTear
   description: "A mountain climate herb with a soft, cold blue flower, known to contain an abundance of healing chemicals."
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Nutriment
           Quantity: 5
@@ -15,7 +14,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: mtear
+    plantId: MTearPlants
   - type: Tag
     tags:
     - Vegetable
@@ -26,9 +25,8 @@
   id: FoodDeathberry
   description: "Taste so good, you will die!"
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Nutriment
           Quantity: 5
@@ -37,7 +35,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: deathberry
+    plantId: DeathberryPlants
   - type: Tag
     tags:
     - Fruit
@@ -48,9 +46,8 @@
   id: FoodPoisonberry
   description: "Taste so good, you could die!"
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Nutriment
           Quantity: 5
@@ -59,7 +56,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: poisonberry
+    plantId: PoisonberryPlants
   - type: Tag
     tags:
     - Fruit
@@ -70,9 +67,8 @@
   id: FoodPoisonApple
   description: "It's a little piece of Eden."
   components:
-  - type: SolutionContainerManager
-    solutions:
-      food:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Nutriment
           Quantity: 5
@@ -81,7 +77,7 @@
   - type: Item
     heldPrefix: produce
   - type: Produce
-    seedId: poisonApple
+    plantId: PoisonApplePlants
   - type: Tag
     tags:
     - Fruit

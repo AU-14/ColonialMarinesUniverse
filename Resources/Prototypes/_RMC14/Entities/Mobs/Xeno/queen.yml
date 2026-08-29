@@ -118,12 +118,16 @@
     clawType: VerySharp
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 40
+      types:
+        Blunt: 13.33
+        Slash: 13.33
+        Piercing: 13.34
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 54
+      types:
+        Blunt: 18
+        Slash: 18
+        Piercing: 18
   - type: XenoOvipositorCapable
   - type: Tackle
     chance: 0.55
@@ -190,23 +194,22 @@
         volume: -6
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoRoyalBlood
-          Quantity: 120
-        - ReagentId: CMUXenoPlasmaRoyal
-          Quantity: 120
-        - ReagentId: CMUXenoPlasmaChitin
-          Quantity: 120
-        - ReagentId: CMUXenoPlasmaPhero
-          Quantity: 120
-        - ReagentId: CMUXenoPlasmaNeuro
-          Quantity: 120
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoRoyalBlood
+        Quantity: 120
+      - ReagentId: CMUXenoPlasmaRoyal
+        Quantity: 120
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 120
+      - ReagentId: CMUXenoPlasmaPhero
+        Quantity: 120
+      - ReagentId: CMUXenoPlasmaNeuro
+        Quantity: 120
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoRoyalBlood
@@ -313,7 +316,7 @@
     canVote: true
   - type: RemoveComponents
     components:
-    - type: Gibbable
+    - type: RMCGibOnDeath
 
 - type: entity
   parent: RMCXenoQueenBase

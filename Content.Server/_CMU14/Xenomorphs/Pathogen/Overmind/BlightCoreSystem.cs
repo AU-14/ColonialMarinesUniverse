@@ -14,6 +14,7 @@ using Robust.Shared.Player;
 using Robust.Shared.Timing;
 using Robust.Server.GameObjects;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Server._RMC14.Announce;
 
 namespace Content.Server._CMU14.Xenomorphs.Pathogen.Overmind;

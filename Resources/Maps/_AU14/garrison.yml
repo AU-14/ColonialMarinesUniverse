@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 06/07/2026 01:48:23
-  entityCount: 49389
+  entityCount: 49390
 maps:
 - 1
 grids:
@@ -342334,43 +342334,6 @@ entities:
     - type: Transform
       pos: 205.5,-100.5
       parent: 1
-- proto: TowelColorBlack
-  entities:
-  - uid: 49110
-    components:
-    - type: Transform
-      pos: 16.543072,-25.33149
-      parent: 1
-  - uid: 49111
-    components:
-    - type: Transform
-      pos: 16.261822,-25.347115
-      parent: 1
-  - uid: 49112
-    components:
-    - type: Transform
-      pos: 16.402447,-25.48774
-      parent: 1
-  - uid: 49113
-    components:
-    - type: Transform
-      pos: 111.375175,-126.568
-      parent: 1
-  - uid: 49114
-    components:
-    - type: Transform
-      pos: 17.515724,-37.41785
-      parent: 1
-  - uid: 49115
-    components:
-    - type: Transform
-      pos: 17.60431,-35.322456
-      parent: 1
-  - uid: 49116
-    components:
-    - type: Transform
-      pos: 17.322952,-36.244286
-      parent: 1
 - proto: TowelColorDarkBlue
   entities:
   - uid: 49117
@@ -342931,4 +342894,11 @@ entities:
       containers:
         rmc_xeno_tunnel_mob_container: !type:Container
           ents: []
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 49390
+    components:
+    - type: Transform
+      pos: 221.5,-45.5
+      parent: 1
 ...

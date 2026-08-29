@@ -185,8 +185,7 @@ public sealed partial class TackleSystem : EntitySystem
                                     ("gun", item)),
                                 PopupType.MediumCaution);
 
-                            var ev = new UpdateClientAmmoEvent();
-                            RaiseLocalEvent(item, ref ev);
+                            _gunSystem.UpdateAmmoCount(item);
                         }
                     }
                 }

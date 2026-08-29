@@ -16,7 +16,7 @@ using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared.Administration;
 using Content.Shared.Construction;
 using Content.Shared.Construction.Prototypes;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Administration.Logs;
 using Content.Shared.Database;
 using Content.Shared.Maps;

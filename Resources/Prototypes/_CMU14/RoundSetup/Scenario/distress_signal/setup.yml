@@ -19,3 +19,15 @@
       backupThreatVote:
         candidates:
           - DistressSignalXenoRoundGroup
+
+    - planets:
+        - CMUPlanetStableGarrisonRedux
+        - AUPlanetShepherdsPride
+        - AUPlanetLV747
+      backupThreatVote:
+        candidates:
+          - DistressSignalXenoRoundGroup
+
+    - planets:
+        - AUPlanetLV759
+      backupQuiet: true

@@ -8,6 +8,7 @@ using Content.Shared._RMC14.Damage;
 using Content.Shared._RMC14.Medical.Defibrillator;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -42,80 +43,77 @@ public sealed partial class Defibrillating : RMCChemicalEffect
            $"[color=red]{PotencyPerSecond * 2}[/color] airloss, and chest pain.\n" +
            $"Critical overdoses cause [color=red]{PotencyPerSecond * 4}[/color] additional heart damage.";
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        if (args.EntityManager.TryGetComponent<MobStateComponent>(args.TargetEntity, out var mobState) &&
+        if (system.TryGetMobState(args.TargetEntity, out var mobState) &&
             mobState.CurrentState == MobState.Dead)
         {
-            TickDead(damageable, potency, args, mobState);
+            TickDead(system, damageable, potency, args, mobState);
             return;
         }
 
-        var index = args.EntityManager.System<CMUMedicalBodyIndexSystem>();
+        var index = system.MedicalBodyIndex;
         if (!index.TryGetOrgan<HeartComponent>(args.TargetEntity, out var heart) ||
-            !args.EntityManager.TryGetComponent<HeartComponent>(heart, out var heartComp))
+            !system.TryGetHeart(heart, out var heartComp))
         {
             return;
         }
 
-        args.EntityManager.System<ChemicalPropertyStatusSystem>()
-            .ApplyCardiacPacing(args.TargetEntity, ActualPotency, args.Reagent!.ID);
-        args.EntityManager.System<SharedHeartSystem>().TryRestartHeart((heart, heartComp));
+        system.ChemicalPropertyStatus
+            .ApplyCardiacPacing(args.TargetEntity, args.ActualPotency, args.Reagent.ID);
+        system.Heart.TryRestartHeart((heart, heartComp));
     }
 
-    private static void TickDead(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args,
+    private static void TickDead(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args,
         MobStateComponent mobState)
     {
-        var entities = args.EntityManager;
         var target = args.TargetEntity;
-        if (entities.HasComponent<UnrevivableComponent>(target) ||
-            !entities.TryGetComponent<MobThresholdsComponent>(target, out var thresholds) ||
-            !entities.TryGetComponent<DamageableComponent>(target, out var damageComponent))
+        if (system.HasUnrevivable(target) ||
+            !system.TryGetMobThresholds(target, out var thresholds) ||
+            !system.TryGetDamageable(target, out var damageComponent))
         {
             return;
         }
 
         // A corpse can remain in the heart system's "beating" transition state until its next
         // periodic pulse update. Chemical pacing must not silently fail during that window.
-        var attempt = new RMCDefibrillatorAttemptEvent(target, allowBeatingHeart: true);
-        entities.EventBus.RaiseLocalEvent(target, attempt);
-        if (attempt.Cancelled)
+        if (!system.CanChemicallyDefibrillate(target))
             return;
 
-        var rmcDamage = entities.System<SharedRMCDamageableSystem>();
+        var rmcDamage = system.RMCDamageable;
         var perGroup = potency * 2f;
         var heal = rmcDamage.DistributeHealingCached(target, BruteGroup, perGroup);
         heal = rmcDamage.DistributeHealingCached(target, BurnGroup, perGroup, heal);
         heal = rmcDamage.DistributeHealingCached(target, ToxinGroup, perGroup, heal);
         heal = rmcDamage.DistributeHealingCached(target, GeneticGroup, perGroup, heal);
         heal = rmcDamage.DistributeHealingCached(target, AirlossGroup, FixedPoint2.Max(perGroup, 200), heal);
-        entities.System<RMCDefibrillatorSystem>().TryApplyElectrogenetic(target, ref heal);
+        system.Defibrillator.TryApplyElectrogenetic(target, ref heal);
         damageable.TryChangeDamage(target, heal, true, interruptsDoAfters: false);
 
-        var thresholdSystem = entities.System<MobThresholdSystem>();
+        var thresholdSystem = system.MobThreshold;
         if (!thresholdSystem.TryGetThresholdForState(target, MobState.Dead, out var deadThreshold) ||
-            damageComponent.TotalDamage >= deadThreshold)
+            damageable.GetTotalDamage((target, damageComponent)) >= deadThreshold)
         {
             return;
         }
 
-        entities.System<MobStateSystem>().ChangeMobState(target, MobState.Critical, mobState, target);
+        system.MobState.ChangeMobState(target, MobState.Critical, mobState, target);
         thresholdSystem.VerifyThresholds(target, thresholds, mobState, damageComponent);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<CMUChemicalMedicalSystem>()
+        system.ChemicalMedical
             .DamageOrgan<HeartComponent>(args.TargetEntity, potency, ShockType);
-        args.EntityManager.System<SharedStatusEffectsSystem>()
+        system.StatusEffects
             .TrySetStatusEffectDuration(args.TargetEntity, Arrhythmia, TimeSpan.FromSeconds(3));
-        args.EntityManager.System<SharedPainShockSystem>().AddPainPulse(args.TargetEntity, potency * 2f);
+        system.PainShock.AddPainPulse(args.TargetEntity, potency * 2f);
         var damage = new DamageSpecifier();
         damage.DamageDict[AsphyxiationType] = potency * 2f;
         damageable.TryChangeDamage(args.TargetEntity, damage, true, interruptsDoAfters: false);
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
-        => args.EntityManager.System<CMUChemicalMedicalSystem>()
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
+        => system.ChemicalMedical
             .DamageOrgan<HeartComponent>(args.TargetEntity, potency * 4f, ShockType);
 }

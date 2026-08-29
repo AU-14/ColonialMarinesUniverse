@@ -451,7 +451,7 @@
   - type: Battery
     maxCharge: 800
     startingCharge: 800
-  - type: ProjectileBatteryAmmoProvider
+  - type: BatteryAmmoProvider
     proto: RMCProjectileTaser
     fireCost: 100
   - type: GunPointBlank

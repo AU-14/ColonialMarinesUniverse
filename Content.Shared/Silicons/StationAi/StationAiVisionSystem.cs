@@ -20,14 +20,14 @@ public sealed partial class StationAiVisionSystem : EntitySystem
     [Dependency] private SharedTransformSystem _xforms = default!;
     [Dependency] private SharedPowerReceiverSystem _power = default!;
 
+    [Dependency] private EntityQuery<OccluderComponent> _occluderQuery = default!;
+
     private SeedJob _seedJob;
     private ViewJob _job;
 
     private readonly HashSet<Entity<OccluderComponent>> _occluders = new();
     private readonly HashSet<Entity<StationAiVisionComponent>> _seeds = new();
     private readonly HashSet<Vector2i> _viewportTiles = new();
-
-    private EntityQuery<OccluderComponent> _occluderQuery;
 
     // Dummy set
     private readonly HashSet<Vector2i> _singleTiles = new();
@@ -44,8 +44,6 @@ public sealed partial class StationAiVisionSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-
-        _occluderQuery = GetEntityQuery<OccluderComponent>();
 
         _seedJob = new()
         {
@@ -99,7 +97,7 @@ public sealed partial class StationAiVisionSystem : EntitySystem
         // Skip occluders step if we're just doing range checks.
         if (!fastPath)
         {
-            var tileEnumerator = _maps.GetLocalTilesEnumerator(grid, grid, expandedBounds, ignoreEmpty: false);
+            var tileEnumerator = _maps.GetLocalTilesIntersecting(grid, grid, expandedBounds, ignoreEmpty: false);
 
             // Get all other relevant tiles.
             while (tileEnumerator.MoveNext(out var tileRef))
@@ -184,7 +182,7 @@ public sealed partial class StationAiVisionSystem : EntitySystem
             return;
 
         // Get viewport tiles
-        var tileEnumerator = _maps.GetLocalTilesEnumerator(grid, grid, localAabb, ignoreEmpty: false);
+        var tileEnumerator = _maps.GetLocalTilesIntersecting(grid, grid, localAabb, ignoreEmpty: false);
 
         while (tileEnumerator.MoveNext(out var tileRef))
         {
@@ -196,7 +194,7 @@ public sealed partial class StationAiVisionSystem : EntitySystem
             _viewportTiles.Add(tileRef.GridIndices);
         }
 
-        tileEnumerator = _maps.GetLocalTilesEnumerator(grid, grid, enlargedLocalAabb, ignoreEmpty: false);
+        tileEnumerator = _maps.GetLocalTilesIntersecting(grid, grid, enlargedLocalAabb, ignoreEmpty: false);
 
         while (tileEnumerator.MoveNext(out var tileRef))
         {

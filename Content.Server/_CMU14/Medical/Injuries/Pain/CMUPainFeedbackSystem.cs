@@ -1,5 +1,4 @@
 using Content.Shared._CMU14.Medical.Core;
-using Content.Server.Speech.Components;
 using Content.Shared._CMU14.Medical.Injuries.Pain;
 using Content.Shared._CMU14.Medical.Injuries.Pain.Events;
 using Content.Shared._CMU14.Medical.Injuries.Vision;
@@ -7,11 +6,12 @@ using Content.Shared._RMC14.Emote;
 using Content.Shared._RMC14.Synth;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Drunk;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
-using Content.Shared.StatusEffect;
+using Content.Shared.StatusEffectNew;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Random;
 using Robust.Shared.Timing;
@@ -28,11 +28,11 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
     [Dependency] private IPrototypeManager _prototypes = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private CMUMedicalSchedulerSystem _scheduler = default!;
-    [Dependency] private StatusEffectQuerySystem _status = default!;
+    [Dependency] private StatusEffectsSystem _status = default!;
     [Dependency] private IGameTiming _timing = default!;
 
     private static readonly CMUMedicalWorkKey FeedbackWork = new("pain-feedback");
-    private static readonly ProtoId<StatusEffectPrototype> Stutter = "Stutter";
+    private static readonly EntProtoId Stutter = "StatusEffectStutter";
     private const float SevereBlurMax = 0.49f;
 
     public override void Initialize()
@@ -141,15 +141,14 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
         if (tier < PainTier.Shock)
             return;
 
-        ApplyTimedStatus<StutteringAccentComponent>(
+        ApplyTimedStatus(
             uid,
             Stutter,
             feedback.ShockStutterDuration);
 
         ApplyDrunkenness(
             uid,
-            feedback.ShockDrunkPower,
-            slur: true);
+            feedback.ShockDrunkPower);
 
         ApplyAsphyxiation(
             uid,
@@ -214,31 +213,30 @@ public sealed partial class CMUPainFeedbackSystem : EntitySystem
         _blur.AddTemporaryBlurModifier(uid, duration, amount);
     }
 
-    private void ApplyDrunkenness(EntityUid uid, float power, bool slur)
+    private void ApplyDrunkenness(EntityUid uid, float power)
     {
         if (power <= 0f)
             return;
 
         var targetDuration = TimeSpan.FromSeconds(power);
-        if (_status.TryGetTime(uid, SharedDrunkSystem.DrunkKey, out var time) &&
-            time.Value.Item2 - _timing.CurTime >= targetDuration)
+        if (_status.TryGetTime(uid, SharedDrunkSystem.Drunk, out var time) &&
+            (time.EndEffectTime == null || time.EndEffectTime - _timing.CurTime >= targetDuration))
         {
             return;
         }
 
-        _drunk.TryApplyDrunkenness(uid, power, slur);
+        _drunk.TryApplyDrunkenness(uid, targetDuration);
     }
 
-    private void ApplyTimedStatus<T>(
+    private void ApplyTimedStatus(
         EntityUid uid,
-        ProtoId<StatusEffectPrototype> status,
+        EntProtoId status,
         TimeSpan duration)
-        where T : IComponent, new()
     {
         if (duration <= TimeSpan.Zero)
             return;
 
-        _status.TryAddStatusEffect<T>(uid, status, duration, refresh: true);
+        _status.TryUpdateStatusEffectDuration(uid, status, duration);
     }
 
     private void ApplyAsphyxiation(EntityUid uid, FixedPoint2 amount)

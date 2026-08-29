@@ -31,7 +31,7 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
     private readonly MobStateSystem _mobState;
     private readonly SpriteSystem _sprite;
     private readonly SharedTransformSystem _transform;
-    private readonly EntityQuery<HumanoidAppearanceComponent> _humanoidQuery;
+    private readonly EntityQuery<HumanoidProfileComponent> _humanoidQuery;
     private readonly EntityQuery<XenoComponent> _xenoQuery;
     private readonly EntityQuery<MobStateComponent> _mobStateQuery;
     private readonly EntityQuery<SpriteComponent> _spriteQuery;
@@ -55,7 +55,7 @@ public sealed partial class CMUZLevelVisibleEntityOverlay : Overlay
         _mobState = _entMan.System<MobStateSystem>();
         _sprite = _entMan.System<SpriteSystem>();
         _transform = _entMan.System<SharedTransformSystem>();
-        _humanoidQuery = _entMan.GetEntityQuery<HumanoidAppearanceComponent>();
+        _humanoidQuery = _entMan.GetEntityQuery<HumanoidProfileComponent>();
         _xenoQuery = _entMan.GetEntityQuery<XenoComponent>();
         _mobStateQuery = _entMan.GetEntityQuery<MobStateComponent>();
         _spriteQuery = _entMan.GetEntityQuery<SpriteComponent>();

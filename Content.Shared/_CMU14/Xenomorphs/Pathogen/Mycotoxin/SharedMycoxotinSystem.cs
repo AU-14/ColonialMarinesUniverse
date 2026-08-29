@@ -80,7 +80,7 @@ public abstract class SharedMycotoxinSystem : EntitySystem
         if (!TryComp<ItemSlotsComponent>(item, out var slots))
             return false;
 
-        if (!_itemSlots.TryGetSlot(item, "filter", out var slot, slots))
+        if (!_itemSlots.TryGetSlot((item, slots), "filter", out var slot))
             return false;
 
         if (slot.ContainerSlot?.ContainedEntity is not { } fEnt)

@@ -12,6 +12,7 @@ using Content.Shared.Armor;
 using Content.Shared.Body.Part;
 using Content.Shared.Clothing.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Examine;
 using Content.Shared.Explosion;
@@ -139,13 +140,13 @@ public sealed partial class CMArmorSystem : EntitySystem
         var max = _alerts.GetMaxSeverity(xeno.ArmorAlert);
 
         var severity = max - ContentHelpers.RoundToLevels(ev.XenoArmor * ev.ArmorModifier, MaxXenoArmor, max + 1);
-        _alerts.ShowAlert(armored, xeno.ArmorAlert, (short)severity, dynamicMessage: armorMessage);
+        _alerts.ShowAlert((armored.Owner, null), xeno.ArmorAlert, (short)severity, dynamicMessage: armorMessage);
     }
 
     private void OnRemove(Entity<CMArmorComponent> armored, ref ComponentRemove args)
     {
         if (TryComp(armored, out XenoComponent? xeno))
-            _alerts.ClearAlert(armored, xeno.ArmorAlert);
+            _alerts.ClearAlert((armored.Owner, null), xeno.ArmorAlert);
     }
 
     private void OnDamageModify(Entity<CMArmorComponent> armored, ref DamageModifyEvent args)
@@ -217,7 +218,7 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnGotEquipped(Entity<CMArmorComponent> armored, ref GotEquippedEvent args)
     {
-        EnsureComp<CMArmorUserComponent>(args.Equipee);
+        EnsureComp<CMArmorUserComponent>(args.EquipTarget);
     }
 
     private void OnArmorVerbExamine(EntityUid uid, CMArmorComponent component, GetVerbsEvent<ExamineVerb> args)
@@ -489,16 +490,16 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnArmorSpeedTierGotEquipped(Entity<RMCArmorSpeedTierComponent> armour, ref GotEquippedEvent args)
     {
-        EnsureComp(args.Equipee, out RMCArmorSpeedTierUserComponent comp);
+        EnsureComp(args.EquipTarget, out RMCArmorSpeedTierUserComponent comp);
 
-        RefreshArmorSpeedTier((args.Equipee, comp));
+        RefreshArmorSpeedTier((args.EquipTarget, comp));
     }
 
     private void OnArmorSpeedTierGotUnequipped(Entity<RMCArmorSpeedTierComponent> armour, ref GotUnequippedEvent args)
     {
-        EnsureComp(args.Equipee, out RMCArmorSpeedTierUserComponent comp);
+        EnsureComp(args.EquipTarget, out RMCArmorSpeedTierUserComponent comp);
 
-        RefreshArmorSpeedTier((args.Equipee, comp));
+        RefreshArmorSpeedTier((args.EquipTarget, comp));
     }
 
     private void RefreshArmorSpeedTier(Entity<RMCArmorSpeedTierUserComponent> user)
@@ -530,7 +531,7 @@ public sealed partial class CMArmorSystem : EntitySystem
 
     private void OnAllowSuitStorageUserWhitelistGotEquipped(Entity<RMCAllowSuitStorageUserWhitelistComponent> ent, ref GotEquippedEvent args)
     {
-        OnAllowSuitStorageWhitelistEquipped(ent, args.Equipee);
+        OnAllowSuitStorageWhitelistEquipped(ent, args.EquipTarget);
     }
 
     private void OnAllowSuitStorageUserWhitelistGotUnequipped(Entity<RMCAllowSuitStorageUserWhitelistComponent> ent, ref GotUnequippedEvent args)

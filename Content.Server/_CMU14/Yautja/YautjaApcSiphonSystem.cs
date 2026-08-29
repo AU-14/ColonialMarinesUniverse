@@ -2,6 +2,7 @@ using Content.Server.Administration.Logs;
 using Content.Shared._CMU14.Yautja;
 using Content.Shared._RMC14.Power;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.FixedPoint;

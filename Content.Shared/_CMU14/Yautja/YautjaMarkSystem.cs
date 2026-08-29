@@ -230,7 +230,7 @@ public sealed partial class YautjaMarkSystem : EntitySystem
         if (_mob.IsDead(target))
             return false;
 
-        var humanoid = HasComp<HumanoidAppearanceComponent>(target);
+        var humanoid = HasComp<HumanoidProfileComponent>(target);
         var xeno = HasComp<XenoComponent>(target);
         if (!CanMarkSpecies(kind, target, humanoid, xeno))
             return false;

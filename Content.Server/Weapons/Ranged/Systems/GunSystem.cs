@@ -1,19 +1,19 @@
 using System.Numerics;
 using Content.Server.Cargo.Systems;
-using Content.Server.Power.EntitySystems;
-using Content.Server.Stunnable;
-using Content.Server.Weapons.Ranged.Components;
+using Content.Shared._RMC14.Weapons.Ranged.Flamer;
+using Content.Shared._RMC14.Weapons.Ranged.Prediction;
 using Content.Shared.Cargo;
 using Content.Shared.Damage;
-using Content.Shared.Damage.Systems;
-using Content.Shared.Effects;
+using Content.Shared.Database;
 using Content.Shared.Projectiles;
+using Content.Shared.Weapons.Hitscan.Components;
+using Content.Shared.Weapons.Hitscan.Events;
 using Content.Shared.Weapons.Melee;
 using Content.Shared.Weapons.Ranged;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Weapons.Ranged.Systems;
-using Robust.Shared.Containers;
+using Robust.Shared.Audio;
 using Robust.Shared.Map;
 using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
@@ -23,12 +23,9 @@ namespace Content.Server.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
 {
-    [Dependency] private DamageExamineSystem _damageExamine = default!;
     [Dependency] private PricingSystem _pricing = default!;
-    [Dependency] private SharedColorFlashEffectSystem _color = default!;
-    [Dependency] private SharedStaminaSystem _stamina = default!;
-    [Dependency] private SharedContainerSystem _container = default!;
     [Dependency] private SharedMapSystem _map = default!;
+    [Dependency] private SharedRMCFlamerSystem _flamer = default!;
 
     private const float DamagePitchVariation = 0.05f;
 
@@ -38,27 +35,252 @@ public sealed partial class GunSystem : SharedGunSystem
         SubscribeLocalEvent<BallisticAmmoProviderComponent, PriceCalculationEvent>(OnBallisticPrice);
     }
 
-    private void OnBallisticPrice(EntityUid uid, BallisticAmmoProviderComponent component, ref PriceCalculationEvent args)
+    private void OnBallisticPrice(Entity<BallisticAmmoProviderComponent> ent, ref PriceCalculationEvent args)
     {
-        if (string.IsNullOrEmpty(component.Proto) || component.UnspawnedCount == 0)
+        if (string.IsNullOrEmpty(ent.Comp.Proto) || ent.Comp.UnspawnedCount == 0)
             return;
 
-        if (!ProtoManager.TryIndex<EntityPrototype>(component.Proto, out var proto))
+        if (!ProtoMan.TryIndex<EntityPrototype>(ent.Comp.Proto, out var proto))
         {
-            Log.Error($"Unable to find fill prototype for price on {component.Proto} on {ToPrettyString(uid)}");
+            Log.Error($"Unable to find fill prototype for price on {ent.Comp.Proto} on {ToPrettyString(ent)}");
             return;
         }
 
-        // Probably good enough for most.
         var price = _pricing.GetEstimatedPrice(proto);
-        args.Price += price * component.UnspawnedCount;
+        args.Price += price * ent.Comp.UnspawnedCount;
     }
 
-    protected override void Popup(string message, EntityUid? uid, EntityUid? user) { }
+    public override List<EntityUid>? Shoot(
+        Entity<GunComponent> gun,
+        List<(EntityUid? Entity, IShootable Shootable)> ammo,
+        EntityCoordinates fromCoordinates,
+        EntityCoordinates toCoordinates,
+        out bool userImpulse,
+        EntityUid? user = null,
+        bool throwItems = false,
+        List<int>? predictedProjectiles = null,
+        ICommonSession? userSession = null)
+    {
+        userImpulse = true;
 
-    protected override void CreateEffect(EntityUid gunUid, MuzzleFlashEvent message, EntityUid? user = null, EntityUid? player = null, Vector2 offset = default, Vector2 originOffset = default)
+        if (user != null)
+        {
+            var selfEvent = new SelfBeforeGunShotEvent(user.Value, gun, ammo);
+            RaiseLocalEvent(user.Value, selfEvent);
+            if (selfEvent.Cancelled)
+            {
+                userImpulse = false;
+                return null;
+            }
+        }
+
+        var fromMap = TransformSystem.ToMapCoordinates(fromCoordinates);
+        var toMap = TransformSystem.ToMapCoordinates(toCoordinates).Position;
+        var mapDirection = toMap - fromMap.Position;
+        var mapAngle = mapDirection.ToAngle();
+        var angle = GetRecoilAngle(gun, mapAngle);
+
+        var fromEnt = Maps.TryFindGridAt(fromMap, out var gridUid, out _)
+            ? TransformSystem.WithEntityId(fromCoordinates, gridUid)
+            : new EntityCoordinates(_map.GetMapOrInvalid(fromMap.MapId), fromMap.Position);
+
+        toMap = fromMap.Position + angle.ToVec() * mapDirection.Length();
+        mapDirection = toMap - fromMap.Position;
+        var gunVelocity = Physics.GetMapLinearVelocity(fromEnt);
+        var shotProjectiles = new List<EntityUid>(ammo.Count);
+
+        foreach (var (ent, shootable) in ammo)
+        {
+            if (throwItems && ent != null)
+            {
+                ShootOrThrow(ent.Value, mapDirection, gunVelocity, gun, user);
+                continue;
+            }
+
+            switch (shootable)
+            {
+                case CartridgeAmmoComponent cartridge:
+                    if (!cartridge.Spent)
+                    {
+                        var projectile = Spawn(cartridge.Prototype, fromEnt);
+                        CreateAndFireProjectiles(projectile, cartridge);
+
+                        RaiseLocalEvent(ent!.Value, new AmmoShotEvent
+                        {
+                            FiredProjectiles = shotProjectiles,
+                        });
+
+                        SetCartridgeSpent(ent.Value, cartridge, true);
+
+                        if (cartridge.DeleteOnSpawn)
+                            Del(ent.Value);
+                    }
+                    else
+                    {
+                        userImpulse = false;
+                        Audio.PlayPredicted(gun.Comp.SoundEmpty, gun, user);
+                    }
+
+                    if (!cartridge.DeleteOnSpawn &&
+                        !Containers.IsEntityInContainer(ent!.Value))
+                    {
+                        EjectCartridge(ent.Value, angle);
+                    }
+
+                    Dirty(ent.Value, cartridge);
+                    break;
+                case AmmoComponent newAmmo:
+                    if (ent != null)
+                        CreateAndFireProjectiles(ent.Value, newAmmo);
+                    break;
+                case HitscanAmmoComponent:
+                    if (ent == null)
+                        break;
+
+                    var hitscanEvent = new HitscanTraceEvent
+                    {
+                        FromCoordinates = fromCoordinates,
+                        ShotDirection = mapDirection.Normalized(),
+                        Gun = gun,
+                        Shooter = user,
+                        Target = gun.Comp.Target,
+                    };
+                    RaiseLocalEvent(ent.Value, ref hitscanEvent);
+
+                    Del(ent.Value);
+                    PlayGunshotSound(gun.Comp.SoundGunshotModified, gun, user);
+                    break;
+                case RMCFlamerAmmoProviderComponent flamer when ent != null:
+                    _flamer.ShootFlamer((ent.Value, flamer), gun, user, fromCoordinates, toCoordinates);
+                    break;
+                case RMCSprayAmmoProviderComponent spray when ent != null:
+                    _flamer.ShootSpray((ent.Value, spray), gun, user, fromCoordinates, toCoordinates);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        RaiseLocalEvent(gun, new AmmoShotEvent
+        {
+            FiredProjectiles = shotProjectiles,
+        });
+
+        Logs.Add(
+            LogType.RMCGunShot,
+            LogImpact.Low,
+            $"{ToPrettyString(user)} shot {ToPrettyString(gun)} with {shotProjectiles.Count} projectiles aiming at {TransformSystem.ToMapCoordinates(toCoordinates)}.");
+
+        return shotProjectiles;
+
+        void CreateAndFireProjectiles(EntityUid ammoEnt, AmmoComponent ammoComp)
+        {
+            if (TryComp<ProjectileSpreadComponent>(ammoEnt, out var ammoSpread))
+            {
+                var spreadEvent = new GunGetAmmoSpreadEvent(ammoSpread.Spread);
+                RaiseLocalEvent(gun, ref spreadEvent);
+
+                var angles = LinearSpread(
+                    mapAngle - spreadEvent.Spread / 2,
+                    mapAngle + spreadEvent.Spread / 2,
+                    ammoSpread.Count);
+
+                FireProjectile(ammoEnt, angles[0].ToVec());
+
+                for (var i = 1; i < ammoSpread.Count; i++)
+                {
+                    var projectile = Spawn(ammoSpread.Proto, fromEnt);
+                    FireProjectile(projectile, angles[i].ToVec());
+                }
+            }
+            else
+            {
+                FireProjectile(ammoEnt, mapDirection);
+            }
+
+            MuzzleFlash(gun, ammoComp, mapDirection.ToAngle(), user);
+            PlayGunshotSound(gun.Comp.SoundGunshotModified, gun, user);
+        }
+
+        void FireProjectile(EntityUid projectile, Vector2 direction)
+        {
+            MarkPredicted(projectile, shotProjectiles.Count);
+            ShootOrThrow(projectile, direction, gunVelocity, gun, user);
+            shotProjectiles.Add(projectile);
+        }
+
+        void MarkPredicted(EntityUid projectile, int index)
+        {
+            if (!GunPrediction ||
+                predictedProjectiles == null ||
+                userSession == null ||
+                index >= predictedProjectiles.Count)
+            {
+                return;
+            }
+
+            var predicted = new PredictedProjectileServerComponent
+            {
+                Shooter = userSession,
+                ClientId = predictedProjectiles[index],
+                ClientEnt = user,
+            };
+            AddComp(projectile, predicted, true);
+            Dirty(projectile, predicted);
+        }
+    }
+
+    private void ShootOrThrow(
+        EntityUid uid,
+        Vector2 mapDirection,
+        Vector2 gunVelocity,
+        Entity<GunComponent> gun,
+        EntityUid? user)
+    {
+        if (gun.Comp.Target is { } target && !TerminatingOrDeleted(target))
+        {
+            var targeted = EnsureComp<TargetedProjectileComponent>(uid);
+            targeted.Target = target;
+            Dirty(uid, targeted);
+        }
+
+        if (!HasComp<ProjectileComponent>(uid))
+        {
+            RemoveShootable(uid);
+            ThrowingSystem.TryThrow(
+                uid,
+                mapDirection,
+                gun.Comp.ProjectileSpeedModified,
+                user,
+                recoil: false,
+                rotate: false);
+            return;
+        }
+
+        ShootProjectile(uid, mapDirection, gunVelocity, gun, user, gun.Comp.ProjectileSpeedModified);
+    }
+
+    private static Angle[] LinearSpread(Angle start, Angle end, int intervals)
+    {
+        var angles = new Angle[intervals];
+        DebugTools.Assert(intervals > 1);
+
+        for (var i = 0; i < intervals; i++)
+            angles[i] = new Angle(start + (end - start) * i / (intervals - 1));
+
+        return angles;
+    }
+
+    protected override void CreateEffect(
+        EntityUid gunUid,
+        MuzzleFlashEvent message,
+        EntityUid? user = null,
+        EntityUid? player = null,
+        Vector2 offset = default,
+        Vector2 originOffset = default)
     {
         var filter = Filter.Pvs(gunUid, entityManager: EntityManager);
+
         if (TryComp<ActorComponent>(user, out var actor))
             filter.RemovePlayer(actor.PlayerSession);
 
@@ -68,69 +290,46 @@ public sealed partial class GunSystem : SharedGunSystem
         RaiseNetworkEvent(message, filter);
     }
 
-
-    // TODO: Pseudo RNG so the client can predict these.
-    #region Hitscan effects
-
-    private void FireEffects(EntityCoordinates fromCoordinates, float distance, Angle angle, HitscanPrototype hitscan, EntityUid? hitEntity = null)
+    public override void PlayImpactSound(
+        EntityUid otherEntity,
+        DamageSpecifier? modifiedDamage,
+        SoundSpecifier? weaponSound,
+        bool forceWeaponSound)
     {
-        // Lord
-        // Forgive me for the shitcode I am about to do
-        // Effects tempt me not
-        var sprites = new List<(NetCoordinates coordinates, Angle angle, SpriteSpecifier sprite, float scale)>();
-        var fromXform = Transform(fromCoordinates.EntityId);
+        DebugTools.Assert(!Deleted(otherEntity), "Impact sound entity was deleted");
 
-        // We'll get the effects relative to the grid / map of the firer
-        // Look you could probably optimise this a bit with redundant transforms at this point.
+        var playedSound = false;
 
-        var gridUid = fromXform.GridUid;
-        if (gridUid != fromCoordinates.EntityId && TryComp(gridUid, out TransformComponent? gridXform))
+        if (!forceWeaponSound &&
+            modifiedDamage != null &&
+            modifiedDamage.GetTotal() > 0 &&
+            TryComp<RangedDamageSoundComponent>(otherEntity, out var rangedSound))
         {
-            var (_, gridRot, gridInvMatrix) = TransformSystem.GetWorldPositionRotationInvMatrix(gridXform);
-            var map = TransformSystem.ToMapCoordinates(fromCoordinates);
-            fromCoordinates = new EntityCoordinates(gridUid.Value, Vector2.Transform(map.Position, gridInvMatrix));
-            angle -= gridRot;
-        }
-        else
-        {
-            angle -= TransformSystem.GetWorldRotation(fromXform);
-        }
+            var type = SharedMeleeWeaponSystem.GetHighestDamageSound(modifiedDamage, ProtoMan);
 
-        if (distance >= 1f)
-        {
-            if (hitscan.MuzzleFlash != null)
+            if (type != null &&
+                rangedSound.SoundTypes?.TryGetValue(type, out var damageSoundType) == true)
             {
-                var coords = fromCoordinates.Offset(angle.ToVec().Normalized() / 2);
-                var netCoords = GetNetCoordinates(coords);
-
-                sprites.Add((netCoords, angle, hitscan.MuzzleFlash, 1f));
+                var soundParams = damageSoundType?.Params ?? AudioParams.Default;
+                Audio.PlayPvs(
+                    damageSoundType,
+                    otherEntity,
+                    soundParams.WithVariation(DamagePitchVariation));
+                playedSound = true;
             }
-
-            if (hitscan.TravelFlash != null)
+            else if (type != null &&
+                     rangedSound.SoundGroups?.TryGetValue(type, out var damageSoundGroup) == true)
             {
-                var coords = fromCoordinates.Offset(angle.ToVec() * (distance + 0.5f) / 2);
-                var netCoords = GetNetCoordinates(coords);
-
-                sprites.Add((netCoords, angle, hitscan.TravelFlash, distance - 1.5f));
+                var soundParams = damageSoundGroup?.Params ?? AudioParams.Default;
+                Audio.PlayPvs(
+                    damageSoundGroup,
+                    otherEntity,
+                    soundParams.WithVariation(DamagePitchVariation));
+                playedSound = true;
             }
         }
 
-        if (hitscan.ImpactFlash != null)
-        {
-            var coords = fromCoordinates.Offset(angle.ToVec() * distance);
-            var netCoords = GetNetCoordinates(coords);
-
-            sprites.Add((netCoords, angle.FlipPositive(), hitscan.ImpactFlash, 1f));
-        }
-
-        if (sprites.Count > 0)
-        {
-            RaiseNetworkEvent(new HitscanEvent
-            {
-                Sprites = sprites,
-            }, Filter.Pvs(fromCoordinates, entityMan: EntityManager));
-        }
+        if (!playedSound && weaponSound != null)
+            Audio.PlayPvs(weaponSound, otherEntity);
     }
-
-    #endregion
 }

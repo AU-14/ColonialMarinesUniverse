@@ -27,6 +27,7 @@ namespace Content.Server.AU14.ColonyEconomy;
 public sealed partial class DepartmentConsoleSystem : EntitySystem
 {
     private const int MaxRegistrationAttempts = 300;
+    private static readonly EntProtoId CashPrototype = "RMCSpaceCash";
 
     private static readonly Dictionary<string, string[]> DepartmentFallbacks = new()
     {
@@ -783,7 +784,7 @@ public sealed partial class DepartmentConsoleSystem : EntitySystem
 
         var amount = (int) msg.Amount;
         comp.DepartmentBudget -= amount;
-        _stack.SpawnMultiple("RMCSpaceCash", amount, uid);
+        _stack.SpawnMultipleNextToOrDrop(CashPrototype, amount, uid);
         UpdateAllUiForDepartment(uid, comp);
     }
 

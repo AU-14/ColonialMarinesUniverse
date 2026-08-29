@@ -1,9 +1,9 @@
 using Content.Server.Chat.Managers;
-using Content.Server.IdentityManagement;
 using Content.Shared.CCVar;
 using Content.Shared.Chat;
 using Content.Shared.Examine;
 using Content.Shared.Hands.Components;
+using Content.Shared.IdentityManagement;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Inventory;
 using Content.Shared.Inventory.VirtualItem;

@@ -66,21 +66,22 @@
   - type: XenoFortify
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 27.5
+      types:
+        Blunt: 9.16
+        Slash: 9.17
+        Piercing: 9.17
   - type: DrawableSolution
     solution: blood
-  - type: SolutionContainerManager
-    solutions:
-      blood:
-        maxVol: 600
-        reagents:
-        - ReagentId: CMUXenoBlood
-          Quantity: 300
-        - ReagentId: CMUXenoPlasmaChitin
-          Quantity: 300
+  - type: Solution
+    id: blood
+    solution:
+      maxVol: 600
+      reagents:
+      - ReagentId: CMUXenoBlood
+        Quantity: 300
+      - ReagentId: CMUXenoPlasmaChitin
+        Quantity: 300
   - type: SolutionRegeneration
-    solution: blood
     generated:
       reagents:
       - ReagentId: CMUXenoBlood
@@ -89,8 +90,10 @@
         Quantity: 1
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 36
+      types:
+        Blunt: 12
+        Slash: 12
+        Piercing: 12
     soundHit:
         collection: Punch
         params:
@@ -184,12 +187,16 @@
     popup: rmc-xeno-steelcrest-popup
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 22.5
+      types:
+        Blunt: 7.5
+        Slash: 7.5
+        Piercing: 7.5
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 30
+      types:
+        Blunt: 10
+        Slash: 10
+        Piercing: 10
   - type: XenoFortify
     armor: 10
     frontalArmor: 15
@@ -197,8 +204,10 @@
     canHeadbuttFortified: true
     canMoveFortified: true
     damageAddedFortified:
-      groups:
-        Brute: -10
+      types:
+        Blunt: -3.33
+        Slash: -3.33
+        Piercing: -3.34
   - type: XenoHeadbutt
     damage:
       types:

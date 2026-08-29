@@ -866,11 +866,12 @@
         bodies:
           CMBInvestigationPartyJobMarshal: 1
       - bucket: Member
-        count: 3
+        count: 4
         bodies:
           CMBInvestigationPartyJobDeputy: 1
           CMBInvestigationPartyJobDeputyShotgun: 1
           CMBInvestigationPartyJobRightsObserver: 1
+          AU14MobK9MPGhostRole: 1
       - bucket: Entity
         count: 0
     markerRequirements:
@@ -882,7 +883,7 @@
           - bucket:Leader
           - marker-id:<generic>
       - bucket: Member
-        requiredBodyCount: 3
+        requiredBodyCount: 4
         requiredMarkerCount: 1
         requiredTags:
           - force:third-party

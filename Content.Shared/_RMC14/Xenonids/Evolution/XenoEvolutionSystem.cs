@@ -15,6 +15,8 @@ using Content.Shared.Climbing.Components;
 using Content.Shared.Climbing.Systems;
 using Content.Shared.Coordinates.Helpers;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Doors.Components;
@@ -50,6 +52,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     [Dependency] private ClimbSystem _climb = default!;
     [Dependency] private IConfigurationManager _config = default!;
     [Dependency] private IComponentFactory _compFactory = default!;
+    [Dependency] private DamageableSystem _damageable = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private EntityLookupSystem _entityLookup = default!;
     [Dependency] private SharedGameTicker _gameTicker = default!;
@@ -466,7 +469,7 @@ public sealed partial class XenoEvolutionSystem : EntitySystem
     private bool DamagedCheckPopup(EntityUid xeno, bool predicted = true, bool doPopup = true)
     {
         if (!TryComp(xeno, out DamageableComponent? damageable) ||
-            damageable.TotalDamage <= 1)
+            _damageable.GetTotalDamage((xeno, damageable)) <= 1)
             return true;
 
         if (predicted)

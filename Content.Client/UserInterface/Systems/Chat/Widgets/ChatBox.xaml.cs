@@ -1179,12 +1179,12 @@ public partial class ChatBox : UIWidget
         if (_colorWholeMessage)
             formatted.Pop();
 
-        return FilterProblematicTags(formatted, allowCommandLinks: false);
+        return FilterProblematicTags(formatted, allowCommandLinks: true);
     }
 
     private static string StripChatActionCommandLink(string markup, ChatMessage message)
     {
-        if ((!message.GhostFollowEntity.Valid && !message.XenoWatchEntity.Valid) ||
+        if (!message.XenoWatchEntity.Valid ||
             !markup.StartsWith("[cmdlink=", StringComparison.OrdinalIgnoreCase))
         {
             return markup;

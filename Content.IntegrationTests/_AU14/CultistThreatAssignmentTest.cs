@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Content.Server._CMU14.Threats;
-using Content.Server.Radio.Components;
+using Content.Shared.Radio.Components;
 using Content.Shared.AU14;
 using Content.Shared._CMU14.Threats;
 using Content.Shared.Chat;
@@ -95,7 +95,7 @@ public sealed class CultistThreatAssignmentTest
 
     private static bool MindHasRolePrototype(IEntityManager entMan, MindComponent mind, string prototype)
     {
-        foreach (var role in mind.MindRoles)
+        foreach (var role in mind.MindRoleContainer.ContainedEntities)
         {
             if (entMan.TryGetComponent(role, out MetaDataComponent? meta) &&
                 meta.EntityPrototype?.ID == prototype)

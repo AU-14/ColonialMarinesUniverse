@@ -9,6 +9,8 @@ using Content.Shared._RMC14.Xenonids.Projectile.Spit.Charge;
 using Content.Shared._CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.Actions;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Effects;
 using Content.Shared.FixedPoint;
 using Content.Shared.Mobs.Components;

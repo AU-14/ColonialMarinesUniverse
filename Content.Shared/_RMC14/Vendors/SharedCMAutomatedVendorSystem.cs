@@ -353,7 +353,7 @@ public abstract partial class SharedCMAutomatedVendorSystem : EntitySystem
         if (TryComp(ent, out AccessReaderComponent? accessReader))
         {
             var access = ent.Comp.Hacked ? new List<ProtoId<AccessLevelPrototype>>() : ent.Comp.Access;
-            _accessReader.SetAccesses((ent, accessReader), access);
+            _accessReader.TrySetAccesses((ent, accessReader), access);
         }
     }
 

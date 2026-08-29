@@ -97,7 +97,7 @@ public sealed partial class CMUBalanceRatingStatisticsWindow : DefaultWindow
             MinWidth = minWidth,
             ClipText = true,
             ToolTip = Loc.GetString(locId),
-            StyleClasses = { StyleBase.StyleClassLabelSubText },
+            StyleClasses = { StyleClass.LabelSubText },
         });
     }
 

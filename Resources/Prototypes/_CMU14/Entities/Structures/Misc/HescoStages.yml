@@ -29,8 +29,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HescoUnfilled2
   - type: HescoDisassemblable
@@ -74,8 +75,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HescoUnfilled3
   - type: HescoDisassemblable
@@ -134,8 +136,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMSandbag
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HescoShortComplete
   - type: HescoDisassemblable
@@ -195,8 +198,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMHescoBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoRaisable
     nextStage: AU14HescoTallBuilding1
   - type: HescoDisassemblable
@@ -265,8 +269,9 @@
     tags:
     - Structure
   - type: Damageable
-    damageContainer: Inorganic
     damageModifierSet: CMHescoBarricade
+  - type: Injurable
+    damageContainer: Inorganic
   - type: HescoFillable
     nextStage: AU14HESCOBarrier
   - type: HescoDisassemblable

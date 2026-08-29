@@ -140,7 +140,7 @@ public sealed partial class CMUMedicalFieldBleedControlSystem : EntitySystem
         if (!_wounds.StopSurfaceBleedingOnPart(part, wounds))
             return false;
 
-        if (_net.IsServer && !_stacks.Use(item.Owner, 1))
+        if (_net.IsServer && !_stacks.TryUse((item.Owner, null), 1))
             return false;
 
         _popup.PopupEntity(Loc.GetString("cmu-field-treatment-bleed-control-finish"), patient, user);

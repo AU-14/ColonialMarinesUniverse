@@ -21,8 +21,10 @@ using Content.Shared.Body.Part;
 using Content.Shared.Buckle.Components;
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.DoAfter;
 using Content.Shared.Hands.EntitySystems;
+using Content.Shared.Interaction;
 using Content.Shared.Jittering;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
@@ -44,6 +46,7 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
     [Dependency] private CMUSurgeryDispatchSystem _dispatch = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedFractureSystem _fracture = default!;
+    [Dependency] private SharedInteractionSystem _interaction = default!;
     [Dependency] private SharedJitteringSystem _jitter = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private SkillsSystem _skills = default!;
@@ -149,6 +152,8 @@ public sealed partial class CMUSurgeryFlowSystem : SharedCMUSurgeryFlowSystem
             MovementThreshold = 0.5f,
             NeedHand = true,
             CancelDuplicate = true,
+            RangeCheck = false,
+            ExtraCheck = () => _interaction.InRangeAndAccessible(surgeon, patient),
         };
         if (!DoAfter.TryStartDoAfter(doAfter))
         {

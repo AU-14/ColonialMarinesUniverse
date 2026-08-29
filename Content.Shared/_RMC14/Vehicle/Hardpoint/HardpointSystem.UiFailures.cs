@@ -25,7 +25,7 @@ public sealed partial class HardpointSystem
             if (string.IsNullOrWhiteSpace(slot.Id))
                 continue;
 
-            if (!_itemSlots.TryGetSlot(uid, slot.Id, out var itemSlot, itemSlots) ||
+            if (!_itemSlots.TryGetSlot((uid, itemSlots), slot.Id, out var itemSlot) ||
                 itemSlot.Item is not { } item)
             {
                 continue;
@@ -45,7 +45,7 @@ public sealed partial class HardpointSystem
                 if (string.IsNullOrWhiteSpace(turretSlot.Id))
                     continue;
 
-                if (!_itemSlots.TryGetSlot(item, turretSlot.Id, out var turretItemSlot, turretItemSlots) ||
+                if (!_itemSlots.TryGetSlot((item, turretItemSlots), turretSlot.Id, out var turretItemSlot) ||
                     turretItemSlot.Item is not { } installed)
                 {
                     continue;

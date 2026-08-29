@@ -4,7 +4,7 @@ using Content.Server.Radio;
 using Content.Server.Radio.EntitySystems;
 using Content.Shared._CMU14.ZLevels.Core.Components;
 using Content.Shared._AU14.Radio;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared._RMC14.Chat;
 using Content.Shared._RMC14.Radio;
 using Content.Shared.Radio;

@@ -415,7 +415,7 @@ public sealed partial class YautjaAttachmentSystem : EntitySystem
         if ((args.SlotFlags & bracer.Slots) == 0)
             return;
 
-        _ui.TryOpenUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, args.Equipee);
+        _ui.TryOpenUi(ent.Owner, YautjaBadBloodWeaponChoiceUI.Key, args.EquipTarget);
         UpdateBadBloodChoiceUi(ent);
     }
 

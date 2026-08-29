@@ -1,0 +1,78 @@
+- type: satiation
+  id: RMCHumanHunger
+  parent: NormalSatiationHunger
+  baseChangeRate: -0.1
+  maximumValue: 480
+  thresholds:
+    Overfed: 480
+    Okay: 380
+    Peckish: 110
+    Starving: 50
+    Dead: 0
+  startingValueMinimum: 120
+  startingValueMaximum: Okay
+  changeModifiers:
+    Overfed: 1
+    Okay: 1
+    Peckish: 1
+    Starving: 1
+    Dead: 0
+
+- type: satiation
+  id: RMCHumanThirst
+  parent: NormalSatiationThirst
+  baseChangeRate: -0.1
+  maximumValue: 378
+  thresholds:
+    Overhydrated: 378
+    Okay: 278
+    Thirsty: 98
+    Parched: 50
+    Dead: 0
+  startingValueMinimum: 108
+  startingValueMaximum: 277
+
+- type: satiation
+  id: RMCSimpleMobHunger
+  parent: SimpleMobBaseHunger
+  baseChangeRate: -0.05
+  maximumValue: 100
+  thresholds:
+    Overfed: 100
+    Okay: 50
+    Peckish: 25
+    Starving: 10
+    Dead: 0
+  startingValueMinimum: 35
+  startingValueMaximum: Okay
+
+- type: satiation
+  id: RMCSimpleMobThirst
+  parent: SimpleMobBaseThirst
+  baseChangeRate: -0.04
+  maximumValue: 200
+  thresholds:
+    Overhydrated: 200
+    Okay: 150
+    Thirsty: 100
+    Parched: 10
+    Dead: 0
+  startingValueMinimum: 110
+  startingValueMaximum: 149
+
+- type: satiation
+  id: RMCRodentHunger
+  parent: MouseHunger
+  startingValueMinimum: Okay
+  startingValueMaximum: Okay
+
+- type: satiation
+  id: RMCRodentThirst
+  parent: MouseThirst
+  startingValueMinimum: Okay
+  startingValueMaximum: Okay
+
+- type: satiation
+  id: CMUApeHunger
+  parent: RMCSimpleMobHunger
+  baseChangeRate: -0.08

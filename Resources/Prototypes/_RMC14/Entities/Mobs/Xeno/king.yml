@@ -61,12 +61,16 @@
     clawType: VerySharp
   - type: MeleeWeapon
     damage:
-      groups:
-        Brute: 50
+      types:
+        Blunt: 16.66
+        Slash: 16.67
+        Piercing: 16.67
   - type: XenoTailStab
     tailDamage:
-      groups:
-        Brute: 66
+      types:
+        Blunt: 22
+        Slash: 22
+        Piercing: 22
   - type: Tackle
     stunMin: 6
     stunMax: 10
@@ -157,8 +161,10 @@
     id: RMCXenoKing
   - type: StunHostilesOnStep
     damage:
-      groups:
-        Brute: 20
+      types:
+        Blunt: 6.66
+        Slash: 6.67
+        Piercing: 6.67
   - type: IntelRecoverCorpseObjectiveOnDeath
     value: 1.4
   - type: XenoRankNames
@@ -169,8 +175,10 @@
       5: rmc-xeno-mature-king
   - type: XenoRend
     damage:
-      groups:
-        Brute: 25
+      types:
+        Blunt: 8.33
+        Slash: 8.33
+        Piercing: 8.34
   - type: XenoBulwarkOfTheHive
   - type: XenoDoom
   - type: XenoDestroy

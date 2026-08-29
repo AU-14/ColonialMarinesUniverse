@@ -87,8 +87,10 @@
   - type: MeleeWeapon
     attackRate: 2.2
     damage:
-      groups:
-        Brute: 42
+      types:
+        Blunt: 14
+        Slash: 14
+        Piercing: 14
   - type: CMArmor
     explosionArmor: 20
     xenoArmor: 30

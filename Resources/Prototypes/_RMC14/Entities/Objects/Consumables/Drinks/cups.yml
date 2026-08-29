@@ -23,11 +23,10 @@
   description: A ceramic mug. Practically guaranteed to fall and spill scalding-hot drink onto your brand-new shirt. Ouch.
   suffix: RMC
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 30
-  - type: Drink
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/coffee_cup.rsi
     layers:
@@ -42,6 +41,8 @@
   - type: DamageOtherOnHit
     damage: {}
   - type: Appearance
+  - type: SolutionContainerVisuals
+    fillBaseName: icon-
   - type: Destructible
     thresholds: [] # TODO RMC14 destroy on explosion unless inside a container
   - type: InteractedBlacklist
@@ -59,9 +60,8 @@
   id: RMCCoffeeCupFilled
   suffix: RMC, Filled, RMCCoffee
   components:
-    - type: SolutionContainerManager
-      solutions:
-        drink:
+    - type: Solution
+      solution:
           maxVol: 30
           reagents:
           - ReagentId: RMCCoffee
@@ -164,11 +164,10 @@
   description: A paper water cup.
   suffix: RMC
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    id: drink
+    solution:
         maxVol: 10
-  - type: Drink
   - type: Sprite
     sprite: _RMC14/Objects/Consumable/Drinks/water_cup.rsi
     layers:

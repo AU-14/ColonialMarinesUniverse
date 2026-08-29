@@ -14,7 +14,7 @@ namespace Content.Server._CMU14.Medical.Anatomy.Organs.Lungs;
 
 public sealed partial class LungsSystem : SharedLungsSystem
 {
-    [Dependency] private SharedBloodstreamSystem _bloodstream = default!;
+    [Dependency] private BloodstreamSystem _bloodstream = default!;
     [Dependency] private SharedRMCEmoteSystem _emote = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
     [Dependency] private IPrototypeManager _proto = default!;
@@ -44,7 +44,7 @@ public sealed partial class LungsSystem : SharedLungsSystem
     protected override void ApplyBloodCough(EntityUid body, EntityUid lung, FixedPoint2 bloodLoss)
     {
         if (bloodLoss > FixedPoint2.Zero && TryComp<BloodstreamComponent>(body, out var bloodstream))
-            _bloodstream.TryModifyBloodLevel((body, bloodstream), -bloodLoss);
+            _bloodstream.TryBleedOut((body, bloodstream), bloodLoss);
 
         _emote.TryEmoteWithChat(body, Cough, forceEmote: true, cooldown: TimeSpan.Zero);
         _popup.PopupEntity(

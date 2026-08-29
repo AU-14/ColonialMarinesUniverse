@@ -1,13 +1,15 @@
-using Content.Server.Body.Systems;
 using Content.Shared._CMU14.Medical.Core;
 using Content.Shared._RMC14.Humanoid;
 using Content.Shared._RMC14.Medical.HUD.Components;
 using Content.Shared._RMC14.Synth;
+using Content.Shared.Body;
 using Content.Shared.Body.Components;
-using Content.Shared.Body.Organ;
 using Content.Shared.Body.Part;
 using Content.Shared.Body.Systems;
+using Content.Shared.Chemistry.Components;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Humanoid;
 
 namespace Content.Server._RMC14.Synth;
@@ -27,13 +29,14 @@ public sealed partial class SynthSystem : SharedSynthSystem
         RemComp<Content.Shared.Forensics.Components.FingerprintComponent>(ent.Owner);
 
         if (TryComp<DamageableComponent>(ent.Owner, out var damageable))
-            _damageable.SetDamageModifierSetId(ent.Owner, ent.Comp.NewDamageModifier, damageable);
+            _damageable.SetDamageModifierSetId((ent.Owner, damageable), ent.Comp.NewDamageModifier);
 
         if (TryComp<BloodstreamComponent>(ent.Owner, out var bloodstream)) // These TryComps are so tests don't fail
         {
             // This makes it so the synth doesn't take bloodloss damage.
             _bloodstream.SetBloodLossThreshold((ent, bloodstream), 0f);
-            _bloodstream.ChangeBloodReagent((ent, bloodstream), ent.Comp.NewBloodReagent);
+            var reference = new Solution([new(ent.Comp.NewBloodReagent, _bloodstream.GetReferenceVolume((ent, bloodstream)))]);
+            _bloodstream.ChangeBloodReagents((ent, bloodstream), reference);
         }
 
         var repOverrideComp = EnsureComp<RMCHumanoidRepresentationOverrideComponent>(ent);

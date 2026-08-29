@@ -6,8 +6,10 @@
   components:
   - type: Action
     itemIconStyle: NoItem
-    icon:
-      sprite: _CMU14/Actions/GOVFOR/commander_silence.rsi
+  - type: Sprite
+    layers:
+    - sprite: _CMU14/Actions/GOVFOR/commander_silence.rsi
       state: silence
+      map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
     event: !type:AU14SilenceActionEvent

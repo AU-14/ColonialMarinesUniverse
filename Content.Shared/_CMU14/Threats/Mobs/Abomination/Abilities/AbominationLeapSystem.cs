@@ -2,6 +2,7 @@ using System.Linq;
 using System.Numerics;
 using Content.Shared._RMC14.Damage.ObstacleSlamming;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Physics;

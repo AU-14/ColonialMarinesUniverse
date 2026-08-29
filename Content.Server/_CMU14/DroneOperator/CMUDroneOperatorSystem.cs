@@ -1,6 +1,7 @@
 using System.Numerics;
 using Content.Server.Administration;
 using Content.Server.Chat.Systems;
+using Content.Server.Humanoid;
 using Content.Server.Mind;
 using Content.Server.NPC;
 using Content.Server.NPC.HTN;
@@ -19,11 +20,13 @@ using Content.Shared._RMC14.Synth;
 using Content.Shared.ActionBlocker;
 using Content.Shared.Access.Components;
 using Content.Shared.Actions;
+using Content.Shared.Chat;
 using Content.Shared.CombatMode;
 using Content.Shared.Coordinates;
 using Content.Shared.Dataset;
 using Content.Shared.DoAfter;
 using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Hands;
 using Content.Shared.Hands.EntitySystems;
 using Content.Shared.Humanoid;
@@ -40,6 +43,7 @@ using Content.Shared.Movement.Pulling.Events;
 using Content.Shared.NPC;
 using Content.Shared.Popups;
 using Content.Shared.Random.Helpers;
+using Content.Shared.Radio;
 using Content.Shared.Radio.Components;
 using Content.Shared.SSDIndicator;
 using Content.Shared.StatusEffectNew;
@@ -72,6 +76,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     [Dependency] private SharedContainerSystem _containers = default!;
     [Dependency] private SharedDoAfterSystem _doAfter = default!;
     [Dependency] private SharedHandsSystem _hands = default!;
+    [Dependency] private HumanoidOrganAppearanceSystem _humanoidAppearance = default!;
     [Dependency] private HTNSystem _htn = default!;
     [Dependency] private MetaDataSystem _metaData = default!;
     [Dependency] private MindSystem _mind = default!;
@@ -85,7 +90,7 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private RadioSystem _radio = default!;
     [Dependency] private SkillsSystem _skills = default!;
-    [Dependency] private SharedStatusEffectsSystem _statusEffects = default!;
+    [Dependency] private StatusEffectsSystem _statusEffects = default!;
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private SharedToolSystem _tool = default!;
     [Dependency] private SharedTransformSystem _transform = default!;
@@ -1869,15 +1874,15 @@ public sealed partial class CMUDroneOperatorSystem : EntitySystem
     private void SetDroneDormantEyeColor(Entity<CMUDroneAndroidComponent> drone, bool dormant)
     {
         if (TerminatingOrDeleted(drone.Owner) ||
-            !TryComp<HumanoidAppearanceComponent>(drone.Owner, out var humanoid))
+            !_humanoidAppearance.TryGetColors(drone.Owner, out _, out var eyeColor))
         {
             return;
         }
 
-        humanoid.EyeColor = dormant
+        var updatedEyeColor = dormant
             ? drone.Comp.DormantEyeColor
-            : GetDroneActiveEyeColor(drone.Owner, humanoid.EyeColor);
-        Dirty(drone.Owner, humanoid);
+            : GetDroneActiveEyeColor(drone.Owner, eyeColor);
+        _humanoidAppearance.TrySetEyeColor(drone.Owner, updatedEyeColor);
     }
 
     private Color GetDroneActiveEyeColor(EntityUid drone, Color fallback)

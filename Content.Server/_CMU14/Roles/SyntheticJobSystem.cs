@@ -23,18 +23,24 @@ public sealed class SyntheticJobSystem : EntitySystem
     public override void Initialize()
     {
         base.Initialize();
-        SubscribeLocalEvent<IsJobAllowedEvent>(OnIsJobAllowed);
+        SubscribeLocalEvent<IsRoleAllowedEvent>(OnIsRoleAllowed);
     }
 
-    private void OnIsJobAllowed(ref IsJobAllowedEvent ev)
+    private void OnIsRoleAllowed(ref IsRoleAllowedEvent ev)
     {
-        if (ev.Cancelled)
+        if (ev.Cancelled || ev.Jobs == null)
             return;
 
-        if (!_prototypes.TryIndex(ev.JobId, out JobPrototype? job) || !job.IsSynthetic)
-            return;
+        foreach (var jobId in ev.Jobs)
+        {
+            if (!_prototypes.TryIndex(jobId, out JobPrototype? job) || !job.IsSynthetic)
+                continue;
 
-        if (!_jobWhitelist.IsAllowed(ev.Player, CMUSyntheticRoles.SyntheticWhitelistJob))
-            ev.Cancelled = true;
+            if (!_jobWhitelist.IsAllowed(ev.Player, CMUSyntheticRoles.SyntheticWhitelistJob))
+            {
+                ev.Cancelled = true;
+                return;
+            }
+        }
     }
 }

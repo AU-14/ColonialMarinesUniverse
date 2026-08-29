@@ -166,7 +166,12 @@ public sealed class ANPRCNetLogLeakTest
 
                 const string spoken = "Убей его";
 
-                var traffic = new ANPRCDirectTrafficReceivedEvent(reader, "GIBBS", 1469, spoken, Foreign);
+                var traffic = new ANPRCDirectTrafficReceivedEvent(
+                    reader,
+                    "GIBBS",
+                    RadioFrequency.FromKilohertz(146_900),
+                    spoken,
+                    Foreign);
                 entities.EventBus.RaiseLocalEvent(station, ref traffic);
 
                 // the set keeps the sounds it caught, whoever ends up reading them
@@ -184,7 +189,12 @@ public sealed class ANPRCNetLogLeakTest
                 Assert.That(forNobody.Single().Message, Is.Not.EqualTo(spoken));
 
                 // a language the reader does have still reads straight
-                var plain = new ANPRCDirectTrafficReceivedEvent(reader, "GIBBS", 1469, "kill him", Common);
+                var plain = new ANPRCDirectTrafficReceivedEvent(
+                    reader,
+                    "GIBBS",
+                    RadioFrequency.FromKilohertz(146_900),
+                    "kill him",
+                    Common);
                 entities.EventBus.RaiseLocalEvent(station, ref plain);
 
                 var rendered = radios.BuildNetLog((station, radio), new[] { reader });

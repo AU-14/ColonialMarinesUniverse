@@ -16,9 +16,8 @@
       map: ["enum.OpenableVisuals.Layer"]
   - type: Item
     size: Small
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         maxVol: 50
   - type: PhysicalComposition
     materialComposition:
@@ -41,9 +40,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/cola.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/cola.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Cola
           Quantity: 30
@@ -59,9 +57,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/mountain_wind.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/mountain_wind.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: SpaceMountainWind
           Quantity: 30
@@ -77,9 +74,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/thirteen_loko.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/thirteen_loko.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: FourteenLoko
           Quantity: 30
@@ -97,9 +93,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/dr_gibb.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/dr_gibb.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: DrGibb
           Quantity: 30
@@ -115,9 +110,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/starkist.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/starkist.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Starkist
           Quantity: 30
@@ -133,9 +127,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/space_up.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/space_up.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: SpaceUp
           Quantity: 30
@@ -151,9 +144,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/lemon_lime.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/lemon_lime.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: LemonLime
           Quantity: 30
@@ -169,9 +161,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/ice_tea.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/ice_tea.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: IcedTea
           Quantity: 30
@@ -187,9 +178,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/purple.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/purple.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: GrapeSoda
           Quantity: 30
@@ -205,9 +195,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/tonic.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/tonic.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: TonicWater
           Quantity: 30
@@ -223,9 +212,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/sodawater.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/sodawater.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: SodaWater
           Quantity: 30
@@ -265,9 +253,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/fruit_beer.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/fruit_beer.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaFruitBeer
           Quantity: 30
@@ -283,9 +270,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/beer.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/beer.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Beer
           Quantity: 30
@@ -301,9 +287,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/ale.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/ale.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Ale
           Quantity: 30
@@ -338,10 +323,11 @@
       visible: false
   - type: Item
     size: Normal
-  - type: StorageFill
-    contents:
-    - id: RMCDrinkCanSequoiaBeer
-      amount: 6
+  - type: EntityTableContainerFill
+    containers:
+      storagebase:
+        id: RMCDrinkCanSequoiaBeer
+        amount: 6
   - type: Icon
     sprite: _RMC14/Objects/Consumable/Drinks/beer_pack.rsi
     state: 6-pack-6
@@ -388,9 +374,8 @@
   - type: Tag
     tags:
      - SequoiaBeer
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Beer
           Quantity: 50
@@ -418,9 +403,8 @@
   name: suoto classic
   description: The can boldly proclaims it to be tangerine flavored. You can't help but think that's a lie. Canned in Havana.
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaClassic
           Quantity: 50
@@ -436,9 +420,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/cherry.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/cherry.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaCherry
           Quantity: 50
@@ -454,9 +437,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/lime.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/lime.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaLime
           Quantity: 50
@@ -472,9 +454,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/grape.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/grape.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaGrape
           Quantity: 50
@@ -490,9 +471,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/blueraspberry.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/blueraspberry.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaBlue
           Quantity: 50
@@ -508,9 +488,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/peach.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/peach.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaPeach
           Quantity: 50
@@ -526,9 +505,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/cranberry.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/cranberry.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaCranberry
           Quantity: 50
@@ -544,9 +522,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/vanilla.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/vanilla.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaVanilla
           Quantity: 50
@@ -562,9 +539,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/pineapple.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/pineapple.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaPineapple
           Quantity: 50
@@ -581,9 +557,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/classic.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/classic.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: Water
           Quantity: 25
@@ -595,9 +570,8 @@
   name: diet suoto classic
   description: Now with 0% fruit juice! Canned in Havana
   components:
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaClassic
           Quantity: 25
@@ -613,9 +587,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/cherry.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/cherry.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaCherry
           Quantity: 25
@@ -631,9 +604,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/lime.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/lime.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaLime
           Quantity: 25
@@ -649,9 +621,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/grape.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/grape.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaGrape
           Quantity: 25
@@ -667,9 +638,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/blueraspberry.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/blueraspberry.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaBlue
           Quantity: 25
@@ -685,9 +655,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/peach.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/peach.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaPeach
           Quantity: 25
@@ -703,9 +672,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/cranberry.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/cranberry.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaCranberry
           Quantity: 25
@@ -723,9 +691,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/vanilla.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/vanilla.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaVanilla
           Quantity: 25
@@ -743,9 +710,8 @@
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/pineapple.rsi
   - type: Item
     sprite: _RMC14/Objects/Consumable/Drinks/Bobda/Diet/pineapple.rsi
-  - type: SolutionContainerManager
-    solutions:
-      drink:
+  - type: Solution
+    solution:
         reagents:
         - ReagentId: CMSodaBobdaPineapple
           Quantity: 25

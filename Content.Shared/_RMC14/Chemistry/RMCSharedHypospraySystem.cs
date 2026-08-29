@@ -10,7 +10,7 @@ using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.Examine;
 using Content.Shared.FixedPoint;
-using Content.Shared.Forensics;
+using Content.Shared.Forensics.Systems;
 using Content.Shared.IdentityManagement;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
@@ -29,6 +29,7 @@ namespace Content.Shared._RMC14.Chemistry;
 public abstract partial class RMCSharedHypospraySystem : EntitySystem
 {
     [Dependency] protected ISharedAdminLogManager _adminLog = default!;
+    [Dependency] protected ForensicsSystem _forensics = default!;
     [Dependency] protected SharedAppearanceSystem _appearance = default!;
     [Dependency] protected SharedAudioSystem _audio = default!;
     [Dependency] protected SharedContainerSystem _container = default!;
@@ -165,7 +166,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         if (!TryComp<ItemSlotsComponent>(ent, out var slots))
             return;
 
-        if (_slots.CanInsert(ent, args.Target.Value, args.User, slots.Slots[ent.Comp.SlotId], true))
+        if (_slots.CanInsert(ent.Owner, slots.Slots[ent.Comp.SlotId], args.Target.Value, args.User, true))
         {
             args.Handled = true;
             if (!_skills.HasSkills(args.User, ent.Comp.TacticalSkills))
@@ -242,7 +243,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         if (!TryComp<ItemSlotsComponent>(ent, out var slots))
             return;
         // Dont transfer when vial is used
-        if (_slots.CanInsert(ent, args.Used, args.User, slots.Slots[ent.Comp.SlotId], true))
+        if (_slots.CanInsert(ent.Owner, slots.Slots[ent.Comp.SlotId], args.Used, args.User, true))
             return;
 
         if (container.ContainedEntities.Count == 0)
@@ -354,8 +355,7 @@ public abstract partial class RMCSharedHypospraySystem : EntitySystem
         _reactive.DoEntityReaction(target, removedSolution, ReactionMethod.Injection);
         _solution.TryAddSolution(targetSoln.Value, removedSolution);
 
-        var ev = new TransferDnaEvent { Donor = target, Recipient = ent };
-        RaiseLocalEvent(target, ref ev);
+        _forensics.TransferDna(ent, target);
 
         // same LogType as syringes...
         _adminLog.Add(LogType.ForceFeed, $"{ToPrettyString(args.User):user} injected {ToPrettyString(target):target} with a solution {SharedSolutionContainerSystem.ToPrettyString(removedSolution):removedSolution} using a {ToPrettyString(ent):using}");

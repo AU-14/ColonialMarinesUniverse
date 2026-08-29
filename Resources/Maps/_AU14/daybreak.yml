@@ -5,7 +5,7 @@ meta:
   forkId: ""
   forkVersion: ""
   time: 03/29/2026 11:31:49
-  entityCount: 2917
+  entityCount: 2918
 maps:
 - 1
 grids:
@@ -24814,4 +24814,11 @@ entities:
       parent: 1
     - type: WarpPoint
       location: USCSS Daybreak Hangar
+- proto: SpawnPointLatejoin
+  entities:
+  - uid: 2918
+    components:
+    - type: Transform
+      pos: -41.5,-9.5
+      parent: 1
 ...

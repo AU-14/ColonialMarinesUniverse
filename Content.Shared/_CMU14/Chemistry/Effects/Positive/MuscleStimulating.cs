@@ -3,6 +3,7 @@ using Content.Shared._CMU14.Chemistry.Effects;
 using Content.Shared._CMU14.Medical.Anatomy.Organs.Heart;
 using Content.Shared._RMC14.Chemistry.Effects;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.EntityEffects;
 using Content.Shared.FixedPoint;
@@ -25,24 +26,25 @@ public sealed partial class Musclestimulating : RMCChemicalEffect
            $"Critical overdoses cause [color=red]{PotencyPerSecond * 4}[/color] additional heart damage and " +
            $"[color=red]{PotencyPerSecond}[/color] brute limb damage, risking cardiac arrest.";
 
-    protected override void Tick(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void Tick(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<ChemicalPropertyStatusSystem>()
-            .ApplyMuscleStimulation(args.TargetEntity, ActualPotency, args.Reagent!.ID);
-        args.EntityManager.System<HungerSystem>().ModifyHunger(args.TargetEntity, -(float)potency);
+        system.ChemicalPropertyStatus
+            .ApplyMuscleStimulation(args.TargetEntity, args.ActualPotency, args.Reagent.ID);
+        if (system.TryGetSatiation(args.TargetEntity, out var satiation))
+            system.Satiation.ModifyValue((args.TargetEntity, satiation), SatiationSystem.Hunger, -(float)potency);
     }
 
-    protected override void TickOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<CMUChemicalMedicalSystem>()
+        system.ChemicalMedical
             .DamageOrgan<HeartComponent>(args.TargetEntity, potency, BluntType);
-        args.EntityManager.System<SharedStatusEffectsSystem>()
+        system.StatusEffects
             .TrySetStatusEffectDuration(args.TargetEntity, Arrhythmia, TimeSpan.FromSeconds(3));
     }
 
-    protected override void TickCriticalOverdose(DamageableSystem damageable, FixedPoint2 potency, EntityEffectReagentArgs args)
+    protected override void TickCriticalOverdose(RMCChemicalEffectSystem system, DamageableSystem damageable, FixedPoint2 potency, RMCReagentEffectArgs args)
     {
-        args.EntityManager.System<CMUChemicalMedicalSystem>()
+        system.ChemicalMedical
             .DamageOrgan<HeartComponent>(args.TargetEntity, potency * 4f, BluntType);
         var damage = new DamageSpecifier();
         damage.DamageDict[BluntType] = potency;

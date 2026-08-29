@@ -112,7 +112,7 @@ public sealed partial class CraftIntoPipeBombSystem : EntitySystem
             }
             if (countStack >= 5 && _repair.UseFuel(used.Value, args.User, 5))
             {
-                _stack.Use(ent, 5, stack);
+                _stack.TryUse((ent, stack), 5);
             }
             else
             {
@@ -131,7 +131,7 @@ public sealed partial class CraftIntoPipeBombSystem : EntitySystem
             if (HasComp<RMCCableCoilComponent>(used))
                 if (countStack >= 5)
                 {
-                    _stack.Use(used.Value, 5, stacks);
+                    _stack.TryUse((used.Value, stacks), 5);
                 }
                 else
                 {

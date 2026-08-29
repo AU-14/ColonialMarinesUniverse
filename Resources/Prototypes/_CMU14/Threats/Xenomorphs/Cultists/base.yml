@@ -1,5 +1,5 @@
 - type: entity
-  parent: RMCBaseMobSpeciesOrganic
+  parent: [AppearanceCMUHuman, RMCBaseMobSpeciesOrganic]
   id: AU14BaseMobSpeciesOrganicCultist
   abstract: true
   suffix: AU14, Cultist

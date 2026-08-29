@@ -3,12 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Content.Server.Destructible;
 using Content.Server.Destructible.Thresholds;
-using Content.Server.Destructible.Thresholds.Triggers;
 using Content.Server.NPC.HTN;
 using Content.Shared._RMC14.Areas;
 using Content.Shared._RMC14.Sentry;
 using Content.Shared._RMC14.Sentry.Laptop;
 using Content.Shared.Containers.ItemSlots;
+using Content.Shared.Destructible.Thresholds.Triggers;
 using Content.Shared.NPC.Prototypes;
 using Content.Shared.NPC.Systems;
 using Content.Shared.UserInterface;
@@ -352,7 +352,7 @@ public sealed partial class SentryLaptopSystem : SharedSentryLaptopSystem
         foreach (var threshold in destruct.Thresholds)
         {
             if (threshold.Trigger is DamageTrigger damageTrigger)
-                max = Math.Max(max, damageTrigger.Damage);
+                max = Math.Max(max, damageTrigger.Damage.Float());
         }
 
         return max > 0f ? max : base.GetSentryMaxHealth(sentry);

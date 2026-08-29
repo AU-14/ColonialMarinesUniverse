@@ -17,13 +17,15 @@ using Content.Shared.Coordinates;
 using Content.Shared.Database;
 using Content.Shared.DoAfter;
 using Content.Shared.DragDrop;
-using Content.Shared.Ghost;
+using Content.Shared.Ghost.Components;
+using Content.Shared.Ghost.Systems;
 using Content.Shared.Hands.Components;
 using Content.Shared.Interaction;
 using Content.Shared.Interaction.Events;
 using Content.Shared.Inventory.Events;
 using Content.Shared.Item;
 using Content.Shared.Maps;
+using Content.Shared.Mind;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Movement.Events;
 using Content.Shared.Movement.Pulling.Components;
@@ -80,7 +82,7 @@ public sealed partial class XenoNestSystem : EntitySystem
         _xenoNestSurfaceQuery = GetEntityQuery<XenoNestSurfaceComponent>();
         _xenoWeedableQuery = GetEntityQuery<XenoWeedableComponent>();
 
-        SubscribeLocalEvent<GhostAttemptHandleEvent>(OnNestedGhostAttemptHandle);
+        SubscribeLocalEvent<XenoNestedComponent, GhostAttemptEvent>(OnNestedGhostAttempt);
 
         SubscribeLocalEvent<XenoComponent, GetUsedEntityEvent>(OnXenoGetUsedEntity);
 
@@ -483,19 +485,14 @@ public sealed partial class XenoNestSystem : EntitySystem
             args.Multiply(ent.Comp.IncubationMultiplier);
     }
 
-    private void OnNestedGhostAttemptHandle(GhostAttemptHandleEvent args)
+    private void OnNestedGhostAttempt(Entity<XenoNestedComponent> ent, ref GhostAttemptEvent args)
     {
-        if (args.Mind.CurrentEntity is not { } ent ||
-            !TryComp(ent, out XenoNestedComponent? nested))
-        {
-            return;
-        }
-
-        if (args.Mind.UserId is not { } userId)
+        if (!TryComp(args.Mind, out MindComponent? mind) ||
+            mind.UserId is not { } userId)
             return;
 
-        nested.GhostedId = userId;
-        Dirty(ent, nested);
+        ent.Comp.GhostedId = userId;
+        Dirty(ent);
     }
 
     public bool TryStartNesting(EntityUid user, Entity<XenoNestSurfaceComponent> surface, EntityUid victim, out DoAfterId? doAfterId, bool allDirs = false)

@@ -116,12 +116,13 @@
         enum.ConstructionVisuals.Layer:
           Primed: { state: grenade_20mm_gas_active }
           Unprimed: { state: grenade_20mm_gas }
-  - type: OnUseTimerTrigger
+  - type: TimerTrigger
     delay: 2
   - type: SpawnOnTrigger
     proto: RMCSmokeNeurotoxin # Placeholder
-  - type: SoundOnTrigger
+  - type: EmitSoundOnTrigger
     sound: /Audio/Effects/smoke.ogg
+    positional: true
   - type: DeleteOnTrigger
   - type: Tag
     tags:

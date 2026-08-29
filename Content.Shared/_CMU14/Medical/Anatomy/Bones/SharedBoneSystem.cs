@@ -31,7 +31,7 @@ public abstract partial class SharedBoneSystem : EntitySystem
     [Dependency] protected IGameTiming Timing = default!;
     [Dependency] protected IPrototypeManager Proto = default!;
     [Dependency] protected SharedFractureSystem Fracture = default!;
-    [Dependency] protected SharedStatusEffectsSystem Status = default!;
+    [Dependency] protected StatusEffectsSystem Status = default!;
     [Dependency] protected RMCUnrevivableSystem Unrevivable = default!;
     [Dependency] private CMUMedicalBodyIndexSystem _medicalIndex = default!;
 

@@ -92,8 +92,9 @@
     sound:
       path: /Audio/_CMU14/Blackfoot/engineidle.ogg
   - type: Damageable
-    damageContainer: StructuralMarine
     damageModifierSet: VehicleFrameHumvee
+  - type: Injurable
+    damageContainer: StructuralMarine
   - type: DoAfter
   - type: UserInterface
     interfaces:

@@ -19,7 +19,7 @@ public sealed partial class DungeonJob
         NoiseDunGen dungen,
         HashSet<Vector2i> reservedTiles,
         int seed,
-        Random random)
+        IRobustRandom random)
     {
         var tiles = new List<(Vector2i, Tile)>();
         var matrix = Matrix3Helpers.CreateTranslation(position);
@@ -36,7 +36,7 @@ public sealed partial class DungeonJob
         var frontier = new Queue<Vector2i>();
         var rooms = new List<DungeonRoom>();
         var tileCount = 0;
-        var tileCap = NextGaussian(random, dungen.TileCap, dungen.CapStd);
+        var tileCap = random.NextGaussian(dungen.TileCap, dungen.CapStd);
         var visited = new HashSet<Vector2i>();
 
         while (iterations > 0 && tileCount < tileCap)

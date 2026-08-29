@@ -11,9 +11,9 @@ using Content.Shared.Explosion.EntitySystems;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared.Coordinates;
 using Content.Shared.Body.Part;
-using Content.Shared.Chemistry.EntitySystems;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.DoAfter;
 using Content.Shared.Interaction;
@@ -21,6 +21,7 @@ using Content.Shared.Item;
 using Content.Shared.Mobs.Systems;
 using Content.Shared.Popups;
 using Content.Shared.Storage;
+using Content.Shared.Storage.Components;
 using Content.Shared.Storage.EntitySystems;
 using Content.Shared.Weapons.Ranged.Components;
 using Content.Shared.Physics;
@@ -49,7 +50,6 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
     [Dependency] private MobStateSystem _mobState = default!;
     [Dependency] private INetManager _net = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private SharedSolutionContainerSystem _solutionContainer = default!;
     [Dependency] private XenoAcidHoleSystem _acidHole = default!;
     [Dependency] protected IPrototypeManager PrototypeManager = default!;
     [Dependency] private IGameTiming _timing = default!;
@@ -278,25 +278,20 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
         if (!HasComp<ItemComponent>(ent.Owner))
             return;
 
-        var vaporSolution = (args.Solution.Owner, (SolutionContainerManagerComponent?) args.Solution.Comp);
-        foreach (var (_, solution) in _solutionContainer.EnumerateSolutions(vaporSolution))
+        if (!args.Solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
+            return;
+
+        if (HasComp<GunComponent>(ent.Owner) &&
+            (!TryComp(ent.Owner, out GunSecondWindComponent? secondWind) || !secondWind.HasSecondWind))
         {
-            if (!solution.Comp.Solution.ContainsReagent(AcidRemovedBy, null))
-                continue;
-
-            if (HasComp<GunComponent>(ent.Owner) &&
-                (!TryComp(ent.Owner, out GunSecondWindComponent? secondWind) || !secondWind.HasSecondWind))
-            {
-                _popup.PopupEntity(
-                    Loc.GetString("rmc-acid-gun-second-wind-spent", ("target", ent.Owner)),
-                    ent.Owner,
-                    PopupType.SmallCaution);
-                return;
-            }
-
-            RemoveAcid(ent.Owner);
-            break;
+            _popup.PopupEntity(
+                Loc.GetString("rmc-acid-gun-second-wind-spent", ("target", ent.Owner)),
+                ent.Owner,
+                PopupType.SmallCaution);
+            return;
         }
+
+        RemoveAcid(ent.Owner);
     }
 
     private void OnPickupAttempt(PickupAttemptEvent args)
@@ -457,7 +452,8 @@ public abstract partial class SharedXenoAcidSystem : EntitySystem
                 continue;
             }
 
-            _entityStorage.EmptyContents(uid);
+            if (TryComp(uid, out EntityStorageComponent? entityStorage))
+                _entityStorage.EmptyContents(uid, entityStorage);
 
             if (TryComp(uid, out StorageComponent? storage))
             {

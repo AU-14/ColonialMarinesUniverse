@@ -6,6 +6,8 @@ using Content.Shared._RMC14.Stun;
 using Content.Shared._RMC14.Vehicle;
 using Content.Shared._RMC14.Xenonids.Hive;
 using Content.Shared.Damage;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
 using Content.Shared.Damage.Prototypes;
 using Content.Shared.Destructible;
 using Content.Shared.FixedPoint;

@@ -106,7 +106,7 @@ public sealed partial class CLFTattooSystem : EntitySystem
         }
 
         // Must be a humanoid
-        if (!HasComp<HumanoidAppearanceComponent>(target))
+        if (!HasComp<HumanoidProfileComponent>(target))
             return;
 
         // Must be alive

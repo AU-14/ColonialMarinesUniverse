@@ -179,10 +179,10 @@ public sealed partial class CMUMedicalFieldMixingSystem : EntitySystem
         if (productId == default)
             return false;
 
-        if (!_stacks.Use(ingredientUid, cost, ingredientStack))
+        if (!_stacks.TryUse((ingredientUid, ingredientStack), cost))
             return false;
 
-        if (!_stacks.Use(baseUid, 1, baseStack))
+        if (!_stacks.TryUse((baseUid, baseStack), 1))
             return false;
 
         var spawned = Spawn(productId, Transform(user).Coordinates);

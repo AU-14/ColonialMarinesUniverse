@@ -42,8 +42,9 @@
     allowDoAfterMovement: true
     canDefibCrit: false
     zapHeal:
-      groups:
-        Airloss: -150
+      types:
+        Asphyxiation: -75
+        Bloodloss: -75
     zapSound:
       path: /Audio/_AU14/Medical/defib_release.ogg
       params:
@@ -83,7 +84,7 @@
   components:
   - type: PowerCellDraw
     enabled: false
-    useRate: 50
+    useCharge: 50
   - type: RMCPowerUsageDisplay
 
 - type: entity

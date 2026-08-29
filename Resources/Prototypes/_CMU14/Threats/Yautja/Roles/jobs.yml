@@ -431,8 +431,9 @@
     baseWalkSpeed: 4.4
     baseSprintSpeed: 8.4
   - type: Damageable
-    damageContainer: Biological
     damageModifierSet: CMUYautja
+  - type: Injurable
+    damageContainer: Biological
     healthBarThreshold: 5
   - type: MeleeWeapon
     soundHit:
@@ -458,12 +459,6 @@
     - CMUYautjaPain
     - CMUYautjaDeathCry
     - CMUYautjaDeathLaugh
-  - type: Vocal
-    sounds:
-      Male: CMUMaleYautja
-      Female: CMUFemaleYautja
-      Unsexed: CMUMaleYautja
-
 - type: playTimeTracker
   id: CMUYautjaHunter
 

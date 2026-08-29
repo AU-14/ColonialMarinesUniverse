@@ -70,7 +70,7 @@ public sealed partial class RMCClothingSystem : EntitySystem
     private void OnNoClothingSlowUpdate<T>(Entity<NoClothingSlowdownComponent> ent, ref T args) where T : EntityEventArgs
     {
         ent.Comp.Active = !_inventory.TryGetSlotEntity(ent, ent.Comp.Slot, out _);
-        _movementSpeed.RefreshMovementSpeedModifiers(ent);
+        _movementSpeed.RefreshMovementSpeedModifiers((ent.Owner, null));
     }
 
     private void OnNoClothingSlowRefresh(Entity<NoClothingSlowdownComponent> ent, ref RefreshMovementSpeedModifiersEvent args)

@@ -17,7 +17,7 @@
   weight: 100
   requireAdminNotify: true
   hidden: false
-  supervisors: nobody
+  supervisors: cm-job-supervisors-nobody
   jobPreviewEntity: RMCPlayerXenoQueenPreview
   accessGroups:
   - CMAccessXeno

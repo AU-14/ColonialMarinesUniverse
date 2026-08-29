@@ -24,6 +24,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -228,6 +229,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -518,6 +520,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -598,6 +601,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -699,6 +703,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -758,6 +763,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -817,6 +823,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -876,6 +883,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -998,6 +1006,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -1057,6 +1066,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -1137,6 +1147,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -1217,6 +1228,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:
@@ -1339,6 +1351,7 @@
   - type: Clickable
   - type: DeleteOnExplosion
   - type: Damageable
+  - type: Injurable
     damageContainer: Inorganic
   - type: Destructible
     thresholds:

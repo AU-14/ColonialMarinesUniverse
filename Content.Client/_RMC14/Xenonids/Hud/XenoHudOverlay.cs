@@ -15,7 +15,9 @@ using Content.Shared._RMC14.Xenonids.Projectile.Spit.Stacks;
 using Content.Shared._RMC14.Xenonids.Rank;
 using Content.Shared._RMC14.Xenonids.Sentinel;
 using Content.Shared.Damage;
-using Content.Shared.Ghost;
+using Content.Shared.Damage.Components;
+using Content.Shared.Damage.Systems;
+using Content.Shared.Ghost.Components;
 using Content.Shared.Mobs;
 using Content.Shared.Mobs.Components;
 using Content.Shared.Mobs.Systems;
@@ -87,6 +89,7 @@ public sealed partial class XenoHudOverlay : Overlay
 
     private readonly ContainerSystem _container;
     private readonly CMHealthIconsSystem _healthIcons;
+    private readonly DamageableSystem _damageable;
     private readonly MobStateSystem _mobState;
     private readonly MobThresholdSystem _mobThresholds;
     private readonly SpriteSystem _sprite;
@@ -117,6 +120,7 @@ public sealed partial class XenoHudOverlay : Overlay
 
         _container = _entity.System<ContainerSystem>();
         _healthIcons = _entity.System<CMHealthIconsSystem>();
+        _damageable = _entity.System<DamageableSystem>();
         _mobState = _entity.System<MobStateSystem>();
         _mobThresholds = _entity.System<MobThresholdSystem>();
         _sprite = _entity.System<SpriteSystem>();
@@ -658,7 +662,7 @@ public sealed partial class XenoHudOverlay : Overlay
         if (!_damageableQuery.TryComp(uid, out var damageable))
             return;
 
-        var damage = damageable.TotalDamage;
+        var damage = _damageable.GetTotalDamage((uid, damageable));
 
         FixedPoint2? critThresholdNullable = null;
         FixedPoint2? deadThresholdNullable = null;
@@ -672,7 +676,7 @@ public sealed partial class XenoHudOverlay : Overlay
         if (_mobState.IsCritical(uid, mobState) ||
             _mobState.IsAlive(uid) &&
             critThresholdNullable != null &&
-            damageable.TotalDamage > critThresholdNullable)
+            damage > critThresholdNullable)
         {
             if (critThresholdNullable is not { } critThreshold || deadThresholdNullable is not { } deadThreshold)
                 return;

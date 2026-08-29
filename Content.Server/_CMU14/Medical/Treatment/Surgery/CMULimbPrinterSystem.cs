@@ -256,7 +256,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
                 if (!TryGetRoboticMetalStack(uid, comp, out var material, out var stack, out reason))
                     return false;
 
-                if (!_stack.Use(material, GetRoboticMetalCost(comp), stack))
+                if (!_stack.TryUse((material, stack), GetRoboticMetalCost(comp)))
                 {
                     reason = Loc.GetString("cmu-limb-printer-missing-metal");
                     return false;
@@ -619,7 +619,7 @@ public sealed partial class CMULimbPrinterSystem : EntitySystem
         }
 
         if (!TryComp<StackComponent>(materialUid, out var foundStack) ||
-            !foundStack.StackTypeId.Equals(comp.RoboticMetalStack.ToString(), StringComparison.Ordinal))
+            foundStack.StackTypeId != comp.RoboticMetalStack)
         {
             reason = Loc.GetString("cmu-limb-printer-wrong-metal");
             return false;

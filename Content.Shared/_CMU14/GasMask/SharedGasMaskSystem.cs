@@ -71,7 +71,7 @@ public sealed partial class SharedGasMaskSystem : EntitySystem
     private void OnMaskExamined(Entity<MycotoxinProtectionComponent> ent, ref ExaminedEvent args)
     {
         if (!TryComp<ItemSlotsComponent>(ent.Owner, out var slots) ||
-            !_itemSlots.TryGetSlot(ent.Owner, "filter", out var slot, slots) ||
+            !_itemSlots.TryGetSlot((ent.Owner, slots), "filter", out var slot) ||
             slot.ContainerSlot?.ContainedEntity is not { } filterEnt ||
             !TryComp(filterEnt, out GasMaskFilterComponent? filter))
         {
