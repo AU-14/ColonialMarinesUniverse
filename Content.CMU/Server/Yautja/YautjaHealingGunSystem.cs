@@ -142,7 +142,7 @@ public sealed partial class YautjaHealingGunSystem : EntitySystem
         if (gun.Comp.RepairsFractures && HasFractures(target.Owner))
             return true;
 
-        var damage = _damageable.GetAllDamage(target);
+        var damage = _damageable.GetAllDamage((target.Owner, (DamageableComponent?) target.Comp));
         foreach (var (type, amount) in gun.Comp.Damage.DamageDict)
         {
             if (amount < 0 &&

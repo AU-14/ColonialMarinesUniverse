@@ -772,7 +772,11 @@
     - sprite: CMU14/Actions/actions_pathogen.rsi
       state: plant_sac
       map: ["enum.ActionVisuals.Icon"]
-  - type: InstantAction
+  - type: TargetAction
+    range: 5
+    checkCanAccess: false
+    deselectOnMiss: false
+  - type: WorldTargetAction
     event: !type:CMUXenoSporeSacActionEvent
  
 - type: entity

@@ -131,14 +131,14 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
     private static FixedPoint2 GetProjectedDamageAfterHeal(DamageSpecifier damage, DamageSpecifier heal)
     {
         FixedPoint2 total = FixedPoint2.Zero;
-        foreach ((string type, FixedPoint2 current) in damage.DamageDict)
+        foreach (var (type, current) in damage.DamageDict)
         {
             FixedPoint2 next = current + heal.DamageDict.GetValueOrDefault(type);
             if (next > FixedPoint2.Zero)
                 total += next;
         }
 
-        foreach ((string type, FixedPoint2 change) in heal.DamageDict)
+        foreach (var (type, change) in heal.DamageDict)
         {
             if (change > FixedPoint2.Zero && !damage.DamageDict.ContainsKey(type))
                 total += change;
@@ -150,7 +150,7 @@ public sealed partial class SubvertedSynthRuleSystem : GameRuleSystem<SubvertedS
     private static void AddHealingToExistingDamage(DamageSpecifier damage, DamageSpecifier heal,
         FixedPoint2 amount)
     {
-        foreach ((string type, FixedPoint2 current) in damage.DamageDict)
+        foreach (var (type, current) in damage.DamageDict)
         {
             if (amount <= FixedPoint2.Zero)
                 return;
