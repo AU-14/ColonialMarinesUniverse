@@ -25,9 +25,9 @@
   <Import Project="..\RobustToolbox\MSBuild\Robust.Properties.targets" />
   <Import Project="..\RobustToolbox\MSBuild\XamlIL.targets" />
   <ItemGroup>
-    <Compile Include="..\Content.CMU\Client\**\*.cs" Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
-    <EmbeddedResource Include="..\Content.CMU\Client\**\*.xaml" Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
-    <AdditionalFiles Include="..\Content.CMU\Client\**\*.xaml" Link="CMU\%(RecursiveDir)%(Filename)%(Extension)" />
+    <Compile Include="..\Content.CMU\Client\**\*.cs" Link="CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <EmbeddedResource Include="..\Content.CMU\Client\**\*.xaml" Link="CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
+    <AdditionalFiles Include="..\Content.CMU\Client\**\*.xaml" Link="CMU14\%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Content.Analyzers\Content.Analyzers.csproj" Condition="'$(SkipRobustAnalyzer)' != 'true'" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
