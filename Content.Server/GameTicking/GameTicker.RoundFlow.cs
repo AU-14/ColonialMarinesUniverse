@@ -590,29 +590,12 @@ namespace Content.Server.GameTicking
             DisallowLateJoin = refresh.DisallowLateJoin;
         }
 
-        private TimeSpan _lastRoundEndHoldNotice; // CMU14
-
         public void EndRound(string text = "")
         {
             if (DummyTicker) return;
             if (RunLevel != GameRunLevel.InRound)
             {
                 _sawmill.Warning($"EndRound has been called while RunLevel is already {RunLevel}, ignoring re-run.");
-                return;
-            }
-
-            // CMU14: admin round-end hold
-            if (_cfg.GetCVar(CCVars.HoldRoundEnd))
-            {
-                if (_gameTiming.CurTime - _lastRoundEndHoldNotice > TimeSpan.FromMinutes(1))
-                {
-                    _lastRoundEndHoldNotice = _gameTiming.CurTime;
-                    _chatManager.SendAdminAnnouncement(
-                        Loc.GetString("cmu-round-end-held-announcement"));
-                }
-
-                _sawmill.Info($"EndRound swallowed by HoldRoundEnd; round continues under admin control. Suppressed end text: {text}");
-
                 return;
             }
 
@@ -1143,7 +1126,6 @@ namespace Content.Server.GameTicking
             PlayersJoinedRoundNormally = 0;
 
             _cfg.SetCVar(RMCCVars.RMCDelayRoundEnd, false);
-            _cfg.SetCVar(CCVars.HoldRoundEnd, false); // CMU14
             RunLevel = GameRunLevel.PreRoundLobby;
             RandomizeLobbyBackground();
             ResettingCleanup();

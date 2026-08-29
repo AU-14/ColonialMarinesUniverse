@@ -2,8 +2,6 @@ using Content.Server.Chat.Managers;
 using Content.Server.CMU14.Language;
 using Content.Server.CMU14.Round.Objectives;
 using Content.Server.Electrocution;
-using Content.Server.Ghost.Roles.Components;
-using Content.Server.Humanoid;
 using Content.Shared.CMU14.Yautja;
 using Content.Shared._RMC14.Actions;
 using Content.Shared._RMC14.Explosion;
@@ -30,7 +28,6 @@ using Content.Shared.NPC.Components;
 using Content.Shared.NPC.Systems;
 using Content.Shared.NameModifier.EntitySystems;
 using Content.Shared.Popups;
-using Content.Shared.Rejuvenate;
 using Content.Shared.Speech;
 using Content.Shared.UserInterface;
 using Robust.Server.Player;
@@ -48,7 +45,6 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     private const int MaxMessageLength = 160;
     private static readonly TimeSpan WarningEvery = TimeSpan.FromSeconds(2);
     private static readonly Color MessageColor = Color.FromHex("#b85440");
-    private static readonly HashSet<string> StrippedOnRaiseSlots = ["gloves", "mask", "eyes"];
 
     [Dependency] private ISharedAdminLogManager _adminLog = default!;
     [Dependency] private SharedAudioSystem _audio = default!;
@@ -64,10 +60,8 @@ public sealed partial class YautjaThrallSystem : EntitySystem
     [Dependency] private MobStateSystem _mob = default!;
     [Dependency] private MovementSpeedModifierSystem _movement = default!;
     [Dependency] private NameModifierSystem _nameModifier = default!;
-    [Dependency] private HumanoidOrganAppearanceSystem _humanoid = default!;
     [Dependency] private IPlayerManager _players = default!;
     [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private YautjaPowerSystem _power = default!;
     [Dependency] private SharedRMCExplosionSystem _rmcExplosion = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
     [Dependency] private SharedActionsSystem _actions = default!;
@@ -86,13 +80,9 @@ public sealed partial class YautjaThrallSystem : EntitySystem
         SubscribeLocalEvent<YautjaMarkComponent, YautjaMarkRemovedEvent>(OnMarkRemoved);
 
         SubscribeLocalEvent<YautjaThrallComponent, ComponentRemove>(OnThrallRemoved);
-        SubscribeLocalEvent<YautjaThrallComponent, TakeGhostRoleEvent>(OnThrallTakeGhostRole);
-        SubscribeLocalEvent<YautjaThrallComponent, IsEquippingTargetAttemptEvent>(OnThrallEquipAttempt);
-        SubscribeLocalEvent<MobStateChangedEvent>(OnMobStateChanged);
         SubscribeLocalEvent<YautjaHivebrokenXenoComponent, RefreshNameModifiersEvent>(OnHivebrokenRefreshName);
 
         SubscribeLocalEvent<YautjaBracerComponent, YautjaLinkThrallBracerActionEvent>(OnLinkThrallBracer);
-        SubscribeLocalEvent<YautjaBracerComponent, YautjaRaiseThrallActionEvent>(OnRaiseThrall);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaTransmitThrallMessageActionEvent>(OnMasterMessage);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaStunThrallActionEvent>(OnStunThrall);
         SubscribeLocalEvent<YautjaBracerComponent, YautjaSelfDestructThrallActionEvent>(OnSelfDestructThrall);
@@ -224,29 +214,6 @@ public sealed partial class YautjaThrallSystem : EntitySystem
 
         if (args.Kind == YautjaMarkKind.Thrall)
             ReleaseThrall(args.Target, thrall, args.Hunter);
-    }
-
-    private void OnMobStateChanged(MobStateChangedEvent args)
-    {
-        if (args.NewMobState != MobState.Dead)
-            return;
-
-        var master = args.Target;
-        var raised = new List<EntityUid>();
-        var query = EntityQueryEnumerator<YautjaThrallComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (comp.Master == master && comp.RaisedByBracer != null)
-                raised.Add(uid);
-        }
-
-        foreach (var uid in raised)
-        {
-            _mob.ChangeMobState(uid, MobState.Dead, origin: master);
-            RemCompDeferred<YautjaThrallComponent>(uid);
-            _adminLog.Add(LogType.Action, LogImpact.High,
-                $"{ToPrettyString(master):master} died; raised thrall {ToPrettyString(uid):thrall} is unbound and dies");
-        }
     }
 
     private void OnThrallRemoved(Entity<YautjaThrallComponent> ent, ref ComponentRemove args)
@@ -552,103 +519,6 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             $"{ToPrettyString(master):hunter} hivebroke xeno {ToPrettyString(target):target} with {ToPrettyString(source):item}");
     }
 
-    private void OnRaiseThrall(Entity<YautjaBracerComponent> ent, ref YautjaRaiseThrallActionEvent args)
-    {
-        if (args.Handled)
-            return;
-
-        if (!_rmcActions.TryUseAction(args))
-            return;
-
-        var user = args.Performer;
-        var target = args.Target;
-
-        if (HasComp<YautjaThrallComponent>(target)
-            || !HasComp<HumanoidProfileComponent>(target)
-            || !_mob.IsDead(target))
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-raise-invalid"), user, user, PopupType.SmallCaution);
-            return;
-        }
-
-        if (ent.Comp.MaxRaiseThrall > 0 && CountAliveThralls(ent.Owner) >= ent.Comp.MaxRaiseThrall)
-        {
-            _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-raise-limit"), user, user, PopupType.SmallCaution);
-            return;
-        }
-
-        if (!_power.HasPowerPopup(user, ent.Comp.RaiseThrallCost))
-            return;
-
-        args.Handled = true;
-        _power.TryRemovePower(user, ent.Comp.RaiseThrallCost);
-        _actions.SetCooldown(ent.Comp.RaiseThrallAction, ent.Comp.RaiseThrallCooldown);
-
-        RaiseLocalEvent(target, new RejuvenateEvent());
-        _mob.ChangeMobState(target, MobState.Alive);
-        _damage.TryChangeDamage(target, ent.Comp.RaiseThrallDamage, ignoreResistances: true);
-
-        MakeThrall(user, target, "Raised from the dead");
-
-        if (TryComp(target, out YautjaThrallComponent? raisedComp))
-        {
-            raisedComp.Raised = true;
-            raisedComp.RaisedByBracer = ent.Owner;
-            Dirty(target, raisedComp);
-        }
-
-        if (!HasComp<YautjaComponent>(target))
-        {
-            if (TryComp(target, out YautjaThrallComponent? thrallComp))
-            {
-                if (_humanoid.TryGetColors(target, out var skinColor, out var eyeColor))
-                {
-                    thrallComp.OriginalSkinColor = skinColor;
-                    thrallComp.OriginalEyeColor = eyeColor;
-                }
-            }
-
-            _humanoid.TrySetColors(target, Color.FromHex("#8f9a8b"), Color.FromHex("#b8d94a"));
-
-            foreach (var slot in StrippedOnRaiseSlots)
-            {
-                _inventory.TryUnequip(target, slot, force: true);
-            }
-        }
-
-        var ghostRole = EnsureComp<GhostRoleComponent>(target);
-        ghostRole.RoleName = Loc.GetString("cmu-yautja-thrall-ghost-role-name");
-        ghostRole.RoleDescription = Loc.GetString("cmu-yautja-thrall-ghost-role-description");
-        ghostRole.RoleRules = Loc.GetString("cmu-yautja-thrall-ghost-role-rules");
-        EnsureComp<GhostTakeoverAvailableComponent>(target);
-
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-raised-others", ("target", target)), target, PopupType.MediumCaution);
-        _adminLog.Add(LogType.Action, LogImpact.High,
-            $"{ToPrettyString(user):hunter} raised {ToPrettyString(target):target} as a Yautja thrall");
-    }
-
-    private void OnThrallEquipAttempt(Entity<YautjaThrallComponent> ent, ref IsEquippingTargetAttemptEvent args)
-    {
-        if (!ent.Comp.Raised || !StrippedOnRaiseSlots.Contains(args.Slot))
-            return;
-
-        if (HasComp<YautjaThrallBracerComponent>(args.Equipment))
-            return;
-
-        args.Cancel();
-        _popup.PopupEntity(Loc.GetString("cmu-yautja-thrall-raise-cover-refuse"), ent, args.EquipTarget, PopupType.SmallCaution);
-    }
-
-    private void OnThrallTakeGhostRole(Entity<YautjaThrallComponent> ent, ref TakeGhostRoleEvent args)
-    {
-        var master = ent.Comp.Master;
-        var masterName = master is { } m && !Deleted(m)
-            ? Name(m)
-            : Loc.GetString("cmu-yautja-identity-unknown");
-        _chat.DispatchServerMessage(args.Player,
-            Loc.GetString("cmu-yautja-thrall-takeover-notice", ("master", masterName)));
-    }
-
     private void MakeThrall(EntityUid master, EntityUid target, string? reason)
     {
         var thrall = EnsureComp<YautjaThrallComponent>(target);
@@ -944,19 +814,6 @@ public sealed partial class YautjaThrallSystem : EntitySystem
             RemComp<YautjaHivebrokenXenoComponent>(target);
 
         _nameModifier.RefreshNameModifiers(target);
-    }
-
-    private int CountAliveThralls(EntityUid bracer)
-    {
-        var count = 0;
-        var query = EntityQueryEnumerator<YautjaThrallComponent>();
-        while (query.MoveNext(out var uid, out var comp))
-        {
-            if (comp.RaisedByBracer == bracer && !_mob.IsDead(uid))
-                count++;
-        }
-
-        return count;
     }
 
     private bool TryFindThrall(EntityUid master, out Entity<YautjaThrallComponent> thrall)

@@ -3,7 +3,6 @@ using Content.Server.CMU14.Round;
 using Content.Server.GameTicking;
 using Content.Server.GameTicking.Rules;
 using Content.Shared._RMC14.Evacuation;
-using Content.Shared._RMC14.Rules;
 using Content.Shared._RMC14.Xenonids;
 using Content.Shared.Cuffs.Components;
 using Content.Shared.GameTicking.Components;
@@ -21,7 +20,6 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
     [Dependency] private AuRoundSystem _auRoundSystem = default!;
     [Dependency] private IEntityManager _entMan = default!;
     [Dependency] private GameTicker _gameTicker = default!;
-    [Dependency] private RMCPlanetSystem _rmcPlanet = default!;
     [Dependency] private CMURoundStatisticsSystem _roundStats = default!;
     [Dependency] private ThreatRuleHelper _threatRuleHelper = default!;
 
@@ -62,21 +60,12 @@ public sealed partial class KillAllXenoRuleSystem : GameRuleSystem<KillAllXenoRu
 
         int requiredPercentXeno = Math.Clamp(ruleComp.PercentXeno, 1, 100);
         int requiredPercentCultist = Math.Clamp(ruleComp.PercentCultist, 1, 100);
-        bool crashedDropship = _threatRuleHelper.HasCrashedDropship();
         int totalXeno = 0, deadXeno = 0;
         int totalCultist = 0, deadCultist = 0;
 
         EntityQueryEnumerator<MobStateComponent> query = _entMan.EntityQueryEnumerator<MobStateComponent>();
         while (query.MoveNext(out EntityUid uid, out MobStateComponent? mobState))
         {
-            // Planet-side survivors stop counting once a dropship has crashed; the endgame is ship-side
-            if (crashedDropship &&
-                mobState.CurrentState != MobState.Dead &&
-                _rmcPlanet.IsOnPlanet(Transform(uid)))
-            {
-                continue;
-            }
-
             if (_entMan.TryGetComponent(uid, out XenoComponent? xeno)
                 && xeno.Role != LesserDroneRole)
             {

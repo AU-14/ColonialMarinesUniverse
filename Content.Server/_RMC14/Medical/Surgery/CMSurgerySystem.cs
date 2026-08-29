@@ -178,7 +178,7 @@ public sealed partial class CMSurgerySystem : SharedCMSurgerySystem
 
     private bool IsDetachedLimbCarrier(EntityUid used)
     {
-        return MetaData(used).EntityPrototype?.ID == DetachedBodyPrototype.ToString() &&
+        return MetaData(used).EntityPrototype?.ID == DetachedBodyPrototype &&
                TryComp<BodyComponent>(used, out var body) &&
                _body.GetRootPartOrNull(used, body) is { } root &&
                CMUBodyPartSlots.IsReportableMissingPart(root.BodyPart.PartType);

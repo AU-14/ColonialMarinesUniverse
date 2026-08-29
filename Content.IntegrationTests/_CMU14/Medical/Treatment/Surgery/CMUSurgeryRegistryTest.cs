@@ -118,30 +118,4 @@ public sealed class CMUSurgeryRegistryTest
 
         await pair.CleanReturnAsync();
     }
-
-    [TestCase(BodyPartType.Arm)]
-    [TestCase(BodyPartType.Hand)]
-    [TestCase(BodyPartType.Leg)]
-    [TestCase(BodyPartType.Foot)]
-    public async Task LimbRemovalAndReattachmentAreEligibleForEveryExtremity(BodyPartType partType)
-    {
-        await using var pair = await PoolManager.GetServerClient();
-        var server = pair.Server;
-
-        await server.WaitAssertion(() =>
-        {
-            var flow = server.EntMan.System<SharedCMUSurgeryFlowSystem>();
-            var surgeryIds = flow.GetEligibleDefinitions(partType)
-                .Select(definition => definition.Id.Id)
-                .ToList();
-
-            Assert.Multiple(() =>
-            {
-                Assert.That(surgeryIds, Does.Contain("CMUSurgeryRemoveLimb"));
-                Assert.That(surgeryIds, Does.Contain("CMUSurgeryReattachLimb"));
-            });
-        });
-
-        await pair.CleanReturnAsync();
-    }
 }

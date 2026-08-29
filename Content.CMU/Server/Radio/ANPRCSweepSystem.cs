@@ -18,7 +18,7 @@ namespace Content.Server.CMU14.Radio;
 // it carries no traffic on the operator's own nets. a fix is built out of repeated
 // catches on the same frequency, so it costs sustained time spent deaf and silent
 // within earshot of a transmitter that keeps talking - not proximity alone
-public sealed partial class ANPRCSweepSystem : EntitySystem
+public sealed class ANPRCSweepSystem : EntitySystem
 {
     [Dependency] private IGameTiming _timing = default!;
     [Dependency] private IConfigurationManager _config = default!;

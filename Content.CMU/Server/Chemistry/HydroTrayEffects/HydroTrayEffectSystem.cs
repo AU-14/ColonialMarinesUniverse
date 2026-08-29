@@ -37,11 +37,9 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
         if (!TryGetAlivePlant(args.Target, out var tray, out _))
             return;
 
-        _plantTray.AdjustToxin((tray.Owner, (PlantTrayComponent?) tray.Comp),
-            -HydroStrength(args.Potency, args.Quantity) * 10f);
+        _plantTray.AdjustToxin(tray, -HydroStrength(args.Potency, args.Quantity) * 10f);
         if (tray.Comp.ToxinLevel > 0)
-            _plantTray.AdjustToxin((tray.Owner, (PlantTrayComponent?) tray.Comp),
-                -1.5f * ((float) args.Potency * 2f));
+            _plantTray.AdjustToxin(tray, -1.5f * ((float) args.Potency * 2f));
     }
 
     private void Anticorrosive(ref HydroTickEvent<Anticorrosive> args)
@@ -53,7 +51,7 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
         if (tray.Comp.ToxinLevel > 0)
             healing += 0.75f * ((float) args.Potency * 2f);
 
-        _plantHolder.AdjustsHealth((plant.Owner, (PlantHolderComponent?) plant.Comp), healing);
+        _plantHolder.AdjustsHealth(plant, healing);
     }
 
     private void Hepatopeutic(ref HydroTickEvent<Hepatopeutic> args)
@@ -119,15 +117,13 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
         if (!TryGetAlivePlant(args.Target, out var tray, out var plant))
             return;
 
-        _plantTray.AdjustToxin((tray.Owner, (PlantTrayComponent?) tray.Comp),
-            1.5f * ((float) args.Potency * 2f) * (float) args.Quantity.Quantity);
+        _plantTray.AdjustToxin(tray, 1.5f * ((float) args.Potency * 2f) * (float) args.Quantity.Quantity);
         plant.Comp.MutationLevel = MathHelper.Clamp(
             plant.Comp.MutationLevel + 10f * ((float) args.Potency * 2f) *
             ((float) args.Quantity.Quantity + plant.Comp.MutationMod),
             0f,
             plant.Comp.MaxMutationLevel);
-        DirtyField<PlantHolderComponent>((plant.Owner, (PlantHolderComponent?) plant.Comp),
-            nameof(plant.Comp.MutationLevel));
+        DirtyField(plant, nameof(plant.Comp.MutationLevel));
     }
 
     private void OnBeforeRandomPlantMutation(
@@ -179,7 +175,7 @@ public sealed partial class HydroTrayEffectSystem : EntitySystem
             return false;
 
         tray = (trayUid, trayComp);
-        if (!_plantTray.TryGetAlivePlant((tray.Owner, (PlantTrayComponent?) tray.Comp), out var plantUid) ||
+        if (!_plantTray.TryGetAlivePlant(tray, out var plantUid) ||
             !TryComp<PlantHolderComponent>(plantUid, out var plantHolder))
         {
             return false;

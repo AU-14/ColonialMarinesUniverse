@@ -208,7 +208,7 @@ public sealed partial class CMUSurgerySystem : SharedCMUSurgerySystem
             BodyPartComponent? bp;
             if (!TryComp(candidate, out bp))
             {
-                if (MetaData(held).EntityPrototype?.ID != DetachedBodyPrototype.ToString() ||
+                if (MetaData(held).EntityPrototype?.ID != DetachedBodyPrototype ||
                     !TryComp<BodyComponent>(held, out var carrierBody) ||
                     Body.GetRootPartOrNull(held, carrierBody) is not { } root)
                 {

@@ -17,7 +17,7 @@ namespace Content.Server.CMU14.Util.Admin.Console;
 /// true = serious cleanup, drops the per-command safety filter) + prototype id filter args,
 /// batch deletion of collected loose entities, prototype id completion, and the report line.
 /// </summary>
-public abstract partial class NukeEntitiesCommand : LocalizedEntityCommands
+public abstract class NukeEntitiesCommand : LocalizedEntityCommands
 {
     [Dependency] protected SharedContainerSystem _container = default!;
     [Dependency] protected IPrototypeManager _protoMan = default!;

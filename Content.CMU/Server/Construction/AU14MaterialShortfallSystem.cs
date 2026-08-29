@@ -17,10 +17,10 @@ namespace Content.Server.CMU14.Construction;
 /// discounted structure is deconstructed, its exact refund action is reduced before it runs. This never
 /// searches for or mutates unrelated stacks in the world.
 /// </summary>
-public sealed partial class AU14MaterialShortfallSystem : EntitySystem
+public sealed class AU14MaterialShortfallSystem : EntitySystem
 {
-    [Dependency] private  IPrototypeManager _prototypes = default!;
-    [Dependency] private  IComponentFactory _componentFactory = default!;
+    [Dependency] private readonly IPrototypeManager _prototypes = default!;
+    [Dependency] private readonly IComponentFactory _componentFactory = default!;
 
     public override void Initialize()
     {

@@ -186,7 +186,8 @@ public sealed partial class ObjectiveConsoleSystem : SharedObjectiveConsoleSyste
                 statusDisplay = ObjectiveStatusDisplay.Uncompleted;
             }
             if (statusDisplay == ObjectiveStatusDisplay.Uncompleted
-                && objComp.Repeating)
+                && objComp.Repeating
+                && objComp.TimesCompleted > 0)
                 statusDisplay = ObjectiveStatusDisplay.Repeating;
             ObjectiveTypeDisplay typeDisplay;
             if (objComp.ObjectiveLevel == 3)

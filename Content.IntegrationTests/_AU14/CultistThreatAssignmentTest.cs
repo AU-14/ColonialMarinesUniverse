@@ -26,7 +26,7 @@ public sealed class CultistThreatAssignmentTest
 {
     private static readonly ProtoId<JobPrototype> ThreatMemberJob = "AU14JobThreatMember";
     private static readonly ProtoId<JobPrototype> CultistJob = "AU14JobCultist";
-    private static readonly ProtoId<ThreatPrototype> CultistThreat = "CultistThreatCF";
+    private static readonly ProtoId<ThreatPrototype> CultistThreatOnMarker = "cultistThreatOnMarker";
 
     [Test]
     public async Task AssignedCultistThreatMemberKeepsCultistJobAndMindRole()
@@ -45,9 +45,9 @@ public sealed class CultistThreatAssignmentTest
         await server.WaitAssertion(() =>
         {
             var entMan = server.EntMan;
-            entMan.SpawnEntity("threatmemberspawnmarker", map.GridCoords);
+            entMan.SpawnEntity("cultistcfthreatmemberspawnmarker", map.GridCoords);
 
-            var threat = server.ProtoMan.Index(CultistThreat);
+            var threat = server.ProtoMan.Index(CultistThreatOnMarker);
             var assignedJobs = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>
             {
                 [player.UserId] = (ThreatMemberJob, EntityUid.Invalid),

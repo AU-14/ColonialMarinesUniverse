@@ -19,10 +19,10 @@ namespace Content.Server.CMU14.ZLevelBuilding;
 /// z-level also gets an invisible <see cref="TileFloorSupportComponent"/> marker so it participates in the
 /// support graph; when that marker is collapsed for lacking support, it removes the floor tile under it.
 /// </summary>
-public sealed partial class TileApplierSystem : EntitySystem
+public sealed class TileApplierSystem : EntitySystem
 {
-    [Dependency] private  MapSystem _map = default!;
-    [Dependency] private  ITileDefinitionManager _tileDef = default!;
+    [Dependency] private readonly MapSystem _map = default!;
+    [Dependency] private readonly ITileDefinitionManager _tileDef = default!;
 
     /// <summary>The invisible per-tile support marker spawned on laid floors (see tiles.yml).</summary>
     private const string TileFloorSupportProto = "AU14TileFloorSupport";

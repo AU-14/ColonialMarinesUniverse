@@ -8,10 +8,10 @@ namespace Content.Server.CMU14.Chat;
 /// Broadcasts a colony alert when Govfor starts or cancels an evacuation from their command tablet,
 /// so insurgents and colonists know how much time they have before Govfor departs and the round ends.
 /// </summary>
-public sealed partial class GovforEvacAlertSystem : EntitySystem
+public sealed class GovforEvacAlertSystem : EntitySystem
 {
-    [Dependency] private  ColonyCommsConsoleSystem _colonyComms = default!;
-    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private readonly ColonyCommsConsoleSystem _colonyComms = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private static readonly TimeSpan BroadcastCooldown = TimeSpan.FromMinutes(1);
 

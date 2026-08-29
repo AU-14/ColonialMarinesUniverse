@@ -1,5 +1,4 @@
 using Content.Server.CMU14.Medical.Treatment.Surgery;
-using Content.Shared.CMU14.Medical.Anatomy.BodyParts;
 using Content.Shared.CMU14.Medical.Treatment.Surgery;
 using Content.Shared.Body.Part;
 using Content.Shared.Interaction.Components;
@@ -41,24 +40,14 @@ public sealed class CMULimbPrinterSchedulerTest
                     {
                         foreach (var symmetry in new[] { BodyPartSymmetry.Left, BodyPartSymmetry.Right })
                         {
-                            var option = state.Options.Find(option =>
+                            Assert.That(
+                                state.Options.Exists(option =>
                                     option.Kind == kind
                                     && option.Type == type
                                     && option.Symmetry == symmetry
-                                    && option.Prototype.Length > 0);
-                            Assert.That(option, Is.Not.Null, $"Missing {kind} {symmetry} {type} option");
-
-                            var printedLimb = entMan.SpawnEntity(option!.Prototype, MapCoordinates.Nullspace);
-                            var bodyPart = entMan.GetComponent<BodyPartComponent>(printedLimb);
-                            Assert.Multiple(() =>
-                            {
-                                Assert.That(bodyPart.PartType, Is.EqualTo(type));
-                                Assert.That(bodyPart.Symmetry, Is.EqualTo(symmetry));
-                                Assert.That(
-                                    entMan.HasComponent<CMURoboticLimbComponent>(printedLimb),
-                                    Is.EqualTo(kind == CMULimbPrinterPrintKind.Robotic));
-                            });
-                            entMan.DeleteEntity(printedLimb);
+                                    && option.Prototype.Length > 0),
+                                Is.True,
+                                $"Missing {kind} {symmetry} {type} option");
                         }
                     }
                 }

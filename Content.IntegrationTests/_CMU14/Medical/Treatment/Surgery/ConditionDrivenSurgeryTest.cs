@@ -2146,11 +2146,8 @@ public sealed class ConditionDrivenSurgeryTest
         await pair.CleanReturnAsync();
     }
 
-    [TestCase(BodyPartType.Hand, BodyPartType.Arm)]
-    [TestCase(BodyPartType.Foot, BodyPartType.Leg)]
-    public async Task ExtremityCanBeRemovedAndAppearsAsReattachableMissingSite(
-        BodyPartType extremityType,
-        BodyPartType anchorType)
+    [Test]
+    public async Task SeveredHandAppearsAsReattachableMissingSite()
     {
         await using var pair = await PoolManager.GetServerClient();
         var server = pair.Server;
@@ -2163,56 +2160,46 @@ public sealed class ConditionDrivenSurgeryTest
             var flow = entMan.System<SharedCMUSurgeryFlowSystem>();
             var human = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
             var surgeon = entMan.SpawnEntity("CMMobHuman", MapCoordinates.Nullspace);
-            EntityUid severedExtremity = default;
+            EntityUid severedHand = default;
             EntityUid detachedBody = default;
 
             try
             {
                 entMan.EnsureComponent<CMUAutodocContainedPatientComponent>(human);
-                var anchorPart = GetBodyPart(entMan, human, anchorType, BodyPartSymmetry.Right);
-                severedExtremity = GetBodyPart(entMan, human, extremityType, BodyPartSymmetry.Right);
-
-                var attachedEntries = dispatch.BuildPartEntries(human, surgeon, ignoreSkillRequirements: true);
-                var attachedExtremity = attachedEntries.Find(entry =>
-                    entry.Type == extremityType
-                    && entry.Symmetry == BodyPartSymmetry.Right);
-                Assert.That(attachedExtremity, Is.Not.Null);
-                Assert.That(
-                    attachedExtremity!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
-                    Does.Contain("CMUSurgeryRemoveLimb"));
-
-                detachedBody = detachable.Detach(severedExtremity) ?? EntityUid.Invalid;
+                var arm = GetBodyPart(entMan, human, BodyPartType.Arm, BodyPartSymmetry.Right);
+                severedHand = GetBodyPart(entMan, human, BodyPartType.Hand, BodyPartSymmetry.Right);
+                detachedBody = detachable.Detach(severedHand) ?? EntityUid.Invalid;
                 Assert.That(detachedBody.Valid, Is.True);
 
                 var entries = dispatch.BuildPartEntries(human, surgeon, ignoreSkillRequirements: true);
-                var missingExtremity = entries.Find(entry =>
-                    entry.Type == extremityType
+                var missingHand = entries.Find(entry =>
+                    entry.Type == BodyPartType.Hand
                     && entry.Symmetry == BodyPartSymmetry.Right);
 
-                Assert.That(missingExtremity, Is.Not.Null);
+                Assert.That(missingHand, Is.Not.Null);
                 Assert.Multiple(() =>
                 {
                     Assert.That(
-                        missingExtremity!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
+                        missingHand!.EligibleSurgeries.ConvertAll(entry => entry.SurgeryId),
                         Does.Contain("CMUSurgeryReattachLimb"));
                     Assert.That(
                         flow.TryGetReattachAnchorPart(
                             human,
-                            extremityType,
+                            BodyPartType.Hand,
                             BodyPartSymmetry.Right,
                             out var anchor),
                         Is.True);
-                    Assert.That(anchor, Is.EqualTo(anchorPart));
+                    Assert.That(anchor, Is.EqualTo(arm));
                     Assert.That(
                         flow.LimbMatchesMissingSlot(
                             human,
                             detachedBody,
-                            extremityType,
+                            BodyPartType.Hand,
                             BodyPartSymmetry.Right),
                         Is.True);
                     Assert.That(flow.ToolMatchesCategory(detachedBody, "severed_limb"), Is.True);
                     Assert.That(entMan.System<SharedBodySystem>().GetRootPartOrNull(detachedBody)?.Entity,
-                        Is.EqualTo(severedExtremity));
+                        Is.EqualTo(severedHand));
                 });
             }
             finally

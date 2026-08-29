@@ -172,13 +172,12 @@ namespace Content.IntegrationTests.Tests.Preferences
                         Assert.That(resolvedReaper.Target, Is.EqualTo(CMUBalanceRatingTarget.Xeno));
                         Assert.That(resolvedReaper.Id, Is.EqualTo("CMXenoReaper"));
                         Assert.That(maps, Has.Some.Matches<CMUBalanceRatingTargetOption>(target =>
-                            target.Id == "CMUPlanetLament/ColonyFall" &&
-                            target.Name.Contains("Barker's Lament", StringComparison.Ordinal) &&
+                            target.Id == "AUPlanetLV327/DistressSignal" &&
+                            target.Name.Contains("Port Nereid", StringComparison.Ordinal) &&
                             target.AllowsMetric(CMUBalanceRatingMetric.Fun) &&
                             !target.AllowsMetric(CMUBalanceRatingMetric.Power)));
-                        // don't pin specific presets
-                        // Assert.That(maps, Has.Some.Matches<CMUBalanceRatingTargetOption>(target =>
-                        //     target.Id.EndsWith("/Insurgency", StringComparison.Ordinal)));
+                        Assert.That(maps, Has.Some.Matches<CMUBalanceRatingTargetOption>(target =>
+                            target.Id.EndsWith("/Insurgency", StringComparison.Ordinal)));
                         Assert.That(maps.All(target =>
                             target.AllowsMetric(CMUBalanceRatingMetric.Fun) &&
                             !target.AllowsMetric(CMUBalanceRatingMetric.Power)), Is.True);
@@ -200,7 +199,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                     async () => await db.CreateCMUBalanceRatingPoll(
                         roundId,
                         CMUBalanceRatingTarget.Map,
-                        "CMUPlanetLament/ColonyFall",
+                        "AUPlanetLV327/DistressSignal",
                         CMUBalanceRatingMetric.Power,
                         firstPlayer.UserId,
                         openedAt),
@@ -226,7 +225,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                 var mapPoll = await db.CreateCMUBalanceRatingPoll(
                     roundId,
                     CMUBalanceRatingTarget.Map,
-                    "CMUPlanetLament/ColonyFall",
+                    "AUPlanetLV327/DistressSignal",
                     CMUBalanceRatingMetric.Fun,
                     firstPlayer.UserId,
                     openedAt.AddSeconds(30));
@@ -259,7 +258,7 @@ namespace Content.IntegrationTests.Tests.Preferences
                     entry.Metric == CMUBalanceRatingMetric.Fun);
                 var map = dashboard.Entries.Single(entry =>
                     entry.Target == CMUBalanceRatingTarget.Map &&
-                    entry.TargetId == "CMUPlanetLament/ColonyFall" &&
+                    entry.TargetId == "AUPlanetLV327/DistressSignal" &&
                     entry.Metric == CMUBalanceRatingMetric.Fun);
                 var weapon = dashboard.Entries.Single(entry =>
                     entry.Target == CMUBalanceRatingTarget.Weapon &&

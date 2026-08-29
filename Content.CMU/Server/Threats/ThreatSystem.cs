@@ -285,32 +285,6 @@ public sealed partial class ThreatSystem : EntitySystem
         }
     }
 
-    public bool ForceSpawnThreat(ProtoId<ThreatPrototype> threatId, EntityUid fallbackMarker,
-        bool startWinConditions = true)
-    {
-        if (!_prototypeManager.TryIndex(threatId, out ThreatPrototype? threat) ||
-            !_entityManager.TryGetComponent(fallbackMarker, out TransformComponent? transform))
-        {
-            return false;
-        }
-
-        var assignedJobs = new Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)>();
-        var result = ExecuteSpawn(threat, transform.MapID, assignedJobs);
-        if (!result.Spawned)
-            return false;
-
-        if (startWinConditions)
-        {
-            StartThreatWinConditions(threat, result.ResolvedForce);
-            _auRound.SetSelectedThreat(threat);
-            _auRound.PreselectThirdPartiesForSelectedThreat();
-        }
-
-        _sawmill.Info($"[ThreatSystem] Admin-forced threat '{threat.ID}' spawned on map {transform.MapID} " +
-            $"(winConditions={startWinConditions}).");
-        return true;
-    }
-
     internal void SchedulePendingThreatSpawn(ThreatPrototype threat,
         MapId mapId,
         Dictionary<NetUserId, (ProtoId<JobPrototype>?, EntityUid)> assignedJobs,

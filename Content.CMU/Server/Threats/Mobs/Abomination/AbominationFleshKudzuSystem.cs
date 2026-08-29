@@ -1,6 +1,7 @@
 using Content.Server.Chat.Systems;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
+using Content.Shared.Interaction.Events;
 using Content.Shared.Mobs.Systems;
 using Robust.Shared.Audio;
 using Robust.Shared.Audio.Systems;
@@ -31,6 +32,11 @@ public sealed partial class AbominationFleshKudzuSystem : EntitySystem
     [Dependency] private SharedPhysicsSystem _physics = default!;
     [Dependency] private IRobustRandom _random = default!;
     [Dependency] private IGameTiming _timing = default!;
+
+    public override void Initialize()
+    {
+        SubscribeLocalEvent<AbominationComponent, AttackAttemptEvent>(OnAbominationAttackAttempt);
+    }
 
     public override void Update(float frameTime)
     {
@@ -92,6 +98,16 @@ public sealed partial class AbominationFleshKudzuSystem : EntitySystem
                 }
             }
         }
+    }
+
+    /// <summary>
+    ///     Block abominations from melee-attacking flesh kudzu — they kept
+    ///     destroying their own coverage in playtest.
+    /// </summary>
+    private void OnAbominationAttackAttempt(Entity<AbominationComponent> ent, ref AttackAttemptEvent args)
+    {
+        if (args.Target is { } target && HasComp<AbominationFleshKudzuComponent>(target))
+            args.Cancel();
     }
 
     private void HealContacts(Entity<AbominationFleshKudzuComponent, PhysicsComponent> ent)

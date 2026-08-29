@@ -211,10 +211,8 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     [ViewVariables]
     private RMCPlanet? SelectedPlanetMap { get; set; }
 
-    private string? _cmuPlanetMapName;
-
     [ViewVariables]
-    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name ?? _cmuPlanetMapName;
+    public string? SelectedPlanetMapName => SelectedPlanetMap?.Proto.Name;
 
     [ViewVariables]
     public string? OperationName { get; private set; }
@@ -824,7 +822,6 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     {
 
         _config.SetCVar(CCVars.GameDisallowLateJoins, false);
-        _cmuPlanetMapName = null;
 
         if (!_autoBalance)
             return;
@@ -872,7 +869,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         // For human hijacks, build a set of map IDs belonging to the hijacker's faction ship(s).
         // For xeno hijacks, keep legacy behavior (Almayer maps).
         var targetShipMaps = new HashSet<MapId>();
-        if (ev.HijackerType == DropshipHijackerType.Human && !string.IsNullOrEmpty(ev.HijackerFaction)) // CMU14
+        if (ev.IsHumanHijack && !string.IsNullOrEmpty(ev.HijackerFaction))
         {
             // Scan ShipFactionComponent grids matching the hijacker's faction
             var shipQuery = EntityQueryEnumerator<ShipFactionComponent, TransformComponent>();
@@ -899,7 +896,7 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
         }
 
         // Only do xeno-specific cleanup for xeno hijacks
-        if (ev.HijackerType != DropshipHijackerType.Human) // CMU14
+        if (!ev.IsHumanHijack)
         {
             var hiveStructures = EntityQueryEnumerator<HiveConstructionLimitedComponent, TransformComponent>();
             while (hiveStructures.MoveNext(out var id, out _, out var xform))
@@ -1747,29 +1744,6 @@ public sealed partial class CMDistressSignalRuleSystem : GameRuleSystem<CMDistre
     {
         OperationName = customname;
         _usingCustomOperationName = true;
-    }
-
-    public void SetCmuRoundInfo(string? planetMapName)
-    {
-        _cmuPlanetMapName = planetMapName;
-        OperationName = GetRandomOperationName();
-    }
-
-    public string? GetWarshipName(GameMapPrototype? map)
-    {
-        if (map == null)
-            return null;
-
-        foreach (var station in map.Stations.Values)
-        {
-            foreach (var entry in station.StationComponentOverrides.Values)
-            {
-                if (entry.Component is StationNameSetupComponent setup)
-                    return setup.StationNameTemplate;
-            }
-        }
-
-        return map.MapName;
     }
 
     private void StartPlanetVote()

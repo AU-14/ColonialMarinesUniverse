@@ -20,7 +20,7 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
 
     private readonly Dictionary<EntityUid, float> _timeSinceLastIncrement = new();
     private readonly Dictionary<EntityUid, float> _lastSlashDamage = new();
-    private static readonly string[] HoistAllowedFactions = ["govfor", "opfor", "clf", "weyu"];
+    private static readonly string[] HoistAllowedFactions = ["govfor", "opfor", "clf"];
 
     public override void Initialize()
     {
@@ -69,7 +69,7 @@ public sealed partial class ObjCaptureSystem : ObjectiveSystem
 
         var userFactions = new List<string>();
         if (args.User != EntityUid.Invalid && TryComp(args.User, out NpcFactionMemberComponent? factionComp))
-            userFactions.AddRange(factionComp.Factions.Select(f => f.ToString().ToLowerInvariant() switch { "auweyu" => "weyu", var id => id })); // WeYu roles carry the npcFaction id AUWeYu; the objective faction key is weyu
+            userFactions.AddRange(factionComp.Factions.Select(f => f.ToString().ToLowerInvariant()));
 
         var hoistingFaction = args.Faction.ToLowerInvariant();
         if (!userFactions.Contains(hoistingFaction))

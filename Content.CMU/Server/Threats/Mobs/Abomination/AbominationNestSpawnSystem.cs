@@ -8,9 +8,9 @@ namespace Content.Server.CMU14.Threats.Mobs.Abomination;
 
 /// <summary>
 ///     Global flesh-nest spawning. Every tick picks one random nest and spawns
-///     one non-mimic abomination at it. The base interval is 4 minutes with one
-///     nest, and each additional nest reduces the interval by 5 seconds, floored
-///     at 60 seconds.
+///     one non-mimic abomination at it. The base interval is 5 minutes with one
+///     nest, and each additional nest reduces the interval by 3 seconds, floored
+///     at 30 seconds.
 /// </summary>
 public sealed partial class AbominationNestSpawnSystem : EntitySystem
 {
@@ -20,10 +20,10 @@ public sealed partial class AbominationNestSpawnSystem : EntitySystem
     [Dependency] private SharedTransformSystem _transform = default!;
 
     /// <summary>Base interval with one nest placed.</summary>
-    public static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(240);
+    public static readonly TimeSpan BaseInterval = TimeSpan.FromSeconds(300);
 
     /// <summary>Minimum spawn interval regardless of nest count.</summary>
-    public static readonly TimeSpan MinInterval = TimeSpan.FromSeconds(60);
+    public static readonly TimeSpan MinInterval = TimeSpan.FromSeconds(30);
 
     public static readonly EntProtoId[] SpawnPool =
     {
@@ -33,7 +33,7 @@ public sealed partial class AbominationNestSpawnSystem : EntitySystem
     };
 
     /// <summary>Seconds subtracted from the interval per extra nest beyond the first.</summary>
-    public const double SecondsPerExtraNest = 5.0;
+    public const double SecondsPerExtraNest = 3.0;
 
     private TimeSpan _nextSpawnAt;
 

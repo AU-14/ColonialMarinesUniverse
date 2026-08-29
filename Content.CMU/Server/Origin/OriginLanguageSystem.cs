@@ -5,11 +5,11 @@ using Robust.Shared.Prototypes;
 
 namespace Content.Server.CMU14.Origin;
 
-public sealed partial class OriginLanguageSystem : EntitySystem
+public sealed class OriginLanguageSystem : EntitySystem
 {
-    [Dependency] private  IPrototypeManager _proto = default!;
-    [Dependency] private  LanguageSystem _language = default!;
-    [Dependency] private  LanguageLearningSystem _learning = default!;
+    [Dependency] private readonly IPrototypeManager _proto = default!;
+    [Dependency] private readonly LanguageSystem _language = default!;
+    [Dependency] private readonly LanguageLearningSystem _learning = default!;
 
     public override void Initialize()
     {

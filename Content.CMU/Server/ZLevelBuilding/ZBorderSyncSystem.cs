@@ -29,23 +29,17 @@ namespace Content.Server.CMU14.ZLevelBuilding;
 /// explicit global whitelist entries so admins can see and edit it through the same menu. Persisted
 /// across rounds in the server user-data folder.
 /// </summary>
-public sealed partial class ZBorderSyncSystem : EntitySystem
+public sealed class ZBorderSyncSystem : EntitySystem
 {
-    [Dependency] private  IPrototypeManager _prototype = default!;
-    [Dependency] private  IComponentFactory _componentFactory = default!;
-    [Dependency] private  IResourceManager _resource = default!;
-    [Dependency] private  CustomConstructionMenuSystem _menu = default!;
-    [Dependency] private  SharedPopupSystem _popup = default!;
-    [Dependency] private  ISharedAdminLogManager _adminLog = default!;
-    [Dependency] private  AuRoundSystem _auRound = default!;
+    [Dependency] private readonly IPrototypeManager _prototype = default!;
+    [Dependency] private readonly IComponentFactory _componentFactory = default!;
+    [Dependency] private readonly IResourceManager _resource = default!;
+    [Dependency] private readonly CustomConstructionMenuSystem _menu = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly ISharedAdminLogManager _adminLog = default!;
+    [Dependency] private readonly AuRoundSystem _auRound = default!;
 
     private static readonly ResPath SaveFile = new("/au14_zborder_sync.txt");
-
-    /// <summary>
-    /// Global code switch for z-border synchronization. Keep the configured lists loaded and editable while
-    /// preventing every map from reflecting border entities across z-levels.
-    /// </summary>
-    public bool GloballyEnabled = false;
 
     /// <summary>The scope key for entries that apply on every map.</summary>
     public const string GlobalScope = "";
@@ -88,9 +82,6 @@ public sealed partial class ZBorderSyncSystem : EntitySystem
     /// the selected planet's MapId and its planet prototype id are both accepted so either keying works.</summary>
     public bool ShouldReflect(string protoId)
     {
-        if (!GloballyEnabled)
-            return false;
-
         // The RMC wall hierarchy puts ordinary, destructible walls beneath its historical "invincible" wall
         // roots. Inheritance alone therefore cannot distinguish a real map boundary from a wall a player just
         // built. Never mirror a damageable wall: doing so will duplicate player construction onto the levels above

@@ -301,10 +301,10 @@ public sealed partial class ObjectiveControlSystem : EntitySystem
 
         string[] factions = presetId switch
         {
-            "insurgency" => ["govfor", "clf", "weyu"],
-            "forceonforce" => ["govfor", "opfor", "weyu"],
+            "insurgency" => ["govfor", "clf", "scientist"],
+            "forceonforce" => ["govfor", "opfor", "scientist"],
             "distresssignal" => ["govfor"],
-            _ => ["weyu"], // corporate fallback (e.g. colonyfall)
+            _ => ["scientist"], // corporate fallback (e.g. colonyfall)
         };
 
         foreach (var faction in factions)
