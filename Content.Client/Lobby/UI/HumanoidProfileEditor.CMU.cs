@@ -15,6 +15,7 @@ using Content.Shared.Body;
 using Content.Shared.CMU14.Threats;
 using Content.Shared.Humanoid;
 using Content.Shared.Humanoid.Markings;
+using Content.Shared.Humanoid.Prototypes;
 using Content.Shared.Preferences;
 using Content.Shared.Roles;
 using Robust.Client.UserInterface.Controls;
@@ -48,6 +49,7 @@ public sealed partial class HumanoidProfileEditor
 
     private IComponentFactory _componentFactory = default!;
     private bool _allowCharacterDescription;
+    private bool _loadingCharacterColorControls;
     private bool _loadingHeightControls;
     private int _previewJobIndex;
     private float _previewJobTimer;
@@ -135,6 +137,14 @@ public sealed partial class HumanoidProfileEditor
 
     private void InitializeCharacterDescription()
     {
+        CharacterSkinColorPicker.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv;
+        CharacterHairColorPicker.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv;
+        CharacterEyeColorPicker.SelectorType = ColorSelectorSliders.ColorSelectorType.Hsv;
+
+        CharacterSkinColorPicker.OnColorChanged += OnCharacterSkinColorChanged;
+        CharacterHairColorPicker.OnColorChanged += OnCharacterHairColorChanged;
+        CharacterEyeColorPicker.OnColorChanged += OnCharacterEyeColorChanged;
+
         ShortExamineEdit.OnTextChanged += args => SetShortExamine(args.Text);
 
         HeightFeetEdit.IsValid = text =>
@@ -669,12 +679,28 @@ public sealed partial class HumanoidProfileEditor
         EyeColorNameLabel.Text = Profile is null
             ? string.Empty
             : NamedColorHelper.NearestColorName(Profile.Appearance.EyeColor);
+
+        if (Profile is null)
+            return;
+
+        _loadingCharacterColorControls = true;
+        CharacterSkinColorPicker.Color = Profile.Appearance.SkinColor;
+        CharacterHairColorPicker.Color = GetNormalHairColor(Profile) ?? Color.White;
+        CharacterEyeColorPicker.Color = Profile.Appearance.EyeColor;
+        _loadingCharacterColorControls = false;
     }
 
     private static string GetNormalHairColorName(HumanoidCharacterProfile? profile)
     {
+        return GetNormalHairColor(profile) is { } color
+            ? NamedColorHelper.NearestColorName(color)
+            : string.Empty;
+    }
+
+    private static Color? GetNormalHairColor(HumanoidCharacterProfile? profile)
+    {
         if (profile is null)
-            return string.Empty;
+            return null;
 
         foreach (var layers in profile.Appearance.Markings.Values)
         {
@@ -682,11 +708,56 @@ public sealed partial class HumanoidProfileEditor
                 markings.Count > 0 &&
                 markings[0].MarkingColors.Count > 0)
             {
-                return NamedColorHelper.NearestColorName(markings[0].MarkingColors[0]);
+                return markings[0].MarkingColors[0];
             }
         }
 
-        return string.Empty;
+        return null;
+    }
+
+    private void OnCharacterSkinColorChanged(Color color)
+    {
+        if (_loadingCharacterColorControls || Profile is null)
+            return;
+
+        var skin = _prototypeManager.Index<SpeciesPrototype>(Profile.Species).SkinColoration;
+        var strategy = _prototypeManager.Index(skin).Strategy;
+        var closest = strategy.ClosestSkinColor(color);
+        _markingsModel.SetOrganSkinColor(closest);
+        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithSkinColor(closest));
+        SkinToneNameLabel.Text = NamedColorHelper.NearestColorName(closest);
+        UpdateSkinColor();
+        ReloadProfilePreview();
+    }
+
+    private void OnCharacterHairColorChanged(Color color)
+    {
+        if (_loadingCharacterColorControls || Profile is null)
+            return;
+
+        foreach (var (organ, layers) in _markingsModel.Markings)
+        {
+            if (!layers.TryGetValue(HumanoidVisualLayers.Hair, out var markings))
+                continue;
+
+            foreach (var marking in markings)
+            {
+                for (var i = 0; i < marking.MarkingColors.Count; i++)
+                    _markingsModel.TrySetMarkingColor(organ, HumanoidVisualLayers.Hair, marking.MarkingId, i, color);
+            }
+        }
+    }
+
+    private void OnCharacterEyeColorChanged(Color color)
+    {
+        if (_loadingCharacterColorControls || Profile is null)
+            return;
+
+        Profile = Profile.WithCharacterAppearance(Profile.Appearance.WithEyeColor(color));
+        _markingsModel.SetOrganEyeColor(color);
+        EyeColorNameLabel.Text = NamedColorHelper.NearestColorName(color);
+        EyeColorPicker.SetData(color);
+        ReloadProfilePreview();
     }
 
     private void UpdateHideMetaInformationButtonText()
