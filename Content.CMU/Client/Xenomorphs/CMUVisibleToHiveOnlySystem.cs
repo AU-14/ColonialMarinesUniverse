@@ -8,9 +8,9 @@ namespace Content.Client.CMU14.Xenomorphs.Pathogen.Overmind;
 
 public sealed partial class CMUVisibleToHiveOnlySystem : EntitySystem
 {
-    [Dependency] private  IPlayerManager _player = default!;
-    [Dependency] private  SpriteSystem _sprite = default!;
-    [Dependency] private  SharedXenoHiveSystem _hive = default!;
+    [Dependency] private readonly IPlayerManager _player = default!;
+    [Dependency] private readonly SpriteSystem _sprite = default!;
+    [Dependency] private readonly SharedXenoHiveSystem _hive = default!;
 
     public override void Update(float frameTime)
     {

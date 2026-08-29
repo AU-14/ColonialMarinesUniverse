@@ -10,7 +10,7 @@ namespace Content.Client.CMU14.Visuals;
 ///     the newest item of the configured container. Replaces the former separate tripwire-payload and
 ///     workbench-weapon visual systems, which were this exact logic twice.
 /// </summary>
-public sealed partial class ContainerIconLayerSystem : EntitySystem
+public sealed class ContainerIconLayerSystem : EntitySystem
 {
     [Dependency] private SpriteSystem _sprite = default!;
     [Dependency] private SharedContainerSystem _container = default!;

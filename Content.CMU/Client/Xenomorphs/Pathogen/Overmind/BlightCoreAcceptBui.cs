@@ -4,9 +4,9 @@ using Robust.Shared.GameObjects;
 
 namespace Content.Client.CMU14.Xenomorphs.Pathogen.Overmind;
 
-public sealed partial class BlightCoreAcceptBui : BoundUserInterface
+public sealed class BlightCoreAcceptBui : BoundUserInterface
 {
-    [Dependency] private  Robust.Client.Player.IPlayerManager _player = default!;
+    [Dependency] private readonly Robust.Client.Player.IPlayerManager _player = default!;
 
     private BlightCoreAcceptWindow? _window;
     

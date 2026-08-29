@@ -15,10 +15,10 @@ namespace Content.Client.CMU14.ZLevelBuilding;
 /// rumble cadence while the cave is still collapsing on the player, so the flutter lasts exactly as
 /// long as the collapse does.
 /// </summary>
-public sealed partial class ZCollapseVignetteSystem : EntitySystem
+public sealed class ZCollapseVignetteSystem : EntitySystem
 {
-    [Dependency] private  IOverlayManager _overlayMan = default!;
-    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private readonly IOverlayManager _overlayMan = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     // 🔧 TUNABLE: must comfortably outlast the server's rumble re-send interval (0.45s) so the black
     // flutter never gaps mid-collapse.

@@ -6,9 +6,9 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Xenomorphs.Pathogen.Overmind;
 
-public sealed partial class BlightCoreAcceptWindow : DefaultWindow
+public sealed class BlightCoreAcceptWindow : DefaultWindow
 {
-    [Dependency] private  IGameTiming _timing = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     private readonly Label _timerLabel;
     private TimeSpan _endsAt;

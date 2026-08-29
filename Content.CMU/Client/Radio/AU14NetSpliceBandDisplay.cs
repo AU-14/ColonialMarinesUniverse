@@ -7,7 +7,7 @@ using Robust.Shared.Timing;
 
 namespace Content.Client.CMU14.Radio;
 
-public sealed partial class AU14NetSpliceBandDisplay : Control
+public sealed class AU14NetSpliceBandDisplay : Control
 {
     private static readonly Color Background = Color.FromHex("#07130A");
     private static readonly Color Grid = Color.FromHex("#123021");
