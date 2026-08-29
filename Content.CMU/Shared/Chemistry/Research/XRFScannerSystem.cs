@@ -21,7 +21,6 @@ using Robust.Shared.Prototypes;
 using Robust.Shared.Timing;
 using System;
 using System.Collections.Generic;
-using System.Linq; // CMU14
 using System.Text;
 
 namespace Content.Shared.CMU14.Chemistry.Research;
@@ -59,7 +58,7 @@ public abstract partial class XRFScannerSystem : EntitySystem
         base.Update(frameTime);
         if (processing.Count > 0)
         {
-            foreach (var kvp in processing.ToArray()) // CMU14: handlers remove entries while iterating
+            foreach (var kvp in processing)
             {
                 if (!kvp.Key.Comp.Processing)
                 {
@@ -75,7 +74,7 @@ public abstract partial class XRFScannerSystem : EntitySystem
                 if (_timing.CurTime > kvp.Value.Item2)
                 {
                     _consys.TryGetContainer(kvp.Key.Owner, "sample", out var sample);
-                    if (sample is null || sample.ContainedEntities.Count == 0) // CMU14: vial can be removed before processing ends
+                    if (sample is null)
                     {
                         _audio.PlayPvs(kvp.Key.Comp.FailSound, kvp.Key);
                         kvp.Key.Comp.Processing = false;
@@ -243,17 +242,12 @@ public abstract partial class XRFScannerSystem : EntitySystem
         string contents = string.Empty;
         if (result)
         {
-            if (!_consys.TryGetContainer(ent.Owner, "sample", out var sample) ||
-                sample.ContainedEntities.Count == 0) // CMU14: vial can be removed before printing
+            if (!_consys.TryGetContainer(ent.Owner, "sample", out var sample))
                 return;
             if (!_solutions.TryGetSolution(sample.ContainedEntities[0], "beaker", out var solution))
                 return;
             var reagentname = solution.Value.Comp.Solution.Contents[0].Reagent.Prototype;
-            if (!_protoman.GetInstances<ReagentPrototype>().TryGetValue(reagentname, out var reagent)) // CMU14: dangling reagent id, print the error paper instead of crashing
-            {
-                PrintResult(ent, false, Loc.GetString("xrf-scanner-fail-unknown"));
-                return;
-            }
+            var reagent = _protoman.GetInstances<ReagentPrototype>()[reagentname];
             _mets.SetEntityName(sample.ContainedEntities[0], string.Format("vial ({0})", reagent.LocalizedName));
             DirtyEntity(sample.ContainedEntities[0]);
             if (_net.IsServer)

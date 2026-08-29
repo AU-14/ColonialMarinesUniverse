@@ -94,9 +94,7 @@ public sealed partial class IdExaminableSystem : EntitySystem
         _factionNameBuffer.Clear();
         foreach (var faction in member.Factions)
         {
-            if (_prototypes.TryIndex(faction, out NpcFactionPrototype? proto)
-                && !proto.Hidden // CMU14: covert factions (CLF) must not leak on examine
-                && proto.Name != null)
+            if (_prototypes.TryIndex(faction, out NpcFactionPrototype? proto) && proto.Name != null)
                 _factionNameBuffer.Add(proto.Name);
         }
 

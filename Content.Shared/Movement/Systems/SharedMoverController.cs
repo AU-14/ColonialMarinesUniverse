@@ -1087,11 +1087,6 @@ public abstract partial class SharedMoverController : VirtualController
 
     private void OnCanMove(Entity<InputMoverComponent> entity, ref UpdateCanMoveEvent args)
     {
-        // A relayed mover controls another entity, so its own static body (for example an
-        // oviposited queen) must not prevent the movable relay target from receiving input.
-        if (RelayQuery.HasComp(entity))
-            return;
-
         // If we don't have a physics component, or have a static body type then we can't move.
         if (!PhysicsQuery.TryComp(entity, out var body) || body.BodyType == BodyType.Static)
             args.Cancel();

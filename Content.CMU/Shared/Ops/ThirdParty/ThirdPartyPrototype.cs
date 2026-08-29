@@ -1,18 +1,11 @@
 using Robust.Shared.Prototypes;
-using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype.Array;
 using Robust.Shared.Utility;
 
 namespace Content.Shared.CMU14.Threats;
 
 [Prototype]
-public sealed partial class ThirdPartyPrototype : IPrototype, IInheritingPrototype
+public sealed partial class ThirdPartyPrototype : IPrototype
 {
-    [ParentDataField(typeof(AbstractPrototypeIdArraySerializer<ThirdPartyPrototype>))]
-    public string[]? Parents { get; private set; }
-
-    [NeverPushInheritance]
-    [AbstractDataField]
-    public bool Abstract { get; private set; }
     /// <summary>
     ///     Player-facing display name for this third party (e.g., "UPP GROM Special Forces").
     ///     If not set, falls back to ID.

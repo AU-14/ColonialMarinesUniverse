@@ -206,43 +206,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public EntityUid? ToggleCloakAction;
 
     [DataField]
-    public EntProtoId CreateFieldRationActionId = "CMUActionYautjaCreateFieldRation";
-
-    [ViewVariables]
-    public EntityUid? CreateFieldRationAction;
-
-    [DataField]
-    public EntProtoId CreateHuntingCanteenActionId = "CMUActionYautjaCreateHuntingCanteen";
-
-    [ViewVariables]
-    public EntityUid? CreateHuntingCanteenAction;
-
-    [DataField]
-    public EntProtoId RaiseThrallActionId = "CMUActionYautjaRaiseThrall";
-
-    [ViewVariables]
-    public EntityUid? RaiseThrallAction;
-
-    [DataField]
-    public bool EnableRaiseThrall;
-
-    [DataField]
-    public int RaiseThrallCost = 500;
-    [DataField]
-    public TimeSpan RaiseThrallCooldown = TimeSpan.FromMinutes(2);
-    [DataField]
-    public DamageSpecifier RaiseThrallDamage = new()
-    {
-        DamageDict = new()
-        {
-            { "Brute", 30 },
-        },
-    };
-
-    [DataField]
-    public int MaxRaiseThrall;
-
-    [DataField]
     public EntProtoId OpenBracerMenuActionId = "CMUActionYautjaOpenBracerMenu";
 
     [ViewVariables]
@@ -408,9 +371,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
     public float SelfDestructGibSplatModifier = 5f;
 
     [DataField]
-    public float SelfDestructGibRadius = 3.5f;
-
-    [DataField]
     public float SelfDestructEquipmentDestroyRadius = 2f;
 
     [DataField]
@@ -424,9 +384,6 @@ public sealed partial class YautjaBracerComponent : Component, IClothingSlots
 
     [DataField]
     public float CloakOpacity = 0.02f;
-
-    [DataField]
-    public float CloakMovingOpacity = 0.10f;
 
     [DataField]
     public bool CloakRestrictWeapons = true;
@@ -648,16 +605,6 @@ public sealed partial class YautjaThrallComponent : Component
 {
     [DataField, AutoNetworkedField]
     public EntityUid Master;
-
-    [DataField, AutoNetworkedField]
-    public bool Raised;
-
-    [DataField, AutoNetworkedField]
-    public EntityUid? RaisedByBracer;
-
-    // Raised thralls wear the corruption on their skin; kept to restore on release.
-    public Color? OriginalSkinColor;
-    public Color? OriginalEyeColor;
 
     [DataField, AutoNetworkedField]
     public string Reason = string.Empty;

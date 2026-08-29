@@ -7,7 +7,6 @@ namespace Content.Shared.CMU14.Threats.Mobs.Abomination;
 public sealed partial class AbominationAssimilateActionEvent : EntityTargetActionEvent;
 public sealed partial class AbominationPlantKudzuActionEvent : InstantActionEvent;
 public sealed partial class AbominationMimicTransformActionEvent : InstantActionEvent;
-public sealed partial class AbominationMimicDrawVenomActionEvent : InstantActionEvent;
 
 [Serializable, NetSerializable]
 public sealed partial class AbominationAssimilateDoAfterEvent : SimpleDoAfterEvent;

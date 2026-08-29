@@ -22,21 +22,21 @@ namespace Content.Shared.CMU14.Xenomorphs.Pathogen.Cyclone;
 
 public sealed partial class CMUXenoCycloneSystem : EntitySystem
 {
-    [Dependency] private SharedAudioSystem _audio = default!;
-    [Dependency] private RMCCameraShakeSystem _cameraShake = default!;
-    [Dependency] private SharedColorFlashEffectSystem _colorFlash = default!;
-    [Dependency] private DamageableSystem _damageable = default!;
-    [Dependency] private EntityLookupSystem _lookup = default!;
-    [Dependency] private INetManager _net = default!;
-    [Dependency] private MobStateSystem _mobState = default!;
-    [Dependency] private SharedDoAfterSystem _doAfter = default!;
-    [Dependency] private SharedPopupSystem _popup = default!;
-    [Dependency] private RMCSizeStunSystem _size = default!;
-    [Dependency] private SharedStunSystem _stun = default!;
-    [Dependency] private SharedTransformSystem _transform = default!;
-    [Dependency] private XenoPlasmaSystem _xenoPlasma = default!;
-    [Dependency] private XenoSystem _xeno = default!;
-    [Dependency] private XenoRotateSystem _rotate = default!;
+    [Dependency] private readonly SharedAudioSystem _audio = default!;
+    [Dependency] private readonly RMCCameraShakeSystem _cameraShake = default!;
+    [Dependency] private readonly SharedColorFlashEffectSystem _colorFlash = default!;
+    [Dependency] private readonly DamageableSystem _damageable = default!;
+    [Dependency] private readonly EntityLookupSystem _lookup = default!;
+    [Dependency] private readonly INetManager _net = default!;
+    [Dependency] private readonly MobStateSystem _mobState = default!;
+    [Dependency] private readonly SharedDoAfterSystem _doAfter = default!;
+    [Dependency] private readonly SharedPopupSystem _popup = default!;
+    [Dependency] private readonly RMCSizeStunSystem _size = default!;
+    [Dependency] private readonly SharedStunSystem _stun = default!;
+    [Dependency] private readonly SharedTransformSystem _transform = default!;
+    [Dependency] private readonly XenoPlasmaSystem _xenoPlasma = default!;
+    [Dependency] private readonly XenoSystem _xeno = default!;
+    [Dependency] private readonly XenoRotateSystem _rotate = default!;
 
     private readonly HashSet<Entity<MobStateComponent>> _hits = new();
 

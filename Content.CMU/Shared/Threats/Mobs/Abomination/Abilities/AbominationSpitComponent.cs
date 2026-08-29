@@ -13,7 +13,7 @@ namespace Content.Shared.CMU14.Threats.Mobs.Abomination.Abilities;
 public sealed partial class AbominationSpitComponent : Component
 {
     [DataField, AutoNetworkedField]
-    public EntProtoId Projectile = "AU14AbominationSpitProjectile";
+    public EntProtoId Projectile = "XenoSpitProjectile";
 
     /// <summary>Max distance in tiles before the projectile auto-despawns.</summary>
     [DataField, AutoNetworkedField]

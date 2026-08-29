@@ -21,7 +21,6 @@ using Content.Shared._RMC14.Xenonids.Leap;
 using Content.Shared._RMC14.Xenonids.Pheromones;
 using Content.Shared.Actions;
 using Content.Shared.Atmos.Rotting;
-using Content.Shared.Buckle; // CMU14
 using Content.Shared.Chat.Prototypes;
 using Content.Shared.Damage;
 using Content.Shared.Damage.Systems;
@@ -100,8 +99,7 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
     [Dependency] private RMCSizeStunSystem _size = default!;
     [Dependency] private RMCUnrevivableSystem _unrevivable = default!;
     [Dependency] private SharedRMCActionsSystem _rmcActions = default!;
-    [Dependency] private BloodyLarvaSystem _bloodyLarva = default!;
-    [Dependency] private SharedBuckleSystem _buckle = default!; // CMU14
+    [Dependency] private readonly BloodyLarvaSystem _bloodyLarva = default!;
 
     private const CollisionGroup LeapCollisionGroup = CollisionGroup.InteractImpassable;
     private const CollisionGroup ThrownCollisionGroup = CollisionGroup.InteractImpassable | CollisionGroup.BarricadeImpassable;
@@ -620,7 +618,6 @@ public abstract partial class SharedXenoParasiteSystem : EntitySystem
 
         if (!force
             && !HasComp<XenoNestedComponent>(victim)
-            && !_buckle.IsBuckled(victim) // CMU14: buckled victims can't dodge or fall over, huggers can reach them
             && TryComp(victim, out StandingStateComponent? standing)
             && !_standing.IsDown(victim, standing))
         {

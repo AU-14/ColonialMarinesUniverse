@@ -86,7 +86,7 @@ public sealed partial class CMUObjectiveComponent : Robust.Shared.GameObjects.Co
     [DataField]
     public Dictionary<string, int> DefaultIntelTiers { get; set; } = new()
     {
-        { "govfor", 1 }, { "opfor", 1 }, { "clf", 1 }, { "weyu", 1 }
+        { "govfor", 1 }, { "opfor", 1 }, { "clf", 1 }, { "scientist", 1 }
     };
 
     [DataField]

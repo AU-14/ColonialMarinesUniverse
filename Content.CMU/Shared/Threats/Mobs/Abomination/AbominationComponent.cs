@@ -30,8 +30,7 @@ public sealed partial class AbominationComponent : Component
         {
             ["Blunt"] = -1,
             ["Slash"] = -1,
-            ["Piercing"] = -1,
-            ["Heat"] = -1
+            ["Piercing"] = -1
         }
     };
 
