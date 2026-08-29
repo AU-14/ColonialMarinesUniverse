@@ -42,7 +42,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
 
         public event Action<NetEntity>? WarpClicked;
         public event Action? OnGhostnadoClicked;
-        public event Action? OnWarpToRandomFollowedClicked;
         public event Action? OnWarpToRandomClicked;
 
         public GhostTargetWindow()
@@ -54,7 +53,6 @@ namespace Content.Client.UserInterface.Systems.Ghost.Controls
             SearchBar.OnTextChanged += OnSearchTextChanged;
 
             GhostnadoButton.OnPressed += _ => OnGhostnadoClicked?.Invoke();
-            WarpToRandomFollowedButton.OnPressed += _ => OnWarpToRandomFollowedClicked?.Invoke();
             WarpToRandomButton.OnPressed += _ => OnWarpToRandomClicked?.Invoke();
             _cfg.OnValueChanged(CCVars.CrtUiEnabled, OnCrtUiEnabledChanged);
             _cfg.OnValueChanged(CCVars.CrtUiColor, OnCrtUiColorChanged);

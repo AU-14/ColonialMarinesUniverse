@@ -1,86 +1,107 @@
 <DefaultWindow xmlns="https://spacestation14.io"
                xmlns:ghost="clr-namespace:Content.Client.UserInterface.Systems.Ghost.Controls"
                Title="{Loc 'ghost-target-window-title'}"
-               MinSize="650 560"
-               SetSize="650 560">
-    <PanelContainer StyleClasses="CrtPanel" HorizontalExpand="True" VerticalExpand="True">
-        <ghost:AspectRatioContainer Ratio="1.1769231"
-                                    HorizontalExpand="True"
-                                    VerticalExpand="True"
-                                    Margin="8">
-            <BoxContainer Orientation="Vertical"
+               MinSize="560 440"
+               SetSize="650 500">
+    <PanelContainer StyleClasses="CrtPanel"
+                    HorizontalExpand="True"
+                    VerticalExpand="True">
+        <BoxContainer Orientation="Vertical"
+                      HorizontalExpand="True"
+                      VerticalExpand="True"
+                      SeparationOverride="6"
+                      Margin="8">
+            <BoxContainer Orientation="Horizontal"
                           HorizontalExpand="True"
-                          VerticalExpand="True"
-                          SeparationOverride="8"
-                          Margin="0">
-                <BoxContainer Orientation="Horizontal"
-                              HorizontalExpand="True"
-                              MinHeight="36"
-                              SeparationOverride="6">
-                    <Button Name="GhostnadoButton"
-                            Text="{Loc 'ghost-target-window-warp-to-most-followed'}"
-                            ToolTip="{Loc 'ghost-target-window-warp-to-most-followed-tooltip'}"
-                            StyleClasses="CrtAttentionButton"
-                            TextAlign="Center"
-                            ClipText="True"
-                            HorizontalExpand="True"
-                            MinHeight="34"
-                            SetHeight="34" />
-                    <Button Name="WarpToRandomFollowedButton"
-                            Text="{Loc 'ghost-target-window-warp-to-random-followed'}"
-                            ToolTip="{Loc 'ghost-target-window-warp-to-random-followed-tooltip'}"
-                            TextAlign="Center"
-                            ClipText="True"
-                            HorizontalExpand="True"
-                            MinHeight="34"
-                            SetHeight="34" />
-                    <Button Name="WarpToRandomButton"
-                            Text="{Loc 'ghost-target-window-warp-to-random'}"
-                            ToolTip="{Loc 'ghost-target-window-warp-to-random-tooltip'}"
-                            TextAlign="Center"
-                            ClipText="True"
-                            HorizontalExpand="True"
-                            MinHeight="34"
-                            SetHeight="34" />
-                </BoxContainer>
+                          MinHeight="34"
+                          SeparationOverride="6">
                 <LineEdit Name="SearchBar"
                           PlaceHolder="{Loc 'ghost-target-window-search-placeholder'}"
                           HorizontalExpand="True"
                           MinHeight="34"
                           SetHeight="34" />
+                <Button Name="GhostnadoButton"
+                        Text="{Loc 'ghost-target-window-warp-to-most-followed'}"
+                        ToolTip="{Loc 'ghost-target-window-warp-to-most-followed-tooltip'}"
+                        StyleClasses="CrtAttentionButton"
+                        TextAlign="Center"
+                        ClipText="True"
+                        MinWidth="180"
+                        SetWidth="180"
+                        MinHeight="34"
+                        SetHeight="34" />
+                <Button Name="WarpToRandomButton"
+                        Text="{Loc 'ghost-target-window-warp-to-random'}"
+                        ToolTip="{Loc 'ghost-target-window-warp-to-random-tooltip'}"
+                        TextAlign="Center"
+                        ClipText="True"
+                        MinWidth="84"
+                        SetWidth="84"
+                        MinHeight="34"
+                        SetHeight="34" />
+            </BoxContainer>
+
+            <!-- Compact labeled filter rows are easier to scan than two anonymous tab strips. -->
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True"
+                          MinHeight="34"
+                          SeparationOverride="6">
+                <PanelContainer StyleClasses="CrtHeaderPanel"
+                                MinWidth="70">
+                    <Label Text="{Loc 'ghost-target-window-group-filter'}"
+                           StyleClasses="CrtHeading"
+                           Align="Center"
+                           VerticalAlignment="Center" />
+                </PanelContainer>
                 <ScrollContainer Name="TabBarScroll"
                                  HorizontalExpand="True"
                                  HScrollEnabled="True"
                                  VScrollEnabled="False"
                                  ReserveScrollbarSpace="False"
-                                 MinHeight="38">
+                                 MinHeight="34">
                     <ghost:UniformWidthContainer Name="FactionTabBar"
                                                  HorizontalExpand="True"
-                                                 SeparationOverride="6" />
+                                                 SeparationOverride="5" />
                 </ScrollContainer>
+            </BoxContainer>
+            <BoxContainer Orientation="Horizontal"
+                          HorizontalExpand="True"
+                          MinHeight="32"
+                          SeparationOverride="6">
+                <PanelContainer StyleClasses="CrtHeaderPanel"
+                                MinWidth="70">
+                    <Label Text="{Loc 'ghost-target-window-role-filter'}"
+                           StyleClasses="CrtHeading"
+                           Align="Center"
+                           VerticalAlignment="Center" />
+                </PanelContainer>
                 <ScrollContainer Name="SubTabBarScroll"
                                  HorizontalExpand="True"
                                  HScrollEnabled="True"
                                  VScrollEnabled="False"
                                  ReserveScrollbarSpace="False"
-                                 MinHeight="34">
+                                 MinHeight="32">
                     <ghost:UniformWidthContainer Name="SubTabBar"
                                                  HorizontalExpand="True"
-                                                 SeparationOverride="5" />
+                                                 SeparationOverride="4" />
                 </ScrollContainer>
-                <PanelContainer Name="ContentPanel" StyleClasses="CrtInsetPanel" HorizontalExpand="True" VerticalExpand="True">
-                    <BoxContainer Name="TabContentRoot"
-                                  Orientation="Vertical"
-                                  HorizontalExpand="True"
-                                  VerticalExpand="True" />
-                </PanelContainer>
-                <Label Name="EmptyLabel"
-                       Text="{Loc 'ghost-target-window-empty'}"
-                       StyleClasses="CrtHeading"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Visible="False" />
             </BoxContainer>
-        </ghost:AspectRatioContainer>
+
+            <PanelContainer Name="ContentPanel"
+                            StyleClasses="CrtInsetPanel"
+                            HorizontalExpand="True"
+                            VerticalExpand="True">
+                <BoxContainer Name="TabContentRoot"
+                              Orientation="Vertical"
+                              HorizontalExpand="True"
+                              VerticalExpand="True" />
+            </PanelContainer>
+            <Label Name="EmptyLabel"
+                   Text="{Loc 'ghost-target-window-empty'}"
+                   StyleClasses="CrtHeading"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Visible="False" />
+        </BoxContainer>
     </PanelContainer>
 </DefaultWindow>
