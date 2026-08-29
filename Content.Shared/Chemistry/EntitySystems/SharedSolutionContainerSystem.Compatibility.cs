@@ -70,6 +70,7 @@ public abstract partial class SharedSolutionContainerSystem
 
             // Clone the solution to the component.
             solutionEnt.Comp.Solution = solution;
+            UpdateChemicals(solutionEnt);
         }
 
         // Clear its data

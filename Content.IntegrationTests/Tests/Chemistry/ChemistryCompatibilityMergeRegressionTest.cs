@@ -5,6 +5,7 @@ using Content.Server.Cargo.Components;
 using Content.Server.Nutrition.Components;
 using Content.Shared._RMC14.Chemistry;
 using Content.Shared._RMC14.Marines.Skills;
+using Content.Shared.Chemistry;
 using Content.Shared.Chemistry.Components;
 using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.EntitySystems;
@@ -656,16 +657,29 @@ public sealed class ChemistryCompatibilityMergeRegressionTest : GameTest
 
         await Server.WaitAssertion(() =>
         {
-            var solutions = SEntMan.System<SharedSolutionContainerSystem>()
-                .EnumerateSolutions(legacyConcrete)
+            var solutionSystem = SEntMan.System<SharedSolutionContainerSystem>();
+            var solutions = solutionSystem.EnumerateSolutions(legacyConcrete)
                 .Select(entry => entry.Name)
                 .ToArray();
+            Assert.That(solutionSystem.TryGetSolution(legacyConcrete, "pen", out _, out var pen), Is.True);
+            var appearance = SEntMan.GetComponent<AppearanceComponent>(legacyConcrete);
+            var appearanceSystem = SEntMan.System<SharedAppearanceSystem>();
             Assert.Multiple(() =>
             {
                 Assert.That(solutions, Is.EquivalentTo(new[] { "pen" }));
                 Assert.That(SEntMan.HasComponent<SolutionManagerComponent>(legacyConcrete), Is.True);
                 Assert.That(SEntMan.HasComponent<SolutionContainerManagerComponent>(legacyConcrete), Is.False);
                 Assert.That(SEntMan.HasComponent<InjectorComponent>(legacyConcrete), Is.False);
+                Assert.That(appearanceSystem.TryGetData<float>(legacyConcrete,
+                    SolutionContainerVisuals.FillFraction,
+                    out var fillFraction,
+                    appearance), Is.True);
+                Assert.That(fillFraction, Is.EqualTo(1));
+                Assert.That(appearanceSystem.TryGetData<Color>(legacyConcrete,
+                    SolutionContainerVisuals.Color,
+                    out var color,
+                    appearance), Is.True);
+                Assert.That(color, Is.EqualTo(pen!.GetColor(SProtoMan)));
             });
         });
     }
