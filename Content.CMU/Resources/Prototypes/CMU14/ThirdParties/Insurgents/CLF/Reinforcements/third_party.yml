@@ -19,6 +19,8 @@
   GhostsNeeded: 600
   roundstart: false
 
+
+
 - type: partySpawn
   id: CLFReinforcementsSpawnIntelMachineGunner
   leadersToSpawn:
@@ -37,55 +39,3 @@
   maxplayers: 600
   GhostsNeeded: 600
   roundstart: false
-
-- type: partySpawn
-  id: CLFReinforcementsSpawnIntelEngineer
-  leadersToSpawn:
-    CMUIntelThirdPartyCLFEngineerReinforcements: 1
-  scalewithpop: false
-  spawnTogether: true
-
-- type: thirdParty
-  id: CLFCellReinforcementsIntelEngineer
-  announceAsSurvivors: true
-  partyspawn: CLFReinforcementsSpawnIntelEngineer
-  entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
-  weight: 1
-  minplayers: 0
-  maxplayers: 600
-  GhostsNeeded: 600
-  roundstart: false
-
-- type: partySpawn
-  id: CLFReinforcementsSpawnIntelSpecialist
-  leadersToSpawn:
-    CMUIntelThirdPartyCLFSpecialistReinforcements: 1
-  scalewithpop: false
-  spawnTogether: true
-
-- type: thirdParty
-  id: CLFCellReinforcementsIntelSpecialist
-  announceAsSurvivors: true
-  partyspawn: CLFReinforcementsSpawnIntelSpecialist
-  entrymethod: shuttle
-  dropshippath: /Maps/CMU14/ShuttlesDropships/rmc_ert_clf_shuttle.yml
-  weight: 1
-  minplayers: 0
-  maxplayers: 600
-  GhostsNeeded: 600
-  roundstart: false
-
-- type: thirdParty
-  parent: CLFCellReinforcementsIntel
-  id: CLFCellReinforcementsSurv
-  displayName: CLF Insurgent Cell (Survivors)
-  entrymethod: ground
-  weight: 8
-  GhostsNeeded: 0
-  roundstart: true
-  announcearrival: ''
-  blacklistedgamemodes:
-  - insurgency
-  - forceonforce
-  - colonyfall

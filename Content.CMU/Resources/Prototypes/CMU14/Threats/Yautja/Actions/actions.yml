@@ -19,7 +19,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleVisorActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleVisorActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -35,7 +35,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleMaskZoomActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleMaskZoomActionEvent
   - type: YautjaPowerAction
     cost: 0
     requireMask: true
@@ -52,27 +52,9 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleCloakActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleCloakActionEvent
   - type: YautjaPowerAction
     cost: 0
-
-- type: entity
-  parent: CMUYautjaActionBase
-  id: CMUActionYautjaRaiseThrall
-  components:
-  - type: Action
-    icon:
-      sprite: CMU14/Yautja/bracer.rsi
-      state: icon
-    useDelay: 120
-  - type: TargetAction
-    range: 2
-    checkCanAccess: false
-  - type: EntityTargetAction
-    targetCheckCanInteract: false
-    event: !type:Content.Shared.CMU14.Yautja.YautjaRaiseThrallActionEvent
-  - type: ActionInRangeUnobstructed
-    range: 2
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -86,7 +68,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaOpenBracerMenuActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaOpenBracerMenuActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -102,7 +84,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleBracerLockActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerLockActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -118,7 +100,7 @@
       state: default
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleBracerIdChipActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleBracerIdChipActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -134,7 +116,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaTranslatorActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaTranslatorActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -150,35 +132,7 @@
       state: shard1
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaCreateStabilisingCrystalActionEvent
-  - type: YautjaPowerAction
-    cost: 0
-
-- type: entity
-  parent: CMUYautjaActionBase
-  id: CMUActionYautjaCreateFieldRation
-  components:
-  - type: Action
-    icon:
-      sprite: Objects/Consumable/Food/meat.rsi
-      state: plain
-    useDelay: 1
-  - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaCreateFieldRationActionEvent
-  - type: YautjaPowerAction
-    cost: 0
-
-- type: entity
-  parent: CMUYautjaActionBase
-  id: CMUActionYautjaCreateHuntingCanteen
-  components:
-  - type: Action
-    icon:
-      sprite: _RMC14/Objects/Consumable/Drinks/canteen.rsi
-      state: canteen
-    useDelay: 1
-  - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaCreateHuntingCanteenActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCreateStabilisingCrystalActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -194,7 +148,7 @@
       state: shard1
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaCreateHumanStabilisingCrystalActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHumanStabilisingCrystalActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -210,7 +164,7 @@
       state: autoinjector
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaCreateHuntingTrapActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaCreateHuntingTrapActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -226,7 +180,7 @@
       state: hudsquad_pve
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaOpenMarkPanelActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaOpenMarkPanelActionEvent
   - type: YautjaPowerAction
     cost: 0
     requireMask: true
@@ -243,7 +197,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaLinkThrallBracerActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaLinkThrallBracerActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -259,7 +213,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaTransmitThrallMessageActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaTransmitThrallMessageActionEvent
   - type: YautjaPowerAction
     cost: 0
     requireBracer: false
@@ -276,7 +230,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleThrallBracerLockActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleThrallBracerLockActionEvent
   - type: YautjaPowerAction
     cost: 0
     requireBracer: false
@@ -293,7 +247,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaStunThrallActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaStunThrallActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -309,7 +263,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaSelfDestructThrallActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaSelfDestructThrallActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -325,7 +279,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaRecallActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaRecallActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -343,7 +297,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaSelfDestructActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaSelfDestructActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -359,7 +313,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleCasterActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleCasterActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -375,7 +329,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleWristBladesActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleWristBladesActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -391,7 +345,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleScimitarActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleScimitarActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -407,7 +361,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleShieldActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleShieldActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -423,7 +377,7 @@
       state: icon
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaToggleChainGauntletActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaToggleChainGauntletActionEvent
   - type: YautjaPowerAction
     cost: 0
 
@@ -438,7 +392,7 @@
     - texture: Interface/Emotes/click.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceClickActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceClickActionEvent
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -451,7 +405,7 @@
     - texture: Interface/Actions/scream.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceRoarActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceRoarActionEvent
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -464,7 +418,7 @@
     - texture: Interface/Emotes/laugh.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceLaughActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceLaughActionEvent
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -477,7 +431,7 @@
     - texture: Interface/Emotes/chitter.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceGrowlActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceGrowlActionEvent
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -490,7 +444,7 @@
     - texture: Interface/Emotes/cry.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoicePainActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoicePainActionEvent
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -503,7 +457,7 @@
     - texture: Interface/Emotes/click.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceDistractActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDistractActionEvent
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -516,7 +470,7 @@
     - texture: Interface/Emotes/deathgasp.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceDeathCryActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDeathCryActionEvent
 
 - type: entity
   parent: CMUYautjaActionBase
@@ -529,4 +483,4 @@
     - texture: Interface/Emotes/deathgasp.png
       map: ["enum.ActionVisuals.Icon"]
   - type: InstantAction
-    event: !type:Content.Shared.CMU14.Yautja.YautjaVoiceDeathLaughActionEvent
+    event: !type:Content.Shared._CMU14.Yautja.YautjaVoiceDeathLaughActionEvent

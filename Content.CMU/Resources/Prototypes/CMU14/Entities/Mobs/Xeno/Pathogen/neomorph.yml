@@ -38,7 +38,6 @@
     - CMU14ActionXenoPathogenDigTunnel
     - CMU14ActionXenoPathogenDevolve
     - CMU14ActionXenoPathogenOrderConstruction
-    - CMU14ActionXenoPathogenRegurgitate
   - type: TunnelRenamer
   - type: XenoBurrow
   - type: XenoConstruction
@@ -78,8 +77,8 @@
     healOffWeeds: true
     restHealMultiplier: 1.0
   - type: XenoPlasma
-    plasma: 1000
-    maxPlasma: 1000
+    plasma: 400
+    maxPlasma: 400
     plasmaRegenOnWeeds: 8
   - type: XenoEvolution
     actionId: CMU14ActionXenoPathogenEvolve

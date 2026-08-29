@@ -4,9 +4,6 @@
   name: mycelium pylon
   description: A towering spike of mycelium. Its base pulsates with large tendrils.
   components:
-  - type: NpcFactionMember
-    factions:
-    - CMU14PathogenWalker
   - type: Sprite
     sprite: CMU14/Structures/Xeno/Pathogen/pathogen_structures64x64.rsi
     layers:

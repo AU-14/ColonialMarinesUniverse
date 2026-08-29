@@ -90,10 +90,6 @@
       components:
       - Xeno
       - CMUPathogenWalker
-  - type: GunUserWhitelist
-    whitelist:
-      components:
-      - PyroWhitelist
 
 - type: Tag
   id: AU14WeaponFlamerM240A2HAZOPS

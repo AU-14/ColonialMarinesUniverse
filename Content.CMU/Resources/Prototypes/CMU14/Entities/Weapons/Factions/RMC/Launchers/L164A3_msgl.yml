@@ -33,10 +33,6 @@
     proto: AU1420MMGrenadeL103A1
   - type: Corrodible
     isCorrodible: false
-  - type: GunUserWhitelist
-    whitelist:
-      components:
-      - GrenadeSpecWhitelist
   - type: ExplosionResistance
     damageCoefficient: 0
   - type: AttachableHolder

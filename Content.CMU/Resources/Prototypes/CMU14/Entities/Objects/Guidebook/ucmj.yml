@@ -12,8 +12,6 @@
   - AU14UCMJCriminalCode
   - AU14UCMJDefinitionsandGlossary
   - AU14UCMJGENCON
-  - AU14UCMJDNR
-  - AU14UCMJExecutions
 
 - type: guideEntry
   parent: RMC
@@ -56,20 +54,6 @@
   name: Definitions and Glossary
   priority: 2
   text: "/ServerInfo/Guidebook/CMU14/UCMJ/AU14UCMJDefinitionsandGlossary.xml"
-
-- type: guideEntry
-  parent: RMC
-  id: AU14UCMJDNR
-  name: DNR
-  priority: 2
-  text: "/ServerInfo/Guidebook/CMU14/UCMJ/AU14UCMJDNR.xml"
-
-- type: guideEntry
-  parent: RMC
-  id: AU14UCMJExecutions
-  name: Executions
-  priority: 2
-  text: "/ServerInfo/Guidebook/CMU14/UCMJ/AU14UCMJExecutions.xml"
 
 - type: guideEntry
   parent: RMC

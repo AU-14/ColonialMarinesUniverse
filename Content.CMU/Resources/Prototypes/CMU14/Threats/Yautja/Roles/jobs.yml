@@ -84,7 +84,7 @@
     - CMUYautjaHuntingTrap
     - CMUYautjaPolishingRag
     - CMUYautjaCleanserGelVial
-#   - CMUYautjaRelayBeacon # has (govfor) shipside teleports
+    - CMUYautjaRelayBeacon
     - CMUYautjaHuntingPouch
     - CMUYautjaToolbeltFilled
     - CMUYautjaHoundObservationPad

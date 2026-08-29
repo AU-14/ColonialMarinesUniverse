@@ -3,9 +3,6 @@
   name: blight core
   description: A pulsating organic mass. You feel drawn to it.
   components:
-  - type: NpcFactionMember
-    factions:
-    - CMU14PathogenWalker
   - type: Transform
     anchored: true
   - type: Physics

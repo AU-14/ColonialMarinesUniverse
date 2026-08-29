@@ -29,20 +29,18 @@
   # Acid spit + cone spray. Same projectile as the spider, but the grunt
   # gets the boiler-style fan to lay down area denial.
   - type: AbominationSpit
-    speed: 30
+    speed: 14
     range: 10
   - type: AbominationAcidSpray
     shots: 7
     spreadDegrees: 50
-    speed: 30
+    speed: 14
     range: 7
   - type: MeleeWeapon
     range: 2
     damage:
       types:
         Slash: 82
-  # Human-parity sprint (default human 4.5) — a walking marine no longer
-  # outpaces the frontline caste.
   - type: MovementSpeedModifier
     baseWalkSpeed: 2.07
-    baseSprintSpeed: 4.6
+    baseSprintSpeed: 3.22
