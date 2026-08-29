@@ -21,7 +21,10 @@ using Robust.Shared.Input;
 using Robust.Shared.IoC;
 using Robust.Shared.Map;
 using Robust.Shared.Maths;
+using Robust.Shared.Physics;
 using Robust.Shared.Physics.Components;
+using Robust.Shared.Physics.Systems;
+using ClientMoverController = Content.Client.PhysicsSystem.Controllers.MoverController;
 
 namespace Content.IntegrationTests.Tests.Movement;
 
@@ -443,6 +446,7 @@ public sealed class MovementMergeRegressionTest : MovementTest
     {
         var source = SPlayer;
         EntityUid target = default;
+        NetEntity targetNet = default;
 
         try
         {
@@ -452,9 +456,41 @@ public sealed class MovementMergeRegressionTest : MovementTest
                 target = SEntMan.SpawnEntity(
                     "MovementMergeRelayTarget",
                     SEntMan.GetComponent<TransformComponent>(source).Coordinates);
+                targetNet = SEntMan.GetNetEntity(target);
 
                 transform.AnchorEntity(source);
-                Server.System<MoverController>().SetRelay(source, target);
+                var moverController = Server.System<MoverController>();
+                moverController.SetRelay(source, target);
+
+                Assert.DoesNotThrow(() => moverController.UpdateBeforeSolve(false, 1f / 60f),
+                    "an anchored relay source must not be simulated as a physical mover");
+            });
+
+            await Pair.RunTicksSync(2);
+            await Client.WaitAssertion(() =>
+            {
+                var clientTarget = CEntMan.GetEntity(targetNet);
+                var clientMoverController = Client.System<ClientMoverController>();
+                clientMoverController.SetRelay(CPlayer, clientTarget);
+
+                var clientMover = CEntMan.GetComponent<InputMoverComponent>(CPlayer);
+                var clientPhysics = CEntMan.GetComponent<PhysicsComponent>(CPlayer);
+                var clientPhysicsSystem = Client.System<SharedPhysicsSystem>();
+                var oldBodyType = clientPhysics.BodyType;
+                var oldCanMove = clientMover.CanMove;
+
+                try
+                {
+                    clientPhysicsSystem.SetBodyType(CPlayer, BodyType.Static, body: clientPhysics);
+                    clientMover.CanMove = true;
+                    Assert.DoesNotThrow(() => clientMoverController.UpdateBeforeSolve(false, 1f / 60f),
+                        "the client must only simulate the movable relay target");
+                }
+                finally
+                {
+                    clientPhysicsSystem.SetBodyType(CPlayer, oldBodyType, body: clientPhysics);
+                    clientMover.CanMove = oldCanMove;
+                }
             });
 
             await SetKey(EngineKeyFunctions.MoveRight, BoundKeyState.Down);
