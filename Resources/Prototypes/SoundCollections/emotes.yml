@@ -3,7 +3,7 @@
   files:
     - /Audio/Voice/Human/manlaugh1.ogg
     - /Audio/Voice/Human/manlaugh2.ogg
-    - /Audio/Voice/UpdatedVoice/Male/Dragon-V0942/Laugh/Giggle1.ogg
+    - /Audio/CMU14/Voice/UpdatedVoice/Male/Dragon-V0942/Laugh/Giggle1.ogg
 
 - type: soundCollection
   id: FemaleLaugh
